@@ -4,7 +4,7 @@ assert let majorIs = lib.versions.major cudatoolkit.version;
        in majorIs == "9" || majorIs == "10" || majorIs == "11";
 
 let
-  version = "2.5.4";
+  version = "2.6.1";
 
   # We define a specific set of CUDA compute capabilities here,
   # because CUDA 11 does not support compute capability 3.0. Also,
@@ -41,7 +41,7 @@ in stdenv.mkDerivation {
   inherit version;
   src = fetchurl {
     url = "https://icl.cs.utk.edu/projectsfiles/magma/downloads/magma-${version}.tar.gz";
-    sha256 = "0rrvd21hczxlm8awc9z54fj7iqpjmsb518fy32s6ghz0g90znd3p";
+    sha256 = "sha256-bNg4CMbovHpEAo4FESs6tOV5vMcyAu0Ucz9mZhEn4hM=";
     name = "magma-${version}.tar.gz";
   };
 
