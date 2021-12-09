@@ -1,15 +1,17 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 }:
 
 buildPythonPackage rec {
   pname = "extras";
   version = "1.0.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "132e36de10b9c91d5d4cc620160a476e0468a88f16c9431817a6729611a81b4e";
+  src = fetchFromGitHub {
+     owner = "testing-cabal";
+     repo = "extras";
+     rev = "1.0.0";
+     sha256 = "0a3lm96bppwa2k5v7pzjb705ix5dsx75i8dk8zgdxi2ph3wvkdi7";
   };
 
   # error: invalid command 'test'
