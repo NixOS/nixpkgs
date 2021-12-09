@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-stdcompat";
-  version = "15";
+  version = "17";
 
   src = fetchurl {
     url = "https://github.com/thierry-martinez/stdcompat/releases/download/v${version}/stdcompat-${version}.tar.gz";
-    sha256 = "1xcwb529m4lg9cbnxa9m3x2nnl9nxzz1x5lxpvdfflg4zxl6yx2y";
+    sha256 = "sha256-GzHhGbYbNVQ6hHPvlsF9BgmsJhOWa4YGgMlO0qsTA3w=";
   };
 
   buildInputs = [ ocaml findlib ];
