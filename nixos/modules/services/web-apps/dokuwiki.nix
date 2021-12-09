@@ -308,6 +308,9 @@ in
         inherit user;
         group = webserver.group;
 
+        # Not yet compatible with php 8 https://www.dokuwiki.org/requirements
+        # https://github.com/splitbrain/dokuwiki/issues/3545
+        phpPackage = pkgs.php74;
         phpEnv = {
           DOKUWIKI_LOCAL_CONFIG = "${dokuwikiLocalConfig hostName cfg}";
           DOKUWIKI_PLUGINS_LOCAL_CONFIG = "${dokuwikiPluginsLocalConfig hostName cfg}";
@@ -446,5 +449,6 @@ in
   meta.maintainers = with maintainers; [
     _1000101
     onny
+    dandellion
   ];
 }
