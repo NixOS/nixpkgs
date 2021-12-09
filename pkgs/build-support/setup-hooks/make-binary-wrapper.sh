@@ -31,7 +31,12 @@ assertExecutable() {
 # use the `strings` command or open the binary file in a text editor.
 makeWrapper() {
     assertExecutable "$1"
-    makeDocumentedCWrapper "$1" "${@:3}" | cc -Os -x c -o "$2" -
+    makeDocumentedCWrapper "$1" "${@:3}" | \
+      cc \
+        -Wall -Werror -Wpedantic \
+        -Os \
+        -x c \
+        -o "$2" -
 }
 
 # Syntax: wrapProgram <PROGRAM> <MAKE-WRAPPER FLAGS...>

@@ -3,7 +3,7 @@
 let
   env = { nativeBuildInputs = [ makeBinaryWrapper ]; };
   envCheck = runCommand "envcheck" env ''
-    ${gcc}/bin/cc -o $out ${./envcheck.c}
+    ${gcc}/bin/cc -Wall -Werror -Wpedantic -o $out ${./envcheck.c}
   '';
   makeGoldenTest = testname: runCommand "test-wrapper_${testname}" env ''
     mkdir -p /tmp/foo
