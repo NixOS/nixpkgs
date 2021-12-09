@@ -16142,7 +16142,9 @@ with pkgs;
 
   entt = callPackage ../development/libraries/entt { };
 
-  libepoxy = callPackage ../development/libraries/libepoxy {};
+  libepoxy = callPackage ../development/libraries/libepoxy {
+    inherit (darwin.apple_sdk.frameworks) Carbon OpenGL;
+  };
 
   libesmtp = callPackage ../development/libraries/libesmtp { };
 
