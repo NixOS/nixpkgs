@@ -1,7 +1,7 @@
 { lib
 , python
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , substituteAll
 , pyparsing
 , graphviz
@@ -12,9 +12,11 @@ buildPythonPackage rec {
   pname = "dot2tex";
   version = "2.11.3";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1kp77wiv7b5qib82i3y3sn9r49rym43aaqm5aw1bwnzfbbq2m6i9";
+  src = fetchFromGitHub {
+     owner = "kjellmf";
+     repo = "dot2tex";
+     rev = "2.11.3";
+     sha256 = "02n73vbz2xafpkl5izmsq9swwzkm0msbnbhz1cgb9qdmh3iba0zg";
   };
 
   patches = [
