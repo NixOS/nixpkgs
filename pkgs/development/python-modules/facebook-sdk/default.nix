@@ -1,6 +1,6 @@
 { pkgs
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , requests
 , python
 }:
@@ -9,9 +9,11 @@ buildPythonPackage rec {
   pname = "facebook-sdk";
   version = "3.1.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "138grz0n6plzdqgi4h6hhszf58bsvx9v76cwj51g1nd3kvkd5g6a";
+  src = fetchFromGitHub {
+     owner = "pythonforfacebook";
+     repo = "facebook-sdk";
+     rev = "v3.1.0";
+     sha256 = "0p7p0wvcspd9p8d6r25bgjbf0ihdw5g1jw3dylwngrazdmc3g36b";
   };
 
   propagatedBuildInputs = [ requests ];
