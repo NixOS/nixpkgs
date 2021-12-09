@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pytest
 , six
 }:
@@ -9,9 +9,11 @@ buildPythonPackage rec {
   pname = "docrep";
   version = "0.3.2";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "ed8a17e201abd829ef8da78a0b6f4d51fb99a4cbd0554adbed3309297f964314";
+  src = fetchFromGitHub {
+     owner = "Chilipp";
+     repo = "docrep";
+     rev = "v0.3.2";
+     sha256 = "0xcb3wpzy4k5aka3x4wmrn84r9mz2paygcw73rcqgrdi4aa1m65s";
   };
 
   checkInputs = [ pytest ];
