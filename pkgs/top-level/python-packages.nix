@@ -10076,6 +10076,8 @@ in {
 
   weconnect = callPackage ../development/python-modules/weconnect { };
 
+  weconnect-mqtt = callPackage ../development/python-modules/weconnect-mqtt { };
+
   werkzeug = callPackage ../development/python-modules/werkzeug { };
 
   werkzeug1 = callPackage ../development/python-modules/werkzeug/1.nix { };
