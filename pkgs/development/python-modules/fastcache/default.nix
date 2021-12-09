@@ -1,12 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, pytest }:
+{ lib, buildPythonPackage, fetchFromGitHub, pytest }:
 
 buildPythonPackage rec {
   pname = "fastcache";
   version = "1.1.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0avqpswfmw5b08xx3ib6zchc5bis390fn1v74vg7nnrkf1pb3qbd";
+  src = fetchFromGitHub {
+     owner = "pbrady";
+     repo = "fastcache";
+     rev = "v1.1.0";
+     sha256 = "097q19wnx7a2c0vjaxr08xf5vhm1z1a2lza05ccsfgrn189681xp";
   };
 
   checkInputs = [ pytest ];
