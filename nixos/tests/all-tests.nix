@@ -381,6 +381,7 @@ in
   postgis = handleTest ./postgis.nix {};
   postgresql = handleTest ./postgresql.nix {};
   postgresql-wal-receiver = handleTest ./postgresql-wal-receiver.nix {};
+  postgresql-container = handleTest ./postgresql-container.nix {};
   powerdns = handleTest ./powerdns.nix {};
   power-profiles-daemon = handleTest ./power-profiles-daemon.nix {};
   pppd = handleTest ./pppd.nix {};

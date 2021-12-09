@@ -344,6 +344,7 @@
   ./services/databases/opentsdb.nix
   ./services/databases/pgmanage.nix
   ./services/databases/postgresql.nix
+  ./services/databases/postgresql-systemd.nix
   ./services/databases/redis.nix
   ./services/databases/riak.nix
   ./services/databases/victoriametrics.nix
