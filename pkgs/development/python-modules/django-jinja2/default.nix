@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi,
+{ lib, buildPythonPackage, fetchFromGitHub,
   django, jinja2, pytz, tox
  }:
 
@@ -12,9 +12,11 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
   };
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "6c1fc68b0f4b1fb21b208a3e5dc19a3b11bab2812c06f827d5fdbd24001a1910";
+  src = fetchFromGitHub {
+     owner = "niwinz";
+     repo = "django-jinja";
+     rev = "2.9.1";
+     sha256 = "0p9pkn6jjzagpnvcrl9c2vjqamkms7ymvyhhmaqqqhrlv89qnzp7";
   };
 
   buildInputs = [ django pytz tox ];
