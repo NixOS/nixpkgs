@@ -219,6 +219,9 @@ let
         # The derivation name is different from the script file name
         # to keep the script file name short to avoid cluttering logs.
         name = "unit-script-${scriptName}";
+        checkPhase = ''
+          ${pkgs.shellcheck}/bin/shellcheck "$out/bin/${scriptName}"
+        '';
       });
     in "${out}/bin/${scriptName}";
 
