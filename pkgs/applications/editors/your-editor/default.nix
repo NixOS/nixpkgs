@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Your-editor (yed) is a small and simple terminal editor core that is meant to be extended through a powerful plugin architecture";
     homepage = "https://your-editor.org/";
-    changelog = "https://github.com/your-editor/yed/blob/1303/CHANGELOG.md";
+    changelog = "https://github.com/your-editor/yed/blob/${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
     platforms = platforms.unix;
     maintainers = with maintainers; [ uniquepointer ];
