@@ -9,7 +9,7 @@
 }:
 
 let
-  # Fetcher function looks similar to fetchPypi.
+  # Fetcher function looks similar to fetchFromGitHub.
   # Allows for easier overriding, without having to know
   # how the source is actually fetched.
   fetcher = {pname, version, sha256}: fetchFromGitHub {
