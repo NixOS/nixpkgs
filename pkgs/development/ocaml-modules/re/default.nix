@@ -2,7 +2,7 @@
 
 buildDunePackage rec {
   pname = "re";
-  version = "1.9.0";
+  version = "1.10.3";
 
   minimumOCamlVersion = "4.02";
 
@@ -10,7 +10,7 @@ buildDunePackage rec {
 
   src = fetchurl {
     url = "https://github.com/ocaml/ocaml-re/releases/download/${version}/re-${version}.tbz";
-    sha256 = "1gas4ky49zgxph3870nffzkr6y41kkpqp4nj38pz1gh49zcf12aj";
+    sha256 = "sha256-hGVGln8/4xdlk13UCmRgqUJDN+zOexJyf8uklIB5Drs=";
   };
 
   buildInputs = lib.optional doCheck ounit;
