@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromGitHub
 , click
 , requests
 , tabulate
@@ -11,9 +11,11 @@ buildPythonPackage rec {
   pname = "databricks-cli";
   version = "0.16.2";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "3e9a65a19a589b795ebbd9b3b16a8e470d612d57d6216ae44a9c7a735e4080e6";
+  src = fetchFromGitHub {
+     owner = "databricks";
+     repo = "databricks-cli";
+     rev = "0.16.2";
+     sha256 = "0immd6csbdfkbls237lk9ajhr6s7m878n5jkw5m4gsd7049ns1f4";
   };
 
   checkInputs = [
