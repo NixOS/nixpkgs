@@ -14,6 +14,8 @@
 , dotnetTestFlags ? []
 # Flags to pass to `dotnet install`.
 , dotnetInstallFlags ? []
+# Flags to pass to `dotnet pack`.
+, dotnetPackFlags ? []
 # Flags to pass to dotnet in all phases.
 , dotnetFlags ? []
 
@@ -21,6 +23,8 @@
 # Unfortunately, dotnet has no method for doing this automatically.
 # If unset, all executables in the projects root will get installed. This may cause bloat!
 , executables ? null
+# Packs a project as a `nupkg`, and installs it to `$out/share`. If set to `true`, the derivation can be used as a dependency for another dotnet project by adding it to `projectReferences`.
+, packNupkg ? false
 # The packages project file, which contains instructions on how to compile it. This can be an array of multiple project files as well.
 , projectFile ? null
 # The NuGet dependency file. This locks all NuGet dependency versions, as otherwise they cannot be deterministically fetched.
@@ -167,7 +171,18 @@ let
           "''${dotnetInstallFlags[@]}"  \
           "''${dotnetFlags[@]}"
       done
-    '' + (if executables != null then ''
+    '' + (lib.optionalString packNupkg ''
+      for project in ''${projectFile[@]}; do
+        dotnet pack "$project" \
+          -p:ContinuousIntegrationBuild=true \
+          -p:Deterministic=true \
+          --output $out/share \
+          --configuration "$buildType" \
+          --no-build \
+          "''${dotnetPackFlags[@]}"  \
+          "''${dotnetFlags[@]}"
+      done
+    '') + (if executables != null then ''
       for executable in $executables; do
         execPath="$out/lib/${args.pname}/$executable"
 
