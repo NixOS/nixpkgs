@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , django
 }:
 
@@ -8,9 +8,11 @@ buildPythonPackage rec {
   pname = "django-multiselectfield";
   version = "0.1.12";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1ygra8s394d1szgj7yawlca17q08hygsrzvq2k3k48zvd0awg96h";
+  src = fetchFromGitHub {
+     owner = "goinnn";
+     repo = "django-multiselectfield";
+     rev = "v0.1.12";
+     sha256 = "1bjydd4zh6wzxmv4drx5fslwcv51qa57l3lc2216fni89islnj2m";
   };
 
   propagatedBuildInputs = [ django ];
