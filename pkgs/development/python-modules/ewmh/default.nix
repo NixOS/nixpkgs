@@ -1,12 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, xlib }:
+{ lib, buildPythonPackage, fetchFromGitHub, xlib }:
 
 buildPythonPackage rec {
   pname = "ewmh";
   version = "0.1.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0g9l14my3v8zlgq1yd8wh5gpara0qcapsfmvg7lq2lapglzhjsy5";
+  src = fetchFromGitHub {
+     owner = "parkouss";
+     repo = "pyewmh";
+     rev = "v0.1.6";
+     sha256 = "1hydpyqr5v1qd05aafhahfhpdl0gybfrs5knrgs5pslhygy80qyq";
   };
 
   propagatedBuildInputs = [ xlib ];
