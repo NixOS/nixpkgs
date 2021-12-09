@@ -85,10 +85,6 @@ rec {
     config = "armv5tel-unknown-linux-gnueabi";
   } // platforms.pogoplug4;
 
-  ben-nanonote = {
-    config = "mipsel-unknown-linux-uclibc";
-  } // platforms.ben_nanonote;
-
   fuloongminipc = {
     config = "mipsel-unknown-linux-gnu";
   } // platforms.fuloong2f_n32;

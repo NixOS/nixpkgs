@@ -394,16 +394,6 @@ rec {
   ## MIPS
   ##
 
-  ben_nanonote = {
-    linux-kernel = {
-      name = "ben_nanonote";
-    };
-    gcc = {
-      arch = "mips32";
-      float = "soft";
-    };
-  };
-
   fuloong2f_n32 = {
     linux-kernel = {
       name = "fuloong2f_n32";

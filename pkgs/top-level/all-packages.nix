@@ -10982,7 +10982,7 @@ with pkgs;
   xbursttools = callPackage ../tools/misc/xburst-tools {
     # It needs a cross compiler for mipsel to build the firmware it will
     # load into the Ben Nanonote
-    gccCross = pkgsCross.ben-nanonote.buildPackages.gccCrossStageStatic;
+    gccCross = pkgsCross.fuloongminipc.buildPackages.gccCrossStageStatic;
     autoconf = buildPackages.autoconf269;
   };
 

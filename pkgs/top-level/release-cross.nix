@@ -136,7 +136,6 @@ in
 
   /* Linux on mipsel */
   fuloongminipc = mapTestOnCross lib.systems.examples.fuloongminipc linuxCommon;
-  ben-nanonote = mapTestOnCross lib.systems.examples.ben-nanonote linuxCommon;
 
   /* Javacript */
   ghcjs = mapTestOnCross lib.systems.examples.ghcjs {
