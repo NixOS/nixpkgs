@@ -26597,8 +26597,6 @@ with pkgs;
 
   lingot = callPackage ../applications/audio/lingot { };
 
-  linuxband = callPackage ../applications/audio/linuxband { };
-
   littlegptracker = callPackage ../applications/audio/littlegptracker {
     inherit (darwin.apple_sdk.frameworks) Foundation;
   };
