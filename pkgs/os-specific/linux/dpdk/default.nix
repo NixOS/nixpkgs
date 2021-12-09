@@ -2,7 +2,7 @@
 , kernel
 , fetchurl
 , pkg-config, meson, ninja
-, libbsd, numactl, libbpf, zlib, libelf, jansson, openssl, libpcap
+, libbsd, numactl, libbpf, zlib, libelf, jansson, openssl, libpcap, rdma-core
 , doxygen, python3
 , withExamples ? []
 , shared ? false }:
@@ -36,6 +36,7 @@ in stdenv.mkDerivation rec {
     libpcap
     numactl
     openssl.dev
+    rdma-core
     zlib
   ] ++ lib.optionals mod kernel.moduleBuildDependencies;
 
