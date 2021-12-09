@@ -37,6 +37,7 @@
 , qtwebkit
 , pdal
 , zstd
+, makeWrapper
 }:
 
 let
@@ -107,7 +108,7 @@ in mkDerivation rec {
     ++ lib.optional withWebKit qtwebkit
     ++ pythonBuildInputs;
 
-  nativeBuildInputs = [ cmake flex bison ninja ];
+  nativeBuildInputs = [ makeWrapper cmake flex bison ninja ];
 
   # Force this pyqt_sip_dir variable to point to the sip dir in PyQt5
   #
@@ -126,6 +127,14 @@ in mkDerivation rec {
     "-DQSCI_SIP_DIR=${python3Packages.qscintilla-qt5}/share/sip/PyQt5"
   ] ++ lib.optional (!withWebKit) "-DWITH_QTWEBKIT=OFF"
     ++ lib.optional withGrass "-DGRASS_PREFIX7=${grass}/grass78";
+
+  postFixup = ''
+    # unpackPhase
+    # grass has to be availble on the command line even though we baked in
+    # the path at build time using GRASS_PREFIX
+    wrapProgram $out/bin/qgis \
+      --prefix PATH : ${lib.makeBinPath (lib.optional withGrass grass)}
+  '';
 
   meta = {
     description = "A Free and Open Source Geographic Information System";

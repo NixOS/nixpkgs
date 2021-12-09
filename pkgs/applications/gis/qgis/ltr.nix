@@ -1,5 +1,5 @@
 { lib, makeWrapper, symlinkJoin
-, qgis-ltr-unwrapped, grass, extraPythonPackages ? (ps: [ ])
+, qgis-ltr-unwrapped, extraPythonPackages ? (ps: [ ])
 }:
 with lib;
 symlinkJoin rec {
@@ -8,7 +8,7 @@ symlinkJoin rec {
 
   paths = [ qgis-ltr-unwrapped ];
 
-  nativeBuildInputs = [ grass makeWrapper qgis-ltr-unwrapped.python3Packages.wrapPython ];
+  nativeBuildInputs = [ makeWrapper qgis-ltr-unwrapped.python3Packages.wrapPython ];
 
   # extend to add to the python environment of QGIS without rebuilding QGIS application.
   pythonInputs = qgis-ltr-unwrapped.pythonBuildInputs ++ (extraPythonPackages qgis-ltr-unwrapped.python3Packages);
@@ -20,7 +20,6 @@ symlinkJoin rec {
 
     wrapProgram $out/bin/qgis \
       --prefix PATH : $program_PATH \
-      --prefix PATH : ${lib.makeBinPath [grass]} \
       --set PYTHONPATH $program_PYTHONPATH
   '';
 
