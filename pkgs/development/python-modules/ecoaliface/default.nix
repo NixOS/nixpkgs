@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , requests
 }:
 
@@ -8,9 +8,11 @@ buildPythonPackage rec {
   pname = "ecoaliface";
   version = "0.5.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "f17b3452cfd31bb8c3509d59b846889c81db5fb85082c061c32703162cbe9083";
+  src = fetchFromGitHub {
+     owner = "matkor";
+     repo = "ecoaliface";
+     rev = "v0.5.0";
+     sha256 = "0r3k53gdp122ig595fqkqg1gnqfgv8rr6b63jg83gfzr2hf4gw9b";
   };
 
   propagatedBuildInputs = [
