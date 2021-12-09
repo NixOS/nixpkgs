@@ -17,6 +17,10 @@ stdenv.mkDerivation rec {
       'set(LINUX_DISTRO "nixos")'
   '';
 
+  postInstall = ''
+    rm $out/bin/monetdb_mtest.sh
+  '';
+
   nativeBuildInputs = [ cmake python3 ];
   buildInputs = [ bison openssl readline bzip2 ];
 
