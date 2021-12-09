@@ -48,13 +48,8 @@ a fixed value. Provided that such a value can be easily forged and validated.
 
 @contextmanager
 def openELF(path):
-    stream = open(path, "rb")
-    try:
-        elf = ELFFile(stream)
-        elf.filename = path
-        yield elf
-    finally:
-        stream.close()
+    with path.open('rb'):
+        yield ELFFile(stream)
 
 def isExecutable(elf):
     # For dynamically linked ELF files it would be enough to check just for the
@@ -98,7 +93,7 @@ def getBinOsabi(elf):
 
 # Tests whether two OS ABIs are compatible, taking into account the generally
 # accepted compatibility of SVR4 ABI with other ABIs.
-def areBinOsabisCompatible(wanted, got):
+def is_abi_compatible(wanted, got):
     if not wanted or not got:
         # One of the types couldn't be detected, so as a fallback we'll assume
         # they're compatible.
@@ -126,7 +121,7 @@ def areBinOsabisCompatible(wanted, got):
 
 
 cachedPaths = set()
-sonameCache = defaultdict(list) # (soname, arch) -> [ (libdir, osabi) ]
+sonameCache: defaultdict[Tuple[str, str], Tuple[Path, str]] = defaultdict(list)
 
 def populateCache(initial, recurse = False):
     libDirs = list(initial)
@@ -139,22 +134,16 @@ def populateCache(initial, recurse = False):
 
         cachedPaths.add(lib)
 
-        for (root, dirs, files) in os.walk(lib):
-            used = False
-            for file in files:
-                if ".so" not in file:
-                    continue
-
+        for path in lib.rglob('*.so*'):
                 try:
-                    with openELF(os.path.join(root, file)) as elf:
+                    with openELF(path) as elf:
                         osabi = getBinOsabi(elf)
                         arch = getBinArch(elf)
 
                         if rpath := getRpathFromElfBinary(elf):
                             libDirs += rpath
-                        #print("Caching", file, arch, lib, osabi)
 
-                        sonameCache[(file, arch)].append( (root, osabi) )
+                        sonameCache[(path.name, arch)].append( (root, osabi) )
                         used = True
                 except ELFError:
                     pass
@@ -162,7 +151,7 @@ def populateCache(initial, recurse = False):
                 print("found .so libs in", root)
 
             if not recurse:
-                break;
+                break
 
 
 def findDependency(soname, arch, osabi):
@@ -178,18 +167,18 @@ def autoPatchelfFile(elf, runtimeDeps):
 
     if interpreterArch != fileArch:
         # Our target architecture is different than this file's architecture, so skip it.
-        print("skipping {} because its architecture ({}) differs from target ({})"
-            .format(elf.filename, fileArch, interpreterArch))
+        print(f"skipping {elf.filename} because its architecture ({fileArch})"
+              f" differs from target ({interpreterArch})")
         return
     elif not areBinOsabisCompatible(interpreterOsabi, fileOsabi):
-        print("skipping {} because its OS ABI ({}) is not compatible with target ({})"
-            .format(elf.filename, fileOsabi, interpreterOsabi))
+        print(f"skipping {elf.filename} because its OS ABI ({fileOsabi}) is not"
+              f" compatible with target ({interpreterOsabi})")
         return
 
     if isExecutable(elf):
         print("setting interpreter of", elf.filename)
         subprocess.run(["patchelf", "--set-interpreter", interpreterPath, elf.filename], check = True)
-        rpath += ["{}/lib".format(path) for path in runtimeDeps]
+        rpath += [path / 'lib' for path in runtimeDeps]
 
     print("searching for dependencies of", elf.filename)
     try:
@@ -206,7 +195,7 @@ def autoPatchelfFile(elf, runtimeDeps):
             # This is an absolute path. If it exists, just use it. Otherwise,
             # we probably want this to produce an error when checked (because
             # just updating the rpath won't satisfy it).
-            if os.path.isfile(dep):
+            if dep.is_file():
                 continue
         elif os.path.isfile(os.path.join(libcLib, dep)):
             # This library exists in libc, and will be correctly resolved by
@@ -245,12 +234,14 @@ def autoPatchelf(pathsToPatch, libDirs, runtimeDeps, recurse = True, ignoreMissi
 
     # Add all shared objects of the current output path to the cache,
     # before libDirs, so that they are chosen first in findDependency.
-    populateCache(pathsToPatch, recurse);
-    populateCache(libDirs);
+    populateCache(pathsToPatch, recurse)
+    populateCache(libDirs)
 
     missingDeps = {}
-    failed = False
-    for path in walk(pathsToPatch, recurse):
+    for path in chain.from_iterable(p.rglob('*') if recurse else p.glob('*')
+                                    for p in pathsToPatch):
+        if path.is_dir():
+            continue
         try:
             with openELF(path) as elf:
                 missing = list(autoPatchelfFile(elf, runtimeDeps))
@@ -262,7 +253,7 @@ def autoPatchelf(pathsToPatch, libDirs, runtimeDeps, recurse = True, ignoreMissi
     # Print a summary of the missing dependencies at the end
     for path, deps in missingDeps.items():
         for dep in deps:
-            print("autoPatchelfHook could not satisfy dependency {} wanted by {}".format(dep, path))
+            print(f"autoPatchelfHook could not satisfy dependency {dep} wanted by {path}")
 
     if missingDeps and not ignoreMissing:
         sys.exit("""
@@ -299,11 +290,9 @@ interpreterArch = None
 libcLib = None
 
 if __name__ == "__main__":
-    with open(os.environ['NIX_BINTOOLS']+"/nix-support/dynamic-linker") as f:
-        interpreterPath = f.read().strip()
-
-    with open(os.environ['NIX_BINTOOLS']+"/nix-support/orig-libc") as f:
-        libcLib = os.path.join(f.read().strip(), "/lib")
+    nix_support = Path(os.environ['NIX_BINTOOLS']) / 'nix-support'
+    interpreter_path = Path((nix_support / 'dynamic-linker').read_text().strip())
+    libc_lib = Path((nix_support / 'orig-libc').read_text().strip()) / 'lib'
 
     with openELF(interpreterPath) as interpreter:
         interpreterOsabi = getBinOsabi(interpreter)
