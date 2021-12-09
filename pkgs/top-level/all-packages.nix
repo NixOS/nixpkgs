@@ -3776,6 +3776,8 @@ with pkgs;
     epubcheck = null;
   };
 
+  asciidoctor-with-extensions = callPackage ../tools/typesetting/asciidoctor-with-extensions { };
+
   asciidoctorj = callPackage ../tools/typesetting/asciidoctorj { };
 
   asunder = callPackage ../applications/audio/asunder { };
