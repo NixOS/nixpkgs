@@ -1,3 +1,6 @@
+
+set -euo pipefail
+
 # Assert that FILE exists and is executable
 #
 # assertExecutable FILE
