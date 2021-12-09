@@ -3771,10 +3771,7 @@ with pkgs;
     enableExtraPlugins = true;
   });
 
-  asciidoctor = callPackage ../tools/typesetting/asciidoctor {
-    # epubcheck pulls in Java, which is problematic on some platforms
-    epubcheck = null;
-  };
+  asciidoctor = callPackage ../tools/typesetting/asciidoctor { };
 
   asciidoctor-with-extensions = callPackage ../tools/typesetting/asciidoctor-with-extensions { };
 
