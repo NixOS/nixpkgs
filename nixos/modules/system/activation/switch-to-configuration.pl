@@ -170,7 +170,9 @@ sub handleModifiedUnit {
         elsif (!boolIsTrue($unitInfo->{'X-RestartIfChanged'} // "yes") || boolIsTrue($unitInfo->{'RefuseManualStop'} // "no") || boolIsTrue($unitInfo->{'X-OnlyManualStart'} // "no")) {
             $unitsToSkip->{$unit} = 1;
         } else {
-            if (!boolIsTrue($unitInfo->{'X-StopIfChanged'} // "yes")) {
+            # It doesn't make sense to stop and start non-services because
+            # they can't have ExecStop=
+            if (!boolIsTrue($unitInfo->{'X-StopIfChanged'} // "yes") || $unit !~ /\.service$/) {
                 # This unit should be restarted instead of
                 # stopped and started.
                 $unitsToRestart->{$unit} = 1;
