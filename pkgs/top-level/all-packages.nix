@@ -29588,7 +29588,7 @@ with pkgs;
 
   yoshimi = callPackage ../applications/audio/yoshimi { };
 
-  your-editor = callPackage ../applications/editors/your-editor { };
+  your-editor = callPackage ../applications/editors/your-editor { stdenv = gccStdenv; };
 
   youtube-dl = with python3Packages; toPythonApplication youtube-dl;
 
