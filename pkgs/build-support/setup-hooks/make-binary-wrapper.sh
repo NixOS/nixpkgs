@@ -35,7 +35,7 @@ assertExecutable() {
 makeWrapper() {
     assertExecutable "$1"
     makeDocumentedCWrapper "$1" "${@:3}" | \
-      cc \
+      @CC@ \
         -Wall -Werror -Wpedantic \
         -Os \
         -x c \

@@ -606,11 +606,13 @@ in
   makeWrapper = makeSetupHook { deps = [ dieHook ]; substitutions = { shell = targetPackages.runtimeShell; }; }
                               ../build-support/setup-hooks/make-wrapper.sh;
 
-  makeBinaryWrapper = makeSetupHook {
-    deps = [ dieHook ];
-  } (runCommand "make-binary-wrapper.sh" {} ''
-      substitute ${../build-support/setup-hooks/make-binary-wrapper.sh} $out --replace " cc " " ${gcc}/bin/cc "
-  '');
+  makeBinaryWrapper = let
+    script = runCommand "make-binary-wrapper.sh" {} ''
+      substitute ${../build-support/setup-hooks/make-binary-wrapper.sh} $out \
+        --replace " @CC@ " " ${gcc}/bin/cc "
+    '';
+  in
+    makeSetupHook { deps = [ dieHook ]; } script;
 
   makeModulesClosure = { kernel, firmware, rootModules, allowMissing ? false }:
     callPackage ../build-support/kernel/modules-closure.nix {
