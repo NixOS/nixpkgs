@@ -2,7 +2,7 @@
 , aioredis
 , async_generator
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , hypothesis
 , lupa
 , pytest-asyncio
@@ -21,9 +21,11 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.5";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-yb0S5DAzbL0+GJ+uDpHrmZl7k+dtv91u1n+jUtxoTHE=";
+  src = fetchFromGitHub {
+     owner = "jamesls";
+     repo = "fakeredis";
+     rev = "1.7.0";
+     sha256 = "0vfyirrcmm31f1w4apa9kwndbg3nf5fqkzpqjqhhplcqsj1x98rz";
   };
 
   propagatedBuildInputs = [
