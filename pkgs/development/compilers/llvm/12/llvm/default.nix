@@ -105,6 +105,33 @@ in stdenv.mkDerivation (rec {
     rm test/ExecutionEngine/frem.ll
   '' + ''
     patchShebangs test/BugPoint/compile-custom.ll.py
+  '' + ''
+    # Tweak tests to ignore namespace part of type to support
+    # gcc-12: https://gcc.gnu.org/PR103598.
+    # The change below mangles strings like:
+    #    CHECK-NEXT: Starting llvm::Function pass manager run.
+    # to:
+    #    CHECK-NEXT: Starting {{.*}}Function pass manager run.
+    for f in \
+      test/Other/new-pass-manager.ll \
+      test/Other/new-pm-O0-defaults.ll \
+      test/Other/new-pm-defaults.ll \
+      test/Other/new-pm-lto-defaults.ll \
+      test/Other/new-pm-thinlto-defaults.ll \
+      test/Other/pass-pipeline-parsing.ll \
+      test/Transforms/Inline/cgscc-incremental-invalidate.ll \
+      test/Transforms/Inline/clear-analyses.ll \
+      test/Transforms/LoopUnroll/unroll-loop-invalidation.ll \
+      test/Transforms/SCCP/ipsccp-preserve-analysis.ll \
+      test/Transforms/SCCP/preserve-analysis.ll \
+      test/Transforms/SROA/dead-inst.ll \
+      test/tools/gold/X86/new-pm.ll \
+      ; do
+      echo "PATCH: $f"
+      substituteInPlace $f \
+        --replace 'Starting llvm::' 'Starting {{.*}}' \
+        --replace 'Finished llvm::' 'Finished {{.*}}'
+    done
   '';
 
   # hacky fix: created binaries need to be run before installation
