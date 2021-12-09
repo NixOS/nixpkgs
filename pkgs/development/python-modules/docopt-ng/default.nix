@@ -1,15 +1,17 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 }:
 
 buildPythonPackage rec {
   pname = "docopt-ng";
   version = "0.7.2";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-hs7qAy8M+lnmB3brDPOKxzZTWBAihyMg9H3IdGeNckQ=";
+  src = fetchFromGitHub {
+     owner = "bazaar-projects";
+     repo = "docopt-ng";
+     rev = "0.7.2";
+     sha256 = "0cwj40pfd6s4jw1hshcjrbalsqz537sv0pakb588cgl4k97wvnl1";
   };
 
   pythonImportsCheck = [ "docopt" ];
