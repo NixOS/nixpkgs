@@ -607,12 +607,19 @@ in
                               ../build-support/setup-hooks/make-wrapper.sh;
 
   makeBinaryWrapper = let
-    script = runCommand "make-binary-wrapper.sh" {} ''
-      substitute ${../build-support/setup-hooks/make-binary-wrapper.sh} $out \
-        --replace " @CC@ " " ${gcc}/bin/cc "
-    '';
+    f = { cc, sanitizers }: let
+      san = lib.concatMapStringsSep " " (s: "-fsanitize=${s}") sanitizers;
+      script = runCommand "make-binary-wrapper.sh" {} ''
+        substitute ${../build-support/setup-hooks/make-binary-wrapper.sh} $out \
+          --replace " @CC@ " " ${cc}/bin/cc ${san} "
+      '';
+    in
+      makeSetupHook { deps = [ dieHook ]; } script;
   in
-    makeSetupHook { deps = [ dieHook ]; } script;
+    lib.makeOverridable f {
+      cc = gcc;
+      sanitizers = [ "undefined" "address" ];
+    };
 
   makeModulesClosure = { kernel, firmware, rootModules, allowMissing ? false }:
     callPackage ../build-support/kernel/modules-closure.nix {
