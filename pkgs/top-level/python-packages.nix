@@ -603,6 +603,8 @@ in {
 
   asana = callPackage ../development/python-modules/asana { };
 
+  ascii-magic = callPackage ../development/python-modules/ascii-magic { };
+
   asciimatics = callPackage ../development/python-modules/asciimatics { };
 
   asciitree = callPackage ../development/python-modules/asciitree { };
