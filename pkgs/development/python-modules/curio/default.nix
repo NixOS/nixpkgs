@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , isPy3k
 , pytestCheckHook
 , sphinx
@@ -12,9 +12,11 @@ buildPythonPackage rec {
   version = "1.5";
   disabled = !isPy3k;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-rwghLlkLt9qOTMOcQgEnEUlNwg1iLxYhVbopbMLjvBA=";
+  src = fetchFromGitHub {
+     owner = "dabeaz";
+     repo = "curio";
+     rev = "1.5";
+     sha256 = "06rvcqs8qysdl7sn1h5w53s0xfgmrqvmdxp9ycbfh0y8ff1c582w";
   };
 
   checkInputs = [
