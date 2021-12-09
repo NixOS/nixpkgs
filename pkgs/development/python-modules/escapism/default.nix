@@ -1,15 +1,17 @@
 { pkgs
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 }:
 
 buildPythonPackage rec {
   pname = "escapism";
   version = "1.0.1";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "73256bdfb4f22230f0428fc6efecee61cdc4fad531b6f98b849cb9c80711e4ec";
+  src = fetchFromGitHub {
+     owner = "minrk";
+     repo = "escapism";
+     rev = "1.0.1";
+     sha256 = "1447mamrdbyv9v47f9wrc4fyvbwz5qrwl8qrdzqdq3q62q4xrawj";
   };
 
   # No tests distributed
