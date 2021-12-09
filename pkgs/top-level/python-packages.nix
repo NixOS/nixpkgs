@@ -5222,6 +5222,8 @@ in {
 
   nltk = callPackage ../development/python-modules/nltk { };
 
+  nmapthon2 = callPackage ../development/python-modules/nmapthon2 { };
+
   nmigen-boards = callPackage ../development/python-modules/nmigen-boards { };
 
   nmigen = callPackage ../development/python-modules/nmigen { };
