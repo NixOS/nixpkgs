@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage }:
+{ lib, fetchFromGitHub, buildPythonPackage }:
 
 buildPythonPackage rec {
   pname = "enzyme";
@@ -7,9 +7,11 @@ buildPythonPackage rec {
   # Tests rely on files obtained over the network
   doCheck = false;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1fv2kh2v4lwj0hhrhj9pib1pdjh01yr4xgyljhx11l94gjlpy5pj";
+  src = fetchFromGitHub {
+     owner = "Diaoul";
+     repo = "enzyme";
+     rev = "0.4.1";
+     sha256 = "1xcsc05c7jgph133mg19fl3mnc7q43vrlq58pkzsbybgxv8v813q";
   };
 
   meta = with lib; {
