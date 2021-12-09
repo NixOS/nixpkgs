@@ -204,6 +204,14 @@ rec {
     passthru = { inherit plugins; };
   };
 
+  terraform_1_1 = mkTerraform {
+    version = "1.1.0";
+    sha256 = "nnYMoQitqFbOjI8twDh9hWDb1qxMNNVy6wldxkyDKY0=";
+    vendorSha256 = "inPNvNUcil9X0VQ/pVgZdnnmn9UCfEz7qXiuKDj8RYM=";
+    patches = [ ./provider-path-0_15.patch ];
+    passthru = { inherit plugins; };
+  };
+
   # Tests that the plugins are being used. Terraform looks at the specific
   # file pattern and if the plugin is not found it will try to download it
   # from the Internet. With sandboxing enable this test will fail if that is
@@ -213,7 +221,7 @@ rec {
       mainTf = writeText "main.tf" ''
         resource "random_id" "test" {}
       '';
-      terraform = terraform_1_0.withPlugins (p: [ p.random ]);
+      terraform = terraform_1_1.withPlugins (p: [ p.random ]);
       test =
         runCommand "terraform-plugin-test" { buildInputs = [ terraform ]; } ''
           set -e

@@ -33138,10 +33138,11 @@ with pkgs;
     terraform_0_14
     terraform_0_15
     terraform_1_0
+    terraform_1_1
     terraform_plugins_test
     ;
 
-  terraform = terraform_1_0;
+  terraform = terraform_1_1;
   # deprecated
   terraform-full = terraform.full;
 
