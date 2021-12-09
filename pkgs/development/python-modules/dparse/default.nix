@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , isPy27
 , toml
 , pyyaml
@@ -13,9 +13,11 @@ buildPythonPackage rec {
   version = "0.5.1";
   disabled = isPy27;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "a1b5f169102e1c894f9a7d5ccf6f9402a836a5d24be80a986c7ce9eaed78f367";
+  src = fetchFromGitHub {
+     owner = "pyupio";
+     repo = "dparse";
+     rev = "0.5.1";
+     sha256 = "0c0ws1v4f3vwv4w1rlhq0n8bdrpd7lc3a6h901d6giqcif9kqp8x";
   };
 
   propagatedBuildInputs = [
