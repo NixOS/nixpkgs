@@ -13389,4 +13389,10 @@
     github = "vdot0x23";
     githubId = 40716069;
   };
+  jpagex = {
+    name = "Jérémy Pagé";
+    email = "contact@jeremypage.me";
+    github = "jpagex";
+    githubId = 635768;
+  };
 }
