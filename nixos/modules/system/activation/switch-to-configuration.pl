@@ -161,6 +161,9 @@ sub handleModifiedUnit {
         recordUnit($reloadListFile, $unit);
     } elsif ($unit =~ /\.socket$/) {
         # FIXME: do something?
+        # Attempt to fix this: https://github.com/NixOS/nixpkgs/pull/141192
+        # Revert of the attempt: https://github.com/NixOS/nixpkgs/pull/147609
+        # More details: https://github.com/NixOS/nixpkgs/issues/74899#issuecomment-981142430
     } else {
         my $unitInfo = parseUnit($newUnitFile);
         if (boolIsTrue($unitInfo->{'X-ReloadIfChanged'} // "no")) {
