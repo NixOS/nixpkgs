@@ -9,7 +9,7 @@ assertExecutable() {
 
 # Generate a binary executable wrapper for wrapping an executable.
 # The binary is compiled from generated C-code using gcc.
-# makeBinaryWrapper EXECUTABLE OUT_PATH ARGS
+# makeWrapper EXECUTABLE OUT_PATH ARGS
 
 # ARGS:
 # --argv0       NAME    : set name of executed process to NAME
@@ -29,13 +29,13 @@ assertExecutable() {
 
 # To troubleshoot a binary wrapper after you compiled it,
 # use the `strings` command or open the binary file in a text editor.
-makeBinaryWrapper() {
+makeWrapper() {
     assertExecutable "$1"
     makeDocumentedCWrapper "$1" "${@:3}" | cc -Os -x c -o "$2" -
 }
 
-# Syntax: wrapProgramBinary <PROGRAM> <MAKE-WRAPPER FLAGS...>
-wrapProgramBinary() {
+# Syntax: wrapProgram <PROGRAM> <MAKE-WRAPPER FLAGS...>
+wrapProgram() {
     local prog="$1"
     local hidden
 
@@ -48,13 +48,13 @@ wrapProgramBinary() {
     mv "$prog" "$hidden"
     # Silence warning about unexpanded $0:
     # shellcheck disable=SC2016
-    makeBinaryWrapper "$hidden" "$prog" --inherit-argv0 "${@:2}"
+    makeWrapper "$hidden" "$prog" --inherit-argv0 "${@:2}"
 }
 
 # Generate source code for the wrapper in such a way that the wrapper source code
 # will still be readable even after compilation
 # makeDocumentedCWrapper EXECUTABLE ARGS
-# ARGS: same as makeBinaryWrapper
+# ARGS: same as makeWrapper
 makeDocumentedCWrapper() {
     local src docs
     src=$(makeCWrapper "$@")
@@ -64,7 +64,7 @@ makeDocumentedCWrapper() {
 }
 
 # makeCWrapper EXECUTABLE ARGS
-# ARGS: same as makeBinaryWrapper
+# ARGS: same as makeWrapper
 makeCWrapper() {
     local argv0 inherit_argv0 n params cmd main flagsBefore flags executable params length
     local uses_prefix uses_suffix uses_assert uses_assert_success uses_stdio uses_asprintf

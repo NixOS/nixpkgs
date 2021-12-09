@@ -14,7 +14,7 @@ let
     diff wrapper.c "${./.}/${testname}.c"
 
     if [ -f "${./.}/${testname}.env" ]; then
-      eval "makeBinaryWrapper ${envCheck} wrapped $params"
+      eval "makeWrapper ${envCheck} wrapped $params"
       env -i ./wrapped > env.txt
       sed "s#SUBST_ARGV0#${envCheck}#;s#SUBST_CWD#$PWD#" \
         "${./.}/${testname}.env" > golden-env.txt
@@ -27,7 +27,7 @@ let
       fi
     else
       # without a golden env, we expect the wrapper compilation to fail
-      ! eval "makeBinaryWrapper ${envCheck} wrapped $params" &> error.txt
+      ! eval "makeWrapper ${envCheck} wrapped $params" &> error.txt
     fi
 
     cp wrapper.c $out
