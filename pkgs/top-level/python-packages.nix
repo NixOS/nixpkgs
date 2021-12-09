@@ -5879,6 +5879,8 @@ in {
 
   pyskyqhub = callPackage ../development/python-modules/pyskyqhub { };
 
+  pyskyqremote = callPackage ../development/python-modules/pyskyqremote { };
+
   pysolcast = callPackage ../development/python-modules/pysolcast { };
 
   pysyncthru = callPackage ../development/python-modules/pysyncthru { };
