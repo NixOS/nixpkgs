@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , isPy27
-, fetchPypi
+, fetchFromGitHub
 , pythonOlder
 , importlib-metadata
 , pytestCheckHook
@@ -14,9 +14,11 @@ buildPythonPackage rec {
 
   disabled = isPy27;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-r0SCigkUpOiba4MDf80+dLjOjjruVNILh/raWfvjXA0=";
+  src = fetchFromGitHub {
+     owner = "nschloe";
+     repo = "exdown";
+     rev = "v0.9.0";
+     sha256 = "1i74py33pvmg0517b1028xa0d18nw7pfqr38k32lgigksmc091fc";
   };
 
   propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
