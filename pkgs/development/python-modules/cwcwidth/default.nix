@@ -1,13 +1,15 @@
-{ lib, buildPythonPackage, fetchPypi, cython, pytestCheckHook }:
+{ lib, buildPythonPackage, fetchFromGitHub, cython, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "cwcwidth";
   version = "0.1.4";
   format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1azrphpkcyggg38xvkfb9dpc4xmmm90p02kf8dkqd4d6j5w96aj8";
+  src = fetchFromGitHub {
+     owner = "sebastinas";
+     repo = "cwcwidth";
+     rev = "v0.1.4";
+     sha256 = "1w6sfkim23l6mcyj303iwisfv77c338rlxf5zpcxsrs6b9r3s2lx";
   };
 
   nativeBuildInputs = [ cython ];
