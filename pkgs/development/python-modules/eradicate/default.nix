@@ -1,12 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchFromGitHub }:
 
 buildPythonPackage rec {
   pname = "eradicate";
   version = "2.0.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "27434596f2c5314cc9b31410c93d8f7e8885747399773cd088d3adea647a60c8";
+  src = fetchFromGitHub {
+     owner = "myint";
+     repo = "eradicate";
+     rev = "v2.0.0";
+     sha256 = "18vbahs105gznwdymnb9j0vwdk6f7hby7harf7nr2lsjia61pgah";
   };
 
   meta = with lib; {
