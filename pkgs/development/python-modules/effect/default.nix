@@ -1,5 +1,5 @@
 { buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , lib
 , isPy3k
 , six
@@ -13,9 +13,11 @@ buildPythonPackage rec {
   pname = "effect";
   disabled = (!isPy3k);
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "7affb603707c648b07b11781ebb793a4b9aee8acf1ac5764c3ed2112adf0c9ea";
+  src = fetchFromGitHub {
+     owner = "python-effect";
+     repo = "effect";
+     rev = "1.1.0";
+     sha256 = "08c38kj3fs63r4ycwr8kr3hck901bqjmlapx3n699nm1bp39pn8j";
   };
 
   checkInputs = [
