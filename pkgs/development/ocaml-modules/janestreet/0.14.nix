@@ -376,7 +376,7 @@ with self;
 
   ppx_accessor = janePackage {
     pname = "ppx_accessor";
-    version = "0.14.3";
+    version = "0.15";
     minimumOCamlVersion = "4.09";
     hash = "sha256:1c8blzh2f34vbm1z3mnvh670c6vda70chw805n2hmkd9j46l0cll";
     meta.description = "[@@deriving] plugin to generate accessors for use with the Accessor libraries";
@@ -548,8 +548,8 @@ with self;
 
   ppx_optcomp = janePackage {
     pname = "ppx_optcomp";
-    version = "0.14.3";
-    hash = "1iflgfzs23asw3k6098v84al5zqx59rx2qjw0mhvk56avlx71pkw";
+    version = "0.15";
+    hash = "sha256-Qk0dxOf7H/UXsaZo3yo2qYeJg6vQHOoWutlxk/DRVP0=";
     minimumOCamlVersion = "4.04.2";
     meta.description = "Optional compilation for OCaml";
     propagatedBuildInputs = [ ppxlib ];
@@ -593,7 +593,7 @@ with self;
 
   ppx_sexp_conv = janePackage {
     pname = "ppx_sexp_conv";
-    version = "0.14.3";
+    version = "0.15";
     minimumOCamlVersion = "4.04.2";
     hash = "0dbri9d00ydi0dw1cavswnqdmhjaaz80vap29ns2lr6mhhlvyjmj";
     meta.description = "[@@deriving] plugin to generate S-expression conversion functions";
