@@ -1,16 +1,12 @@
-/* Library of low-level helper functions for nix expressions.
- *
- * Please implement (mostly) exhaustive unit tests
- * for new functions in `./tests.nix'.
- */
+/*
+  Library of low-level helper functions for nix expressions.
+
+  Please implement (mostly) exhaustive unit tests
+  for new functions in `./tests.nix'.
+*/
 let
-
-  inherit (import ./fixed-points.nix { inherit lib; }) makeExtensible;
-
-  lib = makeExtensible (self: let
-    callLibs = file: import file { lib = self; };
-  in {
-
+  callLibs = let args = { inherit lib; }; in file: import file args;
+  lib = {
     # often used, or depending on very little
     trivial = callLibs ./trivial.nix;
     fixedPoints = callLibs ./fixed-points.nix;
@@ -54,7 +50,7 @@ let
     filesystem = callLibs ./filesystem.nix;
 
     # back-compat aliases
-    platforms = self.systems.doubles;
+    platforms = lib.systems.doubles;
 
     # linux kernel configuration
     kernel = callLibs ./kernel.nix;
@@ -64,14 +60,14 @@ let
       hasAttr head isAttrs isBool isInt isList isString length
       lessThan listToAttrs pathExists readFile replaceStrings seq
       stringLength sub substring tail trace;
-    inherit (self.trivial) id const pipe concat or and bitAnd bitOr bitXor
+    inherit (lib.trivial) id const pipe concat or and bitAnd bitOr bitXor
       bitNot boolToString mergeAttrs flip mapNullable inNixShell isFloat min max
       importJSON importTOML warn warnIf info showWarnings nixpkgsVersion version
       mod compare splitByAndCompare functionArgs setFunctionArgs isFunction
       toHexString toBaseDigits;
-    inherit (self.fixedPoints) fix fix' converge extends composeExtensions
+    inherit (lib.fixedPoints) fix fix' converge extends composeExtensions
       composeManyExtensions makeExtensible makeExtensibleWithCustomName;
-    inherit (self.attrsets) attrByPath hasAttrByPath setAttrByPath
+    inherit (lib.attrsets) attrByPath hasAttrByPath setAttrByPath
       getAttrFromPath attrVals attrValues getAttrs catAttrs filterAttrs
       filterAttrsRecursive foldAttrs collect nameValuePair mapAttrs
       mapAttrs' mapAttrsToList mapAttrsRecursive mapAttrsRecursiveCond
@@ -80,13 +76,13 @@ let
       recursiveUpdate matchAttrs overrideExisting getOutput getBin
       getLib getDev getMan chooseDevOutputs zipWithNames zip
       recurseIntoAttrs dontRecurseIntoAttrs cartesianProductOfSets;
-    inherit (self.lists) singleton forEach foldr fold foldl foldl' imap0 imap1
+    inherit (lib.lists) singleton forEach foldr fold foldl foldl' imap0 imap1
       concatMap flatten remove findSingle findFirst any all count
       optional optionals toList range partition zipListsWith zipLists
       reverseList listDfs toposort sort naturalSort compareLists take
       drop sublist last init crossLists unique intersectLists
       subtractLists mutuallyExclusive groupBy groupBy';
-    inherit (self.strings) concatStrings concatMapStrings concatImapStrings
+    inherit (lib.strings) concatStrings concatMapStrings concatImapStrings
       intersperse concatStringsSep concatMapStringsSep
       concatImapStringsSep makeSearchPath makeSearchPathOutput
       makeLibraryPath makeBinPath optionalString
@@ -98,19 +94,19 @@ let
       nameFromURL enableFeature enableFeatureAs withFeature
       withFeatureAs fixedWidthString fixedWidthNumber isStorePath
       toInt readPathsFromFile fileContents;
-    inherit (self.stringsWithDeps) textClosureList textClosureMap
+    inherit (lib.stringsWithDeps) textClosureList textClosureMap
       noDepEntry fullDepEntry packEntry stringAfter;
-    inherit (self.customisation) overrideDerivation makeOverridable
+    inherit (lib.customisation) overrideDerivation makeOverridable
       callPackageWith callPackagesWith extendDerivation hydraJob
       makeScope makeScopeWithSplicing;
-    inherit (self.meta) addMetaAttrs dontDistribute setName updateName
+    inherit (lib.meta) addMetaAttrs dontDistribute setName updateName
       appendToName mapDerivationAttrset setPrio lowPrio lowPrioSet hiPrio
       hiPrioSet getLicenseFromSpdxId;
-    inherit (self.sources) pathType pathIsDirectory cleanSourceFilter
+    inherit (lib.sources) pathType pathIsDirectory cleanSourceFilter
       cleanSource sourceByRegex sourceFilesBySuffices
       commitIdFromGitRepo cleanSourceWith pathHasContext
       canCleanSource pathIsRegularFile pathIsGitRepo;
-    inherit (self.modules) evalModules unifyModuleSyntax
+    inherit (lib.modules) evalModules unifyModuleSyntax
       applyIfFunction mergeModules
       mergeModules' mergeOptionDecls evalOptionValue mergeDefinitions
       pushDownProperties dischargeProperties filterOverrides
@@ -120,21 +116,21 @@ let
       mkAliasAndWrapDefinitions fixMergeModules mkRemovedOptionModule
       mkRenamedOptionModule mkMergedOptionModule mkChangedOptionModule
       mkAliasOptionModule mkDerivedConfig doRename;
-    inherit (self.options) isOption mkEnableOption mkSinkUndeclaredOptions
+    inherit (lib.options) isOption mkEnableOption mkSinkUndeclaredOptions
       mergeDefaultOption mergeOneOption mergeEqualOption getValues
       getFiles optionAttrSetToDocList optionAttrSetToDocList'
       scrubOptionValue literalExpression literalExample literalDocBook
       showOption showFiles unknownModule mkOption;
-    inherit (self.types) isType setType defaultTypeMerge defaultFunctor
+    inherit (lib.types) isType setType defaultTypeMerge defaultFunctor
       isOptionType mkOptionType;
-    inherit (self.asserts)
+    inherit (lib.asserts)
       assertMsg assertOneOf;
-    inherit (self.debug) addErrorContextToAttrs traceIf traceVal traceValFn
+    inherit (lib.debug) addErrorContextToAttrs traceIf traceVal traceValFn
       traceXMLVal traceXMLValMarked traceSeq traceSeqN traceValSeq
       traceValSeqFn traceValSeqN traceValSeqNFn traceFnSeqN traceShowVal
       traceShowValMarked showVal traceCall traceCall2 traceCall3
       traceValIfNot runTests testAllTrue traceCallXml attrNamesToStr;
-    inherit (self.misc) maybeEnv defaultMergeArg defaultMerge foldArgs
+    inherit (lib.misc) maybeEnv defaultMergeArg defaultMerge foldArgs
       maybeAttrNullable maybeAttr ifEnable checkFlag getValue
       checkReqs uniqList uniqListExt condConcat lazyGenericClosure
       innerModifySumArgs modifySumArgs innerClosePropagation
@@ -144,7 +140,8 @@ let
       mergeAttrsByFuncDefaultsClean mergeAttrBy
       fakeHash fakeSha256 fakeSha512
       nixType imap;
-    inherit (self.versions)
+    inherit (lib.versions)
       splitVersion;
-  });
-in lib
+  };
+in
+lib
