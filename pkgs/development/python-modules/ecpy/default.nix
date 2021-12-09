@@ -1,12 +1,14 @@
-{ lib, fetchPypi, buildPythonPackage, isPy3k, future }:
+{ lib, fetchFromGitHub, buildPythonPackage, isPy3k, future }:
 
 buildPythonPackage rec {
   pname = "ECPy";
   version = "1.2.5";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "9635cffb9b6ecf7fd7f72aea1665829ac74a1d272006d0057d45a621aae20228";
+  src = fetchFromGitHub {
+     owner = "ubinity";
+     repo = "ECPy";
+     rev = "1.2.5";
+     sha256 = "0p642bpqicxjkwqk4q46wqkbxhad1qiir6xz4w7xx0d4cdq7yps8";
   };
 
   prePatch = ''
