@@ -1,12 +1,14 @@
-{ lib, fetchPypi, buildPythonPackage }:
+{ lib, fetchFromGitHub, buildPythonPackage }:
 
 buildPythonPackage rec {
   pname = "ed25519";
   version = "1.5";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0n1k83ww0pr4q6z0h7p8hvy21hcgb96jvgllfbwhvvyf37h3w182";
+  src = fetchFromGitHub {
+     owner = "warner";
+     repo = "python-ed25519";
+     rev = "1.5";
+     sha256 = "0c7sh54divx1sar2914yljy3hli6fjknxpfri0jw9j86jl3y2283";
   };
 
   meta = with lib; {
