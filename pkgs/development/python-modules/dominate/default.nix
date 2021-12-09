@@ -1,12 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k }:
+{ lib, buildPythonPackage, fetchFromGitHub, isPy3k }:
 
 buildPythonPackage rec {
   pname = "dominate";
   version = "2.6.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "76ec2cde23700a6fc4fee098168b9dee43b99c2f1dd0ca6a711f683e8eb7e1e4";
+  src = fetchFromGitHub {
+     owner = "Knio";
+     repo = "dominate";
+     rev = "2.6.0";
+     sha256 = "0i9lf7mz5y91xfga6dycj7d4z57f4cdyrhar38qxg9kzwci1xx5n";
   };
 
   doCheck = !isPy3k;
