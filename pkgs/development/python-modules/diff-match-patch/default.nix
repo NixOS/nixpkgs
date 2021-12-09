@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, python }:
+{ lib, buildPythonPackage, fetchFromGitHub, python }:
 
 buildPythonPackage rec {
   pname = "diff-match-patch";
@@ -10,9 +10,11 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
   };
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "da6f5a01aa586df23dfc89f3827e1cafbb5420be9d87769eeb079ddfd9477a18";
+  src = fetchFromGitHub {
+     owner = "diff-match-patch-python";
+     repo = "diff-match-patch";
+     rev = "v20200713";
+     sha256 = "0834fvsxyw52426lq0qd38vxjk5bpy03sqqg6byayxz5hml1qdqh";
   };
 
   checkPhase = ''
