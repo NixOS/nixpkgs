@@ -1,12 +1,14 @@
-{ lib, fetchPypi, buildPythonPackage }:
+{ lib, fetchFromGitHub, buildPythonPackage }:
 
 buildPythonPackage rec {
   pname = "distro";
   version = "1.6.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "83f5e5a09f9c5f68f60173de572930effbcc0287bb84fdc4426cb4168c088424";
+  src = fetchFromGitHub {
+     owner = "nir0s";
+     repo = "distro";
+     rev = "v1.6.0";
+     sha256 = "157yyhw5y8z7ib2zks887a10jxg0a1l8ffiprzrrzgxl0ghybcnb";
   };
 
   # tests are very targeted at individual linux distributions
