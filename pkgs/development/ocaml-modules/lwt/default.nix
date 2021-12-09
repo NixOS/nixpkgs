@@ -8,13 +8,13 @@ let inherit (lib) optional versionAtLeast; in
 
 buildDunePackage rec {
   pname = "lwt";
-  version = "5.4.1";
+  version = "5.5.0";
 
   useDune2 = true;
 
   src = fetchzip {
     url = "https://github.com/ocsigen/${pname}/archive/${version}.tar.gz";
-    sha256 = "0cq2qy23sa1a5zk6nja3c652mp29i84yfrkcwks6i8sdqwli36jy";
+    sha256 = "sha256-P8k/M4pZ7+TvbqMKvUAReUJ4UK0UF7jRNEWOr7P4csk=";
   };
 
   nativeBuildInputs = [ pkg-config cppo dune-configurator ];
