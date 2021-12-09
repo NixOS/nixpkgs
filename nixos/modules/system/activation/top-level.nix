@@ -113,8 +113,19 @@ in
       default = [];
       description = ''
         A list of packages that should be included in the system
-        closure but not otherwise made available to users. This is
-        primarily used by the installation tests.
+        closure but not otherwise made available to users.
+      '';
+    };
+
+    system.checks = mkOption {
+      type = types.listOf types.package;
+      default = [];
+      description = ''
+        A list of packages that are added as dependencies of the activation
+        script build, for the purpose of validating the configuration.
+
+        Unlike <literal>system.extraDependencies</literal>, these paths do not
+        become part of the runtime closure of the system.
       '';
     };
 
@@ -172,6 +183,8 @@ in
         ''ln -s '${import ../../../lib/from-env.nix "NIXOS_CONFIG" <nixos-config>}' \
             "$out/configuration.nix"
         '';
+
+    system.systemBuilderAttrs.passedTests = concatStringsSep " " config.system.checks;
 
     system.build.toplevel = system;
 
