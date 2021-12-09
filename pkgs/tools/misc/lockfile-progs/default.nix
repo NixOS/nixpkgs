@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   _name   = "lockfile-progs";
-  version = "0.1.18";
+  version = "0.1.19";
   name    = "${_name}-${version}";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/l/${_name}/${_name}_${version}.tar.gz";
-    sha256 = "1rjwn3fh2hy8hmpr66y8yp7v5i3325v1mk0gr7pqhqbyp6j9aad4";
+    sha256 = "sha256-LFcEsByPR0+CkheA5Fkqknsr9qbXYWNUpsXXzVZkhX4=";
   };
 
   buildInputs = [ liblockfile ];
