@@ -52,6 +52,7 @@ in stdenv.mkDerivation rec {
   ++ lib.optional (mod && kernel.kernelOlder "5.11") "-Ddisable_drivers=kni"
   ++ lib.optional (!shared) "-Ddefault_library=static"
   ++ lib.optional stdenv.isx86_64 "-Dmachine=nehalem"
+  ++ lib.optional stdenv.isAarch64 "-Dmachine=generic"
   ++ lib.optional mod "-Dkernel_dir=${placeholder "kmod"}/lib/modules/${kernel.modDirVersion}"
   ++ lib.optional (withExamples != []) "-Dexamples=${builtins.concatStringsSep "," withExamples}";
 
