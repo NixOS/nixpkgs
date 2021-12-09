@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage, pythonOlder, pytest, pysha3, pycrypto
+{ lib, fetchFromGitHub, buildPythonPackage, pythonOlder, pytest, pysha3, pycrypto
 , pycryptodome
 }:
 
@@ -6,9 +6,11 @@ buildPythonPackage rec {
   pname = "eth-hash";
   version = "0.3.2";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "3f40cecd5ead88184aa9550afc19d057f103728108c5102f592f8415949b5a76";
+  src = fetchFromGitHub {
+     owner = "ethereum";
+     repo = "eth-hash";
+     rev = "v0.3.2";
+     sha256 = "1d0qq8619kac09qm2bppa27nb1xnnlanhzarzhiqhggc98ayvh1c";
   };
 
   checkInputs = [ pytest ];
