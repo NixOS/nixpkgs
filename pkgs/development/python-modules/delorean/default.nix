@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , Babel
 , humanize
 , python-dateutil
@@ -11,9 +11,11 @@ buildPythonPackage rec {
   pname = "Delorean";
   version = "1.0.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0d31ay7yq2w7xz7m3ssk5phjbm64b2k8hmgcif22719k29p7hrzy";
+  src = fetchFromGitHub {
+     owner = "myusuf3";
+     repo = "delorean";
+     rev = "1.0.0";
+     sha256 = "01ccr453z11cfgzijcj6xq9c2jr4wa4q2qhl15a2987mx0z379r2";
   };
 
   propagatedBuildInputs = [ Babel humanize python-dateutil tzlocal ];
