@@ -219,9 +219,9 @@
 # Podman, CRI-O modules and related
 /nixos/modules/virtualisation/containers.nix @NixOS/podman @zowoq @adisbladis
 /nixos/modules/virtualisation/cri-o.nix      @NixOS/podman @zowoq @adisbladis
-/nixos/modules/virtualisation/podman.nix     @NixOS/podman @zowoq @adisbladis
+/nixos/modules/virtualisation/podman         @NixOS/podman @zowoq @adisbladis
 /nixos/tests/cri-o.nix                       @NixOS/podman @zowoq @adisbladis
-/nixos/tests/podman.nix                      @NixOS/podman @zowoq @adisbladis
+/nixos/tests/podman                          @NixOS/podman @zowoq @adisbladis
 
 # Docker tools
 /pkgs/build-support/docker                   @roberth @utdemir
