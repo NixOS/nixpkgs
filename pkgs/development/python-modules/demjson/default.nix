@@ -1,12 +1,14 @@
-{ lib, python, buildPythonPackage, fetchPypi, isPy3k }:
+{ lib, python, buildPythonPackage, fetchFromGitHub, isPy3k }:
 
 buildPythonPackage rec {
   pname = "demjson";
   version = "2.2.4";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0ygbddpnvp5lby6mr5kz60la3hkvwwzv3wwb3z0w9ngxl0w21pii";
+  src = fetchFromGitHub {
+     owner = "dmeranda";
+     repo = "demjson";
+     rev = "release-2.2.4";
+     sha256 = "08af460dw1awn3ywdpgk34ghqfz6afsxv1mr1m5hak9q4x6jpqlc";
   };
 
   checkPhase = lib.optionalString isPy3k ''
