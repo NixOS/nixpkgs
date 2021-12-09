@@ -36,9 +36,14 @@ in stdenv.mkDerivation rec {
     libpcap
     numactl
     openssl.dev
-    rdma-core
     zlib
   ] ++ lib.optionals mod kernel.moduleBuildDependencies;
+
+  # Propagated to support current DPDK users in nixpkgs which statically link
+  # with the framework (e.g. odp-dpdk).
+  propagatedBuildInputs = [
+    rdma-core
+  ];
 
   postPatch = ''
     patchShebangs config/arm buildtools
