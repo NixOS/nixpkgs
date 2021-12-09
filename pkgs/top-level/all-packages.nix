@@ -7343,6 +7343,8 @@ with pkgs;
 
   libtins = callPackage ../development/libraries/libtins { };
 
+  libtree = callPackage ../development/tools/misc/libtree { };
+
   libshout = callPackage ../development/libraries/libshout { };
 
   libqb = callPackage ../development/libraries/libqb { };
@@ -10014,6 +10016,8 @@ with pkgs;
   teler = callPackage ../tools/security/teler { };
 
   telescope = callPackage ../applications/networking/browsers/telescope { };
+
+  termcolor = callPackage ../development/libraries/termcolor { };
 
   termscp = callPackage ../tools/networking/termscp {
     inherit (darwin.apple_sdk.frameworks) Foundation Security;
@@ -16135,6 +16139,8 @@ with pkgs;
   elastix = callPackage ../development/libraries/science/biology/elastix {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
+
+  elfio = callPackage ../development/libraries/elfio { };
 
   enchant1 = callPackage ../development/libraries/enchant/1.x.nix { };
 
