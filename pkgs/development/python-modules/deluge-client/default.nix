@@ -1,12 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchFromGitHub }:
 
 buildPythonPackage rec {
   pname = "deluge-client";
   version = "1.9.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0d2f12108a147d44590c8df63997fcb32f8b2fbc18f8cbb221f0136e2e372b85";
+  src = fetchFromGitHub {
+     owner = "JohnDoee";
+     repo = "deluge-client";
+     rev = "1.9.0";
+     sha256 = "0kjx808w6crpak0ihs32zxg6lmy3g3bv5amsfcf98h23kqz4vk5m";
   };
 
   # it will try to connect to a running instance
