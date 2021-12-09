@@ -74,6 +74,16 @@ To package Dotnet applications, you can use `buildDotnetModule`. This has simila
 * `projectFile` has to be used for specifying the dotnet project file relative to the source root. These usually have `.sln` or `.csproj` file extensions. This can be an array of multiple projects as well.
 * `nugetDeps` has to be used to specify the NuGet dependency file. Unfortunately, these cannot be deterministically fetched without a lockfile. This file should be generated using `nuget-to-nix` tool, which is available in nixpkgs.
 * `packNupkg` is used to pack project as a `nupkg`, and installs it to `$out/share`. If set to `true`, the derivation can be used as a dependency for another dotnet project by adding it to `projectReferences`.
+* `projectReferences` can be used to resolve `ProjectReference` project items. Referenced projects can be packed with `buildDotnetModule` by setting the `packNupkg = true` attribute and passing a list of derivations to `projectReferences`. Since we are sharing referenced projects as NuGets they must be added to csproj/fsproj files as `PackageReference` as well.
+ For example, your project has a local dependency:
+ ```xml
+     <ProjectReference Include="../foo/bar.fsproj" />
+ ```
+ To enable discovery through `projectReferences` you would need to add:
+ ```xml
+     <ProjectReference Include="../foo/bar.fsproj" />
+     <PackageReference Include="bar" Version="*" Condition=" '$(ContinuousIntegrationBuild)'=='true' "/>
+  ```
 * `executables` is used to specify which executables get wrapped to `$out/bin`, relative to `$out/lib/$pname`. If this is unset, all executables generated will get installed. If you do not want to install any, set this to `[]`.
 * `runtimeDeps` is used to wrap libraries into `LD_LIBRARY_PATH`. This is how dotnet usually handles runtime dependencies.
 * `buildType` is used to change the type of build. Possible values are `Release`, `Debug`, etc. By default, this is set to `Release`.
@@ -93,7 +103,9 @@ Here is an example `default.nix`, using some of the previously discussed argumen
 ```nix
 { lib, buildDotnetModule, dotnetCorePackages, ffmpeg }:
 
-buildDotnetModule rec {
+let
+  referencedProject = import ../../bar { ... };
+in buildDotnetModule rec {
   pname = "someDotnetApplication";
   version = "0.1";
 
@@ -101,6 +113,7 @@ buildDotnetModule rec {
 
   projectFile = "src/project.sln";
   nugetDeps = ./deps.nix; # File generated with `nuget-to-nix path/to/src > deps.nix`.
+  projectReferences = [ referencedProject ]; # `referencedProject` must contain `nupkg` in the folder structure.
 
   dotnet-sdk = dotnetCorePackages.sdk_3_1;
   dotnet-runtime = dotnetCorePackages.net_5_0;

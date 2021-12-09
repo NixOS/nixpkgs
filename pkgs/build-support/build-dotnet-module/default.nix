@@ -30,6 +30,15 @@
 # The NuGet dependency file. This locks all NuGet dependency versions, as otherwise they cannot be deterministically fetched.
 # This can be generated using the `nuget-to-nix` tool.
 , nugetDeps ? null
+# A list of derivations containing nupkg packages for local project references.
+# Referenced derivations can be built with `buildDotnetModule` with `packNupkg=true` flag.
+# Since we are sharing them as nugets they must be added to csproj/fsproj files as `PackageReference` as well.
+# For example, your project has a local dependency:
+#     <ProjectReference Include="../foo/bar.fsproj" />
+# To enable discovery through `projectReferences` you would need to add a line:
+#     <ProjectReference Include="../foo/bar.fsproj" />
+#     <PackageReference Include="bar" Version="*" Condition=" '$(ContinuousIntegrationBuild)'=='true' "/>
+, projectReferences ? []
 # Libraries that need to be available at runtime should be passed through this.
 # These get wrapped into `LD_LIBRARY_PATH`.
 , runtimeDeps ? []
@@ -64,6 +73,7 @@ let
       inherit sha256;
     };
   });
+  _localDeps = linkFarmFromDrvs "${name}-local-nuget-deps" projectReferences;
 
   nuget-source = stdenvNoCC.mkDerivation rec {
     name = "${args.pname}-nuget-source";
@@ -76,6 +86,8 @@ let
 
       nuget sources Add -Name nixos -Source "$out/lib"
       nuget init "${_nugetDeps}" "$out/lib"
+      ${lib.optionalString (projectReferences != [])
+        "nuget init \"${_localDeps}\" \"$out/lib\""}
 
       # Generates a list of all unique licenses' spdx ids.
       find "$out/lib" -name "*.nuspec" -exec sh -c \
