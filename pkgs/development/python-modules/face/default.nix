@@ -1,12 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, boltons, pytest }:
+{ lib, buildPythonPackage, fetchFromGitHub, boltons, pytest }:
 
 buildPythonPackage rec {
   pname = "face";
   version = "20.1.1";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "7d59ca5ba341316e58cf72c6aff85cca2541cf5056c4af45cb63af9a814bed3e";
+  src = fetchFromGitHub {
+     owner = "mahmoud";
+     repo = "face";
+     rev = "v20.1.1";
+     sha256 = "09slk25vp2dbmaacgk06ga4pay4x2valc469xr7mzzvxpailjlr1";
   };
 
   propagatedBuildInputs = [ boltons ];
