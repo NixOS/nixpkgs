@@ -2,7 +2,7 @@
 , aiohttp
 , buildPythonPackage
 , docopt
-, fetchPypi
+, fetchFromGitHub
 , pythonOlder
 , pyyaml
 }:
@@ -14,9 +14,11 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "hOUN4cA4pKVioIrfJM02GOnZdDRc7xbNtvHfoD3//bM=";
+  src = fetchFromGitHub {
+     owner = "molobrakos";
+     repo = "eliqonline";
+     rev = "v1.2.2";
+     sha256 = "17grl8nkrf7mhn3rz4zr78k387vjiyhg1nbhgb62ba59fx001qcp";
   };
 
   propagatedBuildInputs = [
