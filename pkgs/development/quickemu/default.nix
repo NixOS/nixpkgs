@@ -22,6 +22,7 @@
 let
   runtimePaths = [
     qemu
+    edk2
     gnugrep
     jq
     lsb-release
@@ -41,13 +42,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "quickemu";
-  version = "2.3.2";
+  version = "3.11";
 
   src = fetchFromGitHub {
     owner = "quickemu-project";
     repo = pname;
     rev = version;
-    sha256 = "sha256-15cilf7ccj88c9f4qw1b5mjzgi2f3c854b4xlz1k22xdlx8zwd3f";
+    sha256 = "sha256-1oCgUZ2YB4Ib+8Bhpw90bnRXrQz0Y+a6r/yUvPhOjvc=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
