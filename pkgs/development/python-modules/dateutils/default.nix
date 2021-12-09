@@ -1,12 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, python-dateutil, pytz }:
+{ lib, buildPythonPackage, fetchFromGitHub, python-dateutil, pytz }:
 
 buildPythonPackage rec {
   pname = "dateutils";
   version = "0.6.12";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-A92QvLIVQb1OtLATY35PG1+USIHEbMbktnpgWeNw4/E=";
+  src = fetchFromGitHub {
+     owner = "jmcantrell";
+     repo = "python-dateutils";
+     rev = "v0.6.12";
+     sha256 = "1qa48j7v23c65v8hxpjvi6a8qm08n8pj7g1m992r0qbvnyjx073z";
   };
 
   propagatedBuildInputs = [
