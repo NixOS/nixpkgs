@@ -9,6 +9,10 @@ let
 
 in
 {
+  imports = [
+    ./network-socket-ghostunnel.nix
+  ];
+
   options.virtualisation.podman.networkSocket = {
     enable = mkOption {
       type = types.bool;
