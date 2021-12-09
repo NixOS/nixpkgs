@@ -6,11 +6,11 @@ else
 
 stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-ctypes-${version}";
-  version = "0.18.0";
+  version = "0.19.1";
 
   src = fetchzip {
     url = "https://github.com/ocamllabs/ocaml-ctypes/archive/${version}.tar.gz";
-    sha256 = "03zrbnl16m67ls0yfhq7a4k4238x6x6b3m456g4dw2yqwc153vks";
+    sha256 = "sha256-2mB3gPn3wYljcm0RZGagvmZg/3F6WPqHWFnrZxBRIfY=";
   };
 
   nativeBuildInputs = [ pkg-config ];
