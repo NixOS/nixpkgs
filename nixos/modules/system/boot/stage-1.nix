@@ -575,7 +575,7 @@ in
         else "gzip"
       );
       defaultText = literalDocBook "<literal>zstd</literal> if the kernel supports it (5.9+), <literal>gzip</literal> if not";
-      type = types.unspecified; # We don't have a function type...
+      type = types.anything; # We don't have a function type...
       description = ''
         The compressor to use on the initrd image. May be any of:
 

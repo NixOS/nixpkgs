@@ -247,6 +247,7 @@ let
 
       children = mkOption {
         default = {};
+        type = types.attrsOf types.unspecified;
         description = ''
           Children zones inherit all options of their parents. Attributes
           defined in a child will overwrite the ones of its parent. Only

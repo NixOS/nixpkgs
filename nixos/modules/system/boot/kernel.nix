@@ -36,7 +36,7 @@ in
 
     boot.kernelPackages = mkOption {
       default = pkgs.linuxPackages;
-      type = types.unspecified // { merge = mergeEqualOption; };
+      type = types.anything // { merge = mergeEqualOption; };
       apply = kernelPackages: kernelPackages.extend (self: super: {
         kernel = super.kernel.override (originalArgs: {
           inherit randstructSeed;
