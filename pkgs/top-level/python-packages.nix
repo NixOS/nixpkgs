@@ -10357,8 +10357,6 @@ in {
 
   zc-buildout = callPackage ../development/python-modules/buildout { };
 
-  zc_buildout_nix = callPackage ../development/python-modules/buildout-nix { };
-
   zc_lockfile = callPackage ../development/python-modules/zc_lockfile { };
 
   zconfig = callPackage ../development/python-modules/zconfig { };
