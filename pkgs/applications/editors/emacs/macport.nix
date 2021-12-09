@@ -37,11 +37,11 @@ stdenv.mkDerivation rec {
 
   postUnpack = ''
     mv $sourceRoot $name
-    tar xzf $macportSrc -C $name --strip-components=1
+    tar xf $macportSrc -C $name --strip-components=1
     mv $name $sourceRoot
 
     # extract retina image resources
-    tar xzfv $hiresSrc --strip 1 -C $sourceRoot
+    tar xfv $hiresSrc --strip 1 -C $sourceRoot
   '';
 
   postPatch = ''
