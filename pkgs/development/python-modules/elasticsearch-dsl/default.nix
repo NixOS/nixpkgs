@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , isPy3k
 , elasticsearch
 , ipaddress
@@ -12,9 +12,11 @@ buildPythonPackage rec {
   pname = "elasticsearch-dsl";
   version = "7.4.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "c4a7b93882918a413b63bed54018a1685d7410ffd8facbc860ee7fd57f214a6d";
+  src = fetchFromGitHub {
+     owner = "elasticsearch";
+     repo = "elasticsearch-dsl-py";
+     rev = "v7.4.0";
+     sha256 = "1zg6bl99kw5igksc77pmdlm4i49n1rjvnw7pw4f4gvar4yp6lkd4";
   };
 
   propagatedBuildInputs = [ elasticsearch python-dateutil six ]
