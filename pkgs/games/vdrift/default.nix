@@ -13,6 +13,7 @@
 , curl
 , gettext
 , writeTextFile
+, shellcheck
 
 , data ? fetchsvn {
     url = "svn://svn.code.sf.net/p/vdrift/code/vdrift-data";
@@ -57,6 +58,7 @@ let
 in writeTextFile {
   name = wrappedName;
   text = ''
+    # shellcheck shell=bash
     export VDRIFT_DATA_DIRECTORY="${data}"
     exec ${bin}/bin/vdrift "$@"
   '';
@@ -64,6 +66,7 @@ in writeTextFile {
   executable = true;
   checkPhase = ''
     ${stdenv.shell} -n $out/bin/vdrift
+    ${shellcheck}/bin/shellcheck "$out/bin/vdrift"
   '';
 } // {
   meta = bin.meta // {
