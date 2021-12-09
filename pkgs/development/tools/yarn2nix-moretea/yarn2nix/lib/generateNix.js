@@ -78,7 +78,7 @@ function fetchLockedDep(builtinFetchGit) {
       return ''
     }
 
-    const [url, sha1OrRev] = resolved.split('#')
+    const [url, sha512OrRev] = resolved.split('#')
 
     const fileName = urlToName(url)
 
@@ -93,7 +93,7 @@ function fetchLockedDep(builtinFetchGit) {
     }
 
     if (url.startsWith('git+') || url.startsWith("git:")) {
-      const rev = sha1OrRev
+      const rev = sha512OrRev
 
       const [_, branch] = nameWithVersion.split('#')
 
@@ -102,7 +102,7 @@ function fetchLockedDep(builtinFetchGit) {
       return fetchgit(fileName, urlForGit, rev, branch || 'master', builtinFetchGit)
     }
 
-    const [algo, hash] = integrity ? integrity.split('-') : ['sha1', sha1OrRev]
+    const [algo, hash] = integrity ? integrity.split('-') : ['sha512', sha512OrRev]
 
     return `    {
       name = "${fileName}";

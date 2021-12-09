@@ -6,7 +6,7 @@ const { docopt } = require('docopt')
 const deepEqual = require('deep-equal')
 const R = require('ramda')
 
-const fixPkgAddMissingSha1 = require('../lib/fixPkgAddMissingSha1')
+const fixPkgAddMissingSha512 = require('../lib/fixPkgAddMissingSha512')
 const mapObjIndexedReturnArray = require('../lib/mapObjIndexedReturnArray')
 const generateNix = require('../lib/generateNix')
 
@@ -63,7 +63,7 @@ let pkgs = R.pipe(
 
 ;(async () => {
   if (!options['--no-patch']) {
-    pkgs = await Promise.all(R.map(fixPkgAddMissingSha1, pkgs))
+    pkgs = await Promise.all(R.map(fixPkgAddMissingSha512, pkgs))
   }
 
   const origJson = lockfile.parse(data)
