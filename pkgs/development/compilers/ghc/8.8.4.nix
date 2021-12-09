@@ -186,7 +186,7 @@ stdenv.mkDerivation (rec {
     # cabal passes incorrect --host= when cross-compiling
     # https://github.com/haskell/cabal/issues/5887
     (fetchpatch {
-            url = "https://raw.githubusercontent.com/input-output-hk/haskell.nix/122bd81150386867da07fdc9ad5096db6719545a/overlays/patches/ghc/cabal-host.patch";
+      url = "https://raw.githubusercontent.com/input-output-hk/haskell.nix/122bd81150386867da07fdc9ad5096db6719545a/overlays/patches/ghc/cabal-host.patch";
       sha256 = "sha256:0yd0sajgi24sc1w5m55lkg2lp6kfkgpp3lgija2c8y3cmkwfpdc1";
     })
 
@@ -195,6 +195,12 @@ stdenv.mkDerivation (rec {
     # Renamed to match ghc8.8:
     # https://gitlab.haskell.org/ghc/ghc/-/commit/4b431f334018eaef2cf36de3316025c68c922915#20d64c0bdc272817149d1d5cf20a73a8b5fd637f
     ./rename-numa-api-call.patch
+  ] ++ lib.optionals stdenv.isDarwin [
+    # Reverts the linking behavior of GHC to not resolve `-libc++` to `c++`.
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/input-output-hk/haskell.nix/613ec38dbd62ab7929178c9c7ffff71df9bb86be/overlays/patches/ghc/ghc-macOS-loadArchive-fix.patch";
+      sha256 = "0IUpuzjZb1G+gP3q6RnwQbW4mFzc/OZ/7QqZy+57kx0=";
+    })
   ];
 
   postPatch = "patchShebangs .";
