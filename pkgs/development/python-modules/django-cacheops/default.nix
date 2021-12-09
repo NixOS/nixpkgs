@@ -1,5 +1,5 @@
 { buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , lib
 , django
 , funcy
@@ -11,9 +11,11 @@ buildPythonPackage rec {
   pname = "django-cacheops";
   version = "6.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "78e161ebd96a32e28e19ec7da31f2afed9e62a79726b8b5f0ed12dd16c2e5841";
+  src = fetchFromGitHub {
+     owner = "Suor";
+     repo = "django-cacheops";
+     rev = "6.0";
+     sha256 = "1gfn83dv4bmd0092mz8h24jw14fpgcfjxcc7msq9d5yvrk2id3qh";
   };
 
   propagatedBuildInputs = [
