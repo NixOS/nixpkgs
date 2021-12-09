@@ -14,6 +14,7 @@ buildPythonPackage rec {
   pname = "diofant";
   version = "0.13.0";
   disabled = pythonOlder "3.9";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit version;
