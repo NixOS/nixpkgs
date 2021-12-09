@@ -2,7 +2,7 @@
 , haskell, haskellPackages, nodejs
 , fetchurl, fetchpatch, makeWrapper, writeScriptBin
   # Rust dependecies
-, curl, rustPlatform, openssl, pkg-config, Security
+, curl, rustPlatform, openssl, pkg-config, Security, darwin
 }:
 let
   fetchElmDeps = import ./fetchElmDeps.nix { inherit stdenv lib fetchurl; };
@@ -109,6 +109,17 @@ let
         homepage = "https://github.com/zwilias/elm-json";
         license = licenses.mit;
         maintainers = [ maintainers.turbomack ];
+      };
+    };
+
+    elm-test-rs = import ./packages/elm-test-rs.nix {
+      inherit lib rustPlatform fetchurl openssl stdenv Security darwin;
+    } // {
+      meta = with lib; {
+        description = "Fast and portable executable to run your Elm tests";
+        homepage = "https://github.com/mpizenberg/elm-test-rs";
+        license = licenses.bsd3;
+        maintainers = [ maintainers.jpagex ];
       };
     };
   };

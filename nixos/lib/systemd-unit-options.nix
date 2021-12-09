@@ -1,7 +1,7 @@
-{ config, lib }:
+{ lib, systemdUtils }:
 
+with systemdUtils.lib;
 with lib;
-with import ./systemd-lib.nix { inherit config lib pkgs; };
 
 let
   checkService = checkUnitConfig "Service" [

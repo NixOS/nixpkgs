@@ -39,10 +39,12 @@ in {
   options = {
     services.xserver.windowManager.xmonad = {
       enable = mkEnableOption "xmonad";
+
       haskellPackages = mkOption {
         default = pkgs.haskellPackages;
         defaultText = literalExpression "pkgs.haskellPackages";
         example = literalExpression "pkgs.haskell.packages.ghc784";
+        type = types.attrs;
         description = ''
           haskellPackages used to build Xmonad and other packages.
           This can be used to change the GHC version used to build
