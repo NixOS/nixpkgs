@@ -1,5 +1,5 @@
 { lib
-, fetchPypi
+, fetchFromGitHub
 , buildPythonPackage
 }:
 
@@ -7,9 +7,11 @@ buildPythonPackage rec {
   pname = "dpkt";
   version = "1.9.7.2";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "80f977667ebbad2b5c4f7b7f45ee8bea6622fb71723f68a9a8fe6274520c853b";
+  src = fetchFromGitHub {
+     owner = "kbandla";
+     repo = "dpkt";
+     rev = "v1.9.7.2";
+     sha256 = "115m0n7lda54yqy0ax8aqlqwf8c07pdxcxf3fz8437gpwnrbyh5a";
   };
 
   # Project has no tests
