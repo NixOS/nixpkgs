@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , django
 }:
 
@@ -8,9 +8,11 @@ buildPythonPackage rec {
   version = "1.0";
   pname = "django-discover-runner";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0ba91fe722c256bcbfdeb36fac7eac0f27e5bfda55d98c4c1cf9ab62b5b084fe";
+  src = fetchFromGitHub {
+     owner = "jezdez";
+     repo = "django-discover-runner";
+     rev = "1.0";
+     sha256 = "0v25pgcyqwc4n9p073zqy2f60q1wpyal10x77f18q3vyxk0lpg8g";
   };
 
   propagatedBuildInputs = [ django ];
