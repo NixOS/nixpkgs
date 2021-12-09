@@ -313,4 +313,3 @@ if __name__ == "__main__":
         main()
     else:
         sys.exit("Failed to parse dynamic linker (ld) properties.")
-
