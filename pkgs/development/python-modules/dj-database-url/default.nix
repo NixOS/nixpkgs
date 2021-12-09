@@ -1,12 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchFromGitHub }:
 
 buildPythonPackage rec {
   pname = "dj-database-url";
   version = "0.5.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "4aeaeb1f573c74835b0686a2b46b85990571159ffc21aa57ecd4d1e1cb334163";
+  src = fetchFromGitHub {
+     owner = "kennethreitz";
+     repo = "dj-database-url";
+     rev = "v0.5.0";
+     sha256 = "00rl0qyhmb5rrz2b8illxrxd707fzf2h9cx2x69d83p1xyw6890y";
   };
 
   # Tests access a DB via network
