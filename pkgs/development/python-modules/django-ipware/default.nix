@@ -1,12 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, django }:
+{ lib, buildPythonPackage, fetchFromGitHub, django }:
 
 buildPythonPackage rec {
   pname = "django-ipware";
   version = "4.0.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1294f916f3b3475e40e1b0ec1bd320aa2397978eae672721c81cbc2ed517e9ee";
+  src = fetchFromGitHub {
+     owner = "un33k";
+     repo = "django-ipware";
+     rev = "v4.0.0";
+     sha256 = "1sr2vbnpiq6hqqs4xdfhsylvjcq9ygpjafc25gzvhwlq5zrh8vbq";
   };
 
   propagatedBuildInputs = [ django ];
