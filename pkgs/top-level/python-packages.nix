@@ -10072,6 +10072,8 @@ in {
 
   webthing = callPackage ../development/python-modules/webthing { };
 
+  weconnect = callPackage ../development/python-modules/weconnect { };
+
   werkzeug = callPackage ../development/python-modules/werkzeug { };
 
   werkzeug1 = callPackage ../development/python-modules/werkzeug/1.nix { };
