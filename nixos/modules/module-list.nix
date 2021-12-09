@@ -1,4 +1,5 @@
 [
+  ./config/binsh.nix
   ./config/debug-info.nix
   ./config/fonts/fontconfig.nix
   ./config/fonts/fontdir.nix
