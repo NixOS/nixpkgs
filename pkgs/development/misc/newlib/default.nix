@@ -49,4 +49,9 @@ stdenv.mkDerivation rec {
     incdir = "/${stdenv.targetPlatform.config}/include";
     libdir = "/${stdenv.targetPlatform.config}/lib";
   };
+
+  meta = {
+    description = "C library intended for use on embedded systems";
+    homepage = "https://sourceware.org/newlib/";
+  };
 }
