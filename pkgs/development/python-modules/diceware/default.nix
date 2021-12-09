@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromGitHub
 , pytest-runner
 , setuptools
 , coverage, pytest
@@ -8,9 +8,11 @@ buildPythonPackage rec {
   pname = "diceware";
   version = "0.9.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0klb0ysybzlh2wihvir82hgq62v0jjmlcqklwajyms7c0p529yby";
+  src = fetchFromGitHub {
+     owner = "ulif";
+     repo = "diceware";
+     rev = "v0.9.6";
+     sha256 = "14z94wjdcnz4lvb7r0dsfx8qjndmxkc55dn5qy1namqs01s8n1hd";
   };
 
   nativeBuildInputs = [ pytest-runner ];
