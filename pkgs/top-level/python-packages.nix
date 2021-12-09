@@ -2458,6 +2458,8 @@ in {
 
   elmax = callPackage ../development/python-modules/elmax { };
 
+  elmax-api = callPackage ../development/python-modules/elmax-api { };
+
   emailthreads = callPackage ../development/python-modules/emailthreads { };
 
   email_validator = callPackage ../development/python-modules/email-validator { };
