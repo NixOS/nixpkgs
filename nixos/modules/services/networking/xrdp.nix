@@ -98,7 +98,7 @@ in
       };
 
       confDir = mkOption {
-        type = types.package;
+        type = types.path;
         default = confDir;
         description = "The location of the config files for xrdp.";
       };
