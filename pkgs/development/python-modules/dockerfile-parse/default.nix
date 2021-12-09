@@ -1,12 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, six, pytest-cov, pytest }:
+{ lib, buildPythonPackage, fetchFromGitHub, six, pytest-cov, pytest }:
 
 buildPythonPackage rec {
   version = "1.2.0";
   pname = "dockerfile-parse";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "07e65eec313978e877da819855870b3ae47f3fac94a40a965b9ede10484dacc5";
+  src = fetchFromGitHub {
+     owner = "DBuildService";
+     repo = "dockerfile-parse";
+     rev = "1.2.0";
+     sha256 = "0mpgqvfn2h5ijl20ilvf4cbgqzl2y4crz33i32akjp18bf5kvffz";
   };
 
   postPatch = ''
