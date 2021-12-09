@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mcelog";
-  version = "178";
+  version = "179";
 
   src = fetchFromGitHub {
     owner  = "andikleen";
     repo   = "mcelog";
     rev    = "v${version}";
-    sha256 = "sha256-++R/R3oRw0O0MoDnASdVr9UIiI0yS4UcIO8nV62PLzE=";
+    sha256 = "sha256-zwBVKXq7m735g+nKlYRrseXdYGOIQs0TqOR6iS6Q6Ts=";
   };
 
   postPatch = ''
