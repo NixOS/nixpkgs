@@ -2460,6 +2460,8 @@ with pkgs;
 
   clickclack = callPackage ../tools/misc/clickclack { };
 
+  clickgen = with python3Packages; toPythonApplication clickgen;
+
   clog-cli = callPackage ../development/tools/clog-cli { };
 
   cloud-init = python3.pkgs.callPackage ../tools/virtualization/cloud-init { };
