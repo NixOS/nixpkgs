@@ -1,13 +1,15 @@
-{ buildPythonPackage, fetchPypi, isPy27, pyserial, srp, lib }:
+{ buildPythonPackage, fetchFromGitHub, isPy27, pyserial, srp, lib }:
 
 buildPythonPackage rec {
   pname = "digi-xbee";
   version = "1.4.0";
   disabled = isPy27;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "664737d1aab453ea40b9745f1ee1e88920acff1cce2e07c42e7f5aa64a16e6aa";
+  src = fetchFromGitHub {
+     owner = "digidotcom";
+     repo = "xbee-python";
+     rev = "1.4.0";
+     sha256 = "1c2mavpf31vfjd7plrfw87hcxmhkwf7p5bnazsc3dn5xqjdh3j3f";
   };
 
   propagatedBuildInputs = [ pyserial srp ];
