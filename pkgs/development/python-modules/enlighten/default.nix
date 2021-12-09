@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , blessed
 , prefixed
 , pytestCheckHook
@@ -11,9 +11,11 @@ buildPythonPackage rec {
   pname = "enlighten";
   version = "1.10.1";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "3391916586364aedced5d6926482b48745e4948f822de096d32258ba238ea984";
+  src = fetchFromGitHub {
+     owner = "Rockhopper-Technologies";
+     repo = "enlighten";
+     rev = "1.10.1";
+     sha256 = "1dsscsp9q67ky91b43zabqlq67wavizbbcxfw6xq2451xls53sap";
   };
 
   propagatedBuildInputs = [
