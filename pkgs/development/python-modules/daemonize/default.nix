@@ -1,15 +1,17 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 }:
 
 buildPythonPackage rec {
   pname = "daemonize";
   version = "2.5.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1hwbl3gf9fdds9sc14zgjyjisjvxidrvqc11xlbb0b6jz17nw0nx";
+  src = fetchFromGitHub {
+     owner = "thesharp";
+     repo = "daemonize";
+     rev = "v2.5.0";
+     sha256 = "0pz914x6dfq133nfv0y8q8fss4zr52ip8mq3ds50rx0ddlbb0k2x";
   };
 
   meta = with lib; {
