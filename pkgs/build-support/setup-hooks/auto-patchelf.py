@@ -202,7 +202,7 @@ def autoPatchelfFile(elf, runtimeDeps):
     # new package where you don't yet know its dependencies.
 
     for dep in missing:
-        if dep.startswith("/"):
+        if dep.is_absolute():
             # This is an absolute path. If it exists, just use it. Otherwise,
             # we probably want this to produce an error when checked (because
             # just updating the rpath won't satisfy it).
