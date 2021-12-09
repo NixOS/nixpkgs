@@ -3,7 +3,7 @@
 , dask
 , distributed
 , docrep
-, fetchPypi
+, fetchFromGitHub
 , pytest-asyncio
 , pytestCheckHook
 }:
@@ -12,9 +12,11 @@ buildPythonPackage rec {
   version = "0.7.3";
   pname = "dask-jobqueue";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "682d7cc0e6b319b6ab83a7a898680c12e9c77ddc77df380b40041290f55d4e79";
+  src = fetchFromGitHub {
+     owner = "dask";
+     repo = "dask-jobqueue";
+     rev = "0.7.3";
+     sha256 = "060yndyv2i7vrrfca5xg1xkx5g0kdb8asp1ddwvsyy58rznjs63h";
   };
 
   propagatedBuildInputs = [
