@@ -1,7 +1,7 @@
 { lib
 , python
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pythonOlder
 }:
 
@@ -11,9 +11,11 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "103dc4pzwg8791q3zll1vv4gcc17d9v3jvr9zj23cpv9hpfsp6mb";
+  src = fetchFromGitHub {
+     owner = "nielstron";
+     repo = "demjson3";
+     rev = "release-3.0.5";
+     sha256 = "1zknismng6s1z1fj7shp916fwpdp9z5jfv2qn98jpkckpk8b3myq";
   };
 
   checkPhase = ''
