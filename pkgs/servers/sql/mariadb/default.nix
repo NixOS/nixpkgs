@@ -47,14 +47,6 @@ common = rec { # attributes common to both builds
 
   prePatch = ''
     sed -i 's,[^"]*/var/log,/var/log,g' storage/mroonga/vendor/groonga/CMakeLists.txt
-    # libc++abi 11 uses `#include <version>`, include paths often include
-    # project dirs and that means files with version numbers get included as if
-    # they were a header. This includes files name `VERSION` on
-    # case-insensitive file systems.
-    sed -i 's,/version\>,/version_full,' storage/mroonga/CMakeLists.txt
-    mv storage/mroonga/version storage/mroonga/version_full
-    sed -i 's,/VERSION\>,/VERSION_FULL,' cmake/mysql_version.cmake
-    mv VERSION VERSION_FULL
   '';
 
   patches = [
