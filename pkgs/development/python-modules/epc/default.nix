@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , sexpdata
 }:
 
@@ -8,9 +8,11 @@ buildPythonPackage rec {
   pname = "epc";
   version = "0.0.5";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "a14d2ea74817955a20eb00812e3a4630a132897eb4d976420240f1152c0d7d25";
+  src = fetchFromGitHub {
+     owner = "tkf";
+     repo = "python-epc";
+     rev = "v0.0.5";
+     sha256 = "1r6g1s1xb5756wr4904h9c917mx7k7343ay89a5z2sqmg327l8ah";
   };
 
   propagatedBuildInputs = [ sexpdata ];
