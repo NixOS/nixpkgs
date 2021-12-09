@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pkgs
 , six
 }:
@@ -9,9 +9,11 @@ buildPythonPackage rec {
   pname = "ecdsa";
   version = "0.17.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "b9f500bb439e4153d0330610f5d26baaf18d17b8ced1bc54410d189385ea68aa";
+  src = fetchFromGitHub {
+     owner = "warner";
+     repo = "python-ecdsa";
+     rev = "python-ecdsa-0.17.0";
+     sha256 = "1i8ykkf07q7s3aijbdxsybpclsxjkfj2pv2f2n8nf241n0wibsaz";
   };
 
   propagatedBuildInputs = [ six ];
