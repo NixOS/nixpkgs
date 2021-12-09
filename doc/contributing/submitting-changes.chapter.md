@@ -246,11 +246,21 @@ If the branch is already in a broken state, please refrain from adding extra new
 
 ### Stable release branches {#submitting-changes-stable-release-branches}
 
-For cherry-picking a commit to a stable release branch (“backporting”), use `git cherry-pick -x <original commit>` so that the original commit id is included in the commit.
+The same staging workflow applies to stable release branches, but the main branch is called `release-*` instead of `master`.
 
-Add a reason for the backport by using `git cherry-pick -xe <original commit>` instead when it is not obvious from the original commit message. It is not needed when it's a minor version update that includes security and bug fixes but don't add new features or when the commit fixes an otherwise broken package.
+Example branch names: `release-21.11`, `staging-21.11`, `staging-next-21.11`.
 
-For backporting Pull Requests to stable branches, assign label `backport <branch>` to the original Pull Requests and automation should take care of the rest once the Pull Requests is merged.
+Most changes added to the stable release branches are cherry-picked (“backported”) from the `master` and staging branches.
+
+#### Automatically backporting a Pull Request {#submitting-changes-stable-release-branches-automatic-backports}
+
+Assign label `backport <branch>` (e.g. `backport release-21.11`) to the PR and a backport PR is automatically created after the PR is merged.
+
+#### Manually backporting changes {#submitting-changes-stable-release-branches-manual-backports}
+
+Cherry-pick changes via `git cherry-pick -x <original commit>` so that the original commit id is included in the commit message.
+
+Add a reason for the backport when it is not obvious from the original commit message. You can do this by cherry picking with `git cherry-pick -xe <original commit>`, which allows editing the commit message. This is not needed for minor version updates that include security and bug fixes but don't add new features or when the commit fixes an otherwise broken package.
 
 Here is an example of a cherry-picked commit message with good reason description:
 
