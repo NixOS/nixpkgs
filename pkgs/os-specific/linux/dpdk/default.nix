@@ -68,7 +68,11 @@ in stdenv.mkDerivation rec {
     rm -f $kmod/lib/modules/${kernel.modDirVersion}/build
   '';
 
-  postInstall = lib.optionalString (withExamples != []) ''
+  postInstall = ''
+    # Remove Sphinx cache files. Not only are they not useful, but they also
+    # contain store paths causing spurious dependencies.
+    rm -rf $out/share/doc/dpdk/html/.doctrees
+  '' + lib.optionalString (withExamples != []) ''
     find examples -type f -executable -exec install {} $out/bin \;
   '';
 
