@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , requests
 , ciso8601
 }:
@@ -9,9 +9,11 @@ buildPythonPackage rec {
   pname = "dwdwfsapi";
   version = "1.0.4";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-JOIg6rLrU8v39z1I6smIPEeiUPdSdJcD2avUsTQq+bU=";
+  src = fetchFromGitHub {
+     owner = "stephan192";
+     repo = "dwdwfsapi";
+     rev = "v1.0.4";
+     sha256 = "1lg067nfqjqc12nwmwr4b40vbdhq62mimmmx16s3sgxdiv7kmcxp";
   };
 
   propagatedBuildInputs = [
