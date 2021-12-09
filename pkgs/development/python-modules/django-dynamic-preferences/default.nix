@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromGitHub
 , django, persisting-theory, six
 }:
 
@@ -6,9 +6,11 @@ buildPythonPackage rec {
   pname = "django-dynamic-preferences";
   version = "1.11.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "f214c938b5872a17647e2b2ccfd9ad00a90a3c6c4aa83fa65d3c5c446e7a66c7";
+  src = fetchFromGitHub {
+     owner = "EliotBerriot";
+     repo = "django-dynamic-preferences";
+     rev = "1.11.0";
+     sha256 = "0lyrc4pqrsybq6abc4dd3k0cfgaimsv5mldk7jgla1yxvlw7k9vf";
   };
 
   propagatedBuildInputs = [ six django persisting-theory ];
