@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, pythonOlder
+{ stdenv, lib, buildPythonPackage, fetchFromGitHub, pythonOlder
 , pipInstallHook, writeText
 , blessed
 , docutils
@@ -13,9 +13,11 @@ buildPythonPackage rec {
   version = "0.11.0";
   disabled = pythonOlder "3.5";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "19c602711e00f72e9ae296d8fa742d46da037c2d3a2d254bdf68f817a8da76bb";
+  src = fetchFromGitHub {
+     owner = "h2oai";
+     repo = "datatable";
+     rev = "v0.11.0";
+     sha256 = "0isf66dahz403y96zph9cs509q1fsfw45ksrknmrfvy8dxq2zpxl";
   };
   # authors seem to have created their own build system
   format = "other";
