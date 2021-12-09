@@ -1,6 +1,7 @@
 { pkgs, lib, callPackage, newScope, Agda }:
 
 let
+  nixpkgsLib = lib;
   mkAgdaPackages = Agda: lib.makeScope newScope (mkAgdaPackages' Agda);
   mkAgdaPackages' = Agda: self: let
     callPackage = self.callPackage;
@@ -11,7 +12,7 @@ let
   in {
     inherit mkDerivation;
 
-    lib = lib.extend (final: prev: import ../build-support/agda/lib.nix { lib = prev; });
+    lib = nixpkgsLib // (import ../build-support/agda/lib.nix { lib = nixpkgsLib; });
 
     agda = withPackages [] // {
       inherit withPackages;
