@@ -220,6 +220,7 @@ rec {
         '';
       checkPhase = ''
         ${stdenv.shell} -n $out
+        ${shellcheck}/bin/shellcheck "$out"
       '';
     };
 
@@ -247,6 +248,7 @@ rec {
         '';
       checkPhase = ''
         ${stdenv.shell} -n $out/bin/${name}
+        ${shellcheck}/bin/shellcheck "$out"
       '';
     };
 
