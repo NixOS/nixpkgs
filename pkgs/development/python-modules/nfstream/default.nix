@@ -1,7 +1,6 @@
 { lib
 , fetchPypi
 , buildPythonPackage
-, buildPythonApplication
 , psutil
 , numpy
 , dpkt
@@ -9,7 +8,7 @@
 , pandas
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "nfstream";
   version = "6.3.5";
   format = "wheel";
