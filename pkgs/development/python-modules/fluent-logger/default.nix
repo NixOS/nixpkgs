@@ -1,12 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, msgpack }:
+{ lib, buildPythonPackage, fetchFromGitHub, msgpack }:
 
 buildPythonPackage rec {
   pname = "fluent-logger";
   version = "0.10.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "678bda90c513ff0393964b64544ce41ef25669d2089ce6c3b63d9a18554b9bfa";
+  src = fetchFromGitHub {
+     owner = "fluent";
+     repo = "fluent-logger-python";
+     rev = "v0.10.0";
+     sha256 = "12pq5x3hqypr0dhx7x0xrlzx610ax4b5n1ispfcd2v041vlpz89m";
   };
 
   prePatch = ''
