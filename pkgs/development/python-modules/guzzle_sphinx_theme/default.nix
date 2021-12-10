@@ -1,11 +1,13 @@
-{ lib, buildPythonPackage, sphinx, fetchPypi }:
+{ lib, buildPythonPackage, sphinx, fetchFromGitHub }:
 
 buildPythonPackage rec {
   pname = "guzzle_sphinx_theme";
   version = "0.7.11";
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1rnkzrrsbnifn3vsb4pfaia3nlvgvw6ndpxp7lzjrh23qcwid34v";
+  src = fetchFromGitHub {
+     owner = "guzzle";
+     repo = "guzzle_sphinx_theme";
+     rev = "0.7.11";
+     sha256 = "18mgk1rl1345zf9i7nihfw2mr609ylxcksrklyz6m2xbh19bbrja";
   };
 
   doCheck = false; # no tests
