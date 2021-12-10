@@ -1,4 +1,4 @@
-{config, pkgs, lib, ...}:
+{ config, pkgs, lib, ... }:
 
 with lib;
 
@@ -10,7 +10,7 @@ let
     {
       "guixbuilder${builtins.toString i}" = {
         group = "guixbuild";
-        extraGroups = ["guixbuild"];
+        extraGroups = [ "guixbuild" ];
         home = "/var/empty";
         shell = pkgs.nologin;
         description = "Guix build user ${builtins.toString i}";
@@ -18,7 +18,8 @@ let
       };
     };
 
-in {
+in
+{
 
   options.services.guix = {
     enable = mkEnableOption "GNU Guix package manager";
@@ -33,22 +34,22 @@ in {
   config = mkIf (cfg.enable) {
 
     users = {
-      extraUsers = lib.fold (a: b: a // b) {} (builtins.map buildGuixUser (lib.range 1 10));
-      extraGroups.guixbuild = {name = "guixbuild";};
+      extraUsers = lib.fold (a: b: a // b) { } (builtins.map buildGuixUser (lib.range 1 10));
+      extraGroups.guixbuild = { name = "guixbuild"; };
     };
 
     systemd.services.guix-daemon = {
       enable = true;
       description = "Build daemon for GNU Guix";
       serviceConfig = {
-        ExecStart="/var/guix/profiles/per-user/root/current-guix/bin/guix-daemon --build-users-group=guixbuild";
-        Environment="GUIX_LOCPATH=/var/guix/profiles/per-user/root/guix-profile/lib/locale";
-        RemainAfterExit="yes";
+        ExecStart = "/var/guix/profiles/per-user/root/current-guix/bin/guix-daemon --build-users-group=guixbuild";
+        Environment = "GUIX_LOCPATH=/var/guix/profiles/per-user/root/guix-profile/lib/locale";
+        RemainAfterExit = "yes";
 
         # See <https://lists.gnu.org/archive/html/guix-devel/2016-04/msg00608.html>.
         # Some package builds (for example, go@1.8.1) may require even more than
         # 1024 tasks.
-        TasksMax="8192";
+        TasksMax = "8192";
       };
       wantedBy = [ "multi-user.target" ];
     };
