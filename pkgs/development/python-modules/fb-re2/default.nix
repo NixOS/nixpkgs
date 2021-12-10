@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , re2
 }:
 
@@ -8,9 +8,11 @@ buildPythonPackage rec {
   pname = "fb-re2";
   version = "1.0.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "83b2c2cd58d3874e6e3a784cf4cf2f1a57ce1969e50180f92b010eea24ef26cf";
+  src = fetchFromGitHub {
+     owner = "facebook";
+     repo = "pyre2";
+     rev = "v1.0.7";
+     sha256 = "0snprxdnh3m45r3b0az4v0l28h90ycmfbybzla6xg1qviwv9w1ak";
   };
 
   buildInputs = [ re2 ];
