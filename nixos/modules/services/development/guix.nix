@@ -1,7 +1,5 @@
 { config, pkgs, lib, ... }:
 
-with lib;
-
 let
 
   cfg = config.services.guix;
@@ -20,30 +18,30 @@ let
 
 in
 {
-
   options.services.guix = {
-    enable = mkEnableOption "GNU Guix package manager";
-    package = mkOption {
-      type = types.package;
+    enable = lib.mkEnableOption "GNU Guix package manager";
+    package = lib.mkOption {
+      type = lib.types.package;
       default = pkgs.guix;
       defaultText = "pkgs.guix";
       description = "Package that contains the guix binary and initial store.";
     };
   };
 
-  config = mkIf (cfg.enable) {
+  config = lib.mkIf (cfg.enable) {
 
     users = {
       extraUsers = lib.fold (a: b: a // b) { } (builtins.map buildGuixUser (lib.range 1 10));
       extraGroups.guixbuild = { name = "guixbuild"; };
     };
 
+    # /root/.config/guix/current/lib/systemd/system/guix-daemon.service
     systemd.services.guix-daemon = {
       enable = true;
       description = "Build daemon for GNU Guix";
       serviceConfig = {
         ExecStart = "/var/guix/profiles/per-user/root/current-guix/bin/guix-daemon --build-users-group=guixbuild";
-        Environment = "GUIX_LOCPATH=/var/guix/profiles/per-user/root/guix-profile/lib/locale";
+        Environment = [ "GUIX_LOCPATH=/var/guix/profiles/per-user/root/guix-profile/lib/locale" "LC_ALL=en_US.utf8" ];
         RemainAfterExit = "yes";
 
         # See <https://lists.gnu.org/archive/html/guix-devel/2016-04/msg00608.html>.
@@ -55,7 +53,6 @@ in
     };
 
     system.activationScripts.guix = ''
-
       # copy initial /gnu/store
       if [ ! -d /gnu/store ]
       then
@@ -79,10 +76,14 @@ in
       fi
 
       # authorize substitutes
-      GUIX_PROFILE="`echo ~root`/.config/guix/current"; source $GUIX_PROFILE/etc/profile
-      guix archive --authorize < ~root/.config/guix/current/share/guix/ci.guix.info.pub
+      GUIX_PROFILE="`echo ~root`/.config/guix/current"; \
+      source $GUIX_PROFILE/etc/profile
+      guix archive --authorize < ~root/.config/guix/current/share/guix/ci.guix.gnu.org.pub
+      # probably enable after next stable release
+      # guix archive --authorize < ~root/.config/guix/current/share/guix/bordeaux.guix.gnu.org.pub
     '';
 
+    # you need to relogin for these to execute
     environment.shellInit = ''
       # Make the Guix command available to users
       export PATH="/var/guix/profiles/per-user/root/current-guix/bin:$PATH"
@@ -90,7 +91,9 @@ in
       export GUIX_LOCPATH="$HOME/.guix-profile/lib/locale"
       export PATH="$HOME/.guix-profile/bin:$PATH"
       export INFOPATH="$HOME/.guix-profile/share/info:$INFOPATH"
+
+      export GUIX_PROFILE="$HOME/.config/guix/current"
+      test -f $GUIX_PROFILE/etc/profile && . "$GUIX_PROFILE/etc/profile"
     '';
   };
-
 }

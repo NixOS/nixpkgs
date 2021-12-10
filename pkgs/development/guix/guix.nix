@@ -1,15 +1,16 @@
-{ stdenv, fetchurl }:
+{ stdenv, lib, fetchurl }:
+
 stdenv.mkDerivation rec
 {
   name = "guix-${version}";
-  version = "1.0.0";
+  version = "1.3.0";
 
   src = fetchurl {
     url = "https://ftp.gnu.org/gnu/guix/guix-binary-${version}.${stdenv.targetPlatform.system}.tar.xz";
     sha256 = {
-      "x86_64-linux" = "11y9nnicd3ah8dhi51mfrjmi8ahxgvx1mhpjvsvdzaz07iq56333";
-      "i686-linux" = "14qkz12nsw0cm673jqx0q6ls4m2bsig022iqr0rblpfrgzx20f0i";
-      "aarch64-linux" = "0qzlpvdkiwz4w08xvwlqdhz35mjfmf1v3q8mv7fy09bk0y3cwzqs";
+      "x86_64-linux" = "sha256-xffvtIlHVF5J0tr0jQ+DLzXSqNGfZdqvYHlCWsMnwFA=";
+      "i686-linux" = "sha256-QHOK7hFh8LmRFK+EnNBNqfDNwQ0ia0lqRiHov9uyG2Q=";
+      "aarch64-linux" = "sha256-RE9lNs9ZWWNhI6xxjbm4UHFQLkhVVbLYAb8pNpMIEM4=";
     }."${stdenv.targetPlatform.system}";
   };
   sourceRoot = ".";
@@ -32,12 +33,11 @@ stdenv.mkDerivation rec
     ln -s /var/guix/profiles/per-user/root/current-guix/bin/guix-daemon $out/bin/guix-daemon
   '';
 
-  meta = with stdenv.lib; {
+  meta = {
     description = "The GNU Guix package manager";
     homepage = https://www.gnu.org/software/guix/;
-    license = licenses.gpl3Plus;
-    maintainers = [ maintainers.johnazoidberg ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ johnazoidberg mohe2015 ];
     platforms = [ "aarch64-linux" "i686-linux" "x86_64-linux" ];
   };
-
 }
