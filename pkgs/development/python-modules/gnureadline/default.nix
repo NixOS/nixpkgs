@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , isPyPy
 , pkgs
 }:
@@ -10,9 +10,11 @@ buildPythonPackage rec {
   pname = "gnureadline";
   disabled = isPyPy;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0xllr43dizvybmb68i0ybk1xhaqx5abjwxa9vrg43b9ds0pggvk1";
+  src = fetchFromGitHub {
+     owner = "ludwigschwardt";
+     repo = "python-gnureadline";
+     rev = "v8.0.0";
+     sha256 = "130ph0l2wapax33wdkgdw0lla3agigmwdp3v73w7a7r3sn019qm5";
   };
 
   buildInputs = [ pkgs.ncurses ];
