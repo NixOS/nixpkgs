@@ -1120,6 +1120,18 @@ final: prev:
     meta.homepage = "https://github.com/Shougo/context_filetype.vim/";
   };
 
+  copilot-vim = buildVimPluginFrom2Nix {
+    pname = "copilot.vim";
+    version = "2021-12-07";
+    src = fetchFromGitHub {
+      owner = "github";
+      repo = "copilot.vim";
+      rev = "c01314840b94da0b9767b52f8a4bbc579214e509";
+      sha256 = "10vw2hjrg20i8id5wld8c5b1m96fnxvkb5qhbdf9w5sagawn4wc2";
+    };
+    meta.homepage = "https://github.com/github/copilot.vim/";
+  };
+
   coq-vim = buildVimPluginFrom2Nix {
     pname = "coq.vim";
     version = "2013-01-16";
