@@ -1,4 +1,4 @@
-{ mkXfceDerivation, glib, gtk3, libnotify, libxfce4ui, libxfce4util
+{ lib, mkXfceDerivation, glib, gtk3, libnotify, libxfce4ui, libxfce4util
 , xfce4-panel, xfconf }:
 
 mkXfceDerivation {
@@ -14,7 +14,8 @@ mkXfceDerivation {
     "--enable-dbus-start-daemon"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Simple notification daemon for Xfce";
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

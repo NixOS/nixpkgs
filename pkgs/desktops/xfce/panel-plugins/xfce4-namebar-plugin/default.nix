@@ -38,6 +38,6 @@ stdenv.mkDerivation rec {
     description = "Plugin which integrates titlebar and window controls into the xfce4-panel";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = [ maintainers.volth ];
+    maintainers = with maintainers; [ volth ] ++ teams.xfce.members;
   };
 }
