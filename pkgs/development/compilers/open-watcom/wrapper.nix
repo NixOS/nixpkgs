@@ -123,6 +123,8 @@ let
           '';
         };
       };
+
+      inherit (open-watcom) meta;
     };
 in
 lib.makeOverridable wrapper
