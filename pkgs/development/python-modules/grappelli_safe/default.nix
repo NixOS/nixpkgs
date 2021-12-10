@@ -1,15 +1,17 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 }:
 
 buildPythonPackage rec {
   version = "0.5.2";
   pname = "grappelli_safe";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "35b7ccaf9acc54684c73aeefbeaddc63b8a16143bd981bd5b3ebef253def07df";
+  src = fetchFromGitHub {
+     owner = "stephenmcd";
+     repo = "grappelli-safe";
+     rev = "v0.5.2";
+     sha256 = "0k0j3173wai3w0b61mndxvy2ad6qbydrafj4ll0k172dgawz2cb8";
   };
 
   meta = with lib; {
