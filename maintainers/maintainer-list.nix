@@ -3695,6 +3695,7 @@
   };
   evils = {
     email = "evils.devils@protonmail.com";
+    matrix = "@evils:nixos.dev";
     github = "evils";
     githubId = 30512529;
     name = "Evils";
