@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , python
 }:
 
@@ -8,9 +8,11 @@ buildPythonPackage rec {
   pname = "filetype";
   version = "1.0.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "77df14879b73fd9711b8bd4f465dadf2ecdafff0eac3b22c0bdb0ccba68db316";
+  src = fetchFromGitHub {
+     owner = "h2non";
+     repo = "filetype.py";
+     rev = "v1.0.8";
+     sha256 = "1hib7h2lg58mnck1l1vhg2j1svyyj5pcmg81xpc7v7sjl80idpih";
   };
 
   checkPhase = ''
