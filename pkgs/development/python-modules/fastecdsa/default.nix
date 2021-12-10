@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , gmp
 , pytestCheckHook
 }:
@@ -10,9 +10,11 @@ buildPythonPackage rec {
   version = "2.2.2";
   format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1eb6f3ac86ec483a10df62fcda1fb9a9d5d895a436871a8aa935dd20ccd82c6f";
+  src = fetchFromGitHub {
+     owner = "AntonKueltz";
+     repo = "fastecdsa";
+     rev = "v2.2.2";
+     sha256 = "03g11r6pcrcl0i9zsa3b8yrwkak0hyqfpfi7py7zx31jslnrlz0f";
   };
 
   buildInputs = [ gmp ];
