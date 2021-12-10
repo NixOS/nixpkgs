@@ -101,7 +101,8 @@ rec {
     lib.all (elem: !platformMatch platform elem) (pkg.meta.badPlatforms or []);
 
   /* Get the corresponding attribute in lib.licenses
-     from the SPDX ID.
+     from the SPDX ID,
+     or fallback to a lisence attrset of the corresponding name.
      For SPDX IDs, see
      https://spdx.org/licenses
 
@@ -114,18 +115,34 @@ rec {
        lib.getLicenseFromSpdxId "mIt" == lib.licenses.mit
        => true
        lib.getLicenseFromSpdxId "MY LICENSE"
-       => trace: warning: getLicenseFromSpdxId: No license matches the given SPDX ID: MY LICENSE
        => { shortName = "MY LICENSE"; }
   */
-  getLicenseFromSpdxId =
+  getLicenseFromSpdxId = licstr:
+    getLicenseFromSpdxId' licstr { shortName = licstr; };
+
+  /* Get the corresponding attribute in lib.licenses
+     from the SPDX ID,
+     or fallback to the given default value.
+
+     Type:
+       getLicenseFromSpdxId' :: str -> Any -> Any
+
+     Example:
+     lib.getLicenseFromSpdxId' "MIT" null == lib.licenses.mit
+     => true
+     lib.getLicenseFromSpdxId' "MY LICENSE" lib.licenses.free == lib.licenses.free
+     => true
+     lib.getLicenseFromSpdxId' "MY LICENSE" null
+     => null
+     lib.getLicenseFromSpdxId' "MY LICENSE" (builtins.abort "No SPDX ID matches MY LICENSE")
+     => error: evaluation aborted with the following error message: 'No SPDX ID matches MY LICENSE'
+  */
+  getLicenseFromSpdxId' =
     let
       spdxLicenses = lib.mapAttrs (id: ls: assert lib.length ls == 1; builtins.head ls)
         (lib.groupBy (l: lib.toLower l.spdxId) (lib.filter (l: l ? spdxId) (lib.attrValues lib.licenses)));
-    in licstr:
-      spdxLicenses.${ lib.toLower licstr } or (
-        lib.warn "getLicenseFromSpdxId: No license matches the given SPDX ID: ${licstr}"
-        { shortName = licstr; }
-      );
+    in licstr: default:
+      spdxLicenses.${ lib.toLower licstr } or default;
 
   /* Get the path to the main program of a derivation with either
      meta.mainProgram or pname or name
