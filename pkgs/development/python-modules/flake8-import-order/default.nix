@@ -1,12 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, enum34, pycodestyle, pytest, flake8, pylama }:
+{ lib, buildPythonPackage, fetchFromGitHub, isPy3k, enum34, pycodestyle, pytest, flake8, pylama }:
 
 buildPythonPackage rec {
   pname = "flake8-import-order";
   version = "0.18.1";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "14kfvsagqc6lrplvf3x58ia6x744bk8fj91wmk0hcipa8naw73d2";
+  src = fetchFromGitHub {
+     owner = "PyCQA";
+     repo = "flake8-import-order";
+     rev = "0.18.1";
+     sha256 = "0l1sbl056zv0lxvvm7v2q6ynbqpw2nxhybsq5pryna3727qisznq";
   };
 
   propagatedBuildInputs = [ pycodestyle ] ++ lib.optional (!isPy3k) enum34;
