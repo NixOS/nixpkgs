@@ -4,7 +4,7 @@ let
   buildNum = "399";
   jar = fetchurl {
     url = "https://papermc.io/api/v2/projects/paper/versions/${mcVersion}/builds/${buildNum}/downloads/paper-${mcVersion}-${buildNum}.jar";
-    sha256 = "sha256-Vkvzp41nSsgoJLHcL846kHLf/yaehyNnNUqDq00G4nw=";
+    sha256 = "01374201dkzrx28phy87wji7kzjwx8bpjzv85bjl6672ziskbmpd";
   };
 in stdenv.mkDerivation {
   pname = "papermc";
