@@ -105,8 +105,7 @@ let
         "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
         "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
       ];
-      # TODO
-      sha256 = "1111111111111111111111111111111111111111111111111111";
+      sha256 = "1blp4z9rmnnsvl3bk0ajdccvpzfshnpyijjfiqb9ma02qw2z0gff";
     };
   };
 in
