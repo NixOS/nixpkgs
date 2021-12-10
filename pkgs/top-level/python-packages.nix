@@ -4994,6 +4994,8 @@ in {
 
   mrkd = callPackage ../development/python-modules/mrkd { };
 
+  ms-active-directory = callPackage ../development/python-modules/ms-active-directory { };
+
   ms-cv = callPackage ../development/python-modules/ms-cv { };
 
   msal = callPackage ../development/python-modules/msal { };
