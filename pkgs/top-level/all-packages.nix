@@ -7096,6 +7096,10 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
+  mdbook-plantuml = callPackage ../tools/text/mdbook-plantuml {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
+
   mdcat = callPackage ../tools/text/mdcat {
     inherit (darwin.apple_sdk.frameworks) Security;
     inherit (python3Packages) ansi2html;
