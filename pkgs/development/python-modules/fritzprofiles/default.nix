@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , lxml
 , requests
 }:
@@ -10,9 +10,11 @@ buildPythonPackage rec {
   version = "0.7.3";
   format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-VoKgLJWF9x8dW8A6CNwLtK+AmehtgZP41nUGQO819es=";
+  src = fetchFromGitHub {
+     owner = "AaronDavidSchneider";
+     repo = "fritzprofiles";
+     rev = "v0.7.3";
+     sha256 = "1gbmzcbicpcc94rawz1cvs5xcl90lj5dwn94r7ijaswm9h4dqgy0";
   };
 
   propagatedBuildInputs = [
