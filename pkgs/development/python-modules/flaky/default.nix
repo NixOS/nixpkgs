@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , mock
 , nose
 , pytest
@@ -10,9 +10,11 @@ buildPythonPackage rec {
   pname = "flaky";
   version = "3.7.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "3ad100780721a1911f57a165809b7ea265a7863305acb66708220820caf8aa0d";
+  src = fetchFromGitHub {
+     owner = "box";
+     repo = "flaky";
+     rev = "v3.7.0";
+     sha256 = "0kpdrckmqnsnpqb5icrv39g1pklnyrabf88q52ypy175rcc8yy58";
   };
 
   checkInputs = [ mock nose pytest ];
