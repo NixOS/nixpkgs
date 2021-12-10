@@ -239,7 +239,6 @@ def autoPatchelf(
 
 
 def main():
-
     parser = argparse.ArgumentParser(
         prog="auto-patchelf",
         description="""auto-patchelf tries as hard as possible to patch the\
