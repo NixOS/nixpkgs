@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, nixosTests }:
+{ lib, stdenvNoCC, fetchurl, nixosTests }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "airsonic-advanced";
