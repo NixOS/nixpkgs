@@ -1,13 +1,15 @@
-{ lib, fetchPypi, buildPythonPackage
+{ lib, fetchFromGitHub, buildPythonPackage
 , nose, flask, six, packaging }:
 
 buildPythonPackage rec {
   pname = "Flask-Cors";
   version = "3.0.10";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "b60839393f3b84a0f3746f6cdca56c1ad7426aa738b70d6c61375857823181de";
+  src = fetchFromGitHub {
+     owner = "corydolphin";
+     repo = "flask-cors";
+     rev = "3.0.10";
+     sha256 = "1q8l56wfwjj5vzr6j4lq2s90f8qj7vlk5913437s85b56gghkmdz";
   };
 
   checkInputs = [ nose packaging ];
