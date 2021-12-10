@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , flask
 , google-auth
 , httplib2
@@ -13,9 +13,11 @@ buildPythonPackage rec {
   pname = "google-auth-httplib2";
   version = "0.1.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "a07c39fd632becacd3f07718dfd6021bf396978f03ad3ce4321d060015cc30ac";
+  src = fetchFromGitHub {
+     owner = "GoogleCloudPlatform";
+     repo = "google-auth-library-python-httplib2";
+     rev = "v0.1.0";
+     sha256 = "14l3ck0s32f7qsg7va5zriz8p3n684j0ybhvp1ih4zskxd6z2iv0";
   };
 
   propagatedBuildInputs = [
