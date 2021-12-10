@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pytools
 , numpy
 }:
@@ -9,9 +9,11 @@ buildPythonPackage rec {
   pname = "genpy";
   version = "2021.1";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "9bc062fa98c5c466ff464d8974be81a6bf67af9247b5e5176215ad1e81a6cdac";
+  src = fetchFromGitHub {
+     owner = "inducer";
+     repo = "genpy";
+     rev = "v2021.1";
+     sha256 = "0vjmgzjzbd5kz0rwccdlkp3magrwyinvb4dbvhkdp8nxnp1jcaar";
   };
 
   propagatedBuildInputs = [
