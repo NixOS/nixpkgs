@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , glibcLocales
 , pytestCheckHook
 , pythonOlder
@@ -13,9 +13,11 @@ buildPythonPackage rec {
   version = "1.9.2";
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-sG1pQej9aiyecXkQeehsvno3iMciRKzAbwWTtJzaN5s=";
+  src = fetchFromGitHub {
+     owner = "getpelican";
+     repo = "feedgenerator";
+     rev = "1.9.2";
+     sha256 = "0p81m7zyzf5hd68ls95mx8qn6iaiwjylzinmy1h3d960ndihdykj";
   };
 
   buildInputs = [
