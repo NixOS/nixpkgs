@@ -1,11 +1,11 @@
 { lib, stdenv, fetchurl, makeWrapper, jdk }:
 
 stdenv.mkDerivation rec {
-  name = "lombok-1.18.20";
+  name = "lombok-1.18.22";
 
   src = fetchurl {
     url = "https://projectlombok.org/downloads/${name}.jar";
-    sha256 = "sha256-zpR75sL751n7vo7ztCtoJfgUyYyIU/EBPy2WMM7fdLA=";
+    sha256 = "sha256-7O8VgUEdeoLMBCgWZ+4LrF18ClqudM/DhDA5bJHDGDE=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
