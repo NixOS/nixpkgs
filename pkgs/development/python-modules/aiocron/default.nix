@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , python
 , croniter
 , tzlocal
@@ -11,9 +11,11 @@ buildPythonPackage rec {
   pname = "aiocron";
   version = "1.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-SFRlE/ry63kB5lpk66e2U8gBBu0A7ZyjQZw9ELZVWgE=";
+  src = fetchFromGitHub {
+     owner = "gawel";
+     repo = "aiocron";
+     rev = "1.8";
+     sha256 = "1j8x7wx0ga7g1r84xbrcm7hmw7zd42z6qhws41fdjq0g2j1lncg9";
   };
 
   propagatedBuildInputs = [
