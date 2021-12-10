@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , pythonOlder
-, fetchPypi
+, fetchFromGitHub
 , poetry-core
 , gobject-introspection
 , gtk3
@@ -17,9 +17,11 @@ buildPythonPackage rec {
 
   format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-S6cRsfqXYM4mSVSs2M8fET5ShFClKkGkod2w2y6F2gc=";
+  src = fetchFromGitHub {
+     owner = "gaphor";
+     repo = "gaphas";
+     rev = "3.1.9";
+     sha256 = "03mnxi0r5cs4pn9qmac2brb1ib2nyqzp5vcma2jaccldhapxss95";
   };
 
   nativeBuildInputs = [
