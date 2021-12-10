@@ -206,7 +206,10 @@ let
     # LUKS
     open_normally() {
         ${if (dev.keyFile != null) then ''
-        if wait_target "key file" ${dev.keyFile}; then
+        ${optionalString dev.waitForKeyFile ''
+        wait_target "key file" ${dev.keyFile}
+        ''}
+        if [ -f "${dev.keyFile}" ]; then
             ${csopen} --key-file=${dev.keyFile} \
               ${optionalString (dev.keyFileSize != null) "--keyfile-size=${toString dev.keyFileSize}"} \
               ${optionalString (dev.keyFileOffset != null) "--keyfile-offset=${toString dev.keyFileOffset}"}
@@ -605,6 +608,16 @@ in
               (often the case if a raw device or partition is used as a key file).
               If not specified, the key begins at the first byte of
               <literal>keyFile</literal>.
+            '';
+          };
+
+          waitForKeyFile = mkOption {
+            default = true;
+            type = types.bool;
+            description = ''
+              Whether to wait for the key file to appear. If set to false, the
+              unlocking process will immediately fail or fall back to passphrase
+              if the key file doesn't exist the first time we check.
             '';
           };
 
