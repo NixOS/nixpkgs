@@ -1,12 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, python-Levenshtein, pycodestyle, hypothesis, pytest }:
+{ lib, buildPythonPackage, fetchFromGitHub, python-Levenshtein, pycodestyle, hypothesis, pytest }:
 
 buildPythonPackage rec {
   pname = "fuzzywuzzy";
   version = "0.18.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1s00zn75y2dkxgnbw8kl8dw4p1mc77cv78fwfa4yb0274s96w0a5";
+  src = fetchFromGitHub {
+     owner = "seatgeek";
+     repo = "fuzzywuzzy";
+     rev = "0.18.0";
+     sha256 = "0zh8xd9k95waipsdz516rn51ya9xxlxbd7ivbka4gnkqm9ah79mc";
   };
 
   propagatedBuildInputs = [ python-Levenshtein ];
