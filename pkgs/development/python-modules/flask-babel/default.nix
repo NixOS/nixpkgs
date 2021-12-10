@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , python
-, fetchPypi
+, fetchFromGitHub
 , flask
 , Babel
 , jinja2
@@ -13,9 +13,11 @@ buildPythonPackage rec {
   pname = "Flask-Babel";
   version = "2.0.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "f9faf45cdb2e1a32ea2ec14403587d4295108f35017a7821a2b1acb8cfd9257d";
+  src = fetchFromGitHub {
+     owner = "python-babel";
+     repo = "flask-babel";
+     rev = "v2.0.0";
+     sha256 = "1n6d499viq8crmgvp04vi3nzh1bc4n60wjgh57djkzxm0ssvxvpd";
   };
 
   propagatedBuildInputs = [
