@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pytestCheckHook
 }:
 
@@ -8,9 +8,11 @@ buildPythonPackage rec {
   pname = "fuzzyfinder";
   version = "2.1.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "c56d86f110866becad6690c7518f7036c20831c0f82fc87eba8fdb943132f04b";
+  src = fetchFromGitHub {
+     owner = "amjith";
+     repo = "fuzzyfinder";
+     rev = "2.1.0";
+     sha256 = "10wmapzb3v5rn93bsa3nsi5ajk84s9msy39lsr43arw2v07fralv";
   };
 
   checkInputs = [
