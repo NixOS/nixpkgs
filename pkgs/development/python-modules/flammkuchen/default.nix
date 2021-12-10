@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
+{ lib, buildPythonPackage, fetchFromGitHub, isPy27
 , numpy
 , scipy
 , tables
@@ -11,9 +11,11 @@ buildPythonPackage rec {
   pname = "flammkuchen";
   version = "0.9.2";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "f249fe5bf85f717d3836e0db6fa9443a8a43101ce07704715b42251c44fc968e";
+  src = fetchFromGitHub {
+     owner = "portugueslab";
+     repo = "flammkuchen";
+     rev = "v0.9.2";
+     sha256 = "1sscj4fsp97g2bfpg08v0bbkp4jy16j3a17zmq4bv80q4lzdq1gd";
   };
 
   checkInputs = [
