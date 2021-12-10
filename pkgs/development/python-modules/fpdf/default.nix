@@ -1,12 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchFromGitHub }:
 
 buildPythonPackage rec {
   pname = "fpdf";
   version = "1.7.2";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0yb73c2clv581sgak5jvlvkj4wy3jav6ms5ia8jx3rw969w40n0j";
+  src = fetchFromGitHub {
+     owner = "reingart";
+     repo = "pyfpdf";
+     rev = "1.7.2";
+     sha256 = "19rl2x2mm4kg4sayk1j251wxmdnc8dbilxz4sfri13bnrcn5jw35";
   };
 
   # No tests available
