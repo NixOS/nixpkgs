@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, installShellFiles
+{ lib, buildPythonPackage, fetchFromGitHub, installShellFiles
 , Babel, requests, requests_oauthlib, six, click, markdown, pyyaml, cryptography
 , pytest-runner, coverage, flake8, mock, pytestCheckHook, pytest-cov, tox, gntp, sleekxmpp
 }:
@@ -7,9 +7,11 @@ buildPythonPackage rec {
   pname = "apprise";
   version = "0.9.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-Fe0GIIGXydKP2DzWnnJ7SCgIeaTGEa/Wta6l0N7zl/g=";
+  src = fetchFromGitHub {
+     owner = "caronc";
+     repo = "apprise";
+     rev = "v0.9.6";
+     sha256 = "02jklkcknlahjdmkzp1x08ji0fcg02f2bsb8nfjnjj91354745mq";
   };
 
   nativeBuildInputs = [ Babel installShellFiles ];
