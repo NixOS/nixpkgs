@@ -1,7 +1,7 @@
 { lib
 , aiohttp
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pythonOlder
 }:
 
@@ -12,9 +12,11 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-PveHE317p5fGSxgx7LQkpRYF55HwdzpZFY8/F8s3CBQ=";
+  src = fetchFromGitHub {
+     owner = "tkdrob";
+     repo = "goalzero";
+     rev = "v0.2.1";
+     sha256 = "091c7jsqwxb5vgq2vkhi1m8vk21zxghlbzbhc1dnv25cdfv2hjv1";
   };
 
   propagatedBuildInputs = [
