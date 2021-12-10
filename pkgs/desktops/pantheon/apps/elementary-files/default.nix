@@ -32,23 +32,15 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-files";
-  version = "6.1.0";
-
-  repoName = "files";
+  version = "6.1.1";
 
   outputs = [ "out" "dev" ];
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "files";
     rev = version;
-    sha256 = "sha256-aGiFEeSvDV5rPD2Ll/BuDoWclEPhR1UuoCxUSS9CGmw=";
-  };
-
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    sha256 = "sha256-5TSzV8MQG81aCCR8yiCPhKJaLrp/fwf4mjP32KkcbbY=";
   };
 
   nativeBuildInputs = [
@@ -87,6 +79,12 @@ stdenv.mkDerivation rec {
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
   '';
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
 
   meta = with lib; {
     description = "File browser designed for elementary OS";
