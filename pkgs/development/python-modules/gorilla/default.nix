@@ -1,12 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi}:
+{ lib, buildPythonPackage, fetchFromGitHub}:
 
 buildPythonPackage rec {
   pname = "gorilla";
   version = "0.4.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "005ab8853b037162a7c77bb824604c6e081878ee03c09ad01ef41744856019d3";
+  src = fetchFromGitHub {
+     owner = "christophercrouzet";
+     repo = "gorilla";
+     rev = "v0.4.0";
+     sha256 = "1dr4qm5k15s7a8la2isg686fms6hhc94giyjmdjgzlyzswf050hc";
   };
 
   meta = with lib; {
