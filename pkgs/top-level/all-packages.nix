@@ -24513,6 +24513,8 @@ with pkgs;
     ffmpeg = ffmpeg-full;
   };
 
+  cpeditor = libsForQt515.callPackage ../applications/editors/cpeditor { };
+
   csa = callPackage ../applications/audio/csa { };
 
   csound = callPackage ../applications/audio/csound { };
