@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , flask
 , gevent
 , gevent-websocket
@@ -10,9 +10,11 @@ buildPythonPackage rec {
   pname = "Flask-Sockets";
   version = "0.2.1";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "072927da8edca0e81e024f5787e643c87d80b351b714de95d723becb30e0643b";
+  src = fetchFromGitHub {
+     owner = "heroku-python";
+     repo = "flask-sockets";
+     rev = "v0.2.1";
+     sha256 = "0k63x380gpjjr5j3bmkzsa1qp9gaq1jrm5ai2fnpqw459g1y4bwq";
   };
 
   propagatedBuildInputs = [
