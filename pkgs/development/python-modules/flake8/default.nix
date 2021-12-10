@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pythonOlder
 , configparser
 , enum34
@@ -18,9 +18,11 @@ buildPythonPackage rec {
   pname = "flake8";
   version = "4.0.1";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "03c7mnk34wfz7a0m5zq0273y94awz69fy5iww8alh4a4v96h6vl0";
+  src = fetchFromGitHub {
+     owner = "pycqa";
+     repo = "flake8";
+     rev = "4.0.1";
+     sha256 = "1nrzyr11lmbaa8wygkyncgj2vifswab1n52szdfk9zfjj0r8x9dr";
   };
 
   postPatch = ''
