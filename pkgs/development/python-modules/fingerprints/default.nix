@@ -1,5 +1,5 @@
 { lib
-, fetchPypi
+, fetchFromGitHub
 , buildPythonPackage
 , normality
 , mypy
@@ -10,9 +10,11 @@ buildPythonPackage rec {
   pname = "fingerprints";
   version = "1.0.3";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "cafd5f92b5b91e4ce34af2b954da9c05b448a4778947785abb19a14f363352d0";
+  src = fetchFromGitHub {
+     owner = "alephdata";
+     repo = "fingerprints";
+     rev = "1.0.3";
+     sha256 = "0kvprp0rcaqdbqp6sm08vch53dlfgvcc6xyvi6v9lwhrhx8i3hgi";
   };
 
   propagatedBuildInputs = [
