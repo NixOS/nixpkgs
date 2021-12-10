@@ -1,12 +1,14 @@
-{ lib, fetchPypi, buildPythonPackage, flask }:
+{ lib, fetchFromGitHub, buildPythonPackage, flask }:
 
 buildPythonPackage rec {
   pname = "Flask-SSLify";
   version = "0.1.5";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0gjl1m828z5dm3c5dpc2qjgi4llf84cp72mafr0ib5fd14y1sgnk";
+  src = fetchFromGitHub {
+     owner = "kennethreitz42";
+     repo = "flask-sslify";
+     rev = "v0.1.5";
+     sha256 = "17rqdlwsmyzcxk6sp95spbxn9fjd93yjpl11afihvb8lfv8jmch2";
   };
 
   propagatedBuildInputs = [ flask ];
