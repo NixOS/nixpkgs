@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , six
 , monotonic
 , diskcache
@@ -15,9 +15,11 @@ buildPythonPackage rec {
   pname = "fasteners";
   version = "0.16.3";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "b1ab4e5adfbc28681ce44b3024421c4f567e705cc3963c732bf1cba3348307de";
+  src = fetchFromGitHub {
+     owner = "harlowja";
+     repo = "fasteners";
+     rev = "0.16.3";
+     sha256 = "1nsyy4b90gvcw1cma2mwwilcy8791z1hdf3a220nccxazndbay34";
   };
 
   propagatedBuildInputs = [
