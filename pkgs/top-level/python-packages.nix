@@ -5696,6 +5696,8 @@ in {
 
   openapi-core = callPackage ../development/python-modules/openapi-core { };
 
+  pandas-stubs = callPackage ../development/python-modules/pandas-stubs { };
+
   parameterizedtestcase = callPackage ../development/python-modules/parameterizedtestcase { };
 
   pdunehd = callPackage ../development/python-modules/pdunehd { };
