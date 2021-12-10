@@ -363,32 +363,6 @@ stdenv.mkDerivation rec {
   # Bazel starts a local server and needs to bind a local address.
   __darwinAllowLocalNetworking = true;
 
-  # Bazel expects several utils to be available in Bash even without PATH. Hence this hack.
-  customBash = writeCBin "bash" ''
-    #include <stdio.h>
-    #include <stdlib.h>
-    #include <string.h>
-    #include <unistd.h>
-
-    extern char **environ;
-
-    int main(int argc, char *argv[]) {
-      char *path = getenv("PATH");
-      char *pathToAppend = "${defaultShellPath}";
-      char *newPath;
-      if (path != NULL) {
-        int length = strlen(path) + 1 + strlen(pathToAppend) + 1;
-        newPath = malloc(length * sizeof(char));
-        snprintf(newPath, length, "%s:%s", path, pathToAppend);
-      } else {
-        newPath = pathToAppend;
-      }
-      setenv("PATH", newPath, 1);
-      execve("${bash}/bin/bash", argv, environ);
-      return 0;
-    }
-  '';
-
   postPatch = let
 
     darwinPatches = ''
@@ -461,8 +435,8 @@ stdenv.mkDerivation rec {
         # We default to python3 where possible. See also `postFixup` where
         # python3 is added to $out/nix-support
         substituteInPlace "$path" \
-          --replace /bin/bash ${customBash}/bin/bash \
-          --replace "/usr/bin/env bash" ${customBash}/bin/bash \
+          --replace /bin/bash ${bash}/bin/bash \
+          --replace "/usr/bin/env bash" ${bash}/bin/bash \
           --replace "/usr/bin/env python" ${python3}/bin/python \
           --replace /usr/bin/env ${coreutils}/bin/env \
           --replace /bin/true ${coreutils}/bin/true
@@ -470,17 +444,17 @@ stdenv.mkDerivation rec {
 
       # bazel test runner include references to /bin/bash
       substituteInPlace tools/build_rules/test_rules.bzl \
-        --replace /bin/bash ${customBash}/bin/bash
+        --replace /bin/bash ${bash}/bin/bash
 
       for i in $(find tools/cpp/ -type f)
       do
         substituteInPlace $i \
-          --replace /bin/bash ${customBash}/bin/bash
+          --replace /bin/bash ${bash}/bin/bash
       done
 
       # Fixup scripts that generate scripts. Not fixed up by patchShebangs below.
       substituteInPlace scripts/bootstrap/compile.sh \
-          --replace /bin/bash ${customBash}/bin/bash
+          --replace /bin/bash ${bash}/bin/bash
 
       # add nix environment vars to .bazelrc
       cat >> .bazelrc <<EOF
@@ -548,7 +522,6 @@ stdenv.mkDerivation rec {
     unzip
     makeWrapper
     which
-    customBash
   ] ++ lib.optionals (stdenv.isDarwin) [ cctools libcxx CoreFoundation CoreServices Foundation ];
 
   # Bazel makes extensive use of symlinks in the WORKSPACE.
@@ -578,7 +551,7 @@ stdenv.mkDerivation rec {
     # Note that .bazelversion is always correct and is based on bazel-*
     # executable name, version checks should work fine
     export EMBED_LABEL="${version}- (@non-git)"
-    ${customBash}/bin/bash ./bazel_src/compile.sh
+    ${bash}/bin/bash ./bazel_src/compile.sh
     ./bazel_src/scripts/generate_bash_completion.sh \
         --bazel=./bazel_src/output/bazel \
         --output=./bazel_src/output/bazel-complete.bash \
@@ -672,7 +645,7 @@ stdenv.mkDerivation rec {
   # Save paths to hardcoded dependencies so Nix can detect them.
   postFixup = ''
     mkdir -p $out/nix-support
-    echo "${customBash} ${defaultShellPath}" >> $out/nix-support/depends
+    echo "${defaultShellPath}" >> $out/nix-support/depends
     # The templates get tar’d up into a .jar,
     # so nix can’t detect python is needed in the runtime closure
     # Some of the scripts explicitly depend on Python 2.7. Otherwise, we
