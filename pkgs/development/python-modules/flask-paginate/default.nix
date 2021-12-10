@@ -1,12 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, flask }:
+{ lib, buildPythonPackage, fetchFromGitHub, flask }:
 
 buildPythonPackage rec {
   pname = "flask-paginate";
   version = "2021.10.29";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "660ba1451e4cb168d3a42ed63914fe507bb5c0b30c26a6286b923077bba2362b";
+  src = fetchFromGitHub {
+     owner = "lixxu";
+     repo = "flask-paginate";
+     rev = "v2021.10.29";
+     sha256 = "0n55yxh7irj3lghrcx1670n8fj3qkshvplpf74ihpflfcmr5xqzh";
   };
 
   propagatedBuildInputs = [ flask ];
