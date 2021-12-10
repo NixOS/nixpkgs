@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , flask
 , six
 , pytestCheckHook
@@ -10,9 +10,11 @@ buildPythonPackage rec {
   pname = "flask-talisman";
   version = "0.8.1";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "11gjgqkpj2yqydb0pfhjyx56iy4l9szgz33vg5d7bw8vqp02wl2x";
+  src = fetchFromGitHub {
+     owner = "wntrblm";
+     repo = "flask-talisman";
+     rev = "v0.8.1";
+     sha256 = "0rjdi73aq7idgig0whsidqf5qc3bjhf5d7qv4kh9f3jhwjnd5mqs";
   };
 
   buildInputs = [
