@@ -13,8 +13,6 @@
 , gdk-pixbuf
 }:
 
-let
-in
 python3Packages.buildPythonApplication rec {
   pname = "indicator-sound-switcher";
   version = "2.3.6";
