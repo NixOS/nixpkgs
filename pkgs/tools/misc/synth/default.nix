@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "synth";
-  version = "0.6.1";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "getsynth";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-VsvGrlFmn8Q7dhvo3Buy8G0oeNErtBT4lZ8k8WFC8Zo=";
+    sha256 = "sha256-MeZ5bkOMTJVvaBfGahKsXvaYhfMKcYzPFsBp/p2dPQQ=";
   };
 
-  cargoSha256 = "sha256-10b2n7wMuBt90GZ6AVnSMT7r2501tounw13eJhyrmS4=";
+  cargoSha256 = "sha256-lNeDpUla/PfGd/AogdcOtrmL1Jp+0Ji9LH1CF7uOEe0=";
 
   nativeBuildInputs = [ pkg-config ];
 
