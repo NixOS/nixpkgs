@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , pythonOlder
-, fetchPypi
+, fetchFromGitHub
 , poetry-core
 }:
 
@@ -12,9 +12,11 @@ buildPythonPackage rec {
 
   format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-ex93I+ofo5lP6qoolZwzjxSspeqJimY3vpB32RLJ00k=";
+  src = fetchFromGitHub {
+     owner = "gaphor";
+     repo = "generic";
+     rev = "1.0.1";
+     sha256 = "1y82b032khzcwpny0qy6vl3dhfj02amj1h1i6wl6mnqkd4yvfyiq";
   };
 
   nativeBuildInputs = [
