@@ -3,7 +3,6 @@
 , lib
 , nodePackages
 , perlPackages
-, python2Packages
 , python3Packages
 , runCommand
 , writers
@@ -54,17 +53,6 @@ let
       print "success\n" if true;
     '';
 
-    python2 = writePython2Bin "test-writers-python2-bin" { libraries = [ python2Packages.enum ]; } ''
-      from enum import Enum
-
-
-      class Test(Enum):
-          a = "success"
-
-
-      print Test.a
-    '';
-
     python3 = writePython3Bin "test-writers-python3-bin" { libraries = [ python3Packages.pyyaml ]; } ''
       import yaml
 
@@ -111,17 +99,6 @@ let
       print "success\n" if true;
     '';
 
-    python2 = writePython2 "test-writers-python2" { libraries = [ python2Packages.enum ]; } ''
-      from enum import Enum
-
-
-      class Test(Enum):
-          a = "success"
-
-
-      print Test.a
-    '';
-
     python3 = writePython3 "test-writers-python3" { libraries = [ python3Packages.pyyaml ]; } ''
       import yaml
 
@@ -129,10 +106,6 @@ let
         - test: success
       """)
       print(y[0]['test'])
-    '';
-
-    python2NoLibs = writePython2 "test-writers-python2-no-libs" {} ''
-      print("success")
     '';
 
     python3NoLibs = writePython3 "test-writers-python3-no-libs" {} ''
