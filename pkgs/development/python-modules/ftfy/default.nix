@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , isPy3k
-, fetchPypi
+, fetchFromGitHub
 , wcwidth
 , pytestCheckHook
 }:
@@ -12,9 +12,11 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "ba71121a9c8d7790d3e833c6c1021143f3e5c4118293ec3afb5d43ed9ca8e72b";
+  src = fetchFromGitHub {
+     owner = "LuminosoInsight";
+     repo = "python-ftfy";
+     rev = "v6.0.3";
+     sha256 = "00670f9zjhiqq054cc4rh532w5m8ir9wajf4hmrn14y1a1k5v8a1";
   };
 
   propagatedBuildInputs = [
