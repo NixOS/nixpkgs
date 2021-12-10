@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , hypothesis
 , isPy27
 , mock
@@ -14,9 +14,11 @@ buildPythonPackage rec {
 
   disabled = isPy27; # uses python3 imports
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0kk7wl15r305496q13ka4r6n2r13j99rrrpy2b4575j704dk4x7g";
+  src = fetchFromGitHub {
+     owner = "akesterson";
+     repo = "dpath-python";
+     rev = "v2.0.5";
+     sha256 = "1ga5k3phgn6kmg41m33w3w65vdwnsil3r1y4a6wlhgsnxci5n4vl";
   };
 
   # use pytest as nosetests hangs
