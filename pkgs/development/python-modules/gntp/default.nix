@@ -1,12 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchFromGitHub }:
 
 buildPythonPackage rec {
   pname = "gntp";
   version = "1.0.3";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1q6scs8lp84v0aph6b5c9jhv51rhq2vmzpdd38db92ybkq0g597l";
+  src = fetchFromGitHub {
+     owner = "kfdm";
+     repo = "gntp";
+     rev = "v1.0.3";
+     sha256 = "082qm9gz7qxm6zi543yr9vhfgny2fq9rf2sbj2kr1wshw3kzqcrc";
   };
 
   pythonImportsCheck = [ "gntp" "gntp.notifier" ];
