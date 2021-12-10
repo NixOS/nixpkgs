@@ -71,14 +71,7 @@ autoPatchelf() {
 # So what we do here is basically run in postFixup and emulate the same
 # behaviour as fixupOutputHooks because the setup hook for patchelf is run in
 # fixupOutput and the postFixup hook runs later.
-
-# The following could work (disabling patchelf rpath compression makes sense,
-# as we overwrite it ourselves for all the binaries).
-# BUT, changing phases breaks tools that rely on having a properly functioning
-# install after the fixupPhase.
-export dontPatchELF=1
-#fixupOutputHooks+=('autoPatchelf')
-
+#
 # shellcheck disable=SC2016
 # (Expressions don't expand in single quotes, use double quotes for that.)
 postFixupHooks+=('

@@ -120,7 +120,8 @@ def populate_cache(initial, recursive=False):
                 with open_elf(path) as elf:
                     osabi = get_osabi(elf)
                     arch = get_arch(elf)
-                    rpath = [Path(p) for p in get_rpath(elf) if p and '$ORIGIN' not in p]
+                    rpath = [Path(p) for p in get_rpath(elf)
+                                     if p and '$ORIGIN' not in p]
                     lib_dirs += rpath
                     soname_cache[(path.name, arch)].append((path.parent, osabi))
 
@@ -154,8 +155,8 @@ def autoPatchelfFile(path, runtime_deps):
                       f" differs from target ({interpreter_arch})")
                 return
             elif not osabi_are_compatible(interpreter_osabi, file_osabi):
-                print(f"skipping {path} because its OS ABI ({file_osabi}) is not"
-                      f" compatible with target ({interpreter_osabi})")
+                print(f"skipping {path} because its OS ABI ({file_osabi}) is"
+                      f" not compatible with target ({interpreter_osabi})")
                 return
 
             print("searching for dependencies of", path)
@@ -232,19 +233,16 @@ def autoPatchelf(
             print(f"auto-patchelf could not satisfy dependency {dep} wanted by {path}")
 
     if missingDeps and not ignoreMissing:
-        sys.exit("""
-            auto-patchelf failed to find all the required dependencies.
-            Add the missing dependencies to --libs or use --ignore-missing.
-            """)
+        sys.exit('auto-patchelf failed to find all the required dependencies.\n'
+                 'Add the missing dependencies to --libs or use --ignore-missing.')
 
 
 def main():
     parser = argparse.ArgumentParser(
         prog="auto-patchelf",
-        description="""auto-patchelf tries as hard as possible to patch the\
-                    provided binary files by looking for compatible libraries\
-                    in the provided paths.
-                    """)
+        description='auto-patchelf tries as hard as possible to patch the'
+                    ' provided binary files by looking for compatible'
+                    'libraries in the provided paths.')
     parser.add_argument(
         "--ignore-missing",
         dest="ignoreMissing",
@@ -263,7 +261,8 @@ def main():
         help="Paths where libraries are searched for.")
     parser.add_argument(
         "--runtime-dependencies", nargs="*", type=Path,
-        help="Paths whose 'lib' dir will be added unconditionally to the runtime path of executables.")
+        help="Paths whose 'lib' dir will be added unconditionally to the"
+             "runtime path of executables.")
 
     print("automatically fixing dependencies for ELF files")
     args = parser.parse_args()

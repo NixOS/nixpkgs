@@ -143,11 +143,11 @@ with pkgs;
 
   autorestic = callPackage ../tools/backup/autorestic { };
 
-  autoPatchelfHook = makeSetupHook
-    { name = "auto-patchelf-hook"; deps = [ bintools ]; }
-    ../build-support/setup-hooks/auto-patchelf.sh;
+  #autoPatchelfHook = makeSetupHook
+  #  { name = "auto-patchelf-hook"; deps = [ bintools ]; }
+  #  ../build-support/setup-hooks/auto-patchelf.sh;
 
-  autoPatchelfPyHook = makeSetupHook
+  autoPatchelfHook = makeSetupHook
     { name = "auto-patchelf-py-hook";
       substitutions = {
         pythonInterpreter = "${python3.withPackages (ps: [ ps.pyelftools ])}/bin/python";
