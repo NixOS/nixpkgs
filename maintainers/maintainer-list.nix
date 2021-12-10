@@ -1414,6 +1414,12 @@
     githubId = 251106;
     name = "Daniel Bergey";
   };
+  bergkvist = {
+    email = "tobias@bergkv.ist";
+    github = "bergkvist";
+    githubId = 410028;
+    name = "Tobias Bergkvist";
+  };
   betaboon = {
     email = "betaboon@0x80.ninja";
     github = "betaboon";

@@ -688,6 +688,21 @@ with pkgs;
   makeWrapper = makeSetupHook { deps = [ dieHook ]; substitutions = { shell = targetPackages.runtimeShell; }; }
                               ../build-support/setup-hooks/make-wrapper.sh;
 
+  makeBinaryWrapper = let
+    f = { cc, sanitizers }: let
+      san = lib.concatMapStringsSep " " (s: "-fsanitize=${s}") sanitizers;
+      script = runCommand "make-binary-wrapper.sh" {} ''
+        substitute ${../build-support/setup-hooks/make-binary-wrapper.sh} $out \
+          --replace " @CC@ " " ${cc}/bin/cc ${san} "
+      '';
+    in
+      makeSetupHook { deps = [ dieHook ]; } script;
+  in
+    lib.makeOverridable f {
+      cc = stdenv.cc.cc;
+      sanitizers = [ "undefined" "address" ];
+    };
+
   makeModulesClosure = { kernel, firmware, rootModules, allowMissing ? false }:
     callPackage ../build-support/kernel/modules-closure.nix {
       inherit kernel firmware rootModules allowMissing;
