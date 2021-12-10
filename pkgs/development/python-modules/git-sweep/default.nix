@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , GitPython
 }:
 
@@ -8,9 +8,11 @@ buildPythonPackage rec {
   pname = "git-sweep";
   version = "0.1.1";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1csp0zd049d643d409rfivbswwzrayb4i6gkypp5mc27fb1z2afd";
+  src = fetchFromGitHub {
+     owner = "arc90";
+     repo = "git-sweep";
+     rev = "0.1.1";
+     sha256 = "1237q8c5jk09gci5x26zc99xhw7irypwfp0snz7z4dfa6l76a0pb";
   };
 
   propagatedBuildInputs = [ GitPython ];
