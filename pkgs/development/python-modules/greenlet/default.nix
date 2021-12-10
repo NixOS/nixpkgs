@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , isPyPy
 , python
 }:
@@ -11,9 +11,11 @@ buildPythonPackage rec {
   version = "1.1.2";
   disabled = isPyPy;  # builtin for pypy
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "e30f5ea4ae2346e62cedde8794a56858a67b878dd79f7df76a0767e356b1744a";
+  src = fetchFromGitHub {
+     owner = "python-greenlet";
+     repo = "greenlet";
+     rev = "1.1.2";
+     sha256 = "15z4v2j3yh5x91hj7yr0hd79bmhgvvv0q8l1w79q3cd8n9zyy7l6";
   };
 
   checkPhase = ''
