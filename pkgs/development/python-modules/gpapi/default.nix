@@ -1,6 +1,6 @@
 { buildPythonPackage
 , cryptography
-, fetchPypi
+, fetchFromGitHub
 , lib
 , pythonOlder
 , protobuf
@@ -13,9 +13,11 @@ buildPythonPackage rec {
   pname = "gpapi";
   disabled = pythonOlder "3.3"; # uses shutil.which(), added in 3.3
 
-  src = fetchPypi {
-    inherit version pname;
-    sha256 = "0ampvsv97r3hy1cakif4kmyk1ynf3scbvh4fbk02x7xrxn4kl38w";
+  src = fetchFromGitHub {
+     owner = "NoMore201";
+     repo = "googleplay-api";
+     rev = "v0.4.4";
+     sha256 = "0rr73wzx3phq9kcx6js8ydlw667wq6nwc747kcmdn1ra6296cyb4";
   };
 
   # package doesn't contain unit tests
