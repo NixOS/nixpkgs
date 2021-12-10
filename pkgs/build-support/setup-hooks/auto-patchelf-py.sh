@@ -52,12 +52,12 @@ autoPatchelf() {
     done
 
     @pythonInterpreter@ @py_script@                         \
-        ${norecurse:+--norecurse}                           \
+        ${norecurse:+--no-recurse}                           \
         ${autoPatchelfIgnoreMissingDeps:+--ignore-missing}  \
         --paths "$@"                                        \
         --libs "${autoPatchelfLibs[@]}"                     \
                "${extraAutoPatchelfLibs[@]}"                \
-        --runtimeDependencies "${runtimeDependencies[@]}"
+        --runtime-dependencies "${runtimeDependencies[@]}"
 
     # clear the extra set for the next invocation
     extraAutoPatchelfLibs=()
