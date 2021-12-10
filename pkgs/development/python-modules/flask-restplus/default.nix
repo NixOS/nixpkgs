@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , nose
 , blinker
 , tzlocal
@@ -20,9 +20,11 @@ buildPythonPackage rec {
   pname = "flask-restplus";
   version = "0.13.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0p4zz8b5bwbw7w0vhbyihl99d2gw13cb81rxzj4z626a1cnl8vm6";
+  src = fetchFromGitHub {
+     owner = "noirbizarre";
+     repo = "flask-restplus";
+     rev = "0.13.0";
+     sha256 = "0p49m0z7nbq5wx8znhafmwdrqp606p049hczi6zkwbjwhb5rkqp9";
   };
 
   checkInputs = [ nose blinker tzlocal mock rednose ];
