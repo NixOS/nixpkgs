@@ -9191,6 +9191,8 @@ in {
 
   subunit2sql = callPackage ../development/python-modules/subunit2sql { };
 
+  subzerod = callPackage ../development/python-modules/subzerod { };
+
   suds-jurko = callPackage ../development/python-modules/suds-jurko { };
 
   sumo = callPackage ../development/python-modules/sumo { };
