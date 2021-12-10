@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, makeWrapper, jdk11 }:
+{ lib, stdenv, fetchurl, makeWrapper, jdk11, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "metabase";
@@ -23,5 +23,8 @@ stdenv.mkDerivation rec {
     license     = licenses.agpl3;
     platforms   = platforms.all;
     maintainers = with maintainers; [ schneefux thoughtpolice mmahut ];
+  };
+  passthru.tests = {
+    inherit (nixosTests) metabase;
   };
 }
