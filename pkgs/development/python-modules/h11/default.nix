@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pytestCheckHook
 }:
 
@@ -8,9 +8,11 @@ buildPythonPackage rec {
   pname = "h11";
   version = "0.12.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0hk0nll6qazsambp3kl8cxxsbl4gv5y9252qadyk0jky0sv2q8j7";
+  src = fetchFromGitHub {
+     owner = "python-hyper";
+     repo = "h11";
+     rev = "v0.12.0";
+     sha256 = "16hxhk588im1d9bpgmvsjyg732zbq5hvz5xbmb19jnxdf2rkig7l";
   };
 
   checkInputs = [ pytestCheckHook ];
