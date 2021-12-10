@@ -1,12 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, googleapis-common-protos, protobuf }:
+{ lib, buildPythonPackage, fetchFromGitHub, googleapis-common-protos, protobuf }:
 
 buildPythonPackage rec {
   pname = "google-cloud-audit-log";
   version = "0.2.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "d0852f525ad65705f9fbff6288be4493e1449a7906fb5e01bd71c8d1e424d1fc";
+  src = fetchFromGitHub {
+     owner = "googleapis";
+     repo = "python-audit-log";
+     rev = "v0.2.0";
+     sha256 = "06m3m3m0khdryg1l51q7640vs2zvvjrhak8dy2hz16m0g189slh7";
   };
 
   propagatedBuildInputs = [ googleapis-common-protos protobuf ];
