@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl
+{ lib, stdenv, fetchurl, fetchpatch
 # native deps.
 , runCommand, pkg-config, meson, ninja, makeWrapper
 # build+runtime deps.
@@ -25,6 +25,14 @@ unwrapped = stdenv.mkDerivation rec {
   };
 
   outputs = [ "out" "dev" ];
+
+  patches = [
+    (fetchpatch { # https://gitlab.nic.cz/knot/knot-resolver/-/merge_requests/1237
+      name = "console.aws.amazon.com-fix.patch";
+      url = "https://gitlab.nic.cz/knot/knot-resolver/-/commit/f4dabfbec9273703.diff";
+      sha256 = "3J+FDwNQ6CqIGo9pSzhrQZlHX99vXFDpPOBpwpCnOxs=";
+    })
+  ];
 
   # Path fixups for the NixOS service.
   postPatch = ''
