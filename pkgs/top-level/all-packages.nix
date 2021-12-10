@@ -696,7 +696,10 @@ with pkgs;
           --replace " @CC@ " " ${cc}/bin/cc ${san} "
       '';
     in
-      makeSetupHook { deps = [ dieHook ]; } script;
+      makeSetupHook {
+        deps = [ dieHook ];
+        substitutions.passthru.tests = callPackage ../test/make-binary-wrapper { inherit makeBinaryWrapper; };
+      } script;
   in
     lib.makeOverridable f {
       cc = stdenv.cc;
