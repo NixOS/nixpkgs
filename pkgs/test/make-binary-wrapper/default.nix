@@ -6,7 +6,7 @@ let
     ${gcc}/bin/cc -Wall -Werror -Wpedantic -o $out ${./envcheck.c}
   '';
   makeGoldenTest = testname: runCommand "test-wrapper_${testname}" env ''
-    mkdir -p /tmp/foo
+    mkdir -p ./tmp/foo
 
     params=$(<"${./.}/${testname}.cmdline")
     eval "makeCWrapper /send/me/flags $params" > wrapper.c
