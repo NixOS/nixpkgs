@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , aiounittest
 , google-api-core
 , google-cloud-testutils
@@ -15,9 +15,11 @@ buildPythonPackage rec {
   pname = "google-cloud-firestore";
   version = "2.3.4";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-cU4bwfxRAp14qmSTO+8u/APa7clWXqeeyRuEOwUgFuw=";
+  src = fetchFromGitHub {
+     owner = "googleapis";
+     repo = "python-firestore";
+     rev = "v2.3.4";
+     sha256 = "00cm1g5cwnhq8l5ihbv4y2wwj4p02gj4cbpnlysv6zzc171m1405";
   };
 
   propagatedBuildInputs = [
