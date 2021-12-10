@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pythonOlder
 , sgmllib3k
 }:
@@ -10,9 +10,11 @@ buildPythonPackage rec {
   version = "6.0.8";
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-XOBBCgWrJIyMfPyjoOoiA5aO6f9EhgZzea9IJ6WflmE=";
+  src = fetchFromGitHub {
+     owner = "kurtmckee";
+     repo = "feedparser";
+     rev = "6.0.8";
+     sha256 = "0qdaakqv3k23gl8r1w3lzn6hlnx0fm5sild6kp11iziz25dgbwzd";
   };
 
   propagatedBuildInputs = [ sgmllib3k ];
