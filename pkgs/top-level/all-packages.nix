@@ -25589,6 +25589,8 @@ with pkgs;
 
   jmusicbot = callPackage ../applications/audio/jmusicbot { };
 
+  lairucrem = python3Packages.callPackage ../applications/version-management/lairucrem { };
+
   libquvi = callPackage ../applications/video/quvi/library.nix { };
 
   librespot = callPackage ../applications/audio/librespot {
