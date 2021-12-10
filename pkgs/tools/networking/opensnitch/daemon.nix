@@ -7,6 +7,7 @@
 , lib
 , coreutils
 , iptables
+, makeWrapper
 }:
 
 buildGoModule rec {
@@ -32,6 +33,12 @@ buildGoModule rec {
 
   modRoot = "daemon";
 
+  vendorSha256 = "sha256-LMwQBFkHg1sWIUITLOX2FZi5QUfOivvrkcl9ELO3Trk=";
+
+  nativeBuildInputs = [ pkg-config makeWrapper ];
+
+  buildInputs = [ libnetfilter_queue libnfnetlink ];
+
   postBuild = ''
     mv $GOPATH/bin/daemon $GOPATH/bin/opensnitchd
     mkdir -p $out/lib/systemd/system
@@ -39,14 +46,12 @@ buildGoModule rec {
       --replace "/usr/local/bin/opensnitchd" "$out/bin/opensnitchd" \
       --replace "/etc/opensnitchd/rules" "/var/lib/opensnitch/rules" \
       --replace "/bin/mkdir" "${coreutils}/bin/mkdir"
-    sed -i '/\[Service\]/a Environment=PATH=${iptables}/bin' $out/lib/systemd/system/opensnitchd.service
   '';
 
-  vendorSha256 = "sha256-LMwQBFkHg1sWIUITLOX2FZi5QUfOivvrkcl9ELO3Trk=";
-
-  nativeBuildInputs = [ pkg-config ];
-
-  buildInputs = [ libnetfilter_queue libnfnetlink ];
+  postInstall = ''
+    wrapProgram $out/bin/opensnitchd \
+      --prefix PATH : ${lib.makeBinPath [ iptables ]}
+  '';
 
   meta = with lib; {
     description = "An application firewall";

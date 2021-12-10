@@ -25923,6 +25923,8 @@ with pkgs;
 
   musikcube = callPackage ../applications/audio/musikcube {};
 
+  p2pool = callPackage ../applications/misc/p2pool { };
+
   pass2csv = python3Packages.callPackage ../tools/security/pass2csv {};
 
   pass-secret-service = callPackage ../applications/misc/pass-secret-service { };
