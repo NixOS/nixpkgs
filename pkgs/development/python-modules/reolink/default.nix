@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "reolink";
-  version = "0.0.53";
+  version = "0.56";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -19,9 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fwestenberg";
     repo = pname;
-    # https://github.com/fwestenberg/reolink/issues/78
-    rev = "0053";
-    sha256 = "sha256-kEG+kRTWaC6eQbmlasAWIESFdKPoxQCdZLRrQwb2aRU=";
+    rev = "v${version}";
+    sha256 = "sha256-ld1KDWweaG7y7EPN6Y19PzQRGCIFAPEb6AmlXXbjgCU=";
   };
 
   propagatedBuildInputs = [
@@ -40,6 +39,9 @@ buildPythonPackage rec {
     substituteInPlace setup.py \
       --replace "ffmpeg" "ffmpeg-python"
   '';
+
+  # https://github.com/fwestenberg/reolink/issues/83
+  doCheck = false;
 
   pytestFlagsArray = [
     "test.py"
