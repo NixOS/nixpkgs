@@ -32548,7 +32548,7 @@ with pkgs;
 
   nixStatic = pkgsStatic.nix;
 
-  nixops = callPackage ../tools/package-management/nixops { };
+  nixops = builtins.throw "The NixOps 1.x branch is unmaintained and unsupported. Please upgrade to nixopsUnstable and contribute to the NixOps 2 release.";
 
   nixopsUnstable = lowPrio (callPackage ../applications/networking/cluster/nixops { });
 
