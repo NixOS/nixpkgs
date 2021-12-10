@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , requests
 , google-auth
 , google-auth-oauthlib
@@ -10,9 +10,11 @@ buildPythonPackage rec {
   version = "4.0.1";
   pname = "gspread";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "236a0f24e3724b49bae4cbd5144ed036b0ae6feaf5828ad033eb2824bf05e5be";
+  src = fetchFromGitHub {
+     owner = "burnash";
+     repo = "gspread";
+     rev = "v4.0.1";
+     sha256 = "1cp4lvp9552mv1xx353a9mh2m7iq8llncwj3l7ds8nf91465hsfg";
   };
 
   propagatedBuildInputs = [ requests google-auth google-auth-oauthlib ];
