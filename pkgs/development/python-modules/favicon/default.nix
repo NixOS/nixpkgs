@@ -1,13 +1,15 @@
-{ lib, buildPythonPackage, fetchPypi, requests, beautifulsoup4, pytest, requests-mock,
+{ lib, buildPythonPackage, fetchFromGitHub, requests, beautifulsoup4, pytest, requests-mock,
   pytest-runner }:
 
 buildPythonPackage rec {
   pname = "favicon";
   version = "0.7.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "6d6b5a78de2a0d0084589f687f384b2ecd6a6527093fec564403b1a30605d7a8";
+  src = fetchFromGitHub {
+     owner = "scottwernervt";
+     repo = "favicon";
+     rev = "v0.7.0";
+     sha256 = "0dl83y6lp17jjf2p09r09a7v2rnaqd3hry9w350m80sghvpllyrz";
   };
 
   buildInputs = [ pytest-runner ];
