@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , aiohttp
 }:
 
@@ -8,9 +8,11 @@ buildPythonPackage rec {
   pname = "aiohue";
   version = "3.0.2";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "8aaee7fef3fff4c9271728c645896226f3df1e00bfab8dcea2456edfb3395fd0";
+  src = fetchFromGitHub {
+     owner = "home-assistant-libs";
+     repo = "aiohue";
+     rev = "3.0.2";
+     sha256 = "03sdqlc1k9dp4k8wna1rknflh8mkmwwj0r0b5wq5w3fik2mjr8gz";
   };
 
   propagatedBuildInputs = [
