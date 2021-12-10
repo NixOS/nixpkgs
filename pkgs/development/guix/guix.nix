@@ -35,7 +35,7 @@ stdenv.mkDerivation rec
 
   meta = {
     description = "The GNU Guix package manager";
-    homepage = https://www.gnu.org/software/guix/;
+    homepage = "https://www.gnu.org/software/guix/";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ johnazoidberg mohe2015 ];
     platforms = [ "aarch64-linux" "i686-linux" "x86_64-linux" ];
