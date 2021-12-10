@@ -4,7 +4,7 @@
 , buildPythonPackage, pythonOlder, python
 # Python libraries
 , numpy, tensorflow-tensorboard, absl-py
-, setuptools, wheel, Keras, keras-preprocessing, google-pasta
+, setuptools, wheel, keras, keras-preprocessing, google-pasta
 , opt-einsum, astunparse, h5py
 , termcolor, grpcio, six, wrapt, protobuf, tensorflow-estimator
 , dill, flatbuffers-python, tblib, typing-extensions
@@ -479,7 +479,7 @@ in buildPythonPackage {
   # Actual tests are slow and impure.
   # TODO try to run them anyway
   # TODO better test (files in tensorflow/tools/ci_build/builds/*test)
-  checkInputs = [ Keras ];
+  checkInputs = [ keras ];
   checkPhase = ''
     ${python.interpreter} <<EOF
     # A simple "Hello world"

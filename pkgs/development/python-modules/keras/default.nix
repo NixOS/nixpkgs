@@ -5,12 +5,13 @@
 }:
 
 buildPythonPackage rec {
-  pname = "Keras";
-  version = "2.4.3";
+  pname = "keras";
+  version = "2.7.0";
+  format = "wheel";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "fedd729b52572fb108a98e3d97e1bac10a81d3917d2103cc20ab2a5f03beb973";
+    inherit format pname version;
+    sha256 = "0c33ae1f728064ca0d35dfba999e9c316f03623bf5688c82fb83cc74a80ea248";
   };
 
   checkInputs = [
