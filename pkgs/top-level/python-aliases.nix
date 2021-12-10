@@ -106,4 +106,5 @@ mapAliases ({
   WazeRouteCalculator = wazeroutecalculator; # added 2021-09-29
   websocket_client = websocket-client; # added 2021-06-15
   zc-buildout221 = zc-buildout; # added 2021-07-21
+  zc_buildout_nix = throw "zc_buildout_nix was pinned to a version no longer compatible with other modules";
 })

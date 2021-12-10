@@ -1,17 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, python2, pkg-config, imagemagick, wafHook }:
+{ lib, stdenv, fetchFromGitHub, python3, pkg-config, imagemagick, wafHook }:
 
 stdenv.mkDerivation rec {
   pname = "blockhash";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "commonsmachinery";
     repo = "blockhash";
     rev = "v${version}";
-    sha256 = "0m7ikppl42iicgmwsb7baajmag7v0p1ab06xckifvrr0zm21bq9p";
+    sha256 = "0x3lvhnkb4c3pyq6p81qnnqimz35wpippiac506dgjx3b1848v35";
   };
 
-  nativeBuildInputs = [ python2 pkg-config wafHook ];
+  nativeBuildInputs = [ python3 pkg-config wafHook ];
   buildInputs = [ imagemagick ];
 
   strictDeps = true;

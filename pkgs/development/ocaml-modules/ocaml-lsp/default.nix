@@ -1,4 +1,4 @@
-{ buildDunePackage, jsonrpc, lsp, re, makeWrapper, dot-merlin-reader }:
+{ lib, buildDunePackage, jsonrpc, lsp, re, makeWrapper, dot-merlin-reader, spawn }:
 
 buildDunePackage {
   pname = "ocaml-lsp-server";
@@ -7,7 +7,8 @@ buildDunePackage {
 
   inherit (lsp) preBuild;
 
-  buildInputs = lsp.buildInputs ++ [ lsp re ];
+  buildInputs = lsp.buildInputs ++ [ lsp re ]
+  ++ lib.optional (lib.versionAtLeast jsonrpc.version "1.9") spawn;
 
   nativeBuildInputs = [ makeWrapper ];
 

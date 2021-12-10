@@ -2,21 +2,21 @@
 , kernel
 , fetchurl
 , pkg-config, meson, ninja
-, libbsd, numactl, libbpf, zlib, libelf, jansson, openssl, libpcap
+, libbsd, numactl, libbpf, zlib, libelf, jansson, openssl, libpcap, rdma-core
 , doxygen, python3
 , withExamples ? []
 , shared ? false }:
 
 let
   mod = kernel != null;
-  dpdkVersion = "21.05";
+  dpdkVersion = "21.11";
 in stdenv.mkDerivation rec {
   pname = "dpdk";
   version = "${dpdkVersion}" + lib.optionalString mod "-${kernel.version}";
 
   src = fetchurl {
     url = "https://fast.dpdk.org/rel/dpdk-${dpdkVersion}.tar.xz";
-    sha256 = "sha256-HhJJm0xfzbV8g+X+GE6mvs3ffPCSiTwsXvLvsO7BLws=";
+    sha256 = "sha256-Mkbj7WjuKzaaXYviwGzxCKZp4Vf01Bxby7sha/Wr06E=";
   };
 
   nativeBuildInputs = [
@@ -39,6 +39,12 @@ in stdenv.mkDerivation rec {
     zlib
   ] ++ lib.optionals mod kernel.moduleBuildDependencies;
 
+  # Propagated to support current DPDK users in nixpkgs which statically link
+  # with the framework (e.g. odp-dpdk).
+  propagatedBuildInputs = [
+    rdma-core
+  ];
+
   postPatch = ''
     patchShebangs config/arm buildtools
   '';
@@ -52,6 +58,7 @@ in stdenv.mkDerivation rec {
   ++ lib.optional (mod && kernel.kernelOlder "5.11") "-Ddisable_drivers=kni"
   ++ lib.optional (!shared) "-Ddefault_library=static"
   ++ lib.optional stdenv.isx86_64 "-Dmachine=nehalem"
+  ++ lib.optional stdenv.isAarch64 "-Dmachine=generic"
   ++ lib.optional mod "-Dkernel_dir=${placeholder "kmod"}/lib/modules/${kernel.modDirVersion}"
   ++ lib.optional (withExamples != []) "-Dexamples=${builtins.concatStringsSep "," withExamples}";
 
@@ -67,7 +74,11 @@ in stdenv.mkDerivation rec {
     rm -f $kmod/lib/modules/${kernel.modDirVersion}/build
   '';
 
-  postInstall = lib.optionalString (withExamples != []) ''
+  postInstall = ''
+    # Remove Sphinx cache files. Not only are they not useful, but they also
+    # contain store paths causing spurious dependencies.
+    rm -rf $out/share/doc/dpdk/html/.doctrees
+  '' + lib.optionalString (withExamples != []) ''
     find examples -type f -executable -exec install {} $out/bin \;
   '';
 

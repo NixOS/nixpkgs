@@ -1,4 +1,4 @@
-{ callPackage, python3, enableNpm ? true }:
+{ callPackage, fetchpatch, python3, enableNpm ? true }:
 
 let
   buildNodejs = callPackage ./nodejs.nix {
@@ -9,5 +9,13 @@ buildNodejs {
   inherit enableNpm;
   version = "17.1.0";
   sha256 = "1iyazwpgv3pxqh7zz3s87qwrbahifrj9sj1a2vwhkc4jxcvkz03b";
-  patches = [ ./disable-darwin-v8-system-instrumentation.patch ];
+  patches = [
+    ./disable-darwin-v8-system-instrumentation.patch
+    # Fixes node incorrectly building vendored OpenSSL when we want system OpenSSL.
+    # https://github.com/nodejs/node/pull/40965
+    (fetchpatch {
+      url = "https://github.com/nodejs/node/commit/65119a89586b94b0dd46b45f6d315c9d9f4c9261.patch";
+      sha256 = "sha256-dihKYEdK68sQIsnfTRambJ2oZr0htROVbNZlFzSAL+I=";
+    })
+  ];
 }

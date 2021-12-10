@@ -259,4 +259,11 @@ with lib.maintainers; {
     ];
     scope = "coqui-ai TTS (formerly Mozilla TTS) and leaf packages";
   };
+
+  xfce = {
+    members = [
+      romildo
+    ];
+    scope = "Maintain Xfce desktop environment and related packages.";
+  };
 }

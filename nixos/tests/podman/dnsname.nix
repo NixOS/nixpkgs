@@ -1,4 +1,4 @@
-import ./make-test-python.nix (
+import ../make-test-python.nix (
   { pkgs, lib, ... }:
   let
     inherit (pkgs) writeTextDir python3 curl;
