@@ -30467,7 +30467,25 @@ with pkgs;
 
   minecraft = callPackage ../games/minecraft { };
 
-  minecraft-server = callPackage ../games/minecraft-server { };
+  inherit (import ../games/minecraft-server { inherit callPackage lib; })
+    minecraft-server_1_2
+    minecraft-server_1_3
+    minecraft-server_1_4
+    minecraft-server_1_5
+    minecraft-server_1_6
+    minecraft-server_1_7
+    minecraft-server_1_8
+    minecraft-server_1_9
+    minecraft-server_1_10
+    minecraft-server_1_11
+    minecraft-server_1_12
+    minecraft-server_1_13
+    minecraft-server_1_14
+    minecraft-server_1_15
+    minecraft-server_1_16
+    minecraft-server_1_17
+    minecraft-server_1_18
+    minecraft-server;
 
   moon-buggy = callPackage ../games/moon-buggy {};
 
