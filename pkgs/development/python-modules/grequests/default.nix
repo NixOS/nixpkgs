@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , requests
 , gevent
 }:
@@ -9,9 +9,11 @@ buildPythonPackage rec {
   pname = "grequests";
   version = "0.6.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0rpnim3ppxjdsaa869h1jdimcyc66mamcs593rd7brk8cq68kv3x";
+  src = fetchFromGitHub {
+     owner = "kennethreitz";
+     repo = "grequests";
+     rev = "v0.6.0";
+     sha256 = "1vc9qj1fjyaisbfcqhzzkll0g1fj3lwk941bvnnq03lj5z63wdcz";
   };
 
   # No tests in archive
