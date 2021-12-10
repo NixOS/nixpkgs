@@ -1,12 +1,14 @@
-{ buildPythonPackage, lib, fetchPypi }:
+{ buildPythonPackage, lib, fetchFromGitHub }:
 
 buildPythonPackage rec {
   pname = "fields";
   version = "5.0.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-MdSqA9jUTjXfE8Qx3jUTaZfwR6kkpZfYT3vCCeG+Vyc=";
+  src = fetchFromGitHub {
+     owner = "ionelmc";
+     repo = "python-fields";
+     rev = "v5.0.0";
+     sha256 = "0jzf90i3sig9alm96jvp8l0i5mpvwzqwbi0kgjsb69n6dca3nbnc";
   };
 
   pythonImportsCheck = [ "fields" ];
