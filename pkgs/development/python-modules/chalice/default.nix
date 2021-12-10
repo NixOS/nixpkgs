@@ -85,6 +85,9 @@ buildPythonPackage rec {
     # Don't build
     "test_can_generate_pipeline_for_all"
     "test_build_wheel"
+    # https://github.com/aws/chalice/issues/1850
+    "test_resolve_endpoint"
+    "test_endpoint_from_arn"
   ];
 
   pythonImportsCheck = [ "chalice" ];
