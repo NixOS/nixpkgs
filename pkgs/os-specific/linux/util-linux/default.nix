@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
   ];
 
   outputs = [ "bin" "dev" "out" "lib" "man" ];
+  separateDebugInfo = true;
 
   postPatch = ''
     patchShebangs tests/run.sh
