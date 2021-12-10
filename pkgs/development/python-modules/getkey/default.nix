@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pytestCheckHook
 , flake8
 }:
@@ -9,9 +9,11 @@ buildPythonPackage rec {
   pname = "getkey";
   version = "0.6.5";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0ng0ihfagh9g8hral0bq5nhjlp3csqghyv3z8b7ylkdkqc1cgiv8";
+  src = fetchFromGitHub {
+     owner = "kcsaff";
+     repo = "getkey";
+     rev = "v0.6.5";
+     sha256 = "0bj1yzq28z8k5ghbpdpsr1vzkqxwi5fq4r074k5gb8pf92cdqm2v";
   };
 
   # disable coverage, because we don't care and python-coveralls is not in nixpkgs
