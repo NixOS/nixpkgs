@@ -49,22 +49,22 @@ let
 in
 
 stdenv.mkDerivation rec {
-  version = "10.7.1";
+  version = "11.0.0";
   pname = "geant4";
 
   src = fetchurl{
-    url = "https://geant4-data.web.cern.ch/geant4-data/releases/geant4.10.07.p01.tar.gz";
-    sha256 = "07if874aljizkjyp21qj6v193pmyifyfmwi5kg8jm71x79sn2laj";
+    url = "http://cern.ch/geant4-data/releases/geant4-v11.0.0.tar.gz";
+    sha256 = "sha256-PMin350/8ceiGmLS6zoQvhX2uxWNOTI78yEzScnvdbk=";
   };
 
   boost_python_lib = "python${builtins.replaceStrings ["."] [""] python3.pythonVersion}";
   postPatch = ''
     # Fix for boost 1.67+
     substituteInPlace environments/g4py/CMakeLists.txt \
-      --replace "REQUIRED python" \
+      --replace "REQUIRED python''${PYTHON_VERSION_MAJOR}''${PYTHON_VERSION_MINOR}" \
                 "REQUIRED COMPONENTS $boost_python_lib"
     substituteInPlace environments/g4py/G4PythonHelpers.cmake \
-      --replace "Boost::python" "Boost::$boost_python_lib"
+      --replace "Boost::python''${PYTHON_VERSION_MAJOR}''${PYTHON_VERSION_MINOR}" "Boost::$boost_python_lib"
   '';
 
   cmakeFlags = [
