@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , google-api-core
 , google-cloud-core
 , pytestCheckHook
@@ -11,9 +11,11 @@ buildPythonPackage rec {
   pname = "google-cloud-dns";
   version = "0.34.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "bd75d6e9fd456ce643ee936a113a1ead5405704515caa679db30d7f036e447f3";
+  src = fetchFromGitHub {
+     owner = "googleapis";
+     repo = "python-dns";
+     rev = "v0.34.0";
+     sha256 = "1sq9ny38zsn5gdydac6rn2f7761zyy6nn9fyrzcrm3jm1lbv263g";
   };
 
   propagatedBuildInputs = [ google-api-core google-cloud-core ];
