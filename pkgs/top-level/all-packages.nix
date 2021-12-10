@@ -8716,6 +8716,8 @@ with pkgs;
   plex = callPackage ../servers/plex { };
   plexRaw = callPackage ../servers/plex/raw.nix { };
 
+  psitransfer = callPackage ../servers/psitransfer { };
+
   tab = callPackage ../tools/text/tab { };
 
   tabview = with python3Packages; toPythonApplication tabview;
