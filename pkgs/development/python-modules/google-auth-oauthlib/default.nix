@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , click
 , mock
 , pytestCheckHook
@@ -13,9 +13,11 @@ buildPythonPackage rec {
   pname = "google-auth-oauthlib";
   version = "0.4.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-qQoHL2mT8sMnBnv2UnAEY4TNpajssguU6ppofx8jOno=";
+  src = fetchFromGitHub {
+     owner = "GoogleCloudPlatform";
+     repo = "google-auth-library-python-oauthlib";
+     rev = "v0.4.6";
+     sha256 = "1k9vg8wwwqygqv0sghgnglj9hxfkzmy5v6668smq39zs92awks3q";
   };
 
   propagatedBuildInputs = [
