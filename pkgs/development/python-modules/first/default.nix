@@ -1,12 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchFromGitHub }:
 
 buildPythonPackage rec {
   pname = "first";
   version = "2.0.2";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1gykyrm6zlrbf9iz318p57qwk594mx1jf0d79v79g32zql45na7z";
+  src = fetchFromGitHub {
+     owner = "hynek";
+     repo = "first";
+     rev = "2.0.2";
+     sha256 = "0g0ly8b4m5n6kgam0l1nsgiy00v5k8px7cczcpp7v5q9qgqarwlx";
   };
 
   doCheck = false; # no tests
