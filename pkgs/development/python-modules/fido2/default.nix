@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , six
 , cryptography
 , mock
@@ -11,9 +11,11 @@ buildPythonPackage rec {
   pname = "fido2";
   version = "0.9.3";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "b45e89a6109cfcb7f1bb513776aa2d6408e95c4822f83a253918b944083466ec";
+  src = fetchFromGitHub {
+     owner = "Yubico";
+     repo = "python-fido2";
+     rev = "0.9.3";
+     sha256 = "0wh7d4imdlnxvvdg05xkg2g5lj949g4f00kayh0ywh5a1qgam7b9";
   };
 
   propagatedBuildInputs = [ six cryptography ];
