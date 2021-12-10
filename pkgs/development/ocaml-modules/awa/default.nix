@@ -18,12 +18,13 @@ buildDunePackage rec {
     sha256 = "1l7nsd8jifxjq78xyzcc0z9igc02m2qlvv4cxzsgdim6n1jfzxj2";
   };
 
-  nativeBuildInputs = [ ppx_sexp_conv ppx_cstruct ];
+  nativeBuildInputs = [ ppx_cstruct ];
 
   propagatedBuildInputs = [
     mirage-crypto mirage-crypto-rng mirage-crypto-pk x509
     cstruct cstruct-sexp sexplib mtime
     logs base64 hacl_x25519 zarith
+    ppx_sexp_conv
   ];
 
   doCheck = true;
