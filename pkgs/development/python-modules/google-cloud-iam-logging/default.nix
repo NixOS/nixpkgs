@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , google-api-core
 , grpc-google-iam-v1
 , mock
@@ -13,9 +13,11 @@ buildPythonPackage rec {
   pname = "google-cloud-iam-logging";
   version = "1.0.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "4ac688593279c48d7863f0a90457202ff9b235e3ee8862498e8a5b8f867cc137";
+  src = fetchFromGitHub {
+     owner = "googleapis";
+     repo = "python-iam-logging";
+     rev = "v1.0.0";
+     sha256 = "1q2zzd4w3iwwfncfavzypfsx7qhn6lf43qr7fcsmnh8mhqxhg8v3";
   };
 
   propagatedBuildInputs = [
