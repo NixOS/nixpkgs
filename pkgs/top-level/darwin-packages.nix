@@ -120,7 +120,7 @@ impure-cmds // appleSourcePackages // chooseLibs // {
     executable = true;
 
     text = ''
-      CODESIGN_ALLOCATE=${targetPrefix}codesign_allocate \
+      CODESIGN_ALLOCATE=${self.cctools}/bin/${targetPrefix}codesign_allocate \
         ${self.sigtool}/bin/codesign -f -s - "$linkerOutput"
     '';
   };
