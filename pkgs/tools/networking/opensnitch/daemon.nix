@@ -43,7 +43,7 @@ buildGoModule rec {
     mv $GOPATH/bin/daemon $GOPATH/bin/opensnitchd
     mkdir -p $out/lib/systemd/system
     substitute opensnitchd.service $out/lib/systemd/system/opensnitchd.service \
-      --replace "/usr/local/bin/opensnitchd" "${out}/bin/opensnitchd" \
+      --replace "/usr/local/bin/opensnitchd" "$out/bin/opensnitchd" \
       --replace "/etc/opensnitchd/rules" "/var/lib/opensnitch/rules" \
       --replace "/bin/mkdir" "${coreutils}/bin/mkdir"
   '';
