@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
+{ lib, buildPythonPackage, fetchFromGitHub, isPy27
 , coverage
 , mock
 , pytest
@@ -11,9 +11,11 @@ buildPythonPackage rec {
   version = "20.1.0";
   disabled = isPy27;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "e0a968b5ba15f8a328fdfd7ab1fcb5af4470c28aaf7e55df02a99bc13138e6e8";
+  src = fetchFromGitHub {
+     owner = "benoitc";
+     repo = "gunicorn";
+     rev = "20.1.0";
+     sha256 = "1zhy6c69g8zyd76nlv9ipqrjicfz6f3pys2wgqjm0njhqfdlgly5";
   };
 
   propagatedBuildInputs = [ setuptools ];
