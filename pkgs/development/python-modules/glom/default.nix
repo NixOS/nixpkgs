@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , boltons
 , attrs
 , face
@@ -12,9 +12,11 @@ buildPythonPackage rec {
   pname = "glom";
   version = "20.11.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "54051072bccc9cdb3ebbd8af0559195137a61d308f04bff19678e4b61350eb12";
+  src = fetchFromGitHub {
+     owner = "mahmoud";
+     repo = "glom";
+     rev = "v20.11.0";
+     sha256 = "09yaqd4acmbzpmscxa11z7v8vz4i2y3q20f2ksnz06908y3jgmqw";
   };
 
   propagatedBuildInputs = [ boltons attrs face ];
