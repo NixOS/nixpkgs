@@ -1,54 +1,51 @@
 { lib, buildPackages, runCommand, nettools, bc, bison, flex, perl, rsync, gmp, libmpc, mpfr, openssl
 , libelf, cpio, elfutils, zstd, gawk, python3Minimal, zlib, pahole
 , writeTextFile
-}:
-
-let
-  readConfig = configfile: import (runCommand "config.nix" {} ''
-    echo "{" > "$out"
-    while IFS='=' read key val; do
-      [ "x''${key#CONFIG_}" != "x$key" ] || continue
-      no_firstquote="''${val#\"}";
-      echo '  "'"$key"'" = "'"''${no_firstquote%\"}"'";' >> "$out"
-    done < "${configfile}"
-    echo "}" >> $out
-  '').outPath;
-in {
-  lib,
   # Allow overriding stdenv on each buildLinux call
-  stdenv,
+, stdenv
   # The kernel version
-  version,
+, version
   # Position of the Linux build expression
-  pos ? null,
+, pos ? null
   # Additional kernel make flags
-  extraMakeFlags ? [],
+, extraMakeFlags ? []
   # The version of the kernel module directory
-  modDirVersion ? version,
+, modDirVersion ? version
   # The kernel source (tarball, git checkout, etc.)
-  src,
+, src
   # a list of { name=..., patch=..., extraConfig=...} patches
-  kernelPatches ? [],
+, kernelPatches ? []
   # The kernel .config file
-  configfile,
+, configfile
   # Manually specified nixexpr representing the config
   # If unspecified, this will be autodetected from the .config
-  config ? lib.optionalAttrs allowImportFromDerivation (readConfig configfile),
+, config ?
+    let
+      readConfig = configfile: import (runCommand "config.nix" {} ''
+        echo "{" > "$out"
+        while IFS='=' read key val; do
+          [ "x''${key#CONFIG_}" != "x$key" ] || continue
+          no_firstquote="''${val#\"}";
+          echo '  "'"$key"'" = "'"''${no_firstquote%\"}"'";' >> "$out"
+        done < "${configfile}"
+        echo "}" >> $out
+      '').outPath;
+    in lib.optionalAttrs allowImportFromDerivation (readConfig configfile)
   # Custom seed used for CONFIG_GCC_PLUGIN_RANDSTRUCT if enabled. This is
   # automatically extended with extra per-version and per-config values.
-  randstructSeed ? "",
+, randstructSeed ? ""
   # Use defaultMeta // extraMeta
-  extraMeta ? {},
+, extraMeta ? {}
 
   # for module compatibility
-  isZen      ? false,
-  isLibre    ? false,
-  isHardened ? false,
+, isZen      ? false
+, isLibre    ? false
+, isHardened ? false
 
   # Whether to utilize the controversial import-from-derivation feature to parse the config
-  allowImportFromDerivation ? false,
+, allowImportFromDerivation ? false
   # ignored
-  features ? null,
+, features ? null
 }:
 
 let
