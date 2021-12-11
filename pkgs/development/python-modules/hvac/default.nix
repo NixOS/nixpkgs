@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pyhcl
 , requests
 , six
@@ -10,9 +10,11 @@ buildPythonPackage rec {
   pname = "hvac";
   version = "0.11.2";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "f905c59d32d88d3f67571fe5a8a78de4659e04798ad809de439f667247d13626";
+  src = fetchFromGitHub {
+     owner = "ianunruh";
+     repo = "hvac";
+     rev = "v0.11.2";
+     sha256 = "0cd7am9q73b5r7lhqsx0i0flvpykxkk4c5zmxpdix8ljxbj4qn8p";
   };
 
   propagatedBuildInputs = [
