@@ -26450,6 +26450,8 @@ with pkgs;
 
   kubectl-example = callPackage ../applications/networking/cluster/kubectl-example { };
 
+  kubectl-tree = callPackage ../applications/networking/cluster/kubectl-tree { };
+
   kubeless = callPackage ../applications/networking/cluster/kubeless { };
 
   kubelogin = callPackage ../applications/networking/cluster/kubelogin { };
@@ -28116,9 +28118,7 @@ with pkgs;
 
   rocketchat-desktop = callPackage ../applications/networking/instant-messengers/rocketchat-desktop { };
 
-  rofi-unwrapped = callPackage ../applications/misc/rofi {
-    autoreconfHook = buildPackages.autoreconfHook269;
-  };
+  rofi-unwrapped = callPackage ../applications/misc/rofi { };
   rofi = callPackage ../applications/misc/rofi/wrapper.nix { };
 
   rofi-pass = callPackage ../tools/security/pass/rofi-pass.nix { };

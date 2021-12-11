@@ -1,18 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, lv2 }:
+{ lib, stdenv, fetchFromGitHub, lv2, cairo, pkg-config }:
 
 stdenv.mkDerivation rec {
 
   pname = "molot-lite";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "magnetophon";
     repo = pname;
     rev = version;
-    sha256 = "0xbvicfk1rgp01nlg6hlym9bnygry0nrbv88mv7w6hnacvl63ba4";
+    sha256 = "sha256-0tmobsdCNon6udbkbQw7+EYQKBg2oaXlHIgNEf9U3XE=";
   };
 
-  buildInputs = [ lv2 ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ lv2 cairo ];
 
   makeFlags = [ "INSTALL_DIR=$out/lib/lv2" ];
 
