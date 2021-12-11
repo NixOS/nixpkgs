@@ -1,4 +1,4 @@
-{ config, lib, pkgs, utils, ... }:
+{ config, options, lib, pkgs, utils, ... }:
 with lib;
 let
   cfg = config.services.unifi;
@@ -85,6 +85,10 @@ in
   };
 
   config = mkIf cfg.enable {
+
+    warnings = optional
+      (options.services.unifi.openPorts.highestPrio >= (mkOptionDefault null).priority)
+      "The current services.unifi.openPorts = true default is deprecated and will change to false in 22.11. Set it explicitly to silence this warning.";
 
     users.users.unifi = {
       isSystemUser = true;
