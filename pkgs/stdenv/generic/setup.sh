@@ -295,6 +295,14 @@ if [ -z "${SHELL:-}" ]; then echo "SHELL not set"; exit 1; fi
 BASH="$SHELL"
 export CONFIG_SHELL="$SHELL"
 
+# those variables are declared here, since where and if they are used varies
+# shellcheck disable=SC2034
+declare -a failureHooks addInputsHooks userHooks unpackCmdHooks fixupOutputHooks
+declare -a preHooks prePatchHooks preUnpackHooks preConfigureHooks preBuildHooks preInstallHooks preInstallCheckHooks preCheckHooks preFixupHooks preDistHooks
+declare -a postHooks postPathHooks postUnpackHooks postConfigureHooks postBuildHooks postInstallHooks postInstallCheckHooks postCheckHooks postFixupHooks postDistHooks
+declare failureHook addInputsHook userHook unpackCmdHook fixupOutputHook
+declare preHook prePatch preUnpack preConfigure preBuild preInstall preInstallCheck preCheck preFixup preDist
+declare postHook postPatch postUnpack postConfigure postBuild postInstall postInstallCheck postCheck postFixup postDist
 
 # Execute the pre-hook.
 if [ -z "${shell:-}" ]; then export shell="$SHELL"; fi
@@ -332,10 +340,6 @@ declare -a pkgHostHookVars=(envHostHostHook envHostTargetHook)
 declare -a pkgTargetHookVars=(envTargetTargetHook)
 
 declare -a pkgHookVarVars=(pkgBuildHookVars pkgHostHookVars pkgTargetHookVars)
-
-# those variables are declared here, since where and if they are used varies
-# shellcheck disable=SC2034
-declare -a preFixupHooks fixupOutputHooks preConfigureHooks postFixupHooks postUnpackHooks unpackCmdHooks
 
 # Add env hooks for all sorts of deps with the specified host offset.
 addEnvHooks() {
