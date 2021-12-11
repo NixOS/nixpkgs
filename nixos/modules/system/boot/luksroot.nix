@@ -464,9 +464,7 @@ let
           echo "No FIDO2 key found, falling back to normal open procedure"
           open_normally
         fi
-        ${if !luks.reusePassphrases then ''
-          rm -f /crypt-ramfs/passphrase
-        ''}
+        ${optionalString (!luks.reusePassphrases) "rm -f /crypt-ramfs/passphrase"}
     }
     ''}
 
