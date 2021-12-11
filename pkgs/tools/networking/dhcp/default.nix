@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchpatch, perl, file, nettools, iputils, iproute2, makeWrapper
 , coreutils, gnused, openldap ? null
-, buildPackages, lib
+, buildPackages, lib, pkgsBuildBuild
 }:
 
 stdenv.mkDerivation rec {
@@ -33,6 +33,8 @@ stdenv.mkDerivation rec {
         sha256 = "1y3nsmqjzcg4bhp1xmqp47v7rkl3bpcildkx6mlrg255yvxapmdp";
       })
     ];
+
+  BUILD_CC = "${pkgsBuildBuild.stdenv.cc}/bin/cc";
 
   nativeBuildInputs = [ perl makeWrapper ];
 
