@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , requests
 , requests_oauthlib
 }:
@@ -9,9 +9,11 @@ buildPythonPackage rec {
   pname = "homeconnect";
   version = "0.6.3";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0n4h4mi23zw3v6fbkz17fa6kkl5v9bfmj0p57jvfzcfww511y9mn";
+  src = fetchFromGitHub {
+     owner = "DavidMStraub";
+     repo = "homeconnect";
+     rev = "v0.6.3";
+     sha256 = "122nhng2drjz280zq9j4fpc3wz647xynfzlqwzwadbk0rq91zxm4";
   };
 
   propagatedBuildInputs = [
