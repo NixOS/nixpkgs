@@ -7398,6 +7398,8 @@ in {
     '';
   });
 
+  pytest-aio = callPackage ../development/python-modules/pytest-aio { };
+
   pytest-aiohttp = callPackage ../development/python-modules/pytest-aiohttp { };
 
   pytest-annotate = callPackage ../development/python-modules/pytest-annotate { };
