@@ -1,31 +1,40 @@
-{ lib, buildPythonPackage, fetchPypi, django }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, django
+, django-jinja
+, python
+}:
 
 buildPythonPackage rec {
   pname = "django-sites";
   version = "0.11";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1cbee714fdf2bfbe92e4f5055de4e6c41b64ebb32e1f96b1016c0748210928b8";
+  src = fetchFromGitHub {
+    owner = "niwinz";
+    repo = "django-sites";
+    rev = version;
+    sha256 = "sha256-MQtQC+9DyS1ICXXovbqPpkKIQ5wpuJDgq3Lcd/1kORU=";
   };
-  # LICENSE file appears to be missing from pypi package, but expected by the installer
-  # https://github.com/niwinz/django-sites/issues/11
-  postPatch = ''
-    touch LICENSE
+
+  propagatedBuildInputs = [
+    django
+  ];
+
+  checkInputs = [
+    django-jinja
+  ];
+
+  checkPhase = ''
+    runHook preCheck
+
+    ${python.interpreter} runtests.py
+
+    runHook postCheck
   '';
 
-  propagatedBuildInputs = [ django ];
-
-  # required files for test don't seem to be included in pypi package, full source for 0.10
-  # version doesn't appear to be present on github
-  # https://github.com/niwinz/django-sites/issues/9
-  doCheck = false;
-
   meta = {
-    description = ''
-      Alternative implementation of django "sites" framework
-      based on settings instead of models.
-    '';
+    description = "Alternative implementation of django sites framework";
     homepage = "https://github.com/niwinz/django-sites";
     license = lib.licenses.bsd3;
   };
