@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , ipaddress
 , python
 }:
@@ -9,9 +9,11 @@ buildPythonPackage rec {
   version = "0.1.7";
   pname = "ifaddr";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1f9e8a6ca6f16db5a37d3356f07b6e52344f6f9f7e806d618537731669eb1a94";
+  src = fetchFromGitHub {
+     owner = "pydron";
+     repo = "ifaddr";
+     rev = "0.1.7";
+     sha256 = "1wj8hq62f6fr9j7hdxkfylh4iw588x9yp9r5fj58k1imkw7lvb3s";
   };
 
   propagatedBuildInputs = [ ipaddress ];
