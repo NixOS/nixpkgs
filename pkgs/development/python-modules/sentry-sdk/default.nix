@@ -121,6 +121,8 @@ buildPythonPackage rec {
     "tests/integrations/celery/"
     # pytest-chalice is not available in nixpkgs yet
     "tests/integrations/chalice/"
+    # broken since rq-1.10.1: https://github.com/getsentry/sentry-python/issues/1274
+    "tests/integrations/rq/"
   ];
 
   pythonImportsCheck = [

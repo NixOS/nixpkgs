@@ -15,13 +15,13 @@
 
 buildPythonPackage rec {
   pname = "kombu";
-  version = "5.2.1";
+  version = "5.2.2";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f262a2adc71b53e5b7dad4933bbdee65d8766ca4df6a9043b13edaad2144aaec";
+    sha256 = "sha256-D10HY/uRaAj2F7iGaXsr4o5rw1Am8I5nlpf8gUtIpgg=";
   };
 
   propagatedBuildInputs = [

@@ -35,6 +35,7 @@ common =
       inherit pname version src patches;
 
       is24 = lib.versionAtLeast version "2.4pre";
+      is25 = lib.versionAtLeast version "2.5pre";
 
       VERSION_SUFFIX = suffix;
 
@@ -145,6 +146,10 @@ common =
       # socket path becomes too long otherwise
       preInstallCheck = lib.optionalString stdenv.isDarwin ''
         export TMPDIR=$NIX_BUILD_TOP
+      ''
+      # See https://github.com/NixOS/nix/issues/5687
+      + lib.optionalString (is25 && stdenv.isDarwin) ''
+        echo "exit 99" > tests/gc-non-blocking.sh
       '';
 
       separateDebugInfo = stdenv.isLinux && (is24 -> !enableStatic);
