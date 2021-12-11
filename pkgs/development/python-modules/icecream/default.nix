@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromGitHub
 , asttokens, colorama, executing, pygments
 }:
 
@@ -6,9 +6,11 @@ buildPythonPackage rec {
   pname = "icecream";
   version = "2.1.1";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "47e00e3f4e8477996e7dc420b6fa8ba53f8ced17de65320fedb5b15997b76589";
+  src = fetchFromGitHub {
+     owner = "gruns";
+     repo = "icecream";
+     rev = "v2.1.1";
+     sha256 = "1mj7cjvydksmv60n2zkrr7a7ci2vcck3x9w0mifcah1cs4cdcc6d";
   };
 
   propagatedBuildInputs = [ asttokens colorama executing pygments ];
