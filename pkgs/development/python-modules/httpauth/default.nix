@@ -1,15 +1,17 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 }:
 
 buildPythonPackage rec {
   version = "0.3";
   pname = "httpauth";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0qas7876igyz978pgldp5r7n7pis8n4vf0v87gxr9l7p7if5lr3l";
+  src = fetchFromGitHub {
+     owner = "jonashaag";
+     repo = "httpauth";
+     rev = "0.3";
+     sha256 = "0vwpgl5sh4l5wzjb5j1s60mrvddsbcgspn4wmyn6vvd6ijflsg08";
   };
 
   doCheck = false;
