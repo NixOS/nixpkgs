@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , isPy27
 , idna
 , typing ? null
@@ -10,9 +10,11 @@ buildPythonPackage rec {
   pname = "hyperlink";
   version = "21.0.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0sx50lkivsfjxx9zr4yh7l9gll2l9kvl0v0w8w4wk2x5v9bzjyj2";
+  src = fetchFromGitHub {
+     owner = "python-hyper";
+     repo = "hyperlink";
+     rev = "v21.0.0";
+     sha256 = "0jrsbgzfaikzv0zsymmzsnsisqd4mkdbw9hvqfxvlj7z9b26rrx5";
   };
 
   propagatedBuildInputs = [ idna ]
