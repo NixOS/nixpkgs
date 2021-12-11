@@ -247,6 +247,24 @@ let
     '');
   } name;
 
+  # writePyPy2 takes a name an attributeset with libraries and some pypy2 sourcecode and
+  # returns an executable
+  #
+  # Example:
+  # writePyPy2 "test_pypy2" { libraries = [ pkgs.pypy2Packages.enum ]; } ''
+  #   from enum import Enum
+  #
+  #   class Test(Enum):
+  #       a = "success"
+  #
+  #   print Test.a
+  # ''
+  writePyPy2 = makePythonWriter pkgs.pypy2 pkgs.pypy2Packages;
+
+  # writePyPy2Bin takes the same arguments as writePyPy2 but outputs a directory (like writeScriptBin)
+  writePyPy2Bin = name:
+    writePyPy2 "/bin/${name}";
+
   # writePython3 takes a name an attributeset with libraries and some python3 sourcecode and
   # returns an executable
   #
@@ -264,6 +282,24 @@ let
   # writePython3Bin takes the same arguments as writePython3 but outputs a directory (like writeScriptBin)
   writePython3Bin = name:
     writePython3 "/bin/${name}";
+
+  # writePyPy3 takes a name an attributeset with libraries and some pypy3 sourcecode and
+  # returns an executable
+  #
+  # Example:
+  # writePyPy3 "test_pypy3" { libraries = [ pkgs.pypy3Packages.pyyaml ]; } ''
+  #   import yaml
+  #
+  #   y = yaml.load("""
+  #     - test: success
+  #   """)
+  #   print(y[0]['test'])
+  # ''
+  writePyPy3 = makePythonWriter pkgs.pypy3 pkgs.pypy3Packages;
+
+  # writePyPy3Bin takes the same arguments as writePyPy3 but outputs a directory (like writeScriptBin)
+  writePyPy3Bin = name:
+    writePyPy3 "/bin/${name}";
 
 };
 in

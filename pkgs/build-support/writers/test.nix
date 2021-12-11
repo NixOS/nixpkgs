@@ -3,7 +3,9 @@
 , lib
 , nodePackages
 , perlPackages
+, pypy2Packages
 , python3Packages
+, pypy3Packages
 , runCommand
 , writers
 , writeText
@@ -53,7 +55,27 @@ let
       print "success\n" if true;
     '';
 
+    pypy2 = writePyPy2Bin "test-writers-pypy2-bin" { libraries = [ pypy2Packages.enum ]; } ''
+      from enum import Enum
+
+
+      class Test(Enum):
+          a = "success"
+
+
+      print Test.a
+    '';
+
     python3 = writePython3Bin "test-writers-python3-bin" { libraries = [ python3Packages.pyyaml ]; } ''
+      import yaml
+
+      y = yaml.load("""
+        - test: success
+      """)
+      print(y[0]['test'])
+    '';
+
+    pypy3 = writePyPy3Bin "test-writers-pypy3-bin" { libraries = [ pypy3Packages.pyyaml ]; } ''
       import yaml
 
       y = yaml.load("""
@@ -99,6 +121,17 @@ let
       print "success\n" if true;
     '';
 
+    pypy2 = writePyPy2 "test-writers-pypy2" { libraries = [ pypy2Packages.enum ]; } ''
+      from enum import Enum
+
+
+      class Test(Enum):
+          a = "success"
+
+
+      print Test.a
+    '';
+
     python3 = writePython3 "test-writers-python3" { libraries = [ python3Packages.pyyaml ]; } ''
       import yaml
 
@@ -108,7 +141,24 @@ let
       print(y[0]['test'])
     '';
 
+    pypy3 = writePyPy3 "test-writers-pypy3" { libraries = [ pypy3Packages.pyyaml ]; } ''
+      import yaml
+
+      y = yaml.load("""
+        - test: success
+      """)
+      print(y[0]['test'])
+    '';
+
+    pypy2NoLibs = writePyPy2 "test-writers-pypy2-no-libs" {} ''
+      print("success")
+    '';
+
     python3NoLibs = writePython3 "test-writers-python3-no-libs" {} ''
+      print("success")
+    '';
+
+    pypy3NoLibs = writePyPy3 "test-writers-pypy3-no-libs" {} ''
       print("success")
     '';
   };
