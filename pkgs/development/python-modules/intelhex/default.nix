@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pytestCheckHook
 }:
 
@@ -8,9 +8,11 @@ buildPythonPackage rec {
   pname = "intelhex";
   version = "2.3.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-iStzYacZ9JRSN9qMz3VOlRPbMvViiFJ4WuoQjc0lAJM=";
+  src = fetchFromGitHub {
+     owner = "bialix";
+     repo = "intelhex";
+     rev = "2.3.0";
+     sha256 = "13p7x4ygfgqn27q3c8lam7a0z09764iymgs7lcvjvxgq52nqwf9c";
   };
 
   checkInputs = [ pytestCheckHook ];
