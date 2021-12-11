@@ -5,12 +5,12 @@ let
 in {
   sublime-merge = common {
     buildVersion = "2063";
-    sha256 = "l6vxcOIQ3kQqNzLkf3PbuU3DpDfLh0tXCl/LnJsCt2k=";
+    sha256 = "0sdp0adrrjsz19blp1yb6yjc6kdrvdrpzr1j6wm49phhw9qg3awp";
   } {};
 
   sublime-merge-dev = common {
-    buildVersion = "2055";
-    sha256 = "0f5qmxs5cqgdp7gav223ibjwbcrh8bszk1yg1a6hpz8s8j3icvdi";
+    buildVersion = "2062";
+    sha256 = "035f4gxbg9mb8p8yynpc6a1id9b8krfnr0gl98ib09bdh96ddan3";
     dev = true;
   } {};
 }

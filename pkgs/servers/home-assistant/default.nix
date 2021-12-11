@@ -22,6 +22,7 @@
 let
   defaultOverrides = [
     # Remove with Home Assistant 2021.12
+    (mkOverride "aiohue" "2.6.3" "sha256-zpwkDKPrE5TFZQO0A1ifTQ7n+TRFpXi3jai3h5plyGM=")
     (mkOverride "PyChromecast" "9.4.0" "sha256-Y8PLrjxZHml7BmklEJ/VXGqkRyneAy+QVA5rusPeBHQ=")
 
     # aiounify 29 breaks integration tests

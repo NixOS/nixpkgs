@@ -1,4 +1,4 @@
-{ mkXfceDerivation, gettext, gtk3, glib, cmake, exo, garcon, libxfce4ui, libxfce4util, xfce4-panel, xfconf }:
+{ lib, mkXfceDerivation, gettext, gtk3, glib, cmake, exo, garcon, libxfce4ui, libxfce4util, xfce4-panel, xfconf }:
 
 mkXfceDerivation {
   category = "panel-plugins";
@@ -22,7 +22,8 @@ mkXfceDerivation {
       --replace $out/bin/xfce4-panel ${xfce4-panel.out}/bin/xfce4-panel
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Alternate application launcher for Xfce";
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

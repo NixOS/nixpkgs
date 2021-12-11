@@ -3140,6 +3140,8 @@ with pkgs;
 
   gotify-desktop = callPackage ../tools/misc/gotify-desktop { };
 
+  gotypist = callPackage ../games/gotypist { };
+
   gping = callPackage ../tools/networking/gping { };
 
   gpu-burn = callPackage ../applications/misc/gpu-burn { };
@@ -7096,6 +7098,10 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
+  mdbook-plantuml = callPackage ../tools/text/mdbook-plantuml {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
+
   mdcat = callPackage ../tools/text/mdcat {
     inherit (darwin.apple_sdk.frameworks) Security;
     inherit (python3Packages) ansi2html;
@@ -8712,6 +8718,8 @@ with pkgs;
   plex = callPackage ../servers/plex { };
   plexRaw = callPackage ../servers/plex/raw.nix { };
 
+  psitransfer = callPackage ../servers/psitransfer { };
+
   tab = callPackage ../tools/text/tab { };
 
   tabview = with python3Packages; toPythonApplication tabview;
@@ -8796,7 +8804,7 @@ with pkgs;
 
   pptpd = callPackage ../tools/networking/pptpd {};
 
-  pre-commit = with python3Packages; toPythonApplication pre-commit;
+  pre-commit = callPackage ../tools/misc/pre-commit { };
 
   pretty-simple = callPackage ../development/tools/pretty-simple { };
 
@@ -14840,6 +14848,8 @@ with pkgs;
   krew = callPackage ../development/tools/krew { };
 
   kube-aws = callPackage ../development/tools/kube-aws { };
+
+  kube-hunter = callPackage ../tools/security/kube-hunter { };
 
   kubeaudit = callPackage ../tools/security/kubeaudit { };
 
@@ -24513,6 +24523,8 @@ with pkgs;
     ffmpeg = ffmpeg-full;
   };
 
+  cpeditor = libsForQt515.callPackage ../applications/editors/cpeditor { };
+
   csa = callPackage ../applications/audio/csa { };
 
   csound = callPackage ../applications/audio/csound { };
@@ -25908,6 +25920,8 @@ with pkgs;
   marker = callPackage ../applications/editors/marker { };
 
   musikcube = callPackage ../applications/audio/musikcube {};
+
+  p2pool = callPackage ../applications/misc/p2pool { };
 
   pass2csv = python3Packages.callPackage ../tools/security/pass2csv {};
 
@@ -31230,6 +31244,8 @@ with pkgs;
   deepsea = callPackage ../tools/security/deepsea { };
 
   deeptools = callPackage ../applications/science/biology/deeptools { python = python3; };
+
+  deep-translator = with python3Packages; toPythonApplication deep-translator;
 
   delly = callPackage ../applications/science/biology/delly { };
 

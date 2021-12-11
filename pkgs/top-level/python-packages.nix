@@ -545,6 +545,8 @@ in {
 
   appdirs = callPackage ../development/python-modules/appdirs { };
 
+  appleseed = toPythonModule (pkgs.appleseed.override { python3 = self.python; });
+
   applicationinsights = callPackage ../development/python-modules/applicationinsights { };
 
   appnope = callPackage ../development/python-modules/appnope { };
@@ -602,6 +604,8 @@ in {
   arxiv2bib = callPackage ../development/python-modules/arxiv2bib { };
 
   asana = callPackage ../development/python-modules/asana { };
+
+  ascii-magic = callPackage ../development/python-modules/ascii-magic { };
 
   asciimatics = callPackage ../development/python-modules/asciimatics { };
 
@@ -2010,6 +2014,8 @@ in {
 
   deeptoolsintervals = callPackage ../development/python-modules/deeptoolsintervals { };
 
+  deep-translator = callPackage ../development/python-modules/deep-translator { };
+
   deezer-py = callPackage ../development/python-modules/deezer-py { };
 
   deezer-python = callPackage ../development/python-modules/deezer-python { };
@@ -2463,6 +2469,8 @@ in {
   eliqonline = callPackage ../development/python-modules/eliqonline { };
 
   elmax = callPackage ../development/python-modules/elmax { };
+
+  elmax-api = callPackage ../development/python-modules/elmax-api { };
 
   emailthreads = callPackage ../development/python-modules/emailthreads { };
 
@@ -4211,7 +4219,7 @@ in {
 
   keras-applications = callPackage ../development/python-modules/keras-applications { };
 
-  Keras = callPackage ../development/python-modules/keras { };
+  keras = callPackage ../development/python-modules/keras { };
 
   keras-preprocessing = callPackage ../development/python-modules/keras-preprocessing { };
 
@@ -4986,6 +4994,8 @@ in {
 
   mrkd = callPackage ../development/python-modules/mrkd { };
 
+  ms-active-directory = callPackage ../development/python-modules/ms-active-directory { };
+
   ms-cv = callPackage ../development/python-modules/ms-cv { };
 
   msal = callPackage ../development/python-modules/msal { };
@@ -5220,6 +5230,8 @@ in {
 
   nltk = callPackage ../development/python-modules/nltk { };
 
+  nmapthon2 = callPackage ../development/python-modules/nmapthon2 { };
+
   nmigen-boards = callPackage ../development/python-modules/nmigen-boards { };
 
   nmigen = callPackage ../development/python-modules/nmigen { };
@@ -5439,10 +5451,10 @@ in {
 
   opentracing = callPackage ../development/python-modules/opentracing { };
 
-  openvino = disabledIf isPy27 (toPythonModule (pkgs.openvino.override {
+  openvino = toPythonModule (pkgs.openvino.override {
     inherit (self) python;
     enablePython = true;
-  }));
+  });
 
   openwebifpy = callPackage ../development/python-modules/openwebifpy { };
 
@@ -6074,8 +6086,6 @@ in {
 
   prefixed = callPackage ../development/python-modules/prefixed { };
 
-  pre-commit = callPackage ../development/python-modules/pre-commit { };
-
   pre-commit-hooks = callPackage ../development/python-modules/pre-commit-hooks { };
 
   preggy = callPackage ../development/python-modules/preggy { };
@@ -6095,8 +6105,6 @@ in {
   prison = callPackage ../development/python-modules/prison { };
 
   privacyidea-ldap-proxy = callPackage ../development/python-modules/privacyidea-ldap-proxy { };
-
-  pyjwt1 = callPackage ../development/python-modules/pyjwt/1.nix { };
 
   proboscis = callPackage ../development/python-modules/proboscis { };
 
@@ -8202,9 +8210,9 @@ in {
 
   recaptcha_client = callPackage ../development/python-modules/recaptcha_client { };
 
-  recoll = disabledIf (!isPy3k) (toPythonModule (pkgs.recoll.override {
+  recoll = toPythonModule (pkgs.recoll.override {
     python3Packages = self;
-  }));
+  });
 
   recommonmark = callPackage ../development/python-modules/recommonmark { };
 
@@ -10069,6 +10077,10 @@ in {
   webtest-aiohttp = callPackage ../development/python-modules/webtest-aiohttp { };
 
   webthing = callPackage ../development/python-modules/webthing { };
+
+  weconnect = callPackage ../development/python-modules/weconnect { };
+
+  weconnect-mqtt = callPackage ../development/python-modules/weconnect-mqtt { };
 
   werkzeug = callPackage ../development/python-modules/werkzeug { };
 

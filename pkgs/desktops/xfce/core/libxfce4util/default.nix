@@ -12,5 +12,6 @@ mkXfceDerivation {
   meta = with lib; {
     description = "Extension library for Xfce";
     license = licenses.lgpl2Plus;
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }
