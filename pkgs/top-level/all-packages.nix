@@ -33771,6 +33771,8 @@ with pkgs;
 
   xcfun = callPackage ../development/libraries/science/chemistry/xcfun { };
 
+  xsos = callPackage ../os-specific/linux/xsos { };
+
   zesarux = callPackage ../misc/emulators/zesarux { };
 
   zk = callPackage ../applications/office/zk {};
