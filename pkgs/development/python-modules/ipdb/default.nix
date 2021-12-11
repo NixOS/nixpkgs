@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , ipython
 , isPyPy
 , mock
@@ -12,9 +12,11 @@ buildPythonPackage rec {
   version = "0.13.9";
   disabled = isPyPy;  # setupterm: could not find terminfo database
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "951bd9a64731c444fd907a5ce268543020086a697f6be08f7cc2c9a752a278c5";
+  src = fetchFromGitHub {
+     owner = "gotcha";
+     repo = "ipdb";
+     rev = "0.13.9";
+     sha256 = "1nhjk53xn3bmf338xazq8znqifa8zm2swl3cvy3jwydfhcs7fzf2";
   };
 
   propagatedBuildInputs = [ ipython toml ];
