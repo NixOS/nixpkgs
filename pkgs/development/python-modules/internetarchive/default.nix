@@ -1,5 +1,5 @@
 { buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pytest
 , six
 , tqdm
@@ -22,9 +22,11 @@ buildPythonPackage rec {
   pname = "internetarchive";
   version = "2.2.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "ebd11ecd038c71e75a3aef8d87750b46480169ecaefb23074c4ae48440bf2836";
+  src = fetchFromGitHub {
+     owner = "jjjake";
+     repo = "internetarchive";
+     rev = "v2.2.0";
+     sha256 = "19xyfdrmmq5sn19md94191yr9j0zqfhlaz8yxdnzlzmbpcszmipq";
   };
 
   propagatedBuildInputs = [
