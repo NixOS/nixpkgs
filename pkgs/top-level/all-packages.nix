@@ -29151,6 +29151,8 @@ with pkgs;
 
   wafw00f = python3Packages.callPackage ../tools/security/wafw00f { };
 
+  whispers = callPackage ../tools/security/whispers { };
+
   waon = callPackage ../applications/audio/waon { };
 
   w3m = callPackage ../applications/networking/browsers/w3m { };
