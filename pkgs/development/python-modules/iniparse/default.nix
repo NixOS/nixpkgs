@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , python
 , six
 }:
@@ -9,9 +9,11 @@ buildPythonPackage rec {
   pname = "iniparse";
   version = "0.5";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "932e5239d526e7acb504017bb707be67019ac428a6932368e6851691093aa842";
+  src = fetchFromGitHub {
+     owner = "candlepin";
+     repo = "python-iniparse";
+     rev = "0.5";
+     sha256 = "0sykrswby83gkcvnxh242m58ydz2idldkjhw8g8bb4m1ygphkpx2";
   };
 
   checkPhase = ''
