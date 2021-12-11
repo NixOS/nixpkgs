@@ -1,4 +1,4 @@
-{ lib, stdenv, pkgsBuildTarget, targetPackages
+{ lib, stdenv, pkgsBuildTarget, pkgsHostTarget, targetPackages
 
 # build-tools
 , bootPkgs
@@ -10,11 +10,13 @@
 , # GHC can be built with system libffi or a bundled one.
   libffi ? null
 
-, useLLVM ? !stdenv.targetPlatform.isx86
+, useLLVM ? !(stdenv.targetPlatform.isx86
+              || stdenv.targetPlatform.isPowerPC
+              || stdenv.targetPlatform.isSparc)
 , # LLVM is conceptually a run-time-only depedendency, but for
   # non-x86, we need LLVM to bootstrap later stages, so it becomes a
   # build-time dependency too.
-  buildLlvmPackages, llvmPackages
+  buildTargetLlvmPackages, llvmPackages
 
 , # If enabled, GHC will be built with the GPL-free but slower integer-simple
   # library instead of the faster but GPLed integer-gmp library.
@@ -130,7 +132,7 @@ let
 
   toolsForTarget = [
     pkgsBuildTarget.targetPackages.stdenv.cc
-  ] ++ lib.optional useLLVM buildLlvmPackages.llvm;
+  ] ++ lib.optional useLLVM buildTargetLlvmPackages.llvm;
 
   targetCC = builtins.head toolsForTarget;
 
@@ -138,11 +140,11 @@ let
   # But we cannot avoid BFD when using musl libc due to https://sourceware.org/bugzilla/show_bug.cgi?id=23856
   # see #84670 and #49071 for more background.
   useLdGold = targetPlatform.linker == "gold" ||
-    (targetPlatform.linker == "bfd" && (targetPackages.stdenv.cc.bintools.bintools.hasGold or false) && !targetPlatform.isMusl);
+    (targetPlatform.linker == "bfd" && (targetCC.bintools.bintools.hasGold or false) && !targetPlatform.isMusl);
 
   runtimeDeps = [
     targetPackages.stdenv.cc.bintools
-    coreutils
+    coreutils # for cat
   ]
   # On darwin, we need unwrapped bintools as well (for otool)
   ++ lib.optionals (stdenv.targetPlatform.linker == "cctools") [
@@ -156,6 +158,14 @@ let
   ];
 
 in
+
+# C compiler, bintools and LLVM are used at build time, but will also leak into
+# the resulting GHC's settings file and used at runtime. This means that we are
+# currently only able to build GHC if hostPlatform == buildPlatform.
+assert targetCC == pkgsHostTarget.targetPackages.stdenv.cc;
+assert buildTargetLlvmPackages.llvm == llvmPackages.llvm;
+assert stdenv.targetPlatform.isDarwin -> buildTargetLlvmPackages.clang == llvmPackages.clang;
+
 stdenv.mkDerivation (rec {
   version = "8.8.4";
   pname = "${targetPrefix}ghc${variantSuffix}";
@@ -320,11 +330,11 @@ stdenv.mkDerivation (rec {
     # Install the bash completion file.
     install -D -m 444 utils/completion/ghc.bash $out/share/bash-completion/completions/${targetPrefix}ghc
 
-    # Patch scripts to include "readelf" and "cat" in $PATH.
+    # Patch scripts to include runtime dependencies in $PATH.
     for i in "$out/bin/"*; do
-      test ! -h $i || continue
-      egrep --quiet '^#!' <(head -n 1 $i) || continue
-      sed -i -e '2i export PATH="$PATH:${lib.makeBinPath runtimeDeps}"' $i
+      test ! -h "$i" || continue
+      isScript "$i" || continue
+      sed -i -e '2i export PATH="${lib.makeBinPath runtimeDeps}:$PATH"' "$i"
     done
   '';
 
@@ -345,7 +355,17 @@ stdenv.mkDerivation (rec {
       guibou
     ] ++ lib.teams.haskell.members;
     timeout = 24 * 3600;
-    inherit (ghc.meta) license platforms;
+    inherit (ghc.meta) license;
+    # hardcode platforms because the bootstrap GHC differs depending on the platform,
+    # with differing platforms available for each of them; See HACK comment in
+    # 8.10.2-binary.nix for an explanation of the musl special casing.
+    platforms = [
+      "x86_64-linux"
+    ] ++ lib.optionals (!hostPlatform.isMusl) [
+      "i686-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+    ];
     # integer-simple builds are broken with musl when bootstrapping using
     # GHC 8.10.2 and below, however it is not possible to reverse bootstrap
     # GHC 8.8.4 with GHC 8.10.7.

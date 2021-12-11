@@ -252,11 +252,18 @@ let
                );
     };
 
-    libcxxabi = callPackage ./libcxxabi {
-      inherit llvm_meta;
-      stdenv = if stdenv.hostPlatform.useLLVM or false
+    libcxxabi = let
+      stdenv_ = if stdenv.hostPlatform.useLLVM or false
                then overrideCC stdenv buildLlvmTools.clangNoLibcxx
                else stdenv;
+      cxx-headers = callPackage ./libcxx {
+        inherit llvm_meta;
+        stdenv = stdenv_;
+        headersOnly = true;
+      };
+    in callPackage ./libcxxabi {
+      stdenv = stdenv_;
+      inherit llvm_meta cxx-headers;
     };
 
     libunwind = callPackage ./libunwind {

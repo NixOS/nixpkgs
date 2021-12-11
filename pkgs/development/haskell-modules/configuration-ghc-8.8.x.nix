@@ -4,8 +4,7 @@ with haskellLib;
 
 self: super: {
 
-  # This compiler version needs llvm 7.x.
-  llvmPackages = pkgs.lib.dontRecurseIntoAttrs pkgs.llvmPackages_7;
+  llvmPackages = pkgs.lib.dontRecurseIntoAttrs self.ghc.llvmPackages;
 
   # Disable GHC 8.8.x core libraries.
   array = null;

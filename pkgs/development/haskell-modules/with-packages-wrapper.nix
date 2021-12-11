@@ -1,5 +1,14 @@
 { lib, stdenv, ghc, llvmPackages, packages, symlinkJoin, makeWrapper
-, withLLVM ? !(stdenv.hostPlatform.isx86_64 || stdenv.hostPlatform.isPowerPC)
+# Include LLVM by default if GHC doesn't have native code generation support
+# See https://gitlab.haskell.org/ghc/ghc/-/wikis/platforms
+, useLLVM ? !(lib.any lib.id ([
+    stdenv.targetPlatform.isx86
+    stdenv.targetPlatform.isPowerPC
+    stdenv.targetPlatform.isSparc
+  ] ++ lib.optionals (lib.versionAtLeast ghc.version "9.2") [
+    (stdenv.targetPlatform.isAarch64 && stdenv.targetPlatform.isDarwin)
+    # TODO(@sternenseemann): Is armv7a supported for iOS?
+  ]))
 , postBuild ? ""
 , ghcLibdir ? null # only used by ghcjs, when resolving plugins
 }:
@@ -50,7 +59,7 @@ let
                   ([ llvmPackages.llvm ]
                    ++ lib.optional stdenv.targetPlatform.isDarwin llvmPackages.clang);
 in
-if paths == [] && !withLLVM then ghc else
+if paths == [] && !useLLVM then ghc else
 symlinkJoin {
   # this makes computing paths from the name attribute impossible;
   # if such a feature is needed, the real compiler name should be saved
@@ -73,7 +82,7 @@ symlinkJoin {
           ${lib.optionalString (ghc.isGhcjs or false)
             ''--set NODE_PATH "${ghc.socket-io}/lib/node_modules"''
           } \
-          ${lib.optionalString withLLVM ''--prefix "PATH" ":" "${llvm}"''}
+          ${lib.optionalString useLLVM ''--prefix "PATH" ":" "${llvm}"''}
       fi
     done
 

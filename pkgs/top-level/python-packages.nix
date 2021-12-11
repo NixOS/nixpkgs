@@ -137,6 +137,11 @@ in {
   # it should not override the version of pytest that is used for say
   # Python 2. This is an ugly hack that is needed now because the hook
   # propagates the package.
+  pytestCheckHook_5 = if isPy3k then
+    self.pytestCheckHook.override { pytest = self.pytest_5; }
+  else
+    self.pytestCheckHook;
+
   pytestCheckHook_6_1 = if isPy3k then
     self.pytestCheckHook.override { pytest = self.pytest_6_1; }
   else

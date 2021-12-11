@@ -1,4 +1,4 @@
-{ lib, stdenv, pkgsBuildTarget, targetPackages
+{ lib, stdenv, pkgsBuildTarget, pkgsHostTarget, targetPackages
 
 # build-tools
 , bootPkgs
@@ -17,11 +17,14 @@
                 !stdenv.targetPlatform.isWindows
 , elfutils # for DWARF support
 
-, useLLVM ? !stdenv.targetPlatform.isx86 || stdenv.targetPlatform.isiOS
+, useLLVM ? !(stdenv.targetPlatform.isx86
+              || stdenv.targetPlatform.isPowerPC
+              || stdenv.targetPlatform.isSparc
+              || (stdenv.targetPlatform.isAarch64 && stdenv.targetPlatform.isDarwin))
 , # LLVM is conceptually a run-time-only depedendency, but for
   # non-x86, we need LLVM to bootstrap later stages, so it becomes a
   # build-time dependency too.
-  buildLlvmPackages, llvmPackages
+  buildTargetLlvmPackages, llvmPackages
 
 , # If enabled, GHC will be built with the GPL-free but slightly slower native
   # bignum backend instead of the faster but GPLed gmp backend.
@@ -37,9 +40,6 @@
 , # Whether to build dynamic libs for the standard library (on the target
   # platform). Static libs are always built.
   enableShared ? !stdenv.targetPlatform.isWindows && !stdenv.targetPlatform.useiOSPrebuilt
-
-, # Whether to build terminfo.
-  enableTerminfo ? !stdenv.targetPlatform.isWindows
 
 , version ? "9.3.20211111"
 , # What flavour to build. An empty string indicates no
@@ -116,18 +116,24 @@ let
     GhcRtsHcOpts += -fPIC
   '' + lib.optionalString targetPlatform.useAndroidPrebuilt ''
     EXTRA_CC_OPTS += -std=gnu99
+  ''
+  # While split sections are now enabled by default in ghc 8.8 for windows,
+  # they seem to lead to `too many sections` errors when building base for
+  # profiling.
+  + lib.optionalString targetPlatform.isWindows ''
+    SplitSections = NO
   '';
 
   # Splicer will pull out correct variations
-  libDeps = platform: lib.optional enableTerminfo ncurses
-    ++ [libffi]
+  libDeps = platform:
+       [libffi ncurses]
     ++ lib.optional (!enableNativeBignum) gmp
     ++ lib.optional (platform.libc != "glibc" && !targetPlatform.isWindows) libiconv
     ++ lib.optional enableDwarf elfutils;
 
   toolsForTarget = [
     pkgsBuildTarget.targetPackages.stdenv.cc
-  ] ++ lib.optional useLLVM buildLlvmPackages.llvm;
+  ] ++ lib.optional useLLVM buildTargetLlvmPackages.llvm;
 
   targetCC = builtins.head toolsForTarget;
 
@@ -135,11 +141,11 @@ let
   # But we cannot avoid BFD when using musl libc due to https://sourceware.org/bugzilla/show_bug.cgi?id=23856
   # see #84670 and #49071 for more background.
   useLdGold = targetPlatform.linker == "gold" ||
-    (targetPlatform.linker == "bfd" && (targetPackages.stdenv.cc.bintools.bintools.hasGold or false) && !targetPlatform.isMusl);
+    (targetPlatform.linker == "bfd" && (targetCC.bintools.bintools.hasGold or false) && !targetPlatform.isMusl);
 
   runtimeDeps = [
     targetPackages.stdenv.cc.bintools
-    coreutils
+    coreutils # for cat
   ]
   # On darwin, we need unwrapped bintools as well (for otool)
   ++ lib.optionals (stdenv.targetPlatform.linker == "cctools") [
@@ -153,6 +159,14 @@ let
   ];
 
 in
+
+# C compiler, bintools and LLVM are used at build time, but will also leak into
+# the resulting GHC's settings file and used at runtime. This means that we are
+# currently only able to build GHC if hostPlatform == buildPlatform.
+assert targetCC == pkgsHostTarget.targetPackages.stdenv.cc;
+assert buildTargetLlvmPackages.llvm == llvmPackages.llvm;
+assert stdenv.targetPlatform.isDarwin -> buildTargetLlvmPackages.clang == llvmPackages.clang;
+
 stdenv.mkDerivation (rec {
   inherit version;
   inherit (src) rev;
@@ -306,11 +320,11 @@ stdenv.mkDerivation (rec {
     # Install the bash completion file.
     install -D -m 444 utils/completion/ghc.bash $out/share/bash-completion/completions/${targetPrefix}ghc
 
-    # Patch scripts to include "readelf" and "cat" in $PATH.
+    # Patch scripts to include runtime dependencies in $PATH.
     for i in "$out/bin/"*; do
-      test ! -h $i || continue
-      egrep --quiet '^#!' <(head -n 1 $i) || continue
-      sed -i -e '2i export PATH="$PATH:${lib.makeBinPath runtimeDeps}"' $i
+      test ! -h "$i" || continue
+      isScript "$i" || continue
+      sed -i -e '2i export PATH="${lib.makeBinPath runtimeDeps}:$PATH"' "$i"
     done
   '';
 

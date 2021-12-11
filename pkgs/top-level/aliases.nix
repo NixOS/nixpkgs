@@ -1225,11 +1225,13 @@ mapAliases ({
   ;
 
   # LLVM packages for (integration) testing that should not be used inside Nixpkgs:
-  llvmPackages_git = recurseIntoAttrs (callPackage ../development/compilers/llvm/git {
+  llvmPackages_git = recurseIntoAttrs (callPackage ../development/compilers/llvm/git ({
     inherit (stdenvAdapters) overrideCC;
     buildLlvmTools = buildPackages.llvmPackages_git.tools;
     targetLlvmLibraries = targetPackages.llvmPackages_git.libraries;
-  });
+  } // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    inherit (llvmPackages_11) stdenv;
+  }));
 
   inherit (stdenv.hostPlatform) system; # added 2021-10-22
 
