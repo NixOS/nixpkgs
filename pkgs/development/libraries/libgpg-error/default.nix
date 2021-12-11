@@ -38,8 +38,8 @@ in stdenv.mkDerivation (rec {
   '' + lib.optionalString (stdenv.hostPlatform.isi686 && stdenv.hostPlatform.isMusl) ''
     ln -s lock-obj-pub.i686-unknown-linux-gnu.h src/syscfg/lock-obj-pub.linux-musl.h
   '' + lib.optionalString (stdenv.hostPlatform.isAarch32 && stdenv.hostPlatform.isMusl) ''
-    ln -s src/syscfg/lock-obj-pub.arm-unknown-linux-gnueabi.h src/syscfg/lock-obj-pub.arm-unknown-linux-musleabihf.h
-    ln -s src/syscfg/lock-obj-pub.arm-unknown-linux-gnueabi.h src/syscfg/lock-obj-pub.linux-musleabihf.h
+    ln -s lock-obj-pub.arm-unknown-linux-gnueabi.h src/syscfg/lock-obj-pub.arm-unknown-linux-musleabihf.h
+    ln -s lock-obj-pub.arm-unknown-linux-gnueabi.h src/syscfg/lock-obj-pub.linux-musleabihf.h
   '';
 
   outputs = [ "out" "dev" "info" ];
