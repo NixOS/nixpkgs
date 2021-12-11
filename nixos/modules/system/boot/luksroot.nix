@@ -460,9 +460,13 @@ let
               ${optionalString dev.fido2.askForPin "--pin --pin-source=/crypt-ramfs/passphrase"} \
               --await-dev ${toString dev.fido2.gracePeriod} --salt string:$passphrase
         if [ $? -ne 0 ]; then
+          rm -f /crypt-ramfs/passphrase
           echo "No FIDO2 key found, falling back to normal open procedure"
           open_normally
         fi
+        ${if !luks.reusePassphrases then ''
+          rm -f /crypt-ramfs/passphrase
+        ''}
     }
     ''}
 
