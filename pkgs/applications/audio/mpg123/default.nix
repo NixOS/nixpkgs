@@ -18,11 +18,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mpg123";
-  version = "1.29.2";
+  version = "1.29.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-kHEhTr38G27QwKhdUwAQu7jrwETP5a5ZMOg/fmt5N+Y=";
+    sha256 = "sha256-ljiF2Mx3Ji8ot3GHx9GJ4yGV5kJE3iUwt5jd8yGD6Ec=";
   };
 
   outputs = [ "out" ] ++ lib.optionals withConplay [ "conplay" ];
