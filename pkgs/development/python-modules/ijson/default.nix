@@ -1,12 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchFromGitHub }:
 
 buildPythonPackage rec {
   pname = "ijson";
   version = "3.1.4";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1d1003ae3c6115ec9b587d29dd136860a81a23c7626b682e2b5b12c9fd30e4ea";
+  src = fetchFromGitHub {
+     owner = "ICRAR";
+     repo = "ijson";
+     rev = "v3.1.4";
+     sha256 = "0bf2r8l52q5ayar32q0k9x7nykyj5l8ra90mvlc8byrgxnzaf3wh";
   };
 
   doCheck = false; # something about yajl
