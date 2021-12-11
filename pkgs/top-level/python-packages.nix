@@ -3146,6 +3146,8 @@ in {
 
   gflags = callPackage ../development/python-modules/gflags { };
 
+  ghapi = callPackage ../development/python-modules/ghapi { };
+
   ghdiff = callPackage ../development/python-modules/ghdiff { };
 
   ghp-import = callPackage ../development/python-modules/ghp-import { };
