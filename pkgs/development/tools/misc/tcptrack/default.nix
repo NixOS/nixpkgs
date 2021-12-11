@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "tcptrack";
-  version = "1.4.3+unstable=2017-04-29";
+  version = "unstable-2017-04-29";
 
   src = fetchFromGitHub {
     owner = "bchretien";
