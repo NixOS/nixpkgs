@@ -72,7 +72,7 @@ in lib.makeScopeWithSplicing
     nativeBuildInputs = with buildPackages.netbsd; [
       bsdSetupHook netbsdSetupHook
       makeMinimal
-      install tsort lorder mandoc groff statHook rsync
+      install tsort lorder buildPackages.mandoc groff statHook rsync
     ];
     buildInputs = with self; compatIfNeeded;
 
