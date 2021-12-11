@@ -18,6 +18,9 @@ rustPlatform.buildRustPackage rec {
   '';
 
   cargoSha256 = "sha256-2SKgzVJdtzH9poHx/NJba6+lj/C0PBcEgI/2ITO18Bk=";
+  shells = [ "bash" "fish" "zsh" ];
+  outputs = ["out"] ++ (map (sh:"interactiveShellInit_${sh}") shells);
+  postInstall = lib.concatMapStrings (sh:"$out/bin/mcfly init ${sh} > $interactiveShellInit_${sh};") shells;
 
   meta = with lib; {
     homepage = "https://github.com/cantino/mcfly";
