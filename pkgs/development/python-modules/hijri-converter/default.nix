@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pytestCheckHook
 }:
 
@@ -8,9 +8,11 @@ buildPythonPackage rec {
   pname = "hijri-converter";
   version = "2.2.2";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-1KENsAnBQXWSu/s96+yt+gTY2NXVG2Spcelp12Gp8+E=";
+  src = fetchFromGitHub {
+     owner = "dralshehri";
+     repo = "hijri-converter";
+     rev = "v2.2.2";
+     sha256 = "19hvqs8cp07y5xjrd9kkw2sbykl2xpb1986r9gwgnwhnl7hacyr0";
   };
 
   checkInputs = [ pytestCheckHook ];
