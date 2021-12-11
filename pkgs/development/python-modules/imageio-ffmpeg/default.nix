@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , isPy3k
-, fetchPypi
+, fetchFromGitHub
 , substituteAll
 , ffmpeg
 , python
@@ -13,9 +13,11 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "f2ea4245a2adad25dedf98d343159579167e549ac8c4691cef5eff980e20c139";
+  src = fetchFromGitHub {
+     owner = "imageio";
+     repo = "imageio-ffmpeg";
+     rev = "v0.4.5";
+     sha256 = "1srwfnh964nh6r7z0k6s7rb61phzrdb25kgjvksq23hn1rxv6kf0";
   };
 
   patches = [
