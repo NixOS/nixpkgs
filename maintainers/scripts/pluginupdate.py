@@ -385,7 +385,7 @@ def check_results(
         sys.exit(1)
 
 def parse_plugin_line(line: str) -> PluginDesc:
-    branch = "master"
+    branch = "HEAD"
     alias = None
     name, repo = line.split("/")
     if " as " in repo:

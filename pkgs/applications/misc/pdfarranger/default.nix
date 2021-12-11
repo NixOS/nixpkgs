@@ -5,13 +5,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "pdfarranger";
-  version = "1.8.0";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "0xfxcwb24rp0kni2b4wdk6fvhqnhd6fh559ag6wdr4sspzkqwdjf";
+    sha256 = "1lcmlr7x4143f7wcn0m1ijlvch07nww2qfp3jfnacgy889ijvbfx";
   };
 
   nativeBuildInputs = [

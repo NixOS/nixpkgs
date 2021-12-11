@@ -1414,6 +1414,12 @@
     githubId = 251106;
     name = "Daniel Bergey";
   };
+  bergkvist = {
+    email = "tobias@bergkv.ist";
+    github = "bergkvist";
+    githubId = 410028;
+    name = "Tobias Bergkvist";
+  };
   betaboon = {
     email = "betaboon@0x80.ninja";
     github = "betaboon";
@@ -3689,6 +3695,7 @@
   };
   evils = {
     email = "evils.devils@protonmail.com";
+    matrix = "@evils:nixos.dev";
     github = "evils";
     githubId = 30512529;
     name = "Evils";
@@ -13388,5 +13395,11 @@
     email = "nix.victor@0x23.dk";
     github = "vdot0x23";
     githubId = 40716069;
+  };
+  jpagex = {
+    name = "Jérémy Pagé";
+    email = "contact@jeremypage.me";
+    github = "jpagex";
+    githubId = 635768;
   };
 }

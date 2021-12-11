@@ -18,13 +18,13 @@
 
 buildPythonPackage rec {
   pname = "ansible-lint";
-  version = "5.3.0";
+  version = "5.3.1";
   disabled = isPy27;
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-LlaJQ6uZ9kdN8mK8NYCNiwVXVKprMgRknVeIRzO6zi4=";
+    sha256 = "sha256-fXvHS5uQxZgr5cJ0wq/LpbgHPsiMznk/q0Y/5kGKJfY=";
   };
 
   nativeBuildInputs = [
@@ -49,7 +49,7 @@ buildPythonPackage rec {
   ];
 
   pytestFlagsArray = [
-    "--numprocesses" "auto"
+    "--numprocesses" "$NIX_BUILD_CORES"
   ];
 
   preCheck = ''

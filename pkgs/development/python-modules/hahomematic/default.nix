@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "hahomematic";
-  version = "0.0.16";
+  version = "0.0.17";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "danielperna84";
     repo = pname;
     rev = version;
-    sha256 = "sha256-c+0CjERZX55A1Y73tqf6awe68TPw5pqXEIlBD5C8L8c=";
+    sha256 = "sha256-XUlg3zuLJwWJCi2qx1f8eBK3Li94QxXz82G0zEgUztc=";
   };
 
   propagatedBuildInputs = [

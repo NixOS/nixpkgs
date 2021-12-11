@@ -50,6 +50,7 @@
   ./hardware/device-tree.nix
   ./hardware/gkraken.nix
   ./hardware/flirc.nix
+  ./hardware/gpgsmartcards.nix
   ./hardware/i2c.nix
   ./hardware/sensor/hddtemp.nix
   ./hardware/sensor/iio.nix
@@ -1192,8 +1193,7 @@
   ./virtualisation/kvmgt.nix
   ./virtualisation/openvswitch.nix
   ./virtualisation/parallels-guest.nix
-  ./virtualisation/podman.nix
-  ./virtualisation/podman-network-socket-ghostunnel.nix
+  ./virtualisation/podman/default.nix
   ./virtualisation/qemu-guest-agent.nix
   ./virtualisation/railcar.nix
   ./virtualisation/spice-usb-redirection.nix

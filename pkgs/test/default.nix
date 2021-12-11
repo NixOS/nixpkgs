@@ -35,6 +35,8 @@ with pkgs;
 
   macOSSierraShared = callPackage ./macos-sierra-shared {};
 
+  make-binary-wrapper = callPackage ./make-binary-wrapper { inherit makeBinaryWrapper; };
+
   cross = callPackage ./cross {};
 
   php = recurseIntoAttrs (callPackages ./php {});

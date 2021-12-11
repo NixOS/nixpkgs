@@ -1,4 +1,4 @@
-{lib, buildOcaml, fetchurl}:
+{ lib, buildOcaml, fetchFromGitHub }:
 
 buildOcaml rec {
   version = "112.35.00";
@@ -6,9 +6,11 @@ buildOcaml rec {
 
   minimumSupportedOcamlVersion = "4.00";
 
-  src = fetchurl {
-    url = "https://github.com/janestreet/herelib/archive/${version}.tar.gz";
-    sha256 = "03rrlpjmnd8d1rzzmd112355m7a5bwn3vf90xkbc6gkxlad9cxbs";
+  src = fetchFromGitHub {
+    owner = "janestreet";
+    repo = "herelib";
+    rev = version;
+    sha256 = "sha256-EuMhHu2na3lcpsJ1wMVOgBr6VKndlonq8jgAW01eelI=";
   };
 
   meta = with lib; {

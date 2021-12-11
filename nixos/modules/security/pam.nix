@@ -295,9 +295,14 @@ let
       };
 
       limits = mkOption {
+        default = [];
+        type = limitsType;
         description = ''
           Attribute set describing resource limits.  Defaults to the
           value of <option>security.pam.loginLimits</option>.
+          The meaning of the values is explained in <citerefentry>
+          <refentrytitle>limits.conf</refentrytitle><manvolnum>5</manvolnum>
+          </citerefentry>.
         '';
       };
 
@@ -648,6 +653,51 @@ let
          "${domain} ${type} ${item} ${toString value}\n")
          limits);
 
+  limitsType = with lib.types; listOf (submodule ({ ... }: {
+    options = {
+      domain = mkOption {
+        description = "Username, groupname, or wildcard this limit applies to";
+        example = "@wheel";
+        type = str;
+      };
+
+      type = mkOption {
+        description = "Type of this limit";
+        type = enum [ "-" "hard" "soft" ];
+        default = "-";
+      };
+
+      item = mkOption {
+        description = "Item this limit applies to";
+        type = enum [
+          "core"
+          "data"
+          "fsize"
+          "memlock"
+          "nofile"
+          "rss"
+          "stack"
+          "cpu"
+          "nproc"
+          "as"
+          "maxlogins"
+          "maxsyslogins"
+          "priority"
+          "locks"
+          "sigpending"
+          "msgqueue"
+          "nice"
+          "rtprio"
+        ];
+      };
+
+      value = mkOption {
+        description = "Value of this limit";
+        type = oneOf [ str int ];
+      };
+    };
+  }));
+
   motd = pkgs.writeText "motd" config.users.motd;
 
   makePAMService = name: service:
@@ -669,6 +719,7 @@ in
 
     security.pam.loginLimits = mkOption {
       default = [];
+      type = limitsType;
       example =
         [ { domain = "ftp";
             type   = "hard";
@@ -688,7 +739,8 @@ in
           <varname>domain</varname>, <varname>type</varname>,
           <varname>item</varname>, and <varname>value</varname>
           attribute.  The syntax and semantics of these attributes
-          must be that described in the limits.conf(5) man page.
+          must be that described in <citerefentry><refentrytitle>limits.conf</refentrytitle>
+          <manvolnum>5</manvolnum></citerefentry>.
 
           Note that these limits do not apply to systemd services,
           whose limits can be changed via <option>systemd.extraConfig</option>

@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-seqdiag";
-  version = "2.0.0";
+  version = "3.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-THJ1ra/W2X/lQaDjGbL27VMn0lWPJApwgKMrPhL0JY0=";
+    hash = "sha256-QH5IeXZz9x2Ujp/6BHFsrB2ZqeyPYW3jdk1C0DNBZXQ=";
   };
 
   propagatedBuildInputs = [ sphinx blockdiag seqdiag ];

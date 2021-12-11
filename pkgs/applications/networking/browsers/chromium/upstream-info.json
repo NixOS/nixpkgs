@@ -18,9 +18,9 @@
     }
   },
   "beta": {
-    "version": "97.0.4692.36",
-    "sha256": "0p0f19svnymql8skx6alb6zy4fmc5115dc2avs8h2mca1q8n5r0s",
-    "sha256bin64": "08p0rwn4jglrzma1vf4jnyqaffnk0c8xwc7jkgfpkasm43d72zim",
+    "version": "97.0.4692.45",
+    "sha256": "1x55hys3340inrwwp4lzw5vq3vrg56288m746d4p2ligvsy19byp",
+    "sha256bin64": "1jyhq27fb4pzbxlg0ssfz66hza9g8cbsqyx70ydkjqs9sf4yqqcw",
     "deps": {
       "gn": {
         "version": "2021-11-03",
@@ -31,22 +31,22 @@
     }
   },
   "dev": {
-    "version": "98.0.4736.0",
-    "sha256": "1bakzvzx0604k20p16lxmbl0s8za6fy4akng35c1kzf350jznq7n",
-    "sha256bin64": "09adpl6b43fzlms081c1bs3vrlwrm3kq0mfcqff4q33i0wb5wl25",
+    "version": "98.0.4750.0",
+    "sha256": "0qygnmb1wlbarni2pdfs1xl50ggvf0211c6mj7341wwsbd0bpkgr",
+    "sha256bin64": "1psbh5xwlgr4ain4s9vk7d0kdbbd14v29f95ai5i4d2d3cpj2319",
     "deps": {
       "gn": {
-        "version": "2021-11-24",
+        "version": "2021-12-03",
         "url": "https://gn.googlesource.com/gn",
-        "rev": "b79031308cc878488202beb99883ec1f2efd9a6d",
-        "sha256": "1fdn48y0nvs2qm67qvp1i75d9278ddi5v3bpxgjf28zrh9yragwd"
+        "rev": "e0afadf7a743d5b14737bd454df45d5f1caf0d23",
+        "sha256": "00pxhfikscghgm79zckh9j00jgjmdy6hixkpfq5vmgc0xpxif78v"
       }
     }
   },
   "ungoogled-chromium": {
-    "version": "96.0.4664.45",
-    "sha256": "01q4fsf2cbx6g9nnaihvc5jj3ap8jq2gf16pnhf7ixzbhgcnm328",
-    "sha256bin64": "0546i4yd1jahv088hjxpq0jc393pscvl5ap3s2qw5jrybliyfd2g",
+    "version": "96.0.4664.93",
+    "sha256": "14rlm91pzpdll6x2r1sxdswiv19h1ykxcq0csi9k9g0a9s71yyvw",
+    "sha256bin64": "15233njj6ln7q3c112ssfh9s4m3shhp920zw8648z9dr7k8512qb",
     "deps": {
       "gn": {
         "version": "2021-09-24",
@@ -55,8 +55,8 @@
         "sha256": "0y4414h8jqsbz5af6pn91c0vkfp4s281s85g992xfyl785c5zbsi"
       },
       "ungoogled-patches": {
-        "rev": "96.0.4664.45-1",
-        "sha256": "1k0kf5ika1sz489bcbn485kmdq1xp7ssa80gbqrpd60xihkhnrm3"
+        "rev": "96.0.4664.93-1",
+        "sha256": "0r8cwriaxbmzy9sxa6mx71h8n1a0x7pdx3kmqc1sg97b2qwmg15r"
       }
     }
   }

@@ -1,6 +1,5 @@
 { lib
 , buildPythonPackage
-, cffi
 , coloredlogs
 , fetchFromGitHub
 , ghostscript
@@ -17,7 +16,6 @@
 , pytestCheckHook
 , pythonOlder
 , reportlab
-, setuptools
 , setuptools-scm
 , setuptools-scm-git-archive
 , stdenv
@@ -29,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "ocrmypdf";
-  version = "13.0.0";
+  version = "13.1.0";
 
   src = fetchFromGitHub {
     owner = "jbarlow83";
@@ -41,7 +39,7 @@ buildPythonPackage rec {
     extraPostFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    sha256 = "sha256-W5RFCWKDIRrsgHZL8uSOQWvEltLbqYAweZkgIZZrSIo=";
+    sha256 = "sha256-K8amHifxaR/tRiQODWVZcOd5nL5zzjd8C7h5whl/HoQ=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -63,7 +61,6 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    cffi
     coloredlogs
     img2pdf
     pdfminer
@@ -71,7 +68,6 @@ buildPythonPackage rec {
     pillow
     pluggy
     reportlab
-    setuptools
     tqdm
   ] ++ (lib.optionals (pythonOlder "3.8") [
     importlib-metadata
@@ -92,7 +88,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jbarlow83/OCRmyPDF";
     description = "Adds an OCR text layer to scanned PDF files, allowing them to be searched";
     license = with licenses; [ mpl20 mit ];
-    platforms = platforms.linux;
     maintainers = with maintainers; [ kiwi dotlambda ];
     changelog = "https://github.com/jbarlow83/OCRmyPDF/blob/v${version}/docs/release_notes.rst";
   };

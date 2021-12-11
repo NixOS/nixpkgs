@@ -192,15 +192,28 @@ in
         example = "batch";
         description = ''
           Nix daemon process CPU scheduling policy. This policy propagates to
-          build processes. other is the default scheduling policy for regular
-          tasks. The batch policy is similar to other, but optimised for
-          non-interactive tasks. idle is for extremely low-priority tasks
-          that should only be run when no other task requires CPU time.
+          build processes. <literal>other</literal> is the default scheduling
+          policy for regular tasks. The <literal>batch</literal> policy is
+          similar to <literal>other</literal>, but optimised for
+          non-interactive tasks. <literal>idle</literal> is for extremely
+          low-priority tasks that should only be run when no other task
+          requires CPU time.
 
-          Please note that while using the idle policy may greatly improve
-          responsiveness of a system performing expensive builds, it may also
-          slow down and potentially starve crucial configuration updates
-          during load.
+          Please note that while using the <literal>idle</literal> policy may
+          greatly improve responsiveness of a system performing expensive
+          builds, it may also slow down and potentially starve crucial
+          configuration updates during load.
+
+          <literal>idle</literal> may therefore be a sensible policy for
+          systems that experience only intermittent phases of high CPU load,
+          such as desktop or portable computers used interactively. Other
+          systems should use the <literal>other</literal> or
+          <literal>batch</literal> policy instead.
+
+          For more fine-grained resource control, please refer to
+          <citerefentry><refentrytitle>systemd.resource-control
+          </refentrytitle><manvolnum>5</manvolnum></citerefentry> and adjust
+          <option>systemd.services.nix-daemon</option> directly.
       '';
       };
 
@@ -210,13 +223,20 @@ in
         example = "idle";
         description = ''
           Nix daemon process I/O scheduling class. This class propagates to
-          build processes. best-effort is the default class for regular tasks.
-          The idle class is for extremely low-priority tasks that should only
-          perform I/O when no other task does.
+          build processes. <literal>best-effort</literal> is the default
+          class for regular tasks. The <literal>idle</literal> class is for
+          extremely low-priority tasks that should only perform I/O when no
+          other task does.
 
-          Please note that while using the idle scheduling class can improve
-          responsiveness of a system performing expensive builds, it might also
-          slow down or starve crucial configuration updates during load.
+          Please note that while using the <literal>idle</literal> scheduling
+          class can improve responsiveness of a system performing expensive
+          builds, it might also slow down or starve crucial configuration
+          updates during load.
+
+          <literal>idle</literal> may therefore be a sensible class for
+          systems that experience only intermittent phases of high I/O load,
+          such as desktop or portable computers used interactively. Other
+          systems should use the <literal>best-effort</literal> class.
       '';
       };
 

@@ -2,7 +2,7 @@
   "name": "element-desktop",
   "productName": "Element",
   "main": "lib/electron-main.js",
-  "version": "1.9.5",
+  "version": "1.9.6",
   "description": "A feature-rich client for Matrix.org",
   "author": "Element",
   "repository": {
@@ -54,7 +54,7 @@
     "@types/minimist": "^1.2.1",
     "@typescript-eslint/eslint-plugin": "^4.17.0",
     "@typescript-eslint/parser": "^4.17.0",
-    "allchange": "^1.0.5",
+    "allchange": "^1.0.6",
     "asar": "^2.0.1",
     "chokidar": "^3.5.2",
     "electron": "13.5",

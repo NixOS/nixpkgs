@@ -11,7 +11,6 @@ buildNimPackage rec {
   };
   propagatedBuildInputs = [ snappy ];
   patches = [ ./config.patch ];
-  doCheck = true;
   preCheck = ''
     mkdir $NIX_BUILD_TOP/nimcache/
     mv -v tests/data $NIX_BUILD_TOP/nimcache/data

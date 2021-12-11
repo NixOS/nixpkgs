@@ -69,7 +69,7 @@ function fetchgit(fileName, url, rev, branch, builtinFetchGit) {
 
 function fetchLockedDep(builtinFetchGit) {
   return function (pkg) {
-    const { nameWithVersion, resolved } = pkg
+    const { integrity, nameWithVersion, resolved } = pkg
 
     if (!resolved) {
       console.error(
@@ -102,14 +102,14 @@ function fetchLockedDep(builtinFetchGit) {
       return fetchgit(fileName, urlForGit, rev, branch || 'master', builtinFetchGit)
     }
 
-    const sha = sha1OrRev
+    const [algo, hash] = integrity ? integrity.split('-') : ['sha1', sha1OrRev]
 
     return `    {
       name = "${fileName}";
       path = fetchurl {
         name = "${fileName}";
         url  = "${url}";
-        sha1 = "${sha}";
+        ${algo} = "${hash}";
       };
     }`
   }

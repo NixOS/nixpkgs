@@ -336,7 +336,6 @@ in with self; {
   genomewidesnp6Crlmm = derive2 { name="genomewidesnp6Crlmm"; version="1.0.7"; sha256="16qcxa32fmbdcv5dck0grsnqyfcqql7wpxa1l6andv9hrvabv2jx"; depends=[]; };
   gp53cdf = derive2 { name="gp53cdf"; version="2.18.0"; sha256="11p69rxia8bqajix3jg34vnhczyxgpq50k5kdh878h7bn0mpg6bj"; depends=[AnnotationDbi]; };
   grasp2db = derive2 { name="grasp2db"; version="1.1.0"; sha256="1aq19myhcl9kdmzy8f4c3ilf0s0ng99rl58jja2xlmqsm2hik7ya"; depends=[AnnotationHub dbplyr digest dplyr GenomeInfoDb RSQLite]; };
-  greengenes13_5MgDb = derive2 { name="greengenes13.5MgDb"; version="2.0.0"; sha256="0j4pd653vlfpd9gq6gi459lra8xhyknjrzadkx9d3zjy0hcwpj7r"; depends=[]; };
   gwascatData = derive2 { name="gwascatData"; version="0.99.6"; sha256="1xhmzl06vivq8x01h60q3c4vql67wjgjfs35j4ifmixp1qhicgga"; depends=[data_table]; };
   h10kcod_db = derive2 { name="h10kcod.db"; version="3.4.0"; sha256="0f30n339ib8q478a7axjdh8hzrqws762m680ha0sxm3a0nxwapgg"; depends=[AnnotationDbi org_Hs_eg_db]; };
   h20kcod_db = derive2 { name="h20kcod.db"; version="3.4.0"; sha256="0csh59bgpn5xyaw6bfg7nvi9vcvjd4f66f0dr3xh7c6316835mnx"; depends=[AnnotationDbi org_Hs_eg_db]; };
@@ -847,7 +846,6 @@ in with self; {
   rhesuscdf = derive2 { name="rhesuscdf"; version="2.18.0"; sha256="0q2alkxm80wkzaf0q80df27q30qkswybavz05x6ywsihbs9h0nb8"; depends=[AnnotationDbi]; };
   rhesusprobe = derive2 { name="rhesusprobe"; version="2.18.0"; sha256="0fd8pvwvpcmx41k80nbccjxllh39fvjf7l9dr8facisl1x7gsfil"; depends=[AnnotationDbi]; };
   ri16cod_db = derive2 { name="ri16cod.db"; version="3.4.0"; sha256="1xz533vxjdyxx1wkks0kgk6b90sxs44iqcsvyds0xcm573bx8c6q"; depends=[AnnotationDbi org_Rn_eg_db]; };
-  ribosomaldatabaseproject11_5MgDb = derive2 { name="ribosomaldatabaseproject11.5MgDb"; version="1.00.0"; sha256="04ppa4k8p54bmkq3jm41h0v4lb5hz95cmnakfzmqfml00ir04mxp"; depends=[]; };
   ricecdf = derive2 { name="ricecdf"; version="2.18.0"; sha256="07lsw9rklk2rsvbkcj1ci8hg2x68k3qpkx9yw0cmd7rg5fvydgns"; depends=[AnnotationDbi]; };
   riceprobe = derive2 { name="riceprobe"; version="2.18.0"; sha256="0w6qvszdmnipn3v2bld46x7my2a9hni0jbxd0y1d6xcrrgs951ra"; depends=[AnnotationDbi]; };
   rnu34_db = derive2 { name="rnu34.db"; version="3.13.0"; sha256="155spriq65xpvf1wjw632jsfabzd4lm06l8qqzhs70qqjbnlkln0"; depends=[AnnotationDbi org_Rn_eg_db]; };
@@ -862,7 +860,6 @@ in with self; {
   saureuscdf = derive2 { name="saureuscdf"; version="2.18.0"; sha256="0vmm3fy10dzzmaq22ah4fb0k3fs1gdbhnsi8mxz7xgp27dcan29j"; depends=[AnnotationDbi]; };
   saureusprobe = derive2 { name="saureusprobe"; version="2.18.0"; sha256="0s5ma3hh7ncsi4dq33r3hwffk85x3gvjbm5cslppbsd0r0bjwkia"; depends=[AnnotationDbi]; };
   scAnnotatR_models = derive2 { name="scAnnotatR.models"; version="0.99.10"; sha256="1mj23jyakx5bss4v8lb66ri67ajcxk9kzfp8ya8vsbhkx5npqgl4"; depends=[]; };
-  silva128_1MgDb = derive2 { name="silva128.1MgDb"; version="1.00.0"; sha256="0pwwxxa55d3919rbczg5iskd03ignimk80m52kfi930b1kdg9qc2"; depends=[]; };
   soybeancdf = derive2 { name="soybeancdf"; version="2.18.0"; sha256="1dlwxdslm827661z6f4z2hwr7wpwqfzvizhvv63p86ll7l6gs3s8"; depends=[AnnotationDbi]; };
   soybeanprobe = derive2 { name="soybeanprobe"; version="2.18.0"; sha256="06dpwqad7q3wyq0bsgpwkw8kx1gq5fy1s1lw632xrvgcid2fsmf8"; depends=[AnnotationDbi]; };
   sugarcanecdf = derive2 { name="sugarcanecdf"; version="2.18.0"; sha256="0wghc6wr7iwkql63m3wibjjdcdpqd53z0g5rxdh553sjb0ca2n7z"; depends=[AnnotationDbi]; };
@@ -997,4 +994,7 @@ in with self; {
   MeSH_Xtr_eg_db = derive2 { name="MeSH.Xtr.eg.db"; version="1.15.1"; sha256="19waylyzyga4zqygar6509gq36a8z36fbpz55msb0zsin24s0y82"; depends=[MeSHDbi]; broken = true; };
   MeSH_Zma_eg_db = derive2 { name="MeSH.Zma.eg.db"; version="1.15.1"; sha256="0plldymwirg8hyj9yv5jw4ldrlnvf5dx60gymb8rgmmxvrmhay66"; depends=[MeSHDbi]; broken = true; };
   MeSH_db = derive2 { name="MeSH.db"; version="1.15.1"; sha256="0ixlxcakcc9f6d3dzxfdda4nh5gnivqvbi9dw7c85c0145dgnpzx"; depends=[MeSHDbi]; broken = true; };
+  greengenes13_5MgDb = derive2 { name="greengenes13.5MgDb"; version="2.0.0"; sha256="0j4pd653vlfpd9gq6gi459lra8xhyknjrzadkx9d3zjy0hcwpj7r"; depends=[]; broken = true; };
+  ribosomaldatabaseproject11_5MgDb = derive2 { name="ribosomaldatabaseproject11.5MgDb"; version="1.00.0"; sha256="04ppa4k8p54bmkq3jm41h0v4lb5hz95cmnakfzmqfml00ir04mxp"; depends=[]; broken = true; };
+  silva128_1MgDb = derive2 { name="silva128.1MgDb"; version="1.00.0"; sha256="0pwwxxa55d3919rbczg5iskd03ignimk80m52kfi930b1kdg9qc2"; depends=[]; broken = true; };
 }

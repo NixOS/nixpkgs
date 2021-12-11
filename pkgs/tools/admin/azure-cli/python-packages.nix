@@ -1,4 +1,4 @@
-{ stdenv, python, lib, src, version }:
+{ stdenv, python3, lib, src, version }:
 
 let
   buildAzureCliPackage = with py.pkgs; attrs: buildPythonPackage attrs;
@@ -25,7 +25,7 @@ let
       pythonNamespaces = [ "azure.mgmt" ];
     });
 
-  py = python.override {
+  py = python3.override {
     packageOverrides = self: super: {
       inherit buildAzureCliPackage;
 
@@ -38,6 +38,7 @@ let
 
         propagatedBuildInputs = with self; [
           adal
+          antlr4-python3-runtime
           argcomplete
           azure-common
           azure-cli-telemetry
@@ -63,9 +64,7 @@ let
           requests
           six
           tabulate
-        ]
-        ++ lib.optionals isPy3k [ antlr4-python3-runtime ]
-        ++ lib.optionals (!isPy3k) [ enum34 futures antlr4-python2-runtime ndg-httpsclient ];
+        ];
 
         postPatch = ''
           substituteInPlace setup.py \

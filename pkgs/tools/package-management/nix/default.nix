@@ -35,6 +35,7 @@ common =
       inherit pname version src patches;
 
       is24 = lib.versionAtLeast version "2.4pre";
+      is25 = lib.versionAtLeast version "2.5pre";
 
       VERSION_SUFFIX = suffix;
 
@@ -76,6 +77,9 @@ common =
             }));
 
       propagatedBuildInputs = [ boehmgc ];
+
+      # src/nix-build/nix-build.cc:463:41: error: 'value' is unavailable: introduced in macOS 10.13
+      NIX_CFLAGS_COMPILE = lib.optional (stdenv.hostPlatform.system == "x86_64-darwin") "-D_LIBCPP_DISABLE_AVAILABILITY";
 
       NIX_LDFLAGS = lib.optionals (!is24) [
         # https://github.com/NixOS/nix/commit/3e85c57a6cbf46d5f0fe8a89b368a43abd26daba
@@ -145,6 +149,10 @@ common =
       # socket path becomes too long otherwise
       preInstallCheck = lib.optionalString stdenv.isDarwin ''
         export TMPDIR=$NIX_BUILD_TOP
+      ''
+      # See https://github.com/NixOS/nix/issues/5687
+      + lib.optionalString (is25 && stdenv.isDarwin) ''
+        echo "exit 99" > tests/gc-non-blocking.sh
       '';
 
       separateDebugInfo = stdenv.isLinux && (is24 -> !enableStatic);

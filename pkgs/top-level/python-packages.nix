@@ -550,6 +550,8 @@ in {
 
   appdirs = callPackage ../development/python-modules/appdirs { };
 
+  appleseed = toPythonModule (pkgs.appleseed.override { python3 = self.python; });
+
   applicationinsights = callPackage ../development/python-modules/applicationinsights { };
 
   appnope = callPackage ../development/python-modules/appnope { };
@@ -607,6 +609,8 @@ in {
   arxiv2bib = callPackage ../development/python-modules/arxiv2bib { };
 
   asana = callPackage ../development/python-modules/asana { };
+
+  ascii-magic = callPackage ../development/python-modules/ascii-magic { };
 
   asciimatics = callPackage ../development/python-modules/asciimatics { };
 
@@ -2015,6 +2019,8 @@ in {
 
   deeptoolsintervals = callPackage ../development/python-modules/deeptoolsintervals { };
 
+  deep-translator = callPackage ../development/python-modules/deep-translator { };
+
   deezer-py = callPackage ../development/python-modules/deezer-py { };
 
   deezer-python = callPackage ../development/python-modules/deezer-python { };
@@ -2468,6 +2474,8 @@ in {
   eliqonline = callPackage ../development/python-modules/eliqonline { };
 
   elmax = callPackage ../development/python-modules/elmax { };
+
+  elmax-api = callPackage ../development/python-modules/elmax-api { };
 
   emailthreads = callPackage ../development/python-modules/emailthreads { };
 
@@ -4112,8 +4120,6 @@ in {
 
   jsonstreams = callPackage ../development/python-modules/jsonstreams { };
 
-  jsonwatch = callPackage ../development/python-modules/jsonwatch { };
-
   jug = callPackage ../development/python-modules/jug { };
 
   junitparser = callPackage ../development/python-modules/junitparser { };
@@ -4224,7 +4230,7 @@ in {
 
   keras-applications = callPackage ../development/python-modules/keras-applications { };
 
-  Keras = callPackage ../development/python-modules/keras { };
+  keras = callPackage ../development/python-modules/keras { };
 
   keras-preprocessing = callPackage ../development/python-modules/keras-preprocessing { };
 
@@ -5001,6 +5007,8 @@ in {
 
   mrkd = callPackage ../development/python-modules/mrkd { };
 
+  ms-active-directory = callPackage ../development/python-modules/ms-active-directory { };
+
   ms-cv = callPackage ../development/python-modules/ms-cv { };
 
   msal = callPackage ../development/python-modules/msal { };
@@ -5235,6 +5243,8 @@ in {
 
   nltk = callPackage ../development/python-modules/nltk { };
 
+  nmapthon2 = callPackage ../development/python-modules/nmapthon2 { };
+
   nmigen-boards = callPackage ../development/python-modules/nmigen-boards { };
 
   nmigen = callPackage ../development/python-modules/nmigen { };
@@ -5454,10 +5464,10 @@ in {
 
   opentracing = callPackage ../development/python-modules/opentracing { };
 
-  openvino = disabledIf isPy27 (toPythonModule (pkgs.openvino.override {
+  openvino = toPythonModule (pkgs.openvino.override {
     inherit (self) python;
     enablePython = true;
-  }));
+  });
 
   openwebifpy = callPackage ../development/python-modules/openwebifpy { };
 
@@ -5894,6 +5904,8 @@ in {
 
   pyskyqhub = callPackage ../development/python-modules/pyskyqhub { };
 
+  pyskyqremote = callPackage ../development/python-modules/pyskyqremote { };
+
   pysolcast = callPackage ../development/python-modules/pysolcast { };
 
   pysyncthru = callPackage ../development/python-modules/pysyncthru { };
@@ -6087,8 +6099,6 @@ in {
 
   prefixed = callPackage ../development/python-modules/prefixed { };
 
-  pre-commit = callPackage ../development/python-modules/pre-commit { };
-
   pre-commit-hooks = callPackage ../development/python-modules/pre-commit-hooks { };
 
   preggy = callPackage ../development/python-modules/preggy { };
@@ -6108,8 +6118,6 @@ in {
   prison = callPackage ../development/python-modules/prison { };
 
   privacyidea-ldap-proxy = callPackage ../development/python-modules/privacyidea-ldap-proxy { };
-
-  pyjwt1 = callPackage ../development/python-modules/pyjwt/1.nix { };
 
   proboscis = callPackage ../development/python-modules/proboscis { };
 
@@ -8215,9 +8223,9 @@ in {
 
   recaptcha_client = callPackage ../development/python-modules/recaptcha_client { };
 
-  recoll = disabledIf (!isPy3k) (toPythonModule (pkgs.recoll.override {
+  recoll = toPythonModule (pkgs.recoll.override {
     python3Packages = self;
-  }));
+  });
 
   recommonmark = callPackage ../development/python-modules/recommonmark { };
 
@@ -8752,6 +8760,8 @@ in {
 
   simplekml = callPackage ../development/python-modules/simplekml { };
 
+  simplenote = callPackage ../development/python-modules/simplenote { };
+
   simple-di = callPackage ../development/python-modules/simple-di { };
 
   simple-rest-client = callPackage ../development/python-modules/simple-rest-client { };
@@ -9050,6 +9060,8 @@ in {
 
   spotipy = callPackage ../development/python-modules/spotipy { };
 
+  spur = callPackage ../development/python-modules/spur { };
+
   spyder = callPackage ../development/python-modules/spyder { };
 
   spyder-kernels = callPackage ../development/python-modules/spyder-kernels { };
@@ -9143,6 +9155,8 @@ in {
   stestr = callPackage ../development/python-modules/stestr { };
 
   stevedore = callPackage ../development/python-modules/stevedore { };
+
+  stickytape = callPackage ../development/python-modules/stickytape { };
 
   stm32loader = callPackage ../development/python-modules/stm32loader { };
 
@@ -10085,6 +10099,10 @@ in {
 
   webthing = callPackage ../development/python-modules/webthing { };
 
+  weconnect = callPackage ../development/python-modules/weconnect { };
+
+  weconnect-mqtt = callPackage ../development/python-modules/weconnect-mqtt { };
+
   werkzeug = callPackage ../development/python-modules/werkzeug { };
 
   werkzeug1 = callPackage ../development/python-modules/werkzeug/1.nix { };
@@ -10373,8 +10391,6 @@ in {
   zarr = callPackage ../development/python-modules/zarr { };
 
   zc-buildout = callPackage ../development/python-modules/buildout { };
-
-  zc_buildout_nix = callPackage ../development/python-modules/buildout-nix { };
 
   zc_lockfile = callPackage ../development/python-modules/zc_lockfile { };
 
