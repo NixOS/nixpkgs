@@ -9141,6 +9141,8 @@ in {
 
   stevedore = callPackage ../development/python-modules/stevedore { };
 
+  stickytape = callPackage ../development/python-modules/stickytape { };
+
   stm32loader = callPackage ../development/python-modules/stm32loader { };
 
   stone = callPackage ../development/python-modules/stone { };
