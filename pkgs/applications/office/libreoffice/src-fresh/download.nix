@@ -637,11 +637,11 @@
     md5name = "cf1ee3ac27a215814a9c80803fcee4f0ede8466ebead40267a9bd115e16a8678-neon-0.31.2.tar.gz";
   }
   {
-    name = "nss-3.55-with-nspr-4.27.tar.gz";
-    url = "https://dev-www.libreoffice.org/src/nss-3.55-with-nspr-4.27.tar.gz";
-    sha256 = "ec6032d78663c6ef90b4b83eb552dedf721d2bce208cec3bf527b8f637db7e45";
+    name = "nss-3.73-with-nspr-4.32.tar.gz";
+    url = "https://dev-www.libreoffice.org/src/nss-3.73-with-nspr-4.32.tar.gz";
+    sha256 = "07a9e5b70f121a62706140d4cacc3006d3efb869da40f3a2bf7a65d37847f4d9";
     md5 = "";
-    md5name = "ec6032d78663c6ef90b4b83eb552dedf721d2bce208cec3bf527b8f637db7e45-nss-3.55-with-nspr-4.27.tar.gz";
+    md5name = "07a9e5b70f121a62706140d4cacc3006d3efb869da40f3a2bf7a65d37847f4d9-nss-3.73-with-nspr-4.32.tar.gz";
   }
   {
     name = "libodfgen-0.1.8.tar.xz";
