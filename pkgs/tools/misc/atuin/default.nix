@@ -25,12 +25,14 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security SystemConfiguration ];
 
+  outputs = [ "out" ] ++ (map (sh: "interactiveShellInit_${sh}") shells);
+  shells = [ "bash" "zsh" "fish" ];
   postInstall = ''
     installShellCompletion --cmd atuin \
-      --bash <($out/bin/atuin gen-completions -s bash) \
-      --fish <($out/bin/atuin gen-completions -s fish) \
-      --zsh <($out/bin/atuin gen-completions -s zsh)
-  '';
+      ${lib.concatMapStrings (sh: " --${sh} <$($out/bin/autin gen-completions -s ${sh})")}
+  '' + lib.concatMapStrings
+    (sh: "$out/bin/atuin init ${sh} > $interactiveShellInit_${sh};")
+    shells;
 
   meta = with lib; {
     description = "Replacement for a shell history which records additional commands context with optional encrypted synchronization between machines";
