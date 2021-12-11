@@ -1,5 +1,5 @@
 { lib
-, fetchPypi
+, fetchFromGitHub
 , buildPythonPackage
 , six
 , nose
@@ -8,9 +8,11 @@ buildPythonPackage rec {
   pname = "intbitset";
   version = "2.4.1";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "44bca80b8cc702d5a56f0686f2bb5e028ab4d0c2c1761941589d46b7fa2c701c";
+  src = fetchFromGitHub {
+     owner = "inveniosoftware";
+     repo = "intbitset";
+     rev = "v2.4.1";
+     sha256 = "1bl0w2mv92qv5xml19mzlypghz0dk8br3bqnpwp34gx3af8a2s7d";
   };
 
   patches = [
