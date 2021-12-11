@@ -2,7 +2,7 @@
 , aiohttp
 , async-timeout
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pythonOlder
 }:
 
@@ -13,9 +13,11 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-yZpzGfB5RTWaRn2DmT+cbSDC0pL16FyUc0Nr/V6TlhU=";
+  src = fetchFromGitHub {
+     owner = "home-assistant-ecosystem";
+     repo = "python-hole";
+     rev = "0.7.0";
+     sha256 = "10d3cksfv29g00z6s1iqacspd7iybwsn7wlyj21flknd74ww78yj";
   };
 
   propagatedBuildInputs = [
