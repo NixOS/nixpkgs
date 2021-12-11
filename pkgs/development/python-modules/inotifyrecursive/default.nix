@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , inotify-simple
 }:
 
@@ -8,9 +8,11 @@ buildPythonPackage rec {
   pname = "inotifyrecursive";
   version = "0.3.5";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "osRQsxdpPkU4QW+Q6x14WFBtr+a4uIUDe9LdmuLa+h4=";
+  src = fetchFromGitHub {
+     owner = "letorbi";
+     repo = "inotifyrecursive";
+     rev = "0.3.5";
+     sha256 = "16kdww3iqpgqcn5za687shbijbvi5f38qrsh5wklyhf6r77llsh4";
   };
 
   propagatedBuildInputs = [ inotify-simple ];
