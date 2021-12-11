@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pytestCheckHook
 , watchdog
 }:
@@ -10,9 +10,11 @@ buildPythonPackage rec {
   pname = "hupper";
   version = "1.10.3";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-zW9Rtyx1h7ybzopl7NAloelfGwMoRRm/6RKE0BAxbNk=";
+  src = fetchFromGitHub {
+     owner = "Pylons";
+     repo = "hupper";
+     rev = "1.10.3";
+     sha256 = "1kvnry8svh6mzja4mm77g81y7n666zgbqry128n9qdqsg273c6v1";
   };
 
   # FIXME: watchdog dependency is disabled on Darwin because of #31865, which causes very silent
