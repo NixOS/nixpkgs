@@ -6536,6 +6536,8 @@ with pkgs;
 
   input-utils = callPackage ../os-specific/linux/input-utils { };
 
+  inql = callPackage ../tools/security/inql { };
+
   intecture-agent = callPackage ../tools/admin/intecture/agent.nix { };
 
   intecture-auth = callPackage ../tools/admin/intecture/auth.nix { };
