@@ -19,8 +19,15 @@
   </section>
   <section xml:id="sec-release-22.05-new-services">
     <title>New Services</title>
-    <para>
-    </para>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          <literal>osticket</literal>: sets up the https://osticket.com
+          support ticketing system, also enabling mysql, phpfpm and
+          nginx.
+        </para>
+      </listitem>
+    </itemizedlist>
   </section>
   <section xml:id="sec-release-22.05-incompatibilities">
     <title>Backward Incompatibilities</title>

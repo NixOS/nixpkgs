@@ -574,6 +574,7 @@
   ./services/misc/octoprint.nix
   ./services/misc/ombi.nix
   ./services/misc/osrm.nix
+  ./services/misc/osticket/default.nix
   ./services/misc/owncast.nix
   ./services/misc/packagekit.nix
   ./services/misc/paperless-ng.nix
