@@ -29149,7 +29149,7 @@ with pkgs;
 
   wad = python3Packages.callPackage ../tools/security/wad { };
 
-  wafw00f = python3Packages.callPackage ../tools/security/wafw00f { };
+  wafw00f = callPackage ../tools/security/wafw00f { };
 
   waon = callPackage ../applications/audio/waon { };
 
