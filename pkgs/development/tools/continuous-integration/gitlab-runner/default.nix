@@ -1,7 +1,7 @@
 { lib, buildGoPackage, fetchFromGitLab, fetchurl }:
 
 let
-  version = "14.5.0";
+  version = "14.5.2";
 in
 buildGoPackage rec {
   inherit version;
@@ -19,7 +19,7 @@ buildGoPackage rec {
     owner = "gitlab-org";
     repo = "gitlab-runner";
     rev = "v${version}";
-    sha256 = "sha256-BxnIrjiEW61J6hl7mWNXc2Vb4ae1cWqOypTy9Xo7Hkc=";
+    sha256 = "07mr9w1rp3rnrlixmqziin1gw78s3gncg47b4z9h9zzpy3acy3xd";
   };
 
   patches = [ ./fix-shell-path.patch ];
