@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , isPy27
 , pandas
 , pytestCheckHook
@@ -12,9 +12,11 @@ buildPythonPackage rec {
   version = "0.8.1";
   disabled = isPy27; # scikit-learn>=0.21 doesn't work on python2
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "eaf576b1ba3523a0facf3aaa483ca17e326301e53e7678c54d73b7e0250edd43";
+  src = fetchFromGitHub {
+     owner = "scikit-learn-contrib";
+     repo = "imbalanced-learn";
+     rev = "0.8.1";
+     sha256 = "0xsx0j93bz4v7bp3pnkwk4x6jcpprmykhh0ccmn7kd2304lwdaw9";
   };
 
   propagatedBuildInputs = [ scikit-learn ];
