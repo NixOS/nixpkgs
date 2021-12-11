@@ -3177,7 +3177,6 @@ broken-packages:
   - monad-mersenne-random
   - monad-mock
   - monad-open
-  - Monadoro
   - monad-parallel-progressbar
   - monad-param
   - monad-persist
