@@ -5694,6 +5694,8 @@ in {
 
   netmap = callPackage ../development/python-modules/netmap { };
 
+  openai = callPackage ../development/python-modules/openai { };
+
   openapi-core = callPackage ../development/python-modules/openapi-core { };
 
   pandas-stubs = callPackage ../development/python-modules/pandas-stubs { };
