@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , flexmock
 , pytest
 , pytest-cov
@@ -11,9 +11,11 @@ buildPythonPackage rec {
   pname = "iocapture";
   version = "0.1.2";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "86670e1808bcdcd4f70112f43da72ae766f04cd8311d1071ce6e0e0a72e37ee8";
+  src = fetchFromGitHub {
+     owner = "oinume";
+     repo = "iocapture";
+     rev = "0.1.2";
+     sha256 = "0q1r14lfxl1rf7wq6ha8ns2c6lcrnpmypf28xrharmznm28d5igp";
   };
 
   checkInputs = [
