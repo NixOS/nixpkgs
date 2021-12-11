@@ -1,5 +1,5 @@
 { buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , numpy
 , scikitimage
 , lib
@@ -10,9 +10,11 @@ buildPythonPackage rec {
   pname = "imagecorruptions";
   version = "1.1.2";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "044e173f24d5934899bdbf3596bfbec917e8083e507eed583ab217abebbe084d";
+  src = fetchFromGitHub {
+     owner = "bethgelab";
+     repo = "imagecorruptions";
+     rev = "v1.1.2";
+     sha256 = "17hg5akbkngxa66zn0922icd1vyblns6pw3hg8lmpll3xqal20f4";
   };
 
   postPatch = ''
