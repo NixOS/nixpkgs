@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl
 , autoreconfHook
-, enableLargeConfig ? false # doc: https://github.com/ivmai/bdwgc/blob/v8.2.0/doc/README.macros#L195
+, enableLargeConfig ? false # doc: https://github.com/ivmai/bdwgc/blob/v8.2.0/doc/README.macros (LARGE_CONFIG)
 }:
 
 stdenv.mkDerivation rec {
