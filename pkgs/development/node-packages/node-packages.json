@@ -156,7 +156,7 @@
 , "insect"
 , "intelephense"
 , "ionic"
-, {"iosevka": "https://github.com/be5invis/Iosevka/archive/v11.0.1.tar.gz"}
+, {"iosevka": "https://github.com/be5invis/Iosevka/archive/v11.2.0.tar.gz"}
 , "jake"
 , "javascript-typescript-langserver"
 , "joplin"
