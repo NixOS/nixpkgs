@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , future
 , requests
 , python-dateutil
@@ -16,9 +16,11 @@ buildPythonPackage rec {
   version = "1.16.0";
   disabled = isPy27;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "c8b94557d93bcfe437f20a8176693ea4f54358b74986cc19d94ebc23f48e40cc";
+  src = fetchFromGitHub {
+     owner = "hetznercloud";
+     repo = "hcloud-python";
+     rev = "v1.16.0";
+     sha256 = "12wx796ag02z8lpjkcsy6jqk3faji9pfgxhkmxgcg09l4dh9pi8d";
   };
 
   propagatedBuildInputs = [ future requests python-dateutil ];
