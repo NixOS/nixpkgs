@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "ABI Generic Analysis and Instrumentation Library";
     homepage = "https://sourceware.org/libabigail/";
-    license = licenses.lgpl3Plus;
+    license = with licenses; [ asl20 llvm-exception ];
     maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.linux;
   };

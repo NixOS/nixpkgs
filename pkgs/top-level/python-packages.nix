@@ -9060,6 +9060,8 @@ in {
 
   spotipy = callPackage ../development/python-modules/spotipy { };
 
+  spur = callPackage ../development/python-modules/spur { };
+
   spyder = callPackage ../development/python-modules/spyder { };
 
   spyder-kernels = callPackage ../development/python-modules/spyder-kernels { };
@@ -9153,6 +9155,8 @@ in {
   stestr = callPackage ../development/python-modules/stestr { };
 
   stevedore = callPackage ../development/python-modules/stevedore { };
+
+  stickytape = callPackage ../development/python-modules/stickytape { };
 
   stm32loader = callPackage ../development/python-modules/stm32loader { };
 
