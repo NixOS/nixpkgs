@@ -78,6 +78,9 @@ common =
 
       propagatedBuildInputs = [ boehmgc ];
 
+      # src/nix-build/nix-build.cc:463:41: error: 'value' is unavailable: introduced in macOS 10.13
+      NIX_CFLAGS_COMPILE = lib.optional (stdenv.hostPlatform.system == "x86_64-darwin") "-D_LIBCPP_DISABLE_AVAILABILITY";
+
       NIX_LDFLAGS = lib.optionals (!is24) [
         # https://github.com/NixOS/nix/commit/3e85c57a6cbf46d5f0fe8a89b368a43abd26daba
         (lib.optionalString enableStatic "-lssl -lbrotlicommon -lssh2 -lz -lnghttp2 -lcrypto")
