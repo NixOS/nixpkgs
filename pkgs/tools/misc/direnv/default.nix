@@ -22,7 +22,7 @@ buildGoModule rec {
     make BASH_PATH=$BASH_PATH
   '';
 
-  outputs = [ "out" ] ++ map (sh: "${sh}_interactiveShellInit");
+  outputs = [ "out" ] ++ map (sh: "interactiveShellInit_${sh}");
   shells = [ "bash" "fish" "zsh" ];
 
   installPhase = ''
@@ -30,7 +30,7 @@ buildGoModule rec {
         ${lib.concatMapStrings
     (
         sh: ''
-          $out/bin/direnv hook ${sh} > ''$${sh}_interactiveShellInit
+          $out/bin/direnv hook ${sh} > ''$interactiveShellInit_${sh}
         ''
       )
     shells}
