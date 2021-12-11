@@ -572,6 +572,7 @@ let
           "Family"
           "User"
           "SuppressPrefixLength"
+          "Type"
         ])
         (assertInt "TypeOfService")
         (assertRange "TypeOfService" 0 255)
@@ -584,6 +585,7 @@ let
         (assertValueOneOf "Family" ["ipv4" "ipv6" "both"])
         (assertInt "SuppressPrefixLength")
         (assertRange "SuppressPrefixLength" 0 128)
+        (assertValueOneOf "Type" ["blackhole" "unreachable" "prohibit"])
       ];
 
       sectionRoute = checkUnitConfig "Route" [
