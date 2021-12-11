@@ -2747,6 +2747,8 @@ in {
 
   fingerprints = callPackage ../development/python-modules/fingerprints { };
 
+  finitude = callPackage ../development/python-modules/finitude { };
+
   fints = callPackage ../development/python-modules/fints { };
 
   fiona = callPackage ../development/python-modules/fiona {
