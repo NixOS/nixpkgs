@@ -1,13 +1,15 @@
-{ lib, fetchPypi, buildPythonPackage, isPy27, pytest } :
+{ lib, fetchFromGitHub, buildPythonPackage, isPy27, pytest } :
 
 buildPythonPackage rec {
   pname = "inflection";
   version = "0.5.1";
   disabled = isPy27;
 
-  src = fetchPypi {
-   inherit pname version;
-   sha256 = "1a29730d366e996aaacffb2f1f1cb9593dc38e2ddd30c91250c6dde09ea9b417";
+  src = fetchFromGitHub {
+     owner = "jpvanhal";
+     repo = "inflection";
+     rev = "0.5.1";
+     sha256 = "0mvs6wgpi963k7mqrwzdkh32m29zcm772q0fy7pwszlcsh3l50kg";
   };
 
   checkInputs = [ pytest ];
