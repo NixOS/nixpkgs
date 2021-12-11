@@ -94,7 +94,8 @@ in
 
     extraPackages = mkOption {
       type = with types; listOf package;
-      default = [ ];
+      default = [ ]
+        ++ lib.optional config.security.apparmor.enable pkgs.apparmor-parser;
       example = lib.literalExpression ''
         [
           pkgs.gvisor
@@ -127,7 +128,6 @@ in
   config = lib.mkIf cfg.enable (lib.mkMerge [
     {
       environment.systemPackages = [ cfg.package ]
-        ++ lib.optional config.security.apparmor.enable pkgs.apparmor-parser
         ++ lib.optional cfg.dockerCompat dockerCompat;
 
       environment.etc."cni/net.d/87-podman-bridge.conflist".source = net-conflist;
