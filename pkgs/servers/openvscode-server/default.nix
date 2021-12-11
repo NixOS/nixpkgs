@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, makeWrapper, runCommand
 , cacert, moreutils, jq, git, pkg-config, yarn, python3
-, esbuild, nodejs-14_x, libsecret, xorg, ripgrep
-, AppKit, Cocoa, Security, cctools }:
+, esbuild, nodejs-14_x, node-gyp, libsecret, xorg, ripgrep
+, AppKit, Cocoa, CoreServices, Security, cctools, xcbuild }:
 
 let
   system = stdenv.hostPlatform.system;
@@ -26,13 +26,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "openvscode-server";
-  version = "1.62.3";
+  version = "1.63.0";
 
   src = fetchFromGitHub {
     owner = "gitpod-io";
     repo = "openvscode-server";
     rev = "openvscode-server-v${version}";
-    sha256 = "0822181gbd6y8bzn65liv7prqv7pg067sbl8nac02zg7268qwi6j";
+    sha256 = "1pc1di4i4l0swjqf64yzniz6103mzcgynrd9x8ndvafpy6a5k9g2";
   };
 
   yarnCache = stdenv.mkDerivation {
@@ -55,23 +55,17 @@ in stdenv.mkDerivation rec {
 
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "0rmcixcn7lmrndb2pq0x895qp34hc271h1j0n3xq9rv603v1ayvk";
+    outputHash = "1n0xcy17zq7jipy23jaysaqkwf167n834nb6qfyskhh4b8nx48fc";
   };
-
-  # Extract the Node.js source code which is used to compile packages with
-  # native bindings
-  nodeSources = runCommand "node-sources" {} ''
-    tar --no-same-owner --no-same-permissions -xf ${nodejs.src}
-    mv node-* $out
-  '';
 
   nativeBuildInputs = [
     nodejs yarn' python3 pkg-config makeWrapper git jq moreutils
   ];
+
   buildInputs = lib.optionals (!stdenv.isDarwin) [ libsecret ]
     ++ (with xorg; [ libX11 libxkbfile ])
     ++ lib.optionals stdenv.isDarwin [
-      AppKit Cocoa Security cctools
+      AppKit Cocoa CoreServices Security cctools xcbuild
     ];
 
   patches = [
@@ -101,9 +95,17 @@ in stdenv.mkDerivation rec {
 
     # set offline mirror to yarn cache we created in previous steps
     yarn --offline config set yarn-offline-mirror "${yarnCache}"
-  '' + lib.optionalString stdenv.isLinux ''
-    # set nodedir, so we can build binaries later
-    npm config set nodedir "${nodeSources}"
+
+    # set nodedir to prevent node-gyp from downloading headers
+    # taken from https://nixos.org/manual/nixpkgs/stable/#javascript-tool-specific
+    mkdir -p $HOME/.node-gyp/${nodejs.version}
+    echo 9 > $HOME/.node-gyp/${nodejs.version}/installVersion
+    ln -sfv ${nodejs}/include $HOME/.node-gyp/${nodejs.version}
+    export npm_config_nodedir=${nodejs}
+
+    # use updated node-gyp. fixes the following error on Darwin:
+    # PermissionError: [Errno 1] Operation not permitted: '/usr/sbin/pkgutil'
+    export npm_config_node_gyp=${node-gyp}/lib/node_modules/node-gyp/bin/node-gyp.js
   '';
 
   buildPhase = ''
