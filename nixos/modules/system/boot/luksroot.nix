@@ -459,7 +459,6 @@ let
             fido2luks open ${dev.device} ${dev.name} ${dev.fido2.credential} \
               ${optionalString dev.fido2.askForPin "--pin --pin-source=/crypt-ramfs/passphrase"} \
               --await-dev ${toString dev.fido2.gracePeriod} --salt string:$passphrase
-            ${optionalString dev.fido2.askForPin "rm /crypt-ramfs/passphrase"}
         if [ $? -ne 0 ]; then
           echo "No FIDO2 key found, falling back to normal open procedure"
           open_normally
