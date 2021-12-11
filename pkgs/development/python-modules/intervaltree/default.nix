@@ -1,13 +1,15 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromGitHub
 , python, pytest, sortedcontainers }:
 
 buildPythonPackage rec {
   version = "3.1.0";
   pname = "intervaltree";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "902b1b88936918f9b2a19e0e5eb7ccb430ae45cde4f39ea4b36932920d33952d";
+  src = fetchFromGitHub {
+     owner = "chaimleib";
+     repo = "intervaltree";
+     rev = "3.1.0";
+     sha256 = "0d9jfbramihsg7d2axxh4s3kkkrbd6ch555nf7g1l3zjxvp8kxw9";
   };
 
   buildInputs = [ pytest ];
