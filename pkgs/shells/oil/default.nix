@@ -95,6 +95,7 @@ stdenv.mkDerivation {
   '';
 
   buildPhase = ''
+    build/dev.sh yajl
     make _bin/oil.ovm-dbg -J$NIX_BUILD_CORES
     make _release/oil.tar -J$NIX_BUILD_CORES
   '';
