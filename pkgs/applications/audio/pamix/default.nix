@@ -14,8 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    # Fix pending upstream inclusion for ncurses-6.3 support:
-    #  https://github.com/patroclos/PAmix/pull/73
+    # ncurses-6.3 support, included in next release
     (fetchpatch {
       name = "ncurses-6.3-p1.patch";
       url = "https://github.com/patroclos/PAmix/commit/3400b9c048706c572373e4617b4d5fcdb8dd2505.patch";
