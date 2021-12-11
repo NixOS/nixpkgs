@@ -31,6 +31,6 @@ stdenv.mkDerivation {
     homepage = "https://minecraft.net";
     license = licenses.unfreeRedistributable;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ thoughtpolice tomberek costrouc ];
+    maintainers = with maintainers; [ thoughtpolice tomberek costrouc jyooru ];
   };
 }
