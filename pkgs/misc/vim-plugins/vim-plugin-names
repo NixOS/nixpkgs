@@ -192,6 +192,7 @@ gfanto/fzf-lsp.nvim
 ggandor/lightspeed.nvim
 gibiansky/vim-textobj-haskell
 gioele/vim-autoswap
+github/copilot.vim
 gleam-lang/gleam.vim
 glepnir/dashboard-nvim
 glepnir/galaxyline.nvim
