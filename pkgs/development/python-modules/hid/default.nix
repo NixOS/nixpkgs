@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , hidapi
 , nose
 }:
@@ -9,9 +9,11 @@ buildPythonPackage rec {
   pname = "hid";
   version = "1.0.4";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-9hsDgvN6M0vIuoYEvIS5SHXuT1lPu6+CssOz6CeIP8E=";
+  src = fetchFromGitHub {
+     owner = "apmorton";
+     repo = "pyhidapi";
+     rev = "1.0.4";
+     sha256 = "0n0hv9x8g2wpn69jmh9k03lxvk8ljlc4j7rfzdxx4jwy37h2xid4";
   };
 
   propagatedBuildInputs = [ hidapi ];
