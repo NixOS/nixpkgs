@@ -23542,6 +23542,8 @@ with pkgs;
 
   nordic = callPackage ../data/themes/nordic { };
 
+  nordzy-cursor-theme = callPackage ../data/icons/nordzy-cursor-theme { };
+
   inherit (callPackages ../data/fonts/noto-fonts {})
     noto-fonts noto-fonts-cjk noto-fonts-emoji noto-fonts-emoji-blob-bin noto-fonts-extra;
 
