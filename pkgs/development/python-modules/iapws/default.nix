@@ -1,12 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, scipy }:
+{ lib, buildPythonPackage, fetchFromGitHub, scipy }:
 
 buildPythonPackage rec {
   pname = "iapws";
   version = "1.5.2";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "781285acaedff49d72c074aa308aabf7ca17f486cca490e5ed3f35526bbe4153";
+  src = fetchFromGitHub {
+     owner = "jjgomera";
+     repo = "iapws";
+     rev = "v1.5.2";
+     sha256 = "1pj1wgb7ri69aprjqy19rnz7wzn63xlazg6gw5s1gjinpmmsix0f";
   };
 
   propagatedBuildInputs = [ scipy ];
