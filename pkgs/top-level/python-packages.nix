@@ -2680,6 +2680,8 @@ in {
 
   fastcache = callPackage ../development/python-modules/fastcache { };
 
+  fastcore = callPackage ../development/python-modules/fastcore { };
+
   fastdiff = callPackage ../development/python-modules/fastdiff { };
 
   fastdtw = callPackage ../development/python-modules/fastdtw { };
