@@ -3,13 +3,13 @@
 buildKodiBinaryAddon rec {
   pname = "inputstream-rtmp";
   namespace = "inputstream.rtmp";
-  version = "3.4.0";
+  version = "19.0.0";
 
   src = fetchFromGitHub {
     owner = "xbmc";
     repo = "inputstream.rtmp";
     rev = "${version}-${rel}";
-    sha256 = "1q4k6plkjasnjs7gnbcc1x2mwr562ach7bkqk1z1y343s0dp9qnq";
+    sha256 = "sha256-76yGttcLJJ5XJKsFJ3GnEuPs9+9J0Tr8Znm45676OI8=";
   };
 
   extraBuildInputs = [ openssl rtmpdump zlib ];
