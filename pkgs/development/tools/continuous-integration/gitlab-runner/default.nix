@@ -22,7 +22,10 @@ buildGoPackage rec {
     sha256 = "07mr9w1rp3rnrlixmqziin1gw78s3gncg47b4z9h9zzpy3acy3xd";
   };
 
-  patches = [ ./fix-shell-path.patch ];
+  patches = [
+    ./fix-shell-path.patch
+    ./0001-gitlab-runner-don-t-checked-for-fixed-runtime.patch
+  ];
 
   meta = with lib; {
     description = "GitLab Runner the continuous integration executor of GitLab";
