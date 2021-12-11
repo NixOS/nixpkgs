@@ -2,11 +2,11 @@
 
 tcl.mkTclDerivation rec {
   pname = "incrtcl";
-  version = "4.2.0";
+  version = "4.2.2";
 
   src = fetchurl {
     url    = "mirror://sourceforge/incrtcl/%5BIncr%20Tcl_Tk%5D-source/3.4/itcl${version}.tar.gz";
-    sha256 = "0w28v0zaraxcq1s9pa6cihqqwqvvwfgz275lks7w4gl7hxjxmasw";
+    sha256 = "sha256-rExnDq8bWyVb/KzKgyCzPVa72S/VRGPGPW9pmocOFWw=";
   };
 
   enableParallelBuilding = true;
