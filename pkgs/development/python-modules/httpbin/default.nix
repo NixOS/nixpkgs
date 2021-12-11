@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , flask
 , flask-limiter
 , markupsafe
@@ -15,9 +15,11 @@ buildPythonPackage rec {
   pname = "httpbin";
   version = "0.7.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1yldvf3585zcwj4vxvfm4yr9wwlz3pa2mx2pazqz8x8mr687gcyb";
+  src = fetchFromGitHub {
+     owner = "kennethreitz";
+     repo = "httpbin";
+     rev = "v0.7.0";
+     sha256 = "1r9zcccsibp98844nb439zkd89q6795v6rl5wgsczndh27hpdcdj";
   };
 
   propagatedBuildInputs = [ brotlipy flask flask-limiter markupsafe decorator itsdangerous raven six ];
