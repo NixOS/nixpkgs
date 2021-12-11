@@ -1574,7 +1574,7 @@ dont-distribute-packages:
  - hmeap
  - hmeap-utils
  - hmep
- - hmm-lapack_0_4_1
+ - hmm-lapack_0_5
  - hmt
  - hmt-diagrams
  - hnormalise
@@ -1920,7 +1920,7 @@ dont-distribute-packages:
  - language-python-colour
  - language-qux
  - language-spelling
- - lapack_0_4
+ - lapack_0_5
  - lat
  - latex-formulae-hakyll
  - latex-formulae-pandoc

@@ -275,6 +275,13 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://maddy.email">maddy</link>, a
+          composable all-in-one mail server. Available as
+          <link xlink:href="options.html#opt-services.maddy.enable">services.maddy</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://sr.ht">sourcehut</link>, a
           collection of tools useful for software development. Available
           as

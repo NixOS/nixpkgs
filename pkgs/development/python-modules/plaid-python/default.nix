@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "plaid-python";
-  version = "8.6.0";
+  version = "8.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "da3570fedbc096aa058affa72fc71905401b373a5b0d28b7c27e7af7998859d9";
+    sha256 = "16b23f61deab24d406536a1fd172da77bcbb28b3ca322245b8ee9203350fb57d";
   };
 
   propagatedBuildInputs = [

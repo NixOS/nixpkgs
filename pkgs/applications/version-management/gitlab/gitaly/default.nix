@@ -33,7 +33,7 @@ let
       };
   };
 
-  version = "14.5.1";
+  version = "14.5.2";
   gitaly_package = "gitlab.com/gitlab-org/gitaly/v${lib.versions.major version}";
 in
 
@@ -45,7 +45,7 @@ buildGoModule {
     owner = "gitlab-org";
     repo = "gitaly";
     rev = "v${version}";
-    sha256 = "sha256-AWY/jUIytK/8nrCH2EMrzQ9e0dc9VpZFkO7NhrrqoGg=";
+    sha256 = "sha256-x8LRBd0bw1JipBu3MbV0d8WFIFPD7joZDBGOr1gstMg=";
   };
 
   vendorSha256 = "sha256-ZLd4E3+e25Hqmd6ZyF3X6BveMEg7OF0FX9IvNBWn3v0=";
@@ -72,7 +72,7 @@ buildGoModule {
   meta = with lib; {
     homepage = "https://gitlab.com/gitlab-org/gitaly";
     description = "A Git RPC service for handling all the git calls made by GitLab";
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ [ "x86_64-darwin" ];
     maintainers = with maintainers; [ roblabla globin fpletz talyz ];
     license = licenses.mit;
   };

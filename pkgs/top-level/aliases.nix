@@ -466,6 +466,7 @@ mapAliases ({
   libwnck3 = libwnck;
   lilypond-unstable = lilypond; # added 2021-03-11
   links = links2; # added 2016-01-31
+  linuxband = throw "linuxband has been removed from nixpkgs, as it's abandoned upstream."; # added 2021-12-09
   linux_rpi0 = linuxKernel.kernels.linux_rpi1;
   linuxPackages_rpi0 = linuxKernel.packages.linux_rpi1;
   linuxPackages_rt_5_4 = linuxKernel.packages.linux_rt_5_4;
@@ -481,7 +482,6 @@ mapAliases ({
   linuxPackages_4_19 = linuxKernel.packages.linux_4_19;
   linuxPackages_5_4 = linuxKernel.packages.linux_5_4;
   linuxPackages_5_10 = linuxKernel.packages.linux_5_10;
-  linuxPackages_5_14 = linuxKernel.packages.linux_5_14;
   linuxPackages_5_15 = linuxKernel.packages.linux_5_15;
 
   linux_mptcp_95 = linuxKernel.kernels.linux_mptcp_95;
@@ -497,7 +497,6 @@ mapAliases ({
   linux-rt_5_4 = linuxKernel.kernels.linux_rt_5_4;
   linux_5_10 = linuxKernel.kernels.linux_5_10;
   linux-rt_5_10 = linuxKernel.kernels.linux_rt_5_10;
-  linux_5_14 = linuxKernel.kernels.linux_5_14;
   linux_5_15 = linuxKernel.kernels.linux_5_15;
 
   # added 2020-04-04

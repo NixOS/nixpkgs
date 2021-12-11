@@ -1,4 +1,5 @@
-{ mkXfceDerivation
+{ lib
+, mkXfceDerivation
 , clutter
 , libXcomposite
 , libXinerama
@@ -39,7 +40,8 @@ mkXfceDerivation {
     xfconf
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Gnome shell like dashboard";
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

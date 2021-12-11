@@ -12,14 +12,14 @@
 
 stdenv.mkDerivation rec {
   pname = "ofono";
-  version = "1.32";
+  version = "1.33";
 
   outputs = [ "out" "dev" ];
 
   src = fetchgit {
     url = "git://git.kernel.org/pub/scm/network/ofono/ofono.git";
     rev = version;
-    sha256 = "sha256-bJ7Qgau5soPiptrhcMZ8rWxfprRCTeR7OjQ5HZQ9hbc=";
+    sha256 = "sha256-UTFP69yv1epVrqBoRKCRcR2WiKBG01sLTzrsh/Nude4=";
   };
 
   patches = [

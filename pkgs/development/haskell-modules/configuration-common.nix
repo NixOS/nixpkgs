@@ -946,12 +946,7 @@ self: super: {
   dhall-json = generateOptparseApplicativeCompletions ["dhall-to-json" "dhall-to-yaml"] (dontCheck super.dhall-json);
   dhall-nix = generateOptparseApplicativeCompletion "dhall-to-nix" super.dhall-nix;
   dhall-yaml = generateOptparseApplicativeCompletions ["dhall-to-yaml-ng" "yaml-to-dhall"] super.dhall-yaml;
-  # Too strict lower bound on base64-bytestring
-  # https://github.com/dhall-lang/dhall-haskell/issues/2346
-  dhall-nixpkgs = overrideCabal (drv: {
-    revision = assert !(drv ? revision); "1";
-    editedCabalFile = "0ld4z4d3gw9mxyhm5g2hgw4w68izjnwrcqd6j7yhwhrblhdmqrr4";
-  }) (generateOptparseApplicativeCompletion "dhall-to-nixpkgs" super.dhall-nixpkgs);
+  dhall-nixpkgs = generateOptparseApplicativeCompletion "dhall-to-nixpkgs" super.dhall-nixpkgs;
 
   # https://github.com/haskell-hvr/netrc/pull/2#issuecomment-469526558
   netrc = doJailbreak super.netrc;
@@ -1354,21 +1349,21 @@ self: super: {
     resource-pool = self.hasura-resource-pool;
     ekg-core = self.hasura-ekg-core;
     ekg-json = self.hasura-ekg-json;
-    hspec = dontCheck self.hspec_2_9_2;
-    hspec-core = dontCheck self.hspec-core_2_9_2;
-    hspec-discover = dontCheck super.hspec-discover_2_9_2;
+    hspec = dontCheck self.hspec_2_9_3;
+    hspec-core = dontCheck self.hspec-core_2_9_3;
+    hspec-discover = dontCheck super.hspec-discover_2_9_3;
     tasty-hspec = self.tasty-hspec_1_2;
   }));
   hasura-ekg-core = doJailbreak (super.hasura-ekg-core.overrideScope (self: super: {
-    hspec = dontCheck self.hspec_2_9_2;
-    hspec-core = dontCheck self.hspec-core_2_9_2;
-    hspec-discover = dontCheck super.hspec-discover_2_9_2;
+    hspec = dontCheck self.hspec_2_9_3;
+    hspec-core = dontCheck self.hspec-core_2_9_3;
+    hspec-discover = dontCheck super.hspec-discover_2_9_3;
   }));
   hasura-ekg-json = super.hasura-ekg-json.overrideScope (self: super: {
     ekg-core = self.hasura-ekg-core;
-    hspec = dontCheck self.hspec_2_9_2;
-    hspec-core = dontCheck self.hspec-core_2_9_2;
-    hspec-discover = dontCheck super.hspec-discover_2_9_2;
+    hspec = dontCheck self.hspec_2_9_3;
+    hspec-core = dontCheck self.hspec-core_2_9_3;
+    hspec-discover = dontCheck super.hspec-discover_2_9_3;
   });
   pg-client = overrideCabal (drv: {
     librarySystemDepends = with pkgs; [ postgresql krb5.dev openssl.dev ];
@@ -2008,7 +2003,7 @@ EOT
   ghcup = doJailbreak (super.ghcup.overrideScope (self: super: {
     hspec-golden-aeson = self.hspec-golden-aeson_0_9_0_0;
     optics = self.optics_0_4;
-    streamly = self.streamly_0_8_1;
+    streamly = self.streamly_0_8_1_1;
     Cabal = self.Cabal_3_6_2_0;
     libyaml-streamly = markUnbroken super.libyaml-streamly;
   }));
@@ -2100,9 +2095,9 @@ EOT
   # Jailbreak isn't sufficient, but this is ok as it's a leaf package.
   hadolint = super.hadolint.overrideScope (self: super: {
     language-docker = self.language-docker_10_4_0;
-    hspec = dontCheck self.hspec_2_9_2;
-    hspec-core = dontCheck self.hspec-core_2_9_2;
-    hspec-discover = dontCheck self.hspec-discover_2_9_2;
+    hspec = dontCheck self.hspec_2_9_3;
+    hspec-core = dontCheck self.hspec-core_2_9_3;
+    hspec-discover = dontCheck self.hspec-discover_2_9_3;
     colourista = doJailbreak super.colourista;
   });
 
@@ -2125,5 +2120,8 @@ EOT
   # Too strict bounds on recursive-zipper
   # https://github.com/ChrisPenner/jet/issues/1
   jet = doJailbreak super.jet;
+
+  # Use latest version until next Stackage LTS snapshot
+  Agda = doDistribute self.Agda_2_6_2_1;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
