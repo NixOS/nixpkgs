@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "celery";
-  version = "5.2.0";
+  version = "5.2.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4d858a8fe53c07a9f0cbf8cf1da28e8abe5464d0aba5713bf83908e74277734b";
+    sha256 = "sha256-tBpZC0nK+OZJilfbYo5YDV+Nxv69oPQt5deDrtW3+Ag=";
   };
 
   propagatedBuildInputs = [ billiard click click-didyoumean click-plugins click-repl kombu pytz vine ];
