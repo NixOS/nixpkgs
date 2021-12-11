@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , nose
 , cython
 , numpy
@@ -10,9 +10,11 @@ buildPythonPackage rec {
   version = "0.14.2";
   pname = "hdmedians";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "b47aecb16771e1ba0736557255d80ae0240b09156bff434321de559b359ac2d6";
+  src = fetchFromGitHub {
+     owner = "daleroberts";
+     repo = "hdmedians";
+     rev = "v0.14.2";
+     sha256 = "033lszvdgcv47zyc6azy21w7adn37gk717yv006xwl81kkhdrhkq";
   };
 
   # nose was specified in setup.py as a build dependency...
