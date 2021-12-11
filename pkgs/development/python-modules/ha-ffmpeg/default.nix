@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k
+{ lib, buildPythonPackage, fetchFromGitHub, isPy3k
 , async-timeout }:
 
 buildPythonPackage rec {
@@ -7,9 +7,11 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "8d92f2f5790da038d828ac862673e0bb43e8e972e4c70b1714dd9a0fb776c8d1";
+  src = fetchFromGitHub {
+     owner = "pvizeli";
+     repo = "ha-ffmpeg";
+     rev = "3.0.2";
+     sha256 = "0xh54f1m0c5y145dnm1hv18n0kk0d0iy44gd3jwil7gjfn7q98q6";
   };
 
   propagatedBuildInputs = [ async-timeout ];
