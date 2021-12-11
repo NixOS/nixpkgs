@@ -13,5 +13,5 @@ addEnvHooks "$hostOffset" gettextDataDirsHook
 if [ -n "@gettextNeedsLdflags@" -a -z "${dontAddExtraLibs-}" ]; then
     # See pkgs/build-support/setup-hooks/role.bash
     getHostRole
-    export NIX_LDFLAGS${role_post}+=" -lintl"
+    exportAppend "NIX_LDFLAGS$role_post" " -lintl"
 fi

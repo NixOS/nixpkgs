@@ -249,6 +249,16 @@ printWords() {
     printf '%s ' "$@"
 }
 
+# This function was created to separate the assign and the export step of a dynamic variable
+# abstracted in a function since used in several places
+# Note: $append can't contain " (double quotes)
+exportAppend() {
+    local ref="$1"
+    local append="$2"
+    eval "$ref=\"${!ref:-}$append\""
+    export "$ref"
+}
+
 ######################################################################
 # Initialisation.
 
