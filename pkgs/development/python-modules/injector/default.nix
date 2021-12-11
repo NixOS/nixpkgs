@@ -1,12 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, typing-extensions }:
+{ lib, buildPythonPackage, fetchFromGitHub, typing-extensions }:
 
 buildPythonPackage rec {
   pname = "injector";
   version = "0.18.4";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "10miwi58g4b8rvdf1pl7s7x9j91qyxxv3kdn5idzkfc387hqxn6f";
+  src = fetchFromGitHub {
+     owner = "alecthomas";
+     repo = "injector";
+     rev = "0.18.4";
+     sha256 = "1axn2sbimj8fyr4zjgxf569h9hq1xn6xqnmpfkfnnazy2im4nm9n";
   };
 
   propagatedBuildInputs = [ typing-extensions ];
