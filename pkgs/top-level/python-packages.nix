@@ -9041,6 +9041,8 @@ in {
 
   spotipy = callPackage ../development/python-modules/spotipy { };
 
+  spur = callPackage ../development/python-modules/spur { };
+
   spyder = callPackage ../development/python-modules/spyder { };
 
   spyder-kernels = callPackage ../development/python-modules/spyder-kernels { };
