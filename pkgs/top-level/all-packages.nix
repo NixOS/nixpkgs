@@ -20952,6 +20952,8 @@ with pkgs;
 
   leafnode = callPackage ../servers/news/leafnode { };
 
+  ledfx = callPackage ../servers/home-automation/ledfx { };
+
   lemmy-server = callPackage ../servers/web-apps/lemmy/server.nix {
     inherit (darwin.apple_sdk.frameworks) Security;
   };

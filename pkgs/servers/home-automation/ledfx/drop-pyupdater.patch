@@ -1,0 +1,42 @@
+diff --git a/ledfx/__main__.py b/ledfx/__main__.py
+index 85361d67..4d9d10b9 100644
+--- a/ledfx/__main__.py
++++ b/ledfx/__main__.py
+@@ -23,7 +23,7 @@ import sys
+ import warnings
+ from logging.handlers import RotatingFileHandler
+ 
+-from pyupdater.client import Client
++#from pyupdater.client import Client
+ 
+ import ledfx.config as config_helpers
+ from ledfx.consts import (
+@@ -199,6 +199,8 @@ def installed_via_pip():
+     Returns:
+         boolean
+     """
++    return True
++
+     pip_package_command = subprocess.check_output(
+         [sys.executable, "-m", "pip", "freeze"]
+     )
+@@ -212,6 +214,7 @@ def installed_via_pip():
+ 
+ 
+ def update_ledfx():
++    return
+ 
+     # initialize & refresh in one update, check client
+ 
+diff --git a/setup.py b/setup.py
+index dabea5e0..3546f3c0 100644
+--- a/setup.py
++++ b/setup.py
+@@ -37,7 +37,6 @@ INSTALL_REQUIRES = [
+     "zeroconf<=0.28.8||>=0.30.0",
+     'pywin32>=300; platform_system == "Windows"',
+     "cython>=0.29.21",
+-    "pyupdater>=4.0.0",
+     "sentry-sdk~=1.1.0",
+     "certifi>=2020.12.5",
+     "pyserial>=3.5",
