@@ -2554,6 +2554,8 @@ with pkgs;
 
   cz-cli = callPackage ../applications/version-management/cz-cli {};
 
+  comma = callPackage ../tools/package-management/comma { };
+
   common-licenses = callPackage ../data/misc/common-licenses {};
 
   compactor = callPackage ../applications/networking/compactor { };
