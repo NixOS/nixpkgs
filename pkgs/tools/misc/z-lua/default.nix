@@ -24,9 +24,13 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/z.lua --set LUA_CPATH "${lua52Packages.luafilesystem}/lib/lua/5.2/lfs.so" --set _ZL_USE_LFS 1;
     # Create symlink for backwards compatibility. See: https://github.com/NixOS/nixpkgs/pull/96081
     ln -s $out/bin/z.lua $out/bin/z
+    ${lib.concatMapStrings (sh:"$out/bin/z --init ${sh} > $interactiveShellInit_${sh};") shells}
 
     runHook postInstall
   '';
+
+  shells = ["bash" "fish" "zsh"];
+  outputs = ["out"] ++ (map (sh:"interactiveShellInit_${sh}"));
 
   meta = with lib; {
     homepage = "https://github.com/skywind3000/z.lua";
