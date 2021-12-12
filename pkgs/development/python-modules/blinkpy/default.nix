@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "blinkpy";
-  version = "0.17.1";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "fronzbot";
     repo = "blinkpy";
     rev = "v${version}";
-    sha256 = "11h4r2vkrlxwjig1lay1n5wpny5isfgz85f7lsn8ndnqa2wpsymp";
+    sha256 = "1vmi8r48kcg79nf890r2fqfk9syih8rs1d5va7dr64shflcyi8gp";
   };
 
   propagatedBuildInputs = [
