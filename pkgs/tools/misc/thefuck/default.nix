@@ -14,7 +14,7 @@
 , runCommandLocal
 }:
 
-let self = buildPythonApplication {
+let self = buildPythonApplication rec {
   pname = "thefuck";
   version = "3.32";
 
@@ -46,20 +46,24 @@ let self = buildPythonApplication {
     "test_when_successfully_configured"
   ];
 
-  passthru.mkShellPkg = let shells = [ "bash" "fish" "zsh" ]; in
+  passthru.mkShellPkg =
     { alias ? "fuck"
     , instantMode ? false
     , noConfirm ? false
     , recursive ? false
-    }: runCommandLocal "thefuck-shellPkgs-${self.version}"
+    }: runCommandLocal "thefuck-shellPkgs-${version}"
       {
-        outputs = map (sh: "interactiveShellInit_${sh}") self.shells;
+        outputs = map (sh: "interactiveShellInit_${sh}")
+          ([ "bash" "zsh" ] ++ lib.optional (!instantMode) "fish"); # instant mode does not support fish
       } ''
       ${self}/bin/thefuck --alias ${alias} \
         ${lib.optionalString instantMode "--enable-experimental-instant-mode"} \
         ${lib.optionalString recursive "-r"} \
         ${lib.optionalString noConfirm "--yes"} > out.sh
-      ${lib.concatMapStrings (sh:"cp out.sh $interactiveShellInit_${sh};") shells}
+      for o in $outputs
+      do
+        cp out.sh ''${!o}
+      done
     '';
 
   meta = with lib; {
