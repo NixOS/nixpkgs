@@ -31242,6 +31242,8 @@ with pkgs;
 
   pop-launcher = callPackage ../desktops/gnome/core/pop-launcher { };
 
+  pop-shell-shortcuts = callPackage ../desktops/gnome/core/pop-shell-shortcuts { };
+
   latte-dock = libsForQt5.callPackage ../applications/misc/latte-dock { };
 
   gnome-themes-extra = gnome.gnome-themes-extra;
