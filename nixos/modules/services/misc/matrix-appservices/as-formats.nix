@@ -81,7 +81,6 @@ in
         id = "${botName}-puppet";
         sender_localpart = "_${botName}puppet_bot";
         protocols = [ ];
-        "de.sorunome.msc2409.push_ephemeral" = true;
         namespaces = {
           rooms = [ ];
           users = [

@@ -106,7 +106,7 @@ in
       };
 
       homeserver = mkOption {
-        type = types.enum [ "matrix-synapse" null ];
+        type = types.enum [ "matrix-synapse" "dendrite" null ];
         default = "matrix-synapse";
         description = ''
           The homeserver software the appservices connect to. This will ensure appservices
@@ -161,13 +161,18 @@ in
     systemd.services = (mapAttrs' (n: v: nameValuePair "matrix-as-${n}" (mkService n v)) cfg.services) // {
       # Add the matrix service to the groups of all appservices to give access to the registration file
       matrix-synapse.serviceConfig.SupplementaryGroups = mapAttrsToList (n: v: "matrix-as-${n}") cfg.services;
+      dendrite.serviceConfig.SupplementaryGroups = mapAttrsToList (n: v: "matrix-as-${n}") cfg.services;
     };
 
-    services = mkIf cfg.addRegistrationFiles {
-      matrix-synapse.app_service_config_files = mkIf (cfg.homeserver == "matrix-synapse")
-        (mapAttrsToList (n: _: "/var/lib/matrix-as-${n}/${n}-registration.yaml")
-          (filterAttrs (_: v: v.registrationData != { }) cfg.services));
-    };
+    services =
+      let
+        registrationFiles = mapAttrsToList (n: _: "/var/lib/matrix-as-${n}/${n}-registration.yaml")
+            (filterAttrs (_: v: v.registrationData != { }) cfg.services);
+      in
+      mkIf cfg.addRegistrationFiles {
+        matrix-synapse.app_service_config_files = mkIf (cfg.homeserver == "matrix-synapse") registrationFiles;
+        dendrite.settings.app_service_api.config_files = mkIf (cfg.homeserver == "dendrite") registrationFiles;
+      };
   };
 
   meta.maintainers = with maintainers; [ pacman99 Flakebi ];
