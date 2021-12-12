@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "GoogleContainerTools";
     repo = "skaffold";
     rev = "v${version}";
-    sha256 = "sha256-+VnZoZhBooLue+82zOngij8PpH9/wtZkYiyfklHSpsQ=";
+    sha256 = "sha256-8Ye2eR9eB7oyYOo46OraOxfLOG/XphWJkk+xPzDthPU=";
   };
 
   vendorSha256 = "sha256-jr4HEs2mTRPNAiV/OWUnjYyQ1uSUJfVOTNCRi/18tEo=";
