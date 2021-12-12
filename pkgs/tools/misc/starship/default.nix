@@ -31,12 +31,19 @@ rustPlatform.buildRustPackage rec {
   # the "notify" feature is currently broken on darwin
   buildFeatures = if stdenv.isDarwin then [ "battery" ] else [ "default" ];
 
-  postInstall = ''
-    for shell in bash fish zsh; do
-      STARSHIP_CACHE=$TMPDIR $out/bin/starship completions $shell > starship.$shell
-      installShellCompletion starship.$shell
-    done
-  '';
+  shells = ["bash" "fish" "zsh"];
+  outputs = ["out"] ++ (map (sh:"interactiveShellInit_${sh}") shells);
+  postInstall = lib.concatMapStrings (sh: ''
+  
+    STARSHIP_CACHE=$TMPDIR $out/bin/starship completions ${sh} > starship.${sh}
+    installShellCompletion starship.${sh}
+    (
+      echo 'if [[ $TERM != "dumb" && (-z $INSIDE_EMACS || $INSIDE_EMACS == "vterm") ]]; then'
+      $out/bin/starship init ${sh}
+      echo fi
+    ) > $interactiveShellInit_${sh}
+
+  '') shells;
 
   cargoSha256 = "sha256-6y0Du3YGfH+SDbG3NdokJyG+Y1q5cI4UZp6XwFdvYxk=";
 
