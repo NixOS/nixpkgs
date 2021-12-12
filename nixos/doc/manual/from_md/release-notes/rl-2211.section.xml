@@ -121,6 +121,14 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://asus-linux.org/asusctl">asusd</link>,
+          an utility for controlling the lighting, fan curve, GPU mode
+          and more on supported Asus laptops. Available at
+          [services.asusd].
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://dragonflydb.io/">dragonflydb</link>,
           a modern replacement for Redis and Memcached. Available as
           <link linkend="opt-services.dragonflydb.enable">services.dragonflydb</link>.
