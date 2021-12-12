@@ -14,13 +14,13 @@ let
   ]);
 in stdenv.mkDerivation rec {
   pname = "wike";
-  version = "1.6.2";
+  version = "1.6.3";
 
   src = fetchFromGitHub {
     owner = "hugolabe";
     repo = "Wike";
     rev = version;
-    sha256 = "sha256-23tmp0Cyr6O7Z2loLI0PHOxJGyE27RNmY7PoKBctt44=";
+    sha256 = "sha256-yyifRUf7oITV9lpnHnadZwHOKHr0Z+4bjCV/WoYs6vY=";
   };
 
   nativeBuildInputs = [
