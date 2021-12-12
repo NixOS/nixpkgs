@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "sarge";
-  version = "0.1.7";
+  version = "0.1.7.post1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3b810d396a75a5a2805272f64f4316f6dcc086e0a744b042cdb0effc85c0f21b";
+    sha256 = "64ff42ae6ef90acbded6318ed440ed63b31a669302fb60cf41265debea282a3d";
   };
 
   # No tests in PyPI tarball
