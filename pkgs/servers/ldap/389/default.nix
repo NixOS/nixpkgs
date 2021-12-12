@@ -43,13 +43,13 @@
 
 stdenv.mkDerivation rec {
   pname = "389-ds-base";
-  version = "2.0.7";
+  version = "2.0.11";
 
   src = fetchFromGitHub {
     owner = "389ds";
     repo = pname;
     rev = "${pname}-${version}";
-    sha256 = "sha256-aM1qo+yHrCFespPWHv2f25ooqQVCIZGaZS43dY6kiC4=";
+    sha256 = "sha256-IYXupcIyjSegOkR3txoAoaNliOEiqXfp61b9Xsj9ZNs=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config doxygen ];
