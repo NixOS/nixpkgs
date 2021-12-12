@@ -4,7 +4,7 @@
 
 { toolsVersion ? "26.1.1"
 , platformToolsVersion ? "31.0.3"
-, buildToolsVersions ? [ "31.0.0" ]
+, buildToolsVersions ? [ "32.0.0" ]
 , includeEmulator ? false
 , emulatorVersion ? "30.6.3"
 , platformVersions ? []
