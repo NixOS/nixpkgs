@@ -17087,6 +17087,8 @@ with pkgs;
 
   ilmbase = callPackage ../development/libraries/ilmbase { };
 
+  imgui = callPackage ../development/libraries/imgui { };
+
   imlib = callPackage ../development/libraries/imlib {
     libpng = libpng12;
   };
