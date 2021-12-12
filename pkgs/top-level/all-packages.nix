@@ -29153,7 +29153,7 @@ with pkgs;
 
   vym = qt5.callPackage ../applications/misc/vym { };
 
-  wad = python3Packages.callPackage ../tools/security/wad { };
+  wad = callPackage ../tools/security/wad { };
 
   wafw00f = python3Packages.callPackage ../tools/security/wafw00f { };
 
