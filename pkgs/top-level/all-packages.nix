@@ -23028,8 +23028,6 @@ with pkgs;
     withTpm2Tss = false;
     withUserDb = false;
     glib = null;
-
-    lvm2 = null;
   };
 
 
