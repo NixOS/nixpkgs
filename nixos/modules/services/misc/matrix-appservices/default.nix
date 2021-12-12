@@ -17,6 +17,15 @@ let
       settingsData = settingsFormat.generate "config.json" settings;
       settingsFile = "${dataDir}/config.json";
       serviceDeps = [ "network-online.target" ] ++ serviceDependencies;
+
+      registrationContent = {
+        id = name;
+        url =  "http://${host}:${toString port}";
+        as_token = "$AS_TOKEN";
+        hs_token = "$HS_TOKEN";
+        sender_localpart = "$SENDER_LOCALPART";
+        rate_limited = false;
+      } // registrationData;
     in
     {
       description = "A matrix appservice for ${name}.";
@@ -35,22 +44,24 @@ let
       };
 
       preStart = ''
-        ${pkgs.envsubst}/bin/envsubst \
-          -i ${settingsData} \
-          -o ${settingsFile}
-        chmod 640 ${settingsFile}
+        if [ ! -f ${registrationFile} ]; then
+          AS_TOKEN=$(cat /proc/sys/kernel/random/uuid) \
+          HS_TOKEN=$(cat /proc/sys/kernel/random/uuid) \
+          SENDER_LOCALPART=$(cat /proc/sys/kernel/random/uuid) \
+          ${pkgs.envsubst}/bin/envsubst \
+            -i ${settingsFormat.generate "config.json" registrationContent} \
+            -o ${registrationFile}
 
-        ${optionalString (registerScript != "") ''
-          if [ ! -f ${registrationFile} ]; then
-            ${preStart}
-            ${registerScript}
-            chmod 640 ${registrationFile}
-          fi
-        ''}
+          chmod 640 ${registrationFile}
+        fi
+
+        AS_TOKEN=$(cat ${registrationFile} | yq .as_token | tr -d '"') \
+        HS_TOKEN=$(cat ${registrationFile} | yq .hs_token | tr -d '"') \
+        ${pkgs.envsubst}/bin/envsubst -i ${settingsData} -o ${settingsFile}
+        chmod 640 ${settingsFile}
       '';
 
       script = ''
-        ${preStart}
         ${startupScript}
       '';
 
@@ -59,6 +70,7 @@ let
         Restart = "always";
 
         ProtectSystem = "strict";
+        PrivateTmp = true;
         ProtectHome = true;
         ProtectKernelTunables = true;
         ProtectKernelModules = true;
@@ -66,7 +78,6 @@ let
 
         User = "matrix-as-${name}";
         Group = "matrix-as-${name}";
-        PrivateTmp = true;
         WorkingDirectory = dataDir;
         StateDirectory = "${baseNameOf dataDir}";
         StateDirectoryMode = "0750";
@@ -155,7 +166,7 @@ in
     services = mkIf cfg.addRegistrationFiles {
       matrix-synapse.app_service_config_files = mkIf (cfg.homeserver == "matrix-synapse")
         (mapAttrsToList (n: _: "/var/lib/matrix-as-${n}/${n}-registration.yaml")
-          (filterAttrs (_: v: v.registerScript != "") cfg.services));
+          (filterAttrs (_: v: v.registrationData != { }) cfg.services));
     };
   };
 

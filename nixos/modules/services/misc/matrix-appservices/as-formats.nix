@@ -1,4 +1,4 @@
-{ systemConfig, asConfig, lib, pkgs, ... }:
+{ name, systemConfig, asConfig, lib, pkgs, ... }:
 
 with lib;
 let
@@ -10,20 +10,7 @@ let
   command = "${package}/bin/${pname}";
 
   mautrix = {
-    registerScript = ''
-      ${command} --generate-registration \
-        --config=$SETTINGS_FILE \
-        --registration=$REGISTRATION_FILE
-    '';
-
-    # mautrix stores the registration tokens in the config file
     startupScript = ''
-      mv $SETTINGS_FILE $SETTINGS_FILE.tmp
-      yq -s '.[0].appservice.as_token = .[1].as_token
-        | .[0].appservice.hs_token = .[1].hs_token
-        | .[0]' $SETTINGS_FILE.tmp $REGISTRATION_FILE \
-        > $SETTINGS_FILE
-
       ${command} --config=$SETTINGS_FILE \
         --registration=$REGISTRATION_FILE
     '';
@@ -34,10 +21,23 @@ let
         domain = homeserverDomain;
       };
 
-      appservice.state_store_path = "$DIR/mx-state.json";
+      appservice = with asConfig; {
+        address = "http://${host}:${toString port}";
 
-      bridge.permissions = {
-        ${homeserverDomain} = "user";
+        hostname = host;
+        inherit port;
+
+        state_store_path = "$DIR/mx-state.json";
+        # mautrix stores the registration tokens in the config file
+        as_token = "$AS_TOKEN";
+        hs_token = "$HS_TOKEN";
+      };
+
+      bridge = {
+        username_template = "${name}_{userid}";
+        permissions = {
+          ${homeserverDomain} = "user";
+        };
       };
     };
   };
@@ -51,52 +51,58 @@ in
   };
 
   matrix-appservice = {
-    registerScript = ''
-      url=$(cat $SETTINGS_FILE | yq .appserviceUrl)
-      if [ -z $url ]; then
-        url="http://localhost:$(cat $SETTINGS_FILE | yq .appservicePort)"
-      fi
-      ${command} --generate-registration \
-        --config=$SETTINGS_FILE --url="$url" \
-        --file=$REGISTRATION_FILE
-    '';
-
     startupScript = ''
-      port=$(cat $SETTINGS_FILE | yq .appservicePort)
-      ${command} --config=$SETTINGS_FILE --url="$url" \
-        --port=$port --file=$REGISTRATION_FILE
+      ${command} \
+        --config=$SETTINGS_FILE \
+        --port=$(echo ${asConfig.listenAddress} | sed 's/.*://') \
+        --file=$REGISTRATION_FILE
     '';
 
     description = ''
       For bridges based on the matrix-appservice-bridge library. The settings for these
       bridges are NOT configured automatically, because of the various differences
-      between them. And you must set appservicePort(and optionally apserviceURL)
-      in the settings to pass to the bridge - these settings are not usually part of the config file.
+      between them.
     '';
   };
 
   mx-puppet = {
-    preStart = ''
-      mv $SETTINGS_FILE $SETTINGS_FILE.tmp
-      yq -s '.[0] * .[1]' \
-        ${package.src}/sample.config.yaml $SETTINGS_FILE.tmp > $SETTINGS_FILE
-    '';
-
-    registerScript = ''
-      ${command} \
-        --register \
-        --config=$SETTINGS_FILE \
-        --registration-file=$REGISTRATION_FILE
-    '';
-
     startupScript = ''
       ${command} \
         --config=$SETTINGS_FILE \
         --registration-file=$REGISTRATION_FILE
     '';
 
+    registrationData =
+      let
+        # mx-puppet virtual users are always created based on the package name
+        botName = removePrefix "mx-puppet-" pname;
+      in
+      {
+        id = "${botName}-puppet";
+        sender_localpart = "_${botName}puppet_bot";
+        protocols = [ ];
+        "de.sorunome.msc2409.push_ephemeral" = true;
+        namespaces = {
+          rooms = [ ];
+          users = [
+            {
+              regex = "@_${botName}puppet_.*:${homeserverDomain}";
+              exclusive = true;
+            }
+          ];
+          aliases = [
+            {
+              regex = "#_${botName}puppet_.*:${homeserverDomain}";
+              exclusive = true;
+            }
+          ];
+        };
+      };
+
     settings = {
       bridge = {
+        inherit (asConfig) port;
+        bindAddress = asConfig.host;
         domain = homeserverDomain;
         homeserverUrl = homeserverURL;
       };
@@ -122,23 +128,13 @@ in
   };
 
   mautrix-go = {
-    inherit (mautrix) registerScript startupScript;
-
-    preStart = ''
-      mv $SETTINGS_FILE $SETTINGS_FILE.tmp
-      yq -s '.[0] * .[1]' \
-        ${package.src}/example-config.yaml $SETTINGS_FILE.tmp > $SETTINGS_FILE
-    '';
+    inherit (mautrix) startupScript;
 
     settings = recursiveUpdate mautrix.settings {
+      bridge.username_template = "${name}_{{.}}";
       appservice.database = {
         type = "sqlite3";
         uri = "$DIR/database.db";
-      };
-      bridge.permissions = {
-        # override defaults
-        "@admin:example.com" = "relaybot";
-        "example.com" = "relaybot";
       };
     };
 
@@ -150,8 +146,6 @@ in
   };
 
   mautrix-python = {
-    inherit (mautrix) registerScript;
-
     settings = recursiveUpdate mautrix.settings {
       appservice.database = "sqlite:///$DIR/database.db";
     };

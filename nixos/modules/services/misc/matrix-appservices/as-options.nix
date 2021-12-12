@@ -1,9 +1,12 @@
 { systemConfig, lib, pkgs, ... }:
 with lib;
-types.submodule ({ config, ... }:
+types.submodule ({ config, name, ... }:
   let
+    inherit (systemConfig.services.matrix-appservices)
+      homeserverDomain;
+
     asFormats = (import ./as-formats.nix) {
-      inherit lib pkgs systemConfig;
+      inherit name lib pkgs systemConfig;
       asConfig = config;
     };
     asFormat = asFormats.${config.format};
@@ -32,7 +35,7 @@ types.submodule ({ config, ... }:
         example = "pkgs.mautrix-whatsapp";
         description = ''
           The package for the appservice. Used by formats except 'other'.
-          This is unecessary if startupScript and registerScript is set.
+          This is unecessary if startupScript is set.
         '';
       };
 
@@ -51,8 +54,11 @@ types.submodule ({ config, ... }:
         '';
         description = ''
           Appservice configuration as a Nix attribute set.
-          All environment variables will be substituted,
-          including $DIR which refers to the appservice's data directory.
+          All environment variables will be substituted.
+          Including:
+            - $DIR which refers to the appservice's data directory.
+            - $AS_TOKEN, $HS_TOKEN which refers to the Appservice and
+                Homeserver registration tokens.
 
           Secret tokens, should be specified in serviceConfig.EnvironmentFile
           instead of this world-readable attribute set.
@@ -63,12 +69,48 @@ types.submodule ({ config, ... }:
         '';
       };
 
-      preStart = mkOption {
-        type = types.str;
-        default = asFormat.preStart or "";
+      registrationData = mkOption {
+        type = settingsFormat.type;
+        default = asFormat.registrationData or {
+          namespaces = {
+            users = [
+              {
+                regex = "@${name}_.*:${homeserverDomain}";
+                exclusive = true;
+              }
+              {
+                regex = "@${name}bot:${homeserverDomain}";
+                exclusive = true;
+              }
+            ];
+          };
+        };
+        defaultText = ''
+          Reserve usernames under the homeserver that start with
+          this appservice's name followed by an _ or "bot"
+        '';
         description = ''
-          Script that is run right before registration and startup.
-          The settings file will be available as $SETTINGS_FILE
+          Data to set in the registration file for the appservice. The default
+          set or the format should usually deal with this.
+        '';
+      };
+
+      host = mkOption {
+        type = types.str;
+        default = "localhost";
+        description = ''
+          The host the appservice will listen on.
+          Will need to specified in config, but most formats will do it for you using
+          this option.
+        '';
+      };
+
+      port = mkOption {
+        type = types.port;
+        description = ''
+          The port the appservice will listen on.
+          Will need to specified in config, but most formats will do it for you using
+          this option.
         '';
       };
 
@@ -79,16 +121,6 @@ types.submodule ({ config, ... }:
           Script that starts the appservice.
           The settings file will be available as $SETTINGS_FILE
           and the registration file as $REGISTRATION_FILE
-        '';
-      };
-
-      registerScript = mkOption {
-        type = types.str;
-        default = asFormat.registerScript or "";
-        description = ''
-          Script that registers the appservice using the settings.
-          The settings file will be available as $SETTINGS_FILE
-          and the registration file must be saved to $REGISTRATION_FILE
         '';
       };
 
