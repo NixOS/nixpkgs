@@ -35543,6 +35543,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
   };
 
+  supergfxctl = callPackage ../tools/misc/supergfxctl { };
+
   dnstake = callPackage ../tools/networking/dnstake {};
 
   dnstracer = callPackage ../tools/networking/dnstracer {

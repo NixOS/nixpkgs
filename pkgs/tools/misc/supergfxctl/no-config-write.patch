@@ -1,0 +1,47 @@
+diff --git a/src/config.rs b/src/config.rs
+index 1967d2d..e385158 100644
+--- a/src/config.rs
++++ b/src/config.rs
+@@ -35,8 +35,6 @@ impl GfxConfig {
+     pub fn load(config_path: String) -> Self {
+         let mut file = OpenOptions::new()
+             .read(true)
+-            .write(true)
+-            .create(true)
+             .open(&config_path)
+             .unwrap_or_else(|_| panic!("The directory {} is missing", config_path)); // okay to cause panic here
+         let mut buf = String::new();
+@@ -44,12 +42,17 @@ impl GfxConfig {
+         if let Ok(read_len) = file.read_to_string(&mut buf) {
+             if read_len == 0 {
+                 config = Self::new(config_path);
+-            } else if let Ok(data) = serde_json::from_str(&buf) {
+-                config = data;
+-                config.config_path = config_path;
+             } else {
+-                warn!("Could not deserialise {}", config_path);
+-                panic!("Please remove {} then restart service", config_path);
++                match serde_json::from_str(&buf) {
++                    Ok(data) => {
++                        config = data;
++                        config.config_path = config_path;
++                    },
++                    Err(e) => {
++                        warn!("Could not deserialise {} due to error {}", config_path, e);
++                        panic!("Please remove {} then restart service", config_path);
++                    }
++                }
+             }
+         } else {
+             config = Self::new(config_path)
+@@ -78,9 +81,6 @@ impl GfxConfig {
+     }
+ 
+     pub fn write(&self) {
+-        let mut file = File::create(&self.config_path).expect("Couldn't overwrite config");
+-        let json = serde_json::to_string_pretty(self).expect("Parse config to JSON failed");
+-        file.write_all(json.as_bytes())
+-            .unwrap_or_else(|err| error!("Could not write config: {}", err));
++        println!("Won't write config since it's managed by nix.")
+     }
+ }
