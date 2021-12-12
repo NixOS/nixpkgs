@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "GoogleContainerTools";
     repo = "skaffold";
     rev = "v${version}";
-    sha256 = "sha256-+VnZoZhBooLue+82zOngij8PpH9/wtZkYiyfklHSpsQ=";
+    sha256 = "sha256-8Ye2eR9eB7oyYOo46OraOxfLOG/XphWJkk+xPzDthPU=";
   };
 
   vendorSha256 = "sha256-jr4HEs2mTRPNAiV/OWUnjYyQ1uSUJfVOTNCRi/18tEo=";
@@ -41,6 +41,6 @@ buildGoModule rec {
       It also provides building blocks and describe customizations for a CI/CD pipeline.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ vdemeester ];
+    maintainers = with maintainers; [ vdemeester bryanasdev000];
   };
 }

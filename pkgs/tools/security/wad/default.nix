@@ -1,31 +1,32 @@
 { lib
-, buildPythonApplication
-, fetchPypi
-, mock
-, pytestCheckHook
-, six
+, fetchFromGitHub
+, python3
 }:
 
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "wad";
   version = "0.4.6";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname;
-    inherit version;
-    sha256 = "02jq77h6g9v7n4qqq7qri6wmhggy257983dwgmpjsf4qsagkgwy8";
+  src = fetchFromGitHub {
+    owner = "CERN-CERT";
+    repo = "WAD";
+    rev = "v${version}";
+    hash = "sha256-/mlmOzFkyKpmK/uk4813Wk0cf/+ynX3Qxafnd1mGR5k=";
   };
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3.pkgs; [
     six
   ];
 
-  checkInputs = [
-    pytestCheckHook
+  checkInputs = with python3.pkgs; [
     mock
+    pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "wad" ];
+  pythonImportsCheck = [
+    "wad"
+  ];
 
   meta = with lib; {
     description = "Tool for detecting technologies used by web applications";
