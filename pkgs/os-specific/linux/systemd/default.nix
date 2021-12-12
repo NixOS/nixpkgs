@@ -123,7 +123,7 @@ assert withHomed -> withCryptsetup;
 assert withCryptsetup -> (cryptsetup != null);
 let
   wantCurl = withRemote || withImportd;
-  version = "249.5";
+  version = "250";
 in
 stdenv.mkDerivation {
   inherit pname version;
@@ -134,12 +134,12 @@ stdenv.mkDerivation {
     owner = "systemd";
     repo = "systemd-stable";
     rev = "v${version}";
-    sha256 = "0bir2syy20rdi59sv8xp8nw1c92zl9z0wmv7ggsll8dca7niqwbp";
+    sha256 = "1m5zs2g8xzmavhjwnlcvfxkgzpbxpdfv5r1smd1h6086w0sksn8z";
   };
 
-  # If these need to be regenerated, `git am path/to/00*.patch` them into a
-  # systemd worktree, rebase to the more recent systemd version, and export the
-  # patches again via `git -c format.signoff=false format-patch v${version}`.
+  # On major changes, or when otherwise required, you *must* reformat the patches,
+  # `git am path/to/00*.patch` them into a systemd worktree, rebase to the more recent
+  # systemd version, and export the patches again via `git -c format.signoff=false format-patch v${version}`.
   # Use `find . -name "*.patch" | sort` to get an up-to-date listing of all patches
   patches = [
     ./0001-Start-device-units-for-uninitialised-encrypted-devic.patch
@@ -160,21 +160,12 @@ stdenv.mkDerivation {
     ./0016-kmod-static-nodes.service-Update-ConditionFileNotEmp.patch
     ./0017-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
     ./0018-pkg-config-derive-prefix-from-prefix.patch
-
     # In v248 or v249 we started to get in trouble due to our
     # /etc/systemd/system being a symlink and thus being treated differently by
     # systemd. With the below patch we mitigate that effect by special casing
     # all our root unit dirs if they are symlinks. This does exactly what we
     # need (AFAICT).
     ./0019-core-handle-lookup-paths-being-symlinks.patch
-
-    # In v248 compiler weirdness and refactoring lead to the bootloader
-    # erroring out handling keyboard input on some systems. See
-    # https://github.com/systemd/systemd/issues/19191
-    # This should be redundant in v249.6 when it offically gets tagged in
-    # systemd-stable
-    ./0020-sd-boot-Unify-error-handling.patch
-    ./0021-sd-boot-Rework-console-input-handling.patch
   ] ++ lib.optional stdenv.hostPlatform.isMusl (
     let
       oe-core = fetchzip {
@@ -286,6 +277,10 @@ stdenv.mkDerivation {
           { name = "libtss2-mu.so.0"; pkg = opt withTpm2Tss tpm2-tss; }
           { name = "libtss2-tcti-"; pkg = opt withTpm2Tss tpm2-tss; }
           { name = "libfido2.so.1"; pkg = opt withFido2 libfido2; }
+
+          # inspect-elf support
+          { name = "libelf.so.1"; pkg = opt withCoredump elfutils; }
+          { name = "libdw.so.1"; pkg = opt withCoredump elfutils; }
         ];
 
       patchDlOpen = dl:
@@ -445,7 +440,12 @@ stdenv.mkDerivation {
     "-Dsmack=true"
     "-Db_pie=true"
     "-Dinstall-sysconfdir=false"
-    "-Defi-ld=${stdenv.cc.bintools.targetPrefix}ld"
+    "-Defi-ld=gold"
+    "-Dsbat-distro=nixos"
+    "-Dsbat-distro-summary=NixOS"
+    "-Dsbat-distro-url=https://nixos.org/"
+    "-Dsbat-distro-pkgname=${pname}"
+    "-Dsbat-distro-version=${version}"
     /*
       As of now, systemd doesn't allow runtime configuration of these values. So
       the settings in /etc/login.defs have no effect on it. Many people think this
@@ -499,57 +499,105 @@ stdenv.mkDerivation {
     "-Dutmp=false"
     "-Didn=false"
   ];
+  preConfigure =
+    let
+      # A list of all the runtime binaries that the systemd exectuables, tests and libraries are referencing in their source code, scripts and unit files.
+      # As soon as a dependency isn't required anymore we should remove it from the list. The `where` attribute for each of the replacement patterns must be exhaustive. If another (unhandled) case is found in the source code the build fails with an error message.
+      binaryReplacements = [
+        { search = "/usr/bin/getent"; replacement = "${getent}/bin/getent"; where = [ "src/nspawn/nspawn-setuid.c" ]; }
 
-  preConfigure = ''
-    mesonFlagsArray+=(-Dntp-servers="0.nixos.pool.ntp.org 1.nixos.pool.ntp.org 2.nixos.pool.ntp.org 3.nixos.pool.ntp.org")
-    export LC_ALL="en_US.UTF-8";
-    # FIXME: patch this in systemd properly (and send upstream).
-    # already fixed in f00929ad622c978f8ad83590a15a765b4beecac9: (u)mount
-    for i in \
-      src/core/mount.c \
-      src/core/swap.c \
-      src/cryptsetup/cryptsetup-generator.c \
-      src/journal/cat.c \
-      src/nspawn/nspawn.c \
-      src/remount-fs/remount-fs.c \
-      src/shared/generator.c \
-      src/shutdown/shutdown.c \
-      units/emergency.service.in \
-      units/modprobe@.service \
-      units/rescue.service.in \
-      units/systemd-logind.service.in \
-      units/systemd-nspawn@.service.in; \
-    do
-      test -e $i
-      substituteInPlace $i \
-        --replace /usr/bin/getent ${getent}/bin/getent \
-        --replace /sbin/mkswap ${lib.getBin util-linux}/sbin/mkswap \
-        --replace /sbin/swapon ${lib.getBin util-linux}/sbin/swapon \
-        --replace /sbin/swapoff ${lib.getBin util-linux}/sbin/swapoff \
-        --replace /bin/echo ${coreutils}/bin/echo \
-        --replace /bin/cat ${coreutils}/bin/cat \
-        --replace /sbin/sulogin ${lib.getBin util-linux}/sbin/sulogin \
-        --replace /sbin/modprobe ${lib.getBin kmod}/sbin/modprobe \
-        --replace /usr/lib/systemd/systemd-fsck $out/lib/systemd/systemd-fsck \
-        --replace /bin/plymouth /run/current-system/sw/bin/plymouth # To avoid dependency
-    done
+        {
+          search = "/sbin/mkswap";
+          replacement = "${lib.getBin util-linux}/sbin/mkswap";
+          where = [
+            "man/systemd-makefs@.service.xml"
+          ];
+        }
+        { search = "/sbin/swapon"; replacement = "${lib.getBin util-linux}/sbin/swapon"; where = [ "src/core/swap.c" "src/basic/unit-def.h" ]; }
+        { search = "/sbin/swapoff"; replacement = "${lib.getBin util-linux}/sbin/swapoff"; where = [ "src/core/swap.c" ]; }
+        {
+          search = "/bin/echo";
+          replacement = "${coreutils}/bin/echo";
+          where = [
+            "man/systemd-analyze.xml"
+            "man/systemd.service.xml"
+            "src/analyze/test-verify.c"
+            "src/test/test-env-file.c"
+            "src/test/test-fileio.c"
+            "test/test-execute/exec-systemcallfilter-failing2.service"
+            "test/test-execute/exec-systemcallfilter-failing3.service"
+            "test/test-execute/exec-systemcallfilter-failing.service"
+            "test/testsuite-06.units/hola.service"
+            "test/udev-test.pl"
+            "test/units/hello.service"
+            "test/units/testsuite-07.sh"
+            "test/units/testsuite-15.sh"
+            "test/units/testsuite-17.05.sh"
+            "test/units/testsuite-40.sh"
+            "test/units/unstoppable.service"
+          ];
+        }
+        {
+          search = "/bin/cat";
+          replacement = "${coreutils}/bin/cat";
+          where = [ "test/create-busybox-container" "test/test-execute/exec-noexecpaths-simple.service" "src/journal/cat.c" ];
+        }
+        { search = "/sbin/modprobe"; replacement = "${lib.getBin kmod}/sbin/modprobe"; where = [ "units/modprobe@.service" ]; }
+        {
+          search = "/usr/lib/systemd/systemd-fsck";
+          replacement = "$out/lib/systemd/systemd-fsck";
+          where = [ "man/systemd-fsck@.service.xml" ];
+        }
+      ] ++ lib.optionals withImportd [
+        {
+          search = "\"gpg\"";
+          replacement = "\\\"${gnupg}/bin/gpg\\\"";
+          where = [ "src/import/pull-common.c" ];
+        }
+        {
+          search = "\"tar\"";
+          replacement = "\\\"${gnutar}/bin/tar\\\"";
+          where = [
+            "src/import/export-tar.c"
+            "src/import/export.c"
+            "src/import/import-common.c"
+            "src/import/import-tar.c"
+            "src/import/import.c"
+            "src/import/importd.c"
+            "src/import/pull-tar.c"
+            "src/import/pull.c"
+          ];
+        }
+      ];
 
-    for dir in tools src/resolve test src/test src/shared; do
-      patchShebangs $dir
-    done
+      # { replacement, search, where } -> List[str]
+      mkSubstitute = { replacement, search, where }:
+        map (path: "substituteInPlace ${path} --replace '${search}' \"${replacement}\"") where;
+      mkEnsureSubstituted = { replacement, search, where }:
+        ''
+          if [[ $(grep -r '${search}' | grep -v "${replacement}" | grep -v NEWS | wc -l) -gt 0 ]]; then
+            echo "Not all references to '${search}' have been replace. Found the following matches:"
+            grep '${search}' -r | grep -v "${replacement}" | grep -v NEWS
+            exit 1
+          fi
+        '';
 
-    # absolute paths to gpg & tar
-    substituteInPlace src/import/pull-common.c \
-      --replace '"gpg"' '"${gnupg}/bin/gpg"'
-    for file in src/import/{{export,import,pull}-tar,import-common}.c; do
-      substituteInPlace $file \
-        --replace '"tar"' '"${gnutar}/bin/tar"'
-    done
+    in
+    ''
+      mesonFlagsArray+=(-Dntp-servers="0.nixos.pool.ntp.org 1.nixos.pool.ntp.org 2.nixos.pool.ntp.org 3.nixos.pool.ntp.org")
+      export LC_ALL="en_US.UTF-8";
+
+      ${lib.concatStringsSep "\n" (lib.flatten (map mkSubstitute binaryReplacements))}
+      ${lib.concatMapStringsSep "\n" mkEnsureSubstituted binaryReplacements}
 
 
-    substituteInPlace src/libsystemd/sd-journal/catalog.c \
-      --replace /usr/lib/systemd/catalog/ $out/lib/systemd/catalog/
-  '';
+      for dir in tools src/resolve test src/test src/shared; do
+        patchShebangs $dir
+      done
+
+      substituteInPlace src/libsystemd/sd-journal/catalog.c \
+        --replace /usr/lib/systemd/catalog/ $out/lib/systemd/catalog/
+    '';
 
   # These defines are overridden by CFLAGS and would trigger annoying
   # warning messages
@@ -557,7 +605,7 @@ stdenv.mkDerivation {
     substituteInPlace config.h \
       --replace "POLKIT_AGENT_BINARY_PATH" "_POLKIT_AGENT_BINARY_PATH" \
       --replace "SYSTEMD_BINARY_PATH" "_SYSTEMD_BINARY_PATH" \
-      --replace "SYSTEMD_CGROUP_AGENT_PATH" "_SYSTEMD_CGROUP_AGENT_PATH"
+      --replace "SYSTEMD_CGROUP_AGENTS_PATH" "_SYSTEMD_CGROUP_AGENT_PATH"
   '';
 
   NIX_CFLAGS_COMPILE = toString ([
@@ -569,8 +617,8 @@ stdenv.mkDerivation {
     # Set the release_agent on /sys/fs/cgroup/systemd to the
     # currently running systemd (/run/current-system/systemd) so
     # that we don't use an obsolete/garbage-collected release agent.
-    "-USYSTEMD_CGROUP_AGENT_PATH"
-    "-DSYSTEMD_CGROUP_AGENT_PATH=\"/run/current-system/systemd/lib/systemd/systemd-cgroups-agent\""
+    "-USYSTEMD_CGROUP_AGENTS_PATH"
+    "-DSYSTEMD_CGROUP_AGENTS_PATH=\"/run/current-system/systemd/lib/systemd/systemd-cgroups-agent\""
 
     "-USYSTEMD_BINARY_PATH"
     "-DSYSTEMD_BINARY_PATH=\"/run/current-system/systemd/lib/systemd/systemd\""
@@ -611,6 +659,13 @@ stdenv.mkDerivation {
   '' + lib.optionalString (!withDocumentation) ''
     rm -rf $out/share/doc
   '';
+
+  disallowedReferences =
+    [
+
+    ]
+    ++ lib.optional withTests [ glib ]
+  ;
 
   # The interface version prevents NixOS from switching to an
   # incompatible systemd at runtime.  (Switching across reboots is
