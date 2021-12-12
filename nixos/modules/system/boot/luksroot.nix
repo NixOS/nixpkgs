@@ -192,13 +192,13 @@ let
                 ${if luks.reusePassphrases then ''
                   # we don't rm here because we might reuse it for the next device
                 '' else ''
-                  rm -f /crypt-ramfs/passphrase
+                  shred /crypt-ramfs/passphrase
                 ''}
                 break
             else
                 echo " - failure"
                 # ask for a different one
-                rm -f /crypt-ramfs/passphrase
+                shred /crypt-ramfs/passphrase
             fi
         done
     }
@@ -293,7 +293,7 @@ let
                 ${if luks.reusePassphrases then ''
                   # We don't rm here because we might reuse it for the next device
                 '' else ''
-                  rm -f /crypt-ramfs/passphrase
+                  shred /crypt-ramfs/passphrase
                 ''}
                 break
             else
@@ -393,13 +393,13 @@ let
                 ${if luks.reusePassphrases then ''
                   # we don't rm here because we might reuse it for the next device
                 '' else ''
-                  rm -f /crypt-ramfs/passphrase
+                  shred /crypt-ramfs/passphrase
                 ''}
                 break
             else
                 echo " - failure"
                 # ask for a different one
-                rm -f /crypt-ramfs/passphrase
+                shred /crypt-ramfs/passphrase
             fi
         done
 
@@ -460,11 +460,11 @@ let
               ${optionalString dev.fido2.askForPin "--pin --pin-source=/crypt-ramfs/passphrase"} \
               --await-dev ${toString dev.fido2.gracePeriod} --salt string:$passphrase
         if [ $? -ne 0 ]; then
-          rm -f /crypt-ramfs/passphrase
+          shred /crypt-ramfs/passphrase
           echo "No FIDO2 key found, falling back to normal open procedure"
           open_normally
         fi
-        ${optionalString (!luks.reusePassphrases) "rm -f /crypt-ramfs/passphrase"}
+        ${optionalString (!luks.reusePassphrases) "shred /crypt-ramfs/passphrase"}
     }
     ''}
 
