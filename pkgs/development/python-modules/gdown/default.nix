@@ -7,6 +7,7 @@
 , tqdm
 , setuptools
 , six
+, beautifulsoup4
 }:
 
 buildPythonApplication rec {

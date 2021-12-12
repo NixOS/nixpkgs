@@ -13,14 +13,14 @@
 
 stdenv.mkDerivation rec {
   pname = "marker";
-  version = "2020.04.04";
+  version = "2020.04.04.2";
 
   src = fetchFromGitHub {
     owner = "fabiocolacio";
     repo = "Marker";
     rev = version;
     fetchSubmodules = true;
-    sha256 = "1iy7izyprf050bix8am1krqivgyxnhx3jm775v8f80cgbqxy7m5r";
+    sha256 = "sha256-wLR1FQqlLA02ed/JoAcxRHhIVua1FibAee1PC2zOPOM=";
   };
 
   nativeBuildInputs = [
