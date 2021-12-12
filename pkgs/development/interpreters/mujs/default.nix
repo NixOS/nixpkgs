@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mujs";
-  version = "1.1.2";
+  version = "1.1.3";
 
   src = fetchurl {
     url = "https://mujs.com/downloads/mujs-${version}.tar.xz";
-    sha256 = "sha256-cZ6IK7fZhkDvoWM4Hpto7xzjXIekIuKqQZDJ5AIlh10=";
+    sha256 = "sha256-TSTpUJqea9I9fKFh0Kggvml+fmFD2aVx+tdUGyIcIKY=";
   };
 
   buildInputs = [ readline ];
