@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "catgirl";
-  version = "1.9a";
+  version = "2.0";
 
   src = fetchurl {
     url = "https://git.causal.agency/catgirl/snapshot/${pname}-${version}.tar.gz";
-    sha256 = "sha256-MEm5mrrWfNp+mBHFjGSOGvvfvBJ+Ho/K+mPUxzJDkV0=";
+    sha256 = "sha256-rk6nvfyaFxJ/7JN92L5tDraTngffVb6u/U7dbNjK9jI=";
   };
 
   # catgirl's configure script uses pkg-config --variable exec_prefix openssl
