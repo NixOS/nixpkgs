@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, fetchFromGitLab, jdk17_headless, coreutils, gradle_6, git, perl
-, makeWrapper, fetchpatch, substituteAll
+, makeWrapper, fetchpatch, substituteAll, jre_minimal
 }:
 
 let
@@ -11,6 +11,25 @@ let
     repo = pname;
     rev = version;
     sha256 = "sha256-2cb1pyBOoOlFqJsNKXA0Q9x4wCE4yzzcfrDDtTp7HMk=";
+  };
+
+  jre' = jre_minimal.override {
+    jdk = jdk17_headless;
+    # from https://gitlab.com/signald/signald/-/blob/0.18.5/build.gradle#L173
+    modules = [
+      "java.base"
+      "java.management"
+      "java.naming"
+      "java.sql"
+      "java.xml"
+      "jdk.crypto.ec"
+      "jdk.httpserver"
+
+      # for java/beans/PropertyChangeEvent
+      "java.desktop"
+      # for sun/misc/Unsafe
+      "jdk.unsupported"
+    ];
   };
 
   # fake build to pre-download deps into fixed-output derivation
@@ -67,7 +86,7 @@ in stdenv.mkDerivation rec {
     tar xvf ./build/distributions/signald.tar --strip-components=1 --directory $out/
     wrapProgram $out/bin/signald \
       --prefix PATH : ${lib.makeBinPath [ coreutils ]} \
-      --set JAVA_HOME "${jdk17_headless}"
+      --set JAVA_HOME "${jre'}"
 
     runHook postInstall
   '';
