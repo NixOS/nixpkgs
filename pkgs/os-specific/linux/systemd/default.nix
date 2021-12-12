@@ -15,6 +15,8 @@
 , gperf
 , getent
 , glibcLocales
+
+  # glib is only used during tests (test-bus-gvariant, test-bus-marshal)
 , glib
 , substituteAll
 , gettext
@@ -98,6 +100,8 @@
 , withTimesyncd ? true
 , withTpm2Tss ? !stdenv.hostPlatform.isMusl
 , withUserDb ? !stdenv.hostPlatform.isMusl
+  # tests assume too much system access for them to be feasible for us right now
+, withTests ? false
 
   # name argument
 , pname ? "systemd"
@@ -369,7 +373,6 @@ stdenv.mkDerivation {
     [
       acl
       audit
-      glib
       kmod
       libcap
       libidn2
@@ -379,6 +382,7 @@ stdenv.mkDerivation {
     ]
 
     ++ lib.optional wantGcrypt libgcrypt
+    ++ lib.optional withTests glib
     ++ lib.optional withApparmor libapparmor
     ++ lib.optional wantCurl (lib.getDev curl)
     ++ lib.optionals withCompression [ bzip2 lz4 xz zstd ]
@@ -413,7 +417,7 @@ stdenv.mkDerivation {
     "-Dsetfont-path=${kbd}/bin/setfont"
     "-Dtty-gid=3" # tty in NixOS has gid 3
     "-Ddebug-shell=${bashInteractive}/bin/bash"
-    "-Dglib=${lib.boolToString (glib != null)}"
+    "-Dglib=${lib.boolToString withTests}"
     # while we do not run tests we should also not build them. Removes about 600 targets
     "-Dtests=false"
     "-Danalyze=${lib.boolToString withAnalyze}"
