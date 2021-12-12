@@ -1711,6 +1711,8 @@ in {
 
   colour = callPackage ../development/python-modules/colour { };
 
+  cometblue-lite = callPackage ../development/python-modules/cometblue-lite { };
+
   commandparse = callPackage ../development/python-modules/commandparse { };
 
   commentjson = callPackage ../development/python-modules/commentjson { };
@@ -2746,6 +2748,8 @@ in {
   finalfusion = callPackage ../development/python-modules/finalfusion { };
 
   fingerprints = callPackage ../development/python-modules/fingerprints { };
+
+  finitude = callPackage ../development/python-modules/finitude { };
 
   fints = callPackage ../development/python-modules/fints { };
 
@@ -7398,6 +7402,8 @@ in {
     '';
   });
 
+  pytest-aio = callPackage ../development/python-modules/pytest-aio { };
+
   pytest-aiohttp = callPackage ../development/python-modules/pytest-aiohttp { };
 
   pytest-annotate = callPackage ../development/python-modules/pytest-annotate { };
@@ -8745,6 +8751,8 @@ in {
 
   simplekml = callPackage ../development/python-modules/simplekml { };
 
+  simplenote = callPackage ../development/python-modules/simplenote { };
+
   simple-di = callPackage ../development/python-modules/simple-di { };
 
   simple-rest-client = callPackage ../development/python-modules/simple-rest-client { };
@@ -9043,6 +9051,8 @@ in {
 
   spotipy = callPackage ../development/python-modules/spotipy { };
 
+  spur = callPackage ../development/python-modules/spur { };
+
   spyder = callPackage ../development/python-modules/spyder { };
 
   spyder-kernels = callPackage ../development/python-modules/spyder-kernels { };
@@ -9136,6 +9146,8 @@ in {
   stestr = callPackage ../development/python-modules/stestr { };
 
   stevedore = callPackage ../development/python-modules/stevedore { };
+
+  stickytape = callPackage ../development/python-modules/stickytape { };
 
   stm32loader = callPackage ../development/python-modules/stm32loader { };
 
@@ -9274,6 +9286,8 @@ in {
   tadasets = callPackage ../development/python-modules/tadasets { };
 
   tag-expressions = callPackage ../development/python-modules/tag-expressions { };
+
+  tago = callPackage ../development/python-modules/tago { };
 
   tahoma-api = callPackage ../development/python-modules/tahoma-api { };
 

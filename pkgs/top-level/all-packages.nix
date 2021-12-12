@@ -6536,6 +6536,8 @@ with pkgs;
 
   input-utils = callPackage ../os-specific/linux/input-utils { };
 
+  inql = callPackage ../tools/security/inql { };
+
   intecture-agent = callPackage ../tools/admin/intecture/agent.nix { };
 
   intecture-auth = callPackage ../tools/admin/intecture/auth.nix { };
@@ -14820,6 +14822,8 @@ with pkgs;
   k0sctl = callPackage ../applications/networking/cluster/k0sctl { };
 
   k2tf = callPackage ../development/tools/misc/k2tf { };
+
+  kafka-delta-ingest = callPackage ../development/tools/kafka-delta-ingest { };
 
   kati = callPackage ../development/tools/build-managers/kati { };
 
@@ -26448,6 +26452,8 @@ with pkgs;
 
   kubectl-example = callPackage ../applications/networking/cluster/kubectl-example { };
 
+  kubectl-tree = callPackage ../applications/networking/cluster/kubectl-tree { };
+
   kubeless = callPackage ../applications/networking/cluster/kubeless { };
 
   kubelogin = callPackage ../applications/networking/cluster/kubelogin { };
@@ -28116,9 +28122,7 @@ with pkgs;
 
   rocketchat-desktop = callPackage ../applications/networking/instant-messengers/rocketchat-desktop { };
 
-  rofi-unwrapped = callPackage ../applications/misc/rofi {
-    autoreconfHook = buildPackages.autoreconfHook269;
-  };
+  rofi-unwrapped = callPackage ../applications/misc/rofi { };
   rofi = callPackage ../applications/misc/rofi/wrapper.nix { };
 
   rofi-pass = callPackage ../tools/security/pass/rofi-pass.nix { };

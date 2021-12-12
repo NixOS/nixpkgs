@@ -56,7 +56,7 @@ in
   config = mkIf cfg.enable {
     systemd.services.adguardhome = {
       description = "AdGuard Home: Network-level blocker";
-      after = [ "syslog.target" "network.target" ];
+      after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       unitConfig = {
         StartLimitIntervalSec = 5;

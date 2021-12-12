@@ -34,7 +34,6 @@ buildGoModule rec {
     description = "Declarative configuration for Gmail filters";
     homepage = "https://github.com/mbrt/gmailctl";
     license = licenses.mit;
-    maintainers = [ maintainers.doronbehar ];
-    platforms = platforms.unix;
+    maintainers = with maintainers; [ doronbehar SuperSandro2000 ];
   };
 }
