@@ -1797,6 +1797,8 @@ with pkgs;
 
   gomatrix = callPackage ../applications/misc/gomatrix { };
 
+  gomapenum = callPackage ../tools/security/gomapenum { };
+
   gopacked = callPackage ../applications/misc/gopacked { };
 
   gucci = callPackage ../tools/text/gucci { };
