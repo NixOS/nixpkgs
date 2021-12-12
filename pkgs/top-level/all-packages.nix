@@ -32520,6 +32520,8 @@ with pkgs;
 
   idsk = callPackage ../tools/filesystems/idsk { };
 
+  colima = callPackage ../applications/virtualization/colima {};
+
   lima = callPackage ../applications/virtualization/lima {};
 
   logtop = callPackage ../tools/misc/logtop { };
