@@ -29,7 +29,6 @@
   # Optional dependencies
 , pam
 , cryptsetup
-, lvm2
 , audit
 , acl
 , lz4
