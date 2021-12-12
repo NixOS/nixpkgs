@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, fetchFromGitLab, jdk17_headless, coreutils, gradle_6, git, perl
-, makeWrapper, fetchpatch
+, makeWrapper, fetchpatch, jre_minimal
 }:
 
 let
@@ -16,6 +16,24 @@ let
   log4j-update-cve-2021-44228 = fetchpatch {
     url = "https://gitlab.com/signald/signald/-/commit/7f668062ab9ffa09a49d171e995f57cf0a0803a7.patch";
     sha256 = "sha256-504je6hKciUGelVCGZjxGjHi1qZQaovagXD5PBQP+mM=";
+  };
+
+  jre' = jre_minimal.override {
+    jdk = jdk17_headless;
+    modules = [
+      "java.base"
+      "java.management"
+      "java.naming"
+      "java.sql"
+      "java.xml"
+      "jdk.crypto.ec"
+      "jdk.httpserver"
+
+      # for java/beans/PropertyChangeEvent
+      "java.desktop"
+      # for sun/misc/Unsafe
+      "jdk.unsupported"
+    ];
   };
 
   buildConfigJar = fetchurl {
@@ -82,7 +100,7 @@ in stdenv.mkDerivation rec {
     tar xvf ./build/distributions/signald.tar --strip-components=1 --directory $out/
     wrapProgram $out/bin/signald \
       --prefix PATH : ${lib.makeBinPath [ coreutils ]} \
-      --set JAVA_HOME "${jdk17_headless}"
+      --set JAVA_HOME "${jre'}"
 
     runHook postInstall
   '';
@@ -100,7 +118,7 @@ in stdenv.mkDerivation rec {
     '';
     homepage = "https://signald.org";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ expipiplus1 ];
+    maintainers = with maintainers; [ expipiplus1 ma27 ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];
   };
 }
