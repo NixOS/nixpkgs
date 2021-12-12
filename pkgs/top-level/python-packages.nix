@@ -6942,6 +6942,8 @@ in {
     tesseract = pkgs.tesseract4;
   };
 
+  pyoctoprintapi = callPackage ../development/python-modules/pyoctoprintapi { };
+
   pyodbc = callPackage ../development/python-modules/pyodbc { };
 
   pyogg = callPackage ../development/python-modules/pyogg { };
