@@ -15479,7 +15479,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreFoundation;
   };
 
-  uddup = python3Packages.callPackage ../tools/security/uddup { };
+  uddup = callPackage ../tools/security/uddup { };
 
   udis86 = callPackage  ../development/tools/udis86 { };
 
