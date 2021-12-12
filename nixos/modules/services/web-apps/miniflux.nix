@@ -67,7 +67,7 @@ in
       LISTEN_ADDR = mkDefault "localhost:8080";
       DATABASE_URL = "postgresql://${dbUser}:${dbPassword}@${dbHost}/${dbName}?sslmode=disable";
       RUN_MIGRATIONS = "1";
-      CREATE_ADMIN = "1";
+      CREATE_ADMIN = mkDefault "1";
     };
 
     services.postgresql.enable = true;
