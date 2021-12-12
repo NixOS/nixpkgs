@@ -373,6 +373,8 @@ with pkgs;
 
   onesixtyone = callPackage ../tools/security/onesixtyone {};
 
+  oletools = with python3.pkgs; toPythonApplication oletools;
+
   creddump = callPackage ../tools/security/creddump {};
 
   credential-detector = callPackage ../tools/security/credential-detector { };

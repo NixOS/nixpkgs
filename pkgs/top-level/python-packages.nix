@@ -5411,6 +5411,8 @@ in {
 
   olefile = callPackage ../development/python-modules/olefile { };
 
+  oletools = callPackage ../development/python-modules/oletools { };
+
   omegaconf = callPackage ../development/python-modules/omegaconf { };
 
   omnilogic = callPackage ../development/python-modules/omnilogic { };
