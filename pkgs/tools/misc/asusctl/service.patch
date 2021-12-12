@@ -1,0 +1,27 @@
+diff --git a/data/asusd.service b/data/asusd.service
+index 9f0ee84..66add89 100644
+--- a/data/asusd.service
++++ b/data/asusd.service
+@@ -1,16 +1,18 @@
+ [Unit]
+ Description=ASUS Notebook Control
+-StartLimitInterval=200
++StartLimitInterval=0
+ StartLimitBurst=2
+ Before=multi-user.target
++After=supergfxd.service
++Requires=supergfxd.service
+ 
+ [Service]
+ Environment=IS_SERVICE=1
+-ExecStartPre=/bin/sleep 2
+ ExecStart=/usr/bin/asusd
++StateDirectory=asusd
+ Restart=on-failure
+ Restart=always
+-RestartSec=1
++RestartSec=4
+ Type=dbus
+ BusName=org.asuslinux.Daemon
+ SELinuxContext=system_u:system_r:unconfined_t:s0
++
