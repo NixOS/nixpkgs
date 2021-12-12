@@ -16,7 +16,7 @@ let
   inherit (lib) getLib optional optionalString;
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
   pname = "libepoxy";
   version = "1.5.9";
 
@@ -65,4 +65,10 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ goibhniu erictapen ];
     platforms = platforms.unix;
   };
-}
+} // lib.optionalAttrs stdenv.isDarwin {
+  # cgl_epoxy_api fails in darwin sandbox and on Hydra (because it's headless?)
+  preCheck = ''
+    substituteInPlace ../test/meson.build \
+      --replace "[ 'cgl_epoxy_api', [ 'cgl_epoxy_api.c' ] ]," ""
+  '';
+})
