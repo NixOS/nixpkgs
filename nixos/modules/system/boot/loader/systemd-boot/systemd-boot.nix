@@ -30,6 +30,8 @@ let
 
     memtest86 = if cfg.memtest86.enable then pkgs.memtest86-efi else "";
 
+    netbootxyz = if cfg.netbootxyz.enable then pkgs.netbootxyz-efi else "";
+
     copyExtraFiles = pkgs.writeShellScript "copy-extra-files" ''
       empty_file=$(mktemp)
 
@@ -151,6 +153,29 @@ in {
       };
     };
 
+    netbootxyz = {
+      enable = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Make <literal>netboot.xyz</literal> available from the
+          <literal>systemd-boot</literal> menu. <literal>netboot.xyz</literal>
+          is a menu system that allows you to boot OS installers and
+          utilities over the network.
+        '';
+      };
+
+      entryFilename = mkOption {
+        default = "o_netbootxyz.conf";
+        type = types.str;
+        description = ''
+          <literal>systemd-boot</literal> orders the menu entries by the config file names,
+          so if you want something to appear after all the NixOS entries,
+          it should start with <filename>o</filename> or onwards.
+        '';
+      };
+    };
+
     extraEntries = mkOption {
       type = types.attrsOf types.lines;
       default = {};
@@ -245,6 +270,9 @@ in {
       (mkIf cfg.memtest86.enable {
         "efi/memtest86/BOOTX64.efi" = "${pkgs.memtest86-efi}/BOOTX64.efi";
       })
+      (mkIf cfg.netbootxyz.enable {
+        "efi/netbootxyz/netboot.xyz.efi" = "${pkgs.netbootxyz-efi}";
+      })
     ];
 
     boot.loader.systemd-boot.extraEntries = mkMerge [
@@ -252,6 +280,12 @@ in {
         "${cfg.memtest86.entryFilename}" = ''
           title  MemTest86
           efi    /efi/memtest86/BOOTX64.efi
+        '';
+      })
+      (mkIf cfg.netbootxyz.enable {
+        "${cfg.netbootxyz.entryFilename}" = ''
+          title  netboot.xyz
+          efi    /efi/netbootxyz/netboot.xyz.efi
         '';
       })
     ];
