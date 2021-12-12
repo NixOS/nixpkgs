@@ -61,6 +61,8 @@
 , kexec-tools
 , bashInteractive
 , libmicrohttpd
+, libfido2
+, p11-kit
 
   # the (optional) BPF feature requires bpftool, libbpf, clang and llmv-strip to be avilable during build time.
   # Only libbpf should be a runtime dependency.
@@ -97,8 +99,6 @@
 , withTimesyncd ? true
 , withTpm2Tss ? !stdenv.hostPlatform.isMusl
 , withUserDb ? !stdenv.hostPlatform.isMusl
-, libfido2
-, p11-kit
 
   # name argument
 , pname ? "systemd"
@@ -123,6 +123,7 @@ assert withHomed -> withCryptsetup;
 assert withCryptsetup -> (cryptsetup != null);
 let
   wantCurl = withRemote || withImportd;
+  wantGcrypt = withResolved || withImportd;
   version = "250.3";
 in
 stdenv.mkDerivation {
@@ -365,13 +366,13 @@ stdenv.mkDerivation {
       glib
       kmod
       libcap
-      libgcrypt
       libidn2
       libuuid
       linuxHeaders
       pam
     ]
 
+    ++ lib.optional wantGcrypt libgcrypt
     ++ lib.optional withApparmor libapparmor
     ++ lib.optional wantCurl (lib.getDev curl)
     ++ lib.optionals withCompression [ bzip2 lz4 xz zstd ]
@@ -410,7 +411,7 @@ stdenv.mkDerivation {
     # while we do not run tests we should also not build them. Removes about 600 targets
     "-Dtests=false"
     "-Danalyze=${lib.boolToString withAnalyze}"
-    "-Dgcrypt=${lib.boolToString (libgcrypt != null)}"
+    "-Dgcrypt=${lib.boolToString wantGcrypt}"
     "-Dimportd=${lib.boolToString withImportd}"
     "-Dlz4=${lib.boolToString withCompression}"
     "-Dhomed=${lib.boolToString withHomed}"
