@@ -143,6 +143,16 @@ in rec {
     inherit system;
   });
 
+  netboot_plasma5 = forMatchingSystems supportedSystems (system: makeNetboot {
+    module = ./modules/installer/netboot/netboot-graphical-plasma5.nix;
+    inherit system;
+  });
+
+  netboot_gnome = forMatchingSystems supportedSystems (system: makeNetboot {
+    module = ./modules/installer/netboot/netboot-graphical-gnome.nix;
+    inherit system;
+  });
+
   iso_minimal = forAllSystems (system: makeIso {
     module = ./modules/installer/cd-dvd/installation-cd-minimal.nix;
     type = "minimal";
