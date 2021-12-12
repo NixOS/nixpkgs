@@ -22970,10 +22970,8 @@ with pkgs;
     withTpm2Tss = false;
     withUserDb = false;
     glib = null;
-    libgcrypt = null;
+
     lvm2 = null;
-    libfido2 = null;
-    p11-kit = null;
   };
 
 
