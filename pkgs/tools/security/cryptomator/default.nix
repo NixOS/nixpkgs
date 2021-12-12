@@ -1,25 +1,25 @@
-{ lib, stdenv, fetchFromGitHub
+{ lib
+, stdenv
+, fetchFromGitHub
 , autoPatchelfHook
-, fuse, packer
-, maven, jdk, jre, makeWrapper, glib, wrapGAppsHook
+, fuse
+, packer
+, maven3
+, zulu17
+, makeWrapper
+, glib
+, wrapGAppsHook
 }:
 
 let
   pname = "cryptomator";
-  version = "1.5.15";
+  version = "1.6.4";
 
   src = fetchFromGitHub {
     owner = "cryptomator";
     repo = "cryptomator";
     rev = version;
-    sha256 = "06n7wda7gfalvsg1rlcm51ss73nlbhh95z6zq18yvn040clkzkij";
-  };
-
-  icons = fetchFromGitHub {
-    owner = "cryptomator";
-    repo = "cryptomator-linux";
-    rev = version;
-    sha256 = "1sqbx858zglv0xkpjya0cpbkxf2hkj1xvxhnir3176y2xyjv6aib";
+    sha256 = "15pp4fg8q2b9p9zcqqb8lfp3hr5170yj3md5qc9i3lx0dn58qd2i";
   };
 
   # perform fake build to make a fixed-output derivation out of the files downloaded from maven central (120MB)
@@ -27,13 +27,14 @@ let
     name = "cryptomator-${version}-deps";
     inherit src;
 
-    nativeBuildInputs = [ jdk maven ];
+    nativeBuildInputs = [ zulu17 maven3 ];
+
+    preConfigure = ''
+      sed '/isKeyLocked/c\//removed temporarily (do we have old OpenJFX on Nix?)' -i  src/main/java/org/cryptomator/ui/controls/SecurePasswordField.java
+    '';
 
     buildPhase = ''
-      cd main
-      while mvn -Prelease package -Dmaven.repo.local=$out/.m2 -Dmaven.wagon.rto=5000; [ $? = 1 ]; do
-        echo "timeout, restart maven to continue downloading"
-      done
+      mvn -Plinux package -Dmaven.repo.local=$out/.m2
     '';
 
     # keep only *.{pom,jar,sha1,nbm} and delete all ephemeral files with lastModified timestamps inside
@@ -44,48 +45,50 @@ let
 
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "195ysv9l861y9d1lvmvi7wmk172ynlba9n233blpaigq88cjn208";
+    outputHash = "0qp9z2di31dx24s62kb8py93payjbifs4j7727myvz9pss4vv2j2";
   };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   inherit pname version src;
 
   buildPhase = ''
-    cd main
-    mvn -Prelease package --offline -Dmaven.repo.local=$(cp -dpR ${deps}/.m2 ./ && chmod +w -R .m2 && pwd)/.m2
+    mvn -Plinux package --offline -Dmaven.repo.local=${deps}/.m2
   '';
-
   installPhase = ''
-    mkdir -p $out/bin/ $out/usr/share/cryptomator/libs/
+    mkdir -p $out/bin $out/libs $out/mods
+    # moving over all libs
+    cp -r target/mods/* $out/mods
+    cp target/cryptomator-1.6.4.jar $out/mods
+    cp -r target/libs/* $out/libs
 
-    cp buildkit/target/libs/* buildkit/target/linux-libs/* $out/usr/share/cryptomator/libs/
-
-    makeWrapper ${jre}/bin/java $out/bin/cryptomator \
-      --add-flags "-classpath '$out/usr/share/cryptomator/libs/*'" \
+    makeWrapper ${zulu17}/bin/java $out/bin/cryptomator \
+      --add-flags "-p '$out/mods'" \
+      --add-flags "-classpath '$out/libs/*'" \
       --add-flags "-Dcryptomator.settingsPath='~/.config/Cryptomator/settings.json'" \
-      --add-flags "-Dcryptomator.ipcPortPath='~/.config/Cryptomator/ipcPort.bin'" \
+      --add-flags "-Dcryptomator.ipcSocketPath='~/.config/Cryptomator/ipc.socket'" \
       --add-flags "-Dcryptomator.logDir='~/.local/share/Cryptomator/logs'" \
       --add-flags "-Dcryptomator.mountPointsDir='~/.local/share/Cryptomator/mnt'" \
       --add-flags "-Djdk.gtk.version=3" \
       --add-flags "-Xss20m" \
       --add-flags "-Xmx512m" \
-      --add-flags "org.cryptomator.launcher.Cryptomator" \
-      --prefix PATH : "$out/usr/share/cryptomator/libs/:${lib.makeBinPath [ jre glib ]}" \
+      --add-flags "-m org.cryptomator.desktop/org.cryptomator.launcher.Cryptomator" \
+      --prefix PATH : "$out/usr/share/cryptomator/libs/:${lib.makeBinPath [ zulu17 glib ]}" \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ fuse ]}" \
-      --set JAVA_HOME "${jre.home}"
+      --set JAVA_HOME "${zulu17.home}"
 
     # install desktop entry and icons
-    cp -r ${icons}/resources/appimage/AppDir/usr/* $out/
+    cp -r ${src}/dist/linux/appimage/resources/AppDir/usr/* $out/
   '';
 
-  nativeBuildInputs = [ autoPatchelfHook maven makeWrapper wrapGAppsHook jdk ];
-  buildInputs = [ fuse packer jre glib ];
+  nativeBuildInputs = [ autoPatchelfHook maven3 makeWrapper wrapGAppsHook zulu17 ];
+  buildInputs = [ fuse packer zulu17 glib ];
 
   meta = with lib; {
     description = "Free client-side encryption for your cloud files";
     homepage = "https://cryptomator.org";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ bachp ];
+    maintainers = with maintainers; [ bachp peterwilli ];
     platforms = platforms.linux;
   };
 }
