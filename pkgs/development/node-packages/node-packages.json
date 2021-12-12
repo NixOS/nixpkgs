@@ -227,6 +227,7 @@
 , "postcss-cli"
 , "prettier"
 , "prettier-plugin-toml"
+, "@prettier/plugin-xml"
 , "prisma"
 , "@prisma/language-server"
 , "pscid"
