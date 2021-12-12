@@ -22,7 +22,7 @@ in
       };
 
       recheckInterval = mkOption {
-        type = types.int;
+        type = types.ints.unsigned;
         default = 2000;
         description = "Interval in milliseconds between farm rechecks.";
       };
@@ -70,7 +70,7 @@ in
       };
 
       maxPower = mkOption {
-        type = types.int;
+        type = types.ints.unsigned;
         default = 113;
         description = "Miner max watt usage.";
       };
