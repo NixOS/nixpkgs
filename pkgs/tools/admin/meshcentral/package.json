@@ -1,6 +1,6 @@
 {
   "name": "meshcentral",
-  "version": "0.9.50",
+  "version": "0.9.56",
   "keywords": [
     "Remote Device Management",
     "Remote Device Monitoring",
@@ -117,6 +117,7 @@
     "otplib": "10.2.3",
     "twilio": "*",
     "plivo": "*",
+    "telnyx": "*",
     "web-push": "*",
     "node-xcs": "*",
     "modern-syslog": "*",
