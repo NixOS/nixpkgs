@@ -85,9 +85,18 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://mesonbuild.com";
-    description = "SCons-like build system that use python as a front-end language and Ninja as a building backend";
+    description = "An open source, fast and friendly build system made in Python";
+    longDescription = ''
+      Meson is an open source build system meant to be both extremely fast, and,
+      even more importantly, as user friendly as possible.
+
+      The main design point of Meson is that every moment a developer spends
+      writing or debugging build definitions is a second wasted. So is every
+      second spent waiting for the build system to actually start compiling
+      code.
+    '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ jtojnar mbe ];
-    platforms = platforms.all;
+    maintainers = with maintainers; [ jtojnar mbe AndersonTorres ];
+    inherit (python3.meta) platforms;
   };
 }
