@@ -14837,6 +14837,8 @@ with pkgs;
 
   k2tf = callPackage ../development/tools/misc/k2tf { };
 
+  kafka-delta-ingest = callPackage ../development/tools/kafka-delta-ingest { };
+
   kati = callPackage ../development/tools/build-managers/kati { };
 
   kcat = callPackage ../development/tools/kcat { };
