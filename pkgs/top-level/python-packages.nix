@@ -2456,6 +2456,8 @@ in {
 
   elkm1-lib = callPackage ../development/python-modules/elkm1-lib { };
 
+  elastic-apm = callPackage ../development/python-modules/elastic-apm { };
+
   elasticsearch = callPackage ../development/python-modules/elasticsearch { };
 
   elasticsearch-dsl = callPackage ../development/python-modules/elasticsearch-dsl { };
