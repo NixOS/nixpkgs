@@ -18768,6 +18768,8 @@ with pkgs;
 
   msgpack = callPackage ../development/libraries/msgpack { };
 
+  msoffcrypto-tool = with python3.pkgs; toPythonApplication msoffcrypto-tool;
+
   msilbc = callPackage ../development/libraries/msilbc { };
 
   mp4v2 = callPackage ../development/libraries/mp4v2 { };

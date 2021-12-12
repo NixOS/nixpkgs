@@ -5030,6 +5030,8 @@ in {
 
   msldap = callPackage ../development/python-modules/msldap { };
 
+  msoffcrypto-tool = callPackage ../development/python-modules/msoffcrypto-tool { };
+
   mss = callPackage ../development/python-modules/mss { };
 
   msrestazure = callPackage ../development/python-modules/msrestazure { };
