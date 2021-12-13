@@ -18219,6 +18219,20 @@ let
     };
   };
 
+  PPR = buildPerlPackage {
+    pname = "PPR";
+    version = "0.000028";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DC/DCONWAY/PPR-0.000028.tar.gz";
+      sha256 = "1adrd189rnfl1fgv14inchvrgjqjbpnviisqsz3y8ds3gisafzfk";
+    };
+    meta = {
+      description = "Pattern-based Perl Recognizer";
+      license = lib.licenses.artistic2;
+      maintainers = [ maintainers.artturin ];
+    };
+  };
+
   ProcBackground = buildPerlPackage {
     pname = "Proc-Background";
     version = "1.21";
