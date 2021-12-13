@@ -44,6 +44,8 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  outputs = [ "out" "doc" "man" ];
+
   passthru.tests = {
     noShaping = fcft.override { withShapingTypes = []; };
     onlyGraphemeShaping = fcft.override { withShapingTypes = [ "grapheme" ]; };
