@@ -4,7 +4,6 @@
 , fonts ? [ ]
 }:
 
-with pkgs;
 let
   version = "0.8.1";
   # Figma executable.
