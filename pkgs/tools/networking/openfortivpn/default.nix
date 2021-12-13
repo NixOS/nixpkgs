@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     openssl
   ]
   ++ lib.optional withSystemd systemd
-  ++ lib.optional withPpp     ppp;
+  ++ lib.optional withPpp ppp;
 
   configureFlags = [
     "--sysconfdir=/etc"
