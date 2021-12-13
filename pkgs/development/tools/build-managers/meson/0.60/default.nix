@@ -1,6 +1,5 @@
 { lib
 , python3
-, writeTextDir
 , substituteAll
 , fetchpatch
 , installShellFiles
@@ -8,11 +7,11 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "meson";
-  version = "0.57.1";
+  version = "0.60.2";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "19n8alcpzv6npgp27iqljkmvdmr7s2c7zm8y997j1nlvpa1cgqbj";
+    hash = "sha256-ZOaWhWW/G4FS9PnWyoFU77nhTKqaq/eyLnHmxdBT6SE=";
   };
 
   patches = [
