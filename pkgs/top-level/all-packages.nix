@@ -373,6 +373,8 @@ with pkgs;
 
   onesixtyone = callPackage ../tools/security/onesixtyone {};
 
+  oletools = with python3.pkgs; toPythonApplication oletools;
+
   creddump = callPackage ../tools/security/creddump {};
 
   credential-detector = callPackage ../tools/security/credential-detector { };
@@ -5796,8 +5798,6 @@ with pkgs;
   github-backup = callPackage ../tools/misc/github-backup { };
 
   github-runner = callPackage ../development/tools/continuous-integration/github-runner { };
-
-  gitin = callPackage ../applications/version-management/git-and-tools/gitin { };
 
   gitinspector = callPackage ../applications/version-management/gitinspector { };
 
@@ -17193,7 +17193,11 @@ with pkgs;
 
   jbigkit = callPackage ../development/libraries/jbigkit { };
 
-  jemalloc = callPackage ../development/libraries/jemalloc { };
+  jemalloc = callPackage ../development/libraries/jemalloc {
+    # tests fail with LLVM 11+
+    # https://github.com/jemalloc/jemalloc/issues/2091
+    stdenv = if stdenv.cc.isClang then llvmPackages_10.stdenv else stdenv;
+  };
 
   jemalloc450 = callPackage ../development/libraries/jemalloc/jemalloc450.nix { };
 
@@ -18794,6 +18798,8 @@ with pkgs;
   mqtt-bench = callPackage ../applications/misc/mqtt-bench {};
 
   msgpack = callPackage ../development/libraries/msgpack { };
+
+  msoffcrypto-tool = with python3.pkgs; toPythonApplication msoffcrypto-tool;
 
   msilbc = callPackage ../development/libraries/msilbc { };
 
@@ -22761,7 +22767,9 @@ with pkgs;
 
   seturgent = callPackage ../os-specific/linux/seturgent { };
 
-  sgx-sdk = callPackage ../os-specific/linux/sgx-sdk { };
+  sgx-sdk = callPackage ../os-specific/linux/sgx/sdk { };
+
+  sgx-psw = callPackage ../os-specific/linux/sgx/psw { };
 
   shadow = callPackage ../os-specific/linux/shadow { };
 
@@ -33226,11 +33234,11 @@ with pkgs;
     terraform_0_13
     terraform_0_14
     terraform_0_15
-    terraform_1_0
+    terraform_1
     terraform_plugins_test
     ;
 
-  terraform = terraform_1_0;
+  terraform = terraform_1;
   # deprecated
   terraform-full = terraform.full;
 

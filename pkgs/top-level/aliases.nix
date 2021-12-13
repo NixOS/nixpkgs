@@ -296,6 +296,7 @@ mapAliases ({
     svn_all_fast_export = svn-all-fast-export;
     topGit = top-git;
   };
+  gitin = throw "gitin has been remove because it was unmaintained and depended on an insecure version of libgit2"; # added 2021-12-07
   glib_networking = glib-networking; # added 2018-02-25
   gmailieer = lieer; # added 2020-04-19
   gmvault = throw "gmvault has been removed because it is unmaintained, mostly broken, and insecure"; # added 2021-03-08
@@ -929,7 +930,8 @@ mapAliases ({
   telepathy_salut = telepathy-salut; # added 2018-02-25
   telnet = inetutils; # added 2018-05-15
   terminus = throw "terminus has been removed, it was unmaintained in nixpkgs"; # added 2021-08-21
-  terraform_1_0_0 = terraform_1_0; # added 2021-06-15
+  terraform_1_0_0 = throw "terraform_1_0_0 has been renamed to terraform_1"; # added 2021-06-15
+  terraform_1_0 = throw "terraform_1_0 has been renamed to terraform_1"; # added 2021-12-08
   terraform-provider-ibm = terraform-providers.ibm; # added 2018-09-28
   terraform-provider-libvirt = terraform-providers.libvirt; # added 2018-09-28
   terraform-provider-lxd = terraform-providers.lxd; # added 2020-03-16
