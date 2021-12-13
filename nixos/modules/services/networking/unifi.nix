@@ -7,6 +7,7 @@ let
     @${cfg.jrePackage}/bin/java java \
         ${optionalString (cfg.initialJavaHeapSize != null) "-Xms${(toString cfg.initialJavaHeapSize)}m"} \
         ${optionalString (cfg.maximumJavaHeapSize != null) "-Xmx${(toString cfg.maximumJavaHeapSize)}m"} \
+        ${optionalString (lib.versionOlder cfg.unifiPackage.version "6.5.54") "-Dlog4j2.formatMsgNoLookups=true"} \
         -jar ${stateDir}/lib/ace.jar
   '';
 in

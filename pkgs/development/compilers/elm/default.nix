@@ -215,7 +215,7 @@ let
         };
       };
 
-      inherit (nodePkgs) elm-doc-preview elm-live elm-upgrade elm-xref elm-analyse;
+      inherit (nodePkgs) elm-doc-preview elm-live elm-upgrade elm-xref elm-analyse elm-git-install;
     };
 
 in hsPkgs.elmPkgs // elmNodePackages // elmRustPackages // {

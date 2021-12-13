@@ -17087,6 +17087,8 @@ with pkgs;
 
   ilmbase = callPackage ../development/libraries/ilmbase { };
 
+  imgui = callPackage ../development/libraries/imgui { };
+
   imlib = callPackage ../development/libraries/imlib {
     libpng = libpng12;
   };
@@ -23544,6 +23546,8 @@ with pkgs;
 
   nordic = callPackage ../data/themes/nordic { };
 
+  nordzy-cursor-theme = callPackage ../data/icons/nordzy-cursor-theme { };
+
   inherit (callPackages ../data/fonts/noto-fonts {})
     noto-fonts noto-fonts-cjk noto-fonts-emoji noto-fonts-emoji-blob-bin noto-fonts-extra;
 
@@ -25911,9 +25915,7 @@ with pkgs;
 
   indigenous-desktop = callPackage ../applications/networking/feedreaders/indigenous-desktop { };
 
-  jackline = callPackage ../applications/networking/instant-messengers/jackline {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_08;
-  };
+  jackline = callPackage ../applications/networking/instant-messengers/jackline { };
 
   leftwm = callPackage ../applications/window-managers/leftwm { };
 
@@ -26930,6 +26932,8 @@ with pkgs;
   mnamer = callPackage ../applications/misc/mnamer { };
 
   moc = callPackage ../applications/audio/moc { };
+
+  mod-arpeggiator-lv2 = callPackage ../applications/audio/mod-arpeggiator-lv2 { };
 
   mod-distortion = callPackage ../applications/audio/mod-distortion { };
 
@@ -29151,7 +29155,7 @@ with pkgs;
 
   vym = qt5.callPackage ../applications/misc/vym { };
 
-  wad = python3Packages.callPackage ../tools/security/wad { };
+  wad = callPackage ../tools/security/wad { };
 
   wafw00f = python3Packages.callPackage ../tools/security/wafw00f { };
 
@@ -32478,6 +32482,8 @@ with pkgs;
   utsushi = callPackage ../misc/drivers/utsushi { };
 
   idsk = callPackage ../tools/filesystems/idsk { };
+
+  colima = callPackage ../applications/virtualization/colima {};
 
   lima = callPackage ../applications/virtualization/lima {};
 

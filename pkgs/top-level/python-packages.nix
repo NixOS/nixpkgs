@@ -6942,6 +6942,8 @@ in {
     tesseract = pkgs.tesseract4;
   };
 
+  pyoctoprintapi = callPackage ../development/python-modules/pyoctoprintapi { };
+
   pyodbc = callPackage ../development/python-modules/pyodbc { };
 
   pyogg = callPackage ../development/python-modules/pyogg { };
@@ -9099,7 +9101,9 @@ in {
 
   srvlookup = callPackage ../development/python-modules/srvlookup { };
 
-  ssdeep = callPackage ../development/python-modules/ssdeep { };
+  ssdeep = callPackage ../development/python-modules/ssdeep {
+    inherit (pkgs) ssdeep;
+  };
 
   ssdp = callPackage ../development/python-modules/ssdp { };
 

@@ -39,11 +39,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-xktIHQHmz5gh72NEz9UQ9fMvBlj1BihWxHgxsHmTIB0=";
   };
 
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
-  };
+  patches = [
+    # Introduces a packagekit_backend meson flag.
+    # Makes appcenter actually work by using only the flatpak backend.
+    # https://github.com/elementary/appcenter/pull/1739
+    ./add-packagekit-backend-option.patch
+  ];
 
   nativeBuildInputs = [
     appstream-glib
@@ -78,12 +79,20 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dpayments=false"
     "-Dcurated=false"
+    # This option is introduced in add-packagekit-backend-option.patch
+    "-Dpackagekit_backend=false"
   ];
 
   postPatch = ''
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
   '';
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
 
   meta = with lib; {
     homepage = "https://github.com/elementary/appcenter";

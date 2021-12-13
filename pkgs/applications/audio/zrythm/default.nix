@@ -141,11 +141,14 @@ stdenv.mkDerivation rec {
     # "-Duser_manual=true" # needs sphinx-intl
     "-Dlsp_dsp=disabled"
     "-Db_lto=false"
+    "-Ddebug=true"
   ];
 
   NIX_LDFLAGS = ''
     -lfftw3_threads -lfftw3f_threads
   '';
+
+  dontStrip = true;
 
   postPatch = ''
     chmod +x scripts/meson-post-install.sh
