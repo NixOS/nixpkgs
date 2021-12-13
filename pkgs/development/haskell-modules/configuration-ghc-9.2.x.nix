@@ -83,7 +83,7 @@ self: super: {
   # Jailbreaks & Version Updates
   assoc = doJailbreak super.assoc;
   async = doJailbreak super.async;
-  attoparsec = super.attoparsec_0_14_2;
+  attoparsec = super.attoparsec_0_14_3;
   base64-bytestring = doJailbreak super.base64-bytestring;
   base-compat = self.base-compat_0_12_1;
   base-compat-batteries = self.base-compat-batteries_0_12_1;

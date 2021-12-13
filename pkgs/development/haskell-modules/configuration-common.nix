@@ -1875,7 +1875,7 @@ self: super: {
       sha256 = "1zhv1cg047lfyxfs3mvc73vv96pn240zaj7f2yl4lw5yj6y5rfk9";
     };
   } super.haskell-ci).overrideScope (self: super: {
-    attoparsec = self.attoparsec_0_14_2;
+    attoparsec = self.attoparsec_0_14_3;
     Cabal = self.Cabal_3_6_2_0;
   });
 
