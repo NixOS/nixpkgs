@@ -20,14 +20,14 @@ in
 
 stdenv.mkDerivation rec {
   pname = "fcft";
-  version = "2.5.0";
+  version = "2.5.1";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "dnkl";
     repo = "fcft";
     rev = version;
-    sha256 = "0agqldh68hn898d3f6k99kjbz8had5j5k0jyvi71d4k9vhx8cy7c";
+    sha256 = "0dn0ic2ddi5qz6nqscsn7nlih67ad8vpclppbqwas6xavdfq6va2";
   };
 
   depsBuildBuild = [ pkg-config ];
