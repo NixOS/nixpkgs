@@ -5030,6 +5030,8 @@ in {
 
   msldap = callPackage ../development/python-modules/msldap { };
 
+  msoffcrypto-tool = callPackage ../development/python-modules/msoffcrypto-tool { };
+
   mss = callPackage ../development/python-modules/mss { };
 
   msrestazure = callPackage ../development/python-modules/msrestazure { };
@@ -5409,6 +5411,8 @@ in {
 
   olefile = callPackage ../development/python-modules/olefile { };
 
+  oletools = callPackage ../development/python-modules/oletools { };
+
   omegaconf = callPackage ../development/python-modules/omegaconf { };
 
   omnilogic = callPackage ../development/python-modules/omnilogic { };
@@ -5693,6 +5697,8 @@ in {
   pbr = callPackage ../development/python-modules/pbr { };
 
   pc-ble-driver-py = toPythonModule (callPackage ../development/python-modules/pc-ble-driver-py { });
+
+  pcodedmp = callPackage ../development/python-modules/pcodedmp { };
 
   pcpp = callPackage ../development/python-modules/pcpp { };
 
