@@ -4059,6 +4059,8 @@ in {
     inherit (self) systemd pytest;
   };
 
+  jproperties = callPackage ../development/python-modules/jproperties { };
+
   jpylyzer = callPackage ../development/python-modules/jpylyzer { };
 
   JPype1 = callPackage ../development/python-modules/JPype1 { };
@@ -4618,6 +4620,8 @@ in {
   ludios_wpull = callPackage ../development/python-modules/ludios_wpull { };
 
   luftdaten = callPackage ../development/python-modules/luftdaten { };
+
+  luhn = callPackage ../development/python-modules/luhn { };
 
   luxor = callPackage ../development/python-modules/luxor { };
 
