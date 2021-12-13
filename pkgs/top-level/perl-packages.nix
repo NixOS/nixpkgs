@@ -4421,10 +4421,10 @@ let
 
   CryptPassphraseArgon2 = buildPerlPackage {
     pname = "Crypt-Passphrase-Argon2";
-    version = "0.002";
+    version = "0.003";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/L/LE/LEONT/Crypt-Passphrase-Argon2-0.002.tar.gz";
-      sha256 = "3906ff81697d13804ee21bd5ab78ffb1c4408b4822ce020e92ecf4737ba1f3a8";
+      url = "mirror://cpan/authors/id/L/LE/LEONT/Crypt-Passphrase-Argon2-0.003.tar.gz";
+      sha256 = "sha256-cCkLtb3GfBcBKN8+UWexfQS7eTkzqubAWnWGfao/OTg=";
     };
     propagatedBuildInputs = with perlPackages; [ CryptArgon2 CryptPassphrase ];
     meta = {
