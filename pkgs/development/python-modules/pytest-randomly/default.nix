@@ -5,7 +5,7 @@
 
 buildPythonPackage rec {
   pname = "pytest-randomly";
-  version = "3.10.1";
+  version = "3.10.3";
 
   disabled = pythonOlder "3.6";
 
@@ -14,7 +14,7 @@ buildPythonPackage rec {
     repo = pname;
     owner = "pytest-dev";
     rev = version;
-    sha256 = "10z7hsr8yd80sf5113i61p0g1c0nqkx7p4xi19v3d133f6vjbh3k";
+    sha256 = "0xw0xkk568za10y6r31my0qg378njklm5272sfcrvksnj4r2k1in";
   };
 
   propagatedBuildInputs = lib.optionals (pythonOlder "3.10") [
@@ -30,6 +30,8 @@ buildPythonPackage rec {
   ];
   # needs special invocation, copied from tox.ini
   pytestFlagsArray = [ "-p" "no:randomly" ];
+
+  pythonImportsCheck = [ "pytest_randomly" ];
 
   meta = with lib; {
     description = "Pytest plugin to randomly order tests and control random.seed";
