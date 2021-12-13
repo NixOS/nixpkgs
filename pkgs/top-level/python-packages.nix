@@ -10012,6 +10012,8 @@ in {
 
   vowpalwabbit = callPackage ../development/python-modules/vowpalwabbit { };
 
+  vpk = callPackage ../development/python-modules/vpk { };
+
   vsts = callPackage ../development/python-modules/vsts { };
 
   vsts-cd-manager = callPackage ../development/python-modules/vsts-cd-manager { };
