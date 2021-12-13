@@ -4433,6 +4433,21 @@ let
     };
   };
 
+  CryptPassphraseBcrypt = buildPerlPackage {
+    pname = "Crypt-Passphrase-Bcrypt";
+    version = "0.001";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/L/LE/LEONT/Crypt-Passphrase-Bcrypt-0.001.tar.gz";
+      sha256 = "sha256-M44nA4RH/eAjznyaC1dPR+4zeQRKDAgxrJRx8UMNxMU=";
+    };
+    propagatedBuildInputs = [ CryptEksblowfish CryptPassphrase ];
+    meta = {
+      homepage = "https://github.com/Leont/crypt-passphrase-bcrypt";
+      description = "A bcrypt encoder for Crypt::Passphrase";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   CryptPasswdMD5 = buildPerlModule {
     pname = "Crypt-PasswdMD5";
     version = "1.40";
