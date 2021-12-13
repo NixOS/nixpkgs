@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
       --suffix IDRIS2_LIBS ':' "$out/${name}/lib" \
       --suffix IDRIS2_DATA ':' "$out/${name}/support" \
       --suffix IDRIS2_PATH ':' "${additionalIdris2Paths}" \
-      --suffix LD_LIBRARY_PATH ':' "$out/${name}/lib"
+      --suffix ${if stdenv.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH"} ':' "$out/${name}/lib"
   '';
 
   meta = {
