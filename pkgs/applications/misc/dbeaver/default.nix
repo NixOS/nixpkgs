@@ -31,6 +31,7 @@ javaPackages.mavenfod rec {
   };
 
   mvnSha256 = "7Sm1hAoi5xc4MLONOD8ySLLkpao0qmlMRRva/8zR210=";
+  mvnParameters = "-P desktop,all-platforms";
 
   nativeBuildInputs = [
     copyDesktopItems

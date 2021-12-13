@@ -10,6 +10,7 @@
 , mvnSha256 ? "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
 , mvnHash ? "sha256-${mvnSha256}"
 , mvnFetchExtraArgs ? {}
+, mvnParameters ? ""
 , ...
 } @args:
 
@@ -26,7 +27,7 @@ stdenv.mkDerivation (rec {
     ];
 
     buildPhase = ''
-      mvn package -Dmaven.repo.local=$out/.m2 -P desktop,all-platforms
+      mvn package -Dmaven.repo.local=$out/.m2 ${mvnParameters}
     '';
 
     # keep only *.{pom,jar,sha1,nbm} and delete all ephemeral files with lastModified timestamps inside
