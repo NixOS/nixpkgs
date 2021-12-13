@@ -11,9 +11,8 @@ let
   figma-exec = stdenv.mkDerivation rec {
     inherit version;
     pname = "figma-exec";
-    src = pkgs.fetchurl {
-      url =
-        "https://github.com/Figma-Linux/figma-linux/releases/download/v${version}/figma-linux_${version}_linux_amd64.zip";
+    src = fetchurl {
+      url = "https://github.com/Figma-Linux/figma-linux/releases/download/v${version}/figma-linux_${version}_linux_amd64.zip";
       sha256 = "sha256-LqcjFLQeEQx/3HFy0mPoIynFy704omYVxv42IsY7s8k=";
     };
     buildInputs = [ unzip ];
