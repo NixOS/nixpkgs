@@ -2,7 +2,6 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
-, poetry-core
 , aiohttp
 , yarl
 , aresponses

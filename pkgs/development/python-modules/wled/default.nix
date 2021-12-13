@@ -2,20 +2,20 @@
 , aiohttp
 , awesomeversion
 , backoff
+, buildPythonPackage
 , cachetools
+, fetchFromGitHub
 , poetry-core
 , yarl
 , aresponses
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
-, yarl
 }:
 
 buildPythonPackage rec {
   pname = "wled";
   version = "0.10.2";
-  disabled = pythonOlder "3.8";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";

@@ -22,15 +22,6 @@ buildPythonPackage rec {
     sha256 = "18gbz9rcf183syvxvvhhl62af3b7463rlqxxs49w4m805hkvirdp";
   };
 
-  patches = [
-    (fetchpatch {
-      # Drop loop= kwarg from async_timeout and ClientSession calls
-      # https://github.com/sander76/aio-powerview-api/pull/13
-      url = "https://github.com/sander76/aio-powerview-api/commit/7be67268050fbbf7652ce5a020d2ff26f34d0b27.patch";
-      sha256 = "sha256-7QPwrMP1Sbrayg63YZJcRkVDAqcm6hqh0fuJdrUk5WY=";
-    })
-  ];
-
   propagatedBuildInputs = [
     aiohttp
     async-timeout
