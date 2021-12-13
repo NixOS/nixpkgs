@@ -5873,6 +5873,8 @@ in {
 
   pynx584 = callPackage ../development/python-modules/pynx584 { };
 
+  pypemicro = callPackage ../development/python-modules/pypemicro { };
+
   pypoint = callPackage ../development/python-modules/pypoint { };
 
   pypoolstation = callPackage ../development/python-modules/pypoolstation { };
