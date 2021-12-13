@@ -20,7 +20,7 @@ let
 
       registrationContent = {
         id = name;
-        url =  "http://${host}:${toString port}";
+        url = "http://${host}:${toString port}";
         as_token = "$AS_TOKEN";
         hs_token = "$HS_TOKEN";
         sender_localpart = "$SENDER_LOCALPART";
@@ -151,10 +151,12 @@ in
       })
       cfg.services;
 
-    users.users = mapAttrs' (n: v: nameValuePair "matrix-as-${n}" {
-      group = "matrix-as-${n}";
-      isSystemUser = true;
-    }) cfg.services;
+    users.users = mapAttrs'
+      (n: v: nameValuePair "matrix-as-${n}" {
+        group = "matrix-as-${n}";
+        isSystemUser = true;
+      })
+      cfg.services;
     users.groups = mapAttrs' (n: v: nameValuePair "matrix-as-${n}" { }) cfg.services;
 
     # Create a service for each appservice
@@ -167,7 +169,7 @@ in
     services =
       let
         registrationFiles = mapAttrsToList (n: _: "/var/lib/matrix-as-${n}/${n}-registration.yaml")
-            (filterAttrs (_: v: v.registrationData != { }) cfg.services);
+          (filterAttrs (_: v: v.registrationData != { }) cfg.services);
       in
       mkIf cfg.addRegistrationFiles {
         matrix-synapse.app_service_config_files = mkIf (cfg.homeserver == "matrix-synapse") registrationFiles;
