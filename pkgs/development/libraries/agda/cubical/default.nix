@@ -2,13 +2,13 @@
 
 mkDerivation rec {
   pname = "cubical";
-  version = "0.3pred5030a9";
+  version = "0.4prec3e097a";
 
   src = fetchFromGitHub {
     repo = pname;
     owner = "agda";
-    rev = "d5030a9c89070255fc575add4e9f37b97e6a0c0c";
-    sha256 = "18achbxap4ikydigmz3m3xjfn3i9dw4rn8yih82vrlc01j02nqpi";
+    rev = "c3e097a98c84083550fa31101346bd42a0501add";
+    sha256 = "101cni2a9xvia1mglb94z61jm8xk9r5kc1sn44cri0qsmk1zbqxs";
   };
 
   LC_ALL = "en_US.UTF-8";

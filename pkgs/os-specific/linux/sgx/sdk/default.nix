@@ -21,13 +21,13 @@
 , validatePkgConfig
 , writeShellScript
 , writeText
+, debug ? false
 }:
-with lib;
 stdenv.mkDerivation rec {
   pname = "sgx-sdk";
   version = "2.14.100.2";
 
-  versionTag = concatStringsSep "." (take 2 (splitVersion version));
+  versionTag = lib.concatStringsSep "." (lib.take 2 (lib.splitVersion version));
 
   src = fetchFromGitHub {
     owner = "intel";
@@ -140,6 +140,8 @@ stdenv.mkDerivation rec {
 
   buildFlags = [
     "sdk_install_pkg"
+  ] ++ lib.optionals debug [
+    "DEBUG=1"
   ];
 
   enableParallelBuilding = true;
@@ -264,7 +266,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests = callPackage ./samples.nix { };
 
-  meta = {
+  meta = with lib; {
     description = "Intel SGX SDK for Linux built with IPP Crypto Library";
     homepage = "https://github.com/intel/linux-sgx";
     maintainers = with maintainers; [ sbellem arturcygan veehaitch ];
