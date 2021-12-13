@@ -1349,21 +1349,21 @@ self: super: {
     resource-pool = self.hasura-resource-pool;
     ekg-core = self.hasura-ekg-core;
     ekg-json = self.hasura-ekg-json;
-    hspec = dontCheck self.hspec_2_9_3;
-    hspec-core = dontCheck self.hspec-core_2_9_3;
-    hspec-discover = dontCheck super.hspec-discover_2_9_3;
+    hspec = dontCheck self.hspec_2_9_4;
+    hspec-core = dontCheck self.hspec-core_2_9_4;
+    hspec-discover = dontCheck super.hspec-discover_2_9_4;
     tasty-hspec = self.tasty-hspec_1_2;
   }));
   hasura-ekg-core = doJailbreak (super.hasura-ekg-core.overrideScope (self: super: {
-    hspec = dontCheck self.hspec_2_9_3;
-    hspec-core = dontCheck self.hspec-core_2_9_3;
-    hspec-discover = dontCheck super.hspec-discover_2_9_3;
+    hspec = dontCheck self.hspec_2_9_4;
+    hspec-core = dontCheck self.hspec-core_2_9_4;
+    hspec-discover = dontCheck super.hspec-discover_2_9_4;
   }));
   hasura-ekg-json = super.hasura-ekg-json.overrideScope (self: super: {
     ekg-core = self.hasura-ekg-core;
-    hspec = dontCheck self.hspec_2_9_3;
-    hspec-core = dontCheck self.hspec-core_2_9_3;
-    hspec-discover = dontCheck super.hspec-discover_2_9_3;
+    hspec = dontCheck self.hspec_2_9_4;
+    hspec-core = dontCheck self.hspec-core_2_9_4;
+    hspec-discover = dontCheck super.hspec-discover_2_9_4;
   });
   pg-client = overrideCabal (drv: {
     librarySystemDepends = with pkgs; [ postgresql krb5.dev openssl.dev ];
@@ -2095,9 +2095,9 @@ EOT
   # Jailbreak isn't sufficient, but this is ok as it's a leaf package.
   hadolint = super.hadolint.overrideScope (self: super: {
     language-docker = self.language-docker_10_4_0;
-    hspec = dontCheck self.hspec_2_9_3;
-    hspec-core = dontCheck self.hspec-core_2_9_3;
-    hspec-discover = dontCheck self.hspec-discover_2_9_3;
+    hspec = dontCheck self.hspec_2_9_4;
+    hspec-core = dontCheck self.hspec-core_2_9_4;
+    hspec-discover = dontCheck self.hspec-discover_2_9_4;
     colourista = doJailbreak super.colourista;
   });
 
