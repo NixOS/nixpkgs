@@ -5,6 +5,7 @@
   libuuid, systemd, nspr, check, cmocka, uid_wrapper, p11-kit,
   nss_wrapper, ncurses, Po4a, http-parser, jansson,
   docbook_xsl, docbook_xml_dtd_44,
+  nixosTests,
   withSudo ? false }:
 
 let
@@ -86,6 +87,8 @@ stdenv.mkDerivation rec {
     rm -f "$out"/modules/ldb/memberof.la
     find "$out" -depth -type d -exec rmdir --ignore-fail-on-non-empty {} \;
   '';
+
+  passthru.tests = { inherit (nixosTests) sssd sssd-ldap; };
 
   meta = with lib; {
     description = "System Security Services Daemon";
