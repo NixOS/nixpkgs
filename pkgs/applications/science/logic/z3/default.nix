@@ -49,6 +49,9 @@ stdenv.mkDerivation rec {
         ++ optional pythonBindings "--python --pypkgdir=$out/${python.sitePackages}"
     ) + "\n" + "cd build";
 
+  # ../src/ast/ast.h:183:39: error: 'get<int, int, ast *, symbol, zstring *, rational *, double, unsigned int>' is unavailable: introduced in macOS 10.13
+  NIX_CFLAGS_COMPILE = lib.optional (stdenv.hostPlatform.system == "x86_64-darwin") "-D_LIBCPP_DISABLE_AVAILABILITY";
+
   postInstall = ''
     mkdir -p $dev $lib
     mv $out/lib $lib/lib
