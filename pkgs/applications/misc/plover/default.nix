@@ -1,4 +1,4 @@
-{ lib, fetchurl, python27Packages, python3Packages, wmctrl,
+{ lib, fetchFromGitHub, python27Packages, python3Packages, wmctrl,
   qtbase, mkDerivationWith }:
 
 {
@@ -12,9 +12,11 @@
       license     = licenses.gpl2;
     };
 
-    src = fetchurl {
-      url    = "https://github.com/openstenoproject/plover/archive/v${version}.tar.gz";
-      sha256 = "1hdg5491phx6svrxxsxp8v6n4b25y7y4wxw7x3bxlbyhaskgj53r";
+    src = fetchFromGitHub {
+      owner = "openstenoproject";
+      repo = "plover";
+      rev = "v${version}";
+      sha256 = "sha256-LIhTwHMphg+xTR9NKvjAZ6p0mmqPNcZd9C4cgnenmYQ=";
     };
 
     nativeBuildInputs     = [ setuptools-scm ];
@@ -34,9 +36,11 @@
       license     = licenses.gpl2;
     };
 
-    src = fetchurl {
-      url    = "https://github.com/openstenoproject/plover/archive/v${version}.tar.gz";
-      sha256 = "sha256-Eun+ZgmOIjYw6FS/2OGoBvYh52U/Ue0+NtIqrvV2Tqc=";
+    src = fetchFromGitHub {
+      owner = "openstenoproject";
+      repo = "plover";
+      rev = "v${version}";
+      sha256 = "sha256-oJ7+R3ZWhUbNTTAw1AfMg2ur8vW1XEbsa5FgSTam1Ns=";
     };
 
     # I'm not sure why we don't find PyQt5 here but there's a similar
