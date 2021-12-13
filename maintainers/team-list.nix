@@ -29,6 +29,13 @@ with lib.maintainers; {
     scope = "Maintain ACME-related packages and modules.";
   };
 
+  bazel = {
+    members = [
+      mboes
+    ];
+    scope = "Bazel build tool & related tools https://bazel.build/";
+  };
+
   beam = {
     members = [
       ankhers

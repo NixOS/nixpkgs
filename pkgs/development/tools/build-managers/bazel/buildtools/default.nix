@@ -27,6 +27,8 @@ buildGoModule rec {
     description = "Tools for working with Google's bazel buildtool. Includes buildifier, buildozer, and unused_deps";
     homepage = "https://github.com/bazelbuild/buildtools";
     license = licenses.asl20;
-    maintainers = with maintainers; [ elasticdog uri-canva marsam ];
+    maintainers = with maintainers;
+      [ elasticdog uri-canva marsam ]
+      ++ lib.teams.bazel.members;
   };
 }
