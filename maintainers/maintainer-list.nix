@@ -357,10 +357,10 @@
     name = "AmirHossein Roozbahani";
   };
   ahuzik = {
-    email = "ales.guzik@gmail.com";
-    github = "alesguzik";
+    email = "ah1990au@gmail.com";
+    github = "alesya-h";
     githubId = 209175;
-    name = "Ales Huzik";
+    name = "Alesya Huzik";
   };
   aij = {
     email = "aij+git@mrph.org";

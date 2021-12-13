@@ -24,10 +24,10 @@
 }:
 stdenv.mkDerivation rec {
   pname = "auto-multiple-choice";
-  version = "1.5.1";
+  version = "1.5.2";
   src = fetchurl {
     url = "https://download.auto-multiple-choice.net/${pname}_${version}_precomp.tar.gz";
-    sha256 = "71831122f7b43245d3289617064e0b561817c0130ee1773c1b957841b28b854c";
+    sha256 = "sha256-AjonJOooSe53Fww3QU6Dft95ojNqWrTuPul3nkIbctM=";
   };
   tlType = "run";
 

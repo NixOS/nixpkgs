@@ -12,21 +12,21 @@
 
 buildPythonPackage rec {
   pname = "twentemilieu";
-  version = "0.4.2";
+  version = "0.5.0";
   format = "pyproject";
-  disabled = pythonOlder "3.7";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-twentemilieu";
     rev = "v${version}";
-    sha256 = "1lf31ldbrsmxhbrcg284pwpvjfmwnssv3gqwd5vm2hvd9lwqn6ii";
+    sha256 = "sha256-7HQ0+h8oiyY+TacQdX84K0r994rH0AMZAvZz8PUvQl0=";
   };
 
-  # coverage tests aren't useful when consuming releases
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace '--cov' ""
+      --replace "--cov" ""
   '';
 
   nativeBuildInputs = [
