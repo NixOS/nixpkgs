@@ -110,8 +110,8 @@ let
   };
 
 in stdenv.mkDerivation {
+  pname = "figma";
   inherit version;
-  name = "figma";
   src = builtins.path { path = ./.; };
   nativeBuildInputs = [ figma-fhs ];
   installPhase = ''
