@@ -202,6 +202,9 @@ stdenv.mkDerivation rec {
     for f in $dev/bin/gtk4-encode-symbolic-svg; do
       wrapProgram $f --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
     done
+  '' + lib.optionalString broadwaySupport ''
+    # Broadway daemon
+    moveToOutput bin/gtk4-broadwayd "$out"
   '';
 
   # Wrap demos
