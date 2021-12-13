@@ -28,7 +28,7 @@ buildGoModule rec {
 
   passthru.tests = {
     nixos = nixosTests.ghostunnel;
-    podman = nixosTests.podman-tls-ghostunnel;
+    podman = nixosTests.podman.tls-ghostunnel;
   };
 
   meta = with lib; {

@@ -29,7 +29,7 @@ buildGoModule rec {
   doCheck = false; # NOTE: requires root privileges
 
   passthru.tests = {
-    inherit (nixosTests) podman-dnsname;
+    inherit (nixosTests.podman) dnsname;
   };
 
   meta = with lib; {
