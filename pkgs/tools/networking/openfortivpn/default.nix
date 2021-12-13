@@ -1,7 +1,8 @@
 { stdenv, lib, fetchFromGitHub, autoreconfHook, pkg-config
 , openssl
-, ppp     ? null
-, systemd ? null }:
+, ppp
+, systemd
+}:
 
 let
   withSystemd = stdenv.isLinux && !(systemd == null);
