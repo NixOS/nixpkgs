@@ -4892,6 +4892,8 @@ in {
 
   mixpanel = callPackage ../development/python-modules/mixpanel { };
 
+  mizani = callPackage ../development/python-modules/mizani { };
+
   mkl-service = callPackage ../development/python-modules/mkl-service { };
 
   ml-collections = callPackage ../development/python-modules/ml-collections { };
