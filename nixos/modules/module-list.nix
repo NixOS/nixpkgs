@@ -81,6 +81,7 @@
   ./hardware/sata.nix
   ./hardware/wooting.nix
   ./hardware/uinput.nix
+  ./hardware/uhk.nix
   ./hardware/video/amdgpu-pro.nix
   ./hardware/video/capture/mwprocapture.nix
   ./hardware/video/bumblebee.nix

@@ -1015,6 +1015,8 @@ with pkgs;
 
   topicctl = callPackage ../tools/misc/topicctl { };
 
+  uhk-agent = callPackage ../tools/misc/uhk-agent { };
+
   veikk-linux-driver-gui = libsForQt5.callPackage ../tools/misc/veikk-linux-driver-gui { };
 
   ventoy-bin = callPackage ../tools/cd-dvd/ventoy-bin { };
@@ -22931,6 +22933,8 @@ with pkgs;
   udisks_glue = callPackage ../os-specific/linux/udisks-glue { };
 
   ugtrain = callPackage ../tools/misc/ugtrain { };
+
+  uhk-udev-rules = callPackage ../os-specific/linux/uhk-udev-rules { };
 
   untie = callPackage ../os-specific/linux/untie { };
 
