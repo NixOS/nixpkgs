@@ -2438,6 +2438,8 @@ in {
 
   ecpy = callPackage ../development/python-modules/ecpy { };
 
+  ecs-logging =  callPackage ../development/python-modules/ecs-logging { };
+
   ed25519 = callPackage ../development/python-modules/ed25519 { };
 
   editables = callPackage ../development/python-modules/editables { };
@@ -2461,6 +2463,8 @@ in {
   elgato = callPackage ../development/python-modules/elgato { };
 
   elkm1-lib = callPackage ../development/python-modules/elkm1-lib { };
+
+  elastic-apm = callPackage ../development/python-modules/elastic-apm { };
 
   elasticsearch = callPackage ../development/python-modules/elasticsearch { };
 
