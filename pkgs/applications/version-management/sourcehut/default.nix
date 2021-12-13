@@ -27,7 +27,6 @@ let
       todosrht = self.callPackage ./todo.nix { };
 
       scmsrht = self.callPackage ./scm.nix { };
-      srht-keys = self.scmsrht.srht-keys;
     };
   };
 in
@@ -45,5 +44,4 @@ with python.pkgs; recurseIntoAttrs {
   pagessrht = pagessrht;
   pastesrht = toPythonApplication pastesrht;
   todosrht = toPythonApplication todosrht;
-  srht-keys = scmsrht.srht-keys;
 }

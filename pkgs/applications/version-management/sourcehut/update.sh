@@ -62,12 +62,12 @@ if [ $# -gt 0 ]; then
   services=("$@")
 else
   # Beware that some packages must be updated before others,
-  # eg. srht-keys must be update before gitsrht,
+  # eg. buildsrht must be updated before gitsrht,
   # otherwise this script would enter an infinite loop
   # because the reported $oldHash to be changed
   # may not actually be in $default_nix
   # but in the file of one of its dependencies.
-  services=( "srht" "scmsrht" "srht-keys" "buildsrht" "dispatchsrht" "gitsrht" "hgsrht" "hubsrht" "listssrht" "mansrht"
+  services=( "srht" "scmsrht" "buildsrht" "dispatchsrht" "gitsrht" "hgsrht" "hubsrht" "listssrht" "mansrht"
              "metasrht" "pagessrht" "pastesrht" "todosrht" )
 fi
 
