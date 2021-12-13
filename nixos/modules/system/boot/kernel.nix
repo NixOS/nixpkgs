@@ -43,6 +43,9 @@ in
           kernelPatches = (originalArgs.kernelPatches or []) ++ kernelPatches;
           features = lib.recursiveUpdate super.kernel.features features;
         });
+      } // optionalAttrs config.boot.zfs.unsafeDisableVersionCheck {
+        zfs = super.zfs.overrideAttrs (_: { meta.broken = false; });
+        zfsUnstable = super.zfsUnstable.overrideAttrs (_: { meta.broken = false; });
       });
       # We don't want to evaluate all of linuxPackages for the manual
       # - some of it might not even evaluate correctly.

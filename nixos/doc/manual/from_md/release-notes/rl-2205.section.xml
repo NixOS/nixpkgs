@@ -87,7 +87,7 @@
   </section>
   <section xml:id="sec-release-22.05-notable-changes">
     <title>Other Notable Changes</title>
-    <itemizedlist spacing="compact">
+    <itemizedlist>
       <listitem>
         <para>
           The option
@@ -111,6 +111,16 @@
           are only accessible by default to the members of the Unix
           group <literal>redis-${serverName}</literal> through the Unix
           socket <literal>/run/redis-${serverName}/redis.sock</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          There is a new option
+          <literal>boot.zfs.unsafeDisableVersionCheck</literal> for
+          people living on the bleeding edge, which allows compiling the
+          ZFS kernel module against kernel versions that are not
+          officially supported upstream. To prevent people from
+          accidentally using it, a big fat warning was added.
         </para>
       </listitem>
     </itemizedlist>

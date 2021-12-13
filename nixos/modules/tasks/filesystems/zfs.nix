@@ -115,6 +115,21 @@ in
         description = "True if ZFS filesystem support is enabled";
       };
 
+      unsafeDisableVersionCheck = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          This will disable the kernel version compatibility check of the ZFS
+          kernel module that is normally in place. Hence this allows the user to
+          compile (or at least attempt to compile) the ZFS kernel module against
+          kernel versions that are not officially supported by upstream.
+
+          <emphasis>Caution</emphasis>: You are entering UNSUPPORTED
+          territory. Here be dragons, pool corruption and data loss! You have
+          been warned.
+        '';
+      };
+
       enableUnstable = mkOption {
         type = types.bool;
         default = false;
@@ -397,6 +412,10 @@ in
           assertion = !cfgZfs.forceImportAll || cfgZfs.forceImportRoot;
           message = "If you enable boot.zfs.forceImportAll, you must also enable boot.zfs.forceImportRoot";
         }
+      ];
+
+      warnings = mkIf cfgZfs.unsafeDisableVersionCheck [
+        "You have disabled the ZFS kernel module version check. This can lead to pool corruption or data loss."
       ];
 
       boot = {
