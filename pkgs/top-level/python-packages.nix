@@ -1410,6 +1410,8 @@ in {
 
   carrot = callPackage ../development/python-modules/carrot { };
 
+  cart = callPackage ../development/python-modules/cart { };
+
   cartopy = callPackage ../development/python-modules/cartopy { };
 
   casa-formats-io = callPackage ../development/python-modules/casa-formats-io { };
@@ -1537,6 +1539,8 @@ in {
   ci-info = callPackage ../development/python-modules/ci-info { };
 
   ci-py = callPackage ../development/python-modules/ci-py { };
+
+  circuitbreaker = callPackage ../development/python-modules/circuitbreaker { };
 
   cirq = callPackage ../development/python-modules/cirq { };
 
@@ -2294,6 +2298,8 @@ in {
 
   dm-sonnet = callPackage ../development/python-modules/dm-sonnet { };
 
+  dm-tree = callPackage ../development/python-modules/dm-tree { };
+
   dnachisel = callPackage ../development/python-modules/dnachisel { };
 
   dnslib = callPackage ../development/python-modules/dnslib { };
@@ -2437,6 +2443,8 @@ in {
 
   ecpy = callPackage ../development/python-modules/ecpy { };
 
+  ecs-logging =  callPackage ../development/python-modules/ecs-logging { };
+
   ed25519 = callPackage ../development/python-modules/ed25519 { };
 
   editables = callPackage ../development/python-modules/editables { };
@@ -2460,6 +2468,8 @@ in {
   elgato = callPackage ../development/python-modules/elgato { };
 
   elkm1-lib = callPackage ../development/python-modules/elkm1-lib { };
+
+  elastic-apm = callPackage ../development/python-modules/elastic-apm { };
 
   elasticsearch = callPackage ../development/python-modules/elasticsearch { };
 
@@ -4062,6 +4072,8 @@ in {
     inherit (self) systemd pytest;
   };
 
+  jproperties = callPackage ../development/python-modules/jproperties { };
+
   jpylyzer = callPackage ../development/python-modules/jpylyzer { };
 
   JPype1 = callPackage ../development/python-modules/JPype1 { };
@@ -4626,6 +4638,8 @@ in {
 
   luftdaten = callPackage ../development/python-modules/luftdaten { };
 
+  luhn = callPackage ../development/python-modules/luhn { };
+
   luxor = callPackage ../development/python-modules/luxor { };
 
   luxtronik = callPackage ../development/python-modules/luxtronik { };
@@ -4905,7 +4919,11 @@ in {
 
   mixpanel = callPackage ../development/python-modules/mixpanel { };
 
+  mizani = callPackage ../development/python-modules/mizani { };
+
   mkl-service = callPackage ../development/python-modules/mkl-service { };
+
+  ml-collections = callPackage ../development/python-modules/ml-collections { };
 
   mlflow = callPackage ../development/python-modules/mlflow { };
 
@@ -5301,9 +5319,11 @@ in {
 
   notedown = callPackage ../development/python-modules/notedown { };
 
-  notify2 = callPackage ../development/python-modules/notify2 { };
+  notifications-python-client = callPackage ../development/python-modules/notifications-python-client { };
 
   notify-py = callPackage ../development/python-modules/notify-py { };
+
+  notify2 = callPackage ../development/python-modules/notify2 { };
 
   notmuch = callPackage ../development/python-modules/notmuch {
     inherit (pkgs) notmuch;
@@ -6955,6 +6975,8 @@ in {
     tesseract = pkgs.tesseract4;
   };
 
+  pyoctoprintapi = callPackage ../development/python-modules/pyoctoprintapi { };
+
   pyodbc = callPackage ../development/python-modules/pyodbc { };
 
   pyogg = callPackage ../development/python-modules/pyogg { };
@@ -7643,6 +7665,8 @@ in {
   python-ctags3 = callPackage ../development/python-modules/python-ctags3 { };
 
   python-daemon = callPackage ../development/python-modules/python-daemon { };
+
+  python-datemath = callPackage ../development/python-modules/python-datemath { };
 
   python-dateutil = callPackage ../development/python-modules/dateutil { };
 
@@ -9221,6 +9245,8 @@ in {
   };
 
   subunit2sql = callPackage ../development/python-modules/subunit2sql { };
+
+  subzerod = callPackage ../development/python-modules/subzerod { };
 
   suds-jurko = callPackage ../development/python-modules/suds-jurko { };
 

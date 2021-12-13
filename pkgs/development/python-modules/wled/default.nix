@@ -1,12 +1,11 @@
 { lib
 , aiohttp
-, aresponses
 , awesomeversion
 , backoff
-, buildPythonPackage
 , cachetools
-, fetchFromGitHub
 , poetry-core
+, yarl
+, aresponses
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
@@ -15,7 +14,8 @@
 
 buildPythonPackage rec {
   pname = "wled";
-  version = "0.10.0";
+  version = "0.10.2";
+  disabled = pythonOlder "3.8";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "frenck";
     repo = "python-wled";
     rev = "v${version}";
-    sha256 = "0ivh6yxpswz730i33fwr4hj8nwdmdyw4n6p89x9sxmvjmd7ihkgm";
+    sha256 = "sha256-tqR/edkBFseldSXGoekfRmw//h6Z/Xcg1W0HXJvLhtk=";
   };
 
   nativeBuildInputs = [

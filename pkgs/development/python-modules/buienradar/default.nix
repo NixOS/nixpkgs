@@ -13,15 +13,16 @@
 
 buildPythonPackage rec {
   pname = "buienradar";
-  version = "1.0.4";
+  version = "1.0.5";
 
   disabled = pythonOlder "3.4";
 
   src = fetchFromGitHub {
     owner = "mjj4791";
     repo = "python-buienradar";
-    rev = version;
-    sha256 = "1s0m5x7wdvzzsm797lh6531k614ybh7z0cikxjxqw377mivpz4wq";
+    # https://github.com/mjj4791/python-buienradar/issues/14
+    rev = "caa66ea855dbcc7cf6ee13291d9b2ed7ac01ef98";
+    hash = "sha256:0xz03xj5qjayriaah20adh0ycvlvb8jdvgh7w5gm236n64g6krj0";
   };
 
   propagatedBuildInputs = [

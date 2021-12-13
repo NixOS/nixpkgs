@@ -9903,6 +9903,8 @@ with pkgs;
 
   subfinder = callPackage ../tools/networking/subfinder { };
 
+  subzerod = with python3Packages; toPythonApplication subzerod;
+
   suckit = callPackage ../tools/networking/suckit {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -15706,6 +15708,8 @@ with pkgs;
     stdenv = overrideCC stdenv buildPackages.gcc6; # hidden symbol `__divmoddi4'
   });
 
+  arsenal = callPackage ../tools/security/arsenal { };
+
   assimp = callPackage ../development/libraries/assimp { };
 
   asio_1_10 = callPackage ../development/libraries/asio/1.10.nix { };
@@ -17105,6 +17109,8 @@ with pkgs;
   ilixi = callPackage ../development/libraries/ilixi { };
 
   ilmbase = callPackage ../development/libraries/ilmbase { };
+
+  imgui = callPackage ../development/libraries/imgui { };
 
   imlib = callPackage ../development/libraries/imlib {
     libpng = libpng12;
@@ -23572,6 +23578,8 @@ with pkgs;
 
   nordic = callPackage ../data/themes/nordic { };
 
+  nordzy-cursor-theme = callPackage ../data/icons/nordzy-cursor-theme { };
+
   inherit (callPackages ../data/fonts/noto-fonts {})
     noto-fonts noto-fonts-cjk noto-fonts-emoji noto-fonts-emoji-blob-bin noto-fonts-extra;
 
@@ -25937,9 +25945,7 @@ with pkgs;
 
   indigenous-desktop = callPackage ../applications/networking/feedreaders/indigenous-desktop { };
 
-  jackline = callPackage ../applications/networking/instant-messengers/jackline {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_08;
-  };
+  jackline = callPackage ../applications/networking/instant-messengers/jackline { };
 
   leftwm = callPackage ../applications/window-managers/leftwm { };
 
@@ -29184,6 +29190,8 @@ with pkgs;
   wad = callPackage ../tools/security/wad { };
 
   wafw00f = python3Packages.callPackage ../tools/security/wafw00f { };
+
+  whispers = callPackage ../tools/security/whispers { };
 
   waon = callPackage ../applications/audio/waon { };
 
