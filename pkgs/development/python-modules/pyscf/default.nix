@@ -66,6 +66,7 @@ buildPythonPackage rec {
     nosetests pyscf/ -v \
       --exclude-dir=examples --exclude-dir=pyscf/pbc/grad \
       --exclude-dir=pyscf/x2c \
+      --exclude-dir=pyscf/adc \
       --exclude-dir=pyscf/pbc/tdscf \
       -e test_bz \
       -e h2o_vdz \
