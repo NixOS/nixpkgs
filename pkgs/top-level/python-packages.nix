@@ -1405,6 +1405,8 @@ in {
 
   carrot = callPackage ../development/python-modules/carrot { };
 
+  cart = callPackage ../development/python-modules/cart { };
+
   cartopy = callPackage ../development/python-modules/cartopy { };
 
   casa-formats-io = callPackage ../development/python-modules/casa-formats-io { };
