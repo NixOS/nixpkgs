@@ -1535,6 +1535,8 @@ in {
 
   ci-py = callPackage ../development/python-modules/ci-py { };
 
+  circuitbreaker = callPackage ../development/python-modules/circuitbreaker { };
+
   cirq = callPackage ../development/python-modules/cirq { };
 
   cirq-aqt = callPackage ../development/python-modules/cirq-aqt { };
