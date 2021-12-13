@@ -1,8 +1,10 @@
 { lib
-, python3
-, substituteAll
 , fetchpatch
 , installShellFiles
+, ninja
+, pkg-config
+, python3
+, substituteAll
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -59,10 +61,14 @@ python3.pkgs.buildPythonApplication rec {
 
   setupHook = ./setup-hook.sh;
 
-  # 0.45 update enabled tests but they are failing
+  # Meson included tests since 0.45, however they fail in Nixpkgs because they
+  # require a typical building environment (including C compiler and stuff).
+  # Just for the sake of documentation, the next lines are maintained here.
   doCheck = false;
-  # checkInputs = [ ninja pkg-config ];
-  # checkPhase = "python ./run_project_tests.py";
+  checkInputs = [ ninja pkg-config ];
+  checkPhase = ''
+    python ./run_project_tests.py
+  '';
 
   postFixup = ''
     pushd $out/bin
@@ -100,3 +106,4 @@ python3.pkgs.buildPythonApplication rec {
     inherit (python3.meta) platforms;
   };
 }
+# TODO: a more Nixpkgs-tailoired test suite
