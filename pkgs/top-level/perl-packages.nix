@@ -18090,6 +18090,22 @@ let
     };
   };
 
+  PLS = buildPerlPackage {
+    pname = "PLS";
+    version = "0.897";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MR/MREISNER/PLS-0.897.tar.gz";
+      sha256 = "0278anidj7bgassj32g20cbki2kkqakkr3axyq4k90nj4snw7p6x";
+    };
+    propagatedBuildInputs = [ Future IOAsync PPI PPR PathTiny PerlCritic PerlTidy PodMarkdown URI ];
+    meta = {
+      homepage = "https://github.com/FractalBoy/perl-language-server";
+      description = "Perl Language Server";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.artturin ];
+    };
+  };
+
   Po4a = callPackage ../development/perl-modules/Po4a { };
 
   PodMinimumVersion = buildPerlPackage {
