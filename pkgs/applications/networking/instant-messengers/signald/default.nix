@@ -1,10 +1,16 @@
 { lib, stdenv, fetchurl, fetchgit, jre, coreutils, gradle_6, git, perl
-, makeWrapper }:
+, makeWrapper, fetchpatch
+}:
 
 let
   pname = "signald";
 
   version = "0.13.1";
+
+  log4j-update-cve-2021-44228 = fetchpatch {
+    url = "https://gitlab.com/signald/signald/-/commit/7f668062ab9ffa09a49d171e995f57cf0a0803a7.patch";
+    sha256 = "sha256-504je6hKciUGelVCGZjxGjHi1qZQaovagXD5PBQP+mM=";
+  };
 
   # This package uses the .git directory
   src = fetchgit {
@@ -19,7 +25,7 @@ let
     sha256 = "0y1f42y7ilm3ykgnm6s3ks54d71n8lsy5649xgd9ahv28lj05x9f";
   };
 
-  patches = [ ./git-describe-always.patch ./gradle-plugin.patch ];
+  patches = [ ./git-describe-always.patch ./gradle-plugin.patch log4j-update-cve-2021-44228 ];
 
   postPatch = ''
     patchShebangs gradlew
@@ -45,7 +51,7 @@ let
     forceShare = [ "dummy" ];
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "0w8ixp1l0ch1jc2dqzxdx3ljlh17hpgns2ba7qvj43nr4prl71l7";
+    outputHash = "sha256-SREsv4h8M1Ay99qF7fvvyyPvQr535fNWB1ATH6UY74I=";
   };
 
 in stdenv.mkDerivation rec {
