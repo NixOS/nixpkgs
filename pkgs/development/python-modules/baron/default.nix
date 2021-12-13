@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "baron";
-  version = "0.9";
+  version = "0.10.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0fib74nkqnl1i2zzlhbbfpw3whwc4951p9x61r2xrxhwp4r9yn5h";
+    sha256 = "af822ad44d4eb425c8516df4239ac4fdba9fdb398ef77e4924cd7c9b4045bc2f";
   };
 
   propagatedBuildInputs = [ rply ];

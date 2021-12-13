@@ -5,11 +5,11 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "aws-sam-cli";
-  version = "1.35.0";
+  version = "1.36.0";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "sha256-ojJoC8UuZDVm6CDmYbPoO0e+1QAYa0UcekYEd/MGFRM=";
+    sha256 = "sha256-GJbBhe1l25ZHGWVu1o2oJvd/BNv8dv7aIYor/ebFl9U=";
   };
 
   # Tests are not included in the PyPI package
@@ -51,7 +51,7 @@ python3.pkgs.buildPythonApplication rec {
       --replace "aws_lambda_builders==" "aws-lambda-builders #" \
       --replace "typing_extensions==" "typing-extensions #" \
       --replace "regex==" "regex #" \
-      --replace "tzlocal==3.0" "tzlocal==2.*"
+      --replace "tzlocal==3.0" "tzlocal"
   '';
 
   meta = with lib; {

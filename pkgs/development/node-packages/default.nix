@@ -392,6 +392,7 @@ let
     };
 
     teck-programmer = super.teck-programmer.override {
+      nativeBuildInputs = [ self.node-gyp-build ];
       buildInputs = [ pkgs.libusb1 ];
     };
 

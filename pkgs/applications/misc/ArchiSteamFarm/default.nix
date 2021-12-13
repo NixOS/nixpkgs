@@ -47,6 +47,6 @@ buildDotnetModule rec {
     homepage = "https://github.com/JustArchiNET/ArchiSteamFarm";
     license = licenses.asl20;
     platforms = dotnetCorePackages.aspnetcore_5_0.meta.platforms;
-    maintainers = with maintainers; [ SuperSandro2000 legendofmiracles ];
+    maintainers = with maintainers; [ SuperSandro2000 lom ];
   };
 }

@@ -274,7 +274,7 @@ stdenv.mkDerivation rec {
   disallowedReferences = [ goBootstrap ];
 
   meta = with lib; {
-    homepage = "http://golang.org/";
+    homepage = "https://go.dev/";
     description = "The Go Programming language";
     license = licenses.bsd3;
     maintainers = teams.golang.members;

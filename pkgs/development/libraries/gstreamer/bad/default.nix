@@ -105,7 +105,6 @@ stdenv.mkDerivation rec {
   patches = [
     # Use pkgconfig to inject the includedirs
     ./fix_pkgconfig_includedir.patch
-  ] ++ lib.optionals stdenv.isDarwin [
     # Fix “error: cannot initialize a parameter of type 'unsigned long *' with an rvalue of type 'typename std::remove_reference<decltype(*(&opencv_dilate_erode_type))>::type *' (aka 'volatile unsigned long *')” on Darwin.
     (fetchpatch {
       url = "https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad/commit/640a65bf966df065d41a511e2d76d1f26a2e770c.patch";

@@ -64,6 +64,19 @@ proc getNimbleValues(filePath, key: string): seq[string] =
     if s.len > 0 and s[0] == '"':
       s = s.unescape()
 
+proc getOutputDir(name: string): string =
+  ## Return the output directory for output `name`.
+  ## If `name` is not a valid output then the first output
+  ## is returned as a default.
+  let outputs = splitWhitespace getEnv("outputs")
+  doAssert(outputs.len > 0)
+  if outputs.contains name:
+    result = getEnv(name)
+  if result == "":
+    result = getEnv("out")
+  if result == "":
+    result = getEnv(outputs[0], "/dev/null")
+
 proc configurePhase*() =
   ## Generate "config.nims" which will be read by the Nim
   ## compiler during later phases.
@@ -103,14 +116,14 @@ proc buildPhase*() =
     nf = getNimbleFilePath()
     bins = nf.getNimbleValues("bin")
     srcDir = nf.getNimbleValue("srcDir", ".")
-    binDir = getenv("outputBin", getenv("out", "/dev/null")) / "bin"
+    binDir = getOutputDir("bin") / "bin"
   if bins != @[]:
     for bin in bins:
       cmds.add("nim compile $# --outdir:$# $#" %
           [getenv"nimFlags", binDir, normalizedPath(srcDir / bin)])
   if getEnvBool"nimDoc":
     echo "generating documentation"
-    let docDir = getenv("outputDoc", (getenv("out", "/dev/null") / "doc"))
+    let docDir = getOutputDir("doc") / "doc"
     for path in walkFiles(srcDir / "*.nim"):
       cmds.add("nim doc --outdir:$# $#" % [docDir, path])
   if cmds.len > 0:
@@ -126,7 +139,7 @@ proc installPhase*() =
     let
       nf = getNimbleFilePath()
       srcDir = nf.getNimbleValue("srcDir", ".")
-      devDir = getenv("outputDev", getenv("out", "/dev/null"))
+      devDir = getOutputDir "dev"
     echo "Install ", srcDir, " to ", devDir
     copyDir(normalizedPath(srcDir), normalizedPath(devDir / srcDir))
     copyFile(nf, devDir / nf.extractFilename)

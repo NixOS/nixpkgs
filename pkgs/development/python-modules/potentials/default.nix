@@ -1,23 +1,25 @@
 { lib
-, buildPythonPackage
-, fetchPypi
-, ipywidgets
-, cdcs
 , bibtexparser
-, habanero
-, pandas
-, requests
-, numpy
-, matplotlib
-, unidecode
+, buildPythonPackage
+, cdcs
 , datamodeldict
-, xmltodict
+, fetchPypi
+, habanero
+, ipywidgets
+, lxml
+, matplotlib
+, numpy
+, pandas
 , pytestCheckHook
 , pythonOlder
+, requests
+, scipy
+, unidecode
+, xmltodict
 }:
 
 buildPythonPackage rec {
-  version = "0.3.1";
+  version = "0.3.2";
   pname = "potentials";
   format = "setuptools";
 
@@ -25,20 +27,22 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "02l1rav5jdfsb00byxbswyhqdnjljp9y7g4ddn4mivzi7x39qa52";
+    sha256 = "sha256-u++ClAAc96u7k8w756sFR4oCtIOgERQ7foklxWWPprY=";
   };
 
   propagatedBuildInputs = [
-    ipywidgets
-    cdcs
     bibtexparser
+    cdcs
+    datamodeldict
     habanero
+    ipywidgets
+    lxml
+    matplotlib
+    numpy
     pandas
     requests
-    numpy
-    matplotlib
+    scipy
     unidecode
-    datamodeldict
     xmltodict
   ];
 

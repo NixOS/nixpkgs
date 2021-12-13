@@ -21,13 +21,13 @@
 
 mkDerivation rec {
   pname = "nextcloud-client";
-  version = "3.3.6";
+  version = "3.4.0";
 
   src = fetchFromGitHub {
     owner = "nextcloud";
     repo = "desktop";
     rev = "v${version}";
-    sha256 = "sha256-HhFm8rIsDaV4QmvHplbj49gf1vYCZyBl8WH5bvRHT7I=";
+    sha256 = "sha256-+b+DJwbYegbeoQmcdBg5Y7rJmKwPjz2XRUroP55ZO+g=";
   };
 
   patches = [

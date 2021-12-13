@@ -2,11 +2,11 @@
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
-, isPy27
-, pytest-runner
+, pythonOlder
 , pytestCheckHook
 , numpy
 , pillow
+, setuptools
 }:
 
 let
@@ -20,7 +20,7 @@ let
     sha256 = "sha256-iExy+mUs1uqs/u9N6btlqyP6/TvoPVsuOuzs56zZAS8=";
   };
 
-  # Pydicom needs pydicom-data to run some tests. If these files are downloaded
+  # Pydicom needs pydicom-data to run some tests. If these files aren't downloaded
   # before the package creation, it'll try to download during the checkPhase.
   test_data = fetchFromGitHub {
     owner = "${pname}";
@@ -32,11 +32,11 @@ let
 in
 buildPythonPackage {
   inherit pname version src;
-  disabled = isPy27;
+  disabled = pythonOlder "3.6";
 
-  propagatedBuildInputs = [ numpy pillow ];
+  propagatedBuildInputs = [ numpy pillow setuptools ];
 
-  checkInputs = [ pytest-runner pytestCheckHook ];
+  checkInputs = [ pytestCheckHook ];
 
   # Setting $HOME to prevent pytest to try to create a folder inside
   # /homeless-shelter which is read-only.

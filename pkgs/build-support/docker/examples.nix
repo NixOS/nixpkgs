@@ -350,6 +350,9 @@ rec {
       # This removes sharing of busybox and is not recommended. We do this
       # to make the example suitable as a test case with working binaries.
       cp -r ${pkgs.pkgsStatic.busybox}/* .
+
+      # This is a "build" dependency that will not appear in the image
+      ${pkgs.hello}/bin/hello
     '';
   };
 
@@ -504,6 +507,11 @@ rec {
     fakeRootCommands = ''
       mkdir -p ./home/jane
       chown 1000 ./home/jane
+      ln -s ${pkgs.hello.overrideAttrs (o: {
+        # A unique `hello` to make sure that it isn't included via another mechanism by accident.
+        configureFlags = o.configureFlags or "" + " --program-prefix=layeredImageWithFakeRootCommands-";
+        doCheck = false;
+      })} ./hello
     '';
   };
 
@@ -553,6 +561,20 @@ rec {
 
   # Example export of the bash image
   exportBash = pkgs.dockerTools.exportImage { fromImage = bash; };
+
+  imageViaFakeChroot = pkgs.dockerTools.streamLayeredImage {
+    name = "image-via-fake-chroot";
+    tag = "latest";
+    config.Cmd = [ "hello" ];
+    enableFakechroot = true;
+    # Crucially, instead of a relative path, this creates /bin, which is
+    # intercepted by fakechroot.
+    # This functionality is not available on darwin as of 2021.
+    fakeRootCommands = ''
+      mkdir /bin
+      ln -s ${pkgs.hello}/bin/hello /bin/hello
+    '';
+  };
 
   build-image-with-path = buildImage {
     name = "build-image-with-path";

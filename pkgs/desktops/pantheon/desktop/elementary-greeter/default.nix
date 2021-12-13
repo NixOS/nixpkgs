@@ -1,10 +1,10 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , nix-update-script
 , linkFarm
 , substituteAll
 , elementary-greeter
-, pantheon
 , pkg-config
 , meson
 , ninja

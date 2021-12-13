@@ -483,6 +483,10 @@ self: super: {
     dependencies = with self; [ popfix ];
   });
 
+  nvim-metals = super.nvim-metals.overrideAttrs (old: {
+    dontBuild = true;
+  });
+
   nvim-spectre = super.nvim-spectre.overrideAttrs (old: {
     dependencies = with self; [ plenary-nvim ];
   });
@@ -744,7 +748,7 @@ self: super: {
             libiconv
           ];
 
-          cargoSha256 = "sha256-DiCQpgyz0iNEm6gjaJU5IGdsQISHhPqlDQBzZafngjY=";
+          cargoSha256 = "sha256-zYm+7qAvhVGa/afddHhI2aQxmiLOkus5PHZBDP9S/Qg=";
         };
       in
       ''

@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "schismtracker";
-  version = "20210525";
+  version = "20211116";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "06ybkbqry7f7lmzgwb9s7ipafshl5gdj98lcjsjkcbnywj8r9b3h";
+    sha256 = "1kcw4rwphyqh0hwwjsydzwg484xj17rb5lc8pfsixsg77z50ayzz";
   };
 
   configureFlags = [ "--enable-dependency-tracking" ]
@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook python ];
 
   buildInputs = [ SDL ] ++ lib.optional stdenv.isLinux alsa-lib;
+
+  enableParallelBuilding = true;
 
   meta = with lib; {
     description = "Music tracker application, free reimplementation of Impulse Tracker";

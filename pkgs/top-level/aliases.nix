@@ -33,6 +33,7 @@ in
   ### Deprecated aliases - for backward compatibility
 
 mapAliases ({
+  _0x0 = throw "0x0 upstream is abandoned and no longer exists: https://gitlab.com/somasis/scripts/";
   PPSSPP = ppsspp; # added 2017-10-01
   QmidiNet = qmidinet;  # added 2016-05-22
   accounts-qt = libsForQt5.accounts-qt; # added 2015-12-19
@@ -131,6 +132,7 @@ mapAliases ({
   clangAnalyzer = clang-analyzer;  # added 2015-02-20
   claws-mail-gtk3 = claws-mail; # added 2021-07-10
   clawsMail = claws-mail; # added 2016-04-29
+  claws-mail-gtk2 = throw "claws-mail-gtk2 was removed to get rid of Python 2, please use claws-mail"; # added 2021-12-05
   clutter_gtk = clutter-gtk; # added 2018-02-25
   cmakeWithQt4Gui = throw "cmakeWithQt4Gui has been removed in favor of cmakeWithGui (Qt 5)"; # added 2021-05
   codimd = hedgedoc; # added 2020-11-29
@@ -279,6 +281,7 @@ mapAliases ({
   fuseki = apache-jena-fuseki; # added 2018-04-25
   fwupdate = throw "fwupdate was merged into fwupd"; # added 2020-05-19
   g4py = python3Packages.geant4; # added 2020-06-06
+  gaia = throw "gaia has been removed because it seems abandoned upstream and uses no longer supported dependencies"; # added 2020-06-06
   gdal_1_11 = throw "gdal_1_11 was removed. Use gdal instead."; # added 2021-04-03
   gdb-multitarget = gdb; # added 2017-11-13
   gdk_pixbuf = gdk-pixbuf; # added 2019-05-22
@@ -293,6 +296,7 @@ mapAliases ({
     svn_all_fast_export = svn-all-fast-export;
     topGit = top-git;
   };
+  gitin = throw "gitin has been remove because it was unmaintained and depended on an insecure version of libgit2"; # added 2021-12-07
   glib_networking = glib-networking; # added 2018-02-25
   gmailieer = lieer; # added 2020-04-19
   gmvault = throw "gmvault has been removed because it is unmaintained, mostly broken, and insecure"; # added 2021-03-08
@@ -394,6 +398,7 @@ mapAliases ({
   julia_1 = throw "julia_1 has been deprecated in favor of julia_10 as it was ambiguous"; # added 2021-03-13
   julia_11 = throw "julia_11 has been deprecated in favor of the latest stable version"; # added 2020-09-15
   julia_13 = throw "julia_13 has been deprecated in favor of the latest stable version"; # added 2021-03-13
+  julia_10-bin = throw "julia_10-bin has been deprecated in favor of the latest LTS version"; # added 2021-12-02
   kbdKeymaps = throw "kbdKeymaps is not needed anymore since dvp and neo are now part of kbd"; # added 2021-04-11
   kdeconnect = plasma5Packages.kdeconnect-kde; # added 2020-10-28
   kdiff3-qt5 = kdiff3; # added 2017-02-18
@@ -462,6 +467,7 @@ mapAliases ({
   libwnck3 = libwnck;
   lilypond-unstable = lilypond; # added 2021-03-11
   links = links2; # added 2016-01-31
+  linuxband = throw "linuxband has been removed from nixpkgs, as it's abandoned upstream."; # added 2021-12-09
   linux_rpi0 = linuxKernel.kernels.linux_rpi1;
   linuxPackages_rpi0 = linuxKernel.packages.linux_rpi1;
   linuxPackages_rt_5_4 = linuxKernel.packages.linux_rt_5_4;
@@ -477,7 +483,6 @@ mapAliases ({
   linuxPackages_4_19 = linuxKernel.packages.linux_4_19;
   linuxPackages_5_4 = linuxKernel.packages.linux_5_4;
   linuxPackages_5_10 = linuxKernel.packages.linux_5_10;
-  linuxPackages_5_14 = linuxKernel.packages.linux_5_14;
   linuxPackages_5_15 = linuxKernel.packages.linux_5_15;
 
   linux_mptcp_95 = linuxKernel.kernels.linux_mptcp_95;
@@ -493,7 +498,6 @@ mapAliases ({
   linux-rt_5_4 = linuxKernel.kernels.linux_rt_5_4;
   linux_5_10 = linuxKernel.kernels.linux_5_10;
   linux-rt_5_10 = linuxKernel.kernels.linux_rt_5_10;
-  linux_5_14 = linuxKernel.kernels.linux_5_14;
   linux_5_15 = linuxKernel.kernels.linux_5_15;
 
   # added 2020-04-04
@@ -550,6 +554,7 @@ mapAliases ({
   minergate = throw "minergate has been removed from nixpkgs, because the package is unmaintained and the site has a bad reputation"; # added 2021-08-13
   minergate-cli = throw "minergatecli has been removed from nixpkgs, because the package is unmaintained and the site has a bad reputation"; # added 2021-08-13
   minetime = throw "minetime has been removed from nixpkgs, because it was discontinued 2021-06-22"; # added 2021-10-14
+  monero = monero-cli; # added 2021-11-28
   mopidy-gmusic = throw "mopidy-gmusic has been removed because Google Play Music was discontinued"; # added 2021-03-07
   mopidy-local-images = throw "mopidy-local-images has been removed as it's unmaintained. Its functionality has been merged into the mopidy-local extension."; # added 2020-10-18
   mopidy-local-sqlite = throw "mopidy-local-sqlite has been removed as it's unmaintained. Its functionality has been merged into the mopidy-local extension."; # added 2020-10-18
@@ -716,6 +721,7 @@ mapAliases ({
   polarssl = mbedtls; # added 2018-04-25
   poppler_qt5 = libsForQt5.poppler;  # added 2015-12-19
   postgresql96 = postgresql_9_6;
+  postgresql_9_6 = throw "postgresql_9_6 has been removed from nixpkgs, as this version is no longer supported by upstream"; # added 2021-12-03
   # postgresql plugins
   pgjwt = postgresqlPackages.pgjwt;
   pg_repack = postgresqlPackages.pg_repack;
@@ -784,6 +790,7 @@ mapAliases ({
   # due to it being inside the linuxPackagesFor function.
   rtlwifi_new-firmware = rtw88-firmware; # added 2021-03-14
   recordmydesktop = throw "recordmydesktop has been removed from nixpkgs, as it's unmaintained and uses deprecated libraries"; # added 2019-12-10
+  residualvm = throw "residualvm was merged to scummvm code in 2018-06-15; consider using scummvm"; # added 2021-11-27
   retroshare06 = retroshare;
   gtk-recordmydesktop = throw "gtk-recordmydesktop has been removed from nixpkgs, as it's unmaintained and uses deprecated libraries"; # added 2019-12-10
   qt-recordmydesktop = throw "qt-recordmydesktop has been removed from nixpkgs, as it's abandoned and uses deprecated libraries"; # added 2019-12-10
@@ -835,6 +842,7 @@ mapAliases ({
   sdlmame = mame; # added 2019-10-30
   seeks = throw "seeks has been removed from nixpkgs, as it was unmaintained"; # added 2020-06-21
   seg3d = throw "seg3d has been removed from nixpkgs (2019-11-10)";
+  sepolgen = throw "sepolgen was merged into selinux-python"; # added 2021-11-11
   shared_mime_info = shared-mime-info; # added 2018-02-25
   skrooge2 = skrooge; # added 2017-02-18
   sky = throw "sky has been removed from nixpkgs (2020-09-16)";
@@ -1212,6 +1220,8 @@ mapAliases ({
     qqc2-breeze-style
     sddm-kcm systemsettings
     xdg-desktop-portal-kde
+    plasma-phone-components
+    plasma-nano
   ;
   inherit (plasma5Packages.thirdParty)
     plasma-applet-caffeine-plus

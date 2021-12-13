@@ -193,6 +193,7 @@ in {
       realm = mkOption {
         type = types.str;
         default = config.networking.hostName;
+        defaultText = literalExpression "config.networking.hostName";
         example = "example.com";
         description = ''
           The default realm to be used for the users when no explicit

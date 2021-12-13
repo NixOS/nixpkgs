@@ -52,6 +52,7 @@ in
 
       servers = mkOption {
         default = config.networking.timeServers;
+        defaultText = literalExpression "config.networking.timeServers";
         type = types.listOf types.str;
         description = ''
           The set of NTP servers from which to synchronise.

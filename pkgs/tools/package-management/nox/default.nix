@@ -1,7 +1,7 @@
 { lib, python3Packages, fetchurl, git }:
 
 python3Packages.buildPythonApplication rec {
-  name = "nox-${version}";
+  pname = "nox";
   version = "0.0.6";
   namePrefix = "";
 

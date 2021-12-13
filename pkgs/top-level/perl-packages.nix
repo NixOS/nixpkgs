@@ -6887,6 +6887,10 @@ let
     };
     buildInputs = [ CPANMetaCheck TestDeep TestFailWarnings TestFatal TestFileShareDir ];
     propagatedBuildInputs = [ AppCmd CPANUploader ConfigMVPReaderINI DateTime FileCopyRecursive FileFindRule FileShareDirInstall Filepushd LogDispatchouli MooseXLazyRequire MooseXSetOnce MooseXTypesPerl PathTiny PerlPrereqScanner SoftwareLicense TermEncoding TermUI YAMLTiny ];
+    nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
+    postInstall = lib.optionalString stdenv.isDarwin ''
+      shortenPerlShebang $out/bin/dzil
+    '';
     meta = {
       homepage = "http://dzil.org/";
       description = "Distribution builder; installer not included!";

@@ -2,22 +2,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "bore";
-  version = "0.3.3";
+  version = "0.4.1";
 
   src = fetchFromBitbucket {
     owner = "delan";
     repo = "nonymous";
-    rev = version;
-    sha256 = "0gws1f625izrb3armh6bay1k8l9p9csl37jx03yss1r720k4vn2x";
+    rev = "${pname}-${version}";
+    sha256 = "1fdnnx7d18gj4rkv1dc6q379dqabl66zks9i0rjarjwcci8m30d9";
   };
 
-  cargoSha256 = "1n09gcp1y885lz6g2f73zw3fd0fmv7nwlvaqba2yl0kylzk7naa6";
+  cargoSha256 = "1xlbfzmy0wjyz3jpr17r4ma4i79d9b32yqwwi10vrcjzr7vsyhmx";
   cargoBuildFlags = "-p ${pname}";
 
   # FIXME can’t test --all-targets and --doc in a single invocation
-  checkFeatures = [ "std" ];
-
   cargoTestFlags = [ "--all-targets" "--workspace" ];
+  checkFeatures = [ "std" ];
 
   nativeBuildInputs = [ installShellFiles ]
     ++ lib.optional stdenv.isDarwin llvmPackages.libclang;

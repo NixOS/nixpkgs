@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2021.11.5";
+  version = "2021.12.1";
   components = {
     "abode" = ps: with ps; [ abodepy ];
     "accuweather" = ps: with ps; [ accuweather ];
@@ -77,6 +77,7 @@
     "azure_event_hub" = ps: with ps; [ azure-eventhub ];
     "azure_service_bus" = ps: with ps; [ azure-servicebus ];
     "baidu" = ps: with ps; [ ]; # missing inputs: baidu-aip
+    "balboa" = ps: with ps; [ pybalboa ];
     "bayesian" = ps: with ps; [ ];
     "bbb_gpio" = ps: with ps; [ ]; # missing inputs: Adafruit_BBIO
     "bbox" = ps: with ps; [ ]; # missing inputs: pybbox
@@ -112,6 +113,7 @@
     "bt_home_hub_5" = ps: with ps; [ ]; # missing inputs: bthomehub5-devicelist
     "bt_smarthub" = ps: with ps; [ ]; # missing inputs: btsmarthub_devicelist
     "buienradar" = ps: with ps; [ buienradar ];
+    "button" = ps: with ps; [ ];
     "caldav" = ps: with ps; [ caldav ];
     "calendar" = ps: with ps; [ aiohttp-cors ];
     "camera" = ps: with ps; [ pyturbojpeg aiohttp-cors ];
@@ -166,7 +168,7 @@
     "default_config" = ps: with ps; [ pynacl pyturbojpeg aiodiscover aiohttp-cors async-upnp-client emoji hass-nabucasa home-assistant-frontend ifaddr pillow pyserial pyudev scapy sqlalchemy zeroconf ];
     "delijn" = ps: with ps; [ pydelijn ];
     "deluge" = ps: with ps; [ deluge-client ];
-    "demo" = ps: with ps; [ aiohttp-cors ];
+    "demo" = ps: with ps; [ aiohttp-cors sqlalchemy ];
     "denon" = ps: with ps; [ ];
     "denonavr" = ps: with ps; [ denonavr ];
     "derivative" = ps: with ps; [ ];
@@ -175,6 +177,7 @@
     "device_sun_light_trigger" = ps: with ps; [ aiohttp-cors pillow ];
     "device_tracker" = ps: with ps; [ ];
     "devolo_home_control" = ps: with ps; [ aiohttp-cors devolo-home-control-api ifaddr zeroconf ];
+    "devolo_home_network" = ps: with ps; [ devolo-plc-api ];
     "dexcom" = ps: with ps; [ pydexcom ];
     "dhcp" = ps: with ps; [ aiodiscover scapy ];
     "dht" = ps: with ps; [ ]; # missing inputs: adafruit-circuitpython-dht
@@ -204,7 +207,6 @@
     "dwd_weather_warnings" = ps: with ps; [ dwdwfsapi ];
     "dweet" = ps: with ps; [ ]; # missing inputs: dweepy
     "dynalite" = ps: with ps; [ ]; # missing inputs: dynalite_devices
-    "dyson" = ps: with ps; [ aiohttp-cors ifaddr libpurecool zeroconf ];
     "eafm" = ps: with ps; [ aioeafm ];
     "ebox" = ps: with ps; [ ]; # missing inputs: pyebox
     "ebusd" = ps: with ps; [ ]; # missing inputs: ebusdpy
@@ -246,6 +248,7 @@
     "etherscan" = ps: with ps; [ ]; # missing inputs: python-etherscan-api
     "eufy" = ps: with ps; [ ]; # missing inputs: lakeside
     "everlights" = ps: with ps; [ pyeverlights ];
+    "evil_genius_labs" = ps: with ps; [ pyevilgenius ];
     "evohome" = ps: with ps; [ evohome-async ];
     "ezviz" = ps: with ps; [ ha-ffmpeg pyezviz ];
     "faa_delays" = ps: with ps; [ faadelays ];
@@ -370,7 +373,7 @@
     "homekit_controller" = ps: with ps; [ aiohomekit aiohttp-cors ifaddr zeroconf ];
     "homematic" = ps: with ps; [ pyhomematic ];
     "homematicip_cloud" = ps: with ps; [ homematicip ];
-    "homeworks" = ps: with ps; [ ]; # missing inputs: pyhomeworks
+    "homeworks" = ps: with ps; [ pyhomeworks ];
     "honeywell" = ps: with ps; [ somecomfort ];
     "horizon" = ps: with ps; [ ]; # missing inputs: horimote
     "hp_ilo" = ps: with ps; [ python-hpilo ];
@@ -411,7 +414,6 @@
     "intent_script" = ps: with ps; [ ];
     "intesishome" = ps: with ps; [ pyintesishome ];
     "ios" = ps: with ps; [ aiohttp-cors ifaddr zeroconf ];
-    "iota" = ps: with ps; [ ]; # missing inputs: pyota
     "iotawatt" = ps: with ps; [ iotawattpy ];
     "iperf3" = ps: with ps; [ ]; # missing inputs: iperf3
     "ipma" = ps: with ps; [ pyipma ];
@@ -424,6 +426,7 @@
     "itach" = ps: with ps; [ ]; # missing inputs: pyitachip2ir
     "itunes" = ps: with ps; [ ];
     "izone" = ps: with ps; [ python-izone ];
+    "jellyfin" = ps: with ps; [ jellyfin-apiclient-python ];
     "jewish_calendar" = ps: with ps; [ hdate ];
     "joaoapps_join" = ps: with ps; [ ]; # missing inputs: python-join-api
     "juicenet" = ps: with ps; [ python-juicenet ];
@@ -476,7 +479,6 @@
     "london_air" = ps: with ps; [ ];
     "london_underground" = ps: with ps; [ ]; # missing inputs: london-tube-status
     "lookin" = ps: with ps; [ aiolookin ];
-    "loopenergy" = ps: with ps; [ ]; # missing inputs: pyloopenergy
     "lovelace" = ps: with ps; [ ];
     "luci" = ps: with ps; [ openwrt-luci-rpc ];
     "luftdaten" = ps: with ps; [ luftdaten ];
@@ -519,7 +521,7 @@
     "microsoft_face_identify" = ps: with ps; [ pyturbojpeg aiohttp-cors ];
     "miflora" = ps: with ps; [ bluepy ]; # missing inputs: miflora
     "mikrotik" = ps: with ps; [ librouteros ];
-    "mill" = ps: with ps; [ millheater ];
+    "mill" = ps: with ps; [ mill-local millheater ];
     "min_max" = ps: with ps; [ ];
     "minecraft_server" = ps: with ps; [ aiodns getmac mcstatus ];
     "minio" = ps: with ps; [ minio ];
@@ -547,7 +549,6 @@
     "mutesync" = ps: with ps; [ mutesync ];
     "mvglive" = ps: with ps; [ PyMVGLive ];
     "my" = ps: with ps; [ aiohttp-cors home-assistant-frontend pillow sqlalchemy ];
-    "mychevy" = ps: with ps; [ ]; # missing inputs: mychevy
     "mycroft" = ps: with ps; [ ]; # missing inputs: mycroftapi
     "myq" = ps: with ps; [ pymyq ];
     "mysensors" = ps: with ps; [ aiohttp-cors paho-mqtt pymysensors ];
@@ -560,7 +561,7 @@
     "neato" = ps: with ps; [ aiohttp-cors pybotvac ];
     "nederlandse_spoorwegen" = ps: with ps; [ nsapi ];
     "ness_alarm" = ps: with ps; [ nessclient ];
-    "nest" = ps: with ps; [ aiohttp-cors ha-ffmpeg python-nest ]; # missing inputs: google-nest-sdm
+    "nest" = ps: with ps; [ aiohttp-cors google-nest-sdm ha-ffmpeg python-nest ];
     "netatmo" = ps: with ps; [ pyturbojpeg aiohttp-cors hass-nabucasa pyatmo ];
     "netdata" = ps: with ps; [ netdata ];
     "netgear" = ps: with ps; [ ]; # missing inputs: pynetgear
@@ -596,7 +597,7 @@
     "nzbget" = ps: with ps; [ ]; # missing inputs: pynzbgetapi
     "oasa_telematics" = ps: with ps; [ ]; # missing inputs: oasatelematics
     "obihai" = ps: with ps; [ pyobihai ];
-    "octoprint" = ps: with ps; [ ]; # missing inputs: pyoctoprintapi
+    "octoprint" = ps: with ps; [ pyoctoprintapi ];
     "oem" = ps: with ps; [ oemthermostat ];
     "ohmconnect" = ps: with ps; [ defusedxml ];
     "ombi" = ps: with ps; [ pyombi ];
@@ -695,6 +696,7 @@
     "random" = ps: with ps; [ ];
     "raspihats" = ps: with ps; [ smbus-cffi ]; # missing inputs: raspihats
     "raspyrfm" = ps: with ps; [ ]; # missing inputs: raspyrfm-client
+    "rdw" = ps: with ps; [ vehicle ];
     "recollect_waste" = ps: with ps; [ aiorecollect ];
     "recorder" = ps: with ps; [ sqlalchemy ];
     "recswitch" = ps: with ps; [ ]; # missing inputs: pyrecswitch
@@ -709,6 +711,7 @@
     "rest_command" = ps: with ps; [ ];
     "rflink" = ps: with ps; [ rflink ];
     "rfxtrx" = ps: with ps; [ pyrfxtrx ];
+    "ridwell" = ps: with ps; [ aioridwell ];
     "ring" = ps: with ps; [ ha-ffmpeg ring-doorbell ];
     "ripple" = ps: with ps; [ ]; # missing inputs: python-ripple-api
     "risco" = ps: with ps; [ pyrisco ];
@@ -852,6 +855,7 @@
     "tado" = ps: with ps; [ python-tado ];
     "tag" = ps: with ps; [ ];
     "tahoma" = ps: with ps; [ tahoma-api ];
+    "tailscale" = ps: with ps; [ tailscale ];
     "tank_utility" = ps: with ps; [ ]; # missing inputs: tank_utility
     "tankerkoenig" = ps: with ps; [ pytankerkoenig ];
     "tapsaff" = ps: with ps; [ ]; # missing inputs: tapsaff
@@ -867,6 +871,7 @@
     "temper" = ps: with ps; [ ]; # missing inputs: temperusb
     "template" = ps: with ps; [ ];
     "tensorflow" = ps: with ps; [ numpy pillow pycocotools tensorflow ]; # missing inputs: tf-models-official
+    "tesla_wall_connector" = ps: with ps; [ tesla-wall-connector ];
     "tfiac" = ps: with ps; [ ]; # missing inputs: pytfiac
     "thermoworks_smoke" = ps: with ps; [ stringcase ]; # missing inputs: thermoworks_smoke
     "thethingsnetwork" = ps: with ps; [ ];
@@ -883,6 +888,7 @@
     "tod" = ps: with ps; [ ];
     "todoist" = ps: with ps; [ todoist ];
     "tof" = ps: with ps; [ ]; # missing inputs: RPi.GPIO VL53L1X2
+    "tolo" = ps: with ps; [ tololib ];
     "tomato" = ps: with ps; [ ];
     "toon" = ps: with ps; [ pyturbojpeg aiohttp-cors hass-nabucasa toonapi ];
     "torque" = ps: with ps; [ aiohttp-cors ];
@@ -995,7 +1001,7 @@
     "yamaha_musiccast" = ps: with ps; [ aiohttp-cors aiomusiccast async-upnp-client ifaddr zeroconf ];
     "yandex_transport" = ps: with ps; [ aioymaps ];
     "yandextts" = ps: with ps; [ ];
-    "yeelight" = ps: with ps; [ aiohttp-cors async-upnp-client ifaddr yeelight ];
+    "yeelight" = ps: with ps; [ aiohttp-cors async-upnp-client ifaddr yeelight zeroconf ];
     "yeelightsunflower" = ps: with ps; [ ]; # missing inputs: yeelightsunflower
     "yi" = ps: with ps; [ aioftp ha-ffmpeg ];
     "youless" = ps: with ps; [ youless-api ];

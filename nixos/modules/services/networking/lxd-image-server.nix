@@ -55,9 +55,8 @@ in
         path = "/var/log/lxd-image-server/lxd-image-server.log";
         frequency = "daily";
         keep = 21;
-        user = "lxd-image-server";
-        group = cfg.group;
         extraConfig = ''
+          create 755 lxd-image-server ${cfg.group}
           missingok
           compress
           delaycompress

@@ -38,6 +38,13 @@ let
       rev = "yaml-cpp-${version}";
       sha256 = "0ykkxzxcwwiv8l8r697gyqh1nl582krpvi7m7l6b40ijnk4pw30s";
     };
+
+    patches = [
+      (fetchpatch {
+        url = "https://github.com/jbeder/yaml-cpp/commit/4f48727b365962e31451cd91027bd797bc7d2ee7.patch";
+        sha256 = "sha256-jarZAh7NgwL3xXzxijDiAQmC/EC2WYfNMkYHEIQBPhM=";
+      })
+    ];
   });
 in
 stdenv.mkDerivation rec {

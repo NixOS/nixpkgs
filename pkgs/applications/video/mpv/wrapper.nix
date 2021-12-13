@@ -80,7 +80,10 @@ let
         makeWrapper "${mpv}/Applications/mpv.app/Contents/MacOS/mpv" "$out/Applications/mpv.app/Contents/MacOS/mpv" ${mostMakeWrapperArgs}
       '';
 
-      meta.mainProgram = "mpv";
+      meta = {
+        inherit (mpv.meta) homepage description longDescription maintainers;
+        mainProgram = "mpv";
+      };
     };
 in
   lib.makeOverridable wrapper

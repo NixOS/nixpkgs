@@ -16,8 +16,8 @@ buildPythonPackage rec {
     "webargs"
   ];
 
-
   propagatedBuildInputs = [ marshmallow ];
+
   checkInputs = [
     pytestCheckHook
     pytest-aiohttp

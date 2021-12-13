@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "vehicle";
-  version = "0.2.0";
+  version = "0.2.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "frenck";
     repo = "python-vehicle";
     rev = "v${version}";
-    sha256 = "0yiavz5sw8fjrh6m3mr8gyds7h6vaja3xy1516ajgz0qvijhqylg";
+    sha256 = "sha256-3DkfS8gx3C1/Vj8+IE7uxZ5i0cKJk0mJpBWQqAgb2Xo=";
   };
 
   nativeBuildInputs = [
@@ -54,7 +54,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python client providing RDW vehicle information";
-    homepage = "https://github.com/frenck/python-wled";
+    homepage = "https://github.com/frenck/python-vehicle";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

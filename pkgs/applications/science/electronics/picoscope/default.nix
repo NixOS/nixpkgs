@@ -104,7 +104,8 @@ in stdenv.mkDerivation rec {
     makeWrapper "$(command -v mono)" $out/bin/picoscope \
       --add-flags $out/lib/PicoScope.GTK.exe \
       --prefix MONO_PATH : "$MONO_PATH" \
-      --prefix LD_LIBRARY_PATH : "$MONO_PATH"
+      --prefix LD_LIBRARY_PATH : "$MONO_PATH" \
+      --set LANG C
     runHook postInstall
   '';
 

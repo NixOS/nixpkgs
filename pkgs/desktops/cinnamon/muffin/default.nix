@@ -14,7 +14,8 @@
 , libXtst
 , libxkbcommon
 , pkg-config
-, lib, stdenv
+, lib
+, stdenv
 , udev
 , xorg
 , wrapGAppsHook
@@ -35,13 +36,13 @@
 
 stdenv.mkDerivation rec {
   pname = "muffin";
-  version = "4.8.1";
+  version = "5.2.0";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-zRW+hnoaKKTe4zIJpY1D0Ahc8k5zRbvYBF5Y4vZ6Rbs=";
+    hash = "sha256-WAp0HbfRtwsPjJX1kPBqUStqLaudQPZ8E+h4jmggmw8=";
   };
 
   buildInputs = [

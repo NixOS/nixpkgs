@@ -26,9 +26,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ boringssl' libevent zlib ];
 
   cmakeFlags = [
-    "-DBORINGSSL_DIR=${boringssl'}"
-    "-DBORINGSSL_LIB_crypto=${boringssl'}/lib/libcrypto.a"
-    "-DBORINGSSL_LIB_ssl=${boringssl'}/lib/libssl.a"
+    "-DBORINGSSL_DIR=${lib.getDev boringssl'}"
+    "-DBORINGSSL_LIB_crypto=${lib.getLib boringssl'}/lib/libcrypto.a"
+    "-DBORINGSSL_LIB_ssl=${lib.getLib boringssl'}/lib/libssl.a"
     "-DZLIB_LIB=${zlib}/lib/libz.so"
   ];
 
@@ -39,8 +39,8 @@ stdenv.mkDerivation rec {
 
     mkdir combinedlib
     cd combinedlib
-    ar -x ${boringssl'}/lib/libssl.a
-    ar -x ${boringssl'}/lib/libcrypto.a
+    ar -x ${lib.getLib boringssl'}/lib/libssl.a
+    ar -x ${lib.getLib boringssl'}/lib/libcrypto.a
     ar -x ../src/liblsquic/liblsquic.a
     ar rc liblsquic.a *.o
     ranlib liblsquic.a

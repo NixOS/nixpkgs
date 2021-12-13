@@ -13,9 +13,9 @@ if [ -z "${NIX_PKG_CONFIG_WRAPPER_FLAGS_SET_@suffixSalt@:-}" ]; then
 fi
 
 if (( ${#role_suffixes[@]} > 0 )); then
-	# replace env var with nix-modified one
+    # replace env var with nix-modified one
     PKG_CONFIG_PATH=$PKG_CONFIG_PATH_@suffixSalt@ exec @prog@ "$@"
 else
-	# pkg-config isn't a bonafied dependency so ignore setup hook entirely
-	exec @prog@ "$@"
+    # pkg-config isn't a bonafied dependency so ignore setup hook entirely
+    exec @prog@ "$@"
 fi

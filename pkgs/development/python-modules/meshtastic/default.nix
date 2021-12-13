@@ -15,12 +15,14 @@
 
 buildPythonPackage rec {
   pname = "meshtastic";
-  version = "1.2.40";
+  version = "1.2.44";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "be8464037d0c8085350065b38e7a7b028db15f2524764dec0e3548ea5b53500f";
+    sha256 = "f99e076dde0db86a5ba734b48257ffc7355a2b4729cea1ff5cd7638ca93dbd90";
   };
 
   propagatedBuildInputs = [
@@ -35,18 +37,13 @@ buildPythonPackage rec {
     timeago
   ];
 
-  postPatch = ''
-    # https://github.com/meshtastic/Meshtastic-python/pull/87
-    substituteInPlace setup.py \
-      --replace 'with open("README.md", "r") as fh:' "" \
-      --replace "long_description = fh.read()" "" \
-      --replace "long_description=long_description," 'long_description="",'
-  '';
-
   # Project only provides PyPI releases which don't contain the tests
   # https://github.com/meshtastic/Meshtastic-python/issues/86
   doCheck = false;
-  pythonImportsCheck = [ "meshtastic" ];
+
+  pythonImportsCheck = [
+    "meshtastic"
+  ];
 
   meta = with lib; {
     description = "Python API for talking to Meshtastic devices";

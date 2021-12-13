@@ -2275,21 +2275,6 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xf86videomach64 = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libdrm, libpciaccess, xorgserver }: stdenv.mkDerivation {
-    pname = "xf86-video-mach64";
-    version = "6.9.6";
-    builder = ./builder.sh;
-    src = fetchurl {
-      url = "mirror://xorg/individual/driver/xf86-video-mach64-6.9.6.tar.bz2";
-      sha256 = "171wg8r6py1l138s58rlapin3rlpwsg9spmvhc7l68mm3g3hf1vs";
-    };
-    hardeningDisable = [ "bindnow" "relro" ];
-    nativeBuildInputs = [ pkg-config ];
-    buildInputs = [ xorgproto libdrm libpciaccess xorgserver ];
-    meta.platforms = lib.platforms.unix;
-  }) {};
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videomga = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libdrm, libpciaccess, xorgserver }: stdenv.mkDerivation {
     pname = "xf86-video-mga";
     version = "2.0.0";

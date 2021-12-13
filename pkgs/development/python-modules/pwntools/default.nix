@@ -6,7 +6,7 @@
 , packaging
 , pysocks
 , pygments
-, ROPGadget
+, ropgadget
 , capstone
 , colored-traceback
 , paramiko
@@ -55,7 +55,7 @@ buildPythonPackage rec {
     packaging
     pysocks
     pygments
-    ROPGadget
+    ropgadget
     capstone
     colored-traceback
     paramiko

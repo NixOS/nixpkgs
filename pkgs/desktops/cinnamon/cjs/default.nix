@@ -25,23 +25,24 @@
 , makeWrapper
 , which
 , libxml2
+, gtk4
 }:
 
 stdenv.mkDerivation rec {
   pname = "cjs";
-  version = "4.8.2";
+  version = "5.2.0";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cjs";
     rev = version;
-    hash = "sha256-6+zlWL0DmyP+RFp1ECA4XGbgYUlsMqqyTd6z46w99Ug=";
+    hash = "sha256-06sTk513qVMdznSHJzzB3XIPTcfjgxTB2o+ALqwPpHM=";
   };
 
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [
-    meson # ADDING cmake breaks the build, ignore meson warning
+    meson
     ninja
     pkg-config
     makeWrapper
@@ -50,6 +51,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    gtk4
     gobject-introspection
     cairo
     readline

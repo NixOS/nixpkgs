@@ -25,7 +25,8 @@
 , networkmanager
 , pkg-config
 , polkit
-, lib, stdenv
+, lib
+, stdenv
 , wrapGAppsHook
 , libxml2
 , gtk-doc
@@ -50,23 +51,28 @@
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-common";
-  version = "4.8.6";
+  version = "5.2.0";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cinnamon";
     rev = version;
-    hash = "sha256-4DMXQYH1/RjLhgrn55I7Vkk6+gGsR+OVmiwxVHUIyro=";
+    hash = "sha256-B2Du2zis0xWeeyh3kSyz1doWImk9Fuk4qQ8HNZZdqdw=";
   };
 
   patches = [
     ./use-sane-install-dir.patch
     ./libdir.patch
+
+    (fetchpatch {
+      url = "https://github.com/linuxmint/cinnamon/commit/77ed66050f7df889fcb7a10b702c7b8bcdeaa130.patch";
+      sha256 = "sha256-OegLxz6Xr/nxVwVOAd2oOY62ohZ3r6uYn1+YED5EBHQ=";
+    })
   ];
 
   buildInputs = [
     # TODO: review if we really need this all
-    (python3.withPackages (pp: with pp; [ dbus-python setproctitle pygobject3 pycairo xapp pillow pytz tinycss2 python-pam pexpect distro ]))
+    (python3.withPackages (pp: with pp; [ dbus-python setproctitle pygobject3 pycairo xapp pillow pytz tinycss2 python-pam pexpect distro requests ]))
     atk
     cacert
     cinnamon-control-center
@@ -148,7 +154,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    providedSessions = ["cinnamon" "cinnamon2d"];
+    providedSessions = [ "cinnamon" "cinnamon2d" ];
   };
 
   meta = with lib; {

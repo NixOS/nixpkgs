@@ -1,14 +1,8 @@
 { lib, stdenv, ghc, llvmPackages, packages, symlinkJoin, makeWrapper
-# Include LLVM by default if GHC doesn't have native code generation support
-# See https://gitlab.haskell.org/ghc/ghc/-/wikis/platforms
-, useLLVM ? !(lib.any lib.id ([
-    stdenv.targetPlatform.isx86
-    stdenv.targetPlatform.isPowerPC
-    stdenv.targetPlatform.isSparc
-  ] ++ lib.optionals (lib.versionAtLeast ghc.version "9.2") [
-    (stdenv.targetPlatform.isAarch64 && stdenv.targetPlatform.isDarwin)
-    # TODO(@sternenseemann): Is armv7a supported for iOS?
-  ]))
+# GHC will have LLVM available if necessary for the respective target,
+# so useLLVM only needs to be changed if -fllvm is to be used for a
+# platform that has NCG support
+, useLLVM ? false
 , postBuild ? ""
 , ghcLibdir ? null # only used by ghcjs, when resolving plugins
 }:

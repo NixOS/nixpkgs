@@ -4,7 +4,8 @@
 }:
 
 stdenv.mkDerivation {
-  name = "virtualgl-${lib.getVersion virtualglLib}";
+  pname = "virtualgl";
+  version = lib.getVersion virtualglLib;
 
   paths = [ virtualglLib ];
 

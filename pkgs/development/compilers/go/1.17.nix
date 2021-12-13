@@ -40,6 +40,10 @@ let
     "armv5tel" = "arm";
     "armv6l" = "arm";
     "armv7l" = "arm";
+    "mips" = "mips";
+    "mipsel" = "mipsle";
+    "riscv64" = "riscv64";
+    "s390x" = "s390x";
     "powerpc64le" = "ppc64le";
   }.${platform.parsed.cpu.name} or (throw "Unsupported system");
 
@@ -50,11 +54,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "go";
-  version = "1.17.3";
+  version = "1.17.5";
 
   src = fetchurl {
     url = "https://dl.google.com/go/go${version}.src.tar.gz";
-    sha256 = "sha256-cFxkJR5bJdXVXt4QOcaqIr6kCnqTHRTDcDOYU2Q8PfA=";
+    sha256 = "sha256-Pe+5oJvtBCQDGV6HLcvIxvrhSFljMyJ5Zo7FLoCpWi0=";
   };
 
   # perl is used for testing go vet
@@ -268,7 +272,7 @@ stdenv.mkDerivation rec {
   disallowedReferences = [ goBootstrap ];
 
   meta = with lib; {
-    homepage = "http://golang.org/";
+    homepage = "https://go.dev/";
     description = "The Go Programming language";
     license = licenses.bsd3;
     maintainers = teams.golang.members;

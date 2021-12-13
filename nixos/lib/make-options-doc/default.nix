@@ -24,18 +24,25 @@
 }:
 
 let
-  # Replace functions by the string <function>
-  substFunction = x:
-    if builtins.isAttrs x then lib.mapAttrs (name: substFunction) x
-    else if builtins.isList x then map substFunction x
+  # Make a value safe for JSON. Functions are replaced by the string "<function>",
+  # derivations are replaced with an attrset
+  # { _type = "derivation"; name = <name of that derivation>; }.
+  # We need to handle derivations specially because consumers want to know about them,
+  # but we can't easily use the type,name subset of keys (since type is often used as
+  # a module option and might cause confusion). Use _type,name instead to the same
+  # effect, since _type is already used by the module system.
+  substSpecial = x:
+    if lib.isDerivation x then { _type = "derivation"; name = x.name; }
+    else if builtins.isAttrs x then lib.mapAttrs (name: substSpecial) x
+    else if builtins.isList x then map substSpecial x
     else if lib.isFunction x then "<function>"
     else x;
 
-  optionsListDesc = lib.flip map optionsListVisible
+  optionsList = lib.flip map optionsListVisible
    (opt: transformOptions opt
-    // lib.optionalAttrs (opt ? example) { example = substFunction opt.example; }
-    // lib.optionalAttrs (opt ? default) { default = substFunction opt.default; }
-    // lib.optionalAttrs (opt ? type) { type = substFunction opt.type; }
+    // lib.optionalAttrs (opt ? example) { example = substSpecial opt.example; }
+    // lib.optionalAttrs (opt ? default) { default = substSpecial opt.default; }
+    // lib.optionalAttrs (opt ? type) { type = substSpecial opt.type; }
     // lib.optionalAttrs (opt ? relatedPackages && opt.relatedPackages != []) { relatedPackages = genRelatedPackages opt.relatedPackages opt.name; }
    );
 
@@ -69,96 +76,25 @@ let
         + "</listitem>";
     in "<itemizedlist>${lib.concatStringsSep "\n" (map (p: describe (unpack p)) packages)}</itemizedlist>";
 
-  # Custom "less" that pushes up all the things ending in ".enable*"
-  # and ".package*"
-  optionLess = a: b:
-    let
-      ise = lib.hasPrefix "enable";
-      isp = lib.hasPrefix "package";
-      cmp = lib.splitByAndCompare ise lib.compare
-                                 (lib.splitByAndCompare isp lib.compare lib.compare);
-    in lib.compareLists cmp a.loc b.loc < 0;
-
   # Remove invisible and internal options.
   optionsListVisible = lib.filter (opt: opt.visible && !opt.internal) (lib.optionAttrSetToDocList options);
 
-  # Customly sort option list for the man page.
-  # Always ensure that the sort order matches sortXML.py!
-  optionsList = lib.sort optionLess optionsListDesc;
-
-  # Convert the list of options into an XML file.
-  # This file is *not* sorted sorted to save on eval time, since the docbook XML
-  # and the manpage depend on it and thus we evaluate this on every system rebuild.
-  optionsXML = builtins.toFile "options.xml" (builtins.toXML optionsListDesc);
-
   optionsNix = builtins.listToAttrs (map (o: { name = o.name; value = removeAttrs o ["name" "visible" "internal"]; }) optionsList);
 
-  # TODO: declarations: link to github
-  singleAsciiDoc = name: value: ''
-    == ${name}
-
-    ${value.description}
-
-    [discrete]
-    === details
-
-    Type:: ${value.type}
-    ${ if lib.hasAttr "default" value
-       then ''
-        Default::
-        +
-        ----
-        ${builtins.toJSON value.default}
-        ----
-      ''
-      else "No Default:: {blank}"
-    }
-    ${ if value.readOnly
-       then "Read Only:: {blank}"
-      else ""
-    }
-    ${ if lib.hasAttr "example" value
-       then ''
-        Example::
-        +
-        ----
-        ${builtins.toJSON value.example}
-        ----
-      ''
-      else "No Example:: {blank}"
-    }
-  '';
-
-  singleMDDoc = name: value: ''
-    ## ${lib.escape [ "<" ">" ] name}
-    ${value.description}
-
-    ${lib.optionalString (value ? type) ''
-      *_Type_*:
-      ${value.type}
-    ''}
-
-    ${lib.optionalString (value ? default) ''
-      *_Default_*
-      ```
-      ${builtins.toJSON value.default}
-      ```
-    ''}
-
-    ${lib.optionalString (value ? example) ''
-      *_Example_*
-      ```
-      ${builtins.toJSON value.example}
-      ```
-    ''}
-  '';
-
-in {
+in rec {
   inherit optionsNix;
 
-  optionsAsciiDoc = lib.concatStringsSep "\n" (lib.mapAttrsToList singleAsciiDoc optionsNix);
+  optionsAsciiDoc = pkgs.runCommand "options.adoc" {} ''
+    ${pkgs.python3Minimal}/bin/python ${./generateAsciiDoc.py} \
+      < ${optionsJSON}/share/doc/nixos/options.json \
+      > $out
+  '';
 
-  optionsMDDoc = lib.concatStringsSep "\n" (lib.mapAttrsToList singleMDDoc optionsNix);
+  optionsCommonMark = pkgs.runCommand "options.md" {} ''
+    ${pkgs.python3Minimal}/bin/python ${./generateCommonMark.py} \
+      < ${optionsJSON}/share/doc/nixos/options.json \
+      > $out
+  '';
 
   optionsJSON = pkgs.runCommand "options.json"
     { meta.description = "List of NixOS options in JSON format";
@@ -176,7 +112,18 @@ in {
       mkdir -p $out/nix-support
       echo "file json $dst/options.json" >> $out/nix-support/hydra-build-products
       echo "file json-br $dst/options.json.br" >> $out/nix-support/hydra-build-products
-    ''; # */
+    '';
+
+  # Convert options.json into an XML file.
+  # The actual generation of the xml file is done in nix purely for the convenience
+  # of not having to generate the xml some other way
+  optionsXML = pkgs.runCommand "options.xml" {} ''
+    ${pkgs.nix}/bin/nix-instantiate \
+      --store dummy:// \
+      --eval --xml --strict ${./optionsJSONtoXML.nix} \
+      --argstr file ${optionsJSON}/share/doc/nixos/options.json \
+      > "$out"
+  '';
 
   optionsDocBook = pkgs.runCommand "options-docbook.xml" {} ''
     optionsXML=${optionsXML}

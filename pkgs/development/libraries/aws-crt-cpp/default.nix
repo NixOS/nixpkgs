@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "aws-crt-cpp";
-  version = "0.17.0";
+  version = "0.17.8";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-crt-cpp";
     rev = "v${version}";
-    sha256 = "0ijvyg3hrh1d0npca62syz8qy6nkqh90fq54cqyln0p333z16q52";
+    sha256 = "sha256-eHABIg3v5ycpQzacW/8C74PT6yDOXGmJqDa9P1hN7Mo=";
   };
 
   postPatch = ''

@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "keyring";
-  version = "23.2.1";
+  version = "23.4.0";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6334aee6073db2fb1f30892697b1730105b5e9a77ce7e61fca6b435225493efe";
+    sha256 = "sha256-iPIGAkKV48b7FrsKYPtLt+wRhWKdxacp8SqnwjbQE4c=";
   };
 
   nativeBuildInputs = [
@@ -43,12 +43,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  # Keychain communications isn't possible in our build environment
-  # keyring.errors.KeyringError: Can't get password from keychain: (-25307, 'Unknown Error')
-  disabledTests = lib.optionals (stdenv.isDarwin) [
-    "test_multiprocess_get"
-    "test_multiprocess_get_after_native_get"
-  ] ++ [
+  disabledTests = [
     # E       ValueError: too many values to unpack (expected 1)
     "test_entry_point"
   ];

@@ -26,7 +26,7 @@
 , file, libvirt, glib, vips, taglib, libopus, linux-pam, libidn, protobuf, fribidi, harfbuzz
 , bison, flex, pango, python3, patchelf, binutils, freetds, wrapGAppsHook, atk
 , bundler, libsass, libexif, libselinux, libsepol, shared-mime-info, libthai, libdatrie
-, CoreServices, DarwinTools, cctools
+, CoreServices, DarwinTools, cctools, libtool
 }@args:
 
 let
@@ -280,7 +280,7 @@ in
   };
 
   grpc = attrs: {
-    nativeBuildInputs = [ pkg-config ];
+    nativeBuildInputs = [ pkg-config ] ++ lib.optional stdenv.isDarwin libtool;
     buildInputs = [ openssl ];
     hardeningDisable = [ "format" ];
     NIX_CFLAGS_COMPILE = toString [
@@ -297,6 +297,9 @@ in
     postPatch = ''
       substituteInPlace Makefile \
         --replace '-Wno-invalid-source-encoding' ""
+    '' + lib.optionalString stdenv.isDarwin ''
+      substituteInPlace src/ruby/ext/grpc/extconf.rb \
+        --replace "ENV['AR'] = 'libtool -o' if RUBY_PLATFORM =~ /darwin/" ""
     '';
   };
 
@@ -570,7 +573,7 @@ in
   };
 
   rugged = attrs: {
-    nativeBuildInputs = [ cmake pkg-config which ];
+    nativeBuildInputs = [ cmake pkg-config which ] ++ lib.optional stdenv.isDarwin libiconv;
     buildInputs = [ openssl libssh2 zlib ];
     dontUseCmakeConfigure = true;
   };
@@ -676,11 +679,5 @@ in
 
   zookeeper = attrs: {
     buildInputs = lib.optionals stdenv.isDarwin [ cctools ];
-    dontBuild = false;
-    postPatch = ''
-      sed -i ext/extconf.rb -e "4a \
-        FileUtils.cp '${./zookeeper-ftbfs-with-gcc-8.patch}', 'patches/zkc-3.4.5-gcc-8.patch'
-      "
-    '';
   };
 }

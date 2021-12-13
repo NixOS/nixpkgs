@@ -7,13 +7,13 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "selinux-python";
-  version = "2.9";
+  version = "3.3";
 
-  inherit (libsepol) se_release se_url;
+  inherit (libsepol) se_url;
 
   src = fetchurl {
-    url = "${se_url}/${se_release}/selinux-python-${version}.tar.gz";
-    sha256 = "1pjzsyay5535cxcjag7y7k193ajry0s0xc3dqv5905qd7cwval1n";
+    url = "${se_url}/${version}/selinux-python-${version}.tar.gz";
+    sha256 = "1v244hpb45my303793xa4kcn7qnxjgxn4ja7rdn9k1q361hi1nca";
   };
 
   strictDeps = true;
@@ -49,4 +49,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
   };
 }
-

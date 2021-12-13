@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, m4, cxx ? true }:
 
 let self = stdenv.mkDerivation rec {
-  name = "gmp-4.3.2";
+  pname = "gmp";
+  version = "4.3.2";
 
   src = fetchurl {
-    url = "mirror://gnu/gmp/${name}.tar.bz2";
+    url = "mirror://gnu/gmp/gmp-${version}.tar.bz2";
     sha256 = "0x8prpqi9amfcmi7r4zrza609ai9529pjaq0h4aw51i867064qck";
   };
 

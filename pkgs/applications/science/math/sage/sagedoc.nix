@@ -1,7 +1,7 @@
 { stdenv
 , sage-with-env
 , python3
-, maxima-ecl
+, maxima
 , tachyon
 , jmol
 , cddlib
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     sage-with-env.env.lib
     python3
-    maxima-ecl
+    maxima
     tachyon
     jmol
     cddlib

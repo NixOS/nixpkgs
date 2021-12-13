@@ -32,7 +32,7 @@ buildPythonApplication rec {
       --replace 'thrift = "^0.13.0"' 'thrift = "*"' \
       --replace 'halo = "^0.0.29"' 'halo = "*"'
     substituteInPlace tests/test_inspect.py \
-      --replace "parquet-cpp-arrow version 5.0.0" "parquet-cpp-arrow version 6.0.0" \
+      --replace "parquet-cpp-arrow version 5.0.0" "parquet-cpp-arrow version ${pyarrow.version}" \
       --replace "serialized_size: 2222" "serialized_size: 2221"
   '';
 

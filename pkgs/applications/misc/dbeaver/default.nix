@@ -14,17 +14,19 @@
 , libXtst
 , zlib
 , maven
+, webkitgtk
+, glib-networking
 }:
 
 stdenv.mkDerivation rec {
   pname = "dbeaver";
-  version = "21.2.5"; # When updating also update fetchedMavenDeps.sha256
+  version = "21.3.0"; # When updating also update fetchedMavenDeps.sha256
 
   src = fetchFromGitHub {
     owner = "dbeaver";
     repo = "dbeaver";
     rev = version;
-    sha256 = "bLZYwf6dtbzS0sWKfQQzv4NqRQZqLkJaT24eW3YOsdQ=";
+    sha256 = "iKxnuMm5hpreP706N+XxaBrDVVwVFRWKNmiCyXkOUCQ=";
   };
 
   fetchedMavenDeps = stdenv.mkDerivation {
@@ -69,6 +71,9 @@ stdenv.mkDerivation rec {
     libXrender
     libXtst
     zlib
+  ] ++ lib.optionals stdenv.isLinux [
+    webkitgtk
+    glib-networking
   ];
 
   desktopItems = [
@@ -130,7 +135,8 @@ stdenv.mkDerivation rec {
 
       makeWrapper $out/dbeaver/dbeaver $out/bin/dbeaver \
         --prefix PATH : ${jdk}/bin \
-        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([ glib gtk3 libXtst ])} \
+        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([ glib gtk3 libXtst webkitgtk glib-networking ])} \
+        --prefix GIO_EXTRA_MODULES : "${glib-networking}/lib/gio/modules" \
         --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
 
       mkdir -p $out/share/pixmaps

@@ -132,7 +132,12 @@ in {
     users.users = optionalAttrs (cfg.user == "collectd") {
       collectd = {
         isSystemUser = true;
+        group = "collectd";
       };
+    };
+
+    users.groups = optionalAttrs (cfg.user == "collectd") {
+      collectd = {};
     };
   };
 }

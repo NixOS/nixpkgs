@@ -59,6 +59,7 @@ stdenv.mkDerivation {
     IOKit
     Metal
     QuartzCore
+    darwin.DarwinTools
   ]);
 
   builder = ./builder.sh;

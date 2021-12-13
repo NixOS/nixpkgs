@@ -5,7 +5,7 @@
 , qtmultimedia, qtxmlpatterns
 , qtquickcontrols, qtquickcontrols2
 , qtmacextras
-, monero, miniupnpc, unbound, readline
+, monero-cli, miniupnpc, unbound, readline
 , boost, libunwind, libsodium, pcsclite
 , randomx, zeromq, libgcrypt, libgpg-error
 , hidapi, rapidjson, quirc
@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "monero-gui";
-  version = "0.17.2.3";
+  version = "0.17.3.0";
 
   src = fetchFromGitHub {
     owner  = "monero-project";
     repo   = "monero-gui";
     rev    = "v${version}";
-    sha256 = "1d8y5yqyw0db2jdv9mwkczwm2qcwhzyslvq994yq5rvs4vkd8xjg";
+    sha256 = "0rc1p0k16icgfhc7yvkvb8p6570zz0cvigs648l05fcm3mf787rp";
   };
 
   nativeBuildInputs = [
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     qtbase qtdeclarative qtgraphicaleffects
     qtmultimedia qtquickcontrols qtquickcontrols2
     qtxmlpatterns
-    monero miniupnpc unbound readline
+    monero-cli miniupnpc unbound readline
     randomx libgcrypt libgpg-error
     boost libunwind libsodium pcsclite
     zeromq hidapi rapidjson quirc
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   postUnpack = ''
     # copy monero sources here
     # (needs to be writable)
-    cp -r ${monero.source}/* source/monero
+    cp -r ${monero-cli.source}/* source/monero
     chmod -R +w source/monero
   '';
 
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
 
     # use monerod from the monero package
     substituteInPlace src/daemon/DaemonManager.cpp \
-      --replace 'QApplication::applicationDirPath() + "' '"${monero}/bin'
+      --replace 'QApplication::applicationDirPath() + "' '"${monero-cli}/bin'
 
     # 1: only build external deps, *not* the full monero
     # 2: use nixpkgs libraries

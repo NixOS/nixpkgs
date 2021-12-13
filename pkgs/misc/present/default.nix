@@ -26,6 +26,6 @@ python3Packages.buildPythonPackage rec {
     description = "A terminal-based presentation tool with colors and effects.";
     homepage = "https://github.com/vinayak-mehta/present";
     license = licenses.asl20;
-    maintainers = with maintainers; [ legendofmiracles ];
+    maintainers = with maintainers; [ lom ];
   };
 }

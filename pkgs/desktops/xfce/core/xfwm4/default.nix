@@ -1,4 +1,4 @@
-{ mkXfceDerivation, exo, librsvg, dbus-glib, libepoxy, gtk3, libXdamage
+{ lib, mkXfceDerivation, exo, librsvg, dbus-glib, libepoxy, gtk3, libXdamage
 , libstartup_notification, libxfce4ui, libxfce4util, libwnck
 , libXpresent, xfconf }:
 
@@ -24,7 +24,8 @@ mkXfceDerivation {
     xfconf
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Window manager for Xfce";
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

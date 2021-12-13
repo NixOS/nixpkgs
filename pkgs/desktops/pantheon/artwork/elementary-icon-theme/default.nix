@@ -1,7 +1,7 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , nix-update-script
-, pantheon
 , meson
 , python3
 , ninja
@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-icon-theme";
-  version = "6.0.0";
+  version = "6.1.0";
 
   repoName = "icons";
 
@@ -21,13 +21,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "0k94zi8fzi0nf5q471fmrlz8jjkv8m6vav1spzv7ynkg2hik8d9b";
-  };
-
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    sha256 = "sha256-WR4HV0nJKj0WeSFHXLK64O0LhX8myAJE4w0aztyhPn4=";
   };
 
   nativeBuildInputs = [
@@ -56,6 +50,12 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = "gtk-update-icon-cache $out/share/icons/elementary";
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
 
   meta = with lib; {
     description = "Named, vector icons for elementary OS";

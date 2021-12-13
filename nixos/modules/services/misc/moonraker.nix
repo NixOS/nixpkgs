@@ -18,6 +18,7 @@ in {
       klipperSocket = mkOption {
         type = types.path;
         default = config.services.klipper.apiSocket;
+        defaultText = literalExpression "config.services.klipper.apiSocket";
         description = "Path to Klipper's API socket.";
       };
 

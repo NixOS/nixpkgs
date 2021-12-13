@@ -291,10 +291,10 @@ let
   # define packages to install
   basePackages = [
     git
-    # replace with beam.packages.erlang.elixir_1_11 if you need
+    # replace with beam.packages.erlang.elixir_1_13 if you need
     beam.packages.erlang.elixir
     nodejs
-    postgresql_13
+    postgresql_14
     # only used for frontend dependencies
     # you are free to use yarn2nix as well
     nodePackages.node2nix
@@ -312,10 +312,11 @@ let
     mkdir -p .nix-mix .nix-hex
     export MIX_HOME=$PWD/.nix-mix
     export HEX_HOME=$PWD/.nix-mix
+    # make hex from Nixpkgs available
+    # `mix local.hex` will install hex into MIX_HOME and should take precedence
+    export MIX_PATH="${beam.packages.erlang.hex}/lib/erlang/lib/hex/ebin"
     export PATH=$MIX_HOME/bin:$HEX_HOME/bin:$PATH
-    # TODO: not sure how to make hex available without installing it afterwards.
-    mix local.hex --if-missing
-    export LANG=en_US.UTF-8
+    export LANG=C.UTF-8
     # keep your shell history in iex
     export ERL_AFLAGS="-kernel shell_history enabled"
 

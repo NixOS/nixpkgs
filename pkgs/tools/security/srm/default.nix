@@ -1,12 +1,11 @@
 { lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-
-  name = "srm-" + version;
+  pname = "srm";
   version = "1.2.15";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/srm/${version}/${name}.tar.gz";
+    url = "mirror://sourceforge/project/srm/${version}/srm-${version}.tar.gz";
     sha256 = "10sjarhprs6s4zandndg720528rcnd4xk8dl48pjj7li1q9c30vm";
   };
 

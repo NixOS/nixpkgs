@@ -41,6 +41,7 @@ let
         (whenAtLeast "5.2" yes)
       ];
       DEBUG_INFO_BTF            = whenAtLeast "5.2" (option yes);
+      BPF_LSM                   = whenAtLeast "5.7" (option yes);
       DEBUG_KERNEL              = yes;
       DEBUG_DEVRES              = no;
       DYNAMIC_DEBUG             = yes;

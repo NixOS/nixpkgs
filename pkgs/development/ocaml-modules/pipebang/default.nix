@@ -1,4 +1,4 @@
-{lib, buildOcaml, fetchurl}:
+{ lib, buildOcaml, fetchFromGitHub }:
 
 buildOcaml rec {
   pname = "pipebang";
@@ -6,9 +6,11 @@ buildOcaml rec {
 
   minimumSupportedOcamlVersion = "4.00";
 
-  src = fetchurl {
-    url = "https://github.com/janestreet/pipebang/archive/${version}.tar.gz";
-    sha256 = "0acm2y8wxvnapa248lkgm0vcc44hlwhrjxqkx1awjxzcmarnxhfk";
+  src = fetchFromGitHub {
+    owner = "janestreet";
+    repo = "pipebang";
+    rev = version;
+    sha256 = "sha256-9A3X/ciL5HtuKQ5awS+hDDBLL5ytOr12wHsmJLNRn+Q=";
   };
 
   meta = with lib; {

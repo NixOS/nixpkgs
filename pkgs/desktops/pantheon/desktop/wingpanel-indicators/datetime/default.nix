@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , nix-update-script
 , substituteAll
-, pantheon
 , pkg-config
 , meson
 , python3
@@ -24,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-datetime";
-  version = "2.3.1";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-/kbwZVzOlC3ATCuXVMdf2RIskoGQKG1evaDYO3yFerg=";
+    sha256 = "sha256-GxlnzLDrZmDDAGlUMoM4k4SkbCqra3Th6ugRAj3Wse4=";
   };
 
   patches = [
@@ -38,9 +37,6 @@ stdenv.mkDerivation rec {
       src = ./fix-paths.patch;
       elementary_calendar = elementary-calendar;
     })
-    # Fix incorrect month shown on re-opening indicator if previously changed month
-    # https://github.com/elementary/wingpanel-indicator-datetime/pull/284
-    ./fix-incorrect-month.patch
   ];
 
   nativeBuildInputs = [

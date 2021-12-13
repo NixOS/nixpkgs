@@ -35,7 +35,9 @@ buildPythonPackage rec {
   ];
 
   checkPhase = ''
-    stestr run
+    stestr run -e <(echo "
+      hacking.tests.test_doctest.HackingTestCase.test_flake8
+    ")
   '';
 
   pythonImportsCheck = [ "hacking" ];

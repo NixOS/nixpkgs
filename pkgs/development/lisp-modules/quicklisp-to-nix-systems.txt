@@ -71,6 +71,7 @@ cl-prevalence
 cl-protobufs
 cl-qprint
 cl-reexport
+cl-shellwords
 cl-slice
 cl-smt-lib
 cl-smtp

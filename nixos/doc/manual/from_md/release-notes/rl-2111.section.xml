@@ -1,9 +1,5 @@
 <section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="sec-release-21.11">
-  <title>Release 21.11 (“Porcupine”, 2021.11/??)</title>
-  <para>
-    In addition to numerous new and upgraded packages, this release has
-    the following highlights:
-  </para>
+  <title>Release 21.11 (“Porcupine”, 2021/11/30)</title>
   <itemizedlist spacing="compact">
     <listitem>
       <para>
@@ -14,6 +10,10 @@
   </itemizedlist>
   <section xml:id="sec-release-21.11-highlights">
     <title>Highlights</title>
+    <para>
+      In addition to numerous new and upgraded packages, this release
+      has the following highlights:
+    </para>
     <itemizedlist>
       <listitem>
         <para>
@@ -37,7 +37,7 @@
       </listitem>
       <listitem>
         <para>
-          kOps now defaults to 1.21.1, which uses containerd as the
+          kops now defaults to 1.21.1, which uses containerd as the
           default runtime.
         </para>
       </listitem>
@@ -84,13 +84,13 @@
       </listitem>
       <listitem>
         <para>
-          Activation scripts can now opt int to be run when running
-          <literal>nixos-rebuild dry-activate</literal> and detect the
-          dry activation by reading <literal>$NIXOS_ACTION</literal>.
-          This allows activation scripts to output what they would
-          change if the activation was really run. The users/modules
-          activation script supports this and outputs some of is
-          actions.
+          Activation scripts can now, optionally, be run during a
+          <literal>nixos-rebuild dry-activate</literal> and can detect
+          the dry activation by reading
+          <literal>$NIXOS_ACTION</literal>. This allows activation
+          scripts to output what they would change if the activation was
+          really run. The users/modules activation script supports this
+          and outputs some of is actions.
         </para>
       </listitem>
       <listitem>
@@ -172,6 +172,41 @@
           </listitem>
         </itemizedlist>
       </listitem>
+      <listitem>
+        <para>
+          ORY Kratos was updated to version 0.8.0-alpha.3
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              This release requires you to run SQL migrations. Please,
+              as always, create a backup of your database first!
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              The SDKs are now generated with tag v0alpha2 to reflect
+              that some signatures have changed in a breaking fashion.
+              Please update your imports from v0alpha1 to v0alpha2.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              The SMTPS scheme used in courier config URL with
+              cleartext/StartTLS/TLS SMTP connection types is now only
+              supporting implicit TLS. For StartTLS and cleartext SMTP,
+              please use the SMTP scheme instead.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              for more details, see
+              <link xlink:href="https://github.com/ory/kratos/releases/tag/v0.8.0-alpha.1">Release
+              Notes</link>.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-new-services">
@@ -220,14 +255,14 @@
         <para>
           <link xlink:href="https://www.isc.org/kea/">Kea</link>, ISCs
           2nd generation DHCP and DDNS server suite. Available at
-          <link xlink:href="options.html#opt-services.kea">services.kea</link>.
+          <link xlink:href="options.html#opt-services.kea.dhcp4">services.kea</link>.
         </para>
       </listitem>
       <listitem>
         <para>
           <link xlink:href="https://owncast.online/">owncast</link>,
           self-hosted video live streaming solution. Available at
-          <link xlink:href="options.html#opt-services.owncast">services.owncast</link>.
+          <link xlink:href="options.html#opt-services.owncast.enable">services.owncast</link>.
         </para>
       </listitem>
       <listitem>
@@ -235,7 +270,14 @@
           <link xlink:href="https://joinpeertube.org/">PeerTube</link>,
           developed by Framasoft, is the free and decentralized
           alternative to video platforms. Available at
-          <link xlink:href="options.html#opt-services.peertube">services.peertube</link>.
+          <link xlink:href="options.html#opt-services.peertube.enable">services.peertube</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://maddy.email">maddy</link>, a
+          composable all-in-one mail server. Available as
+          <link xlink:href="options.html#opt-services.maddy.enable">services.maddy</link>.
         </para>
       </listitem>
       <listitem>
@@ -487,6 +529,15 @@
           <link xlink:href="https://gitlab.com/ananicy-cpp/ananicy-cpp/">ananicy-cpp</link>.
           Available as
           <link linkend="opt-services.ananicy.enable">services.ananicy</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/prometheus-community/smartctl_exporter">smartctl_exporter</link>,
+          a Prometheus exporter for
+          <link xlink:href="https://en.wikipedia.org/wiki/S.M.A.R.T.">S.M.A.R.T.</link>
+          data. Available as
+          <link xlink:href="options.html#opt-services.prometheus.exporters.smartctl.enable">services.prometheus.exporters.smartctl</link>.
         </para>
       </listitem>
     </itemizedlist>
@@ -1827,15 +1878,6 @@ Superuser created successfully.
       </listitem>
       <listitem>
         <para>
-          Changing systemd <literal>.socket</literal> units now restarts
-          them and stops the service that is activated by them.
-          Additionally, services with
-          <literal>stopOnChange = false</literal> don’t break anymore
-          when they are socket-activated.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
           The <literal>virtualisation.libvirtd</literal> module has been
           refactored and updated with new options:
         </para>
@@ -1985,6 +2027,22 @@ Superuser created successfully.
           after the upgrade, please delete your
           <literal>$XDG_CONFIG_HOME/retroarch/retroarch.cfg</literal>
           file.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          hydrus has been upgraded from version <literal>438</literal>
+          to <literal>463</literal>. Since upgrading between releases
+          this old is advised against, be sure to have a backup of your
+          data before upgrading. For details, see
+          <link xlink:href="https://hydrusnetwork.github.io/hydrus/help/getting_started_installing.html#big_updates">the
+          hydrus manual</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          More jdk and jre versions are now exposed via
+          <literal>java-packages.compiler</literal>.
         </para>
       </listitem>
     </itemizedlist>

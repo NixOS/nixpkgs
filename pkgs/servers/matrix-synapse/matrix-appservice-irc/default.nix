@@ -5,7 +5,8 @@ let
     inherit pkgs nodejs;
     inherit (stdenv.hostPlatform) system;
   };
-  version = builtins.replaceStrings [ "\n" ] [ "" ] (builtins.readFile ./REVISION);
+  version = (lib.importJSON ./package.json).version;
+  srcInfo = lib.importJSON ./src.json;
 in
 ourNodePackages.package.override {
   pname = "matrix-appservice-irc";
@@ -15,7 +16,7 @@ ourNodePackages.package.override {
     owner = "matrix-org";
     repo = "matrix-appservice-irc";
     rev = version;
-    sha256 = "sha256-EncodJKptrLC54B5XipkiHXFgJ5cD+crcT3SOPOc+7M=";
+    inherit (srcInfo) sha256;
   };
 
   nativeBuildInputs = [ makeWrapper nodePackages.node-gyp-build ];
@@ -30,7 +31,7 @@ ourNodePackages.package.override {
 
   meta = with lib; {
     description = "Node.js IRC bridge for Matrix";
-    maintainers = with maintainers; [ piegames ];
+    maintainers = with maintainers; [ ];
     homepage = "https://github.com/matrix-org/matrix-appservice-irc";
     license = licenses.asl20;
   };

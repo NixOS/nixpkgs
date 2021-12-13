@@ -11,7 +11,7 @@ let
     systemd.services.invidious = {
       description = "Invidious (An alternative YouTube front-end)";
       wants = [ "network-online.target" ];
-      after = [ "syslog.target" "network-online.target" ];
+      after = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
 
       script =

@@ -11,9 +11,11 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   # reconf needed to sucesfully cross-compile
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-
-  buildInputs = [ m17n_db ];
+  nativeBuildInputs = [
+    autoreconfHook pkg-config
+    # requires m17n-db tool at build time
+    m17n_db
+  ];
 
   # Fails parallel build due to missing intra-package depends:
   #   https://savannah.nongnu.org/bugs/index.php?61377

@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchFromGitHub
+, fetchpatch
 , buildPythonPackage
 , cryptography
 , click
@@ -26,10 +27,12 @@ buildPythonPackage rec {
   };
 
   patches = [
-    # Fix removed function in construct library
-    # https://github.com/LedgerHQ/ledgerctl/issues/17
-    # https://github.com/construct/construct/commit/8915512f53552b1493afdbce5bbf8bb6f2aa4411
-    ./remove-iterateints.patch
+    (fetchpatch {
+      # Fix removed function in construct library
+      url = "https://github.com/LedgerHQ/ledgerctl/commit/fd23d0e14721b93789071e80632e6bd9e47c1256.patch";
+      sha256 = "sha256-YNlENguPQW5FNFT7mqED+ghF3TJiKao4H+56Eu+j+Eo=";
+      excludes = [ "setup.py" ];
+    })
   ];
 
   buildInputs = lib.optionals stdenv.isDarwin [ AppKit ];

@@ -8,18 +8,20 @@
 , numba
 , pynndescent
 , tensorflow
+, tqdm
 , pytestCheckHook
+, keras
 }:
 
 buildPythonPackage rec {
   pname = "umap-learn";
-  version = "0.5.1";
+  version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "lmcinnes";
     repo = "umap";
     rev = version;
-    sha256 = "0favphngcz5jvyqs06x07hk552lvl9qx3vka8r4x0xmv88gsg349";
+    sha256 = "sha256-JfYuuE1BP+HdiEl7l01sZ/XXlEwHyAsLjK9nqhRd/3o=";
   };
 
   propagatedBuildInputs = [
@@ -28,12 +30,14 @@ buildPythonPackage rec {
     scipy
     numba
     pynndescent
+    tqdm
   ];
 
   checkInputs = [
     nose
     tensorflow
     pytestCheckHook
+    keras
   ];
 
   preCheck = ''

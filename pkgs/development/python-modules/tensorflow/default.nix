@@ -1,12 +1,12 @@
 { stdenv, bazel_3, buildBazelPackage, isPy3k, lib, fetchFromGitHub, symlinkJoin
-, addOpenGLRunpath, fetchpatch
+, addOpenGLRunpath, fetchpatch, patchelfUnstable
 # Python deps
 , buildPythonPackage, pythonOlder, python
 # Python libraries
-, numpy, tensorflow-tensorboard_2, absl-py
-, setuptools, wheel, keras-preprocessing, google-pasta
+, numpy, tensorflow-tensorboard, absl-py
+, setuptools, wheel, keras, keras-preprocessing, google-pasta
 , opt-einsum, astunparse, h5py
-, termcolor, grpcio, six, wrapt, protobuf, tensorflow-estimator_2
+, termcolor, grpcio, six, wrapt, protobuf, tensorflow-estimator
 , dill, flatbuffers-python, tblib, typing-extensions
 # Common deps
 , git, pybind11, which, binutils, glibcLocales, cython, perl
@@ -28,7 +28,7 @@
 , avx2Support  ? stdenv.hostPlatform.avx2Support
 , fmaSupport   ? stdenv.hostPlatform.fmaSupport
 # Darwin deps
-, Foundation, Security
+, Foundation, Security, cctools, llvmPackages_11
 }:
 
 assert cudaSupport -> cudatoolkit != null
@@ -72,7 +72,7 @@ let
 
   tfFeature = x: if x then "1" else "0";
 
-  version = "2.4.2";
+  version = "2.7.0";
   variant = if cudaSupport then "-gpu" else "";
   pname = "tensorflow${variant}";
 
@@ -94,15 +94,90 @@ let
       setuptools
       six
       tblib
-      tensorflow-estimator_2
-      tensorflow-tensorboard_2
+      tensorflow-estimator
+      tensorflow-tensorboard
       termcolor
       typing-extensions
       wheel
       wrapt
   ]);
 
-  bazel-build = buildBazelPackage {
+  rules_cc_darwin_patched = stdenv.mkDerivation {
+    name = "rules_cc-${pname}-${version}";
+
+    src = _bazel-build.deps;
+
+    prePatch = "pushd rules_cc";
+    patches = [
+      # https://github.com/bazelbuild/rules_cc/issues/122
+      (fetchpatch {
+        name = "tensorflow-rules_cc-libtool-path.patch";
+        url = "https://github.com/bazelbuild/rules_cc/commit/8c427ab30bf213630dc3bce9d2e9a0e29d1787db.diff";
+        sha256 = "sha256-C4v6HY5+jm0ACUZ58gBPVejCYCZfuzYKlHZ0m2qDHCk=";
+      })
+
+      # https://github.com/bazelbuild/rules_cc/pull/124
+      (fetchpatch {
+        name = "tensorflow-rules_cc-install_name_tool-path.patch";
+        url = "https://github.com/bazelbuild/rules_cc/commit/156497dc89100db8a3f57b23c63724759d431d05.diff";
+        sha256 = "sha256-NES1KeQmMiUJQVoV6dS4YGRxxkZEjOpFSCyOq9HZYO0=";
+      })
+    ];
+    postPatch = "popd";
+
+    dontConfigure = true;
+    dontBuild = true;
+
+    installPhase = ''
+      runHook preInstall
+
+      mv rules_cc/ "$out"
+
+      runHook postInstall
+    '';
+  };
+  llvm-raw_darwin_patched = stdenv.mkDerivation {
+    name = "llvm-raw-${pname}-${version}";
+
+    src = _bazel-build.deps;
+
+    prePatch = "pushd llvm-raw";
+    patches = [
+      # Fix a vendored config.h that requires the 10.13 SDK
+      ./llvm_bazel_fix_macos_10_12_sdk.patch
+    ];
+    postPatch = ''
+      touch {BUILD,WORKSPACE}
+      popd
+    '';
+
+    dontConfigure = true;
+    dontBuild = true;
+
+    installPhase = ''
+      runHook preInstall
+
+      mv llvm-raw/ "$out"
+
+      runHook postInstall
+    '';
+  };
+  bazel-build = if stdenv.isDarwin then _bazel-build.overrideAttrs (prev: {
+    bazelBuildFlags = prev.bazelBuildFlags ++ [
+      "--override_repository=rules_cc=${rules_cc_darwin_patched}"
+      "--override_repository=llvm-raw=${llvm-raw_darwin_patched}"
+    ];
+    preBuild = ''
+      export AR="${cctools}/bin/libtool"
+    '';
+  }) else _bazel-build;
+
+  _bazel-build = (buildBazelPackage.override (lib.optionalAttrs stdenv.isDarwin {
+    # clang 7 fails to emit a symbol for
+    # __ZN4llvm11SmallPtrSetIPKNS_10AllocaInstELj8EED1Ev in any of the
+    # translation units, so the build fails at link time
+    stdenv = llvmPackages_11.stdenv;
+  })) {
     name = "${pname}-${version}";
     bazel = bazel_3;
 
@@ -110,21 +185,8 @@ let
       owner = "tensorflow";
       repo = "tensorflow";
       rev = "v${version}";
-      sha256 = "07a2y05hixch1bjag5pzw3p1m7bdj3bq4gdvmsfk2xraz49b1pi8";
+      sha256 = "sha256-n7jRDPeXsyq4pEWSWmOCas4c8VsArIKlCuwvSU/Ro/c=";
     };
-
-    patches = [
-      # included from 2.6.0 onwards
-      (fetchpatch {
-        name = "fix-numpy-1.20-notimplementederror.patch";
-        url = "https://github.com/tensorflow/tensorflow/commit/b258941525f496763d4277045b6513c815720e3a.patch";
-        sha256 = "19f9bzrcfsynk11s2hqvscin5c65zf7r6g3nb10jnimw79vafiry";
-      })
-      # Relax too strict Python packages versions dependencies.
-      ./relax-dependencies.patch
-      # Add missing `io_bazel_rules_docker` dependency.
-      ./workspace.patch
-    ];
 
     # On update, it can be useful to steal the changes from gentoo
     # https://gitweb.gentoo.org/repo/gentoo.git/tree/sci-libs/tensorflow
@@ -206,7 +268,6 @@ let
       "opt_einsum_archive"
       "org_sqlite"
       "pasta"
-      "pcre"
       "png"
       "pybind11"
       "six_archive"
@@ -295,9 +356,12 @@ let
     fetchAttrs = {
       # cudaSupport causes fetch of ncclArchive, resulting in different hashes
       sha256 = if cudaSupport then
-        "10m6qj3kchgxfgb6qh59vc51knm9r9pkng8bf90h00dnggvv8234"
+        "sha256-GIBs1BAUuefwlavu7dr9rFb4n1A3uwnvvCAvsBnSSqQ="
       else
-        "04a98yrp09nd0p17k0jbzkgjppxs0yma7m5zkfrwgvr4g0w71v68";
+        if stdenv.isDarwin then
+          "sha256-156eOnnjk+wzIiGLd6k/+SAgm4AyImsV/qBsHFlxe+k="
+        else
+          "sha256-Fj/wWapsre55VctJ1k1kcYKAn3uDCMPN5rVX8y76ypM=";
     };
 
     buildAttrs = {
@@ -355,6 +419,18 @@ in buildPythonPackage {
 
   src = bazel-build.python;
 
+  # Adjust dependency requirements:
+  # - Relax gast version requirement that doesn't match what we have packaged
+  # - The purpose of python3Packages.libclang is not clear at the moment and we don't have it packaged yet
+  # - keras and tensorlow-io-gcs-filesystem will be considered as optional for now.
+  postPatch = ''
+    sed -i setup.py \
+      -e "s/'gast[^']*',/'gast',/" \
+      -e "/'libclang[^']*',/d" \
+      -e "/'keras[^']*',/d" \
+      -e "/'tensorflow-io-gcs-filesystem[^']*',/d"
+  '';
+
   # Upstream has a pip hack that results in bin/tensorboard being in both tensorflow
   # and the propagated input tensorflow-tensorboard, which causes environment collisions.
   # Another possibility would be to have tensorboard only in the buildInputs
@@ -381,15 +457,16 @@ in buildPythonPackage {
     protobuf
     six
     tblib
-    tensorflow-estimator_2
+    tensorflow-estimator
     termcolor
     typing-extensions
     wrapt
   ] ++ lib.optionals withTensorboard [
-    tensorflow-tensorboard_2
+    tensorflow-tensorboard
   ];
 
-  nativeBuildInputs = lib.optional cudaSupport addOpenGLRunpath;
+  # remove patchelfUnstable once patchelf 0.14 with https://github.com/NixOS/patchelf/pull/256 becomes the default
+  nativeBuildInputs = lib.optional cudaSupport [ addOpenGLRunpath patchelfUnstable ];
 
   postFixup = lib.optionalString cudaSupport ''
     find $out -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do
@@ -402,6 +479,7 @@ in buildPythonPackage {
   # Actual tests are slow and impure.
   # TODO try to run them anyway
   # TODO better test (files in tensorflow/tools/ci_build/builds/*test)
+  checkInputs = [ keras ];
   checkPhase = ''
     ${python.interpreter} <<EOF
     # A simple "Hello world"

@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
     description = "A simple and easy to use Wikipedia Text User Interface";
     homepage = "https://github.com/builditluc/wiki-tui";
     license = licenses.mit;
-    maintainers = with maintainers; [ legendofmiracles ];
+    maintainers = with maintainers; [ lom ];
     mainProgram = "wiki-tui";
   };
 }

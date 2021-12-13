@@ -3,13 +3,13 @@
 
 mkDerivation rec {
   pname = "qmapshack";
-  version = "1.16.0";
+  version = "1.16.1";
 
   src = fetchFromGitHub {
     owner = "Maproom";
     repo = pname;
     rev = "V_${version}";
-    sha256 = "1yzgkdjxwyg8ggbxyjwr0zjrx99ckrbz2p2524iii9i7qqn8wfsx";
+    sha256 = "sha256-2otvRKtFb51PLrIh/Hxltp69n5nyR63HGGvk73TFjqA=";
   };
 
   patches = [

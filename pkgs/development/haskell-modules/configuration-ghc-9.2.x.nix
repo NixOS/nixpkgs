@@ -4,8 +4,7 @@ with haskellLib;
 
 self: super: {
 
-  # This compiler version needs llvm 10.x.
-  llvmPackages = pkgs.lib.dontRecurseIntoAttrs pkgs.llvmPackages_10;
+  llvmPackages = pkgs.lib.dontRecurseIntoAttrs self.ghc.llvmPackages;
 
   # Disable GHC 9.2.x core libraries.
   array = null;
@@ -98,12 +97,15 @@ self: super: {
   data-fix = doJailbreak super.data-fix;
   dec = doJailbreak super.dec;
   ed25519 = doJailbreak super.ed25519;
+  genvalidity = self.genvalidity_1_0_0_1;
+  genvalidity-property = self.genvalidity-property_1_0_0_0;
+  genvalidity-hspec = self.genvalidity-hspec_1_0_0_0;
   ghc-byteorder = doJailbreak super.ghc-byteorder;
   ghc-lib = self.ghc-lib_9_2_1_20211101;
   ghc-lib-parser = self.ghc-lib-parser_9_2_1_20211101;
   ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_2_0_1;
   hackage-security = doJailbreak super.hackage-security;
-  hashable = super.hashable_1_4_0_0;
+  hashable = super.hashable_1_4_0_1;
   hashable-time = doJailbreak super.hashable-time_0_3;
   hedgehog = doJailbreak super.hedgehog;
   HTTP = overrideCabal (drv: { postPatch = "sed -i -e 's,! Socket,!Socket,' Network/TCP.hs"; }) (doJailbreak super.HTTP);
@@ -113,11 +115,13 @@ self: super: {
   lifted-async = doJailbreak super.lifted-async;
   lukko = doJailbreak super.lukko;
   network = super.network_3_1_2_5;
+  ormolu = self.ormolu_0_4_0_0;
   OneTuple = super.OneTuple_0_3_1;
   parallel = doJailbreak super.parallel;
+  path = doJailbreak super.path_0_9_1;
   polyparse = overrideCabal (drv: { postPatch = "sed -i -e 's, <0.11, <0.12,' polyparse.cabal"; }) (doJailbreak super.polyparse);
   primitive = doJailbreak super.primitive;
-  quickcheck-instances = super.quickcheck-instances_0_3_26_1;
+  quickcheck-instances = super.quickcheck-instances_0_3_27;
   regex-posix = doJailbreak super.regex-posix;
   resolv = doJailbreak super.resolv;
   semialign = super.semialign_1_2_0_1;
@@ -148,6 +152,16 @@ self: super: {
     ] ++ drv.testFlags or [];
   }) (doJailbreak super.hpack);
 
+  validity = pkgs.lib.pipe super.validity_0_12_0_0 [
+    # head.hackage patch
+    (appendPatch (pkgs.fetchpatch {
+      url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/9110e6972b5daf085e19cad41f97920d3ddac499/patches/validity-0.12.0.0.patch";
+      sha256 = "0hzns596dxvyn8irgi7aflx76wak1qi13chkkvl0055pkgykm08f";
+    }))
+    # head.hackage ignores test suite
+    dontCheck
+  ];
+
   # lens >= 5.1 supports 9.2.1
   lens = super.lens_5_1;
 
@@ -176,7 +190,10 @@ self: super: {
   memory = appendPatch (pkgs.fetchpatch {
     url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/memory-0.16.0.patch";
     sha256 = "1kjganx729a6xfgfnrb3z7q6mvnidl042zrsd9n5n5a3i76nl5nl";
-  }) super.memory_0_16_0;
+  }) (overrideCabal {
+    editedCabalFile = null;
+    revision = null;
+  } super.memory_0_16_0);
 
   # GHC 9.0.x doesn't like `import Spec (main)` in Main.hs
   # https://github.com/snoyberg/mono-traversable/issues/192

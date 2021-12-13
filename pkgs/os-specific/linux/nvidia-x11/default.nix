@@ -26,6 +26,9 @@ rec {
     }
     else legacy_390;
 
+  # see https://www.nvidia.com/en-us/drivers/unix/ "Production branch"
+  production = legacy_470;
+
   beta = generic {
     version = "495.29.05";
     sha256_64bit = "sha256-9yVLl9QAxpJQR5ZJb059j2TpOx4xxCeGCk8hmhhvEl4=";

@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fastp";
-  version = "0.23.1";
+  version = "0.23.2";
 
   src = fetchFromGitHub {
     owner = "OpenGene";
     repo = "fastp";
     rev = "v${version}";
-    sha256 = "sha256-vRJlNtg2JabBAUaX91Y04z8MdyxEnreBAlIHn7VB+u4=";
+    sha256 = "sha256-W1mXTfxD7/gHJhao6qqbNcyM3t2cfrUYiBYPJi/O1RI=";
   };
 
   buildInputs = [ zlib libdeflate isa-l ];

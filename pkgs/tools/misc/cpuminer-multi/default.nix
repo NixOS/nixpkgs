@@ -1,17 +1,14 @@
 { lib, stdenv, fetchFromGitHub, curl, jansson, autoconf, automake
 , aesni ? stdenv.hostPlatform.aesSupport }:
 
-let
-  rev = "8393e03089c0abde61bd5d72aba8f926c3d6eca4";
-  date = "20160316";
-in
 stdenv.mkDerivation {
-  name = "cpuminer-multi-${date}-${lib.strings.substring 0 7 rev}";
+  pname = "cpuminer-multi";
+  version = "unstable-2016-03-16";
 
   src = fetchFromGitHub {
     owner = "hyc";
     repo = "cpuminer-multi";
-    inherit rev;
+    rev = "8393e03089c0abde61bd5d72aba8f926c3d6eca4";
     sha256 = "11dg4rra4dgfb9x6q85irn0hrkx2lkwyrdpgdh10pag09s3vhy4v";
   };
 

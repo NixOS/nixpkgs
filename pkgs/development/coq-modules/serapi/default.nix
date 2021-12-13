@@ -15,6 +15,7 @@ let
       });
 
   release = {
+    "8.14.0+0.14.0".sha256 = "sha256:1kh80yb791yl771qbqkvwhbhydfii23a7lql0jgifvllm2k8hd8d";
     "8.14+rc1+0.14.0".sha256 = "1w7d7anvcfx8vz51mnrf1jkw6rlpzjkjlr06avf58wlhymww7pja";
     "8.13.0+0.13.0".sha256 = "0k69907xn4k61w4mkhwf8kh8drw9pijk9ynijsppihw98j8w38fy";
     "8.12.0+0.12.1".sha256 = "048x3sgcq4h845hi6hm4j4dsfca8zfj70dm42w68n63qcm6xf9hn";
@@ -27,8 +28,11 @@ in
   pname = "serapi";
   inherit version release;
 
-  defaultVersion =  with versions; switch coq.version [
-      { case = isEq "8.14"; out = "8.14+rc1+0.14.0"; }
+  defaultVersion =  with versions;
+    if isGe "4.12" coq.ocamlPackages.ocaml.version then null
+    else
+    switch coq.version [
+      { case = isEq "8.14"; out = "8.14.0+0.14.0"; }
       { case = isEq "8.13"; out = "8.13.0+0.13.0"; }
       { case = isEq "8.12"; out = "8.12.0+0.12.1"; }
       { case = isEq "8.11"; out = "8.11.0+0.11.1"; }

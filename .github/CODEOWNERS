@@ -6,6 +6,13 @@
 #
 # For documentation on this file, see https://help.github.com/articles/about-codeowners/
 # Mentioned users will get code review requests.
+#
+# IMPORTANT NOTE: in order to actually get pinged, commit access is required.
+# This also holds true for GitHub teams. Since almost none of our teams have write
+# permissions, you need to list all members of the team with commit access individually.
+# We still add the team to the list next to its members, this helps keeping things
+# in sync. (Put non team members before the team to distinguish them.)
+# See https://github.com/NixOS/nixpkgs/issues/124085 for more details
 
 # This file
 /.github/CODEOWNERS @edolstra
@@ -32,7 +39,7 @@
 /pkgs/top-level/stage.nix                        @nbp @Ericson2314 @matthewbauer
 /pkgs/top-level/splice.nix                       @Ericson2314 @matthewbauer
 /pkgs/top-level/release-cross.nix                @Ericson2314 @matthewbauer
-/pkgs/stdenv/generic                             @Ericson2314 @matthewbauer
+/pkgs/stdenv/generic                             @Ericson2314 @matthewbauer @cab404
 /pkgs/stdenv/cross                               @Ericson2314 @matthewbauer
 /pkgs/build-support/cc-wrapper                   @Ericson2314 @orivej
 /pkgs/build-support/bintools-wrapper             @Ericson2314 @orivej
@@ -210,11 +217,11 @@
 /pkgs/top-level/php-packages.nix         @jtojnar @NixOS/php @aanderse @etu @globin @ma27 @talyz
 
 # Podman, CRI-O modules and related
-/nixos/modules/virtualisation/containers.nix @NixOS/podman @zowoq
-/nixos/modules/virtualisation/cri-o.nix      @NixOS/podman @zowoq
-/nixos/modules/virtualisation/podman.nix     @NixOS/podman @zowoq
-/nixos/tests/cri-o.nix                       @NixOS/podman @zowoq
-/nixos/tests/podman.nix                      @NixOS/podman @zowoq
+/nixos/modules/virtualisation/containers.nix @NixOS/podman @zowoq @adisbladis
+/nixos/modules/virtualisation/cri-o.nix      @NixOS/podman @zowoq @adisbladis
+/nixos/modules/virtualisation/podman         @NixOS/podman @zowoq @adisbladis
+/nixos/tests/cri-o.nix                       @NixOS/podman @zowoq @adisbladis
+/nixos/tests/podman                          @NixOS/podman @zowoq @adisbladis
 
 # Docker tools
 /pkgs/build-support/docker                   @roberth @utdemir
@@ -229,6 +236,10 @@
 /pkgs/development/compilers/go @kalbasit @Mic92 @zowoq
 /pkgs/development/go-modules   @kalbasit @Mic92 @zowoq
 /pkgs/development/go-packages  @kalbasit @Mic92 @zowoq
+
+# GNOME
+/pkgs/desktops/gnome                              @NixOS/GNOME @jtojnar @hedning
+/pkgs/desktops/gnome/extensions       @piegamesde @NixOS/GNOME @jtojnar @hedning
 
 # Cinnamon
 /pkgs/desktops/cinnamon @mkg20001

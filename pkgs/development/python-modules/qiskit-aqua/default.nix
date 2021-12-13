@@ -111,7 +111,7 @@ buildPythonPackage rec {
     "qiskit.optimization"
   ];
   pytestFlagsArray = [
-    "--timeout=30"
+    "--timeout=30"  # limit test duration to 30 seconds. Some tests previously would run indefinitely
     "--durations=10"
   ];
   disabledTestPaths = lib.optionals (!withPyscf) [
@@ -169,6 +169,8 @@ buildPythonPackage rec {
     "test_eoh"
     "test_qasm_5"
     "test_uccsd_hf"
+    "test_lih"
+    "test_lih_freeze_core"
   ] ++ lib.optionals (!withPyscf) [
     "test_validate" # test/chemistry/test_inputparser.py
   ];

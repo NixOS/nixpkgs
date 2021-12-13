@@ -17,8 +17,15 @@ stdenv.mkDerivation rec {
       url = "https://git.savannah.gnu.org/cgit/gsl.git/patch/?id=9cc12d";
       sha256 = "1bmrmihi28cly9g9pq54kkix2jy59y7cd7h5fw4v1c7h5rc2qvs8";
     })
+
+    (fetchpatch {
+      name = "fix-parallel-test.patch";
+      url = "https://git.savannah.gnu.org/cgit/gsl.git/patch/?id=12654373c3b60541230921aae81f93b484ec5eaf";
+      sha256 = "1flzpbsfj7gjywv6v9qvm8wpdrkbpj7shryinfdpb40y7si9njdw";
+    })
   ];
 
+  enableParallelBuilding = true;
   doCheck = true;
 
   meta = {

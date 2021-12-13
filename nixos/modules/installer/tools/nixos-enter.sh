@@ -1,4 +1,5 @@
 #! @runtimeShell@
+# shellcheck shell=bash
 
 set -e
 

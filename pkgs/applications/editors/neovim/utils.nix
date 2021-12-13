@@ -177,7 +177,7 @@ let
     assert withPython -> throw "Python2 support has been removed from neovim, please remove withPython and extraPythonPackages.";
 
     wrapNeovimUnstable neovim (res // {
-      wrapperArgs = lib.escapeShellArgs res.wrapperArgs + extraMakeWrapperArgs;
+      wrapperArgs = lib.escapeShellArgs res.wrapperArgs + " " + extraMakeWrapperArgs;
       wrapRc = (configure != {});
   });
 in

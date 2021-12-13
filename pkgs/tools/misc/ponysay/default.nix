@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, python3, texinfo, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "ponysay";
+  pname = "ponysay";
   version = "unstable-2021-03-27";
 
   src = fetchFromGitHub {

@@ -17,25 +17,27 @@ let
   openfst = fetchFromGitHub {
     owner = "kkm000";
     repo = "openfst";
-    rev = "0bca6e76d24647427356dc242b0adbf3b5f1a8d9";
-    sha256 = "1802rr14a03zl1wa5a0x1fa412kcvbgprgkadfj5s6s3agnn11rx";
+    rev = "338225416178ac36b8002d70387f5556e44c8d05";
+    sha256 = "sha256-MGEUuw7ex+WcujVdxpO2Bf5sB6Z0edcAeLGqW/Lo1Hs=";
   };
 in
 stdenv.mkDerivation {
   pname = "kaldi";
-  version = "2020-12-26";
+  version = "2021-12-03";
 
   src = fetchFromGitHub {
     owner = "kaldi-asr";
     repo = "kaldi";
-    rev = "813b73185a18725e4f6021981d17221d6ee23a19";
-    sha256 = "sha256-lTqXTG5ZTPmhCgt+BVzOwjKEIj+bLGUa+IxJq+XtHUg=";
+    rev = "2b016ab8cb018e031ab3bf01ec36cc2950c7e509";
+    sha256 = "sha256-R8CrY7cwU5XfeGEgeFuZ0ApsEcEmWN/lrZaCjz85tyk=";
   };
 
   cmakeFlags = [
     "-DKALDI_BUILD_TEST=off"
     "-DBUILD_SHARED_LIBS=on"
   ];
+
+  enableParallelBuilding = true;
 
   preConfigure = ''
     mkdir bin

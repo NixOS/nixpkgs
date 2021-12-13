@@ -1,23 +1,30 @@
 { lib
-, fetchurl
+, fetchFromGitea
 , buildPythonApplication
 , pbr
 , requests
 , setuptools
+, genericUpdater
+, common-updater-scripts
 }:
 
 buildPythonApplication rec {
   pname = "git-review";
-  version = "2.1.0";
+  version = "2.2.0";
 
   # Manually set version because prb wants to get it from the git
   # upstream repository (and we are installing from tarball instead)
   PBR_VERSION = version;
 
-  src = fetchurl {
-    url = "https://opendev.org/opendev/${pname}/archive/${version}.tar.gz";
-    hash = "sha256-3A1T+/iXhNeMS2Aww5jISoiNExdv9N9/kwyATSuwVTE=";
+  src = fetchFromGitea {
+    domain = "opendev.org";
+    owner = "opendev";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-2+X5fPxB2FIp1fwqEUc+W0gH2NjhF/V+La+maE+XEpo=";
   };
+
+  outputs = [ "out" "man" ];
 
   nativeBuildInputs = [
     pbr
@@ -34,6 +41,11 @@ buildPythonApplication rec {
   doCheck = false;
 
   pythonImportsCheck = [ "git_review" ];
+
+  passthru.updateScript = genericUpdater {
+    inherit pname version;
+    versionLister = "${common-updater-scripts}/bin/list-git-tags ${src.meta.homepage}";
+  };
 
   meta = with lib; {
     description = "Tool to submit code to Gerrit";

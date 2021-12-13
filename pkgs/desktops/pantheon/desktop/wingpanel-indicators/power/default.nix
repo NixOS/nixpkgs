@@ -1,8 +1,8 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , substituteAll
 , nix-update-script
-, pantheon
 , gnome
 , pkg-config
 , meson

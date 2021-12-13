@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libmpdclient";
-  version = "2.19";
+  version = "2.20";
 
   src = fetchFromGitHub {
     owner  = "MusicPlayerDaemon";
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "01agvjscdxagw6jcfx0wg81c4b6p8rh0hp3slycmjs2b835kvmq2";
+    sha256 = "sha256-qEgdwG7ygVblIa3uRf1tddxHg7T1yvY17nbhZ7NRNvg=";
   };
 
   nativeBuildInputs = [ meson ninja ]

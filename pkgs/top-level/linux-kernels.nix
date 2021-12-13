@@ -159,13 +159,6 @@ in {
       ];
     };
 
-    linux_5_14 = callPackage ../os-specific/linux/kernel/linux-5.14.nix {
-      kernelPatches = [
-        kernelPatches.bridge_stp_helper
-        kernelPatches.request_key_helper
-      ];
-    };
-
     linux_5_15 = callPackage ../os-specific/linux/kernel/linux-5.15.nix {
       kernelPatches = [
         kernelPatches.bridge_stp_helper
@@ -229,7 +222,6 @@ in {
     linux_4_19_hardened = hardenedKernelFor kernels.linux_4_19 { };
     linux_5_4_hardened = hardenedKernelFor kernels.linux_5_4 { };
     linux_5_10_hardened = hardenedKernelFor kernels.linux_5_10 { };
-    linux_5_14_hardened = hardenedKernelFor kernels.linux_5_14 { };
     linux_5_15_hardened = hardenedKernelFor kernels.linux_5_15 { };
 
   }));
@@ -250,6 +242,7 @@ in {
     inherit (kernel) kernelOlder kernelAtLeast;
     # Obsolete aliases (these packages do not depend on the kernel).
     inherit (pkgs) odp-dpdk pktgen; # added 2018-05
+    inherit (pkgs) bcc bpftrace; # added 2021-12
 
     acpi_call = callPackage ../os-specific/linux/acpi-call {};
 
@@ -262,12 +255,6 @@ in {
     apfs = callPackage ../os-specific/linux/apfs { };
 
     batman_adv = callPackage ../os-specific/linux/batman-adv {};
-
-    bcc = callPackage ../os-specific/linux/bcc {
-      python = pkgs.python3;
-    };
-
-    bpftrace = callPackage ../os-specific/linux/bpftrace { };
 
     bbswitch = callPackage ../os-specific/linux/bbswitch {};
 
@@ -472,7 +459,6 @@ in {
     linux_4_19 = recurseIntoAttrs (packagesFor kernels.linux_4_19);
     linux_5_4 = recurseIntoAttrs (packagesFor kernels.linux_5_4);
     linux_5_10 = recurseIntoAttrs (packagesFor kernels.linux_5_10);
-    linux_5_14 = recurseIntoAttrs (packagesFor kernels.linux_5_14);
     linux_5_15 = recurseIntoAttrs (packagesFor kernels.linux_5_15);
   };
 
@@ -502,7 +488,6 @@ in {
     linux_4_19_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_4_19 { });
     linux_5_4_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_5_4 { });
     linux_5_10_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_5_10 { });
-    linux_5_14_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_5_14 { });
     linux_5_15_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_5_15 { });
 
     linux_zen = recurseIntoAttrs (packagesFor kernels.linux_zen);

@@ -7,17 +7,18 @@
 , libressl
 , ncurses
 , autoreconfHook
+, buildPackages
 }:
 
 stdenv.mkDerivation rec {
   pname = "telescope";
-  version = "0.5.2";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "omar-polo";
     repo = pname;
     rev = version;
-    sha256 = "sha256-AdbFJfoicQUgJ9kesIWZ9ygttyjjDeC0UHRI98GwoZ8=";
+    sha256 = "sha256-r2+jvmnW9EeQf/2X2cOxnOa+HGuGHV6YMftT2MxbSYQ=";
   };
 
   nativeBuildInputs = [
@@ -30,6 +31,10 @@ stdenv.mkDerivation rec {
     libevent
     libressl
     ncurses
+  ];
+
+  configureFlags = [
+    "HOSTCC=${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc"
   ];
 
   meta = with lib; {

@@ -1,4 +1,4 @@
-pkgs: with pkgs.lib;
+{ lib, config, pkgs }: with lib;
 
 rec {
 
@@ -165,4 +165,9 @@ rec {
       ${builtins.toJSON set}
       EOF
     '';
+
+  systemdUtils = {
+    lib = import ./systemd-lib.nix { inherit lib config pkgs; };
+    unitOptions = import ./systemd-unit-options.nix { inherit lib systemdUtils; };
+  };
 }

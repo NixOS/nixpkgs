@@ -134,8 +134,9 @@ in
   /* Test some cross builds on 64 bit mingw-w64 */
   crossMingwW64 = mapTestOnCross lib.systems.examples.mingwW64 windowsCommon;
 
-  /* Linux on the fuloong */
+  /* Linux on mipsel */
   fuloongminipc = mapTestOnCross lib.systems.examples.fuloongminipc linuxCommon;
+  ben-nanonote = mapTestOnCross lib.systems.examples.ben-nanonote linuxCommon;
 
   /* Javacript */
   ghcjs = mapTestOnCross lib.systems.examples.ghcjs {
@@ -146,9 +147,32 @@ in
   rpi = mapTestOnCross lib.systems.examples.raspberryPi rpiCommon;
   rpi-musl = mapTestOnCross lib.systems.examples.muslpi rpiCommon;
 
+  /* Linux on the Remarkable */
+  remarkable1 = mapTestOnCross lib.systems.examples.remarkable1 linuxCommon;
+  remarkable2 = mapTestOnCross lib.systems.examples.remarkable2 linuxCommon;
+
+  /* Linux on armv7l-hf */
+  armv7l-hf = mapTestOnCross lib.systems.examples.armv7l-hf-multiplatform linuxCommon;
+  scaleway-c1 = mapTestOnCross lib.systems.examples.scaleway-c1 linuxCommon;
+
+  pogoplug4 = mapTestOnCross lib.systems.examples.pogoplug4 linuxCommon;
+
+  /* Linux on aarch64 */
+  aarch64 = mapTestOnCross lib.systems.examples.aarch64-multiplatform linuxCommon;
   aarch64-musl = mapTestOnCross lib.systems.examples.aarch64-multiplatform-musl linuxCommon;
 
+  /* Linux on RISCV */
+  riscv64 = mapTestOnCross lib.systems.examples.riscv64 linuxCommon;
+  riscv32 = mapTestOnCross lib.systems.examples.riscv32 linuxCommon;
+
+  m68k = mapTestOnCross lib.systems.examples.m68k linuxCommon;
+  s390x = mapTestOnCross lib.systems.examples.s390x linuxCommon;
+
+  /* (Cross-compiled) Linux on x86 */
   x86_64-musl = mapTestOnCross lib.systems.examples.musl64 linuxCommon;
+  x86_64-gnu = mapTestOnCross lib.systems.examples.gnu64 linuxCommon;
+  i686-musl = mapTestOnCross lib.systems.examples.musl32 linuxCommon;
+  i686-gnu = mapTestOnCross lib.systems.examples.gnu32 linuxCommon;
 
   ppc64le = mapTestOnCross lib.systems.examples.powernv linuxCommon;
   ppc64le-musl = mapTestOnCross lib.systems.examples.musl-power linuxCommon;
@@ -159,15 +183,22 @@ in
   wasi32 = mapTestOnCross lib.systems.examples.wasi32 wasiCommon;
 
   msp430 = mapTestOnCross lib.systems.examples.msp430 embedded;
+  mmix = mapTestOnCross lib.systems.examples.mmix embedded;
+  vc4 = mapTestOnCross lib.systems.examples.vc4 embedded;
+  or1k = mapTestOnCross lib.systems.examples.or1k embedded;
   avr = mapTestOnCross lib.systems.examples.avr embedded;
   arm-embedded = mapTestOnCross lib.systems.examples.arm-embedded embedded;
-  powerpc-embedded = mapTestOnCross lib.systems.examples.ppc-embedded embedded;
+  armhf-embedded = mapTestOnCross lib.systems.examples.armhf-embedded embedded;
   aarch64-embedded = mapTestOnCross lib.systems.examples.aarch64-embedded embedded;
+  aarch64be-embedded = mapTestOnCross lib.systems.examples.aarch64be-embedded embedded;
+  powerpc-embedded = mapTestOnCross lib.systems.examples.ppc-embedded embedded;
+  powerpcle-embedded = mapTestOnCross lib.systems.examples.ppcle-embedded embedded;
   i686-embedded = mapTestOnCross lib.systems.examples.i686-embedded embedded;
   x86_64-embedded = mapTestOnCross lib.systems.examples.x86_64-embedded embedded;
+  riscv64-embedded = mapTestOnCross lib.systems.examples.riscv64 embedded;
+  riscv32-embedded = mapTestOnCross lib.systems.examples.riscv32 embedded;
 
-  # TODO: fix cross compilation of nix{,Unstable} to netbsd and switch to common
-  x86_64-netbsd = mapTestOnCross lib.systems.examples.x86_64-netbsd embedded;
+  x86_64-netbsd = mapTestOnCross lib.systems.examples.x86_64-netbsd common;
 
   # we test `embedded` instead of `linuxCommon` because very few packages
   # successfully cross-compile to Redox so far

@@ -324,6 +324,7 @@ in {
 
       mongoUrl = mkOption {
         default = "mongodb://${config.services.mongodb.bind_ip}:27017/seyren";
+        defaultText = literalExpression ''"mongodb://''${config.services.mongodb.bind_ip}:27017/seyren"'';
         description = "Mongodb connection string.";
         type = types.str;
       };

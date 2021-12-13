@@ -55,10 +55,19 @@ buildPythonPackage rec {
     timeout-decorator
   ];
 
-  # Integration tests require local DBs
-  pytestFlagsArray = [ "tests/unit" ];
+  pytestFlagsArray = [
+    # Integration tests require local DBs
+    "tests/unit"
+  ];
 
-  pythonImportsCheck = [ "requests_cache" ];
+  disabledTests = [
+    # Tests are flaky in the sandbox
+    "test_remove_expired_responses"
+  ];
+
+  pythonImportsCheck = [
+    "requests_cache"
+  ];
 
   meta = with lib; {
     description = "Persistent cache for requests library";

@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "jenkins-job-builder";
-  version = "3.10.0";
+  version = "3.11.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-8MP8YHIkxDqjPsUYv6ROmuRwcGMzPpsVCRwxga3XdYU=";
+    sha256 = "sha256-QupCP0S+r+4OmFAJEklo4wBEf2475BgOg1aM8hUg0bE=";
   };
 
   postPatch = ''

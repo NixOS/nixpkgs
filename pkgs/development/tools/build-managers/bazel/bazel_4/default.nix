@@ -1,4 +1,4 @@
-{ stdenv, callPackage, lib, fetchurl, fetchFromGitHub, installShellFiles
+{ stdenv, callPackage, lib, fetchurl, fetchpatch, fetchFromGitHub, installShellFiles
 , runCommand, runCommandCC, makeWrapper, recurseIntoAttrs
 # this package (through the fixpoint glass)
 , bazel_self
@@ -213,6 +213,14 @@ stdenv.mkDerivation rec {
     (substituteAll {
       src = ../bazel_rc.patch;
       bazelSystemBazelRCPath = bazelRC;
+    })
+
+    # On macOS Monterey, protoc segfaults.
+    # Issue: https://github.com/bazelbuild/bazel/issues/14216
+    # Fix: https://github.com/bazelbuild/bazel/pull/14275
+    (fetchpatch {
+      url = "https://github.com/bazelbuild/bazel/commit/ae0a6c98d4f94abedbedb2d51c27de5febd7df67.patch";
+      sha256 = "sha256-YcdxqjTMGI86k1wgFqxJqghv0kknAjlFQFpt4VccCTE=";
     })
   ] ++ lib.optional enableNixHacks ../nix-hacks.patch;
 

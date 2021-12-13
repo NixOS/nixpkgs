@@ -41,5 +41,6 @@ stdenv.mkDerivation rec {
     description = "A plugin that adds context-menu items for Dropbox to Thunar";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

@@ -54,6 +54,10 @@ self: super: {
   ghc-datasize = disableLibraryProfiling super.ghc-datasize;
   ghc-vis = disableLibraryProfiling super.ghc-vis;
 
+  # We can remove this once fakedata version gets to 1.0.1 as the test suite
+  # works fine there.
+  fakedata = dontCheck super.fakedata;
+
   # This test keeps being aborted because it runs too quietly for too long
   Lazy-Pbkdf2 = if pkgs.stdenv.isi686 then dontCheck super.Lazy-Pbkdf2 else super.Lazy-Pbkdf2;
 
@@ -68,7 +72,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "06njg44840na3ps3s29kjhjba0962vdr2zpd12yvqf16rwgf4zmq";
+      sha256 = "1x2d0gfqxxfygzigm34n0spaxh8bwipxs9317f6c5lkpj916p957";
       # delete android and Android directories which cause issues on
       # darwin (case insensitive directory). Since we don't need them
       # during the build process, we can delete it to prevent a hash
@@ -848,8 +852,8 @@ self: super: {
     })
     super.hledger-lib;
 
-  # hledger-lib 1.23 depends on doctest >= 0.18
-  hledger-lib_1_23 = super.hledger-lib_1_23.override {
+  # hledger-lib 1.24 depends on doctest >= 0.18
+  hledger-lib_1_24 = super.hledger-lib_1_24.override {
     doctest = self.doctest_0_18_2;
   };
 
@@ -942,6 +946,7 @@ self: super: {
   dhall-json = generateOptparseApplicativeCompletions ["dhall-to-json" "dhall-to-yaml"] (dontCheck super.dhall-json);
   dhall-nix = generateOptparseApplicativeCompletion "dhall-to-nix" super.dhall-nix;
   dhall-yaml = generateOptparseApplicativeCompletions ["dhall-to-yaml-ng" "yaml-to-dhall"] super.dhall-yaml;
+  dhall-nixpkgs = generateOptparseApplicativeCompletion "dhall-to-nixpkgs" super.dhall-nixpkgs;
 
   # https://github.com/haskell-hvr/netrc/pull/2#issuecomment-469526558
   netrc = doJailbreak super.netrc;
@@ -1338,27 +1343,27 @@ self: super: {
   graphql-engine = overrideCabal (drv: {
     patches = [ ./patches/graphql-engine-mapkeys.patch ];
     doHaddock = false;
-    version = "2.0.9";
+    version = "2.0.10";
   }) (super.graphql-engine.overrideScope (self: super: {
     immortal = self.immortal_0_2_2_1;
     resource-pool = self.hasura-resource-pool;
     ekg-core = self.hasura-ekg-core;
     ekg-json = self.hasura-ekg-json;
-    hspec = dontCheck self.hspec_2_9_1;
-    hspec-core = dontCheck self.hspec-core_2_9_1;
-    hspec-discover = dontCheck super.hspec-discover_2_9_1;
+    hspec = dontCheck self.hspec_2_9_3;
+    hspec-core = dontCheck self.hspec-core_2_9_3;
+    hspec-discover = dontCheck super.hspec-discover_2_9_3;
     tasty-hspec = self.tasty-hspec_1_2;
   }));
   hasura-ekg-core = doJailbreak (super.hasura-ekg-core.overrideScope (self: super: {
-    hspec = dontCheck self.hspec_2_9_1;
-    hspec-core = dontCheck self.hspec-core_2_9_1;
-    hspec-discover = dontCheck super.hspec-discover_2_9_1;
+    hspec = dontCheck self.hspec_2_9_3;
+    hspec-core = dontCheck self.hspec-core_2_9_3;
+    hspec-discover = dontCheck super.hspec-discover_2_9_3;
   }));
   hasura-ekg-json = super.hasura-ekg-json.overrideScope (self: super: {
     ekg-core = self.hasura-ekg-core;
-    hspec = dontCheck self.hspec_2_9_1;
-    hspec-core = dontCheck self.hspec-core_2_9_1;
-    hspec-discover = dontCheck super.hspec-discover_2_9_1;
+    hspec = dontCheck self.hspec_2_9_3;
+    hspec-core = dontCheck self.hspec-core_2_9_3;
+    hspec-discover = dontCheck super.hspec-discover_2_9_3;
   });
   pg-client = overrideCabal (drv: {
     librarySystemDepends = with pkgs; [ postgresql krb5.dev openssl.dev ];
@@ -1838,7 +1843,7 @@ self: super: {
   # https://github.com/enomsg/science-constants-dimensional/pull/1
   science-constants-dimensional = doJailbreak super.science-constants-dimensional;
 
-  # Tests are flaky on busy machines
+  # Tests are flaky on busy machines, upstream doesn't intend to fix
   # https://github.com/merijn/paramtree/issues/4
   paramtree = dontCheck super.paramtree;
 
@@ -1969,10 +1974,6 @@ EOT
   composite-aeson = assert super.composite-aeson.version == "0.7.5.0";
     doJailbreak super.composite-aeson;
 
-  # Too strict bounds on profunctors
-  # https://github.com/google/proto-lens/issues/413
-  proto-lens = doJailbreak super.proto-lens;
-
   # 2021-06-20: Outdated upper bounds
   # https://github.com/Porges/email-validate-hs/issues/58
   email-validate = doJailbreak super.email-validate;
@@ -2002,7 +2003,7 @@ EOT
   ghcup = doJailbreak (super.ghcup.overrideScope (self: super: {
     hspec-golden-aeson = self.hspec-golden-aeson_0_9_0_0;
     optics = self.optics_0_4;
-    streamly = self.streamly_0_8_0;
+    streamly = self.streamly_0_8_1_1;
     Cabal = self.Cabal_3_6_2_0;
     libyaml-streamly = markUnbroken super.libyaml-streamly;
   }));
@@ -2093,26 +2094,34 @@ EOT
 
   # Jailbreak isn't sufficient, but this is ok as it's a leaf package.
   hadolint = super.hadolint.overrideScope (self: super: {
-    language-docker = self.language-docker_10_3_0;
-    hspec = dontCheck self.hspec_2_9_1;
-    hspec-core = dontCheck self.hspec-core_2_9_1;
-    hspec-discover = dontCheck self.hspec-discover_2_9_1;
+    language-docker = self.language-docker_10_4_0;
+    hspec = dontCheck self.hspec_2_9_3;
+    hspec-core = dontCheck self.hspec-core_2_9_3;
+    hspec-discover = dontCheck self.hspec-discover_2_9_3;
     colourista = doJailbreak super.colourista;
   });
 
   # These should be updated in lockstep
-  hledger_1_23 = super.hledger_1_23.override {
-    hledger-lib = self.hledger-lib_1_23;
+  hledger_1_24 = super.hledger_1_24.override {
+    hledger-lib = self.hledger-lib_1_24;
   };
 
   # Needs brick > 0.64
   nix-tree = super.nix-tree.override {
-    brick = self.brick_0_64_2;
+    brick = self.brick_0_65;
   };
 
-  # Needs matching xmonad version
-  xmonad-contrib_0_17_0 = super.xmonad-contrib_0_17_0.override {
-    xmonad = self.xmonad_0_17_0;
-  };
+  # build newer version for `pkgs.shellcheck`
+  ShellCheck_0_8_0 = doDistribute super.ShellCheck_0_8_0;
+
+  # test suite requires stack to run, https://github.com/dino-/photoname/issues/24
+  photoname = dontCheck super.photoname;
+
+  # Too strict bounds on recursive-zipper
+  # https://github.com/ChrisPenner/jet/issues/1
+  jet = doJailbreak super.jet;
+
+  # Use latest version until next Stackage LTS snapshot
+  Agda = doDistribute self.Agda_2_6_2_1;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

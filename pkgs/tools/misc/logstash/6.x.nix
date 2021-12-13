@@ -11,10 +11,10 @@ with lib;
 
 let this = stdenv.mkDerivation rec {
   version = elk6Version;
-  name = "logstash-${optionalString (!enableUnfree) "oss-"}${version}";
+  pname = "logstash${optionalString (!enableUnfree) "-oss"}";
 
   src = fetchurl {
-    url = "https://artifacts.elastic.co/downloads/logstash/${name}.tar.gz";
+    url = "https://artifacts.elastic.co/downloads/logstash/${pname}-${version}.tar.gz";
     sha256 =
       if enableUnfree
       then "00pwi7clgdflzzg15bh3y30gzikvvy7p5fl88fww7xhhy47q8053"

@@ -10,6 +10,8 @@ in
 {
   dns-single-node = dns.singlenode.test;
   dns-multi-node = dns.multinode.test;
-  rbac-single-node = rbac.singlenode.test;
-  rbac-multi-node = rbac.multinode.test;
+  # timed out: https://hydra.nixos.org/build/160710933
+  #rbac-single-node = rbac.singlenode.test;
+  # timed out: https://hydra.nixos.org/build/160711286
+  #rbac-multi-node = rbac.multinode.test;
 }

@@ -293,10 +293,10 @@ in
   pam = {
     src = fetchFromGitHub {
       name = "pam";
-      owner = "stogh";
+      owner = "sto";
       repo = "ngx_http_auth_pam_module";
-      rev = "v1.5.2";
-      sha256 = "06nydxk82rc9yrw4408nakb197flxh4z1yv935crg65fn9706rl7";
+      rev = "v1.5.3";
+      sha256 = "sha256:09lnljdhjg65643bc4535z378lsn4llbq67zcxlln0pizk9y921a";
     };
     inputs = [ pkgs.pam ];
   };

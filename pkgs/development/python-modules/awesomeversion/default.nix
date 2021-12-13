@@ -3,32 +3,35 @@
 , fetchFromGitHub
 , pytestCheckHook
 , pythonOlder
-, requests
 }:
 
 buildPythonPackage rec {
   pname = "awesomeversion";
-  version = "21.10.1";
+  version = "21.11.0";
+  format = "setuptools";
+
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "ludeeus";
     repo = pname;
     rev = version;
-    sha256 = "sha256-y+QU8T1Cb6FpRcRqhao4KPdE9XlU5C+GURaEuahC25E=";
+    sha256 = "sha256-qxN5AdLlzadG0/raeAyJ/37PLgYLndl1JQSVkgdLv/4=";
   };
 
   postPatch = ''
-    substituteInPlace setup.py --replace "main" ${version}
+    # Upstream doesn't set a version
+    substituteInPlace setup.py \
+      --replace "main" ${version}
   '';
-
-  propagatedBuildInputs = [ requests ];
 
   checkInputs = [
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "awesomeversion" ];
+  pythonImportsCheck = [
+    "awesomeversion"
+  ];
 
   meta = with lib; {
     description = "Python module to deal with versions";

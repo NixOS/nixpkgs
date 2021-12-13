@@ -1,28 +1,19 @@
 { lib, stdenv
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , openssl
 }:
 
 stdenv.mkDerivation rec {
   pname = "s2n-tls";
-  version = "1.0.17";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-6XqBpNURU8fzGkTt4jsijgMiOkzMebmLmPAq8yQsTg4=";
+    sha256 = "sha256-gd91thIcJO6Bhn1ENkW0k2iDzu1CvSYwWVv0VEM9umU=";
   };
-
-  patches = [
-    # Fix FindLibCrypto paths (https://github.com/aws/s2n-tls/pull/3067)
-    (fetchpatch {
-      url = "https://github.com/aws/s2n-tls/commit/bda649524402be4018c44bff07f6c64502a351ec.patch";
-      sha256 = "02jmxsrd506vhjzlrgh1p2z1f1sn4v8klks25zisiykyqkyaczkv";
-    })
-  ];
 
   nativeBuildInputs = [ cmake ];
 

@@ -1,4 +1,4 @@
-{ fetchurl, fetchpatch, lib, stdenv, pkg-config, makeWrapper, cmake, gtest
+{ fetchurl, lib, stdenv, pkg-config, makeWrapper, cmake, gtest
 , boost, icu, libxml2, libxslt, gettext, swig, isocodes, gtk3, glibcLocales
 , webkitgtk, dconf, hicolor-icon-theme, libofx, aqbanking, gwenhywfar, libdbi
 , libdbiDrivers, guile, perl, perlPackages
@@ -26,21 +26,12 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gnucash";
-  version = "4.6";
+  version = "4.8";
 
   src = fetchurl {
     url = "mirror://sourceforge/gnucash/${pname}-${version}.tar.bz2";
-    sha256 = "0csp8iddhc901vv09gl5lj970g6ili696vwj4vdpkiprp7gh26r5";
+    sha256 = "04pbgx08lfm3l46ndd28ivq5yp3y6zgalbzgi2x8w5inhgzy9f0m";
   };
-
-  patches = [
-    # Fixes a warning about an initialized variable that kills enableDebugging gnucash builds on nix.
-    # This will most likely be part of the 4.7 release, it will be safe to remove then.
-    (fetchpatch {
-      url = "https://github.com/Gnucash/gnucash/commit/b42052464ba9701a3d1834fc58fa0deb32ab9afe.patch";
-      sha256 = "092957c8jqj4v70fv0ia1wpgl6x34hbwjrichxfbk5ja8l6535gc";
-    })
-  ];
 
   nativeBuildInputs = [ pkg-config makeWrapper cmake gtest swig ];
 
@@ -55,6 +46,9 @@ stdenv.mkDerivation rec {
 
   # glib-2.62 deprecations
   NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS";
+
+  # this patch disables test-gnc-timezone and test-gnc-datetime which fail due to nix datetime challenges
+  patches = [ ./0001-changes.patch ];
 
   postPatch = ''
     patchShebangs .
@@ -77,20 +71,16 @@ stdenv.mkDerivation rec {
       --prefix GIO_EXTRA_MODULES : "${lib.getLib dconf}/lib/gio/modules"
   '';
 
-  # TODO: The following tests FAILED:
-  #   70 - test-load-c (Failed)
-  #   71 - test-modsysver (Failed)
-  #   72 - test-incompatdep (Failed)
-  #   73 - test-agedver (Failed)
-  #   77 - test-gnc-module-swigged-c (Failed)
-  #   78 - test-gnc-module-load-deps (Failed)
-  #   80 - test-gnc-module-scm-module (Failed)
-  #   81 - test-gnc-module-scm-multi (Failed)
+  /*
+  GNUcash's `make check` target does not define its prerequisites but expects them to have already been built.
+  The list of targets below was built through trial and error based on failing tests.
+  */
   preCheck = ''
-    export LD_LIBRARY_PATH=$PWD/lib:$PWD/lib/gnucash:$PWD/lib/gnucash/test''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH
+    export LD_LIBRARY_PATH=$PWD/lib:$PWD/lib/gnucash:$PWD/lib/gnucash/test:$PWD/lib/gnucash/test/future''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH
     export NIX_CFLAGS_LINK="-lgtest -lgtest_main"
+    make test-scm-query test-split-register-copy-ops test-link-ofx test-import-backend test-import-account-matcher test-import-pending-matches test-qofquerycore test-import-map test-gnc-numeric test-gnc-rational test-gnc-int128 test-qofsession test-kvp-value test-gnc-guid test-numeric test-vendor test-job test-employee test-customer test-address test-business test-recurrence test-transaction-voiding test-transaction-reversal test-split-vs-account test-tokenizer test-aqb test-import-parse test-link-module-tax-us test-dynload test-agedver test-incompatdep test-modsysver test-load-c test-gnc-path-util test-xml2-is-file test-load-example-account test-query test-querynew test-lots test-group-vs-book test-account-object test-engine test-qof test-commodities test-object test-guid test-load-engine test-userdata-dir-invalid-home test-userdata-dir test-resolve-file-path test-gnc-glib-utils test-sqlbe test-column-types test-backend-dbi test-xml-transaction test-xml-pricedb test-xml-commodity test-xml-account test-string-converters test-load-backend test-kvp-frames test-dom-converters1 test-autoclear test-sx test-print-parse-amount gncmod-futuremodsys
   '';
-  doCheck = false;
+  doCheck = true;
 
   meta = {
     description = "Personal and small-business financial-accounting application";

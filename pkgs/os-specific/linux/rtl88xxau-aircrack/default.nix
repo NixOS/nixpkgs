@@ -39,6 +39,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/aircrack-ng/rtl8812au";
     license = licenses.gpl2Only;
     maintainers = [ maintainers.jethro ];
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
   };
 }

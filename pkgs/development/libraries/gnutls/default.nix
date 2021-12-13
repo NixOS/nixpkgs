@@ -51,8 +51,10 @@ stdenv.mkDerivation rec {
 
   preConfigure = "patchShebangs .";
   configureFlags =
-    lib.optional stdenv.isLinux "--with-default-trust-store-file=/etc/ssl/certs/ca-certificates.crt"
-  ++ [
+    lib.optionals stdenv.isLinux [
+    "--with-default-trust-store-file=/etc/ssl/certs/ca-certificates.crt"
+    "--with-default-trust-store-pkcs11=pkcs11:"
+  ] ++ [
     "--disable-dependency-tracking"
     "--enable-fast-install"
     "--with-unbound-root-key-file=${dns-root-data}/root.key"

@@ -199,8 +199,8 @@ let
         mktplcRef = {
           name = "vscode-neovim";
           publisher = "asvetliakov";
-          version = "0.0.82";
-          sha256 = "17f0jzg9vdbqdjnnc5i1q28ij2kckvvxi7fw9szmyy754f074jb1";
+          version = "0.0.83";
+          sha256 = "1giybf12p0h0fm950w9bwvzdk77771zfkylrqs9h0lhbdzr92qbl";
         };
         meta = {
           license = lib.licenses.mit;
@@ -921,8 +921,8 @@ let
         mktplcRef = {
           name = "Ionide-fsharp";
           publisher = "Ionide";
-          version = "5.5.5";
-          sha256 = "xrBNiIbZVJ0sGUk/4PudD8kSyX94QkrFtf7Ho/sB0Vs=";
+          version = "5.10.1";
+          sha256 = "sha256-LkWWgyh4khPyUgekVeO8ZzPK+1gTrS8d9Yz6/kHomr8=";
         };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/Ionide.Ionide-fsharp/changelog";

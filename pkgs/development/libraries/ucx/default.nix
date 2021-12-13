@@ -1,8 +1,17 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, doxygen
-, numactl, rdma-core, libbfd, libiberty, perl, zlib
+, numactl, rdma-core, libbfd, libiberty, perl, zlib, symlinkJoin
+, enableCuda ? false
+, cudatoolkit
 }:
 
-stdenv.mkDerivation rec {
+let
+  # Needed for configure to find all libraries
+  cudatoolkit' = symlinkJoin {
+    inherit (cudatoolkit) name meta;
+    paths = [ cudatoolkit cudatoolkit.lib ];
+  };
+
+in stdenv.mkDerivation rec {
   pname = "ucx";
   version = "1.11.2";
 
@@ -15,7 +24,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook doxygen ];
 
-  buildInputs = [ numactl rdma-core libbfd libiberty perl zlib ];
+  buildInputs = [
+    libbfd
+    libiberty
+    numactl
+    perl
+    rdma-core
+    zlib
+  ] ++ lib.optional enableCuda cudatoolkit;
 
   configureFlags = [
     "--with-rdmacm=${rdma-core}"
@@ -23,7 +39,7 @@ stdenv.mkDerivation rec {
     "--with-rc"
     "--with-dm"
     "--with-verbs=${rdma-core}"
-  ];
+  ] ++ lib.optional enableCuda "--with-cuda=${cudatoolkit'}";
 
   enableParallelBuilding = true;
 

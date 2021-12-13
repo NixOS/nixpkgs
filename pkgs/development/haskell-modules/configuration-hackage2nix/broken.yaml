@@ -88,6 +88,7 @@ broken-packages:
   - aeson-tiled
   - aeson-typescript
   - aeson-utils
+  - aeson-value-parser
   - affection
   - affine-invariant-ensemble-mcmc
   - Agata
@@ -1124,6 +1125,7 @@ broken-packages:
   - docopt
   - docrecords
   - doctest-discover-configurator
+  - doctest-parallel
   - doctest-prop
   - docusign-example
   - docvim
@@ -1352,7 +1354,6 @@ broken-packages:
   - fadno-braids
   - failable-list
   - failure-detector
-  - fakedata
   - fake-type
   - faktory
   - f-algebra-gen
@@ -2027,6 +2028,7 @@ broken-packages:
   - hastache
   - haste
   - haste-prim
+  - has-transformers
   - hat
   - hatex-guide
   - hats
@@ -2075,6 +2077,7 @@ broken-packages:
   - hdph-closure
   - hdr-histogram
   - HDRUtils
+  - headed-megaparsec
   - headergen
   - heap-console
   - heapsort
@@ -2731,6 +2734,7 @@ broken-packages:
   - kmonad
   - kmp-dfa
   - koellner-phonetic
+  - koji-install
   - Konf
   - kontra-config
   - kparams
@@ -3564,6 +3568,7 @@ broken-packages:
   - pandoc-filter-indent
   - pandoc-include
   - pandoc-lens
+  - pandoc-lua-marshal
   - pandoc-markdown-ghci-filter
   - pandoc-placetable
   - pandoc-pyplot

@@ -296,9 +296,10 @@ in
     })
 
     (mkIf serviceCfg.contractor.enable {
-      environment.systemPackages = with  pkgs.pantheon; [
+      environment.systemPackages = with pkgs.pantheon; [
         contractor
-        extra-elementary-contracts
+        file-roller-contract
+        gnome-bluetooth-contract
       ];
 
       environment.pathsToLink = [

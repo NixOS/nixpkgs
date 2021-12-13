@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
     description = "Simple command-line tool to send text and files to discord";
     homepage = "https://github.com/somebody1234/cliscord";
     license = licenses.mit;
-    maintainers = with maintainers; [ legendofmiracles ];
+    maintainers = with maintainers; [ lom ];
     mainProgram = "cliscord";
   };
 }

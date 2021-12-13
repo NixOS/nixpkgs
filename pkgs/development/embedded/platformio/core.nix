@@ -49,6 +49,16 @@ let
           sha256 = "074smp3448wcazlhc7sb8r54l4kfavr6yks3w5x60zl1qpijf52r";
         };
       });
+
+      zeroconf = super.zeroconf.overridePythonAttrs (oldAttrs: rec {
+        version = "0.36.13";
+        src = fetchFromGitHub {
+          owner = "jstasiak";
+          repo = "python-zeroconf";
+          rev = version;
+          sha256 = "aYNb67ESyz2Q2CKLhG+/Z8Xtt0Js8uf+xrVSEpY0X8c=";
+        };
+      });
     };
   };
 in

@@ -8,7 +8,9 @@ let
 
   configOptions = {
     data_dir = dataDir;
-    ui = cfg.webUi;
+    ui_config = {
+      enabled = cfg.webUi;
+    };
   } // cfg.extraConfig;
 
   configFiles = [ "/etc/consul.json" "/etc/consul-addrs.json" ]

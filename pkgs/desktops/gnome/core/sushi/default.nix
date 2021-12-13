@@ -8,7 +8,8 @@
 , gnome
 , gtksourceview4
 , gjs
-, webkitgtk_4_1
+, libsoup
+, webkitgtk
 , icu
 , wrapGAppsHook
 , gst_all_1
@@ -48,11 +49,14 @@ stdenv.mkDerivation rec {
     gtksourceview4
     gdk-pixbuf
     librsvg
-    webkitgtk_4_1
+    libsoup
+    webkitgtk
     libepoxy
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-ugly
   ];
 
   # See https://github.com/NixOS/nixpkgs/issues/31168

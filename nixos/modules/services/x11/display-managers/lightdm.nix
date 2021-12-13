@@ -312,7 +312,7 @@ in
     };
 
     systemd.tmpfiles.rules = [
-      "d /run/lightdm 0711 lightdm lightdm 0"
+      "d /run/lightdm 0711 lightdm lightdm -"
       "d /var/cache/lightdm 0711 root lightdm -"
       "d /var/lib/lightdm 1770 lightdm lightdm -"
       "d /var/lib/lightdm-data 1775 lightdm lightdm -"

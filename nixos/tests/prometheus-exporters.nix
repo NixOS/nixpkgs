@@ -861,6 +861,9 @@ let
         wait_for_unit("prometheus-postfix-exporter.service")
         wait_for_file("/var/lib/postfix/queue/public/showq")
         wait_for_open_port(9154)
+        wait_until_succeeds(
+            "curl -sSf http://localhost:9154/metrics | grep 'postfix_up{path=\"/var/lib/postfix/queue/public/showq\"} 1'"
+        )
         succeed(
             "curl -sSf http://localhost:9154/metrics | grep 'postfix_smtpd_connects_total 0'"
         )
@@ -1011,6 +1014,25 @@ let
             "curl -sSf 'localhost:9172/probe?name=success' | grep -q '{}'".format(
                 'script_success{script="success"} 1'
             )
+        )
+      '';
+    };
+
+    smartctl = {
+      exporterConfig = {
+        enable = true;
+        devices = [
+          "/dev/vda"
+        ];
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-smartctl-exporter.service")
+        wait_for_open_port("9633")
+        wait_until_succeeds(
+          "curl -sSf 'localhost:9633/metrics'"
+        )
+        wait_until_succeeds(
+            'journalctl -eu prometheus-smartctl-exporter.service -o cat | grep "/dev/vda: Unable to detect device type"'
         )
       '';
     };

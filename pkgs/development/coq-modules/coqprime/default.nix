@@ -6,12 +6,13 @@ with lib; mkCoqDerivation {
   owner = "thery";
   inherit version;
   defaultVersion = with versions; switch coq.coq-version [
-    { case = range "8.12" "8.13"; out = "8.12"; }
+    { case = range "8.12" "8.14"; out = "8.14.1"; }
     { case = range "8.10" "8.11"; out = "8.10"; }
     { case = range "8.8"  "8.9";  out = "8.8"; }
     { case = "8.7";               out = "8.7.2"; }
   ] null;
 
+  release."8.14.1".sha256= "sha256:0dqf87xkzcpg7gglbxjyx68ad84w1w73icxgy3s7d3w563glc2p7";
   release."8.12".sha256  = "1slka4w0pya15js4drx9frj7lxyp3k2lzib8v23givzpnxs8ijdj";
   release."8.10".sha256  = "0r9gnh5a5ykiiz5h1i8xnzgiydpwc4z9qhndxyya85xq0f910qaz";
   release."8.8".sha256   = "075yjczk79pf1hd3lgdjiz84ilkzfxjh18lgzrhhqp7d3kz5lxp5";

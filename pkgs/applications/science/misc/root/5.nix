@@ -61,6 +61,28 @@ stdenv.mkDerivation rec {
   ];
 
   preConfigure = ''
+    # binutils 2.37 fixes
+    fixupList=(
+      cint/demo/gl/make0
+      cint/demo/exception/Makefile
+      cint/demo/makecint/KRcc/Makefile
+      cint/demo/makecint/Stub2/Make2
+      cint/demo/makecint/Array/Makefile
+      cint/demo/makecint/DArray/Makefile
+      cint/demo/makecint/ReadFile/Makefile
+      cint/demo/makecint/stl/Makefile
+      cint/demo/makecint/Stub2/Make1
+      cint/cint/include/makemat
+      cint/cint/lib/WildCard/Makefile
+      cint/cint/include/make.arc
+      cint/cint/lib/qt/Makefile
+      cint/cint/lib/pthread/Makefile
+      graf2d/asimage/src/libAfterImage/Makefile.in
+    )
+    for toFix in "''${fixupList[@]}"; do
+      substituteInPlace "$toFix" --replace "clq" "cq"
+    done
+
     patchShebangs build/unix/
     ln -s ${lib.getDev stdenv.cc.libc}/include/AvailabilityMacros.h cint/cint/include/
   ''

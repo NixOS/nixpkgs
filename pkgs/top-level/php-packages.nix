@@ -173,6 +173,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     event = callPackage ../development/php-packages/event { };
 
+    gnupg = callPackage ../development/php-packages/gnupg { };
+
     igbinary = callPackage ../development/php-packages/igbinary { };
 
     imagick = callPackage ../development/php-packages/imagick { };
@@ -563,6 +565,7 @@ lib.makeScope pkgs.newScope (self: with self; {
           buildInputs = [ libxml2 ];
           internalDeps = [ php.extensions.dom ];
           NIX_CFLAGS_COMPILE = [ "-I../.." "-DHAVE_DOM" ];
+          doCheck = false;
           configureFlags = [ "--enable-xmlreader" ]
             # Required to build on darwin.
             ++ lib.optionals (lib.versionOlder php.version "7.4") [ "--with-libxml-dir=${libxml2.dev}" ];

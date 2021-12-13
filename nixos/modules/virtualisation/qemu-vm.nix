@@ -329,6 +329,7 @@ in
       mkOption {
         type = types.str;
         default = "./${config.system.name}.qcow2";
+        defaultText = literalExpression ''"./''${config.system.name}.qcow2"'';
         description =
           ''
             Path to the disk image containing the root filesystem.
@@ -678,6 +679,7 @@ in
       mkOption {
         type = types.str;
         default = "./${config.system.name}-efi-vars.fd";
+        defaultText = literalExpression ''"./''${config.system.name}-efi-vars.fd"'';
         description =
           ''
             Path to nvram image containing UEFI variables.  The will be created
@@ -833,6 +835,7 @@ in
 
     # FIXME: Consolidate this one day.
     virtualisation.qemu.options = mkMerge [
+      [ "-device virtio-keyboard" ]
       (mkIf pkgs.stdenv.hostPlatform.isx86 [
         "-usb" "-device usb-tablet,bus=usb-bus.0"
       ])

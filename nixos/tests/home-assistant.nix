@@ -24,6 +24,11 @@ in {
     services.home-assistant = {
       inherit configDir;
       enable = true;
+      package = (pkgs.home-assistant.override {
+        extraComponents = [ "zha" ];
+      }).overrideAttrs (oldAttrs: {
+        doInstallCheck = false;
+      });
       config = {
         homeassistant = {
           name = "Home";
@@ -87,6 +92,8 @@ in {
     with subtest("Check that capabilities are passed for emulated_hue to bind to port 80"):
         hass.wait_for_open_port(80)
         hass.succeed("curl --fail http://localhost:80/description.xml")
+    with subtest("Check extra components are considered in systemd unit hardening"):
+        hass.succeed("systemctl show -p DeviceAllow home-assistant.service | grep -q char-ttyUSB")
     with subtest("Print log to ease debugging"):
         output_log = hass.succeed("cat ${configDir}/home-assistant.log")
         print("\n### home-assistant.log ###\n")

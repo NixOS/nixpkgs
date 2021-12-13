@@ -250,11 +250,11 @@ self: super: ({
   c2hsc = addTestToolDepends [ pkgs.gcc ] super.c2hsc;
 
   # streamly depends on Cocoa starting with 0.8.0
-  streamly_0_8_0 = overrideCabal (drv: {
+  streamly_0_8_1_1 = overrideCabal (drv: {
     libraryFrameworkDepends = [
       darwin.apple_sdk.frameworks.Cocoa
     ] ++ (drv.libraryFrameworkDepends or []);
-  }) super.streamly_0_8_0;
+  }) super.streamly_0_8_1_1;
 
 } // lib.optionalAttrs pkgs.stdenv.isAarch64 {  # aarch64-darwin
 

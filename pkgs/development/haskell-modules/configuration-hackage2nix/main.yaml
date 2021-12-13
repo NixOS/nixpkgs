@@ -122,6 +122,10 @@ default-package-overrides:
   - gi-webkit2webextension < 4.0.27
   - gi-wnck < 3.0.11
   # gi-cogl, gi-coglpango, gi-clutter, gi-json, gi-rsvg are only available for haskell-gi >= 0.26
+  # 1.2.1.0 needs opaleye >= 0.8 which stackage doesn't provide
+  - rel8 < 1.2.1.0
+  # 0.14.0.0 drops support for every GHC < 9.0.1
+  - brittany < 0.14
 
 extra-packages:
   - base16-bytestring < 1               # required for cabal-install etc.
@@ -155,6 +159,9 @@ extra-packages:
   - ghc-lib-parser == 9.0.1.*           # 2021-11-05: Need one GHC 9.0.1 compatible version
   - ghc-lib-parser-ex == 9.0.*          # 2021-11-05: Need one GHC 9.0.1 compatible version
   - doctest == 0.18.*                   # 2021-11-19: closest to stackage version for GHC 9.*
+  - brick == 0.64.*                     # 2021-12-03: matterhorn depends on brick < 0.65
+  - path == 0.9.0                       # 2021-12-03: path version building with stackage genvalidity and GHC 9.0.1
+  - ormolu == 0.3.*                     # 2021-12-03: for HLS with GHC 9.0.1
 
 package-maintainers:
   abbradar:

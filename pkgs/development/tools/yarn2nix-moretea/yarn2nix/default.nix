@@ -1,6 +1,7 @@
 { pkgs ? import <nixpkgs> {}
 , nodejs ? pkgs.nodejs
 , yarn ? pkgs.yarn
+, allowAliases ? pkgs.config.allowAliases or true
 }:
 
 let
@@ -9,6 +10,14 @@ let
   compose = f: g: x: f (g x);
   id = x: x;
   composeAll = builtins.foldl' compose id;
+
+  # https://docs.npmjs.com/files/package.json#license
+  # TODO: support expression syntax (OR, AND, etc)
+  getLicenseFromSpdxId = licstr:
+    if licstr == "UNLICENSED" then
+      lib.licenses.unfree
+    else
+      lib.getLicenseFromSpdxId licstr;
 in rec {
   # Export yarn again to make it easier to find out which yarn was used.
   inherit yarn;
@@ -30,16 +39,7 @@ in rec {
       non-null = builtins.filter (x: x != null) parts;
     in builtins.concatStringsSep "-" non-null;
 
-  # https://docs.npmjs.com/files/package.json#license
-  # TODO: support expression syntax (OR, AND, etc)
-  spdxLicense = licstr:
-    if licstr == "UNLICENSED" then
-      lib.licenses.unfree
-    else
-      lib.findFirst
-        (l: l ? spdxId && l.spdxId == licstr)
-        { shortName = licstr; }
-        (builtins.attrValues lib.licenses);
+  inherit getLicenseFromSpdxId;
 
   # Generates the yarn.nix from the yarn.lock file
   mkYarnNix = { yarnLock, flags ? [] }:
@@ -369,7 +369,7 @@ in rec {
         description = packageJSON.description or "";
         homepage = packageJSON.homepage or "";
         version = packageJSON.version or "";
-        license = if packageJSON ? license then spdxLicense packageJSON.license else "";
+        license = if packageJSON ? license then getLicenseFromSpdxId packageJSON.license else "";
       } // (attrs.meta or {});
     });
 
@@ -437,4 +437,7 @@ in rec {
 
     patchShebangs $out
   '';
+} // lib.optionalAttrs allowAliases {
+  # Aliases
+  spdxLicense = getLicenseFromSpdxId; # added 2021-12-01
 }

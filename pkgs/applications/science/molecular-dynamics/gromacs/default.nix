@@ -14,7 +14,7 @@ let
     if stdenv.hostPlatform.system == "i686-linux" then "SSE2" else
     if stdenv.hostPlatform.system == "x86_64-linux" then "SSE4.1" else
     if stdenv.hostPlatform.system == "x86_64-darwin" then "SSE4.1" else
-    if stdenv.hostPlatform.system == "aarch64-linux" then "ARM_NEON" else
+    if stdenv.hostPlatform.system == "aarch64-linux" then "ARM_NEON_ASIMD" else
     "None";
 
 in stdenv.mkDerivation rec {

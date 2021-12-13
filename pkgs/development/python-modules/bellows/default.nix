@@ -17,13 +17,14 @@
 
 buildPythonPackage rec {
   pname = "bellows";
-  version = "0.28.0";
+  version = "0.29.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "bellows";
     rev = version;
-    sha256 = "sha256-j1vS6PDvvuJapECn0lKGuBkYwWsyzJaTZDRQPjMsuLk=";
+    sha256 = "sha256-coIrI3C6Wnn8Of/IHAlvZgkcBBf9OBQt5Ir6YOXCf0c=";
   };
 
   propagatedBuildInputs = [
@@ -43,12 +44,6 @@ buildPythonPackage rec {
     pytest-timeout
   ]  ++ lib.optionals (pythonOlder "3.8") [
     asynctest
-  ];
-
-  disabledTests = [
-    # AssertionError: assert 65534 is None
-    # https://github.com/zigpy/bellows/issues/436
-    "test_startup_nwk_params"
   ];
 
   pythonImportsCheck = [

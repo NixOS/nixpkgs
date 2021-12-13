@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, bison, lzo, db4 }:
 
 stdenv.mkDerivation rec {
-  name = "netboot";
+  pname = "netboot";
   version = "0.10.2";
 
   src = fetchurl {

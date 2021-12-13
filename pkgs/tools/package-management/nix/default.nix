@@ -35,6 +35,7 @@ common =
       inherit pname version src patches;
 
       is24 = lib.versionAtLeast version "2.4pre";
+      is25 = lib.versionAtLeast version "2.5pre";
 
       VERSION_SUFFIX = suffix;
 
@@ -145,6 +146,10 @@ common =
       # socket path becomes too long otherwise
       preInstallCheck = lib.optionalString stdenv.isDarwin ''
         export TMPDIR=$NIX_BUILD_TOP
+      ''
+      # See https://github.com/NixOS/nix/issues/5687
+      + lib.optionalString (is25 && stdenv.isDarwin) ''
+        echo "exit 99" > tests/gc-non-blocking.sh
       '';
 
       separateDebugInfo = stdenv.isLinux && (is24 -> !enableStatic);
@@ -256,13 +261,13 @@ in rec {
   nixUnstable = lib.lowPrio (callPackage common rec {
     pname = "nix";
     version = "2.5${suffix}";
-    suffix = "pre20211007_${lib.substring 0 7 src.rev}";
+    suffix = "pre20211206_${lib.substring 0 7 src.rev}";
 
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "844dd901a7debe8b03ec93a7f717b6c4038dc572";
-      sha256 = "sha256-fe1B4lXkS6/UfpO0rJHwLC06zhOPrdSh4s9PmQ1JgPo=";
+      rev = "d1aaa7ef71713b6693ad3ddf8704ce62bab82095";
+      sha256 = "sha256-zdMODMLdJ0smEEzNMOoIzBxt9QWVzgMvr+pwxkhtD4g=";
     };
 
     boehmgc = boehmgc_nixUnstable;

@@ -26,7 +26,7 @@ we assign the name `wan` to the interface with MAC address
 
 ```nix
 systemd.network.links."10-wan" = {
-  matchConfig.MACAddress = "52:54:00:12:01:01";
+  matchConfig.PermanentMACAddress = "52:54:00:12:01:01";
   linkConfig.Name = "wan";
 };
 ```

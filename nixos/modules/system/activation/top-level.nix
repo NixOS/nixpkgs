@@ -1,4 +1,4 @@
-{ config, lib, pkgs, modules, baseModules, specialArgs, ... }:
+{ config, lib, pkgs, extendModules, noUserModules, ... }:
 
 with lib;
 
@@ -11,16 +11,10 @@ let
   # you can provide an easy way to boot the same configuration
   # as you use, but with another kernel
   # !!! fix this
-  children = mapAttrs (childName: childConfig:
-      (import ../../../lib/eval-config.nix {
-        inherit lib baseModules specialArgs;
-        system = config.nixpkgs.initialSystem;
-        modules =
-           (optionals childConfig.inheritParentConfig modules)
-        ++ [ ./no-clone.nix ]
-        ++ [ childConfig.configuration ];
-      }).config.system.build.toplevel
-    ) config.specialisation;
+  children =
+    mapAttrs
+      (childName: childConfig: childConfig.configuration.system.build.toplevel)
+      config.specialisation;
 
   systemBuilder =
     let
@@ -176,7 +170,11 @@ in
         </screen>
       '';
       type = types.attrsOf (types.submodule (
-        { ... }: {
+        local@{ ... }: let
+          extend = if local.config.inheritParentConfig
+            then extendModules
+            else noUserModules.extendModules;
+        in {
           options.inheritParentConfig = mkOption {
             type = types.bool;
             default = true;
@@ -185,7 +183,15 @@ in
 
           options.configuration = mkOption {
             default = {};
-            description = "Arbitrary NixOS configuration options.";
+            description = ''
+              Arbitrary NixOS configuration.
+
+              Anything you can add to a normal NixOS configuration, you can add
+              here, including imports and config values, although nested
+              specialisations will be ignored.
+            '';
+            visible = "shallow";
+            inherit (extend { modules = [ ./no-clone.nix ]; }) type;
           };
         })
       );
@@ -202,6 +208,7 @@ in
     system.boot.loader.kernelFile = mkOption {
       internal = true;
       default = pkgs.stdenv.hostPlatform.linux-kernel.target;
+      defaultText = literalExpression "pkgs.stdenv.hostPlatform.linux-kernel.target";
       type = types.str;
       description = ''
         Name of the kernel file to be passed to the bootloader.
