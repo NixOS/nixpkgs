@@ -938,6 +938,7 @@
   ./services/networking/tedicross.nix
   ./services/networking/tetrd.nix
   ./services/networking/teleport.nix
+  ./services/networking/teleirc.nix
   ./services/networking/thelounge.nix
   ./services/networking/tinc.nix
   ./services/networking/tinydns.nix
