@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "hubsrht";
-  version = "0.13.16";
+  version = "0.14.4";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "hub.sr.ht";
     rev = version;
-    sha256 = "sha256-TyeEJvkRjqTs92+pKloJhpTnnkYaMZHZkdO6Da5Bq7c=";
+    sha256 = "sha256-7HF+jykWGqzPWA0YtJZQZU7pnID1yexcqLkEf2HpnSs=";
   };
 
   nativeBuildInputs = srht.nativeBuildInputs;
