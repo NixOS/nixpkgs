@@ -57,16 +57,6 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-PMin350/8ceiGmLS6zoQvhX2uxWNOTI78yEzScnvdbk=";
   };
 
-  boost_python_lib = "python${builtins.replaceStrings ["."] [""] python3.pythonVersion}";
-  postPatch = ''
-    # Fix for boost 1.67+
-    substituteInPlace environments/g4py/CMakeLists.txt \
-      --replace "REQUIRED python''${PYTHON_VERSION_MAJOR}''${PYTHON_VERSION_MINOR}" \
-                "REQUIRED COMPONENTS $boost_python_lib"
-    substituteInPlace environments/g4py/G4PythonHelpers.cmake \
-      --replace "Boost::python''${PYTHON_VERSION_MAJOR}''${PYTHON_VERSION_MINOR}" "Boost::$boost_python_lib"
-  '';
-
   cmakeFlags = [
     "-DGEANT4_INSTALL_DATA=OFF"
     "-DGEANT4_USE_GDML=${if enableGDML then "ON" else "OFF"}"
