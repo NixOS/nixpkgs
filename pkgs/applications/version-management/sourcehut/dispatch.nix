@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "dispatchsrht";
-  version = "0.15.32";
+  version = "0.15.33";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "dispatch.sr.ht";
     rev = version;
-    sha256 = "sha256-4P4cXhjcZ8IBzpRfmYIJkzl9U4Plo36a48Pf/KjmhFY=";
+    sha256 = "sha256-xNYJ5zFlMB9CgW6H9bmjhRfhpty44A90gDrjgV6wFl4=";
   };
 
   nativeBuildInputs = srht.nativeBuildInputs;
