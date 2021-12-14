@@ -32,6 +32,13 @@ with lib.maintainers; {
   bazel = {
     members = [
       mboes
+      marsam
+      uri-canva
+      cbley
+      olebedev
+      groodt
+      aherrmann
+      ylecornec
     ];
     scope = "Bazel build tool & related tools https://bazel.build/";
   };
