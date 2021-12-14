@@ -7054,6 +7054,12 @@
       fingerprint = "BA3A 5886 AE6D 526E 20B4  57D6 6A37 DF94 8318 8492";
     }];
   };
+  lux = {
+    email = "lux@lux.name";
+    githubId = 1208273;
+    matrix = "@lux:ontheblueplanet.com";
+    name = "Lux";
+  };
   luz = {
     email = "luz666@daum.net";
     github = "Luz";
