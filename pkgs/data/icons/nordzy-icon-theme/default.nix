@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     description = "A free and open source icon theme using the Nord color palette and based on WhiteSur and Numix Icon Theme";
     homepage = "https://github.com/alvatip/Nordzy-icon";
     license = licenses.gpl3;
-    platforms = platforms.all;
+    platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [
       alexnortung
     ];
