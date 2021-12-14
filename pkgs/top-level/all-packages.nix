@@ -2601,6 +2601,8 @@ with pkgs;
 
   wlsunset = callPackage ../tools/wayland/wlsunset { };
 
+  wluma = callPackage ../tools/wayland/wluma {  };
+
   wob = callPackage ../tools/wayland/wob { };
 
   wshowkeys = callPackage ../tools/wayland/wshowkeys { };
