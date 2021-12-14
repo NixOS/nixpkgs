@@ -2,7 +2,7 @@
 , zlib, jdk, glib, gtk, libXtst, libsecret, gsettings-desktop-schemas, webkitgtk
 , makeWrapper, perl, ... }:
 
-{ name, src ? builtins.getAttr stdenv.hostPlatform.system sources, sources ? null, description }:
+{ name, src ? builtins.getAttr stdenv.hostPlatform.system sources, sources ? null, description, productVersion }:
 
 stdenv.mkDerivation rec {
   inherit name src;
@@ -37,13 +37,12 @@ stdenv.mkDerivation rec {
     # settings in ~/.eclipse/org.eclipse.platform_<version> rather
     # than ~/.eclipse/org.eclipse.platform_<version>_<number>.
     productId=$(sed 's/id=//; t; d' $out/eclipse/.eclipseproduct)
-    productVersion=$(sed 's/version=//; t; d' $out/eclipse/.eclipseproduct)
 
     makeWrapper $out/eclipse/eclipse $out/bin/eclipse \
       --prefix PATH : ${jdk}/bin \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([ glib gtk libXtst libsecret ] ++ lib.optional (webkitgtk != null) webkitgtk)} \
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
-      --add-flags "-configuration \$HOME/.eclipse/''${productId}_$productVersion/configuration"
+      --add-flags "-configuration \$HOME/.eclipse/''${productId}_${productVersion}/configuration"
 
     # Create desktop item.
     mkdir -p $out/share/applications
