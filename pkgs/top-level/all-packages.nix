@@ -22964,6 +22964,8 @@ with pkgs;
     buildGoModule = buildGo118Module;
   };
 
+  teleirc = callPackage ../servers/teleirc { };
+
   thanos = callPackage ../servers/monitoring/thanos { };
 
   trafficserver = callPackage ../servers/http/trafficserver { };
