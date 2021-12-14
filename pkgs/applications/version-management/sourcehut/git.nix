@@ -8,13 +8,13 @@
 , scmsrht
 }:
 let
-  version = "0.73.6";
+  version = "0.76.2";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "git.sr.ht";
     rev = version;
-    sha256 = "sha256-9WdeHXmyX5K/ldaE9AbSWTRlsrSDuKtm8QhthEHfmuU=";
+    sha256 = "sha256-JnMoQtoR4gXujO/+2WR3oM4MNXjrqWLbS66DO09mCP4=";
   };
 
   buildShell = src: buildGoModule {
@@ -32,13 +32,13 @@ let
   buildKeys = src: buildGoModule {
     inherit src version;
     pname = "gitsrht-keys";
-    vendorSha256 = "sha256-7ti8xCjSrxsslF7/1X/GY4FDl+69hPL4UwCDfjxmJLU=";
+    vendorSha256 = "sha256-9pojS69HCKVHUceyOpGtv9ewcxFD4WsOVsEzkmWJkF4=";
   };
 
   buildUpdateHook = src: buildGoModule {
     inherit src version;
     pname = "gitsrht-update-hook";
-    vendorSha256 = "sha256-q8DFk0k3UcmSIiovmZPGsbK2cFU21ID8+2F+LbI62sg=";
+    vendorSha256 = "sha256-sBlG7EFqdDm7CkAHVX50Mf4N3sl1rPNmWExG/bfbfGA=";
   };
 
   updateHook = buildUpdateHook "${src}/gitsrht-update-hook";
