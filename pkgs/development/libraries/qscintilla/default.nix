@@ -1,32 +1,29 @@
 { stdenv, lib, fetchurl, unzip
-, qt4 ? null, qmake4Hook ? null
-, withQt5 ? false, qtbase ? null, qtmacextras ? null, qmake ? null
+, withQt5 ? true, qtbase, qtmacextras ? null
+, qmake
 , fixDarwinDylibNames
 }:
 
 let
-  pname = "qscintilla-qt${if withQt5 then "5" else "4"}";
-  version = "2.11.6";
+  pname = "qscintilla-qt5";
+  version = "2.13.1";
 
 in stdenv.mkDerivation rec {
   inherit pname version;
 
   src = fetchurl {
-    url = "https://www.riverbankcomputing.com/static/Downloads/QScintilla/${version}/QScintilla-${version}.tar.gz";
-    sha256 = "5zRgV9tH0vs4RGf6/M/LE6oHQTc8XVk7xytVsvDdIKc=";
+    url = "https://www.riverbankcomputing.com/static/Downloads/QScintilla/${version}/QScintilla_src-${version}.tar.gz";
+    sha256 = "gA49IHGpa8zNdYE0avDS/ij8MM1oUwy4MCaF0BOv1Uo=";
   };
 
-  sourceRoot = "QScintilla-${version}/Qt4Qt5";
+  sourceRoot = "QScintilla_src-${version}/src";
 
-  buildInputs = [ (if withQt5 then qtbase else qt4) ];
+  buildInputs = [ qtbase ];
 
-  propagatedBuildInputs = lib.optional (withQt5 && stdenv.isDarwin) qtmacextras;
+  propagatedBuildInputs = lib.optional stdenv.isDarwin qtmacextras;
 
-  nativeBuildInputs = [ unzip ]
-    ++ (if withQt5 then [ qmake ] else [ qmake4Hook ])
+  nativeBuildInputs = [ unzip qmake ]
     ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
-
-  patches = lib.optional (!withQt5) ./fix-qt4-build.patch;
 
   # Make sure that libqscintilla2.so is available in $out/lib since it is expected
   # by some packages such as sqlitebrowser
@@ -36,14 +33,13 @@ in stdenv.mkDerivation rec {
 
   dontWrapQtApps = true;
 
-  postPatch = ''
+  preConfigure = ''
     substituteInPlace qscintilla.pro \
       --replace '$$[QT_INSTALL_LIBS]'         $out/lib \
       --replace '$$[QT_INSTALL_HEADERS]'      $out/include \
       --replace '$$[QT_INSTALL_TRANSLATIONS]' $out/translations \
       --replace '$$[QT_HOST_DATA]/mkspecs'    $out/mkspecs \
-      --replace '$$[QT_INSTALL_DATA]/mkspecs' $out/mkspecs \
-      --replace '$$[QT_INSTALL_DATA]'         $out/share${lib.optionalString (! withQt5) "/qt"}
+      --replace '$$[QT_INSTALL_DATA]'         $out/share
   '';
 
   meta = with lib; {
