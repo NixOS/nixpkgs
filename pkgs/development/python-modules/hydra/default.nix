@@ -23,6 +23,7 @@ buildPythonPackage rec {
   disabledTests = [
     "test_bash_completion_with_dot_in_path"
     "test_install_uninstall"
+    "test_config_search_path"
   ];
   disabledTestPaths = [ "tests/test_hydra.py" ];
 

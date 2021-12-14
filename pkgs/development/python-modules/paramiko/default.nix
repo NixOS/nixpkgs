@@ -13,11 +13,11 @@
 
 buildPythonPackage rec {
   pname = "paramiko";
-  version = "2.8.0";
+  version = "2.8.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e673b10ee0f1c80d46182d3af7751d033d9b573dd7054d2d0aa46be186c3c1d2";
+    sha256 = "85b1245054e5d7592b9088cc6d08da22445417912d3a3e48138675c7a8616438";
   };
 
   propagatedBuildInputs = [ bcrypt cryptography pynacl pyasn1 ];

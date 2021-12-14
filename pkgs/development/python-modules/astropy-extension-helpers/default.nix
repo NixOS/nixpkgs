@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, findutils
 , pytestCheckHook
 }:
 
@@ -16,7 +17,12 @@ buildPythonPackage rec {
 
   patches = [ ./permissions.patch ];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [ findutils pytestCheckHook ];
+
+  # avoid import mismatch errors, as conftest.py is copied to build dir
+  pytestFlagsArray = [
+    "extension_helpers"
+  ];
 
   pythonImportsCheck = [
     "extension_helpers"

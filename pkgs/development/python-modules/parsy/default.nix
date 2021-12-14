@@ -1,18 +1,20 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder, pytest }:
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, pytest }:
 
 buildPythonPackage rec {
   pname = "parsy";
   version = "1.4.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "7c411373e520e97431f0b390db9d2cfc5089bc1d33f4f1584d2cdc9e6368f302";
+  src = fetchFromGitHub {
+    repo = "parsy";
+    owner = "python-parsy";
+    rev = "v${version}";
+    sha256 = "sha256-FislrLb+u4T5m/eEER7kazZHJKEwPHe+Vg/YDJp4PyM=";
   };
 
   checkInputs = [ pytest ];
 
   checkPhase = ''
-    py.test test/
+    py.test tests
   '';
 
   disabled = pythonOlder "3.4";

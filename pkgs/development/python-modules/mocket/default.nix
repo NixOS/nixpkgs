@@ -19,12 +19,12 @@
 
 buildPythonPackage rec {
   pname = "mocket";
-  version = "3.10.1";
+  version = "3.10.2";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c77e75432c21108e5a28a529793eb2b82753b6f7050ac9f59fc5d7a72fa74c0f";
+    sha256 = "6dbfd47fdc5629136bdbb487cd3cc8d786b402df546b9c7106bed737677aa9f4";
   };
 
   propagatedBuildInputs = [

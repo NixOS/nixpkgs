@@ -5,7 +5,7 @@
 , setuptools
 , setuptools-scm
 , cocotb-bus
-, pytest
+, pytestCheckHook
 , swig
 , verilog
 }:
@@ -42,11 +42,10 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace "'cocotb-bus<1.0'" ""
   '';
 
-  checkInputs = [ cocotb-bus pytest swig verilog ];
+  checkInputs = [ cocotb-bus pytestCheckHook swig verilog ];
 
   checkPhase = ''
     export PATH=$out/bin:$PATH
-    make test
   '';
 
   meta = with lib; {
