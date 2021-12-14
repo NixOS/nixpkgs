@@ -5,16 +5,17 @@ let
   version = "3.9.5";
   pname = "standardnotes";
   name = "${pname}-${version}";
+  throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
   plat = {
     i686-linux = "i386";
     x86_64-linux = "x86_64";
-  }.${stdenv.hostPlatform.system};
+  }.${stdenv.hostPlatform.system} or throwSystem;
 
   sha256 = {
     i686-linux = "sha256-7Mo8ELFV6roZ3IYWBtB2rRDAzJrq4ht9f1v6uohsauw=";
     x86_64-linux = "sha256-9VPYII9E8E3yL7UuU0+GmaK3qxWX4bwfACDl7F7sngo=";
-  }.${stdenv.hostPlatform.system};
+  }.${stdenv.hostPlatform.system} or throwSystem;
 
   src = fetchurl {
     url = "https://github.com/standardnotes/desktop/releases/download/v${version}/standard-notes-${version}-linux-${plat}.AppImage";
@@ -60,7 +61,7 @@ in appimageTools.wrapType2 rec {
     '';
     homepage = "https://standardnotes.org";
     license = licenses.agpl3;
-    maintainers = with maintainers; [ mgregoire ];
+    maintainers = with maintainers; [ mgregoire chuangzhu ];
     platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }
