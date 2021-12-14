@@ -9,11 +9,11 @@ let
 in
 buildPythonApplication rec {
   pname = "todoman";
-  version = "4.0.1";
+  version = "4.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ec88f8009321e77deb0ae682f7d036c139edf4175f8413011b532905c6e7d2b1";
+    sha256 = "ce3caa481d923e91da9b492b46509810a754e2d3ef857f5d20bc5a8e362b50c8";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
