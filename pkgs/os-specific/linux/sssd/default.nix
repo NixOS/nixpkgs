@@ -1,10 +1,11 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, glibc, augeas, dnsutils, c-ares, curl,
   cyrus_sasl, ding-libs, libnl, libunistring, nss, samba, nfs-utils, doxygen,
-  python, python3, pam, popt, talloc, tdb, tevent, pkg-config, ldb, openldap,
+  python3, pam, popt, talloc, tdb, tevent, pkg-config, ldb, openldap,
   pcre2, libkrb5, cifs-utils, glib, keyutils, dbus, fakeroot, libxslt, libxml2,
-  libuuid, ldap, systemd, nspr, check, cmocka, uid_wrapper, p11-kit,
+  libuuid, systemd, nspr, check, cmocka, uid_wrapper, p11-kit,
   nss_wrapper, ncurses, Po4a, http-parser, jansson,
   docbook_xsl, docbook_xml_dtd_44,
+  nixosTests,
   withSudo ? false }:
 
 let
@@ -12,13 +13,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "sssd";
-  version = "2.6.0";
+  version = "2.6.1";
 
   src = fetchFromGitHub {
     owner = "SSSD";
     repo = pname;
     rev = version;
-    sha256 = "1ik0x0b7s38d7n0aqhl31r0asxw6qcdb31hx9qydk87yg3n6rziv";
+    sha256 = "sha256-AcfNm/0VpjD+Aa1ZUwI2EI/i0s06rxQCfabv3a/AM38=";
   };
 
   postPatch = ''
@@ -30,7 +31,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     export SGML_CATALOG_FILES="${docbookFiles}"
-    export PYTHONPATH=${ldap}/lib/python2.7/site-packages
+    export PYTHONPATH=$(find ${python3.pkgs.ldap} -type d -name site-packages)
     export PATH=$PATH:${openldap}/libexec
 
     configureFlagsArray=(
@@ -40,7 +41,6 @@ stdenv.mkDerivation rec {
       --enable-pammoddir=$out/lib/security
       --with-os=fedora
       --with-pid-path=/run
-      --with-python2-bindings
       --with-python3-bindings
       --with-syslog=journald
       --without-selinux
@@ -56,10 +56,10 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   nativeBuildInputs = [ autoreconfHook pkg-config doxygen ];
   buildInputs = [ augeas dnsutils c-ares curl cyrus_sasl ding-libs libnl libunistring nss
-                  samba nfs-utils p11-kit python python3 popt
+                  samba nfs-utils p11-kit python3 popt
                   talloc tdb tevent ldb pam openldap pcre2 libkrb5
                   cifs-utils glib keyutils dbus fakeroot libxslt libxml2
-                  libuuid ldap systemd nspr check cmocka uid_wrapper
+                  libuuid python3.pkgs.ldap systemd nspr check cmocka uid_wrapper
                   nss_wrapper ncurses Po4a http-parser jansson ];
 
   makeFlags = [
@@ -87,6 +87,8 @@ stdenv.mkDerivation rec {
     rm -f "$out"/modules/ldb/memberof.la
     find "$out" -depth -type d -exec rmdir --ignore-fail-on-non-empty {} \;
   '';
+
+  passthru.tests = { inherit (nixosTests) sssd sssd-ldap; };
 
   meta = with lib; {
     description = "System Security Services Daemon";
