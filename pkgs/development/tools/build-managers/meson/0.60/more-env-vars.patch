@@ -6,7 +6,7 @@ diff -Naur meson-0.60.2-old/mesonbuild/environment.py meson-0.60.2-new/mesonbuil
          # allows native builds to never need to worry about the 'BUILD_*'
          # ones.
 -        ([var_name + '_FOR_BUILD'] if is_cross else [var_name]),
-+        [var_name + '_FOR_BUILD'] ++ ([] if is_cross else [var_name]),
++        [var_name + '_FOR_BUILD'] + ([] if is_cross else [var_name]),
          # Always just the unprefixed host versions
          [var_name]
      )[for_machine]
