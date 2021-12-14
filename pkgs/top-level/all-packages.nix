@@ -7463,6 +7463,8 @@ with pkgs;
 
   localtime = callPackage ../tools/system/localtime { };
 
+  log4j-detect = callPackage ../tools/security/log4j-detect { };
+
   log4j-scan = callPackage ../tools/security/log4j-scan { };
 
   log4jcheck = callPackage ../tools/security/log4jcheck { };
