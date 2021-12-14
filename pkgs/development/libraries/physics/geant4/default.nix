@@ -127,7 +127,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://www.geant4.org";
     license = licenses.g4sl;
-    maintainers = with maintainers; [ tmplt omnipotententity ];
+    maintainers = with maintainers; [ omnipotententity ];
     platforms = platforms.linux;
   };
 }
