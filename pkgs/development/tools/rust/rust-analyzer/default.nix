@@ -11,20 +11,23 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rust-analyzer-unwrapped";
-  version = "2021-11-29";
-  cargoSha256 = "sha256-UgYR0e3Pt3lcbkSDnizlwtwjnqTaqGlXRgR724U4rSU=";
+  version = "2021-12-13";
+  cargoSha256 = "sha256-VF4pwSl3Wei7KxyQFOPj7hVX/NG2zImRLv4iN+ijAs8=";
 
   src = fetchFromGitHub {
     owner = "rust-analyzer";
     repo = "rust-analyzer";
     rev = version;
-    sha256 = "sha256-vh7z8jupVxXPOko3sWUsOB7eji/7lKfwJ/CE3iw97Sw=";
+    sha256 = "sha256-xt7iDfIoaBhStgqsgttyOFF4NYPQ8jeVwDoYUwrvtrA=";
   };
 
   patches = [
     # Code format and git history check require more dependencies but don't really matter for packaging.
     # So just ignore them.
     ./ignore-git-and-rustfmt-tests.patch
+
+    # Remove when we have rustc >= 1.57.0.
+    ./no-1-57-map-while.patch
   ];
 
   buildAndTestSubdir = "crates/rust-analyzer";
