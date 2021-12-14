@@ -43,8 +43,8 @@ in {
 
       package = mkOption {
         type = types.package;
-        default = pkgs.couchdb;
-        defaultText = literalExpression "pkgs.couchdb";
+        default = pkgs.couchdb3;
+        defaultText = literalExpression "pkgs.couchdb3";
         description = ''
           CouchDB package to use.
         '';
@@ -150,6 +150,14 @@ in {
         '';
       };
 
+      argsFile = mkOption {
+        type = types.path;
+        default = "${cfg.package}/etc/vm.args";
+        description = ''
+          vm.args configuration. Overrides Couchdb's Erlang VM parameters file.
+        '';
+      };
+
       configFile = mkOption {
         type = types.path;
         description = ''
@@ -186,12 +194,14 @@ in {
       '';
 
       environment = {
-        # we are actually specifying 4 configuration files:
+        # we are actually specifying 5 configuration files:
         # 1. the preinstalled default.ini
         # 2. the module configuration
         # 3. the extraConfig from the module options
         # 4. the locally writable config file, which couchdb itself writes to
         ERL_FLAGS= ''-couch_ini ${cfg.package}/etc/default.ini ${configFile} ${pkgs.writeText "couchdb-extra.ini" cfg.extraConfig} ${cfg.configFile}'';
+        # 5. the vm.args file
+        COUCHDB_ARGS_FILE=''${cfg.argsFile}'';
       };
 
       serviceConfig = {
