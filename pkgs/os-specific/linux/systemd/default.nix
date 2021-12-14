@@ -2,6 +2,7 @@
 
 { stdenv
 , lib
+, nixosTests
 , fetchFromGitHub
 , fetchpatch
 , fetchzip
@@ -615,6 +616,10 @@ stdenv.mkDerivation {
   # systemd builds is the same, then we can switch between them at
   # runtime; otherwise we can't and we need to reboot.
   passthru.interfaceVersion = 2;
+
+  passthru.tests = {
+    inherit (nixosTests) switchTest;
+  };
 
   meta = with lib; {
     homepage = "https://www.freedesktop.org/wiki/Software/systemd/";

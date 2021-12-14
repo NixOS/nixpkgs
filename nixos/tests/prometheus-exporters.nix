@@ -939,7 +939,7 @@ let
       exporterConfig = {
         enable = true;
       };
-      metricProvider.services.redis.enable = true;
+      metricProvider.services.redis.servers."".enable = true;
       exporterTest = ''
         wait_for_unit("redis.service")
         wait_for_unit("prometheus-redis-exporter.service")
