@@ -106,6 +106,7 @@ let
 in {
 
   imports = [
+    (mkRemovedOptionModule [ "services" "kubernetes" "addons" "dashboard" ] "Removed due to it being an outdated version")
     (mkRemovedOptionModule [ "services" "kubernetes" "verbose" ] "")
   ];
 
