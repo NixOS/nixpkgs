@@ -9,8 +9,8 @@ let
     inherit buildFHSUserEnv;
   };
   stableVersion = {
-    version = "2020.3.1.25"; # "Android Studio Arctic Fox (2020.3.1)"
-    sha256Hash = "10gpwb130bzp6a9g958cjqcb2gsm0vdgm08nm5xy45xdh54nxjfg";
+    version = "2020.3.1.26"; # "Android Studio Arctic Fox (2020.3.1)"
+    sha256Hash = "NE2FgjXtXTCVrCWRakqPhzAGn3blpf0OugJSKviPVBs=";
   };
   betaVersion = {
     version = "2021.1.1.17"; # "Android Studio Bumblebee (2021.1.1) Beta 4"
