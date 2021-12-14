@@ -87,7 +87,32 @@
   </section>
   <section xml:id="sec-release-22.05-notable-changes">
     <title>Other Notable Changes</title>
-    <para>
-    </para>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          The option
+          <link linkend="opt-services.redis.servers">services.redis.servers</link>
+          was added to support per-application
+          <literal>redis-server</literal> which is more secure since
+          Redis databases are only mere key prefixes without any
+          configuration or ACL of their own. Backward-compatibility is
+          preserved by mapping old
+          <literal>services.redis.settings</literal> to
+          <literal>services.redis.servers.&quot;&quot;.settings</literal>,
+          but you are strongly encouraged to name each
+          <literal>redis-server</literal> instance after the application
+          using it, instead of keeping that nameless one. Except for the
+          nameless
+          <literal>services.redis.servers.&quot;&quot;</literal> still
+          accessible at <literal>127.0.0.1:6379</literal>, and to the
+          members of the Unix group <literal>redis</literal> through the
+          Unix socket <literal>/run/redis/redis.sock</literal>, all
+          other <literal>services.redis.servers.${serverName}</literal>
+          are only accessible by default to the members of the Unix
+          group <literal>redis-${serverName}</literal> through the Unix
+          socket <literal>/run/redis-${serverName}/redis.sock</literal>.
+        </para>
+      </listitem>
+    </itemizedlist>
   </section>
 </section>
