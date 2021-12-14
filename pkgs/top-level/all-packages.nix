@@ -30245,7 +30245,7 @@ with pkgs;
 
   fishfight = callPackage ../games/fishfight {
     inherit (xorg) libX11 libXi;
-    inherit (darwin.apple_sdk.frameworks) AudioToolbox Cocoa CoreAudio CoreFoundation IOKit OpenGL;
+    inherit (darwin.apple_sdk.frameworks) AudioToolbox Cocoa CoreAudio OpenGL;
   };
 
   flightgear = libsForQt5.callPackage ../games/flightgear { };
