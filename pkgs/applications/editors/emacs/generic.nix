@@ -64,6 +64,16 @@ let emacs = stdenv.mkDerivation (lib.optionalAttrs nativeComp {
       rm -fr .git
     '')
 
+    # Add the name of the wrapped gvfsd
+    # This used to be carried as a patch but it often got out of sync with upstream
+    # and was hard to maintain for emacs-overlay.
+    (lib.concatStrings (map (fn: ''
+      sed -i 's#(${fn} "gvfs-fuse-daemon")#(${fn} "gvfs-fuse-daemon") (${fn} ".gvfsd-fuse-wrapped")#' lisp/net/tramp-gvfs.el
+    '') [
+      "tramp-compat-process-running-p"
+      "tramp-process-running-p"
+    ]))
+
     # Reduce closure size by cleaning the environment of the emacs dumper
     ''
       substituteInPlace src/Makefile.in \
