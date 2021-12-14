@@ -54,6 +54,16 @@ self: super: {
   ghc-datasize = disableLibraryProfiling super.ghc-datasize;
   ghc-vis = disableLibraryProfiling super.ghc-vis;
 
+  # `pinch`s test suite uses a function called `openSocket` that's available
+  # in `network` versions 3.1.2.0 and bigger.
+  # There's an open PR updating the lower bound for `network`:
+  # > https://github.com/abhinav/pinch/pull/46
+  # With that said version tracked for `network` right now is 3.1.1.1 so we're
+  # replacing the network pinch uses with `network_3_1_2_5` for now.
+  pinch = super.pinch.overrideScope (self : super: {
+    network = self.network_3_1_2_5;
+  });
+
   # We can remove this once fakedata version gets to 1.0.1 as the test suite
   # works fine there.
   fakedata = dontCheck super.fakedata;
