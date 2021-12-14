@@ -19,7 +19,7 @@ in buildPythonPackage rec {
 
   nativeBuildInputs = [ sip qmake pyqt-builder ];
   buildInputs = [ qtbase qscintilla ];
-  propagatedBuildInputs = [ pyqt5 pyqt5 ] ++ lib.optional (stdenv.isDarwin) qtmacextras;
+  propagatedBuildInputs = [ pyqt5 ] ++ lib.optional (stdenv.isDarwin) qtmacextras;
 
   dontWrapQtApps = true;
 
@@ -41,7 +41,18 @@ in buildPythonPackage rec {
     cd Python
     cp pyproject-qt5.toml pyproject.toml
     echo '[tool.sip.project]' >> pyproject.toml
-    echo 'sip-include-dirs = [ "${sipIncludeDirs}" ]' >> pyproject.toml
+    echo 'sip-include-dirs = [ "${sipIncludeDirs}"]' >> pyproject.toml
+  '' + lib.optionalString stdenv.isDarwin ''
+    substituteInPlace project.py \
+      --replace \
+      "if self.project.qsci_external_lib:
+                if self.qsci_features_dir is not None:" \
+      "if self.project.qsci_external_lib:
+                self.builder_settings.append('QT += widgets')
+
+                self.builder_settings.append('QT += printsupport')
+
+                if self.qsci_features_dir is not None:"
   '';
 
   dontConfigure = true;
@@ -61,8 +72,7 @@ in buildPythonPackage rec {
     #
 
   build = "sip-install --qsci-features-dir ${qsciFeaturesDir} --qsci-include-dir ${qsciIncludeDir} \
-           --qsci-library-dir ${qsciLibraryDir} --api-dir ${apiDir}" + lib.optionalString stdenv.isDarwin
-           " --qmake-setting 'QT += widgets'";
+           --qsci-library-dir ${qsciLibraryDir} --api-dir ${apiDir}";
 
   postInstall = ''
     # Needed by pythonImportsCheck to find the module
