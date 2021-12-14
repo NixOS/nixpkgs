@@ -297,10 +297,10 @@
       elpaBuild {
         pname = "geiser";
         ename = "geiser";
-        version = "0.18";
+        version = "0.19";
         src = fetchurl {
-          url = "https://elpa.nongnu.org/nongnu/geiser-0.18.tar";
-          sha256 = "131j4f82hl4pqj07qsl1f2dz4105v5fyll3bc97ggayzvrdiy58i";
+          url = "https://elpa.nongnu.org/nongnu/geiser-0.19.tar";
+          sha256 = "13w6gx6y8ilppcpfib5293600n0xy4xc4xa6idpmbcfd2pkmnw1x";
         };
         packageRequires = [ emacs ];
         meta = {
@@ -327,10 +327,10 @@
       elpaBuild {
         pname = "geiser-chibi";
         ename = "geiser-chibi";
-        version = "0.16";
+        version = "0.17";
         src = fetchurl {
-          url = "https://elpa.nongnu.org/nongnu/geiser-chibi-0.16.tar";
-          sha256 = "0j9dgg2q01ya6yawpfc15ywrfykd5gzbh118k1x4mghfkfnqn1zi";
+          url = "https://elpa.nongnu.org/nongnu/geiser-chibi-0.17.tar";
+          sha256 = "1mpbkv48y1ij762f61hp1zjg3lx8k5b9bbsm5lfb7xzvmk5k3zf0";
         };
         packageRequires = [ emacs geiser ];
         meta = {
@@ -342,10 +342,10 @@
       elpaBuild {
         pname = "geiser-chicken";
         ename = "geiser-chicken";
-        version = "0.16";
+        version = "0.17";
         src = fetchurl {
-          url = "https://elpa.nongnu.org/nongnu/geiser-chicken-0.16.tar";
-          sha256 = "1zmb8c86akrd5f1v59s4xkbpgsqbdcbc6d5f9h6kxa55ylc4dn6a";
+          url = "https://elpa.nongnu.org/nongnu/geiser-chicken-0.17.tar";
+          sha256 = "13jhh0083fjx4xq0k31vw5v3ffbmn3jkb2608bimm9xlw6acgn4s";
         };
         packageRequires = [ emacs geiser ];
         meta = {
@@ -357,10 +357,10 @@
       elpaBuild {
         pname = "geiser-gambit";
         ename = "geiser-gambit";
-        version = "0.16";
+        version = "0.17";
         src = fetchurl {
-          url = "https://elpa.nongnu.org/nongnu/geiser-gambit-0.16.tar";
-          sha256 = "0bc38qlqj7a3cnrcnqrb6m3jvjh2ia5iby9i50vcn0jbs52rfsnz";
+          url = "https://elpa.nongnu.org/nongnu/geiser-gambit-0.17.tar";
+          sha256 = "12r9h1dl0y9j421v0idvr9ljj93962xfrs0nff5lmx5z1cayq456";
         };
         packageRequires = [ emacs geiser ];
         meta = {
@@ -387,10 +387,10 @@
       elpaBuild {
         pname = "geiser-guile";
         ename = "geiser-guile";
-        version = "0.18";
+        version = "0.19";
         src = fetchurl {
-          url = "https://elpa.nongnu.org/nongnu/geiser-guile-0.18.tar";
-          sha256 = "1jnqra7gysscn0gb1ap56rbjlrnhsmma7q4yfiy3zxsz8m69xhqf";
+          url = "https://elpa.nongnu.org/nongnu/geiser-guile-0.19.tar";
+          sha256 = "1rjml11gkl80x4hmh84m84r4qb3kxi36d7mwm25n791v5fs1cl32";
         };
         packageRequires = [ emacs geiser ];
         meta = {
@@ -417,10 +417,10 @@
       elpaBuild {
         pname = "geiser-mit";
         ename = "geiser-mit";
-        version = "0.13";
+        version = "0.15";
         src = fetchurl {
-          url = "https://elpa.nongnu.org/nongnu/geiser-mit-0.13.tar";
-          sha256 = "1y2cgrcvdp358x7lpcz8x8nw5g1y4h03d9gbkbd6k85643cwrkbi";
+          url = "https://elpa.nongnu.org/nongnu/geiser-mit-0.15.tar";
+          sha256 = "11agp5k79g0w5596x98kbwijvqnb1hwrbqx680mh1svd1l8374q0";
         };
         packageRequires = [ emacs geiser ];
         meta = {
@@ -447,10 +447,10 @@
       elpaBuild {
         pname = "geiser-stklos";
         ename = "geiser-stklos";
-        version = "1.3";
+        version = "1.4";
         src = fetchurl {
-          url = "https://elpa.nongnu.org/nongnu/geiser-stklos-1.3.tar";
-          sha256 = "1wkhnkdhdrhrh0vipgnlmyimi859za6jhf2ldpwfmk8r2aj8ywan";
+          url = "https://elpa.nongnu.org/nongnu/geiser-stklos-1.4.tar";
+          sha256 = "18z34x4xmn58080r2ar6wd07kap7f367my2q5ph6cdf0gs6nz4sv";
         };
         packageRequires = [ emacs geiser ];
         meta = {
@@ -881,6 +881,26 @@
           license = lib.licenses.free;
         };
       }) {};
+    pdf-tools = callPackage ({ elpaBuild
+                             , emacs
+                             , fetchurl
+                             , let-alist
+                             , lib
+                             , tablist }:
+      elpaBuild {
+        pname = "pdf-tools";
+        ename = "pdf-tools";
+        version = "1.0";
+        src = fetchurl {
+          url = "https://elpa.nongnu.org/nongnu/pdf-tools-1.0.tar";
+          sha256 = "0cjr7y2ikf2al43wrzlqdpbksj0ww6m0nvmlz97slx8nk94k2qyf";
+        };
+        packageRequires = [ emacs let-alist tablist ];
+        meta = {
+          homepage = "https://elpa.gnu.org/packages/pdf-tools.html";
+          license = lib.licenses.free;
+        };
+      }) {};
     php-mode = callPackage ({ elpaBuild, emacs, fetchurl, lib }:
       elpaBuild {
         pname = "php-mode";
@@ -975,10 +995,10 @@
       elpaBuild {
         pname = "rust-mode";
         ename = "rust-mode";
-        version = "1.0.1";
+        version = "1.0.2";
         src = fetchurl {
-          url = "https://elpa.nongnu.org/nongnu/rust-mode-1.0.1.tar";
-          sha256 = "1rybjnaycvjgqp8g8lkjzgvnwd4565cbx88qlnxfrlqd5161r1k3";
+          url = "https://elpa.nongnu.org/nongnu/rust-mode-1.0.2.tar";
+          sha256 = "08zkq5md20ppqlvd5xxsbzargs6ffzmjr1b1pq9i937l3n9d4swl";
         };
         packageRequires = [ emacs ];
         meta = {
@@ -1095,6 +1115,21 @@
           license = lib.licenses.free;
         };
       }) {};
+    subed = callPackage ({ elpaBuild, emacs, fetchurl, lib }:
+      elpaBuild {
+        pname = "subed";
+        ename = "subed";
+        version = "0.0.2";
+        src = fetchurl {
+          url = "https://elpa.nongnu.org/nongnu/subed-0.0.2.tar";
+          sha256 = "1q9sb8kn1g5hvmm5zl4hm90fvf5kb82da69y24x7yzgs6axy0dga";
+        };
+        packageRequires = [ emacs ];
+        meta = {
+          homepage = "https://elpa.gnu.org/packages/subed.html";
+          license = lib.licenses.free;
+        };
+      }) {};
     swift-mode = callPackage ({ elpaBuild, emacs, fetchurl, lib, seq }:
       elpaBuild {
         pname = "swift-mode";
@@ -1122,6 +1157,21 @@
         packageRequires = [ emacs ];
         meta = {
           homepage = "https://elpa.gnu.org/packages/systemd.html";
+          license = lib.licenses.free;
+        };
+      }) {};
+    tablist = callPackage ({ elpaBuild, emacs, fetchurl, lib }:
+      elpaBuild {
+        pname = "tablist";
+        ename = "tablist";
+        version = "1.0";
+        src = fetchurl {
+          url = "https://elpa.nongnu.org/nongnu/tablist-1.0.tar";
+          sha256 = "1r37vk31ddiahhd11ric00py9ay9flgmsv368j47pl9653g9i6d9";
+        };
+        packageRequires = [ emacs ];
+        meta = {
+          homepage = "https://elpa.gnu.org/packages/tablist.html";
           license = lib.licenses.free;
         };
       }) {};
@@ -1182,6 +1232,26 @@
         packageRequires = [ emacs ];
         meta = {
           homepage = "https://elpa.gnu.org/packages/web-mode.html";
+          license = lib.licenses.free;
+        };
+      }) {};
+    webpaste = callPackage ({ cl-lib ? null
+                            , elpaBuild
+                            , emacs
+                            , fetchurl
+                            , lib
+                            , request }:
+      elpaBuild {
+        pname = "webpaste";
+        ename = "webpaste";
+        version = "3.2.2";
+        src = fetchurl {
+          url = "https://elpa.nongnu.org/nongnu/webpaste-3.2.2.tar";
+          sha256 = "0vviv062v46mlssz8627623g1b2nq4n4x3yiv8c882gvgvfvi2bi";
+        };
+        packageRequires = [ cl-lib emacs request ];
+        meta = {
+          homepage = "https://elpa.gnu.org/packages/webpaste.html";
           license = lib.licenses.free;
         };
       }) {};
