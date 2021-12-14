@@ -42,6 +42,13 @@ mkDerivation rec {
       url = "https://raw.githubusercontent.com/debian-calibre/calibre/debian/${version}%2Bdfsg-1/debian/patches/0001-only-plugin-update.patch";
       sha256 = "sha256-dLzO1TWP7Q4nw2a3oN7qlhGCmcA0NKJrZidUnD6hUMA=";
     })
+
+    # fix for CVE-2021-44686
+    (fetchpatch {
+      name = "0002-CVE-2021-44686.patch";
+      url = "https://github.com/kovidgoyal/calibre/commit/235b7e38c197ba4a3c17531e516610af8795e348.patch";
+      sha256 = "07ncv6r2v05m8rnv4syjfalkpksqpjag6icf1z57nv7k9dkkfmfw";
+    })
   ]
   ++ lib.optional (!unrarSupport) ./dont_build_unrar_plugin.patch;
 
