@@ -10,17 +10,17 @@
 , libiconv
 
   # rbw-fzf
-, withFzf ? false
+, withFzf ? true
 , fzf
 , perl
 
   # rbw-rofi
-, withRofi ? false
+, withRofi ? true
 , rofi
 , xclip
 
   # pass-import
-, withPass ? false
+, withPass ? true
 , pass
 }:
 
