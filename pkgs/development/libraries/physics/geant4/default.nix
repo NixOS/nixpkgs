@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   pname = "geant4";
 
   src = fetchurl{
-    url = "http://cern.ch/geant4-data/releases/geant4-v11.0.0.tar.gz";
+    url = "https://cern.ch/geant4-data/releases/geant4-v${version}.tar.gz";
     sha256 = "sha256-PMin350/8ceiGmLS6zoQvhX2uxWNOTI78yEzScnvdbk=";
   };
 
