@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-RzAQnuOjT8eMH+rJm+/JrF96PZbCgzDVNPQYUeXPWnY=";
 
+  ldflags = ["-X github.com/docker/compose/v2/internal.Version=${version}"];
+
   doCheck = false;
   installPhase = ''
     install -D $GOPATH/bin/cmd $out/libexec/docker/cli-plugins/docker-compose
