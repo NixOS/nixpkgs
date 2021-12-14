@@ -9092,7 +9092,15 @@ with pkgs;
 
   qprint = callPackage ../tools/text/qprint { };
 
-  qscintilla = callPackage ../development/libraries/qscintilla { };
+  qscintilla = if stdenv.isDarwin then
+    callPackage ../development/libraries/qscintilla {
+      inherit (qt5) qmake qtbase qtmacextras;
+  } else
+    callPackage ../development/libraries/qscintilla {
+      inherit (qt5) qmake qtbase;
+  };
+
+  qscintilla-qt4 = callPackage ../development/libraries/qscintilla-qt4 { };
 
   qshowdiff = callPackage ../tools/text/qshowdiff { };
 
