@@ -72,7 +72,7 @@ let
 
   tfFeature = x: if x then "1" else "0";
 
-  version = "2.4.2";
+  version = "2.4.4";
   variant = if cudaSupport then "-gpu" else "";
   pname = "tensorflow${variant}";
 
@@ -295,9 +295,12 @@ let
     fetchAttrs = {
       # cudaSupport causes fetch of ncclArchive, resulting in different hashes
       sha256 = if cudaSupport then
-        "10m6qj3kchgxfgb6qh59vc51knm9r9pkng8bf90h00dnggvv8234"
+        "sha256-ZAi093u2AQBBcgs9O2/KqdoZCtupQGzWc/1BNofEpoI="
       else
-        "04a98yrp09nd0p17k0jbzkgjppxs0yma7m5zkfrwgvr4g0w71v68";
+        if stdenv.isDarwin then
+          "sha256-LLjUcM+s69CbAczuAvytoM3jnq+VnF9XUA6lXC1XJoo="
+        else
+          "sha256-yOxwOHgk78ezm7/Uo6oHut8r3/xLgnnCBc0mcLNHSRE=";
     };
 
     buildAttrs = {
