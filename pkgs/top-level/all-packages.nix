@@ -10463,6 +10463,8 @@ with pkgs;
 
   v2ray-domain-list-community = callPackage ../data/misc/v2ray-domain-list-community { };
 
+  v2ray-geoip = callPackage ../data/misc/v2ray-geoip { };
+
   vacuum = callPackage ../applications/networking/instant-messengers/vacuum {};
 
   vampire = callPackage ../applications/science/logic/vampire {};
