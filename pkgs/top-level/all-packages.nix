@@ -10607,7 +10607,6 @@ with pkgs;
 
   sssd = callPackage ../os-specific/linux/sssd {
     inherit (perlPackages) Po4a;
-    inherit (python27Packages) ldap;
   };
 
   sentry-cli = callPackage ../development/tools/sentry-cli {
@@ -19240,6 +19239,8 @@ with pkgs;
   present = callPackage ../misc/present { };
 
   prime-server = callPackage ../development/libraries/prime-server { };
+
+  primecount = callPackage ../development/libraries/science/math/primecount { };
 
   primesieve = callPackage ../development/libraries/science/math/primesieve { };
 
