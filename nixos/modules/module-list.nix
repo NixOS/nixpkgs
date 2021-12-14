@@ -45,6 +45,7 @@
   ./hardware/ckb-next.nix
   ./hardware/cpu/amd-microcode.nix
   ./hardware/cpu/intel-microcode.nix
+  ./hardware/cpu/intel-sgx.nix
   ./hardware/corectrl.nix
   ./hardware/digitalbitbox.nix
   ./hardware/device-tree.nix
@@ -928,6 +929,7 @@
   ./services/search/kibana.nix
   ./services/search/meilisearch.nix
   ./services/search/solr.nix
+  ./services/security/aesmd.nix
   ./services/security/certmgr.nix
   ./services/security/cfssl.nix
   ./services/security/clamav.nix
