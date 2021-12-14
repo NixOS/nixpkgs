@@ -24,25 +24,18 @@
 }:
 
 let
-  # Make a value safe for JSON. Functions are replaced by the string "<function>",
-  # derivations are replaced with an attrset
-  # { _type = "derivation"; name = <name of that derivation>; }.
-  # We need to handle derivations specially because consumers want to know about them,
-  # but we can't easily use the type,name subset of keys (since type is often used as
-  # a module option and might cause confusion). Use _type,name instead to the same
-  # effect, since _type is already used by the module system.
-  substSpecial = x:
-    if lib.isDerivation x then { _type = "derivation"; name = x.name; }
-    else if builtins.isAttrs x then lib.mapAttrs (name: substSpecial) x
-    else if builtins.isList x then map substSpecial x
+  # Replace functions by the string <function>
+  substFunction = x:
+    if builtins.isAttrs x then lib.mapAttrs (name: substFunction) x
+    else if builtins.isList x then map substFunction x
     else if lib.isFunction x then "<function>"
     else x;
 
   optionsList = lib.flip map optionsListVisible
    (opt: transformOptions opt
-    // lib.optionalAttrs (opt ? example) { example = substSpecial opt.example; }
-    // lib.optionalAttrs (opt ? default) { default = substSpecial opt.default; }
-    // lib.optionalAttrs (opt ? type) { type = substSpecial opt.type; }
+    // lib.optionalAttrs (opt ? example) { example = substFunction opt.example; }
+    // lib.optionalAttrs (opt ? default) { default = substFunction opt.default; }
+    // lib.optionalAttrs (opt ? type) { type = substFunction opt.type; }
     // lib.optionalAttrs (opt ? relatedPackages && opt.relatedPackages != []) { relatedPackages = genRelatedPackages opt.relatedPackages opt.name; }
    );
 
@@ -79,6 +72,11 @@ let
   # Remove invisible and internal options.
   optionsListVisible = lib.filter (opt: opt.visible && !opt.internal) (lib.optionAttrSetToDocList options);
 
+  # Convert the list of options into an XML file.
+  # This file is *not* sorted sorted to save on eval time, since the docbook XML
+  # and the manpage depend on it and thus we evaluate this on every system rebuild.
+  optionsXML = builtins.toFile "options.xml" (builtins.toXML optionsList);
+
   optionsNix = builtins.listToAttrs (map (o: { name = o.name; value = removeAttrs o ["name" "visible" "internal"]; }) optionsList);
 
 in rec {
@@ -112,18 +110,7 @@ in rec {
       mkdir -p $out/nix-support
       echo "file json $dst/options.json" >> $out/nix-support/hydra-build-products
       echo "file json-br $dst/options.json.br" >> $out/nix-support/hydra-build-products
-    '';
-
-  # Convert options.json into an XML file.
-  # The actual generation of the xml file is done in nix purely for the convenience
-  # of not having to generate the xml some other way
-  optionsXML = pkgs.runCommand "options.xml" {} ''
-    ${pkgs.nix}/bin/nix-instantiate \
-      --store dummy:// \
-      --eval --xml --strict ${./optionsJSONtoXML.nix} \
-      --argstr file ${optionsJSON}/share/doc/nixos/options.json \
-      > "$out"
-  '';
+    ''; # */
 
   optionsDocBook = pkgs.runCommand "options-docbook.xml" {} ''
     optionsXML=${optionsXML}
