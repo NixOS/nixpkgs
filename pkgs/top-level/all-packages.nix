@@ -19202,6 +19202,8 @@ with pkgs;
 
   prime-server = callPackage ../development/libraries/prime-server { };
 
+  primecount = callPackage ../development/libraries/science/math/primecount { };
+
   primesieve = callPackage ../development/libraries/science/math/primesieve { };
 
   prison = callPackage ../development/libraries/prison { };
