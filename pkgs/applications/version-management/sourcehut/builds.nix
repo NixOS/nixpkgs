@@ -11,20 +11,20 @@
 , python
 }:
 let
-  version = "0.74.2";
+  version = "0.74.12";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "builds.sr.ht";
     rev = version;
-    sha256 = "sha256-vdVKaI42pA0dnyMXhQ4AEaDgTtKcrH6hc9L6PFcl6ZA=";
+    sha256 = "sha256-lGMfJqpAB5evwDrNWgeSmAEAlJ8lb2V/daCLD1VpxKg=";
   };
 
   buildWorker = src: buildGoModule {
     inherit src version;
     pname = "builds-sr-ht-worker";
 
-    vendorSha256 = "sha256-ZEarWM/33t+pNXUEIpfd/DkBkhu3UUg17Hh8XXWOepA=";
+    vendorSha256 = "sha256-Pf1M9a43eK4jr6QMi6kRHA8DodXQU0pqq9ua5VC3ER0=";
   };
 in
 buildPythonPackage rec {
