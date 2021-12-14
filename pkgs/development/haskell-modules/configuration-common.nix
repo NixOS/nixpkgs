@@ -977,6 +977,13 @@ self: super: {
   # dontCheck: use of non-standard strptime "%s" which musl doesn't support; only used in test
   unix-time = if pkgs.stdenv.hostPlatform.isMusl then dontCheck super.unix-time else super.unix-time;
 
+  # hslua has tests that appear to break when using musl.
+  # https://github.com/hslua/hslua/issues/106
+  # Note that hslua is currently version 1.3.  However, in the latest version
+  # (>= 2.0), hslua has been split into multiple packages and this override
+  # will likely need to be moved to the hslua-core package.
+  hslua = if pkgs.stdenv.hostPlatform.isMusl then dontCheck super.hslua else super.hslua;
+
   # The test suite runs for 20+ minutes on a very fast machine, which feels kinda disproportionate.
   prettyprinter = dontCheck super.prettyprinter;
   brittany = doJailbreak (dontCheck super.brittany);  # Outdated upperbound on ghc-exactprint: https://github.com/lspitzner/brittany/issues/342
