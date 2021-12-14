@@ -31477,6 +31477,8 @@ with pkgs;
   lapack-reference = callPackage ../development/libraries/science/math/liblapack { };
   liblapack = lapack-reference;
 
+  lapce = callPackage ../applications/editors/lapce { };
+
   libbraiding = callPackage ../development/libraries/science/math/libbraiding { };
 
   libhomfly = callPackage ../development/libraries/science/math/libhomfly { };
