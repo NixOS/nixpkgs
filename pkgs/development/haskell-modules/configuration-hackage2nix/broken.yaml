@@ -1688,7 +1688,6 @@ broken-packages:
   - git-cuk
   - git-date
   - gitdo
-  - github
   - github-backup
   - github-data
   - github-tools
@@ -3384,7 +3383,6 @@ broken-packages:
   - nix-freeze-tree
   - nixfromnpm
   - nixpkgs-update
-  - nix-thunk
   - nix-tools
   - nkjp
   - nlp-scores

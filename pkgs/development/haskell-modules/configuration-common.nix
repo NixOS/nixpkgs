@@ -1705,12 +1705,16 @@ self: super: {
   # Issue reported upstream, no bug tracker url yet.
   darcs = doJailbreak super.darcs;
 
-  # Too strict version bounds on base16-bytestring and http-link-header.
-  # This patch will be merged when next release comes.
-  github = appendPatch (pkgs.fetchpatch {
-    url = "https://github.com/phadej/github/commit/514b175851dd7c4a9722ff203dd6f652a15d33e8.patch";
-    sha256 = "0pmx54xd7ah85y9mfi5366wbnwrp918j0wbx8yw8hrdac92qi4gh";
-  }) super.github;
+  nix-thunk = appendPatches [
+    (pkgs.fetchpatch {
+      url = "https://github.com/obsidiansystems/nix-thunk/commit/49d27a85dd39cd9413c99958c67e596756a502b5.patch";
+      sha256 = "1p1n0123yrbdqyfk4kx3gq6bdv65l1bxgbsg51ckcwclg54xp2p5";
+    })
+    (pkgs.fetchpatch {
+      url = "https://github.com/obsidiansystems/nix-thunk/commit/512867c651977265d5d8f456b538f7a364ec8a8b.patch";
+      sha256 = "121yg26y4g28k8xv7y1j6c3pxm17vsjn3vi62kkc8g928c47yd02";
+    })
+  ] super.nix-thunk;
 
   # list `modbus` in librarySystemDepends, correct to `libmodbus`
   libmodbus = overrideCabal (drv: {
