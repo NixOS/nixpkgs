@@ -7463,6 +7463,8 @@ with pkgs;
 
   localtime = callPackage ../tools/system/localtime { };
 
+  log4j-scan = callPackage ../tools/security/log4j-scan { };
+
   logcheck = callPackage ../tools/system/logcheck { };
 
   logmein-hamachi = callPackage ../tools/networking/logmein-hamachi { };
