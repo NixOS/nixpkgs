@@ -100,7 +100,7 @@ let
       machine1.succeed("host redis.default.svc.cluster.local")
 
       # check dns inside the container
-      machine1.succeed("kubectl exec -ti probe -- /bin/host redis.default.svc.cluster.local")
+      machine1.succeed("kubectl exec probe -- /bin/host redis.default.svc.cluster.local")
     '';
   };
 
@@ -142,7 +142,7 @@ let
       machine2.succeed("host redis.default.svc.cluster.local")
 
       # check dns inside the container
-      machine1.succeed("kubectl exec -ti probe -- /bin/host redis.default.svc.cluster.local")
+      machine1.succeed("kubectl exec probe -- /bin/host redis.default.svc.cluster.local")
     '';
   };
 in {
