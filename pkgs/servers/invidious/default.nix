@@ -88,7 +88,11 @@ crystal.buildCrystalPackage rec {
     INVIDIOUS_CONFIG="database_url: sqlite3:///dev/null" $out/bin/invidious --help
   '';
 
-  passthru.tests = { inherit (nixosTests) invidious; };
+  passthru = {
+    inherit lsquic;
+    tests = { inherit (nixosTests) invidious; };
+    updateScript = ./update.sh;
+  };
 
   meta = with lib; {
     description = "An open source alternative front-end to YouTube";
