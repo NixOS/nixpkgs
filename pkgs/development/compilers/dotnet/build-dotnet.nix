@@ -12,6 +12,7 @@ assert builtins.elem type [ "aspnetcore" "runtime" "sdk"];
 , libuuid
 , zlib
 , curl
+, lttng-ust_2_12
 }:
 
 let
@@ -40,14 +41,17 @@ let
 in stdenv.mkDerivation rec {
   inherit pname version;
 
+  # Some of these dependencies are `dlopen()`ed.
   rpath = lib.makeLibraryPath [
+    stdenv.cc.cc
+    lttng-ust_2_12
+    zlib
+
     curl
     icu
     libunwind
     libuuid
     openssl
-    stdenv.cc.cc
-    zlib
   ];
 
   src = fetchurl {
@@ -73,7 +77,7 @@ in stdenv.mkDerivation rec {
     patchelf --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" $out/dotnet
     patchelf --set-rpath "${rpath}" $out/dotnet
     find $out -type f -name "*.so" -exec patchelf --set-rpath '$ORIGIN:${rpath}' {} \;
-    find $out -type f -name "apphost" -exec patchelf --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" --set-rpath '$ORIGIN:${rpath}' {} \;
+    find $out -type f \( -name "apphost" -or -name "createdump" \) -exec patchelf --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" --set-rpath '$ORIGIN:${rpath}' {} \;
   '';
 
   doInstallCheck = true;
