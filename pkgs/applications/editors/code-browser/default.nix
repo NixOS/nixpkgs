@@ -8,6 +8,8 @@
 , withGtk3 ? false, gtk3
 , mkDerivation ? stdenv.mkDerivation
 }:
+let onlyOneEnabled = xs: 1 == builtins.length (builtins.filter lib.id xs);
+in assert onlyOneEnabled [ withQt withGtk2 withGtk3 ];
 mkDerivation rec {
   pname = "code-browser";
   version = "8.0";
