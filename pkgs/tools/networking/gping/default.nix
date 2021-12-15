@@ -2,6 +2,7 @@
 , stdenv
 , rustPlatform
 , fetchFromGitHub
+, fetchpatch
 , libiconv
 }:
 
@@ -17,6 +18,13 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "sha256-xEASs6r5zxYJXS+at6aX5n0whGp5qwuNwq6Jh0GM+/4=";
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/orf/gping/commit/b843beb9617e4b7b98d4f6d3942067cad59c9d60.patch";
+      sha256 = "sha256-9DIeeweCuGqymvUj4EBct82XVevkFSbHWaV76ExjGbs=";
+    })
+  ];
 
   buildInputs = lib.optional stdenv.isDarwin libiconv;
 

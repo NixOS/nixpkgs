@@ -2040,6 +2040,17 @@ Superuser created successfully.
           hydrus manual</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <literal>pkgs.emacsPackages.orgPackages</literal> is removed
+          because org elpa is deprecated. The packages in the top level
+          of <literal>pkgs.emacsPackages</literal>, such as org and
+          org-contrib, refer to the ones in
+          <literal>pkgs.emacsPackages.elpaPackages</literal> and
+          <literal>pkgs.emacsPackages.nongnuPackages</literal> where the
+          new versions will release.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>
