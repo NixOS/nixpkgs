@@ -37,13 +37,13 @@ buildType = if stdenv.isDarwin then
 
 edk2 = buildStdenv.mkDerivation {
   pname = "edk2";
-  version = "202102";
+  version = "202108";
 
   # submodules
   src = fetchgit {
     url = "https://github.com/tianocore/edk2";
     rev = "edk2-stable${edk2.version}";
-    sha256 = "1292hfbqz4wyikdf6glqdy80n9zpy54gnfngqnyv05908hww6h82";
+    sha256 = "1ps244f7y43afxxw6z95xscy24f9mpp8g0mfn90rd4229f193ba2";
   };
 
   buildInputs = [ libuuid pythonEnv ];
