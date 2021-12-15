@@ -52,7 +52,7 @@ in rec {
   };
 
   unifi6 = generic {
-    version = "6.5.54";
-    sha256 = "sha256-M2gYqKZi0czFgfWx0tTW43b+aUVqS6Mg+misRB9/Fes=";
+    version = "6.5.55";
+    sha256 = "sha256-NUGRO+f6JzWvYPwiitZsgp+LQwnGSncnost03mgNVxA=";
   };
 }
