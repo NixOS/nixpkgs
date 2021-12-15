@@ -31570,6 +31570,8 @@ with pkgs;
   sage = callPackage ../applications/science/math/sage { };
   sageWithDoc = sage.override { withDoc = true; };
 
+  subread = callPackage ../applications/science/biology/subread { };
+
   suitesparse_4_2 = callPackage ../development/libraries/science/math/suitesparse/4.2.nix { };
   suitesparse_4_4 = callPackage ../development/libraries/science/math/suitesparse/4.4.nix {};
   suitesparse_5_3 = callPackage ../development/libraries/science/math/suitesparse {};
