@@ -11,25 +11,22 @@
 , libiconv
 }:
 
-# Note for maintainers: use ./update-influxdb2.sh to update the Yarn
-# dependencies nix expression.
-
 let
-  version = "2.0.8";
-  shorthash = "e91d41810f"; # git rev-parse HEAD with 2.0.8 checked out
-  libflux_version = "0.124.0";
+  version = "2.1.1";
+  shorthash = "657e1839de"; # git rev-parse --short HEAD with the release checked out
+  libflux_version = "0.139.0";
 
   src = fetchFromGitHub {
     owner = "influxdata";
     repo = "influxdb";
     rev = "v${version}";
-    sha256 = "0hbinnja13xr9ziyynjsnsbrxmyrvag7xdgfwq2ya28g07lw5wgq";
+    sha256 = "sha256-wf01DhB1ampZuWPkHUEOf3KJK4GjeOAPL3LG2+g4NGY=";
   };
 
   ui = fetchurl {
-    url = "https://github.com/influxdata/ui/releases/download/OSS-v${version}/build.tar.gz";
-    # https://github.com/influxdata/ui/releases/download/OSS-v${version}/sha256.txt
-    sha256 = "94965ae999a1098c26128141fbb849be3da9a723d509118eb6e0db4384ee01fc";
+    url = "https://github.com/influxdata/ui/releases/download/OSS-${version}/build.tar.gz";
+    # https://github.com/influxdata/ui/releases/download/OSS-${version}/sha256.txt
+    sha256 = "25ec479b257545bbea5c2191301e6de36ee3f0fa02078de02b05735ebc3cd93b";
   };
 
   flux = rustPlatform.buildRustPackage {
@@ -39,10 +36,10 @@ let
       owner = "influxdata";
       repo = "flux";
       rev = "v${libflux_version}";
-      sha256 = "1g1qilfzxqbbjbfvgkf7k7spcnhzvlmrqacpqdl05418ywkp3v29";
+      sha256 = "sha256-cELeWZXGVLFoPYfBoBP8NeLBVFIb5o+lWyto42BLyXY=";
     };
     sourceRoot = "source/libflux";
-    cargoSha256 = "0farcjwnwwgfvcgbs5r6vsdrsiwq2mp82sjxkqb1pzqfls4ixcxj";
+    cargoSha256 = "sha256-wFgawxgqZqoPnOXJD3r5t2n7Y2bTAkBbBxeBtFEF7N4=";
     nativeBuildInputs = [ llvmPackages.libclang ];
     buildInputs = lib.optional stdenv.isDarwin libiconv;
     LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
@@ -70,8 +67,8 @@ in buildGoModule {
 
   nativeBuildInputs = [ go-bindata pkg-config ];
 
-  vendorSha256 = "1kar88vlm6px7smlnajpyf8qx6d481xk979qafpfb1xy8931781m";
-  subPackages = [ "cmd/influxd" "cmd/influx" ];
+  vendorSha256 = "sha256-96cENiUcoazQyss6ocYzY9NmUpzzU3s+fAf3AHyLYEg=";
+  subPackages = [ "cmd/influxd" "cmd/telemetryd" ];
 
   PKG_CONFIG_PATH = "${flux}/pkgconfig";
   # We have to run a bunch of go:generate commands to embed the UI
@@ -80,6 +77,7 @@ in buildGoModule {
   # the relevant go:generate directives, and run them by hand without
   # breaking hermeticity.
   preBuild = ''
+    mkdir -p static/data
     tar -xzf ${ui} -C static/data
 
     grep -RI -e 'go:generate.*go-bindata' | cut -f1 -d: | while read -r filename; do
