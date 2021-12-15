@@ -1799,6 +1799,8 @@ with pkgs;
 
   gomatrix = callPackage ../applications/misc/gomatrix { };
 
+  gomapenum = callPackage ../tools/security/gomapenum { };
+
   gopacked = callPackage ../applications/misc/gopacked { };
 
   gucci = callPackage ../tools/text/gucci { };
@@ -7467,6 +7469,8 @@ with pkgs;
   linuxquota = callPackage ../tools/misc/linuxquota { };
 
   liquidctl = with python3Packages; toPythonApplication liquidctl;
+
+  lmp = callPackage ../tools/security/lmp { };
 
   localtime = callPackage ../tools/system/localtime { };
 
