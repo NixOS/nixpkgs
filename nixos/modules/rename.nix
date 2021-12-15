@@ -80,6 +80,9 @@ with lib;
       libinput and synaptics.
     '')
     (mkRemovedOptionModule [ "virtualisation" "rkt" ] "The rkt module has been removed, it was archived by upstream")
+    (mkRemovedOptionModule [ "services" "racoon" ] ''
+      The racoon module has been removed, because the software project was abandoned upstream.
+    '')
 
     # Do NOT add any option renames here, see top of the file
   ];
