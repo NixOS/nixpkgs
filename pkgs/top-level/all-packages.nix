@@ -9092,13 +9092,7 @@ with pkgs;
 
   qprint = callPackage ../tools/text/qprint { };
 
-  qscintilla = if stdenv.isDarwin then
-    callPackage ../development/libraries/qscintilla {
-      inherit (qt5) qmake qtbase qtmacextras;
-  } else
-    callPackage ../development/libraries/qscintilla {
-      inherit (qt5) qmake qtbase;
-  };
+  qscintilla = libsForQt5.callPackage ../development/libraries/qscintilla { };
 
   qscintilla-qt4 = callPackage ../development/libraries/qscintilla-qt4 { };
 
@@ -19500,17 +19494,17 @@ with pkgs;
     });
 
   libsForQt512 = recurseIntoAttrs (import ./qt5-packages.nix {
-    inherit lib pkgs;
+    inherit lib pkgs stdenv;
     qt5 = qt512;
   });
 
   libsForQt514 = recurseIntoAttrs (import ./qt5-packages.nix {
-    inherit lib pkgs;
+    inherit lib pkgs stdenv;
     qt5 = qt514;
   });
 
   libsForQt515 = recurseIntoAttrs (import ./qt5-packages.nix {
-    inherit lib pkgs;
+    inherit lib pkgs stdenv;
     qt5 = qt515;
   });
 

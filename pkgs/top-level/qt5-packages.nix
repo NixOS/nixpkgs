@@ -9,6 +9,7 @@
 { lib
 , pkgs
 , qt5
+, stdenv
 }:
 
 (lib.makeScope pkgs.newScope ( self:
@@ -190,8 +191,12 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
 
   qoauth = callPackage ../development/libraries/qoauth { };
 
-  qscintilla = callPackage ../development/libraries/qscintilla {
-    withQt5 = true;
+  qscintilla = if stdenv.isDarwin then
+    callPackage ../development/libraries/qscintilla {
+      inherit (qt5) qmake qtbase qtmacextras;
+  } else
+    callPackage ../development/libraries/qscintilla {
+      inherit (qt5) qmake qtbase;
   };
 
   qt5ct = callPackage ../tools/misc/qt5ct { };
