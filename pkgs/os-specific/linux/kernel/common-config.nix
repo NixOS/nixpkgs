@@ -876,6 +876,12 @@ let
 
       SCHED_CORE = whenAtLeast "5.14" yes;
 
+      ASHMEM =                 { optional = true; tristate = whenAtLeast "5.0" "y";};
+      ANDROID =                { optional = true; tristate = whenAtLeast "5.0" "y";};
+      ANDROID_BINDER_IPC =     { optional = true; tristate = whenAtLeast "5.0" "y";};
+      ANDROID_BINDERFS =       { optional = true; tristate = whenAtLeast "5.0" "y";};
+      ANDROID_BINDER_DEVICES = { optional = true; freeform = whenAtLeast "5.0" "binder,hwbinder,vndbinder";};
+
     } // optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "aarch64-linux") {
       # Enable CPU/memory hotplug support
       # Allows you to dynamically add & remove CPUs/memory to a VM client running NixOS without requiring a reboot
