@@ -16164,6 +16164,8 @@ with pkgs;
 
   dssi = callPackage ../development/libraries/dssi {};
 
+  dolfin = callPackage ../development/libraries/dolfin {};
+
   duckdb = callPackage ../development/libraries/duckdb {};
 
   duckstation = libsForQt5.callPackage ../misc/emulators/duckstation {};

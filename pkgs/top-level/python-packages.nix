@@ -2094,6 +2094,8 @@ in {
 
   digi-xbee = callPackage ../development/python-modules/digi-xbee { };
 
+  dijitso = callPackage ../development/python-modules/dijitso { };
+
   dill = callPackage ../development/python-modules/dill { };
 
   dingz = callPackage ../development/python-modules/dingz { };
@@ -2734,14 +2736,15 @@ in {
 
   feedparser = callPackage ../development/python-modules/feedparser { };
 
-  fenics = callPackage ../development/libraries/science/math/fenics {
-    pytest = self.pytest_4;
-    hdf5 = pkgs.hdf5_1_10;
-  };
+  fenics = callPackage ../development/python-modules/fenics { };
+
+  ffc = callPackage ../development/python-modules/ffc { };
 
   ffmpeg-python = callPackage ../development/python-modules/ffmpeg-python { };
 
   ffmpeg-progress-yield = callPackage ../development/python-modules/ffmpeg-progress-yield { };
+
+  fiat = callPackage ../development/python-modules/fiat { };
 
   fido2 = callPackage ../development/python-modules/fido2 { };
 
@@ -9793,6 +9796,8 @@ in {
   ueberzug = callPackage ../development/python-modules/ueberzug {
     inherit (pkgs.xorg) libX11 libXext;
   };
+
+  ufl = callPackage ../development/python-modules/ufl { };
 
   ufonormalizer = callPackage ../development/python-modules/ufonormalizer { };
 
