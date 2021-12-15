@@ -40,9 +40,8 @@ let
 
             services = {
 
-              journalbeat = let lt6 = builtins.compareVersions
-                                        elk.journalbeat.version "6" < 0; in {
-                enable = true;
+              journalbeat = {
+                enable = elk ? journalbeat;
                 package = elk.journalbeat;
                 extraConfig = pkgs.lib.mkOptionDefault (''
                   logging:
@@ -51,8 +50,6 @@ let
                     metrics.enabled: false
                   output.elasticsearch:
                     hosts: [ "127.0.0.1:9200" ]
-                    ${pkgs.lib.optionalString lt6 "template.enabled: false"}
-                '' + pkgs.lib.optionalString (!lt6) ''
                   journalbeat.inputs:
                   - paths: []
                     seek: cursor
@@ -202,6 +199,7 @@ let
           one.wait_until_succeeds(total_hits("flowers") + " | grep -v 0")
           one.wait_until_succeeds(total_hits("dragons") + " | grep 0")
 
+    '' + lib.optionalString (elk ? journalbeat) ''
       with subtest(
           "A message logged to the journal is ingested by elasticsearch via journalbeat"
       ):
@@ -210,7 +208,7 @@ let
           one.wait_until_succeeds(
               total_hits("Supercalifragilisticexpialidocious") + " | grep -v 0"
           )
-
+    '' + ''
       with subtest("Elasticsearch-curator works"):
           one.systemctl("stop logstash")
           one.systemctl("start elasticsearch-curator")
@@ -235,7 +233,6 @@ in {
   #   elasticsearch = pkgs.elasticsearch7-oss;
   #   logstash      = pkgs.logstash7-oss;
   #   kibana        = pkgs.kibana7-oss;
-  #   journalbeat   = pkgs.journalbeat7;
   #   metricbeat    = pkgs.metricbeat7;
   # };
   unfree = lib.dontRecurseIntoAttrs {
@@ -250,7 +247,6 @@ in {
       elasticsearch = pkgs.elasticsearch7;
       logstash      = pkgs.logstash7;
       kibana        = pkgs.kibana7;
-      journalbeat   = pkgs.journalbeat7;
       metricbeat    = pkgs.metricbeat7;
     };
   };
