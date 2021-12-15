@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "vehicle";
-  version = "0.2.2";
+  version = "0.3.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "frenck";
     repo = "python-vehicle";
     rev = "v${version}";
-    sha256 = "sha256-3DkfS8gx3C1/Vj8+IE7uxZ5i0cKJk0mJpBWQqAgb2Xo=";
+    sha256 = "0blpyh246l16bn6jy8ifym2br13k8qxagggbwpzwrwfxkb3kdz5x";
   };
 
   nativeBuildInputs = [
