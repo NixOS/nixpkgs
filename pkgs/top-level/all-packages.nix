@@ -7194,6 +7194,8 @@ with pkgs;
 
   nkeys = callPackage ../tools/system/nkeys { };
 
+  nkdfu = with pythonPackages; toPythonApplication nkdfu;
+
   nyxt = callPackage ../applications/networking/browsers/nyxt { };
 
   nfpm = callPackage ../tools/package-management/nfpm { };
