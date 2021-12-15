@@ -30,10 +30,10 @@ rec {
   production = legacy_470;
 
   beta = generic {
-    version = "495.29.05";
-    sha256_64bit = "sha256-9yVLl9QAxpJQR5ZJb059j2TpOx4xxCeGCk8hmhhvEl4=";
-    settingsSha256 = "sha256-dcEI+3bxSTwVbHcR6IgvIUFt4vWtK5T4NMGVhmmeVJ0=";
-    persistencedSha256 = "sha256-OT/hOXEPatc6pAKrxDe0jsmaDFCtVXAbdW4elKe6xE8=";
+    version = "495.46";
+    sha256_64bit = "sha256-2Dt30X2gxUZnqlsT1uqVpcUTBCV7Hs8vjUo7WuMcYvU=";
+    settingsSha256 = "sha256-vbcZYn+UBBGwjfrJ6SyXt3+JLBeNcXK4h8mjj7qxZPk=";
+    persistencedSha256 = "sha256-ieYqkVxe26cLw1LUgBsFSSowAyfZkTcItIzQCestCXI=";
   };
 
   # Vulkan developer beta driver
