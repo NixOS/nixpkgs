@@ -19,11 +19,11 @@ let
   }.${lib.versions.majorMinor php.version} or (throw "Unsupported PHP version.");
 in stdenv.mkDerivation rec {
   pname = "php-blackfire";
-  version = "1.71.0";
+  version = "1.72.0";
 
   src = fetchurl {
     url = "https://packages.blackfire.io/debian/pool/any/main/b/blackfire-php/blackfire-php_${version}_amd64.deb";
-    sha256 = "8LsYkzNy98qQ9niXrRCkL47Ouyd33ZICnSXx29WIWl4=";
+    sha256 = "FczlRevMn3VGCW+mtIqjGMNZKjsqzCGW3DQLQG7dJ8c=";
   };
 
   nativeBuildInputs = [
