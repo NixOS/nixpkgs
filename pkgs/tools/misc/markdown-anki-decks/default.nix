@@ -40,7 +40,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Simple program to convert markdown files into anki decks";
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [ ];
     homepage = "https://github.com/lukesmurray/markdown-anki-decks";
     license = licenses.mit;
     platforms = platforms.unix;

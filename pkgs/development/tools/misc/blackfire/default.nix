@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     description = "Blackfire Profiler agent and client";
     homepage = "https://blackfire.io/";
     license = licenses.unfree;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [ ];
     platforms = [ "x86_64-linux" ];
   };
 }

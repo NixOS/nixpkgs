@@ -36,7 +36,7 @@ stdenv.mkDerivation {
     description = "Inkscape extension which removes all matrix transforms by applying them recursively to shapes";
     homepage = "https://github.com/Klowner/inkscape-applytransforms";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.all;
   };
 }

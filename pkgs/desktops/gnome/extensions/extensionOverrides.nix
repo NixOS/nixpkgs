@@ -22,7 +22,7 @@ super: lib.trivial.pipe super [
   }))
 
   (patchExtension "dash-to-dock@micxgx.gmail.com" (old: {
-    meta.maintainers = with lib.maintainers; [ eperuffo jtojnar rhoriguchi ];
+    meta.maintainers = with lib.maintainers; [ eperuffo rhoriguchi ];
   }))
 
   (patchExtension "display-brightness-ddcutil@themightydeity.github.com" (old: {

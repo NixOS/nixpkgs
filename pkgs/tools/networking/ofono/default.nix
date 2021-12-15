@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     description = "Infrastructure for building mobile telephony (GSM/UMTS) applications";
     homepage = "https://01.org/ofono";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }
