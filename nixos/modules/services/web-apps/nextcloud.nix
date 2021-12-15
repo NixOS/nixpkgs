@@ -251,6 +251,23 @@ in {
       '';
     };
 
+    database = {
+
+      createLocally = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Create the database and database user locally. Only available for
+          mysql database.
+          Note that this option will use the latest version of MariaDB which
+          is not officially supported by Nextcloud. As for now a workaround
+          is used to also support MariaDB version >= 10.6.
+        '';
+      };
+
+    };
+
+
     config = {
       dbtype = mkOption {
         type = types.enum [ "sqlite" "pgsql" "mysql" ];
@@ -583,6 +600,12 @@ in {
         else pkgs.php80;
     }
 
+    { assertions = [
+      { assertion = cfg.database.createLocally -> cfg.config.dbtype == "mysql";
+        message = ''services.nextcloud.config.dbtype must be set to mysql if services.nextcloud.database.createLocally is set to true.'';
+      }
+    ]; }
+
     { systemd.timers.nextcloud-cron = {
         wantedBy = [ "timers.target" ];
         timerConfig.OnBootSec = "5m";
@@ -810,6 +833,32 @@ in {
       users.groups.nextcloud.members = [ "nextcloud" config.services.nginx.user ];
 
       environment.systemPackages = [ occ ];
+
+      services.mysql = lib.mkIf cfg.database.createLocally {
+        enable = true;
+        package = lib.mkDefault pkgs.mariadb;
+        ensureDatabases = [ cfg.config.dbname ];
+        ensureUsers = [{
+          name = cfg.config.dbuser;
+          ensurePermissions = { "${cfg.config.dbname}.*" = "ALL PRIVILEGES"; };
+        }];
+        # FIXME(@Ma27) Nextcloud isn't compatible with mariadb 10.6,
+        # this is a workaround.
+        # See https://help.nextcloud.com/t/update-to-next-cloud-21-0-2-has-get-an-error/117028/22
+        settings = {
+          mysqld = {
+            innodb_read_only_compressed = 0;
+          };
+        };
+        initialScript = pkgs.writeText "mysql-init" ''
+          CREATE USER '${cfg.config.dbname}'@'localhost' IDENTIFIED BY '${builtins.readFile( cfg.config.dbpassFile )}';
+          CREATE DATABASE IF NOT EXISTS ${cfg.config.dbname};
+          GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX, ALTER,
+            CREATE TEMPORARY TABLES ON ${cfg.config.dbname}.* TO '${cfg.config.dbuser}'@'localhost'
+            IDENTIFIED BY '${builtins.readFile( cfg.config.dbpassFile )}';
+          FLUSH privileges;
+        '';
+      };
 
       services.nginx.enable = mkDefault true;
 
