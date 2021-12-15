@@ -103,7 +103,22 @@ let
     #        ],
     #     )
     #
-    [ bash coreutils findutils gawk gnugrep gnutar gnused gzip which unzip file zip python27 python3 ];
+    [
+      bash
+      coreutils
+      file
+      findutils
+      gawk
+      gnugrep
+      gnused
+      gnutar
+      gzip
+      python27
+      python3
+      unzip
+      which
+      zip
+    ];
 
   # Java toolchain used for the build and tests
   javaToolchain = "@bazel_tools//tools/jdk:toolchain_${buildJdkName}";
@@ -516,12 +531,13 @@ stdenv.mkDerivation rec {
   # when a command can’t be found in a bazel build, you might also
   # need to add it to `defaultShellPath`.
   nativeBuildInputs = [
+    coreutils
     installShellFiles
-    zip
+    makeWrapper
     python3
     unzip
-    makeWrapper
     which
+    zip
   ] ++ lib.optionals (stdenv.isDarwin) [ cctools libcxx CoreFoundation CoreServices Foundation ];
 
   # Bazel makes extensive use of symlinks in the WORKSPACE.
