@@ -56,6 +56,23 @@ let
                 '');
               };
 
+              filebeat = {
+                enable = elk ? filebeat;
+                package = elk.filebeat;
+                inputs.journald.id = "everything";
+
+                inputs.log = {
+                  enabled = true;
+                  paths = [
+                    "/var/lib/filebeat/test"
+                  ];
+                };
+
+                settings = {
+                  logging.level = "info";
+                };
+              };
+
               metricbeat = {
                 enable = true;
                 package = elk.metricbeat;
@@ -226,12 +243,27 @@ let
           one.wait_until_succeeds(
               expect_hits("Supercalifragilisticexpialidocious")
           )
+    '' + lib.optionalString (elk ? filebeat) ''
+      with subtest(
+          "A message logged to the journal is ingested by elasticsearch via filebeat"
+      ):
+          one.wait_for_unit("filebeat.service")
+          one.execute("echo 'Superdupercalifragilisticexpialidocious' | systemd-cat")
+          one.wait_until_succeeds(
+              expect_hits("Superdupercalifragilisticexpialidocious")
+          )
+          one.execute(
+              "echo 'SuperdupercalifragilisticexpialidociousIndeed' >> /var/lib/filebeat/test"
+          )
+          one.wait_until_succeeds(
+              expect_hits("SuperdupercalifragilisticexpialidociousIndeed")
+          )
     '' + ''
       with subtest("Elasticsearch-curator works"):
           one.systemctl("stop logstash")
           one.systemctl("start elasticsearch-curator")
           one.wait_until_succeeds(
-              '! curl --silent --show-error "${esUrl}/_cat/indices" | grep logstash | grep ^'
+              '! curl --silent --show-error --fail-with-body "${esUrl}/_cat/indices" | grep logstash | grep ^'
           )
     '';
   }) { inherit pkgs system; };
@@ -251,6 +283,7 @@ in {
   #   elasticsearch = pkgs.elasticsearch7-oss;
   #   logstash      = pkgs.logstash7-oss;
   #   kibana        = pkgs.kibana7-oss;
+  #   filebeat      = pkgs.filebeat7;
   #   metricbeat    = pkgs.metricbeat7;
   # };
   unfree = lib.dontRecurseIntoAttrs {
@@ -265,6 +298,7 @@ in {
       elasticsearch = pkgs.elasticsearch7;
       logstash      = pkgs.logstash7;
       kibana        = pkgs.kibana7;
+      filebeat      = pkgs.filebeat7;
       metricbeat    = pkgs.metricbeat7;
     };
   };
