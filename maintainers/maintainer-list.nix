@@ -9044,6 +9044,12 @@
     githubId = 116740;
     name = "Paweł Pacana";
   };
+  pb- = {
+    email = "pbaecher@gmail.com";
+    github = "pb-";
+    githubId = 84886;
+    name = "Paul Baecher";
+  };
   pbogdan = {
     email = "ppbogdan@gmail.com";
     github = "pbogdan";
