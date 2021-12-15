@@ -96,12 +96,22 @@ let
       "darwin" = defaultSets;
     }.${configName} or setsForVersion;
 
-  # evaluate a configuration and only return the attributes changed by it
+  # attribute set that has all the attributes of haskellPackages set to null
+  availableHaskellPackages = builtins.listToAttrs (
+    builtins.map (attr: lib.nameValuePair attr null) (
+      builtins.attrNames pkgs.haskellPackages
+    )
+  );
+
+  # evaluate a configuration and only return the attributes changed by it,
+  # pass availableHaskellPackages as super in case intersectAttrs is used
   overriddenAttrs = fileName: builtins.attrNames (
-    import (nixpkgsPath + "/pkgs/development/haskell-modules/${fileName}") {
-      haskellLib = pkgs.haskell.lib.compose;
-      inherit pkgs;
-    } {} {}
+    lib.fix (self:
+      import (nixpkgsPath + "/pkgs/development/haskell-modules/${fileName}") {
+        haskellLib = pkgs.haskell.lib.compose;
+        inherit pkgs;
+      } self availableHaskellPackages
+    )
   );
 
   # list of derivations that are affected by overrides in the given configuration
