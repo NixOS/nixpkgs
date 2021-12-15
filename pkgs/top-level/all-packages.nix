@@ -7467,6 +7467,8 @@ with pkgs;
 
   log4jcheck = callPackage ../tools/security/log4jcheck { };
 
+  log4shell-detector = callPackage ../tools/security/log4shell-detector { };
+
   logcheck = callPackage ../tools/system/logcheck { };
 
   logmein-hamachi = callPackage ../tools/networking/logmein-hamachi { };
