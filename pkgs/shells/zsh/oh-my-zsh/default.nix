@@ -7,13 +7,13 @@
 stdenv.mkDerivation rec {
   version = "2021-12-13";
   pname = "oh-my-zsh";
-  rev = "9a3d853481645ae0f961e9cc8421fc5d84e2c3c3";
+  rev = "5403db85998ff0c087bc97d972e1e76551127b7e";
 
   src = fetchFromGitHub {
     inherit rev;
     owner = "ohmyzsh";
     repo = "ohmyzsh";
-    sha256 = "TFktV7xBm3KaRfW+cUGdwIZZD7TfU0gaq4J8cKBjtMM=";
+    sha256 = "xv/qruRy96omAaboedcG6+KTkR3CkaFDgw/agihTCNs=";
   };
 
   installPhase = ''
