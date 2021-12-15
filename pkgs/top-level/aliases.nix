@@ -951,6 +951,7 @@ mapAliases ({
   seg3d = throw "seg3d has been removed from nixpkgs (2019-11-10)";
   sepolgen = throw "sepolgen was merged into selinux-python"; # added 2021-11-11
   shared_mime_info = shared-mime-info; # added 2018-02-25
+  shellinabox = throw "shellinabox has been removed from nixpkgs, as it was unmaintained upstream"; # added 2021-12-15
   sickbeard = throw "sickbeard has been removed from nixpkgs, as it was unmaintained."; # added 2022-01-01
   sickrage = throw "sickbeard has been removed from nixpkgs, as it was unmaintained."; # added 2022-01-01
   sigurlx = throw "sigurlx has been removed (upstream is gone)"; # added 2022-01-24

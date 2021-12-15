@@ -9642,10 +9642,6 @@ with pkgs;
 
   shout = nodePackages.shout;
 
-  shellinabox = callPackage ../servers/shellinabox {
-    openssl = openssl_1_0_2;
-  };
-
   shrikhand = callPackage ../data/fonts/shrikhand { };
 
   shunit2 = callPackage ../tools/misc/shunit2 { };
