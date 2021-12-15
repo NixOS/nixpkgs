@@ -98,7 +98,10 @@ let
   # overlays. For common, nix, darwin etc. only the derivation from the default
   # package set will be emitted.
   packages = builtins.filter (v:
-    v != null && (skipEvalErrors -> (builtins.tryEval (v.outPath or v)).success)
+    lib.warnIf (v.meta.broken or false) "${v.pname} is marked as broken" (
+      v != null
+      && (skipEvalErrors -> (builtins.tryEval (v.outPath or v)).success)
+    )
   ) (
     lib.concatMap (fileName:
       let
