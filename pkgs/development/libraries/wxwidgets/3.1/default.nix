@@ -23,6 +23,7 @@
 , withWebKit ? false
 , webkitgtk ? null
 , AGL ? null
+, AVFoundation ? null
 , Carbon ? null
 , Cocoa ? null
 , Kernel ? null
@@ -60,7 +61,7 @@ stdenv.mkDerivation rec {
   ++ optional (!withGtk2) gtk3
   ++ optional withMesa libGLU
   ++ optional (withWebKit && !stdenv.isDarwin) webkitgtk # Disable webkitgtk on darwin pending #126101
-  ++ optionals stdenv.isDarwin [ setfile Carbon Cocoa Kernel QTKit ];
+  ++ optionals stdenv.isDarwin [ setfile AVFoundation Carbon Cocoa Kernel QTKit ];
 
   nativeBuildInputs = [ pkg-config ];
 

@@ -8,7 +8,7 @@
 , compat24 ? false, compat26 ? true, unicode ? true
 , withGtk2 ? true
 , withWebKit ? !stdenv.isDarwin, webkitgtk  # Disable webkitgtk on darwin pending #126101
-, AGL, Carbon, Cocoa, Kernel, QTKit
+, AGL, AVFoundation, Carbon, Cocoa, Kernel, QTKit
 }:
 
 with lib;
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     ++ optional (!withGtk2) gtk3
     ++ optional withMesa libGLU
     ++ optional withWebKit webkitgtk
-    ++ optionals stdenv.isDarwin [ setfile Carbon Cocoa Kernel QTKit ];
+    ++ optionals stdenv.isDarwin [ setfile AVFoundation Carbon Cocoa Kernel QTKit ];
 
   propagatedBuildInputs = optional stdenv.isDarwin AGL;
 
