@@ -109,19 +109,6 @@ stdenv.mkDerivation rec {
       --replace /usr/include/linux/magic.h ${linuxHeaders}/include/linux/magic.h
   '';
 
-  # audacity only looks for ffmpeg at runtime, so we need to link it in manually
-  NIX_LDFLAGS = toString [
-    "-lavcodec"
-    "-lavdevice"
-    "-lavfilter"
-    "-lavformat"
-    "-lavresample"
-    "-lavutil"
-    "-lpostproc"
-    "-lswresample"
-    "-lswscale"
-  ];
-
   nativeBuildInputs = [
     cmake
     gettext
@@ -173,6 +160,11 @@ stdenv.mkDerivation rec {
     Cocoa
     CoreAudioKit
     AudioUnit AudioToolbox CoreAudio CoreServices Carbon # for portaudio
+  ];
+
+  cmakeFlags = [
+    "-Daudacity_use_ffmpeg=linked"
+    "-DDISABLE_DYNAMIC_LOADING_FFMPEG=ON"
   ];
 
   doCheck = false; # Test fails
