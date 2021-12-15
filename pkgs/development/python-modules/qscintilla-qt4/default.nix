@@ -10,7 +10,6 @@
 
 disabledIf (isPy3k || isPyPy)
   (buildPythonPackage {
-    # TODO: Qt5 support
     pname = "qscintilla";
     version = pkgs.qscintilla.version;
     format = "other";
@@ -38,6 +37,6 @@ disabledIf (isPy3k || isPyPy)
       description = "A Python binding to QScintilla, Qt based text editing control";
       license = licenses.lgpl21Plus;
       maintainers = with maintainers; [ danbst ];
-      platforms = platforms.unix;
+      platforms = platforms.linux;
     };
   })

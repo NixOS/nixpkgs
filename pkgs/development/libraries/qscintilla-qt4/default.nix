@@ -1,11 +1,8 @@
-{ stdenv, lib, fetchurl, unzip
-, qt4 ? null, qmake4Hook ? null
-, withQt5 ? false, qtbase ? null, qtmacextras ? null, qmake ? null
-, fixDarwinDylibNames
+{ stdenv, lib, fetchurl, unzip, qt4, qmake4Hook
 }:
 
 let
-  pname = "qscintilla-qt${if withQt5 then "5" else "4"}";
+  pname = "qscintilla-qt4";
   version = "2.11.6";
 
 in stdenv.mkDerivation rec {
@@ -18,15 +15,11 @@ in stdenv.mkDerivation rec {
 
   sourceRoot = "QScintilla-${version}/Qt4Qt5";
 
-  buildInputs = [ (if withQt5 then qtbase else qt4) ];
+  buildInputs = [ qt4 ];
 
-  propagatedBuildInputs = lib.optional (withQt5 && stdenv.isDarwin) qtmacextras;
+  nativeBuildInputs = [ unzip qmake4Hook ];
 
-  nativeBuildInputs = [ unzip ]
-    ++ (if withQt5 then [ qmake ] else [ qmake4Hook ])
-    ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
-
-  patches = lib.optional (!withQt5) ./fix-qt4-build.patch;
+  patches = ./fix-qt4-build.patch;
 
   # Make sure that libqscintilla2.so is available in $out/lib since it is expected
   # by some packages such as sqlitebrowser
@@ -43,7 +36,7 @@ in stdenv.mkDerivation rec {
       --replace '$$[QT_INSTALL_TRANSLATIONS]' $out/translations \
       --replace '$$[QT_HOST_DATA]/mkspecs'    $out/mkspecs \
       --replace '$$[QT_INSTALL_DATA]/mkspecs' $out/mkspecs \
-      --replace '$$[QT_INSTALL_DATA]'         $out/share${lib.optionalString (! withQt5) "/qt"}
+      --replace '$$[QT_INSTALL_DATA]'         $out/share
   '';
 
   meta = with lib; {
@@ -65,6 +58,6 @@ in stdenv.mkDerivation rec {
     homepage = "https://www.riverbankcomputing.com/software/qscintilla/intro";
     license = with licenses; [ gpl3 ]; # and commercial
     maintainers = with maintainers; [ peterhoeg ];
-    platforms = platforms.unix;
+    platforms = platforms.linux;
   };
 }
