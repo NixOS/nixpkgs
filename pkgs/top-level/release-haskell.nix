@@ -310,7 +310,7 @@ let
       cabal2nix-unstable = released ++ [ compilerNames.ghc921 ];
       funcmp = released ++ [ compilerNames.ghc921 ];
       haskell-language-server = released;
-      hoogle = released;
+      hoogle = released ++ [ compilerNames.ghc921 ];
       hsdns = released ++ [ compilerNames.ghc921 ];
       jailbreak-cabal = released ++ [ compilerNames.ghc921 ];
       language-nix = released ++ [ compilerNames.ghc921 ];

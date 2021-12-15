@@ -214,4 +214,7 @@ self: super: {
     ghc-lib-parser = self.ghc-lib-parser_9_2_1_20211101;
     ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_2_0_1;
   });
+
+  # https://github.com/sjakobi/bsb-http-chunked/issues/38
+  bsb-http-chunked = dontCheck super.bsb-http-chunked;
 }
