@@ -14946,6 +14946,8 @@ with pkgs;
 
   lttng-ust = callPackage ../development/tools/misc/lttng-ust { };
 
+  lttng-ust_2_12 = callPackage ../development/tools/misc/lttng-ust/2.12.nix { };
+
   lttv = callPackage ../development/tools/misc/lttv { };
 
   luaformatter = callPackage ../development/tools/luaformatter
