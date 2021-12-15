@@ -7,8 +7,8 @@
 , mpeg2dec, systemd, gnutls, avahi, libcddb, libjack2, SDL, SDL_image
 , libmtp, unzip, taglib, libkate, libtiger, libv4l, samba, libssh2, liboggz
 , libass, libva, libdvbpsi, libdc1394, libraw1394, libopus
-, libvdpau, libsamplerate, live555, fluidsynth, wayland, wayland-protocols
-, ncurses, srt
+, libvdpau, libsamplerate, libspatialaudio, live555, fluidsynth
+, wayland, wayland-protocols, ncurses, srt
 , onlyLibVLC ? false
 , withQt5 ? true, qtbase, qtsvg, qtx11extras, wrapQtAppsHook
 , jackSupport ? false
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     libkate libtiger libv4l samba libssh2 liboggz libass libdvbpsi libva
     xorg.xlibsWrapper xorg.libXv xorg.libXvMC xorg.libXpm xorg.xcbutilkeysyms
     libdc1394 libraw1394 libopus libebml libmatroska libvdpau libsamplerate
-    fluidsynth wayland wayland-protocols ncurses srt
+    libspatialaudio fluidsynth wayland wayland-protocols ncurses srt
   ] ++ optional (!stdenv.hostPlatform.isAarch64 && !stdenv.hostPlatform.isAarch32) live555
     ++ optionals withQt5    [ qtbase qtsvg qtx11extras ]
     ++ optionals skins2Support (with xorg; [ libXpm freetype libXext libXinerama ])
@@ -99,6 +99,12 @@ stdenv.mkDerivation rec {
   # Remove runtime dependencies on libraries
   postConfigure = ''
     sed -i 's|^#define CONFIGURE_LINE.*$|#define CONFIGURE_LINE "<removed>"|g' config.h
+  '';
+
+  # Add missing SOFA files
+  # Given in EXTRA_DIST, but not in install-data target
+  postInstall = ''
+    cp -R share/hrtfs $out/share/vlc
   '';
 
   meta = with lib; {
