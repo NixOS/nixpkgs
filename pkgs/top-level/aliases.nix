@@ -278,7 +278,7 @@ mapAliases ({
 
   ### E ###
 
-
+  eagle7 = throw "eagle7 has been removed because it did not support a supported openssl version"; # added 2021-12-15
   ec2_ami_tools = ec2-ami-tools; # Added 2021-10-08
   ec2_api_tools = ec2-api-tools; # Added 2021-10-08
   ec2-utils = amazon-ec2-utils; # Added 2022-02-01

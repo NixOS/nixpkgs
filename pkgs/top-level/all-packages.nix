@@ -32846,13 +32846,6 @@ with pkgs;
 
   appcsxcad = libsForQt5.callPackage ../applications/science/electronics/appcsxcad { };
 
-  # Since version 8 Eagle requires an Autodesk account and a subscription
-  # in contrast to single payment for the charged editions.
-  # This is the last version with the old model.
-  eagle7 = callPackage ../applications/science/electronics/eagle/eagle7.nix {
-    openssl = openssl_1_0_2;
-  };
-
   eagle = libsForQt5.callPackage ../applications/science/electronics/eagle/eagle.nix { };
 
   caneda = libsForQt5.callPackage ../applications/science/electronics/caneda { };
