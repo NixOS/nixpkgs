@@ -6434,10 +6434,6 @@ with pkgs;
 
   gtk-vnc = callPackage ../tools/admin/gtk-vnc {};
 
-  gtmess = callPackage ../applications/networking/instant-messengers/gtmess {
-    openssl = openssl_1_0_2;
-  };
-
   gup = callPackage ../development/tools/build-managers/gup {};
 
   gupnp = callPackage ../development/libraries/gupnp { };
