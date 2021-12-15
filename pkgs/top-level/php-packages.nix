@@ -275,7 +275,11 @@ lib.makeScope pkgs.newScope (self: with self; {
         }
         { name = "exif"; doCheck = false; }
         { name = "ffi"; buildInputs = [ libffi ]; enable = lib.versionAtLeast php.version "7.4"; }
-        { name = "fileinfo"; buildInputs = [ pcre2 ]; }
+        {
+          name = "fileinfo";
+          buildInputs = [ pcre2 ];
+          doCheck = !stdenv.isAarch64; # example: https://hydra.nixos.org/build/160271542
+        }
         { name = "filter"; buildInputs = [ pcre2 ]; }
         { name = "ftp"; buildInputs = [ openssl ]; }
         {
