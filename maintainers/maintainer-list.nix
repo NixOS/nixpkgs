@@ -3293,15 +3293,15 @@
     name = "embr";
   };
   emgrav = {
-    name = "Emelie Graven"
+    name = "Emelie Graven";
     email = "emelie@graven.dev";
-    matrix = "@emelie:graven.dev"
+    matrix = "@emelie:graven.dev";
     keys = [{
       longkeyid = "ed25519/0x9DEBB56FE610BAD1";
       fingerprint = "16D3 6E7B FBB0 0641 BBF6  574D 9DEB B56F E610 BAD1";
     }];
     github = "emgrav";
-    githubId = "614975"
+    githubId = "614975";
   };
   emily = {
     email = "nixpkgs@emily.moe";
