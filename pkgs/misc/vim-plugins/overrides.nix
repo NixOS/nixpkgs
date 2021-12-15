@@ -227,11 +227,6 @@ self: super: {
     '';
   });
 
-  ensime-vim = super.ensime-vim.overrideAttrs (old: {
-    passthru.python3Dependencies = ps: with ps; [ sexpdata websocket-client ];
-    dependencies = with self; [ vimproc-vim vimshell-vim self.self forms ];
-  });
-
   fcitx-vim = super.fcitx-vim.overrideAttrs (old: {
     passthru.python3Dependencies = ps: with ps; [ dbus-python ];
     meta = {
