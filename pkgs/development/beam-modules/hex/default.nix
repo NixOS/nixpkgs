@@ -10,6 +10,10 @@ let
     pname = "hex";
     version = "1.0.1";
 
+    # How to obtain `sha256`:
+    # nix-prefetch-url --unpack https://github.com/hexpm/hex/archive/v${version}.tar.gz
+    # Optional convert to SRI hash:
+    # nix hash to-sri --type sha256 <hash>
     src = fetchFromGitHub {
       owner = "hexpm";
       repo = "hex";
