@@ -7,7 +7,7 @@
 , libGLU, libGL
 , compat24 ? false, compat26 ? true, unicode ? true
 , withGtk2 ? true
-, withWebKit ? false, webkitgtk
+, withWebKit ? !stdenv.isDarwin, webkitgtk  # Disable webkitgtk on darwin pending #126101
 , AGL, Carbon, Cocoa, Kernel, QTKit
 }:
 
