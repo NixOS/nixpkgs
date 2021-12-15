@@ -39,6 +39,12 @@
      nix-build maintainers/scripts/haskell/test-configurations.nix \
        --arg config '{ allowBroken = false; }' --keep-going
 
+   By default the haskell.packages.ghc*Binary sets used for bootstrapping GHC
+   are _not_ tested. You can change this using:
+
+     nix-build maintainers/scripts/haskell/test-configurations.nix \
+       --arg skipBinaryGHCs false --keep-going
+
 */
 { files ? [
     "configuration-common.nix"
@@ -48,6 +54,7 @@
 , nixpkgsPath ? ../../..
 , config ? { allowBroken = true; }
 , skipEvalErrors ? true
+, skipBinaryGHCs ? true
 }:
 
 let
@@ -70,8 +77,11 @@ let
         builtins.match "ghc-([0-9]+).([0-9]+).x" configName
       );
       # return all package sets under haskell.packages matching the version components
-      setsForVersion = builtins.map (name: pkgs.haskell.packages.${name}) (
-        builtins.filter (lib.hasPrefix "ghc${configVersion}") (
+      setsForVersion =  builtins.map (name: pkgs.haskell.packages.${name}) (
+        builtins.filter (setName:
+          lib.hasPrefix "ghc${configVersion}" setName
+          && (skipBinaryGHCs -> !(lib.hasInfix "Binary" setName))
+        ) (
           builtins.attrNames pkgs.haskell.packages
         )
       );
