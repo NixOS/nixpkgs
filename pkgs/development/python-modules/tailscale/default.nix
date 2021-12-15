@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "tailscale";
-  version = "0.1.4";
+  version = "0.1.5";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "frenck";
     repo = "python-tailscale";
     rev = "v${version}";
-    sha256 = "sha256-xRVkmofD2pOco0kJfVcmUaPow2ZZNEZrhvNmldUjQuw=";
+    sha256 = "1a33xibkbavl442sc7phvj6d6w17x91zh64f59w0xrsccabn25b1";
   };
 
   nativeBuildInputs = [
