@@ -1613,13 +1613,13 @@ let
         mktplcRef = {
           name = "vscode-ltex";
           publisher = "valentjn";
-          version = "13.0.0";
+          version = "13.1.0";
         };
 
         vsix = fetchurl {
            name = "${mktplcRef.publisher}-${mktplcRef.name}.zip";
            url = "https://github.com/valentjn/vscode-ltex/releases/download/${mktplcRef.version}/vscode-ltex-${mktplcRef.version}-offline-linux-x64.vsix";
-           sha256 = "6db4846dee4e394f7bcfb7e29520d45d6bc1534482ba73cf40cd5edf3f6ec266";
+           sha256 = "1nlrijjwc35n1xgb5lgnr4yvlgfcxd0vdj93ip8lv2xi8x1ni5f6";
         };
 
         nativeBuildInputs = [ jq moreutils ];

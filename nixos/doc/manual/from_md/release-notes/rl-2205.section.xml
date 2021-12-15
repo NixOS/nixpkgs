@@ -83,11 +83,22 @@
           release based on GTK+3 and Python 3.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The <literal>writers.writePython2</literal> and corresponding
+          <literal>writers.writePython2Bin</literal> convenience
+          functions to create executable Python 2 scripts in the store
+          were removed in preparation of removal of the Python 2
+          interpreter. Scripts have to be converted to Python 3 for use
+          with <literal>writers.writePython3</literal> or
+          <literal>writers.writePyPy2</literal> needs to be used.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.05-notable-changes">
     <title>Other Notable Changes</title>
-    <itemizedlist spacing="compact">
+    <itemizedlist>
       <listitem>
         <para>
           The option
@@ -111,6 +122,16 @@
           are only accessible by default to the members of the Unix
           group <literal>redis-${serverName}</literal> through the Unix
           socket <literal>/run/redis-${serverName}/redis.sock</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The
+          <literal>writers.writePyPy2</literal>/<literal>writers.writePyPy3</literal>
+          and corresponding
+          <literal>writers.writePyPy2Bin</literal>/<literal>writers.writePyPy3Bin</literal>
+          convenience functions to create executable Python 2/3 scripts
+          using the PyPy interpreter were added.
         </para>
       </listitem>
     </itemizedlist>
