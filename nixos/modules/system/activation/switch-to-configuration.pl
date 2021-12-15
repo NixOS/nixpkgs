@@ -114,8 +114,7 @@ sub parseFstab {
 sub parseUnit {
     my ($filename) = @_;
     my $info = {};
-    parseKeyValues($info, read_file($filename)) if -f $filename;
-    parseKeyValues($info, read_file("${filename}.d/overrides.conf")) if -f "${filename}.d/overrides.conf";
+    parseKeyValues($info, read_file("$_")) for glob "${filename}{,.d/*.conf}";
     return $info;
 }
 
@@ -143,7 +142,9 @@ sub recordUnit {
 # absolute path as well.
 sub fingerprintUnit {
     my ($s) = @_;
-    return abs_path($s) . (-f "${s}.d/overrides.conf" ? " " . abs_path "${s}.d/overrides.conf" : "");
+    my @ret = ();
+    push(@ret, abs_path($_)) for glob "${s}{,.d/*.conf}";
+    return join(" ", @ret);
 }
 
 sub handleModifiedUnit {
