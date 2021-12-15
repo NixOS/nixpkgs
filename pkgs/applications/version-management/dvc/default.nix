@@ -1,6 +1,7 @@
 { lib
 , python3Packages
 , fetchFromGitHub
+, installShellFiles
 }:
 
 with python3Packages;
@@ -179,6 +180,7 @@ buildPythonApplication rec {
   nativeBuildInputs = [
     setuptools-scm
     setuptools-scm-git-archive
+    installShellFiles
   ];
 
   propagatedBuildInputs = [
@@ -221,6 +223,15 @@ buildPythonApplication rec {
   ];
 
   doCheck = false;
+
+  # generate and install command completions
+  postInstall = ''
+    for shl in bash zsh
+    do
+      $out/bin/dvc completion -s $shl > dvc.$shl
+      installShellCompletion dvc.$shl
+    done
+  '';
 
   meta = with lib; {
     description = "Version Control System for Machine Learning Projects";
