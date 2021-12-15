@@ -20587,18 +20587,10 @@ with pkgs;
 
   utmps = skawarePackages.utmps;
 
-  ucommon = ucommon_openssl;
-
-  ucommon_openssl = callPackage ../development/libraries/ucommon {
-    gnutls = null;
-    openssl = openssl_1_0_2;
-  };
-
-  ucommon_gnutls = lowPrio (ucommon.override {
+  ucommon = callPackage ../development/libraries/ucommon {
     openssl = null;
     zlib = null;
-    gnutls = gnutls;
-  });
+  };
 
   v8 = callPackage ../development/libraries/v8 { };
 
