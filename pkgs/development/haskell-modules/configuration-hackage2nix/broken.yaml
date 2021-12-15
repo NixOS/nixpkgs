@@ -2435,7 +2435,6 @@ broken-packages:
   - htssets
   - http2-client
   - http2-grpc-proto-lens
-  - http3
   - http-attoparsec
   - http-client-lens
   - http-client-request-modifiers
