@@ -21316,6 +21316,7 @@ with pkgs;
 
   influxdb = callPackage ../servers/nosql/influxdb { };
   influxdb2 = callPackage ../servers/nosql/influxdb2 { };
+  influx-cli = callPackage ../servers/nosql/influxdb2/cli.nix { };
 
   mysql57 = callPackage ../servers/sql/mysql/5.7.x.nix {
     inherit (darwin) cctools developer_cmds;
