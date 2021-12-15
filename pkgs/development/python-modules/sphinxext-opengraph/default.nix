@@ -2,6 +2,8 @@
 , buildPythonPackage
 , fetchFromGitHub
 , sphinx
+, pytestCheckHook
+, beautifulsoup4
 }:
 
 buildPythonPackage rec {
@@ -19,7 +21,10 @@ buildPythonPackage rec {
     sphinx
   ];
 
-  doCheck = false; # no tests
+  checkInputs = [
+    pytestCheckHook
+    beautifulsoup4
+  ];
 
   pythonImportsCheck = [ "sphinxext.opengraph" ];
 
