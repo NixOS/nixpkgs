@@ -30467,7 +30467,7 @@ with pkgs;
 
   minecraft = callPackage ../games/minecraft { };
 
-  inherit (import ../games/minecraft-server { inherit callPackage lib; })
+  inherit (import ../games/minecraft-server { inherit callPackage lib javaPackages; })
     minecraft-server_1_2
     minecraft-server_1_3
     minecraft-server_1_4
