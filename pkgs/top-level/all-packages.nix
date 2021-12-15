@@ -7463,6 +7463,8 @@ with pkgs;
 
   liquidctl = with python3Packages; toPythonApplication liquidctl;
 
+  lmp = callPackage ../tools/security/lmp { };
+
   localtime = callPackage ../tools/system/localtime { };
 
   log4j-detect = callPackage ../tools/security/log4j-detect { };
