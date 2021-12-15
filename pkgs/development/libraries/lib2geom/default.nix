@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     description = "Easy to use 2D geometry library in C++";
     homepage = "https://gitlab.com/inkscape/lib2geom";
     license = [ licenses.lgpl21Only licenses.mpl11 ];
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 }

@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
     description = "Tool for playing with XDG desktop portals";
     homepage = "https://github.com/bilelmoussaoui/ashpd/tree/master/ashpd-demo";
     license = licenses.mit;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

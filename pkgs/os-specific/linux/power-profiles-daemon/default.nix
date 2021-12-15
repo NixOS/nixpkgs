@@ -163,6 +163,6 @@ stdenv.mkDerivation rec {
     description = "Makes user-selected power profiles handling available over D-Bus";
     platforms = platforms.linux;
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ jtojnar mvnetbiz ];
+    maintainers = with maintainers; [ mvnetbiz ];
   };
 }
