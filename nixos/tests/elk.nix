@@ -139,27 +139,43 @@ let
       };
 
     passthru.elkPackages = elk;
-    testScript = ''
+    testScript =
+      let
+        valueObject = lib.optionalString (lib.versionAtLeast elk.elasticsearch.version "7") ".value";
+      in ''
       import json
 
 
-      def total_hits(message):
+      def expect_hits(message):
           dictionary = {"query": {"match": {"message": message}}}
           return (
-              "curl --silent --show-error '${esUrl}/_search' "
+              "curl --silent --show-error --fail-with-body '${esUrl}/_search' "
               + "-H 'Content-Type: application/json' "
               + "-d '{}' ".format(json.dumps(dictionary))
-              + "| jq .hits.total"
+              + " | tee /dev/console"
+              + " | jq -es 'if . == [] then null else .[] | .hits.total${valueObject} > 0 end'"
+          )
+
+
+      def expect_no_hits(message):
+          dictionary = {"query": {"match": {"message": message}}}
+          return (
+              "curl --silent --show-error --fail-with-body '${esUrl}/_search' "
+              + "-H 'Content-Type: application/json' "
+              + "-d '{}' ".format(json.dumps(dictionary))
+              + " | tee /dev/console"
+              + " | jq -es 'if . == [] then null else .[] | .hits.total${valueObject} == 0 end'"
           )
 
 
       def has_metricbeat():
           dictionary = {"query": {"match": {"event.dataset": {"query": "system.cpu"}}}}
           return (
-              "curl --silent --show-error '${esUrl}/_search' "
+              "curl --silent --show-error --fail-with-body '${esUrl}/_search' "
               + "-H 'Content-Type: application/json' "
               + "-d '{}' ".format(json.dumps(dictionary))
-              + "| jq '.hits.total > 0'"
+              + " | tee /dev/console"
+              + " | jq -es 'if . == [] then null else .[] | .hits.total${valueObject} > 0 end'"
           )
 
 
@@ -175,7 +191,8 @@ let
       # TODO: extend this test with multiple elasticsearch nodes
       #       and see if the status turns "green".
       one.wait_until_succeeds(
-          "curl --silent --show-error '${esUrl}/_cluster/health' | jq .status | grep -v red"
+          "curl --silent --show-error --fail-with-body '${esUrl}/_cluster/health'"
+          + " | jq -es 'if . == [] then null else .[] | .status != \"red\" end'"
       )
 
       with subtest("Perform some simple logstash tests"):
@@ -186,18 +203,19 @@ let
       with subtest("Kibana is healthy"):
           one.wait_for_unit("kibana.service")
           one.wait_until_succeeds(
-              "curl --silent --show-error 'http://localhost:5601/api/status' | jq .status.overall.state | grep green"
+              "curl --silent --show-error --fail-with-body 'http://localhost:5601/api/status'"
+              + " | jq -es 'if . == [] then null else .[] | .status.overall.state == \"green\" end'"
           )
 
       with subtest("Metricbeat is running"):
           one.wait_for_unit("metricbeat.service")
 
       with subtest("Metricbeat metrics arrive in elasticsearch"):
-          one.wait_until_succeeds(has_metricbeat() + " | tee /dev/console | grep 'true'")
+          one.wait_until_succeeds(has_metricbeat())
 
       with subtest("Logstash messages arive in elasticsearch"):
-          one.wait_until_succeeds(total_hits("flowers") + " | grep -v 0")
-          one.wait_until_succeeds(total_hits("dragons") + " | grep 0")
+          one.wait_until_succeeds(expect_hits("flowers"))
+          one.wait_until_succeeds(expect_no_hits("dragons"))
 
     '' + lib.optionalString (elk ? journalbeat) ''
       with subtest(
@@ -206,7 +224,7 @@ let
           one.wait_for_unit("journalbeat.service")
           one.execute("echo 'Supercalifragilisticexpialidocious' | systemd-cat")
           one.wait_until_succeeds(
-              total_hits("Supercalifragilisticexpialidocious") + " | grep -v 0"
+              expect_hits("Supercalifragilisticexpialidocious")
           )
     '' + ''
       with subtest("Elasticsearch-curator works"):
