@@ -3080,6 +3080,8 @@ with pkgs;
 
   gh-ost = callPackage ../tools/misc/gh-ost { };
 
+  ghdorker = callPackage ../tools/security/ghdorker { };
+
   ghidra-bin = callPackage ../tools/security/ghidra { };
 
   gif-for-cli = callPackage ../tools/misc/gif-for-cli { };
