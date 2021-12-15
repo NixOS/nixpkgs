@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , fetchpatch
 , cmake
-, wxGTK
 , pkg-config
 , python3
 , gettext
@@ -18,7 +17,6 @@
 , sqlite
 , sratom
 , suil
-, alsa-lib
 , libsndfile
 , soxr
 , flac
@@ -28,8 +26,10 @@
 , libopus
 , ffmpeg
 , soundtouch
-, pcre /*, portaudio - given up fighting their portaudio.patch */
+, pcre
+/*, portaudio - given up fighting their portaudio.patch */
 , linuxHeaders
+, alsa-lib
 , at-spi2-core
 , dbus
 , libepoxy
@@ -40,6 +40,16 @@
 , libsepol
 , libxkbcommon
 , util-linux
+, wxGTK
+, AppKit ? null
+, AudioToolbox ? null
+, AudioUnit ? null
+, Carbon ? null
+, Cocoa ? null
+, CoreAudio ? null
+, CoreAudioKit ? null
+, CoreServices ? null
+, wxmac
 }:
 
 # TODO
@@ -49,14 +59,20 @@
 let
   inherit (lib) optionals;
 
+  wxWidgets_src = fetchFromGitHub {
+    owner = "audacity";
+    repo = "wxWidgets";
+    rev = "07e7d832c7a337aedba3537b90b2c98c4d8e2985";
+    sha256 = "1mawnkcrmqj98jp0jxlnh9xkc950ca033ccb51c7035pzmi9if9a";
+    fetchSubmodules = true;
+  };
+
   wxGTK' = wxGTK.overrideAttrs (oldAttrs: rec {
-    src = fetchFromGitHub {
-      owner = "audacity";
-      repo = "wxWidgets";
-      rev = "07e7d832c7a337aedba3537b90b2c98c4d8e2985";
-      sha256 = "1mawnkcrmqj98jp0jxlnh9xkc950ca033ccb51c7035pzmi9if9a";
-      fetchSubmodules = true;
-    };
+    src = wxWidgets_src;
+  });
+
+  wxmac' = wxmac.overrideAttrs (oldAttrs: rec {
+    src = wxWidgets_src;
   });
 
 in
@@ -88,7 +104,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     touch src/RevisionIdent.h
-
+  '' + lib.optionalString stdenv.isLinux ''
     substituteInPlace src/FileNames.cpp \
       --replace /usr/include/linux/magic.h ${linuxHeaders}/include/linux/magic.h
   '';
@@ -116,7 +132,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    alsa-lib
     expat
     ffmpeg
     file
@@ -138,9 +153,8 @@ stdenv.mkDerivation rec {
     sratom
     suil
     twolame
-    wxGTK'
-    wxGTK'.gtk
   ] ++ optionals stdenv.isLinux [
+    alsa-lib # for portaudio
     at-spi2-core
     dbus
     libepoxy
@@ -151,6 +165,14 @@ stdenv.mkDerivation rec {
     libselinux
     libsepol
     util-linux
+    wxGTK'
+    wxGTK'.gtk
+  ] ++ optionals stdenv.isDarwin [
+    wxmac'
+    AppKit
+    Cocoa
+    CoreAudioKit
+    AudioUnit AudioToolbox CoreAudio CoreServices Carbon # for portaudio
   ];
 
   doCheck = false; # Test fails
@@ -160,6 +182,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.audacityteam.org/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ lheckemann ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
