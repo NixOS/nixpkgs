@@ -136,6 +136,14 @@ stdenv.mkDerivation rec {
   };
 
   src = fetchFromGitHub {
+    owner = "chatwoot";
+    repo = "chatwoot";
+    rev = "a7623041bf9b2a89841da0cec0985738629b8db6";
+    sha256 = "kVOUKCztcfT7KG8qhlc/Du9ReDkOu6lInPxiof1o730=";
+    fetchSubmodules = false;
+  };
+
+  /* src = fetchFromGitHub {
     owner = "mkg20001";
     repo = "chatwoot";
     rev = "3a0a9a4637c07180af3ef7d7eed1dd4e20c95443";
@@ -146,9 +154,9 @@ stdenv.mkDerivation rec {
     repo = "chatwoot";
     rev = "03b1a3d045bbfc221bcf07c8155eccd2d0d88905";
     sha256 = "dJ3uG8wpuDGzPOZEgRCv1FHyU3pHch+sgsFRlaWxNjY=";
-    fetchSubmodules = true; */
+    fetchSubmodules = true; /
     # rev = "v${version}";
-  };
+  }; */
 
   postPatch = ''
     cp ${./Gemfile} Gemfile

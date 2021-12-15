@@ -291,6 +291,17 @@
     };
     version = "2.0.2";
   };
+  barnes = {
+    dependencies = ["multi_json" "statsd-ruby"];
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "16v48b6fkp95m3h6vnwync1fh3wrrkj00nyqn30fxwm5a0zqq562";
+      type = "gem";
+    };
+    version = "0.0.9";
+  };
   bcrypt = {
     groups = ["default"];
     platforms = [];
@@ -451,7 +462,7 @@
   };
   crack = {
     dependencies = ["rexml"];
-    groups = ["default" "development" "test"];
+    groups = ["default" "test"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
@@ -1072,7 +1083,7 @@
     version = "1.3.7";
   };
   hashdiff = {
-    groups = ["default" "development" "test"];
+    groups = ["default" "test"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
@@ -1573,7 +1584,7 @@
     version = "2.5.8";
   };
   nokogiri = {
-    dependencies = ["racc"];
+    dependencies = ["mini_portile2" "racc"];
     groups = ["default" "development" "test"];
     platforms = [];
     source = {
@@ -2604,7 +2615,7 @@
   };
   webmock = {
     dependencies = ["addressable" "crack" "hashdiff"];
-    groups = ["development" "test"];
+    groups = ["test"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
@@ -2657,7 +2668,7 @@
     version = "0.7.5";
   };
   websocket-extensions = {
-    groups = ["default" "development" "test"];
+    groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
