@@ -55,6 +55,13 @@ class Version(DataClassJsonMixin):
             for download_name, download_info in self.get_manifest()["downloads"].items()
         }
 
+    def get_java_version(self) -> Any:
+        """
+        Return the java version specified in a version's manifest, if it is
+        present. Versions <= 1.6 do not specify this.
+        """
+        return self.get_manifest().get("javaVersion", {}).get("majorVersion", None)
+
     def get_server(self) -> Optional[Download]:
         """
         If the version has a server download available, return the Download
@@ -138,6 +145,7 @@ def generate() -> Dict[str, Dict[str, str]]:
 
     for version, server in servers.items():
         server["version"] = latest_major_releases[version].id
+        server["javaVersion"] = latest_major_releases[version].get_java_version()
     return servers
 
 
