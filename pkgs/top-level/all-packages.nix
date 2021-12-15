@@ -9194,10 +9194,6 @@ with pkgs;
 
   proxysql = callPackage ../servers/sql/proxysql { };
 
-  proxytunnel = callPackage ../tools/misc/proxytunnel {
-    openssl = openssl_1_0_2;
-  };
-
   prs = callPackage ../tools/security/prs { };
 
   psw = callPackage ../tools/misc/psw { };
