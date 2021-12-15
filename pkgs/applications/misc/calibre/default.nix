@@ -1,6 +1,7 @@
 { lib
 , mkDerivation
 , fetchurl
+, fetchpatch
 , poppler_utils
 , pkg-config
 , libpng
@@ -37,6 +38,13 @@ mkDerivation rec {
     ./disable_plugins.patch
     # Automatic version update disabled by default (from Debian)
     ./no_updates_dialog.patch
+
+    # fix for CVE-2021-44686
+    (fetchpatch {
+      name = "0001-CVE-2021-44686.patch";
+      url = "https://github.com/kovidgoyal/calibre/commit/235b7e38c197ba4a3c17531e516610af8795e348.patch";
+      sha256 = "07ncv6r2v05m8rnv4syjfalkpksqpjag6icf1z57nv7k9dkkfmfw";
+    })
   ]
   ++ lib.optional (!unrarSupport) ./dont_build_unrar_plugin.patch;
 
