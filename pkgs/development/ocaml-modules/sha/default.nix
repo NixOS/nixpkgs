@@ -2,11 +2,11 @@
 
 buildDunePackage rec {
   pname = "sha";
-  version = "1.14";
+  version = "1.15.1";
 
   src = fetchurl {
     url = "https://github.com/djs55/ocaml-${pname}/releases/download/v${version}/${pname}-v${version}.tbz";
-    sha256 = "114vydrfdp7fayigvgk3ckiby0kh4n49c1j53v8k40gk6nzm3l19";
+    sha256 = "sha256-cRtjydvwgXgimi6F3C48j7LrWgfMO6m9UJKjKlxvp0Q=";
   };
 
   useDune2 = true;

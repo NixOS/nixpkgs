@@ -36,84 +36,84 @@ in
     {
       name = "G4NDL";
       version = "4.6";
-      sha256 = "022l2jjhi57frfdv9nk6s6q23gmr9zkix06fmni8gf0gmvr7qa4x";
+      sha256 = "sha256-nSh88q4PuIeirc6AHudPub4hsNFm2rSby+6UCKUUVAg=";
       envvar = "NEUTRONHP";
     }
 
     {
       name = "G4EMLOW";
-      version = "7.13";
-      sha256 = "0scczd4ismvd4g3vfshbvwv92bzkdjz0ma7y21n6qxxy96v9cj1p";
+      version = "8.0";
+      sha256 = "sha256-2Rmo5YOGiCV7kkimE5EOsqdjMFngMMi1DAosKtn9Kzs=";
       envvar = "LE";
     }
 
     {
       name = "G4PhotonEvaporation";
       version = "5.7";
-      sha256 = "1rg7fygfxx06h98ywlci6b0b9ih74q8diygr76c3vppxdzjl47kn";
+      sha256 = "sha256-dh5C5W/93j2YOfn52BAmB8a0wDKRUe5Rggb07p535+U=";
       envvar = "LEVELGAMMA";
     }
 
     {
       name = "G4RadioactiveDecay";
       version = "5.6";
-      sha256 = "1w8d9zzc4ss7sh1f8cxv5pmrx2b74p1y26377rw9hnlfkiy0g1iq";
+      sha256 = "sha256-OIYHfJyOWph4PmcY4cMlZ4me6y27M+QC1Edrwv5PDfE=";
       envvar = "RADIOACTIVE";
     }
 
     {
       name = "G4SAIDDATA";
       version = "2.0";
-      sha256 = "149fqy801n1pj2g6lcai2ziyvdz8cxdgbfarax6y8wdakgksh9hx";
+      sha256 = "sha256-HSao55uqceRNV1m59Vpn6Lft4xdRMWqekDfYAJDHLpE=";
       envvar = "SAIDXS";
     }
 
     {
       name = "G4PARTICLEXS";
-      version = "3.1.1";
-      sha256 = "1nmgy8w1s196php7inrkbsi0f690qa2dsyj9s1sp75mndkfpxhb6";
+      version = "4.0";
+      sha256 = "sha256-k4EDlwPD8rD9NqtJmTYqLItP+QgMMi+QtOMZKBEzypU=";
       envvar = "PARTICLEXS";
     }
 
     {
       name = "G4ABLA";
       version = "3.1";
-      sha256 = "1v97q28g1xqwnav0lwzwk7hc3b87yrmbvkgadf4bkwcbnm9b163n";
+      sha256 = "sha256-dpiwUrWL8bmIa+rNvWr2B63B4Jn8cwq2shz38JDAJ+0=";
       envvar = "ABLA";
     }
 
     {
       name = "G4INCL";
       version = "1.0";
-      sha256 = "0z9nqk125vvf4f19lhgb37jy60jf9zrjqg5zbxbd1wz93a162qbi";
+      sha256 = "sha256-cWFhghrp89BWX788LPNPTgLj5RnrQZqCI27vIsLENn0=";
       envvar = "INCL";
     }
 
     {
       name = "G4PII";
       version = "1.3";
-      sha256 = "09p92rk1sj837m6n6yd9k9a8gkh6bby2bfn6k0f3ix3m4s8as9b2";
+      sha256 = "sha256-YiWtkCZ19DgcmMa6JfxaBs6HVJqpeWNNPQNJHWYW6SY=";
       envvar = "PII";
     }
 
     {
       name = "G4ENSDFSTATE";
       version = "2.3";
-      sha256 = "00wjir59rrrlk0a12vi8rsnhyya71rdi1kmark9sp487hbhcai4l";
+      sha256 = "sha256-lETF4IIHkavTzKrOEFsOR3kPrc4obhEUmDTnnEqOkgM=";
       envvar = "ENSDFSTATE";
     }
 
     {
       name = "G4RealSurface";
       version = "2.2";
-      sha256 = "08382y1258ifs7nap6zaaazvabg72blr0dkqgwk32lrg07hdwm4r";
+      sha256 = "sha256-mVTe4AEvUzEmf3g2kOkS5y21v1Lqm6vs0S6iIoIXaCA=";
       envvar = "REALSURFACE";
     }
 
     {
       name = "G4TENDL";
-      version = "1.3.2";
-      sha256 = "0jdqmz3rz5a7yrq1mli6dj3bnmn73igf4fdxwfbl3rxywg38fa9v";
+      version = "1.4";
+      sha256 = "sha256-S3J0AgzItO1Wm4ku8YwuCI7c22tm850lWFzO4l2XIeA=";
       envvar = "PARTICLEHP";
     }
   ])

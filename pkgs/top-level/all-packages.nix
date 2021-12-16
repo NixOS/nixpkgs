@@ -1799,6 +1799,8 @@ with pkgs;
 
   gomatrix = callPackage ../applications/misc/gomatrix { };
 
+  gomapenum = callPackage ../tools/security/gomapenum { };
+
   gopacked = callPackage ../applications/misc/gopacked { };
 
   gucci = callPackage ../tools/text/gucci { };
@@ -3078,6 +3080,8 @@ with pkgs;
 
   gh-ost = callPackage ../tools/misc/gh-ost { };
 
+  ghdorker = callPackage ../tools/security/ghdorker { };
+
   ghidra-bin = callPackage ../tools/security/ghidra { };
 
   gif-for-cli = callPackage ../tools/misc/gif-for-cli { };
@@ -4285,11 +4289,9 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
 
-  code-browser-qt = libsForQt5.callPackage ../applications/editors/code-browser { withQt = true;
-                                                                                };
-  code-browser-gtk = callPackage ../applications/editors/code-browser { withGtk = true;
-                                                                        qtbase = qt5.qtbase;
-                                                                      };
+  code-browser-qt = libsForQt5.callPackage ../applications/editors/code-browser { withQt = true; };
+  code-browser-gtk2 = callPackage ../applications/editors/code-browser { withGtk2 = true; };
+  code-browser-gtk = callPackage ../applications/editors/code-browser { withGtk3 = true; };
 
   c14 = callPackage ../applications/networking/c14 { };
 
@@ -7461,9 +7463,19 @@ with pkgs;
 
   liquidctl = with python3Packages; toPythonApplication liquidctl;
 
+  lmp = callPackage ../tools/security/lmp { };
+
   localtime = callPackage ../tools/system/localtime { };
 
+  log4j-detect = callPackage ../tools/security/log4j-detect { };
+
   log4j-scan = callPackage ../tools/security/log4j-scan { };
+
+  log4j-vuln-scanner = callPackage ../tools/security/log4j-vuln-scanner { };
+
+  log4jcheck = callPackage ../tools/security/log4jcheck { };
+
+  log4shell-detector = callPackage ../tools/security/log4shell-detector { };
 
   logcheck = callPackage ../tools/system/logcheck { };
 
@@ -14785,7 +14797,7 @@ with pkgs;
   img = callPackage ../development/tools/img { };
 
   include-what-you-use = callPackage ../development/tools/analysis/include-what-you-use {
-    llvmPackages = llvmPackages_12;
+    llvmPackages = llvmPackages_13;
   };
 
   indent = callPackage ../development/tools/misc/indent { };
@@ -14931,6 +14943,8 @@ with pkgs;
   lttng-tools = callPackage ../development/tools/misc/lttng-tools { };
 
   lttng-ust = callPackage ../development/tools/misc/lttng-ust { };
+
+  lttng-ust_2_12 = callPackage ../development/tools/misc/lttng-ust/2.12.nix { };
 
   lttv = callPackage ../development/tools/misc/lttv { };
 
@@ -31570,6 +31584,8 @@ with pkgs;
   sage = callPackage ../applications/science/math/sage { };
   sageWithDoc = sage.override { withDoc = true; };
 
+  subread = callPackage ../applications/science/biology/subread { };
+
   suitesparse_4_2 = callPackage ../development/libraries/science/math/suitesparse/4.2.nix { };
   suitesparse_4_4 = callPackage ../development/libraries/science/math/suitesparse/4.4.nix {};
   suitesparse_5_3 = callPackage ../development/libraries/science/math/suitesparse {};
@@ -32410,6 +32426,8 @@ with pkgs;
   fahclient = callPackage ../applications/science/misc/foldingathome/client.nix {};
   fahcontrol = callPackage ../applications/science/misc/foldingathome/control.nix {};
   fahviewer = callPackage ../applications/science/misc/foldingathome/viewer.nix {};
+
+  fbmark = callPackage ../tools/misc/fbmark { };
 
   foma = callPackage ../tools/misc/foma { };
 
