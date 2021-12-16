@@ -4,6 +4,7 @@
 
 with lib;
 let
+  # Compare with https://github.com/draios/sysdig/blob/dev/cmake/modules/falcosecurity-libs.cmake
   libsRev = "2160111cd088aea9ae2235d3385ecb0b1ab6623c";
   libsSha256 = "sha256-TOuxXtrxujyAjzAtlX3/eCfM16mwxnmZ6Wg44SG0dTs=";
 in
