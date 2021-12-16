@@ -25,6 +25,6 @@ buildGoModule rec {
     description = "Tool to extract useful data from documents";
     homepage = "https://github.com/redcode-labs/Sammler";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab unrooted ];
+    maintainers = with maintainers; [ fab unrooted wr0belj wintrmvte ];
   };
 }
