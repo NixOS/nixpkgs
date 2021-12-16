@@ -3,7 +3,6 @@ import ./make-test-python.nix ({ lib, ... }:
   name = "fontconfig-default-fonts";
 
   meta.maintainers = with lib.maintainers; [
-    jtojnar
   ];
 
   machine = { config, pkgs, ... }: {

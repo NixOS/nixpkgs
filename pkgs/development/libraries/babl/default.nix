@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     description = "Image pixel format conversion library";
     homepage = "https://gegl.org/babl/";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 }

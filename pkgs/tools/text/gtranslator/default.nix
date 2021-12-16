@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
     description = "GNOME translation making program";
     homepage = "https://wiki.gnome.org/Apps/Gtranslator";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

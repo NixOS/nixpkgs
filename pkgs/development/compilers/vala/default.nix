@@ -103,7 +103,7 @@ let
       homepage = "https://wiki.gnome.org/Projects/Vala";
       license = licenses.lgpl21Plus;
       platforms = platforms.unix;
-      maintainers = with maintainers; [ antono jtojnar maxeaubrey ] ++ teams.pantheon.members;
+      maintainers = with maintainers; [ antono maxeaubrey ] ++ teams.pantheon.members;
     };
   });
 

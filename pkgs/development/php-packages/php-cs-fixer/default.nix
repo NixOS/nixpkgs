@@ -26,6 +26,6 @@ mkDerivation {
     description = "A tool to automatically fix PHP coding standards issues";
     license = licenses.mit;
     homepage = "http://cs.sensiolabs.org/";
-    maintainers = with maintainers; [ jtojnar ] ++ teams.php.members;
+    maintainers = with maintainers; [ ] ++ teams.php.members;
   };
 }

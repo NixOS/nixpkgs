@@ -56,7 +56,7 @@ link-grammar = stdenv.mkDerivation rec {
     homepage = "https://www.abisource.com/projects/link-grammar/";
     changelog = "https://github.com/opencog/link-grammar/blob/link-grammar-${version}/ChangeLog";
     license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 };

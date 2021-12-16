@@ -33,6 +33,6 @@ rustPlatform.buildRustPackage rec {
     description = "A project for generating C bindings from Rust code";
     homepage = "https://github.com/eqrion/cbindgen";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [ ];
   };
 }

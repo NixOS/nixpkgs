@@ -207,8 +207,8 @@ in {
   };
 
   openssl_3_0 = common {
-    version = "3.0.0";
-    sha256 = "sha256-We7fy0bCUhTJvTftYHgpe03wHQEiZ/6enu4x9hvHBTY=";
+    version = "3.0.1";
+    sha256 = "sha256-wxGthTNTvOeW7a0BqGLFCopYf2Ln4hAO9GWrU+ybBtE=";
     patches = [
       ./3.0/nix-ssl-cert-file.patch
 

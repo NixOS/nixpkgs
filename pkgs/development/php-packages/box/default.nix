@@ -26,6 +26,6 @@ mkDerivation {
     description = "An application for building and managing Phars";
     license = licenses.mit;
     homepage = "https://box-project.github.io/box2/";
-    maintainers = with maintainers; [ jtojnar ] ++ teams.php.members;
+    maintainers = with maintainers; [ ] ++ teams.php.members;
   };
 }

@@ -95,6 +95,6 @@ in buildPythonApplication rec {
     homepage = "http://mypaint.org/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ goibhniu jtojnar ];
+    maintainers = with maintainers; [ goibhniu ];
   };
 }

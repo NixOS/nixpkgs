@@ -58,7 +58,7 @@ in stdenv.mkDerivation rec {
     description = "Blackfire Profiler PHP module";
     homepage = "https://blackfire.io/";
     license = licenses.unfree;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [ ];
     platforms = [ "x86_64-linux" ];
   };
 }
