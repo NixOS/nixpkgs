@@ -1,7 +1,7 @@
 {   lib, buildPythonApplication, fetchPypi
   , altair, astor, base58, blinker, click, cachetools, GitPython, pillow, protobuf
   , pyarrow, pydeck, pympler, requests, toml, tornado, tzlocal, validators, watchdog
-  , jinja2, setuptools 
+  , jinja2, setuptools
 }:
 
 buildPythonApplication rec {
@@ -21,7 +21,7 @@ buildPythonApplication rec {
     pushd unpacked/${pname}-${version}
 
     substituteInPlace ${pname}-${version}.dist-info/METADATA \
-      --replace "click (<8.0,>=7.0)" "click" 
+      --replace "click (<8.0,>=7.0)" "click"
 
     popd
     wheel pack ./unpacked/${pname}-${version}
@@ -31,7 +31,7 @@ buildPythonApplication rec {
   propagatedBuildInputs = [
     altair astor base58 blinker click cachetools GitPython pillow protobuf
     pyarrow pydeck pympler requests toml tornado tzlocal validators watchdog
-    jinja2 setuptools 
+    jinja2 setuptools
   ];
 
   postInstall = ''
