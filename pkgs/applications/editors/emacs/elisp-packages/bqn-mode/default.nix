@@ -5,7 +5,7 @@
 
 trivialBuild {
   pname = "bqn-mode";
-  version = "0.pre+unstable=2021-12-04";
+  version = "0.pre+date=2021-12-03";
 
   src = fetchFromGitHub {
     owner = "museoa";

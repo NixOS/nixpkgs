@@ -2,29 +2,34 @@
 , stdenv
 , fetchFromGitHub
 , nix-update-script
+, gettext
 , meson
 , ninja
-, gettext
+, python3
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-wallpapers";
-  version = "6.0.0";
-
-  repoName = "wallpapers";
+  version = "6.1.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "wallpapers";
     rev = version;
-    sha256 = "1qpf8w7x9sp3sd4zpsrlj5ywpwqkq4ywbagm4sf25cwwn82dl59b";
+    sha256 = "sha256-E/cUxa/GNt/01EjuuvurHxJu3qV9e+jcdcCi2+NxVDA=";
   };
 
   nativeBuildInputs = [
     gettext
     meson
     ninja
+    python3
   ];
+
+  postPatch = ''
+    chmod +x meson/symlink.py
+    patchShebangs meson/symlink.py
+  '';
 
   passthru = {
     updateScript = nix-update-script {

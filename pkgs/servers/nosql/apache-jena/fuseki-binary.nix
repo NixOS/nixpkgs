@@ -3,10 +3,10 @@ let
   s = # Generated upstream information
   rec {
     baseName="apache-jena-fuseki";
-    version = "4.2.0";
+    version = "4.3.1";
     name="${baseName}-${version}";
-    url="http://archive.apache.org/dist/jena/binaries/apache-jena-fuseki-${version}.tar.gz";
-    sha256 = "1x3va4yqmxh55lhr6ms85ks9v0lqkl3y41h0bpjdycp8j96lsy3h";
+    url="https://dlcdn.apache.org/jena/binaries/apache-jena-fuseki-${version}.tar.gz";
+    sha256 = "1r0vfa7d55lzw22yfx46mxxmz8x8pkr666vggqw2m1rzzj52z9nx";
   };
   buildInputs = [
     makeWrapper

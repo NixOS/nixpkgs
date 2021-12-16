@@ -1,20 +1,63 @@
-{ lib, stdenv, fetchurl, bison, flex, perl, libpng, giflib, libjpeg, alsa-lib, readline, libGLU, libGL, libXaw
-, pkg-config, gtk2, SDL, autoreconfHook, makeDesktopItem
+{ lib
+, stdenv
+, fetchurl
+, bison
+, flex
+, perl
+, libpng
+, giflib
+, libjpeg
+, alsa-lib
+, readline
+, libGLU
+, libGL
+, libXaw
+, pkg-config
+, gtk2
+, SDL
+, SDL_image
+, autoreconfHook
+, makeDesktopItem
+, dos2unix
+, xa
+, file
 }:
 
 stdenv.mkDerivation rec {
   pname = "vice";
-  version = "3.1";
+  version = "3.5";
 
   src = fetchurl {
     url = "mirror://sourceforge/vice-emu/vice-${version}.tar.gz";
-    sha256 = "0h0jbml02s2a36hr78dxv1zshmfhxp1wadpcdl09aq416fb1bf1y";
+    sha256 = "sha256-Vrl4+q64solgMr1gTQPDUBACGH7vHKWM7O1A8Rpl3A4=";
   };
 
-  buildInputs = [ bison flex perl libpng giflib libjpeg alsa-lib readline libGLU libGL
-    pkg-config gtk2 SDL autoreconfHook libXaw ];
+  nativeBuildInputs = [
+    autoreconfHook
+    bison
+    dos2unix
+    file
+    flex
+    pkg-config
+  ];
+
+  buildInputs = [
+    alsa-lib
+    giflib
+    gtk2
+    libGL
+    libGLU
+    libXaw
+    libjpeg
+    libpng
+    perl
+    readline
+    SDL
+    SDL_image
+    xa
+  ];
   dontDisableStatic = true;
-  configureFlags = [ "--enable-fullscreen --enable-gnomeui" ];
+  configureFlags = [ "--enable-fullscreen" "--enable-gnomeui" "--disable-pdf-docs" ];
 
   desktopItem = makeDesktopItem {
     name = "vice";
@@ -28,16 +71,10 @@ stdenv.mkDerivation rec {
   preBuild = ''
     for i in src/resid src/resid-dtv
     do
-        mkdir -pv $i/src
-        ln -sv ../../wrap-u-ar.sh $i/src
+      mkdir -pv $i/src
+      ln -sv ../../wrap-u-ar.sh $i/src
     done
   '';
-  patchPhase = ''
-    # Disable font-cache update
-    sed -i -e "s|install: install-data-am|install-no: install-data-am|" data/fonts/Makefile.am
-  '';
-
-  #NIX_LDFLAGS = "-lX11 -L${libX11}/lib";
 
   postInstall = ''
     mkdir -p $out/share/applications
@@ -46,7 +83,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Commodore 64, 128 and other emulators";
-    homepage = "http://www.viceteam.org";
+    homepage = "https://vice-emu.sourceforge.io/";
     license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.sander ];
     platforms = lib.platforms.linux;

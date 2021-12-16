@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, writeText }:
+{ lib, stdenv, fetchFromGitHub, writeText, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "dokuwiki";
@@ -44,6 +44,10 @@ stdenv.mkDerivation rec {
     cp ${phpLocalConfig} $out/share/dokuwiki/conf/local.php
     cp ${phpPluginsLocalConfig} $out/share/dokuwiki/conf/plugins.local.php
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) dokuwiki;
+  };
 
   meta = with lib; {
     description = "Simple to use and highly versatile Open Source wiki software that doesn't require a database";

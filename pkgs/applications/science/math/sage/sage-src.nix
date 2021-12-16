@@ -125,6 +125,14 @@ stdenv.mkDerivation rec {
       sha256 = "sha256-3eJPfWfCrCAQ5filIn7FbzjRQeO9QyTIVl/HyRuqFtE=";
     })
 
+    # https://trac.sagemath.org/ticket/32567
+    (fetchSageDiff {
+      base = "9.5.beta2";
+      name = "arb-2.21.0-update.patch";
+      rev = "eb3304dd521a3d5a9334e747a08e234bbf16b4eb";
+      sha256 = "sha256-XDkaY4VQGyESXI6zuD7nCNzyQOl/fmBFvAESH9+RRvk=";
+    })
+
     # https://trac.sagemath.org/ticket/32797
     (fetchSageDiff {
       base = "9.5.beta7";

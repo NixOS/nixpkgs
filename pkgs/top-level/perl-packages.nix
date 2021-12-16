@@ -9043,10 +9043,10 @@ let
 
   Future = buildPerlModule {
     pname = "Future";
-    version = "0.46";
+    version = "0.47";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PEVANS/Future-0.46.tar.gz";
-      sha256 = "0zx4cabzz5zyzvyvc7mvl0cc7zkslp0jnxsv41yii76dal8blcbq";
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/Future-0.47.tar.gz";
+      sha256 = "1pmhkhrmvaf8c3jbrfqqhmxjrzcsxdn2q7apj033gwxggland88h";
     };
     buildInputs = [ TestFatal TestIdentity TestRefcount ];
     meta = {
@@ -17635,10 +17635,10 @@ let
 
   PerlCritic = buildPerlModule {
     pname = "Perl-Critic";
-    version = "1.138";
+    version = "1.140";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PETDANCE/Perl-Critic-1.138.tar.gz";
-      sha256 = "2ad194f91ef24df4698369c2562d4164e9bf74f2d5565c681841abf79789ed82";
+      url = "mirror://cpan/authors/id/P/PE/PETDANCE/Perl-Critic-1.140.tar.gz";
+      sha256 = "1nzxpn71mrpp85yxrxlraj52q2skvf9ja887ls11d57h6smg1vmz";
     };
     buildInputs = [ TestDeep ];
     nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
@@ -17849,10 +17849,10 @@ let
 
   PerlTidy = buildPerlPackage rec {
     pname = "Perl-Tidy";
-    version = "20201207";
+    version = "20211029";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SH/SHANCOCK/Perl-Tidy-20201207.tar.gz";
-      sha256 = "049x02awvpfr7m8dai04ya61jzs6cl45qplxzx7nf8x6jgj08i9f";
+      url = "mirror://cpan/authors/id/S/SH/SHANCOCK/Perl-Tidy-20211029.tar.gz";
+      sha256 = "1nhfi3gb8gif9p34m4ycqw0k8992yy42c21hk9b99l2pdbiv20zc";
     };
     meta = {
       description = "Indent and reformat perl scripts";
@@ -18090,6 +18090,22 @@ let
     };
   };
 
+  PLS = buildPerlPackage {
+    pname = "PLS";
+    version = "0.897";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MR/MREISNER/PLS-0.897.tar.gz";
+      sha256 = "0278anidj7bgassj32g20cbki2kkqakkr3axyq4k90nj4snw7p6x";
+    };
+    propagatedBuildInputs = [ Future IOAsync PPI PPR PathTiny PerlCritic PerlTidy PodMarkdown URI ];
+    meta = {
+      homepage = "https://github.com/FractalBoy/perl-language-server";
+      description = "Perl Language Server";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.artturin ];
+    };
+  };
+
   Po4a = callPackage ../development/perl-modules/Po4a { };
 
   PodMinimumVersion = buildPerlPackage {
@@ -18216,6 +18232,20 @@ let
     meta = {
       description = "Extensions to L<PPI|PPI>";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  PPR = buildPerlPackage {
+    pname = "PPR";
+    version = "0.000028";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DC/DCONWAY/PPR-0.000028.tar.gz";
+      sha256 = "1adrd189rnfl1fgv14inchvrgjqjbpnviisqsz3y8ds3gisafzfk";
+    };
+    meta = {
+      description = "Pattern-based Perl Recognizer";
+      license = lib.licenses.artistic2;
+      maintainers = [ maintainers.artturin ];
     };
   };
 

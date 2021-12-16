@@ -20,6 +20,11 @@ buildPythonPackage rec {
     sha256 = "agshUVkkqogj4FbonFd/rrGisMOomS62NND66YKZvjg=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "rapidfuzz >= 1.8.2, < 1.9" "rapidfuzz"
+  '';
+
   propagatedBuildInputs = [
     rapidfuzz
   ];

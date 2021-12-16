@@ -2680,6 +2680,8 @@ in {
 
   fastcache = callPackage ../development/python-modules/fastcache { };
 
+  fastcore = callPackage ../development/python-modules/fastcore { };
+
   fastdiff = callPackage ../development/python-modules/fastdiff { };
 
   fastdtw = callPackage ../development/python-modules/fastdtw { };
@@ -3143,6 +3145,8 @@ in {
   gevent-websocket = callPackage ../development/python-modules/gevent-websocket { };
 
   gflags = callPackage ../development/python-modules/gflags { };
+
+  ghapi = callPackage ../development/python-modules/ghapi { };
 
   ghdiff = callPackage ../development/python-modules/ghdiff { };
 
@@ -10013,6 +10017,8 @@ in {
   voluptuous-serialize = callPackage ../development/python-modules/voluptuous-serialize { };
 
   vowpalwabbit = callPackage ../development/python-modules/vowpalwabbit { };
+
+  vpk = callPackage ../development/python-modules/vpk { };
 
   vsts = callPackage ../development/python-modules/vsts { };
 

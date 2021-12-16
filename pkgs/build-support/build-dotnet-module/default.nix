@@ -14,6 +14,8 @@
 , dotnetTestFlags ? []
 # Flags to pass to `dotnet install`.
 , dotnetInstallFlags ? []
+# Flags to pass to `dotnet pack`.
+, dotnetPackFlags ? []
 # Flags to pass to dotnet in all phases.
 , dotnetFlags ? []
 
@@ -21,11 +23,22 @@
 # Unfortunately, dotnet has no method for doing this automatically.
 # If unset, all executables in the projects root will get installed. This may cause bloat!
 , executables ? null
+# Packs a project as a `nupkg`, and installs it to `$out/share`. If set to `true`, the derivation can be used as a dependency for another dotnet project by adding it to `projectReferences`.
+, packNupkg ? false
 # The packages project file, which contains instructions on how to compile it. This can be an array of multiple project files as well.
 , projectFile ? null
 # The NuGet dependency file. This locks all NuGet dependency versions, as otherwise they cannot be deterministically fetched.
 # This can be generated using the `nuget-to-nix` tool.
 , nugetDeps ? null
+# A list of derivations containing nupkg packages for local project references.
+# Referenced derivations can be built with `buildDotnetModule` with `packNupkg=true` flag.
+# Since we are sharing them as nugets they must be added to csproj/fsproj files as `PackageReference` as well.
+# For example, your project has a local dependency:
+#     <ProjectReference Include="../foo/bar.fsproj" />
+# To enable discovery through `projectReferences` you would need to add a line:
+#     <ProjectReference Include="../foo/bar.fsproj" />
+#     <PackageReference Include="bar" Version="*" Condition=" '$(ContinuousIntegrationBuild)'=='true' "/>
+, projectReferences ? []
 # Libraries that need to be available at runtime should be passed through this.
 # These get wrapped into `LD_LIBRARY_PATH`.
 , runtimeDeps ? []
@@ -60,6 +73,7 @@ let
       inherit sha256;
     };
   });
+  _localDeps = linkFarmFromDrvs "${name}-local-nuget-deps" projectReferences;
 
   nuget-source = stdenvNoCC.mkDerivation rec {
     name = "${args.pname}-nuget-source";
@@ -72,6 +86,8 @@ let
 
       nuget sources Add -Name nixos -Source "$out/lib"
       nuget init "${_nugetDeps}" "$out/lib"
+      ${lib.optionalString (projectReferences != [])
+        "nuget init \"${_localDeps}\" \"$out/lib\""}
 
       # Generates a list of all unique licenses' spdx ids.
       find "$out/lib" -name "*.nuspec" -exec sh -c \
@@ -167,7 +183,18 @@ let
           "''${dotnetInstallFlags[@]}"  \
           "''${dotnetFlags[@]}"
       done
-    '' + (if executables != null then ''
+    '' + (lib.optionalString packNupkg ''
+      for project in ''${projectFile[@]}; do
+        dotnet pack "$project" \
+          -p:ContinuousIntegrationBuild=true \
+          -p:Deterministic=true \
+          --output $out/share \
+          --configuration "$buildType" \
+          --no-build \
+          "''${dotnetPackFlags[@]}"  \
+          "''${dotnetFlags[@]}"
+      done
+    '') + (if executables != null then ''
       for executable in $executables; do
         execPath="$out/lib/${args.pname}/$executable"
 
