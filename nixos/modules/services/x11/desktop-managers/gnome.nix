@@ -403,10 +403,17 @@ in
     })
 
     (mkIf serviceCfg.core-shell.enable {
-      services.xserver.desktopManager.gnome.sessionPath = [
-        pkgs.gnome.gnome-shell
-        pkgs.gnome.gnome-shell-extensions
-      ];
+      services.xserver.desktopManager.gnome.sessionPath =
+        let
+          mandatoryPackages = [
+            pkgs.gnome.gnome-shell
+          ];
+          optionalPackages = [
+            pkgs.gnome.gnome-shell-extensions
+          ];
+        in
+        mandatoryPackages
+        ++ utils.removePackagesByName optionalPackages config.environment.gnome.excludePackages;
 
       services.colord.enable = mkDefault true;
       services.gnome.chrome-gnome-shell.enable = mkDefault true;
@@ -460,24 +467,31 @@ in
       ];
 
       # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/blob/gnome-3-38/elements/core/meta-gnome-core-shell.bst
-      environment.systemPackages = with pkgs.gnome; [
-        adwaita-icon-theme
-        nixos-background-info
-        gnome-backgrounds
-        gnome-bluetooth
-        gnome-color-manager
-        gnome-control-center
-        gnome-shell
-        gnome-shell-extensions
-        gnome-themes-extra
-        pkgs.gnome-tour # GNOME Shell detects the .desktop file on first log-in.
-        pkgs.gnome-user-docs
-        pkgs.orca
-        pkgs.glib # for gsettings
-        pkgs.gnome-menus
-        pkgs.gtk3.out # for gtk-launch
-        pkgs.xdg-user-dirs # Update user dirs as described in http://freedesktop.org/wiki/Software/xdg-user-dirs/
-      ];
+      environment.systemPackages =
+        let
+          mandatoryPackages = with pkgs.gnome; [
+            gnome-shell
+          ];
+          optionalPackages = with pkgs.gnome; [
+            adwaita-icon-theme
+            nixos-background-info
+            gnome-backgrounds
+            gnome-bluetooth
+            gnome-color-manager
+            gnome-control-center
+            gnome-shell-extensions
+            gnome-themes-extra
+            pkgs.gnome-tour # GNOME Shell detects the .desktop file on first log-in.
+            pkgs.gnome-user-docs
+            pkgs.orca
+            pkgs.glib # for gsettings program
+            pkgs.gnome-menus
+            pkgs.gtk3.out # for gtk-launch program
+            pkgs.xdg-user-dirs # Update user dirs as described in http://freedesktop.org/wiki/Software/xdg-user-dirs/
+          ];
+        in
+        mandatoryPackages
+        ++ utils.removePackagesByName optionalPackages config.environment.gnome.excludePackages;
     })
 
     # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/blob/gnome-3-38/elements/core/meta-gnome-core-utilities.bst
