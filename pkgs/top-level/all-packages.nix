@@ -7479,6 +7479,8 @@ with pkgs;
 
   logcheck = callPackage ../tools/system/logcheck { };
 
+  logmap = callPackage ../tools/security/logmap { };
+
   logmein-hamachi = callPackage ../tools/networking/logmein-hamachi { };
 
   logkeys = callPackage ../tools/security/logkeys { };
