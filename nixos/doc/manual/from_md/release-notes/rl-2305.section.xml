@@ -346,6 +346,17 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>ghcWithPackages</literal> and
+          <literal>ghcWithHoogle</literal> wrappers will now also
+          symlink GHC’s and all included libraries’ documentation to
+          <literal>$out/share/doc</literal> for convenience. If
+          undesired, the old behavior can be restored by overriding the
+          builders with
+          <literal>{ installDocumentation = false; }</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>mastodon</literal> now supports connection to a
           remote <literal>PostgreSQL</literal> database.
         </para>
