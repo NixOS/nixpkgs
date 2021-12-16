@@ -147,7 +147,6 @@ embark-theme/vim as embark-vim
 embear/vim-localvimrc
 enomsg/vim-haskellConcealPlus
 enricobacis/vim-airline-clock
-ensime/ensime-vim
 ervandew/supertab
 esneider/YUNOcommit.vim
 euclidianAce/BetterLua.vim

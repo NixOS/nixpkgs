@@ -384,6 +384,7 @@ mapAliases ({
   jbuilder = dune_1; # added 2018-09-09
   jikes = throw "jikes was deprecated on 2019-10-07: abandoned by upstream";
   joseki = apache-jena-fuseki; # added 2016-02-28
+  journalbeat7 = throw "journalbeat has been removed upstream. Use filebeat with the journald input instead.";
   jvmci8 = throw "graalvm8 and its tools were deprecated in favor of graalvm8-ce"; # added 2021-10-15
   json_glib = json-glib; # added 2018-02-25
   kafkacat = kcat; # added 2021-10-07

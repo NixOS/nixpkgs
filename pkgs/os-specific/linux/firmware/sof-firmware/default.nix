@@ -5,13 +5,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "sof-firmware";
-  version = "1.9.2";
+  version = "1.9.3";
 
   src = fetchFromGitHub {
     owner = "thesofproject";
     repo = "sof-bin";
     rev = "v${version}";
-    sha256 = "sha256-aEoLlP34rorllCdTneATlCHnmhJD/VABV9Uv4dDmShA=";
+    sha256 = "sha256-mQGwc0nwjku9ZxcFy8H4QiBLETkAeyqYvFzBHtK8/DY=";
   };
 
   dontFixup = true; # binaries must not be stripped or patchelfed

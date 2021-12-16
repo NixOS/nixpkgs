@@ -320,21 +320,22 @@ in
                         ${optionalString cfg.explicitSymlinks "-H"} \
                         ${optionalString cfg.followSymlinks "-L"} \
                         ${concatStringsSep " " cfg.directories}'';
+          cachedir = escapeShellArg cfg.cachedir;
           in if (cfg.cachedir != null) then ''
-            mkdir -p ${cfg.cachedir}
-            chmod 0700 ${cfg.cachedir}
+            mkdir -p ${cachedir}
+            chmod 0700 ${cachedir}
 
             ( flock 9
-              if [ ! -e ${cfg.cachedir}/firstrun ]; then
+              if [ ! -e ${cachedir}/firstrun ]; then
                 ( flock 10
                   flock -u 9
                   ${tarsnap} --fsck
                   flock 9
-                ) 10>${cfg.cachedir}/firstrun
+                ) 10>${cachedir}/firstrun
               fi
-            ) 9>${cfg.cachedir}/lockf
+            ) 9>${cachedir}/lockf
 
-             exec flock ${cfg.cachedir}/firstrun ${run}
+             exec flock ${cachedir}/firstrun ${run}
           '' else "exec ${run}";
 
         serviceConfig = {
@@ -356,22 +357,23 @@ in
           tarsnap = ''tarsnap --configfile "/etc/tarsnap/${name}.conf"'';
           lastArchive = "$(${tarsnap} --list-archives | sort | tail -1)";
           run = ''${tarsnap} -x -f "${lastArchive}" ${optionalString cfg.verbose "-v"}'';
+          cachedir = escapeShellArg cfg.cachedir;
 
         in if (cfg.cachedir != null) then ''
-          mkdir -p ${cfg.cachedir}
-          chmod 0700 ${cfg.cachedir}
+          mkdir -p ${cachedir}
+          chmod 0700 ${cachedir}
 
           ( flock 9
-            if [ ! -e ${cfg.cachedir}/firstrun ]; then
+            if [ ! -e ${cachedir}/firstrun ]; then
               ( flock 10
                 flock -u 9
                 ${tarsnap} --fsck
                 flock 9
-              ) 10>${cfg.cachedir}/firstrun
+              ) 10>${cachedir}/firstrun
             fi
-          ) 9>${cfg.cachedir}/lockf
+          ) 9>${cachedir}/lockf
 
-           exec flock ${cfg.cachedir}/firstrun ${run}
+           exec flock ${cachedir}/firstrun ${run}
         '' else "exec ${run}";
 
         serviceConfig = {

@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "procs";
-  version = "0.11.10";
+  version = "0.11.12";
 
   src = fetchFromGitHub {
     owner = "dalance";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-kt1qv4x48qXzlqvV2nfFXkYzgeC4m+rA7NA+coznNno=";
+    sha256 = "sha256-O2jH56l4SCYF+9oNhviJdybKmUo/iuR5mOOugc4Hw6Y=";
   };
 
-  cargoSha256 = "sha256-itncLfIjNwwAO393gZ5xyRnig/N0JEovBQvOIAC4e9g=";
+  cargoSha256 = "sha256-MrYOOAFj+mVm/EPx4CGQI7YhxPcF0jBgnnJk/DV2ojk=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -29,6 +29,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/dalance/procs";
     changelog = "https://github.com/dalance/procs/raw/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ dalance Br1ght0ne ];
+    maintainers = with maintainers; [ dalance Br1ght0ne SuperSandro2000 ];
   };
 }
