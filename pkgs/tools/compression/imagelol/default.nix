@@ -12,7 +12,18 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  # fix for case-sensitive filesystems
+  # https://github.com/MCredstoner2004/ImageLOL/issues/1
+  postPatch = ''
+    mv ImageLOL src
+    substituteInPlace CMakeLists.txt \
+      --replace 'add_subdirectory("imagelol")' 'add_subdirectory("src")'
+  '';
+
   nativeBuildInputs = [ cmake ];
+
+  # error: 'path' is unavailable: introduced in macOS 10.15
+  CXXFLAGS = lib.optional (stdenv.hostPlatform.system == "x86_64-darwin") "-D_LIBCPP_DISABLE_AVAILABILITY";
 
   installPhase = ''
     mkdir -p $out/bin
