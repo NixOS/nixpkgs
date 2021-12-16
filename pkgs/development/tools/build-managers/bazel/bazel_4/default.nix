@@ -75,7 +75,7 @@ let
     for i in ${builtins.toString srcDeps}; do cp $i $out/$(stripHash $i); done
   '';
 
-  defaultShellPath = lib.makeBinPath
+  defaultShellUtils =
     # Keep this list conservative. For more exotic tools, prefer to use
     # @rules_nixpkgs to pull in tools from the nix repository. Example:
     #
@@ -119,6 +119,8 @@ let
       which
       zip
     ];
+
+  defaultShellPath = lib.makeBinPath defaultShellUtils;
 
   # Java toolchain used for the build and tests
   javaToolchain = "@bazel_tools//tools/jdk:toolchain_${buildJdkName}";
@@ -527,10 +529,7 @@ stdenv.mkDerivation rec {
     in lib.optionalString stdenv.hostPlatform.isDarwin darwinPatches
      + genericPatches;
 
-  buildInputs = [
-    buildJdk
-    python3
-  ];
+  buildInputs = [buildJdk] ++ defaultShellUtils;
 
   # when a command can’t be found in a bazel build, you might also
   # need to add it to `defaultShellPath`.
