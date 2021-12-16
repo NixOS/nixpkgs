@@ -8,13 +8,13 @@
 , scmsrht
 }:
 let
-  version = "0.76.2";
+  version = "0.76.3";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "git.sr.ht";
     rev = version;
-    sha256 = "sha256-JnMoQtoR4gXujO/+2WR3oM4MNXjrqWLbS66DO09mCP4=";
+    sha256 = "sha256-fC9r4cdvbH0Y/hqyWGePPxJlujxcYn9QbPh1LvBaYhU=";
   };
 
   buildShell = src: buildGoModule {
