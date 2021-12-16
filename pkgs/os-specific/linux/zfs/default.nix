@@ -46,7 +46,7 @@ let
       name = "zfs-${configFile}-${version}${optionalString buildKernel "-${kernel.version}"}";
 
       src = fetchFromGitHub {
-        owner = "zfsonlinux";
+        owner = "openzfs";
         repo = "zfs";
         inherit rev sha256;
       };
