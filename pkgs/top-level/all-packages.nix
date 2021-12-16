@@ -3410,6 +3410,8 @@ with pkgs;
 
   moonraker = callPackage ../servers/moonraker { };
 
+  morsel = callPackage ../tools/text/morsel {};
+
   mousetweaks = callPackage ../applications/accessibility/mousetweaks {
     inherit (xorg) libX11 libXtst libXfixes;
   };
