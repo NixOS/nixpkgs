@@ -380,10 +380,10 @@
     "owner": "integrations",
     "provider-source-address": "registry.terraform.io/integrations/github",
     "repo": "terraform-provider-github",
-    "rev": "v4.18.2",
-    "sha256": "1m4ddj4bm84ljrkg8i98gdgbf5c89chv3yz13xbmyl2iga2x5bf7",
+    "rev": "v4.19.0",
+    "sha256": "17xpkcrklzbim91rxw4g4n8izk9qiw9q0vfivr467i32dv5mzc2d",
     "vendorSha256": null,
-    "version": "4.18.2"
+    "version": "4.19.0"
   },
   "gitlab": {
     "owner": "gitlabhq",
