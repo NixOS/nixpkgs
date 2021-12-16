@@ -142,6 +142,16 @@
           using the PyPy interpreter were added.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The <literal>influxdb2</literal> package was split into
+          <literal>influxdb2-server</literal> and
+          <literal>influxdb2-cli</literal>, matching the split that took
+          place upstream. A combined <literal>influxdb2</literal>
+          package is still provided in this release for backwards
+          compatibilty, but will be removed at a later date.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>
