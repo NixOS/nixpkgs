@@ -38,6 +38,11 @@ buildPythonPackage rec {
   pname = "metasrht";
   inherit version src;
 
+  patches = [
+    # Revert change breaking Unix socket support for Redis
+    patches/redis-socket/meta/0001-Revert-Add-webhook-queue-monitoring.patch
+  ];
+
   nativeBuildInputs = srht.nativeBuildInputs;
 
   propagatedBuildInputs = [
