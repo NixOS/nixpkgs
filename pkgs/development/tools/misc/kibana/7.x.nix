@@ -4,23 +4,23 @@
 , stdenv
 , makeWrapper
 , fetchurl
-, nodejs-16_x
+, nodejs-14_x
 , coreutils
 , which
 }:
 
 with lib;
 let
-  nodejs = nodejs-16_x;
+  nodejs = nodejs-14_x;
   inherit (builtins) elemAt;
   info = splitString "-" stdenv.hostPlatform.system;
   arch = elemAt info 0;
   plat = elemAt info 1;
   shas =
     {
-      x86_64-linux  = "0jivwsrq31n0qfznrsjfsn65sg3wpbd990afn2wzjnj4drq7plz6";
-      x86_64-darwin = "02483aqzrccq1x6rwznmcazijdd46yxj9vnbihnvp2xyp3w9as45";
-      aarch64-linux = "0iw155gkkl1hshc80lfj95rssg039ig21wz1l3srmmf2x4f934s9";
+      x86_64-linux  = "19p9s4sir982bb1zcldrbphhwfs9i11p0q28vgc421iqg10kjlf1";
+      x86_64-darwin = "0qq557ngwwakifidyrccga4cadj9k9pzhjwy4msmbcgf5pb86qyc";
+      aarch64-linux = "183cp1h8d3n7xfcpcys4hf36palczxa409afyp62kzyzckngy0j8";
     };
 
 in stdenv.mkDerivation rec {

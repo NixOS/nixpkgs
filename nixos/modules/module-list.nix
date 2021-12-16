@@ -448,7 +448,6 @@
   ./services/hardware/xow.nix
   ./services/logging/SystemdJournal2Gelf.nix
   ./services/logging/awstats.nix
-  ./services/logging/filebeat.nix
   ./services/logging/fluentd.nix
   ./services/logging/graylog.nix
   ./services/logging/heartbeat.nix

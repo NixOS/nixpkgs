@@ -17,14 +17,14 @@ let
   shas =
     if enableUnfree
     then {
-      x86_64-linux  = "1vm53alq9q1qy2jcsjg9z339xrkac5r9qqpdafp53ny4zsv1n7vj";
-      x86_64-darwin = "0hhjyl04h3gd66rdk22272rj419br4v2i59lyrmaj6hmnsqbv968";
-      aarch64-linux = "0yjaki7gjffrz86hvqgn1gzhd9dc9llcj50g2x1sgpyn88zk0z0p";
+      x86_64-linux  = "0yjaki7gjffrz86hvqgn1gzhd9dc9llcj50g2x1sgpyn88zk0z0p";
+      x86_64-darwin = "0dqm66c89w1nvmbwqzphlqmf7avrycgv1nwd5b0k1z168fj0c3zm";
+      aarch64-linux = "11hjhyb48mjagmvqyxb780n57kr619h6p4adl2vs1zm97g9gslx8";
     }
     else {
-      x86_64-linux  = "1f3659vcgczm7v03q3fvsmp1ndp6wm3i7r2b2vbl4xq7hf9v7azk";
-      x86_64-darwin = "10zw9qc0lc0x9in0nkxc1aiazhyd69l8sya2ni46ivyyjwf0sqsn";
-      aarch64-linux = "1czhgmky2zf3mqykn5ww4257yfhd36mi4x6dq569ymly83pivf8v";
+      x86_64-linux  = "14b1649avjcalcsi0ffkgznq6d93qdk6m3j0i73mwfqka5d3dvy3";
+      x86_64-darwin = "0ypgdfklr5rxvsnc3czh231pa1z2h70366j1c6q5g64b3xnxpphs";
+      aarch64-linux = "01ainayr8fwwfix7dmxfhhmb23ji65dn4lbjwnj2w0pl0ym9h9w2";
     };
   this = stdenv.mkDerivation rec {
     version = elk7Version;

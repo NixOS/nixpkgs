@@ -18,9 +18,9 @@ let
   plat = elemAt info 1;
   shas =
     {
-      x86_64-linux  = "1s16l95wc589cr69pfbgmkn9rkvxn6sd6jlbiqpm6p6iyxiaxd6c";
-      x86_64-darwin = "05h7pvq4pb816wgcymnfklp3w6sv54x6138v2infw5219dnk8pfs";
-      aarch64-linux = "0q4xnjzhlx1b2lkikca88qh9glfxaifsm419k2bxxlrfrx31zlkq";
+      x86_64-linux  = "1ld7656b37l67vi4pyv0il865b168niqnbd4hzbvdnwrm35prp10";
+      x86_64-darwin = "11b180y11xw5q01l7aw6lyn15lp9ks8xmakjg1j7gp3z6c90hpn3";
+      aarch64-linux = "0s4ph79x17f90jk31wjwk259dk9dmhnmnkxdcn77m191wvf6m3wy";
     };
 in
 stdenv.mkDerivation rec {

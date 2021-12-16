@@ -40,8 +40,9 @@ let
 
             services = {
 
-              journalbeat = {
-                enable = elk ? journalbeat;
+              journalbeat = let lt6 = builtins.compareVersions
+                                        elk.journalbeat.version "6" < 0; in {
+                enable = true;
                 package = elk.journalbeat;
                 extraConfig = pkgs.lib.mkOptionDefault (''
                   logging:
@@ -50,27 +51,12 @@ let
                     metrics.enabled: false
                   output.elasticsearch:
                     hosts: [ "127.0.0.1:9200" ]
+                    ${pkgs.lib.optionalString lt6 "template.enabled: false"}
+                '' + pkgs.lib.optionalString (!lt6) ''
                   journalbeat.inputs:
                   - paths: []
                     seek: cursor
                 '');
-              };
-
-              filebeat = {
-                enable = elk ? filebeat;
-                package = elk.filebeat;
-                inputs.journald.id = "everything";
-
-                inputs.log = {
-                  enabled = true;
-                  paths = [
-                    "/var/lib/filebeat/test"
-                  ];
-                };
-
-                settings = {
-                  logging.level = "info";
-                };
               };
 
               metricbeat = {
@@ -156,43 +142,27 @@ let
       };
 
     passthru.elkPackages = elk;
-    testScript =
-      let
-        valueObject = lib.optionalString (lib.versionAtLeast elk.elasticsearch.version "7") ".value";
-      in ''
+    testScript = ''
       import json
 
 
-      def expect_hits(message):
+      def total_hits(message):
           dictionary = {"query": {"match": {"message": message}}}
           return (
-              "curl --silent --show-error --fail-with-body '${esUrl}/_search' "
+              "curl --silent --show-error '${esUrl}/_search' "
               + "-H 'Content-Type: application/json' "
               + "-d '{}' ".format(json.dumps(dictionary))
-              + " | tee /dev/console"
-              + " | jq -es 'if . == [] then null else .[] | .hits.total${valueObject} > 0 end'"
-          )
-
-
-      def expect_no_hits(message):
-          dictionary = {"query": {"match": {"message": message}}}
-          return (
-              "curl --silent --show-error --fail-with-body '${esUrl}/_search' "
-              + "-H 'Content-Type: application/json' "
-              + "-d '{}' ".format(json.dumps(dictionary))
-              + " | tee /dev/console"
-              + " | jq -es 'if . == [] then null else .[] | .hits.total${valueObject} == 0 end'"
+              + "| jq .hits.total"
           )
 
 
       def has_metricbeat():
           dictionary = {"query": {"match": {"event.dataset": {"query": "system.cpu"}}}}
           return (
-              "curl --silent --show-error --fail-with-body '${esUrl}/_search' "
+              "curl --silent --show-error '${esUrl}/_search' "
               + "-H 'Content-Type: application/json' "
               + "-d '{}' ".format(json.dumps(dictionary))
-              + " | tee /dev/console"
-              + " | jq -es 'if . == [] then null else .[] | .hits.total${valueObject} > 0 end'"
+              + "| jq '.hits.total > 0'"
           )
 
 
@@ -208,8 +178,7 @@ let
       # TODO: extend this test with multiple elasticsearch nodes
       #       and see if the status turns "green".
       one.wait_until_succeeds(
-          "curl --silent --show-error --fail-with-body '${esUrl}/_cluster/health'"
-          + " | jq -es 'if . == [] then null else .[] | .status != \"red\" end'"
+          "curl --silent --show-error '${esUrl}/_cluster/health' | jq .status | grep -v red"
       )
 
       with subtest("Perform some simple logstash tests"):
@@ -220,50 +189,33 @@ let
       with subtest("Kibana is healthy"):
           one.wait_for_unit("kibana.service")
           one.wait_until_succeeds(
-              "curl --silent --show-error --fail-with-body 'http://localhost:5601/api/status'"
-              + " | jq -es 'if . == [] then null else .[] | .status.overall.state == \"green\" end'"
+              "curl --silent --show-error 'http://localhost:5601/api/status' | jq .status.overall.state | grep green"
           )
 
       with subtest("Metricbeat is running"):
           one.wait_for_unit("metricbeat.service")
 
       with subtest("Metricbeat metrics arrive in elasticsearch"):
-          one.wait_until_succeeds(has_metricbeat())
+          one.wait_until_succeeds(has_metricbeat() + " | tee /dev/console | grep 'true'")
 
       with subtest("Logstash messages arive in elasticsearch"):
-          one.wait_until_succeeds(expect_hits("flowers"))
-          one.wait_until_succeeds(expect_no_hits("dragons"))
+          one.wait_until_succeeds(total_hits("flowers") + " | grep -v 0")
+          one.wait_until_succeeds(total_hits("dragons") + " | grep 0")
 
-    '' + lib.optionalString (elk ? journalbeat) ''
       with subtest(
           "A message logged to the journal is ingested by elasticsearch via journalbeat"
       ):
           one.wait_for_unit("journalbeat.service")
           one.execute("echo 'Supercalifragilisticexpialidocious' | systemd-cat")
           one.wait_until_succeeds(
-              expect_hits("Supercalifragilisticexpialidocious")
+              total_hits("Supercalifragilisticexpialidocious") + " | grep -v 0"
           )
-    '' + lib.optionalString (elk ? filebeat) ''
-      with subtest(
-          "A message logged to the journal is ingested by elasticsearch via filebeat"
-      ):
-          one.wait_for_unit("filebeat.service")
-          one.execute("echo 'Superdupercalifragilisticexpialidocious' | systemd-cat")
-          one.wait_until_succeeds(
-              expect_hits("Superdupercalifragilisticexpialidocious")
-          )
-          one.execute(
-              "echo 'SuperdupercalifragilisticexpialidociousIndeed' >> /var/lib/filebeat/test"
-          )
-          one.wait_until_succeeds(
-              expect_hits("SuperdupercalifragilisticexpialidociousIndeed")
-          )
-    '' + ''
+
       with subtest("Elasticsearch-curator works"):
           one.systemctl("stop logstash")
           one.systemctl("start elasticsearch-curator")
           one.wait_until_succeeds(
-              '! curl --silent --show-error --fail-with-body "${esUrl}/_cat/indices" | grep logstash | grep ^'
+              '! curl --silent --show-error "${esUrl}/_cat/indices" | grep logstash | grep ^'
           )
     '';
   }) { inherit pkgs system; };
@@ -283,7 +235,7 @@ in {
   #   elasticsearch = pkgs.elasticsearch7-oss;
   #   logstash      = pkgs.logstash7-oss;
   #   kibana        = pkgs.kibana7-oss;
-  #   filebeat      = pkgs.filebeat7;
+  #   journalbeat   = pkgs.journalbeat7;
   #   metricbeat    = pkgs.metricbeat7;
   # };
   unfree = lib.dontRecurseIntoAttrs {
@@ -298,7 +250,7 @@ in {
       elasticsearch = pkgs.elasticsearch7;
       logstash      = pkgs.logstash7;
       kibana        = pkgs.kibana7;
-      filebeat      = pkgs.filebeat7;
+      journalbeat   = pkgs.journalbeat7;
       metricbeat    = pkgs.metricbeat7;
     };
   };

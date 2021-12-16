@@ -19,21 +19,13 @@
   </section>
   <section xml:id="sec-release-22.05-new-services">
     <title>New Services</title>
-    <itemizedlist>
+    <itemizedlist spacing="compact">
       <listitem>
         <para>
           <link xlink:href="https://github.com/intel/linux-sgx#install-the-intelr-sgx-psw">aesmd</link>,
           the Intel SGX Architectural Enclave Service Manager. Available
           as
           <link linkend="opt-services.aesmd.enable">services.aesmd</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://www.elastic.co/guide/en/beats/filebeat/current/filebeat-overview.html">filebeat</link>,
-          a lightweight shipper for forwarding and centralizing log
-          data. Available as
-          <link linkend="opt-services.filebeat.enable">services.filebeat</link>.
         </para>
       </listitem>
     </itemizedlist>
