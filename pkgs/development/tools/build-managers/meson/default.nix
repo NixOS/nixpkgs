@@ -89,7 +89,7 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://mesonbuild.com";
     description = "SCons-like build system that use python as a front-end language and Ninja as a building backend";
     license = licenses.asl20;
-    maintainers = with maintainers; [ jtojnar mbe ];
+    maintainers = with maintainers; [ mbe ];
     platforms = platforms.all;
   };
 }

@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     description = "Flatpak portal library";
     homepage = "https://github.com/flatpak/libportal";
     license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

@@ -98,6 +98,6 @@ stdenv.mkDerivation rec {
         appendixUrl = appendix.url;
         free = false;
       };
-    maintainers = with maintainers; [ toonn jtojnar ];
+    maintainers = with maintainers; [ toonn ];
   };
 }
