@@ -26,14 +26,16 @@ let
       };
     };
   allTests =
-    foldAttrs recursiveUpdate {} (map allTestsForSystem supportedSystems);
+    foldAttrs recursiveUpdate { } (map allTestsForSystem supportedSystems);
 
   pkgs = import ./.. { system = "x86_64-linux"; };
 
 
   versionModule =
-    { system.nixos.versionSuffix = versionSuffix;
+    {
+      system.nixos.versionSuffix = versionSuffix;
       system.nixos.revision = nixpkgs.rev or nixpkgs.shortRev;
+      system.stateVersion = mkForce "21.04";
     };
 
   makeModules = module: rest: [ configuration versionModule module rest ];
@@ -92,9 +94,10 @@ let
   buildFromConfig = module: sel: forAllSystems (system: hydraJob (sel (import ./lib/eval-config.nix {
     inherit system;
     modules = makeModules module
-      ({ ... }:
+      ({ config, ... }:
       { fileSystems."/".device  = mkDefault "/dev/sda1";
         boot.loader.grub.device = mkDefault "/dev/sda";
+        system.stateVersion = mkDefault config.system.version;
       });
   }).config));
 
