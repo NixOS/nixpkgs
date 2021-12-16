@@ -21338,6 +21338,9 @@ with pkgs;
   influxdb2-cli = callPackage ../servers/nosql/influxdb2/cli.nix {
     buildGoModule = buildGo117Module;
   };
+  # For backwards compatibility with older versions of influxdb2,
+  # which bundled the server and CLI into the same derivation. Will be
+  # removed in a few releases.
   influxdb2 = callPackage ../servers/nosql/influxdb2/combined.nix { };
 
   mysql57 = callPackage ../servers/sql/mysql/5.7.x.nix {
