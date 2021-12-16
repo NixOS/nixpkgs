@@ -1228,6 +1228,7 @@ mapAliases ({
   inherit (plasma5Packages.thirdParty)
     plasma-applet-caffeine-plus
     plasma-applet-virtual-desktop-bar
+    kde-rounded-corners
     kwin-dynamic-workspaces
     kwin-tiling
     krohnkite

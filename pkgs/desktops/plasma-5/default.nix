@@ -158,6 +158,7 @@ let
         plasma-applet-caffeine-plus = callPackage ./3rdparty/addons/caffeine-plus.nix { };
         plasma-applet-virtual-desktop-bar = callPackage ./3rdparty/addons/virtual-desktop-bar.nix { };
         bismuth = callPackage ./3rdparty/addons/bismuth { };
+        kde-rounded-corners = callPackage ./3rdparty/kwin/kde-rounded-corners.nix { };
         kwin-dynamic-workspaces = callPackage ./3rdparty/kwin/scripts/dynamic-workspaces.nix { };
         kwin-tiling = callPackage ./3rdparty/kwin/scripts/tiling.nix { };
         krohnkite = callPackage ./3rdparty/kwin/scripts/krohnkite.nix { };
