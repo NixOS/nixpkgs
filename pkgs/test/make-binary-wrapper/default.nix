@@ -1,7 +1,7 @@
 { lib, coreutils, python3, gcc, writeText, writeScript, runCommand, makeBinaryWrapper }:
 
 let
-  env = { nativeBuildInputs = [ makeBinaryWrapper ]; };
+  env = { buildInputs = [ makeBinaryWrapper ]; };
   envCheck = runCommand "envcheck" env ''
     ${gcc}/bin/cc -Wall -Werror -Wpedantic -o $out ${./envcheck.c}
   '';

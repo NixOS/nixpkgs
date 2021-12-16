@@ -697,8 +697,15 @@ with pkgs;
       '';
     in
       makeSetupHook {
-        deps = [ dieHook ];
-        substitutions.passthru.tests = callPackage ../test/make-binary-wrapper { inherit makeBinaryWrapper; };
+        deps = [ dieHook cc ];
+        substitutions.passthru.tests = callPackage ../test/make-binary-wrapper {
+          makeBinaryWrapper = makeBinaryWrapper.override {
+            sanitizers = (if stdenv.isDarwin && stdenv.isAarch64
+              then [ ]
+              else [ "undefined" "address" ]
+            );
+          };
+        };
       } script;
   in
     lib.makeOverridable f {
