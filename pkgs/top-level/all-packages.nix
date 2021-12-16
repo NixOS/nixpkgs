@@ -13113,7 +13113,7 @@ with pkgs;
   squeak = callPackage ../development/compilers/squeak { };
 
   squirrel-sql = callPackage ../development/tools/database/squirrel-sql {
-    drivers = [ mssql_jdbc mysql_jdbc postgresql_jdbc ];
+    drivers = [ jtds_jdbc mssql_jdbc mysql_jdbc postgresql_jdbc ];
   };
 
   stalin = callPackage ../development/compilers/stalin { };
@@ -21353,6 +21353,7 @@ with pkgs;
   mysql_jdbc = callPackage ../servers/sql/mysql/jdbc { };
 
   mssql_jdbc = callPackage ../servers/sql/mssql/jdbc { };
+  jtds_jdbc = callPackage ../servers/sql/mssql/jdbc/jtds.nix { };
 
   azuredatastudio = callPackage ../applications/misc/azuredatastudio { };
 
