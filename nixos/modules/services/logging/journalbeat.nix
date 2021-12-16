@@ -28,7 +28,6 @@ in
         type = types.package;
         default = pkgs.journalbeat;
         defaultText = literalExpression "pkgs.journalbeat";
-        example = literalExpression "pkgs.journalbeat7";
         description = ''
           The journalbeat package to use
         '';
