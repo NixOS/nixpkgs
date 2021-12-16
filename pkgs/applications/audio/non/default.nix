@@ -1,20 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, python2, cairo, libjpeg, ntk, libjack2
+{ lib, stdenv, fetchFromGitHub, pkg-config, python3, cairo, libjpeg, ntk, libjack2
 , libsndfile, ladspaH, liblo, libsigcxx, lrdf, wafHook
 }:
 
 stdenv.mkDerivation {
   pname = "non";
-  version = "2018-02-15";
+  version = "unstable-2021-01-28";
   src = fetchFromGitHub {
-    owner = "original-male";
+    owner = "linuxaudio";
     repo = "non";
-    rev = "5ae43bb27c42387052a73e5ffc5d33efb9d946a9";
-    sha256 = "1cljkkyi9dxqpqhx8y6l2ja4zjmlya26m26kqxml8gx08vyvddhx";
+    rev = "cdad26211b301d2fad55a26812169ab905b85bbb";
+    sha256 = "sha256-iMJNMDytNXpEkUhL0RILSd25ixkm8HL/edtOZta0Pf4=";
   };
 
   nativeBuildInputs = [ pkg-config wafHook ];
-  buildInputs = [ python2 cairo libjpeg ntk libjack2 libsndfile
-    ladspaH liblo libsigcxx lrdf
+  buildInputs = [ python3 cairo libjpeg ntk libjack2 libsndfile
+                  ladspaH liblo libsigcxx lrdf
   ];
 
   meta = {
