@@ -22219,6 +22219,8 @@ with pkgs;
 
   linuxConsoleTools = callPackage ../os-specific/linux/consoletools { };
 
+  linux-laptop-system-tray-extensions = callPackage ../os-specific/linux/linux-laptop-system-tray-extensions { };
+
   libreelec-dvb-firmware = callPackage ../os-specific/linux/firmware/libreelec-dvb-firmware { };
 
   openiscsi = callPackage ../os-specific/linux/open-iscsi { };

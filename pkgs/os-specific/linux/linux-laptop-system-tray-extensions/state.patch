@@ -1,0 +1,11 @@
+--- a/modules/Core/main.py     2021-12-14 23:16:06.182256726 +0100
++++ b/modules/Core/main.py     2021-12-15 22:43:37.415008227 +0100
+@@ -178,7 +178,7 @@
+         self.exit_code = 0
+ 
+         # init state manager
+-        self.state_manager = StateManager(filename=self.project_path + "/state.json")
++        self.state_manager = StateManager(filename=os.path.expanduser("~") + "/.local/ste/state.json")
+ 
+         # init event manager and extras
+         self.core_event_queue = queue.Queue()
