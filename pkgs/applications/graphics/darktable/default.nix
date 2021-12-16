@@ -27,6 +27,9 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional stdenv.isDarwin gtk-mac-integration
     ++ lib.optional stdenv.cc.isClang llvmPackages.openmp;
 
+  # VC5Decompressor.cpp:718:55: error: 'value' is unavailable: introduced in macOS 10.13
+  CXXFLAGS = lib.optional (stdenv.hostPlatform.system == "x86_64-darwin") "-D_LIBCPP_DISABLE_AVAILABILITY";
+
   cmakeFlags = [
     "-DBUILD_USERMANUAL=False"
   ] ++ lib.optionals stdenv.isDarwin [
