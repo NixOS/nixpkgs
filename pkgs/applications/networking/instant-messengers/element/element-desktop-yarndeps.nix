@@ -146,11 +146,11 @@
       };
     }
     {
-      name = "_electron_get___get_1.13.0.tgz";
+      name = "_electron_get___get_1.13.1.tgz";
       path = fetchurl {
-        name = "_electron_get___get_1.13.0.tgz";
-        url  = "https://registry.yarnpkg.com/@electron/get/-/get-1.13.0.tgz";
-        sha1 = "95c6bcaff4f9a505ea46792424f451efea89228c";
+        name = "_electron_get___get_1.13.1.tgz";
+        url  = "https://registry.yarnpkg.com/@electron/get/-/get-1.13.1.tgz";
+        sha1 = "42a0aa62fd1189638bd966e23effaebb16108368";
       };
     }
     {
@@ -730,11 +730,11 @@
       };
     }
     {
-      name = "_types_node___node_14.17.21.tgz";
+      name = "_types_node___node_14.18.0.tgz";
       path = fetchurl {
-        name = "_types_node___node_14.17.21.tgz";
-        url  = "https://registry.yarnpkg.com/@types/node/-/node-14.17.21.tgz";
-        sha1 = "6359d8cf73481e312a43886fa50afc70ce5592c6";
+        name = "_types_node___node_14.18.0.tgz";
+        url  = "https://registry.yarnpkg.com/@types/node/-/node-14.18.0.tgz";
+        sha1 = "98df2397f6936bfbff4f089e40e06fa5dd88d32a";
       };
     }
     {
@@ -898,11 +898,11 @@
       };
     }
     {
-      name = "allchange___allchange_1.0.3.tgz";
+      name = "allchange___allchange_1.0.6.tgz";
       path = fetchurl {
-        name = "allchange___allchange_1.0.3.tgz";
-        url  = "https://registry.yarnpkg.com/allchange/-/allchange-1.0.3.tgz";
-        sha1 = "f8814ddfbcfe39a01bf4570778ee7e6d9ff0ebb3";
+        name = "allchange___allchange_1.0.6.tgz";
+        url  = "https://registry.yarnpkg.com/allchange/-/allchange-1.0.6.tgz";
+        sha1 = "f905918255541dc92d6a1f5cdf758db4597f569c";
       };
     }
     {
@@ -1634,14 +1634,6 @@
       };
     }
     {
-      name = "core_js___core_js_3.18.2.tgz";
-      path = fetchurl {
-        name = "core_js___core_js_3.18.2.tgz";
-        url  = "https://registry.yarnpkg.com/core-js/-/core-js-3.18.2.tgz";
-        sha1 = "63a551e8a29f305cd4123754846e65896619ba5b";
-      };
-    }
-    {
       name = "core_util_is___core_util_is_1.0.2.tgz";
       path = fetchurl {
         name = "core_util_is___core_util_is_1.0.2.tgz";
@@ -1767,6 +1759,14 @@
         name = "debug___debug_3.2.7.tgz";
         url  = "https://registry.yarnpkg.com/debug/-/debug-3.2.7.tgz";
         sha1 = "72580b7e9145fb39b6676f9c5e5fb100b934179a";
+      };
+    }
+    {
+      name = "debug___debug_4.3.3.tgz";
+      path = fetchurl {
+        name = "debug___debug_4.3.3.tgz";
+        url  = "https://registry.yarnpkg.com/debug/-/debug-4.3.3.tgz";
+        sha1 = "04266e0b70a98d4462e6e288e38259213332b664";
       };
     }
     {
@@ -2010,11 +2010,11 @@
       };
     }
     {
-      name = "electron___electron_13.5.1.tgz";
+      name = "electron___electron_13.5.2.tgz";
       path = fetchurl {
-        name = "electron___electron_13.5.1.tgz";
-        url  = "https://registry.yarnpkg.com/electron/-/electron-13.5.1.tgz";
-        sha1 = "76c02c39be228532f886a170b472cbd3d93f0d0f";
+        name = "electron___electron_13.5.2.tgz";
+        url  = "https://registry.yarnpkg.com/electron/-/electron-13.5.2.tgz";
+        sha1 = "5c5826e58a5e12bb5ca8047b789d07b45260ecbc";
       };
     }
     {
@@ -2618,11 +2618,11 @@
       };
     }
     {
-      name = "global_agent___global_agent_2.2.0.tgz";
+      name = "global_agent___global_agent_3.0.0.tgz";
       path = fetchurl {
-        name = "global_agent___global_agent_2.2.0.tgz";
-        url  = "https://registry.yarnpkg.com/global-agent/-/global-agent-2.2.0.tgz";
-        sha1 = "566331b0646e6bf79429a16877685c4a1fbf76dc";
+        name = "global_agent___global_agent_3.0.0.tgz";
+        url  = "https://registry.yarnpkg.com/global-agent/-/global-agent-3.0.0.tgz";
+        sha1 = "ae7cd31bd3583b93c5a16437a1afe27cc33a1ab6";
       };
     }
     {
