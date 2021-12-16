@@ -22,6 +22,6 @@ stdenv.mkDerivation rec {
     description = "Pure Java (type 4) JDBC 3.0 driver for Microsoft SQL Server";
     homepage = "http://jtds.sourceforge.net/";
     license = licenses.lgpl21;
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 }
