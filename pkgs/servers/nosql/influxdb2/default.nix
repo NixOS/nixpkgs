@@ -1,4 +1,4 @@
-{ buildGo117Module
+{ buildGoModule
 , fetchFromGitHub
 , fetchurl
 , go-bindata
@@ -15,7 +15,6 @@ let
   version = "2.1.1";
   ui_version = "2.1.2";
   libflux_version = "0.139.0";
-  cli_version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "influxdata";
@@ -61,21 +60,7 @@ let
     '';
   };
 
-  cli = buildGo117Module {
-    pname = "influxdb-cli";
-    version = version;
-    src = fetchFromGitHub {
-      owner = "influxdata";
-      repo = "influx-cli";
-      rev = "v${cli_version}";
-      sha256 = "sha256-9FUchI93xLpQwtpbr5S3GfVrApHaemwbnRPIfAWmG6Y=";
-    };
-
-    vendorSha256 = "sha256-Boz1G8g0fjjlflxZh4V8sd/v0bE9Oy3DpqywOpKxjd0=";
-    subPackages = [ "cmd/influx" ];
-    ldflags = [ "-X main.commit=v${cli_version}" "-X main.version=${cli_version}" ];
-  };
-in buildGo117Module {
+in buildGoModule {
   pname = "influxdb";
   version = version;
   src = src;
@@ -83,7 +68,7 @@ in buildGo117Module {
   nativeBuildInputs = [ go-bindata pkg-config ];
 
   vendorSha256 = "sha256-GVLAzVJzSsC10ZWDZPP8upydwZG21E+zQ6sMKm1lCY0=";
-  subPackages = [ "cmd/influxd" ];
+  subPackages = [ "cmd/influxd" "cmd/telemetryd" ];
 
   PKG_CONFIG_PATH = "${flux}/pkgconfig";
   # Check that libflux and the UI are at the right version, and embed
@@ -109,9 +94,6 @@ in buildGo117Module {
     go generate
     popd
   '';
-  postInstall = ''
-    ln -s ${cli}/bin/influx $out/bin/influx
-  '';
 
   tags = [ "assets" ];
 
@@ -121,6 +103,6 @@ in buildGo117Module {
     description = "An open-source distributed time series database";
     license = licenses.mit;
     homepage = "https://influxdata.com/";
-    maintainers = with maintainers; [ danderson ];
+    maintainers = with maintainers; [ abbradar danderson ];
   };
 }
