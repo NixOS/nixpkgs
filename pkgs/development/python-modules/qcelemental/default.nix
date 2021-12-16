@@ -26,6 +26,8 @@ buildPythonPackage rec {
 
   doCheck = true;
 
+  disabledTestPaths = [ "qcelemental/tests/test_molparse_pubchem.py" ];
+
   meta = with lib; {
     description = "Periodic table, physical constants, and molecule parsing for quantum chemistry";
     homepage = "http://docs.qcarchive.molssi.org/projects/qcelemental/en/latest/";
