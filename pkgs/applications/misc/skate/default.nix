@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "skate";
-  version = "0.1.0";
+  version = "0.1.2";
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = "skate";
     rev = "v${version}";
-    sha256 = "01brxckjz8vlgaq9917l45xf48078d4465qn9l0lyll6hic6p06c";
+    sha256 = "sha256-Z+7unYmwPLOhJAMAhMwjapAmslTNxmP01myjgEOBfu8=";
   };
 
-  vendorSha256 = "0mvx4rzs0mvb1dyxj105mh2awfy0bmp716x7hpfdwhwz3p11fc7k";
+  vendorSha256 = "sha256-CdYyiUiy2q2boEHjdXkgRzVI+6fEb+fBrlInl6IrFjk=";
 
   doCheck = false;
 
