@@ -53,11 +53,11 @@ with py.pkgs;
 
 buildPythonApplication rec {
   pname = "archivy";
-  version = "1.4.0";
+  version = "1.6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-wQuR7cltDLr2u8BQ851MSjKmeLW8mQ/3bdEF5c9nxL0=";
+    sha256 = "sha256-97ACQ3qp9ciw0kHwKwmatzCBl4XZr+6poejBM/0D4k8=";
   };
 
   # Relax some dependencies
