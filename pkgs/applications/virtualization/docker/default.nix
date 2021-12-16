@@ -77,7 +77,7 @@ rec {
 
       extraPath = optionals (stdenv.isLinux) (makeBinPath [ iproute2 iptables e2fsprogs xz xfsprogs procps util-linux git ]);
 
-      extraUserPath = optionals (stdenv.isLinux) (makeBinPath [ rootlesskit slirp4netns fuse-overlayfs ]);
+      extraUserPath = optionals (stdenv.isLinux && !clientOnly) (makeBinPath [ rootlesskit slirp4netns fuse-overlayfs ]);
 
       postPatch = ''
         patchShebangs hack/make.sh hack/make/
