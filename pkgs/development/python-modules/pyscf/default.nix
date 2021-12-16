@@ -104,7 +104,7 @@ buildPythonPackage rec {
     description = "Python-based simulations of chemistry framework";
     homepage = "https://github.com/pyscf/pyscf";
     license = licenses.asl20;
-    platforms = platforms.unix;
+    platforms = [ "x86_64-linux" "x86_64-darwin" ];
     maintainers = [ maintainers.sheepforce ];
   };
 }
