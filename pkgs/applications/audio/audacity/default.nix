@@ -173,7 +173,7 @@ stdenv.mkDerivation rec {
     description = "Sound editor with graphical UI";
     homepage = "https://www.audacityteam.org/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ lheckemann ];
+    maintainers = with maintainers; [ lheckemann veprbl ];
     platforms = platforms.unix;
   };
 }
