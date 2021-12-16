@@ -3358,6 +3358,18 @@ final: prev:
     meta.homepage = "https://github.com/vim-scripts/mayansmoke/";
   };
 
+  mini-nvim = buildVimPluginFrom2Nix {
+    pname = "mini.nvim";
+    version = "2021-12-16";
+    src = fetchFromGitHub {
+      owner = "echasnovski";
+      repo = "mini.nvim";
+      rev = "8a57a7a5425cb4a3721a96b0ec436ba536926874";
+      sha256 = "1fns3zcbwxi3n9pb39cs80n2rwhhf2y5ssyl41mj7krqliwxb51y";
+    };
+    meta.homepage = "https://github.com/echasnovski/mini.nvim/";
+  };
+
   minimap-vim = buildVimPluginFrom2Nix {
     pname = "minimap.vim";
     version = "2021-12-15";
