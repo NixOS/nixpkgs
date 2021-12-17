@@ -1,7 +1,8 @@
 { lib
 , stdenv
-, fetchzip
 , fetchFromGitHub
+, fetchpatch
+, fetchzip
 , callPackage
 , autoconf
 , automake
@@ -25,40 +26,33 @@
 }:
 stdenv.mkDerivation rec {
   pname = "sgx-sdk";
-  version = "2.14.100.2";
-
-  versionTag = lib.concatStringsSep "." (lib.take 2 (lib.splitVersion version));
+  # Version as given in se_version.h
+  version = "2.15.101.1";
+  # Version as used in the Git tag
+  versionTag = "2.15.1";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "linux-sgx";
     rev = "sgx_${versionTag}";
-    hash = "sha256-D/QZWBUe1gRbbjWnV10b7IPoM3utefAsOEKnQuasIrM=";
+    hash = "sha256-e11COTR5eDPMB81aPRKatvIkAOeX+OZgnvn2utiv78M=";
     fetchSubmodules = true;
   };
 
-  postUnpack =
-    let
-      optlibName = "optimized_libs_${versionTag}.tar.gz";
-      optimizedLibs = fetchzip {
-        url = "https://download.01.org/intel-sgx/sgx-linux/${versionTag}/${optlibName}";
-        hash = "sha256-FjNhNV9+KDMvBYdWXZbua6qYOc3Z1/jtcF4j52TSxQY=";
-        stripRoot = false;
-      };
-      sgxIPPCryptoHeader = "${optimizedLibs}/external/ippcp_internal/inc/sgx_ippcp.h";
-    in
-    ''
-      # Make sure this is the right version of linux-sgx
-      grep -q '"${version}"' "$src/common/inc/internal/se_version.h" \
-        || (echo "Could not find expected version ${version} in linux-sgx source" >&2 && exit 1)
+  postUnpack = ''
+    # Make sure this is the right version of linux-sgx
+    grep -q '"${version}"' "$src/common/inc/internal/se_version.h" \
+      || (echo "Could not find expected version ${version} in linux-sgx source" >&2 && exit 1)
+  '';
 
-      # Make sure we use the correct version to build IPP Crypto
-      grep -q 'optlib_name=${optlibName}' "$src/download_prebuilt.sh" \
-        || (echo "Could not find expected optimized libs ${optlibName} in linux-sgx source" >&2 && exit 1)
-
-      # Add missing sgx_ippcp.h: https://github.com/intel/linux-sgx/pull/752
-      ln -s ${sgxIPPCryptoHeader} "$sourceRoot/external/ippcp_internal/inc/sgx_ippcp.h"
-    '';
+  patches = [
+    # Commit to add missing sgx_ippcp.h not yet part of this release
+    (fetchpatch {
+      name = "add-missing-sgx_ippcp-header.patch";
+      url = "https://github.com/intel/linux-sgx/commit/51d1087b707a47e18588da7bae23e5f686d44be6.patch";
+      sha256 = "sha256-RZC14H1oEuGp0zn8CySDPy1KNqP/POqb+KMYoQt2A7M=";
+    })
+  ];
 
   postPatch = ''
     # https://github.com/intel/linux-sgx/pull/730
@@ -121,7 +115,7 @@ stdenv.mkDerivation rec {
 
       pushd 'external/ippcp_internal'
 
-      install ${ipp-crypto-no_mitigation}/include/* inc/
+      cp -r ${ipp-crypto-no_mitigation}/include/. inc/
 
       install -D -m a+rw ${ipp-crypto-no_mitigation}/lib/intel64/libippcp.a \
         lib/linux/intel64/no_mitigation/libippcp.a
@@ -131,7 +125,7 @@ stdenv.mkDerivation rec {
         lib/linux/intel64/cve_2020_0551_cf/libippcp.a
 
       rm inc/ippcp.h
-      patch ${ipp-crypto-no_mitigation}/include/ippcp.h -i inc/ippcp20u3.patch -o inc/ippcp.h
+      patch ${ipp-crypto-no_mitigation}/include/ippcp.h -i inc/ippcp21u3.patch -o inc/ippcp.h
 
       install -D ${ipp-crypto-no_mitigation.src}/LICENSE license/LICENSE
 
@@ -227,8 +221,7 @@ stdenv.mkDerivation rec {
       --replace '/opt/intel/sgxsdk' "$out"
     for file in $out/share/SampleCode/*/Makefile; do
       substituteInPlace $file \
-        --replace '/opt/intel/sgxsdk' "$out" \
-        --replace '$(SGX_SDK)/buildenv.mk' "$out/share/bin/buildenv.mk"
+        --replace '/opt/intel/sgxsdk' "$out"
     done
 
     header "Fixing BINUTILS_DIR in buildenv.mk"

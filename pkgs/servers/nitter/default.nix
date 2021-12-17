@@ -45,7 +45,6 @@ nimPackages.buildNimPackage rec {
     homepage = "https://github.com/zedeus/nitter";
     maintainers = with maintainers; [ erdnaxe ];
     license = licenses.agpl3Only;
-    platforms = [ "x86_64-linux" ];
     mainProgram = "nitter";
   };
 }

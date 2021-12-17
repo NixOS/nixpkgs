@@ -1026,6 +1026,7 @@
   ./services/web-apps/plantuml-server.nix
   ./services/web-apps/plausible.nix
   ./services/web-apps/pgpkeyserver-lite.nix
+  ./services/web-apps/powerdns-admin.nix
   ./services/web-apps/matomo.nix
   ./services/web-apps/moinmoin.nix
   ./services/web-apps/openwebrx.nix

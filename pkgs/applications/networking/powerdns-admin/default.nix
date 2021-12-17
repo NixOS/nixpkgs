@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, mkYarnPackage, writeText, python3 }:
+{ lib, stdenv, fetchFromGitHub, mkYarnPackage, nixosTests, writeText, python3 }:
 
 let
   version = "0.2.3";
@@ -23,8 +23,8 @@ let
 
   pythonDeps = with python.pkgs; [
     flask flask_assets flask_login flask_sqlalchemy flask_migrate flask-seasurf flask_mail flask-sslify
-    mysqlclient sqlalchemy
-    configobj bcrypt requests ldap pyotp qrcode dnspython
+    mysqlclient psycopg2 sqlalchemy
+    cffi configobj cryptography bcrypt requests ldap pyotp qrcode dnspython
     gunicorn python3-saml pyopenssl pytz cssmin jsmin authlib bravado-core
     lima pytimeparse pyyaml
   ];
@@ -91,6 +91,7 @@ in stdenv.mkDerivation rec {
 
   postPatch = ''
     rm -r powerdnsadmin/static powerdnsadmin/assets.py
+    sed -i "s/id:/'id':/" migrations/versions/787bdba9e147_init_db.py
   '';
 
   installPhase = ''
@@ -100,7 +101,7 @@ in stdenv.mkDerivation rec {
     wrapPythonPrograms
 
     mkdir -p $out/share $out/bin
-    cp -r powerdnsadmin $out/share/powerdnsadmin
+    cp -r migrations powerdnsadmin $out/share/
 
     ln -s ${assets} $out/share/powerdnsadmin/static
     ln -s ${assetsPy} $out/share/powerdnsadmin/assets.py
@@ -113,6 +114,12 @@ in stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru = {
+    # PYTHONPATH of all dependencies used by the package
+    pythonPath = python3.pkgs.makePythonPath pythonDeps;
+    tests = nixosTests.powerdns-admin;
+  };
 
   meta = with lib; {
     description = "A PowerDNS web interface with advanced features";
