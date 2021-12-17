@@ -21,6 +21,7 @@ evalConfigArgs@
 , # !!! See comment about args in lib/modules.nix
   specialArgs ? {}
 , modules
+, modulesLocation ? (builtins.unsafeGetAttrPos "modules" evalConfigArgs).file or null
 , # !!! See comment about check in lib/modules.nix
   check ? true
 , prefix ? []
@@ -74,7 +75,18 @@ let
         _module.check = lib.mkDefault check;
       };
     };
-  allUserModules = modules ++ legacyModules;
+
+  allUserModules =
+    let
+      # Add the invoking file (or specified modulesLocation) as error message location
+      # for modules that don't have their own locations; presumably inline modules.
+      locatedModules =
+        if modulesLocation == null then
+          modules
+        else
+          map (lib.setDefaultModuleLocation modulesLocation) modules;
+    in
+      locatedModules ++ legacyModules;
 
   noUserModules = evalModulesMinimal ({
     inherit prefix specialArgs;
