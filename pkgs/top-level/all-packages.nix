@@ -698,11 +698,21 @@ with pkgs;
           --replace " @CC@ " " ${cc}/bin/cc ${san} "
       '';
     in
-      makeSetupHook { deps = [ dieHook ]; } script;
+      makeSetupHook {
+        deps = [ dieHook cc ];
+        substitutions.passthru.tests = callPackage ../test/make-binary-wrapper {
+          makeBinaryWrapper = makeBinaryWrapper.override {
+            sanitizers = (if stdenv.isDarwin && stdenv.isAarch64
+              then [ ]
+              else [ "undefined" "address" ]
+            );
+          };
+        };
+      } script;
   in
     lib.makeOverridable f {
-      cc = stdenv.cc.cc;
-      sanitizers = [ "undefined" "address" ];
+      cc = stdenv.cc;
+      sanitizers = [ ];
     };
 
   makeModulesClosure = { kernel, firmware, rootModules, allowMissing ? false }:
