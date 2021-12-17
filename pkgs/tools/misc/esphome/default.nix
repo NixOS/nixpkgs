@@ -17,14 +17,14 @@ let
 in
 with python.pkgs; buildPythonApplication rec {
   pname = "esphome";
-  version = "2021.12.0";
+  version = "2021.12.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-OiqY72XuzkdVxrUyPwAgH/Lnrht4lTlLYOirjF9UpjM=";
+    sha256 = "sha256-sxGlvbWlHrAVjCIKx4WsnmKQN4iOVfX+vnkntqceHDA=";
   };
 
   patches = [

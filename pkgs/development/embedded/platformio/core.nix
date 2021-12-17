@@ -9,6 +9,16 @@
 let
   python = python3.override {
     packageOverrides = self: super: {
+      aiofiles = super.aiofiles.overridePythonAttrs (oldAttrs: rec {
+        version = "0.8.0";
+        src = fetchFromGitHub {
+          owner = "Tinche";
+          repo = "aiofiles";
+          rev = "v${version}";
+          sha256 = "0mr9pzji4vqyf2yzh8yxz5q7fm8mgmkimx1xh49wh625m72pxcap";
+        };
+      });
+
       asgiref = super.asgiref.overridePythonAttrs (oldAttrs: rec {
         version = "3.4.1";
         src = fetchFromGitHub {
@@ -41,22 +51,12 @@ let
       });
 
       uvicorn = super.uvicorn.overridePythonAttrs (oldAttrs: rec {
-        version = "0.15.0";
+        version = "0.16.0";
         src = fetchFromGitHub {
           owner = "encode";
           repo = "uvicorn";
           rev = version;
-          sha256 = "074smp3448wcazlhc7sb8r54l4kfavr6yks3w5x60zl1qpijf52r";
-        };
-      });
-
-      zeroconf = super.zeroconf.overridePythonAttrs (oldAttrs: rec {
-        version = "0.36.13";
-        src = fetchFromGitHub {
-          owner = "jstasiak";
-          repo = "python-zeroconf";
-          rev = version;
-          sha256 = "aYNb67ESyz2Q2CKLhG+/Z8Xtt0Js8uf+xrVSEpY0X8c=";
+          sha256 = "14jih6j4q2qp5c9rgl798i5p51b4y6zkkj434q2l1naw0csphk4s";
         };
       });
     };

@@ -28,7 +28,6 @@ in
         type = types.package;
         default = pkgs.journalbeat;
         defaultText = literalExpression "pkgs.journalbeat";
-        example = literalExpression "pkgs.journalbeat7";
         description = ''
           The journalbeat package to use
         '';
@@ -89,6 +88,8 @@ in
     systemd.services.journalbeat = {
       description = "Journalbeat log shipper";
       wantedBy = [ "multi-user.target" ];
+      wants = [ "elasticsearch.service" ];
+      after = [ "elasticsearch.service" ];
       preStart = ''
         mkdir -p ${cfg.stateDir}/data
         mkdir -p ${cfg.stateDir}/logs
