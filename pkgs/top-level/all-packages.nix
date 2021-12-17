@@ -26949,6 +26949,8 @@ with pkgs;
 
   minicom = callPackage ../tools/misc/minicom { };
 
+  minigalaxy = callPackage ../applications/misc/minigalaxy { };
+
   minimodem = callPackage ../applications/radio/minimodem { };
 
   minidjvu = callPackage ../applications/graphics/minidjvu { };
