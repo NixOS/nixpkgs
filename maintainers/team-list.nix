@@ -253,7 +253,7 @@ with lib.maintainers; {
       wr0belj
       wintrmvte
     ];
-    scope = "Maintain Red Code Labs related packages and modules"
+    scope = "Maintain Red Code Labs related packages and modules."
   };
 
   sage = {

@@ -26,6 +26,6 @@ buildGoModule rec {
     description = "Reverse/bind shell generator";
     homepage = "https://github.com/redcode-labs/GoSH";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab unrooted wr0belj wintrmvte ];
+    maintainers = with maintainers; [ fab ] ++ teams.redcodelabs.members;
   };
 }
