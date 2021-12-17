@@ -100,6 +100,9 @@ stdenv.mkDerivation rec {
       sha256 = "0zp2iydd46analda9cfnbmzdkjphz5m7dynrdj5qdnmq6j3px9fw";
       name = "audacity_xdg_paths.patch";
     })
+    # This is required to make audacity work with nixpkgs’ sqlite
+    # https://github.com/audacity/audacity/pull/1802 rebased onto 3.0.2
+    ./0001-Use-a-different-approach-to-estimate-the-disk-space-.patch
   ];
 
   postPatch = ''
