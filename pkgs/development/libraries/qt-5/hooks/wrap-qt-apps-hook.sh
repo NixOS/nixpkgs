@@ -76,6 +76,8 @@ wrapQtAppsHook() {
     [ -z "$wrapQtAppsHookHasRun" ] || return 0
     wrapQtAppsHookHasRun=1
 
+    shopt -u failglob
+    shopt -s nullglob
     local targetDirs=( "$prefix/bin" "$prefix/sbin" "$prefix/libexec" "$prefix/Applications" "$prefix/"*.app )
     echo "wrapping Qt applications in ${targetDirs[@]}"
 
@@ -100,6 +102,8 @@ wrapQtAppsHook() {
             fi
         done
     done
+    shopt -u nullglob
+    shopt -s failglob
 }
 
 fixupOutputHooks+=(wrapQtAppsHook)
