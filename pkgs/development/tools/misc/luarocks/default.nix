@@ -32,10 +32,14 @@ stdenv.mkDerivation rec {
             configureFlags="$configureFlags --lua-suffix=$LUA_SUFFIX"
         }
     }
+    shopt -u failglob
+    shopt -s nullglob
     lua_inc="$(echo "${lua}/include"/*/)"
     if test -n "$lua_inc"; then
         configureFlags="$configureFlags --with-lua-include=$lua_inc"
     fi
+    shopt -u nullglob
+    shopt -s failglob
   '';
 
   nativeBuildInputs = [ makeWrapper installShellFiles ];
