@@ -7199,8 +7199,8 @@ final: prev:
     src = fetchFromGitHub {
       owner = "tomasiser";
       repo = "vim-code-dark";
-      rev = "884ca67c45bcdcef45ce2b9939b377db973171dd";
-      sha256 = "1s369k30k177qla5qcnd1hh4agxyfb1k7yp1kw74nc7kj0swldb9";
+      rev = "64bb3dcb143894c016daaf6bfaa7ebfc60f0150f";
+      sha256 = "10w6gl0dvyqrmpdzvq5rwwqjrmd19q0daz670d2mdvnqcx5mykw3";
     };
     meta.homepage = "https://github.com/tomasiser/vim-code-dark/";
   };
@@ -8091,6 +8091,18 @@ final: prev:
       sha256 = "14q32d2cxh55qg2v9ykwayaanh47zx8fd3pj952x9zrhijkx5g4q";
     };
     meta.homepage = "https://github.com/fatih/vim-go/";
+  };
+
+  vim-Grammalecte = buildVimPluginFrom2Nix {
+    pname = "vim-Grammalecte";
+    version = "2021-07-27";
+    src = fetchFromGitHub {
+      owner = "dpelle";
+      repo = "vim-Grammalecte";
+      rev = "a0ce51a77e56151f62ddbfd10e7dec46000f2848";
+      sha256 = "0d94k53i1zwvcmc49n1dj6cnka57baqx3bpzyaqn9zswlmbcknrn";
+    };
+    meta.homepage = "https://github.com/dpelle/vim-Grammalecte/";
   };
 
   vim-grammarous = buildVimPluginFrom2Nix {
