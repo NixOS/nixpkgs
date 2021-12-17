@@ -5,7 +5,7 @@
  
          # init state manager
 -        self.state_manager = StateManager(filename=self.project_path + "/state.json")
-+        self.state_manager = StateManager(filename=os.path.expanduser("~") + "/.local/ste/state.json")
++        self.state_manager = StateManager(filename=os.getenv("XDG_STATE_HOME", os.path.expanduser("~") + "/.local/state") + "/ste/state.json")
  
          # init event manager and extras
          self.core_event_queue = queue.Queue()
