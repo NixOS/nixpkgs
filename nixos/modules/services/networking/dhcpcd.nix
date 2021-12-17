@@ -214,11 +214,11 @@ in
           };
       };
 
-    users.users._dhcpcd = {
+    users.users.dhcpcd = {
       isSystemUser = true;
-      group = "_dhcpcd";
+      group = "dhcpcd";
     };
-    users.groups._dhcpcd = {};
+    users.groups.dhcpcd = {};
 
     environment.systemPackages = [ dhcpcd ];
 

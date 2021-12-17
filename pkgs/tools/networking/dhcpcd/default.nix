@@ -37,8 +37,8 @@ stdenv.mkDerivation rec {
   ++ lib.optionals enablePrivSep [
     "--enable-privsep"
     # dhcpcd disables privsep if it can't find the default user,
-    # so we explicitly specify the default.
-    "--privsepuser=_dhcpcd"
+    # so we explicitly specify a user.
+    "--privsepuser=dhcpcd"
   ];
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
