@@ -103,6 +103,9 @@ let
     #        ],
     #     )
     #
+    # Some of the scripts explicitly depend on Python 2.7. Otherwise, we
+    # default to using python3. Therefore, both python27 and python3 are
+    # runtime dependencies.
     [
       bash
       coreutils
@@ -662,16 +665,10 @@ stdenv.mkDerivation rec {
   '';
 
   # Save paths to hardcoded dependencies so Nix can detect them.
+  # This is needed because the templates get tar’d up into a .jar.
   postFixup = ''
     mkdir -p $out/nix-support
     echo "${defaultShellPath}" >> $out/nix-support/depends
-    # The templates get tar’d up into a .jar,
-    # so nix can’t detect python is needed in the runtime closure
-    # Some of the scripts explicitly depend on Python 2.7. Otherwise, we
-    # default to using python3. Therefore, both python27 and python3 are
-    # runtime dependencies.
-    echo "${python27}" >> $out/nix-support/depends
-    echo "${python3}" >> $out/nix-support/depends
   '' + lib.optionalString stdenv.isDarwin ''
     echo "${cctools}" >> $out/nix-support/depends
   '';
