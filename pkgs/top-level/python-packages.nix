@@ -10339,6 +10339,8 @@ in {
     inherit (pkgs.xorg) xorgserver;
   };
 
+  xxh = callPackage ../shells/xxh {};
+
   xxhash = callPackage ../development/python-modules/xxhash { };
 
   yahooweather = callPackage ../development/python-modules/yahooweather { };
