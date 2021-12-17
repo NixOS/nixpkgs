@@ -43,6 +43,10 @@ rustPlatform.buildRustPackage rec {
   # Skipping until resolved
   doCheck = false;
 
+  preInstall = ''
+    find ./target -name libswc_common.${stdenv.hostPlatform.extensions.sharedLibrary} -delete
+  '';
+
   postInstall = ''
     installShellCompletion --cmd deno \
       --bash <($out/bin/deno completions bash) \
