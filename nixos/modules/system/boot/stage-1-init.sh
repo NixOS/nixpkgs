@@ -19,7 +19,7 @@ ln -s @extraUtils@/bin /bin
 # Copy the secrets to their needed location
 if [ -d "@extraUtils@/secrets" ]; then
     for secret in $(cd "@extraUtils@/secrets"; find . -type f); do
-        mkdir -p $(dirname "/$secret")
+        mkdir -p "$(dirname "/$secret")"
         ln -s "@extraUtils@/secrets/$secret" "$secret"
     done
 fi
@@ -127,7 +127,7 @@ if [ -d "/.initrd-secrets" ]; then
     # under /.initrd-secrets/
     #
     for secret in $(cd "/.initrd-secrets"; find . -type f); do
-        mkdir -p $(dirname "/$secret")
+        mkdir -p "$(dirname "/$secret")"
         cp "/.initrd-secrets/$secret" "$secret"
     done
 fi
@@ -153,22 +153,29 @@ exec > /tmp/stage-1-init.log.fifo 2>&1
 # Process the kernel command line.
 export stage2Init=/init
 for o in $(cat /proc/cmdline); do
+    # fixing SC2046/SC2086 (quote vars) breaks with
+    # switch_root: can't execute '': No such file or directory
     case $o in
         console=*)
+            # shellcheck disable=SC2046,SC2086
             set -- $(IFS==; echo $o)
             params=$2
+            # shellcheck disable=SC2046,SC2086
             set -- $(IFS=,; echo $params)
             console=$1
             ;;
         init=*)
+            # shellcheck disable=SC2046,SC2086
             set -- $(IFS==; echo $o)
             stage2Init=$2
             ;;
         boot.persistence=*)
+            # shellcheck disable=SC2046,SC2086
             set -- $(IFS==; echo $o)
             persistence=$2
             ;;
         boot.persistence.opt=*)
+            # shellcheck disable=SC2046,SC2086
             set -- $(IFS==; echo $o)
             persistence_opt=$2
             ;;
@@ -198,6 +205,7 @@ for o in $(cat /proc/cmdline); do
             # If a root device is specified on the kernel command
             # line, make it available through the symlink /dev/root.
             # Recognise LABEL= and UUID= to support UNetbootin.
+            # shellcheck disable=SC2046,SC2086
             set -- $(IFS==; echo $o)
             if [ $2 = "LABEL" ]; then
                 root="/dev/disk/by-label/$3"
@@ -214,6 +222,7 @@ for o in $(cat /proc/cmdline); do
         findiso=*)
             # if an iso name is supplied, try to find the device where
             # the iso resides on
+            # shellcheck disable=SC2046,SC2086
             set -- $(IFS==; echo $o)
             isoPath=$2
             ;;
@@ -587,9 +596,9 @@ exec 3>&-
 
 # Emit a udev rule for /dev/root to prevent systemd from complaining.
 if [ -e /mnt-root/iso ]; then
-    eval $(udevadm info --export --export-prefix=ROOT_ --device-id-of-file=/mnt-root/iso)
+    eval "$(udevadm info --export --export-prefix=ROOT_ --device-id-of-file=/mnt-root/iso)"
 else
-    eval $(udevadm info --export --export-prefix=ROOT_ --device-id-of-file=$targetRoot)
+    eval "$(udevadm info --export --export-prefix=ROOT_ --device-id-of-file=$targetRoot)"
 fi
 if [ "$ROOT_MAJOR" -a "$ROOT_MINOR" -a "$ROOT_MAJOR" != 0 ]; then
     mkdir -p /run/udev/rules.d
@@ -646,6 +655,6 @@ mount --move /sys $targetRoot/sys
 mount --move /dev $targetRoot/dev
 mount --move /run $targetRoot/run
 
-exec env -i $(type -P switch_root) "$targetRoot" "$stage2Init"
+exec env -i "$(type -P switch_root)" "$targetRoot" "$stage2Init"
 
 fail # should never be reached
