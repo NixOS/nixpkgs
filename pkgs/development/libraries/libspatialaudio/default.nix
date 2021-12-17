@@ -1,14 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, cmake, libmysofa, zlib }:
-stdenv.mkDerivation {
-  name = "libspatialaudio";
+{ lib, stdenv, cmake, fetchFromGitHub, libmysofa, zlib }:
+
+let version = "0.3.0";
+in stdenv.mkDerivation {
+  pname = "libspatialaudio";
+  inherit version;
+
   src = fetchFromGitHub {
     owner = "videolabs";
     repo = "libspatialaudio";
-    rev = "0.3.0";
+    rev = version;
     hash = "sha256-sPnQPD41AceXM4uGqWXMYhuQv0TUkA6TZP8ChxUFIoI=";
   };
-  buildInputs = [ cmake libmysofa zlib ];
-  configurePhase = "cmake -DCMAKE_INSTALL_PREFIX=$out .";
+
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ libmysofa zlib ];
 
   meta = {
     description =
@@ -16,6 +21,7 @@ stdenv.mkDerivation {
     homepage = "https://github.com/videolabs/libspatialaudio";
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ krav ];
   };
 }
 
