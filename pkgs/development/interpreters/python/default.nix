@@ -219,6 +219,7 @@ in {
     sqlite = null;
     configd = null;
     tzdata = null;
+    libffi = pkgs.libffiBoot; # without test suite
     stripConfig = true;
     stripIdlelib = true;
     stripTests = true;
