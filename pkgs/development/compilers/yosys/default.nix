@@ -34,13 +34,13 @@
 
 stdenv.mkDerivation rec {
   pname   = "yosys";
-  version = "0.11+52";
+  version = "0.12+36";
 
   src = fetchFromGitHub {
     owner = "YosysHQ";
     repo  = "yosys";
-    rev   = "2be110cb0ba645f95f62ee01b6a6fa46a85d5b26";
-    hash  = "sha256-A1QKu6SbtpJJPF8/LA5SMUP3/+n5giM6rOYdc6vkl90=";
+    rev   = "60c3ea367c942459a95e610ed98f277ce46c0142";
+    hash  = "sha256-NcfhNUmb3IDG08XgS+NGbRLI8sn4aQkOA7RF7wucDug=";
   };
 
   enableParallelBuilding = true;
