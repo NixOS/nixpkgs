@@ -1009,7 +1009,7 @@ mapAliases ({
   rdmd = throw "'rdmd' has been renamed to/replaced by 'dtools'"; # Converted to throw 2022-02-22
   readline5 = throw "readline-5 is no longer supported in nixpkgs, please use 'readline' for main supported version"; # Added 2022-02-20
   readline62 = throw "readline-6.2 is no longer supported in nixpkgs, please use 'readline' for main supported version"; # Added 2022-02-20
-  readline80 = throw "readline-8.0 is no longer supported in nixpkgs, please use 'readline' for main supported version or 'readline81' for most recent version"; # Added 2021-04-22
+  readline80 = throw "readline-8.0 is no longer supported in nixpkgs, please use 'readline' for main supported version"; # Added 2021-04-22
   redkite = throw "redkite was archived by upstream"; # Added 2021-04-12
   redshift-wlr = throw "redshift-wlr has been replaced by gammastep"; # Added 2021-12-25
   renpy = throw "renpy has been removed from nixpkgs, it was unmaintained and the latest packaged version required python2"; # Added 2022-01-12

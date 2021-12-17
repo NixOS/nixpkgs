@@ -16044,7 +16044,6 @@ with pkgs;
 
   gdb = callPackage ../development/tools/misc/gdb {
     guile = null;
-    readline = readline81;
   };
 
   java-language-server = callPackage ../development/tools/java/java-language-server { };
@@ -18785,9 +18784,7 @@ with pkgs;
     python = python3;
   };
 
-  libqalculate = callPackage ../development/libraries/libqalculate {
-    readline = readline81;
-  };
+  libqalculate = callPackage ../development/libraries/libqalculate { };
 
   libqt5pas = libsForQt5.callPackage ../development/compilers/fpc/libqt5pas.nix { };
 
@@ -19981,7 +19978,7 @@ with pkgs;
 
   raylib = callPackage ../development/libraries/raylib { };
 
-  readline = readline6;
+  readline = readline81;
   readline6 = readline63;
 
   readline63 = callPackage ../development/libraries/readline/6.3.nix { };
