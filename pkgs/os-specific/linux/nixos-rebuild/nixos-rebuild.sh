@@ -362,16 +362,14 @@ if [ "$action" = edit ]; then
     exit 1
 fi
 
-ORIGIN_PWD="$PWD"
+
 tmpDir=$(mktemp -t -d nixos-rebuild.XXXXXX)
 SSHOPTS="$NIX_SSHOPTS -o ControlMaster=auto -o ControlPath=$tmpDir/ssh-%n -o ControlPersist=60"
-cd "$tmpDir"
 
 cleanup() {
     for ctrl in "$tmpDir"/ssh-*; do
         ssh -o ControlPath="$ctrl" -O exit dummyhost 2>/dev/null || true
     done
-    cd "$ORIGIN_PWD"
     rm -rf "$tmpDir"
 }
 trap cleanup EXIT
