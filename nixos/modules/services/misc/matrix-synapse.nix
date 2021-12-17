@@ -763,7 +763,7 @@ in {
       after = [ "network.target" ] ++ optional hasLocalPostgresDB "postgresql.service";
       wantedBy = [ "multi-user.target" ];
       preStart = ''
-        ${cfg.package}/bin/homeserver \
+        ${cfg.package}/bin/synapse_homeserver \
           --config-path ${configFile} \
           --keys-directory ${cfg.dataDir} \
           --generate-keys
@@ -783,7 +783,7 @@ in {
           chmod 0600 ${cfg.dataDir}/homeserver.signing.key
         '')) ];
         ExecStart = ''
-          ${cfg.package}/bin/homeserver \
+          ${cfg.package}/bin/synapse_homeserver \
             ${ concatMapStringsSep "\n  " (x: "--config-path ${x} \\") ([ configFile ] ++ cfg.extraConfigFiles) }
             --keys-directory ${cfg.dataDir}
         '';
