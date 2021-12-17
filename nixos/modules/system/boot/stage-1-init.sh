@@ -90,7 +90,7 @@ waitDevice() {
     # great if we had a way to synchronously wait for them, but
     # alas...  So just wait for a few seconds for the device to
     # appear.
-    if test ! -e $device; then
+    if test ! -e "$device"; then
         echo -n "waiting for device $device to appear..."
         try=20
         while [ $try -gt 0 ]; do
@@ -99,7 +99,7 @@ waitDevice() {
             lvm vgchange -ay
             # and tell udev to create nodes for the new LVs
             udevadm trigger --action=add
-            if test -e $device; then break; fi
+            if test -e "$device"; then break; fi
             echo -n "."
             try=$((try - 1))
         done
@@ -207,9 +207,9 @@ for o in $(cat /proc/cmdline); do
             # Recognise LABEL= and UUID= to support UNetbootin.
             # shellcheck disable=SC2046,SC2086
             set -- $(IFS==; echo $o)
-            if [ $2 = "LABEL" ]; then
+            if [ "$2" = "LABEL" ]; then
                 root="/dev/disk/by-label/$3"
-            elif [ $2 = "UUID" ]; then
+            elif [ "$2" = "UUID" ]; then
                 root="/dev/disk/by-uuid/$3"
             else
                 root=$2
@@ -375,7 +375,7 @@ mountFS() {
     fi
 
     # Filter out x- options, which busybox doesn't do yet.
-    local optionsFiltered="$(IFS=,; for i in $options; do if [ "${i:0:2}" != "x-" ]; then echo -n $i,; fi; done)"
+    local optionsFiltered="$(IFS=,; for i in $options; do if [ "${i:0:2}" != "x-" ]; then echo -n "$i,"; fi; done)"
     # Prefix (lower|upper|work)dir with /mnt-root (overlayfs)
     local optionsPrefixed="$( echo "$optionsFiltered" | sed -E 's#\<(lowerdir|upperdir|workdir)=#\1=/mnt-root#g' )"
 
@@ -602,6 +602,7 @@ else
 fi
 if [ "$ROOT_MAJOR" -a "$ROOT_MINOR" -a "$ROOT_MAJOR" != 0 ]; then
     mkdir -p /run/udev/rules.d
+    # shellcheck disable=SC2086
     echo 'ACTION=="add|change", SUBSYSTEM=="block", ENV{MAJOR}=="'$ROOT_MAJOR'", ENV{MINOR}=="'$ROOT_MINOR'", SYMLINK+="root"' > /run/udev/rules.d/61-dev-root-link.rules
 fi
 
@@ -624,7 +625,7 @@ for pid in $(pgrep -v -f '^@'); do
     # http://stackoverflow.com/questions/12213445/identifying-kernel-threads
     readlink "/proc/$pid/exe" &> /dev/null || continue
     # Try to avoid killing ourselves.
-    [ $pid -eq $$ ] && continue
+    [ "$pid" -eq $$ ] && continue
     kill -9 "$pid"
 done
 
