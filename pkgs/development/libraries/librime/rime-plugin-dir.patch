@@ -1,0 +1,34 @@
+diff --git a/plugins/plugins_module.cc b/plugins/plugins_module.cc
+index 7a567be..2dd776c 100644
+--- a/plugins/plugins_module.cc
++++ b/plugins/plugins_module.cc
+@@ -13,6 +13,10 @@
+ #include <rime/registry.h>
+ #include <rime_api.h>
+ 
++#include <cstdlib>
++#include <cstdio>
++#include <unistd.h>
++
+ namespace fs = boost::filesystem;
+ 
+ namespace rime {
+@@ -95,7 +99,17 @@ PluginManager& PluginManager::instance() {
+ }  // namespace rime
+ 
+ static void rime_plugins_initialize() {
+-  rime::PluginManager::instance().LoadPlugins(RIME_PLUGINS_DIR);
++  char *plugin_dir_env = getenv("RIME_PLUGINS_DIR");
++  char plugins_dir[256];
++  if (plugin_dir_env == NULL) {
++    snprintf(plugins_dir, sizeof(plugins_dir),
++        "%s/%s/%s",
++        "/etc/profiles/per-user", getlogin(), RIME_PLUGINS_DIR
++        );
++  } else {
++    snprintf(plugins_dir, sizeof(plugins_dir), "%s", plugin_dir_env);
++  }
++  rime::PluginManager::instance().LoadPlugins(plugins_dir);
+ }
+ 
+ static void rime_plugins_finalize() {}

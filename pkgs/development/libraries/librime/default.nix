@@ -1,5 +1,6 @@
 { lib, stdenv, fetchFromGitHub, cmake, boost, glog, leveldb, marisa, opencc,
-  libyamlcpp, gtest, capnproto, pkg-config }:
+  libyamlcpp, gtest, capnproto, pkg-config, withExternalPlugins ? true,
+  withPrivateHeaders ?  withExternalPlugins }:
 
 stdenv.mkDerivation rec {
   pname = "librime";
@@ -15,6 +16,19 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [ boost glog leveldb marisa opencc libyamlcpp gtest capnproto ];
+
+  cmakeFlags = with lib;
+    optionals withExternalPlugins [ "-DENABLE_EXTERNAL_PLUGINS=ON"
+                                    "-DRIME_PLUGINS_DIR=share/librime/plugins"
+                                  ] ++
+    optional withPrivateHeaders "-DINSTALL_PRIVATE_HEADERS=ON";
+
+  patches = [ ./rime-plugin-dir.patch ];
+
+  postInstall = lib.optionalString withPrivateHeaders ''
+    # Some plugins need these headers.
+    cp -r ../thirdparty/include/* $out/include
+    '';
 
   meta = with lib; {
     homepage    = "https://rime.im/";
