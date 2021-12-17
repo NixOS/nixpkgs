@@ -92,7 +92,7 @@ in withWarnings {
 
   # Merge the option definitions in all modules, forming the full
   # system configuration.
-  inherit (nixosWithUserModules) config options _module type;
+  inherit (nixosWithUserModules) config options _module type extendModules;
 
   inherit extraArgs;
 
