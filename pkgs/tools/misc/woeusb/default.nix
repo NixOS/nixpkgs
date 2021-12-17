@@ -2,14 +2,14 @@
 , coreutils, dosfstools, findutils, gawk, gnugrep, grub2_light, ncurses, ntfs3g, parted, p7zip, util-linux, wimlib, wget }:
 
 stdenv.mkDerivation rec {
-  version = "5.1.0";
+  version = "5.1.2";
   pname = "woeusb";
 
   src = fetchFromGitHub {
     owner = "WoeUSB";
     repo = "WoeUSB";
     rev = "v${version}";
-    sha256 = "1qakk7lnj71m061rn72nabk4c37vw0vkx2a28xgxas8v8cwvkkam";
+    sha256 = "sha256-7NuUCo1uN6RZIpdDJFZr1DULrr4UNcXdPzx9A5t79O8=";
   };
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];

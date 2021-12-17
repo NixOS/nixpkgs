@@ -21,14 +21,13 @@ stdenv.mkDerivation rec {
       "--localstatedir=/var"
     ];
 
-  patches = lib.optional stdenv.hostPlatform.isMusl
-    (
-      fetchpatch
-      {
-        url = "https://raw.githubusercontent.com/openembedded/openembedded-core/94f780e889f194b67a48587ac68b3200288bee10/meta/recipes-connectivity/libnss-mdns/libnss-mdns/0001-check-for-nss.h.patch";
-        sha256 = "1l1kjbdw8z31br4vib3l5b85jy7kxin760a2f24lww8v6lqdpgds";
-      }
-    );
+  patches = [
+    # Provide compat definition for libc lacking <nss.h> (e.g. musl)
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/openembedded/openembedded-core/94f780e889f194b67a48587ac68b3200288bee10/meta/recipes-connectivity/libnss-mdns/libnss-mdns/0001-check-for-nss.h.patch";
+      sha256 = "1l1kjbdw8z31br4vib3l5b85jy7kxin760a2f24lww8v6lqdpgds";
+    })
+  ];
 
 
   meta = {

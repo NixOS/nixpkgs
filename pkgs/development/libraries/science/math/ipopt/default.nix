@@ -18,9 +18,9 @@ stdenv.mkDerivation rec {
     "--with-lapack-lib=-llapack"
   ];
 
-  nativeBuildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip gfortran ];
 
-  buildInputs = [ gfortran blas lapack ];
+  buildInputs = [ blas lapack ];
 
   enableParallelBuilding = true;
 

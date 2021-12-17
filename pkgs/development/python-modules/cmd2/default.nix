@@ -1,21 +1,58 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage, pythonOlder, isPy3k
-, pyperclip, six, pyparsing, vim, wcwidth, colorama, attrs
-, contextlib2 ? null, typing ? null, setuptools-scm
-, pytest, mock ? null, pytest-mock
-, which, glibcLocales
+{ lib
+, stdenv
+, attrs
+, buildPythonPackage
+, colorama
+, fetchPypi
+, glibcLocales
+, importlib-metadata
+, pyperclip
+, pytest-mock
+, pytestCheckHook
+, pythonOlder
+, setuptools-scm
+, typing-extensions
+, vim
+, wcwidth
 }:
+
 buildPythonPackage rec {
   pname = "cmd2";
-  version = "1.5.0";
+  version = "2.2.0";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "701a8c9975c4abc45e5d13906ab149f959f812869106347323a3f89ac0e82a62";
+    sha256 = "34cd12424d9e2835eff125146af3d9f4a4c2931c6bc5a3cea9790bd4f55756d9";
   };
 
-  LC_ALL="en_US.UTF-8";
+  LC_ALL = "en_US.UTF-8";
 
-  postPatch = lib.optional stdenv.isDarwin ''
+  buildInputs = [
+    setuptools-scm
+  ];
+
+  propagatedBuildInputs = [
+    attrs
+    colorama
+    pyperclip
+    wcwidth
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    typing-extensions
+    importlib-metadata
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+    glibcLocales
+    pytest-mock
+    vim
+  ];
+
+  postPatch = ''
+    sed -i "/--cov/d" setup.cfg
+  '' + lib.optionalString stdenv.isDarwin ''
     # Fake the impure dependencies pbpaste and pbcopy
     mkdir bin
     echo '#!${stdenv.shell}' > bin/pbpaste
@@ -24,37 +61,14 @@ buildPythonPackage rec {
     export PATH=$(realpath bin):$PATH
   '';
 
-  disabled = !isPy3k;
-
-  buildInputs = [
-    setuptools-scm
-  ];
-
-  propagatedBuildInputs = [
-    colorama
-    pyperclip
-    six
-    pyparsing
-    wcwidth
-    attrs
-  ]
-  ++ lib.optionals (pythonOlder "3.5") [contextlib2 typing]
-  ;
-
-
   doCheck = !stdenv.isDarwin;
-  # pytest-cov
-  # argcomplete  will generate errors
-  checkInputs= [ pytest mock which vim glibcLocales pytest-mock ]
-        ++ lib.optional (pythonOlder "3.6") [ mock ];
-  checkPhase = ''
-    # test_path_completion_user_expansion might be fixed in the next release
-    py.test -k 'not test_path_completion_user_expansion'
-  '';
+
+  pythonImportsCheck = [ "cmd2" ];
 
   meta = with lib; {
     description = "Enhancements for standard library's cmd module";
     homepage = "https://github.com/python-cmd2/cmd2";
+    license = with licenses; [ mit ];
     maintainers = with maintainers; [ teto ];
   };
 }

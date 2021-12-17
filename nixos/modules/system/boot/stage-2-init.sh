@@ -62,9 +62,11 @@ chown -f 0:30000 /nix/store
 chmod -f 1775 /nix/store
 if [ -n "@readOnlyStore@" ]; then
     if ! [[ "$(findmnt --noheadings --output OPTIONS /nix/store)" =~ ro(,|$) ]]; then
-        # FIXME when linux < 4.5 is EOL, switch to atomic bind mounts
-        #mount /nix/store /nix/store -o bind,remount,ro
-        mount --bind /nix/store /nix/store
+        if [ -z "$container" ]; then
+            mount --bind /nix/store /nix/store
+        else
+            mount --rbind /nix/store /nix/store
+        fi
         mount -o remount,ro,bind /nix/store
     fi
 fi

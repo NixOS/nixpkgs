@@ -21,7 +21,7 @@ in
         as described at <link xlink:href="https://www.infradead.org/openconnect/hip.html" />
       '';
       default = null;
-      example = literalExample "\${pkgs.openconnect}/libexec/openconnect/hipreport.sh";
+      example = literalExpression ''"''${pkgs.openconnect}/libexec/openconnect/hipreport.sh"'';
       type = types.nullOr types.path;
     };
   };

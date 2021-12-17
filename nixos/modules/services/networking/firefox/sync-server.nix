@@ -119,7 +119,7 @@ in
           password, and the <option>syncserver.secret</option> setting is used by the server to
           generate cryptographically-signed authentication tokens.
 
-          If this file does not exists, then it is created with a generated
+          If this file does not exist, then it is created with a generated
           <option>syncserver.secret</option> settings.
        '';
       };

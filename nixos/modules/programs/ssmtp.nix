@@ -54,7 +54,7 @@ in
           <citerefentry><refentrytitle>ssmtp</refentrytitle><manvolnum>5</manvolnum></citerefentry> configuration. Refer
           to <link xlink:href="https://linux.die.net/man/5/ssmtp.conf"/> for details on supported values.
         '';
-        example = literalExample ''
+        example = literalExpression ''
           {
             Debug = true;
             FromLineOverride = false;
@@ -181,6 +181,8 @@ in
       source = "${pkgs.ssmtp}/bin/sendmail";
       setuid = false;
       setgid = false;
+      owner = "root";
+      group = "root";
     };
 
   };

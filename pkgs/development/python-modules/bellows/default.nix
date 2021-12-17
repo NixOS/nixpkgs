@@ -17,13 +17,14 @@
 
 buildPythonPackage rec {
   pname = "bellows";
-  version = "0.26.0";
+  version = "0.29.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "bellows";
     rev = version;
-    sha256 = "0qbsk5iv3vrpwz7kfmjdbc66rfkg788p6wwxbf6jzfarfhcgrh3k";
+    sha256 = "sha256-coIrI3C6Wnn8Of/IHAlvZgkcBBf9OBQt5Ir6YOXCf0c=";
   };
 
   propagatedBuildInputs = [
@@ -43,13 +44,6 @@ buildPythonPackage rec {
     pytest-timeout
   ]  ++ lib.optionals (pythonOlder "3.8") [
     asynctest
-  ];
-
-  disabledTests = [
-    # RuntimeError: coroutine 'test_remigrate_forcibly_downgraded_v4' was never awaited
-    #"test_remigrate_forcibly_downgraded_v4"
-    # RuntimeError: Event loop is closed
-    "test_thread_already_stopped"
   ];
 
   pythonImportsCheck = [

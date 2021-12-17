@@ -12,6 +12,8 @@
 mkDerivation {
   pname = "akregator";
   meta = {
+    homepage = "https://apps.kde.org/akregator/";
+    description = "KDE feed reader";
     license = with lib.licenses; [ gpl2 lgpl21 fdl12 ];
     maintainers = kdepimTeam;
   };

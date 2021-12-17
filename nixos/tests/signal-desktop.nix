@@ -29,7 +29,6 @@ in {
     environment.systemPackages = with pkgs; [
       signal-desktop file sqlite sqlcipher-signal
     ];
-    virtualisation.memorySize = 1024;
   };
 
   enableOCR = true;
@@ -41,7 +40,7 @@ in {
     machine.wait_for_x()
 
     # start signal desktop
-    machine.execute("su - alice -c signal-desktop &")
+    machine.execute("su - alice -c signal-desktop >&2 &")
 
     # Wait for the Signal window to appear. Since usually the tests
     # are run sandboxed and therfore with no internet, we can not wait

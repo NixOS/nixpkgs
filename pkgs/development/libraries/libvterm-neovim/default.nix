@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , perl
 , libtool
@@ -16,8 +17,7 @@ stdenv.mkDerivation {
     sha256 = "0r6yimzbkgrsi9aaxwvxahai2lzgjd1ysblr6m6by5w459853q3n";
   };
 
-  buildInputs = [ perl ];
-  nativeBuildInputs = [ libtool ];
+  nativeBuildInputs = [ perl libtool ];
 
   makeFlags = [ "PREFIX=$(out)" ]
     ++ lib.optional stdenv.isDarwin "LIBTOOL=${libtool}/bin/libtool";

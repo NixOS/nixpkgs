@@ -35,6 +35,7 @@ common =
       inherit pname version src patches;
 
       is24 = lib.versionAtLeast version "2.4pre";
+      is25 = lib.versionAtLeast version "2.5pre";
 
       VERSION_SUFFIX = suffix;
 
@@ -58,7 +59,7 @@ common =
            ];
 
       buildInputs =
-        [ curl libsodium openssl sqlite xz bzip2 nlohmann_json
+        [ curl libsodium openssl sqlite xz bzip2
           brotli boost editline
         ]
         ++ lib.optionals stdenv.isDarwin [ Security ]
@@ -77,17 +78,12 @@ common =
 
       propagatedBuildInputs = [ boehmgc ];
 
-      # Seems to be required when using std::atomic with 64-bit types
-      NIX_LDFLAGS =
-        # need to list libraries individually until
+      NIX_LDFLAGS = lib.optionals (!is24) [
         # https://github.com/NixOS/nix/commit/3e85c57a6cbf46d5f0fe8a89b368a43abd26daba
-        # is in a release
-          lib.optionalString enableStatic "-lssl -lbrotlicommon -lssh2 -lz -lnghttp2 -lcrypto"
-
-        # need to detect it here until
+        (lib.optionalString enableStatic "-lssl -lbrotlicommon -lssh2 -lz -lnghttp2 -lcrypto")
         # https://github.com/NixOS/nix/commits/74b4737d8f0e1922ef5314a158271acf81cd79f8
-        # is in a release
-        + lib.optionalString (stdenv.hostPlatform.system == "armv5tel-linux" || stdenv.hostPlatform.system == "armv6l-linux") "-latomic";
+        (lib.optionalString (stdenv.hostPlatform.system == "armv5tel-linux" || stdenv.hostPlatform.system == "armv6l-linux") "-latomic")
+      ];
 
       preConfigure =
         # Copy libboost_context so we don't get all of Boost in our closure.
@@ -150,13 +146,17 @@ common =
       # socket path becomes too long otherwise
       preInstallCheck = lib.optionalString stdenv.isDarwin ''
         export TMPDIR=$NIX_BUILD_TOP
+      ''
+      # See https://github.com/NixOS/nix/issues/5687
+      + lib.optionalString (is25 && stdenv.isDarwin) ''
+        echo "exit 99" > tests/gc-non-blocking.sh
       '';
 
-      separateDebugInfo = stdenv.isLinux;
+      separateDebugInfo = stdenv.isLinux && (is24 -> !enableStatic);
 
       enableParallelBuilding = true;
 
-      meta = {
+      meta = with lib; {
         description = "Powerful package manager that makes package management reliable and reproducible";
         longDescription = ''
           Nix is a powerful package manager for Linux and other Unix systems that
@@ -166,10 +166,10 @@ common =
           environments.
         '';
         homepage = "https://nixos.org/";
-        license = lib.licenses.lgpl2Plus;
-        maintainers = [ lib.maintainers.eelco ];
-        platforms = lib.platforms.unix;
-        outputsToInstall = [ "out" ] ++ lib.optional enableDocumentation "man";
+        license = licenses.lgpl2Plus;
+        maintainers = with maintainers; [ eelco lovesegfault ];
+        platforms = platforms.unix;
+        outputsToInstall = [ "out" ] ++ optional enableDocumentation "man";
       };
 
       passthru = {
@@ -208,22 +208,31 @@ common =
     patches = (drv.patches or []) ++ [
       # Part of the GC solution in https://github.com/NixOS/nix/pull/4944
       (fetchpatch {
-        url = https://github.com/hercules-ci/nix/raw/5c58d84a76d96f269e3ff1e72c9c9ba5f68576af/boehmgc-coroutine-sp-fallback.diff;
+        url = "https://github.com/hercules-ci/nix/raw/5c58d84a76d96f269e3ff1e72c9c9ba5f68576af/boehmgc-coroutine-sp-fallback.diff";
         sha256 = "sha256-JvnWVTlkltmQUs/0qApv/LPZ690UX1/2hEP+LYRwKbI=";
       })
     ];
   });
 
+  # master: https://github.com/NixOS/nix/pull/5536
+  # 2.4: https://github.com/NixOS/nix/pull/5537
+  installNlohmannJsonPatch = fetchpatch {
+    url = "https://github.com/NixOS/nix/pull/5536.diff";
+    sha256 = "sha256-SPnam4xNIjbMgnq6IP1AaM1V62X0yZNo4DEVmI8sHOo=";
+  };
+
 in rec {
 
   nix = nixStable;
 
-  nixStable = callPackage common (rec {
+  nixStable = nix_2_4;
+
+  nix_2_3 = callPackage common (rec {
     pname = "nix";
-    version = "2.3.15";
+    version = "2.3.16";
     src = fetchurl {
       url = "https://nixos.org/releases/nix/${pname}-${version}/${pname}-${version}.tar.xz";
-      sha256 = "sha256-N+MxClX94eUOfUMh0puRgNHp16+cjSEdtqZn5u5OtBA=";
+      sha256 = "sha256-fuaBtp8FtSVJLSAsO+3Nne4ZYLuBj2JpD2xEk7fCqrw=";
     };
 
     boehmgc = boehmgc_nix;
@@ -231,19 +240,39 @@ in rec {
     inherit storeDir stateDir confDir;
   });
 
-  nixUnstable = lib.lowPrio (callPackage common rec {
+  nix_2_4 = callPackage common (rec {
     pname = "nix";
-    version = "2.4${suffix}";
-    suffix = "pre20210802_47e96bb";
+    version = "2.4";
 
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "47e96bb533f8cacc171bec9b688b134de31a48a9";
-      sha256 = "sha256-vwj1fAGn3Pl9Vr/qSL+oDxuwbRzEdI3dsEg6o3xTmWg=";
+      rev = version;
+      sha256 = "sha256-op48CCDgLHK0qV1Batz4Ln5FqBiRjlE6qHTiZgt3b6k=";
     };
 
     boehmgc = boehmgc_nixUnstable;
+
+    patches = [ installNlohmannJsonPatch ];
+
+    inherit storeDir stateDir confDir;
+  });
+
+  nixUnstable = lib.lowPrio (callPackage common rec {
+    pname = "nix";
+    version = "2.5${suffix}";
+    suffix = "pre20211206_${lib.substring 0 7 src.rev}";
+
+    src = fetchFromGitHub {
+      owner = "NixOS";
+      repo = "nix";
+      rev = "d1aaa7ef71713b6693ad3ddf8704ce62bab82095";
+      sha256 = "sha256-zdMODMLdJ0smEEzNMOoIzBxt9QWVzgMvr+pwxkhtD4g=";
+    };
+
+    boehmgc = boehmgc_nixUnstable;
+
+    patches = [ installNlohmannJsonPatch ];
 
     inherit storeDir stateDir confDir;
 

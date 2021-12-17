@@ -24,9 +24,8 @@ existing packages here and modify it as necessary.
 
 */
 
-{
-  libsForQt5, lib, fetchurl,
-  gconf, gsettings-desktop-schemas
+{ libsForQt5, lib, config, fetchurl
+, gconf, gsettings-desktop-schemas
 }:
 
 let
@@ -123,7 +122,6 @@ let
       kscreen = callPackage ./kscreen.nix {};
       kscreenlocker = callPackage ./kscreenlocker.nix {};
       ksshaskpass = callPackage ./ksshaskpass.nix {};
-      ksysguard = throw "ksysguard has been replaced with plasma-systemmonitor";
       ksystemstats = callPackage ./ksystemstats.nix {};
       kwallet-pam = callPackage ./kwallet-pam.nix {};
       kwayland-integration = callPackage ./kwayland-integration.nix {};
@@ -136,9 +134,11 @@ let
       milou = callPackage ./milou.nix {};
       oxygen = callPackage ./oxygen.nix {};
       plasma-browser-integration = callPackage ./plasma-browser-integration.nix {};
+      plasma-phone-components = callPackage ./plasma-phone-components {};
       plasma-desktop = callPackage ./plasma-desktop {};
       plasma-disks = callPackage ./plasma-disks.nix {};
       plasma-integration = callPackage ./plasma-integration {};
+      plasma-nano = callPackage ./plasma-nano {};
       plasma-nm = callPackage ./plasma-nm {};
       plasma-pa = callPackage ./plasma-pa.nix { inherit gconf; };
       plasma-sdk = callPackage ./plasma-sdk.nix {};
@@ -157,6 +157,7 @@ let
       thirdParty = let inherit (libsForQt5) callPackage; in {
         plasma-applet-caffeine-plus = callPackage ./3rdparty/addons/caffeine-plus.nix { };
         plasma-applet-virtual-desktop-bar = callPackage ./3rdparty/addons/virtual-desktop-bar.nix { };
+        bismuth = callPackage ./3rdparty/addons/bismuth { };
         kwin-dynamic-workspaces = callPackage ./3rdparty/kwin/scripts/dynamic-workspaces.nix { };
         kwin-tiling = callPackage ./3rdparty/kwin/scripts/tiling.nix { };
         krohnkite = callPackage ./3rdparty/kwin/scripts/krohnkite.nix { };
@@ -164,6 +165,8 @@ let
         parachute = callPackage ./3rdparty/kwin/scripts/parachute.nix { };
       };
 
+    } // lib.optionalAttrs (config.allowAliases or true) {
+      ksysguard = throw "ksysguard has been replaced with plasma-systemmonitor";
     };
 in
 lib.makeScope libsForQt5.newScope packages

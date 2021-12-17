@@ -37,12 +37,14 @@
 , profilingLibraries ? false
 , withGd ? false
 , meta
+, extraBuildInputs ? []
+, extraNativeBuildInputs ? []
 , ...
 } @ args:
 
 let
   version = "2.33";
-  patchSuffix = "-47";
+  patchSuffix = "-56";
   sha256 = "sha256-LiVWAA4QXb1X8Layoy/yzxc73k8Nhd/8z9i35RoGd/8=";
 in
 
@@ -61,7 +63,7 @@ stdenv.mkDerivation ({
     [
       /* No tarballs for stable upstream branch, only https://sourceware.org/git/glibc.git and using git would complicate bootstrapping.
           $ git fetch --all -p && git checkout origin/release/2.33/master && git describe
-          glibc-2.33-47-gb5711025bc
+          glibc-2.33-56-g6090cf1330
           $ git show --minimal --reverse glibc-2.33.. | gzip -9n --rsyncable - > 2.33-master.patch.gz
 
          To compare the archive contents zdiff can be used.
@@ -120,6 +122,9 @@ stdenv.mkDerivation ({
       })
 
       ./fix-x64-abi.patch
+
+      /* https://github.com/NixOS/nixpkgs/pull/137601 */
+      ./nix-nss-open-files.patch
     ]
     ++ lib.optional stdenv.hostPlatform.isMusl ./fix-rpc-types-musl-conflicts.patch
     ++ lib.optional stdenv.buildPlatform.isDarwin ./darwin-cross-build.patch;
@@ -156,7 +161,7 @@ stdenv.mkDerivation ({
       "--enable-bind-now"
       (lib.withFeatureAs withLinuxHeaders "headers" "${linuxHeaders}/include")
       (lib.enableFeature profilingLibraries "profile")
-    ] ++ lib.optionals (stdenv.hostPlatform.isx86_64 || stdenv.hostPlatform.isi686 || stdenv.hostPlatform.isAarch64) [
+    ] ++ lib.optionals (stdenv.hostPlatform.isx86 || stdenv.hostPlatform.isAarch64) [
       # This feature is currently supported on
       # i386, x86_64 and x32 with binutils 2.29 or later,
       # and on aarch64 with binutils 2.30 or later.
@@ -186,8 +191,8 @@ stdenv.mkDerivation ({
   outputs = [ "out" "bin" "dev" "static" ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ bison python3Minimal ];
-  buildInputs = [ linuxHeaders ] ++ lib.optionals withGd [ gd libpng ];
+  nativeBuildInputs = [ bison python3Minimal ] ++ extraNativeBuildInputs;
+  buildInputs = [ linuxHeaders ] ++ lib.optionals withGd [ gd libpng ] ++ extraBuildInputs;
 
   # Needed to install share/zoneinfo/zone.tab.  Set to impure /bin/sh to
   # prevent a retained dependency on the bootstrap tools in the stdenv-linux
@@ -195,7 +200,7 @@ stdenv.mkDerivation ({
   BASH_SHELL = "/bin/sh";
 
   # Used by libgcc, elf-header, and others to determine ABI
-  passthru = { inherit version; };
+  passthru = { inherit version; minorRelease = version; };
 }
 
 // (removeAttrs args [ "withLinuxHeaders" "withGd" ]) //
@@ -283,9 +288,4 @@ stdenv.mkDerivation ({
 
 // lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform) {
   preInstall = null; # clobber the native hook
-
-  # To avoid a dependency on the build system 'bash'.
-  preFixup = ''
-    rm -f $bin/bin/{ldd,tzselect,catchsegv,xtrace}
-  '';
 })

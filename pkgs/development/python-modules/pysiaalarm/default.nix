@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "pysiaalarm";
-  version = "3.0.0";
+  version = "3.0.2";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b1c3a3d48d399bc91014167f59b23af601044d182db9267c23a9cf3559922122";
+    sha256 = "sha256-hS0OaafYjRdPVSCOHfb2zKp0tEOl1LyMJpwnpvsvALs=";
   };
 
   postPatch = ''

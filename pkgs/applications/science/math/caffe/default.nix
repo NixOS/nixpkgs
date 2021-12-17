@@ -91,7 +91,11 @@ stdenv.mkDerivation rec {
     inherit (python.sourceVersion) major minor;  # Should be changed in case of PyPy
   });
 
-  postPatch = lib.optionalString (cudaSupport && lib.versionAtLeast cudatoolkit.version "9.0") ''
+  postPatch = ''
+    substituteInPlace src/caffe/util/io.cpp --replace \
+      'SetTotalBytesLimit(kProtoReadBytesLimit, 536870912)' \
+      'SetTotalBytesLimit(kProtoReadBytesLimit)'
+  '' + lib.optionalString (cudaSupport && lib.versionAtLeast cudatoolkit.version "9.0") ''
     # CUDA 9.0 doesn't support sm_20
     sed -i 's,20 21(20) ,,' cmake/Cuda.cmake
   '';

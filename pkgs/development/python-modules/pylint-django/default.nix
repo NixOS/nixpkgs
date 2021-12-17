@@ -1,28 +1,24 @@
-{ buildPythonPackage
+{ lib
+, buildPythonPackage
+, coverage
+, django
+, factory_boy
 , fetchFromGitHub
 , isPy3k
-, lib
-
-# pythonPackages
-, django
 , pylint-plugin-utils
-
-# pythonPackages for checkInputs
-, coverage
-, factory_boy
-, pytest
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "pylint-django";
-  version = "2.4.3";
+  version = "2.4.4";
   disabled = !isPy3k;
 
   src = fetchFromGitHub {
     owner = "PyCQA";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1mybq9jynypxbaxj921s3sx8dph8n3hmipmv4nla1g9h07g9g02z";
+    sha256 = "sha256-bFcb5GhC7jc7jEpNlyjWa2CuCSMvQLJdnag+7mHwSb8=";
   };
 
   propagatedBuildInputs = [
@@ -30,17 +26,26 @@ buildPythonPackage rec {
     pylint-plugin-utils
   ];
 
-  checkInputs = [ coverage factory_boy pytest ];
+  checkInputs = [
+    coverage
+    factory_boy
+    pytestCheckHook
+  ];
 
-  # Check command taken from scripts/test.sh
-  # Skip test external_django_tables2_noerror_meta_class:
-  # requires an unpackaged django_tables2
-  checkPhase = ''
-      python pylint_django/tests/test_func.py -v -k "not tables2"
-  '';
+  disabledTests = [
+    # Skip outdated tests and the one with a missing dependency (django_tables2)
+    "external_django_tables2_noerror_meta_class"
+    "external_factory_boy_noerror"
+    "func_noerror_foreign_key_attributes"
+    "func_noerror_foreign_key_key_cls_unbound"
+  ];
+
+  pythonImportsCheck = [
+    "pylint_django"
+  ];
 
   meta = with lib; {
-    description = "A Pylint plugin to analyze Django applications";
+    description = "Pylint plugin to analyze Django applications";
     homepage = "https://github.com/PyCQA/pylint-django";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ kamadorueda ];

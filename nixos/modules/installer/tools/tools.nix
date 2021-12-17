@@ -104,7 +104,20 @@ in
     };
   };
 
-  config = {
+  options.system.disableInstallerTools = mkOption {
+    internal = true;
+    type = types.bool;
+    default = false;
+    description = ''
+      Disable nixos-rebuild, nixos-generate-config, nixos-installer
+      and other NixOS tools. This is useful to shrink embedded,
+      read-only systems which are not expected to be rebuild or
+      reconfigure themselves. Use at your own risk!
+    '';
+  };
+
+  config = lib.mkIf (!config.system.disableInstallerTools) {
+
     system.nixos-generate-config.configuration = mkDefault ''
       # Edit this configuration file to define what should be installed on
       # your system.  Help is available in the configuration.nix(5) man page

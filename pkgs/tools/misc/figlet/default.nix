@@ -1,11 +1,12 @@
 { lib, stdenv, fetchurl, fetchpatch }:
 
-stdenv.mkDerivation {
-  name = "figlet-2.2.5";
+stdenv.mkDerivation rec {
+  pname = "figlet";
+  version = "2.2.5";
 
   # some tools can be found here ftp://ftp.figlet.org/pub/figlet/util/
   src = fetchurl {
-    url = "ftp://ftp.figlet.org/pub/figlet/program/unix/figlet-2.2.5.tar.gz";
+    url = "ftp://ftp.figlet.org/pub/figlet/program/unix/figlet-${version}.tar.gz";
     sha256 = "0za1ax15x7myjl8jz271ybly8ln9kb9zhm1gf6rdlxzhs07w925z";
   };
 

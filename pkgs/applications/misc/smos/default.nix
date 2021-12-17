@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A comprehensive self-management system";
-    homepage = https://smos.online;
+    homepage = "https://smos.online";
     license = licenses.mit;
     maintainers = with maintainers; [ norfair ];
     platforms = platforms.linux ++ platforms.darwin;

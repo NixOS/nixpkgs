@@ -13,12 +13,14 @@
 
 buildPythonPackage rec {
   pname = "python-telegram-bot";
-  version = "13.7";
+  version = "13.8.1";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-JN91RZ4zW5a6/6aZFnn4RL1CaXivWmnKQZoKxDpAYCw=";
+    sha256 = "sha256-sGaR5Vw1lDJn7mNtmqcCs1eRVdLzLg4tbX8R8LXnJ/A=";
   };
 
   propagatedBuildInputs = [
@@ -36,14 +38,18 @@ buildPythonPackage rec {
     rm -r telegram/vendor
 
     substituteInPlace requirements.txt \
-      --replace 'APScheduler==3.6.3' 'APScheduler'
+      --replace "APScheduler==3.6.3" "APScheduler" \
+      --replace "cachetools==4.2.2" "cachetools"
   '';
 
   setupPyGlobalFlags = "--with-upstream-urllib3";
 
   # tests not included with release
   doCheck = false;
-  pythonImportsCheck = [ "telegram" ];
+
+  pythonImportsCheck = [
+    "telegram"
+  ];
 
   meta = with lib; {
     description = "Python library to interface with the Telegram Bot API";

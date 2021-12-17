@@ -1,22 +1,26 @@
 { lib
+, ocaml
 , buildDunePackage
 , tezos-stdlib
 , tezos-base
 , tezos-sapling
+, tezos-context
 , tezos-protocol-environment-sigs
 , tezos-protocol-environment-structs
+, tezos-test-helpers
 , zarith
 , alcotest-lwt
-, crowbar
 }:
 
 buildDunePackage {
   pname = "tezos-protocol-environment";
-  inherit (tezos-stdlib) version src useDune2 doCheck preBuild;
+  inherit (tezos-stdlib) version useDune2;
+  src = "${tezos-stdlib.base_src}/src/lib_protocol_environment";
 
   propagatedBuildInputs = [
     tezos-sapling
     tezos-base
+    tezos-context
     tezos-protocol-environment-sigs
     tezos-protocol-environment-structs
     zarith # this might break, since they actually want 1.11
@@ -24,8 +28,10 @@ buildDunePackage {
 
   checkInputs = [
     alcotest-lwt
-    crowbar
+    tezos-test-helpers
   ];
+
+  doCheck = true;
 
   meta = tezos-stdlib.meta // {
     description = "Tezos: custom economic-protocols environment implementation for `tezos-client` and testing";

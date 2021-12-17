@@ -226,7 +226,7 @@ in
 
             hostSettings = mkOption {
               default = { };
-              example = literalExample ''
+              example = literalExpression ''
                 {
                   host1 = {
                     addresses = [
@@ -282,27 +282,27 @@ in
             package = mkOption {
               type = types.package;
               default = pkgs.tinc_pre;
-              defaultText = "pkgs.tinc_pre";
+              defaultText = literalExpression "pkgs.tinc_pre";
               description = ''
                 The package to use for the tinc daemon's binary.
               '';
             };
 
             chroot = mkOption {
-              default = true;
+              default = false;
               type = types.bool;
               description = ''
                 Change process root directory to the directory where the config file is located (/etc/tinc/netname/), for added security.
                 The chroot is performed after all the initialization is done, after writing pid files and opening network sockets.
 
-                Note that tinc can't run scripts anymore (such as tinc-down or host-up), unless it is setup to be runnable inside chroot environment.
+                Note that this currently breaks dns resolution and tinc can't run scripts anymore (such as tinc-down or host-up), unless it is setup to be runnable inside chroot environment.
               '';
             };
 
             settings = mkOption {
               default = { };
               type = types.submodule { freeformType = tincConfType; };
-              example = literalExample ''
+              example = literalExpression ''
                 {
                   Interface = "custom.interface";
                   DirectOnly = true;

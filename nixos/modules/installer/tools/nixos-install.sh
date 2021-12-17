@@ -1,4 +1,5 @@
 #! @runtimeShell@
+# shellcheck shell=bash
 
 set -e
 shopt -s nullglob
@@ -58,7 +59,7 @@ while [ "$#" -gt 0 ]; do
         --no-channel-copy)
             noChannelCopy=1
             ;;
-        --no-root-passwd)
+        --no-root-password|--no-root-passwd)
             noRootPasswd=1
             ;;
         --no-bootloader)

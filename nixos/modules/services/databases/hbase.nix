@@ -5,18 +5,27 @@ with lib;
 let
   cfg = config.services.hbase;
 
-  configFile = pkgs.writeText "hbase-site.xml" ''
-    <configuration>
-      <property>
-        <name>hbase.rootdir</name>
-        <value>file://${cfg.dataDir}/hbase</value>
-      </property>
-      <property>
-        <name>hbase.zookeeper.property.dataDir</name>
-        <value>${cfg.dataDir}/zookeeper</value>
-      </property>
-    </configuration>
-  '';
+  defaultConfig = {
+    "hbase.rootdir" = "file://${cfg.dataDir}/hbase";
+    "hbase.zookeeper.property.dataDir" = "${cfg.dataDir}/zookeeper";
+  };
+
+  buildProperty = configAttr:
+    (builtins.concatStringsSep "\n"
+      (lib.mapAttrsToList
+        (name: value: ''
+          <property>
+            <name>${name}</name>
+            <value>${builtins.toString value}</value>
+          </property>
+        '')
+        configAttr));
+
+  configFile = pkgs.writeText "hbase-site.xml"
+    ''<configuration>
+        ${buildProperty (defaultConfig // cfg.settings)}
+      </configuration>
+    '';
 
   configDir = pkgs.runCommand "hbase-config-dir" { preferLocalBuild = true; } ''
     mkdir -p $out
@@ -44,8 +53,7 @@ in {
       package = mkOption {
         type = types.package;
         default = pkgs.hbase;
-        defaultText = "pkgs.hbase";
-        example = literalExample "pkgs.hbase";
+        defaultText = literalExpression "pkgs.hbase";
         description = ''
           HBase package to use.
         '';
@@ -86,6 +94,14 @@ in {
         '';
       };
 
+      settings = mkOption {
+        type = with lib.types; attrsOf (oneOf [ str int bool ]);
+        default = defaultConfig;
+        description = ''
+          configurations in hbase-site.xml, see <link xlink:href="https://github.com/apache/hbase/blob/master/hbase-server/src/test/resources/hbase-site.xml"/> for details.
+        '';
+      };
+
     };
 
   };
@@ -104,7 +120,8 @@ in {
       wantedBy = [ "multi-user.target" ];
 
       environment = {
-        JAVA_HOME = "${pkgs.jre}";
+        # JRE 15 removed option `UseConcMarkSweepGC` which is needed.
+        JAVA_HOME = "${pkgs.jre8}";
         HBASE_LOG_DIR = cfg.logDir;
       };
 

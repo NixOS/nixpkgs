@@ -3,7 +3,6 @@
 , buildPythonPackage
 , sqlalchemy
 , sqlalchemy-utils
-, psycopg2
 }:
 
 buildPythonPackage rec {

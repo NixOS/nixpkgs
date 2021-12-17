@@ -114,14 +114,14 @@ in {
         default = {
           type = "normal";
         };
-        example = literalExample ''
+        example = literalExpression ''
           {
             type = "emperor";
             vassals = {
               moin = {
                 type = "normal";
                 pythonPackages = self: with self; [ moinmoin ];
-                socket = "${config.services.uwsgi.runDir}/uwsgi.sock";
+                socket = "''${config.services.uwsgi.runDir}/uwsgi.sock";
               };
             };
           }
@@ -163,7 +163,7 @@ in {
         type = types.listOf types.str;
         apply = caps: caps ++ optionals isEmperor imperialPowers;
         default = [ ];
-        example = literalExample ''
+        example = literalExpression ''
           [
             "CAP_NET_BIND_SERVICE" # bind on ports <1024
             "CAP_NET_RAW"          # open raw sockets

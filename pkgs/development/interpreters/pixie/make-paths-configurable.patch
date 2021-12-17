@@ -73,11 +73,12 @@ new file mode 100755
 index 0000000..44a7fbd
 --- /dev/null
 +++ b/dust.in
-@@ -0,0 +1,43 @@
+@@ -0,0 +1,40 @@
 +#!/usr/bin/env bash
 +
 +base_path=@basePath@
 +pixie_path=@pixiePath@
++rlwrap_cmd=@rlwrapPath@
 +
 +function set_load_path() {
 +    load_path=""
@@ -98,11 +99,7 @@ index 0000000..44a7fbd
 +
 +case $1 in
 +    ""|"repl")
-+        rlwrap_cmd=""
-+        if [ -n "`which rlwrap`" ]; then
-+            rlwrap_cmd="rlwrap -aignored -n"
-+        fi
-+        $rlwrap_cmd $pixie_path $load_path
++        $rlwrap_cmd -aignored -n $pixie_path $load_path
 +        ;;
 +    "run")
 +        shift

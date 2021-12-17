@@ -8,20 +8,20 @@
 
 buildGoModule rec {
   pname = "wtf";
-  version = "0.36.0";
+  version = "0.40.0";
 
   src = fetchFromGitHub {
     owner = "wtfutil";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-JVHcunpS+2/0d7XaUZ95m9QpVHCG1Tq8LJ9KNURSRy8=";
-   };
+    sha256 = "0hd5gnydxfncsmm7c58lvhkpnyxknvicc8f58xfh74azf363wcvm";
+  };
 
-  vendorSha256 = "sha256-4uRhbRPfCRYwFlfucXOYhLruj7hkV4G9Sxjh9yQkDEQ=";
+  vendorSha256 = "1pkdfg042kg3b6m5rf044gz5yg6vp3bbsay1mrrbaysnb3gs51dq";
 
   doCheck = false;
 
-  buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
+  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
   subPackages = [ "." ];
 
@@ -35,6 +35,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "The personal information dashboard for your terminal";
     homepage = "https://wtfutil.com/";
+    changelog = "https://github.com/wtfutil/wtf/raw/v${version}/CHANGELOG.md";
     license = licenses.mpl20;
     maintainers = with maintainers; [ kalbasit ];
     platforms = platforms.linux ++ platforms.darwin;

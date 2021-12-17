@@ -3,10 +3,10 @@ let
   s = # Generated upstream information
   rec {
     baseName="apache-jena-fuseki";
-    version = "3.13.1";
+    version = "4.3.1";
     name="${baseName}-${version}";
-    url="http://archive.apache.org/dist/jena/binaries/apache-jena-fuseki-${version}.tar.gz";
-    sha256 = "018b07icvjhd44c046rxfjiczcs63cic77cymgg4w8pd3na06c7y";
+    url="https://dlcdn.apache.org/jena/binaries/apache-jena-fuseki-${version}.tar.gz";
+    sha256 = "1r0vfa7d55lzw22yfx46mxxmz8x8pkr666vggqw2m1rzzj52z9nx";
   };
   buildInputs = [
     makeWrapper
@@ -20,7 +20,8 @@ stdenv.mkDerivation {
   };
   installPhase = ''
     cp -r . "$out"
-    ln -s "$out"/{fuseki-server,fuseki} "$out/bin"
+    chmod +x $out/fuseki
+    ln -s "$out"/{fuseki-backup,fuseki-server,fuseki} "$out/bin"
     for i in "$out"/bin/*; do
       wrapProgram "$i" \
         --prefix "PATH" : "${java}/bin/" \

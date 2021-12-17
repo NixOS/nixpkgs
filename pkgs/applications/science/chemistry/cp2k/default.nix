@@ -1,6 +1,8 @@
 { lib, stdenv, fetchFromGitHub, python3, gfortran, blas, lapack
 , fftw, libint, libvori, libxc, mpi, gsl, scalapack, openssh, makeWrapper
-, libxsmm, spglib, which
+, libxsmm, spglib, which, pkg-config
+, enableElpa ? false
+, elpa
 } :
 
 let
@@ -19,7 +21,7 @@ in stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ python3 which openssh makeWrapper ];
+  nativeBuildInputs = [ python3 which openssh makeWrapper pkg-config ];
   buildInputs = [
     gfortran
     fftw
@@ -32,7 +34,7 @@ in stdenv.mkDerivation rec {
     scalapack
     blas
     lapack
-  ];
+  ] ++ lib.optional enableElpa elpa;
 
   propagatedBuildInputs = [ mpi ];
   propagatedUserEnvPkgs = [ mpi ];
@@ -60,20 +62,20 @@ in stdenv.mkDerivation rec {
     AR         = ar -r
     DFLAGS     = -D__FFTW3 -D__LIBXC -D__LIBINT -D__parallel -D__SCALAPACK \
                  -D__MPI_VERSION=3 -D__F2008 -D__LIBXSMM -D__SPGLIB \
-                 -D__MAX_CONTR=4 -D__LIBVORI
+                 -D__MAX_CONTR=4 -D__LIBVORI ${lib.optionalString enableElpa "-D__ELPA"}
     CFLAGS    = -fopenmp
     FCFLAGS    = \$(DFLAGS) -O2 -ffree-form -ffree-line-length-none \
                  -ftree-vectorize -funroll-loops -msse2 \
                  -std=f2008 \
                  -fopenmp -ftree-vectorize -funroll-loops \
                  -I${libxc}/include -I${libxsmm}/include \
-                 -I${libint}/include
+                 -I${libint}/include ${lib.optionalString enableElpa "$(pkg-config --variable=fcflags elpa)"}
     LIBS       = -lfftw3 -lfftw3_threads \
                  -lscalapack -lblas -llapack \
                  -lxcf03 -lxc -lxsmmf -lxsmm -lsymspg \
                  -lint2 -lstdc++ -lvori \
                  -lgomp -lpthread -lm \
-                 -fopenmp
+                 -fopenmp ${lib.optionalString enableElpa "$(pkg-config --libs elpa)"}
     LDFLAGS    = \$(FCFLAGS) \$(LIBS)
     EOF
   '';

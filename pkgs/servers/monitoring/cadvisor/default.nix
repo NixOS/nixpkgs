@@ -15,7 +15,7 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-FMO+wNmjFFD9+/9mhNcyZftk8ryhwFXDZeEy/h5EMWc=";
 
-  buildFlagsArray = [ "-ldflags=-s -w -X github.com/google/cadvisor/version.Version=${version}" ];
+  ldflags = [ "-s" "-w" "-X github.com/google/cadvisor/version.Version=${version}" ];
 
   postInstall = ''
     mv $out/bin/{cmd,cadvisor}

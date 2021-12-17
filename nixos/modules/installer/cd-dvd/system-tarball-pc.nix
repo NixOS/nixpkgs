@@ -114,7 +114,7 @@ in
   # To be able to use the systemTarball to catch troubles.
   boot.crashDump = {
     enable = true;
-    kernelPackages = pkgs.linuxPackages_3_4;
+    kernelPackages = pkgs.linuxKernel.packages.linux_3_4;
   };
 
   # No grub for the tarball.

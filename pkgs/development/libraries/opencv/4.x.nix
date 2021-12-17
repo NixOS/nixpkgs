@@ -12,6 +12,7 @@
 , gflags
 , protobuf
 , config
+, ocl-icd
 
 , enableJPEG ? true
 , libjpeg
@@ -72,20 +73,20 @@
 }:
 
 let
-  version = "4.5.2";
+  version = "4.5.4";
 
   src = fetchFromGitHub {
     owner = "opencv";
     repo = "opencv";
     rev = version;
-    sha256 = "sha256-pxi1VBF4txvRqspdqvCsAQ3XKzl633/o3wyOgD9wid4=";
+    sha256 = "sha256-eIESkc/yYiZZ5iY4t/rAPd+jfjuMYR3srCBC4fO3g70=";
   };
 
   contribSrc = fetchFromGitHub {
     owner = "opencv";
     repo = "opencv_contrib";
     rev = version;
-    sha256 = "sha256-iMenRTY+qeL7WRgnRuQbsHflYDakE7pWWSHeIjrg0Iw=";
+    sha256 = "sha256-RkCIGukZ8KJkmVZQAZTWdVcVKD2I3NcfGShcqzKhQD0=";
   };
 
   # Contrib must be built in order to enable Tesseract support:
@@ -214,11 +215,13 @@ stdenv.mkDerivation {
     cp --no-preserve=mode -r "${contribSrc}/modules" "$NIX_BUILD_TOP/source/opencv_contrib"
   '';
 
-  # This prevents cmake from using libraries in impure paths (which
-  # causes build failure on non NixOS)
+  # Ensures that we use the system OpenEXR rather than the vendored copy of the source included with OpenCV.
   patches = [
     ./cmake-don-t-use-OpenCVFindOpenEXR.patch
   ] ++ lib.optional enableCuda ./cuda_opt_flow.patch;
+
+  # This prevents cmake from using libraries in impure paths (which
+  # causes build failure on non NixOS)
   postPatch = ''
     sed -i '/Add these standard paths to the search paths for FIND_LIBRARY/,/^\s*$/{d}' CMakeLists.txt
   '';
@@ -266,11 +269,11 @@ stdenv.mkDerivation {
     # tesseract & leptonica.
     ++ lib.optionals enableTesseract [ tesseract leptonica ]
     ++ lib.optional enableTbb tbb
-    ++ lib.optionals enableCuda [ cudatoolkit nvidia-optical-flow-sdk ]
     ++ lib.optionals stdenv.isDarwin [ bzip2 AVFoundation Cocoa VideoDecodeAcceleration CoreMedia MediaToolbox ]
     ++ lib.optionals enableDocs [ doxygen graphviz-nox ];
 
-  propagatedBuildInputs = lib.optional enablePython pythonPackages.numpy;
+  propagatedBuildInputs = lib.optional enablePython pythonPackages.numpy
+    ++ lib.optionals enableCuda [ cudatoolkit nvidia-optical-flow-sdk ];
 
   nativeBuildInputs = [ cmake pkg-config unzip ];
 
@@ -305,6 +308,8 @@ stdenv.mkDerivation {
   ] ++ lib.optionals stdenv.isDarwin [
     "-DWITH_OPENCL=OFF"
     "-DWITH_LAPACK=OFF"
+  ] ++ lib.optionals (!stdenv.isDarwin) [
+    "-DOPENCL_LIBRARY=${ocl-icd}/lib/libOpenCL.so"
   ] ++ lib.optionals enablePython [
     "-DOPENCV_SKIP_PYTHON_LOADER=ON"
   ];

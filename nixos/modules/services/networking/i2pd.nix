@@ -481,7 +481,7 @@ in
       exploratory.inbound = i2cpOpts "exploratory";
       exploratory.outbound = i2cpOpts "exploratory";
 
-      ntcp2.enable = mkEnableTrueOption "NTCP2.";
+      ntcp2.enable = mkEnableTrueOption "NTCP2";
       ntcp2.published = mkEnableOption "NTCP2 publication";
       ntcp2.port = mkOption {
         type = types.int;

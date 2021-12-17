@@ -1,12 +1,14 @@
-{ lib, stdenv, fetchzip, bzip2, openssl, zlib }:
+{ lib, stdenv, fetchFromGitHub, bzip2, openssl, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "imgpatchtools";
   version = "0.3";
 
-  src = fetchzip {
-    url = "https://github.com/erfanoabdi/imgpatchtools/archive/${version}.tar.gz";
-    sha256 = "1cwp1hfhip252dz0mbkhrsrkws6m15k359n4amw2vfnglnls8czd";
+  src = fetchFromGitHub {
+    owner = "erfanoabdi";
+    repo = "imgpatchtools";
+    rev = version;
+    sha256 = "sha256-7TOkqaXPui14VcSmMmYJ1Wg+s85wrgp+E0XcCB0Ml7M=";
   };
 
   buildInputs = [ bzip2 openssl zlib ];

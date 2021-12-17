@@ -2,32 +2,45 @@
 , stdenv
 , fetchgit
 , wrapLisp
-, sbcl_2_0_9
+, sbcl
 , openssl
 }:
 
 stdenv.mkDerivation rec {
   pname = "clpm";
-  version = "0.3.6";
+  version = "0.4.1";
 
   src = fetchgit {
     url = "https://gitlab.common-lisp.net/clpm/clpm";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "04w46yhv31p4cfb84b6qvyfw7x5nx6lzyd4yzhd9x6qvb7p5kmfh";
+    sha256 = "sha256-UhaLmbdsIPj6O+s262HUMxuz/5t43JR+TlOjq8Y2CDs=";
   };
 
   buildInputs = [
-    (wrapLisp sbcl_2_0_9)
+    (wrapLisp sbcl)
+  ];
+
+  propagatedBuildInputs = [
     openssl
   ];
+
+  postPatch = ''
+    # patch cl-plus-ssl to ensure that it finds libssl and libcrypto
+    sed 's|libssl.so|${openssl.out}/lib/libssl.so|' -i ext/cl-plus-ssl/src/reload.lisp
+    sed 's|libcrypto.so|${openssl.out}/lib/libcrypto.so|' -i ext/cl-plus-ssl/src/reload.lisp
+    # patch dexador to avoid error due to dexador being loaded multiple times
+    sed -i 's/defpackage/uiop:define-package/g' ext/dexador/src/dexador.lisp
+  '';
 
   buildPhase = ''
     runHook preBuild
 
-    ln -s ${openssl.out}/lib/libcrypto*${stdenv.hostPlatform.extensions.sharedLibrary}* .
-    ln -s ${openssl.out}/lib/libssl*${stdenv.hostPlatform.extensions.sharedLibrary}* .
-    common-lisp.sh --script scripts/build.lisp
+    # exporting home to avoid using /homeless-shelter/.cache/ as this will cause
+    # ld to complaing about `impure path used in link`.
+    export HOME=$TMP
+
+    common-lisp.sh --script scripts/build-release.lisp
 
     runHook postBuild
   '';
@@ -35,7 +48,8 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    INSTALL_ROOT=$out sh install.sh
+    cd build/release-staging/dynamic/clpm-${version}*/
+    INSTALL_ROOT=$out/ bash install.sh
 
     runHook postInstall
   '';
@@ -48,6 +62,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.clpm.dev/";
     license = licenses.bsd2;
     maintainers = [ maintainers.petterstorvik ];
-    platforms = platforms.all;
+    platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }

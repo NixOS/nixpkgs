@@ -1,12 +1,11 @@
 { lib, stdenv, fetchurl, openssl }:
 
 stdenv.mkDerivation rec {
-  baseName = "ipmiutil";
+  pname = "ipmiutil";
   version = "3.1.6";
-  name = "${baseName}-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/${baseName}/${name}.tar.gz";
+    url = "mirror://sourceforge/project/ipmiutil/pmiutil-${version}.tar.gz";
     sha256 = "0jlfb4firph3hc0854n7cw7yjwlax3wdxn37r2jl0l94dj684548";
   };
 

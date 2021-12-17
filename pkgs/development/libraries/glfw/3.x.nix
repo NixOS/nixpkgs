@@ -6,17 +6,19 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "3.3.4";
+  version = "3.3.5";
   pname = "glfw";
 
   src = fetchFromGitHub {
     owner = "glfw";
     repo = "GLFW";
     rev = version;
-    sha256 = "sha256-BP4wxjgm0x0E68tNz5eudkVUyBnXkQlP7LY3ppZunhw=";
+    sha256 = "sha256-1KkzYclOLGqiV1/8BsJ3e+pXMQ6a+sjLwZ7mjSuxxbA=";
   };
 
-  patches = lib.optional waylandSupport ./wayland.patch;
+  # Fix freezing on Wayland (https://github.com/glfw/glfw/pull/1711)
+  # and linkage issues on X11 (https://github.com/NixOS/nixpkgs/issues/142583)
+  patches = if waylandSupport then ./wayland.patch else ./x11.patch;
 
   propagatedBuildInputs = [ libGL ];
 

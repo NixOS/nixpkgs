@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , intltool
 , fetchFromGitLab
 , meson
@@ -11,7 +12,6 @@
 , desktop-file-utils
 , gtk-doc
 , wrapGAppsHook
-, gnome
 , itstool
 , libxml2
 , yelp-tools
@@ -25,6 +25,7 @@
 , runCommand
 , symlinkJoin
 , gobject-introspection
+, nix-update-script
 }:
 
 let
@@ -44,7 +45,7 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "gucharmap";
-  version = "13.0.2";
+  version = "14.0.0";
 
   outputs = [ "out" "lib" "dev" "devdoc" ];
 
@@ -53,7 +54,7 @@ in stdenv.mkDerivation rec {
     owner = "GNOME";
     repo = pname;
     rev = version;
-    sha256 = "099za9mc6qdq9pwcbjp3d7hxjbaa43vk2w9qw4yiyswl1xq3jw62";
+    sha256 = "sha256-d283zVRH42NZNq+vGmItN3ZBrRrl9gpYDco7osm3RoY=";
   };
 
   nativeBuildInputs = [
@@ -93,8 +94,8 @@ in stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = pname;
+    updateScript = nix-update-script {
+      attrPath = "gnome.gucharmap";
     };
   };
 

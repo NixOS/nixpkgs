@@ -5,21 +5,12 @@
 
 buildPythonPackage rec {
   pname = "celery";
-  version = "5.1.1";
+  version = "5.2.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "54436cd97b031bf2e08064223240e2a83d601d9414bcb1b702f94c6c33c29485";
+    sha256 = "sha256-tBpZC0nK+OZJilfbYo5YDV+Nxv69oPQt5deDrtW3+Ag=";
   };
-
-  # click  is only used for the repl, in most cases this shouldn't impact
-  # downstream packages
-  postPatch = ''
-    substituteInPlace requirements/test.txt \
-      --replace "moto==1.3.7" moto
-    substituteInPlace requirements/default.txt \
-      --replace "click>=7.0,<8.0" click
-  '';
 
   propagatedBuildInputs = [ billiard click click-didyoumean click-plugins click-repl kombu pytz vine ];
 

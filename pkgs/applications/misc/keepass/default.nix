@@ -3,11 +3,11 @@
 
 with builtins; buildDotnetPackage rec {
   baseName = "keepass";
-  version = "2.48.1";
+  version = "2.49";
 
   src = fetchurl {
     url = "mirror://sourceforge/keepass/KeePass-${version}-Source.zip";
-    sha256 = "sha256-HkAgKPvf8TUgUlgsGWVgjuYJaRPGi8obOFQEtmzDtLE=";
+    sha256 = "sha256-1hg4bRuQSG+UzEQGeQcSURTmTxt5ITGQqfg0IS7RWt0=";
   };
 
   sourceRoot = ".";
@@ -76,7 +76,11 @@ with builtins; buildDotnetPackage rec {
     ];
   };
 
-  outputFiles = [ "Build/KeePass/Release/*" "Build/KeePassLib/Release/*" ];
+  outputFiles = [
+    "Build/KeePass/Release/*"
+    "Build/KeePassLib/Release/*"
+    "Ext/KeePass.config.xml" # contains <PreferUserConfiguration>true</PreferUserConfiguration>
+  ];
   dllFiles = [ "KeePassLib.dll" ];
   exeFiles = [ "KeePass.exe" ];
 
@@ -84,7 +88,7 @@ with builtins; buildDotnetPackage rec {
   # after loading. It is brought into plugins bin/ directory using
   # buildEnv in the plugin derivation. Wrapper below makes sure it
   # is found and does not pollute output path.
-  binPaths = lib.concatStrings (lib.intersperse ":" (map (x: x + "/bin") plugins));
+  binPaths = lib.concatStringsSep ":" (map (x: x + "/bin") plugins);
 
   dynlibPath = lib.makeLibraryPath [ gtk2 ];
 

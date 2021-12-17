@@ -6,19 +6,25 @@
 
 buildPythonPackage rec {
   pname = "adafruit-platformdetect";
-  version = "3.15.3";
+  version = "3.18.0";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "Adafruit-PlatformDetect";
     inherit version;
-    sha256 = "sha256-cmeCh54dwYwbL1AwGrPwTDp4F6VONclV7iu2Sm1g33Q=";
+    sha256 = "593f3719580b31b3dffab0817414a3aa548ed609659ad216ceb8cf31cc51ec9b";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
   # Project has not published tests yet
   doCheck = false;
-  pythonImportsCheck = [ "adafruit_platformdetect" ];
+
+  pythonImportsCheck = [
+    "adafruit_platformdetect"
+  ];
 
   meta = with lib; {
     description = "Platform detection for use by Adafruit libraries";

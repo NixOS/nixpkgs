@@ -12,7 +12,7 @@ in {
     package = mkOption {
       type = types.package;
       default = pkgs.haskellPackages.greenclip;
-      defaultText = "pkgs.haskellPackages.greenclip";
+      defaultText = literalExpression "pkgs.haskellPackages.greenclip";
       description = "greenclip derivation to use.";
     };
   };

@@ -5,7 +5,6 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     imports = [ common/user-account.nix common/x11.nix ];
 
     virtualisation.emptyDiskImages = [ 512 512 ];
-    virtualisation.memorySize = 1024;
 
     environment.systemPackages = [ pkgs.cryptsetup ];
 

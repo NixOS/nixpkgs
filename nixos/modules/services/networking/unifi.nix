@@ -7,27 +7,9 @@ let
     @${cfg.jrePackage}/bin/java java \
         ${optionalString (cfg.initialJavaHeapSize != null) "-Xms${(toString cfg.initialJavaHeapSize)}m"} \
         ${optionalString (cfg.maximumJavaHeapSize != null) "-Xmx${(toString cfg.maximumJavaHeapSize)}m"} \
+        ${optionalString (lib.versionOlder cfg.unifiPackage.version "6.5.54") "-Dlog4j2.formatMsgNoLookups=true"} \
         -jar ${stateDir}/lib/ace.jar
   '';
-  mountPoints = [
-    {
-      what = "${cfg.unifiPackage}/dl";
-      where = "${stateDir}/dl";
-    }
-    {
-      what = "${cfg.unifiPackage}/lib";
-      where = "${stateDir}/lib";
-    }
-    {
-      what = "${cfg.mongodbPackage}/bin";
-      where = "${stateDir}/bin";
-    }
-    {
-      what = "${cfg.dataDir}";
-      where = "${stateDir}/data";
-    }
-  ];
-  systemdMountPoints = map (m: "${utils.escapeSystemdPath m.where}.mount") mountPoints;
 in
 {
 
@@ -44,7 +26,7 @@ in
     services.unifi.jrePackage = mkOption {
       type = types.package;
       default = pkgs.jre8;
-      defaultText = "pkgs.jre8";
+      defaultText = literalExpression "pkgs.jre8";
       description = ''
         The JRE package to use. Check the release notes to ensure it is supported.
       '';
@@ -53,7 +35,7 @@ in
     services.unifi.unifiPackage = mkOption {
       type = types.package;
       default = pkgs.unifiLTS;
-      defaultText = "pkgs.unifiLTS";
+      defaultText = literalExpression "pkgs.unifiLTS";
       description = ''
         The unifi package to use.
       '';
@@ -62,19 +44,9 @@ in
     services.unifi.mongodbPackage = mkOption {
       type = types.package;
       default = pkgs.mongodb;
-      defaultText = "pkgs.mongodb";
+      defaultText = literalExpression "pkgs.mongodb";
       description = ''
         The mongodb package to use.
-      '';
-    };
-
-    services.unifi.dataDir = mkOption {
-      type = types.str;
-      default = "${stateDir}/data";
-      description = ''
-        Where to store the database and other data.
-
-        This directory will be bind-mounted to ${stateDir}/data as part of the service startup.
       '';
     };
 
@@ -115,10 +87,12 @@ in
   config = mkIf cfg.enable {
 
     users.users.unifi = {
-      uid = config.ids.uids.unifi;
+      isSystemUser = true;
+      group = "unifi";
       description = "UniFi controller daemon user";
       home = "${stateDir}";
     };
+    users.groups.unifi = {};
 
     networking.firewall = mkIf cfg.openPorts {
       # https://help.ubnt.com/hc/en-us/articles/218506997
@@ -134,32 +108,11 @@ in
       ];
     };
 
-    # We must create the binary directories as bind mounts instead of symlinks
-    # This is because the controller resolves all symlinks to absolute paths
-    # to be used as the working directory.
-    systemd.mounts = map ({ what, where }: {
-        bindsTo = [ "unifi.service" ];
-        partOf = [ "unifi.service" ];
-        unitConfig.RequiresMountsFor = stateDir;
-        options = "bind";
-        what = what;
-        where = where;
-      }) mountPoints;
-
-    systemd.tmpfiles.rules = [
-      "d '${stateDir}' 0700 unifi - - -"
-      "d '${stateDir}/data' 0700 unifi - - -"
-      "d '${stateDir}/webapps' 0700 unifi - - -"
-      "L+ '${stateDir}/webapps/ROOT' - - - - ${cfg.unifiPackage}/webapps/ROOT"
-    ];
-
     systemd.services.unifi = {
       description = "UniFi controller daemon";
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ] ++ systemdMountPoints;
-      partOf = systemdMountPoints;
-      bindsTo = systemdMountPoints;
-      unitConfig.RequiresMountsFor = stateDir;
+      after = [ "network.target" ];
+
       # This a HACK to fix missing dependencies of dynamic libs extracted from jars
       environment.LD_LIBRARY_PATH = with pkgs.stdenv; "${cc.cc.lib}/lib";
       # Make sure package upgrades trigger a service restart
@@ -170,9 +123,15 @@ in
         ExecStart = "${(removeSuffix "\n" cmd)} start";
         ExecStop = "${(removeSuffix "\n" cmd)} stop";
         Restart = "on-failure";
+        TimeoutSec = "5min";
         User = "unifi";
         UMask = "0077";
         WorkingDirectory = "${stateDir}";
+        # the stop command exits while the main process is still running, and unifi
+        # wants to manage its own child processes. this means we have to set KillSignal
+        # to something the main process ignores, otherwise every stop will have unifi.service
+        # fail with SIGTERM status.
+        KillSignal = "SIGCONT";
 
         # Hardening
         AmbientCapabilities = "";
@@ -201,8 +160,27 @@ in
         SystemCallErrorNumber = "EPERM";
         SystemCallFilter = [ "@system-service" ];
 
-        # Required for ProtectSystem=strict
-        BindPaths = [ stateDir ];
+        StateDirectory = "unifi";
+        RuntimeDirectory = "unifi";
+        LogsDirectory = "unifi";
+        CacheDirectory= "unifi";
+
+        TemporaryFileSystem = [
+          # required as we want to create bind mounts below
+          "${stateDir}/webapps:rw"
+        ];
+
+        # We must create the binary directories as bind mounts instead of symlinks
+        # This is because the controller resolves all symlinks to absolute paths
+        # to be used as the working directory.
+        BindPaths =  [
+          "/var/log/unifi:${stateDir}/logs"
+          "/run/unifi:${stateDir}/run"
+          "${cfg.unifiPackage}/dl:${stateDir}/dl"
+          "${cfg.unifiPackage}/lib:${stateDir}/lib"
+          "${cfg.mongodbPackage}/bin:${stateDir}/bin"
+          "${cfg.unifiPackage}/webapps/ROOT:${stateDir}/webapps/ROOT"
+        ];
 
         # Needs network access
         PrivateNetwork = false;
@@ -212,6 +190,9 @@ in
     };
 
   };
+  imports = [
+    (mkRemovedOptionModule [ "services" "unifi" "dataDir" ] "You should move contents of dataDir to /var/lib/unifi/data" )
+  ];
 
-  meta.maintainers = with lib.maintainers; [ erictapen ];
+  meta.maintainers = with lib.maintainers; [ erictapen pennae ];
 }

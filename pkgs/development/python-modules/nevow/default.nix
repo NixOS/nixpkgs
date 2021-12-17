@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchpatch, fetchPypi, isPy3k, twisted }:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, twisted }:
 
 buildPythonPackage rec {
   pname = "Nevow";

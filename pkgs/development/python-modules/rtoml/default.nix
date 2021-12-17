@@ -5,6 +5,7 @@
 , setuptools-rust
 , rustPlatform
 , pytestCheckHook
+, libiconv
 }:
 
 buildPythonPackage rec {
@@ -31,6 +32,8 @@ buildPythonPackage rec {
     rust.cargo
     cargoSetupHook
   ];
+
+  buildInputs = [ libiconv ];
 
   pythonImportsCheck = [ "rtoml" ];
 

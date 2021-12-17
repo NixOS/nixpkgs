@@ -4,7 +4,7 @@
 #  3. replying to that message via email.
 
 import ./make-test-python.nix (
-  { pkgs, lib, ... }:
+  { pkgs, lib, package ? pkgs.discourse, ... }:
   let
     certs = import ./common/acme/server/snakeoil-certs.nix;
     clientDomain = "client.fake.domain";
@@ -28,6 +28,8 @@ import ./make-test-python.nix (
       { nodes, ... }:
       {
         virtualisation.memorySize = 2048;
+        virtualisation.cores = 4;
+        virtualisation.useNixStoreImage = true;
 
         imports = [ common/user-account.nix ];
 
@@ -55,7 +57,7 @@ import ./make-test-python.nix (
 
         services.discourse = {
           enable = true;
-          inherit admin;
+          inherit admin package;
           hostname = discourseDomain;
           sslCertificate = "${certs.${discourseDomain}.cert}";
           sslCertificateKey = "${certs.${discourseDomain}.key}";

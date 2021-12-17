@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, libroxml, proj, libyamlcpp, boost } :
+{ lib, stdenv, fetchFromGitHub, libroxml, proj_7, libyamlcpp, boost } :
 
 stdenv.mkDerivation rec {
   pname = "osm2xmap";
@@ -14,14 +14,14 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "GIT_VERSION=${version}"
     "GIT_TIMESTAMP="
-    "SHAREDIR=${placeholder "out"}/share/osm2xmap"
+    "SHAREDIR=${placeholder "out"}/share/osm2xmap/"
     "INSTALL_BINDIR=${placeholder "out"}/bin"
     "INSTALL_MANDIR=${placeholder "out"}/share/man/man1"
   ];
 
   NIX_CFLAGS_COMPILE = "-DACCEPT_USE_OF_DEPRECATED_PROJ_API_H";
 
-  buildInputs = [ libroxml proj libyamlcpp boost ];
+  buildInputs = [ libroxml proj_7 libyamlcpp boost ];
 
   meta = with lib; {
     homepage = "https://github.com/sembruk/osm2xmap";

@@ -140,7 +140,6 @@ let
               in
               [ pkgs.firefox-unwrapped pkgs.geckodriver testRunner ];
 
-            virtualisation.memorySize = 768;
           }
         ];
 

@@ -40,21 +40,24 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "materialize";
-  version = "0.8.1";
-  rev = "ef996c54db7c9504690b9f230a4a676ae1fb617f";
+  version = "0.10.0";
+  MZ_DEV_BUILD_SHA = "c14633f59e842fbdd62c7239ffd8c2a16704386e";
 
   src = fetchFromGitHub {
     owner = "MaterializeInc";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1lrv0q191rhdqk316557qk2a6b00vrf07j1g63ri6mp8ad1g8gk3";
+    sha256 = "06290l2xrryx7bc9g1ffyfjm18a34pa2k410qk9w2p0psqiw2v8d";
   };
 
-  cargoSha256 = "0fx7m1ci4zak7sm71kdiaj2l29rlqax15hd424i9yn4aj1bd358b";
+  cargoSha256 = "1bxfp6pidiziiq938ah49pa3qr1dhnfnbihp7jxind9qsb3q9gp0";
 
   nativeBuildInputs = [ cmake perl pkg-config ]
     # Provides the mig command used by the krb5-src build script
     ++ lib.optional stdenv.isDarwin bootstrap_cmds;
+
+  # Needed to get openssl-sys to use pkg-config.
+  OPENSSL_NO_VENDOR = 1;
 
   buildInputs = [ openssl ]
     ++ lib.optionals stdenv.isDarwin [ libiconv DiskArbitration Foundation ];
@@ -64,8 +67,10 @@ rustPlatform.buildRustPackage rec {
     "--exact"
     "--skip test_client"
     "--skip test_client_errors"
+    "--skip test_client_all_subjects"
     "--skip test_no_block"
     "--skip test_safe_mode"
+    "--skip test_tls"
   ];
 
   postPatch = ''
@@ -75,7 +80,6 @@ rustPlatform.buildRustPackage rec {
       --replace _Materialize root
   '';
 
-  MZ_DEV_BUILD_SHA = rev;
   cargoBuildFlags = [ "--bin materialized" ];
 
   postInstall = ''
@@ -86,7 +90,7 @@ rustPlatform.buildRustPackage rec {
     homepage    = "https://materialize.com";
     description = "A streaming SQL materialized view engine for real-time applications";
     license     = licenses.bsl11;
-    platforms   = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms   = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" ];
     maintainers = [ maintainers.petrosagg ];
   };
 }

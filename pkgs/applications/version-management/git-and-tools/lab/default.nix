@@ -2,24 +2,24 @@
 
 buildGoModule rec {
   pname = "lab";
-  version = "0.22.0";
+  version = "0.23.0";
 
   src = fetchFromGitHub {
     owner = "zaquestion";
     repo = "lab";
     rev = "v${version}";
-    sha256 = "sha256-CyXEmlsc40JtwDjRYNWqN+3cuoG8K07jAQdd1rktvS8=";
+    sha256 = "0g8v3cli8rvr0zsxiv4w0afzqmh0d85a832c4hc75b3f9amkr0dl";
   };
 
   subPackages = [ "." ];
 
-  vendorSha256 = "sha256-PSS7OPbM+XsylqDlWc4h+oZrOua2kSWKLEuyjqo/cxM=";
+  vendorSha256 = "09xn5vycb9shygs13pfwxlb89j6rhrbplm10mfgxi4kzlvm7agl6";
 
   doCheck = false;
 
   nativeBuildInputs = [ makeWrapper installShellFiles ];
 
-  buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
+  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
   postInstall = ''
     wrapProgram $out/bin/lab --prefix PATH ":" "${lib.makeBinPath [ git xdg-utils ]}";

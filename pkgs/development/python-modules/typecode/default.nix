@@ -11,9 +11,11 @@
 , pytestCheckHook
 , pytest-xdist
 }:
+
 buildPythonPackage rec {
   pname = "typecode";
   version = "21.6.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -38,6 +40,12 @@ buildPythonPackage rec {
   checkInputs = [
     pytestCheckHook
     pytest-xdist
+  ];
+
+  disabledTests = [
+    "TestFileTypesDataDriven"
+    # AssertionError: assert 'application/x-bytecode.python'...
+    "test_compiled_python_1"
   ];
 
   pythonImportsCheck = [

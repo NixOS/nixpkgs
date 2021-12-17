@@ -1,5 +1,4 @@
 { lib
-, aiohttp
 , buildPythonPackage
 , fetchFromGitHub
 , pytest-mock

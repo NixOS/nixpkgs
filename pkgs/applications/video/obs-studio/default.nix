@@ -21,16 +21,14 @@
 , curl
 , wayland
 , xorg
-, makeWrapper
 , pkg-config
 , libvlc
 , mbedtls
-
+, wrapGAppsHook
 , scriptingSupport ? true
 , luajit
 , swig
 , python3
-
 , alsaSupport ? stdenv.isLinux
 , alsa-lib
 , pulseaudioSupport ? config.pulseaudio or stdenv.isLinux
@@ -46,13 +44,13 @@ let
 in
 mkDerivation rec {
   pname = "obs-studio";
-  version = "27.0.0";
+  version = "27.0.1";
 
   src = fetchFromGitHub {
     owner = "obsproject";
     repo = "obs-studio";
     rev = version;
-    sha256 = "1n71705b9lbdff3svkmgwmbhlhhxvi8ajxqb74lm07v56a5bvi6p";
+    sha256 = "04fzsr9yizmxy0r7z2706crvnsnybpnv5kgfn77znknxxjacfhkn";
     fetchSubmodules = true;
   };
 
@@ -68,7 +66,7 @@ mkDerivation rec {
     addOpenGLRunpath
     cmake
     pkg-config
-    makeWrapper
+    wrapGAppsHook
   ]
   ++ optional scriptingSupport swig;
 
@@ -121,9 +119,12 @@ mkDerivation rec {
     "-DCEF_ROOT_DIR=../../cef"
   ];
 
-  postInstall = ''
-    wrapProgram $out/bin/obs \
-      --prefix "LD_LIBRARY_PATH" : "${xorg.libX11.out}/lib:${libvlc}/lib"
+  dontWrapGApps = true;
+  preFixup = ''
+    qtWrapperArgs+=(
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ xorg.libX11 libvlc ]}"
+      ''${gappsWrapperArgs[@]}
+    )
   '';
 
   postFixup = lib.optionalString stdenv.isLinux ''

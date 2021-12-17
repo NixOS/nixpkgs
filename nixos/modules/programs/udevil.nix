@@ -9,6 +9,11 @@ in {
   options.programs.udevil.enable = mkEnableOption "udevil";
 
   config = mkIf cfg.enable {
-    security.wrappers.udevil.source = "${lib.getBin pkgs.udevil}/bin/udevil";
+    security.wrappers.udevil =
+      { setuid = true;
+        owner = "root";
+        group = "root";
+        source = "${lib.getBin pkgs.udevil}/bin/udevil";
+      };
   };
 }

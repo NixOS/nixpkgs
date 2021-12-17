@@ -253,7 +253,7 @@ chmod 400 /var/lib/secrets/certs.secret
 </programlisting>
 
   <para>
-   Now you're all set to generate certs! You should monitor the first invokation
+   Now you're all set to generate certs! You should monitor the first invocation
    by running <literal>systemctl start acme-example.com.service &amp;
    journalctl -fu acme-example.com.service</literal> and watching its log output.
   </para>

@@ -50,7 +50,7 @@ expression does not protect the Prelude import with a semantic integrity
 check, so the first step is to freeze the expression using `dhall freeze`,
 like this:
 
-```bash
+```ShellSession
 $ dhall freeze --inplace ./true.dhall
 ```
 
@@ -113,7 +113,7 @@ in
 
 … which we can then build using this command:
 
-```bash
+```ShellSession
 $ nix build --file ./example.nix dhallPackages.true
 ```
 
@@ -121,7 +121,7 @@ $ nix build --file ./example.nix dhallPackages.true
 
 The above package produces the following directory tree:
 
-```bash
+```ShellSession
 $ tree -a ./result
 result
 ├── .cache
@@ -135,7 +135,7 @@ result
 
 * `source.dhall` contains the result of interpreting our Dhall package:
 
-  ```bash
+  ```ShellSession
   $ cat ./result/source.dhall
   True
   ```
@@ -143,7 +143,7 @@ result
 * The `.cache` subdirectory contains one binary cache product encoding the
   same result as `source.dhall`:
 
-  ```bash
+  ```ShellSession
   $ dhall decode < ./result/.cache/dhall/122027abdeddfe8503496adeb623466caa47da5f63abd2bc6fa19f6cfcb73ecfed70
   True
   ```
@@ -151,7 +151,7 @@ result
 * `binary.dhall` contains a Dhall expression which handles fetching and decoding
   the same cache product:
 
-  ```bash
+  ```ShellSession
   $ cat ./result/binary.dhall
   missing sha256:27abdeddfe8503496adeb623466caa47da5f63abd2bc6fa19f6cfcb73ecfed70
   $ cp -r ./result/.cache .cache
@@ -168,7 +168,7 @@ to conserve disk space when they are used exclusively as dependencies.  For
 example, if we build the Prelude package it will only contain the binary
 encoding of the expression:
 
-```bash
+```ShellSession
 $ nix build --file ./example.nix dhallPackages.Prelude
 
 $ tree -a result
@@ -199,7 +199,7 @@ Dhall overlay like this:
 … and now the Prelude will contain the fully decoded result of interpreting
 the Prelude:
 
-```bash
+```ShellSession
 $ nix build --file ./example.nix dhallPackages.Prelude
 
 $ tree -a result
@@ -302,7 +302,7 @@ Additionally, `buildDhallGitHubPackage` accepts the same arguments as
 You can use the `dhall-to-nixpkgs` command-line utility to automate
 packaging Dhall code.  For example:
 
-```bash
+```ShellSession
 $ nix-env --install --attr haskellPackages.dhall-nixpkgs
 
 $ nix-env --install --attr nix-prefetch-git  # Used by dhall-to-nixpkgs
@@ -329,18 +329,49 @@ The utility takes care of automatically detecting remote imports and converting
 them to package dependencies.  You can also use the utility on local
 Dhall directories, too:
 
-```bash
+```ShellSession
 $ dhall-to-nixpkgs directory ~/proj/dhall-semver
 { buildDhallDirectoryPackage, Prelude }:
   buildDhallDirectoryPackage {
     name = "proj";
-    src = /Users/gabriel/proj/dhall-semver;
+    src = ~/proj/dhall-semver;
     file = "package.dhall";
     source = false;
     document = false;
     dependencies = [ (Prelude.overridePackage { file = "package.dhall"; }) ];
     }
 ```
+
+### Remote imports as fixed-output derivations {#ssec-dhall-remote-imports-as-fod}
+
+`dhall-to-nixpkgs` has the ability to fetch and build remote imports as
+fixed-output derivations by using their Dhall integrity check. This is
+sometimes easier than manually packaging all remote imports.
+
+This can be used like the following:
+
+```ShellSession
+$ dhall-to-nixpkgs directory --fixed-output-derivations ~/proj/dhall-semver
+{ buildDhallDirectoryPackage, buildDhallUrl }:
+  buildDhallDirectoryPackage {
+    name = "proj";
+    src = ~/proj/dhall-semver;
+    file = "package.dhall";
+    source = false;
+    document = false;
+    dependencies = [
+      (buildDhallUrl {
+        url = "https://prelude.dhall-lang.org/v17.0.0/package.dhall";
+        hash = "sha256-ENs8kZwl6QRoM9+Jeo/+JwHcOQ+giT2VjDQwUkvlpD4=";
+        dhallHash = "sha256:10db3c919c25e9046833df897a8ffe2701dc390fa0893d958c3430524be5a43e";
+        })
+      ];
+    }
+```
+
+Here, `dhall-semver`'s `Prelude` dependency is fetched and built with the
+`buildDhallUrl` helper function, instead of being passed in as a function
+argument.
 
 ## Overriding dependency versions {#ssec-dhall-overriding-dependency-versions}
 
@@ -359,7 +390,7 @@ in  Prelude.Bool.not False
 
 If we try to rebuild that expression the build will fail:
 
-```
+```ShellSession
 $ nix build --file ./example.nix dhallPackages.true
 builder for '/nix/store/0f1hla7ff1wiaqyk1r2ky4wnhnw114fi-true.drv' failed with exit code 1; last 10 log lines:
 
@@ -385,7 +416,7 @@ importing the URL.
 However, we can override the default Prelude version by using `dhall-to-nixpkgs`
 to create a Dhall package for our desired Prelude:
 
-```bash
+```ShellSession
 $ dhall-to-nixpkgs github https://github.com/dhall-lang/dhall-lang.git \
     --name Prelude \
     --directory Prelude \
@@ -396,7 +427,7 @@ $ dhall-to-nixpkgs github https://github.com/dhall-lang/dhall-lang.git \
 … and then referencing that package in our Dhall overlay, by either overriding
 the Prelude globally for all packages, like this:
 
-```bash
+```nix
   dhallOverrides = self: super: {
     true = self.callPackage ./true.nix { };
 
@@ -407,7 +438,7 @@ the Prelude globally for all packages, like this:
 … or selectively overriding the Prelude dependency for just the `true` package,
 like this:
 
-```bash
+```nix
   dhallOverrides = self: super: {
     true = self.callPackage ./true.nix {
       Prelude = self.callPackage ./Prelude.nix { };

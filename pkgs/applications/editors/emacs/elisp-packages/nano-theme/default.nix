@@ -1,26 +1,19 @@
 { lib
-, stdenv
+, trivialBuild
 , fetchFromGitHub
 , emacs
 }:
 
-stdenv.mkDerivation rec {
+trivialBuild rec {
   pname = "nano-theme";
-  version = "2021-06-05";
+  version = "0.pre+unstable=2021-06-29";
 
   src = fetchFromGitHub {
     owner = "rougier";
     repo  = pname;
-    rev = "99ff1c5e78296a073c6e63b966045e0d83a136e7";
-    hash = "sha256-IDVnl4J4hx2mlLaiA+tKxxRGcIyBULr2HBeY/GMHD90=";
+    rev = "4a231787a32b3019f9f0abb3511a112fd54bf685";
+    hash = "sha256-eco9BMKLhPuwFJb5QesbM6g3cZv3FdVvQ9fXq6D3Ifc=";
   };
-
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out/share/emacs/site-lisp
-    install *.el $out/share/emacs/site-lisp
-    runHook postInstall
-  '';
 
   meta = {
     homepage = "https://github.com/rougier/nano-theme";

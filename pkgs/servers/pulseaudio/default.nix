@@ -40,7 +40,8 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkg-config autoreconfHook makeWrapper perlPackages.perl perlPackages.XMLParser ];
+  nativeBuildInputs = [ pkg-config autoreconfHook makeWrapper perlPackages.perl perlPackages.XMLParser ]
+    ++ lib.optionals stdenv.isLinux [ glib ];
 
   propagatedBuildInputs =
     lib.optionals stdenv.isLinux [ libcap ];

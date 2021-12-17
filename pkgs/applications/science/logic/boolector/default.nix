@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, lib, python3
+{ stdenv, fetchFromGitHub, lib, python3, fetchpatch
 , cmake, lingeling, btor2tools, gtest, gmp
 }:
 
@@ -12,6 +12,15 @@ stdenv.mkDerivation rec {
     rev    = version;
     sha256 = "1smcy6yp8wvnw2brgnv5bf40v87k4v4fbdbrhi7987vja632k50z";
   };
+
+  patches = [
+    # present in master - remove after 3.2.2
+    (fetchpatch {
+      name = "fix-parser-getc-char-casts.patch";
+      url = "https://github.com/Boolector/boolector/commit/cc3a70918538c1e71ea5e7273fa1ac098da37c1b.patch";
+      sha256 = "0pjvagcy74vxa2q75zbshcz8j7rvhl98549xfcf5y8yyxf5h8hyq";
+    })
+  ];
 
   postPatch = ''
     sed s@REPLACEME@file://${gtest.src}@ ${./cmake-gtest.patch} | patch -p1

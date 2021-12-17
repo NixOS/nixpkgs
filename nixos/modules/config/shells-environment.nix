@@ -136,10 +136,8 @@ in
 
     environment.binsh = mkOption {
       default = "${config.system.build.binsh}/bin/sh";
-      defaultText = "\${config.system.build.binsh}/bin/sh";
-      example = literalExample ''
-        "''${pkgs.dash}/bin/dash"
-      '';
+      defaultText = literalExpression ''"''${config.system.build.binsh}/bin/sh"'';
+      example = literalExpression ''"''${pkgs.dash}/bin/dash"'';
       type = types.path;
       visible = false;
       description = ''
@@ -152,7 +150,7 @@ in
 
     environment.shells = mkOption {
       default = [];
-      example = literalExample "[ pkgs.bashInteractive pkgs.zsh ]";
+      example = literalExpression "[ pkgs.bashInteractive pkgs.zsh ]";
       description = ''
         A list of permissible login shells for user accounts.
         No need to mention <literal>/bin/sh</literal>

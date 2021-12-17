@@ -21,13 +21,6 @@ let newPython = python3.override {
         sha256 = "1dv6mjsm67l1razcgmq66riqmsb36wns17mnipqr610v0z0zf5j0";
       };
     });
-    urllib3 = super.urllib3.overridePythonAttrs (oldAttrs: rec {
-      version = "1.25.11";
-      src = oldAttrs.src.override {
-        inherit version;
-        sha256 = "18hpzh1am1dqx81fypn57r2wk565fi4g14292qrc5jm1h9dalzld";
-      };
-    });
     # https://github.com/conan-io/conan/issues/8876
     pyjwt = super.pyjwt.overridePythonAttrs (oldAttrs: rec {
       version = "1.7.1";
@@ -59,14 +52,14 @@ let newPython = python3.override {
 };
 
 in newPython.pkgs.buildPythonApplication rec {
-  version = "1.35.0";
+  version = "1.40.0";
   pname = "conan";
 
   src = fetchFromGitHub {
     owner = "conan-io";
     repo = "conan";
     rev = version;
-    sha256 = "19rgylkjxvv47vz5vgh46rw108xskpv7lmax8y2fnm2wd1j3bq9c";
+    sha256 = "1sb4w4wahasrwxkag1g79f135601sca6iafv4r4836f2vi48ka2d";
   };
 
   propagatedBuildInputs = with newPython.pkgs; [
@@ -105,12 +98,6 @@ in newPython.pkgs.buildPythonApplication rec {
   # TODO: reenable tests now that we fetch tests w/ the source from GitHub.
   # Not enabled right now due to time constraints/failing tests that I didn't have time to track down
   doCheck = false;
-
-  postPatch = ''
-    substituteInPlace conans/requirements.txt \
-      --replace "deprecation>=2.0, <2.1" "deprecation" \
-      --replace "six>=1.10.0,<=1.15.0" "six>=1.10.0,<=1.16.0"
-  '';
 
   meta = with lib; {
     homepage = "https://conan.io";

@@ -1,7 +1,6 @@
 {
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   lib,
 }:
 

@@ -9,19 +9,19 @@
 , glib
 , gtk3
 , freerdp
-, nix-update-script
+, unstableGitUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "gtk-frdp";
-  version = "3.37.1-unstable-2020-10-26";
+  version = "unstable-2021-10-01";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = pname;
-    rev = "805721e82ca1df6a50da3b5bd3b75d6747016482";
-    sha256 = "q/UFKYj3LUkAzll3KeKd6oec0GJnDtTuFMTTatKFlcs=";
+    rev = "9c15c1202ed66fe20334e33d798cc5ebd39917f0";
+    sha256 = "2YOLpyd26qWQKvneH4ww2DS8h/ZNYDmfbYIjQDvDMko=";
   };
 
   nativeBuildInputs = [
@@ -39,8 +39,10 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
+    updateScript = unstableGitUpdater {
+      # The updater tries src.url by default, which does not exist for fetchFromGitHub (fetchurl).
+      url = "${meta.homepage}.git";
+      branch = "gtk-frdp-0-1";
     };
   };
 

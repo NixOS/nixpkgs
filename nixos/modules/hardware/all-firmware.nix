@@ -62,7 +62,7 @@ in {
         zd1211fw
         alsa-firmware
         sof-firmware
-        openelec-dvb-firmware
+        libreelec-dvb-firmware
       ] ++ optional (pkgs.stdenv.hostPlatform.isAarch32 || pkgs.stdenv.hostPlatform.isAarch64) raspberrypiWirelessFirmware
         ++ optionals (versionOlder config.boot.kernelPackages.kernel.version "4.13") [
         rtl8723bs-firmware
@@ -83,7 +83,7 @@ in {
         b43Firmware_5_1_138
         b43Firmware_6_30_163_46
         b43FirmwareCutter
-      ] ++ optional (pkgs.stdenv.hostPlatform.isi686 || pkgs.stdenv.hostPlatform.isx86_64) facetimehd-firmware;
+      ] ++ optional pkgs.stdenv.hostPlatform.isx86 facetimehd-firmware;
     })
     (mkIf cfg.wirelessRegulatoryDatabase {
       hardware.firmware = [ pkgs.wireless-regdb ];

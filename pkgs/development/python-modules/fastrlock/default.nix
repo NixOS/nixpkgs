@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "fastrlock";
-  version = "0.6";
+  version = "0.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9f5d6ec9fe130b7490bb04572134392420b72bd0842185e02d461a797d6bc749";
+    sha256 = "9cc100ed0924b32173d7de705a82fdf1257cdf60af1952a13f64759307b40931";
   };
 
   meta = with lib; {

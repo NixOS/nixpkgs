@@ -61,7 +61,7 @@
           <link linkend="opt-fileSystems._name_.neededForBoot">neededForBoot</link>).
           As a motivating example, this could be useful if you’ve
           forgotten to set
-          <link xlink:href="options.html#opt-fileSystems._name_.neededForBoot">neededForBoot</link>
+          <link linkend="opt-fileSystems._name_.neededForBoot">neededForBoot</link>
           on a file system.
         </para>
       </listitem>

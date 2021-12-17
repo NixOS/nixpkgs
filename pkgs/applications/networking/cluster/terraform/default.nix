@@ -27,6 +27,8 @@ let
         inherit sha256;
       };
 
+      ldflags = [ "-s" "-w" ];
+
       postConfigure = ''
         # speakeasy hardcodes /bin/stty https://github.com/bgentry/speakeasy/issues/22
         substituteInPlace vendor/github.com/bgentry/speakeasy/speakeasy_unix.go \
@@ -114,7 +116,7 @@ let
           passthru = {
             withPlugins = newplugins:
               withPlugins (x: newplugins x ++ actualPlugins);
-            full = withPlugins lib.attrValues;
+            full = withPlugins (p: lib.filter lib.isDerivation (lib.attrValues p));
 
             # Ouch
             overrideDerivation = f:
@@ -194,10 +196,10 @@ rec {
     passthru = { inherit plugins; };
   };
 
-  terraform_1_0 = mkTerraform {
-    version = "1.0.4";
-    sha256 = "09g0ln247scv8mj40gxhkij0li62v0rjm2bsgmvl953aj7g3dlh1";
-    vendorSha256 = "07pzqvf9lwgc1fadmyam5hn7arlvzrjsplls445738jpn61854gg";
+  terraform_1 = mkTerraform {
+    version = "1.1.1";
+    sha256 = "sha256-JHwHxFpAUVnm9QlfSYrBELrgct0RkjS7OQb6gKEAsCA=";
+    vendorSha256 = "sha256-inPNvNUcil9X0VQ/pVgZdnnmn9UCfEz7qXiuKDj8RYM=";
     patches = [ ./provider-path-0_15.patch ];
     passthru = { inherit plugins; };
   };
@@ -211,7 +213,7 @@ rec {
       mainTf = writeText "main.tf" ''
         resource "random_id" "test" {}
       '';
-      terraform = terraform_1_0.withPlugins (p: [ p.random ]);
+      terraform = terraform_1.withPlugins (p: [ p.random ]);
       test =
         runCommand "terraform-plugin-test" { buildInputs = [ terraform ]; } ''
           set -e

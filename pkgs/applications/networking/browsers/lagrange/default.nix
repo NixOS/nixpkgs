@@ -7,23 +7,25 @@
 , fribidi
 , harfbuzz
 , libunistring
+, libwebp
 , mpg123
 , openssl
 , pcre
 , SDL2
 , AppKit
+, zip
 , zlib
 }:
 
 stdenv.mkDerivation rec {
   pname = "lagrange";
-  version = "1.6.2";
+  version = "1.9.2";
 
   src = fetchFromGitHub {
     owner = "skyjake";
     repo = "lagrange";
     rev = "v${version}";
-    sha256 = "sha256-YTWVBQt0X12UDFJv/rPBqlIBC4iXSvpdYi/HIl+BPxc=";
+    sha256 = "sha256-ZiG3KSEk4l9FFxfftQNb1UHQV//SlK8thp5Tr8ek5v4=";
     fetchSubmodules = true;
   };
 
@@ -31,17 +33,12 @@ stdenv.mkDerivation rec {
     rm -r lib/fribidi lib/harfbuzz
   '';
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [ cmake pkg-config zip ];
 
-  buildInputs = [ fribidi harfbuzz libunistring mpg123 openssl pcre SDL2 zlib ]
+  buildInputs = [ fribidi harfbuzz libunistring libwebp mpg123 openssl pcre SDL2 zlib ]
     ++ lib.optional stdenv.isDarwin AppKit;
 
   hardeningDisable = lib.optional (!stdenv.cc.isClang) "format";
-
-  cmakeFlags = [
-    "-DENABLE_HARFBUZZ_MINIMAL:BOOL=OFF"
-    "-DENABLE_FRIBIDI_BUILD:BOOL=OFF"
-  ];
 
   installPhase = lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/Applications

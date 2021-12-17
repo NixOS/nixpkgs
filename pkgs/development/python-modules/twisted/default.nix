@@ -13,18 +13,19 @@
 , service-identity
 , setuptools
 , idna
+, typing-extensions
 }:
 buildPythonPackage rec {
   pname = "Twisted";
-  version = "20.3.0";
+  version = "21.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    extension = "tar.bz2";
-    sha256 = "040yzha6cyshnn6ljgk2birgh6mh2cnra48xp5ina5vfsnsmab6p";
+    extension = "tar.gz";
+    sha256 = "01lh225d7lfnmfx4f4kxwl3963gjc9yg8jfkn1w769v34ia55mic";
   };
 
-  propagatedBuildInputs = [ zope_interface incremental automat constantly hyperlink pyhamcrest attrs setuptools ];
+  propagatedBuildInputs = [ zope_interface incremental automat constantly hyperlink pyhamcrest attrs setuptools typing-extensions ];
 
   passthru.extras.tls = [ pyopenssl service-identity idna ];
 
@@ -32,7 +33,7 @@ buildPythonPackage rec {
   # twisted.python.runtime.platform.supportsINotify() == False
   patchPhase = lib.optionalString stdenv.isLinux ''
     substituteInPlace src/twisted/python/_inotify.py --replace \
-      "ctypes.util.find_library('c')" "'${stdenv.glibc.out}/lib/libc.so.6'"
+      "ctypes.util.find_library(\"c\")" "'${stdenv.glibc.out}/lib/libc.so.6'"
   '';
 
   # Generate Twisted's plug-in cache.  Twisted users must do it as well.  See

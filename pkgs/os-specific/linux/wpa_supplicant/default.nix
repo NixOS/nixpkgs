@@ -1,4 +1,5 @@
 { lib, stdenv, fetchurl, fetchpatch, openssl, pkg-config, libnl
+, nixosTests
 , withDbus ? true, dbus
 , withReadline ? true, readline
 , withPcsclite ? true, pcsclite
@@ -138,6 +139,10 @@ stdenv.mkDerivation rec {
     rm $out/share/man/man8/wpa_priv.8
     install -Dm444 wpa_supplicant.conf $out/share/doc/wpa_supplicant/wpa_supplicant.conf.example
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) wpa_supplicant;
+  };
 
   meta = with lib; {
     homepage = "https://w1.fi/wpa_supplicant/";

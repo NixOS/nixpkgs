@@ -1,5 +1,8 @@
 { lib, stdenv, ghc, llvmPackages, packages, symlinkJoin, makeWrapper
-, withLLVM ? !(stdenv.hostPlatform.isx86_64 || stdenv.hostPlatform.isPowerPC)
+# GHC will have LLVM available if necessary for the respective target,
+# so useLLVM only needs to be changed if -fllvm is to be used for a
+# platform that has NCG support
+, useLLVM ? false
 , postBuild ? ""
 , ghcLibdir ? null # only used by ghcjs, when resolving plugins
 }:
@@ -50,7 +53,7 @@ let
                   ([ llvmPackages.llvm ]
                    ++ lib.optional stdenv.targetPlatform.isDarwin llvmPackages.clang);
 in
-if paths == [] && !withLLVM then ghc else
+if paths == [] && !useLLVM then ghc else
 symlinkJoin {
   # this makes computing paths from the name attribute impossible;
   # if such a feature is needed, the real compiler name should be saved
@@ -73,7 +76,7 @@ symlinkJoin {
           ${lib.optionalString (ghc.isGhcjs or false)
             ''--set NODE_PATH "${ghc.socket-io}/lib/node_modules"''
           } \
-          ${lib.optionalString withLLVM ''--prefix "PATH" ":" "${llvm}"''}
+          ${lib.optionalString useLLVM ''--prefix "PATH" ":" "${llvm}"''}
       fi
     done
 

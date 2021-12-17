@@ -14,20 +14,17 @@ top-level attribute to `top-level/all-packages.nix`.
 
 */
 
-{
-  newScope,
-  lib, stdenv, fetchurl, fetchpatch, fetchFromGitHub, makeSetupHook, makeWrapper,
-  bison, cups ? null, harfbuzz, libGL, perl,
-  gstreamer, gst-plugins-base, gtk3, dconf,
-  llvmPackages_5,
+{ newScope
+, lib, stdenv, fetchurl, fetchpatch, fetchFromGitHub, makeSetupHook, makeWrapper
+, bison, cups ? null, harfbuzz, libGL, perl
+, gstreamer, gst-plugins-base, gtk3, dconf
+, llvmPackages_5, darwin
 
   # options
-  developerBuild ? false,
-  decryptSslTraffic ? false,
-  debug ? false,
+, developerBuild ? false
+, decryptSslTraffic ? false
+, debug ? false
 }:
-
-with lib;
 
 let
 
@@ -51,29 +48,27 @@ let
   };
 
   patches = {
-    qtbase =
-      optionals stdenv.isDarwin [
-        ./qtbase.patch.d/0001-qtbase-mkspecs-mac.patch
+    qtbase = lib.optionals stdenv.isDarwin [
+      ./qtbase.patch.d/0001-qtbase-mkspecs-mac.patch
 
-        # Downgrade minimal required SDK to 10.12
-        ./qtbase.patch.d/0013-define-kiosurfacesuccess.patch
-        ./qtbase.patch.d/qtbase-sdk-10.12-mac.patch
+      # Downgrade minimal required SDK to 10.12
+      ./qtbase.patch.d/0013-define-kiosurfacesuccess.patch
+      ./qtbase.patch.d/qtbase-sdk-10.12-mac.patch
 
-        # Patch framework detection to support X.framework/X.tbd,
-        # extending the current support for X.framework/X.
-        ./qtbase.patch.d/0012-qtbase-tbd-frameworks.patch
-      ]
-      ++ [
-        ./qtbase.patch.d/0003-qtbase-mkspecs.patch
-        ./qtbase.patch.d/0004-qtbase-replace-libdir.patch
-        ./qtbase.patch.d/0005-qtbase-cmake.patch
-        ./qtbase.patch.d/0006-qtbase-gtk3.patch
-        ./qtbase.patch.d/0007-qtbase-xcursor.patch
-        ./qtbase.patch.d/0008-qtbase-tzdir.patch
-        ./qtbase.patch.d/0009-qtbase-qtpluginpath.patch
-        ./qtbase.patch.d/0010-qtbase-assert.patch
-        ./qtbase.patch.d/0011-fix-header_module.patch
-      ];
+      # Patch framework detection to support X.framework/X.tbd,
+      # extending the current support for X.framework/X.
+      ./qtbase.patch.d/0012-qtbase-tbd-frameworks.patch
+    ] ++ [
+      ./qtbase.patch.d/0003-qtbase-mkspecs.patch
+      ./qtbase.patch.d/0004-qtbase-replace-libdir.patch
+      ./qtbase.patch.d/0005-qtbase-cmake.patch
+      ./qtbase.patch.d/0006-qtbase-gtk3.patch
+      ./qtbase.patch.d/0007-qtbase-xcursor.patch
+      ./qtbase.patch.d/0008-qtbase-tzdir.patch
+      ./qtbase.patch.d/0009-qtbase-qtpluginpath.patch
+      ./qtbase.patch.d/0010-qtbase-assert.patch
+      ./qtbase.patch.d/0011-fix-header_module.patch
+    ];
     qtdeclarative = [ ./qtdeclarative.patch ];
     qtlocation = [ ./qtlocation-gcc-9.patch ];
     qtscript = [ ./qtscript.patch ];
@@ -103,8 +98,7 @@ let
         stripLen = 1;
         extraPrefix = "src/3rdparty/";
       })
-    ]
-      ++ optional stdenv.isDarwin ./qtwebengine-darwin-no-platform-check.patch;
+    ] ++ lib.optional stdenv.isDarwin ./qtwebengine-darwin-no-platform-check.patch;
     qtwebkit = [
       (fetchpatch {
         name = "qtwebkit-bison-3.7-build.patch";
@@ -118,7 +112,7 @@ let
       })
       ./qtwebkit.patch
       ./qtwebkit-icu68.patch
-    ] ++ optionals stdenv.isDarwin [
+    ] ++ lib.optionals stdenv.isDarwin [
       ./qtwebkit-darwin-no-readline.patch
       ./qtwebkit-darwin-no-qos-classes.patch
     ];
@@ -145,6 +139,8 @@ let
       callPackage = self.newScope { inherit qtCompatVersion qtModule srcs; };
     in {
 
+      inherit callPackage qtCompatVersion qtModule srcs;
+
       mkDerivationWith =
         import ../mkDerivation.nix
         { inherit lib; inherit debug; inherit (self) wrapQtAppsHook; };
@@ -157,8 +153,12 @@ let
         inherit bison cups harfbuzz libGL;
         withGtk3 = true; inherit dconf gtk3;
         inherit debug developerBuild decryptSslTraffic;
+        inherit (darwin.apple_sdk.frameworks) AGL AppKit ApplicationServices Carbon Cocoa CoreAudio CoreBluetooth
+          CoreLocation CoreServices DiskArbitration Foundation OpenGL MetalKit IOKit;
+        inherit (darwin) libobjc;
       };
 
+      qt3d = callPackage ../modules/qt3d.nix {};
       qtcharts = callPackage ../modules/qtcharts.nix {};
       qtconnectivity = callPackage ../modules/qtconnectivity.nix {};
       qtdeclarative = callPackage ../modules/qtdeclarative.nix {};
@@ -185,23 +185,33 @@ let
       qtvirtualkeyboard = callPackage ../modules/qtvirtualkeyboard.nix {};
       qtwayland = callPackage ../modules/qtwayland.nix {};
       qtwebchannel = callPackage ../modules/qtwebchannel.nix {};
-      qtwebengine = callPackage ../modules/qtwebengine.nix {};
+      qtwebengine = callPackage ../modules/qtwebengine.nix {
+        inherit (darwin) cctools libobjc libunwind xnu;
+        inherit (darwin.apple_sdk.libs) sandbox;
+        inherit (darwin.apple_sdk.frameworks) ApplicationServices AVFoundation Foundation ForceFeedback GameController AppKit
+          ImageCaptureCore CoreBluetooth IOBluetooth CoreWLAN Quartz Cocoa LocalAuthentication;
+      };
       qtwebglplugin = callPackage ../modules/qtwebglplugin.nix {};
-      qtwebkit = callPackage ../modules/qtwebkit.nix {};
+      qtwebkit = callPackage ../modules/qtwebkit.nix {
+        inherit (darwin) ICU;
+        inherit (darwin.apple_sdk.frameworks) OpenGL;
+      };
       qtwebsockets = callPackage ../modules/qtwebsockets.nix {};
-      qtwebview = callPackage ../modules/qtwebview.nix {};
+      qtwebview = callPackage ../modules/qtwebview.nix {
+        inherit (darwin.apple_sdk.frameworks) CoreFoundation WebKit;
+      };
       qtx11extras = callPackage ../modules/qtx11extras.nix {};
       qtxmlpatterns = callPackage ../modules/qtxmlpatterns.nix {};
 
       env = callPackage ../qt-env.nix {};
       full = env "qt-full-${qtbase.version}" ([
-        qtcharts qtconnectivity qtdeclarative qtdoc qtgraphicaleffects
+        qt3d qtcharts qtconnectivity qtdeclarative qtdoc qtgraphicaleffects
         qtimageformats qtlocation qtmultimedia qtquickcontrols qtquickcontrols2
         qtscript qtsensors qtserialport qtsvg qttools qttranslations
         qtvirtualkeyboard qtwebchannel qtwebengine qtwebkit qtwebsockets
         qtwebview qtx11extras qtxmlpatterns
-      ] ++ optional (!stdenv.isDarwin) qtwayland
-        ++ optional (stdenv.isDarwin) qtmacextras);
+      ] ++ lib.optional (!stdenv.isDarwin) qtwayland
+        ++ lib.optional (stdenv.isDarwin) qtmacextras);
 
       qmake = makeSetupHook {
         deps = [ self.qtbase.dev ];
@@ -212,12 +222,11 @@ let
       } ../hooks/qmake-hook.sh;
 
       wrapQtAppsHook = makeSetupHook {
-        deps =
-          [ self.qtbase.dev makeWrapper ]
-          ++ optional stdenv.isLinux self.qtwayland.dev;
+        deps = [ self.qtbase.dev makeWrapper ]
+          ++ lib.optional stdenv.isLinux self.qtwayland.dev;
       } ../hooks/wrap-qt-apps-hook.sh;
     };
 
-   self = makeScope newScope addPackages;
+   self = lib.makeScope newScope addPackages;
 
 in self

@@ -119,6 +119,18 @@ specialMount() {
 }
 source @earlyMountScript@
 
+# Copy initrd secrets from /.initrd-secrets to their actual destinations
+if [ -d "/.initrd-secrets" ]; then
+    #
+    # Secrets are named by their full destination pathname and stored
+    # under /.initrd-secrets/
+    #
+    for secret in $(cd "/.initrd-secrets"; find . -type f); do
+        mkdir -p $(dirname "/$secret")
+        cp "/.initrd-secrets/$secret" "$secret"
+    done
+fi
+
 # Log the script output to /dev/kmsg or /run/log/stage-1-init.log.
 mkdir -p /tmp
 mkfifo /tmp/stage-1-init.log.fifo
@@ -542,7 +554,7 @@ while read -u 3 mountPoint; do
     # If copytoram is enabled: skip mounting the ISO and copy its content to a tmpfs.
     if [ -n "$copytoram" ] && [ "$device" = /dev/root ] && [ "$mountPoint" = /iso ]; then
       fsType=$(blkid -o value -s TYPE "$device")
-      fsSize=$(blockdev --getsize64 "$device")
+      fsSize=$(blockdev --getsize64 "$device" || stat -Lc '%s' "$device")
 
       mkdir -p /tmp-iso
       mount -t "$fsType" /dev/root /tmp-iso

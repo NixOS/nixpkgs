@@ -8,7 +8,8 @@
 , fetchFromGitHub
 , flake8
 , flask-sockets
-, isPy3k
+, moto
+, pythonOlder
 , psutil
 , pytest-asyncio
 , pytestCheckHook
@@ -19,14 +20,16 @@
 
 buildPythonPackage rec {
   pname = "slack-sdk";
-  version = "3.8.0";
-  disabled = !isPy3k;
+  version = "3.13.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "slackapi";
     repo = "python-slack-sdk";
     rev = "v${version}";
-    sha256 = "sha256-r3GgcU4K2jj+4aIytpY2HiVqHzChynn2BCn1VNTL2t0=";
+    sha256 = "sha256-L12faNLwjlEkJZ9s9aIyUHSk7x3n908EHCYU9jECiYQ=";
   };
 
   propagatedBuildInputs = [
@@ -43,6 +46,7 @@ buildPythonPackage rec {
     databases
     flake8
     flask-sockets
+    moto
     psutil
     pytest-asyncio
     pytestCheckHook
@@ -64,7 +68,9 @@ buildPythonPackage rec {
     "test_interactions"
   ];
 
-  pythonImportsCheck = [ "slack_sdk" ];
+  pythonImportsCheck = [
+    "slack_sdk"
+  ];
 
   meta = with lib; {
     description = "Slack Developer Kit for Python";

@@ -57,7 +57,7 @@ with lib;
 with builtins;
 
 let majorVersion = "11";
-    version = "${majorVersion}.1.0";
+    version = "${majorVersion}.2.0";
 
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
@@ -95,7 +95,7 @@ stdenv.mkDerivation ({
 
   src = fetchurl {
     url = "mirror://gcc/releases/gcc-${version}/gcc-${version}.tar.xz";
-    sha256 = "1pwxrjhsymv90xzh0x42cxfnmhjinf2lnrrf3hj5jq1rm2w6yjjc";
+    sha256 = "sha256-0I7cU2tUw3KhAQ/2YZ3SdMDxYDqkkhK6IPeqLNo2+os=";
   };
 
   inherit patches;
@@ -152,6 +152,7 @@ stdenv.mkDerivation ({
     else "")
       + lib.optionalString targetPlatform.isAvr ''
             makeFlagsArray+=(
+               '-s' # workaround for hitting hydra log limit
                'LIMITS_H_TEST=false'
             )
           '';

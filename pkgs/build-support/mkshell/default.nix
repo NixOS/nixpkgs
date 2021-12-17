@@ -14,8 +14,9 @@
 , ...
 }@attrs:
 let
-  mergeInputs = name: lib.concatLists (lib.catAttrs name
-    ([ attrs ] ++ inputsFrom));
+  mergeInputs = name:
+    (attrs.${name} or []) ++
+    (lib.subtractLists inputsFrom (lib.flatten (lib.catAttrs name inputsFrom)));
 
   rest = builtins.removeAttrs attrs [
     "packages"

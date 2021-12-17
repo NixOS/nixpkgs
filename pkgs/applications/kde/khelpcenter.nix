@@ -1,8 +1,7 @@
-{
-  mkDerivation,
-  extra-cmake-modules, kdoctools,
-  grantlee, kcmutils, kconfig, kcoreaddons, kdbusaddons, ki18n,
-  kinit, khtml, kservice, xapian
+{ lib, mkDerivation
+, extra-cmake-modules, kdoctools
+, grantlee, kcmutils, kconfig, kcoreaddons, kdbusaddons, ki18n
+, kinit, khtml, kservice, xapian
 }:
 
 mkDerivation {
@@ -12,4 +11,9 @@ mkDerivation {
     grantlee kcmutils kconfig kcoreaddons kdbusaddons khtml
     ki18n kinit kservice xapian
   ];
+  meta = with lib; {
+    homepage = "https://apps.kde.org/help/";
+    description = "Help center";
+    license = licenses.gpl2Plus;
+  };
 }

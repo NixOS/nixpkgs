@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "pyvmomi";
-  version = "7.0.2";
+  version = "7.0.3";
 
   src = fetchFromGitHub {
     owner = "vmware";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0li6g72ps1vxjzqhz10n02fl6cs069173jd9y4ih5am7vwhrwgpa";
+    sha256 = "07jwlbi3k5kvpmgygvpkhsnbdp9m2ndwqxk9k6kyzfszwcbdx4bk";
   };
 
   # requires old version of vcrpy

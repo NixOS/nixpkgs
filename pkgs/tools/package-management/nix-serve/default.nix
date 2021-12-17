@@ -37,7 +37,10 @@ stdenv.mkDerivation {
                 --add-flags $out/libexec/nix-serve/nix-serve.psgi
   '';
 
-  passthru.tests.nix-serve = nixosTests.nix-serve;
+  passthru.tests = {
+    nix-serve = nixosTests.nix-serve;
+    nix-serve-ssh = nixosTests.nix-serve-ssh;
+  };
 
   meta = {
     homepage = "https://github.com/edolstra/nix-serve";

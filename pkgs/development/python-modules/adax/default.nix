@@ -8,14 +8,16 @@
 
 buildPythonPackage rec {
   pname = "adax";
-  version = "0.1.0";
+  version = "0.2.0";
+  format = "setuptools";
+
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "Danielhiversen";
     repo = "pyadax";
     rev = version;
-    sha256 = "06qk8xbv8lsaabdpi6pclnbkp3vmb4k18spahldazqj8235ii237";
+    sha256 = "sha256-EMSX2acklwWOYiEeLHYG5mwdiGnWAUo5dGMiHCmZrko=";
   };
 
   propagatedBuildInputs = [

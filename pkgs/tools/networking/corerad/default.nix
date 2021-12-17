@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "corerad";
-  version = "0.3.3";
+  version = "0.3.4";
 
   src = fetchFromGitHub {
     owner = "mdlayher";
     repo = "corerad";
     rev = "v${version}";
-    sha256 = "1xfqjxygf6r5wbf3brilx4d4hm0h518zaadmmzvkmbbz6w0fyl0k";
+    sha256 = "0sf2r4q57hwdakv0b4skn76b0xy7bwj2j9rpj6frs5fkk6gsi6sm";
   };
 
-  vendorSha256 = "0ydyfdx9syrv719knwv64srfx4d1m9pzkivfc3q188bx5qx67pjw";
+  vendorSha256 = "123f9y1pfayfd5amkw5b8jzi8dbn7a16kbf7lzbmw69c1gj4gx9z";
 
   doCheck = false;
 

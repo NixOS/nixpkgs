@@ -62,10 +62,10 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  postFixup =
-    '' wrapProgram $out/bin/mit-scheme${arch} --set MITSCHEME_LIBRARY_PATH \
-         $out/lib/mit-scheme${arch}
-    '';
+  postFixup = ''
+    wrapProgram $out/bin/mit-scheme${arch}-${version} --set MITSCHEME_LIBRARY_PATH \
+      $out/lib/mit-scheme${arch}-${version}
+  '';
 
   nativeBuildInputs = [ makeWrapper gnum4 texinfo texLive automake ghostscript autoconf libtool ];
 

@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, bison, cmake, pkg-config
 , boost, icu, libedit, libevent, lz4, ncurses, openssl, protobuf, re2, readline, zlib, zstd
-, numactl, perl, cctools, CoreServices, developer_cmds, libtirpc, rpcsvc-proto, curl
+, numactl, perl, cctools, CoreServices, developer_cmds, libtirpc, rpcsvc-proto, curl, DarwinTools
 }:
 
 let
@@ -32,7 +32,7 @@ self = stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.isLinux [
     numactl libtirpc
   ] ++ lib.optionals stdenv.isDarwin [
-    cctools CoreServices developer_cmds
+    cctools CoreServices developer_cmds DarwinTools
   ];
 
   outputs = [ "out" "static" ];

@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "amqtt";
-  version = "0.10.0-alpha.4";
+  version = "0.10.0";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
@@ -23,8 +23,13 @@ buildPythonPackage rec {
     owner = "Yakifo";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1v5hlcciyicnhwk1xslh3kxyjqaw526fb05pvhjpp3zqrmbxya4d";
+    sha256 = "sha256-27LmNR1KC8w3zRJ7YBlBolQ4Q70ScTPqypMCpU6fO+I=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'websockets = "^9.0"' 'websockets = "^10.0"'
+  '';
 
   nativeBuildInputs = [ poetry-core ];
 

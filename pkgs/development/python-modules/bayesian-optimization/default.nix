@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, python
 , scikit-learn
 , scipy
 , pytest

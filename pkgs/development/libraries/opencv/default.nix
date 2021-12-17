@@ -9,6 +9,7 @@
 , enableFfmpeg ? false, ffmpeg
 , enableGStreamer ? false, gst_all_1
 , enableEigen ? true, eigen
+, enableUnfree ? false
 , Cocoa, QTKit
 }:
 
@@ -67,7 +68,7 @@ stdenv.mkDerivation rec {
     (opencvFlag "PNG" enablePNG)
     (opencvFlag "OPENEXR" enableEXR)
     (opencvFlag "GSTREAMER" enableGStreamer)
-  ];
+  ] ++ lib.optional (!enableUnfree) "-DBUILD_opencv_nonfree=OFF";
 
   hardeningDisable = [ "bindnow" "relro" ];
 
@@ -82,7 +83,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Open Computer Vision Library with more than 500 algorithms";
     homepage = "https://opencv.org/";
-    license = licenses.bsd3;
+    license = if enableUnfree then licenses.unfree else licenses.bsd3;
     maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };

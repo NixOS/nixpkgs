@@ -159,6 +159,17 @@ The following methods are available on machine objects:
 `execute`
 
 :   Execute a shell command, returning a list `(status, stdout)`.
+    If the command detaches, it must close stdout, as `execute` will wait
+    for this to consume all output reliably. This can be achieved by
+    redirecting stdout to stderr `>&2`, to `/dev/console`, `/dev/null` or
+    a file. Examples of detaching commands are `sleep 365d &`, where the
+    shell forks a new process that can write to stdout and `xclip -i`, where
+    the `xclip` command itself forks without closing stdout.
+    Takes an optional parameter `check_return` that defaults to `True`.
+    Setting this parameter to `False` will not check for the return code
+    and return -1 instead. This can be used for commands that shut down
+    the VM and would therefore break the pipe that would be used for
+    retrieving the return code.
 
 `succeed`
 
@@ -173,6 +184,9 @@ The following methods are available on machine objects:
         (if there is one, zero will be returned otherwise).
 
     -   Dereferencing unset variables fail the command.
+
+    -   It will wait for stdout to be closed. See `execute` for the
+        implications.
 
 `fail`
 

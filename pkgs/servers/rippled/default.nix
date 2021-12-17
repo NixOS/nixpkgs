@@ -116,12 +116,12 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "rippled";
-  version = "1.7.0";
+  version = "1.7.3";
 
   src = fetchgit {
     url = "https://github.com/ripple/rippled.git";
     rev = version;
-    sha256 = "1rr5kxks9hsxyxrz90dw259b6fs9lywdlqv0bj2g21a6f7g60v2v";
+    sha256 = "008qzb138r2pi0cqj4d6d5f0grlb2gm87m8j0dj8b0giya22xv6s";
     leaveDotGit = true;
     fetchSubmodules = true;
   };

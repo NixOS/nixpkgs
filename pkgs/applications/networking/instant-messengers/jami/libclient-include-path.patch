@@ -1,0 +1,13 @@
+diff --git i/CMakeLists.txt w/CMakeLists.txt
+index 0ee77dba..767e19df 100644
+--- i/CMakeLists.txt
++++ w/CMakeLists.txt
+@@ -635,7 +635,7 @@ if(ENABLE_SHARED)
+     )
+ endif()
+ 
+-SET(INCLUDE_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/include)
++SET(INCLUDE_INSTALL_DIR ${CMAKE_INSTALL_FULL_INCLUDEDIR})
+ 
+ INSTALL( FILES ${libringclient_LIB_HDRS} ${libringclient_extra_LIB_HDRS}
+   DESTINATION ${INCLUDE_INSTALL_DIR}/libringclient

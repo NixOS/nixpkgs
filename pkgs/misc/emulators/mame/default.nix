@@ -1,12 +1,26 @@
-{ lib, stdenv, mkDerivation, fetchFromGitHub, makeDesktopItem, makeWrapper
-, python, pkg-config, SDL2, SDL2_ttf, alsa-lib, which, qtbase, libXinerama
-, libpcap, CoreAudioKit, ForceFeedback
-, installShellFiles }:
+{ lib
+, stdenv
+, alsa-lib
+, CoreAudioKit
+, fetchFromGitHub
+, fontconfig
+, ForceFeedback
+, installShellFiles
+, libpcap
+, libpulseaudio
+, libXi
+, libXinerama
+, makeDesktopItem
+, makeWrapper
+, pkg-config
+, python3
+, qtbase
+, SDL2
+, SDL2_ttf
+, which
+}:
 
 let
-  majorVersion = "0";
-  minorVersion = "226";
-
   desktopItem = makeDesktopItem {
     name = "MAME";
     exec = "mame${lib.optionalString stdenv.is64bit "64"}";
@@ -16,15 +30,16 @@ let
   };
 
   dest = "$out/opt/mame";
-in mkDerivation {
+in
+stdenv.mkDerivation rec {
   pname = "mame";
-  version = "${majorVersion}.${minorVersion}";
+  version = "0.238";
 
   src = fetchFromGitHub {
     owner = "mamedev";
     repo = "mame";
-    rev = "mame${majorVersion}${minorVersion}";
-    sha256 = "0pnsvz4vkjkqb1ac5wzwz31vx0iknyg5ffly90nhl13kcr656jrj";
+    rev = "mame${builtins.replaceStrings [ "." ] [ "" ] version}";
+    sha256 = "sha256-kh0kvtl+zPJjBWUXyzb/LSbPoJRxh55vUwF2G06tzoo=";
   };
 
   hardeningDisable = [ "fortify" ];
@@ -33,18 +48,19 @@ in mkDerivation {
   makeFlags = [
     "TOOLS=1"
     "USE_LIBSDL=1"
-  ]
-  ++ lib.optionals stdenv.cc.isClang [ "CC=clang" "CXX=clang++" ]
-  ;
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "CXX=${stdenv.cc.targetPrefix}c++"
+  ];
 
   dontWrapQtApps = true;
 
+  # https://docs.mamedev.org/initialsetup/compilingmame.html
   buildInputs =
-    [ SDL2 SDL2_ttf qtbase libXinerama ]
-    ++ lib.optional stdenv.isLinux alsa-lib
-    ++ lib.optionals stdenv.isDarwin [ libpcap CoreAudioKit ForceFeedback ]
-    ;
-  nativeBuildInputs = [ python pkg-config which makeWrapper installShellFiles ];
+    [ SDL2 SDL2_ttf qtbase ]
+    ++ lib.optionals stdenv.isLinux [ alsa-lib libpulseaudio libXinerama libXi fontconfig ]
+    ++ lib.optionals stdenv.isDarwin [ libpcap CoreAudioKit ForceFeedback ];
+
+  nativeBuildInputs = [ python3 pkg-config which makeWrapper installShellFiles ];
 
   # by default MAME assumes that paths with stock resources
   # are relative and that you run MAME changing to
@@ -75,13 +91,15 @@ in mkDerivation {
     ln -s ${desktopItem}/share/applications $out/share
   '';
 
+  enableParallelBuilding = true;
+
   meta = with lib; {
     description = "Is a multi-purpose emulation framework";
     homepage = "https://www.mamedev.org/";
     license = with licenses; [ bsd3 gpl2Plus ];
     platforms = platforms.unix;
-    # makefile needs fixes for install target
-    badPlatforms = [ "aarch64-linux" ];
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ thiagokokada ];
+    # macOS needs more time to build
+    timeout = 24 * 3600;
   };
 }

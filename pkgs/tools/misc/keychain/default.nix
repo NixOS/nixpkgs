@@ -1,5 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, coreutils, openssh, gnupg
-, perl, procps, gnugrep, gawk, findutils, gnused }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, installShellFiles
+, makeWrapper
+, coreutils
+, openssh
+, gnupg
+, perl
+, procps
+, gnugrep
+, gawk
+, findutils
+, gnused
+}:
 
 stdenv.mkDerivation rec {
   pname = "keychain";
@@ -12,33 +25,19 @@ stdenv.mkDerivation rec {
     sha256 = "1bkjlg0a2bbdjhwp37ci1rwikvrl4s3xlbf2jq2z4azc96dr83mj";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ installShellFiles makeWrapper ];
   buildInputs = [ perl ];
 
   installPhase = ''
-    mkdir -p $out/{bin,share/man/man1}
+    mkdir -p $out/bin
     cp keychain $out/bin/keychain
-    cp keychain.1 $out/share/man/man1
+    installManPage keychain.1
     wrapProgram $out/bin/keychain \
-      --prefix PATH ":" "${coreutils}/bin" \
-      --prefix PATH ":" "${openssh}/bin" \
-      --prefix PATH ":" "${gnupg}/bin" \
-      --prefix PATH ":" "${gnugrep}/bin" \
-      --prefix PATH ":" "${gnused}/bin" \
-      --prefix PATH ":" "${findutils}/bin" \
-      --prefix PATH ":" "${gawk}/bin" \
-      --prefix PATH ":" "${procps}/bin"
+      --prefix PATH ":" "${lib.makeBinPath [ coreutils findutils gawk gnupg gnugrep gnused openssh procps ]}" \
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Keychain management tool";
-    homepage = "https://www.funtoo.org/Keychain";
-    license = lib.licenses.gpl2;
-    # other platforms are untested (AFAIK)
-    platforms =
-      with lib;
-      platforms.linux ++ platforms.darwin;
-    maintainers = with lib.maintainers; [ sigma ];
     longDescription = ''
       Keychain helps you to manage SSH and GPG keys in a convenient and secure
       manner. It acts as a frontend to ssh-agent and ssh-add, but allows you
@@ -51,5 +50,9 @@ stdenv.mkDerivation rec {
       for remote cron jobs to securely "hook in" to a long-running ssh-agent
       process, allowing your scripts to take advantage of key-based logins.
     '';
+    homepage = "https://www.funtoo.org/Keychain";
+    license = licenses.gpl2;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ sigma SuperSandro2000 ];
   };
 }

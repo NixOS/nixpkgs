@@ -68,5 +68,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ ] ++ teams.pantheon.members;
     platforms = platforms.linux;
+    mainProgram = "com.github.philip-scott.notes-up";
   };
 }

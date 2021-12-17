@@ -21,8 +21,8 @@ buildGoModule rec {
     go generate -x ./internal/vm/
   '';
 
-  buildFlagsArray = [
-    "-ldflags=-X main.Version=${version}"
+  ldflags = [
+    "-X main.Version=${version}"
   ];
 
   meta = with lib; {

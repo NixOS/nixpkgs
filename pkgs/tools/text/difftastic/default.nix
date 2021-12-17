@@ -1,23 +1,35 @@
-{ lib, fetchFromGitHub, rustPlatform }:
+{ lib, fetchFromGitHub, rustPlatform, tree-sitter }:
 
 rustPlatform.buildRustPackage rec {
   pname = "difftastic";
-  version = "0.6";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "wilfred";
     repo = pname;
     rev = version;
-    sha256 = "WFvxdRCbTBW1RGn2SvAo2iXn82OO/Z06cZQkIu4eiew=";
+    sha256 = "sha256-A6Z3g6fbYBynyN4OhRrZNO0ZghvT3XnIahdUQ8SE8tU=";
   };
 
-  cargoSha256 = "2hRUfIxNVs4uSrEESas3wvvVsZHVocP8aiO7K0NZ+mY=";
+  cargoSha256 = "sha256-6/JwrPymtpj/CXqx3Pe43v+MJTNONArU2WEo/zgJhT4=";
+
+  postPatch = ''
+    pushd vendor
+    for grammar in */; do
+      if [ -d "${tree-sitter.grammars}/$grammar" ]; then
+        rm -r "$grammar"
+        ln -s "${tree-sitter.grammars}/$grammar"
+      fi
+    done
+    popd
+  '';
 
   meta = with lib; {
     description = "A syntax-aware diff";
     homepage = "https://github.com/Wilfred/difftastic";
+    changelog = "https://github.com/Wilfred/difftastic/raw/${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ethancedwards8 ];
-    platforms = platforms.unix;
+    maintainers = with maintainers; [ ethancedwards8 figsoda ];
+    mainProgram = "difft";
   };
 }

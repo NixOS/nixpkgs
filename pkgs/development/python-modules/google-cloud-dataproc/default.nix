@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-dataproc";
-  version = "2.4.0";
+  version = "3.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6e5373febe420e2b2375d2252b272129f11a37ff1b88a7587322931063be8d38";
+    sha256 = "e012d76aa32b918c71392c11e1c727328c1570364f8d8e0676e52bc64c57a7af";
   };
 
   propagatedBuildInputs = [ google-api-core libcst proto-plus ];
@@ -30,12 +30,11 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "google.cloud.dataproc"
     "google.cloud.dataproc_v1"
-    "google.cloud.dataproc_v1beta2"
   ];
 
   meta = with lib; {
     description = "Google Cloud Dataproc API client library";
-    homepage = "https://github.com/GoogleCloudPlatform/google-cloud-python";
+    homepage = "https://github.com/googleapis/python-dataproc";
     license = licenses.asl20;
     maintainers = with maintainers; [ SuperSandro2000 ];
   };

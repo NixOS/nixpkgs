@@ -1,7 +1,7 @@
 { lib, pkgs, makeWrapper, haskellPackages, haskell, pandoc, imagemagick, CoreServices }:
 
 with lib;
-with haskell.lib;
+with haskell.lib.compose;
 
 let
   ldgallery-viewer = pkgs.callPackage ./viewer { inherit CoreServices; };
@@ -12,7 +12,7 @@ in
 # making sure that the versions of the compiler and viewer parts are in sync
 assert ldgallery-compiler.version == versions.majorMinor ldgallery-viewer.version;
 
-justStaticExecutables (overrideCabal ldgallery-compiler (oldAttrs: {
+justStaticExecutables (overrideCabal (oldAttrs: {
   pname = "ldgallery"; # bundled viewer + compiler
 
   buildTools = (oldAttrs.buildTools or []) ++ [ makeWrapper pandoc ];
@@ -50,4 +50,4 @@ justStaticExecutables (overrideCabal ldgallery-compiler (oldAttrs: {
 
   # other package metadata (maintainer, description, license, ...)
   # are inherited from the compiler package
-}))
+}) ldgallery-compiler)

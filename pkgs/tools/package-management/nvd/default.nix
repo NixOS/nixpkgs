@@ -2,13 +2,15 @@
 
 stdenv.mkDerivation rec {
   pname = "nvd";
-  version = "0.1.1";
+  version = "0.1.2";
 
   src = fetchFromGitLab {
     owner = "khumba";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0accq0cw6qsxin1fb2bp2ijgjf9akb9qlivkykpfsgnk5qjafv2n";
+    # There is a 0.1.2 release but no tag yet
+    # https://gitlab.com/khumba/nvd/-/issues/7
+    rev = "13d3ab1255e0de03693cecb7da9764c9afd5d472";
+    sha256 = "1537s7j0m0hkahf0s1ai7bm94xj9fz6b9x78py0dn3cgnl9bfzla";
   };
 
   buildInputs = [ python3 ];

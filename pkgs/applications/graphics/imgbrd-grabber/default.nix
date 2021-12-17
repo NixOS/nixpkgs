@@ -6,6 +6,7 @@
 , qttools
 , qtscript
 , qtdeclarative
+, qtnetworkauth
 , qtbase
 , autogen
 , automake
@@ -17,15 +18,16 @@
 , rsync
 , typescript
 }:
+
 stdenv.mkDerivation rec {
   pname = "imgbrd-grabber";
+  version = "7.5.1";
 
-  version = "7.3.2";
   src = fetchFromGitHub {
     owner = "Bionus";
     repo = "imgbrd-grabber";
     rev = "v${version}";
-    sha256 = "053rwvcr88fcba0447a6r115cgnqsm9rl066z8d5jacqnhdij58k";
+    sha256 = "sha256-40JCdtRhAQpz2lBGmYh2MgA9rRzHmOZx7lWW0IbfjP4=";
     fetchSubmodules = true;
   };
 
@@ -41,6 +43,7 @@ stdenv.mkDerivation rec {
     qtbase
     qtdeclarative
     qttools
+    qtnetworkauth
     nodejs
     cmake
     wrapQtAppsHook
@@ -67,6 +70,8 @@ stdenv.mkDerivation rec {
 
     # link the catch2 sources from nixpkgs
     ln -sf ${catch2.src} tests/src/vendor/catch
+
+    sed "s|strict\": true|strict\": false|g" -i ./sites/tsconfig.json
   '';
 
   postInstall = ''

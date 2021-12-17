@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy37, pyperclip }:
+{ lib, buildPythonPackage, fetchFromGitHub, pyperclip }:
 
 buildPythonPackage rec {
   version = "0.2.6";

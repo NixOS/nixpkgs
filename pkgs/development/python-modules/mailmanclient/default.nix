@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "mailmanclient";
-  version = "3.3.2";
+  version = "3.3.3";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4082ac0c66d7f7bee15751fe2564098b971177c0013e66d0c8ceee1ebdcb5592";
+    sha256 = "92fe624675e41f41f59de1208e0125dfaa8d062bbe6138bd7cd79e4dd0b6f85e";
   };
 
   propagatedBuildInputs = [ six httplib2 requests ];
@@ -17,6 +17,6 @@ buildPythonPackage rec {
     description = "REST client for driving Mailman 3";
     license = licenses.lgpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ peti globin qyliss ];
+    maintainers = with maintainers; [ globin qyliss ];
   };
 }

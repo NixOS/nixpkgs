@@ -9,13 +9,13 @@ assert upnpSupport -> miniupnpc != null;
 
 stdenv.mkDerivation rec {
   pname = "i2pd";
-  version = "2.38.0";
+  version = "2.40.0";
 
   src = fetchFromGitHub {
     owner = "PurpleI2P";
     repo = pname;
     rev = version;
-    sha256 = "sha256-8wy6Zdnw0JgnHFLa1U3qlzjpDIqi2gykbkkV7lh+Zag=";
+    sha256 = "sha256-Cld5TP2YoLzm73q7uP/pwqEeUsT5uMPAUx9HABOVeZA=";
   };
 
   buildInputs = with lib; [ boost zlib openssl ]

@@ -1,8 +1,9 @@
 { lib, stdenv, fetchurl, pkg-config, libX11, libXtst, qt4 }:
 stdenv.mkDerivation rec {
-  name = "qjoypad-4.1.0";
+  pname = "qjoypad";
+  version = "4.1.0";
   src = fetchurl {
-    url = "mirror://sourceforge/qjoypad/${name}.tar.gz";
+    url = "mirror://sourceforge/qjoypad/qjoypad-${version}.tar.gz";
     sha256 = "1jlm7i26nfp185xrl41kz5z6fgvyj51bjpz48cg27xx64y40iamm";
   };
   nativeBuildInputs = [ pkg-config ];

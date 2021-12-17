@@ -13,7 +13,7 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-1u1mzANLlWduAQF1GUX7BJSyYlSZwNQISqKwbyRlGog=";
 
-  buildFlagsArray = [ "-ldflags=-s -w -X github.com/jckuester/awsweeper/internal.version=${version} -X github.com/jckuester/awsweeper/internal.commit=${src.rev} -X github.com/jckuester/awsweeper/internal.date=unknown" ];
+  ldflags = [ "-s" "-w" "-X github.com/jckuester/awsweeper/internal.version=${version}" "-X github.com/jckuester/awsweeper/internal.commit=${src.rev}" "-X github.com/jckuester/awsweeper/internal.date=unknown" ];
 
   doCheck = false;
 

@@ -1,3 +1,8 @@
+# Update instructions:
+#
+# To update `thunderbird-bin`'s `release_sources.nix`, run from the nixpkgs root:
+#
+#     nix-shell maintainers/scripts/update.nix --argstr package pkgs.firefox-bin-unwrapped
 { stdenv, lib, fetchurl, config, makeWrapper
 , alsa-lib
 , at-spi2-atk
@@ -178,11 +183,9 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Mozilla Thunderbird, a full-featured email client (binary package)";
     homepage = "http://www.mozilla.org/thunderbird/";
-    license = {
-      free = false;
-      url = "http://www.mozilla.org/en-US/foundation/trademarks/policy/";
-    };
+    license = licenses.mpl20;
     maintainers = with lib.maintainers; [ ];
     platforms = platforms.linux;
+    hydraPlatforms = [ ];
   };
 }

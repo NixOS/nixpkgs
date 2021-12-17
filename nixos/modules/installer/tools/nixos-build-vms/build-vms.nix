@@ -8,11 +8,21 @@ let
     _file = "${networkExpr}@node-${vm}";
     imports = [ module ];
   }) (import networkExpr);
+
+  pkgs = import ../../../../.. { inherit system config; };
+
+  testing = import ../../../../lib/testing-python.nix {
+    inherit system pkgs;
+  };
+
+  interactiveDriver = (testing.makeTest { inherit nodes; testScript = "start_all(); join_all();"; }).driverInteractive;
 in
 
-with import ../../../../lib/testing-python.nix {
-  inherit system;
-  pkgs = import ../../../../.. { inherit system config; };
-};
 
-(makeTest { inherit nodes; testScript = ""; }).driverInteractive
+pkgs.runCommand "nixos-build-vms" { nativeBuildInputs = [ pkgs.makeWrapper ]; } ''
+  mkdir -p $out/bin
+  ln -s ${interactiveDriver}/bin/nixos-test-driver $out/bin/nixos-test-driver
+  ln -s ${interactiveDriver}/bin/nixos-test-driver $out/bin/nixos-run-vms
+  wrapProgram $out/bin/nixos-test-driver \
+    --add-flags "--interactive"
+''

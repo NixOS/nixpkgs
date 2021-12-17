@@ -5,7 +5,10 @@ luarocks.overrideAttrs(old: {
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "luarocks-nix";
-    rev = "nix_v3.5.0-1";
-    sha256 = "sha256-jcgshxAuuc8QizpYL/2K3PKYWiKsnF/8BJAUaryvEvQ=";
+    rev = "standalone";
+    sha256 = "sha256-53Zi+GTayO9EQTCIVrzPeRRHeIkHLqy0mHyBDzbcQQk=";
   };
+  patches = [];
+
+  meta.mainProgram = "luarocks";
 })

@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 let
-  inherit (lib) generators literalExample mkEnableOption mkIf mkOption recursiveUpdate types;
+  inherit (lib) generators literalExpression mkEnableOption mkIf mkOption recursiveUpdate types;
   cfg = config.services.zeronet;
   dataDir = "/var/lib/zeronet";
   configFile = pkgs.writeText "zeronet.conf" (generators.toINI {} (recursiveUpdate defaultSettings cfg.settings));
@@ -22,7 +22,7 @@ in with lib; {
     settings = mkOption {
       type = with types; attrsOf (oneOf [ str int bool (listOf str) ]);
       default = {};
-      example = literalExample "global.tor = enable;";
+      example = literalExpression "{ global.tor = enable; }";
 
       description = ''
         <filename>zeronet.conf</filename> configuration. Refer to
@@ -34,7 +34,6 @@ in with lib; {
     port = mkOption {
       type = types.port;
       default = 43110;
-      example = 43110;
       description = "Optional zeronet web UI port.";
     };
 
@@ -43,7 +42,6 @@ in with lib; {
       # read-only config file and crashes
       type = types.port;
       default = 12261;
-      example = 12261;
       description = "Zeronet fileserver port.";
     };
 

@@ -37,6 +37,7 @@ in
     hostname = mkOption {
       description = "Kubernetes proxy hostname override.";
       default = config.networking.hostName;
+      defaultText = literalExpression "config.networking.hostName";
       type = str;
     };
 
@@ -76,6 +77,9 @@ in
         WorkingDirectory = top.dataDir;
         Restart = "on-failure";
         RestartSec = 5;
+      };
+      unitConfig = {
+        StartLimitIntervalSec = 0;
       };
     };
 

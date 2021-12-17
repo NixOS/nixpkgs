@@ -1,14 +1,19 @@
-{ lib, stdenv, fetchurl
-, kernel, klibc
+{ lib
+, stdenv
+, fetchFromGitHub
+, kernel
+, klibc
 }:
 
 stdenv.mkDerivation rec {
   name = "v86d-${version}-${kernel.version}";
   version = "0.1.10";
 
-  src = fetchurl {
-    url = "https://github.com/mjanusz/v86d/archive/v86d-${version}.tar.gz";
-    sha256 = "1flnpp8rc945cxr6jr9dlm8mi8gr181zrp2say4269602s1a4ymg";
+  src = fetchFromGitHub {
+    owner = "mjanusz";
+    repo = "v86d";
+    rev = "v86d-${version}";
+    hash = "sha256-95LRzVbO/DyddmPwQNNQ290tasCGoQk7FDHlst6LkbA=";
   };
 
   patchPhase = ''

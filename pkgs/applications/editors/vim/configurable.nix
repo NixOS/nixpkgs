@@ -93,6 +93,16 @@ in stdenv.mkDerivation rec {
     "--disable-nextaf_check"
     "--disable-carbon_check"
     "--disable-gtktest"
+  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "vim_cv_toupper_broken=no"
+    "--with-tlib=ncurses"
+    "vim_cv_terminfo=yes"
+    "vim_cv_tgetent=zero" # it does on native anyway
+    "vim_cv_tty_group=tty"
+    "vim_cv_tty_mode=0660"
+    "vim_cv_getcwd_broken=no"
+    "vim_cv_stat_ignores_slash=yes"
+    "vim_cv_memmove_handles_overlap=yes"
   ]
     ++ lib.optional (guiSupport == "gtk2" || guiSupport == "gtk3") "--enable-gui=${guiSupport}"
   ++ lib.optional stdenv.isDarwin

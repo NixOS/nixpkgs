@@ -1,6 +1,9 @@
 { stdenv
 , lib
 , go
+, pkgs
+, nodejs
+, nodePackages
 , buildGoModule
 , fetchFromGitHub
 , mkYarnPackage
@@ -9,27 +12,59 @@
 }:
 
 let
-  version = "2.27.1";
+  version = "2.30.3";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "prometheus";
     repo = "prometheus";
-    sha256 = "0836ygyvld5skjycd7366i6vyf451s6cay5ng6c2fwq0skvp2gj2";
+    sha256 = "1as6x5bsp7mxa4rp7jhyjlpcvzqm1zngnwvp73rc4rwhz8w8vm3k";
   };
 
   goPackagePath = "github.com/prometheus/prometheus";
 
-  webui = mkYarnPackage {
-    src = "${src}/web/ui/react-app";
-    packageJSON = ./webui-package.json;
-    yarnNix = ./webui-yarndeps.nix;
+  codemirrorNode = import ./webui/codemirror-promql {
+    inherit pkgs nodejs;
+    inherit (stdenv.hostPlatform) system;
+  };
+  webuiNode = import ./webui/webui {
+    inherit pkgs nodejs;
+    inherit (stdenv.hostPlatform) system;
+  };
 
-    # The standard yarn2nix directory management causes build failures with
-    # Prometheus's webui due to using relative imports into node_modules. Use
-    # an extremely simplified version of it instead.
-    configurePhase = "ln -s $node_modules node_modules";
-    buildPhase = "PUBLIC_URL=. yarn build";
+  codemirror = stdenv.mkDerivation {
+    name = "prometheus-webui-codemirror-promql";
+    src = "${src}/web/ui/module/codemirror-promql";
+
+    buildInputs = [ nodejs nodePackages.typescript codemirrorNode.nodeDependencies ];
+
+    configurePhase = ''
+      ln -s ${codemirrorNode.nodeDependencies}/lib/node_modules node_modules
+    '';
+    buildPhase = ''
+      PUBLIC_URL=. npm run build
+    '';
+    installPhase = ''
+      mkdir -p $out
+      mv lib dist $out
+    '';
+    distPhase = ":";
+  };
+
+
+  webui = stdenv.mkDerivation {
+    name = "prometheus-webui";
+    src = "${src}/web/ui/react-app";
+
+    buildInputs = [ nodejs webuiNode.nodeDependencies ];
+
+    # create `node_modules/.cache` dir (we need writeable .cache)
+    # and then copy the rest over.
+    configurePhase = ''
+      mkdir -p node_modules/{.cache,.bin}
+      cp -a ${webuiNode.nodeDependencies}/lib/node_modules/. node_modules
+    '';
+    buildPhase = "PUBLIC_URL=. npm run build";
     installPhase = "mv build $out";
     distPhase = "true";
   };
@@ -38,13 +73,23 @@ buildGoModule rec {
   pname = "prometheus";
   inherit src version;
 
-  vendorSha256 = "0dq3p7hga7m1aq78har5rr136hlb0kp8zhh2wzqlkxrk1f33w54p";
+  vendorSha256 = "0qyv8vybx5wg8k8hwvrpp4hz9wv6g4kf9sq5v5qc2bxx6apc0s9r";
 
   excludedPackages = [ "documentation/prometheus-mixin" ];
 
+  nativeBuildInputs = [ nodejs ];
+
   postPatch = ''
-    ln -s ${webui.node_modules} web/ui/react-app/node_modules
+    # we don't want this anyways, as we
+    # build modules for them
+    echo "exit 0" > web/ui/module/build.sh
+
+    ln -s ${webuiNode.nodeDependencies}/lib/node_modules web/ui/react-app/node_modules
     ln -s ${webui} web/ui/static/react
+
+    # webui-codemirror
+    ln -s ${codemirror}/dist web/ui/module/codemirror-promql/dist
+    ln -s ${codemirror}/lib web/ui/module/codemirror-promql/lib
   '';
 
   tags = [ "builtinassets" ];

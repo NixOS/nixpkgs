@@ -1,30 +1,27 @@
 { lib
 , buildPythonPackage
+, envoy-utils
 , fetchFromGitHub
 , httpx
 , pytest-asyncio
 , pytest-raises
-, pytest-runner
 , pytestCheckHook
 , respx
 }:
 
 buildPythonPackage rec {
   pname = "envoy-reader";
-  version = "0.19.0";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "jesserizzo";
     repo = "envoy_reader";
     rev = version;
-    sha256 = "0jyrgm7dc6k66c94gadc69a6xsv2b48wn3b3rbpwgbssi5s7iiz6";
+    sha256 = "sha256-nPB1Fvb1qwLHeFkXP2jXixD2ZGA09MtS1qXRhYGt0fM=";
   };
 
-  nativeBuildInputs = [
-    pytest-runner
-  ];
-
   propagatedBuildInputs = [
+    envoy-utils
     httpx
   ];
 
@@ -34,6 +31,11 @@ buildPythonPackage rec {
     pytestCheckHook
     respx
   ];
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "pytest-runner>=5.2" ""
+  '';
 
   pythonImportsCheck = [ "envoy_reader" ];
 

@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , appstream-glib
 , desktop-file-utils
-, epoxy
+, libepoxy
 , gettext
 , glib
 , gtk3
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
   ];
   buildInputs = [
-    epoxy
+    libepoxy
     glib
     gtk3
     mpv

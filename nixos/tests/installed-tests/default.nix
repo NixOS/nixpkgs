@@ -104,5 +104,6 @@ in
   malcontent = callInstalledTest ./malcontent.nix {};
   ostree = callInstalledTest ./ostree.nix {};
   pipewire = callInstalledTest ./pipewire.nix {};
+  power-profiles-daemon = callInstalledTest ./power-profiles-daemon.nix {};
   xdg-desktop-portal = callInstalledTest ./xdg-desktop-portal.nix {};
 }

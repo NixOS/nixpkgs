@@ -35,9 +35,12 @@ with lib;
     services.dbus.packages = [ pkgs.rtkit ];
 
     users.users.rtkit =
-      { uid = config.ids.uids.rtkit;
+      {
+        isSystemUser = true;
+        group = "rtkit";
         description = "RealtimeKit daemon";
       };
+    users.groups.rtkit = {};
 
   };
 

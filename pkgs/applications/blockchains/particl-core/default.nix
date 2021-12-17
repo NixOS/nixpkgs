@@ -1,8 +1,9 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , autoreconfHook
 , boost
 , db48
-, fetchurl
+, fetchFromGitHub
 , libevent
 , miniupnpc
 , openssl
@@ -17,11 +18,13 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "particl-core";
-  version = "0.19.2.5";
+  version = "0.19.2.14";
 
-  src = fetchurl {
-    url = "https://github.com/particl/particl-core/archive/v${version}.tar.gz";
-    sha256 = "sha256-uI4T8h6RvCikk8h/sZmGlj3Uj3Xhu0vDn/fPb6rLcSg=";
+  src = fetchFromGitHub {
+    owner = "particl";
+    repo = "particl-core";
+    rev = "v${version}";
+    sha256 = "sha256-gJLEMfEvQ35xjKt8iN/FXi2T/GBMSS7eUqOC8XHKPBg=";
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
@@ -41,7 +44,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Privacy-Focused Marketplace & Decentralized Application Platform";
-    longDescription= ''
+    longDescription = ''
       An open source, decentralized privacy platform built for global person to person eCommerce.
       RPC daemon and CLI client only.
     '';

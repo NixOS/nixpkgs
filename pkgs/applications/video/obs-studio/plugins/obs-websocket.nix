@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "obs-websocket";
-  version = "4.9.0";
+  version = "4.9.1";
 
   src = fetchFromGitHub {
     owner = "Palakis";
     repo = "obs-websocket";
     rev = version;
-    sha256 = "1dxih5czcfs1vczbq48784jvmgs8awbsrwk8mdfi4pg8n577cr1w";
+    sha256 = "sha256-XCiSNWTiA/u+3IbYlhIc5bCjKjLHDRVjYIG5MEoYnr0=";
   };
 
   nativeBuildInputs = [ cmake ];

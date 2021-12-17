@@ -4,7 +4,7 @@ GEM
     chronic (0.10.2)
     highline (2.0.3)
     rchardet (1.8.0)
-    reckon (0.7.1)
+    reckon (0.8.0)
       chronic (>= 0.3.0)
       highline (>= 1.5.2)
       rchardet (>= 1.8.0)
@@ -16,4 +16,4 @@ DEPENDENCIES
   reckon
 
 BUNDLED WITH
-   1.17.2
+   2.2.20

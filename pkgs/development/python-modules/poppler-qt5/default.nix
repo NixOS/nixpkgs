@@ -54,6 +54,6 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/frescobaldi/python-poppler-qt5";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ eduardosm ];
+    maintainers = with maintainers; [ ];
   };
 }

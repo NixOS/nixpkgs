@@ -38,6 +38,6 @@ perlPackages.buildPerlPackage rec {
     description = "Open-Source Spam Filter";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ peti qknight qyliss ];
+    maintainers = with lib.maintainers; [ qknight qyliss ];
   };
 }

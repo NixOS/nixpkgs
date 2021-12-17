@@ -8,9 +8,6 @@
 , pillow
 , tinycss2
 , pytestCheckHook
-, pytest-runner
-, pytest-flake8
-, pytest-isort
 }:
 
 buildPythonPackage rec {
@@ -23,11 +20,21 @@ buildPythonPackage rec {
     sha256 = "sha256-sLmSnPXboAUXjXRqgDb88AJVUPSYylTbYYczIjhHg7w=";
   };
 
-  nativeBuildInputs = [ pytest-runner ];
-
   propagatedBuildInputs = [ cairocffi cssselect2 defusedxml pillow tinycss2 ];
 
-  checkInputs = [ pytestCheckHook pytest-flake8 pytest-isort ];
+  propagatedNativeBuildInputs = [ cairocffi ];
+
+  checkInputs = [ pytestCheckHook ];
+
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "pytest-runner" "" \
+      --replace "pytest-flake8" "" \
+      --replace "pytest-isort" "" \
+      --replace "pytest-cov" "" \
+      --replace "--flake8" "" \
+      --replace "--isort" ""
+  '';
 
   pytestFlagsArray = [
     "cairosvg/test_api.py"

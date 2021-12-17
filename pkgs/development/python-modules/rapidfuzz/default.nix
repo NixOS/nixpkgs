@@ -5,11 +5,12 @@
 , pytestCheckHook
 , hypothesis
 , pandas
+, numpy
 }:
 
 buildPythonPackage rec {
   pname = "rapidfuzz";
-  version = "1.4.1";
+  version = "1.9.0";
 
   disabled = pythonOlder "3.5";
 
@@ -18,8 +19,12 @@ buildPythonPackage rec {
     repo = "RapidFuzz";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-uZdD25ATJgRrDAHYSQNp7NvEmW7p3LD9vNmxAbf5Mwk=";
+    sha256 = "sha256-INtoJXPe22vB6Yi9Co3xxJ8uxZYz9dn0eMF+fo9GfIo=";
   };
+
+  propagatedBuildInputs = [
+    numpy
+  ];
 
   checkInputs = [
     pytestCheckHook
@@ -40,7 +45,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Rapid fuzzy string matching";
-    homepage = "https://github.com/maxbachmann/rapidfuzz";
+    homepage = "https://github.com/maxbachmann/RapidFuzz";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
   };

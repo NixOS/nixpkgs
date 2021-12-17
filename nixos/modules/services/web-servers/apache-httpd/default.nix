@@ -36,11 +36,12 @@ let
   dependentCertNames = unique (map (hostOpts: hostOpts.certName) acmeEnabledVhosts);
 
   mkListenInfo = hostOpts:
-    if hostOpts.listen != [] then hostOpts.listen
-    else (
-      optional (hostOpts.onlySSL || hostOpts.addSSL || hostOpts.forceSSL) { ip = "*"; port = 443; ssl = true; } ++
-      optional (!hostOpts.onlySSL) { ip = "*"; port = 80; ssl = false; }
-    );
+    if hostOpts.listen != [] then
+      hostOpts.listen
+    else
+      optionals (hostOpts.onlySSL || hostOpts.addSSL || hostOpts.forceSSL) (map (addr: { ip = addr; port = 443; ssl = true; }) hostOpts.listenAddresses) ++
+      optionals (!hostOpts.onlySSL) (map (addr: { ip = addr; port = 80; ssl = false; }) hostOpts.listenAddresses)
+    ;
 
   listenInfo = unique (concatMap mkListenInfo vhosts);
 
@@ -406,7 +407,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.apacheHttpd;
-        defaultText = "pkgs.apacheHttpd";
+        defaultText = literalExpression "pkgs.apacheHttpd";
         description = ''
           Overridable attribute of the Apache HTTP Server package to use.
         '';
@@ -415,8 +416,8 @@ in
       configFile = mkOption {
         type = types.path;
         default = confFile;
-        defaultText = "confFile";
-        example = literalExample ''pkgs.writeText "httpd.conf" "# my custom config file ..."'';
+        defaultText = literalExpression "confFile";
+        example = literalExpression ''pkgs.writeText "httpd.conf" "# my custom config file ..."'';
         description = ''
           Override the configuration file used by Apache. By default,
           NixOS generates one automatically.
@@ -436,7 +437,7 @@ in
       extraModules = mkOption {
         type = types.listOf types.unspecified;
         default = [];
-        example = literalExample ''
+        example = literalExpression ''
           [
             "proxy_connect"
             { name = "jk"; path = "''${pkgs.tomcat_connectors}/modules/mod_jk.so"; }
@@ -462,7 +463,7 @@ in
         default = "common";
         example = "combined";
         description = ''
-          Log format for log files. Possible values are: combined, common, referer, agent.
+          Log format for log files. Possible values are: combined, common, referer, agent, none.
           See <link xlink:href="https://httpd.apache.org/docs/2.4/logs.html"/> for more details.
         '';
       };
@@ -515,7 +516,14 @@ in
             documentRoot = "${pkg}/htdocs";
           };
         };
-        example = literalExample ''
+        defaultText = literalExpression ''
+          {
+            localhost = {
+              documentRoot = "''${package.out}/htdocs";
+            };
+          }
+        '';
+        example = literalExpression ''
           {
             "foo.example.com" = {
               forceSSL = true;
@@ -549,7 +557,7 @@ in
       phpPackage = mkOption {
         type = types.package;
         default = pkgs.php;
-        defaultText = "pkgs.php";
+        defaultText = literalExpression "pkgs.php";
         description = ''
           Overridable attribute of the PHP package to use.
         '';

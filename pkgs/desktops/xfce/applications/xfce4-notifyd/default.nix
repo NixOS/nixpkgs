@@ -1,4 +1,4 @@
-{ mkXfceDerivation, glib, exo, gtk3, libnotify, libxfce4ui, libxfce4util
+{ lib, mkXfceDerivation, glib, gtk3, libnotify, libxfce4ui, libxfce4util
 , xfce4-panel, xfconf }:
 
 mkXfceDerivation {
@@ -8,9 +8,14 @@ mkXfceDerivation {
 
   sha256 = "sha256-Gomehef68+mOgGFDaH48jG51nbaV4ruN925h71w7FuE=";
 
-  buildInputs = [ exo gtk3 glib libnotify libxfce4ui libxfce4util xfce4-panel xfconf ];
+  buildInputs = [ gtk3 glib libnotify libxfce4ui libxfce4util xfce4-panel xfconf ];
 
-  meta = {
+  configureFlags = [
+    "--enable-dbus-start-daemon"
+  ];
+
+  meta = with lib; {
     description = "Simple notification daemon for Xfce";
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

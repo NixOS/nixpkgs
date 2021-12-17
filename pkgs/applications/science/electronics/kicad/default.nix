@@ -209,8 +209,8 @@ stdenv.mkDerivation rec {
   ++ optionals (stable && with3d) [ "--set-default KISYS3DMOD ${packages3d}/share/kicad/modules/packages3d" ]
   ++ optionals (!stable)
   [
-    "--set-default KICAD6_FOOTPRINT_DIR ${footprints}/share/kicad/modules"
-    "--set-default KICAD6_SYMBOL_DIR ${symbols}/share/kicad/library"
+    "--set-default KICAD6_FOOTPRINT_DIR ${footprints}/share/kicad/footprints"
+    "--set-default KICAD6_SYMBOL_DIR ${symbols}/share/kicad/symbols"
     "--set-default KICAD6_TEMPLATE_DIR ${templates}/share/kicad/template"
     "--prefix KICAD6_TEMPLATE_DIR : ${symbols}/share/kicad/template"
     "--prefix KICAD6_TEMPLATE_DIR : ${footprints}/share/kicad/template"
@@ -277,7 +277,7 @@ stdenv.mkDerivation rec {
     then "Open Source Electronics Design Automation suite"
     else "Open Source EDA suite, development build")
     + (if (!with3d) then ", without 3D models" else "");
-    homepage = "https://www.kicad-pcb.org/";
+    homepage = "https://www.kicad.org/";
     longDescription = ''
       KiCad is an open source software suite for Electronic Design Automation.
       The Programs handle Schematic Capture, and PCB Layout with Gerber output.

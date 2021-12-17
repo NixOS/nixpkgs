@@ -1,13 +1,21 @@
-{ lib, fetchPypi, buildPythonPackage }:
+{ lib
+, fetchPypi
+, buildPythonPackage
+}:
 
 buildPythonPackage rec {
   pname = "dpkt";
-  version = "1.9.6";
+  version = "1.9.7.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b5737010fd420d142e02ed04fa616edd1fc05e414980baef594f72287c875eef";
+    sha256 = "80f977667ebbad2b5c4f7b7f45ee8bea6622fb71723f68a9a8fe6274520c853b";
   };
+
+  # Project has no tests
+  doCheck = false;
+
+  pythonImportsCheck = [ "dpkt" ];
 
   meta = with lib; {
     description = "Fast, simple packet creation / parsing, with definitions for the basic TCP/IP protocols";

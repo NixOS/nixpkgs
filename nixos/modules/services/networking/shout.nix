@@ -83,11 +83,13 @@ in {
 
   config = mkIf cfg.enable {
     users.users.shout = {
-      uid = config.ids.uids.shout;
+      isSystemUser = true;
+      group = "shout";
       description = "Shout daemon user";
       home = shoutHome;
       createHome = true;
     };
+    users.groups.shout = {};
 
     systemd.services.shout = {
       description = "Shout web IRC client";

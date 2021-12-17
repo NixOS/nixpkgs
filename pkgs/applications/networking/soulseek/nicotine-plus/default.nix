@@ -5,13 +5,13 @@ with lib;
 
 python3Packages.buildPythonApplication rec {
   pname = "nicotine-plus";
-  version = "3.0.6";
+  version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = "Nicotine-Plus";
     repo = "nicotine-plus";
     rev = version;
-    sha256 = "sha256-NL6TXFRB7OeqNEfdANkEqh+MCOF1+ehR+6RO1XsIix8=";
+    hash = "sha256-NfI2RfxAYhA1qefml1ayfYWjbkrzUL4l9p2Rm/ROnzQ=";
   };
 
   nativeBuildInputs = [ gettext wrapGAppsHook ];
@@ -21,8 +21,6 @@ python3Packages.buildPythonApplication rec {
 
   postInstall = ''
     mv $out/bin/nicotine $out/bin/nicotine-plus
-    substituteInPlace $out/share/applications/org.nicotine_plus.Nicotine.desktop \
-      --replace "Exec=nicotine" "Exec=$out/bin/nicotine-plus"
   '';
 
   doCheck = false;

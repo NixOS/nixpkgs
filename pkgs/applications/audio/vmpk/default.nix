@@ -5,11 +5,11 @@
 
 mkDerivation rec {
   pname = "vmpk";
-  version = "0.8.2";
+  version = "0.8.5";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${version}/${pname}-${version}.tar.bz2";
-    sha256 = "1kv256j13adk4ib7r464gsl4vjhih820bq37ddhqfyfd07wh53a2";
+    sha256 = "sha256-SPome4UKGOWQLT9RMoGZ0wUdwodG8mSIaGFCg0i5CmY=";
   };
 
   nativeBuildInputs = [ cmake pkg-config qttools docbook-xsl-nons ];

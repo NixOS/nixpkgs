@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
 
     makeWrapper $out/lib/runtime/bin/java $out/bin/jabref \
       --add-flags '-Djava.library.path=${systemLibPaths}' --add-flags "-p $out/lib/app -m org.jabref/org.jabref.JabRefLauncher" \
-      --run 'export LD_LIBRARY_PATH=${systemLibPaths}:$LD_LIBRARY_PATH'
+      --prefix LD_LIBRARY_PATH : '${systemLibPaths}'
 
     cp -r ${desktopItem}/share/applications $out/share/
 

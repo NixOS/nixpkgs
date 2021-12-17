@@ -9,11 +9,11 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "msmtp";
-  version = "1.8.15";
+  version = "1.8.19";
 
   src = fetchurl {
     url = "https://marlam.de/${pname}/releases/${pname}-${version}.tar.xz";
-    sha256 = "sha256-ImXcY56/Lt8waf/+CjvXZ0n4tY9AAdXN6uGYc5SQmc4=";
+    sha256 = "sha256-NKHhmBF2h02+TuZu4NkQPJCYmqTc3Ehh5N4Fzn5EUms=";
   };
 
   patches = [
@@ -26,8 +26,8 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkg-config texinfo ];
 
-  configureFlags =
-    [ "--sysconfdir=/etc" ] ++ lib.optional stdenv.isDarwin [ "--with-macosx-keyring" ];
+  configureFlags = [ "--sysconfdir=/etc" "--with-libgsasl" ]
+    ++ lib.optional stdenv.isDarwin [ "--with-macosx-keyring" ];
 
   postInstall = ''
     install -d $out/share/doc/${pname}/scripts

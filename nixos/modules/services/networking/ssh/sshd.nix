@@ -401,9 +401,12 @@ in
   config = mkIf cfg.enable {
 
     users.users.sshd =
-      { isSystemUser = true;
+      {
+        isSystemUser = true;
+        group = "sshd";
         description = "SSH privilege separation user";
       };
+    users.groups.sshd = {};
 
     services.openssh.moduliFile = mkDefault "${cfgc.package}/etc/ssh/moduli";
     services.openssh.sftpServerExecutable = mkDefault "${cfgc.package}/libexec/sftp-server";
@@ -436,7 +439,7 @@ in
                 mkdir -m 0755 -p /etc/ssh
 
                 ${flip concatMapStrings cfg.hostKeys (k: ''
-                  if ! [ -f "${k.path}" ]; then
+                  if ! [ -s "${k.path}" ]; then
                       ssh-keygen \
                         -t "${k.type}" \
                         ${if k ? bits then "-b ${toString k.bits}" else ""} \
@@ -549,11 +552,7 @@ in
 
         LogLevel ${cfg.logLevel}
 
-        ${if cfg.useDns then ''
-          UseDNS yes
-        '' else ''
-          UseDNS no
-        ''}
+        UseDNS ${if cfg.useDns then "yes" else "no"}
 
       '';
 

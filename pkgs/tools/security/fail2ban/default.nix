@@ -47,7 +47,10 @@ python3.pkgs.buildPythonApplication rec {
     in
     ''
       # see https://github.com/NixOS/nixpkgs/issues/4968
-      rm -r ${sitePackages}/etc ${sitePackages}/usr
+      rm -r "${sitePackages}/etc"
+    '' + lib.optionalString stdenv.isLinux ''
+      # see https://github.com/NixOS/nixpkgs/issues/4968
+      rm -r "${sitePackages}/usr"
     '';
 
   meta = with lib; {

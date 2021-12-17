@@ -21,10 +21,10 @@ rustPlatform.buildRustPackage rec {
     mkdir -p $out/share/kak/autoload/plugins
     cp rc/parinfer.kak $out/share/kak/autoload/plugins/
 
-    rtpPath=$out/share/vim-plugins/parinfer-rust
-    mkdir -p $rtpPath/plugin
+    rtpPath=$out/plugin
+    mkdir -p $rtpPath
     sed "s,let s:libdir = .*,let s:libdir = '${placeholder "out"}/lib'," \
-      plugin/parinfer.vim >$rtpPath/plugin/parinfer.vim
+      plugin/parinfer.vim > $rtpPath/parinfer.vim
   '';
 
   meta = with lib; {

@@ -39,6 +39,14 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+    # Fix for falling back to GeoIP when WiFi devices are not found
+    # https://gitlab.freedesktop.org/geoclue/geoclue/-/commit/2de651b6590087a2df2defe8f3d85b3cf6b91494
+    # NOTE: this should be removed when the next version is released
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/geoclue/geoclue/commit/2de651b6590087a2df2defe8f3d85b3cf6b91494.patch";
+      sha256 = "hv7t2Hmpv2oDXiPWA7JpYD9q+cuuk+En/lJJickvFII=";
+    })
+
     # Make the Mozilla API key configurable
     # https://gitlab.freedesktop.org/geoclue/geoclue/merge_requests/54 (only partially backported)
     (fetchpatch {

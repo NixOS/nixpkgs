@@ -31,7 +31,7 @@ in {
             botToken = "";
           };
         };
-        example = literalExample ''
+        example = literalExpression ''
           {
             bridge = {
               domain = "public-domain.tld";
@@ -98,6 +98,9 @@ in {
       serviceDependencies = mkOption {
         type = with types; listOf str;
         default = optional config.services.matrix-synapse.enable "matrix-synapse.service";
+        defaultText = literalExpression ''
+          optional config.services.matrix-synapse.enable "matrix-synapse.service"
+        '';
         description = ''
           List of Systemd services to require and wait for when starting the application service,
           such as the Matrix homeserver if it's running on the same host.

@@ -6,7 +6,6 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
 
-  # No tests in PyPi Tarball
   src = fetchFromGitHub {
     owner = "pdfminer";
     repo = "pdfminer.six";
@@ -15,6 +14,12 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ chardet cryptography sortedcontainers ];
+
+  postInstall = ''
+    for file in $out/bin/*.py; do
+      ln $file ''${file//.py/}
+    done
+  '';
 
   checkInputs = [ nose ];
   checkPhase = ''

@@ -7,21 +7,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "calibre-web";
-  version = "0.6.12";
+  version = "0.6.14";
 
   src = fetchFromGitHub {
     owner = "janeczku";
     repo = "calibre-web";
     rev = version;
-    sha256 = "sha256-IgS281qDxG302UznC63nZH8/ty4fgFtn+lLYdakGA4w=";
+    sha256 = "sha256-rR5pUB3A0WNQxq7ZJ6ykua7hMlzs49aMmVbBUOkOVfA=";
   };
-
-  prePatch = ''
-    substituteInPlace setup.cfg \
-        --replace "requests>=2.11.1,<2.25.0" "requests>=2.11.1,<2.26.0" \
-        --replace "cps = calibreweb:main" "calibre-web = calibreweb:main" \
-        --replace "PyPDF3>=1.0.0,<1.0.4" "PyPDF3>=1.0.0"
-  '';
 
   patches = [
     # default-logger.patch switches default logger to /dev/stdout. Otherwise calibre-web tries to open a file relative
@@ -41,6 +34,13 @@ python3.pkgs.buildPythonApplication rec {
     mkdir -p src/calibreweb
     mv cps.py src/calibreweb/__init__.py
     mv cps src/calibreweb
+
+    substituteInPlace setup.cfg \
+      --replace "requests>=2.11.1,<2.25.0" "requests" \
+      --replace "cps = calibreweb:main" "calibre-web = calibreweb:main" \
+      --replace "PyPDF3>=1.0.0,<1.0.4" "PyPDF3>=1.0.0" \
+      --replace "unidecode>=0.04.19,<1.3.0" "unidecode>=0.04.19" \
+      --replace "flask-wtf>=0.14.2,<0.16.0" "flask-wtf>=0.14.2"
   '';
 
   # Upstream repo doesn't provide any tests.
@@ -51,7 +51,9 @@ python3.pkgs.buildPythonApplication rec {
     flask-babel
     flask_login
     flask_principal
+    flask_wtf
     iso-639
+    lxml
     pypdf3
     requests
     sqlalchemy

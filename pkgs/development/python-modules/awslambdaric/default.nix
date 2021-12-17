@@ -1,17 +1,37 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy27, pytestCheckHook, autoconf
-, automake, cmake, gcc, libtool, perl, simplejson }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, isPy27
+, pytestCheckHook
+, autoconf
+, automake
+, cmake
+, gcc
+, libtool
+, perl
+, simplejson
+}:
 
 buildPythonPackage rec {
   pname = "awslambdaric";
-  version = "1.2.0";
+  version = "2.0.0";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-lambda-python-runtime-interface-client";
     rev = version;
-    sha256 = "120qar8iaxj6dmnhjw1c40n2w06f1nyxy57dwh06xdiany698fg4";
+    sha256 = "1amlaq119mk8fa3fxi3d6vgp83vcd81mbk53jzbixacklmcsp50k";
   };
+
+  patches = [
+    (fetchpatch {
+      # https://github.com/aws/aws-lambda-python-runtime-interface-client/pull/58
+      url = "https://github.com/aws/aws-lambda-python-runtime-interface-client/commit/162c3c0051bb9daa92e4a2a4af7e90aea60ee405.patch";
+      sha256 = "09qqq5x6npc9jw2qbhzifqn5sqiby4smiin1aw30psmlp21fv7j8";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace requirements/base.txt \

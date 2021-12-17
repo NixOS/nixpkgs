@@ -90,10 +90,13 @@ let
           meta.description = "Release-critical builds for the Nixpkgs unstable channel";
           constituents =
             [ jobs.tarball
+              jobs.metrics
               jobs.manual
               jobs.lib-tests
               jobs.pkgs-lib-tests
               jobs.stdenv.x86_64-linux
+              jobs.cargo.x86_64-linux
+              jobs.go.x86_64-linux
               jobs.linux.x86_64-linux
               jobs.pandoc.x86_64-linux
               jobs.python.x86_64-linux
@@ -104,7 +107,7 @@ let
               jobs.nix-info.x86_64-linux
               jobs.nix-info-tested.x86_64-linux
               # Ensure that X11/GTK are in order.
-              jobs.thunderbird.x86_64-linux
+              jobs.thunderbird-unwrapped.x86_64-linux
               jobs.cachix.x86_64-linux
 
               /*
@@ -129,6 +132,8 @@ let
             ++ lib.collect lib.isDerivation jobs.stdenvBootstrapTools
             ++ lib.optionals supportDarwin [
               jobs.stdenv.x86_64-darwin
+              jobs.cargo.x86_64-darwin
+              jobs.go.x86_64-darwin
               jobs.python.x86_64-darwin
               jobs.python3.x86_64-darwin
               jobs.nixpkgs-review.x86_64-darwin

@@ -13,25 +13,12 @@ let
 
   self = python3Packages.buildPythonApplication rec {
     pname = "mercurial";
-    version = "5.8";
+    version = "5.9.3";
 
     src = fetchurl {
       url = "https://mercurial-scm.org/release/mercurial-${version}.tar.gz";
-      sha256 = "17rhlmmkqz5ll3k68jfzpcifg3nndbcbc2nx7kw8xn3qcj7nlpgw";
+      sha256 = "sha256-O0P2iXetD6dap/HlyPCoO6k1YhqyOWEpq7SY5W0b4I4=";
     };
-
-    patches = [
-      # https://phab.mercurial-scm.org/D10638, needed for below patch to apply
-      (fetchpatch {
-        url = "https://www.mercurial-scm.org/repo/hg/raw-rev/c365850b611490a5fdb235eb1cea310a542c2f84";
-        sha256 = "1gn3xvahbjdhbglffqpmj559w1bkqqsk70wqcanwv7nh972aqy9g";
-      })
-      # https://phab.mercurial-scm.org/D10639, fixes https://bz.mercurial-scm.org/show_bug.cgi?id=6514
-      (fetchpatch {
-        url = "https://www.mercurial-scm.org/repo/hg/raw-rev/c8f62920f07a40af3403ba9aefa1dac8a97d53ea";
-        sha256 = "1kw0xjg2c4jby0ncarjvpa5qafsyl1wzbk6jxls4hnxlxdl53nmn";
-      })
-    ];
 
     format = "other";
 
@@ -40,7 +27,7 @@ let
     cargoDeps = if rustSupport then rustPlatform.fetchCargoTarball {
       inherit src;
       name = "${pname}-${version}";
-      sha256 = "1kc2giqvfwsdl5fb0qmz96ws1gdrs3skfdzvpiif2i8f7r4nqlhd";
+      sha256 = "sha256:1d911jaawdrcv2mdhlp2ylr10791zj7dhb69aiw5yy7vn7gry82n";
       sourceRoot = "${pname}-${version}/rust";
     } else null;
     cargoRoot = if rustSupport then "rust" else null;

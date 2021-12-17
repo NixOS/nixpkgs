@@ -15,17 +15,17 @@
 , rustc
 , rust-cbindgen
 , yasm
-, llvmPackages_11
+, llvmPackages_12
 , nspr
 }:
 
 stdenv.mkDerivation rec {
   pname = "spidermonkey";
-  version = "78.11.0";
+  version = "78.15.0";
 
   src = fetchurl {
     url = "mirror://mozilla/firefox/releases/${version}esr/source/firefox-${version}esr.source.tar.xz";
-    sha256 = "0zjpzkxx3wc2840d7q4b9lnkj1kwk1qps29s9c83jf5y6xclnf9q";
+    sha256 = "0l91cxdc5v9fps79ckb1kid4gw6v5qng1jd9zvaacwaiv628shx4";
   };
 
   patches = [
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoconf213
     cargo
-    llvmPackages_11.llvm # for llvm-objdump
+    llvmPackages_12.llvm # for llvm-objdump
     perl
     pkg-config
     python3

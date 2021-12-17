@@ -40,7 +40,7 @@ let
       };
 
       frequency = mkOption {
-        type = types.enum [ "daily" "weekly" "monthly" "yearly" ];
+        type = types.enum [ "hourly" "daily" "weekly" "monthly" "yearly" ];
         default = "daily";
         description = ''
           How often to rotate the logs.
@@ -111,7 +111,7 @@ in
           can be controlled by the <link linkend="opt-services.logrotate.paths._name_.priority">priority</link> option
           using the same semantics as `lib.mkOrder`. Smaller values have a greater priority.
         '';
-        example = literalExample ''
+        example = literalExpression ''
           {
             httpd = {
               path = "/var/log/httpd/*.log";
@@ -155,7 +155,7 @@ in
     systemd.services.logrotate = {
       description = "Logrotate Service";
       wantedBy = [ "multi-user.target" ];
-      startAt = "*-*-* *:05:00";
+      startAt = "hourly";
       script = ''
         exec ${pkgs.logrotate}/sbin/logrotate ${configFile}
       '';

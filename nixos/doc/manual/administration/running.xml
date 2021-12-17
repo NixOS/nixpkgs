@@ -10,12 +10,12 @@
    such as how to use the <command>systemd</command> service manager.
   </para>
  </partintro>
- <xi:include href="service-mgmt.xml" />
- <xi:include href="rebooting.xml" />
- <xi:include href="user-sessions.xml" />
- <xi:include href="control-groups.xml" />
- <xi:include href="logging.xml" />
- <xi:include href="cleaning-store.xml" />
- <xi:include href="containers.xml" />
- <xi:include href="troubleshooting.xml" />
+ <xi:include href="../from_md/administration/service-mgmt.chapter.xml" />
+ <xi:include href="../from_md/administration/rebooting.chapter.xml" />
+ <xi:include href="../from_md/administration/user-sessions.chapter.xml" />
+ <xi:include href="../from_md/administration/control-groups.chapter.xml" />
+ <xi:include href="../from_md/administration/logging.chapter.xml" />
+ <xi:include href="../from_md/administration/cleaning-store.chapter.xml" />
+ <xi:include href="../from_md/administration/containers.chapter.xml" />
+ <xi:include href="../from_md/administration/troubleshooting.chapter.xml" />
 </part>

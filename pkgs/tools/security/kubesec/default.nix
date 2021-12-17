@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "kubesec";
-  version = "2.11.2";
+  version = "2.11.4";
 
   src = fetchFromGitHub {
     owner = "controlplaneio";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-W9c3L8lYjF1W0kwSODhMldlqX1h+2mZIRtElZ20skn4=";
+    sha256 = "sha256-z1v+xm0ZWs8F5KtltBSDx9W+xNqRsfvAgQUKgrZa+28=";
   };
 
-  vendorSha256 = "sha256-zfQu1EdwvR+LGmsbE8RA4pcOGgsukG1TMTCgPyNoVsc=";
+  vendorSha256 = "sha256-/2u92KvfzbJxJjh1cy9+4AuM5Qw1tK9Hu0xjRs0nhBE=";
 
   # Tests wants to download the kubernetes schema for use with kubeval
   doCheck = false;

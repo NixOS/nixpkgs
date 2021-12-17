@@ -4,24 +4,24 @@
 , asyncio-dgram
 , asynctest
 , buildPythonPackage
+, docutils
 , fetchFromGitHub
 , poetry-core
 , pytest-aiohttp
 , pytest-asyncio
 , pytestCheckHook
-, pythonAtLeast
 , voluptuous
 }:
 
 buildPythonPackage rec {
   pname = "aioguardian";
-  version = "1.0.8";
+  version = "2021.11.0";
 
   src = fetchFromGitHub {
     owner = "bachya";
     repo = pname;
     rev = version;
-    sha256 = "0nqsacg0yrsqr6qax4486ffk8r88ra5yixxd6r88jwscm2bmjg3p";
+    sha256 = "sha256-jQIRACm0d0a5mQqlwxSTgLZfJFvGLWuJTb/MacppmS4=";
   };
 
   format = "pyproject";
@@ -34,6 +34,7 @@ buildPythonPackage rec {
     aiohttp
     async-timeout
     asyncio-dgram
+    docutils
     voluptuous
   ];
 
@@ -45,9 +46,18 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTestPaths = [ "examples/" ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'docutils = "<0.18"' 'docutils = "*"'
+  '';
 
-  pythonImportsCheck = [ "aioguardian" ];
+  disabledTestPaths = [
+    "examples/"
+  ];
+
+  pythonImportsCheck = [
+    "aioguardian"
+  ];
 
   meta = with lib; {
     description = " Python library to interact with Elexa Guardian devices";

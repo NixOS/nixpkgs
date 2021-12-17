@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchurl, jre, nixosTests, writeScript, common-updater-scripts
-, git, nixfmt, nix, coreutils, gnused, disableRemoteLogging ? true }:
+{ lib, stdenv, fetchurl, jre, writeScript, common-updater-scripts, git, nixfmt
+, nix, coreutils, gnused, disableRemoteLogging ? true }:
 
 with lib;
 
@@ -9,7 +9,7 @@ let
   common = { scalaVersion, sha256 }:
     stdenv.mkDerivation rec {
       pname = "ammonite";
-      version = "2.4.0";
+      version = "2.4.1";
 
       src = fetchurl {
         url =
@@ -28,7 +28,6 @@ let
       '';
 
       passthru = {
-        tests = { inherit (nixosTests) ammonite; };
 
         updateScript = writeScript "update.sh" ''
           #!${stdenv.shell}
@@ -58,6 +57,15 @@ let
         '';
       };
 
+      doInstallCheck = true;
+      installCheckPhase = ''
+        runHook preInstallCheck
+
+        $out/bin/amm -h "$PWD" -c 'val foo = 21; println(foo * 2)' | grep 42
+
+        runHook postInstallCheck
+      '';
+
       meta = {
         description = "Improved Scala REPL";
         longDescription = ''
@@ -75,10 +83,10 @@ let
 in {
   ammonite_2_12 = common {
     scalaVersion = "2.12";
-    sha256 = "K8JII6SAmnBjMWQ9a3NqSLLuP1OLcbwobj3G+OCiLdA=";
+    sha256 = "5n9q/7d/PwDJfBPITYyDua24+fci6bi1oG5dSw8A244=";
   };
   ammonite_2_13 = common {
     scalaVersion = "2.13";
-    sha256 = "2F35qhWI6hNb+Eh9ZTDznqo116yN7MZIGVchaAIM36A=";
+    sha256 = "RIuNyWvwNM39/rczUH328K5ky5hePflokW/VP603j+I=";
   };
 }

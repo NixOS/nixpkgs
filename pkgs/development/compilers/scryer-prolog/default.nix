@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
   # Use system openssl, gmp, mpc and mpfr.
   cargoPatches = [ ./cargo.patch ];
 
-  cargoSha256 = "0gb0l2wwf8079jwggn9zxk8pz8pxg3b7pin1d7dsbd4ij52lzyi2";
+  cargoSha256 = "1vf7pfhvpk7ikzibdccw7xgbywv5n4vvshjwsdsf94bhl2knrlg3";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl gmp libmpc mpfr ];

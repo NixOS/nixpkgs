@@ -4,8 +4,11 @@
 , jq
 , rust-analyzer
 , nodePackages
-, setDefaultServerPath ? true
 , moreutils
+, esbuild
+, pkg-config
+, libsecret
+, setDefaultServerPath ? true
 }:
 
 let
@@ -21,7 +24,11 @@ let
 
     releaseTag = rust-analyzer.version;
 
-    nativeBuildInputs = [ jq moreutils ];
+    nativeBuildInputs = [
+      jq moreutils esbuild
+      # Required by `keytar`, which is a dependency of `vsce`.
+      pkg-config libsecret
+    ];
 
     # Follows https://github.com/rust-analyzer/rust-analyzer/blob/41949748a6123fd6061eb984a47f4fe780525e63/xtask/src/dist.rs#L39-L65
     postInstall = ''
@@ -33,7 +40,9 @@ let
       ' package.json | sponge package.json
 
       mkdir -p $vsix
-      npx vsce package -o $vsix/${pname}.zip
+      # vsce ask for continue due to missing LICENSE.md
+      # Should be removed after https://github.com/rust-analyzer/rust-analyzer/commit/acd5c1f19bf7246107aaae7b6fe3f676a516c6d2
+      echo y | npx vsce package -o $vsix/${pname}.zip
     '';
   };
 

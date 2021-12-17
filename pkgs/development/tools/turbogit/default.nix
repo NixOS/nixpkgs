@@ -1,16 +1,16 @@
 { fetchFromGitHub, buildGoModule, lib, installShellFiles, libgit2, pkg-config }:
 buildGoModule rec {
   pname = "turbogit";
-  version = "3.0.1";
+  version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = "b4nst";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-A1hVpapp6yIpUVnDQ1yLLHiYdLcQlr/JcTOmt5sr3Oo=";
+    sha256 = "sha256-BHgVJlitRUX/9zYPoK5XfRpzzTZRbLhQVZJcx8KVshk=";
   };
 
-  vendorSha256 = "sha256-1AEcBq7wiENWQ5HZEEXpIgA6Bf2T28zm/MwYTke/f9s=";
+  vendorSha256 = "sha256-280OcGXZQJD4G6z0b2WnWAS+v7XVptyf2WnlPjG99/0=";
 
   subPackages = [ "." ];
 

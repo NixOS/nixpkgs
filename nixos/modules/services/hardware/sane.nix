@@ -73,7 +73,7 @@ in
           The example contains the package for HP scanners.
         </para></note>
       '';
-      example = literalExample "[ pkgs.hplipWithPlugin ]";
+      example = literalExpression "[ pkgs.hplipWithPlugin ]";
     };
 
     hardware.sane.disabledDefaultBackends = mkOption {
@@ -115,6 +115,7 @@ in
     hardware.sane.drivers.scanSnap.package = mkOption {
       type = types.package;
       default = pkgs.sane-drivers.epjitsu;
+      defaultText = literalExpression "pkgs.sane-drivers.epjitsu";
       description = ''
         Epjitsu driver package to use. Useful if you want to extract the driver files yourself.
 

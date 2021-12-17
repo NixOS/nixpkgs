@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, cmake, pkg-config, gettext
 , glibmm, libxmlxx, pango, librsvg
-, SDL2, glew, boost, ffmpeg, portaudio, epoxy
+, SDL2, glew, boost, ffmpeg, portaudio, libepoxy
 }:
 
 stdenv.mkDerivation rec {
@@ -27,6 +27,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glibmm libxmlxx pango librsvg
-    SDL2 glew boost ffmpeg portaudio epoxy
+    SDL2 glew boost ffmpeg portaudio libepoxy
   ];
 }

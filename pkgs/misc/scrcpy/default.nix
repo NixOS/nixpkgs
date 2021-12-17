@@ -2,18 +2,18 @@
 , meson
 , ninja
 , pkg-config
-, fetchpatch
 
 , platform-tools
 , ffmpeg
+, libusb1
 , SDL2
 }:
 
 let
-  version = "1.18";
+  version = "1.21";
   prebuilt_server = fetchurl {
     url = "https://github.com/Genymobile/scrcpy/releases/download/v${version}/scrcpy-server-v${version}";
-    sha256 = "18si7k9hyqa77yy9w747kl2x2pivyigny49dwzx9sfd9xmmmq734";
+    sha256 = "sha256-28zKtSPuJnluVeozZSZJ5LevSY7a6ap15NTXhpwKuEg=";
   };
 in
 stdenv.mkDerivation rec {
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     owner = "Genymobile";
     repo = pname;
     rev = "v${version}";
-    sha256 = "019948v63qhmp742hmar7a98ss673m0wdycpphjhfl1kg4iihiya";
+    sha256 = "sha256-9MzOaQj+lR1F+E/yoxbL/HMOOuKOU82zkPVq7x6AH3c=";
   };
 
   # postPatch:
@@ -38,7 +38,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper meson ninja pkg-config ];
 
-  buildInputs = [ ffmpeg SDL2 ];
+  buildInputs = [ ffmpeg SDL2 ] ++ lib.optionals stdenv.isLinux [
+    libusb1
+  ];
 
   # Manually install the server jar to prevent Meson from "fixing" it
   preConfigure = ''
@@ -59,6 +61,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Genymobile/scrcpy";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ deltaevo lukeadams ];
+    maintainers = with maintainers; [ deltaevo lukeadams msfjarvis ];
   };
 }

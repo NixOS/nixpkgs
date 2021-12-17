@@ -36,11 +36,13 @@
 , nspr
 , nss
 , pango
+, pipewire
 , udev
 , xorg
 , zlib
 , xdg-utils
 , wrapGAppsHook
+, commandLineArgs ? ""
 }:
 
 let
@@ -80,6 +82,7 @@ rpath = lib.makeLibraryPath [
   nspr
   nss
   pango
+  pipewire
   udev
   xdg-utils
   xorg.libxcb
@@ -90,11 +93,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "brave";
-  version = "1.27.111";
+  version = "1.33.106";
 
   src = fetchurl {
     url = "https://github.com/brave/brave-browser/releases/download/v${version}/brave-browser_${version}_amd64.deb";
-    sha256 = "nQkna1r8wSjTPEWp9RxOz45FVmz97NHzTlb4Hh5lXcs=";
+    sha256 = "XSqlQyc6gJthchfmq29d5+OVVSaxYG7zpVZNFZpl67s=";
   };
 
   dontConfigure = true;
@@ -124,7 +127,7 @@ stdenv.mkDerivation rec {
 
       ln -sf $BINARYWRAPPER $out/bin/brave
 
-      for exe in $out/opt/brave.com/brave/{brave,crashpad_handler}; do
+      for exe in $out/opt/brave.com/brave/{brave,chrome_crashpad_handler}; do
       patchelf \
           --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
           --set-rpath "${rpath}" $exe
@@ -154,6 +157,11 @@ stdenv.mkDerivation rec {
       ln -sf ${xdg-utils}/bin/xdg-mime $out/opt/brave.com/brave/xdg-mime
 
       runHook postInstall
+  '';
+
+  preFixup = ''
+    # Add command line args to wrapGApp.
+    gappsWrapperArgs+=(--add-flags ${lib.escapeShellArg commandLineArgs})
   '';
 
   installCheckPhase = ''

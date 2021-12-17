@@ -186,7 +186,12 @@ in
   config = mkIf (cfg.ssh.enable || cfg.pam.enable) {
     environment.systemPackages = [ pkgs.duo-unix ];
 
-    security.wrappers.login_duo.source = "${pkgs.duo-unix.out}/bin/login_duo";
+    security.wrappers.login_duo =
+      { setuid = true;
+        owner = "root";
+        group = "root";
+        source = "${pkgs.duo-unix.out}/bin/login_duo";
+      };
 
     system.activationScripts = {
       login_duo = mkIf cfg.ssh.enable ''

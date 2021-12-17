@@ -1,4 +1,4 @@
-{ config, lib, pkgs, baseModules, extraModules, modules, modulesPath, ... }:
+{ config, lib, pkgs, extendModules, noUserModules, ... }:
 
 with lib;
 
@@ -6,7 +6,8 @@ let
 
   cfg = config.documentation;
 
-  manualModules = baseModules ++ optionals cfg.nixos.includeAllModules (extraModules ++ modules);
+  /* Modules for which to show options even when not imported. */
+  extraDocModules = [ ../virtualisation/qemu-vm.nix ];
 
   /* For the purpose of generating docs, evaluate options with each derivation
     in `pkgs` (recursively) replaced by a fake with path "\${pkgs.attribute.path}".
@@ -20,13 +21,10 @@ let
     extraSources = cfg.nixos.extraModuleSources;
     options =
       let
-        scrubbedEval = evalModules {
-          modules = [ { nixpkgs.localSystem = config.nixpkgs.localSystem; } ] ++ manualModules;
-          args = (config._module.args) // { modules = [ ]; };
-          specialArgs = {
-            pkgs = scrubDerivations "pkgs" pkgs;
-            inherit modulesPath;
-          };
+        extendNixOS = if cfg.nixos.includeAllModules then extendModules else noUserModules.extendModules;
+        scrubbedEval = extendNixOS {
+          modules = extraDocModules;
+          specialArgs.pkgs = scrubDerivations "pkgs" pkgs;
         };
         scrubDerivations = namePrefix: pkgSet: mapAttrs
           (name: value:
@@ -76,6 +74,10 @@ let
       ];
     };
 
+  # list of man outputs currently active intended for use as default values
+  # for man-related options, thus "man" is included unconditionally.
+  activeManOutputs = [ "man" ] ++ lib.optionals cfg.dev.enable [ "devman" ];
+
 in
 
 {
@@ -120,6 +122,24 @@ in
         '';
       };
 
+      man.manualPages = mkOption {
+        type = types.path;
+        default = pkgs.buildEnv {
+          name = "man-paths";
+          paths = config.environment.systemPackages;
+          pathsToLink = [ "/share/man" ];
+          extraOutputsToInstall = activeManOutputs;
+          ignoreCollisions = true;
+        };
+        defaultText = literalDocBook "all man pages in <option>config.environment.systemPackages</option>";
+        description = ''
+          The manual pages to generate caches for if <option>generateCaches</option>
+          is enabled. Must be a path to a directory with man pages under
+          <literal>/share/man</literal>; see the source for an example.
+          Advanced users can make this a content-addressed derivation to save a few rebuilds.
+        '';
+      };
+
       info.enable = mkOption {
         type = types.bool;
         default = true;
@@ -145,11 +165,11 @@ in
         description = ''
           Whether to install documentation targeted at developers.
           <itemizedlist>
-          <listitem><para>This includes man pages targeted at developers if <option>man.enable</option> is
+          <listitem><para>This includes man pages targeted at developers if <option>documentation.man.enable</option> is
                     set (this also includes "devman" outputs).</para></listitem>
-          <listitem><para>This includes info pages targeted at developers if <option>info.enable</option>
+          <listitem><para>This includes info pages targeted at developers if <option>documentation.info.enable</option>
                     is set (this also includes "devinfo" outputs).</para></listitem>
-          <listitem><para>This includes other pages targeted at developers if <option>doc.enable</option>
+          <listitem><para>This includes other pages targeted at developers if <option>documentation.doc.enable</option>
                     is set (this also includes "devdoc" outputs).</para></listitem>
           </itemizedlist>
         '';
@@ -163,10 +183,10 @@ in
           <itemizedlist>
           <listitem><para>This includes man pages like
                     <citerefentry><refentrytitle>configuration.nix</refentrytitle>
-                    <manvolnum>5</manvolnum></citerefentry> if <option>man.enable</option> is
+                    <manvolnum>5</manvolnum></citerefentry> if <option>documentation.man.enable</option> is
                     set.</para></listitem>
           <listitem><para>This includes the HTML manual and the <command>nixos-help</command> command if
-                    <option>doc.enable</option> is set.</para></listitem>
+                    <option>documentation.doc.enable</option> is set.</para></listitem>
           </itemizedlist>
         '';
       };
@@ -189,7 +209,7 @@ in
           Which extra NixOS module paths the generated NixOS's documentation should strip
           from options.
         '';
-        example = literalExample ''
+        example = literalExpression ''
           # e.g. with options from modules in ''${pkgs.customModules}/nix:
           [ pkgs.customModules ]
         '';
@@ -204,19 +224,11 @@ in
     (mkIf cfg.man.enable {
       environment.systemPackages = [ pkgs.man-db ];
       environment.pathsToLink = [ "/share/man" ];
-      environment.extraOutputsToInstall = [ "man" ] ++ optional cfg.dev.enable "devman";
+      environment.extraOutputsToInstall = activeManOutputs;
       environment.etc."man_db.conf".text =
         let
-          manualPages = pkgs.buildEnv {
-            name = "man-paths";
-            paths = config.environment.systemPackages;
-            pathsToLink = [ "/share/man" ];
-            extraOutputsToInstall = ["man"];
-            ignoreCollisions = true;
-          };
-          manualCache = pkgs.runCommandLocal "man-cache" { }
-          ''
-            echo "MANDB_MAP ${manualPages}/share/man $out" > man.conf
+          manualCache = pkgs.runCommandLocal "man-cache" { } ''
+            echo "MANDB_MAP ${cfg.man.manualPages}/share/man $out" > man.conf
             ${pkgs.man-db}/bin/mandb -C man.conf -psc >/dev/null 2>&1
           '';
         in

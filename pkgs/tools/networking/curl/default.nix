@@ -3,12 +3,13 @@
 , idnSupport ? false, libidn ? null
 , ldapSupport ? false, openldap ? null
 , zlibSupport ? true, zlib ? null
-, sslSupport ? zlibSupport, openssl ? null
+, opensslSupport ? zlibSupport, openssl ? null
 , gnutlsSupport ? false, gnutls ? null
 , wolfsslSupport ? false, wolfssl ? null
 , scpSupport ? zlibSupport && !stdenv.isSunOS && !stdenv.isCygwin, libssh2 ? null
-, gssSupport ? with stdenv.hostPlatform; !(
+, gssSupport ? with stdenv.hostPlatform; (
     !isWindows &&
+    # disable gss becuase of: undefined reference to `k5_bcmp'
     # a very sad story re static: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=439039
     !isStatic &&
     # the "mig" tool does not configure its compiler correctly. This could be
@@ -29,10 +30,10 @@ assert http2Support -> nghttp2 != null;
 assert idnSupport -> libidn != null;
 assert ldapSupport -> openldap != null;
 assert zlibSupport -> zlib != null;
-assert sslSupport -> openssl != null;
-assert !(gnutlsSupport && sslSupport);
+assert opensslSupport -> openssl != null;
+assert !(gnutlsSupport && opensslSupport);
 assert !(gnutlsSupport && wolfsslSupport);
-assert !(sslSupport && wolfsslSupport);
+assert !(opensslSupport && wolfsslSupport);
 assert gnutlsSupport -> gnutls != null;
 assert wolfsslSupport -> wolfssl != null;
 assert scpSupport -> libssh2 != null;
@@ -42,26 +43,26 @@ assert gssSupport -> libkrb5 != null;
 
 stdenv.mkDerivation rec {
   pname = "curl";
-  version = "7.76.1";
+  version = "7.79.1";
 
   src = fetchurl {
     urls = [
       "https://curl.haxx.se/download/${pname}-${version}.tar.bz2"
       "https://github.com/curl/curl/releases/download/${lib.replaceStrings ["."] ["_"] pname}-${version}/${pname}-${version}.tar.bz2"
     ];
-    sha256 = "1scmfrp0c27pkd7yva9k50miprjpsyfbb33apx72qc9igm6ii3ks";
+    sha256 = "0lbq73wz44p4fm2gp05mzrqrzfvhlmvlgfg8c8wkj5lkkamw8qny";
   };
 
   patches = [
-    ./CVE-2021-22897.patch
-    ./CVE-2021-22898.patch
-    ./CVE-2021-22901.patch
+    ./7.79.1-darwin-no-systemconfiguration.patch
   ];
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
   separateDebugInfo = stdenv.isLinux;
 
   enableParallelBuilding = true;
+
+  strictDeps = true;
 
   nativeBuildInputs = [ pkg-config perl ];
 
@@ -75,7 +76,7 @@ stdenv.mkDerivation rec {
     optional zlibSupport zlib ++
     optional gssSupport libkrb5 ++
     optional c-aresSupport c-ares ++
-    optional sslSupport openssl ++
+    optional opensslSupport openssl ++
     optional gnutlsSupport gnutls ++
     optional wolfsslSupport wolfssl ++
     optional scpSupport libssh2 ++
@@ -93,15 +94,15 @@ stdenv.mkDerivation rec {
       "--without-ca-bundle"
       "--without-ca-path"
       # The build fails when using wolfssl with --with-ca-fallback
-      ( if wolfsslSupport then "--without-ca-fallback" else "--with-ca-fallback")
+      (lib.withFeature (!wolfsslSupport) "ca-fallback")
       "--disable-manual"
-      ( if sslSupport then "--with-ssl=${openssl.dev}" else "--without-ssl" )
-      ( if gnutlsSupport then "--with-gnutls=${gnutls.dev}" else "--without-gnutls" )
-      ( if scpSupport then "--with-libssh2=${libssh2.dev}" else "--without-libssh2" )
-      ( if ldapSupport then "--enable-ldap" else "--disable-ldap" )
-      ( if ldapSupport then "--enable-ldaps" else "--disable-ldaps" )
-      ( if idnSupport then "--with-libidn=${libidn.dev}" else "--without-libidn" )
-      ( if brotliSupport then "--with-brotli" else "--without-brotli" )
+      (lib.withFeatureAs opensslSupport "openssl" openssl.dev)
+      (lib.withFeatureAs gnutlsSupport "gnutls" gnutls.dev)
+      (lib.withFeatureAs scpSupport "libssh2" libssh2.dev)
+      (lib.enableFeature ldapSupport "ldap")
+      (lib.enableFeature ldapSupport "ldaps")
+      (lib.withFeatureAs idnSupport "libidn" libidn.dev)
+      (lib.withFeature brotliSupport "brotli")
     ]
     ++ lib.optional wolfsslSupport "--with-wolfssl=${wolfssl.dev}"
     ++ lib.optional c-aresSupport "--enable-ares=${c-ares}"
@@ -133,7 +134,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    inherit sslSupport openssl;
+    inherit opensslSupport openssl;
   };
 
   meta = with lib; {
@@ -142,5 +143,7 @@ stdenv.mkDerivation rec {
     license = licenses.curl;
     maintainers = with maintainers; [ lovek323 ];
     platforms = platforms.all;
+    # Fails to link against static brotli or gss
+    broken = stdenv.hostPlatform.isStatic && (brotliSupport || gssSupport);
   };
 }

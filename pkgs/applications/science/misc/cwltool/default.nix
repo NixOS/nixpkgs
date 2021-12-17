@@ -1,22 +1,35 @@
 { lib
-, python3Packages
+, fetchFromGitHub
+, git
+, nodejs
+, python3
 }:
 
-python3Packages.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "cwltool";
-  version = "3.1.20210628163208";
+  version = "3.1.20211104071347";
+  format = "setuptools";
 
-  src = python3Packages.fetchPypi {
-    inherit pname version;
-    sha256 = "21b885f725420413d2f87eadc5e81c08a9c91beceda89b35d1a702ec4df47e52";
+  disabled = python3.pythonOlder "3.6";
+
+  src = fetchFromGitHub {
+    owner = "common-workflow-language";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-tp4SdilW2PKav7b3/BchXYl33W9U0aQH6FPdOhHSvIQ=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace 'prov == 1.5.1' 'prov'
+      --replace 'prov == 1.5.1' 'prov' \
+      --replace "setup_requires=PYTEST_RUNNER," ""
   '';
 
-  propagatedBuildInputs = with python3Packages; [
+  nativeBuildInputs = [
+    git
+  ];
+
+  propagatedBuildInputs = with python3.pkgs; [
     argcomplete
     bagit
     coloredlogs
@@ -24,18 +37,41 @@ python3Packages.buildPythonApplication rec {
     prov
     psutil
     pydot
+    rdflib
+    requests
+    ruamel-yaml
     schema-salad
     shellescape
     typing-extensions
   ];
 
-  doCheck = false; # hard to setup
-  pythonImportsCheck = [ "cwltool" ];
+  checkInputs = with python3.pkgs; [
+    mock
+    nodejs
+    pytest-mock
+    pytest-xdist
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    "test_content_types"
+    "test_env_filtering"
+    "test_http_path_mapping"
+  ];
+
+  disabledTestPaths = [
+    "tests/test_udocker.py"
+    "tests/test_provenance.py"
+  ];
+
+  pythonImportsCheck = [
+    "cwltool"
+  ];
 
   meta = with lib; {
+    description = "Common Workflow Language reference implementation";
     homepage = "https://www.commonwl.org";
     license = with licenses; [ asl20 ];
-    description = "Common Workflow Language reference implementation";
     maintainers = with maintainers; [ veprbl ];
   };
 }

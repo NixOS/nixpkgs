@@ -9,9 +9,9 @@ let
     sha256 = "sha256-h7sCjUcP0bhRaTSbRMVdW3M3M9wtUN3xGW4CZyXq0DQ=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config gperf ];
   buildInputs = [
-    glib gperf util-linux kmod
+    glib util-linux kmod
   ];
 in
 stdenv.mkDerivation {
@@ -53,7 +53,7 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl2Plus ;
     maintainers = [lib.maintainers.raskin];
     platforms = lib.platforms.linux;
-    homepage = "https://www.gentoo.org/proj/en/eudev/";
+    homepage = "https://wiki.gentoo.org/wiki/Project:Eudev";
     downloadPage = "http://dev.gentoo.org/~blueness/eudev/";
     updateWalker = true;
   };

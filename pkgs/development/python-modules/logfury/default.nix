@@ -2,30 +2,49 @@
 , buildPythonPackage
 , fetchPypi
 , funcsigs
-, six
+, setuptools-scm
+, pytestCheckHook
+, pythonOlder
+, testfixtures
 }:
 
 buildPythonPackage rec {
   pname = "logfury";
-  version = "0.1.2";
+  version = "1.0.1";
+
+  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1lywirv3d1lw691mc4mfpz7ak6r49klri43bbfgdnvsfppxminj2";
+    sha256 = "sha256-EwpdrOq5rVNJJCUt33BIKqLJZmKzo4JafTCYHQO3aiY=";
   };
+
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = [
     funcsigs
-    six
   ];
 
-  # No tests
-  doCheck = false;
+  checkInputs = [
+    pytestCheckHook
+    testfixtures
+  ];
 
-  meta = {
-    description = "Logfury is for python library maintainers. It allows for responsible, low-boilerplate logging of method calls.";
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "'setuptools_scm<6.0'" "'setuptools_scm'"
+  '';
+
+  pythonImportsCheck = [
+    "logfury"
+  ];
+
+  meta = with lib; {
+    description = "Python module that allows for responsible, low-boilerplate logging of method calls";
     homepage = "https://github.com/ppolewicz/logfury";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ jwiegley ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ jwiegley ];
   };
 }

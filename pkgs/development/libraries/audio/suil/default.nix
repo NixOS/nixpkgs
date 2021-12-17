@@ -31,6 +31,6 @@ stdenv.mkDerivation rec {
     description = "A lightweight C library for loading and wrapping LV2 plugin UIs";
     license = licenses.mit;
     maintainers = with maintainers; [ goibhniu ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

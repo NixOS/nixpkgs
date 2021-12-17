@@ -21,13 +21,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "amdvlk";
-  version = "2021.Q3.2";
+  version = "2021.Q4.1";
 
   src = fetchRepoProject {
     name = "${pname}-src";
     manifest = "https://github.com/GPUOpen-Drivers/AMDVLK.git";
     rev = "refs/tags/v-${version}";
-    sha256 = "q860VD6hUs1U9mlkj/vqkLT/4zqGqQl4JI/flyDwhC8=";
+    sha256 = "sha256-yvpHLreBNhiSxnZis5+XcTOSZPRLq5K8YNJsjpYqD6s=";
   };
 
   buildInputs = [
@@ -64,9 +64,6 @@ in stdenv.mkDerivation rec {
   ];
 
   cmakeDir = "../drivers/xgl";
-
-  # LTO is disabled in gcc for i686 as of #66528
-  cmakeFlags = lib.optionals stdenv.is32bit ["-DXGL_ENABLE_LTO=OFF"];
 
   installPhase = ''
     install -Dm755 -t $out/lib icd/amdvlk${suffix}.so

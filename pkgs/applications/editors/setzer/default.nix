@@ -18,13 +18,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "setzer";
-  version = "0.4.1";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "cvfosammmm";
     repo = "Setzer";
     rev = "v${version}";
-    sha256 = "1rcx2c07jg1ij81pnvg3px49hfbjmkagn68d3gp79z3gcajbp2av";
+    sha256 = "sha256-uh6mXXJP/EpfvHTXL7PH+Yd1F5Q+6B01ns4vRr/2Xqo=";
   };
 
   format = "other";
@@ -53,6 +53,7 @@ python3.pkgs.buildPythonApplication rec {
     pyxdg
     pdfminer
     pycairo
+    pexpect
   ];
 
   checkPhase = ''

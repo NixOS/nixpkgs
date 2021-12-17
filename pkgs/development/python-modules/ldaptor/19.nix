@@ -8,7 +8,6 @@
 , service-identity
 , zope_interface
 , isPy3k
-, python
 }:
 
 buildPythonPackage rec {

@@ -14,6 +14,8 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : with lib; {
       imports = [ common/user-account.nix ];
 
       virtualisation.memorySize = if pkgs.stdenv.is64bit then 4096 else 2047;
+      virtualisation.cores = 4;
+      virtualisation.useNixStoreImage = true;
       systemd.services.gitlab.serviceConfig.Restart = mkForce "no";
       systemd.services.gitlab-workhorse.serviceConfig.Restart = mkForce "no";
       systemd.services.gitaly.serviceConfig.Restart = mkForce "no";
@@ -145,7 +147,8 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : with lib; {
       )
       gitlab.succeed("systemd-tmpfiles --create")
       gitlab.succeed("rm -rf ${nodes.gitlab.config.services.postgresql.dataDir}")
-      gitlab.systemctl("start gitlab-config.service gitlab-postgresql.service")
+      gitlab.systemctl("start gitlab-config.service gitaly.service gitlab-postgresql.service")
+      gitlab.wait_for_file("${nodes.gitlab.config.services.gitlab.statePath}/tmp/sockets/gitaly.socket")
       gitlab.succeed(
           "sudo -u gitlab -H gitlab-rake gitlab:backup:restore RAILS_ENV=production BACKUP=dump force=yes"
       )

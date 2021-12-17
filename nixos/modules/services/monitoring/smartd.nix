@@ -125,6 +125,7 @@ in
         mail = {
           enable = mkOption {
             default = config.services.mail.sendmailSetuidWrapper != null;
+            defaultText = literalExpression "config.services.mail.sendmailSetuidWrapper != null";
             type = types.bool;
             description = "Whenever to send e-mail notifications.";
           };
@@ -169,12 +170,14 @@ in
         x11 = {
           enable = mkOption {
             default = config.services.xserver.enable;
+            defaultText = literalExpression "config.services.xserver.enable";
             type = types.bool;
             description = "Whenever to send X11 xmessage notifications.";
           };
 
           display = mkOption {
             default = ":${toString config.services.xserver.display}";
+            defaultText = literalExpression ''":''${toString config.services.xserver.display}"'';
             type = types.str;
             description = "DISPLAY to send X11 notifications to.";
           };

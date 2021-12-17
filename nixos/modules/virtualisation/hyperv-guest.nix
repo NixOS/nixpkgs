@@ -34,7 +34,7 @@ in {
       initrd.availableKernelModules = [ "hyperv_keyboard" ];
 
       kernelParams = [
-        "video=hyperv_fb:${cfg.videoMode} elevator=noop"
+        "video=hyperv_fb:${cfg.videoMode}" "elevator=noop"
       ];
     };
 

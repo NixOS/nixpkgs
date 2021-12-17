@@ -2,7 +2,7 @@ diff --git a/platform/gsutil/gslib/command_runner.py b/platform/gsutil/gslib/com
 index f490bb3..dc6bbcc 100644
 --- a/platform/gsutil/gslib/command_runner.py
 +++ b/platform/gsutil/gslib/command_runner.py
-@@ -330,17 +330,6 @@ class CommandRunner(object):
+@@ -330,18 +330,6 @@ class CommandRunner(object):
      Returns:
        Return value(s) from Command that was run.
      """
@@ -17,10 +17,11 @@ index f490bb3..dc6bbcc 100644
 -      if system_util.IsRunningInteractively() and collect_analytics:
 -        metrics.CheckAndMaybePromptForAnalyticsEnabling()
 -
+-    self.MaybePromptForPythonUpdate(command_name)
+ 
      if not args:
        args = []
- 
-@@ -413,18 +402,10 @@ class CommandRunner(object):
+@@ -415,15 +403,6 @@ class CommandRunner(object):
        ShutDownGsutil()
      if GetFailureCount() > 0:
        return_code = 1
@@ -34,6 +35,10 @@ index f490bb3..dc6bbcc 100644
 -              'issued prior to the update was not executed and should be re-run.'
 -          )))
      return return_code
+ 
+   def SkipUpdateCheck(self):
+@@ -467,6 +446,7 @@ class CommandRunner(object):
+     return True
  
    def MaybeCheckForAndOfferSoftwareUpdate(self, command_name, debug):
 +    return False

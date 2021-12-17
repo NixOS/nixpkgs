@@ -12,14 +12,15 @@
 
 buildPythonPackage rec {
   pname = "gios";
-  version = "2.0.0";
-  disabled = pythonOlder "3.7";
+  version = "2.1.0";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "bieniu";
     repo = pname;
     rev = version;
-    sha256 = "1xbbp08ssan0b9j6s3vzg8cn421avc0xvahx5fvrb8kcbzkg8ssl";
+    sha256 = "sha256-WjuDsu0EA+KtErusw5VADyvleVegXHCTEkuQ1lU/SRU=";
   };
 
   propagatedBuildInputs = [

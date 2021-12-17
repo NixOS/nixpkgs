@@ -1,22 +1,31 @@
-{ lib, stdenv, rustPlatform, cmake, fetchFromGitHub, pkg-config, openssl
-, libiconv, Security }:
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, cmake
+, pkg-config
+, stdenv
+, libiconv
+, Security
+, SystemConfiguration
+, openssl
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "gitoxide";
-  version = "0.7.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "Byron";
     repo = "gitoxide";
     rev = "v${version}";
-    sha256 = "12f5qrrfjfqp1aph2nmfi9nyzs1ndvgrb3y53mrszm9kf7fa6pyg";
+    sha256 = "sha256-c29gmmkIOyS+HNq2kv53yq+sdEDmQbSmcvVGcd55/hk=";
   };
 
-  cargoSha256 = "0gw19zdxbkgnj1kcyqn1naj1dnhsx10j860m0xgs5z7bbvfg82p6";
+  cargoSha256 = "sha256-oc7XpiOZj4bfqdwrEHj/CzNtWzYWFkgMJOySJNgxAGQ=";
 
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = if stdenv.isDarwin
-    then [ libiconv Security ]
+    then [ libiconv Security SystemConfiguration ]
     else [ openssl ];
 
   # Needed to get openssl-sys to use pkg-config.
@@ -25,7 +34,8 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "A command-line application for interacting with git repositories";
     homepage = "https://github.com/Byron/gitoxide";
+    changelog = "https://github.com/Byron/gitoxide/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit /* or */ asl20 ];
-    maintainers = [ maintainers.syberant ];
+    maintainers = with maintainers; [ syberant ];
   };
 }

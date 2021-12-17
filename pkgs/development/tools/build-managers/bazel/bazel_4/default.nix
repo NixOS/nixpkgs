@@ -1,4 +1,4 @@
-{ stdenv, callPackage, lib, fetchurl, fetchFromGitHub, installShellFiles
+{ stdenv, callPackage, lib, fetchurl, fetchpatch, fetchFromGitHub, installShellFiles
 , runCommand, runCommandCC, makeWrapper, recurseIntoAttrs
 # this package (through the fixpoint glass)
 , bazel_self
@@ -27,12 +27,12 @@
 }:
 
 let
-  version = "4.1.0";
+  version = "4.2.1";
   sourceRoot = ".";
 
   src = fetchurl {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    sha256 = "1svf9n345m0ag05hlcw3cwsl6bw2imcn4da25yyzcl3ar5axfxzk";
+    sha256 = "Eup6oR4r2xLeHc65k5oi6W9aSAQ3yxfBIzedjg/fXoI=";
   };
 
   # Update with `eval $(nix-build -A bazel.updater)`,
@@ -40,7 +40,7 @@ let
   srcDeps = lib.attrsets.attrValues srcDepsSet;
   srcDepsSet =
     let
-      srcs = (builtins.fromJSON (builtins.readFile ./src-deps.json));
+      srcs = lib.importJSON ./src-deps.json;
       toFetchurl = d: lib.attrsets.nameValuePair d.name (fetchurl {
         urls = d.urls;
         sha256 = d.sha256;
@@ -56,7 +56,7 @@ let
        else srcs."java_tools_javac11_linux-v10.6.zip")
       srcs."coverage_output_generator-v2.5.zip"
       srcs.build_bazel_rules_nodejs
-      srcs."android_tools_pkg-0.19.0rc3.tar.gz"
+      srcs."android_tools_pkg-0.23.0.tar.gz"
       srcs.bazel_toolchains
       srcs.com_github_grpc_grpc
       srcs.upb
@@ -177,7 +177,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/bazelbuild/bazel/";
     description = "Build tool that builds code quickly and reliably";
     license = licenses.asl20;
-    maintainers = [ maintainers.mboes ];
+    maintainers = lib.teams.bazel.members;
     inherit platforms;
   };
 
@@ -213,6 +213,14 @@ stdenv.mkDerivation rec {
     (substituteAll {
       src = ../bazel_rc.patch;
       bazelSystemBazelRCPath = bazelRC;
+    })
+
+    # On macOS Monterey, protoc segfaults.
+    # Issue: https://github.com/bazelbuild/bazel/issues/14216
+    # Fix: https://github.com/bazelbuild/bazel/pull/14275
+    (fetchpatch {
+      url = "https://github.com/bazelbuild/bazel/commit/ae0a6c98d4f94abedbedb2d51c27de5febd7df67.patch";
+      sha256 = "sha256-YcdxqjTMGI86k1wgFqxJqghv0kknAjlFQFpt4VccCTE=";
     })
   ] ++ lib.optional enableNixHacks ../nix-hacks.patch;
 
@@ -434,8 +442,8 @@ stdenv.mkDerivation rec {
       substituteInPlace tools/objc/j2objc_dead_code_pruner.py --replace "$!/usr/bin/python2.7" "#!${python27}/bin/python"
 
       # md5sum is part of coreutils
-      sed -i 's|/sbin/md5|md5sum|' \
-        src/BUILD
+      sed -i 's|/sbin/md5|md5sum|g' \
+        src/BUILD third_party/ijar/test/testenv.sh tools/objc/libtool.sh
 
       # replace initial value of pythonShebang variable in BazelPythonSemantics.java
       substituteInPlace src/main/java/com/google/devtools/build/lib/bazel/rules/python/BazelPythonSemantics.java \
@@ -617,7 +625,9 @@ stdenv.mkDerivation rec {
       ./bazel_src/output/bazel-complete.fish
   '';
 
-  doInstallCheck = true;
+  # Install check fails on `aarch64-darwin`
+  # https://github.com/NixOS/nixpkgs/issues/145587
+  doInstallCheck = stdenv.hostPlatform.system != "aarch64-darwin";
   installCheckPhase = ''
     export TEST_TMPDIR=$(pwd)
 

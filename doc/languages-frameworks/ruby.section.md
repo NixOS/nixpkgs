@@ -8,7 +8,7 @@ In the Nixpkgs tree, Ruby packages can be found throughout, depending on what th
 
 There are two main approaches for using Ruby with gems. One is to use a specifically locked `Gemfile` for an application that has very strict dependencies. The other is to depend on the common gems, which we'll explain further down, and rely on them being updated regularly.
 
-The interpreters have common attributes, namely `gems`, and `withPackages`. So you can refer to `ruby.gems.nokogiri`, or `ruby_2_6.gems.nokogiri` to get the Nokogiri gem already compiled and ready to use.
+The interpreters have common attributes, namely `gems`, and `withPackages`. So you can refer to `ruby.gems.nokogiri`, or `ruby_2_7.gems.nokogiri` to get the Nokogiri gem already compiled and ready to use.
 
 Since not all gems have executables like `nokogiri`, it's usually more convenient to use the `withPackages` function like this: `ruby.withPackages (p: with p; [ nokogiri ])`. This will also make sure that the Ruby in your environment will be able to find the gem and it can be used in your Ruby code (for example via `ruby` or `irb` executables) via `require "nokogiri"` as usual.
 
@@ -200,6 +200,19 @@ $ nix-shell --run 'ruby -rpg -e "puts PG.library_version"'
 ```
 
 Of course for this use-case one could also use overlays since the configuration for `pg` depends on the `postgresql` alias, but for demonstration purposes this has to suffice.
+
+### Platform-specific gems
+
+Right now, bundix has some issues with pre-built, platform-specific gems: [bundix PR #68](https://github.com/nix-community/bundix/pull/68).
+Until this is solved, you can tell bundler to not use platform-specific gems and instead build them from source each time:
+- globally (will be set in `~/.config/.bundle/config`):
+```shell
+$ bundle config set force_ruby_platform true
+```
+- locally (will be set in `<project-root>/.bundle/config`):
+```shell
+$ bundle config set --local force_ruby_platform true
+```
 
 ### Adding a gem to the default gemset {#adding-a-gem-to-the-default-gemset}
 

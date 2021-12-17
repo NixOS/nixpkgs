@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "smart-open";
-  version = "5.1.0";
+  version = "5.2.1";
 
   disabled = pythonOlder "3.5";
 
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "RaRe-Technologies";
     repo = "smart_open";
     rev = "v${version}";
-    sha256 = "0gv3vxpglnhh6d80wsqigxi7psn6s7ylz20kx5ahblcx5rqyhjmi";
+    sha256 = "13a1qsb4vwrhx45hz4qcl0d7bgv20ai5vsy7cq0q6qbj212nff19";
   };
 
   propagatedBuildInputs = [

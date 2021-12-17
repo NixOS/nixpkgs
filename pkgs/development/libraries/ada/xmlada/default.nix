@@ -9,14 +9,14 @@
 
 stdenv.mkDerivation rec {
   pname = "xmlada";
-  version = "21.0.0";
+  version = "22.0.0";
 
   src = fetchFromGitHub {
     name = "xmlada-${version}-src";
     owner = "AdaCore";
     repo = "xmlada";
     rev = "v${version}";
-    sha256 = "00vljkvck951nj853v9sda5qbfm1mp8y2k61ja2595rmp8qcrazw";
+    sha256 = "1pg6m0sfc1vwvd18r80jv2vwrsb2qgvyl8jmmrmpbdni0npx0kv3";
   };
 
   nativeBuildInputs = [

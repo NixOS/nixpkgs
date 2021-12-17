@@ -2,6 +2,7 @@
 , lib
 , fetchurl
 , autoreconfHook
+, autoconf-archive
 , pkg-config
 , perl
 , python3
@@ -13,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pcsclite";
-  version = "1.9.1";
+  version = "1.9.4";
 
   outputs = [ "bin" "out" "dev" "doc" "man" ];
 
   src = fetchurl {
     url = "https://pcsclite.apdu.fr/files/pcsc-lite-${version}.tar.bz2";
-    sha256 = "sha256-c8R4m3h2qDOnD0k82iFlXf6FaJ2bfilwHCQyduVeaDo=";
+    sha256 = "sha256:0jqwnpywk9ka3q88b1k93p8s0xhmx1isdpcqa80nd8p04z1am34a";
   };
 
   patches = [ ./no-dropdir-literals.patch ];
@@ -55,7 +56,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ autoreconfHook pkg-config perl ];
+  nativeBuildInputs = [ autoreconfHook autoconf-archive pkg-config perl ];
 
   buildInputs = [ python3 ]
     ++ lib.optionals stdenv.isLinux [ dbus polkit systemd ]

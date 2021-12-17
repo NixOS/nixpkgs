@@ -2,34 +2,30 @@
 , stdenv
 , buildGoModule
 , fetchFromGitHub
+, fuse
+, makeWrapper
 , openssl
 , pandoc
 , pkg-config
 , libfido2
 }:
 
-let
-  # pandoc is currently broken on aarch64-darwin
-  # because of missing ghc
-  brokenPandoc = stdenv.isDarwin && stdenv.isAarch64;
-in
-
 buildGoModule rec {
   pname = "gocryptfs";
-  version = "2.0.1";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "rfjakob";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0wiagmym8mwi0vpvrs5ryn3zjwha8ilh7xkavvkd1gqd5laln0kp";
+    sha256 = "sha256-qERtX9UcdMolbffzPiVQlblirzJ5baOmHonJIO8ang0=";
   };
 
-  vendorSha256 = "10az8n7z4rhsk1af2x6v3pmxg4zp7c9cal35ily8bdzzcb9cpgs0";
+  vendorSha256 = "sha256-yJ7RYwhArgmGlFmSplrX1hiLkc7FkS1qQCUcRlbnNWQ=";
 
   nativeBuildInputs = [
+    makeWrapper
     pkg-config
-  ] ++ lib.optionals (!brokenPandoc) [
     pandoc
   ];
 
@@ -37,16 +33,15 @@ buildGoModule rec {
 
   propagatedBuildInputs = [ libfido2 ];
 
-  buildFlagsArray = ''
-    -ldflags=
-      -X main.GitVersion=${version}
-      -X main.GitVersionFuse=[vendored]
-      -X main.BuildDate=unknown
-  '';
+  ldflags = [
+    "-X main.GitVersion=${version}"
+    "-X main.GitVersionFuse=[vendored]"
+    "-X main.BuildDate=unknown"
+  ];
 
   subPackages = [ "." "gocryptfs-xray" "contrib/statfs" ];
 
-  postBuild = lib.optionalString (!brokenPandoc) ''
+  postBuild = ''
     pushd Documentation/
     mkdir -p $out/share/man/man1
     # taken from Documentation/MANPAGE-render.bash
@@ -54,6 +49,14 @@ buildGoModule rec {
     pandoc MANPAGE-XRAY.md -s -t man -o $out/share/man/man1/gocryptfs-xray.1
     pandoc MANPAGE-STATFS.md -s -t man -o $out/share/man/man1/statfs.1
     popd
+  '';
+
+  # use --suffix here to ensure we don't shadow /run/wrappers/bin/fusermount,
+  # as the setuid wrapper is required to use gocryptfs as non-root on NixOS
+  postInstall = ''
+    wrapProgram $out/bin/gocryptfs \
+      --suffix PATH : ${lib.makeBinPath [ fuse ]}
+    ln -s $out/bin/gocryptfs $out/bin/mount.fuse.gocryptfs
   '';
 
   meta = with lib; {

@@ -56,6 +56,7 @@ in
 , mainProgram ? null
 , doCoverage ? false
 , doHaddock ? !(ghc.isHaLVM or false)
+, doHaddockInterfaces ? doHaddock && lib.versionAtLeast ghc.version "9.0.1"
 , passthru ? {}
 , pkg-configDepends ? [], libraryPkgconfigDepends ? [], executablePkgconfigDepends ? [], testPkgconfigDepends ? [], benchmarkPkgconfigDepends ? []
 , testDepends ? [], testHaskellDepends ? [], testSystemDepends ? [], testFrameworkDepends ? []
@@ -226,7 +227,11 @@ let
   ] ++ optionals isCross ([
     "--configure-option=--host=${stdenv.hostPlatform.config}"
   ] ++ crossCabalFlags
-  ) ++ optionals enableSeparateBinOutput ["--bindir=${binDir}"];
+  ) ++ optionals enableSeparateBinOutput [
+    "--bindir=${binDir}"
+  ] ++ optionals (doHaddockInterfaces && isLibrary) [
+    "--ghc-options=-haddock"
+  ];
 
   setupCompileFlags = [
     (optionalString (!coreSetup) "-${nativePackageDbFlag}=$setupPackageConfDir")

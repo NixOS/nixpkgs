@@ -17,21 +17,23 @@
 , makeFontsConf
 , libglvnd
 , libxkbcommon
+, stdenv
+, enableWayland ? stdenv.isLinux
 , wayland
 , xorg
 }:
 rustPlatform.buildRustPackage rec {
   pname = "neovide";
-  version = "unstable-2021-08-08";
+  version = "unstable-2021-10-09";
 
   src = fetchFromGitHub {
     owner = "Kethku";
     repo = "neovide";
-    rev = "725f12cafd4a26babd0d6bbcbca9a99c181991ac";
-    sha256 = "sha256-ThMobWKe3wHhR15TmmKrI6Gp1wvGVfJ52MzibK0ubkc=";
+    rev = "7f76ad4764197ba75bb9263d25b265d801563ccf";
+    sha256 = "sha256-kcP0WSk3quTaWCGQYN4zYlDQ9jhx/Vu6AamSLGFszwQ=";
   };
 
-  cargoSha256 = "sha256-5lOGncnyA8DwetY5bU6k2KXNClFgp+xIBEeA0/iwGF0=";
+  cargoSha256 = "sha256-TQEhz9FtvIb/6Qtyz018dPle0+nub1oMZMFtKAqYcoI=";
 
   SKIA_SOURCE_DIR =
     let
@@ -96,9 +98,18 @@ rustPlatform.buildRustPackage rec {
     }))
   ];
 
-  postFixup = ''
+  postFixup = let
+    libPath = lib.makeLibraryPath ([
+      libglvnd
+      libxkbcommon
+      xorg.libXcursor
+      xorg.libXext
+      xorg.libXrandr
+      xorg.libXi
+    ] ++ lib.optionals enableWayland [ wayland ]);
+  in ''
       wrapProgram $out/bin/neovide \
-        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libglvnd libxkbcommon wayland xorg.libXcursor xorg.libXext xorg.libXrandr xorg.libXi ]}
+        --prefix LD_LIBRARY_PATH : ${libPath}
     '';
 
   postInstall = ''
@@ -115,6 +126,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Kethku/neovide";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ ck3d ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
+    mainProgram = "neovide";
   };
 }

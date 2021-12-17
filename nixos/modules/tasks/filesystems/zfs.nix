@@ -8,6 +8,7 @@ with lib;
 let
 
   cfgZfs = config.boot.zfs;
+  cfgExpandOnBoot = config.services.zfs.expandOnBoot;
   cfgSnapshots = config.services.zfs.autoSnapshot;
   cfgSnapFlags = cfgSnapshots.flags;
   cfgScrub = config.services.zfs.autoScrub;
@@ -103,7 +104,7 @@ in
         readOnly = true;
         type = types.package;
         default = if config.boot.zfs.enableUnstable then pkgs.zfsUnstable else pkgs.zfs;
-        defaultText = "if config.boot.zfs.enableUnstable then pkgs.zfsUnstable else pkgs.zfs";
+        defaultText = literalExpression "if config.boot.zfs.enableUnstable then pkgs.zfsUnstable else pkgs.zfs";
         description = "Configured ZFS userland tools package.";
       };
 
@@ -149,7 +150,6 @@ in
       devNodes = mkOption {
         type = types.path;
         default = "/dev/disk/by-id";
-        example = "/dev/disk/by-id";
         description = ''
           Name of directory from which to import ZFS devices.
 
@@ -200,7 +200,6 @@ in
           an interactive prompt (keylocation=prompt) and from a file (keylocation=file://).
         '';
       };
-
     };
 
     services.zfs.autoSnapshot = {
@@ -327,6 +326,23 @@ in
       };
     };
 
+    services.zfs.expandOnBoot = mkOption {
+      type = types.either (types.enum [ "disabled" "all" ]) (types.listOf types.str);
+      default = "disabled";
+      example = [ "tank" "dozer" ];
+      description = ''
+        After importing, expand each device in the specified pools.
+
+        Set the value to the plain string "all" to expand all pools on boot:
+
+            services.zfs.expandOnBoot = "all";
+
+        or set the value to a list of pools to expand the disks of specific pools:
+
+            services.zfs.expandOnBoot = [ "tank" "dozer" ];
+      '';
+    };
+
     services.zfs.zed = {
       enableMail = mkEnableOption "ZED's ability to send emails" // {
         default = cfgZfs.package.enableMail;
@@ -334,7 +350,7 @@ in
 
       settings = mkOption {
         type = with types; attrsOf (oneOf [ str int bool (listOf str) ]);
-        example = literalExample ''
+        example = literalExpression ''
           {
             ZED_DEBUG_LOG = "/tmp/zed.debug.log";
 
@@ -545,7 +561,8 @@ in
                                   then cfgZfs.requestEncryptionCredentials
                                   else cfgZfs.requestEncryptionCredentials != []) ''
                   ${cfgZfs.package}/sbin/zfs list -rHo name,keylocation ${pool} | while IFS=$'\t' read ds kl; do
-                    (${optionalString (!isBool cfgZfs.requestEncryptionCredentials) ''
+                    {
+                      ${optionalString (!isBool cfgZfs.requestEncryptionCredentials) ''
                          if ! echo '${concatStringsSep "\n" cfgZfs.requestEncryptionCredentials}' | grep -qFx "$ds"; then
                            continue
                          fi
@@ -559,7 +576,8 @@ in
                       * )
                         ${cfgZfs.package}/sbin/zfs load-key "$ds"
                         ;;
-                    esac) < /dev/null # To protect while read ds kl in case anything reads stdin
+                    esac
+                    } < /dev/null # To protect while read ds kl in case anything reads stdin
                   done
                 ''}
                 echo "Successfully imported ${pool}"
@@ -586,6 +604,7 @@ in
               ${cfgZfs.package}/sbin/zfs set nixos:shutdown-time="$(date)" "${pool}"
             '';
           };
+
         createZfsService = serv:
           nameValuePair serv {
             after = [ "systemd-modules-load.service" ];
@@ -607,6 +626,86 @@ in
           };
 
       systemd.targets.zfs.wantedBy = [ "multi-user.target" ];
+    })
+
+    (mkIf (cfgZfs.enabled && cfgExpandOnBoot != "disabled") {
+      systemd.services."zpool-expand@" = {
+        description = "Expand ZFS pools";
+        after = [ "zfs.target" ];
+
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+        };
+
+        scriptArgs = "%i";
+        path = [ pkgs.gawk cfgZfs.package ];
+
+        # ZFS has no way of enumerating just devices in a pool in a way
+        # that 'zpool online -e' supports. Thus, we've implemented a
+        # bit of a strange approach of highlighting just devices.
+        # See: https://github.com/openzfs/zfs/issues/12505
+        script = let
+          # This UUID has been chosen at random and is to provide a
+          # collision-proof, predictable token to search for
+          magicIdentifier = "NIXOS-ZFS-ZPOOL-DEVICE-IDENTIFIER-37108bec-aff6-4b58-9e5e-53c7c9766f05";
+          zpoolScripts = pkgs.writeShellScriptBin "device-highlighter" ''
+            echo "${magicIdentifier}"
+          '';
+        in ''
+          pool=$1
+
+          echo "Expanding all devices for $pool."
+
+          # Put our device-highlighter script it to the PATH
+          export ZPOOL_SCRIPTS_PATH=${zpoolScripts}/bin
+
+          # Enable running our precisely specified zpool script as root
+          export ZPOOL_SCRIPTS_AS_ROOT=1
+
+          devices() (
+            zpool status -c device-highlighter "$pool" \
+             | awk '($2 == "ONLINE" && $6 == "${magicIdentifier}") { print $1; }'
+          )
+
+          for device in $(devices); do
+            echo "Attempting to expand $device of $pool..."
+            if ! zpool online -e "$pool" "$device"; then
+              echo "Failed to expand '$device' of '$pool'."
+            fi
+          done
+        '';
+      };
+
+      systemd.services."zpool-expand-pools" =
+        let
+          # Create a string, to be interpolated in a bash script
+          # which enumerates all of the pools to expand.
+          # If the `pools` option is `true`, we want to dynamically
+          # expand every pool. Otherwise we want to enumerate
+          # just the specifically provided list of pools.
+          poolListProvider = if cfgExpandOnBoot == "all"
+            then "$(zpool list -H | awk '{print $1}')"
+            else lib.escapeShellArgs cfgExpandOnBoot;
+        in
+        {
+          description = "Expand specified ZFS pools";
+          wantedBy = [ "default.target" ];
+          after = [ "zfs.target" ];
+
+          serviceConfig = {
+            Type = "oneshot";
+            RemainAfterExit = true;
+          };
+
+          path = [ pkgs.gawk cfgZfs.package ];
+
+          script = ''
+            for pool in ${poolListProvider}; do
+              systemctl start --no-block "zpool-expand@$pool"
+            done
+          '';
+        };
     })
 
     (mkIf (cfgZfs.enabled && cfgSnapshots.enable) {

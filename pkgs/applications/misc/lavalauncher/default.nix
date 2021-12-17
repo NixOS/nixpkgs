@@ -7,24 +7,26 @@
 , scdoc
 , cairo
 , librsvg
+, libxkbcommon
 , wayland
 , wayland-protocols
 }:
 
 stdenv.mkDerivation rec {
   pname = "lavalauncher";
-  version = "2.0.0";
+  version = "2.1.1";
 
   src = fetchgit {
     url = "https://git.sr.ht/~leon_plickat/lavalauncher";
     rev = "v${version}";
-    sha256 = "MXREycR4ZetTe71ZwEqyozMJN9OLTDvU0W4J8qkTQAs=";
+    sha256 = "hobhZ6s9m2xCdAurdj0EF1BeS88j96133zu+2jb1FMM=";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config scdoc ];
   buildInputs = [
     cairo
     librsvg
+    libxkbcommon
     wayland
     wayland-protocols
   ];

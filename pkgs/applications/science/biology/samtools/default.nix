@@ -1,13 +1,22 @@
-{ lib, stdenv, fetchurl, zlib, htslib, perl, ncurses ? null }:
+{ lib, stdenv, fetchurl, fetchpatch, zlib, htslib, perl, ncurses ? null }:
 
 stdenv.mkDerivation rec {
   pname = "samtools";
-  version = "1.11";
+  version = "1.13";
 
   src = fetchurl {
     url = "https://github.com/samtools/samtools/releases/download/${version}/${pname}-${version}.tar.bz2";
-    sha256 = "1dp5wknak4arnw5ghhif9mmljlfnw5bgm91wib7z0j8wdjywx0z2";
+    sha256 = "sha256-YWyi4FHMgAmh6cAc/Yx8r4twkW3f9m87dpFAeUZfjGA=";
   };
+
+  patches = [
+    # Pull upstream patch for ncurses-6.3 support
+    (fetchpatch {
+      name = "ncurses-6.3.patch";
+      url = "https://github.com/samtools/samtools/commit/396ef20eb0854d6b223c3223b60bb7efe42301f7.patch";
+      sha256 = "sha256-p0l9ymXK9nqL2w8EytbW+qeaI7dD86IQgIVxacBj838=";
+    })
+  ];
 
   nativeBuildInputs = [ perl ];
 

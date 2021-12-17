@@ -3,13 +3,12 @@
 , fetchFromGitHub
 , SDL2
 , cmake
-, epoxy
+, libepoxy
 , ffmpeg
 , imagemagick
 , libedit
 , libelf
 , libzip
-, copyDesktopItems
 , makeDesktopItem
 , minizip
 , pkg-config
@@ -37,7 +36,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     SDL2
-    epoxy
+    libepoxy
     ffmpeg
     imagemagick
     libedit

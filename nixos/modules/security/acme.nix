@@ -77,6 +77,7 @@ let
 
     unitConfig = {
       ConditionPathExists = "!/var/lib/acme/.minica/key.pem";
+      StartLimitIntervalSec = 0;
     };
 
     serviceConfig = commonServiceConfig // {
@@ -162,9 +163,8 @@ let
       [ "--dns" data.dnsProvider ]
       ++ optionals (!data.dnsPropagationCheck) [ "--dns.disable-cp" ]
       ++ optionals (data.dnsResolver != null) [ "--dns.resolvers" data.dnsResolver ]
-    ) else (
-      [ "--http" "--http.webroot" data.webroot ]
-    );
+    ) else if data.listenHTTP != null then [ "--http" "--http.port" data.listenHTTP ]
+    else [ "--http" "--http.webroot" data.webroot ];
 
     commonOpts = [
       "--accept-tos" # Checking the option is covered by the assertions
@@ -192,6 +192,14 @@ let
       ++ data.extraLegoRenewFlags
     );
 
+    # We need to collect all the ACME webroots to grant them write
+    # access in the systemd service.
+    webroots =
+      lib.remove null
+        (lib.unique
+            (builtins.map
+            (certAttrs: certAttrs.webroot)
+            (lib.attrValues config.security.acme.certs)));
   in {
     inherit accountHash cert selfsignedDeps;
 
@@ -227,6 +235,7 @@ let
 
       unitConfig = {
         ConditionPathExists = "!/var/lib/acme/${cert}/key.pem";
+        StartLimitIntervalSec = 0;
       };
 
       serviceConfig = commonServiceConfig // {
@@ -288,6 +297,8 @@ let
           "acme/.lego/accounts/${accountHash}"
         ];
 
+        ReadWritePaths = commonServiceConfig.ReadWritePaths ++ webroots;
+
         # Needs to be space separated, but can't use a multiline string because that'll include newlines
         BindPaths = [
           "${accountDir}:/tmp/accounts"
@@ -304,13 +315,19 @@ let
           if [ -e renewed ]; then
             rm renewed
             ${data.postRun}
+            ${optionalString (data.reloadServices != [])
+                "systemctl --no-block try-reload-or-restart ${escapeShellArgs data.reloadServices}"
+            }
           fi
         '');
+      } // optionalAttrs (data.listenHTTP != null && toInt (elemAt (splitString ":" data.listenHTTP) 1) < 1024) {
+        AmbientCapabilities = "CAP_NET_BIND_SERVICE";
       };
 
       # Working directory will be /tmp
       script = ''
-        set -euxo pipefail
+        ${optionalString data.enableDebugLogs "set -x"}
+        set -euo pipefail
 
         # This reimplements the expiration date check, but without querying
         # the acme server first. By doing this offline, we avoid errors
@@ -423,6 +440,8 @@ let
         default = "_mkMergedOptionModule";
       };
 
+      enableDebugLogs = mkEnableOption "debug logging for this certificate" // { default = cfg.enableDebugLogs; };
+
       webroot = mkOption {
         type = types.nullOr types.str;
         default = null;
@@ -433,6 +452,17 @@ let
           will be created below the webroot if it doesn't exist.
           <literal>http://example.org/.well-known/acme-challenge/</literal> must also
           be available (notice unencrypted HTTP).
+        '';
+      };
+
+      listenHTTP = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = ":1360";
+        description = ''
+          Interface and port to listen on to solve HTTP challenges
+          in the form [INTERFACE]:PORT.
+          If you use a port other than 80, you must proxy port 80 to this port.
         '';
       };
 
@@ -464,6 +494,15 @@ let
         description = "Group running the ACME client.";
       };
 
+      reloadServices = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        description = ''
+          The list of systemd services to call <code>systemctl try-reload-or-restart</code>
+          on.
+        '';
+      };
+
       postRun = mkOption {
         type = types.lines;
         default = "";
@@ -486,7 +525,7 @@ let
       extraDomainNames = mkOption {
         type = types.listOf types.str;
         default = [];
-        example = literalExample ''
+        example = literalExpression ''
           [
             "example.org"
             "mydomain.org"
@@ -592,6 +631,8 @@ in {
   options = {
     security.acme = {
 
+      enableDebugLogs = mkEnableOption "debug logging for all certificates by default" // { default = true; };
+
       validMinDays = mkOption {
         type = types.int;
         default = 30;
@@ -656,7 +697,7 @@ in {
           to those units if they rely on the certificates being present,
           or trigger restarts of the service if certificates get renewed.
         '';
-        example = literalExample ''
+        example = literalExpression ''
           {
             "example.com" = {
               webroot = "/var/lib/acme/acme-challenge/";
@@ -752,6 +793,28 @@ in {
           message = ''
             Options `security.acme.certs.${cert}.dnsProvider` and
             `security.acme.certs.${cert}.webroot` are mutually exclusive.
+          '';
+        }
+        {
+          assertion = data.webroot == null || data.listenHTTP == null;
+          message = ''
+            Options `security.acme.certs.${cert}.webroot` and
+            `security.acme.certs.${cert}.listenHTTP` are mutually exclusive.
+          '';
+        }
+        {
+          assertion = data.listenHTTP == null || data.dnsProvider == null;
+          message = ''
+            Options `security.acme.certs.${cert}.listenHTTP` and
+            `security.acme.certs.${cert}.dnsProvider` are mutually exclusive.
+          '';
+        }
+        {
+          assertion = data.dnsProvider != null || data.webroot != null || data.listenHTTP != null;
+          message = ''
+            One of `security.acme.certs.${cert}.dnsProvider`,
+            `security.acme.certs.${cert}.webroot`, or
+            `security.acme.certs.${cert}.listenHTTP` must be provided.
           '';
         }
       ]) cfg.certs));

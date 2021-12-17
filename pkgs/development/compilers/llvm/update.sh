@@ -19,19 +19,26 @@ sed -Ei \
   "$FILE"
 
 readonly ATTRSET="llvmPackages_$VERSION_MAJOR"
-readonly SOURCES=(
-  "clang-unwrapped.src"
-  "compiler-rt.src"
-  "clang-unwrapped.clang-tools-extra_src"
-  "libcxx.src"
-  "libcxxabi.src"
-  "libunwind.src"
-  "lld.src"
-  "lldb.src"
-  "llvm.src"
-  "llvm.polly_src"
-  "openmp.src"
-)
+
+if [ "$VERSION_MAJOR" -ge "13" ]; then
+  readonly SOURCES=(
+    "llvm.src"
+  )
+else
+  readonly SOURCES=(
+    "clang-unwrapped.src"
+    "compiler-rt.src"
+    "clang-unwrapped.clang-tools-extra_src"
+    "libcxx.src"
+    "libcxxabi.src"
+    "libunwind.src"
+    "lld.src"
+    "lldb.src"
+    "llvm.src"
+    "llvm.polly_src"
+    "openmp.src"
+  )
+fi
 
 for SOURCE in "${SOURCES[@]}"; do
   echo "Updating the hash of $SOURCE:"

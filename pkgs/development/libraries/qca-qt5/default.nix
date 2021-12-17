@@ -9,6 +9,14 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-wThREJq+/EYjNwmJ+uOnRb9rGss8KhOolYU5gj6XTks=";
   };
 
+  patches = [
+    # Pull upstream fix for gcc-11
+    (fetchurl {
+      url = "https://github.com/KDE/qca/commit/32275f1a74c161d2fed8c056b2dd9555687a22f2.patch";
+      sha256 = "sha256-SUH2eyzP2vH/ZjYcX8ybwiqhoTm/QjuEpTKjb2iH1No=";
+    })
+  ];
+
   buildInputs = [ openssl qtbase ];
   nativeBuildInputs = [ cmake pkg-config ];
 

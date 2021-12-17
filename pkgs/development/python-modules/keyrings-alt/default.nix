@@ -1,15 +1,15 @@
 { lib, buildPythonPackage, fetchPypi, pythonOlder, isPy27, six
-, pytest, backports_unittest-mock, keyring, setuptools-scm, toml
+, pytest, backports_unittest-mock, keyring, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "keyrings.alt";
-  version = "4.0.2";
+  version = "4.1.0";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cc475635099d6edd7e475c5a479e5b4da5e811a3af04495a1e9ada488d16fe25";
+    sha256 = "52ccb61d6f16c10f32f30d38cceef7811ed48e086d73e3bae86f0854352c4ab2";
   };
 
   postPatch = ''
@@ -17,7 +17,7 @@ buildPythonPackage rec {
       --replace "--flake8" ""
   '';
 
-  nativeBuildInputs = [ setuptools-scm toml ];
+  nativeBuildInputs = [ setuptools-scm ];
   propagatedBuildInputs = [ six ];
 
   checkInputs = [ pytest keyring ] ++ lib.optional (pythonOlder "3.3") backports_unittest-mock;

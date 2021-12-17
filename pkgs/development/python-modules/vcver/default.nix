@@ -1,10 +1,12 @@
-{ lib, buildPythonPackage, fetchFromGitHub
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
 , packaging
-, fetchurl, python }:
+}:
 
 buildPythonPackage rec {
   pname = "vcver";
-  version = "0.2.10";
+  version = "0.2.12";
 
   src = fetchFromGitHub {
     owner = "toumorokoshi";

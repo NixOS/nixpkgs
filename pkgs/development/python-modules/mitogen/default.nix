@@ -5,13 +5,13 @@
 
 buildPythonPackage rec {
   pname = "mitogen";
-  version = "0.3.0rc1";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "mitogen-hq";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0hxb41sshybxjyvyarl2axs0v6w53vqxafgfjrmpp5k20z5kapz4";
+    sha256 = "sha256-SotxlsJDIeFd4BN9C7afyyybET5ST2yaoWVEyT/lr48=";
   };
 
   # Tests require network access and Docker support

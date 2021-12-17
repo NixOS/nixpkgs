@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , buildPythonPackage
+, fetchpatch
 , fetchPypi
 , pythonOlder
 , pytestCheckHook
@@ -12,26 +13,34 @@
 , ipython_genutils
 , traitlets
 , jupyter_core
-, jupyter_client
+, jupyter-client
 , nbformat
 , nbconvert
 , send2trash
 , terminado
-, prometheus_client
+, prometheus-client
 , anyio
 , websocket-client
 , requests
+, requests-unixsocket
 }:
 
 buildPythonPackage rec {
   pname = "jupyter_server";
-  version = "1.8.0";
+  version = "1.11.2";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8f0c75e0a577536125ad62a442ebb7cf02746f1a69d907e8a273c6225d281237";
+    sha256 = "c1f32e0c1807ab2de37bf70af97a36b4436db0bc8af3124632b1f4441038bf95";
   };
+
+  patches = [ (fetchpatch
+    { name = "Normalize-file-name-and-path.patch";
+      url = "https://github.com/jupyter-server/jupyter_server/pull/608/commits/345e26cdfd78651954b68708fa44119c2ac0dbd5.patch";
+      sha256 = "1kqz3dyh2w0h1g1fbvqa13q17hb6y32694rlaasyg213mq6g4k32";
+    })
+  ];
 
   propagatedBuildInputs = [
     argon2_cffi
@@ -41,14 +50,15 @@ buildPythonPackage rec {
     ipython_genutils
     traitlets
     jupyter_core
-    jupyter_client
+    jupyter-client
     nbformat
     nbconvert
     send2trash
     terminado
-    prometheus_client
+    prometheus-client
     anyio
     websocket-client
+    requests-unixsocket
   ];
 
   checkInputs = [
@@ -59,9 +69,10 @@ buildPythonPackage rec {
 
   preCheck = ''
     export HOME=$(mktemp -d)
+    export PATH=$out/bin:$PATH
   '';
 
-  pytestFlagsArray = [ "jupyter_server/tests/" ];
+  pytestFlagsArray = [ "jupyter_server" ];
 
   # disabled failing tests
   disabledTests = [

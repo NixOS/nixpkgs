@@ -102,14 +102,14 @@ in {
     package = mkOption {
       description = "The kafka package to use";
       default = pkgs.apacheKafka;
-      defaultText = "pkgs.apacheKafka";
+      defaultText = literalExpression "pkgs.apacheKafka";
       type = types.package;
     };
 
     jre = mkOption {
       description = "The JRE with which to run Kafka";
       default = cfg.package.passthru.jre;
-      defaultText = "pkgs.apacheKafka.passthru.jre";
+      defaultText = literalExpression "pkgs.apacheKafka.passthru.jre";
       type = types.package;
     };
 
@@ -120,10 +120,12 @@ in {
     environment.systemPackages = [cfg.package];
 
     users.users.apache-kafka = {
-      uid = config.ids.uids.apache-kafka;
+      isSystemUser = true;
+      group = "apache-kafka";
       description = "Apache Kafka daemon user";
       home = head cfg.logDirs;
     };
+    users.groups.apache-kafka = {};
 
     systemd.tmpfiles.rules = map (logDir: "d '${logDir}' 0700 apache-kafka - - -") cfg.logDirs;
 

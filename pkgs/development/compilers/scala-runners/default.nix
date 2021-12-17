@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   dontBuild = true;
   installPhase = ''
     mkdir -p $out/bin $out/lib
-    sed -ie "s| cs | ${coursier}/bin/coursier |" scala-runner
+    sed -ie "s| cs | ${coursier}/bin/cs |" scala-runner
     cp scala-runner $out/lib
     ln -s $out/lib/scala-runner $out/bin/scala
     ln -s $out/lib/scala-runner $out/bin/scalac

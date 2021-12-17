@@ -5,27 +5,18 @@
 , withMPRIS ? false, dbus ? null
 }:
 
-let
-  features = [ "cursive/pancurses-backend" ]
-    ++ lib.optional withALSA "alsa_backend"
-    ++ lib.optional withPulseAudio "pulseaudio_backend"
-    ++ lib.optional withPortAudio "portaudio_backend"
-    ++ lib.optional withMPRIS "mpris";
-in
 rustPlatform.buildRustPackage rec {
   pname = "ncspot";
-  version = "0.8.1";
+  version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "hrkfdn";
     repo = "ncspot";
     rev = "v${version}";
-    sha256 = "0sgnd6n8j8lygmb9qvv6i2ir28fdsrpmzlviz7d0gbx684qj0zkc";
+    sha256 = "sha256-k4EGyQjjJCvUhp56OjYl63n+giI05GiIS2++I1SVhCg=";
   };
 
-  cargoSha256 = "0piipqf5y5bczbwkaplv6niqh3rp2di1gn7wwpd0gaa2cw7ylbb1";
-
-  cargoBuildFlags = [ "--no-default-features" "--features" "${lib.concatStringsSep "," features}" ];
+  cargoSha256 = "sha256-YsjInqmkPnAwqgRBDiwcLH0DDqCF0NElrn+WO2v+ATM=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -35,6 +26,13 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optional withPulseAudio libpulseaudio
     ++ lib.optional withPortAudio portaudio
     ++ lib.optional withMPRIS dbus;
+
+  buildNoDefaultFeatures = true;
+  buildFeatures = [ "cursive/pancurses-backend" ]
+    ++ lib.optional withALSA "alsa_backend"
+    ++ lib.optional withPulseAudio "pulseaudio_backend"
+    ++ lib.optional withPortAudio "portaudio_backend"
+    ++ lib.optional withMPRIS "mpris";
 
   doCheck = false;
 

@@ -10,10 +10,11 @@ let
   };
 in
 stdenv.mkDerivation rec {
-  name = "ding-1.9";
+  pname = "ding";
+  version = "1.9";
 
   src = fetchurl {
-    url = "http://ftp.tu-chemnitz.de/pub/Local/urz/ding/${name}.tar.gz";
+    url = "http://ftp.tu-chemnitz.de/pub/Local/urz/ding/ding-${version}.tar.gz";
     sha256 = "sha256-aabIH894WihsBTo1LzIBzIZxxyhRYVxLcHpDQwmwmOU=";
   };
 

@@ -28,19 +28,11 @@ let
         #     0.40.12: https://github.com/openembedded/openembedded-core/raw/8553c52f174af4c8c433c543f806f5ed5c1ec48c/meta/recipes-devtools/vala/vala/disable-graphviz.patch
         "0.40" = ./disable-graphviz-0.40.12.patch;
 
-        # NOTE: the openembedded-core project doesn't have a patch for 0.44.1
-        # We've reverted the addition of the "--disable-valadoc" option
-        # and then applied the following patch.
-        #     0.42.4: https://github.com/openembedded/openembedded-core/raw/f2b4f9ec6f44dced7f88df849cca68961419eeb8/meta/recipes-devtools/vala/vala/disable-graphviz.patch
-        "0.44" = ./disable-graphviz-0.44.3.patch;
-
-        "0.46" = ./disable-graphviz-0.46.1.patch;
-
         "0.48" = ./disable-graphviz-0.46.1.patch;
 
-        "0.50" = ./disable-graphviz-0.46.1.patch;
-
         "0.52" = ./disable-graphviz-0.46.1.patch;
+
+        "0.54" = ./disable-graphviz-0.46.1.patch;
 
       }.${lib.versions.majorMinor version} or (throw "no graphviz patch for this version of vala");
 
@@ -69,7 +61,7 @@ let
     # so that it can be used to regenerate documentation.
     patches        = lib.optionals disableGraphviz [ graphvizPatch ./gvc-compat.patch ];
     configureFlags = lib.optional  disableGraphviz "--disable-graphviz";
-    preBuild       = lib.optional  disableGraphviz "buildFlagsArray+=(\"VALAC=$(pwd)/compiler/valac\")";
+    preBuild       = lib.optionalString disableGraphviz "buildFlagsArray+=(\"VALAC=$(pwd)/compiler/valac\")";
 
     outputs = [ "out" "devdoc" ];
 
@@ -89,10 +81,11 @@ let
     doCheck = false; # fails, requires dbus daemon
 
     passthru = {
-     updateScript = gnome.updateScript {
-       attrPath = "${pname}_${lib.versions.major version}_${lib.versions.minor version}";
-       packageName = pname;
-     };
+      updateScript = gnome.updateScript {
+        attrPath = "${pname}_${lib.versions.major version}_${lib.versions.minor version}";
+        packageName = pname;
+        freeze = true;
+      };
     };
 
     meta = with lib; {
@@ -100,7 +93,7 @@ let
       homepage = "https://wiki.gnome.org/Projects/Vala";
       license = licenses.lgpl21Plus;
       platforms = platforms.unix;
-      maintainers = with maintainers; [ antono jtojnar peterhoeg maxeaubrey ] ++ teams.pantheon.members;
+      maintainers = with maintainers; [ antono jtojnar maxeaubrey ] ++ teams.pantheon.members;
     };
   });
 
@@ -110,25 +103,20 @@ in rec {
     sha256 = "1pxpack8rrmywlf47v440hc6rv3vi8q9c6niwqnwikxvb2pwf3w7";
   };
 
-  vala_0_46 = generic {
-    version = "0.46.13";
-    sha256 = "0d7l4vh2xra3q75kw3sy2d9bn5p6s3g3r7j37bdn6ir8l3wp2ivs";
-  };
-
   vala_0_48 = generic {
-    version = "0.48.18";
-    sha256 = "1pbz4nyrrf9wp8rp953sczx545s4g0h5mars9ynkn788dzs2h3wy";
-  };
-
-  vala_0_50 = generic {
-    version = "0.50.9";
-    sha256 = "0w5ngs90rq7vy21nqfq8drqyb33kxm17j161qvakwpsbjsidv1mn";
+    version = "0.48.20";
+    sha256 = "sha256-RrHIF/dIUfvMOV/E+eoRlQLPh7kzPMllbhzczAvTN24=";
   };
 
   vala_0_52 = generic {
-    version = "0.52.4";
-    sha256 = "0cfz3xshc9azxx4fn25x9gadnph6jvf1r2wzd7p5krk0a4755ppc";
+    version = "0.52.8";
+    sha256 = "sha256-d3t9HLVnFewyJUXQEw5/9Y2eem0b2WtuKX6eYOgRh5M=";
   };
 
-  vala = vala_0_52;
+  vala_0_54 = generic {
+    version = "0.54.2";
+    sha256 = "iE3nRTF9TVbk6M7emT3I8E1Qz8o2z2DS8vJ4wwwrExE=";
+  };
+
+  vala = vala_0_54;
 }

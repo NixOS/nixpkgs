@@ -1,17 +1,29 @@
-{ fetchFromGitHub, lib, gobject-introspection, gtk3, python3Packages }:
+{ fetchFromGitHub
+, lib
+, gobject-introspection
+, gtk3
+, python3Packages
+, wrapGAppsHook
+, gdk-pixbuf
+, libappindicator
+, librsvg
+}:
 
 # Although we copy in the udev rules here, you probably just want to use
 # logitech-udev-rules instead of adding this to services.udev.packages on NixOS
 python3Packages.buildPythonApplication rec {
   pname = "solaar";
-  version = "1.0.6";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "pwr-Solaar";
     repo = "Solaar";
     rev = version;
-    sha256 = "sha256-Ys0005hIQ+fT4oMeU5iFtbLNqn1WM6iLdIKGwdyn7BM=";
+    sha256 = "sha256-rNz296pKw2/WaryxHekWHSAS1jdTviZxXDgO/L/PJCU=";
   };
+
+  nativeBuildInputs = [ wrapGAppsHook gdk-pixbuf ];
+  buildInputs = [ libappindicator librsvg ];
 
   propagatedBuildInputs = with python3Packages; [
     gobject-introspection
@@ -21,11 +33,6 @@ python3Packages.buildPythonApplication rec {
     pyudev
     pyyaml
     xlib
-  ];
-
-  makeWrapperArgs = [
-    "--prefix PYTHONPATH : $PYTHONPATH"
-    "--prefix GI_TYPELIB_PATH : $GI_TYPELIB_PATH"
   ];
 
   # the -cli symlink is just to maintain compabilility with older versions where

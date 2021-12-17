@@ -18,16 +18,23 @@
 
 stdenv.mkDerivation rec {
   pname = "libjxl";
-  version = "unstable-2021-06-22";
+  version = "0.5";
 
   src = fetchFromGitHub {
     owner = "libjxl";
     repo = "libjxl";
-    rev = "409efe027d6a4a4446b84abe8d7b2fa40409257d";
-    sha256 = "1akb6yyp2h4h6mfcqd4bgr3ybcik5v5kdc1rxaqnyjs7fp2f6nvv";
+    rev = "v${version}";
+    sha256 = "0grljgmy6cfhm8zni9d1mdn01qzc49k1pl75vhr7qcd3sp4r8lxm";
     # There are various submodules in `third_party/`.
     fetchSubmodules = true;
   };
+
+  # hydra's darwin machines run into https://github.com/libjxl/libjxl/issues/408
+  # unless we disable highway's tests
+  postPatch = lib.optional stdenv.isDarwin ''
+    substituteInPlace third_party/highway/CMakeLists.txt \
+      --replace 'if(BUILD_TESTING)' 'if(false)'
+  '';
 
   nativeBuildInputs = [
     asciidoc # for docs

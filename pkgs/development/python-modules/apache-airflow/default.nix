@@ -58,19 +58,19 @@
 , termcolor
 , unicodecsv
 , werkzeug
-, pytest
+, pytestCheckHook
 , freezegun
 , mkYarnPackage
 }:
 let
 
-  version = "2.1.2";
+  version = "2.1.4";
 
   airflow-src = fetchFromGitHub rec {
     owner = "apache";
     repo = "airflow";
     rev = version;
-    sha256 = "sha256-Q0l2c1tuxcoE65zgdxnv/j1TIoQzaNoEFCYHvqN+Bzk=";
+    sha256 = "12nxjaz4afkq30s42x3rbsci8jiw2k5zjngsc8i190fasbacbnbs";
   };
 
   # airflow bundles a web interface, which is built using webpack by an undocumented shell script in airflow's source tree.
@@ -171,7 +171,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     freezegun
-    pytest
+    pytestCheckHook
   ];
 
   INSTALL_PROVIDERS_FROM_SOURCES = "true";
@@ -193,16 +193,22 @@ buildPythonPackage rec {
       --replace "sqlalchemy>=1.3.18, <1.4" "sqlalchemy" \
       --replace "sqlalchemy_jsonfield~=1.0" "sqlalchemy-jsonfield" \
       --replace "werkzeug~=1.0, >=1.0.1" "werkzeug" \
-      --replace "itsdangerous>=1.1.0, <2.0" "itsdangerous"
+      --replace "itsdangerous>=1.1.0, <2.0" "itsdangerous" \
+      --replace "python-slugify>=3.0.0,<5.0" "python-slugify" \
+      --replace "colorlog>=4.0.2, <6.0" "colorlog"
 
     substituteInPlace tests/core/test_core.py \
       --replace "/bin/bash" "${stdenv.shell}"
+  '' + lib.optionalString stdenv.isDarwin ''
+    # Fix failing test on Hydra
+    substituteInPlace airflow/utils/db.py \
+      --replace "/tmp/sqlite_default.db" "$TMPDIR/sqlite_default.db"
   '';
 
   # allow for gunicorn processes to have access to python packages
   makeWrapperArgs = [ "--prefix PYTHONPATH : $PYTHONPATH" ];
 
-  checkPhase = ''
+  preCheck = ''
    export HOME=$(mktemp -d)
    export AIRFLOW_HOME=$HOME
    export AIRFLOW__CORE__UNIT_TEST_MODE=True
@@ -212,9 +218,15 @@ buildPythonPackage rec {
    airflow version
    airflow db init
    airflow db reset -y
-
-   pytest tests/core/test_core.py
   '';
+
+  pytestFlagsArray = [
+    "tests/core/test_core.py"
+  ];
+
+  disabledTests = lib.optionals stdenv.isDarwin [
+    "bash_operator_kill"  # psutil.AccessDenied
+  ];
 
   postInstall = ''
     cp -rv ${airflow-frontend}/static/dist $out/lib/${python.libPrefix}/site-packages/airflow/www/static

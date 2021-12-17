@@ -9,7 +9,7 @@ let
 
   devices = mapAttrsToList (name: device: {
     deviceID = device.id;
-    inherit (device) name addresses introducer;
+    inherit (device) name addresses introducer autoAcceptFolders;
   }) cfg.devices;
 
   folders = mapAttrsToList ( _: folder: {
@@ -37,7 +37,7 @@ let
     do sleep 1; done
 
     curl() {
-        ${pkgs.curl}/bin/curl -sS -H "X-API-Key: $api_key" \
+        ${pkgs.curl}/bin/curl -sSLk -H "X-API-Key: $api_key" \
             --retry 1000 --retry-delay 1 --retry-all-errors \
             "$@"
     }
@@ -46,7 +46,7 @@ let
     old_cfg=$(curl ${cfg.guiAddress}/rest/config)
 
     # generate the new config by merging with the NixOS config options
-    new_cfg=$(echo "$old_cfg" | ${pkgs.jq}/bin/jq -c '. * {
+    new_cfg=$(printf '%s\n' "$old_cfg" | ${pkgs.jq}/bin/jq -c '. * {
         "devices": (${builtins.toJSON devices}${optionalString (! cfg.overrideDevices) " + .devices"}),
         "folders": (${builtins.toJSON folders}${optionalString (! cfg.overrideFolders) " + .folders"})
     } * ${builtins.toJSON cfg.extraOptions}')
@@ -149,6 +149,15 @@ in {
               '';
             };
 
+            autoAcceptFolders = mkOption {
+              type = types.bool;
+              default = false;
+              description = ''
+                Automatically create or share folders that this device advertises at the default path.
+                See <link xlink:href="https://docs.syncthing.net/users/config.html?highlight=autoaccept#config-file-format"/>.
+              '';
+            };
+
           };
         }));
       };
@@ -173,7 +182,7 @@ in {
           will be reverted on restart if <link linkend="opt-services.syncthing.overrideDevices">overrideDevices</link>
           is enabled.
         '';
-        example = literalExample ''
+        example = literalExpression ''
           {
             "/home/user/sync" = {
               id = "syncme";
@@ -234,7 +243,7 @@ in {
                 There are 4 different types of versioning with different parameters.
                 See <link xlink:href="https://docs.syncthing.net/users/versioning.html"/>.
               '';
-              example = literalExample ''
+              example = literalExpression ''
                 [
                   {
                     versioning = {
@@ -421,8 +430,17 @@ in {
         description = ''
           The path where the settings and keys will exist.
         '';
-        default = cfg.dataDir + (optionalString cond "/.config/syncthing");
-        defaultText = literalExample "dataDir${optionalString cond " + \"/.config/syncthing\""}";
+        default = cfg.dataDir + optionalString cond "/.config/syncthing";
+        defaultText = literalExpression "dataDir${optionalString cond " + \"/.config/syncthing\""}";
+      };
+
+      extraFlags = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        example = [ "--reset-deltas" ];
+        description = ''
+          Extra flags passed to the syncthing command in the service definition.
+        '';
       };
 
       openDefaultPorts = mkOption {
@@ -443,7 +461,7 @@ in {
       package = mkOption {
         type = types.package;
         default = pkgs.syncthing;
-        defaultText = literalExample "pkgs.syncthing";
+        defaultText = literalExpression "pkgs.syncthing";
         description = ''
           The Syncthing package to use.
         '';
@@ -517,7 +535,7 @@ in {
             ${cfg.package}/bin/syncthing \
               -no-browser \
               -gui-address=${cfg.guiAddress} \
-              -home=${cfg.configDir}
+              -home=${cfg.configDir} ${escapeShellArgs cfg.extraFlags}
           '';
           MemoryDenyWriteExecute = true;
           NoNewPrivileges = true;

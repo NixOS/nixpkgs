@@ -1,6 +1,4 @@
-{ lib
-, stdenv
-, runtimeShell
+{ runtimeShell
 , symlinkJoin
 , writeTextFile
 }:

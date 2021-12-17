@@ -6,7 +6,7 @@ To update the list of packages from MELPA,
 
 1. Run `./update-elpa`.
 2. Check for evaluation errors:
-     `nix-instantiate ../../../../../ -A emacs.pkgs.elpaPackages`.
+     env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate ../../../../../ -A emacs.pkgs.elpaPackages
 3. Run `git commit -m "elpa-packages $(date -Idate)" -- elpa-generated.nix`
 
 ## Update from overlay
@@ -36,14 +36,16 @@ self: let
     inherit (self) emacs;
   };
 
+  # Use custom elpa url fetcher with fallback/uncompress
+  fetchurl = buildPackages.callPackage ./fetchelpa.nix { };
+
   generateElpa = lib.makeOverridable ({
     generated ? ./elpa-generated.nix
   }: let
 
     imported = import generated {
       callPackage = pkgs: args: self.callPackage pkgs (args // {
-        # Use custom elpa url fetcher with fallback/uncompress
-        fetchurl = buildPackages.callPackage ./fetchelpa.nix { };
+        inherit fetchurl;
       });
     };
 
@@ -66,15 +68,10 @@ self: let
         # actually unpack source of ada-mode and wisi
         # which are both needed to compile the tools
         # we need at runtime
-        phases = "unpackPhase " + old.phases; # not a list, interestingly…
+        dontUnpack = false;
         srcs = [
           super.ada-mode.src
-          # ada-mode needs a specific version of wisi, check NEWS or ada-mode's
-          # package-requires to find the version to use.
-          (pkgs.fetchurl {
-            url = "https://elpa.gnu.org/packages/wisi-3.1.3.tar.lz";
-            sha256 = "18dwcc0crds7aw466vslqicidlzamf8avn59gqi2g7y2x9k5q0as";
-          })
+          self.wisi.src
         ];
 
         sourceRoot = "ada-mode-${self.ada-mode.version}";
@@ -96,6 +93,10 @@ self: let
         postInstall = ''
           ./install.sh --prefix=$out
         '';
+
+        meta = old.meta // {
+          maintainers = [ lib.maintainers.sternenseemann ];
+        };
       });
     };
 

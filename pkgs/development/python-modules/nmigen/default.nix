@@ -55,7 +55,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "Jinja2~=2.11" "Jinja2>=2.11"
+      --replace "Jinja2~=2.11" "Jinja2>=2.11" \
+      --replace "pyvcd~=0.2.2" "pyvcd"
   '';
 
   pythonImportsCheck = [ "nmigen" ];

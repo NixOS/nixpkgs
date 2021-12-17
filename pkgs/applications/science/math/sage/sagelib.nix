@@ -10,7 +10,7 @@
 , cypari2
 , cysignals
 , cython
-, ecl
+, lisp-compiler
 , eclib
 , ecm
 , flint
@@ -27,6 +27,7 @@
 , linbox
 , m4ri
 , m4rie
+, memory-allocator
 , libmpc
 , mpfi
 , ntl
@@ -73,7 +74,7 @@ buildPythonPackage rec {
     jupyter_core
     pkg-config
     pip # needed to query installed packages
-    ecl
+    lisp-compiler
   ];
 
   buildInputs = [
@@ -91,7 +92,7 @@ buildPythonPackage rec {
     arb
     brial
     cliquer
-    ecl
+    lisp-compiler
     eclib
     ecm
     fflas-ffpack
@@ -107,6 +108,7 @@ buildPythonPackage rec {
     lrcalc
     m4ri
     m4rie
+    memory-allocator
     mpfi
     ntl
     blas

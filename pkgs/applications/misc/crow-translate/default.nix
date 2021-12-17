@@ -34,37 +34,37 @@ let
   qonlinetranslator = fetchFromGitHub {
     owner = "crow-translate";
     repo = "QOnlineTranslator";
-    rev = "1.4.4";
-    sha256 = "sha256-ogO6ovkQmyvTUPCYAQ4U3AxOju9r3zHB9COnAAfKSKA=";
+    rev = "1.5.2";
+    sha256 = "sha256-iGi25aKwff2hNNx6o4kHZV8gVbEQcMgpTTvop3CoLjM=";
   };
   circleflags = fetchFromGitHub {
     owner = "HatScripts";
     repo = "circle-flags";
-    rev = "v2.1.0";
-    sha256 = "sha256-E0iTDjicfdGqK4r+anUZanEII9SBafeEUcMLf7BGdp0=";
+    rev = "v2.3.0";
+    sha256 = "sha256-KabmewF1Xf/1JQuzolrlRyLJR8O5j+/iT+29/QtOQVE=";
   };
-  we10x = fetchFromGitHub {
-    owner = "yeyushengfan258";
-    repo = "We10X-icon-theme";
-    rev = "bd2c68482a06d38b2641503af1ca127b9e6540db";
-    sha256 = "sha256-T1oPstmjLffnVrIIlmTTpHv38nJHBBGJ070ilRwAjk8=";
+  fluent = fetchFromGitHub {
+    owner = "vinceliuice";
+    repo = "Fluent-icon-theme";
+    rev = "2021-08-15";
+    sha256 = "sha256-uBu0vbKfhhnPKGwrnSBjPwS9ncH1iAlmeefAcpckOm4=";
   };
 in
 mkDerivation rec {
   pname = "crow-translate";
-  version = "2.8.4";
+  version = "2.9.1";
 
   src = fetchFromGitHub {
     owner = "crow-translate";
     repo = pname;
     rev = version;
-    sha256 = "sha256-TPJgKTZqsh18BQGFWgp0wsw1ehtI8ydQ7ZCvYNX6pH8=";
+    sha256 = "sha256-7Zb6PZO8eLeGPEZD37ja+LZydIQdsgy5gMAMtlS4k5Y=";
   };
 
   patches = [
     (substituteAll {
       src = ./dont-fetch-external-libs.patch;
-      inherit singleapplication qtaskbarcontrol qhotkey qonlinetranslator circleflags we10x;
+      inherit singleapplication qtaskbarcontrol qhotkey qonlinetranslator circleflags fluent;
     })
     (substituteAll {
       # See https://github.com/NixOS/nixpkgs/issues/86054
@@ -75,7 +75,7 @@ mkDerivation rec {
 
   postPatch = ''
     cp -r ${circleflags}/flags/* data/icons
-    cp -r ${we10x}/src/* data/icons
+    cp -r ${fluent}/src/* data/icons
   '';
 
   nativeBuildInputs = [ cmake extra-cmake-modules qttools ];

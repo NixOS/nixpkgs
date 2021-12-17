@@ -38,6 +38,6 @@ python3.pkgs.buildPythonPackage rec {
     description = "PyO3 word count example";
     homepage = "https://github.com/PyO3/pyo3";
     license = licenses.asl20;
-    maintainers = [ maintainers.danieldk ];
+    maintainers = [ ];
   };
 }

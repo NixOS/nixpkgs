@@ -1,7 +1,8 @@
 { lib, stdenv, fetchgit, opencflite, clang, libcxx }:
 
 stdenv.mkDerivation {
-  name = "maloader-0git";
+  pname = "maloader";
+  version = "unstable-2014-02-25";
 
   src = fetchgit {
     url = "git://github.com/shinh/maloader.git";

@@ -57,8 +57,13 @@ let
     useTemplate = use_template;
 
     recursive = mkOption {
-      description = "Whether to recursively snapshot dataset children.";
-      type = types.bool;
+      description = ''
+        Whether to recursively snapshot dataset children.
+        You can also set this to <literal>"zfs"</literal> to handle datasets
+        recursively in an atomic way without the possibility to
+        override settings for child datasets.
+      '';
+      type = with types; oneOf [ bool (enum [ "zfs" ]) ];
       default = false;
     };
 

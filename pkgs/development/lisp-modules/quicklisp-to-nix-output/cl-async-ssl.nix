@@ -2,15 +2,15 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = "cl-async-ssl";
-  version = "cl-async-20210228-git";
+  version = "cl-async-20211020-git";
 
   description = "SSL Wrapper around cl-async socket implementation.";
 
   deps = [ args."alexandria" args."babel" args."bordeaux-threads" args."cffi" args."cffi-grovel" args."cffi-toolchain" args."cl-async" args."cl-async-base" args."cl-async-util" args."cl-libuv" args."cl-ppcre" args."fast-io" args."static-vectors" args."trivial-features" args."trivial-gray-streams" args."vom" ];
 
   src = fetchurl {
-    url = "http://beta.quicklisp.org/archive/cl-async/2021-02-28/cl-async-20210228-git.tgz";
-    sha256 = "08r8jlvj2zbc1f864imb864adkqhspgm5s8drjykqhv1d3hrsvy4";
+    url = "http://beta.quicklisp.org/archive/cl-async/2021-10-20/cl-async-20211020-git.tgz";
+    sha256 = "1b3bwqvzw2pc83m4x8vbbxyriq58g0j3738mzq68v689zl071dl0";
   };
 
   packageName = "cl-async-ssl";
@@ -20,9 +20,9 @@ rec {
 }
 /* (SYSTEM cl-async-ssl DESCRIPTION
     SSL Wrapper around cl-async socket implementation. SHA256
-    08r8jlvj2zbc1f864imb864adkqhspgm5s8drjykqhv1d3hrsvy4 URL
-    http://beta.quicklisp.org/archive/cl-async/2021-02-28/cl-async-20210228-git.tgz
-    MD5 0954743eb96f941aa27ff09bceff91dc NAME cl-async-ssl FILENAME
+    1b3bwqvzw2pc83m4x8vbbxyriq58g0j3738mzq68v689zl071dl0 URL
+    http://beta.quicklisp.org/archive/cl-async/2021-10-20/cl-async-20211020-git.tgz
+    MD5 0e0cd11758e93a91b39ad726fb1051cc NAME cl-async-ssl FILENAME
     cl-async-ssl DEPS
     ((NAME alexandria FILENAME alexandria) (NAME babel FILENAME babel)
      (NAME bordeaux-threads FILENAME bordeaux-threads)
@@ -41,5 +41,5 @@ rec {
     (alexandria babel bordeaux-threads cffi cffi-grovel cffi-toolchain cl-async
      cl-async-base cl-async-util cl-libuv cl-ppcre fast-io static-vectors
      trivial-features trivial-gray-streams vom)
-    VERSION cl-async-20210228-git SIBLINGS
+    VERSION cl-async-20211020-git SIBLINGS
     (cl-async-repl cl-async-test cl-async) PARASITES NIL) */

@@ -112,7 +112,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.murmur;
-        defaultText = "pkgs.murmur";
+        defaultText = literalExpression "pkgs.murmur";
         description = "Overridable attribute of the murmur package to use.";
       };
 

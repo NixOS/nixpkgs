@@ -4,7 +4,7 @@ stdenvNoCC.mkDerivation rec {
   pname = "zinit";
   version = "3.7";
   src = fetchFromGitHub {
-    owner = "zdharma";
+    owner = "zdharma-continuum";
     repo = pname;
     rev = "v${version}";
     hash = "sha256-B+cTGz+U8MR22l6xXdRAAjDr+ulCk+CJ9GllFMK0axE=";
@@ -37,6 +37,6 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/zdharma/zinit";
     description = "Flexible zsh plugin manager";
     license = licenses.mit;
-    maintainers = with maintainers; [ pasqui23 ];
+    maintainers = with maintainers; [ pasqui23 sei40kr ];
   };
 }

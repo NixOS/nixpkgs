@@ -1,21 +1,23 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , glib
 , autoreconfHook
 , pkg-config
 , systemd
 , fetchFromGitLab
+, nix-update-script
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-desktop-testing";
-  version = "unstable-2019-12-11";
+  version = "2021.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "gnome-desktop-testing";
-    rev = "57239dc8ef49ba74d442603a07a3e132b0cfdc6a";
-    sha256 = "01c4jhpk23kfcnw3l9kfwjw9v5kgqmfhhqypw4k2d2sdkf4mgfv4";
+    rev = "v${version}";
+    sha256 = "sha256-PWn4eEZskY0YgMpf6O2dgXNSu8b8T311vFHREv2HE/Q=";
   };
 
   nativeBuildInputs = [
@@ -29,6 +31,12 @@ stdenv.mkDerivation rec {
   ];
 
   enableParallelBuilding = true;
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "gnome-desktop-testing";
+    };
+  };
 
   meta = with lib; {
     description = "GNOME test runner for installed tests";

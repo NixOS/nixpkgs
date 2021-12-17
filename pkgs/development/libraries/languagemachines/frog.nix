@@ -5,7 +5,7 @@
 }:
 
 let
-  release = builtins.fromJSON (builtins.readFile ./release-info/LanguageMachines-frog.json);
+  release = lib.importJSON ./release-info/LanguageMachines-frog.json;
 in
 
 stdenv.mkDerivation {

@@ -7,12 +7,12 @@
 
 stdenv.mkDerivation rec {
   pname = "apache-storm";
-  version = "2.2.0";
+  version = "2.3.0";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://apache/storm/${name}/${name}.tar.gz";
-    sha256 = "0xc6lfilfkkjyds59b6c770gj21v9srzpln31c9qb3ls6hzic8gn";
+    sha256 = "sha256-ScIlWyZjPG/ZY5nFIDOeRZ/NopoOfm0Mh3XO/P9sNjY=";
   };
 
   nativeBuildInputs = [ zip unzip ];

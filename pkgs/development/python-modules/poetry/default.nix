@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "poetry";
-  version = "1.1.7";
+  version = "1.1.12";
   format = "pyproject";
   disabled = isPy27;
 
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     owner = "python-poetry";
     repo = pname;
     rev = version;
-    sha256 = "03cbzjw0sb8rs85iq191ndk9523d6qpymh2nhw5bvcxfvsf9042d";
+    sha256 = "1fm4yj6wxr24v7b77gmf63j7xsgszhbhzw2i9fvlfi0p9l0q34pm";
   };
 
   postPatch = ''
@@ -98,6 +98,9 @@ buildPythonPackage rec {
       sha256 = "yHjFb9xJBLFOqkOZaJolKviTdtST9PMFwH9n8ud2Y+U=";
     })
   ];
+
+  # allow for package to use pep420's native namespaces
+  pythonNamespaces = [ "poetry" ];
 
   meta = with lib; {
     homepage = "https://python-poetry.org/";

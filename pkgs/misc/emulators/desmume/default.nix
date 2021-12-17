@@ -1,57 +1,87 @@
-{ lib, stdenv, fetchurl, fetchpatch
-, pkg-config, libtool, intltool
-, libXmu
-, lua
-, tinyxml
-, agg, alsa-lib, soundtouch, openal
+{ lib
+, stdenv
+, fetchFromGitHub
+, SDL2
+, agg
+, alsa-lib
 , desktop-file-utils
-, gtk2, gtkglext, libglade
-, libGLU, libpcap, SDL, zziplib }:
+, gtk3
+, intltool
+, libGLU
+, libXmu
+, libpcap
+, libtool
+, lua
+, meson
+, ninja
+, openal
+, pkg-config
+, soundtouch
+, tinyxml
+, zlib
+}:
 
-with lib;
 stdenv.mkDerivation rec {
-
   pname = "desmume";
-  version = "0.9.11";
+  version = "0.9.11+unstable=2021-09-22";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/project/desmume/desmume/${version}/${pname}-${version}.tar.gz";
-    sha256 = "15l8wdw3q61fniy3h93d84dnm6s4pyadvh95a0j6d580rjk4pcrs";
+  src = fetchFromGitHub {
+    owner = "TASVideos";
+    repo = pname;
+    rev = "7fc2e4b6b6a58420de65a4089d4df3934d7a46b1";
+    hash = "sha256-sTCyjQ31w1Lp+aa3VQ7/rdLbhjnqthce54mjKJZQIDM=";
   };
 
-  patches = [
-    ./gcc6_fixes.patch
-    ./gcc7_fixes.patch
-    ./01_use_system_tinyxml.patch
+  nativeBuildInputs = [
+    desktop-file-utils
+    intltool
+    libtool
+    lua
+    meson
+    ninja
+    pkg-config
   ];
 
-  CXXFLAGS = "-fpermissive";
+  buildInputs = [
+    SDL2
+    agg
+    alsa-lib
+    gtk3
+    libGLU
+    libXmu
+    libpcap
+    openal
+    soundtouch
+    tinyxml
+    zlib
+  ];
 
-  buildInputs =
-  [ pkg-config libtool intltool libXmu lua agg alsa-lib soundtouch
-    openal desktop-file-utils gtk2 gtkglext libglade
-    libGLU libpcap SDL zziplib tinyxml ];
+  hardeningDisable = [ "format" ];
 
-  configureFlags = [
-    "--disable-glade"  # Failing on compile step
-    "--enable-openal"
-    "--enable-glx"
-    "--enable-hud"
-    "--enable-wifi" ];
+  preConfigure = ''
+    cd desmume/src/frontend/posix
+  '';
 
-  meta = {
+  mesonFlags = [
+    "-Db_pie=true"
+    "-Dopenal=true"
+    "-Dwifi=true"
+  ];
+
+  meta = with lib; {
+    homepage = "https://www.github.com/TASVideos/desmume/";
     description = "An open-source Nintendo DS emulator";
     longDescription = ''
-      DeSmuME is a freeware emulator for the NDS roms & Nintendo DS
-      Lite games created by YopYop156. It supports many homebrew nds
-      rom demoes as well as a handful of Wireless Multiboot demo nds
-      roms. DeSmuME is also able to emulate nearly all of the
+      DeSmuME is a freeware emulator for the NDS roms & Nintendo DS Lite games
+      created by YopYop156 and now maintained by the TASvideos team. It supports
+      many homebrew nds rom demoes as well as a handful of Wireless Multiboot
+      demo nds roms. DeSmuME is also able to emulate nearly all of the
       commercial nds rom titles which other DS Emulators aren't.
     '';
-    homepage = "http://www.desmume.com";
-    license = licenses.gpl1Plus;
+    license = licenses.gpl2Plus;
     maintainers = [ maintainers.AndersonTorres ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
-# TODO: investigate glade
+# TODO: investigate the patches
+# TODO: investigate other platforms

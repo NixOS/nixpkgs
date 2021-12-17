@@ -1,8 +1,16 @@
 # Fetchers {#chap-pkgs-fetchers}
 
-When using Nix, you will frequently need to download source code and other files from the internet. Nixpkgs comes with a few helper functions that allow you to fetch fixed-output derivations in a structured way.
+When using Nix, you will frequently need to download source code and other files from the internet. For this purpose, Nix provides the [_fixed output derivation_](https://nixos.org/manual/nix/stable/#fixed-output-drvs) feature and Nixpkgs provides various functions that implement the actual fetching from various protocols and services.
 
-The two fetcher primitives are `fetchurl` and `fetchzip`. Both of these have two required arguments, a URL and a hash. The hash is typically `sha256`, although many more hash algorithms are supported. Nixpkgs contributors are currently recommended to use `sha256`. This hash will be used by Nix to identify your source. A typical usage of fetchurl is provided below.
+## Caveats
+
+Because fixed output derivations are _identified_ by their hash, a common mistake is to update a fetcher's URL or a version parameter, without updating the hash. **This will cause the old contents to be used.** So remember to always invalidate the hash argument.
+
+For those who develop and maintain fetchers, a similar problem arises with changes to the implementation of a fetcher. These may cause a fixed output derivation to fail, but won't normally be caught by tests because the supposed output is already in the store or cache. For the purpose of testing, you can use a trick that is embodied by the [`invalidateFetcherByDrvHash`](#sec-pkgs-invalidateFetcherByDrvHash) function. It uses the derivation `name` to create a unique output path per fetcher implementation, defeating the caching precisely where it would be harmful.
+
+## `fetchurl` and `fetchzip` {#fetchurl}
+
+Two basic fetchers are `fetchurl` and `fetchzip`. Both of these have two required arguments, a URL and a hash. The hash is typically `sha256`, although many more hash algorithms are supported. Nixpkgs contributors are currently recommended to use `sha256`. This hash will be used by Nix to identify your source. A typical usage of fetchurl is provided below.
 
 ```nix
 { stdenv, fetchurl }:
@@ -20,7 +28,7 @@ The main difference between `fetchurl` and `fetchzip` is in how they store the c
 
 `fetchpatch` works very similarly to `fetchurl` with the same arguments expected. It expects patch files as a source and performs normalization on them before computing the checksum. For example it will remove comments or other unstable parts that are sometimes added by version control systems and can change over time.
 
-Other fetcher functions allow you to add source code directly from a VCS such as subversion or git. These are mostly straightforward nambes based on the name of the command used with the VCS system. Because they give you a working repository, they act most like `fetchzip`.
+Most other fetchers return a directory rather than a single file.
 
 ## `fetchsvn` {#fetchsvn}
 

@@ -27,13 +27,13 @@ in {
     };
 
     ca = mkOption {
-      defaultText = "\${cfg.dataDir}/ca.pem";
+      defaultText = literalExpression ''"''${cfg.dataDir}/ca.pem"'';
       type = types.str;
       description = "CA used to sign the new certificate -- accepts '[file:]fname' or 'env:varname'.";
     };
 
     caKey = mkOption {
-      defaultText = "file:\${cfg.dataDir}/ca-key.pem";
+      defaultText = literalExpression ''"file:''${cfg.dataDir}/ca-key.pem"'';
       type = types.str;
       description = "CA private key -- accepts '[file:]fname' or 'env:varname'.";
     };

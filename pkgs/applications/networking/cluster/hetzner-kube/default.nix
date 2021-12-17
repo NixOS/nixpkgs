@@ -22,10 +22,9 @@ buildGoModule rec {
 
   doCheck = false;
 
-  buildFlagsArray = ''
-    -ldflags=
-    -X github.com/xetys/hetzner-kube/cmd.version=${version}
-  '';
+  ldflags = [
+    "-X github.com/xetys/hetzner-kube/cmd.version=${version}"
+  ];
 
   nativeBuildInputs = [
     installShellFiles

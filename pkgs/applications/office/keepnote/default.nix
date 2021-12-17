@@ -1,11 +1,12 @@
 { lib, fetchurl, python2Packages }:
 
-python2Packages.buildPythonApplication {
-  name = "keepnote-0.7.8";
+python2Packages.buildPythonApplication rec {
+  pname = "keepnote";
+  version = "0.7.8";
   namePrefix = "";
 
   src = fetchurl {
-    url = "http://keepnote.org/download/keepnote-0.7.8.tar.gz";
+    url = "http://keepnote.org/download/keepnote-${version}.tar.gz";
     sha256 = "0nhkkv1n0lqf3zn17pxg5cgryv1wwlj4hfmhixwd76rcy8gs45dh";
   };
 

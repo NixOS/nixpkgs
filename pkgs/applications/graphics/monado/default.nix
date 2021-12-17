@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitLab
+, fetchpatch
 , writeText
 , cmake
 , doxygen
@@ -18,6 +19,7 @@
 , libXau
 , libXdmcp
 , libXrandr
+, libbsd
 , libffi
 , libjpeg
 # , librealsense
@@ -54,6 +56,15 @@ stdenv.mkDerivation rec {
     sha256 = "07zxs96i3prjqww1f68496cl2xxqaidx32lpfyy0pn5am4c297zc";
   };
 
+  patches = [
+    # https://github.com/NixOS/nixpkgs/issues/137245
+    # Fix warning after Vulkan 1.2.174 VK_NULL_HANDLE change
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/monado/monado/-/commit/c47775a95d8e139a2f234063793eb6726f830510.patch";
+      sha256 = "093ymvi9ifpk4vyjcwhhci9cnscxwbv5f80xdbppcqa0j92nmkmp";
+    })
+  ];
+
   nativeBuildInputs = [
     cmake
     doxygen
@@ -78,6 +89,7 @@ stdenv.mkDerivation rec {
     libXau
     libXdmcp
     libXrandr
+    libbsd
     libjpeg
     libffi
     # librealsense.dev - see below

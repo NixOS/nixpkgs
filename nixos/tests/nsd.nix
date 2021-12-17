@@ -85,6 +85,7 @@ in import ./make-test-python.nix ({ pkgs, ...} : {
         self = clientv4 if type == 4 else clientv6
         out = self.succeed(f"host -{type} -t {rr} {query}").rstrip()
         self.log(f"output: {out}")
+        import re
         assert re.search(
             expected, out
         ), f"DNS IPv{type} query on {query} gave '{out}' instead of '{expected}'"

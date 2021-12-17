@@ -1,7 +1,9 @@
 { lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation {
-  name = "wavegain-1.3.1";
+  pname = "wavegain";
+  version = "1.3.1";
+
   src = fetchFromGitHub {
     owner = "MestreLion";
     repo = "wavegain";

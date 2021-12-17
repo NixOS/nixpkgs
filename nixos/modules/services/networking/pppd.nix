@@ -16,7 +16,7 @@ in
 
       package = mkOption {
         default = pkgs.ppp;
-        defaultText = "pkgs.ppp";
+        defaultText = literalExpression "pkgs.ppp";
         type = types.package;
         description = "pppd package to use.";
       };

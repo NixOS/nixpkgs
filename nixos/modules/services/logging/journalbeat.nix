@@ -27,8 +27,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.journalbeat;
-        defaultText = "pkgs.journalbeat";
-        example = literalExample "pkgs.journalbeat7";
+        defaultText = literalExpression "pkgs.journalbeat";
         description = ''
           The journalbeat package to use
         '';
@@ -89,6 +88,8 @@ in
     systemd.services.journalbeat = {
       description = "Journalbeat log shipper";
       wantedBy = [ "multi-user.target" ];
+      wants = [ "elasticsearch.service" ];
+      after = [ "elasticsearch.service" ];
       preStart = ''
         mkdir -p ${cfg.stateDir}/data
         mkdir -p ${cfg.stateDir}/logs

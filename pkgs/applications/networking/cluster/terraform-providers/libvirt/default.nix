@@ -1,4 +1,4 @@
-{ lib, buildGoPackage, fetchFromGitHub, fetchpatch, libvirt, pkg-config, makeWrapper, cdrtools }:
+{ buildGoModule, cdrtools, fetchFromGitHub, lib, libvirt, makeWrapper, pkg-config }:
 
 # USAGE:
 # install the following package globally or in nix-shell:
@@ -9,33 +9,25 @@
 #
 #   virtualisation.libvirtd.enable = true;
 #
-# terraform-provider-libvirt does not manage pools at the moment:
-#
-#   $ virsh --connect "qemu:///system" pool-define-as default dir - - - - /var/lib/libvirt/images
-#   $ virsh --connect "qemu:///system" pool-start default
-#
 # pick an example from (i.e ubuntu):
-# https://github.com/dmacvicar/terraform-provider-libvirt/tree/master/examples
+# https://github.com/dmacvicar/terraform-provider-libvirt/tree/main/examples
 
-buildGoPackage rec {
+let
+  sha256 = "sha256-8GGPd0+qdw7s4cr0RgLoS0Cu4C+RAuuboZzTyYN/kq8=";
+  vendorSha256 = "sha256-fpO2sGM+VUKLmdfJ9CQfTFnCfxVTK2m9Sirj9oerD/I=";
+  version = "0.6.11";
+in buildGoModule {
+  inherit version;
+  inherit vendorSha256;
+
   pname = "terraform-provider-libvirt";
-  version = "0.6.3";
-
-  goPackagePath = "github.com/dmacvicar/terraform-provider-libvirt";
-
-  patches = [
-    (fetchpatch {
-      name = "base_volume_copy.patch";
-      url = "https://github.com/cyril-s/terraform-provider-libvirt/commit/52df264e8a28c40ce26e2b614ee3daea882931c3.patch";
-      sha256 = "1fg7ii2fi4c93hl41nhcncy9bpw3avbh6yiq99p1vkf87hhrw72n";
-    })
-  ];
 
   src = fetchFromGitHub {
+    inherit sha256;
+
     owner = "dmacvicar";
     repo = "terraform-provider-libvirt";
     rev = "v${version}";
-    sha256 = "0ak2lpnv6h0i7lzfcggd90jpfhvsasdr6nflkflk2drlcpalggj9";
   };
 
   nativeBuildInputs = [ pkg-config makeWrapper ];
@@ -48,7 +40,12 @@ buildGoPackage rec {
 
   # Terraform allow checking the provider versions, but this breaks
   # if the versions are not provided via file paths.
-  postBuild = "mv go/bin/terraform-provider-libvirt{,_v${version}}";
+  postBuild = "mv $GOPATH/bin/terraform-provider-libvirt{,_v${version}}";
+  
+  ldflags = [ "-X main.version=${version}" ];
+  passthru.provider-source-address = "registry.terraform.io/dmacvicar/libvirt";
+
+  doCheck = false;
 
   meta = with lib; {
     homepage = "https://github.com/dmacvicar/terraform-provider-libvirt";

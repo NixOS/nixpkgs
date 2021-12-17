@@ -16,16 +16,67 @@ let
     lib.concatMapStrings (s: if lib.isList s then "-" else s)
       (builtins.split "[^a-zA-Z0-9_.\\-]+" name);
 
-  # Function to build "zfs allow" and "zfs unallow" commands for the
-  # filesystems we've delegated permissions to.
-  buildAllowCommand = zfsAction: permissions: dataset: lib.escapeShellArgs [
-    # Here we explicitly use the booted system to guarantee the stable API needed by ZFS
-    "-+/run/booted-system/sw/bin/zfs"
-    zfsAction
-    cfg.user
-    (concatStringsSep "," permissions)
-    dataset
-  ];
+  # Function to build "zfs allow" commands for the filesystems we've
+  # delegated permissions to. It also checks if the target dataset
+  # exists before delegating permissions, if it doesn't exist we
+  # delegate it to the parent dataset. This should solve the case of
+  # provisoning new datasets.
+  buildAllowCommand = permissions: dataset: (
+    "-+${pkgs.writeShellScript "zfs-allow-${dataset}" ''
+      # Here we explicitly use the booted system to guarantee the stable API needed by ZFS
+
+      # Run a ZFS list on the dataset to check if it exists
+      if ${lib.escapeShellArgs [
+        "/run/booted-system/sw/bin/zfs"
+        "list"
+        dataset
+      ]} 2> /dev/null; then
+        ${lib.escapeShellArgs [
+          "/run/booted-system/sw/bin/zfs"
+          "allow"
+          cfg.user
+          (concatStringsSep "," permissions)
+          dataset
+        ]}
+      else
+        ${lib.escapeShellArgs [
+          "/run/booted-system/sw/bin/zfs"
+          "allow"
+          cfg.user
+          (concatStringsSep "," permissions)
+          # Remove the last part of the path
+          (builtins.dirOf dataset)
+        ]}
+      fi
+    ''}"
+  );
+
+  # Function to build "zfs unallow" commands for the filesystems we've
+  # delegated permissions to. Here we unallow both the target but also
+  # on the parent dataset because at this stage we have no way of
+  # knowing if the allow command did execute on the parent dataset or
+  # not in the pre-hook. We can't run the same if in the post hook
+  # since the dataset should have been created at this point.
+  buildUnallowCommand = permissions: dataset: (
+    "-+${pkgs.writeShellScript "zfs-unallow-${dataset}" ''
+      # Here we explicitly use the booted system to guarantee the stable API needed by ZFS
+      ${lib.escapeShellArgs [
+        "/run/booted-system/sw/bin/zfs"
+        "unallow"
+        cfg.user
+        (concatStringsSep "," permissions)
+        dataset
+      ]}
+      ${lib.escapeShellArgs [
+        "/run/booted-system/sw/bin/zfs"
+        "unallow"
+        cfg.user
+        (concatStringsSep "," permissions)
+        # Remove the last part of the path
+        (builtins.dirOf dataset)
+      ]}
+    ''}"
+  );
 in
 {
 
@@ -76,6 +127,33 @@ in
       description = ''
         SSH private key file to use to login to the remote system. Can be
         overridden in individual commands.
+      '';
+    };
+
+    localSourceAllow = mkOption {
+      type = types.listOf types.str;
+      # Permissions snapshot and destroy are in case --no-sync-snap is not used
+      default = [ "bookmark" "hold" "send" "snapshot" "destroy" ];
+      description = ''
+        Permissions granted for the <option>services.syncoid.user</option> user
+        for local source datasets. See
+        <link xlink:href="https://openzfs.github.io/openzfs-docs/man/8/zfs-allow.8.html"/>
+        for available permissions.
+      '';
+    };
+
+    localTargetAllow = mkOption {
+      type = types.listOf types.str;
+      default = [ "change-key" "compression" "create" "mount" "mountpoint" "receive" "rollback" ];
+      example = [ "create" "mount" "receive" "rollback" ];
+      description = ''
+        Permissions granted for the <option>services.syncoid.user</option> user
+        for local target datasets. See
+        <link xlink:href="https://openzfs.github.io/openzfs-docs/man/8/zfs-allow.8.html"/>
+        for available permissions.
+        Make sure to include the <literal>change-key</literal> permission if you send raw encrypted datasets,
+        the <literal>compression</literal> permission if you send raw compressed datasets, and so on.
+        For remote target datasets you'll have to set your remote user permissions by yourself.
       '';
     };
 
@@ -133,6 +211,30 @@ in
             '';
           };
 
+          localSourceAllow = mkOption {
+            type = types.listOf types.str;
+            description = ''
+              Permissions granted for the <option>services.syncoid.user</option> user
+              for local source datasets. See
+              <link xlink:href="https://openzfs.github.io/openzfs-docs/man/8/zfs-allow.8.html"/>
+              for available permissions.
+              Defaults to <option>services.syncoid.localSourceAllow</option> option.
+            '';
+          };
+
+          localTargetAllow = mkOption {
+            type = types.listOf types.str;
+            description = ''
+              Permissions granted for the <option>services.syncoid.user</option> user
+              for local target datasets. See
+              <link xlink:href="https://openzfs.github.io/openzfs-docs/man/8/zfs-allow.8.html"/>
+              for available permissions.
+              Make sure to include the <literal>change-key</literal> permission if you send raw encrypted datasets,
+              the <literal>compression</literal> permission if you send raw compressed datasets, and so on.
+              For remote target datasets you'll have to set your remote user permissions by yourself.
+            '';
+          };
+
           sendOptions = mkOption {
             type = types.separatedString " ";
             default = "";
@@ -179,10 +281,12 @@ in
         config = {
           source = mkDefault name;
           sshKey = mkDefault cfg.sshKey;
+          localSourceAllow = mkDefault cfg.localSourceAllow;
+          localTargetAllow = mkDefault cfg.localTargetAllow;
         };
       }));
       default = { };
-      example = literalExample ''
+      example = literalExpression ''
         {
           "pool/test".target = "root@target:pool/test";
         }
@@ -221,13 +325,11 @@ in
             path = [ "/run/booted-system/sw/bin/" ];
             serviceConfig = {
               ExecStartPre =
-                # Permissions snapshot and destroy are in case --no-sync-snap is not used
-                (map (buildAllowCommand "allow" [ "bookmark" "hold" "send" "snapshot" "destroy" ]) (localDatasetName c.source)) ++
-                (map (buildAllowCommand "allow" [ "create" "mount" "receive" "rollback" ]) (localDatasetName c.target));
+                (map (buildAllowCommand c.localSourceAllow) (localDatasetName c.source)) ++
+                (map (buildAllowCommand c.localTargetAllow) (localDatasetName c.target));
               ExecStopPost =
-                # Permissions snapshot and destroy are in case --no-sync-snap is not used
-                (map (buildAllowCommand "unallow" [ "bookmark" "hold" "send" "snapshot" "destroy" ]) (localDatasetName c.source)) ++
-                (map (buildAllowCommand "unallow" [ "create" "mount" "receive" "rollback" ]) (localDatasetName c.target));
+                (map (buildUnallowCommand c.localSourceAllow) (localDatasetName c.source)) ++
+                (map (buildUnallowCommand c.localTargetAllow) (localDatasetName c.target));
               ExecStart = lib.escapeShellArgs ([ "${pkgs.sanoid}/bin/syncoid" ]
                 ++ optionals c.useCommonArgs cfg.commonArgs
                 ++ optional c.recursive "-r"

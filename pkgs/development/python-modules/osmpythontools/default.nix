@@ -13,13 +13,13 @@
 
 buildPythonPackage rec {
   pname = "osmpythontools";
-  version = "0.3.0";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "mocnik-science";
     repo = "osm-python-tools";
     rev = "v${version}";
-    sha256 = "0r72z7f7kmvvbd9zvgci8rwmfj85xj34mb3x5dj3jcv5ij5j72yh";
+    sha256 = "1m5ai9h1zbp79x0vb138fmyh2hg8lqp859s7j33lra9hds6wb40a";
   };
 
   # Upstream setup.py has test dependencies in `install_requires` argument.

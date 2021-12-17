@@ -74,6 +74,8 @@ in
   imports = [
     (mkRenamedOptionModule [ "nix" "useChroot" ] [ "nix" "useSandbox" ])
     (mkRenamedOptionModule [ "nix" "chrootDirs" ] [ "nix" "sandboxPaths" ])
+    (mkRenamedOptionModule [ "nix" "daemonIONiceLevel" ] [ "nix" "daemonIOSchedPriority" ])
+    (mkRemovedOptionModule [ "nix" "daemonNiceLevel" ] "Consider nix.daemonCPUSchedPolicy instead.")
   ];
 
   ###### interface
@@ -82,10 +84,19 @@ in
 
     nix = {
 
+      enable = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether to enable Nix.
+          Disabling Nix makes the system hard to modify and the Nix programs and configuration will not be made available by NixOS itself.
+        '';
+      };
+
       package = mkOption {
         type = types.package;
         default = pkgs.nix;
-        defaultText = "pkgs.nix";
+        defaultText = literalExpression "pkgs.nix";
         description = ''
           This option specifies the Nix package instance to use throughout the system.
         '';
@@ -175,22 +186,71 @@ in
         '';
       };
 
-      daemonNiceLevel = mkOption {
-        type = types.int;
-        default = 0;
+      daemonCPUSchedPolicy = mkOption {
+        type = types.enum ["other" "batch" "idle"];
+        default = "other";
+        example = "batch";
         description = ''
-          Nix daemon process priority. This priority propagates to build processes.
-          0 is the default Unix process priority, 19 is the lowest.
-        '';
+          Nix daemon process CPU scheduling policy. This policy propagates to
+          build processes. <literal>other</literal> is the default scheduling
+          policy for regular tasks. The <literal>batch</literal> policy is
+          similar to <literal>other</literal>, but optimised for
+          non-interactive tasks. <literal>idle</literal> is for extremely
+          low-priority tasks that should only be run when no other task
+          requires CPU time.
+
+          Please note that while using the <literal>idle</literal> policy may
+          greatly improve responsiveness of a system performing expensive
+          builds, it may also slow down and potentially starve crucial
+          configuration updates during load.
+
+          <literal>idle</literal> may therefore be a sensible policy for
+          systems that experience only intermittent phases of high CPU load,
+          such as desktop or portable computers used interactively. Other
+          systems should use the <literal>other</literal> or
+          <literal>batch</literal> policy instead.
+
+          For more fine-grained resource control, please refer to
+          <citerefentry><refentrytitle>systemd.resource-control
+          </refentrytitle><manvolnum>5</manvolnum></citerefentry> and adjust
+          <option>systemd.services.nix-daemon</option> directly.
+      '';
       };
 
-      daemonIONiceLevel = mkOption {
+      daemonIOSchedClass = mkOption {
+        type = types.enum ["best-effort" "idle"];
+        default = "best-effort";
+        example = "idle";
+        description = ''
+          Nix daemon process I/O scheduling class. This class propagates to
+          build processes. <literal>best-effort</literal> is the default
+          class for regular tasks. The <literal>idle</literal> class is for
+          extremely low-priority tasks that should only perform I/O when no
+          other task does.
+
+          Please note that while using the <literal>idle</literal> scheduling
+          class can improve responsiveness of a system performing expensive
+          builds, it might also slow down or starve crucial configuration
+          updates during load.
+
+          <literal>idle</literal> may therefore be a sensible class for
+          systems that experience only intermittent phases of high I/O load,
+          such as desktop or portable computers used interactively. Other
+          systems should use the <literal>best-effort</literal> class.
+      '';
+      };
+
+      daemonIOSchedPriority = mkOption {
         type = types.int;
         default = 0;
+        example = 1;
         description = ''
-          Nix daemon process I/O priority. This priority propagates to build processes.
-          0 is the default Unix process I/O priority, 7 is the lowest.
-        '';
+          Nix daemon process I/O scheduling priority. This priority propagates
+          to build processes. The supported priorities depend on the
+          scheduling policy: With idle, priorities are not used in scheduling
+          decisions. best-effort supports values in the range 0 (high) to 7
+          (low).
+      '';
       };
 
       buildMachines = mkOption {
@@ -460,7 +520,7 @@ in
               flake = mkOption {
                 type = types.nullOr types.attrs;
                 default = null;
-                example = literalExample "nixpkgs";
+                example = literalExpression "nixpkgs";
                 description = ''
                   The flake input to which <option>from></option> is to be rewritten.
                 '';
@@ -499,7 +559,7 @@ in
 
   ###### implementation
 
-  config = {
+  config = mkIf cfg.enable {
 
     nix.binaryCachePublicKeys = [ "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=" ];
     nix.binaryCaches = [ "https://cache.nixos.org/" ];
@@ -508,7 +568,7 @@ in
       [ nix
         pkgs.nix-info
       ]
-      ++ optional (config.programs.bash.enableCompletion && !versionAtLeast nixVersion "2.4pre") pkgs.nix-bash-completions;
+      ++ optional (config.programs.bash.enableCompletion) pkgs.nix-bash-completions;
 
     environment.etc."nix/nix.conf".source = nixConf;
 
@@ -534,6 +594,22 @@ in
             + "\n"
           ) cfg.buildMachines;
       };
+    assertions =
+      let badMachine = m: m.system == null && m.systems == [];
+      in [
+        {
+          assertion = !(builtins.any badMachine cfg.buildMachines);
+          message = ''
+            At least one system type (via <varname>system</varname> or
+              <varname>systems</varname>) must be set for every build machine.
+              Invalid machine specifications:
+          '' + "      " +
+          (builtins.concatStringsSep "\n      "
+            (builtins.map (m: m.hostName)
+              (builtins.filter (badMachine) cfg.buildMachines)));
+        }
+      ];
+
 
     systemd.packages = [ nix ];
 
@@ -550,8 +626,9 @@ in
         unitConfig.RequiresMountsFor = "/nix/store";
 
         serviceConfig =
-          { Nice = cfg.daemonNiceLevel;
-            IOSchedulingPriority = cfg.daemonIONiceLevel;
+          { CPUSchedulingPolicy = cfg.daemonCPUSchedPolicy;
+            IOSchedulingClass = cfg.daemonIOSchedClass;
+            IOSchedulingPriority = cfg.daemonIOSchedPriority;
             LimitNOFILE = 4096;
           };
 

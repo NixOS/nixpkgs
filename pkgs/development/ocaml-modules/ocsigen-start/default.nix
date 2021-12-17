@@ -5,7 +5,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "ocaml${ocaml.version}-ocsigen-start-${version}";
+  pname = "ocaml${ocaml.version}-ocsigen-start";
   version = "4.3.0";
 
   buildInputs = [ ocaml findlib ];

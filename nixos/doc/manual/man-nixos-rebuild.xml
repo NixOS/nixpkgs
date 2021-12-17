@@ -553,6 +553,22 @@
 
    <varlistentry>
     <term>
+     <option>--use-substitutes</option>
+    </term>
+    <listitem>
+     <para>
+       When set, nixos-rebuild will add <option>--use-substitutes</option>
+       to each invocation of nix-copy-closure. This will only affect the
+       behavior of nixos-rebuild if <option>--target-host</option> or
+       <option>--build-host</option> is also set. This is useful when
+       the target-host connection to cache.nixos.org is faster than the
+       connection between hosts.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>
      <option>--use-remote-sudo</option>
     </term>
     <listitem>

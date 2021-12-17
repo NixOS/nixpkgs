@@ -18,5 +18,6 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/siraben/remkrom";
     license = licenses.mit;
     maintainers = with maintainers; [ siraben ];
+    mainProgram = "remkrom";
   };
 }

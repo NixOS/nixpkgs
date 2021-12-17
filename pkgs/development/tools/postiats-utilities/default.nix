@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "postiats-utilities";
-  version = "2.0.1";
+  version = "2.1.1";
   src = fetchFromGitHub {
     owner = "Hibou57";
     repo = "PostiATS-Utilities";
     rev = "v${version}";
-    sha256 = "1238zp6sh60rdqbzff0w5c36w2z1jr44qnv43qidmcp19zvr7jd5";
+    sha256 = "sha256-QeBbv5lwqL2ARjB+RGyBHeuibaxugffBLhC9lYs+5tE=";
   };
 
   meta = with lib; {

@@ -12,7 +12,8 @@ assert check-ocaml-version "4";
 
 stdenv.mkDerivation {
 
-  name = "mezzo-0.0.m8";
+  pname = "mezzo";
+  version = "0.0.m8";
 
   src = fetchFromGitHub {
     owner = "protz";

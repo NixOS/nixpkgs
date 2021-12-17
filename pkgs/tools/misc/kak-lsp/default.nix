@@ -1,23 +1,23 @@
-{ stdenv, lib, fetchFromGitHub, rustPlatform, Security }:
+{ stdenv, lib, fetchFromGitHub, rustPlatform, Security, SystemConfiguration }:
 
 rustPlatform.buildRustPackage rec {
   pname = "kak-lsp";
-  version = "10.0.0";
+  version = "11.0.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-SmK4G9AoKGqKGbXucn5AO5DTOeVNq3gCBGvDTIJQgRU=";
+    sha256 = "sha256-rSUXMQF4V+ToYw3RIfEZd2AfAiHoRPDC3DZBAg2zeKo=";
   };
 
-  cargoSha256 = "sha256-iY5xT8e/gRN/mBT9v5LhMcl9g1/SyrH/glPBP+toZ9o=";
+  cargoSha256 = "sha256-vcq+WVHmGFrZFLzNWyHU7qN6cDSKP9pAzxZNs2+8jR8=";
 
-  buildInputs = lib.optional stdenv.isDarwin [ Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
 
   meta = with lib; {
     description = "Kakoune Language Server Protocol Client";
-    homepage = "https://github.com/ul/kak-lsp";
+    homepage = "https://github.com/kak-lsp/kak-lsp";
     license = with licenses; [ unlicense /* or */ mit ];
     maintainers = [ maintainers.spacekookie ];
   };

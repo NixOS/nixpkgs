@@ -12,14 +12,16 @@
 
 buildPythonPackage rec {
   pname = "pyzerproc";
-  version = "0.4.9";
-  disabled = pythonOlder "3.6";
+  version = "0.4.10";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "emlove";
     repo = pname;
     rev = version;
-    sha256 = "11bsvmvazx9gpj0w80b6wgdp41z8y2sk6bhkj3ps7grsgr59n7rz";
+    sha256 = "sha256-sfxyHpJzYYwxLsvfJpqI6cC/CKS7Jx0vXSLL3QD9qV4=";
   };
 
   postPatch = ''
@@ -39,7 +41,9 @@ buildPythonPackage rec {
     asynctest
   ];
 
-  pythonImportsCheck = [ "pyzerproc" ];
+  pythonImportsCheck = [
+    "pyzerproc"
+  ];
 
   meta = with lib; {
     description = "Python library to control Zerproc Bluetooth LED smart string lights";

@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "packer";
-  version = "1.7.4";
+  version = "1.7.8";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "packer";
     rev = "v${version}";
-    sha256 = "sha256-VNOq9uhtzf1hdEn+bkAOYy4gZxP5ek0WaaS/71uJzrA=";
+    sha256 = "sha256-VLHibkyuB8H2zfUCAuk7lBKbW5bl2kJOkwpo/iqsdm8=";
   };
 
-  vendorSha256 = "sha256-WYA/wZJg93+X4IAX9hOMRHVRQRyA4N4aDaScDgkGUIE=";
+  vendorSha256 = "sha256-NB3oD4IB2xC9+d2eghPa1hnJM7Eop88zvRFlHdQDn38=";
 
   subPackages = [ "." ];
 
@@ -28,6 +28,7 @@ buildGoModule rec {
     homepage    = "https://www.packer.io";
     license     = licenses.mpl20;
     maintainers = with maintainers; [ cstrahan zimbatm ma27 ];
+    changelog   = "https://github.com/hashicorp/packer/blob/v${version}/CHANGELOG.md";
     platforms   = platforms.unix;
   };
 }

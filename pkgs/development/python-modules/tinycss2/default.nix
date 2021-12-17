@@ -1,44 +1,36 @@
 { lib
 , buildPythonPackage
 , pythonOlder
-, fetchPypi
-, fetchpatch
+, fetchFromGitHub
 , webencodings
-# Check inputs
-, pytest
-, pytest-runner
-, pytest-cov
-, pytest-flake8
-, pytest-isort
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "tinycss2";
-  version = "1.0.2";
+  version = "1.1.0";
   disabled = pythonOlder "3.5";
+  format = "flit";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1kw84y09lggji4krkc58jyhsfj31w8npwhznr7lf19d0zbix09v4";
+  src = fetchFromGitHub {
+    owner = "kozea";
+    repo = "tinycss2";
+    rev = "v${version}";
+    # for tests
+    fetchSubmodules = true;
+    sha256 = "sha256-WA88EYolL76WqeA1UKR3Sfw11j8NuOGOxPezujYizH8=";
   };
-
-  patches = [
-    (
-      fetchpatch {
-        name = "tinycss2-fix-pytest-flake8-fail.patch";
-        url = "https://github.com/Kozea/tinycss2/commit/6556604fb98c2153412384d6f0f705db2da1aa60.patch";
-        sha256 = "1srvdzg1bak65fawd611rlskcgn5abmwmyjnk8qrrrasr554bc59";
-      }
-    )
-  ];
 
   propagatedBuildInputs = [ webencodings ];
 
-  checkInputs = [ pytest pytest-runner pytest-cov pytest-flake8 pytest-isort ];
+  checkInputs = [
+    pytestCheckHook
+  ];
 
-  # https://github.com/PyCQA/pycodestyle/issues/598
-  preCheck = ''
-    printf "[flake8]\nignore=W504,E741,E126" >> setup.cfg
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "'pytest-cov', 'pytest-flake8', 'pytest-isort', 'coverage[toml]'" "" \
+      --replace "--isort --flake8 --cov" ""
   '';
 
   meta = with lib; {

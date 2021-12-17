@@ -15,8 +15,7 @@ mkCoqDerivation rec {
 
   inherit version;
   defaultVersion = with versions; switch coq.coq-version [
-    { case = isGe "8.13"; out = "8.13.0"; }
-    { case = "8.11"; out = "8.11.1"; }
+    { case = range "8.10" "8.13"; out = "8.13.0"; }
     { case = "8.9"; out = "8.9.0"; }
     { case = "8.8"; out = "8.8.0"; }
     { case = "8.7"; out = "8.7.0"; }

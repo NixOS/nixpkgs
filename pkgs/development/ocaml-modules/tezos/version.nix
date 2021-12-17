@@ -6,11 +6,14 @@
 
 buildDunePackage {
   pname = "tezos-version";
-  inherit (tezos-stdlib) version src useDune2 preBuild doCheck;
+  inherit (tezos-stdlib) version useDune2;
+  src = "${tezos-stdlib.base_src}/src/lib_version";
 
   propagatedBuildInputs = [
     tezos-base
   ];
+
+  doCheck = true;
 
   meta = tezos-stdlib.meta // {
     description = "Tezos: version information generated from Git";

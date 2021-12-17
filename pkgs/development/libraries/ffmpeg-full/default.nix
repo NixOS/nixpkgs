@@ -244,7 +244,7 @@ assert opensslExtlib -> gnutls == null && openssl != null && nonfreeLicensing;
 
 stdenv.mkDerivation rec {
   pname = "ffmpeg-full";
-  inherit (ffmpeg) src version;
+  inherit (ffmpeg) src version patches;
 
   prePatch = ''
     patchShebangs .
@@ -446,6 +446,14 @@ stdenv.mkDerivation rec {
 
   buildFlags = [ "all" ]
     ++ optional qtFaststartProgram "tools/qt-faststart"; # Build qt-faststart executable
+
+  doCheck = true;
+  checkPhase = let
+    ldLibraryPathEnv = if stdenv.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
+  in ''
+    ${ldLibraryPathEnv}="libavcodec:libavdevice:libavfilter:libavformat:libavresample:libavutil:libpostproc:libswresample:libswscale:''${${ldLibraryPathEnv}}" \
+      make check -j$NIX_BUILD_CORES
+  '';
 
   # Hacky framework patching technique borrowed from the phantomjs2 package
   postInstall = optionalString qtFaststartProgram ''

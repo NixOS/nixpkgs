@@ -24,7 +24,7 @@
 , gobject-introspection
 , fribidi
 , xorg
-, epoxy
+, libepoxy
 , libxkbcommon
 , libxml2
 , gmp
@@ -76,12 +76,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./patches/3.0-immodules.cache.patch
-
-    (fetchpatch {
-      name = "Xft-setting-fallback-compute-DPI-properly.patch";
-      url = "https://bug757142.bugzilla-attachments.gnome.org/attachment.cgi?id=344123";
-      sha256 = "0g6fhqcv8spfy3mfmxpyji93k8d4p4q4fz1v9a1c1cgcwkz41d7p";
-    })
+    ./patches/3.0-Xft-setting-fallback-compute-DPI-properly.patch
   ] ++ lib.optionals stdenv.isDarwin [
     # X11 module requires <gio/gdesktopappinfo.h> which is not installed on Darwin
     # let’s drop that dependency in similar way to how other parts of the library do it
@@ -109,7 +104,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libxkbcommon
-    epoxy
+    libepoxy
     isocodes
   ] ++ lib.optionals stdenv.isDarwin [
     AppKit
@@ -153,6 +148,8 @@ stdenv.mkDerivation rec {
     "-Dtests=false"
     "-Dtracker3=${lib.boolToString trackerSupport}"
     "-Dbroadway_backend=${lib.boolToString broadwaySupport}"
+    "-Dx11_backend=${lib.boolToString x11Support}"
+    "-Dquartz_backend=${lib.boolToString (stdenv.isDarwin && !x11Support)}"
   ];
 
   doCheck = false; # needs X11
@@ -164,6 +161,10 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-DG_ENABLE_DEBUG -DG_DISABLE_CAST_CHECKS";
 
   postPatch = ''
+    # See https://github.com/NixOS/nixpkgs/issues/132259
+    substituteInPlace meson.build \
+      --replace "x11_enabled = false" ""
+
     files=(
       build-aux/meson/post-install.py
       demos/gtk-demo/geninclude.py
@@ -207,6 +208,7 @@ stdenv.mkDerivation rec {
     updateScript = gnome.updateScript {
       packageName = "gtk+";
       attrPath = "gtk3";
+      freeze = true;
     };
   };
 

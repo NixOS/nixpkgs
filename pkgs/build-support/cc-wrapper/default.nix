@@ -463,6 +463,9 @@ stdenv.mkDerivation {
     + optionalString (targetPlatform ? gcc.mode) ''
       echo "-mmode=${targetPlatform.gcc.mode}" >> $out/nix-support/cc-cflags-before
     ''
+    + optionalString (targetPlatform ? gcc.thumb) ''
+      echo "-m${if targetPlatform.gcc.thumb then "thumb" else "arm"}" >> $out/nix-support/cc-cflags-before
+    ''
     + optionalString (targetPlatform ? gcc.tune &&
                       isGccArchSupported targetPlatform.gcc.tune) ''
       echo "-mtune=${targetPlatform.gcc.tune}" >> $out/nix-support/cc-cflags-before

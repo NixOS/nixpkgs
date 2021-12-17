@@ -20,7 +20,7 @@ callPackage ./generic.nix {
     })
   ];
 
-  preConfigure = lib.optional stdenv.buildPlatform.isDarwin ''
+  preConfigure = lib.optionalString stdenv.buildPlatform.isDarwin ''
     rm BUILD
   '';
 }

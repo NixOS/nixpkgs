@@ -52,6 +52,13 @@ Additionally, the following syntax extensions are currently used:
 
   This syntax is taken from [MyST](https://myst-parser.readthedocs.io/en/latest/using/syntax.html#targets-and-cross-referencing).
 
+- []{#ssec-contributing-markup-inline-roles}
+  If you want to link to a man page, you can use `` {manpage}`nix.conf(5)` ``, which will turn into {manpage}`nix.conf(5)`.
+
+  The references will turn into links when a mapping exists in {file}`doc/build-aux/pandoc-filters/unix-man-urls.lua`.
+
+  This syntax is taken from [MyST](https://myst-parser.readthedocs.io/en/latest/syntax/syntax.html#roles-an-in-line-extension-point). Though, the feature originates from [reStructuredText](https://www.sphinx-doc.org/en/master/usage/restructuredtext/roles.html#role-manpage) with slightly different syntax.
+
 - []{#ssec-contributing-markup-admonitions}
   **Admonitions**, set off from the text to bring attention to something.
 

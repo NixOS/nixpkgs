@@ -1,5 +1,5 @@
 { newScope, config, stdenv, fetchurl, makeWrapper
-, llvmPackages_12, llvmPackages_13, ed, gnugrep, coreutils, xdg-utils
+, llvmPackages_13, ed, gnugrep, coreutils, xdg-utils
 , glib, gtk3, gnome, gsettings-desktop-schemas, gn, fetchgit
 , libva, pipewire, wayland
 , gcc, nspr, nss, runCommand
@@ -19,18 +19,34 @@
 }:
 
 let
-  llvmPackages = llvmPackages_12;
+  llvmPackages = llvmPackages_13;
   stdenv = llvmPackages.stdenv;
+
+  upstream-info = (lib.importJSON ./upstream-info.json).${channel};
+
+  # Helper functions for changes that depend on specific versions:
+  warnObsoleteVersionConditional = min-version: result:
+    let ungoogled-version = (lib.importJSON ./upstream-info.json).ungoogled-chromium.version;
+    in lib.warnIf
+         (lib.versionAtLeast ungoogled-version min-version)
+         "chromium: ungoogled version ${ungoogled-version} is newer than a conditional bounded at ${min-version}. You can safely delete it."
+         result;
+  chromiumVersionAtLeast = min-version:
+    let result = lib.versionAtLeast upstream-info.version min-version;
+    in  warnObsoleteVersionConditional min-version result;
+  versionRange = min-version: upto-version:
+    let inherit (upstream-info) version;
+        result = lib.versionAtLeast version min-version && lib.versionOlder version upto-version;
+    in warnObsoleteVersionConditional upto-version result;
 
   callPackage = newScope chromium;
 
   chromium = rec {
-    inherit stdenv llvmPackages;
-
-    upstream-info = (lib.importJSON ./upstream-info.json).${channel};
+    inherit stdenv llvmPackages upstream-info;
 
     mkChromiumDerivation = callPackage ./common.nix ({
-      inherit channel gnome2 gnomeSupport gnomeKeyringSupport proprietaryCodecs
+      inherit channel chromiumVersionAtLeast versionRange;
+      inherit gnome2 gnomeSupport gnomeKeyringSupport proprietaryCodecs
               cupsSupport pulseSupport ungoogled;
       gnChromium = gn.overrideAttrs (oldAttrs: {
         inherit (upstream-info.deps.gn) version;
@@ -38,12 +54,11 @@ let
           inherit (upstream-info.deps.gn) url rev sha256;
         };
       });
-    } // lib.optionalAttrs (lib.versionAtLeast upstream-info.version "94") rec {
-      llvmPackages = llvmPackages_13;
-      stdenv = llvmPackages.stdenv;
     });
 
-    browser = callPackage ./browser.nix { inherit channel enableWideVine ungoogled; };
+    browser = callPackage ./browser.nix {
+      inherit channel chromiumVersionAtLeast enableWideVine ungoogled;
+    };
 
     ungoogled-chromium = callPackage ./ungoogled.nix {};
   };

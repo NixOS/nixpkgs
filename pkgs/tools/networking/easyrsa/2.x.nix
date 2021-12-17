@@ -1,11 +1,18 @@
-{ lib, stdenv, fetchurl, autoreconfHook, makeWrapper
-, gnugrep, openssl }:
+{ lib
+, stdenv
+, fetchurl
+, autoreconfHook
+, makeWrapper
+, gnugrep
+, openssl
+}:
 
-stdenv.mkDerivation {
-  name = "easyrsa-2.2.0";
+stdenv.mkDerivation rec {
+  pname = "easyrsa";
+  version = "2.2.0";
 
   src = fetchurl {
-    url = "https://github.com/OpenVPN/easy-rsa/archive/v2.2.0.tar.gz";
+    url = "https://github.com/OpenVPN/easy-rsa/archive/v${version}.tar.gz";
     sha256 = "1xq4by5frb6ikn53ss3y8v7ss639dccxfq8jfrbk07ynkmk668qk";
   };
 

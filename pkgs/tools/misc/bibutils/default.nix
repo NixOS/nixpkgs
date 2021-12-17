@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "bibutils";
-  version = "6.10";
+  version = "7.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/bibutils/bibutils_${version}_src.tgz";
-    sha256 = "15p4av74ihsg03j854dkdqihpspwnp58p9g1lhx48w8kz91c0ml6";
+    sha256 = "sha256-bgKK7x6Kaz5azvCYWEp7tocI81z+dAEbNBwR/qXktcM=";
   };
 
   preConfigure = lib.optionalString stdenv.isDarwin ''

@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, fetchpatch
-, autoreconfHook, libgpgerror, gnupg, pkg-config, glib, pth, libassuan
+, autoreconfHook, libgpg-error, gnupg, pkg-config, glib, pth, libassuan
 , file, which, ncurses
 , texinfo
 , buildPackages
@@ -21,16 +21,10 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (fetchpatch { # probably included in > 1.16.0
-      name = "test_t-edit-sign.diff"; # we experienced segmentation fault in this test
-      url = "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=gpgme.git;a=patch;h=81a33ea5e1b86d586b956e893a5b25c4cd41c969";
-      sha256 = "1xxvv0kc9wdj5hzpddzs3cn8dhmm2cb29224a7h9vairraq5272h";
-    })
-    (fetchpatch { # gpg: Send --with-keygrip when listing keys
-      name = "c4cf527ea227edb468a84bf9b8ce996807bd6992.patch";
-      url = "http://git.gnupg.org/cgi-bin/gitweb.cgi?p=gpgme.git;a=patch;h=c4cf527ea227edb468a84bf9b8ce996807bd6992";
-      sha256 = "0y0b0lb2nq5p9kx13b59b2jaz157mvflliw1qdvg1v1hynvgb8m4";
-    })
+    # probably included in > 1.16.0
+    ./test_t-edit-sign.diff
+    # https://dev.gnupg.org/rMc4cf527ea227edb468a84bf9b8ce996807bd6992
+    ./fix_gpg_list_keys.diff
     # https://lists.gnupg.org/pipermail/gnupg-devel/2020-April/034591.html
     (fetchpatch {
       name = "0001-Fix-python-tests-on-non-Linux.patch";
@@ -46,7 +40,7 @@ stdenv.mkDerivation rec {
   outputBin = "dev"; # gpgme-config; not so sure about gpgme-tool
 
   propagatedBuildInputs =
-    [ libgpgerror glib libassuan pth ]
+    [ libgpg-error glib libassuan pth ]
     ++ lib.optional (qtbase != null) qtbase;
 
   nativeBuildInputs = [ pkg-config gnupg texinfo autoreconfHook ]
@@ -58,7 +52,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--enable-fixed-path=${gnupg}/bin"
-    "--with-libgpg-error-prefix=${libgpgerror.dev}"
+    "--with-libgpg-error-prefix=${libgpg-error.dev}"
     "--with-libassuan-prefix=${libassuan.dev}"
   ] ++ lib.optional pythonSupport "--enable-languages=python"
   # Tests will try to communicate with gpg-agent instance via a UNIX socket

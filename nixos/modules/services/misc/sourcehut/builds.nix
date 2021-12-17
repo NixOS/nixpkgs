@@ -54,7 +54,7 @@ in
     images = mkOption {
       type = types.attrsOf (types.attrsOf (types.attrsOf types.package));
       default = { };
-      example = lib.literalExample ''(let
+      example = lib.literalExpression ''(let
           # Pinning unstable to allow usage with flakes and limit rebuilds.
           pkgs_unstable = builtins.fetchGit {
               url = "https://github.com/NixOS/nixpkgs";
@@ -84,7 +84,7 @@ in
             (rev: archs:
               lib.attrsets.mapAttrsToList
                 (arch: image:
-                  pkgs.runCommandNoCC "buildsrht-images" { } ''
+                  pkgs.runCommand "buildsrht-images" { } ''
                     mkdir -p $out/${distro}/${rev}/${arch}
                     ln -s ${image}/*.qcow2 $out/${distro}/${rev}/${arch}/root.img.qcow2
                   '')
@@ -97,7 +97,7 @@ in
         "${pkgs.sourcehut.buildsrht}/lib/images"
       ];
     };
-    image_dir = pkgs.runCommandNoCC "builds.sr.ht-worker-images" { } ''
+    image_dir = pkgs.runCommand "builds.sr.ht-worker-images" { } ''
       mkdir -p $out/images
       cp -Lr ${image_dir_pre}/* $out/images
     '';

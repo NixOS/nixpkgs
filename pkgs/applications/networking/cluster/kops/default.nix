@@ -21,11 +21,10 @@ let
         nativeBuildInputs = [ go-bindata installShellFiles ];
         subPackages = [ "cmd/kops" ];
 
-        buildFlagsArray = ''
-          -ldflags=
-              -X k8s.io/kops.Version=${version}
-              -X k8s.io/kops.GitVersion=${version}
-        '';
+        ldflags = [
+          "-X k8s.io/kops.Version=${version}"
+          "-X k8s.io/kops.GitVersion=${version}"
+        ];
 
         preBuild = ''
           (cd go/src/k8s.io/kops
@@ -53,21 +52,21 @@ rec {
 
   mkKops = generic;
 
-  kops_1_19 = mkKops rec {
-    version = "1.19.2";
-    sha256 = "15csxih1xy8myky37n5dyzp5mc31pc4bq9asaw6zz51mgw8ad5r9";
-    rev = "v${version}";
-  };
-
   kops_1_20 = mkKops rec {
-    version = "1.20.2";
-    sha256 = "011ib3xkj6nn7qax8d0ns8y4jhkwwmry1qnzxklvzssaxhmzs557";
+    version = "1.20.3";
+    sha256 = "sha256-Yrh0wFz7MQgTDwENqQouYh3pr1gOq64Rqft5yxIiCAo=";
     rev = "v${version}";
   };
 
   kops_1_21 = mkKops rec {
-    version = "1.21.0";
-    sha256 = "sha256-T2i3qpg3GC7yaYCGrN1V5XXrUyT+Ce9Q4aV00gQJ7gM=";
+    version = "1.21.4";
+    sha256 = "sha256-f2xOVa3N/GH5IoI6H/QwDdKTeQoF/kEHX6lNytCZ9cs=";
+    rev = "v${version}";
+  };
+
+  kops_1_22 = mkKops rec {
+    version = "1.22.2";
+    sha256 = "sha256-9LT4/iwlPFiz+hUHE0y8DK8T9xwL9HkrrFUXrEqKbM8=";
     rev = "v${version}";
   };
 }

@@ -88,6 +88,9 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gnome-settings-daemon = callPackage ./core/gnome-settings-daemon { };
 
+  # Using 3.38 to match Mutter used in Pantheon
+  gnome-settings-daemon338 = callPackage ./core/gnome-settings-daemon/3.38 { };
+
   gnome-software = callPackage ./core/gnome-software { };
 
   gnome-system-monitor = callPackage ./core/gnome-system-monitor { };
@@ -106,9 +109,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   mutter = callPackage ./core/mutter { };
 
-  # Needed for elementary's gala and greeter until 3.36 support has more bugfixes
-  # https://github.com/elementary/gala/issues/763
-  mutter334 = callPackage ./core/mutter/3.34 { };
+  # Needed for elementary's gala and greeter until support for higher versions is provided
+  mutter338 = callPackage ./core/mutter/3.38 { };
 
   nautilus = callPackage ./core/nautilus { };
 
@@ -355,7 +357,9 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   maintainers = lib.teams.gnome.members;
 
-  mutter328 = throw "Removed as Pantheon is upgraded to mutter334.";
+  mutter328 = throw "Removed as Pantheon is upgraded to mutter338.";
+
+  mutter334 = throw "Removed as Pantheon is upgraded to mutter338.";
 
   gnome-getting-started-docs = throw "Removed in favour of gnome-tour.";
 

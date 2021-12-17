@@ -9,19 +9,20 @@
 , oniguruma
 , libiconv
 , Security
+, libxcb
 , zlib
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "broot";
-  version = "1.6.2";
+  version = "1.7.4";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-SjfTMBGby2jzmeNEtBVYqumLExhXW8nqxpbaeeaRM3w=";
+    sha256 = "sha256-laFLm6A0EeprSHuqBi3p4ykgBbCinYU1sf0iRV0PY/M=";
   };
 
-  cargoHash = "sha256-BdSqTzXu7Glhr0fQGmnkg5BXYgdQS6jgfH3A9hPpECY=";
+  cargoHash = "sha256-0ybig1S56cJjf6QGWuDasfsIiwRhK+bpWNKOjs4D7P8=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -29,7 +30,7 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs = [ libgit2 oniguruma ] ++ lib.optionals stdenv.isDarwin [
+  buildInputs = [ libgit2 oniguruma libxcb ] ++ lib.optionals stdenv.isDarwin [
     libiconv
     Security
     zlib
@@ -72,9 +73,15 @@ rustPlatform.buildRustPackage rec {
     installManPage man/broot.1
   '';
 
+  doInstallCheck = true;
+  installCheckPhase = ''
+    $out/bin/broot --version | grep "${version}"
+  '';
+
   meta = with lib; {
     description = "An interactive tree view, a fuzzy search, a balanced BFS descent and customizable commands";
     homepage = "https://dystroy.org/broot/";
+    changelog = "https://github.com/Canop/broot/releases/tag/v${version}";
     maintainers = with maintainers; [ dywedir ];
     license = with licenses; [ mit ];
   };

@@ -17,6 +17,7 @@ in {
     name = mkOption {
       description = "Etcd unique node name.";
       default = config.networking.hostName;
+      defaultText = literalExpression "config.networking.hostName";
       type = types.str;
     };
 
@@ -123,7 +124,7 @@ in {
       '';
       type = types.attrsOf types.str;
       default = {};
-      example = literalExample ''
+      example = literalExpression ''
         {
           "CORS" = "*";
           "NAME" = "default-name";
@@ -187,9 +188,11 @@ in {
     environment.systemPackages = [ pkgs.etcd ];
 
     users.users.etcd = {
-      uid = config.ids.uids.etcd;
+      isSystemUser = true;
+      group = "etcd";
       description = "Etcd daemon user";
       home = cfg.dataDir;
     };
+    users.groups.etcd = {};
   };
 }

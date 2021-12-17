@@ -14,12 +14,12 @@
 
 buildPythonPackage rec {
   pname = "locationsharinglib";
-  version = "4.1.6";
-  disabled = pythonOlder "3.6";
+  version = "4.1.8";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "092j8z01nwjqh5zr7aj8mxl1zjd3j2irhrs39dhn47bd6db2a6ij";
+    sha256 = "sha256-69NzKSWpuU0Riwlj6cFC4h/shc/83e1mpq++zxDqftY=";
   };
 
   propagatedBuildInputs = [
@@ -39,6 +39,8 @@ buildPythonPackage rec {
     # Tests requirements want to pull in multiple modules which we don't need
     substituteInPlace setup.py \
       --replace "tests_require=test_requirements" "tests_require=[]"
+     substituteInPlace requirements.txt \
+       --replace "coloredlogs>=15.0.1" "coloredlogs"
   '';
 
   checkPhase = ''

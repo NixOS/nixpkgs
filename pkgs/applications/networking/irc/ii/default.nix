@@ -9,9 +9,9 @@ stdenv.mkDerivation rec {
     sha256 = "1lk8vjl7i8dcjh4jkg8h8bkapcbs465sy8g9c0chfqsywbmf3ndr";
   };
 
-  installPhase = ''
-    make install PREFIX=$out
-  '';
+  makeFlags = [ "CC:=$(CC)" ];
+
+  installFlags = [ "PREFIX=$(out)" ];
 
   meta = {
     homepage = "https://tools.suckless.org/ii/";

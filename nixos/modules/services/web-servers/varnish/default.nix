@@ -13,10 +13,12 @@ in
     services.varnish = {
       enable = mkEnableOption "Varnish Server";
 
+      enableConfigCheck = mkEnableOption "checking the config during build time" // { default = true; };
+
       package = mkOption {
         type = types.package;
         default = pkgs.varnish;
-        defaultText = "pkgs.varnish";
+        defaultText = literalExpression "pkgs.varnish";
         description = ''
           The package to use
         '';
@@ -40,6 +42,7 @@ in
       stateDir = mkOption {
         type = types.path;
         default = "/var/spool/varnish/${config.networking.hostName}";
+        defaultText = literalExpression ''"/var/spool/varnish/''${config.networking.hostName}"'';
         description = "
           Directory holding all state for Varnish to run.
         ";
@@ -48,7 +51,7 @@ in
       extraModules = mkOption {
         type = types.listOf types.package;
         default = [];
-        example = literalExample "[ pkgs.varnishPackages.geoip ]";
+        example = literalExpression "[ pkgs.varnishPackages.geoip ]";
         description = "
           Varnish modules (except 'std').
         ";
@@ -96,11 +99,10 @@ in
     environment.systemPackages = [ cfg.package ];
 
     # check .vcl syntax at compile time (e.g. before nixops deployment)
-    system.extraDependencies = [
-      (pkgs.stdenv.mkDerivation {
-        name = "check-varnish-syntax";
-        buildCommand = "${cfg.package}/sbin/varnishd -C ${commandLine} 2> $out || (cat $out; exit 1)";
-      })
+    system.extraDependencies = mkIf cfg.enableConfigCheck [
+      (pkgs.runCommand "check-varnish-syntax" {} ''
+        ${cfg.package}/bin/varnishd -C ${commandLine} 2> $out || (cat $out; exit 1)
+      '')
     ];
 
     users.users.varnish = {

@@ -15,6 +15,12 @@ stdenv.mkDerivation rec {
     configureFlagsArray+=("CFLAGS=-fno-strict-aliasing -fno-aggressive-loop-optimizations")
   '';
 
+  # Disable parallel builds as manpages lack some dependencies:
+  #    ../tool/jhton ext/JudyHS_funcs_3.htm | grep -v '^[   ]*$' | sed -e 's/\.C//' > man/man3/JudyHS_funcs
+  #    make[2]: *** No rule to make target 'man/man3/JSLD', needed by 'all-am'.  Stop.
+  # Let's wait for the upstream fix similar to https://sourceforge.net/p/judy/patches/4/
+  enableParallelBuilding = false;
+
   meta = {
     homepage = "http://judy.sourceforge.net/";
     license = lib.licenses.lgpl21Plus;

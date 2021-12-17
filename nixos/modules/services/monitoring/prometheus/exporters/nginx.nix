@@ -47,7 +47,7 @@ in
       ExecStart = ''
         ${pkgs.prometheus-nginx-exporter}/bin/nginx-prometheus-exporter \
           --nginx.scrape-uri '${cfg.scrapeUri}' \
-          --nginx.ssl-verify ${toString cfg.sslVerify} \
+          --nginx.ssl-verify ${boolToString cfg.sslVerify} \
           --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
           --web.telemetry-path ${cfg.telemetryPath} \
           --prometheus.const-labels ${concatStringsSep "," cfg.constLabels} \

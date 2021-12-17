@@ -1,15 +1,24 @@
-{ lib, stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "re2";
-  version = "2021-04-01";
+  version = "2021-09-01";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "re2";
     rev = version;
-    sha256 = "1iia0883lssj7ckbsr0n7yb3gdw24c8wnl2q5hhzlml23h4ipbh3";
+    sha256 = "1fyhypw345xz8zdh53gz6j1fwgrx0gszk1d349ja37dpxh4jp2jh";
   };
+
+  patches = [
+    # Pull upstreal fix for parallel testing.
+    (fetchpatch {
+      name = "parallel-tests.patch";
+      url = "https://github.com/google/re2/commit/9262284a7edc1b83e7172f4ec2d7967d695e7420.patch";
+      sha256 = "1knhfx9cs4841r09jw4ha6mdx9qwpvlcxvd04i8vr84kd0lilqms";
+    })
+  ];
 
   preConfigure = ''
     substituteInPlace Makefile --replace "/usr/local" "$out"
@@ -18,6 +27,8 @@ stdenv.mkDerivation rec {
   '';
 
   buildFlags = lib.optionals stdenv.hostPlatform.isStatic [ "static" ];
+
+  enableParallelBuilding = true;
 
   preCheck = "patchShebangs runtests";
   doCheck = true;

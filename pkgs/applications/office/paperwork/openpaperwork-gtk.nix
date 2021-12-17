@@ -38,6 +38,7 @@ buildPythonPackage rec {
     pygobject3
     pkgs.poppler_gi
     pkgs.gtk3
+    pkgs.libhandy
     distro
     pkgs.pango
     openpaperwork-core

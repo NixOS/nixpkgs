@@ -2,15 +2,15 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = "alexandria";
-  version = "20210411-git";
+  version = "20210807-git";
 
   description = "Alexandria is a collection of portable public domain utilities.";
 
   deps = [ ];
 
   src = fetchurl {
-    url = "http://beta.quicklisp.org/archive/alexandria/2021-04-11/alexandria-20210411-git.tgz";
-    sha256 = "0bd4axr1z1q6khvpyf5xvgybdajs1dc7my6g0rdzhhxbibfcf3yh";
+    url = "http://beta.quicklisp.org/archive/alexandria/2021-08-07/alexandria-20210807-git.tgz";
+    sha256 = "0y2x3xapx06v8083ls4pz12s63gv33d6ix05r61m62h4qqm8qk3j";
   };
 
   packageName = "alexandria";
@@ -20,8 +20,8 @@ rec {
 }
 /* (SYSTEM alexandria DESCRIPTION
     Alexandria is a collection of portable public domain utilities. SHA256
-    0bd4axr1z1q6khvpyf5xvgybdajs1dc7my6g0rdzhhxbibfcf3yh URL
-    http://beta.quicklisp.org/archive/alexandria/2021-04-11/alexandria-20210411-git.tgz
-    MD5 415c43451862b490577b20ee4fb8e8d7 NAME alexandria FILENAME alexandria
-    DEPS NIL DEPENDENCIES NIL VERSION 20210411-git SIBLINGS (alexandria-tests)
+    0y2x3xapx06v8083ls4pz12s63gv33d6ix05r61m62h4qqm8qk3j URL
+    http://beta.quicklisp.org/archive/alexandria/2021-08-07/alexandria-20210807-git.tgz
+    MD5 0193fd1a1d702b4a0fafa19361b1e644 NAME alexandria FILENAME alexandria
+    DEPS NIL DEPENDENCIES NIL VERSION 20210807-git SIBLINGS (alexandria-tests)
     PARASITES NIL) */

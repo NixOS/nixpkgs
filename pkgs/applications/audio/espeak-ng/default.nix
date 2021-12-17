@@ -35,6 +35,12 @@ stdenv.mkDerivation rec {
     "--with-mbrola=${if mbrolaSupport then "yes" else "no"}"
   ];
 
+  # Current release lacks dependencies on local espeak-ng:
+  #  cd dictsource && ESPEAK_DATA_PATH=/build/espeak-ng LD_LIBRARY_PATH=../src: ../src/espeak-ng --compile=yue && cd ..
+  #  bash: line 1: ../src/espeak-ng: No such file or directory
+  # Should be fixed in next release: https://github.com/espeak-ng/espeak-ng/pull/1029
+  enableParallelBuilding = false;
+
   postInstall = lib.optionalString stdenv.isLinux ''
     patchelf --set-rpath "$(patchelf --print-rpath $out/bin/espeak-ng)" $out/bin/speak-ng
   '';

@@ -1,5 +1,4 @@
 { lib
-, isPy3k
 , buildPythonPackage
 , fetchPypi
 , flask

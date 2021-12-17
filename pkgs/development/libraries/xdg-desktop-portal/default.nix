@@ -1,5 +1,7 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchFromGitHub
+, fetchpatch
 , nixosTests
 , substituteAll
 , autoreconfHook
@@ -20,7 +22,7 @@
 
 stdenv.mkDerivation rec {
   pname = "xdg-desktop-portal";
-  version = "1.8.1";
+  version = "1.10.1";
 
   outputs = [ "out" "installedTests" ];
 
@@ -28,7 +30,7 @@ stdenv.mkDerivation rec {
     owner = "flatpak";
     repo = pname;
     rev = version;
-    sha256 = "sha256-tuRKCBj9ELC7yFPs/Sut/EdO+L8nwW3S8NWU+XedAF8=";
+    sha256 = "Q1ZP/ljdIxJHg+3JaTL/LIZV+3cK2+dognsTC95udVA=";
   };
 
   patches = [
@@ -36,6 +38,12 @@ stdenv.mkDerivation rec {
     (substituteAll {
       src = ./fix-paths.patch;
       inherit flatpak;
+    })
+    # Fixes the issue in https://github.com/flatpak/xdg-desktop-portal/issues/636
+    # Remove it when the next stable release arrives
+    (fetchpatch {
+      url = "https://github.com/flatpak/xdg-desktop-portal/commit/d7622e15ff8fef114a6759dde564826d04215a9f.patch";
+      sha256 = "sha256-vmfxK4ddG6Xon//rpiz6OiBsDLtT0VG5XyBJG3E4PPs=";
     })
   ];
 

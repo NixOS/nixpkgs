@@ -13,13 +13,10 @@ buildGoPackage rec {
     sha256 = "sha256-/VToLQexvRtcBU+k8WnGEcfLfxme/hgRnhU8723BEFU=";
   };
 
-  buildFlagsArray = ''
-    -ldflags=
-    -X
-    ${goPackagePath}/pkg/cmd.version=${version}
-    -X
-    ${goPackagePath}/pkg/cmd.buildDate=Nix
-  '';
+  ldflags = [
+    "-X ${goPackagePath}/pkg/cmd.version=${version}"
+    "-X ${goPackagePath}/pkg/cmd.buildDate=Nix"
+  ];
 
   meta = with lib; {
     homepage = "https://www.kube-router.io/";

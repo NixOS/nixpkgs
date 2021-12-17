@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , scipy
@@ -6,7 +7,6 @@
 , pyqt5
 , pyopengl
 , qt5
-, python
 , pytestCheckHook
 , freefont_ttf
 , makeFontsConf
@@ -52,6 +52,13 @@ buildPythonPackage rec {
     export DYLD_FRAMEWORK_PATH=/System/Library/Frameworks
     export FONTCONFIG_FILE=${fontsConf}
   '';
+
+  disabledTests = lib.optionals (!stdenv.hostPlatform.isx86) [
+    # small precision-related differences on other architectures,
+    # upstream doesn't consider it serious.
+    # https://github.com/pyqtgraph/pyqtgraph/issues/2110
+    "test_PolyLineROI"
+  ];
 
   meta = with lib; {
     description = "Scientific Graphics and GUI Library for Python";

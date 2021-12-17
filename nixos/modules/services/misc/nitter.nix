@@ -79,7 +79,7 @@ in
         staticDir = mkOption {
           type = types.path;
           default = "${pkgs.nitter}/share/nitter/public";
-          defaultText = "\${pkgs.nitter}/share/nitter/public";
+          defaultText = literalExpression ''"''${pkgs.nitter}/share/nitter/public"'';
           description = "Path to the static files directory.";
         };
 
@@ -299,7 +299,7 @@ in
     systemd.services.nitter = {
         description = "Nitter (An alternative Twitter front-end)";
         wantedBy = [ "multi-user.target" ];
-        after = [ "syslog.target" "network.target" ];
+        after = [ "network.target" ];
         serviceConfig = {
           DynamicUser = true;
           StateDirectory = "nitter";

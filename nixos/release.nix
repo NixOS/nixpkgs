@@ -217,6 +217,20 @@ in rec {
     }).config.system.build.amazonImage)
 
   );
+  amazonImageZfs = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
+
+    with import ./.. { inherit system; };
+
+    hydraJob ((import lib/eval-config.nix {
+      inherit system;
+      modules =
+        [ configuration
+          versionModule
+          ./maintainers/scripts/ec2/amazon-image-zfs.nix
+        ];
+    }).config.system.build.amazonImage)
+
+  );
 
 
   # Test job for https://github.com/NixOS/nixpkgs/issues/121354 to test
@@ -237,6 +251,37 @@ in rec {
 
   );
 
+  # An image that can be imported into lxd and used for container creation
+  lxdImage = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
+
+    with import ./.. { inherit system; };
+
+    hydraJob ((import lib/eval-config.nix {
+      inherit system;
+      modules =
+        [ configuration
+          versionModule
+          ./maintainers/scripts/lxd/lxd-image.nix
+        ];
+    }).config.system.build.tarball)
+
+  );
+
+  # Metadata for the lxd image
+  lxdMeta = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
+
+    with import ./.. { inherit system; };
+
+    hydraJob ((import lib/eval-config.nix {
+      inherit system;
+      modules =
+        [ configuration
+          versionModule
+          ./maintainers/scripts/lxd/lxd-image.nix
+        ];
+    }).config.system.build.metadata)
+
+  );
 
   # Ensure that all packages used by the minimal NixOS config end up in the channel.
   dummy = forAllSystems (system: pkgs.runCommand "dummy"

@@ -1,5 +1,5 @@
 { lib, stdenv, kernel, elfutils, python2, python3, perl, newt, slang, asciidoc, xmlto, makeWrapper
-, docbook_xsl, docbook_xml_dtd_45, libxslt, flex, bison, pkg-config, libunwind, binutils
+, docbook_xsl, docbook_xml_dtd_45, libxslt, flex, bison, pkg-config, libunwind, binutils-unwrapped
 , libiberty, audit, libbfd, libopcodes, openssl, systemtap, numactl
 , zlib
 , withGtk ? false, gtk2
@@ -54,7 +54,6 @@ stdenv.mkDerivation {
     "-Wno-error=cpp"
     "-Wno-error=bool-compare"
     "-Wno-error=deprecated-declarations"
-    "-DOBJDUMP_PATH=\"${binutils}/bin/objdump\""
     "-Wno-error=stringop-truncation"
   ];
 
@@ -69,8 +68,9 @@ stdenv.mkDerivation {
   installFlags = [ "install" "install-man" "ASCIIDOC8=1" "prefix=$(out)" ];
 
   preFixup = ''
+    # pull in 'objdump' into PATH to make annotations work
     wrapProgram $out/bin/perf \
-      --prefix PATH : "${binutils}/bin"
+      --prefix PATH : "${binutils-unwrapped}/bin"
   '';
 
   meta = {

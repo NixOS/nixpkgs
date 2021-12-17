@@ -3,7 +3,7 @@
 , makeDesktopItem
 , copyDesktopItems
 , fetchFromGitHub
-, gradleGen
+, gradle_6
 , jdk
 , perl
 
@@ -29,20 +29,20 @@ let
   # Note: when raising the version, ensure that all SNAPSHOT versions in
   # build.gradle are replaced by a fixed version
   # (the current one at the time of release) (see postPatch).
-  version = "126.1";
+  version = "126.2";
   buildVersion = makeBuildVersion version;
 
   Mindustry = fetchFromGitHub {
     owner = "Anuken";
     repo = "Mindustry";
     rev = "v${version}";
-    sha256 = "cyg4TofSSFLv8pM3zzvc0FxXMiTm+OIchBJF9PDQrkg=";
+    sha256 = "URmjmfzQAVVl6erbh3+FVFdN7vGTNwYKPtcrwtt9vkg=";
   };
   Arc = fetchFromGitHub {
     owner = "Anuken";
     repo = "Arc";
     rev = "v${version}";
-    sha256 = "uBIm82mt1etBB/HrNY6XGa7mmBfwd1E3RtqN8Rk5qeY=";
+    sha256 = "pUUak5P9t4RmSdT+/oH/8oo6l7rjIN08XDJ06TcUn8I=";
   };
   soloud = fetchFromGitHub {
     owner = "Anuken";
@@ -87,8 +87,7 @@ let
     popd
   '';
 
-  # The default one still uses jdk8 (#89731)
-  gradle_6 = (gradleGen.override (old: { java = jdk; })).gradle_6_8;
+  gradle = (gradle_6.override (old: { java = jdk; }));
 
   # fake build to pre-download deps into fixed-output derivation
   deps = stdenv.mkDerivation {
@@ -96,7 +95,7 @@ let
     inherit version unpackPhase patches;
     postPatch = cleanupMindustrySrc;
 
-    nativeBuildInputs = [ gradle_6 perl ];
+    nativeBuildInputs = [ gradle perl ];
     # Here we download dependencies for both the server and the client so
     # we only have to specify one hash for 'deps'. Deps can be garbage
     # collected after the build, so this is not really an issue.
@@ -114,7 +113,7 @@ let
     '';
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "Mw8LZ1iW6vn4RkBBs8SWHp6mo2Bhj7tMZjLbyuJUqSI=";
+    outputHash = "+7vSwQT6LwHgKE9DubISznq4G4DgvlnD7WaF1KywBzU=";
   };
 
 in
@@ -129,6 +128,15 @@ stdenv.mkDerivation rec {
     rm Arc/backends/backend-sdl/libs/linux64/libsdl-arc*.so
   '' + cleanupMindustrySrc;
 
+  # Propagate glew to prevent it from being cleaned up.
+  # Since a jar is a compressed archive, nix can't figure out that the dependency is actually in there,
+  # and will assume that it's not actually needed.
+  # This can cause issues.
+  # See https://github.com/NixOS/nixpkgs/issues/109798.
+  propagatedBuildInputs = lib.optionals enableClient [
+    glew.out
+  ];
+
   buildInputs = lib.optionals enableClient [
     SDL2
     glew
@@ -136,7 +144,7 @@ stdenv.mkDerivation rec {
   ];
   nativeBuildInputs = [
     pkg-config
-    gradle_6
+    gradle
     makeWrapper
     jdk
   ] ++ lib.optionals enableClient [
@@ -157,9 +165,11 @@ stdenv.mkDerivation rec {
   '' + optionalString enableClient ''
     gradle --offline --no-daemon jnigenBuild -Pbuildversion=${buildVersion}
     gradle --offline --no-daemon sdlnatives -Pdynamic -Pbuildversion=${buildVersion}
+    glewlib=${lib.getLib glew}/lib/libGLEW.so
+    sdllib=${lib.getLib SDL2}/lib/libSDL2.so
     patchelf ../Arc/backends/backend-sdl/libs/linux64/libsdl-arc*.so \
-      --add-needed ${glew.out}/lib/libGLEW.so \
-      --add-needed ${SDL2}/lib/libSDL2.so
+      --add-needed $glewlib \
+      --add-needed $sdllib
     gradle --offline --no-daemon desktop:dist -Pbuildversion=${buildVersion}
   '' + optionalString enableServer ''
     gradle --offline --no-daemon server:dist -Pbuildversion=${buildVersion}
@@ -191,8 +201,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.x86_64;
     # Hash mismatch on darwin:
     # https://github.com/NixOS/nixpkgs/pull/105590#issuecomment-737120293
-    broken = stdenv.isDarwin
-    # does not work with any maintained java version (https://github.com/Anuken/Mindustry/issues/5114)
-      || true;
+    broken = stdenv.isDarwin;
   };
 }

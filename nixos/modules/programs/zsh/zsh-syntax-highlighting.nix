@@ -42,7 +42,7 @@ in
         default = {};
         type = types.attrsOf types.str;
 
-        example = literalExample ''
+        example = literalExpression ''
           {
             "rm -rf *" = "fg=white,bold,bg=red";
           }
@@ -59,7 +59,7 @@ in
         default = {};
         type = types.attrsOf types.str;
 
-        example = literalExample ''
+        example = literalExpression ''
           {
             "alias" = "fg=magenta,bold";
           }

@@ -1,9 +1,11 @@
 {lib, stdenv, fetchurl, libmtsupport, libfacet, libbtree, libmtquery, help2man} :
 
-stdenv.mkDerivation {
-  name = "mt-utils-0.0.1alpha3";
+stdenv.mkDerivation rec {
+  pname = "mt-utils";
+  version = "0.0.1alpha3";
+
   src = fetchurl {
-      url = "mirror://sourceforge/multitran/mt-utils-0.0.1alpha3.tar.bz2";
+      url = "mirror://sourceforge/multitran/mt-utils-${version}.tar.bz2";
       sha256 = "e407702c90c5272882386914e1eeca5f6c5039393af9a44538536b94867b0a0e";
   };
 

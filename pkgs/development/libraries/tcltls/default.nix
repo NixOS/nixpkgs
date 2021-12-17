@@ -2,11 +2,11 @@
 
 tcl.mkTclDerivation rec {
   pname = "tcltls";
-  version = "1.7.21";
+  version = "1.7.22";
 
   src = fetchurl {
     url = "https://core.tcl-lang.org/tcltls/uv/tcltls-${version}.tar.gz";
-    sha256 = "0xf1rfsnn4k9j1bd2a1p8ir0xr4a3phgr9lcgbazh4084l2y8sl0";
+    sha256 = "sha256-6E4reideyCxKqp0bH5eG2+Q1jIFekXU5/+f2Z/9Lw7Q=";
   };
 
   buildInputs = [ openssl ];

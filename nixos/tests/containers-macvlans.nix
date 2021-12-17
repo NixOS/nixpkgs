@@ -15,7 +15,6 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     machine1 =
       { lib, ... }:
       {
-        virtualisation.memorySize = 256;
         virtualisation.vlans = [ 1 ];
 
         # To be able to ping containers from the host, it is necessary
@@ -55,7 +54,6 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     machine2 =
       { ... }:
       {
-        virtualisation.memorySize = 256;
         virtualisation.vlans = [ 1 ];
       };
 

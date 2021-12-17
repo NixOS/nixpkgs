@@ -11,11 +11,14 @@ stdenv.mkDerivation rec {
     sha256 = "0305ngsnwm8npzgyhyifasi4l802xnfz19r0kbzzniirmcn4082d";
   };
 
+  patches = [ ./musl-compat.patch ];
+
   preBuild = ''
     mv config.mk.template config.mk
   '';
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
+  enableParallelBuilding = true;
 
   installPhase = ''
     install -D hactool $out/bin/hactool

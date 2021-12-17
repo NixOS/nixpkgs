@@ -7,7 +7,6 @@ import ./make-test-python.nix ({ pkgs, ... }: {
   nodes = {
     machine = { ... }: {
       services.metabase.enable = true;
-      virtualisation.memorySize = 1024;
     };
   };
 

@@ -9,7 +9,6 @@
 , attrs
 , click
 , importlib-metadata
-, pytestCheckHook
 }:
 
 buildPythonPackage rec {

@@ -1,6 +1,5 @@
 { lib
 , buildPythonPackage
-, python
 , fetchPypi
 , isPy27
 , pytestCheckHook

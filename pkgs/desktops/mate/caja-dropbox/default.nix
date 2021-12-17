@@ -7,11 +7,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "caja-dropbox";
-  version = "1.24.0";
+  version = "1.26.0";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1rcn82q58mv9hn5xamvzay2pw1szfk6zns94362476fcp786lji2";
+    sha256 = "16w4r0zjps12lmzwiwpb9qnmbvd0p391q97296sxa8k88b1x14wn";
   };
 
   patches = [
@@ -50,6 +50,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/mate-desktop/caja-dropbox";
     license = with licenses; [ gpl3Plus cc-by-nd-30 ];
     platforms = platforms.unix;
-    maintainers = [ maintainers.romildo ];
+    maintainers = teams.mate.members;
   };
 }

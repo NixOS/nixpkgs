@@ -7,7 +7,6 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
   machine =
     { lib, ... }:
     {
-      virtualisation.memorySize = 256;
       virtualisation.vlans = [];
 
       networking.bridges.br0.interfaces = [];

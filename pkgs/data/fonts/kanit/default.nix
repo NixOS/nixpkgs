@@ -12,12 +12,16 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
-    mkdir -p $out/share/doc/${pname}/css/ $out/share/fonts/{opentype,truetype}
+    runHook preInstall
 
-    cp $src/OFL.txt $src/documentation/{BRIEF.md,features.html} $out/share/doc/${pname}
-    cp $src/documentation/css/fonts.css $out/share/doc/${pname}/css
+    mkdir -p $out/share/doc/kanit/css/ $out/share/fonts/{opentype,truetype}
+
+    cp $src/OFL.txt $src/documentation/{BRIEF.md,features.html} $out/share/doc/kanit
+    cp $src/documentation/css/fonts.css $out/share/doc/kanit/css
     cp $src/fonts/otf/*.otf $out/share/fonts/opentype
     cp $src/fonts/ttf/*.ttf $out/share/fonts/truetype
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -1,7 +1,8 @@
 { lib, mkDerivation, fetchpatch, qtbase, qmake, inkscape, imagemagick, wpa_supplicant }:
 
 mkDerivation {
-  name = "wpa_gui-${wpa_supplicant.version}";
+  pname = "wpa_gui";
+  version = wpa_supplicant.version;
 
   inherit (wpa_supplicant) src;
 

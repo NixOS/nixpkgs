@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libmatemixer";
-  version = "1.24.1";
+  version = "1.26.0";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1n6rq7k66zvfd6sb7h92xihh021w9hysfa4yd1mzjcbb7c62ybqx";
+    sha256 = "1wcz4ppg696m31f5x7rkyvxxdriik2vprsr83b4wbs97bdhcr6ws";
   };
 
   nativeBuildInputs = [ pkg-config gettext ];
@@ -31,6 +31,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/mate-desktop/libmatemixer";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.romildo ];
+    maintainers = teams.mate.members;
   };
 }

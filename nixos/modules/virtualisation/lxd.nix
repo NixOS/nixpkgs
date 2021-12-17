@@ -34,8 +34,8 @@ in {
 
       package = mkOption {
         type = types.package;
-        default = pkgs.lxd.override { nftablesSupport = config.networking.nftables.enable; };
-        defaultText = "pkgs.lxd";
+        default = pkgs.lxd;
+        defaultText = literalExpression "pkgs.lxd";
         description = ''
           The LXD package to use.
         '';
@@ -44,7 +44,7 @@ in {
       lxcPackage = mkOption {
         type = types.package;
         default = pkgs.lxc;
-        defaultText = "pkgs.lxc";
+        defaultText = literalExpression "pkgs.lxc";
         description = ''
           The LXC package to use with LXD (required for AppArmor profiles).
         '';
@@ -53,7 +53,7 @@ in {
       zfsSupport = mkOption {
         type = types.bool;
         default = config.boot.zfs.enabled;
-        defaultText = "config.boot.zfs.enabled";
+        defaultText = literalExpression "config.boot.zfs.enabled";
         description = ''
           Enables lxd to use zfs as a storage for containers.
 
@@ -158,7 +158,7 @@ in {
       };
     };
 
-    users.groups.lxd.gid = config.ids.gids.lxd;
+    users.groups.lxd = {};
 
     users.users.root = {
       subUidRanges = [ { startUid = 1000000; count = 65536; } ];

@@ -1,7 +1,7 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , nix-update-script
-, pantheon
 , pkg-config
 , meson
 , ninja
@@ -25,21 +25,13 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-mail";
-  version = "6.0.0";
-
-  repoName = "mail";
+  version = "6.3.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "mail";
     rev = version;
-    sha256 = "07iiipl0nsp63g5bn1y2hg6bmgj6i9cxqcfpd7q3vmldnkijvaxs";
-  };
-
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    sha256 = "sha256-wOu9jvvwG53vzcNa38nk4eREZWW7Cin8el4qApQ8gI8=";
   };
 
   nativeBuildInputs = [
@@ -72,11 +64,18 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
+
   meta = with lib; {
     description = "Mail app designed for elementary OS";
     homepage = "https://github.com/elementary/mail";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers ++ [ maintainers.ethancedwards8 ];
+    maintainers = with maintainers; [ ethancedwards8 ] ++ teams.pantheon.members;
+    mainProgram = "io.elementary.mail";
   };
 }

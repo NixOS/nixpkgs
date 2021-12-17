@@ -1,6 +1,9 @@
-{ buildPythonPackage
-, appdirs
-, contextlib2
+{ stdenv
+, lib
+, buildPythonPackage
+, pythonOlder
+, isPy27
+, backports-entry-points-selectable
 , cython
 , distlib
 , fetchPypi
@@ -8,26 +11,23 @@
 , flaky
 , importlib-metadata
 , importlib-resources
-, isPy27
-, lib
 , pathlib2
+, platformdirs
 , pytest-freezegun
 , pytest-mock
 , pytest-timeout
 , pytestCheckHook
-, pythonOlder
 , setuptools-scm
 , six
-, stdenv
 }:
 
 buildPythonPackage rec {
   pname = "virtualenv";
-  version = "20.4.7";
+  version = "20.8.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "14fdf849f80dbb29a4eb6caa9875d476ee2a5cf76a5f5415fa2f1606010ab467";
+    sha256 = "bcc17f0b3a29670dd777d6f0755a4c04f28815395bca279cdcb213b97199a6b8";
   };
 
   nativeBuildInputs = [
@@ -35,13 +35,12 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    appdirs
+    backports-entry-points-selectable
     distlib
     filelock
+    platformdirs
     six
-  ] ++ lib.optionals isPy27 [
-    contextlib2
-  ] ++ lib.optionals (isPy27 && !stdenv.hostPlatform.isWindows) [
+  ] ++ lib.optionals (pythonOlder "3.4" && !stdenv.hostPlatform.isWindows) [
     pathlib2
   ] ++ lib.optionals (pythonOlder "3.7") [
     importlib-resources
@@ -73,11 +72,8 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    "test_can_build_c_extensions"
-    "test_xonsh" # imports xonsh, which is not in pythonPackages
-    # tests search `python3`, fail on python2, pypy
-    "test_python_via_env_var"
-    "test_python_multi_value_prefer_newline_via_env_var"
+    # Permission Error
+    "test_bad_exe_py_info_no_raise"
   ];
 
   pythonImportsCheck = [ "virtualenv" ];

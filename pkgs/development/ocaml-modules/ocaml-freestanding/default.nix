@@ -22,13 +22,13 @@ else
 stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-${pname}-${version}";
   inherit pname;
-  version = "0.6.4";
+  version = "0.6.5";
 
   src = fetchFromGitHub {
     owner = "mirage";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0w3x2wfd04qr6mci4cp1gfqw33yysp8gamgkpgbgwslr0skryiq5";
+    sha256 = "sha256:1mbyjzwcs64n7i3xkkyaxgl3r46drbl0gkqf3fqgm2kh3q03638l";
   };
 
   postUnpack = ''
@@ -53,15 +53,6 @@ stdenv.mkDerivation rec {
     runHook preConfigure
     env PKG_CONFIG_DEPS=solo5-bindings-${target} sh configure.sh
     runHook postConfigure
-  '';
-
-  preBuild = ''
-    # perform substitutions, so opam isn't needed
-    for flags in flags/cflags.tmp flags/libs.tmp; do
-      substitute "$flags.in" "$flags" \
-        --replace "%{prefix}%" "$out" \
-        --replace "%{ocaml-freestanding:lib}%" "$out/lib"
-    done
   '';
 
   installPhase = ''

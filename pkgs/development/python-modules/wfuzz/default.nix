@@ -1,14 +1,12 @@
 { buildPythonPackage
 , chardet
 , colorama
-, configparser
 , fetchFromGitHub
 , future
 , isPy27
 , lib
 , mock
 , netaddr
-, pkgs
 , pycurl
 , pyparsing
 , pytest

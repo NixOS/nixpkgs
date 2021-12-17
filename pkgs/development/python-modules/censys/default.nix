@@ -2,33 +2,41 @@
 , backoff
 , buildPythonPackage
 , fetchFromGitHub
+, importlib-metadata
 , parameterized
+, poetry-core
 , pytestCheckHook
 , pythonOlder
 , requests
 , requests-mock
 , responses
 , rich
-, types-requests
 }:
 
 buildPythonPackage rec {
   pname = "censys";
-  version = "2.0.3";
+  version = "2.0.9";
+  format = "pyproject";
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "censys";
     repo = "censys-python";
     rev = "v${version}";
-    sha256 = "0ga5f6xv6rylfvalnl3cflr0w30r771gb05n5cjhxisb8an0qcb6";
+    sha256 = "sha256-qh3Z8Gza8J3OEM94GguJ+oEdVle01Gx1m/7+LCOErKY=";
   };
+
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
     backoff
     requests
     rich
-    types-requests
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    importlib-metadata
   ];
 
   checkInputs = [
@@ -39,11 +47,12 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace "rich==10.3.0" "rich" \
-      --replace "types-requests==0.1.11" "types-requests"
-    substituteInPlace pytest.ini --replace \
-      " --cov -rs -p no:warnings" ""
+    substituteInPlace pyproject.toml \
+      --replace 'backoff = "^1.11.1"' 'backoff = "*"' \
+      --replace 'requests = ">=2.26.0"' 'requests = "*"' \
+      --replace 'rich = "^10.6.0"' 'rich = "*"'
+    substituteInPlace pytest.ini \
+      --replace "--cov" ""
   '';
 
   # The tests want to write a configuration file

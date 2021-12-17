@@ -4,13 +4,13 @@
 
 let
   pname = "MyCrypto";
-  version = "1.7.16";
-  hash = "sha256-fvV/dT9tj8/d/kjM0dVj3IC/O7Y/yG8fscDCzUBwHKI=";
+  version = "1.7.17";
+  sha256 = "20eb48989b5ae5e60e438eff6830ac79a0d89ac26dff058097260e747e866444"; # Taken from release's checksums.txt.gpg
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://github.com/mycryptohq/mycrypto/releases/download/${version}/linux-x86-64_${version}_MyCrypto.AppImage";
-    inherit hash;
+    inherit sha256;
   };
 
   appimageContents = appimageTools.extractType2 {

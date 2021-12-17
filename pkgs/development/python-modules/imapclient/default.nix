@@ -7,7 +7,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "IMAPClient";
+  pname = "imapclient";
   version = "2.2.0";
 
   src = fetchFromGitHub {

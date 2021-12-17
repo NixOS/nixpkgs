@@ -17,7 +17,7 @@
 , libdatrie
 , libXdmcp
 , libxkbcommon
-, epoxy
+, libepoxy
 , dbus
 , at-spi2-core
 , libXtst
@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-gtk";
-  version = "5.0.7";
+  version = "5.0.10";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    sha256 = "0vcikqrxv1xxcdaiz3axgm7rpab4w8aciw838sbpa9l20dp8cnyq";
+    sha256 = "sha256-QR2ZHP6dP7XcOCJw2BE1ak+mnRL0njV2T1+iBeMA+do=";
   };
 
   cmakeFlags = [
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     libdatrie
     libXdmcp
     libxkbcommon
-    epoxy
+    libepoxy
     dbus
     at-spi2-core
     libXtst

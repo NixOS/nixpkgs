@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, gnum4 }:
 
 stdenv.mkDerivation rec {
-  name = "jade-${version}-${debpatch}";
+  pname = "jade";
   version = "1.2.1";
   debpatch = "47.3";
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   patchsrc =  fetchurl {
-    url = "http://ftp.debian.org/debian/pool/main/j/jade/jade_${version}-${debpatch}.diff.gz";
+    url = "mirror://debian/pool/main/j/jade/jade_${version}-${debpatch}.diff.gz";
     sha256 = "8e94486898e3503308805f856a65ba5b499a6f21994151270aa743de48305464";
   };
 

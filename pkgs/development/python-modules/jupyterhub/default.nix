@@ -13,7 +13,7 @@
 , jupyter-telemetry
 , oauthlib
 , pamela
-, prometheus_client
+, prometheus-client
 , requests
 , sqlalchemy
 , tornado
@@ -121,7 +121,7 @@ buildPythonPackage rec {
     jupyter-telemetry
     oauthlib
     pamela
-    prometheus_client
+    prometheus-client
     requests
     sqlalchemy
     tornado

@@ -1,4 +1,4 @@
-{ fetchFromGitHub, lib, libpcap, rustPlatform }:
+{ lib, rustPlatform, fetchFromGitHub, libpcap }:
 
 rustPlatform.buildRustPackage rec {
   pname = "dnspeep";
@@ -11,14 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "0lz22vlgi1alsq676q4nlzfzwnsrvziyqdnmdbn00rwqsvlb81q6";
   };
 
-  # dnspeep has git dependencies therefore doesn't work with `cargoSha256`
-  cargoLock = {
-    # update Cargo.lock every update
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "pcap-0.8.1" = "1nnfyhlhcpbl4i6zmfa9rvnvr6ibg5khran1f5yhmr9yfhmhgakd";
-    };
-  };
+  cargoSha256 = "sha256-I1m+6M2tmmTZuXlZaecSslj6q2iCsMBq7k9vHiMd3WE=";
 
   LIBPCAP_LIBDIR = lib.makeLibraryPath [ libpcap ];
   LIBPCAP_VER = libpcap.version;

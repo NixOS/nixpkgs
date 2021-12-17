@@ -34,7 +34,7 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
 
   buildInputs = [ ffmpeg qtbase ];
 
-  propagatedBuildInputs = with python3Packages; [ appdirs atomicwrites attrs click matplotlib numpy pyqt5 ruamel_yaml ];
+  propagatedBuildInputs = with python3Packages; [ appdirs atomicwrites attrs click matplotlib numpy pyqt5 ruamel-yaml ];
 
   dontWrapQtApps = true;
 

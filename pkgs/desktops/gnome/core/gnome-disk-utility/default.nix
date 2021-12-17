@@ -27,11 +27,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-disk-utility";
-  version = "40.2";
+  version = "41.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-disk-utility/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-ztES6qh9j/ohOv1NC62TnPp662cbeySIWaHchNb1Iec=";
+    sha256 = "sha256-h0PJj9ZWBi74YpM+/jDFvkxrMi7ALu4VTscNCO0Ild8=";
   };
 
   nativeBuildInputs = [
@@ -81,5 +81,6 @@ stdenv.mkDerivation rec {
     maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
+    mainProgram = "gnome-disks";
   };
 }

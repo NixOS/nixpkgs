@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Library for operations on boolean expression binary trees";
-    homepage = "https://perso.b2b2c.ca/~sarrazip/dev/boolstuff.html";
+    homepage = "http://perso.b2b2c.ca/~sarrazip/dev/boolstuff.html";
     license = "GPL";
     maintainers = [ lib.maintainers.marcweber ];
     platforms = lib.platforms.all;

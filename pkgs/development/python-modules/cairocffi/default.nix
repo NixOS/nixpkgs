@@ -8,7 +8,6 @@
 , makeFontsConf
 , freefont_ttf
 , pytest
-, pytest-runner
 , glibcLocales
 , cairo
 , cffi

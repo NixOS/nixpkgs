@@ -3,17 +3,18 @@
 , lib
 , fetchurl
 , postgresql
+, nixosTests
 , ...
 }@args:
 
 callPackage ../nginx/generic.nix args rec {
   pname = "openresty";
-  nginxVersion = "1.19.3";
-  version = "${nginxVersion}.2";
+  nginxVersion = "1.19.9";
+  version = "${nginxVersion}.1";
 
   src = fetchurl {
     url = "https://openresty.org/download/openresty-${version}.tar.gz";
-    sha256 = "1fav3qykckqcyw9ksi8s61prpwab44zbcvj95rwfpfqgk5jffh6f";
+    sha256 = "1xn1d0x2y63z0mi0qq3js6lz6ziba92r7vyyfkj1qc738vjz8vsp";
   };
 
   # generic.nix applies fixPatch on top of every patch defined there.  This
@@ -41,6 +42,10 @@ callPackage ../nginx/generic.nix args rec {
     ln -s $out/nginx/conf $out/conf
     ln -s $out/nginx/html $out/html
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) openresty-lua;
+  };
 
   meta = {
     description = "A fast web application server built on Nginx";

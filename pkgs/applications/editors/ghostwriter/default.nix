@@ -14,13 +14,13 @@
 
 mkDerivation rec {
   pname = "ghostwriter";
-  version = "2.0.2";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "wereturtle";
     repo = pname;
     rev = version;
-    sha256 = "sha256-kNt0IIAcblDJ81ENIkoJuJvrI+F+fdVgWUJ6g1YpjqU=";
+    sha256 = "sha256-NPuwT0msFvGyS33X7lefdPZZ3AC4pZb1tvmOzzlQlgc=";
   };
 
   nativeBuildInputs = [ qmake pkg-config qttools ];

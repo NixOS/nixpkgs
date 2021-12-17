@@ -1,11 +1,13 @@
-{ lib, stdenv, fetchzip, netcdf, hdf5, curl, cmake, ninja }:
+{ lib, stdenv, fetchFromGitHub, netcdf, hdf5, curl, cmake, ninja }:
 stdenv.mkDerivation rec {
   pname = "netcdf-cxx4";
   version = "4.3.1";
 
-  src = fetchzip {
-    url = "https://github.com/Unidata/netcdf-cxx4/archive/v${version}.tar.gz";
-    sha256 = "05kydd5z9iil5iv4fp7l11cicda5n5lsg5sdmsmc55xpspnsg7hr";
+  src = fetchFromGitHub {
+    owner = "Unidata";
+    repo = "netcdf-cxx4";
+    rev = "v${version}";
+    sha256 = "sha256-GZ6n7dW3l8Kqrk2Xp2mxRTUWWQj0XEd2LDTG9EtrfhY=";
   };
 
   preConfigure = ''

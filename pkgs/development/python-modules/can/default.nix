@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
-, isPy27
 , aenum
 , wrapt
 , typing ? null
@@ -12,7 +11,7 @@
 , hypothesis
 , future
 , pytest
-, pytest-timeout }:
+ }:
 
 buildPythonPackage rec {
   pname = "python-can";

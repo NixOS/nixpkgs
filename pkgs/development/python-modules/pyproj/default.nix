@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "pyproj";
-  version = "3.1.0";
+  version = "3.2.1";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pyproj4";
     repo = "pyproj";
     rev = version;
-    sha256 = "sha256-UN8cJk5Lgd+d2tKmFuF6QvKr36w1435RKovzGfMXi1E=";
+    sha256 = "sha256-r343TvXpSr+EMAbvzSUpsfipwP8TFmitOfT0gjgoO00=";
   };
 
   # force pyproj to use ${proj}

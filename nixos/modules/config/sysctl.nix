@@ -22,7 +22,7 @@ in
 
     boot.kernel.sysctl = mkOption {
       default = {};
-      example = literalExample ''
+      example = literalExpression ''
         { "net.ipv4.tcp_syncookies" = false; "vm.swappiness" = 60; }
       '';
       type = types.attrsOf sysctlOption;

@@ -12,19 +12,19 @@
 
 stdenv.mkDerivation rec {
   pname = "uutils-coreutils";
-  version = "0.0.7";
+  version = "0.0.8";
 
   src = fetchFromGitHub {
     owner = "uutils";
     repo = "coreutils";
     rev = version;
-    sha256 = "sha256-XI6061nCVyL8Q1s+QH75IesneJNhbhxGnILZxQCa5LU=";
+    sha256 = "0hx5ypy58d182gxpgs0dxcw03pdgvrcikbhczg6yqpdjjh7163as";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-bfwWyeuslLjh4OCt+H8CM8hCrRFqlibOS8gS64lysa0=";
+    hash = "sha256:1ynw97dr40yg18jaqgvz3shs0s0j6pvvlkrbka2ganiv8c9fvbyw";
   };
 
   nativeBuildInputs = [ rustPlatform.cargoSetupHook sphinx ];

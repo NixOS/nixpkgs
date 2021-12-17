@@ -17,6 +17,10 @@ buildPythonPackage {
     future
   ] ++ lib.optionals (!isPy3k) [ typing ];
 
+  propagatedNativeBuildInputs = [
+    cffi
+  ];
+
   # Some required libraries for testing are not packaged yet.
   doCheck = false;
   pythonImportsCheck = [ "olm" ];

@@ -1,22 +1,27 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{ lib, rustPlatform, fetchFromGitHub, stdenv, CoreFoundation, CoreServices }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-modules";
-  version = "0.5.0";
+  version = "0.5.6";
 
   src = fetchFromGitHub {
     owner = "regexident";
     repo = pname;
     rev = version;
-    sha256 = "0y6ag8nar85l2fh2ca41fglkzc74cv1p5szxrhk1jdqnd2qzhvjp";
+    sha256 = "sha256-bLljwxNrCmg1ZWfSninIxJIFIn2oHY8dmbHYPdwtD+M=";
   };
 
-  cargoSha256 = "0m5r36p57w4vw2g3hg12s38ay328swjb0qfl381xwb2xqx10g8kx";
+  cargoSha256 = "sha256-heyVeQwEIOA9qtyXnHY8lPo06YgIUJaWCtaht9dWLoo=";
+
+  buildInputs = lib.optionals stdenv.isDarwin [
+    CoreFoundation
+    CoreServices
+  ];
 
   meta = with lib; {
     description = "A cargo plugin for showing a tree-like overview of a crate's modules";
     homepage = "https://github.com/regexident/cargo-modules";
     license = with licenses; [ mpl20 ];
-    maintainers = with maintainers; [ rvarago ];
+    maintainers = with maintainers; [ figsoda rvarago ];
   };
 }

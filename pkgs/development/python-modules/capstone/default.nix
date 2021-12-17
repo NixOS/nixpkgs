@@ -2,8 +2,6 @@
 , buildPythonPackage
 , capstone
 , stdenv
-, fetchpatch
-, fetchPypi
 , setuptools
 }:
 
@@ -34,6 +32,6 @@ buildPythonPackage rec {
     description = "Python bindings for Capstone disassembly engine";
     maintainers = with maintainers; [ bennofs ris ];
     # creates a manylinux2014-x86_64 wheel
-    broken = stdenv.isAarch64;
+    broken = !stdenv.isx86_64;
   };
 }

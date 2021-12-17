@@ -3,10 +3,18 @@
 { pkgs, lib }:
 
 rec {
+  /* The same functionality as this haskell.lib, except that the derivation
+     being overridden is always the last parameter. This permits more natural
+     composition of several overrides, i.e. without having to nestle one call
+     between the function name and argument of another. haskell.lib.compose is
+     preferred for any new code.
+  */
+  compose = import ./lib/compose.nix { inherit pkgs lib; };
+
   /* This function takes a file like `hackage-packages.nix` and constructs
      a full package set out of that.
    */
-  makePackageSet = import ./make-package-set.nix;
+  makePackageSet = compose.makePackageSet;
 
   /* The function overrideCabal lets you alter the arguments to the
      mkDerivation function.
@@ -34,47 +42,37 @@ rec {
          "https://github.com/bos/aeson#readme"
 
    */
-  overrideCabal = drv: f: (drv.override (args: args // {
-    mkDerivation = drv: (args.mkDerivation drv).override f;
-  })) // {
-    overrideScope = scope: overrideCabal (drv.overrideScope scope) f;
-  };
+  overrideCabal = drv: f: compose.overrideCabal f drv;
 
   # : Map Name (Either Path VersionNumber) -> HaskellPackageOverrideSet
   # Given a set whose values are either paths or version strings, produces
   # a package override set (i.e. (self: super: { etc. })) that sets
   # the packages named in the input set to the corresponding versions
-  packageSourceOverrides =
-    overrides: self: super: pkgs.lib.mapAttrs (name: src:
-      let isPath = x: builtins.substring 0 1 (toString x) == "/";
-          generateExprs = if isPath src
-                             then self.callCabal2nix
-                             else self.callHackage;
-      in generateExprs name src {}) overrides;
+  packageSourceOverrides = compose.packageSourceOverrides;
 
   /* doCoverage modifies a haskell package to enable the generation
      and installation of a coverage report.
 
      See https://wiki.haskell.org/Haskell_program_coverage
    */
-  doCoverage = drv: overrideCabal drv (drv: { doCoverage = true; });
+  doCoverage = compose.doCoverage;
 
   /* dontCoverage modifies a haskell package to disable the generation
      and installation of a coverage report.
    */
-  dontCoverage = drv: overrideCabal drv (drv: { doCoverage = false; });
+  dontCoverage = compose.dontCoverage;
 
   /* doHaddock modifies a haskell package to enable the generation and
      installation of API documentation from code comments using the
      haddock tool.
    */
-  doHaddock = drv: overrideCabal drv (drv: { doHaddock = true; });
+  doHaddock = compose.doHaddock;
 
   /* dontHaddock modifies a haskell package to disable the generation and
      installation of API documentation from code comments using the
      haddock tool.
    */
-  dontHaddock = drv: overrideCabal drv (drv: { doHaddock = false; });
+  dontHaddock = compose.dontHaddock;
 
   /* doJailbreak enables the removal of version bounds from the cabal
      file. You may want to avoid this function.
@@ -92,39 +90,39 @@ rec {
      https://github.com/peti/jailbreak-cabal/issues/7 has further details.
 
    */
-  doJailbreak = drv: overrideCabal drv (drv: { jailbreak = true; });
+  doJailbreak = compose.doJailbreak;
 
   /* dontJailbreak restores the use of the version bounds the check
      the use of dependencies in the package description.
    */
-  dontJailbreak = drv: overrideCabal drv (drv: { jailbreak = false; });
+  dontJailbreak = compose.dontJailbreak;
 
   /* doCheck enables dependency checking, compilation and execution
      of test suites listed in the package description file.
    */
-  doCheck = drv: overrideCabal drv (drv: { doCheck = true; });
+  doCheck = compose.doCheck;
   /* dontCheck disables dependency checking, compilation and execution
      of test suites listed in the package description file.
    */
-  dontCheck = drv: overrideCabal drv (drv: { doCheck = false; });
+  dontCheck = compose.dontCheck;
 
   /* doBenchmark enables dependency checking, compilation and execution
      for benchmarks listed in the package description file.
    */
-  doBenchmark = drv: overrideCabal drv (drv: { doBenchmark = true; });
+  doBenchmark = compose.doBenchmark;
   /* dontBenchmark disables dependency checking, compilation and execution
      for benchmarks listed in the package description file.
    */
-  dontBenchmark = drv: overrideCabal drv (drv: { doBenchmark = false; });
+  dontBenchmark = compose.dontBenchmark;
 
   /* doDistribute enables the distribution of binaries for the package
      via hydra.
    */
-  doDistribute = drv: overrideCabal drv (drv: { hydraPlatforms = drv.platforms or ["i686-linux" "x86_64-linux" "x86_64-darwin"]; });
+  doDistribute = compose.doDistribute;
   /* dontDistribute disables the distribution of binaries for the package
      via hydra.
    */
-  dontDistribute = drv: overrideCabal drv (drv: { hydraPlatforms = []; });
+  dontDistribute = compose.dontDistribute;
 
   /* appendConfigureFlag adds a single argument that will be passed to the
      cabal configure command, after the arguments that have been defined
@@ -134,67 +132,67 @@ rec {
 
          > haskell.lib.appendConfigureFlag haskellPackages.servant "--profiling-detail=all-functions"
    */
-  appendConfigureFlag = drv: x: appendConfigureFlags drv [x];
-  appendConfigureFlags = drv: xs: overrideCabal drv (drv: { configureFlags = (drv.configureFlags or []) ++ xs; });
+  appendConfigureFlag = drv: x: compose.appendConfigureFlag x drv;
+  appendConfigureFlags = drv: xs: compose.appendConfigureFlags xs drv;
 
-  appendBuildFlag = drv: x: overrideCabal drv (drv: { buildFlags = (drv.buildFlags or []) ++ [x]; });
-  appendBuildFlags = drv: xs: overrideCabal drv (drv: { buildFlags = (drv.buildFlags or []) ++ xs; });
+  appendBuildFlag = drv: x: compose.appendBuildFlag x drv;
+  appendBuildFlags = drv: xs: compose.appendBuildFlags xs drv;
 
   /* removeConfigureFlag drv x is a Haskell package like drv, but with
      all cabal configure arguments that are equal to x removed.
 
          > haskell.lib.removeConfigureFlag haskellPackages.servant "--verbose"
    */
-  removeConfigureFlag = drv: x: overrideCabal drv (drv: { configureFlags = lib.remove x (drv.configureFlags or []); });
+  removeConfigureFlag = drv: x: compose.removeConfigureFlag x drv;
 
-  addBuildTool = drv: x: addBuildTools drv [x];
-  addBuildTools = drv: xs: overrideCabal drv (drv: { buildTools = (drv.buildTools or []) ++ xs; });
+  addBuildTool = drv: x: compose.addBuildTool x drv;
+  addBuildTools = drv: xs: compose.addBuildTools xs drv;
 
-  addExtraLibrary = drv: x: addExtraLibraries drv [x];
-  addExtraLibraries = drv: xs: overrideCabal drv (drv: { extraLibraries = (drv.extraLibraries or []) ++ xs; });
+  addExtraLibrary = drv: x: compose.addExtraLibrary x drv;
+  addExtraLibraries = drv: xs: compose.addExtraLibraries xs drv;
 
-  addBuildDepend = drv: x: addBuildDepends drv [x];
-  addBuildDepends = drv: xs: overrideCabal drv (drv: { buildDepends = (drv.buildDepends or []) ++ xs; });
+  addBuildDepend = drv: x: compose.addBuildDepend x drv;
+  addBuildDepends = drv: xs: compose.addBuildDepends xs drv;
 
-  addTestToolDepend = drv: x: addTestToolDepends drv [x];
-  addTestToolDepends = drv: xs: overrideCabal drv (drv: { testToolDepends = (drv.testToolDepends or []) ++ xs; });
+  addTestToolDepend = drv: x: compose.addTestToolDepend x drv;
+  addTestToolDepends = drv: xs: compose.addTestToolDepends xs drv;
 
-  addPkgconfigDepend = drv: x: addPkgconfigDepends drv [x];
-  addPkgconfigDepends = drv: xs: overrideCabal drv (drv: { pkg-configDepends = (drv.pkg-configDepends or []) ++ xs; });
+  addPkgconfigDepend = drv: x: compose.addPkgconfigDepend x drv;
+  addPkgconfigDepends = drv: xs: compose.addPkgconfigDepends xs drv;
 
-  addSetupDepend = drv: x: addSetupDepends drv [x];
-  addSetupDepends = drv: xs: overrideCabal drv (drv: { setupHaskellDepends = (drv.setupHaskellDepends or []) ++ xs; });
+  addSetupDepend = drv: x: compose.addSetupDepend x drv;
+  addSetupDepends = drv: xs: compose.addSetupDepends xs drv;
 
-  enableCabalFlag = drv: x: appendConfigureFlag (removeConfigureFlag drv "-f-${x}") "-f${x}";
-  disableCabalFlag = drv: x: appendConfigureFlag (removeConfigureFlag drv "-f${x}") "-f-${x}";
+  enableCabalFlag = drv: x: compose.enableCabalFlag x drv;
+  disableCabalFlag = drv: x: compose.disableCabalFlag x drv;
 
-  markBroken = drv: overrideCabal drv (drv: { broken = true; hydraPlatforms = []; });
-  unmarkBroken = drv: overrideCabal drv (drv: { broken = false; });
-  markBrokenVersion = version: drv: assert drv.version == version; markBroken drv;
-  markUnbroken = drv: overrideCabal drv (drv: { broken = false; });
+  markBroken = compose.markBroken;
+  unmarkBroken = compose.unmarkBroken;
+  markBrokenVersion = compose.markBrokenVersion;
+  markUnbroken = compose.markUnbroken;
 
-  enableLibraryProfiling = drv: overrideCabal drv (drv: { enableLibraryProfiling = true; });
-  disableLibraryProfiling = drv: overrideCabal drv (drv: { enableLibraryProfiling = false; });
+  enableLibraryProfiling = compose.enableLibraryProfiling;
+  disableLibraryProfiling = compose.disableLibraryProfiling;
 
-  enableExecutableProfiling = drv: overrideCabal drv (drv: { enableExecutableProfiling = true; });
-  disableExecutableProfiling = drv: overrideCabal drv (drv: { enableExecutableProfiling = false; });
+  enableExecutableProfiling = compose.enableExecutableProfiling;
+  disableExecutableProfiling = compose.disableExecutableProfiling;
 
-  enableSharedExecutables = drv: overrideCabal drv (drv: { enableSharedExecutables = true; });
-  disableSharedExecutables = drv: overrideCabal drv (drv: { enableSharedExecutables = false; });
+  enableSharedExecutables = compose.enableSharedExecutables;
+  disableSharedExecutables = compose.disableSharedExecutables;
 
-  enableSharedLibraries = drv: overrideCabal drv (drv: { enableSharedLibraries = true; });
-  disableSharedLibraries = drv: overrideCabal drv (drv: { enableSharedLibraries = false; });
+  enableSharedLibraries = compose.enableSharedLibraries;
+  disableSharedLibraries = compose.disableSharedLibraries;
 
-  enableDeadCodeElimination = drv: overrideCabal drv (drv: { enableDeadCodeElimination = true; });
-  disableDeadCodeElimination = drv: overrideCabal drv (drv: { enableDeadCodeElimination = false; });
+  enableDeadCodeElimination = compose.enableDeadCodeElimination;
+  disableDeadCodeElimination = compose.disableDeadCodeElimination;
 
-  enableStaticLibraries = drv: overrideCabal drv (drv: { enableStaticLibraries = true; });
-  disableStaticLibraries = drv: overrideCabal drv (drv: { enableStaticLibraries = false; });
+  enableStaticLibraries = compose.enableStaticLibraries;
+  disableStaticLibraries = compose.disableStaticLibraries;
 
-  enableSeparateBinOutput = drv: overrideCabal drv (drv: { enableSeparateBinOutput = true; });
+  enableSeparateBinOutput = compose.enableSeparateBinOutput;
 
-  appendPatch = drv: x: appendPatches drv [x];
-  appendPatches = drv: xs: overrideCabal drv (drv: { patches = (drv.patches or []) ++ xs; });
+  appendPatch = drv: x: compose.appendPatch x drv;
+  appendPatches = drv: xs: compose.appendPatches xs drv;
 
   /* Set a specific build target instead of compiling all targets in the package.
    * For example, imagine we have a .cabal file with a library, and 2 executables "dev" and "server".
@@ -203,115 +201,67 @@ rec {
    *   setBuildTarget (callCabal2nix "thePackageName" thePackageSrc {}) "server"
    *
    */
-  setBuildTargets = drv: xs: overrideCabal drv (drv: { buildTarget = lib.concatStringsSep " " xs; });
-  setBuildTarget = drv: x: setBuildTargets drv [x];
+  setBuildTargets = drv: xs: compose.setBuildTargets xs drv;
+  setBuildTarget = drv: x: compose.setBuildTarget x drv;
 
-  doHyperlinkSource = drv: overrideCabal drv (drv: { hyperlinkSource = true; });
-  dontHyperlinkSource = drv: overrideCabal drv (drv: { hyperlinkSource = false; });
+  doHyperlinkSource = compose.doHyperlinkSource;
+  dontHyperlinkSource = compose.dontHyperlinkSource;
 
-  disableHardening = drv: flags: overrideCabal drv (drv: { hardeningDisable = flags; });
+  disableHardening = drv: flags: compose.disableHardening flags drv;
 
   /* Let Nix strip the binary files.
    * This removes debugging symbols.
    */
-  doStrip = drv: overrideCabal drv (drv: { dontStrip = false; });
+  doStrip = compose.doStrip;
 
   /* Stop Nix from stripping the binary files.
    * This keeps debugging symbols.
    */
-  dontStrip = drv: overrideCabal drv (drv: { dontStrip = true; });
+  dontStrip = compose.dontStrip;
 
   /* Useful for debugging segfaults with gdb.
    * This includes dontStrip.
    */
-  enableDWARFDebugging = drv:
-   # -g: enables debugging symbols
-   # --disable-*-stripping: tell GHC not to strip resulting binaries
-   # dontStrip: see above
-   appendConfigureFlag (dontStrip drv) "--ghc-options=-g --disable-executable-stripping --disable-library-stripping";
+  enableDWARFDebugging = compose.enableDWARFDebugging;
 
   /* Create a source distribution tarball like those found on hackage,
      instead of building the package.
    */
-  sdistTarball = pkg: lib.overrideDerivation pkg (drv: {
-    name = "${drv.pname}-source-${drv.version}";
-    # Since we disable the haddock phase, we also need to override the
-    # outputs since the separate doc output will not be produced.
-    outputs = ["out"];
-    buildPhase = "./Setup sdist";
-    haddockPhase = ":";
-    checkPhase = ":";
-    installPhase = "install -D dist/${drv.pname}-*.tar.gz $out/${drv.pname}-${drv.version}.tar.gz";
-    fixupPhase = ":";
-  });
+  sdistTarball = compose.sdistTarball;
 
   /* Create a documentation tarball suitable for uploading to Hackage instead
      of building the package.
    */
-  documentationTarball = pkg:
-    pkgs.lib.overrideDerivation pkg (drv: {
-      name = "${drv.name}-docs";
-      # Like sdistTarball, disable the "doc" output here.
-      outputs = [ "out" ];
-      buildPhase = ''
-        runHook preHaddock
-        ./Setup haddock --for-hackage
-        runHook postHaddock
-      '';
-      haddockPhase = ":";
-      checkPhase = ":";
-      installPhase = ''
-        runHook preInstall
-        mkdir -p "$out"
-        tar --format=ustar \
-          -czf "$out/${drv.name}-docs.tar.gz" \
-          -C dist/doc/html "${drv.name}-docs"
-        runHook postInstall
-      '';
-    });
+  documentationTarball = compose.documentationTarball;
 
   /* Use the gold linker. It is a linker for ELF that is designed
      "to run as fast as possible on modern systems"
    */
-  linkWithGold = drv : appendConfigureFlag drv
-    "--ghc-option=-optl-fuse-ld=gold --ld-option=-fuse-ld=gold --with-ld=ld.gold";
+  linkWithGold = compose.linkWithGold;
 
   /* link executables statically against haskell libs to reduce
      closure size
    */
-  justStaticExecutables = drv: overrideCabal drv (drv: {
-    enableSharedExecutables = false;
-    enableLibraryProfiling = false;
-    isLibrary = false;
-    doHaddock = false;
-    postFixup = "rm -rf $out/lib $out/nix-support $out/share/doc";
-  });
+  justStaticExecutables = compose.justStaticExecutables;
 
   /* Build a source distribution tarball instead of using the source files
      directly. The effect is that the package is built as if it were published
      on hackage. This can be used as a test for the source distribution,
      assuming the build fails when packaging mistakes are in the cabal file.
    */
-  buildFromSdist = pkg: overrideCabal pkg (drv: {
-    src = "${sdistTarball pkg}/${pkg.pname}-${pkg.version}.tar.gz";
-
-    # Revising and jailbreaking the cabal file has been handled in sdistTarball
-    revision = null;
-    editedCabalFile = null;
-    jailbreak = false;
-  });
+  buildFromSdist = compose.buildFromSdist;
 
   /* Build the package in a strict way to uncover potential problems.
      This includes buildFromSdist and failOnAllWarnings.
    */
-  buildStrictly = pkg: buildFromSdist (failOnAllWarnings pkg);
+  buildStrictly = compose.buildStrictly;
 
   /* Disable core optimizations, significantly speeds up build time */
-  disableOptimization = pkg: appendConfigureFlag pkg "--disable-optimization";
+  disableOptimization = compose.disableOptimization;
 
   /* Turn on most of the compiler warnings and fail the build if any
      of them occur. */
-  failOnAllWarnings = drv: appendConfigureFlag drv "--ghc-option=-Wall --ghc-option=-Werror";
+  failOnAllWarnings = compose.failOnAllWarnings;
 
   /* Add a post-build check to verify that dependencies declared in
      the cabal file are actually used.
@@ -320,54 +270,33 @@ rec {
      of this check and a list of ignored package names that would otherwise
      cause false alarms.
    */
-  checkUnusedPackages =
-    { ignoreEmptyImports ? false
-    , ignoreMainModule   ? false
-    , ignorePackages     ? []
-    } : drv :
-      overrideCabal (appendConfigureFlag drv "--ghc-option=-ddump-minimal-imports") (_drv: {
-        postBuild = with lib;
-          let args = concatStringsSep " " (
-                       optional ignoreEmptyImports "--ignore-empty-imports" ++
-                       optional ignoreMainModule   "--ignore-main-module" ++
-                       map (pkg: "--ignore-package ${pkg}") ignorePackages
-                     );
-          in "${pkgs.haskellPackages.packunused}/bin/packunused" +
-             optionalString (args != "") " ${args}";
-      });
+  checkUnusedPackages = compose.checkUnusedPackages;
 
-  buildStackProject = pkgs.callPackage ./generic-stack-builder.nix { };
+  buildStackProject = compose.buildStackProject;
 
   /* Add a dummy command to trigger a build despite an equivalent
      earlier build that is present in the store or cache.
    */
-  triggerRebuild = drv: i: overrideCabal drv (drv: { postUnpack = ": trigger rebuild ${toString i}"; });
+  triggerRebuild = drv: i: compose.triggerRebuild i drv;
 
   /* Override the sources for the package and optionaly the version.
      This also takes of removing editedCabalFile.
    */
-  overrideSrc = drv: { src, version ? drv.version }:
-    overrideCabal drv (_: { inherit src version; editedCabalFile = null; });
+  overrideSrc = drv: src: compose.overrideSrc src drv;
 
   # Get all of the build inputs of a haskell package, divided by category.
-  getBuildInputs = p: p.getBuildInputs;
+  getBuildInputs = compose.getBuildInputs;
 
   # Extract the haskell build inputs of a haskell package.
   # This is useful to build environments for developing on that
   # package.
-  getHaskellBuildInputs = p: (getBuildInputs p).haskellBuildInputs;
+  getHaskellBuildInputs = compose.getHaskellBuildInputs;
 
   # Under normal evaluation, simply return the original package. Under
   # nix-shell evaluation, return a nix-shell optimized environment.
-  shellAware = p: if lib.inNixShell then p.env else p;
+  shellAware = compose.shellAware;
 
-  ghcInfo = ghc:
-    rec { isCross = (ghc.cross or null) != null;
-          isGhcjs = ghc.isGhcjs or false;
-          nativeGhc = if isCross || isGhcjs
-                        then ghc.bootPkgs.ghc
-                        else ghc;
-        };
+  ghcInfo = compose.ghcInfo;
 
   ### mkDerivation helpers
   # These allow external users of a haskell package to extract
@@ -379,35 +308,15 @@ rec {
   # an example of this.
 
   # Some information about which phases should be run.
-  controlPhases = ghc: let inherit (ghcInfo ghc) isCross; in
-                  { doCheck ? !isCross && (lib.versionOlder "7.4" ghc.version)
-                  , doBenchmark ? false
-                  , ...
-                  }: { inherit doCheck doBenchmark; };
+  controlPhases = compose.controlPhases;
 
   # Utility to convert a directory full of `cabal2nix`-generated files into a
   # package override set
   #
   # packagesFromDirectory : { directory : Directory, ... } -> HaskellPackageOverrideSet
-  packagesFromDirectory =
-    { directory, ... }:
+  packagesFromDirectory = compose.packagesFromDirectory;
 
-    self: super:
-      let
-        haskellPaths = builtins.attrNames (builtins.readDir directory);
-
-        toKeyVal = file: {
-          name  = builtins.replaceStrings [ ".nix" ] [ "" ] file;
-
-          value = self.callPackage (directory + "/${file}") { };
-        };
-
-      in
-        builtins.listToAttrs (map toKeyVal haskellPaths);
-
-  addOptparseApplicativeCompletionScripts = exeName: pkg:
-    builtins.trace "addOptparseApplicativeCompletionScripts is deprecated in favor of generateOptparseApplicativeCompletion. Please change ${pkg.name} to use the latter or its plural form."
-    (generateOptparseApplicativeCompletion exeName pkg);
+  addOptparseApplicativeCompletionScripts = compose.addOptparseApplicativeCompletionScripts;
 
   /*
     Modify a Haskell package to add shell completion scripts for the
@@ -422,23 +331,7 @@ rec {
       command: name of an executable
           pkg: Haskell package that builds the executables
   */
-  generateOptparseApplicativeCompletion = exeName: pkg: overrideCabal pkg (drv: {
-    postInstall = (drv.postInstall or "") + ''
-      bashCompDir="''${!outputBin}/share/bash-completion/completions"
-      zshCompDir="''${!outputBin}/share/zsh/vendor-completions"
-      fishCompDir="''${!outputBin}/share/fish/vendor_completions.d"
-      mkdir -p "$bashCompDir" "$zshCompDir" "$fishCompDir"
-      "''${!outputBin}/bin/${exeName}" --bash-completion-script "''${!outputBin}/bin/${exeName}" >"$bashCompDir/${exeName}"
-      "''${!outputBin}/bin/${exeName}" --zsh-completion-script "''${!outputBin}/bin/${exeName}" >"$zshCompDir/_${exeName}"
-      "''${!outputBin}/bin/${exeName}" --fish-completion-script "''${!outputBin}/bin/${exeName}" >"$fishCompDir/${exeName}.fish"
-
-      # Sanity check
-      grep -F ${exeName} <$bashCompDir/${exeName} >/dev/null || {
-        echo 'Could not find ${exeName} in completion script.'
-        exit 1
-      }
-    '';
-  });
+  generateOptparseApplicativeCompletion = compose.generateOptparseApplicativeCompletion;
 
   /*
     Modify a Haskell package to add shell completion scripts for the
@@ -453,13 +346,10 @@ rec {
      commands: name of an executable
           pkg: Haskell package that builds the executables
   */
-  generateOptparseApplicativeCompletions = commands: pkg:
-    pkgs.lib.foldr generateOptparseApplicativeCompletion pkg commands;
+  generateOptparseApplicativeCompletions = compose.generateOptparseApplicativeCompletions;
 
   # Don't fail at configure time if there are multiple versions of the
   # same package in the (recursive) dependencies of the package being
   # built. Will delay failures, if any, to compile time.
-  allowInconsistentDependencies = drv: overrideCabal drv (drv: {
-    allowInconsistentDependencies = true;
-  });
+  allowInconsistentDependencies = compose.allowInconsistentDependencies;
 }

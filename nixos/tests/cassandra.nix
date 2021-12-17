@@ -41,7 +41,6 @@ let
       ];
     };
     services.cassandra = cassandraCfg ipAddress // extra;
-    virtualisation.memorySize = 1024;
   };
 in
 {

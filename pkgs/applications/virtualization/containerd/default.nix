@@ -10,7 +10,7 @@
 
 buildGoModule rec {
   pname = "containerd";
-  version = "1.5.5";
+  version = "1.5.8";
 
   outputs = [ "out" "man" ];
 
@@ -18,7 +18,7 @@ buildGoModule rec {
     owner = "containerd";
     repo = "containerd";
     rev = "v${version}";
-    sha256 = "sha256-6mDTTXHpXBcKOcT+VrGgt6HJzvTeKgJ0ItJ+IjCTJxk=";
+    sha256 = "sha256-XIAByE2/eVG8DAZXstKs51LQYdVPcPQuIlST3xCclrU=";
   };
 
   vendorSha256 = null;
@@ -27,14 +27,12 @@ buildGoModule rec {
 
   buildInputs = [ btrfs-progs ];
 
-  buildFlags = [ "VERSION=v${version}" "REVISION=${src.rev}" ];
-
   BUILDTAGS = lib.optionals (btrfs-progs == null) [ "no_btrfs" ];
 
   buildPhase = ''
     runHook preBuild
     patchShebangs .
-    make binaries man $buildFlags
+    make binaries man "VERSION=v${version}" "REVISION=${src.rev}"
     runHook postBuild
   '';
 

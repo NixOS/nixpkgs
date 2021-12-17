@@ -91,6 +91,17 @@ self: super: {
   xml-html-qq = dontCheck super.xml-html-qq;
   yaml-combinators = dontCheck super.yaml-combinators;
   yesod-paginator = dontCheck super.yesod-paginator;
+  hls-pragmas-plugin = dontCheck super.hls-pragmas-plugin;
+  hls-call-hierarchy-plugin = dontCheck super.hls-call-hierarchy-plugin;
+  hls-module-name-plugin = dontCheck super.hls-module-name-plugin;
+  hls-brittany-plugin = dontCheck super.hls-brittany-plugin;
+
+  # Similar RTS issue in test suite:
+  # rts/linker/elf_reloc_aarch64.c:98: encodeAddendAarch64: Assertion `isInt64(21+12, addend)' failed.
+  hls-hlint-plugin = dontCheck super.hls-hlint-plugin;
+  hls-ormolu-plugin = dontCheck super.hls-ormolu-plugin;
+  hls-haddock-comments-plugin = dontCheck super.hls-haddock-comments-plugin;
+
 
   # https://github.com/ekmett/half/issues/35
   half = dontCheck super.half;

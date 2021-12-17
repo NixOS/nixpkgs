@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libexttextcat";
-  version = "3.4.5";
+  version = "3.4.6";
 
   src = fetchurl {
     url = "https://dev-www.libreoffice.org/src/libexttextcat/${pname}-${version}.tar.xz";
-    sha256 = "1j6sjwkyhqvsgyw938bxxfwkzzi1mahk66g5342lv6j89jfvrz8k";
+    sha256 = "sha256-bXfqziDp6hBsEzDiaO3nDJpKiXRN3CVxVoJ1TsozaN8=";
   };
 
   meta = with lib; {

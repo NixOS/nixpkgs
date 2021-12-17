@@ -1,14 +1,11 @@
 { lib, stdenv, fetchurl, fetchpatch, pkg-config, systemd, util-linux, coreutils }:
 
-let
-  v = "2.02.106";
-in
-
 stdenv.mkDerivation {
-  name = "lvm2-${v}";
+  pname = "lvm2";
+  version = "2.02.106";
 
   src = fetchurl {
-    url = "ftp://sources.redhat.com/pub/lvm2/releases/LVM2.${v}.tgz";
+    url = "ftp://sources.redhat.com/pub/lvm2/releases/LVM2.${version}.tgz";
     sha256 = "0nr833bl0q4zq52drjxmmpf7bs6kqxwa5kahwwxm9411khkxz0vc";
   };
 

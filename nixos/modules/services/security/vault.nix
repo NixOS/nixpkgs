@@ -42,7 +42,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.vault;
-        defaultText = "pkgs.vault";
+        defaultText = literalExpression "pkgs.vault";
         description = "This option specifies the vault package to use.";
       };
 

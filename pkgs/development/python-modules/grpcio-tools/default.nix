@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "grpcio-tools";
-  version = "1.39.0";
+  version = "1.42.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "39dfe7415bc0d3860fdb8dd90607594b046b88b57dbe64284efa4820f951c805";
+    sha256 = "d0a0daa82eb2c2fb8e12b82a458d1b7c5516fe1135551da92b1a02e2cba93422";
   };
 
   outputs = [ "out" "dev" ];

@@ -1,7 +1,6 @@
 { lib, stdenv
 , buildPythonPackage
 , fetchPypi
-, fetchpatch
 , isPy27
 , ipaddress
 , openssl
@@ -9,7 +8,6 @@
 , darwin
 , packaging
 , six
-, pythonOlder
 , isPyPy
 , cffi
 , pytest

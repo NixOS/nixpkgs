@@ -11,10 +11,6 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         enable = true;
         maxMemory = 800;
       };
-
-      # Airsonic is a Java application, and unfortunately requires a significant
-      # amount of memory.
-      virtualisation.memorySize = 1024;
     };
 
   testScript = ''

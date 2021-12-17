@@ -4,7 +4,6 @@
 , daemonize
 , dbus-python
 , fetchFromGitHub
-, fetchpatch
 , gobject-introspection
 , gtk3
 , makeWrapper

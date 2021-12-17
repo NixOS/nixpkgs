@@ -29,7 +29,7 @@ index 9f57af5..e65289d 100644
                           name);
  
 -                argv[0] = "/usr/sbin/usermod";
-+                argv[0] = "@shadown@/bin/usermod";
++                argv[0] = "@shadow@/bin/usermod";
                  argv[1] = "-c";
                  argv[2] = name;
                  argv[3] = "--";

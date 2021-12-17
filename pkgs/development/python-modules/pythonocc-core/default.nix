@@ -1,5 +1,4 @@
-{ lib, stdenv, python, fetchFromGitHub, cmake, swig, ninja
-, opencascade, smesh, freetype, libGL, libGLU, libX11
+{ lib, stdenv, python, fetchFromGitHub, cmake, swig, opencascade, smesh, freetype, libGL, libGLU, libX11
 , Cocoa }:
 
 stdenv.mkDerivation rec {

@@ -22,7 +22,7 @@ in
       bundles = mkOption {
         type = types.listOf types.package;
         default = [ pkgs.felix_remoteshell ];
-        defaultText = "[ pkgs.felix_remoteshell ]";
+        defaultText = literalExpression "[ pkgs.felix_remoteshell ]";
         description = "List of bundles that should be activated on startup";
       };
 

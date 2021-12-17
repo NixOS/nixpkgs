@@ -1,18 +1,15 @@
 { lib, stdenv, buildPackages, fetchurl, pkg-config, pcre, libxml2, zlib, bzip2, which, file
-, openssl, enableMagnet ? false, lua5_1 ? null
-, enableMysql ? false, libmysqlclient ? null
-, enableLdap ? false, openldap ? null
-, enableWebDAV ? false, sqlite ? null, libuuid ? null
-, enableExtendedAttrs ? false, attr ? null
+, openssl
+, enableDbi ? false, libdbi
+, enableMagnet ? false, lua5_1
+, enableMysql ? false, libmysqlclient
+, enableLdap ? false, openldap
+, enablePam ? false, linux-pam
+, enableSasl ? false, cyrus_sasl
+, enableWebDAV ? false, sqlite, libuuid
+, enableExtendedAttrs ? false, attr
 , perl
 }:
-
-assert enableMagnet -> lua5_1 != null;
-assert enableMysql -> libmysqlclient != null;
-assert enableLdap -> openldap != null;
-assert enableWebDAV -> sqlite != null;
-assert enableWebDAV -> libuuid != null;
-assert enableExtendedAttrs -> attr != null;
 
 stdenv.mkDerivation rec {
   pname = "lighttpd";
@@ -33,16 +30,22 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ pcre pcre.dev libxml2 zlib bzip2 which file openssl ]
+             ++ lib.optional enableDbi libdbi
              ++ lib.optional enableMagnet lua5_1
              ++ lib.optional enableMysql libmysqlclient
              ++ lib.optional enableLdap openldap
+             ++ lib.optional enablePam linux-pam
+             ++ lib.optional enableSasl cyrus_sasl
              ++ lib.optional enableWebDAV sqlite
              ++ lib.optional enableWebDAV libuuid;
 
   configureFlags = [ "--with-openssl" ]
+                ++ lib.optional enableDbi "--with-dbi"
                 ++ lib.optional enableMagnet "--with-lua"
                 ++ lib.optional enableMysql "--with-mysql"
                 ++ lib.optional enableLdap "--with-ldap"
+                ++ lib.optional enablePam "--with-pam"
+                ++ lib.optional enableSasl "--with-sasl"
                 ++ lib.optional enableWebDAV "--with-webdav-props"
                 ++ lib.optional enableWebDAV "--with-webdav-locks"
                 ++ lib.optional enableExtendedAttrs "--with-attr";
@@ -69,6 +72,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.lighttpd.net/";
     license = lib.licenses.bsd3;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = [ maintainers.bjornfor ];
+    maintainers = with maintainers; [ bjornfor brecht ];
   };
 }

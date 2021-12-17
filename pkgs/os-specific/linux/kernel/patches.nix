@@ -47,12 +47,13 @@
   cpu-cgroup-v2 = import ./cpu-cgroup-v2-patches;
 
   hardened = let
-    mkPatch = kernelVersion: src: {
+    mkPatch = kernelVersion: { version, sha256, patch }: let src = patch; in {
       name = lib.removeSuffix ".patch" src.name;
       patch = fetchurl (lib.filterAttrs (k: v: k != "extra") src);
       extra = src.extra;
+      inherit version sha256;
     };
-    patches = builtins.fromJSON (builtins.readFile ./hardened/patches.json);
+    patches = lib.importJSON ./hardened/patches.json;
   in lib.mapAttrs mkPatch patches;
 
   # https://bugzilla.kernel.org/show_bug.cgi?id=197591#c6

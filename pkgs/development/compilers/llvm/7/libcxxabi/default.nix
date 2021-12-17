@@ -1,4 +1,5 @@
 { lib, stdenv, llvm_meta, cmake, fetch, libcxx, libunwind, llvm, version
+, fetchpatch
 , standalone ? stdenv.hostPlatform.useLLVM or false
 , withLibunwind ? !stdenv.isDarwin && !stdenv.isFreeBSD && !stdenv.hostPlatform.isWasm
   # on musl the shared objects don't build
@@ -21,6 +22,13 @@ stdenv.mkDerivation {
     export TRIPLE=x86_64-apple-darwin
   '' + lib.optionalString stdenv.hostPlatform.isMusl ''
     patch -p1 -d $(ls -d libcxx-*) -i ${../../libcxx-0001-musl-hacks.patch}
+  '' + lib.optionalString (!stdenv.cc.isClang) ''
+    pushd libcxx-*
+    patch -p2 < ${fetchpatch {
+      url = "https://github.com/llvm/llvm-project/commit/76ccec07b4fa0cc68dfd07d557e7fb661804a468.patch";
+      sha256 = "1lgzkfkp7qinfc6gd8x5di1iq1gqdv81249c6f02chn9q122sbq1";
+    }}
+    popd
   '';
 
   patches = [

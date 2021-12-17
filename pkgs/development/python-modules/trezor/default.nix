@@ -19,18 +19,18 @@
 , shamir-mnemonic
 , typing-extensions
 , trezor-udev-rules
-, pytest
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "trezor";
-  version = "0.12.3";
+  version = "0.12.4";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "02c39c333435b8f6dc62cc79bb5bf35fc7f0eb144a1a748be3b7c065ee3e85ae";
+    sha256 = "3e180d9f9f8b69176b5ef36311b6161f5b793b538eb2dfd4babbb4d3fb1e374e";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -54,16 +54,7 @@ buildPythonPackage rec {
     trezor-udev-rules
   ];
 
-  checkInputs = [
-    pytest
-  ];
-
-  # disable test_tx_api.py as it requires being online
-  checkPhase = ''
-    runHook preCheck
-    pytest --pyargs tests --ignore tests/test_tx_api.py
-    runHook postCheck
-  '';
+  checkInputs = [ pytestCheckHook ];
 
   postFixup = ''
     mkdir completions

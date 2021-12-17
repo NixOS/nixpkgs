@@ -1,12 +1,14 @@
-{ lib, stdenv, fetchzip, autoreconfHook }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "tio";
   version = "1.32";
 
-  src = fetchzip {
-    url = "https://github.com/tio/tio/archive/v${version}.tar.gz";
-    sha256 = "0lwqdm73kshi9qs8pks1b4by6yb9jf3bbyw3bv52xmggnr5s1hcv";
+  src = fetchFromGitHub {
+    owner = "tio";
+    repo = "tio";
+    rev = "v${version}";
+    hash = "sha256-m8GgS7bv1S7KXoP7tYaTaXnjF1lBz4s0ThHqOU5tmFM=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

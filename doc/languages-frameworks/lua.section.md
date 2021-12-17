@@ -128,7 +128,7 @@ Let's present the luarocks way first and the manual one in a second time.
 
 ### Packaging a library on luarocks {#packaging-a-library-on-luarocks}
 
-[Luarocks.org](www.luarocks.org) is the main repository of lua packages.
+[Luarocks.org](https://luarocks.org/) is the main repository of lua packages.
 The site proposes two types of packages, the rockspec and the src.rock
 (equivalent of a [rockspec](https://github.com/luarocks/luarocks/wiki/Rockspec-format) but with the source).
 These packages can have different build types such as `cmake`, `builtin` etc .

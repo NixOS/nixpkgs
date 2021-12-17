@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "pyrsistent";
-  version = "0.17.3";
+  version = "0.18.0";
 
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2e636185d9eb976a18a8a8e96efce62f2905fea90041958d8cc2a189756ebf3e";
+    sha256 = "773c781216f8c2900b42a7b638d5b517bb134ae1acbebe4d1e8f1f41ea60eb4b";
   };
 
   propagatedBuildInputs = [ six ];

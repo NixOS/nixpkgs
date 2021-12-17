@@ -4,8 +4,6 @@
 , isPy3k
 , libGL
 , libX11
-, pytestCheckHook
-, psutil
 }:
 
 buildPythonPackage rec {

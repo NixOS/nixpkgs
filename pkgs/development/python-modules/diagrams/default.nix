@@ -27,7 +27,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'jinja2 = "^2.10"' 'jinja2 = "*"'
+      --replace 'jinja2 = "^2.10"' 'jinja2 = "*"' \
+      --replace 'graphviz = ">=0.13.2,<0.17.0"' 'graphviz = "*"'
   '';
 
   preConfigure = ''
@@ -35,7 +36,10 @@ buildPythonPackage rec {
     ./autogen.sh
   '';
 
-  patches = [ ./build_poetry.patch ];
+  patches = [
+    # The build-system section is missing
+    ./build_poetry.patch
+  ];
 
   checkInputs = [ pytestCheckHook ];
 
@@ -44,6 +48,8 @@ buildPythonPackage rec {
   nativeBuildInputs = [ black inkscape imagemagick jinja2 poetry-core round ];
 
   propagatedBuildInputs = [ graphviz ];
+
+  pythonImportsCheck = [ "diagrams" ];
 
   meta = with lib; {
     description = "Diagram as Code";

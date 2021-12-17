@@ -1,4 +1,4 @@
-{ mkXfceDerivation, gtk3, libxfce4ui, libxfce4util, xfce4-panel, xfconf }:
+{ lib, mkXfceDerivation, gtk3, libxfce4ui, libxfce4util, xfce4-panel, xfconf }:
 
 mkXfceDerivation {
   category = "panel-plugins";
@@ -10,7 +10,8 @@ mkXfceDerivation {
 
   buildInputs = [ gtk3 libxfce4ui libxfce4util xfce4-panel xfconf ];
 
-  meta = {
+  meta = with lib; {
     description = "Battery plugin for Xfce panel";
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

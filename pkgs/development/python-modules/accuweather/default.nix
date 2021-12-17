@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "accuweather";
-  version = "0.2.0";
+  version = "0.3.0";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "bieniu";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Swe8vegRcyaeG4n/8aeGFLrXkwcLM/Al53yD6oD/0GA=";
+    sha256 = "sha256-Kn2hP0mdnC4+Lk8wsTznC23CsYLYKhya+HlHox1Fo2o=";
   };
 
   postPatch = ''

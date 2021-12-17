@@ -4,7 +4,7 @@
 , libX11
 , gst_all_1
 , sqlite
-, epoxy
+, libepoxy
 , pango
 , cairo
 , gdk-pixbuf
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     pcsclite
     gtk3
     cairo
-    epoxy
+    libepoxy
     pango
     gdk-pixbuf
     gst_all_1.gstreamer

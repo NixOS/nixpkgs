@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "2.0.2";
 
   src = fetchurl {
-    url = "https://www.apache.org/dist/santuario/c-library/${pname}-${version}.tar.gz";
+    url = "mirror://apache/santuario/c-library/${pname}-${version}.tar.gz";
     sha256 = "1prh5sxzipkqglpsh53iblbr7rxi54wbijxdjiahzjmrijqa40y3";
   };
 

@@ -1,15 +1,14 @@
 { lib, fetchFromGitHub, makeWrapper, clang, haskellPackages }:
 
 haskellPackages.mkDerivation rec {
-
   pname = "carp";
-  version = "0.5.0";
+  version = "0.5.3";
 
   src = fetchFromGitHub {
     owner = "carp-lang";
     repo = "Carp";
     rev = "v${version}";
-    sha256 = "sha256-nTSMY8bq0b/JvE/XQGDC4St2sqdni12E5WQU5FXnuCg=";
+    sha256 = "08ryk30ii24qsdpdq7bqi406ynv9nr8zy2pcv9n70ar8fxfw0859";
   };
 
   buildTools = [ makeWrapper ];

@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchurl, ocamlPackages, makeWrapper
-, libGLU, libGL, freeglut, mpfr, gmp
+{ lib
+, stdenv
+, fetchurl
+, ocamlPackages
+, makeWrapper
+, libGLU
+, libGL
+, freeglut
+, mpfr
+, gmp
 , pkgsHostTarget
 }:
 
@@ -7,24 +15,32 @@ let
   inherit (pkgsHostTarget.targetPackages.stdenv) cc;
 in
 
-stdenv.mkDerivation {
-  name = "glsurf-3.3.1";
+stdenv.mkDerivation rec {
+  pname = "glsurf";
+  version = "3.3.1";
 
   src = fetchurl {
-    url = "https://raffalli.eu/~christophe/glsurf/glsurf-3.3.1.tar.gz";
+    url = "https://raffalli.eu/~christophe/glsurf/glsurf-${version}.tar.gz";
     sha256 = "0w8xxfnw2snflz8wdr2ca9f5g91w5vbyp1hwlx1v7vg83d4bwqs7";
   };
 
   nativeBuildInputs = [
     makeWrapper
   ] ++ (with ocamlPackages; [
-    ocaml findlib
+    ocaml
+    findlib
   ]);
 
   buildInputs = [
-    freeglut libGL libGLU mpfr gmp
+    freeglut
+    libGL
+    libGLU
+    mpfr
+    gmp
   ] ++ (with ocamlPackages; [
-    camlp4 lablgl camlimages_4_2_4
+    camlp4
+    lablgl
+    camlimages_4_2_4
   ]);
 
   postPatch = ''

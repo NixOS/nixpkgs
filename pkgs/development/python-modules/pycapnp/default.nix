@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pycapnp";
-  version = "1.0.0";
+  version = "1.1.0";
   disabled = isPyPy || isPy27;
 
   src = fetchFromGitHub {
     owner = "capnproto";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1n6dq2fbagi3wvrpkyb7wx4y15nkm2grln4y75hrqgmnli8ggi9v";
+    sha256 = "1xi6df93ggkpmwckwbi356v7m32zv5qry8s45hvsps66dz438kmi";
   };
 
   buildInputs = [ capnproto cython pkgconfig ];

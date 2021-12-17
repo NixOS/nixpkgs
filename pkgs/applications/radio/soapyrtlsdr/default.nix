@@ -26,6 +26,6 @@ in stdenv.mkDerivation {
     description = "SoapySDR plugin for RTL-SDR devices";
     license = licenses.mit;
     maintainers = with maintainers; [ ragge ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

@@ -84,7 +84,7 @@ in
     services.openvpn.servers = mkOption {
       default = {};
 
-      example = literalExample ''
+      example = literalExpression ''
         {
           server = {
             config = '''

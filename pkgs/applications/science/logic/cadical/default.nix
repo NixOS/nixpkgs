@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cadical";
-  version = "1.3.0";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "arminbiere";
     repo = "cadical";
     rev = "rel-${version}";
-    sha256 = "05lvnvapjawgkky38xknb9lgaliiwan4kggmb9yggl4ifpjrh8qf";
+    sha256 = "0y44z3np4gssgdh4aj5qila7pshrbphycdxn2083i8ayyyjbxshp";
   };
 
   outputs = [ "out" "dev" "lib" ];
@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
     install -Dm0755 build/cadical "$out/bin/cadical"
     install -Dm0755 build/mobical "$out/bin/mobical"
     install -Dm0644 src/ccadical.h "$dev/include/ccadical.h"
+    install -Dm0644 src/cadical.hpp "$dev/include/cadical.hpp"
     install -Dm0644 build/libcadical.a "$lib/lib/libcadical.a"
     mkdir -p "$out/share/doc/${pname}/"
     install -Dm0755 {LICEN?E,README*,VERSION} "$out/share/doc/${pname}/"

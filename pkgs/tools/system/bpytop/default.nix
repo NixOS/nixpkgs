@@ -47,6 +47,6 @@ stdenv.mkDerivation rec {
     platforms = with platforms; linux ++ freebsd ++ darwin;
 
     # https://github.com/NixOS/nixpkgs/pull/94625#issuecomment-668509399
-    broken = stdenv.isDarwin;
+    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }

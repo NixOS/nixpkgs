@@ -1,6 +1,6 @@
 {
   "name": "@holoviz/panel",
-  "version": "0.11.1",
+  "version": "0.12.1",
   "description": "A high level dashboarding library for python visualization libraries.",
   "license": "BSD-3-Clause",
   "repository": {
@@ -8,7 +8,7 @@
     "url": "https://github.com/holoviz/panel.git"
   },
   "dependencies": {
-    "@bokeh/bokehjs": "^2.3.0",
+    "@bokeh/bokehjs": "^2.3.3",
     "@luma.gl/constants": "^8.0.3",
     "@types/debounce": "^1.2.0",
     "@types/gl-matrix": "^2.4.5",

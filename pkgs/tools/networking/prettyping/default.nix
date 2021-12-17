@@ -1,12 +1,11 @@
 { stdenv, lib, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "${program}-${version}";
-  program = "prettyping";
+  pname = "prettyping";
   version = "1.0.1";
   src = fetchFromGitHub {
     owner = "denilsonsa";
-    repo = program;
+    repo = pname;
     rev = "v${version}";
     sha256 = "05vfaq9y52z40245j47yjk1xaiwrazv15sgjq64w91dfyahjffxf";
   };

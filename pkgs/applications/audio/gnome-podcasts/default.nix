@@ -21,20 +21,20 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-podcasts";
-  version = "0.4.9";
+  version = "0.5.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "podcasts";
     rev = version;
-    sha256 = "1ah59ac3xm3sqai8zhil8ar30pviw83cm8in1n4id77rv24xkvgm";
+    hash = "sha256-Jk++/QrQt/fjOz2OaEIr1Imq2DmqTjcormCebjO4/Kk=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    sha256 = "1iihpfvkli09ysn46cnif53xizkwzk0m91bljmlzsygp3ip5i5yw";
+    hash = "sha256-jlXpeVabc1h2GU1j9Ff6GZJec+JgFyOdJzsOtdkrEWI=";
   };
 
   nativeBuildInputs = [

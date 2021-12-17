@@ -16,7 +16,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.solr;
-        defaultText = "pkgs.solr";
+        defaultText = literalExpression "pkgs.solr";
         description = "Which Solr package to use.";
       };
 

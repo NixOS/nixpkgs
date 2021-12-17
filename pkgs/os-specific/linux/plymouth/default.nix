@@ -15,8 +15,8 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "plymouth-unstable";
-  version = "2020-12-07";
+  pname = "plymouth";
+  version = "unstable-2021-10-18";
 
   outputs = [
     "out"
@@ -27,8 +27,8 @@ stdenv.mkDerivation rec {
     domain = "gitlab.freedesktop.org";
     owner = "plymouth";
     repo = "plymouth";
-    rev = "c4ced2a2d70edea7fbb95274aa1d01d95928df1b";
-    sha256 = "7CPuKMA0fTt8DBsaA4Td74kHT/O7PW8N3awP04nUnOI=";
+    rev = "18363cd887dbfe7e82a2f4cc1a49ef9513919142";
+    sha256 = "sha256-+AP4ALOFdYFt/8MDXjMaHptkogCwK1iXKuza1zfMaws=";
   };
 
   nativeBuildInputs = [
@@ -45,15 +45,6 @@ stdenv.mkDerivation rec {
     libdrm
     pango
     systemd
-  ];
-
-  patches = [
-    # KillMode=none is deprecated
-    # https://gitlab.freedesktop.org/plymouth/plymouth/-/issues/123
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/plymouth/plymouth/-/commit/b406b0895a95949db2adfedaeda451f36f2b51c3.patch";
-      sha256 = "/UBImNuFO0G/oxlttjGIXon8YXMXlc9XU8uVuR9QuxY=";
-    })
   ];
 
   postPatch = ''

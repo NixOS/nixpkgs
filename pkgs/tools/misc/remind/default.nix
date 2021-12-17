@@ -16,11 +16,11 @@ let
 in
 tcl.mkTclDerivation rec {
   pname = "remind";
-  version = "03.03.07";
+  version = "03.03.10";
 
   src = fetchurl {
     url = "https://dianne.skoll.ca/projects/remind/download/remind-${version}.tar.gz";
-    sha256 = "sha256-h8lOKdHhiVT/XSIkfX7KMHzmIeEdIsFCCPkD9oo7ij0=";
+    sha256 = "sha256-BqFt3f4+hfz4njzOI1mkrUJhR7zOqzT/TNWS+sk2XEc=";
   };
 
   propagatedBuildInputs = tclLibraries;

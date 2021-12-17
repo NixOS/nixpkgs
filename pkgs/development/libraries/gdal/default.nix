@@ -7,13 +7,13 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "gdal";
-  version = "3.2.2";
+  version = "3.3.2";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "gdal";
-    rev = "a33784291d19015217ea2604988e53d448e14a07";
-    sha256 = "sha256-ynCju3chDfYtyrGmUE0n3kkaH2Mpm+/DDHHxCahjhSQ=";
+    rev = "v${version}";
+    sha256 = "sha256-fla3EMDmuW0+vmmU0sgtLsGfO7dDApLQ2EoKJeR/1IM=";
   };
 
   sourceRoot = "source/gdal";
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     "--with-mysql=${getDev libmysqlclient}/bin/mysql_config"
     "--with-geotiff=${libgeotiff}"
     "--with-sqlite3=${sqlite.dev}"
-    "--with-spatialite=${libspatialite}"
+    "--with-spatialite=${libspatialite.dev}"
     "--with-python" # optional
     "--with-proj=${proj.dev}" # optional
     "--with-geos=${geos}/bin/geos-config" # optional

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "zam-plugins";
-  version = "3.13";
+  version = "3.14";
 
   src = fetchFromGitHub {
     owner = "zamaudio";
     repo = pname;
     rev = version;
-    sha256 = "02blg0iqich4vx5z1ahj6avkh83yqszdiq83p9jd5qwm0i4llqjq";
+    sha256 = "sha256-zlANfFuEXQdXlSu4CuXNyChiuV7wkumaOJqgthl6Y9Q=";
     fetchSubmodules = true;
   };
 

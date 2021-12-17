@@ -1,5 +1,4 @@
 { lib
-, nixosTests
 , python3
 , groff
 , less
@@ -21,11 +20,11 @@ let
 in
 with py.pkgs; buildPythonApplication rec {
   pname = "awscli";
-  version = "1.19.97"; # N.B: if you change this, change botocore and boto3 to a matching version too
+  version = "1.20.54"; # N.B: if you change this, change botocore and boto3 to a matching version too
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-kecuyQMk4GWH9G0/f4Gi/hWtW4Zme9Q4i7XclcZTlNc=";
+    sha256 = "sha256-stnuPobBKIpKA4iTKGTO5kmMEl7grFdZNryz40S599M=";
   };
 
   # https://github.com/aws/aws-cli/issues/4837
@@ -33,9 +32,6 @@ with py.pkgs; buildPythonApplication rec {
     substituteInPlace setup.py \
       --replace "docutils>=0.10,<0.16" "docutils>=0.10"
   '';
-
-  # No tests included
-  doCheck = false;
 
   propagatedBuildInputs = [
     botocore
@@ -62,9 +58,17 @@ with py.pkgs; buildPythonApplication rec {
 
   passthru = {
     python = py; # for aws_shell
-
-    tests = { inherit (nixosTests) awscli; };
   };
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    $out/bin/aws --version | grep "${py.pkgs.botocore.version}"
+    $out/bin/aws --version | grep "${version}"
+
+    runHook postInstallCheck
+  '';
 
   meta = with lib; {
     homepage = "https://aws.amazon.com/cli/";

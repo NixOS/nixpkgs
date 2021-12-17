@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27, pytestCheckHook, fetchpatch }:
+{ lib, buildPythonPackage, fetchPypi, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "astor";

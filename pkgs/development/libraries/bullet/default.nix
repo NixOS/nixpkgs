@@ -1,25 +1,33 @@
-{ lib, stdenv, fetchFromGitHub, cmake, libGLU, libGL, freeglut
-, Cocoa,  OpenGL
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, libGLU
+, libGL
+, freeglut
+, Cocoa
+, OpenGL
 }:
 
 stdenv.mkDerivation rec {
   pname = "bullet";
-  version = "2.87";
+  version = "3.17";
 
   src = fetchFromGitHub {
     owner = "bulletphysics";
     repo = "bullet3";
     rev = version;
-    sha256 = "1msp7w3563vb43w70myjmqsdb97kna54dcfa7yvi9l3bvamb92w3";
+    sha256 = "sha256-uQ4X8F8nmagbcFh0KexrmnhHIXFSB3A1CCnjPVeHL3Q=";
   };
 
   nativeBuildInputs = [ cmake ];
   buildInputs = lib.optionals stdenv.isLinux [ libGLU libGL freeglut ]
     ++ lib.optionals stdenv.isDarwin [ Cocoa OpenGL ];
 
-  patches = [ ./gwen-narrowing.patch ];
-
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = ''
+    substituteInPlace examples/ThirdPartyLibs/Gwen/CMakeLists.txt \
+      --replace "-DGLEW_STATIC" "-DGLEW_STATIC -Wno-narrowing"
+  '' + lib.optionalString stdenv.isDarwin ''
     sed -i 's/FIND_PACKAGE(OpenGL)//' CMakeLists.txt
     sed -i 's/FIND_LIBRARY(COCOA_LIBRARY Cocoa)//' CMakeLists.txt
   '';
@@ -36,6 +44,7 @@ stdenv.mkDerivation rec {
     "-DCOCOA_LIBRARY=${Cocoa}/Library/Frameworks/Cocoa.framework"
     "-DBUILD_BULLET2_DEMOS=OFF"
     "-DBUILD_UNIT_TESTS=OFF"
+    "-DBUILD_BULLET_ROBOTICS_GUI_EXTRA=OFF"
   ];
 
   NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang

@@ -4,9 +4,10 @@
 , fetchurl, pkg-config, perl, texinfo, setupDebugInfoDirs, buildPackages
 
 # Run time
-, ncurses, readline, gmp, mpfr, expat, libipt, zlib, dejagnu
+, ncurses, readline, gmp, mpfr, expat, libipt, zlib, dejagnu, sourceHighlight
 
 , pythonSupport ? stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.hostPlatform.isCygwin, python3 ? null
+, enableDebuginfod ? false, elfutils
 , guile ? null
 , safePaths ? [
    # $debugdir:$datadir/auto-load are whitelisted by default by GDB
@@ -26,11 +27,11 @@ assert pythonSupport -> python3 != null;
 
 stdenv.mkDerivation rec {
   pname = targetPrefix + basename;
-  version = "10.2";
+  version = "11.1";
 
   src = fetchurl {
     url = "mirror://gnu/gdb/${basename}-${version}.tar.xz";
-    sha256 = "0aag1c0fw875pvhjg1qp7x8pf6gf92bjv5gcic5716scacyj58da";
+    sha256 = "151z6d0265hv9cgx9zqqa4bd6vbp20hrljhd6bxl7lr0gd0crkyc";
   };
 
   postPatch = if stdenv.isDarwin then ''
@@ -46,9 +47,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config texinfo perl setupDebugInfoDirs ];
 
-  buildInputs = [ ncurses readline gmp mpfr expat libipt zlib guile ]
+  buildInputs = [ ncurses readline gmp mpfr expat libipt zlib guile sourceHighlight ]
     ++ lib.optional pythonSupport python3
-    ++ lib.optional doCheck dejagnu;
+    ++ lib.optional doCheck dejagnu
+    ++ lib.optional enableDebuginfod (elfutils.override { enableDebuginfod = true; });
 
   propagatedNativeBuildInputs = [ setupDebugInfoDirs ];
 
@@ -89,7 +91,8 @@ stdenv.mkDerivation rec {
     "--with-expat" "--with-libexpat-prefix=${expat.dev}"
     "--with-auto-load-safe-path=${builtins.concatStringsSep ":" safePaths}"
   ] ++ lib.optional (!pythonSupport) "--without-python"
-    ++ lib.optional stdenv.hostPlatform.isMusl "--disable-nls";
+    ++ lib.optional stdenv.hostPlatform.isMusl "--disable-nls"
+    ++ lib.optional enableDebuginfod "--with-debuginfod=yes";
 
   postInstall =
     '' # Remove Info files already provided by Binutils and other packages.

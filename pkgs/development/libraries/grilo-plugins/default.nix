@@ -31,11 +31,11 @@
 
 stdenv.mkDerivation rec {
   pname = "grilo-plugins";
-  version = "0.3.13";
+  version = "0.3.14";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "HEMF1nNkqTBUODbMGYLzDpRpc7j/avPv4x2HcJq1IPg=";
+    sha256 = "aGhEs07HOySTH/bMT2Az8AcpR6bbYKzcf7Pq8Velgcg=";
   };
 
   patches = [
@@ -95,7 +95,7 @@ stdenv.mkDerivation rec {
     homepage = "https://wiki.gnome.org/Projects/Grilo";
     description = "A collection of plugins for the Grilo framework";
     maintainers = teams.gnome.members;
-    license = licenses.lgpl21;
+    license = licenses.lgpl21Plus;
     platforms = platforms.linux;
   };
 }

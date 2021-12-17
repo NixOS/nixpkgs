@@ -5,14 +5,14 @@
 
 buildPythonPackage rec {
   pname = "emv";
-  version = "1.0.11";
+  version = "1.0.13";
   disabled = pythonOlder "3.4";
 
   src = fetchFromGitHub {
     owner = "russss";
     repo = "python-emv";
     rev = "v${version}";
-    hash = "sha256:1715hcba3fdi0i5awnrjdjnk74p66sxm9349pd8bb717zrh4gpj7";
+    hash = "sha256-Jobw8OyKMaLfVsvMadrUrg5BijFo9G6kjgjhGIV8H1M=";
   };
 
   postPatch = ''

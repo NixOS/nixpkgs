@@ -2,35 +2,42 @@
 
 stdenv.mkDerivation rec {
   pname = "crda";
-  version = "3.18";
+  version = "4.14";
 
   src = fetchurl {
-    sha256 = "1gydiqgb08d9gbx4l6gv98zg3pljc984m50hmn3ysxcbkxkvkz23";
-    url = "http://kernel.org/pub/software/network/crda/crda-${version}.tar.xz";
+    url = "https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/crda.git/snapshot/crda-${version}.tar.gz";
+    sha256 = "sha256-Wo81u4snR09Gaw511FG6kXQz2KqxiJZ4pk2cTnKouMI=";
   };
 
   patches = [
-    # Switch to Python 3
-    # https://lore.kernel.org/linux-wireless/1437542484-23409-1-git-send-email-ahmed.taahir@gmail.com/
+    # Fix python 3 build: except ImportError, e: SyntaxError: invalid syntax
     (fetchpatch {
-      url = "https://lore.kernel.org/linux-wireless/1437542484-23409-2-git-send-email-ahmed.taahir@gmail.com/raw";
-      sha256 = "0s2n340cgaasvg1k8g9v8xjrbh4y2mcgrhdmv97ja2fs8xjcjbf1";
+      url = "https://raw.githubusercontent.com/archlinux/svntogit-packages/d234fddf451fab0f4fc412e2769f54e11f10d7d8/trunk/crda-4.14-python-3.patch";
+      sha256 = "sha256-KEezEKrfizq9k4ZiE2mf3Nl4JiBayhXeVnFl7wYh28Y=";
     })
+
     (fetchpatch {
-      url = "https://lore.kernel.org/linux-wireless/1437542484-23409-3-git-send-email-ahmed.taahir@gmail.com/raw";
-      sha256 = "01dlfw7kqhyx025jxq2l75950b181p9r7i9zkflcwvbzzdmx59md";
+      url = "https://raw.githubusercontent.com/archlinux/svntogit-packages/d48ec843222b0d74c85bce86fa6f087c7dfdf952/trunk/0001-Makefile-Link-libreg.so-against-the-crypto-library.patch";
+      sha256 = "sha256-j93oydi209f22OF8aXZ/NczuUOnlhkdSeYvy2WRRvm0=";
     })
   ];
 
-  buildInputs = [ libgcrypt libnl ];
+  strictDeps = true;
+
   nativeBuildInputs = [
     pkg-config
-    python3Packages.pycrypto
+    python3Packages.m2crypto # only used for a build time script
+  ];
+
+  buildInputs = [
+    libgcrypt
+    libnl
   ];
 
   postPatch = ''
     patchShebangs utils/
     substituteInPlace Makefile \
+      --replace 'gzip' 'gzip -n' \
       --replace ldconfig true \
       --replace pkg-config $PKG_CONFIG
     sed -i crda.c \
@@ -45,18 +52,11 @@ stdenv.mkDerivation rec {
     "REG_BIN=${wireless-regdb}/lib/crda/regulatory.bin"
   ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=unused-const-variable";
-
   buildFlags = [ "all_noverify" ];
   enableParallelBuilding = true;
 
   doCheck = true;
   checkTarget = "verify";
-
-  postInstall = ''
-    # The patch installs build header
-    rm $out/include/reglib/keys-gcrypt.h
-  '';
 
   meta = with lib; {
     description = "Linux wireless Central Regulatory Domain Agent";

@@ -12,7 +12,7 @@ with self; with super; {
     inherit (pkgs) antlr4;
   };
 
-  appleseed = toPythonModule (pkgs.appleseed.override { inherit (self) python; });
+  appleseed = disabled super.appleseed;
 
   application = callPackage ../development/python-modules/application { };
 
@@ -35,6 +35,10 @@ with self; with super; {
   blivet = callPackage ../development/python-modules/blivet { };
 
   box2d = callPackage ../development/python-modules/box2d { };
+
+  boto3 = callPackage ../development/python-modules/boto3/1_17.nix {};
+
+  botocore = callPackage ../development/python-modules/botocore/1_20.nix {};
 
   browsermob-proxy = callPackage ../development/python-modules/browsermob-proxy { };
 
@@ -70,6 +74,8 @@ with self; with super; {
 
   construct = callPackage ../development/python-modules/construct/2.10.54.nix { };
 
+  contextlib2 = callPackage ../development/python-modules/contextlib2/0.nix { };
+
   convertdate = callPackage ../development/python-modules/convertdate/2.2.x.nix { };
 
   cryptography = callPackage ../development/python-modules/cryptography/3.3.nix { };
@@ -79,6 +85,8 @@ with self; with super; {
   darcsver = callPackage ../development/python-modules/darcsver { };
 
   dateparser = callPackage ../development/python-modules/dateparser/0.x.nix { };
+
+  decorator = callPackage ../development/python-modules/decorator/4.nix { };
 
   deskcon = callPackage ../development/python-modules/deskcon { };
 
@@ -102,6 +110,8 @@ with self; with super; {
 
   feedparser = callPackage ../development/python-modules/feedparser/5.nix { };
 
+  filelock =  callPackage ../development/python-modules/filelock/3.2.nix { };
+
   flask = callPackage ../development/python-modules/flask/1.nix { };
 
   flask_ldap_login = callPackage ../development/python-modules/flask-ldap-login { };
@@ -121,11 +131,6 @@ with self; with super; {
   futures = callPackage ../development/python-modules/futures { };
 
   gdcm = disabled super.gdcm;
-
-  gaia = disabledIf (isPyPy || isPy3k) (toPythonModule (pkgs.gaia.override {
-    pythonPackages = self;
-    pythonSupport = true;
-  })); # gaia isn't supported with python3 and it's not available from pypi
 
   geant4 = disabled super.geant4;
 
@@ -162,7 +167,7 @@ with self; with super; {
     pythonPackages = self;
   });
 
-  hg-git = callPackage ../development/python-modules/hg-git { };
+  hg-git = callPackage ../development/python-modules/hg-git/0.8.nix { };
 
   hgsvn = callPackage ../development/python-modules/hgsvn { };
 
@@ -204,11 +209,9 @@ with self; with super; {
 
   jsonrpclib = callPackage ../development/python-modules/jsonrpclib { };
 
-  jupyter_client = callPackage ../development/python-modules/jupyter_client/5.nix { };
+  jupyter-client = callPackage ../development/python-modules/jupyter-client/5.nix { };
 
   jupyter_console = callPackage ../development/python-modules/jupyter_console/5.nix { };
-
-  keyring = callPackage ../development/python-modules/keyring/2.nix { };
 
   koji = callPackage ../development/python-modules/koji { };
 
@@ -370,6 +373,8 @@ with self; with super; {
 
   openpyxl = callPackage ../development/python-modules/openpyxl/2.nix { };
 
+  openvino = disabled super.openvino;
+
   openwrt-luci-rpc = disabled super.openwrt-luci-rpc;
 
   opt-einsum = callPackage ../development/python-modules/opt-einsum/2.nix { };
@@ -379,8 +384,6 @@ with self; with super; {
   pagerduty = callPackage ../development/python-modules/pagerduty { };
 
   pandas = callPackage ../development/python-modules/pandas/2.nix { };
-
-  pasteScript = callPackage ../development/python-modules/pastescript { };
 
   pathpy = callPackage ../development/python-modules/path.py/2.nix { };
 
@@ -393,13 +396,13 @@ with self; with super; {
 
   pip = callPackage ../development/python-modules/pip/20.nix { };
 
+  pluggy = callPackage ../development/python-modules/pluggy/0.nix { };
+
   postorius = disabled super.postorius;
 
   praw = callPackage ../development/python-modules/praw/6.3.nix { };
 
   prettytable = callPackage ../development/python-modules/prettytable/1.nix { };
-
-  privacyidea-ldap-proxy = callPackage ../development/python-modules/privacyidea/ldap-proxy.nix { };
 
   ldaptor = callPackage ../development/python-modules/ldaptor/19.nix { };
 
@@ -407,12 +410,17 @@ with self; with super; {
 
   prompt-toolkit = callPackage ../development/python-modules/prompt-toolkit/1.nix { };
 
+  protobuf = callPackage ../development/python-modules/protobuf {
+    disabled = isPyPy;
+    protobuf = pkgs.protobuf3_17; # last version compatible with Python 2
+  };
+
   pyamf = callPackage ../development/python-modules/pyamf { };
 
   pyblosxom = callPackage ../development/python-modules/pyblosxom { };
 
   pycairo = callPackage ../development/python-modules/pycairo/1.18.nix {
-    inherit (pkgs) meson;
+    inherit (pkgs.buildPackages) meson;
   };
 
   pycangjie = disabled pycangjie;
@@ -450,8 +458,6 @@ with self; with super; {
   };
 
   pyhamcrest = callPackage ../development/python-modules/pyhamcrest/1.nix { };
-
-  pyjwt = callPackage ../development/python-modules/pyjwt/1.nix { };
 
   pykickstart = callPackage ../development/python-modules/pykickstart { };
 
@@ -516,17 +522,17 @@ with self; with super; {
 
   remotecv = callPackage ../development/python-modules/remotecv { };
 
+  recoll = disabled super.recoll;
+
   rhpl = callPackage ../development/python-modules/rhpl { };
 
   rivet = disabled super.rivet;
 
   robotframework-ride = callPackage ../development/python-modules/robotframework-ride { };
 
-  ruamel-ordereddict = self.ruamel_ordereddict;
-  ruamel_ordereddict = callPackage ../development/python-modules/ruamel_ordereddict { };
+  ruamel-ordereddict = callPackage ../development/python-modules/ruamel-ordereddict { };
 
-  ruamel_yaml = self.ruamel-yaml;
-  ruamel-yaml = callPackage ../development/python-modules/ruamel_yaml/0.16.nix { };
+  ruamel-yaml = callPackage ../development/python-modules/ruamel-yaml/0.16.nix { };
 
   runsnakerun = callPackage ../development/python-modules/runsnakerun { };
 
@@ -537,6 +543,8 @@ with self; with super; {
   rpy2 = callPackage ../development/python-modules/rpy2/2.nix { };
 
   rsa = callPackage ../development/python-modules/rsa/4_0.nix { };
+
+  s3transfer = callPackage ../development/python-modules/s3transfer/0_4.nix { };
 
   sandboxlib = callPackage ../development/python-modules/sandboxlib { };
 
@@ -612,6 +620,8 @@ with self; with super; {
 
   tarman = callPackage ../development/python-modules/tarman { };
 
+  tensorflow-bin = disabled super.tensorflow-bin;
+
   thumbor = callPackage ../development/python-modules/thumbor { };
 
   tmdb3 = callPackage ../development/python-modules/tmdb3 { };
@@ -633,6 +643,8 @@ with self; with super; {
   TurboCheetah = callPackage ../development/python-modules/TurboCheetah { };
 
   typing = callPackage ../development/python-modules/typing { };
+
+  tzlocal = callPackage ../development/python-modules/tzlocal/2.nix { };
 
   ujson = callPackage ../development/python-modules/ujson/2.nix { };
 

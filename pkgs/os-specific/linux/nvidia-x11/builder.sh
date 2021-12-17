@@ -17,10 +17,8 @@ buildPhase() {
         # Create the module.
         echo "Building linux driver against kernel: $kernel";
         cd kernel
-        sysSrc=$(echo $kernel/lib/modules/$kernelVersion/source)
-        sysOut=$(echo $kernel/lib/modules/$kernelVersion/build)
         unset src # used by the nv makefile
-        make IGNORE_PREEMPT_RT_PRESENCE=1 NV_BUILD_SUPPORTS_HMM=1 SYSSRC=$sysSrc SYSOUT=$sysOut module -j$NIX_BUILD_CORES
+        make $makeFlags -j $NIX_BUILD_CORES module
 
         cd ..
     fi
@@ -108,8 +106,16 @@ installPhase() {
             sed -E "s#(libEGL_nvidia)#$i/lib/\\1#" 10_nvidia.json > 10_nvidia.json.fixed
             sed -E "s#(libnvidia-egl-wayland)#$i/lib/\\1#" 10_nvidia_wayland.json > 10_nvidia_wayland.json.fixed
 
-            install -Dm644 10_nvidia.json.fixed $i/share/glvnd/egl_vendor.d/nvidia.json
-            install -Dm644 10_nvidia_wayland.json.fixed $i/share/glvnd/egl_vendor.d/nvidia_wayland.json
+            install -Dm644 10_nvidia.json.fixed $i/share/glvnd/egl_vendor.d/10_nvidia.json
+            install -Dm644 10_nvidia_wayland.json.fixed $i/share/egl/egl_external_platform.d/10_nvidia_wayland.json
+
+            if [[ -f "15_nvidia_gbm.json" ]]; then
+              sed -E "s#(libnvidia-egl-gbm)#$i/lib/\\1#" 15_nvidia_gbm.json > 15_nvidia_gbm.json.fixed
+              install -Dm644 15_nvidia_gbm.json.fixed $i/share/egl/egl_external_platform.d/15_nvidia_gbm.json
+
+              mkdir -p $i/lib/gbm
+              ln -s $i/lib/libnvidia-allocator.so $i/lib/gbm/nvidia-drm_gbm.so
+            fi
         fi
 
     done

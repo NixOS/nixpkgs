@@ -1,10 +1,8 @@
 { lib
 , fetchPypi
-, fetchurl
 , fetchpatch
 , buildPythonPackage
 , pythonOlder
-, python
 , bzip2
 , c-blosc
 , cython

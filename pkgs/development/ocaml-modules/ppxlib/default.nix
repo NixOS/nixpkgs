@@ -2,7 +2,7 @@
 , version ?
   if lib.versionAtLeast ocaml.version "4.07"
   then if lib.versionAtLeast ocaml.version "4.08"
-  then "0.22.2" else "0.15.0" else "0.13.0"
+  then "0.23.0" else "0.15.0" else "0.13.0"
 , ocaml-compiler-libs, ocaml-migrate-parsetree, ppx_derivers, stdio
 , stdlib-shims, ocaml-migrate-parsetree-2
 }:
@@ -36,6 +36,10 @@ let param = {
   };
   "0.22.2" = {
     sha256 = "0fysjqcpv281n52wl3h0dy2lzf9d61wdzk90ldv3p63a4i3mr1j2";
+    min_version = "4.07";
+  };
+  "0.23.0" = {
+    sha256 = "0jg5v4pssbl66hn5davpin1i57a0r3r54l96vpz5y99xk5w70xi1";
     min_version = "4.07";
   };
 }."${version}"; in

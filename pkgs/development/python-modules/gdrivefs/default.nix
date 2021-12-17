@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchurl
+, fetchFromGitHub
 , isPy3k
 , gipc
 , greenlet
@@ -16,9 +16,11 @@ buildPythonPackage rec {
   pname = "gdrivefs";
   disabled = isPy3k;
 
-  src = fetchurl {
-    url = "https://github.com/dsoprea/GDriveFS/archive/${version}.tar.gz";
-    sha256 = "0m45z77idy0bs5fqlz0y534fy28ikamrd321hmqsc3q7d39kqzv0";
+  src = fetchFromGitHub {
+    owner = "dsoprea";
+    repo = "GDriveFS";
+    rev = version;
+    sha256 = "sha256-eDBy2rp3uitUrR9CG75x8mAio8+gaSckA/lEPAWO0Yo=";
   };
 
   buildInputs = [ gipc greenlet httplib2 six ];

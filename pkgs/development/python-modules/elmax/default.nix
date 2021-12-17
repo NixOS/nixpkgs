@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "elmax";
-  version = "0.1.2";
+  version = "0.1.3";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "home-assistant-ecosystem";
     repo = "python-elmax";
     rev = version;
-    sha256 = "sha256-Aq/OHxOmtUUmBNlFPu892C8AkTX+Ee0oca7D79InPXQ=";
+    sha256 = "sha256-OiVPjWqQw1u0OL6/uYlT+FP2XDh7l3OZyVtQfycHICI=";
   };
 
   nativeBuildInputs = [ poetry-core ];

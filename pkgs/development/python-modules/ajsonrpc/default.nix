@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "ajsonrpc";
-  version = "1.1.0";
+  version = "1.2.0";
 
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1b5r8975wdnk3qnc1qjnn4lkxmqcir3brbwnxml9ii90dnsw408a";
+    sha256 = "791bac18f0bf0dee109194644f151cf8b7ff529c4b8d6239ac48104a3251a19f";
   };
 
   checkInputs = [ pytestCheckHook ];

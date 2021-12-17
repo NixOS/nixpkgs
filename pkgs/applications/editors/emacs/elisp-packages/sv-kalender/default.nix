@@ -2,14 +2,11 @@
 
 trivialBuild {
   pname = "sv-kalender";
-  version = "1.9";
+  version = "1.11";
 
   src = fetchurl {
     url = "http://bigwalter.net/daniel/elisp/sv-kalender.el";
-    sha256 = "0kilp0nyhj67qscy13s0g07kygz2qwmddklhan020sk7z7jv3lpi";
-    postFetch = ''
-      echo "(provide 'sv-kalender)" >> $out
-    '';
+    sha256 = "0mcx7g1pg6kfp0i4b9rh3q9csgdf3054ijswy368bxwdxsjgfz2m";
   };
 
   meta = with lib; {

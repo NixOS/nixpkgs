@@ -4,10 +4,10 @@
 
 stdenv.mkDerivation rec {
   pname = "s3backer";
-  version = "1.6.1";
+  version = "1.6.3";
 
   src = fetchFromGitHub {
-    sha256 = "sha256-67sVT72i8tOMdGH/+Oh1N7Vh/2/qD56ImGWI+tprMOM=";
+    sha256 = "sha256-DOf+kpflDd2U1nXDLKYts/yf121CrBFIBI47OQa5XBs=";
     rev = version;
     repo = "s3backer";
     owner = "archiecobbs";

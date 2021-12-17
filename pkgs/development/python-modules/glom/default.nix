@@ -6,7 +6,6 @@
 , face
 , pytest
 , pyyaml
-, isPy37
 }:
 
 buildPythonPackage rec {

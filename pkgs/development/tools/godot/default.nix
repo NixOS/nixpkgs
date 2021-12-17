@@ -1,7 +1,24 @@
-{ stdenv, lib, fetchFromGitHub, scons, pkg-config, udev, libX11
-, libXcursor , libXinerama, libXrandr, libXrender, libpulseaudio
-, libXi, libXext, libXfixes, freetype, openssl
-, alsa-lib, libGLU, zlib, yasm
+{ stdenv
+, lib
+, fetchFromGitHub
+, scons
+, pkg-config
+, udev
+, libX11
+, libXcursor
+, libXinerama
+, libXrandr
+, libXrender
+, libpulseaudio
+, libXi
+, libXext
+, libXfixes
+, freetype
+, openssl
+, alsa-lib
+, libGLU
+, zlib
+, yasm
 , withUdev ? true
 }:
 
@@ -11,34 +28,49 @@ let
     pulseaudio = false;
     udev = withUdev;
   };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "godot";
-  version = "3.3.2";
+  version = "3.4";
 
   src = fetchFromGitHub {
-    owner  = "godotengine";
-    repo   = "godot";
-    rev    = "${version}-stable";
-    sha256 = "0rfm6sbbwzvsn76a8aqagd7cqdzmk8qxphgl89k7y982l9a5sz50";
+    owner = "godotengine";
+    repo = "godot";
+    rev = "${version}-stable";
+    sha256 = "0y542zla6msgxf31rd0349d9j3ya7f3njnwmmrh8lmzfgxx86qbx";
   };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    scons udev libX11 libXcursor libXinerama libXrandr libXrender
-    libXi libXext libXfixes freetype openssl alsa-lib libpulseaudio
-    libGLU zlib yasm
+    scons
+    udev
+    libX11
+    libXcursor
+    libXinerama
+    libXrandr
+    libXrender
+    libXi
+    libXext
+    libXfixes
+    freetype
+    openssl
+    alsa-lib
+    libpulseaudio
+    libGLU
+    zlib
+    yasm
   ];
 
-  patches = [
-    ./pkg_config_additions.patch
-    ./dont_clobber_environment.patch
-  ];
+  patches = [ ./pkg_config_additions.patch ./dont_clobber_environment.patch ];
 
   enableParallelBuilding = true;
 
   sconsFlags = "target=release_debug platform=x11";
   preConfigure = ''
-    sconsFlags+=" ${lib.concatStringsSep " " (lib.mapAttrsToList (k: v: "${k}=${builtins.toJSON v}") options)}"
+    sconsFlags+=" ${
+      lib.concatStringsSep " "
+      (lib.mapAttrsToList (k: v: "${k}=${builtins.toJSON v}") options)
+    }"
   '';
 
   outputs = [ "out" "dev" "man" ];
@@ -62,10 +94,10 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage    = "https://godotengine.org";
+    homepage = "https://godotengine.org";
     description = "Free and Open Source 2D and 3D game engine";
-    license     = licenses.mit;
-    platforms   = [ "i686-linux" "x86_64-linux" ];
+    license = licenses.mit;
+    platforms = [ "i686-linux" "x86_64-linux" ];
     maintainers = with maintainers; [ twey ];
   };
 }

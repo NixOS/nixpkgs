@@ -1,19 +1,16 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib
+, buildPythonPackage
+, fetchPypi
 }:
 
 buildPythonPackage rec {
   pname = "puremagic";
-  version = "1.10";
+  version = "1.11";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "025ih5q1qa40x88j7ngsdr5sf0dp400kwlfzz60i7v6fh0ms1zkg";
+    sha256 = "09d762b9d83c65a83617ee57a3532eb10663f394c1caf81390516c5b1cc0fc6b";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace '"argparse"' ""
-  '';
 
   # test data not included on pypi
   doCheck = false;

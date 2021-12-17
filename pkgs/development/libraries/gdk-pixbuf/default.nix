@@ -16,10 +16,11 @@
 , libjpeg
 , libpng
 , gnome
-, gobject-introspection
 , doCheck ? false
 , makeWrapper
 , lib
+, withIntrospection ? (stdenv.buildPlatform == stdenv.hostPlatform)
+, gobject-introspection
 }:
 
 let
@@ -43,13 +44,19 @@ stdenv.mkDerivation rec {
     ./installed-tests-path.patch
   ];
 
+  # gdk-pixbuf-thumbnailer is not wrapped therefore strictDeps will work
+  strictDeps = true;
+
+  depsBuildBuild = [
+    pkg-config
+  ];
+
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
     gettext
     python3
-    gobject-introspection
     makeWrapper
     glib
     gi-docgen
@@ -58,7 +65,11 @@ stdenv.mkDerivation rec {
     libxslt
     docbook-xsl-nons
     docbook_xml_dtd_43
-  ] ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
+  ] ++ lib.optionals stdenv.isDarwin [
+    fixDarwinDylibNames
+  ] ++ lib.optionals withIntrospection [
+    gobject-introspection
+  ];
 
   propagatedBuildInputs = [
     glib
@@ -69,7 +80,7 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dgtk_doc=${lib.boolToString withGtkDoc}"
-    "-Dintrospection=${if (stdenv.buildPlatform == stdenv.hostPlatform) then "enabled" else "disabled"}"
+    "-Dintrospection=${if withIntrospection then "enabled" else "disabled"}"
     "-Dgio_sniffing=false"
   ];
 

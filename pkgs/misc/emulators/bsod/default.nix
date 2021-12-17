@@ -1,10 +1,11 @@
 {lib, stdenv, fetchurl, ncurses}:
 
-stdenv.mkDerivation {
-  name = "bsod-0.1";
+stdenv.mkDerivation rec {
+  pname = "bsod";
+  version = "0.1";
 
   src = fetchurl {
-    url = "https://www.vanheusden.com/bsod/bsod-0.1.tgz";
+    url = "https://www.vanheusden.com/bsod/bsod-${version}.tgz";
     sha256 = "0hqwacazyq5rhc04j8w8w0j0dgb6ca8k66c9lxf6bsyi6wvbhvmd";
   };
 

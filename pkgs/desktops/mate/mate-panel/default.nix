@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mate-panel";
-  version = "1.24.2";
+  version = "1.26.1";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1sj851h71nq4ssrsd4k5b0vayxmspl5x3rhf488b2xpcj81vmi9h";
+    sha256 = "038irkjl9ap7kqacf1c0i74h0rwkcpaw685vyml50vj5hg23hc38";
   };
 
   nativeBuildInputs = [
@@ -46,6 +46,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/mate-desktop/mate-panel";
     license = with licenses; [ gpl2Plus lgpl2Plus fdl11Plus ];
     platforms = platforms.unix;
-    maintainers = [ maintainers.romildo ];
+    maintainers = teams.mate.members;
   };
 }

@@ -1,6 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, openssl, tcl, installShellFiles, buildPackages, readline ? null, ncurses ? null }:
-
-assert readline != null -> ncurses != null;
+{ stdenv, lib, fetchFromGitHub, openssl, tcl, installShellFiles, buildPackages, readline, ncurses, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "sqlcipher";
@@ -14,16 +12,24 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ installShellFiles tcl ];
-  buildInputs = [ readline ncurses openssl ];
+  buildInputs = [ readline ncurses openssl zlib ];
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  configureFlags = [ "--enable-threadsafe" "--disable-tcl" ];
+  configureFlags = [
+    "--enable-threadsafe"
+    "--with-readline-inc=-I${lib.getDev readline}/include"
+  ];
 
-  CFLAGS = [ "-DSQLITE_ENABLE_COLUMN_METADATA=1" "-DSQLITE_SECURE_DELETE=1" "-DSQLITE_ENABLE_UNLOCK_NOTIFY=1" "-DSQLITE_HAS_CODEC" ];
-  LDFLAGS = lib.optional (readline != null) "-lncurses";
+  CFLAGS = [
+    "-DSQLITE_ENABLE_COLUMN_METADATA=1"
+    "-DSQLITE_SECURE_DELETE=1"
+    "-DSQLITE_ENABLE_UNLOCK_NOTIFY=1"
+    "-DSQLITE_HAS_CODEC"
+  ];
+
   BUILD_CC = "$(CC_FOR_BUILD)";
 
-  doCheck = false; # fails. requires tcl?
+  TCLLIBDIR = "${placeholder "out"}/lib/tcl${lib.versions.majorMinor tcl.version}";
 
   postInstall = ''
     installManPage sqlcipher.1

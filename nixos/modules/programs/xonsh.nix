@@ -27,7 +27,8 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.xonsh;
-        example = literalExample "pkgs.xonsh.override { configFile = \"/path/to/xonshrc\"; }";
+        defaultText = literalExpression "pkgs.xonsh";
+        example = literalExpression "pkgs.xonsh.override { configFile = \"/path/to/xonshrc\"; }";
         description = ''
           xonsh package to use.
         '';

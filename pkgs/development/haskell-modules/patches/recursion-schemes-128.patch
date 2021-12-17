@@ -1,0 +1,24 @@
+diff --git a/recursion-schemes.cabal b/recursion-schemes.cabal
+index c35f2c6..e692ade 100644
+--- a/recursion-schemes.cabal
++++ b/recursion-schemes.cabal
+@@ -93,6 +93,7 @@ library
+       Paths_recursion_schemes
+ 
+   ghc-options: -Wall
++  ghc-prof-options: -DPROFILING_ENABLED
+   if impl(ghc >= 8.6)
+     ghc-options: -Wno-star-is-type
+   default-language: Haskell2010
+diff --git a/src/Data/Functor/Foldable/TH.hs b/src/Data/Functor/Foldable/TH.hs
+index b3d5ac8..d4ef0e4 100644
+--- a/src/Data/Functor/Foldable/TH.hs
++++ b/src/Data/Functor/Foldable/TH.hs
+@@ -1,4 +1,7 @@
+ {-# LANGUAGE CPP, PatternGuards, Rank2Types #-}
++#if defined(PROFILING_ENABLED)
++{-# OPTIONS_GHC -O0 #-}
++#endif
+ module Data.Functor.Foldable.TH
+   ( MakeBaseFunctor(..)
+   , BaseRules

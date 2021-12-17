@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xkbmon";
-  version = "0.3";
+  version = "0.4";
 
   src = fetchFromGitHub {
     owner = "xkbmon";
     repo = "xkbmon";
     rev = version;
-    sha256 = "03v8f6fijgwagjphyj8w7lgh5hlc8jk0j2n45n7fm0xwy82cxxx9";
+    sha256 = "sha256-EWW6L6NojzXodDOET01LMcQT8/1JIMpOD++MCiM3j1Y=";
   };
 
   buildInputs = [ libX11 ];

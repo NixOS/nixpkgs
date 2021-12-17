@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "alsaequal";
+  pname = "alsaequal";
   version = "0.6";
 
   src = fetchurl {

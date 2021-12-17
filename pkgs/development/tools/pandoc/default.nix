@@ -1,10 +1,10 @@
 { haskellPackages, fetchpatch, haskell, removeReferencesTo }:
 
 let
-  static = haskell.lib.justStaticExecutables haskellPackages.pandoc;
+  static = haskell.lib.compose.justStaticExecutables haskellPackages.pandoc;
 
 in
-  (haskell.lib.overrideCabal static (drv: {
+  (haskell.lib.compose.overrideCabal (drv: {
     configureFlags = drv.configureFlags or [] ++ ["-fembed_data_files"];
     buildDepends = drv.buildDepends or [] ++ [haskellPackages.file-embed];
     buildTools = (drv.buildTools or []) ++ [ removeReferencesTo ];
@@ -16,7 +16,7 @@ in
         sha256 = "gOtrWVylzwgu0YLD4SztqlXxtaXXGOf8nTqLwUBS7qs=";
       })
     ];
-  })).overrideAttrs (drv: {
+  }) static).overrideAttrs (drv: {
 
     # These libraries are still referenced, because they generate
     # a `Paths_*` module for figuring out their version.

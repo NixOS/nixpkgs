@@ -6,6 +6,8 @@
 , libsodium
 , cffi
 , hypothesis
+, stdenv
+, six
 }:
 
 buildPythonPackage rec {
@@ -23,8 +25,13 @@ buildPythonPackage rec {
     libsodium
   ];
 
+  propagatedNativeBuildInputs = [
+    cffi
+  ];
+
   propagatedBuildInputs = [
     cffi
+    six
   ];
 
   checkInputs = [

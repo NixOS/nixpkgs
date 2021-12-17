@@ -6,13 +6,14 @@
 , mock
 , pytz
 , tornado
-, prometheus_client
+, prometheus-client
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "flower";
   version = "1.0.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -27,10 +28,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     celery
+    humanize
+    prometheus-client
     pytz
     tornado
-    humanize
-    prometheus_client
   ];
 
   checkInputs = [
@@ -38,7 +39,15 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "flower" ];
+  disabledTests = [
+    # AssertionError as the celery release can't be detected
+    "test_default"
+    "test_with_app"
+  ];
+
+  pythonImportsCheck = [
+    "flower"
+  ];
 
   meta = with lib; {
     description = "Celery Flower";

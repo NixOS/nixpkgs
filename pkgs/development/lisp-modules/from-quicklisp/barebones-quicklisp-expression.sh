@@ -122,8 +122,8 @@ url="${ql_src##* }"
   with (import <nixpkgs> {});
       fetchdarcs {
         url=''$url'';
-	rev=''$version'';
-	sha256=''0000000000000000000000000000000000000000000000000000000000000000'';
+    rev=''$version'';
+    sha256=''0000000000000000000000000000000000000000000000000000000000000000'';
     }" | nix-instantiate - | tail -n 1 |
     xargs nix-store -r 2>&1 | tee /dev/stderr | grep 'instead has' | tail -n 1 |
     sed -e 's/.* instead has .//;s/[^0-9a-z].*//')
@@ -149,7 +149,7 @@ url="${ql_src##* }"
 }
 
 if [ "$ql_src" = '{"error":"Not Found"}' ]; then
-	echo "# $name: not found"
+    echo "# $name: not found"
 else
 cat << EOF | grep -Ev '^[ ]+$'
 

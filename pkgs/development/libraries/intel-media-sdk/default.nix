@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "intel-media-sdk";
-  version = "21.2.3";
+  version = "21.4.3";
 
   src = fetchFromGitHub {
     owner = "Intel-Media-SDK";
     repo = "MediaSDK";
     rev = "intel-mediasdk-${version}";
-    sha256 = "sha256-Id2/d6rRKiei6UQ0pywdcbNLfIQR8gEseiDgqeaT3p8=";
+    sha256 = "sha256-Z6wIwgcKa+EaqSmbD//pYzGjDezASNWGnLCROiRvACo=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];

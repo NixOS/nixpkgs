@@ -4,12 +4,12 @@
 
 stdenv.mkDerivation rec {
   pname = "dtc";
-  version = "1.6.0";
+  version = "1.6.1";
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/utils/dtc/dtc.git";
     rev = "refs/tags/v${version}";
-    sha256 = "0li992wwd7kgy71bikanqky49y4hq3p3vx35p2hvyxy1k0wfy7i8";
+    sha256 = "sha256-gx9LG3U9etWhPxm7Ox7rOu9X5272qGeHqZtOe68zFs4=";
   };
 
   buildInputs = [ libyaml ];

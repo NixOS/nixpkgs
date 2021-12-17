@@ -2,21 +2,25 @@
 
 stdenv.mkDerivation rec {
   pname = "phoronix-test-suite";
-  version = "10.2.2";
+  version = "10.6.1";
 
   src = fetchurl {
     url = "https://phoronix-test-suite.com/releases/${pname}-${version}.tar.gz";
-    sha256 = "sha256-g5hUmsn01Msopxzmi/G4LcZISXMD2wFqreaHMkFzF1Y=";
+    sha256 = "sha256-ixDMd9/tO793yVvIE60n5gytfDAmcuA631/ZON9v6LA=";
   };
 
   buildInputs = [ php ];
   nativeBuildInputs = [ which gnused makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     ./install-sh $out
     wrapProgram $out/bin/phoronix-test-suite \
     --set PHP_BIN ${php}/bin/php \
     --prefix PATH : ${lib.makeBinPath [ gnumake gcc ]}
+
+    runHook postInstall
   '';
 
   passthru.tests = {

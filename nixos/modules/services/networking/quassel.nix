@@ -37,11 +37,10 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.quasselDaemon;
-        defaultText = "pkgs.quasselDaemon";
+        defaultText = literalExpression "pkgs.quasselDaemon";
         description = ''
           The package of the quassel daemon.
         '';
-        example = literalExample "pkgs.quasselDaemon";
       };
 
       interfaces = mkOption {

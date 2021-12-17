@@ -1,11 +1,9 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, utils, ... }:
 
 let
   toplevelConfig = config;
   inherit (lib) types;
-  inherit (import ../system/boot/systemd-lib.nix {
-    inherit config pkgs lib;
-  }) mkPathSafeName;
+  inherit (utils.systemdUtils.lib) mkPathSafeName;
 in {
   options.systemd.services = lib.mkOption {
     type = types.attrsOf (types.submodule ({ name, config, ... }: {
@@ -62,8 +60,8 @@ in {
       options.confinement.binSh = lib.mkOption {
         type = types.nullOr types.path;
         default = toplevelConfig.environment.binsh;
-        defaultText = "config.environment.binsh";
-        example = lib.literalExample "\${pkgs.dash}/bin/dash";
+        defaultText = lib.literalExpression "config.environment.binsh";
+        example = lib.literalExpression ''"''${pkgs.dash}/bin/dash"'';
         description = ''
           The program to make available as <filename>/bin/sh</filename> inside
           the chroot. If this is set to <literal>null</literal>, no

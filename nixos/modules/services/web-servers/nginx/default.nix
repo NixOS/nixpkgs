@@ -79,6 +79,11 @@ let
       # we use a list of mime types from the mailcap package, which is also
       # used by most other Linux distributions by default.
       include ${pkgs.mailcap}/etc/nginx/mime.types;
+      # When recommendedOptimisation is disabled nginx fails to start because the mailmap mime.types database
+      # contains 1026 enries and the default is only 1024. Setting to a higher number to remove the need to
+      # overwrite it because nginx does not allow duplicated settings.
+      types_hash_max_size 4096;
+
       include ${cfg.package}/conf/fastcgi.conf;
       include ${cfg.package}/conf/uwsgi_params;
 
@@ -113,7 +118,6 @@ let
         tcp_nopush on;
         tcp_nodelay on;
         keepalive_timeout 65;
-        types_hash_max_size 4096;
       ''}
 
       ssl_protocols ${cfg.sslProtocols};
@@ -169,6 +173,14 @@ let
 
       ${optionalString (cfg.mapHashMaxSize != null) ''
         map_hash_max_size ${toString cfg.mapHashMaxSize};
+      ''}
+
+      ${optionalString (cfg.serverNamesHashBucketSize != null) ''
+        server_names_hash_bucket_size ${toString cfg.serverNamesHashBucketSize};
+      ''}
+
+      ${optionalString (cfg.serverNamesHashMaxSize != null) ''
+        server_names_hash_max_size ${toString cfg.serverNamesHashMaxSize};
       ''}
 
       # $connection_upgrade is used for websocket proxying
@@ -232,13 +244,13 @@ let
 
         defaultListen =
           if vhost.listen != [] then vhost.listen
-          else optionals (hasSSL || vhost.rejectSSL) (
-            singleton { addr = "0.0.0.0"; port = 443; ssl = true; }
-            ++ optional enableIPv6 { addr = "[::]"; port = 443; ssl = true; }
-          ) ++ optionals (!onlySSL) (
-            singleton { addr = "0.0.0.0"; port = 80; ssl = false; }
-            ++ optional enableIPv6 { addr = "[::]"; port = 80; ssl = false; }
-          );
+          else
+            let addrs = if vhost.listenAddresses != [] then vhost.listenAddresses else (
+              [ "0.0.0.0" ] ++ optional enableIPv6 "[::0]"
+            );
+            in
+          optionals (hasSSL || vhost.rejectSSL) (map (addr: { inherit addr; port = 443; ssl = true; }) addrs)
+          ++ optionals (!onlySSL) (map (addr: { inherit addr; port = 80; ssl = false; }) addrs);
 
         hostListen =
           if vhost.forceSSL
@@ -417,7 +429,7 @@ in
 
       package = mkOption {
         default = pkgs.nginxStable;
-        defaultText = "pkgs.nginxStable";
+        defaultText = literalExpression "pkgs.nginxStable";
         type = types.package;
         apply = p: p.override {
           modules = p.modules ++ cfg.additionalModules;
@@ -432,7 +444,7 @@ in
       additionalModules = mkOption {
         default = [];
         type = types.listOf (types.attrsOf types.anything);
-        example = literalExample "[ pkgs.nginxModules.brotli ]";
+        example = literalExpression "[ pkgs.nginxModules.brotli ]";
         description = ''
           Additional <link xlink:href="https://www.nginx.com/resources/wiki/modules/">third-party nginx modules</link>
           to install. Packaged modules are available in
@@ -643,13 +655,30 @@ in
           '';
       };
 
+      serverNamesHashBucketSize = mkOption {
+        type = types.nullOr types.ints.positive;
+        default = null;
+        description = ''
+            Sets the bucket size for the server names hash tables. Default
+            value depends on the processor’s cache line size.
+          '';
+      };
+
+      serverNamesHashMaxSize = mkOption {
+        type = types.nullOr types.ints.positive;
+        default = null;
+        description = ''
+            Sets the maximum size of the server names hash tables.
+          '';
+      };
+
       resolver = mkOption {
         type = types.submodule {
           options = {
             addresses = mkOption {
               type = types.listOf types.str;
               default = [];
-              example = literalExample ''[ "[::1]" "127.0.0.1:5353" ]'';
+              example = literalExpression ''[ "[::1]" "127.0.0.1:5353" ]'';
               description = "List of resolvers to use";
             };
             valid = mkOption {
@@ -713,7 +742,7 @@ in
           Defines a group of servers to use as proxy target.
         '';
         default = {};
-        example = literalExample ''
+        example = literalExpression ''
           "backend_server" = {
             servers = { "127.0.0.1:8000" = {}; };
             extraConfig = ''''
@@ -730,7 +759,7 @@ in
         default = {
           localhost = {};
         };
-        example = literalExample ''
+        example = literalExpression ''
           {
             "hydra.example.com" = {
               forceSSL = true;
@@ -864,14 +893,14 @@ in
         RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
         RestrictNamespaces = true;
         LockPersonality = true;
-        MemoryDenyWriteExecute = !(builtins.any (mod: (mod.allowMemoryWriteExecute or false)) cfg.package.modules);
+        MemoryDenyWriteExecute = !((builtins.any (mod: (mod.allowMemoryWriteExecute or false)) cfg.package.modules) || (cfg.package == pkgs.openresty));
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
         RemoveIPC = true;
         PrivateMounts = true;
         # System Call Filtering
         SystemCallArchitectures = "native";
-        SystemCallFilter = "~@cpu-emulation @debug @keyring @ipc @mount @obsolete @privileged @setuid";
+        SystemCallFilter = "~@cpu-emulation @debug @keyring @ipc @mount @obsolete @privileged @setuid @mincore";
       };
     };
 

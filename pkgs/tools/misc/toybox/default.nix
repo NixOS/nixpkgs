@@ -8,17 +8,18 @@
 
 stdenv.mkDerivation rec {
   pname = "toybox";
-  version = "0.8.4";
+  version = "0.8.5";
 
   src = fetchFromGitHub {
     owner = "landley";
     repo = pname;
     rev = version;
-    sha256 = "0cgbmv6qk1haj709hjx5q4sl7wgh91i459gzs1203adwc7rvk6jv";
+    sha256 = "sha256-32LQiPsBjBh5LpRZuaYT+Dr/oETNTQERGqrpwWPhMTo=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ]; # needed for cross
-  buildInputs = lib.optionals enableStatic [ stdenv.cc.libc stdenv.cc.libc.static ];
+  buildInputs = lib.optionals (enableStatic && stdenv.cc.libc ? static)
+    [ stdenv.cc.libc stdenv.cc.libc.static ];
 
   postPatch = "patchShebangs .";
 

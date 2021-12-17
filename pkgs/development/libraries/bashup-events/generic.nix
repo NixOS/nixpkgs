@@ -3,7 +3,6 @@
   lib
 , resholvePackage
 , bash
-, shellcheck
 , doCheck ? true
 , doInstallCheck ? true
   # variant-specific
@@ -50,12 +49,10 @@ resholvePackage rec {
   '';
 
   inherit doCheck;
-  checkInputs = [ shellcheck bash ];
+  checkInputs = [ bash ];
 
-  # check based on https://github.com/bashup/events/blob/master/.dkrc
   checkPhase = ''
     runHook preCheck
-    SHELLCHECK_OPTS='-e SC2016,SC2145' ${shellcheck}/bin/shellcheck ./bashup.events
     ${bash}/bin/bash -n ./bashup.events
     ${bash}/bin/bash ./bashup.events
     runHook postCheck

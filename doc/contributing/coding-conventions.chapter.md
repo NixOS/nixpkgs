@@ -181,6 +181,21 @@
   rev = "${version}";
   ```
 
+- Building lists conditionally _should_ be done with `lib.optional(s)` instead of using `if cond then [ ... ] else null` or `if cond then [ ... ] else [ ]`.
+
+  ```nix
+  buildInputs = lib.optional stdenv.isDarwin iconv;
+  ```
+
+  instead of
+
+  ```nix
+  buildInputs = if stdenv.isDarwin then [ iconv ] else null;
+  ```
+
+  As an exception, an explicit conditional expression with null can be used when fixing a important bug without triggering a mass rebuild.
+  If this is done a follow up pull request _should_ be created to change the code to `lib.optional(s)`.
+
 - Arguments should be listed in the order they are used, with the exception of `lib`, which always goes first.
 
 ## Package naming {#sec-package-naming}
@@ -545,7 +560,26 @@ The following types of tests exists:
 
 Here in the nixpkgs manual we describe mostly _package tests_; for _module tests_ head over to the corresponding [section in the NixOS manual](https://nixos.org/manual/nixos/stable/#sec-nixos-tests).
 
-### Writing package tests {#ssec-package-tests-writing}
+### Writing inline package tests {#ssec-inline-package-tests-writing}
+
+For very simple tests, they can be written inline:
+
+```nix
+{ …, yq-go }:
+
+buildGoModule rec {
+  …
+
+  passthru.tests = {
+    simple = runCommand "${pname}-test" {} ''
+      echo "test: 1" | ${yq-go}/bin/yq eval -j > $out
+      [ "$(cat $out | tr -d $'\n ')" = '{"test":1}' ]
+    '';
+  };
+}
+```
+
+### Writing larger package tests {#ssec-package-tests-writing}
 
 This is an example using the `phoronix-test-suite` package with the current best practices.
 

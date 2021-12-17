@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libX11 ];
 
+  makeFlags = [ "CC:=$(CC)" ];
+
   installFlags = [ "PREFIX=$(out)" ];
 
   meta = {

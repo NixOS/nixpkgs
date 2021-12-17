@@ -62,8 +62,8 @@ in {
         knot-resolver package to use.
       ";
       default = pkgs.knot-resolver;
-      defaultText = "pkgs.knot-resolver";
-      example = literalExample "pkgs.knot-resolver.override { extraFeatures = true; }";
+      defaultText = literalExpression "pkgs.knot-resolver";
+      example = literalExpression "pkgs.knot-resolver.override { extraFeatures = true; }";
     };
     extraConfig = mkOption {
       type = types.lines;

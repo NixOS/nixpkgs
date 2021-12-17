@@ -14,7 +14,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
           port = 18332;
         };
       };
-      services.bitcoind = {
+      services.bitcoind."testnet" = {
         enable = true;
         testnet = true;
         rpc.users = {

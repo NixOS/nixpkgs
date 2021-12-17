@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "hap-python";
-  version = "4.0.0";
+  version = "4.3.0";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "ikalchev";
     repo = "HAP-python";
     rev = "v${version}";
-    sha256 = "1k4gq23j4f7yppxf8rzrrayn6clj48cdzixjdsmv5awhzsf9n6w4";
+    sha256 = "sha256-G4KL6iMeVn/tmvFtFL8vyqHGNfqk6j8iG4tDK9VpCyM=";
   };
 
   propagatedBuildInputs = [
@@ -42,8 +42,8 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  # Disable tests requiring network access
   disabledTestPaths = [
+    # Disable tests requiring network access
     "tests/test_accessory_driver.py"
     "tests/test_hap_handler.py"
     "tests/test_hap_protocol.py"
@@ -56,7 +56,10 @@ buildPythonPackage rec {
     "test_we_can_start_stop"
     "test_push_event"
     "test_bridge_run_stop"
+    "test_migration_to_include_client_properties"
   ];
+
+  pythonImportsCheck = [ "pyhap" ];
 
   meta = with lib; {
     homepage = "https://github.com/ikalchev/HAP-python";

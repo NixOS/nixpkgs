@@ -97,6 +97,7 @@ in
       mgrModulePath = mkOption {
         type = types.path;
         default = "${pkgs.ceph.lib}/lib/ceph/mgr";
+        defaultText = literalExpression ''"''${pkgs.ceph.lib}/lib/ceph/mgr"'';
         description = ''
           Path at which to find ceph-mgr modules.
         '';
@@ -181,6 +182,7 @@ in
       rgwMimeTypesFile = mkOption {
         type = with types; nullOr path;
         default = "${pkgs.mime-types}/etc/mime.types";
+        defaultText = literalExpression ''"''${pkgs.mime-types}/etc/mime.types"'';
         description = ''
           Path to mime types used by radosgw.
         '';
@@ -190,11 +192,9 @@ in
     extraConfig = mkOption {
       type = with types; attrsOf str;
       default = {};
-      example = ''
-        {
-          "ms bind ipv6" = "true";
-        };
-      '';
+      example = {
+        "ms bind ipv6" = "true";
+      };
       description = ''
         Extra configuration to add to the global section. Use for setting values that are common for all daemons in the cluster.
       '';
@@ -205,9 +205,7 @@ in
       daemons = mkOption {
         type = with types; listOf str;
         default = [];
-        example = ''
-          [ "name1" "name2" ];
-        '';
+        example = [ "name1" "name2" ];
         description = ''
           A list of names for manager daemons that should have a service created. The names correspond
           to the id part in ceph i.e. [ "name1" ] would result in mgr.name1
@@ -227,9 +225,7 @@ in
       daemons = mkOption {
         type = with types; listOf str;
         default = [];
-        example = ''
-          [ "name1" "name2" ];
-        '';
+        example = [ "name1" "name2" ];
         description = ''
           A list of monitor daemons that should have a service created. The names correspond
           to the id part in ceph i.e. [ "name1" ] would result in mon.name1
@@ -249,9 +245,7 @@ in
       daemons = mkOption {
         type = with types; listOf str;
         default = [];
-        example = ''
-          [ "name1" "name2" ];
-        '';
+        example = [ "name1" "name2" ];
         description = ''
           A list of OSD daemons that should have a service created. The names correspond
           to the id part in ceph i.e. [ "name1" ] would result in osd.name1
@@ -279,9 +273,7 @@ in
       daemons = mkOption {
         type = with types; listOf str;
         default = [];
-        example = ''
-          [ "name1" "name2" ];
-        '';
+        example = [ "name1" "name2" ];
         description = ''
           A list of metadata service daemons that should have a service created. The names correspond
           to the id part in ceph i.e. [ "name1" ] would result in mds.name1
@@ -301,9 +293,7 @@ in
       daemons = mkOption {
         type = with types; listOf str;
         default = [];
-        example = ''
-          [ "name1" "name2" ];
-        '';
+        example = [ "name1" "name2" ];
         description = ''
           A list of rados gateway daemons that should have a service created. The names correspond
           to the id part in ceph i.e. [ "name1" ] would result in client.name1, radosgw daemons
@@ -318,7 +308,7 @@ in
       extraConfig = mkOption {
         type = with types; attrsOf (attrsOf str);
         default = {};
-        example = ''
+        example = literalExpression ''
           {
             # This would create a section for a radosgw daemon named node0 and related
             # configuration for it

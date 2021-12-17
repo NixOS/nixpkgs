@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-audit";
-  version = "0.15.0";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "RustSec";
     repo = "rustsec";
     rev = "cargo-audit%2Fv${version}";
-    sha256 = "0pvb1m9277ysjzydjvx7viybi6bd23ch7sbjyx1wnz45ahrmia1j";
+    sha256 = "sha256-6Jb7ViVY4YcnNvGarnHWyBPnpz7xiHQjumOmVaA8rzg=";
   };
 
-  cargoSha256 = "0cf8kg8vhfqbrkm227rzyl3394n7fsqhqgq13qks7374h5d04haw";
+  cargoSha256 = "sha256-31zZMjIFnMIzSmTEACFBE4nSMje9SvE9KzZdoxTg4VM=";
 
   nativeBuildInputs = [
     pkg-config
@@ -32,8 +32,7 @@ rustPlatform.buildRustPackage rec {
     Security
   ];
 
-  # enables `cargo audit fix`
-  cargoBuildFlags = [ "--features fix" ];
+  buildFeatures = [ "fix" ];
 
   # The tests require network access which is not available in sandboxed Nix builds.
   doCheck = false;

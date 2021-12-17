@@ -14,7 +14,7 @@ in {
       default = with pkgs.xorg; [
         xclock bitmap xlsfonts xfd xrefresh xload xwininfo xdpyinfo xwd xwud
       ];
-      example = literalExample ''
+      defaultText = literalExpression ''
         with pkgs.xorg; [
           xclock bitmap xlsfonts xfd xrefresh xload xwininfo xdpyinfo xwd xwud
         ]
@@ -49,9 +49,10 @@ in {
     users.groups.mail = {};
     security.wrappers = {
       dtmail = {
-        source = "${pkgs.cdesktopenv}/bin/dtmail";
-        group = "mail";
         setgid = true;
+        owner = "root";
+        group = "mail";
+        source = "${pkgs.cdesktopenv}/bin/dtmail";
       };
     };
 

@@ -1,4 +1,4 @@
-{ mkXfceDerivation, exo, gtk3, libsoup, libxfce4ui, libxfce4util, xfce4-panel, glib-networking }:
+{ lib, mkXfceDerivation, exo, gtk3, libsoup, libxfce4ui, libxfce4util, xfce4-panel, glib-networking }:
 
 mkXfceDerivation {
   category = "apps";
@@ -10,7 +10,8 @@ mkXfceDerivation {
 
   buildInputs = [ exo gtk3 libsoup libxfce4ui libxfce4util xfce4-panel glib-networking ];
 
-  meta = {
+  meta = with lib; {
     description = "Screenshot utility for the Xfce desktop";
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

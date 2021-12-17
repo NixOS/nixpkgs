@@ -7,12 +7,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "3.6.0";
+  version = "3.6.1";
   pname = "darktable";
 
   src = fetchurl {
     url = "https://github.com/darktable-org/darktable/releases/download/release-${version}/darktable-${version}.tar.xz";
-    sha256 = "sha256:0f8aqwkgw4gs97b5i4ygiqk5zilwq7ax7zwdd31r72zk98cd1g46";
+    sha256 = "sha256-or/HwQO4JJRUV6m/7Z5S8Af6HQMPnbyz/wMnhRvkLRQ=";
   };
 
   nativeBuildInputs = [ cmake ninja llvm pkg-config intltool perl desktop-file-utils wrapGAppsHook ];

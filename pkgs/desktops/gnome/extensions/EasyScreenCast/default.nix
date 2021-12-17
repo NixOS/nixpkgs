@@ -2,14 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-EasyScreenCast";
-  version = "unstable-2020-11-25";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
-    # To make it work with gnome 3.38, using effectively: https://github.com/EasyScreenCast/EasyScreenCast/pull/276
-    owner = "Ian2020";
+    owner = "EasyScreenCast";
     repo = "EasyScreenCast";
-    rev = "b1ab4a999bc7110ecbf68b5fe42c37fa67d7cb0d";
-    sha256 = "s9b0ITKUzgG6XOd1bK7i3mGxfc+T+UHrTZhBp0Ff8zQ=";
+    rev = version;
+    sha256 = "sha256-+lh/hqYC9+DUvLE016KuAY4Ybw8KrqEEG7WG4pUbg2k=";
   };
 
   patches = [

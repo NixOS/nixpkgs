@@ -20,15 +20,17 @@ rec {
       name = "PowerNV";
 
       baseConfig = "powernv_defconfig";
-      target = "zImage";
-      installTarget = "install";
-      file = "vmlinux";
+      target = "vmlinux";
       autoModules = true;
       # avoid driver/FS trouble arising from unusual page size
       extraConfig = ''
         PPC_64K_PAGES n
         PPC_4K_PAGES y
         IPV6 y
+
+        ATA_BMDMA y
+        ATA_SFF y
+        VIRTIO_MENU y
       '';
     };
   };
@@ -233,7 +235,7 @@ rec {
     };
   };
 
-  scaleway-c1 = lib.recursiveUpdate armv7l-hf-multiplatform {
+  scaleway-c1 = armv7l-hf-multiplatform // {
     gcc = {
       cpu = "cortex-a9";
       fpu = "vfpv3";

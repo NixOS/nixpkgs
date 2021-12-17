@@ -45,7 +45,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Decentralized peer to peer chat application.";
-    homepage = "http://retroshare.sourceforge.net/";
+    homepage = "https://retroshare.cc/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ StijnDW ];

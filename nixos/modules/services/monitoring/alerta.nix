@@ -32,7 +32,6 @@ in
     bind = mkOption {
       type = types.str;
       default = "0.0.0.0";
-      example = literalExample "0.0.0.0";
       description = "Address to bind to. The default is to bind to all addresses";
     };
 
@@ -46,20 +45,17 @@ in
       type = types.str;
       description = "URL of the MongoDB or PostgreSQL database to connect to";
       default = "mongodb://localhost";
-      example = "mongodb://localhost";
     };
 
     databaseName = mkOption {
       type = types.str;
       description = "Name of the database instance to connect to";
       default = "monitoring";
-      example = "monitoring";
     };
 
     corsOrigins = mkOption {
       type = types.listOf types.str;
       description = "List of URLs that can access the API for Cross-Origin Resource Sharing (CORS)";
-      example = [ "http://localhost" "http://localhost:5000" ];
       default = [ "http://localhost" "http://localhost:5000" ];
     };
 

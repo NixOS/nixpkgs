@@ -61,8 +61,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A helpful tool that lets you debug what part of your API is causing you issues";
     homepage = "https://github.com/jeremyvaartjes/ping";
-    maintainers = with maintainers; [ xiorcale ] ++ pantheon.maintainers;
+    maintainers = with maintainers; [ xiorcale ] ++ teams.pantheon.members;
     platforms = platforms.linux;
     license = licenses.gpl3;
+    mainProgram = "com.github.jeremyvaartjes.ping";
   };
 }

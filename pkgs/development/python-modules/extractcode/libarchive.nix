@@ -10,7 +10,6 @@
 , zlib
 , zstd
 , plugincode
-, pytestCheckHook
 }:
 
 buildPythonPackage rec {

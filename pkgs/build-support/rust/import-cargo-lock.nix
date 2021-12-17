@@ -2,26 +2,38 @@
 
 {
   # Cargo lock file
-  lockFile
+  lockFile ? null
+
+  # Cargo lock file contents as string
+, lockFileContents ? null
 
   # Hashes for git dependencies.
 , outputHashes ? {}
-}:
+} @ args:
+
+assert (lockFile == null) != (lockFileContents == null);
 
 let
   # Parse a git source into different components.
   parseGit = src:
     let
-      parts = builtins.match ''git\+([^?]+)(\?rev=(.*))?#(.*)?'' src;
-      rev = builtins.elemAt parts 2;
+      parts = builtins.match ''git\+([^?]+)(\?(rev|tag|branch)=(.*))?#(.*)'' src;
+      type = builtins.elemAt parts 2; # rev, tag or branch
+      value = builtins.elemAt parts 3;
     in
       if parts == null then null
       else {
         url = builtins.elemAt parts 0;
-        sha = builtins.elemAt parts 3;
-      } // lib.optionalAttrs (rev != null) { inherit rev; };
+        sha = builtins.elemAt parts 4;
+      } // lib.optionalAttrs (type != null) { inherit type value; };
 
-  packages = (builtins.fromTOML (builtins.readFile lockFile)).package;
+  # shadows args.lockFileContents
+  lockFileContents =
+    if lockFile != null
+    then builtins.readFile lockFile
+    else args.lockFileContents;
+
+  packages = (builtins.fromTOML lockFileContents).package;
 
   # There is no source attribute for the source package itself. But
   # since we do not want to vendor the source package anyway, we can
@@ -113,19 +125,30 @@ let
         };
       in runCommand "${pkg.name}-${pkg.version}" {} ''
         tree=${tree}
-        if grep --quiet '\[workspace\]' "$tree/Cargo.toml"; then
-          # If the target package is in a workspace, find the crate path
-          # using `cargo metadata`.
-          crateCargoTOML=$(${cargo}/bin/cargo metadata --format-version 1 --no-deps --manifest-path $tree/Cargo.toml | \
-            ${jq}/bin/jq -r '.packages[] | select(.name == "${pkg.name}") | .manifest_path')
 
+        # If the target package is in a workspace, or if it's the top-level
+        # crate, we should find the crate path using `cargo metadata`.
+        crateCargoTOML=$(${cargo}/bin/cargo metadata --format-version 1 --no-deps --manifest-path $tree/Cargo.toml | \
+          ${jq}/bin/jq -r '.packages[] | select(.name == "${pkg.name}") | .manifest_path')
+
+        # If the repository is not a workspace the package might be in a subdirectory.
+        if [[ -z $crateCargoTOML ]]; then
+          for manifest in $(find $tree -name "Cargo.toml"); do
+            echo Looking at $manifest
+            crateCargoTOML=$(${cargo}/bin/cargo metadata --format-version 1 --no-deps --manifest-path "$manifest" | ${jq}/bin/jq -r '.packages[] | select(.name == "${pkg.name}") | .manifest_path' || :)
             if [[ ! -z $crateCargoTOML ]]; then
-              tree=$(dirname $crateCargoTOML)
-            else
-              >&2 echo "Cannot find path for crate '${pkg.name}-${pkg.version}' in the Cargo workspace in: $tree"
-              exit 1
+              break
             fi
+          done
+
+          if [[ -z $crateCargoTOML ]]; then
+            >&2 echo "Cannot find path for crate '${pkg.name}-${pkg.version}' in the tree in: $tree"
+            exit 1
+          fi
         fi
+
+        echo Found crate ${pkg.name} at $crateCargoTOML
+        tree=$(dirname $crateCargoTOML)
 
         cp -prvd "$tree/" $out
         chmod u+w $out
@@ -137,16 +160,23 @@ let
         cat > $out/.cargo-config <<EOF
         [source."${gitParts.url}"]
         git = "${gitParts.url}"
-        ${lib.optionalString (gitParts ? rev) "rev = \"${gitParts.rev}\""}
+        ${lib.optionalString (gitParts ? type) "${gitParts.type} = \"${gitParts.value}\""}
         replace-with = "vendored-sources"
         EOF
       ''
       else throw "Cannot handle crate source: ${pkg.source}";
 
-  vendorDir = runCommand "cargo-vendor-dir" {} ''
+  vendorDir = runCommand "cargo-vendor-dir" (lib.optionalAttrs (lockFile == null) {
+    inherit lockFileContents;
+    passAsFile = [ "lockFileContents" ];
+  }) ''
     mkdir -p $out/.cargo
 
-    ln -s ${lockFile} $out/Cargo.lock
+    ${
+      if lockFile != null
+      then "ln -s ${lockFile} $out/Cargo.lock"
+      else "cp $lockFileContentsPath $out/Cargo.lock"
+    }
 
     cat > $out/.cargo/config <<EOF
     [source.crates-io]

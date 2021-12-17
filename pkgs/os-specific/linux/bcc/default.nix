@@ -1,12 +1,12 @@
 { lib, stdenv, fetchFromGitHub
-, makeWrapper, cmake, llvmPackages, kernel
+, makeWrapper, cmake, llvmPackages
 , flex, bison, elfutils, python, luajit, netperf, iperf, libelf
-, systemtap, bash, libbpf
+, bash, libbpf, nixosTests
 }:
 
 python.pkgs.buildPythonApplication rec {
   pname = "bcc";
-  version = "0.20.0";
+  version = "0.23.0";
 
   disabled = !stdenv.isLinux;
 
@@ -14,15 +14,14 @@ python.pkgs.buildPythonApplication rec {
     owner = "iovisor";
     repo = "bcc";
     rev = "v${version}";
-    sha256 = "1xnpz2zv445dp5h0160drv6xlvrnwfj23ngc4dp3clcd59jh1baq";
+    sha256 = "sha256-iLVUwJTDQ8Bn38sgHOcIR8TYxIB+gIlfTgr9+gPU0gE=";
   };
   format = "other";
 
   buildInputs = with llvmPackages; [
-    llvm llvm.dev libclang kernel
+    llvm llvm.dev libclang
     elfutils luajit netperf iperf
-    systemtap.stapBuild flex bash
-    libbpf
+    flex bash libbpf
   ];
 
   patches = [
@@ -32,12 +31,10 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = [ python.pkgs.netaddr ];
-  nativeBuildInputs = [ makeWrapper cmake flex bison llvmPackages.llvm.dev ]
-    # libelf is incompatible with elfutils-libelf
-    ++ lib.filter (x: x != libelf) kernel.moduleBuildDependencies;
+  nativeBuildInputs = [ makeWrapper cmake flex bison llvmPackages.llvm.dev ];
 
   cmakeFlags = [
-    "-DBCC_KERNEL_MODULES_DIR=${kernel.dev}/lib/modules"
+    "-DBCC_KERNEL_MODULES_DIR=/run/booted-system/kernel-modules/lib/modules"
     "-DREVISION=${version}"
     "-DENABLE_USDT=ON"
     "-DENABLE_CPP_API=ON"
@@ -72,10 +69,14 @@ python.pkgs.buildPythonApplication rec {
     wrapPythonProgramsIn "$out/share/bcc/tools" "$out $pythonPath"
   '';
 
+  passthru.tests = {
+    bpf = nixosTests.bpf;
+  };
+
   meta = with lib; {
     description = "Dynamic Tracing Tools for Linux";
     homepage    = "https://iovisor.github.io/bcc/";
     license     = licenses.asl20;
-    maintainers = with maintainers; [ ragge mic92 thoughtpolice ];
+    maintainers = with maintainers; [ ragge mic92 thoughtpolice martinetd ];
   };
 }

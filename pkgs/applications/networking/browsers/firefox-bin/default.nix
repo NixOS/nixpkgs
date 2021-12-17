@@ -25,10 +25,12 @@
 , libXi
 , libXinerama
 , libXrender
+, libXrandr
 , libXt
+, libXtst
 , libcanberra
 , libnotify
-, gnome
+, adwaita-icon-theme
 , libGLU, libGL
 , nspr
 , nss
@@ -50,7 +52,7 @@
 , ffmpeg
 , runtimeShell
 , mesa # firefox wants gbm for drm+dmabuf
-, systemLocale ? config.i18n.defaultLocale or "en-US"
+, systemLocale ? config.i18n.defaultLocale or "en_US"
 }:
 
 let
@@ -72,13 +74,18 @@ let
 
   policies = {
     DisableAppUpdate = true;
-  };
+  } // config.firefox.policies or {};
 
-  policiesJson = writeText "no-update-firefox-policy.json" (builtins.toJSON { inherit policies; });
+  policiesJson = writeText "firefox-policies.json" (builtins.toJSON { inherit policies; });
 
   defaultSource = lib.findFirst (sourceMatches "en-US") {} sources;
 
-  source = lib.findFirst (sourceMatches systemLocale) defaultSource sources;
+  mozLocale =
+    if systemLocale == "ca_ES@valencia"
+    then "ca-valencia"
+    else lib.replaceStrings ["_"] ["-"] systemLocale;
+
+  source = lib.findFirst (sourceMatches mozLocale) defaultSource sources;
 
   pname = "firefox-${channel}-bin-unwrapped";
 
@@ -118,7 +125,9 @@ stdenv.mkDerivation {
       libXi
       libXinerama
       libXrender
+      libXrandr
       libXt
+      libXtst
       libcanberra
       libnotify
       libGLU libGL
@@ -137,7 +146,7 @@ stdenv.mkDerivation {
 
   inherit gtk3;
 
-  buildInputs = [ wrapGAppsHook gtk3 gnome.adwaita-icon-theme ];
+  buildInputs = [ wrapGAppsHook gtk3 adwaita-icon-theme ];
 
   # "strip" after "patchelf" may break binaries.
   # See: https://github.com/NixOS/patchelf/issues/10
@@ -196,11 +205,9 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Mozilla Firefox, free web browser (binary package)";
     homepage = "http://www.mozilla.org/firefox/";
-    license = {
-      free = false;
-      url = "http://www.mozilla.org/en-US/foundation/trademarks/policy/";
-    };
+    license = licenses.mpl20;
     platforms = builtins.attrNames mozillaPlatforms;
+    hydraPlatforms = [];
     maintainers = with maintainers; [ taku0 lovesegfault ];
   };
 }

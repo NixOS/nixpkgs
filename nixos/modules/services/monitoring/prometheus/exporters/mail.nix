@@ -100,7 +100,7 @@ let
     servers = mkOption {
       type = types.listOf (types.submodule serverOptions);
       default = [];
-      example = literalExample ''
+      example = literalExpression ''
         [ {
           name = "testserver";
           server = "smtp.domain.tld";

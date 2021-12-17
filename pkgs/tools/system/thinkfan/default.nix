@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "thinkfan";
-  version = "1.2.2";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "vmatare";
     repo = "thinkfan";
     rev = version;
-    sha256 = "01l1pnj1cgy3dwgyys2s5iqzyv6kk47vlpy09qjafk8py21ijik3";
+    sha256 = "sha256-ZCZqi7A4qdWtDSkTw6ktHIZnPhdes2AX7+QBroaDDfI=";
   };
 
   postPatch = ''

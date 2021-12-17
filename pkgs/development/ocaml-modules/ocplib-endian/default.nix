@@ -1,17 +1,19 @@
-{ lib, buildDunePackage, fetchzip, cppo }:
+{ lib, buildDunePackage, fetchFromGitHub, cppo }:
 
 buildDunePackage rec {
   version = "1.1";
   pname = "ocplib-endian";
 
-  src = fetchzip {
-    url = "https://github.com/OCamlPro/ocplib-endian/archive/${version}.tar.gz";
+  src = fetchFromGitHub {
+    owner = "OCamlPro";
+    repo = "ocplib-endian";
+    rev = version;
     sha256 = "sha256-zKsSkhlZBXSqPtw+/WN3pwo9plM9rDZfMbGVfosqb10=";
   };
 
   useDune2 = true;
 
-  buildInputs = [ cppo ];
+  nativeBuildInputs = [ cppo ];
 
   meta = with lib; {
     description = "Optimised functions to read and write int16/32/64";

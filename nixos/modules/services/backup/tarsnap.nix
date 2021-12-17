@@ -214,7 +214,7 @@ in
               maxbwRateUp = mkOption {
                 type = types.nullOr types.int;
                 default = null;
-                example = literalExample "25 * 1000";
+                example = literalExpression "25 * 1000";
                 description = ''
                   Upload bandwidth rate limit in bytes.
                 '';
@@ -223,7 +223,7 @@ in
               maxbwRateDown = mkOption {
                 type = types.nullOr types.int;
                 default = null;
-                example = literalExample "50 * 1000";
+                example = literalExpression "50 * 1000";
                 description = ''
                   Download bandwidth rate limit in bytes.
                 '';
@@ -256,7 +256,7 @@ in
 
         default = {};
 
-        example = literalExample ''
+        example = literalExpression ''
           {
             nixos =
               { directories = [ "/home" "/root/ssl" ];
@@ -310,7 +310,7 @@ in
         # the service - therefore we sleep in a loop until we can ping the
         # endpoint.
         preStart = ''
-          while ! ping -q -c 1 v1-0-0-server.tarsnap.com &> /dev/null; do sleep 3; done
+          while ! ping -4 -q -c 1 v1-0-0-server.tarsnap.com &> /dev/null; do sleep 3; done
         '';
 
         script = let
@@ -320,21 +320,22 @@ in
                         ${optionalString cfg.explicitSymlinks "-H"} \
                         ${optionalString cfg.followSymlinks "-L"} \
                         ${concatStringsSep " " cfg.directories}'';
+          cachedir = escapeShellArg cfg.cachedir;
           in if (cfg.cachedir != null) then ''
-            mkdir -p ${cfg.cachedir}
-            chmod 0700 ${cfg.cachedir}
+            mkdir -p ${cachedir}
+            chmod 0700 ${cachedir}
 
             ( flock 9
-              if [ ! -e ${cfg.cachedir}/firstrun ]; then
+              if [ ! -e ${cachedir}/firstrun ]; then
                 ( flock 10
                   flock -u 9
                   ${tarsnap} --fsck
                   flock 9
-                ) 10>${cfg.cachedir}/firstrun
+                ) 10>${cachedir}/firstrun
               fi
-            ) 9>${cfg.cachedir}/lockf
+            ) 9>${cachedir}/lockf
 
-             exec flock ${cfg.cachedir}/firstrun ${run}
+             exec flock ${cachedir}/firstrun ${run}
           '' else "exec ${run}";
 
         serviceConfig = {
@@ -356,22 +357,23 @@ in
           tarsnap = ''tarsnap --configfile "/etc/tarsnap/${name}.conf"'';
           lastArchive = "$(${tarsnap} --list-archives | sort | tail -1)";
           run = ''${tarsnap} -x -f "${lastArchive}" ${optionalString cfg.verbose "-v"}'';
+          cachedir = escapeShellArg cfg.cachedir;
 
         in if (cfg.cachedir != null) then ''
-          mkdir -p ${cfg.cachedir}
-          chmod 0700 ${cfg.cachedir}
+          mkdir -p ${cachedir}
+          chmod 0700 ${cachedir}
 
           ( flock 9
-            if [ ! -e ${cfg.cachedir}/firstrun ]; then
+            if [ ! -e ${cachedir}/firstrun ]; then
               ( flock 10
                 flock -u 9
                 ${tarsnap} --fsck
                 flock 9
-              ) 10>${cfg.cachedir}/firstrun
+              ) 10>${cachedir}/firstrun
             fi
-          ) 9>${cfg.cachedir}/lockf
+          ) 9>${cachedir}/lockf
 
-           exec flock ${cfg.cachedir}/firstrun ${run}
+           exec flock ${cachedir}/firstrun ${run}
         '' else "exec ${run}";
 
         serviceConfig = {

@@ -1,5 +1,5 @@
 { lib, stdenv, rustPlatform, fetchCrate, installShellFiles
-, libgpgerror, gpgme, gettext, openssl, Security
+, libgpg-error, gpgme, gettext, openssl, Security
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -14,11 +14,15 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "159a5ph1gxwcgahyr8885lq3c1w76nxzfrfdpyqixqrr7jzx2rd3";
   cargoDepsName = pname;
 
-  cargoBuildFlags = [ "--bin sy" "--features" "vault,extract,completions,substitute,process" ];
-
-  nativeBuildInputs = [ libgpgerror gpgme gettext installShellFiles ];
+  nativeBuildInputs = [ libgpg-error gpgme gettext installShellFiles ];
 
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security ];
+
+  buildFeatures = [ "vault" "extract" "completions" "substitute" "process" ];
+
+  checkFeatures = [ ];
+
+  cargoBuildFlags = [ "--bin" "sy" ];
 
   postInstall = ''
     installShellCompletion --cmd sy \

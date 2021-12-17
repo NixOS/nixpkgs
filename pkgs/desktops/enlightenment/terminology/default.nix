@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "terminology";
-  version = "1.9.0";
+  version = "1.11.0";
 
   src = fetchurl {
-    url = "http://download.enlightenment.org/rel/apps/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "0v74858yvrrfy0l2pq7yn6izvqhpkb9gw2jpd3a3khjwv8kw6frz";
+    url = "https://download.enlightenment.org/rel/apps/${pname}/${pname}-${version}.tar.xz";
+    sha256 = "0bbav27p1xni7kidgf3vn42bwsfrzds301k3f7c8dg7v5yyq9n2g";
   };
 
   nativeBuildInputs = [
@@ -30,11 +30,11 @@ stdenv.mkDerivation rec {
     patchShebangs data/colorschemes/*.py
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Powerful terminal emulator based on EFL";
     homepage = "https://www.enlightenment.org/about-terminology";
-    license = lib.licenses.bsd2;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ matejc tstrobel ftrvxmtrx romildo ];
+    license = licenses.bsd2;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ matejc tstrobel ftrvxmtrx romildo ];
   };
 }

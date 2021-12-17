@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, autoreconfHook, xz, coreutils }:
+{ stdenv, lib, fetchurl, fetchpatch, autoreconfHook, xz, buildPackages }:
 
 stdenv.mkDerivation rec {
   pname = "libunwind";
@@ -9,9 +9,19 @@ stdenv.mkDerivation rec {
     sha256 = "0dc46flppifrv2z0mrdqi60165ghxm1wk0g47vcbyzjdplqwjnfz";
   };
 
-  patches = [ ./backtrace-only-with-glibc.patch ];
+  patches = [
+    ./backtrace-only-with-glibc.patch
 
-  postPatch = lib.optionalString stdenv.hostPlatform.isMusl ''
+    (fetchpatch {
+      # upstream build fix against -fno-common compilers like >=gcc-10
+      url = "https://github.com/libunwind/libunwind/commit/29e17d8d2ccbca07c423e3089a6d5ae8a1c9cb6e.patch";
+      sha256 = "1angwfq6h0jskg6zx8g6w9min38g5mgmrcbppcy5hqn59cgsxbw0";
+    })
+  ];
+
+  postPatch = if stdenv.cc.isClang then ''
+    substituteInPlace configure.ac --replace "-lgcc_s" ""
+  '' else lib.optionalString stdenv.hostPlatform.isMusl ''
     substituteInPlace configure.ac --replace "-lgcc_s" "-lgcc_eh"
   '';
 
@@ -21,7 +31,7 @@ stdenv.mkDerivation rec {
 
   # Without latex2man, no man pages are installed despite being
   # prebuilt in the source tarball.
-  configureFlags = [ "LATEX2MAN=${coreutils}/bin/true" ];
+  configureFlags = [ "LATEX2MAN=${buildPackages.coreutils}/bin/true" ];
 
   propagatedBuildInputs = [ xz ];
 

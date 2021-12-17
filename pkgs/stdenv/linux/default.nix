@@ -279,6 +279,10 @@ in
         };
       };
     };
+
+    # `libtool` comes with obsolete config.sub/config.guess that don't recognize Risc-V.
+    extraNativeBuildInputs =
+      lib.optional (localSystem.isRiscV) prevStage.updateAutotoolsGnuConfigScriptsHook;
   })
 
 
@@ -375,12 +379,7 @@ in
       targetPlatform = localSystem;
       inherit config;
 
-      preHook = ''
-        # Make "strip" produce deterministic output, by setting
-        # timestamps etc. to a fixed value.
-        commonStripFlags="--enable-deterministic-archives"
-        ${commonPreHook}
-      '';
+      preHook = commonPreHook;
 
       initialPath =
         ((import ../common-path.nix) {pkgs = prevStage;});

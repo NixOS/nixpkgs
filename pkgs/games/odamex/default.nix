@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "odamex";
-  version = "0.8.2";
+  version = "0.9.5";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${pname}-src-${version}.tar.bz2";
-    sha256 = "0d4v1l7kghkz1xz92jxlx50x3iy94z7ix1i3209m5j5545qzxrqq";
+    sha256 = "sha256-WBqO5fWzemw1kYlY192v0nnZkbIEVuWmjWYMy+1ODPQ=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];

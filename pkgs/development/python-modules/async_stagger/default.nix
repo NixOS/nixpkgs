@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, fetchpatch
 , pythonOlder
 , pytestCheckHook
 , pytest-asyncio

@@ -67,7 +67,7 @@ in
       eternal-terminal = {
         description = "Eternal Terminal server.";
         wantedBy = [ "multi-user.target" ];
-        after = [ "syslog.target" "network.target" ];
+        after = [ "network.target" ];
         serviceConfig = {
           Type = "forking";
           ExecStart = "${pkgs.eternal-terminal}/bin/etserver --daemon --cfgfile=${pkgs.writeText "et.cfg" ''

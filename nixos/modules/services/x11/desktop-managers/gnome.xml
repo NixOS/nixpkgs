@@ -126,21 +126,6 @@
 </programlisting>
 
  </section>
- <section xml:id="sec-gnome-gdm">
-  <title>GDM</title>
-
-  <para>
-   If you want to use GNOME Wayland session on Nvidia hardware, you need to enable:
-  </para>
-
-<programlisting>
-<xref linkend="opt-services.xserver.displayManager.gdm.nvidiaWayland"/> = true;
-</programlisting>
-
-  <para>
-   as the default configuration will forbid this.
-  </para>
- </section>
 
  <section xml:id="sec-gnome-icons-and-gtk-themes">
   <title>Icons and GTK Themes</title>

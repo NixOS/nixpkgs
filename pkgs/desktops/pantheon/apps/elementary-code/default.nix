@@ -1,7 +1,7 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , nix-update-script
-, pantheon
 , pkg-config
 , meson
 , ninja
@@ -21,7 +21,6 @@
 , libsoup
 , vte
 , webkitgtk
-, zeitgeist
 , ctags
 , libgit2-glib
 , wrapGAppsHook
@@ -30,7 +29,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-code";
-  version = "6.0.0";
+  version = "6.1.0";
 
   repoName = "code";
 
@@ -38,7 +37,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "1w1m52mq3zr9alkxk1c0s4ncscka1km5ppd0r6zm86qan9cjwq0f";
+    sha256 = "sha256-AXmMcPj2hf33G5v3TUg+eZwaKOdVlRvoVXglMJFHRjw=";
   };
 
   passthru = {
@@ -53,10 +52,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-
-    # polkit is needed for ITS rules
-    polkit
-
+    polkit # needed for ITS rules
     python3
     vala
     wrapGAppsHook
@@ -77,7 +73,6 @@ stdenv.mkDerivation rec {
     libsoup
     vte
     webkitgtk
-    zeitgeist
   ];
 
   # install script fails with UnicodeDecodeError because of printing a fancy elipsis character
@@ -100,6 +95,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/elementary/code";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
+    mainProgram = "io.elementary.code";
   };
 }

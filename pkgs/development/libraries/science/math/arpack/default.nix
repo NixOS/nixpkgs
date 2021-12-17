@@ -22,9 +22,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake gfortran ];
   buildInputs = assert (blas.isILP64 == lapack.isILP64); [
-    gfortran
     blas
     lapack
     eigen

@@ -19,7 +19,6 @@ in {
 
     apiKeyFile = mkOption {
       type = types.path;
-      default = "";
       example = "/run/keys/mackerel-api-key";
       description = ''
         Path to file containing the Mackerel API key. The file should contain a

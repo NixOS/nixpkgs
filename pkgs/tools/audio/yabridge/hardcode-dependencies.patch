@@ -1,0 +1,43 @@
+diff --git a/meson.build b/meson.build
+index 8eae0442..ec0649da 100644
+--- a/meson.build
++++ b/meson.build
+@@ -196,6 +196,7 @@ if with_32bit_libraries or with_bitbridge
+       'boost_filesystem',
+       static : with_static_boost,
+       dirs : [
++        '@boost32@/lib',
+         # Used by Arch based distros
+         '/usr/local/lib32',
+         '/usr/lib32',
+@@ -219,7 +220,7 @@ if is_64bit_system
+   xcb_64bit_dep = dependency('xcb')
+ endif
+ if with_32bit_libraries or with_bitbridge
+-  xcb_32bit_dep = winegcc.find_library('xcb')
++  xcb_32bit_dep = winegcc.find_library('xcb', dirs: ['@libxcb32@/lib'])
+ endif
+ 
+ # These are all headers-only libraries, and thus won't require separate 32-bit
+diff --git a/src/plugin/utils.cpp b/src/plugin/utils.cpp
+index 6e32b4c9..f6eb09eb 100644
+--- a/src/plugin/utils.cpp
++++ b/src/plugin/utils.cpp
+@@ -107,7 +107,7 @@ std::string PluginInfo::wine_version() const {
+         access(wineloader_path.c_str(), X_OK) == 0) {
+         wine_path = wineloader_path;
+     } else {
+-        wine_path = bp::search_path("wine").string();
++        wine_path = "@wine@/bin/wine";
+     }
+ 
+     bp::ipstream output;
+@@ -436,7 +436,7 @@ Configuration load_config_for(const fs::path& yabridge_path) {
+ bool send_notification(const std::string& title,
+                        const std::string body,
+                        bool append_origin) {
+-    const fs::path notify_send_path = bp::search_path("notify-send");
++    const fs::path notify_send_path = "@libnotify@/bin/notify-send";
+     if (notify_send_path.empty()) {
+         return false;
+     }

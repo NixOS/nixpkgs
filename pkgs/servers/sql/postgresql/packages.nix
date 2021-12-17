@@ -1,8 +1,6 @@
 self: super: {
 
-    age = super.callPackage ./ext/age.nix {
-      bison = self.bison_3_5;
-    };
+    age = super.callPackage ./ext/age.nix { };
 
     periods = super.callPackage ./ext/periods.nix { };
 

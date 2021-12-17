@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "certifi";
-  version = "2021.05.30";
+  version = "2021.10.08";
 
   disabled = isPy27;
 
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = "python-certifi";
     rev = version;
-    sha256 = "1i4ljsc47iac6kl1w4w6x0qia08s9z394z9lbyzc05pm7y8a3cmj";
+    sha256 = "sha256-SFb/spVHK15b53ZG1P147DcTjs1dqR0+MBXzpE+CWpo=";
   };
 
   checkInputs = [

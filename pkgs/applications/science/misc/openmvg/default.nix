@@ -8,14 +8,14 @@
 , enableDocs ? false }:
 
 stdenv.mkDerivation rec {
-  version = "1.6";
+  version = "2.0";
   pname = "openmvg";
 
   src = fetchFromGitHub {
     owner = "openmvg";
     repo = "openmvg";
     rev = "v${version}";
-    sha256 = "0mrsi0dzgi7cjzn13r9xv7rnc8c9a4h8ip78xy88m9xsyr21wd1h";
+    sha256 = "sha256-6F/xUgZpqY+v6CpwTBhIXI4JdT8HVB0P5JzOL66AVd8=";
     fetchSubmodules = true;
   };
 

@@ -88,5 +88,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ] ++ teams.pantheon.members;
     platforms = platforms.linux;
+    mainProgram = "com.github.needleandthread.vocal";
   };
 }

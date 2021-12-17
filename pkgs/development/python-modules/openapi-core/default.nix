@@ -17,6 +17,7 @@
 , django
 , djangorestframework
 , responses
+, mock
 }:
 
 buildPythonPackage rec {
@@ -54,6 +55,7 @@ buildPythonPackage rec {
     django
     djangorestframework
     responses
+    mock
   ];
 
   disabledTestPaths = [

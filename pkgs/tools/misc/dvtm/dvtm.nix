@@ -1,7 +1,7 @@
-{ lib, stdenv, ncurses, customConfig ? null, name, src, patches ? [] }:
+{ lib, stdenv, ncurses, customConfig ? null, pname, version, src, patches ? [] }:
 stdenv.mkDerivation {
 
-  inherit name src patches;
+  inherit pname version src patches;
 
   CFLAGS = lib.optionalString stdenv.isDarwin "-D_DARWIN_C_SOURCE";
 

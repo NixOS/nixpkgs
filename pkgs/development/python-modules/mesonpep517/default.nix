@@ -3,9 +3,7 @@
 , fetchPypi
 , meson
 , ninja
-, intreehooks
 , toml
-, pythonOlder
 }:
 
 # TODO: offer meson as a Python package so we have dist-info folder.
