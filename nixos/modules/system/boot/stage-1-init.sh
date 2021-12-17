@@ -1,4 +1,5 @@
 #! @shell@
+# shellcheck shell=bash
 
 targetRoot=/mnt-root
 console=tty1
@@ -51,7 +52,7 @@ EOF
   *) to ignore the error and continue
 EOF
 
-    read -n 1 reply
+    read -r -n 1 reply
 
     if [ -n "$allowShell" -a "$reply" = f ]; then
         exec setsid @shell@ -c "exec @shell@ < /dev/$console >/dev/$console 2>/dev/$console"
@@ -449,7 +450,7 @@ lustrateRoot () {
 
     echo
     echo "Restoring selected impurities:"
-    while read -u 4 keeper; do
+    while read -r -u 4 keeper; do
         dirname="$(dirname "$keeper")"
         mkdir -m 0755 -p "$root/$dirname"
         cp -av "$root/old-root/$keeper" "$root/$keeper"
@@ -513,10 +514,10 @@ mkdir -p $targetRoot
 
 exec 3< @fsInfo@
 
-while read -u 3 mountPoint; do
-    read -u 3 device
-    read -u 3 fsType
-    read -u 3 options
+while read  -r -u 3 mountPoint; do
+    read -r -u 3 device
+    read -r -u 3 fsType
+    read -r -u 3 options
 
     # !!! Really quick hack to support bind mounts, i.e., where the
     # "device" should be taken relative to /mnt-root, not /.  Assume
