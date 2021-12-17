@@ -28,7 +28,15 @@ stdenv.mkDerivation {
     fetchSubmodules = true;
   };
 
+  postPatch = lib.optional (stdenv.cc.isClang && (lib.versionAtLeast stdenv.cc.version "9"))''
+    substituteInPlace cmake_configure.cmake \
+      --replace 'target_link_libraries(rw_interface INTERFACE "stdc++fs")' ""
+  '';
+
   nativeBuildInputs = [ cmake ];
+
+  # error: 'path' is unavailable: introduced in macOS 10.15
+  CXXFLAGS = lib.optional (stdenv.hostPlatform.system == "x86_64-darwin") "-D_LIBCPP_DISABLE_AVAILABILITY";
 
   buildInputs = [
     sfml libGLU libGL bullet glm libmad xlibsWrapper openal SDL2 boost ffmpeg

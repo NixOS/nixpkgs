@@ -29,6 +29,20 @@ with lib.maintainers; {
     scope = "Maintain ACME-related packages and modules.";
   };
 
+  bazel = {
+    members = [
+      mboes
+      marsam
+      uri-canva
+      cbley
+      olebedev
+      groodt
+      aherrmann
+      ylecornec
+    ];
+    scope = "Bazel build tool & related tools https://bazel.build/";
+  };
+
   beam = {
     members = [
       ankhers

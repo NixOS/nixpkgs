@@ -7,6 +7,7 @@
 , packaging
 # Check Inputs
 , pytestCheckHook
+, pytest-subtests
 , numpy
 , matplotlib
 , uncertainties
@@ -19,7 +20,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "Pint";
-    sha256 = "8c4bce884c269051feb7abc69dbfd18403c0c764abc83da132e8a7222f8ba801";
+    sha256 = "sha256-jEvOiEwmkFH+t6vGnb/RhAPAx2SryD2hMuinIi+LqAE=";
   };
 
   disabled = pythonOlder "3.6";
@@ -32,6 +33,7 @@ buildPythonPackage rec {
   # Test suite explicitly requires pytest
   checkInputs = [
     pytestCheckHook
+    pytest-subtests
     numpy
     matplotlib
     uncertainties
@@ -42,7 +44,7 @@ buildPythonPackage rec {
     description = "Physical quantities module";
     license = licenses.bsd3;
     homepage = "https://github.com/hgrecco/pint/";
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc doronbehar ];
   };
 
 }

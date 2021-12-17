@@ -41,6 +41,9 @@ in stdenv.mkDerivation rec {
   propagatedBuildInputs = lib.optional enableMpi mpi;
   propagatedUserEnvPkgs = lib.optional enableMpi mpi;
 
+  # error: 'value' is unavailable: introduced in macOS 10.13
+  CXXFLAGS = lib.optional (stdenv.hostPlatform.system == "x86_64-darwin") "-D_LIBCPP_DISABLE_AVAILABILITY";
+
   cmakeFlags = [
     "-DGMX_SIMD:STRING=${SIMD cpuAcceleration}"
     "-DGMX_OPENMP:BOOL=TRUE"

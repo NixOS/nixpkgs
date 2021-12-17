@@ -87,11 +87,7 @@ buildPythonPackage rec {
     };
   };
 
-  setup_cfg = writeText "setup.cfg" (lib.generators.toINI {} passthru.config);
-
-  preBuild = ''
-    cp "$setup_cfg" ./setup.cfg
-  '';
+  MPLSETUPCFG = writeText "mplsetup.cfg" (lib.generators.toINI {} passthru.config);
 
   # Matplotlib tries to find Tcl/Tk by opening a Tk window and asking the
   # corresponding interpreter object for its library paths. This fails if

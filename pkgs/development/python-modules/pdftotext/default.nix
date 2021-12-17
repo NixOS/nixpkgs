@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, poppler }:
+{ lib, buildPythonPackage, fetchPypi, poppler }:
 
 buildPythonPackage rec {
   pname = "pdftotext";
@@ -8,11 +8,6 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "2a9aa89bc62022408781b39d188fabf5a3ad1103b6630f32c4e27e395f7966ee";
   };
-
-  postPatch = lib.optionalString stdenv.isDarwin ''
-    substituteInPlace setup.py \
-        --replace '= brew_poppler_include()' '= "${lib.getDev poppler}/include", "${lib.getLib poppler}/lib"'
-  '';
 
   buildInputs = [ poppler ];
 
