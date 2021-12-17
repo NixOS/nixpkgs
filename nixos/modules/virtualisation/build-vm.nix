@@ -1,4 +1,4 @@
-{ extendModules, lib, ... }:
+{ config, extendModules, lib, ... }:
 let
 
   inherit (lib)
@@ -40,6 +40,15 @@ in
       inherit (vmVariantWithBootLoader) type;
       default = {};
       visible = "shallow";
+    };
+
+  };
+
+  config = {
+
+    system.build = {
+      vm = lib.mkDefault config.virtualisation.vmVariant.system.build.vm;
+      vmWithBootLoader = lib.mkDefault config.virtualisation.vmVariantWithBootLoader.system.build.vm;
     };
 
   };

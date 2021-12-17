@@ -16,7 +16,5 @@ in
 
   system = eval.config.system.build.toplevel;
 
-  vm = eval.config.virtualisation.vmVariant.system.build.vm;
-
-  vmWithBootLoader = eval.config.virtualisation.vmVariantWithBootLoader.system.build.vm;
+  inherit (eval.config.system.build) vm vmWithBootLoader;
 }
