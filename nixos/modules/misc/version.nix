@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
   cfg = config.system.nixos;
+  opt = options.system.nixos;
 in
 
 {
@@ -53,6 +54,7 @@ in
     stateVersion = mkOption {
       type = types.str;
       default = cfg.release;
+      defaultText = literalExpression "config.${opt.release}";
       description = ''
         Every once in a while, a new NixOS release may change
         configuration defaults in a way incompatible with stateful

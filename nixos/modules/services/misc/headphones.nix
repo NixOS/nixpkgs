@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
@@ -7,6 +7,7 @@ let
   name = "headphones";
 
   cfg = config.services.headphones;
+  opt = options.services.headphones;
 
 in
 
@@ -29,6 +30,7 @@ in
       configFile = mkOption {
         type = types.path;
         default = "${cfg.dataDir}/config.ini";
+        defaultText = literalExpression ''"''${config.${opt.dataDir}}/config.ini"'';
         description = "Path to config file.";
       };
       host = mkOption {

@@ -1,9 +1,10 @@
-{ config, lib, pkgs, utils, ... }:
+{ config, lib, options, pkgs, utils, ... }:
 
 with lib;
 
 let
   gcfg = config.services.tarsnap;
+  opt = options.services.tarsnap;
 
   configFile = name: cfg: ''
     keyfile ${cfg.keyfile}
@@ -59,12 +60,13 @@ in
       };
 
       archives = mkOption {
-        type = types.attrsOf (types.submodule ({ config, ... }:
+        type = types.attrsOf (types.submodule ({ config, options, ... }:
           {
             options = {
               keyfile = mkOption {
                 type = types.str;
                 default = gcfg.keyfile;
+                defaultText = literalExpression "config.${opt.keyfile}";
                 description = ''
                   Set a specific keyfile for this archive. This defaults to
                   <literal>"/root/tarsnap.key"</literal> if left unspecified.
@@ -87,6 +89,9 @@ in
               cachedir = mkOption {
                 type = types.nullOr types.path;
                 default = "/var/cache/tarsnap/${utils.escapeSystemdPath config.keyfile}";
+                defaultText = literalExpression ''
+                  "/var/cache/tarsnap/''${utils.escapeSystemdPath config.${options.keyfile}}"
+                '';
                 description = ''
                   The cache allows tarsnap to identify previously stored data
                   blocks, reducing archival time and bandwidth usage.
