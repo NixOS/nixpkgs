@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config texinfo ];
   buildInputs = [
     libgcrypt libassuan libksba libiconv npth gettext
-    readline libusb1 gnutls adns openldap zlib bzip2 sqlite tpm2-tss
-  ];
+    readline libusb1 gnutls adns openldap zlib bzip2 sqlite
+  ] ++ optional (!stdenv.isDarwin) tpm2-tss ;
 
   patches = [
     ./fix-libusb-include-path.patch
@@ -52,8 +52,7 @@ stdenv.mkDerivation rec {
     "--with-ksba-prefix=${libksba.dev}"
     "--with-npth-prefix=${npth}"
   ] ++ optional guiSupport "--with-pinentry-pgm=${pinentry}/${pinentryBinaryPath}"
-  ++ optional (tpm2-tss != null) "--with-tss=intel";
-
+  ++ optional ( (!stdenv.isDarwin) && (tpm2-tss != null) ) "--with-tss=intel";
   postInstall = if enableMinimal
   then ''
     rm -r $out/{libexec,sbin,share}
