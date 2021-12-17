@@ -1,7 +1,8 @@
-{ config, lib, pkgs, utils, ... }:
+{ config, lib, options, pkgs, utils, ... }:
 with lib;
 let
   cfg = config.services.unifi-video;
+  opt = options.services.unifi-video;
   mainClass = "com.ubnt.airvision.Main";
   cmd = ''
     ${pkgs.jsvc}/bin/jsvc \
@@ -164,6 +165,7 @@ in
       pidFile = mkOption {
         type = types.path;
         default = "${cfg.dataDir}/unifi-video.pid";
+        defaultText = literalExpression ''"''${config.${opt.dataDir}}/unifi-video.pid"'';
         description = "Location of unifi-video pid file.";
       };
 

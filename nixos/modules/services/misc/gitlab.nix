@@ -1,9 +1,10 @@
-{ config, lib, pkgs, utils, ... }:
+{ config, lib, options, pkgs, utils, ... }:
 
 with lib;
 
 let
   cfg = config.services.gitlab;
+  opt = options.services.gitlab;
 
   ruby = cfg.packages.gitlab.ruby;
 
@@ -309,6 +310,7 @@ in {
       backup.path = mkOption {
         type = types.str;
         default = cfg.statePath + "/backup";
+        defaultText = literalExpression ''config.${opt.statePath} + "/backup"'';
         description = "GitLab path for backups.";
       };
 
@@ -554,6 +556,7 @@ in {
         defaultForProjects = mkOption {
           type = types.bool;
           default = cfg.registry.enable;
+          defaultText = literalExpression "config.${opt.registry.enable}";
           description = "If GitLab container registry should be enabled by default for projects.";
         };
         issuer = mkOption {

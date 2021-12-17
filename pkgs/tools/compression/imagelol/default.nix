@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   # fix for case-sensitive filesystems
   # https://github.com/MCredstoner2004/ImageLOL/issues/1
   postPatch = ''
-    mv ImageLOL src
+    mv imagelol src
     substituteInPlace CMakeLists.txt \
       --replace 'add_subdirectory("imagelol")' 'add_subdirectory("src")'
   '';
