@@ -47,8 +47,8 @@
                   system.nixos.revision = final.mkIf (self ? rev) self.rev;
 
                   system.build = {
-                    vm = config.virtualisation.vmVariant.system.build.vm;
-                    vmWithBootLoader = config.virtualisation.vmVariantWithBootLoader.system.build.vm;
+                    vm = lib.mkDefault config.virtualisation.vmVariant.system.build.vm;
+                    vmWithBootLoader = lib.mkDefault config.virtualisation.vmVariantWithBootLoader.system.build.vm;
                   };
                 })
               ];
