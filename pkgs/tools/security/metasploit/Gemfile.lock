@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/rapid7/metasploit-framework
-  revision: ede9849ebbca64d7f47bfd19f3088b18fdb220cc
-  ref: refs/tags/6.1.19
+  revision: c2234acba2d212b4eb940904e595a43edb352a4e
+  ref: refs/tags/6.1.20
   specs:
-    metasploit-framework (6.1.19)
+    metasploit-framework (6.1.20)
       actionpack (~> 6.0)
       activerecord (~> 6.0)
       activesupport (~> 6.0)
@@ -31,9 +31,9 @@ GIT
       metasploit-concern
       metasploit-credential
       metasploit-model
-      metasploit-payloads (= 2.0.65)
+      metasploit-payloads (= 2.0.66)
       metasploit_data_models
-      metasploit_payloads-mettle (= 1.0.15)
+      metasploit_payloads-mettle (= 1.0.17)
       mqtt
       msgpack
       nessus_rest
@@ -98,25 +98,25 @@ GEM
   remote: https://rubygems.org/
   specs:
     Ascii85 (1.1.0)
-    actionpack (6.1.4.1)
-      actionview (= 6.1.4.1)
-      activesupport (= 6.1.4.1)
+    actionpack (6.1.4.4)
+      actionview (= 6.1.4.4)
+      activesupport (= 6.1.4.4)
       rack (~> 2.0, >= 2.0.9)
       rack-test (>= 0.6.3)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.0, >= 1.2.0)
-    actionview (6.1.4.1)
-      activesupport (= 6.1.4.1)
+    actionview (6.1.4.4)
+      activesupport (= 6.1.4.4)
       builder (~> 3.1)
       erubi (~> 1.4)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.1, >= 1.2.0)
-    activemodel (6.1.4.1)
-      activesupport (= 6.1.4.1)
-    activerecord (6.1.4.1)
-      activemodel (= 6.1.4.1)
-      activesupport (= 6.1.4.1)
-    activesupport (6.1.4.1)
+    activemodel (6.1.4.4)
+      activesupport (= 6.1.4.4)
+    activerecord (6.1.4.4)
+      activemodel (= 6.1.4.4)
+      activesupport (= 6.1.4.4)
+    activesupport (6.1.4.4)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (>= 1.6, < 2)
       minitest (>= 5.1)
@@ -125,10 +125,10 @@ GEM
     addressable (2.8.0)
       public_suffix (>= 2.0.2, < 5.0)
     afm (0.2.2)
-    arel-helpers (2.13.0)
-      activerecord (>= 3.1.0, < 7)
+    arel-helpers (2.14.0)
+      activerecord (>= 3.1.0, < 8)
     aws-eventstream (1.2.0)
-    aws-partitions (1.540.0)
+    aws-partitions (1.541.0)
     aws-sdk-core (3.124.0)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.525.0)
@@ -247,7 +247,7 @@ GEM
       activemodel (~> 6.0)
       activesupport (~> 6.0)
       railties (~> 6.0)
-    metasploit-payloads (2.0.65)
+    metasploit-payloads (2.0.66)
     metasploit_data_models (5.0.4)
       activerecord (~> 6.0)
       activesupport (~> 6.0)
@@ -258,10 +258,10 @@ GEM
       railties (~> 6.0)
       recog (~> 2.0)
       webrick
-    metasploit_payloads-mettle (1.0.15)
+    metasploit_payloads-mettle (1.0.17)
     method_source (1.0.0)
     mini_portile2 (2.6.1)
-    minitest (5.14.4)
+    minitest (5.15.0)
     mqtt (0.5.0)
     msgpack (1.4.2)
     multi_json (1.15.0)
@@ -288,7 +288,7 @@ GEM
       pcaprub
     patch_finder (1.0.2)
     pcaprub (0.12.4)
-    pdf-reader (2.6.0)
+    pdf-reader (2.7.0)
       Ascii85 (~> 1.0)
       afm (~> 0.2.1)
       hashery (~> 2.0)
@@ -309,15 +309,15 @@ GEM
       nokogiri (>= 1.6)
     rails-html-sanitizer (1.4.2)
       loofah (~> 2.3)
-    railties (6.1.4.1)
-      actionpack (= 6.1.4.1)
-      activesupport (= 6.1.4.1)
+    railties (6.1.4.4)
+      actionpack (= 6.1.4.4)
+      activesupport (= 6.1.4.4)
       method_source
       rake (>= 0.13)
       thor (~> 1.0)
     rake (13.0.6)
     rb-readline (0.5.5)
-    recog (2.3.21)
+    recog (2.3.22)
       nokogiri
     redcarpet (3.5.1)
     reline (0.2.5)

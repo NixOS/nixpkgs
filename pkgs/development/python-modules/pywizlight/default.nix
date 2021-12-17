@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pywizlight";
-  version = "0.4.13";
+  version = "0.4.15";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sbidy";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-XO9KmsC3DXgVcGWr5ss3m2wB8rVboWyQUWBidynhkP8=";
+    rev = "v${version}";
+    sha256 = "sha256-Ud6/aLvAWqTcvCJTiprkj9yG6DXdDOPzFEr+T0/qnBw=";
   };
 
   propagatedBuildInputs = [
@@ -37,6 +37,8 @@ buildPythonPackage rec {
     "test_Bulb_Discovery"
     "test_timeout"
     "test_timeout_PilotBuilder"
+    "test_error_PilotBuilder_warm_wite"
+    "test_error_PilotBuilder_cold_white_lower"
   ];
 
   pythonImportsCheck = [

@@ -2,6 +2,7 @@
 with lib;
 let
   cfg = config.security.acme;
+  opt = options.security.acme;
 
   # Used to calculate timer accuracy for coalescing
   numCerts = length (builtins.attrNames cfg.certs);
@@ -485,6 +486,7 @@ let
       email = mkOption {
         type = types.nullOr types.str;
         default = cfg.email;
+        defaultText = literalExpression "config.${opt.email}";
         description = "Contact email address for the CA to be able to reach you.";
       };
 
