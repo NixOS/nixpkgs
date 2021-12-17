@@ -43,10 +43,8 @@
 /pkgs/build-support/writers @lassulus @Profpatsch
 
 # Nixpkgs documentation
-/maintainers/scripts/db-to-md.sh @jtojnar @ryantm
-/maintainers/scripts/doc @jtojnar @ryantm
-/doc/build-aux/pandoc-filters @jtojnar
-/doc/contributing/contributing-to-documentation.chapter.md @jtojnar
+/maintainers/scripts/db-to-md.sh @ryantm
+/maintainers/scripts/doc @ryantm
 
 # NixOS Internals
 /nixos/default.nix          @nbp @infinisil
@@ -69,13 +67,6 @@
 
 # NixOS integration test driver
 /nixos/lib/test-driver  @tfc
-
-# Updaters
-## update.nix
-/maintainers/scripts/update.nix   @jtojnar
-/maintainers/scripts/update.py    @jtojnar
-## common-updater-scripts
-/pkgs/common-updater/scripts/update-source-version    @jtojnar
 
 # Python-related code and docs
 /maintainers/scripts/update-python-libraries	              @FRidh
@@ -205,9 +196,9 @@
 /doc/languages-frameworks/php.section.md          @NixOS/php @aanderse @etu @globin @ma27 @talyz
 /nixos/tests/php                                  @NixOS/php @aanderse @etu @globin @ma27 @talyz
 /pkgs/build-support/build-pecl.nix                @NixOS/php @aanderse @etu @globin @ma27 @talyz
-/pkgs/development/interpreters/php       @jtojnar @NixOS/php @aanderse @etu @globin @ma27 @talyz
+/pkgs/development/interpreters/php                @NixOS/php @aanderse @etu @globin @ma27 @talyz
 /pkgs/development/php-packages                    @NixOS/php @aanderse @etu @globin @ma27 @talyz
-/pkgs/top-level/php-packages.nix         @jtojnar @NixOS/php @aanderse @etu @globin @ma27 @talyz
+/pkgs/top-level/php-packages.nix                  @NixOS/php @aanderse @etu @globin @ma27 @talyz
 
 # Podman, CRI-O modules and related
 /nixos/modules/virtualisation/containers.nix @NixOS/podman @zowoq
