@@ -5,8 +5,8 @@ let
   description = "PrusaSlicer fork with more features and faster development cycle";
 
   versions = {
-    stable = { version = "2.3.56.9"; sha256 = "sha256-vv01wGQkrasKKjpGSDeDqZbd1X5/iTfGXYN5Jwz+FKE="; };
-    latest = { version = "2.3.57.6"; sha256 = "sha256-ZCOtVmvNXDWLo9UMzxARCp+iyRTcy/ogd5sV0k86JG8="; };
+    stable = { version = "2.3.57.7"; sha256 = "sha256-qYvHNGuA2YDatrY/K2g5PE2gD53VXNptCaa7TpWGV7g="; };
+    latest = { version = "2.3.57.7"; sha256 = "sha256-qYvHNGuA2YDatrY/K2g5PE2gD53VXNptCaa7TpWGV7g="; };
   };
 
   override = { version, sha256 }: super: {
@@ -46,6 +46,7 @@ let
       homepage = "https://github.com/supermerili/SuperSlicer";
       license = licenses.agpl3;
       maintainers = with maintainers; [ cab404 moredread ];
+      mainProgram = "superslicer";
     };
 
     passthru = allVersions;
