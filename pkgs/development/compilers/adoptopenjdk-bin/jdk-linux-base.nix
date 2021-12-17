@@ -71,9 +71,6 @@ let result = stdenv.mkDerivation rec {
 
     rm -rf $out/demo
 
-    # Remove some broken manpages.
-    rm -rf $out/man/ja*
-
     # Remove embedded freetype to avoid problems like
     # https://github.com/NixOS/nixpkgs/issues/57733
     find "$out" -name 'libfreetype.so*' -delete
