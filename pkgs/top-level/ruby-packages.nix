@@ -2061,6 +2061,17 @@
     };
     version = "1.2.0";
   };
+  pry-nav = {
+    dependencies = ["pry"];
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "0m4km5qq3ibg7j88dsnxhn482cnw331bn14by83fcy549kw5fsv1";
+      type = "gem";
+    };
+    version = "1.0.0";
+  };
   public_suffix = {
     groups = ["default"];
     platforms = [];
