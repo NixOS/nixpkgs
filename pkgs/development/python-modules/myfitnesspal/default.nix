@@ -20,12 +20,12 @@
 
 buildPythonPackage rec {
   pname = "myfitnesspal";
-  version = "1.16.5";
+  version = "1.16.6";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-v7lYaZLHxQs3/2uJnj+9y0xCXfPO1C38jLwzF7IMbb0=";
+    sha256 = "ac07369ede3ca4c6d673e02f2b9e0893b17d079f3085e36fdfdbdd1cba9f37db";
   };
 
   propagatedBuildInputs = [
