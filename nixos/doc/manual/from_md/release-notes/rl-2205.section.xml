@@ -159,6 +159,14 @@
           compatibilty, but will be removed at a later date.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The <literal>services.unifi.openPorts</literal> option default
+          value of <literal>true</literal> is now deprecated and will be
+          changed to <literal>false</literal> in 22.11. Configurations
+          using this default will print a warning when rebuilt.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>
