@@ -167,6 +167,16 @@
           using this default will print a warning when rebuilt.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The option
+          <link linkend="opt-services.ssh.enableAskPassword">services.ssh.enableAskPassword</link>
+          was added, decoupling the setting of
+          <literal>SSH_ASKPASS</literal> from
+          <literal>services.xserver.enable</literal>. This allows easy
+          usage in non-X11 environments, e.g. Wayland.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>
