@@ -3381,7 +3381,9 @@ with pkgs;
 
   merriweather-sans = callPackage ../data/fonts/merriweather-sans { };
 
-  meson = callPackage ../development/tools/build-managers/meson { };
+  # TODO: call a sprintable to deprecate Meson 0.57 as soon as possible
+  meson = callPackage ../development/tools/build-managers/meson/0.57 { };
+  meson_0_60 = callPackage ../development/tools/build-managers/meson/0.60 { };
 
   meson-tools = callPackage ../misc/meson-tools { };
 
