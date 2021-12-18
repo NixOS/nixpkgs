@@ -129,6 +129,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   pantheon-agent-polkit = callPackage ./services/pantheon-agent-polkit { };
 
+  xdg-desktop-portal-pantheon = callPackage ./services/xdg-desktop-portal-pantheon { };
+
   #### WINGPANEL INDICATORS
 
   wingpanel-applications-menu = callPackage ./desktop/wingpanel-indicators/applications-menu { };
