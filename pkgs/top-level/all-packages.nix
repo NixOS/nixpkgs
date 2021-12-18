@@ -18714,6 +18714,7 @@ with pkgs;
       proj = proj_7;
     };
     proj = proj_7;
+    boost = boost175;
   };
 
 
