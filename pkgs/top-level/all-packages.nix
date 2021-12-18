@@ -32415,6 +32415,10 @@ with pkgs;
 
   bastet = callPackage ../games/bastet { };
 
+  beancount-ing-diba = callPackage ../applications/office/beancount/beancount-ing-diba.nix {
+    inherit (python3Packages) buildPythonApplication;
+  };
+
   black-hole-solver = callPackage ../games/black-hole-solver {
     inherit (perlPackages) PathTiny;
   };
