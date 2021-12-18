@@ -86,11 +86,18 @@ stdenvNoCC.mkDerivation rec {
         if allowUserExtensions then ''
           homeExt="$HOME/${extensionHomePath}"
           mkdir -p "$homeExt"
-          extensionsDir="$(mktemp -dp ''${XDG_RUNTIME_DIR:-''${TEMPDIR:-/tmp}})"
-          ${mergerfs}/bin/mergerfs \
-            -o use_ino,cache.files=partial,dropcacheonclose=true,category.create=mfs \
-            "${combinedExtensionsDrv}=RO:$homeExt=RW" "$extensionsDir" \
-            || ${setExtDir}
+          # assume the store path is unique enough
+          # that it can replace a tmpdir suffix
+          extensionsDir="''${XDG_RUNTIME_DIR:-''${TEMPDIR:-/tmp}}/codeExts${combinedExtensionsDrv}"
+          # avoid remounting after closing and reopening vscode
+          if ! (mount | grep "$extensionsDir" > /dev/null)
+          then
+            mkdir -p $extensionsDir
+            ${mergerfs}/bin/mergerfs \
+              -o use_ino,cache.files=partial,dropcacheonclose=true,category.create=mfs \
+              "${combinedExtensionsDrv}=RO:$homeExt=RW" "$extensionsDir" || \
+              ${setExtDir}
+          fi
       '' else setExtDir)}" "$o"
       echo exec "$vscode/$1" '--extensions-dir $extensionsDir "$@"' >> "$o"
     )
