@@ -6,6 +6,7 @@
 , makeWrapper
 , openssl
 , procps
+, rpmextract
 , zlib
 # optional packages that enable certain features
 , acl ? null  # EXT2/EXT3/XFS ACL support
@@ -45,14 +46,20 @@
 
 
 # The newest version of TSM client should be discoverable by
-# going to the `downloadPage` (see `meta` below), then
-# * find section "Client Service Release",
-# * pick the latest version and follow the link
-#   "IBM Spectrum Protect Client .. Downloads and READMEs"
-# * in the table at the page's bottom, follow the
-#   "HTTPS" link of the "Linux x86_64 Ubuntu client"
-# * in the directory listing, pick the big `.tar` file
-# (as of 2021-12-13)
+# going to the `downloadPage` (see `meta` below).
+# Find the "Backup-archive client" table on that page.
+# Look for "Download Documents" of the latest release.
+# Here, two links must be checked:
+# * "IBM Spectrum Protect Client ... Downloads and READMEs":
+#   In the table at the page's bottom,
+#   check the date of the "Linux x86_64 client"
+# * "IBM Spectrum Protect BA client ... interim fix downloads"
+# Look for the "Linux x86_64 client" rows
+# in the table # at the bottom of each page.
+# Follow the "HTTPS" link of the row with the latest date stamp.
+# In the directory listing to show up, pick the big `.tar` file.
+#
+# (as of 2021-12-18)
 
 
 let
@@ -84,20 +91,22 @@ let
       major = lib.versions.major version;
       minor = lib.versions.minor version;
       patch = lib.versions.patch version;
+      fixup = lib.lists.elemAt (lib.versions.splitVersion version) 3;
     in
-      "https://public.dhe.ibm.com/storage/tivoli-storage-management/maintenance/client/v${major}r${minor}/Linux/LinuxX86_DEB/BA/v${major}${minor}${patch}/${version}-TIV-TSMBAC-LinuxX86_DEB.tar";
+      "https://public.dhe.ibm.com/storage/tivoli-storage-management/${if fixup=="0" then "maintenance" else "patches"}/client/v${major}r${minor}/Linux/LinuxX86/BA/v${major}${minor}${patch}/${version}-TIV-TSMBAC-LinuxX86.tar";
 
   unwrapped = stdenv.mkDerivation rec {
     name = "tsm-client-${version}-unwrapped";
     version = "8.1.13.0";
     src = fetchurl {
       url = mkSrcUrl version;
-      sha256 = "0fy9c224g6rkrgd6ls01vs30bk9j9mlhf2x6akd11r7h8bib19zn";
+      sha256 = "1p6bw1szsb6kl7nfalsnz0kxcs8dvggh8ad8irj677ljhhryqbm4";
     };
     inherit meta;
 
     nativeBuildInputs = [
       autoPatchelfHook
+      rpmextract
     ];
     buildInputs = [
       openssl
@@ -110,12 +119,15 @@ let
     sourceRoot = ".";
 
     postUnpack = ''
-      for debfile in *.deb
-      do
-        ar -x "$debfile"
-        tar --xz --extract --file=data.tar.xz
-        rm data.tar.xz
-      done
+      rpmextract TIVsm-API64.x86_64.rpm
+      rpmextract TIVsm-APIcit.x86_64.rpm
+      rpmextract TIVsm-BA.x86_64.rpm
+      rpmextract TIVsm-BAcit.x86_64.rpm
+      rpmextract TIVsm-BAhdw.x86_64.rpm
+      rpmextract TIVsm-JBB.x86_64.rpm
+      # use globbing so that version updates don't break the build:
+      rpmextract gskcrypt64-*.linux.x86_64.rpm
+      rpmextract gskssl64-*.linux.x86_64.rpm
     '';
 
     installPhase = ''
@@ -127,7 +139,7 @@ let
 
     # Fix relative symlinks after `/usr` was moved up one level
     preFixup = ''
-      for link in $out/lib/* $out/bin/*
+      for link in $out/lib{,64}/* $out/bin/*
       do
         target=$(readlink "$link")
         if [ "$(cut -b -6 <<< "$target")" != "../../" ]
