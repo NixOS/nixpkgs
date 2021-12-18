@@ -9,7 +9,7 @@ with vmTools;
 
   buildHelloInVM = runInLinuxVM hello;
 
-  buildPanInVM = runInLinuxVM pan;
+  buildPanInVM = runInLinuxVM (pan // { memSize = 2048; });
 
 
   testRPMImage = makeImageTestScript diskImages.fedora27x86_64;
