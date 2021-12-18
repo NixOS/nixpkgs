@@ -1,9 +1,12 @@
 import collections
 import json
 import sys
+from typing import Any, Dict, List
+
+JSON = Dict[str, Any]
 
 class Key:
-    def __init__(self, path):
+    def __init__(self, path: List[str]):
         self.path = path
     def __hash__(self):
         result = 0
@@ -16,8 +19,8 @@ class Key:
 Option = collections.namedtuple('Option', ['name', 'value'])
 
 # pivot a dict of options keyed by their display name to a dict keyed by their path
-def pivot(options):
-    result = dict()
+def pivot(options: Dict[str, JSON]) -> Dict[Key, Option]:
+    result: Dict[Key, Option] = dict()
     for (name, opt) in options.items():
         result[Key(opt['loc'])] = Option(name, opt)
     return result
@@ -25,8 +28,8 @@ def pivot(options):
 # pivot back to indexed-by-full-name
 # like the docbook build we'll just fail if multiple options with differing locs
 # render to the same option name.
-def unpivot(options):
-    result = dict()
+def unpivot(options: Dict[Key, Option]) -> Dict[str, JSON]:
+    result: Dict[str, Dict] = dict()
     for (key, opt) in options.items():
         if opt.name in result:
             raise RuntimeError(
