@@ -91,11 +91,11 @@ stdenv.mkDerivation rec {
     rm -f $out/lib/bash/Makefile.inc
   '';
 
-  postFixup =
+  preFixup =
     if interactive
     then ''
       substituteInPlace "$out/bin/bashbug" \
-        --replace '${stdenv.shellPackage}/bin/sh' "$out/bin/sh"
+        --replace '/bin/sh' "$out/bin/sh"
     ''
     # most space is taken by locale data
     else ''
