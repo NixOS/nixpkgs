@@ -396,6 +396,8 @@ with self; with super; {
 
   pip = callPackage ../development/python-modules/pip/20.nix { };
 
+  platformdirs = callPackage ../development/python-modules/platformdirs/2.nix { };
+
   pluggy = callPackage ../development/python-modules/pluggy/0.nix { };
 
   postorius = disabled super.postorius;

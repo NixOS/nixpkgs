@@ -74,6 +74,9 @@ buildPythonPackage rec {
   disabledTests = [
     # Permission Error
     "test_bad_exe_py_info_no_raise"
+  ] ++ lib.optionals isPy27 [
+    "test_python_via_env_var"
+    "test_python_multi_value_prefer_newline_via_env_var"
   ];
 
   pythonImportsCheck = [ "virtualenv" ];
