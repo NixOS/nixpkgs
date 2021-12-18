@@ -1872,12 +1872,12 @@ final: prev:
     pname = "feline.nvim";
     version = "2021-10-15";
     src = fetchFromGitHub {
-      owner = "famiu";
+      owner = "feline-nvim";
       repo = "feline.nvim";
       rev = "4ef5e1516395eea731275e0f58b6bfba5c6ac9c1";
       sha256 = "12fci8gkbs3gf7cx68dpczkvsgy7bbax6f5fdl6fbjszpwr96lhw";
     };
-    meta.homepage = "https://github.com/famiu/feline.nvim/";
+    meta.homepage = "https://github.com/feline-nvim/feline.nvim/";
   };
 
   fennel-vim = buildVimPluginFrom2Nix {
@@ -9998,8 +9998,8 @@ final: prev:
     src = fetchFromGitHub {
       owner = "tpope";
       repo = "vim-sleuth";
-      rev = "baaae3119e53c59c9704b8ce44b81ae21b8e075b";
-      sha256 = "1cnfjh9ay9ld2k266li6vlxm42d17vlhwzjpsp05fm7z4djxvj5w";
+      rev = "3e210938b3c14d89d713537f92a63e202bdfb1e9";
+      sha256 = "172z0rg7gdbxxmmcnmrf4k1ypal0471qry2dj03jnic3i4d927dg";
     };
     meta.homepage = "https://github.com/tpope/vim-sleuth/";
   };
