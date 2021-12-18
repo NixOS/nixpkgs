@@ -22,9 +22,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  # error: 'path' is unavailable: introduced in macOS 10.15
-  CXXFLAGS = lib.optional (stdenv.hostPlatform.system == "x86_64-darwin") "-D_LIBCPP_DISABLE_AVAILABILITY";
-
   installPhase = ''
     mkdir -p $out/bin
     cp ./ImageLOL $out/bin

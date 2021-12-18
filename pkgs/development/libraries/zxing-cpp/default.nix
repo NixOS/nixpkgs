@@ -21,9 +21,6 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  # error: 'path' is unavailable: introduced in macOS 10.15
-  CXXFLAGS = lib.optional (stdenv.hostPlatform.system == "x86_64-darwin") "-D_LIBCPP_DISABLE_AVAILABILITY";
-
   cmakeFlags = [
     "-DBUILD_EXAMPLES=OFF"
   ];
