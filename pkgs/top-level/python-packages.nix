@@ -8092,7 +8092,9 @@ in {
 
   pywizlight = callPackage ../development/python-modules/pywizlight { };
 
-  pywlroots = callPackage ../development/python-modules/pywlroots { };
+  pywlroots = callPackage ../development/python-modules/pywlroots {
+    wlroots = pkgs.wlroots_0_14;
+  };
 
   pyxattr = callPackage ../development/python-modules/pyxattr { };
 
