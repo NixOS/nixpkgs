@@ -918,6 +918,8 @@ let
 
     pgocaml = callPackage ../development/ocaml-modules/pgocaml {};
 
+    pfff = callPackage ../development/ocaml-modules/pfff {};
+
     pgocaml_ppx = callPackage ../development/ocaml-modules/pgocaml/ppx.nix {};
 
     ocaml-r = callPackage ../development/ocaml-modules/ocaml-r { };
