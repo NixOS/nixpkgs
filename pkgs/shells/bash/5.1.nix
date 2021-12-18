@@ -95,7 +95,7 @@ stdenv.mkDerivation rec {
     if interactive
     then ''
       substituteInPlace "$out/bin/bashbug" \
-        --replace '${stdenv.shell}' "$out/bin/bash"
+        --replace '${stdenv.shellPackage}/bin/sh' "$out/bin/sh"
     ''
     # most space is taken by locale data
     else ''
