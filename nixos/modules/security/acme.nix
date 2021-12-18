@@ -324,7 +324,7 @@ let
           fi
         '');
       } // optionalAttrs (data.listenHTTP != null && toInt (elemAt (splitString ":" data.listenHTTP) 1) < 1024) {
-        AmbientCapabilities = "CAP_NET_BIND_SERVICE";
+        CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
       };
 
       # Working directory will be /tmp

@@ -203,7 +203,7 @@ in {
           webserverBasicConfig
           {
             security.acme.certs."a.example.test".ocspMustStaple = true;
-            services.nginx.virtualHosts."a.example.com" = {
+            services.nginx.virtualHosts."a.example.test" = {
               extraConfig = ''
                 ssl_stapling on;
                 ssl_stapling_verify on;
@@ -224,7 +224,7 @@ in {
               script = "${pkgs.python3}/bin/python -m http.server";
             };
 
-            services.nginx.virtualHosts."slow.example.com" = {
+            services.nginx.virtualHosts."slow.example.test" = {
               forceSSL = true;
               enableACME = true;
               locations."/".proxyPass = "http://localhost:8000";
@@ -232,10 +232,24 @@ in {
           }
         ];
 
-        use-root.configuration = { ... }: lib.mkMerge [
+        # Test lego internal server (listenHTTP option)
+        # Also tests useRoot option
+        lego-server.configuration = { ... }: lib.mkMerge [
           webserverBasicConfig
           {
             security.acme.useRoot = true;
+            security.acme.certs."lego.example.test" = {
+              listenHTTP = ":80";
+              group = "nginx";
+            };
+            services.nginx.virtualHosts."a.example.test" = {
+              onlySSL = true;
+              forceSSL = lib.mkForce false;
+            };
+            services.nginx.virtualHosts."lego.example.test" = {
+              useACMEHost = "lego.example.test";
+              onlySSL = true;
+            };
           }
         ];
 
@@ -402,7 +416,7 @@ in {
       # Perform general tests first
       switch_to(webserver, "general")
 
-      with subtest("Can request certificate with HTTPS-01 challenge"):
+      with subtest("Can request certificate with HTTP-01 challenge"):
           webserver.wait_for_unit("acme-finished-a.example.test.target")
           check_fullchain(webserver, "a.example.test")
           check_issuer(webserver, "a.example.test", "pebble")
@@ -449,19 +463,22 @@ in {
           webserver.wait_for_unit("acme-finished-a.example.test.target")
           check_stapling(client, "a.example.test")
 
-      with subtest("Can request certificate with HTTPS-01 when nginx startup is delayed"):
+      with subtest("Can request certificate with HTTP-01 using lego's internal web server"):
+          switch_to(webserver, "lego-server")
+          webserver.wait_for_unit("acme-finished-lego.example.test.target")
+          webserver.wait_for_unit("nginx.service")
+          webserver.succeed("echo HENLO && systemctl cat nginx.service")
+          webserver.succeed("test \"$(stat -c '%U' /var/lib/acme/* | uniq)\" = \"root\"")
+          check_connection(client, "a.example.test")
+          check_connection(client, "lego.example.test")
+
+      with subtest("Can request certificate with HTTP-01 when nginx startup is delayed"):
           webserver.execute("systemctl stop nginx")
           switch_to(webserver, "slow-startup")
-          webserver.wait_for_unit("acme-finished-slow.example.com.target")
-          check_issuer(webserver, "slow.example.com", "pebble")
+          webserver.wait_for_unit("acme-finished-slow.example.test.target")
+          check_issuer(webserver, "slow.example.test", "pebble")
           webserver.wait_for_unit("nginx.service")
-          check_connection(client, "slow.example.com")
-
-      with subtest("Can set useRoot to true and still use certs normally"):
-          switch_to(webserver, "use-root")
-          webserver.wait_for_unit("nginx.service")
-          webserver.succeed("test \"$(stat -c '%U' /var/lib/acme/* | uniq)\" = \"root\"")
-          check_connection(client, "a.example.com")
+          check_connection(client, "slow.example.test")
 
       domains = ["http", "dns", "wildcard"]
       for server, logsrc in [
