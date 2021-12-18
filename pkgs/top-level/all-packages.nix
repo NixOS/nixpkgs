@@ -6008,6 +6008,7 @@ with pkgs;
 
   goverlay = callPackage ../tools/graphics/goverlay {
     inherit (qt5) wrapQtAppsHook;
+    inherit (plasma5Packages) breeze-qt5;
   };
 
   gpart = callPackage ../tools/filesystems/gpart { };
