@@ -157,25 +157,25 @@ for o in $(cat /proc/cmdline); do
     # switch_root: can't execute '': No such file or directory
     case $o in
         console=*)
-            # shellcheck disable=SC2046,SC2086
+            # shellcheck disable=SC2046,SC2086,SC1097
             set -- $(IFS==; echo $o)
             params=$2
-            # shellcheck disable=SC2046,SC2086
+            # shellcheck disable=SC2046,SC2086,SC1097
             set -- $(IFS=,; echo $params)
             console=$1
             ;;
         init=*)
-            # shellcheck disable=SC2046,SC2086
+            # shellcheck disable=SC2046,SC2086,SC1097
             set -- $(IFS==; echo $o)
             stage2Init=$2
             ;;
         boot.persistence=*)
-            # shellcheck disable=SC2046,SC2086
+            # shellcheck disable=SC2046,SC2086,SC1097
             set -- $(IFS==; echo $o)
             persistence=$2
             ;;
         boot.persistence.opt=*)
-            # shellcheck disable=SC2046,SC2086
+            # shellcheck disable=SC2046,SC2086,SC1097
             set -- $(IFS==; echo $o)
             persistence_opt=$2
             ;;
@@ -205,7 +205,7 @@ for o in $(cat /proc/cmdline); do
             # If a root device is specified on the kernel command
             # line, make it available through the symlink /dev/root.
             # Recognise LABEL= and UUID= to support UNetbootin.
-            # shellcheck disable=SC2046,SC2086
+            # shellcheck disable=SC2046,SC2086,SC1097
             set -- $(IFS==; echo $o)
             if [ "$2" = "LABEL" ]; then
                 root="/dev/disk/by-label/$3"
@@ -222,7 +222,7 @@ for o in $(cat /proc/cmdline); do
         findiso=*)
             # if an iso name is supplied, try to find the device where
             # the iso resides on
-            # shellcheck disable=SC2046,SC2086
+            # shellcheck disable=SC2046,SC2086,SC1097
             set -- $(IFS==; echo $o)
             isoPath=$2
             ;;
