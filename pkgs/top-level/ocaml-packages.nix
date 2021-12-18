@@ -581,6 +581,8 @@ let
 
     json-data-encoding-bson = callPackage ../development/ocaml-modules/json-data-encoding/bson.nix { };
 
+    json-wheel = callPackage ../development/ocaml-modules/json-wheel { };
+
     junit = callPackage ../development/ocaml-modules/junit { };
     junit_ounit = callPackage ../development/ocaml-modules/junit/ounit.nix { };
     junit_alcotest = callPackage ../development/ocaml-modules/junit/alcotest.nix { };
