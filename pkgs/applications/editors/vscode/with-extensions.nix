@@ -1,6 +1,12 @@
-{ lib, stdenv, runCommand, buildEnv, vscode, makeWrapper
-, vscodeExtensions ? [] }:
-
+{ lib
+, stdenvNoCC
+, symlinkJoin
+, vscode
+, writeShellScript
+, vscodeExtensions ? [ ]
+, allowUserExtensions ? true
+, mergerfs ? null
+}:
 /*
   `vscodeExtensions`
    :  A set of vscode extensions to be installed alongside the editor. Here's a an
@@ -41,46 +47,65 @@
       extensions as its `--extensions-dir`.
 */
 
+# When no extensions are requested, we simply don't build
+
+if allowUserExtensions && vscodeExtensions == [ ] then vscode else
+
 let
-  inherit (vscode) executableName longName;
-  wrappedPkgVersion = lib.getVersion vscode;
-  wrappedPkgName = lib.removeSuffix "-${wrappedPkgVersion}" vscode.name;
-
-  combinedExtensionsDrv = buildEnv {
+  # if vscode is itself another vscode-with-extensions we avoid to build it too
+  _vscode = vscode.vscode or vscode;
+  combinedExtensionsDrv = symlinkJoin {
     name = "vscode-extensions";
-    paths = vscodeExtensions;
+    paths = map
+      (p: "${p}/share/vscode/extensions")
+      (vscodeExtensions ++ vscode.vscodeExtensions or [ ]);
   };
-
-  extensionsFlag = lib.optionalString (vscodeExtensions != []) ''
-    --add-flags "--extensions-dir ${combinedExtensionsDrv}/share/vscode/extensions"
+  setExtDir = ''
+    extensionsDir="${combinedExtensionsDrv}"
   '';
 in
 
-# When no extensions are requested, we simply redirect to the original
-# non-wrapped vscode executable.
-runCommand "${wrappedPkgName}-with-extensions-${wrappedPkgVersion}" {
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ vscode ];
+stdenvNoCC.mkDerivation rec {
   dontPatchELF = true;
   dontStrip = true;
-  meta = vscode.meta;
-} (if stdenv.isDarwin then ''
-  mkdir -p $out/bin/
-  mkdir -p "$out/Applications/${longName}.app/Contents/MacOS"
+  pname = "${vscode.pname}-with-extensions";
 
-  for path in PkgInfo Frameworks Resources _CodeSignature Info.plist; do
-    ln -s "${vscode}/Applications/${longName}.app/Contents/$path" "$out/Applications/${longName}.app/Contents/"
-  done
+  vscode = _vscode;
+  inherit (vscode)
+    meta extensionHomePath executableName
+    longName shortName userHomePath version;
+  passthru = {
+    inherit vscodeExtensions;
+  };
 
-  makeWrapper "${vscode}/bin/${executableName}" "$out/bin/${executableName}" ${extensionsFlag}
-  makeWrapper "${vscode}/Applications/${longName}.app/Contents/MacOS/Electron" "$out/Applications/${longName}.app/Contents/MacOS/Electron" ${extensionsFlag}
-'' else ''
-  mkdir -p "$out/bin"
-  mkdir -p "$out/share/applications"
-  mkdir -p "$out/share/pixmaps"
+  passAsFile = [ "buildCommand" ];
+  buildCommand = ''
+    mkVscWrapper()(
+      o="$out/$1"
+      install -Dm0777 "${writeShellScript "vsc-wrapper" (
+        if allowUserExtensions then ''
+          homeExt="$HOME/${extensionHomePath}"
+          mkdir -p "$homeExt"
+          extensionsDir="$(mktemp -dp ''${XDG_RUNTIME_DIR:-''${TEMPDIR:-/tmp}})"
+          ${mergerfs}/bin/mergerfs \
+            -o use_ino,cache.files=partial,dropcacheonclose=true,category.create=mfs \
+            "${combinedExtensionsDrv}=RO:$homeExt=RW" "$extensionsDir" \
+            || ${setExtDir}
+      '' else setExtDir)}" "$o"
+      echo exec "$vscode/$1" '--extensions-dir $extensionsDir "$@"' >> "$o"
+    )
+    mkVscWrapper "bin/$executableName"
+  '' + (if stdenvNoCC.isDarwin then ''
+    mkVscWrapper "Applications/$longName.app/Contents/MacOS/Electron"
+    for path in PkgInfo Frameworks Resources _CodeSignature Info.plist; do
+      ln -s "$vscode/Applications/$longName.app/Contents/$path" "$out/Applications/$longName.app/Contents/"
+    done
+  '' else ''
+    mkdir -p "$out/share/applications"
+    mkdir -p "$out/share/pixmaps"
 
-  ln -sT "${vscode}/share/pixmaps/code.png" "$out/share/pixmaps/code.png"
-  ln -sT "${vscode}/share/applications/${executableName}.desktop" "$out/share/applications/${executableName}.desktop"
-  ln -sT "${vscode}/share/applications/${executableName}-url-handler.desktop" "$out/share/applications/${executableName}-url-handler.desktop"
-  makeWrapper "${vscode}/bin/${executableName}" "$out/bin/${executableName}" ${extensionsFlag}
-'')
+    ln -sT "$vscode/share/pixmaps/code.png" "$out/share/pixmaps/code.png"
+    ln -sT "$vscode/share/applications/$executableName.desktop" "$out/share/applications/$executableName.desktop"
+    ln -sT "$vscode/share/applications/$executableName-url-handler.desktop" "$out/share/applications/$executableName-url-handler.desktop"
+  '');
+}
