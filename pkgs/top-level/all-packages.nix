@@ -7483,6 +7483,8 @@ with pkgs;
 
   log4j-scan = callPackage ../tools/security/log4j-scan { };
 
+  log4j-sniffer = callPackage ../tools/security/log4j-sniffer { };
+
   log4j-vuln-scanner = callPackage ../tools/security/log4j-vuln-scanner { };
 
   log4jcheck = callPackage ../tools/security/log4jcheck { };
