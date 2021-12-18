@@ -109,6 +109,8 @@ else
         StringCompareConstantTime
         SysHostnameLong
         TermSizeAny
+        Test2Harness
+        TestPostgreSQL
         TextDiff
         TextTable
         XMLSimple
@@ -135,7 +137,8 @@ else
       sqlite
       libpqxx_6
       top-git
-      mercurial /*darcs*/
+      mercurial
+      darcs
       subversion
       breezy
       openssl
