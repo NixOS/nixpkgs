@@ -1,12 +1,12 @@
 { lib, stdenv, fetchFromGitHub, mkYarnPackage, nixosTests, writeText, python3 }:
 
 let
-  version = "0.2.3";
+  version = "0.2.4";
   src = fetchFromGitHub {
     owner = "ngoduykhanh";
     repo = "PowerDNS-Admin";
     rev = "v${version}";
-    sha256 = "16faz57d77mxkflkvwyi8gb9wvnq2vhw79b84v1fmqvxri1yaphw";
+    sha256 = "sha256-xJ0NNnDVwGl+t9q1INPhCxcTmQayYBYdjEG0PbPCI9E=";
   };
 
   python = python3.override {
@@ -22,7 +22,7 @@ let
   };
 
   pythonDeps = with python.pkgs; [
-    flask flask_assets flask_login flask_sqlalchemy flask_migrate flask-seasurf flask_mail flask-sslify
+    flask flask_assets flask_login flask_sqlalchemy flask_migrate flask-seasurf flask_mail flask-session flask-sslify
     mysqlclient psycopg2 sqlalchemy
     cffi configobj cryptography bcrypt requests ldap pyotp qrcode dnspython
     gunicorn python3-saml pyopenssl pytz cssmin jsmin authlib bravado-core
@@ -125,6 +125,6 @@ in stdenv.mkDerivation rec {
     description = "A PowerDNS web interface with advanced features";
     homepage = "https://github.com/ngoduykhanh/PowerDNS-Admin";
     license = licenses.mit;
-    maintainers = with maintainers; [ zhaofengli ];
+    maintainers = with maintainers; [ Flakebi zhaofengli ];
   };
 }
