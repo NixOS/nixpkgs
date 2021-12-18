@@ -228,6 +228,4 @@ in
   };
 
   meta.maintainers = with maintainers; [ rnhmjoj ];
-  # uses relatedPackages
-  meta.buildDocsInSandbox = false;
 }

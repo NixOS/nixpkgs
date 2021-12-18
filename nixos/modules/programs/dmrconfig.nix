@@ -7,8 +7,6 @@ let
 
 in {
   meta.maintainers = [ maintainers.etu ];
-  # uses relatedPackages
-  meta.buildDocsInSandbox = false;
 
   ###### interface
   options = {

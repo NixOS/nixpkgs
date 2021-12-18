@@ -185,7 +185,4 @@ in {
   imports = [
     (lib.mkRenamedOptionModule [ "programs" "tmux" "extraTmuxConf" ] [ "programs" "tmux" "extraConfig" ])
   ];
-
-  # uses relatedPackages
-  meta.buildDocsInSandbox = false;
 }

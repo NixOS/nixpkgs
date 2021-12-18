@@ -221,7 +221,4 @@ in {
     boot.extraModprobeConfig = "options thinkpad_acpi experimental=1 fan_control=1";
 
   };
-
-  # uses relatedPackages
-  meta.buildDocsInSandbox = false;
 }

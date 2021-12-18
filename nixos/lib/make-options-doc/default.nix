@@ -55,10 +55,15 @@ let
   # ../../../lib/options.nix influences.
   #
   # Each element of `relatedPackages` can be either
-  # - a string:  that will be interpreted as an attribute name from `pkgs`,
-  # - a list:    that will be interpreted as an attribute path from `pkgs`,
-  # - an attrset: that can specify `name`, `path`, `package`, `comment`
+  # - a string:  that will be interpreted as an attribute name from `pkgs` and turned into a link
+  #              to search.nixos.org,
+  # - a list:    that will be interpreted as an attribute path from `pkgs` and turned into a link
+  #              to search.nixos.org,
+  # - an attrset: that can specify `name`, `path`, `comment`
   #   (either of `name`, `path` is required, the rest are optional).
+  #
+  # NOTE: No checks against `pkgs` are made to ensure that the referenced package actually exists.
+  # Such checks are not compatible with option docs caching.
   genRelatedPackages = packages: optName:
     let
       unpack = p: if lib.isString p then { name = p; }
@@ -68,16 +73,16 @@ let
         let
           title = args.title or null;
           name = args.name or (lib.concatStringsSep "." args.path);
-          path = args.path or [ args.name ];
-          package = args.package or (lib.attrByPath path (throw "Invalid package attribute path `${toString path}' found while evaluating `relatedPackages' of option `${optName}'") pkgs);
-        in "<listitem>"
-        + "<para><literal>${lib.optionalString (title != null) "${title} aka "}pkgs.${name} (${package.meta.name})</literal>"
-        + lib.optionalString (!package.meta.available) " <emphasis>[UNAVAILABLE]</emphasis>"
-        + ": ${package.meta.description or "???"}.</para>"
-        + lib.optionalString (args ? comment) "\n<para>${args.comment}</para>"
-        # Lots of `longDescription's break DocBook, so we just wrap them into <programlisting>
-        + lib.optionalString (package.meta ? longDescription) "\n<programlisting>${package.meta.longDescription}</programlisting>"
-        + "</listitem>";
+        in ''
+          <listitem>
+            <para>
+              <link xlink:href="https://search.nixos.org/packages?show=${name}&amp;sort=relevance&amp;query=${name}">
+                <literal>${lib.optionalString (title != null) "${title} aka "}pkgs.${name}</literal>
+              </link>
+            </para>
+            ${lib.optionalString (args ? comment) "<para>${args.comment}</para>"}
+          </listitem>
+        '';
     in "<itemizedlist>${lib.concatStringsSep "\n" (map (p: describe (unpack p)) packages)}</itemizedlist>";
 
   # Remove invisible and internal options.
