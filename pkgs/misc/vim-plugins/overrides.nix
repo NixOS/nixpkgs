@@ -227,11 +227,6 @@ self: super: {
     '';
   });
 
-  ensime-vim = super.ensime-vim.overrideAttrs (old: {
-    passthru.python3Dependencies = ps: with ps; [ sexpdata websocket-client ];
-    dependencies = with self; [ vimproc-vim vimshell-vim self.self forms ];
-  });
-
   fcitx-vim = super.fcitx-vim.overrideAttrs (old: {
     passthru.python3Dependencies = ps: with ps; [ dbus-python ];
     meta = {
@@ -748,7 +743,7 @@ self: super: {
             libiconv
           ];
 
-          cargoSha256 = "sha256-zYm+7qAvhVGa/afddHhI2aQxmiLOkus5PHZBDP9S/Qg=";
+          cargoSha256 = "sha256-iE0L4pSKPf8lf76DuSTnU7LfNUgy1O06IgxracsLpFA=";
         };
       in
       ''

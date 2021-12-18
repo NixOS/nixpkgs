@@ -1,5 +1,5 @@
-# Update script: pkgs/development/tools/rust/rust-analyzer/update.sh
 { lib
+, fetchFromGitHub
 , vscode-utils
 , jq
 , rust-analyzer
@@ -15,14 +15,26 @@ let
   pname = "rust-analyzer";
   publisher = "matklad";
 
+  # Use the plugin version as in vscode marketplace, updated by update script.
+  inherit (vsix) version;
+
+  releaseTag = "2021-11-29";
+
+  src = fetchFromGitHub {
+    owner = "rust-analyzer";
+    repo = "rust-analyzer";
+    rev = releaseTag;
+    sha256 = "sha256-vh7z8jupVxXPOko3sWUsOB7eji/7lKfwJ/CE3iw97Sw=";
+  };
+
   build-deps = nodePackages."rust-analyzer-build-deps-../../misc/vscode-extensions/rust-analyzer/build-deps";
   # FIXME: Making a new derivation to link `node_modules` and run `npm run package`
   # will cause a build failure.
   vsix = build-deps.override {
-    src = "${rust-analyzer.src}/editors/code";
+    src = "${src}/editors/code";
     outputs = [ "vsix" "out" ];
 
-    releaseTag = rust-analyzer.version;
+    inherit releaseTag;
 
     nativeBuildInputs = [
       jq moreutils esbuild
@@ -46,9 +58,6 @@ let
     '';
   };
 
-  # Use the plugin version as in vscode marketplace, updated by update script.
-  inherit (vsix) version;
-
 in
 vscode-utils.buildVscodeExtension {
   inherit version vsix;
@@ -68,7 +77,7 @@ vscode-utils.buildVscodeExtension {
     description = "An alternative rust language server to the RLS";
     homepage = "https://github.com/rust-analyzer/rust-analyzer";
     license = with licenses; [ mit asl20 ];
-    maintainers = with maintainers; [ oxalica ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.all;
   };
 }

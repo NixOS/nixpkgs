@@ -48,8 +48,6 @@ lib.makeScope newScope (self:
 
     pixie = callPackage ../development/nim-packages/pixie { };
 
-    python = callPackage ../development/nim-packages/python { };
-
     redis = callPackage ../development/nim-packages/redis { };
 
     redpool = callPackage ../development/nim-packages/redpool { };

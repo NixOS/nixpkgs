@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , meson
 , ninja
 , gettext
@@ -40,21 +41,14 @@
 
 stdenv.mkDerivation rec {
   pname = "epiphany";
-  version = "41.0";
+  version = "41.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "s50YJUkllbC3TF1qZoaoV/lBnfpMAvgBPCl7yHDibdA=";
+    sha256 = "Ud5KGB+nxKEs3DDMsWQ2ElwaFt+av44/pTP8gb8Q60w=";
   };
 
-  patches = [
-    # tab-view: Update close button position on startup
-    # https://gitlab.gnome.org/GNOME/epiphany/-/merge_requests/1025
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/epiphany/-/commit/6e9d6d3cf7fa7ddf21a70e9816a5cd4767a79523.patch";
-      sha256 = "sha256-lBVliGCIKwTvsYnWjAcmJxhTg1HS/2x4wlOh+4sx/xQ=";
-    })
-  ] ++ lib.optionals withPantheon [
+  patches = lib.optionals withPantheon [
     # Pantheon specific patches for epiphany
     # https://github.com/elementary/browser
     #

@@ -10,7 +10,7 @@ in
     services.influxdb2 = {
       enable = mkEnableOption "the influxdb2 server";
       package = mkOption {
-        default = pkgs.influxdb2;
+        default = pkgs.influxdb2-server;
         defaultText = literalExpression "pkgs.influxdb2";
         description = "influxdb2 derivation to use.";
         type = types.package;
