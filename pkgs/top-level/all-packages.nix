@@ -29707,6 +29707,8 @@ with pkgs;
 
   ytalk = callPackage ../applications/networking/instant-messengers/ytalk { };
 
+  ytarchive = callPackage ../tools/misc/ytarchive { };
+
   ytcc = callPackage ../tools/networking/ytcc { };
 
   ytmdesktop = callPackage ../applications/audio/ytmdesktop { };
