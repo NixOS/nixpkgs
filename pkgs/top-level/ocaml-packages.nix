@@ -500,6 +500,8 @@ let
 
     gmetadom = callPackage ../development/ocaml-modules/gmetadom { };
 
+    grain_dypgen = callPackage ../development/ocaml-modules/grain_dypgen { };
+
     graphics =
     if lib.versionOlder "4.09" ocaml.version
     then callPackage ../development/ocaml-modules/graphics { }
