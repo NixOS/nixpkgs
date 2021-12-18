@@ -19,7 +19,6 @@ let
       services.unifi = {
         enable = true;
         unifiPackage = unifi;
-        openFirewall = false;
       };
     };
 
