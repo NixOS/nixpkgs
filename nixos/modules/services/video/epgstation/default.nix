@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
   cfg = config.services.epgstation;
+  opt = options.services.epgstation;
 
   username = config.users.users.epgstation.name;
   groupname = config.users.users.epgstation.group;
@@ -72,6 +73,7 @@ in
     socketioPort = mkOption {
       type = types.port;
       default = cfg.port + 1;
+      defaultText = literalExpression "config.${opt.port} + 1";
       description = ''
         Socket.io port for EPGStation to listen on.
       '';
@@ -80,6 +82,7 @@ in
     clientSocketioPort = mkOption {
       type = types.port;
       default = cfg.socketioPort;
+      defaultText = literalExpression "config.${opt.socketioPort}";
       description = ''
         Socket.io port that the web client is going to connect to. This may be
         different from <option>socketioPort</option> if EPGStation is hidden
@@ -183,6 +186,9 @@ in
         in {
           type = types.str;
           default = "http+unix://${replaceStrings ["/"] ["%2F"] sockPath}";
+          defaultText = literalExpression ''
+            "http+unix://''${replaceStrings ["/"] ["%2F"] config.${options.services.mirakurun.unixSocket}}"
+          '';
           example = "http://localhost:40772";
           description = "URL to connect to Mirakurun.";
         });

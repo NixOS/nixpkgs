@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
   top = config.services.kubernetes;
+  otop = options.services.kubernetes;
   cfg = top.kubelet;
 
   cniConfig =
@@ -35,6 +36,7 @@ let
       key = mkOption {
         description = "Key of taint.";
         default = name;
+        defaultText = literalDocBook "Name of this submodule.";
         type = str;
       };
       value = mkOption {
@@ -76,12 +78,14 @@ in
     clusterDomain = mkOption {
       description = "Use alternative domain.";
       default = config.services.kubernetes.addons.dns.clusterDomain;
+      defaultText = literalExpression "config.${options.services.kubernetes.addons.dns.clusterDomain}";
       type = str;
     };
 
     clientCaFile = mkOption {
       description = "Kubernetes apiserver CA file for client authentication.";
       default = top.caFile;
+      defaultText = literalExpression "config.${otop.caFile}";
       type = nullOr path;
     };
 
@@ -148,6 +152,7 @@ in
     featureGates = mkOption {
       description = "List set of feature gates";
       default = top.featureGates;
+      defaultText = literalExpression "config.${otop.featureGates}";
       type = listOf str;
     };
 

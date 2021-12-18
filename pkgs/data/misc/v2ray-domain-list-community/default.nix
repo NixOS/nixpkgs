@@ -1,7 +1,7 @@
-{ stdenv, buildGoModule, fetchFromGitHub, lib }:
+{ stdenv, pkgsBuildBuild, fetchFromGitHub, lib }:
 
 let
-  generator = buildGoModule rec {
+  generator = pkgsBuildBuild.buildGoModule rec {
     pname = "v2ray-domain-list-community";
     version = "20211119143108";
     src = fetchFromGitHub {

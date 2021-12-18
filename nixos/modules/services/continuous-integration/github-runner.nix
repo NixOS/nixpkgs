@@ -10,6 +10,8 @@ let
   stateDir = "%S/${systemdDir}";
   # %L: Log directory root (usually /var/log); see systemd.unit(5)
   logsDir = "%L/${systemdDir}";
+  # Name of file stored in service state directory
+  currentConfigTokenFilename = ".current-token";
 in
 {
   options.services.github-runner = {
@@ -144,13 +146,11 @@ in
         ExecStart = "${cfg.package}/bin/runsvc.sh";
 
         # Does the following, sequentially:
-        # - Copy the current and the previous `tokenFile` to the $RUNTIME_DIRECTORY
-        #   and make it accessible to the service user to allow for a content
-        #   comparison.
-        # - If the module configuration or the token has changed, clear the state directory.
-        # - Configure the runner.
-        # - Copy the configured `tokenFile` to the $STATE_DIRECTORY and make it
-        #   inaccessible to the service user.
+        # - If the module configuration or the token has changed, purge the state directory,
+        #   and create the current and the new token file with the contents of the configured
+        #   token. While both files have the same content, only the later is accessible by
+        #   the service user.
+        # - Configure the runner using the new token file. When finished, delete it.
         # - Set up the directory structure by creating the necessary symlinks.
         ExecStartPre =
           let
@@ -173,37 +173,20 @@ in
             currentConfigPath = "$STATE_DIRECTORY/.nixos-current-config.json";
             runnerRegistrationConfig = getAttrs [ "name" "tokenFile" "url" "runnerGroup" "extraLabels" ] cfg;
             newConfigPath = builtins.toFile "${svcName}-config.json" (builtins.toJSON runnerRegistrationConfig);
-            currentConfigTokenFilename = ".current-token";
             newConfigTokenFilename = ".new-token";
             runnerCredFiles = [
               ".credentials"
               ".credentials_rsaparams"
               ".runner"
             ];
-            ownConfigTokens = writeScript "own-config-tokens" ''
-              # Copy current and new token file to runtime dir and make it accessible to the service user
-              cp ${escapeShellArg cfg.tokenFile} "$RUNTIME_DIRECTORY/${newConfigTokenFilename}"
-              chmod 600 "$RUNTIME_DIRECTORY/${newConfigTokenFilename}"
-              chown "$USER" "$RUNTIME_DIRECTORY/${newConfigTokenFilename}"
-
-              if [[ -e "$STATE_DIRECTORY/${currentConfigTokenFilename}" ]]; then
-                cp "$STATE_DIRECTORY/${currentConfigTokenFilename}" "$RUNTIME_DIRECTORY/${currentConfigTokenFilename}"
-                chmod 600 "$RUNTIME_DIRECTORY/${currentConfigTokenFilename}"
-                chown "$USER" "$RUNTIME_DIRECTORY/${currentConfigTokenFilename}"
-              fi
-            '';
-            disownConfigTokens = writeScript "disown-config-tokens" ''
-              # Make the token inaccessible to the runner service user
-              chmod 600 "$STATE_DIRECTORY/${currentConfigTokenFilename}"
-              chown root:root "$STATE_DIRECTORY/${currentConfigTokenFilename}"
-            '';
             unconfigureRunner = writeScript "unconfigure" ''
               differs=
               # Set `differs = 1` if current and new runner config differ or if `currentConfigPath` does not exist
               ${pkgs.diffutils}/bin/diff -q '${newConfigPath}' "${currentConfigPath}" >/dev/null 2>&1 || differs=1
               # Also trigger a registration if the token content changed
               ${pkgs.diffutils}/bin/diff -q \
-                "$RUNTIME_DIRECTORY"/{${currentConfigTokenFilename},${newConfigTokenFilename}} \
+                "$STATE_DIRECTORY"/${currentConfigTokenFilename} \
+                ${escapeShellArg cfg.tokenFile} \
                 >/dev/null 2>&1 || differs=1
 
               if [[ -n "$differs" ]]; then
@@ -211,13 +194,18 @@ in
                 echo "The old runner will still appear in the GitHub Actions UI." \
                   "You have to remove it manually."
                 find "$STATE_DIRECTORY/" -mindepth 1 -delete
+
+                # Copy the configured token file to the state dir and allow the service user to read the file
+                install --mode=666 ${escapeShellArg cfg.tokenFile} "$STATE_DIRECTORY/${newConfigTokenFilename}"
+                # Also copy current file to allow for a diff on the next start
+                install --mode=600 ${escapeShellArg cfg.tokenFile} "$STATE_DIRECTORY/${currentConfigTokenFilename}"
               fi
             '';
             configureRunner = writeScript "configure" ''
-              empty=$(ls -A "$STATE_DIRECTORY")
-              if [[ -z "$empty" ]]; then
+              if [[ -e "$STATE_DIRECTORY/${newConfigTokenFilename}" ]]; then
                 echo "Configuring GitHub Actions Runner"
-                token=$(< "$RUNTIME_DIRECTORY"/${newConfigTokenFilename})
+
+                token=$(< "$STATE_DIRECTORY"/${newConfigTokenFilename})
                 RUNNER_ROOT="$STATE_DIRECTORY" ${cfg.package}/bin/config.sh \
                   --unattended \
                   --work "$RUNTIME_DIRECTORY" \
@@ -234,8 +222,7 @@ in
                 rm    -rf "$STATE_DIRECTORY/_diag/"
 
                 # Cleanup token from config
-                rm -f "$RUNTIME_DIRECTORY"/${currentConfigTokenFilename}
-                mv    "$RUNTIME_DIRECTORY"/${newConfigTokenFilename} "$STATE_DIRECTORY/${currentConfigTokenFilename}"
+                rm "$STATE_DIRECTORY/${newConfigTokenFilename}"
 
                 # Symlink to new config
                 ln -s '${newConfigPath}' "${currentConfigPath}"
@@ -250,10 +237,8 @@ in
             '';
           in
           map (x: "${x} ${escapeShellArgs [ stateDir runtimeDir logsDir ]}") [
-            "+${ownConfigTokens}" # runs as root
-            unconfigureRunner
+            "+${unconfigureRunner}" # runs as root
             configureRunner
-            "+${disownConfigTokens}" # runs as root
             setupRuntimeDir
           ];
 
@@ -265,6 +250,13 @@ in
         StateDirectory = [ systemdDir ];
         StateDirectoryMode = "0700";
         WorkingDirectory = runtimeDir;
+
+        InaccessiblePaths = [
+          # Token file path given in the configuration
+          cfg.tokenFile
+          # Token file in the state directory
+          "${stateDir}/${currentConfigTokenFilename}"
+        ];
 
         # By default, use a dynamically allocated user
         DynamicUser = true;

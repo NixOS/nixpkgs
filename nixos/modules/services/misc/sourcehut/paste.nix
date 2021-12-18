@@ -1,8 +1,9 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 let
   cfg = config.services.sourcehut;
+  opt = options.services.sourcehut;
   cfgIni = cfg.settings;
   scfg = cfg.paste;
   iniKey = "paste.sr.ht";
@@ -39,6 +40,7 @@ in
     statePath = mkOption {
       type = types.path;
       default = "${cfg.statePath}/pastesrht";
+      defaultText = literalExpression ''"''${config.${opt.statePath}}/pastesrht"'';
       description = ''
         State path for pastesrht.sr.ht.
       '';
