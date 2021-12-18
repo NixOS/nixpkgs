@@ -104,7 +104,7 @@ in rec {
       cp ${coreutils_}/bin/* $out/bin
       (cd $out/bin && rm vdir dir sha*sum pinky factor pathchk runcon shuf who whoami shred users)
 
-      cp ${bash}/bin/bash $out/bin
+      cp ${bashNoninteractive}/bin/bash $out/bin
       cp ${findutils}/bin/find $out/bin
       cp ${findutils}/bin/xargs $out/bin
       cp -d ${diffutils}/bin/* $out/bin

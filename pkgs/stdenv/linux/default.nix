@@ -334,7 +334,7 @@ in
       ${localSystem.libc} = getLibc prevStage;
       binutils = super.binutils.override {
         # Don't use stdenv's shell but our own
-        shell = self.bash + "/bin/bash";
+        shell = self.bashNoninteractive + "/bin/bash";
         # Build expand-response-params with last stage like below
         buildPackages = {
           inherit (prevStage) stdenv;
@@ -353,7 +353,7 @@ in
         libc = getLibc self;
         inherit lib;
         inherit (self) stdenvNoCC coreutils gnugrep;
-        shell = self.bash + "/bin/bash";
+        shell = self.bashNoninteractive + "/bin/bash";
       };
     };
     extraNativeBuildInputs = [ prevStage.patchelf prevStage.xz ] ++
@@ -400,14 +400,14 @@ in
         inherit (prevStage) glibc;
 
         inherit bootstrapTools;
-        shellPackage = prevStage.bash;
+        shellPackage = prevStage.bashNoninteractive;
       };
 
       # Mainly avoid reference to bootstrap tools
       allowedRequisites = with prevStage; with lib;
         # Simple executable tools
         concatMap (p: [ (getBin p) (getLib p) ]) [
-            gzip bzip2 xz bash binutils.bintools coreutils diffutils findutils
+            gzip bzip2 xz bashNoninteractive binutils.bintools coreutils diffutils findutils
             gawk gnumake gnused gnutar gnugrep gnupatch patchelf ed
           ]
         # Library dependencies
@@ -425,7 +425,7 @@ in
 
       overrides = self: super: {
         inherit (prevStage)
-          gzip bzip2 xz bash coreutils diffutils findutils gawk
+          gzip bzip2 xz bashNoninteractive coreutils diffutils findutils gawk
           gnumake gnused gnutar gnugrep gnupatch patchelf
           attr acl zlib pcre libunistring libidn2;
         ${localSystem.libc} = getLibc prevStage;

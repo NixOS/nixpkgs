@@ -11304,20 +11304,23 @@ with pkgs;
 
   any-nix-shell = callPackage ../shells/any-nix-shell { };
 
-  bash_4 = lowPrio (callPackage ../shells/bash/4.4.nix {
+  bashNoninteractive_4 = lowPrio (callPackage ../shells/bash/4.4.nix {
     binutils = stdenv.cc.bintools;
   });
-  bash = lowPrio (callPackage ../shells/bash/5.1.nix {
+  bashNoninteractive = lowPrio (callPackage ../shells/bash/5.1.nix {
     binutils = stdenv.cc.bintools;
   });
   # WARNING: this attribute is used by nix-shell so it shouldn't be removed/renamed
-  bashInteractive = callPackage ../shells/bash/5.1.nix {
+  bashInteractive = bash;
+
+  bash = callPackage ../shells/bash/5.1.nix {
     binutils = stdenv.cc.bintools;
     interactive = true;
     withDocs = true;
   };
 
-  bashInteractive_4 = lowPrio (callPackage ../shells/bash/4.4.nix {
+  bashInteractive_4 = bash_4;
+  bash_4 = lowPrio (callPackage ../shells/bash/4.4.nix {
     binutils = stdenv.cc.bintools;
     interactive = true;
     withDocs = true;

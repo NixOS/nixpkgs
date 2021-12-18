@@ -533,7 +533,7 @@ rec {
       persistent = self: super: with prevStage; {
         inherit
           patchutils m4 scons flex perl bison unifdef unzip openssl python3
-          gettext sharutils libarchive pkg-config groff bash subversion
+          gettext sharutils libarchive pkg-config groff bashNoninteractive subversion
           openssh sqlite sed serf openldap db cyrus-sasl expat apr-util
           findfreetype libssh curl cmake autoconf automake libtool cpio
           libssh2 nghttp2 libkrb5 ninja;
@@ -558,18 +558,18 @@ rec {
       };
     in
     with prevStage; stageFun 3 prevStage {
-      shell = "${pkgs.bash}/bin/bash";
+      shell = "${pkgs.bashNoninteractive}/bin/bash";
 
       # We have a valid shell here (this one has no bootstrap-tools runtime deps) so stageFun
       # enables patchShebangs above. Unfortunately, patchShebangs ignores our $SHELL setting
       # and instead goes by $PATH, which happens to contain bootstrapTools. So it goes and
       # patches our shebangs back to point at bootstrapTools. This makes sure bash comes first.
       extraNativeBuildInputs = with pkgs; [ xz ];
-      extraBuildInputs = [ pkgs.darwin.CF pkgs.bash ];
+      extraBuildInputs = [ pkgs.darwin.CF pkgs.bashNoninteractive ];
       libcxx = pkgs."${finalLlvmPackages}".libcxx;
 
       extraPreHook = ''
-        export PATH=${pkgs.bash}/bin:$PATH
+        export PATH=${pkgs.bashNoninteractive}/bin:$PATH
         export PATH_LOCALE=${pkgs.darwin.locale}/share/locale
       '';
 
@@ -578,7 +578,7 @@ rec {
         (with pkgs; [
           xz.bin
           xz.out
-          bash
+          bashNoninteractive
           zlib
           libxml2.out
           curl.out
@@ -609,7 +609,7 @@ rec {
     let
       persistent = self: super: with prevStage; {
         inherit
-          gnumake gzip gnused bzip2 gawk ed xz patch bash python3
+          gnumake gzip gnused bzip2 gawk ed xz patch bashNoninteractive python3
           ncurses libffi zlib gmp pcre gnugrep cmake
           coreutils findutils diffutils patchutils ninja libxml2;
 
@@ -648,9 +648,9 @@ rec {
       };
     in
     with prevStage; stageFun 4 prevStage {
-      shell = "${pkgs.bash}/bin/bash";
+      shell = "${pkgs.bashNoninteractive}/bin/bash";
       extraNativeBuildInputs = with pkgs; [ xz ];
-      extraBuildInputs = [ pkgs.darwin.CF pkgs.bash ];
+      extraBuildInputs = [ pkgs.darwin.CF pkgs.bashNoninteractive ];
       libcxx = pkgs."${finalLlvmPackages}".libcxx;
 
       extraPreHook = ''
@@ -665,7 +665,7 @@ rec {
       pkgs = prevStage;
       persistent = self: super: with prevStage; {
         inherit
-          gnumake gzip gnused bzip2 gawk ed xz patch bash
+          gnumake gzip gnused bzip2 gawk ed xz patch bashNoninteractive
           ncurses libffi zlib gmp pcre gnugrep
           coreutils findutils diffutils patchutils pbzx;
 
@@ -712,7 +712,7 @@ rec {
       __extraImpureHostDeps = commonImpureHostDeps;
 
       initialPath = import ../common-path.nix { inherit pkgs; };
-      shell = "${pkgs.bash}/bin/bash";
+      shell = "${pkgs.bashNoninteractive}/bin/bash";
 
       cc = pkgs."${finalLlvmPackages}".libcxxClang;
 
@@ -724,7 +724,7 @@ rec {
 
       extraAttrs = {
         libc = pkgs.darwin.Libsystem;
-        shellPackage = pkgs.bash;
+        shellPackage = pkgs.bashNoninteractive;
         inherit bootstrapTools;
       };
 
@@ -748,7 +748,7 @@ rec {
         ncurses.dev
         ncurses.man
         gnused
-        bash
+        bashNoninteractive
         gawk
         gnugrep
         patch

@@ -198,6 +198,7 @@ in {
     inherit passthruFun;
     pythonAttr = "python3Minimal";
     # strip down that python version as much as possible
+    bash = bashNoninteractive;
     openssl = null;
     readline = null;
     ncurses = null;

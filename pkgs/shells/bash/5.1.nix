@@ -24,7 +24,7 @@ let
   });
 in
 stdenv.mkDerivation rec {
-  name = "bash-${optionalString interactive "interactive-"}${version}-p${toString (builtins.length upstreamPatches)}";
+  name = "bash-${optionalString (!interactive) "noninteractive-"}${version}-p${toString (builtins.length upstreamPatches)}";
   version = "5.1";
 
   src = fetchurl {
