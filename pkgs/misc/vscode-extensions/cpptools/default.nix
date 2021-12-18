@@ -1,7 +1,9 @@
 { lib, vscode-utils
-, fetchurl, mono, writeScript, runtimeShell
+, fetchurl, writeScript, runtimeShell
 , jq, clang-tools
 , gdbUseFixed ? true, gdb # The gdb default setting will be fixed to specified. Use version from `PATH` otherwise.
+# dependencies for native binaries
+, autoPatchelfHook, makeWrapper, stdenv, lttng-ust, libkrb5, zlib
 }:
 
 /*
@@ -29,20 +31,7 @@
 
 let
   gdbDefaultsTo = if gdbUseFixed then "${gdb}/bin/gdb" else "gdb";
-
-
-  openDebugAD7Script = writeScript "OpenDebugAD7" ''
-    #!${runtimeShell}
-    BIN_DIR="$(cd "$(dirname "$0")" && pwd -P)"
-    ${if gdbUseFixed
-        then ''
-          export PATH=''${PATH}''${PATH:+:}${gdb}/bin
-        ''
-        else ""}
-    ${mono}/bin/mono $BIN_DIR/bin/OpenDebugAD7.exe $*
-  '';
 in
-
 vscode-utils.buildVscodeMarketplaceExtension rec {
   mktplcRef = {
     name = "cpptools";
@@ -56,8 +45,17 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
     sha256 = "sha256-LqndG/vv8LgVPEX6dGkikDB6M6ISneo2UJ78izXVFbk=";
   };
 
+  nativeBuildInputs = [
+    autoPatchelfHook
+    makeWrapper
+  ];
+
   buildInputs = [
     jq
+    lttng-ust
+    libkrb5
+    zlib
+    stdenv.cc.cc.lib
   ];
 
   postPatch = ''
@@ -73,20 +71,19 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
     # Prevent download/install of extensions
     touch "./install.lock"
 
-    # Mono runtimes from nix package (used by generated `OpenDebugAD7`).
-    mv ./debugAdapters/bin/OpenDebugAD7 ./debugAdapters/bin/OpenDebugAD7_orig
-    cp -p "${openDebugAD7Script}" "./debugAdapters/bin/OpenDebugAD7"
-
     # Clang-format from nix package.
     mv  ./LLVM/ ./LLVM_orig
     mkdir "./LLVM/"
     find "${clang-tools}" -mindepth 1 -maxdepth 1 | xargs ln -s -t "./LLVM"
 
-    # Patching  cpptools and cpptools-srv
-    elfInterpreter="$(cat $NIX_CC/nix-support/dynamic-linker)"
-    patchelf --set-interpreter "$elfInterpreter" ./bin/cpptools
-    patchelf --set-interpreter "$elfInterpreter" ./bin/cpptools-srv
+    # Patching binaries
     chmod a+x ./bin/cpptools{-srv,}
+    chmod a+x ./debugAdapters/bin/OpenDebugAD7
+    patchelf --replace-needed liblttng-ust.so.0 liblttng-ust.so.1 ./debugAdapters/bin/libcoreclrtraceptprovider.so
+  '';
+
+  postFixup = lib.optionalString gdbUseFixed ''
+    wrapProgram $out/share/vscode/extensions/ms-vscode.cpptools/debugAdapters/bin/OpenDebugAD7 --prefix PATH : ${lib.makeBinPath [ gdb ]}
   '';
 
     meta = with lib; {
