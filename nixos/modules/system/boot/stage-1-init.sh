@@ -54,9 +54,9 @@ EOF
 
     read -r -n 1 reply
 
-    if [ -n "$allowShell" -a "$reply" = f ]; then
+    if [[ -n "$allowShell" && "$reply" = "f" ]]; then
         exec setsid @shell@ -c "exec @shell@ < /dev/$console >/dev/$console 2>/dev/$console"
-    elif [ -n "$allowShell" -a "$reply" = i ]; then
+    elif [[ -n "$allowShell" && "$reply" = "i" ]]; then
         echo "Starting interactive shell..."
         setsid @shell@ -c "exec @shell@ < /dev/$console >/dev/$console 2>/dev/$console" || fail
     elif [ "$reply" = r ]; then
@@ -291,10 +291,10 @@ checkFS() {
     if [ ! -b "$device" ]; then return 0; fi
 
     # Don't check ROM filesystems.
-    if [ "$fsType" = iso9660 -o "$fsType" = udf ]; then return 0; fi
+    if [[ "$fsType" = "iso9660" || "$fsType" = "udf" ]]; then return 0; fi
 
     # Don't check resilient COWs as they validate the fs structures at mount time
-    if [ "$fsType" = btrfs -o "$fsType" = zfs -o "$fsType" = bcachefs ]; then return 0; fi
+    if [[ "$fsType" = "btrfs" || "$fsType" = "zfs" || "$fsType" = "bcachefs" ]]; then return 0; fi
 
     # Skip fsck for nilfs2 - not needed by design and no fsck tool for this filesystem.
     if [ "$fsType" = nilfs2 ]; then return 0; fi
@@ -386,7 +386,7 @@ mountFS() {
     # Optionally resize the filesystem.
     case $options in
         *x-nixos.autoresize*)
-            if [ "$fsType" = ext2 -o "$fsType" = ext3 -o "$fsType" = ext4 ]; then
+            if [[ "$fsType" = ext2 || "$fsType" = ext3 || "$fsType" = ext4 ]]; then
                 modprobe "$fsType"
                 echo "resizing $device..."
                 e2fsck -fp "$device"
@@ -416,7 +416,7 @@ mountFS() {
     local n=0
     while true; do
         mount "/mnt-root$mountPoint" && break
-        if [ \( "$fsType" != cifs -a "$fsType" != zfs \) -o "$n" -ge 10 ]; then fail; break; fi
+        if [[ "$fsType" != "cifs" && "$fsType" != "zfs" || "$n" -ge 10 ]]; then fail; break; fi
         echo "retrying..."
         sleep 1
         n=$((n + 1))
@@ -600,7 +600,7 @@ if [ -e /mnt-root/iso ]; then
 else
     eval "$(udevadm info --export --export-prefix=ROOT_ --device-id-of-file=$targetRoot)"
 fi
-if [ "$ROOT_MAJOR" -a "$ROOT_MINOR" -a "$ROOT_MAJOR" != 0 ]; then
+if [[ "$ROOT_MAJOR" && "$ROOT_MINOR" && "$ROOT_MAJOR" != 0 ]]; then
     mkdir -p /run/udev/rules.d
     # shellcheck disable=SC2086
     echo 'ACTION=="add|change", SUBSYSTEM=="block", ENV{MAJOR}=="'$ROOT_MAJOR'", ENV{MINOR}=="'$ROOT_MINOR'", SYMLINK+="root"' > /run/udev/rules.d/61-dev-root-link.rules
