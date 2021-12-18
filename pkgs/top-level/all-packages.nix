@@ -21433,7 +21433,7 @@ with pkgs;
     postgresql_13
     postgresql_14
   ;
-  postgresql = postgresql_13.override { this = postgresql; };
+  postgresql = postgresql_13;
   postgresqlPackages = recurseIntoAttrs postgresql.pkgs;
   postgresql11Packages = recurseIntoAttrs postgresql_11.pkgs;
   postgresql12Packages = recurseIntoAttrs postgresql_12.pkgs;

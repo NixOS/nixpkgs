@@ -221,7 +221,7 @@ in
       extraPlugins = mkOption {
         type = types.listOf types.path;
         default = [];
-        example = literalExpression "with pkgs.postgresql_11.pkgs; [ postgis pg_repack ]";
+        example = literalExpression "with config.services.postgresql.package.pkgs; [ postgis pg_repack ]";
         description = ''
           List of PostgreSQL plugins. PostgreSQL version for each plugin should
           match version for <literal>services.postgresql.package</literal> value.
