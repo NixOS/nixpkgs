@@ -377,10 +377,11 @@ mountFS() {
         if [ -z "$fsType" ]; then fsType=auto; fi
     fi
 
+    local optionsFiltered optionsPrefixed
     # Filter out x- options, which busybox doesn't do yet. https://www.mail-archive.com/busybox@busybox.net/msg27642.html
-    local optionsFiltered="$(IFS=,; for i in $options; do if [ "${i:0:2}" != "x-" ]; then echo -n "$i,"; fi; done)"
+    optionsFiltered="$(IFS=,; for i in $options; do if [ "${i:0:2}" != "x-" ]; then echo -n "$i,"; fi; done)"
     # Prefix (lower|upper|work)dir with /mnt-root (overlayfs)
-    local optionsPrefixed="$( echo "$optionsFiltered" | sed -E 's#\<(lowerdir|upperdir|workdir)=#\1=/mnt-root#g' )"
+    optionsPrefixed="$( echo "$optionsFiltered" | sed -E 's#\<(lowerdir|upperdir|workdir)=#\1=/mnt-root#g' )"
 
     echo "$device /mnt-root$mountPoint $fsType $optionsPrefixed" >> /etc/fstab
 
