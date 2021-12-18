@@ -30,6 +30,10 @@ self: super: ({
 
   double-conversion = addExtraLibrary pkgs.libcxx super.double-conversion;
 
+  hercules-ci-cnix-store = super.hercules-ci-cnix-store.overrideAttrs (drv: {
+    NIX_CFLAGS_COMPILE = "-D_LIBCPP_DISABLE_AVAILABILITY";
+  });
+
   apecs-physics = addPkgconfigDepends [
     darwin.apple_sdk.frameworks.ApplicationServices
   ] super.apecs-physics;
