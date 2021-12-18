@@ -69,6 +69,7 @@ cl-ppcre-template
 cl-ppcre-unicode
 cl-prevalence
 cl-protobufs
+cl-qrencode
 cl-qprint
 cl-reexport
 cl-shellwords

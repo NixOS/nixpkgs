@@ -24,8 +24,8 @@ let lispPackages = rec {
       quicklispdist = pkgs.fetchurl {
         # Will usually be replaced with a fresh version anyway, but needs to be
         # a valid distinfo.txt
-        url = "http://beta.quicklisp.org/dist/quicklisp/2021-10-21/distinfo.txt";
-        sha256 = "sha256:0ihi3p6fvagzfzkkyzs6b3jrz5yidj4f5dcgnh73qas19mk345ai";
+        url = "http://beta.quicklisp.org/dist/quicklisp/2021-12-09/distinfo.txt";
+        sha256 = "sha256:0gc4cv73nl7xkfwvmkmfhfx6yqf876nfm2v24v6fky9n24sh4y6w";
       };
       buildPhase = "true; ";
       postInstall = ''
@@ -233,7 +233,7 @@ let lispPackages = rec {
     description = "Multi-dimensional arrays with FFI/CUDA support";
     deps = with pkgs.lispPackages; [
       alexandria bordeaux-threads cffi cffi-grovel cl-cuda flexi-streams ieee-floats
-      lla mgl-pax static-vectors trivial-garbage
+      lla mgl-pax static-vectors trivial-garbage cl-fad
     ];
     src = pkgs.fetchFromGitHub {
       owner = "melisgl";
