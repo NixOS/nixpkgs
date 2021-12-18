@@ -19,6 +19,7 @@ ln -s @extraUtils@/bin /bin
 
 # Copy the secrets to their needed location
 if [ -d "@extraUtils@/secrets" ]; then
+    # shellcheck disable=SC2043
     for secret in $(cd "@extraUtils@/secrets"; find . -type f); do
         mkdir -p "$(dirname "/$secret")"
         ln -s "@extraUtils@/secrets/$secret" "$secret"
@@ -239,6 +240,7 @@ mkdir -p /lib
 ln -s @modulesClosure@/lib/modules /lib/modules
 ln -s @modulesClosure@/lib/firmware /lib/firmware
 echo @extraUtils@/bin/modprobe > /proc/sys/kernel/modprobe
+# shellcheck disable=SC2043
 for i in @kernelModules@; do
     info "loading module $(basename $i)..."
     modprobe $i
@@ -472,6 +474,7 @@ lustrateRoot () {
 
 
 if test -e /sys/power/resume -a -e /sys/power/disk; then
+    # shellcheck disable=SC2043
     if test -n "@resumeDevice@" && waitDevice "@resumeDevice@"; then
         resumeDev="@resumeDevice@"
         resumeInfo="$(udevadm info -q property "$resumeDev" )"
