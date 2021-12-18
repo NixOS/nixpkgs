@@ -67,11 +67,15 @@ let
               (t == "directory" -> baseNameOf n != "tests")
               && (t == "file" -> hasSuffix ".nix" n)
             );
+        pull = dir:
+          if isStorePath pkgs.path
+          then "${builtins.storePath pkgs.path}/${dir}"
+          else filter "${toString pkgs.path}/${dir}";
       in
         pkgs.runCommand "lazy-options.json" {
-          libPath = filter "${toString pkgs.path}/lib";
-          pkgsLibPath = filter "${toString pkgs.path}/pkgs/pkgs-lib";
-          nixosPath = filter "${toString pkgs.path}/nixos";
+          libPath = pull "lib";
+          pkgsLibPath = pull "pkgs/pkgs-lib";
+          nixosPath = pull "nixos";
           modules = map (p: ''"${removePrefix "${modulesPath}/" (toString p)}"'') docModules.lazy;
         } ''
           export NIX_STORE_DIR=$TMPDIR/store
