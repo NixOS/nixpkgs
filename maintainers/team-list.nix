@@ -29,6 +29,20 @@ with lib.maintainers; {
     scope = "Maintain ACME-related packages and modules.";
   };
 
+  bazel = {
+    members = [
+      mboes
+      marsam
+      uri-canva
+      cbley
+      olebedev
+      groodt
+      aherrmann
+      ylecornec
+    ];
+    scope = "Bazel build tool & related tools https://bazel.build/";
+  };
+
   beam = {
     members = [
       ankhers
@@ -231,6 +245,15 @@ with lib.maintainers; {
       zowoq
     ];
     scope = "Maintain Podman and CRI-O related packages and modules.";
+  };
+
+  redcodelabs = {
+    members = [
+      unrooted
+      wr0belj
+      wintrmvte
+    ];
+    scope = "Maintain Red Code Labs related packages and modules.";
   };
 
   sage = {

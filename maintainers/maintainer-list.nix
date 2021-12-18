@@ -12130,6 +12130,12 @@
     githubId = 122319;
     name = "Renato Alves";
   };
+  unrooted = {
+    name = "Konrad Klawikowski";
+    email = "konrad.root.klawikowski@gmail.com";
+    github = "unrooted";
+    githubId = 30440603;
+  };
   uralbash = {
     email = "root@uralbash.ru";
     github = "uralbash";
@@ -12579,6 +12585,12 @@
     githubId = 78392041;
     name = "Winter";
   };
+  wintrmvte = {
+    name = "Jakub Lutczyn";
+    email = "kubalutczyn@gmail.com";
+    github = "wintrmvte";
+    githubId = 41823252;
+  };
   wirew0rm = {
     email = "alex@wirew0rm.de";
     github = "wirew0rm";
@@ -12656,6 +12668,12 @@
     github = "worldofpeace";
     githubId = 28888242;
     name = "WORLDofPEACE";
+  };
+  wr0belj = {
+    name = "Jakub Wróbel";
+    email = "wrobel.jakub@protonmail.com";
+    github = "wr0belj";
+    githubId = 40501814;
   };
   wscott = {
     email = "wsc9tt@gmail.com";

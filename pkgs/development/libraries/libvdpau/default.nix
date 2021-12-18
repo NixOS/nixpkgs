@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-lX11";
 
   meta = with lib; {
-    homepage = "https://people.freedesktop.org/~aplattner/vdpau/";
+    homepage = "https://www.freedesktop.org/wiki/Software/VDPAU/";
     description = "Library to use the Video Decode and Presentation API for Unix (VDPAU)";
     license = licenses.mit; # expat version
     platforms = platforms.unix;

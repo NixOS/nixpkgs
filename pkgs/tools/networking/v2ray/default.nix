@@ -1,5 +1,5 @@
-{ lib, fetchFromGitHub, fetchurl, linkFarm, buildGoModule, runCommand, makeWrapper, nixosTests
-, assetOverrides ? {}
+{ lib, fetchFromGitHub, fetchurl, symlinkJoin, buildGoModule, runCommand, makeWrapper, nixosTests
+, v2ray-geoip, v2ray-domain-list-community, assets ? [ v2ray-geoip v2ray-domain-list-community ]
 }:
 
 let
@@ -14,30 +14,10 @@ let
 
   vendorSha256 = "sha256-7zSIAKcMwtaTvokKuLJ8orqJc2jGuaw5FglEJadeZ9I=";
 
-  assets = {
-    # MIT licensed
-    "geoip.dat" = let
-      geoipRev = "202109300030";
-      geoipSha256 = "1d2z3ljs0v9rd10cfj8cpiijz3ikkplsymr44f7y90g4dmniwqh0";
-    in fetchurl {
-      url = "https://github.com/v2fly/geoip/releases/download/${geoipRev}/geoip.dat";
-      sha256 = geoipSha256;
-    };
-
-    # MIT licensed
-    "geosite.dat" = let
-      geositeRev = "20211001023210";
-      geositeSha256 = "02d55i1pdndwvmi4v42hnncjng517s0k06gr3yn5krnj2qfjli2w";
-    in fetchurl {
-      url = "https://github.com/v2fly/domain-list-community/releases/download/${geositeRev}/dlc.dat";
-      sha256 = geositeSha256;
-    };
-
-  } // assetOverrides;
-
-  assetsDrv = linkFarm "v2ray-assets" (lib.mapAttrsToList (name: path: {
-    inherit name path;
-  }) assets);
+  assetsDrv = symlinkJoin {
+    name = "v2ray-assets";
+    paths = assets;
+  };
 
   core = buildGoModule rec {
     pname = "v2ray-core";
@@ -84,6 +64,6 @@ in runCommand "v2ray-${version}" {
 } ''
   for file in ${core}/bin/*; do
     makeWrapper "$file" "$out/bin/$(basename "$file")" \
-      --set-default V2RAY_LOCATION_ASSET ${assetsDrv}
+      --set-default V2RAY_LOCATION_ASSET ${assetsDrv}/share/v2ray
   done
 ''
