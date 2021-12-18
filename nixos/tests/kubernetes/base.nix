@@ -60,13 +60,6 @@ let
                   advertiseAddress = master.ip;
                 };
                 masterAddress = "${masterName}.${config.networking.domain}";
-                # workaround for:
-                #   https://github.com/kubernetes/kubernetes/issues/102676
-                #   (workaround from) https://github.com/kubernetes/kubernetes/issues/95488
-                kubelet.extraOpts = ''\
-                  --cgroups-per-qos=false \
-                  --enforce-node-allocatable="" \
-                '';
               };
             }
             (optionalAttrs (any (role: role == "master") machine.roles) {
