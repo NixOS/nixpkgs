@@ -375,6 +375,16 @@ let
         wg = nsWrap "wg" src dst;
         ns = if dst == "init" then "1" else dst;
 
+        wg_setup = ''
+          ${concatMapStringsSep "\n" (ip:
+            ''${ipPostMove} address add "${ip}" dev "${name}"''
+          ) values.ips}
+          ${concatStringsSep " " (
+            [ ''${wg} set "${name}" private-key "${privKey}"'' ]
+            ++ optional (values.listenPort != null) ''listen-port "${toString values.listenPort}"''
+          )}
+        '';
+
     in
     nameValuePair "wireguard-${name}"
       {
@@ -382,6 +392,7 @@ let
         requires = [ "network-online.target" ];
         after = [ "network.target" "network-online.target" ];
         wantedBy = [ "multi-user.target" ];
+        reloadIfChanged = true;
         environment.DEVICE = name;
         path = with pkgs; [ kmod iproute2 wireguard-tools ];
 
@@ -398,18 +409,24 @@ let
           ${ipPreMove} link add dev "${name}" type wireguard
           ${optionalString (values.interfaceNamespace != null && values.interfaceNamespace != values.socketNamespace) ''${ipPreMove} link set "${name}" netns "${ns}"''}
 
-          ${concatMapStringsSep "\n" (ip:
-            ''${ipPostMove} address add "${ip}" dev "${name}"''
-          ) values.ips}
-
-          ${concatStringsSep " " (
-            [ ''${wg} set "${name}" private-key "${privKey}"'' ]
-            ++ optional (values.listenPort != null) ''listen-port "${toString values.listenPort}"''
-          )}
+          ${wg_setup}
 
           ${ipPostMove} link set up dev "${name}"
 
           ${values.postSetup}
+        '';
+
+        # Accroding to the man page, seting the `listen-port` to `0` will be chosen randomly (that's the default behavior).
+        # The `fwmask` never used in this module, so we could ignore it.
+        # And the `private-key` will be set at the `wg_setup`.
+        # The rest arguments are for setting the peers. They are managed by the peer units.
+        # Because the peer units won't delete the interface, we needn't write reload script. Restart has the effect of reloading.
+        reload = ''
+          ${wg} set ${name} listen-port 0
+          ${concatMapStringsSep "\n" (ip:
+            ''${ipPostMove} address del "${ip}" dev "${name}"''
+          ) values.ips}
+          ${wg_setup}
         '';
 
         postStop = ''
@@ -444,7 +461,11 @@ in
       };
 
       interfaces = mkOption {
-        description = "WireGuard interfaces.";
+        description = ''
+          WireGuard interfaces.
+          If you had some security update, you can restart (<code>systemctl restart wireguard-$NAME</code>)
+          the service to ensure the patches are applied.
+        '';
         default = {};
         example = {
           wg0 = {
