@@ -1,0 +1,16 @@
+diff --git a/meson.build b/meson.build
+index 4aeab2b..dc44e6c 100644
+--- a/meson.build
++++ b/meson.build
+@@ -25,8 +25,10 @@ dependencies = {
+     'wingpanel': wingpanel
+ }
+ 
++libdir = join_paths(get_option('prefix'), get_option('libdir'))
++
+ indicator_name = 'ayatana'
+-indicator_dir  = dependencies['wingpanel'].get_pkgconfig_variable('indicatorsdir')
++indicator_dir  = dependencies['wingpanel'].get_pkgconfig_variable('indicatorsdir', define_variable: ['libdir', libdir])
+ 
+ # ----------------------------------------------------------------------------------------------------------------------
+ # Bindings:
