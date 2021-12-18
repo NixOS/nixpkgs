@@ -1,4 +1,6 @@
 { lib
+, callPackage
+, nixosTests
 , stdenv
 , fetchurl
 , autoPatchelfHook
@@ -81,6 +83,11 @@ let
     '';
   };
 
+  passthru.tests = {
+    test-cli = callPackage ./test-cli.nix {};
+    test-gui = nixosTests.tsm-client-gui;
+  };
+
   mkSrcUrl = version:
     let
       major = lib.versions.major version;
@@ -96,7 +103,7 @@ let
       url = mkSrcUrl version;
       sha256 = "0fy9c224g6rkrgd6ls01vs30bk9j9mlhf2x6akd11r7h8bib19zn";
     };
-    inherit meta;
+    inherit meta passthru;
 
     nativeBuildInputs = [
       autoPatchelfHook
@@ -152,7 +159,7 @@ buildEnv {
   meta = meta // lib.attrsets.optionalAttrs enableGui {
     mainProgram = "dsmj";
   };
-  passthru = { inherit unwrapped; };
+  passthru = passthru // { inherit unwrapped; };
   paths = [ unwrapped ];
   nativeBuildInputs = [ makeWrapper ];
   pathsToLink = [
