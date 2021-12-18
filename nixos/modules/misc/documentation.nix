@@ -15,7 +15,7 @@ let
       f = import m;
       instance = f (mapAttrs (n: _: abort "evaluating ${n} for `meta` failed") (functionArgs f));
     in
-      cfg.nixos.splitOptionDocBuild
+      cfg.nixos.options.splitBuild
         && builtins.isPath m
         && isFunction f
         && instance ? options
@@ -101,6 +101,7 @@ let
               exit 1
             } >&2
         '';
+    inherit (cfg.nixos.options) warningsAreErrors;
   };
 
 
@@ -256,13 +257,22 @@ in
         '';
       };
 
-      nixos.splitOptionDocBuild = mkOption {
+      nixos.options.splitBuild = mkOption {
         type = types.bool;
         default = true;
         description = ''
           Whether to split the option docs build into a cacheable and an uncacheable part.
           Splitting the build can substantially decrease the amount of time needed to build
           the manual, but some user modules may be incompatible with this splitting.
+        '';
+      };
+
+      nixos.options.warningsAreErrors = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Treat warning emitted during the option documentation build (eg for missing option
+          descriptions) as errors.
         '';
       };
 

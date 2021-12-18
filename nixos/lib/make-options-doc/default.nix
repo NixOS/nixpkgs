@@ -25,6 +25,9 @@
 # used to split the options doc build into a static part (nixos/modules) and a dynamic part
 # (non-nixos modules imported via configuration.nix, other module sources).
 , baseOptionsJSON ? null
+# instead of printing warnings for eg options with missing descriptions (which may be lost
+# by nix build unless -L is given), emit errors instead and fail the build
+, warningsAreErrors ? true
 }:
 
 let
@@ -121,6 +124,7 @@ in rec {
           then "cp $options $dst/options.json"
           else ''
             ${pkgs.python3Minimal}/bin/python ${./mergeJSON.py} \
+              ${lib.optionalString warningsAreErrors "--warnings-are-errors"} \
               ${baseOptionsJSON} $options \
               > $dst/options.json
           ''

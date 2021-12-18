@@ -1,4 +1,13 @@
-{ pkgs, options, config, version, revision, extraSources ? [], baseOptionsJSON ? null, prefix ? ../../.. }:
+{ pkgs
+, options
+, config
+, version
+, revision
+, extraSources ? []
+, baseOptionsJSON ? null
+, warningsAreErrors ? true
+, prefix ? ../../..
+}:
 
 with pkgs;
 
@@ -15,7 +24,7 @@ let
   stripAnyPrefixes = lib.flip (lib.foldr lib.removePrefix) prefixesToStrip;
 
   optionsDoc = buildPackages.nixosOptionsDoc {
-    inherit options revision baseOptionsJSON;
+    inherit options revision baseOptionsJSON warningsAreErrors;
     transformOptions = opt: opt // {
       # Clean up declaration sites to not refer to the NixOS source tree.
       declarations = map stripAnyPrefixes opt.declarations;

@@ -41,8 +41,10 @@ def unpivot(options: Dict[Key, Option]) -> Dict[str, JSON]:
         result[opt.name] = opt.value
     return result
 
-options = pivot(json.load(open(sys.argv[1], 'r')))
-overrides = pivot(json.load(open(sys.argv[2], 'r')))
+warningsAreErrors = sys.argv[1] == "--warnings-are-errors"
+optOffset = 1 if warningsAreErrors else 0
+options = pivot(json.load(open(sys.argv[1 + optOffset], 'r')))
+overrides = pivot(json.load(open(sys.argv[2 + optOffset], 'r')))
 
 # fix up declaration paths in lazy options, since we don't eval them from a full nixpkgs dir
 for (k, v) in options.items():
@@ -65,10 +67,20 @@ for (k, v) in overrides.items():
             cur[ok] = ov
 
 # check that every option has a description
-# TODO: nixos-rebuild with flakes may hide the warning, maybe turn on -L by default for those?
+hasWarnings = False
 for (k, v) in options.items():
     if v.value.get('description', None) is None:
-        print(f"\x1b[1;31mwarning: option {v.name} has no description\x1b[0m", file=sys.stderr)
+        severity = "error" if warningsAreErrors else "warning"
+        hasWarnings = True
+        print(f"\x1b[1;31m{severity}: option {v.name} has no description\x1b[0m", file=sys.stderr)
         v.value['description'] = "This option has no description."
+if hasWarnings and warningsAreErrors:
+    print(
+        "\x1b[1;31m" +
+        "Treating warnings as errors. Set documentation.nixos.options.warningsAreErrors " +
+        "to false to ignore these warnings." +
+        "\x1b[0m",
+        file=sys.stderr)
+    sys.exit(1)
 
 json.dump(unpivot(options), fp=sys.stdout)
