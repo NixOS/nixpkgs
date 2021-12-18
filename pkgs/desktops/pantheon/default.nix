@@ -47,8 +47,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   elementary-gsettings-schemas = callPackage ./desktop/elementary-gsettings-schemas { };
 
-  notes-up = pkgs.notes-up.override { withPantheon = true; };
-
   touchegg = pkgs.touchegg.override { withPantheon = true; };
 
   #### APPS
@@ -245,5 +243,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   elementary-screenshot-tool = elementary-screenshot; # added 2021-07-21
 
   extra-elementary-contracts = throw "extra-elementary-contracts has been removed as all contracts have been upstreamed."; # added 2021-12-01
+
+  inherit (pkgs) notes-up; # added 2021-12-18
 
 })
