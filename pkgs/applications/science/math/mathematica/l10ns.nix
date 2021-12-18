@@ -15,6 +15,48 @@ let allVersions = with lib; flip map
       installer = "Mathematica_13.0.0_BNDL_LINUX.sh";
     }
     {
+      version = "12.3.1";
+      lang = "en";
+      language = "English";
+      sha256 = "51b9cab12fd91b009ea7ad4968a2c8a59e94dc55d2e6cc1d712acd5ba2c4d509";
+      installer = "Mathematica_12.3.1_LINUX.sh";
+    }
+    {
+      version = "12.3.0";
+      lang = "en";
+      language = "English";
+      sha256 = "045df045f6e796ded59f64eb2e0f1949ac88dcba1d5b6e05fb53ea0a4aed7215";
+      installer = "Mathematica_12.3.0_LINUX.sh";
+    }
+    {
+      version = "12.2.0";
+      lang = "en";
+      language = "English";
+      sha256 = "3b6676a203c6adb7e9c418a5484b037974287b5be09c64e7dfea74ddc0e400d7";
+      installer = "Mathematica_12.2.0_LINUX.sh";
+    }
+    {
+      version = "12.1.1";
+      lang = "en";
+      language = "English";
+      sha256 = "02mk8gmv8idnakva1nc7r7mx8ld02lk7jgsj1zbn962aps3bhixd";
+      installer = "Mathematica_12.1.1_LINUX.sh";
+    }
+    {
+      version = "12.1.0";
+      lang = "en";
+      language = "English";
+      sha256 = "15m9l20jvkxh5w6mbp81ys7mx2lx5j8acw5gz0il89lklclgb8z7";
+      installer = "Mathematica_12.1.0_LINUX.sh";
+    }
+    {
+      version = "12.0.0";
+      lang = "en";
+      language = "English";
+      sha256 = "b9fb71e1afcc1d72c200196ffa434512d208fa2920e207878433f504e58ae9d7";
+      installer = "Mathematica_12.0.0_LINUX.sh";
+    }
+    {
       version = "11.3.0";
       lang = "en";
       language = "English";
