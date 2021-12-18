@@ -9184,12 +9184,6 @@
     githubId = 301903;
     name = "Chip Collier";
   };
-  phreedom = {
-    email = "phreedom@yandex.ru";
-    github = "phreedom";
-    githubId = 62577;
-    name = "Evgeny Egorochkin";
-  };
   phryneas = {
     email = "mail@lenzw.de";
     github = "phryneas";

@@ -113,7 +113,7 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
 
     maintainers = with maintainers;
-      [ phreedom thoughtpolice joachifm prusnak ];
+      [ thoughtpolice joachifm prusnak ];
     platforms = platforms.unix;
   };
 }

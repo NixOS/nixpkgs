@@ -27,7 +27,7 @@ let
     homepage = "https://apparmor.net/";
     description = "A mandatory access control system - ${component}";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ joachifm julm phreedom thoughtpolice ];
+    maintainers = with maintainers; [ joachifm julm thoughtpolice ];
     platforms = platforms.linux;
   };
 

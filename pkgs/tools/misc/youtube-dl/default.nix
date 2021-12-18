@@ -77,6 +77,6 @@ buildPythonPackage rec {
     '';
     license = licenses.publicDomain;
     platforms = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [ bluescreen303 phreedom AndersonTorres fpletz ma27 ];
+    maintainers = with maintainers; [ bluescreen303 AndersonTorres fpletz ma27 ];
   };
 }
