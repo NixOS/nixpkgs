@@ -19,7 +19,7 @@
 , shamir-mnemonic
 , typing-extensions
 , trezor-udev-rules
-, pytest
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -54,16 +54,7 @@ buildPythonPackage rec {
     trezor-udev-rules
   ];
 
-  checkInputs = [
-    pytest
-  ];
-
-  # disable test_tx_api.py as it requires being online
-  checkPhase = ''
-    runHook preCheck
-    pytest --pyargs tests --ignore tests/test_tx_api.py
-    runHook postCheck
-  '';
+  checkInputs = [ pytestCheckHook ];
 
   postFixup = ''
     mkdir completions

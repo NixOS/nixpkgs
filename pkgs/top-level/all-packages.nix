@@ -698,11 +698,21 @@ with pkgs;
           --replace " @CC@ " " ${cc}/bin/cc ${san} "
       '';
     in
-      makeSetupHook { deps = [ dieHook ]; } script;
+      makeSetupHook {
+        deps = [ dieHook cc ];
+        substitutions.passthru.tests = callPackage ../test/make-binary-wrapper {
+          makeBinaryWrapper = makeBinaryWrapper.override {
+            sanitizers = (if stdenv.isDarwin && stdenv.isAarch64
+              then [ ]
+              else [ "undefined" "address" ]
+            );
+          };
+        };
+      } script;
   in
     lib.makeOverridable f {
-      cc = stdenv.cc.cc;
-      sanitizers = [ "undefined" "address" ];
+      cc = stdenv.cc;
+      sanitizers = [ ];
     };
 
   makeModulesClosure = { kernel, firmware, rootModules, allowMissing ? false }:
@@ -20683,6 +20693,8 @@ with pkgs;
     mod_wsgi2 = callPackage ../servers/http/apache-modules/mod_wsgi { python = python2; ncurses = null; };
     mod_wsgi3 = callPackage ../servers/http/apache-modules/mod_wsgi { python = python3; };
 
+    mod_itk = callPackage ../servers/http/apache-modules/mod_itk { };
+
     php = pkgs.php.override { inherit apacheHttpd; };
 
     subversion = pkgs.subversion.override { httpServer = true; inherit apacheHttpd; };
@@ -24192,7 +24204,14 @@ with pkgs;
 
   audacity-gtk2 = callPackage ../applications/audio/audacity { wxGTK = wxGTK31-gtk2; };
   audacity-gtk3 = callPackage ../applications/audio/audacity { wxGTK = wxGTK31-gtk3; };
-  audacity = audacity-gtk2;
+  audacity =
+    if stdenv.isDarwin then
+      callPackage ../applications/audio/audacity {
+        inherit (darwin.apple_sdk.frameworks) AppKit AudioToolbox AudioUnit Carbon Cocoa CoreAudio CoreAudioKit CoreServices;
+        suil = suil-qt5;
+      }
+    else
+      audacity-gtk2;
 
   audio-recorder = callPackage ../applications/audio/audio-recorder { };
 
@@ -29399,7 +29418,7 @@ with pkgs;
   };
 
   xastir = callPackage ../applications/misc/xastir {
-    rastermagick = imagemagick;
+    rastermagick = imagemagick6;
     inherit (xorg) libXt;
   };
 
@@ -32039,7 +32058,6 @@ with pkgs;
 
   mxnet = callPackage ../applications/science/math/mxnet {
     inherit (linuxPackages) nvidia_x11;
-    stdenv = gcc9Stdenv;
   };
 
   wxmaxima = callPackage ../applications/science/math/wxmaxima { wxGTK = wxGTK30; };

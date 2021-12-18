@@ -3,14 +3,14 @@
 
 buildPythonPackage rec {
   pname = "bx-python";
-  version = "0.8.12";
+  version = "0.8.13";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "bxlab";
     repo = "bx-python";
     rev = "v${version}";
-    sha256 = "sha256-bOoD2dY6Zf4HRMqZcGSot1owu/5VEkF6wpuMTzVUlFU=";
+    sha256 = "0r3z02mvaswijalr42ikpa7crvliijy0aigsvp5m0frp05n4irf5";
   };
 
   nativeBuildInputs = [ cython ];

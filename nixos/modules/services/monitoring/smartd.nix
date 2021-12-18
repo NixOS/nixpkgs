@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
@@ -8,6 +8,7 @@ let
        + optionalString (config.networking.domain != null) ".${config.networking.domain}";
 
   cfg = config.services.smartd;
+  opt = options.services.smartd;
 
   nm = cfg.notifications.mail;
   nw = cfg.notifications.wall;
@@ -211,6 +212,7 @@ in
 
         autodetected = mkOption {
           default = cfg.defaults.monitored;
+          defaultText = literalExpression "config.${opt.defaults.monitored}";
           type = types.separatedString " ";
           description = ''
             Like <option>services.smartd.defaults.monitored</option>, but for the

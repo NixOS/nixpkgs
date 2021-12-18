@@ -36,6 +36,13 @@
           <link linkend="opt-services.filebeat.enable">services.filebeat</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/ngoduykhanh/PowerDNS-Admin">PowerDNS-Admin</link>,
+          a web interface for the PowerDNS server. Available at
+          <link xlink:href="options.html#opt-services.powerdns-admin.enable">services.powerdns-admin</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.05-incompatibilities">
@@ -150,6 +157,14 @@
           place upstream. A combined <literal>influxdb2</literal>
           package is still provided in this release for backwards
           compatibilty, but will be removed at a later date.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>services.unifi.openPorts</literal> option default
+          value of <literal>true</literal> is now deprecated and will be
+          changed to <literal>false</literal> in 22.11. Configurations
+          using this default will print a warning when rebuilt.
         </para>
       </listitem>
     </itemizedlist>

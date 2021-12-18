@@ -41,12 +41,17 @@ let
       pkgs.zstd
     ];
 
-    defaultPackages = map (pkg: setPrio ((pkg.meta.priority or 5) + 3) pkg)
-      [ pkgs.nano
-        pkgs.perl
-        pkgs.rsync
-        pkgs.strace
-      ];
+  defaultPackageNames =
+    [ "nano"
+      "perl"
+      "rsync"
+      "strace"
+    ];
+  defaultPackages =
+    map
+      (n: let pkg = pkgs.${n}; in setPrio ((pkg.meta.priority or 5) + 3) pkg)
+      defaultPackageNames;
+  defaultPackagesText = "[ ${concatMapStringsSep " " (n: "pkgs.${n}") defaultPackageNames } ]";
 
 in
 
@@ -73,6 +78,11 @@ in
       defaultPackages = mkOption {
         type = types.listOf types.package;
         default = defaultPackages;
+        defaultText = literalDocBook ''
+          these packages, with their <literal>meta.priority</literal> numerically increased
+          (thus lowering their installation priority):
+          <programlisting>${defaultPackagesText}</programlisting>
+        '';
         example = [];
         description = ''
           Set of default packages that aren't strictly necessary
