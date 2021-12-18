@@ -9392,6 +9392,8 @@ in {
     inherit (pkgs.darwin.apple_sdk.frameworks) Foundation Security;
     flatbuffers-core = pkgs.flatbuffers;
     flatbuffers-python = self.flatbuffers;
+    protobuf-core = pkgs.protobuf;
+    protobuf-python = self.protobuf;
     lmdb-core = pkgs.lmdb;
   };
 
