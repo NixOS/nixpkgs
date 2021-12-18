@@ -26,6 +26,9 @@ stdenv.mkDerivation rec {
     export DYLD_LIBRARY_PATH=$PWD/libcaf_core:$PWD/libcaf_io
   '';
 
+  # error: 'get< ... >' is unavailable: introduced in macOS 10.13
+  CXXFLAGS = lib.optional (stdenv.hostPlatform.system == "x86_64-darwin") "-D_LIBCPP_DISABLE_AVAILABILITY";
+
   meta = with lib; {
     description = "An open source implementation of the actor model in C++";
     homepage = "http://actor-framework.org/";
