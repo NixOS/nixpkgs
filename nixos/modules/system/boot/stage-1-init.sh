@@ -1,5 +1,6 @@
 #! @shell@
-# shellcheck shell=bash
+# shellcheck shell=bash disable=SC2174
+# SC2174 warning: When used with (mkdir) -p, -m only applies to the deepest directory.
 
 targetRoot=/mnt-root
 console=tty1
