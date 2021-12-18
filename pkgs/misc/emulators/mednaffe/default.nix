@@ -4,8 +4,7 @@
 , autoreconfHook
 , pkg-config
 , mednafen
-, gtk2 ? null
-, gtk3 ? null
+, gtk3
 , wrapGAppsHook
 }:
 
@@ -21,16 +20,11 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config wrapGAppsHook ];
-  buildInputs = [ gtk2 gtk3 mednafen ];
-
-  configureFlags = [ (lib.enableFeature (gtk3 != null) "gtk3") ];
-
-  dontWrapGApps = true;
+  buildInputs = [ gtk3 mednafen ];
 
   postInstall = ''
     wrapProgram $out/bin/mednaffe \
-      --prefix PATH ':' "${mednafen}/bin" \
-      "''${gappsWrapperArgs[@]}"
+      --prefix PATH ':' "${mednafen}/bin"
    '';
 
   meta = with lib; {
