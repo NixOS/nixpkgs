@@ -293,7 +293,7 @@ Test flags, e.g., `--package foo`, can be passed to `cargo test` via the
 
 Another attribute, called `checkFlags`, is used to pass arguments to the test
 binary itself, as stated
-(here)[https://doc.rust-lang.org/cargo/commands/cargo-test.html].
+[here](https://doc.rust-lang.org/cargo/commands/cargo-test.html).
 
 #### Tests relying on the structure of the `target/` directory {#tests-relying-on-the-structure-of-the-target-directory}
 

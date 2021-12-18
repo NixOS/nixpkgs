@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   preInstall = ''
-    find ./target -name libswc_common.${stdenv.hostPlatform.extensions.sharedLibrary} -delete
+    find ./target -name libswc_common${stdenv.hostPlatform.extensions.sharedLibrary} -delete
   '';
 
   postInstall = ''
