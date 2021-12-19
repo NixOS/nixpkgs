@@ -363,8 +363,8 @@ let
         mktplcRef = {
           name = "bracket-pair-colorizer-2";
           publisher = "CoenraadS";
-          version = "0.2.1";
-          sha256 = "0bfvzs4ac537zqhnqaa38jf4lhiy1fmqcv6lq89nnx8k963380z7";
+          version = "0.2.2";
+          sha256 = "0zcbs7h801agfs2cggk1cz8m8j0i2ypmgznkgw17lcx3zisll9ad";
         };
         meta = with lib; {
           license = licenses.mit;
@@ -529,8 +529,8 @@ let
         mktplcRef = {
           name = "gitlens";
           publisher = "eamodio";
-          version = "11.6.0";
-          sha256 = "sha256-JxCNE/IL/v94xWmhebsRZo1Gw+nSSpDgZ41ZGongGVI=";
+          version = "11.7.0";
+          sha256 = "0apjjlfdwljqih394ggz2d8m599pyyjrb0b4cfcz83601b7hk3x6";
         };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/eamodio.gitlens/changelog";
