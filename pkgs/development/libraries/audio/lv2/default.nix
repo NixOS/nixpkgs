@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, gtk2, libsndfile, pkg-config, python3, wafHook }:
+{ lib, stdenv, fetchurl, libsndfile, pkg-config, python3, wafHook }:
 
 stdenv.mkDerivation rec {
   pname = "lv2";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config wafHook ];
-  buildInputs = [ gtk2 libsndfile python3 ];
+  buildInputs = [ libsndfile python3 ];
 
   wafConfigureFlags = lib.optionals stdenv.isDarwin [ "--lv2dir=${placeholder "out"}/lib/lv2" ];
 
