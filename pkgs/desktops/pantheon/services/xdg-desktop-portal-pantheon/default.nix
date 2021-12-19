@@ -8,9 +8,9 @@
 , vala
 , wrapGAppsHook
 , glib
+, granite
 , gtk3
 , libhandy
-, pantheon
 , systemd
 , vte
 }:
@@ -36,9 +36,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib
+    granite
     gtk3
     libhandy
-    pantheon.granite
     systemd
     vte
   ];
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = nix-update-script {
-      attrPath = pname;
+      attrPath = "pantheon.${pname}";
     };
   };
 

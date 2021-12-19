@@ -34,7 +34,7 @@ stdenvNoCC.mkDerivation rec {
   #TODO:doc output
 
   meta = with lib; {
-    homepage = "https://github.com/zdharma/zinit";
+    homepage = "https://github.com/zdharma-continuum/zinit";
     description = "Flexible zsh plugin manager";
     license = licenses.mit;
     maintainers = with maintainers; [ pasqui23 sei40kr ];

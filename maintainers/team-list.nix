@@ -247,6 +247,15 @@ with lib.maintainers; {
     scope = "Maintain Podman and CRI-O related packages and modules.";
   };
 
+  redcodelabs = {
+    members = [
+      unrooted
+      wr0belj
+      wintrmvte
+    ];
+    scope = "Maintain Red Code Labs related packages and modules.";
+  };
+
   sage = {
     members = [
       timokau

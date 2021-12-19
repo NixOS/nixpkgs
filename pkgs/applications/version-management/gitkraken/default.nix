@@ -11,19 +11,19 @@ with lib;
 let
   curlWithGnuTls = curl.override { gnutlsSupport = true; opensslSupport = false; };
   pname = "gitkraken";
-  version = "8.1.1";
+  version = "8.2.0";
 
   throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
   srcs = {
     x86_64-linux = fetchzip {
       url = "https://release.axocdn.com/linux/GitKraken-v${version}.tar.gz";
-      sha256 = "sha256-C6R7/ucQhMsugg7qT+B8OG77AMOx2nmZlVAQcxAfpmc=";
+      sha256 = "sha256-id8pdkTphi3J0ZG88K7oc/O6OwAvmWyFEs9kMbleSFs=";
     };
 
     x86_64-darwin = fetchzip {
       url = "https://release.axocdn.com/darwin/GitKraken-v${version}.zip";
-      sha256 = "sha256-l0K9Ha+0KqVqNQOSouT2rwRRi4YoIjMNnZnmBY8Loa8=";
+      sha256 = "sha256-dwPKIXOQB3lixvMBJJRrRSamYRoC9n1rjcqi542dA44=";
     };
 
     aarch64-darwin = srcs.x86_64-darwin;
