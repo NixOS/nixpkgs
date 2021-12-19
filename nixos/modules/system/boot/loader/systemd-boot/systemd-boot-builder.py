@@ -250,7 +250,11 @@ def main() -> None:
     if "@graceful@" == "1":
         bootctl_flags.append("--graceful")
 
-    if os.getenv("NIXOS_INSTALL_BOOTLOADER") == "1":
+    if not @installBootloaderFiles@:
+        # There is nothing to do here if we don't actually want to install or
+        # update the systemd-boot bootloader files on the boot partition.
+        pass
+    elif os.getenv("NIXOS_INSTALL_BOOTLOADER") == "1":
         # bootctl uses fopen() with modes "wxe" and fails if the file exists.
         if os.path.exists("@efiSysMountPoint@/loader/loader.conf"):
             os.unlink("@efiSysMountPoint@/loader/loader.conf")
@@ -299,7 +303,7 @@ def main() -> None:
             write_entry(*gen, machine_id, current=is_default)
             for specialisation in get_specialisations(*gen):
                 write_entry(*specialisation, machine_id, current=is_default)
-            if is_default:
+            if @installBootloaderFiles@ and is_default:
                 write_loader_conf(*gen)
         except OSError as e:
             # See https://github.com/NixOS/nixpkgs/issues/114552

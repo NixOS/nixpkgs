@@ -22,6 +22,8 @@ let
 
     timeout = optionalString (config.boot.loader.timeout != null) config.boot.loader.timeout;
 
+    installBootloaderFiles = if cfg.installBootloaderFiles then "True" else "False";
+
     editor = if cfg.editor then "True" else "False";
 
     configurationLimit = if cfg.configurationLimit == null then 0 else cfg.configurationLimit;
@@ -80,6 +82,25 @@ in {
       type = types.bool;
 
       description = lib.mdDoc "Whether to enable the systemd-boot (formerly gummiboot) EFI boot manager";
+    };
+
+    installBootloaderFiles = mkOption {
+      default = true;
+
+      type = types.bool;
+
+      description = lib.mdDoc ''
+        Whether to actually install the systemd-boot bootloader files.
+        Setting this to false makes it so the module only copies the
+        kernels to the boot partition and generates boot loader specification
+        entries for them. This is useful for when you want to use a
+        bootloader - not managed by NixOS - that is able to boot using such
+        boot loader specification entries.
+
+        The `memtest86` option is unaffected by this option: if that option
+        is set to `true`, the MemTest86 image will be copied and a boot loader
+        specification entry will be created for it, even if this is set to false.
+      '';
     };
 
     editor = mkOption {
