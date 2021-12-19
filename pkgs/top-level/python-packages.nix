@@ -7633,6 +7633,8 @@ in {
 
   pytest-mypy = callPackage ../development/python-modules/pytest-mypy { };
 
+  pytest-mypy-plugins = callPackage ../development/python-modules/pytest-mypy-plugins { };
+
   pytest-openfiles = callPackage ../development/python-modules/pytest-openfiles { };
 
   pytest-order = callPackage ../development/python-modules/pytest-order { };
