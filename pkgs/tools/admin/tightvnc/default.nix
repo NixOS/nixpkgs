@@ -81,5 +81,9 @@ stdenv.mkDerivation {
 
     maintainers = [];
     platforms = lib.platforms.unix;
+
+    knownVulnerabilities = [ "CVE-2021-42785" ];
+    # Unfortunately, upstream doesn't maintain the 1.3 branch anymore, and the
+    # new 2.x branch is substantially different (requiring either Windows or Java)
   };
 }
