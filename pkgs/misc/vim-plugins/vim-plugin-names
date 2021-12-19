@@ -847,6 +847,7 @@ Valodim/deoplete-notmuch
 vhda/verilog_systemverilog.vim
 vifm/vifm.vim
 vigoux/LanguageTool.nvim
+vijaymarupudi/nvim-fzf
 vim-airline/vim-airline
 vim-airline/vim-airline-themes
 vim-autoformat/vim-autoformat

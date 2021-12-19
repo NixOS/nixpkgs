@@ -4282,6 +4282,18 @@ final: prev:
     meta.homepage = "https://github.com/allendang/nvim-expand-expr/";
   };
 
+  nvim-fzf = buildVimPluginFrom2Nix {
+    pname = "nvim-fzf";
+    version = "2021-10-25";
+    src = fetchFromGitHub {
+      owner = "vijaymarupudi";
+      repo = "nvim-fzf";
+      rev = "7cc3670b00f4d6e0968289f8b3bee7481cab3e73";
+      sha256 = "1flp9y54fr94gb96x8nrvw2sx61rwwi2rzmjmipa9crl0ckj14pb";
+    };
+    meta.homepage = "https://github.com/vijaymarupudi/nvim-fzf/";
+  };
+
   nvim-gdb = buildVimPluginFrom2Nix {
     pname = "nvim-gdb";
     version = "2021-12-09";
