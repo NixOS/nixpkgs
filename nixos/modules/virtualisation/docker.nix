@@ -8,8 +8,8 @@ let
 
   cfg = config.virtualisation.docker;
   proxy_env = config.networking.proxy.envVars;
-  daemonConfigJson = builtins.toJSON cfg.daemonConfig;
-  daemonConfigFile = pkgs.writeText "daemon.json" daemonConfigJson;
+  daemonSettingsJson = builtins.toJSON cfg.daemon.settings;
+  daemonSettingsFile = pkgs.writeText "daemon.json" daemonSettingsJson;
 in
 
 {
@@ -53,7 +53,7 @@ in
           '';
       };
 
-    daemonConfig =
+    daemon.settings =
       mkOption {
         type = types.anything;
         default = { };
@@ -188,7 +188,7 @@ in
               ${cfg.package}/bin/dockerd \
                 --group=docker \
                 --host=fd:// \
-                --config-file=${daemonConfigFile} \
+                --config-file=${daemonSettingsFile} \
                 --log-driver=${cfg.logDriver} \
                 ${optionalString (cfg.storageDriver != null) "--storage-driver=${cfg.storageDriver}"} \
                 ${optionalString cfg.liveRestore "--live-restore" } \

@@ -114,7 +114,7 @@
           If you previously used
           <literal>/etc/docker/daemon.json</literal>, you need to
           incorporate the changes into the new option
-          <literal>virtualisation.docker.daemonConfig</literal>.
+          <literal>virtualisation.docker.daemon.settings</literal>.
         </para>
       </listitem>
     </itemizedlist>
