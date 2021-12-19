@@ -1,14 +1,16 @@
-{ lib, stdenv, fetchurl
+{ lib, stdenv, fetchFromGitHub
 , attr, judy, keyutils, libaio, libapparmor, libbsd, libcap, libgcrypt, lksctp-tools, zlib
 }:
 
 stdenv.mkDerivation rec {
   pname = "stress-ng";
-  version = "0.13.03";
+  version = "0.13.08";
 
-  src = fetchurl {
-    url = "https://kernel.ubuntu.com/~cking/tarballs/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-PmDWBeN42GqFkaMNblV77XCdgqWxlhY3gALNj/ADeos=";
+  src = fetchFromGitHub {
+    owner = "ColinIanKing";
+    repo = pname;
+    rev = "V${version}";
+    sha256 = "sha256-LHGtx7H8Cv9ZM5hRNrC1mjsl1k9lNx/5k7V8lqvJ7yw=";
   };
 
   postPatch = ''
@@ -62,9 +64,9 @@ stdenv.mkDerivation rec {
       hardware. However, it has never been intended to be used as a precise benchmark
       test suite, so do NOT use it in this manner.
     '';
-    homepage = "https://kernel.ubuntu.com/~cking/stress-ng/";
-    downloadPage = "https://kernel.ubuntu.com/~cking/tarballs/stress-ng/";
-    changelog = "https://kernel.ubuntu.com/git/cking/stress-ng.git/plain/debian/changelog?h=V${version}";
+    homepage = "https://github.com/ColinIanKing/stress-ng";
+    downloadPage = "https://github.com/ColinIanKing/stress-ng/tags";
+    changelog = "https://github.com/ColinIanKing/stress-ng/raw/V${version}/debian/changelog";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ c0bw3b ];
     platforms = platforms.unix;
