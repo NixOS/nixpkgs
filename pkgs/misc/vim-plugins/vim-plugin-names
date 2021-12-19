@@ -154,12 +154,12 @@ euclio/vim-markdown-composer
 f-person/git-blame.nvim
 f3fora/cmp-spell
 famiu/bufdelete.nvim
-famiu/feline.nvim
 fannheyward/telescope-coc.nvim
 farmergreg/vim-lastplace
 fatih/vim-go
 fcpg/vim-osc52
 FelikZ/ctrlp-py-matcher
+feline-nvim/feline.nvim
 fenetikm/falcon
 fhill2/floating.nvim
 fiatjaf/neuron.vim
@@ -847,6 +847,8 @@ Valodim/deoplete-notmuch
 vhda/verilog_systemverilog.vim
 vifm/vifm.vim
 vigoux/LanguageTool.nvim
+vijaymarupudi/nvim-fzf
+vijaymarupudi/nvim-fzf-commands
 vim-airline/vim-airline
 vim-airline/vim-airline-themes
 vim-autoformat/vim-autoformat
