@@ -76,6 +76,7 @@ stdenv.mkDerivation rec {
     "-Dgtk_doc=true"
     "-Ddesktop_docs=false"
     "-Ddate_in_gnome_version=false"
+    "-Dgnome_distributor=NixOS"
   ];
 
   separateDebugInfo = stdenv.isLinux;
