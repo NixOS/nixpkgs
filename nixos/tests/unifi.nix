@@ -16,16 +16,17 @@ let
     };
 
     nodes.server = {
+      virtualisation.memorySize = 1024;
       services.unifi = {
         enable = true;
         unifiPackage = unifi;
-        openFirewall = false;
+        openPorts = false;
       };
     };
 
     testScript = ''
       server.wait_for_unit("unifi.service")
-      server.wait_until_succeeds("curl -Lk https://localhost:8443 >&2", timeout=300)
+      server.wait_until_succeeds("curl -Lk https://localhost:8443 >&2")
     '';
   };
 in with pkgs; {
