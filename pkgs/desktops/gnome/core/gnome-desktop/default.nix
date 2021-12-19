@@ -75,6 +75,7 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dgtk_doc=true"
     "-Ddesktop_docs=false"
+    "-Ddate_in_gnome_version=false"
   ];
 
   separateDebugInfo = stdenv.isLinux;
