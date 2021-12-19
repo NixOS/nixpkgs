@@ -68,7 +68,14 @@ in
       dataDir = mkOption {
         type = types.path;
         example = "/var/lib/mysql";
-        description = "Location where MySQL stores its table files.";
+        description = ''
+          The data directory for MySQL.
+
+          <note><para>
+          If left as the default value of <literal>/var/lib/mysql</literal> this directory will automatically be created before the MySQL
+          server starts, otherwise you are responsible for ensuring the directory exists with appropriate ownership and permissions.
+          </para></note>
+        '';
       };
 
       configFile = mkOption {
@@ -341,11 +348,6 @@ in
 
     environment.etc."my.cnf".source = cfg.configFile;
 
-    systemd.tmpfiles.rules = [
-      "d '${cfg.dataDir}' 0700 '${cfg.user}' '${cfg.group}' - -"
-      "z '${cfg.dataDir}' 0700 '${cfg.user}' '${cfg.group}' - -"
-    ];
-
     systemd.services.mysql = let
       hasNotify = isMariaDB;
     in {
@@ -489,41 +491,47 @@ in
             '') cfg.ensureUsers}
         '';
 
-        serviceConfig = {
-          Type = if hasNotify then "notify" else "simple";
-          Restart = "on-abort";
-          RestartSec = "5s";
+        serviceConfig = mkMerge [
+          {
+            Type = if hasNotify then "notify" else "simple";
+            Restart = "on-abort";
+            RestartSec = "5s";
 
-          # User and group
-          User = cfg.user;
-          Group = cfg.group;
-          # Runtime directory and mode
-          RuntimeDirectory = "mysqld";
-          RuntimeDirectoryMode = "0755";
-          # Access write directories
-          ReadWritePaths = [ cfg.dataDir ];
-          # Capabilities
-          CapabilityBoundingSet = "";
-          # Security
-          NoNewPrivileges = true;
-          # Sandboxing
-          ProtectSystem = "strict";
-          ProtectHome = true;
-          PrivateTmp = true;
-          PrivateDevices = true;
-          ProtectHostname = true;
-          ProtectKernelTunables = true;
-          ProtectKernelModules = true;
-          ProtectControlGroups = true;
-          RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
-          LockPersonality = true;
-          MemoryDenyWriteExecute = true;
-          RestrictRealtime = true;
-          RestrictSUIDSGID = true;
-          PrivateMounts = true;
-          # System Call Filtering
-          SystemCallArchitectures = "native";
-        };
+            # User and group
+            User = cfg.user;
+            Group = cfg.group;
+            # Runtime directory and mode
+            RuntimeDirectory = "mysqld";
+            RuntimeDirectoryMode = "0755";
+            # Access write directories
+            ReadWritePaths = [ cfg.dataDir ];
+            # Capabilities
+            CapabilityBoundingSet = "";
+            # Security
+            NoNewPrivileges = true;
+            # Sandboxing
+            ProtectSystem = "strict";
+            ProtectHome = true;
+            PrivateTmp = true;
+            PrivateDevices = true;
+            ProtectHostname = true;
+            ProtectKernelTunables = true;
+            ProtectKernelModules = true;
+            ProtectControlGroups = true;
+            RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
+            LockPersonality = true;
+            MemoryDenyWriteExecute = true;
+            RestrictRealtime = true;
+            RestrictSUIDSGID = true;
+            PrivateMounts = true;
+            # System Call Filtering
+            SystemCallArchitectures = "native";
+          }
+          (mkIf (cfg.dataDir == "/var/lib/mysql") {
+            StateDirectory = "mysql";
+            StateDirectoryMode = "0700";
+          })
+        ];
       };
 
   };
