@@ -6516,6 +6516,8 @@ in {
 
   pydub = callPackage ../development/python-modules/pydub { };
 
+  pyduke-energy = callPackage ../development/python-modules/pyduke-energy { };
+
   pydy = callPackage ../development/python-modules/pydy { };
 
   pydyf = callPackage ../development/python-modules/pydyf { };
