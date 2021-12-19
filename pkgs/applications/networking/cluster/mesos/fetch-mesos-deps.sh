@@ -4,7 +4,7 @@ header "fetching Apache Mesos maven repo"
 function fetchArtifact {
   repoPath="$1"
   echo "Fetching $repoPath"
-  url="http://repo.maven.apache.org/maven2/$repoPath"
+  url="https://repo.maven.apache.org/maven2/$repoPath"
   mkdir -p $(dirname $out/$repoPath)
   curl --fail --location --insecure --retry 3 --max-redirs 20 "$url" --output "$out/$repoPath"
 }
@@ -1127,12 +1127,12 @@ fetchArtifact org/vafer/jdependency/0.7/jdependency-0.7.pom
 fetchArtifact org/vafer/jdependency/0.7/jdependency-0.7.pom.sha1
 fetchArtifact org/vafer/jdependency/0.7/jdependency-0.7.jar
 fetchArtifact org/vafer/jdependency/0.7/jdependency-0.7.jar.sha1
-fetchArtifact com/google/protobuf/protobuf-java/3.3.0/protobuf-java-3.3.0.pom
-fetchArtifact com/google/protobuf/protobuf-java/3.3.0/protobuf-java-3.3.0.pom.sha1
-fetchArtifact com/google/protobuf/protobuf-java/3.3.0/protobuf-java-3.3.0.jar
-fetchArtifact com/google/protobuf/protobuf-java/3.3.0/protobuf-java-3.3.0.jar.sha1
-fetchArtifact com/google/protobuf/protobuf-parent/3.3.0/protobuf-parent-3.3.0.pom
-fetchArtifact com/google/protobuf/protobuf-parent/3.3.0/protobuf-parent-3.3.0.pom.sha1
+fetchArtifact com/google/protobuf/protobuf-java/3.5.0/protobuf-java-3.5.0.pom
+fetchArtifact com/google/protobuf/protobuf-java/3.5.0/protobuf-java-3.5.0.pom.sha1
+fetchArtifact com/google/protobuf/protobuf-java/3.5.0/protobuf-java-3.5.0.jar
+fetchArtifact com/google/protobuf/protobuf-java/3.5.0/protobuf-java-3.5.0.jar.sha1
+fetchArtifact com/google/protobuf/protobuf-parent/3.5.0/protobuf-parent-3.5.0.pom
+fetchArtifact com/google/protobuf/protobuf-parent/3.5.0/protobuf-parent-3.5.0.pom.sha1
 fetchArtifact com/google/google/1/google-1.pom
 fetchArtifact com/google/google/1/google-1.pom.sha1
 fetchArtifact com/google/guava/guava/11.0.2/guava-11.0.2.pom
