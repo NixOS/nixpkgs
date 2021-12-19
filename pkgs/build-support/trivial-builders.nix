@@ -219,7 +219,7 @@ rec {
         ${text}
         '';
       checkPhase = ''
-        ${stdenv.shell} -n $out
+        ${stdenv.shellDryRun} $out
       '';
     };
 
@@ -246,7 +246,7 @@ rec {
         ${text}
         '';
       checkPhase = ''
-        ${stdenv.shell} -n $out/bin/${name}
+        ${stdenv.shellDryRun} $out/bin/${name}
       '';
     };
 
@@ -295,7 +295,7 @@ rec {
       checkPhase =
         if checkPhase == null then ''
           runHook preCheck
-          ${stdenv.shell} -n $out/bin/${name}
+          ${stdenv.shellDryRun} $out/bin/${name}
           ${shellcheck}/bin/shellcheck $out/bin/${name}
           runHook postCheck
         ''
