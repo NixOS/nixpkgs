@@ -1,6 +1,13 @@
 { lib, stdenv, fetchFromGitHub, cmake, boost, glog, leveldb, marisa, opencc,
-  libyamlcpp, gtest, capnproto, pkg-config }:
+  libyamlcpp, gtest, capnproto, pkg-config, plugins ? [ ] }:
 
+let
+  copySinglePlugin = plug: "cp -r ${plug} plugins/${plug.name}";
+  copyPlugins = ''
+    ${lib.concatMapStringsSep "\n" copySinglePlugin plugins}
+    chmod +w -R plugins/*
+  '';
+in
 stdenv.mkDerivation rec {
   pname = "librime";
   version = "1.7.3";
@@ -14,7 +21,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [ boost glog leveldb marisa opencc libyamlcpp gtest capnproto ];
+  buildInputs = [ boost glog leveldb marisa opencc libyamlcpp gtest capnproto ]
+              ++ plugins; # for propagated build inputs
+
+  preConfigure = copyPlugins;
 
   meta = with lib; {
     homepage    = "https://rime.im/";
