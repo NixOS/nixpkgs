@@ -19,6 +19,9 @@ case "$1" in
 EOF
     ;;
   *)
-    echo "@version@ (@codeName@)"
+    if [ -e /run/booted-system/nixos-version ]; then
+        printf "Booted generation: %s\n" "$(cat /run/booted-system/nixos-version)"
+    fi
+    echo "Current generation: @version@ (@codeName@)"
     ;;
 esac

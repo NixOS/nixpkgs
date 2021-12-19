@@ -69,7 +69,7 @@ import ./make-test-python.nix ({ pkgs, ...} : rec {
               raise Exception("narSize not set")
 
       with subtest("nixos-version"):
-          machine.succeed("[ `nixos-version | wc -w` = 2 ]")
+          machine.succeed("[ `nixos-version | wc -w` = 7 ]")
 
       with subtest("nixos-rebuild"):
           assert "NixOS module" in machine.succeed("nixos-rebuild --help")
