@@ -56,13 +56,29 @@ in
       user = mkOption {
         type = types.str;
         default = "mysql";
-        description = "User account under which MySQL runs.";
+        description = ''
+          User account under which MySQL runs.
+
+          <note><para>
+          If left as the default value this user will automatically be created
+          on system activation, otherwise you are responsible for
+          ensuring the user exists before the MySQL service starts.
+          </para></note>
+        '';
       };
 
       group = mkOption {
         type = types.str;
         default = "mysql";
-        description = "Group under which MySQL runs.";
+        description = ''
+          Group account under which MySQL runs.
+
+          <note><para>
+          If left as the default value this user will automatically be created
+          on system activation, otherwise you are responsible for
+          ensuring the user exists before the MySQL service starts.
+          </para></note>
+        '';
       };
 
       dataDir = mkOption {
