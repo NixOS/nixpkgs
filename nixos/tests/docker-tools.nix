@@ -215,6 +215,12 @@ import ./make-test-python.nix ({ pkgs, ... }: {
                 f"docker run --rm  ${examples.layersOrder.imageName} cat /tmp/layer{index}"
             )
 
+    with subtest("Ensure layers unpacked in correct order before runAsRoot runs"):
+        assert "abc" in docker.succeed(
+            "docker load --input='${examples.layersUnpackOrder}'",
+            "docker run --rm ${examples.layersUnpackOrder.imageName} cat /layer-order"
+        )
+
     with subtest("Ensure environment variables are correctly inherited"):
         docker.succeed(
             "docker load --input='${examples.environmentVariables}'"
