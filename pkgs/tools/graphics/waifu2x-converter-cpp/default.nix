@@ -26,9 +26,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake makeWrapper ];
 
-  # main.cpp:498:12: error: 'is_directory' is unavailable: introduced in macOS 10.15
-  CXXFLAGS = lib.optional (stdenv.hostPlatform.system == "x86_64-darwin") "-D_LIBCPP_DISABLE_AVAILABILITY";
-
   preFixup = lib.optionalString stdenv.isLinux ''
     wrapProgram $out/bin/waifu2x-converter-cpp --prefix LD_LIBRARY_PATH : "${ocl-icd}/lib"
   '';
