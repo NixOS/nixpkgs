@@ -2351,6 +2351,8 @@ in {
 
   docstring-to-markdown = callPackage ../development/python-modules/docstring-to-markdown { };
 
+  docstring-parser = callPackage ../development/python-modules/docstring-parser { };
+
   docopt = callPackage ../development/python-modules/docopt { };
 
   docopt-ng = callPackage ../development/python-modules/docopt-ng { };
