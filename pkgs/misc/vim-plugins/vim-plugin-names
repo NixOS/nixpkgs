@@ -848,6 +848,7 @@ vhda/verilog_systemverilog.vim
 vifm/vifm.vim
 vigoux/LanguageTool.nvim
 vijaymarupudi/nvim-fzf
+vijaymarupudi/nvim-fzf-commands
 vim-airline/vim-airline
 vim-airline/vim-airline-themes
 vim-autoformat/vim-autoformat

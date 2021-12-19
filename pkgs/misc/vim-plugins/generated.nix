@@ -4294,6 +4294,18 @@ final: prev:
     meta.homepage = "https://github.com/vijaymarupudi/nvim-fzf/";
   };
 
+  nvim-fzf-commands = buildVimPluginFrom2Nix {
+    pname = "nvim-fzf-commands";
+    version = "2021-05-31";
+    src = fetchFromGitHub {
+      owner = "vijaymarupudi";
+      repo = "nvim-fzf-commands";
+      rev = "c6188c8618ca6b579af37cbc242414e1016bcd45";
+      sha256 = "0nn04gpz3n0jqb9kyxbmipkixzp1lk2f67knxqzzzlxm27m839fy";
+    };
+    meta.homepage = "https://github.com/vijaymarupudi/nvim-fzf-commands/";
+  };
+
   nvim-gdb = buildVimPluginFrom2Nix {
     pname = "nvim-gdb";
     version = "2021-12-09";
