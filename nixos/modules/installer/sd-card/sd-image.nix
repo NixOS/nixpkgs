@@ -18,7 +18,7 @@ with lib;
 let
   rootfsImage = pkgs.callPackage ../../../lib/make-ext4-fs.nix ({
     inherit (config.sdImage) storePaths;
-    compressImage = true;
+    compressImage = config.sdImage.compressImage;
     populateImageCommands = config.sdImage.populateRootCommands;
     volumeLabel = "NIXOS_SD";
   } // optionalAttrs (config.sdImage.rootPartitionUUID != null) {
@@ -171,10 +171,18 @@ in
     sdImage.storePaths = [ config.system.build.toplevel ];
 
     system.build.sdImage = pkgs.callPackage ({ stdenv, dosfstools, e2fsprogs,
-    mtools, libfaketime, util-linux, zstd }: stdenv.mkDerivation {
+    mtools, libfaketime, util-linux,
+    (lib.optional config.sdImage.compressImage zstd)}: stdenv.mkDerivation {
       name = config.sdImage.imageName;
 
-      nativeBuildInputs = [ dosfstools e2fsprogs mtools libfaketime util-linux zstd ];
+      nativeBuildInputs = [
+        dosfstools
+        e2fsprogs
+        libfaketime
+        mtools
+        util-linux
+        (config.sdImage.compress zstd)
+      ];
 
       inherit (config.sdImage) compressImage;
 
@@ -189,14 +197,18 @@ in
           echo "file sd-image $img" >> $out/nix-support/hydra-build-products
         fi
 
+        root_fs=${rootfsImage}
+        ${lib.optionalString config.sdImage.makeFsExtraArgs.compressImage ''
+        root_fs=./root-fs.img
         echo "Decompressing rootfs image"
-        zstd -d --no-progress "${rootfsImage}" -o ./root-fs.img
+        zstd -d --no-progress "${rootfsImage}" -o $root_fs
+        ''}
 
         # Gap in front of the first partition, in MiB
         gap=${toString config.sdImage.firmwarePartitionOffset}
 
         # Create the image file sized to fit /boot/firmware and /, plus slack for the gap.
-        rootSizeBlocks=$(du -B 512 --apparent-size ./root-fs.img | awk '{ print $1 }')
+        rootSizeBlocks=$(du -B 512 --apparent-size $root_fs | awk '{ print $1 }')
         firmwareSizeBlocks=$((${toString config.sdImage.firmwareSize} * 1024 * 1024 / 512))
         imageSize=$((rootSizeBlocks * 512 + firmwareSizeBlocks * 512 + gap * 1024 * 1024))
         truncate -s $imageSize $img
@@ -214,7 +226,7 @@ in
 
         # Copy the rootfs into the SD image
         eval $(partx $img -o START,SECTORS --nr 2 --pairs)
-        dd conv=notrunc if=./root-fs.img of=$img seek=$START count=$SECTORS
+        dd conv=notrunc if=$root_fs of=$img seek=$START count=$SECTORS
 
         # Create a FAT32 /boot/firmware partition of suitable size into firmware_part.img
         eval $(partx $img -o START,SECTORS --nr 1 --pairs)
