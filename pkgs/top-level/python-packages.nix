@@ -6285,6 +6285,8 @@ in {
 
   psycopg2cffi = callPackage ../development/python-modules/psycopg2cffi { };
 
+  psygnal = callPackage ../development/python-modules/psygnal { };
+
   ptable = callPackage ../development/python-modules/ptable { };
 
   ptest = callPackage ../development/python-modules/ptest { };
