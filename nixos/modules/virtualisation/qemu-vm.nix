@@ -620,6 +620,7 @@ in
 
     # FIXME: Consolidate this one day.
     virtualisation.qemu.options = mkMerge [
+      [ "-device virtio-keyboard" ]
       (mkIf (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) [
         "-usb" "-device usb-tablet,bus=usb-bus.0"
       ])
