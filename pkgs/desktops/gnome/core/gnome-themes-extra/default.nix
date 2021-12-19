@@ -1,5 +1,6 @@
 { lib, stdenv, fetchurl, intltool, gtk3, gnome, librsvg, pkg-config, pango, atk, gtk2
-, gdk-pixbuf, hicolor-icon-theme }:
+, gdk-pixbuf, hicolor-icon-theme
+, withGtk2 ? true }:
 
 let
   pname = "gnome-themes-extra";
@@ -19,10 +20,13 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config intltool ];
-  buildInputs = [ gtk3 librsvg pango atk gtk2 gdk-pixbuf ];
+  buildInputs = [ gtk3 librsvg pango atk gdk-pixbuf ]
+    ++ lib.optional withGtk2 gtk2;
   propagatedBuildInputs = [ gnome.adwaita-icon-theme hicolor-icon-theme ];
 
   dontDropIconThemeCache = true;
+
+  configureFlags = lib.optional (!withGtk2) "--disable-gtk2-engine";
 
   postInstall = ''
     gtk-update-icon-cache "$out"/share/icons/HighContrast
