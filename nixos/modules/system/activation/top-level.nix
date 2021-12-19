@@ -55,8 +55,8 @@ let
       substituteInPlace $out/dry-activate --subst-var out
       chmod u+x $out/activate $out/dry-activate
       unset activationScript dryActivationScript
-      ${pkgs.stdenv.shell} -n $out/activate
-      ${pkgs.stdenv.shell} -n $out/dry-activate
+      ${pkgs.stdenv.shellDryRun} $out/activate
+      ${pkgs.stdenv.shellDryRun} $out/dry-activate
 
       cp ${config.system.build.bootStage2} $out/init
       substituteInPlace $out/init --subst-var-by systemConfig $out
