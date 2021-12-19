@@ -141,6 +141,13 @@ stdenv.mkDerivation rec {
       url = "https://github.com/xianyi/OpenBLAS/commit/6fe0f1fab9d6a7f46d71d37ebb210fbf56924fbc.diff";
       sha256 = "06gwh73k4sas1ap2fi3jvpifbjkys2vhmnbj4mzrsvj279ljsfdk";
     })
+    (fetchpatch {
+      name = "CVE-2021-4048.patch";
+      url = "https://github.com/Reference-LAPACK/lapack/commit/38f3eeee3108b18158409ca2a100e6fe03754781.patch";
+      sha256 = "146dcgflxfvnbhw098hbnwdg4x5n920g07d8rykzvrci1dqs3jkj";
+      stripLen = 1;
+      extraPrefix = "lapack-netlib/";
+    })
   ];
 
   inherit blas64;
