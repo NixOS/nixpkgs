@@ -13426,4 +13426,10 @@
     github = "jpagex";
     githubId = 635768;
   };
+  pwoelfel = {
+    name = "Philipp Woelfel";
+    email = "philipp.woelfel@gmail.com";
+    github = "PhilippWoelfel";
+    githubID = 19400064;
+  };
 }
