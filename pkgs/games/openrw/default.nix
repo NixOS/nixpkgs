@@ -35,9 +35,6 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ cmake ];
 
-  # error: 'path' is unavailable: introduced in macOS 10.15
-  CXXFLAGS = lib.optional (stdenv.hostPlatform.system == "x86_64-darwin") "-D_LIBCPP_DISABLE_AVAILABILITY";
-
   buildInputs = [
     sfml libGLU libGL bullet glm libmad xlibsWrapper openal SDL2 boost ffmpeg
   ] ++ lib.optionals stdenv.isDarwin [ OpenAL Cocoa ];

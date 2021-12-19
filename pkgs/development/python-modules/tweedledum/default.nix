@@ -24,9 +24,6 @@ buildPythonPackage rec {
   nativeBuildInputs = [ cmake ninja scikit-build ];
   dontUseCmakeConfigure = true;
 
-  # error: 'value' is unavailable: introduced in macOS 10.13
-  CXXFLAGS = lib.optional (stdenv.hostPlatform.system == "x86_64-darwin") "-D_LIBCPP_DISABLE_AVAILABILITY";
-
   pythonImportsCheck = [ "tweedledum" ];
 
   checkInputs = [ pytestCheckHook ];
