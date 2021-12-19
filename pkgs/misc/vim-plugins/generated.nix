@@ -1872,12 +1872,12 @@ final: prev:
     pname = "feline.nvim";
     version = "2021-10-15";
     src = fetchFromGitHub {
-      owner = "famiu";
+      owner = "feline-nvim";
       repo = "feline.nvim";
       rev = "4ef5e1516395eea731275e0f58b6bfba5c6ac9c1";
       sha256 = "12fci8gkbs3gf7cx68dpczkvsgy7bbax6f5fdl6fbjszpwr96lhw";
     };
-    meta.homepage = "https://github.com/famiu/feline.nvim/";
+    meta.homepage = "https://github.com/feline-nvim/feline.nvim/";
   };
 
   fennel-vim = buildVimPluginFrom2Nix {
