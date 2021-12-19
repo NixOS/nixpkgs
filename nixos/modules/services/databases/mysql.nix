@@ -21,6 +21,8 @@ in
     (mkRemovedOptionModule [ "services" "mysql" "pidDir" ] "Don't wait for pidfiles, describe dependencies through systemd.")
     (mkRemovedOptionModule [ "services" "mysql" "rootPassword" ] "Use socket authentication or set the password outside of the nix store.")
     (mkRemovedOptionModule [ "services" "mysql" "extraOptions" ] "Use services.mysql.settings.mysqld instead.")
+    (mkRemovedOptionModule [ "services" "mysql" "bind" ] "Use services.mysql.settings.mysqld.bind-address instead.")
+    (mkRemovedOptionModule [ "services" "mysql" "port" ] "Use services.mysql.settings.mysqld.port instead.")
   ];
 
   ###### interface
@@ -37,19 +39,6 @@ in
         description = "
           Which MySQL derivation to use. MariaDB packages are supported too.
         ";
-      };
-
-      bind = mkOption {
-        type = types.nullOr types.str;
-        default = null;
-        example = "0.0.0.0";
-        description = "Address to bind to. The default is to bind to all addresses.";
-      };
-
-      port = mkOption {
-        type = types.port;
-        default = 3306;
-        description = "Port of MySQL.";
       };
 
       user = mkOption {
@@ -315,8 +304,7 @@ in
     services.mysql.settings.mysqld = mkMerge [
       {
         datadir = cfg.dataDir;
-        bind-address = mkIf (cfg.bind != null) cfg.bind;
-        port = cfg.port;
+        port = mkDefault 3306;
       }
       (mkIf (cfg.replication.role == "master" || cfg.replication.role == "slave") {
         log-bin = "mysql-bin-${toString cfg.replication.serverId}";
