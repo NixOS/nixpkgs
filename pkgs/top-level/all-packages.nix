@@ -29343,7 +29343,7 @@ with pkgs;
 
   chatterino2 = libsForQt5.callPackage ../applications/networking/instant-messengers/chatterino2 {};
 
-  weston = callPackage ../applications/window-managers/weston { pipewire = pipewire_0_2; };
+  weston = callPackage ../applications/window-managers/weston { };
 
   whalebird = callPackage ../applications/misc/whalebird {
     electron = electron_14;
