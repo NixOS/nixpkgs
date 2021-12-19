@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     homepage    = "https://rime.im/";
     description = "Rime Input Method Engine, the core library";
     license     = licenses.bsd3;
-    maintainers = with maintainers; [ sifmelcara ];
+    maintainers = with maintainers; [ vonfry ];
     platforms   = platforms.linux;
   };
 }
