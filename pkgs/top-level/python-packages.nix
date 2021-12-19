@@ -9121,6 +9121,8 @@ in {
 
   sqlalchemy-migrate = callPackage ../development/python-modules/sqlalchemy-migrate { };
 
+  sqlalchemy-mixins = callPackage ../development/python-modules/sqlalchemy-mixins { };
+
   sqlalchemy-utils = callPackage ../development/python-modules/sqlalchemy-utils { };
 
   sqlitedict = callPackage ../development/python-modules/sqlitedict { };
