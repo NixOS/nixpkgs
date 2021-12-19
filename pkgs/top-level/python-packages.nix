@@ -9369,6 +9369,8 @@ in {
 
   supervisor = callPackage ../development/python-modules/supervisor { };
 
+  superqt = callPackage ../development/python-modules/superqt { };
+
   sure = callPackage ../development/python-modules/sure { };
 
   surepy = callPackage ../development/python-modules/surepy { };
