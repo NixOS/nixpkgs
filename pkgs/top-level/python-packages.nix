@@ -5208,6 +5208,16 @@ in {
 
   nanotime = callPackage ../development/python-modules/nanotime { };
 
+  napari = callPackage ../development/python-modules/napari {
+    inherit (pkgs.libsForQt5) mkDerivationWith wrapQtAppsHook;
+  };
+
+  napari-console = callPackage ../development/python-modules/napari-console { };
+
+  napari-plugin-engine = callPackage ../development/python-modules/napari-plugin-engine { };
+
+  napari-svg = callPackage ../development/python-modules/napari-svg { };
+
   nassl = callPackage ../development/python-modules/nassl { };
 
   nats-python = callPackage ../development/python-modules/nats-python { };
