@@ -13430,6 +13430,6 @@
     name = "Philipp Woelfel";
     email = "philipp.woelfel@gmail.com";
     github = "PhilippWoelfel";
-    githubID = 19400064;
+    githubId = 19400064;
   };
 }

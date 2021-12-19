@@ -12,20 +12,20 @@
   gnome2,
   alsa-lib,
   libgccjit,
+  jdk11
   }:
 
 let
   year = "2021";
-  rel = "1";
-  subrel = "1";
-in
-stdenv.mkDerivation rec {
+  major = "1";
+  minor = "1";
+in stdenv.mkDerivation rec {
   pname = "pdfstudio";
-  version = "${year}.${rel}.${subrel}";
-  autoPatchelfIgnoreMissingDeps=true;
+  version = "${year}.${major}.${minor}";
+  autoPatchelfIgnoreMissingDeps = true;
 
   src = fetchurl {
-    url = "https://download.qoppa.com/${pname}/v${year}/PDFStudio_v${year}_${rel}_${subrel}_linux64.deb";
+    url = "https://download.qoppa.com/${pname}/v${year}/PDFStudio_v${year}_${major}_${minor}_linux64.deb";
     sha256 = "089jfpbsxwjhx245g8svlmg213kny3z5nl6ra1flishnrsfjjcxb";
   };
 
@@ -41,9 +41,10 @@ stdenv.mkDerivation rec {
     makeWrapper
     dpkg
     copyDesktopItems
+    jdk11 # only for unpacking .jar.pack files
   ];
 
-  desktopItems = lib.singleton (makeDesktopItem {
+  desktopItems = [(makeDesktopItem {
        name = "${pname}${year}";
        desktopName = "PDF Studio";
        genericName = "View and edit PDF files";
@@ -54,7 +55,7 @@ stdenv.mkDerivation rec {
        categories = "Office";
        type = "Application";
        terminal = false;
-  });
+  })];
 
   unpackPhase = "dpkg-deb -x $src .";
   dontConfigure = true;
@@ -71,16 +72,13 @@ stdenv.mkDerivation rec {
     ln -s $out/share/${pname}${year}/.install4j/${pname}${year}.png  $out/share/pixmaps/
     makeWrapper $out/share/${pname}${year}/${pname}${year} $out/bin/${pname}
 
-    runHook postInstall
-  '';
+    #Unpack jar files. Otherwise pdfstudio does this and fails due to read-only FS.
+    for pfile in $out/share/${pname}${year}/jre/lib/{,ext/}*.jar.pack; do
+      jar_file=`echo "$pfile" | awk '{ print substr($0,1,length($0)-5) }'`
+      unpack200 -r "$pfile" "$jar_file"
+    done
 
-  # We need to run pdfstudio once. This will unpack some jre.pack files in jre/lib.
-  # We must do this after autoPatchelfHook, so we'll do this in preInstallCheck.
-  # An alternative would beo to patchelf manually, using this (e.g., in the fixup phase):
-  # find $out/share/${pname}${year}/jre/bin -type f -executable -exec patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) {} \;
-  doInstallCheck = true;
-  preInstallCheck = ''
-    $out/share/${pname}${year}/${pname}${year}
+    runHook postInstall
   '';
 
   meta = with lib; {
