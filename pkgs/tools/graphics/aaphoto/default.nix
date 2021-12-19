@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchFromGitHub
+, fetchurl
 , jasper
 , libpng
 , libjpeg
@@ -9,13 +9,11 @@
 
 stdenv.mkDerivation rec {
   pname = "aaphoto";
-  version = "0.43.1";
+  version = "0.45";
 
-  src = fetchFromGitHub {
-    owner = "log69";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-qngWWqV2vLm1gO0KJ0uHOCf2IoEAs1oiygpJtDvt3s8=";
+  src = fetchurl {
+    url = "http://log69.com/downloads/aaphoto_sources_${version}.tar.gz";
+    sha256 = "sha256-06koJM7jNVFqVgqg6BmOZ74foqk6yjUIFnwULzPZ4go=";
   };
 
   buildInputs = [
