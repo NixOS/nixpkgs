@@ -10150,6 +10150,8 @@ with pkgs;
 
   termplay = callPackage ../tools/misc/termplay { };
 
+  tetrd = callPackage ../applications/networking/tetrd { };
+
   tewisay = callPackage ../tools/misc/tewisay { };
 
   texmacs = if stdenv.isDarwin
