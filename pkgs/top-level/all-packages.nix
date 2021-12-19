@@ -5610,6 +5610,8 @@ with pkgs;
 
   ghr = callPackage ../applications/version-management/git-and-tools/ghr { };
 
+  ghrepo-stats = with python3Packages; toPythonApplication ghrepo-stats;
+
   gibberish-detector = with python3Packages; toPythonApplication gibberish-detector;
 
   gibo = callPackage ../tools/misc/gibo { };
