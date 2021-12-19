@@ -4055,6 +4055,8 @@ in {
 
   itemadapter = callPackage ../development/python-modules/itemadapter { };
 
+  itemdb = callPackage ../development/python-modules/itemdb { };
+
   itemloaders = callPackage ../development/python-modules/itemloaders { };
 
   iterm2 = callPackage ../development/python-modules/iterm2 { };
