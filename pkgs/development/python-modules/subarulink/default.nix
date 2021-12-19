@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "subarulink";
-  version = "0.3.15";
+  version = "0.3.16";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "G-Two";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-akDccWkiFwTwq7dvUxm34BFNS5PnQowqnxVvkPFzxLM=";
+    sha256 = "05q10bmd45n384wcr5003r45d03j99zl92cysfp2ydlf0gj9h1pg";
   };
 
   propagatedBuildInputs = [
