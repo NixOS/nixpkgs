@@ -10200,6 +10200,8 @@ with pkgs;
 
   timetrap = callPackage ../applications/office/timetrap { };
 
+  timetagger = callPackage ../servers/timetagger { };
+
   timekeeper = callPackage ../applications/office/timekeeper { };
 
   timezonemap = callPackage ../development/libraries/timezonemap { };

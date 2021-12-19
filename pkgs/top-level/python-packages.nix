@@ -9719,6 +9719,8 @@ in {
 
   timeout-decorator = callPackage ../development/python-modules/timeout-decorator { };
 
+  timetagger = callPackage ../development/python-modules/timetagger { };
+
   timezonefinder = callPackage ../development/python-modules/timezonefinder { };
 
   tinycss2 = callPackage ../development/python-modules/tinycss2 { };
