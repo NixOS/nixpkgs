@@ -999,6 +999,8 @@ with pkgs;
 
   godns = callPackage ../tools/networking/godns { };
 
+  godspeed = callPackage ../tools/networking/godspeed { };
+
   ksnip = libsForQt5.callPackage ../tools/misc/ksnip { };
 
   linux-router = callPackage ../tools/networking/linux-router { };
