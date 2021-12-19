@@ -13,8 +13,8 @@ mkDerivation rec {
   };
 
   tsl = fetchurl {
-    url = "https://ec.europa.eu/information_society/policy/esignature/trusted-list/tl-mp.xml";
-    sha256 = "0klz9blrp0jjhlr9k1i266afp44pqmii1x0y8prk0417ia3fxpli";
+    url = "https://ec.europa.eu/tools/lotl/eu-lotl-pivot-300.xml";
+    sha256 = "1cikz36w9phgczcqnwk4k3mx3kk919wy2327jksmfa4cjfjq4a8d";
   };
 
   # Adds explicit imports for QPainterPath, fixed in upstream (https://github.com/open-eid/DigiDoc4-Client/pull/914)
