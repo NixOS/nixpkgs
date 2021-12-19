@@ -8085,6 +8085,8 @@ in {
     inherit (pkgs) libxml2;
   };
 
+  pyweatherflowrest = callPackage ../development/python-modules/pyweatherflowrest { };
+
   pywebpush = callPackage ../development/python-modules/pywebpush { };
 
   pywebview = callPackage ../development/python-modules/pywebview { };
