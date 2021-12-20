@@ -296,6 +296,8 @@ in {
 
     ena = callPackage ../os-specific/linux/ena {};
 
+    liquidtux = callPackage ../os-specific/linux/liquidtux {};
+
     v4l2loopback = callPackage ../os-specific/linux/v4l2loopback { };
 
     lttng-modules = callPackage ../os-specific/linux/lttng-modules { };
