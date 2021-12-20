@@ -1,9 +1,8 @@
 { lib, stdenv, cmake, fetchFromGitHub, libmysofa, zlib }:
 
-let version = "0.3.0";
-in stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "libspatialaudio";
-  inherit version;
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "videolabs";
@@ -15,13 +14,12 @@ in stdenv.mkDerivation {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ libmysofa zlib ];
 
-  meta = {
+  meta = with lib; {
     description =
       "Ambisonic encoding / decoding and binauralization library in C++";
     homepage = "https://github.com/videolabs/libspatialaudio";
-    license = lib.licenses.lgpl21Plus;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ krav ];
+    license = licenses.lgpl21Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ krav ];
   };
 }
-
