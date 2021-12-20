@@ -9877,6 +9877,8 @@ with pkgs;
     wlroots = wlroots_0_14;
   };
 
+  phockup = callPackage ../applications/misc/phockup { };
+
   phodav = callPackage ../tools/networking/phodav { };
 
   photon-rss = callPackage ../applications/networking/feedreaders/photon { };
