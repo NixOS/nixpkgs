@@ -1,8 +1,15 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "cement";
   version = "3.0.6";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
@@ -13,12 +20,14 @@ buildPythonPackage rec {
   # 127.0.0.1:11211.
   doCheck = false;
 
-  disabled = !isPy3k;
+  pythonImportsCheck = [
+    "cement"
+  ];
 
   meta = with lib; {
+    description = "CLI Application Framework for Python";
     homepage = "https://builtoncement.com/";
-    description = "A CLI Application Framework for Python.";
-    maintainers = with maintainers; [ eqyiel ];
     license = licenses.bsd3;
+    maintainers = with maintainers; [ eqyiel ];
   };
 }
