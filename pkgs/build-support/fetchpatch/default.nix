@@ -9,15 +9,24 @@ let
   # 0.3.4 would change hashes: https://github.com/NixOS/nixpkgs/issues/25154
   patchutils = buildPackages.patchutils_0_3_3;
 in
-{ stripLen ? 0, extraPrefix ? null, excludes ? [], includes ? [], revert ? false, ... }@args:
+{ stripLen ? 0
+, extraPrefix ? null
+, excludes ? []
+, includes ? []
+, revert ? false
+, postFetch ? ""
+, ...
+}@args:
 
 fetchurl ({
   postFetch = ''
     tmpfile="$TMPDIR/patch"
+
     if [ ! -s "$out" ]; then
       echo "error: Fetched patch file '$out' is empty!" 1>&2
       exit 1
     fi
+
     "${patchutils}/bin/lsdiff" "$out" \
       | sort -u | sed -e 's/[*?]/\\&/g' \
       | xargs -I{} \
@@ -29,6 +38,7 @@ fetchurl ({
            --addnewprefix=b/${extraPrefix} \
         ''} \
         --clean "$out" > "$tmpfile"
+
     if [ ! -s "$tmpfile" ]; then
       echo "error: Normalized patch '$tmpfile' is empty (while the fetched file was not)!" 1>&2
       echo "Did you maybe fetch a HTML representation of a patch instead of a raw patch?" 1>&2
@@ -36,6 +46,7 @@ fetchurl ({
       cat "$out" 1>&2
       exit 1
     fi
+
     ${patchutils}/bin/filterdiff \
       -p1 \
       ${builtins.toString (builtins.map (x: "-x ${lib.escapeShellArg x}") excludes)} \
@@ -52,6 +63,6 @@ fetchurl ({
   '' + lib.optionalString revert ''
     ${patchutils}/bin/interdiff "$out" /dev/null > "$tmpfile"
     mv "$tmpfile" "$out"
-  '' + (args.postFetch or "");
+  '' + postFetch;
   meta.broken = excludes != [] && includes != [];
 } // builtins.removeAttrs args ["stripLen" "extraPrefix" "excludes" "includes" "revert" "postFetch"])
