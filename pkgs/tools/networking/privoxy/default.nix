@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     # GPLv2 (or later). See https://www.privoxy.org/user-manual/copyright.html
     license = licenses.gpl2Plus;
     platforms = platforms.all;
-    maintainers = [ maintainers.phreedom ];
+    maintainers = [ ];
   };
 
 }

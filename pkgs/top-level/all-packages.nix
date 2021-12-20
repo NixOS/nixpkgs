@@ -3805,10 +3805,9 @@ with pkgs;
     enableExtraPlugins = true;
   });
 
-  asciidoctor = callPackage ../tools/typesetting/asciidoctor {
-    # epubcheck pulls in Java, which is problematic on some platforms
-    epubcheck = null;
-  };
+  asciidoctor = callPackage ../tools/typesetting/asciidoctor { };
+
+  asciidoctor-with-extensions = callPackage ../tools/typesetting/asciidoctor-with-extensions { };
 
   asciidoctorj = callPackage ../tools/typesetting/asciidoctorj { };
 
@@ -5612,6 +5611,8 @@ with pkgs;
   gst = callPackage ../applications/version-management/git-and-tools/gst { };
 
   ghr = callPackage ../applications/version-management/git-and-tools/ghr { };
+
+  ghrepo-stats = with python3Packages; toPythonApplication ghrepo-stats;
 
   gibberish-detector = with python3Packages; toPythonApplication gibberish-detector;
 
@@ -18373,6 +18374,8 @@ with pkgs;
 
   libstrophe = callPackage ../development/libraries/libstrophe { };
 
+  libspatialaudio = callPackage ../development/libraries/libspatialaudio { };
+
   libspatialindex = callPackage ../development/libraries/libspatialindex { };
 
   libspatialite = callPackage ../development/libraries/libspatialite { };
@@ -27144,6 +27147,8 @@ with pkgs;
 
   rofi-power-menu = callPackage ../applications/misc/rofi-power-menu { };
 
+  rofi-pulse-select = callPackage ../applications/audio/rofi-pulse-select { };
+
   rofi-vpn = callPackage ../applications/networking/rofi-vpn { };
 
   ympd = callPackage ../applications/audio/ympd { };
@@ -28371,6 +28376,8 @@ with pkgs;
   split2flac = callPackage ../applications/audio/split2flac { };
 
   spotify-qt = libsForQt5.callPackage ../applications/audio/spotify-qt { };
+
+  spotify-tray = callPackage ../applications/misc/spotify-tray { };
 
   spotify-tui = callPackage ../applications/audio/spotify-tui {
     inherit (darwin.apple_sdk.frameworks) AppKit Security;
@@ -29738,6 +29745,8 @@ with pkgs;
   youtube-viewer = perlPackages.WWWYoutubeViewer;
 
   ytalk = callPackage ../applications/networking/instant-messengers/ytalk { };
+
+  ytarchive = callPackage ../tools/misc/ytarchive { };
 
   ytcc = callPackage ../tools/networking/ytcc { };
 
