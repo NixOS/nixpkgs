@@ -30652,6 +30652,8 @@ with pkgs;
 
   pacvim = callPackage ../games/pacvim { };
 
+  papermc-1_12_x = callPackage ../games/papermc/1.12.nix { };
+
   papermc-1_13_x = callPackage ../games/papermc/1.13.nix { };
 
   papermc-1_14_x = callPackage ../games/papermc/1.14.nix { };
