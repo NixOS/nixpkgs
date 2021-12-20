@@ -3158,6 +3158,8 @@ in {
 
   ghp-import = callPackage ../development/python-modules/ghp-import { };
 
+  ghrepo-stats = callPackage ../development/python-modules/ghrepo-stats { };
+
   gibberish-detector = callPackage ../development/python-modules/gibberish-detector { };
 
   gidgethub = callPackage ../development/python-modules/gidgethub { };
