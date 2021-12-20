@@ -46,8 +46,9 @@
 # Tests to disable. This gets passed to `dotnet test --filter "FullyQualifiedName!={}"`, to ensure compatibility with all frameworks.
 # See https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-test#filter-option-details for more details.
 , disabledTests ? []
-# The project file to run unit tests against. This is usually the regular project file, but sometimes it needs to be manually set.
-, testProjectFile ? projectFile
+# The project file to run unit tests against. This is usually referenced in the regular project file, but sometimes it needs to be manually set.
+# It gets restored and build, but not installed. You may need to regenerate your nuget lockfile after setting this.
+, testProjectFile ? ""
 
 # The type of build to perform. This is passed to `dotnet` with the `--configuration` flag. Possible values are `Release`, `Debug`, etc.
 , buildType ? "Release"
@@ -136,7 +137,7 @@ let
 
       mkdir -p "$HOME/nuget_pkgs"
 
-      for project in "${lib.concatStringsSep "\" \"" (lib.toList projectFile)}"; do
+      for project in "${lib.concatStringsSep "\" \"" ((lib.toList projectFile) ++ lib.optionals (testProjectFile != "") (lib.toList testProjectFile))}"; do
         ${dotnet-sdk}/bin/dotnet restore "$project" \
           ${lib.optionalString (!enableParallelBuilding) "--disable-parallel"} \
           -p:ContinuousIntegrationBuild=true \
@@ -156,7 +157,7 @@ let
 
       export HOME=$(mktemp -d)
 
-      for project in ''${projectFile[@]}; do
+      for project in ''${projectFile[@]} ''${testProjectFile[@]}; do
         dotnet restore "$project" \
           ${lib.optionalString (!enableParallelBuilding) "--disable-parallel"} \
           -p:ContinuousIntegrationBuild=true \
@@ -172,7 +173,7 @@ let
     buildPhase = args.buildPhase or ''
       runHook preBuild
 
-      for project in ''${projectFile[@]}; do
+      for project in ''${projectFile[@]} ''${testProjectFile[@]}; do
         dotnet build "$project" \
           -maxcpucount:${if enableParallelBuilding then "$NIX_BUILD_CORES" else "1"} \
           -p:BuildInParallel=${if enableParallelBuilding then "true" else "false"} \
