@@ -126,6 +126,9 @@ let
       ./workspace.patch
       # Patch the sources to compile with protobuf >= 3.16.
       ./system-protobuf.patch
+      # Avoid using a deprecated method that was removed
+      # https://github.com/protocolbuffers/protobuf/blob/66dc42d891a4fc8e9190c524fd67961688a37bbe/src/google/protobuf/io/coded_stream.h#L387-L39
+      ./system-protobuf_SetTotalBytesLimit.patch
     ];
 
     # On update, it can be useful to steal the changes from gentoo
