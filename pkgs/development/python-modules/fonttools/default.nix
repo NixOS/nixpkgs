@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , pythonOlder
 , brotlipy
 , zopfli
@@ -28,6 +29,15 @@ buildPythonPackage rec {
     rev    = version;
     sha256 = "1zp9idjkn4bn1a4pn8x64vi8j1ijdsd4qvgf1f70dfwqvw6ak1i6";
   };
+
+  patches = [
+    # avoid deprecation warnings. patch already in 4.27.0
+    # https://github.com/fonttools/fonttools/pull/2400
+    (fetchpatch {
+      url = "https://github.com/fonttools/fonttools/commit/232b2ccbc4a4c9b043b23131a30ec93b821d7e39.patch";
+      sha256 = "sha256-B/EYCv7fYRyzZHhd0bOWEAZzJrOojRw6Vr/xvsC75S4=";
+    })
+  ];
 
   # all dependencies are optional, but
   # we run the checks with them
