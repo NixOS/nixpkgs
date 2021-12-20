@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "log4j-sniffer";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "palantir";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-5KoZ0QiHqyy0Zn1K0kLCYAaszD6hkng260WYSeZN0Ac=";
+    sha256 = "sha256-dsuIeNAYe/iuxfezfs+hyyziFrE3M+GRxqYuawYFKDU=";
   };
 
   vendorSha256 = null;
