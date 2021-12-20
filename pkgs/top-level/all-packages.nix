@@ -16066,7 +16066,9 @@ with pkgs;
 
   cpp-ipfs-api = callPackage ../development/libraries/cpp-ipfs-api { };
 
-  cpp-netlib = callPackage ../development/libraries/cpp-netlib {};
+  cpp-netlib = callPackage ../development/libraries/cpp-netlib {
+    boost = boost169; # fatal error: 'boost/asio/stream_socket_service.hpp' file not found
+  };
 
   ubus = callPackage ../development/libraries/ubus { };
 
@@ -18723,6 +18725,7 @@ with pkgs;
       proj = proj_7;
     };
     proj = proj_7;
+    boost = boost175;
   };
 
 
@@ -22726,7 +22729,9 @@ with pkgs;
 
   semodule-utils = callPackage ../os-specific/linux/semodule-utils { };
 
-  powerdns = callPackage ../servers/dns/powerdns { };
+  powerdns = callPackage ../servers/dns/powerdns {
+    boost = boost172;
+  };
 
   powerdns-admin = callPackage ../applications/networking/powerdns-admin { };
 
@@ -24287,11 +24292,21 @@ with pkgs;
 
   jnetmap = callPackage ../applications/networking/jnetmap {};
 
-  libbitcoin = callPackage ../tools/misc/libbitcoin/libbitcoin.nix { };
-  libbitcoin-protocol = callPackage ../tools/misc/libbitcoin/libbitcoin-protocol.nix { };
-  libbitcoin-client   = callPackage ../tools/misc/libbitcoin/libbitcoin-client.nix { };
-  libbitcoin-network  = callPackage ../tools/misc/libbitcoin/libbitcoin-network.nix { };
-  libbitcoin-explorer = callPackage ../tools/misc/libbitcoin/libbitcoin-explorer.nix { };
+  libbitcoin = callPackage ../tools/misc/libbitcoin/libbitcoin.nix {
+    boost = boost175; # fatal error: 'boost/interprocess/detail/posix_time_types_wrk.hpp' file not found
+  };
+  libbitcoin-protocol = callPackage ../tools/misc/libbitcoin/libbitcoin-protocol.nix {
+    boost = boost175;
+  };
+  libbitcoin-client   = callPackage ../tools/misc/libbitcoin/libbitcoin-client.nix {
+    boost = boost175;
+  };
+  libbitcoin-network  = callPackage ../tools/misc/libbitcoin/libbitcoin-network.nix {
+    boost = boost175;
+  };
+  libbitcoin-explorer = callPackage ../tools/misc/libbitcoin/libbitcoin-explorer.nix {
+    boost = boost175;
+  };
 
 
   aumix = callPackage ../applications/audio/aumix {
@@ -26672,7 +26687,9 @@ with pkgs;
 
   libowlevelzs = callPackage ../development/libraries/libowlevelzs { };
 
-  librecad = libsForQt514.callPackage ../applications/misc/librecad { };
+  librecad = libsForQt514.callPackage ../applications/misc/librecad {
+    boost = boost175;
+  };
 
   libreoffice = hiPrio libreoffice-still;
   libreoffice-unwrapped = libreoffice.libreoffice;
