@@ -30652,9 +30652,11 @@ with pkgs;
 
   pacvim = callPackage ../games/pacvim { };
 
-  papermc = callPackage ../games/papermc { };
+  papermc-1_17_x = callPackage ../games/papermc/1.17.nix { };
 
   papermc-1_18_x = callPackage ../games/papermc/1.18.nix { };
+
+  papermc = papermc-1_17_x; # current stable build
 
   pentobi = libsForQt5.callPackage ../games/pentobi { };
 
