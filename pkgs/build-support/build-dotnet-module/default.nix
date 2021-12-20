@@ -110,6 +110,9 @@ let
     # Stripping breaks the executable
     dontStrip = true;
 
+    # gappsWrapperArgs gets included when wrapping for dotnet, as to avoid double wrapping
+    dontWrapGApps = true;
+
     DOTNET_NOLOGO = true; # This disables the welcome message.
     DOTNET_CLI_TELEMETRY_OPTOUT = true;
 

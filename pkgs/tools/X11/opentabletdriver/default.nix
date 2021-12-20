@@ -85,8 +85,6 @@ buildDotnetModule rec {
     })
   ];
 
-  dontWrapGApps = true;
-
   passthru = {
     updateScript = ./update.sh;
     tests = {
