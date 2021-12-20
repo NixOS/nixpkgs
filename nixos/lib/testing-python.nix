@@ -86,13 +86,6 @@ rec {
         nodesList = map (c: c.config.system.name) (lib.attrValues nodes);
       in nodesList ++ lib.optional (lib.length nodesList == 1) "machine";
 
-      # TODO: This is an implementation error and needs fixing
-      # the testing famework cannot legitimately restrict hostnames further
-      # beyond RFC1035
-      invalidNodeNames = lib.filter
-        (node: builtins.match "^[A-z_]([A-z0-9_]+)?$" node == null)
-        nodeHostNames;
-
       testScript' =
         # Call the test script with the computed nodes.
         if lib.isFunction testScript
@@ -100,16 +93,7 @@ rec {
         else testScript;
 
     in
-    if lib.length invalidNodeNames > 0 then
-      throw ''
-        Cannot create machines out of (${lib.concatStringsSep ", " invalidNodeNames})!
-        All machines are referenced as python variables in the testing framework which will break the
-        script when special characters are used.
-
-        This is an IMPLEMENTATION ERROR and needs to be fixed. Meanwhile,
-        please stick to alphanumeric chars and underscores as separation.
-      ''
-    else lib.warnIf skipLint "Linting is disabled" (runCommand testDriverName
+    lib.warnIf skipLint "Linting is disabled" (runCommand testDriverName
       {
         inherit testName;
         nativeBuildInputs = [ makeWrapper ];
