@@ -5877,6 +5877,8 @@ in {
 
   ppdeep = callPackage ../development/python-modules/ppdeep { };
 
+  proxy_tools = callPackage ../development/python-modules/proxy_tools { };
+
   pyaehw4a1 = callPackage ../development/python-modules/pyaehw4a1 { };
 
   pyatag = callPackage ../development/python-modules/pyatag { };
