@@ -208,6 +208,7 @@ in
         serviceConfig =
           { Type = "forking";
             PIDFile = "/run/dhcpcd/pid";
+            RuntimeDirectory = "dhcpcd";
             ExecStart = "@${dhcpcd}/sbin/dhcpcd dhcpcd --quiet ${optionalString cfg.persistent "--persistent"} --config ${dhcpcdConf}";
             ExecReload = "${dhcpcd}/sbin/dhcpcd --rebind";
             Restart = "always";
