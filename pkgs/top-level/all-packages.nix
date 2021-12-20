@@ -30654,6 +30654,8 @@ with pkgs;
 
   papermc = callPackage ../games/papermc { };
 
+  papermc-1_18_x = callPackage ../games/papermc/1.18.nix { };
+
   pentobi = libsForQt5.callPackage ../games/pentobi { };
 
   performous = callPackage ../games/performous {
