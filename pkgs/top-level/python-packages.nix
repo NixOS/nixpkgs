@@ -2560,6 +2560,8 @@ in {
 
   eradicate = callPackage ../development/python-modules/eradicate { };
 
+  esprima = callPackage ../development/python-modules/esprima { };
+
   escapism = callPackage ../development/python-modules/escapism { };
 
   etcd = callPackage ../development/python-modules/etcd { };
@@ -8201,6 +8203,8 @@ in {
   Quandl = callPackage ../development/python-modules/quandl { }; # alias for an older package which did not support Python 3
 
   quantities = callPackage ../development/python-modules/quantities { };
+
+  quantum-gateway = callPackage ../development/python-modules/quantum-gateway { };
 
   querystring_parser = callPackage ../development/python-modules/querystring-parser { };
 
