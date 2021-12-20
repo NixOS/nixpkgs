@@ -200,11 +200,11 @@ common =
     };
   in nix;
 
-  boehmgc_nix = boehmgc.override {
+  boehmgc_nix_2_3 = boehmgc.override {
     enableLargeConfig = true;
   };
 
-  boehmgc_nixUnstable = boehmgc_nix.overrideAttrs (drv: {
+  boehmgc_nix = boehmgc_nix_2_3.overrideAttrs (drv: {
     patches = (drv.patches or []) ++ [
       # Part of the GC solution in https://github.com/NixOS/nix/pull/4944
       (fetchpatch {
@@ -235,7 +235,7 @@ in rec {
       sha256 = "sha256-fuaBtp8FtSVJLSAsO+3Nne4ZYLuBj2JpD2xEk7fCqrw=";
     };
 
-    boehmgc = boehmgc_nix;
+    boehmgc = boehmgc_nix_2_3;
 
     inherit storeDir stateDir confDir;
   });
@@ -251,7 +251,7 @@ in rec {
       sha256 = "sha256-op48CCDgLHK0qV1Batz4Ln5FqBiRjlE6qHTiZgt3b6k=";
     };
 
-    boehmgc = boehmgc_nixUnstable;
+    boehmgc = boehmgc_nix;
 
     patches = [ installNlohmannJsonPatch ];
 
@@ -269,7 +269,7 @@ in rec {
       sha256 = "sha256-GOsiqy9EaTwDn2PLZ4eFj1VkXcBUbqrqHehRE9GuGdU=";
     };
 
-    boehmgc = boehmgc_nixUnstable;
+    boehmgc = boehmgc_nix;
 
     patches = [ installNlohmannJsonPatch ];
 
@@ -288,7 +288,7 @@ in rec {
       sha256 = "sha256-zdMODMLdJ0smEEzNMOoIzBxt9QWVzgMvr+pwxkhtD4g=";
     };
 
-    boehmgc = boehmgc_nixUnstable;
+    boehmgc = boehmgc_nix;
 
     patches = [ installNlohmannJsonPatch ];
 
