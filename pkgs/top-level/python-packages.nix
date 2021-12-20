@@ -4847,6 +4847,8 @@ in {
 
   merkletools = callPackage ../development/python-modules/merkletools { };
 
+  meross-iot = callPackage ../development/python-modules/meross-iot { };
+
   mesa = callPackage ../development/python-modules/mesa { };
 
   meshio = callPackage ../development/python-modules/meshio { };
@@ -6203,6 +6205,8 @@ in {
 
   proxmoxer = callPackage ../development/python-modules/proxmoxer { };
 
+  proxy-py = callPackage ../development/python-modules/proxy-py { };
+
   psautohint = callPackage ../development/python-modules/psautohint { };
 
   psd-tools = callPackage ../development/python-modules/psd-tools { };
@@ -7538,6 +7542,8 @@ in {
   pytest-instafail = callPackage ../development/python-modules/pytest-instafail { };
 
   pytest-isort = callPackage ../development/python-modules/pytest-isort { };
+
+  pytest-json-report = callPackage ../development/python-modules/pytest-json-report { };
 
   pytest-lazy-fixture = callPackage ../development/python-modules/pytest-lazy-fixture { };
 
