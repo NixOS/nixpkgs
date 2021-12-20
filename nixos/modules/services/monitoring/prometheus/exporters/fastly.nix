@@ -32,10 +32,10 @@ in
     script = ''
       ${optionalString (cfg.tokenPath != null)
       "export FASTLY_API_TOKEN=$(cat ${toString cfg.tokenPath})"}
-      ${pkgs.fastly-exporter}/bin/fastly-exporter \
-        -endpoint http://${cfg.listenAddress}:${cfg.port}/metrics
+      ${pkgs.prometheus-fastly-exporter}/bin/fastly-exporter \
+        -endpoint http://${cfg.listenAddress}:${toString cfg.port}/metrics
         ${optionalString cfg.debug "-debug true"} \
-        ${optionalString cfg.configFile "-config-file ${cfg.configFile}"}
+        ${optionalString (cfg.configFile != null) "-config-file ${cfg.configFile}"}
     '';
   };
 }
