@@ -1885,6 +1885,8 @@ with pkgs;
 
   pacparser = callPackage ../tools/networking/pacparser { };
 
+  opencbm = callPackage ../tools/misc/opencbm { };
+
   parquet-tools = callPackage ../tools/misc/parquet-tools { };
 
   pass = callPackage ../tools/security/pass { };
