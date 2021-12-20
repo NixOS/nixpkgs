@@ -259,6 +259,19 @@ let
       '';
     };
 
+    fastly = {
+      exporterConfig = {
+        enable = true;
+        tokenPath = pkgs.writeText "token" "abc123";
+      };
+
+      # noop: fastly's exporter can't start without first talking to fastly
+      # see: https://github.com/peterbourgon/fastly-exporter/issues/87
+      exporterTest = ''
+        succeed("true");
+      '';
+    };
+
     fritzbox = {
       # TODO add proper test case
       exporterConfig = {
