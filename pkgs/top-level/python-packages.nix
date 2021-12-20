@@ -3350,6 +3350,8 @@ in {
 
   gorilla = callPackage ../development/python-modules/gorilla { };
 
+  goveelights = callPackage ../development/python-modules/goveelights { };
+
   gpapi = callPackage ../development/python-modules/gpapi { };
 
   gplaycli = callPackage ../development/python-modules/gplaycli { };
