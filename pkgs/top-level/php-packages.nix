@@ -133,12 +133,14 @@ lib.makeScope pkgs.newScope (self: with self; {
   php = phpPackage;
 
   # This is a set of interactive tools based on PHP.
-  tools = {
+  tools = rec {
     box = callPackage ../development/php-packages/box { };
 
     composer = callPackage ../development/php-packages/composer { };
 
     deployer = callPackage ../development/php-packages/deployer { };
+
+    phpactor = callPackage ../development/php-packages/phpactor { inherit composer; };
 
     php-cs-fixer = callPackage ../development/php-packages/php-cs-fixer { };
 
