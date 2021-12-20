@@ -38,6 +38,6 @@ stdenv.mkDerivation rec {
     repositories.git = "https://git.torproject.org/torsocks.git";
     license          = lib.licenses.gpl2;
     platforms        = lib.platforms.unix;
-    maintainers      = with lib.maintainers; [ phreedom thoughtpolice ];
+    maintainers      = with lib.maintainers; [ thoughtpolice ];
   };
 }

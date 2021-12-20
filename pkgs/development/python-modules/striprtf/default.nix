@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "striprtf";
-  version = "0.0.16";
+  version = "0.0.17";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "690387117f3341354fddd0957913158d1319c207755c0cc54a614f80248887b2";
+    sha256 = "e122b5d334cda9b0edb3eeb8910f01d0ffb02eaca054facd75b17b98fcf646f5";
   };
 
   meta = with lib; {

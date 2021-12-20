@@ -3481,9 +3481,9 @@
     githubId = 5493775;
     name = "Ente";
   };
-  enzime = {
+  Enzime = {
     email = "enzime@users.noreply.github.com";
-    github = "enzime";
+    github = "Enzime";
     githubId = 10492681;
     name = "Michael Hoang";
   };
@@ -9183,12 +9183,6 @@
     github = "photex";
     githubId = 301903;
     name = "Chip Collier";
-  };
-  phreedom = {
-    email = "phreedom@yandex.ru";
-    github = "phreedom";
-    githubId = 62577;
-    name = "Evgeny Egorochkin";
   };
   phryneas = {
     email = "mail@lenzw.de";

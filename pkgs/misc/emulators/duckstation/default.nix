@@ -1,51 +1,59 @@
 { lib
 , mkDerivation
 , fetchFromGitHub
-, cmake
-, extra-cmake-modules
-, pkg-config
 , SDL2
-, qtbase
-, wrapQtAppsHook
-, qttools
-, ninja
+, cmake
+, curl
+, extra-cmake-modules
 , gtk3
 , libevdev
-, curl
 , libpulseaudio
-, sndio
 , mesa
+, ninja
+, pkg-config
+, qtbase
+, qttools
+, sndio
 , vulkan-loader
 , wayland
+, wrapQtAppsHook
 }:
+
 mkDerivation rec {
   pname = "duckstation";
-  version = "unstable-2021-10-29";
+  version = "0.pre+date=2021-12-16";
 
   src = fetchFromGitHub {
     owner = "stenzek";
     repo = pname;
-    rev = "287b1e1abc98ef3f01d8530e0b428b58d8e77e96";
-    sha256 = "sha256-1s7oBdOOkK6a3DKCZ70dAilFzlzrURwhx+MRTmOPWJE=";
+    rev = "59cb7c03432f5f8d9f6283c71a34825d05e118c6";
+    sha256 = "sha256-vF3YEpicbwCtR6QW2huNk0+pJ7BBjn/x9/Ae1c00gN4=";
   };
 
-  nativeBuildInputs = [ cmake ninja pkg-config extra-cmake-modules wrapQtAppsHook qttools ];
+  nativeBuildInputs = [
+    cmake
+    extra-cmake-modules
+    ninja
+    pkg-config
+    qttools
+    wrapQtAppsHook
+  ];
 
   buildInputs = [
     SDL2
-    qtbase
+    curl
     gtk3
     libevdev
-    sndio
-    mesa
-    curl
     libpulseaudio
-    wayland
+    mesa
+    qtbase
+    sndio
     vulkan-loader
+    wayland
   ];
 
   cmakeFlags = [
-    "-DUSE_DRMKMS=ON" # Broken in combination with Wayland, https://github.com/stenzek/duckstation/issues/2630
+    "-DUSE_DRMKMS=ON"
     "-DUSE_WAYLAND=ON"
   ];
 
@@ -62,6 +70,7 @@ mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
+
     mkdir -p $out/bin $out/share $out/share/pixmaps $out/share/applications
     rm bin/common-tests
 
@@ -70,6 +79,7 @@ mkDerivation rec {
 
     cp ../extras/icons/icon-256px.png $out/share/pixmaps/duckstation.png
     cp ../extras/linux-desktop-files/* $out/share/applications/
+
     runHook postInstall
   '';
 
@@ -84,14 +94,13 @@ mkDerivation rec {
     "--prefix LD_LIBRARY_PATH : ${vulkan-loader}/lib"
   ];
 
-  # TODO:
-  # - default sound backend (cubeb) does not work, but SDL does. Strangely, switching to cubeb while a game is running makes it work.
-
   meta = with lib; {
-    description = "PlayStation 1 emulator focusing on playability, speed and long-term maintainability";
     homepage = "https://github.com/stenzek/duckstation";
+    description = "Fast PlayStation 1 emulator for x86-64/AArch32/AArch64";
     license = licenses.gpl3Only;
+    maintainers = with maintainers; [ guibou AndersonTorres ];
     platforms = platforms.linux;
-    maintainers = [ maintainers.guibou ];
   };
 }
+# TODO: default sound backend (cubeb) does not work, but SDL does. Strangely,
+# switching to cubeb while a game is running makes it work.
