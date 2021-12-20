@@ -15884,6 +15884,8 @@ with pkgs;
 
   buddy = callPackage ../development/libraries/buddy { };
 
+  buildkit-nix = callPackage ../applications/virtualization/buildkit-nix { };
+
   bulletml = callPackage ../development/libraries/bulletml { };
 
   bwidget = callPackage ../development/libraries/bwidget { };
