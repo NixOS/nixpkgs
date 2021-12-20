@@ -54,8 +54,9 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.tests = {
-    inherit (nixosTests) knot;
     inherit knot-resolver;
+  } // lib.optionalAttrs stdenv.isLinux {
+    inherit (nixosTests) knot;
   };
 
   meta = with lib; {
