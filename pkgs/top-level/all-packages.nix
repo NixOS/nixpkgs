@@ -8685,6 +8685,8 @@ with pkgs;
     wlroots = wlroots_0_12;
   };
 
+  phockup = callPackage ../applications/misc/phockup { };
+
   phodav = callPackage ../tools/networking/phodav { };
 
   pim6sd = callPackage ../servers/pim6sd { };
