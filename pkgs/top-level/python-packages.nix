@@ -3074,6 +3074,8 @@ in {
 
   geeknote = callPackage ../development/python-modules/geeknote { };
 
+  gehomesdk = callPackage ../development/python-modules/gehomesdk { };
+
   gemfileparser = callPackage ../development/python-modules/gemfileparser { };
 
   genanki = callPackage ../development/python-modules/genanki { };
