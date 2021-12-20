@@ -1,6 +1,6 @@
-# === This file is part of Calamares - <https://github.com/calamares> ===
 #
 #   SPDX-FileCopyrightText: 2019 Adriaan de Groot <groot@kde.org>
+#   SPDX-FileCopyrightText: 2021 Victor Fuentes <vmf24@cornel.edu>
 #   SPDX-License-Identifier: GPL-3.0-or-later
 #
 ###
@@ -40,7 +40,7 @@
 #
 cmake_minimum_required(VERSION 3.3 FATAL_ERROR)
 
-set( CALAMARES_EXTENSIONS_VERSION 1.2.1 )
+set( CALAMARES_EXTENSIONS_VERSION 0.0.1 )
 
 include( ${CMAKE_CURRENT_LIST_DIR}/CMakeModules/ExtendedVersion.cmake )
 if ( CMAKE_SCRIPT_MODE_FILE )
@@ -56,14 +56,9 @@ project(calamares-extensions
 set( CMAKE_CXX_STANDARD 17 )
 set( CMAKE_CXX_STANDARD_REQUIRED ON )
 
-# On developer's machine, the user package registry breaks
-# consumers by loading the developer's config from a build
-# directory (which doesn't have the rest of the config
-# installed inside it).
-set( CALAMARES_VERSION_REQUIRED 3.2.46 )
-find_package(Calamares ${CALAMARES_VERSION_REQUIRED} NO_CMAKE_PACKAGE_REGISTRY)
+find_package(Calamares NO_CMAKE_PACKAGE_REGISTRY)
 if (NOT TARGET Calamares::calamares OR NOT TARGET Calamares::calamaresui)
-    find_package(Calamares ${CALAMARES_VERSION_REQUIRED} REQUIRED)
+    find_package(Calamares REQUIRED)
 endif()
 
 ### CMAKE SETUP
@@ -96,28 +91,14 @@ calamares_add_branding_subdirectory( branding/default NAME default )
 calamares_add_branding_subdirectory( branding/default-mobile NAME default-mobile )
 calamares_add_branding_subdirectory( branding/fancy NAME fancy )
 
-# This one has files in subdirectories
-calamares_add_branding_subdirectory( branding/samegame NAME samegame SUBDIRECTORIES img )
-
-# KaOS branding, with translations, note we can *NAME* something
-# different from the source directory it lives in; this will be installed
-# to a directory called *NAME* though -- and the `branding.desc` must
-# have a *componentName* that matches this *NAME*.
-calamares_add_branding_subdirectory( branding/kaos_branding NAME kaos )
-
 ### MODULES
 #
 # Add one of more modules, either C++ or Python.
 #
 set(LIST_SKIPPED_MODULES "")
 
-calamares_add_module_subdirectory( modules/freebsddisk LIST_SKIPPED_MODULES )  # C++ viewmodule
-calamares_add_module_subdirectory( modules/mobile LIST_SKIPPED_MODULES )
-calamares_add_module_subdirectory( modules/os-freebsd LIST_SKIPPED_MODULES )
-calamares_add_module_subdirectory( modules/os-nixos LIST_SKIPPED_MODULES )
-calamares_add_module_subdirectory( modules/refind LIST_SKIPPED_MODULES )
-calamares_add_module_subdirectory( modules/slowpython LIST_SKIPPED_MODULES )  # Python job
-calamares_add_module_subdirectory( modules/unpackfsc LIST_SKIPPED_MODULES )
+calamares_add_module_subdirectory( modules/nixos-generate-config LIST_SKIPPED_MODULES )
+calamares_add_module_subdirectory( modules/nixos-customize-config LIST_SKIPPED_MODULES )
 
 # If modules cannot be built, they usually call a macro
 # which builds a list of explanations; show that list.
