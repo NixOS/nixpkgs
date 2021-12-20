@@ -33,7 +33,7 @@ in
       ${optionalString (cfg.tokenPath != null)
       "export FASTLY_API_TOKEN=$(cat ${toString cfg.tokenPath})"}
       ${pkgs.prometheus-fastly-exporter}/bin/fastly-exporter \
-        -endpoint http://${cfg.listenAddress}:${toString cfg.port}/metrics
+        -listen http://${cfg.listenAddress}:${toString cfg.port}
         ${optionalString cfg.debug "-debug true"} \
         ${optionalString (cfg.configFile != null) "-config-file ${cfg.configFile}"}
     '';
