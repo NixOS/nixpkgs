@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, setuptools_scm
+, setuptools-scm
 , pyqt5
 , typing-extensions
 , pytest
@@ -16,7 +16,7 @@
     sha256 = "sha256-rkTiCJ8mIogS9SDmLPiaAyhhuBx3kk6rXjCc19zbwiM=";
   };
   format = "pyproject";
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
   propagatedBuildInputs = [ pyqt5 typing-extensions ];
   checkInputs = [ pytestCheckHook pytest ];
   doCheck = false; # Segfaults...

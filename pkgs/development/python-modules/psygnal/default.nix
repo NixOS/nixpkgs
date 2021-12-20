@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , wheel
 , setuptools
-, setuptools_scm
+, setuptools-scm
 , pytestCheckHook
 , pytest-mypy-plugins
 , pytest-cov
@@ -20,7 +20,7 @@
     rev = "v${version}";
     sha256 = "sha256-SiG2ywNEw3aNrRXyEMFTnvHKtKowO8yqoCaNI8PT4/Y=";
   };
-  buildInputs = [ setuptools_scm ];
+  buildInputs = [ setuptools-scm ];
   propagatedBuildInputs = [ typing-extensions ];
   checkInputs = [ pytestCheckHook pytest-cov pytest-mypy-plugins ];
   doCheck = false;  # mypy checks are failing

@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, setuptools_scm
+, setuptools-scm
 , pytestCheckHook
 , vispy
 , napari-plugin-engine
@@ -15,7 +15,7 @@
     rev = "v${version}";
     sha256 = "sha256-20NLi6JTugP+hxqF2AnhSkuvhkGGbeG+tT3M2SZbtRc=";
   };
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
   propagatedBuildInputs = [ vispy napari-plugin-engine imageio ];
   checkInputs = [ pytestCheckHook ];
   doCheck = false; # Circular dependency: napari

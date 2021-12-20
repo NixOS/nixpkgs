@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, setuptools_scm
+, setuptools-scm
 , pytestCheckHook
 , pytest
 , ipython
@@ -18,7 +18,7 @@
     rev = "v${version}";
     sha256 = "sha256-aVdYOzkZ+dqB680oDjNCg6quXU+QgUZI09E/MSTagyA=";
   };
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
   # setup.py somehow requires pytest
   propagatedBuildInputs = [ pytest ipython ipykernel napari-plugin-engine imageio qtconsole ];
   chechInputs = [ pytestCheckHook ];

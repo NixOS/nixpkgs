@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, setuptools_scm
+, setuptools-scm
 , pytestCheckHook
 }: buildPythonPackage rec {
   pname = "napari-plugin-engine";
@@ -12,7 +12,7 @@
     rev = "v${version}";
     sha256 = "sha256-cKpCAEYYRq3UPje7REjzhEe1J9mmrtXs8TBnxWukcNE=";
   };
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
   checkInputs = [ pytestCheckHook ];
   doCheck = false;
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

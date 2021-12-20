@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , setuptools
-, setuptools_scm
+, setuptools-scm
 , wheel
 , pytest
 }: buildPythonPackage rec {
@@ -14,7 +14,7 @@
     rev = "${version}";
     sha256 = "sha256-hQuPJQrGvDs4dJrMLSR4sSnqy45xrF2ufinBG+azuCg=";
   };
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
   propagatedBuildInputs = [ pytest setuptools wheel ];
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 

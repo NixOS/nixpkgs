@@ -2,7 +2,7 @@
 , mkDerivationWith
 , buildPythonPackage
 , fetchFromGitHub
-, setuptools_scm
+, setuptools-scm
 , superqt
 , typing-extensions
 , tifffile
@@ -35,7 +35,7 @@
     rev = "v${version}";
     sha256 = "sha256-0QSI0mgDjF70/X58fE7uWwlBUCGY5gsvbCm4oJkp2Yk=";
   };
-  nativeBuildInputs = [ setuptools_scm wrapQtAppsHook ];
+  nativeBuildInputs = [ setuptools-scm wrapQtAppsHook ];
   propagatedBuildInputs = [
     napari-plugin-engine
     cachey

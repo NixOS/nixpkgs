@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, setuptools_scm
+, setuptools-scm
 , pytestCheckHook
 , pytest-mypy-plugins
 , typing-extensions
@@ -18,7 +18,7 @@
     rev = "v${version}";
     sha256 = "sha256-DvL1szk2RoCrpisjp0BVNL6qFZtYc2oYDenX59Cxbug=";
   };
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
   propagatedBuildInputs = [ typing-extensions qtpy pyside2 psygnal docstring-parser ];
   checkInputs = [ pytestCheckHook pytest-mypy-plugins ];
   doCheck = false; # Reports "Fatal Python error"
