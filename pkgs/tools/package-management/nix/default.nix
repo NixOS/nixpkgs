@@ -225,7 +225,7 @@ in rec {
 
   nix = nixStable;
 
-  nixStable = nix_2_4;
+  nixStable = nix_2_5;
 
   nix_2_3 = callPackage common (rec {
     pname = "nix";
