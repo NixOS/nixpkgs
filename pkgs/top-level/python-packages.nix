@@ -1294,6 +1294,8 @@ in {
 
   breezy = callPackage ../development/python-modules/breezy { };
 
+  brelpy = callPackage ../development/python-modules/brelpy { };
+
   broadlink = callPackage ../development/python-modules/broadlink { };
 
   brother = callPackage ../development/python-modules/brother { };
