@@ -59,6 +59,15 @@ buildDotnetModule rec {
     udev
   ];
 
+  doCheck = true;
+  testProjectFile = "OpenTabletDriver.Tests/OpenTabletDriver.Tests.csproj";
+
+  # Require networking
+  disabledTests = [
+    "OpenTabletDriver.Tests.PluginRepositoryTest.ExpandRepositoryTarballFork"
+    "OpenTabletDriver.Tests.PluginRepositoryTest.ExpandRepositoryTarball"
+  ];
+
   postInstall = ''
     # Give a more "*nix" name to the binaries
     mv $out/bin/OpenTabletDriver.Console $out/bin/otd
