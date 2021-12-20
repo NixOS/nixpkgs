@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "appeditor";
-  version = "1.1.1";
+  version = "1.1.3";
 
   src = fetchFromGitHub {
     owner = "donadigo";
     repo = "appeditor";
     rev = version;
-    sha256 = "14ycw1b6v2sa4vljpnx2lpx4w89mparsxk6s8w3yx4dqjglcg5bp";
+    sha256 = "sha256-0zutz1nnThyF7h44cDxjE53hhAJfJf6DTs9p4HflXr8=";
   };
 
   nativeBuildInputs = [
