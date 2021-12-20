@@ -31,11 +31,12 @@ common =
   }:
   let
      sh = busybox-sandbox-shell;
-     nix = stdenv.mkDerivation rec {
-      inherit pname version src patches;
 
-      is24 = lib.versionAtLeast version "2.4pre";
-      is25 = lib.versionAtLeast version "2.5pre";
+    is24 = lib.versionAtLeast version "2.4pre";
+    is25 = lib.versionAtLeast version "2.5pre";
+
+    nix = stdenv.mkDerivation {
+      inherit pname version src patches;
 
       VERSION_SUFFIX = suffix;
 
@@ -173,6 +174,9 @@ common =
       };
 
       passthru = {
+        is24 = lib.warn ''nix package: attribute .is24 is deprecated. Please use lib.versionAtLeast X.version "2.4pre".'' is24;
+        is25 = lib.warn ''nix package: attribute .is25 is deprecated. Please use lib.versionAtLeast X.version "2.5pre".'' is25;
+
         perl-bindings = perl.pkgs.toPerlModule (stdenv.mkDerivation {
           pname = "nix-perl";
           inherit version;
