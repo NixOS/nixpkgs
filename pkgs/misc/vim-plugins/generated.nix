@@ -3358,6 +3358,18 @@ final: prev:
     meta.homepage = "https://github.com/vim-scripts/mayansmoke/";
   };
 
+  mini-nvim = buildVimPluginFrom2Nix {
+    pname = "mini.nvim";
+    version = "2021-12-19";
+    src = fetchFromGitHub {
+      owner = "echasnovski";
+      repo = "mini.nvim";
+      rev = "5bfb783225d4204db6aeb68311d80f9e80b9ab14";
+      sha256 = "1ryf16zndj4g31zqabwxsw9lyj0n1if8d6h6f6jkpd08j4h51jgw";
+    };
+    meta.homepage = "https://github.com/echasnovski/mini.nvim/";
+  };
+
   minimap-vim = buildVimPluginFrom2Nix {
     pname = "minimap.vim";
     version = "2021-12-20";
@@ -4048,8 +4060,8 @@ final: prev:
     src = fetchFromGitHub {
       owner = "MunifTanjim";
       repo = "nui.nvim";
-      rev = "e4ee72ba93dcb91f2f9ecc3035251a08bf83f67e";
-      sha256 = "1ii961gjpa0ygkxnh16kxwbpnc0wrn4k9m284hiaagrbql148n7a";
+      rev = "c16b09708f7ebf73cb46e876d44b97f153e28248";
+      sha256 = "13q933h9spf7qld1ln4x11r8hlh3j71f5g88b7k5f91csi0vsfb8";
     };
     meta.homepage = "https://github.com/MunifTanjim/nui.nvim/";
   };
