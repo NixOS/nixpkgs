@@ -1321,7 +1321,8 @@ genericBuild() {
         if [[ "$curPhase" = distPhase && -z "${doDist:-}" ]]; then continue; fi
 
         if [[ -n $NIX_LOG_FD ]]; then
-            echo "@nix { \"action\": \"setPhase\", \"phase\": \"$curPhase\" }" >&$NIX_LOG_FD
+            TIMESTAMP=$(date +"%s")
+            echo "@nix { \"action\": \"setPhase\", \"phase\": \"$curPhase\" , \"timestamp\": $TIMESTAMP }" >&$NIX_LOG_FD
         fi
 
         showPhaseHeader "$curPhase"
@@ -1335,6 +1336,10 @@ genericBuild() {
             cd "${sourceRoot:-.}"
         fi
     done
+    if [[ -n $NIX_LOG_FD ]]; then
+        TIMESTAMP=$(date +"%s")
+        echo "@nix { \"timestamp\": $TIMESTAMP }" >&$NIX_LOG_FD
+    fi
 }
 
 
