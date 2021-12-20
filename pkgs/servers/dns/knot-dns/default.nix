@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, pkg-config, gnutls, liburcu, lmdb, libcap_ng, libidn2, libunistring
 , systemd, nettle, libedit, zlib, libiconv, libintl, libmaxminddb, libbpf, nghttp2, libmnl
-, autoreconfHook, nixosTests
+, autoreconfHook, nixosTests, knot-resolver
 }:
 
 stdenv.mkDerivation rec {
@@ -53,7 +53,10 @@ stdenv.mkDerivation rec {
     rm -r "$out"/lib/*.la
   '';
 
-  passthru.tests = { inherit (nixosTests) knot; };
+  passthru.tests = {
+    inherit (nixosTests) knot;
+    inherit knot-resolver;
+  };
 
   meta = with lib; {
     description = "Authoritative-only DNS server from .cz domain registry";
