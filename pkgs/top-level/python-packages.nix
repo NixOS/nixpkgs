@@ -5433,6 +5433,8 @@ in {
 
   omegaconf = callPackage ../development/python-modules/omegaconf { };
 
+  omnikinverter = callPackage ../development/python-modules/omnikinverter { };
+
   omnilogic = callPackage ../development/python-modules/omnilogic { };
 
   ondilo = callPackage ../development/python-modules/ondilo { };
