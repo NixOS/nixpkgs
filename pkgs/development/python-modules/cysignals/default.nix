@@ -1,4 +1,5 @@
 { lib
+, autoreconfHook
 , fetchPypi
 , buildPythonPackage
 , cython
@@ -9,11 +10,11 @@ assert pariSupport -> pari != null;
 
 buildPythonPackage rec {
   pname = "cysignals";
-  version = "1.11.1";
+  version = "1.11.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "72985b0ddd6d6f0084b9583562c39d818012420c4f7dd8bf31b55be45d3b95f8";
+    sha256 = "5858b1760fbe21848121b826b2463a67ac5a45caf3d73105497a68618c5a6fa6";
   };
 
   # explicit check:
@@ -39,6 +40,8 @@ buildPythonPackage rec {
     # pari.
     pari
   ];
+
+  nativeBuildInputs = [ autoreconfHook ];
 
   enableParallelBuilding = true;
 
