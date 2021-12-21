@@ -85,6 +85,7 @@ stdenv.mkDerivation {
 
     ./CVE-2020-35448.patch
     ./CVE-2021-3487.patch
+    ./CVE-2021-45078.patch
   ] ++ lib.optional stdenv.targetPlatform.isiOS ./support-ios.patch
     ++ # This patch was suggested by Nick Clifton to fix
        # https://sourceware.org/bugzilla/show_bug.cgi?id=16177
