@@ -2241,7 +2241,6 @@ dont-distribute-packages:
  - nomyx-language
  - nomyx-library
  - nomyx-server
- - notifications-tray-icon
  - notmuch-haskell
  - notmuch-web
  - numeric-ode
@@ -2275,8 +2274,6 @@ dont-distribute-packages:
  - openpgp-Crypto
  - openpgp-crypto-api
  - openssh-github-keys
- - opentracing-jaeger
- - opentracing-zipkin-v1
  - optima-for-hasql
  - optimal-blocks
  - optimusprime
@@ -2729,7 +2726,6 @@ dont-distribute-packages:
  - servant-ede
  - servant-event-stream
  - servant-examples
- - servant-github-webhook
  - servant-http2-client
  - servant-matrix-param
  - servant-polysemy

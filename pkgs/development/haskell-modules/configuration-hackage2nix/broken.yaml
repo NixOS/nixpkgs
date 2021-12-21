@@ -1688,7 +1688,6 @@ broken-packages:
   - git-cuk
   - git-date
   - gitdo
-  - github
   - github-backup
   - github-data
   - github-tools
@@ -2435,7 +2434,6 @@ broken-packages:
   - htssets
   - http2-client
   - http2-grpc-proto-lens
-  - http3
   - http-attoparsec
   - http-client-lens
   - http-client-request-modifiers
@@ -3177,7 +3175,6 @@ broken-packages:
   - monad-mersenne-random
   - monad-mock
   - monad-open
-  - Monadoro
   - monad-parallel-progressbar
   - monad-param
   - monad-persist
@@ -3386,7 +3383,6 @@ broken-packages:
   - nix-freeze-tree
   - nixfromnpm
   - nixpkgs-update
-  - nix-thunk
   - nix-tools
   - nkjp
   - nlp-scores
@@ -3728,7 +3724,6 @@ broken-packages:
   - pi-forall
   - pig
   - pi-hoole
-  - pinch
   - pinchot
   - Pipe
   - pipes-async
