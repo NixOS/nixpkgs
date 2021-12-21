@@ -33,6 +33,12 @@ buildPythonPackage rec {
 
   disabledTests = lib.optionals stdenv.isDarwin [
     "test_sendfile_file"
+
+    # require loopback networking:
+    "test_sendfile_socket"
+    "test_serve_small_bin_file_sync"
+    "test_serve_small_bin_file"
+    "test_slow_file"
   ];
 
   pythonImportsCheck = [
