@@ -2145,5 +2145,9 @@ self: super: {
       "--skip" "/attributes-with/mixed/"
     ] ++ drv.testFlags or [];
   }) super.lucid;
+  # Basically the entire doctest suite of swagger2 fails for the same reason
+  swagger2 = assert super.swagger2.version == "2.6"; overrideCabal (drv: {
+    testTarget = "spec";
+  }) super.swagger2;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
