@@ -126,6 +126,8 @@ default-package-overrides:
   - rel8 < 1.2.1.0
   # 0.14.0.0 drops support for every GHC < 9.0.1
   - brittany < 0.14
+  # 1.2.0.0: “Dropped support for GHC <9.2 (might readd it later)”
+  - retrie < 1.2.0.0
 
 extra-packages:
   - base16-bytestring < 1               # required for cabal-install etc.

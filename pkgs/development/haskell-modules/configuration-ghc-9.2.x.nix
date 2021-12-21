@@ -101,6 +101,19 @@ self: super: {
   genvalidity-property = self.genvalidity-property_1_0_0_0;
   genvalidity-hspec = self.genvalidity-hspec_1_0_0_0;
   ghc-byteorder = doJailbreak super.ghc-byteorder;
+  ghc-exactprint = overrideCabal (drv: {
+    # HACK: ghc-exactprint 1.3.0 is not buildable for GHC < 9.2,
+    # but hackage2nix evaluates the cabal file with GHC 8.10.*,
+    # causing the build-depends to be skipped. Since the dependency
+    # list hasn't changed much since 0.6.4, we can just reuse the
+    # normal expression.
+    inherit (self.ghc-exactprint_1_3_0) src version;
+    revision = null; editedCabalFile = null;
+    libraryHaskellDepends = [
+      self.fail
+      self.ordered-containers
+    ] ++ drv.libraryHaskellDepends or [];
+  }) super.ghc-exactprint;
   ghc-lib = self.ghc-lib_9_2_1_20211101;
   ghc-lib-parser = self.ghc-lib-parser_9_2_1_20211101;
   ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_2_0_1;
@@ -124,6 +137,7 @@ self: super: {
   quickcheck-instances = super.quickcheck-instances_0_3_27;
   regex-posix = doJailbreak super.regex-posix;
   resolv = doJailbreak super.resolv;
+  retrie = doDistribute self.retrie_1_2_0_0;
   semialign = super.semialign_1_2_0_1;
   singleton-bool = doJailbreak super.singleton-bool;
   scientific = doJailbreak super.scientific;
