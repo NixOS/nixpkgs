@@ -1192,6 +1192,18 @@ let
 
       ms-toolsai.jupyter = callPackage ./ms-toolsai-jupyter {};
 
+      ms-toolsai.jupyter-renderers = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "jupyter-renderers";
+          publisher = "ms-toolsai";
+          version = "1.0.4";
+          sha256 = "sha256-aKWu0Gp0f28DCv2akF/G8UDaGfTN410CcH8CAmW7mgU=";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
       mvllow.rose-pine = buildVscodeMarketplaceExtension {
         mktplcRef = {
           publisher = "mvllow";
