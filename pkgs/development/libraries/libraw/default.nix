@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, lcms2, pkg-config }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libraw";
-  version = "0.20.2";
+  version = "unstable-2021-12-03";
 
   src = fetchFromGitHub {
     owner = "LibRaw";
     repo = "LibRaw";
-    rev = version;
-    sha256 = "16nm4r2l5501c9zvz25pzajq5id592jhn068scjxhr8np2cblybc";
+    rev = "52b2fc52e93a566e7e05eaa44cada58e3360b6ad";
+    sha256 = "kW0R4iPuqnFuWYDrl46ok3kaPcGgY2MqZT7mqVX+BDQ=";
   };
 
   outputs = [ "out" "lib" "dev" "doc" ];
