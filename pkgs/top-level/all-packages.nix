@@ -12607,10 +12607,7 @@ with pkgs;
       /**/ if platform.isDarwin then 11
       else if platform.isFreeBSD then 7
       else if platform.isAndroid then 12
-      else if platform.isLinux then
-        /**/ if platform.isRiscV then 11
-        else if platform.isMusl then 11
-        else 7
+      else if platform.isLinux then 11
       else if platform.isWasm then 8
       else latest_version;
     # We take the "max of the mins". Why? Since those are lower bounds of the
