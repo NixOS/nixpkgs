@@ -646,7 +646,8 @@ in with py.pkgs; buildPythonApplication rec {
     "namecheapdns"
     "neato"
     "ness_alarm"
-    "nest"
+    # python-nest has an unfree license, this prevents builds through ofborg
+    # "nest"
     "netatmo"
     "nexia"
     "nightscout"
