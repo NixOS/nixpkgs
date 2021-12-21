@@ -792,8 +792,8 @@ let
           mktplcRef = {
             publisher = "github";
             name = "copilot";
-            version = "1.4.2678";
-            sha256 = "sha256-NryXLuMIZJngp2dBsGbNhBiblEthckw1Zk2vqMXIzFM=";
+            version = "1.7.4421";
+            sha256 = "1wvzf8rq8ligj079f1m74zzna2mfmhcbgvvrsw6w0wxw9x8fn4wy";
           };
           meta = { license = lib.licenses.unfree; };
         };
@@ -1191,6 +1191,18 @@ let
       };
 
       ms-toolsai.jupyter = callPackage ./ms-toolsai-jupyter {};
+
+      ms-toolsai.jupyter-renderers = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "jupyter-renderers";
+          publisher = "ms-toolsai";
+          version = "1.0.4";
+          sha256 = "sha256-aKWu0Gp0f28DCv2akF/G8UDaGfTN410CcH8CAmW7mgU=";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
 
       mvllow.rose-pine = buildVscodeMarketplaceExtension {
         mktplcRef = {
