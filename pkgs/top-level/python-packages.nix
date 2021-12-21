@@ -4637,6 +4637,8 @@ in {
 
   loo-py = callPackage ../development/python-modules/loo-py { };
 
+  losant-rest = callPackage ../development/python-modules/losant-rest { };
+
   lsassy = callPackage ../development/python-modules/lsassy { };
 
   luddite = callPackage ../development/python-modules/luddite { };
