@@ -999,6 +999,8 @@ with pkgs;
 
   godns = callPackage ../tools/networking/godns { };
 
+  godspeed = callPackage ../tools/networking/godspeed { };
+
   ksnip = libsForQt5.callPackage ../tools/misc/ksnip { };
 
   linux-router = callPackage ../tools/networking/linux-router { };
@@ -13566,6 +13568,13 @@ with pkgs;
   phpExtensions = php.extensions;
   phpPackages = php.packages;
 
+  # Import PHP81 interpreter, extensions and packages
+  php81 = callPackage ../development/interpreters/php/8.1.nix {
+    stdenv = if stdenv.cc.isClang then llvmPackages.stdenv else stdenv;
+  };
+  php81Extensions = recurseIntoAttrs php81.extensions;
+  php81Packages = recurseIntoAttrs php81.packages;
+
   # Import PHP80 interpreter, extensions and packages
   php80 = callPackage ../development/interpreters/php/8.0.nix {
     stdenv = if stdenv.cc.isClang then llvmPackages.stdenv else stdenv;
@@ -18843,6 +18852,10 @@ with pkgs;
   mpeg2dec = libmpeg2;
 
   mqtt-bench = callPackage ../applications/misc/mqtt-bench {};
+
+  mqttui = callPackage ../tools/networking/mqttui {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   msgpack = callPackage ../development/libraries/msgpack { };
 

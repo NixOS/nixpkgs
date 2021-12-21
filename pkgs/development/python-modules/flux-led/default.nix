@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "flux-led";
-  version = "0.27.8";
+  version = "0.27.10";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "Danielhiversen";
     repo = "flux_led";
     rev = version;
-    sha256 = "sha256-3Yq8BmDBiHLu119pazX0vKaXd547PCezfpFqh9G/DtM=";
+    sha256 = "sha256-xHPP6QxPmlMAEdZ3t5RyDXKN51okwxBtaOZPTyONy5w=";
   };
 
   propagatedBuildInputs = [
