@@ -32202,7 +32202,9 @@ with pkgs;
 
   gildas = callPackage ../applications/science/astronomy/gildas { };
 
-  gplates = libsForQt5.callPackage ../applications/science/misc/gplates { };
+  gplates = libsForQt5.callPackage ../applications/science/misc/gplates {
+    boost = boost175;
+  };
 
   gravit = callPackage ../applications/science/astronomy/gravit { };
 
