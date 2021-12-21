@@ -23,28 +23,35 @@ def open_elf(path):
         yield ELFFile(stream)
 
 
-def is_executable(elf):
-    # For dynamically linked ELF files it would be enough to check just
-    # for the INTERP section. However, we won't catch statically linked
-    # executables as they only have an ELF type of EXEC but no INTERP.
-    #
-    # So what we do here is just check whether *either* the ELF type is
-    # EXEC *or* there is an INTERP section. This also catches
+def is_static_executable(elf):
+    # Statically linked executables have an ELF type of EXEC but no INTERP.
+    return (elf.header["e_type"] == 'ET_EXEC'
+            and not elf.get_section_by_name(".interp"))
+
+
+def is_dynamic_executable(elf):
+    # We do not require an ELF type of EXEC. This also catches
     # position-independent executables, as they typically have an INTERP
     # section but their ELF type is DYN.
-    return (elf.header["e_type"] == 'ET_EXEC'
-            or elf.get_section_by_name(".interp"))
+    return bool(elf.get_section_by_name(".interp"))
 
 
 def get_dependencies(elf):
+    # This convoluted code is here on purpose. For some reason, using
+    # elf.get_section_by_name(".dynamic") does not always return an
+    # instance of DynamicSection, but that is required to call iter_tags
     for section in elf.iter_sections():
         if isinstance(section, DynamicSection):
             for tag in section.iter_tags('DT_NEEDED'):
                 yield tag.needed
+            # There is only one dynamic section
             break
 
 
 def get_rpath(elf):
+    # This convoluted code is here on purpose. For some reason, using
+    # elf.get_section_by_name(".dynamic") does not always return an
+    # instance of DynamicSection, but that is required to call iter_tags
     for section in elf.iter_sections():
         if isinstance(section, DynamicSection):
             for tag in section.iter_tags('DT_RUNPATH'):
@@ -52,6 +59,9 @@ def get_rpath(elf):
 
             for tag in section.iter_tags('DT_RPATH'):
                 return tag.rpath.split(':')
+
+            # There is only one dynamic section
+            break
 
     return []
 
@@ -138,6 +148,7 @@ def findDependency(soname, soarch, soabi):
     return None
 
 
+patched_any = False
 missingDeps = defaultdict(list)
 
 
@@ -145,40 +156,49 @@ def autoPatchelfFile(path, runtime_deps):
     try:
         with open_elf(path) as elf:
 
-            file_arch = get_arch(elf)
-            file_osabi = get_osabi(elf)
-            file_is_executable = is_executable(elf)
+            if is_static_executable(elf):
+                # No point patching these
+                print(f"skipping {path} because it is statically linked")
+                return
 
+            if elf.num_segments() == 0:
+                # no segment (e.g. object file)
+                print(f"skipping {path} because it contains no segment")
+                return
+
+            file_arch = get_arch(elf)
             if interpreter_arch != file_arch:
                 # Our target architecture is different than this file's
                 # architecture, so skip it.
                 print(f"skipping {path} because its architecture ({file_arch})"
                       f" differs from target ({interpreter_arch})")
                 return
-            elif not osabi_are_compatible(interpreter_osabi, file_osabi):
+
+            file_osabi = get_osabi(elf)
+            if osabi_are_compatible(interpreter_osabi, file_osabi):
                 print(f"skipping {path} because its OS ABI ({file_osabi}) is"
                       f" not compatible with target ({interpreter_osabi})")
                 return
 
+            file_is_dynamic_executable = is_dynamic_executable(elf)
+
             print("searching for dependencies of", path)
-            dependencies = list(map(Path, get_dependencies(elf)))
+            dependencies = map(Path, get_dependencies(elf))
 
     except ELFError:
         return
 
     rpath = []
-    if file_is_executable:
+    if file_is_dynamic_executable:
         print("setting interpreter of", path)
         subprocess.run(
                 ["patchelf", "--set-interpreter", interpreter_path.as_posix(), path.as_posix()],
                 check=True)
         rpath += runtime_deps
 
-    # This ensures that we get the output of all missing dependencies
-    # instead of failing at the first one, because it's more useful when
-    # working on a new package where you don't yet know its
-    # dependencies.
-
+    # Be sure to get the output of all missing dependencies instead of
+    # failing at the first one, because it's more useful when working
+    # on a new package where you don't yet know the dependencies.
     for dep in dependencies:
         if dep.is_absolute() and dep.is_file():
             # This is an absolute path. If it exists, just use it.
@@ -193,10 +213,10 @@ def autoPatchelfFile(path, runtime_deps):
 
         if foundDependency := findDependency(dep.name, file_arch, file_osabi):
             rpath.append(foundDependency)
-            print("    {} -> found: {}".format(dep, foundDependency))
+            print(f"    {dep} -> found: {foundDependency}")
         else:
             missingDeps[path].append(dep)
-            print("    {} -> not found!".format(dep))
+            print(f"    {dep} -> not found!")
 
     # Dedup the rpath
     rpath = ":".join(dict.fromkeys(map(Path.as_posix, rpath)))
@@ -206,6 +226,7 @@ def autoPatchelfFile(path, runtime_deps):
         subprocess.run(
                 ["patchelf", "--set-rpath", rpath, path.as_posix()],
                 check=True)
+        patched_any = True
 
 
 def autoPatchelf(
@@ -236,6 +257,10 @@ def autoPatchelf(
     if missingDeps and not ignoreMissing:
         sys.exit('auto-patchelf failed to find all the required dependencies.\n'
                  'Add the missing dependencies to --libs or use --ignore-missing.')
+
+    if not patched_any:
+        print('auto-patchelf failed to find any file to patch.\n'
+              'It may have been misconfigured, or you may not need it.')
 
 
 def main():
