@@ -1887,13 +1887,13 @@ self: super: {
 
   # Build haskell-ci from git repository, including some useful fixes,
   # e. g. required for generating the workflows for the cabal2nix repository
-  haskell-ci-unstable = (overrideSrc {
-    version = "0.13.20211011";
+  haskell-ci-unstable = (overrideSrc rec {
+    version = "0.13.20211116-${builtins.substring 0 7 src.rev}";
     src = pkgs.fetchFromGitHub {
       owner = "haskell-CI";
       repo = "haskell-ci";
-      rev = "c88e67e675bc4a990da53863c7fb42e67bcf9847";
-      sha256 = "1zhv1cg047lfyxfs3mvc73vv96pn240zaj7f2yl4lw5yj6y5rfk9";
+      rev = "b61df11e7f6010ce09920c231321ab1545a990b5";
+      sha256 = "0v6mqpavz5v161milq6a3x9gzap0pgksd3h4rwi2s3f9b15sczcy";
     };
   } super.haskell-ci).overrideScope (self: super: {
     attoparsec = self.attoparsec_0_14_3;
