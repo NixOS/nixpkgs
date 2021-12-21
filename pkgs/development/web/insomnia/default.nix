@@ -1,5 +1,5 @@
 { lib, stdenv, makeWrapper, fetchurl, dpkg, alsa-lib, atk, cairo, cups, dbus, expat
-, fontconfig, freetype, gdk-pixbuf, glib, gnome2, pango, mesa, nspr, nss, gtk3, gtk2
+, fontconfig, freetype, gdk-pixbuf, glib, gnome2, pango, mesa, nspr, nss, gtk3
 , at-spi2-atk, gsettings-desktop-schemas, gobject-introspection, wrapGAppsHook
 , libX11, libXScrnSaver, libXcomposite, libXcursor, libXdamage, libXext
 , libXfixes, libXi, libXrandr, libXrender, libXtst, libxcb, nghttp2
@@ -12,7 +12,6 @@ let
     libudev0-shim
     nghttp2
     openssl
-    stdenv.cc.cc
   ];
 in stdenv.mkDerivation rec {
   pname = "insomnia";
@@ -41,7 +40,6 @@ in stdenv.mkDerivation rec {
     glib
     gnome2.GConf
     pango
-    gtk2
     gtk3
     gsettings-desktop-schemas
     libX11
@@ -59,7 +57,6 @@ in stdenv.mkDerivation rec {
     mesa # for libgbm
     nspr
     nss
-    stdenv.cc.cc
   ];
 
   dontBuild = true;
