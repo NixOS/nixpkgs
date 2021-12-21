@@ -10295,6 +10295,8 @@ with pkgs;
 
   traceroute = callPackage ../tools/networking/traceroute { };
 
+  besttrace = callPackage ../tools/networking/besttrace { };
+
   tracebox = callPackage ../tools/networking/tracebox { };
 
   tracefilegen = callPackage ../development/tools/analysis/garcosim/tracefilegen { };
