@@ -5,26 +5,31 @@
 
 buildGoModule rec {
   pname = "gitleaks";
-  version = "7.6.1";
+  version = "8.2.3";
 
   src = fetchFromGitHub {
     owner = "zricethezav";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-52Wi3bQvKdHoJ1nVb4OVJ9wd8hDVF+6zlVSpsEai0Jw=";
+    sha256 = "sha256-COYVgn7fhmU0ZUhlnqxQ/5rf5aVhkcWeG199DFcE/w4=";
   };
 
-  vendorSha256 = "sha256-86PspExE+T/IuCvpf6LAkWcCRlHPqP5VUbHAckEzALc=";
+  vendorSha256 = "sha256-cIwte59AdVOWMBUWE4gKZSHhU37HgEW4k0v+jUUyj1Q=";
 
   ldflags = [
-    "-s" "-w" "-X github.com/zricethezav/gitleaks/v${lib.versions.major version}/version.Version=${version}"
+    "-s"
+    "-w"
+    "-X github.com/zricethezav/gitleaks/v${lib.versions.major version}/version.Version=${version}"
   ];
+
+  # With v8 the config tests are are blocking
+  doCheck = false;
 
   meta = with lib; {
     description = "Scan git repos (or files) for secrets";
     longDescription = ''
       Gitleaks is a SAST tool for detecting hardcoded secrets like passwords,
-      API keys, and tokens in git repos.
+      API keys and tokens in git repos.
     '';
     homepage = "https://github.com/zricethezav/gitleaks";
     license = with licenses; [ mit ];

@@ -1,32 +1,23 @@
-{ lib, stdenv
-, go
-, fetchurl
-, redo-apenwarr
-, curl
-, perl
-, genericUpdater
-, writeShellScript
-}:
+{ lib, stdenv, go, fetchurl, redo-apenwarr, curl, perl, genericUpdater
+, writeShellScript, nixosTests, cfgPath ? "/etc/nncp.hjson" }:
 
 stdenv.mkDerivation rec {
   pname = "nncp";
-  version = "7.7.0";
+  version = "8.0.2";
+  outputs = [ "out" "doc" "info" ];
 
   src = fetchurl {
     url = "http://www.nncpgo.org/download/${pname}-${version}.tar.xz";
-    sha256 = "ppKi/JY8sKRb/Vt/SXom0L1zhjBPn6PNUm3Gn8o5Ke4=";
+    sha256 = "sha256-hMb7bAdk3xFcUe5CTu9LnIR3VSJDUKbMSE86s8d5udM=";
   };
 
   nativeBuildInputs = [ go redo-apenwarr ];
 
-  buildPhase = ''
-    runHook preBuild
-    export GOCACHE=$PWD/.cache
-    export CFGPATH=/etc/nncp.hjson
-    export SENDMAIL=sendmail # default value for generated config file
-    redo ''${enableParallelBuilding:+-j''${NIX_BUILD_CORES}}
-    runHook postBuild
-  '';
+  # Build parameters
+  CFGPATH = cfgPath;
+  SENDMAIL = "sendmail";
+
+  preConfigure = "export GOCACHE=$NIX_BUILD_TOP/gocache";
 
   installPhase = ''
     runHook preInstall
@@ -42,7 +33,7 @@ stdenv.mkDerivation rec {
     inherit pname version;
     versionLister = writeShellScript "nncp-versionLister" ''
       echo "# Versions for $1:" >> "$2"
-      ${curl}/bin/curl -s http://www.nncpgo.org/Tarballs.html | ${perl}/bin/perl -lne 'print $1 if /Release.*>([0-9.]+)</'
+      ${curl}/bin/curl -s ${meta.downloadPage} | ${perl}/bin/perl -lne 'print $1 if /Release.*>([0-9.]+)</'
     '';
   };
 
@@ -64,8 +55,9 @@ stdenv.mkDerivation rec {
       transmission exists.
     '';
     homepage = "http://www.nncpgo.org/";
+    downloadPage = "http://www.nncpgo.org/Tarballs.html";
     license = licenses.gpl3Only;
     platforms = platforms.all;
-    maintainers = [ maintainers.woffs ];
+    maintainers = with maintainers; [ ehmry woffs ];
   };
 }

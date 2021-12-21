@@ -547,7 +547,11 @@ lib.makeScope pkgs.newScope (self: with self; {
         { name = "sysvsem"; }
         { name = "sysvshm"; }
         { name = "tidy"; configureFlags = [ "--with-tidy=${html-tidy}" ]; doCheck = false; }
-        { name = "tokenizer"; }
+        {
+          name = "tokenizer";
+          patches = lib.optional (lib.versionAtLeast php.version "8.1")
+            ../development/interpreters/php/fix-tokenizer-php81.patch;
+        }
         {
           name = "wddx";
           buildInputs = [ libxml2 ];
