@@ -1294,6 +1294,8 @@ in {
 
   breezy = callPackage ../development/python-modules/breezy { };
 
+  brelpy = callPackage ../development/python-modules/brelpy { };
+
   broadlink = callPackage ../development/python-modules/broadlink { };
 
   brother = callPackage ../development/python-modules/brother { };
@@ -2558,6 +2560,8 @@ in {
 
   eradicate = callPackage ../development/python-modules/eradicate { };
 
+  esprima = callPackage ../development/python-modules/esprima { };
+
   escapism = callPackage ../development/python-modules/escapism { };
 
   etcd = callPackage ../development/python-modules/etcd { };
@@ -3156,6 +3160,8 @@ in {
 
   ghp-import = callPackage ../development/python-modules/ghp-import { };
 
+  ghrepo-stats = callPackage ../development/python-modules/ghrepo-stats { };
+
   gibberish-detector = callPackage ../development/python-modules/gibberish-detector { };
 
   gidgethub = callPackage ../development/python-modules/gidgethub { };
@@ -3347,6 +3353,8 @@ in {
   googletrans = callPackage ../development/python-modules/googletrans { };
 
   gorilla = callPackage ../development/python-modules/gorilla { };
+
+  goveelights = callPackage ../development/python-modules/goveelights { };
 
   gpapi = callPackage ../development/python-modules/gpapi { };
 
@@ -4843,6 +4851,8 @@ in {
 
   merkletools = callPackage ../development/python-modules/merkletools { };
 
+  meross-iot = callPackage ../development/python-modules/meross-iot { };
+
   mesa = callPackage ../development/python-modules/mesa { };
 
   meshio = callPackage ../development/python-modules/meshio { };
@@ -5188,6 +5198,8 @@ in {
 
   neo = callPackage ../development/python-modules/neo { };
 
+  neo4j-driver = callPackage ../development/python-modules/neo4j-driver { };
+
   nessclient = callPackage ../development/python-modules/nessclient { };
 
   nest-asyncio = callPackage ../development/python-modules/nest-asyncio { };
@@ -5424,6 +5436,8 @@ in {
   oletools = callPackage ../development/python-modules/oletools { };
 
   omegaconf = callPackage ../development/python-modules/omegaconf { };
+
+  omnikinverter = callPackage ../development/python-modules/omnikinverter { };
 
   omnilogic = callPackage ../development/python-modules/omnilogic { };
 
@@ -5877,6 +5891,8 @@ in {
 
   ppdeep = callPackage ../development/python-modules/ppdeep { };
 
+  proxy_tools = callPackage ../development/python-modules/proxy_tools { };
+
   pyaehw4a1 = callPackage ../development/python-modules/pyaehw4a1 { };
 
   pyatag = callPackage ../development/python-modules/pyatag { };
@@ -6194,6 +6210,8 @@ in {
   prox-tv = callPackage ../development/python-modules/prox-tv { };
 
   proxmoxer = callPackage ../development/python-modules/proxmoxer { };
+
+  proxy-py = callPackage ../development/python-modules/proxy-py { };
 
   psautohint = callPackage ../development/python-modules/psautohint { };
 
@@ -6517,6 +6535,8 @@ in {
   pydsdl = callPackage ../development/python-modules/pydsdl { };
 
   pydub = callPackage ../development/python-modules/pydub { };
+
+  pyduke-energy = callPackage ../development/python-modules/pyduke-energy { };
 
   pydy = callPackage ../development/python-modules/pydy { };
 
@@ -7531,6 +7551,8 @@ in {
 
   pytest-isort = callPackage ../development/python-modules/pytest-isort { };
 
+  pytest-json-report = callPackage ../development/python-modules/pytest-json-report { };
+
   pytest-lazy-fixture = callPackage ../development/python-modules/pytest-lazy-fixture { };
 
   pytest-localserver = callPackage ../development/python-modules/pytest-localserver { };
@@ -8067,6 +8089,8 @@ in {
     inherit (pkgs) libxml2;
   };
 
+  pyweatherflowrest = callPackage ../development/python-modules/pyweatherflowrest { };
+
   pywebpush = callPackage ../development/python-modules/pywebpush { };
 
   pywebview = callPackage ../development/python-modules/pywebview { };
@@ -8179,6 +8203,8 @@ in {
   Quandl = callPackage ../development/python-modules/quandl { }; # alias for an older package which did not support Python 3
 
   quantities = callPackage ../development/python-modules/quantities { };
+
+  quantum-gateway = callPackage ../development/python-modules/quantum-gateway { };
 
   querystring_parser = callPackage ../development/python-modules/querystring-parser { };
 
@@ -9112,6 +9138,8 @@ in {
   sqlalchemy-jsonfield = callPackage ../development/python-modules/sqlalchemy-jsonfield { };
 
   sqlalchemy-migrate = callPackage ../development/python-modules/sqlalchemy-migrate { };
+
+  sqlalchemy-mixins = callPackage ../development/python-modules/sqlalchemy-mixins { };
 
   sqlalchemy-utils = callPackage ../development/python-modules/sqlalchemy-utils { };
 
