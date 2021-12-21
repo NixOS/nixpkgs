@@ -51,13 +51,13 @@ autoPatchelf() {
         esac
     done
 
-    @pythonInterpreter@ @py_script@                         \
-        ${norecurse:+--no-recurse}                           \
-        ${autoPatchelfIgnoreMissingDeps:+--ignore-missing}  \
-        --paths "$@"                                        \
-        --libs "${autoPatchelfLibs[@]}"                     \
-               "${extraAutoPatchelfLibs[@]}"                \
-        --runtime-dependencies "${runtimeDependencies[@]}"
+    @pythonInterpreter@ @py_script@                                 \
+        ${norecurse:+--no-recurse}                                  \
+        ${autoPatchelfIgnoreMissingDeps:+--ignore-missing}          \
+        --paths "$@"                                                \
+        --libs "${autoPatchelfLibs[@]}"                             \
+               "${extraAutoPatchelfLibs[@]}"                        \
+        --runtime-dependencies "${runtimeDependencies[@]/%//lib}"
 
     # clear the extra set for the next invocation
     extraAutoPatchelfLibs=()

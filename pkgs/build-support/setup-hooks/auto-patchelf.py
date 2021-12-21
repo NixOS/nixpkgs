@@ -161,9 +161,27 @@ def autoPatchelfFile(path, runtime_deps):
 
             print("searching for dependencies of", path)
             dependencies = list(map(Path, get_dependencies(elf)))
+            file_rpath = ':'.join(get_rpath(elf))
 
     except ELFError:
         return
+
+    # At this point we do not use elftools anymore. As there may be a slight
+    # mismatch in how elftools and patchelf interpret ELF files, We want to
+    # make sure that they agree on the values read, and that patchelf does not
+    # choke on reading the file. This ensures compatibility with the bash
+    # autoPatchelf script which relied only on patchelf and ignored files that
+    # it could no understand.
+    res = subprocess.run(
+            ["patchelf", "--print-rpath", path.as_posix()],
+            capture_output=True,
+            text=True)
+    if res.returncode != 0:
+        return
+    patchelf_rpath = res.stdout.strip()
+    if file_rpath != patchelf_rpath:
+        print(f"Rpath detection mismatch: elftools found {file_rpath}"
+              f" while patchelf found {patchelf_rpath}")
 
     rpath = []
     if file_is_executable:
@@ -171,7 +189,7 @@ def autoPatchelfFile(path, runtime_deps):
         subprocess.run(
                 ["patchelf", "--set-interpreter", interpreter_path.as_posix(), path.as_posix()],
                 check=True)
-        rpath += [path / 'lib' for path in runtime_deps]
+        rpath += runtime_deps
 
     # This ensures that we get the output of all missing dependencies
     # instead of failing at the first one, because it's more useful when
@@ -261,8 +279,7 @@ def main():
         help="Paths where libraries are searched for.")
     parser.add_argument(
         "--runtime-dependencies", nargs="*", type=Path,
-        help="Paths whose 'lib' dir will be added unconditionally to the"
-             "runtime path of executables.")
+        help="Paths to prepend to the runtime path of executable binaries.")
 
     print("automatically fixing dependencies for ELF files")
     args = parser.parse_args()
