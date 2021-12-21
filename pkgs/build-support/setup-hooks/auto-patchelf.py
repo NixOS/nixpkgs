@@ -116,6 +116,7 @@ def populate_cache(initial, recursive=False):
             if not path.is_file():
                 continue
 
+            resolved = path.resolve()
             try:
                 with open_elf(path) as elf:
                     osabi = get_osabi(elf)
@@ -123,7 +124,7 @@ def populate_cache(initial, recursive=False):
                     rpath = [Path(p) for p in get_rpath(elf)
                                      if p and '$ORIGIN' not in p]
                     lib_dirs += rpath
-                    soname_cache[(path.name, arch)].append((path.parent, osabi))
+                    soname_cache[(path.name, arch)].append((resolved.parent, osabi))
 
             except ELFError:
                 # Not an ELF file in the right format
@@ -242,7 +243,7 @@ def autoPatchelf(
 
     missingDeps = {}
     for path in chain.from_iterable(glob(p, '*', recursive) for p in pathsToPatch):
-        if path.is_file():
+        if not path.is_symlink() and path.is_file():
             autoPatchelfFile(path, runtime_deps)
 
     # Print a summary of the missing dependencies at the end
