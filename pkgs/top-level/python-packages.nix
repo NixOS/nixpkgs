@@ -753,6 +753,8 @@ in {
 
   automat = callPackage ../development/python-modules/automat { };
 
+  automate-home = callPackage ../development/python-modules/automate-home { };
+
   autopage = callPackage ../development/python-modules/autopage { };
 
   autopep8 = callPackage ../development/python-modules/autopep8 { };
@@ -3084,6 +3086,10 @@ in {
 
   geeknote = callPackage ../development/python-modules/geeknote { };
 
+  gehomesdk = callPackage ../development/python-modules/gehomesdk { };
+
+  gekitchen = callPackage ../development/python-modules/gekitchen { };
+
   gemfileparser = callPackage ../development/python-modules/gemfileparser { };
 
   genanki = callPackage ../development/python-modules/genanki { };
@@ -4634,6 +4640,8 @@ in {
   lomond = callPackage ../development/python-modules/lomond { };
 
   loo-py = callPackage ../development/python-modules/loo-py { };
+
+  losant-rest = callPackage ../development/python-modules/losant-rest { };
 
   lsassy = callPackage ../development/python-modules/lsassy { };
 

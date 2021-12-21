@@ -27,12 +27,12 @@
 }:
 
 let
-  version = "4.2.1";
+  version = "4.2.2";
   sourceRoot = ".";
 
   src = fetchurl {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    sha256 = "Eup6oR4r2xLeHc65k5oi6W9aSAQ3yxfBIzedjg/fXoI=";
+    sha256 = "mYHQ1To1bE6HlihHdQqXyegFTkYIVHSABsgPDX4rLTM=";
   };
 
   # Update with `eval $(nix-build -A bazel.updater)`,
@@ -238,14 +238,6 @@ stdenv.mkDerivation rec {
     (substituteAll {
       src = ../bazel_rc.patch;
       bazelSystemBazelRCPath = bazelRC;
-    })
-
-    # On macOS Monterey, protoc segfaults.
-    # Issue: https://github.com/bazelbuild/bazel/issues/14216
-    # Fix: https://github.com/bazelbuild/bazel/pull/14275
-    (fetchpatch {
-      url = "https://github.com/bazelbuild/bazel/commit/ae0a6c98d4f94abedbedb2d51c27de5febd7df67.patch";
-      sha256 = "sha256-YcdxqjTMGI86k1wgFqxJqghv0kknAjlFQFpt4VccCTE=";
     })
   ] ++ lib.optional enableNixHacks ../nix-hacks.patch;
 
