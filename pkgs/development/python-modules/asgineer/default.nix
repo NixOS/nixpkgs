@@ -1,6 +1,8 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, pytestCheckHook
+, requests
 }:
 
 buildPythonPackage rec {
@@ -15,7 +17,10 @@ buildPythonPackage rec {
     sha256 = "0hd1i9pc8m7sc8bkn31q4ygkmnl5vklrcziq9zkdiqaqm8clyhcx";
   };
 
-  doCheck = false;
+  checkInputs = [
+    pytestCheckHook
+    requests
+  ];
 
   meta = with lib; {
     description = "A really thin ASGI web framework";
