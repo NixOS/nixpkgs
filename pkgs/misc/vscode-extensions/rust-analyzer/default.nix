@@ -8,6 +8,8 @@
 , esbuild
 , pkg-config
 , libsecret
+, stdenv
+, darwin
 , setDefaultServerPath ? true
 }:
 
@@ -17,6 +19,8 @@ let
 
   # Use the plugin version as in vscode marketplace, updated by update script.
   inherit (vsix) version;
+
+  inherit (darwin.apple_sdk.frameworks) AppKit Security;
 
   releaseTag = "2021-11-29";
 
@@ -37,9 +41,15 @@ let
     inherit releaseTag;
 
     nativeBuildInputs = [
-      jq moreutils esbuild
+      jq
+      moreutils
+      esbuild
       # Required by `keytar`, which is a dependency of `vsce`.
-      pkg-config libsecret
+      pkg-config
+      libsecret
+    ] ++ lib.optional stdenv.isDarwin [
+      Security
+      AppKit
     ];
 
     # Follows https://github.com/rust-analyzer/rust-analyzer/blob/41949748a6123fd6061eb984a47f4fe780525e63/xtask/src/dist.rs#L39-L65
