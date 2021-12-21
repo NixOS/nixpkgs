@@ -43,20 +43,19 @@ in {
           If you do so, the 'bindAddr' and 'port' options are ignored.
         '';
 
-        default = null;
+        default = pkgs.timetagger.override { addr = cfg.bindAddr; port = cfg.port; };
+        defaultText = literalExpression ''
+          pkgs.timetagger.override {
+            addr = ${cfg.bindAddr};
+            port = ${cfg.port};
+          };
+        '';
         type = types.package;
       };
     };
   };
 
-  config = let
-    timetaggerPkg = if !isNull cfg.package then cfg.package else
-      pkgs.timetagger.overwriteAttrs {
-        addr = cfg.bindAddr;
-        port = cfg.port;
-      };
-
-  in mkIf cfg.enable {
+  config = mkIf cfg.enable {
     systemd.services.timetagger = {
       description = "Timetagger service";
       wantedBy = [ "multi-user.target" ];
@@ -66,7 +65,7 @@ in {
         Group = "timetagger";
         StateDirectory = "timetagger";
 
-        ExecStart = "${timetaggerPkg}/bin/timetagger";
+        ExecStart = "${cfg.package}/bin/timetagger";
 
         Restart = "on-failure";
         RestartSec = 1;
