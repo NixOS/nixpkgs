@@ -704,6 +704,7 @@ sakhnik/nvim-gdb
 saltstack/salt-vim
 samoshkin/vim-mergetool
 sbdchd/neoformat
+sblumentritt/bitbake.vim
 scalameta/nvim-metals
 sdiehl/vim-ormolu
 sebastianmarkow/deoplete-rust
