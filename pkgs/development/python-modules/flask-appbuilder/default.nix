@@ -25,12 +25,12 @@
 
 buildPythonPackage rec {
   pname = "flask-appbuilder";
-  version = "3.3.3";
+  version = "3.3.4";
 
   src = fetchPypi {
     pname = "Flask-AppBuilder";
     inherit version;
-    sha256 = "sha256-yjb4dpcQt2se5GT+wodh4UC9LAF4JmYrdX89VIdkk0U=";
+    sha256 = "180swqkcp34vkarqb50dpn2300a6qdgihliqfflp0brab9v2n1hg";
   };
 
   # See here: https://github.com/dpgaspar/Flask-AppBuilder/commit/7097a7b133f27c78d2b54d2a46e4a4c24478a066.patch
