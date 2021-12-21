@@ -13650,7 +13650,7 @@ with pkgs;
   python3Packages = python3.pkgs;
 
   pythonInterpreters = callPackage ./../development/interpreters/python { };
-  inherit (pythonInterpreters) python27 python37 python38 python39 python310 python3Minimal pypy27 pypy38 rustpython;
+  inherit (pythonInterpreters) python27 python37 python38 python39 python310 python3Minimal pypy27 pypy38 pypy37 rustpython;
 
   # Python package sets.
   python27Packages = python27.pkgs;
@@ -13662,6 +13662,8 @@ with pkgs;
   pypy2Packages = pypy2.pkgs;
   pypy27Packages = pypy27.pkgs;
   pypy3Packages = pypy3.pkgs;
+  pypy37Packages = pypy37.pkgs;
+  pypy38Packages = pypy38.pkgs;
 
   py3c = callPackage ../development/libraries/py3c { };
 
