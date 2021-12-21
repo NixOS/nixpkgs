@@ -15901,6 +15901,8 @@ with pkgs;
 
   buddy = callPackage ../development/libraries/buddy { };
 
+  buildkit-nix = callPackage ../applications/virtualization/buildkit-nix { };
+
   bulletml = callPackage ../development/libraries/bulletml { };
 
   bwidget = callPackage ../development/libraries/bwidget { };
@@ -27299,9 +27301,7 @@ with pkgs;
 
   ninjas2 = callPackage ../applications/audio/ninjas2 {};
 
-  nncp = callPackage ../tools/misc/nncp {
-    go = go_1_15;
-  };
+  nncp = callPackage ../tools/misc/nncp { };
 
   notion = callPackage ../applications/window-managers/notion { };
 
@@ -32623,6 +32623,8 @@ with pkgs;
 
   hjson = with python3Packages; toPythonApplication hjson;
 
+  hjson-go = callPackage ../development/tools/hjson-go { };
+
   epkowa = callPackage ../misc/drivers/epkowa { };
 
   utsushi = callPackage ../misc/drivers/utsushi { };
@@ -32741,6 +32743,7 @@ with pkgs;
     nixStable
     nix_2_3
     nix_2_4
+    nix_2_5
     nixUnstable;
 
   nixStatic = pkgsStatic.nix;
