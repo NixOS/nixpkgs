@@ -186,6 +186,8 @@ with pkgs;
 
   antsimulator = callPackage ../games/antsimulator { };
 
+  astrolog = callPackage ../applications/science/astronomy/astrolog { };
+
   atkinson-hyperlegible = callPackage ../data/fonts/atkinson-hyperlegible { };
 
   atuin = callPackage ../tools/misc/atuin {
