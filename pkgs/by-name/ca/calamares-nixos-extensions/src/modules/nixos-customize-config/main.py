@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
-#   SPDX-FileCopyrightText: 2021 Victor Fuentes <vmf24@cornell.edu>
+#   SPDX-FileCopyrightText: 2021 Victor Fuentes <hyruleterminatriforce@gmail.com>
 #   SPDX-FileCopyrightText: 2019 Adriaan de Groot <groot@kde.org>
 #   SPDX-License-Identifier: GPL-3.0-or-later
 #
@@ -107,8 +107,13 @@ cfg ="""# Edit this configuration file to define what should be installed on
   systemd.services."autovt@tty1".enable = false;
 
   # Configure keymap in X11
-  # services.xserver.layout = "us";
-  # services.xserver.xkbOptions = "eurosign:e";
+  services.xserver = {
+    layout = "@@kblayout@@";
+    xkbVariant = "@@kbvariant@@";
+  };
+
+  # Fix localectl: https://github.com/NixOS/nixpkgs/issues/19629
+  services.xserver.exportConfiguration = true;
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
@@ -233,6 +238,8 @@ def run():
     catenate(variables, "fullname", fullname)
     catenate(variables, "autologin", "true" if gs.value("autoLoginUser") != None else "false")
     catenate(variables, "groups", (" ").join(["\"" + s + "\"" for s in groups]))
+    catenate(variables, "kblayout", gs.value("keyboardLayout"))
+    catenate(variables, "kbvariant", gs.value("keyboardVariant"))
 
     # Check that all variables are used
     for key in variables.keys():
