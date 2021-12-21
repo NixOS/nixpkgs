@@ -31,11 +31,9 @@ stdenv.mkDerivation rec {
   pname = "elementary-code";
   version = "6.1.0";
 
-  repoName = "code";
-
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "code";
     rev = version;
     sha256 = "sha256-AXmMcPj2hf33G5v3TUg+eZwaKOdVlRvoVXglMJFHRjw=";
   };
@@ -74,9 +72,6 @@ stdenv.mkDerivation rec {
     vte
     webkitgtk
   ];
-
-  # install script fails with UnicodeDecodeError because of printing a fancy elipsis character
-  LC_ALL = "C.UTF-8";
 
   # ctags needed in path by outline plugin
   preFixup = ''
