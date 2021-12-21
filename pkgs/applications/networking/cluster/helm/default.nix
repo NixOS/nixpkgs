@@ -3,7 +3,7 @@
 buildGoModule rec {
   pname = "helm";
   version = "3.7.2";
-  gitCommit = "1d11fcb5d3f3bf00dbe6fe31b8412839a96b3dc4";
+  gitCommit = "663a896f4a815053445eec4153677ddc24a0a361";
 
   src = fetchFromGitHub {
     owner = "helm";
