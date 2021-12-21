@@ -11,6 +11,15 @@ python3Packages.buildPythonApplication rec {
     sha256 = "04asw5alkkf2q5iixswarj6ddb0y4a6ixm7cckl6204jiyxpv6kc";
   };
 
+  propagatedBuildInputs = with python3Packages; [
+    dnspython
+    requests
+  ];
+
+  prePatch = ''
+    sed -i 's/distro = None/distro = NixOS/' pyradio/config
+  '';
+
   checkPhase = ''
     $out/bin/pyradio --help
   '';
