@@ -1,6 +1,8 @@
 { lib
 , python3Packages
 , fetchFromGitHub
+, pytestCheckHook
+, requests
 }:
 
 python3Packages.buildPythonPackage rec {
@@ -21,7 +23,16 @@ python3Packages.buildPythonPackage rec {
     maintainers = with maintainers; [ matthiasbeyer ];
   };
 
-  doCheck = false;
+  checkInputs = [
+    pytestCheckHook
+    requests
+  ];
+
+  preCheck = ''
+    # https://github.com/NixOS/nixpkgs/issues/12591
+    mkdir -p check-phase
+    export HOME=$(pwd)/check-phase
+  '';
 
   propagatedBuildInputs = with python3Packages; [
     asgineer
