@@ -20,6 +20,11 @@ stdenv.mkDerivation rec {
       url = "https://github.com/jedisct1/pure-ftpd/commit/bf6fcd4935e95128cf22af5924cdc8fe5c0579da.patch";
       sha256 = "003klx7j82qf92qr1dxg32v5r2bhhywplynd3xil1lbcd3s3mqhi";
     })
+    (fetchpatch {
+      name = "CVE-2021-40524.patch";
+      url = "https://github.com/jedisct1/pure-ftpd/commit/37ad222868e52271905b94afea4fc780d83294b4.patch";
+      sha256 = "0696qilplfd99di0cba1j3r4fg216091c5j7fdn5qk7pk6bw1r69";
+    })
   ];
 
   buildInputs = [ openssl ];
