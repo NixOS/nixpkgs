@@ -1900,14 +1900,9 @@ self: super: {
     Cabal = self.Cabal_3_6_2_0;
   });
 
-  Frames-streamly = overrideCabal (drv: {
-    # https://github.com/adamConnerSax/Frames-streamly/issues/1
-    patchPhase = ''
-cat > example_data/acs100k.csv <<EOT
-"YEAR","REGION","STATEFIP","DENSITY","METRO","PUMA","PERWT","SEX","AGE","RACE","RACED","HISPAN","HISPAND","CITIZEN","LANGUAGE","LANGUAGED","SPEAKENG","EDUC","EDUCD","GRADEATT","GRADEATTD","EMPSTAT","EMPSTATD","INCTOT","INCSS","POVERTY"
-2006,32,1,409.6,3,2300,87.0,1,47,1,100,0,0,0,1,100,3,6,65,0,0,1,12,36000,0,347
-EOT
-    ''; }) (super.Frames-streamly.override { relude = super.relude_1_0_0_1; });
+  Frames-streamly = super.Frames-streamly.override {
+    relude = super.relude_1_0_0_1;
+  };
 
   # 2021-05-09: compilation requires patches from master,
   # remove at next release (current is 0.1.0.4).
