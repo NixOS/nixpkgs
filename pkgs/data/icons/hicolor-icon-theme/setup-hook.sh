@@ -30,6 +30,8 @@ symlinkParentIconThemes() {
             echo "  theme: $theme_name"
             inheritance=$(sed -rne 's,^Inherits=(.*)$,\1,p' "$theme")
             IFS=',' read -ra parent_themes <<< "$inheritance"
+            shopt -u failglob
+            shopt -s nullglob
             for parent_theme in "${parent_themes[@]}"; do
                 parent_path=""
                 if [ -e "$out/share/icons/$parent_theme" ]; then
@@ -46,6 +48,8 @@ symlinkParentIconThemes() {
                 fi
                 echo "    parent: $parent_theme	-> $parent_path"
             done
+            shopt -u nullglob
+            shopt -s failglob
         done
     fi
 }
