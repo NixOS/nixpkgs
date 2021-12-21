@@ -28799,10 +28799,19 @@ with pkgs;
   thunderbird = wrapThunderbird thunderbird-unwrapped { };
   thunderbird-wayland = wrapThunderbird thunderbird-unwrapped { forceWayland = true; };
 
-  thunderbolt = callPackage ../os-specific/linux/thunderbolt {};
-
   thunderbird-bin = thunderbird-bin-91;
-  thunderbird-bin-91 = callPackage ../applications/networking/mailreaders/thunderbird-bin { };
+  thunderbird-bin-unwrapped = thunderbird-bin-91-unwrapped;
+
+  thunderbird-bin-91 = wrapThunderbird thunderbird-bin-91-unwrapped {
+    applicationName = "thunderbird";
+    pname = "thunderbird-bin";
+    desktopName = "Thunderbird";
+  };
+  thunderbird-bin-91-unwrapped = callPackage ../applications/networking/mailreaders/thunderbird-bin {
+    inherit (gnome) adwaita-icon-theme;
+  };
+
+  thunderbolt = callPackage ../os-specific/linux/thunderbolt {};
 
   ticpp = callPackage ../development/libraries/ticpp { };
 
