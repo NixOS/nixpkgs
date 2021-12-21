@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "bgpq3";
-  version = "0.1.35";
+  version = "0.1.36";
 
   src = fetchFromGitHub {
     owner = "snar";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0fd5a3krq0i906m0iivgphiqq88cw6c0w1q4n7lmzyq9201mb8wj";
+    sha256 = "sha256-FBtt++w2WzCnSim+r+MVy287w2jmdNEaQIro2KaVeRI=";
   };
 
   # Fix binary install location. Remove with next upstream release.
