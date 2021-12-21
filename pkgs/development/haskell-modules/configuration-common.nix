@@ -2109,13 +2109,20 @@ self: super: {
   gogol-core = appendPatch ./patches/gogol-core-144.patch super.gogol-core;
 
   # Jailbreak isn't sufficient, but this is ok as it's a leaf package.
-  hadolint = super.hadolint.overrideScope (self: super: {
+  hadolint = overrideCabal (drv: {
+    # Test suite depends on ordering of unordered-containers returned values
+    # which was upgraded in LTS 18.19
+    # https://github.com/hadolint/hadolint/issues/753
+    testFlags = [
+      "--skip" "/Hadolint.Formatter.Sarif/Formatter: Sarif/print empty results/"
+    ] ++ drv.testFlags or [];
+  }) (super.hadolint.overrideScope (self: super: {
     language-docker = self.language-docker_10_4_0;
     hspec = dontCheck self.hspec_2_9_4;
     hspec-core = dontCheck self.hspec-core_2_9_4;
     hspec-discover = dontCheck self.hspec-discover_2_9_4;
     colourista = doJailbreak super.colourista;
-  });
+  }));
 
   # These should be updated in lockstep
   hledger_1_24_1 = super.hledger_1_24_1.override {
