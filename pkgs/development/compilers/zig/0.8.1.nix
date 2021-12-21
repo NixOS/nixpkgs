@@ -11,13 +11,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "zig";
-  version = "0.9.0";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "ziglang";
     repo = pname;
     rev = version;
-    hash = "sha256-Hfl1KKtGcopMrn+U9r0/qr/wReWJIgb8+IgwMoguv/0=";
+    hash = "sha256-zMSOH8ZWcvzHRwOgGIbLO9Q6jf1P5QL5KCMD+frp+JA=";
   };
 
   nativeBuildInputs = [
@@ -54,3 +54,4 @@ stdenv.mkDerivation rec {
     broken = stdenv.isDarwin; # See https://github.com/NixOS/nixpkgs/issues/86299
   };
 }
+
