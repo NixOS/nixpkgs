@@ -162,27 +162,9 @@ def autoPatchelfFile(path, runtime_deps):
 
             print("searching for dependencies of", path)
             dependencies = list(map(Path, get_dependencies(elf)))
-            file_rpath = ':'.join(get_rpath(elf))
 
     except ELFError:
         return
-
-    # At this point we do not use elftools anymore. As there may be a slight
-    # mismatch in how elftools and patchelf interpret ELF files, We want to
-    # make sure that they agree on the values read, and that patchelf does not
-    # choke on reading the file. This ensures compatibility with the bash
-    # autoPatchelf script which relied only on patchelf and ignored files that
-    # it could no understand.
-    res = subprocess.run(
-            ["patchelf", "--print-rpath", path.as_posix()],
-            capture_output=True,
-            text=True)
-    if res.returncode != 0:
-        return
-    patchelf_rpath = res.stdout.strip()
-    if file_rpath != patchelf_rpath:
-        print(f"Rpath detection mismatch: elftools found {file_rpath}"
-              f" while patchelf found {patchelf_rpath}")
 
     rpath = []
     if file_is_executable:
