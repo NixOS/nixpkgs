@@ -175,7 +175,7 @@ def autoPatchelfFile(path, runtime_deps):
                 return
 
             file_osabi = get_osabi(elf)
-            if osabi_are_compatible(interpreter_osabi, file_osabi):
+            if not osabi_are_compatible(interpreter_osabi, file_osabi):
                 print(f"skipping {path} because its OS ABI ({file_osabi}) is"
                       f" not compatible with target ({interpreter_osabi})")
                 return
