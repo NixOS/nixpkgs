@@ -2140,7 +2140,7 @@ self: super: {
   # Upgrade of unordered-containers in Stackage causes ordering-sensitive test to fail
   # https://github.com/chrisdone/lucid/issues/123
   # https://github.com/commercialhaskell/stackage/issues/6366
-  lucid = assert super.lucid == "2.9.12.1"; overrideCabal (drv: {
+  lucid = assert super.lucid.version == "2.9.12.1"; overrideCabal (drv: {
     testFlags = [
       "--skip" "/attributes-with/mixed/"
     ] ++ drv.testFlags or [];
