@@ -753,6 +753,8 @@ in {
 
   automat = callPackage ../development/python-modules/automat { };
 
+  automate-home = callPackage ../development/python-modules/automate-home { };
+
   autopage = callPackage ../development/python-modules/autopage { };
 
   autopep8 = callPackage ../development/python-modules/autopep8 { };
