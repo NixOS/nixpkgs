@@ -14,19 +14,16 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-ayatana";
-  version = "unstable-2021-12-01";
+  version = "unstable-2021-12-18";
 
   src = fetchFromGitHub {
     owner = "Lafydev";
     repo = pname;
-    rev = "53dc05919cdba772c787620a4bee5821e38c53cd";
-    sha256 = "sha256-T0OHzqENyeAr0pvXUaRMwF1RpwKVyDAF5P5G9S28COU=";
+    rev = "5749f753ca64ce58232a46b9045949b3f8219827";
+    sha256 = "sha256-kuEVw62IDTyC3hRRcWv2RihPOohGqEt8YLr44SurwPM=";
   };
 
   patches = [
-    # Fixes install path for wingpanel indicator
-    # https://github.com/Lafydev/wingpanel-indicator-ayatana/pull/30
-    ./fix-indicator-dir.patch
     # Tells the indicator the path for libapplication.so
     (substituteAll {
       src = ./fix-libapplication-dir.patch;
