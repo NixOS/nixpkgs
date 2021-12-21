@@ -5691,6 +5691,8 @@ with pkgs;
 
   git-cola = callPackage ../applications/version-management/git-and-tools/git-cola { };
 
+  git-credential-1password = callPackage ../applications/version-management/git-and-tools/git-credential-1password { };
+
   git-crecord = callPackage ../applications/version-management/git-crecord { };
 
   git-crypt = callPackage ../applications/version-management/git-and-tools/git-crypt { };
