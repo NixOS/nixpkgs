@@ -19,6 +19,7 @@ alx741/vim-hindent
 alx741/vim-stylishask
 amiorin/ctrlp-z
 andersevenrud/cmp-tmux
+andersevenrud/nordic.nvim
 andrep/vimacs
 andreshazard/vim-logreview
 AndrewRadev/sideways.vim
