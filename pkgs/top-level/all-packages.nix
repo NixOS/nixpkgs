@@ -26517,6 +26517,8 @@ with pkgs;
 
   kubeconform = callPackage ../applications/networking/cluster/kubeconform { };
 
+  kubecolor = callPackage ../applications/networking/cluster/kubecolor { };
+
   kubectl = callPackage ../applications/networking/cluster/kubectl { };
 
   kubebuilder = callPackage ../applications/networking/cluster/kubebuilder { };
