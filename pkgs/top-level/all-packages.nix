@@ -26192,7 +26192,6 @@ with pkgs;
   };
 
   wlroots = wlroots_0_15;
-  wlroots_0_12 = callPackage ../development/libraries/wlroots/0.12.nix {};
   wlroots_0_14 = callPackage ../development/libraries/wlroots/0.14.nix {
     inherit (xorg) xcbutilrenderutil;
   };
