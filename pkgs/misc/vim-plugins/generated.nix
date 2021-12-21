@@ -2361,6 +2361,18 @@ final: prev:
     meta.homepage = "https://github.com/junegunn/goyo.vim/";
   };
 
+  graphviz-vim = buildVimPluginFrom2Nix {
+    pname = "graphviz.vim";
+    version = "2021-04-09";
+    src = fetchFromGitHub {
+      owner = "liuchengxu";
+      repo = "graphviz.vim";
+      rev = "12b04c512694ace2fc15735676f5afdd05519466";
+      sha256 = "1ky9rar3gxvsf0n3y71qfln4pxmz3hpq3dqimbf0r8l8q7sw483r";
+    };
+    meta.homepage = "https://github.com/liuchengxu/graphviz.vim/";
+  };
+
   gruvbox = buildVimPluginFrom2Nix {
     pname = "gruvbox";
     version = "2020-07-03";
