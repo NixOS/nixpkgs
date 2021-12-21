@@ -8737,7 +8737,7 @@ with pkgs;
   philter = callPackage ../tools/networking/philter { };
 
   phoc = callPackage ../applications/misc/phoc {
-    wlroots = wlroots_0_12;
+    wlroots = wlroots_0_14;
   };
 
   phodav = callPackage ../tools/networking/phodav { };
