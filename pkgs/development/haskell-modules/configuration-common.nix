@@ -863,7 +863,7 @@ self: super: {
     super.hledger-lib;
 
   # hledger-lib 1.24 depends on doctest >= 0.18
-  hledger-lib_1_24 = super.hledger-lib_1_24.override {
+  hledger-lib_1_24_1 = super.hledger-lib_1_24_1.override {
     doctest = self.doctest_0_18_2;
   };
 
@@ -2118,8 +2118,8 @@ self: super: {
   });
 
   # These should be updated in lockstep
-  hledger_1_24 = super.hledger_1_24.override {
-    hledger-lib = self.hledger-lib_1_24;
+  hledger_1_24_1 = super.hledger_1_24_1.override {
+    hledger-lib = self.hledger-lib_1_24_1;
   };
 
   # Needs brick > 0.64
