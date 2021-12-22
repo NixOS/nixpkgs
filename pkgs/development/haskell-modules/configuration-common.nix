@@ -1517,9 +1517,6 @@ self: super: {
   # Due to tests restricting base in 0.8.0.0 release
   http-media = doJailbreak super.http-media;
 
-  # 2020-11-19: Jailbreaking until: https://github.com/snapframework/heist/pull/124
-  heist = doJailbreak super.heist;
-
   hinit = generateOptparseApplicativeCompletion "hi" (super.hinit.override { haskeline = self.haskeline_0_8_2; });
 
   # 2020-11-19: Jailbreaking until: https://github.com/snapframework/snap/pull/219
@@ -2176,5 +2173,12 @@ self: super: {
       "-p" "!/Text-golden/&&!/respects payloadKeys for each constituent payload/"
     ] ++ drv.testFlags or [];
   }) super.katip;
+  # 2020-11-19: Jailbreaking until: https://github.com/snapframework/heist/pull/124
+  # 2021-12-22: https://github.com/snapframework/heist/issues/131
+  heist = assert super.heist.version == "1.1.0.1"; overrideCabal (drv: {
+    testFlags = [
+      "-t" "!*/compiled/ns*"
+    ] ++ drv.testFlags or [];
+  }) (doJailbreak super.heist);
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
