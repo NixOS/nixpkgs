@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
   outputBin = "dev";
 
+  nativeBuildInputs = [ makeWrapper ];
   buildInputs = optional stdenv.isFreeBSD autoreconfHook;
 
   configureFlags = [ "--with-apr=${apr.dev}" "--with-expat=${expat.dev}" ]
@@ -38,7 +39,7 @@ stdenv.mkDerivation rec {
         "--without-freetds" "--without-berkeley-db" "--without-crypto" ]
     ;
 
-  propagatedBuildInputs = [ makeWrapper apr expat libiconv ]
+  propagatedBuildInputs = [ apr expat libiconv ]
     ++ optional sslSupport openssl
     ++ optional bdbSupport db
     ++ optional ldapSupport openldap
