@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchPypi
 , googleapis-common-protos
-, grpc
 , grpcio
 , protobuf
 , pythonOlder
@@ -10,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "grpcio-status";
-  inherit (grpc) version;
+  version = "1.43.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "JVM8TWXX1ROmOPDEuIsrZnAOO/Q+aZWlWjvRXsC3eQI=";
+    sha256 = "sha256-IXWQBvNqf/v/GH1BkfQRjActiqn6aCOhGq14QqPGzNA=";
   };
 
   propagatedBuildInputs = [
