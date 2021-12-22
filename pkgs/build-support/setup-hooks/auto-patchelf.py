@@ -37,15 +37,17 @@ def is_dynamic_executable(elf):
 
 
 def get_dependencies(elf):
+    dependencies = []
     # This convoluted code is here on purpose. For some reason, using
     # elf.get_section_by_name(".dynamic") does not always return an
     # instance of DynamicSection, but that is required to call iter_tags
     for section in elf.iter_sections():
         if isinstance(section, DynamicSection):
             for tag in section.iter_tags('DT_NEEDED'):
-                yield tag.needed
-            # There is only one dynamic section
-            break
+                dependencies.append(tag.needed)
+            break # There is only one dynamic section
+
+    return dependencies
 
 
 def get_rpath(elf):
@@ -60,8 +62,7 @@ def get_rpath(elf):
             for tag in section.iter_tags('DT_RPATH'):
                 return tag.rpath.split(':')
 
-            # There is only one dynamic section
-            break
+            break # There is only one dynamic section
 
     return []
 
