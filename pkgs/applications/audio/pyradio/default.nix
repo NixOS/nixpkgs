@@ -28,6 +28,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "http://www.coderholic.com/pyradio/";
     description = "Curses based internet radio player";
     license = licenses.mit;
-    maintainers = with maintainers; [ contrun ];
+    maintainers = with maintainers; [ contrun j-steinbach ];
   };
 }
