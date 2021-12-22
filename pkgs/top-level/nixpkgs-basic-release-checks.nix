@@ -29,30 +29,35 @@ pkgs.runCommand "nixpkgs-release-checks" { src = nixpkgs; buildInputs = [nix]; }
         exit 1
     fi
 
+    platforms=(${pkgs.lib.concatStringsSep " " supportedSystems})
     # Check that all-packages.nix evaluates on a number of platforms without any warnings.
-    for platform in ${pkgs.lib.concatStringsSep " " supportedSystems}; do
+    for platform in ''${platforms[@]} ; do
         header "checking Nixpkgs on $platform"
 
-        nix-env -f $src \
+        (nix-env -f $src \
             --show-trace --argstr system "$platform" \
             --arg config '{ allowAliases = false; }' \
             --option experimental-features 'no-url-literals' \
             -qa --drv-path --system-filter \* --system \
-            "''${opts[@]}" 2>&1 >/dev/null | tee eval-warnings.log
+            "''${opts[@]}" 2>&1 >/dev/null | tee eval-warnings-$platform.log) &
+    done
+    wait
 
-        if [ -s eval-warnings.log ]; then
+    for platform in ''${platforms[@]} ; do
+        if [ -s eval-warnings-$platform.log ]; then
             echo "Nixpkgs on $platform evaluated with warnings, aborting"
             exit 1
         fi
-        rm eval-warnings.log
+        rm eval-warnings-$platform.log
 
-        nix-env -f $src \
+        (nix-env -f $src \
             --show-trace --argstr system "$platform" \
             --arg config '{ allowAliases = false; }' \
             --option experimental-features 'no-url-literals' \
             -qa --drv-path --system-filter \* --system --meta --xml \
-            "''${opts[@]}" > /dev/null
+            "''${opts[@]}" > /dev/null) &
     done
+    wait
 
     touch $out
 ''
