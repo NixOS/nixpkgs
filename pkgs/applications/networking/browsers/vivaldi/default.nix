@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, zlib, libX11, libXext, libSM, libICE, libxkbcommon, libxshmfence
 , libXfixes, libXt, libXi, libXcursor, libXScrnSaver, libXcomposite, libXdamage, libXtst, libXrandr
-, alsa-lib, dbus, cups, libexif, ffmpeg, systemd
+, alsa-lib, dbus, cups, libexif, ffmpeg, systemd, libva
 , freetype, fontconfig, libXft, libXrender, libxcb, expat
 , libuuid
 , libxml2
@@ -35,7 +35,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     stdenv.cc.cc stdenv.cc.libc zlib libX11 libXt libXext libSM libICE libxcb libxkbcommon libxshmfence
     libXi libXft libXcursor libXfixes libXScrnSaver libXcomposite libXdamage libXtst libXrandr
-    atk at-spi2-atk at-spi2-core alsa-lib dbus cups gtk3 gdk-pixbuf libexif ffmpeg systemd
+    atk at-spi2-atk at-spi2-core alsa-lib dbus cups gtk3 gdk-pixbuf libexif ffmpeg systemd libva
     freetype fontconfig libXrender libuuid expat glib nss nspr
     libxml2 pango cairo gnome2.GConf
     libdrm mesa
