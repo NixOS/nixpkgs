@@ -51,7 +51,7 @@ autoPatchelf() {
     done
 
     local runtimeDependenciesArray=($runtimeDependencies)
-    @pythonInterpreter@ @py_script@                                     \
+    @pythonInterpreter@ @autoPatchelfScript@                            \
         ${norecurse:+--no-recurse}                                      \
         ${autoPatchelfIgnoreMissingDeps:+--ignore-missing}              \
         --paths "$@"                                                    \
