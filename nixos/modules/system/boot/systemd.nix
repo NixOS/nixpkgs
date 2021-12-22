@@ -756,6 +756,12 @@ in
       '';
     };
 
+    systemd.tmpfiles.validateConfig = mkOption {
+      type = types.bool;
+      default = true;
+      description = "Validate the syntax of tmpfiles rules at build time.";
+    };
+
     systemd.tmpfiles.rules = mkOption {
       type = types.listOf types.str;
       default = [];
@@ -1050,7 +1056,14 @@ in
           done
         '' + concatMapStrings (name: optionalString (hasPrefix "tmpfiles.d/" name) ''
           rm -f $out/${removePrefix "tmpfiles.d/" name}
-        '') config.system.build.etc.passthru.targets;
+        '') config.system.build.etc.passthru.targets
+        + optionalString cfg.tmpfiles.validateConfig ''
+          for file in $out/*.conf; do
+            echo validating $file
+            # --exclude-prefix / allows to run systemd-tmpfiles without touching the fs but still after parsing config
+            ${cfg.package}/bin/systemd-tmpfiles --create --exclude-prefix / $file
+          done
+        '';
       }) + "/*";
 
       "systemd/system-generators" = { source = hooks "generators" cfg.generators; };
