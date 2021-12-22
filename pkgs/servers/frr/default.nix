@@ -1,40 +1,71 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, autoreconfHook
-, libcap
-, json_c
-, readline
-, net-snmp
-, perl
-, texinfo
-, pkg-config
-, c-ares
-, python3
 , python3Packages
-, libyang
+
+# build time
+, autoreconfHook
 , flex
 , bison
+, perl
+, pkg-config
+, texinfo
+
+# runtime
+, c-ares
+, json_c
+, libcap
+, libelf
+, libunwind
+, libyang
+, net-snmp
 , openssl
-, czmq
+, pam
+, pcre2
+, python3
+, readline
+
+# tests
+, nettools
 , nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "frr";
-  version = "7.5.1";
+  version = "8.1";
 
   src = fetchFromGitHub {
     owner = "FRRouting";
     repo = pname;
     rev = "${pname}-${version}";
-    sha256 = "0lzsvi3kl9zcd4k04vc3363z9v2yrp7wc8bziv6w9h5fznh2vkxp";
+    sha256 = "sha256-hJcgLiPBxOE5QEh0RhtZhM3dOxFqW5H0TUjN+aP4qRk=";
   };
 
-  buildInputs = [ readline net-snmp c-ares json_c python3 libyang openssl czmq ]
-    ++ lib.optionals stdenv.isLinux [ libcap ];
+  nativeBuildInputs = [
+    autoreconfHook
+    bison
+    flex
+    perl
+    pkg-config
+    python3Packages.sphinx
+    texinfo
+  ];
 
-  nativeBuildInputs = [ pkg-config perl texinfo autoreconfHook python3Packages.sphinx python3Packages.pytest flex bison ];
+  buildInputs = [
+    c-ares
+    json_c
+    libelf
+    libunwind
+    libyang
+    net-snmp
+    openssl
+    pam
+    pcre2
+    python3
+    readline
+  ] ++ lib.optionals stdenv.isLinux [
+    libcap
+  ];
 
   configureFlags = [
     "--sysconfdir=/etc/frr"
@@ -53,6 +84,12 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace tools/frr-reload --replace /usr/lib/frr/ $out/libexec/frr/
   '';
+
+  doCheck = true;
+  checkInputs = [
+    nettools
+    python3Packages.pytest
+  ];
 
   enableParallelBuilding = true;
 
