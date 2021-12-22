@@ -90,7 +90,7 @@ To package Dotnet applications, you can use `buildDotnetModule`. This has simila
 * `dotnet-sdk` is useful in cases where you need to change what dotnet SDK is being used.
 * `dotnet-runtime` is useful in cases where you need to change what dotnet runtime is being used. This can be either a regular dotnet runtime, or an aspnetcore.
 * `dotnet-test-sdk` is useful in cases where unit tests expect a different dotnet SDK. By default, this is set to the `dotnet-sdk` attribute.
-* `testProjectFile` is useful in cases where the regular project file does not contain the unit tests. By default, this is set to the `projectFile` attribute.
+* `testProjectFile` is useful in cases where the regular project file does not contain the unit tests. It gets restored and build, but not installed. You may need to regenerate your nuget lockfile after setting this.
 * `disabledTests` is used to disable running specific unit tests. This gets passed as: `dotnet test --filter "FullyQualifiedName!={}"`, to ensure compatibility with all unit test frameworks.
 * `dotnetRestoreFlags` can be used to pass flags to `dotnet restore`.
 * `dotnetBuildFlags` can be used to pass flags to `dotnet build`.
