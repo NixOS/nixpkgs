@@ -13,9 +13,9 @@
 # https://github.com/dmacvicar/terraform-provider-libvirt/tree/main/examples
 
 let
-  sha256 = "sha256-8GGPd0+qdw7s4cr0RgLoS0Cu4C+RAuuboZzTyYN/kq8=";
-  vendorSha256 = "sha256-fpO2sGM+VUKLmdfJ9CQfTFnCfxVTK2m9Sirj9oerD/I=";
-  version = "0.6.11";
+  sha256 = "sha256-1l+ARrXHxtSdnQfYV/6gw3BYHVH8NN4pi+Ttk1nwF88=";
+  vendorSha256 = "sha256-OJa8pQgf5PlECZZkFV9fyCOdh6CrregY1BWycx7JPFE=";
+  version = "0.6.12";
 in buildGoModule {
   inherit version;
   inherit vendorSha256;
@@ -41,7 +41,7 @@ in buildGoModule {
   # Terraform allow checking the provider versions, but this breaks
   # if the versions are not provided via file paths.
   postBuild = "mv $GOPATH/bin/terraform-provider-libvirt{,_v${version}}";
-  
+
   ldflags = [ "-X main.version=${version}" ];
   passthru.provider-source-address = "registry.terraform.io/dmacvicar/libvirt";
 
@@ -50,7 +50,6 @@ in buildGoModule {
   meta = with lib; {
     homepage = "https://github.com/dmacvicar/terraform-provider-libvirt";
     description = "Terraform provider for libvirt";
-    platforms = platforms.linux;
     license = licenses.asl20;
     maintainers = with maintainers; [ mic92 ];
   };
