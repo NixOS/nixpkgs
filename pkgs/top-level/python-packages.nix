@@ -4021,7 +4021,14 @@ in {
 
   jaxlib-bin = callPackage ../development/python-modules/jaxlib/bin.nix { };
 
-  jaxlib = self.jaxlib-bin;
+  jaxlib-build = callPackage ../development/python-modules/jaxlib {
+    cudaSupport = pkgs.config.cudaSupport or false;
+    cudatoolkit = pkgs.cudatoolkit_11_2;
+    cudnn = pkgs.cudnn_cudatoolkit_11_2;
+    nccl = pkgs.nccl_cudatoolkit_11;
+  };
+
+  jaxlib = self.jaxlib-build;
 
   JayDeBeApi = callPackage ../development/python-modules/JayDeBeApi { };
 
