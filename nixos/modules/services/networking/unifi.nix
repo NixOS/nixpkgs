@@ -9,24 +9,46 @@ let
         ${optionalString (cfg.maximumJavaHeapSize != null) "-Xmx${(toString cfg.maximumJavaHeapSize)}m"} \
         -jar ${stateDir}/lib/ace.jar
   '';
+
+  sites = mapAttrsToList (siteId: site:
+    let gwCfg = if (site.configGatewayFile != null) then site.configGatewayFile
+                else pkgs.writeText "config.gateway.json" (builtins.toJSON site.configGateway);
+    in { name = siteId; path = gwCfg; }) cfg.sites;
+
+  siteOptions = { ... }: {
+    options = {
+        configGateway = mkOption {
+            type = with types; nullOr attrs;
+            default = null;
+            description = ''
+                The gateway configuration as per https://help.ui.com/hc/en-us/articles/215458888-UniFi-USG-Advanced-Configuration-Using-config-gateway-json.
+            '';
+            example = ''
+               { config.services.unifi.sites.default.configGateway = { system.conntrack.timeout.tcp.close = "20"; }; }
+            '';
+        };
+        configGatewayFile = mkOption {
+            type = with types; nullOr path;
+            default = null;
+            description = ''
+                The gateway configuration as per https://help.ui.com/hc/en-us/articles/215458888-UniFi-USG-Advanced-Configuration-Using-config-gateway-json as nix path to a JSON file.
+            '';
+        };
+    };
+  };
 in
 {
 
   options = {
     services.unifi.sites = mkOption {
-      description = "Site configuration";
+      description = ''
+        Site configuration
+
+        Warning: If this option is set, any existing config.gateway.json is replaced by what is declared here.
+      '';
       default = {};
       example = { default = { system.conntrack.timeout.tcp.close = "20"; }; };
-      type = with types; attrsOf (submodule {
-        options = {
-          configGateway = mkOption {
-            type = types.either types.str types.attrs;
-            description = ''
-              The gateway configuration as per https://help.ui.com/hc/en-us/articles/215458888-UniFi-USG-Advanced-Configuration-Using-config-gateway-json.
-            '';
-          };
-        };
-      });
+      type = with types; attrsOf (submodule siteOptions);
     };
 
     services.unifi.enable = mkOption {
@@ -124,6 +146,23 @@ in
         3478  # UDP port used for STUN.
         10001 # UDP port used for device discovery.
       ];
+    };
+
+    systemd.services.unifi-gateways = mkIf (cfg.sites != null) {
+      description = "UniFi Gateway Config Helper";
+      wantedBy = [ "unifi.service" ];
+      restartTriggers = map (s: s.path) sites;
+      serviceConfig.User = "unifi";
+      serviceConfig.RemainAfterExit = true;
+      serviceConfig.Type = "oneshot";
+      script = concatMapStringsSep "\n" (e:
+        let dir = "${stateDir}/sites/${e.name}";
+            file = "${dir}/config.gateway.json";
+        in ''
+            mkdir -p ${dir}
+            ln -fs ${e.path} ${file}
+        ''
+      ) sites;
     };
 
     systemd.services.unifi = {
