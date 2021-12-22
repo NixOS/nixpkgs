@@ -424,6 +424,15 @@ let
         };
       };
 
+      denigmaapp.denigma = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "denigmaapp";
+          name = "denigma";
+          version = "0.0.11";
+          sha256 = "0r3hss25myf3x3c3cm7acakyi26bcygvq29sh90mcsxzk1g0bivc";
+        };
+      };
+
       denoland.vscode-deno = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-deno";
