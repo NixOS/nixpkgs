@@ -2133,10 +2133,6 @@ self: super: {
   # test suite requires stack to run, https://github.com/dino-/photoname/issues/24
   photoname = dontCheck super.photoname;
 
-  # Too strict bounds on recursive-zipper
-  # https://github.com/ChrisPenner/jet/issues/1
-  jet = doJailbreak super.jet;
-
   # Upgrade of unordered-containers in Stackage causes ordering-sensitive test to fail
   # https://github.com/chrisdone/lucid/issues/123
   # https://github.com/commercialhaskell/stackage/issues/6366
