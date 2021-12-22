@@ -9,20 +9,21 @@
 , pyqrcode
 , pyserial
 , pythonOlder
+, pyyaml
 , tabulate
 , timeago
 }:
 
 buildPythonPackage rec {
   pname = "meshtastic";
-  version = "1.2.44";
+  version = "1.2.46";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f99e076dde0db86a5ba734b48257ffc7355a2b4729cea1ff5cd7638ca93dbd90";
+    sha256 = "sha256-a3AfTWZaqTQxMJCQGbRsMUoX+Uixyzu4/o9AqkNzDL0=";
   };
 
   propagatedBuildInputs = [
@@ -33,6 +34,7 @@ buildPythonPackage rec {
     pypubsub
     pyqrcode
     pyserial
+    pyyaml
     tabulate
     timeago
   ];
