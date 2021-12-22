@@ -511,7 +511,6 @@ rec {
 
   buildRPM = attrs: runInLinuxImage (stdenv.mkDerivation ({
     prePhases = [ "prepareImagePhase" "sysInfoPhase" ];
-    dontUnpack = true;
     dontConfigure = true;
 
     outDir = "rpms/${attrs.diskImage.name}";
@@ -536,9 +535,7 @@ rec {
     buildPhase = ''
       eval "$preBuild"
 
-      # Hacky: RPM looks for <basename>.spec inside the tarball, so
-      # strip off the hash.
-      srcName="$(stripHash "$src")"
+      srcName="$(rpmspec --srpm -q --qf '%{source}' *.spec)"
       cp "$src" "$srcName" # `ln' doesn't work always work: RPM requires that the file is owned by root
 
       export HOME=/tmp/home
