@@ -198,7 +198,6 @@ GEM
     jwt (2.3.0)
     kgio (2.11.4)
     libv8-node (16.10.0.0)
-    libv8-node (16.10.0.0-aarch64-linux)
     listen (3.7.0)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
@@ -466,7 +465,6 @@ GEM
     zeitwerk (2.5.1)
 
 PLATFORMS
-  aarch64-linux
   ruby
 
 DEPENDENCIES

@@ -164,7 +164,7 @@ def _diff_file(filepath: str, old_version: DiscourseVersion, new_version: Discou
 def _remove_platforms(rubyenv_dir: Path):
     for platform in ['arm64-darwin-20', 'x86_64-darwin-18',
                      'x86_64-darwin-19', 'x86_64-darwin-20',
-                     'x86_64-linux']:
+                     'x86_64-linux', 'aarch64-linux']:
         with open(rubyenv_dir / 'Gemfile.lock', 'r') as f:
             for line in f:
                 if platform in line:
