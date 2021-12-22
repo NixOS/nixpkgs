@@ -26071,11 +26071,11 @@ with pkgs;
 
   super-productivity = callPackage ../applications/office/super-productivity { };
 
-  wlroots = callPackage ../development/libraries/wlroots {
+  wlroots = wlroots_0_14;
+  wlroots_0_12 = callPackage ../development/libraries/wlroots/0.12.nix {};
+  wlroots_0_14 = callPackage ../development/libraries/wlroots/0.14.nix {
     inherit (xorg) xcbutilrenderutil;
   };
-
-  wlroots_0_12 = callPackage ../development/libraries/wlroots/0.12.nix {};
 
   sway-unwrapped = callPackage ../applications/window-managers/sway { };
   sway = callPackage ../applications/window-managers/sway/wrapper.nix { };
