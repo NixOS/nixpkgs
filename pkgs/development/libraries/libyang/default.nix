@@ -1,32 +1,48 @@
 { stdenv
 , lib
 , fetchFromGitHub
+
+# build time
 , cmake
-, pcre
 , pkg-config
+
+# run time
+, pcre2
+
+# update script
 , genericUpdater
 , common-updater-scripts
 }:
 
 stdenv.mkDerivation rec {
   pname = "libyang";
-  version = "1.0.240";
+  version = "2.0.112";
 
   src = fetchFromGitHub {
     owner = "CESNET";
     repo = "libyang";
     rev = "v${version}";
-    sha256 = "12hzwm0jszhnbmn0a03pljpz18dzsrqn91z6y62ghci26qi3xcxn";
+    sha256 = "sha256-f8x0tC3XcQ9fnUE987GYw8qEo/B+J759vpCImqG3QWs=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ pcre ];
-  cmakeFlags = [ "-DENABLE_LYD_PRIV=ON" "-DCMAKE_BUILD_TYPE:String=Release" ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+
+  buildInputs = [
+    pcre2
+  ];
+
+  cmakeFlags = [
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    "-DCMAKE_BUILD_TYPE:String=Release"
+  ];
 
   passthru.updateScript = genericUpdater {
     inherit pname version;
     versionLister = "${common-updater-scripts}/bin/list-git-tags ${src.meta.homepage}";
-    ignoredVersions = "^2\.";
     rev-prefix = "v";
   };
 
