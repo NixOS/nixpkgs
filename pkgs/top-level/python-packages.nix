@@ -1531,6 +1531,8 @@ in {
 
   chevron = callPackage ../development/python-modules/chevron { };
 
+  chex = callPackage ../development/python-modules/chex { };
+
   chiabip158 = callPackage ../development/python-modules/chiabip158 { };
 
   chiapos = callPackage ../development/python-modules/chiapos { };
@@ -2298,6 +2300,8 @@ in {
   dlx = callPackage ../development/python-modules/dlx { };
 
   dmenu-python = callPackage ../development/python-modules/dmenu { };
+
+  dm-haiku = callPackage ../development/python-modules/dm-haiku { };
 
   dm-sonnet = callPackage ../development/python-modules/dm-sonnet { };
 
@@ -4075,6 +4079,8 @@ in {
 
   jmespath = callPackage ../development/python-modules/jmespath { };
 
+  jmp = callPackage ../development/python-modules/jmp { };
+
   joblib = callPackage ../development/python-modules/joblib { };
 
   johnnycanencrypt = callPackage ../development/python-modules/johnnycanencrypt {
@@ -5525,6 +5531,8 @@ in {
   opsdroid_get_image_size = callPackage ../development/python-modules/opsdroid_get_image_size { };
 
   opt-einsum = callPackage ../development/python-modules/opt-einsum { };
+
+  optax = callPackage ../development/python-modules/optax { };
 
   optuna = callPackage ../development/python-modules/optuna { };
 
