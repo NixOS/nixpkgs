@@ -4019,7 +4019,9 @@ in {
 
   jax = callPackage ../development/python-modules/jax { };
 
-  jaxlib = callPackage ../development/python-modules/jaxlib { };
+  jaxlib-bin = callPackage ../development/python-modules/jaxlib/bin.nix { };
+
+  jaxlib = self.jaxlib-bin;
 
   JayDeBeApi = callPackage ../development/python-modules/JayDeBeApi { };
 
