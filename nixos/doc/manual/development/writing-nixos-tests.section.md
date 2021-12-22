@@ -195,7 +195,8 @@ The following methods are available on machine objects:
 
 `wait_until_succeeds`
 
-:   Repeat a shell command with 1-second intervals until it succeeds.
+:   Repeat a shell command with 1-second intervals until it succeeds or
+    timeout is reached, e.g., `wait_until_succeeds( "cmd", timeout=30)`.
 
 `wait_until_fails`
 

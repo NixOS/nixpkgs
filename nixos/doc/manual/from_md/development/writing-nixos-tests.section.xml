@@ -343,7 +343,8 @@ start_all()
       <listitem>
         <para>
           Repeat a shell command with 1-second intervals until it
-          succeeds.
+          succeeds or timeout is reached, e.g.,
+          <literal>wait_until_succeeds( &quot;cmd&quot;, timeout=30)</literal>.
         </para>
       </listitem>
     </varlistentry>
