@@ -124,10 +124,6 @@ self: super: {
     buildDepends = [ pkgs.qt5.wrapQtAppsHook ];
   }) super.qtah-cpp-qt5;
 
-  # Missing test data
-  # https://github.com/aleksey-makarov/melf/issues/1
-  melf = dontCheck super.melf;
-
   # The Haddock phase fails for one reason or another.
   deepseq-magic = dontHaddock super.deepseq-magic;
   feldspar-signal = dontHaddock super.feldspar-signal; # https://github.com/markus-git/feldspar-signal/issues/1
