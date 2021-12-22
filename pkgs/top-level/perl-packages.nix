@@ -14524,10 +14524,10 @@ let
 
   MojoliciousPluginSyslog = buildPerlPackage {
     pname = "Mojolicious-Plugin-Syslog";
-    version = "0.04";
+    version = "0.05";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/Mojolicious-Plugin-Syslog-0.04.tar.gz";
-      sha256 = "807d06b88304675a2bb9181bab123a0e16d3cf2f6a5753a168090ed88085a492";
+      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/Mojolicious-Plugin-Syslog-0.05.tar.gz";
+      sha256 = "sha256-G5Ur6EJ00gAeawLkqw93Et8O4wiPk2qFRlQofh0BPp8=";
     };
     propagatedBuildInputs = [ Mojolicious ];
     meta = {
