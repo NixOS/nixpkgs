@@ -11599,6 +11599,8 @@ with pkgs;
     inherit (darwin) cctools;
   };
 
+  chez-racket = callPackage ../development/compilers/chez-racket {};
+
   chez-srfi = callPackage ../development/chez-modules/chez-srfi { };
 
   chez-mit = callPackage ../development/chez-modules/chez-mit { };
