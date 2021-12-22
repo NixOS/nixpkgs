@@ -4510,6 +4510,18 @@ final: prev:
     meta.homepage = "https://github.com/gennaro-tedesco/nvim-peekup/";
   };
 
+  Nvim-R = buildVimPluginFrom2Nix {
+    pname = "Nvim-R";
+    version = "2021-12-04";
+    src = fetchFromGitHub {
+      owner = "jalvesaq";
+      repo = "Nvim-R";
+      rev = "caad94ccedae6d8c47c131cb6b5ce85ae81113c5";
+      sha256 = "1qz1qphdbiiqnbyhqr7lx70q425mf28y7hzyai322mhyrki431s9";
+    };
+    meta.homepage = "https://github.com/jalvesaq/Nvim-R/";
+  };
+
   nvim-scrollview = buildVimPluginFrom2Nix {
     pname = "nvim-scrollview";
     version = "2021-12-16";
