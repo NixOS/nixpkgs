@@ -183,8 +183,7 @@ def autoPatchelfFile(path, runtime_deps):
 
             file_is_dynamic_executable = is_dynamic_executable(elf)
 
-            print("searching for dependencies of", path)
-            dependencies = map(Path, get_dependencies(elf))
+            file_dependencies = map(Path, get_dependencies(elf))
 
     except ELFError:
         return
@@ -197,10 +196,11 @@ def autoPatchelfFile(path, runtime_deps):
                 check=True)
         rpath += runtime_deps
 
+    print("searching for dependencies of", path)
     # Be sure to get the output of all missing dependencies instead of
     # failing at the first one, because it's more useful when working
     # on a new package where you don't yet know the dependencies.
-    for dep in dependencies:
+    for dep in file_dependencies:
         if dep.is_absolute() and dep.is_file():
             # This is an absolute path. If it exists, just use it.
             # Otherwise, we probably want this to produce an error when
