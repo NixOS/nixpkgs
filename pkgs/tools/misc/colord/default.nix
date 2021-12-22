@@ -60,6 +60,7 @@ stdenv.mkDerivation rec {
     "-Dvapi=true"
     "-Ddaemon=${lib.boolToString enableDaemon}"
     "-Ddaemon_user=colord"
+    "-Dargyllcms_sensor=${lib.boolToString (stdenv.buildPlatform == stdenv.hostPlatform)}"
   ];
 
   nativeBuildInputs = [
@@ -81,7 +82,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    argyllcms
     bash-completion
     dbus
     glib
@@ -93,6 +93,8 @@ stdenv.mkDerivation rec {
     systemd
   ] ++ lib.optionals enableDaemon [
     polkit
+  ] ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
+    argyllcms
   ];
 
   postInstall = ''
