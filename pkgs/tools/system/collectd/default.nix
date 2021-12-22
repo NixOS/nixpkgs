@@ -2,6 +2,7 @@
 , autoreconfHook
 , pkg-config
 , libtool
+, nixosTests
 , ...
 }@args:
 let
@@ -40,6 +41,10 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  passthru.tests = {
+    inherit (nixosTests) collectd;
+  };
 
   meta = with lib; {
     description = "Daemon which collects system performance statistics periodically";
