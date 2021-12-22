@@ -1,9 +1,12 @@
 { lib
 , aiohttp
+, aioresponses
 , attrs
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , jmespath
+, pytest-aiohttp
+, pytestCheckHook
 , pythonOlder
 }:
 
@@ -14,19 +17,23 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-mQq/bbo/UrmJcPyVqvSE5SH6qf8oycGfWm3KP931hAw=";
+  src = fetchFromGitHub {
+    owner = "kellerza";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-HSezbwJg6uPy7JFflRUlaHQw5KWLEmRMgOzbP2NKGik=";
   };
-
   propagatedBuildInputs = [
     aiohttp
     attrs
     jmespath
   ];
 
-  # pypi does not contain tests and GitHub archive not available
-  doCheck = false;
+  checkInputs = [
+    aioresponses
+    pytest-aiohttp
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [
     "pysma"
