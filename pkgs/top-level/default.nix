@@ -49,7 +49,7 @@ let # Rename the function arguments
 in let
   lib = import ../../lib;
 
-  throwIfNot = b: msg: if b then x: x else throw msg;
+  inherit (lib) throwIfNot;
 
   checked =
     throwIfNot (lib.isList overlays) "The overlays argument to nixpkgs must be a list."
