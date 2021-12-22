@@ -2172,5 +2172,11 @@ self: super: {
       "-t" "!*/compiled/ns*"
     ] ++ drv.testFlags or [];
   }) (doJailbreak super.heist);
+  # https://github.com/hercules-ci/hercules-ci-agent/issues/352
+  hercules-ci-api-agent = assert super.hercules-ci-api-agent.version == "0.4.1.0"; overrideCabal (drv: {
+    testFlags = [
+      "--skip" "/hercules-ci-api/Hercules.API.Agent.Evaluate.EvaluateEvent.DerivationInfo/DerivationInfo/ToJSON/encodes v2 correctly/"
+    ] ++ drv.testFlags or [];
+  }) (doJailbreak super.hercules-ci-api-agent);
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
