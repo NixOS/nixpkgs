@@ -1,13 +1,14 @@
 { lib
 , buildPythonPackage
 , dotmap
-, fetchPypi
+, fetchFromGitHub
 , pexpect
 , protobuf
 , pygatt
 , pypubsub
 , pyqrcode
 , pyserial
+, pytestCheckHook
 , pythonOlder
 , pyyaml
 , tabulate
@@ -21,9 +22,11 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-a3AfTWZaqTQxMJCQGbRsMUoX+Uixyzu4/o9AqkNzDL0=";
+  src = fetchFromGitHub {
+    owner = "meshtastic";
+    repo = "Meshtastic-python";
+    rev = version;
+    sha256 = "sha256-XNoAt0R3Jt8i0erovwHBIJ3l9bY5po2UjRl/uzGBs9k=";
   };
 
   propagatedBuildInputs = [
@@ -39,9 +42,13 @@ buildPythonPackage rec {
     timeago
   ];
 
-  # Project only provides PyPI releases which don't contain the tests
-  # https://github.com/meshtastic/Meshtastic-python/issues/86
-  doCheck = false;
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  preCheck = ''
+    export PATH="$PATH:$out/bin";
+  '';
 
   pythonImportsCheck = [
     "meshtastic"
