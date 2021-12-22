@@ -2156,5 +2156,13 @@ self: super: {
   swagger2 = assert super.swagger2.version == "2.6"; overrideCabal (drv: {
     testTarget = "spec";
   }) super.swagger2;
+  # https://github.com/kapralVV/Unique/issues/9
+  Unique = assert super.Unique.version == "0.4.7.9"; overrideCabal (drv: {
+    testFlags = [
+      "--skip" "/Data.List.UniqueUnsorted.removeDuplicates/removeDuplicates: simple test/"
+      "--skip" "/Data.List.UniqueUnsorted.repeatedBy,repeated,unique/unique: simple test/"
+      "--skip" "/Data.List.UniqueUnsorted.repeatedBy,repeated,unique/repeatedBy: simple test/"
+    ] ++ drv.testFlags or [];
+  }) super.Unique;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
