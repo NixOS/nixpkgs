@@ -253,6 +253,11 @@ in {
     inherit (darwin) libunwind;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+  pypy37 = pypy38.override {
+    self = pythonInterpreters.pypy37;
+    pythonVersion = "3.7";
+    sha256 = "sha256-LtAqyecQhZxBvILer7CGGXkruaJ+6qFnbHQe3t0hTdc=";
+  };
 
   pypy27_prebuilt = callPackage ./pypy/prebuilt.nix {
     # Not included at top-level
