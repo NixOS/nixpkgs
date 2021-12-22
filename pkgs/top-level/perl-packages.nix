@@ -23059,6 +23059,22 @@ let
     buildInputs = [ ListMoreUtils TestDifferences TestException ];
   };
 
+  TextMarkdownHoedown = buildPerlModule {
+    pname = "Text-Markdown-Hoedown";
+    version = "1.03";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TO/TOKUHIROM/Text-Markdown-Hoedown-1.03.tar.gz";
+      sha256 = "sha256-U6cw/29IgrmavYVW8mqRH1gvZ1tZ8OFnJe0ey8CE7lA=";
+    };
+    buildInputs = [ Filepushd ];
+    perlPreHook = lib.optionalString stdenv.isDarwin "export LD=$CC";
+    meta = {
+      homepage = "https://github.com/tokuhirom/Text-Markdown-Hoedown";
+      description = "hoedown for Perl5";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   TestMinimumVersion = buildPerlPackage {
     pname = "Test-MinimumVersion";
     version = "0.101082";
