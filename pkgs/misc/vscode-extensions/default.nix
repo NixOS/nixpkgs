@@ -950,8 +950,8 @@ let
         mktplcRef = {
           publisher = "influxdata";
           name = "flux";
-          version = "0.6.5";
-          sha256 = "sha256-rKkZ7Sg8buryFtbIuKsrf3V3Rf7PP8hnbEIRFf4FvSM=";
+          version = "0.6.13";
+          sha256 = "0myl7rppzcz7hxy9zjs81vs9p66lnbfcrdr6s5qb4i6929gmywfy";
         };
         meta = with lib; {
           license = licenses.mit;
