@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   outputs = [ "out" "dev" "man" ];
+  separateDebugInfo = true;
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ cpio zlib zstd bzip2 file libarchive libgcrypt nspr nss db xz python lua sqlite ]
