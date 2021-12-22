@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "utf8proc";
-  version = "2.6.1";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "JuliaStrings";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1zqc6airkzkssbjxanx5v8blfk90180gc9id0dx8ncs54f1ib8w7";
+    sha256 = "sha256-UjZFW+ECU1qbKoo2J2GE8gMEas7trz7YI4mqF5WtOvM=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -18,12 +18,6 @@ stdenv.mkDerivation rec {
     "-DUTF8PROC_ENABLE_TESTING=ON"
     "-DCMAKE_SKIP_BUILD_RPATH=OFF"
   ];
-
-  # the pkg-config file is not created in the cmake installation
-  # process, so we use the Makefile and install it manually
-  # see https://github.com/JuliaStrings/utf8proc/issues/198
-  preConfigure = "make libutf8proc.pc prefix=$out";
-  postInstall = "install -Dm644 ../libutf8proc.pc -t $out/lib/pkgconfig/";
 
   doCheck = true;
 
