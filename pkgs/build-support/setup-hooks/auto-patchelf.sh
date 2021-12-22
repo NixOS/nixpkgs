@@ -61,9 +61,6 @@ autoPatchelf() {
         --libs "${autoPatchelfLibs[@]}"                                 \
                "${extraAutoPatchelfLibs[@]}"                            \
         --runtime-dependencies "${runtimeDependenciesArray[@]/%//lib}"
-
-    # clear the extra set for the next invocation
-    extraAutoPatchelfLibs=()
 }
 
 # XXX: This should ultimately use fixupOutputHooks but we currently don't have
