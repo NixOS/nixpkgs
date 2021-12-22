@@ -1,20 +1,22 @@
 #!/usr/bin/env python3
 
+from collections import defaultdict
+from contextlib import contextmanager
+from dataclasses import dataclass
 from elftools.common.exceptions import ELFError
 from elftools.elf.dynamic import DynamicSection
 from elftools.elf.elffile import ELFFile
 from elftools.elf.enums import ENUM_E_TYPE, ENUM_EI_OSABI
-from collections import defaultdict
-from contextlib import contextmanager
-from typing import Tuple
-from pathlib import Path, PurePath
 from itertools import chain
+from pathlib import Path, PurePath
+from typing import Tuple
 
 import argparse
 import os
 import pprint
 import subprocess
 import sys
+
 
 
 @contextmanager
@@ -149,23 +151,26 @@ def findDependency(soname, soarch, soabi):
     return None
 
 
-patched_any = False
-missingDeps = defaultdict(list)
+@dataclass
+class Dependency:
+    file: Path              # The file that contains the dependency
+    name: Path              # The name of the dependency
+    found: bool = False     # Whether it was found somewhere
 
 
-def autoPatchelfFile(path, runtime_deps):
+def autoPatchelfFile(path: Path, runtime_deps: list[Path]) -> list[Dependency]:
     try:
         with open_elf(path) as elf:
 
             if is_static_executable(elf):
                 # No point patching these
                 print(f"skipping {path} because it is statically linked")
-                return
+                return []
 
             if elf.num_segments() == 0:
                 # no segment (e.g. object file)
                 print(f"skipping {path} because it contains no segment")
-                return
+                return []
 
             file_arch = get_arch(elf)
             if interpreter_arch != file_arch:
@@ -173,20 +178,20 @@ def autoPatchelfFile(path, runtime_deps):
                 # architecture, so skip it.
                 print(f"skipping {path} because its architecture ({file_arch})"
                       f" differs from target ({interpreter_arch})")
-                return
+                return []
 
             file_osabi = get_osabi(elf)
             if not osabi_are_compatible(interpreter_osabi, file_osabi):
                 print(f"skipping {path} because its OS ABI ({file_osabi}) is"
                       f" not compatible with target ({interpreter_osabi})")
-                return
+                return []
 
             file_is_dynamic_executable = is_dynamic_executable(elf)
 
             file_dependencies = map(Path, get_dependencies(elf))
 
     except ELFError:
-        return
+        return []
 
     rpath = []
     if file_is_dynamic_executable:
@@ -197,6 +202,7 @@ def autoPatchelfFile(path, runtime_deps):
         rpath += runtime_deps
 
     print("searching for dependencies of", path)
+    dependencies = []
     # Be sure to get the output of all missing dependencies instead of
     # failing at the first one, because it's more useful when working
     # on a new package where you don't yet know the dependencies.
@@ -214,9 +220,10 @@ def autoPatchelfFile(path, runtime_deps):
 
         if foundDependency := findDependency(dep.name, file_arch, file_osabi):
             rpath.append(foundDependency)
+            dependencies.append(Dependency(path, dep, True))
             print(f"    {dep} -> found: {foundDependency}")
         else:
-            missingDeps[path].append(dep)
+            dependencies.append(Dependency(path, dep, False))
             print(f"    {dep} -> not found!")
 
     # Dedup the rpath
@@ -227,7 +234,8 @@ def autoPatchelfFile(path, runtime_deps):
         subprocess.run(
                 ["patchelf", "--set-rpath", rpath, path.as_posix()],
                 check=True)
-        patched_any = True
+
+    return dependencies
 
 
 def autoPatchelf(
@@ -245,21 +253,23 @@ def autoPatchelf(
     populate_cache(pathsToPatch, recursive)
     populate_cache(libDirs)
 
-    missingDeps = {}
+    dependencies = []
     for path in chain.from_iterable(glob(p, '*', recursive) for p in pathsToPatch):
         if not path.is_symlink() and path.is_file():
-            autoPatchelfFile(path, runtime_deps)
+            dependencies += autoPatchelfFile(path, runtime_deps)
 
     # Print a summary of the missing dependencies at the end
-    for path, deps in missingDeps.items():
-        for dep in deps:
-            print(f"auto-patchelf could not satisfy dependency {dep} wanted by {path}")
+    for dep in dependencies:
+        if not dep.found:
+            print(f"auto-patchelf could not satisfy dependency {dep.name} wanted by {dep.file}")
 
-    if missingDeps and not ignoreMissing:
+    any_missing = any(not dep.found for dep in dependencies)
+    if any_missing and not ignoreMissing:
         sys.exit('auto-patchelf failed to find all the required dependencies.\n'
                  'Add the missing dependencies to --libs or use --ignore-missing.')
 
-    if not patched_any:
+    some_found = any(dep.found for dep in dependencies)
+    if not some_found:
         print('auto-patchelf failed to find any file to patch.\n'
               'It may have been misconfigured, or you may not need it.')
 
