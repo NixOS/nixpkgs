@@ -5232,6 +5232,12 @@
     githubId = 3081095;
     name = "Jürgen Keck";
   };
+  j-steinbach = {
+    email = "steinbach_j@web.de";
+    github = "j-steinbach";
+    githubId = 69524139;
+    name = "J. Steinbach";
+  };
   j03 = {
     email = "github@johannesloetzsch.de";
     github = "johannesloetzsch";
