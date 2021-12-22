@@ -2164,5 +2164,11 @@ self: super: {
       "--skip" "/Data.List.UniqueUnsorted.repeatedBy,repeated,unique/repeatedBy: simple test/"
     ] ++ drv.testFlags or [];
   }) super.Unique;
+  # https://github.com/AndrewRademacher/aeson-casing/issues/8
+  aeson-casing = assert super.aeson-casing.version == "0.2.0.0"; overrideCabal (drv: {
+    testFlags = [
+      "-p" "! /encode train/"
+    ] ++ drv.testFlags or [];
+  }) super.aeson-casing;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
