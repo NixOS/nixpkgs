@@ -17,7 +17,7 @@ alvarosevilla95/luatab.nvim
 alx741/vim-hindent
 alx741/vim-stylishask
 amiorin/ctrlp-z
-andersevenrud/compe-tmux@cmp
+andersevenrud/cmp-tmux@cmp
 andrep/vimacs
 andreshazard/vim-logreview
 AndrewRadev/sideways.vim
@@ -247,6 +247,7 @@ hrsh7th/vim-vsnip
 hrsh7th/vim-vsnip-integ
 hsanson/vim-android
 hsitz/VimOrganizer
+hura/vim-asymptote
 iamcco/coc-spell-checker
 iamcco/markdown-preview.nvim
 ianks/vim-tsx
@@ -392,6 +393,7 @@ lewis6991/gitsigns.nvim
 lf-lang/lingua-franca.vim
 lfe-support/vim-lfe
 lfilho/cosco.vim
+lifepillar/pgsql.vim
 lifepillar/vim-gruvbox8
 lifepillar/vim-mucomplete
 lighttiger2505/deoplete-vim-lsp
@@ -485,7 +487,8 @@ motus/pig.vim
 mpickering/hlint-refactor-vim
 ms-jpq/chadtree@chad
 mtikekar/vim-bsv
-MunifTanjim/nui.nvim
+MunifTanjim/nui.nvim@main
+mustache/vim-mustache-handlebars
 mzlogin/vim-markdown-toc
 mzlogin/vim-smali
 nacro90/numb.nvim
@@ -879,11 +882,13 @@ vim-scripts/mayansmoke
 vim-scripts/PreserveNoEOL
 vim-scripts/prev_indent
 vim-scripts/random.vim
+vim-scripts/rcshell.vim
 vim-scripts/Rename
 vim-scripts/ReplaceWithRegister
 vim-scripts/ShowMultiBase
 vim-scripts/tabmerge
 vim-scripts/taglist.vim
+vim-scripts/timestamp.vim
 vim-scripts/utl.vim
 vim-scripts/vis
 vim-scripts/wombat256.vim

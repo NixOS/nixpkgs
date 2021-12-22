@@ -1,20 +1,32 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "sarge";
   version = "0.1.7";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "3b810d396a75a5a2805272f64f4316f6dcc086e0a744b042cdb0effc85c0f21b";
+  src = fetchFromGitHub {
+    owner = "vsajip";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-E1alSDXj0oeyB6dN5PAtN62FPpMsCKb4R9DpfWdFtn0=";
   };
 
-  # No tests in PyPI tarball
-  doCheck = false;
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "sarge"
+  ];
 
   meta = with lib; {
+    description = "Python wrapper for subprocess which provides command pipeline functionality";
     homepage = "https://sarge.readthedocs.org/";
-    description = "A wrapper for subprocess which provides command pipeline functionality";
     license = licenses.bsd3;
     maintainers = with maintainers; [ abbradar ];
   };

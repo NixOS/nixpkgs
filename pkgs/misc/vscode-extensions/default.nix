@@ -819,8 +819,8 @@ let
           mktplcRef = {
             name = "vscode-pull-request-github";
             publisher = "github";
-            version = "0.22.0";
-            sha256 = "13p3z86vkra26npp5a78pxdwa4z6jqjzsd38arhgdnjgwmi6bnrw";
+            version = "0.35.2021122109";
+            sha256 = "1n7vjwxm92ibwhgn2n57p54dqpi0vvyllmcgjxilgnr14irg5457";
           };
           meta = { license = lib.licenses.mit; };
         };
@@ -950,8 +950,8 @@ let
         mktplcRef = {
           publisher = "influxdata";
           name = "flux";
-          version = "0.6.5";
-          sha256 = "sha256-rKkZ7Sg8buryFtbIuKsrf3V3Rf7PP8hnbEIRFf4FvSM=";
+          version = "0.6.13";
+          sha256 = "0myl7rppzcz7hxy9zjs81vs9p66lnbfcrdr6s5qb4i6929gmywfy";
         };
         meta = with lib; {
           license = licenses.mit;
