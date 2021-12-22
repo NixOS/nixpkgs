@@ -2170,5 +2170,11 @@ self: super: {
       "-p" "! /encode train/"
     ] ++ drv.testFlags or [];
   }) super.aeson-casing;
+  # https://github.com/Soostone/katip/issues/134
+  katip = assert super.katip.version == "0.8.7.0"; overrideCabal (drv: {
+    testFlags = [
+      "-p" "!/Text-golden/&&!/respects payloadKeys for each constituent payload/"
+    ] ++ drv.testFlags or [];
+  }) super.katip;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
