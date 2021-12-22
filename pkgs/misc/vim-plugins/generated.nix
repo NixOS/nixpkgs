@@ -4906,6 +4906,18 @@ final: prev:
     meta.homepage = "https://github.com/andsild/peskcolor.vim/";
   };
 
+  pgsql-vim = buildVimPluginFrom2Nix {
+    pname = "pgsql.vim";
+    version = "2021-12-03";
+    src = fetchFromGitHub {
+      owner = "lifepillar";
+      repo = "pgsql.vim";
+      rev = "b4518baca45a556ab8b1ad6daee78f8d4744f635";
+      sha256 = "0jzzbsg73p6p0fjivix5bn8h6n1rz759bq8z1ilj2m6wz14c1ilm";
+    };
+    meta.homepage = "https://github.com/lifepillar/pgsql.vim/";
+  };
+
   pig-vim = buildVimPluginFrom2Nix {
     pname = "pig.vim";
     version = "2017-06-08";
@@ -5194,6 +5206,18 @@ final: prev:
       sha256 = "1rfzv6lxbhfk4xwdmhpc9b0xamfa2lrzc1xi630v1hakscjdjcm1";
     };
     meta.homepage = "https://github.com/rafaqz/ranger.vim/";
+  };
+
+  rcshell-vim = buildVimPluginFrom2Nix {
+    pname = "rcshell.vim";
+    version = "2014-12-29";
+    src = fetchFromGitHub {
+      owner = "vim-scripts";
+      repo = "rcshell.vim";
+      rev = "6b307c6e6e6948fbb27146b0f41b5fb2ddf8e1a8";
+      sha256 = "0dj6gjq213ljshnncal3ywzv8ply2lzqmvpzaf7vdsd6r6vss3ch";
+    };
+    meta.homepage = "https://github.com/vim-scripts/rcshell.vim/";
   };
 
   readline-vim = buildVimPluginFrom2Nix {
@@ -6256,6 +6280,18 @@ final: prev:
     meta.homepage = "https://github.com/itchyny/thumbnail.vim/";
   };
 
+  timestamp-vim = buildVimPluginFrom2Nix {
+    pname = "timestamp.vim";
+    version = "2010-11-06";
+    src = fetchFromGitHub {
+      owner = "vim-scripts";
+      repo = "timestamp.vim";
+      rev = "0437f9bddd4e699e8e9de176daacec234d42b56c";
+      sha256 = "1dvssbmz7xm4p83jmsqalkshbrk67cacsjvxjpnlw870zf2hqc8p";
+    };
+    meta.homepage = "https://github.com/vim-scripts/timestamp.vim/";
+  };
+
   tlib_vim = buildVimPluginFrom2Nix {
     pname = "tlib_vim";
     version = "2021-07-17";
@@ -6939,6 +6975,18 @@ final: prev:
       sha256 = "1bm99j4vskbgzfn09567qi0462dvjrpdkifc4hg24bi02bx9hjrj";
     };
     meta.homepage = "https://github.com/haya14busa/vim-asterisk/";
+  };
+
+  vim-asymptote = buildVimPluginFrom2Nix {
+    pname = "vim-asymptote";
+    version = "2014-06-26";
+    src = fetchFromGitHub {
+      owner = "hura";
+      repo = "vim-asymptote";
+      rev = "2c59b7d173bf3837c1378e60b0c51d911cdbe15c";
+      sha256 = "0j4hrirssgnh37crl3yvy2vxf7wigdir860z1qvn1m72hld8n32y";
+    };
+    meta.homepage = "https://github.com/hura/vim-asymptote/";
   };
 
   vim-auto-save = buildVimPluginFrom2Nix {
@@ -9066,6 +9114,18 @@ final: prev:
       sha256 = "1q2j88rcg0slvm2bfdri4fy42h5a2md9bbqsspb3kzx5yrhgawhp";
     };
     meta.homepage = "https://github.com/simnalamburt/vim-mundo/";
+  };
+
+  vim-mustache-handlebars = buildVimPluginFrom2Nix {
+    pname = "vim-mustache-handlebars";
+    version = "2021-11-30";
+    src = fetchFromGitHub {
+      owner = "mustache";
+      repo = "vim-mustache-handlebars";
+      rev = "0153fe03a919add2d6cf2d41b2d5b6e1188bc0e0";
+      sha256 = "0dnafs9bcfm539plx5hq6nzq6k8li3xbkizdhv71cpmfcbw2srln";
+    };
+    meta.homepage = "https://github.com/mustache/vim-mustache-handlebars/";
   };
 
   vim-nerdtree-syntax-highlight = buildVimPluginFrom2Nix {

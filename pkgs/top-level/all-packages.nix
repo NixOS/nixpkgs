@@ -9779,6 +9779,8 @@ with pkgs;
 
   stm32loader = with python3Packages; toPythonApplication stm32loader;
 
+  stremio = qt5.callPackage ../applications/video/stremio { };
+
   stubby = callPackage ../tools/networking/stubby { };
 
   sunwait = callPackage ../applications/misc/sunwait { };
@@ -32670,6 +32672,8 @@ with pkgs;
   epkowa = callPackage ../misc/drivers/epkowa { };
 
   utsushi = callPackage ../misc/drivers/utsushi { };
+
+  utsushi-networkscan = callPackage ../misc/drivers/utsushi/networkscan.nix { };
 
   idsk = callPackage ../tools/filesystems/idsk { };
 
