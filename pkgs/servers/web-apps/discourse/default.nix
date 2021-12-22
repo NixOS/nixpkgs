@@ -313,7 +313,11 @@ let
       enabledPlugins = plugins;
       plugins = callPackage ./plugins/all-plugins.nix { inherit mkDiscoursePlugin; };
       ruby = rubyEnv.wrappedRuby;
-      tests = import ../../../../nixos/tests/discourse.nix { package = pkgs.discourse.override args; };
+      tests = import ../../../../nixos/tests/discourse.nix {
+        inherit (stdenv) system;
+        inherit pkgs;
+        package = pkgs.discourse.override args;
+      };
     };
   };
 in discourse
