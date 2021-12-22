@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.ipip.net/product/client.html#besttrace";
     description = "IPIP.net 开发的加强版 traceroute，附带链路可视化";
-    license = "custom";
+    license = licenses.unfree;
     platforms = platforms.linux;
   };
 }
