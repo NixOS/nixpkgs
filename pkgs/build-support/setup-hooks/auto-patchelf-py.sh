@@ -38,7 +38,6 @@ addAutoPatchelfSearchPath() {
 
 autoPatchelf() {
     local norecurse
-
     while [ $# -gt 0 ]; do
         case "$1" in
             --) shift; break;;
@@ -51,13 +50,14 @@ autoPatchelf() {
         esac
     done
 
-    @pythonInterpreter@ @py_script@                                 \
-        ${norecurse:+--no-recurse}                                  \
-        ${autoPatchelfIgnoreMissingDeps:+--ignore-missing}          \
-        --paths "$@"                                                \
-        --libs "${autoPatchelfLibs[@]}"                             \
-               "${extraAutoPatchelfLibs[@]}"                        \
-        --runtime-dependencies "${runtimeDependencies[@]/%//lib}"
+    local runtimeDependenciesArray=($runtimeDependencies)
+    @pythonInterpreter@ @py_script@                                     \
+        ${norecurse:+--no-recurse}                                      \
+        ${autoPatchelfIgnoreMissingDeps:+--ignore-missing}              \
+        --paths "$@"                                                    \
+        --libs "${autoPatchelfLibs[@]}"                                 \
+               "${extraAutoPatchelfLibs[@]}"                            \
+        --runtime-dependencies "${runtimeDependenciesArray[@]/%//lib}"
 
     # clear the extra set for the next invocation
     extraAutoPatchelfLibs=()
