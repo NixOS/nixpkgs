@@ -1,0 +1,33 @@
+From 8c2499d400e5a75257582ba91081cd7ba38ef4cc Mon Sep 17 00:00:00 2001
+From: hqurve <hqurve@outlook.com>
+Date: Wed, 22 Dec 2021 19:02:54 -0400
+Subject: [PATCH] set nvimcom location
+
+---
+ R/common_global.vim | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/R/common_global.vim b/R/common_global.vim
+index 8b8d658..fc7c20e 100644
+--- a/R/common_global.vim
++++ b/R/common_global.vim
+@@ -15,6 +15,16 @@ if exists("s:did_global_stuff")
+ endif
+ let s:did_global_stuff = 1
+ 
++if !exists("g:R_nvimcom_home")
++    let g:R_nvimcom_home = "@nvimcom@/library"
++    " add nvimcom to R library path
++    if $R_LIBS_SITE == ""
++        let $R_LIBS_SITE = "@nvimcom@/library"
++    else
++        let $R_LIBS_SITE = "@nvimcom@/library:" . $R_LIBS_SITE
++    endif
++endif
++
+ if !exists('g:rplugin')
+     " Also in functions.vim
+     let g:rplugin = {'debug_info': {}, 'libs_in_ncs': []}
+-- 
+2.34.0
+
