@@ -36,7 +36,7 @@ self: super: {
 
   # Similar to https://ghc.haskell.org/trac/ghc/ticket/13062
   happy = dontCheck super.happy;
-  happy_1_19_12 = dontCheck super.happy_1_19_12;
+  happy_1_19_12 = doDistribute (dontCheck super.happy_1_19_12);
 
 } // lib.optionalAttrs pkgs.stdenv.hostPlatform.isAarch64 {
   # AARCH64-SPECIFIC OVERRIDES
