@@ -9,6 +9,8 @@
 , pkg-config
 , libsecret
 , setDefaultServerPath ? true
+, stdenv
+, darwin
 }:
 
 let
@@ -40,6 +42,11 @@ let
       jq moreutils esbuild
       # Required by `keytar`, which is a dependency of `vsce`.
       pkg-config libsecret
+    ];
+
+    buildInputs = lib.optionals stdenv.isDarwin [
+      darwin.apple_sdk.frameworks.Security
+      darwin.apple_sdk.frameworks.AppKit
     ];
 
     # Follows https://github.com/rust-analyzer/rust-analyzer/blob/41949748a6123fd6061eb984a47f4fe780525e63/xtask/src/dist.rs#L39-L65

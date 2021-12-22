@@ -14,6 +14,7 @@
 , moreutils
 , racket-minimal
 , clojure-lsp
+, darwin
 }:
 
 let
