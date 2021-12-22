@@ -119,6 +119,30 @@ ${cfg.extraConfig}
 
   hasLocalPostgresDB = let args = cfg.database_args; in
     usePostgresql && (!(args ? host) || (elem args.host [ "localhost" "127.0.0.1" "::1" ]));
+
+  registerNewMatrixUser =
+    let
+      isIpv6 = x: lib.length (lib.splitString ":" x) > 1;
+      listener =
+        lib.findFirst (
+          listener: lib.any (
+            resource: lib.any (
+              name: name == "client"
+            ) resource.names
+          ) listener.resources
+        ) (lib.last cfg.listeners) cfg.listeners;
+    in
+    pkgs.writeShellScriptBin "matrix-synapse-register_new_matrix_user" ''
+      exec ${cfg.package}/bin/register_new_matrix_user \
+        $@ \
+        ${lib.concatMapStringsSep " " (x: "-c ${x}") ([ configFile ] ++ cfg.extraConfigFiles)} \
+        "${listener.type}://${
+          if (isIpv6 listener.bind_address) then
+            "[${listener.bind_address}]"
+          else
+            "${listener.bind_address}"
+        }:${builtins.toString listener.port}/"
+    '';
 in {
   options = {
     services.matrix-synapse = {
@@ -792,6 +816,8 @@ in {
         UMask = "0077";
       };
     };
+
+    environment.systemPackages = [ registerNewMatrixUser ];
   };
 
   imports = [
