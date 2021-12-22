@@ -39,6 +39,14 @@ stdenv.mkDerivation rec {
         "--without-freetds" "--without-berkeley-db" "--without-crypto" ]
     ;
 
+  # For some reason, db version 6.9 is selected when cross-compiling.
+  # It's unclear as to why, it requires someone with more autotools / configure knowledge to go deeper into that.
+  # Always replacing the link flag with a generic link flag seems to help though, so let's do that for now.
+  postConfigure = lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+    substituteInPlace Makefile \
+      --replace "-ldb-6.9" "-ldb"
+  '';
+
   propagatedBuildInputs = [ apr expat libiconv ]
     ++ optional sslSupport openssl
     ++ optional bdbSupport db
