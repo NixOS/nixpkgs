@@ -26430,6 +26430,8 @@ with pkgs;
 
   kbibtex = libsForQt5.callPackage ../applications/office/kbibtex { };
 
+  kbst = callPackage ../applications/networking/cluster/kbst { };
+
   kaidan = libsForQt5.callPackage ../applications/networking/instant-messengers/kaidan { };
 
   kde-gruvbox = callPackage ../data/themes/kde-gruvbox { };
