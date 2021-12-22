@@ -36,8 +36,8 @@ let
 
   babelfishTranslate = path: name:
     pkgs.runCommand "${name}.fish" {
-      nativeBuildInputs = [ pkgs.babelfish ];
-    } "${pkgs.babelfish}/bin/babelfish < ${path} > $out;";
+      nativeBuildInputs = [ pkgs.buildPackages.babelfish ];
+    } "${pkgs.buildPackages.babelfish}/bin/babelfish < ${path} > $out;";
 
 in
 
@@ -271,7 +271,7 @@ in
             ''
               mkdir -p $out
               if [ -d $package/share/man ]; then
-                find $package/share/man -type f | xargs ${pkgs.python3.interpreter} ${patchedGenerator}/create_manpage_completions.py --directory $out >/dev/null
+                find $package/share/man -type f | xargs ${pkgs.buildPackages.python3.interpreter} ${patchedGenerator}/create_manpage_completions.py --directory $out >/dev/null
               fi
             '';
         in
