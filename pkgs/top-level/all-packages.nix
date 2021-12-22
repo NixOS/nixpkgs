@@ -149,6 +149,7 @@ with pkgs;
 
   autoPatchelfHook = makeSetupHook
     { name = "auto-patchelf-py-hook";
+      deps = [ bintools ];
       substitutions = {
         pythonInterpreter = "${python3.withPackages (ps: [ ps.pyelftools ])}/bin/python";
         py_script = ../build-support/setup-hooks/auto-patchelf.py;
