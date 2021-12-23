@@ -24,18 +24,10 @@ You can test building an Octave package as follows:
 $ nix-build -A octavePackages.symbolic
 ```
 
-When building Octave packages with `nix-build`, the `buildOctavePackage` function adds `octave-octaveVersion` to; the start of the package's name attribute.
-
-This can be required when installing the package using `nix-env`:
+To install it into your user profile, run this command from the root of the repository:
 
 ```ShellSession
-$ nix-env -i octave-6.2.0-symbolic
-```
-
-Although, you can also install it using the attribute name:
-
-```ShellSession
-$ nix-env -i -A octavePackages.symbolic
+$ nix-env -f. -iA octavePackages.symbolic
 ```
 
 You can build Octave with packages by using the `withPackages` passed-through function.
