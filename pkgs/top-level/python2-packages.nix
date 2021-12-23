@@ -12,7 +12,7 @@ with self; with super; {
     inherit (pkgs) antlr4;
   };
 
-  appleseed = toPythonModule (pkgs.appleseed.override { inherit (self) python; });
+  appleseed = disabled super.appleseed;
 
   application = callPackage ../development/python-modules/application { };
 
@@ -380,6 +380,8 @@ with self; with super; {
 
   openpyxl = callPackage ../development/python-modules/openpyxl/2.nix { };
 
+  openvino = disabled super.openvino;
+
   openwrt-luci-rpc = disabled super.openwrt-luci-rpc;
 
   opt-einsum = callPackage ../development/python-modules/opt-einsum/2.nix { };
@@ -529,6 +531,8 @@ with self; with super; {
 
   remotecv = callPackage ../development/python-modules/remotecv { };
 
+  recoll = disabled super.recoll;
+
   rhpl = callPackage ../development/python-modules/rhpl { };
 
   rivet = disabled super.rivet;
@@ -624,6 +628,9 @@ with self; with super; {
   };
 
   tarman = callPackage ../development/python-modules/tarman { };
+
+  tensorflow-bin = disabled super.tensorflow-bin;
+  tensorflow-bin_2 = disabled super.tensorflow-bin_2;
 
   thumbor = callPackage ../development/python-modules/thumbor { };
 
