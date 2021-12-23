@@ -3427,6 +3427,8 @@ with pkgs;
 
   moonraker = callPackage ../servers/moonraker { };
 
+  morsel = callPackage ../tools/text/morsel {};
+
   mousetweaks = callPackage ../applications/accessibility/mousetweaks {
     inherit (xorg) libX11 libXtst libXfixes;
   };
@@ -5425,6 +5427,8 @@ with pkgs;
   ferdi = callPackage ../applications/networking/instant-messengers/ferdi {
     mkFranzDerivation = callPackage ../applications/networking/instant-messengers/franz/generic.nix { };
   };
+
+  fq = callPackage ../development/tools/fq { };
 
   franz = callPackage ../applications/networking/instant-messengers/franz {
     mkFranzDerivation = callPackage ../applications/networking/instant-messengers/franz/generic.nix { };

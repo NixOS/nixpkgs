@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "goveelights";
-  version = "0.1.0";
+  version = "0.1.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-4j4iBT4PIpk6BbHwJF7+sp/PeIlHw+8dsOK1Ecfuwtc=";
+    sha256 = "sha256-A7tfY+aFzhfruCZ43usj1/CsTejbPMzHM8SYrY/TU1s=";
   };
 
   propagatedBuildInputs = [
