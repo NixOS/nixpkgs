@@ -17,7 +17,7 @@ let
 in
 
 buildPythonPackage rec {
-  version = "3.5.0";
+  version = "3.5.1";
   pname = "matplotlib";
   format = "setuptools";
 
@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "38892a254420d95594285077276162a5e9e9c30b6da08bdc2a4d53331ad9a6fa";
+    sha256 = "b2e9810e09c3a47b73ce9cab5a72243a1258f61e7900969097a817232246ce1c";
   };
 
   XDG_RUNTIME_DIR = "/tmp";

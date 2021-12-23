@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , sqlite
@@ -39,6 +40,11 @@ buildPythonPackage rec {
     "testVFS"
     "testVFSWithWAL"
     "testdb"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # This is https://github.com/rogerbinns/apsw/issues/277 but
+    # because we use pytestCheckHook we need to blacklist the test
+    # manually
+    "testzzForkChecker"
   ];
 
   pythonImportsCheck = [

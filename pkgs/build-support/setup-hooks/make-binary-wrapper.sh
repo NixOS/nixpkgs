@@ -33,13 +33,20 @@ assertExecutable() {
 # To troubleshoot a binary wrapper after you compiled it,
 # use the `strings` command or open the binary file in a text editor.
 makeWrapper() {
-    assertExecutable "$1"
-    makeDocumentedCWrapper "$1" "${@:3}" | \
+    local original="$1"
+    local wrapper="$2"
+    shift 2
+
+    assertExecutable "$original"
+
+    mkdir -p "$(dirname "$wrapper")"
+
+    makeDocumentedCWrapper "$original" "$@" | \
       @CC@ \
         -Wall -Werror -Wpedantic \
         -Os \
         -x c \
-        -o "$2" -
+        -o "$wrapper" -
 }
 
 # Syntax: wrapProgram <PROGRAM> <MAKE-WRAPPER FLAGS...>

@@ -186,6 +186,8 @@ with pkgs;
 
   antsimulator = callPackage ../games/antsimulator { };
 
+  astrolog = callPackage ../applications/science/astronomy/astrolog { };
+
   atkinson-hyperlegible = callPackage ../data/fonts/atkinson-hyperlegible { };
 
   atuin = callPackage ../tools/misc/atuin {
@@ -488,7 +490,7 @@ with pkgs;
     cacert = buildPackages.cacert;
     git-lfs = buildPackages.git-lfs;
   }) // { # fetchgit is a function, so we use // instead of passthru.
-    tests = callPackages ../build-support/fetchgit/tests.nix {};
+    tests = pkgs.tests.fetchgit;
   };
 
   fetchgitLocal = callPackage ../build-support/fetchgitlocal { };
@@ -531,7 +533,7 @@ with pkgs;
 
   fetchpatch = callPackage ../build-support/fetchpatch { }
     // {
-      tests = callPackages ../build-support/fetchpatch/tests.nix { };
+      tests = pkgs.tests.fetchpatch;
     };
 
   fetchs3 = callPackage ../build-support/fetchs3 { };
@@ -549,7 +551,7 @@ with pkgs;
 
   fetchFirefoxAddon = callPackage ../build-support/fetchfirefoxaddon { }
     // {
-      tests = callPackages ../build-support/fetchfirefoxaddon/tests.nix { };
+      tests = pkgs.tests.fetchFirefoxAddon;
     };
 
   fetchNextcloudApp = callPackage ../build-support/fetchnextcloudapp {};
@@ -998,6 +1000,8 @@ with pkgs;
   gofu = callPackage ../applications/misc/gofu { };
 
   godns = callPackage ../tools/networking/godns { };
+
+  godspeed = callPackage ../tools/networking/godspeed { };
 
   ksnip = libsForQt5.callPackage ../tools/misc/ksnip { };
 
@@ -1884,6 +1888,8 @@ with pkgs;
   mpdevil = callPackage ../applications/audio/mpdevil { };
 
   pacparser = callPackage ../tools/networking/pacparser { };
+
+  opencbm = callPackage ../tools/misc/opencbm { };
 
   parquet-tools = callPackage ../tools/misc/parquet-tools { };
 
@@ -3405,6 +3411,8 @@ with pkgs;
 
   mlarchive2maildir = callPackage ../applications/networking/mailreaders/mlarchive2maildir { };
 
+  mmctl = callPackage ../tools/misc/mmctl { };
+
   molly-brown = callPackage ../servers/gemini/molly-brown { };
 
   monetdb = callPackage ../servers/sql/monetdb { };
@@ -3420,6 +3428,8 @@ with pkgs;
   moodle-dl = callPackage ../tools/networking/moodle-dl { };
 
   moonraker = callPackage ../servers/moonraker { };
+
+  morsel = callPackage ../tools/text/morsel {};
 
   mousetweaks = callPackage ../applications/accessibility/mousetweaks {
     inherit (xorg) libX11 libXtst libXfixes;
@@ -3805,10 +3815,9 @@ with pkgs;
     enableExtraPlugins = true;
   });
 
-  asciidoctor = callPackage ../tools/typesetting/asciidoctor {
-    # epubcheck pulls in Java, which is problematic on some platforms
-    epubcheck = null;
-  };
+  asciidoctor = callPackage ../tools/typesetting/asciidoctor { };
+
+  asciidoctor-with-extensions = callPackage ../tools/typesetting/asciidoctor-with-extensions { };
 
   asciidoctorj = callPackage ../tools/typesetting/asciidoctorj { };
 
@@ -5421,6 +5430,8 @@ with pkgs;
     mkFranzDerivation = callPackage ../applications/networking/instant-messengers/franz/generic.nix { };
   };
 
+  fq = callPackage ../development/tools/fq { };
+
   franz = callPackage ../applications/networking/instant-messengers/franz {
     mkFranzDerivation = callPackage ../applications/networking/instant-messengers/franz/generic.nix { };
   };
@@ -5613,6 +5624,8 @@ with pkgs;
 
   ghr = callPackage ../applications/version-management/git-and-tools/ghr { };
 
+  ghrepo-stats = with python3Packages; toPythonApplication ghrepo-stats;
+
   gibberish-detector = with python3Packages; toPythonApplication gibberish-detector;
 
   gibo = callPackage ../tools/misc/gibo { };
@@ -5689,6 +5702,8 @@ with pkgs;
   git-codereview = callPackage ../applications/version-management/git-and-tools/git-codereview { };
 
   git-cola = callPackage ../applications/version-management/git-and-tools/git-cola { };
+
+  git-credential-1password = callPackage ../applications/version-management/git-and-tools/git-credential-1password { };
 
   git-crecord = callPackage ../applications/version-management/git-crecord { };
 
@@ -9770,6 +9785,8 @@ with pkgs;
 
   stm32loader = with python3Packages; toPythonApplication stm32loader;
 
+  stremio = qt5.callPackage ../applications/video/stremio { };
+
   stubby = callPackage ../tools/networking/stubby { };
 
   sunwait = callPackage ../applications/misc/sunwait { };
@@ -11166,6 +11183,8 @@ with pkgs;
   yasr = callPackage ../applications/audio/yasr { };
 
   yank = callPackage ../tools/misc/yank { };
+
+  yamlfix = with python3Packages; toPythonApplication yamlfix;
 
   yamllint = with python3Packages; toPythonApplication yamllint;
 
@@ -12821,9 +12840,7 @@ with pkgs;
 
   rgxg = callPackage ../tools/text/rgxg { };
 
-  rocclr = callPackage ../development/libraries/rocclr {
-    inherit (llvmPackages_rocm) clang;
-  };
+  rocclr = callPackage ../development/libraries/rocclr { };
 
   hip = callPackage ../development/compilers/hip {
     inherit (llvmPackages_rocm) clang clang-unwrapped compiler-rt lld llvm;
@@ -13561,6 +13578,13 @@ with pkgs;
   phpExtensions = php.extensions;
   phpPackages = php.packages;
 
+  # Import PHP81 interpreter, extensions and packages
+  php81 = callPackage ../development/interpreters/php/8.1.nix {
+    stdenv = if stdenv.cc.isClang then llvmPackages.stdenv else stdenv;
+  };
+  php81Extensions = recurseIntoAttrs php81.extensions;
+  php81Packages = recurseIntoAttrs php81.packages;
+
   # Import PHP80 interpreter, extensions and packages
   php80 = callPackage ../development/interpreters/php/8.0.nix {
     stdenv = if stdenv.cc.isClang then llvmPackages.stdenv else stdenv;
@@ -13647,7 +13671,7 @@ with pkgs;
   python3Packages = python3.pkgs;
 
   pythonInterpreters = callPackage ./../development/interpreters/python { };
-  inherit (pythonInterpreters) python27 python37 python38 python39 python310 python311 python3Minimal pypy27 pypy38 rustpython;
+  inherit (pythonInterpreters) python27 python37 python38 python39 python310 python311 python3Minimal pypy27 pypy38 pypy37 rustpython;
 
   # Python package sets.
   python27Packages = python27.pkgs;
@@ -13660,6 +13684,8 @@ with pkgs;
   pypy2Packages = pypy2.pkgs;
   pypy27Packages = pypy27.pkgs;
   pypy3Packages = pypy3.pkgs;
+  pypy37Packages = pypy37.pkgs;
+  pypy38Packages = pypy38.pkgs;
 
   py3c = callPackage ../development/libraries/py3c { };
 
@@ -15050,6 +15076,7 @@ with pkgs;
   nimbo = with python3Packages; callPackage ../applications/misc/nimbo { };
 
   gn = callPackage ../development/tools/build-managers/gn { };
+  gn1924 = callPackage ../development/tools/build-managers/gn/rev1924.nix { };
 
   nixbang = callPackage ../development/tools/misc/nixbang {
     pythonPackages = python3Packages;
@@ -15898,6 +15925,8 @@ with pkgs;
 
   buddy = callPackage ../development/libraries/buddy { };
 
+  buildkit-nix = callPackage ../applications/virtualization/buildkit-nix { };
+
   bulletml = callPackage ../development/libraries/bulletml { };
 
   bwidget = callPackage ../development/libraries/bwidget { };
@@ -16063,7 +16092,9 @@ with pkgs;
 
   cpp-ipfs-api = callPackage ../development/libraries/cpp-ipfs-api { };
 
-  cpp-netlib = callPackage ../development/libraries/cpp-netlib {};
+  cpp-netlib = callPackage ../development/libraries/cpp-netlib {
+    boost = boost169; # fatal error: 'boost/asio/stream_socket_service.hpp' file not found
+  };
 
   ubus = callPackage ../development/libraries/ubus { };
 
@@ -18373,6 +18404,8 @@ with pkgs;
 
   libstrophe = callPackage ../development/libraries/libstrophe { };
 
+  libspatialaudio = callPackage ../development/libraries/libspatialaudio { };
+
   libspatialindex = callPackage ../development/libraries/libspatialindex { };
 
   libspatialite = callPackage ../development/libraries/libspatialite { };
@@ -18718,6 +18751,7 @@ with pkgs;
       proj = proj_7;
     };
     proj = proj_7;
+    boost = boost175;
   };
 
 
@@ -18831,6 +18865,10 @@ with pkgs;
   mpeg2dec = libmpeg2;
 
   mqtt-bench = callPackage ../applications/misc/mqtt-bench {};
+
+  mqttui = callPackage ../tools/networking/mqttui {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   msgpack = callPackage ../development/libraries/msgpack { };
 
@@ -20863,6 +20901,7 @@ with pkgs;
   envoy = callPackage ../servers/http/envoy {
     go = go_1_15;
     jdk = openjdk11;
+    gn = gn1924;
   };
 
   etcd = callPackage ../servers/etcd { };
@@ -22721,7 +22760,9 @@ with pkgs;
 
   semodule-utils = callPackage ../os-specific/linux/semodule-utils { };
 
-  powerdns = callPackage ../servers/dns/powerdns { };
+  powerdns = callPackage ../servers/dns/powerdns {
+    boost = boost172;
+  };
 
   powerdns-admin = callPackage ../applications/networking/powerdns-admin { };
 
@@ -23986,6 +24027,8 @@ with pkgs;
 
   undefined-medium = callPackage ../data/fonts/undefined-medium { };
 
+  unfonts-core = callPackage ../data/fonts/unfonts-core { };
+
   uni-vga = callPackage ../data/fonts/uni-vga
     { inherit (buildPackages.xorg) fonttosfnt mkfontscale; };
 
@@ -24106,6 +24149,8 @@ with pkgs;
   masterpdfeditor4 = libsForQt5.callPackage ../applications/misc/masterpdfeditor4 { };
 
   foxitreader = libsForQt512.callPackage ../applications/misc/foxitreader { };
+
+  pdfstudio = callPackage ../applications/misc/pdfstudio { };
 
   aeolus = callPackage ../applications/audio/aeolus { };
 
@@ -24282,11 +24327,21 @@ with pkgs;
 
   jnetmap = callPackage ../applications/networking/jnetmap {};
 
-  libbitcoin = callPackage ../tools/misc/libbitcoin/libbitcoin.nix { };
-  libbitcoin-protocol = callPackage ../tools/misc/libbitcoin/libbitcoin-protocol.nix { };
-  libbitcoin-client   = callPackage ../tools/misc/libbitcoin/libbitcoin-client.nix { };
-  libbitcoin-network  = callPackage ../tools/misc/libbitcoin/libbitcoin-network.nix { };
-  libbitcoin-explorer = callPackage ../tools/misc/libbitcoin/libbitcoin-explorer.nix { };
+  libbitcoin = callPackage ../tools/misc/libbitcoin/libbitcoin.nix {
+    boost = boost175; # fatal error: 'boost/interprocess/detail/posix_time_types_wrk.hpp' file not found
+  };
+  libbitcoin-protocol = callPackage ../tools/misc/libbitcoin/libbitcoin-protocol.nix {
+    boost = boost175;
+  };
+  libbitcoin-client   = callPackage ../tools/misc/libbitcoin/libbitcoin-client.nix {
+    boost = boost175;
+  };
+  libbitcoin-network  = callPackage ../tools/misc/libbitcoin/libbitcoin-network.nix {
+    boost = boost175;
+  };
+  libbitcoin-explorer = callPackage ../tools/misc/libbitcoin/libbitcoin-explorer.nix {
+    boost = boost175;
+  };
 
 
   aumix = callPackage ../applications/audio/aumix {
@@ -25519,9 +25574,9 @@ with pkgs;
   fragments = callPackage ../applications/networking/p2p/fragments { };
 
   freecad = libsForQt5.callPackage ../applications/graphics/freecad {
+    boost = python3Packages.boost169;
     inherit (python3Packages)
       GitPython
-      boost
       matplotlib
       pivy
       ply
@@ -26430,6 +26485,8 @@ with pkgs;
 
   kbibtex = libsForQt5.callPackage ../applications/office/kbibtex { };
 
+  kbst = callPackage ../applications/networking/cluster/kbst { };
+
   kaidan = libsForQt5.callPackage ../applications/networking/instant-messengers/kaidan { };
 
   kde-gruvbox = callPackage ../data/themes/kde-gruvbox { };
@@ -26537,6 +26594,8 @@ with pkgs;
   kubernix = callPackage ../applications/networking/cluster/kubernix { };
 
   kubeconform = callPackage ../applications/networking/cluster/kubeconform { };
+
+  kubecolor = callPackage ../applications/networking/cluster/kubecolor { };
 
   kubectl = callPackage ../applications/networking/cluster/kubectl { };
 
@@ -26667,7 +26726,9 @@ with pkgs;
 
   libowlevelzs = callPackage ../development/libraries/libowlevelzs { };
 
-  librecad = libsForQt514.callPackage ../applications/misc/librecad { };
+  librecad = libsForQt514.callPackage ../applications/misc/librecad {
+    boost = boost175;
+  };
 
   libreoffice = hiPrio libreoffice-still;
   libreoffice-unwrapped = libreoffice.libreoffice;
@@ -27144,6 +27205,8 @@ with pkgs;
 
   rofi-power-menu = callPackage ../applications/misc/rofi-power-menu { };
 
+  rofi-pulse-select = callPackage ../applications/audio/rofi-pulse-select { };
+
   rofi-vpn = callPackage ../applications/networking/rofi-vpn { };
 
   ympd = callPackage ../applications/audio/ympd { };
@@ -27275,9 +27338,7 @@ with pkgs;
 
   ninjas2 = callPackage ../applications/audio/ninjas2 {};
 
-  nncp = callPackage ../tools/misc/nncp {
-    go = go_1_15;
-  };
+  nncp = callPackage ../tools/misc/nncp { };
 
   notion = callPackage ../applications/window-managers/notion { };
 
@@ -27560,7 +27621,9 @@ with pkgs;
 
   notmuch-addrlookup = callPackage ../applications/networking/mailreaders/notmuch-addrlookup { };
 
-  nova-filters =  callPackage ../applications/audio/nova-filters { };
+  nova-filters =  callPackage ../applications/audio/nova-filters {
+    boost = boost172;
+  };
 
   nvi = callPackage ../applications/editors/nvi { };
 
@@ -28372,6 +28435,8 @@ with pkgs;
 
   spotify-qt = libsForQt5.callPackage ../applications/audio/spotify-qt { };
 
+  spotify-tray = callPackage ../applications/misc/spotify-tray { };
+
   spotify-tui = callPackage ../applications/audio/spotify-tui {
     inherit (darwin.apple_sdk.frameworks) AppKit Security;
   };
@@ -28795,10 +28860,19 @@ with pkgs;
   thunderbird = wrapThunderbird thunderbird-unwrapped { };
   thunderbird-wayland = wrapThunderbird thunderbird-unwrapped { forceWayland = true; };
 
-  thunderbolt = callPackage ../os-specific/linux/thunderbolt {};
-
   thunderbird-bin = thunderbird-bin-91;
-  thunderbird-bin-91 = callPackage ../applications/networking/mailreaders/thunderbird-bin { };
+  thunderbird-bin-unwrapped = thunderbird-bin-91-unwrapped;
+
+  thunderbird-bin-91 = wrapThunderbird thunderbird-bin-91-unwrapped {
+    applicationName = "thunderbird";
+    pname = "thunderbird-bin";
+    desktopName = "Thunderbird";
+  };
+  thunderbird-bin-91-unwrapped = callPackage ../applications/networking/mailreaders/thunderbird-bin {
+    inherit (gnome) adwaita-icon-theme;
+  };
+
+  thunderbolt = callPackage ../os-specific/linux/thunderbolt {};
 
   ticpp = callPackage ../development/libraries/ticpp { };
 
@@ -29738,6 +29812,8 @@ with pkgs;
   youtube-viewer = perlPackages.WWWYoutubeViewer;
 
   ytalk = callPackage ../applications/networking/instant-messengers/ytalk { };
+
+  ytarchive = callPackage ../tools/misc/ytarchive { };
 
   ytcc = callPackage ../tools/networking/ytcc { };
 
@@ -31420,7 +31496,9 @@ with pkgs;
 
   minia = callPackage ../applications/science/biology/minia { };
 
-  mirtk = callPackage ../development/libraries/science/biology/mirtk { };
+  mirtk = callPackage ../development/libraries/science/biology/mirtk {
+    boost = boost16x;
+  };
 
   muscle = callPackage ../applications/science/biology/muscle { };
 
@@ -32174,7 +32252,9 @@ with pkgs;
 
   gildas = callPackage ../applications/science/astronomy/gildas { };
 
-  gplates = libsForQt5.callPackage ../applications/science/misc/gplates { };
+  gplates = libsForQt5.callPackage ../applications/science/misc/gplates {
+    boost = boost175;
+  };
 
   gravit = callPackage ../applications/science/astronomy/gravit { };
 
@@ -32595,9 +32675,13 @@ with pkgs;
 
   hjson = with python3Packages; toPythonApplication hjson;
 
+  hjson-go = callPackage ../development/tools/hjson-go { };
+
   epkowa = callPackage ../misc/drivers/epkowa { };
 
   utsushi = callPackage ../misc/drivers/utsushi { };
+
+  utsushi-networkscan = callPackage ../misc/drivers/utsushi/networkscan.nix { };
 
   idsk = callPackage ../tools/filesystems/idsk { };
 
@@ -32713,6 +32797,7 @@ with pkgs;
     nixStable
     nix_2_3
     nix_2_4
+    nix_2_5
     nixUnstable;
 
   nixStatic = pkgsStatic.nix;

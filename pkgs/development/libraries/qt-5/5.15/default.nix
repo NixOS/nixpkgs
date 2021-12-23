@@ -125,7 +125,9 @@ let
       qtconnectivity = callPackage ../modules/qtconnectivity.nix {};
       qtdeclarative = callPackage ../modules/qtdeclarative.nix {};
       qtdoc = callPackage ../modules/qtdoc.nix {};
-      qtgamepad = callPackage ../modules/qtgamepad.nix {};
+      qtgamepad = callPackage ../modules/qtgamepad.nix {
+        inherit (darwin.apple_sdk.frameworks) GameController;
+      };
       qtgraphicaleffects = callPackage ../modules/qtgraphicaleffects.nix {};
       qtimageformats = callPackage ../modules/qtimageformats.nix {};
       qtlocation = callPackage ../modules/qtlocation.nix {};

@@ -1,3 +1,0 @@
-url http://userpages.uni-koblenz.de/~bpelzer/ekrhyper/
-ensure_choice
-version '.*[^0-9]_([-0-9_]+)[.].*' '\1'

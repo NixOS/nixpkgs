@@ -32,8 +32,12 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  # -pthread gets passed to clang, causing warnings
-  configureFlags = lib.optional stdenv.isDarwin "--enable-werror=no";
+  configureFlags =
+    [
+      "--enable-gd-formats"
+    ]
+    # -pthread gets passed to clang, causing warnings
+    ++ lib.optional stdenv.isDarwin "--enable-werror=no";
 
   nativeBuildInputs = [ autoconf automake pkg-config ];
 

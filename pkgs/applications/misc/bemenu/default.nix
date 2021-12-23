@@ -11,23 +11,14 @@ assert x11Support -> xorg != null;
 
 stdenv.mkDerivation rec {
   pname = "bemenu";
-  version = "0.6.3";
+  version = "0.6.4";
 
   src = fetchFromGitHub {
     owner = "Cloudef";
     repo = pname;
     rev = version;
-    sha256 = "sha256-U4IMfDvQ0rfEJhE3Uext2c/Cs0mjy1tw+k8uk441Ag8=";
+    sha256 = "5xRM3NQfomG0vJheNEBLy3OaS6UEwabNKYa96u2md6M=";
   };
-
-  patches = [
-    # Pull upstream fix for build against ncurses-6.3
-    (fetchpatch {
-      name = "ncurses-6.3.patch";
-      url = "https://github.com/Cloudef/bemenu/commit/d31164db756989579468946aba62969e42c7ed28.patch";
-      sha256 = "sha256-oyndQI7SaR8cK0IO5wIIxMpmakhfUzwUqLIKRbPkEdw=";
-    })
-  ];
 
   nativeBuildInputs = [ pkg-config pcre ];
 

@@ -14,8 +14,13 @@
   </itemizedlist>
   <section xml:id="sec-release-22.05-highlights">
     <title>Highlights</title>
-    <para>
-    </para>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          PHP 8.1 is now available
+        </para>
+      </listitem>
+    </itemizedlist>
   </section>
   <section xml:id="sec-release-22.05-new-services">
     <title>New Services</title>
@@ -107,6 +112,14 @@
           interpreter. Scripts have to be converted to Python 3 for use
           with <literal>writers.writePython3</literal> or
           <literal>writers.writePyPy2</literal> needs to be used.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          If you previously used
+          <literal>/etc/docker/daemon.json</literal>, you need to
+          incorporate the changes into the new option
+          <literal>virtualisation.docker.daemon.settings</literal>.
         </para>
       </listitem>
     </itemizedlist>
