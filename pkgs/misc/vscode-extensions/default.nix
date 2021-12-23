@@ -1694,6 +1694,21 @@ let
         };
       };
 
+      tuttieee.emacs-mcx = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "emacs-mcx";
+          publisher = "tuttieee";
+          version = "0.37.1";
+          sha256 = "19969qb6ink70km4wawh4w238igdm6npwskyr3hx38qgf69nd748";
+        };
+        meta = {
+          changelog = "https://github.com/whitphx/vscode-emacs-mcx/blob/main/CHANGELOG.md";
+          description = "Awesome Emacs Keymap - VSCode emacs keybinding with multi cursor support";
+          homepage = "https://github.com/whitphx/vscode-emacs-mcx";
+          license = lib.licenses.mit;
+        };
+      };
+
       tyriar.sort-lines = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "sort-lines";
