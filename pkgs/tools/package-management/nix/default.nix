@@ -43,7 +43,7 @@ common =
         [ "out" "dev" ]
         ++ lib.optionals enableDocumentation [ "man" "doc" ];
 
-      hardeningEnable = [ "pie" ];
+      hardeningEnable = lib.optionals (!stdenv.isDarwin) [ "pie" ];
 
       nativeBuildInputs =
         [ pkg-config ]
