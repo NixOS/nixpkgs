@@ -27,7 +27,7 @@ in
             The default value is `fuck`, but you can use anything else as well.
           '';
         };
-        recursive = mkEnableOption "recursively applying rules untilthe command runs";
+        recursive = mkEnableOption "recursively applying rules until the command runs";
         noConfirm = mkEnableOption "applying rules automatically, without any user confirmation";
         instantMode = mkEnableOption ''
           the experimental instant mode, that reduces evaluation times by logging shell output
