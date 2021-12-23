@@ -28,7 +28,7 @@ export TMPDIR=/tmp
 latest_tag="$(git ls-remote --tags --sort -version:refname \
   https://gitlab.com/kicad/code/kicad.git \
   | grep -o 'refs/tags/[0-9]*\.[0-9]*\.[0-9]*$' \
-  | grep -v ".99" | head -n 1 | cut -d '/' -f 3)"
+  | grep -v "\.99" | grep -v "\.9\.9" | head -n 1 | cut -d '/' -f 3)"
 
 all_versions=( "${latest_tag}" master )
 
