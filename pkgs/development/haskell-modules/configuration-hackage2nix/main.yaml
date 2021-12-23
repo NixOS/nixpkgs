@@ -279,6 +279,7 @@ package-maintainers:
     - Unique
   maralorn:
     - cabal-fmt
+    - ema
     - generic-optics
     - ghcup
     - ghcid
