@@ -23,7 +23,7 @@ stdenv.mkDerivation (args // {
     export LZ4="$(find ${lz4.out}/lib -type f | sort | head -n1)"
   '';
 
-  nativeBuildInputs = lib.optional stdenv.isDarwin darwin.cctools;
+  nativeBuildInputs = lib.optionals stdenv.isDarwin (with darwin; [ cctools autoSignDarwinBinariesHook ]);
   buildInputs = [ ncurses libX11 zlib lz4 ]
     ++ lib.optional stdenv.isDarwin libiconv;
 
