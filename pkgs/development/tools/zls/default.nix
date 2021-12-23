@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "zls";
-  version = "unstable-2021-06-06";
+  version = "unstable-2021-12-23";
 
   src = fetchFromGitHub {
     owner = "zigtools";
     repo = pname;
-    rev = "39d87188647bd8c8eed304ee18f2dd1df6942f60";
-    sha256 = "sha256-22N508sVkP1OLySAijhtTPzk2fGf+FVnX9LTYRbRpB4=";
+    rev = "cb4e74213480113ea1af78aff70a90ba41777653";
+    sha256 = "sha256-MVo21qNCZop/HXBqrPcosGbRY+W69KNCc1DfnH47GsI=";
     fetchSubmodules = true;
   };
 
