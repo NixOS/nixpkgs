@@ -1,10 +1,10 @@
-{ stdenv, lib, config, fetchzip, fetchurl, cmake, makeWrapper
 # Common:
+{ stdenv, lib, config, fetchzip, fetchurl, cmake, makeWrapper
 , alembic, boost, embree, ffmpeg, fftw, freetype, gettext
 , glew, gmp, ilmbase, jemalloc, libharu, libjpeg, libpng
 , libsamplerate, libsndfile, libtiff, opencolorio, openexr
 , openimagedenoise, openimageio2, openjpeg, opensubdiv
-, potrace, pugixml, python3, tbb, zlib, zstd
+, potrace, pugixml, python3, tbb, zlib, zstd, runCommandNoCC
 
 # Linux specific:
 , libGL, libGLU, libX11, libXext, libXi, libXrender, libXxf86vm
@@ -28,35 +28,37 @@
 
 , waylandSupport ? false
 , dbus, libffi, libxkbcommon, pkg-config, wayland, wayland-protocols
+
+, makeWrapperArgs ? []
+, pythonDeps ? ps: []
 }:
 
 let
-  numpyPath = "${python3.pkgs.numpy}/${python3.sitePackages}";
-in
-stdenv.mkDerivation rec {
-  pname = "blender";
+numpyPath = "${python3.pkgs.numpy}/${python3.sitePackages}";
+
+unwrapped = stdenv.mkDerivation rec {
+  pname = "blender-unwrapped";
   version = "3.0.0";
 
   # We use fetchurl here instead of fetchzip,
   # so that source is available at the https://tarballs.nixos.org
   src = fetchurl {
-    url = "https://download.blender.org/source/${pname}-${version}.tar.xz";
+    url = "https://download.blender.org/source/blender-${version}.tar.xz";
     sha256 = "sha256-UPDzK834gloSulyNhTtubGstpl7wHoWOpZAKBszL8cs=";
   };
 
   patches = lib.optionals stdenv.isDarwin [ ./darwin.patch ];
 
   nativeBuildInputs = [
-    cmake makeWrapper python3.pkgs.wrapPython llvmPackages.llvm.dev
-  ]
-  ++ lib.optionals cudaSupport [ addOpenGLRunpath ];
+    cmake llvmPackages.llvm.dev
+  ];
 
   buildInputs = [
     alembic boost embree ffmpeg fftw freetype gettext glew
     gmp ilmbase jemalloc libharu libjpeg libpng libsamplerate
     libsndfile libtiff opencolorio openexr openimagedenoise
     openimageio2 openjpeg potrace pugixml python3 tbb zlib zstd
-    (opensubdiv.override { inherit cudaSupport; })
+    opensubdiv
   ]
   ++ lib.optionals stdenv.isLinux [
     libGL libGLU libX11 libXext libXi libXrender libXxf86vm
@@ -72,11 +74,8 @@ stdenv.mkDerivation rec {
     dbus libffi libxkbcommon pkg-config wayland wayland-protocols
   ]
   ++ lib.optionals jackaudioSupport [ libjack2 ]
-  ++ lib.optionals cudaSupport [ cudatoolkit_11 ]
   ++ lib.optionals colladaSupport [ opencollada ]
   ++ lib.optionals spaceNavSupport [ libspnav ];
-
-  pythonPath = with python3.pkgs; [ numpy requests ];
 
   postPatch = ''
     # allow usage of dynamically linked embree
@@ -112,37 +111,11 @@ stdenv.mkDerivation rec {
   # Clang doesn't support "-export-dynamic"
   ++ lib.optionals stdenv.cc.isClang [ "-DPYTHON_LINKFLAGS=" ]
   ++ lib.optionals jackaudioSupport [ "-DWITH_JACK=ON" ]
-  ++ lib.optionals waylandSupport [ "-DWITH_GHOST_WAYLAND=ON" ]
-  ++ lib.optionals cudaSupport [ "-DWITH_CYCLES_CUDA_BINARIES=ON" ];
-
-  # Since some dependencies are built with gcc 6, we need gcc 6's libstdc++
-  # in our RPATH. Sigh.
-  NIX_LDFLAGS = lib.optionalString cudaSupport "-rpath ${stdenv.cc.cc.lib}/lib";
-
-  blenderExecutable = placeholder "out" + (
-    if stdenv.isDarwin
-    then "/Applications/Blender.app/Contents/MacOS/Blender"
-    else "/bin/blender"
-  );
+  ++ lib.optionals waylandSupport [ "-DWITH_GHOST_WAYLAND=ON" ];
 
   postInstall = lib.optionalString stdenv.isDarwin ''
     mkdir $out/Applications
     mv $out/Blender.app $out/Applications
-  '' + ''
-    buildPythonPath "$pythonPath"
-    wrapProgram $blenderExecutable \
-      --prefix PATH : $program_PATH \
-      --prefix PYTHONPATH : "$program_PYTHONPATH" \
-      --add-flags '--python-use-system-env'
-  '';
-
-  # Set RUNPATH so that libcuda and libnvrtc in /run/opengl-driver(-32)/lib
-  # can be found. See the explanation in libglvnd.
-  postFixup = lib.optionalString cudaSupport ''
-    for program in $out/bin/blender $out/bin/.blender-wrapped; do
-      isELF "$program" || continue
-      addOpenGLRunpath "$program"
-    done
   '';
 
   meta = with lib; {
@@ -150,10 +123,37 @@ stdenv.mkDerivation rec {
     homepage = "https://www.blender.org";
     # They comment two licenses: GPLv2 and Blender License, but they say:
     # "We've decided to cancel the BL offering for an indefinite period."
-    # CUDA toolkit is unfree.
-    license = with licenses; [ gpl2Plus ]
-      ++ lib.optionals cudaSupport [ unfree ];
+    license = with licenses; [ gpl2Plus ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
     maintainers = with maintainers; [ goibhniu veprbl ];
   };
-}
+};
+in
+runCommandNoCC "blender-${unwrapped.version}" {
+  inherit unwrapped;
+  inherit (unwrapped) meta;
+
+  pythonPath = with python3.pkgs; [ numpy requests ] ++ pythonDeps python3.pkgs;
+
+  blenderExecutable =
+    if stdenv.isDarwin
+    then "Applications/Blender.app/Contents/MacOS/Blender"
+    else "bin/blender";
+
+  nativeBuildInputs = [ makeWrapper python3.pkgs.wrapPython ];
+} ''
+  buildPythonPath "$pythonPath"
+  makeWrapper "$unwrapped/$blenderExecutable" "$out/$blenderExecutable" \
+    ${lib.concatStringsSep " " (
+      lib.optionals cudaSupport [
+        "--prefix LD_LIBRARY_PATH : /run/opengl-driver/lib"
+        "--prefix PATH : ${cudatoolkit_11}/bin"
+        "--prefix CYCLES_CUDA_EXTRA_CFLAGS ' ' -I${cudatoolkit_11}/include"
+      ] ++ [
+        "--prefix PATH : $program_PATH"
+        "--prefix PYTHONPATH : $program_PYTHONPATH"
+        "--add-flags '--python-use-system-env'"
+      ]
+      ++ makeWrapperArgs
+    )}
+''
