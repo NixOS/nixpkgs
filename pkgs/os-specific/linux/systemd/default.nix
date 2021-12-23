@@ -123,7 +123,7 @@ assert withHomed -> withCryptsetup;
 assert withCryptsetup -> (cryptsetup != null);
 let
   wantCurl = withRemote || withImportd;
-  version = "249.7";
+  version = "250";
 in
 stdenv.mkDerivation {
   inherit pname version;
@@ -134,7 +134,7 @@ stdenv.mkDerivation {
     owner = "systemd";
     repo = "systemd-stable";
     rev = "v${version}";
-    sha256 = "sha256-y33/BvvI+JyhsvuT1Cbm6J2Z72j71oXgLw6X9NwCMPE=";
+    sha256 = "sha256-H1k9NeAGAQNDqzrksl27fd3/ZnebUcsl3Kr+jp7Qv9Q=";
   };
 
   # If these need to be regenerated, `git am path/to/00*.patch` them into a
@@ -245,6 +245,10 @@ stdenv.mkDerivation {
         [
           # bpf compilation support
           { name = "libbpf.so.0"; pkg = opt withLibBPF libbpf; }
+
+          # For parsing of elf files
+          { name = "libdw.so.1"; pkg = opt withCoredump elfutils; }
+          { name = "libelf.so.1"; pkg = opt withCoredump elfutils; }
 
           # We did never provide support for libxkbcommon & qrencode
           { name = "libxkbcommon.so.0"; pkg = null; }
@@ -369,7 +373,6 @@ stdenv.mkDerivation {
     ++ lib.optional withApparmor libapparmor
     ++ lib.optional wantCurl (lib.getDev curl)
     ++ lib.optionals withCompression [ bzip2 lz4 xz zstd ]
-    ++ lib.optional withCoredump elfutils
     ++ lib.optional withCryptsetup (lib.getDev cryptsetup.dev)
     ++ lib.optional withEfi gnu-efi
     ++ lib.optional withKexectools kexec-tools
@@ -435,7 +438,7 @@ stdenv.mkDerivation {
     "-Dsmack=true"
     "-Db_pie=true"
     "-Dinstall-sysconfdir=false"
-    "-Defi-ld=${stdenv.cc.bintools.targetPrefix}ld"
+    "-Defi-ld=auto"
     /*
       As of now, systemd doesn't allow runtime configuration of these values. So
       the settings in /etc/login.defs have no effect on it. Many people think this
