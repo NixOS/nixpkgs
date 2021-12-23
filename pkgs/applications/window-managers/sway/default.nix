@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, substituteAll, swaybg
-, meson, ninja, pkg-config, wayland-scanner, scdoc
+, meson_0_60, ninja, pkg-config, wayland-scanner, scdoc
 , wayland, libxkbcommon, pcre, json_c, dbus, libevdev
 , pango, cairo, libinput, libcap, pam, gdk-pixbuf, librsvg
 , wlroots, wayland-protocols, libdrm
@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sway-unwrapped";
-  version = "1.6.1";
+  version = "1.7";
 
   src = fetchFromGitHub {
     owner = "swaywm";
     repo = "sway";
     rev = version;
-    sha256 = "0j4sdbsrlvky1agacc0pcz9bwmaxjmrapjnzscbd2i0cria2fc5j";
+    sha256 = "0ss3l258blyf2d0lwd7pi7ga1fxfj8pxhag058k7cmjhs3y30y5l";
   };
 
   patches = [
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    meson ninja pkg-config wayland-scanner scdoc
+    meson_0_60 ninja pkg-config wayland-scanner scdoc
   ];
 
   buildInputs = [
