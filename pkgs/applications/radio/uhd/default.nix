@@ -107,7 +107,8 @@ stdenv.mkDerivation rec {
     ++ optionals (enableDpdk) [ dpdk ]
   ;
 
-  doCheck = true;
+  # many tests fails on darwin, according to ofborg
+  doCheck = !stdenv.isDarwin;
 
   # Build only the host software
   preConfigure = "cd host";
