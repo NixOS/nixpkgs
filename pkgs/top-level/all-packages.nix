@@ -22249,6 +22249,8 @@ with pkgs;
 
   gradm = callPackage ../os-specific/linux/gradm { };
 
+  gt = callPackage ../os-specific/linux/gt { };
+
   inherit (nodePackages) gtop;
 
   hd-idle = callPackage ../os-specific/linux/hd-idle { };
