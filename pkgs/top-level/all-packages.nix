@@ -12832,9 +12832,7 @@ with pkgs;
 
   rgxg = callPackage ../tools/text/rgxg { };
 
-  rocclr = callPackage ../development/libraries/rocclr {
-    inherit (llvmPackages_rocm) clang;
-  };
+  rocclr = callPackage ../development/libraries/rocclr { };
 
   hip = callPackage ../development/compilers/hip {
     inherit (llvmPackages_rocm) clang clang-unwrapped compiler-rt lld llvm;
@@ -27615,7 +27613,9 @@ with pkgs;
 
   notmuch-addrlookup = callPackage ../applications/networking/mailreaders/notmuch-addrlookup { };
 
-  nova-filters =  callPackage ../applications/audio/nova-filters { };
+  nova-filters =  callPackage ../applications/audio/nova-filters {
+    boost = boost172;
+  };
 
   nvi = callPackage ../applications/editors/nvi { };
 

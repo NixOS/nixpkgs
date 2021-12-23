@@ -31,6 +31,13 @@
       zeroadPackages
     ;
 
+    # Make sure haskell.compiler is included, so alternative GHC versions show up,
+    # but don't add haskell.packages.* since they contain the same packages (at
+    # least by name) as haskellPackages.
+    haskell = super.haskell // {
+      compiler = recurseIntoAttrs super.haskell.compiler;
+    };
+
     # This is an alias which we disallow by default; explicitly allow it
     emacs27Packages = emacs27.pkgs;
   };
