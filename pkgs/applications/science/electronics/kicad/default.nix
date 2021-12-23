@@ -2,8 +2,7 @@
 , fetchFromGitLab
 , gnome
 , dconf
-, wxGTK30
-, wxGTK31
+, wxGTK31-gtk3
 , makeWrapper
 , gsettings-desktop-schemas
 , hicolor-icon-theme
@@ -15,7 +14,6 @@
 , pname ? "kicad"
 , stable ? true
 , oceSupport ? false
-, withOCE ? false
 , withOCCT ? false
 , withOCC ? true
 , ngspiceSupport ? false
@@ -28,7 +26,8 @@
 , sanitizeAddress ? false
 , sanitizeThreads ? false
 , with3d ? true
-, withI18n ? true
+, withI18n ? false
+, withPCM ? true # Plugin and Content Manager
 , srcs ? { }
 }:
 
@@ -71,8 +70,6 @@
 assert withNgspice -> libngspice != null;
 assert lib.assertMsg (!ngspiceSupport)
   "`nspiceSupport` was renamed to `withNgspice` for the sake of consistency with other kicad nix arguments.";
-assert lib.assertMsg (!oceSupport)
-  "`oceSupport` was renamed to `withOCE` for the sake of consistency with other kicad nix arguments.";
 assert lib.assertMsg (!scriptingSupport)
   "`scriptingSupport` was renamed to `withScripting` for the sake of consistency with other kicad nix arguments.";
 assert lib.assertMsg (!withOCCT)
@@ -132,25 +129,9 @@ let
     if srcOverridep "libVersion" then srcs.libVersion
     else versionsImport.${baseName}.libVersion.version;
 
-  wxGTK =
-    if (stable)
-    # wxGTK3x may default to withGtk2 = false, see #73145
-    then
-      wxGTK30.override
-        {
-          withGtk2 = false;
-        }
-    # wxGTK31 currently introduces an issue with opening the python interpreter in pcbnew
-    # but brings high DPI support?
-    else
-      wxGTK31.override {
-        withGtk2 = false;
-      };
-
+  wxGTK = wxGTK31-gtk3;
   python = python3;
-  wxPython = if (stable)
-    then python.pkgs.wxPython_4_0
-    else python.pkgs.wxPython_4_1;
+  wxPython = python.pkgs.wxPython_4_1;
 
   inherit (lib) concatStringsSep flatten optionalString optionals;
 in
@@ -164,7 +145,7 @@ stdenv.mkDerivation rec {
     inherit kicadSrc kicadVersion;
     inherit (passthru) i18n;
     inherit wxGTK python wxPython;
-    inherit withI18n withOCC withOCE withNgspice withScripting;
+    inherit withOCC withNgspice withScripting withI18n withPCM;
     inherit debug sanitizeAddress sanitizeThreads;
   };
 
@@ -197,27 +178,14 @@ stdenv.mkDerivation rec {
     "--prefix GIO_EXTRA_MODULES : ${dconf}/lib/gio/modules"
     # required to open a bug report link in firefox-wayland
     "--set-default MOZ_DBUS_REMOTE 1"
-  ]
-  ++ optionals (stable)
-  [
-    "--set-default KISYSMOD ${footprints}/share/kicad/modules"
-    "--set-default KICAD_SYMBOL_DIR ${symbols}/share/kicad/library"
-    "--set-default KICAD_TEMPLATE_DIR ${templates}/share/kicad/template"
-    "--prefix KICAD_TEMPLATE_DIR : ${symbols}/share/kicad/template"
-    "--prefix KICAD_TEMPLATE_DIR : ${footprints}/share/kicad/template"
-  ]
-  ++ optionals (stable && with3d) [ "--set-default KISYS3DMOD ${packages3d}/share/kicad/modules/packages3d" ]
-  ++ optionals (!stable)
-  [
     "--set-default KICAD6_FOOTPRINT_DIR ${footprints}/share/kicad/footprints"
     "--set-default KICAD6_SYMBOL_DIR ${symbols}/share/kicad/symbols"
     "--set-default KICAD6_TEMPLATE_DIR ${templates}/share/kicad/template"
     "--prefix KICAD6_TEMPLATE_DIR : ${symbols}/share/kicad/template"
     "--prefix KICAD6_TEMPLATE_DIR : ${footprints}/share/kicad/template"
   ]
-  ++ optionals (!stable && with3d)
+  ++ optionals (with3d)
   [
-    "--set-default KISYS3DMOD ${packages3d}/share/kicad/3dmodels"
     "--set-default KICAD6_3DMODEL_DIR ${packages3d}/share/kicad/3dmodels"
   ]
   ++ optionals (withNgspice) [ "--prefix LD_LIBRARY_PATH : ${libngspice}/lib" ]
@@ -259,9 +227,6 @@ stdenv.mkDerivation rec {
     ln -s ${base}/share/applications $out/share/applications
     ln -s ${base}/share/icons $out/share/icons
     ln -s ${base}/share/mime $out/share/mime
-  '' + optionalString (stable) ''
-    ln -s ${base}/share/appdata $out/share/appdata
-  '' + optionalString (!stable) ''
     ln -s ${base}/share/metainfo $out/share/metainfo
   '';
 
