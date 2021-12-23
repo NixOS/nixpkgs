@@ -34064,4 +34064,6 @@ with pkgs;
   };
 
   zthrottle = callPackage ../tools/misc/zthrottle { };
+
+  xnotify = callPackage ../applications/misc/xnotify {};
 }
