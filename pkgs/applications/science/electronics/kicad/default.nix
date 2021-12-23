@@ -32,23 +32,21 @@
 }:
 
 # The `srcs` parameter can be used to override the kicad source code
-# and all libraries (including i18n), which are otherwise inaccessible
+# and all libraries, which are otherwise inaccessible
 # to overlays since most of the kicad build expression has been
 # refactored into base.nix, most of the library build expressions have
-# been refactored into libraries.nix, and most the i18n build
-# expression has been refactored into i18n.nix. Overrides are only
-# applied when building `kicad-unstable`. The `srcs` parameter has no
-# effect for stable `kicad`. `srcs` takes an attribute set in which
+# been refactored into libraries.nix. Overrides are only applied when
+# building `kicad-unstable`. The `srcs` parameter has
+# no effect for stable `kicad`. `srcs` takes an attribute set in which
 # any of the following attributes are meaningful (though none are
-# mandatory): "kicad", "kicadVersion", "i18n", "symbols", "templates",
+# mandatory): "kicad", "kicadVersion", "symbols", "templates",
 # "footprints", "packages3d", and "libVersion". "kicadVersion" and
 # "libVersion" should be set to a string with the desired value for
 # the version attribute in kicad's `mkDerivation` and the version
-# attribute in any of the library's or i18n's `mkDerivation`,
-# respectively. "kicad", "i18n", "symbols", "templates", "footprints",
-# and "packages3d" should be set to an appropriate fetcher (e.g.,
-# `fetchFromGitLab`). So, for example, a possible overlay for kicad
-# is:
+# attribute in any of the library's `mkDerivation`, respectively.
+# "kicad", "symbols", "templates", "footprints", and "packages3d"
+# should be set to an appropriate fetcher (e.g. `fetchFromGitLab`).
+# So, for example, a possible overlay for kicad is:
 #
 # final: prev:
 
@@ -88,14 +86,6 @@ let
     sha256 = versionsImport.${baseName}.kicadVersion.src.sha256;
   };
 
-  i18nSrcFetch = fetchFromGitLab {
-    group = "kicad";
-    owner = "code";
-    repo = "kicad-i18n";
-    rev = versionsImport.${baseName}.libVersion.libSources.i18n.rev;
-    sha256 = versionsImport.${baseName}.libVersion.libSources.i18n.sha256;
-  };
-
   libSrcFetch = name: fetchFromGitLab {
     group = "kicad";
     owner = "libraries";
@@ -118,11 +108,6 @@ let
     if srcOverridep "kicadVersion" then srcs.kicadVersion
     else versionsImport.${baseName}.kicadVersion.version;
 
-  i18nSrc = if srcOverridep "i18n" then srcs.i18n else i18nSrcFetch;
-  i18nVersion =
-    if srcOverridep "i18nVersion" then srcs.i18nVersion
-    else versionsImport.${baseName}.libVersion.version;
-
   libSrc = name: if srcOverridep name then srcs.${name} else libSrcFetch name;
   # TODO does it make sense to only have one version for all libs?
   libVersion =
@@ -139,11 +124,9 @@ stdenv.mkDerivation rec {
 
   # Common libraries, referenced during runtime, via the wrapper.
   passthru.libraries = callPackages ./libraries.nix { inherit libSrc; };
-  passthru.i18n = callPackage ./i18n.nix { src = i18nSrc; };
   base = callPackage ./base.nix {
     inherit stable baseName;
     inherit kicadSrc kicadVersion;
-    inherit (passthru) i18n;
     inherit wxGTK python wxPython;
     inherit withOCC withNgspice withScripting withI18n withPCM;
     inherit debug sanitizeAddress sanitizeThreads;

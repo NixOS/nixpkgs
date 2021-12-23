@@ -12,8 +12,6 @@
     libVersion = {
       version =			"6.0.0";
       libSources = {
-        i18n.rev =		"0ad3d7e469e31c8868ad83f90e22a9c18f16aa1f";
-        i18n.sha256 =		"0y51l0r62cnxkvpc21732p3cx7pjvaqjih8193502hlv9kv1j9p6";
         symbols.rev =		"275f22eb9eecd5b6deabdefd82c9a826254d9f23";
         symbols.sha256 =	"0wjk464l60xknvgc9d870901lqnx296dw7amlh3wg0wf78izarfr";
         templates.rev =		"3a422b5b0928f3fd31579769d4dee2b009a85a11";
@@ -36,8 +34,6 @@
     libVersion = {
       version =			"2021-12-25";
       libSources = {
-        i18n.rev =		"e89d9a89bec59199c1ade56ee2556591412ab7b0";
-        i18n.sha256 =		"04zaqyhj3qr4ymyd3k5vjpcna64j8klpsygcgjcv29s3rdi8glfl";
         symbols.rev =		"125a2e736504e776e4c6fb7f5131efad75edf245";
         symbols.sha256 =	"0wjk464l60xknvgc9d870901lqnx296dw7amlh3wg0wf78izarfr";
         templates.rev =		"8c9ff3dadb9c75cf2932f11c09a46c0c9d84784b";

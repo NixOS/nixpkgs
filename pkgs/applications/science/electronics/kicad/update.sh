@@ -66,10 +66,6 @@ gitlab="https://gitlab.com/kicad"
 # append commit hash or tag
 gitlab_pre="https://gitlab.com/api/v4/projects/kicad%2Fcode%2Fkicad/repository/archive.tar.gz?sha="
 
-# not a lib, but separate and already moved to gitlab
-i18n="${gitlab}/code/kicad-i18n.git"
-i18n_pre="https://gitlab.com/api/v4/projects/kicad%2Fcode%2Fkicad-i18n/repository/archive.tar.gz?sha="
-
 count=0
 
 printf "Latest tag is\t%s\n" "${latest_tag}" >&2
@@ -127,20 +123,6 @@ for version in "${all_versions[@]}"; do
         printf "%6sversion =\t\t\t\"%s\";\n" "" "${today}"
         printf "%6slibSources = {\n" ""
 
-        echo "Checking i18n" >&2
-        i18n_rev="$(${get_rev} "${i18n}" "${version}" | cut -f1)"
-        has_rev="$(grep -sm 1 "\"${pname}\"" -A 11 "${file}" | grep -sm 1 "${i18n_rev}" || true)"
-        has_hash="$(grep -sm 1 "\"${pname}\"" -A 12 "${file}" | grep -sm 1 "i18n.sha256" || true)"
-        if [[ -n ${has_rev} && -n ${has_hash} && -z ${clean} ]]; then
-          echo "Reusing old kicad-i18n-${today}.src.sha256, already latest .rev" >&2
-          grep -sm 1 "\"${pname}\"" -A 12 "${file}" | grep -sm 1 "i18n" -A 1
-        else
-          printf "%8si18n.rev =\t\t\"%s\";\n" "" "${i18n_rev}"
-          printf "%8si18n.sha256 =\t\t\"%s\";\n" "" \
-            "$(${prefetch} "${i18n_pre}${i18n_rev}")"
-          count=$((count+1))
-        fi
-
           for lib in "${libs[@]}"; do
             echo "Checking ${lib}" >&2
             url="${gitlab}/libraries/kicad-${lib}.git"
@@ -166,7 +148,7 @@ for version in "${all_versions[@]}"; do
     printf "%2s};\n" ""
   else
     printf "\nReusing old %s\n" "${pname}" >&2
-    grep -sm 1 "\"${pname}\"" -A 23 "${file}"
+    grep -sm 1 "\"${pname}\"" -A 21 "${file}"
   fi
 done
 printf "}\n"

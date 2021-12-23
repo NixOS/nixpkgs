@@ -43,7 +43,6 @@
 , baseName
 , kicadSrc
 , kicadVersion
-, i18n
 , withOCC
 , withNgspice
 , withScripting
@@ -161,16 +160,10 @@ stdenv.mkDerivation rec {
 
   dontStrip = debug;
 
-  postInstall = optionalString (withI18n) ''
-    mkdir -p $out/share
-    lndir ${i18n}/share $out/share
-  '';
-
   meta = {
     description = "Just the built source without the libraries";
     longDescription = ''
-      Just the build products, optionally with the i18n linked in
-      the libraries are passed via an env var in the wrapper, default.nix
+      Just the build products, the libraries are passed via an env var in the wrapper, default.nix
     '';
     homepage = "https://www.kicad.org/";
     license = lib.licenses.agpl3;
