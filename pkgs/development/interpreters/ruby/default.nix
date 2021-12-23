@@ -206,7 +206,9 @@ let
           sed -i '/^  CONFIG\["\(BASERUBY\|SHELL\|GREP\|EGREP\|MKDIR_P\|MAKEDIRS\|INSTALL\)"\]/d' $rbConfig
         '' + opString useBaseRuby ''
           # Prevent the baseruby from being included in the closure.
-          sed -i "s|'--with-baseruby=${baseRuby}/bin/ruby'||" $rbConfig
+          ${removeReferencesTo}/bin/remove-references-to \
+            -t ${baseRuby} \
+            $rbConfig $out/lib/libruby*
         '';
 
         disallowedRequisites = op (!jitSupport) stdenv.cc.cc
