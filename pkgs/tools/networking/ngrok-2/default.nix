@@ -34,6 +34,9 @@ stdenv.mkDerivation {
 
   passthru.updateScript = ./update.sh;
 
+  # Stripping causes SEGFAULT on x86_64-darwin
+  dontStrip = true;
+
   meta = {
     description = "Allows you to expose a web server running on your local machine to the internet";
     homepage = "https://ngrok.com/";

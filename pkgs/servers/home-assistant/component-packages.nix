@@ -683,7 +683,7 @@
     "qld_bushfire" = ps: with ps; [ georss-qld-bushfire-alert-client ];
     "qnap" = ps: with ps; [ ]; # missing inputs: qnapstats
     "qrcode" = ps: with ps; [ pillow ]; # missing inputs: pyzbar
-    "quantum_gateway" = ps: with ps; [ ]; # missing inputs: quantum-gateway
+    "quantum_gateway" = ps: with ps; [ quantum-gateway ];
     "qvr_pro" = ps: with ps; [ ]; # missing inputs: pyqvrpro
     "qwikswitch" = ps: with ps; [ ]; # missing inputs: pyqwikswitch
     "rachio" = ps: with ps; [ pyturbojpeg aiohttp-cors hass-nabucasa rachiopy ];

@@ -292,9 +292,13 @@ in {
 
     it87 = callPackage ../os-specific/linux/it87 {};
 
+    asus-ec-sensors = callPackage ../os-specific/linux/asus-ec-sensors {};
+
     asus-wmi-sensors = callPackage ../os-specific/linux/asus-wmi-sensors {};
 
     ena = callPackage ../os-specific/linux/ena {};
+
+    liquidtux = callPackage ../os-specific/linux/liquidtux {};
 
     v4l2loopback = callPackage ../os-specific/linux/v4l2loopback { };
 

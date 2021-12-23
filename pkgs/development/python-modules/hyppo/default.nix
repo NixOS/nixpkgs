@@ -1,8 +1,9 @@
 { lib
 , buildPythonPackage
-, isPy27
+, pythonOlder
 , fetchFromGitHub
-, pytestCheckHook , pytest-cov , numba
+, pytestCheckHook
+, numba
 , numpy
 , scikit-learn
 , scipy
@@ -14,7 +15,7 @@ buildPythonPackage rec {
   pname = "hyppo";
   version = "0.2.2";
 
-  disabled = isPy27;
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "neurodata";
@@ -30,7 +31,7 @@ buildPythonPackage rec {
     scipy
   ];
 
-  checkInputs = [ pytestCheckHook pytest-cov matplotlib seaborn ];
+  checkInputs = [ pytestCheckHook matplotlib seaborn ];
   disabledTestPaths = [
     "docs"
     "benchmarks"

@@ -44,6 +44,9 @@ buildPythonPackage rec {
 
   disabledTests = [
     "test_sims"
+    "test_proper_termination"
+    "test_branching"
+    "test_morph"
   ];
 
   pythonImportsCheck = [

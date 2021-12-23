@@ -43,13 +43,13 @@
   - nixpkgs:
 
     - update pkg
-      - `nix-env -i pkg-name -f <path to your local nixpkgs folder>`
+      - `nix-env -iA pkg-attribute-name -f <path to your local nixpkgs folder>`
     - add pkg
       - Make sure it’s in `pkgs/top-level/all-packages.nix`
-      - `nix-env -i pkg-name -f <path to your local nixpkgs folder>`
+      - `nix-env -iA pkg-attribute-name -f <path to your local nixpkgs folder>`
     - _If you don’t want to install pkg in you profile_.
-      - `nix-build -A pkg-attribute-name <path to your local nixpkgs folder>/default.nix` and check results in the folder `result`. It will appear in the same directory where you did `nix-build`.
-    - If you did `nix-env -i pkg-name` you can do `nix-env -e pkg-name` to uninstall it from your system.
+      - `nix-build -A pkg-attribute-name <path to your local nixpkgs folder>` and check results in the folder `result`. It will appear in the same directory where you did `nix-build`.
+    - If you installed your package with `nix-env`, you can run `nix-env -e pkg-name` where `pkg-name` is as reported by `nix-env -q` to uninstall it from your system.
 
   - NixOS and its modules:
     - You can add new module to your NixOS configuration file (usually it’s `/etc/nixos/configuration.nix`). And do `sudo nixos-rebuild test -I nixpkgs=<path to your local nixpkgs folder> --fast`.

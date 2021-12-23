@@ -54,6 +54,16 @@ self: super: {
   ghc-datasize = disableLibraryProfiling super.ghc-datasize;
   ghc-vis = disableLibraryProfiling super.ghc-vis;
 
+  # `pinch`s test suite uses a function called `openSocket` that's available
+  # in `network` versions 3.1.2.0 and bigger.
+  # There's an open PR updating the lower bound for `network`:
+  # > https://github.com/abhinav/pinch/pull/46
+  # With that said version tracked for `network` right now is 3.1.1.1 so we're
+  # replacing the network pinch uses with `network_3_1_2_5` for now.
+  pinch = super.pinch.overrideScope (self : super: {
+    network = self.network_3_1_2_5;
+  });
+
   # We can remove this once fakedata version gets to 1.0.1 as the test suite
   # works fine there.
   fakedata = dontCheck super.fakedata;
@@ -967,6 +977,13 @@ self: super: {
   # dontCheck: use of non-standard strptime "%s" which musl doesn't support; only used in test
   unix-time = if pkgs.stdenv.hostPlatform.isMusl then dontCheck super.unix-time else super.unix-time;
 
+  # hslua has tests that appear to break when using musl.
+  # https://github.com/hslua/hslua/issues/106
+  # Note that hslua is currently version 1.3.  However, in the latest version
+  # (>= 2.0), hslua has been split into multiple packages and this override
+  # will likely need to be moved to the hslua-core package.
+  hslua = if pkgs.stdenv.hostPlatform.isMusl then dontCheck super.hslua else super.hslua;
+
   # The test suite runs for 20+ minutes on a very fast machine, which feels kinda disproportionate.
   prettyprinter = dontCheck super.prettyprinter;
   brittany = doJailbreak (dontCheck super.brittany);  # Outdated upperbound on ghc-exactprint: https://github.com/lspitzner/brittany/issues/342
@@ -1349,21 +1366,21 @@ self: super: {
     resource-pool = self.hasura-resource-pool;
     ekg-core = self.hasura-ekg-core;
     ekg-json = self.hasura-ekg-json;
-    hspec = dontCheck self.hspec_2_9_3;
-    hspec-core = dontCheck self.hspec-core_2_9_3;
-    hspec-discover = dontCheck super.hspec-discover_2_9_3;
+    hspec = dontCheck self.hspec_2_9_4;
+    hspec-core = dontCheck self.hspec-core_2_9_4;
+    hspec-discover = dontCheck super.hspec-discover_2_9_4;
     tasty-hspec = self.tasty-hspec_1_2;
   }));
   hasura-ekg-core = doJailbreak (super.hasura-ekg-core.overrideScope (self: super: {
-    hspec = dontCheck self.hspec_2_9_3;
-    hspec-core = dontCheck self.hspec-core_2_9_3;
-    hspec-discover = dontCheck super.hspec-discover_2_9_3;
+    hspec = dontCheck self.hspec_2_9_4;
+    hspec-core = dontCheck self.hspec-core_2_9_4;
+    hspec-discover = dontCheck super.hspec-discover_2_9_4;
   }));
   hasura-ekg-json = super.hasura-ekg-json.overrideScope (self: super: {
     ekg-core = self.hasura-ekg-core;
-    hspec = dontCheck self.hspec_2_9_3;
-    hspec-core = dontCheck self.hspec-core_2_9_3;
-    hspec-discover = dontCheck super.hspec-discover_2_9_3;
+    hspec = dontCheck self.hspec_2_9_4;
+    hspec-core = dontCheck self.hspec-core_2_9_4;
+    hspec-discover = dontCheck super.hspec-discover_2_9_4;
   });
   pg-client = overrideCabal (drv: {
     librarySystemDepends = with pkgs; [ postgresql krb5.dev openssl.dev ];
@@ -1695,12 +1712,16 @@ self: super: {
   # Issue reported upstream, no bug tracker url yet.
   darcs = doJailbreak super.darcs;
 
-  # Too strict version bounds on base16-bytestring and http-link-header.
-  # This patch will be merged when next release comes.
-  github = appendPatch (pkgs.fetchpatch {
-    url = "https://github.com/phadej/github/commit/514b175851dd7c4a9722ff203dd6f652a15d33e8.patch";
-    sha256 = "0pmx54xd7ah85y9mfi5366wbnwrp918j0wbx8yw8hrdac92qi4gh";
-  }) super.github;
+  nix-thunk = appendPatches [
+    (pkgs.fetchpatch {
+      url = "https://github.com/obsidiansystems/nix-thunk/commit/49d27a85dd39cd9413c99958c67e596756a502b5.patch";
+      sha256 = "1p1n0123yrbdqyfk4kx3gq6bdv65l1bxgbsg51ckcwclg54xp2p5";
+    })
+    (pkgs.fetchpatch {
+      url = "https://github.com/obsidiansystems/nix-thunk/commit/512867c651977265d5d8f456b538f7a364ec8a8b.patch";
+      sha256 = "121yg26y4g28k8xv7y1j6c3pxm17vsjn3vi62kkc8g928c47yd02";
+    })
+  ] super.nix-thunk;
 
   # list `modbus` in librarySystemDepends, correct to `libmodbus`
   libmodbus = overrideCabal (drv: {
@@ -1866,27 +1887,22 @@ self: super: {
 
   # Build haskell-ci from git repository, including some useful fixes,
   # e. g. required for generating the workflows for the cabal2nix repository
-  haskell-ci-unstable = (overrideSrc {
-    version = "0.13.20211011";
+  haskell-ci-unstable = (overrideSrc rec {
+    version = "0.13.20211116-${builtins.substring 0 7 src.rev}";
     src = pkgs.fetchFromGitHub {
       owner = "haskell-CI";
       repo = "haskell-ci";
-      rev = "c88e67e675bc4a990da53863c7fb42e67bcf9847";
-      sha256 = "1zhv1cg047lfyxfs3mvc73vv96pn240zaj7f2yl4lw5yj6y5rfk9";
+      rev = "b61df11e7f6010ce09920c231321ab1545a990b5";
+      sha256 = "0v6mqpavz5v161milq6a3x9gzap0pgksd3h4rwi2s3f9b15sczcy";
     };
   } super.haskell-ci).overrideScope (self: super: {
-    attoparsec = self.attoparsec_0_14_2;
+    attoparsec = self.attoparsec_0_14_3;
     Cabal = self.Cabal_3_6_2_0;
   });
 
-  Frames-streamly = overrideCabal (drv: {
-    # https://github.com/adamConnerSax/Frames-streamly/issues/1
-    patchPhase = ''
-cat > example_data/acs100k.csv <<EOT
-"YEAR","REGION","STATEFIP","DENSITY","METRO","PUMA","PERWT","SEX","AGE","RACE","RACED","HISPAN","HISPAND","CITIZEN","LANGUAGE","LANGUAGED","SPEAKENG","EDUC","EDUCD","GRADEATT","GRADEATTD","EMPSTAT","EMPSTATD","INCTOT","INCSS","POVERTY"
-2006,32,1,409.6,3,2300,87.0,1,47,1,100,0,0,0,1,100,3,6,65,0,0,1,12,36000,0,347
-EOT
-    ''; }) (super.Frames-streamly.override { relude = super.relude_1_0_0_1; });
+  Frames-streamly = super.Frames-streamly.override {
+    relude = super.relude_1_0_0_1;
+  };
 
   # 2021-05-09: compilation requires patches from master,
   # remove at next release (current is 0.1.0.4).
@@ -2095,9 +2111,9 @@ EOT
   # Jailbreak isn't sufficient, but this is ok as it's a leaf package.
   hadolint = super.hadolint.overrideScope (self: super: {
     language-docker = self.language-docker_10_4_0;
-    hspec = dontCheck self.hspec_2_9_3;
-    hspec-core = dontCheck self.hspec-core_2_9_3;
-    hspec-discover = dontCheck self.hspec-discover_2_9_3;
+    hspec = dontCheck self.hspec_2_9_4;
+    hspec-core = dontCheck self.hspec-core_2_9_4;
+    hspec-discover = dontCheck self.hspec-discover_2_9_4;
     colourista = doJailbreak super.colourista;
   });
 
