@@ -3411,6 +3411,8 @@ with pkgs;
 
   mlarchive2maildir = callPackage ../applications/networking/mailreaders/mlarchive2maildir { };
 
+  mmctl = callPackage ../tools/misc/mmctl { };
+
   molly-brown = callPackage ../servers/gemini/molly-brown { };
 
   monetdb = callPackage ../servers/sql/monetdb { };
@@ -11181,6 +11183,8 @@ with pkgs;
   yasr = callPackage ../applications/audio/yasr { };
 
   yank = callPackage ../tools/misc/yank { };
+
+  yamlfix = with python3Packages; toPythonApplication yamlfix;
 
   yamllint = with python3Packages; toPythonApplication yamllint;
 
