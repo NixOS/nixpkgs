@@ -47,5 +47,8 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ relrod ftrvxmtrx ];
     platforms = platforms.unix;
+    # unable to execute command: posix_spawn failed: Argument list too long
+    # Builds fine on aarch64-darwin
+    broken = stdenv.system == "x86_64-darwin";
   };
 }
