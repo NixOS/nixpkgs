@@ -418,6 +418,20 @@ let
         };
       };
 
+      cweijan.vscode-database-client2 = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-database-client2";
+          publisher = "cweijan";
+          version = "4.3.3";
+          sha256 = "06bj23y5rbpz0lw45p1sxssalgn19iqfqbijw2ym22grm0i9hcby";
+        };
+        meta = {
+          description = "Database Client For Visual Studio Code";
+          homepage = "https://marketplace.visualstudio.com/items?itemName=cweijan.vscode-mysql-client2";
+          license = lib.licenses.mit;
+        };
+      };
+
       dbaeumer.vscode-eslint = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-eslint";
