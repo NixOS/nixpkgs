@@ -10,7 +10,7 @@ let
   mono-addins = dotnetPackages.MonoAddins;
 in
 buildDotnetPackage rec {
-  baseName = "Pinta";
+  pname = "Pinta";
   version = "1.7.1";
 
   outputFiles = [ "bin/*" ];
