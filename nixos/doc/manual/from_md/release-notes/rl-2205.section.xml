@@ -424,6 +424,15 @@
           renamed to <literal>linux-firmware</literal>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          A new module was added for the
+          <link xlink:href="https://starship.rs/">Starship</link> shell
+          prompt, providing the options
+          <literal>programs.starship.enable</literal> and
+          <literal>programs.starship.settings</literal>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>
