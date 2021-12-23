@@ -7,6 +7,7 @@
 
 with lib;
 
+let self =
 {
   options = {
     basicAuth = mkOption {
@@ -111,6 +112,21 @@ with lib;
       '';
     };
 
+    locations = mkOption {
+      type = types.attrsOf (types.hideSubTree (types.submodule self));
+      default = {};
+      example = literalExpression ''
+        {
+          "/" = {
+            proxyPass = "http://localhost:3000";
+          };
+        };
+      '';
+      description = ''
+        Sub-locations configuration.
+      '';
+    };
+
     extraConfig = mkOption {
       type = types.lines;
       default = "";
@@ -129,4 +145,6 @@ with lib;
       '';
     };
   };
-}
+};
+
+in self
