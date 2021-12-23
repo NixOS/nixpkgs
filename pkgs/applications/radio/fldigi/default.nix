@@ -2,7 +2,7 @@
 , stdenv
 , fetchurl
 , hamlib
-, fltk14
+, fltk13
 , libjpeg
 , libpng
 , portaudio
@@ -31,13 +31,15 @@ stdenv.mkDerivation rec {
     libXinerama
     gettext
     hamlib
-    fltk14
+    fltk13
     libjpeg
     libpng
     portaudio
     libsndfile
     libsamplerate
   ] ++ lib.optionals (stdenv.isLinux) [ libpulseaudio alsa-lib udev ];
+
+  enableParallelBuilding = true;
 
   meta = with lib; {
     description = "Digital modem program";
