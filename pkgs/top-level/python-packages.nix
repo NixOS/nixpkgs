@@ -5276,6 +5276,8 @@ in {
 
   nitpick = callPackage ../applications/version-management/nitpick { };
 
+  nitransforms = callPackage ../development/python-modules/nitransforms { };
+
   nix-kernel = callPackage ../development/python-modules/nix-kernel {
     inherit (pkgs) nix;
   };
