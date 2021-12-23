@@ -2,6 +2,7 @@
 , buildPythonPackage
 , pythonOlder
 , fetchPypi
+, certifi
 , requests
 , six
 , websocket-client
@@ -9,15 +10,16 @@
 
 buildPythonPackage rec {
   pname = "jellyfin-apiclient-python";
-  version = "1.8.0";
+  version = "1.8.1";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-pH1mFm0enT8LOCYABAgb/T/ZwHyhtQGBu7mAxNeu7jQ=";
+    sha256 = "t2XmZ7rsrZq943lzRDrqzsY/djFNjFbkEYeHeA2AViI=";
   };
 
   propagatedBuildInputs = [
+    certifi
     requests
     six
     websocket-client
