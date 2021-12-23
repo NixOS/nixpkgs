@@ -1,8 +1,8 @@
-{ lib, zlib, fetchFromGitHub, python3Packages, wrapQtAppsHook }:
+{ lib, zlib, fetchFromGitHub, python3Packages, wrapQtAppsHook, makeDesktopItem }:
 
 python3Packages.buildPythonApplication rec {
   pname = "manuskript";
-  version = "0.11.0";
+  version = "0.12.0";
 
   format = "other";
 
@@ -10,7 +10,7 @@ python3Packages.buildPythonApplication rec {
     repo = pname;
     owner = "olivierkes";
     rev = version;
-    sha256 = "1l6l9k6k69yv8xqpll0zv9cwdqqg4zvxy90l6sx5nv2yywh5crla";
+    sha256 = "0gfwwnpjslb0g8y3v9ha4sd8in6bpy6bhi4rn4hmfd2vmq2flpbd";
   };
 
   nativeBuildInputs = [ wrapQtAppsHook ];
@@ -28,11 +28,22 @@ python3Packages.buildPythonApplication rec {
 
   buildPhase = "";
 
-  installPhase = ''
-    mkdir -p $out/share/${pname}
-    cp -av  bin/ i18n/ libs/ manuskript/ resources/ icons/ $out
-    cp -r sample-projects/ $out/share/${pname}
-  '';
+  installPhase = (
+    let
+      desktopItem = makeDesktopItem {
+        name = "Manuskript";
+        exec = "manuskript";
+        desktopName = "Manuskript";
+        genericName = "Manuskript";
+        categories = "Office;";
+      };
+    in
+      ''
+        mkdir -p $out/share/${pname}
+        cp -av  bin/ i18n/ libs/ manuskript/ resources/ icons/ $out
+        cp -a ${desktopItem}/share/applications $out/share
+        cp -r sample-projects/ $out/share/${pname}
+      '');
 
   postFixup = ''
     wrapQtApp $out/bin/manuskript
