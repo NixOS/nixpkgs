@@ -19436,7 +19436,7 @@ with pkgs;
       inherit lib stdenv fetchurl fetchpatch fetchFromGitHub makeSetupHook makeWrapper;
       inherit bison cups dconf harfbuzz libGL perl gtk3;
       inherit (gst_all_1) gstreamer gst-plugins-base;
-      inherit llvmPackages_5 darwin;
+      inherit darwin;
     });
 
   qt514 = recurseIntoAttrs (makeOverridable
@@ -19445,7 +19445,7 @@ with pkgs;
       inherit lib stdenv fetchurl fetchpatch fetchFromGitHub makeSetupHook makeWrapper;
       inherit bison cups dconf harfbuzz libGL perl gtk3;
       inherit (gst_all_1) gstreamer gst-plugins-base;
-      inherit llvmPackages_5 darwin;
+      inherit darwin;
     });
 
   qt515 = recurseIntoAttrs (makeOverridable
@@ -19454,7 +19454,7 @@ with pkgs;
       inherit lib stdenv fetchurl fetchpatch fetchgit fetchFromGitHub makeSetupHook makeWrapper;
       inherit bison cups dconf harfbuzz libGL perl gtk3;
       inherit (gst_all_1) gstreamer gst-plugins-base;
-      inherit llvmPackages_5 darwin;
+      inherit darwin;
     });
 
   libsForQt512 = recurseIntoAttrs (import ./qt5-packages.nix {
