@@ -120,10 +120,11 @@ stdenv.mkDerivation rec {
   installPhase = let
     icaFlag = program:
       if (builtins.match "selfservice(.*)" program) != null then "--icaroot"
+      else if (lib.versionAtLeast version "21.12" && builtins.match "wfica(.*)" program != null) then null
       else "-icaroot";
     wrap = program: ''
       wrapProgram $out/opt/citrix-icaclient/${program} \
-        --add-flags "${icaFlag program} $ICAInstDir" \
+        ${lib.optionalString (icaFlag program != null) ''--add-flags "${icaFlag program} $ICAInstDir"''} \
         --set ICAROOT "$ICAInstDir" \
         --prefix LD_LIBRARY_PATH : "$ICAInstDir:$ICAInstDir/lib" \
         --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
