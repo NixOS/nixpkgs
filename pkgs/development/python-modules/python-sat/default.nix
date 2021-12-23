@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "python-sat";
-  version = "0.1.6.dev6";
+  version = "0.1.7.dev1";
 
   src = fetchFromGitHub {
     owner = "pysathq";
     repo = "pysat";
     rev = version;
-    sha256 = "1gckxhqkvzyw7pmwg8xzxq146jysqy0s23l5mjc3awm6swdij66y";
+    sha256 = "sha256-zGdgD+SgoMB7/zDQI/trmV70l91TB7OkDxaJ30W3dkI=";
   };
 
   propagatedBuildInputs = [ six pypblib ];
