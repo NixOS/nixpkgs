@@ -176,18 +176,21 @@ The NixOS tests are available as `nixosTests` in parameters of derivations. For 
 NixOS tests run in a VM, so they are slower than regular package tests. For more information see [NixOS module tests](https://nixos.org/manual/nixos/stable/#sec-nixos-tests).
 
 Alternatively, you can specify other derivations as tests. You can make use of
-the optional parameter (here: `self`) to inject the correct package without
-relying on non-local definitions, even in the presence of `overrideAttrs`. This
-means `(mypkg.overrideAttrs f).passthru.tests` will be as expected, as long as the
+the optional parameter to inject the correct package without
+relying on non-local definitions, even in the presence of `overrideAttrs`.
+Here that's `finalAttrs.public`, but you could choose a different name if
+`finalAttrs` already exists in your scope.
+
+`(mypkg.overrideAttrs f).passthru.tests` will be as expected, as long as the
 definition of `tests` does not rely on the original `mypkg` or overrides it in
 all places.
 
 ```nix
 # my-package/default.nix
 { stdenv, callPackage }:
-stdenv.mkDerivation (self: {
+stdenv.mkDerivation (finalAttrs: {
   # ...
-  passthru.tests.example = callPackage ./example.nix { my-package = self.public; }
+  passthru.tests.example = callPackage ./example.nix { my-package = finalAttrs.public; }
 })
 ```
 

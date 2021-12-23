@@ -322,21 +322,21 @@ For information about how to run the updates, execute `nix-shell maintainers/scr
 If you pass a function to `mkDerivation`, it will receive as its argument the final arguments, considering use of `overrideAttrs`. For example:
 
 ```nix
-mkDerivation (self: {
+mkDerivation (finalAttrs: {
   pname = "hello";
   withFeature = true;
   configureFlags =
-    lib.optionals self.withFeature ["--with-feature"];
+    lib.optionals finalAttrs.withFeature ["--with-feature"];
 })
 ```
 
 Note that this does not use the `rec` keyword to reuse `withFeature` in `configureFlags`.
 The `rec` keyword works at the syntax level and is unaware of overriding.
 
-Instead, the definition references `self`, allowing users to change `withFeature`
+Instead, the definition references `finalAttrs`, allowing users to change `withFeature`
 consistently with `overrideAttrs`.
 
-`self` also contains the attribute `public`, which represents the final package,
+`finalAttrs` also contains the attribute `public`, which represents the final package,
 including the output paths, etc.
 
 Let's look at a more elaborate example to understand the differences between
@@ -345,30 +345,30 @@ various bindings:
 ```nix
 # `pkg` is the _original_ definition (for illustration purposes)
 let pkg =
-  mkDerivation (self: {   # self is the final package
+  mkDerivation (finalAttrs: {
     # ...
 
     # An example attribute
     packages = [];
 
     # `passthru.tests` is a commonly defined attribute.
-    passthru.tests.simple = f self.public;
+    passthru.tests.simple = f finalAttrs.public;
 
     # An example of an attribute containing a function
     passthru.appendPackages = packages':
-      self.public.overrideAttrs (newSelf: super: {
+      finalAttrs.public.overrideAttrs (newSelf: super: {
         packages = super.packages ++ packages';
       });
 
     # For illustration purposes; referenced as
-    # `(pkg.overrideAttrs(x)).self` etc in the text below.
-    passthru.self = self;
+    # `(pkg.overrideAttrs(x)).finalAttrs` etc in the text below.
+    passthru.finalAttrs = finalAttrs;
     passthru.original = pkg;
   });
 in pkg
 ```
 
-Unlike the `pkg` binding in the above example, the `self` parameter always references the final attributes. For instance `(pkg.overrideAttrs(x)).self.public` is identical to `pkg.overrideAttrs(x)`, whereas `(pkg.overrideAttrs(x)).original` is the same as `pkg`.
+Unlike the `pkg` binding in the above example, the `finalAttrs` parameter always references the final attributes. For instance `(pkg.overrideAttrs(x)).finalAttrs.public` is identical to `pkg.overrideAttrs(x)`, whereas `(pkg.overrideAttrs(x)).original` is the same as the original `pkg`.
 
 See also the section about [`passthru.tests`](#var-meta-tests).
 
