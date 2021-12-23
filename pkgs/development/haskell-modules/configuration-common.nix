@@ -2178,5 +2178,7 @@ self: super: {
       "--skip" "/hercules-ci-api/Hercules.API.Agent.Evaluate.EvaluateEvent.DerivationInfo/DerivationInfo/ToJSON/encodes v2 correctly/"
     ] ++ drv.testFlags or [];
   }) (doJailbreak super.hercules-ci-api-agent);
+  # https://github.com/emc2/HUnit-Plus/issues/26
+  HUnit-Plus = dontCheck super.HUnit-Plus;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
