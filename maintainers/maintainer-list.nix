@@ -13432,4 +13432,10 @@
     github = "PhilippWoelfel";
     githubId = 19400064;
   };
+  CarlosLoboxyz = {
+    name = "Carlos Lobo";
+    email = "86011416+CarlosLoboxyz@users.noreply.github.com";
+    github = "CarlosLoboxyz";
+    githubId = 86011416;
+  };
 }
