@@ -10,7 +10,7 @@ let
     inherit (stdenv) hostPlatform;
   };
 
-  makeOverlayable = mkDerivationSimple: # TODO(@robert): turn mkDerivationSimple into let binding.
+  makeOverlayable = mkDerivationSimple:
     fnOrAttrs:
       if builtins.isFunction fnOrAttrs
       then makeDerivationExtensible mkDerivationSimple fnOrAttrs
@@ -65,7 +65,6 @@ let
 
 in
 
-# TODO(@roberth): inline makeOverlayable; reindenting whole rest of this file.
 makeOverlayable (overrideAttrs:
 
 
