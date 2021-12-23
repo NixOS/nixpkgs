@@ -4781,6 +4781,8 @@ in {
 
   mathlibtools = callPackage ../development/python-modules/mathlibtools { };
 
+  matlink-gpapi = callPackage ../development/python-modules/matlink-gpapi { };
+
   matplotlib = callPackage ../development/python-modules/matplotlib {
     stdenv = if stdenv.isDarwin then pkgs.clangStdenv else pkgs.stdenv;
     inherit (pkgs.darwin.apple_sdk.frameworks) Cocoa;
