@@ -6279,6 +6279,8 @@ in {
 
   pvlib = callPackage ../development/python-modules/pvlib { };
 
+  pvo = callPackage ../development/python-modules/pvo { };
+
   Pweave = callPackage ../development/python-modules/pweave { };
 
   pwntools = callPackage ../development/python-modules/pwntools {
