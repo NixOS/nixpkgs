@@ -932,6 +932,8 @@ let
 
     ocf = callPackage ../development/ocaml-modules/ocf { };
 
+    ocf_ppx = callPackage ../development/ocaml-modules/ocf/ppx.nix { };
+
     ocp-build = callPackage ../development/tools/ocaml/ocp-build { };
 
     ocp-indent = callPackage ../development/tools/ocaml/ocp-indent { };
@@ -1403,6 +1405,8 @@ let
     xml-light = callPackage ../development/ocaml-modules/xml-light { };
 
     xtmpl = callPackage ../development/ocaml-modules/xtmpl { };
+
+    xtmpl_ppx = callPackage ../development/ocaml-modules/xtmpl/ppx.nix { };
 
     yaml = callPackage ../development/ocaml-modules/yaml { };
 
