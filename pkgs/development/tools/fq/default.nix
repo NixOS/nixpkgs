@@ -1,4 +1,9 @@
-{ lib, buildGo117Module, fetchFromGitHub }:
+{ lib
+, buildGo117Module
+, fetchFromGitHub
+, fq
+, testVersion
+}:
 
 buildGo117Module rec {
   pname = "fq";
@@ -12,6 +17,14 @@ buildGo117Module rec {
   };
 
   vendorSha256 = "sha256-89rSpxhP35wreo+0AqM+rDICCPchF+yFVvrTtZ2Xwr4=";
+
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.version=${version}"
+  ];
+
+  passthru.tests = testVersion { package = fq; };
 
   meta = with lib; {
     description = "jq for binary formats";
