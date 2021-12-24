@@ -12,6 +12,7 @@
 , testVersion
 , tomlkit
 , staticjinja
+, callPackage
 }:
 
 buildPythonPackage rec {
@@ -51,8 +52,9 @@ buildPythonPackage rec {
     export PATH="$PATH:$out/bin";
   '';
 
-  passthru.tests.version = testVersion {
-    package = staticjinja;
+  passthru.tests = {
+    version = testVersion { package = staticjinja; };
+    minimal-template = callPackage ./test-minimal-template {};
   };
 
   meta = with lib; {
