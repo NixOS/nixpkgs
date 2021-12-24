@@ -287,8 +287,6 @@ self: super: ({
   # https://github.com/fpco/unliftio/issues/87
   unliftio = dontCheck super.unliftio;
 
-  # https://github.com/fpco/inline-c/issues/127
-  inline-c-cpp = dontCheck super.inline-c-cpp;
 
   # https://github.com/haskell-crypto/cryptonite/issues/360
   cryptonite = appendPatch ./patches/cryptonite-remove-argon2.patch super.cryptonite;

@@ -2,6 +2,10 @@
 
 with haskellLib;
 
+let
+  inherit (pkgs.stdenv.hostPlatform) isDarwin;
+in
+
 self: super: {
 
   llvmPackages = pkgs.lib.dontRecurseIntoAttrs self.ghc.llvmPackages;
@@ -150,4 +154,7 @@ self: super: {
   mysql-simple = addBuildDepends [
     self.blaze-textual
   ] super.mysql-simple;
+
+  # https://github.com/fpco/inline-c/issues/127 (recommend to upgrade to Nixpkgs GHC >=9.0)
+  inline-c-cpp = (if isDarwin then dontCheck else x: x) super.inline-c-cpp;
 }
