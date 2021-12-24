@@ -2,9 +2,9 @@
 , pkgs
 , stdenv
 
-# Build-time dependencies:
+  # Build-time dependencies:
 , addOpenGLRunpath
-, bazel_3
+, bazel_4
 , binutils
 , buildBazelPackage
 , buildPythonPackage
@@ -16,20 +16,21 @@
 , setuptools
 , symlinkJoin
 , wheel
+, which
 
-# Build-time and runtime CUDA dependencies:
+  # Build-time and runtime CUDA dependencies:
 , cudatoolkit ? null
 , cudnn ? null
 , nccl ? null
 
-# Python dependencies:
+  # Python dependencies:
 , absl-py
 , flatbuffers
 , numpy
 , scipy
 , six
 
-# Runtime dependencies:
+  # Runtime dependencies:
 , double-conversion
 , giflib
 , grpc
@@ -38,11 +39,11 @@
 , snappy
 , zlib
 
-# CUDA flags:
+  # CUDA flags:
 , cudaCapabilities ? [ "sm_35" "sm_50" "sm_60" "sm_70" "sm_75" "compute_80" ]
 , cudaSupport ? false
 
-# MKL:
+  # MKL:
 , mklSupport ? true
 }:
 
@@ -81,7 +82,7 @@ let
   bazel-build = buildBazelPackage {
     name = "bazel-build-${pname}-${version}";
 
-    bazel = bazel_3;
+    bazel = bazel_4;
 
     src = fetchFromGitHub {
       owner = "google";
@@ -96,6 +97,7 @@ let
       git
       setuptools
       wheel
+      which
     ];
 
     buildInputs = [
@@ -104,20 +106,17 @@ let
       grpc
       jsoncpp
       libjpeg_turbo
+      numpy
       pkgs.flatbuffers
       pkgs.protobuf
       pybind11
+      scipy
+      six
       snappy
       zlib
     ] ++ lib.optionals cudaSupport [
       cudatoolkit
       cudnn
-    ];
-
-    propagatedBuildInputs = [
-      numpy
-      scipy
-      six
     ];
 
     postPatch = ''
@@ -206,7 +205,7 @@ let
 
     bazelBuildFlags = [
       "-c opt"
-    ] ++ lib.optional (stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isUnix) [
+    ] ++ lib.optional (stdenv.targetPlatform.isx86_64 && stdenv.targetPlatform.isUnix) [
       "--config=avx_posix"
     ] ++ lib.optional cudaSupport [
       "--config=cuda"
@@ -215,10 +214,11 @@ let
     ];
 
     fetchAttrs = {
-      sha256 = if cudaSupport then
-        "0zzlwk25wsn6d0514hks7q1zcl6iybvpyrafsdgk7ykbays51l8c"
-      else
-        "1j94wxfx4cnql10cplykh7x0xpsp1jvg7275g5haryfxi7qkr2wg";
+      sha256 =
+        if cudaSupport then
+          "1lyipbflqd1y5cdj4hdml5h1inbr0wwfgp6xw5p5623qv3im16lh"
+        else
+          "09kapzpfwnlr6ghmgwac232bqf2a57mm1brz4cvfx8mlg8bbaw63";
     };
 
     buildAttrs = {
@@ -240,18 +240,19 @@ let
       '';
 
       installPhase = ''
-        ./bazel-bin/build/build_wheel --output_path=$out --cpu=${stdenv.hostPlatform.linuxArch}
+        ./bazel-bin/build/build_wheel --output_path=$out --cpu=${stdenv.targetPlatform.linuxArch}
       '';
     };
 
     inherit meta;
   };
 
-in buildPythonPackage {
+in
+buildPythonPackage {
   inherit meta pname version;
   format = "wheel";
 
-  src = "${bazel-build}/jaxlib-${version}-cp${builtins.replaceStrings ["."] [""] python.pythonVersion}-none-manylinux2010_${stdenv.hostPlatform.linuxArch}.whl";
+  src = "${bazel-build}/jaxlib-${version}-cp${builtins.replaceStrings ["."] [""] python.pythonVersion}-none-manylinux2010_${stdenv.targetPlatform.linuxArch}.whl";
 
   postInstall = lib.optionalString cudaSupport ''
     find $out -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do
@@ -269,12 +270,16 @@ in buildPythonPackage {
     giflib
     grpc
     jsoncpp
+    libjpeg_turbo
     numpy
     scipy
+    six
     snappy
   ];
 
+  pythonImportsCheck = [ "jaxlib" ];
+
   # Without it there are complaints about libcudart.so.11.0 not being found
   # because RPATH path entries added above are stripped.
-  dontPatchELF = true;
+  dontPatchELF = cudaSupport;
 }
