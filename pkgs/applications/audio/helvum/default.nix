@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  prePatch = ''
+  postPatch = ''
     patchShebangs build-aux/cargo.sh
   '';
 
@@ -68,6 +68,6 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.freedesktop.org/ryuukyu/helvum";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ fufexan ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }
