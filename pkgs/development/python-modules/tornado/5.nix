@@ -19,7 +19,7 @@ buildPythonPackage rec {
   # We specify the name of the test files to prevent
   # https://github.com/NixOS/nixpkgs/issues/14634
   checkPhase = ''
-    ${python.interpreter} -m unittest discover *_test.py
+    ${python.interpreter} -m unittest discover '*_test.py'
   '';
 
   src = fetchPypi {
