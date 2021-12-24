@@ -206,6 +206,7 @@ simple-date
 simple-date-time
 smart-buffer
 smug
+spinneret
 split-sequence
 sqlite
 static-vectors

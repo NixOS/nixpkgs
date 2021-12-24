@@ -2263,6 +2263,50 @@ let quicklisp-to-nix-packages = rec {
        }));
 
 
+  "spinneret" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."spinneret" or (x: {}))
+       (import ./quicklisp-to-nix-output/spinneret.nix {
+         inherit fetchurl;
+           "alexandria" = quicklisp-to-nix-packages."alexandria";
+           "anaphora" = quicklisp-to-nix-packages."anaphora";
+           "babel" = quicklisp-to-nix-packages."babel";
+           "bordeaux-threads" = quicklisp-to-nix-packages."bordeaux-threads";
+           "cl-ppcre" = quicklisp-to-nix-packages."cl-ppcre";
+           "closer-mop" = quicklisp-to-nix-packages."closer-mop";
+           "fare-quasiquote" = quicklisp-to-nix-packages."fare-quasiquote";
+           "fare-quasiquote-extras" = quicklisp-to-nix-packages."fare-quasiquote-extras";
+           "fare-quasiquote-optima" = quicklisp-to-nix-packages."fare-quasiquote-optima";
+           "fare-quasiquote-readtable" = quicklisp-to-nix-packages."fare-quasiquote-readtable";
+           "fare-utils" = quicklisp-to-nix-packages."fare-utils";
+           "global-vars" = quicklisp-to-nix-packages."global-vars";
+           "introspect-environment" = quicklisp-to-nix-packages."introspect-environment";
+           "iterate" = quicklisp-to-nix-packages."iterate";
+           "lisp-namespace" = quicklisp-to-nix-packages."lisp-namespace";
+           "named-readtables" = quicklisp-to-nix-packages."named-readtables";
+           "parenscript" = quicklisp-to-nix-packages."parenscript";
+           "parse-declarations-1_dot_0" = quicklisp-to-nix-packages."parse-declarations-1_dot_0";
+           "parse-number" = quicklisp-to-nix-packages."parse-number";
+           "serapeum" = quicklisp-to-nix-packages."serapeum";
+           "split-sequence" = quicklisp-to-nix-packages."split-sequence";
+           "string-case" = quicklisp-to-nix-packages."string-case";
+           "trivia" = quicklisp-to-nix-packages."trivia";
+           "trivia_dot_balland2006" = quicklisp-to-nix-packages."trivia_dot_balland2006";
+           "trivia_dot_level0" = quicklisp-to-nix-packages."trivia_dot_level0";
+           "trivia_dot_level1" = quicklisp-to-nix-packages."trivia_dot_level1";
+           "trivia_dot_level2" = quicklisp-to-nix-packages."trivia_dot_level2";
+           "trivia_dot_quasiquote" = quicklisp-to-nix-packages."trivia_dot_quasiquote";
+           "trivia_dot_trivial" = quicklisp-to-nix-packages."trivia_dot_trivial";
+           "trivial-cltl2" = quicklisp-to-nix-packages."trivial-cltl2";
+           "trivial-features" = quicklisp-to-nix-packages."trivial-features";
+           "trivial-file-size" = quicklisp-to-nix-packages."trivial-file-size";
+           "trivial-garbage" = quicklisp-to-nix-packages."trivial-garbage";
+           "trivial-gray-streams" = quicklisp-to-nix-packages."trivial-gray-streams";
+           "trivial-macroexpand-all" = quicklisp-to-nix-packages."trivial-macroexpand-all";
+           "type-i" = quicklisp-to-nix-packages."type-i";
+       }));
+
+
   "smug" = buildLispPackage
     ((f: x: (x // (f x)))
        (qlOverrides."smug" or (x: {}))
