@@ -117,6 +117,28 @@ let
       };
     });
 
+  buildGateway = { name, version, src, license, description, wmClass, ... }:
+    (mkJetBrainsProduct {
+      inherit name version src wmClass jdk;
+      product = "Gateway";
+      extraLdPath = [ zlib ];
+      extraWrapperArgs = [
+        ''--set M2_HOME "${maven}/maven"''
+        ''--set M2 "${maven}/maven/bin"''
+      ];
+      meta = with lib; {
+        homepage = "https://www.jetbrains.com/remote-development/gateway/";
+        inherit description license;
+        longDescription = ''
+          JetBrains Gateway is a compact desktop app that allows
+          you to work remotely with a JetBrains IDE without even
+          downloading one.
+        '';
+        maintainers = with maintainers; [ edwtjo gytis-ivaskevicius ];
+        platforms = [ "x86_64-darwin" "i686-darwin" "i686-linux" "x86_64-linux" ];
+      };
+    });
+
   buildMps = { name, version, src, license, description, wmClass, ... }:
     (mkJetBrainsProduct rec {
       inherit name version src wmClass jdk;
@@ -308,6 +330,19 @@ in
     };
     wmClass = "jetbrains-idea";
     update-channel = "IntelliJ IDEA RELEASE";
+  };
+
+  gateway = buildGateway rec {
+    name = "gateway-${version}";
+    version = "213.6461.21"; /* updated by script */
+    description = "Remote Development Gateway by JetBrains";
+    license = lib.licenses.unfree;
+    src = fetchurl {
+      url = "https://download.jetbrains.com/idea/gateway/JetBrainsGateway-${version}.tar.gz";
+      sha256 = "1m90fm9gmxz7igxskw7h15hpm4fz8rd8c0kpjcv09x8a4axdcgmd"; /* updated by script */
+    };
+    wmClass = "jetbrains-gateway";
+    update-channel = "JetBrains Gateway RELEASE";
   };
 
   mps = buildMps rec {
