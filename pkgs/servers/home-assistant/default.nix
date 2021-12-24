@@ -219,6 +219,19 @@ let
       });
     })
 
+    # Remove with 2021.12.6 as the requirement will be 1.1.16 (at least)
+    (self: super: {
+      yalexs = super.yalexs.overridePythonAttrs (oldAttrs: rec {
+        version = "1.1.13";
+        src = fetchFromGitHub {
+          owner = "bdraco";
+          repo = "yalexs";
+          rev = "v${version}";
+          sha256 = "sha256-lnx8+VyDyO7Wg+QW+CC0FUg77Ndfjar6PLsDYwEpaCQ=";
+        };
+      });
+    })
+
     # home-assistant-frontend does not exist in python3.pkgs
     (self: super: {
       home-assistant-frontend = self.callPackage ./frontend.nix { };
