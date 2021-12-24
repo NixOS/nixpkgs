@@ -124,7 +124,7 @@ let lispPackages = rec {
   };
   nyxt = pkgs.lispPackages.buildLispPackage rec {
     baseName = "nyxt";
-    version = "2.0.0";
+    version = "2.2.3";
 
     description = "Browser";
 
@@ -146,6 +146,9 @@ let lispPackages = rec {
         ' "$out/bin/nyxt-lisp-launcher.sh"
         cp "$out/lib/common-lisp/nyxt/nyxt" "$out/bin/"
       '';
+
+      # Prevent nyxt from trying to obtain dependencies as submodules
+      makeFlags = [ "NYXT_SUBMODULES=false" ] ++ x.buildFlags or [];
     };
 
     deps = with pkgs.lispPackages; [
@@ -160,6 +163,8 @@ let lispPackages = rec {
             cl-prevalence
             closer-mop
             cl-containers
+            cl-qrencode
+            clss
             cluffer
             moptilities
             dexador
@@ -168,17 +173,20 @@ let lispPackages = rec {
             iolib
             local-time
             log4cl
+            lparallel
             mk-string-metrics
             osicat
             parenscript
             quri
             serapeum
+            spinneret
             str
             plump
             swank
             trivia
             trivial-clipboard
             trivial-features
+            trivial-garbage
             trivial-package-local-nicknames
             trivial-types
             unix-opts
@@ -194,7 +202,7 @@ let lispPackages = rec {
       owner = "atlas-engineer";
       repo = "nyxt";
       rev = "${version}";
-      sha256 = "sha256-eSRNfzkAzGTorLjdHo1LQEKLx4ASdv3RGXIFZ5WFIXk=";
+      sha256 = "1v1szbj44pwxh3k70fvg78xjfkab29dqnlafa722sppdyqd06cqp";
     };
 
     packageName = "nyxt";
