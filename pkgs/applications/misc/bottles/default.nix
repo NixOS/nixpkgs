@@ -3,18 +3,18 @@
 , desktop-file-utils, gsettings-desktop-schemas, libnotify, libhandy
 , python3Packages, gettext
 , appstream-glib, gdk-pixbuf, glib, gobject-introspection, gspell, gtk3
-, steam-run, xdg-utils, pciutils, cabextract, wineWowPackages
+, steam-run, xdg-utils, pciutils, cabextract, wineWowPackages, webkitgtk, p7zip
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "bottles";
-  version = "2021.7.28-treviso-2";
+  version = "2021.12.14-treviso-4";
 
   src = fetchFromGitHub {
     owner = "bottlesdevs";
     repo = pname;
     rev = version;
-    sha256 = "0kvwcajm9izvkwfg7ir7bks39bpc665idwa8mc8d536ajyjriysn";
+    hash = "sha256-Lbqw/M37PUmf2af8B+G4IySifoTfBwMXw9UmeymWiNM=";
   };
 
   postPatch = ''
@@ -53,12 +53,15 @@ python3Packages.buildPythonApplication rec {
     gst-python
     liblarch
     patool
+    markdown
   ] ++ [
     steam-run
     xdg-utils
     pciutils
     cabextract
     wineWowPackages.minimal
+    webkitgtk
+    p7zip
   ];
 
   format = "other";
@@ -68,11 +71,12 @@ python3Packages.buildPythonApplication rec {
   preConfigure = ''
     substituteInPlace build-aux/meson/postinstall.py \
       --replace "'update-desktop-database'" "'${desktop-file-utils}/bin/update-desktop-database'"
-    substituteInPlace src/runner.py \
-      --replace " {runner}" " ${steam-run}/bin/steam-run {runner}" \
-      --replace " {dxvk_setup}" " ${steam-run}/bin/steam-run {dxvk_setup}"
-      substituteInPlace src/runner_utilities.py \
-        --replace " {runner}" " ${steam-run}/bin/steam-run {runner}" \
+    substituteInPlace src/backend/runner.py \
+      --replace "{runner} {command}" "${steam-run}/bin/steam-run {runner} {command}"
+    substituteInPlace src/backend/manager_utils.py \
+      --replace "{runner}" " ${steam-run}/bin/steam-run {runner}"
+    substituteInPlace src/backend/manager.py \
+      --replace "{runner}" " ${steam-run}/bin/steam-run {runner}" \
   '';
 
   preFixup = ''
