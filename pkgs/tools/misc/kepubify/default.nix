@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "kepubify";
-  version = "4.0.2";
+  version = "4.0.3";
 
   src = fetchFromGitHub {
     owner = "pgaskin";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-w48ln6xlxdUVMdLuprtnAx36liC8QuXAaJpOfnpv9AM=";
+    sha256 = "sha256-pe4jNBoPjrkvsdeFjH4TNwacp0qkf+v+SjIAZqV1GWE=";
   };
 
-  vendorSha256 = "sha256-gCdCAlJ5h40zi3w1S6NZZVB2iEx4F7cVLDn4pOr9JWA=";
+  vendorSha256 = "sha256-eiFG6lgsY5hf+XT3Kf5uA4Ai8vBbPsh1T4ObV+rj30Y=";
 
   # remove when built with >= go 1.17
   tags = [ "zip117" ];
