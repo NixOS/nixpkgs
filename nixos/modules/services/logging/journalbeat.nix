@@ -5,13 +5,9 @@ with lib;
 let
   cfg = config.services.journalbeat;
 
-  lt6 = builtins.compareVersions cfg.package.version "6" < 0;
-
   journalbeatYml = pkgs.writeText "journalbeat.yml" ''
     name: ${cfg.name}
     tags: ${builtins.toJSON cfg.tags}
-
-    ${optionalString lt6 "journalbeat.cursor_state_file: /var/lib/${cfg.stateDir}/cursor-state"}
 
     ${cfg.extraConfig}
   '';
@@ -28,7 +24,6 @@ in
         type = types.package;
         default = pkgs.journalbeat;
         defaultText = literalExpression "pkgs.journalbeat";
-        example = literalExpression "pkgs.journalbeat7";
         description = ''
           The journalbeat package to use
         '';
@@ -58,17 +53,7 @@ in
 
       extraConfig = mkOption {
         type = types.lines;
-        default = optionalString lt6 ''
-          journalbeat:
-            seek_position: cursor
-            cursor_seek_fallback: tail
-            write_cursor_state: true
-            cursor_flush_period: 5s
-            clean_field_names: true
-            convert_to_numbers: false
-            move_metadata_to_field: journal
-            default_type: journal
-        '';
+        default = "";
         description = "Any other configuration options you want to add";
       };
 
@@ -89,6 +74,8 @@ in
     systemd.services.journalbeat = {
       description = "Journalbeat log shipper";
       wantedBy = [ "multi-user.target" ];
+      wants = [ "elasticsearch.service" ];
+      after = [ "elasticsearch.service" ];
       preStart = ''
         mkdir -p ${cfg.stateDir}/data
         mkdir -p ${cfg.stateDir}/logs

@@ -2,13 +2,13 @@
 
 let
   pname = "pdftk";
-  version = "3.2.1";
+  version = "3.3.2";
 
   src = fetchFromGitLab {
     owner = "pdftk-java";
     repo = "pdftk";
     rev = "v${version}";
-    sha256 = "056db8rjczdfkq7fm3bv5g15y042rc9hb4zh5qccjrdw630vk9y4";
+    sha256 = "1gji1a06g3p6r4v5dx6h9kbvnf95d0lsjvp0c7daw5l8xhsrvijx";
   };
 
   deps = stdenv.mkDerivation {
@@ -32,7 +32,7 @@ let
 
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "0p59myc5m3ds7fh0zdz3n7l7hx6dj8bpyqxzlhdrqybsyxwpw4w3";
+    outputHash = "0qx1axqr0h5zbn2z9bnb1d0rbs0vajw4p8szw34nicngnn213g7k";
   };
 
   # Point to our local deps repo

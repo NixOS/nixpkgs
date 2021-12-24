@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "injector";
-  version = "0.18.4";
+  version = "0.19.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "10miwi58g4b8rvdf1pl7s7x9j91qyxxv3kdn5idzkfc387hqxn6f";
+    sha256 = "3eaaf51cd3ba7be1354d92a5210c8bba43dd324300eafd214e1f2568834a912f";
   };
 
   propagatedBuildInputs = [ typing-extensions ];

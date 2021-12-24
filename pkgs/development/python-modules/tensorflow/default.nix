@@ -6,13 +6,13 @@
 , numpy, tensorflow-tensorboard, absl-py
 , setuptools, wheel, keras, keras-preprocessing, google-pasta
 , opt-einsum, astunparse, h5py
-, termcolor, grpcio, six, wrapt, protobuf, tensorflow-estimator
+, termcolor, grpcio, six, wrapt, protobuf-python, tensorflow-estimator
 , dill, flatbuffers-python, tblib, typing-extensions
 # Common deps
 , git, pybind11, which, binutils, glibcLocales, cython, perl
 # Common libraries
 , jemalloc, mpi, gast, grpc, sqlite, boringssl, jsoncpp
-, curl, snappy, flatbuffers-core, lmdb-core, icu, double-conversion, libpng, libjpeg_turbo, giflib
+, curl, snappy, flatbuffers-core, lmdb-core, icu, double-conversion, libpng, libjpeg_turbo, giflib, protobuf-core
 # Upsteam by default includes cuda support since tensorflow 1.15. We could do
 # that in nix as well. It would make some things easier and less confusing, but
 # it would also make the default tensorflow package unfree. See
@@ -90,7 +90,7 @@ let
       keras-preprocessing
       numpy
       opt-einsum
-      protobuf
+      protobuf-python
       setuptools
       six
       tblib
@@ -188,11 +188,16 @@ let
       sha256 = "sha256-n7jRDPeXsyq4pEWSWmOCas4c8VsArIKlCuwvSU/Ro/c=";
     };
 
+    patches = [
+      # Patch the sources to compile with protobuf >= 3.16.
+      ./system-protobuf.patch
+    ];
+
     # On update, it can be useful to steal the changes from gentoo
     # https://gitweb.gentoo.org/repo/gentoo.git/tree/sci-libs/tensorflow
 
     nativeBuildInputs = [
-      which pythonEnv cython perl
+      which pythonEnv cython perl protobuf-core
     ] ++ lib.optional cudaSupport addOpenGLRunpath;
 
     buildInputs = [
@@ -241,12 +246,7 @@ let
       # "com_github_googleapis_googleapis"
       # "com_github_googlecloudplatform_google_cloud_cpp"
       "com_github_grpc_grpc"
-      # Multiple issues with custom protobuf.
-      # First `com_github_googleapis` fails to configure. Can be worked around by disabling `com_github_googleapis`
-      # and related functionality, but then the next error is about "dangling symbolic link", and in general
-      # looks like that's only the beginning: see
-      # https://stackoverflow.com/questions/55578884/how-to-build-tensorflow-1-13-1-with-custom-protobuf
-      # "com_google_protobuf"
+      "com_google_protobuf"
       # Fails with the error: external/org_tensorflow/tensorflow/core/profiler/utils/tf_op_utils.cc:46:49: error: no matching function for call to 're2::RE2::FullMatch(absl::lts_2020_02_25::string_view&, re2::RE2&)'
       # "com_googlesource_code_re2"
       "curl"
@@ -280,6 +280,11 @@ let
     ];
 
     INCLUDEDIR = "${includes_joined}/include";
+
+    # This is needed for the Nix-provided protobuf dependency to work,
+    # as otherwise the rule `link_proto_files` tries to create the links
+    # to `/usr/include/...` which results in build failures.
+    PROTOBUF_INCLUDE_PATH = "${protobuf-core}/include";
 
     PYTHON_BIN_PATH = pythonEnv.interpreter;
 
@@ -356,12 +361,12 @@ let
     fetchAttrs = {
       # cudaSupport causes fetch of ncclArchive, resulting in different hashes
       sha256 = if cudaSupport then
-        "sha256-GIBs1BAUuefwlavu7dr9rFb4n1A3uwnvvCAvsBnSSqQ="
+        "sha256-+szc2mRoImwijzbj3nw6HmZp3DeRjjPRU5yC+5AEbkg="
       else
         if stdenv.isDarwin then
-          "sha256-156eOnnjk+wzIiGLd6k/+SAgm4AyImsV/qBsHFlxe+k="
+          "sha256-+bwIzp6t7gRJPcI8B5oyuf9z0AjCAyggUR7x+vv5kFs="
         else
-          "sha256-Fj/wWapsre55VctJ1k1kcYKAn3uDCMPN5rVX8y76ypM=";
+          "sha256-5yOYmeGpJq4Chi55H7iblxyRXVktgnePtpYTPvBs538=";
     };
 
     buildAttrs = {
@@ -454,7 +459,7 @@ in buildPythonPackage {
     keras-preprocessing
     numpy
     opt-einsum
-    protobuf
+    protobuf-python
     six
     tblib
     tensorflow-estimator

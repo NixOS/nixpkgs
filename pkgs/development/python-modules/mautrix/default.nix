@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchPypi, aiohttp, pythonOlder
-, sqlalchemy, ruamel-yaml, CommonMark, lxml
+, sqlalchemy, ruamel-yaml, CommonMark, lxml, aiosqlite
 }:
 
 buildPythonPackage rec {
@@ -16,6 +16,7 @@ buildPythonPackage rec {
 
     # defined in optional-requirements.txt
     sqlalchemy
+    aiosqlite
     ruamel-yaml
     CommonMark
     lxml

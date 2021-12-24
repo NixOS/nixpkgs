@@ -2,23 +2,35 @@
 , stdenv
 , fetchFromGitHub
 , cmake
-, python3
 , nasm
+, openssl
+, python3
 , extraCmakeFlags ? [ ]
 }:
 
 stdenv.mkDerivation rec {
   pname = "ipp-crypto";
-  version = "2020_update3";
+  version = "2021.3";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "ipp-crypto";
-    rev = "ipp-crypto_${version}";
-    sha256 = "02vlda6mlhbd12ljzdf65klpx4kmx1ylch9w3yllsiya4hwqzy4b";
+    rev = "ippcp_${version}";
+    hash = "sha256-QEJXvQ//zhQqibFxXwPMdS1MHewgyb24LRmkycVSGrM=";
   };
+
+  # Fix typo: https://github.com/intel/ipp-crypto/pull/33
+  postPatch = ''
+    substituteInPlace sources/cmake/ippcp-gen-config.cmake \
+      --replace 'ippcpo-config.cmake' 'ippcp-config.cmake'
+  '';
 
   cmakeFlags = [ "-DARCH=intel64" ] ++ extraCmakeFlags;
 
-  nativeBuildInputs = [ cmake python3 nasm ];
+  nativeBuildInputs = [
+    cmake
+    nasm
+    openssl
+    python3
+  ];
 }

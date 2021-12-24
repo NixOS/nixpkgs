@@ -4,7 +4,8 @@
 }:
 
 assert builtins.elem type [ "aspnetcore" "runtime" "sdk"];
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , libunwind
 , openssl
@@ -42,9 +43,8 @@ in stdenv.mkDerivation rec {
   inherit pname version;
 
   # Some of these dependencies are `dlopen()`ed.
-  rpath = lib.makeLibraryPath [
+  rpath = lib.makeLibraryPath ([
     stdenv.cc.cc
-    lttng-ust_2_12
     zlib
 
     curl
@@ -52,7 +52,9 @@ in stdenv.mkDerivation rec {
     libunwind
     libuuid
     openssl
-  ];
+  ] ++ lib.optionals stdenv.isLinux [
+    lttng-ust_2_12
+  ]);
 
   src = fetchurl {
     url = builtins.getAttr type urls;

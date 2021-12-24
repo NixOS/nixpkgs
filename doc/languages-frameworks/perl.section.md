@@ -58,13 +58,7 @@ in `all-packages.nix`. You can test building a Perl package as follows:
 $ nix-build -A perlPackages.ClassC3
 ```
 
-`buildPerlPackage` adds `perl-` to the start of the name attribute, so the package above is actually called `perl-Class-C3-0.21`. So to install it, you can say:
-
-```ShellSession
-$ nix-env -i perl-Class-C3
-```
-
-(Of course you can also install using the attribute name: `nix-env -i -A perlPackages.ClassC3`.)
+To install it with `nix-env` instead: `nix-env -f. -iA perlPackages.ClassC3`.
 
 So what does `buildPerlPackage` do? It does the following:
 
@@ -135,8 +129,10 @@ This will remove the `-I` flags from the shebang line, rewrite them in the `use 
 Nix expressions for Perl packages can be generated (almost) automatically from CPAN. This is done by the program `nix-generate-from-cpan`, which can be installed as follows:
 
 ```ShellSession
-$ nix-env -i nix-generate-from-cpan
+$ nix-env -f "<nixpkgs>" -iA nix-generate-from-cpan
 ```
+
+Substitute `<nixpkgs>` by the path of a nixpkgs clone to use the latest version.
 
 This program takes a Perl module name, looks it up on CPAN, fetches and unpacks the corresponding package, and prints a Nix expression on standard output. For example:
 

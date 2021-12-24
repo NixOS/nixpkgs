@@ -1,6 +1,8 @@
-{ lib, stdenv, writeScriptBin, fetchFromGitLab, autoreconfHook, pkg-config
-, autoconf-archive, libxslt, boost , gtkmm2 , imagemagick, sane-backends
-, tesseract4, udev, libusb1 }:
+{ lib, stdenv, writeScriptBin, fetchpatch, fetchFromGitLab, autoreconfHook, pkg-config
+, autoconf-archive, libxslt, boost, gtkmm2, imagemagick, sane-backends
+, tesseract4, udev, libusb1
+, withNetworkScan ? false, utsushi-networkscan
+}:
 
 
 let
@@ -10,16 +12,28 @@ let
       [ -r .rev ] && cat .rev || true
     fi
   '';
+
 in stdenv.mkDerivation rec {
-  pname = "utsushi";
-  version = "unstable-2021-01-01";
+  pname = "imagescan";
+  version = "3.65.0";
 
   src = fetchFromGitLab {
-    owner = pname;
+    owner = "utsushi";
     repo = pname;
-    rev = "1646d7d301f3d2aeb24930696688853fed5f0d43";
-    sha256 = "1g9m00qljhlw56h3hgfq67ywf4r92nl37m7x5mxa7ygaxc0dyb14";
+    rev = version;
+    sha256 = "sha256-CrN9F/WJKmlDN7eozEHtKgGUQBWVwTqwjnrfiATk7lI=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/media-gfx/iscan/files/iscan-3.63.0-autoconf-2.70.patch?id=4fe8a9e6c60f9163cadad830ba4935c069c67b10";
+      sha256 = "sha256-2V4cextjcEQrywe4tvvD5KaVYdXnwdNhTiY/aSNx3mM=";
+    })
+    (fetchpatch {
+      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/media-gfx/iscan/files/iscan-3.61.0-imagemagick-7.patch?id=985c92af4730d864e86fa87746185b0246e9db93";
+      sha256 = "sha256-dfdVMp3ZfclYeRxYjMIvl+ZdlLn9S+IwQ+OmlHW8318=";
+    })
+  ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -49,8 +63,8 @@ in stdenv.mkDerivation rec {
     # create fake udev and sane config
     mkdir -p $out/etc/{sane.d,udev/rules.d}
     touch $out/etc/sane.d/dll.conf
+
     # absolute paths to convert & tesseract
-    sed -i '/\[AC_DEFINE(\[HAVE_IMAGE_MAGICK\], \[1\])/a \             MAGICK_CONVERT="${imagemagick}/bin/convert"' configure.ac
     substituteInPlace filters/magick.cpp \
       --replace 'convert ' '${imagemagick}/bin/convert '
     substituteInPlace filters/reorient.cpp \
@@ -76,6 +90,10 @@ in stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   doInstallCheck = false;
+
+  postInstall = lib.optionalString withNetworkScan ''
+    ln -s ${utsushi-networkscan}/libexec/utsushi/networkscan $out/libexec/utsushi
+  '';
 
   meta = with lib; {
     description = "SANE utsushi backend for some Epson scanners";

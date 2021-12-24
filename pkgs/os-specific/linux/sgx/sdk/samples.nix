@@ -12,7 +12,11 @@ let
     buildInputs = [
       sgx-sdk
     ];
-    enableParallelBuilding = true;
+
+    # The samples don't have proper support for parallel building
+    # causing them to fail randomly.
+    enableParallelBuilding = false;
+
     buildFlags = [
       "SGX_MODE=SIM"
     ];
@@ -44,6 +48,7 @@ in
     # Requires interaction
     doInstallCheck = false;
   });
+  protobufSGXDemo = buildSample "ProtobufSGXDemo";
   remoteAttestation = (buildSample "RemoteAttestation").overrideAttrs (oldAttrs: {
     dontFixup = true;
     installCheckPhase = ''
@@ -52,6 +57,7 @@ in
   });
   sampleEnclave = buildSample "SampleEnclave";
   sampleEnclavePCL = buildSample "SampleEnclavePCL";
+  sampleEnclaveGMIPP = buildSample "SampleEnclaveGMIPP";
   sealUnseal = buildSample "SealUnseal";
   switchless = buildSample "Switchless";
 }

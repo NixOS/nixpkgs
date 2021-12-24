@@ -72,7 +72,7 @@ The `dotnetCorePackages.sdk` contains both a runtime and the full sdk of a given
 To package Dotnet applications, you can use `buildDotnetModule`. This has similar arguments to `stdenv.mkDerivation`, with the following additions:
 
 * `projectFile` has to be used for specifying the dotnet project file relative to the source root. These usually have `.sln` or `.csproj` file extensions. This can be an array of multiple projects as well.
-* `nugetDeps` has to be used to specify the NuGet dependency file. Unfortunately, these cannot be deterministically fetched without a lockfile. This file should be generated using `nuget-to-nix` tool, which is available in nixpkgs.
+* `nugetDeps` has to be used to specify the NuGet dependency file. Unfortunately, these cannot be deterministically fetched without a lockfile. A script to fetch these is available as `passthru.fetch-deps`. This file can also be generated manually using `nuget-to-nix` tool, which is available in nixpkgs.
 * `packNupkg` is used to pack project as a `nupkg`, and installs it to `$out/share`. If set to `true`, the derivation can be used as a dependency for another dotnet project by adding it to `projectReferences`.
 * `projectReferences` can be used to resolve `ProjectReference` project items. Referenced projects can be packed with `buildDotnetModule` by setting the `packNupkg = true` attribute and passing a list of derivations to `projectReferences`. Since we are sharing referenced projects as NuGets they must be added to csproj/fsproj files as `PackageReference` as well.
  For example, your project has a local dependency:
@@ -90,7 +90,7 @@ To package Dotnet applications, you can use `buildDotnetModule`. This has simila
 * `dotnet-sdk` is useful in cases where you need to change what dotnet SDK is being used.
 * `dotnet-runtime` is useful in cases where you need to change what dotnet runtime is being used. This can be either a regular dotnet runtime, or an aspnetcore.
 * `dotnet-test-sdk` is useful in cases where unit tests expect a different dotnet SDK. By default, this is set to the `dotnet-sdk` attribute.
-* `testProjectFile` is useful in cases where the regular project file does not contain the unit tests. By default, this is set to the `projectFile` attribute.
+* `testProjectFile` is useful in cases where the regular project file does not contain the unit tests. It gets restored and build, but not installed. You may need to regenerate your nuget lockfile after setting this.
 * `disabledTests` is used to disable running specific unit tests. This gets passed as: `dotnet test --filter "FullyQualifiedName!={}"`, to ensure compatibility with all unit test frameworks.
 * `dotnetRestoreFlags` can be used to pass flags to `dotnet restore`.
 * `dotnetBuildFlags` can be used to pass flags to `dotnet build`.
@@ -98,6 +98,8 @@ To package Dotnet applications, you can use `buildDotnetModule`. This has simila
 * `dotnetInstallFlags` can be used to pass flags to `dotnet install`.
 * `dotnetPackFlags` can be used to pass flags to `dotnet pack`. Used only if `packNupkg` is set to `true`.
 * `dotnetFlags` can be used to pass flags to all of the above phases.
+
+When packaging a new application, you need to fetch it's dependencies. You can set `nugetDeps` to an empty string to make the derivation temporarily evaluate, and then run `nix-build -A package.passthru.fetch-deps` to generate it's dependency fetching script. After running the script, you should have the location of the generated lockfile printed to the console. This can be copied to a stable directory. Note that if either `projectFile` or `nugetDeps` are unset, this script cannot be generated!
 
 Here is an example `default.nix`, using some of the previously discussed arguments:
 ```nix
@@ -112,7 +114,8 @@ in buildDotnetModule rec {
   src = ./.;
 
   projectFile = "src/project.sln";
-  nugetDeps = ./deps.nix; # File generated with `nuget-to-nix path/to/src > deps.nix`.
+  nugetDeps = ./deps.nix; # File generated with `nix-build -A package.passthru.fetch-deps`.
+
   projectReferences = [ referencedProject ]; # `referencedProject` must contain `nupkg` in the folder structure.
 
   dotnet-sdk = dotnetCorePackages.sdk_3_1;

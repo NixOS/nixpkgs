@@ -25,14 +25,14 @@ stdenv.mkDerivation rec {
     let
       ae.prebuilt = fetchurl {
         url = "https://download.01.org/intel-sgx/sgx-linux/${versionTag}/prebuilt_ae_${versionTag}.tar.gz";
-        hash = "sha256-nGKZEpT2Mx0DLgqjv9qbZqBt1pQaSHcnA0K6nHma3sk";
+        hash = "sha256-JriA9UGYFkAPuCtRizk8RMM1YOYGR/eO9ILnx47A40s=";
       };
       dcap = rec {
-        version = "1.11";
+        version = "1.12.1";
         filename = "prebuilt_dcap_${version}.tar.gz";
         prebuilt = fetchurl {
           url = "https://download.01.org/intel-sgx/sgx-dcap/${version}/linux/${filename}";
-          hash = "sha256-ShGScS4yNLki04RNPxxLvqzGmy4U1L0gVETvfAo8w9M=";
+          hash = "sha256-V/XHva9Sq3P36xSW+Sd0G6Dnk4H0ANO1Ns/u+FI1eGI=";
         };
       };
     in

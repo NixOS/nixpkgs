@@ -252,7 +252,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2021.12.1";
+  hassVersion = "2021.12.4";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
@@ -269,7 +269,7 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    hash = "sha256:11qlalfzykbq5ydn2cagkqcbvdjkmjcdpp6lgiys9lyrw1rxycnb";
+    hash = "sha256:NZPv6Zyy9brdArRsyGA6EMkYEY1wCf6osjek4lEsr1c=";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling
@@ -646,7 +646,8 @@ in with py.pkgs; buildPythonApplication rec {
     "namecheapdns"
     "neato"
     "ness_alarm"
-    "nest"
+    # python-nest has an unfree license, this prevents builds through ofborg
+    # "nest"
     "netatmo"
     "nexia"
     "nightscout"
