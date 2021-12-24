@@ -14,15 +14,15 @@ let
   log4j-api = fetchMavenArtifact {
     groupId = "org.apache.logging.log4j";
     artifactId = "log4j-api";
-    version = "2.15.0";
-    sha256 = "0m8admb2sbcjj9p54r516zczyb09qg4al36gd6p6sj85irz3xhy8";
+    version = "2.12.3";
+    sha256 = "0z9snl8h31dkwqisd6sfsh5yvf6fbg6imjc7mryzflnq1dfnk2d8";
   };
 
   log4j-core = fetchMavenArtifact {
     groupId = "org.apache.logging.log4j";
     artifactId = "log4j-core";
-    version = "2.15.0";
-    sha256 = "02r2d95dv7dhfh24p41bap4yam0j6q6n4gpkyjsbfwari498b6j1";
+    version = "2.12.3";
+    sha256 = "16idm7w073cjbk7nzbc4vcnahh9097dgp1nipj99hh6vamai32q4";
   };
 
   pkg_path = "$out/lib/ghidra";
@@ -73,7 +73,7 @@ in stdenv.mkDerivation rec {
       mv "$f" "$out/share/icons/hicolor/$res/apps/ghidra.png"
     done;
 
-    # workaround for CVE-2021-44228
+    # workaround for CVE-2021-44228, CVE-2021-45046, CVE-2021-45105
     rm -f $out/lib/ghidra/Ghidra/Framework/Generic/lib/{log4j-api-2.12.1.jar,log4j-core-2.12.1.jar}
     cp ${log4j-api}/share/java/*.jar ${log4j-core}/share/java/*.jar $out/lib/ghidra/Ghidra/Framework/Generic/lib
   '';
