@@ -902,11 +902,15 @@ unpackPhase() {
     # directory, then look below which directory got added.  Yeah,
     # it's rather hacky.
     local dirsBefore=""
+    shopt -u failglob
+    shopt -s nullglob
     for i in *; do
         if [ -d "$i" ]; then
             dirsBefore="$dirsBefore $i "
         fi
     done
+    shopt -u nullglob
+    shopt -s failglob
 
     # Unpack all source archives.
     for i in $srcs; do
