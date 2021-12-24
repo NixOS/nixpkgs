@@ -46,12 +46,6 @@ stdenv.mkDerivation {
   '';
 
   postInstall = ''
-    for i in "$out/{bin,sbin}/"*
-    do
-      wrapProgram $i --prefix PATH :  \
-        "${nettools}/bin:${nettools}/sbin"
-    done
-
     mkdir -p $out/share/doc/vpnc
     cp README nortel.txt ChangeLog $out/share/doc/vpnc/
   '';
