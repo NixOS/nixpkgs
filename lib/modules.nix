@@ -37,6 +37,7 @@ let
     toList
     types
     warnIf
+    zipAttrsWith
     ;
   inherit (lib.options)
     isOption
@@ -442,7 +443,8 @@ rec {
         }
       */
       byName = attr: f: modules:
-        foldl' (acc: module:
+        zipAttrsWith (n: concatLists)
+          (map (module:
               if !(builtins.isAttrs module.${attr}) then
                 throw ''
                   You're trying to declare a value of type `${builtins.typeOf module.${attr}}'
@@ -454,11 +456,8 @@ rec {
                   this option by e.g. referring to `man 5 configuration.nix'!
                 ''
               else
-                acc // (mapAttrs (n: v:
-                                   (acc.${n} or []) ++ f module v
-                                 ) module.${attr}
-                       )
-               ) {} modules;
+                mapAttrs (n: f module) module.${attr}
+              ) modules);
       # an attrset 'name' => list of submodules that declare ‘name’.
       declsByName = byName "options" (module: option:
           [{ inherit (module) _file; options = option; }]
