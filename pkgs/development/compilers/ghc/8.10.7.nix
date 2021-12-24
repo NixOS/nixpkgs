@@ -212,6 +212,10 @@ stdenv.mkDerivation (rec {
       url = "https://gitlab.haskell.org/ghc/ghc/-/commit/97d0b0a367e4c6a52a17c3299439ac7de129da24.patch";
       sha256 = "0r4zjj0bv1x1m2dgxp3adsf2xkr94fjnyj1igsivd9ilbs5ja0b5";
     })
+
+    # Add flag to fix C++ exceptions on darwin
+    # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/7247
+    ./add-fcompact-unwind.patch
   ];
 
   postPatch = "patchShebangs .";

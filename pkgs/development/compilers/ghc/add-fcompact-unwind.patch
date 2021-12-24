@@ -1,0 +1,68 @@
+commit e11f194f6765756df19e39e501bdc420d278848a
+Author: Robert Hensing <robert@roberthensing.nl>
+Date:   Fri Dec 24 14:52:35 2021 +0100
+
+    Add -fcompact-unwind
+
+diff --git a/compiler/main/DriverPipeline.hs b/compiler/main/DriverPipeline.hs
+index 1bc08779cc..b85a2f87d7 100644
+--- a/compiler/main/DriverPipeline.hs
++++ b/compiler/main/DriverPipeline.hs
+@@ -1850,7 +1850,8 @@ linkBinary' staticLink dflags o_files dep_packages = do
+                       -- like
+                       --     ld: warning: could not create compact unwind for .LFB3: non-standard register 5 being saved in prolog
+                       -- on x86.
+-                      ++ (if toolSettings_ldSupportsCompactUnwind toolSettings' &&
++                      ++ (if not (gopt Opt_CompactUnwind dflags) &&
++                             toolSettings_ldSupportsCompactUnwind toolSettings' &&
+                              not staticLink &&
+                              (platformOS platform == OSDarwin) &&
+                              case platformArch platform of
+diff --git a/compiler/main/DynFlags.hs b/compiler/main/DynFlags.hs
+index d222b3b6de..e8c766f6e1 100644
+--- a/compiler/main/DynFlags.hs
++++ b/compiler/main/DynFlags.hs
+@@ -644,6 +644,7 @@ data GeneralFlag
+    | Opt_Ticky_Dyn_Thunk
+    | Opt_RPath
+    | Opt_RelativeDynlibPaths
++   | Opt_CompactUnwind               -- ^ @-fcompact-unwind@
+    | Opt_Hpc
+    | Opt_FlatCache
+    | Opt_ExternalInterpreter
+@@ -3145,6 +3146,13 @@ dynamic_flags_deps = [
+                   return dflags
+           else return (gopt_set dflags Opt_SplitSections)))
+ 
++  , make_ord_flag defGhcFlag "fcompact-unwind"
++      (noArgM (\dflags -> do
++        if platformOS (targetPlatform dflags) == OSDarwin
++          then return (gopt_set dflags Opt_CompactUnwind)
++          else do addWarn "-compact-unwind is only implemented by the darwin platform. Ignoring."
++                  return dflags))
++
+         -------- ghc -M -----------------------------------------------------
+   , make_ord_flag defGhcFlag "dep-suffix"              (hasArg addDepSuffix)
+   , make_ord_flag defGhcFlag "dep-makefile"            (hasArg setDepMakefile)
+diff --git a/docs/users_guide/phases.rst b/docs/users_guide/phases.rst
+index e6dcb1dbd0..926591bac9 100644
+--- a/docs/users_guide/phases.rst
++++ b/docs/users_guide/phases.rst
+@@ -1264,3 +1264,17 @@ for example).
+     that do runtime dynamic linking, where code dynamically linked in
+     the future might require the value of a CAF that would otherwise
+     be garbage-collected.
++
++.. ghc-flag:: -fcompact-unwind
++    :shortdesc: Instruct the linker to produce a `__compact_unwind` section.
++    :type: dynamic
++    :category: linking
++
++    :since: 8.10
++
++    This instructs the linker to produce an executable that supports Apple's
++    compact unwinding sections. These are used by C++ and Objective-C code
++    to unwind the stack when an exception occurs.
++
++    In theory, the older `__eh_frame` section should also be usable for this
++    purpose, but this does not always work.
