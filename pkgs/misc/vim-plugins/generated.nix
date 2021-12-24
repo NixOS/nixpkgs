@@ -9812,6 +9812,18 @@ final: prev:
     meta.homepage = "https://github.com/jordwalke/vim-reasonml/";
   };
 
+  vim-rego = buildVimPluginFrom2Nix {
+    pname = "vim-rego";
+    version = "2020-05-04";
+    src = fetchFromGitHub {
+      owner = "tsandall";
+      repo = "vim-rego";
+      rev = "c383f053acee421a1bd01b2351df52ab09d2323f";
+      sha256 = "0idr4fw9fj9fqlz43dbgz17r06k4w497f5dx7f07ch1qcr67384v";
+    };
+    meta.homepage = "https://github.com/tsandall/vim-rego/";
+  };
+
   vim-repeat = buildVimPluginFrom2Nix {
     pname = "vim-repeat";
     version = "2021-01-25";
