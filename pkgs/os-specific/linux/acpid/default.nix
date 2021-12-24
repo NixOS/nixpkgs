@@ -11,14 +11,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  # remove when https://sourceforge.net/p/acpid2/code/merge-requests/1/ is merged
-  postPatch = ''
-    substituteInPlace configure.ac \
-      --replace "AC_FUNC_MALLOC" "" \
-      --replace "AC_FUNC_REALLOC" "" \
-      --replace "strrchr strtol" "strrchr strtol malloc realloc"
-  '';
-
   meta = with lib; {
     homepage = "https://sourceforge.net/projects/acpid2/";
     description = "A daemon for delivering ACPI events to userspace programs";
