@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "Pympler";
-  version = "1.0";
+  version = "1.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f2e82c3e33835d0378ed95fffabc00806f4070f00decaa38b340ca99b1aca25c";
+    sha256 = "993f1a3599ca3f4fcd7160c7545ad06310c9e12f70174ae7ae8d4e25f6c5d3fa";
   };
 
   postPatch = ''
