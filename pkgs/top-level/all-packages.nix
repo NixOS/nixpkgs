@@ -3411,6 +3411,8 @@ with pkgs;
 
   mlarchive2maildir = callPackage ../applications/networking/mailreaders/mlarchive2maildir { };
 
+  mmctl = callPackage ../tools/misc/mmctl { };
+
   molly-brown = callPackage ../servers/gemini/molly-brown { };
 
   monetdb = callPackage ../servers/sql/monetdb { };
@@ -3426,6 +3428,8 @@ with pkgs;
   moodle-dl = callPackage ../tools/networking/moodle-dl { };
 
   moonraker = callPackage ../servers/moonraker { };
+
+  morsel = callPackage ../tools/text/morsel {};
 
   mousetweaks = callPackage ../applications/accessibility/mousetweaks {
     inherit (xorg) libX11 libXtst libXfixes;
@@ -5423,6 +5427,8 @@ with pkgs;
   ferdi = callPackage ../applications/networking/instant-messengers/ferdi {
     mkFranzDerivation = callPackage ../applications/networking/instant-messengers/franz/generic.nix { };
   };
+
+  fq = callPackage ../development/tools/fq { };
 
   franz = callPackage ../applications/networking/instant-messengers/franz {
     mkFranzDerivation = callPackage ../applications/networking/instant-messengers/franz/generic.nix { };
@@ -11169,6 +11175,8 @@ with pkgs;
 
   yank = callPackage ../tools/misc/yank { };
 
+  yamlfix = with python3Packages; toPythonApplication yamlfix;
+
   yamllint = with python3Packages; toPythonApplication yamllint;
 
   yaml-merge = callPackage ../tools/text/yaml-merge { };
@@ -15094,6 +15102,8 @@ with pkgs;
   omake = callPackage ../development/tools/ocaml/omake { };
 
   omniorb = callPackage ../development/tools/omniorb { };
+
+  openai = with python3Packages; toPythonApplication openai;
 
   opengrok = callPackage ../development/tools/misc/opengrok { };
 
@@ -26512,7 +26522,6 @@ with pkgs;
   krane = callPackage ../applications/networking/cluster/krane { };
 
   krita = libsForQt5.callPackage ../applications/graphics/krita { };
-  krita-beta = libsForQt5.callPackage ../applications/graphics/krita/beta.nix { };
 
   krusader = libsForQt5.callPackage ../applications/misc/krusader { };
 

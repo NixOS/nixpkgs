@@ -4739,6 +4739,8 @@ in {
 
   mapbox = callPackage ../development/python-modules/mapbox { };
 
+  mariadb = callPackage ../development/python-modules/mariadb { };
+
   marisa-trie = callPackage ../development/python-modules/marisa-trie { };
 
   markdown2 = callPackage ../development/python-modules/markdown2 { };
@@ -4780,6 +4782,8 @@ in {
   matchpy = callPackage ../development/python-modules/matchpy { };
 
   mathlibtools = callPackage ../development/python-modules/mathlibtools { };
+
+  matlink-gpapi = callPackage ../development/python-modules/matlink-gpapi { };
 
   matplotlib = callPackage ../development/python-modules/matplotlib {
     stdenv = if stdenv.isDarwin then pkgs.clangStdenv else pkgs.stdenv;
@@ -5822,7 +5826,11 @@ in {
 
   netmap = callPackage ../development/python-modules/netmap { };
 
+  openai = callPackage ../development/python-modules/openai { };
+
   openapi-core = callPackage ../development/python-modules/openapi-core { };
+
+  pandas-stubs = callPackage ../development/python-modules/pandas-stubs { };
 
   parameterizedtestcase = callPackage ../development/python-modules/parameterizedtestcase { };
 
@@ -6276,6 +6284,8 @@ in {
   pushover-complete = callPackage ../development/python-modules/pushover-complete { };
 
   pvlib = callPackage ../development/python-modules/pvlib { };
+
+  pvo = callPackage ../development/python-modules/pvo { };
 
   Pweave = callPackage ../development/python-modules/pweave { };
 
@@ -10390,6 +10400,8 @@ in {
   yalexs = callPackage ../development/python-modules/yalexs { };
 
   yamale = callPackage ../development/python-modules/yamale { };
+
+  yamlfix = callPackage ../development/python-modules/yamlfix { };
 
   yamllint = callPackage ../development/python-modules/yamllint { };
 

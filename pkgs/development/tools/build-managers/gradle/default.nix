@@ -89,16 +89,16 @@ rec {
   # https://docs.gradle.org/current/userguide/compatibility.html
 
   gradle_7 = gen {
-    version = "7.3.2";
+    version = "7.3.3";
     nativeVersion = "0.22-milestone-21";
-    sha256 = "14jk1mhk59flzml55alwi9r5picmf8657q1nhd5mygrnmj79zf13";
+    sha256 = "00h3z0vxc4hv31sc71gb88r8yabyqgz304wpr0bxhbx2d14f11mm";
     defaultJava = jdk17;
   };
 
   gradle_6 = gen {
-    version = "6.9.1";
+    version = "6.9.2";
     nativeVersion = "0.22-milestone-20";
-    sha256 = "1zmjfwlh34b65rdx9izgavw3qwqqwm39h5siyj2bf0m55111a4lc";
+    sha256 = "13qyk3f6namw27ynh6nxljxpk9r3l12vxl3f0qpglprdf3c6ydcb";
     defaultJava = jdk11;
   };
 

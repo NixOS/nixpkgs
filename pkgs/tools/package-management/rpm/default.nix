@@ -62,6 +62,8 @@ stdenv.mkDerivation rec {
     ln -sf $out/bin/{rpm,rpmverify}
   '';
 
+  enableParallelBuilding = true;
+
   meta = with lib; {
     homepage = "https://www.rpm.org/";
     license = with licenses; [ gpl2Plus lgpl21Plus ];

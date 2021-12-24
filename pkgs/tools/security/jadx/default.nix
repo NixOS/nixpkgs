@@ -40,7 +40,7 @@ let
     '';
 
     outputHashMode = "recursive";
-    outputHash = "sha256-5QJPMC/lk0C3nVCpGLE4r6rnchwttIbdHmcySnpNmF8=";
+    outputHash = "sha256-i+vK085P1T182wW4PajpDyZgyupKHlrx1yJgzJdHETU=";
   };
 in stdenv.mkDerivation {
   inherit pname version src;

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, python, buildPythonApplication
+{ lib, stdenv, fetchurl, fetchFromGitHub, python, buildPythonApplication
 , libselinux
 # Propagated to blivet
 , useNixUdev ? true
@@ -58,9 +58,11 @@ in buildPythonApplication rec {
   version = "0.4.1";
   disabled = python.isPy3k;
 
-  src = fetchurl {
-    url = "https://github.com/NixOS/nixpart/archive/v${version}.tar.gz";
-    sha256 = "0avwd8p47xy9cydlbjxk8pj8q75zyl68gw2w6fnkk78dcb1a3swp";
+  src = fetchFromGitHub {
+    owner = "NixOS";
+    repo = "nixpart";
+    rev = "v${version}";
+    sha256 = "sha256-edl3mRg9Bn9Bd6FJl4zf1WS7XRcHTL5ey9LuKhaZG7I=";
   };
 
   propagatedBuildInputs = [ blivet ];

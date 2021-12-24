@@ -6338,6 +6338,12 @@
     githubId = 15692230;
     name = "Muhammad Herdiansyah";
   };
+  koozz = {
+    email = "koozz@linux.com";
+    github = "koozz";
+    githubId = 264372;
+    name = "Jan van den Berg";
+  };
   koral = {
     email = "koral@mailoo.org";
     github = "k0ral";
@@ -9422,6 +9428,12 @@
       longkeyid = "rsa4096/2D2595A00D08ACE0";
       fingerprint = "48AD DE10 F27B AFB4 7BB0  CCAF 2D25 95A0 0D08 ACE0";
     }];
+  };
+  ppom = {
+    name = "Paco Pompeani";
+    email = "paco@ecomail.io";
+    github = "aopom";
+    githubId = 38916722;
   };
   pradeepchhetri = {
     email = "pradeep.chhetri89@gmail.com";
