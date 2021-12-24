@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "Pyro5";
-  version = "5.12";
+  version = "5.13.1";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "616e6957c341da0ca26f947805c9c97b42031941f59ca5613537d1420ff4f2e2";
+    sha256 = "2be9da379ae0ec4cf69ffb3c5c589b698eea00e614a9af7945b87fa9bb09baf2";
   };
 
   propagatedBuildInputs = [ serpent ];
