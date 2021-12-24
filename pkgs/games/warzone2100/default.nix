@@ -26,6 +26,9 @@
 , vulkan-loader
 , shaderc
 
+, testVersion
+, warzone2100
+
 , withVideos ? false
 }:
 
@@ -98,6 +101,14 @@ stdenv.mkDerivation rec {
   postInstall = lib.optionalString withVideos ''
     cp ${sequences_src} $out/share/warzone2100/sequences.wz
   '';
+
+  passthru.tests = {
+    version = testVersion {
+      package = warzone2100;
+      # The command always exits with code 1
+      command = "(warzone2100 --version || [ $? -eq 1 ])";
+    };
+  };
 
   meta = with lib; {
     description = "A free RTS game, originally developed by Pumpkin Studios";
