@@ -12,26 +12,17 @@
 
 stdenv.mkDerivation rec {
   pname = "gst-rtsp-server";
-  version = "1.18.4";
+  version = "1.19.3";
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "153c78klvzlmi86d0gmdf7w9crv11rkd4y82b14a0wdr83gbhsx4";
+    sha256 = "088xjnsgm72sychggh0wbkaz6r2qf2fp8lnb8b1pxp8fwdms1n9s";
   };
 
   outputs = [
     "out"
     "dev"
     # "devdoc" # disabled until `hotdoc` is packaged in nixpkgs
-  ];
-
-  patches = [
-    # To use split outputs, we need this so double prefix won't be used in the
-    # pkg-config files. Hopefully, this won't be needed on the next release,
-    # _if_
-    # https://gitlab.freedesktop.org/gstreamer/gst-rtsp-server/merge_requests/1
-    # will be merged. For the current release, this merge request won't apply.
-    ./fix_pkgconfig_includedir.patch
   ];
 
   nativeBuildInputs = [

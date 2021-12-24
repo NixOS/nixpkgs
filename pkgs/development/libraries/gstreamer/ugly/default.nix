@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gst-plugins-ugly";
-  version = "1.18.4";
+  version = "1.19.3";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "0g6i4db1883q3j0l2gdv46fcqwiiaw63n6mhvsfcms1i1p7g1391";
+    sha256 = "1s86girzks0z6j06w4008gg5a3scj8pmsyjj60k4ymbwx2li16nl";
   };
 
   nativeBuildInputs = [
@@ -60,6 +60,7 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
     "-Dsidplay=disabled" # sidplay / sidplay/player.h isn't packaged in nixpkgs as of writing
+    "-Dgpl=enabled"
   ];
 
   postPatch = ''

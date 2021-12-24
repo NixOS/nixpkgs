@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gstreamer";
-  version = "1.18.4";
+  version = "1.19.3";
 
   outputs = [
     "out"
@@ -34,12 +34,8 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "1igv9l4hm21kp1jmlwlagzs7ly1vaxv1sbda29q8247372dwkvls";
+    sha256 = "1jhv4bihfghm5xpzl5jfk4vaqsmdkiyp3knbq231b51gz55psvch";
   };
-
-  patches = [
-    ./fix_pkgconfig_includedir.patch
-  ];
 
   nativeBuildInputs = [
     meson
