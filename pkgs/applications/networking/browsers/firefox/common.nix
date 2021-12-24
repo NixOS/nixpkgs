@@ -8,7 +8,7 @@
 , freetype, fontconfig, file, nspr, nss
 , yasm, libGLU, libGL, sqlite, unzip, makeWrapper
 , hunspell, libevent, libstartup_notification
-, libvpx_1_8
+, libvpx
 , icu69, libpng, glib, pciutils
 , autoconf213, which, gnused, rustPackages
 , rust-cbindgen, nodejs, nasm, fetchpatch
@@ -150,7 +150,7 @@ buildStdenv.mkDerivation ({
     xorg.libXext
     libevent libstartup_notification /* cairo */
     libpng glib
-    nasm icu69 libvpx_1_8
+    nasm icu69 libvpx
     # >= 66 requires nasm for the AV1 lib dav1d
     # yasm can potentially be removed in future versions
     # https://bugzilla.mozilla.org/show_bug.cgi?id=1501796
