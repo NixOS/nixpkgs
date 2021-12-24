@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     lib.optionals stdenv.isDarwin [
       frameworks.CoreFoundation
       frameworks.IOKit
-    ] ++ lib.optional (stdenv.isDarwin && !stdenv.isAarch64) (
+    ] ++ lib.optional (stdenv.isDarwin && stdenv.isx86_64) (
       # Found this explanation for needing to create a header directory for libproc.h alone.
       # https://github.com/NixOS/nixpkgs/blob/049e5e93af9bbbe06b4c40fd001a4e138ce1d677/pkgs/development/libraries/webkitgtk/default.nix#L154
       # TL;DR, the other headers in the include path for the macOS SDK is not compatible with the C++ stdlib and causes issues, so we copy
