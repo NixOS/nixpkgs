@@ -535,6 +535,8 @@ in {
     inherit (pkgs) graphviz;
   };
 
+  aocd = callPackage ../development/python-modules/aocd { };
+
   apache-airflow = callPackage ../development/python-modules/apache-airflow { };
 
   apcaccess = callPackage ../development/python-modules/apcaccess { };

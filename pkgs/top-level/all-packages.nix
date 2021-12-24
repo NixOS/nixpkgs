@@ -186,6 +186,8 @@ with pkgs;
 
   antsimulator = callPackage ../games/antsimulator { };
 
+  aocd = with pythonPackages; toPythonApplication aocd;
+
   astrolog = callPackage ../applications/science/astronomy/astrolog { };
 
   atkinson-hyperlegible = callPackage ../data/fonts/atkinson-hyperlegible { };
