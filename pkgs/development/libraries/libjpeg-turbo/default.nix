@@ -16,13 +16,13 @@ assert !(enableJpeg7 && enableJpeg8);  # pick only one or none, not both
 stdenv.mkDerivation rec {
 
   pname = "libjpeg-turbo";
-  version = "2.1.0";
+  version = "2.1.2";
 
   src = fetchFromGitHub {
     owner = "libjpeg-turbo";
     repo = "libjpeg-turbo";
     rev = version;
-    sha256 = "sha256-Ma3Q/zMJPjsQmoaYJtVbHJOx65AfGLWJYi2iRFm3l5s=";
+    sha256 = "sha256-mlHueKAU/uNUdV9s4jWKAE+XVJdpEFhw2hxGvqRwAGc=";
   };
 
   # This is needed by freeimage
