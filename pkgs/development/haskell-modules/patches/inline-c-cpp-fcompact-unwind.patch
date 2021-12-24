@@ -1,0 +1,15 @@
+diff --git a/inline-c-cpp/inline-c-cpp.cabal b/inline-c-cpp/inline-c-cpp.cabal
+index 9645dd7..6ab7b32 100644
+--- a/inline-c-cpp/inline-c-cpp.cabal
++++ b/inline-c-cpp/inline-c-cpp.cabal
+@@ -47,6 +47,10 @@ common cxx-opts
+     ghc-options:
+       -optcxx-std=c++11
+       -optcxx-Wall
++
++    if os(darwin)
++      ghc-options:
++        -fcompact-unwind
+   else
+     -- On GHC < 8.10, we have to emulate -optcxx by making the C compiler compile
+     -- C++. GCC accepts this via -std, whereas Clang requires us to change the

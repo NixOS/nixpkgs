@@ -256,11 +256,11 @@ self: super: ({
     ] ++ (drv.libraryFrameworkDepends or []);
   }) super.streamly_0_8_1_1;
 
+  inline-c-cpp = appendPatch ./patches/inline-c-cpp-fcompact-unwind.patch super.inline-c-cpp;
+
 } // lib.optionalAttrs pkgs.stdenv.isAarch64 {  # aarch64-darwin
 
   # https://github.com/fpco/unliftio/issues/87
   unliftio = dontCheck super.unliftio;
 
-  # https://github.com/fpco/inline-c/issues/127
-  inline-c-cpp = dontCheck super.inline-c-cpp;
 })
