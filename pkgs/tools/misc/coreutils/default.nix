@@ -21,11 +21,11 @@ assert selinuxSupport -> libselinux != null && libsepol != null;
 with lib;
 
 stdenv.mkDerivation (rec {
-  pname = "coreutils";
+  pname = "coreutils${optionalString (!minimal) "-full"}";
   version = "9.0";
 
   src = fetchurl {
-    url = "mirror://gnu/${pname}/${pname}-${version}.tar.xz";
+    url = "mirror://gnu/coreutils/coreutils-${version}.tar.xz";
     sha256 = "sha256-zjCs30pBvFuzDdlV6eqnX6IWtOPesIiJ7TJDPHs7l84=";
   };
 
