@@ -147,6 +147,17 @@ with lib;
       '';
     };
 
+    kTLS = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether to enable kTLS support.
+        Implementing TLS in the kernel (kTLS) improves performance by significantly
+        reducing the need for copying operations between user space and the kernel.
+        Required Nginx version 1.21.4 or later.
+      '';
+    };
+
     sslCertificate = mkOption {
       type = types.path;
       example = "/var/host.cert";

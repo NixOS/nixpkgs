@@ -317,8 +317,11 @@ let
           ${optionalString (hasSSL && vhost.sslTrustedCertificate != null) ''
             ssl_trusted_certificate ${vhost.sslTrustedCertificate};
           ''}
-          ${optionalString vhost.rejectSSL ''
+          ${optionalString (hasSSL && vhost.rejectSSL) ''
             ssl_reject_handshake on;
+          ''}
+          ${optionalString (hasSSL && vhost.kTLS) ''
+            ssl_conf_command Options KTLS;
           ''}
 
           ${mkBasicAuth vhostName vhost}
@@ -825,6 +828,14 @@ in
       }
 
       {
+        assertion = any (host: host.kTLS) (attrValues virtualHosts) -> versionAtLeast cfg.package.version "1.21.4";
+        message = ''
+          services.nginx.virtualHosts.<name>.kTLS requires nginx version
+          1.21.4 or above; see the documentation for services.nginx.package.
+        '';
+      }
+
+      {
         assertion = all (host: !(host.enableACME && host.useACMEHost != null)) (attrValues virtualHosts);
         message = ''
           Options services.nginx.service.virtualHosts.<name>.enableACME and
@@ -900,7 +911,7 @@ in
         PrivateMounts = true;
         # System Call Filtering
         SystemCallArchitectures = "native";
-        SystemCallFilter = "~@cpu-emulation @debug @keyring @ipc @mount @obsolete @privileged @setuid @mincore";
+        SystemCallFilter = [ "~@cpu-emulation @debug @keyring @mount @obsolete @privileged @setuid @mincore" ] ++ optionals (cfg.package != pkgs.tengine) [ "~@ipc" ];
       };
     };
 
