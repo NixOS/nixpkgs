@@ -512,12 +512,14 @@ in
     systemd.generators = mkOption {
       type = types.attrsOf types.path;
       default = {};
-      example = { systemd-gpt-auto-generator = "/dev/null"; };
+      example = literalExpression ''{ systemd-gpt-auto-generator = "${config.systemd.package}/lib/systemd/system-generators/systemd-gpt-auto-generator"; };'';
       description = ''
         Definition of systemd generators.
         For each <literal>NAME = VALUE</literal> pair of the attrSet, a link is generated from
         <literal>/etc/systemd/system-generators/NAME</literal> to <literal>VALUE</literal>.
+        Note: systemd-gpt-auto-generator is disabled by default due to not being declarative.
       '';
+        # systemd-gpt-auto-generator issue https://github.com/NixOS/nixpkgs/issues/4002
     };
 
     systemd.shutdown = mkOption {
@@ -1053,7 +1055,7 @@ in
         '') config.system.build.etc.passthru.targets;
       }) + "/*";
 
-      "systemd/system-generators" = { source = hooks "generators" cfg.generators; };
+      "systemd/system-generators" = { source = hooks "generators" ({ systemd-gpt-auto-generator = "/dev/null"; } // cfg.generators); };
       "systemd/system-shutdown" = { source = hooks "shutdown" cfg.shutdown; };
     });
 

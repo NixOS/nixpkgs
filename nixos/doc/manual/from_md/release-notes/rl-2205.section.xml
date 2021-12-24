@@ -117,6 +117,14 @@
           <literal>virtualisation.docker.daemon.settings</literal>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <literal>systemd-gpt-auto-generator</literal> is now disabled
+          by default due to conflicting with our declarative mount
+          management, Issue
+          <link xlink:href="https://github.com/NixOS/nixpkgs/issues/4002">#4002</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.05-notable-changes">
