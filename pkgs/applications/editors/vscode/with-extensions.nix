@@ -2,9 +2,12 @@
 , stdenvNoCC
 , symlinkJoin
 , vscode
-, writeShellScript
+, runtimeShell
 , vscodeExtensions ? [ ]
-, allowUserExtensions ? true
+# TODO:change defaults when one of those issues is resolved:
+# https://github.com/rpodgorny/unionfs-fuse/issues/101
+# https://github.com/trapexit/mergerfs/issues/115
+, mountPosition ? if stdenvNoCC.isDarwin then "none" else "above"
 , mergerfs ? null
 }:
 /*
@@ -47,59 +50,67 @@
       extensions as its `--extensions-dir`.
 */
 
+assert lib.assertOneOf "mountPosition" mountPosition [ "above" "below" "none" ];
+
 # When no extensions are requested, we simply don't build
 
-if allowUserExtensions && vscodeExtensions == [ ] then vscode else
+if mountPosition != "none" && vscodeExtensions == [ ] then vscode else
 
 let
   # if vscode is itself another vscode-with-extensions we avoid to build it too
-  _vscode = vscode.vscode or vscode;
+  canFlatten = mountPosition == vscode.mountPosition or "" && vscode ? vscodeExtensions && vscode ? vscode;
+  _vscode = if canFlatten then vscode.vscode else vscode;
   combinedExtensionsDrv = symlinkJoin {
     name = "vscode-extensions";
     paths = map
       (p: "${p}/share/vscode/extensions")
-      (vscodeExtensions ++ vscode.vscodeExtensions or [ ]);
+      (vscodeExtensions ++ (lib.optionals canFlatten vscode.vscodeExtensions));
   };
   setExtDir = ''
-    extensionsDir="${combinedExtensionsDrv}"
+    export VSCODE_EXTENSIONS="${combinedExtensionsDrv}"
   '';
 in
 
 stdenvNoCC.mkDerivation rec {
   dontPatchELF = true;
   dontStrip = true;
-  pname = "${vscode.pname}-with-extensions";
+  pname = "${_vscode.pname}-with-extensions";
 
   vscode = _vscode;
-  inherit (vscode)
+  inherit (_vscode)
     meta extensionHomePath executableName
     longName shortName userHomePath version;
   passthru = {
-    inherit vscodeExtensions;
+    inherit vscodeExtensions mountPosition;
   };
 
-  passAsFile = [ "buildCommand" ];
+  passAsFile = [ "buildCommand" "vscSh" ];
+  vscSh = if mountPosition == "none" then setExtDir else ''
+    homeExt="''${VSCODE_EXTENSIONS:-$HOME/${extensionHomePath}}"
+    mkdir -p "$homeExt"
+    # assume $out is unique enough it can replace a tmpdir suffix
+    export VSCODE_EXTENSIONS="''${XDG_RUNTIME_DIR:-''${TEMPDIR:-/tmp}/$PID}@out@"
+    # avoid remounting after closing and reopening vscode
+    if ! (mount | grep "$VSCODE_EXTENSIONS" > /dev/null)
+    then
+      mkdir -p "$VSCODE_EXTENSIONS"
+      ${mergerfs}/bin/mergerfs \
+        -o use_ino,cache.files=partial,dropcacheonclose=true,category.create=mfs \
+        ${
+          if mountPosition =="above" then
+            ''"${combinedExtensionsDrv}=RO:$homeExt=RW"''
+          else
+            ''"$homeExt=RW:${combinedExtensionsDrv}=RO"''
+        } "$VSCODE_EXTENSIONS" || ${setExtDir}
+    fi
+  '';
   buildCommand = ''
     mkVscWrapper()(
       o="$out/$1"
-      install -Dm0777 "${writeShellScript "vsc-wrapper" (
-        if allowUserExtensions then ''
-          homeExt="$HOME/${extensionHomePath}"
-          mkdir -p "$homeExt"
-          # assume the store path is unique enough
-          # that it can replace a tmpdir suffix
-          extensionsDir="''${XDG_RUNTIME_DIR:-''${TEMPDIR:-/tmp}}/codeExts${combinedExtensionsDrv}"
-          # avoid remounting after closing and reopening vscode
-          if ! (mount | grep "$extensionsDir" > /dev/null)
-          then
-            mkdir -p $extensionsDir
-            ${mergerfs}/bin/mergerfs \
-              -o use_ino,cache.files=partial,dropcacheonclose=true,category.create=mfs \
-              "${combinedExtensionsDrv}=RO:$homeExt=RW" "$extensionsDir" || \
-              ${setExtDir}
-          fi
-      '' else setExtDir)}" "$o"
-      echo exec "$vscode/$1" '--extensions-dir $extensionsDir "$@"' >> "$o"
+      install -Dm0777 "$vscShPath" "$o"
+      sed -i "1i#! ${runtimeShell}\n" "$o"
+      echo exec "$vscode/$1" '"$@"' >> "$o"
+      substituteInPlace "$o" --subst-var out
     )
     mkVscWrapper "bin/$executableName"
   '' + (if stdenvNoCC.isDarwin then ''
