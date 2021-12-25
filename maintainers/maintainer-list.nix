@@ -119,6 +119,12 @@
     githubId = 241628;
     name = "Adam Russell";
   };
+  aadibajpai = {
+    email = "hello@aadibajpai.com";
+    github = "aadibajpai";
+    githubId = 27063113;
+    name = "Aadi Bajpai";
+  };
   aanderse = {
     email = "aaron@fosslib.net";
     matrix = "@aanderse:nixos.dev";

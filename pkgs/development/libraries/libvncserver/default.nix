@@ -1,21 +1,26 @@
-{ lib, stdenv, fetchzip, fetchpatch, cmake
-, libjpeg, openssl, zlib, libgcrypt, libpng
-, systemd, Carbon
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, libjpeg
+, openssl
+, zlib
+, libgcrypt
+, libpng
+, systemd
+, Carbon
 }:
 
-let
-  s = # Generated upstream information
-  rec {
-    pname = "libvncserver";
-    version = "0.9.13";
-    url = "https://github.com/LibVNC/libvncserver/archive/LibVNCServer-${version}.tar.gz";
-    sha256 = "0zz0hslw8b1p3crnfy3xnmrljik359h83dpk64s697dqdcrzy141"; # unpacked archive checksum
-  };
-in
-stdenv.mkDerivation {
-  inherit (s) pname version;
-  src = fetchzip {
-    inherit (s) url sha256;
+stdenv.mkDerivation rec {
+  pname = "libvncserver";
+  version = "0.9.13";
+
+  src = fetchFromGitHub {
+    owner = "LibVNC";
+    repo = "libvncserver";
+    rev = "LibVNCServer-${version}";
+    sha256 = "sha256-gQT/M2u4nWQ0MfO2gWAqY0ZJc7V9eGczGzcsxKmG4H8=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -24,12 +29,11 @@ stdenv.mkDerivation {
     ++ lib.optional stdenv.isDarwin Carbon;
   propagatedBuildInputs = [ zlib ];
 
-  meta = {
-    inherit (s) version;
+  meta = with lib; {
     description = "VNC server library";
     homepage = "https://libvnc.github.io/";
-    license = lib.licenses.gpl2Plus ;
-    maintainers = [lib.maintainers.raskin];
-    platforms = lib.platforms.unix;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.unix;
   };
 }
