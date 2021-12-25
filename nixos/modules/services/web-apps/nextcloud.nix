@@ -302,8 +302,7 @@ in {
       adminpassFile = mkOption {
         type = types.str;
         description = ''
-          The full path to a file that contains the admin's password. Must be
-          readable by user <literal>nextcloud</literal>.
+          The full path to a file that contains the admin's password.
         '';
       };
 
@@ -392,8 +391,7 @@ in {
             type = types.str;
             example = "/var/nextcloud-objectstore-s3-secret";
             description = ''
-              The full path to a file that contains the access secret. Must be
-              readable by user <literal>nextcloud</literal>.
+              The full path to a file that contains the access secret.
             '';
           };
           hostname = mkOption {
@@ -606,6 +604,11 @@ in {
         # "The files of the app [all apps in /var/lib/nextcloud/apps] were not replaced correctly"
         # Restarting phpfpm on Nextcloud package update fixes these issues (but this is a workaround).
         phpfpm-nextcloud.restartTriggers = [ cfg.package ];
+        phpfpm-nextcloud.serviceConfig.LoadCredential = lib.flatten [
+          "adminpass:${cfg.config.adminpassFile}"
+          (lib.optional (cfg.config.dbpassFile != null) "dbpass:${cfg.config.dbpassFile}")
+          (lib.optional (cfg.config.objectstore.s3.enable) "s3:${cfg.objectstore.s3.secretFile}")
+        ];
 
         nextcloud-setup = let
           c = cfg.config;
@@ -618,7 +621,7 @@ in {
                 'bucket' => '${s3.bucket}',
                 'autocreate' => ${boolToString s3.autocreate},
                 'key' => '${s3.key}',
-                'secret' => nix_read_secret('${s3.secretFile}'),
+                'secret' => nix_read_secret('s3'),
                 ${optionalString (s3.hostname != null) "'hostname' => '${s3.hostname}',"}
                 ${optionalString (s3.port != null) "'port' => ${toString s3.port},"}
                 'use_ssl' => ${boolToString s3.useSsl},
@@ -640,16 +643,16 @@ in {
             <?php
             ${optionalString requiresReadSecretFunction ''
               function nix_read_secret($file) {
-                if (!file_exists($file)) {
+                $credential_file = $_ENV["CREDENTIALS_DIRECTORY"] . "/" . $file;
+                if (!file_exists($credential_file)) {
                   throw new \RuntimeException(sprintf(
                     "Cannot start Nextcloud, secret file %s set by NixOS doesn't seem to "
-                    . "exist! Please make sure that the file exists and has appropriate "
-                    . "permissions for user & group 'nextcloud'!",
-                    $file
+                    . "exist!",
+                    $credential_file
                   ));
                 }
 
-                return trim(file_get_contents($file));
+                return trim(file_get_contents($credential_file));
               }
             ''}
             $CONFIG = [
@@ -670,7 +673,7 @@ in {
               ${optionalString (c.dbport != null) "'dbport' => '${toString c.dbport}',"}
               ${optionalString (c.dbuser != null) "'dbuser' => '${c.dbuser}',"}
               ${optionalString (c.dbtableprefix != null) "'dbtableprefix' => '${toString c.dbtableprefix}',"}
-              ${optionalString (c.dbpassFile != null) "'dbpassword' => nix_read_secret('${c.dbpassFile}'),"}
+              ${optionalString (c.dbpassFile != null) "'dbpassword' => nix_read_secret('dbpass'),"}
               'dbtype' => '${c.dbtype}',
               'trusted_domains' => ${writePhpArrary ([ cfg.hostName ] ++ c.extraTrustedDomains)},
               'trusted_proxies' => ${writePhpArrary (c.trustedProxies)},
@@ -683,12 +686,12 @@ in {
             dbpass = {
               arg = "DBPASS";
               value = if c.dbpassFile != null
-                then ''"$(<"${toString c.dbpassFile}")"''
+                then ''"$(<"$CREDENTIALS_DIRECTORY/dbpass")"''
                 else ''""'';
             };
             adminpass = {
               arg = "ADMINPASS";
-              value = ''"$(<"${toString c.adminpassFile}")"'';
+              value = ''"$(<"$CREDENTIALS_DIRECTORY/adminpass")"'';
             };
             installFlags = concatStringsSep " \\\n    "
               (mapAttrsToList (k: v: "${k} ${toString v}") {
@@ -723,20 +726,12 @@ in {
           path = [ occ ];
           script = ''
             ${optionalString (c.dbpassFile != null) ''
-              if [ ! -r "${c.dbpassFile}" ]; then
-                echo "dbpassFile ${c.dbpassFile} is not readable by nextcloud:nextcloud! Aborting..."
-                exit 1
-              fi
-              if [ -z "$(<${c.dbpassFile})" ]; then
+              if [ -z "$(<$CREDENTIALS_DIRECTORY/dbpass)" ]; then
                 echo "dbpassFile ${c.dbpassFile} is empty!"
                 exit 1
               fi
             ''}
-            if [ ! -r "${c.adminpassFile}" ]; then
-              echo "adminpassFile ${c.adminpassFile} is not readable by nextcloud:nextcloud! Aborting..."
-              exit 1
-            fi
-            if [ -z "$(<${c.adminpassFile})" ]; then
+            if [ -z "$(<$CREDENTIALS_DIRECTORY/adminpass)" ]; then
               echo "adminpassFile ${c.adminpassFile} is empty!"
               exit 1
             fi
@@ -779,6 +774,11 @@ in {
           '';
           serviceConfig.Type = "oneshot";
           serviceConfig.User = "nextcloud";
+          serviceConfig.LoadCredential = lib.flatten [
+            "adminpass:${cfg.config.adminpassFile}"
+            (lib.optional (cfg.config.dbpassFile != null) "dbpass:${cfg.config.dbpassFile}")
+            (lib.optional (cfg.config.objectstore.s3.enable) "s3:${cfg.config.objectstore.s3.secretFile}")
+          ];
         };
         nextcloud-cron = {
           environment.NEXTCLOUD_CONFIG_DIR = "${datadir}/config";
