@@ -64,7 +64,16 @@ let
 
       preConfigure = "./bootstrap";
 
-      postFixup = "wrapPythonPrograms";
+      dontWrapGApps = true;
+
+      preFixup = ''
+        makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+      '';
+
+      postFixup = ''
+        wrapPythonPrograms
+        wrapGApp $out/bin/${pname}
+      '';
 
       # the geoclue agent may inspect these paths and expect them to be
       # valid without having the correct $PATH set
