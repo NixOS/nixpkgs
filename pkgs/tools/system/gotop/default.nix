@@ -28,5 +28,6 @@ buildGoModule rec {
     changelog = "https://github.com/xxxserxxx/gotop/raw/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = [ maintainers.magnetophon ];
+    broken = stdenv.isDarwin; # needs to update gopsutil to at least v3.21.3 to include https://github.com/shirou/gopsutil/pull/1042
   };
 }

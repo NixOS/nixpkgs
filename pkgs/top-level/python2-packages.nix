@@ -437,8 +437,6 @@ with self; with super; {
 
   pydns = callPackage ../development/python-modules/pydns { };
 
-  pydocstyle = callPackage ../development/python-modules/pydocstyle/2.nix { };
-
   pyechonest = callPackage ../development/python-modules/pyechonest { };
 
   pyexcelerator = callPackage ../development/python-modules/pyexcelerator { };
@@ -460,6 +458,8 @@ with self; with super; {
   };
 
   pyhamcrest = callPackage ../development/python-modules/pyhamcrest/1.nix { };
+
+  pyjwt = callPackage ../development/python-modules/pyjwt/1.nix { };
 
   pykickstart = callPackage ../development/python-modules/pykickstart { };
 

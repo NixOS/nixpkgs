@@ -6078,11 +6078,11 @@ let
 
   DBDSQLite = buildPerlPackage {
     pname = "DBD-SQLite";
-    version = "1.66";
+    version = "1.70";
 
     src = fetchurl {
-      url = "mirror://cpan/authors/id/I/IS/ISHIGAKI/DBD-SQLite-1.66.tar.gz";
-      sha256 = "1zljln5nh61gj3k22a1fv2vhx5l83waizmarwkh77hk6kzzmvrw9";
+      url = "mirror://cpan/authors/id/I/IS/ISHIGAKI/DBD-SQLite-1.70.tar.gz";
+      sha256 = "0gpyv89p3yfwifbm005bz5ci8c63jikkfvafg8x7f3lyaggqvza0";
     };
 
     propagatedBuildInputs = [ DBI ];
@@ -6091,6 +6091,13 @@ let
     patches = [
       # Support building against our own sqlite.
       ../development/perl-modules/DBD-SQLite/external-sqlite.patch
+
+      # Pull upstream fix for test failures against sqlite-3.37.
+      (fetchpatch {
+        name = "sqlite-3.37-compat.patch";
+        url = "https://github.com/DBD-SQLite/DBD-SQLite/commit/ba4f472e7372dbf453444c7764d1c342e7af12b8.patch";
+        sha256 = "02lg1y6px7h89pfvgrf23anhbl3v050gn0kmaajvv5h6layhjzly";
+      })
     ];
 
     makeMakerFlags = "SQLITE_INC=${pkgs.sqlite.dev}/include SQLITE_LIB=${pkgs.sqlite.out}/lib";

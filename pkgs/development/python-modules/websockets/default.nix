@@ -1,21 +1,23 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , python
 , pythonOlder
-, stdenv
 }:
 
 buildPythonPackage rec {
   pname = "websockets";
-  version = "10.0";
+  version = "10.1";
+  format = "setuptools";
+
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "aaugustin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-F10C8ukjYfbn2X2PMzrdSDqvs51/A9lx8Y3kv8YJ8Cw=";
+    sha256 = "sha256-FFaoqxa+TmKJ+P6T7HrwodjbVCir+2qJSfZsoj6deJU=";
   };
 
   # Tests fail on Darwin with `OSError: AF_UNIX path too long`
@@ -34,7 +36,9 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  pythonImportsCheck = [ "websockets" ];
+  pythonImportsCheck = [
+    "websockets"
+  ];
 
   meta = with lib; {
     description = "WebSocket implementation in Python";

@@ -13,11 +13,16 @@
 , grpc
 , abseil-cpp
 , libnsl
+
+# tests
+, python3
 }:
 
 stdenv.mkDerivation rec {
   pname = "grpc";
-  version = "1.43.0"; # N.B: if you change this, change pythonPackages.grpcio-tools to a matching version too
+  version = "1.43.0"; # N.B: if you change this, please update:
+    # pythonPackages.grpcio-tools
+    # pythonPackages.grpcio-status
 
   src = fetchFromGitHub {
     owner = "grpc";
@@ -85,6 +90,10 @@ stdenv.mkDerivation rec {
     + lib.optionalString stdenv.isAarch64 "-Wno-error=format-security";
 
   enableParallelBuilds = true;
+
+  passthru.tests = {
+    inherit (python3.pkgs) grpcio-status grpcio-tools;
+  };
 
   meta = with lib; {
     description = "The C based gRPC (C++, Python, Ruby, Objective-C, PHP, C#)";

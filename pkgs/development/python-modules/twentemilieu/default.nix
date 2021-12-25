@@ -2,10 +2,10 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
-, poetry-core
 , aiohttp
 , yarl
 , aresponses
+, poetry-core
 , pytest-asyncio
 , pytestCheckHook
 }:

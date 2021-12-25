@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "simple_di";
-  version = "0.1.2";
+  version = "0.1.4";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0wqbfbajnwmkzih0jl3mncalr7dslvmwhb5mk11asqvmbp1xhn30";
+    sha256 = "2667f2b9095e86c7726b3853c30b37f527f7d247282c7dd0b3428a7fb5d1a8a9";
   };
 
   propagatedBuildInputs = [

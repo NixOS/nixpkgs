@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "docstring-to-markdown";
-  version = "0.9";
+  version = "0.10";
 
   src = fetchFromGitHub {
     owner = "python-lsp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-XVTlSqqWmvnB5nvjvgGDJmg71KKTq2hHB4//QW7ugvA=";
+    sha256 = "0rflkbms94wkcypjcnz30bc4w4iww91h7sqq3j2b6ypzl4g48csa";
   };
 
   patches = [

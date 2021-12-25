@@ -179,8 +179,7 @@ let
               # Lightweight distribution and test
               inherit (bootstrap) dist test;
               # Test a full stdenv bootstrap from the bootstrap tools definition
-              # TODO re-enable with https://github.com/NixOS/nixpkgs/pull/126411
-              # inherit (bootstrap.test-pkgs) stdenv;
+              inherit (bootstrap.test-pkgs) stdenv;
             };
 
           # Cross compiled bootstrap tools
