@@ -27097,6 +27097,8 @@ with pkgs;
 
   mozjpeg = callPackage ../applications/graphics/mozjpeg { };
 
+  edgetx = libsForQt5.callPackage ../applications/misc/edgetx { };
+
   easytag = callPackage ../applications/audio/easytag { };
 
   mp3gain = callPackage ../applications/audio/mp3gain { };
