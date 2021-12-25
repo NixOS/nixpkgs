@@ -84,6 +84,26 @@ in
           See <link xlink:href="https://github.com/rfjakob/earlyoom#notifications">README</link> for details.
         '';
       };
+
+      avoid = mkOption {
+        type = with types; nullOr str;
+        default = null;
+        description = ''
+          Regex of processes to avoid killing.
+
+          See <link xlink:href="https://github.com/rfjakob/earlyoom#preferred-processes">README</link> for details.
+        '';
+      };
+
+      prefer = mkOption {
+        type = with types; nullOr str;
+        default = null;
+        description = ''
+          Regex of processes to prefer killing.
+
+          See <link xlink:href="https://github.com/rfjakob/earlyoom#preferred-processes">README</link> for details.
+        '';
+      };
     };
   };
 
@@ -120,7 +140,11 @@ in
           ${optionalString ecfg.useKernelOOMKiller "-k"} \
           ${optionalString ecfg.ignoreOOMScoreAdjust "-i"} \
           ${optionalString ecfg.enableDebugInfo "-d"} \
-          ${optionalString ecfg.enableNotifications "-n"}
+          ${optionalString ecfg.enableNotifications "-n"} \
+          ${optionalString (ecfg.avoid != null)
+            "--avoid ${escapeShellArg ecfg.avoid}"} \
+          ${optionalString (ecfg.prefer != null)
+            "--prefer ${escapeShellArg ecfg.prefer}"}
         '';
       };
     };
