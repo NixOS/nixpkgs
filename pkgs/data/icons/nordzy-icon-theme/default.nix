@@ -1,4 +1,4 @@
-{ stdenv
+{ stdenvNoCC
 , fetchFromGitHub
 , lib
 , bash
@@ -10,7 +10,7 @@
 let
   themes-arg-string = lib.strings.concatMapStrings (theme: "-t ${theme} ") nordzy-themes;
 in
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "nordzy-icon-theme";
   version = "unstable-2021-12-14";
 
@@ -21,10 +21,12 @@ stdenv.mkDerivation rec {
     sha256 = "Jqn5CF80xlYJ7H4qI1VEj91vcKPPoMXP5+sPs0ksiC4=";
   };
 
-  nativeBuildInputs = [ gtk3 ];
-
+  # In the post patch phase we should fir st make sure to patch shebangs.
+  # We can also remove the gtk-update-icon-cache since the cache will later be built by the system.
   postPatch = ''
     patchShebangs install.sh
+    substituteInPlace install.sh \
+      --replace "gtk-update-icon-cache" "#"
   '';
 
   installPhase = ''
@@ -33,7 +35,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/icons
     ./install.sh --dest $out/share/icons \
       -n ${nordzy-theme-name} \
-      -t ${themes-arg-string}
+      ${themes-arg-string}
 
     runHook postInstall
   '';
