@@ -23,7 +23,7 @@ const exec = async (...args) => {
 const urlToName = url => {
   const isCodeloadGitTarballUrl = url.startsWith('https://codeload.github.com/') && url.includes('/tar.gz/')
 
-  if (url.startsWith('git+') || isCodeloadGitTarballUrl) {
+  if (url.startsWith('git+') /*|| yarnExotics[new URL(url).pathname]*/ || isCodeloadGitTarballUrl) {
     return path.basename(url)
   } else {
     return url
@@ -36,13 +36,13 @@ const downloadFileHttps = (fileName, url, expectedHash) => {
 	return new Promise((resolve, reject) => {
 		https.get(url, (res) => {
 			const file = fs.createWriteStream(fileName)
-			const hash = crypto.createHash('sha1')
+			const hash = crypto.createHash(expectedHash.type)
 			res.pipe(file)
 			res.pipe(hash).setEncoding('hex')
 			res.on('end', () => {
 				file.close()
 				const h = hash.read()
-				if (h != expectedHash) return reject(new Error(`hash mismatch, expected ${expectedHash}, got ${h}`))
+				if (h != expectedHash.string) return reject(new Error(`[${url}]: hash mismatch, expected ${expectedHash.string}, got ${h}`))
 				resolve()
 			})
                         res.on('error', e => reject(e))
@@ -72,20 +72,57 @@ const downloadGit = async (fileName, url, rev) => {
 	await exec('rm', [ '-rf', fileName + '.tmp', ])
 }
 
+
+// yarn automatically detects https urls pointing to git repos and converts them into their respective git url
+// this reproduces this behaviour
+// yarn's code: https://github.com/yarnpkg/yarn/tree/master/src/resolvers/exotics
+const genericGit = ({ url, fileName, rev }) => {
+	return downloadGit(fileName, url, rev)		
+}
+
+// TODO: maybe turn this into an impl that can be reused by both fixup_yarn_lock and fetch-yarn-deps by adding a .getFilename() method and making it importable from both
+const yarnExotics = {
+	'codeload.github.com': ({ url, fileName, hash }) => {
+		// https://codeload.github.com/hirak/prestissimo/zip/refs/heads/master
+		const [user, repo, type, , , rev] = exploded.pathExploded
+		return downloadGit(fileName, `https://github.com/${user}/${repo}.git`, rev)
+	},
+	'github.com': genericGit,
+	'bitbucket.org': genericGit,
+	'gist.github.com': (args) => {
+		return genericGit({ ...args, url: `https://gist.github.com/${args.exploded.pathExploded[0]}` })
+	},
+	'gitlab.com': genericGit,
+}
+
 const downloadPkg = (pkg, verbose) => {
-	const [ url, hash ] = pkg.resolved.split('#')
+	const [ url, rev ] = pkg.resolved.split('#') // rev might be null
+	const integrity = pkg.integrity
+
+	let hash
+	if (integrity) { // this is the stronger hash so we should use that, rev is just sha1
+	  let [ type, hash64 ] = integrity.split('-')
+	  hash = { type, string: Buffer.from(hash64, 'base64').toString('hex') }
+	} else {
+	  hash = { type: 'sha1', string: rev }
+	}
+
+	const exploded = new URL(url)
+	exploded.pathExploded = exploded.pathname.split('/').slice(1)
+
 	if (verbose) console.log('downloading ' + url)
+
 	const fileName = urlToName(url)
-	if (url.startsWith('https://codeload.github.com/') && url.includes('/tar.gz/')) {
-		const s = url.split('/')
-		downloadGit(fileName, `https://github.com/${s[3]}/${s[4]}.git`, s[6])
-	} else if (url.startsWith('https://')) {
+
+	/*if (yarnExotics[exploded.hostname]) {
+		return yarnExotics[exploded.hostname]({ url, fileName, hash, exploded, rev })
+	} else*/ if (url.startsWith('https://')) {
 		return downloadFileHttps(fileName, url, hash)
-	} else if (url.startsWith('git:')) {
-		return downloadGit(fileName, url.replace(/^git\+/, ''), hash)
-	} else if (url.startsWith('git+')) {
-		return downloadGit(fileName, url.replace(/^git\+/, ''), hash)
-	} else if (url.startsWith('file:')) {
+	} else if (exploded.protocol === 'git:') {
+		return downloadGit(fileName, url.replace(/^git\+/, ''), rev)
+	} else if (exploded.protocol.startsWith('git+')) {
+		return downloadGit(fileName, url.replace(/^git\+/, ''), rev)
+	} else if (exploded.protocol === 'file:') {
 		console.warn(`ignoring unsupported file:path url "${url}"`)
 	} else {
 		throw new Error('don\'t know how to download "' + url + '"')
