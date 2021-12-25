@@ -639,6 +639,18 @@ final: prev:
     meta.homepage = "https://github.com/hrsh7th/cmp-emoji/";
   };
 
+  cmp-git = buildVimPluginFrom2Nix {
+    pname = "cmp-git";
+    version = "2021-11-29";
+    src = fetchFromGitHub {
+      owner = "petertriho";
+      repo = "cmp-git";
+      rev = "2d78e6e66130af1a19f8fd15e9d123ed000d633c";
+      sha256 = "0v1h16r2ll6bv20j94padbmxgr8jjr86ll07z1lzy5lk8dndpakx";
+    };
+    meta.homepage = "https://github.com/petertriho/cmp-git/";
+  };
+
   cmp-latex-symbols = buildVimPluginFrom2Nix {
     pname = "cmp-latex-symbols";
     version = "2021-09-10";

@@ -597,6 +597,7 @@ peitalin/vim-jsx-typescript
 peterbjorgensen/sved
 peterhoeg/vim-qml
 PeterRincker/vim-argumentative
+petertriho/cmp-git
 petRUShka/vim-opencl
 phaazon/hop.nvim
 phanviet/vim-monokai-pro
