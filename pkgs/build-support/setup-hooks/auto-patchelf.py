@@ -77,9 +77,11 @@ def get_osabi(elf):
     return elf.header["e_ident"]["EI_OSABI"]
 
 
-# Tests whether two OS ABIs are compatible, taking into account the
-# generally accepted compatibility of SVR4 ABI with other ABIs.
 def osabi_are_compatible(wanted, got):
+    """
+    Tests whether two OS ABIs are compatible, taking into account the
+    generally accepted compatibility of SVR4 ABI with other ABIs.
+    """
     if not wanted or not got:
         # One of the types couldn't be detected, so as a fallback we'll
         # assume they're compatible.
@@ -258,13 +260,13 @@ def autoPatchelf(
         if not path.is_symlink() and path.is_file():
             dependencies += autoPatchelfFile(path, runtime_deps)
 
+    missing = [dep for dep in dependencies if not dep.found]
+    
     # Print a summary of the missing dependencies at the end
-    for dep in dependencies:
-        if not dep.found:
-            print(f"auto-patchelf could not satisfy dependency {dep.name} wanted by {dep.file}")
+    for dep in missing:
+        print(f"auto-patchelf could not satisfy dependency {dep.name} wanted by {dep.file}")
 
-    any_missing = any(not dep.found for dep in dependencies)
-    if any_missing and not ignoreMissing:
+    if missing and not ignore_missing:
         sys.exit('auto-patchelf failed to find all the required dependencies.\n'
                  'Add the missing dependencies to --libs or use --ignore-missing.')
 
