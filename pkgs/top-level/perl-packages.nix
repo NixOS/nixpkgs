@@ -18997,6 +18997,29 @@ let
     };
   };
 
+  RegexpCommontime = buildPerlPackage {
+    pname = "Regexp-Common-time";
+    version = "0.16";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MA/MANWAR/Regexp-Common-time-0.16.tar.gz";
+      sha256 = "1jjay5gybbls3xn5ihc6q5ig3kf4i28nq4gvg2zp4p5m1ajhg08w";
+    };
+    propagatedBuildInputs = [ RegexpCommon ];
+    meta = {
+      homepage = "https://github.com/manwar/Regexp-Common-time";
+      description = "Date and time regexps.";
+      maintainers = [ maintainers.artturin ];
+      # This module is copyrighted only to ensure proper attribution of
+      # authorship and to ensure that it remains available to all.  This
+      # module is free, open-source software.  This module may be freely used
+      # for any purpose, commercial, public, or private, provided that proper
+      # credit is given, and that no more-restrictive license is applied to
+      # derivative (not dependent) works.
+      # https://metacpan.org/release/MANWAR/Regexp-Common-time-0.13/view/lib/Regexp/Common/time.pm#LICENSE-AND-COPYRIGHT
+      license = lib.licenses.free;
+    };
+  };
+
   RegexpGrammars = buildPerlModule {
     pname = "Regexp-Grammars";
     version = "1.057";
