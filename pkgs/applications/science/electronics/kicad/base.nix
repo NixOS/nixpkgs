@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
   ++ optionals (!withScripting) [
     "-DKICAD_SCRIPTING_WXPYTHON=OFF"
   ]
-  ++ optional (withNgspice) "-DKICAD_SPICE=ON"
+  ++ optional (!withNgspice) "-DKICAD_SPICE=OFF"
   ++ optional (!withOCC) "-DKICAD_USE_OCC=OFF"
   ++ optionals (withOCC) [
     "-DKICAD_USE_OCC=ON"
