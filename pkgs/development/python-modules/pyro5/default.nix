@@ -1,6 +1,7 @@
 { buildPythonPackage
 , fetchPypi
 , lib
+, stdenv
 , serpent
 , pythonOlder
 , pytestCheckHook
@@ -22,7 +23,10 @@ buildPythonPackage rec {
   checkInputs = [ pytestCheckHook ];
 
   # ignore network related tests, which fail in sandbox
-  disabledTests = [ "StartNSfunc" "Broadcast" "GetIP" "TestNameServer" "TestBCSetup" ];
+  disabledTests = [ "StartNSfunc" "Broadcast" "GetIP" "TestNameServer" "TestBCSetup" ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "Socket"
+  ];
 
   meta = with lib; {
     description = "Distributed object middleware for Python (RPC)";
