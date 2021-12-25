@@ -1819,6 +1819,8 @@ with pkgs;
 
   gucci = callPackage ../tools/text/gucci { };
 
+  guglielmo = libsForQt5.callPackage ../applications/radio/guglielmo { };
+
   grc = python3Packages.callPackage ../tools/misc/grc { };
 
   green-pdfviewer = callPackage ../applications/misc/green-pdfviewer {
@@ -11611,6 +11613,8 @@ with pkgs;
     inherit (darwin) cctools;
   };
 
+  chez-racket = callPackage ../development/compilers/chez-racket {};
+
   chez-srfi = callPackage ../development/chez-modules/chez-srfi { };
 
   chez-mit = callPackage ../development/chez-modules/chez-mit { };
@@ -13077,7 +13081,8 @@ with pkgs;
   sbcl_2_1_2 = callPackage ../development/compilers/sbcl/2.1.2.nix {};
   sbcl_2_1_9 = callPackage ../development/compilers/sbcl/2.1.9.nix {};
   sbcl_2_1_10 = callPackage ../development/compilers/sbcl/2.1.10.nix {};
-  sbcl = sbcl_2_1_9;
+  sbcl_2_1_11 = callPackage ../development/compilers/sbcl/2.1.11.nix {};
+  sbcl = sbcl_2_1_11;
 
   roswell = callPackage ../development/tools/roswell { };
 
@@ -21175,6 +21180,7 @@ with pkgs;
 
   nginxMainline = callPackage ../servers/http/nginx/mainline.nix {
     zlib = zlib-ng.override { withZlibCompat = true; };
+    withKTLS = true;
     withPerl = false;
     # We don't use `with` statement here on purpose!
     # See https://github.com/NixOS/nixpkgs/pull/10474#discussion_r42369334
@@ -24286,7 +24292,7 @@ with pkgs;
 
   milkytracker = callPackage ../applications/audio/milkytracker { };
 
-  ptcollab = libsForQt5.callPackage ../applications/audio/ptcollab { };
+  ptcollab = libsForQt515.callPackage ../applications/audio/ptcollab { };
 
   schismtracker = callPackage ../applications/audio/schismtracker { };
 
