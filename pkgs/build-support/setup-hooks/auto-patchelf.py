@@ -261,7 +261,7 @@ def autoPatchelf(
             dependencies += autoPatchelfFile(path, runtime_deps)
 
     missing = [dep for dep in dependencies if not dep.found]
-    
+
     # Print a summary of the missing dependencies at the end
     for dep in missing:
         print(f"auto-patchelf could not satisfy dependency {dep.name} wanted by {dep.file}")
@@ -269,11 +269,6 @@ def autoPatchelf(
     if missing and not ignore_missing:
         sys.exit('auto-patchelf failed to find all the required dependencies.\n'
                  'Add the missing dependencies to --libs or use --ignore-missing.')
-
-    some_found = any(dep.found for dep in dependencies)
-    if not some_found:
-        print('auto-patchelf failed to find any file to patch.\n'
-              'It may have been misconfigured, or you may not need it.')
 
 
 def main():
