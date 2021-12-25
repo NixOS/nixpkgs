@@ -282,7 +282,6 @@ def main():
                     'libraries in the provided paths.')
     parser.add_argument(
         "--ignore-missing",
-        dest="ignoreMissing",
         action="store_true",
         help="Do not fail when some dependencies are not found.")
     parser.add_argument(
@@ -309,7 +308,7 @@ def main():
         args.libs,
         args.runtime_dependencies,
         args.recursive,
-        args.ignoreMissing)
+        args.ignore_missing)
 
 
 interpreter_path = None
