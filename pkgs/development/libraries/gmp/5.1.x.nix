@@ -22,7 +22,11 @@ let self = stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ m4 ];
 
-  patches = if stdenv.isDarwin then [ ./need-size-t.patch ] else null;
+  patches = [
+    ./5.1.3-CVE-2021-43618.patch
+  ] ++ lib.optionals stdenv.isDarwin [
+    ./need-size-t.patch
+  ];
 
   configureFlags = [
     "--with-pic"
