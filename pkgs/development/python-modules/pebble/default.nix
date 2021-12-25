@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, isPy27, fetchPypi, pytestCheckHook }:
+{ lib, stdenv, buildPythonPackage, isPy27, fetchPypi, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "pebble";
@@ -10,6 +10,8 @@ buildPythonPackage rec {
     inherit version;
     sha256 = "0a595f7mrf89xlck9b2x83bqybc9zd9jxkl0sa5cf19vax18rg8h";
   };
+
+  doCheck = !stdenv.isDarwin;
 
   checkInputs = [
     pytestCheckHook
