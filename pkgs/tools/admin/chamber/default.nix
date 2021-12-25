@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "chamber";
-  version = "2.10.6";
+  version = "2.10.7";
 
   src = fetchFromGitHub {
     owner = "segmentio";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-8VnFpzm5St0AYFzups2ILQ/MrQRZLQ1xY9JjlGVBmZk=";
+    sha256 = "sha256-HpxHGbgPdu92ha0QO15x1rrJikDmpSA8E8YdgjzQ/Mw=";
   };
 
   CGO_ENABLED = 0;
