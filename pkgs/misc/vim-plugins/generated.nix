@@ -10340,6 +10340,18 @@ final: prev:
     meta.homepage = "https://github.com/machakann/vim-swap/";
   };
 
+  vim-syntax-vidir-ls = buildVimPluginFrom2Nix {
+    pname = "vim-syntax-vidir-ls";
+    version = "2019-04-02";
+    src = fetchFromGitHub {
+      owner = "trapd00r";
+      repo = "vim-syntax-vidir-ls";
+      rev = "2b64ff03eb1a523fe0528e69804c5d19d8a809d7";
+      sha256 = "14k1ka3x4sl86hb31b5ylhq41a2pd2szh09bldh1sqdnqqvlx3ii";
+    };
+    meta.homepage = "https://github.com/trapd00r/vim-syntax-vidir-ls/";
+  };
+
   vim-SyntaxRange = buildVimPluginFrom2Nix {
     pname = "vim-SyntaxRange";
     version = "2021-01-16";

@@ -826,6 +826,7 @@ tpope/vim-surround
 tpope/vim-tbone
 tpope/vim-unimpaired
 tpope/vim-vinegar
+trapd00r/vim-syntax-vidir-ls
 travitch/hasksyn
 tremor-rs/tremor-vim
 triglav/vim-visual-increment
