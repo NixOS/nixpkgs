@@ -378,7 +378,8 @@ rec {
        zipAttrsWith (name: values: values) [{a = "x";} {a = "y"; b = "z";}]
        => { a = ["x" "y"]; b = ["z"] }
   */
-  zipAttrsWith = f: sets: zipAttrsWithNames (concatMap attrNames sets) f sets;
+  zipAttrsWith =
+    builtins.zipAttrsWith or (f: sets: zipAttrsWithNames (concatMap attrNames sets) f sets);
   /* Like `zipAttrsWith' with `(name: values: values)' as the function.
 
     Example:
