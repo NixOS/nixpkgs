@@ -3,6 +3,7 @@
 , lib
 , bash
 , gtk3
+, nordzy-theme-name ? "Nordzy"
 , nordzy-themes ? [ "all" ] # Override this to only install selected themes
 }:
 
@@ -23,8 +24,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ gtk3 ];
 
   postPatch = ''
-    substituteInPlace install.sh \
-      --replace /bin/bash ${bash}/bin/bash
+    patchShebangs install.sh
   '';
 
   installPhase = ''
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/share/icons
     ./install.sh --dest $out/share/icons \
-      -n Nordzy \
+      -n ${nordzy-theme-name} \
       -t ${themes-arg-string}
 
     runHook postInstall
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     description = "A free and open source icon theme using the Nord color palette and based on WhiteSur and Numix Icon Theme";
     homepage = "https://github.com/alvatip/Nordzy-icon";
     license = licenses.gpl3;
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.all;
     maintainers = with maintainers; [
       alexnortung
     ];
