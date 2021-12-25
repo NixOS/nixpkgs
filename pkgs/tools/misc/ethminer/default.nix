@@ -20,14 +20,14 @@
 
 stdenv.mkDerivation rec {
   pname = "ethminer";
-  version = "0.19.0";
+  version = "0.20.0";
 
   src =
     fetchFromGitHub {
       owner = "ethereum-mining";
       repo = "ethminer";
-      rev = "v${version}";
-      sha256 = "1kyff3vx2r4hjpqah9qk99z6dwz7nsnbnhhl6a76mdhjmgp1q646";
+      rev = "e55fbdc2f985b852de61c1b541eb1570ad69dbf0"; # https://github.com/ethereum-mining/ethminer/pull/2377; FIXME change once upstream releases
+      sha256 = "sha256-ugKMuoBqEztCrOltNK+VXTKZjgwjyHr6pLn+xenhCDA=";
       fetchSubmodules = true;
     };
 
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
   ];
 
   preConfigure = ''
-    sed -i 's/_lib_static//' libpoolprotocols/CMakeLists.txt
+    substituteInPlace libpoolprotocols/CMakeLists.txt --replace _static ""
   '';
 
   postInstall = ''
