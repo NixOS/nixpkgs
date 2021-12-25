@@ -70,6 +70,7 @@ stdenv.mkDerivation rec {
     freetype
     gdk-pixbuf
     gnome2.gtkglext
+    glib-networking
     webkitgtk
     gtk2
     gtk2-x11
