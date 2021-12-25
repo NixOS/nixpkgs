@@ -51,7 +51,7 @@ let
   released = with compilerNames; [
     ghc884
     ghc8107
-    ghc901
+    ghc902
     ghc921
   ];
 
@@ -313,7 +313,7 @@ let
       haskell-language-server = [
         compilerNames.ghc884
         compilerNames.ghc8107
-        compilerNames.ghc901
+        compilerNames.ghc902
       ];
       hoogle = released;
       hlint = released;
@@ -325,7 +325,7 @@ let
       ghc-api-compat = [
         compilerNames.ghc884
         compilerNames.ghc8107
-        compilerNames.ghc901
+        compilerNames.ghc902
       ];
     })
     {
@@ -393,11 +393,11 @@ let
           jobs.pkgsMusl.haskell.compiler.ghc8107Binary
           jobs.pkgsMusl.haskell.compiler.ghc884
           jobs.pkgsMusl.haskell.compiler.ghc8107
-          jobs.pkgsMusl.haskell.compiler.ghc901
+          jobs.pkgsMusl.haskell.compiler.ghc902
           jobs.pkgsMusl.haskell.compiler.ghc921
           jobs.pkgsMusl.haskell.compiler.ghcHEAD
           jobs.pkgsMusl.haskell.compiler.integer-simple.ghc8107
-          jobs.pkgsMusl.haskell.compiler.integer-simple.ghc901
+          jobs.pkgsMusl.haskell.compiler.integer-simple.ghc902
           jobs.pkgsMusl.haskell.compiler.integer-simple.ghc921
           jobs.pkgsMusl.haskell.compiler.native-bignum.ghcHEAD
         ];
