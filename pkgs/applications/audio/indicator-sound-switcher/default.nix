@@ -23,6 +23,12 @@ python3Packages.buildPythonApplication rec {
     sha256 = "APU8Y0xUhRd9RbMSG9TD0TBvFLu/VlLGauf56z8gZDw=";
   };
 
+  postPatch = ''
+    ls -lah lib
+    substituteInPlace lib/indicator_sound_switcher/lib_pulseaudio.py \
+      --replace "CDLL('libpulse.so.0')" "CDLL('${libpulseaudio}/lib/libpulse.so')"
+  '';
+
   nativeBuildInputs = [
     gettext
     intltool
@@ -44,10 +50,6 @@ python3Packages.buildPythonApplication rec {
     libayatana-appindicator-gtk3
     libpulseaudio
     keybinder3
-  ];
-
-  makeWrapperArgs = [
-    "--prefix LD_LIBRARY_PATH : ${libpulseaudio}/lib"
   ];
 
   meta = with lib; {
