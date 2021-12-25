@@ -129,6 +129,8 @@ buildStdenv.mkDerivation ({
   inherit src unpackPhase meta;
 
   patches = [
+    # Upstream bug: https://bugzilla.mozilla.org/show_bug.cgi?id=1745560:
+    ./fix-build-with-wayland-1.20.patch
   ] ++
   lib.optional (lib.versionAtLeast version "86") ./env_var_for_system_dir-ff86.patch ++
   lib.optional (lib.versionAtLeast version "90" && lib.versionOlder version "95") ./no-buildconfig-ffx90.patch ++

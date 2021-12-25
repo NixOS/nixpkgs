@@ -21,6 +21,7 @@ buildPythonPackage rec {
 
     substituteInPlace setup.py \
       --replace "click==7.1.2" "click" \
+      --replace "terminaltables==3.1.0" "terminaltables~=3.1" \
       --replace "pyscard==2.0.0" "pyscard"
   '';
 

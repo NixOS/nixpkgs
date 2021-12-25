@@ -28,7 +28,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'websockets = "^9.0"' 'websockets = "^10.0"'
+      --replace 'websockets = "^9.0"' 'websockets = "^10.0"' \
+      --replace 'PyYAML = "^5.4.0"' 'PyYAML = "*"' \
   '';
 
   nativeBuildInputs = [ poetry-core ];

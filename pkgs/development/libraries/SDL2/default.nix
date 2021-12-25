@@ -35,7 +35,11 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
   outputBin = "dev"; # sdl-config
 
-  patches = [ ./find-headers.patch ];
+  patches = [
+    ./find-headers.patch
+    # To fix the build with wayland 1.20.0:
+    ./Fix-build-against-wayland-1.20.patch
+  ];
 
   # Fix with mesa 19.2: https://bugzilla.libsdl.org/show_bug.cgi?id=4797
   postPatch = ''

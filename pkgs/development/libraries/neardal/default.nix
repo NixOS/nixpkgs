@@ -1,7 +1,8 @@
 { lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, pkg-config, glib, readline, makeWrapper }:
 
 stdenv.mkDerivation {
-  name = "neardal-0.7-post-git-20150930";
+  pname = "neardal";
+  version = "unstable-0.7-post-git-2015-09-30";
 
   src = fetchFromGitHub {
     owner = "connectivity";

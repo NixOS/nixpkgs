@@ -1,7 +1,7 @@
-From 717226ad0dc37ceb6c667c1f56396848978b6e83 Mon Sep 17 00:00:00 2001
+From b5966b6abb9696798618367cab33d1fed317734f Mon Sep 17 00:00:00 2001
 From: Nikolay Amiantov <ab@fmap.me>
 Date: Tue, 11 Oct 2016 13:12:08 +0300
-Subject: [PATCH 09/21] Change /usr/share/zoneinfo to /etc/zoneinfo
+Subject: [PATCH 09/19] Change /usr/share/zoneinfo to /etc/zoneinfo
 
 NixOS uses this path.
 ---
@@ -137,5 +137,5 @@ index 0a8fe25d0f..2f02b9a520 100644
                          return -ENOMEM;
  
 -- 
-2.33.0
+2.33.1
 

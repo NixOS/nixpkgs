@@ -1,13 +1,14 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, libcdio, pkg-config,
   libiconv, IOKit, DiskArbitration}:
 
-stdenv.mkDerivation {
-  name = "libcdio-paranoia-0.94+2";
+stdenv.mkDerivation rec {
+  pname = "libcdio-paranoia";
+  version = "0.94+2";
 
   src = fetchFromGitHub {
     owner = "rocky";
     repo = "libcdio-paranoia";
-    rev = "release-10.2+0.94+2";
+    rev = "release-10.2+${version}";
     sha256 = "1wjgmmaca4baw7k5c3vdap9hnjc49ciagi5kvpvync3aqfmdvkha";
   };
 

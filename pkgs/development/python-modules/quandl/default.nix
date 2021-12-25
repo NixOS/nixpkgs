@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "quandl";
-  version = "3.6.1";
+  version = "3.7.0";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit version;
     pname = "Quandl";
-    sha256 = "0jr69fqxhzdmkfh3fxz0yp2kks2hkmixrscjjf59q2l7irglwhc4";
+    sha256 = "6e0b82fbc7861610b3577c5397277c4220e065eee0fed4e46cd6b6021655b64c";
   };
 
   checkInputs = [

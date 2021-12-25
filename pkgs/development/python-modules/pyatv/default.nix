@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "pyatv";
-  version = "0.9.6";
+  version = "0.9.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "postlund";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0navm7a0k1679kj7nbkbyl7s2q0wq0xmcnizmnvp0arkd5xqmqv1";
+    sha256 = "1ikv9m1348sjv31gch5w0sj97jlr4yjxbqfyds7alxxcm5hrhai4";
   };
 
   propagatedBuildInputs = [

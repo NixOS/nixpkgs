@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "metakernel";
-  version = "0.28.1";
+  version = "0.28.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3b57eb7b3b332614dcba1fa53c8cc1253dbccf962b111517ea16cbecce9a11d5";
+    sha256 = "8811a4497444495639ef000902f4c6e8a7e2c57da1d47a8a24bcc9083548b389";
   };
 
   propagatedBuildInputs = [ ipykernel ];

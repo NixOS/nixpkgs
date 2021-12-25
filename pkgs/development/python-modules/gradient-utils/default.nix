@@ -52,6 +52,11 @@ buildPythonPackage rec {
     "test_add_metrics_pushes_metrics" # requires a working prometheus push gateway
   ];
 
+  disabledTestPaths = [
+    # needs network access
+    "tests/integration/test_metrics.py"
+  ];
+
   pythonImportsCheck = [ "gradient_utils" ];
 
   meta = with lib; {

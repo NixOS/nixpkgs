@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , duckdb
+, mypy
 , numpy
 , pandas
 , pybind11
@@ -38,6 +39,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytestCheckHook
+    mypy
   ];
 
   pythonImportsCheck = [ "duckdb" ];

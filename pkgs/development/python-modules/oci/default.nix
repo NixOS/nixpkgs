@@ -11,19 +11,19 @@
 
 buildPythonPackage rec {
   pname = "oci";
-  version = "2.36.0";
+  version = "2.52.0";
 
   src = fetchFromGitHub {
     owner = "oracle";
     repo = "oci-python-sdk";
     rev = "v${version}";
-    hash = "sha256-scG/ZhWeiCgXp7iD6arWIN8KZecSjKLsCW4oXeJvx6M=";
+    hash = "sha256-4MlelzUPCJCZJQh8sNJHEL0WEcVWktV0TBEY0tdTHmk=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
       --replace "configparser==4.0.2" "configparser" \
-      --replace "cryptography==3.2.1" "cryptography" \
+      --replace "cryptography<=3.4.7,>=3.2.1" "cryptography" \
       --replace "pyOpenSSL>=17.5.0,<=19.1.0" "pyOpenSSL"
   '';
 

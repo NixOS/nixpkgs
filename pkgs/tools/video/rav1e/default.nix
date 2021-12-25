@@ -4,14 +4,14 @@ let
   rustTargetPlatformSpec = rust.toRustTargetSpec stdenv.hostPlatform;
 in rustPlatform.buildRustPackage rec {
   pname = "rav1e";
-  version = "0.4.1";
+  version = "0.5.0";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-9fBAH1vuLJ3yu8X5+CQGLQFDlzTYoFBUTy3Muo6hLkw=";
+    sha256 = "sha256-3g2wqQJk26KUfzmneKdTxfNSRI/ioMa5MR6AEeR7eKs=";
   };
 
-  cargoSha256 = "sha256-QhWVqHcNjJF94uTvHGVnV8MTp2bYOuCEjaMBfViOLRo=";
+  cargoSha256 = "sha256-sPUAWQj8UDHV7IvYnerASltSPPGVB7f1tThqFYBu6t4=";
 
   nativeBuildInputs = [ nasm cargo-c ];
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, intltool, glib, gnome, gtk3, gnupg22, gpgme, dbus-glib, libgnome-keyring }:
+{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, intltool, glib, gnome, gtk3, gnupg, gpgme, dbus-glib, libgnome-keyring }:
 
 stdenv.mkDerivation rec {
   pname = "libcryptui";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ pkg-config intltool autoreconfHook ];
-  buildInputs = [ glib gtk3 gnupg22 gpgme dbus-glib libgnome-keyring ];
+  buildInputs = [ glib gtk3 gnupg gpgme dbus-glib libgnome-keyring ];
   propagatedBuildInputs = [ dbus-glib ];
 
   enableParallelBuilding = true;

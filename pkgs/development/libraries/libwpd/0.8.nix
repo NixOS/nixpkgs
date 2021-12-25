@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, pkg-config, glib, libgsf, libxml2, bzip2 }:
 
 stdenv.mkDerivation rec {
-  name = "libwpd-0.8.14";
+  pname = "libwpd";
+  version = "0.8.14";
 
   src = fetchurl {
-    url = "mirror://sourceforge/libwpd/${name}.tar.gz";
+    url = "mirror://sourceforge/libwpd/libwpd-${version}.tar.gz";
     sha256 = "1syli6i5ma10cwzpa61a18pyjmianjwsf6pvmvzsh5md6yk4yx01";
   };
 

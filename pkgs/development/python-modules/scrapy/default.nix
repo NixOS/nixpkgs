@@ -111,6 +111,7 @@ buildPythonPackage rec {
     "test_custom_loop_asyncio"
     "test_custom_loop_asyncio_deferred_signal"
     "FileFeedStoragePreFeedOptionsTest"  # https://github.com/scrapy/scrapy/issues/5157
+    "test_timeout_download_from_spider_nodata_rcvd"
     # Fails with AssertionError
     "test_peek_fifo"
     "test_peek_one_element"

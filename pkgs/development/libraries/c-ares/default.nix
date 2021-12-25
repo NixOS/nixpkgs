@@ -8,11 +8,11 @@
 let self =
 stdenv.mkDerivation rec {
   pname = "c-ares";
-  version = "1.17.2";
+  version = "1.18.1";
 
   src = fetchurl {
     url = "https://c-ares.haxx.se/download/${pname}-${version}.tar.gz";
-    sha256 = "sha256-SAPIRM4gzlEO8OuD+OpB+iTsqunSgMRoxYLSuyWzkT0=";
+    sha256 = "sha256-Gn1SqKhKn7/7G+kTPA9uFyF9kepab6Yfa0cpzaeOu88=";
   };
 
   enableParallelBuilding = true;

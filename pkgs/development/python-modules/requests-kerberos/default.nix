@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "requests-kerberos";
-  version = "0.13.0";
+  version = "0.14.0";
 
   # tests are not present in the PyPI version
   src = fetchFromGitHub {
     owner = "requests";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0yvfg2cj3d10l8fd8kyal4hmpd7fd1c3bca13cj9ril5l573in76";
+    sha256 = "0s30pcnlir3j2jmf7yh065f294cf3x0x5i3ldskn8mm0a3657mv3";
   };
 
   # avoid needing to package krb5

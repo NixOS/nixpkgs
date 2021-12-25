@@ -31,6 +31,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
+      --replace "fountains~=1.1.1" "fountains~=1.2" \
       --replace "bitlist~=0.5.1" "bitlist>=0.5.1" \
       --replace "parts~=1.1.2" "parts>=1.1.2"
   '';

@@ -16,12 +16,12 @@
 
 buildPythonPackage rec {
   pname = "pot";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchPypi {
     pname = "POT";
     inherit version;
-    sha256 = "01mdsiv8rlgqzvm3bds9aj49khnn33i523c2cqqrl10zg742pb6l";
+    sha256 = "a70e092ddc5a29a4b526192750604a634dfc2faa1641664b4c2c1c00b3cd63cf";
   };
 
   postPatch = ''

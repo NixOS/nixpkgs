@@ -1,9 +1,11 @@
 {lib, stdenv, fetchurl, pkg-config, glib, pango}:
 
-stdenv.mkDerivation {
-  name = "pangoxsl-1.6.0.3";
+stdenv.mkDerivation rec {
+  pname = "pangoxsl";
+  version = "1.6.0.3";
+
   src = fetchurl {
-    url = "mirror://sourceforge/pangopdf/pangoxsl-1.6.0.3.tar.gz";
+    url = "mirror://sourceforge/pangopdf/pangoxsl-${version}.tar.gz";
     sha256 = "1wcd553nf4nwkrfrh765cyzwj9bsg7zpkndg2hjs8mhwgx04lm8n";
   };
 
