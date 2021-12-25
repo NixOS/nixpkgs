@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libpipeline";
-  version = "1.5.3";
+  version = "1.5.4";
 
   src = fetchurl {
     url = "mirror://savannah/libpipeline/libpipeline-${version}.tar.gz";
-    sha256 = "1c5dl017xil2ssb6a5vg927bnsbc9vymfgi9ahvqbb8gypx0igsx";
+    sha256 = "sha256-23hb3boKN+8UtO+Cri0YuIJOaYPfuZEDGTheKN8/Gpw=";
   };
 
   patches = lib.optionals stdenv.isDarwin [ ./fix-on-osx.patch ];
