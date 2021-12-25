@@ -7605,6 +7605,8 @@ in {
 
   pytest-raisesregexp = callPackage ../development/python-modules/pytest-raisesregexp { };
 
+  pytest-raisin = callPackage ../development/python-modules/pytest-raisin { };
+
   pytest-randomly = callPackage ../development/python-modules/pytest-randomly { };
 
   pytest-random-order = callPackage ../development/python-modules/pytest-random-order { };
