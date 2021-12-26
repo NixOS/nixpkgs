@@ -7,7 +7,7 @@ buildDunePackage rec {
   minimumOCamlVersion = "4.02";
 
   src = fetchurl {
-    url = "https://github.com/ocaml-doc/odoc-parser/releases/download/0.9.0/odoc-parser-0.9.0.tbz";
+    url = "https://github.com/ocaml-doc/odoc-parser/releases/download/${version}/odoc-parser-${version}.tbz";
     sha256 = "0ydxy2sj2w9i4vvyjnxplgmp5gbkp5ilnv36pvk4vgrrmldss3fz";
   };
 
