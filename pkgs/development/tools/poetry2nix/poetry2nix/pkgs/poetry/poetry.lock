@@ -274,11 +274,15 @@ python-versions = "*"
 
 [[package]]
 name = "filelock"
-version = "3.0.12"
+version = "3.2.1"
 description = "A platform independent file lock."
 category = "main"
 optional = false
-python-versions = "*"
+python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,>=2.7"
+
+[package.extras]
+docs = ["furo (>=2021.8.17b43)", "sphinx (>=4.1)", "sphinx-autodoc-typehints (>=1.12)"]
+testing = ["coverage (>=4)", "pytest (>=4)", "pytest-cov", "pytest-timeout (>=1.4.2)"]
 
 [[package]]
 name = "funcsigs"
@@ -343,7 +347,7 @@ six = "*"
 
 [[package]]
 name = "identify"
-version = "2.2.15"
+version = "2.3.0"
 description = "File identification library for Python"
 category = "dev"
 optional = false
@@ -624,7 +628,7 @@ dev = ["pre-commit", "tox"]
 
 [[package]]
 name = "poetry-core"
-version = "1.0.6"
+version = "1.0.7"
 description = "Poetry PEP 517 Build Backend"
 category = "main"
 optional = false
@@ -1004,7 +1008,7 @@ socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 
 [[package]]
 name = "virtualenv"
-version = "20.8.0"
+version = "20.8.1"
 description = "Virtual Python Environment builder"
 category = "main"
 optional = false
@@ -1296,8 +1300,8 @@ enum34 = [
     {file = "enum34-1.1.10.tar.gz", hash = "sha256:cce6a7477ed816bd2542d03d53db9f0db935dd013b70f336a95c73979289f248"},
 ]
 filelock = [
-    {file = "filelock-3.0.12-py3-none-any.whl", hash = "sha256:929b7d63ec5b7d6b71b0fa5ac14e030b3f70b75747cef1b10da9b879fef15836"},
-    {file = "filelock-3.0.12.tar.gz", hash = "sha256:18d82244ee114f543149c66a6e0c14e9c4f8a1044b5cdaadd0f82159d6a6ff59"},
+    {file = "filelock-3.2.1-py2.py3-none-any.whl", hash = "sha256:7f07b08d731907441ff40d0c5b81f9512cd968842e0b6264c8bd18a8ce877760"},
+    {file = "filelock-3.2.1.tar.gz", hash = "sha256:9cdd29c411ab196cf4c35a1da684f7b9da723696cb356efa45bf5eb1ff313ee3"},
 ]
 funcsigs = [
     {file = "funcsigs-1.0.2-py2.py3-none-any.whl", hash = "sha256:330cc27ccbf7f1e992e69fef78261dc7c6569012cf397db8d3de0234e6c937ca"},
@@ -1322,8 +1326,8 @@ httpretty = [
     {file = "httpretty-0.9.7.tar.gz", hash = "sha256:66216f26b9d2c52e81808f3e674a6fb65d4bf719721394a1a9be926177e55fbe"},
 ]
 identify = [
-    {file = "identify-2.2.15-py2.py3-none-any.whl", hash = "sha256:de83a84d774921669774a2000bf87ebba46b4d1c04775f4a5d37deff0cf39f73"},
-    {file = "identify-2.2.15.tar.gz", hash = "sha256:528a88021749035d5a39fe2ba67c0642b8341aaf71889da0e1ed669a429b87f0"},
+    {file = "identify-2.3.0-py2.py3-none-any.whl", hash = "sha256:d1e82c83d063571bb88087676f81261a4eae913c492dafde184067c584bc7c05"},
+    {file = "identify-2.3.0.tar.gz", hash = "sha256:fd08c97f23ceee72784081f1ce5125c8f53a02d3f2716dde79a6ab8f1039fea5"},
 ]
 idna = [
     {file = "idna-2.10-py2.py3-none-any.whl", hash = "sha256:b97d804b1e9b523befed77c48dacec60e6dcb0b5391d57af6a65a312a90648c0"},
@@ -1435,8 +1439,8 @@ pluggy = [
     {file = "pluggy-0.13.1.tar.gz", hash = "sha256:15b2acde666561e1298d71b523007ed7364de07029219b604cf808bfa1c765b0"},
 ]
 poetry-core = [
-    {file = "poetry-core-1.0.6.tar.gz", hash = "sha256:dd3c97003579242236890306836f2acc86d9741e6bea320dda6f844f16b0d845"},
-    {file = "poetry_core-1.0.6-py2.py3-none-any.whl", hash = "sha256:4ef68b4a55a8a95a60e6a312317e5a2f2af7590cf3d46b6bfe648c1e5f13cc48"},
+    {file = "poetry-core-1.0.7.tar.gz", hash = "sha256:98c11c755a16ef6c5673c22ca94a3802a7df4746a0853a70b6fae8b9f5cac206"},
+    {file = "poetry_core-1.0.7-py2.py3-none-any.whl", hash = "sha256:4f8a7f5390d772f42c4c4c3f188e6424b802cb4b57466c6633a1b9ac36f18a43"},
 ]
 pre-commit = [
     {file = "pre_commit-2.15.0-py2.py3-none-any.whl", hash = "sha256:a4ed01000afcb484d9eb8d504272e642c4c4099bbad3a6b27e519bd6a3e928a6"},
@@ -1589,8 +1593,8 @@ urllib3 = [
     {file = "urllib3-1.25.11.tar.gz", hash = "sha256:8d7eaa5a82a1cac232164990f04874c594c9453ec55eef02eab885aa02fc17a2"},
 ]
 virtualenv = [
-    {file = "virtualenv-20.8.0-py2.py3-none-any.whl", hash = "sha256:a4b987ec31c3c9996cf1bc865332f967fe4a0512c41b39652d6224f696e69da5"},
-    {file = "virtualenv-20.8.0.tar.gz", hash = "sha256:4da4ac43888e97de9cf4fdd870f48ed864bbfd133d2c46cbdec941fed4a25aef"},
+    {file = "virtualenv-20.8.1-py2.py3-none-any.whl", hash = "sha256:10062e34c204b5e4ec5f62e6ef2473f8ba76513a9a617e873f1f8fb4a519d300"},
+    {file = "virtualenv-20.8.1.tar.gz", hash = "sha256:bcc17f0b3a29670dd777d6f0755a4c04f28815395bca279cdcb213b97199a6b8"},
 ]
 wcwidth = [
     {file = "wcwidth-0.2.5-py2.py3-none-any.whl", hash = "sha256:beb4802a9cebb9144e99086eff703a642a13d6a0052920003a230f3294bbe784"},

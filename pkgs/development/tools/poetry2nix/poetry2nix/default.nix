@@ -5,7 +5,7 @@
 }:
 let
   # Poetry2nix version
-  version = "1.21.0";
+  version = "1.22.0";
 
   inherit (poetryLib) isCompatible readTOML moduleName;
 
@@ -211,7 +211,7 @@ lib.makeScope pkgs.newScope (self: {
 
                   __toPluginAble = toPluginAble self;
 
-                  inherit (hooks) pipBuildHook removePathDependenciesHook poetry2nixFixupHook wheelUnpackHook;
+                  inherit (hooks) pipBuildHook removePathDependenciesHook removeGitDependenciesHook poetry2nixFixupHook wheelUnpackHook;
                 } // lib.optionalAttrs (! super ? setuptools-scm) {
                   # The canonical name is setuptools-scm
                   setuptools-scm = super.setuptools_scm;
@@ -313,7 +313,10 @@ lib.makeScope pkgs.newScope (self: {
 
       app = py.pkgs.buildPythonPackage (
         passedAttrs // inputAttrs // {
-          nativeBuildInputs = inputAttrs.nativeBuildInputs ++ [ py.pkgs.removePathDependenciesHook ];
+          nativeBuildInputs = inputAttrs.nativeBuildInputs ++ [
+            py.pkgs.removePathDependenciesHook
+            py.pkgs.removeGitDependenciesHook
+          ];
         } // {
           pname = moduleName pyProject.tool.poetry.name;
           version = pyProject.tool.poetry.version;
