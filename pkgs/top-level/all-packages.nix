@@ -13685,7 +13685,7 @@ with pkgs;
   # Python package sets.
   python27Packages = python27.pkgs;
   python37Packages = python37.pkgs;
-  python38Packages = recurseIntoAttrs python38.pkgs;
+  python38Packages = python38.pkgs;
   python39Packages = recurseIntoAttrs python39.pkgs;
   python310Packages = recurseIntoAttrs python310.pkgs;
   python311Packages = python311.pkgs;
