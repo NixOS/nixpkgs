@@ -93,6 +93,9 @@ stdenv.mkDerivation rec {
     "-DKICAD_STDLIB_DEBUG=ON"
     "-DKICAD_USE_VALGRIND=ON"
   ]
+  ++ optionals (!doInstallCheck) [
+    "-DKICAD_BUILD_QA_TESTS=OFF"
+  ]
   ++ optionals (sanitizeAddress) [
     "-DKICAD_SANITIZE_ADDRESS=ON"
   ]

@@ -13,13 +13,9 @@
 
 , pname ? "kicad"
 , stable ? true
-, oceSupport ? false
-, withOCCT ? false
 , withOCC ? true
-, ngspiceSupport ? false
 , withNgspice ? true
 , libngspice
-, scriptingSupport ? false
 , withScripting ? true
 , python3
 , debug ? false
@@ -65,13 +61,6 @@
 #   });
 # }
 
-assert withNgspice -> libngspice != null;
-assert lib.assertMsg (!ngspiceSupport)
-  "`nspiceSupport` was renamed to `withNgspice` for the sake of consistency with other kicad nix arguments.";
-assert lib.assertMsg (!scriptingSupport)
-  "`scriptingSupport` was renamed to `withScripting` for the sake of consistency with other kicad nix arguments.";
-assert lib.assertMsg (!withOCCT)
-  "`withOCCT` was renamed to `withOCC` for the sake of consistency with upstream cmake options.";
 let
   baseName = if (stable) then "kicad" else "kicad-unstable";
   versionsImport = import ./versions.nix;
