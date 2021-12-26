@@ -234,27 +234,60 @@ in {
 
         # Test lego internal server (listenHTTP option)
         # Also tests useRoot option
-        lego-server.configuration = { ... }: lib.mkMerge [
-          webserverBasicConfig
+        lego-server.configuration = { ... }: {
+          security.acme.useRoot = true;
+          security.acme.certs."lego.example.test" = {
+            listenHTTP = ":80";
+            group = "nginx";
+          };
+          services.nginx.enable = true;
+          services.nginx.virtualHosts."lego.example.test" = {
+            useACMEHost = "lego.example.test";
+            onlySSL = true;
+          };
+        };
+
+      # Test compatiblity with Caddy
+      # It only supports useACMEHost, hence not using mkServerConfigs
+      } // (let
+        baseCaddyConfig = { nodes, config, ... }: {
+          security.acme = {
+            defaults = (dnsConfig nodes) // {
+              group = config.services.caddy.group;
+            };
+            # One manual wildcard cert
+            certs."example.test" = {
+              domain = "*.example.test";
+            };
+          };
+
+          services.caddy = {
+            enable = true;
+            virtualHosts."a.exmaple.test" = {
+              useACMEHost = "example.test";
+              extraConfig = ''
+                root * ${documentRoot}
+              '';
+            };
+          };
+        };
+      in {
+        caddy.configuration = baseCaddyConfig;
+
+        # Test that the server reloads when only the acme configuration is changed.
+        "caddy-change-acme-conf".configuration = { nodes, config, ... }: lib.mkMerge [
+          (baseCaddyConfig {
+            inherit nodes config;
+          })
           {
-            security.acme.useRoot = true;
-            security.acme.certs."lego.example.test" = {
-              listenHTTP = ":80";
-              group = "nginx";
-            };
-            services.nginx.virtualHosts."a.example.test" = {
-              onlySSL = true;
-              forceSSL = lib.mkForce false;
-            };
-            services.nginx.virtualHosts."lego.example.test" = {
-              useACMEHost = "lego.example.test";
-              onlySSL = true;
+            security.acme.certs."example.test" = {
+              keyType = "ec384";
             };
           }
         ];
 
       # Test compatibility with Nginx
-      } // (mkServerConfigs {
+      }) // (mkServerConfigs {
           server = "nginx";
           group = "nginx";
           vhostBaseData = vhostBase;
@@ -479,6 +512,24 @@ in {
           check_issuer(webserver, "slow.example.test", "pebble")
           webserver.wait_for_unit("nginx.service")
           check_connection(client, "slow.example.test")
+
+      with subtest("Works with caddy"):
+          switch_to(webserver, "caddy")
+          webserver.wait_for_unit("acme-finished-example.test.target")
+          webserver.wait_for_unit("caddy.service")
+          # FIXME reloading caddy is not sufficient to load new certs.
+          # Restart it manually until this is fixed.
+          webserver.succeed("systemctl restart caddy.service")
+          check_connection(client, "a.example.test")
+
+      with subtest("security.acme changes reflect on caddy"):
+          switch_to(webserver, "caddy-change-acme-conf")
+          webserver.wait_for_unit("acme-finished-example.test.target")
+          webserver.wait_for_unit("caddy.service")
+          # FIXME reloading caddy is not sufficient to load new certs.
+          # Restart it manually until this is fixed.
+          webserver.succeed("systemctl restart caddy.service")
+          check_connection_key_bits(client, "a.example.test", "384")
 
       domains = ["http", "dns", "wildcard"]
       for server, logsrc in [
