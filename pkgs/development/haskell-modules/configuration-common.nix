@@ -2226,4 +2226,7 @@ self: super: {
   #       hpack emits its version into the generated files…
   hpack-dhall = assert super.hpack-dhall.version == "0.5.3"; dontCheck super.hpack-dhall;
 
+  # Invalid CPP in test suite: https://github.com/cdornan/memory-cd/issues/1
+  memory-cd = dontCheck super.memory-cd;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
