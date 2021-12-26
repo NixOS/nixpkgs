@@ -2,13 +2,13 @@
 
 buildDunePackage rec {
   pname = "odoc-parser";
-  version = "0.9.0";
+  version = "1.0.0";
 
   minimumOCamlVersion = "4.02";
 
   src = fetchurl {
     url = "https://github.com/ocaml-doc/odoc-parser/releases/download/${version}/odoc-parser-${version}.tbz";
-    sha256 = "0ydxy2sj2w9i4vvyjnxplgmp5gbkp5ilnv36pvk4vgrrmldss3fz";
+    sha256 = "sha256-tqoI6nGp662bK+vE2h7aDXE882dObVfRBFnZNChueqE=";
   };
 
   useDune2 = true;
