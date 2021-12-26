@@ -61,7 +61,7 @@ buildDunePackage {
       menhirSdk
       ocaml-version
       ocp-indent
-      odoc-parser
+      (if version == "0.20.0" then odoc-parser.override { version = "0.9.0"; } else odoc-parser)
       re
       stdio
       uuseg
@@ -82,7 +82,7 @@ buildDunePackage {
       menhirSdk
       ocp-indent
       dune-build-info
-      odoc-parser
+      (odoc-parser.override { version = "0.9.0"; })
     ]
     else if lib.versionAtLeast version "0.18.0"
     then [
