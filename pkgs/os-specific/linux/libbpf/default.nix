@@ -5,6 +5,7 @@
 , stdenv
 , zlib
 , lib
+, nixosTests
 }:
 
 with builtins;
