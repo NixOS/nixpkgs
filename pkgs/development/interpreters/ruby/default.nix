@@ -99,7 +99,7 @@ let
             inherit patchSet useRailsExpress ops fetchpatch;
             patchLevel = ver.patchLevel;
           }).${ver.majMinTiny}
-          ++ [ ./do-not-regenerate-revision.h.patch ]
+          ++ op (lib.versionOlder ver.majMin "3.1") ./do-not-regenerate-revision.h.patch
           ++ op (atLeast30 && useRailsExpress) ./do-not-update-gems-baseruby.patch
           # Ruby prior to 3.0 has a bug the installer (tools/rbinstall.rb) but
           # the resulting error was swallowed. Newer rubygems no longer swallows
@@ -263,6 +263,14 @@ in {
     sha256 = {
       src = "1b4j39zyyvdkf1ax2c6qfa40b4mxfkr87zghhw19fmnzn8f8d1im";
       git = "1q19w5i1jkfxn7qq6f9v9ngax9h52gxwijk7hp312dx6amwrkaim";
+    };
+  };
+
+  ruby_3_1 = generic {
+    version = rubyVersion "3" "1" "0" "";
+    sha256 = {
+      src = "sha256-UKBQTG7ctNYc5rjP292qlXBxlfqw7Ne16SZUsqlBKFQ=";
+      git = "sha256-TcsoWY+zVZeue1/ypV1L0WERp1UVK35WtVtYPYiJh4c=";
     };
   };
 }
