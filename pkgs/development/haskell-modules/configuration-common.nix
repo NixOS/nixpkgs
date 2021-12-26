@@ -2218,5 +2218,11 @@ self: super: {
       "-p" "!/xml: <x b=\"\" a=\"y\"><\\/x>/&&!/xml: <x b=\"z\" a=\"y\"><\\/x>/"
     ] ++ drv.testFlags or [];
   }) super.xmlbf;
+  # https://github.com/ssadler/aeson-quick/issues/3
+  aeson-quick = overrideCabal (drv: {
+    testFlags = [
+      "-p" "!/asLens.set/&&!/complex.set/&&!/multipleKeys.set/"
+    ] ++ drv.testFlags or [];
+  }) super.aeson-quick;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
