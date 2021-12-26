@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "bimmer-connected";
-  version = "0.8.5";
+  version = "0.8.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "bimmerconnected";
     repo = "bimmer_connected";
     rev = version;
-    hash = "sha256-twVI84YCW+t9ar2vHN1OEiY5tT4/pHP29GnpWprdeHs=";
+    hash = "sha256-nLZdaV341mULXIngkEqiLQeg4G2NDFGNg/AUozgJe74=";
   };
 
   nativeBuildInputs = [
