@@ -26,6 +26,7 @@
 , libfido2
 , hostname
 , nixosTests
+, pkgsStatic
 , withFIDO ? stdenv.hostPlatform.isUnix && !stdenv.hostPlatform.isMusl
 , linkOpenssl ? true
 }:
@@ -64,21 +65,18 @@ stdenv.mkDerivation rec {
     # to use: `configure' wants `gcc', but `make' wants `ld'.
     unset LD
   ''
-  # Upstream build system does not support static build, so we fall back
-  # on fragile patching of configure script.
-  #
-  # libedit is found by pkg-config, but without --static flag, required
-  # to get also transitive dependencies for static linkage, hence sed
-  # expression.
-  #
-  # Kerberos can be found either by krb5-config or by fall-back shell
-  # code in openssh's configure.ac. Neither of them support static
-  # build, but patching code for krb5-config is simpler, so to get it
-  # into PATH, libkrb5.dev is added into buildInputs.
+  # Upstream configure script does not understand that we are building
+  # statically, and pkg-config must be invoked differently.
   + optionalString stdenv.hostPlatform.isStatic ''
     sed -i "s,PKGCONFIG --libs,PKGCONFIG --libs --static,g" configure
-    sed -i 's#KRB5CONF --libs`#KRB5CONF --libs` -lkrb5support -lkeyutils#g' configure
-    sed -i 's#KRB5CONF --libs gssapi`#KRB5CONF --libs gssapi` -lkrb5support -lkeyutils#g' configure
+  '';
+
+  # Link dependencies of -lkrb5. Upstream build system does not handle it.
+  postConfigure = optionalString stdenv.hostPlatform.isStatic ''
+      sed -i -r -e 's/-lkrb5 /-lkrb5 -lkrb5support -lkeyutils /g' \
+                -e 's/-lkrb5$/-lkrb5 -lkrb5support -lkeyutils /g' \
+          Makefile
+      sed -i -r -e 's/^LIBS=/LIBS=-laudit /' Makefile
   '';
 
   # I set --disable-strip because later we strip anyway. And it fails to strip
@@ -107,7 +105,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
   enableParallelChecking = false;
   checkInputs = optional (!stdenv.isDarwin) hostname;
-  preCheck = ''
+  preCheck = lib.optionalString (!stdenv.hostPlatform.isStatic) (''
     # construct a dummy HOME
     export HOME=$(realpath ../dummy-home)
     mkdir -p ~/.ssh
@@ -150,7 +148,7 @@ stdenv.mkDerivation rec {
 
     # set up NIX_REDIRECTS for direct invocations
     set -a; source ~/.ssh/environment.base; set +a
-  '';
+  '');
   # integration tests hard to get working on darwin with its shaky
   # sandbox
   # t-exec tests fail on musl
@@ -172,6 +170,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests = {
     borgbackup-integration = nixosTests.borgbackup;
+    static = pkgsStatic.openssh;
   };
 
   meta = {
