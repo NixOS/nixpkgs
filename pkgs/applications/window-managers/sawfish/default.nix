@@ -22,11 +22,11 @@
 
 stdenv.mkDerivation rec {
   pname = "sawfish";
-  version = "1.12.90";
+  version = "1.13.0";
 
   src = fetchurl {
     url = "https://download.tuxfamily.org/sawfish/${pname}_${version}.tar.xz";
-    sha256 = "18p8srqqj9vjffg13qhspfz2gr1h4vfs10qzlv89g76r289iam31";
+    sha256 = "sha256-gWs8W/pMtQjbH8FEifzNAj3siZzxPd6xm8PmXXhyr10=";
   };
 
   nativeBuildInputs = [
