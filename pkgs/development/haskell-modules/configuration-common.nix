@@ -2229,4 +2229,7 @@ self: super: {
   # Invalid CPP in test suite: https://github.com/cdornan/memory-cd/issues/1
   memory-cd = dontCheck super.memory-cd;
 
+  # https://github.com/andreymulik/sdp/issues/3
+  sdp = disableLibraryProfiling super.sdp;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
