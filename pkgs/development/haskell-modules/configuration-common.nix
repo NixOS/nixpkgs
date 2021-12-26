@@ -2212,5 +2212,11 @@ self: super: {
       "--skip" "/toJsonSerializer/should generate valid JSON/"
     ] ++ drv.testFlags or [];
   }) super.hschema-aeson;
+  # https://gitlab.com/k0001/xmlbf/-/issues/32
+  xmlbf = overrideCabal (drv: {
+    testFlags = [
+      "-p" "!/xml: <x b=\"\" a=\"y\"><\\/x>/&&!/xml: <x b=\"z\" a=\"y\"><\\/x>/"
+    ] ++ drv.testFlags or [];
+  }) super.xmlbf;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
