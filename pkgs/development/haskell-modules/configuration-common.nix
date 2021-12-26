@@ -2220,6 +2220,12 @@ self: super: {
       "-p" "!/asLens.set/&&!/complex.set/&&!/multipleKeys.set/"
     ] ++ drv.testFlags or [];
   }) super.aeson-quick;
+  # https://github.com/minio/minio-hs/issues/165
+  minio-hs = overrideCabal (drv: {
+    testFlags = [
+      "-p" "!/Test mkSelectRequest/"
+    ] ++ drv.testFlags or [];
+  }) super.minio-hs;
 
   # golden files expect an old version of hpack, so tests fail intermittently
   # TODO: maybe disable golden test suite altogether? this will happen again as
