@@ -2818,6 +2818,18 @@ final: prev:
     meta.homepage = "https://github.com/JuliaEditorSupport/julia-vim/";
   };
 
+  kanagawa-nvim = buildVimPluginFrom2Nix {
+    pname = "kanagawa.nvim";
+    version = "2021-12-25";
+    src = fetchFromGitHub {
+      owner = "rebelot";
+      repo = "kanagawa.nvim";
+      rev = "10bccb5e8e8530725c8059df2e6852fb01842d1c";
+      sha256 = "15jji03qvpbyfk1bpc9b31rbkklfzdnhmnld4cr5ydjmz1fd5fzb";
+    };
+    meta.homepage = "https://github.com/rebelot/kanagawa.nvim/";
+  };
+
   kommentary = buildVimPluginFrom2Nix {
     pname = "kommentary";
     version = "2021-12-03";
