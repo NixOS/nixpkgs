@@ -168,7 +168,14 @@ let
         ${containerInit cfg} "''${SYSTEM_PATH:-/nix/var/nix/profiles/system}/init"
     '';
 
-  preStartScript = cfg:
+  preStartScript = let
+    mkForceHostPath = d: "mkdir -p ${d.hostPath}";
+    mkForceHostPaths = bs:
+      concatStringsSep "\n"
+        (map mkForceHostPath
+          (lib.filter (d: d.hostPath != null && d.forceHostPath)
+            (lib.attrValues bs)));
+  in cfg:
     ''
       # Clean up existing machined registration and interfaces.
       machinectl terminate "$INSTANCE" 2> /dev/null || true
@@ -184,6 +191,9 @@ let
           "ip link del dev ${name} 2> /dev/null || true "
         ) cfg.extraVeths
       )}
+
+      # Mkdir all hostPath-binds when forceHostPath is set
+      ${mkForceHostPaths cfg.bindMounts}
    '';
 
   postStartScript = (cfg:
@@ -295,6 +305,11 @@ let
         example = "/home/alice";
         type = types.nullOr types.str;
         description = "Location of the host path to be mounted.";
+      };
+      forceHostPath = mkOption {
+        default = false;
+        type = types.bool;
+        description = "Determine whether the host path should be created if non-existent.";
       };
       isReadOnly = mkOption {
         default = true;
@@ -426,6 +441,7 @@ let
   dummyConfig =
     {
       extraVeths = {};
+      bindMounts = {};
       additionalCapabilities = [];
       ephemeral = false;
       timeoutStartSec = "1min";
