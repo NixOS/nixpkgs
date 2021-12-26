@@ -2186,5 +2186,11 @@ self: super: {
       "--skip" "/Geo/Hexable/Encodes a linestring/"
     ] ++ drv.testFlags or [];
   }) super.haskell-postgis;
+  # https://github.com/ChrisPenner/json-to-haskell/issues/5
+  json-to-haskell = overrideCabal (drv: {
+    testFlags = [
+      "--match" "/should sanitize weird field and record names/"
+    ] ++ drv.testFlags or [];
+  }) super.json-to-haskell;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
