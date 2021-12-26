@@ -2180,5 +2180,11 @@ self: super: {
   }) (doJailbreak super.hercules-ci-api-agent);
   # https://github.com/emc2/HUnit-Plus/issues/26
   HUnit-Plus = dontCheck super.HUnit-Plus;
+  # https://github.com/ewestern/haskell-postgis/issues/7
+  haskell-postgis = overrideCabal (drv: {
+    testFlags = [
+      "--skip" "/Geo/Hexable/Encodes a linestring/"
+    ] ++ drv.testFlags or [];
+  }) super.haskell-postgis;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
