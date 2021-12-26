@@ -2200,5 +2200,11 @@ self: super: {
       "-p" "!/field.unexpected-value/&&!/field.missing-field/&&!/argument.unexpected-value/&&!/argument.missing-field/"
     ] ++ drv.testFlags or [];
   }) super.morpheus-graphql-core;
+  # https://github.com/SupercedeTech/dropbox-client/issues/1
+  dropbox = overrideCabal (drv: {
+    testFlags = [
+      "--skip" "/Dropbox/Dropbox aeson aeson/encodes list folder correctly/"
+    ] ++ drv.testFlags or [];
+  }) super.dropbox;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
