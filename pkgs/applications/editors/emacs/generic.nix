@@ -25,6 +25,7 @@
 , srcRepo ? false, autoreconfHook ? null, texinfo ? null
 , siteStart ? ./site-start.el
 , nativeComp ? false
+, withPgtk ? false
 , withImageMagick ? lib.versionOlder version "27" && (withX || withNS)
 , toolkit ? (
   if withGTK2 then "gtk2"
@@ -150,6 +151,7 @@ let emacs = stdenv.mkDerivation (lib.optionalAttrs nativeComp {
     ++ lib.optional withXwidgets "--with-xwidgets"
     ++ lib.optional nativeComp "--with-native-compilation"
     ++ lib.optional withImageMagick "--with-imagemagick"
+    ++ lib.optional withPgtk "--with-pgtk"
   ;
 
   installTargets = [ "tags" "install" ];
