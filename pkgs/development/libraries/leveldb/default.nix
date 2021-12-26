@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fixDarwinDylibNames, snappy }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, fixDarwinDylibNames, snappy }:
 
 stdenv.mkDerivation rec {
   pname = "leveldb";
@@ -10,6 +10,17 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "01kxga1hv4wp94agx5vl3ybxfw5klqrdsrb6p6ywvnjmjxm8322y";
   };
+
+  patches = [
+    # Re-enable RTTI. Needed for e.g. Ceph to compile properly.
+    # See https://github.com/NixOS/nixpkgs/issues/147801,
+    # https://github.com/google/leveldb/issues/731,
+    # https://lists.ceph.io/hyperkitty/list/dev@ceph.io/thread/K4OSAA4AJS2V7FQI6GNCKCK3IRQDBQRS/.
+    (fetchpatch {
+      url = "https://src.fedoraproject.org/rpms/leveldb/raw/e8178670c664e952fdd00f1fc6e3eb28b2c5b6a8/f/0006-revert-no-rtti.patch";
+      sha256 = "sha256-d2YAV8O+1VKu3WwgNsWw6Cxg5sUUR+xOlJtA7pTcigQ=";
+    })
+  ];
 
   buildInputs = [ snappy ];
 
