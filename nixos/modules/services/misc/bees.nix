@@ -21,6 +21,8 @@ let
         <para>
         This must be in a format usable by findmnt; that could be a key=value
         pair, or a bare path to a mount point.
+        We prefer bare paths as then the beesd service will be ordered after
+        mounting the path itself.
       '';
       example = "LABEL=MyBulkDataDrive";
     };
@@ -122,6 +124,7 @@ in
             StartupIOWeight = 25;
             SyslogIdentifier = "beesd"; # would otherwise be "bees-service-wrapper"
           };
+        unitConfig.RequiresMountsFor = lib.mkIf (lib.hasPrefix "/" fs.spec) fs.spec;
         wantedBy = [ "multi-user.target" ];
       })
       cfg.filesystems;
