@@ -4,6 +4,7 @@
 , buildPythonPackage
 , python
 , cython
+, pythran
 , numpy
 , scipy
 , matplotlib
@@ -22,18 +23,19 @@ let
   installedPackageRoot = "${builtins.placeholder "out"}/${python.sitePackages}";
 in buildPythonPackage rec {
   pname = "scikit-image";
-  version = "0.18.3";
+  version = "0.19.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "0a2h3bw5rkk23k4r04qc9maccg00nddssd7lfsps8nhp5agk1vyh";
+    sha256 = "09wy21zcq03grb0lj35pp46l44qp08a9q9ijkglqa428f3wp7nma";
   };
 
   patches = [ ./add-testing-data.patch ];
 
-  nativeBuildInputs = [ cython ];
+  # pythran isn't necessary for building but is imported in `setup.py`.
+  nativeBuildInputs = [ cython pythran ];
 
   propagatedBuildInputs = [
     cloudpickle
