@@ -122,6 +122,20 @@
           <literal>virtualisation.docker.daemon.settings</literal>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          MultiMC versions 0.6.14 and later are <quote>Debranded</quote>
+          and the launcher now refers to itself as
+          <quote>DevLauncher</quote>. This change affects the data
+          folder where game instances and other save and configuration
+          files are stored. Users with existing installations should
+          rename <literal>~/.local/share/multimc</literal> to
+          <literal>~/.local/share/DevLauncher</literal>. The main config
+          file’s path has also moved from
+          <literal>~/.local/share/multimc/multimc.cfg</literal> to
+          <literal>~/.local/share/DevLauncher/devlauncher.cfg</literal>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.05-notable-changes">

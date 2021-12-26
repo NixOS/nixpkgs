@@ -1,15 +1,15 @@
-{ lib, mkDerivation, fetchFromGitHub, cmake, jdk8, jdk, zlib, file, makeWrapper, xorg, libpulseaudio, qtbase, libGL, msaClientID ? "" }:
+{ lib, mkDerivation, makeDesktopItem, fetchFromGitHub, cmake, jdk8, jdk, zlib, file, makeWrapper, xorg, libpulseaudio, qtbase, libGL, msaClientID ? "" }:
 
 let
   libpath = with xorg; lib.makeLibraryPath [ libX11 libXext libXcursor libXrandr libXxf86vm libpulseaudio libGL ];
 in mkDerivation rec {
   pname = "multimc";
-  version = "unstable-2021-09-08";
+  version = "0.6.14";
   src = fetchFromGitHub {
     owner = "MultiMC";
-    repo = "MultiMC5";
-    rev = "e2355eb276bf355ca4acf526a0f3cc390aa88f8b";
-    sha256 = "3G9QPoAbC+uVfUYR0Kq6hnxl9c2mvCzIEYGjwfarQJ8=";
+    repo = "Launcher";
+    rev = "0.6.14";
+    sha256 = "sha256-7tM+z35dtUIN/UioJ7zTP8kdRKlTJIrWRkA08B8ci3A=";
     fetchSubmodules = true;
   };
   nativeBuildInputs = [ cmake file makeWrapper ];
@@ -28,16 +28,33 @@ in mkDerivation rec {
       --replace 'QString MSAClientID = "";' 'QString MSAClientID = "${msaClientID}";'
   '';
 
-  cmakeFlags = [ "-DMultiMC_LAYOUT=lin-system" ];
+  cmakeFlags = [ "-DLauncher_LAYOUT=lin-nodeps" ];
+
+  desktopItem = makeDesktopItem {
+    name = "multimc";
+    desktopName = "MultiMC";
+    genericName = "Minecraft Launcher";
+    comment = "Free, open source launcher and instance manager for Minecraft.";
+    icon = "launcher";
+    exec = "DevLauncher";
+    categories = "Game";
+    terminal = "false";
+  };
+
+  preFixup = ''
+    mkdir -p $out/lib
+    mv $out/bin/*.so $out/lib/
+  '';
 
   postInstall = ''
-    install -Dm644 ../launcher/resources/multimc/scalable/multimc.svg $out/share/pixmaps/multimc.svg
-    install -Dm755 ../launcher/package/linux/multimc.desktop $out/share/applications/multimc.desktop
+    install -Dm644 ../launcher/resources/multimc/scalable/launcher.svg $out/share/pixmaps/multimc.svg
+    install -Dm755 ${desktopItem}/share/applications/multimc.desktop $out/share/applications/multimc.desktop
 
     # xorg.xrandr needed for LWJGL [2.9.2, 3) https://github.com/LWJGL/lwjgl/issues/128
-    wrapProgram $out/bin/multimc \
+    wrapProgram $out/bin/DevLauncher \
       --set GAME_LIBRARY_PATH /run/opengl-driver/lib:${libpath} \
-      --prefix PATH : ${lib.makeBinPath [ xorg.xrandr ]}
+      --prefix PATH : ${lib.makeBinPath [ xorg.xrandr ]} \
+      --add-flags '-d "''${XDG_DATA_HOME-$HOME/.local/share}/DevLauncher"'
   '';
 
   meta = with lib; {
