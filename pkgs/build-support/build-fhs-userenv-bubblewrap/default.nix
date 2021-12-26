@@ -16,6 +16,7 @@ args @ {
 , unshareUts ? true
 , unshareCgroup ? true
 , dieWithParent ? true
+, extraLdConf ? ""
 , ...
 }:
 
@@ -26,6 +27,7 @@ let
   env = buildFHSEnv (removeAttrs args [
     "runScript" "extraInstallCommands" "meta" "passthru" "extraBwrapArgs" "dieWithParent"
     "unshareUser" "unshareCgroup" "unshareUts" "unshareNet" "unsharePid" "unshareIpc"
+    "extraLdConf"
   ]);
 
   etcBindFlags = let
@@ -78,6 +80,8 @@ let
   # issues running some binary with LD_LIBRARY_PATH
   createLdConfCache = ''
     cat > /etc/ld.so.conf <<EOF
+    /run/opengl-driver/lib
+    /run/opengl-driver-32/lib
     /lib
     /lib/x86_64-linux-gnu
     /lib64
@@ -88,6 +92,7 @@ let
     /lib32
     /usr/lib/i386-linux-gnu
     /usr/lib32
+  '' + extraLdConf + ''
     EOF
     ldconfig &> /dev/null
   '';
