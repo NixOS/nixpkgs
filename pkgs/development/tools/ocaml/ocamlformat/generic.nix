@@ -23,6 +23,7 @@ let src =
       "0.17.0" = "0f1lxp697yq61z8gqxjjaqd2ns8fd1vjfggn55x0gh9dx098p138";
       "0.18.0" = "0571kzmb1h03qj74090n3mg8wfbh29qqrkdjkai6rnl5chll86lq";
       "0.19.0" = "0ihgwl7d489g938m1jvgx8azdgq9f5np5mzqwwya797hx2m4dz32";
+      "0.20.0" = "sha256-JtmNCgwjbCyUE4bWqdH5Nc2YSit+rekwS43DcviIfgk=";
     }."${version}";
   };
   ocamlPackages =
@@ -47,7 +48,26 @@ buildDunePackage {
   useDune2 = true;
 
   buildInputs =
-    if lib.versionAtLeast version "0.19.0"
+    if lib.versionAtLeast version "0.20.0"
+    then [
+      base
+      cmdliner
+      dune-build-info
+      either
+      fix
+      fpath
+      menhir
+      menhirLib
+      menhirSdk
+      ocaml-version
+      ocp-indent
+      odoc-parser
+      re
+      stdio
+      uuseg
+      uutf
+    ]
+    else if lib.versionAtLeast version "0.19.0"
     then [
       base
       cmdliner
