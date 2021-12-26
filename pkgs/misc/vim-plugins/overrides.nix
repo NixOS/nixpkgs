@@ -56,6 +56,9 @@
 , CoreFoundation
 , CoreServices
 
+  # Nvim-R
+, rPackages
+
   # nvim-treesitter dependencies
 , tree-sitter
 
@@ -480,6 +483,21 @@ self: super: {
 
   nvim-metals = super.nvim-metals.overrideAttrs (old: {
     dontBuild = true;
+  });
+
+  Nvim-R = super.Nvim-R.overrideAttrs (old: let
+    nvimcom = rPackages.buildRPackage {
+      name = "nvimcom";
+      src = old.src + "/R/nvimcom";
+    };
+  in{
+    inherit nvimcom;
+    patches = [
+      (substituteAll {
+        src = ./patches/Nvim-R/set-nvimcom-location.patch;
+        inherit nvimcom;
+      })
+    ];
   });
 
   nvim-spectre = super.nvim-spectre.overrideAttrs (old: {
