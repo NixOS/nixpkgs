@@ -2192,5 +2192,7 @@ self: super: {
       "--match" "/should sanitize weird field and record names/"
     ] ++ drv.testFlags or [];
   }) super.json-to-haskell;
+  # https://github.com/fieldstrength/aeson-deriving/issues/5
+  aeson-deriving = dontCheck super.aeson-deriving;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
