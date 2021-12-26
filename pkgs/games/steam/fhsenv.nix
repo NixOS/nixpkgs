@@ -44,17 +44,6 @@ let
       ++ lib.optional withPrimus primus
       ++ extraPkgs pkgs;
 
-  ldPath = lib.optionals stdenv.is64bit [ "/lib64" ]
-  ++ [ "/lib32" ]
-  ++ map (x: "/steamrt/${steam-runtime-wrapped.arch}/" + x) steam-runtime-wrapped.libs
-  ++ lib.optionals (steam-runtime-wrapped-i686 != null) (map (x: "/steamrt/${steam-runtime-wrapped-i686.arch}/" + x) steam-runtime-wrapped-i686.libs);
-
-  # Zachtronics and a few other studios expect STEAM_LD_LIBRARY_PATH to be present
-  exportLDPath = ''
-    export LD_LIBRARY_PATH=${lib.concatStringsSep ":" ldPath}''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH
-    export STEAM_LD_LIBRARY_PATH="$STEAM_LD_LIBRARY_PATH''${STEAM_LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
-  '';
-
   # bootstrap.tar.xz has 444 permissions, which means that simple deletes fail
   # and steam will not be able to start
   fixBootstrap = ''
@@ -69,13 +58,6 @@ let
 
   runSh = writeScript "run.sh" ''
     #!${runtimeShell}
-    runtime_paths="${lib.concatStringsSep ":" ldPath}"
-    if [ "$1" == "--print-steam-runtime-library-paths" ]; then
-      echo "$runtime_paths''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
-      exit 0
-    fi
-    export LD_LIBRARY_PATH="$runtime_paths''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
-    export STEAM_LD_LIBRARY_PATH="$STEAM_LD_LIBRARY_PATH''${STEAM_LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
     exec "$@"
   '';
 
@@ -244,6 +226,11 @@ in buildFHSUserEnv rec {
     libvdpau
   ] ++ steamPackages.steam-runtime-wrapped.overridePkgs) ++ extraLibraries pkgs;
 
+  extraLdConf = let
+    paths = map (x: "/steamrt/${steam-runtime-wrapped.arch}/" + x) steam-runtime-wrapped.libs
+  ++ lib.optionals (steam-runtime-wrapped-i686 != null) (map (x: "/steamrt/${steam-runtime-wrapped-i686.arch}/" + x) steam-runtime-wrapped-i686.libs);
+  in (lib.concatStringsSep "\n" paths) + "\n";
+
   extraBuildCommands = ''
     if [ -f $out/usr/share/vulkan/icd.d/nvidia_icd.json ]; then
       cp $out/usr/share/vulkan/icd.d/nvidia_icd{,32}.json
@@ -306,7 +293,6 @@ in buildFHSUserEnv rec {
     EOF
       fi
     fi
-    ${lib.optionalString (!nativeOnly) exportLDPath}
     ${fixBootstrap}
     exec steam "$@"
   '';
@@ -328,7 +314,7 @@ in buildFHSUserEnv rec {
     name = "steam-run";
 
     targetPkgs = commonTargetPkgs;
-    inherit multiPkgs extraBuildCommands;
+    inherit multiPkgs extraBuildCommands extraLdConf;
 
     inherit unshareIpc unsharePid;
 
@@ -340,7 +326,6 @@ in buildFHSUserEnv rec {
         exit 1
       fi
       shift
-      ${lib.optionalString (!nativeOnly) exportLDPath}
       ${fixBootstrap}
       exec -- "$run" "$@"
     '';
