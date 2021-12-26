@@ -1,0 +1,36 @@
+#!/usr/bin/env nix-shell
+#!nix-shell -i oil -p jq sd nix-prefetch-git moreutils oil nixUnstable prefetch-yarn-deps
+
+# TODO set to `verbose` or `extdebug` once implemented in oil
+shopt --set verbose
+
+const directory = $(dirname $0 | xargs realpath)
+const domain = "dev.funkwhale.audio"
+const owner = "funkwhale"
+const repo = "funkwhale"
+const latest_rev = $(curl -q https://${domain}/api/v4/projects/${owner}%2F${repo}/repository/tags | \
+  jq -r 'first.name')
+const latest_version = $(echo $latest_rev)
+const current_version = $(jq -r '.version' $directory/pin.json)
+if ($latest_version === $current_version) {
+  echo "funkwhale is already up-to-date"
+  return 0
+} else {
+  const source = "https://$domain/$owner/$repo/-/raw/$latest_version"
+  const package_json = $(curl -qf $source/front/package.json)
+  echo $package_json > $directory/package.json
+
+  const repo_meta = $(nix-prefetch-git https://${domain}/${owner}/${repo}.git --rev $latest_rev)
+  const repo_hash = $(echo $repo_meta | jq -r '.sha256')
+
+  const yarn_lock = $(curl -qf $source/front/yarn.lock)
+  echo $yarn_lock > /tmp/funkwhale-yarn.lock
+  const yarn_offline_cache_hash = $(prefetch-yarn-deps /tmp/funkwhale-yarn.lock)
+  rm /tmp/funkwhale-yarn.lock
+
+  jq ".version = \"$latest_version\" | \
+      .\"repoSha256\" = \"$repo_hash\" | \
+      .\"yarnOfflineCacheSha256\" = \"$yarn_offline_cache_hash\"" $directory/pin.json | sponge $directory/pin.json
+
+  echo "funkwhale: ${current_version} -> ${latest_version}"
+}
