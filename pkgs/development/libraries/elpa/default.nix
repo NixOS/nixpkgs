@@ -18,11 +18,11 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 
 stdenv.mkDerivation rec {
   pname = "elpa";
-  version = "2021.05.002_bugfix";
+  version = "2021.11.001";
 
   src = fetchurl {
     url = "https://elpa.mpcdf.mpg.de/software/tarball-archive/Releases/${version}/elpa-${version}.tar.gz";
-    sha256 = "0jr2j1ncslbr7fi47dj58b7afm7kr0sx6jfpfgqb5r5rwn6w9ayy";
+    sha256 = "0bw0nwzwvjfmijfwznmrghypd3q237a3h5g5fcdncilrqnk1sdpv";
   };
 
   patches = [

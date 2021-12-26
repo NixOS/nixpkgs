@@ -282,7 +282,7 @@ else let
       ++ [ "-DCMAKE_SYSTEM_NAME=${lib.findFirst lib.isString "Generic" (
            lib.optional (!stdenv.hostPlatform.isRedox) stdenv.hostPlatform.uname.system)}"]
       ++ lib.optional (stdenv.hostPlatform.uname.processor != null) "-DCMAKE_SYSTEM_PROCESSOR=${stdenv.hostPlatform.uname.processor}"
-      ++ lib.optional (stdenv.hostPlatform.uname.release != null) "-DCMAKE_SYSTEM_VERSION=${stdenv.hostPlatform.release}"
+      ++ lib.optional (stdenv.hostPlatform.uname.release != null) "-DCMAKE_SYSTEM_VERSION=${stdenv.hostPlatform.uname.release}"
       ++ lib.optional (stdenv.hostPlatform.isDarwin) "-DCMAKE_OSX_ARCHITECTURES=${stdenv.hostPlatform.darwinArch}"
       ++ lib.optional (stdenv.buildPlatform.uname.system != null) "-DCMAKE_HOST_SYSTEM_NAME=${stdenv.buildPlatform.uname.system}"
       ++ lib.optional (stdenv.buildPlatform.uname.processor != null) "-DCMAKE_HOST_SYSTEM_PROCESSOR=${stdenv.buildPlatform.uname.processor}"

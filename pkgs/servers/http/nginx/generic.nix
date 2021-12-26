@@ -3,6 +3,7 @@
 , nixosTests
 , substituteAll, gd, geoip, perl
 , withDebug ? false
+, withKTLS ? false
 , withStream ? true
 , withMail ? false
 , withPerl ? true
@@ -80,6 +81,8 @@ stdenv.mkDerivation {
     "--http-scgi-temp-path=/var/cache/nginx/scgi"
   ] ++ optionals withDebug [
     "--with-debug"
+  ] ++ optionals withKTLS [
+    "--with-openssl-opt=enable-ktls"
   ] ++ optionals withStream [
     "--with-stream"
     "--with-stream_realip_module"

@@ -23,8 +23,9 @@ let
 
 in
 stdenv.mkDerivation {
-  name = "openafs-${version}-${kernel.modDirVersion}";
-  inherit version src;
+  pname = "openafs";
+  version = "${version}-${kernel.modDirVersion}";
+  inherit src;
 
   nativeBuildInputs = [ autoconf automake flex libtool_2 perl which bison ]
     ++ kernel.moduleBuildDependencies;

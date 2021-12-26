@@ -1,24 +1,21 @@
-{ lib, mkDerivation, fetchgit, fetchurl, cmake, darkhttpd, gettext, makeWrapper, pkg-config
-, libdigidocpp, opensc, openldap, openssl, pcsclite, qtbase, qttranslations, qtsvg }:
+{ lib, mkDerivation, fetchurl, cmake, darkhttpd, gettext, makeWrapper
+, pkg-config, libdigidocpp, opensc, openldap, openssl, pcsclite, qtbase
+, qttranslations, qtsvg }:
 
 mkDerivation rec {
   pname = "qdigidoc";
-  version = "4.2.8";
+  version = "4.2.9";
 
-  src = fetchgit {
-    url = "https://github.com/open-eid/DigiDoc4-Client";
-    rev = "v${version}";
-    sha256 = "02k2s6l79ssvrksa0midm7bq856llrmq0n40yxwm3j011nvc8vsm";
-    fetchSubmodules = true;
+  src = fetchurl {
+    url =
+      "https://github.com/open-eid/DigiDoc4-Client/releases/download/v${version}/qdigidoc4-${version}.tar.gz";
+    sha256 = "1rhd3mvj6ld16zgfscj81f1vhs2nvifsizky509l1av7dsjfbbzr";
   };
 
   tsl = fetchurl {
-    url = "https://ec.europa.eu/information_society/policy/esignature/trusted-list/tl-mp.xml";
-    sha256 = "0klz9blrp0jjhlr9k1i266afp44pqmii1x0y8prk0417ia3fxpli";
+    url = "https://ec.europa.eu/tools/lotl/eu-lotl-pivot-300.xml";
+    sha256 = "1cikz36w9phgczcqnwk4k3mx3kk919wy2327jksmfa4cjfjq4a8d";
   };
-
-  # Adds explicit imports for QPainterPath, fixed in upstream (https://github.com/open-eid/DigiDoc4-Client/pull/914)
-  patches = [ ./qt5.15.patch ];
 
   nativeBuildInputs = [ cmake darkhttpd gettext makeWrapper pkg-config ];
 

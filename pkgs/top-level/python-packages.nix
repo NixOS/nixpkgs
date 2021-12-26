@@ -540,6 +540,8 @@ in {
     inherit (pkgs) graphviz;
   };
 
+  aocd = callPackage ../development/python-modules/aocd { };
+
   apache-airflow = callPackage ../development/python-modules/apache-airflow { };
 
   apcaccess = callPackage ../development/python-modules/apcaccess { };
@@ -5844,7 +5846,11 @@ in {
 
   netmap = callPackage ../development/python-modules/netmap { };
 
+  openai = callPackage ../development/python-modules/openai { };
+
   openapi-core = callPackage ../development/python-modules/openapi-core { };
+
+  pandas-stubs = callPackage ../development/python-modules/pandas-stubs { };
 
   parameterizedtestcase = callPackage ../development/python-modules/parameterizedtestcase { };
 
@@ -7618,6 +7624,8 @@ in {
   pytest-raises = callPackage ../development/python-modules/pytest-raises { };
 
   pytest-raisesregexp = callPackage ../development/python-modules/pytest-raisesregexp { };
+
+  pytest-raisin = callPackage ../development/python-modules/pytest-raisin { };
 
   pytest-randomly = callPackage ../development/python-modules/pytest-randomly { };
 

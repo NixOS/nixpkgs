@@ -186,6 +186,8 @@ with pkgs;
 
   antsimulator = callPackage ../games/antsimulator { };
 
+  aocd = with pythonPackages; toPythonApplication aocd;
+
   astrolog = callPackage ../applications/science/astronomy/astrolog { };
 
   atkinson-hyperlegible = callPackage ../data/fonts/atkinson-hyperlegible { };
@@ -1818,6 +1820,8 @@ with pkgs;
   gopacked = callPackage ../applications/misc/gopacked { };
 
   gucci = callPackage ../tools/text/gucci { };
+
+  guglielmo = libsForQt5.callPackage ../applications/radio/guglielmo { };
 
   grc = python3Packages.callPackage ../tools/misc/grc { };
 
@@ -5076,9 +5080,7 @@ with pkgs;
 
   ericw-tools = callPackage ../applications/misc/ericw-tools { };
 
-  cryfs = callPackage ../tools/filesystems/cryfs {
-    boost = boost175;
-  };
+  cryfs = callPackage ../tools/filesystems/cryfs { };
 
   encfs = callPackage ../tools/filesystems/encfs {
     tinyxml2 = tinyxml-2;
@@ -7950,7 +7952,9 @@ with pkgs;
 
   netcdfcxx4 = callPackage ../development/libraries/netcdf-cxx4 { };
 
-  netcdffortran = callPackage ../development/libraries/netcdf-fortran { };
+  netcdffortran = callPackage ../development/libraries/netcdf-fortran {
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation;
+  };
 
   networking-ts-cxx = callPackage ../development/libraries/networking-ts-cxx { };
 
@@ -9789,8 +9793,6 @@ with pkgs;
 
   stremio = qt5.callPackage ../applications/video/stremio { };
 
-  stubby = callPackage ../tools/networking/stubby { };
-
   sunwait = callPackage ../applications/misc/sunwait { };
 
   surface-control = callPackage ../applications/misc/surface-control { };
@@ -11622,6 +11624,8 @@ with pkgs;
     inherit (darwin) cctools;
   };
 
+  chez-racket = callPackage ../development/compilers/chez-racket {};
+
   chez-srfi = callPackage ../development/chez-modules/chez-srfi { };
 
   chez-mit = callPackage ../development/chez-modules/chez-mit { };
@@ -13088,7 +13092,8 @@ with pkgs;
   sbcl_2_1_2 = callPackage ../development/compilers/sbcl/2.1.2.nix {};
   sbcl_2_1_9 = callPackage ../development/compilers/sbcl/2.1.9.nix {};
   sbcl_2_1_10 = callPackage ../development/compilers/sbcl/2.1.10.nix {};
-  sbcl = sbcl_2_1_9;
+  sbcl_2_1_11 = callPackage ../development/compilers/sbcl/2.1.11.nix {};
+  sbcl = sbcl_2_1_11;
 
   roswell = callPackage ../development/tools/roswell { };
 
@@ -15119,6 +15124,8 @@ with pkgs;
 
   omniorb = callPackage ../development/tools/omniorb { };
 
+  openai = with python3Packages; toPythonApplication openai;
+
   opengrok = callPackage ../development/tools/misc/opengrok { };
 
   openocd = callPackage ../development/embedded/openocd { };
@@ -15570,9 +15577,7 @@ with pkgs;
   uefi-firmware-parser = callPackage ../development/tools/analysis/uefi-firmware-parser { };
 
   uhd3_5 = callPackage ../applications/radio/uhd/3.5.nix { };
-  uhd = callPackage ../applications/radio/uhd {
-    boost = boost175;
-  };
+  uhd = callPackage ../applications/radio/uhd { };
 
   uisp = callPackage ../development/embedded/uisp { };
 
@@ -15667,6 +15672,7 @@ with pkgs;
   ycmd = callPackage ../development/tools/misc/ycmd {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
     python = python3;
+    boost = boost174;
   };
 
   yodl = callPackage ../development/tools/misc/yodl { };
@@ -16510,7 +16516,8 @@ with pkgs;
 
   getdata = callPackage ../development/libraries/getdata { };
 
-  getdns = callPackage ../development/libraries/getdns { };
+  inherit (callPackages ../development/libraries/getdns { })
+    getdns stubby;
 
   gettext = callPackage ../development/libraries/gettext { };
 
@@ -19729,7 +19736,7 @@ with pkgs;
 
   simp_le = callPackage ../tools/admin/simp_le { };
 
-  simpleitk = callPackage ../development/libraries/simpleitk { };
+  simpleitk = callPackage ../development/libraries/simpleitk { lua = lua5_3; };
 
   sfml = callPackage ../development/libraries/sfml {
     inherit (darwin.apple_sdk.frameworks) IOKit Foundation AppKit OpenAL;
@@ -21211,6 +21218,7 @@ with pkgs;
 
   nginxMainline = callPackage ../servers/http/nginx/mainline.nix {
     zlib = zlib-ng.override { withZlibCompat = true; };
+    withKTLS = true;
     withPerl = false;
     # We don't use `with` statement here on purpose!
     # See https://github.com/NixOS/nixpkgs/pull/10474#discussion_r42369334
@@ -24323,7 +24331,7 @@ with pkgs;
 
   milkytracker = callPackage ../applications/audio/milkytracker { };
 
-  ptcollab = libsForQt5.callPackage ../applications/audio/ptcollab { };
+  ptcollab = libsForQt515.callPackage ../applications/audio/ptcollab { };
 
   schismtracker = callPackage ../applications/audio/schismtracker { };
 
@@ -26580,7 +26588,6 @@ with pkgs;
   krane = callPackage ../applications/networking/cluster/krane { };
 
   krita = libsForQt5.callPackage ../applications/graphics/krita { };
-  krita-beta = libsForQt5.callPackage ../applications/graphics/krita/beta.nix { };
 
   krusader = libsForQt5.callPackage ../applications/misc/krusader { };
 
