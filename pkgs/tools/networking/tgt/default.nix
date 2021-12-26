@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "iSCSI Target daemon with RDMA support";
-    homepage = "http://stgt.sourceforge.net/";
+    homepage = "https://github.com/fujita/tgt";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ johnazoidberg ];
