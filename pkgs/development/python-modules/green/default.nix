@@ -2,6 +2,7 @@
 , buildPythonPackage
 , isPy3k
 , fetchPypi
+, django
 , colorama
 , coverage
 , unidecode
@@ -11,6 +12,7 @@
 buildPythonPackage rec {
   pname = "green";
   version = "3.3.0";
+  format = "setuptools";
 
   disabled = !isPy3k;
 
@@ -29,17 +31,28 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
-    colorama coverage unidecode lxml
+    colorama
+    coverage
+    unidecode
+    lxml
   ];
 
   # let green run it's own test suite
   checkPhase = ''
-    $out/bin/green -tvvv green
+    $out/bin/green -tvvv \
+      green.test.test_version \
+      green.test.test_cmdline \
+      green.test.test_command
   '';
+
+  pythonImportsCheck = [
+    "green"
+  ];
 
   meta = with lib; {
     description = "Python test runner";
     homepage = "https://github.com/CleanCut/green";
     license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
 }

@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "direnv";
-  version = "2.30.0";
+  version = "2.30.1";
 
   src = fetchFromGitHub {
     owner = "direnv";
     repo = "direnv";
     rev = "v${version}";
-    sha256 = "sha256-URA4aXtxahNwQDif9HpsM+WS7CGOYO2WHa69Q5pmG5A=";
+    sha256 = "sha256-4ojoV6BtPOaMnDierxlfkOuaP1KZGYNMImSURA33tfg=";
   };
 
   vendorSha256 = "sha256-YhgQUl9fdictEtz6J88vEzznGd8Ipeb9AYo/p1ZLz5k=";

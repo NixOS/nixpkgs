@@ -184,6 +184,10 @@ stdenv.mkDerivation {
     ''-DNIXPKGS_LIBXCURSOR="${libXcursor.out}/lib/libXcursor"''
   ] ++ lib.optional libGLSupported ''-DNIXPKGS_MESA_GL="${libGL.out}/lib/libGL"''
     ++ lib.optional stdenv.isLinux "-DUSE_X11"
+    ++ lib.optionals (stdenv.hostPlatform.system == "x86_64-darwin") [
+      # ignore "is only available on macOS 10.12.2 or newer" in obj-c code
+      "-Wno-error=unguarded-availability"
+    ]
     ++ lib.optionals withGtk3 [
          ''-DNIXPKGS_QGTK3_XDG_DATA_DIRS="${gtk3}/share/gsettings-schemas/${gtk3.name}"''
          ''-DNIXPKGS_QGTK3_GIO_EXTRA_MODULES="${dconf.lib}/lib/gio/modules"''

@@ -5,13 +5,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "wapiti";
-  version = "3.0.5";
+  version = "3.0.7";
 
   src = fetchFromGitHub {
     owner = "wapiti-scanner";
     repo = pname;
     rev = version;
-    sha256 = "0663hzpmn6p5xh65d2gk4yk2zh992lfd9lhdwwabhpv3n85nza75";
+    sha256 = "0kya9a2zs1c518z4p34pfjx2sms6843gh3c9qc9zvk4lr4g7hw3x";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -19,19 +19,26 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
+    aiocache
+    aiosqlite
     beautifulsoup4
     browser-cookie3
     cryptography
-    Mako
-    markupsafe
-    pysocks
+    dnspython
     httpx
     httpx-ntlm
     httpx-socks
+    loguru
+    Mako
+    markupsafe
+    pysocks
     six
+    sqlalchemy
     tld
     yaswfp
-  ] ++ lib.optionals (python3.pythonOlder "3.8") [ importlib-metadata ];
+  ] ++ lib.optionals (python3.pythonOlder "3.8") [
+    importlib-metadata
+  ];
 
   checkInputs = with python3.pkgs; [
     respx
@@ -42,9 +49,18 @@ python3.pkgs.buildPythonApplication rec {
   postPatch = ''
     # Ignore pinned versions
     substituteInPlace setup.py \
-      --replace "==" ">="
+      --replace "httpx-socks[asyncio] == 0.5.1" "httpx-socks[asyncio]" \
+      --replace "markupsafe==1.1.1" "markupsafe" \
+      --replace "importlib_metadata==3.7.2" "importlib_metadata" \
+      --replace "browser-cookie3==0.11.4" "browser-cookie3" \
+      --replace "cryptography==3.3.2" "cryptography" \
+      --replace "httpx[brotli]==0.20.0" "httpx" \
+      --replace "sqlalchemy>=1.4.26" "sqlalchemy" \
+      --replace "aiocache==0.11.1" "aiocache" \
+      --replace "aiosqlite==0.17.0" "aiosqlite" \
+      --replace "dnspython==2.1.0" "dnspython"
     substituteInPlace setup.cfg \
-      --replace " --cov" ""
+      --replace " --cov --cov-report=xml" ""
   '';
 
   preCheck = ''
@@ -92,6 +108,7 @@ python3.pkgs.buildPythonApplication rec {
     "test_title_false_positive"
     "test_title_positive"
     "test_true_positive_request_count"
+    "test_unregistered_cname"
     "test_url_detection"
     "test_warning"
     "test_whole"
@@ -108,7 +125,9 @@ python3.pkgs.buildPythonApplication rec {
     "test_persister_upload"
   ];
 
-  pythonImportsCheck = [ "wapitiCore" ];
+  pythonImportsCheck = [
+    "wapitiCore"
+  ];
 
   meta = with lib; {
     description = "Web application vulnerability scanner";

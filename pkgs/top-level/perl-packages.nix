@@ -6078,11 +6078,11 @@ let
 
   DBDSQLite = buildPerlPackage {
     pname = "DBD-SQLite";
-    version = "1.66";
+    version = "1.70";
 
     src = fetchurl {
-      url = "mirror://cpan/authors/id/I/IS/ISHIGAKI/DBD-SQLite-1.66.tar.gz";
-      sha256 = "1zljln5nh61gj3k22a1fv2vhx5l83waizmarwkh77hk6kzzmvrw9";
+      url = "mirror://cpan/authors/id/I/IS/ISHIGAKI/DBD-SQLite-1.70.tar.gz";
+      sha256 = "0gpyv89p3yfwifbm005bz5ci8c63jikkfvafg8x7f3lyaggqvza0";
     };
 
     propagatedBuildInputs = [ DBI ];
@@ -6091,6 +6091,13 @@ let
     patches = [
       # Support building against our own sqlite.
       ../development/perl-modules/DBD-SQLite/external-sqlite.patch
+
+      # Pull upstream fix for test failures against sqlite-3.37.
+      (fetchpatch {
+        name = "sqlite-3.37-compat.patch";
+        url = "https://github.com/DBD-SQLite/DBD-SQLite/commit/ba4f472e7372dbf453444c7764d1c342e7af12b8.patch";
+        sha256 = "02lg1y6px7h89pfvgrf23anhbl3v050gn0kmaajvv5h6layhjzly";
+      })
     ];
 
     makeMakerFlags = "SQLITE_INC=${pkgs.sqlite.dev}/include SQLITE_LIB=${pkgs.sqlite.out}/lib";
@@ -18994,6 +19001,29 @@ let
     propagatedBuildInputs = [ RegexpCommon ];
     meta = {
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  RegexpCommontime = buildPerlPackage {
+    pname = "Regexp-Common-time";
+    version = "0.16";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MA/MANWAR/Regexp-Common-time-0.16.tar.gz";
+      sha256 = "1jjay5gybbls3xn5ihc6q5ig3kf4i28nq4gvg2zp4p5m1ajhg08w";
+    };
+    propagatedBuildInputs = [ RegexpCommon ];
+    meta = {
+      homepage = "https://github.com/manwar/Regexp-Common-time";
+      description = "Date and time regexps.";
+      maintainers = [ maintainers.artturin ];
+      # This module is copyrighted only to ensure proper attribution of
+      # authorship and to ensure that it remains available to all.  This
+      # module is free, open-source software.  This module may be freely used
+      # for any purpose, commercial, public, or private, provided that proper
+      # credit is given, and that no more-restrictive license is applied to
+      # derivative (not dependent) works.
+      # https://metacpan.org/release/MANWAR/Regexp-Common-time-0.13/view/lib/Regexp/Common/time.pm#LICENSE-AND-COPYRIGHT
+      license = lib.licenses.free;
     };
   };
 

@@ -1,10 +1,11 @@
 {lib, stdenv, fetchurl}:
 
-stdenv.mkDerivation {
-  name = "commons-bsf-1.2";
+stdenv.mkDerivation rec {
+  pname = "commons-bsf";
+  version = "2.4.0";
 
   src = fetchurl {
-    url = "mirror://apache/commons/bsf/binaries/bsf-bin-2.4.0.tar.gz";
+    url = "mirror://apache/commons/bsf/binaries/bsf-bin-${version}.tar.gz";
     sha256 = "1my3hv4y8cvrd1kr315wvbjqsamzlzswnbqcmsa2m4hqcafddfr8";
   };
 

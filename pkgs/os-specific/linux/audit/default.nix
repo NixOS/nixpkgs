@@ -1,6 +1,7 @@
 {
   lib, stdenv, buildPackages, fetchurl, fetchpatch,
   runCommand,
+  autoreconfHook,
   autoconf, automake, libtool,
   enablePython ? false, python ? null,
 }:
@@ -19,8 +20,7 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "dev" "out" "man" ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isMusl
-    [ autoconf automake libtool ];
+  nativeBuildInputs = [ autoreconfHook ];
   buildInputs = lib.optional enablePython python;
 
   configureFlags = [
@@ -44,8 +44,7 @@ stdenv.mkDerivation rec {
       url = "https://github.com/linux-audit/audit-userspace/commit/017e6c6ab95df55f34e339d2139def83e5dada1f.patch";
       sha256 = "100xa1rzkv0mvhjbfgpfm72f7c4p68syflvgc3xm6pxgrqqmfq8h";
     })
-  ]
-  ++ lib.optional stdenv.hostPlatform.isMusl [
+
     (
       let patch = fetchpatch {
             url = "https://github.com/linux-audit/audit-userspace/commit/d579a08bb1cde71f939c13ac6b2261052ae9f77e.patch";
@@ -60,6 +59,14 @@ stdenv.mkDerivation rec {
               '-* Copyright (c) 2007-09,2011-16 Red Hat Inc., Durham, North Carolina.'
         ''
     )
+
+    # upstream fix for linux-headers-5.15 which removed ipx.h
+    (fetchpatch {
+      name = "no-ipx.patch";
+      url = "https://github.com/linux-audit/audit-userspace/commit/6b09724c69d91668418ddb3af00da6db6755208c.patch";
+      sha256 = "0qjq41ridyamajz9v9nyplgq7f8nn3fxw375s9sa5a0igsrx9pm0";
+      excludes = [ "ChangeLog" ];
+    })
   ];
 
   prePatch = ''

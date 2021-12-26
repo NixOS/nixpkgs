@@ -247,12 +247,12 @@ in
 
   clion = buildClion rec {
     name = "clion-${version}";
-    version = "2021.3"; /* updated by script */
+    version = "2021.3.1"; /* updated by script */
     description  = "C/C++ IDE. New. Intelligent. Cross-platform";
     license = lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/cpp/CLion-${version}.tar.gz";
-      sha256 = "0rvq0k99c4kniw2k0a8m2hq27v9nvn7qg6yg9dwxlmadsrx6as29"; /* updated by script */
+      sha256 = "0nf1r02i51pplrazlyavc6xs6mi91spa92srfqpsgb78ar9vn027"; /* updated by script */
     };
     wmClass = "jetbrains-clion";
     update-channel = "CLion RELEASE"; # channel's id as in http://www.jetbrains.com/updates/updates.xml
@@ -260,12 +260,12 @@ in
 
   datagrip = buildDataGrip rec {
     name = "datagrip-${version}";
-    version = "2021.3.1"; /* updated by script */
+    version = "2021.3.2"; /* updated by script */
     description = "Your Swiss Army Knife for Databases and SQL";
     license = lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/datagrip/${name}.tar.gz";
-      sha256 = "18drbddcjbbv6q6j95wy7ila8d7imi0gh5nnf0lhj4gkkxhszmii"; /* updated by script */
+      sha256 = "0m0nc988w2a2p0l3a9cirnk2vbrsas4wb3fc4pwiml5bz5vwh255"; /* updated by script */
     };
     wmClass = "jetbrains-datagrip";
     update-channel = "DataGrip RELEASE";
@@ -273,12 +273,12 @@ in
 
   goland = buildGoland rec {
     name = "goland-${version}";
-    version = "2021.3"; /* updated by script */
+    version = "2021.3.1"; /* updated by script */
     description = "Up and Coming Go IDE";
     license = lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/go/${name}.tar.gz";
-      sha256 = "0bdsvfsx0vhmvlqvy9phw6yz98la8qw2avm4p0yl9j8y9zplbhl0"; /* updated by script */
+      sha256 = "1kl1sg2fjh8wpx47984vw6zrqf7nakbji606cl52brkxik7py0d3"; /* updated by script */
     };
     wmClass = "jetbrains-goland";
     update-channel = "GoLand RELEASE";
@@ -365,12 +365,12 @@ in
 
   rider = buildRider rec {
     name = "rider-${version}";
-    version = "2021.3.1"; /* updated by script */
+    version = "2021.3.2"; /* updated by script */
     description = "A cross-platform .NET IDE based on the IntelliJ platform and ReSharper";
     license = lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/rider/JetBrains.Rider-${version}.tar.gz";
-      sha256 = "0c788xvcd5b9jafz2yyllj1pzgc9ry3pg82qi8glghvimjnk1cfd"; /* updated by script */
+      sha256 = "0arnh9wlw874jqlgad00q0nf1kjp7pvb4xixwrb6v1l9fbr9nsan"; /* updated by script */
     };
     wmClass = "jetbrains-rider";
     update-channel = "Rider RELEASE";

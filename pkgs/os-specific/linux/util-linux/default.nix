@@ -1,7 +1,10 @@
 { lib, stdenv, fetchurl, pkg-config, zlib, shadow, libcap_ng
 , ncurses ? null, pam, systemd ? null
 , nlsSupport ? true
+, audit ? null
 }:
+
+assert stdenv.hostPlatform.isStatic -> audit != null;
 
 stdenv.mkDerivation rec {
   pname = "util-linux";
@@ -57,7 +60,17 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs =
     [ zlib pam libcap_ng ]
-    ++ lib.filter (p: p != null) [ ncurses systemd ];
+    ++ lib.filter (p: p != null) [ ncurses systemd ]
+    # not sure how util-linux is linking with linux-pam,
+    # probably just with a simplistic -lpam.
+    # linux-pam doesn't seem to have a .pc file so I can't
+    # add -laudit to the Requires.private.
+    # libaudit is also needed directly anyway cf login-utils/login.c
+    # and sys-utils/hwclock.c, not sure how we got it working
+    # without audit on dynamic builds.
+    ++ lib.optionals stdenv.hostPlatform.isStatic [ audit ];
+
+  NIX_CFLAGS_LINK = lib.optionalString stdenv.hostPlatform.isStatic "-laudit";
 
   doCheck = false; # "For development purpose only. Don't execute on production system!"
 

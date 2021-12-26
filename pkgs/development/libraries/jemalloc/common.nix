@@ -1,5 +1,6 @@
 { version, sha256 }:
 { lib, stdenv, fetchurl
+, fetchpatch
 # By default, jemalloc puts a je_ prefix onto all its symbols on OSX, which
 # then stops downstream builds (mariadb in particular) from detecting it. This
 # option should remove the prefix and give us a working jemalloc.
@@ -19,6 +20,14 @@ stdenv.mkDerivation rec {
     url = "https://github.com/jemalloc/jemalloc/releases/download/${version}/${pname}-${version}.tar.bz2";
     inherit sha256;
   };
+
+  patches = [
+    # workaround https://github.com/jemalloc/jemalloc/issues/2091
+    (fetchpatch {
+      url = "https://github.com/jemalloc/jemalloc/commit/3b4a03b92b2e415415a08f0150fdb9eeb659cd52.diff";
+      sha256 = "sha256-6AYtADREhfj93ZLk9xnXtjc6vHDU0EKLLOvLd6YdJeI=";
+    })
+  ];
 
   # see the comment on stripPrefix
   configureFlags = []

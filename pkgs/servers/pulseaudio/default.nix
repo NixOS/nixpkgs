@@ -26,7 +26,7 @@
 , # Whether to build only the library.
   libOnly ? false
 
-, CoreServices, AudioUnit, Cocoa
+, AudioUnit, Cocoa, CoreServices, Libc
 }:
 
 stdenv.mkDerivation rec {
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ libtool libsndfile soxr speexdsp fftwFloat ]
     ++ lib.optionals stdenv.isLinux [ glib dbus ]
-    ++ lib.optionals stdenv.isDarwin [ CoreServices AudioUnit Cocoa ]
+    ++ lib.optionals stdenv.isDarwin [ AudioUnit Cocoa CoreServices Libc ]
     ++ lib.optionals (!libOnly) (
       [ libasyncns webrtc-audio-processing ]
       ++ lib.optional jackaudioSupport libjack2
@@ -94,7 +94,6 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optional (jackaudioSupport && !libOnly) "--enable-jack"
     ++ lib.optionals stdenv.isDarwin [
-      "--with-mac-sysroot=/"
       "--disable-neon-opt"
     ]
     ++ lib.optional (stdenv.isLinux && useSystemd) "--with-systemduserunitdir=${placeholder "out"}/lib/systemd/user"
@@ -102,12 +101,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  # not sure what the best practices are here -- can't seem to find a way
-  # for the compiler to bring in stdlib and stdio (etc.) properly
-  # the alternative is to copy the files from /usr/include to src, but there are
-  # probably a large number of files that would need to be copied (I stopped
-  # after the seventh)
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-I/usr/include";
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-I${Libc}";
 
   installFlags =
     [ "sysconfdir=${placeholder "out"}/etc"

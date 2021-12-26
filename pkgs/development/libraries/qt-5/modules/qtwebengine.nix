@@ -110,6 +110,8 @@ qtModule {
     # it fails when compiled with -march=sandybridge https://github.com/NixOS/nixpkgs/pull/59148#discussion_r276696940
     # TODO: investigate and fix properly
     "-march=westmere"
+  ] ++ lib.optionals stdenv.cc.isClang [
+    "-Wno-elaborated-enum-base"
   ] ++ lib.optionals stdenv.isDarwin [
     "-DMAC_OS_X_VERSION_MAX_ALLOWED=MAC_OS_X_VERSION_10_12"
     "-DMAC_OS_X_VERSION_MIN_REQUIRED=MAC_OS_X_VERSION_10_12"
