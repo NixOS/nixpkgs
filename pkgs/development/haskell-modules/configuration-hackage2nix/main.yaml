@@ -138,7 +138,6 @@ extra-packages:
   - dhall == 1.29.0                     # required for ats-pkg
   - dhall == 1.38.1                     # required for spago
   - Diff < 0.4                          # required by liquidhaskell-0.8.10.2: https://github.com/ucsd-progsys/liquidhaskell/issues/1729
-  - ghc-tcplugins-extra ==0.3.2         # required for polysemy-plugin 0.2.5.0
   - haddock == 2.23.*                   # required on GHC < 8.10.x
   - haddock-api == 2.23.*               # required on GHC < 8.10.x
   - haddock-library ==1.7.*             # required by stylish-cabal-0.5.0.0

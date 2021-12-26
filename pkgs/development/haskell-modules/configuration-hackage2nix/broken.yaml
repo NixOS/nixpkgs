@@ -3792,7 +3792,6 @@ broken-packages:
   - polynom
   - polynomial
   - polysemy-mocks
-  - polysemy-plugin
   - polysemy-zoo
   - polytypeable
   - pomaps

@@ -1228,12 +1228,8 @@ self: super: {
     })
   ] super.polysemy;
 
-  # polysemy-plugin 0.2.5.0 has constraint ghc-tcplugins-extra (==0.3.*)
-  # This upstream issue is relevant:
-  # https://github.com/polysemy-research/polysemy/issues/322
-  polysemy-plugin = super.polysemy-plugin.override {
-    ghc-tcplugins-extra = self.ghc-tcplugins-extra_0_3_2;
-  };
+  # 2021-12-26: Too strict bounds on doctest
+  polysemy-plugin = doJailbreak super.polysemy-plugin;
 
   # Test suite requires running a database server. Testing is done upstream.
   hasql-notifications = dontCheck super.hasql-notifications;
