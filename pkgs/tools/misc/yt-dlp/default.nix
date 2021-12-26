@@ -20,12 +20,12 @@ buildPythonPackage rec {
   # The websites yt-dlp deals with are a very moving target. That means that
   # downloads break constantly. Because of that, updates should always be backported
   # to the latest stable release.
-  version = "2021.12.1";
+  version = "2021.12.25";
 
   src = fetchPypi {
     inherit pname;
     version = builtins.replaceStrings [ ".0" ] [ "." ] version;
-    sha256 = "sha256-WNpbltSDT+gTDJYLnf1nDNLQ5TtlDNkuXEOBckFRuA8=";
+    sha256 = "sha256-h8E1F8VVEM+sqGFyYN43YCkDXbwvhxWnQmulZS6P4hI=";
   };
 
   propagatedBuildInputs = [ websockets mutagen ]

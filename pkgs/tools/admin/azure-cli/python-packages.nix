@@ -146,7 +146,7 @@ let
         "sha256-p9MTfVxGD1CsLUQGHWCnC08nedTKhEt3QZtXJeZeCb4=";
 
       azure-mgmt-recoveryservicesbackup = overrideAzureMgmtPackage super.azure-mgmt-recoveryservicesbackup "3.0.0" "zip"
-        "sha256-y5akbJdqXZsRi+mecq1opR1Ye9yTxNblGp/zjiXEqaY=";
+        "sha256-GZJIayjd1tT1l/0wBCF80sr09NyKDOcSJrWudnrOOhg=";
 
       azure-mgmt-resource = overrideAzureMgmtPackage super.azure-mgmt-resource "19.0.0" "zip"
         "bbb60bb9419633c2339569d4e097908638c7944e782b5aef0f5d9535085a9100";
