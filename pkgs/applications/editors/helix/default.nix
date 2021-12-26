@@ -16,6 +16,10 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
+  patches = [
+    ./patches/reenable-haskell.patch
+  ];
+
   postInstall = ''
     mkdir -p $out/lib
     cp -r runtime $out/lib
