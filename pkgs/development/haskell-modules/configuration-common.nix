@@ -1677,6 +1677,8 @@ self: super: {
   # Issue reported upstream, no bug tracker url yet.
   darcs = doJailbreak super.darcs;
 
+  # Too strict verion bounds on cryptonite and github.
+  # PRs are merged, will be fixed next release or Hackage revision.
   nix-thunk = appendPatches [
     (pkgs.fetchpatch {
       url = "https://github.com/obsidiansystems/nix-thunk/commit/49d27a85dd39cd9413c99958c67e596756a502b5.patch";
