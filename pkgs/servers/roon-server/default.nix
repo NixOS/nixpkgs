@@ -26,6 +26,9 @@ stdenv.mkDerivation rec {
       sha256 = "sha256-Td3iRYGmTg8Vx9c4e4ugIIbAqhDFPax9vR2BsCIQCZA=";
     };
 
+  dontConfigure = true;
+  dontBuild = true;
+
   buildInputs = [
     alsa-lib
     freetype
