@@ -27123,6 +27123,7 @@ with pkgs;
 
   monotone = callPackage ../applications/version-management/monotone {
     lua = lua5;
+    boost = boost170;
   };
 
   monotoneViz = callPackage ../applications/version-management/monotone-viz {
