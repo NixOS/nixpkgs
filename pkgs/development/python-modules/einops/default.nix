@@ -43,8 +43,14 @@ buildPythonPackage rec {
   EINOPS_SKIP_CUPY = 1;
 
   checkPhase = ''
-    export HOME=$TMPDIR
+    runHook preCheck
+
+    # Leftover files in a $TMPDIR can screw tests up, so creating a separate dir
+    export HOME=$(mktemp -d)
     nosetests -v -w tests
+    rm -rf $HOME
+
+    runHook postCheck
   '';
 
   meta = {
