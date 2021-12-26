@@ -2206,5 +2206,11 @@ self: super: {
       "--skip" "/Dropbox/Dropbox aeson aeson/encodes list folder correctly/"
     ] ++ drv.testFlags or [];
   }) super.dropbox;
+  # https://github.com/alonsodomin/haskell-schema/issues/11
+  hschema-aeson = overrideCabal (drv: {
+    testFlags = [
+      "--skip" "/toJsonSerializer/should generate valid JSON/"
+    ] ++ drv.testFlags or [];
+  }) super.hschema-aeson;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
