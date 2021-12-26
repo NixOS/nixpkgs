@@ -23,6 +23,12 @@ python3Packages.buildPythonApplication rec {
     mv $out/bin/nicotine $out/bin/nicotine-plus
   '';
 
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}"
+    )
+  '';
+
   doCheck = false;
 
   meta = {
