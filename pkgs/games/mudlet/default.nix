@@ -1,20 +1,28 @@
 { fetchFromGitHub, lib, stdenv, wrapQtAppsHook, git, pcre, pugixml, qtbase, libsForQt5, libsecret, qtmultimedia, qttools, yajl, libzip, hunspell
-, boost, libGLU, lua, cmake,  which, pkg-config, }:
+, boost, libGLU, lua, cmake,  which, pkg-config, fetchpatch }:
 
 let
   luaEnv = lua.withPackages(ps: with ps; [ luazip luafilesystem lrexlib-pcre luasql-sqlite3 lua-yajl luautf8 ]);
 in
 stdenv.mkDerivation rec {
   pname = "mudlet";
-  version = "4.12.0";
+  version = "4.14.1";
 
   src = fetchFromGitHub {
     owner = "Mudlet";
     repo = "Mudlet";
     rev = "Mudlet-${version}";
     fetchSubmodules = true;
-    sha256 = "023plm5mwm15xikmdh1mq3gx1n7y4a0r0kw9fvk3rvm9brm78hzp";
+    sha256 = "sha256-vpJoBvggcjR0rnMtRf47atKzDcfVHrtuEN5Y4rbaFyU=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "fix-cmake-typo.patch";
+      url = "https://github.com/Mudlet/Mudlet/commit/07ac56f1ecd2a6ed4a9c1abe3564681480ceda6e.diff";
+      sha256 = "sha256-gDrEcf9k59y1rCu3MLi6oPHHQsF2JvHeuOiJtyJ79gE=";
+    })
+  ];
 
   nativeBuildInputs = [ pkg-config cmake wrapQtAppsHook git qttools which ];
   buildInputs = [
