@@ -2225,4 +2225,9 @@ self: super: {
     ] ++ drv.testFlags or [];
   }) super.aeson-quick;
 
+  # golden files expect an old version of hpack, so tests fail intermittently
+  # TODO: maybe disable golden test suite altogether? this will happen again as
+  #       hpack emits its version into the generated files…
+  hpack-dhall = assert super.hpack-dhall.version == "0.5.3"; dontCheck super.hpack-dhall;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
