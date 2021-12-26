@@ -36,15 +36,21 @@ stdenv.mkDerivation rec {
             export CAML_LD_LIBRARY_PATH="''${CAML_LD_LIBRARY_PATH-}''${CAML_LD_LIBRARY_PATH:+:}''$1/lib/ocaml/${ocaml.version}/site-lib/stublibs"
         fi
     }
-    createOcamlDestDir () {
+    exportOcamlDestDir () {
         export OCAMLFIND_DESTDIR="''$out/lib/ocaml/${ocaml.version}/site-lib/"
+    }
+    createOcamlDestDir () {
         if test -n "''${createFindlibDestdir-}"; then
           mkdir -p $OCAMLFIND_DESTDIR
         fi
     }
 
+    # run for every buildInput
     addEnvHooks "$targetOffset" addOCamlPath
+    # run before configurePhase, even without buildInputs, and not in nix-shell
     preConfigureHooks+=(createOcamlDestDir)
+    # run even in nix-shell, and even without buildInputs
+    addEnvHooks "$hostOffset" exportOcamlDestDir
   '';
 
   meta = {
