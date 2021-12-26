@@ -124,11 +124,6 @@ in
       sha256 = "1d6zzk0ii43iqfnjbldwp8sasyx99lbjp1nfgqjla7ixld6yp98l";
     };
 
-    makeFlags = [
-      # TODO(@sternenseemann): remove if afdko is new enough to know about Unicode 14.0
-      "BYPASS_SEQUENCE_CHECK=True"
-    ];
-
     nativeBuildInputs = [
       cairo
       imagemagick

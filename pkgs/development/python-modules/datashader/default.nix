@@ -31,6 +31,13 @@ buildPythonPackage rec {
     sha256 = "sha256-6JscHm1QjDmXOLLa83qhAvY/xwvlPM6duQ1lSxnCVV8=";
   };
 
+  # the complete extra is for usage with conda, which we
+  # don't care about
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "dask[complete]" "dask"
+  '';
+
   propagatedBuildInputs = [
     dask
     bokeh
@@ -56,9 +63,22 @@ buildPythonPackage rec {
     netcdf4
   ];
 
+  preCheck = ''
+    export HOME=$TMPDIR
+  '';
+
   pytestFlagsArray = [
     "-n $NIX_BUILD_CORES"
     "datashader"
+  ];
+
+  disabledTests = [
+    # not compatible with current version of bokeh
+    # see: https://github.com/holoviz/datashader/issues/1031
+    "test_interactive_image_update"
+    # latest dask broken array marshalling
+    # see: https://github.com/holoviz/datashader/issues/1032
+    "test_raster_quadmesh_autorange_reversed"
   ];
 
   disabledTestPaths = [

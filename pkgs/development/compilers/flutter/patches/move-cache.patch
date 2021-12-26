@@ -20,7 +20,7 @@ index ed42baea29..fee2fb1d62 100644
          final Uri entryUri = _fileSystem.path.toUri(asset);
          result.add(_Asset(
 -          baseDir: _fileSystem.path.join(Cache.flutterRoot!, 'bin', 'cache', 'artifacts', 'material_fonts'),
-+          baseDir: _fileSystem.path.join(globals.fsUtils.homeDirPath!, 'bin', 'cache', 'artifacts', 'material_fonts'),
++          baseDir: _fileSystem.path.join(globals.fsUtils.homeDirPath!, '.cache', 'flutter', 'artifacts', 'material_fonts'),
            relativeUri: Uri(path: entryUri.pathSegments.last),
            entryUri: entryUri,
            package: null,

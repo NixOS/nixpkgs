@@ -1,6 +1,5 @@
-{ lib, stdenv, llvm_meta, cmake, python3, src, libunwind, version
+{ lib, stdenv, llvm_meta, cmake, python3, src, cxx-headers, libunwind, version
 , enableShared ? !stdenv.hostPlatform.isStatic
-, libcxx
 }:
 
 stdenv.mkDerivation rec {
@@ -26,7 +25,7 @@ stdenv.mkDerivation rec {
   buildInputs = lib.optional (!stdenv.isDarwin && !stdenv.isFreeBSD && !stdenv.hostPlatform.isWasm) libunwind;
 
   cmakeFlags = [
-    "-DLIBCXXABI_LIBCXX_INCLUDES=${libcxx.dev}/include/c++/v1"
+    "-DLIBCXXABI_LIBCXX_INCLUDES=${cxx-headers}/include/c++/v1"
   ] ++ lib.optionals (stdenv.hostPlatform.useLLVM or false) [
     "-DLLVM_ENABLE_LIBCXX=ON"
     "-DLIBCXXABI_USE_LLVM_UNWINDER=ON"

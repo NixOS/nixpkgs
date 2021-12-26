@@ -41,6 +41,7 @@
 , gnupg
 , zlib
 , xz
+, zstd
 , tpm2-tss
 , libuuid
 , libapparmor
@@ -48,6 +49,7 @@
 , bzip2
 , pcre2
 , e2fsprogs
+, elfutils
 , linuxHeaders ? stdenv.cc.libc.linuxHeaders
 , gnu-efi
 , iptables
@@ -68,7 +70,7 @@
 
 , withAnalyze ? true
 , withApparmor ? true
-, withCompression ? true  # adds bzip2, lz4 and xz
+, withCompression ? true  # adds bzip2, lz4, xz and zstd
 , withCoredump ? true
 , withCryptsetup ? true
 , withDocumentation ? true
@@ -373,7 +375,8 @@ stdenv.mkDerivation {
 
     ++ lib.optional withApparmor libapparmor
     ++ lib.optional wantCurl (lib.getDev curl)
-    ++ lib.optionals withCompression [ bzip2 lz4 xz ]
+    ++ lib.optionals withCompression [ bzip2 lz4 xz zstd ]
+    ++ lib.optional withCoredump elfutils
     ++ lib.optional withCryptsetup (lib.getDev cryptsetup.dev)
     ++ lib.optional withEfi gnu-efi
     ++ lib.optional withKexectools kexec-tools

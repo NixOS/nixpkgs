@@ -1,17 +1,17 @@
-{ lib, stdenv, fetchurl, pkg-config, glib, libintl }:
+{ lib, stdenv, fetchurl, pkg-config, meson, ninja, glib, libintl }:
 
 with lib;
 
 stdenv.mkDerivation rec {
   pname = "desktop-file-utils";
-  version = "0.24";
+  version = "0.26";
 
   src = fetchurl {
     url = "https://www.freedesktop.org/software/${pname}/releases/${pname}-${version}.tar.xz";
-    sha256 = "1nc3bwjdrpcrkbdmzvhckq0yngbcxspwj2n1r7jr3gmx1jk5vpm1";
+    sha256 = "02bkfi6fyk4c0gh2avd897882ww5zl7qg7bzzf28qb57kvkvsvdj";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config meson ninja ];
   buildInputs = [ glib libintl ];
 
   postPatch = ''

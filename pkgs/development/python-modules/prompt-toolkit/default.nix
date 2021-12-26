@@ -2,26 +2,37 @@
 , buildPythonPackage
 , fetchPypi
 , pytestCheckHook
-, six
+, pythonOlder
 , wcwidth
 }:
 
 buildPythonPackage rec {
   pname = "prompt-toolkit";
-  version = "3.0.19";
+  version = "3.0.22";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     pname = "prompt_toolkit";
     inherit version;
-    sha256 = "08360ee3a3148bdb5163621709ee322ec34fc4375099afa4bbf751e9b7b7fa4f";
+    sha256 = "sha256-RJ8zPdEgvQH10paozhRSEUujpx+ucojS8K4skYdk+nI=";
   };
 
-  propagatedBuildInputs = [ six wcwidth ];
+  propagatedBuildInputs = [
+    wcwidth
+  ];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [
+    pytestCheckHook
+  ];
 
   disabledTests = [
     "test_pathcompleter_can_expanduser"
+  ];
+
+  pythonImportsCheck = [
+    "prompt_toolkit"
   ];
 
   meta = with lib; {
@@ -33,7 +44,7 @@ buildPythonPackage rec {
       with a nice interactive Python shell (called ptpython) built on top.
     '';
     homepage = "https://github.com/jonathanslenders/python-prompt-toolkit";
-    maintainers = with maintainers; [ ];
     license = licenses.bsd3;
+    maintainers = with maintainers; [ ];
   };
 }

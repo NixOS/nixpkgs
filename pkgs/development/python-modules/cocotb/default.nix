@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "cocotb";
-  version = "1.5.2";
+  version = "1.6.0";
 
   # - we need to use the tarball from PyPi
   #   or the full git checkout (with .git)
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   #   because it does not include required metadata
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9f4f3e6eb9caeb479e98d604770645b57469cd25b39e28df1916ffcd593efbe6";
+    sha256 = "a695544ab314e6d795b72ece9e67b51c6668c569b21303158e00452db43c5756";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
