@@ -73,7 +73,6 @@ self: super:
   astroid = super.astroid.overridePythonAttrs (
     old: rec {
       buildInputs = (old.buildInputs or [ ]) ++ [ self.pytest-runner ];
-      doCheck = false;
     }
   );
 
@@ -162,6 +161,14 @@ self: super:
     }
   );
 
+  cloudflare = super.cloudflare.overridePythonAttrs (
+    old: {
+      postPatch = ''
+        rm -rf examples/*
+      '';
+    }
+  );
+
   colour = super.colour.overridePythonAttrs (
     old: {
       buildInputs = (old.buildInputs or [ ]) ++ [ self.d2to1 ];
@@ -184,10 +191,22 @@ self: super:
     old: {
       nativeBuildInputs = (old.nativeBuildInputs or [ ])
         ++ lib.optional (lib.versionAtLeast old.version "3.4") [ self.setuptools-rust ]
-        ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) self.python.pythonForBuild.pkgs.cffi;
+        ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) self.python.pythonForBuild.pkgs.cffi
+        ++ lib.optional (lib.versionAtLeast old.version "3.5")
+        (with pkgs.rustPlatform; [ cargoSetupHook rust.cargo rust.rustc ]);
       buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.openssl ];
     } // lib.optionalAttrs (lib.versionAtLeast old.version "3.4" && lib.versionOlder old.version "3.5") {
       CRYPTOGRAPHY_DONT_BUILD_RUST = "1";
+    } // lib.optionalAttrs (lib.versionAtLeast old.version "3.5") rec {
+      cargoDeps = pkgs.rustPlatform.fetchCargoTarball {
+        src = old.src;
+        sourceRoot = "${old.pname}-${old.version}/${cargoRoot}";
+        name = "${old.pname}-${old.version}";
+        # This hash could no longer be valid for cryptography versions
+        # different from 3.5.0
+        sha256 = "sha256-tQoQfo+TAoqAea86YFxyj/LNQCiViu5ij/3wj7ZnYLI=";
+      };
+      cargoRoot = "src/rust";
     }
   );
 
@@ -344,6 +363,12 @@ self: super:
       buildInputs = (old.buildInputs or [ ]) ++ [ self.pytest-runner ];
     }
   );
+
+  filelock = super.filelock.overridePythonAttrs (old: {
+    postPatch = ''
+      substituteInPlace setup.py --replace 'setup()' 'setup(version="${old.version}")'
+    '';
+  });
 
   fiona = super.fiona.overridePythonAttrs (
     old: {
@@ -845,7 +870,10 @@ self: super:
         # is64bit: unfortunately the build would exhaust all possible memory on i686-linux.
         stdenv.buildPlatform.is64bit
         # Derivation fails to build since v0.900 if mypyc is enabled.
-        && lib.strings.versionOlder old.version "0.900";
+        && (
+          lib.strings.versionOlder old.version "0.900"
+          || lib.strings.versionAtLeast old.version "0.910"
+        );
     }
   );
 
@@ -967,28 +995,6 @@ self: super:
       buildInputs = with pkgs; [ freetype libjpeg zlib libtiff libwebp tcl lcms2 ] ++ (old.buildInputs or [ ]);
     }
   );
-
-  # Work around https://github.com/nix-community/poetry2nix/issues/244
-  # where git deps are not picked up as they should
-  pip =
-    if lib.versionAtLeast super.pip.version "20.3" then
-      super.pip.overridePythonAttrs
-        (old:
-          let
-            pname = "pip";
-            version = "20.2.4";
-          in
-          {
-            name = pname + "-" + version;
-            inherit version;
-            src = pkgs.fetchFromGitHub {
-              owner = "pypa";
-              repo = pname;
-              rev = version;
-              sha256 = "eMVV4ftgV71HLQsSeaOchYlfaJVgzNrwUynn3SA1/Do=";
-              name = "${pname}-${version}-source";
-            };
-          }) else super.pip;
 
   platformdirs = super.platformdirs.overridePythonAttrs (old: {
     postPatch = ''
@@ -1201,7 +1207,6 @@ self: super:
   pylint = super.pylint.overridePythonAttrs (
     old: {
       buildInputs = (old.buildInputs or [ ]) ++ [ self.pytest-runner ];
-      doCheck = false;
     }
   );
 
@@ -1369,7 +1374,6 @@ self: super:
       postPatch = old.postPatch or "" + ''
         sed -i '/\[metadata\]/aversion = ${old.version}' setup.cfg
       '';
-      doCheck = false;
     }
   );
 
@@ -1700,7 +1704,7 @@ self: super:
           if (!enableCuda) then ''
             export USE_CUDA=0
           '' else ''
-            export LD_LIBRARY_PATH="$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}${cudatoolkit}/targets/x86_64-linux/lib"
+            export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:${cudatoolkit}/targets/x86_64-linux/lib"
           '';
         preFixup = lib.optionalString (!enableCuda) ''
           # For some reason pytorch retains a reference to libcuda even if it
@@ -1739,9 +1743,9 @@ self: super:
       ];
       preConfigure =
         if (enableCuda) then ''
-          export LD_LIBRARY_PATH="$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}${self.torch}/${self.python.sitePackages}/torch/lib:${lib.makeLibraryPath [ cudatoolkit "${cudatoolkit}" ]}"
+          export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:${self.torch}/${self.python.sitePackages}/torch/lib:${lib.makeLibraryPath [ cudatoolkit "${cudatoolkit}" ]}"
         '' else ''
-          export LD_LIBRARY_PATH="$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}${self.torch}/${self.python.sitePackages}/torch/lib"
+          export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:${self.torch}/${self.python.sitePackages}/torch/lib"
         '';
     }))
     { };
@@ -1854,13 +1858,14 @@ self: super:
     if lib.versionAtLeast super.zipp.version "2.0.0" then
       (
         super.zipp.overridePythonAttrs (
-          old: {
+          old:
+          if (old.format or "pyproject") != "wheel" then {
             prePatch = ''
               substituteInPlace setup.py --replace \
               'setuptools.setup()' \
               'setuptools.setup(version="${super.zipp.version}")'
             '';
-          }
+          } else old
         )
       ) else super.zipp
   ).overridePythonAttrs (
@@ -2080,9 +2085,8 @@ self: super:
     nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ self.flit-core ];
   });
 
-  virtualenv = super.virtualenv.overridePythonAttrs (old: {
-    postPatch = ''
-      substituteInPlace setup.cfg --replace 'platformdirs>=2,<3' 'platformdirs'
-    '';
+  uwsgi = super.uwsgi.overridePythonAttrs (old: {
+    buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.ncurses ];
+    sourceRoot = ".";
   });
 }
