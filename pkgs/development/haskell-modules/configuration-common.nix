@@ -2194,5 +2194,11 @@ self: super: {
   }) super.json-to-haskell;
   # https://github.com/fieldstrength/aeson-deriving/issues/5
   aeson-deriving = dontCheck super.aeson-deriving;
+  # https://github.com/morpheusgraphql/morpheus-graphql/issues/660
+  morpheus-graphql-core = overrideCabal (drv: {
+    testFlags = [
+      "-p" "!/field.unexpected-value/&&!/field.missing-field/&&!/argument.unexpected-value/&&!/argument.missing-field/"
+    ] ++ drv.testFlags or [];
+  }) super.morpheus-graphql-core;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
