@@ -10264,6 +10264,8 @@ with pkgs;
 
   touchegg = callPackage ../tools/inputmethods/touchegg { };
 
+  torrent7z = callPackage ../tools/archivers/torrent7z { };
+
   torsocks = callPackage ../tools/security/tor/torsocks.nix { };
 
   toss = callPackage ../tools/networking/toss { };
