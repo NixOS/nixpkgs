@@ -362,7 +362,12 @@ stdenv.mkDerivation {
     license = with licenses; [ fdl13 gpl2 lgpl21 lgpl3 ];
     maintainers = with maintainers; [ qknight ttuegel periklis bkchr ];
     platforms = platforms.unix;
-    broken = stdenv.isDarwin && (compareVersion "5.9.0" < 0);
+    # Qt5 is broken on aarch64-darwin
+    # the build ends up with the following error:
+    #   error: unknown target CPU 'armv8.3-a+crypto+sha2+aes+crc+fp16+lse+simd+ras+rdm+rcpc'
+    #   note: valid target CPU values are: nocona, core2, penryn, ..., znver1, znver2, x86-64
+    # it seems the qmake/cmake passes x86_64 as preferred architecture somewhere
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 
 }
