@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Crossplatform mud client";
-    homepage = "http://mudlet.org/";
+    homepage = "https://mudlet.org";
     maintainers = [ maintainers.wyvie maintainers.pstn ];
     platforms = platforms.linux;
     license = licenses.gpl2;
