@@ -126,6 +126,10 @@ default-package-overrides:
   - brittany < 0.14
   # 1.2.0.0: “Dropped support for GHC <9.2 (might readd it later)”
   - retrie < 1.2.0.0
+  # Compat with polysemy in Stackage LTS 18
+  - polysemy-resume < 0.1.0.2
+  - polysemy-conc < 0.5
+  - polysemy-mocks < 0.2
 
 extra-packages:
   - base16-bytestring < 1               # required for cabal-install etc.

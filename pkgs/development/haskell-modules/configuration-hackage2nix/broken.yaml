@@ -3791,7 +3791,6 @@ broken-packages:
   - polydata-core
   - polynom
   - polynomial
-  - polysemy-mocks
   - polysemy-zoo
   - polytypeable
   - pomaps
