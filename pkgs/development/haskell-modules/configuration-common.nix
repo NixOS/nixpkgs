@@ -2239,5 +2239,14 @@ self: super: {
 
   # https://github.com/andreymulik/sdp/issues/3
   sdp = disableLibraryProfiling super.sdp;
+  sdp-binary = disableLibraryProfiling super.sdp-binary;
+  sdp-deepseq = disableLibraryProfiling super.sdp-deepseq;
+  sdp-hashable = disableLibraryProfiling super.sdp-hashable;
+  sdp-io = disableLibraryProfiling super.sdp-io;
+  sdp-quickcheck = disableLibraryProfiling super.sdp-quickcheck;
+  sdp4bytestring = disableLibraryProfiling super.sdp4bytestring;
+  sdp4text = disableLibraryProfiling super.sdp4text;
+  sdp4unordered = disableLibraryProfiling super.sdp4unordered;
+  sdp4vector = disableLibraryProfiling super.sdp4vector;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
