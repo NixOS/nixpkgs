@@ -14668,7 +14668,6 @@ with pkgs;
   ffuf = callPackage ../tools/security/ffuf { };
 
   flow = callPackage ../development/tools/analysis/flow {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_10;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
@@ -32259,7 +32258,12 @@ with pkgs;
 
   yad = callPackage ../tools/misc/yad { };
 
-  yacas = callPackage ../applications/science/math/yacas { };
+  yacas = libsForQt5.callPackage ../applications/science/math/yacas { };
+
+  yacas-gui = yacas.override {
+    enableGui = true;
+    enableJupyter = false;
+  };
 
   speedcrunch = libsForQt5.callPackage ../applications/science/math/speedcrunch { };
 
