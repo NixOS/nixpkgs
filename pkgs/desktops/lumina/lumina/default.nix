@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , fluxbox
 , libarchive
-, linux-pam
 , numlockx
 , qmake
 , qtbase
@@ -36,7 +35,6 @@ mkDerivation rec {
   buildInputs = [
     fluxbox # window manager for Lumina DE
     libarchive # make `bsdtar` available for lumina-archiver
-    linux-pam
     numlockx # required for changing state of numlock at login
     qtbase
     qtmultimedia
@@ -64,10 +62,6 @@ mkDerivation rec {
     # Avoid absolute path on sessdir
     substituteInPlace src-qt5/OS-detect.pri \
       --replace L_SESSDIR=/usr/share/xsessions '#L_SESSDIR=/usr/share/xsessions'
-
-    # Do not set special permission
-    substituteInPlace src-qt5/core/lumina-checkpass/lumina-checkpass.pro \
-      --replace "chmod 4555" "chmod 555"
 
     # Fix plugin dir
     substituteInPlace src-qt5/core/lumina-theme-engine/lthemeengine.pri \
