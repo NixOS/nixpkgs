@@ -10270,6 +10270,8 @@ with pkgs;
 
   touchegg = callPackage ../tools/inputmethods/touchegg { };
 
+  torrent7z = callPackage ../tools/archivers/torrent7z { };
+
   torsocks = callPackage ../tools/security/tor/torsocks.nix { };
 
   toss = callPackage ../tools/networking/toss { };
@@ -27169,6 +27171,7 @@ with pkgs;
   inherit (mopidyPackages)
     mopidy
     mopidy-iris
+    mopidy-jellyfin
     mopidy-local
     mopidy-moped
     mopidy-mopify
@@ -30704,6 +30707,8 @@ with pkgs;
   n2048 = callPackage ../games/n2048 { };
 
   naev = callPackage ../games/naev { };
+
+  nanosaur = callPackage ../games/nanosaur { };
 
   nethack = callPackage ../games/nethack { };
 

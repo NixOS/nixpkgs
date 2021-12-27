@@ -3,21 +3,23 @@
 , fetchFromGitHub
 , cmake
 , wrapQtAppsHook
-, SDL2
-, qtbase
-, qtmultimedia
 , boost17x
-, libpulseaudio
 , pkg-config
 , libusb1
 , zstd
 , libressl
-, alsa-lib
-, rapidjson
-, aacHleDecoding ? true
-, fdk_aac
-, ffmpeg-full
+, enableSdl2 ? true, SDL2
+, enableQt ? true, qtbase, qtmultimedia
+, enableQtTranslation ? enableQt, qttools
+, enableWebService ? true
+, enableCubeb ? true, libpulseaudio
+, enableFfmpegAudioDecoder ? true
+, enableFfmpegVideoDumper ? true
+, ffmpeg
+, useDiscordRichPresence ? true, rapidjson
+, enableFdk ? false, fdk_aac
 }:
+assert lib.assertMsg (!enableFfmpegAudioDecoder || !enableFdk) "Can't enable both enableFfmpegAudioDecoder and enableFdk";
 
 stdenv.mkDerivation {
   pname = "citra";
@@ -31,36 +33,43 @@ stdenv.mkDerivation {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake wrapQtAppsHook pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ]
+  ++ lib.optionals enableQt [ wrapQtAppsHook ];
+
   buildInputs = [
-    SDL2
-    qtbase
-    qtmultimedia
-    libpulseaudio
     boost17x
     libusb1
-    alsa-lib
-    rapidjson # for discord-rpc
-  ] ++ lib.optional aacHleDecoding [ fdk_aac ffmpeg-full ];
+  ]
+  ++ lib.optionals enableSdl2 [ SDL2 ]
+  ++ lib.optionals enableQt [ qtbase qtmultimedia ]
+  ++ lib.optionals enableQtTranslation [ qttools ]
+  ++ lib.optionals enableCubeb [ libpulseaudio ]
+  ++ lib.optionals (enableFfmpegAudioDecoder || enableFfmpegVideoDumper) [ ffmpeg ]
+  ++ lib.optionals useDiscordRichPresence [ rapidjson ]
+  ++ lib.optionals enableFdk [ fdk_aac ];
 
   cmakeFlags = [
     "-DUSE_SYSTEM_BOOST=ON"
-    "-DUSE_DISCORD_PRESENCE=ON"
-  ] ++ lib.optionals aacHleDecoding [
-    "-DENABLE_FFMPEG_AUDIO_DECODER=ON"
-    "-DCITRA_USE_BUNDLED_FFMPEG=OFF"
-  ];
+  ]
+  ++ lib.optionals (!enableSdl2) [ "-DENABLE_SDL2=OFF" ]
+  ++ lib.optionals (!enableQt) [ "-DENABLE_QT=OFF" ]
+  ++ lib.optionals enableQtTranslation [ "-DENABLE_QT_TRANSLATION=ON" ]
+  ++ lib.optionals (!enableWebService) [ "-DENABLE_WEB_SERVICE=OFF" ]
+  ++ lib.optionals (!enableCubeb) [ "-DENABLE_CUBEB=OFF" ]
+  ++ lib.optionals enableFfmpegAudioDecoder [ "-DENABLE_FFMPEG_AUDIO_DECODER=ON"]
+  ++ lib.optionals enableFfmpegVideoDumper [ "-DENABLE_FFMPEG_VIDEO_DUMPER=ON" ]
+  ++ lib.optionals useDiscordRichPresence [ "-DUSE_DISCORD_PRESENCE=ON" ]
+  ++ lib.optionals enableFdk [ "-DENABLE_FDK=ON" ];
 
   postPatch = ''
-    # we already know the submodules are present
+    # We already know the submodules are present
     substituteInPlace CMakeLists.txt \
       --replace "check_submodules_present()" ""
 
-    # Trick configure system.
-    sed -n 's,^ *path = \(.*\),\1,p' .gitmodules | while read path; do
-    mkdir "$path/.git"
-    done
-
+    # Devendoring
     rm -rf externals/zstd externals/libressl
     cp -r ${zstd.src} externals/zstd
     tar xf ${libressl.src} -C externals/
@@ -69,6 +78,7 @@ stdenv.mkDerivation {
   '';
 
   # Todo: cubeb audio backend (the default one) doesn't work on the SDL interface.
+  # This seems to be a problem with libpulseaudio, other applications have similar problems (e.g Duckstation).
   # Note that the two interfaces have two separate configuration files.
 
   meta = with lib; {

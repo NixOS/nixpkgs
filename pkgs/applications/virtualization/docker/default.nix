@@ -15,7 +15,7 @@ rec {
       , go-md2man, go, containerd_1_4, runc, docker-proxy, tini, libtool
       , sqlite, iproute2, lvm2, systemd, docker-buildx, docker-compose_2
       , btrfs-progs, iptables, e2fsprogs, xz, util-linux, xfsprogs, git
-      , procps, libseccomp
+      , procps, libseccomp, rootlesskit, slirp4netns, fuse-overlayfs
       , nixosTests
       , clientOnly ? !stdenv.isLinux, symlinkJoin
     }:
@@ -77,6 +77,8 @@ rec {
 
       extraPath = optionals (stdenv.isLinux) (makeBinPath [ iproute2 iptables e2fsprogs xz xfsprogs procps util-linux git ]);
 
+      extraUserPath = optionals (stdenv.isLinux && !clientOnly) (makeBinPath [ rootlesskit slirp4netns fuse-overlayfs ]);
+
       postPatch = ''
         patchShebangs hack/make.sh hack/make/
       '';
@@ -109,6 +111,11 @@ rec {
         install -Dm644 ./contrib/init/systemd/docker.service $out/etc/systemd/system/docker.service
         substituteInPlace $out/etc/systemd/system/docker.service --replace /usr/bin/dockerd $out/bin/dockerd
         install -Dm644 ./contrib/init/systemd/docker.socket $out/etc/systemd/system/docker.socket
+
+        # rootless Docker
+        install -Dm755 ./contrib/dockerd-rootless.sh $out/libexec/docker/dockerd-rootless.sh
+        makeWrapper $out/libexec/docker/dockerd-rootless.sh $out/bin/dockerd-rootless \
+          --prefix PATH : "$out/libexec/docker:$extraPath:$extraUserPath"
       '';
 
       DOCKER_BUILDTAGS = []
@@ -184,6 +191,7 @@ rec {
     '' + optionalString (!clientOnly) ''
       # symlink docker daemon to docker cli derivation
       ln -s ${moby}/bin/dockerd $out/bin/dockerd
+      ln -s ${moby}/bin/dockerd-rootless $out/bin/dockerd-rootless
 
       # systemd
       mkdir -p $out/etc/systemd/system
