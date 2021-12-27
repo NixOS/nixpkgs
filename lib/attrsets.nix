@@ -369,7 +369,7 @@ rec {
       value = f name (catAttrs name sets);
     }) names);
 
-  /* Implementation note: Common names  appear multiple times in the list of
+  /* Implementation note: Common names appear multiple times in the list of
      names, hopefully this does not affect the system because the maximal
      laziness avoid computing twice the same expression and listToAttrs does
      not care about duplicated attribute names.
@@ -419,8 +419,8 @@ rec {
     let f = attrPath:
       zipAttrsWith (n: values:
         let here = attrPath ++ [n]; in
-        if tail values == []
-        || pred here (head (tail values)) (head values) then
+        if length values == 1
+        || pred here (elemAt values 1) (head values) then
           head values
         else
           f here values
@@ -446,10 +446,7 @@ rec {
        }
 
      */
-  recursiveUpdate = lhs: rhs:
-    recursiveUpdateUntil (path: lhs: rhs:
-      !(isAttrs lhs && isAttrs rhs)
-    ) lhs rhs;
+  recursiveUpdate = recursiveUpdateUntil (path: lhs: rhs: !(isAttrs lhs && isAttrs rhs));
 
   /* Returns true if the pattern is contained in the set. False otherwise.
 
