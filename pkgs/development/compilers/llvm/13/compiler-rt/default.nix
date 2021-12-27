@@ -33,6 +33,12 @@ stdenv.mkDerivation {
     "-DCOMPILER_RT_BUILD_SANITIZERS=OFF"
     "-DCOMPILER_RT_BUILD_XRAY=OFF"
     "-DCOMPILER_RT_BUILD_PROFILE=OFF"
+  ] ++ lib.optionals (isMusl && isAarch64) [
+    # disable MEMPROF + XRAY + SANITIZERS to prevent building sanitizer_common,
+    # which fails with
+    #    /build/source/compiler-rt/lib/sanitizer_common/sanitizer_linux.cpp: In function 'bool __sanitizer::Aarch64GetESR(ucontext_t*, __sanitizer::u64*)':
+    #    /build/source/compiler-rt/lib/sanitizer_common/sanitizer_linux.cpp:1814:35: error: cannot convert 'long double*' to '__sanitizer::u8*' {aka 'unsigned char*'} in initialization
+    "-DCOMPILER_RT_BUILD_MEMPROF=OFF"
   ] ++ lib.optionals ((useLLVM || bareMetal) && !haveLibc) [
     "-DCMAKE_C_COMPILER_WORKS=ON"
     "-DCMAKE_CXX_COMPILER_WORKS=ON"
