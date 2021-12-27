@@ -1,6 +1,7 @@
 {
   lib, stdenv,
   fetchFromGitHub,
+  fetchpatch,
   gfortran,
   cmake,
   shared ? true
@@ -20,6 +21,14 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "0sxnc97z67i7phdmcnq8f8lmxgw10wdwvr8ami0w3pb179cgrbpb";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2021-4048.patch";
+      url = "https://github.com/Reference-LAPACK/lapack/commit/0631b6beaed60ba118b0b027c0f8d35397bf5df0.patch";
+      sha256 = "1bqjw3f6ak9iz97y7ckn0rrfcgrzbn9prgfasl489qpxgzp2kjh8";
+    })
+  ];
 
   nativeBuildInputs = [ gfortran cmake ];
 
