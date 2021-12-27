@@ -2,6 +2,7 @@
 , mkDerivation
 , fetchFromGitHub
 , fluxbox
+, hicolor-icon-theme
 , libarchive
 , numlockx
 , qmake
@@ -34,6 +35,7 @@ mkDerivation rec {
 
   buildInputs = [
     fluxbox # window manager for Lumina DE
+    hicolor-icon-theme
     libarchive # make `bsdtar` available for lumina-archiver
     numlockx # required for changing state of numlock at login
     qtbase
@@ -47,6 +49,8 @@ mkDerivation rec {
     xorg.xcbutilwm
     xscreensaver
   ];
+
+  dontDropIconThemeCache = true;
 
   patches = [
     ./LuminaOS-NixOS.cpp.patch
@@ -82,6 +86,12 @@ mkDerivation rec {
     # Fix desktop files
     for i in $(grep -lir 'OnlyShowIn=Lumina' src-qt5); do
       substituteInPlace $i --replace 'OnlyShowIn=Lumina' 'OnlyShowIn=X-Lumina'
+    done
+  '';
+
+  postInstall = ''
+    for theme in lumina-icons material-design-{dark,light}; do
+      gtk-update-icon-cache $out/share/icons/$theme
     done
   '';
 
