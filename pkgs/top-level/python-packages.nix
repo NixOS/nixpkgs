@@ -2016,6 +2016,8 @@ in {
 
   deap = callPackage ../development/python-modules/deap { };
 
+  dearpygui = callPackage ../development/python-modules/dearpygui { };
+
   debian = callPackage ../development/python-modules/debian { };
 
   debian-inspector = callPackage ../development/python-modules/debian-inspector { };
