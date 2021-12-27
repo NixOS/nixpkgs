@@ -2198,6 +2198,11 @@ self: super: {
       "-p" "!/field.unexpected-value/&&!/field.missing-field/&&!/argument.unexpected-value/&&!/argument.missing-field/"
     ] ++ drv.testFlags or [];
   }) super.morpheus-graphql-core;
+  morpheus-graphql = overrideCabal (drv: {
+    testFlags = [
+      "-p" "!/Test Rendering/"
+    ] ++ drv.testFlags or [];
+  }) super.morpheus-graphql;
   # https://github.com/SupercedeTech/dropbox-client/issues/1
   dropbox = overrideCabal (drv: {
     testFlags = [
