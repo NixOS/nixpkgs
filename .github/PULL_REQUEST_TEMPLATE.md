@@ -33,5 +33,5 @@ Reviewing guidelines: https://nixos.org/manual/nixpkgs/unstable/#chap-reviewing-
   - [ ] (Module updates) Added a release notes entry if the change is significant
   - [ ] (Module addition) Added a release notes entry if adding a new NixOS module
   - [ ] (Release notes changes) Ran `nixos/doc/manual/md-to-db.sh` to update generated release notes
-  - [ ] (Breaking change) Added a `breaks things:` footer to each commit that breaks compatibility (see [CONTRIBUTING.md](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md#submitting-changes))
+  - [ ] (Breaking change) Added a `breaks things:` footer to each commit that breaks compatibility (see [Submitting changes](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md#submitting-changes))
 - [ ] Fits [CONTRIBUTING.md](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md).
