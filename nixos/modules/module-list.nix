@@ -1071,6 +1071,7 @@
   ./services/web-servers/ttyd.nix
   ./services/web-servers/uwsgi.nix
   ./services/web-servers/varnish/default.nix
+  ./services/web-servers/webhook.nix
   ./services/web-servers/zope2.nix
   ./services/x11/extra-layouts.nix
   ./services/x11/clight.nix

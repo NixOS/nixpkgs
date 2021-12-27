@@ -43,6 +43,14 @@
           <link xlink:href="options.html#opt-services.powerdns-admin.enable">services.powerdns-admin</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/adnanh/webhook">webhook</link>,
+          a lightweight incoming webhook server to run shell commands.
+          Available as
+          <link linkend="opt-services.webhook.enable">services.webhook</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.05-incompatibilities">
