@@ -510,7 +510,7 @@ rec {
      tarball must contain an RPM specfile. */
 
   buildRPM = attrs: runInLinuxImage (stdenv.mkDerivation ({
-    prePhases = [ pkgs.prepareImagePhase pkgs.sysInfoPhase ];
+    prePhases = [ "prepareImagePhase" "sysInfoPhase" ];
     dontUnpack = true;
     dontConfigure = true;
 
