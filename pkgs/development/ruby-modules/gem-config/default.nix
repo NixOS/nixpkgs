@@ -381,8 +381,7 @@ in
       # Reduce output size by a lot, and remove some unnecessary references.
       # The ext directory should only be required at build time, so
       # can be deleted now.
-      rm -r $out/${ruby.gemPath}/gems/mathematical-${attrs.version}/ext \
-            $out/${ruby.gemPath}/extensions/*/*/mathematical-${attrs.version}/gem_make.out
+      rm -r $out/${ruby.gemPath}/gems/mathematical-${attrs.version}/ext
     '';
 
     # For some reason 'mathematical.so' is missing cairo, glib, and
