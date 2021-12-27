@@ -19484,8 +19484,6 @@ with pkgs;
   # plasma5Packages maps to the Qt5 packages set that is used to build the plasma5 desktop
   plasma5Packages = libsForQt515;
 
-  qt5ct = libsForQt5.callPackage ../tools/misc/qt5ct { };
-
   qtEnv = qt5.env;
   qt5Full = qt5.full;
 
