@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tgt";
-  version = "1.0.80";
+  version = "1.0.81";
 
   src = fetchFromGitHub {
     owner = "fujita";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-5qBqCHbkL6yw/iT2AtSumw8V0bV74TEyYMRgcPHW2lg=";
+    sha256 = "sha256-SgMpoaVAuTbgpmnXRfQFWlK5gl01fsE9vJxu3C2ctPU=";
   };
 
   nativeBuildInputs = [ libxslt docbook_xsl makeWrapper ];
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "iSCSI Target daemon with RDMA support";
-    homepage = "http://stgt.sourceforge.net/";
+    homepage = "https://github.com/fujita/tgt";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ johnazoidberg ];

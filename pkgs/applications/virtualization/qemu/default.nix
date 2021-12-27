@@ -84,7 +84,8 @@ stdenv.mkDerivation rec {
   dontUseMesonConfigure = true; # meson's configurePhase isn't compatible with qemu build
 
   outputs = [ "out" "ga" ];
-  separateDebugInfo = true;
+  # On aarch64-linux we would shoot over the Hydra's 2G output limit.
+  separateDebugInfo = !(stdenv.isAarch64 && stdenv.isLinux);
 
   patches = [
     ./fix-qemu-ga.patch

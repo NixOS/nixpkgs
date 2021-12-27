@@ -30,7 +30,9 @@ if isPyPy then null else buildPythonPackage rec {
   NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang
     "-Wno-unused-command-line-argument -Wno-unreachable-code -Wno-c++11-narrowing";
 
-  doCheck = !stdenv.hostPlatform.isMusl;
+  # Lots of tests fail on aarch64-darwin due to "Cannot allocate write+execute memory":
+  # * https://cffi.readthedocs.io/en/latest/using.html#callbacks
+  doCheck = !stdenv.hostPlatform.isMusl && !(stdenv.isDarwin && stdenv.isAarch64);
 
   checkInputs = [ pytestCheckHook ];
 
