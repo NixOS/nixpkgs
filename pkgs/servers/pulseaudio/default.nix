@@ -26,7 +26,7 @@
 , # Whether to build only the library.
   libOnly ? false
 
-, AudioUnit, Cocoa, CoreServices, Libc
+, AudioUnit, Cocoa, CoreServices
 }:
 
 stdenv.mkDerivation rec {
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ libtool libsndfile soxr speexdsp fftwFloat ]
     ++ lib.optionals stdenv.isLinux [ glib dbus ]
-    ++ lib.optionals stdenv.isDarwin [ AudioUnit Cocoa CoreServices Libc ]
+    ++ lib.optionals stdenv.isDarwin [ AudioUnit Cocoa CoreServices ]
     ++ lib.optionals (!libOnly) (
       [ libasyncns webrtc-audio-processing ]
       ++ lib.optional jackaudioSupport libjack2
@@ -100,8 +100,6 @@ stdenv.mkDerivation rec {
     ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "--disable-gsettings";
 
   enableParallelBuilding = true;
-
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-I${Libc}";
 
   installFlags =
     [ "sysconfdir=${placeholder "out"}/etc"

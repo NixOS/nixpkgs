@@ -21323,7 +21323,6 @@ with pkgs;
   };
 
   pulseaudio = callPackage ../servers/pulseaudio ({
-    inherit (darwin) Libc;
     inherit (darwin.apple_sdk.frameworks) CoreServices AudioUnit Cocoa;
   } // lib.optionalAttrs stdenv.isDarwin {
     # Default autoreconfHook (2.70) fails on darwin,
