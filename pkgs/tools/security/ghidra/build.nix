@@ -11,6 +11,8 @@
 , makeDesktopItem
 , autoPatchelfHook
 , icoutils
+, xcbuild
+, libredirect
 }:
 
 let
@@ -40,7 +42,7 @@ let
     pname = "${pname}-deps";
     inherit version src;
 
-    nativeBuildInputs = [ gradle perl ];
+    nativeBuildInputs = [ gradle perl ] ++ lib.optional stdenv.isDarwin xcbuild;
     buildPhase = ''
     cat >>build.gradle <<HERE
 task resolveDependencies {
@@ -101,11 +103,26 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     gradle unzip makeWrapper icoutils
-  ];
+  ] ++ lib.optional stdenv.isDarwin xcbuild;
 
   dontStrip = true;
 
-  buildPhase = ''
+  buildPhase = (lib.optionalString stdenv.isDarwin ''
+    export HOME=$(mktemp -d)
+
+    # construct a dummy /etc/passwd file - something attempts to determine
+    # the user's "real" home using this
+    DUMMY_PASSWD=$(realpath ../dummy-passwd)
+    cat > $DUMMY_PASSWD <<EOF
+    $(whoami)::$(id -u):$(id -g)::$HOME:$SHELL
+    EOF
+
+    export NIX_REDIRECTS=/etc/passwd=$DUMMY_PASSWD
+    export DYLD_INSERT_LIBRARIES=${libredirect}/lib/libredirect.dylib
+  '') + ''
+
+    export GRADLE_USER_HOME=$(mktemp -d)
+
     ln -s ${fixedDeps}/dependencies dependencies
 
     sed -ie "s#mavenLocal()#mavenLocal(); maven { url '${fixedDeps}/maven' }#g" build.gradle
