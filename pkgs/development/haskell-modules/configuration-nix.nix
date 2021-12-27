@@ -718,8 +718,12 @@ self: super: builtins.intersectAttrs super {
   postgresql-pure = dontCheck super.postgresql-pure;
 
   retrie = overrideCabal (drv: {
-    testToolDepends = [ pkgs.git pkgs.mercurial ];
+    testToolDepends = [ pkgs.git pkgs.mercurial ] ++ drv.testToolDepends or [];
   }) super.retrie;
+
+  retrie_1_2_0_0 = overrideCabal (drv: {
+    testToolDepends = [ pkgs.git pkgs.mercurial ] ++ drv.testToolDepends or [];
+  }) super.retrie_1_2_0_0;
 
   nix-output-monitor = overrideCabal {
     # Can't ran the golden-tests with nix, because they call nix
@@ -1037,4 +1041,11 @@ self: super: builtins.intersectAttrs super {
       })
     ] ++ (drv.patches or []);
   }) super.graphviz;
+
+  # Test case tries to contact the network
+  http-api-data-qq = overrideCabal (drv: {
+    testFlags = [
+      "-p" "!/Can be used with http-client/"
+    ] ++ drv.testFlags or [];
+  }) super.http-api-data-qq;
 }

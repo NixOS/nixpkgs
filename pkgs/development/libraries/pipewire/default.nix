@@ -1,5 +1,6 @@
 { stdenv
 , lib
+, buildPackages
 , fetchFromGitLab
 , removeReferencesTo
 , python3
@@ -171,12 +172,17 @@ let
 
     postInstall = ''
       mkdir $out/nix-support
-      pushd $lib/share/pipewire
-      for f in *.conf; do
-        echo "Generating JSON from $f"
-        $out/bin/spa-json-dump "$f" > "$out/nix-support/$f.json"
-      done
-      popd
+      ${if (stdenv.hostPlatform == stdenv.buildPlatform) then ''
+        pushd $lib/share/pipewire
+        for f in *.conf; do
+          echo "Generating JSON from $f"
+
+          $out/bin/spa-json-dump "$f" > "$out/nix-support/$f.json"
+        done
+        popd
+      '' else ''
+        cp ${buildPackages.pipewire}/nix-support/*.json "$out/nix-support"
+      ''}
 
       moveToOutput "share/systemd/user/pipewire-pulse.*" "$pulse"
       moveToOutput "lib/systemd/user/pipewire-pulse.*" "$pulse"

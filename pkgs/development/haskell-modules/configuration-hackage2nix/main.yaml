@@ -67,8 +67,6 @@ core-packages:
 # tracked in stackage.yaml. Adding conflicting overrides with stackage here will
 # not work.
 default-package-overrides:
-  # This was only intended for ghc-7.0.4, and has very old deps, one hidden behind a flag
-  - MissingH ==1.4.2.0
   # gi-gdkx11-4.x requires gtk-4.x, which is still under development and
   # not yet available in Nixpkgs
   - gi-gdkx11 < 4
@@ -126,6 +124,12 @@ default-package-overrides:
   - rel8 < 1.2.1.0
   # 0.14.0.0 drops support for every GHC < 9.0.1
   - brittany < 0.14
+  # 1.2.0.0: “Dropped support for GHC <9.2 (might readd it later)”
+  - retrie < 1.2.0.0
+  # Compat with polysemy in Stackage LTS 18
+  - polysemy-resume < 0.1.0.2
+  - polysemy-conc < 0.5
+  - polysemy-mocks < 0.2
 
 extra-packages:
   - base16-bytestring < 1               # required for cabal-install etc.
@@ -138,7 +142,6 @@ extra-packages:
   - dhall == 1.29.0                     # required for ats-pkg
   - dhall == 1.38.1                     # required for spago
   - Diff < 0.4                          # required by liquidhaskell-0.8.10.2: https://github.com/ucsd-progsys/liquidhaskell/issues/1729
-  - ghc-tcplugins-extra ==0.3.2         # required for polysemy-plugin 0.2.5.0
   - haddock == 2.23.*                   # required on GHC < 8.10.x
   - haddock-api == 2.23.*               # required on GHC < 8.10.x
   - haddock-library ==1.7.*             # required by stylish-cabal-0.5.0.0
@@ -279,6 +282,7 @@ package-maintainers:
     - Unique
   maralorn:
     - cabal-fmt
+    - ema
     - generic-optics
     - ghcup
     - ghcid

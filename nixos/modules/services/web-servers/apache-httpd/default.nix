@@ -154,7 +154,7 @@ let
       sslServerKey = if useACME then "${sslCertDir}/key.pem" else hostOpts.sslServerKey;
       sslServerChain = if useACME then "${sslCertDir}/chain.pem" else hostOpts.sslServerChain;
 
-      acmeChallenge = optionalString useACME ''
+      acmeChallenge = optionalString (useACME && hostOpts.acmeRoot != null) ''
         Alias /.well-known/acme-challenge/ "${hostOpts.acmeRoot}/.well-known/acme-challenge/"
         <Directory "${hostOpts.acmeRoot}">
             AllowOverride None
@@ -677,9 +677,16 @@ in
     };
 
     security.acme.certs = let
-      acmePairs = map (hostOpts: nameValuePair hostOpts.hostName {
+      acmePairs = map (hostOpts: let
+        hasRoot = hostOpts.acmeRoot != null;
+      in nameValuePair hostOpts.hostName {
         group = mkDefault cfg.group;
-        webroot = hostOpts.acmeRoot;
+        # if acmeRoot is null inherit config.security.acme
+        # Since config.security.acme.certs.<cert>.webroot's own default value
+        # should take precedence set priority higher than mkOptionDefault
+        webroot = mkOverride (if hasRoot then 1000 else 2000) hostOpts.acmeRoot;
+        # Also nudge dnsProvider to null in case it is inherited
+        dnsProvider = mkOverride (if hasRoot then 1000 else 2000) null;
         extraDomainNames = hostOpts.serverAliases;
         # Use the vhost-specific email address if provided, otherwise let
         # security.acme.email or security.acme.certs.<cert>.email be used.
