@@ -29,7 +29,7 @@ let
     deps;
   nugetSource = linkFarm "nuget-packages" nugetPackages;
 
-  dotnetSdk = dotnetCorePackages.sdk_3_1;
+  dotnetSdk = dotnetCorePackages.sdk_6_0;
   runtimeId =
     if stdenv.isAarch64
     then "linux-arm64"
@@ -38,13 +38,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "github-runner";
-  version = "2.285.1";
+  version = "2.286.0";
 
   src = fetchFromGitHub {
     owner = "actions";
     repo = "runner";
     rev = "v${version}";
-    hash = "sha256-SlKUuebsoZ9OgYuDTNOlY1KMg01LFSFazrLCctiFq3A=";
+    hash = "sha256-a3Kh65NTpVlKUer59rna7NWIQSxh1edU9MwguakzydI=";
   };
 
   nativeBuildInputs = [
@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # Relax the version requirement
     substituteInPlace src/global.json \
-      --replace '3.1.302' '${dotnetSdk.version}'
+      --replace '6.0.100' '${dotnetSdk.version}'
 
     # Disable specific tests
     substituteInPlace src/dir.proj \
@@ -116,14 +116,6 @@ stdenv.mkDerivation rec {
     runHook postConfigure
   '';
 
-  postConfigure = ''
-    # `crossgen` dependency is called during build
-    patchelf \
-      --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}" \
-      $HOME/.nuget/packages/microsoft.netcore.app.runtime.${runtimeId}/*/tools/crossgen
-  '';
-
   buildPhase = ''
     runHook preBuild
 
@@ -142,6 +134,8 @@ stdenv.mkDerivation rec {
 
   disabledTests = [
     # Self-updating is patched out, hence this test will fail
+    "FullyQualifiedName!=GitHub.Runner.Common.Tests.Listener.SelfUpdaterL0.TestSelfUpdateAsync_ValidateHash"
+    "FullyQualifiedName!=GitHub.Runner.Common.Tests.Listener.SelfUpdaterL0.TestSelfUpdateAsync"
     "FullyQualifiedName!=GitHub.Runner.Common.Tests.Listener.RunnerL0.TestRunOnceHandleUpdateMessage"
   ] ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
     # "JavaScript Actions in Alpine containers are only supported on x64 Linux runners. Detected Linux Arm64"
