@@ -18,13 +18,13 @@
 
 mkDerivation rec {
   pname = "lumina";
-  version = "1.6.1";
+  version = "1.6.2";
 
   src = fetchFromGitHub {
     owner = "lumina-desktop";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0wc8frhw1yv07n05r33c4zilq5lgn5gw07a9n37g6nyn5sgrbp4f";
+    sha256 = "1llr65gilcf0k88f9mbwzlalqwdnjy4nv2jq7w154z0xmd6iarfq";
   };
 
   nativeBuildInputs = [
@@ -80,6 +80,10 @@ mkDerivation rec {
     # Add full path of bsdtar to lumina-archiver
     substituteInPlace src-qt5/desktop-utils/lumina-archiver/TarBackend.cpp \
       --replace '"bsdtar"' '"${lib.getBin libarchive}/bin/bsdtar"'
+
+    # Fix installation path of lumina-sudo
+    substituteInPlace src-qt5/desktop-utils/lumina-sudo/lumina-sudo.pro \
+      --replace "/usr/bin" "$out/bin"
 
     # Fix desktop files
     for i in $(grep -lir 'OnlyShowIn=Lumina' src-qt5); do
