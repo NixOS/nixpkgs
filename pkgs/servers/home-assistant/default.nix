@@ -20,7 +20,10 @@
 , packageOverrides ? self: super: {}
 
 # Skip pip install of required packages on startup
-, skipPip ? true }:
+, skipPip ? true
+
+# Whether to build a python package instead of an application
+, buildPackage ? false }:
 
 let
   defaultOverrides = [
@@ -254,7 +257,7 @@ let
   # Don't forget to run parse-requirements.py after updating
   hassVersion = "2021.12.4";
 
-in with py.pkgs; buildPythonApplication rec {
+in with py.pkgs; (if buildPackage then buildPythonPackage else buildPythonApplication) rec {
   pname = "homeassistant";
   version = assert (componentPackages.version == hassVersion); hassVersion;
 

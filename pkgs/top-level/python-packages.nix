@@ -3656,6 +3656,11 @@ in {
 
   holoviews = callPackage ../development/python-modules/holoviews { };
 
+  homeassistant = callPackage ../servers/home-assistant {
+    buildPackage = true;
+    python3 = python;
+  };
+
   homeassistant-pyozw = callPackage ../development/python-modules/homeassistant-pyozw { };
 
   homeconnect = callPackage ../development/python-modules/homeconnect { };
