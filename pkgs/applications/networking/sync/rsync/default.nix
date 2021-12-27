@@ -50,6 +50,12 @@ stdenv.mkDerivation rec {
     # links them even.
     "--with-included-zlib=no"
   ]
+  ++ lib.optional (!enableACLs) "--disable-acl-support"
+  ++ lib.optional (!enableOpenSSL) "--disable-openssl"
+  ++ lib.optional (!enableXXHash) "--disable-xxhash"
+  ++ lib.optional (!enableZstd) "--disable-zstd"
+  ++ lib.optional (!enableLZ4) "--disable-lz4"
+
   # Work around issue with cross-compilation:
   #     configure.sh: error: cannot run test program while cross compiling
   # Remove once 3.2.4 or more recent is released.
