@@ -3847,14 +3847,7 @@ with pkgs;
 
   bdsync = callPackage ../tools/backup/bdsync { };
 
-  beamerpresenter = libsForQt5.callPackage ../applications/office/beamerpresenter {
-    # developed for a compiler with C++20 support
-    stdenv =
-      if stdenv.isDarwin then
-        overrideCC stdenv clang_10
-      else
-        stdenv;
-  };
+  beamerpresenter = libsForQt5.callPackage ../applications/office/beamerpresenter { };
 
   beanstalkd = callPackage ../servers/beanstalkd { };
 
