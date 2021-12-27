@@ -33,7 +33,7 @@
 , vala
 , wayland-protocols
 , zlib
-, withPolkit ? true
+, withPolkit ? (!stdenv.isDarwin)
 }:
 
 # If this package is built with polkit support (withPolkit=true),
@@ -78,6 +78,8 @@ stdenv.mkDerivation rec {
       "# meson.add_install_script('../build-aux/setcap-or-suid',"
   '';
 
+  NIX_CFLAGS_COMPILE = if stdenv.isDarwin then "-Wno-unused-function -Wno-missing-field-initializers" else null;
+
   nativeBuildInputs = [
     docbook_xsl
     gettext
@@ -104,20 +106,18 @@ stdenv.mkDerivation rec {
     gtk3
     json-glib
     libcacard
-    libcap_ng
-    libdrm
     libjpeg_turbo
     libopus
     libusb1
     lz4
     openssl
-    phodav
     pixman
     spice-protocol
     usbredir
-    wayland-protocols
     zlib
-  ] ++ lib.optionals withPolkit [ polkit acl ] ;
+  ]
+  ++ lib.optionals withPolkit [ polkit acl ]
+  ++ lib.optionals (!stdenv.isDarwin) [ libcap_ng libdrm phodav wayland-protocols ];
 
   PKG_CONFIG_POLKIT_GOBJECT_1_POLICYDIR = "${placeholder "out"}/share/polkit-1/actions";
 
@@ -126,6 +126,9 @@ stdenv.mkDerivation rec {
     "-Dusb-ids-path=${hwdata}/share/hwdata/usb.ids"
   ] ++ lib.optionals (!withPolkit) [
     "-Dpolkit=disabled"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "-Dwebdav=disabled" # no phodav
+    "-Dlibcap-ng=disabled"
   ];
 
   meta = with lib; {
@@ -140,6 +143,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.spice-space.org/";
     license = licenses.lgpl21;
     maintainers = [ maintainers.xeji ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
