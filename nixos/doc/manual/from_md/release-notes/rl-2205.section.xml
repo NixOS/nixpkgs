@@ -14,7 +14,17 @@
   </itemizedlist>
   <section xml:id="sec-release-22.05-highlights">
     <title>Highlights</title>
-    <itemizedlist spacing="compact">
+    <itemizedlist>
+      <listitem>
+        <para>
+          <literal>security.acme.defaults</literal> has been added to
+          simplify configuring settings for many certificates at once.
+          This also opens up the the option to use DNS-01 validation
+          when using <literal>enableACME</literal> on web server virtual
+          hosts (e.g.
+          <literal>services.nginx.virtualHosts.*.enableACME</literal>).
+        </para>
+      </listitem>
       <listitem>
         <para>
           PHP 8.1 is now available
@@ -31,6 +41,14 @@
           the Intel SGX Architectural Enclave Service Manager. Available
           as
           <link linkend="opt-services.aesmd.enable">services.aesmd</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://docs.docker.com/engine/security/rootless/">rootless
+          Docker</link>, a <literal>systemd --user</literal> Docker
+          service which runs without root permissions. Available as
+          <link xlink:href="options.html#opt-virtualisation.docker.rootless.enable">virtualisation.docker.rootless.enable</link>.
         </para>
       </listitem>
       <listitem>
@@ -122,6 +140,15 @@
           <literal>virtualisation.docker.daemon.settings</literal>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The <literal>autorestic</literal> package has been upgraded
+          from 1.3.0 to 1.5.0 which introduces breaking changes in
+          config file, check
+          <link xlink:href="https://autorestic.vercel.app/migration/1.4_1.5">their
+          migration guide</link> for more details.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.05-notable-changes">
@@ -182,12 +209,34 @@
       </listitem>
       <listitem>
         <para>
+          <literal>security.acme</literal> certificates will now
+          correctly check for CA revokation before reaching their
+          minimum age.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Removing domains from
+          <literal>security.acme.certs._name_.extraDomainNames</literal>
+          will now correctly remove those domains during rebuild/renew.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The option
           <link linkend="opt-services.ssh.enableAskPassword">services.ssh.enableAskPassword</link>
           was added, decoupling the setting of
           <literal>SSH_ASKPASS</literal> from
           <literal>services.xserver.enable</literal>. This allows easy
           usage in non-X11 environments, e.g. Wayland.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>services.stubby</literal> module was converted to
+          a
+          <link xlink:href="https://github.com/NixOS/rfcs/blob/master/rfcs/0042-config-option.md">settings-style</link>
+          configuration.
         </para>
       </listitem>
     </itemizedlist>

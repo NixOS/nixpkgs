@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "PyWavelets";
-  version = "1.1.1";
+  version = "1.2.0";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1a64b40f6acb4ffbaccce0545d7fc641744f95351f62e4c6aaa40549326008c9";
+    sha256 = "6cbd69b047bb4e00873097472133425f5f08a4e6bc8b3f0ae709274d4d5e9a8d";
   };
 
   checkInputs = [ nose pytest ];

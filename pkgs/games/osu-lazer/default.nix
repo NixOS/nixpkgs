@@ -32,9 +32,9 @@ in stdenv.mkDerivation rec {
   ];
 
   nugetDeps = linkFarmFromDrvs "${pname}-nuget-deps" (import ./deps.nix {
-    fetchNuGet = { name, version, sha256 }: fetchurl {
-      name = "nuget-${name}-${version}.nupkg";
-      url = "https://www.nuget.org/api/v2/package/${name}/${version}";
+    fetchNuGet = { pname, version, sha256 }: fetchurl {
+      name = "${pname}-${version}.nupkg";
+      url = "https://www.nuget.org/api/v2/package/${pname}/${version}";
       inherit sha256;
     };
   });

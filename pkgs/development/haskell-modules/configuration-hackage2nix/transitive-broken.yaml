@@ -650,7 +650,6 @@ dont-distribute-packages:
  - cakyrespa
  - cal3d-examples
  - cal3d-opengl
- - calamity-commands
  - calc
  - calculator
  - caldims
@@ -930,6 +929,7 @@ dont-distribute-packages:
  - delta
  - delta-h
  - dep-t-advice
+ - dep-t-dynamic
  - dependent-literals-plugin
  - dependent-state
  - dephd
@@ -1087,6 +1087,7 @@ dont-distribute-packages:
  - falling-turnip
  - fallingblocks
  - family-tree
+ - fast-bech32
  - fastirc
  - fault-tree
  - fbrnch
@@ -1514,6 +1515,7 @@ dont-distribute-packages:
  - hedgehog-gen-json
  - hedis-pile
  - heist-aeson
+ - helic
  - helics
  - helics-wai
  - helium
@@ -2250,6 +2252,7 @@ dont-distribute-packages:
  - numhask-range
  - numhask-test
  - nymphaea
+ - oath
  - obd
  - obdd
  - oberon0
@@ -2375,18 +2378,9 @@ dont-distribute-packages:
  - polh-lexicon
  - polydata
  - polysemy-RandomFu
- - polysemy-check
- - polysemy-conc
- - polysemy-http
- - polysemy-log
  - polysemy-log-co
- - polysemy-log-di
  - polysemy-methodology-co-log
  - polysemy-optics
- - polysemy-process
- - polysemy-readline
- - polysemy-resume
- - polysemy-webserver
  - polyseq
  - polytypeable-utils
  - pomodoro
@@ -3080,6 +3074,7 @@ dont-distribute-packages:
  - typed-encoding-encoding
  - typed-spreadsheet
  - typed-streams
+ - typelet
  - typelevel
  - typelevel-rewrite-rules
  - typescript-docs

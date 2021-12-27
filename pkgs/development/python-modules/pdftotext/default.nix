@@ -6,7 +6,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Kpqom8YgIkCHgbOdGI+r9aOtEQO2Yw8yxOJ+OV95Zu4=";
+    sha256 = "2a9aa89bc62022408781b39d188fabf5a3ad1103b6630f32c4e27e395f7966ee";
   };
 
   buildInputs = [ poppler ];

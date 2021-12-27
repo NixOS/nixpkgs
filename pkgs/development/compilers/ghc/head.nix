@@ -12,9 +12,10 @@
   libffi ? null
 
   # Libdw.c only supports x86_64, i686 and s390x
-, enableDwarf ? stdenv.targetPlatform.isx86 &&
-                !stdenv.targetPlatform.isDarwin &&
-                !stdenv.targetPlatform.isWindows
+, enableDwarf ? (stdenv.targetPlatform.isx86 ||
+                 (stdenv.targetPlatform.isS390 && stdenv.targetPlatform.is64bit)) &&
+                lib.meta.availableOn stdenv.hostPlatform elfutils &&
+                lib.meta.availableOn stdenv.targetPlatform elfutils
 , elfutils # for DWARF support
 
 , useLLVM ? !(stdenv.targetPlatform.isx86

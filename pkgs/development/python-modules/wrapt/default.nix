@@ -5,14 +5,14 @@
 
 buildPythonPackage rec {
   pname = "wrapt";
-  version = "1.13.1";
+  version = "1.13.3";
 
   # No tests in archive
   doCheck = false;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "909a80ce028821c7ad01bdcaa588126825931d177cdccd00b3545818d4a195ce";
+    sha256 = "1fea9cd438686e6682271d36f3481a9f3636195578bab9ca3382e2f5f01fc185";
   };
 
   meta = {

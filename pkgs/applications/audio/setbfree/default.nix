@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip, alsa-lib, freetype, ftgl, libjack2, libX11, lv2
+{ lib, stdenv, fetchFromGitHub, alsa-lib, freetype, ftgl, libjack2, libX11, lv2
 , libGLU, libGL, pkg-config, ttf_bitstream_vera
 }:
 
@@ -6,9 +6,11 @@ stdenv.mkDerivation  rec {
   pname = "setbfree";
   version = "0.8.11";
 
-  src = fetchzip {
-    url = "https://github.com/pantherb/setBfree/archive/v${version}.tar.gz";
-    sha256 = "0c2wc8nkrzsy0yic4y7hjz320m3d20r8152j9dk8nsnmgjmyr2ir";
+  src = fetchFromGitHub {
+    owner = "pantherb";
+    repo = "setBfree";
+    rev = "v${version}";
+    sha256 = "sha256-OYrsq3zVaotmS1KUgDIQbVQgxpfweMKiB17/PC1iXDA=";
   };
 
   postPatch = ''

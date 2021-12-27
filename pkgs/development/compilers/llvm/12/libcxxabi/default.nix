@@ -1,5 +1,7 @@
 { lib, stdenv, llvm_meta, cmake, python3, fetch, libcxx, libunwind, llvm, version
 , enableShared ? !stdenv.hostPlatform.isStatic
+, standalone ? stdenv.hostPlatform.useLLVM or false
+, withLibunwind ? !stdenv.isDarwin && !stdenv.isFreeBSD && !stdenv.hostPlatform.isWasm
 }:
 
 stdenv.mkDerivation {
@@ -28,9 +30,9 @@ stdenv.mkDerivation {
   ];
 
   nativeBuildInputs = [ cmake python3 ];
-  buildInputs = lib.optional (!stdenv.isDarwin && !stdenv.isFreeBSD && !stdenv.hostPlatform.isWasm) libunwind;
+  buildInputs = lib.optional withLibunwind libunwind;
 
-  cmakeFlags = lib.optionals (stdenv.hostPlatform.useLLVM or false) [
+  cmakeFlags = lib.optionals standalone [
     "-DLLVM_ENABLE_LIBCXX=ON"
     "-DLIBCXXABI_USE_LLVM_UNWINDER=ON"
   ] ++ lib.optionals stdenv.hostPlatform.isWasm [
@@ -47,7 +49,7 @@ stdenv.mkDerivation {
         # the magic combination of necessary CMake variables
         # if you fancy a try, take a look at
         # https://gitlab.kitware.com/cmake/community/-/wikis/doc/cmake/RPATH-handling
-        install_name_tool -id $out/$file $file
+        ${stdenv.cc.targetPrefix}install_name_tool -id $out/$file $file
       done
       make install
       install -d 755 $out/include

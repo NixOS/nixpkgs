@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "adguardhome";
-  version = "0.106.3";
+  version = "0.107.0";
 
   src = (import ./bins.nix { inherit fetchurl fetchzip; }).${stdenv.hostPlatform.system};
 

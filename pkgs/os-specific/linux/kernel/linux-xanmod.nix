@@ -1,7 +1,7 @@
 { lib, stdenv, buildLinux, fetchFromGitHub, ... } @ args:
 
 let
-  version = "5.15.7";
+  version = "5.15.11";
   release = "1";
   suffix = "xanmod${release}-tt";
 in
@@ -13,7 +13,7 @@ buildLinux (args // rec {
     owner = "xanmod";
     repo = "linux";
     rev = modDirVersion;
-    sha256 = "sha256-SeqPnzT3SApFozgQsiGtS9uUqxk8aXcDp7adcERlL1A=";
+    sha256 = "sha256-f5DvjgZQoryCpRcawlmZY6muZdAcQMNm+N18XHEBq4U=";
   };
 
   structuredExtraConfig = with lib.kernel; {
@@ -51,16 +51,12 @@ buildLinux (args // rec {
     # Graysky's additional CPU optimizations
     CC_OPTIMIZE_FOR_PERFORMANCE_O3 = yes;
 
-    # Android Ashmem and Binder IPC Driver as module for Anbox
-    ASHMEM = module;
-    ANDROID = yes;
-    ANDROID_BINDER_IPC = module;
-    ANDROID_BINDERFS = module;
-    ANDROID_BINDER_DEVICES = freeform "binder,hwbinder,vndbinder";
-
     # Futex WAIT_MULTIPLE implementation for Wine / Proton Fsync.
     FUTEX = yes;
     FUTEX_PI = yes;
+
+    # WineSync driver for fast kernel-backed Wine
+    WINESYNC = module;
   };
 
   extraMeta = {

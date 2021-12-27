@@ -26,6 +26,9 @@
 , vulkan-loader
 , shaderc
 
+, testVersion
+, warzone2100
+
 , withVideos ? false
 }:
 
@@ -39,11 +42,11 @@ in
 
 stdenv.mkDerivation rec {
   inherit pname;
-  version  = "4.2.3";
+  version  = "4.2.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/releases/${version}/${pname}_src.tar.xz";
-    sha256 = "sha256-nmHl/Qk8Knck9kDF8cuPUzOUxNNx0Vk/g1NW/H82vo0=";
+    sha256 = "sha256-IkD1WkeKas9qtUUTTo9w4cEoGAoX+d+Cr2C5PTUFaEg=";
   };
 
   buildInputs = [
@@ -99,6 +102,14 @@ stdenv.mkDerivation rec {
   postInstall = lib.optionalString withVideos ''
     cp ${sequences_src} $out/share/warzone2100/sequences.wz
   '';
+
+  passthru.tests = {
+    version = testVersion {
+      package = warzone2100;
+      # The command always exits with code 1
+      command = "(warzone2100 --version || [ $? -eq 1 ])";
+    };
+  };
 
   meta = with lib; {
     description = "A free RTS game, originally developed by Pumpkin Studios";

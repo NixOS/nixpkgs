@@ -222,6 +222,7 @@ broken-packages:
   - assumpta
   - ast-monad
   - astrds
+  - astro
   - async-combinators
   - async-dejafu
   - asynchronous-exceptions
@@ -1557,6 +1558,7 @@ broken-packages:
   - fused-effects-mwc-random
   - fused-effects-resumable
   - fusion
+  - futhark-manifest
   - futun
   - future
   - fuzzy-time-gen
@@ -1675,6 +1677,7 @@ broken-packages:
   - gi-gtksheet
   - gi-handy
   - gi-json
+  - gingersnap
   - ginsu
   - gipeda
   - giphy-api
@@ -3187,6 +3190,7 @@ broken-packages:
   - monad-ste
   - monad-stlike-io
   - monad-task
+  - monad-throw-exit
   - monad-timing
   - monad-tx
   - monad-unify
@@ -3499,6 +3503,8 @@ broken-packages:
   - opentelemetry-http-client
   - opentheory-char
   - opentok
+  - opentracing-jaeger
+  - opentracing-zipkin-v1
   - opentype
   - OpenVGRaw
   - Operads
@@ -3540,6 +3546,7 @@ broken-packages:
   - overloaded
   - overloaded-records
   - overture
+  - owoify-hs
   - pack
   - package-description-remote
   - package-o-tron
@@ -3570,6 +3577,7 @@ broken-packages:
   - pandoc-pyplot
   - pandoc-unlit
   - pandoc-utils
+  - pandora-io
   - pang-a-lambda
   - pangraph
   - pan-os-syslog
@@ -3596,6 +3604,7 @@ broken-packages:
   - pareto
   - parochial
   - Parry
+  - parse
   - parseargs
   - parsec2
   - parsec3
@@ -3791,8 +3800,9 @@ broken-packages:
   - polydata-core
   - polynom
   - polynomial
-  - polysemy-mocks
-  - polysemy-plugin
+  - polysemy-check
+  - polysemy-http
+  - polysemy-process
   - polysemy-zoo
   - polytypeable
   - pomaps
@@ -3843,6 +3853,7 @@ broken-packages:
   - PPrinter
   - pqc
   - praglude
+  - prairie
   - preamble
   - precis
   - precursor
@@ -4370,6 +4381,7 @@ broken-packages:
   - servant-static-th
   - servant-streaming
   - servant-to-elm
+  - servant-tracing
   - servant-yaml
   - servant-zeppelin
   - server-generic
@@ -4782,6 +4794,7 @@ broken-packages:
   - syb-with-class-instances-text
   - sydtest-aeson
   - sydtest-hedis
+  - sydtest-hspec
   - sydtest-mongo
   - sydtest-persistent-postgresql
   - sydtest-rabbitmq

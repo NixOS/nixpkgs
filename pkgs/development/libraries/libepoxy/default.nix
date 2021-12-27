@@ -1,41 +1,74 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, utilmacros, python3
-, libGL, libX11
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, utilmacros
+, python3
+, libGL
+, libX11
+, Carbon
+, OpenGL
 }:
 
-with lib;
+let
+  inherit (lib) getLib optional optionalString;
 
-stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation (rec {
   pname = "libepoxy";
-  version = "1.5.4";
+  version = "1.5.9";
 
   src = fetchFromGitHub {
     owner = "anholt";
     repo = pname;
     rev = version;
-    sha256 = "0rmg0qlswn250h0arx434jh3hwzsr95lawanpmh1czsfvrcx59l6";
+    sha256 = "sha256-8rdmC8FZUkKkEvWPJIdfrBQHiwa81vl5tmVqRdU4UIY=";
   };
-
-  outputs = [ "out" "dev" ];
-
-  nativeBuildInputs = [ autoreconfHook pkg-config utilmacros python3 ];
-  buildInputs = [ libGL libX11 ];
-
-  preConfigure = optionalString stdenv.isDarwin ''
-    substituteInPlace configure --replace build_glx=no build_glx=yes
-    substituteInPlace src/dispatch_common.h --replace "PLATFORM_HAS_GLX 0" "PLATFORM_HAS_GLX 1"
-  '';
 
   patches = [ ./libgl-path.patch ];
 
+  postPatch = ''
+    patchShebangs src/*.py
+  ''
+  + optionalString stdenv.isDarwin ''
+    substituteInPlace src/dispatch_common.h --replace "PLATFORM_HAS_GLX 0" "PLATFORM_HAS_GLX 1"
+  '';
+
+  outputs = [ "out" "dev" ];
+
+  nativeBuildInputs = [ meson ninja pkg-config utilmacros python3 ];
+
+  buildInputs = [
+    libGL
+    libX11
+  ] ++ lib.optionals stdenv.isDarwin [
+    Carbon
+    OpenGL
+  ];
+
+  mesonFlags = [
+    "-Dtests=${if doCheck then "true" else "false"}"
+  ]
+  ++ optional stdenv.isDarwin "-Dglx=yes";
+
   NIX_CFLAGS_COMPILE = ''-DLIBGL_PATH="${getLib libGL}/lib"'';
 
-  doCheck = false; # needs X11
+  # tests are running from version 1.5.9
+  doCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "A library for handling OpenGL function pointer management";
     homepage = "https://github.com/anholt/libepoxy";
     license = licenses.mit;
     maintainers = with maintainers; [ goibhniu erictapen ];
     platforms = platforms.unix;
   };
-}
+} // lib.optionalAttrs stdenv.isDarwin {
+  # cgl_epoxy_api fails in darwin sandbox and on Hydra (because it's headless?)
+  preCheck = ''
+    substituteInPlace ../test/meson.build \
+      --replace "[ 'cgl_epoxy_api', [ 'cgl_epoxy_api.c' ] ]," ""
+  '';
+})

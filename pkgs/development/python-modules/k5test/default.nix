@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "k5test";
-  version = "0.10.0";
+  version = "0.10.1";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fc5e7e5e286b2f331c1396c33f2a1cd8cf34e78d8d482168a50ffd8576a1455c";
+    sha256 = "2c9181133f3d52c8e29a5ba970b668273c08f855e5da834aaee2ea9efeb6b069";
   };
 
   patches = [

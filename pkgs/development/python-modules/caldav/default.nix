@@ -4,7 +4,6 @@
 , pythonOlder
 , icalendar
 , lxml
-, mock
 , nose
 , pytz
 , requests
@@ -15,23 +14,27 @@
 
 buildPythonPackage rec {
   pname = "caldav";
-  version = "0.8.0";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "python-caldav";
     repo = pname;
     rev = "v${version}";
-    sha256 = "11q3svns3a2ywfci739krxbh67cx691qja772wq22606blyygyjy";
+    hash = "sha256-2mpE1aLipps4X/3EF0oKHXDcrgUh78/fxY6y1B1V2IU=";
   };
 
-  nativeBuildInputs = lib.optionals (pythonOlder "3.5") [ mock ];
-  propagatedBuildInputs = [ six requests vobject lxml ]
-    ++ lib.optionals (pythonOlder "3.6") [ pytz tzlocal ];
+  propagatedBuildInputs = [
+    vobject
+    lxml
+    requests
+    six
+  ];
 
   checkInputs = [
     icalendar
     nose
     tzlocal
+    pytz
   ];
 
   checkPhase = ''
@@ -41,7 +44,7 @@ buildPythonPackage rec {
   # xandikos and radicale is only a optional test dependency, not available for python3
   postPatch = ''
     substituteInPlace setup.py \
-      --replace ", 'xandikos'" "" \
+      --replace ", 'xandikos<0.2.4'" "" \
       --replace ", 'radicale'" ""
   '';
 
@@ -51,7 +54,6 @@ buildPythonPackage rec {
     description = "This project is a CalDAV (RFC4791) client library for Python.";
     homepage = "https://github.com/python-caldav/caldav";
     license = licenses.asl20;
-    maintainers = with maintainers; [ marenz ];
-    #broken = true; # requires radicale which is not packaged yet
+    maintainers = with maintainers; [ marenz dotlambda ];
   };
 }

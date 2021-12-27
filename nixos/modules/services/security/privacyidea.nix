@@ -204,6 +204,7 @@ in
       systemd.services.privacyidea = let
         piuwsgi = pkgs.writeText "uwsgi.json" (builtins.toJSON {
           uwsgi = {
+            buffer-size = 8192;
             plugins = [ "python3" ];
             pythonpath = "${penv}/${uwsgi.python3.sitePackages}";
             socket = "/run/privacyidea/socket";
