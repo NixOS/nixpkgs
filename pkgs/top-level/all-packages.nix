@@ -30685,6 +30685,8 @@ with pkgs;
 
   naev = callPackage ../games/naev { };
 
+  nanosaur = callPackage ../games/nanosaur { };
+
   nethack = callPackage ../games/nethack { };
 
   nethack-qt = callPackage ../games/nethack {
