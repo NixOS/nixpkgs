@@ -22366,6 +22366,8 @@ with pkgs;
     gtk3 = gtk4;
   };
 
+  webp-pixbuf-loader = callPackage ../development/libraries/webp-pixbuf-loader {};
+
   websocketpp = callPackage ../development/libraries/websocket++ { };
 
   webrtc-audio-processing_1 = callPackage ../development/libraries/webrtc-audio-processing { stdenv = gcc10StdenvCompat; };
