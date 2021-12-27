@@ -3,13 +3,14 @@
 from collections import defaultdict
 from contextlib import contextmanager
 from dataclasses import dataclass
-from elftools.common.exceptions import ELFError
-from elftools.elf.dynamic import DynamicSection
-from elftools.elf.elffile import ELFFile
-from elftools.elf.enums import ENUM_E_TYPE, ENUM_EI_OSABI
+from elftools.common.exceptions import ELFError # type: ignore
+from elftools.elf.dynamic import DynamicSection # type: ignore
+from elftools.elf.elffile import ELFFile # type: ignore
+from elftools.elf.enums import ENUM_E_TYPE, ENUM_EI_OSABI # type: ignore
 from itertools import chain
 from pathlib import Path, PurePath
-from typing import Tuple
+
+from typing import Tuple, Optional, Iterator, List, DefaultDict, Set
 
 import argparse
 import os
@@ -20,7 +21,7 @@ import sys
 
 
 @contextmanager
-def open_elf(path: str) -> Iterator[IO[byte]]:
+def open_elf(path: Path) -> Iterator[ELFFile]:
     with path.open('rb') as stream:
         yield ELFFile(stream)
 
@@ -77,7 +78,7 @@ def get_osabi(elf: ELFFile) -> str:
     return elf.header["e_ident"]["EI_OSABI"]
 
 
-def osabi_are_compatible(wanted: Optional[str], got: Optional[str]) -> bool:
+def osabi_are_compatible(wanted: str, got: str) -> bool:
     """
     Tests whether two OS ABIs are compatible, taking into account the
     generally accepted compatibility of SVR4 ABI with other ABIs.
@@ -108,15 +109,15 @@ def osabi_are_compatible(wanted: Optional[str], got: Optional[str]) -> bool:
     return wanted == got
 
 
-def glob(path: str, pattern: str, recursive: bool) -> List[str]:
+def glob(path: Path, pattern: str, recursive: bool) -> Iterator[Path]:
     return path.rglob(pattern) if recursive else path.glob(pattern)
 
 
-cached_paths = set()
-soname_cache = defaultdict(list)
+cached_paths: Set[Path] = set()
+soname_cache: DefaultDict[Tuple[str, str], List[Tuple[Path, str]]] = defaultdict(list)
 
 
-def populate_cache(initial: str, recursive: bool =False) -> None:
+def populate_cache(initial: List[Path], recursive: bool =False) -> None:
     lib_dirs = list(initial)
 
     while lib_dirs:
@@ -146,7 +147,7 @@ def populate_cache(initial: str, recursive: bool =False) -> None:
                 pass
 
 
-def findDependency(soname: str, soarch: str, soabi: str) -> Optional[str]:
+def find_dependency(soname: str, soarch: str, soabi: str) -> Optional[Path]:
     for lib, libabi in soname_cache[(soname, soarch)]:
         if osabi_are_compatible(soabi, libabi):
             return lib
@@ -160,7 +161,7 @@ class Dependency:
     found: bool = False     # Whether it was found somewhere
 
 
-def autoPatchelfFile(path: Path, runtime_deps: list[Path]) -> list[Dependency]:
+def auto_patchelf_file(path: Path, runtime_deps: list[Path]) -> list[Dependency]:
     try:
         with open_elf(path) as elf:
 
@@ -220,45 +221,45 @@ def autoPatchelfFile(path: Path, runtime_deps: list[Path]) -> list[Dependency]:
             # resolved by the linker.
             continue
 
-        if foundDependency := findDependency(dep.name, file_arch, file_osabi):
-            rpath.append(foundDependency)
+        if found_dependency := find_dependency(dep.name, file_arch, file_osabi):
+            rpath.append(found_dependency)
             dependencies.append(Dependency(path, dep, True))
-            print(f"    {dep} -> found: {foundDependency}")
+            print(f"    {dep} -> found: {found_dependency}")
         else:
             dependencies.append(Dependency(path, dep, False))
             print(f"    {dep} -> not found!")
 
     # Dedup the rpath
-    rpath = ":".join(dict.fromkeys(map(Path.as_posix, rpath)))
+    rpath_str = ":".join(dict.fromkeys(map(Path.as_posix, rpath)))
 
     if rpath:
-        print("setting RPATH to:", rpath)
+        print("setting RPATH to:", rpath_str)
         subprocess.run(
-                ["patchelf", "--set-rpath", rpath, path.as_posix()],
+                ["patchelf", "--set-rpath", rpath_str, path.as_posix()],
                 check=True)
 
     return dependencies
 
 
-def autoPatchelf(
-        pathsToPatch,
-        libDirs,
-        runtime_deps,
+def auto_patchelf(
+        paths_to_patch: List[Path],
+        lib_dirs: List[Path],
+        runtime_deps: List[Path],
         recursive: bool =True,
-        ignoreMissing: bool =False) -> None:
+        ignore_missing: bool =False) -> None:
 
-    if not pathsToPatch:
+    if not paths_to_patch:
         sys.exit("No paths to patch, stopping.")
 
     # Add all shared objects of the current output path to the cache,
-    # before libDirs, so that they are chosen first in findDependency.
-    populate_cache(pathsToPatch, recursive)
-    populate_cache(libDirs)
+    # before lib_dirs, so that they are chosen first in find_dependency.
+    populate_cache(paths_to_patch, recursive)
+    populate_cache(lib_dirs)
 
     dependencies = []
-    for path in chain.from_iterable(glob(p, '*', recursive) for p in pathsToPatch):
+    for path in chain.from_iterable(glob(p, '*', recursive) for p in paths_to_patch):
         if not path.is_symlink() and path.is_file():
-            dependencies += autoPatchelfFile(path, runtime_deps)
+            dependencies += auto_patchelf_file(path, runtime_deps)
 
     missing = [dep for dep in dependencies if not dep.found]
 
@@ -300,7 +301,7 @@ def main() -> None:
     args = parser.parse_args()
     pprint.pprint(vars(args))
 
-    autoPatchelf(
+    auto_patchelf(
         args.paths,
         args.libs,
         args.runtime_dependencies,
@@ -308,10 +309,10 @@ def main() -> None:
         args.ignore_missing)
 
 
-interpreter_path = None
-interpreter_osabi = None
-interpreter_arch = None
-libc_lib = None
+interpreter_path: Path  = None # type: ignore
+interpreter_osabi: str  = None # type: ignore
+interpreter_arch: str   = None # type: ignore
+libc_lib: Path          = None # type: ignore
 
 if __name__ == "__main__":
     nix_support = Path(os.environ['NIX_BINTOOLS']) / 'nix-support'
