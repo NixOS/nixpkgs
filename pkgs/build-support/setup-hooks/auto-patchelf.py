@@ -20,25 +20,25 @@ import sys
 
 
 @contextmanager
-def open_elf(path):
+def open_elf(path: str) -> Iterator[IO[byte]]:
     with path.open('rb') as stream:
         yield ELFFile(stream)
 
 
-def is_static_executable(elf):
+def is_static_executable(elf: ELFFile) -> bool:
     # Statically linked executables have an ELF type of EXEC but no INTERP.
     return (elf.header["e_type"] == 'ET_EXEC'
             and not elf.get_section_by_name(".interp"))
 
 
-def is_dynamic_executable(elf):
+def is_dynamic_executable(elf: ELFFile) -> bool:
     # We do not require an ELF type of EXEC. This also catches
     # position-independent executables, as they typically have an INTERP
     # section but their ELF type is DYN.
     return bool(elf.get_section_by_name(".interp"))
 
 
-def get_dependencies(elf):
+def get_dependencies(elf: ELFFile) -> List[str]:
     dependencies = []
     # This convoluted code is here on purpose. For some reason, using
     # elf.get_section_by_name(".dynamic") does not always return an
@@ -52,7 +52,7 @@ def get_dependencies(elf):
     return dependencies
 
 
-def get_rpath(elf):
+def get_rpath(elf: ELFFile) -> List[str]:
     # This convoluted code is here on purpose. For some reason, using
     # elf.get_section_by_name(".dynamic") does not always return an
     # instance of DynamicSection, but that is required to call iter_tags
@@ -69,15 +69,15 @@ def get_rpath(elf):
     return []
 
 
-def get_arch(elf):
+def get_arch(elf: ELFFile) -> str:
     return elf.get_machine_arch()
 
 
-def get_osabi(elf):
+def get_osabi(elf: ELFFile) -> str:
     return elf.header["e_ident"]["EI_OSABI"]
 
 
-def osabi_are_compatible(wanted, got):
+def osabi_are_compatible(wanted: Optional[str], got: Optional[str]) -> bool:
     """
     Tests whether two OS ABIs are compatible, taking into account the
     generally accepted compatibility of SVR4 ABI with other ABIs.
@@ -108,7 +108,7 @@ def osabi_are_compatible(wanted, got):
     return wanted == got
 
 
-def glob(path, pattern, recursive):
+def glob(path: str, pattern: str, recursive: bool) -> List[str]:
     return path.rglob(pattern) if recursive else path.glob(pattern)
 
 
@@ -116,7 +116,7 @@ cached_paths = set()
 soname_cache = defaultdict(list)
 
 
-def populate_cache(initial, recursive=False):
+def populate_cache(initial: str, recursive: bool =False) -> None:
     lib_dirs = list(initial)
 
     while lib_dirs:
@@ -146,7 +146,7 @@ def populate_cache(initial, recursive=False):
                 pass
 
 
-def findDependency(soname, soarch, soabi):
+def findDependency(soname: str, soarch: str, soabi: str) -> Optional[str]:
     for lib, libabi in soname_cache[(soname, soarch)]:
         if osabi_are_compatible(soabi, libabi):
             return lib
@@ -244,8 +244,8 @@ def autoPatchelf(
         pathsToPatch,
         libDirs,
         runtime_deps,
-        recursive=True,
-        ignoreMissing=False):
+        recursive: bool =True,
+        ignoreMissing: bool =False) -> None:
 
     if not pathsToPatch:
         sys.exit("No paths to patch, stopping.")
@@ -271,7 +271,7 @@ def autoPatchelf(
                  'Add the missing dependencies to --libs or use --ignore-missing.')
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser(
         prog="auto-patchelf",
         description='auto-patchelf tries as hard as possible to patch the'
