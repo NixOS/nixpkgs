@@ -2140,6 +2140,12 @@
     githubId = 3956062;
     name = "Simon Lackerbauer";
   };
+  cirno-999 = {
+    email = "reverene@protonmail.com";
+    github = "cirno-999";
+    githubId = 73712874;
+    name = "cirno-999";
+  };
   citadelcore = {
     email = "alex@arctarus.co.uk";
     github = "citadelcore";
