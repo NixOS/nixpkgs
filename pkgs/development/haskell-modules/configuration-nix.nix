@@ -1041,4 +1041,11 @@ self: super: builtins.intersectAttrs super {
       })
     ] ++ (drv.patches or []);
   }) super.graphviz;
+
+  # Test case tries to contact the network
+  http-api-data-qq = overrideCabal (drv: {
+    testFlags = [
+      "-p" "!/Can be used with http-client/"
+    ] ++ drv.testFlags or [];
+  }) super.http-api-data-qq;
 }
