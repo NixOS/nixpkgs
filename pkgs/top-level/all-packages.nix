@@ -22691,9 +22691,7 @@ with pkgs;
 
   octomap = callPackage ../development/libraries/octomap { };
 
-  odin = callPackage ../development/compilers/odin {
-    llvmPackages = llvmPackages_11;
-  };
+  odin = callPackage ../development/compilers/odin { };
 
   odp-dpdk = callPackage ../os-specific/linux/odp-dpdk { };
 
