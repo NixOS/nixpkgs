@@ -1,4 +1,5 @@
 { buildOctavePackage
+, stdenv
 , lib
 , fetchurl
 }:
@@ -22,5 +23,7 @@ buildOctavePackage rec {
        Single-Instruction-Multiple-Data (SIMD) computations, selectively
        using available OpenCL hardware and drivers.
     '';
+    # error: structure has no member 'dir'
+    broken = stdenv.isDarwin;
   };
 }
