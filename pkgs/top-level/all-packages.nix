@@ -186,7 +186,7 @@ with pkgs;
 
   antsimulator = callPackage ../games/antsimulator { };
 
-  aocd = with pythonPackages; toPythonApplication aocd;
+  aocd = with python3Packages; toPythonApplication aocd;
 
   astrolog = callPackage ../applications/science/astronomy/astrolog { };
 
