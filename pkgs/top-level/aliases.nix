@@ -35,6 +35,9 @@ in
 ### Please maintain this list in ASCIIbetical ordering.
 ### Hint: the "sections" are delimited by ### <letter> ###
 
+# A script to convert old aliases to throws and remove old
+# throws can be found in './maintainers/scripts/remove-old-aliases.py'.
+
 mapAliases ({
   # forceSystem should not be used directly in Nixpkgs.
   # Added 2018-07-16
