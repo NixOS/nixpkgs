@@ -51,16 +51,12 @@ buildLinux (args // rec {
     # Graysky's additional CPU optimizations
     CC_OPTIMIZE_FOR_PERFORMANCE_O3 = yes;
 
-    # Android Ashmem and Binder IPC Driver as module for Anbox
-    ASHMEM = module;
-    ANDROID = yes;
-    ANDROID_BINDER_IPC = module;
-    ANDROID_BINDERFS = module;
-    ANDROID_BINDER_DEVICES = freeform "binder,hwbinder,vndbinder";
-
     # Futex WAIT_MULTIPLE implementation for Wine / Proton Fsync.
     FUTEX = yes;
     FUTEX_PI = yes;
+
+    # WineSync driver for fast kernel-backed Wine
+    WINESYNC = module;
   };
 
   extraMeta = {
