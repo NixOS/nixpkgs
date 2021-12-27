@@ -2,7 +2,7 @@
 , stdenv
 , fetchurl
 , hamlib
-, fltk14
+, fltk13
 , libjpeg
 , libpng
 , portaudio
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     libXinerama
     gettext
     hamlib
-    fltk14
+    fltk13
     libjpeg
     libpng
     portaudio
@@ -39,11 +39,16 @@ stdenv.mkDerivation rec {
     libsamplerate
   ] ++ lib.optionals (stdenv.isLinux) [ libpulseaudio alsa-lib udev ];
 
+  enableParallelBuilding = true;
+
   meta = with lib; {
     description = "Digital modem program";
     homepage = "https://sourceforge.net/projects/fldigi/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ relrod ftrvxmtrx ];
     platforms = platforms.unix;
+    # unable to execute command: posix_spawn failed: Argument list too long
+    # Builds fine on aarch64-darwin
+    broken = stdenv.system == "x86_64-darwin";
   };
 }

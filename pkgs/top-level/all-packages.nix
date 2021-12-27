@@ -186,7 +186,7 @@ with pkgs;
 
   antsimulator = callPackage ../games/antsimulator { };
 
-  aocd = with pythonPackages; toPythonApplication aocd;
+  aocd = with python3Packages; toPythonApplication aocd;
 
   astrolog = callPackage ../applications/science/astronomy/astrolog { };
 
@@ -2989,6 +2989,10 @@ with pkgs;
   fast-cli = nodePackages.fast-cli;
 
   fast-cpp-csv-parser = callPackage ../development/libraries/fast-cpp-csv-parser { };
+
+  fast-ssh = callPackage ../tools/networking/fast-ssh {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   faudio = callPackage ../development/libraries/faudio { };
 
@@ -10263,6 +10267,8 @@ with pkgs;
   tor-browser-bundle-bin = callPackage ../applications/networking/browsers/tor-browser-bundle-bin { };
 
   touchegg = callPackage ../tools/inputmethods/touchegg { };
+
+  torrent7z = callPackage ../tools/archivers/torrent7z { };
 
   torsocks = callPackage ../tools/security/tor/torsocks.nix { };
 
@@ -30680,6 +30686,8 @@ with pkgs;
   n2048 = callPackage ../games/n2048 { };
 
   naev = callPackage ../games/naev { };
+
+  nanosaur = callPackage ../games/nanosaur { };
 
   nethack = callPackage ../games/nethack { };
 
