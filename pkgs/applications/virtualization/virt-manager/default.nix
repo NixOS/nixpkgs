@@ -38,6 +38,10 @@ python3.pkgs.buildPythonApplication rec {
   patchPhase = ''
     sed -i 's|/usr/share/libvirt/cpu_map.xml|${system-libvirt}/share/libvirt/cpu_map.xml|g' virtinst/capabilities.py
     sed -i "/'install_egg_info'/d" setup.py
+
+    # Fixes testCLI0051virt_install_initrd_inject on Darwin: "cpio: root:root: invalid group"
+    substituteInPlace virtinst/install/installerinject.py \
+      --replace "'--owner=root:root'" "'--owner=0:0'"
   '';
 
   postConfigure = ''
@@ -53,7 +57,7 @@ python3.pkgs.buildPythonApplication rec {
 
     gappsWrapperArgs+=(--set PYTHONPATH "$PYTHONPATH")
     # these are called from virt-install in initrdinject.py
-    gappsWrapperArgs+=(--prefix PATH : "${makeBinPath [ cpio e2fsprogs file findutils gzip ]}")
+    gappsWrapperArgs+=(--prefix PATH : "${makeBinPath ([ cpio e2fsprogs file findutils gzip ])}")
 
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
@@ -87,8 +91,7 @@ python3.pkgs.buildPythonApplication rec {
       manages Xen and LXC (linux containers).
     '';
     license = licenses.gpl2;
-    # exclude Darwin since libvirt-glib currently doesn't build there
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ qknight offline fpletz globin ];
   };
 }
