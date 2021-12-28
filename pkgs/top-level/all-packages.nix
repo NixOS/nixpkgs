@@ -3303,6 +3303,10 @@ with pkgs;
 
   krapslog = callPackage ../tools/misc/krapslog { };
 
+  krill = callPackage ../servers/krill {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   lcdproc = callPackage ../servers/monitoring/lcdproc { };
 
   languagetool = callPackage ../tools/text/languagetool {  };
