@@ -572,7 +572,7 @@ buildLuarocksPackage {
   propagatedBuildInputs = [ penlight markdown ];
 
   meta = {
-    homepage = "http://stevedonovan.github.com/ldoc";
+    homepage = "https://github.com/lunarmodules/LDoc";
     description = "A Lua Documentation Tool";
     license.fullName = "MIT/X11";
   };
