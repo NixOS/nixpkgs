@@ -444,10 +444,10 @@ rec {
       */
       byName = attr: f: modules:
         zipAttrsWith (n: concatLists)
-          (map (module:
-              if !(builtins.isAttrs module.${attr}) then
+          (map (module: let subtree = module.${attr}; in
+              if !(builtins.isAttrs subtree) then
                 throw ''
-                  You're trying to declare a value of type `${builtins.typeOf module.${attr}}'
+                  You're trying to declare a value of type `${builtins.typeOf subtree}'
                   rather than an attribute-set for the option
                   `${builtins.concatStringsSep "." prefix}'!
 
@@ -456,7 +456,7 @@ rec {
                   this option by e.g. referring to `man 5 configuration.nix'!
                 ''
               else
-                mapAttrs (n: f module) module.${attr}
+                mapAttrs (n: f module) subtree
               ) modules);
       # an attrset 'name' => list of submodules that declare ‘name’.
       declsByName = byName "options" (module: option:
