@@ -1,7 +1,6 @@
 { stdenvNoCC
 , fetchFromGitHub
 , lib
-, bash
 , gtk3
 , nordzy-theme-name ? "Nordzy"
 , nordzy-themes ? [ "all" ] # Override this to only install selected themes
@@ -21,13 +20,16 @@ stdenvNoCC.mkDerivation {
     sha256 = "Jqn5CF80xlYJ7H4qI1VEj91vcKPPoMXP5+sPs0ksiC4=";
   };
 
-  # In the post patch phase we should fir st make sure to patch shebangs.
-  # We can also remove the gtk-update-icon-cache since the cache will later be built by the system.
+  # In the post patch phase we should first make sure to patch shebangs.
   postPatch = ''
     patchShebangs install.sh
-    substituteInPlace install.sh \
-      --replace "gtk-update-icon-cache" "#"
   '';
+
+  nativeBuildInputs = [
+    gtk3
+  ];
+
+  dontDropIconThemeCache = true;
 
   installPhase = ''
     runHook preInstall
@@ -46,7 +48,7 @@ stdenvNoCC.mkDerivation {
     description = "A free and open source icon theme using the Nord color palette and based on WhiteSur and Numix Icon Theme";
     homepage = "https://github.com/alvatip/Nordzy-icon";
     license = licenses.gpl3;
-    platforms = platforms.all;
+    platforms = platforms.linux;
     maintainers = with maintainers; [
       alexnortung
     ];
