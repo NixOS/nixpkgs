@@ -19,7 +19,6 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "filcole";
     repo = pname;
-    # release not tagged: https://github.com/filcole/pycarwings2/issues/33
     rev = "v${version}";
     sha256 = "04k1la7wix6sp668nqpwdhd3057b2bzcz7h2b9a57cxlifl8pjxf";
   };

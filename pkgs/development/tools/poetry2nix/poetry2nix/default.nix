@@ -5,7 +5,7 @@
 }:
 let
   # Poetry2nix version
-  version = "1.23.0";
+  version = "1.24.1";
 
   inherit (poetryLib) isCompatible readTOML moduleName;
 
@@ -261,6 +261,7 @@ lib.makeScope pkgs.newScope (self: {
     , python ? pkgs.python3
     , preferWheels ? false
     , editablePackageSources ? { }
+    , extraPackages ? ps: [ ]
     }:
     let
       poetryPython = self.mkPoetryPackages {
@@ -270,7 +271,7 @@ lib.makeScope pkgs.newScope (self: {
       inherit (poetryPython) poetryPackages;
 
     in
-    poetryPython.python.withPackages (_: poetryPackages);
+    poetryPython.python.withPackages (ps: poetryPackages ++ (extraPackages ps));
 
   /* Creates a Python application from pyproject.toml and poetry.lock
 
