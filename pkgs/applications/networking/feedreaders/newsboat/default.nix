@@ -34,9 +34,6 @@ rustPlatform.buildRustPackage rec {
     make prefix="$out"
   '';
 
-  # TODO: Check if that's still needed
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin " -Wno-error=format-security";
-
   # https://github.com/NixOS/nixpkgs/pull/98471#issuecomment-703100014 . We set
   # these for all platforms, since upstream's gettext crate behavior might
   # change in the future.
