@@ -67,6 +67,8 @@ let result = stdenv.mkDerivation rec {
     mv $sourceRoot $out
 
     # jni.h expects jni_md.h to be in the header search path.
+    # FIXME this glob pattern fails. It should pass without the shopt line
+    shopt -u failglob
     ln -s $out/include/linux/*_md.h $out/include/
 
     rm -rf $out/demo
