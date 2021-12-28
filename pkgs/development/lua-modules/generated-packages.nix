@@ -944,7 +944,7 @@ buildLuarocksPackage {
   propagatedBuildInputs = [ lua ];
 
   meta = {
-    homepage = "http://ittner.github.com/lua-iconv/";
+    homepage = "https://github.com/ittner/lua-iconv/";
     description = "Lua binding to the iconv";
     license.fullName = "MIT/X11";
   };
