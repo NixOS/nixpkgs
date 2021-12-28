@@ -18990,6 +18990,8 @@ with pkgs;
 
   nanovna-saver = libsForQt5.callPackage ../applications/science/electronics/nanovna-saver { };
 
+  ncnn = callPackage ../development/libraries/ncnn { };
+
   ndpi = callPackage ../development/libraries/ndpi { };
 
   nemo-qml-plugin-dbus = libsForQt5.callPackage ../development/libraries/nemo-qml-plugin-dbus { };
