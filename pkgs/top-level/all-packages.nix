@@ -28621,6 +28621,7 @@ with pkgs;
     jdk = jdk8;
     pythonPackages = python3Packages;
     inherit llvmPackages;
+    boost = boost16x; # Filesystem tests in the checkPhase fail with Boost 1.77
   };
 
   spotifywm = callPackage ../applications/audio/spotifywm { };
