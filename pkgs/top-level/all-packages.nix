@@ -8472,6 +8472,8 @@ with pkgs;
 
   olsrd = callPackage ../tools/networking/olsrd { };
 
+  oonf-olsrd2 = callPackage ../tools/networking/oonf-olsrd2 { };
+
   opl3bankeditor = libsForQt5.callPackage ../tools/audio/opl3bankeditor { };
   opn2bankeditor = libsForQt5.callPackage ../tools/audio/opl3bankeditor/opn2bankeditor.nix { };
 
