@@ -30262,6 +30262,8 @@ with pkgs;
 
   btanks = callPackage ../games/btanks { };
 
+  bugdom = callPackage ../games/bugdom { };
+
   bzflag = callPackage ../games/bzflag {
     inherit (darwin.apple_sdk.frameworks) Carbon CoreServices;
   };
