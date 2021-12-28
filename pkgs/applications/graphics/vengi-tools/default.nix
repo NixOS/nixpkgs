@@ -118,6 +118,7 @@ in stdenv.mkDerivation rec {
 
   passthru.tests = {
     voxconvert-roundtrip = callPackage ./test-voxconvert-roundtrip.nix {};
+    voxconvert-all-formats = callPackage ./test-voxconvert-all-formats.nix {};
     run-voxedit = nixosTests.vengi-tools;
   };
 
