@@ -1868,6 +1868,10 @@ with pkgs;
 
   passExtensions = recurseIntoAttrs pass.extensions;
 
+  inherd-quake = callPackage ../applications/misc/inherd-quake {
+    inherit (darwin.apple_sdk.frameworks) CoreServices Security;
+  };
+
   xjadeo = callPackage ../tools/video/xjadeo { };
 
   asc-key-to-qr-code-gif = callPackage ../tools/security/asc-key-to-qr-code-gif { };
