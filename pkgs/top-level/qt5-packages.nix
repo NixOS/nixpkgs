@@ -194,6 +194,8 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
     withQt5 = true;
   };
 
+  qt5ct = callPackage ../tools/misc/qt5ct { };
+
   qtfeedback = callPackage ../development/libraries/qtfeedback { };
 
   qtutilities = callPackage ../development/libraries/qtutilities { };

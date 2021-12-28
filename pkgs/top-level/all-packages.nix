@@ -883,7 +883,9 @@ with pkgs;
     type = "OPN";
   };
 
-  arc_unpacker = callPackage ../tools/archivers/arc_unpacker { };
+  arc_unpacker = callPackage ../tools/archivers/arc_unpacker {
+    boost = boost16x; # checkPhase fails with Boost 1.77
+  };
 
   adminer = callPackage ../servers/adminer { };
 
@@ -8471,6 +8473,8 @@ with pkgs;
   };
 
   olsrd = callPackage ../tools/networking/olsrd { };
+
+  oonf-olsrd2 = callPackage ../tools/networking/oonf-olsrd2 { };
 
   opl3bankeditor = libsForQt5.callPackage ../tools/audio/opl3bankeditor { };
   opn2bankeditor = libsForQt5.callPackage ../tools/audio/opl3bankeditor/opn2bankeditor.nix { };
@@ -19489,8 +19493,6 @@ with pkgs;
 
   # plasma5Packages maps to the Qt5 packages set that is used to build the plasma5 desktop
   plasma5Packages = libsForQt515;
-
-  qt5ct = libsForQt5.callPackage ../tools/misc/qt5ct { };
 
   qtEnv = qt5.env;
   qt5Full = qt5.full;
