@@ -219,6 +219,19 @@ let
       });
     })
 
+    # Remove with 2021.12.6 as the requirement will be 1.1.16 (at least)
+    (self: super: {
+      yalexs = super.yalexs.overridePythonAttrs (oldAttrs: rec {
+        version = "1.1.13";
+        src = fetchFromGitHub {
+          owner = "bdraco";
+          repo = "yalexs";
+          rev = "v${version}";
+          sha256 = "sha256-lnx8+VyDyO7Wg+QW+CC0FUg77Ndfjar6PLsDYwEpaCQ=";
+        };
+      });
+    })
+
     # home-assistant-frontend does not exist in python3.pkgs
     (self: super: {
       home-assistant-frontend = self.callPackage ./frontend.nix { };
@@ -252,7 +265,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2021.12.4";
+  hassVersion = "2021.12.5";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
@@ -269,7 +282,7 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    hash = "sha256:NZPv6Zyy9brdArRsyGA6EMkYEY1wCf6osjek4lEsr1c=";
+    hash = "sha256:116qklmzvqh3hn3i6i7lvsnqydd2qclk612rwlxs3v56kzpks62n";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling
