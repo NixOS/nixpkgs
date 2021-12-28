@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, fetchpatch
 , pkg-config
 , vala
 , gobject-introspection
@@ -45,6 +46,14 @@ stdenv.mkDerivation rec {
     url = "https://download.gimp.org/pub/gegl/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "sha256-wRJ4LPQJaWniMhfM36vkIoTjXVQ1/wxD1A5McPrsqN0=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2021-45463.patch";
+      url = "https://gitlab.gnome.org/GNOME/gegl/-/commit/bfce470f0f2f37968862129d5038b35429f2909b.patch";
+      sha256 = "0nvgn7hfw6pia19xqp51mkp9nh730v19ha050dz0algnrk3ngakp";
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config
