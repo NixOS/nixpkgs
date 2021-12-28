@@ -1,0 +1,13 @@
+diff --git a/kmymoney/plugins/weboob/interface/weboobinterface.cpp b/kmymoney/plugins/weboob/interface/weboobinterface.cpp
+index 9d8ad440d..98de63df9 100644
+--- a/kmymoney/plugins/weboob/interface/weboobinterface.cpp
++++ b/kmymoney/plugins/weboob/interface/weboobinterface.cpp
+@@ -65,6 +65,8 @@ WeboobInterface::WeboobInterface() :
+ 
+         PyObject *sys = PyImport_ImportModule("sys");
+         PyObject *path = PyObject_GetAttrString(sys, "path");
++        PyObject *pythonpath = PyUnicode_FromString("@pythonpath@");
++        PyList_Append(path, pythonpath);
+         PyObject *pyLocation = PyUnicode_FromString(moduleLocation);
+         PyList_Append(path, pyLocation);
+ 

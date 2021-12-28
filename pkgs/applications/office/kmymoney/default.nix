@@ -1,4 +1,12 @@
-{ stdenv, lib, fetchurl, doxygen, extra-cmake-modules, graphviz, kdoctools
+{ lib
+, stdenv
+, mkDerivation
+, fetchurl
+, substituteAll
+, doxygen
+, extra-cmake-modules
+, graphviz
+, kdoctools
 , wrapQtAppsHook
 
 , akonadi, alkimia, aqbanking, gmp, gwenhywfar, kactivities, karchive
@@ -10,24 +18,30 @@
 # Needed for running tests:
 , qtbase, xvfb-run
 
-, python2, python3Packages
+, python3
 }:
 
-stdenv.mkDerivation rec {
+let
+  python = python3.withPackages (ps: with ps; [ weboob ]);
+in mkDerivation rec {
   pname = "kmymoney";
-  version = "5.1.1";
+  version = "5.1.2";
 
   src = fetchurl {
     url = "mirror://kde/stable/kmymoney/${version}/src/${pname}-${version}.tar.xz";
-    sha256 = "sha256-33ufeOhZb5nSgpXKc4cI8GVe4Fd4nf2SHHsbq5ZXgpg=";
+    hash = "sha256-N73E52OihJufc59z44s4nAK94cGxhE7c+n46sdW/ezs=";
   };
 
-  # Hidden dependency that wasn't included in CMakeLists.txt:
-  NIX_CFLAGS_COMPILE = "-I${kitemmodels.dev}/include/KF5";
+  patches = [
+    (substituteAll {
+      src = ./pythonpath.patch;
+      pythonpath = "${python}/${python.sitePackages}";
+    })
+  ];
 
   nativeBuildInputs = [
-    doxygen extra-cmake-modules graphviz kdoctools python2
-    python3Packages.wrapPython wrapQtAppsHook
+    doxygen extra-cmake-modules graphviz kdoctools python
+    wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -35,24 +49,7 @@ stdenv.mkDerivation rec {
     kcontacts kdewebkit kdiagram kholidays kidentitymanagement kitemmodels
     libical libofx qgpgme
     sqlcipher
-
-    # Put it into buildInputs so that CMake can find it, even though we patch
-    # it into the interface later.
-    python3Packages.weboob
   ];
-
-  weboobPythonPath = [ python3Packages.weboob ];
-
-  postInstall = ''
-    buildPythonPath "$weboobPythonPath"
-    patchPythonScript "$out/share/kmymoney/weboob/kmymoneyweboob.py"
-
-    # Within the embedded Python interpreter, sys.argv is unavailable, so let's
-    # assign it to a dummy value so that the assignment of sys.argv[0] injected
-    # by patchPythonScript doesn't fail:
-    sed -i -e '1i import sys; sys.argv = [""]' \
-      "$out/share/kmymoney/weboob/kmymoneyweboob.py"
-  '';
 
   doInstallCheck = stdenv.hostPlatform == stdenv.buildPlatform;
   installCheckInputs = [ xvfb-run ];
