@@ -254,10 +254,10 @@ in {
 
             authProtocols = mkOption {
               default = [
-                # WPA2 and WPA3
-                "WPA-PSK" "WPA-EAP" "SAE"
+                # WPA2
+                "WPA-PSK" "WPA-EAP"
                 # 802.11r variants of the above
-                "FT-PSK" "FT-EAP" "FT-SAE"
+                "FT-PSK" "FT-EAP"
               ];
               # The list can be obtained by running this command
               # awk '
