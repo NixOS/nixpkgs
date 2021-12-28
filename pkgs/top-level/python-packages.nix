@@ -100,6 +100,12 @@ let
 
   disabledIf = x: drv: if x then disabled drv else drv;
 
+  # CUDA-related packages that are compatible with the currently packaged version
+  # of TensorFlow, used to keep these versions in sync in related packages like `jaxlib`.
+  tensorflow_compat_cudatoolkit = pkgs.cudatoolkit_11_2;
+  tensorflow_compat_cudnn = pkgs.cudnn_cudatoolkit_11_2;
+  tensorflow_compat_nccl = pkgs.nccl_cudatoolkit_11;
+
 in {
 
   inherit pkgs stdenv;
@@ -4053,7 +4059,17 @@ in {
 
   jax = callPackage ../development/python-modules/jax { };
 
-  jaxlib = callPackage ../development/python-modules/jaxlib { };
+  jaxlib-bin = callPackage ../development/python-modules/jaxlib/bin.nix { };
+
+  jaxlib-build = callPackage ../development/python-modules/jaxlib {
+    # Some platforms don't have `cudaSupport` defined, hence the need for 'or false'.
+    cudaSupport = pkgs.config.cudaSupport or false;
+    cudatoolkit = tensorflow_compat_cudatoolkit;
+    cudnn = tensorflow_compat_cudnn;
+    nccl = tensorflow_compat_nccl;
+  };
+
+  jaxlib = self.jaxlib-build;
 
   JayDeBeApi = callPackage ../development/python-modules/JayDeBeApi { };
 
@@ -9453,16 +9469,16 @@ in {
 
   tensorflow-bin = callPackage ../development/python-modules/tensorflow/bin.nix {
     cudaSupport = pkgs.config.cudaSupport or false;
-    cudatoolkit = pkgs.cudatoolkit_11_2;
-    cudnn = pkgs.cudnn_cudatoolkit_11_2;
+    cudatoolkit = tensorflow_compat_cudatoolkit;
+    cudnn = tensorflow_compat_cudnn;
   };
 
   tensorflow-build = callPackage ../development/python-modules/tensorflow {
     inherit (pkgs.darwin) cctools;
     cudaSupport = pkgs.config.cudaSupport or false;
-    cudatoolkit = pkgs.cudatoolkit_11_2;
-    cudnn = pkgs.cudnn_cudatoolkit_11_2;
-    nccl = pkgs.nccl_cudatoolkit_11;
+    cudatoolkit = tensorflow_compat_cudatoolkit;
+    cudnn = tensorflow_compat_cudnn;
+    nccl = tensorflow_compat_nccl;
     inherit (pkgs.darwin.apple_sdk.frameworks) Foundation Security;
     flatbuffers-core = pkgs.flatbuffers;
     flatbuffers-python = self.flatbuffers;
