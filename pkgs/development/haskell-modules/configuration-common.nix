@@ -2254,4 +2254,13 @@ self: super: {
   sdp4unordered = disableLibraryProfiling super.sdp4unordered;
   sdp4vector = disableLibraryProfiling super.sdp4vector;
 
+  hie-bios = appendPatches [
+    # Accounts for a breaking change in GHC 9.0.2 via CPP
+    (pkgs.fetchpatch {
+      name = "hie-bios-ghc-9.0.2-compat.patch";
+      url = "https://github.com/haskell/hie-bios/commit/da0cb23384cc6e9b393792f8f25a3c174a4edafa.patch";
+      sha256 = "1qj67s93h6pxvdapw1sxy6izwp5y8vjaw67gw3lsnj8gs14fqq4h";
+    })
+  ] super.hie-bios;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
