@@ -21,6 +21,7 @@
 , graalvmXmx ? "-J-Xmx6g"
   # The GraalVM to use
 , graalvm ? graalvmCEPackages.graalvm11-ce
+, meta ? { }
 , ...
 } @ args:
 
@@ -47,6 +48,10 @@ stdenv.mkDerivation (args // {
     runHook postInstall
   '';
 
-  meta.platforms = lib.attrByPath [ "meta" "platforms" ] graalvm.meta.platforms args;
-  meta.mainProgram = lib.attrByPath [ "meta" "mainProgram" ] executable args;
+  meta = {
+    # default to graalvm's platforms
+    platforms = graalvm.meta.platforms;
+    # default to executable name
+    mainProgram = executable;
+  } // meta;
 })
