@@ -245,7 +245,12 @@ stdenv.mkDerivation {
     + optionalString (sharedLibraryLoader != null) ''
       if [[ -z ''${dynamicLinker+x} ]]; then
         echo "Don't know the name of the dynamic linker for platform '${targetPlatform.config}', so guessing instead." >&2
+        # FIXME the glob fails sometimes, it should succeed without the shopt lines
+        shopt -u failglob
+        shopt -s nullglob
         local dynamicLinker="${sharedLibraryLoader}/lib/ld*.so.?"
+        shopt -u nullglob
+        shopt -s failglob
       fi
     ''
 
