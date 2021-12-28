@@ -10,7 +10,7 @@
 , icu
 , libkrb5
 , lib
-, linkFarm
+, linkFarmFromDrvs
 , lttng-ust
 , makeWrapper
 , nodejs-12_x
@@ -18,16 +18,19 @@
 , openssl
 , stdenv
 , zlib
+, writeShellApplication
+, nuget-to-nix
 }:
 let
-  deps = (import ./deps.nix { inherit fetchurl; });
-  nugetPackages = map
-    (x: {
-      name = "${x.name}.nupkg";
-      path = "${x}";
-    })
-    deps;
-  nugetSource = linkFarm "nuget-packages" nugetPackages;
+  nugetSource = linkFarmFromDrvs "nuget-packages" (
+    import ./deps.nix {
+      fetchNuGet = { pname, version, sha256 }: fetchurl {
+        name = "${pname}.${version}.nupkg";
+        url = "https://www.nuget.org/api/v2/package/${pname}/${version}";
+        inherit sha256;
+      };
+    }
+  );
 
   dotnetSdk = dotnetCorePackages.sdk_6_0;
   runtimeId =
@@ -269,6 +272,39 @@ stdenv.mkDerivation rec {
 
     wrap config.sh --prefix PATH : ${lib.makeBinPath [ glibc.bin ]}
   '';
+
+  # Script to create deps.nix file for dotnet dependencies. Run it with
+  # $(nix-build -A github-runner.passthru.createDepsFile)/bin/create-deps-file
+  #
+  # Default output path is /tmp/${pname}-deps.nix, but can be override with cli argument.
+  #
+  # Inspired by passthru.fetch-deps in pkgs/build-support/build-dotnet-module/default.nix
+  passthru.createDepsFile = writeShellApplication {
+    name = "create-deps-file";
+    runtimeInputs = [ dotnetSdk nuget-to-nix ];
+    text = ''
+      rundir=$(pwd)
+
+      printf "\n* Setup workdir\n"
+      workdir="$(mktemp -d /tmp/${pname}.XXX)"
+      cp -rT "${src}" "$workdir"
+      chmod -R +w "$workdir"
+      trap 'rm -rf "$workdir"' EXIT
+
+      pushd "$workdir"
+
+      mkdir nuget_pkgs
+
+      printf "\n* Restore ${pname} dotnet project\n"
+      dotnet restore src/ActionsRunner.sln --packages nuget_pkgs --no-cache --force --runtime ${runtimeId}
+
+      cd "$rundir"
+      deps_file=''${1-"/tmp/${pname}-deps.nix"}
+      printf "\n* Make %s file\n" "$(basename "$deps_file")"
+      nuget-to-nix "$workdir/nuget_pkgs" > "$deps_file"
+      printf "\n* Dependency file writen to %s" "$deps_file"
+    '';
+  };
 
   meta = with lib; {
     description = "Self-hosted runner for GitHub Actions";
