@@ -19,6 +19,7 @@ with vmTools;
     name = "patchelf-rpm";
     src = patchelf.src;
     diskImage = diskImages.fedora27x86_64;
+    diskImageFormat = "qcow2";
   };
 
 
