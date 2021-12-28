@@ -320,6 +320,7 @@ in with py.pkgs; buildPythonApplication rec {
     ciso8601
     cryptography
     httpx
+    ifaddr
     jinja2
     pip
     pyjwt
