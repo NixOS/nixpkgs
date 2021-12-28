@@ -9156,6 +9156,8 @@ with pkgs;
 
   real_time_config_quick_scan = callPackage ../applications/audio/real_time_config_quick_scan { };
 
+  realesrgan-ncnn-vulkan = callPackage ../tools/graphics/realesrgan-ncnn-vulkan { };
+
   react-native-debugger = callPackage ../development/tools/react-native-debugger { };
 
   read-edid = callPackage ../os-specific/linux/read-edid { };
