@@ -236,6 +236,7 @@ in
 
       environment = {
         KEA_PIDFILE_DIR = "/run/kea";
+        KEA_LOCKFILE_DIR = "/run/kea";
       };
 
       restartTriggers = [
@@ -271,6 +272,7 @@ in
 
       environment = {
         KEA_PIDFILE_DIR = "/run/kea";
+        KEA_LOCKFILE_DIR = "/run/kea";
       };
 
       restartTriggers = [
@@ -313,6 +315,7 @@ in
 
       environment = {
         KEA_PIDFILE_DIR = "/run/kea";
+        KEA_LOCKFILE_DIR = "/run/kea";
       };
 
       restartTriggers = [
@@ -353,6 +356,7 @@ in
 
       environment = {
         KEA_PIDFILE_DIR = "/run/kea";
+        KEA_LOCKFILE_DIR = "/run/kea";
       };
 
       restartTriggers = [
@@ -361,7 +365,7 @@ in
 
       serviceConfig = {
         ExecStart = "${package}/bin/kea-dhcp-ddns -c /etc/kea/dhcp-ddns.conf ${lib.escapeShellArgs cfg.dhcp-ddns.extraArgs}";
-        AmbientCapabilites = [
+        AmbientCapabilities = [
           "CAP_NET_BIND_SERVICE"
         ];
         CapabilityBoundingSet = [
