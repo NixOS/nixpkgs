@@ -106,7 +106,7 @@ stdenv.mkDerivation rec {
       --replace "which" "${buildPackages.busybox}/bin/which"
 
     substituteInPlace src/shared-data-manager.c \
-      --replace /bin/rm ${busybox}/bin/rm
+      --replace /bin/rm ${buildPackages.busybox}/bin/rm
   '';
 
   postInstall = ''
