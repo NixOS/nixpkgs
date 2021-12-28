@@ -5,13 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "wapiti";
-  version = "3.0.7";
+  version = "3.0.9";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "wapiti-scanner";
     repo = pname;
     rev = version;
-    sha256 = "0kya9a2zs1c518z4p34pfjx2sms6843gh3c9qc9zvk4lr4g7hw3x";
+    sha256 = "sha256-olqPM8EQ8LxQQM7kqcjbT9RMdBeYdhfn6Qp6BUu8K5Q=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -22,17 +23,20 @@ python3.pkgs.buildPythonApplication rec {
     aiocache
     aiosqlite
     beautifulsoup4
+    brotli
     browser-cookie3
     cryptography
     dnspython
     httpx
     httpx-ntlm
     httpx-socks
+    humanize
     loguru
     Mako
     markupsafe
     pysocks
     six
+    sslyze
     sqlalchemy
     tld
     yaswfp
@@ -49,16 +53,8 @@ python3.pkgs.buildPythonApplication rec {
   postPatch = ''
     # Ignore pinned versions
     substituteInPlace setup.py \
-      --replace "httpx-socks[asyncio] == 0.5.1" "httpx-socks[asyncio]" \
-      --replace "markupsafe==1.1.1" "markupsafe" \
-      --replace "importlib_metadata==3.7.2" "importlib_metadata" \
-      --replace "browser-cookie3==0.11.4" "browser-cookie3" \
-      --replace "cryptography==3.3.2" "cryptography" \
-      --replace "httpx[brotli]==0.20.0" "httpx" \
-      --replace "sqlalchemy>=1.4.26" "sqlalchemy" \
-      --replace "aiocache==0.11.1" "aiocache" \
-      --replace "aiosqlite==0.17.0" "aiosqlite" \
-      --replace "dnspython==2.1.0" "dnspython"
+      --replace "httpx-socks[asyncio] == 0.6.0" "httpx-socks[asyncio]"
+    sed -i -e "s/==[0-9.]*//" setup.py
     substituteInPlace setup.cfg \
       --replace " --cov --cov-report=xml" ""
   '';
@@ -103,6 +99,7 @@ python3.pkgs.buildPythonApplication rec {
     "test_request_object"
     "test_script"
     "test_ssrf"
+    "test_merge_with_and_without_redirection"
     "test_tag_name_escape"
     "test_timeout"
     "test_title_false_positive"
@@ -121,7 +118,7 @@ python3.pkgs.buildPythonApplication rec {
     # Requires a PHP installation
     "test_timesql"
     "test_cookies"
-    # E           TypeError: Expected bytes or bytes-like object got: <class 'str'>
+    # TypeError: Expected bytes or bytes-like object got: <class 'str'>
     "test_persister_upload"
   ];
 
