@@ -26,8 +26,10 @@ export DOTNET_NOLOGO=1
 export DOTNET_CLI_TELEMETRY_OPTOUT=1
 
 mkdir ./nuget_pkgs
-dotnet restore ArchiSteamFarm.sln --packages ./nuget_pkgs
 
+for project in ArchiSteamFarm/ArchiSteamFarm.csproj ArchiSteamFarm.Tests/ArchiSteamFarm.Tests.csproj; do
+  dotnet restore "$project" --packages ./nuget_pkgs
+done
 nuget-to-nix ./nuget_pkgs > "$deps_file"
 
 trap '
