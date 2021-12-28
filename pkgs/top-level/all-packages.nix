@@ -32812,6 +32812,8 @@ with pkgs;
 
   nar-serve = callPackage ../tools/nix/nar-serve { };
 
+  neo = callPackage ../applications/misc/neo { };
+
   inherit (callPackage ../tools/package-management/nix {
       storeDir = config.nix.storeDir or "/nix/store";
       stateDir = config.nix.stateDir or "/nix/var";
