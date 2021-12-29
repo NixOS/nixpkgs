@@ -33,10 +33,12 @@ let
   );
 
   dotnetSdk = dotnetCorePackages.sdk_6_0;
-  runtimeId =
-    if stdenv.isAarch64
-    then "linux-arm64"
-    else "linux-x64";
+  # Map Nix systems to .NET runtime ids
+  runtimeIds = {
+    "x86_64-linux" = "linux-x64";
+    "aarch64-linux" = "linux-arm64";
+  };
+  runtimeId = runtimeIds.${stdenv.system};
   fakeSha1 = "0000000000000000000000000000000000000000";
 in
 stdenv.mkDerivation rec {
@@ -276,7 +278,7 @@ stdenv.mkDerivation rec {
   # Script to create deps.nix file for dotnet dependencies. Run it with
   # $(nix-build -A github-runner.passthru.createDepsFile)/bin/create-deps-file
   #
-  # Default output path is /tmp/${pname}-deps.nix, but can be override with cli argument.
+  # Default output path is /tmp/${pname}-deps.nix, but can be overriden with cli argument.
   #
   # Inspired by passthru.fetch-deps in pkgs/build-support/build-dotnet-module/default.nix
   passthru.createDepsFile = writeShellApplication {
@@ -295,8 +297,10 @@ stdenv.mkDerivation rec {
 
       mkdir nuget_pkgs
 
-      printf "\n* Restore ${pname} dotnet project\n"
-      dotnet restore src/ActionsRunner.sln --packages nuget_pkgs --no-cache --force --runtime ${runtimeId}
+      ${lib.concatMapStrings (rid: ''
+      printf "\n* Restore ${pname} (${rid}) dotnet project\n"
+      dotnet restore src/ActionsRunner.sln --packages nuget_pkgs --no-cache --force --runtime "${rid}"
+      '') (lib.attrValues runtimeIds)}
 
       cd "$rundir"
       deps_file=''${1-"/tmp/${pname}-deps.nix"}
@@ -310,7 +314,7 @@ stdenv.mkDerivation rec {
     description = "Self-hosted runner for GitHub Actions";
     homepage = "https://github.com/actions/runner";
     license = licenses.mit;
-    maintainers = with maintainers; [ veehaitch newam kfollesdal];
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    maintainers = with maintainers; [ veehaitch newam kfollesdal ];
+    platforms = attrNames runtimeIds;
   };
 }
