@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     platforms = platforms.linux;
-    homepage = "https://developer.gnome.org/gtksourceviewmm/";
+    homepage = "https://gitlab.gnome.org/GNOME/gtksourceviewmm";
     description = "C++ wrapper for gtksourceview";
     license = licenses.lgpl2;
     maintainers = teams.gnome.members;
