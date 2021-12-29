@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
   buildFeatures = if stdenv.isDarwin then [ "battery" ] else [ "default" ];
 
   shells = ["bash" "fish" "zsh"];
-  outputs = ["out"] ++ (map (sh:"interactiveShellInit_${sh}") shells);
+  outputs = ["out"] ++ (map (sh:"promptInit_${sh}") shells);
   postInstall = lib.concatMapStrings (sh: ''
   
     STARSHIP_CACHE=$TMPDIR $out/bin/starship completions ${sh} > starship.${sh}
