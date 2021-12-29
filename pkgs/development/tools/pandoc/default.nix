@@ -26,7 +26,7 @@ in
     # This should ideally be fixed in haskellPackages (or even Cabal),
     # but a minimal pandoc is important enough to patch it manually.
     disallowedReferences = [ haskellPackages.pandoc-types haskellPackages.HTTP ];
-    postInstall = ''
+    postInstall = drv.postInstall or "" + ''
       remove-references-to \
         -t ${haskellPackages.pandoc-types} \
         $out/bin/pandoc
