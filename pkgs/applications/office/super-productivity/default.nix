@@ -1,8 +1,5 @@
-{ stdenv , lib , fetchurl , appimageTools , makeWrapper , electron_12 }:
+{ stdenv , lib , fetchurl , appimageTools , makeWrapper , electron }:
 
-let
-  electron = electron_12;
-in
 stdenv.mkDerivation rec {
   pname = "super-productivity";
   version = "7.8.0";
