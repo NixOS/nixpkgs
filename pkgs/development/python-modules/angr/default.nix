@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , ailment
 , archinfo
 , buildPythonPackage
@@ -53,6 +54,8 @@ buildPythonPackage rec {
     rev = "v${version}";
     sha256 = "sha256-lRoJZX7HPZE6y7v5AuU1C6sjOIXXefv8M/qPiNQtobw=";
   };
+
+  setupPyBuildFlags = lib.optionals stdenv.isLinux [ "--plat-name" "linux" ];
 
   propagatedBuildInputs = [
     ailment
