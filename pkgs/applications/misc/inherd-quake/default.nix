@@ -9,12 +9,12 @@
 }:
 
 rustPlatform.buildRustPackage rec {
-  pname = "quake";
+  pname = "inherd-quake";
   version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "phodal";
-    repo = pname;
+    repo = "quake";
     rev = "v${version}";
     sha256 = "1f7k68g18g3dpnrsmhgmz753bly1i3f4lmsljiyp9ap0c6w8ahgg";
   };
@@ -35,5 +35,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/phodal/quake";
     license = licenses.mit;
     maintainers = [ maintainers.elliot ];
+    mainProgram = "quake";
   };
 }
