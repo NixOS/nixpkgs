@@ -519,6 +519,8 @@ with pkgs;
 
   packr = callPackage ../development/libraries/packr { };
 
+  perseus-cli = callPackage ../development/tools/perseus-cli { };
+
   pet = callPackage ../development/tools/pet { };
 
   pkger = callPackage ../development/libraries/pkger { };
