@@ -310,7 +310,7 @@ stdenv.mkDerivation rec {
     description = "Self-hosted runner for GitHub Actions";
     homepage = "https://github.com/actions/runner";
     license = licenses.mit;
-    maintainers = with maintainers; [ veehaitch newam ];
+    maintainers = with maintainers; [ veehaitch newam kfollesdal];
     platforms = [ "x86_64-linux" "aarch64-linux" ];
   };
 }
