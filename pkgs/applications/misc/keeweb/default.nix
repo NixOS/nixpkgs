@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, appimageTools, undmg, libsecret, libxshmfence }:
+{ lib, stdenv, fetchurl, appimageTools, undmg, libsecret, libxshmfence, gsettings-desktop-schemas, gtk3 }:
 let
   pname = "keeweb";
   version = "1.18.6";
@@ -37,6 +37,11 @@ let
     inherit name src meta;
 
     extraPkgs = pkgs: with pkgs; [ libsecret libxshmfence ];
+
+    profile = ''
+      export LC_ALL=C.UTF-8
+      export XDG_DATA_DIRS=${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS
+    '';
 
     extraInstallCommands = ''
       mv $out/bin/{${name},${pname}}
