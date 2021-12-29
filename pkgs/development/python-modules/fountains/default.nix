@@ -6,26 +6,24 @@
 
 buildPythonPackage rec {
   pname = "fountains";
-  version = "1.1.1";
+  version = "1.2.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fbf4e2cb11d60d3bafca5bb7c01c254d08a5541ed7ddfe00ef975eb173fb75a4";
+    sha256 = "sha256-bea8EXw3b0CibhEREdY4FZouiiXP4y+UbbDXed7Ltwo=";
   };
 
   propagatedBuildInputs = [
     bitlist
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "bitlist~=0.5.1" "bitlist>=0.5.1"
-  '';
-
-  # Project has no test
+  # Module has no test
   doCheck = false;
 
-  pythonImportsCheck = [ "fountains" ];
+  pythonImportsCheck = [
+    "fountains"
+  ];
 
   meta = with lib; {
     description = "Python library for generating and embedding data for unit testing";

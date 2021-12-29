@@ -5,6 +5,7 @@
 , dnspython
 , fetchFromGitHub
 , mock
+, poetry-core
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
@@ -13,15 +14,21 @@
 
 buildPythonPackage rec {
   pname = "mcstatus";
-  version = "6.5.0";
+  version = "7.0.0";
+  format = "pyproject";
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "Dinnerbone";
     repo = pname;
     rev = "v${version}";
-    sha256 = "00xi3452lap4zx38msx89vvhrzkzb2dvwis1fcmx24qngj9g3yfr";
+    sha256 = "sha256-/EoVM3wEiA2suJHxMu2zZktQhO6T9grWcvWuzmUe6V0=";
   };
+
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
     asyncio-dgram
@@ -36,7 +43,16 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "mcstatus" ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'asyncio-dgram = "1.2.0"' 'asyncio-dgram = ">=1.2.0"' \
+      --replace 'six = "1.14.0"' 'six = ">=1.14.0"' \
+      --replace 'click = "7.1.2"' 'click = ">=7.1.2"'
+  '';
+
+  pythonImportsCheck = [
+    "mcstatus"
+  ];
 
   meta = with lib; {
     description = "Python library for checking the status of Minecraft servers";

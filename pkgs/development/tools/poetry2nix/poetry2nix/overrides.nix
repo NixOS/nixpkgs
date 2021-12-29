@@ -202,14 +202,14 @@ self: super:
       buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.openssl ];
     } // lib.optionalAttrs (lib.versionAtLeast old.version "3.4" && lib.versionOlder old.version "3.5") {
       CRYPTOGRAPHY_DONT_BUILD_RUST = "1";
-    } // lib.optionalAttrs (lib.versionAtLeast old.version "3.5") rec {
+    } // lib.optionalAttrs (lib.versionAtLeast old.version "35") rec {
       cargoDeps =
         let
           getCargoHash = version:
-            if lib.versionOlder version "3.6.0" then "sha256-tQoQfo+TAoqAea86YFxyj/LNQCiViu5ij/3wj7ZnYLI="
-            else if lib.versionOlder version "3.6.1" then "sha256-Y6TuW7AryVgSvZ6G8WNoDIvi+0tvx8ZlEYF5qB0jfNk="
+            if lib.versionOlder version "36.0.0" then "sha256-tQoQfo+TAoqAea86YFxyj/LNQCiViu5ij/3wj7ZnYLI="
+            else if lib.versionOlder version "36.0.1" then "sha256-Y6TuW7AryVgSvZ6G8WNoDIvi+0tvx8ZlEYF5qB0jfNk="
             # This hash could no longer be valid for cryptography versions
-            # different from 3.6.1
+            # different from 36.0.1
             else "sha256-kozYXkqt1Wpqyo9GYCwN08J+zV92ZWFJY/f+rulxmeQ=";
         in
         pkgs.rustPlatform.fetchCargoTarball {

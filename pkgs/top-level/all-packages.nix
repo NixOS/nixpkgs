@@ -883,7 +883,9 @@ with pkgs;
     type = "OPN";
   };
 
-  arc_unpacker = callPackage ../tools/archivers/arc_unpacker { };
+  arc_unpacker = callPackage ../tools/archivers/arc_unpacker {
+    boost = boost16x; # checkPhase fails with Boost 1.77
+  };
 
   adminer = callPackage ../servers/adminer { };
 
@@ -1914,6 +1916,10 @@ with pkgs;
   };
 
   passExtensions = recurseIntoAttrs pass.extensions;
+
+  inherd-quake = callPackage ../applications/misc/inherd-quake {
+    inherit (darwin.apple_sdk.frameworks) CoreServices Security;
+  };
 
   xjadeo = callPackage ../tools/video/xjadeo { };
 
@@ -6926,6 +6932,8 @@ with pkgs;
 
   kubepug = callPackage ../development/tools/kubepug { };
 
+  kubergrunt = callPackage ../applications/networking/cluster/kubergrunt { };
+
   kwalletcli = libsForQt5.callPackage ../tools/security/kwalletcli { };
 
   peruse = libsForQt5.callPackage ../tools/misc/peruse { };
@@ -8469,6 +8477,8 @@ with pkgs;
   };
 
   olsrd = callPackage ../tools/networking/olsrd { };
+
+  oonf-olsrd2 = callPackage ../tools/networking/oonf-olsrd2 { };
 
   opl3bankeditor = libsForQt5.callPackage ../tools/audio/opl3bankeditor { };
   opn2bankeditor = libsForQt5.callPackage ../tools/audio/opl3bankeditor/opn2bankeditor.nix { };
@@ -19486,8 +19496,6 @@ with pkgs;
   # plasma5Packages maps to the Qt5 packages set that is used to build the plasma5 desktop
   plasma5Packages = libsForQt515;
 
-  qt5ct = libsForQt5.callPackage ../tools/misc/qt5ct { };
-
   qtEnv = qt5.env;
   qt5Full = qt5.full;
 
@@ -28621,6 +28629,7 @@ with pkgs;
     jdk = jdk8;
     pythonPackages = python3Packages;
     inherit llvmPackages;
+    boost = boost16x; # Filesystem tests in the checkPhase fail with Boost 1.77
   };
 
   spotifywm = callPackage ../applications/audio/spotifywm { };
@@ -32810,6 +32819,8 @@ with pkgs;
   mynewt-newt = callPackage ../tools/package-management/mynewt-newt { };
 
   nar-serve = callPackage ../tools/nix/nar-serve { };
+
+  neo = callPackage ../applications/misc/neo { };
 
   inherit (callPackage ../tools/package-management/nix {
       storeDir = config.nix.storeDir or "/nix/store";

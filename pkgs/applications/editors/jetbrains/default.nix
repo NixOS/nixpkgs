@@ -91,6 +91,10 @@ let
         patchelf --set-interpreter $interp $out/goland*/plugins/go/lib/dlv/linux/dlv
 
         chmod +x $out/goland*/plugins/go/lib/dlv/linux/dlv
+
+        # fortify source breaks build since delve compiles with -O0
+        wrapProgram $out/goland*/plugins/go/lib/dlv/linux/dlv \
+          --prefix disableHardening " " fortify
       '';
     });
 

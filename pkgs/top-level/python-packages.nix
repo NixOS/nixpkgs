@@ -7845,7 +7845,7 @@ in {
   python-manilaclient = callPackage ../development/python-modules/python-manilaclient { };
 
   python-mapnik = let
-    boost = pkgs.boost.override {
+    boost = pkgs.boost175.override {
       enablePython = true;
       inherit python;
     };
@@ -8892,6 +8892,8 @@ in {
   simpy = callPackage ../development/python-modules/simpy { };
 
   signify = callPackage ../development/python-modules/signify { };
+
+  siosocks = callPackage ../development/python-modules/siosocks { };
 
   sip = callPackage ../development/python-modules/sip { };
 
