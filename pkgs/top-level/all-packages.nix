@@ -32011,6 +32011,8 @@ with pkgs;
 
   otter = callPackage ../applications/science/logic/otter {};
 
+  otto-matic = callPackage ../games/otto-matic { };
+
   picosat = callPackage ../applications/science/logic/picosat {};
 
   libpoly = callPackage ../applications/science/logic/poly {};
