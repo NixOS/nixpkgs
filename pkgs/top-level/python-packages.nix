@@ -2980,6 +2980,8 @@ in {
 
   forecast-solar = callPackage ../development/python-modules/forecast-solar { };
 
+  formbox = callPackage ../development/python-modules/formbox { };
+
   fortiosapi = callPackage ../development/python-modules/fortiosapi { };
 
   FormEncode = callPackage ../development/python-modules/FormEncode { };
