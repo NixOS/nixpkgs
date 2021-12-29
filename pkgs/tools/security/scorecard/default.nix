@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "scorecard";
-  version = "3.0.1";
+  version = "3.2.1";
 
   src = fetchFromGitHub {
     owner = "ossf";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-19XDAgv9ARCZ7eNlWUPcsbGNyKA9vYFry8m6D3+vQP8=";
+    sha256 = "sha256-MVFhw/r1sws82oofV4LHmiSlKxyYd8abYq8oFiB0HH8=";
     # populate values otherwise taken care of by goreleaser,
     # unfortunately these require us to use git. By doing
     # this in postFetch we can delete .git afterwards and
@@ -27,7 +27,7 @@ buildGoModule rec {
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
-  vendorSha256 = "sha256-ucF26pTEvG8tkzsyC9WNbvl8QCeetKBvBIcQL2NTfjo=";
+  vendorSha256 = "sha256-WrM2aE0z6SnfoPEBqgn1TO6sSGPMrQvL6+ddvOS2w1k=";
 
   # Install completions post-install
   nativeBuildInputs = [ installShellFiles ];

@@ -7845,7 +7845,7 @@ in {
   python-manilaclient = callPackage ../development/python-modules/python-manilaclient { };
 
   python-mapnik = let
-    boost = pkgs.boost.override {
+    boost = pkgs.boost175.override {
       enablePython = true;
       inherit python;
     };

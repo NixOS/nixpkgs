@@ -174,7 +174,7 @@ with python.pkgs; buildPythonApplication rec {
       --subst-var-by SPDX_LICENSE_LIST_DATA '${spdx-license-list-data}'
 
     substituteInPlace setup.py \
-      --replace "zeroconf==0.28.*" "zeroconf"
+      --replace "zeroconf==0.37.*" "zeroconf"
   '';
 
   meta = with lib; {

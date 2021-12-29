@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "listssrht";
-  version = "0.48.19";
+  version = "0.51.0";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "lists.sr.ht";
     rev = version;
-    sha256 = "sha256-bsakEMyvWaxiE4/SGcAP4mlGG9jkdHfFxpt9H+TJn/8=";
+    sha256 = "sha256-iywZ6G5E4AJevg/Q1LoB7JMJxBcsAnbhiND++mFy/bw=";
   };
 
   nativeBuildInputs = srht.nativeBuildInputs;
@@ -37,10 +37,12 @@ buildPythonPackage rec {
     export SRHT_PATH=${srht}/${python.sitePackages}/srht
   '';
 
+  pythonImportsCheck = [ "listssrht" ];
+
   meta = with lib; {
     homepage = "https://git.sr.ht/~sircmpwn/lists.sr.ht";
     description = "Mailing list service for the sr.ht network";
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
     maintainers = with maintainers; [ eadwu ];
   };
 }

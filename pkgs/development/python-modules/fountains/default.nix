@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "fountains";
   version = "1.2.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -17,15 +18,12 @@ buildPythonPackage rec {
     bitlist
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "bitlist~=0.5.1" "bitlist>=0.5.1"
-  '';
-
-  # Project has no test
+  # Module has no test
   doCheck = false;
 
-  pythonImportsCheck = [ "fountains" ];
+  pythonImportsCheck = [
+    "fountains"
+  ];
 
   meta = with lib; {
     description = "Python library for generating and embedding data for unit testing";

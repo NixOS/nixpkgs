@@ -2,26 +2,33 @@
 , buildPythonPackage
 , fetchFromGitHub
 , fetchurl
+, importlib-resources
 , pytestCheckHook
 , python
+, pythonOlder
 }:
 let
   table = fetchurl {
-    # See https://github.com/dahlia/iso4217/blob/main/setup.py#L18
+    # See https://github.com/dahlia/iso4217/blob/main/setup.py#L19
     url = "http://www.currency-iso.org/dam/downloads/lists/list_one.xml";
-    sha256 = "0frhicc7s8gqglr41hzx61fic3ckvr4sg773ahp1s28n5by3y7ac";
+    hash = "sha256-bp8uTMR1YRaI2cJLo0kdt9xD4nNaWK+LdlheWQ26qy0=";
   };
 in
 buildPythonPackage rec {
   pname = "iso4217";
-  version = "1.6";
+  version = "1.7";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "dahlia";
     repo = pname;
     rev = version;
-    sha256 = "0mdpf5a0xr5lrcfgvqi1sdn7ln2w6pkc3lg0laqkbx5mhxky0fla";
+    hash = "sha256-Ih2l6bGM7i5TUkzJPkgx8EOOL4a3/qE28SUZS6M4sQc=";
   };
+
+  propagatedBuildInputs = lib.optionals (pythonOlder "3.9") [
+    importlib-resources
+  ];
 
   checkInputs = [
     pytestCheckHook
@@ -39,9 +46,13 @@ buildPythonPackage rec {
     cp -r ${table} $out/${python.sitePackages}/$pname/table.xml
   '';
 
-  pytestFlagsArray = [ "$pname/test.py" ];
+  pytestFlagsArray = [
+    "$pname/test.py"
+  ];
 
-  pythonImportsCheck = [ "iso4217" ];
+  pythonImportsCheck = [
+    "iso4217"
+  ];
 
   meta = with lib; {
     description = "ISO 4217 currency data package for Python";
