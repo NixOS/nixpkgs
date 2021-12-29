@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , runCommand
 , darwin
-, gcc11
 }:
 
 stdenv.mkDerivation rec {
@@ -17,13 +16,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-uKR1ogQwEoyxyWBiLnW8BsOsYgTpeIpKrKspq0JwYjY=";
   };
 
-  nativeBuildInputs = lib.optionals stdenv.isDarwin [ gcc11 ];
-
   hardeningDisable = lib.optionals (stdenv.isAarch64 && stdenv.isDarwin) [ "stackprotector" ];
 
-  ADDFLAGS = with darwin.apple_sdk;
+  ADDFLAGS = with darwin.apple_sdk.frameworks;
     lib.optional stdenv.isDarwin
-      "-F${frameworks.IOKit}/Library/Frameworks/";
+      "-F${IOKit}/Library/Frameworks/";
 
   buildInputs = with darwin.apple_sdk;
     lib.optionals stdenv.isDarwin [
