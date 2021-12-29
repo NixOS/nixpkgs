@@ -338,6 +338,8 @@ in {
 
     fwts-efi-runtime = callPackage ../os-specific/linux/fwts/module.nix { };
 
+    gasket = callPackage ../os-specific/linux/gasket { };
+
     gcadapter-oc-kmod = callPackage ../os-specific/linux/gcadapter-oc-kmod { };
     hid-nintendo = callPackage ../os-specific/linux/hid-nintendo { };
 

@@ -26172,6 +26172,8 @@ with pkgs;
 
   fxload = callPackage ../os-specific/linux/fxload { };
 
+  gasket = callPackage ../os-specific/linux/gasket { };
+
   gfxtablet = callPackage ../os-specific/linux/gfxtablet { };
 
   gmailctl = callPackage ../applications/networking/gmailctl { };
