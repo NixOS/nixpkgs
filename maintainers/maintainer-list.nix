@@ -3349,6 +3349,12 @@
     githubId = 103082;
     name = "Ed Brindley";
   };
+  elliot = {
+    email = "hack00mind@gmail.com";
+    github = "Eliot00";
+    githubId = 18375468;
+    name = "Elliot Xu";
+  };
   elliottvillars = {
     email = "elliottvillars@gmail.com";
     github = "elliottvillars";
@@ -7027,6 +7033,12 @@
     github = "madjar";
     githubId = 109141;
     name = "Georges Dubus";
+  };
+  Madouura = {
+    email = "madouura@gmail.com";
+    github = "Madouura";
+    githubId = 93990818;
+    name = "Madoura";
   };
   mafo = {
     email = "Marc.Fontaine@gmx.de";

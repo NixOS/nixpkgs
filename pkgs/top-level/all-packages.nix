@@ -1868,6 +1868,10 @@ with pkgs;
 
   passExtensions = recurseIntoAttrs pass.extensions;
 
+  inherd-quake = callPackage ../applications/misc/inherd-quake {
+    inherit (darwin.apple_sdk.frameworks) CoreServices Security;
+  };
+
   xjadeo = callPackage ../tools/video/xjadeo { };
 
   asc-key-to-qr-code-gif = callPackage ../tools/security/asc-key-to-qr-code-gif { };
@@ -24078,7 +24082,7 @@ with pkgs;
 
   milkytracker = callPackage ../applications/audio/milkytracker { };
 
-  ptcollab = libsForQt5.callPackage ../applications/audio/ptcollab { };
+  ptcollab = libsForQt515.callPackage ../applications/audio/ptcollab { };
 
   schismtracker = callPackage ../applications/audio/schismtracker { };
 
@@ -32035,6 +32039,8 @@ with pkgs;
   android-file-transfer = libsForQt5.callPackage ../tools/filesystems/android-file-transfer { };
 
   antimicrox = libsForQt5.callPackage ../tools/misc/antimicrox { };
+
+  ares = callPackage ../misc/emulators/ares { };
 
   atari800 = callPackage ../misc/emulators/atari800 { };
 
