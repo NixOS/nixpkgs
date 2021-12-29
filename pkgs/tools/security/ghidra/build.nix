@@ -12,6 +12,7 @@
 , autoPatchelfHook
 , icoutils
 , xcbuild
+, protobuf3_17
 , libredirect
 }:
 
@@ -36,14 +37,20 @@ let
     categories = "Development;";
   };
 
-  # fake build to pre-download deps into fixed-output derivation
-  # Taken from mindustry derivation.
-  deps = stdenv.mkDerivation {
-    pname = "${pname}-deps";
-    inherit version src;
+  # postPatch scripts.
+  # Tells ghidra to use our own protoc binary instead of the prebuilt one.
+  fixProtoc = ''
+    cat >>Ghidra/Debug/Debugger-gadp/build.gradle <<HERE
+protobuf {
+  protoc {
+    path = '${protobuf3_17}/bin/protoc'
+  }
+}
+HERE
+  '';
 
-    nativeBuildInputs = [ gradle perl ] ++ lib.optional stdenv.isDarwin xcbuild;
-    buildPhase = ''
+  # Adds a gradle step that downloads all the dependencies to the gradle cache.
+  addResolveStep = ''
     cat >>build.gradle <<HERE
 task resolveDependencies {
   doLast {
@@ -64,6 +71,19 @@ void resolveConfiguration(subProject, configuration, name) {
   }
 }
 HERE
+  '';
+
+  # fake build to pre-download deps into fixed-output derivation
+  # Taken from mindustry derivation.
+  deps = stdenv.mkDerivation {
+    pname = "${pname}-deps";
+    inherit version src;
+
+    patches = [ ./0001-Use-protobuf-gradle-plugin.patch ];
+    postPatch = fixProtoc + addResolveStep;
+
+    nativeBuildInputs = [ gradle perl ] ++ lib.optional stdenv.isDarwin xcbuild;
+    buildPhase = ''
       export GRADLE_USER_HOME=$(mktemp -d)
 
       # First, fetch the static dependencies.
@@ -77,25 +97,11 @@ HERE
       find $GRADLE_USER_HOME/caches/modules-2 -type f -regex '.*\.\(jar\|pom\)' \
         | perl -pe 's#(.*/([^/]+)/([^/]+)/([^/]+)/[0-9a-f]{30,40}/([^/\s]+))$# ($x = $2) =~ tr|\.|/|; "install -Dm444 $1 \$out/maven/$x/$3/$4/$5" #e' \
         | sh
-      find $GRADLE_USER_HOME/caches/modules-2 -type f -regex '.*\.exe' \
-        | perl -pe 's#(.*/([^/]+)/([^/]+)/([^/]+)/[0-9a-f]{30,40}/([^/\s]+))$# ($x = $2) =~ tr|\.|/|; "install -Dm555 $1 \$out/maven/$x/$3/$4/$5" #e' \
-        | sh
       cp -r dependencies $out/dependencies
     '';
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "sha256-tiJpctga2ddPJbO9qvYQBpDmpEn6ncCjfDIxg8YWs5U=";
-  };
-
-  fixedDeps = stdenv.mkDerivation {
-    pname = "${pname}-fixeddeps";
-    inherit version;
-
-    nativeBuildInputs = [ autoPatchelfHook ];
-    src = deps;
-    installPhase = ''
-    cp -r . $out
-    '';
+    outputHash = "sha256-Yxf6g908+fRRUh40PrwNUCTvxzlvSmwzE8R+3ZkRIvs=";
   };
 
 in stdenv.mkDerivation rec {
@@ -106,6 +112,9 @@ in stdenv.mkDerivation rec {
   ] ++ lib.optional stdenv.isDarwin xcbuild;
 
   dontStrip = true;
+
+  patches = [ ./0001-Use-protobuf-gradle-plugin.patch ];
+  postPatch = fixProtoc;
 
   buildPhase = (lib.optionalString stdenv.isDarwin ''
     export HOME=$(mktemp -d)
@@ -123,9 +132,10 @@ in stdenv.mkDerivation rec {
 
     export GRADLE_USER_HOME=$(mktemp -d)
 
-    ln -s ${fixedDeps}/dependencies dependencies
+    ln -s ${deps}/dependencies dependencies
 
-    sed -ie "s#mavenLocal()#mavenLocal(); maven { url '${fixedDeps}/maven' }#g" build.gradle
+    sed -i "s#mavenLocal()#mavenLocal(); maven { url '${deps}/maven' }#g" build.gradle
+
     gradle --offline --no-daemon --info -Dorg.gradle.java.home=${openjdk11} buildGhidra
   '';
 
