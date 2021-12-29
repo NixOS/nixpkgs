@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "aiohue";
-  version = "3.0.10";
+  version = "3.0.11";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-LwtE9F5ic0aZ9/q3dSWn20O27yW/QD/Yi1NPdFmiP10=";
+    sha256 = "sha256-McC5DX3Cti9eGpPniywNY2DvbAqHSFwhek85TJN/zn0=";
   };
 
   propagatedBuildInputs = [
