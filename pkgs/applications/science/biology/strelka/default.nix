@@ -1,4 +1,4 @@
-{lib, stdenv, fetchFromGitHub, cmake, zlib, python2}:
+{lib, stdenv, fetchFromGitHub, fetchpatch, cmake, zlib, python2}:
 
 stdenv.mkDerivation rec {
   pname = "strelka";
@@ -10,6 +10,16 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "1nykbmim1124xh22nrhrsn8xgjb3s2y7akrdapn9sl1gdych4ppf";
   };
+
+  patches = [
+    # Pull pending fix for gcc-12:
+    #   https://github.com/Illumina/strelka/pull/204
+    (fetchpatch {
+      name = "limits.patch";
+      url = "https://github.com/Illumina/strelka/commit/98272cd345c6e4c672e6a5b7721204fcac0502d6.patch";
+      hash = "sha256-psBiuN32nvwZ+QX51JQjIdRhEE3k7PfwbkD10ckqvZk=";
+    })
+  ];
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ zlib python2 ];
