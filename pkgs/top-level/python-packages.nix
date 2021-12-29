@@ -5566,6 +5566,8 @@ in {
 
   orm = callPackage ../development/python-modules/orm { };
 
+  ormar = callPackage ../development/python-modules/ormar { };
+
   ortools = (toPythonModule (pkgs.or-tools.override { inherit (self) python; })).python;
 
   orvibo = callPackage ../development/python-modules/orvibo { };
