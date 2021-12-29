@@ -4303,6 +4303,8 @@ in {
 
   isort = callPackage ../development/python-modules/isort { };
 
+  isosurfaces = callPackage ../development/python-modules/isosurfaces { };
+
   isounidecode = callPackage ../development/python-modules/isounidecode { };
 
   isoweek = callPackage ../development/python-modules/isoweek { };
