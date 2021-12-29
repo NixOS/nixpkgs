@@ -41,7 +41,7 @@ rustPlatform.buildRustPackage rec {
       echo 'if [[ $TERM != "dumb" && (-z $INSIDE_EMACS || $INSIDE_EMACS == "vterm") ]]; then'
       $out/bin/starship init ${sh}
       echo fi
-    ) > $interactiveShellInit_${sh}
+    ) > $promptInit_${sh}
 
   '') shells;
 
