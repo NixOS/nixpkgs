@@ -1,4 +1,4 @@
-{ pkgs, nodejs, nodejs-slim, stdenv, fetchFromGitHub, lib, ... }:
+{ pkgs, nodejs, nodejs-slim, stdenv, fetchFromGitHub, lib, runCommand, matrix-appservice-slack }:
 let
   src = fetchFromGitHub {
     owner = "matrix-org";
@@ -12,9 +12,9 @@ let
     inherit (stdenv.hostPlatform) system;
     nodejs = nodejs-slim;
   };
+  pname = "matrix-appservice-slack";
 in
 nodePackages.package.override {
-  pname = "matrix-appservice-slack";
 
   inherit src;
 
@@ -33,6 +33,13 @@ nodePackages.package.override {
     makeWrapper '${nodejs-slim}/bin/node' "$out/bin/matrix-appservice-slack" \
     --add-flags "$out/lib/node_modules/matrix-appservice-slack/lib/app.js"
   '';
+
+  passthru.tests = {
+    simple = runCommand "${pname}-test" {} ''
+      ${matrix-appservice-slack}/bin/matrix-appservice-slack --help > $out
+      [ -s $out ]
+    '';
+  };
 
   meta = with lib; {
     description = "A Matrix <--> Slack bridge";
