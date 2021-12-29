@@ -1,6 +1,21 @@
-{ lib, fetchFromGitHub, fetchpatch, python3Packages }:
+{ lib, fetchFromGitHub, fetchpatch, python3 }:
 
-python3Packages.buildPythonApplication rec {
+let
+  python = python3.override {
+    packageOverrides = self: super: {
+      mautrix_0_13 = self.mautrix.overridePythonAttrs (oldAttrs: rec {
+        version = "0.13.3";
+        src = oldAttrs.src.override {
+          inherit (oldAttrs) pname;
+          inherit version;
+          sha256 = "1e4a292469f3e200c182aaa5bf693a5c3834b2a0cfb3d29e4c9a1559db7740e3";
+        };
+      });
+    };
+  };
+in
+
+python.pkgs.buildPythonApplication rec {
   pname = "heisenbridge";
   version = "1.8.2";
 
@@ -15,15 +30,15 @@ python3Packages.buildPythonApplication rec {
     echo "${version}" > heisenbridge/version.txt
   '';
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = with python.pkgs; [
     aiohttp
     irc
-    mautrix
+    mautrix_0_13
     python-socks
     pyyaml
   ];
 
-  checkInputs = with python3Packages; [
+  checkInputs = with python.pkgs; [
     pytestCheckHook
   ];
 
