@@ -9750,6 +9750,8 @@ in {
 
   trio = callPackage ../development/python-modules/trio { };
 
+  trio-asyncio = callPackage ../development/python-modules/trio-asyncio { };
+
   trueskill = callPackage ../development/python-modules/trueskill { };
 
   trustme = callPackage ../development/python-modules/trustme { };
