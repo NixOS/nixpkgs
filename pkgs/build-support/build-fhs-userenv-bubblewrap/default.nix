@@ -8,6 +8,7 @@ args @ {
 , extraInstallCommands ? ""
 , meta ? {}
 , passthru ? {}
+, extraBwrapArgs ? []
 , unshareUser ? true
 , unshareIpc ? true
 , unsharePid ? true
@@ -23,7 +24,7 @@ let
   buildFHSEnv = callPackage ./env.nix { };
 
   env = buildFHSEnv (removeAttrs args [
-    "runScript" "extraInstallCommands" "meta" "passthru" "dieWithParent"
+    "runScript" "extraInstallCommands" "meta" "passthru" "extraBwrapArgs" "dieWithParent"
     "unshareUser" "unshareCgroup" "unshareUts" "unshareNet" "unsharePid" "unshareIpc"
   ]);
 
@@ -169,6 +170,7 @@ let
       "''${ro_mounts[@]}"
       "''${symlinks[@]}"
       "''${auto_mounts[@]}"
+      ${concatStringsSep "\n  " extraBwrapArgs}
       ${init runScript}/bin/${name}-init ${initArgs}
     )
     exec "''${cmd[@]}"
