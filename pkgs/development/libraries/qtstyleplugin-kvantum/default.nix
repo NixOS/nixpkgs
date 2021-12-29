@@ -4,18 +4,19 @@
 
 stdenv.mkDerivation rec {
   pname = "qtstyleplugin-kvantum";
-  version = "0.20.2";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "tsujan";
     repo = "Kvantum";
     rev = "V${version}";
-    sha256 = "145wm8c5v56djmvgjhksmywx6ak81vhxyg6yy3jj7wlvcan4p238";
+    sha256 = "0yvxj7r9z890nfq5cadw7ys144c2mnvaplvx4v4ndv7238b741l8";
   };
 
   nativeBuildInputs = [
     qmake qttools wrapQtAppsHook
   ];
+
   buildInputs = [
     qtbase qtsvg qtx11extras kwindowsystem libX11 libXext
   ];
