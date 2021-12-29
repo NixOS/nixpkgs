@@ -1,0 +1,12 @@
+diff --git a/src/github.com/cockroachdb/cockroach/Makefile b/src/github.com/cockroachdb/cockroach/Makefile
+index f3f3c0ff..e854fffb 100644
+--- a/src/github.com/cockroachdb/cockroach/Makefile
++++ b/src/github.com/cockroachdb/cockroach/Makefile
+@@ -790,7 +790,6 @@ SWAGGER_TARGETS := \
+ DOCGEN_TARGETS := \
+ 	bin/.docgen_bnfs \
+ 	bin/.docgen_functions \
+-	docs/generated/redact_safe.md \
+ 	bin/.docgen_http \
+ 	bin/.docgen_logformats \
+ 	docs/generated/logsinks.md \

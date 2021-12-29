@@ -1,0 +1,18 @@
+diff --git a/src/github.com/cockroachdb/cockroach/Makefile b/src/github.com/cockroachdb/cockroach/Makefile
+index f3f3c0f..4ee109f 100644
+--- a/src/github.com/cockroachdb/cockroach/Makefile
++++ b/src/github.com/cockroachdb/cockroach/Makefile
+@@ -176,13 +176,6 @@ bindir       := $(prefix)/bin
+ # Avoid reusing GOFLAGS as that is overwritten by various release processes.
+ GOMODVENDORFLAGS := -mod=vendor
+ 
+-ifeq "$(findstring -j,$(shell ps -o args= $$PPID))" ""
+-ifdef NCPUS
+-MAKEFLAGS += -j$(NCPUS)
+-$(info Running make with -j$(NCPUS))
+-endif
+-endif
+-
+ help: ## Print help for targets with comments.
+ 	@echo "Usage:"
+ 	@echo "  make [target...] [VAR=foo VAR2=bar...]"
