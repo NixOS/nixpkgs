@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "codec2";
-  version = "1.0.1";
+  version = "1.0.3";
 
   src = fetchFromGitHub {
     owner = "drowe67";
     repo = "codec2";
     rev = "v${version}";
-    sha256 = "05xjsb67dzwncl2rnhg6fqih8krf38b7vmvzlsb7y9g6d1b085wg";
+    hash = "sha256-2/Ef5cEe7Kr3a/D8u4BgvTQM6M6vglXsF+ccstFHDUw=";
   };
 
   nativeBuildInputs = [ cmake ];
