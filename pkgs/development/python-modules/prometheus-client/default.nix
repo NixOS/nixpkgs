@@ -2,11 +2,15 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "prometheus-client";
   version = "0.12.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "prometheus";
@@ -19,11 +23,14 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "prometheus_client" ];
+  pythonImportsCheck = [
+    "prometheus_client"
+  ];
 
   meta = with lib; {
     description = "Prometheus instrumentation library for Python applications";
     homepage = "https://github.com/prometheus/client_python";
     license = licenses.asl20;
+    maintainers = with maintainers; [ ];
   };
 }
