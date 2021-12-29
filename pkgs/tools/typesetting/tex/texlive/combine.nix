@@ -224,9 +224,9 @@ in (buildEnv {
     ln -sf fmtutil "$out/bin/mktexfmt"
 
     perl `type -P mktexlsr.pl` ./share/texmf
-    ${bin.texlinks} "$out/bin" && wrapBin
+    ${bin.texlinks}/bin/texlinks "$out/bin" && wrapBin
     perl `type -P fmtutil.pl` --sys --all | grep '^fmtutil' # too verbose
-    #${bin.texlinks} "$out/bin" && wrapBin # do we need to regenerate format links?
+    #${bin.texlinks}/bin/texlinks "$out/bin" && wrapBin # do we need to regenerate format links?
 
     # Disable unavailable map files
     echo y | perl `type -P updmap.pl` --sys --syncwithtrees --force
