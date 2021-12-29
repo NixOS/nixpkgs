@@ -41,6 +41,8 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace 'aiofiles = "^0.6.0"' 'aiofiles = "*"'
+    substituteInPlace pyproject.toml \
+      --replace 'aiohttp-socks = "^0.6.0"' 'aiohttp-socks = "*"'
   '';
 
   nativeBuildInputs = [
