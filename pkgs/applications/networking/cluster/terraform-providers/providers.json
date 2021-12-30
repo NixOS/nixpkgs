@@ -43,6 +43,15 @@
     "vendorSha256": "1k28fcfm7437i7gfbcbrigk2i50c1mix7z1rb2g617prih84wa6y",
     "version": "1.144.0"
   },
+  "ansible": {
+    "owner": "nbering",
+    "provider-source-address": "registry.terraform.io/nbering/ansible",
+    "repo": "terraform-provider-ansible",
+    "rev": "v1.0.4",
+    "sha256": "1djjcrcm9218rfn51kpzp3cbb5qbkfwpjqm9h9rhadibbvjmly6y",
+    "vendorSha256": "1kc47n1janmiwwjphvxpily3dwyy1axxh36aj3sb2kpawi4pq1rq",
+    "version": "1.0.4"
+  },
   "archive": {
     "owner": "hashicorp",
     "provider-source-address": "registry.terraform.io/hashicorp/archive",
