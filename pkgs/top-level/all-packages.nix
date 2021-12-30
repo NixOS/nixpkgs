@@ -26639,6 +26639,8 @@ with pkgs;
 
   kubelogin-oidc = callPackage ../applications/networking/cluster/kubelogin-oidc { };
 
+  kup = libsForQt5.callPackage ../applications/misc/kup { };
+
   k9s = callPackage ../applications/networking/cluster/k9s { };
 
   pgo-client = callPackage ../applications/networking/cluster/pgo-client { };
