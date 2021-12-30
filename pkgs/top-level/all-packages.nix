@@ -26134,6 +26134,8 @@ with pkgs;
 
   singularity = callPackage ../applications/virtualization/singularity { };
 
+  spectral-compressor = callPackage ../applications/audio/spectral-compressor  { };
+
   spectmorph = callPackage ../applications/audio/spectmorph { };
 
   smallwm = callPackage ../applications/window-managers/smallwm { };
