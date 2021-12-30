@@ -150,6 +150,14 @@
           <link linkend="opt-services.prosody-filer.enable">services.prosody-filer</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://timetagger.app">timetagger</link>,
+          an open source time-tracker with an intuitive user experience
+          and powerful reporting.
+          <link xlink:href="options.html#opt-services.timetagger.enable">services.timetagger</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.05-incompatibilities">
