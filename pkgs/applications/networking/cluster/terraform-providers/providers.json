@@ -634,6 +634,15 @@
     "sha256": "17hnm7wivd75psap2qdmlnmmlf964s7jf4jrfgsm6njx32wwwfpp",
     "version": "1.12.3"
   },
+  "linuxbox": {
+    "owner": "numtide",
+    "provider-source-address": "registry.terraform.io/numtide/linuxbox",
+    "repo": "terraform-provider-linuxbox",
+    "rev": "v0.4.2",
+    "sha256": "1ghlp0nnc67m5rsx6aixqxjd5vhpbi88gcfyv3710dvqxchdgscy",
+    "vendorSha256": "01d556pfaa2ycww5kgd1f3shp2i2r48kgwnls39lhplp5qmnkz4g",
+    "version": "0.4.2"
+  },
   "local": {
     "owner": "hashicorp",
     "provider-source-address": "registry.terraform.io/hashicorp/local",

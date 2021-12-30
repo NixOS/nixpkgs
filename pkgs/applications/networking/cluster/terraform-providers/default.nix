@@ -55,7 +55,6 @@ let
     # Packages that don't fit the default model
     gandi = callPackage ./gandi { };
     libvirt = callPackage ./libvirt { };
-    linuxbox = callPackage ./linuxbox { };
     lxd = callPackage ./lxd { };
     teleport = callPackage ./teleport { };
     vpsadmin = callPackage ./vpsadmin { };
