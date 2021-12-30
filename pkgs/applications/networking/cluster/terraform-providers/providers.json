@@ -1196,6 +1196,15 @@
     "sha256": "06nk5c7lxs8fc04sz97lc3yk1zk1b9phkzw6fj9fnmpgaak87bj9",
     "version": "0.9.2"
   },
+  "vercel": {
+    "owner": "ondrejsika",
+    "provider-source-address": "registry.terraform.io/ondrejsika/vercel",
+    "repo": "terraform-provider-vercel",
+    "rev": "v2.1.0",
+    "sha256": "06lskp3mmax7g0lchq6jaxavycj7snkhip9madzqkr552qvz5cgw",
+    "vendorSha256": "0s0kf1v2217q9hfmc7r2yybcfk33k566dfvs2jiq63kyjnadhb0k",
+    "version": "2.1.0"
+  },
   "vra7": {
     "owner": "terraform-providers",
     "repo": "terraform-provider-vra7",
