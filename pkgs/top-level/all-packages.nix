@@ -28799,6 +28799,8 @@ with pkgs;
 
   tap-plugins = callPackage ../applications/audio/tap-plugins { };
 
+  blop-plugins = callPackage ../applications/audio/blop-plugins { };
+
   taskjuggler = callPackage ../applications/misc/taskjuggler { };
 
   tabula = callPackage ../applications/misc/tabula { };
