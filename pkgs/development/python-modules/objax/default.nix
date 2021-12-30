@@ -7,7 +7,7 @@
 , parameterized
 , pillow
 , scipy
-, tensorflow-tensorboard_2
+, tensorflow-tensorboard_2 ? null
 }:
 
 buildPythonPackage rec {
@@ -40,5 +40,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/google/objax";
     license = licenses.asl20;
     maintainers = with maintainers; [ ndl ];
+    # Darwin doesn't have `tensorflow-tensorboard_2` which is required by wheel deps.
+    platforms = [ "aarch64-linux" "x86_64-linux" ];
   };
 }

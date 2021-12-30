@@ -6,8 +6,6 @@
 , deepmerge
 , dm-haiku
 , poetry
-, pytest
-, pytestcov
 , pyyaml
 , tables
 , tabulate
@@ -31,8 +29,6 @@ buildPythonPackage rec {
 
   buildInputs = [
     poetry
-    pytest
-    pytestcov
   ];
 
   propagatedBuildInputs = [
