@@ -53,7 +53,6 @@ let
   # These are the providers that don't fall in line with the default model
   special-providers = {
     # Packages that don't fit the default model
-    ansible = callPackage ./ansible { };
     cloudfoundry = callPackage ./cloudfoundry { };
     gandi = callPackage ./gandi { };
     hcloud = callPackage ./hcloud { };
