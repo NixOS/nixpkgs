@@ -23,7 +23,7 @@ buildDotnetModule rec {
   dotnet-runtime = dotnetCorePackages.aspnetcore_6_0;
   dotnet-sdk = dotnetCorePackages.sdk_6_0;
 
-  nugetDeps = if stdenvNoCC.isAarch64 then ./deps-aarch64.nix else ./deps.nix;
+  nugetDeps = if stdenvNoCC.isAarch64 then ./deps-aarch64-linux.nix else ./deps-x86_64-linux.nix;
 
   projectFile = "ArchiSteamFarm.sln";
   executables = [ "ArchiSteamFarm" ];
@@ -49,7 +49,7 @@ buildDotnetModule rec {
     description = "Application with primary purpose of idling Steam cards from multiple accounts simultaneously";
     homepage = "https://github.com/JustArchiNET/ArchiSteamFarm";
     license = licenses.asl20;
-    platforms = [ "x86_64-linux" "aarch64-linux" "i386-linux" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
     maintainers = with maintainers; [ SuperSandro2000 lom ];
   };
 }
