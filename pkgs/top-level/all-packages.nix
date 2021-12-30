@@ -15984,9 +15984,7 @@ with pkgs;
 
   captive-browser = callPackage ../applications/networking/browsers/captive-browser { };
 
-  ndn-cxx = callPackage ../development/libraries/ndn-cxx {
-    boost = boost175;
-  };
+  ndn-cxx = callPackage ../development/libraries/ndn-cxx { };
 
   ndn-tools = callPackage ../tools/networking/ndn-tools { };
 
