@@ -5574,6 +5574,8 @@ in {
 
   opt-einsum = callPackage ../development/python-modules/opt-einsum { };
 
+  optax = callPackage ../development/python-modules/optax { };
+
   optuna = callPackage ../development/python-modules/optuna { };
 
   opuslib = callPackage ../development/python-modules/opuslib { };
