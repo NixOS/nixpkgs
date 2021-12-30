@@ -1,4 +1,4 @@
-{ lib, python3, fetchFromGitHub, clang-unwrapped }:
+{ lib, python3, fetchFromGitHub, clang-unwrapped, whatstyle, testVersion }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "whatstyle";
@@ -19,6 +19,8 @@ python3.pkgs.buildPythonApplication rec {
   checkInputs = [ clang-unwrapped /* clang-format */ ];
 
   doCheck = false; # 3 or 4 failures depending on version, haven't investigated.
+
+  passthru.tests.version = testVersion { package = whatstyle; };
 
   meta = with lib; {
     description = "Find a code format style that fits given source files";

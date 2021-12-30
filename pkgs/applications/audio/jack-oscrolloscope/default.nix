@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, SDL, libjack2, libGLU, libGL, pkg-config }:
+{ lib, stdenv, fetchurl, SDL, libjack2, libGLU, libGL, pkg-config, jack_oscrolloscope, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "jack_oscrolloscope";
@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     mv jack_oscrolloscope $out/bin/
   '';
+
+  passthru.tests.version = testVersion { package = jack_oscrolloscope; };
 
   meta = with lib; {
     description = "A simple waveform viewer for JACK";

@@ -1,4 +1,4 @@
-{ lib, python2 }:
+{ lib, python2, buttersink, testVersion }:
 
 python2.pkgs.buildPythonApplication rec {
   pname = "buttersink";
@@ -13,6 +13,8 @@ python2.pkgs.buildPythonApplication rec {
 
   # No tests implemented
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = buttersink; };
 
   meta = with lib; {
     description = "Synchronise btrfs snapshots";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, mpfr, readline }:
+{ lib, stdenv, fetchurl, mpfr, readline, wcalc, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "wcalc";
@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ mpfr readline ];
+
+  passthru.tests.version = testVersion { package = wcalc; };
 
   meta = with lib; {
     description = "A command line calculator";

@@ -6,6 +6,8 @@
 , pytestCheckHook
 , pythonOlder
 , setuptools
+, seqdiag
+, testVersion
 }:
 
 buildPythonPackage rec {
@@ -44,6 +46,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "seqdiag"
   ];
+
+  passthru.tests.version = testVersion { package = seqdiag; };
 
   meta = with lib; {
     description = "Generate sequence-diagram image from spec-text file (similar to Graphviz)";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromSourcehut, installShellFiles, lua }:
+{ lib, stdenv, fetchFromSourcehut, installShellFiles, lua, fennel, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "fennel";
@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
   postInstall = ''
     installManPage fennel.1
   '';
+
+  passthru.tests.version = testVersion { package = fennel; };
 
   meta = with lib; {
     description = "A Lua Lisp language";

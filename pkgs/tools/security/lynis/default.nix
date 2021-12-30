@@ -1,4 +1,4 @@
-{ lib, stdenv, makeWrapper, fetchFromGitHub, gawk, installShellFiles }:
+{ lib, stdenv, makeWrapper, fetchFromGitHub, gawk, installShellFiles, lynis, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "lynis";
@@ -27,6 +27,8 @@ stdenv.mkDerivation rec {
     installShellCompletion --bash --name lynis.bash \
       extras/bash_completion.d/lynis
   '';
+
+  passthru.tests.version = testVersion { package = lynis; };
 
   meta = with lib; {
     description = "Security auditing tool for Linux, macOS, and UNIX-based systems";

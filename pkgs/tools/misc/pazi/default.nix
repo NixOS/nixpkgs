@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, darwin }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, darwin, pazi, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "pazi";
@@ -14,6 +14,8 @@ rustPlatform.buildRustPackage rec {
   buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   cargoSha256 = "1iamlp5519h8mmgd4964cvyp7mmnqdg2d3qj5v7yzilyp4nz15jc";
+
+  passthru.tests.version = testVersion { package = pazi; };
 
   meta = with lib; {
     description = "An autojump \"zap to directory\" helper";

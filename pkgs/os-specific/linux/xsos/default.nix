@@ -9,6 +9,8 @@
 , multipath-tools
 , iproute2
 , sysvinit
+, xsos
+, testVersion
 }:
 let
   binPath = [
@@ -41,6 +43,8 @@ stdenv.mkDerivation rec {
     wrapProgram "$out/bin/xsos" --prefix PATH : ${lib.makeBinPath binPath}
     installShellCompletion --bash --name xsos.bash xsos-bash-completion.bash
   '';
+
+  passthru.tests.version = testVersion { package = xsos; };
 
   meta = with lib; {
     description = "Summarize system info from sosreports";

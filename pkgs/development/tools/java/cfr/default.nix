@@ -1,4 +1,4 @@
-{ lib, stdenv, makeWrapper, fetchurl, jre }:
+{ lib, stdenv, makeWrapper, fetchurl, jre, cfr, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "cfr";
@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
     install -Dm444 $src $jar
     makeWrapper ${jre}/bin/java $out/bin/cfr --add-flags "-jar $jar"
   '';
+
+  passthru.tests.version = testVersion { package = cfr; };
 
   meta = with lib; {
     description = "Another java decompiler";

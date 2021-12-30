@@ -1,4 +1,4 @@
-{ callPackage, lib, stdenv, fetchurl, jre, makeWrapper }:
+{ callPackage, lib, stdenv, fetchurl, jre, makeWrapper, openapi-generator-cli, testVersion }:
 
 let this = stdenv.mkDerivation rec {
   version = "5.2.1";
@@ -27,6 +27,8 @@ let this = stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.tests.version = testVersion { package = openapi-generator-cli; };
 
   meta = with lib; {
     description = "Allows generation of API client libraries (SDK generation), server stubs and documentation automatically given an OpenAPI Spec";

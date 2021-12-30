@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fuse, samba, pkg-config, glib, autoconf, attr, libsecret }:
+{ lib, stdenv, fetchurl, fuse, samba, pkg-config, glib, autoconf, attr, libsecret, smbnetfs, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "smbnetfs";
@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config autoconf ];
   buildInputs = [ fuse samba glib attr libsecret ];
+
+  passthru.tests.version = testVersion { package = smbnetfs; };
 
   meta = with lib; {
     description = "A FUSE FS for mounting Samba shares";

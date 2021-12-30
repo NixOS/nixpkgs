@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, libsodium }:
+{ lib, stdenv, fetchFromGitHub, libsodium, quicktun, testVersion }:
 
 stdenv.mkDerivation {
   pname = "quicktun";
@@ -21,6 +21,8 @@ stdenv.mkDerivation {
     rm out/quicktun*tgz
     install -vD out/quicktun* -t $out/bin
   '';
+
+  passthru.tests.version = testVersion { package = quicktun; };
 
   meta = with lib; {
     description = "Very simple, yet secure VPN software";

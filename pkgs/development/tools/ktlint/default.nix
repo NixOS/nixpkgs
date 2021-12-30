@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, makeWrapper, jre_headless }:
+{ lib, stdenv, fetchurl, makeWrapper, jre_headless, ktlint, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "ktlint";
@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
   postFixup = ''
     wrapProgram $out/bin/ktlint --prefix PATH : "${jre_headless}/bin"
   '';
+
+  passthru.tests.version = testVersion { package = ktlint; };
 
   meta = with lib; {
     description = "An anti-bikeshedding Kotlin linter with built-in formatter";

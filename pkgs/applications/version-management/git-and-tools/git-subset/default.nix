@@ -1,4 +1,4 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, pkg-config, openssl, curl, libiconv, Security }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, pkg-config, openssl, curl, libiconv, Security, git-subset, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "git-subset";
@@ -16,6 +16,8 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ curl libiconv Security ];
+
+  passthru.tests.version = testVersion { package = git-subset; };
 
   meta = with lib; {
     description = "Super fast Git tree filtering";

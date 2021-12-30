@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, bundlerEnv }:
+{ stdenv, lib, fetchFromGitHub, bundlerEnv, cewl, testVersion }:
 
 let
   rubyEnv = bundlerEnv {
@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
     cp *.rb $out/bin/
     mv $out/bin/cewl.rb $out/bin/cewl
   '';
+
+  passthru.tests.version = testVersion { package = cewl; };
 
   meta = with lib; {
     description = "Custom wordlist generator";

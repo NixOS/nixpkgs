@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, ncurses, readline, autoreconfHook }:
+{ lib, stdenv, fetchurl, fetchpatch, ncurses, readline, autoreconfHook, hunspell, testVersion }:
 
 stdenv.mkDerivation rec {
   version = "1.7.0";
@@ -32,6 +32,8 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--with-ui" "--with-readline" ];
 
   hardeningDisable = [ "format" ];
+
+  passthru.tests.version = testVersion { package = hunspell; };
 
   meta = with lib; {
     homepage = "http://hunspell.sourceforge.net";

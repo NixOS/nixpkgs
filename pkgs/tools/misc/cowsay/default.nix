@@ -1,4 +1,4 @@
-{ lib, stdenv, perl, installShellFiles, fetchFromGitHub }:
+{ lib, stdenv, perl, installShellFiles, fetchFromGitHub, cowsay, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "cowsay";
@@ -36,6 +36,8 @@ stdenv.mkDerivation rec {
   '';
 
   outputs = [ "out" "man" ];
+
+  passthru.tests.version = testVersion { package = cowsay; };
 
   meta = with lib; {
     description = "A program which generates ASCII pictures of a cow with a message";

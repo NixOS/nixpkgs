@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, rustPlatform, libpcap, libseccomp, pkg-config }:
+{ lib, fetchFromGitHub, rustPlatform, libpcap, libseccomp, pkg-config, sniffglue, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "sniffglue";
@@ -16,6 +16,8 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ libpcap libseccomp ];
+
+  passthru.tests.version = testVersion { package = sniffglue; };
 
   meta = with lib; {
     description = "Secure multithreaded packet sniffer";

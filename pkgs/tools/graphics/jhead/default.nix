@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, libjpeg }:
+{ lib, stdenv, fetchFromGitHub, libjpeg, jhead, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "jhead";
@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
     cp -v jhead.1 $out/man/man1
     cp -v *.txt $out/share/doc/${pname}-${version}
   '';
+
+  passthru.tests.version = testVersion { package = jhead; };
 
   meta = with lib; {
     homepage = "http://www.sentex.net/~mwandel/jhead/";

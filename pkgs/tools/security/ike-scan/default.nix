@@ -6,6 +6,8 @@
 , fetchpatch
 , openssl
 , stdenv
+, ike-scan
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -34,6 +36,8 @@ stdenv.mkDerivation rec {
       sha256 = "0wbrq89dl8js7cdivd0c45hckmflan33cpgc3qm5s3az6r4mjljm";
     })
   ];
+
+  passthru.tests.version = testVersion { package = ike-scan; };
 
   meta = with lib; {
     description = "Tool to discover, fingerprint and test IPsec VPN servers";

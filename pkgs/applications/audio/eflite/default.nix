@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, flite, alsa-lib, debug ? false }:
+{ lib, stdenv, fetchurl, fetchpatch, flite, alsa-lib, debug ? false, eflite, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "eflite";
@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
   ];
 
   CFLAGS = lib.optionalString debug " -DDEBUG=2";
+
+  passthru.tests.version = testVersion { package = eflite; };
 
   meta = {
     homepage = "http://eflite.sourceforge.net";

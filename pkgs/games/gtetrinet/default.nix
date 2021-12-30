@@ -1,4 +1,4 @@
-{ fetchFromGitHub, lib, stdenv, autoreconfHook, intltool, pkg-config, libgnome, libgnomeui, GConf }:
+{ fetchFromGitHub, lib, stdenv, autoreconfHook, intltool, pkg-config, libgnome, libgnomeui, GConf, gtetrinet, testVersion }:
 
 stdenv.mkDerivation {
   pname = "gtetrinet";
@@ -30,6 +30,8 @@ stdenv.mkDerivation {
   '';
 
   enableParallelBuilding = true;
+
+  passthru.tests.version = testVersion { package = gtetrinet; };
 
   meta = {
     description = "Client for Tetrinet, a multiplayer online Tetris game";

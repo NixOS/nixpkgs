@@ -1,8 +1,10 @@
-{ buildPythonApplication, lib, minijail }:
+{ buildPythonApplication, lib, minijail, minijail-tools, testVersion }:
 
 buildPythonApplication {
   pname = "minijail-tools";
   inherit (minijail) version src;
+
+  passthru.tests.version = testVersion { package = minijail-tools; };
 
   meta = with lib; {
     homepage = "https://android.googlesource.com/platform/external/minijail/+/refs/heads/master/tools/";

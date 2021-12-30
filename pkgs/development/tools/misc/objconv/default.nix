@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, unzip }:
+{ lib, stdenv, fetchurl, unzip, objconv, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "objconv";
@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
     mv objconv $out/bin
     mv objconv-instructions.pdf $out/doc/objconv
   '';
+
+  passthru.tests.version = testVersion { package = objconv; };
 
   meta = with lib; {
     description = "Object and executable file converter, modifier and disassembler";

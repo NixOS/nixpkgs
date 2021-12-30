@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, cmake }:
+{ lib, stdenv, fetchurl, cmake, libuchardet, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "uchardet";
@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = !stdenv.isi686; # tests fail on i686
+
+  passthru.tests.version = testVersion { package = libuchardet; };
 
   meta = with lib; {
     description = "Mozilla's Universal Charset Detector C/C++ API";

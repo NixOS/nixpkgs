@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildGoModule }:
+{ lib, fetchFromGitHub, buildGoModule, gotestsum, testVersion }:
 
 buildGoModule rec {
   pname = "gotestsum";
@@ -18,6 +18,8 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" "-X gotest.tools/gotestsum/cmd.version=${version}" ];
 
   subPackages = [ "." ];
+
+  passthru.tests.version = testVersion { package = gotestsum; };
 
   meta = with lib; {
     homepage = "https://github.com/gotestyourself/gotestsum";

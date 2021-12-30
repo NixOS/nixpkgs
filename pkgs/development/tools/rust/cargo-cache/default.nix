@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, libiconv, Security }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, libiconv, Security, cargo-cache, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-cache";
@@ -16,6 +16,8 @@ rustPlatform.buildRustPackage rec {
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
 
   checkFlagsArray = [ "offline_tests" ];
+
+  passthru.tests.version = testVersion { package = cargo-cache; };
 
   meta = with lib; {
     description = "Manage cargo cache (\${CARGO_HOME}, ~/.cargo/), print sizes of dirs and remove dirs selectively";

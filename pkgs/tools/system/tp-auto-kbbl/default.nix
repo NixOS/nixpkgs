@@ -5,6 +5,8 @@
 , pkg-config
 , openssl
 , libevdev
+, tp-auto-kbbl
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -22,6 +24,8 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ dbus libevdev openssl ];
+
+  passthru.tests.version = testVersion { package = tp-auto-kbbl; };
 
   meta = with lib; {
     description = "Auto toggle keyboard back-lighting on Thinkpads (and maybe other laptops) for Linux";

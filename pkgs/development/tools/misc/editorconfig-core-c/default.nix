@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchgit, cmake, pcre, doxygen }:
+{ lib, stdenv, fetchgit, cmake, pcre, doxygen, editorconfig-core-c, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "editorconfig-core-c";
@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
   # Multiple doxygen can not generate man pages in the same base directory in
   # parallel: https://bugzilla.gnome.org/show_bug.cgi?id=791153
   enableParallelBuilding = false;
+
+  passthru.tests.version = testVersion { package = editorconfig-core-c; };
 
   meta = with lib; {
     homepage = "https://editorconfig.org/";

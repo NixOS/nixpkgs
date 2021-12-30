@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, buildPackages, diffutils, ed }:
+{ lib, stdenv, fetchurl, fetchpatch, buildPackages, diffutils, ed, rcs, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "rcs";
@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-std=c99";
 
   hardeningDisable = lib.optional stdenv.cc.isClang "format";
+
+  passthru.tests.version = testVersion { package = rcs; };
 
   meta = {
     homepage = "https://www.gnu.org/software/rcs/";

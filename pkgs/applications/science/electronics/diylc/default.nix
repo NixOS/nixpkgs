@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, makeDesktopItem, unzip, bash, jre8 }:
+{ lib, stdenv, fetchurl, makeDesktopItem, unzip, bash, jre8, diylc, testVersion }:
 
 let
   pname = "diylc";
@@ -64,6 +64,8 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.tests.version = testVersion { package = diylc; };
 
   meta = with lib; {
     description = "Multi platform circuit layout and schematic drawing tool";

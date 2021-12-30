@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, makeWrapper, jre }:
+{ lib, stdenv, fetchurl, makeWrapper, jre, yuicompressor, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "yuicompressor";
@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
     makeWrapper ${jre}/bin/java $out/bin/yuicompressor --add-flags \
      "-cp $out/lib/yuicompressor.jar com.yahoo.platform.yui.compressor.YUICompressor"
   '';
+
+  passthru.tests.version = testVersion { package = yuicompressor; };
 
   meta = with lib; {
     description = "A JavaScript and CSS minifier";

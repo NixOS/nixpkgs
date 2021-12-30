@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildPythonApplication, aiohttp, python-dateutil, humanize, click, pytestCheckHook, tox }:
+{ lib, fetchFromGitHub, buildPythonApplication, aiohttp, python-dateutil, humanize, click, pytestCheckHook, tox, twtxt, testVersion }:
 
 buildPythonApplication rec {
   pname = "twtxt";
@@ -22,6 +22,8 @@ buildPythonApplication rec {
   propagatedBuildInputs = [ aiohttp python-dateutil humanize click ];
 
   checkInputs = [ pytestCheckHook tox ];
+
+  passthru.tests.version = testVersion { package = twtxt; };
 
   meta = with lib; {
     description = "Decentralised, minimalist microblogging service for hackers";

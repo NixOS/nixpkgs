@@ -1,6 +1,8 @@
 { buildGoModule
 , fetchFromGitHub
 , lib
+, chisel
+, testVersion
 }:
 
 buildGoModule rec {
@@ -20,6 +22,8 @@ buildGoModule rec {
 
   # tests require access to the network
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = chisel; };
 
   meta = with lib; {
     description = "TCP/UDP tunnel over HTTP";

@@ -1,4 +1,4 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub, fsql, testVersion }:
 
 buildGoPackage rec {
   pname = "fsql";
@@ -12,6 +12,8 @@ buildGoPackage rec {
     rev = "v${version}";
     sha256 = "1accpxryk4744ydfrqc3la5k376ji11yr84n66dz5cx0f3n71vmz";
   };
+
+  passthru.tests.version = testVersion { package = fsql; };
 
   meta = with lib; {
     description = "Search through your filesystem with SQL-esque queries";

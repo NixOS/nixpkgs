@@ -52,6 +52,8 @@
 , libpulseaudio
 , zeroconfSupport ? true
 , avahi
+, pipewire
+, testVersion
 }:
 
 let
@@ -211,6 +213,8 @@ let
         };
       };
     };
+
+    passthru.tests.version = testVersion { package = pipewire; };
 
     meta = with lib; {
       description = "Server and user space API to deal with multimedia pipelines";

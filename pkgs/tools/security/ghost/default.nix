@@ -1,6 +1,8 @@
 { lib
 , fetchFromGitHub
 , python3
+, ghost
+, testVersion
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -24,6 +26,8 @@ python3.pkgs.buildPythonApplication rec {
   doCheck = false;
 
   pythonImportsCheck = [ "ghost" ];
+
+  passthru.tests.version = testVersion { package = ghost; };
 
   meta = with lib; {
     description = "Android post-exploitation framework";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, morsel, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "morsel";
@@ -12,6 +12,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "sha256-2xR2/013ocDKWS1oWitpAbSDPRwEJJqFcCIm6ZQpCoc=";
+
+  passthru.tests.version = testVersion { package = morsel; };
 
   meta = with lib; {
     description = "Command line tool to translate morse code input to text in real time";

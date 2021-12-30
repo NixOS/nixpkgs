@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, jre_headless, makeWrapper }:
+{ lib, stdenv, fetchurl, jre_headless, makeWrapper, flyway, testVersion }:
 stdenv.mkDerivation rec{
   pname = "flyway";
   version = "7.13.0";
@@ -19,6 +19,8 @@ stdenv.mkDerivation rec{
       --add-flags "org.flywaydb.commandline.Main" \
       --add-flags "-jarDirs='$out/share/flyway/jars'"
   '';
+  passthru.tests.version = testVersion { package = flyway; };
+
   meta = with lib; {
     description = "Evolve your Database Schema easily and reliably across all your instances";
     longDescription = ''

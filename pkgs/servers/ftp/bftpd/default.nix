@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, bftpd, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "bftpd";
@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  passthru.tests.version = testVersion { package = bftpd; };
 
   meta = with lib; {
     description = "A minimal ftp server";

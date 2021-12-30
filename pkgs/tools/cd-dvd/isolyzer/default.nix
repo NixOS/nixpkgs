@@ -1,6 +1,8 @@
 { lib
 , python3
 , fetchFromGitHub
+, isolyzer
+, testVersion
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -15,6 +17,8 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   propagatedBuildInputs = with python3.pkgs; [ setuptools six ];
+
+  passthru.tests.version = testVersion { package = isolyzer; };
 
   meta = with lib; {
     homepage = "https://github.com/KBNLresearch/isolyzer";

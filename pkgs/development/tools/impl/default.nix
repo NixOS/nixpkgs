@@ -1,4 +1,4 @@
-{ buildGoModule, lib, fetchFromGitHub }:
+{ buildGoModule, lib, fetchFromGitHub, impl, testVersion }:
 
 buildGoModule rec {
   pname = "impl";
@@ -15,6 +15,8 @@ buildGoModule rec {
 
   # go: cannot find GOROOT directory: go
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = impl; };
 
   meta = with lib; {
     description = "Generate method stubs for implementing an interface";

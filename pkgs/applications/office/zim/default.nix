@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, python3Packages, gtk3, gobject-introspection, wrapGAppsHook, gnome }:
+{ lib, stdenv, fetchurl, python3Packages, gtk3, gobject-introspection, wrapGAppsHook, gnome, zim, testVersion }:
 
 # TODO: Declare configuration options for the following optional dependencies:
 #  -  File stores: hg, git, bzr
@@ -27,6 +27,8 @@ python3Packages.buildPythonApplication rec {
   checkPhase = ''
     ${python3Packages.python.interpreter} test.py
   '';
+
+  passthru.tests.version = testVersion { package = zim; };
 
   meta = with lib; {
     description = "A desktop wiki";

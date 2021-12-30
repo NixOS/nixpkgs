@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, cachefilesd, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "cachefilesd";
@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
     "SBINDIR=$(out)/sbin"
     "MANDIR=$(out)/share/man"
   ];
+
+  passthru.tests.version = testVersion { package = cachefilesd; };
 
   meta = with lib; {
     description = "Local network file caching management daemon";

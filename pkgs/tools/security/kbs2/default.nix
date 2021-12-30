@@ -1,4 +1,4 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, installShellFiles, python3, libxcb, AppKit, libiconv }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, installShellFiles, python3, libxcb, AppKit, libiconv, kbs2, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "kbs2";
@@ -35,6 +35,8 @@ rustPlatform.buildRustPackage rec {
       installShellCompletion kbs2.$shell
     done
   '';
+
+  passthru.tests.version = testVersion { package = kbs2; };
 
   meta = with lib; {
     description = "A secret manager backed by age";

@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, python3Packages, readline, ncurses, canto-daemon }:
+{ lib, fetchFromGitHub, python3Packages, readline, ncurses, canto-daemon, canto-curses, testVersion }:
 
 python3Packages.buildPythonApplication rec {
   version = "0.9.9";
@@ -13,6 +13,8 @@ python3Packages.buildPythonApplication rec {
 
   buildInputs = [ readline ncurses canto-daemon ];
   propagatedBuildInputs = [ canto-daemon ];
+
+  passthru.tests.version = testVersion { package = canto-curses; };
 
   meta = {
     description = "An ncurses-based console Atom/RSS feed reader";

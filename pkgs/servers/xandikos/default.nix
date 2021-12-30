@@ -2,6 +2,8 @@
 , fetchFromGitHub
 , python3Packages
 , nixosTests
+, xandikos
+, testVersion
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -34,6 +36,8 @@ python3Packages.buildPythonApplication rec {
     "test_iter_with_etag"
     "test_iter_with_etag_missing_uid"
   ];
+
+  passthru.tests.version = testVersion { package = xandikos; };
 
   meta = with lib; {
     description = "Lightweight CalDAV/CardDAV server";

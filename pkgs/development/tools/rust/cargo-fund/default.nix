@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, rustPlatform, Security, curl, openssl, libiconv }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, rustPlatform, Security, curl, openssl, libiconv, cargo-fund, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-fund";
@@ -19,6 +19,8 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security libiconv curl ];
+
+  passthru.tests.version = testVersion { package = cargo-fund; };
 
   meta = with lib; {
     description = "Discover funding links for your project's dependencies";

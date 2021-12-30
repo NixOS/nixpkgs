@@ -7,6 +7,8 @@
 , python3Packages
 , perlPackages
 , gnuplot
+, tsung
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -43,6 +45,8 @@ stdenv.mkDerivation rec {
         --prefix PATH : ${lib.makeBinPath [ gnuplot ]} \
         --set PERL5LIB "${perlPackages.makePerlPath [ perlPackages.TemplateToolkit ]}"
   '';
+
+  passthru.tests.version = testVersion { package = tsung; };
 
   meta = with lib; {
     homepage = "http://tsung.erlang-projects.org/";

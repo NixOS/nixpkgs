@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{ lib, rustPlatform, fetchFromGitHub, todiff, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "todiff";
@@ -14,6 +14,8 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "0vrn1vc3rwabv6l2r1qb7mkcxbp75q79bfl3rxhyi51ra3ij507r";
 
   checkFeatures = [ "integration_tests" ];
+
+  passthru.tests.version = testVersion { package = todiff; };
 
   meta = with lib; {
     description = "Human-readable diff for todo.txt files";

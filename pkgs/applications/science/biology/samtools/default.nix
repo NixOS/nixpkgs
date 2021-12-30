@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, zlib, htslib, perl, ncurses ? null }:
+{ lib, stdenv, fetchurl, fetchpatch, zlib, htslib, perl, ncurses ? null, samtools, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "samtools";
@@ -32,6 +32,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   doCheck = true;
+
+  passthru.tests.version = testVersion { package = samtools; };
 
   meta = with lib; {
     description = "Tools for manipulating SAM/BAM/CRAM format";

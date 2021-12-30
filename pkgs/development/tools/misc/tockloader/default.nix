@@ -1,5 +1,7 @@
 { lib
 , python3Packages
+, tockloader
+, testVersion
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -26,6 +28,8 @@ python3Packages.buildPythonApplication rec {
     $out/bin/tockloader --version | grep -q ${version}
     runHook postCheck
   '';
+
+  passthru.tests.version = testVersion { package = tockloader; };
 
   meta = with lib; {
     homepage = "https://github.com/tock/tockloader";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, readline, tcp_wrappers, pcre, makeWrapper, gcc, ps }:
+{ lib, stdenv, fetchurl, readline, tcp_wrappers, pcre, makeWrapper, gcc, ps, atftp, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "atftp";
@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   checkInputs = [ ps ];
+
+  passthru.tests.version = testVersion { package = atftp; };
 
   meta = {
     description = "Advanced tftp tools";

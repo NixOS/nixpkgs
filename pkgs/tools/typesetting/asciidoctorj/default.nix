@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip, jdk, makeWrapper }:
+{ lib, stdenv, fetchzip, jdk, makeWrapper, asciidoctorj, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "asciidoctorj";
@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/asciidoctorj \
       --prefix JAVA_HOME : ${jdk}
   '';
+
+  passthru.tests.version = testVersion { package = asciidoctorj; };
 
   meta = with lib; {
     description = "Official library for running Asciidoctor on the JVM";

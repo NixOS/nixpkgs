@@ -1,4 +1,4 @@
-{ lib, python3Packages }:
+{ lib, python3Packages, s4cmd, testVersion }:
 
 python3Packages.buildPythonApplication rec {
   pname = "s4cmd";
@@ -25,6 +25,8 @@ python3Packages.buildPythonApplication rec {
 
   # Test suite requires an S3 bucket
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = s4cmd; };
 
   meta = with lib; {
     homepage = "https://github.com/bloomreach/s4cmd";

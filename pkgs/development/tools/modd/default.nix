@@ -1,4 +1,4 @@
-{ buildGoPackage, fetchFromGitHub, lib }:
+{ buildGoPackage, fetchFromGitHub, lib, modd, testVersion }:
 
 buildGoPackage rec {
   pname = "modd";
@@ -11,6 +11,8 @@ buildGoPackage rec {
   };
   goPackagePath = "github.com/cortesi/modd";
   subPackages = [ "cmd/modd" ];
+  passthru.tests.version = testVersion { package = modd; };
+
   meta = with lib; {
     description = "A flexible developer tool that runs processes and responds to filesystem changes";
     homepage = "https://github.com/cortesi/modd";

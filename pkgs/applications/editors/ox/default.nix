@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, rustPlatform }:
+{ lib, fetchFromGitHub, rustPlatform, ox, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "ox";
@@ -12,6 +12,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "0m5vglm58myf50vbb7m6gd3srk3n93afg70lz63i2kciqkkwsnjl";
+
+  passthru.tests.version = testVersion { package = ox; };
 
   meta = with lib; {
     description = "An independent Rust text editor that runs in your terminal";

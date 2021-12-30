@@ -1,4 +1,4 @@
-{ buildPythonApplication, fetchFromGitHub, nose, openjdk, lib }:
+{ buildPythonApplication, fetchFromGitHub, nose, openjdk, lib, html5validator, testVersion }:
 
 buildPythonApplication rec {
   pname = "html5validator";
@@ -15,6 +15,8 @@ buildPythonApplication rec {
 
   checkInputs = [ nose ];
   checkPhase = "PATH=$PATH:$out/bin nosetests";
+
+  passthru.tests.version = testVersion { package = html5validator; };
 
   meta = with lib; {
     homepage = "https://github.com/svenkreiss/html5validator";

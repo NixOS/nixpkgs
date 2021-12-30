@@ -4,6 +4,8 @@
 , fetchFromGitHub
 , trezor-udev-rules
 , AppKit
+, trezord
+, testVersion
 }:
 
 buildGoModule rec {
@@ -21,6 +23,8 @@ buildGoModule rec {
 
   propagatedBuildInputs = lib.optionals stdenv.isLinux [ trezor-udev-rules ]
     ++ lib.optionals stdenv.isDarwin [ AppKit ];
+
+  passthru.tests.version = testVersion { package = trezord; };
 
   meta = with lib; {
     description = "Trezor Communication Daemon aka Trezor Bridge";

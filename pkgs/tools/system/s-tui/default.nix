@@ -1,4 +1,4 @@
-{ lib, python3Packages }:
+{ lib, python3Packages, s-tui, testVersion }:
 
 python3Packages.buildPythonPackage rec {
   pname = "s-tui";
@@ -15,6 +15,8 @@ python3Packages.buildPythonPackage rec {
   ];
 
   LC_ALL = "en_US.UTF-8";
+
+  passthru.tests.version = testVersion { package = s-tui; };
 
   meta = with lib; {
     homepage = "https://amanusk.github.io/s-tui/";

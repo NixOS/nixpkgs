@@ -1,4 +1,4 @@
-{ fetchFromGitHub, rustPlatform, lib }:
+{ fetchFromGitHub, rustPlatform, lib, typos, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "typos";
@@ -12,6 +12,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "sha256-PH1LpdzeBGmMDP5l2dgRWcZo+PjA5LTNLLBqnMEeOZk=";
+
+  passthru.tests.version = testVersion { package = typos; };
 
   meta = with lib; {
     description = "Source code spell checker";

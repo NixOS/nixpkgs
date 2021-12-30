@@ -1,6 +1,8 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, log4j-vuln-scanner
+, testVersion
 }:
 
 buildGoModule rec {
@@ -20,6 +22,8 @@ buildGoModule rec {
     mv $out/bin/scanner $out/bin/$pname
     mv $out/bin/patcher $out/bin/log4j-vuln-patcher
   '';
+
+  passthru.tests.version = testVersion { package = log4j-vuln-scanner; };
 
   meta = with lib; {
     description = "Local log4j vulnerability scanner";

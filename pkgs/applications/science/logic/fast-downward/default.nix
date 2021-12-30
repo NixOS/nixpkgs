@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchhg, cmake, which, python3, osi, cplex }:
+{ stdenv, lib, fetchhg, cmake, which, python3, osi, cplex, fast-downward, testVersion }:
 
 stdenv.mkDerivation {
   version = "19.12";
@@ -49,6 +49,8 @@ stdenv.mkDerivation {
     substituteInPlace $out/${python3.sitePackages}/driver/arguments.py \
       --replace 'args.build = "release"' "args.build = \"$out/libexec/fast-downward\""
   '';
+
+  passthru.tests.version = testVersion { package = fast-downward; };
 
   meta = with lib; {
     description = "A domain-independent planning system";

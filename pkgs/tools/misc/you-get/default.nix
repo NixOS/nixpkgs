@@ -1,4 +1,4 @@
-{ lib, buildPythonApplication, fetchPypi, installShellFiles }:
+{ lib, buildPythonApplication, fetchPypi, installShellFiles, you-get, testVersion }:
 
 buildPythonApplication rec {
   pname = "you-get";
@@ -21,6 +21,8 @@ buildPythonApplication rec {
       --fish contrib/completion/you-get.fish \
       --bash contrib/completion/you-get-completion.bash
   '';
+
+  passthru.tests.version = testVersion { package = you-get; };
 
   meta = with lib; {
     description = "A tiny command line utility to download media contents from the web";

@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, vendir, testVersion }:
 
 buildGoModule rec {
   pname = "vendir";
@@ -14,6 +14,8 @@ buildGoModule rec {
   vendorSha256 = null;
 
   subPackages = [ "cmd/vendir" ];
+
+  passthru.tests.version = testVersion { package = vendir; };
 
   meta = with lib; {
     description = "CLI tool to vendor portions of git repos, github releases, helm charts, docker image contents, etc. declaratively";

@@ -1,4 +1,4 @@
-{ lib, stdenv, autoreconfHook, pkg-config, SDL2, SDL2_mixer, SDL2_net, fetchFromGitHub, python3 }:
+{ lib, stdenv, autoreconfHook, pkg-config, SDL2, SDL2_mixer, SDL2_net, fetchFromGitHub, python3, crispyDoom, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "crispy-doom";
@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   strictDeps = true;
+
+  passthru.tests.version = testVersion { package = crispyDoom; };
 
   meta = {
     homepage = "http://fabiangreffrath.github.io/crispy-doom";

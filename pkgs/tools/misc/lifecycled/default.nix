@@ -1,6 +1,8 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, lifecycled
+, testVersion
 }:
 buildGoModule rec {
   pname = "lifecycled";
@@ -20,6 +22,8 @@ buildGoModule rec {
     substitute init/systemd/lifecycled.unit $out/lib/systemd/system/lifecycled.service \
       --replace /usr/bin/lifecycled $out/bin/lifecycled
   '';
+
+  passthru.tests.version = testVersion { package = lifecycled; };
 
   meta = with lib; {
     description = "A daemon for responding to AWS AutoScaling Lifecycle Hooks";

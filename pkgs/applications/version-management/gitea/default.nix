@@ -10,6 +10,8 @@
 , sqliteSupport ? true
 , pamSupport ? true
 , nixosTests
+, gitea
+, testVersion
 }:
 
 with lib;
@@ -72,6 +74,8 @@ buildGoPackage rec {
   goPackagePath = "code.gitea.io/gitea";
 
   passthru.tests.gitea = nixosTests.gitea;
+
+  passthru.tests.version = testVersion { package = gitea; };
 
   meta = {
     description = "Git with a cup of tea";

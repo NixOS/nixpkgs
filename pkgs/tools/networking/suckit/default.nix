@@ -5,6 +5,8 @@
 , openssl
 , stdenv
 , Security
+, suckit
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -26,6 +28,8 @@ rustPlatform.buildRustPackage rec {
 
   # requires internet access
   checkFlags = [ "--skip=test_download_url" ];
+
+  passthru.tests.version = testVersion { package = suckit; };
 
   meta = with lib; {
     description = "Recursively visit and download a website's content to your disk";

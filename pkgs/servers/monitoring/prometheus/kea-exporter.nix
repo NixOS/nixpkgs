@@ -1,4 +1,4 @@
-{ lib, python3Packages, nixosTests }:
+{ lib, python3Packages, nixosTests, prometheus-kea-exporter, testVersion }:
 
 python3Packages.buildPythonApplication rec {
   pname = "kea-exporter";
@@ -22,6 +22,8 @@ python3Packages.buildPythonApplication rec {
   passthru.tests = {
     inherit (nixosTests.prometheus-exporters) kea;
   };
+
+  passthru.tests.version = testVersion { package = prometheus-kea-exporter; };
 
   meta = with lib; {
     description = "Export Kea Metrics in the Prometheus Exposition Format";

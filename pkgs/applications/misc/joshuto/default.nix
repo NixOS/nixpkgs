@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub, stdenv, SystemConfiguration }:
+{ lib, rustPlatform, fetchFromGitHub, stdenv, SystemConfiguration, joshuto, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "joshuto";
@@ -14,6 +14,8 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-g8YYOk2RW4GPdkWlvAxd5KFdV4S1l5yKEzNm9OAc8RI=";
 
   buildInputs = lib.optional stdenv.isDarwin SystemConfiguration;
+
+  passthru.tests.version = testVersion { package = joshuto; };
 
   meta = with lib; {
     description = "Ranger-like terminal file manager written in Rust";

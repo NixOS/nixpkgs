@@ -4,6 +4,8 @@
 , zlib
 , libdeflate
 , isa-l
+, fastp
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -22,6 +24,8 @@ stdenv.mkDerivation rec {
   installPhase = ''
     install -D fastp $out/bin/fastp
   '';
+
+  passthru.tests.version = testVersion { package = fastp; };
 
   meta = with lib; {
     description = "Ultra-fast all-in-one FASTQ preprocessor";

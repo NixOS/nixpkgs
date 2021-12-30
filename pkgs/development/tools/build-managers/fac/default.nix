@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchCrate, git }:
+{ lib, rustPlatform, fetchCrate, git, fac-build, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "fac-build";
@@ -24,6 +24,8 @@ rustPlatform.buildRustPackage rec {
         --replace 'std::process::Command::new("git")' \
         'std::process::Command::new("${git}/bin/git")'
   '';
+
+  passthru.tests.version = testVersion { package = fac-build; };
 
   meta = with lib; {
     description = ''

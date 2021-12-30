@@ -13,6 +13,8 @@
 , libxslt
 , gst_all_1
 , wrapGAppsHook
+, yelp
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -49,6 +51,8 @@ stdenv.mkDerivation rec {
       packageName = "yelp";
     };
   };
+
+  passthru.tests.version = testVersion { package = yelp; };
 
   meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Yelp";

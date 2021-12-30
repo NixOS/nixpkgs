@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, which, zstd, pbzip2 }:
+{ lib, stdenv, fetchFromGitHub, which, zstd, pbzip2, makeself, testVersion }:
 
 stdenv.mkDerivation rec {
   version = "2.4.2";
@@ -32,6 +32,8 @@ stdenv.mkDerivation rec {
   fixupPhase = ''
     sed -e "s|^HEADER=.*|HEADER=$out/share/${pname}-${version}/makeself-header.sh|" -i $out/bin/makeself
   '';
+
+  passthru.tests.version = testVersion { package = makeself; };
 
   meta = with lib; {
     homepage = "https://makeself.io";

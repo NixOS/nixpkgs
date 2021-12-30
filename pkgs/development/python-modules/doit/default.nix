@@ -8,6 +8,8 @@
 , cloudpickle
 , pyinotify
 , macfsevents
+, doit
+, testVersion
 }:
 
 buildPythonPackage rec {
@@ -34,6 +36,8 @@ buildPythonPackage rec {
     # depends on doit-py, which has a circular dependency on doit
     "test___main__.py"
   ];
+
+  passthru.tests.version = testVersion { package = doit; };
 
   meta = with lib; {
     homepage = "https://pydoit.org/";

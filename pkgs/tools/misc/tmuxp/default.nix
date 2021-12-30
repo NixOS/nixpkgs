@@ -1,4 +1,4 @@
-{ lib, python3Packages }:
+{ lib, python3Packages, tmuxp, testVersion }:
 
 let
   pypkgs = python3Packages;
@@ -22,6 +22,8 @@ pypkgs.buildPythonApplication rec {
     kaptan
     libtmux
   ];
+
+  passthru.tests.version = testVersion { package = tmuxp; };
 
   meta = with lib; {
     description = "Manage tmux workspaces from JSON and YAML";

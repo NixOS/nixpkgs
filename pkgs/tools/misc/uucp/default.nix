@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, uucp, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "uucp";
@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
       --replace 4555 0555
     sed -i '/chown $(OWNER)/d' Makefile.in
   '';
+
+  passthru.tests.version = testVersion { package = uucp; };
 
   meta = {
     description = "Unix-unix cp over serial line, also includes cu program";

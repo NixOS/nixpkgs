@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, libsodium, libevent }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, libsodium, libevent, dnscrypt-wrapper, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "dnscrypt-wrapper";
@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [ libsodium libevent ];
+
+  passthru.tests.version = testVersion { package = dnscrypt-wrapper; };
 
   meta = with lib; {
     description = "A tool for adding dnscrypt support to any name resolver";

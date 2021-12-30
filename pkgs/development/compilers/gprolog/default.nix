@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, gprolog, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "gprolog";
@@ -33,6 +33,8 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
+
+  passthru.tests.version = testVersion { package = gprolog; };
 
   meta = {
     homepage = "https://www.gnu.org/software/gprolog/";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, openssl }:
+{ lib, stdenv, fetchFromGitHub, openssl, hash_extender, testVersion }:
 
 stdenv.mkDerivation {
   pname = "hash_extender";
@@ -20,6 +20,8 @@ stdenv.mkDerivation {
     mkdir -p $out/bin
     cp hash_extender $out/bin
   '';
+
+  passthru.tests.version = testVersion { package = hash_extender; };
 
   meta = with lib; {
     description = "Tool to automate hash length extension attacks";

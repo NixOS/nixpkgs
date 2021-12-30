@@ -4,6 +4,8 @@
 , python
 , pythonImportsCheckHook
 , makeWrapper
+, hjson
+, testVersion
 }:
 
 buildPythonPackage rec {
@@ -28,6 +30,8 @@ buildPythonPackage rec {
       --set PYTHONPATH "$PYTHONPATH" \
       --prefix PATH : ${lib.makeBinPath [ python ]}
   '';
+
+  passthru.tests.version = testVersion { package = hjson; };
 
   meta = with lib; {
     description = "A user interface for JSON";

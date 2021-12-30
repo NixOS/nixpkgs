@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, qmake, qtbase, qtscript }:
+{ lib, stdenv, fetchFromGitHub, qmake, qtbase, qtscript, qbs, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "qbs";
@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
   qmakeFlags = [ "QBS_INSTALL_PREFIX=$(out)" "qbs.pro" ];
 
   buildInputs = [ qtbase qtscript ];
+
+  passthru.tests.version = testVersion { package = qbs; };
 
   meta = with lib; {
     description = "A tool that helps simplify the build process for developing projects across multiple platforms";

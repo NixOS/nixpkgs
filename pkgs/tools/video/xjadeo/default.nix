@@ -1,5 +1,6 @@
 { lib, stdenv, autoreconfHook, fetchFromGitHub, ffmpeg, freetype, libGLU
-, libjack2, liblo, libX11, libXv, pkg-config, portmidi, xorg }:
+, libjack2, liblo, libX11, libXv, pkg-config, portmidi, xorg, xjadeo
+, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "xjadeo";
@@ -31,6 +32,8 @@ stdenv.mkDerivation rec {
     libXv
     portmidi
   ];
+
+  passthru.tests.version = testVersion { package = xjadeo; };
 
   meta = with lib; {
     description = "The X Jack Video Monitor";

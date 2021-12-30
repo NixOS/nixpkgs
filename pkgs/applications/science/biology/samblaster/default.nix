@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub, samblaster, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "samblaster";
@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cp samblaster $out/bin
   '';
+
+  passthru.tests.version = testVersion { package = samblaster; };
 
   meta = with lib; {
     description = "Tool for marking duplicates and extracting discordant/split reads from SAM/BAM files";

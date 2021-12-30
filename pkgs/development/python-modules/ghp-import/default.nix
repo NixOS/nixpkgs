@@ -2,6 +2,8 @@
 , buildPythonPackage
 , fetchPypi
 , python-dateutil
+, ghp-import
+, testVersion
 }:
 
 buildPythonPackage rec {
@@ -19,6 +21,8 @@ buildPythonPackage rec {
   doCheck = false;
 
   pythonImportsCheck = [ "ghp_import" ];
+
+  passthru.tests.version = testVersion { package = ghp-import; };
 
   meta = with lib; {
     description = "Copy your docs directly to the gh-pages branch";

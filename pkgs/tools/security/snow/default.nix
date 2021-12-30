@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, snow, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "snow";
@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
   installPhase = ''
     install -Dm755 snow -t $out/bin
   '';
+
+  passthru.tests.version = testVersion { package = snow; };
 
   meta = with lib; {
     description = "Conceal messages in ASCII text by appending whitespace to the end of lines";

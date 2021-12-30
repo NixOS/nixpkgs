@@ -1,4 +1,4 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub, sift, testVersion }:
 
 buildGoPackage rec {
   pname = "sift";
@@ -15,6 +15,8 @@ buildGoPackage rec {
   };
 
   goDeps = ./deps.nix;
+
+  passthru.tests.version = testVersion { package = sift; };
 
   meta = with lib; {
     description = "A fast and powerful alternative to grep";

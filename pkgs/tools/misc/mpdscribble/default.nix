@@ -9,6 +9,8 @@
 , libgcrypt
 , libmpdclient
 , systemd
+, mpdscribble
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -28,6 +30,8 @@ stdenv.mkDerivation rec {
     libgcrypt
     systemd
   ];
+
+  passthru.tests.version = testVersion { package = mpdscribble; };
 
   meta = with lib; {
     description = "A MPD client which submits info about tracks being played to a scrobbler";

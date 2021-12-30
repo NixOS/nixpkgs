@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, bison, flex, rdma-core }:
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, bison, flex, rdma-core, opensm, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "opensm";
@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  passthru.tests.version = testVersion { package = opensm; };
 
   meta = with lib; {
     description = "Infiniband subnet manager";

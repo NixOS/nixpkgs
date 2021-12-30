@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, hddtemp, testVersion }:
 let
   db = fetchurl {
     url = "mirror://savannah/hddtemp/hddtemp.db";
@@ -27,6 +27,8 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  passthru.tests.version = testVersion { package = hddtemp; };
 
   meta = with lib; {
     description = "Tool for displaying hard disk temperature";

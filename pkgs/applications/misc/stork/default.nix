@@ -3,6 +3,8 @@
 , fetchFromGitHub
 , openssl
 , pkg-config
+, stork
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -21,6 +23,8 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl ];
+
+  passthru.tests.version = testVersion { package = stork; };
 
   meta = with lib; {
     description = "Impossibly fast web search, made for static sites";

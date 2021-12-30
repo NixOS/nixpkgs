@@ -1,4 +1,4 @@
-{ fetchFromSourcehut, gtk3, lib, libdbusmenu-gtk3, pkg-config, stdenv, vala }:
+{ fetchFromSourcehut, gtk3, lib, libdbusmenu-gtk3, pkg-config, stdenv, vala, snixembed, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "snixembed";
@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ gtk3 libdbusmenu-gtk3 ];
 
   makeFlags = [ "PREFIX=$(out)" ];
+
+  passthru.tests.version = testVersion { package = snixembed; };
 
   meta = with lib; {
     description = "Proxy StatusNotifierItems as XEmbedded systemtray-spec icons";

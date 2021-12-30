@@ -1,4 +1,4 @@
-{ lib, python3Packages }:
+{ lib, python3Packages, sewer, testVersion }:
 
 python3Packages.buildPythonApplication rec {
   pname = "sewer";
@@ -10,6 +10,8 @@ python3Packages.buildPythonApplication rec {
   };
 
   propagatedBuildInputs = with python3Packages; [ pyopenssl requests tldextract ];
+
+  passthru.tests.version = testVersion { package = sewer; };
 
   meta = with lib; {
     homepage = "https://github.com/komuw/sewer";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, elfutils }:
+{ lib, stdenv, fetchurl, elfutils, dwz, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "dwz";
@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ elfutils ];
 
   makeFlags = [ "prefix=${placeholder "out"}" ];
+
+  passthru.tests.version = testVersion { package = dwz; };
 
   meta = with lib; {
     homepage = "https://sourceware.org/dwz/";

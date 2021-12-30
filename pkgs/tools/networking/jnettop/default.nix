@@ -1,4 +1,4 @@
-{ fetchurl, fetchpatch, lib, stdenv, autoconf, libpcap, ncurses, pkg-config, glib }:
+{ fetchurl, fetchpatch, lib, stdenv, autoconf, libpcap, ncurses, pkg-config, glib, jnettop, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "jnettop";
@@ -29,6 +29,8 @@ stdenv.mkDerivation rec {
   ];
 
   preConfigure = "autoconf ";
+
+  passthru.tests.version = testVersion { package = jnettop; };
 
   meta = {
     description = "Network traffic visualizer";

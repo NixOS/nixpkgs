@@ -1,4 +1,4 @@
-{ lib, stdenv, perl, ronn, fetchurl }:
+{ lib, stdenv, perl, ronn, fetchurl, geteltorito, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "geteltorito";
@@ -37,6 +37,8 @@ stdenv.mkDerivation rec {
     ronn --roff README.new --pipe > $out/man/man1/geteltorito.1
     install -vD geteltorito $out/bin/geteltorito
   '';
+
+  passthru.tests.version = testVersion { package = geteltorito; };
 
   meta = with lib; {
     description = "Extract the initial/default boot image from a CD image if existent";

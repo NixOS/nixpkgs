@@ -18,6 +18,8 @@
 , zstd
 , enableCopyDevicesPatch ? false
 , nixosTests
+, rsync
+, testVersion
 }:
 
 let
@@ -60,6 +62,8 @@ stdenv.mkDerivation rec {
   ;
 
   passthru.tests = { inherit (nixosTests) rsyncd; };
+
+  passthru.tests.version = testVersion { package = rsync; };
 
   meta = base.meta // {
     description = "A fast incremental file transfer utility";

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, python3 }:
+{ stdenv, lib, fetchurl, python3, itstool, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "itstool";
@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
   postFixup = ''
     wrapPythonPrograms
   '';
+
+  passthru.tests.version = testVersion { package = itstool; };
 
   meta = {
     homepage = "http://itstool.org/";

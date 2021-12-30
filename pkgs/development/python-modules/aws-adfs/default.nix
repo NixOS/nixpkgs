@@ -13,6 +13,8 @@
 , pytestCheckHook
 , requests
 , requests-kerberos
+, aws-adfs
+, testVersion
 }:
 
 buildPythonPackage rec {
@@ -56,6 +58,8 @@ buildPythonPackage rec {
   LC_ALL = "en_US.UTF-8";
 
   pythonImportsCheck = [ "aws_adfs" ];
+
+  passthru.tests.version = testVersion { package = aws-adfs; };
 
   meta = with lib; {
     description = "Command line tool to ease aws cli authentication against ADFS";

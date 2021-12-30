@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, brook, testVersion }:
 
 buildGoModule rec {
   pname = "brook";
@@ -12,6 +12,8 @@ buildGoModule rec {
   };
 
   vendorSha256 = "sha256-iaaXLpzN69yHBcAi9GS+G7LupX/7VABo1XFNegk+i3Q=";
+
+  passthru.tests.version = testVersion { package = brook; };
 
   meta = with lib; {
     homepage = "https://github.com/txthinking/brook";

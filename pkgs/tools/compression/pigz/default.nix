@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, zlib, util-linux }:
+{ lib, stdenv, fetchurl, zlib, util-linux, pigz, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "pigz";
@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
     ln -s pigz.1 "$out/share/man/man1/unpigz.1"
     install -Dm755 pigz.pdf "$out/share/doc/pigz/pigz.pdf"
   '';
+
+  passthru.tests.version = testVersion { package = pigz; };
 
   meta = with lib; {
     homepage = "https://www.zlib.net/pigz/";

@@ -16,6 +16,8 @@
 , libxml2
 , speechSupport ? true
 , speechd
+, dasher
+, testVersion
 }:
 
 stdenv.mkDerivation {
@@ -59,6 +61,8 @@ stdenv.mkDerivation {
   ] ++ lib.optional speechSupport speechd;
 
   enableParallelBuilding = true;
+
+  passthru.tests.version = testVersion { package = dasher; };
 
   meta = {
     homepage = "https://www.inference.org.uk/dasher/";

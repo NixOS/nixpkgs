@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config, efivar, popt }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config, efivar, popt, efibootmgr, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "efibootmgr";
@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
   makeFlags = [ "EFIDIR=nixos" "PKG_CONFIG=${stdenv.cc.targetPrefix}pkg-config" ];
 
   installFlags = [ "prefix=$(out)" ];
+
+  passthru.tests.version = testVersion { package = efibootmgr; };
 
   meta = with lib; {
     description = "A Linux user-space application to modify the Intel Extensible Firmware Interface (EFI) Boot Manager";

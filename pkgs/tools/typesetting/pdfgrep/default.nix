@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, poppler, libgcrypt, pcre, asciidoc }:
+{ lib, stdenv, fetchurl, pkg-config, poppler, libgcrypt, pcre, asciidoc, pdfgrep, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "pdfgrep";
@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config asciidoc ];
   buildInputs = [ poppler libgcrypt pcre ];
+
+  passthru.tests.version = testVersion { package = pdfgrep; };
 
   meta = {
     description = "Commandline utility to search text in PDF files";

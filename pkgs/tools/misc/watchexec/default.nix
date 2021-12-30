@@ -1,4 +1,4 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, CoreServices, Foundation, installShellFiles, libiconv }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, CoreServices, Foundation, installShellFiles, libiconv, watchexec, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "watchexec";
@@ -21,6 +21,8 @@ rustPlatform.buildRustPackage rec {
     installManPage doc/watchexec.1
     installShellCompletion --zsh --name _watchexec completions/zsh
   '';
+
+  passthru.tests.version = testVersion { package = watchexec; };
 
   meta = with lib; {
     description = "Executes commands in response to file modifications";

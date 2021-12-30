@@ -6,6 +6,8 @@
 , pyyaml
 , setuptools
 , installShellFiles
+, gita
+, testVersion
 }:
 
 buildPythonApplication rec {
@@ -47,6 +49,8 @@ buildPythonApplication rec {
     installShellCompletion --bash --name gita ${src}/.gita-completion.bash
     installShellCompletion --zsh --name gita ${src}/.gita-completion.zsh
   '';
+
+  passthru.tests.version = testVersion { package = gita; };
 
   meta = with lib; {
     description = "A command-line tool to manage multiple git repos";

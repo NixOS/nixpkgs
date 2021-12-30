@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, reviewdog, testVersion }:
 
 buildGoModule rec {
   pname = "reviewdog";
@@ -18,6 +18,8 @@ buildGoModule rec {
   subPackages = [ "cmd/reviewdog" ];
 
   ldflags = [ "-s" "-w" "-X github.com/reviewdog/reviewdog/commands.Version=${version}" ];
+
+  passthru.tests.version = testVersion { package = reviewdog; };
 
   meta = with lib; {
     description = "Automated code review tool integrated with any code analysis tools regardless of programming language";

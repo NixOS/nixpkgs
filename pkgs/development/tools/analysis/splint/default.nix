@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, flex }:
+{ fetchurl, lib, stdenv, flex, splint, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "splint";
@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ flex ];
 
   doCheck = true;
+
+  passthru.tests.version = testVersion { package = splint; };
 
   meta = with lib; {
     homepage = "http://www.splint.org/";

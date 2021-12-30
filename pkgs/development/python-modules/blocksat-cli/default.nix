@@ -9,6 +9,8 @@
 , sseclient-py
 , zfec
 , pytestCheckHook
+, blocksat-cli
+, testVersion
 }:
 
 buildPythonPackage rec {
@@ -43,6 +45,8 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "blocksatcli" ];
+
+  passthru.tests.version = testVersion { package = blocksat-cli; };
 
   meta = with lib; {
     description = "Blockstream Satellite CLI";

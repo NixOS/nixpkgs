@@ -14,6 +14,8 @@
 , jpgSupport ? true
 , graphicsmagick
 , exiftool
+, megapixels
+, testVersion
 }:
 
 assert jpgSupport -> tiffSupport;
@@ -59,6 +61,8 @@ stdenv.mkDerivation rec {
       --prefix PATH : ${runtimePath}
     )
   '';
+
+  passthru.tests.version = testVersion { package = megapixels; };
 
   meta = with lib; {
     description = "GTK4 camera application that knows how to deal with the media request api";

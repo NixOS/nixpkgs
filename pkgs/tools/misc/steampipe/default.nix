@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles, steampipe, testVersion }:
 
 buildGoModule rec {
   pname = "steampipe";
@@ -30,6 +30,8 @@ buildGoModule rec {
       --fish <($out/bin/steampipe --install-dir $INSTALL_DIR completion fish) \
       --zsh <($out/bin/steampipe --install-dir $INSTALL_DIR completion zsh)
   '';
+
+  passthru.tests.version = testVersion { package = steampipe; };
 
   meta = with lib; {
     homepage = "https://steampipe.io/";

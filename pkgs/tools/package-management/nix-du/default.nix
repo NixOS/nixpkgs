@@ -8,6 +8,8 @@
 , graphviz
 , Security
 , pkg-config
+, nix-du
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -33,6 +35,8 @@ rustPlatform.buildRustPackage rec {
   ] ++ lib.optionals stdenv.isDarwin [ Security ];
 
   nativeBuildInputs = [ pkg-config ];
+
+  passthru.tests.version = testVersion { package = nix-du; };
 
   meta = with lib; {
     description = "A tool to determine which gc-roots take space in your nix store";

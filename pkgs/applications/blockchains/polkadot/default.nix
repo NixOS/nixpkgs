@@ -4,6 +4,8 @@
 , llvmPackages
 , protobuf
 , rustPlatform
+, polkadot
+, testVersion
 }:
 rustPlatform.buildRustPackage rec {
   pname = "polkadot";
@@ -31,6 +33,8 @@ rustPlatform.buildRustPackage rec {
 
   # We can't run the test suite since we didn't compile the WASM runtimes.
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = polkadot; };
 
   meta = with lib; {
     description = "Polkadot Node Implementation";

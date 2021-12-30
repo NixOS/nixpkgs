@@ -1,4 +1,4 @@
-{ lib, pkg-config, rustPlatform, fetchFromGitHub, openssl }:
+{ lib, pkg-config, rustPlatform, fetchFromGitHub, openssl, cargo-bitbake, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-bitbake";
@@ -15,6 +15,8 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ openssl ];
 
   cargoSha256 = "0mm6059wjh5p8923dwz55dpwi55gq2bcmpx7kn40pq5ppkiqjiw9";
+
+  passthru.tests.version = testVersion { package = cargo-bitbake; };
 
   meta = with lib; {
     description = "Cargo extension that can generate BitBake recipes utilizing the classes from meta-rust";

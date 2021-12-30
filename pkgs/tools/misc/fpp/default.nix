@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, python3 }:
+{ lib, stdenv, fetchFromGitHub, python3, fpp, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "fpp";
@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
     cp -r fpp src $out/share/fpp
     ln -s $out/share/fpp/fpp $out/bin/fpp
   '';
+
+  passthru.tests.version = testVersion { package = fpp; };
 
   meta = {
     description = "CLI program that accepts piped input and presents files for selection";

@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, python3Packages, bash, git, less }:
+{ lib, fetchFromGitHub, python3Packages, bash, git, less, icdiff, testVersion }:
 
 python3Packages.buildPythonApplication rec {
   pname = "icdiff";
@@ -24,6 +24,8 @@ python3Packages.buildPythonApplication rec {
     patchShebangs test.sh
     ./test.sh ${python3Packages.python.interpreter}
   '';
+
+  passthru.tests.version = testVersion { package = icdiff; };
 
   meta = with lib; {
     homepage = "https://www.jefftk.com/icdiff";

@@ -1,4 +1,4 @@
-{ fetchurl, python2Packages }:
+{ fetchurl, python2Packages, tailor, testVersion }:
 
 python2Packages.buildPythonApplication rec {
   pname = "tailor";
@@ -11,6 +11,8 @@ python2Packages.buildPythonApplication rec {
     ];
     sha256 = "061acapxxn5ab3ipb5nd3nm8pk2xj67bi83jrfd6lqq3273fmdjh";
   };
+
+  passthru.tests.version = testVersion { package = tailor; };
 
   meta = {
     description = "Version control tools integration tool";

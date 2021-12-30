@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, ncurses, glibc }:
+{ lib, stdenv, fetchurl, ncurses, glibc, kermit, testVersion }:
 
 stdenv.mkDerivation {
   pname = "kermit";
@@ -29,6 +29,8 @@ stdenv.mkDerivation {
     mkdir -p $out/man/man1
     make -f makefile install
   '';
+
+  passthru.tests.version = testVersion { package = kermit; };
 
   meta = with lib; {
     homepage = "https://www.kermitproject.org/ck90.html";

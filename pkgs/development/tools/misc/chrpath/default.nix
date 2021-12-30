@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, chrpath, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "chrpath";
@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     url = "https://alioth-archive.debian.org/releases/${pname}/${pname}/${version}/${pname}-${version}.tar.gz";
     sha256 = "0yvfq891mcdkf8g18gjjkn2m5rvs8z4z4cl1vwdhx6f2p9a4q3dv";
   };
+
+  passthru.tests.version = testVersion { package = chrpath; };
 
   meta = with lib; {
     description = "Command line tool to adjust the RPATH or RUNPATH of ELF binaries";

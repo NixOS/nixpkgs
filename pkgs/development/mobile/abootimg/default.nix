@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, coreutils, cpio, findutils, gzip, makeWrapper, util-linux }:
+{ lib, stdenv, fetchFromGitHub, coreutils, cpio, findutils, gzip, makeWrapper, util-linux, abootimg, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "abootimg";
@@ -30,6 +30,8 @@ stdenv.mkDerivation rec {
     install -D -m 755 abootimg-unpack-initrd $out/bin
     wrapProgram $out/bin/abootimg-unpack-initrd --prefix PATH : ${lib.makeBinPath [ cpio gzip ]}
   '';
+
+  passthru.tests.version = testVersion { package = abootimg; };
 
   meta = with lib; {
     homepage = "https://github.com/ggrandou/abootimg";

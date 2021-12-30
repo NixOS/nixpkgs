@@ -7,6 +7,8 @@
 , libiconv
 , openssl
 , Security
+, finalfrontier
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -41,6 +43,8 @@ rustPlatform.buildRustPackage rec {
     done
     installShellCompletion finalfrontier.{bash,fish,zsh}
   '';
+
+  passthru.tests.version = testVersion { package = finalfrontier; };
 
   meta = with lib; {
     description = "Utility for training word and subword embeddings";

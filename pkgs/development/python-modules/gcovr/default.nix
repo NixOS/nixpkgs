@@ -4,6 +4,8 @@
 , jinja2
 , lxml
 , pygments
+, gcovr
+, testVersion
 }:
 
 buildPythonPackage rec {
@@ -31,6 +33,8 @@ buildPythonPackage rec {
     "gcovr.workers"
     "gcovr.configuration"
   ];
+
+  passthru.tests.version = testVersion { package = gcovr; };
 
   meta = with lib; {
     description = "A Python script for summarizing gcov data";

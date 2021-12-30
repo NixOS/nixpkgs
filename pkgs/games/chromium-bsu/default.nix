@@ -15,6 +15,8 @@
 , openal
 , pkg-config
 , quesoglc
+, chromium-bsu
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -56,6 +58,8 @@ stdenv.mkDerivation rec {
     install -D misc/chromium-bsu.png $out/share/pixmaps/chromium-bsu.png
     install -D misc/chromium-bsu.desktop $out/share/applications/chromium-bsu.desktop
   '';
+
+  passthru.tests.version = testVersion { package = chromium-bsu; };
 
   meta = with lib; {
     homepage = "http://chromium-bsu.sourceforge.net/";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, perl }:
+{ lib, stdenv, fetchurl, perl, daemon, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "daemon";
@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ perl ];
+
+  passthru.tests.version = testVersion { package = daemon; };
 
   meta = with lib; {
     description = "Turns other processes into daemons";

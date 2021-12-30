@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, elvish, testVersion }:
 
 buildGoModule rec {
   pname = "elvish";
@@ -18,6 +18,8 @@ buildGoModule rec {
   vendorSha256 = "sha256-810YVxO1rjeDV1XWvE4RmJjGOMdTlicnv7YbvKtoDbM=";
 
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = elvish; };
 
   meta = with lib; {
     description = "A friendly and expressive command shell";

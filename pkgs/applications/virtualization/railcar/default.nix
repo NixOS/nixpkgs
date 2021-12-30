@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, rustPlatform, libseccomp }:
+{ lib, fetchFromGitHub, rustPlatform, libseccomp, railcar, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "railcar";
@@ -16,6 +16,8 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "1zsch6gpbw96j5wa68ksbk4x6nbsl7dbvdhdprljpcyrwwkhz47x";
 
   buildInputs = [ libseccomp ];
+
+  passthru.tests.version = testVersion { package = railcar; };
 
   meta = with lib; {
     description = "Rust implementation of the Open Containers Initiative oci-runtime";

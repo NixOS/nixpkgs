@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, cmake, pkg-config, graphicsmagick, libjpeg
-, ffmpeg, zlib, libexif }:
+, ffmpeg, zlib, libexif, timg, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "timg";
@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
     "-DWITH_VIDEO_DEVICE=On"
     "-DWITH_OPENSLIDE_SUPPORT=Off" # https://openslide.org/ lib not yet in nix
   ];
+
+  passthru.tests.version = testVersion { package = timg; };
 
   meta = with lib; {
     homepage = "https://timg.sh/";

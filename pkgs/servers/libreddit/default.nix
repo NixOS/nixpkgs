@@ -4,6 +4,8 @@
 , rustPlatform
 , fetchFromGitHub
 , Security
+, libreddit
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,6 +26,8 @@ rustPlatform.buildRustPackage rec {
   passthru.tests = {
     inherit (nixosTests) libreddit;
   };
+
+  passthru.tests.version = testVersion { package = libreddit; };
 
   meta = with lib; {
     description = "Private front-end for Reddit";

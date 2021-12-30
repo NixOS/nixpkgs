@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub, your-editor, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "your-editor";
@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
     ./install.sh -p $out
     runHook postInstall
   '';
+
+  passthru.tests.version = testVersion { package = your-editor; };
 
   meta = with lib; {
     description = "Your-editor (yed) is a small and simple terminal editor core that is meant to be extended through a powerful plugin architecture";

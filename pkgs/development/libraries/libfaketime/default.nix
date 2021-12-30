@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, perl, coreutils }:
+{ lib, stdenv, fetchurl, perl, coreutils, libfaketime, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "libfaketime";
@@ -32,6 +32,8 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=cast-function-type -Wno-error=format-truncation";
 
   checkInputs = [ perl ];
+
+  passthru.tests.version = testVersion { package = libfaketime; };
 
   meta = with lib; {
     description = "Report faked system time to programs without having to change the system-wide time";

@@ -41,6 +41,8 @@
 , pytest-xdist
 , pytestCheckHook
 , requests
+, mitmproxy
+, testVersion
 }:
 
 buildPythonPackage rec {
@@ -118,6 +120,8 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "mitmproxy" ];
+
+  passthru.tests.version = testVersion { package = mitmproxy; };
 
   meta = with lib; {
     description = "Man-in-the-middle proxy";

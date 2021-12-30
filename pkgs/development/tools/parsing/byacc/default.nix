@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, byacc, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "byacc";
@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
   postInstall = ''
     ln -s $out/bin/byacc $out/bin/yacc
   '';
+
+  passthru.tests.version = testVersion { package = byacc; };
 
   meta = with lib; {
     description = "Berkeley YACC";

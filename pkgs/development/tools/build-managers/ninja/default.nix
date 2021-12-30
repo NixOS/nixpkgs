@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, python3, buildDocs ? true, asciidoc, docbook_xml_dtd_45, docbook_xsl, libxslt, re2c }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, python3, buildDocs ? true, asciidoc, docbook_xml_dtd_45, docbook_xsl, libxslt, re2c, ninja, testVersion }:
 
 with lib;
 
@@ -32,6 +32,8 @@ stdenv.mkDerivation rec {
   '';
 
   setupHook = ./setup-hook.sh;
+
+  passthru.tests.version = testVersion { package = ninja; };
 
   meta = {
     description = "Small build system with a focus on speed";

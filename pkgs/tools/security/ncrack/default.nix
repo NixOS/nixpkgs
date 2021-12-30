@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, openssl, zlib }:
+{ lib, stdenv, fetchFromGitHub, openssl, zlib, ncrack, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "ncrack";
@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ openssl zlib ];
+
+  passthru.tests.version = testVersion { package = ncrack; };
 
   meta = with lib; {
     description = "Network authentication tool";

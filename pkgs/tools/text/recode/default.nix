@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, python3, perl, intltool, flex, texinfo, libiconv, libintl }:
+{ lib, stdenv, fetchurl, python3, perl, intltool, flex, texinfo, libiconv, libintl, recode, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "recode";
@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ libintl ];
 
   doCheck = true;
+
+  passthru.tests.version = testVersion { package = recode; };
 
   meta = {
     homepage = "https://github.com/rrthomas/recode";

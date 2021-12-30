@@ -24,6 +24,8 @@
     # building on linux fails without this feature flag (both x86_64 and AArch64)
     ++ lib.optionals enableKafka [ "rdkafka-plain" "rdkafka/dynamic_linking" ]
     ++ lib.optional stdenv.targetPlatform.isUnix "unix")
+, vector
+, testVersion
 }:
 
 let
@@ -95,6 +97,8 @@ rustPlatform.buildRustPackage {
   '';
 
   passthru = { inherit features; };
+
+  passthru.tests.version = testVersion { package = vector; };
 
   meta = with lib; {
     description = "A high-performance logs, metrics, and events router";

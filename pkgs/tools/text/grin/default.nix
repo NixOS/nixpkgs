@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, python3Packages }:
+{ lib, fetchFromGitHub, python3Packages, grin, testVersion }:
 
 python3Packages.buildPythonApplication rec {
   pname = "grin";
@@ -13,6 +13,8 @@ python3Packages.buildPythonApplication rec {
   };
 
   buildInputs = with python3Packages; [ nose ];
+
+  passthru.tests.version = testVersion { package = grin; };
 
   meta = {
     homepage = "https://github.com/matthew-brett/grin";

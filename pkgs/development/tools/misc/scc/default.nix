@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, scc, testVersion }:
 
 buildGoModule rec {
   pname = "scc";
@@ -15,6 +15,8 @@ buildGoModule rec {
 
   # scc has a scripts/ sub-package that's for testing.
   excludedPackages = [ "scripts" ];
+
+  passthru.tests.version = testVersion { package = scc; };
 
   meta = with lib; {
     homepage = "https://github.com/boyter/scc";

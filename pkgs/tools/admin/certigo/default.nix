@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, certigo, testVersion }:
 
 buildGoModule rec {
   pname = "certigo";
@@ -14,6 +14,8 @@ buildGoModule rec {
   vendorSha256 = "sha256-0wul0f8T7E4cXbsNee1j1orUgjrAToqDLgwCjiyii1Y=";
 
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = certigo; };
 
   meta = with lib; {
     description = "A utility to examine and validate certificates in a variety of formats";

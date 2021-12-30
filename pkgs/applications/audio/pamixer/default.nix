@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, boost, libpulseaudio }:
+{ lib, stdenv, fetchFromGitHub, boost, libpulseaudio, pamixer, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "pamixer";
@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ boost libpulseaudio ];
 
   makeFlags = [ "PREFIX=$(out)" ];
+
+  passthru.tests.version = testVersion { package = pamixer; };
 
   meta = with lib; {
     description = "Pulseaudio command line mixer";

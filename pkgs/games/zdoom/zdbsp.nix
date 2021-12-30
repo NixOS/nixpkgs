@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip, cmake, zlib }:
+{ lib, stdenv, fetchzip, cmake, zlib, zdbsp, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "zdbsp";
@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
   installPhase = ''
     install -Dm755 zdbsp $out/bin/zdbsp
   '';
+
+  passthru.tests.version = testVersion { package = zdbsp; };
 
   meta = with lib; {
     description = "ZDoom's internal node builder for DOOM maps";

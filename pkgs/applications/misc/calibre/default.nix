@@ -23,6 +23,8 @@
 , xdg-utils
 , removeReferencesTo
 , libstemmer
+, calibre
+, testVersion
 }:
 
 mkDerivation rec {
@@ -166,6 +168,8 @@ mkDerivation rec {
   '';
 
   disallowedReferences = [ podofo.dev ];
+
+  passthru.tests.version = testVersion { package = calibre; };
 
   meta = with lib; {
     homepage = "https://calibre-ebook.com";

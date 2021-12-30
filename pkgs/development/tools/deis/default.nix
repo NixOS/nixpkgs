@@ -1,4 +1,4 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub, deis, testVersion }:
 
 buildGoPackage rec {
   pname = "deis";
@@ -24,6 +24,8 @@ buildGoPackage rec {
   preBuild = ''
     export GOPATH=$GOPATH:$NIX_BUILD_TOP/go/src/${goPackagePath}/Godeps/_workspace
   '';
+
+  passthru.tests.version = testVersion { package = deis; };
 
   meta = with lib; {
     homepage = "https://deis.io";

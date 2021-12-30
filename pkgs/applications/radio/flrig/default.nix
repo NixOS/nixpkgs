@@ -4,6 +4,8 @@
 , fltk13
 , libjpeg
 , pkg-config
+, flrig
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -23,6 +25,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
   ];
+
+  passthru.tests.version = testVersion { package = flrig; };
 
   meta = {
     description = "Digital modem rig control program";

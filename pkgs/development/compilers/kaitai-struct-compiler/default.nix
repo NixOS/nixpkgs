@@ -3,6 +3,8 @@
 , fetchzip
 , openjdk8
 , makeWrapper
+, kaitai-struct-compiler
+, testVersion
 }:
 
 
@@ -23,6 +25,8 @@ stdenv.mkDerivation rec {
     cp -R $src/lib $out/lib
     wrapProgram $out/bin/kaitai-struct-compiler --prefix PATH : ${lib.makeBinPath [ openjdk8 ] }
   '';
+
+  passthru.tests.version = testVersion { package = kaitai-struct-compiler; };
 
   meta = with lib; {
     homepage = "https://github.com/kaitai-io/kaitai_struct_compiler";

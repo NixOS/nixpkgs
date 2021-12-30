@@ -11,6 +11,8 @@
 , yajl
 , nixosTests
 , criu
+, crun
+, testVersion
 }:
 
 let
@@ -69,6 +71,8 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   passthru.tests = { inherit (nixosTests) podman; };
+
+  passthru.tests.version = testVersion { package = crun; };
 
   meta = with lib; {
     description = "A fast and lightweight fully featured OCI runtime and C library for running containers";

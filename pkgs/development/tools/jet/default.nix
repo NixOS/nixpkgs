@@ -1,4 +1,4 @@
-{ lib, buildGraalvmNativeImage, fetchurl }:
+{ lib, buildGraalvmNativeImage, fetchurl, jet, testVersion }:
 
 buildGraalvmNativeImage rec {
   pname = "jet";
@@ -25,6 +25,8 @@ buildGraalvmNativeImage rec {
     "--no-fallback"
     "--no-server"
   ];
+
+  passthru.tests.version = testVersion { package = jet; };
 
   meta = with lib; {
     description = "CLI to transform between JSON, EDN and Transit, powered with a minimal query language";

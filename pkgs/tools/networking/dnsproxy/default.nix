@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, dnsproxy, testVersion }:
 
 buildGoModule rec {
   pname = "dnsproxy";
@@ -16,6 +16,8 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" "-X" "main.VersionString=${version}" ];
 
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = dnsproxy; };
 
   meta = with lib; {
     description = "Simple DNS proxy with DoH, DoT, and DNSCrypt support";

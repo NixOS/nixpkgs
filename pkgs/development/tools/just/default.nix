@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, stdenv, rustPlatform, coreutils, bash, installShellFiles, libiconv }:
+{ lib, fetchFromGitHub, stdenv, rustPlatform, coreutils, bash, installShellFiles, libiconv, just, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "just";
@@ -51,6 +51,8 @@ rustPlatform.buildRustPackage rec {
     "--skip=status_error" # "exit status" instead of "exit code"
     "--skip=exit_status" # "exit status" instead of "exit code"
   ];
+
+  passthru.tests.version = testVersion { package = just; };
 
   meta = with lib; {
     homepage = "https://github.com/casey/just";

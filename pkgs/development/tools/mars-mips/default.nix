@@ -1,4 +1,4 @@
-{ lib, stdenvNoCC, fetchurl, makeWrapper, copyDesktopItems, makeDesktopItem, unzip, imagemagick, jre }:
+{ lib, stdenvNoCC, fetchurl, makeWrapper, copyDesktopItems, makeDesktopItem, unzip, imagemagick, jre, mars-mips, testVersion }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "mars-mips";
@@ -38,6 +38,8 @@ stdenvNoCC.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.tests.version = testVersion { package = mars-mips; };
 
   meta = with lib; {
     description = "An IDE for programming in MIPS assembly language intended for educational-level use";

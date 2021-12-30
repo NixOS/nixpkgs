@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, ctags, perl, binutils, abi-dumper }:
+{ lib, stdenv, fetchFromGitHub, ctags, perl, binutils, abi-dumper, abi-compliance-checker, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "abi-compliance-checker";
@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ abi-dumper ];
 
   makeFlags = [ "prefix=$(out)" ];
+
+  passthru.tests.version = testVersion { package = abi-compliance-checker; };
 
   meta = with lib; {
     homepage = "https://lvc.github.io/abi-compliance-checker";

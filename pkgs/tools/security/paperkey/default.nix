@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv }:
+{ fetchurl, lib, stdenv, paperkey, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "paperkey";
@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  passthru.tests.version = testVersion { package = paperkey; };
 
   meta = with lib; {
     description = "Store OpenPGP or GnuPG on paper";

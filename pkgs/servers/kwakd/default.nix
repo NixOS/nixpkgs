@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, stdenv }:
+{ lib, fetchFromGitHub, stdenv, kwakd, testVersion }:
 
 stdenv.mkDerivation {
   pname = "kwakd";
@@ -18,6 +18,8 @@ stdenv.mkDerivation {
     substituteInPlace $serviceDir/kwakd.service \
       --replace "kwakd -p 80" "$out/bin/kwakd -p 80"
   '';
+
+  passthru.tests.version = testVersion { package = kwakd; };
 
   meta = with lib; {
     description = "A super small webserver that serves blank pages";

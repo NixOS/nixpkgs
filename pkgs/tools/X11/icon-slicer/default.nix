@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, gdk-pixbuf, popt }:
+{ lib, stdenv, fetchurl, pkg-config, gdk-pixbuf, popt, icon-slicer, testVersion }:
 stdenv.mkDerivation rec {
   pname = "icon-slicer";
   version = "0.3";
@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ popt pkg-config ];
   buildInputs = [ gdk-pixbuf ];
+
+  passthru.tests.version = testVersion { package = icon-slicer; };
 
   meta = with lib; {
     description = "Utility for generating icon themes and libXcursor cursor themes";

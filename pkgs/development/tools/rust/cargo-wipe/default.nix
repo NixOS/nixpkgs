@@ -2,6 +2,8 @@
 , rustPlatform
 , fetchFromGitHub
 , nix-update-script
+, cargo-wipe
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -22,6 +24,8 @@ rustPlatform.buildRustPackage rec {
       attrPath = pname;
     };
   };
+
+  passthru.tests.version = testVersion { package = cargo-wipe; };
 
   meta = with lib; {
     description = ''Cargo subcommand "wipe": recursively finds and optionally wipes all "target" or "node_modules" folders'';

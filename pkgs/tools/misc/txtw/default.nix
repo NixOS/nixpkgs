@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cairo }:
+{ lib, stdenv, fetchFromGitHub, cairo, txtw, testVersion }:
 
 stdenv.mkDerivation rec {
   version = "0.4";
@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ cairo ];
 
   prePatch = ''sed -i "s@/usr/local@$out@" Makefile'';
+
+  passthru.tests.version = testVersion { package = txtw; };
 
   meta = with lib; {
     description = "Compute text widths";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, librsvg, libxml2, SDL, SDL_image, SDL_mixer, SDL_net, SDL_ttf, t4kcommon }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, librsvg, libxml2, SDL, SDL_image, SDL_mixer, SDL_net, SDL_ttf, t4kcommon, tuxtype, testVersion }:
 
 stdenv.mkDerivation rec {
   version = "1.8.3";
@@ -32,6 +32,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ librsvg libxml2 SDL SDL_image SDL_mixer SDL_net SDL_ttf t4kcommon ];
 
   configureFlags = [ "--without-sdlpango" ];
+
+  passthru.tests.version = testVersion { package = tuxtype; };
 
   meta = with lib; {
     description = "An Educational Typing Tutor Game Starring Tux, the Linux Penguin";

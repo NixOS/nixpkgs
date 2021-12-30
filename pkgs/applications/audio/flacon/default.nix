@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitHub, cmake, libuchardet, pkg-config, shntool, flac
 , opusTools, vorbis-tools, mp3gain, lame, wavpack, vorbisgain, gtk3, qtbase
-, qttools, wrapQtAppsHook }:
+, qttools, wrapQtAppsHook, flacon, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "flacon";
@@ -32,6 +32,8 @@ stdenv.mkDerivation rec {
       --suffix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}" \
       --prefix PATH : "$bin_path";
   '';
+
+  passthru.tests.version = testVersion { package = flacon; };
 
   meta = with lib; {
     description =

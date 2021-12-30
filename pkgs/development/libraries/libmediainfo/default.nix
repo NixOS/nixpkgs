@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, libzen, zlib, fetchpatch }:
+{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, libzen, zlib, fetchpatch, libmediainfo, testVersion }:
 
 stdenv.mkDerivation rec {
   version = "21.09";
@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
   postInstall = ''
     install -vD -m 644 libmediainfo.pc "$out/lib/pkgconfig/libmediainfo.pc"
   '';
+
+  passthru.tests.version = testVersion { package = libmediainfo; };
 
   meta = with lib; {
     description = "Shared library for mediainfo";

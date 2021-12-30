@@ -8,6 +8,8 @@
 , pandoc
 , pkg-config
 , libfido2
+, gocryptfs
+, testVersion
 }:
 
 buildGoModule rec {
@@ -58,6 +60,8 @@ buildGoModule rec {
       --suffix PATH : ${lib.makeBinPath [ fuse ]}
     ln -s $out/bin/gocryptfs $out/bin/mount.fuse.gocryptfs
   '';
+
+  passthru.tests.version = testVersion { package = gocryptfs; };
 
   meta = with lib; {
     description = "Encrypted overlay filesystem written in Go";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, ip2location, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "ip2location";
@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   doCheck = true;
+
+  passthru.tests.version = testVersion { package = ip2location; };
 
   meta = with lib; {
     description = "Look up locations of host names and IP addresses";

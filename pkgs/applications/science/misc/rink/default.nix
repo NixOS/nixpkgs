@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, rustPlatform, openssl, pkg-config, ncurses
-, libiconv, Security }:
+, libiconv, Security, rink, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   version = "0.6.2";
@@ -20,6 +20,8 @@ rustPlatform.buildRustPackage rec {
 
   # Some tests fail and/or attempt to use internet servers.
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = rink; };
 
   meta = with lib; {
     description = "Unit-aware calculator";

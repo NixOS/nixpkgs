@@ -1,6 +1,6 @@
 { lib, fetchFromGitHub, rustPlatform, pkg-config, openssl, withRodio ? true
 , withALSA ? true, alsa-lib ? null, withPulseAudio ? false, libpulseaudio ? null
-, withPortAudio ? false, portaudio ? null }:
+, withPortAudio ? false, portaudio ? null, librespot, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "librespot";
@@ -28,6 +28,8 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optional withPortAudio "portaudio-backend";
 
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = librespot; };
 
   meta = with lib; {
     description = "Open Source Spotify client library and playback daemon";

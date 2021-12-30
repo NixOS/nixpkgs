@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, zlib }:
+{ lib, stdenv, fetchFromGitHub, cmake, zlib, diamond, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "diamond";
@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ zlib ];
+
+  passthru.tests.version = testVersion { package = diamond; };
 
   meta = with lib; {
     description = "Accelerated BLAST compatible local sequence aligner";

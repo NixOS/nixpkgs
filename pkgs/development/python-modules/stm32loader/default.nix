@@ -6,6 +6,8 @@
 , pyserial
 , pytest
 , mock
+, stm32loader
+, testVersion
 }:
 
 buildPythonPackage rec {
@@ -24,6 +26,8 @@ buildPythonPackage rec {
   checkPhase = ''
     pytest --strict tests/unit
   '';
+
+  passthru.tests.version = testVersion { package = stm32loader; };
 
   meta = with lib; {
     description = "Flash firmware to STM32 microcontrollers in Python";

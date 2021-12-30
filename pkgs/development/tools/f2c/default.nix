@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, f2c, testVersion }:
 
 stdenv.mkDerivation {
   pname = "f2c";
@@ -21,6 +21,8 @@ stdenv.mkDerivation {
 
     runHook postInstall
   '';
+
+  passthru.tests.version = testVersion { package = f2c; };
 
   meta = with lib; {
     description = "Convert Fortran 77 source code to C";

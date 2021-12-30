@@ -2,6 +2,8 @@
 , fetchFromGitLab
 , coq
 , cacert
+, ligo
+, testVersion
 }:
 
 coq.ocamlPackages.buildDunePackage rec {
@@ -50,6 +52,8 @@ coq.ocamlPackages.buildDunePackage rec {
   ];
 
   doCheck = true;
+
+  passthru.tests.version = testVersion { package = ligo; };
 
   meta = with lib; {
     homepage = "https://ligolang.org/";

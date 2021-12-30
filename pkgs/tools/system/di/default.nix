@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, di, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "di";
@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
   };
 
   makeFlags = [ "INSTALL_DIR=$(out)" ];
+
+  passthru.tests.version = testVersion { package = di; };
 
   meta = with lib; {
     description = "Disk information utility; displays everything 'df' does and more";

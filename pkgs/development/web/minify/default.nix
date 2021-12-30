@@ -1,4 +1,4 @@
-{ buildGoModule, fetchFromGitHub, lib }:
+{ buildGoModule, fetchFromGitHub, lib, minify, testVersion }:
 
 buildGoModule rec {
   pname = "minify";
@@ -16,6 +16,8 @@ buildGoModule rec {
   doCheck = false;
 
   ldflags = [ "-s" "-w" "-X main.Version=${version}" ];
+
+  passthru.tests.version = testVersion { package = minify; };
 
   meta = with lib; {
     description = "Minifiers for web formats";

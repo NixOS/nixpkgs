@@ -1,4 +1,4 @@
-{ lib, stdenvNoCC, fetchFromGitHub }:
+{ lib, stdenvNoCC, fetchFromGitHub, betterdiscordctl, testVersion }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "betterdiscordctl";
@@ -31,6 +31,8 @@ stdenvNoCC.mkDerivation rec {
   installCheckPhase = ''
     $out/bin/betterdiscordctl --version
   '';
+
+  passthru.tests.version = testVersion { package = betterdiscordctl; };
 
   meta = with lib; {
     homepage = "https://github.com/bb010g/betterdiscordctl";

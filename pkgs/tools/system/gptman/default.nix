@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, libiconv }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, libiconv, gptman, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "gptman";
@@ -14,6 +14,8 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "1cp8cyrd7ab8r2j28b69c2p3ysix5b9hpsqk07cmzgqwwml0qj12";
 
   buildInputs = lib.optional stdenv.isDarwin libiconv;
+
+  passthru.tests.version = testVersion { package = gptman; };
 
   meta = with lib; {
     description = "A CLI tool for Linux to copy a partition from one disk to another and more.";

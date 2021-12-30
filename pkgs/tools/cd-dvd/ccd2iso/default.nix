@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, ccd2iso, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "ccd2iso";
@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     url = "mirror://sourceforge/ccd2iso/ccd2iso-${version}.tar.gz";
     sha256 = "1z000zi7hpr2h9cabj6hzf3n6a6gd6glmm8nn36v4b8i4vzbhx7q";
   };
+
+  passthru.tests.version = testVersion { package = ccd2iso; };
 
   meta = with lib; {
     description = "CloneCD to ISO converter";

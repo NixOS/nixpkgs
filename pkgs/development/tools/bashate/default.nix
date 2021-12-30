@@ -8,6 +8,8 @@
 , pytestCheckHook
 , pythonOlder
 , setuptools
+, bashate
+, testVersion
 }:
 
 buildPythonApplication rec {
@@ -33,6 +35,8 @@ buildPythonApplication rec {
   ];
 
   pythonImportsCheck = [ "bashate" ];
+
+  passthru.tests.version = testVersion { package = bashate; };
 
   meta = with lib; {
     description = "Style enforcement for bash programs";

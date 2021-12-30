@@ -4,6 +4,8 @@
 , git
 , fetchFromGitHub
 , pytestCheckHook
+, git-revise
+, testVersion
 }:
 
 buildPythonPackage rec {
@@ -21,6 +23,8 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.6";
 
   checkInputs = [ git pytestCheckHook ];
+
+  passthru.tests.version = testVersion { package = git-revise; };
 
   meta = with lib; {
     description = "Efficiently update, split, and rearrange git commits";

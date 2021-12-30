@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake }:
+{ lib, stdenv, fetchFromGitHub, cmake, cmark-gfm, testVersion }:
 stdenv.mkDerivation rec {
   pname = "cmark-gfm";
   version = "0.29.0.gfm.2";
@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   # tests load the library dynamically which for unknown reason failed
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = cmark-gfm; };
 
   meta = with lib; {
     description = "GitHub's fork of cmark, a CommonMark parsing and rendering library and program in C";

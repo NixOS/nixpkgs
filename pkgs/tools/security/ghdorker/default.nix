@@ -1,5 +1,7 @@
 { lib
 , python3
+, ghdorker
+, testVersion
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -25,6 +27,8 @@ python3.pkgs.buildPythonApplication rec {
   pythonImportsCheck = [
     "GHDorker"
   ];
+
+  passthru.tests.version = testVersion { package = ghdorker; };
 
   meta = with lib; {
     description = "Extensible GitHub dorking tool";

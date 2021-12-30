@@ -6,6 +6,8 @@
 , libidn
 , pkg-config
 , Security
+, mpop
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -32,6 +34,8 @@ stdenv.mkDerivation rec {
   configureFlags = lib.optional stdenv.isDarwin [
     "--with-macosx-keyring"
   ];
+
+  passthru.tests.version = testVersion { package = mpop; };
 
   meta = with lib;{
     description = "POP3 mail retrieval agent";

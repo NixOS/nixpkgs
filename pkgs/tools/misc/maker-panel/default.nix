@@ -3,6 +3,8 @@
 , rustPlatform
 , go-md2man
 , installShellFiles
+, maker-panel
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -27,6 +29,8 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     installManPage maker-panel.5
   '';
+
+  passthru.tests.version = testVersion { package = maker-panel; };
 
   meta = with lib; {
     description = "Make mechanical PCBs by combining shapes together.";

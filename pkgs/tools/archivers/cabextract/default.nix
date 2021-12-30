@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, cabextract, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "cabextract";
@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
   configureFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "ac_cv_func_fnmatch_works=yes"
   ];
+
+  passthru.tests.version = testVersion { package = cabextract; };
 
   meta = with lib; {
     homepage = "https://www.cabextract.org.uk/";

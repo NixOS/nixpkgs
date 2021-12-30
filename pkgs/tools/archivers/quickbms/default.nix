@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchzip, bzip2, lzo, openssl, zlib }:
+{ stdenv, lib, fetchzip, bzip2, lzo, openssl, zlib, quickbms, testVersion }:
 
 stdenv.mkDerivation rec {
   version = "0.11.0";
@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ bzip2 lzo openssl zlib ];
 
   makeFlags = [ "PREFIX=$(out)" ];
+
+  passthru.tests.version = testVersion { package = quickbms; };
 
   meta = with lib; {
     description = "Universal script based file extractor and reimporter";

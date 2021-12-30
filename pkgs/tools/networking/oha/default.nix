@@ -1,4 +1,4 @@
-{ fetchFromGitHub, lib, pkg-config, rustPlatform, stdenv, openssl, Security }:
+{ fetchFromGitHub, lib, pkg-config, rustPlatform, stdenv, openssl, Security, oha, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "oha";
@@ -20,6 +20,8 @@ rustPlatform.buildRustPackage rec {
 
   # tests don't work inside the sandbox
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = oha; };
 
   meta = with lib; {
     description = "HTTP load generator inspired by rakyll/hey with tui animation";

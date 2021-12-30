@@ -2,6 +2,8 @@
 , stdenv
 , fetchFromGitHub
 , libusb1
+, uhubctl
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -18,6 +20,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ libusb1 ];
 
   installFlags = [ "prefix=${placeholder "out"}" ];
+
+  passthru.tests.version = testVersion { package = uhubctl; };
 
   meta = with lib; {
     homepage = "https://github.com/mvp/uhubctl";

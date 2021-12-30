@@ -1,6 +1,8 @@
 { lib
 , fetchFromGitHub
 , rustPlatform
+, choose
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -15,6 +17,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "sha256-55/B+LxdbekfaKKyng0lUCU3QnqL34M+QnLUxaPqkqI=";
+
+  passthru.tests.version = testVersion { package = choose; };
 
   meta = with lib; {
     description = "A human-friendly and fast alternative to cut and (sometimes) awk";

@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, ipfs-cluster, testVersion }:
 
 buildGoModule rec {
   pname = "ipfs-cluster";
@@ -12,6 +12,8 @@ buildGoModule rec {
     rev = "v${version}";
     sha256 = "sha256-GELCd12LhA4CBe9DRRBu4r+AwCksaRVIWcSAJScvnbk=";
   };
+
+  passthru.tests.version = testVersion { package = ipfs-cluster; };
 
   meta = with lib; {
     description = "Allocate, replicate, and track Pins across a cluster of IPFS daemons";

@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{ lib, rustPlatform, fetchFromGitHub, kondo, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "kondo";
@@ -12,6 +12,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "0sddsm0jys1bsj2bsr39lcyx8k2hzw17nlsv6aql0v82x8qbsiv4";
+
+  passthru.tests.version = testVersion { package = kondo; };
 
   meta = with lib; {
     description = "Save disk space by cleaning unneeded files from software projects";

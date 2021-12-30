@@ -1,4 +1,4 @@
-{ rustPlatform, fetchFromGitHub, lib }:
+{ rustPlatform, fetchFromGitHub, lib, xcp, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "xcp";
@@ -15,6 +15,8 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   cargoSha256 = "sha256-wFOXRQSOfmGB6Zmkqn7KoK+vyHeFKyGNx7Zf2zzPcE4=";
+
+  passthru.tests.version = testVersion { package = xcp; };
 
   meta = with lib; {
     description = "An extended cp(1)";

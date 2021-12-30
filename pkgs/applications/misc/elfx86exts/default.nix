@@ -1,6 +1,8 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+, elfx86exts
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -15,6 +17,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "0n3b9vdk5n32jmd7ks50d55z4dfahjincd2s1d8m9z17ip2qw2c4";
+
+  passthru.tests.version = testVersion { package = elfx86exts; };
 
   meta = with lib; {
     description = "Decode x86 binaries and print out which instruction set extensions they use.";

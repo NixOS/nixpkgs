@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, crystal, makeWrapper, openssl }:
+{ lib, fetchFromGitHub, crystal, makeWrapper, openssl, lucky-cli, testVersion }:
 
 crystal.buildCrystalPackage rec {
   pname = "lucky-cli";
@@ -31,6 +31,8 @@ crystal.buildCrystalPackage rec {
     wrapProgram $out/bin/lucky \
       --prefix PATH : ${lib.makeBinPath [ crystal ]}
   '';
+
+  passthru.tests.version = testVersion { package = lucky-cli; };
 
   meta = with lib; {
     description =

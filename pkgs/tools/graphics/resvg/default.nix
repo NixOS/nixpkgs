@@ -1,4 +1,4 @@
-{ stdenv, lib, rustPlatform, fetchFromGitHub, libiconv }:
+{ stdenv, lib, rustPlatform, fetchFromGitHub, libiconv, resvg, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "resvg";
@@ -16,6 +16,8 @@ rustPlatform.buildRustPackage rec {
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = resvg; };
 
   meta = with lib; {
     description = "An SVG rendering library";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, perl }:
+{ lib, stdenv, fetchurl, perl, coan, testVersion }:
 
 stdenv.mkDerivation rec {
   version = "6.0.1";
@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mv -v $out/share/man/man1/coan.1.{1,gz}
   '';
+
+  passthru.tests.version = testVersion { package = coan; };
 
   meta = with lib; {
     description = "The C preprocessor chainsaw";

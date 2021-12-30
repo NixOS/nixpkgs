@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchgit, fetchpatch, makeWrapper, coreutils }:
+{ stdenv, lib, fetchgit, fetchpatch, makeWrapper, coreutils, datefudge, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "datefudge";
@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
     chmod +x $out/lib/datefudge/datefudge.so
     wrapProgram $out/bin/datefudge --prefix PATH : ${coreutils}/bin
   '';
+
+  passthru.tests.version = testVersion { package = datefudge; };
 
   meta = with lib; {
     description = "Fake the system date";

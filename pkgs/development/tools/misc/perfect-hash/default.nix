@@ -1,4 +1,4 @@
-{ lib, python3, fetchFromGitHub }:
+{ lib, python3, fetchFromGitHub, perfect-hash, testVersion }:
 python3.pkgs.buildPythonApplication rec {
   pname = "perfect-hash";
   version = "0.4.1";
@@ -17,6 +17,8 @@ python3.pkgs.buildPythonApplication rec {
     cp README.md $out/share/doc/perfect-hash
     cp -r examples $out/share/doc/perfect-hash
   '';
+
+  passthru.tests.version = testVersion { package = perfect-hash; };
 
   meta = with lib; {
     description = "Minimal perfect hash function generator";

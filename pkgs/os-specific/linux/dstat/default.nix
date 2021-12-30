@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, fetchpatch, python3Packages }:
+{ lib, fetchFromGitHub, fetchpatch, python3Packages, dstat, testVersion }:
 
 python3Packages.buildPythonApplication rec {
   pname = "dstat";
@@ -30,6 +30,8 @@ python3Packages.buildPythonApplication rec {
     sed -i "s/import collections/import collections.abc/g" $out/share/dstat/dstat.py $out/bin/dstat
     sed -i "s/collections.Sequence/collections.abc.Sequence/g" "$out"/bin/dstat
   '';
+
+  passthru.tests.version = testVersion { package = dstat; };
 
   meta = with lib; {
     homepage = "http://dag.wieers.com/home-made/dstat/";

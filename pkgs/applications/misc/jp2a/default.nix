@@ -8,6 +8,8 @@
 , autoconf-archive
 , pkg-config
 , bash-completion
+, jp2a
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -32,6 +34,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ libjpeg libpng ncurses ];
 
   installFlags = [ "bashcompdir=\${out}/share/bash-completion/completions" ];
+
+  passthru.tests.version = testVersion { package = jp2a; };
 
   meta = with lib; {
     homepage = "https://csl.name/jp2a/";

@@ -4,6 +4,8 @@
 , perlPackages
 , makeWrapper
 , installShellFiles
+, nikto
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -53,6 +55,8 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/nikto \
       --prefix PERL5LIB : $PERL5LIB
   '';
+
+  passthru.tests.version = testVersion { package = nikto; };
 
   meta = with lib; {
     description = "Web server scanner";

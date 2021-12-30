@@ -7,6 +7,8 @@
 , libiconv
 , libresolv
 , Security
+, onefetch
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -23,6 +25,8 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-vNa1OF1x/MCTo9B4DTDZNWyHTsOl7Za3EgjnpsL/gWg=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ CoreFoundation libiconv libresolv Security ];
+
+  passthru.tests.version = testVersion { package = onefetch; };
 
   meta = with lib; {
     description = "Git repository summary on your terminal";

@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, fetchpatch, python3 }:
+{ lib, fetchFromGitHub, fetchpatch, python3, heisenbridge, testVersion }:
 
 let
   python = python3.override {
@@ -41,6 +41,8 @@ python.pkgs.buildPythonApplication rec {
   checkInputs = with python.pkgs; [
     pytestCheckHook
   ];
+
+  passthru.tests.version = testVersion { package = heisenbridge; };
 
   meta = with lib; {
     description = "A bouncer-style Matrix-IRC bridge.";

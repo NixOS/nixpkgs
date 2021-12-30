@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, gtk3, breeze-icons, pantheon, gnome-icon-theme, hicolor-icon-theme }:
+{ lib, stdenv, fetchFromGitHub, gtk3, breeze-icons, pantheon, gnome-icon-theme, hicolor-icon-theme, flat-remix-icon-theme, testVersion }:
 
 stdenv.mkDerivation rec  {
   pname = "flat-remix-icon-theme";
@@ -32,6 +32,8 @@ stdenv.mkDerivation rec  {
       gtk-update-icon-cache $theme
     done
   '';
+
+  passthru.tests.version = testVersion { package = flat-remix-icon-theme; };
 
   meta = with lib; {
     description = "Flat remix is a pretty simple icon theme inspired on material design";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, Security, fetchpatch }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, Security, fetchpatch, bandwhich, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "bandwhich";
@@ -25,6 +25,8 @@ rustPlatform.buildRustPackage rec {
       sha256 = "sha256-FyZ7jUXK7ebXq7q/lvRSe7YdPnpYWKZE3WrSKLMjJeA=";
     })
   ];
+
+  passthru.tests.version = testVersion { package = bandwhich; };
 
   meta = with lib; {
     description = "A CLI utility for displaying current network utilization";

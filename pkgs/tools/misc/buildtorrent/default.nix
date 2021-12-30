@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, buildtorrent, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "buildtorrent";
@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     url = "https://mathr.co.uk/blog/code/${pname}-${version}.tar.gz";
     sha256 = "sha256-6OJ2R72ziHOsVw1GwalompKwG7Z/WQidHN0IeE9wUtA=";
   };
+
+  passthru.tests.version = testVersion { package = buildtorrent; };
 
   meta = with lib; {
     description = "A simple commandline torrent creator";

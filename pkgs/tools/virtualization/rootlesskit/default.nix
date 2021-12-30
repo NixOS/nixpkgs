@@ -1,4 +1,4 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub, rootlesskit, testVersion }:
 
 buildGoPackage rec {
   pname = "rootlesskit";
@@ -11,6 +11,8 @@ buildGoPackage rec {
     rev = "v${version}";
     sha256 = "15k0503077ang9ywvmhpr1l7ax0v3wla0x8n6lqpmd71w0j2zm5r";
   };
+
+  passthru.tests.version = testVersion { package = rootlesskit; };
 
   meta = with lib; {
     homepage = "https://github.com/rootless-containers/rootlesskit";

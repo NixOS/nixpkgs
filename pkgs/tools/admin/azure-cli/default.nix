@@ -1,4 +1,4 @@
-{ stdenv, lib, python3, fetchFromGitHub, installShellFiles }:
+{ stdenv, lib, python3, fetchFromGitHub, installShellFiles, azure-cli, testVersion }:
 
 let
   version = "2.30.0";
@@ -261,6 +261,8 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
     "azure.storage.blob"
     "azure.storage.common"
   ];
+
+  passthru.tests.version = testVersion { package = azure-cli; };
 
   meta = with lib; {
     homepage = "https://github.com/Azure/azure-cli";

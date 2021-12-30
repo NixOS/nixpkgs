@@ -1,4 +1,4 @@
-{ lib, stdenv, buildGraalvmNativeImage, babashka, fetchurl, fetchFromGitHub, clojure, writeScript }:
+{ lib, stdenv, buildGraalvmNativeImage, babashka, fetchurl, fetchFromGitHub, clojure, writeScript, clojure-lsp, testVersion }:
 
 buildGraalvmNativeImage rec {
   pname = "clojure-lsp";
@@ -56,6 +56,8 @@ buildGraalvmNativeImage rec {
     sed -i "$nixFile" -re "s|\"$old_jar_hash\"|\"$new_jar_hash\"|"
     update-source-version clojure-lsp "$latest_version"
   '';
+
+  passthru.tests.version = testVersion { package = clojure-lsp; };
 
   meta = with lib; {
     description = "Language Server Protocol (LSP) for Clojure";

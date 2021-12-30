@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, pkg-config }:
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, pkg-config, zzuf, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "zzuf";
@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ autoconf automake libtool pkg-config ];
 
   preConfigure = "./bootstrap";
+
+  passthru.tests.version = testVersion { package = zzuf; };
 
   meta = with lib; {
     description = "Transparent application input fuzzer";

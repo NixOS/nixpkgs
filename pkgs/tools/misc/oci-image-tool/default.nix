@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildGoPackage }:
+{ lib, fetchFromGitHub, buildGoPackage, oci-image-tool, testVersion }:
 
 buildGoPackage rec {
   pname = "oci-image-tool";
@@ -13,6 +13,8 @@ buildGoPackage rec {
     rev = "v${version}";
     sha256 = "0c4n69smqlkf0r6khy9gbg5f810qh9g8jqsl9kibb0dyswizr14r";
   };
+
+  passthru.tests.version = testVersion { package = oci-image-tool; };
 
   meta = {
     description = "A collection of tools for working with the OCI image format specification";

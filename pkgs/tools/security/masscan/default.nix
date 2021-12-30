@@ -4,6 +4,8 @@
 , installShellFiles
 , makeWrapper
 , libpcap
+, masscan
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -48,6 +50,8 @@ stdenv.mkDerivation rec {
   installCheckPhase = ''
     $out/bin/masscan --selftest
   '';
+
+  passthru.tests.version = testVersion { package = masscan; };
 
   meta = with lib; {
     description = "Fast scan of the Internet";

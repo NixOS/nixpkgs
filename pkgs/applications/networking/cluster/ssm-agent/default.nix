@@ -9,6 +9,8 @@
 , util-linux
 , bashInteractive
 , overrideEtc ? true
+, ssm-agent
+, testVersion
 }:
 
 let
@@ -117,6 +119,8 @@ buildGoPackage rec {
   postFixup = ''
     wrapProgram $out/bin/amazon-ssm-agent --prefix PATH : ${bashInteractive}/bin
   '';
+
+  passthru.tests.version = testVersion { package = ssm-agent; };
 
   meta = with lib; {
     description = "Agent to enable remote management of your Amazon EC2 instance configuration";

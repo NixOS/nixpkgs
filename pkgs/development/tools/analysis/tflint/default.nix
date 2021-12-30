@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, tflint, testVersion }:
 
 buildGoModule rec {
   pname = "tflint";
@@ -16,6 +16,8 @@ buildGoModule rec {
   doCheck = false;
 
   subPackages = [ "." ];
+
+  passthru.tests.version = testVersion { package = tflint; };
 
   meta = with lib; {
     description = "Terraform linter focused on possible errors, best practices, and so on";

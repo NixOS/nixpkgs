@@ -1,6 +1,8 @@
 { lib
 , buildPythonApplication
 , fetchPypi
+, badchars
+, testVersion
 }:
 
 buildPythonApplication rec {
@@ -18,6 +20,8 @@ buildPythonApplication rec {
 
   # no tests are available and it can't be imported (it's only a script, not a module)
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = badchars; };
 
   meta = with lib; {
     description = "HEX badchar generator for different programming languages";

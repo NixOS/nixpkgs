@@ -7,6 +7,8 @@
 , stdenv
 , curl
 , Security
+, cargo-deny
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -34,6 +36,8 @@ rustPlatform.buildRustPackage rec {
 
   # tests require internet access
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = cargo-deny; };
 
   meta = with lib; {
     description = "Cargo plugin to generate list of all licenses for a crate";

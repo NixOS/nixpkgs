@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, m4 }:
+{ lib, stdenv, fetchurl, m4, gforth, testVersion }:
 
 let
   version = "0.7.3";
@@ -19,6 +19,8 @@ stdenv.mkDerivation {
     mkdir -p $out/share/emacs/site-lisp
     cp gforth.el $out/share/emacs/site-lisp/
   '';
+
+  passthru.tests.version = testVersion { package = gforth; };
 
   meta = {
     description = "The Forth implementation of the GNU project";

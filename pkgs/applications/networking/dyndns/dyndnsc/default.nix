@@ -1,4 +1,4 @@
-{ stdenv, lib, python3Packages }:
+{ stdenv, lib, python3Packages, dyndnsc, testVersion }:
 
 python3Packages.buildPythonApplication rec {
   pname = "dyndnsc";
@@ -39,6 +39,8 @@ python3Packages.buildPythonApplication rec {
   ];
   # Allow tests that bind or connect to localhost on macOS.
   __darwinAllowLocalNetworking = true;
+
+  passthru.tests.version = testVersion { package = dyndnsc; };
 
   meta = with lib; {
     description = "Dynamic DNS update client with support for multiple protocols";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, libpcap, zlib }:
+{ lib, stdenv, fetchurl, libpcap, zlib, darkstat, testVersion }:
 
 stdenv.mkDerivation rec {
   version = "3.0.719";
@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ libpcap zlib ];
 
   enableParallelBuilding = true;
+
+  passthru.tests.version = testVersion { package = darkstat; };
 
   meta = with lib; {
     description = "Network statistics web interface";

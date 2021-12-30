@@ -11,6 +11,8 @@
 , xclip
 , xdotool
 , makeWrapper
+, espanso
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -49,6 +51,8 @@ rustPlatform.buildRustPackage rec {
     wrapProgram $out/bin/espanso \
       --prefix PATH : ${lib.makeBinPath [ libnotify xclip ]}
   '';
+
+  passthru.tests.version = testVersion { package = espanso; };
 
   meta = with lib; {
     description = "Cross-platform Text Expander written in Rust";

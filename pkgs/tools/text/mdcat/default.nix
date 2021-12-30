@@ -8,6 +8,8 @@
 , Security
 , ansi2html
 , installShellFiles
+, mdcat
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -46,6 +48,8 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion --fish $releaseDir/build/mdcat-*/out/completions/mdcat.fish
     installShellCompletion --zsh $releaseDir/build/mdcat-*/out/completions/_mdcat
   '';
+
+  passthru.tests.version = testVersion { package = mdcat; };
 
   meta = with lib; {
     description = "cat for markdown";

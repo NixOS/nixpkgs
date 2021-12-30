@@ -8,6 +8,8 @@
 , openssl
 , Security
 , libiconv
+, movine
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -27,6 +29,8 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ postgresql sqlite ] ++ (
     if !stdenv.isDarwin then [ openssl ] else [ Security libiconv ]
   );
+
+  passthru.tests.version = testVersion { package = movine; };
 
   meta = with lib; {
     description = "A migration manager written in Rust, that attempts to be smart yet minimal";

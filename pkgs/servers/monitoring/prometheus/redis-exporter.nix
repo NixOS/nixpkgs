@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
+{ lib, buildGoModule, fetchFromGitHub, nixosTests, prometheus-redis-exporter, testVersion }:
 
 buildGoModule rec {
   pname = "redis_exporter";
@@ -23,6 +23,8 @@ buildGoModule rec {
   doCheck = false;
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) redis; };
+
+  passthru.tests.version = testVersion { package = prometheus-redis-exporter; };
 
   meta = with lib; {
     description = "Prometheus exporter for Redis metrics";

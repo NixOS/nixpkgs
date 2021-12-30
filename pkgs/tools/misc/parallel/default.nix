@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, perl, makeWrapper, procps, coreutils }:
+{ fetchurl, lib, stdenv, perl, makeWrapper, procps, coreutils, parallel, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "parallel";
@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
+
+  passthru.tests.version = testVersion { package = parallel; };
 
   meta = with lib; {
     description = "Shell tool for executing jobs in parallel";

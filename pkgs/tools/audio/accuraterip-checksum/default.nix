@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, libsndfile }:
+{ lib, stdenv, fetchFromGitHub, libsndfile, accuraterip-checksum, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "accuraterip-checksum";
@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.tests.version = testVersion { package = accuraterip-checksum; };
 
   meta = with lib; {
     description = "Program for computing the AccurateRip checksum of singletrack WAV files";

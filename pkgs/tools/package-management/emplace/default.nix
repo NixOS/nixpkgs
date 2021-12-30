@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{ lib, rustPlatform, fetchFromGitHub, emplace, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "emplace";
@@ -12,6 +12,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "sha256-UbbVjT5JQuVSCgbcelEVaAql4CUnCtO99zHp3Ei31Gs=";
+
+  passthru.tests.version = testVersion { package = emplace; };
 
   meta = with lib; {
     description = "Mirror installed software on multiple machines";

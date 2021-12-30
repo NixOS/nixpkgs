@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{ lib, rustPlatform, fetchFromGitHub, git-codeowners, testVersion }:
 rustPlatform.buildRustPackage rec {
   pname = "git-codeowners";
   version = "0.1.2";
@@ -11,6 +11,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "00wi64v2zn8rp8fjwbdwyvl3pva5sn9xclaawp2m222dqnlszb2d";
+
+  passthru.tests.version = testVersion { package = git-codeowners; };
 
   meta = with lib; {
     homepage = "https://github.com/softprops/git-codeowners";

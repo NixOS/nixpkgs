@@ -1,4 +1,4 @@
-{ rustPlatform, lib, fetchFromGitLab }:
+{ rustPlatform, lib, fetchFromGitLab, uwc, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "uwc";
@@ -14,6 +14,8 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "04pslga3ff766cpb73n6ivzmqfa0hm19gcla8iyv6p59ddsajh3q";
 
   doCheck = true;
+
+  passthru.tests.version = testVersion { package = uwc; };
 
   meta = with lib; {
     description = "Like wc, but unicode-aware, and with per-line mode";

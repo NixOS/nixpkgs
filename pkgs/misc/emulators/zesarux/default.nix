@@ -13,6 +13,8 @@
 , ncurses
 , openssl
 , which
+, zesarux
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -77,6 +79,8 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.tests.version = testVersion { package = zesarux; };
 
   meta = with lib; {
     homepage = "https://github.com/chernandezba/zesarux";

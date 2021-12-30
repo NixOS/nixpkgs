@@ -1,6 +1,8 @@
 { lib
 , fetchFromGitHub
 , rustPlatform
+, zktree
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -15,6 +17,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "18v7agm39acnblc703278cn8py5971hm8p5kxmznpw119fjp36s5";
+
+  passthru.tests.version = testVersion { package = zktree; };
 
   meta = with lib; {
     description = "A small tool to display Znodes in Zookeeper in tree structure.";

@@ -26,6 +26,8 @@
 , at-spi2-core
 , cups
 , libxshmfence
+, libcef
+, testVersion
 }:
 
 let
@@ -101,6 +103,8 @@ stdenv.mkDerivation rec {
     cp -r ../Resources/* $out/share/cef/
     cp -r ../include $out/
   '';
+
+  passthru.tests.version = testVersion { package = libcef; };
 
   meta = with lib; {
     description = "Simple framework for embedding Chromium-based browsers in other applications";

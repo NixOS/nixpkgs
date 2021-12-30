@@ -1,6 +1,8 @@
 { lib
 , fetchFromGitHub
 , python3
+, xcat
+, testVersion
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -34,6 +36,8 @@ python3.pkgs.buildPythonApplication rec {
   # Project has no tests
   doCheck = false;
   pythonImportsCheck = [ "xcat" ];
+
+  passthru.tests.version = testVersion { package = xcat; };
 
   meta = with lib; {
     description = "XPath injection tool";

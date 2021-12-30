@@ -9,6 +9,8 @@
 , gnome-icon-theme
 , numix-icon-theme-circle
 , hicolor-icon-theme
+, canta-theme
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -54,6 +56,8 @@ stdenv.mkDerivation rec {
     cp -a icons/Canta $out/share/icons
     gtk-update-icon-cache $out/share/icons/Canta
   '';
+
+  passthru.tests.version = testVersion { package = canta-theme; };
 
   meta = with lib; {
     description = "Flat Design theme for GTK based desktop environments";

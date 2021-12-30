@@ -1,6 +1,8 @@
 { lib
 , python3
 , fetchFromGitHub
+, mkdocs
+, testVersion
 }:
 
 with python3.pkgs;
@@ -49,6 +51,8 @@ buildPythonApplication rec {
   ];
 
   pythonImportsCheck = [ "mkdocs" ];
+
+  passthru.tests.version = testVersion { package = mkdocs; };
 
   meta = with lib; {
     description = "Project documentation with Markdown / static website generator";

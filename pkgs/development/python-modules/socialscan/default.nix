@@ -5,6 +5,8 @@
 , colorama
 , pythonOlder
 , tqdm
+, socialscan
+, testVersion
 }:
 
 buildPythonPackage rec {
@@ -33,6 +35,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "socialscan"
   ];
+
+  passthru.tests.version = testVersion { package = socialscan; };
 
   meta = with lib; {
     description = "Python library and CLI for accurately querying username and email usage on online platforms";

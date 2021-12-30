@@ -5,6 +5,8 @@
 , patchelf
 , pkg-config
 , libusb1
+, libusb-compat-0_1
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -32,6 +34,8 @@ stdenv.mkDerivation rec {
     find $out/lib -name \*.so\* -type f -exec \
       patchelf --set-rpath ${lib.makeLibraryPath buildInputs} {} \;
   '';
+
+  passthru.tests.version = testVersion { package = libusb-compat-0_1; };
 
   meta = with lib; {
     homepage = "https://libusb.info/";

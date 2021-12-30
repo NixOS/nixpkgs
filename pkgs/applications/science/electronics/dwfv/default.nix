@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchCrate }:
+{ lib, rustPlatform, fetchCrate, dwfv, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "dwfv";
@@ -10,6 +10,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "1z51yx3psdxdzmwny0rzlch5hjx2pssll73q79qij2bc7wgyjscy";
+
+  passthru.tests.version = testVersion { package = dwfv; };
 
   meta = with lib; {
     description = "A simple digital waveform viewer with vi-like key bindings";

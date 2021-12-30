@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, boost, cmake, cpp-hocon, curl, leatherman, libwhereami, libyamlcpp, openssl, ruby, util-linux }:
+{ lib, stdenv, fetchFromGitHub, boost, cmake, cpp-hocon, curl, leatherman, libwhereami, libyamlcpp, openssl, ruby, util-linux, facter, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "facter";
@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ boost cpp-hocon curl leatherman libwhereami libyamlcpp openssl ruby util-linux ];
+
+  passthru.tests.version = testVersion { package = facter; };
 
   meta = with lib; {
     homepage = "https://github.com/puppetlabs/facter";

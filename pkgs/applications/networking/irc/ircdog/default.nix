@@ -1,6 +1,8 @@
 { lib
 , buildGoPackage
 , fetchFromGitHub
+, ircdog
+, testVersion
 }:
 
 buildGoPackage rec {
@@ -16,6 +18,8 @@ buildGoPackage rec {
     sha256 = "1ppbznlkv7vajfbimxbyiq5y6pkfhm6ylhl408rwq1bawl28hpkl";
     fetchSubmodules = true;
   };
+
+  passthru.tests.version = testVersion { package = ircdog; };
 
   meta = with lib; {
     description = "ircdog is a simple wrapper over the raw IRC protocol that can respond to pings, and interprets formatting codes";

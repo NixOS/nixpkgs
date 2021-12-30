@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, openssl }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, openssl, httperf, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "httperf";
@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
     mkdir -vp $out/bin
     mv -v src/httperf $out/bin
   '';
+
+  passthru.tests.version = testVersion { package = httperf; };
 
   meta = with lib; {
     description = "The httperf HTTP load generator";

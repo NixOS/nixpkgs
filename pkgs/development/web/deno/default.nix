@@ -13,6 +13,8 @@
 , Foundation
 , QuartzCore
 , librusty_v8 ? callPackage ./librusty_v8.nix { }
+, deno
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -63,6 +65,8 @@ rustPlatform.buildRustPackage rec {
   '';
 
   passthru.updateScript = ./update/update.ts;
+
+  passthru.tests.version = testVersion { package = deno; };
 
   meta = with lib; {
     homepage = "https://deno.land/";

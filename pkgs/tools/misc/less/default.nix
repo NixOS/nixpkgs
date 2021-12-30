@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, ncurses, lessSecure ? false }:
+{ lib, stdenv, fetchurl, ncurses, lessSecure ? false, less, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "less";
@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
     ++ lib.optional lessSecure [ "--with-secure" ];
 
   buildInputs = [ ncurses ];
+
+  passthru.tests.version = testVersion { package = less; };
 
   meta = with lib; {
     homepage = "https://www.greenwoodsoftware.com/less/";

@@ -1,6 +1,8 @@
 { lib
 , fetchurl
 , python3
+, flawfinder
+, testVersion
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -16,6 +18,8 @@ python3.pkgs.buildPythonApplication rec {
   doCheck = false;
 
   pythonImportsCheck = [ "flawfinder" ];
+
+  passthru.tests.version = testVersion { package = flawfinder; };
 
   meta = with lib; {
     description = "Tool to examines C/C++ source code for security flaws";

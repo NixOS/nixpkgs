@@ -24,6 +24,8 @@
 , taglib
 , wrapQtAppsHook
 , zlib
+, kid3
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -69,6 +71,8 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     export DOCBOOKDIR="${docbook_xsl}/xml/xsl/docbook/"
   '';
+
+  passthru.tests.version = testVersion { package = kid3; };
 
   meta = with lib; {
     homepage = "https://kid3.kde.org/";

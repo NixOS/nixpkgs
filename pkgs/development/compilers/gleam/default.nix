@@ -1,4 +1,4 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, pkg-config, openssl, Security, libiconv }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, pkg-config, openssl, Security, libiconv, gleam, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "gleam";
@@ -17,6 +17,8 @@ rustPlatform.buildRustPackage rec {
     lib.optionals stdenv.isDarwin [ Security libiconv ];
 
   cargoSha256 = "sha256-Q5WyKQ4HFOIL1KAQ0QvAbZfy+WRAWf9HxSvSabSz4W4=";
+
+  passthru.tests.version = testVersion { package = gleam; };
 
   meta = with lib; {
     description = "A statically typed language for the Erlang VM";

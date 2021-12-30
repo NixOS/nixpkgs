@@ -5,6 +5,8 @@
 , pkg-config
 , openssl
 , Security
+, drill
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -29,6 +31,8 @@ rustPlatform.buildRustPackage rec {
   ] ++ lib.optionals stdenv.isDarwin [
     Security
   ];
+
+  passthru.tests.version = testVersion { package = drill; };
 
   meta = with lib; {
     description = "HTTP load testing application inspired by Ansible syntax";

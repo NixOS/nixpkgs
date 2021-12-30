@@ -1,4 +1,4 @@
-{ lib, fetchFromSourcehut, rustPlatform }:
+{ lib, fetchFromSourcehut, rustPlatform, swayr, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "swayr";
@@ -20,6 +20,8 @@ rustPlatform.buildRustPackage rec {
   preCheck = ''
     export HOME=$TMPDIR
   '';
+
+  passthru.tests.version = testVersion { package = swayr; };
 
   meta = with lib; {
     description = "A window switcher (and more) for sway";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchpatch, fetchurl, boost }:
+{ lib, stdenv, fetchpatch, fetchurl, boost, sourceHighlight, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "source-highlight";
@@ -48,6 +48,8 @@ stdenv.mkDerivation rec {
   # Upstream uses the same intermediate files in multiple tests, running
   # them in parallel by make will eventually break one or more tests.
   enableParallelChecking = false;
+
+  passthru.tests.version = testVersion { package = sourceHighlight; };
 
   meta = with lib; {
     description = "Source code renderer with syntax highlighting";

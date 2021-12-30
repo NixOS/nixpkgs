@@ -4,6 +4,8 @@
 , makeDesktopItem
 , qtsvg
 , wrapQtAppsHook
+, pyspread
+, testVersion
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -64,6 +66,8 @@ python3.pkgs.buildPythonApplication rec {
   preFixup = ''
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
+
+  passthru.tests.version = testVersion { package = pyspread; };
 
   meta = with lib; {
     homepage = "https://pyspread.gitlab.io/";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, dcfldd, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "dcfldd";
@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ ];
+
+  passthru.tests.version = testVersion { package = dcfldd; };
 
   meta = with lib; {
     description = "An enhanced version of GNU dd";

@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, python3Packages, help2man, installShellFiles }:
+{ lib, fetchFromGitHub, python3Packages, help2man, installShellFiles, crudini, testVersion }:
 
 python3Packages.buildPythonApplication rec {
   pname = "crudini";
@@ -39,6 +39,8 @@ python3Packages.buildPythonApplication rec {
 
     runHook postCheck
   '';
+
+  passthru.tests.version = testVersion { package = crudini; };
 
   meta = with lib; {
     description = "A utility for manipulating ini files ";

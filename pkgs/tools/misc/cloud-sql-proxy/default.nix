@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, cloud-sql-proxy, testVersion }:
 
 buildGoModule rec {
   pname = "cloud-sql-proxy";
@@ -16,6 +16,8 @@ buildGoModule rec {
   vendorSha256 = "sha256-913GJ/rPvDavQQMqDDTe4gBXziPPeQRPpUUG3DAz96g=";
 
   checkFlags = [ "-short" ];
+
+  passthru.tests.version = testVersion { package = cloud-sql-proxy; };
 
   meta = with lib; {
     description = "An authenticating proxy for Second Generation Google Cloud SQL databases";

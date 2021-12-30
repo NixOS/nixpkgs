@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, perl, wdiff }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, perl, wdiff, pkgdiff, testVersion }:
 
 stdenv.mkDerivation rec {
   version = "1.7.2";
@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
   postInstall = ''
     wrapProgram $out/bin/pkgdiff --prefix PATH : ${lib.makeBinPath [ wdiff ]}
   '';
+
+  passthru.tests.version = testVersion { package = pkgdiff; };
 
   meta = with lib; {
     description = "A tool for visualizing changes in Linux software packages";

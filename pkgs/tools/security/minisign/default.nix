@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, libsodium }:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, libsodium, minisign, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "minisign";
@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ libsodium ];
+
+  passthru.tests.version = testVersion { package = minisign; };
 
   meta = with lib; {
     description = "A simple tool for signing files and verifying signatures";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, qmake, qtbase, qttools, subversion, apr }:
+{ lib, stdenv, fetchFromGitHub, qmake, qtbase, qttools, subversion, apr, svn-all-fast-export, testVersion }:
 
 let
   version = "1.0.18";
@@ -26,6 +26,8 @@ stdenv.mkDerivation {
   NIX_LDFLAGS = "-lsvn_fs-1";
 
   dontWrapQtApps = true;
+
+  passthru.tests.version = testVersion { package = svn-all-fast-export; };
 
   meta = with lib; {
     homepage = "https://github.com/svn-all-fast-export/svn2git";

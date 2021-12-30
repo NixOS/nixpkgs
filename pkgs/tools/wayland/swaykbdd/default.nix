@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, json_c, pkg-config }:
+{ lib, stdenv, fetchFromGitHub, meson, ninja, json_c, pkg-config, swaykbdd, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "swaykbdd";
@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ meson ninja pkg-config ];
   buildInputs = [ json_c ];
+
+  passthru.tests.version = testVersion { package = swaykbdd; };
 
   meta = with lib; {
     description = "Per-window keyboard layout for Sway";

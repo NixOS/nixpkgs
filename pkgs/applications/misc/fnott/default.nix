@@ -15,6 +15,8 @@
 , wlroots
 , dbus
 , fcft
+, fnott
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -47,6 +49,8 @@ stdenv.mkDerivation rec {
     dbus
     fcft
   ];
+
+  passthru.tests.version = testVersion { package = fnott; };
 
   meta = with lib; {
     homepage = "https://codeberg.org/dnkl/fnott";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, glib, gettext, readline }:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, glib, gettext, readline, sdcv, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "sdcv";
@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
   '';
 
   NIX_CFLAGS_COMPILE = "-D__GNU_LIBRARY__";
+
+  passthru.tests.version = testVersion { package = sdcv; };
 
   meta = with lib; {
     homepage = "https://dushistov.github.io/sdcv/";

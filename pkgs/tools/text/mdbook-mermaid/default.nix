@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, CoreServices }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, CoreServices, mdbook-mermaid, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "mdbook-mermaid";
@@ -14,6 +14,8 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-GL5Z4KfRu0zQAzVCWRIhaYtG5FrDdQabsbyFX7SjZvg=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
+
+  passthru.tests.version = testVersion { package = mdbook-mermaid; };
 
   meta = with lib; {
     description = "A preprocessor for mdbook to add mermaid.js support";

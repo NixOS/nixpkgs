@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles, kn, testVersion }:
 
 buildGoModule rec {
   pname = "kn";
@@ -33,6 +33,8 @@ buildGoModule rec {
   installCheckPhase = ''
     $out/bin/kn version | grep ${version} > /dev/null
   '';
+
+  passthru.tests.version = testVersion { package = kn; };
 
   meta = with lib; {
     description = "The Knative client kn is your door to the Knative world. It allows you to create Knative resources interactively from the command line or from within scripts";

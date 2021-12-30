@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, perl, udev, sg3_utils }:
+{ lib, stdenv, fetchFromGitHub, perl, udev, sg3_utils, ledmon, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "ledmon";
@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
     "LEDCTL_INSTDIR=${placeholder "out"}/sbin"
     "LEDMON_INSTDIR=${placeholder "out"}/sbin"
   ];
+
+  passthru.tests.version = testVersion { package = ledmon; };
 
   meta = with lib; {
     homepage = "https://github.com/intel/ledmon";

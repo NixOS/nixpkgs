@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchgit, ant, jdk, makeWrapper, jre, coreutils, which }:
+{ lib, stdenv, fetchgit, ant, jdk, makeWrapper, jre, coreutils, which, projectlibre, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "projectlibre";
@@ -35,6 +35,8 @@ stdenv.mkDerivation rec {
     cp $resourcesPath/projectlibre.png $out/share/pixmaps
     cp -R $resourcesPath/samples/* $out/share/projectlibre/samples
   '';
+
+  passthru.tests.version = testVersion { package = projectlibre; };
 
   meta = with lib; {
     homepage = "https://www.projectlibre.com/";

@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, rustPlatform }:
+{ lib, fetchFromGitHub, rustPlatform, rshijack, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rshijack";
@@ -12,6 +12,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "sha256-biHDnLu7OiYpnwtmayk2m6QYvX51YUVJH2FGP4qo14Q=";
+
+  passthru.tests.version = testVersion { package = rshijack; };
 
   meta = with lib; {
     description = "TCP connection hijacker";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, libpng, libjpeg, giflib, perl, pkg-config }:
+{ lib, stdenv, fetchFromGitHub, libpng, libjpeg, giflib, perl, pkg-config, metapixel, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "metapixel";
@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
     cp metapixel-prepare $out/bin/metapixel-prepare
     cp metapixel-sizesort $out/bin/metapixel-sizesort
   '';
+
+  passthru.tests.version = testVersion { package = metapixel; };
 
   meta = with lib; {
     homepage = "https://github.com/schani/metapixel";

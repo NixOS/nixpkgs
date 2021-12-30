@@ -1,4 +1,4 @@
-{ fetchFromGitHub, lib, rustPlatform }:
+{ fetchFromGitHub, lib, rustPlatform, tv, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "tv";
@@ -12,6 +12,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "sha256-nI4n4KMPLaIF978b5VvW3mb02vKW+r39nllrhukJilI=";
+
+  passthru.tests.version = testVersion { package = tv; };
 
   meta = with lib; {
     description = "Format json into table view";

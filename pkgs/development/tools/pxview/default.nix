@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, perl, perlPackages, pxlib }:
+{ lib, stdenv, fetchurl, pkg-config, perl, perlPackages, pxlib, pxview, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "pxview";
@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
   # https://sourceforge.net/p/pxlib/bugs/12/
   LDFLAGS = "-lm";
   hardeningDisable = [ "format" ];
+
+  passthru.tests.version = testVersion { package = pxview; };
 
   meta = with lib; {
     description = "Program to convert Paradox databases";

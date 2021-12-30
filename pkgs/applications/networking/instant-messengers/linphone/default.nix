@@ -47,6 +47,8 @@
 
 , udev
 , zlib
+, linphone
+, testVersion
 }:
 
 mkDerivation rec {
@@ -175,6 +177,8 @@ mkDerivation rec {
     mkdir -p $out/share/linphone
     ln -s ${liblinphone}/share/linphone/* $out/share/linphone/
   '';
+
+  passthru.tests.version = testVersion { package = linphone; };
 
   meta = with lib; {
     homepage = "https://www.linphone.org/";

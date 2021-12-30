@@ -5,6 +5,8 @@
 , pkg-config
 , pcsclite
 , PCSC
+, age-plugin-yubikey
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -27,6 +29,8 @@ rustPlatform.buildRustPackage rec {
     ] else [
       pcsclite
     ];
+
+  passthru.tests.version = testVersion { package = age-plugin-yubikey; };
 
   meta = with lib; {
     description = "YubiKey plugin for age clients";

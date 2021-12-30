@@ -8,6 +8,8 @@
 , gnused
 , rofi
 , todo-txt-cli
+, todofi-sh
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -31,6 +33,8 @@ stdenv.mkDerivation rec {
     patchShebangs $out/bin
     wrapProgram $out/bin/todofi.sh --prefix PATH : "${lib.makeBinPath [ coreutils gawk gnugrep gnused rofi todo-txt-cli ]}"
   '';
+
+  passthru.tests.version = testVersion { package = todofi-sh; };
 
   meta = with lib; {
     description = "Todo-txt + Rofi = Todofi.sh";

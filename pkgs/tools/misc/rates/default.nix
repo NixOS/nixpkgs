@@ -3,6 +3,8 @@
 , fetchFromGitHub
 , rustPlatform
 , Security
+, rates
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,6 +21,8 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "041sskiq152iywwqd8p7aqsqzbj359zl7ilnp8ahzdqprz3slk1w";
 
   buildInputs = lib.optional stdenv.isDarwin Security;
+
+  passthru.tests.version = testVersion { package = rates; };
 
   meta = with lib; {
     description = "CLI tool that brings currency exchange rates right into your terminal";

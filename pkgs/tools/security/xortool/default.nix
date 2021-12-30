@@ -4,6 +4,8 @@
 , fetchFromGitHub
 , importlib-metadata
 , poetry-core
+, xortool
+, testVersion
 }:
 
 buildPythonApplication rec {
@@ -25,6 +27,8 @@ buildPythonApplication rec {
   # Project has no tests
   doCheck = false;
   pythonImportsCheck = [ "xortool" ];
+
+  passthru.tests.version = testVersion { package = xortool; };
 
   meta = with lib; {
     description = "Tool to analyze multi-byte XOR cipher";

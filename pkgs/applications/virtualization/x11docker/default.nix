@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, nx-libs, xorg, getopt, gnugrep, gawk, ps, mount, iproute2 }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, nx-libs, xorg, getopt, gnugrep, gawk, ps, mount, iproute2, x11docker, testVersion }:
 stdenv.mkDerivation rec {
   pname = "x11docker";
   version = "6.10.0";
@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
     wrapProgram "$out/bin/x11docker" \
       --prefix PATH : "${lib.makeBinPath [ getopt gnugrep gawk ps mount iproute2 nx-libs xorg.xdpyinfo xorg.xhost xorg.xinit ]}"
   '';
+
+  passthru.tests.version = testVersion { package = x11docker; };
 
   meta = {
     description = "Run graphical applications with Docker";

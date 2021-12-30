@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, faust2jaqt, faust2lv2 }:
+{ stdenv, lib, fetchFromGitHub, faust2jaqt, faust2lv2, faustStk, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "faustPhhysicalModeling";
@@ -29,6 +29,8 @@ stdenv.mkDerivation rec {
       cp $f $out/bin/
     done
   '';
+  passthru.tests.version = testVersion { package = faustStk; };
+
   meta = with lib; {
     description = "The physical modeling instruments included with faust, compiled as jack standalone and lv2 instruments";
     homepage = "https://ccrma.stanford.edu/~rmichon/faustSTK/";

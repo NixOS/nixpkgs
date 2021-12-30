@@ -5,6 +5,8 @@
 , pkg-config
 , clang
 , llvmPackages
+, fido2luks
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -26,6 +28,8 @@ rustPlatform.buildRustPackage rec {
   '';
 
   cargoSha256 = "sha256-8JFe3mivf2Ewu1nLMugeeK+9ZXAGPHaqCyKfWfwLOc8=";
+
+  passthru.tests.version = testVersion { package = fido2luks; };
 
   meta = with lib; {
     description = "Decrypt your LUKS partition using a FIDO2 compatible authenticator";

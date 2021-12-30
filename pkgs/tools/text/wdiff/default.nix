@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, texinfo, which }:
+{ lib, stdenv, fetchurl, texinfo, which, wdiff, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "wdiff";
@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
   checkInputs = [ which ];
 
   strictDeps = true;
+
+  passthru.tests.version = testVersion { package = wdiff; };
 
   meta = with lib; {
     homepage = "https://www.gnu.org/software/wdiff/";

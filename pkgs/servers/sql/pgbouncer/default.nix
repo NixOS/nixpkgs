@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, openssl, libevent, c-ares, pkg-config }:
+{ lib, stdenv, fetchurl, openssl, libevent, c-ares, pkg-config, pgbouncer, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "pgbouncer";
@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libevent openssl c-ares ];
   enableParallelBuilding = true;
+
+  passthru.tests.version = testVersion { package = pgbouncer; };
 
   meta = with lib; {
     homepage = "https://pgbouncer.github.io";

@@ -12,6 +12,8 @@
 , CoreServices
 , libiconv
 , xz
+, rustup
+, testVersion
 }:
 
 let
@@ -84,6 +86,8 @@ rustPlatform.buildRustPackage rec {
     $out/bin/rustup completions bash cargo > "$out/share/bash-completion/completions/cargo"
     $out/bin/rustup completions zsh cargo >  "$out/share/zsh/site-functions/_cargo"
   '';
+
+  passthru.tests.version = testVersion { package = rustup; };
 
   meta = with lib; {
     description = "The Rust toolchain installer";

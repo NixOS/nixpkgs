@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, CoreServices }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, CoreServices, cobalt, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cobalt";
@@ -14,6 +14,8 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-S2BVulU2bsgJpxKEt8u2ddNav8/1fd+s7wTVkSeHL4o=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
+
+  passthru.tests.version = testVersion { package = cobalt; };
 
   meta = with lib; {
     description = "Static site generator written in Rust";

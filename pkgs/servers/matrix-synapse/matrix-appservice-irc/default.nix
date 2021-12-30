@@ -1,4 +1,4 @@
-{ pkgs, nodePackages, makeWrapper, nixosTests, nodejs, stdenv, lib, fetchFromGitHub }:
+{ pkgs, nodePackages, makeWrapper, nixosTests, nodejs, stdenv, lib, fetchFromGitHub, matrix-appservice-irc, testVersion }:
 
 let
   ourNodePackages = import ./node-composition.nix {
@@ -28,6 +28,8 @@ ourNodePackages.package.override {
 
   passthru.tests.matrix-appservice-irc = nixosTests.matrix-appservice-irc;
   passthru.updateScript = ./update.sh;
+
+  passthru.tests.version = testVersion { package = matrix-appservice-irc; };
 
   meta = with lib; {
     description = "Node.js IRC bridge for Matrix";

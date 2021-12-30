@@ -1,4 +1,4 @@
-{ lib, python3Packages, fetchFromGitHub, git }:
+{ lib, python3Packages, fetchFromGitHub, git, git-delete-merged-branches, testVersion }:
 
 python3Packages.buildPythonApplication rec {
   pname = "git-delete-merged-branches";
@@ -18,6 +18,8 @@ python3Packages.buildPythonApplication rec {
 
   checkInputs = [ git ]
     ++ (with python3Packages; [ parameterized ]);
+
+  passthru.tests.version = testVersion { package = git-delete-merged-branches; };
 
   meta = with lib; {
     description = "Command-line tool to delete merged Git branches";

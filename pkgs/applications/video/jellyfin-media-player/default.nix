@@ -22,6 +22,8 @@
 , qtwebchannel
 , qtwebengine
 , qtx11extras
+, jellyfin-media-player
+, testVersion
 }:
 
 mkDerivation rec {
@@ -96,6 +98,8 @@ mkDerivation rec {
 
     ln -s "$out/Applications/Jellyfin Media Player.app/Contents/MacOS/Jellyfin Media Player" $out/bin/jellyfinmediaplayer
   '';
+
+  passthru.tests.version = testVersion { package = jellyfin-media-player; };
 
   meta = with lib; {
     homepage = "https://github.com/jellyfin/jellyfin-media-player";

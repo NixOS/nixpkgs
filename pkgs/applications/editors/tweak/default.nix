@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, ncurses }:
+{ lib, stdenv, fetchurl, ncurses, tweak, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "tweak";
@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses ];
   preBuild = "substituteInPlace Makefile --replace '$(DESTDIR)/usr/local' $out";
+
+  passthru.tests.version = testVersion { package = tweak; };
 
   meta = with lib; {
     description = "An efficient hex editor";

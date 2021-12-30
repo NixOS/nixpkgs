@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, go-md2man, installShellFiles }:
+{ lib, buildGoModule, fetchFromGitHub, go-md2man, installShellFiles, vgrep, testVersion }:
 
 buildGoModule rec {
   pname = "vgrep";
@@ -22,6 +22,8 @@ buildGoModule rec {
     make docs
     installManPage docs/*.[1-9]
   '';
+
+  passthru.tests.version = testVersion { package = vgrep; };
 
   meta = with lib; {
     description = "User-friendly pager for grep/git-grep/ripgrep";

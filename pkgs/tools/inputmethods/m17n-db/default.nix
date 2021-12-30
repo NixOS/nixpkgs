@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, gettext, gawk, bash }:
+{ lib, stdenv, fetchurl, gettext, gawk, bash, m17n_db, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "m17n-db";
@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
   configureFlags = lib.optional (stdenv ? glibc)
     "--with-charmaps=${stdenv.glibc.out}/share/i18n/charmaps"
   ;
+
+  passthru.tests.version = testVersion { package = m17n_db; };
 
   meta = {
     homepage = "https://www.nongnu.org/m17n/";

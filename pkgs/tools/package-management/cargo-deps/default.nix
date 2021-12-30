@@ -1,4 +1,4 @@
-{ lib, fetchCrate, rustPlatform }:
+{ lib, fetchCrate, rustPlatform, cargo-deps, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-deps";
@@ -10,6 +10,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "15pf4x2aw8sl65g63cz4yv9y78yc2wi25h9khpqx6i7gyd7dxbsc";
+
+  passthru.tests.version = testVersion { package = cargo-deps; };
 
   meta = with lib; {
     description = "Cargo subcommand for building dependency graphs of Rust projects";

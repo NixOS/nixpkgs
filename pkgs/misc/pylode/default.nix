@@ -1,6 +1,8 @@
 { lib
 , python3
 , fetchFromGitHub
+, pylode
+, testVersion
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -38,6 +40,8 @@ python3.pkgs.buildPythonApplication rec {
   pythonImportsCheck = [
     "pylode"
   ];
+
+  passthru.tests.version = testVersion { package = pylode; };
 
   meta = with lib; {
     description = "OWL ontology documentation tool using Python and templating, based on LODE";

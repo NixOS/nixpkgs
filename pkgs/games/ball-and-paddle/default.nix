@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, SDL, SDL_image, SDL_mixer, SDL_ttf, guile, gettext }:
+{ fetchurl, lib, stdenv, SDL, SDL_image, SDL_mixer, SDL_ttf, guile, gettext, ballAndPaddle, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "ballandpaddle";
@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
         -e "s|desktopdir *=.*$|desktopdir = $out/share/applications|g ;
             s|pixmapsdir *=.*$|pixmapsdir = $out/share/pixmaps|g"
   '';
+
+  passthru.tests.version = testVersion { package = ballAndPaddle; };
 
   meta = {
     description = "GNU Ball and Paddle, an old-fashioned ball and paddle game";

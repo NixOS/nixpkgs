@@ -19,6 +19,8 @@
 , gspell
 , libcanberra
 , nix-update-script
+, gnome-recipes
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -68,6 +70,8 @@ stdenv.mkDerivation rec {
       attrPath = pname;
     };
   };
+
+  passthru.tests.version = testVersion { package = gnome-recipes; };
 
   meta = with lib; {
     description = "Recipe management application for GNOME";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, libpng, bison, flex, ffmpeg, icu }:
+{ lib, stdenv, fetchFromGitHub, libpng, bison, flex, ffmpeg, icu, cfdg, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "cfdg";
@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/doc/${pname}-${version}
     cp *.txt $out/share/doc/${pname}-${version}
   '';
+
+  passthru.tests.version = testVersion { package = cfdg; };
 
   meta = with lib; {
     description = "Context-free design grammar - a tool for graphics generation";

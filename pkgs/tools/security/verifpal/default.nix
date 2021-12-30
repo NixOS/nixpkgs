@@ -2,6 +2,8 @@
 , fetchgit
 , buildGoModule
 , pigeon
+, verifpal
+, testVersion
 }:
 
 buildGoModule rec {
@@ -25,6 +27,8 @@ buildGoModule rec {
     substituteInPlace cmd/verifpal/main.go --replace "go:generate goversioninfo" "(disabled goversioninfo)"
     go generate verifpal.com/cmd/verifpal
   '';
+
+  passthru.tests.version = testVersion { package = verifpal; };
 
   meta = {
     homepage = "https://verifpal.com/";

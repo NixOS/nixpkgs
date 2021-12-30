@@ -12,6 +12,8 @@
 , tk
 , freetype
 , msgpack
+, pymol
+, testVersion
 }:
 let
   pname = "pymol";
@@ -57,6 +59,8 @@ python3Packages.buildPythonApplication rec {
     ln -s ../../lib/python/pymol/pymol_path/data/pymol/icons/icon2.svg "$out/share/icons/pymol.svg"
     cp -r "${desktopItem}/share/applications/" "$out/share/"
   '';
+
+  passthru.tests.version = testVersion { package = pymol; };
 
   meta = with lib; {
     inherit description;

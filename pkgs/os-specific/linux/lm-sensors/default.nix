@@ -8,6 +8,8 @@
 , perl
 , sensord ? false
 , rrdtool ? null
+, lm_sensors
+, testVersion
 }:
 
 assert sensord -> rrdtool != null;
@@ -38,6 +40,8 @@ stdenv.mkDerivation rec {
   installFlags = [
     "ETCDIR=${placeholder "out"}/etc"
   ];
+
+  passthru.tests.version = testVersion { package = lm_sensors; };
 
   meta = with lib; {
     homepage = "https://hwmon.wiki.kernel.org/lm_sensors";

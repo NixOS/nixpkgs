@@ -11,6 +11,8 @@
 , requests
 , responses
 , unidiff
+, detect-secrets
+, testVersion
 }:
 
 buildPythonPackage rec {
@@ -59,6 +61,8 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "detect_secrets" ];
+
+  passthru.tests.version = testVersion { package = detect-secrets; };
 
   meta = with lib; {
     description = "An enterprise friendly way of detecting and preventing secrets in code";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, traceroute, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "traceroute";
@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     sed -i 's@LIBS := \(.*\) -lm \(.*\)@LIBS := \1 \2@' Make.rules
   '';
+
+  passthru.tests.version = testVersion { package = traceroute; };
 
   meta = with lib; {
     homepage = "http://traceroute.sourceforge.net/";

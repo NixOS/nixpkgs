@@ -1,4 +1,4 @@
-{ alephone, fetchurl, unrar }:
+{ alephone, fetchurl, unrar, alephone-eternal, testVersion }:
 
 alephone.makeWrapper rec {
   pname = "marathon-eternal";
@@ -11,6 +11,8 @@ alephone.makeWrapper rec {
   };
 
   sourceRoot = "Eternal 1.2.0";
+
+  passthru.tests.version = testVersion { package = alephone-eternal; };
 
   meta = {
     description =

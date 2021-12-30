@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub, stdenv, openssl, perl, pkg-config, libiconv, Security }:
+{ lib, rustPlatform, fetchFromGitHub, stdenv, openssl, perl, pkg-config, libiconv, Security, convco, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "convco";
@@ -16,6 +16,8 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ openssl perl pkg-config ];
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
+
+  passthru.tests.version = testVersion { package = convco; };
 
   meta = with lib; {
     description = "A Conventional commit cli";

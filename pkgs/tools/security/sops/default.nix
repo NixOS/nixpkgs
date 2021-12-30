@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, sops, testVersion }:
 
 buildGoModule rec {
   pname = "sops";
@@ -14,6 +14,8 @@ buildGoModule rec {
   vendorSha256 = "1mnwgsbpi56ql0lbpn7dkaps96x9b1lmhlk5cd6d40da7xj616n7";
 
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = sops; };
 
   meta = with lib; {
     homepage = "https://github.com/mozilla/sops";

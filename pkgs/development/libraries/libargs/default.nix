@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake }:
+{ lib, stdenv, fetchFromGitHub, cmake, libargs, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "args";
@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
+
+  passthru.tests.version = testVersion { package = libargs; };
 
   meta = with lib; {
     description = "A simple header-only C++ argument parser library";

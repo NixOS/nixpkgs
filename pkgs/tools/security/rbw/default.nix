@@ -22,6 +22,8 @@
   # pass-import
 , withPass ? false
 , pass
+, rbw
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -82,6 +84,8 @@ rustPlatform.buildRustPackage rec {
   '' + lib.optionalString withPass ''
     cp bin/pass-import $out/bin
   '';
+
+  passthru.tests.version = testVersion { package = rbw; };
 
   meta = with lib; {
     description = "Unofficial command line client for Bitwarden";

@@ -14,6 +14,8 @@
 , poppler_gi
 , webkitgtk
 , librsvg
+, setzer
+, testVersion
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -59,6 +61,8 @@ python3.pkgs.buildPythonApplication rec {
   checkPhase = ''
     meson test --print-errorlogs
   '';
+
+  passthru.tests.version = testVersion { package = setzer; };
 
   meta = with lib; {
     description = "LaTeX editor written in Python with Gtk";

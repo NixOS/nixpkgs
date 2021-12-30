@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage, lxml, docopt, six, pytestCheckHook, mock }:
+{ lib, fetchPypi, buildPythonPackage, lxml, docopt, six, pytestCheckHook, mock, rnginline, testVersion }:
 
 buildPythonPackage rec {
   pname = "rnginline";
@@ -18,6 +18,8 @@ buildPythonPackage rec {
     "rnginline/test/test_cmdline.py"
     "rnginline/test/test_rnginline.py"
   ];
+
+  passthru.tests.version = testVersion { package = rnginline; };
 
   meta = {
     description = "A Python library and command-line tool for loading multi-file RELAX NG schemas from arbitary URLs, and flattening them into a single RELAX NG schema";

@@ -1,4 +1,4 @@
-{ lib, fetchFromGitLab, python3Packages }:
+{ lib, fetchFromGitLab, python3Packages, tuir, testVersion }:
 
 with python3Packages;
 buildPythonApplication rec {
@@ -22,6 +22,8 @@ buildPythonApplication rec {
   checkInputs = [ coverage coveralls docopt mock pylint pytest vcrpy ];
 
   propagatedBuildInputs = [ beautifulsoup4 decorator kitchen requests six ];
+
+  passthru.tests.version = testVersion { package = tuir; };
 
   meta = with lib; {
     description = "Browse Reddit from your Terminal (fork of rtv)";

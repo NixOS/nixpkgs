@@ -4,6 +4,8 @@
 , file
 , installShellFiles
 , asciidoctor
+, pistol
+, testVersion
 }:
 
 buildGoModule rec {
@@ -36,6 +38,8 @@ buildGoModule rec {
   '';
 
   ldflags = [ "-s" "-w" "-X main.Version=${version}" ];
+
+  passthru.tests.version = testVersion { package = pistol; };
 
   meta = with lib; {
     description = "General purpose file previewer designed for Ranger, Lf to make scope.sh redundant";

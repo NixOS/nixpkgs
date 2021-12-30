@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, rustPlatform, ncurses }:
+{ lib, fetchFromGitHub, rustPlatform, ncurses, hexdino, testVersion }:
 
 rustPlatform.buildRustPackage {
   pname = "hexdino";
@@ -14,6 +14,8 @@ rustPlatform.buildRustPackage {
   cargoSha256 = "1hpndmpk1zlfvb4r95m13yvnsbjkwgw4pb9ala2d5yzfp38225nm";
 
   buildInputs = [ ncurses ];
+
+  passthru.tests.version = testVersion { package = hexdino; };
 
   meta = with lib; {
     description = "A hex editor with vim like keybindings written in Rust";

@@ -34,6 +34,8 @@
 , Foundation
 , libiconv
 , OpenGL
+, alacritty
+, testVersion
 }:
 let
   rpathLibs = [
@@ -136,6 +138,8 @@ rustPlatform.buildRustPackage rec {
   '';
 
   dontPatchELF = true;
+
+  passthru.tests.version = testVersion { package = alacritty; };
 
   meta = with lib; {
     description = "A cross-platform, GPU-accelerated terminal emulator";

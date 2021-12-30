@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, gawk, gnused, libgcrypt, zlib, bzip2 }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, gawk, gnused, libgcrypt, zlib, bzip2, munge, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "munge";
@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--localstatedir=/var"
   ];
+
+  passthru.tests.version = testVersion { package = munge; };
 
   meta = with lib; {
     description = ''

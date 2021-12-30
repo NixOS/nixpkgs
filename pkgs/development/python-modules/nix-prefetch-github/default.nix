@@ -8,6 +8,8 @@
 , pytestCheckHook
 , pytest-cov
 , pythonOlder
+, nix-prefetch-github
+, testVersion
 }:
 
 buildPythonPackage rec {
@@ -33,6 +35,8 @@ buildPythonPackage rec {
 
   # ignore tests which are impure
   disabledTests = [ "network" "requires_nix_build" ];
+
+  passthru.tests.version = testVersion { package = nix-prefetch-github; };
 
   meta = with lib; {
     description = "Prefetch sources from github";

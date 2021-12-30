@@ -7,6 +7,8 @@
 , systemd
 , liburing
 , zstd
+, plocate
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -34,6 +36,8 @@ stdenv.mkDerivation rec {
     #   "-Dsystemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
     "-Dsharedstatedir=/var/lib"
   ];
+
+  passthru.tests.version = testVersion { package = plocate; };
 
   meta = with lib; {
     description = "Much faster locate";

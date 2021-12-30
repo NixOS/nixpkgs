@@ -1,5 +1,5 @@
 { lib, buildPythonApplication, fetchPypi, matplotlib, procps, pyqt5, python
-, pythonPackages, qt5, sphinx, xvfb-run }:
+, pythonPackages, qt5, sphinx, xvfb-run, flent, testVersion }:
 
 buildPythonApplication rec {
   pname = "flent";
@@ -28,6 +28,8 @@ buildPythonApplication rec {
   preFixup = ''
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
+
+  passthru.tests.version = testVersion { package = flent; };
 
   meta = with lib; {
     description = "The FLExible Network Tester";

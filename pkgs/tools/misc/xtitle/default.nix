@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, libxcb, xcbutil, xcbutilwm, git }:
+{ lib, stdenv, fetchFromGitHub, libxcb, xcbutil, xcbutilwm, git, xtitle, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "xtitle";
@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ libxcb git xcbutil xcbutilwm ];
+
+  passthru.tests.version = testVersion { package = xtitle; };
 
   meta = with lib; {
     description = "Outputs X window titles";

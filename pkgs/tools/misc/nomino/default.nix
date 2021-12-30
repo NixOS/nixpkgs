@@ -1,4 +1,4 @@
-{ fetchFromGitHub, lib, rustPlatform }:
+{ fetchFromGitHub, lib, rustPlatform, nomino, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "nomino";
@@ -12,6 +12,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "0501w3124vkipb1rnksjaizkghw3jf3nmmmmf3zprmcaim1b4szg";
+
+  passthru.tests.version = testVersion { package = nomino; };
 
   meta = with lib; {
     description = "Batch rename utility for developers";

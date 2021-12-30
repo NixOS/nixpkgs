@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, do-agent, testVersion }:
 
 buildGoModule rec {
   pname = "do-agent";
@@ -22,6 +22,8 @@ buildGoModule rec {
   postInstall = ''
     install -Dm444 -t $out/lib/systemd/system $src/packaging/etc/systemd/system/do-agent.service
   '';
+
+  passthru.tests.version = testVersion { package = do-agent; };
 
   meta = with lib; {
     description = "DigitalOcean droplet system metrics agent";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, libpcap, makeWrapper, perlPackages }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, libpcap, makeWrapper, perlPackages, arp-scan, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "arp-scan";
@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
       wrapProgram "$out/bin/$name" --set PERL5LIB "${perlPackages.makeFullPerlPath perlModules}"
     done;
   '';
+
+  passthru.tests.version = testVersion { package = arp-scan; };
 
   meta = with lib; {
     description = "ARP scanning and fingerprinting tool";

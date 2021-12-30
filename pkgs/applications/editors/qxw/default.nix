@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, gtk2, pcre }:
+{ lib, stdenv, fetchurl, pkg-config, gtk2, pcre, qxw, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "qxw";
@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
             s/cp -a/install -D/;
             s,/usr/games,/bin,' Makefile
   '';
+
+  passthru.tests.version = testVersion { package = qxw; };
 
   meta = with lib; {
     description = "A program to help create and publish crosswords";

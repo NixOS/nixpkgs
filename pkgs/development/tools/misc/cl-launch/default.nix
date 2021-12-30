@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, cl-launch, testVersion }:
 stdenv.mkDerivation rec {
   pname = "cl-launch";
   version = "4.1.4.1";
@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
   preBuild = ''
     sed -e 's/\t\t@/\t\t/g' -i Makefile
   '';
+
+  passthru.tests.version = testVersion { package = cl-launch; };
 
   meta = with lib; {
     description = "Common Lisp launcher script";

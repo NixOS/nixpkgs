@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, texinfo }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, texinfo, macchanger, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "macchanger";
@@ -37,6 +37,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook texinfo ];
 
   outputs = [ "out" "info" ];
+
+  passthru.tests.version = testVersion { package = macchanger; };
 
   meta = with lib; {
     description = "A utility for viewing/manipulating the MAC address of network interfaces";

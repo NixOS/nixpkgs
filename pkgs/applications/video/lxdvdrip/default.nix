@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, libdvdread }:
+{ lib, stdenv, fetchurl, libdvdread, lxdvdrip, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "lxdvdrip";
@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ libdvdread ];
+
+  passthru.tests.version = testVersion { package = lxdvdrip; };
 
   meta = {
     description = "Command line tool to make a copy from a video DVD for private use";

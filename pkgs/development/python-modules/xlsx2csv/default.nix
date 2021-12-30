@@ -1,6 +1,8 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, xlsx2csv
+, testVersion
 }:
 
 buildPythonPackage rec {
@@ -11,6 +13,8 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "c3aaf0c5febd9c5e48488026e7a58af37a67bf3da5e221cc57d371328b3b7dd3";
   };
+
+  passthru.tests.version = testVersion { package = xlsx2csv; };
 
   meta = with lib; {
     homepage = "https://github.com/dilshod/xlsx2csv";

@@ -6,6 +6,8 @@
 , pytestCheckHook
 , setuptools
 , pythonOlder
+, nwdiag
+, testVersion
 }:
 
 buildPythonPackage rec {
@@ -44,6 +46,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "nwdiag"
   ];
+
+  passthru.tests.version = testVersion { package = nwdiag; };
 
   meta = with lib; {
     description = "Generate network-diagram image from spec-text file (similar to Graphviz)";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, perl }:
+{ lib, stdenv, fetchurl, perl, nasm, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "nasm";
@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
     make golden
     make test
   '';
+
+  passthru.tests.version = testVersion { package = nasm; };
 
   meta = with lib; {
     homepage = "https://www.nasm.us/";

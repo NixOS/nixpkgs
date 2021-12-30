@@ -8,6 +8,8 @@
 , mnemonic
 , pyaes
 , typing-extensions
+, hwi
+, testVersion
 }:
 
 buildPythonPackage rec {
@@ -41,6 +43,8 @@ buildPythonPackage rec {
   doCheck = false;
 
   pythonImportsCheck = [ "hwilib" ];
+
+  passthru.tests.version = testVersion { package = hwi; };
 
   meta = {
     description = "Bitcoin Hardware Wallet Interface";

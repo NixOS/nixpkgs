@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, dcrd, testVersion }:
 
 buildGoModule rec {
   pname = "dcrd";
@@ -16,6 +16,8 @@ buildGoModule rec {
   doCheck = false;
 
   subPackages = [ "." "cmd/dcrctl" "cmd/promptsecret" ];
+
+  passthru.tests.version = testVersion { package = dcrd; };
 
   meta = {
     homepage = "https://decred.org";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, Security }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, Security, pastel, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "pastel";
@@ -14,6 +14,8 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "12zachbg78ajx1n1mqp53rd00dzcss5cqhsq0119lalzc8b5zkrn";
 
   buildInputs = lib.optional stdenv.isDarwin Security;
+
+  passthru.tests.version = testVersion { package = pastel; };
 
   meta = with lib; {
     description = "A command-line tool to generate, analyze, convert and manipulate colors";

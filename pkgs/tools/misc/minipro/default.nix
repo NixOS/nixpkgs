@@ -3,6 +3,8 @@
 , fetchFromGitLab
 , pkg-config
 , libusb1
+, minipro
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -25,6 +27,8 @@ stdenv.mkDerivation rec {
     "PKG_CONFIG=${pkg-config}/bin/${pkg-config.targetPrefix}pkg-config"
     "CC=${stdenv.cc.targetPrefix}cc"
   ];
+
+  passthru.tests.version = testVersion { package = minipro; };
 
   meta = with lib; {
     homepage = "https://gitlab.com/DavidGriffith/minipro";

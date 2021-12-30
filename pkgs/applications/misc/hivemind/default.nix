@@ -1,4 +1,4 @@
-{ lib, buildGoPackage, fetchFromGitHub, runtimeShell }:
+{ lib, buildGoPackage, fetchFromGitHub, runtimeShell, hivemind, testVersion }:
 
 buildGoPackage rec {
   pname = "hivemind";
@@ -15,6 +15,8 @@ buildGoPackage rec {
     rev = "v${version}";
     sha256 = "0afcnd03wsdphbbpha65rv5pnv0x6ldnnm6rnv1m6xkkywgnzx95";
   };
+
+  passthru.tests.version = testVersion { package = hivemind; };
 
   meta = with lib; {
     homepage = "https://github.com/DarthSim/";

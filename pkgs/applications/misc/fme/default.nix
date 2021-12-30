@@ -11,6 +11,8 @@
 , libglademm
 , libsigcxx
 , pkg-config
+, fme
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -42,6 +44,8 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     ./autogen.sh
   '';
+
+  passthru.tests.version = testVersion { package = fme; };
 
   meta = with lib; {
     homepage = "https://github.com/rdehouss/fme/";

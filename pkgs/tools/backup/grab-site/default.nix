@@ -1,4 +1,4 @@
-{ lib, python38, fetchFromGitHub }:
+{ lib, python38, fetchFromGitHub, grab-site, testVersion }:
 let
   python = python38.override {
     self = python;
@@ -46,6 +46,8 @@ with python.pkgs; buildPythonApplication rec {
     export PATH=$PATH:$out/bin
     bash ./tests/offline-tests
   '';
+
+  passthru.tests.version = testVersion { package = grab-site; };
 
   meta = with lib; {
     description = "Crawler for web archiving with WARC output";

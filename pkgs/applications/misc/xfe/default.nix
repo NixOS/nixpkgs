@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fox, pkg-config, gettext, xlibsWrapper, gcc, intltool, file, libpng }:
+{ lib, stdenv, fetchurl, fox, pkg-config, gettext, xlibsWrapper, gcc, intltool, file, libpng, xfe, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "xfe";
@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  passthru.tests.version = testVersion { package = xfe; };
 
   meta = with lib; {
     description = "MS-Explorer like file manager for X";

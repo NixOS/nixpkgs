@@ -5,6 +5,8 @@
 , openssl
 , stdenv
 , Security
+, eureka-ideas
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -23,6 +25,8 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security ];
+
+  passthru.tests.version = testVersion { package = eureka-ideas; };
 
   meta = with lib; {
     description = "CLI tool to input and store your ideas without leaving the terminal";

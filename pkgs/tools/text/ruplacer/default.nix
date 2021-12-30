@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, Security }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, Security, ruplacer, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "ruplacer";
@@ -14,6 +14,8 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-/37TBl/FnCtkiufusPuJIpirD2WVO882xSqrfWVMNW0=";
 
   buildInputs = (lib.optional stdenv.isDarwin Security);
+
+  passthru.tests.version = testVersion { package = ruplacer; };
 
   meta = with lib; {
     description = "Find and replace text in source files";

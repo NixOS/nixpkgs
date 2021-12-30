@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, libogg, pkg-config }:
+{ lib, stdenv, fetchurl, libogg, pkg-config, liboggz, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "liboggz";
@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ libogg ];
 
   nativeBuildInputs = [ pkg-config ];
+
+  passthru.tests.version = testVersion { package = liboggz; };
 
   meta = with lib; {
     homepage = "https://xiph.org/oggz/";

@@ -3,6 +3,8 @@
 , fetchFromGitHub
 , untokenize
 , python
+, unify
+, testVersion
 }:
 
 buildPythonPackage rec {
@@ -20,6 +22,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ untokenize ];
 
   checkPhase = "${python.interpreter} -m unittest discover";
+
+  passthru.tests.version = testVersion { package = unify; };
 
   meta = with lib; {
     description = "Modifies strings to all use the same quote where possible";

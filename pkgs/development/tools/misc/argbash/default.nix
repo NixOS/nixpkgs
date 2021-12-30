@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, runtimeShell, python3Packages, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, autoconf, runtimeShell, python3Packages, makeWrapper, argbash, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "argbash";
@@ -29,6 +29,8 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/argbash \
       --prefix PATH : '${autoconf}/bin'
   '';
+
+  passthru.tests.version = testVersion { package = argbash; };
 
   meta = with lib; {
     description = "Bash argument parsing code generator";

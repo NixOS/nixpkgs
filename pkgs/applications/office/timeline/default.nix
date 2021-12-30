@@ -4,6 +4,8 @@
 , gettext
 , makeDesktopItem
 , copyDesktopItems
+, timeline
+, testVersion
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -77,6 +79,8 @@ python3.pkgs.buildPythonApplication rec {
     ${python3.interpreter} tools/execute-specs.py
     runHook postCheck
   '';
+
+  passthru.tests.version = testVersion { package = timeline; };
 
   meta = with lib; {
     homepage = "http://thetimelineproj.sourceforge.net/";

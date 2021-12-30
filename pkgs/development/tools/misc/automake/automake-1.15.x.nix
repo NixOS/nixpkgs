@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, perl, autoconf }:
+{ lib, stdenv, fetchurl, perl, autoconf, automake115x, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "automake";
@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
   # Don't fixup "#! /bin/sh" in Libtool, otherwise it will use the
   # "fixed" path in generated files!
   dontPatchShebangs = true;
+
+  passthru.tests.version = testVersion { package = automake115x; };
 
   meta = {
     branch = "1.15";

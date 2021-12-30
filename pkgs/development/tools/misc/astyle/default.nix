@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, cmake }:
+{ stdenv, lib, fetchurl, cmake, astyle, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "astyle";
@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ cmake ];
+
+  passthru.tests.version = testVersion { package = astyle; };
 
   meta = with lib; {
     description = "Source code indenter, formatter, and beautifier for C, C++, C# and Java";

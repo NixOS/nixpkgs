@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchgit, fetchpatch, ocamlPackages, autoreconfHook }:
+{ lib, stdenv, fetchgit, fetchpatch, ocamlPackages, autoreconfHook, virt-top, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "virt-top";
@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
   buildInputs = with ocamlPackages; [ ocaml findlib ocaml_extlib ocaml_libvirt gettext-stub curses csv xml-light ];
 
   buildPhase = "make opt";
+
+  passthru.tests.version = testVersion { package = virt-top; };
 
   meta = with lib; {
     description = "A top-like utility for showing stats of virtualized domains";

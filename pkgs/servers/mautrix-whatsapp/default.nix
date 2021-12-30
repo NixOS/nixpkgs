@@ -1,4 +1,4 @@
-{ lib, buildGo117Module, fetchFromGitHub, olm }:
+{ lib, buildGo117Module, fetchFromGitHub, olm, mautrix-whatsapp, testVersion }:
 
 buildGo117Module rec {
   pname = "mautrix-whatsapp";
@@ -18,6 +18,8 @@ buildGo117Module rec {
   doCheck = false;
 
   runVend = true;
+
+  passthru.tests.version = testVersion { package = mautrix-whatsapp; };
 
   meta = with lib; {
     homepage = "https://github.com/tulir/mautrix-whatsapp";

@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, jre, glib, libXtst, gtk2, makeWrapper, unzip }:
+{ fetchurl, lib, stdenv, jre, glib, libXtst, gtk2, makeWrapper, unzip, davmail, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "davmail";
@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ glib gtk2 libXtst ]}
     runHook postInstall
   '';
+
+  passthru.tests.version = testVersion { package = davmail; };
 
   meta = with lib; {
     homepage = "http://davmail.sourceforge.net/";

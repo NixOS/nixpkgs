@@ -6,6 +6,8 @@
 , stdenv
 , Security
 , SystemConfiguration
+, sentry-cli
+, testVersion
 }:
 rustPlatform.buildRustPackage rec {
   pname = "sentry-cli";
@@ -26,6 +28,8 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config ];
 
   cargoSha256 = "0n9354mm97z3n001airipq8k58i7lg20p2m9yfx9y0zhsagyhmj8";
+
+  passthru.tests.version = testVersion { package = sentry-cli; };
 
   meta = with lib; {
     homepage = "https://docs.sentry.io/cli/";

@@ -57,6 +57,8 @@
 , xxHash
 , vamp-plugin-sdk
 , zstd
+, zrythm
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -161,6 +163,8 @@ stdenv.mkDerivation rec {
       --prefix GSETTINGS_SCHEMA_DIR : "$out/share/gsettings-schemas/${pname}-${version}/glib-2.0/schemas/"
     )
   '';
+
+  passthru.tests.version = testVersion { package = zrythm; };
 
   meta = with lib; {
     homepage = "https://www.zrythm.org";

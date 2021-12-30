@@ -4,6 +4,8 @@
 , fetchFromGitHub
 , fetchpatch
 , libiconv
+, gping
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -27,6 +29,8 @@ rustPlatform.buildRustPackage rec {
   ];
 
   buildInputs = lib.optional stdenv.isDarwin libiconv;
+
+  passthru.tests.version = testVersion { package = gping; };
 
   meta = with lib; {
     description = "Ping, but with a graph";

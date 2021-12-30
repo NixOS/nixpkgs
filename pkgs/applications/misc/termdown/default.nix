@@ -5,6 +5,8 @@
 , pyfiglet
 , python-dateutil
 , setuptools
+, termdown
+, testVersion
 }:
 
 buildPythonApplication rec {
@@ -19,6 +21,8 @@ buildPythonApplication rec {
   };
 
   propagatedBuildInputs = [ python-dateutil click pyfiglet setuptools ];
+
+  passthru.tests.version = testVersion { package = termdown; };
 
   meta = with lib; {
     description = "Starts a countdown to or from TIMESPEC";

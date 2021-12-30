@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchzip, bash, makeWrapper, coreutils, gnugrep, ncurses, doCheck ? true }:
+{ stdenv, lib, fetchzip, bash, makeWrapper, coreutils, gnugrep, ncurses, doCheck ? true, bats, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "bats";
@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
       "/usr/bin/env bash" "${bash}/bin/bash"
     bin/bats test
   '';
+
+  passthru.tests.version = testVersion { package = bats; };
 
   meta = with lib; {
     homepage = "https://github.com/bats-core/bats-core";

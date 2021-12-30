@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, ncurses, libvorbis, SDL }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, ncurses, libvorbis, SDL, mp3blaster, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "mp3blaster";
@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.cc.isClang [
     "-Wno-reserved-user-defined-literal"
   ]);
+
+  passthru.tests.version = testVersion { package = mp3blaster; };
 
   meta = with lib; {
     description = "An audio player for the text console";

@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, autogen }:
+{ fetchurl, lib, stdenv, autogen, complexity, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "complexity";
@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ autogen ];
 
   doCheck = true;
+
+  passthru.tests.version = testVersion { package = complexity; };
 
   meta = {
     description = "C code complexity measurement tool";

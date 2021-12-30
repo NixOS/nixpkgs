@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, gnugo, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "gnugo";
@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
   };
 
   hardeningDisable = [ "format" ];
+
+  passthru.tests.version = testVersion { package = gnugo; };
 
   meta = {
     description = "GNU Go - A computer go player";

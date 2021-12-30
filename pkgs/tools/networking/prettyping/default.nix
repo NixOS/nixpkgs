@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub }:
+{ stdenv, lib, fetchFromGitHub, prettyping, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "prettyping";
@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
   installPhase = ''
     install -Dt $out/bin prettyping
   '';
+
+  passthru.tests.version = testVersion { package = prettyping; };
 
   meta = with lib; {
     homepage = "https://github.com/denilsonsa/prettyping";

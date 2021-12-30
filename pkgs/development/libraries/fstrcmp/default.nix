@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip, libtool, ghostscript, groff, autoreconfHook }:
+{ lib, stdenv, fetchzip, libtool, ghostscript, groff, autoreconfHook, fstrcmp, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "fstrcmp";
@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ libtool ghostscript groff autoreconfHook ];
 
   enableParallelBuilding = true;
+
+  passthru.tests.version = testVersion { package = fstrcmp; };
 
   meta = with lib; {
     description = "Make fuzzy comparisons of strings and byte arrays";

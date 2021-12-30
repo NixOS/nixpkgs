@@ -8,6 +8,8 @@
 , ncurses
 , openssl
 , pcre
+, sngrep
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -54,6 +56,8 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     ./bootstrap.sh
   '';
+
+  passthru.tests.version = testVersion { package = sngrep; };
 
   meta = with lib; {
     description = "A tool for displaying SIP calls message flows from terminal";

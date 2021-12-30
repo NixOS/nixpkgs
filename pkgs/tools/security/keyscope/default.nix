@@ -8,6 +8,8 @@
 , Foundation
 , IOKit
 , Security
+, keyscope
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -38,6 +40,8 @@ rustPlatform.buildRustPackage rec {
   '';
 
   VERGEN_GIT_SEMVER = "v${version}";
+
+  passthru.tests.version = testVersion { package = keyscope; };
 
   meta = with lib; {
     description = "A key and secret workflow (validation, invalidation, etc.) tool";

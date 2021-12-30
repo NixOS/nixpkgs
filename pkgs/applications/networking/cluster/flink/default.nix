@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, makeWrapper, jre }:
+{ lib, stdenv, fetchurl, makeWrapper, jre, flink, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "flink";
@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
     env.log.dir: /tmp/flink-logs
     EOF
   '';
+
+  passthru.tests.version = testVersion { package = flink; };
 
   meta = with lib; {
     description = "A distributed stream processing framework";

@@ -1,4 +1,4 @@
-{ fetchFromGitHub, gtk3, lib, pkg-config, stdenv }:
+{ fetchFromGitHub, gtk3, lib, pkg-config, stdenv, iwgtk, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "iwgtk";
@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ gtk3 ];
 
   makeFlags = [ "prefix=$(out)" ];
+
+  passthru.tests.version = testVersion { package = iwgtk; };
 
   meta = with lib; {
     description = "Lightweight, graphical wifi management utility for Linux";

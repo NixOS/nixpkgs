@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, fixDarwinDylibNames }:
+{ lib, stdenv, fetchFromGitHub, cmake, fixDarwinDylibNames, qhull, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "qhull";
@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ]
     ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
+
+  passthru.tests.version = testVersion { package = qhull; };
 
   meta = with lib; {
     homepage = "http://www.qhull.org/";

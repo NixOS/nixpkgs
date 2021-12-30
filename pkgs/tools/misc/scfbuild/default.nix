@@ -1,4 +1,4 @@
-{ lib, buildPythonApplication, fetchFromGitHub, python, pyyaml, fonttools, fontforge }:
+{ lib, buildPythonApplication, fetchFromGitHub, python, pyyaml, fonttools, fontforge, scfbuild, testVersion }:
 
 buildPythonApplication {
   pname = "scfbuild";
@@ -24,6 +24,8 @@ buildPythonApplication {
 
     runHook postInstall
   '';
+
+  passthru.tests.version = testVersion { package = scfbuild; };
 
   meta = with lib; {
     description = "SVGinOT color font builder";

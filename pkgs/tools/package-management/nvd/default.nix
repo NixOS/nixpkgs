@@ -1,4 +1,4 @@
-{ fetchFromGitLab, installShellFiles, lib, python3, stdenv }:
+{ fetchFromGitLab, installShellFiles, lib, python3, stdenv, nvd, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "nvd";
@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
     installManPage src/nvd.1
     runHook postInstall
   '';
+
+  passthru.tests.version = testVersion { package = nvd; };
 
   meta = with lib; {
     description = "Nix/NixOS package version diff tool";

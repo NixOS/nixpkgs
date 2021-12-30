@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, rustPlatform }:
+{ lib, fetchFromGitHub, rustPlatform, rtss, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rtss";
@@ -12,6 +12,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "1b1xiaaxbw6y80pkzd594dikm372l1mmymf1wn2acmlz979nmas8";
+
+  passthru.tests.version = testVersion { package = rtss; };
 
   meta = with lib; {
     description = "Annotate output with relative durations between lines";

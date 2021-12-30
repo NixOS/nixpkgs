@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, installShellFiles, rustPlatform, ronn, pkg-config, libsodium }:
+{ lib, fetchFromGitHub, installShellFiles, rustPlatform, ronn, pkg-config, libsodium, bupstash, testVersion }:
 rustPlatform.buildRustPackage rec {
   pname = "bupstash";
   version = "0.10.3";
@@ -22,6 +22,8 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     installManPage doc/man/*.[1-9]
   '';
+
+  passthru.tests.version = testVersion { package = bupstash; };
 
   meta = with lib; {
     description = "Easy and efficient encrypted backups";

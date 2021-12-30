@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, rustPlatform }:
+{ lib, fetchFromGitHub, rustPlatform, jql, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "jql";
@@ -12,6 +12,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "sha256-snc5QSaxbnXo6FOceqYucjN+ECo+RonejXda9Fvgggc=";
+
+  passthru.tests.version = testVersion { package = jql; };
 
   meta = with lib; {
     description = "A JSON Query Language CLI tool built with Rust";

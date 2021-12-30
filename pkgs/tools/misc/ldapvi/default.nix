@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchgit, openldap, openssl, popt, glib, ncurses, readline, pkg-config, cyrus_sasl, autoconf, automake }:
+{ lib, stdenv, fetchgit, openldap, openssl, popt, glib, ncurses, readline, pkg-config, cyrus_sasl, autoconf, automake, ldapvi, testVersion }:
 
 stdenv.mkDerivation {
   pname = "ldapvi";
@@ -17,6 +17,8 @@ stdenv.mkDerivation {
     cd ldapvi
     ./autogen.sh
   '';
+
+  passthru.tests.version = testVersion { package = ldapvi; };
 
   meta = with lib; {
     description = "Interactive LDAP client for Unix terminals";

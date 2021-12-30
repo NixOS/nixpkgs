@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, pythonPackages, openssh, rsync }:
+{ lib, fetchFromGitHub, pythonPackages, openssh, rsync, pssh, testVersion }:
 
 pythonPackages.buildPythonApplication rec {
   pname = "pssh";
@@ -19,6 +19,8 @@ pythonPackages.buildPythonApplication rec {
         --replace "'rsync'" "'${rsync}/bin/rsync'"
     done
   '';
+
+  passthru.tests.version = testVersion { package = pssh; };
 
   meta = with lib; {
     description = "Parallel SSH Tools";

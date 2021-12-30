@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, frugal, testVersion }:
 
 buildGoModule rec {
   pname = "frugal";
@@ -14,6 +14,8 @@ buildGoModule rec {
   subPackages = [ "." ];
 
   vendorSha256 = "sha256-Z42t9dGlNbSwNy2N/ZoEejkbIEeUUk87mcYhkTnxhpc=";
+
+  passthru.tests.version = testVersion { package = frugal; };
 
   meta = with lib; {
     description = "Thrift improved";

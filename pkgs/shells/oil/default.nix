@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, withReadline ? true, readline }:
+{ stdenv, lib, fetchurl, withReadline ? true, readline, oil, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "oil";
@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
 
   # Stripping breaks the bundles by removing the zip file from the end.
   dontStrip = true;
+
+  passthru.tests.version = testVersion { package = oil; };
 
   meta = {
     description = "A new unix shell";

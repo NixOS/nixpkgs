@@ -7,6 +7,8 @@
 , zlib
 , libiconv
 , Security
+, miniserve
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -36,6 +38,8 @@ rustPlatform.buildRustPackage rec {
       --fish <($out/bin/miniserve --print-completions fish) \
       --zsh <($out/bin/miniserve --print-completions zsh)
   '';
+
+  passthru.tests.version = testVersion { package = miniserve; };
 
   meta = with lib; {
     description = "For when you really just want to serve some files over HTTP right now!";

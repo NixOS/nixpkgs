@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, wrapGAppsHook, alsa-lib, gtk3, libpulseaudio }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, wrapGAppsHook, alsa-lib, gtk3, libpulseaudio, praat, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "praat";
@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ alsa-lib gtk3 libpulseaudio ];
 
   enableParallelBuilding = true;
+
+  passthru.tests.version = testVersion { package = praat; };
 
   meta = with lib; {
     description = "Doing phonetics by computer";

@@ -2,6 +2,8 @@
 , stdenv
 , fetchurl
 , texinfo
+, marst
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -25,6 +27,8 @@ stdenv.mkDerivation rec {
     install -m644 doc/marst.info -Dt $out/share/info/
     install -m644 doc/marst.pdf -Dt $out/share/doc/${pname}/
   '';
+
+  passthru.tests.version = testVersion { package = marst; };
 
   meta = with lib; {
     homepage = "https://www.gnu.org/software/marst/";

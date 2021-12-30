@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, goreleaser, testVersion }:
 
 buildGoModule rec {
   pname = "goreleaser";
@@ -22,6 +22,8 @@ buildGoModule rec {
 
   # tests expect the source files to be a build repo
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = goreleaser; };
 
   meta = with lib; {
     description = "Deliver Go binaries as fast and easily as possible";

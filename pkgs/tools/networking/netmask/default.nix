@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, texinfo }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, texinfo, netmask, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "netmask";
@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ texinfo ];
   nativeBuildInputs = [ autoreconfHook ];
+
+  passthru.tests.version = testVersion { package = netmask; };
 
   meta = with lib; {
     homepage = "https://github.com/tlby/netmask";

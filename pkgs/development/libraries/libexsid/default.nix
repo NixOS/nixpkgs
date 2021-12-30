@@ -6,6 +6,8 @@
 , docSupport ? true
 , doxygen
 , libftdi1
+, libexsid
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -36,6 +38,8 @@ stdenv.mkDerivation rec {
     mkdir -p $doc/share/libexsid/doc
     cp -r docs/html $doc/share/libexsid/doc/
   '';
+
+  passthru.tests.version = testVersion { package = libexsid; };
 
   meta = with lib; {
     description = "Driver for exSID USB";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitLab, SDL, SDL_image, SDL_mixer, zlib }:
+{ lib, stdenv, fetchFromGitLab, SDL, SDL_image, SDL_mixer, zlib, meritous, testVersion }:
 
 stdenv.mkDerivation {
   pname = "meritous";
@@ -28,6 +28,8 @@ stdenv.mkDerivation {
   '';
 
   hardeningDisable = [ "stackprotector" "fortify" ];
+
+  passthru.tests.version = testVersion { package = meritous; };
 
   meta = with lib; {
     description = "Action-adventure dungeon crawl game";

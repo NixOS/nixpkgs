@@ -4,6 +4,8 @@
 , cmake
 , fetchpatch
 , staticOnly ? stdenv.hostPlatform.isStatic
+, brotli
+, testVersion
 }:
 
 # ?TODO: there's also python lib in there
@@ -54,6 +56,8 @@ stdenv.mkDerivation rec {
     cp ../docs/*.1 $out/share/man/man1/
     cp ../docs/*.3 $out/share/man/man3/
   '';
+
+  passthru.tests.version = testVersion { package = brotli; };
 
   meta = with lib; {
     homepage = "https://github.com/google/brotli";

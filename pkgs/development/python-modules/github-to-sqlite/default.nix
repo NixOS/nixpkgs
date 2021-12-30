@@ -7,6 +7,8 @@
 , requests
 , requests-mock
 , sqlite-utils
+, github-to-sqlite
+, testVersion
 }:
 
 buildPythonPackage rec {
@@ -35,6 +37,8 @@ buildPythonPackage rec {
   disabledTests = [
     "test_scrape_dependents"
   ];
+
+  passthru.tests.version = testVersion { package = github-to-sqlite; };
 
   meta = with lib; {
     description = "Save data from GitHub to a SQLite database";

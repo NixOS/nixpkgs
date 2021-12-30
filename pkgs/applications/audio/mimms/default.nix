@@ -1,4 +1,4 @@
-{ fetchurl, lib, python2Packages, libmms }:
+{ fetchurl, lib, python2Packages, libmms, mimms, testVersion }:
 
 python2Packages.buildPythonApplication rec {
   pname = "mimms";
@@ -13,6 +13,8 @@ python2Packages.buildPythonApplication rec {
     wrapProgram $out/bin/mimms \
       --prefix LD_LIBRARY_PATH : ${libmms}/lib
   '';
+
+  passthru.tests.version = testVersion { package = mimms; };
 
   meta = {
     homepage = "https://savannah.nongnu.org/projects/mimms/";

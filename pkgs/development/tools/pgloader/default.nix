@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, makeWrapper, sbcl_2_0_8, sqlite, freetds, libzip, curl, git, cacert, openssl }:
+{ lib, stdenv, fetchurl, makeWrapper, sbcl_2_0_8, sqlite, freetds, libzip, curl, git, cacert, openssl, pgloader, testVersion }:
 stdenv.mkDerivation rec {
   pname = "pgloader";
   version = "3.6.2";
@@ -27,6 +27,8 @@ stdenv.mkDerivation rec {
     install -Dm755 bin/pgloader "$out/bin/pgloader"
     wrapProgram $out/bin/pgloader --prefix LD_LIBRARY_PATH : "${LD_LIBRARY_PATH}"
   '';
+
+  passthru.tests.version = testVersion { package = pgloader; };
 
   meta = with lib; {
     homepage = "https://pgloader.io/";

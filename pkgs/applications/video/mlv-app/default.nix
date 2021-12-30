@@ -5,6 +5,8 @@
 , qtbase
 , qtmultimedia
 , stdenv
+, mlv-app
+, testVersion
 }:
 
 mkDerivation rec {
@@ -49,6 +51,8 @@ mkDerivation rec {
   nativeBuildInputs = [
     qmake
   ];
+
+  passthru.tests.version = testVersion { package = mlv-app; };
 
   meta = with lib; {
     description = "All in one MLV processing app that is pretty great";

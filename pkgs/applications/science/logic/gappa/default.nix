@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, gmp, mpfr, boost }:
+{ lib, stdenv, fetchurl, gmp, mpfr, boost, gappa, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "gappa";
@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
 
   buildPhase = "./remake";
   installPhase = "./remake install";
+
+  passthru.tests.version = testVersion { package = gappa; };
 
   meta = {
     homepage = "http://gappa.gforge.inria.fr/";

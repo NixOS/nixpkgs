@@ -1,4 +1,4 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, openssl, Security, libiconv, pkg-config, protobuf, which, buildPackages }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, openssl, Security, libiconv, pkg-config, protobuf, which, buildPackages, quill, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "quill";
@@ -35,6 +35,8 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config protobuf ];
   buildInputs = [ openssl ]
     ++ lib.optionals stdenv.isDarwin [ Security libiconv ];
+
+  passthru.tests.version = testVersion { package = quill; };
 
   meta = with lib; {
     homepage = "https://github.com/dfinity/quill";

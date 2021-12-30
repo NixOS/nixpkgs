@@ -1,4 +1,4 @@
-{ lib, buildPythonApplication, fetchFromGitHub, i3ipc, importlib-metadata }:
+{ lib, buildPythonApplication, fetchFromGitHub, i3ipc, importlib-metadata, autotiling, testVersion }:
 
 buildPythonApplication rec {
   pname = "autotiling";
@@ -13,6 +13,8 @@ buildPythonApplication rec {
 
   propagatedBuildInputs = [ i3ipc importlib-metadata ];
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = autotiling; };
 
   meta = with lib; {
     homepage = "https://github.com/nwg-piotr/autotiling";

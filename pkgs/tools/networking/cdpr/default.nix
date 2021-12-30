@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, libpcap }:
+{ lib, stdenv, fetchurl, libpcap, cdpr, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "cdpr";
@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
   installPhase = ''
     install -Dm755 cdpr $out/bin/cdpr
   '';
+
+  passthru.tests.version = testVersion { package = cdpr; };
 
   meta = with lib; {
     description = "Cisco Discovery Protocol Reporter";

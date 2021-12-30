@@ -7,6 +7,8 @@
 , nettools
 , openssh
 , procps
+, sshuttle
+, testVersion
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -35,6 +37,8 @@ python3Packages.buildPythonApplication rec {
     wrapProgram $out/bin/sshuttle \
       --prefix PATH : "${lib.makeBinPath ([ coreutils openssh procps ] ++ lib.optionals stdenv.isLinux [ iptables nettools ])}" \
   '';
+
+  passthru.tests.version = testVersion { package = sshuttle; };
 
   meta = with lib; {
     homepage = "https://github.com/sshuttle/sshuttle/";

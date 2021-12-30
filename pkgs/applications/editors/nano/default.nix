@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, fetchFromGitHub, ncurses, texinfo, writeScript
 , common-updater-scripts, git, nix, nixfmt, coreutils, gnused, nixosTests
-, gettext ? null, enableNls ? true, enableTiny ? false }:
+, gettext ? null, enableNls ? true, enableTiny ? false, nano, testVersion }:
 
 assert enableNls -> (gettext != null);
 
@@ -70,6 +70,8 @@ in stdenv.mkDerivation rec {
       fi
     '';
   };
+
+  passthru.tests.version = testVersion { package = nano; };
 
   meta = {
     homepage = "https://www.nano-editor.org/";

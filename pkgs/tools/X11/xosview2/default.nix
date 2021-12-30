@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, libX11 }:
+{ lib, stdenv, fetchurl, libX11, xosview2, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "xosview2";
@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   buildInputs = [ libX11 ];
+
+  passthru.tests.version = testVersion { package = xosview2; };
 
   meta = with lib; {
     description = "Lightweight program that gathers information from your operating system and displays it in graphical form";

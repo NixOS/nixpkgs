@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildPythonApplication }:
+{ lib, fetchFromGitHub, buildPythonApplication, grc, testVersion }:
 
 buildPythonApplication rec {
   pname = "grc";
@@ -25,6 +25,8 @@ buildPythonApplication rec {
     install -Dm444 -t $out/share/zsh/vendor-completions _grc
     runHook postInstall
   '';
+
+  passthru.tests.version = testVersion { package = grc; };
 
   meta = with lib; {
     homepage = "http://korpus.juls.savba.sk/~garabik/software/grc.html";

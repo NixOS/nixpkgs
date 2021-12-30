@@ -3,6 +3,8 @@
 , fetchFromGitHub
 , rustPlatform
 , Security
+, mqttui
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,6 +21,8 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-aAMDl8GZ+XqA4uBiDm2eHQsNFiqCrMBO66X0ruEjpJg=";
 
   buildInputs = lib.optional stdenv.isDarwin Security;
+
+  passthru.tests.version = testVersion { package = mqttui; };
 
   meta = with lib; {
     description = "Terminal client for MQTT";

@@ -11,6 +11,8 @@
 , wtype
 , xdotool
 , xsel
+, rofimoji
+, testVersion
 }:
 
 buildPythonApplication rec {
@@ -38,6 +40,8 @@ buildPythonApplication rec {
 
   # no tests executed
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = rofimoji; };
 
   meta = with lib; {
     description = "A simple emoji and character picker for rofi";

@@ -20,6 +20,8 @@
 , html2text
 , psycopg2
 , withPostgresql ? true
+, trytond
+, testVersion
 }:
 
 buildPythonApplication rec {
@@ -65,6 +67,8 @@ buildPythonApplication rec {
   preCheck = ''
     export HOME=$(mktemp -d)
   '';
+
+  passthru.tests.version = testVersion { package = trytond; };
 
   meta = with lib; {
     description = "The server of the Tryton application platform";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, ninja, makeWrapper, darwin }:
+{ lib, stdenv, fetchFromGitHub, ninja, makeWrapper, darwin, sumneko-lua-language-server, testVersion }:
 let
   target = if stdenv.isDarwin then "macOS" else "Linux";
 in
@@ -71,6 +71,8 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.tests.version = testVersion { package = sumneko-lua-language-server; };
 
   meta = with lib; {
     description = "Lua Language Server coded by Lua ";

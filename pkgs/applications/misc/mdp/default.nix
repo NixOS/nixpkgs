@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, ncurses }:
+{ lib, stdenv, fetchFromGitHub, ncurses, mdp, testVersion }:
 
 stdenv.mkDerivation rec {
   version = "1.0.15";
@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=$(out)" ];
 
   buildInputs = [ ncurses ];
+
+  passthru.tests.version = testVersion { package = mdp; };
 
   meta = with lib; {
     homepage = "https://github.com/visit1985/mdp";

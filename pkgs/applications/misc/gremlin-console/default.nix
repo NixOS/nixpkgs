@@ -1,4 +1,4 @@
-{ fetchzip, lib, stdenv, makeWrapper, openjdk }:
+{ fetchzip, lib, stdenv, makeWrapper, openjdk, gremlin-console, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "gremlin-console";
@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
       --set CLASSPATH "$out/opt/lib/"
     runHook postInstall
   '';
+
+  passthru.tests.version = testVersion { package = gremlin-console; };
 
   meta = with lib; {
     homepage = "https://tinkerpop.apache.org/";

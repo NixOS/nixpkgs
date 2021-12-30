@@ -1,4 +1,4 @@
-{ lib, fetchCrate, rustPlatform, pkg-config, libXrandr, libX11, python3 }:
+{ lib, fetchCrate, rustPlatform, pkg-config, libXrandr, libX11, python3, hacksaw, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "hacksaw";
@@ -14,6 +14,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "1rykc06lq3bkblsrj68rbil63yqdnvxkxlppq1w74wf0d6cwjc08";
+
+  passthru.tests.version = testVersion { package = hacksaw; };
 
   meta = with lib; {
     description = "Lightweight selection tool for usage in screenshot scripts etc";

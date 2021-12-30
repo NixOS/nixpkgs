@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, pkg-config, openssl, curl, Security, CoreServices, CoreFoundation, libiconv }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, pkg-config, openssl, curl, Security, CoreServices, CoreFoundation, libiconv, wrangler, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wrangler";
@@ -22,6 +22,8 @@ rustPlatform.buildRustPackage rec {
 
   # tries to use "/homeless-shelter" and fails
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = wrangler; };
 
   meta = with lib; {
     description = "A CLI tool designed for folks who are interested in using Cloudflare Workers";

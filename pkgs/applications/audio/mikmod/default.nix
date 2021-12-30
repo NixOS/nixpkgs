@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, libmikmod, ncurses }:
+{ lib, stdenv, fetchurl, libmikmod, ncurses, mikmod, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "mikmod";
@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ libmikmod ncurses ];
+
+  passthru.tests.version = testVersion { package = mikmod; };
 
   meta = {
     description = "Tracker music player for the terminal";

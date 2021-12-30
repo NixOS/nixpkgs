@@ -1,4 +1,4 @@
-{ rustPlatform, fetchFromGitHub, lib }:
+{ rustPlatform, fetchFromGitHub, lib, rpg-cli, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rpg-cli";
@@ -15,6 +15,8 @@ rustPlatform.buildRustPackage rec {
 
   # tests assume the authors macbook, and thus fail
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = rpg-cli; };
 
   meta = with lib; {
     description = "Your filesystem as a dungeon";

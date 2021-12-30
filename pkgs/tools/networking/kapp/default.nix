@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles, kapp, testVersion }:
 buildGoModule rec {
   pname = "kapp";
   version = "0.43.0";
@@ -26,6 +26,8 @@ buildGoModule rec {
       installShellCompletion kapp.$shell
     done
   '';
+
+  passthru.tests.version = testVersion { package = kapp; };
 
   meta = with lib; {
     description = "CLI tool that encourages Kubernetes users to manage bulk resources with an application abstraction for grouping";

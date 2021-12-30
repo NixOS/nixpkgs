@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, nfpm, testVersion }:
 
 buildGoModule rec {
   pname = "nfpm";
@@ -16,6 +16,8 @@ buildGoModule rec {
   doCheck = false;
 
   ldflags = [ "-s" "-w" "-X main.version=${version}" ];
+
+  passthru.tests.version = testVersion { package = nfpm; };
 
   meta = with lib; {
     description = "A simple deb and rpm packager written in Go";

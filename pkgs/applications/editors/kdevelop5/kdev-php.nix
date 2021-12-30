@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, cmake, extra-cmake-modules, threadweaver, ktexteditor, kdevelop-unwrapped, kdevelop-pg-qt }:
+{ stdenv, lib, fetchFromGitHub, cmake, extra-cmake-modules, threadweaver, ktexteditor, kdevelop-unwrapped, kdevelop-pg-qt, kdev-php, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "kdev-php";
@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ kdevelop-pg-qt threadweaver ktexteditor kdevelop-unwrapped ];
 
   dontWrapQtApps = true;
+
+  passthru.tests.version = testVersion { package = kdev-php; };
 
   meta = with lib; {
     maintainers = [ maintainers.aanderse ];

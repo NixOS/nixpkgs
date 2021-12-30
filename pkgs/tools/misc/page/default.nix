@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub, installShellFiles }:
+{ lib, rustPlatform, fetchFromGitHub, installShellFiles, page, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "page";
@@ -21,6 +21,8 @@ rustPlatform.buildRustPackage rec {
   '';
 
   cargoSha256 = "19ff5h8z34z15wdnd3mj8bwlqcixwbimys77gfjmzb3w1g9ivlks";
+
+  passthru.tests.version = testVersion { package = page; };
 
   meta = with lib; {
     description = "Use neovim as pager";

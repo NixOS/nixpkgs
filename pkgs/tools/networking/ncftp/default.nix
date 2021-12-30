@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, ncurses, coreutils }:
+{ lib, stdenv, fetchurl, ncurses, coreutils, ncftp, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "ncftp";
@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
     "--enable-ssp"
     "--mandir=$(out)/share/man/"
   ];
+
+  passthru.tests.version = testVersion { package = ncftp; };
 
   meta = with lib; {
     description = "Command line FTP (File Transfer Protocol) client";

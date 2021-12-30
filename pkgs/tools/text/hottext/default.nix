@@ -1,4 +1,4 @@
-{ lib, nimPackages, fetchurl, gentium, makeDesktopItem }:
+{ lib, nimPackages, fetchurl, gentium, makeDesktopItem, hottext, testVersion }:
 
 nimPackages.buildNimPackage rec {
   pname = "hottext";
@@ -36,6 +36,8 @@ nimPackages.buildNimPackage rec {
   postInstall = ''
     cp -r $desktopItem/* $out
   '';
+
+  passthru.tests.version = testVersion { package = hottext; };
 
   meta = with lib; {
     description = "Simple RSVP speed-reading utility";

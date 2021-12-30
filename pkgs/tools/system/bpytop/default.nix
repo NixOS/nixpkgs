@@ -3,6 +3,8 @@
 , python3Packages
 , fetchFromGitHub
 , makeWrapper
+, bpytop
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -38,6 +40,8 @@ stdenv.mkDerivation rec {
       --add-flags "$out/libexec/bpytop.py" \
       --prefix PYTHONPATH : "$PYTHONPATH"
   '';
+
+  passthru.tests.version = testVersion { package = bpytop; };
 
   meta = with lib; {
     description = "A resource monitor; python port of bashtop";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, libX11, libXrandr, glib, colord }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, libX11, libXrandr, glib, colord, xiccd, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "xiccd";
@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ libX11 libXrandr glib colord ];
+
+  passthru.tests.version = testVersion { package = xiccd; };
 
   meta = with lib; {
     description = "X color profile daemon";

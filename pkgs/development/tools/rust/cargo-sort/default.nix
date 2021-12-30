@@ -1,4 +1,4 @@
-{ fetchFromGitHub, lib, rustPlatform }:
+{ fetchFromGitHub, lib, rustPlatform, cargo-sort, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-sort";
@@ -12,6 +12,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "sha256-1iOZ1EEP4bObTweTN4Wjtb9Y9ysJQ/9xnNpprxKIaho=";
+
+  passthru.tests.version = testVersion { package = cargo-sort; };
 
   meta = with lib; {
     description = "A tool to check that your Cargo.toml dependencies are sorted alphabetically";

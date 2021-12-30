@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchCrate }:
+{ lib, rustPlatform, fetchCrate, cargo-license, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-license";
@@ -10,6 +10,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "sha256-DkINY3j0x0fUynMX8+pxNFwKI/YGqEv1M2a55FuKBGY=";
+
+  passthru.tests.version = testVersion { package = cargo-license; };
 
   meta = with lib; {
     description = "Cargo subcommand to see license of dependencies";

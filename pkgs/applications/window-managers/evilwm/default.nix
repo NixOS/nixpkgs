@@ -7,6 +7,8 @@
 , libXrender
 , xorgproto
 , patches ? [ ]
+, evilwm
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -34,6 +36,8 @@ stdenv.mkDerivation rec {
 
   # Allow users set their own list of patches
   inherit patches;
+
+  passthru.tests.version = testVersion { package = evilwm; };
 
   meta = with lib; {
     homepage = "http://www.6809.org.uk/evilwm/";

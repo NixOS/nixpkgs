@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, python3Packages, texinfo }:
+{ fetchurl, lib, stdenv, python3Packages, texinfo, rubber, testVersion }:
 
 python3Packages.buildPythonApplication rec {
   pname = "rubber";
@@ -23,6 +23,8 @@ python3Packages.buildPythonApplication rec {
   checkPhase = ''
     cd tests && ${stdenv.shell} run.sh
   '';
+
+  passthru.tests.version = testVersion { package = rubber; };
 
   meta = with lib; {
     description = "Wrapper for LaTeX and friends";

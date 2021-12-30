@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, perlPackages, beancount }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, perlPackages, beancount
+, ledger2beancount, testVersion }:
 
 with lib;
 
@@ -43,6 +44,8 @@ in stdenv.mkDerivation rec {
     wrapProgram "$out/bin/ledger2beancount" \
       --set PERL5LIB "${perlPackages.makeFullPerlPath perlDeps}"
   '';
+
+  passthru.tests.version = testVersion { package = ledger2beancount; };
 
   meta = {
     description = "Ledger to Beancount text-based converter";

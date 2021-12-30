@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, python3, which, ldc, zlib }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, python3, which, ldc, zlib, sambamba, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "sambamba";
@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cp bin/sambamba-${version} $out/bin/sambamba
   '';
+
+  passthru.tests.version = testVersion { package = sambamba; };
 
   meta = with lib; {
     description = "SAM/BAM processing tool";

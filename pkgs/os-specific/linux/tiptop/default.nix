@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, libxml2, ncurses, bison, flex }:
+{ lib, stdenv, fetchurl, fetchpatch, libxml2, ncurses, bison, flex, tiptop, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "tiptop";
@@ -32,6 +32,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ libxml2 ncurses ];
 
   NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2";
+
+  passthru.tests.version = testVersion { package = tiptop; };
 
   meta = with lib; {
     description = "Performance monitoring tool for Linux";

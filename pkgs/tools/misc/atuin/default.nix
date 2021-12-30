@@ -6,6 +6,8 @@
 , libiconv
 , Security
 , SystemConfiguration
+, atuin
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -36,6 +38,8 @@ rustPlatform.buildRustPackage rec {
       --fish atuin.fish \
       --zsh _atuin
   '';
+
+  passthru.tests.version = testVersion { package = atuin; };
 
   meta = with lib; {
     description = "Replacement for a shell history which records additional commands context with optional encrypted synchronization between machines";

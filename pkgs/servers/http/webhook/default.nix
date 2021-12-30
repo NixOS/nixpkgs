@@ -1,4 +1,4 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub, webhook, testVersion }:
 
 buildGoPackage rec {
   pname = "webhook";
@@ -13,6 +13,8 @@ buildGoPackage rec {
     rev = version;
     sha256 = "0n03xkgwpzans0cymmzb0iiks8mi2c76xxdak780dk0jbv6qgp5i";
   };
+
+  passthru.tests.version = testVersion { package = webhook; };
 
   meta = with lib; {
     homepage = "https://github.com/adnanh/webhook";

@@ -15,6 +15,8 @@
 , threadSupport ? true
 , useBoehmgc ? false
 , boehmgc
+, ecl
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -74,6 +76,8 @@ stdenv.mkDerivation rec {
       ]
     }"
   '';
+
+  passthru.tests.version = testVersion { package = ecl; };
 
   meta = with lib; {
     description = "Lisp implementation aiming to be small, fast and easy to embed";

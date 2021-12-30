@@ -1,4 +1,4 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub, elfinfo, testVersion }:
 
 buildGoPackage rec {
   pname = "elfinfo";
@@ -11,6 +11,8 @@ buildGoPackage rec {
     repo = "elfinfo";
     sha256 = "1n8bg0rcq9fqa6rdnk6x9ngvm59hcayblkpjv9j5myn2vmm6fv8m";
   };
+
+  passthru.tests.version = testVersion { package = elfinfo; };
 
   meta = with lib; {
     description = "Small utility for showing information about ELF files";

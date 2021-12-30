@@ -16,6 +16,8 @@
 , meson
 , ninja
 , wrapGAppsHook
+, srain
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -49,6 +51,8 @@ stdenv.mkDerivation rec {
     libsecret
     openssl
   ];
+
+  passthru.tests.version = testVersion { package = srain; };
 
   meta = with lib; {
     description = "Modern IRC client written in GTK";

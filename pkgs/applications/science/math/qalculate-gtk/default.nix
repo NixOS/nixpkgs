@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, intltool, autoreconfHook, pkg-config, libqalculate, gtk3, wrapGAppsHook }:
+{ lib, stdenv, fetchFromGitHub, intltool, autoreconfHook, pkg-config, libqalculate, gtk3, wrapGAppsHook, qalculate-gtk, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "qalculate-gtk";
@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ intltool pkg-config autoreconfHook wrapGAppsHook ];
   buildInputs = [ libqalculate gtk3 ];
   enableParallelBuilding = true;
+
+  passthru.tests.version = testVersion { package = qalculate-gtk; };
 
   meta = with lib; {
     description = "The ultimate desktop calculator";

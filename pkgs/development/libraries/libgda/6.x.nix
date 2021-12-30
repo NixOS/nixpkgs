@@ -23,6 +23,8 @@
 , libmysqlclient ? null
 , postgresSupport ? false
 , postgresql ? null
+, libgda6
+, testVersion
 }:
 
 assert mysqlSupport -> libmysqlclient != null;
@@ -77,6 +79,8 @@ stdenv.mkDerivation rec {
       versionPolicy = "odd-unstable";
     };
   };
+
+  passthru.tests.version = testVersion { package = libgda6; };
 
   meta = with lib; {
     description = "Database access library";

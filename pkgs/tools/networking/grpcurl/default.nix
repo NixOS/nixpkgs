@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, grpcurl, testVersion }:
 
 buildGoModule rec {
   pname = "grpcurl";
@@ -16,6 +16,8 @@ buildGoModule rec {
   vendorSha256 = "sha256-dHh8zHtU/r6AscInfNfVFd5psys2b6D1FS02lSoiGto=";
 
   ldflags = [ "-s" "-w" "-X main.version=${version}" ];
+
+  passthru.tests.version = testVersion { package = grpcurl; };
 
   meta = with lib; {
     description = "Like cURL, but for gRPC: Command-line tool for interacting with gRPC servers";

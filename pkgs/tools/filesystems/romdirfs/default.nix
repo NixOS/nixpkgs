@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, fuse }:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, fuse, romdirfs, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "romdirfs";
@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ fuse ];
+
+  passthru.tests.version = testVersion { package = romdirfs; };
 
   meta = with lib; {
     description = "FUSE for access Playstation 2 IOP IOPRP images and BIOS dumps";

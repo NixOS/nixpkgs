@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub, boost, nix, pkg-config }:
+{ lib, rustPlatform, fetchFromGitHub, boost, nix, pkg-config, nix-doc, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "nix-doc";
@@ -17,6 +17,8 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config ];
 
   cargoSha256 = "sha256-RxsH4bSAzBslK8MVGmCJxduf6MYOtQEKxt9QjgUCg1o=";
+
+  passthru.tests.version = testVersion { package = nix-doc; };
 
   meta = with lib; {
     description = "An interactive Nix documentation tool";

@@ -3,6 +3,8 @@
 , nixosTests
 , python3
 , python3Packages
+, calibre-web
+, testVersion
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -63,6 +65,8 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   passthru.tests.calibre-web = nixosTests.calibre-web;
+
+  passthru.tests.version = testVersion { package = calibre-web; };
 
   meta = with lib; {
     description = "Web app for browsing, reading and downloading eBooks stored in a Calibre database";

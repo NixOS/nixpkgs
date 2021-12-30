@@ -8,6 +8,8 @@
 , requests
 , setuptools
 , terminaltables
+, linode-cli
+, testVersion
 }:
 
 let
@@ -63,6 +65,8 @@ buildPythonApplication rec {
   '';
 
   passthru.updateScript = ./update.sh;
+
+  passthru.tests.version = testVersion { package = linode-cli; };
 
   meta = with lib; {
     description = "The Linode Command Line Interface";

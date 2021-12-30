@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, xtermcontrol, testVersion }:
 
 stdenv.mkDerivation rec {
   version = "3.8";
@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     url = "https://thrysoee.dk/xtermcontrol/xtermcontrol-${version}.tar.gz";
     sha256 = "sha256-Vh6GNiDkjNhaD9U/3fG2LpMLN39L3jRUgG/FQeG1z40=";
   };
+
+  passthru.tests.version = testVersion { package = xtermcontrol; };
 
   meta = {
     description = "Enables dynamic control of xterm properties";

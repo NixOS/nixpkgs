@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, ncurses }:
+{ stdenv, lib, fetchurl, ncurses, ht, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "ht";
@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
   patches = [ ./gcc7.patch ];
 
   NIX_CFLAGS_COMPILE = [ "-Wno-narrowing" ];
+
+  passthru.tests.version = testVersion { package = ht; };
 
   meta = with lib; {
     description = "File editor/viewer/analyzer for executables";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, jre, makeWrapper }:
+{ lib, stdenv, fetchurl, jre, makeWrapper, jnetmap, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "jnetmap";
@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
     makeWrapper "${jre}/bin/java" "$out/bin/jnetmap" \
         --add-flags "-jar \"$out/lib/jnetmap.jar\""
   '';
+
+  passthru.tests.version = testVersion { package = jnetmap; };
 
   meta = with lib; {
     description = "Graphical network monitoring and documentation tool";

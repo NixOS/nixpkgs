@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub }:
+{ stdenv, lib, fetchFromGitHub, disfetch, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "disfetch";
@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
     install -Dm755 -t $out/bin disfetch
     runHook postInstall
   '';
+
+  passthru.tests.version = testVersion { package = disfetch; };
 
   meta = with lib; {
     description = "Yet another *nix distro fetching program, but less complex";

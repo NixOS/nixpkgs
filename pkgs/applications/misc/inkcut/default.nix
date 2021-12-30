@@ -3,6 +3,8 @@
 , fetchFromGitHub
 , wrapQtAppsHook
 , cups
+, inkcut
+, testVersion
 }:
 
 with python3Packages;
@@ -63,6 +65,8 @@ buildPythonApplication rec {
     sed -i "s|cmd = \['inkcut'\]|cmd = \['$out/bin/inkcut'\]|" $out/share/inkscape/extensions/inkcut_cut.py
     sed -i "s|cmd = \['inkcut'\]|cmd = \['$out/bin/inkcut'\]|" $out/share/inkscape/extensions/inkcut_open.py
   '';
+
+  passthru.tests.version = testVersion { package = inkcut; };
 
   meta = with lib; {
     homepage = "https://www.codelv.com/projects/inkcut/";

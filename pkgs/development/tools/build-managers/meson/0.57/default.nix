@@ -4,6 +4,8 @@
 , substituteAll
 , fetchpatch
 , installShellFiles
+, meson
+, testVersion
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -83,6 +85,8 @@ python3.pkgs.buildPythonApplication rec {
     installShellCompletion --zsh data/shell-completions/zsh/_meson
     installShellCompletion --bash data/shell-completions/bash/meson
   '';
+
+  passthru.tests.version = testVersion { package = meson; };
 
   meta = with lib; {
     homepage = "https://mesonbuild.com";

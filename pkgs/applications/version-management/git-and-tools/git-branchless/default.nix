@@ -11,6 +11,8 @@
 , stdenv
 , Security
 , SystemConfiguration
+, git-branchless
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -47,6 +49,8 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_checkout_pty"
     "--skip=test_next_ambiguous_interactive"
   ];
+
+  passthru.tests.version = testVersion { package = git-branchless; };
 
   meta = with lib; {
     description = "A suite of tools to help you visualize, navigate, manipulate, and repair your commit history";

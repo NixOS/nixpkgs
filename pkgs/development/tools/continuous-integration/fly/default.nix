@@ -1,4 +1,4 @@
-{ buildGoModule, fetchFromGitHub, stdenv, lib }:
+{ buildGoModule, fetchFromGitHub, stdenv, lib, fly, testVersion }:
 
 buildGoModule rec {
   pname = "fly";
@@ -26,6 +26,8 @@ buildGoModule rec {
     $out/bin/fly completion --shell bash > $out/share/bash-completion/completions/fly
     $out/bin/fly completion --shell zsh > $out/share/zsh/site-functions/_fly
   '';
+
+  passthru.tests.version = testVersion { package = fly; };
 
   meta = with lib; {
     description = "A command line interface to Concourse CI";

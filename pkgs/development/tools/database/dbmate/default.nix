@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, dbmate, testVersion }:
 
 buildGoModule rec {
   pname = "dbmate";
@@ -14,6 +14,8 @@ buildGoModule rec {
   vendorSha256 = "sha256-Qe3fwyEf/NiGmUSha/zZHRBR1okw2vE97u7tybqiWNI=";
 
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = dbmate; };
 
   meta = with lib; {
     description = "Database migration tool";

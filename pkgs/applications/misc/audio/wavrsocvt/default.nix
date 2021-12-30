@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, wavrsocvt, testVersion }:
 
 stdenv.mkDerivation {
   pname = "wavrsocvt";
@@ -17,6 +17,8 @@ stdenv.mkDerivation {
     mkdir -p $out/bin
     cp wavrsocvt $out/bin
   '';
+
+  passthru.tests.version = testVersion { package = wavrsocvt; };
 
   meta = with lib; {
     description = "Convert .wav files into sound files for Lego NXT brick";

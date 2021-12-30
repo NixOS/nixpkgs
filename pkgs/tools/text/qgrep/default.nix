@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, CoreServices, CoreFoundation, fetchpatch }:
+{ lib, stdenv, fetchFromGitHub, CoreServices, CoreFoundation, fetchpatch, qgrep, testVersion }:
 
 stdenv.mkDerivation rec {
   version = "1.1";
@@ -29,6 +29,8 @@ stdenv.mkDerivation rec {
   installPhase = ''
     install -Dm755 qgrep $out/bin/qgrep
   '';
+
+  passthru.tests.version = testVersion { package = qgrep; };
 
   meta = with lib; {
     description = "Fast regular expression grep for source code with incremental index updates";

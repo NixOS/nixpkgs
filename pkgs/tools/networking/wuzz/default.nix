@@ -1,4 +1,4 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub, wuzz, testVersion }:
 
 buildGoPackage rec {
   pname = "wuzz";
@@ -15,6 +15,8 @@ buildGoPackage rec {
   };
 
   goDeps = ./deps.nix;
+
+  passthru.tests.version = testVersion { package = wuzz; };
 
   meta = with lib; {
     homepage = "https://github.com/asciimoo/wuzz";

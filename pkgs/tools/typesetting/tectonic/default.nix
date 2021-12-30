@@ -9,6 +9,8 @@
 , pkg-config
 , makeWrapper
 , biber
+, tectonic
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -43,6 +45,8 @@ rustPlatform.buildRustPackage rec {
   '';
 
   doCheck = true;
+
+  passthru.tests.version = testVersion { package = tectonic; };
 
   meta = with lib; {
     description = "Modernized, complete, self-contained TeX/LaTeX engine, powered by XeTeX and TeXLive";

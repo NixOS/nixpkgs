@@ -1,4 +1,4 @@
-{ lib, buildPythonApplication, fetchFromGitHub, python_magic, python-dateutil }:
+{ lib, buildPythonApplication, fetchFromGitHub, python_magic, python-dateutil, s3cmd, testVersion }:
 
 buildPythonApplication rec {
   pname = "s3cmd";
@@ -14,6 +14,8 @@ buildPythonApplication rec {
   propagatedBuildInputs = [ python_magic python-dateutil ];
 
   dontUseSetuptoolsCheck = true;
+
+  passthru.tests.version = testVersion { package = s3cmd; };
 
   meta = with lib; {
     homepage = "https://s3tools.org/s3cmd";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, ascii, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "ascii";
@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
   preInstall = ''
     mkdir -vp "$out/bin" "$out/share/man/man1"
   '';
+
+  passthru.tests.version = testVersion { package = ascii; };
 
   meta = with lib; {
     description = "Interactive ASCII name and synonym chart";

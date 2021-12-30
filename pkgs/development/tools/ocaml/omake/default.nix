@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, ocaml, ncurses }:
+{ lib, stdenv, fetchurl, ocaml, ncurses, omake, testVersion }:
 
 stdenv.mkDerivation rec {
 
@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ ocaml ncurses ];
+
+  passthru.tests.version = testVersion { package = omake; };
 
   meta = {
     description = "A build system designed for scalability and portability";

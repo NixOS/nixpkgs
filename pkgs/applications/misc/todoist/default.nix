@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, todoist, testVersion }:
 
 buildGoModule rec {
   pname = "todoist";
@@ -18,6 +18,8 @@ buildGoModule rec {
   postPatch = ''
     substituteInPlace main.go --replace '0.15.0' '${version}'
   '';
+
+  passthru.tests.version = testVersion { package = todoist; };
 
   meta = {
     homepage = "https://github.com/sachaos/todoist";

@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, vale, testVersion }:
 
 buildGoModule rec {
   pname = "vale";
@@ -22,6 +22,8 @@ buildGoModule rec {
   '';
 
   ldflags = [ "-s" "-w" "-X main.version=${version}" ];
+
+  passthru.tests.version = testVersion { package = vale; };
 
   meta = with lib; {
     homepage = "https://docs.errata.ai/vale/about";

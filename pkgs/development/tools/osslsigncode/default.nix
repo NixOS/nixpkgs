@@ -5,6 +5,8 @@
 , pkg-config
 , curl
 , openssl
+, osslsigncode
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -21,6 +23,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   buildInputs = [ curl openssl ];
+
+  passthru.tests.version = testVersion { package = osslsigncode; };
 
   meta = with lib; {
     homepage = "https://github.com/mtrojnar/osslsigncode";

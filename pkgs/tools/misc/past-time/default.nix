@@ -5,6 +5,8 @@
 , freezegun
 , pytestCheckHook
 , tqdm
+, past-time
+, testVersion
 }:
 
 buildPythonApplication rec {
@@ -29,6 +31,8 @@ buildPythonApplication rec {
   ];
 
   pythonImportsCheck = [ "past_time" ];
+
+  passthru.tests.version = testVersion { package = past-time; };
 
   meta = with lib; {
     description = "Tool to visualize the progress of the year based on the past days";

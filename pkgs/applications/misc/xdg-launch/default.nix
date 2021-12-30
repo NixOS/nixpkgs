@@ -9,6 +9,8 @@
 , pkg-config
 , glib
 , xorg
+, xdg-launch
+, testVersion
 }:
 stdenv.mkDerivation rec {
   pname = "xdg-launch";
@@ -46,6 +48,8 @@ stdenv.mkDerivation rec {
     perl # pod2man
     pkg-config
   ];
+
+  passthru.tests.version = testVersion { package = xdg-launch; };
 
   meta = with lib; {
     homepage = "https://github.com/bbidulock/xdg-launch";

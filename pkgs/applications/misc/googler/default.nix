@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, python, installShellFiles }:
+{ lib, stdenv, fetchFromGitHub, python, installShellFiles, googler, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "googler";
@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
     installShellCompletion --fish auto-completion/fish/googler.fish
     installShellCompletion --zsh auto-completion/zsh/_googler
   '';
+
+  passthru.tests.version = testVersion { package = googler; };
 
   meta = with lib; {
     homepage = "https://github.com/jarun/googler";

@@ -1,4 +1,4 @@
-{ fetchCrate, lib, rustPlatform }:
+{ fetchCrate, lib, rustPlatform, textplots, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "textplots";
@@ -10,6 +10,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "19xb1ann3bqx26nhjjvcwqdsvzg7lflg9fdrnlx05ndd2ip44flz";
+
+  passthru.tests.version = testVersion { package = textplots; };
 
   meta = with lib; {
     description = "Terminal plotting written in Rust";

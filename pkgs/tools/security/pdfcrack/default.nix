@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl }:
+{ stdenv, lib, fetchurl, pdfcrack, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "pdfcrack";
@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
   installPhase = ''
     install -Dt $out/bin pdfcrack
   '';
+
+  passthru.tests.version = testVersion { package = pdfcrack; };
 
   meta = with lib; {
     homepage = "http://pdfcrack.sourceforge.net/";

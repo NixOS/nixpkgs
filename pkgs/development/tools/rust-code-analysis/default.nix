@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{ lib, rustPlatform, fetchFromGitHub, rust-code-analysis, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rust-code-analysis";
@@ -14,6 +14,8 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-++d/czDJVGzY8GvBpBKpP0Rum4J4RpT95S81IRUWY2M=";
 
   cargoBuildFlags = [ "--workspace" ];
+
+  passthru.tests.version = testVersion { package = rust-code-analysis; };
 
   meta = with lib; {
     description = "Analyze and collect metrics on source code";

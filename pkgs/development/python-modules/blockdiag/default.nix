@@ -12,6 +12,8 @@
 , setuptools
 , webcolors
 , python
+, blockdiag
+, testVersion
 }:
 
 buildPythonPackage rec {
@@ -55,6 +57,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "blockdiag"
   ];
+
+  passthru.tests.version = testVersion { package = blockdiag; };
 
   meta = with lib; {
     description = "Generate block-diagram image from spec-text file (similar to Graphviz)";

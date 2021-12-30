@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, ncurses }:
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, ncurses, imgcat, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "imgcat";
@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
   };
 
   NIX_CFLAGS_COMPILE = "-Wno-error";
+
+  passthru.tests.version = testVersion { package = imgcat; };
 
   meta = with lib; {
     description = "It's like cat, but for images";

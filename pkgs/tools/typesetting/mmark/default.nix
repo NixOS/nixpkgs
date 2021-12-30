@@ -1,4 +1,4 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub, mmark, testVersion }:
 
 buildGoPackage rec {
   pname = "mmark";
@@ -15,6 +15,8 @@ buildGoPackage rec {
   };
 
   goDeps = ./deps.nix;
+
+  passthru.tests.version = testVersion { package = mmark; };
 
   meta = {
     description = "A powerful markdown processor in Go geared towards the IETF";

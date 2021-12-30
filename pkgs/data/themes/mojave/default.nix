@@ -10,6 +10,8 @@
 , optipng
 , sassc
 , which
+, mojave-gtk-theme
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -81,6 +83,8 @@ stdenv.mkDerivation rec {
     jdupes -l -r $out/share
     runHook postInstall
   '';
+
+  passthru.tests.version = testVersion { package = mojave-gtk-theme; };
 
   meta = with lib; {
     description = "Mac OSX Mojave like theme for GTK based desktop environments";

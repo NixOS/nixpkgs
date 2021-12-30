@@ -1,6 +1,8 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, ipinfo
+, testVersion
 }:
 
 buildGoModule rec {
@@ -18,6 +20,8 @@ buildGoModule rec {
 
   # Tests require network access
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = ipinfo; };
 
   meta = with lib; {
     description = "Command Line Interface for the IPinfo API";

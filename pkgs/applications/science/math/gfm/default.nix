@@ -11,6 +11,8 @@
 , libticables2
 , libticalcs2
 , libticonv
+, gfm
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -43,6 +45,8 @@ stdenv.mkDerivation rec {
   ];
 
   NIX_CFLAGS_COMPILE = "-I${libticables2}/include/tilp2";
+
+  passthru.tests.version = testVersion { package = gfm; };
 
   meta = with lib; {
     changelog = "http://lpg.ticalc.org/prj_tilp/news.html";

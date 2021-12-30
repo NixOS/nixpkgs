@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, m4, makeWrapper, libbsd, perlPackages }:
+{ lib, stdenv, fetchurl, m4, makeWrapper, libbsd, perlPackages, csmith, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "csmith";
@@ -30,6 +30,8 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  passthru.tests.version = testVersion { package = csmith; };
 
   meta = with lib; {
     description = "A random generator of C programs";

@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{ lib, rustPlatform, fetchFromGitHub, bingrep, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "bingrep";
@@ -12,6 +12,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "sha256-XcXllex7UEufV5URhH7aqln1tNxwaiAETO3fUKmHf7s=";
+
+  passthru.tests.version = testVersion { package = bingrep; };
 
   meta = with lib; {
     description = "Greps through binaries from various OSs and architectures, and colors them";

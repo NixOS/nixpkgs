@@ -1,4 +1,4 @@
-{ lib, stdenvNoCC, fetchFromGitHub, makeWrapper, fzf, gawk }:
+{ lib, stdenvNoCC, fetchFromGitHub, makeWrapper, fzf, gawk, sysz, testVersion }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "sysz";
@@ -21,6 +21,8 @@ stdenvNoCC.mkDerivation rec {
       --prefix PATH : ${lib.makeBinPath [ fzf gawk ]}
     runHook postInstall
   '';
+
+  passthru.tests.version = testVersion { package = sysz; };
 
   meta = with lib; {
     homepage = "https://github.com/joehillen/sysz";

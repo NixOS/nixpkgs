@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, perl }:
+{ lib, stdenv, fetchFromGitHub, perl, libx86emu, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "libx86emu";
@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   installFlags = [ "DESTDIR=$(out)" "LIBDIR=/lib" ];
+
+  passthru.tests.version = testVersion { package = libx86emu; };
 
   meta = with lib; {
     description = "x86 emulation library";

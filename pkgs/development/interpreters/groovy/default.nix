@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, unzip, which, makeWrapper, jdk }:
+{ lib, stdenv, fetchurl, unzip, which, makeWrapper, jdk, groovy, testVersion }:
 
 # at runtime, need jdk
 
@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
             --prefix PATH ":" "${jdk}/bin"
     done
   '';
+
+  passthru.tests.version = testVersion { package = groovy; };
 
   meta = with lib; {
     description = "An agile dynamic language for the Java Platform";

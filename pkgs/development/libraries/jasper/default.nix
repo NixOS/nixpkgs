@@ -3,6 +3,8 @@
 , fetchFromGitHub
 , cmake
 , pkg-config
+, jasper
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -20,6 +22,8 @@ stdenv.mkDerivation rec {
     cmake
     pkg-config
   ];
+
+  passthru.tests.version = testVersion { package = jasper; };
 
   meta = with lib; {
     homepage = "https://jasper-software.github.io/jasper/";

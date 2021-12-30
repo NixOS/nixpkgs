@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, libpng, xorg }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, libpng, xorg, xcur2png, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "xcur2png";
@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
     xorg.libXcursor
     xorg.xorgproto
   ];
+
+  passthru.tests.version = testVersion { package = xcur2png; };
 
   meta = with lib; {
     homepage = "https://github.com/eworm-de/xcur2png/releases";

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, json_c, libbsd }:
+{ stdenv, lib, fetchFromGitHub, json_c, libbsd, health-check, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "health-check";
@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
     "MANDIR=${placeholder "out"}/share/man/man8"
     "BASHDIR=${placeholder "out"}/share/bash-completion/completions"
   ];
+
+  passthru.tests.version = testVersion { package = health-check; };
 
   meta = with lib; {
     description = "Process monitoring tool";

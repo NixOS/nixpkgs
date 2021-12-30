@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, libnfc }:
+{ lib, stdenv, fetchurl, pkg-config, libnfc, mfcuk, testVersion }:
 
 stdenv.mkDerivation {
   pname = "mfcuk";
@@ -11,6 +11,8 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libnfc ];
+
+  passthru.tests.version = testVersion { package = mfcuk; };
 
   meta = with lib; {
     description = "MiFare Classic Universal toolKit";

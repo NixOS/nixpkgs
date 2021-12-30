@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, curl, expat, fuse, gumbo, libuuid }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, curl, expat, fuse, gumbo, libuuid, httpdirfs, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "httpdirfs";
@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ curl expat fuse gumbo libuuid ];
 
   makeFlags = [ "prefix=${placeholder "out"}" ];
+
+  passthru.tests.version = testVersion { package = httpdirfs; };
 
   meta = with lib; {
     description = "A FUSE filesystem for HTTP directory listings";

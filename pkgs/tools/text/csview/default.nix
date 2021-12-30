@@ -1,4 +1,4 @@
-{ fetchFromGitHub, lib, rustPlatform }:
+{ fetchFromGitHub, lib, rustPlatform, csview, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "csview";
@@ -12,6 +12,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "sha256-gEiZIwISlazkBwQPFaIWM6dViumc55no8RQ8E30JfUo=";
+
+  passthru.tests.version = testVersion { package = csview; };
 
   meta = with lib; {
     description = "A high performance csv viewer with cjk/emoji support";

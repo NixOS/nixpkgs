@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub, pkg-config }:
+{ lib, rustPlatform, fetchFromGitHub, pkg-config, gifski, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "gifski";
@@ -14,6 +14,8 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-8t7VhPby56UX2LlD2xcJKkWamuJxN9LiVEQPEa78EQQ=";
 
   nativeBuildInputs = [ pkg-config ];
+
+  passthru.tests.version = testVersion { package = gifski; };
 
   meta = with lib; {
     description = "GIF encoder based on libimagequant (pngquant)";

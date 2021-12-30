@@ -1,4 +1,4 @@
-{ fetchFromGitHub, perl, lib, stdenv }:
+{ fetchFromGitHub, perl, lib, stdenv, sec, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "sec";
@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
     cp sec $out/bin
     cp sec.man $out/share/man/man1/sec.1
   '';
+
+  passthru.tests.version = testVersion { package = sec; };
 
   meta = {
     homepage = "https://simple-evcorr.github.io";

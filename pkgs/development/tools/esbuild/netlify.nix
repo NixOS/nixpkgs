@@ -1,4 +1,4 @@
-{ buildGoModule, fetchFromGitHub, lib }:
+{ buildGoModule, fetchFromGitHub, lib, esbuild_netlify, testVersion }:
 
 buildGoModule rec {
   pname = "esbuild";
@@ -12,6 +12,8 @@ buildGoModule rec {
   };
 
   vendorSha256 = "sha256-2ABWPqhK2Cf4ipQH7XvRrd+ZscJhYPc3SV2cGT0apdg=";
+
+  passthru.tests.version = testVersion { package = esbuild_netlify; };
 
   meta = with lib; {
     description = "A fork of esbuild maintained by netlify";

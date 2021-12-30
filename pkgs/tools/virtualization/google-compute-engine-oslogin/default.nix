@@ -6,6 +6,8 @@
 , json_c
 , nixosTests
 , pam
+, google-compute-engine-oslogin
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -46,6 +48,8 @@ stdenv.mkDerivation rec {
   passthru.tests = {
     inherit (nixosTests) google-oslogin;
   };
+
+  passthru.tests.version = testVersion { package = google-compute-engine-oslogin; };
 
   meta = with lib; {
     homepage = "https://github.com/GoogleCloudPlatform/compute-image-packages";

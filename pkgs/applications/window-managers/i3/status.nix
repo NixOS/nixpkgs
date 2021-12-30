@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, libconfuse, yajl, alsa-lib, libpulseaudio, libnl, meson, ninja, perl, pkg-config, asciidoc, xmlto, docbook_xml_dtd_45, docbook_xsl }:
+{ fetchurl, lib, stdenv, libconfuse, yajl, alsa-lib, libpulseaudio, libnl, meson, ninja, perl, pkg-config, asciidoc, xmlto, docbook_xml_dtd_45, docbook_xsl, i3status, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "i3status";
@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ meson ninja perl pkg-config asciidoc xmlto docbook_xml_dtd_45 docbook_xsl ];
   buildInputs = [ libconfuse yajl alsa-lib libpulseaudio libnl ];
+
+  passthru.tests.version = testVersion { package = i3status; };
 
   meta = {
     description = "Generates a status line for i3bar, dzen2, xmobar or lemonbar";

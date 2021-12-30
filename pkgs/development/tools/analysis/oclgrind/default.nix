@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, llvmPackages, readline, python }:
+{ lib, stdenv, fetchFromGitHub, cmake, llvmPackages, readline, python, oclgrind, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "oclgrind";
@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DCLANG_ROOT=${llvmPackages.clang-unwrapped}"
   ];
+
+  passthru.tests.version = testVersion { package = oclgrind; };
 
   meta = with lib; {
     description = "An OpenCL device simulator and debugger";

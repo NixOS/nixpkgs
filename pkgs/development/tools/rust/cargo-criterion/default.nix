@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, rustPlatform }:
+{ lib, fetchFromGitHub, rustPlatform, cargo-criterion, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-criterion";
@@ -12,6 +12,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "sha256-L/ILHKWlcYTkbEi2qDu7tf/3NHfTl6GhW0s+fUlsW08=";
+
+  passthru.tests.version = testVersion { package = cargo-criterion; };
 
   meta = with lib; {
     description = "Cargo extension for running Criterion.rs benchmarks";

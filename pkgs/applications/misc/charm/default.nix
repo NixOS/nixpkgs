@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, charm, testVersion }:
 
 buildGoModule rec {
   pname = "charm";
@@ -16,6 +16,8 @@ buildGoModule rec {
   doCheck = false;
 
   ldflags = [ "-s" "-w" "-X=main.Version=${version}" ];
+
+  passthru.tests.version = testVersion { package = charm; };
 
   meta = with lib; {
     description = "Manage your charm account on the CLI";

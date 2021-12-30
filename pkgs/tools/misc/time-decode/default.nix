@@ -1,6 +1,8 @@
 { lib
 , fetchFromGitHub
 , python3
+, time-decode
+, testVersion
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -23,6 +25,8 @@ python3.pkgs.buildPythonApplication rec {
   doCheck = false;
 
   pythonImportsCheck = [ "time_decode" ];
+
+  passthru.tests.version = testVersion { package = time-decode; };
 
   meta = with lib; {
     description = "Timestamp and date decoder";

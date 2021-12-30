@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, perlPackages }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, perlPackages, cloc, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "cloc";
@@ -29,6 +29,8 @@ stdenv.mkDerivation rec {
   makeFlags = [ "prefix=" "DESTDIR=$(out)" "INSTALL=install" ];
 
   postFixup = "wrapProgram $out/bin/cloc --prefix PERL5LIB : $PERL5LIB";
+
+  passthru.tests.version = testVersion { package = cloc; };
 
   meta = {
     description = "A program that counts lines of source code";

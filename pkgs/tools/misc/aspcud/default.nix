@@ -6,6 +6,8 @@
 , cmake
 , gringo
 , re2c
+, aspcud
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -27,6 +29,8 @@ stdenv.mkDerivation rec {
     "-DASPCUD_GRINGO_PATH=${gringo}/bin/gringo"
     "-DASPCUD_CLASP_PATH=${clasp}/bin/clasp"
   ];
+
+  passthru.tests.version = testVersion { package = aspcud; };
 
   meta = with lib; {
     description = "Solver for package problems in CUDF format using ASP";

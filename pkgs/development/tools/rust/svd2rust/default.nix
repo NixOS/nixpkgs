@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchCrate, stdenv, libiconv }:
+{ lib, rustPlatform, fetchCrate, stdenv, libiconv, svd2rust, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "svd2rust";
@@ -12,6 +12,8 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-Qg/wA3R98FAb8UZ5s7GOEgOeifrqwFJ4lg0BC2SZOE8=";
 
   buildInputs = lib.optional stdenv.isDarwin libiconv;
+
+  passthru.tests.version = testVersion { package = svd2rust; };
 
   meta = with lib; {
     description = "Generate Rust register maps (`struct`s) from SVD files";

@@ -1,4 +1,4 @@
-{ lib, fetchurl, python3Packages, php }:
+{ lib, fetchurl, python3Packages, php, nextcloud-news-updater, testVersion }:
 
 python3Packages.buildPythonApplication rec {
   pname = "nextcloud-news-updater";
@@ -12,6 +12,8 @@ python3Packages.buildPythonApplication rec {
   doCheck = false;
 
   propagatedBuildInputs = [ php ];
+
+  passthru.tests.version = testVersion { package = nextcloud-news-updater; };
 
   meta = {
     description = "Fast parallel feed updater for the Nextcloud news app";

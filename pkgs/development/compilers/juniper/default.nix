@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip, makeWrapper, mono }:
+{ lib, stdenv, fetchzip, makeWrapper, mono, juniper, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "juniper";
@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
       --add-flags "$out/Juniper.exe \$@"
     runHook postInstall
   '';
+
+  passthru.tests.version = testVersion { package = juniper; };
 
   meta = with lib; {
     description = "Functional reactive programming language for programming Arduino";

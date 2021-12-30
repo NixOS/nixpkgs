@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildGoModule }:
+{ lib, fetchFromGitHub, buildGoModule, act, testVersion }:
 
 buildGoModule rec {
   pname = "act";
@@ -16,6 +16,8 @@ buildGoModule rec {
   doCheck = false;
 
   ldflags = [ "-s" "-w" "-X main.version=${version}" ];
+
+  passthru.tests.version = testVersion { package = act; };
 
   meta = with lib; {
     description = "Run your GitHub Actions locally";

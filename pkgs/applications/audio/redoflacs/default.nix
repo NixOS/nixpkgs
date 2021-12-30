@@ -5,6 +5,8 @@
 , installShellFiles
 , flac
 , sox
+, redoflacs
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -36,6 +38,8 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/redoflacs \
       --prefix PATH : ${lib.makeBinPath ([ flac sox ])}
   '';
+
+  passthru.tests.version = testVersion { package = redoflacs; };
 
   meta = with lib; {
     description = "Parallel BASH commandline FLAC compressor, verifier, organizer, analyzer, and retagger";

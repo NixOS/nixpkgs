@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, ffmpeg, ffmpegSupport ? true, makeWrapper, nixosTests }:
+{ lib, stdenv, fetchurl, ffmpeg, ffmpegSupport ? true, makeWrapper, nixosTests, navidrome, testVersion }:
 
 with lib;
 
@@ -38,6 +38,8 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.tests.navidrome = nixosTests.navidrome;
+
+  passthru.tests.version = testVersion { package = navidrome; };
 
   meta = {
     description = "Navidrome Music Server and Streamer compatible with Subsonic/Airsonic";

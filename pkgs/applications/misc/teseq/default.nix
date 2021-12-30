@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, teseq, testVersion }:
 
 let
   version = "1.1.1";
@@ -11,6 +11,8 @@ stdenv.mkDerivation {
     url = "mirror://gnu/teseq/teseq-${version}.tar.gz";
     sha256 = "08ln005qciy7f3jhv980kfhhfmh155naq59r5ah9crz1q4mx5yrj";
   };
+
+  passthru.tests.version = testVersion { package = teseq; };
 
   meta = {
     homepage = "https://www.gnu.org/software/teseq/";

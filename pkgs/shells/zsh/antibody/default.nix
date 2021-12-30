@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, antibody, testVersion }:
 
 buildGoModule rec {
   pname = "antibody";
@@ -16,6 +16,8 @@ buildGoModule rec {
   doCheck = false;
 
   ldflags = [ "-s" "-w" "-X main.version=${version}" ];
+
+  passthru.tests.version = testVersion { package = antibody; };
 
   meta = with lib; {
     description = "The fastest shell plugin manager";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, jre, makeWrapper }:
+{ lib, stdenv, fetchurl, jre, makeWrapper, mill, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "mill";
@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
   installCheckPhase = ''
     $out/bin/mill --help > /dev/null
   '';
+
+  passthru.tests.version = testVersion { package = mill; };
 
   meta = with lib; {
     homepage = "https://www.lihaoyi.com/mill";

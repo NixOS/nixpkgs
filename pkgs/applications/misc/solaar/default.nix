@@ -7,6 +7,8 @@
 , gdk-pixbuf
 , libappindicator
 , librsvg
+, solaar
+, testVersion
 }:
 
 # Although we copy in the udev rules here, you probably just want to use
@@ -45,6 +47,8 @@ python3Packages.buildPythonApplication rec {
 
   # No tests
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = solaar; };
 
   meta = with lib; {
     description = "Linux devices manager for the Logitech Unifying Receiver";

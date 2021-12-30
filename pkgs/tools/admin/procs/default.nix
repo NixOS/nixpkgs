@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, installShellFiles, Security, libiconv }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, installShellFiles, Security, libiconv, procs, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "procs";
@@ -23,6 +23,8 @@ rustPlatform.buildRustPackage rec {
   '';
 
   buildInputs = lib.optionals stdenv.isDarwin [ Security libiconv ];
+
+  passthru.tests.version = testVersion { package = procs; };
 
   meta = with lib; {
     description = "A modern replacement for ps written in Rust";

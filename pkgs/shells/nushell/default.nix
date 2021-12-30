@@ -14,6 +14,8 @@
 , nghttp2
 , libgit2
 , withExtraFeatures ? true
+, nushell
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -63,6 +65,8 @@ rustPlatform.buildRustPackage rec {
     HOME=$TMPDIR cargo test
     runHook postCheck
   '';
+
+  passthru.tests.version = testVersion { package = nushell; };
 
   meta = with lib; {
     description = "A modern shell written in Rust";

@@ -7,6 +7,8 @@
 , inetutils
 , IOKit
 , ApplicationServices
+, smartmontools
+, testVersion
 }:
 
 let
@@ -41,6 +43,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = lib.optionals stdenv.isDarwin [ IOKit ApplicationServices ];
   enableParallelBuilding = true;
+
+  passthru.tests.version = testVersion { package = smartmontools; };
 
   meta = with lib; {
     description = "Tools for monitoring the health of hard drives";

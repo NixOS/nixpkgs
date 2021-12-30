@@ -7,6 +7,8 @@
 , tqdm
 , setuptools
 , six
+, gdown
+, testVersion
 }:
 
 buildPythonApplication rec {
@@ -35,6 +37,8 @@ buildPythonApplication rec {
   pythonImportsCheck = [
     "gdown"
   ];
+
+  passthru.tests.version = testVersion { package = gdown; };
 
   meta = with lib; {
     description = "A CLI tool for downloading large files from Google Drive";

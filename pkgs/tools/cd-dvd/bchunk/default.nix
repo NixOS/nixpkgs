@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, bchunk, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "bchunk";
@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
     install -Dt $out/bin bchunk
     install -Dt $out/share/man/man1 bchunk.1
   '';
+
+  passthru.tests.version = testVersion { package = bchunk; };
 
   meta = with lib; {
     homepage = "http://he.fi/bchunk/";

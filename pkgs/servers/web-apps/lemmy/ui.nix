@@ -6,6 +6,8 @@
 , pkg-config
 , fetchFromGitHub
 , fetchYarnDeps
+, lemmy-ui
+, testVersion
 }:
 
 let
@@ -67,6 +69,8 @@ mkYarnPackage {
   distPhase = "true";
 
   passthru.updateScript = ./update.sh;
+
+  passthru.tests.version = testVersion { package = lemmy-ui; };
 
   meta = with lib; {
     description = "Building a federated alternative to reddit in rust";

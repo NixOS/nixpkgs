@@ -1,6 +1,8 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+, dotenv-linter
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -15,6 +17,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "sha256-7Porqqh6lYeBCK2pAtbL9nxtORB9rqSyVdJDoy1/ZDo=";
+
+  passthru.tests.version = testVersion { package = dotenv-linter; };
 
   meta = with lib; {
     description = "Lightning-fast linter for .env files. Written in Rust";

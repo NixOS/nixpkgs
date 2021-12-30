@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, rustPlatform, stdenv, libiconv }:
+{ lib, fetchFromGitHub, rustPlatform, stdenv, libiconv, cargo-fuzz, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-fuzz";
@@ -16,6 +16,8 @@ rustPlatform.buildRustPackage rec {
   buildInputs = lib.optional stdenv.isDarwin libiconv;
 
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = cargo-fuzz; };
 
   meta = with lib; {
     description = "Command line helpers for fuzzing";

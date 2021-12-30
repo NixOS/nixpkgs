@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchzip, jdk, makeWrapper, coreutils, curl }:
+{ stdenv, lib, fetchzip, jdk, makeWrapper, coreutils, curl, jbang, testVersion }:
 
 stdenv.mkDerivation rec {
   version = "0.82.1";
@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
   installCheckPhase = ''
     $out/bin/jbang --version 2>&1 | grep -q "${version}"
   '';
+
+  passthru.tests.version = testVersion { package = jbang; };
 
   meta = with lib; {
     description = "Run java as scripts anywhere";

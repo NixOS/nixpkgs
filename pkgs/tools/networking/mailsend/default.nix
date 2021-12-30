@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, openssl }:
+{ lib, stdenv, fetchurl, openssl, mailsend, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "mailsend";
@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
       sha256 = "0vz373zcfl19inflybfjwshcq06rvhx0i5g0f4b021cxfhyb1sm0";
     })
   ];
+  passthru.tests.version = testVersion { package = mailsend; };
+
   meta = with lib; {
     description = "CLI email sending tool";
     license = licenses.bsd3;

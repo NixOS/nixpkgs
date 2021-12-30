@@ -7,6 +7,8 @@
 , perl
 , libmaxminddb ? null
 , geolite-legacy ? null
+, ipv6calc
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -52,6 +54,8 @@ stdenv.mkDerivation rec {
   ];
 
   enableParallelBuilding = true;
+
+  passthru.tests.version = testVersion { package = ipv6calc; };
 
   meta = with lib; {
     description = "Calculate/manipulate (not only) IPv6 addresses";

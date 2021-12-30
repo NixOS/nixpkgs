@@ -13,6 +13,8 @@
 , patch
 , perl
 , unixtools
+, quilt
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -45,6 +47,8 @@ stdenv.mkDerivation rec {
   postInstall = ''
     wrapProgram $out/bin/quilt --prefix PATH : ${lib.makeBinPath buildInputs}
   '';
+
+  passthru.tests.version = testVersion { package = quilt; };
 
   meta = with lib; {
     homepage = "https://savannah.nongnu.org/projects/quilt";

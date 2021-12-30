@@ -1,4 +1,4 @@
-{ lib, python3Packages, fetchFromGitHub, gettext, installShellFiles }:
+{ lib, python3Packages, fetchFromGitHub, gettext, installShellFiles, ytcc, testVersion }:
 
 python3Packages.buildPythonApplication rec {
   pname = "ytcc";
@@ -38,6 +38,8 @@ python3Packages.buildPythonApplication rec {
   postInstall = ''
     installManPage doc/ytcc.1
   '';
+
+  passthru.tests.version = testVersion { package = ytcc; };
 
   meta = {
     description = "Command Line tool to keep track of your favourite YouTube channels without signing up for a Google account";

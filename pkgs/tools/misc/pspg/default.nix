@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, gnugrep, ncurses, pkg-config, installShellFiles, readline, postgresql }:
+{ lib, stdenv, fetchFromGitHub, gnugrep, ncurses, pkg-config, installShellFiles, readline, postgresql, pspg, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "pspg";
@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
   postInstall = ''
     installShellCompletion --bash --cmd pspg bash-completion.sh
   '';
+
+  passthru.tests.version = testVersion { package = pspg; };
 
   meta = with lib; {
     homepage = "https://github.com/okbob/pspg";

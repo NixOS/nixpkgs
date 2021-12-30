@@ -35,6 +35,8 @@
 , ffmpegthumbnailer
 , enableInotifyTools ? true
 , inotify-tools
+, gerbera
+, testVersion
 }:
 
 let
@@ -95,6 +97,8 @@ stdenv.mkDerivation rec {
     sqlite
     zlib
   ] ++ flatten (builtins.catAttrs "packages" (builtins.filter (e: e.enable) options));
+
+  passthru.tests.version = testVersion { package = gerbera; };
 
   meta = with lib; {
     homepage = "https://docs.gerbera.io/";

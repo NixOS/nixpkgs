@@ -1,4 +1,4 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub, confd, testVersion }:
 
 buildGoPackage rec {
   pname = "confd";
@@ -14,6 +14,8 @@ buildGoPackage rec {
     repo = "confd";
     sha256 = "0q7r6dkgirnmqi3rhqdaai88jqzw52l6jdrrwsf2qq0hva09961p";
   };
+
+  passthru.tests.version = testVersion { package = confd; };
 
   meta = {
     description = "Manage local application configuration files using templates and data from etcd or consul";

@@ -4,6 +4,8 @@
 , lib
 , makeWrapper
 , rustPlatform
+, ptags
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -31,6 +33,8 @@ rustPlatform.buildRustPackage rec {
   checkPhase = ''
     $releaseDir/ptags --help > /dev/null
   '';
+
+  passthru.tests.version = testVersion { package = ptags; };
 
   meta = with lib; {
     description = "A parallel universal-ctags wrapper for git repository";

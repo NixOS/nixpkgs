@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromSourcehut }:
+{ lib, rustPlatform, fetchFromSourcehut, cargo-depgraph, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-depgraph";
@@ -12,6 +12,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "sha256-mMXIiAfYBqOS3z4735T9dB9TEo7Ph2JCNq0QfyetxJg=";
+
+  passthru.tests.version = testVersion { package = cargo-depgraph; };
 
   meta = with lib; {
     description = "Create dependency graphs for cargo projects using `cargo metadata` and graphviz";

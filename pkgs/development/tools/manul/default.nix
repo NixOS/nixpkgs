@@ -1,4 +1,4 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub, manul, testVersion }:
 
 buildGoPackage {
   pname = "manul";
@@ -16,6 +16,8 @@ buildGoPackage {
 
   deleteVendor = true;
   goDeps = ./deps.nix;
+
+  passthru.tests.version = testVersion { package = manul; };
 
   meta = with lib; {
     description = "The madness vendoring utility for Golang programs";

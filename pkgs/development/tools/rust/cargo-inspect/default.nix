@@ -1,4 +1,4 @@
-{ stdenv, lib, rustPlatform, fetchFromGitHub, Security }:
+{ stdenv, lib, rustPlatform, fetchFromGitHub, Security, cargo-inspect, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-inspect";
@@ -14,6 +14,8 @@ rustPlatform.buildRustPackage rec {
   buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
   cargoSha256 = "069i8ydrp1pssnjq7d6mydwr7xh2cmcpzpf8bzd6nfjr6xx1pipr";
+
+  passthru.tests.version = testVersion { package = cargo-inspect; };
 
   meta = with lib; {
     description = "See what Rust is doing behind the curtains";

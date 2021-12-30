@@ -1,4 +1,4 @@
-{ lib, python3Packages }:
+{ lib, python3Packages, doitlive, testVersion }:
 
 python3Packages.buildPythonApplication rec {
   pname = "doitlive";
@@ -13,6 +13,8 @@ python3Packages.buildPythonApplication rec {
 
   # disable tests (too many failures)
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = doitlive; };
 
   meta = with lib; {
     description = "Tool for live presentations in the terminal";

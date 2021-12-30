@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, perl, ppp, iproute2 }:
+{ lib, stdenv, fetchurl, perl, ppp, iproute2, pptp, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "pptp";
@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
   postFixup = ''
     patchShebangs $out
   '';
+
+  passthru.tests.version = testVersion { package = pptp; };
 
   meta = with lib; {
     description = "PPTP client for Linux";

@@ -9,6 +9,8 @@
 , gtk3
 , openssl
 , pango
+, noaa-apt
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -53,6 +55,8 @@ rustPlatform.buildRustPackage rec {
     install -Dm644 -t $out/share/icons/hicolor/48x48/apps $src/debian/noaa-apt.png
     install -Dm644 -t $out/share/icons/hicolor/scalable/apps $src/debian/noaa-apt.svg
   '';
+
+  passthru.tests.version = testVersion { package = noaa-apt; };
 
   meta = with lib; {
     description = "NOAA APT image decoder";

@@ -4,6 +4,8 @@
 , fltk13
 , libjpeg
 , pkg-config
+, flwrap
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -23,6 +25,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
   ];
+
+  passthru.tests.version = testVersion { package = flwrap; };
 
   meta = {
     description = "Digital modem file transfer program";

@@ -20,6 +20,8 @@
 , zlib
 , yasm
 , withUdev ? true
+, godot
+, testVersion
 }:
 
 let
@@ -92,6 +94,8 @@ stdenv.mkDerivation rec {
     substituteInPlace "$out/share/applications/org.godotengine.Godot.desktop" \
       --replace "Exec=godot" "Exec=$out/bin/godot"
   '';
+
+  passthru.tests.version = testVersion { package = godot; };
 
   meta = with lib; {
     homepage = "https://godotengine.org";

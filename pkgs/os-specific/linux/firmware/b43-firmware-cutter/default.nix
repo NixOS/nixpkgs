@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, b43FirmwareCutter, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "b43-fwcutter";
@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
   patches = [ ./no-root-install.patch ];
 
   makeFlags = [ "PREFIX=$(out)" ];
+
+  passthru.tests.version = testVersion { package = b43FirmwareCutter; };
 
   meta = {
     description = "Firmware extractor for cards supported by the b43 kernel module";

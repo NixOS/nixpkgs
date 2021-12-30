@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, python3Packages, gettext }:
+{ stdenv, lib, fetchFromGitHub, python3Packages, gettext, linkchecker, testVersion }:
 
 with python3Packages;
 
@@ -44,6 +44,8 @@ buildPythonApplication rec {
       pytest --ignore=tests/checker/{test_telnet,telnetserver}.py \
         -k 'not TestLoginUrl and not test_timeit2'
   '';
+
+  passthru.tests.version = testVersion { package = linkchecker; };
 
   meta = {
     description = "Check websites for broken links";

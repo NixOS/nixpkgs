@@ -3,6 +3,8 @@
 , fetchurl
 , fetchpatch
 , ncurses
+, tcsh
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -33,6 +35,8 @@ stdenv.mkDerivation rec {
       url = "https://git.alpinelinux.org/aports/plain/community/tcsh/001-sysmalloc.patch?id=184585c046cdd56512f1a76e426dd799b368f8cf";
       sha256 = "1qc6ydxhdfizsbkaxhpn3wib8sfphrw10xnnsxx2prvzg9g2zp67";
     });
+
+  passthru.tests.version = testVersion { package = tcsh; };
 
   meta = with lib; {
     homepage = "https://www.tcsh.org/";

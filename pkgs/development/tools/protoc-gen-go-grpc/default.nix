@@ -1,6 +1,8 @@
 { buildGoPackage
 , fetchFromGitHub
 , lib
+, protoc-gen-go-grpc
+, testVersion
 }:
 
 buildGoPackage rec {
@@ -19,6 +21,8 @@ buildGoPackage rec {
   subPackages = [ "cmd/protoc-gen-go-grpc" ];
 
   goDeps = ./deps.nix;
+
+  passthru.tests.version = testVersion { package = protoc-gen-go-grpc; };
 
   meta = with lib; {
     description = "The Go language implementation of gRPC. HTTP/2 based RPC";

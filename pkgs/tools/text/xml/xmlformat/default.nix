@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, perl }:
+{ lib, stdenv, fetchurl, perl, xmlformat, testVersion }:
 stdenv.mkDerivation rec {
   pname = "xmlformat";
   version = "1.04";
@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
     cp ./xmlformat.pl $out/bin/xmlformat
     cp ./LICENSE $out/
   '';
+
+  passthru.tests.version = testVersion { package = xmlformat; };
 
   meta = {
     description = "a configurable formatter (or 'pretty-printer') for XML documents";

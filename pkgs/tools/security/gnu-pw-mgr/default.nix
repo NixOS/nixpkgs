@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, gnulib }:
+{ stdenv, lib, fetchurl, gnulib, gnu-pw-mgr, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "gnu-pw-mgr";
@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ gnulib ];
+
+  passthru.tests.version = testVersion { package = gnu-pw-mgr; };
 
   meta = with lib; {
     homepage = "https://www.gnu.org/software/gnu-pw-mgr/";

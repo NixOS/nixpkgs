@@ -13,6 +13,8 @@
 , libjpeg
 , libuuid
 , poppler
+, pdf2djvu
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -61,6 +63,8 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  passthru.tests.version = testVersion { package = pdf2djvu; };
 
   meta = with lib; {
     description = "Creates djvu files from PDF files";

@@ -4,6 +4,8 @@
 , libclang
 , stdenv
 , Security
+, cargo-spellcheck
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -28,6 +30,8 @@ rustPlatform.buildRustPackage rec {
   checkFlags = [
     "--skip checker::hunspell::tests::hunspell_binding_is_sane"
   ];
+
+  passthru.tests.version = testVersion { package = cargo-spellcheck; };
 
   meta = with lib; {
     description = "Checks rust documentation for spelling and grammar mistakes";

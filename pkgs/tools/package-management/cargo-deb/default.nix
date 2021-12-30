@@ -5,6 +5,8 @@
 , rust
 , libiconv
 , Security
+, cargo-deb
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -30,6 +32,8 @@ rustPlatform.buildRustPackage rec {
     substituteInPlace src/dependencies.rs \
       --replace 'assert!(deps.iter().any(|d| d.starts_with("libc")));' '// no libc assert here'
   '';
+
+  passthru.tests.version = testVersion { package = cargo-deb; };
 
   meta = with lib; {
     description = "Generate Debian packages from information in Cargo.toml";

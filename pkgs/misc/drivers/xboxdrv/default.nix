@@ -8,6 +8,8 @@
 , boost
 , glib
 , dbus-glib
+, xboxdrv
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -25,6 +27,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config sconsPackages.scons_3_1_2 ];
   buildInputs = [ libX11 libusb1 boost glib dbus-glib ];
   dontUseSconsInstall = true;
+
+  passthru.tests.version = testVersion { package = xboxdrv; };
 
   meta = with lib; {
     homepage = "https://xboxdrv.gitlab.io/";

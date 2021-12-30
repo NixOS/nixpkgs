@@ -9,6 +9,8 @@
 , autoreconfHook
 , pkg-config
 , pandoc
+, mp3fs
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -32,6 +34,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkg-config pandoc ];
 
   enableParallelBuilding = true;
+
+  passthru.tests.version = testVersion { package = mp3fs; };
 
   meta = with lib; {
     description = "FUSE file system that transparently transcodes to MP3";

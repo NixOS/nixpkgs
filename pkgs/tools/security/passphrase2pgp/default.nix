@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, passphrase2pgp, testVersion }:
 
 buildGoModule rec {
   pname = "passphrase2pgp";
@@ -17,6 +17,8 @@ buildGoModule rec {
     mkdir -p $out/share/doc/$name
     cp README.md $out/share/doc/$name
   '';
+
+  passthru.tests.version = testVersion { package = passphrase2pgp; };
 
   meta = with lib; {
     description = "Predictable, passphrase-based PGP key generator";

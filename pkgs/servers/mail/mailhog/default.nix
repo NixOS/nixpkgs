@@ -1,4 +1,4 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub, mailhog, testVersion }:
 
 buildGoPackage rec {
   pname = "MailHog";
@@ -14,6 +14,8 @@ buildGoPackage rec {
   };
 
   ldflags = [ "-s" "-w" "-X main.version=${version}" ];
+
+  passthru.tests.version = testVersion { package = mailhog; };
 
   meta = with lib; {
     description = "Web and API based SMTP testing";

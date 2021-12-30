@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, clips, testVersion }:
 
 stdenv.mkDerivation rec {
   version = "6.40";
@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
     install -D -t $out/bin core/clips
     runHook postInstall
   '';
+
+  passthru.tests.version = testVersion { package = clips; };
 
   meta = with lib; {
     description = "A Tool for Building Expert Systems";

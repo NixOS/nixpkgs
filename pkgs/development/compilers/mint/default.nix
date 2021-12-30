@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, crystal, openssl }:
+{ lib, fetchFromGitHub, crystal, openssl, mint, testVersion }:
 
 crystal.buildCrystalPackage rec {
   version = "0.15.1";
@@ -23,6 +23,8 @@ crystal.buildCrystalPackage rec {
   shardsFile = ./shards.nix;
 
   buildInputs = [ openssl ];
+
+  passthru.tests.version = testVersion { package = mint; };
 
   meta = with lib; {
     description = "A refreshing language for the front-end web";

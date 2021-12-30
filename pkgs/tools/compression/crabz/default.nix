@@ -6,6 +6,8 @@
 , libiconv
 , CoreFoundation
 , Security
+, crabz
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -37,6 +39,8 @@ rustPlatform.buildRustPackage rec {
     substituteInPlace $core_affinity/.cargo-checksum.json \
       --replace $oldHash $(sha256sum $core_affinity/src/lib.rs | cut -d " " -f 1)
   '';
+
+  passthru.tests.version = testVersion { package = crabz; };
 
   meta = with lib; {
     description = "A cross platform, fast, compression and decompression tool";

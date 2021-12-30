@@ -4,6 +4,8 @@
 , installShellFiles
 , qemu
 , makeWrapper
+, lima
+, testVersion
 }:
 
 buildGoModule rec {
@@ -44,6 +46,8 @@ buildGoModule rec {
   installCheckPhase = ''
     USER=nix $out/bin/limactl validate examples/default.yaml
   '';
+
+  passthru.tests.version = testVersion { package = lima; };
 
   meta = with lib; {
     homepage = "https://github.com/lima-vm/lima";

@@ -1,4 +1,4 @@
-{ lib, stdenv, cmake, llvmPackages, llvm, irony }:
+{ lib, stdenv, cmake, llvmPackages, llvm, irony, irony-server, testVersion }:
 
 stdenv.mkDerivation {
   pname = "irony-server";
@@ -10,6 +10,8 @@ stdenv.mkDerivation {
   dontUseCmakeBuildDir = true;
 
   cmakeDir = "server";
+
+  passthru.tests.version = testVersion { package = irony-server; };
 
   meta = with lib; {
     description = "The server part of irony";

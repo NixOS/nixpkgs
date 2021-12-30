@@ -3,6 +3,8 @@
 , rustPlatform
 , fetchFromGitHub
 , libiconv
+, code-minimap
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,6 +21,8 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-yjjoQYYWK9/9fOP5ICnhpuF/07SyCszB9GCDr0GJ0v0=";
 
   buildInputs = lib.optional stdenv.isDarwin libiconv;
+
+  passthru.tests.version = testVersion { package = code-minimap; };
 
   meta = with lib; {
     description = "A high performance code minimap render";

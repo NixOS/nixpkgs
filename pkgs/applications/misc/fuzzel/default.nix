@@ -19,6 +19,8 @@
 , cairo
 , librsvg
 , libpng
+, fuzzel
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -59,6 +61,8 @@ stdenv.mkDerivation rec {
     "-Dpng-backend=${withPNGBackend}"
     "-Dsvg-backend=${withSVGBackend}"
   ];
+
+  passthru.tests.version = testVersion { package = fuzzel; };
 
   meta = with lib; {
     description = "Wayland-native application launcher, similar to rofi’s drun mode";

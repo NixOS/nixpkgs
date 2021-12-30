@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, dcrwallet, testVersion }:
 
 buildGoModule rec {
   pname = "dcrwallet";
@@ -16,6 +16,8 @@ buildGoModule rec {
   doCheck = false;
 
   subPackages = [ "." ];
+
+  passthru.tests.version = testVersion { package = dcrwallet; };
 
   meta = {
     homepage = "https://decred.org";

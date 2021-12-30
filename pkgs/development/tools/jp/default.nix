@@ -1,4 +1,4 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub, jp, testVersion }:
 
 buildGoPackage rec {
   pname = "jp";
@@ -13,6 +13,8 @@ buildGoPackage rec {
     repo = "jp";
     sha256 = "0fdbnihbd0kq56am3bmh2zrfk4fqjslcbm48malbgmpqw3a5nvpi";
   };
+  passthru.tests.version = testVersion { package = jp; };
+
   meta = with lib; {
     description = "A command line interface to the JMESPath expression language for JSON";
     homepage = "https://github.com/jmespath/jp";

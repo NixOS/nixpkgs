@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, SDL2, libogg, libvorbis, zlib, unzip }:
+{ lib, stdenv, fetchurl, pkg-config, SDL2, libogg, libvorbis, zlib, unzip, exult, testVersion }:
 
 let
 
@@ -35,6 +35,8 @@ stdenv.mkDerivation rec {
       unzip -o -d $out/share/exult ${audio}
       chmod 644 $out/share/exult/*.flx
     ''; # */
+
+  passthru.tests.version = testVersion { package = exult; };
 
   meta = {
     homepage = "http://exult.sourceforge.net/";

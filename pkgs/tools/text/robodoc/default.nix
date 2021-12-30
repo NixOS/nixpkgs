@@ -2,6 +2,8 @@
 , stdenv
 , fetchFromGitHub
 , autoreconfHook
+, robodoc
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -18,6 +20,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
 
   hardeningDisable = [ "format" ];
+
+  passthru.tests.version = testVersion { package = robodoc; };
 
   meta = with lib; {
     homepage = "https://github.com/gumpu/ROBODoc";

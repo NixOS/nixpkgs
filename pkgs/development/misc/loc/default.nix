@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, rustPlatform }:
+{ lib, fetchFromGitHub, rustPlatform, loc, testVersion }:
 
 with rustPlatform;
 
@@ -14,6 +14,8 @@ buildRustPackage rec {
   };
 
   cargoSha256 = "1qfqhqimp56g34bir30zgl273yssrbmwf1h8h8yvdpzkybpd92gx";
+
+  passthru.tests.version = testVersion { package = loc; };
 
   meta = with lib; {
     homepage = "https://github.com/cgag/loc";

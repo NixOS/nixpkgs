@@ -1,4 +1,4 @@
-{ lib, buildPythonApplication, fetchPypi, pyserial, pyudev }:
+{ lib, buildPythonApplication, fetchPypi, pyserial, pyudev, rshell, testVersion }:
 
 buildPythonApplication rec {
   pname = "rshell";
@@ -10,6 +10,8 @@ buildPythonApplication rec {
   };
 
   propagatedBuildInputs = [ pyserial pyudev ];
+
+  passthru.tests.version = testVersion { package = rshell; };
 
   meta = with lib; {
     homepage = "https://github.com/dhylands/rshell";

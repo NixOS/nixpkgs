@@ -5,6 +5,8 @@
 , autoreconfHook
 , onigurumaSupport ? true
 , oniguruma
+, jq
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -64,6 +66,8 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = { inherit onigurumaSupport; };
+
+  passthru.tests.version = testVersion { package = jq; };
 
   meta = with lib; {
     description = "A lightweight and flexible command-line JSON processor";

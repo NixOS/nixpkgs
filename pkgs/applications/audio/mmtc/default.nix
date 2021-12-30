@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub, installShellFiles }:
+{ lib, rustPlatform, fetchFromGitHub, installShellFiles, mmtc, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "mmtc";
@@ -21,6 +21,8 @@ rustPlatform.buildRustPackage rec {
   '';
 
   GEN_COMPLETIONS = 1;
+
+  passthru.tests.version = testVersion { package = mmtc; };
 
   meta = with lib; {
     description = "Minimal mpd terminal client that aims to be simple yet highly configurable";

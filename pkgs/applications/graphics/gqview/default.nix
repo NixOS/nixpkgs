@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, gtk2, libpng }:
+{ lib, stdenv, fetchurl, pkg-config, gtk2, libpng, gqview, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "gqview";
@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   NIX_LDFLAGS = "-lm";
+
+  passthru.tests.version = testVersion { package = gqview; };
 
   meta = with lib; {
     description = "A fast image viewer";

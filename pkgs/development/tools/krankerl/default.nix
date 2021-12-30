@@ -8,6 +8,8 @@
 , file
 , gzip
 , makeWrapper
+, krankerl
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -38,6 +40,8 @@ rustPlatform.buildRustPackage rec {
   checkInputs = [
     file
   ];
+
+  passthru.tests.version = testVersion { package = krankerl; };
 
   meta = with lib; {
     description = "A CLI helper to manage, package and publish Nextcloud apps";

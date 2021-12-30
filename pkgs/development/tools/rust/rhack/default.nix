@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{ lib, rustPlatform, fetchFromGitHub, rhack, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rhack";
@@ -12,6 +12,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "sha256-HmBh2qbO/HuNPfHKifq41IB5ResnGka2iaAsnwppm9s=";
+
+  passthru.tests.version = testVersion { package = rhack; };
 
   meta = with lib; {
     description = "Temporary edit external crates that your project depends on";

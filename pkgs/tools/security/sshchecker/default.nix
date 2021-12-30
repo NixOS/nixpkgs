@@ -1,6 +1,8 @@
 { buildGoModule
 , fetchFromGitHub
 , lib
+, sshchecker
+, testVersion
 }:
 
 buildGoModule rec {
@@ -15,6 +17,8 @@ buildGoModule rec {
   };
 
   vendorSha256 = "19hdaf7d6lvwrl5rc1srrjsjx57g25cy4lvw0vvs6j52impdk6ak";
+
+  passthru.tests.version = testVersion { package = sshchecker; };
 
   meta = with lib; {
     description = "Dedicated SSH brute-forcing tool";

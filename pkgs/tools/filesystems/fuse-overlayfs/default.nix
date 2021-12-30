@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, fuse3, nixosTests }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, fuse3, nixosTests, fuse-overlayfs, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "fuse-overlayfs";
@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ fuse3 ];
 
   passthru.tests = { inherit (nixosTests) podman; };
+
+  passthru.tests.version = testVersion { package = fuse-overlayfs; };
 
   meta = with lib; {
     description = "FUSE implementation for overlayfs";

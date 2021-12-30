@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv }:
+{ fetchurl, lib, stdenv, qprint, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "qprint";
@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     mkdir -p $out/share/man/man1
   '';
+
+  passthru.tests.version = testVersion { package = qprint; };
 
   meta = {
     homepage = "http://www.fourmilab.ch/webtools/qprint/";

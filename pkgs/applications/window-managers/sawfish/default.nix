@@ -18,6 +18,8 @@
 , rep-gtk
 , texinfo
 , which
+, sawfish
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -70,6 +72,8 @@ stdenv.mkDerivation rec {
         --set REP_LOAD_PATH "$out/share/sawfish/lisp"
     done
   '';
+
+  passthru.tests.version = testVersion { package = sawfish; };
 
   meta = with lib; {
     homepage = "http://sawfish.tuxfamily.org/";

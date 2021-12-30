@@ -5,6 +5,8 @@
 , CoreFoundation
 , Security
 , SystemConfiguration
+, gobang
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -25,6 +27,8 @@ rustPlatform.buildRustPackage rec {
     Security
     SystemConfiguration
   ];
+
+  passthru.tests.version = testVersion { package = gobang; };
 
   meta = with lib; {
     description = "A cross-platform TUI database management tool written in Rust";

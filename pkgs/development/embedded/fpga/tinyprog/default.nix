@@ -1,6 +1,8 @@
 { lib
 , python3Packages
 , fetchFromGitHub
+, tinyprog
+, testVersion
 }:
 
 with python3Packages; buildPythonApplication rec {
@@ -33,6 +35,8 @@ with python3Packages; buildPythonApplication rec {
   preBuild = ''
     export SETUPTOOLS_SCM_PRETEND_VERSION="${version}"
   '';
+
+  passthru.tests.version = testVersion { package = tinyprog; };
 
   meta = with lib; {
     homepage = "https://github.com/tinyfpga/TinyFPGA-Bootloader/tree/master/programmer";

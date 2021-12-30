@@ -4,6 +4,8 @@
 , nix-update-script
 , makeWrapper
 , rr
+, cargo-rr
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -30,6 +32,8 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     wrapProgram $out/bin/cargo-rr --prefix PATH : ${lib.makeBinPath [ rr ]}
   '';
+
+  passthru.tests.version = testVersion { package = cargo-rr; };
 
   meta = with lib; {
     description = "Cargo subcommand \"rr\": a light wrapper around rr, the time-travelling debugger";

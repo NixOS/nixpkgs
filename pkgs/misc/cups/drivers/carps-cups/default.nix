@@ -2,6 +2,8 @@
 , lib
 , fetchFromGitHub
 , cups
+, carps-cups
+, testVersion
 }:
 
 stdenv.mkDerivation {
@@ -31,6 +33,8 @@ stdenv.mkDerivation {
   '';
 
   buildInputs = [ cups ];
+
+  passthru.tests.version = testVersion { package = carps-cups; };
 
   meta = with lib; {
     description = "CUPS Linux drivers for Canon printers";

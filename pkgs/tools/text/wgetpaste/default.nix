@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, wget, bash }:
+{ lib, stdenv, fetchurl, wget, bash, wgetpaste, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "wgetpaste";
@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin;
     cp wgetpaste $out/bin;
   '';
+
+  passthru.tests.version = testVersion { package = wgetpaste; };
 
   meta = {
     description = "Command-line interface to various pastebins";

@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildGoModule }:
+{ lib, fetchFromGitHub, buildGoModule, mdr, testVersion }:
 
 buildGoModule rec {
   pname = "mdr";
@@ -20,6 +20,8 @@ buildGoModule rec {
     "-X main.GitLastTag=${version}"
     "-X main.GitExactTag=${version}"
   ];
+
+  passthru.tests.version = testVersion { package = mdr; };
 
   meta = with lib; {
     description = "MarkDown Renderer for the terminal";

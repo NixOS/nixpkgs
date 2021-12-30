@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, libnl }:
+{ lib, stdenv, fetchurl, pkg-config, libnl, iw, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "iw";
@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ libnl ];
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
+
+  passthru.tests.version = testVersion { package = iw; };
 
   meta = {
     description = "Tool to use nl80211";

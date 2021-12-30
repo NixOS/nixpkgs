@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, rustPlatform }:
+{ lib, fetchFromGitHub, rustPlatform, tagref, testVersion }:
 rustPlatform.buildRustPackage rec {
   pname = "tagref";
   version = "1.5.0";
@@ -11,6 +11,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "sha256-6siqfAWFoOomqcRvW+iku28FbyKCHiDzMVIUwWP8hJM=";
+
+  passthru.tests.version = testVersion { package = tagref; };
 
   meta = with lib; {
     description = "Tagref helps you refer to other locations in your codebase.";

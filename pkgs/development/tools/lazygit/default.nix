@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, lazygit, testVersion }:
 
 buildGoModule rec {
   pname = "lazygit";
@@ -15,6 +15,8 @@ buildGoModule rec {
   subPackages = [ "." ];
 
   ldflags = [ "-X main.version=${version}" "-X main.buildSource=nix" ];
+
+  passthru.tests.version = testVersion { package = lazygit; };
 
   meta = with lib; {
     description = "Simple terminal UI for git commands";

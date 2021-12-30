@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, ctags, perl, elfutils, vtable-dumper }:
+{ lib, stdenv, fetchFromGitHub, ctags, perl, elfutils, vtable-dumper, abi-dumper, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "abi-dumper";
@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
 
   preBuild = "mkdir -p $out";
   makeFlags = [ "prefix=$(out)" ];
+
+  passthru.tests.version = testVersion { package = abi-dumper; };
 
   meta = with lib; {
     homepage = "https://github.com/lvc/abi-dumper";

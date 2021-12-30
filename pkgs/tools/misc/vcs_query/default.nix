@@ -1,4 +1,4 @@
-{ lib, stdenv, python3, fetchFromGitHub }:
+{ lib, stdenv, python3, fetchFromGitHub, vcs_query, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "vcs_query";
@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
     buildPythonPath ${python3.pkgs.vobject};
     patchPythonScript $out/bin/vcs_query
   '';
+
+  passthru.tests.version = testVersion { package = vcs_query; };
 
   meta = with lib; {
     homepage = "https://github.com/mageta/vcs_query";

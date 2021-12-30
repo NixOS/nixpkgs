@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, perl, ncurses }:
+{ lib, stdenv, fetchurl, perl, ncurses, ipbt, testVersion }:
 
 stdenv.mkDerivation rec {
   version = "20210215.5a9cb02";
@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ perl ];
   buildInputs = [ ncurses ];
+
+  passthru.tests.version = testVersion { package = ipbt; };
 
   meta = with lib; {
     description = "A high-tech ttyrec player for Unix";

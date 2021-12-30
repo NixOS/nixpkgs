@@ -19,6 +19,8 @@
 , pytestCheckHook
 , setuptools-scm
 , six
+, virtualenv
+, testVersion
 }:
 
 buildPythonPackage rec {
@@ -80,6 +82,8 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "virtualenv" ];
+
+  passthru.tests.version = testVersion { package = virtualenv; };
 
   meta = with lib; {
     description = "A tool to create isolated Python environments";

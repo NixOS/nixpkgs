@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, zlib }:
+{ lib, stdenv, fetchurl, zlib, potrace, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "potrace";
@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
   doCheck = true;
+
+  passthru.tests.version = testVersion { package = potrace; };
 
   meta = with lib; {
     homepage = "http://potrace.sourceforge.net/";

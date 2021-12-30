@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles, micro, testVersion }:
 
 buildGoModule rec {
   pname = "micro";
@@ -23,6 +23,8 @@ buildGoModule rec {
     installManPage assets/packaging/micro.1
     install -Dt $out/share/applications assets/packaging/micro.desktop
   '';
+
+  passthru.tests.version = testVersion { package = micro; };
 
   meta = with lib; {
     homepage = "https://micro-editor.github.io";

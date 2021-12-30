@@ -4,6 +4,8 @@
 , installShellFiles
 , stdenv
 , Security
+, hyperfine
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -27,6 +29,8 @@ rustPlatform.buildRustPackage rec {
       $releaseDir/build/hyperfine-*/out/hyperfine.{bash,fish} \
       --zsh $releaseDir/build/hyperfine-*/out/_hyperfine
   '';
+
+  passthru.tests.version = testVersion { package = hyperfine; };
 
   meta = with lib; {
     description = "Command-line benchmarking tool";

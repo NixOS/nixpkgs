@@ -1,5 +1,7 @@
 { lib
 , python3
+, bkyml
+, testVersion
 }:
 
 with python3.pkgs;
@@ -35,6 +37,8 @@ buildPythonApplication rec {
     ruamel-yaml
     setuptools
   ];
+
+  passthru.tests.version = testVersion { package = bkyml; };
 
   meta = with lib; {
     homepage = "https://github.com/joscha/bkyml";

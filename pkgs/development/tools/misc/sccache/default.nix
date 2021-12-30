@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, rustPlatform, pkg-config, openssl, Security }:
+{ stdenv, lib, fetchFromGitHub, rustPlatform, pkg-config, openssl, Security, sccache, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   version = "0.2.15";
@@ -21,6 +21,8 @@ rustPlatform.buildRustPackage rec {
   # Tests fail because of client server setup which is not possible inside the pure environment,
   # see https://github.com/mozilla/sccache/issues/460
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = sccache; };
 
   meta = with lib; {
     description = "Ccache with Cloud Storage";

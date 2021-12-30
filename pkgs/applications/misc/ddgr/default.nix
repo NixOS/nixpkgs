@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, python3, installShellFiles }:
+{ lib, stdenv, fetchFromGitHub, python3, installShellFiles, ddgr, testVersion }:
 
 stdenv.mkDerivation rec {
   version = "1.9";
@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
     installShellCompletion --fish auto-completion/fish/ddgr.fish
     installShellCompletion --zsh auto-completion/zsh/_ddgr
   '';
+
+  passthru.tests.version = testVersion { package = ddgr; };
 
   meta = with lib; {
     homepage = "https://github.com/jarun/ddgr";

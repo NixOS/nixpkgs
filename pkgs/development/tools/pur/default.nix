@@ -1,6 +1,8 @@
 { lib
 , python3
 , fetchFromGitHub
+, pur
+, testVersion
 }:
 
 let
@@ -33,6 +35,8 @@ buildPythonApplication rec {
   ];
 
   pythonImportsCheck = [ "pur" ];
+
+  passthru.tests.version = testVersion { package = pur; };
 
   meta = with lib; {
     description = "Python library for update and track the requirements";

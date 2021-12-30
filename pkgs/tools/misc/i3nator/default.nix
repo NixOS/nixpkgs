@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, rustPlatform }:
+{ lib, fetchFromGitHub, rustPlatform, i3nator, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "i3nator";
@@ -12,6 +12,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "04sx1dsznvh60s2yd9bzbvj6fgjvj37vv33qpww13fyph832i37g";
+
+  passthru.tests.version = testVersion { package = i3nator; };
 
   meta = with lib; {
     description = "Tmuxinator for the i3 window manager";

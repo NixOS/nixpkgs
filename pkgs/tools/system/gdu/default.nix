@@ -3,6 +3,8 @@
 , buildGoModule
 , fetchFromGitHub
 , installShellFiles
+, gdu
+, testVersion
 }:
 
 buildGoModule rec {
@@ -35,6 +37,8 @@ buildGoModule rec {
   '';
 
   doCheck = !stdenv.isDarwin;
+
+  passthru.tests.version = testVersion { package = gdu; };
 
   meta = with lib; {
     description = "Disk usage analyzer with console interface";

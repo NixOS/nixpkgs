@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, libcap, acl, file, readline }:
+{ stdenv, lib, fetchFromGitHub, libcap, acl, file, readline, clifm, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "clifm";
@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
   ];
 
   enableParallelBuilding = true;
+
+  passthru.tests.version = testVersion { package = clifm; };
 
   meta = with lib; {
     homepage = "https://github.com/leo-arch/clifm";

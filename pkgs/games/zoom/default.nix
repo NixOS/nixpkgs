@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, perl, expat, xlibsWrapper, freetype }:
+{ lib, stdenv, fetchurl, perl, expat, xlibsWrapper, freetype, zoom, testVersion }:
 
 # !!! assert freetype == xorg.freetype
 
@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ perl expat xlibsWrapper freetype ];
 
   NIX_CFLAGS_COMPILE = "-I${freetype}/include/freetype2 -fgnu89-inline";
+
+  passthru.tests.version = testVersion { package = zoom; };
 
   meta = with lib; {
     description = "Player for Z-Code, TADS and HUGO stories or games";

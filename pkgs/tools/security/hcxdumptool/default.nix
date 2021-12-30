@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, openssl }:
+{ stdenv, lib, fetchFromGitHub, openssl, hcxdumptool, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "hcxdumptool";
@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ openssl ];
 
   installFlags = [ "PREFIX=$(out)" ];
+
+  passthru.tests.version = testVersion { package = hcxdumptool; };
 
   meta = with lib; {
     homepage = "https://github.com/ZerBea/hcxdumptool";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, automake, autoconf, pkg-config, gtk3 }:
+{ lib, stdenv, fetchFromGitHub, automake, autoconf, pkg-config, gtk3, gsimplecal, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "gsimplecal";
@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ automake autoconf gtk3 ];
 
   preConfigure = "./autogen.sh";
+
+  passthru.tests.version = testVersion { package = gsimplecal; };
 
   meta = {
     homepage = "http://dmedvinsky.github.io/gsimplecal/";

@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, gperf, guile, gmp, zlib, liboop, readline, gnum4, pam
-, nettools, lsof, procps }:
+, nettools, lsof, procps, lsh, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "lsh";
@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-std=gnu90";
 
   buildInputs = [ gperf guile gmp zlib liboop readline gnum4 pam ];
+
+  passthru.tests.version = testVersion { package = lsh; };
 
   meta = {
     description = "GPL'd implementation of the SSH protocol";

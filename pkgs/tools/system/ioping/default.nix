@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, ioping, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "ioping";
@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
   ];
 
   makeFlags = [ "PREFIX=$(out)" ];
+
+  passthru.tests.version = testVersion { package = ioping; };
 
   meta = with lib; {
     description = "Disk I/O latency measuring tool";

@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, texinfo, help2man }:
+{ fetchurl, lib, stdenv, texinfo, help2man, gengetopt, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "gengetopt";
@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
       'set -o posix' \
       'set +o posix'
   '';
+
+  passthru.tests.version = testVersion { package = gengetopt; };
 
   meta = {
     description = "Command-line option parser generator";

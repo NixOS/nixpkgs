@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, ncurses }:
+{ fetchurl, lib, stdenv, ncurses, nmon, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "nmon";
@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cp nmon $out/bin
   '';
+
+  passthru.tests.version = testVersion { package = nmon; };
 
   meta = with lib; {
     description = "AIX & Linux Performance Monitoring tool";

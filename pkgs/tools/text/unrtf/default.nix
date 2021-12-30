@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, autoconf, automake, libiconv }:
+{ lib, stdenv, fetchurl, autoconf, automake, libiconv, unrtf, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "unrtf";
@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
   preConfigure = "./bootstrap";
 
   outputs = [ "out" "man" ];
+
+  passthru.tests.version = testVersion { package = unrtf; };
 
   meta = with lib; {
     description = "A converter from Rich Text Format to other formats";

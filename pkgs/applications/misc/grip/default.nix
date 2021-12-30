@@ -12,6 +12,8 @@
 , libid3tag
 , ncurses
 , libtool
+, grip
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -36,6 +38,8 @@ stdenv.mkDerivation rec {
     ncurses
   ];
   enableParallelBuilding = true;
+
+  passthru.tests.version = testVersion { package = grip; };
 
   meta = {
     description = "GTK-based audio CD player/ripper";

@@ -9,6 +9,8 @@
 , intel-gmmlib
 , enableX11 ? stdenv.isLinux
 , libX11
+, intel-media-driver
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -50,6 +52,8 @@ stdenv.mkDerivation rec {
     patchelf --set-rpath "$(patchelf --print-rpath $out/lib/dri/iHD_drv_video.so):${lib.makeLibraryPath [ libX11 ]}" \
       $out/lib/dri/iHD_drv_video.so
   '';
+
+  passthru.tests.version = testVersion { package = intel-media-driver; };
 
   meta = with lib; {
     description = "Intel Media Driver for VAAPI — Broadwell+ iGPUs";

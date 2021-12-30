@@ -12,6 +12,8 @@
 , makeWrapper
 , procps
 , nixosTests
+, runc
+, testVersion
 }:
 
 buildGoModule rec {
@@ -52,6 +54,8 @@ buildGoModule rec {
   '';
 
   passthru.tests = { inherit (nixosTests) cri-o docker podman; };
+
+  passthru.tests.version = testVersion { package = runc; };
 
   meta = with lib; {
     homepage = "https://github.com/opencontainers/runc";

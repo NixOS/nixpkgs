@@ -10,6 +10,8 @@
 , tesseract4
 , leptonica
 , ffmpeg
+, ccextractor
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -42,6 +44,8 @@ stdenv.mkDerivation rec {
     wrapProgram "$out/bin/ccextractor" \
       --set TESSDATA_PREFIX "${tesseract4}/share/"
   '';
+
+  passthru.tests.version = testVersion { package = ccextractor; };
 
   meta = with lib; {
     homepage = "https://www.ccextractor.org";

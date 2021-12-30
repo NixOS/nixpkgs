@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, ncurses, zlib, bzip2, sqlite, pkg-config, glib, gnutls }:
+{ lib, stdenv, fetchurl, fetchpatch, ncurses, zlib, bzip2, sqlite, pkg-config, glib, gnutls, ncdc, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "ncdc";
@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ ncurses zlib bzip2 sqlite glib gnutls ];
+
+  passthru.tests.version = testVersion { package = ncdc; };
 
   meta = with lib; {
     description = "Modern and lightweight direct connect client with a friendly ncurses interface";

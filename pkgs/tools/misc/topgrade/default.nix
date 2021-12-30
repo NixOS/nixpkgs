@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, rustPlatform, Foundation, installShellFiles }:
+{ stdenv, lib, fetchFromGitHub, rustPlatform, Foundation, installShellFiles, topgrade, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "topgrade";
@@ -20,6 +20,8 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     installManPage topgrade.8
   '';
+
+  passthru.tests.version = testVersion { package = topgrade; };
 
   meta = with lib; {
     description = "Upgrade all the things";

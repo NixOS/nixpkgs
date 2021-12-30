@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildGoModule }:
+{ lib, fetchFromGitHub, buildGoModule, pg_tileserv, testVersion }:
 
 buildGoModule rec {
   pname = "pg_tileserv";
@@ -16,6 +16,8 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" "-X main.programVersion=${version}" ];
 
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = pg_tileserv; };
 
   meta = with lib; {
     description = "A very thin PostGIS-only tile server in Go";

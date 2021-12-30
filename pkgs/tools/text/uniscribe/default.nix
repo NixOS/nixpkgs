@@ -1,4 +1,4 @@
-{ stdenv, lib, bundlerEnv, bundlerUpdateScript, makeWrapper }:
+{ stdenv, lib, bundlerEnv, bundlerUpdateScript, makeWrapper, uniscribe, testVersion }:
 
 let
   rubyEnv = bundlerEnv {
@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.updateScript = bundlerUpdateScript "uniscribe";
+
+  passthru.tests.version = testVersion { package = uniscribe; };
 
   meta = with lib; {
     description = "Explains Unicode characters/code points: Displays their name, category, and shows compositions";

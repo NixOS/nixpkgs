@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, glib }:
+{ lib, stdenv, fetchurl, pkg-config, glib, libvisual, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "libvisual";
@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
     "ac_cv_func_malloc_0_nonnull=yes"
     "ac_cv_func_realloc_0_nonnull=yes"
   ];
+
+  passthru.tests.version = testVersion { package = libvisual; };
 
   meta = {
     description = "An abstraction library for audio visualisations";

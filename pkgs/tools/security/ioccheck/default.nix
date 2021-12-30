@@ -1,6 +1,8 @@
 { lib
 , fetchFromGitHub
 , python3
+, ioccheck
+, testVersion
 }:
 
 let
@@ -70,6 +72,8 @@ buildPythonApplication rec {
   pythonImportsCheck = [
     "ioccheck"
   ];
+
+  passthru.tests.version = testVersion { package = ioccheck; };
 
   meta = with lib; {
     description = "Tool for researching IOCs";

@@ -11,6 +11,8 @@
 , tk
 , wrapGAppsHook
 , xz
+, gtkwave
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -31,6 +33,8 @@ stdenv.mkDerivation rec {
     "--enable-judy"
     "--enable-gtk3"
   ];
+
+  passthru.tests.version = testVersion { package = gtkwave; };
 
   meta = {
     description = "VCD/Waveform viewer for Unix and Win32";

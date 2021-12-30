@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, requests, dparse, click, setuptools, pytestCheckHook }:
+{ lib, buildPythonPackage, fetchPypi, requests, dparse, click, setuptools, pytestCheckHook, safety-cli, testVersion }:
 
 buildPythonPackage rec {
   pname = "safety";
@@ -22,6 +22,8 @@ buildPythonPackage rec {
   preCheck = ''
     export HOME=$(mktemp -d)
   '';
+
+  passthru.tests.version = testVersion { package = safety-cli; };
 
   meta = with lib; {
     description =

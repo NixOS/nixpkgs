@@ -8,6 +8,8 @@
 , pam
 , useSSL ? true
 , openssl
+, monit
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -36,6 +38,8 @@ stdenv.mkDerivation rec {
     "libmonit_cv_setjmp_available=yes"
     "libmonit_cv_vsnprintf_c99_conformant=yes"
   ];
+
+  passthru.tests.version = testVersion { package = monit; };
 
   meta = {
     homepage = "https://mmonit.com/monit/";

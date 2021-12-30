@@ -16,6 +16,8 @@
 , SDL2
 , sqlite
 , wavpack
+, ddnet
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -56,6 +58,8 @@ stdenv.mkDerivation rec {
     substituteInPlace src/engine/shared/storage.cpp \
       --replace /usr/ $out/
   '';
+
+  passthru.tests.version = testVersion { package = ddnet; };
 
   meta = with lib; {
     description = "A Teeworlds modification with a unique cooperative gameplay.";

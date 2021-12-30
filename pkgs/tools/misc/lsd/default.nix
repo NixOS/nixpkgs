@@ -2,6 +2,8 @@
 , fetchFromGitHub
 , rustPlatform
 , installShellFiles
+, lsd
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -37,6 +39,8 @@ rustPlatform.buildRustPackage rec {
 
     runHook postInstallCheck
   '';
+
+  passthru.tests.version = testVersion { package = lsd; };
 
   meta = with lib; {
     homepage = "https://github.com/Peltoche/lsd";

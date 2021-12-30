@@ -5,6 +5,8 @@
 , bash
 , pandoc
 , apksigner
+, apksigcopier
+, testVersion
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -40,6 +42,8 @@ python3.pkgs.buildPythonApplication rec {
   postInstall = ''
     installManPage ${pname}.1
   '';
+
+  passthru.tests.version = testVersion { package = apksigcopier; };
 
   meta = with lib; {
     description = "Copy/extract/patch android apk signatures & compare apks";

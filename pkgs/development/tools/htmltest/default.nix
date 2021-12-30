@@ -1,6 +1,8 @@
 { buildGoModule
 , fetchFromGitHub
 , lib
+, htmltest
+, testVersion
 }:
 
 buildGoModule rec {
@@ -24,6 +26,8 @@ buildGoModule rec {
 
   # tests require network access
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = htmltest; };
 
   meta = with lib; {
     description = "Tool to test generated HTML output";

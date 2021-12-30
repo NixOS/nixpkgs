@@ -1,4 +1,4 @@
-{ lib, libnotify, buildGoModule, fetchFromGitHub, pkg-config }:
+{ lib, libnotify, buildGoModule, fetchFromGitHub, pkg-config, yubikey-touch-detector, testVersion }:
 
 buildGoModule rec {
   pname = "yubikey-touch-detector";
@@ -15,6 +15,8 @@ buildGoModule rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ libnotify ];
+
+  passthru.tests.version = testVersion { package = yubikey-touch-detector; };
 
   meta = with lib; {
     description = "A tool to detect when your YubiKey is waiting for a touch (to send notification or display a visual indicator on the screen).";

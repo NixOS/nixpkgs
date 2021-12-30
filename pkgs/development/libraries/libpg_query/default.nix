@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, which }:
+{ lib, stdenv, fetchFromGitHub, which, libpg_query, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "libpg_query";
@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
     install -Dm644 -t $out/lib libpg_query.a
     install -Dm644 -t $out/include pg_query.h
   '';
+
+  passthru.tests.version = testVersion { package = libpg_query; };
 
   meta = with lib; {
     homepage = "https://github.com/pganalyze/libpg_query";

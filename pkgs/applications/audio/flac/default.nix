@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, libogg }:
+{ lib, stdenv, fetchurl, fetchpatch, libogg, flac, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "flac";
@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
   #doCheck = true; # takes lots of time
 
   outputs = [ "bin" "dev" "out" "man" "doc" ];
+
+  passthru.tests.version = testVersion { package = flac; };
 
   meta = with lib; {
     homepage = "https://xiph.org/flac/";

@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, gettext, libmpcdec, libao }:
+{ fetchurl, lib, stdenv, gettext, libmpcdec, libao, mpc123, testVersion }:
 
 let version = "0.2.4"; in
 stdenv.mkDerivation rec {
@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
     '' mkdir -p "$out/bin"
        cp -v mpc123 "$out/bin"
     '';
+
+  passthru.tests.version = testVersion { package = mpc123; };
 
   meta = {
     homepage = "http://mpc123.sourceforge.net/";

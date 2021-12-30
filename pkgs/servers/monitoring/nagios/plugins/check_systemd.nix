@@ -1,4 +1,4 @@
-{ fetchFromGitHub, python3Packages, lib }:
+{ fetchFromGitHub, python3Packages, lib, check_systemd, testVersion }:
 
 python3Packages.buildPythonApplication rec {
   pname = "check_systemd";
@@ -25,6 +25,8 @@ python3Packages.buildPythonApplication rec {
     export PATH=$PATH:$out/bin
   '';
   checkInputs = [ python3Packages.pytestCheckHook ];
+
+  passthru.tests.version = testVersion { package = check_systemd; };
 
   meta = with lib; {
     description = "Nagios / Icinga monitoring plugin to check systemd for failed units";

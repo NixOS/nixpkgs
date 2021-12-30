@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, python3, pkg-config, imagemagick, wafHook }:
+{ lib, stdenv, fetchFromGitHub, python3, pkg-config, imagemagick, wafHook, blockhash, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "blockhash";
@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ imagemagick ];
 
   strictDeps = true;
+
+  passthru.tests.version = testVersion { package = blockhash; };
 
   meta = with lib; {
     homepage = "https://github.com/commonsmachinery/blockhash";

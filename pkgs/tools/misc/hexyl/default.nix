@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, rustPlatform }:
+{ lib, fetchFromGitHub, rustPlatform, hexyl, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "hexyl";
@@ -12,6 +12,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "sha256-CGaCMrShagK4dAdwJtaeUMJlYOlG/cH+6E1QDYGrqL0=";
+
+  passthru.tests.version = testVersion { package = hexyl; };
 
   meta = with lib; {
     changelog = "https://github.com/sharkdp/hexyl/releases/tag/v${version}";

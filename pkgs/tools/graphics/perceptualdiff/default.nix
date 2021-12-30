@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, freeimage }:
+{ lib, stdenv, fetchFromGitHub, cmake, freeimage, perceptualdiff, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "perceptualdiff";
@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ freeimage ];
+
+  passthru.tests.version = testVersion { package = perceptualdiff; };
 
   meta = with lib; {
     description = "A program that compares two images using a perceptually based image metric";

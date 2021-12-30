@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, pkg-config, boost, lua }:
+{ fetchurl, lib, stdenv, pkg-config, boost, lua, ansifilter, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "ansifilter";
@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
     "PREFIX=${placeholder "out"}"
     "conf_dir=/etc/ansifilter"
   ];
+
+  passthru.tests.version = testVersion { package = ansifilter; };
 
   meta = with lib; {
     description = "Tool to convert ANSI to other formats";

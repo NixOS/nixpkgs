@@ -9,6 +9,8 @@
 , svg-path
 , pygments
 , watchdog
+, hovercraft
+, testVersion
 }:
 
 buildPythonApplication rec {
@@ -25,6 +27,8 @@ buildPythonApplication rec {
 
   checkInputs = [ manuel ];
   propagatedBuildInputs = [ setuptools docutils lxml svg-path pygments watchdog ];
+
+  passthru.tests.version = testVersion { package = hovercraft; };
 
   meta = with lib; {
     description = "Makes impress.js presentations from reStructuredText";

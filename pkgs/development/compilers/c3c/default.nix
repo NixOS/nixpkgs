@@ -3,6 +3,8 @@
 , fetchFromGitHub
 , cmake
 , python3
+, c3c
+, testVersion
 }:
 
 llvmPackages.stdenv.mkDerivation rec {
@@ -36,6 +38,8 @@ llvmPackages.stdenv.mkDerivation rec {
     install -Dm755 c3c $out/bin/c3c
     cp -r lib $out
   '';
+
+  passthru.tests.version = testVersion { package = c3c; };
 
   meta = with lib; {
     description = "Compiler for the C3 language";

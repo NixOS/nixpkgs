@@ -6,6 +6,8 @@
 , mpfr
 , openssl
 , pkg-config
+, scryer-prolog
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -26,6 +28,8 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl gmp libmpc mpfr ];
+
+  passthru.tests.version = testVersion { package = scryer-prolog; };
 
   meta = with lib; {
     description = "A modern Prolog implementation written mostly in Rust.";

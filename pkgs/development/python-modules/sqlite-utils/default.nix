@@ -10,6 +10,8 @@
 , tabulate
 , pytestCheckHook
 , hypothesis
+, sqlite-utils
+, testVersion
 }:
 
 buildPythonPackage rec {
@@ -48,6 +50,8 @@ buildPythonPackage rec {
     pytestCheckHook
     hypothesis
   ];
+
+  passthru.tests.version = testVersion { package = sqlite-utils; };
 
   meta = with lib; {
     description = "Python CLI utility and library for manipulating SQLite databases";

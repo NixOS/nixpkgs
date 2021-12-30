@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{ lib, rustPlatform, fetchFromGitHub, steam-acf, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "steam-acf";
@@ -12,6 +12,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "0fzlvn0sl7613hpsb7ncykmcl53dgl8rzsg317nwkj2w679q4xq6";
+
+  passthru.tests.version = testVersion { package = steam-acf; };
 
   meta = with lib; {
     description = "Tool to convert Steam .acf files to JSON";

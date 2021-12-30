@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv }:
+{ fetchurl, lib, stdenv, rush, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "rush";
@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
   };
 
   doCheck = true;
+
+  passthru.tests.version = testVersion { package = rush; };
 
   meta = {
     description = "Restricted User Shell";

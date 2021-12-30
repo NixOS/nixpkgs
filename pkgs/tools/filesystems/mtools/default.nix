@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, mtools, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "mtools";
@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
   configureFlags = lib.optional stdenv.isDarwin "--without-x";
 
   doCheck = true;
+
+  passthru.tests.version = testVersion { package = mtools; };
 
   meta = with lib; {
     homepage = "https://www.gnu.org/software/mtools/";

@@ -12,6 +12,8 @@
 , libiconv
 , libobjc
 , libresolv
+, gpg-tui
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -45,6 +47,8 @@ rustPlatform.buildRustPackage rec {
     libobjc
     libresolv
   ];
+
+  passthru.tests.version = testVersion { package = gpg-tui; };
 
   meta = with lib; {
     description = "Terminal user interface for GnuPG";

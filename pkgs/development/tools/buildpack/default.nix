@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles, buildpack, testVersion }:
 
 buildGoModule rec {
   pname = "pack";
@@ -23,6 +23,8 @@ buildGoModule rec {
     installShellCompletion --bash --name pack.bash $(PACK_HOME=$PWD $out/bin/pack completion --shell bash)
     installShellCompletion --zsh --name _pack $(PACK_HOME=$PWD $out/bin/pack completion --shell zsh)
   '';
+
+  passthru.tests.version = testVersion { package = buildpack; };
 
   meta = with lib; {
     homepage = "https://buildpacks.io/";

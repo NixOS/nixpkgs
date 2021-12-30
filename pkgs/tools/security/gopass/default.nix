@@ -9,6 +9,8 @@
 , xclip
 , wl-clipboard
 , passAlias ? false
+, gopass
+, testVersion
 }:
 
 buildGoModule rec {
@@ -54,6 +56,8 @@ buildGoModule rec {
       --prefix PATH : "${wrapperPath}" \
       --set GOPASS_NO_REMINDER true
   '';
+
+  passthru.tests.version = testVersion { package = gopass; };
 
   meta = with lib; {
     description = "The slightly more awesome Standard Unix Password Manager for Teams. Written in Go";

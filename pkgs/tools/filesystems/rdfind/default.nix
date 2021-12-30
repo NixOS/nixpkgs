@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, nettle }:
+{ lib, stdenv, fetchurl, nettle, rdfind, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "rdfind";
@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ nettle ];
+
+  passthru.tests.version = testVersion { package = rdfind; };
 
   meta = with lib; {
     homepage = "https://rdfind.pauldreik.se/";

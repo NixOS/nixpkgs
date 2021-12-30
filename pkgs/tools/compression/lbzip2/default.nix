@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, gnulib, perl, autoconf, automake }:
+{ lib, stdenv, fetchFromGitHub, gnulib, perl, autoconf, automake, lbzip2, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "lbzip2";
@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
     substituteInPlace configure.ac --replace 'AC_PREREQ([2.63])' 'AC_PREREQ(2.64)'
     ./build-aux/autogen.sh
   '';
+
+  passthru.tests.version = testVersion { package = lbzip2; };
 
   meta = with lib; {
     homepage = "https://github.com/kjn/lbzip2"; # Formerly http://lbzip2.org/

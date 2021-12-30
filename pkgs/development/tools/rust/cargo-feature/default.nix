@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub, stdenv, libiconv }:
+{ lib, rustPlatform, fetchFromGitHub, stdenv, libiconv, cargo-feature, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-feature";
@@ -14,6 +14,8 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-MkLsQebQdqfUuARIdQZg47kMPudstJUgRQgUuovoLes=";
 
   buildInputs = lib.optional stdenv.isDarwin libiconv;
+
+  passthru.tests.version = testVersion { package = cargo-feature; };
 
   meta = with lib; {
     description = "Allows conveniently modify features of crate";

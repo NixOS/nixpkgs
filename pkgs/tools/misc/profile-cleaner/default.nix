@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, parallel, sqlite, bc, file }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, parallel, sqlite, bc, file, profile-cleaner, testVersion }:
 
 stdenv.mkDerivation rec {
   version = "2.44";
@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/profile-cleaner \
       --prefix PATH : "${lib.makeBinPath [ parallel sqlite bc file ]}"
   '';
+
+  passthru.tests.version = testVersion { package = profile-cleaner; };
 
   meta = {
     description = "Reduces browser profile sizes by cleaning their sqlite databases";

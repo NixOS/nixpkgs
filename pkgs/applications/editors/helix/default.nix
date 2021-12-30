@@ -1,4 +1,4 @@
-{ fetchFromGitHub, lib, rustPlatform, makeWrapper }:
+{ fetchFromGitHub, lib, rustPlatform, makeWrapper, helix, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "helix";
@@ -23,6 +23,8 @@ rustPlatform.buildRustPackage rec {
   postFixup = ''
     wrapProgram $out/bin/hx --set HELIX_RUNTIME $out/lib/runtime
   '';
+
+  passthru.tests.version = testVersion { package = helix; };
 
   meta = with lib; {
     description = "A post-modern modal text editor";

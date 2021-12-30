@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub, stdenv, Security }:
+{ lib, rustPlatform, fetchFromGitHub, stdenv, Security, hors, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "hors";
@@ -17,6 +17,8 @@ rustPlatform.buildRustPackage rec {
 
   # requires network access
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = hors; };
 
   meta = with lib; {
     description = "Instant coding answers via the command line";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, ncurses, gettext, python3, python3Packages, makeWrapper }:
+{ lib, stdenv, fetchurl, ncurses, gettext, python3, python3Packages, makeWrapper, calcurse, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "calcurse";
@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
     buildPythonPath "${python3Packages.httplib2} ${python3Packages.oauth2client}"
     patchPythonScript $out/bin/calcurse-caldav
   '';
+
+  passthru.tests.version = testVersion { package = calcurse; };
 
   meta = with lib; {
     description = "A calendar and scheduling application for the command line";

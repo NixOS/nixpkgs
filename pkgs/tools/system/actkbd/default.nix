@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv }:
+{ fetchurl, lib, stdenv, actkbd, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "actkbd";
@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/doc/actkbd
     cp -r README samples $out/share/doc/actkbd
   '';
+
+  passthru.tests.version = testVersion { package = actkbd; };
 
   meta = with lib; {
     description = "A keyboard shortcut daemon";

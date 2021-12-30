@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, lib, moarvm }:
+{ stdenv, fetchurl, perl, lib, moarvm, nqp, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "nqp";
@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
+
+  passthru.tests.version = testVersion { package = nqp; };
 
   meta = with lib; {
     description = "Not Quite Perl -- a lightweight Raku-like environment for virtual machines";

@@ -1,4 +1,4 @@
-{ lib, fetchurl, buildPythonApplication, click, future, six }:
+{ lib, fetchurl, buildPythonApplication, click, future, six, proselint, testVersion }:
 
 buildPythonApplication rec {
   pname = "proselint";
@@ -12,6 +12,8 @@ buildPythonApplication rec {
   };
 
   propagatedBuildInputs = [ click future six ];
+
+  passthru.tests.version = testVersion { package = proselint; };
 
   meta = with lib; {
     description = "A linter for prose";

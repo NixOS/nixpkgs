@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, datamash, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "datamash";
@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     url = "mirror://gnu/${pname}/${pname}-${version}.tar.gz";
     sha256 = "1cxdlhgz3wzjqlq8bgwad93fgqymk2abbldfzw1ffnhcp4mmjjjp";
   };
+
+  passthru.tests.version = testVersion { package = datamash; };
 
   meta = with lib; {
     description = "A command-line program which performs basic numeric,textual and statistical operations on input textual data files";

@@ -1,4 +1,4 @@
-{ lib, stdenv, cmake, rocksdb, rapidjson, pkg-config, fetchFromGitHub, fetchpatch, zlib }:
+{ lib, stdenv, cmake, rocksdb, rapidjson, pkg-config, fetchFromGitHub, fetchpatch, zlib, sortmerna, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "sortmerna";
@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
       --replace "target_link_libraries(sortmerna" \
         "target_link_libraries(sortmerna Threads::Threads"
   '';
+
+  passthru.tests.version = testVersion { package = sortmerna; };
 
   meta = with lib; {
     description = "Tools for filtering, mapping, and OTU-picking from shotgun genomics data";

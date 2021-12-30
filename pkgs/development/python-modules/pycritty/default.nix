@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder, pyyaml }:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, pyyaml, pycritty, testVersion }:
 
 buildPythonPackage rec {
   pname = "pycritty";
@@ -22,6 +22,8 @@ buildPythonPackage rec {
   doCheck = false;
 
   pythonImportsCheck = [ "pycritty" ];
+
+  passthru.tests.version = testVersion { package = pycritty; };
 
   meta = with lib; {
     description = "A CLI tool for changing your alacritty configuration on the fly";

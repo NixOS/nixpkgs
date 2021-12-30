@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchCrate, rustPlatform }:
+{ lib, stdenv, fetchCrate, rustPlatform, oxipng, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   version = "5.0.1";
@@ -12,6 +12,8 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "1dkfplmi21wgks8pfxxc3kww89i9wq7fq5j7jm7a8zi59p3xdars";
 
   doCheck = !stdenv.isAarch64 && !stdenv.isDarwin;
+
+  passthru.tests.version = testVersion { package = oxipng; };
 
   meta = with lib; {
     homepage = "https://github.com/shssoichiro/oxipng";

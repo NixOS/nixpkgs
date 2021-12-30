@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, primesieve }:
+{ lib, stdenv, fetchFromGitHub, cmake, primesieve, primecount, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "primecount";
@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-/Cb/HkD4UQ9gXsRpvRiEuQBoRd0THxNHsBaAAa+CqQo=";
   };
+
+  passthru.tests.version = testVersion { package = primecount; };
 
   meta = with lib; {
     description = "Fast prime counting function implementations";

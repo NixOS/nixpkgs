@@ -6,6 +6,8 @@
 , pytestCheckHook
 , pythonOlder
 , setuptools
+, actdiag
+, testVersion
 }:
 
 buildPythonPackage rec {
@@ -39,6 +41,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "actdiag"
   ];
+
+  passthru.tests.version = testVersion { package = actdiag; };
 
   meta = with lib; {
     description = "Generate activity-diagram image from spec-text file (similar to Graphviz)";

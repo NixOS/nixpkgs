@@ -1,4 +1,4 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, pkg-config, openssl, Security }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, pkg-config, openssl, Security, simple-http-server, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "simple-http-server";
@@ -19,6 +19,8 @@ rustPlatform.buildRustPackage rec {
 
   # Currently no tests are implemented, so we avoid building the package twice
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = simple-http-server; };
 
   meta = with lib; {
     description = "Simple HTTP server in Rust";

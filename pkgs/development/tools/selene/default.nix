@@ -6,6 +6,8 @@
 , openssl
 , stdenv
 , Security
+, selene
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -27,6 +29,8 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optional (robloxSupport && stdenv.isDarwin) Security;
 
   buildNoDefaultFeatures = !robloxSupport;
+
+  passthru.tests.version = testVersion { package = selene; };
 
   meta = with lib; {
     description = "A blazing-fast modern Lua linter written in Rust";

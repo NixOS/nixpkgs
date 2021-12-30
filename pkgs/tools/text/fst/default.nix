@@ -3,6 +3,8 @@
 , fetchCrate
 , stdenv
 , libiconv
+, fst
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -28,6 +30,8 @@ rustPlatform.buildRustPackage rec {
     $out/bin/fst fuzzy "$fst" 'abc'
     $out/bin/fst --help > /dev/null
   '';
+
+  passthru.tests.version = testVersion { package = fst; };
 
   meta = with lib; {
     description = "Represent large sets and maps compactly with finite state transducers";

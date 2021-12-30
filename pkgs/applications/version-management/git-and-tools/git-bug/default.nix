@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, git-bug, testVersion }:
 
 buildGoModule rec {
   pname = "git-bug";
@@ -27,6 +27,8 @@ buildGoModule rec {
     install -D -m 0644 misc/zsh_completion/git-bug "$out/share/zsh/site-functions/git-bug"
     install -D -m 0644 -t "$out/share/man/man1" doc/man/*
   '';
+
+  passthru.tests.version = testVersion { package = git-bug; };
 
   meta = with lib; {
     description = "Distributed bug tracker embedded in Git";

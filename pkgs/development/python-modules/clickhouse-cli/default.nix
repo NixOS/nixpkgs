@@ -6,6 +6,8 @@
 , pygments
 , requests
 , sqlparse
+, clickhouse-cli
+, testVersion
 }:
 
 buildPythonPackage rec {
@@ -26,6 +28,8 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "clickhouse_cli" ];
+
+  passthru.tests.version = testVersion { package = clickhouse-cli; };
 
   meta = with lib; {
     description = "A third-party client for the Clickhouse DBMS server";

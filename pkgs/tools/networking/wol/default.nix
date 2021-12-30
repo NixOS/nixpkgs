@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, perl }:
+{ lib, stdenv, fetchurl, perl, wol, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "wol";
@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ perl ];
 
   enableParallelBuilding = true;
+
+  passthru.tests.version = testVersion { package = wol; };
 
   meta = with lib; {
     description = "Implements Wake On LAN functionality in a small program";

@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, aviator, testVersion }:
 
 buildGoModule rec {
   pname = "aviator";
@@ -13,6 +13,8 @@ buildGoModule rec {
 
   deleteVendor = true;
   vendorSha256 = "sha256-rYOphvI1ZE8X5UExfgxHnWBn697SDkNnmxeY7ihIZ1s=";
+
+  passthru.tests.version = testVersion { package = aviator; };
 
   meta = with lib; {
     description = "Merge YAML/JSON files in a in a convenient fashion";

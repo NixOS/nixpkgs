@@ -24,6 +24,8 @@
 , sleekxmpp
 , telegram
 , webtest
+, errbot
+, testVersion
 }:
 
 buildPythonApplication rec {
@@ -79,6 +81,8 @@ buildPythonApplication rec {
   ];
 
   pythonImportsCheck = [ "errbot" ];
+
+  passthru.tests.version = testVersion { package = errbot; };
 
   meta = with lib; {
     description = "Chatbot designed to be simple to extend with plugins written in Python";

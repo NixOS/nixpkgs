@@ -14,6 +14,8 @@
 , pkg-config
 , alsa-lib
 , udev
+, fldigi
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -40,6 +42,8 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals (stdenv.isLinux) [ libpulseaudio alsa-lib udev ];
 
   enableParallelBuilding = true;
+
+  passthru.tests.version = testVersion { package = fldigi; };
 
   meta = with lib; {
     description = "Digital modem program";

@@ -1,4 +1,4 @@
-{ buildGoPackage, fetchFromGitHub, lib }:
+{ buildGoPackage, fetchFromGitHub, lib, devd, testVersion }:
 
 buildGoPackage rec {
   pname = "devd";
@@ -11,6 +11,8 @@ buildGoPackage rec {
   };
   goPackagePath = "github.com/cortesi/devd";
   subPackages = [ "cmd/devd" ];
+  passthru.tests.version = testVersion { package = devd; };
+
   meta = with lib; {
     description = "A local webserver for developers";
     homepage = "https://github.com/cortesi/devd";

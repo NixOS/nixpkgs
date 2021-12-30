@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, xtruss, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "xtruss";
@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     url = "https://www.chiark.greenend.org.uk/~sgtatham/xtruss/${pname}-${version}.tar.gz";
     sha256 = "1mm8k92zc318jk71wlf2r4rb723nd9lalhjl0pf48raiajb5ifgd";
   };
+
+  passthru.tests.version = testVersion { package = xtruss; };
 
   meta = with lib; {
     description = "easy-to-use X protocol tracing program";

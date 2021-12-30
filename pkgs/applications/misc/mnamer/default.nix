@@ -1,4 +1,4 @@
-{ python3Packages, fetchFromGitHub, lib }:
+{ python3Packages, fetchFromGitHub, lib, mnamer, testVersion }:
 
 python3Packages.buildPythonApplication rec {
   pname = "mnamer";
@@ -36,6 +36,8 @@ python3Packages.buildPythonApplication rec {
     "e2e"
     "test_utils.py"
   ];
+
+  passthru.tests.version = testVersion { package = mnamer; };
 
   meta = with lib; {
     homepage = "https://github.com/jkwill87/mnamer";

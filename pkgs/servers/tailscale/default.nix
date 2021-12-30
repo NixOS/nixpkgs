@@ -1,4 +1,4 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub, makeWrapper, iptables, iproute2, procps }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub, makeWrapper, iptables, iproute2, procps, tailscale, testVersion }:
 
 buildGoModule rec {
   pname = "tailscale";
@@ -32,6 +32,8 @@ buildGoModule rec {
     sed -i -e "s#/usr/sbin#$out/bin#" -e "/^EnvironmentFile/d" ./cmd/tailscaled/tailscaled.service
     install -D -m0444 -t $out/lib/systemd/system ./cmd/tailscaled/tailscaled.service
   '';
+
+  passthru.tests.version = testVersion { package = tailscale; };
 
   meta = with lib; {
     homepage = "https://tailscale.com";

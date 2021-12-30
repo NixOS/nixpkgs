@@ -1,4 +1,4 @@
-{ lib, python3 }:
+{ lib, python3, pipreqs, testVersion }:
 
 with python3.pkgs;
 
@@ -15,6 +15,8 @@ buildPythonApplication rec {
 
   # Tests requires network access. Works fine without sandboxing
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = pipreqs; };
 
   meta = with lib; {
     description = "Generate requirements.txt file for any project based on imports";

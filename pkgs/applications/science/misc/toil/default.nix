@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, python3Packages }:
+{ lib, fetchFromGitHub, python3Packages, toil, testVersion }:
 
 python3Packages.buildPythonApplication rec {
   pname = "toil";
@@ -29,6 +29,8 @@ python3Packages.buildPythonApplication rec {
 
   pytestFlagsArray = [ "src/toil/test" ];
   pythonImportsCheck = [ "toil" ];
+
+  passthru.tests.version = testVersion { package = toil; };
 
   meta = with lib; {
     homepage = "https://toil.ucsc-cgl.org/";

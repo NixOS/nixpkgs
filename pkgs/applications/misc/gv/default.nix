@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, Xaw3d, ghostscriptX, perl, pkg-config, libiconv }:
+{ lib, stdenv, fetchurl, Xaw3d, ghostscriptX, perl, pkg-config, libiconv, gv, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "gv";
@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
+
+  passthru.tests.version = testVersion { package = gv; };
 
   meta = {
     homepage = "https://www.gnu.org/software/gv/";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, libcap, acl }:
+{ lib, stdenv, fetchFromGitHub, libcap, acl, bfs, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "bfs";
@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
   buildFlags = [ "release" ]; # "release" enables compiler optimizations
+
+  passthru.tests.version = testVersion { package = bfs; };
 
   meta = with lib; {
     description = "A breadth-first version of the UNIX find command";

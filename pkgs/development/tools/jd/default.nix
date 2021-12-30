@@ -1,4 +1,4 @@
-{ lib, buildGoPackage, fetchgit }:
+{ lib, buildGoPackage, fetchgit, jd, testVersion }:
 
 buildGoPackage rec {
   pname = "jd";
@@ -12,6 +12,8 @@ buildGoPackage rec {
     url = "https://github.com/tidwall/jd";
     sha256 = "0dj4k38pf80dl77jns29vx2dj265s4ksg2q2s9n240b7b8z8mn5h";
   };
+
+  passthru.tests.version = testVersion { package = jd; };
 
   meta = with lib; {
     description = "Interactive JSON Editor";

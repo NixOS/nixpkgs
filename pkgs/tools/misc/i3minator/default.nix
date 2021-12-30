@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, python3Packages, glibcLocales }:
+{ lib, fetchFromGitHub, python3Packages, glibcLocales, i3minator, testVersion }:
 
 python3Packages.buildPythonApplication rec {
   pname = "i3minator";
@@ -17,6 +17,8 @@ python3Packages.buildPythonApplication rec {
 
   # No tests
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = i3minator; };
 
   meta = with lib; {
     description = "i3 project manager similar to tmuxinator";
