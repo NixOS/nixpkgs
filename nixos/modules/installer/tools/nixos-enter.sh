@@ -104,4 +104,6 @@ chroot_add_resolv_conf "$mountPoint" || print "ERROR: failed to set up resolv.co
     chroot "$mountPoint" systemd-tmpfiles --create --remove --exclude-prefix=/dev 1>&2 || true
 )
 
+unset TMPDIR
+
 exec chroot "$mountPoint" "${command[@]}"
