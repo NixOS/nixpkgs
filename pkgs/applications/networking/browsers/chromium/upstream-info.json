@@ -14,7 +14,8 @@
     "chromedriver": {
       "version": "96.0.4664.45",
       "sha256_linux": "15wybxlh38sw7f2bzalf9ivfp8262cpcvhq08nw9d2cj3j39f13m",
-      "sha256_darwin": "0r3b8wgbd8xjb09f4vc402gp77y2aqjk9hpqvvr6xgdr7nqym20f"
+      "sha256_darwin": "0r3b8wgbd8xjb09f4vc402gp77y2aqjk9hpqvvr6xgdr7nqym20f",
+      "sha256_darwin_aarch64": "1yynw8ngs2655blnf1s6r9flbxlwgaybdvgl6r6h7ppl974dl7rm"
     }
   },
   "beta": {
