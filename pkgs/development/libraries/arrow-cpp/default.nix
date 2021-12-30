@@ -208,11 +208,6 @@ stdenv.mkDerivation rec {
     in
     lib.optionalString doInstallCheck "-${builtins.concatStringsSep ":" filteredTests}";
 
-  preInstallCheck = ''
-    export HOME
-    HOME="$(mktemp -d)"
-  '';
-
   installCheckInputs = [ perl which ] ++ lib.optional enableS3 minio;
   installCheckPhase =
     let
