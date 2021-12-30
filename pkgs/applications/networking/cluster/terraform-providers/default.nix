@@ -54,7 +54,6 @@ let
   special-providers = {
     # Packages that don't fit the default model
     gandi = callPackage ./gandi { };
-    hcloud = callPackage ./hcloud { };
     libvirt = callPackage ./libvirt { };
     linuxbox = callPackage ./linuxbox { };
     lxd = callPackage ./lxd { };

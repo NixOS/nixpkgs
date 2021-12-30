@@ -446,6 +446,15 @@
     "sha256": "00l3cwvyyjk0n3j535qfj3bsf1s5l07786gnxycj0f8vz3a06bcq",
     "version": "1.6.0"
   },
+  "hcloud": {
+    "owner": "hetznercloud",
+    "provider-source-address": "registry.terraform.io/hetznercloud/hcloud",
+    "repo": "terraform-provider-hcloud",
+    "rev": "v1.32.2",
+    "sha256": "0rr65bxd0w5r0zqgj975rzxw7j3wrav4dw9gl3ispfhkb9v1302f",
+    "vendorSha256": "0g8cbkg5kcddd1x3p6d8mb6mqwsayqby0mrrifkw5icf7rlaa0sl",
+    "version": "1.32.2"
+  },
   "hedvig": {
     "owner": "terraform-providers",
     "repo": "terraform-provider-hedvig",
