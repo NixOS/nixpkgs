@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Speech codec designed for communications quality speech at low data rates";
-    homepage = "http://www.rowetel.com/blog/?page_id=452";
+    homepage = "https://www.rowetel.com/codec2.html";
     license = licenses.lgpl21Only;
     platforms = platforms.unix;
     maintainers = with maintainers; [ markuskowa ];

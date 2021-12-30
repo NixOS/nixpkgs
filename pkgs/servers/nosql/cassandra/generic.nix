@@ -117,7 +117,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "http://cassandra.apache.org/";
+    homepage = "https://cassandra.apache.org/";
     description = "A massively scalable open source NoSQL database";
     platforms = platforms.unix;
     license = licenses.asl20;
