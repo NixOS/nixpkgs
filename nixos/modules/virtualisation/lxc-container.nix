@@ -157,6 +157,7 @@ in
     users.users.root.initialHashedPassword = mkOverride 150 "";
 
     system.activationScripts.installInitScript = mkForce ''
+      mkdir -p /sbin/
       ln -fs $systemConfig/init /sbin/init
     '';
 
