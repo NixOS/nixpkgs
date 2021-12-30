@@ -197,6 +197,15 @@
     "vendorSha256": "004pb5xnvisq3j113i6qfvnh1j06nkpkgzav3wb08k0bl19b6jks",
     "version": "3.4.0"
   },
+  "cloudfoundry": {
+    "owner": "cloudfoundry-community",
+    "provider-source-address": "registry.terraform.io/cloudfoundry-community/cloudfoundry",
+    "repo": "terraform-provider-cloudfoundry",
+    "rev": "v0.15.0",
+    "sha256": "0kg9aivxlbkqgrwv0j02hfsaky5q4f0bmqihn589dsdk7jds66i7",
+    "vendorSha256": "19jnaazhdqagfx5wkpvrf0amf7d22kg6hzk0nsg888d0l4x93hna",
+    "version": "0.15.0"
+  },
   "cloudinit": {
     "owner": "hashicorp",
     "provider-source-address": "registry.terraform.io/hashicorp/cloudinit",
