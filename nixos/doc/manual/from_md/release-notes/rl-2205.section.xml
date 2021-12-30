@@ -122,6 +122,14 @@
           <literal>virtualisation.docker.daemon.settings</literal>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The backward compatibility in
+          <literal>services.wordpress</literal> to configure sites with
+          the old interface has been removed. Please use
+          <literal>services.wordpress.sites</literal> instead.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.05-notable-changes">
