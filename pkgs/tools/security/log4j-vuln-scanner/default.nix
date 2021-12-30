@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "log4j-vuln-scanner";
-  version = "0.10";
+  version = "0.11";
 
   src = fetchFromGitHub {
     owner = "hillu";
     repo = "local-log4j-vuln-scanner";
     rev = "v${version}";
-    sha256 = "sha256-w3S+OxSTRgmFJOODDOoK33ddckv18LNnZyx7/HBTl9I=";
+    sha256 = "sha256-YGo2dhfqLPNP8O9gdRJfxKmEK/pKd17WNTXQ2cq78qg=";
   };
 
-  vendorSha256 = "sha256-pQpattmS9VmO3ZIQUFn66az8GSmB4IvYhTTCFn6SUmo=";
+  vendorSha256 = null;
 
   postInstall = ''
     mv $out/bin/scanner $out/bin/$pname
