@@ -63,6 +63,8 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # we are not interested in linting errors
     "tests/test_lint.py"
+    # breaks with `RuntimeError: cannot schedule new futures after interpreter shutdown`
+    "tests/test_pr_curve.py"
   ];
 
   meta = with lib; {
