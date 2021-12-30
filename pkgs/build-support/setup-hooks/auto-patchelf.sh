@@ -89,9 +89,13 @@ populateCacheForDep() {
 
             local soname="${found%.so*}"
             local foundso=
+            shopt -u failglob
+            shopt -s nullglob
             for foundso in "$rpathElem/$soname".so*; do
                 addToDepCache "$foundso"
             done
+            shopt -u nullglob
+            shopt -s failglob
 
             # Found in this element of the rpath, no need to check others.
             if [ -n "$foundso" ]; then
