@@ -1,4 +1,4 @@
-/* The top-level package collection of nixpkgs.
+\/* The top-level package collection of nixpkgs.
  * It is sorted by categories corresponding to the folder names
  * in the /pkgs folder. Inside the categories packages are roughly
  * sorted by alphabet, but strict sorting has been long lost due
@@ -25769,7 +25769,9 @@ with pkgs;
     vmopts = config.jetbrains.vmopts or null;
     jdk = jetbrains.jdk;
   }) // {
-    jdk = callPackage ../development/compilers/jetbrains-jdk {  };
+    sourcebuild = callPackage ../development/compilers/jetbrains-jdk/default.nix {  };
+    prebuild = callPackage ../development/compilers/jetbrains-jdk/prebuild.nix {  };
+    jdk = if stdenv.isDarwin then jetbrains.prebuild else jetbrains.sourcebuild;
   });
 
   jmusicbot = callPackage ../applications/audio/jmusicbot { };
