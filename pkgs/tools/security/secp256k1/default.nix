@@ -9,13 +9,13 @@ stdenv.mkDerivation {
 
   # I can't find any version numbers, so we're just using the date of the
   # last commit.
-  version = "unstable-2021-06-06";
+  version = "unstable-2021-12-25";
 
   src = fetchFromGitHub {
     owner = "bitcoin-core";
     repo = "secp256k1";
-    rev = "7973576f6e3ab27d036a09397152b124d747f4ae";
-    sha256 = "0vjk55dv0mkph4k6bqgkykmxn05ngzvhc4rzjnvn33xzi8dzlvah";
+    rev = "39a36db94a6f733398d4eefd4e89bcaaeb063551";
+    sha256 = "1xss16608cvjaivlz7y4wzj229f1411hcbfw0lnrznl4rz4r4ah1";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

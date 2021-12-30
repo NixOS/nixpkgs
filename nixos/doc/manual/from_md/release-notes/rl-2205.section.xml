@@ -151,6 +151,16 @@
       </listitem>
       <listitem>
         <para>
+          <literal>secp256k1</literal> has been upgraded to the latest
+          upstream commit. It includes some backwards-incompatible
+          changes in the schnorr signatures module; code that depends on
+          it will need to be updated to either use
+          <literal>secp256k1_schnorr_sign_custom</literal> or not pass a
+          <literal>noncefp</literal> parameter.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           For <literal>pkgs.python3.pkgs.ipython</literal>, its direct
           dependency
           <literal>pkgs.python3.pkgs.matplotlib-inline</literal> (which
