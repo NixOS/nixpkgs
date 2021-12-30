@@ -1,4 +1,4 @@
-\/* The top-level package collection of nixpkgs.
+/* The top-level package collection of nixpkgs.
  * It is sorted by categories corresponding to the folder names
  * in the /pkgs folder. Inside the categories packages are roughly
  * sorted by alphabet, but strict sorting has been long lost due
