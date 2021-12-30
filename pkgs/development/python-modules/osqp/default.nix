@@ -13,11 +13,11 @@
 
 buildPythonPackage rec {
   pname = "osqp";
-  version = "0.6.2.post0";
+  version = "0.6.2.post4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5f0695f26a3bef0fae91254bc283fab790dcca0064bfe0f425167f9c9e8b4cbc";
+    sha256 = "23831d407c52a67789e0490257f91a62b86ddeaf31dbcdefb7d3801e56596154";
   };
 
   nativeBuildInputs = [ cmake ];
