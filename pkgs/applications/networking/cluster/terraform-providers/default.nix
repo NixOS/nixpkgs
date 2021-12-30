@@ -57,7 +57,6 @@ let
     libvirt = callPackage ./libvirt { };
     teleport = callPackage ./teleport { };
     vpsadmin = callPackage ./vpsadmin { };
-    vercel = callPackage ./vercel { };
   } // (lib.optionalAttrs (config.allowAliases or false) {
     kubernetes-alpha = throw "This has been merged as beta into the kubernetes provider. See https://www.hashicorp.com/blog/beta-support-for-crds-in-the-terraform-provider-for-kubernetes for details";
   });
