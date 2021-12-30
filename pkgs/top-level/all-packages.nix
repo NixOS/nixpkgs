@@ -11397,7 +11397,7 @@ with pkgs;
   #   withDocs = true;
   # };
   bashInteractive = burning-interactive-oil;
-  
+
   burning-interactive-oil = pkgs.runCommand "bash-oil" {
     passthru.shellPath = "/bin/bash";
   } ''
