@@ -1,19 +1,13 @@
 { config, pkgs, lib, ... }:
 
-let
-  inherit (lib) mkDefault mkEnableOption mkForce mkIf mkMerge mkOption types maintainers recursiveUpdate;
-  inherit (lib) any attrValues concatMapStrings concatMapStringsSep flatten literalExpression;
-  inherit (lib) filterAttrs mapAttrs mapAttrs' mapAttrsToList nameValuePair optional optionalAttrs optionalString;
+with lib;
 
-  cfg = migrateOldAttrs config.services.dokuwiki;
+let
+  cfg = config.services.dokuwiki;
   eachSite = cfg.sites;
   user = "dokuwiki";
   webserver = config.services.${cfg.webserver};
   stateDir = hostName: "/var/lib/dokuwiki/${hostName}/data";
-
-  # Migrate config.services.dokuwiki.<hostName> to config.services.dokuwiki.sites.<hostName>
-  oldSites = filterAttrs (o: _: o != "sites" && o != "webserver");
-  migrateOldAttrs = cfg: cfg // { sites = cfg.sites // oldSites cfg; };
 
   dokuwikiAclAuthConfig = hostName: cfg: pkgs.writeText "acl.auth-${hostName}.php" ''
     # acl.auth.php
@@ -257,10 +251,7 @@ in
   options = {
     services.dokuwiki = mkOption {
       type = types.submodule {
-        # Used to support old interface
-        freeformType = types.attrsOf (types.submodule siteOpts);
 
-        # New interface
         options.sites = mkOption {
           type = types.attrsOf (types.submodule siteOpts);
           default = {};
@@ -300,8 +291,6 @@ in
       message = "services.dokuwiki.sites.${hostName}.aclUse must must be true if usersFile is not null";
     }
     ]) eachSite);
-
-    warnings = mapAttrsToList (hostName: _: ''services.dokuwiki."${hostName}" is deprecated use services.dokuwiki.sites."${hostName}"'') (oldSites cfg);
 
     services.phpfpm.pools = mapAttrs' (hostName: cfg: (
       nameValuePair "dokuwiki-${hostName}" {
