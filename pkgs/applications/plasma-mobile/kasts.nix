@@ -10,9 +10,12 @@
 , kcoreaddons
 , ki18n
 , kirigami2
+, networkmanager-qt
+, qtkeychain
 , qtmultimedia
 , qtquickcontrols2
 , syndication
+, taglib
 }:
 
 let
@@ -37,9 +40,12 @@ mkDerivation rec {
     kcoreaddons
     ki18n
     kirigami2
-    qtquickcontrols2
+    networkmanager-qt
+    qtkeychain
     qtmultimedia
+    qtquickcontrols2
     syndication
+    taglib
   ];
 
   preFixup = ''
