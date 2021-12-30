@@ -180,6 +180,16 @@ in stdenv.mkDerivation (rec {
     "-DLLVM_HOST_TRIPLE=${stdenv.hostPlatform.config}"
     "-DLLVM_DEFAULT_TARGET_TRIPLE=${stdenv.hostPlatform.config}"
     "-DLLVM_ENABLE_DUMP=ON"
+  ] ++ optionals stdenv.hostPlatform.isStatic [
+    # Disables building of shared libs, -fPIC is still injected by cc-wrapper
+    "-DLLVM_ENABLE_PIC=OFF"
+    "-DLLVM_BUILD_STATIC=ON"
+    # libxml2 needs to be disabled because the LLVM build system ignores its .la
+    # file and doesn't link zlib as well.
+    # https://github.com/ClangBuiltLinux/tc-build/issues/150#issuecomment-845418812
+    "-DLLVM_ENABLE_LIBXML2=OFF"
+    # This is a Shared Library not tied to LLVM_ENABLE_PIC
+    "-DLLVM_TOOL_REMARKS_SHLIB_BUILD=OFF"
   ] ++ optionals enableManpages [
     "-DLLVM_BUILD_DOCS=ON"
     "-DLLVM_ENABLE_SPHINX=ON"
