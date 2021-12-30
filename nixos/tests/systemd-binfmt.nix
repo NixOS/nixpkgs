@@ -68,4 +68,23 @@ in {
       machine.succeed("exec -a meow ${testAarch64} meow")
     '';
   };
+
+  ldPreload = makeTest {
+    name = "systemd-binfmt-ld-preload";
+    machine = {
+      boot.binfmt.emulatedSystems = [
+        "aarch64-linux"
+      ];
+    };
+    testScript = let
+      helloAarch64 = pkgs.pkgsCross.aarch64-multiplatform.hello;
+      libredirectAarch64 = pkgs.pkgsCross.aarch64-multiplatform.libredirect;
+    in ''
+      machine.start()
+
+      assert "error" not in machine.succeed(
+          "LD_PRELOAD='${libredirectAarch64}/lib/libredirect.so' ${helloAarch64}/bin/hello 2>&1"
+      ).lower()
+    '';
+  };
 }
