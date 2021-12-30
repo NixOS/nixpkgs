@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pynetdicom";
-  version = "2.0.0";
+  version = "2.0.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "pydicom";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Kfcfk76au2ymbX+nl0PhuuCd+t6dYRbTurGlW6msv3Y=";
+    sha256 = "sha256-28SoOdS6sAj3KrfJT8PR2k8XLEY2zh0k9w1eq1y7V8M=";
   };
 
   propagatedBuildInputs = [
