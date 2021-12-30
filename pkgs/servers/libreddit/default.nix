@@ -29,6 +29,6 @@ rustPlatform.buildRustPackage rec {
     description = "Private front-end for Reddit";
     homepage = "https://github.com/spikecodes/libreddit";
     license = with licenses; [ agpl3Only ];
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [ fab jojosch ];
   };
 }
