@@ -22294,7 +22294,7 @@ with pkgs;
   iproute_mptcp = callPackage ../os-specific/linux/iproute/mptcp.nix { };
 
   iputils = hiPrio (callPackage ../os-specific/linux/iputils { });
-  # hiPrio for collisions with inetutils (ping and tftpd.8.gz)
+  # hiPrio for collisions with inetutils (ping)
 
   iptables = callPackage ../os-specific/linux/iptables { };
   iptables-legacy = callPackage ../os-specific/linux/iptables { nftablesCompat = false; };
