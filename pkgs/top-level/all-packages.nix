@@ -21675,6 +21675,7 @@ with pkgs;
 
   rabbitmq-server = callPackage ../servers/amqp/rabbitmq-server {
     inherit (darwin.apple_sdk.frameworks) AppKit Carbon Cocoa;
+    elixir = elixir_1_12;
   };
 
   radicale1 = callPackage ../servers/radicale/1.x.nix { };
