@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "imgbrd-grabber";
-  version = "7.5.1";
+  version = "7.7.0";
 
   src = fetchFromGitHub {
     owner = "Bionus";
     repo = "imgbrd-grabber";
     rev = "v${version}";
-    sha256 = "sha256-40JCdtRhAQpz2lBGmYh2MgA9rRzHmOZx7lWW0IbfjP4=";
+    sha256 = "sha256-Mym/fuV9YVyj5w8U9KlZ/wuwnnC3K5TGNo9RrAFHI5g=";
     fetchSubmodules = true;
   };
 
