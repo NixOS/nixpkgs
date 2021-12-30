@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "actdiag";
-  version = "2.0.0";
+  version = "3.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "blockdiag";
     repo = pname;
     rev = version;
-    sha256 = "sha256-pTWunoc6T1m+4SOe0ob0ac4ZwwXsYNZwkdwVtlMZrIo=";
+    sha256 = "sha256-WmprkHOgvlsOIg8H77P7fzEqxGnj6xaL7Df7urRkg3o=";
   };
 
   propagatedBuildInputs = [
