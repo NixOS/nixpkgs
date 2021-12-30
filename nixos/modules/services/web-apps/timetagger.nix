@@ -8,15 +8,19 @@ in {
 
   options = {
     services.timetagger = {
-      enable = mkEnableOption ''
-        Tag your time, get the insight
+      enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Tag your time, get the insight
 
-        <note><para>
-          This app does not do authentication.
-          You must setup authentication yourself or run it in an environment where
-          only allowed users have access.
-        </para></note>
-      '';
+          <note><para>
+            This app does not do authentication.
+            You must setup authentication yourself or run it in an environment where
+            only allowed users have access.
+          </para></note>
+        '';
+      };
 
       bindAddr = mkOption {
         description = "Address to bind to.";
