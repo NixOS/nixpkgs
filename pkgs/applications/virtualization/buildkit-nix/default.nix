@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "buildkit-nix";
-  version = "0.0.1";
+  version = "0.0.2";
 
   src = fetchFromGitHub {
     owner = "AkihiroSuda";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Bdw7kYAZmRf1VOJ8y7JISQbAo0vLjWlo0j5x+VD9lSU=";
+    sha256 = "sha256-k9YO4KFIDebfszhKG6RYDFlVfbUPFHRsHRQXXlJ6SoU=";
   };
 
   vendorSha256 = "sha256-c+VHt2uTaEQIXsmJ9TA7X5lfMxGL9yKbbnnXn4drCLU=";

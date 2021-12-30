@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "hubsrht";
-  version = "0.13.1";
+  version = "0.14.4";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "hub.sr.ht";
     rev = version;
-    sha256 = "sha256-Kqzy4mh5Nn1emzHBco/LVuXro/tW3NX+OYqdEwBSQ/U=";
+    sha256 = "sha256-7HF+jykWGqzPWA0YtJZQZU7pnID1yexcqLkEf2HpnSs=";
   };
 
   nativeBuildInputs = srht.nativeBuildInputs;
@@ -26,11 +26,12 @@ buildPythonPackage rec {
   '';
 
   dontUseSetuptoolsCheck = true;
+  pythonImportsCheck = [ "hubsrht" ];
 
   meta = with lib; {
     homepage = "https://git.sr.ht/~sircmpwn/hub.sr.ht";
     description = "Project hub service for the sr.ht network";
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
     maintainers = with maintainers; [ eadwu ];
   };
 }

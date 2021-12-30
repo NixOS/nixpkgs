@@ -5,20 +5,12 @@
 let
   python = python3.override {
     packageOverrides = self: super: {
-      sqlalchemy = super.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
-        version = "1.3.24";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "ebbb777cbf9312359b897bf81ba00dae0f5cb69fba2a18265dcc18a6f5ef7519";
-        };
-      });
-
       tulir-telethon = self.telethon.overridePythonAttrs (oldAttrs: rec {
-        version = "1.24.0a2";
+        version = "1.25.0a1";
         pname = "tulir-telethon";
         src = oldAttrs.src.override {
           inherit pname version;
-          sha256 = "sha256-Qbx164FwC8nhesoY2fkaKvErN8g0Ph8vGcx+Cc1AqRg=";
+          sha256 = "sha256-TFZRmhCrQ9IccGFcYxwdbD2ReSCWZ2n33S1ank1Bn1k=";
         };
       });
     };
@@ -33,17 +25,17 @@ let
 
 in python.pkgs.buildPythonPackage rec {
   pname = "mautrix-telegram";
-  version = "0.10.2";
+  version = "0.11.0";
   disabled = python.pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "telegram";
     rev = "v${version}";
-    sha256 = "sha256-BYsGLyxhdjBVmnZXLC5ZjwDlWcHdUGp+DsNIOXA1/Tc=";
+    sha256 = "sha256-s0UCl0FJWO53hvHJhpeSQVGCBKEH7COFLXFCFitpDjw=";
   };
 
-  patches = [ ./0001-Re-add-entrypoint.patch ./0002-Don-t-depend-on-pytest-runner.patch ];
+  patches = [ ./0001-Re-add-entrypoint.patch ];
   postPatch = ''
     sed -i -e '/alembic>/d' requirements.txt
     substituteInPlace requirements.txt \

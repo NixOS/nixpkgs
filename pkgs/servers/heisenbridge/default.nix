@@ -1,37 +1,44 @@
-{ lib, fetchFromGitHub, fetchpatch, python3Packages }:
+{ lib, fetchFromGitHub, fetchpatch, python3 }:
 
-python3Packages.buildPythonApplication rec {
+let
+  python = python3.override {
+    packageOverrides = self: super: {
+      mautrix_0_13 = self.mautrix.overridePythonAttrs (oldAttrs: rec {
+        version = "0.13.3";
+        src = oldAttrs.src.override {
+          inherit (oldAttrs) pname;
+          inherit version;
+          sha256 = "1e4a292469f3e200c182aaa5bf693a5c3834b2a0cfb3d29e4c9a1559db7740e3";
+        };
+      });
+    };
+  };
+in
+
+python.pkgs.buildPythonApplication rec {
   pname = "heisenbridge";
-  version = "1.7.1";
+  version = "1.8.2";
 
   src = fetchFromGitHub {
     owner = "hifi";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-q1Rj8BehvYnV/Kah5YKAxBUz4j9WziSqn1fVeaKpy7g=";
+    sha256 = "173prcd56rwlxjxlw67arnm12k1l317xi5s6m7jhmp8zbbrj5vwr";
   };
-
-  patches = [
-    # Compatibility with aiohttp 3.8.0
-    (fetchpatch {
-      url = "https://github.com/hifi/heisenbridge/commit/cff5d33e0b617e6cf3a44dc00c72b98743175c9e.patch";
-      sha256 = "sha256-y5X4mWvX1bq0XNZNTYUc0iK3SzvaHpS7px53I7xC9c8=";
-    })
-  ];
 
   postPatch = ''
     echo "${version}" > heisenbridge/version.txt
   '';
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = with python.pkgs; [
     aiohttp
     irc
-    mautrix
+    mautrix_0_13
     python-socks
     pyyaml
   ];
 
-  checkInputs = with python3Packages; [
+  checkInputs = with python.pkgs; [
     pytestCheckHook
   ];
 

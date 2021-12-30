@@ -149,6 +149,20 @@
           migration guide</link> for more details.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          For <literal>pkgs.python3.pkgs.ipython</literal>, its direct
+          dependency
+          <literal>pkgs.python3.pkgs.matplotlib-inline</literal> (which
+          is really an adapter to integrate matplotlib in ipython if it
+          is installed) does not depend on
+          <literal>pkgs.python3.pkgs.matplotlib</literal> anymore. This
+          is closer to a non-Nix install of ipython. This has the added
+          benefit to reduce the closure size of
+          <literal>ipython</literal> from ~400MB to ~160MB (including
+          ~100MB for python itself).
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.05-notable-changes">
@@ -237,6 +251,13 @@
           a
           <link xlink:href="https://github.com/NixOS/rfcs/blob/master/rfcs/0042-config-option.md">settings-style</link>
           configuration.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The option <literal>services.duplicati.dataDir</literal> has
+          been added to allow changing the location of duplicati’s
+          files.
         </para>
       </listitem>
     </itemizedlist>
