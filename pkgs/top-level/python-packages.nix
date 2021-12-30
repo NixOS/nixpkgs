@@ -4109,6 +4109,8 @@ in {
 
   jmespath = callPackage ../development/python-modules/jmespath { };
 
+  jmp = callPackage ../development/python-modules/jmp { };
+
   joblib = callPackage ../development/python-modules/joblib { };
 
   johnnycanencrypt = callPackage ../development/python-modules/johnnycanencrypt {
