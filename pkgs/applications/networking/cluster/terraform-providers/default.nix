@@ -13,6 +13,7 @@ let
       pname = data.repo;
       version = data.version;
       subPackages = [ "." ];
+      doCheck = false;
       src = fetchFromGitHub {
         inherit (data) owner repo rev sha256;
       };
@@ -31,6 +32,7 @@ let
       version = data.version;
       goPackagePath = "github.com/${data.owner}/${data.repo}";
       subPackages = [ "." ];
+      doCheck = false;
       src = fetchFromGitHub {
         inherit (data) owner repo rev sha256;
       };
