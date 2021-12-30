@@ -2504,6 +2504,8 @@ in {
 
   elasticsearchdsl = self.elasticsearch-dsl;
 
+  elegy = callPackage ../development/python-modules/elegy { };
+
   elementpath = callPackage ../development/python-modules/elementpath { };
 
   elevate = callPackage ../development/python-modules/elevate { };
