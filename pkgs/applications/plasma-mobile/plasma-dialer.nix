@@ -13,11 +13,11 @@
 , kpeople
 , libphonenumber
 , libpulseaudio
-, libqofono
+, modemmanager-qt
 , protobuf
 , pulseaudio-qt
+, qtfeedback
 , qtquickcontrols2
-, telepathy
 }:
 
 mkDerivation rec {
@@ -38,11 +38,11 @@ mkDerivation rec {
     kpeople
     libphonenumber
     libpulseaudio
-    libqofono
+    modemmanager-qt
     protobuf # Needed by libphonenumber
     pulseaudio-qt
+    qtfeedback
     qtquickcontrols2
-    telepathy
   ];
 
   meta = with lib; {

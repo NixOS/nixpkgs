@@ -8497,8 +8497,6 @@ with pkgs;
 
   neo-cowsay = callPackage ../tools/misc/neo-cowsay { };
 
-  neochat = libsForQt5.callPackage ../applications/networking/instant-messengers/neochat { };
-
   neofetch = callPackage ../tools/misc/neofetch { };
 
   nerdfonts = callPackage ../data/fonts/nerdfonts { };
