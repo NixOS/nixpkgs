@@ -44,6 +44,8 @@
 , libgxps
 , supportXPS ? true # Open XML Paper Specification via libgxps
 , withPantheon ? false
+, evince
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -139,6 +141,8 @@ stdenv.mkDerivation rec {
       packageName = pname;
     };
   };
+
+  passthru.tests.version = testVersion { package = evince; };
 
   meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Evince";

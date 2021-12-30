@@ -1,4 +1,4 @@
-{ lib, stdenv, whois, libxcrypt, perl, pkg-config }:
+{ lib, stdenv, whois, libxcrypt, perl, pkg-config, mkpasswd, testVersion }:
 
 stdenv.mkDerivation {
   pname = "mkpasswd";
@@ -10,6 +10,8 @@ stdenv.mkDerivation {
   inherit (whois) preConfigure;
   buildPhase = "make mkpasswd";
   installPhase = "make install-mkpasswd";
+
+  passthru.tests.version = testVersion { package = mkpasswd; };
 
   meta = with lib; {
     homepage = "https://packages.qa.debian.org/w/whois.html";

@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, evans, testVersion }:
 
 buildGoModule rec {
   pname = "evans";
@@ -14,6 +14,8 @@ buildGoModule rec {
   subPackages = [ "." ];
 
   vendorSha256 = "sha256-WclmINHcgRtbRSZGv+lOgwuImHKVC9cfK8C+f9JBcts=";
+
+  passthru.tests.version = testVersion { package = evans; };
 
   meta = with lib; {
     description = "More expressive universal gRPC client";

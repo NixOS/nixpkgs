@@ -1,4 +1,4 @@
-{ lib, python3Packages }:
+{ lib, python3Packages, pydf, testVersion }:
 
 python3Packages.buildPythonPackage rec {
   pname = "pydf";
@@ -14,6 +14,8 @@ python3Packages.buildPythonPackage rec {
     install -t $out/share/pydf -m 444 pydfrc
     install -t $out/share/man/man1 -m 444 pydf.1
   '';
+
+  passthru.tests.version = testVersion { package = pydf; };
 
   meta = with lib; {
     description = "colourised df(1)-clone";

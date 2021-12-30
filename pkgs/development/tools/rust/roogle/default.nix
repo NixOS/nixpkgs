@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{ lib, rustPlatform, fetchFromGitHub, roogle, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "roogle";
@@ -17,6 +17,8 @@ rustPlatform.buildRustPackage rec {
     mkdir -p $out/share/roogle
     cp -r assets $out/share/roogle
   '';
+
+  passthru.tests.version = testVersion { package = roogle; };
 
   meta = with lib; {
     description = "A Rust API search engine which allows you to search functions by names and type signatures";

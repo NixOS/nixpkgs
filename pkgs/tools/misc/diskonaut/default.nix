@@ -1,4 +1,4 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, diskonaut, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "diskonaut";
@@ -15,6 +15,8 @@ rustPlatform.buildRustPackage rec {
 
   # 1 passed; 44 failed https://hydra.nixos.org/build/148943783/nixlog/1
   doCheck = !stdenv.isDarwin;
+
+  passthru.tests.version = testVersion { package = diskonaut; };
 
   meta = with lib; {
     description = "Terminal disk space navigator";

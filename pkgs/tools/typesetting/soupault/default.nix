@@ -1,4 +1,4 @@
-{ fetchFromGitHub, ocamlPackages, lib }:
+{ fetchFromGitHub, ocamlPackages, lib, soupault, testVersion }:
 
 ocamlPackages.buildDunePackage rec {
   pname = "soupault";
@@ -31,6 +31,8 @@ ocamlPackages.buildDunePackage rec {
     tsort
     yaml
   ];
+
+  passthru.tests.version = testVersion { package = soupault; };
 
   meta = with lib; {
     description = "A tool that helps you create and manage static websites";

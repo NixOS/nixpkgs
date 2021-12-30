@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, bison, flex, makeWrapper, texinfo4, getopt, readline, texlive }:
+{ lib, stdenv, fetchurl, bison, flex, makeWrapper, texinfo4, getopt, readline, texlive, eukleides, testVersion }:
 
 lib.fix (eukleides: stdenv.mkDerivation rec {
   pname = "eukleides";
@@ -47,6 +47,8 @@ lib.fix (eukleides: stdenv.mkDerivation rec {
   passthru.pkgs = [ eukleides.tex ]
     # packages needed by euktoeps, euktopdf and eukleides.sty
     ++ (with texlive; collection-pstricks.pkgs ++ epstopdf.pkgs ++ iftex.pkgs ++ moreverb.pkgs);
+
+  passthru.tests.version = testVersion { package = eukleides; };
 
   meta = {
     description = "Geometry Drawing Language";

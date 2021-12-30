@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchCrate }:
+{ lib, rustPlatform, fetchCrate, svgbob, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "svgbob";
@@ -11,6 +11,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "sha256-pkdiow+9gsQ9rrSHwukd17r5CfsaJgYj6KA4wYKbtA0=";
+
+  passthru.tests.version = testVersion { package = svgbob; };
 
   meta = with lib; {
     description = "Convert your ascii diagram scribbles into happy little SVG";

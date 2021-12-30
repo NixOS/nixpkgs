@@ -2,6 +2,8 @@
 , stdenv
 , fetchurl
 , fetchpatch
+, pv
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -21,6 +23,8 @@ stdenv.mkDerivation rec {
       sha256 = "001xayskfprri4s2gd3bqwajw6nz6nv0ggb0835par7q7bsd0dzr";
     })
   ];
+
+  passthru.tests.version = testVersion { package = pv; };
 
   meta = {
     homepage = "http://www.ivarch.com/programs/pv";

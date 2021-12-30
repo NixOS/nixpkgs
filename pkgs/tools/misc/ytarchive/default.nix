@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, ytarchive, testVersion }:
 
 buildGoModule rec {
   pname = "ytarchive";
@@ -14,6 +14,8 @@ buildGoModule rec {
   vendorSha256 = "sha256-r9fDFSCDItQ7YSj9aTY1LXRrFE9T3XD0X36ywCfu0R8=";
 
   ldflags = [ "-s" "-w" ];
+
+  passthru.tests.version = testVersion { package = ytarchive; };
 
   meta = with lib; {
     homepage = "https://github.com/Kethsar/ytarchive";

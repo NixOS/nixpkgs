@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, rustPlatform, pkg-config, libXrandr, libX11 }:
+{ lib, fetchFromGitHub, rustPlatform, pkg-config, libXrandr, libX11, shotgun, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "shotgun";
@@ -16,6 +16,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "sha256-w5s9I7lXO8HN9zHqZQCeqBXSd7jmbsaqMZRwPLnbqNk=";
+
+  passthru.tests.version = testVersion { package = shotgun; };
 
   meta = with lib; {
     description = "Minimal X screenshot utility";

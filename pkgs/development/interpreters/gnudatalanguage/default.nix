@@ -58,6 +58,8 @@
 , enableWX ? (stdenv.isLinux || stdenv.isDarwin)
   # X11: OFF by default for platform consistency. Use X where WX is not available
 , enableXWin ? (!stdenv.isLinux && !stdenv.isDarwin)
+, gnudatalanguage
+, testVersion
 }:
 
 let
@@ -186,6 +188,8 @@ stdenv.mkDerivation rec {
       enableXWin
       ;
   };
+
+  passthru.tests.version = testVersion { package = gnudatalanguage; };
 
   meta = with lib; {
     description = "Free incremental compiler of IDL";

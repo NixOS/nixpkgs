@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, autoconf, automake, ncurses }:
+{ lib, stdenv, fetchurl, autoconf, automake, ncurses, conspy, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "conspy";
@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
     automake --add-missing
     autoconf
   '';
+
+  passthru.tests.version = testVersion { package = conspy; };
 
   meta = with lib; {
     description = "Linux text console viewer";

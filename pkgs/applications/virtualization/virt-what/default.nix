@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl }:
+{ stdenv, lib, fetchurl, virt-what, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "virt-what";
@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     url = "https://people.redhat.com/~rjones/virt-what/files/${pname}-${version}.tar.gz";
     sha256 = "0yqz1l4di57d4y1z94yhdmkiykg9a8i7xwkqmd9zsk5a6i9lbjqj";
   };
+
+  passthru.tests.version = testVersion { package = virt-what; };
 
   meta = with lib; {
     description = "Detect if running in a virtual machine and prints its type";

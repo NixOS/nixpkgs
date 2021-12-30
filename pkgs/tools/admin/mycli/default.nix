@@ -1,6 +1,8 @@
 { lib
 , python3
 , glibcLocales
+, mycli
+, testVersion
 }:
 
 with python3.pkgs;
@@ -44,6 +46,8 @@ buildPythonApplication rec {
       --replace "sqlparse>=0.3.0,<0.4.0" "sqlparse" \
       --replace "importlib_resources >= 5.0.0" "importlib_resources"
   '';
+
+  passthru.tests.version = testVersion { package = mycli; };
 
   meta = with lib; {
     inherit version;

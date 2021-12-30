@@ -4,6 +4,8 @@
 , cmake
 , gtest
 , which
+, genmap
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -29,6 +31,8 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     echo > benchmarks/CMakeLists.txt
   '';
+
+  passthru.tests.version = testVersion { package = genmap; };
 
   meta = {
     description = "Ultra-fast computation of genome mappability";

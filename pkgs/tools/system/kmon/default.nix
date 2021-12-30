@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub, installShellFiles, python3, libxcb }:
+{ lib, rustPlatform, fetchFromGitHub, installShellFiles, python3, libxcb, kmon, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "kmon";
@@ -20,6 +20,8 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     installManPage man/kmon.8
   '';
+
+  passthru.tests.version = testVersion { package = kmon; };
 
   meta = with lib; {
     description = "Linux Kernel Manager and Activity Monitor";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cairo, libjpeg, meson, ninja, wayland, pkg-config, scdoc, wayland-protocols }:
+{ lib, stdenv, fetchFromGitHub, cairo, libjpeg, meson, ninja, wayland, pkg-config, scdoc, wayland-protocols, grim, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "grim";
@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
     wayland
     wayland-protocols
   ];
+
+  passthru.tests.version = testVersion { package = grim; };
 
   meta = with lib; {
     description = "Grab images from a Wayland compositor";

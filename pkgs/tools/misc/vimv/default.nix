@@ -1,4 +1,4 @@
-{ lib, stdenvNoCC, fetchFromGitHub }:
+{ lib, stdenvNoCC, fetchFromGitHub, vimv, testVersion }:
 
 stdenvNoCC.mkDerivation {
   pname = "vimv";
@@ -16,6 +16,8 @@ stdenvNoCC.mkDerivation {
     install $src/vimv $out/bin/vimv
     patchShebangs $out/bin/vimv
   '';
+
+  passthru.tests.version = testVersion { package = vimv; };
 
   meta = with lib; {
     homepage = "https://github.com/thameera/vimv";

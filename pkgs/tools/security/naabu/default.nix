@@ -2,6 +2,8 @@
 , buildGoModule
 , fetchFromGitHub
 , libpcap
+, naabu
+, testVersion
 }:
 
 buildGoModule rec {
@@ -26,6 +28,8 @@ buildGoModule rec {
   subPackages = [
     "cmd/naabu/"
   ];
+
+  passthru.tests.version = testVersion { package = naabu; };
 
   meta = with lib; {
     description = "Fast SYN/CONNECT port scanner";

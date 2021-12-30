@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, crystal }:
+{ lib, fetchFromGitHub, crystal, ameba, testVersion }:
 
 crystal.buildCrystalPackage rec {
   pname = "ameba";
@@ -10,6 +10,8 @@ crystal.buildCrystalPackage rec {
     rev = "v${version}";
     sha256 = "sha256-oZdaHV+vnYUiCXNMrSuHvZzDYDgFZsoD715DE3tJ2bE=";
   };
+
+  passthru.tests.version = testVersion { package = ameba; };
 
   meta = with lib; {
     description = "A static code analysis tool for Crystal";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, Security }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, Security, diskus, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "diskus";
@@ -14,6 +14,8 @@ rustPlatform.buildRustPackage rec {
   buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
   cargoSha256 = "sha256-qNXv6Z9sKl7rol78UTOSRFML/JCGfOJMGOdt49KHD50=";
+
+  passthru.tests.version = testVersion { package = diskus; };
 
   meta = with lib; {
     description = "A minimal, fast alternative to 'du -sh'";

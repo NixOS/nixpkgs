@@ -8,6 +8,8 @@
 , libseccomp
 , libslirp
 , nixosTests
+, slirp4netns
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -28,6 +30,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   passthru.tests = { inherit (nixosTests) podman; };
+
+  passthru.tests.version = testVersion { package = slirp4netns; };
 
   meta = with lib; {
     homepage = "https://github.com/rootless-containers/slirp4netns";

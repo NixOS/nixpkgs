@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, gtk2, freeglut, SDL, SDL_mixer, libGLU, libGL, libXi, libXmu }:
+{ lib, stdenv, fetchurl, pkg-config, gtk2, freeglut, SDL, SDL_mixer, libGLU, libGL, libXi, libXmu, crack_attack, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "crack-attack";
@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
   enableParallelBuilding = true;
+
+  passthru.tests.version = testVersion { package = crack_attack; };
 
   meta = {
     description = "A fast-paced puzzle game inspired by the classic Super NES title Tetris Attack!";

@@ -11,6 +11,8 @@
 , croniter
 , w3lib
 , ipython
+, archivebox
+, testVersion
 }:
 
 let
@@ -45,6 +47,8 @@ buildPythonApplication rec {
     w3lib
     ipython
   ];
+
+  passthru.tests.version = testVersion { package = archivebox; };
 
   meta = with lib; {
     description = "Open source self-hosted web archiving";

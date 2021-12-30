@@ -12,6 +12,8 @@
 , ncurses
 , ueberzug
 , youtube-dl
+, ytfzf
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -41,6 +43,8 @@ stdenv.mkDerivation rec {
       coreutils curl dmenu fzf gnused jq mpv ncurses ueberzug youtube-dl
     ]}
   '';
+
+  passthru.tests.version = testVersion { package = ytfzf; };
 
   meta = with lib; {
     description = "A posix script to find and watch youtube videos from the terminal";

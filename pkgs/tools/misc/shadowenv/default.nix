@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, installShellFiles, Security }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, installShellFiles, Security, shadowenv, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "shadowenv";
@@ -24,6 +24,8 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion --fish sh/completions/shadowenv.fish
     installShellCompletion --zsh sh/completions/_shadowenv
   '';
+
+  passthru.tests.version = testVersion { package = shadowenv; };
 
   meta = with lib; {
     homepage = "https://shopify.github.io/shadowenv/";

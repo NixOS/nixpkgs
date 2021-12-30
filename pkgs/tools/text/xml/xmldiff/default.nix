@@ -3,6 +3,8 @@
 , fetchFromGitHub
 , lxml
 , six
+, xmldiff
+, testVersion
 }:
 
 buildPythonApplication rec {
@@ -20,6 +22,8 @@ buildPythonApplication rec {
     lxml
     six
   ];
+
+  passthru.tests.version = testVersion { package = xmldiff; };
 
   meta = with lib; {
     homepage = "https://xmldiff.readthedocs.io/en/stable/";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, makeDesktopItem, SDL2, SDL2_image, SDL2_mixer, SDL2_net }:
+{ lib, stdenv, fetchurl, makeDesktopItem, SDL2, SDL2_image, SDL2_mixer, SDL2_net, rocksndiamonds, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "rocksndiamonds";
@@ -37,6 +37,8 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  passthru.tests.version = testVersion { package = rocksndiamonds; };
 
   meta = with lib; {
     description = "Scrolling tile-based arcade style puzzle game";

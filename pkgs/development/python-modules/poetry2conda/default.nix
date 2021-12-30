@@ -7,6 +7,8 @@
 , poetry
 , poetry-semver
 , pyyaml
+, poetry2conda
+, testVersion
 }:
 
 buildPythonApplication rec {
@@ -34,6 +36,8 @@ buildPythonApplication rec {
     pytestCheckHook
     pyyaml
   ];
+
+  passthru.tests.version = testVersion { package = poetry2conda; };
 
   meta = with lib; {
     description = "A script to convert a Python project declared on a pyproject.toml to a conda environment";

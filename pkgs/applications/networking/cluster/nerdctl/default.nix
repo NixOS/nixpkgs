@@ -6,6 +6,8 @@
 , buildkit
 , cni-plugins
 , extraPackages ? [ ]
+, nerdctl
+, testVersion
 }:
 
 buildGoModule rec {
@@ -47,6 +49,8 @@ buildGoModule rec {
     $out/bin/nerdctl --version | grep "nerdctl version ${version}"
     runHook postInstallCheck
   '';
+
+  passthru.tests.version = testVersion { package = nerdctl; };
 
   meta = with lib; {
     homepage = "https://github.com/containerd/nerdctl/";

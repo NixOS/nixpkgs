@@ -1,4 +1,4 @@
-{ lib, fetchurl, python2Packages }:
+{ lib, fetchurl, python2Packages, getmail, testVersion }:
 
 python2Packages.buildPythonApplication rec {
   pname = "getmail";
@@ -16,6 +16,8 @@ python2Packages.buildPythonApplication rec {
     # documentation installation; too bad it is counterproductive now
     sed -e '/datadir or prefix,/d' -i setup.py
   '';
+
+  passthru.tests.version = testVersion { package = getmail; };
 
   meta = {
     description = "A program for retrieving mail";

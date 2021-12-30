@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchpatch, fetchFromGitHub, btrfs-progs, python3 }:
+{ lib, stdenv, fetchpatch, fetchFromGitHub, btrfs-progs, python3, dduper, testVersion }:
 
 let
   btrfsProgsPatched = btrfs-progs.overrideAttrs (oldAttrs: {
@@ -39,6 +39,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     install -m755 ./dduper $out/bin
   '';
+
+  passthru.tests.version = testVersion { package = dduper; };
 
   meta = with lib; {
     description = "Fast block-level out-of-band BTRFS deduplication tool.";

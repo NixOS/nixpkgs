@@ -6,6 +6,8 @@
 , libftdi1
 , libusb1
 , libgpiod
+, openocd
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -49,6 +51,8 @@ stdenv.mkDerivation rec {
     fi
     ln -s "$rules" "$out/etc/udev/rules.d/"
   '';
+
+  passthru.tests.version = testVersion { package = openocd; };
 
   meta = with lib; {
     description = "Free and Open On-Chip Debugging, In-System Programming and Boundary-Scan Testing";

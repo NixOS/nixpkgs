@@ -7,6 +7,8 @@
 , Security
 , CoreServices
 , nix-update-script
+, texlab
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -42,6 +44,8 @@ rustPlatform.buildRustPackage rec {
   passthru.updateScript = nix-update-script {
     attrPath = pname;
   };
+
+  passthru.tests.version = testVersion { package = texlab; };
 
   meta = with lib; {
     description = "An implementation of the Language Server Protocol for LaTeX";

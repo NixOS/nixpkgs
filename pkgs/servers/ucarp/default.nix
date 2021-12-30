@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, libpcap }:
+{ stdenv, lib, fetchurl, libpcap, ucarp, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "ucarp";
@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ libpcap ];
+
+  passthru.tests.version = testVersion { package = ucarp; };
 
   meta = with lib; {
     description = "Userspace implementation of CARP";

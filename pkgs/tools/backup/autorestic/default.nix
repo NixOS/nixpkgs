@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, installShellFiles, buildGoModule }:
+{ lib, fetchFromGitHub, installShellFiles, buildGoModule, autorestic, testVersion }:
 
 buildGoModule rec {
   pname = "autorestic";
@@ -21,6 +21,8 @@ buildGoModule rec {
          --fish <($out/bin/autorestic completion fish) \
          --zsh <($out/bin/autorestic completion zsh)
   '';
+
+  passthru.tests.version = testVersion { package = autorestic; };
 
   meta = with lib; {
     description = "High level CLI utility for restic";

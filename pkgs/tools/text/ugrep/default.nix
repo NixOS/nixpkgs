@@ -7,6 +7,8 @@
 , pcre2
 , xz
 , zlib
+, ugrep
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -28,6 +30,8 @@ stdenv.mkDerivation rec {
     xz
     zlib
   ];
+
+  passthru.tests.version = testVersion { package = ugrep; };
 
   meta = with lib; {
     description = "Ultra fast grep with interactive query UI";

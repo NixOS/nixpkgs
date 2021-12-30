@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, erlang }:
+{ lib, stdenv, fetchFromGitHub, erlang, rebar, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "rebar";
@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cp rebar $out/bin/rebar
   '';
+
+  passthru.tests.version = testVersion { package = rebar; };
 
   meta = {
     homepage = "https://github.com/rebar/rebar";

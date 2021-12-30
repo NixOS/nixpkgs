@@ -6,6 +6,8 @@
 , pythonOlder
 , pyyaml
 , stdenv
+, yamllint
+, testVersion
 }:
 
 buildPythonPackage rec {
@@ -38,6 +40,8 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "yamllint" ];
+
+  passthru.tests.version = testVersion { package = yamllint; };
 
   meta = with lib; {
     description = "A linter for YAML files";

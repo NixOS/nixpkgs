@@ -20,6 +20,8 @@
 , libhandy
 , libxml2
 , pantheon
+, minder
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -68,6 +70,8 @@ stdenv.mkDerivation rec {
       ln -vrs $x "$out/bin/''${x##*.}"
     done
   '';
+
+  passthru.tests.version = testVersion { package = minder; };
 
   meta = with lib; {
     description = "Mind-mapping application for elementary OS";

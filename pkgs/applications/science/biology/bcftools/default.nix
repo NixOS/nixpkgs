@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, htslib, zlib, bzip2, xz, curl, perl, python3, bash }:
+{ lib, stdenv, fetchurl, htslib, zlib, bzip2, xz, curl, perl, python3, bash, bcftools, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "bcftools";
@@ -33,6 +33,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   doCheck = true;
+
+  passthru.tests.version = testVersion { package = bcftools; };
 
   meta = with lib; {
     description = "Tools for manipulating BCF2/VCF/gVCF format, SNP and short indel sequence variants";

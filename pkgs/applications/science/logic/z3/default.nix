@@ -10,6 +10,8 @@
 , ocaml ? null
 , findlib ? null
 , zarith ? null
+, z3
+, testVersion
 }:
 
 assert javaBindings -> jdk != null;
@@ -66,6 +68,8 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "lib" "dev" "python" ]
     ++ optional javaBindings "java"
     ++ optional ocamlBindings "ocaml";
+
+  passthru.tests.version = testVersion { package = z3; };
 
   meta = with lib; {
     description = "A high-performance theorem prover and SMT solver";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, e2fsprogs }:
+{ lib, stdenv, fetchurl, e2fsprogs, extundelete, testVersion }:
 
 stdenv.mkDerivation {
   version = "0.2.4";
@@ -18,6 +18,8 @@ stdenv.mkDerivation {
       --replace "Directory ACL:" "High 32 bits of size:" \
       --replace "inode.i_dir_acl" "inode.i_size_high"
   '';
+
+  passthru.tests.version = testVersion { package = extundelete; };
 
   meta = with lib; {
     description = "Utility that can recover deleted files from an ext3 or ext4 partition";

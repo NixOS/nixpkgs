@@ -1,4 +1,4 @@
-{ lib, openssl, pkg-config, fetchFromGitHub, rustPlatform }:
+{ lib, openssl, pkg-config, fetchFromGitHub, rustPlatform, afterburn, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "afterburn";
@@ -26,6 +26,8 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     DEFAULT_INSTANCE=root PREFIX= DESTDIR=$out make install-units
   '';
+
+  passthru.tests.version = testVersion { package = afterburn; };
 
   meta = with lib; {
     homepage = "https://github.com/coreos/ignition";

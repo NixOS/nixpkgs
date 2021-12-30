@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, libX11 }:
+{ lib, stdenv, fetchFromGitHub, libX11, xkbmon, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "xkbmon";
@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ libX11 ];
 
   installPhase = "install -D -t $out/bin xkbmon";
+
+  passthru.tests.version = testVersion { package = xkbmon; };
 
   meta = with lib; {
     homepage = "https://github.com/xkbmon/xkbmon";

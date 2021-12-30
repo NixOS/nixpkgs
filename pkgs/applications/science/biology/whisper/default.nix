@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl }:
+{ lib, stdenv, fetchFromGitHub, fetchurl, whisper, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "whisper";
@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
     install -Dt $out/bin whisper whisper-index
     runHook postInstall
   '';
+
+  passthru.tests.version = testVersion { package = whisper; };
 
   meta = with lib; {
     description = "Short read sequence mapper";

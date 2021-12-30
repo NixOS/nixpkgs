@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{ lib, rustPlatform, fetchFromGitHub, fundoc, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "fundoc";
@@ -12,6 +12,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "sha256-6riBlCyqNN2nzgwfVfbRy1avT9b0PdetOrbmbaltsjE=";
+
+  passthru.tests.version = testVersion { package = fundoc; };
 
   meta = with lib; {
     description = "Language agnostic documentation generator";

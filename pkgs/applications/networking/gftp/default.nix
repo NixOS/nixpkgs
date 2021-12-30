@@ -11,6 +11,8 @@
 , openssl
 , pkg-config
 , readline
+, gftp
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -44,6 +46,8 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     ./autogen.sh
   '';
+
+  passthru.tests.version = testVersion { package = gftp; };
 
   meta = with lib; {
     homepage = "https://github.com/masneyb/gftp";

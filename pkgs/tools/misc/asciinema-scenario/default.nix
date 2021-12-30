@@ -1,6 +1,8 @@
 { lib
 , rustPlatform
 , fetchCrate
+, asciinema-scenario
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -13,6 +15,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "1yf63w2findgqipvgmlkw3pqfkai7mvqp86jg40lvr0mpnvly2ny";
+
+  passthru.tests.version = testVersion { package = asciinema-scenario; };
 
   meta = with lib; {
     description = "Create asciinema videos from a text file";

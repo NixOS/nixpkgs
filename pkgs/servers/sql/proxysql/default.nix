@@ -28,6 +28,8 @@
 , python
 , re2
 , zlib
+, proxysql
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -140,6 +142,8 @@ stdenv.mkDerivation rec {
   postInstall = ''
     sed -i s_/usr/bin/proxysql_$out/bin/proxysql_ $out/lib/systemd/system/*.service
   '';
+
+  passthru.tests.version = testVersion { package = proxysql; };
 
   meta = with lib; {
     homepage = "https://proxysql.com/";

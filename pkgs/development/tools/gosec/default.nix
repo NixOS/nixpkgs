@@ -1,6 +1,8 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, gosec
+, testVersion
 }:
 
 buildGoModule rec {
@@ -29,6 +31,8 @@ buildGoModule rec {
     "-X main.GitTag=${src.rev}"
     "-X main.BuildDate=unknown"
   ];
+
+  passthru.tests.version = testVersion { package = gosec; };
 
   meta = with lib; {
     homepage = "https://github.com/securego/gosec";

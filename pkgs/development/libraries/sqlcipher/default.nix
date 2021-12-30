@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, openssl, tcl, installShellFiles, buildPackages, readline, ncurses, zlib }:
+{ stdenv, lib, fetchFromGitHub, openssl, tcl, installShellFiles, buildPackages, readline, ncurses, zlib, sqlcipher, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "sqlcipher";
@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
   postInstall = ''
     installManPage sqlcipher.1
   '';
+
+  passthru.tests.version = testVersion { package = sqlcipher; };
 
   meta = with lib; {
     homepage = "https://www.zetetic.net/sqlcipher/";

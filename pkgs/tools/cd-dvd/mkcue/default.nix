@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, mkcue, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "mkcue";
@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
 
   preInstall = "mkdir -pv $out/bin";
   postInstall = "chmod -v +w $out/bin/mkcue";
+
+  passthru.tests.version = testVersion { package = mkcue; };
 
   meta = with lib; {
     description = "Generates CUE sheets from a CD TOC";

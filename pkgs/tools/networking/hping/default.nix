@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, libpcap, withTcl ? true, tcl }:
+{ lib, stdenv, fetchFromGitHub, libpcap, withTcl ? true, tcl, hping, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "hping";
@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
     ln -s hping3.8.gz $out/share/man/man8/hping.8.gz
     ln -s hping3.8.gz $out/share/man/man8/hping2.8.gz
   '';
+
+  passthru.tests.version = testVersion { package = hping; };
 
   meta = with lib; {
     description = "A command-line oriented TCP/IP packet assembler/analyzer";

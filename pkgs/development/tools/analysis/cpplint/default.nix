@@ -1,4 +1,4 @@
-{ lib, python3Packages, fetchFromGitHub }:
+{ lib, python3Packages, fetchFromGitHub, cpplint, testVersion }:
 
 python3Packages.buildPythonApplication rec {
   pname = "cpplint";
@@ -22,6 +22,8 @@ python3Packages.buildPythonApplication rec {
   checkPhase = ''
     ./cpplint_unittest.py
   '';
+
+  passthru.tests.version = testVersion { package = cpplint; };
 
   meta = with lib; {
     homepage = "https://github.com/cpplint/cpplint";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, hercules, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "hercules";
@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     url = "http://downloads.hercules-390.eu/${pname}-${version}.tar.gz";
     sha256 = "0zg6rwz8ib4alibf8lygi8qn69xx8n92kbi8b3jhi1ymb32mf349";
   };
+
+  passthru.tests.version = testVersion { package = hercules; };
 
   meta = with lib; {
     description = "IBM mainframe emulator";

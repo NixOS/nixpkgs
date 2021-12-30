@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, jre, makeWrapper }:
+{ stdenv, lib, fetchurl, jre, makeWrapper, tabula-java, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "tabula-java";
@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
 
     makeWrapper ${jre}/bin/java $out/bin/tabula-java --add-flags "-jar $out/share/tabula-java/tabula-java.jar"
   '';
+
+  passthru.tests.version = testVersion { package = tabula-java; };
 
   meta = with lib; {
     description = "A library for extracting tables from PDF files.";

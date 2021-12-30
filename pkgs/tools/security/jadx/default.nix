@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, gradle, jdk, makeWrapper, perl }:
+{ lib, stdenv, fetchFromGitHub, gradle, jdk, makeWrapper, perl, jadx
+, testVersion }:
 
 let
   pname = "jadx";
@@ -96,6 +97,8 @@ in stdenv.mkDerivation {
       wrapProgram $out/bin/$prog --set JAVA_HOME ${jdk.home}
     done
   '';
+
+  passthru.tests.version = testVersion { package = jadx; };
 
   meta = with lib; {
     description = "Dex to Java decompiler";

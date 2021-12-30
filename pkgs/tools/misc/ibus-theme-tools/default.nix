@@ -1,4 +1,4 @@
-{ lib, python3Packages, fetchFromGitHub, gettext }:
+{ lib, python3Packages, fetchFromGitHub, gettext, ibus-theme-tools, testVersion }:
 
 python3Packages.buildPythonApplication rec {
   pname = "ibus-theme-tools";
@@ -19,6 +19,8 @@ python3Packages.buildPythonApplication rec {
   doCheck = false;
 
   pythonImportsCheck = [ "ibus_theme_tools" ];
+
+  passthru.tests.version = testVersion { package = ibus-theme-tools; };
 
   meta = with lib; {
     description = "Generate the IBus GTK or GNOME Shell theme from existing themes";

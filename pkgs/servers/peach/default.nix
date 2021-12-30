@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, peach, testVersion }:
 
 buildGoModule rec {
   pname = "peach";
@@ -12,6 +12,8 @@ buildGoModule rec {
   };
 
   vendorSha256 = "0f215hd5a9d4fyvdirp2j14ghap5vwv12i28jmzm6wxjihj8nn1g";
+
+  passthru.tests.version = testVersion { package = peach; };
 
   meta = with lib; {
     description = "Web server for multi-language, real-time synchronization and searchable documentation";

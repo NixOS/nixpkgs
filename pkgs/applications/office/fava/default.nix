@@ -1,4 +1,4 @@
-{ lib, python3 }:
+{ lib, python3, fava, testVersion }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "fava";
@@ -38,6 +38,8 @@ python3.pkgs.buildPythonApplication rec {
     # runs fava in debug mode, which tries to interpret bash wrapper as Python
     "test_cli"
   ];
+
+  passthru.tests.version = testVersion { package = fava; };
 
   meta = with lib; {
     description = "Web interface for beancount";

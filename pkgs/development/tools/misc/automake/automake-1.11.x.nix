@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, perl, autoconf }:
+{ lib, stdenv, fetchurl, perl, autoconf, automake111x, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "automake";
@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
 
   # Run the test suite in parallel.
   enableParallelBuilding = true;
+
+  passthru.tests.version = testVersion { package = automake111x; };
 
   meta = {
     branch = "1.11";

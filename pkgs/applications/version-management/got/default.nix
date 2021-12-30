@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, openssl, libuuid, libmd, zlib, ncurses }:
+{ lib, stdenv, fetchurl, pkg-config, openssl, libuuid, libmd, zlib, ncurses, got, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "got";
@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
     test "$($out/bin/got --version)" = '${pname} ${version}'
     runHook postInstallCheck
   '';
+
+  passthru.tests.version = testVersion { package = got; };
 
   meta = with lib; {
     description = "A version control system which prioritizes ease of use and simplicity over flexibility";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, zlib }:
+{ lib, stdenv, fetchFromGitHub, zlib, minimap2, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "minimap2";
@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/man/man1
     cp minimap2.1 $out/share/man/man1
   '';
+
+  passthru.tests.version = testVersion { package = minimap2; };
 
   meta = with lib; {
     description = "A versatile pairwise aligner for genomic and spliced nucleotide sequences";

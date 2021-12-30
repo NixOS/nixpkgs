@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, rustPlatform }:
+{ lib, fetchFromGitHub, rustPlatform, kubernix, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "kubernix";
@@ -13,6 +13,8 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "133h6mkz9aylhligy16pfjzsl94xxj0rk2zjm08dhg0inj84z3yv";
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = kubernix; };
 
   meta = with lib; {
     description = "Single dependency Kubernetes clusters for local testing, experimenting and development";

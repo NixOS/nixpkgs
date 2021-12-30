@@ -7,6 +7,8 @@
 , libnotify
 , procps
 , makeWrapper
+, giph
+, testVersion
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -32,6 +34,8 @@ stdenvNoCC.mkDerivation rec {
     wrapProgram $out/bin/giph \
       --prefix PATH : ${lib.makeBinPath [ ffmpeg xdotool libnotify slop procps ]}
   '';
+
+  passthru.tests.version = testVersion { package = giph; };
 
   meta = with lib; {
     homepage = "https://github.com/phisch/giph";

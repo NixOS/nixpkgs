@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, zlib, bzip2 }:
+{ lib, stdenv, fetchurl, zlib, bzip2, cbc, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "cbc";
@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib bzip2 ];
 
   # FIXME: move share/coin/Data to a separate output?
+
+  passthru.tests.version = testVersion { package = cbc; };
 
   meta = {
     homepage = "https://projects.coin-or.org/Cbc";

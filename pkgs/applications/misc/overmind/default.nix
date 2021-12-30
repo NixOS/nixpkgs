@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, tmux, which, makeWrapper }:
+{ lib, buildGoModule, fetchFromGitHub, tmux, which, makeWrapper, overmind, testVersion }:
 
 buildGoModule rec {
   pname = "overmind";
@@ -18,6 +18,8 @@ buildGoModule rec {
   };
 
   vendorSha256 = "KDMzR6qAruscgS6/bHTN6RnHOlLKCm9lxkr9k3oLY+Y=";
+
+  passthru.tests.version = testVersion { package = overmind; };
 
   meta = with lib; {
     homepage = "https://github.com/DarthSim/overmind";

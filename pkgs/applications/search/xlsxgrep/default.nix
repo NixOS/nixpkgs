@@ -1,4 +1,4 @@
-{ lib, python3Packages }:
+{ lib, python3Packages, xlsxgrep, testVersion }:
 
 python3Packages.buildPythonApplication rec {
   pname = "xlsxgrep";
@@ -10,6 +10,8 @@ python3Packages.buildPythonApplication rec {
   };
 
   pythonPath = with python3Packages; [ xlrd ];
+
+  passthru.tests.version = testVersion { package = xlsxgrep; };
 
   meta = with lib; {
     maintainers = with maintainers; [ felixscheinost ];

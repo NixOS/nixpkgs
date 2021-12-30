@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, untie, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "untie";
@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
   };
 
   makeFlags = [ "PREFIX=$(out)" ];
+
+  passthru.tests.version = testVersion { package = untie; };
 
   meta = with lib; {
     description = "A tool to run processes untied from some of the namespaces";

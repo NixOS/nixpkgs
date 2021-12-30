@@ -10,6 +10,8 @@
 , libutempter
 , vte
 , libwnck
+, guake
+, testVersion
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -65,6 +67,8 @@ python3.pkgs.buildPythonApplication rec {
   preFixup = ''
     gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libutempter ]}")
   '';
+
+  passthru.tests.version = testVersion { package = guake; };
 
   meta = with lib; {
     description = "Drop-down terminal for GNOME";

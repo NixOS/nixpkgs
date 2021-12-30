@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, ncurses }:
+{ lib, stdenv, fetchurl, ncurses, vbindiff, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "vbindiff";
@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
     url = "https://www.cjmweb.net/vbindiff/${pname}-${version}.tar.gz";
     sha256 = "1f1kj4jki08bnrwpzi663mjfkrx4wnfpzdfwd2qgijlkx5ysjkgh";
   };
+
+  passthru.tests.version = testVersion { package = vbindiff; };
 
   meta = {
     description = "A terminal visual binary diff viewer";

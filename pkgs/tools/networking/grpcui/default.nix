@@ -1,4 +1,4 @@
-{ buildGoModule, fetchFromGitHub, lib }:
+{ buildGoModule, fetchFromGitHub, lib, grpcui, testVersion }:
 
 buildGoModule rec {
   pname = "grpcui";
@@ -18,6 +18,8 @@ buildGoModule rec {
   subPackages = [ "cmd/grpcui" ];
 
   ldflags = [ "-s" "-w" "-X main.version=${version}" ];
+
+  passthru.tests.version = testVersion { package = grpcui; };
 
   meta = with lib; {
     description = "An interactive web UI for gRPC, along the lines of postman";

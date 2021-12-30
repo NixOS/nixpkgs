@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, glow, testVersion }:
 
 buildGoModule rec {
   pname = "glow";
@@ -16,6 +16,8 @@ buildGoModule rec {
   doCheck = false;
 
   ldflags = [ "-s" "-w" "-X=main.Version=${version}" ];
+
+  passthru.tests.version = testVersion { package = glow; };
 
   meta = with lib; {
     description = "Render markdown on the CLI, with pizzazz!";

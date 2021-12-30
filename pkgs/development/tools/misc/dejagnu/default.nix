@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, expect, makeWrapper }:
+{ fetchurl, lib, stdenv, expect, makeWrapper, dejagnu, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "dejagnu";
@@ -39,6 +39,8 @@ stdenv.mkDerivation rec {
     wrapProgram "$out/bin/runtest" \
       --prefix PATH ":" "${expect}/bin"
   '';
+
+  passthru.tests.version = testVersion { package = dejagnu; };
 
   meta = with lib; {
     description = "Framework for testing other programs";

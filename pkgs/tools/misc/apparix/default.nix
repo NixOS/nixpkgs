@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, apparix, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "apparix";
@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
   };
 
   doCheck = true;
+
+  passthru.tests.version = testVersion { package = apparix; };
 
   meta = with lib; {
     homepage = "http://micans.org/apparix";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, fuse, attr, asciidoc }:
+{ lib, stdenv, fetchurl, pkg-config, fuse, attr, asciidoc, disorderfs, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "disorderfs";
@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ fuse attr ];
 
   installFlags = [ "PREFIX=$(out)" ];
+
+  passthru.tests.version = testVersion { package = disorderfs; };
 
   meta = with lib; {
     description = "An overlay FUSE filesystem that introduces non-determinism into filesystem metadata";

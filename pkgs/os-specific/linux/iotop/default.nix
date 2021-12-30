@@ -1,4 +1,4 @@
-{ lib, fetchurl, python3Packages, fetchpatch }:
+{ lib, fetchurl, python3Packages, fetchpatch, iotop, testVersion }:
 
 python3Packages.buildPythonApplication rec {
   pname = "iotop";
@@ -17,6 +17,8 @@ python3Packages.buildPythonApplication rec {
   ];
 
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = iotop; };
 
   meta = with lib; {
     description = "A tool to find out the processes doing the most IO";

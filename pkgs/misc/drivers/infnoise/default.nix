@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, libftdi }:
+{ lib, stdenv, fetchFromGitHub, libftdi, infnoise, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "infnoise";
@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace init_scripts/infnoise.service --replace "/usr/local" "$out"
   '';
+
+  passthru.tests.version = testVersion { package = infnoise; };
 
   meta = with lib; {
     homepage = "https://github.com/13-37-org/infnoise";

@@ -3,6 +3,8 @@
 , fetchFromGitHub
 , makeWrapper
 , kcov
+, cargo-kcov
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -25,6 +27,8 @@ rustPlatform.buildRustPackage rec {
     wrapProgram $out/bin/cargo-kcov \
         --prefix PATH : ${lib.makeBinPath [ kcov ]}
   '';
+
+  passthru.tests.version = testVersion { package = cargo-kcov; };
 
   meta = with lib; {
     description = "Cargo subcommand to run kcov to get coverage report on Linux";

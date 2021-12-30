@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, curl, python3Packages, glibcLocales }:
+{ lib, fetchFromGitHub, curl, python3Packages, glibcLocales, httpstat, testVersion }:
 
 python3Packages.buildPythonApplication rec {
   pname = "httpstat";
@@ -14,6 +14,8 @@ python3Packages.buildPythonApplication rec {
   runtimeDeps = [ curl ];
 
   LC_ALL = "en_US.UTF-8";
+
+  passthru.tests.version = testVersion { package = httpstat; };
 
   meta = {
     description = "curl statistics made simple";

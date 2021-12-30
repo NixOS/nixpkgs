@@ -14,6 +14,8 @@
 , withJack ? stdenv.hostPlatform.isUnix
 , jack
 , withConplay ? !stdenv.hostPlatform.isWindows
+, mpg123
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -61,6 +63,8 @@ stdenv.mkDerivation rec {
     wrapProgram $conplay/bin/conplay \
       --prefix PATH : $out/bin
   '';
+
+  passthru.tests.version = testVersion { package = mpg123; };
 
   meta = with lib; {
     description = "Fast console MPEG Audio Player and decoder library";

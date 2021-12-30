@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, zlib }:
+{ lib, stdenv, fetchFromGitHub, zlib, zasm, testVersion }:
 let
   libs-src = fetchFromGitHub {
     owner = "megatokio";
@@ -39,6 +39,8 @@ stdenv.mkDerivation rec {
   installPhase = ''
     install -Dm755 -t $out/bin zasm
   '';
+
+  passthru.tests.version = testVersion { package = zasm; };
 
   meta = with lib; {
     description = "Z80 / 8080 / Z180 assembler (for unix-style OS)";

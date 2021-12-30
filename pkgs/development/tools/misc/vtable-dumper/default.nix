@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, libelf }:
+{ lib, stdenv, fetchFromGitHub, libelf, vtable-dumper, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "vtable-dumper";
@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libelf ];
   makeFlags = [ "prefix=$(out)" ];
+
+  passthru.tests.version = testVersion { package = vtable-dumper; };
 
   meta = with lib; {
     homepage = "https://github.com/lvc/vtable-dumper";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, docbook_xml_dtd_412, docbook_xsl, perl, w3m, xmlto }:
+{ lib, stdenv, fetchFromGitHub, docbook_xml_dtd_412, docbook_xsl, perl, w3m, xmlto, colordiff, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "colordiff";
@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
     "MAN_DIR=/share/man/man1"
     "DESTDIR=${placeholder "out"}"
   ];
+
+  passthru.tests.version = testVersion { package = colordiff; };
 
   meta = with lib; {
     description = "Wrapper for 'diff' that produces the same output but with pretty 'syntax' highlighting";

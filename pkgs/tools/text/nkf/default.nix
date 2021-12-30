@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, nkf, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "nkf";
@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
   };
 
   makeFlags = [ "prefix=$(out)" ];
+
+  passthru.tests.version = testVersion { package = nkf; };
 
   meta = {
     description = "Tool for converting encoding of Japanese text";

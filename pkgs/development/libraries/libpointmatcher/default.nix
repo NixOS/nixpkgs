@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, eigen, boost, libnabo }:
+{ lib, stdenv, fetchFromGitHub, cmake, eigen, boost, libnabo, libpointmatcher, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "libpointmatcher";
@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
     export LD_LIBRARY_PATH=$PWD
     ./utest/utest --path ../examples/data/
   '';
+
+  passthru.tests.version = testVersion { package = libpointmatcher; };
 
   meta = with lib; {
     inherit (src.meta) homepage;

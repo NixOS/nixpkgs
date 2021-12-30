@@ -13,6 +13,8 @@
 , goffice
 , libgsf
 , makeWrapper
+, nip2
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -45,6 +47,8 @@ stdenv.mkDerivation rec {
   postFixup = ''
     wrapProgram $out/bin/nip2 --set VIPSHOME "$out"
   '';
+
+  passthru.tests.version = testVersion { package = nip2; };
 
   meta = with lib; {
     homepage = "https://github.com/libvips/nip2";

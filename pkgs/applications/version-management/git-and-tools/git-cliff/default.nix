@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, Security }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, Security, git-cliff, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "git-cliff";
@@ -17,6 +17,8 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   buildInputs = lib.optionals stdenv.isDarwin [ Security ];
+
+  passthru.tests.version = testVersion { package = git-cliff; };
 
   meta = with lib; {
     description = "A highly customizable Changelog Generator that follows Conventional Commit specifications";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, Security }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, Security, htmlq, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "htmlq";
@@ -16,6 +16,8 @@ rustPlatform.buildRustPackage rec {
   buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = htmlq; };
 
   meta = with lib; {
     description = "Like jq, but for HTML";

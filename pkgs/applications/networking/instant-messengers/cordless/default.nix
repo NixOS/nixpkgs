@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, cordless, testVersion }:
 
 buildGoModule rec {
   pname = "cordless";
@@ -14,6 +14,8 @@ buildGoModule rec {
   subPackages = [ "." ];
 
   vendorSha256 = "01anbhwgwam70dymcmvkia1xpw48658rq7wv4m7fiavxvnli6z2y";
+
+  passthru.tests.version = testVersion { package = cordless; };
 
   meta = with lib; {
     homepage = "https://github.com/Bios-Marcel/cordless";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, dbus, pkg-config }:
+{ lib, stdenv, fetchFromGitHub, dbus, pkg-config, notify-desktop, testVersion }:
 
 stdenv.mkDerivation {
   pname = "notify-desktop";
@@ -17,6 +17,8 @@ stdenv.mkDerivation {
     mkdir -p $out/bin
     install -m 755 bin/notify-desktop $out/bin/notify-desktop
   '';
+
+  passthru.tests.version = testVersion { package = notify-desktop; };
 
   meta = with lib; {
     description = "Little application that lets you send desktop notifications with one command";

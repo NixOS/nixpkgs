@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{ lib, rustPlatform, fetchFromGitHub, treefmt, testVersion }:
 rustPlatform.buildRustPackage rec {
   pname = "treefmt";
   version = "0.3.0";
@@ -11,6 +11,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "sha256-Gvr6Zjd9Gvn2CyjNHlJaKPFYUViPezRwoDBeVelRlkU=";
+
+  passthru.tests.version = testVersion { package = treefmt; };
 
   meta = {
     description = "one CLI to format the code tree";

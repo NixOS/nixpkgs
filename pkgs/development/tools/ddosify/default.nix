@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, ddosify, testVersion }:
 
 buildGoModule rec {
   pname = "ddosify";
@@ -25,6 +25,8 @@ buildGoModule rec {
   installCheckPhase = ''
     $out/bin/ddosify -version | grep ${version} > /dev/null
   '';
+
+  passthru.tests.version = testVersion { package = ddosify; };
 
   meta = with lib; {
     description = "High-performance load testing tool, written in Golang";

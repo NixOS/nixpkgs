@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pam }:
+{ lib, stdenv, fetchurl, pam, vlock, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "vlock";
@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
   configureFlags = [ "VLOCK_GROUP=root" "ROOT_GROUP=root" ];
 
   buildInputs = [ pam ];
+
+  passthru.tests.version = testVersion { package = vlock; };
 
   meta = with lib; {
     description = "Virtual console locking program";

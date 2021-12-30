@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, perl }:
+{ lib, stdenv, fetchurl, perl, ndisc6, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "ndisc6";
@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
     "sysconfdir=\${out}/etc"
     "localstatedir=$(TMPDIR)"
   ];
+
+  passthru.tests.version = testVersion { package = ndisc6; };
 
   meta = with lib; {
     homepage = "https://www.remlab.net/ndisc6/";

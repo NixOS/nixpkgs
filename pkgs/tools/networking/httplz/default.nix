@@ -9,6 +9,8 @@
 , stdenv
 , libiconv
 , Security
+, httplz
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -44,6 +46,8 @@ rustPlatform.buildRustPackage rec {
     wrapProgram $out/bin/httplz \
       --prefix PATH : "${openssl}/bin"
   '';
+
+  passthru.tests.version = testVersion { package = httplz; };
 
   meta = with lib; {
     description = "A basic http server for hosting a folder fast and simply";

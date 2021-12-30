@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, openmp }:
+{ lib, stdenv, fetchFromGitHub, openmp, bsc, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "bsc";
@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
   '';
 
   makeFlags = [ "PREFIX=$(out)" ];
+
+  passthru.tests.version = testVersion { package = bsc; };
 
   meta = with lib; {
     description = "High performance block-sorting data compression library";

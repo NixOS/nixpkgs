@@ -1,4 +1,4 @@
-{ lib, buildPythonApplication, fetchFromGitHub, pytestCheckHook, pytest-cov, pytest-dependency, aspell-python, aspellDicts, chardet }:
+{ lib, buildPythonApplication, fetchFromGitHub, pytestCheckHook, pytest-cov, pytest-dependency, aspell-python, aspellDicts, chardet, codespell, testVersion }:
 
 buildPythonApplication rec {
   pname = "codespell";
@@ -21,6 +21,8 @@ buildPythonApplication rec {
   disabledTests = [ "test_command" ];
 
   pythonImportsCheck = [ "codespell_lib" ];
+
+  passthru.tests.version = testVersion { package = codespell; };
 
   meta = with lib; {
     description = "Fix common misspellings in source code";

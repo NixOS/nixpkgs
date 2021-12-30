@@ -1,4 +1,4 @@
-{ lib, python3Packages }:
+{ lib, python3Packages, pirate-get, testVersion }:
 
 with python3Packages;
 
@@ -12,6 +12,8 @@ buildPythonApplication rec {
   };
 
   propagatedBuildInputs = [ colorama veryprettytable pyperclip ];
+
+  passthru.tests.version = testVersion { package = pirate-get; };
 
   meta = with lib; {
     description = "A command line interface for The Pirate Bay";

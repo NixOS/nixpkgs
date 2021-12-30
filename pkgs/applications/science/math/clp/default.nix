@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, zlib }:
+{ lib, stdenv, fetchurl, zlib, clp, testVersion }:
 
 stdenv.mkDerivation rec {
   version = "1.17.6";
@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ zlib ];
 
   doCheck = true;
+
+  passthru.tests.version = testVersion { package = clp; };
 
   meta = with lib; {
     license = licenses.epl10;

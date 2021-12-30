@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, ipget, testVersion }:
 
 buildGoModule rec {
   pname = "ipget";
@@ -19,6 +19,8 @@ buildGoModule rec {
   '';
 
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = ipget; };
 
   meta = with lib; {
     description = "Retrieve files over IPFS and save them locally";

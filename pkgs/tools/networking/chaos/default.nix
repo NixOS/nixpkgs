@@ -1,6 +1,8 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, chaos
+, testVersion
 }:
 
 buildGoModule rec {
@@ -19,6 +21,8 @@ buildGoModule rec {
   subPackages = [
     "cmd/chaos/"
   ];
+
+  passthru.tests.version = testVersion { package = chaos; };
 
   meta = with lib; {
     description = "Tool to communicate with Chaos DNS API";

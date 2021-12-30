@@ -1,4 +1,4 @@
-{ lib, python3Packages }:
+{ lib, python3Packages, raiseorlaunch, testVersion }:
 
 python3Packages.buildPythonApplication rec {
   pname = "raiseorlaunch";
@@ -15,6 +15,8 @@ python3Packages.buildPythonApplication rec {
   # no tests
   doCheck = false;
   pythonImportsCheck = [ "raiseorlaunch" ];
+
+  passthru.tests.version = testVersion { package = raiseorlaunch; };
 
   meta = with lib; {
     maintainers = with maintainers; [ winpat ];

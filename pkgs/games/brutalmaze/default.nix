@@ -1,4 +1,4 @@
-{ lib, fetchFromSourcehut, python3Packages }:
+{ lib, fetchFromSourcehut, python3Packages, brutalmaze, testVersion }:
 
 python3Packages.buildPythonApplication rec {
   pname = "brutalmaze";
@@ -20,6 +20,8 @@ python3Packages.buildPythonApplication rec {
   ];
 
   doCheck = false; # there's no test
+
+  passthru.tests.version = testVersion { package = brutalmaze; };
 
   meta = with lib; {
     description = "Minimalist thrilling shoot 'em up game";

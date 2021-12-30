@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchCrate, pkg-config, openssl, stdenv, Security }:
+{ lib, rustPlatform, fetchCrate, pkg-config, openssl, stdenv, Security, panamax, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "panamax";
@@ -14,6 +14,8 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl ] ++ lib.optional stdenv.isDarwin Security;
+
+  passthru.tests.version = testVersion { package = panamax; };
 
   meta = with lib; {
     description = "Mirror rustup and crates.io repositories for offline Rust and cargo usage";

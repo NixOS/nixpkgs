@@ -1,4 +1,4 @@
-{ buildGoPackage, fetchFromGitHub, git, pandoc, lib }:
+{ buildGoPackage, fetchFromGitHub, git, pandoc, lib, checkmake, testVersion }:
 
 buildGoPackage rec {
   pname = "checkmake";
@@ -34,6 +34,8 @@ buildGoPackage rec {
     mkdir -p $out/share/man/man1
     mv checkmake.1 $out/share/man/man1/checkmake.1
   '';
+
+  passthru.tests.version = testVersion { package = checkmake; };
 
   meta = with lib; {
     description = "Experimental tool for linting and checking Makefiles";

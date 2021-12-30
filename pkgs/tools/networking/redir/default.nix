@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, redir, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "redir";
@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook ];
+
+  passthru.tests.version = testVersion { package = redir; };
 
   meta = {
     description = "A TCP port redirector for UNIX";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch }:
+{ lib, stdenv, fetchurl, fetchpatch, dmidecode, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "dmidecode";
@@ -57,6 +57,8 @@ stdenv.mkDerivation rec {
     "prefix=$(out)"
     "CC=${stdenv.cc.targetPrefix}cc"
   ];
+
+  passthru.tests.version = testVersion { package = dmidecode; };
 
   meta = with lib; {
     homepage = "https://www.nongnu.org/dmidecode/";

@@ -4,6 +4,8 @@
 , stdenv
 , Security
 , libiconv
+, geckodriver
+, testVersion
 }:
 
 rustPlatform.buildRustPackage {
@@ -25,6 +27,8 @@ rustPlatform.buildRustPackage {
   cargoSha256 = "1vajlcpyk77v6nvhs737yi8hs7ids9kz0sbwy29rm1vmmfjp2b27";
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
+
+  passthru.tests.version = testVersion { package = geckodriver; };
 
   meta = with lib; {
     description = "Proxy for using W3C WebDriver-compatible clients to interact with Gecko-based browsers";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub, vimer, testVersion }:
 
 stdenv.mkDerivation rec {
   version = "0.2.0";
@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
     cp vimer $out/bin/
     chmod +x $out/bin/vimer
   '';
+
+  passthru.tests.version = testVersion { package = vimer; };
 
   meta = with lib; {
     homepage = "https://github.com/susam/vimer";

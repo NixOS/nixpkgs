@@ -6,6 +6,8 @@
 , GitPython
 , tenacity
 , humanfriendly
+, git-annex-remote-googledrive
+, testVersion
 }:
 
 buildPythonApplication rec {
@@ -24,6 +26,8 @@ buildPythonApplication rec {
   doCheck = false;
 
   pythonImportsCheck = [ "git_annex_remote_googledrive" ];
+
+  passthru.tests.version = testVersion { package = git-annex-remote-googledrive; };
 
   meta = with lib; {
     description = "A git-annex special remote for Google Drive";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, ocl-icd, opencl-clhpp }:
+{ lib, stdenv, fetchFromGitHub, cmake, ocl-icd, opencl-clhpp, clpeak, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "clpeak";
@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [ ocl-icd opencl-clhpp ];
+
+  passthru.tests.version = testVersion { package = clpeak; };
 
   meta = with lib; {
     description = "A tool which profiles OpenCL devices to find their peak capacities";

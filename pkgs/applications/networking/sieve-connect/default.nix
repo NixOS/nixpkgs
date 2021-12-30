@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, perlPackages, installShellFiles }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, perlPackages, installShellFiles, sieve-connect, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "sieve-connect";
@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
         AuthenSASL Socket6 IOSocketInet6 IOSocketSSL NetSSLeay NetDNS
         TermReadKey TermReadLineGnu ]}"
   '';
+
+  passthru.tests.version = testVersion { package = sieve-connect; };
 
   meta = with lib; {
     description = "A client for the MANAGESIEVE Protocol";

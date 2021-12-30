@@ -9,6 +9,8 @@
 , gerbv
 , librsvg
 , bash
+, pcb2gcode
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -30,6 +32,8 @@ stdenv.mkDerivation rec {
     substituteInPlace ./Makefile.am \
     --replace '`git describe --dirty --always --tags`' '${version}'
   '';
+
+  passthru.tests.version = testVersion { package = pcb2gcode; };
 
   meta = with lib; {
     description = "Command-line tool for isolation, routing and drilling of PCBs ";

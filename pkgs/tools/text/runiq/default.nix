@@ -1,4 +1,4 @@
-{ fetchCrate, lib, rustPlatform }:
+{ fetchCrate, lib, rustPlatform, runiq, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "runiq";
@@ -10,6 +10,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "1g4yfz5xq9lqwh0ggyn8kn8bnzrqfmh7kx455md5ranrqqh0x5db";
+
+  passthru.tests.version = testVersion { package = runiq; };
 
   meta = with lib; {
     description = "An efficient way to filter duplicate lines from input, à la uniq";

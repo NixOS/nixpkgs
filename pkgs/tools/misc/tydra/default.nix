@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub, installShellFiles }:
+{ lib, rustPlatform, fetchFromGitHub, installShellFiles, tydra, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "tydra";
@@ -24,6 +24,8 @@ rustPlatform.buildRustPackage rec {
 
     installShellCompletion tydra.{bash,fish} _tydra
   '';
+
+  passthru.tests.version = testVersion { package = tydra; };
 
   meta = with lib; {
     description = "Shortcut menu-based task runner, inspired by Emacs Hydra";

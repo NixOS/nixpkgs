@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, rustPlatform }:
+{ lib, fetchFromGitHub, rustPlatform, blflash, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "blflash";
@@ -12,6 +12,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "sha256-/y3R8B2TOf8jeB9tcewoA9EGN6kj/EPMTjU6rfTF5Vc=";
+
+  passthru.tests.version = testVersion { package = blflash; };
 
   meta = with lib; {
     description = "An bl602 serial flasher written in Rust";

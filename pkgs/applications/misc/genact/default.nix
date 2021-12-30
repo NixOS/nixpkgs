@@ -1,4 +1,4 @@
-{ fetchFromGitHub, lib, rustPlatform }:
+{ fetchFromGitHub, lib, rustPlatform, genact, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "genact";
@@ -12,6 +12,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "0a5ic6c7fvmg2kh3qprzffnpw40cmrgbscrlhxxs3m7nxfjdh7bc";
+
+  passthru.tests.version = testVersion { package = genact; };
 
   meta = with lib; {
     description = "A nonsense activity generator";

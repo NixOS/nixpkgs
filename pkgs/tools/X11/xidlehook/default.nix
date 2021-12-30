@@ -9,6 +9,8 @@
 , pkg-config
 , patchelf
 , Security
+, xidlehook
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -37,6 +39,8 @@ rustPlatform.buildRustPackage rec {
     RPATH="$(patchelf --print-rpath $out/bin/xidlehook)"
     patchelf --set-rpath "$RPATH:${libpulseaudio}/lib" $out/bin/xidlehook
   '';
+
+  passthru.tests.version = testVersion { package = xidlehook; };
 
   meta = with lib; {
     description = "xautolock rewrite in Rust, with a few extra features";

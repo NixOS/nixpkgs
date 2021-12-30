@@ -1,4 +1,4 @@
-{ lib, python3Packages, fetchFromGitHub, substituteAll }:
+{ lib, python3Packages, fetchFromGitHub, substituteAll, auto-cpufreq, testVersion }:
 
 python3Packages.buildPythonPackage rec {
   pname = "auto-cpufreq";
@@ -36,6 +36,8 @@ python3Packages.buildPythonPackage rec {
     cp ${src}/scripts/auto-cpufreq.service $out/lib/systemd/system
     substituteInPlace $out/lib/systemd/system/auto-cpufreq.service --replace "/usr/local" $out
   '';
+
+  passthru.tests.version = testVersion { package = auto-cpufreq; };
 
   meta = with lib; {
     homepage = "https://github.com/AdnanHodzic/auto-cpufreq";

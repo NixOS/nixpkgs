@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, libiconv }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, libiconv, cconv, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "cconv";
@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ libiconv ];
+
+  passthru.tests.version = testVersion { package = cconv; };
 
   meta = with lib; {
     description = "A iconv based simplified-traditional chinese conversion tool";

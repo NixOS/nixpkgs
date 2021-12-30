@@ -12,6 +12,8 @@
 , gawk
 , findutils
 , gnused
+, keychain
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -35,6 +37,8 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/keychain \
       --prefix PATH ":" "${lib.makeBinPath [ coreutils findutils gawk gnupg gnugrep gnused openssh procps ]}" \
   '';
+
+  passthru.tests.version = testVersion { package = keychain; };
 
   meta = with lib; {
     description = "Keychain management tool";

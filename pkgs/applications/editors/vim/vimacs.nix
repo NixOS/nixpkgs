@@ -1,6 +1,6 @@
 { lib, stdenv, config, vim_configurable, macvim, vimPlugins
 , useMacvim ? stdenv.isDarwin && (config.vimacs.macvim or true)
-, vimacsExtraArgs ? "" }:
+, vimacsExtraArgs ? "", vimacs, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "vimacs";
@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
       ln -s "$out"/bin/vimacs $out/bin/$prog
     done
   '';
+
+  passthru.tests.version = testVersion { package = vimacs; };
 
   meta = with lib; {
     description = "Vim-Improved eMACS: Emacs emulation for Vim";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, tk }:
+{ lib, stdenv, fetchurl, tk, gocr, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "gocr";
@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
   preFixup = ''
     sed -i -e 's|exec wish|exec ${tk}/bin/wish|' $out/bin/gocr.tcl
   '';
+
+  passthru.tests.version = testVersion { package = gocr; };
 
   meta = {
     homepage = "http://jocr.sourceforge.net/";

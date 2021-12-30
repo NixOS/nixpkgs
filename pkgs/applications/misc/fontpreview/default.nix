@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, makeWrapper, xdotool, fzf, imagemagick, sxiv, getopt }:
+{ stdenv, lib, fetchFromGitHub, makeWrapper, xdotool, fzf, imagemagick, sxiv, getopt, fontpreview, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "fontpreview";
@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/fontpreview \
       --prefix PATH : ${lib.makeBinPath [ xdotool fzf imagemagick sxiv getopt ]}
   '';
+
+  passthru.tests.version = testVersion { package = fontpreview; };
 
   meta = with lib; {
     homepage = "https://github.com/sdushantha/fontpreview";

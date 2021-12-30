@@ -1,4 +1,4 @@
-{ lib, python3Packages, fetchFromGitHub }:
+{ lib, python3Packages, fetchFromGitHub, reuse, testVersion }:
 
 python3Packages.buildPythonApplication rec {
   pname = "reuse";
@@ -23,6 +23,8 @@ python3Packages.buildPythonApplication rec {
   ];
 
   checkInputs = with python3Packages; [ pytestCheckHook ];
+
+  passthru.tests.version = testVersion { package = reuse; };
 
   meta = with lib; {
     description = "A tool for compliance with the REUSE Initiative recommendations";

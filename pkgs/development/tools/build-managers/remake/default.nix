@@ -5,6 +5,8 @@
 , readline
 , guileSupport ? false
 , guile
+, remake
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -29,6 +31,8 @@ stdenv.mkDerivation rec {
     ++ lib.optionals guileSupport [ guile ];
 
   # make check fails, see https://github.com/rocky/remake/issues/117
+
+  passthru.tests.version = testVersion { package = remake; };
 
   meta = {
     homepage = "http://bashdb.sourceforge.net/remake/";

@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{ lib, rustPlatform, fetchFromGitHub, mcfly, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "mcfly";
@@ -18,6 +18,8 @@ rustPlatform.buildRustPackage rec {
   '';
 
   cargoSha256 = "sha256-7wyRHViPL+Hb9Rwrb1dAmmz+faOl9ddNlTdQ/XvTWE8=";
+
+  passthru.tests.version = testVersion { package = mcfly; };
 
   meta = with lib; {
     homepage = "https://github.com/cantino/mcfly";

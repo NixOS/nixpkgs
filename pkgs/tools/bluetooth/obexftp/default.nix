@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, openobex, bluez, cmake }:
+{ lib, stdenv, fetchurl, pkg-config, openobex, bluez, cmake, obexftp, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "obexftp";
@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
   postFixup = ''
     sed -i 's,^Requires: bluetooth,Requires:,' $out/lib/pkgconfig/obexftp.pc
   '';
+
+  passthru.tests.version = testVersion { package = obexftp; };
 
   meta = with lib; {
     homepage = "http://dev.zuckschwerdt.org/openobex/wiki/ObexFtp";

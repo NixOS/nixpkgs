@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchPypi, mistune_2_0, cjkwrap, wcwidth
-, pytestCheckHook }:
+, pytestCheckHook, md2gemini, testVersion }:
 
 buildPythonPackage rec {
   pname = "md2gemini";
@@ -13,6 +13,8 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "0mfa0f0m762168fbsxjr1cx9yhj82dr8z1d28jl6hj9bkqnvvwiy";
   };
+
+  passthru.tests.version = testVersion { package = md2gemini; };
 
   meta = with lib; {
     description = "Markdown to Gemini text format conversion library";

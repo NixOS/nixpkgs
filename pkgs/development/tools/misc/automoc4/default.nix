@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, cmake, qt4 }:
+{ lib, stdenv, fetchurl, cmake, qt4, automoc4, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "automoc4";
@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ qt4 ];
+
+  passthru.tests.version = testVersion { package = automoc4; };
 
   meta = with lib; {
     homepage = "https://techbase.kde.org/Development/Tools/Automoc4";

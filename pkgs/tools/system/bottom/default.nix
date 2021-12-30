@@ -7,6 +7,8 @@
 , IOKit
 , installShellFiles
 , libiconv
+, bottom
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -40,6 +42,8 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     installShellCompletion $releaseDir/build/bottom-*/out/btm.{bash,fish} --zsh $releaseDir/build/bottom-*/out/_btm
   '';
+
+  passthru.tests.version = testVersion { package = bottom; };
 
   meta = with lib; {
     description = "A cross-platform graphical process/system monitor with a customizable interface";

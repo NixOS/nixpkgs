@@ -9,6 +9,8 @@
 , elfio
 , termcolor
 , gtest
+, libtree
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -46,6 +48,8 @@ stdenv.mkDerivation rec {
   checkInputs = [ gtest ];
 
   cmakeFlags = [ "-DLIBTREE_BUILD_TESTS=ON" ];
+
+  passthru.tests.version = testVersion { package = libtree; };
 
   meta = with lib; {
     description = "Tree ldd with an option to bundle dependencies into a single folder";

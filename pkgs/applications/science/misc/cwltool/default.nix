@@ -3,6 +3,8 @@
 , git
 , nodejs
 , python3
+, cwltool
+, testVersion
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -67,6 +69,8 @@ python3.pkgs.buildPythonApplication rec {
   pythonImportsCheck = [
     "cwltool"
   ];
+
+  passthru.tests.version = testVersion { package = cwltool; };
 
   meta = with lib; {
     description = "Common Workflow Language reference implementation";

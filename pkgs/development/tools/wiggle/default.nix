@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, ncurses, groff }:
+{ lib, stdenv, fetchFromGitHub, ncurses, groff, wiggle, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "wiggle";
@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
                    )
     patchShebangs .
   '';
+
+  passthru.tests.version = testVersion { package = wiggle; };
 
   meta = with lib; {
     homepage = "https://blog.neil.brown.name/category/wiggle/";

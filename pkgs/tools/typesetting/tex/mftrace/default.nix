@@ -8,6 +8,8 @@
 , fontforge
 , potrace
 , texlive
+, mftrace
+, testVersion
 }:
 
 /*
@@ -47,6 +49,8 @@ let self = stdenv.mkDerivation rec {
   passthru.tlType = "bin";
   passthru.pkgs = [ self ] ++
     (with texlive; kpathsea.pkgs ++ t1utils.pkgs ++ metafont.pkgs);
+
+  passthru.tests.version = testVersion { package = mftrace; };
 
   meta = with lib; {
     description = "Scalable PostScript Fonts for MetaFont";

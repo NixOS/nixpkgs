@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, pkg-config, openssl, Security }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, pkg-config, openssl, Security, cargo-whatfeatures, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-whatfeatures";
@@ -17,6 +17,8 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ openssl ]
     ++ lib.optionals stdenv.isDarwin [ Security ];
+
+  passthru.tests.version = testVersion { package = cargo-whatfeatures; };
 
   meta = with lib; {
     description = "A simple cargo plugin to get a list of features for a specific crate";

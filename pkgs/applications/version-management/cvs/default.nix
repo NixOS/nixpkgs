@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, nano }:
+{ lib, stdenv, fetchurl, fetchpatch, nano, cvs, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "cvs";
@@ -41,6 +41,8 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = false; # fails 1 of 1 tests
+
+  passthru.tests.version = testVersion { package = cvs; };
 
   meta = with lib; {
     homepage = "http://cvs.nongnu.org";

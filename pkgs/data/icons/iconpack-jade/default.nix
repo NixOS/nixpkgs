@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, gtk3, gnome-icon-theme, hicolor-icon-theme }:
+{ lib, stdenv, fetchFromGitHub, gtk3, gnome-icon-theme, hicolor-icon-theme, iconpack-jade, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "iconpack-jade";
@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
       gtk-update-icon-cache $theme
     done
   '';
+
+  passthru.tests.version = testVersion { package = iconpack-jade; };
 
   meta = with lib; {
     description = "Icon pack based upon Faenza and Mint-X";

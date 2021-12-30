@@ -7,6 +7,8 @@
 , Foundation
 , libiconv
 , Security
+, delta
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -30,6 +32,8 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion --bash --name delta.bash etc/completion/completion.bash
     installShellCompletion --zsh --name _delta etc/completion/completion.zsh
   '';
+
+  passthru.tests.version = testVersion { package = delta; };
 
   meta = with lib; {
     homepage = "https://github.com/dandavison/delta";

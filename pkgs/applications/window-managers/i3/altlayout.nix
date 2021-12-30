@@ -1,4 +1,4 @@
-{ lib, python3Packages }:
+{ lib, python3Packages, i3altlayout, testVersion }:
 
 python3Packages.buildPythonApplication rec {
   pname = "i3altlayout";
@@ -14,6 +14,8 @@ python3Packages.buildPythonApplication rec {
   doCheck = false;
 
   pythonImportsCheck = [ "i3altlayout" ];
+
+  passthru.tests.version = testVersion { package = i3altlayout; };
 
   meta = with lib; {
     maintainers = with maintainers; [ magnetophon ];

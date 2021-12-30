@@ -1,4 +1,4 @@
-{ lib, stdenv, pkgs, python3, fetchpatch, glibcLocales }:
+{ lib, stdenv, pkgs, python3, fetchpatch, glibcLocales, khal, testVersion }:
 
 with python3.pkgs; buildPythonApplication rec {
   pname = "khal";
@@ -55,6 +55,8 @@ with python3.pkgs; buildPythonApplication rec {
     # Mocking breaks in this testcase
     "test_import_from_stdin"
   ];
+
+  passthru.tests.version = testVersion { package = khal; };
 
   meta = with lib; {
     homepage = "http://lostpackets.de/khal/";

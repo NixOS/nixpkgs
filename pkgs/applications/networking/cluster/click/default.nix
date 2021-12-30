@@ -1,4 +1,4 @@
-{ darwin, fetchFromGitHub, rustPlatform, lib, stdenv }:
+{ darwin, fetchFromGitHub, rustPlatform, lib, stdenv, click, testVersion }:
 
 with rustPlatform;
 
@@ -16,6 +16,8 @@ buildRustPackage rec {
   cargoSha256 = "16r5rwdbqyb5xrjc55i30xb20crpyjc75zn10xxjkicmvrpwydp6";
 
   buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+
+  passthru.tests.version = testVersion { package = click; };
 
   meta = with lib; {
     description = ''The "Command Line Interactive Controller for Kubernetes"'';

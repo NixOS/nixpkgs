@@ -2,6 +2,8 @@
 , python3Packages
 , nix
 , ronn
+, vulnix
+, testVersion
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -47,6 +49,8 @@ python3Packages.buildPythonApplication rec {
   '';
 
   dontStrip = true;
+
+  passthru.tests.version = testVersion { package = vulnix; };
 
   meta = with lib; {
     description = "NixOS vulnerability scanner";

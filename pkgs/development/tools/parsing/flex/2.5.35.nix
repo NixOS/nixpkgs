@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, autoreconfHook, flex, bison, texinfo, help2man, m4 }:
+{ lib, stdenv, fetchurl, autoreconfHook, flex, bison, texinfo, help2man, m4, flex_2_5_35, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "flex";
@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = false; # fails 2 out of 46 tests
+
+  passthru.tests.version = testVersion { package = flex_2_5_35; };
 
   meta = with lib; {
     branch = "2.5.35";

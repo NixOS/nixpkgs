@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, python3, libX11, libXrandr }:
+{ lib, stdenv, fetchFromGitHub, python3, libX11, libXrandr, blugon, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "blugon";
@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
   '';
 
   makeFlags = [ "PREFIX=$(out)" ];
+
+  passthru.tests.version = testVersion { package = blugon; };
 
   meta = with lib; {
     description = "Simple and configurable Blue Light Filter for X";

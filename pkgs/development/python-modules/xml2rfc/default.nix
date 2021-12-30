@@ -18,6 +18,8 @@
 , jinja2
 , configargparse
 , appdirs
+, xml2rfc
+, testVersion
 }:
 
 buildPythonPackage rec {
@@ -63,6 +65,8 @@ buildPythonPackage rec {
   doCheck = false;
 
   pythonImportsCheck = [ "xml2rfc" ];
+
+  passthru.tests.version = testVersion { package = xml2rfc; };
 
   meta = with lib; {
     description = "Tool generating IETF RFCs and drafts from XML sources";

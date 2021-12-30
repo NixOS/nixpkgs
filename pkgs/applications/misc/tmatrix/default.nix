@@ -4,6 +4,8 @@
 , cmake
 , installShellFiles
 , ncurses
+, tmatrix
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -23,6 +25,8 @@ stdenv.mkDerivation rec {
   postInstall = ''
     installManPage ../tmatrix.6
   '';
+
+  passthru.tests.version = testVersion { package = tmatrix; };
 
   meta = with lib; {
     description = "Terminal based replica of the digital rain from The Matrix";

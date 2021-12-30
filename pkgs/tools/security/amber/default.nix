@@ -1,4 +1,4 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, Security }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, Security, amber-secret, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   # Renaming it to amber-secret because another package named amber exists
@@ -15,6 +15,8 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "0dmhlyrw6yd7p80v7anz5nrd28bcrhq27vzy605dinddvncjn13q";
 
   buildInputs = lib.optionals stdenv.isDarwin [ Security ];
+
+  passthru.tests.version = testVersion { package = amber-secret; };
 
   meta = with lib; {
     description = "Manage secret values in-repo via public key cryptography";

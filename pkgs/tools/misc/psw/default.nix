@@ -1,6 +1,8 @@
 { lib
 , fetchFromGitHub
 , rustPlatform
+, psw
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -15,6 +17,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "1y2am1bz68q7d9bn4264al13fv2j6a87bwrd60ycx0qak9fczlmv";
+
+  passthru.tests.version = testVersion { package = psw; };
 
   meta = with lib; {
     description = "A command line tool to write random bytes to stdout";

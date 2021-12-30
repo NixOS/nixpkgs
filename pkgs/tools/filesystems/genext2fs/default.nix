@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, genext2fs, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "genext2fs";
@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
   postPatch = ''
     sed -e 's@4 [*] (EXT2_TIND_BLOCK+1)@-1+&@' -i genext2fs.c
   '';
+
+  passthru.tests.version = testVersion { package = genext2fs; };
 
   meta = with lib; {
     homepage = "http://genext2fs.sourceforge.net/";

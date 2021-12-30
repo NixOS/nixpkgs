@@ -1,4 +1,4 @@
-{ lib, stdenv, pkgsBuildBuild, rustPlatform, fetchFromGitHub, pkg-config, libunwind, python3 }:
+{ lib, stdenv, pkgsBuildBuild, rustPlatform, fetchFromGitHub, pkg-config, libunwind, python3, py-spy, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "py-spy";
@@ -21,6 +21,8 @@ rustPlatform.buildRustPackage rec {
   checkInputs = [ python3 ];
 
   cargoSha256 = "sha256-LEtmzCoT8esBYh9PkCGpzUU7miaWd3Ao0z/LzxhP39A=";
+
+  passthru.tests.version = testVersion { package = py-spy; };
 
   meta = with lib; {
     description = "Sampling profiler for Python programs";

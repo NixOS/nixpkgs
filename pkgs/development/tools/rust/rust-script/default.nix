@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{ lib, rustPlatform, fetchFromGitHub, rust-script, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rust-script";
@@ -15,6 +15,8 @@ rustPlatform.buildRustPackage rec {
 
   # tests require network access
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = rust-script; };
 
   meta = with lib; {
     description = "Run Rust files and expressions as scripts without any setup or compilation step";

@@ -18,6 +18,8 @@
 , sassc
 , udisks2
 , wrapGAppsHook
+, monitor
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -65,6 +67,8 @@ stdenv.mkDerivation rec {
       attrPath = pname;
     };
   };
+
+  passthru.tests.version = testVersion { package = monitor; };
 
   meta = with lib; {
     description = "Manage processes and monitor system resources";

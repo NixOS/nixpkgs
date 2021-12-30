@@ -1,4 +1,4 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub, gh-ost, testVersion }:
 
 buildGoPackage rec {
   pname = "gh-ost";
@@ -14,6 +14,8 @@ buildGoPackage rec {
   goPackagePath = "github.com/github/gh-ost";
 
   ldflags = [ "-s" "-w" "-X main.AppVersion=${version}" "-X main.BuildDescribe=${src.rev}" ];
+
+  passthru.tests.version = testVersion { package = gh-ost; };
 
   meta = with lib; {
     description = "Triggerless online schema migration solution for MySQL";

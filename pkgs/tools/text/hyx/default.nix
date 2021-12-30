@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, memstreamHook }:
+{ lib, stdenv, fetchurl, memstreamHook, hyx, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "hyx";
@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
   installPhase = ''
     install -vD hyx $out/bin/hyx
   '';
+
+  passthru.tests.version = testVersion { package = hyx; };
 
   meta = with lib; {
     description = "minimalistic but powerful Linux console hex editor";

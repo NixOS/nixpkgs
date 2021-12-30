@@ -4,6 +4,8 @@
 , jq
 , libxml2
 , makeWrapper
+, oq
+, testVersion
 }:
 
 crystal.buildCrystalPackage rec {
@@ -26,6 +28,8 @@ crystal.buildCrystalPackage rec {
     wrapProgram "$out/bin/oq" \
       --prefix PATH : "${lib.makeBinPath [ jq ]}"
   '';
+
+  passthru.tests.version = testVersion { package = oq; };
 
   meta = with lib; {
     description = "A performant, and portable jq wrapper";

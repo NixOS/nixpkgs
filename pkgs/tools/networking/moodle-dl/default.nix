@@ -1,4 +1,4 @@
-{ lib, python3Packages }:
+{ lib, python3Packages, moodle-dl, testVersion }:
 
 python3Packages.buildPythonApplication rec {
   pname = "moodle-dl";
@@ -24,6 +24,8 @@ python3Packages.buildPythonApplication rec {
     requests
     slixmpp
   ];
+
+  passthru.tests.version = testVersion { package = moodle-dl; };
 
   meta = with lib; {
     homepage = "https://github.com/C0D3D3V/Moodle-Downloader-2";

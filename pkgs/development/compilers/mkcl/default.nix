@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, makeWrapper, gmp, gcc }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, makeWrapper, gmp, gcc, mkcl, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "mkcl";
@@ -46,6 +46,8 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  passthru.tests.version = testVersion { package = mkcl; };
 
   meta = with lib; {
     description = "ANSI Common Lisp Implementation";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fuse, pkg-config, attr, uthash }:
+{ lib, stdenv, fetchurl, fuse, pkg-config, attr, uthash, mhddfs, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "mhddfs";
@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cp mhddfs $out/bin/
   '';
+
+  passthru.tests.version = testVersion { package = mhddfs; };
 
   meta = {
     homepage = "http://mhddfs.uvw.ru/";

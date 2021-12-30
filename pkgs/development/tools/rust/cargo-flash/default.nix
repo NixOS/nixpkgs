@@ -6,6 +6,8 @@
 , pkg-config
 , rustfmt
 , AppKit
+, cargo-flash
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -23,6 +25,8 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config rustfmt ];
   buildInputs = [ libusb1 ] ++ lib.optionals stdenv.isDarwin [ AppKit ];
+
+  passthru.tests.version = testVersion { package = cargo-flash; };
 
   meta = with lib; {
     description = "A cargo extension for working with microcontrollers";

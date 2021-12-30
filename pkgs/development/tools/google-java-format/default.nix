@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, jre, makeWrapper }:
+{ lib, stdenv, fetchurl, jre, makeWrapper, google-java-format, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "google-java-format";
@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.tests.version = testVersion { package = google-java-format; };
 
   meta = with lib; {
     description = "Java source formatter by Google";

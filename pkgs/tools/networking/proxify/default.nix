@@ -1,6 +1,8 @@
 { buildGoModule
 , fetchFromGitHub
 , lib
+, proxify
+, testVersion
 }:
 
 buildGoModule rec {
@@ -15,6 +17,8 @@ buildGoModule rec {
   };
 
   vendorSha256 = "sha256-Yf1edWWHao2A+iY/5N14mvtvLP+IJDZEEB0Voj47sCs=";
+
+  passthru.tests.version = testVersion { package = proxify; };
 
   meta = with lib; {
     description = "Proxy tool for HTTP/HTTPS traffic capture";

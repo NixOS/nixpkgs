@@ -1,4 +1,4 @@
-{ buildGoModule, fetchFromGitHub, lib, patchResolver ? true }:
+{ buildGoModule, fetchFromGitHub, lib, patchResolver ? true, summon, testVersion }:
 
 with lib;
 
@@ -24,6 +24,8 @@ buildGoModule rec {
   postInstall = ''
     mv $out/bin/cmd $out/bin/summon
   '';
+
+  passthru.tests.version = testVersion { package = summon; };
 
   meta = with lib; {
     description =

@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{ lib, rustPlatform, fetchFromGitHub, elfcat, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "elfcat";
@@ -12,6 +12,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = null;
+
+  passthru.tests.version = testVersion { package = elfcat; };
 
   meta = with lib; {
     description = "ELF visualizer, generates HTML files from ELF binaries.";

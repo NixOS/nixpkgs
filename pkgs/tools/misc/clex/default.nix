@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, ncurses }:
+{ lib, stdenv, fetchurl, ncurses, clex, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "clex";
@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses ];
 
   enableParallelBuilding = true;
+
+  passthru.tests.version = testVersion { package = clex; };
 
   meta = with lib; {
     description = "File manager with full-screen terminal interface";

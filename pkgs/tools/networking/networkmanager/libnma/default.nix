@@ -20,6 +20,8 @@
 , glib
 , substituteAll
 , lib
+, libnma
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -80,6 +82,8 @@ stdenv.mkDerivation rec {
       versionPolicy = "odd-unstable";
     };
   };
+
+  passthru.tests.version = testVersion { package = libnma; };
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/libnma";

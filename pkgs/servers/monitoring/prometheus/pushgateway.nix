@@ -1,4 +1,4 @@
-{ lib, go, buildGoPackage, fetchFromGitHub }:
+{ lib, go, buildGoPackage, fetchFromGitHub, prometheus-pushgateway, testVersion }:
 
 buildGoPackage rec {
   pname = "pushgateway";
@@ -37,6 +37,8 @@ buildGoPackage rec {
       pushgateway --version 2>&1 | fgrep -q -- "$s" || { echo "pushgateway --version output missing $s"; exit 1; }
     done
   '';
+
+  passthru.tests.version = testVersion { package = prometheus-pushgateway; };
 
   meta = with lib; {
     description = "Allows ephemeral and batch jobs to expose metrics to Prometheus";

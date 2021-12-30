@@ -7,6 +7,8 @@
 , xxHash
 , zlib
 , openssl
+, mold
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -27,6 +29,8 @@ stdenv.mkDerivation rec {
   EXTRA_LDFLAGS = "-fuse-ld=${llvmPackages_latest.lld}/bin/ld.lld";
   LTO = 1;
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
+
+  passthru.tests.version = testVersion { package = mold; };
 
   meta = with lib; {
     description = "A high performance drop-in replacement for existing unix linkers";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, installShellFiles, jdk, rlwrap, makeWrapper, writeScript }:
+{ lib, stdenv, fetchurl, installShellFiles, jdk, rlwrap, makeWrapper, writeScript, clojure, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "clojure";
@@ -70,6 +70,8 @@ stdenv.mkDerivation rec {
 
     update-source-version clojure "$latest_version"
   '';
+
+  passthru.tests.version = testVersion { package = clojure; };
 
   meta = with lib; {
     description = "A Lisp dialect for the JVM";

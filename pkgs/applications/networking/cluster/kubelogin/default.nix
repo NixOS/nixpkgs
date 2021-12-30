@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildGoModule, go }:
+{ lib, fetchFromGitHub, buildGoModule, go, kubelogin, testVersion }:
 
 buildGoModule rec {
   pname = "kubelogin";
@@ -17,6 +17,8 @@ buildGoModule rec {
     "-X main.version=${version}"
     "-X main.goVersion=${lib.getVersion go}"
   ];
+
+  passthru.tests.version = testVersion { package = kubelogin; };
 
   meta = with lib; {
     description = "A Kubernetes credential plugin implementing Azure authentication";

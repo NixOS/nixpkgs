@@ -7,6 +7,8 @@
 , runtimeShell
 , nixosTests
 , enablePrivSep ? true
+, dhcpcd
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -51,6 +53,8 @@ stdenv.mkDerivation rec {
   postInstall = lib.optionalString (udev != null) "[ -e ${placeholder "out"}/lib/dhcpcd/dev/udev.so ]";
 
   passthru.tests = { inherit (nixosTests.networking.scripted) macvlan dhcpSimple dhcpOneIf; };
+
+  passthru.tests.version = testVersion { package = dhcpcd; };
 
   meta = with lib; {
     description = "A client for the Dynamic Host Configuration Protocol (DHCP)";

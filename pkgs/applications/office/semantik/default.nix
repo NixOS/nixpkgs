@@ -20,6 +20,8 @@
 , ki18n
 , sonnet
 , kdelibs4support
+, semantik
+, testVersion
 }:
 
 mkDerivation rec {
@@ -79,6 +81,8 @@ mkDerivation rec {
   wafConfigureFlags = [
     "--qtlibs=${lib.getLib qtbase}/lib"
   ];
+
+  passthru.tests.version = testVersion { package = semantik; };
 
   meta = with lib; {
     description = "A mind-mapping application for KDE";

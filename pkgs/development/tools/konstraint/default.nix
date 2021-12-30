@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, konstraint, testVersion }:
 
 buildGoModule rec {
   pname = "konstraint";
@@ -16,6 +16,8 @@ buildGoModule rec {
   excludedPackages = ".github";
 
   ldflags = [ "-s" "-w" "-X github.com/plexsystems/konstraint/internal/commands.version=${version}" ];
+
+  passthru.tests.version = testVersion { package = konstraint; };
 
   meta = with lib; {
     homepage = "https://github.com/plexsystems/konstraint";

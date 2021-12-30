@@ -6,6 +6,8 @@
 , DiskArbitration
 , Foundation
 , Security
+, fnm
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -33,6 +35,8 @@ rustPlatform.buildRustPackage rec {
       --fish <($out/bin/fnm completions --shell fish) \
       --zsh <($out/bin/fnm completions --shell zsh)
   '';
+
+  passthru.tests.version = testVersion { package = fnm; };
 
   meta = with lib; {
     description = "Fast and simple Node.js version manager";

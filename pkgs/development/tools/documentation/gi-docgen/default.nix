@@ -4,6 +4,8 @@
 , meson
 , ninja
 , python3
+, gi-docgen
+, testVersion
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -54,6 +56,8 @@ python3.pkgs.buildPythonApplication rec {
     substituteInPlace $out/nix-support/propagated-build-inputs \
       --replace "${python3}" ""
   '';
+
+  passthru.tests.version = testVersion { package = gi-docgen; };
 
   meta = with lib; {
     description = "Documentation generator for GObject-based libraries";

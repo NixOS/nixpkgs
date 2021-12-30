@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, cassowary, testVersion }:
 
 buildGoModule rec {
   pname = "cassowary";
@@ -16,6 +16,8 @@ buildGoModule rec {
   doCheck = false;
 
   ldflags = [ "-s" "-w" "-X main.version=${version}" ];
+
+  passthru.tests.version = testVersion { package = cassowary; };
 
   meta = with lib; {
     homepage = "https://github.com/rogerwelin/cassowary";

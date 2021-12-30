@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildGoModule, nixosTests }:
+{ lib, fetchFromGitHub, buildGoModule, nixosTests, lego, testVersion }:
 
 buildGoModule rec {
   pname = "lego";
@@ -20,6 +20,8 @@ buildGoModule rec {
   ldflags = [
     "-X main.version=${version}"
   ];
+
+  passthru.tests.version = testVersion { package = lego; };
 
   meta = with lib; {
     description = "Let's Encrypt client and ACME library written in Go";

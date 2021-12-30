@@ -10,6 +10,8 @@
 , setuptools
 , tinyprog
 , pytestCheckHook
+, apio
+, testVersion
 }:
 
 buildPythonApplication rec {
@@ -59,6 +61,8 @@ buildPythonApplication rec {
   ];
 
   pytestFlagsArray = [ "--offline" ];
+
+  passthru.tests.version = testVersion { package = apio; };
 
   meta = with lib; {
     description = "Open source ecosystem for open FPGA boards";

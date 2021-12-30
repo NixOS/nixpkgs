@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub, installShellFiles, nasm }:
+{ lib, rustPlatform, fetchFromGitHub, installShellFiles, nasm, sic-image-cli, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "sic-image-cli";
@@ -23,6 +23,8 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion sic.{bash,fish}
     installShellCompletion --zsh _sic
   '';
+
+  passthru.tests.version = testVersion { package = sic-image-cli; };
 
   meta = with lib; {
     description = "Accessible image processing and conversion from the terminal";

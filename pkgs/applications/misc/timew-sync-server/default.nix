@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, timew-sync-server, testVersion }:
 
 buildGoModule rec {
   pname = "timew-sync-server";
@@ -12,6 +12,8 @@ buildGoModule rec {
   };
 
   vendorSha256 = "iROqiRWkHG6N6kivUmgmu6sg14JDdG4f98BdR7CL1gs=";
+
+  passthru.tests.version = testVersion { package = timew-sync-server; };
 
   meta = with lib; {
     homepage = "https://github.com/timewarrior-synchronize/timew-sync-server";

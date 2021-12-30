@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, libxslt, docbook_xsl, postgresql }:
+{ lib, stdenv, fetchFromGitHub, libxslt, docbook_xsl, postgresql, pg_checksums, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "pg_checksums";
@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
     install -Dm755 -t $out/bin pg_checksums
     install -Dm644 -t $out/share/man/man1 doc/man1/pg_checksums.1
   '';
+
+  passthru.tests.version = testVersion { package = pg_checksums; };
 
   meta = with lib; {
     description = "Activate/deactivate/verify checksums in offline PostgreSQL clusters";

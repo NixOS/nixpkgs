@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, ncurses }:
+{ stdenv, lib, fetchurl, ncurses, heme, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "heme";
@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     mkdir -p $out/man/man1
   '';
+  passthru.tests.version = testVersion { package = heme; };
+
   meta = with lib; {
     description = "Portable and fast console hex editor for unix operating systems";
     homepage = "http://heme.sourceforge.net/";

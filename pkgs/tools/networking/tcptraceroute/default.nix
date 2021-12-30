@@ -3,6 +3,8 @@
 , fetchFromGitHub
 , libpcap
 , libnet
+, tcptraceroute
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -24,6 +26,8 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ libpcap libnet ];
+
+  passthru.tests.version = testVersion { package = tcptraceroute; };
 
   meta = {
     description = "A traceroute implementation using TCP packets";

@@ -1,6 +1,8 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, cloudlist
+, testVersion
 }:
 
 buildGoModule rec {
@@ -15,6 +17,8 @@ buildGoModule rec {
   };
 
   vendorSha256 = "0yr9w2k6lyxnwbxh9mp1lri9z29wl9rgfvq8mjjdlqvcqhbw7l7l";
+
+  passthru.tests.version = testVersion { package = cloudlist; };
 
   meta = with lib; {
     description = "Tool for listing assets from multiple cloud providers";

@@ -1,4 +1,4 @@
-{ lib, python3Packages, fetchFromGitHub }:
+{ lib, python3Packages, fetchFromGitHub, fprettify, testVersion }:
 
 python3Packages.buildPythonApplication rec {
   pname = "fprettify";
@@ -18,6 +18,8 @@ python3Packages.buildPythonApplication rec {
   propagatedBuildInputs = with python3Packages; [
     configargparse
   ];
+
+  passthru.tests.version = testVersion { package = fprettify; };
 
   meta = with lib; {
     description = "An auto-formatter for modern Fortran code that imposes strict whitespace formatting, written in Python.";

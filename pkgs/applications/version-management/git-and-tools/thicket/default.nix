@@ -1,6 +1,8 @@
 { lib
 , fetchFromGitHub
 , crystal
+, thicket
+, testVersion
 }:
 
 crystal.buildCrystalPackage rec {
@@ -21,6 +23,8 @@ crystal.buildCrystalPackage rec {
 
   # there is one test that tries to clone a repo
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = thicket; };
 
   meta = with lib; {
     description = "A better one-line git log";

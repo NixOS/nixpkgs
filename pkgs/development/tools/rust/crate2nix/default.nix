@@ -6,6 +6,8 @@
 , cargo
 , nix
 , nix-prefetch-git
+, crate2nix
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -33,6 +35,8 @@ rustPlatform.buildRustPackage rec {
     wrapProgram $out/bin/crate2nix \
         --suffix PATH ":" ${lib.makeBinPath [ cargo nix nix-prefetch-git ]}
   '';
+
+  passthru.tests.version = testVersion { package = crate2nix; };
 
   meta = with lib; {
     description = "A Nix build file generator for Rust crates.";

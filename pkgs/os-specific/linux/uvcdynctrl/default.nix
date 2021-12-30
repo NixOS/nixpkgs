@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, libxml2 }:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, libxml2, uvcdynctrl, testVersion }:
 
 stdenv.mkDerivation {
   version = "0.3.0";
@@ -26,6 +26,8 @@ stdenv.mkDerivation {
         --replace "/lib/udev" "$out/lib/udev"
     done
   '';
+
+  passthru.tests.version = testVersion { package = uvcdynctrl; };
 
   meta = with lib; {
     description = "A simple interface for devices supported by the linux UVC driver";

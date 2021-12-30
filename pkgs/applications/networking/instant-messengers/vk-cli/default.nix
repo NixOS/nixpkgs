@@ -6,6 +6,8 @@
 , glibc
 , ncurses
 , openssl
+, vk-cli
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -43,6 +45,8 @@ stdenv.mkDerivation rec {
       --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       --set-rpath "${lib.makeLibraryPath [ curl glibc ]}"
   '';
+
+  passthru.tests.version = testVersion { package = vk-cli; };
 
   meta = with lib; {
     description = "A console (ncurses) client for vk.com written in D";

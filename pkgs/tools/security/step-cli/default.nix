@@ -1,6 +1,8 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, step-cli
+, testVersion
 }:
 
 buildGoModule rec {
@@ -26,6 +28,8 @@ buildGoModule rec {
   '';
 
   vendorSha256 = "sha256-kVvbSTybO23zb1ivCrjZqkM44ljPGD1GdBv76qCpTEQ=";
+
+  passthru.tests.version = testVersion { package = step-cli; };
 
   meta = with lib; {
     description = "A zero trust swiss army knife for working with X509, OAuth, JWT, OATH OTP, etc";

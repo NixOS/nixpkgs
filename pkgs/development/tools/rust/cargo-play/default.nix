@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{ lib, rustPlatform, fetchFromGitHub, cargo-play, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-play";
@@ -18,6 +18,8 @@ rustPlatform.buildRustPackage rec {
     "--skip=dtoa_test"
     "--skip=infer_override"
   ];
+
+  passthru.tests.version = testVersion { package = cargo-play; };
 
   meta = with lib; {
     description = "Run your rust code without setting up cargo";

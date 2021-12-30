@@ -7,6 +7,8 @@
 , libexif
 , popt
 , libintl
+, exif
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -35,6 +37,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ libexif popt libintl ];
+
+  passthru.tests.version = testVersion { package = exif; };
 
   meta = with lib; {
     homepage = "https://libexif.github.io";

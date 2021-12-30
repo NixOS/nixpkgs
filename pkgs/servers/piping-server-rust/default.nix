@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub, stdenv, CoreServices, Security }:
+{ lib, rustPlatform, fetchFromGitHub, stdenv, CoreServices, Security, piping-server-rust, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "piping-server-rust";
@@ -14,6 +14,8 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-8xUhYyjc4560PowCRwYeZMUJLhZFTHcMRLe/iQAwaWE=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ CoreServices Security ];
+
+  passthru.tests.version = testVersion { package = piping-server-rust; };
 
   meta = with lib; {
     description = "Infinitely transfer between every device over pure HTTP with pipes or browsers";

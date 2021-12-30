@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, six, mock, pytestCheckHook, setuptools, setuptools-scm }:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, six, mock, pytestCheckHook, setuptools, setuptools-scm, ansi2html, testVersion }:
 
 buildPythonPackage rec {
   pname = "ansi2html";
@@ -18,6 +18,8 @@ buildPythonPackage rec {
   checkInputs = [ mock pytestCheckHook ];
 
   pythonImportsCheck = [ "ansi2html" ];
+
+  passthru.tests.version = testVersion { package = ansi2html; };
 
   meta = with lib; {
     description = "Convert text with ANSI color codes to HTML";

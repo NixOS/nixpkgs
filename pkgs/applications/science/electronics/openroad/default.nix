@@ -23,6 +23,8 @@
 , xorg
 , yosys
 , zlib
+, openroad
+, testVersion
 }:
 
 mkDerivation rec {
@@ -83,6 +85,8 @@ mkDerivation rec {
     cd ..
     test/regression
   '';
+
+  passthru.tests.version = testVersion { package = openroad; };
 
   meta = with lib; {
     description = "OpenROAD's unified application implementing an RTL-to-GDS flow";

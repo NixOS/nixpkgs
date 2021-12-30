@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, matterbridge, testVersion }:
 
 buildGoModule rec {
   pname = "matterbridge";
@@ -12,6 +12,8 @@ buildGoModule rec {
   };
 
   vendorSha256 = null;
+
+  passthru.tests.version = testVersion { package = matterbridge; };
 
   meta = with lib; {
     description = "Simple bridge between Mattermost, IRC, XMPP, Gitter, Slack, Discord, Telegram, Rocket.Chat, Hipchat(via xmpp), Matrix and Steam";

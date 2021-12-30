@@ -6,6 +6,8 @@
 , dbus
 , openssl
 , Foundation
+, tiny
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -25,6 +27,8 @@ rustPlatform.buildRustPackage rec {
   buildInputs = lib.optionals stdenv.isLinux [ dbus openssl ] ++ lib.optional stdenv.isDarwin Foundation;
 
   buildFeatures = lib.optional stdenv.isLinux "desktop-notifications";
+
+  passthru.tests.version = testVersion { package = tiny; };
 
   meta = with lib; {
     description = "A console IRC client";

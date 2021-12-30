@@ -8,6 +8,8 @@
 , xz
 , zlib
 , zstd
+, ouch
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -38,6 +40,8 @@ rustPlatform.buildRustPackage rec {
   '';
 
   GEN_COMPLETIONS = 1;
+
+  passthru.tests.version = testVersion { package = ouch; };
 
   meta = with lib; {
     description = "A command-line utility for easily compressing and decompressing files and directories";

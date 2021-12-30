@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, makeWrapper, xdg-utils, installShellFiles, git }:
+{ lib, buildGoModule, fetchFromGitHub, makeWrapper, xdg-utils, installShellFiles, git, lab, testVersion }:
 
 buildGoModule rec {
   pname = "lab";
@@ -28,6 +28,8 @@ buildGoModule rec {
       installShellCompletion lab.$shell
     done
   '';
+
+  passthru.tests.version = testVersion { package = lab; };
 
   meta = with lib; {
     description = "Lab wraps Git or Hub, making it simple to clone, fork, and interact with repositories on GitLab";

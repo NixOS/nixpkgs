@@ -12,6 +12,8 @@
 , util-linux
 , which
 , xclip
+, waydroid
+, testVersion
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -67,6 +69,8 @@ python3Packages.buildPythonApplication rec {
       xclip
     ]}"
   '';
+
+  passthru.tests.version = testVersion { package = waydroid; };
 
   meta = with lib; {
     description = "Waydroid is a container-based approach to boot a full Android system on a regular GNU/Linux system like Ubuntu";

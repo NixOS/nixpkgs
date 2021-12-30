@@ -10,6 +10,8 @@
 , gucharmap
 , python3
 , gnome
+, bluefish
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -30,6 +32,8 @@ stdenv.mkDerivation rec {
     gucharmap
     python3
   ];
+
+  passthru.tests.version = testVersion { package = bluefish; };
 
   meta = with lib; {
     description = "A powerful editor targeted towards programmers and webdevelopers";

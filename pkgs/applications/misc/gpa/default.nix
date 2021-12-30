@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, intltool, pkg-config, gtk2, gpgme, libgpg-error, libassuan }:
+{ lib, stdenv, fetchurl, intltool, pkg-config, gtk2, gpgme, libgpg-error, libassuan, gpa, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "gpa";
@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ intltool pkg-config ];
   buildInputs = [ gtk2 gpgme libgpg-error libassuan ];
+
+  passthru.tests.version = testVersion { package = gpa; };
 
   meta = with lib; {
     description = "Graphical user interface for the GnuPG";

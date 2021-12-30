@@ -24,6 +24,8 @@
 , Cocoa
 , IOKit
 , libsamplerate
+, superTuxKart
+, testVersion
 }:
 let
   assets = fetchsvn {
@@ -130,6 +132,8 @@ stdenv.mkDerivation rec {
       --set-default SUPERTUXKART_ASSETS_DIR "${assets}" \
       --set-default SUPERTUXKART_DATADIR "$out/share/supertuxkart" \
   '';
+
+  passthru.tests.version = testVersion { package = superTuxKart; };
 
   meta = with lib; {
     description = "A Free 3D kart racing game";

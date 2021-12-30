@@ -23,6 +23,8 @@
 , tesseract4
 , tqdm
 , unpaper
+, ocrmypdf
+, testVersion
 }:
 
 buildPythonPackage rec {
@@ -83,6 +85,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "ocrmypdf"
   ];
+
+  passthru.tests.version = testVersion { package = ocrmypdf; };
 
   meta = with lib; {
     homepage = "https://github.com/jbarlow83/OCRmyPDF";

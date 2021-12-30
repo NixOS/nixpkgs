@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, pkg-config, makeWrapper, openssl, git, libiconv, Security, installShellFiles }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, pkg-config, makeWrapper, openssl, git, libiconv, Security, installShellFiles, git-gone, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "git-gone";
@@ -25,6 +25,8 @@ rustPlatform.buildRustPackage rec {
   postFixup = ''
     wrapProgram $out/bin/git-gone --prefix PATH : "${lib.makeBinPath [ git ]}"
   '';
+
+  passthru.tests.version = testVersion { package = git-gone; };
 
   meta = with lib; {
     description = "Cleanup stale Git branches of pull requests";

@@ -8,6 +8,8 @@
 , curl
 , Security
 , runCommand
+, wasm-bindgen-cli
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -29,6 +31,8 @@ rustPlatform.buildRustPackage rec {
 
   # other tests require it to be ran in the wasm-bindgen monorepo
   cargoTestFlags = [ "--test=interface-types" ];
+
+  passthru.tests.version = testVersion { package = wasm-bindgen-cli; };
 
   meta = with lib; {
     homepage = "https://rustwasm.github.io/docs/wasm-bindgen/";

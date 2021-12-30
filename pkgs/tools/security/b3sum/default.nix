@@ -1,4 +1,4 @@
-{ lib, fetchCrate, rustPlatform }:
+{ lib, fetchCrate, rustPlatform, b3sum, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "b3sum";
@@ -10,6 +10,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "sha256-y5QVgu716p8TFoEeWIzX9aJWeT3FKwlh5vUQkKR6pdE=";
+
+  passthru.tests.version = testVersion { package = b3sum; };
 
   meta = {
     description = "BLAKE3 cryptographic hash function";

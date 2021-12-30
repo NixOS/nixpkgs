@@ -4,6 +4,8 @@
 , glibcLocales
 , coreutils
 , git
+, xonsh
+, testVersion
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -72,6 +74,8 @@ python3Packages.buildPythonApplication rec {
     (with python3Packages; [ pyte pytestCheckHook pytest-mock pytest-subprocess ]);
 
   propagatedBuildInputs = with python3Packages; [ ply prompt-toolkit pygments ];
+
+  passthru.tests.version = testVersion { package = xonsh; };
 
   meta = with lib; {
     description = "A Python-ish, BASHwards-compatible shell";

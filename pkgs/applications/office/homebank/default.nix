@@ -1,5 +1,5 @@
 { fetchurl, lib, stdenv, gtk, pkg-config, libofx, intltool, wrapGAppsHook
-, libsoup, gnome }:
+, libsoup, gnome, homebank, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "homebank";
@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config wrapGAppsHook ];
   buildInputs = [ gtk libofx intltool libsoup gnome.adwaita-icon-theme ];
+
+  passthru.tests.version = testVersion { package = homebank; };
 
   meta = with lib; {
     description = "Free, easy, personal accounting for everyone";

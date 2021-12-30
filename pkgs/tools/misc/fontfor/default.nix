@@ -6,6 +6,8 @@
 , expat
 , fontconfig
 , freetype
+, fontfor
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -30,6 +32,8 @@ rustPlatform.buildRustPackage rec {
   ];
 
   cargoSha256 = "1drfrq32lvmi1xlshynzh66gb1cah43pqcyxv3qxp487br9w1iyj";
+
+  passthru.tests.version = testVersion { package = fontfor; };
 
   meta = with lib; {
     description = "Find fonts which can show a specified character and preview them in browser";

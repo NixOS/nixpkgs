@@ -1,6 +1,8 @@
 { lib
 , fetchFromGitHub
 , python3Packages
+, urlwatch
+, testVersion
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -31,6 +33,8 @@ python3Packages.buildPythonApplication rec {
 
   # no tests
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = urlwatch; };
 
   meta = with lib; {
     description = "A tool for monitoring webpages for updates";

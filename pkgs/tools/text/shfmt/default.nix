@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles, scdoc }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles, scdoc, shfmt, testVersion }:
 
 buildGoModule rec {
   pname = "shfmt";
@@ -23,6 +23,8 @@ buildGoModule rec {
     scdoc < cmd/shfmt/shfmt.1.scd > shfmt.1
     installManPage shfmt.1
   '';
+
+  passthru.tests.version = testVersion { package = shfmt; };
 
   meta = with lib; {
     homepage = "https://github.com/mvdan/sh";

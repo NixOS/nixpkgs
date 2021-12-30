@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, libjack2, libsndfile, pkg-config }:
+{ lib, stdenv, fetchurl, libjack2, libsndfile, pkg-config, jack_capture, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "jack_capture";
@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
   '';
 
   hardeningDisable = [ "format" ];
+
+  passthru.tests.version = testVersion { package = jack_capture; };
 
   meta = with lib; {
     description = "A program for recording soundfiles with jack";

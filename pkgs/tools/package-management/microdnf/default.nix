@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, gettext, libdnf, pkg-config, glib, libpeas, libsmartcols, help2man }:
+{ lib, stdenv, fetchFromGitHub, cmake, gettext, libdnf, pkg-config, glib, libpeas, libsmartcols, help2man, microdnf, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "microdnf";
@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config cmake gettext help2man ];
   buildInputs = [ libdnf glib libpeas libsmartcols ];
+
+  passthru.tests.version = testVersion { package = microdnf; };
 
   meta = with lib; {
     description = "Lightweight implementation of dnf in C";

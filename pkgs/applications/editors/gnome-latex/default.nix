@@ -19,6 +19,8 @@
 , intltool
 , itstool
 , libxml2
+, gnome-latex
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -73,6 +75,8 @@ stdenv.mkDerivation rec {
     packageName = pname;
     versionPolicy = "odd-unstable";
   };
+
+  passthru.tests.version = testVersion { package = gnome-latex; };
 
   meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/GNOME-LaTeX";

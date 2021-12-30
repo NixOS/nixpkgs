@@ -1,6 +1,7 @@
 { autoreconfHook, enableGestures ? false, lib, stdenv, fetchFromGitHub
 , pkg-config, cairo, fontconfig, freetype, libXft, libXcursor, libXinerama
-, libXpm, libXt, librsvg, libpng, fribidi, perl, libstroke, readline, libxslt }:
+, libXpm, libXt, librsvg, libpng, fribidi, perl, libstroke, readline, libxslt
+, fvwm, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "fvwm";
@@ -32,6 +33,8 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional enableGestures libstroke;
 
   configureFlags = [ "--enable-mandoc" "--disable-htmldoc" ];
+
+  passthru.tests.version = testVersion { package = fvwm; };
 
   meta = {
     homepage = "http://fvwm.org";

@@ -3,6 +3,8 @@
 , fetchPypi
 , file
 , stdenv
+, sqlmap
+, testVersion
 }:
 
 buildPythonPackage rec {
@@ -27,6 +29,8 @@ buildPythonPackage rec {
   doCheck = false;
 
   pythonImportsCheck = [ "sqlmap" ];
+
+  passthru.tests.version = testVersion { package = sqlmap; };
 
   meta = with lib; {
     description = "Automatic SQL injection and database takeover tool";

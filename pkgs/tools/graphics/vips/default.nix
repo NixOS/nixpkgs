@@ -34,6 +34,8 @@
 , libjxl
 , openslide
 , libheif
+, vips
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -98,6 +100,8 @@ stdenv.mkDerivation rec {
   autoreconfPhase = ''
     NOCONFIGURE=1 ./autogen.sh
   '';
+
+  passthru.tests.version = testVersion { package = vips; };
 
   meta = with lib; {
     homepage = "https://libvips.github.io/libvips/";

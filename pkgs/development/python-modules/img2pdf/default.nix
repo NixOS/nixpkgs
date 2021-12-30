@@ -1,4 +1,4 @@
-{ lib, pillow, fetchPypi, buildPythonPackage, isPy27, pikepdf }:
+{ lib, pillow, fetchPypi, buildPythonPackage, isPy27, pikepdf, img2pdf, testVersion }:
 
 buildPythonPackage rec {
   pname = "img2pdf";
@@ -17,6 +17,8 @@ buildPythonPackage rec {
 
   # no tests exectuted
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = img2pdf; };
 
   meta = with lib; {
     description = "Convert images to PDF via direct JPEG inclusion";

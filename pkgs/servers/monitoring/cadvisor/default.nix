@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, cadvisor, testVersion }:
 
 buildGoModule rec {
   pname = "cadvisor";
@@ -25,6 +25,8 @@ buildGoModule rec {
   preCheck = ''
     rm internal/container/mesos/handler_test.go
   '';
+
+  passthru.tests.version = testVersion { package = cadvisor; };
 
   meta = with lib; {
     description = "Analyzes resource usage and performance characteristics of running docker containers";

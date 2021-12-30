@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, zlib, lzo, bzip2, lz4, nasm, perl }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, zlib, lzo, bzip2, lz4, nasm, perl, lrzip, testVersion }:
 
 let
   inherit (stdenv.hostPlatform) isx86;
@@ -30,6 +30,8 @@ stdenv.mkDerivation rec {
   configureFlags = lib.optionals (!isx86) [
     "--disable-asm"
   ];
+
+  passthru.tests.version = testVersion { package = lrzip; };
 
   meta = with lib; {
     homepage = "http://ck.kolivas.org/apps/lrzip/";

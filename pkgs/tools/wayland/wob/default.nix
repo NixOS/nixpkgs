@@ -9,6 +9,8 @@
 , wayland
 , wayland-protocols
 , libseccomp
+, wob
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -27,6 +29,8 @@ stdenv.mkDerivation rec {
     ++ lib.optional stdenv.isLinux libseccomp;
 
   mesonFlags = lib.optional stdenv.isLinux "-Dseccomp=enabled";
+
+  passthru.tests.version = testVersion { package = wob; };
 
   meta = with lib; {
     inherit (src.meta) homepage;

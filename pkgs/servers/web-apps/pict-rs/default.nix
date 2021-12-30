@@ -8,6 +8,8 @@
 , imagemagick
 , ffmpeg
 , exiftool
+, pict-rs
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -35,6 +37,8 @@ rustPlatform.buildRustPackage rec {
     wrapProgram "$out/bin/pict-rs" \
         --prefix PATH : "${lib.makeBinPath [ imagemagick ffmpeg exiftool ]}"
   '';
+
+  passthru.tests.version = testVersion { package = pict-rs; };
 
   meta = with lib; {
     description = "A simple image hosting service";

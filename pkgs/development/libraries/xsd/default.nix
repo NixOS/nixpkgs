@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, xercesc }:
+{ lib, stdenv, fetchurl, xercesc, xsd, testVersion }:
 
 let
 in
@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ xercesc ];
+
+  passthru.tests.version = testVersion { package = xsd; };
 
   meta = {
     homepage = "http://www.codesynthesis.com/products/xsd";

@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, zlib }:
+{ fetchurl, lib, stdenv, zlib, fastjar, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "fastjar";
@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib ];
 
   doCheck = true;
+
+  passthru.tests.version = testVersion { package = fastjar; };
 
   meta = {
     description = "Fast Java archiver written in C";

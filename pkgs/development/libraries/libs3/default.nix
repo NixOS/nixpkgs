@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, curl, libxml2 }:
+{ lib, stdenv, fetchFromGitHub, curl, libxml2, libs3, testVersion }:
 
 stdenv.mkDerivation {
   pname = "libs3";
@@ -14,6 +14,8 @@ stdenv.mkDerivation {
   buildInputs = [ curl libxml2 ];
 
   makeFlags = [ "DESTDIR=$(out)" ];
+
+  passthru.tests.version = testVersion { package = libs3; };
 
   meta = with lib; {
     homepage = "https://github.com/bji/libs3";

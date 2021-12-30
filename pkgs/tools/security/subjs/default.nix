@@ -1,6 +1,8 @@
 { buildGoModule
 , fetchFromGitHub
 , lib
+, subjs
+, testVersion
 }:
 
 buildGoModule rec {
@@ -17,6 +19,8 @@ buildGoModule rec {
   vendorSha256 = "1y01k8pvv7y9zb15wbk068cvkx0g83484jak2dvcvghqcf5j1fr1";
 
   ldflags = [ "-s" "-w" "-X main.AppVersion=${version}" ];
+
+  passthru.tests.version = testVersion { package = subjs; };
 
   meta = with lib; {
     description = "Fetcher for Javascript files";

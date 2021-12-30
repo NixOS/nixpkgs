@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, ddrutility, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "ddrutility";
@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
   '';
 
   makeFlags = [ "DESTDIR=$(out)" ];
+
+  passthru.tests.version = testVersion { package = ddrutility; };
 
   meta = with lib; {
     description = "A set of utilities for hard drive data rescue";

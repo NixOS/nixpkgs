@@ -1,4 +1,4 @@
-{ aspell, aspellDicts_de, aspellDicts_en, buildEnv, fetchurl, fortune, gnugrep, makeWrapper, lib, stdenv, tk, tre }:
+{ aspell, aspellDicts_de, aspellDicts_en, buildEnv, fetchurl, fortune, gnugrep, makeWrapper, lib, stdenv, tk, tre, ding, testVersion }:
 let
   aspellEnv = buildEnv {
     name = "env-ding-aspell";
@@ -46,6 +46,8 @@ stdenv.mkDerivation rec {
 
     wrapProgram $out/bin/ding --prefix PATH : ${lib.makeBinPath [ gnugrep aspellEnv tk fortune ]} --prefix ASPELL_CONF : "\"prefix ${aspellEnv};\""
   '';
+
+  passthru.tests.version = testVersion { package = ding; };
 
   meta = with lib; {
     description = "Simple and fast dictionary lookup tool";

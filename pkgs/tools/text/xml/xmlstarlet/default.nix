@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, libxml2, libxslt }:
+{ lib, stdenv, fetchurl, pkg-config, libxml2, libxslt, xmlstarlet, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "xmlstarlet";
@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
     ''
       ln -s xml $out/bin/xmlstarlet
     '';
+
+  passthru.tests.version = testVersion { package = xmlstarlet; };
 
   meta = {
     description = "A command line tool for manipulating and querying XML data";

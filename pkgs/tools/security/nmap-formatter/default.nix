@@ -1,6 +1,8 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, nmap-formatter
+, testVersion
 }:
 
 buildGoModule rec {
@@ -21,6 +23,8 @@ buildGoModule rec {
     substituteInPlace cmd/root.go \
       --replace "0.2.0" "${version}"
   '';
+
+  passthru.tests.version = testVersion { package = nmap-formatter; };
 
   meta = with lib; {
     description = "Tool that allows you to convert nmap output";

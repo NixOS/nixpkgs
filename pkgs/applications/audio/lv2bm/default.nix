@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, glib, libsndfile, lilv, lv2, pkg-config, serd, sord, sratom }:
+{ lib, stdenv, fetchFromGitHub, glib, libsndfile, lilv, lv2, pkg-config, serd, sord, sratom, lv2bm, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "lv2bm";
@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
   installPhase = ''
     make install PREFIX=$out
   '';
+
+  passthru.tests.version = testVersion { package = lv2bm; };
 
   meta = with lib; {
     homepage = "https://github.com/portalmod/lv2bm";

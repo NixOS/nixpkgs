@@ -23,6 +23,8 @@
 , xcbutilwm
 , waylandSupport ? true
 , x11Support ? true
+, yambar
+, testVersion
 }:
 
 let
@@ -74,6 +76,8 @@ stdenv.mkDerivation rec {
     (mesonFeatureFlag "backend-x11" x11Support)
     (mesonFeatureFlag "backend-wayland" waylandSupport)
   ];
+
+  passthru.tests.version = testVersion { package = yambar; };
 
   meta = with lib; {
     homepage = "https://codeberg.org/dnkl/yambar";

@@ -4,6 +4,8 @@
 , pkg-config
 , installShellFiles
 , fuse
+, sandboxfs
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -22,6 +24,8 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ fuse ];
 
   postInstall = "installManPage man/sandboxfs.1";
+
+  passthru.tests.version = testVersion { package = sandboxfs; };
 
   meta = with lib; {
     description = "A virtual file system for sandboxing";

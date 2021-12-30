@@ -1,4 +1,4 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub, gucci, testVersion }:
 
 buildGoPackage rec {
   pname = "gucci";
@@ -18,6 +18,8 @@ buildGoPackage rec {
   ldflags = [
     "-X main.AppVersion=${version}"
   ];
+
+  passthru.tests.version = testVersion { package = gucci; };
 
   meta = with lib; {
     description = "A simple CLI templating tool written in golang";

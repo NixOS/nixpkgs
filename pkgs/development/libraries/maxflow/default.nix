@@ -2,6 +2,8 @@
 , stdenv
 , fetchFromGitHub
 , cmake
+, maxflow
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -16,6 +18,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
+
+  passthru.tests.version = testVersion { package = maxflow; };
 
   meta = with lib; {
     description = "Software for computing mincut/maxflow in a graph";

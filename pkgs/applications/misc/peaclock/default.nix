@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, libpthreadstubs, icu }:
+{ lib, stdenv, fetchFromGitHub, cmake, libpthreadstubs, icu, peaclock, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "peaclock";
@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ libpthreadstubs icu ];
+
+  passthru.tests.version = testVersion { package = peaclock; };
 
   meta = with lib; {
     description = "A clock, timer, and stopwatch for the terminal";

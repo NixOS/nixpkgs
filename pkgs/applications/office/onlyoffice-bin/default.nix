@@ -30,6 +30,8 @@
 , wrapGAppsHook
 , xkeyboard_config
 , xorg
+, onlyoffice-bin
+, testVersion
 }:
 let
 
@@ -164,6 +166,8 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.updateScript = ./update.sh;
+
+  passthru.tests.version = testVersion { package = onlyoffice-bin; };
 
   meta = with lib; {
     description = "Office suite that combines text, spreadsheet and presentation editors allowing to create, view and edit local documents";

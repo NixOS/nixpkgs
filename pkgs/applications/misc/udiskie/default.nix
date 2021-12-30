@@ -15,6 +15,8 @@
 , pyyaml
 , udisks2
 , wrapGAppsHook
+, udiskie
+, testVersion
 }:
 
 buildPythonApplication rec {
@@ -65,6 +67,8 @@ buildPythonApplication rec {
   checkPhase = ''
     nosetests
   '';
+
+  passthru.tests.version = testVersion { package = udiskie; };
 
   meta = with lib; {
     homepage = "https://github.com/coldfix/udiskie";

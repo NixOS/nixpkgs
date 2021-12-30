@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, which, txt2man }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, which, txt2man, retry, testVersion }:
 stdenv.mkDerivation rec {
   pname = "retry";
   version = "1.0.4";
@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     rev = "${pname}-${version}";
     sha256 = "sha256:0jrx4yrwlf4fn3309kxraj7zgwk7gq6rz5ibswq3w3b3jfvxi8qb";
   };
+
+  passthru.tests.version = testVersion { package = retry; };
 
   meta = with lib; {
     homepage = "https://github.com/minfrin/retry";

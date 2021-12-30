@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, safecopy, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "safecopy";
@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     url = "mirror://sourceforge/project/safecopy/safecopy/safecopy-${version}/safecopy-${version}.tar.gz";
     sha256 = "1zf4kk9r8za9pn4hzy1y3j02vrhl1rxfk5adyfq0w0k48xfyvys2";
   };
+
+  passthru.tests.version = testVersion { package = safecopy; };
 
   meta = {
     description = "Data recovery tool for damaged hardware";

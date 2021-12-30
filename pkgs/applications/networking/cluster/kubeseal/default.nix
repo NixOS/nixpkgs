@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, kubeseal, testVersion }:
 
 buildGoModule rec {
   pname = "kubeseal";
@@ -18,6 +18,8 @@ buildGoModule rec {
   subPackages = [ "cmd/kubeseal" ];
 
   ldflags = [ "-s" "-w" "-X main.VERSION=${version}" ];
+
+  passthru.tests.version = testVersion { package = kubeseal; };
 
   meta = with lib; {
     description = "A Kubernetes controller and tool for one-way encrypted Secrets";

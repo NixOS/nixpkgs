@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, libjpeg, zlib, perl }:
+{ lib, stdenv, fetchFromGitHub, libjpeg, zlib, perl, qpdf, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "qpdf";
@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   enableParallelBuilding = true;
+
+  passthru.tests.version = testVersion { package = qpdf; };
 
   meta = with lib; {
     homepage = "http://qpdf.sourceforge.net/";

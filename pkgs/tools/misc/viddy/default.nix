@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, viddy, testVersion }:
 
 buildGoModule rec {
   pname = "viddy";
@@ -19,6 +19,8 @@ buildGoModule rec {
     "-X"
     "main.version=${version}"
   ];
+
+  passthru.tests.version = testVersion { package = viddy; };
 
   meta = with lib; {
     description = "A modern watch command";

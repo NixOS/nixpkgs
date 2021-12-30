@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, darwin }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, darwin, boringtun, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "boringtun";
@@ -17,6 +17,8 @@ rustPlatform.buildRustPackage rec {
 
   # Testing this project requires sudo, Docker and network access, etc.
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = boringtun; };
 
   meta = with lib; {
     description = "Userspace WireGuard® implementation in Rust";

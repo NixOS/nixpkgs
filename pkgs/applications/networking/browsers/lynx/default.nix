@@ -9,6 +9,8 @@
 , openssl
 , nukeReferences
 , fetchpatch
+, lynx
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -54,6 +56,8 @@ stdenv.mkDerivation rec {
     make cfg_defs.h
     nuke-refs cfg_defs.h
   '';
+
+  passthru.tests.version = testVersion { package = lynx; };
 
   meta = with lib; {
     description = "A text-mode web browser";

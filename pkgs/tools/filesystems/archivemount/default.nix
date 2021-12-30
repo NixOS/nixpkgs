@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, fuse, libarchive }:
+{ lib, stdenv, fetchurl, pkg-config, fuse, libarchive, archivemount, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "archivemount";
@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ fuse libarchive ];
+
+  passthru.tests.version = testVersion { package = archivemount; };
 
   meta = {
     description = "Gateway between FUSE and libarchive: allows mounting of cpio, .tar.gz, .tar.bz2 archives";

@@ -5,6 +5,8 @@
 , rustPlatform
 , libiconv
 , Security
+, anevicon
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -33,6 +35,8 @@ rustPlatform.buildRustPackage rec {
 
   # Tries to send large UDP packets that Darwin rejects.
   doCheck = !stdenv.isDarwin;
+
+  passthru.tests.version = testVersion { package = anevicon; };
 
   meta = with lib; {
     description = "UDP-based load generator";

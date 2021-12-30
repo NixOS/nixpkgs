@@ -1,4 +1,4 @@
-{ lib, stdenv, runtimeShell, fetchFromGitHub, fetchpatch, ocaml, num, camlp5 }:
+{ lib, stdenv, runtimeShell, fetchFromGitHub, fetchpatch, ocaml, num, camlp5, hol_light, testVersion }:
 
 let
   load_num =
@@ -47,6 +47,8 @@ stdenv.mkDerivation {
     echo "${start_script}" > "$out/bin/hol_light"
     chmod a+x "$out/bin/hol_light"
   '';
+
+  passthru.tests.version = testVersion { package = hol_light; };
 
   meta = with lib; {
     description = "Interactive theorem prover based on Higher-Order Logic";

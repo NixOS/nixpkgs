@@ -1,6 +1,8 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, gosh
+, testVersion
 }:
 
 buildGoModule rec {
@@ -21,6 +23,8 @@ buildGoModule rec {
   runVend = true;
 
   subPackages = [ "." ];
+
+  passthru.tests.version = testVersion { package = gosh; };
 
   meta = with lib; {
     description = "Reverse/bind shell generator";

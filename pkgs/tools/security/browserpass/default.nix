@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, makeWrapper, gnupg }:
+{ lib, buildGoModule, fetchFromGitHub, makeWrapper, gnupg, browserpass, testVersion }:
 buildGoModule rec {
   pname = "browserpass";
   version = "3.0.6";
@@ -45,6 +45,8 @@ buildGoModule rec {
     mkdir -p $out/lib/mozilla/native-messaging-hosts
     ln -s $out/lib/browserpass/hosts/firefox/*.json $out/lib/mozilla/native-messaging-hosts
   '';
+
+  passthru.tests.version = testVersion { package = browserpass; };
 
   meta = with lib; {
     description = "Browserpass native client app";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, metamath, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "metamath";
@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-Cg1dgz+uphDlGhKH3mTywtAccWinC5+pwNv4TB3YAnI=";
   };
+
+  passthru.tests.version = testVersion { package = metamath; };
 
   meta = with lib; {
     description = "Interpreter for the metamath proof language";

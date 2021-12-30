@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip, jdk11 }:
+{ lib, stdenv, fetchzip, jdk11, igv, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "igv";
@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin/igv
     chmod +x $out/bin/igvtools
   '';
+
+  passthru.tests.version = testVersion { package = igv; };
 
   meta = with lib; {
     homepage = "https://www.broadinstitute.org/igv/";

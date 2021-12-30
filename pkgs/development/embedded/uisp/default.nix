@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, uisp, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "uisp";
@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
   };
 
   NIX_CFLAGS_COMPILE = "-Wno-error";
+
+  passthru.tests.version = testVersion { package = uisp; };
 
   meta = {
     description = "Tool for AVR microcontrollers which can interface to many hardware in-system programmers";

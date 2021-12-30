@@ -1,6 +1,8 @@
 { lib
 , fetchFromGitHub
 , python3
+, dnsrecon
+, testVersion
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -37,6 +39,8 @@ python3.pkgs.buildPythonApplication rec {
     runHook postInstall
   '';
 
+
+  passthru.tests.version = testVersion { package = dnsrecon; };
 
   meta = with lib; {
     description = "DNS Enumeration script";

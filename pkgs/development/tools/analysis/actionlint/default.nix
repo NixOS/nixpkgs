@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, ronn, installShellFiles }:
+{ lib, buildGoModule, fetchFromGitHub, ronn, installShellFiles, actionlint, testVersion }:
 
 buildGoModule rec {
   pname = "actionlint";
@@ -23,6 +23,8 @@ buildGoModule rec {
   '';
 
   ldflags = [ "-s" "-w" "-X github.com/rhysd/actionlint.version=${version}" ];
+
+  passthru.tests.version = testVersion { package = actionlint; };
 
   meta = with lib; {
     homepage = "https://rhysd.github.io/actionlint/";

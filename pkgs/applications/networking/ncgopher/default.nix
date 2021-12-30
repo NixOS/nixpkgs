@@ -5,6 +5,8 @@
 , ncurses6
 , openssl
 , sqlite
+, ncgopher
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -26,6 +28,8 @@ rustPlatform.buildRustPackage rec {
     openssl
     sqlite
   ];
+
+  passthru.tests.version = testVersion { package = ncgopher; };
 
   meta = with lib; {
     description = "A gopher and gemini client for the modern internet";

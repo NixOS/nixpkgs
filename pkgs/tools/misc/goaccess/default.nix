@@ -7,6 +7,8 @@
 , ncurses
 , openssl
 , withGeolocation ? true
+, goaccess
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -39,6 +41,8 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals withGeolocation [
     "--enable-geoip=mmdb"
   ];
+
+  passthru.tests.version = testVersion { package = goaccess; };
 
   meta = with lib; {
     description = "Real-time web log analyzer and interactive viewer that runs in a terminal in *nix systems";

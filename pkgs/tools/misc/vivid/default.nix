@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, rustPlatform }:
+{ lib, fetchFromGitHub, rustPlatform, vivid, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "vivid";
@@ -12,6 +12,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "sha256-1aox1eiF3hu5guBjRcM3qb6mHJOutI+yargW7X4cFfg=";
+
+  passthru.tests.version = testVersion { package = vivid; };
 
   meta = with lib; {
     description = "A generator for LS_COLORS with support for multiple color themes";

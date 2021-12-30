@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, libiconv, Security }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, libiconv, Security, agate, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "agate";
@@ -22,6 +22,8 @@ rustPlatform.buildRustPackage rec {
     $out/bin/agate --version 2>&1 | grep "agate ${version}"
     runHook postInstallCheck
   '';
+
+  passthru.tests.version = testVersion { package = agate; };
 
   meta = with lib; {
     homepage = "https://github.com/mbrubeck/agate";

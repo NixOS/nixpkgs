@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, python3Packages }:
+{ lib, fetchFromGitHub, python3Packages, peru, testVersion }:
 
 python3Packages.buildPythonApplication rec {
   pname = "peru";
@@ -17,6 +17,8 @@ python3Packages.buildPythonApplication rec {
 
   # No tests in archive
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = peru; };
 
   meta = with lib; {
     homepage = "https://github.com/buildinspace/peru";

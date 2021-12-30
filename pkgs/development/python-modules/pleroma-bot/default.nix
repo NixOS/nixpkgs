@@ -7,6 +7,8 @@
 , requests_oauthlib
 , requests
 , pyaml
+, pleroma-bot
+, testVersion
 }:
 
 buildPythonPackage rec {
@@ -24,6 +26,8 @@ buildPythonPackage rec {
   checkInputs = [ pytestCheckHook requests-mock ];
 
   pythonImportsCheck = [ "pleroma_bot" ];
+
+  passthru.tests.version = testVersion { package = pleroma-bot; };
 
   meta = with lib; {
     homepage = "https://robertoszek.github.io/pleroma-bot/";

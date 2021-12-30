@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub, fsmon, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "fsmon";
@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
   installPhase = ''
     make install PREFIX=$out
   '';
+
+  passthru.tests.version = testVersion { package = fsmon; };
 
   meta = with lib; {
     description = "FileSystem Monitor utility";

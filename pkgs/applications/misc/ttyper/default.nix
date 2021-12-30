@@ -1,4 +1,4 @@
-{ fetchFromGitHub, lib, rustPlatform }:
+{ fetchFromGitHub, lib, rustPlatform, ttyper, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "ttyper";
@@ -12,6 +12,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "sha256-N10X5eJlpDKmCEffEXpkAejS32Lz183Lup0mmLMwOSU=";
+
+  passthru.tests.version = testVersion { package = ttyper; };
 
   meta = with lib; {
     description = "Terminal-based typing test";

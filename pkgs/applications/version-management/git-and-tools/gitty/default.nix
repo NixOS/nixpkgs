@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildGoModule }:
+{ lib, fetchFromGitHub, buildGoModule, gitty, testVersion }:
 
 buildGoModule rec {
   pname = "gitty";
@@ -14,6 +14,8 @@ buildGoModule rec {
   vendorSha256 = "sha256-LINOjjKicnr0T9RiOcSWWDl0bdY3c6EHHMTBA9LTOG4=";
 
   ldflags = [ "-s" "-w" "-X=main.Version=${version}" ];
+
+  passthru.tests.version = testVersion { package = gitty; };
 
   meta = with lib; {
     homepage = "https://github.com/muesli/gitty/";

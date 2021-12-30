@@ -1,4 +1,4 @@
-{ python3Packages, fetchFromGitHub, lib }:
+{ python3Packages, fetchFromGitHub, lib, pg_activity, testVersion }:
 
 python3Packages.buildPythonApplication rec {
   pname = "pg_activity";
@@ -21,6 +21,8 @@ python3Packages.buildPythonApplication rec {
   ];
 
   pythonImportsCheck = [ "pgactivity" ];
+
+  passthru.tests.version = testVersion { package = pg_activity; };
 
   meta = with lib; {
     description = "A top like application for PostgreSQL server activity monitoring";

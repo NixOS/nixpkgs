@@ -1,4 +1,4 @@
-{ stdenv, lib, rustPlatform, fetchFromGitLab, pkg-config, file, perl, curl, cmake, openssl, libssh2, libgit2, libzip, Security }:
+{ stdenv, lib, rustPlatform, fetchFromGitLab, pkg-config, file, perl, curl, cmake, openssl, libssh2, libgit2, libzip, Security, powerline-rs, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "powerline-rs";
@@ -22,6 +22,8 @@ rustPlatform.buildRustPackage rec {
     install -Dm 755 "${COMPLETION_OUT}/${pname}.bash" "$out/share/bash-completion/completions/${pname}"
     install -Dm 755 "${COMPLETION_OUT}/${pname}.fish" "$out/share/fish/vendor_completions.d/${pname}"
   '';
+
+  passthru.tests.version = testVersion { package = powerline-rs; };
 
   meta = with lib; {
     description = "powerline-shell rewritten in Rust, inspired by powerline-go";

@@ -6,6 +6,8 @@
 , mpfi
 , libxml2
 , fplll
+, sollya
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -18,6 +20,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ gmp mpfr mpfi libxml2 fplll ];
+
+  passthru.tests.version = testVersion { package = sollya; };
 
   meta = with lib; {
     description = "A tool environment for safe floating-point code development";

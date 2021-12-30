@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, bigloo }:
+{ lib, stdenv, fetchurl, bigloo, hop, testVersion }:
 
 # Compute the “release” version of bigloo (before the first dash, if any)
 let bigloo-release =
@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
     "--bigloo=${bigloo}/bin/bigloo"
     "--bigloolibdir=${bigloo}/lib/bigloo/${bigloo-release}/"
   ];
+
+  passthru.tests.version = testVersion { package = hop; };
 
   meta = with lib; {
     description = "A multi-tier programming language for the Web 2.0 and the so-called diffuse Web";

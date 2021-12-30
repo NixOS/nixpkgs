@@ -1,5 +1,7 @@
 { lib
 , python3
+, wlc
+, testVersion
 }:
 
 with python3.pkgs;
@@ -25,6 +27,8 @@ buildPythonPackage rec {
   checkInputs = [
     pytestCheckHook
   ];
+
+  passthru.tests.version = testVersion { package = wlc; };
 
   meta = with lib; {
     description = "wlc is a Weblate commandline client using Weblate's REST API.";

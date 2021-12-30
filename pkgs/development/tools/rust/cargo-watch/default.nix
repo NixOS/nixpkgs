@@ -1,4 +1,4 @@
-{ stdenv, lib, rustPlatform, fetchFromGitHub, CoreServices, Foundation, rust, libiconv }:
+{ stdenv, lib, rustPlatform, fetchFromGitHub, CoreServices, Foundation, rust, libiconv, cargo-watch, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-watch";
@@ -20,6 +20,8 @@ rustPlatform.buildRustPackage rec {
   preCheck = ''
     export PATH="$(pwd)/target/${rust.toRustTarget stdenv.hostPlatform}/release:$PATH"
   '';
+
+  passthru.tests.version = testVersion { package = cargo-watch; };
 
   meta = with lib; {
     description = "A Cargo subcommand for watching over Cargo project's source";

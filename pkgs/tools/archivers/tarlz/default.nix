@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, lzip, lzlib, texinfo }:
+{ lib, stdenv, fetchurl, lzip, lzlib, texinfo, tarlz, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "tarlz";
@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   makeFlags = [ "CXX:=$(CXX)" ];
   doCheck = true;
+
+  passthru.tests.version = testVersion { package = tarlz; };
 
   meta = with lib; {
     homepage = "https://www.nongnu.org/lzip/${pname}.html";

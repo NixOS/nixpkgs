@@ -1,4 +1,4 @@
-{ lib, python3Packages }:
+{ lib, python3Packages, nyx, testVersion }:
 
 with python3Packages;
 
@@ -15,6 +15,8 @@ buildPythonApplication rec {
 
   # ./run_tests.py returns `TypeError: testFailure() takes exactly 1 argument`
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = nyx; };
 
   meta = with lib; {
     description = "Command-line monitor for Tor";

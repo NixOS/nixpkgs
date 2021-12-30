@@ -1,6 +1,8 @@
 { lib
 , fetchCrate
 , rustPlatform
+, vopono
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -13,6 +15,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-zM5JufS0qEYPEEwl6iPZYge3cssrsLu835AhAd8F3vc";
+
+  passthru.tests.version = testVersion { package = vopono; };
 
   meta = with lib; {
     description = "Run applications through VPN connections in network namespaces";

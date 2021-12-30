@@ -7,6 +7,8 @@
 , cmake
 , qtbase
 , jami-daemon
+, jami-libclient
+, testVersion
 }:
 
 stdenv.mkDerivation {
@@ -40,6 +42,8 @@ stdenv.mkDerivation {
   ];
 
   dontWrapQtApps = true;
+
+  passthru.tests.version = testVersion { package = jami-libclient; };
 
   meta = jami-meta // {
     description = "The client library" + jami-meta.description;

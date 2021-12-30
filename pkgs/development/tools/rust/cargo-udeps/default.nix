@@ -1,4 +1,4 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, pkg-config, openssl, CoreServices, Security, libiconv, SystemConfiguration }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, pkg-config, openssl, CoreServices, Security, libiconv, SystemConfiguration, cargo-udeps, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-udeps";
@@ -21,6 +21,8 @@ rustPlatform.buildRustPackage rec {
 
   # Requires network access
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = cargo-udeps; };
 
   meta = with lib; {
     description = "Find unused dependencies in Cargo.toml";

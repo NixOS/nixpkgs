@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, gtk2, SDL, nasm, zlib, libpng, libGLU, libGL }:
+{ lib, stdenv, fetchurl, pkg-config, gtk2, SDL, nasm, zlib, libpng, libGLU, libGL, gensgs, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "gens-gs";
@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
   # Work around build failures on recent GTK.
   # See http://ubuntuforums.org/showthread.php?p=10535837
   NIX_CFLAGS_COMPILE = "-UGTK_DISABLE_DEPRECATED -UGSEAL_ENABLE";
+
+  passthru.tests.version = testVersion { package = gensgs; };
 
   meta = with lib; {
     homepage = "https://segaretro.org/Gens/GS";

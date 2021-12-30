@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, bison, libressl, libevent }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, bison, libressl, libevent, gmid, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "gmid";
@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
     ./configure PREFIX=$out
     runHook postConfigure
   '';
+
+  passthru.tests.version = testVersion { package = gmid; };
 
   meta = with lib; {
     description = "Simple and secure Gemini server";

@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, awsweeper, testVersion }:
 
 buildGoModule rec {
   pname = "awsweeper";
@@ -16,6 +16,8 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" "-X github.com/jckuester/awsweeper/internal.version=${version}" "-X github.com/jckuester/awsweeper/internal.commit=${src.rev}" "-X github.com/jckuester/awsweeper/internal.date=unknown" ];
 
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = awsweeper; };
 
   meta = with lib; {
     description = "A tool to clean out your AWS account";

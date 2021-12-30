@@ -8,6 +8,8 @@
 , Security
 , libiconv
 , openssl
+, himalaya
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -41,6 +43,8 @@ rustPlatform.buildRustPackage rec {
       --fish <($out/bin/himalaya completion fish) \
       --zsh <($out/bin/himalaya completion zsh)
   '';
+
+  passthru.tests.version = testVersion { package = himalaya; };
 
   meta = with lib; {
     description = "CLI email client written in Rust";

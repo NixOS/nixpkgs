@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, python3Packages, }:
+{ lib, fetchFromGitHub, python3Packages, canto-daemon, testVersion }:
 
 python3Packages.buildPythonApplication rec {
   version = "0.9.8";
@@ -16,6 +16,8 @@ python3Packages.buildPythonApplication rec {
   doCheck = false;
 
   pythonImportsCheck = [ "canto_next" ];
+
+  passthru.tests.version = testVersion { package = canto-daemon; };
 
   meta = with lib; {
     description = "Daemon for the canto Atom/RSS feed reader";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, makeWrapper, jre, which, gawk }:
+{ lib, stdenv, fetchurl, makeWrapper, jre, which, gawk, neo4j, testVersion }:
 
 with lib;
 
@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
             --set JAVA_HOME "${jre}"
     done
   '';
+
+  passthru.tests.version = testVersion { package = neo4j; };
 
   meta = with lib; {
     description = "A highly scalable, robust (fully ACID) native graph database";

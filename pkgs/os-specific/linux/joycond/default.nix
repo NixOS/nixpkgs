@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, libevdev, udev, acl }:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, libevdev, udev, acl, joycond, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "joycond";
@@ -29,6 +29,8 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/etc/udev/rules.d/89-joycond.rules --replace \
       "/bin/setfacl"  "${acl}/bin/setfacl"
   '';
+
+  passthru.tests.version = testVersion { package = joycond; };
 
   meta = with lib; {
     homepage = "https://github.com/DanielOgorchock/joycond";

@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
+{ lib, buildGoModule, fetchFromGitHub, nixosTests, prometheus-node-exporter, testVersion }:
 
 buildGoModule rec {
   pname = "node_exporter";
@@ -30,6 +30,8 @@ buildGoModule rec {
   ];
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) node; };
+
+  passthru.tests.version = testVersion { package = prometheus-node-exporter; };
 
   meta = with lib; {
     description = "Prometheus exporter for machine metrics";

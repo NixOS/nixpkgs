@@ -11,6 +11,8 @@
 , libusb1
 , libdrm
 , xorg
+, ddcutil
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -38,6 +40,8 @@ stdenv.mkDerivation rec {
   ];
 
   enableParallelBuilding = true;
+
+  passthru.tests.version = testVersion { package = ddcutil; };
 
   meta = with lib; {
     homepage = "http://www.ddcutil.com/";

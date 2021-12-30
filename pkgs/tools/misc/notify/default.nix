@@ -1,6 +1,8 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, notify
+, testVersion
 }:
 
 buildGoModule rec {
@@ -23,6 +25,8 @@ buildGoModule rec {
 
   # Test files are not part of the release tarball
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = notify; };
 
   meta = with lib; {
     description = "Notify allows sending the output from any tool to Slack, Discord and Telegram";

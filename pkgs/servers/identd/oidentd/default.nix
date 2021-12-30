@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, bison, flex }:
+{ lib, stdenv, fetchurl, bison, flex, oidentd, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "oidentd";
@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     url = "https://files.janikrabe.com/pub/oidentd/releases/${version}/${pname}-${version}.tar.gz";
     sha256 = "1d5mqlknfywbx2bgj7ap7x6qzvz257hhqcqhy6zk45dqpsirdn7a";
   };
+
+  passthru.tests.version = testVersion { package = oidentd; };
 
   meta = with lib; {
     description = "Configurable Ident protocol server";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, libmad }:
+{ lib, stdenv, fetchurl, libmad, normalize, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "normalize";
@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ libmad ];
+
+  passthru.tests.version = testVersion { package = normalize; };
 
   meta = with lib; {
     homepage = "https://www.nongnu.org/normalize/";

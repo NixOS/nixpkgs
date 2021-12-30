@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, libdvdread, pkg-config }:
+{ lib, stdenv, fetchurl, libdvdread, pkg-config, lsdvd, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "lsdvd";
@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libdvdread ];
   nativeBuildInputs = [ pkg-config ];
+
+  passthru.tests.version = testVersion { package = lsdvd; };
 
   meta = with lib; {
     homepage = "https://sourceforge.net/projects/lsdvd/";

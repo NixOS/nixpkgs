@@ -14,6 +14,8 @@
 , CoreText
 , Security
 , fira-code
+, silicon
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -37,6 +39,8 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optionals stdenv.isLinux [ python3 ];
 
   LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
+
+  passthru.tests.version = testVersion { package = silicon; };
 
   meta = with lib; {
     description = "Create beautiful image of your source code";

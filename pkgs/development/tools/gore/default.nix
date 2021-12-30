@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, gore, testVersion }:
 
 buildGoModule rec {
   pname = "gore";
@@ -14,6 +14,8 @@ buildGoModule rec {
   vendorSha256 = "sha256-/yggEibpQK9Uk116RkE5XbbJe6j4WsIC3GtKPU/P2hU=";
 
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = gore; };
 
   meta = with lib; {
     description = "Yet another Go REPL that works nicely";

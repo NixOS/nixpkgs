@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, perlPackages, pythonPackages }:
+{ lib, stdenv, fetchFromGitHub, perlPackages, pythonPackages, shocco, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "shocco";
@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ perlPackages.TextMarkdown pythonPackages.pygments ];
+
+  passthru.tests.version = testVersion { package = shocco; };
 
   meta = with lib; {
     description = "A quick-and-dirty, literate-programming-style documentation generator for / in POSIX shell";

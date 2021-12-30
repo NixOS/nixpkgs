@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, barcode, testVersion }:
 
 stdenv.mkDerivation rec {
   version = "0.99";
@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
   };
 
   hardeningDisable = [ "format" ];
+
+  passthru.tests.version = testVersion { package = barcode; };
 
   meta = with lib; {
     description = "GNU barcode generator";

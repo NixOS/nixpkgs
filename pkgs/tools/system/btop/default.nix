@@ -1,6 +1,8 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, btop
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -15,6 +17,8 @@ stdenv.mkDerivation rec {
   };
 
   installFlags = [ "PREFIX=$(out)" ];
+
+  passthru.tests.version = testVersion { package = btop; };
 
   meta = with lib; {
     description = "A monitor of resources";

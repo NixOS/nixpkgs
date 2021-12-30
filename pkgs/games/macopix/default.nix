@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, gtk, openssl }:
+{ lib, stdenv, fetchurl, pkg-config, gtk, openssl, macopix, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "macopix";
@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   NIX_LDFLAGS = "-lX11";
+
+  passthru.tests.version = testVersion { package = macopix; };
 
   meta = {
     description = "Mascot Constructive Pilot for X";

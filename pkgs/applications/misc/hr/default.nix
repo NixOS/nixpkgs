@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub, hr, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "hr";
@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
   preInstall = ''
     mkdir -p $out/{bin,share}
   '';
+
+  passthru.tests.version = testVersion { package = hr; };
 
   meta = with lib; {
     homepage = "https://github.com/LuRsT/hr";

@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchCrate }:
+{ lib, rustPlatform, fetchCrate, rust-petname, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rust-petname";
@@ -11,6 +11,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "sha256-tCVJX8NcbT+6t2kDeCMfcSDaq3O89ycj08bxTmp3JHs=";
+
+  passthru.tests.version = testVersion { package = rust-petname; };
 
   meta = with lib; {
     description = "Generate human readable random names";

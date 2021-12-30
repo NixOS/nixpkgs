@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, gettext }:
+{ lib, stdenv, fetchurl, gettext, enscript, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "enscript";
@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ gettext ];
 
   doCheck = true;
+
+  passthru.tests.version = testVersion { package = enscript; };
 
   meta = {
     description = "Converter from ASCII to PostScript, HTML, or RTF";

@@ -1,4 +1,4 @@
-{ lib, stdenv, rustPlatform, fetchCrate, pkg-config, openssl, Security }:
+{ lib, stdenv, rustPlatform, fetchCrate, pkg-config, openssl, Security, graphql-client, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "graphql-client";
@@ -18,6 +18,8 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     openssl
   ] ++ lib.optionals stdenv.isDarwin [ Security ];
+
+  passthru.tests.version = testVersion { package = graphql-client; };
 
   meta = with lib; {
     description = "A GraphQL tool for Rust projects";

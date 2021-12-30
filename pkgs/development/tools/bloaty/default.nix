@@ -1,4 +1,4 @@
-{ lib, stdenv, cmake, zlib, fetchFromGitHub }:
+{ lib, stdenv, cmake, zlib, fetchFromGitHub, bloaty, testVersion }:
 
 stdenv.mkDerivation rec {
   version = "1.1";
@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
   installPhase = ''
     install -Dm755 {.,$out/bin}/bloaty
   '';
+
+  passthru.tests.version = testVersion { package = bloaty; };
 
   meta = with lib; {
     description = "a size profiler for binaries";

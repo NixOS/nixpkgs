@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, ncurses, libconfuse
-, libnl }:
+, libnl, bmon, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "bmon";
@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
     # Must be an absolute path
     export PKG_CONFIG="$(command -v "$PKG_CONFIG")"
   '';
+
+  passthru.tests.version = testVersion { package = bmon; };
 
   meta = with lib; {
     description = "Network bandwidth monitor";

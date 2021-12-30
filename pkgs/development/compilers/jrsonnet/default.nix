@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, rustPlatform, installShellFiles }:
+{ stdenv, lib, fetchFromGitHub, rustPlatform, installShellFiles, jrsonnet, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "jrsonnet";
@@ -25,6 +25,8 @@ rustPlatform.buildRustPackage rec {
   '';
 
   cargoSha256 = "sha256-eFfAU9Q3nYAJK+kKP1Y6ONjOIfkuYTlelrFrEW9IJ8c=";
+
+  passthru.tests.version = testVersion { package = jrsonnet; };
 
   meta = {
     description = "Purely-functional configuration language that helps you define JSON data";

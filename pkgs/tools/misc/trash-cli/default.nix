@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, python3Packages }:
+{ lib, fetchFromGitHub, python3Packages, trash-cli, testVersion }:
 
 python3Packages.buildPythonApplication rec {
   pname = "trash-cli";
@@ -39,6 +39,8 @@ python3Packages.buildPythonApplication rec {
 
     runHook postInstallCheck
   '';
+
+  passthru.tests.version = testVersion { package = trash-cli; };
 
   meta = with lib; {
     homepage = "https://github.com/andreafrancia/trash-cli";

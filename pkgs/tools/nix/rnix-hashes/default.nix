@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub, fetchpatch }:
+{ lib, rustPlatform, fetchFromGitHub, fetchpatch, rnix-hashes, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rnix-hashes";
@@ -20,6 +20,8 @@ rustPlatform.buildRustPackage rec {
   ];
 
   cargoSha256 = "sha256-p6W9NtOKzVViyFq5SQvnIsik7S3mqUqxI/05OiC+P+Q=";
+
+  passthru.tests.version = testVersion { package = rnix-hashes; };
 
   meta = with lib; {
     description = "Nix Hash Converter";

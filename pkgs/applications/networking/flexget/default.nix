@@ -1,4 +1,4 @@
-{ lib, python3Packages, fetchFromGitHub }:
+{ lib, python3Packages, fetchFromGitHub, flexget, testVersion }:
 
 python3Packages.buildPythonApplication rec {
   pname = "flexget";
@@ -64,6 +64,8 @@ python3Packages.buildPythonApplication rec {
     # Plugins requirements
     transmission-rpc
   ];
+
+  passthru.tests.version = testVersion { package = flexget; };
 
   meta = with lib; {
     homepage = "https://flexget.com/";

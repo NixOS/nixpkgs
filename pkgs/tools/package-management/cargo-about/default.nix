@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub, pkg-config, zstd, stdenv }:
+{ lib, rustPlatform, fetchFromGitHub, pkg-config, zstd, stdenv, cargo-about, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-about";
@@ -19,6 +19,8 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ zstd ];
+
+  passthru.tests.version = testVersion { package = cargo-about; };
 
   meta = with lib; {
     description = "Cargo plugin to generate list of all licenses for a crate";

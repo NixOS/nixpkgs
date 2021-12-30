@@ -2,6 +2,8 @@
 , buildGoModule
 , fetchFromGitHub
 , fetchpatch
+, buildkite-agent-metrics
+, testVersion
 }:
 buildGoModule rec {
   pname = "buildkite-agent-metrics";
@@ -32,6 +34,8 @@ buildGoModule rec {
     mkdir -p $lambda/bin
     mv $out/bin/lambda $lambda/bin
   '';
+
+  passthru.tests.version = testVersion { package = buildkite-agent-metrics; };
 
   meta = with lib; {
     description = "A command-line tool (and Lambda) for collecting Buildkite agent metrics";

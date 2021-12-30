@@ -1,4 +1,4 @@
-{ lib, stdenv, rustPlatform, python3, perl, openssl, Security, fetchFromGitHub, pkg-config }:
+{ lib, stdenv, rustPlatform, python3, perl, openssl, Security, fetchFromGitHub, pkg-config, s3rs, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "s3rs";
@@ -16,6 +16,8 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ python3 perl pkg-config ];
   buildInputs = [ openssl ]
     ++ lib.optionals stdenv.isDarwin [ Security ];
+
+  passthru.tests.version = testVersion { package = s3rs; };
 
   meta = with lib; {
     description = "A s3 cli client with multi configs with diffent provider";

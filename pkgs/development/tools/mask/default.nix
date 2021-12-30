@@ -1,4 +1,4 @@
-{ fetchFromGitHub, lib, rustPlatform }:
+{ fetchFromGitHub, lib, rustPlatform, mask, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "mask";
@@ -15,6 +15,8 @@ rustPlatform.buildRustPackage rec {
 
   # tests require mask to be installed
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = mask; };
 
   meta = with lib; {
     description = "A CLI task runner defined by a simple markdown file";

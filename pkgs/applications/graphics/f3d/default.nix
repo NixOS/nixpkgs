@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, vtk_9, libX11, libGL, Cocoa, OpenGL }:
+{ lib, stdenv, fetchFromGitHub, cmake, vtk_9, libX11, libGL, Cocoa, OpenGL, f3d, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "f3d";
@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ vtk_9 ]
     ++ lib.optionals stdenv.isLinux [ libGL libX11 ]
     ++ lib.optionals stdenv.isDarwin [ Cocoa OpenGL ];
+
+  passthru.tests.version = testVersion { package = f3d; };
 
   meta = with lib; {
     description = "Fast and minimalist 3D viewer using VTK";

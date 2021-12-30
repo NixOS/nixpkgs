@@ -8,6 +8,8 @@
 , libxml2
 , openssl
 , curl
+, hurl
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -44,6 +46,8 @@ rustPlatform.buildRustPackage rec {
     python ci/gen_manpage.py docs/hurlfmt.md > hurlfmt.1
     installManPage hurl.1 hurlfmt.1
   '';
+
+  passthru.tests.version = testVersion { package = hurl; };
 
   meta = with lib; {
     description = "Command line tool that performs HTTP requests defined in a simple plain text format.";

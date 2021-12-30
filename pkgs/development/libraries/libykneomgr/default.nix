@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, pcsclite, libzip, help2man }:
+{ lib, stdenv, fetchurl, pkg-config, pcsclite, libzip, help2man, libykneomgr, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "libykneomgr";
@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-backend=pcsc"
   ];
+
+  passthru.tests.version = testVersion { package = libykneomgr; };
 
   meta = with lib; {
     homepage = "https://developers.yubico.com/libykneomgr";

@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{ lib, rustPlatform, fetchFromGitHub, cargo-llvm-lines, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-llvm-lines";
@@ -12,6 +12,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "sha256-H2APBu9oHmtRGSB+VQT9V5C36awPy8fi6A2Qf1RsIbU=";
+
+  passthru.tests.version = testVersion { package = cargo-llvm-lines; };
 
   meta = with lib; {
     description = "Count the number of lines of LLVM IR across all instantiations of a generic function";

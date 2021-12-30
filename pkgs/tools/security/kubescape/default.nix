@@ -2,6 +2,8 @@
 , buildGoModule
 , fetchFromGitHub
 , installShellFiles
+, kubescape
+, testVersion
 }:
 
 buildGoModule rec {
@@ -36,6 +38,8 @@ buildGoModule rec {
       --fish <($out/bin/kubescape completion fish) \
       --zsh <($out/bin/kubescape completion zsh)
   '';
+
+  passthru.tests.version = testVersion { package = kubescape; };
 
   meta = with lib; {
     description = "Tool for testing if Kubernetes is deployed securely";

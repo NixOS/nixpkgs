@@ -11,6 +11,8 @@
 , pkg-config
 , python3
 , zlib
+, rnp
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -47,6 +49,8 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     echo "v${version}" > version.txt
   '';
+
+  passthru.tests.version = testVersion { package = rnp; };
 
   meta = with lib; {
     homepage = "https://github.com/rnpgp/rnp";

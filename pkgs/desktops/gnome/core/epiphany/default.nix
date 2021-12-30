@@ -37,6 +37,8 @@
 , libhandy
 , buildPackages
 , withPantheon ? false
+, epiphany
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -129,6 +131,8 @@ stdenv.mkDerivation rec {
       packageName = pname;
     };
   };
+
+  passthru.tests.version = testVersion { package = epiphany; };
 
   meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Epiphany";

@@ -15,6 +15,8 @@
 , wrapGAppsHook
 , itstool
 , gnome
+, baobab
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -57,6 +59,8 @@ stdenv.mkDerivation rec {
       packageName = pname;
     };
   };
+
+  passthru.tests.version = testVersion { package = baobab; };
 
   meta = with lib; {
     description = "Graphical application to analyse disk usage in any GNOME environment";

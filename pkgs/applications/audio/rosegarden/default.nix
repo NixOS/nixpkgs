@@ -19,6 +19,8 @@
 , lirc
 , lrdf
 , qtbase
+, rosegarden
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -50,6 +52,8 @@ stdenv.mkDerivation rec {
     qtbase
     alsa-lib
   ];
+
+  passthru.tests.version = testVersion { package = rosegarden; };
 
   meta = with lib; {
     homepage = "https://www.rosegardenmusic.com/";

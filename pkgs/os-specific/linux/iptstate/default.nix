@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, libnetfilter_conntrack, ncurses }:
+{ lib, stdenv, fetchurl, libnetfilter_conntrack, ncurses, iptstate, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "iptstate";
@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ libnetfilter_conntrack ncurses ];
+
+  passthru.tests.version = testVersion { package = iptstate; };
 
   meta = with lib; {
     description = "Conntrack top like tool";

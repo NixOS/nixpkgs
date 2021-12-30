@@ -16,6 +16,8 @@
 , libsndfile
 , pango
 , perl
+, e16
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -51,6 +53,8 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace scripts/e_gen_menu --replace "/usr/local:" "/run/current-system/sw:/usr/local:"
   '';
+
+  passthru.tests.version = testVersion { package = e16; };
 
   meta = with lib; {
     homepage = "https://www.enlightenment.org/e16";

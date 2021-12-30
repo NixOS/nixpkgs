@@ -1,6 +1,8 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, nuclei
+, testVersion
 }:
 
 buildGoModule rec {
@@ -23,6 +25,8 @@ buildGoModule rec {
 
   # Test files are not part of the release tarball
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = nuclei; };
 
   meta = with lib; {
     description = "Tool for configurable targeted scanning";

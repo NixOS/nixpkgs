@@ -1,4 +1,4 @@
-{ lib, stdenv, libusb1, pkg-config, fetchFromGitHub }:
+{ lib, stdenv, libusb1, pkg-config, fetchFromGitHub, ltwheelconf, testVersion }:
 
 stdenv.mkDerivation {
   pname = "ltwheelconf";
@@ -18,6 +18,8 @@ stdenv.mkDerivation {
     mkdir -p $out/bin
     cp ltwheelconf $out/bin
   '';
+
+  passthru.tests.version = testVersion { package = ltwheelconf; };
 
   meta = with lib; {
     homepage = "https://github.com/thk/LTWheelConf";

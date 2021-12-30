@@ -11,6 +11,8 @@
 , Security
 , libxcb
 , zlib
+, broot
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -77,6 +79,8 @@ rustPlatform.buildRustPackage rec {
   installCheckPhase = ''
     $out/bin/broot --version | grep "${version}"
   '';
+
+  passthru.tests.version = testVersion { package = broot; };
 
   meta = with lib; {
     description = "An interactive tree view, a fuzzy search, a balanced BFS descent and customizable commands";

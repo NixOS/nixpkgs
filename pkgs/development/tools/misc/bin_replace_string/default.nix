@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, libelf, txt2man }:
+{ lib, stdenv, fetchurl, libelf, txt2man, bin_replace_string, testVersion }:
 
 stdenv.mkDerivation {
   pname = "bin_replace_string";
@@ -13,6 +13,8 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ txt2man ];
 
   enableParallelBuilding = true;
+
+  passthru.tests.version = testVersion { package = bin_replace_string; };
 
   meta = with lib; {
     description = "Edit precompiled binaries";

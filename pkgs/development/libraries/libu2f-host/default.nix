@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkg-config, json_c, hidapi }:
+{ lib, stdenv, fetchurl, fetchpatch, pkg-config, json_c, hidapi, libu2f-host, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "libu2f-host";
@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ json_c hidapi ];
 
   doCheck = true;
+
+  passthru.tests.version = testVersion { package = libu2f-host; };
 
   meta = with lib; {
     homepage = "https://developers.yubico.com/libu2f-host";

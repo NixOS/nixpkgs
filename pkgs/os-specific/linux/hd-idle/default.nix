@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles, hd-idle, testVersion }:
 
 buildGoModule rec {
   pname = "hd-idle";
@@ -18,6 +18,8 @@ buildGoModule rec {
   postInstall = ''
     installManPage debian/hd-idle.8
   '';
+
+  passthru.tests.version = testVersion { package = hd-idle; };
 
   meta = with lib; {
     description = "Spins down external disks after a period of idle time";

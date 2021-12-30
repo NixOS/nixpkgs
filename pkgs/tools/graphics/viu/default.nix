@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{ lib, rustPlatform, fetchFromGitHub, viu, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "viu";
@@ -15,6 +15,8 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   cargoSha256 = "0s6i42n4jivzj4ad62r7nc6ailydy686ivszcd6cj5f4dinsbgq3";
+
+  passthru.tests.version = testVersion { package = viu; };
 
   meta = with lib; {
     description = "A command-line application to view images from the terminal written in Rust";

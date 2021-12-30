@@ -8,6 +8,8 @@
 , gsl
 , libaudclient
 , libmpdclient
+, gjay
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -31,6 +33,8 @@ stdenv.mkDerivation rec {
   ];
 
   hardeningDisable = [ "format" ];
+
+  passthru.tests.version = testVersion { package = gjay; };
 
   meta = with lib; {
     description = "Generates playlists such that each song sounds good following the previous song";

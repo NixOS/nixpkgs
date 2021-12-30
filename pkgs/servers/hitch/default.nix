@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, docutils, libev, openssl, pkg-config, nixosTests }:
+{ lib, stdenv, fetchurl, docutils, libev, openssl, pkg-config, nixosTests, hitch, testVersion }:
 stdenv.mkDerivation rec {
   version = "1.7.2";
   pname = "hitch";
@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "doc" "man" ];
 
   passthru.tests.hitch = nixosTests.hitch;
+
+  passthru.tests.version = testVersion { package = hitch; };
 
   meta = with lib; {
     description = "Libev-based high performance SSL/TLS proxy by Varnish Software";

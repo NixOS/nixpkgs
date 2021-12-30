@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, makeWrapper, jre }:
+{ lib, stdenv, fetchurl, makeWrapper, jre, checkstyle, testVersion }:
 
 stdenv.mkDerivation rec {
   version = "8.45.1";
@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
       --add-flags "-jar $out/checkstyle/checkstyle-all.jar"
     runHook postInstall
   '';
+
+  passthru.tests.version = testVersion { package = checkstyle; };
 
   meta = with lib; {
     description = "Checks Java source against a coding standard";

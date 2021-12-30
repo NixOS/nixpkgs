@@ -4,6 +4,8 @@
 , libbsd
 , pkg-config
 , rustPlatform
+, inputplug
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,6 +26,8 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     installManPage inputplug.1
   '';
+
+  passthru.tests.version = testVersion { package = inputplug; };
 
   meta = with lib; {
     description = "Monitor XInput events and run arbitrary scripts on hierarchy change events";

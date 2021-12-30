@@ -11,6 +11,8 @@
 , libhandy
 , libnotify
 , pango
+, caerbannog
+, testVersion
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -48,6 +50,8 @@ python3.pkgs.buildPythonApplication rec {
     gpgme
     pygobject3
   ];
+
+  passthru.tests.version = testVersion { package = caerbannog; };
 
   meta = with lib; {
     description = "Mobile-friendly Gtk frontend for password-store";

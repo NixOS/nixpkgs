@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, rustPlatform }:
+{ lib, fetchFromGitHub, rustPlatform, shell-hist, testVersion }:
 
 rustPlatform.buildRustPackage {
   pname = "shell-hist";
@@ -12,6 +12,8 @@ rustPlatform.buildRustPackage {
   };
 
   cargoSha256 = "1b2cfs03vlaz7jnr67ilgjfi7cm59izpcdi6pyvbzv8s46z2dysp";
+
+  passthru.tests.version = testVersion { package = shell-hist; };
 
   meta = with lib; {
     description = "Inspect your shell history";

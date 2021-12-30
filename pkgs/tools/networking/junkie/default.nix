@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, libpcap, guile, openssl }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, libpcap, guile, openssl, junkie, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "junkie";
@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
     "GUILELIBDIR=\${out}/share/guile/site"
     "GUILECACHEDIR=\${out}/lib/guile/ccache"
   ];
+
+  passthru.tests.version = testVersion { package = junkie; };
 
   meta = {
     description = "Deep packet inspection swiss-army knife";

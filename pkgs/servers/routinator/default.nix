@@ -3,6 +3,8 @@
 , fetchFromGitHub
 , stdenv
 , Security
+, routinator
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -22,6 +24,8 @@ rustPlatform.buildRustPackage rec {
 
   buildNoDefaultFeatures = true;
   buildFeatures = [ "socks" ];
+
+  passthru.tests.version = testVersion { package = routinator; };
 
   meta = with lib; {
     description = "An RPKI Validator written in Rust";

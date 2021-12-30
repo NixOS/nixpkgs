@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildGoModule }:
+{ lib, fetchFromGitHub, buildGoModule, mtail, testVersion }:
 
 buildGoModule rec {
   pname = "mtail";
@@ -24,6 +24,8 @@ buildGoModule rec {
   ldflags = [
     "-X main.Version=${version}"
   ];
+
+  passthru.tests.version = testVersion { package = mtail; };
 
   meta = with lib; {
     license = licenses.asl20;

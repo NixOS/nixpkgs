@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, rustPlatform, libxcb, python3 }:
+{ lib, fetchFromGitHub, rustPlatform, libxcb, python3, swaywsr, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "swaywsr";
@@ -18,6 +18,8 @@ rustPlatform.buildRustPackage rec {
 
   # has not tests
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = swaywsr; };
 
   meta = with lib; {
     description = "Automatically change sway workspace names based on their contents";

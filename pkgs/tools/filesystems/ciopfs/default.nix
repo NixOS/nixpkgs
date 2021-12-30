@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, fuse, glib, attr }:
+{ lib, stdenv, fetchurl, pkg-config, fuse, glib, attr, ciopfs, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "ciopfs";
@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ fuse glib attr ];
 
   makeFlags = [ "DESTDIR=$(out)" "PREFIX=" ];
+
+  passthru.tests.version = testVersion { package = ciopfs; };
 
   meta = {
     homepage = "https://www.brain-dump.org/projects/ciopfs/";

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, icu, zlib, gmp, lib, nqp, removeReferencesTo }:
+{ stdenv, fetchurl, perl, icu, zlib, gmp, lib, nqp, removeReferencesTo, rakudo, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "rakudo";
@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
   postFixup = ''
     remove-references-to -t ${stdenv.cc.cc} "$(readlink -f $out/share/perl6/runtime/dynext/libperl6_ops_moar${stdenv.hostPlatform.extensions.sharedLibrary})"
   '';
+
+  passthru.tests.version = testVersion { package = rakudo; };
 
   meta = with lib; {
     description = "Raku implementation on top of Moar virtual machine";

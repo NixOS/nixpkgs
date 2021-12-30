@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, autoconf, bison, libpaper, gperf, file, perl }:
+{ lib, stdenv, fetchurl, fetchpatch, autoconf, bison, libpaper, gperf, file, perl, a2ps, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "a2ps";
@@ -32,6 +32,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoconf file bison perl ];
   buildInputs = [ libpaper gperf ];
+
+  passthru.tests.version = testVersion { package = a2ps; };
 
   meta = with lib; {
     description = "An Anything to PostScript converter and pretty-printer";

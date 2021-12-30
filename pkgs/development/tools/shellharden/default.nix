@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{ lib, rustPlatform, fetchFromGitHub, shellharden, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "shellharden";
@@ -14,6 +14,8 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "0bjqgw49msl288yfa7bl31bfa9kdy4zh1q3j0lyw4vvkv2r14pf5";
 
   postPatch = "patchShebangs moduletests/run";
+
+  passthru.tests.version = testVersion { package = shellharden; };
 
   meta = with lib; {
     description = "The corrective bash syntax highlighter";

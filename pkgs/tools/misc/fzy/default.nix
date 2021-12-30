@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub, fzy, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "fzy";
@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
   };
 
   makeFlags = [ "PREFIX=$(out)" ];
+
+  passthru.tests.version = testVersion { package = fzy; };
 
   meta = with lib; {
     description = "A better fuzzy finder";

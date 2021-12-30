@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, which }:
+{ lib, stdenv, fetchurl, which, crunch, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "crunch";
@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
   '';
 
   makeFlags = [ "PREFIX=$(out)" ];
+
+  passthru.tests.version = testVersion { package = crunch; };
 
   meta = with lib; {
     description = "Wordlist generator";

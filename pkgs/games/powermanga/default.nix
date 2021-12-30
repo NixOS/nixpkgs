@@ -6,6 +6,8 @@
 , SDL
 , SDL_mixer
 , libpng
+, powermanga
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -39,6 +41,8 @@ stdenv.mkDerivation rec {
     # Otherwise it will try to write in /var/games at install time
     "scoredir=$(TMPDIR)"
   ];
+
+  passthru.tests.version = testVersion { package = powermanga; };
 
   meta = with lib; {
     homepage = "https://linux.tlk.fr/games/Powermanga/";

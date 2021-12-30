@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, ncurses, readline }:
+{ lib, stdenv, fetchFromGitHub, cmake, ncurses, readline, ctodo, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "ctodo";
@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ ncurses readline ];
+
+  passthru.tests.version = testVersion { package = ctodo; };
 
   meta = with lib; {
     homepage = "http://ctodo.apakoh.dk/";

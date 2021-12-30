@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, makeWrapper, perl, openssh, rsync }:
+{ fetchurl, lib, stdenv, makeWrapper, perl, openssh, rsync, autobuild, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "autobuild";
@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ perl openssh rsync ];
 
   doCheck = true;
+
+  passthru.tests.version = testVersion { package = autobuild; };
 
   meta = {
     description = "Continuous integration tool";

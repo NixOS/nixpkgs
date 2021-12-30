@@ -1,4 +1,4 @@
-{ stdenvNoCC, lib, fetchFromGitHub }:
+{ stdenvNoCC, lib, fetchFromGitHub, fet-sh, testVersion }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "fet-sh";
@@ -18,6 +18,8 @@ stdenvNoCC.mkDerivation rec {
   installPhase = ''
     install -m755 -D fet.sh $out/bin/fet.sh
   '';
+
+  passthru.tests.version = testVersion { package = fet-sh; };
 
   meta = with lib; {
     description = "A fetch written in posix shell without any external commands";

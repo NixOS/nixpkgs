@@ -2,6 +2,8 @@
 , buildPythonPackage
 , fetchPypi
 , nose
+, yapf
+, testVersion
 }:
 
 buildPythonPackage rec {
@@ -16,6 +18,8 @@ buildPythonPackage rec {
   checkInputs = [
     nose
   ];
+
+  passthru.tests.version = testVersion { package = yapf; };
 
   meta = with lib; {
     homepage = "https://github.com/google/yapf";

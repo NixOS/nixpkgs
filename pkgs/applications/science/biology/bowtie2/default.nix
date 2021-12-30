@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, tbb, zlib, python3, perl }:
+{ lib, stdenv, fetchFromGitHub, cmake, tbb, zlib, python3, perl, bowtie2, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "bowtie2";
@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [ tbb zlib python3 perl ];
+
+  passthru.tests.version = testVersion { package = bowtie2; };
 
   meta = with lib; {
     description = "An ultrafast and memory-efficient tool for aligning sequencing reads to long reference sequences";

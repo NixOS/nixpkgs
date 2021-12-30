@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, multus-cni, testVersion }:
 
 buildGoModule rec {
   pname = "multus-cni";
@@ -25,6 +25,8 @@ buildGoModule rec {
 
   # Some of the tests require accessing a k8s cluster
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = multus-cni; };
 
   meta = with lib; {
     description = "Multus CNI is a container network interface (CNI) plugin for Kubernetes that enables attaching multiple network interfaces to pods";

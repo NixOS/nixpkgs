@@ -1,4 +1,4 @@
-{ lib, python3 }:
+{ lib, python3, lit, testVersion }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "lit";
@@ -15,6 +15,8 @@ python3.pkgs.buildPythonApplication rec {
 
   # Non-standard test suite. Needs custom checkPhase.
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = lit; };
 
   meta = {
     description = "Portable tool for executing LLVM and Clang style test suites";

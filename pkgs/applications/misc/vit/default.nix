@@ -2,6 +2,8 @@
 , python3Packages
 , taskwarrior
 , glibcLocales
+, vit
+, testVersion
 }:
 
 with python3Packages;
@@ -30,6 +32,8 @@ buildPythonApplication rec {
   preCheck = ''
     export TERM=''${TERM-linux}
   '';
+
+  passthru.tests.version = testVersion { package = vit; };
 
   meta = with lib; {
     homepage = "https://github.com/scottkosty/vit";

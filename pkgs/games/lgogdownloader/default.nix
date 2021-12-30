@@ -11,6 +11,8 @@
 , rhash
 , tinyxml-2
 , help2man
+, lgogdownloader
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -49,6 +51,8 @@ stdenv.mkDerivation rec {
        return 1
      fi
   '';
+
+  passthru.tests.version = testVersion { package = lgogdownloader; };
 
   meta = with lib; {
     description = "Unofficial downloader to GOG.com for Linux users. It uses the same API as the official GOGDownloader";

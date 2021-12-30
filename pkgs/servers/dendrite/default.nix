@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
+{ lib, buildGoModule, fetchFromGitHub, nixosTests, dendrite, testVersion }:
 
 buildGoModule rec {
   pname = "matrix-dendrite";
@@ -16,6 +16,8 @@ buildGoModule rec {
   passthru.tests = {
     inherit (nixosTests) dendrite;
   };
+
+  passthru.tests.version = testVersion { package = dendrite; };
 
   meta = with lib; {
     homepage = "https://matrix.org";

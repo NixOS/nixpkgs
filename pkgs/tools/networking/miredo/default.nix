@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, nettools, iproute2, judy }:
+{ lib, stdenv, fetchurl, nettools, iproute2, judy, miredo, testVersion }:
 
 stdenv.mkDerivation rec {
   version = "1.2.6";
@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
   postInstall = ''
     rm -rf $out/lib/systemd $out/var $out/etc/miredo/miredo.conf
   '';
+
+  passthru.tests.version = testVersion { package = miredo; };
 
   meta = with lib; {
     description = "Teredo IPv6 Tunneling Daemon";

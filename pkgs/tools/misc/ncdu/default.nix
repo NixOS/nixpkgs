@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, ncurses }:
+{ lib, stdenv, fetchurl, ncurses, ncdu, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "ncdu";
@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ ncurses ];
+
+  passthru.tests.version = testVersion { package = ncdu; };
 
   meta = with lib; {
     description = "Disk usage analyzer with an ncurses interface";

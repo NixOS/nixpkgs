@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, rustPlatform, cmake }:
+{ lib, fetchFromGitHub, rustPlatform, cmake, unused, testVersion }:
 rustPlatform.buildRustPackage rec {
   pname = "unused";
   version = "0.2.3";
@@ -13,6 +13,8 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ cmake ];
 
   cargoSha256 = "sha256-PjCR+kHlgPWkTkhN0idotGmLSe/FaKkgI9AMEJtoRz8=";
+
+  passthru.tests.version = testVersion { package = unused; };
 
   meta = with lib; {
     description = "A tool to identify potentially unused code";

@@ -7,6 +7,8 @@
 , marble
 , qtwebengine
 , ldutils
+, zombietrackergps
+, testVersion
 }:
 
 mkDerivation rec {
@@ -44,6 +46,8 @@ mkDerivation rec {
   postConfigure = ''
     substituteInPlace Makefile --replace '$(INSTALL_ROOT)' ""
   '';
+
+  passthru.tests.version = testVersion { package = zombietrackergps; };
 
   meta = with lib; {
     description = "GPS track manager for Qt using KDE Marble maps";

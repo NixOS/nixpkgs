@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, mmv-go, testVersion }:
 
 buildGoModule rec {
   pname = "mmv-go";
@@ -14,6 +14,8 @@ buildGoModule rec {
   vendorSha256 = "sha256-3Xk8S2Em28r5R7894Ubo2OOlGhrKplV/gY4ftCjPvMo=";
 
   ldflags = [ "-s" "-w" "-X main.revision=${src.rev}" ];
+
+  passthru.tests.version = testVersion { package = mmv-go; };
 
   meta = with lib; {
     homepage = "https://github.com/itchyny/mmv";

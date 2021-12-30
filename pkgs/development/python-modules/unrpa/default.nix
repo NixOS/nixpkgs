@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, uncompyle6, isPy27 }:
+{ lib, buildPythonPackage, fetchPypi, uncompyle6, isPy27, unrpa, testVersion }:
 
 buildPythonPackage rec {
   pname = "unrpa";
@@ -14,6 +14,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ uncompyle6 ];
 
   pythonImportsCheck = [ "unrpa" ];
+
+  passthru.tests.version = testVersion { package = unrpa; };
 
   meta = with lib; {
     homepage = "https://github.com/Lattyware/unrpa";

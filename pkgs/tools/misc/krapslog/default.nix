@@ -1,4 +1,4 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, libiconv }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, libiconv, krapslog, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "krapslog";
@@ -14,6 +14,8 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-2XCtjMV8ko6jnvXYtJhLlNvB1uc0QLO/aYsQX40deBk=";
 
   buildInputs = lib.optional stdenv.isDarwin libiconv;
+
+  passthru.tests.version = testVersion { package = krapslog; };
 
   meta = with lib; {
     description = "Visualize a log file with sparklines";

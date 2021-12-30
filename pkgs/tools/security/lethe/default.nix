@@ -3,6 +3,8 @@
 , fetchFromGitHub
 , rustPlatform
 , Security
+, lethe
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,6 +21,8 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-suE8USKTZECVlTX4Wpz3vapo/Wmn7qaC3eyAJ3gmzqk=";
 
   buildInputs = lib.optional stdenv.isDarwin Security;
+
+  passthru.tests.version = testVersion { package = lethe; };
 
   meta = with lib; {
     description = "Tool to wipe drives in a secure way";

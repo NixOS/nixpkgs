@@ -1,4 +1,4 @@
-{ lib, stdenv, autoreconfHook, fetchFromGitHub, l-smash }:
+{ lib, stdenv, autoreconfHook, fetchFromGitHub, l-smash, m4acut, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "m4acut";
@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ l-smash ];
+
+  passthru.tests.version = testVersion { package = m4acut; };
 
   meta = with lib; {
     description = "Losslessly & gaplessly cut m4a (AAC in MP4) files.";

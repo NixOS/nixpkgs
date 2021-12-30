@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, libgnomeui, libxml2 }:
+{ lib, stdenv, fetchurl, pkg-config, libgnomeui, libxml2, verbiste, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "verbiste";
@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ libgnomeui libxml2 ];
 
   enableParallelBuilding = true;
+
+  passthru.tests.version = testVersion { package = verbiste; };
 
   meta = with lib; {
     homepage = "http://sarrazip.com/dev/verbiste.html";

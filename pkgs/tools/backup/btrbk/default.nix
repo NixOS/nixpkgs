@@ -15,6 +15,8 @@
 , curl
 , writeShellScript
 , nixosTests
+, btrbk
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -63,6 +65,8 @@ stdenv.mkDerivation rec {
       ${curl}/bin/curl -s https://digint.ch/download/btrbk/releases/ | ${perl}/bin/perl -lne 'print $1 if /btrbk-([0-9.]*)\.tar/'
     '';
   };
+
+  passthru.tests.version = testVersion { package = btrbk; };
 
   meta = with lib; {
     description = "A backup tool for btrfs subvolumes";

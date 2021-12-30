@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchCrate, fetchpatch }:
+{ lib, rustPlatform, fetchCrate, fetchpatch, eva, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "eva";
@@ -24,6 +24,8 @@ rustPlatform.buildRustPackage rec {
       sha256 = "003yxqlyi8jna0rf05q2a006r2pkz6pcwwfl3dv8zb6p83kk1kgj";
     })
   ];
+
+  passthru.tests.version = testVersion { package = eva; };
 
   meta = with lib; {
     description = "A calculator REPL, similar to bc";

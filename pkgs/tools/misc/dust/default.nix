@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, rustPlatform }:
+{ lib, fetchFromGitHub, rustPlatform, du-dust, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "du-dust";
@@ -19,6 +19,8 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-LAow4DVqON5vrYBU8v8wzg/HcHxm1GqS9DMre3y12Jo=";
 
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = du-dust; };
 
   meta = with lib; {
     description = "du + rust = dust. Like du but more intuitive";

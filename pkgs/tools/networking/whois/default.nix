@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, perl, gettext, pkg-config, libidn2, libiconv }:
+{ lib, stdenv, fetchFromGitHub, perl, gettext, pkg-config, libidn2, libiconv, whois, testVersion }:
 
 stdenv.mkDerivation rec {
   version = "5.5.10";
@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
   buildFlags = [ "whois" ];
 
   installTargets = [ "install-whois" ];
+
+  passthru.tests.version = testVersion { package = whois; };
 
   meta = with lib; {
     description = "Intelligent WHOIS client from Debian";

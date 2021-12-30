@@ -1,6 +1,8 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+, natls
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -15,6 +17,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "sha256-Am4HmfmhskKxcp1iWod5z3caHwsdo31qCaVi0UxTXAg=";
+
+  passthru.tests.version = testVersion { package = natls; };
 
   meta = with lib; {
     description = "the 'ls' replacement you never knew you needed";

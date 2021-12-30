@@ -21,6 +21,8 @@
 , wrapGAppsHook
 , lastFMSupport ? true
 , youtubeSupport ? true
+, lollypop
+, testVersion
 }:
 
 python3.pkgs.buildPythonApplication rec  {
@@ -100,6 +102,8 @@ python3.pkgs.buildPythonApplication rec  {
     };
   };
 
+
+  passthru.tests.version = testVersion { package = lollypop; };
 
   meta = with lib; {
     changelog = "https://gitlab.gnome.org/World/lollypop/tags/${version}";

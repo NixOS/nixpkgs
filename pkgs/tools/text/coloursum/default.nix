@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, Security }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, Security, coloursum, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "coloursum";
@@ -14,6 +14,8 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "08l01ivmln9gwabwa1p0gk454qyxlcpnlxx840vys476f4pw7vvf";
 
   buildInputs = lib.optional stdenv.isDarwin Security;
+
+  passthru.tests.version = testVersion { package = coloursum; };
 
   meta = with lib; {
     description = "Colourise your checksum output";

@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, libidn, libkrb5 }:
+{ fetchurl, lib, stdenv, libidn, libkrb5, gsasl, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "gsasl";
@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
     export LOCALDOMAIN="dummydomain"
   '';
   doCheck = !stdenv.hostPlatform.isDarwin;
+
+  passthru.tests.version = testVersion { package = gsasl; };
 
   meta = {
     description = "GNU SASL, Simple Authentication and Security Layer library";

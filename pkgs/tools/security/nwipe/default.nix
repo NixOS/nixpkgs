@@ -5,6 +5,8 @@
 , ncurses
 , parted
 , pkg-config
+, nwipe
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -31,6 +33,8 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     sh init.sh || :
   '';
+
+  passthru.tests.version = testVersion { package = nwipe; };
 
   meta = with lib; {
     description = "Securely erase disks";

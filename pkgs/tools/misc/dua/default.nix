@@ -1,4 +1,4 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, libiconv, Foundation }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, libiconv, Foundation, dua, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "dua";
@@ -21,6 +21,8 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-B4e8wT/RhpwtCb11HqN8vksshBaF/CmpMPT62aBuFnw=";
 
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = dua; };
 
   meta = with lib; {
     description = "A tool to conveniently learn about the disk usage of directories, fast!";

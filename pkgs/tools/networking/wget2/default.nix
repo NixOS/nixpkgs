@@ -23,6 +23,8 @@
 , xz
 , zlib
 , zstd
+, wget2
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -97,6 +99,8 @@ stdenv.mkDerivation rec {
     # TODO: https://gitlab.com/gnuwget/wget2/-/issues/537
     (lib.withFeatureAs sslSupport "ssl" "openssl")
   ];
+
+  passthru.tests.version = testVersion { package = wget2; };
 
   meta = with lib; {
     description = "successor of GNU Wget, a file and recursive website downloader.";

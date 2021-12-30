@@ -1,4 +1,4 @@
-{ lib, buildGo117Module, fetchFromGitHub }:
+{ lib, buildGo117Module, fetchFromGitHub, kopia, testVersion }:
 
 buildGo117Module rec {
   pname = "kopia";
@@ -21,6 +21,8 @@ buildGo117Module rec {
     "-X github.com/kopia/kopia/repo.BuildVersion=${version}"
     "-X github.com/kopia/kopia/repo.BuildInfo=${src.rev}"
   ];
+
+  passthru.tests.version = testVersion { package = kopia; };
 
   meta = with lib; {
     homepage = "https://kopia.io";

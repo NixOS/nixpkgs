@@ -4,6 +4,8 @@
 , stdenvNoCC
 , lua52Support ? true
 , luauSupport ? false
+, stylua
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,6 +26,8 @@ rustPlatform.buildRustPackage rec {
 
   # test_standard fails on darwin
   doCheck = !stdenvNoCC.isDarwin;
+
+  passthru.tests.version = testVersion { package = stylua; };
 
   meta = with lib; {
     description = "An opinionated Lua code formatter";

@@ -1,4 +1,4 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub, matterircd, testVersion }:
 
 buildGoPackage rec {
   pname = "matterircd";
@@ -12,6 +12,8 @@ buildGoPackage rec {
   };
 
   goPackagePath = "github.com/42wim/matterircd";
+
+  passthru.tests.version = testVersion { package = matterircd; };
 
   meta = with lib; {
     inherit (src.meta) homepage;

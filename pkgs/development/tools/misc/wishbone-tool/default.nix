@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, rustPlatform, libusb-compat-0_1 }:
+{ lib, fetchFromGitHub, rustPlatform, libusb-compat-0_1, wishbone-tool, testVersion }:
 
 let
   version = "0.6.9";
@@ -22,6 +22,8 @@ rustPlatform.buildRustPackage {
   cargoSha256 = "1b12wpmzv7wxidc4hd8hmp8iwqhqlycxh8bdv3rf701sqsazkc5x";
 
   buildInputs = [ libusb-compat-0_1 ];
+
+  passthru.tests.version = testVersion { package = wishbone-tool; };
 
   meta = with lib; {
     description = "Manipulate a Wishbone device over some sort of bridge";

@@ -1,6 +1,8 @@
 { buildGoModule
 , fetchFromGitHub
 , lib
+, gau
+, testVersion
 }:
 
 buildGoModule rec {
@@ -15,6 +17,8 @@ buildGoModule rec {
   };
 
   vendorSha256 = "sha256-u5ketxHPwZN2mV0uTgwJbY+ImusGZ9GTTmFAGvdH5yA=";
+
+  passthru.tests.version = testVersion { package = gau; };
 
   meta = with lib; {
     description = "Tool to fetch known URLs";

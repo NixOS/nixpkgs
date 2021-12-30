@@ -5,6 +5,8 @@
 , Security
 , DiskArbitration
 , Foundation
+, meilisearch
+, testVersion
 }:
 
 let version = "0.23.1";
@@ -25,6 +27,8 @@ rustPlatform.buildRustPackage {
   ];
   cargoSha256 = "sha256-dz+1IQZRSeMEagI2dnOtR3A8prg4UZ2Om0pd1BUhuhE=";
   buildInputs = lib.optionals stdenv.isDarwin [ Security DiskArbitration Foundation ];
+  passthru.tests.version = testVersion { package = meilisearch; };
+
   meta = with lib; {
     description = "Powerful, fast, and an easy to use search engine ";
     homepage = "https://docs.meilisearch.com/";

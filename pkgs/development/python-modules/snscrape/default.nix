@@ -7,6 +7,8 @@
 , pytz
 , requests
 , setuptools-scm
+, snscrape
+, testVersion
 }:
 
 buildPythonPackage rec {
@@ -43,6 +45,8 @@ buildPythonPackage rec {
   '';
 
   pythonImportsCheck = [ "snscrape" ];
+
+  passthru.tests.version = testVersion { package = snscrape; };
 
   meta = with lib; {
     homepage = "https://github.com/JustAnotherArchivist/snscrape";

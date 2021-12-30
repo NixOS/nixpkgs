@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, runtimeShell, jre_headless }:
+{ lib, stdenv, fetchurl, runtimeShell, jre_headless, procyon, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "procyon";
@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
     EOF
     chmod +x $out/bin/procyon
   '';
+
+  passthru.tests.version = testVersion { package = procyon; };
 
   meta = with lib; {
     description = "Procyon is a suite of Java metaprogramming tools including a Java decompiler";

@@ -2,6 +2,8 @@
 , stdenv
 , fetchurl
 , perl
+, cpuid
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -38,6 +40,8 @@ stdenv.mkDerivation rec {
       exit 1
     fi
   '';
+
+  passthru.tests.version = testVersion { package = cpuid; };
 
   meta = with lib; {
     description = "Linux tool to dump x86 CPUID information about the CPU";

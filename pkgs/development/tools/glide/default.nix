@@ -1,4 +1,4 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub, glide, testVersion }:
 
 buildGoPackage rec {
   pname = "glide";
@@ -16,6 +16,8 @@ buildGoPackage rec {
     repo = "glide";
     sha256 = "1wskg1cxqy9sp0738qiiagdw09dbs3swxsk4z6w5hsfiq2h44a54";
   };
+
+  passthru.tests.version = testVersion { package = glide; };
 
   meta = with lib; {
     homepage = "https://glide.sh";

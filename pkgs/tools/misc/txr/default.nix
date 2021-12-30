@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, bison, flex, libffi }:
+{ lib, stdenv, fetchurl, bison, flex, libffi, txr, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "txr";
@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
       au BufRead,BufNewFile *.tl,*.tlo set filetype=tl | set lisp
     EOF
   '';
+
+  passthru.tests.version = testVersion { package = txr; };
 
   meta = with lib; {
     description = "Programming language for convenient data munging";

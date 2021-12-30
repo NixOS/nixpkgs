@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, libiconv, installShellFiles }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, libiconv, installShellFiles, flavours, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "flavours";
@@ -23,6 +23,8 @@ rustPlatform.buildRustPackage rec {
       --fish <($out/bin/flavours --completions fish) \
       --bash <($out/bin/flavours --completions bash)
   '';
+
+  passthru.tests.version = testVersion { package = flavours; };
 
   meta = with lib; {
     description = "An easy to use base16 scheme manager/builder that integrates with any workflow";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, icu, catch2, pandoc }:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, icu, catch2, pandoc, nuspell, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "nuspell";
@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
   postInstall = ''
     rm -rf $out/share/doc
   '';
+
+  passthru.tests.version = testVersion { package = nuspell; };
 
   meta = with lib; {
     description = "Free and open source C++ spell checking library";

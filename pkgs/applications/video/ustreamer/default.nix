@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, libbsd, libevent, libjpeg }:
+{ lib, stdenv, fetchFromGitHub, libbsd, libevent, libjpeg, ustreamer, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "ustreamer";
@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cp ustreamer $out/bin/
   '';
+
+  passthru.tests.version = testVersion { package = ustreamer; };
 
   meta = with lib; {
     homepage = "https://github.com/pikvm/ustreamer";

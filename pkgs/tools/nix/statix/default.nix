@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub, withJson ? true, stdenv }:
+{ lib, rustPlatform, fetchFromGitHub, withJson ? true, stdenv, statix, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "statix";
@@ -19,6 +19,8 @@ rustPlatform.buildRustPackage rec {
 
   # tests are failing on darwin
   doCheck = !stdenv.isDarwin;
+
+  passthru.tests.version = testVersion { package = statix; };
 
   meta = with lib; {
     description = "Lints and suggestions for the nix programming language";

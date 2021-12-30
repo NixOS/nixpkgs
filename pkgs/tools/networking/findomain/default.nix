@@ -6,6 +6,8 @@
 , perl
 , libiconv
 , Security
+, findomain
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -27,6 +29,8 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     installManPage ${pname}.1
   '';
+
+  passthru.tests.version = testVersion { package = findomain; };
 
   meta = with lib; {
     description = "The fastest and cross-platform subdomain enumerator";

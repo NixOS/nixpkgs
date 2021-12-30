@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, cmake, gfortran, lhapdf }:
+{ lib, stdenv, fetchurl, cmake, gfortran, lhapdf, mcfm, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "MCFM";
@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
     "-Duse_external_lhapdf=ON"
     "-Duse_internal_lhapdf=OFF"
   ];
+
+  passthru.tests.version = testVersion { package = mcfm; };
 
   meta = with lib; {
     description = "Monte Carlo for FeMtobarn processes";

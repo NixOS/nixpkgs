@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, glib, libsigrok, libsigrokdecode }:
+{ lib, stdenv, fetchurl, pkg-config, glib, libsigrok, libsigrokdecode, sigrok-cli, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "sigrok-cli";
@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ glib libsigrok libsigrokdecode ];
+
+  passthru.tests.version = testVersion { package = sigrok-cli; };
 
   meta = with lib; {
     description = "Command-line frontend for the sigrok signal analysis software suite";

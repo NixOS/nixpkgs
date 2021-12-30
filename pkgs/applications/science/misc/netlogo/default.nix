@@ -1,4 +1,4 @@
-{ jre, lib, stdenv, fetchurl, makeWrapper, makeDesktopItem }:
+{ jre, lib, stdenv, fetchurl, makeWrapper, makeDesktopItem, netlogo, testVersion }:
 
 let
 
@@ -43,6 +43,8 @@ stdenv.mkDerivation rec {
     cp $src1 $out/share/icons/hicolor/256x256/apps/netlogo.png
     cp ${desktopItem}/share/applications/* $out/share/applications
   '';
+
+  passthru.tests.version = testVersion { package = netlogo; };
 
   meta = with lib; {
     description = "A multi-agent programmable modeling environment";

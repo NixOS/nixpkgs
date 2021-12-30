@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, helmfile, testVersion }:
 
 buildGoModule rec {
   pname = "helmfile";
@@ -18,6 +18,8 @@ buildGoModule rec {
   subPackages = [ "." ];
 
   ldflags = [ "-s" "-w" "-X github.com/roboll/helmfile/pkg/app/version.Version=${version}" ];
+
+  passthru.tests.version = testVersion { package = helmfile; };
 
   meta = {
     description = "Deploy Kubernetes Helm charts";

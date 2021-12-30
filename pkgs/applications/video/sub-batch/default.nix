@@ -4,6 +4,8 @@
 , rustPlatform
 , makeWrapper
 , alass
+, sub-batch
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,6 +26,8 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     wrapProgram "$out/bin/sub-batch" --prefix PATH : "${lib.makeBinPath [ alass ]}"
   '';
+
+  passthru.tests.version = testVersion { package = sub-batch; };
 
   meta = with lib; {
     description = "Match and rename subtitle files to video files and perform other batch operations on subtitle files";

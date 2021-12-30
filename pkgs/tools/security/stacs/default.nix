@@ -1,6 +1,8 @@
 { lib
 , fetchFromGitHub
 , python3
+, stacs
+, testVersion
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -32,6 +34,8 @@ python3.pkgs.buildPythonApplication rec {
   pythonImportsCheck = [
     "stacs"
   ];
+
+  passthru.tests.version = testVersion { package = stacs; };
 
   meta = with lib; {
     description = "Static token and credential scanner";

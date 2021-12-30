@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, gpx, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "gpx";
@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "1izs8s5npkbfrsyk17429hyl1vyrbj9dp6vmdlbb2vh6mfgl54h8";
   };
+
+  passthru.tests.version = testVersion { package = gpx; };
 
   meta = {
     description = "Gcode to x3g conversion postprocessor";

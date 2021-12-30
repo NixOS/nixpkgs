@@ -10,6 +10,8 @@
 , python-linux-procfs
 , python-ethtool
 , wrapGAppsHook
+, tuna
+, testVersion
 }:
 
 buildPythonApplication rec {
@@ -51,6 +53,8 @@ buildPythonApplication rec {
   # contains no tests
   doCheck = false;
   pythonImportsCheck = [ "tuna" ];
+
+  passthru.tests.version = testVersion { package = tuna; };
 
   meta = with lib; {
     description = "Thread and IRQ affinity setting GUI and cmd line tool";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, makeWrapper, gcc, asciidoc, autoreconfHook }:
+{ lib, stdenv, fetchurl, makeWrapper, gcc, asciidoc, autoreconfHook, colm, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "colm";
@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/colm \
       --prefix PATH ":" ${gcc}/bin
   '';
+
+  passthru.tests.version = testVersion { package = colm; };
 
   meta = with lib; {
     description = "A programming language for the analysis and transformation of computer languages";

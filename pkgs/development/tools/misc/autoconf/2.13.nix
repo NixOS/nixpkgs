@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, m4, perl, xz }:
+{ lib, stdenv, fetchurl, m4, perl, xz, autoconf213, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "autoconf";
@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
   dontPatchShebangs = true;
 
   postInstall = ''ln -s autoconf "$out"/bin/autoconf-2.13'';
+
+  passthru.tests.version = testVersion { package = autoconf213; };
 
   meta = {
     homepage = "https://www.gnu.org/software/autoconf/";

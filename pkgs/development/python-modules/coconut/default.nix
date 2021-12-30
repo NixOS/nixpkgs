@@ -10,6 +10,8 @@
 , prompt-toolkit
 , tkinter
 , watchdog
+, coconut
+, testVersion
 }:
 
 buildPythonApplication rec {
@@ -33,6 +35,8 @@ buildPythonApplication rec {
   ];
 
   pythonImportsCheck = [ "coconut" ];
+
+  passthru.tests.version = testVersion { package = coconut; };
 
   meta = with lib; {
     homepage = "http://coconut-lang.org/";

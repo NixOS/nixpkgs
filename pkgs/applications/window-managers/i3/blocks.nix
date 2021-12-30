@@ -1,4 +1,4 @@
-{ fetchFromGitHub, fetchpatch, lib, stdenv, autoreconfHook, pkg-config }:
+{ fetchFromGitHub, fetchpatch, lib, stdenv, autoreconfHook, pkg-config, i3blocks, testVersion }:
 
 with lib;
 
@@ -23,6 +23,8 @@ stdenv.mkDerivation {
   ];
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
+
+  passthru.tests.version = testVersion { package = i3blocks; };
 
   meta = {
     description = "A flexible scheduler for your i3bar blocks";

@@ -1,4 +1,4 @@
-{ python3Packages, lib, fetchFromGitHub }:
+{ python3Packages, lib, fetchFromGitHub, nerd-font-patcher, testVersion }:
 
 python3Packages.buildPythonApplication rec {
   pname = "nerd-font-patcher";
@@ -31,6 +31,8 @@ python3Packages.buildPythonApplication rec {
     install -Dm755 font-patcher $out/bin/${pname}
     cp -ra src/glyphs $out/share/${pname}
   '';
+
+  passthru.tests.version = testVersion { package = nerd-font-patcher; };
 
   meta = with lib; {
     description = "Font patcher to generate Nerd font";

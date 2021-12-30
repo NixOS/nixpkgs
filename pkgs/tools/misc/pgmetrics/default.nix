@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, pgmetrics, testVersion }:
 
 buildGoModule rec {
   pname = "pgmetrics";
@@ -16,6 +16,8 @@ buildGoModule rec {
   doCheck = false;
 
   ldflags = [ "-s" "-w" "-X main.version=${version}" ];
+
+  passthru.tests.version = testVersion { package = pgmetrics; };
 
   meta = with lib; {
     homepage = "https://pgmetrics.io/";

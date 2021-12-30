@@ -1,5 +1,7 @@
 { lib
 , python3
+, markdown-anki-decks
+, testVersion
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -37,6 +39,8 @@ python3.pkgs.buildPythonApplication rec {
 
   # No tests available on Pypi and there is only a failing version assertion test in the repo.
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = markdown-anki-decks; };
 
   meta = with lib; {
     description = "Simple program to convert markdown files into anki decks";

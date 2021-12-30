@@ -1,4 +1,4 @@
-{ lib, python3Packages }:
+{ lib, python3Packages, s3bro, testVersion }:
 
 python3Packages.buildPythonPackage rec {
   pname = "s3bro";
@@ -13,6 +13,8 @@ python3Packages.buildPythonPackage rec {
 
   # No tests
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = s3bro; };
 
   meta = with lib; {
     description = "A handy s3 cli tool";

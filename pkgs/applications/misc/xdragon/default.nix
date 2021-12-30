@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, gtk3 }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, gtk3, xdragon, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "xdragon";
@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
   postInstall = ''
     ln -s $out/bin/dragon $out/bin/xdragon
   '';
+
+  passthru.tests.version = testVersion { package = xdragon; };
 
   meta = with lib; {
     description = "Simple drag-and-drop source/sink for X (called dragon in upstream)";

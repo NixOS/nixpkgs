@@ -3,6 +3,8 @@
 , fetchurl
 , libmnl
 , pkg-config
+, ethtool
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -21,6 +23,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libmnl
   ];
+
+  passthru.tests.version = testVersion { package = ethtool; };
 
   meta = with lib; {
     description = "Utility for controlling network drivers and hardware";

@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchCrate }:
+{ lib, rustPlatform, fetchCrate, lscolors, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "lscolors";
@@ -13,6 +13,8 @@ rustPlatform.buildRustPackage rec {
 
   # setid is not allowed in the sandbox
   checkFlags = [ "--skip=tests::style_for_setid" ];
+
+  passthru.tests.version = testVersion { package = lscolors; };
 
   meta = with lib; {
     description = "Rust library and tool to colorize paths using LS_COLORS";

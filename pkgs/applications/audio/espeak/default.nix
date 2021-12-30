@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, unzip, portaudio }:
+{ lib, stdenv, fetchurl, unzip, portaudio, espeak-classic, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "espeak";
@@ -27,6 +27,8 @@ stdenv.mkDerivation rec {
     cd src
     makeFlags="PREFIX=$out DATADIR=$out/share/espeak-data"
   '';
+
+  passthru.tests.version = testVersion { package = espeak-classic; };
 
   meta = with lib; {
     description = "Compact open source software speech synthesizer";

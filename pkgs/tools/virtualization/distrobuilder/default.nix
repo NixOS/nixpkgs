@@ -8,6 +8,8 @@
 , gnutar
 , squashfsTools
 , debootstrap
+, distrobuilder
+, testVersion
 }:
 
 let
@@ -46,6 +48,8 @@ buildGoModule rec {
   postInstall = ''
     wrapProgram $out/bin/distrobuilder --prefix PATH ":" ${lib.makeBinPath bins}
   '';
+
+  passthru.tests.version = testVersion { package = distrobuilder; };
 
   meta = with lib; {
     description = "System container image builder for LXC and LXD";

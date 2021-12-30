@@ -3,6 +3,8 @@
 , buildGoModule
 , unixODBC
 , icu
+, usql
+, testVersion
 }:
 
 buildGoModule rec {
@@ -42,6 +44,8 @@ buildGoModule rec {
 
   # All the checks currently require docker instances to run the databases.
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = usql; };
 
   meta = with lib; {
     description = "Universal command-line interface for SQL databases";

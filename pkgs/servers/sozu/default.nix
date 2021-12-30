@@ -1,4 +1,4 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, darwin }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, darwin, sozu, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "sozu";
@@ -15,6 +15,8 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs =
     lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
+
+  passthru.tests.version = testVersion { package = sozu; };
 
   meta = with lib; {
     description =

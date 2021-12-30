@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, cmake, readline }:
+{ lib, stdenv, fetchurl, cmake, readline, tasksh, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "tasksh";
@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ readline ];
   nativeBuildInputs = [ cmake ];
+
+  passthru.tests.version = testVersion { package = tasksh; };
 
   meta = with lib; {
     description = "REPL for taskwarrior";

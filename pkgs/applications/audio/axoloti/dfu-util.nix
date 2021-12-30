@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, libusb1-axoloti }:
+{ lib, stdenv, fetchurl, pkg-config, libusb1-axoloti, dfu-util-axoloti, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "dfu-util";
@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     url = "http://dfu-util.sourceforge.net/releases/${pname}-${version}.tar.gz";
     sha256 = "0n7h08avlzin04j93m6hkq9id6hxjiiix7ff9gc2n89aw6dxxjsm";
   };
+
+  passthru.tests.version = testVersion { package = dfu-util-axoloti; };
 
   meta = with lib; {
     description = "Device firmware update (DFU) USB programmer";

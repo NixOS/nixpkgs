@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPackages, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ stdenv, lib, buildPackages, buildGoModule, fetchFromGitHub, installShellFiles, stern, testVersion }:
 let isCrossBuild = stdenv.hostPlatform != stdenv.buildPlatform;
 
 in
@@ -31,6 +31,8 @@ buildGoModule rec {
         installShellCompletion stern.$shell
       done
     '';
+
+  passthru.tests.version = testVersion { package = stern; };
 
   meta = with lib; {
     description = "Multi pod and container log tailing for Kubernetes";

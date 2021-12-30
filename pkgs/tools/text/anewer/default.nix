@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{ lib, rustPlatform, fetchFromGitHub, anewer, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "anewer";
@@ -12,6 +12,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "sha256-LJ0l5CZM5NqdbCZe4ELkYf9EkKyBxL/LrNmFy+JS6gM=";
+
+  passthru.tests.version = testVersion { package = anewer; };
 
   meta = with lib; {
     description = "Append lines from stdin to a file if they don't already exist in the file";

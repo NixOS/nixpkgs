@@ -4,6 +4,8 @@
 , libiconv
 , rustPlatform
 , AppKit
+, fclones
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -26,6 +28,8 @@ rustPlatform.buildRustPackage rec {
 
   # device::test_physical_device_name test fails on Darwin
   doCheck = !stdenv.isDarwin;
+
+  passthru.tests.version = testVersion { package = fclones; };
 
   meta = with lib; {
     description = "Efficient Duplicate File Finder and Remover";

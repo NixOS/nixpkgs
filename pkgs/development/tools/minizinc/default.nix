@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, flex, bison }:
+{ lib, stdenv, fetchFromGitHub, cmake, flex, bison, minizinc, testVersion }:
 stdenv.mkDerivation rec {
   pname = "minizinc";
   version = "2.5.5";
@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "sha256-9z2E6KqOys9UUXlXWB4eDhg34kS3PhUB1Dd1F6iGYoE=";
   };
+
+  passthru.tests.version = testVersion { package = minizinc; };
 
   meta = with lib; {
     homepage = "https://www.minizinc.org/";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, perl }:
+{ lib, stdenv, fetchurl, perl, mencal, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "mencal";
@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ perl ];
+
+  passthru.tests.version = testVersion { package = mencal; };
 
   meta = with lib; {
     description = "Menstruation calendar";

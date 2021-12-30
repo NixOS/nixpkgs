@@ -1,6 +1,8 @@
 { lib
 , python3
 , fetchFromGitHub
+, appdaemon
+, testVersion
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -59,6 +61,8 @@ python3.pkgs.buildPythonApplication rec {
   checkPhase = ''
     $out/bin/appdaemon -v | grep -q "${version}"
   '';
+
+  passthru.tests.version = testVersion { package = appdaemon; };
 
   meta = with lib; {
     description = "Sandboxed Python execution environment for writing automation apps for Home Assistant";

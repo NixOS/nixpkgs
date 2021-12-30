@@ -1,4 +1,4 @@
-{ buildGoModule, fetchFromGitHub, lib }:
+{ buildGoModule, fetchFromGitHub, lib, base16-universal-manager, testVersion }:
 
 buildGoModule rec {
   pname = "base16-universal-manager";
@@ -12,6 +12,8 @@ buildGoModule rec {
   };
 
   vendorSha256 = "19rba689319w3wf0b10yafydyz01kqg8b051vnijcyjyk0khwvsk";
+
+  passthru.tests.version = testVersion { package = base16-universal-manager; };
 
   meta = with lib; {
     description = "A universal manager to set base16 themes for any supported application";

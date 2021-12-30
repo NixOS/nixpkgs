@@ -1,4 +1,4 @@
-{ lib, stdenvNoCC, fetchFromGitHub, bash }:
+{ lib, stdenvNoCC, fetchFromGitHub, bash, bfetch, testVersion }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "bfetch";
@@ -18,6 +18,8 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   makeFlags = [ "PREFIX=$(out)" ];
+
+  passthru.tests.version = testVersion { package = bfetch; };
 
   meta = with lib; {
     description = "A SuperB general-purpose fetch displayer written in portable sh";

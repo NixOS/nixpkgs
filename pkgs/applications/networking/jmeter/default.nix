@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, jre, makeWrapper, coreutils }:
+{ fetchurl, lib, stdenv, jre, makeWrapper, coreutils, jmeter, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "jmeter";
@@ -43,6 +43,8 @@ stdenv.mkDerivation rec {
     $out/bin/jmeter-stoptest.sh > /dev/null
     timeout --kill=1s 1s $out/bin/jmeter-mirror-server.sh || test "$?" = "124"
   '';
+
+  passthru.tests.version = testVersion { package = jmeter; };
 
   meta = with lib; {
     description = "A 100% pure Java desktop application designed to load test functional behavior and measure performance";

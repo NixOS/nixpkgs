@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, openssl, perl }:
+{ lib, stdenv, fetchFromGitHub, openssl, perl, tmux-xpanes, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "tmux-xpanes";
@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
     install -m 755 bin/* $out/bin/
     install -m 644 man/*.1 $out/share/man/man1/
   '';
+
+  passthru.tests.version = testVersion { package = tmux-xpanes; };
 
   meta = with lib; {
     description = "tmux-based terminal divider";

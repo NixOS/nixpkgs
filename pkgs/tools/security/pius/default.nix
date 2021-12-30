@@ -1,4 +1,4 @@
-{ fetchFromGitHub, lib, python3Packages, gnupg, perl }:
+{ fetchFromGitHub, lib, python3Packages, gnupg, perl, pius, testVersion }:
 
 let version = "3.0.0"; in
 python3Packages.buildPythonApplication {
@@ -20,6 +20,8 @@ python3Packages.buildPythonApplication {
   '';
 
   buildInputs = [ perl ];
+
+  passthru.tests.version = testVersion { package = pius; };
 
   meta = {
     homepage = "https://www.phildev.net/pius/";

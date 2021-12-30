@@ -17,6 +17,8 @@
 , gnomeSupport ? true
 , libsecret
 , gcr
+, pan
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -52,6 +54,8 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  passthru.tests.version = testVersion { package = pan; };
 
   meta = with lib; {
     description = "A GTK-based Usenet newsreader good at both text and binaries";

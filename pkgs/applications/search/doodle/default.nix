@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, libextractor, gettext }:
+{ lib, stdenv, fetchurl, libextractor, gettext, doodle, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "doodle";
@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
     url = "https://grothoff.org/christian/doodle/download/doodle-${version}.tar.gz";
     sha256 = "sha256-dtRPfUjhBNgN+5zHMYmszISmBv1+K6yjKsbQBiAXWRA=";
   };
+
+  passthru.tests.version = testVersion { package = doodle; };
 
   meta = {
     homepage = "https://grothoff.org/christian/doodle/";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, libdivecomputer, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "libdivecomputer";
@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
   };
 
   enableParallelBuilding = true;
+
+  passthru.tests.version = testVersion { package = libdivecomputer; };
 
   meta = with lib; {
     homepage = "http://www.libdivecomputer.org";

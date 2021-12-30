@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub, git-fire, testVersion }:
 
 stdenv.mkDerivation {
   pname = "git-fire";
@@ -14,6 +14,8 @@ stdenv.mkDerivation {
   installPhase = ''
     install -D -m755 $src/git-fire $out/bin/git-fire
   '';
+
+  passthru.tests.version = testVersion { package = git-fire; };
 
   meta = with lib; {
     description = ''

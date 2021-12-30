@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, libX11, libXext, libXi, libXmu, libXt, libXtst }:
+{ lib, stdenv, fetchurl, libX11, libXext, libXi, libXmu, libXt, libXtst, imwheel, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "imwheel";
@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
     "sysconfdir=${placeholder "out"}/etc"
     "ETCDIR=${placeholder "out"}/etc"
   ];
+
+  passthru.tests.version = testVersion { package = imwheel; };
 
   meta = with lib; {
     homepage = "http://imwheel.sourceforge.net/";

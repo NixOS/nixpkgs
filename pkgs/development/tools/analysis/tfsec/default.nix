@@ -1,6 +1,8 @@
 { lib
 , buildGoPackage
 , fetchFromGitHub
+, tfsec
+, testVersion
 }:
 
 buildGoPackage rec {
@@ -21,6 +23,8 @@ buildGoPackage rec {
     "-s"
     "-X ${goPackagePath}/version.Version=${version}"
   ];
+
+  passthru.tests.version = testVersion { package = tfsec; };
 
   meta = with lib; {
     description = "Static analysis powered security scanner for terraform code";

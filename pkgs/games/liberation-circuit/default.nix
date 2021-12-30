@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, fetchurl, cmake, git, makeWrapper, allegro5, libGL }:
+{ stdenv, lib, fetchFromGitHub, fetchurl, cmake, git, makeWrapper, allegro5, libGL, liberation-circuit, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "liberation-circuit";
@@ -57,6 +57,8 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.tests.version = testVersion { package = liberation-circuit; };
 
   meta = with lib; {
     description = "Real-time strategy game with programmable units";

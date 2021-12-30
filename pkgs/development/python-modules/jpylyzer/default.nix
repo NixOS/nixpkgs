@@ -3,6 +3,8 @@
 , buildPythonPackage
 , six
 , pytestCheckHook
+, jpylyzer
+, testVersion
 }:
 
 buildPythonPackage rec {
@@ -20,6 +22,8 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "jpylyzer" ];
+
+  passthru.tests.version = testVersion { package = jpylyzer; };
 
   meta = with lib; {
     description = "JP2 (JPEG 2000 Part 1) image validator and properties extractor";

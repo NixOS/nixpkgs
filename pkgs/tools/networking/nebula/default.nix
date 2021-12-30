@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, nebula, testVersion }:
 
 buildGoModule rec {
   pname = "nebula";
@@ -18,6 +18,8 @@ buildGoModule rec {
   subPackages = [ "cmd/nebula" "cmd/nebula-cert" ];
 
   ldflags = [ "-X main.Build=${version}" ];
+
+  passthru.tests.version = testVersion { package = nebula; };
 
   meta = with lib; {
     description = "A scalable overlay networking tool with a focus on performance, simplicity and security";

@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchurl, nixosTests }:
+{ lib, buildGoModule, fetchurl, nixosTests, ipfs, testVersion }:
 
 buildGoModule rec {
   pname = "ipfs";
@@ -37,6 +37,8 @@ buildGoModule rec {
     substituteInPlace $out/etc/systemd/system/ipfs-hardened.service \
       --replace /usr/bin/ipfs $out/bin/ipfs
   '';
+
+  passthru.tests.version = testVersion { package = ipfs; };
 
   meta = with lib; {
     description = "A global, versioned, peer-to-peer filesystem";

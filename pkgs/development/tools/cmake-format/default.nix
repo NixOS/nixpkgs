@@ -7,6 +7,8 @@
 , pylint
 , pyyaml
 , six
+, cmake-format
+, testVersion
 }:
 
 buildPythonApplication rec {
@@ -25,6 +27,8 @@ buildPythonApplication rec {
   propagatedBuildInputs = [ autopep8 flake8 jinja2 pylint pyyaml six ];
 
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = cmake-format; };
 
   meta = with lib; {
     description = "Source code formatter for cmake listfiles";

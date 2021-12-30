@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, tut, testVersion }:
 
 buildGoModule rec {
   pname = "tut";
@@ -12,6 +12,8 @@ buildGoModule rec {
   };
 
   vendorSha256 = "sha256-kMGEAN/I2XsIc6zCDbhbbstYlyjDpXQsOPUzjaJqJBk=";
+
+  passthru.tests.version = testVersion { package = tut; };
 
   meta = with lib; {
     description = "A TUI for Mastodon with vim inspired keys";

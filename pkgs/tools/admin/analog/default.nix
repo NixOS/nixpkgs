@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub }:
+{ stdenv, lib, fetchFromGitHub, analog, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "analog";
@@ -27,6 +27,8 @@ stdenv.mkDerivation rec {
     mv how-to $out/share/doc/$pname/
     mv lang images examples $out/share/$pname/
   '';
+
+  passthru.tests.version = testVersion { package = analog; };
 
   meta = {
     homepage = "https://www.c-amie.co.uk/software/analog/";

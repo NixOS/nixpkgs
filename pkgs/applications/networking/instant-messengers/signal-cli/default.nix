@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, makeWrapper, openjdk11_headless, libmatthew_java, dbus, dbus_java }:
+{ stdenv, lib, fetchurl, makeWrapper, openjdk11_headless, libmatthew_java, dbus, dbus_java, signal-cli, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "signal-cli";
@@ -43,6 +43,8 @@ stdenv.mkDerivation rec {
     # --help returns non-0 exit code even when working
     signal-cli --version
   '';
+
+  passthru.tests.version = testVersion { package = signal-cli; };
 
   meta = with lib; {
     homepage = "https://github.com/AsamK/signal-cli";

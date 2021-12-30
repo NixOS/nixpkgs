@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, rustPlatform }:
+{ lib, fetchFromGitHub, rustPlatform, fend, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "fend";
@@ -18,6 +18,8 @@ rustPlatform.buildRustPackage rec {
   installCheckPhase = ''
     [[ "$($out/bin/fend "1 km to m")" = "1000 m" ]]
   '';
+
+  passthru.tests.version = testVersion { package = fend; };
 
   meta = with lib; {
     description = "Arbitrary-precision unit-aware calculator";

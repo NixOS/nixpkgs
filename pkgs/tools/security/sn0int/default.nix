@@ -5,6 +5,8 @@
 , libseccomp
 , sqlite
 , pkg-config
+, sn0int
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -33,6 +35,8 @@ rustPlatform.buildRustPackage rec {
   # One of the dependencies (chrootable-https) tries to read "/etc/resolv.conf"
   # in "checkPhase", hence fails in sandbox of "nix".
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = sn0int; };
 
   meta = with lib; {
     description = "Semi-automatic OSINT framework and package manager";

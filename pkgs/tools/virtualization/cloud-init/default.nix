@@ -6,6 +6,8 @@
 , openssh
 , python3
 , shadow
+, cloud-init
+, testVersion
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -107,6 +109,8 @@ python3.pkgs.buildPythonApplication rec {
   pythonImportsCheck = [
     "cloudinit"
   ];
+
+  passthru.tests.version = testVersion { package = cloud-init; };
 
   meta = with lib; {
     homepage = "https://cloudinit.readthedocs.org";

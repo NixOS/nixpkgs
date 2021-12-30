@@ -3,6 +3,8 @@
 , fetchFromGitHub
 , pkg-config
 , openssl
+, lychee
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,6 +26,8 @@ rustPlatform.buildRustPackage rec {
 
   # Disabled because they currently fail
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = lychee; };
 
   meta = with lib; {
     description = "A fast, async, resource-friendly link checker written in Rust.";

@@ -2,6 +2,8 @@
 , python3Packages
 , ffmpeg
 , fetchpatch
+, streamlink
+, testVersion
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -35,6 +37,8 @@ python3Packages.buildPythonApplication rec {
   postPatch = ''
     substituteInPlace setup.cfg --replace 'lxml >=4.6.4,<5.0' 'lxml'
   '';
+
+  passthru.tests.version = testVersion { package = streamlink; };
 
   meta = with lib; {
     homepage = "https://streamlink.github.io/";

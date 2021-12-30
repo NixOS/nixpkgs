@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, perl }:
+{ lib, stdenv, fetchurl, perl, gnused, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "gnused";
@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
 
   # Prevents attempts of running 'help2man' on cross-built binaries.
   PERL = if stdenv.hostPlatform == stdenv.buildPlatform then null else "missing";
+
+  passthru.tests.version = testVersion { package = gnused; };
 
   meta = {
     homepage = "https://www.gnu.org/software/sed/";

@@ -23,6 +23,8 @@
 , protobuf
 , sqlite
 , plugins ? [ ]
+, chatty
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -74,6 +76,8 @@ stdenv.mkDerivation rec {
       ${lib.concatMapStringsSep " " (p: p.wrapArgs or "") plugins}
     )
   '';
+
+  passthru.tests.version = testVersion { package = chatty; };
 
   meta = with lib; {
     description = "XMPP and SMS messaging via libpurple and ModemManager";

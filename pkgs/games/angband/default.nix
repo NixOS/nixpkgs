@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, ncurses5 }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, ncurses5, angband, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "angband";
@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ ncurses5 ];
   installFlags = [ "bindir=$(out)/bin" ];
+
+  passthru.tests.version = testVersion { package = angband; };
 
   meta = with lib; {
     homepage = "https://angband.github.io/angband";

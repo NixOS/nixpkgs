@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, bc, curl, figlet, fortune, gawk, iproute2, procps }:
+{ stdenv, lib, fetchFromGitHub, bc, curl, figlet, fortune, gawk, iproute2, procps, fancy-motd, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "fancy-motd";
@@ -35,6 +35,8 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.tests.version = testVersion { package = fancy-motd; };
 
   meta = with lib; {
     description = "Fancy, colorful MOTD written in bash. Server status at a glance.";

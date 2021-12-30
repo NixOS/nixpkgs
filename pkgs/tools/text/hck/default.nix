@@ -5,6 +5,8 @@
 , stdenv
 , CoreFoundation
 , Security
+, hck
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -32,6 +34,8 @@ rustPlatform.buildRustPackage rec {
     substituteInPlace $core_affinity/.cargo-checksum.json \
       --replace $oldHash $(sha256sum $core_affinity/src/lib.rs | cut -d " " -f 1)
   '';
+
+  passthru.tests.version = testVersion { package = hck; };
 
   meta = with lib; {
     description = "A close to drop in replacement for cut that can use a regex delimiter instead of a fixed string";

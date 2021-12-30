@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, cloud-nuke, testVersion }:
 
 buildGoModule rec {
   pname = "cloud-nuke";
@@ -16,6 +16,8 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" "-X main.VERSION=${version}" ];
 
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = cloud-nuke; };
 
   meta = with lib; {
     homepage = "https://github.com/gruntwork-io/cloud-nuke";

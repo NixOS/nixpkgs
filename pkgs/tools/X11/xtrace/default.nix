@@ -1,4 +1,4 @@
-{ lib, stdenv, autoreconfHook, fetchFromGitLab, libX11, xauth, makeWrapper }:
+{ lib, stdenv, autoreconfHook, fetchFromGitLab, libX11, xauth, makeWrapper, xtrace, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "xtrace";
@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
     wrapProgram "$out/bin/xtrace" \
         --prefix PATH ':' "${xauth}/bin"
   '';
+
+  passthru.tests.version = testVersion { package = xtrace; };
 
   meta = with lib; {
     homepage = "https://salsa.debian.org/debian/xtrace";

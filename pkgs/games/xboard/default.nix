@@ -17,6 +17,8 @@
 , cairo
 , pango
 , gtk2
+, xboard
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -46,6 +48,8 @@ stdenv.mkDerivation rec {
     pango
     gtk2
   ];
+
+  passthru.tests.version = testVersion { package = xboard; };
 
   meta = with lib; {
     description = "GUI for chess engines";

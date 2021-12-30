@@ -1,6 +1,8 @@
 { lib
 , python3
 , qt5
+, patray
+, testVersion
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -33,6 +35,8 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
 
+
+  passthru.tests.version = testVersion { package = patray; };
 
   meta = with lib; {
     description = "Yet another tray pulseaudio frontend";

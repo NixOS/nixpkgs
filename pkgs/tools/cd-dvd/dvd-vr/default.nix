@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, dvd-vr, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "dvd-vr";
@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "13wkdia3c0ryda40b2nzpb9vddimasgc4w95hvl0k555k9k8bl0r";
   };
   makeFlags = [ "PREFIX=$(out)" ];
+
+  passthru.tests.version = testVersion { package = dvd-vr; };
 
   meta = with lib; {
     homepage = "https://www.pixelbeat.org/programs/dvd-vr/";

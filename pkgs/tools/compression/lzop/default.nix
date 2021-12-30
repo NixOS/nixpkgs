@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, lzo }:
+{ lib, stdenv, fetchurl, lzo, lzop, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "lzop";
@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ lzo ];
+
+  passthru.tests.version = testVersion { package = lzop; };
 
   meta = with lib; {
     homepage = "http://www.lzop.org";

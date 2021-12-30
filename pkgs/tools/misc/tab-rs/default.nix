@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, IOKit }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, IOKit, tab-rs, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "tab-rs";
@@ -17,6 +17,8 @@ rustPlatform.buildRustPackage rec {
 
   # many tests are failing
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = tab-rs; };
 
   meta = with lib; {
     description = "Intuitive, config-driven terminal multiplexer designed for software & systems engineers";

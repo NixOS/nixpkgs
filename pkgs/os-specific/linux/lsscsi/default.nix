@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, lsscsi, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "lsscsi";
@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     substituteInPlace Makefile.in --replace /usr "$out"
   '';
+
+  passthru.tests.version = testVersion { package = lsscsi; };
 
   meta = with lib; {
     license = licenses.gpl2;

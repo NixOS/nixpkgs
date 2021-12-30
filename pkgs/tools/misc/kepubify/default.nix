@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildGoModule }:
+{ lib, fetchFromGitHub, buildGoModule, kepubify, testVersion }:
 
 buildGoModule rec {
   pname = "kepubify";
@@ -19,6 +19,8 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
   excludedPackages = [ "kobotest" ];
+
+  passthru.tests.version = testVersion { package = kepubify; };
 
   meta = with lib; {
     description = "EPUB to KEPUB converter";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, perl, autoconf, automake, libtool }:
+{ lib, stdenv, fetchFromGitHub, perl, autoconf, automake, libtool, qqwing, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "qqwing";
@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ perl autoconf automake libtool ];
 
   makeFlags = [ "prefix=$(out)" "tgz" ];
+
+  passthru.tests.version = testVersion { package = qqwing; };
 
   meta = with lib; {
     homepage = "https://qqwing.com";

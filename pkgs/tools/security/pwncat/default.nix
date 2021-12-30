@@ -1,6 +1,8 @@
 { lib
 , buildPythonApplication
 , fetchPypi
+, pwncat
+, testVersion
 }:
 
 buildPythonApplication rec {
@@ -14,6 +16,8 @@ buildPythonApplication rec {
 
   # Tests requires to start containers
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = pwncat; };
 
   meta = with lib; {
     description = "TCP/UDP communication suite";

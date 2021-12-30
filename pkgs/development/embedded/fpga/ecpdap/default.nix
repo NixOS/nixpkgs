@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, pkg-config, libusb1, AppKit }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, pkg-config, libusb1, AppKit, ecpdap, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "ecpdap";
@@ -22,6 +22,8 @@ rustPlatform.buildRustPackage rec {
     mkdir -p $out/etc/udev/rules.d
     cp drivers/*.rules $out/etc/udev/rules.d
   '';
+
+  passthru.tests.version = testVersion { package = ecpdap; };
 
   meta = with lib; {
     description = "A tool to program ECP5 FPGAs";

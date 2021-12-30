@@ -1,4 +1,4 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, libiconv }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, libiconv, xplr, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "xplr";
@@ -14,6 +14,8 @@ rustPlatform.buildRustPackage rec {
   buildInputs = lib.optional stdenv.isDarwin libiconv;
 
   cargoSha256 = "0gbhkpha02ymr861av0fmyz6h007ajwkqcajq8hrnfzjk8rii47m";
+
+  passthru.tests.version = testVersion { package = xplr; };
 
   meta = with lib; {
     description = "A hackable, minimal, fast TUI file explorer";

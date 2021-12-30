@@ -1,4 +1,4 @@
-{ rustPlatform, fetchFromGitLab, lib, makeWrapper, gst_all_1, libsixel }:
+{ rustPlatform, fetchFromGitLab, lib, makeWrapper, gst_all_1, libsixel, termplay, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "termplay";
@@ -28,6 +28,8 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     wrapProgram $out/bin/termplay --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0"
   '';
+
+  passthru.tests.version = testVersion { package = termplay; };
 
   meta = with lib; {
     description = "Play an image/video in your terminal";

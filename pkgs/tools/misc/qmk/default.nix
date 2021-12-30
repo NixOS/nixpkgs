@@ -1,5 +1,7 @@
 { lib
 , python3
+, qmk
+, testVersion
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -42,6 +44,8 @@ python3.pkgs.buildPythonApplication rec {
 
   # no tests implemented
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = qmk; };
 
   meta = with lib; {
     homepage = "https://github.com/qmk/qmk_cli";

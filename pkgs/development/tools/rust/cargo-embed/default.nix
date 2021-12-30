@@ -7,6 +7,8 @@
 , pkg-config
 , rustfmt
 , AppKit
+, cargo-embed
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -26,6 +28,8 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ libusb1 libftdi1 ] ++ lib.optionals stdenv.isDarwin [ AppKit ];
 
   buildFeatures = [ "ftdi" ];
+
+  passthru.tests.version = testVersion { package = cargo-embed; };
 
   meta = with lib; {
     description = "A cargo extension for working with microcontrollers";

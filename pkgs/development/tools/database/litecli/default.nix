@@ -1,5 +1,7 @@
 { lib
 , python3Packages
+, litecli
+, testVersion
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -27,6 +29,8 @@ python3Packages.buildPythonApplication rec {
   ];
 
   pythonImportsCheck = [ "litecli" ];
+
+  passthru.tests.version = testVersion { package = litecli; };
 
   meta = with lib; {
     description = "Command-line interface for SQLite";

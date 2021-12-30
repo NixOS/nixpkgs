@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, which }:
+{ lib, stdenv, fetchurl, which, eprover, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "eprover";
@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
     "--exec-prefix=$(out)"
     "--man-prefix=$(out)/share/man"
   ];
+
+  passthru.tests.version = testVersion { package = eprover; };
 
   meta = with lib; {
     description = "Automated theorem prover for full first-order logic with equality";

@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, go-bindata }:
+{ lib, buildGoModule, fetchFromGitHub, go-bindata, writefreely, testVersion }:
 
 buildGoModule rec {
   pname = "writefreely";
@@ -24,6 +24,8 @@ buildGoModule rec {
   tags = [ "sqlite" ];
 
   subPackages = [ "cmd/writefreely" ];
+
+  passthru.tests.version = testVersion { package = writefreely; };
 
   meta = with lib; {
     description = "Build a digital writing community";

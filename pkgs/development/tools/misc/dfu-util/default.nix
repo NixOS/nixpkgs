@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, libusb1 }:
+{ lib, stdenv, fetchurl, pkg-config, libusb1, dfu-util, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "dfu-util";
@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     url = "http://dfu-util.sourceforge.net/releases/${pname}-${version}.tar.gz";
     sha256 = "sha256-tLU7ohqC7349TEffKVKt9fpJT0mbawtXxYxdBK6P8Z4=";
   };
+
+  passthru.tests.version = testVersion { package = dfu-util; };
 
   meta = with lib; {
     description = "Device firmware update (DFU) USB programmer";

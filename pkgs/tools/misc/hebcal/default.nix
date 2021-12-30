@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, hebcal, testVersion }:
 
 stdenv.mkDerivation rec {
   version = "4.24";
@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
 
   doCheck = true;
+
+  passthru.tests.version = testVersion { package = hebcal; };
 
   meta = with lib; {
     homepage = "https://hebcal.github.io";

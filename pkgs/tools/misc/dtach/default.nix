@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, dtach, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "dtach";
@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cp dtach $out/bin/dtach
   '';
+
+  passthru.tests.version = testVersion { package = dtach; };
 
   meta = {
     homepage = "http://dtach.sourceforge.net/";

@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, coredns, testVersion }:
 
 buildGoModule rec {
   pname = "coredns";
@@ -14,6 +14,8 @@ buildGoModule rec {
   vendorSha256 = "sha256-MiTg1GHeqNJcQSaqWXW/nW4ZdNzoLTgNlLbbn1bm7aA=";
 
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = coredns; };
 
   meta = with lib; {
     homepage = "https://coredns.io";

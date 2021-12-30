@@ -18,6 +18,8 @@
 , libpsl
 , python3
 , brotli
+, libsoup
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -86,6 +88,8 @@ stdenv.mkDerivation rec {
       freeze = true;
     };
   };
+
+  passthru.tests.version = testVersion { package = libsoup; };
 
   meta = {
     description = "HTTP client/server library for GNOME";

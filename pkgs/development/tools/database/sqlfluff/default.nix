@@ -1,6 +1,8 @@
 { lib
 , fetchFromGitHub
 , python3
+, sqlfluff
+, testVersion
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -54,6 +56,8 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   pythonImportsCheck = [ "sqlfluff" ];
+
+  passthru.tests.version = testVersion { package = sqlfluff; };
 
   meta = with lib; {
     description = "SQL linter and auto-formatter";

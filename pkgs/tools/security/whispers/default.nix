@@ -1,6 +1,8 @@
 { lib
 , fetchFromGitHub
 , python3
+, whispers
+, testVersion
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -42,6 +44,8 @@ python3.pkgs.buildPythonApplication rec {
   pythonImportsCheck = [
     "whispers"
   ];
+
+  passthru.tests.version = testVersion { package = whispers; };
 
   meta = with lib; {
     description = "Tool to identify hardcoded secrets in static structured text";

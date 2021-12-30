@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, perl, gettext, buildPackages }:
+{ lib, stdenv, fetchurl, perl, gettext, buildPackages, texi2html, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "texi2html";
@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
       substituteInPlace $f --replace "${buildPackages.perl}" "${perl}"
     done
   '';
+
+  passthru.tests.version = testVersion { package = texi2html; };
 
   meta = with lib; {
     description = "Perl script which converts Texinfo source files to HTML output";

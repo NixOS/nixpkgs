@@ -11,6 +11,8 @@
 , bzip2
 , acl
 , libobjc
+, libticalcs2
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -38,6 +40,8 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.isDarwin [
     libobjc
   ];
+
+  passthru.tests.version = testVersion { package = libticalcs2; };
 
   meta = with lib; {
     changelog = "http://lpg.ticalc.org/prj_tilp/news.html";

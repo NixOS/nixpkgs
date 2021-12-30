@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, readline, ncurses }:
+{ lib, stdenv, fetchurl, readline, ncurses, devtodo, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "devtodo";
@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ readline ncurses ];
 
   enableParallelBuilding = true;
+
+  passthru.tests.version = testVersion { package = devtodo; };
 
   meta = with lib; {
     homepage = "https://swapoff.org/devtodo1.html";

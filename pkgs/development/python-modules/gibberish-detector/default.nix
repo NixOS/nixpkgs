@@ -3,6 +3,8 @@
 , fetchFromGitHub
 , isPy27
 , pytestCheckHook
+, gibberish-detector
+, testVersion
 }:
 
 buildPythonPackage rec {
@@ -22,6 +24,8 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "gibberish_detector" ];
+
+  passthru.tests.version = testVersion { package = gibberish-detector; };
 
   meta = with lib; {
     description = "Python module to detect gibberish strings";

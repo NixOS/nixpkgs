@@ -1,4 +1,4 @@
-{ fetchFromGitHub, lib, rustPlatform }:
+{ fetchFromGitHub, lib, rustPlatform, verco, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "verco";
@@ -12,6 +12,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "sha256-4Ou/stedL3WCY4Awsl++lc5fZ9gxd4uorf4G2/0DiPc=";
+
+  passthru.tests.version = testVersion { package = verco; };
 
   meta = with lib; {
     description = "A simple Git/Mercurial/PlasticSCM tui client based on keyboard shortcuts";

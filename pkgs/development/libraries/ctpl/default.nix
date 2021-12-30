@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, glib }:
+{ lib, stdenv, fetchurl, pkg-config, glib, ctpl, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "ctpl";
@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ glib ];
+
+  passthru.tests.version = testVersion { package = ctpl; };
 
   meta = with lib; {
     homepage = "http://ctpl.tuxfamily.org/";

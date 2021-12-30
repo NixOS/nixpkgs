@@ -1,6 +1,8 @@
 { lib
 , python3
 , fetchFromGitHub
+, calendar-cli
+, testVersion
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -24,6 +26,8 @@ python3.pkgs.buildPythonApplication rec {
 
   # tests require networking
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = calendar-cli; };
 
   meta = with lib; {
     description = "Simple command-line CalDav client";

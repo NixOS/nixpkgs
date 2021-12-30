@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, guile, which, ed, libtool }:
+{ fetchurl, lib, stdenv, guile, which, ed, libtool, mcron, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "mcron";
@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ guile which ed libtool ];
 
   doCheck = true;
+
+  passthru.tests.version = testVersion { package = mcron; };
 
   meta = {
     description = "Flexible implementation of `cron' in Guile";

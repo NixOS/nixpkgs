@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, python }:
+{ lib, stdenv, fetchFromGitHub, cmake, python, opencc, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "opencc";
@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
   '' + lib.optionalString stdenv.isDarwin ''
     export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH''${DYLD_LIBRARY_PATH:+:}$(pwd)/src
   '';
+
+  passthru.tests.version = testVersion { package = opencc; };
 
   meta = with lib; {
     homepage = "https://github.com/BYVoid/OpenCC";

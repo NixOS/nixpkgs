@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, python3, autoreconfHook }:
+{ lib, stdenv, fetchurl, python3, autoreconfHook, jbig2dec, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "jbig2dec";
@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
 
   checkInputs = [ python3 ];
   doCheck = true;
+
+  passthru.tests.version = testVersion { package = jbig2dec; };
 
   meta = {
     homepage = "https://www.jbig2dec.com/";

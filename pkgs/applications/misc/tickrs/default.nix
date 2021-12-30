@@ -1,4 +1,4 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, perl, Security }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, perl, Security, tickrs, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "tickrs";
@@ -16,6 +16,8 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ perl ];
 
   buildInputs = lib.optionals stdenv.isDarwin [ Security ];
+
+  passthru.tests.version = testVersion { package = tickrs; };
 
   meta = with lib; {
     description = "Realtime ticker data in your terminal";

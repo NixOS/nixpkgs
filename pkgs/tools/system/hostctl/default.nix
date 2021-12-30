@@ -1,4 +1,4 @@
-{ buildGoModule, fetchFromGitHub, lib, installShellFiles }:
+{ buildGoModule, fetchFromGitHub, lib, installShellFiles, hostctl, testVersion }:
 
 buildGoModule rec {
   pname = "hostctl";
@@ -21,6 +21,8 @@ buildGoModule rec {
       --bash <($out/bin/hostctl completion bash) \
       --zsh <($out/bin/hostctl completion zsh)
   '';
+
+  passthru.tests.version = testVersion { package = hostctl; };
 
   meta = with lib; {
     description = "Your dev tool to manage /etc/hosts like a pro!";

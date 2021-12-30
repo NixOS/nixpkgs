@@ -1,6 +1,8 @@
 { lib
 , python3Packages
 , fetchFromGitHub
+, pferd
+, testVersion
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -22,6 +24,8 @@ python3Packages.buildPythonApplication rec {
     keyring
     certifi
   ];
+
+  passthru.tests.version = testVersion { package = pferd; };
 
   meta = with lib; {
     homepage = "https://github.com/Garmelon/PFERD";

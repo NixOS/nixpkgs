@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub, cadical, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "cadical";
@@ -37,6 +37,8 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.tests.version = testVersion { package = cadical; };
 
   meta = with lib; {
     description = "Simplified Satisfiability Solver";

@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildGoModule }:
+{ lib, fetchFromGitHub, buildGoModule, drone-cli, testVersion }:
 
 buildGoModule rec {
   version = "1.4.0";
@@ -19,6 +19,8 @@ buildGoModule rec {
     rev = revision;
     sha256 = "sha256-+70PWHGd8AQP6ih0b/+VOIbJcF8tSOAO9wsGqQWX+bU=";
   };
+
+  passthru.tests.version = testVersion { package = drone-cli; };
 
   meta = with lib; {
     mainProgram = "drone";

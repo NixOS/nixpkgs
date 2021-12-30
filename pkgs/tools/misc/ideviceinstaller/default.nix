@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, usbmuxd, libzip, libimobiledevice }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, usbmuxd, libzip, libimobiledevice, ideviceinstaller, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "ideviceinstaller";
@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config usbmuxd libimobiledevice libzip ];
+
+  passthru.tests.version = testVersion { package = ideviceinstaller; };
 
   meta = with lib; {
     homepage = "https://github.com/libimobiledevice/ideviceinstaller";

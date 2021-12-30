@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, rustPlatform, installShellFiles }:
+{ lib, fetchFromGitHub, rustPlatform, installShellFiles, fd, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "fd";
@@ -21,6 +21,8 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion $releaseDir/build/fd-find-*/out/fd.{bash,fish}
     installShellCompletion --zsh contrib/completion/_fd
   '';
+
+  passthru.tests.version = testVersion { package = fd; };
 
   meta = with lib; {
     description = "A simple, fast and user-friendly alternative to find";

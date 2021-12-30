@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, ised, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "ised";
@@ -7,6 +7,8 @@ stdenv.mkDerivation rec {
     url = "mirror://sourceforge/project/ised/${pname}-${version}.tar.bz2";
     sha256 = "0fhha61whkkqranqdxg792g0f5kgp5m3m6z1iqcvjh2c34rczbmb";
   };
+
+  passthru.tests.version = testVersion { package = ised; };
 
   meta = {
     description = "A numeric sequence editor";

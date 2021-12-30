@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv }:
+{ fetchurl, lib, stdenv, cppi, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "cppi";
@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
   };
 
   doCheck = true;
+
+  passthru.tests.version = testVersion { package = cppi; };
 
   meta = {
     homepage = "https://savannah.gnu.org/projects/cppi/";

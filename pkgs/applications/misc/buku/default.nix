@@ -1,4 +1,4 @@
-{ lib, python3, fetchFromGitHub }:
+{ lib, python3, fetchFromGitHub, buku, testVersion }:
 
 let
   python3' = python3.override {
@@ -90,6 +90,8 @@ with python3'.pkgs; buildPythonApplication rec {
     cp auto-completion/bash/* $out/share/bash-completion/completions
     cp auto-completion/fish/* $out/share/fish/vendor_completions.d
   '';
+
+  passthru.tests.version = testVersion { package = buku; };
 
   meta = with lib; {
     description = "Private cmdline bookmark manager";

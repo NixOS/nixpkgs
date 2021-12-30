@@ -13,6 +13,8 @@
 , docSupport ? true
 , doxygen
 , graphviz
+, libsidplayfp
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -74,6 +76,8 @@ stdenv.mkDerivation rec {
       attrPath = pname;
     };
   };
+
+  passthru.tests.version = testVersion { package = libsidplayfp; };
 
   meta = with lib; {
     description = "A library to play Commodore 64 music derived from libsidplay2";

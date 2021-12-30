@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, etcd_3_4, testVersion }:
 
 buildGoModule rec {
   pname = "etcd";
@@ -24,6 +24,8 @@ buildGoModule rec {
   installPhase = ''
     install -Dm755 bin/* bin/functional/cmd/* -t $out/bin
   '';
+
+  passthru.tests.version = testVersion { package = etcd_3_4; };
 
   meta = with lib; {
     description = "Distributed reliable key-value store for the most critical data of a distributed system";

@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, go-license-detector, testVersion }:
 
 buildGoModule rec {
   pname = "go-license-detector";
@@ -14,6 +14,8 @@ buildGoModule rec {
   vendorSha256 = "0gan5l7vsq0hixxcymhhs8p07v92w60r0lhgvrr9a99nic12vmia";
 
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = go-license-detector; };
 
   meta = with lib; {
     description = "Reliable project licenses detector";

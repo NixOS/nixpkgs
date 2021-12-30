@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, rustPlatform }:
+{ lib, fetchFromGitHub, rustPlatform, as-tree, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "as-tree";
@@ -16,6 +16,8 @@ rustPlatform.buildRustPackage rec {
   # they have updated their release script, so this patch can be removed
   # when the next version is released.
   cargoPatches = [ ./cargo-lock.patch ];
+
+  passthru.tests.version = testVersion { package = as-tree; };
 
   meta = with lib; {
     description = "Print a list of paths as a tree of paths";

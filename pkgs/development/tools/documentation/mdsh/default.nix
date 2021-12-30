@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, rustPlatform }:
+{ lib, fetchFromGitHub, rustPlatform, mdsh, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "mdsh";
@@ -12,6 +12,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "0x5fd47rjmzzmwgj14gbj0rbxwbphd7f63mis4ivwlwc9ikjxdxb";
+
+  passthru.tests.version = testVersion { package = mdsh; };
 
   meta = with lib; {
     description = "Markdown shell pre-processor";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromSourcehut, fennel, lua }:
+{ lib, stdenv, fetchFromSourcehut, fennel, lua, fnlfmt, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "fnlfmt";
@@ -30,6 +30,8 @@ stdenv.mkDerivation rec {
     install -D ./fnlfmt $out/bin/fnlfmt
     runHook postInstall
   '';
+
+  passthru.tests.version = testVersion { package = fnlfmt; };
 
   meta = with lib; {
     description = "Formatter for Fennel";

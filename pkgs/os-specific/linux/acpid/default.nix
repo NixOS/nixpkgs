@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, autoreconfHook }:
+{ lib, stdenv, fetchurl, autoreconfHook, acpid, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "acpid";
@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook ];
+
+  passthru.tests.version = testVersion { package = acpid; };
 
   meta = with lib; {
     homepage = "https://sourceforge.net/projects/acpid2/";

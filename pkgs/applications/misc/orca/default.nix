@@ -30,6 +30,8 @@
 , setproctitle
 , gst_all_1
 , gst-python
+, orca
+, testVersion
 }:
 
 buildPythonApplication rec {
@@ -94,6 +96,8 @@ buildPythonApplication rec {
       packageName = pname;
     };
   };
+
+  passthru.tests.version = testVersion { package = orca; };
 
   meta = with lib; {
     homepage = "https://wiki.gnome.org/Projects/Orca";

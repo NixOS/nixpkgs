@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake }:
+{ lib, stdenv, fetchFromGitHub, cmake, bdf2sfd, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "bdf2sfd";
@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
+
+  passthru.tests.version = testVersion { package = bdf2sfd; };
 
   meta = with lib; {
     description = "BDF to SFD converter";

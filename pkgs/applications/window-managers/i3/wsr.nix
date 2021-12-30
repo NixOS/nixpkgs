@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, rustPlatform, libxcb, python3 }:
+{ lib, fetchFromGitHub, rustPlatform, libxcb, python3, i3wsr, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "i3wsr";
@@ -18,6 +18,8 @@ rustPlatform.buildRustPackage rec {
 
   # has not tests
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = i3wsr; };
 
   meta = with lib; {
     description = "Automatically change i3 workspace names based on their contents";

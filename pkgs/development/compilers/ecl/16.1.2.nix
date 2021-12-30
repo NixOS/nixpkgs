@@ -14,6 +14,8 @@
 , threadSupport ? false
 , useBoehmgc ? true
 , boehmgc
+, ecl_16_1_2
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -92,6 +94,8 @@ stdenv.mkDerivation rec {
   '' + ''
     --prefix NIX_LDFLAGS_BEFORE_${gcc.bintools.suffixSalt} ' ' "-L${lib.getLib libffi}/lib"
   '';
+
+  passthru.tests.version = testVersion { package = ecl_16_1_2; };
 
   meta = with lib; {
     description = "Lisp implementation aiming to be small, fast and easy to embed";

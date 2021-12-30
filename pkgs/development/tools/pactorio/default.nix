@@ -6,6 +6,8 @@
 , bzip2
 , stdenv
 , Security
+, pactorio
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -31,6 +33,8 @@ rustPlatform.buildRustPackage rec {
   '';
 
   GEN_COMPLETIONS = 1;
+
+  passthru.tests.version = testVersion { package = pactorio; };
 
   meta = with lib; {
     description = "Mod packager for factorio";

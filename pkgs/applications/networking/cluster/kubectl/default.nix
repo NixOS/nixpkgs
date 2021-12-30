@@ -1,4 +1,4 @@
-{ stdenv, kubernetes, installShellFiles }:
+{ stdenv, kubernetes, installShellFiles, kubectl, testVersion }:
 
 stdenv.mkDerivation {
   pname = "kubectl";
@@ -21,6 +21,8 @@ stdenv.mkDerivation {
       --bash <($out/bin/kubectl completion bash) \
       --zsh <($out/bin/kubectl completion zsh)
   '';
+
+  passthru.tests.version = testVersion { package = kubectl; };
 
   meta = kubernetes.meta // {
     description = "Kubernetes CLI";

@@ -1,4 +1,4 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, libiconv, perl, python3, Security, AppKit, openssl, xclip, pkg-config }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, libiconv, perl, python3, Security, AppKit, openssl, xclip, pkg-config, gitui, testVersion }:
 rustPlatform.buildRustPackage rec {
   pname = "gitui";
   version = "0.19.0";
@@ -19,6 +19,8 @@ rustPlatform.buildRustPackage rec {
 
   # Needed to get openssl-sys to use pkg-config.
   OPENSSL_NO_VENDOR = 1;
+
+  passthru.tests.version = testVersion { package = gitui; };
 
   meta = with lib; {
     description = "Blazing fast terminal-ui for git written in rust";

@@ -7,6 +7,8 @@
 , cmake
 , pytest-datadir
 , pytestCheckHook
+, cmake-language-server
+, testVersion
 }:
 
 buildPythonApplication rec {
@@ -32,6 +34,8 @@ buildPythonApplication rec {
   checkInputs = [ cmake pytest-datadir pytestCheckHook ];
   dontUseCmakeConfigure = true;
   pythonImportsCheck = [ "cmake_language_server" ];
+
+  passthru.tests.version = testVersion { package = cmake-language-server; };
 
   meta = with lib; {
     description = "CMake LSP Implementation";

@@ -1,4 +1,4 @@
-{ lib, buildGoPackage, fetchFromGitLab, fetchurl }:
+{ lib, buildGoPackage, fetchFromGitLab, fetchurl, gitlab-runner, testVersion }:
 
 let
   version = "14.6.0";
@@ -26,6 +26,8 @@ buildGoPackage rec {
     ./fix-shell-path.patch
     ./0001-gitlab-runner-don-t-checked-for-fixed-runtime.patch
   ];
+
+  passthru.tests.version = testVersion { package = gitlab-runner; };
 
   meta = with lib; {
     description = "GitLab Runner the continuous integration executor of GitLab";

@@ -11,6 +11,8 @@
 , SDL
 , automake
 , GConf
+, coriander
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -28,6 +30,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ glib gtk2 libgnomeui libXv libraw1394 libdc1394 SDL GConf ];
+
+  passthru.tests.version = testVersion { package = coriander; };
 
   meta = {
     homepage = "https://damien.douxchamps.net/ieee1394/coriander/";

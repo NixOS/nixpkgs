@@ -1,6 +1,8 @@
 { lib
 , fetchFromGitHub
 , python3
+, knockpy
+, testVersion
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -28,6 +30,8 @@ python3.pkgs.buildPythonApplication rec {
   doCheck = false;
 
   pythonImportsCheck = [ "knockpy" ];
+
+  passthru.tests.version = testVersion { package = knockpy; };
 
   meta = with lib; {
     description = "Tool to scan subdomains";

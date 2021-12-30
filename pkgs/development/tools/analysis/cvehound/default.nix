@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, coccinelle, gnugrep, python3Packages }:
+{ lib, fetchFromGitHub, coccinelle, gnugrep, python3Packages, cvehound, testVersion }:
 
 with python3Packages;
 
@@ -30,6 +30,8 @@ buildPythonApplication rec {
 
   # Tries to clone the kernel sources
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = cvehound; };
 
   meta = with lib; {
     description = "tool to check linux kernel source dump for known CVEs";

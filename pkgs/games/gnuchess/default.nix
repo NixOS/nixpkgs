@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, flex, makeWrapper }:
+{ lib, stdenv, fetchurl, flex, makeWrapper, gnuchess, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "gnuchess";
@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/gnuchessx --set PATH "$out/bin"
     wrapProgram $out/bin/gnuchessu --set PATH "$out/bin"
   '';
+
+  passthru.tests.version = testVersion { package = gnuchess; };
 
   meta = with lib; {
     description = "GNU Chess engine";

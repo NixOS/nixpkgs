@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, Security }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, Security, mhost, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "mhost";
@@ -18,6 +18,8 @@ rustPlatform.buildRustPackage rec {
   CARGO_CRATE_NAME = "mhost";
 
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = mhost; };
 
   meta = with lib; {
     description = "A modern take on the classic host DNS lookup utility including an easy to use and very fast Rust lookup library";

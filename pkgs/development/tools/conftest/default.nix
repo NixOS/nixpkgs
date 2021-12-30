@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles, conftest, testVersion }:
 
 buildGoModule rec {
   pname = "conftest";
@@ -36,6 +36,8 @@ buildGoModule rec {
     export HOME="$TMPDIR"
     $out/bin/conftest --version | grep ${version} > /dev/null
   '';
+
+  passthru.tests.version = testVersion { package = conftest; };
 
   meta = with lib; {
     description = "Write tests against structured configuration data";

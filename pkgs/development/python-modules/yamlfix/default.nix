@@ -6,6 +6,8 @@
 , pytestCheckHook
 , pythonOlder
 , ruyaml
+, yamlfix
+, testVersion
 }:
 
 buildPythonPackage rec {
@@ -45,6 +47,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "yamlfix"
   ];
+
+  passthru.tests.version = testVersion { package = yamlfix; };
 
   meta = with lib; {
     description = "Python YAML formatter that keeps your comments";

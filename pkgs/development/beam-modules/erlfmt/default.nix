@@ -1,4 +1,4 @@
-{ fetchFromGitHub, rebar3Relx, lib }:
+{ fetchFromGitHub, rebar3Relx, lib, erlfmt, testVersion }:
 
 rebar3Relx rec {
   pname = "erlfmt";
@@ -10,6 +10,8 @@ rebar3Relx rec {
     sha256 = "19apbs9xr4j8qjb3sv9ilknqjw4a7bvp8jvwrjiwvwnxzzm2kjm6";
     rev = "v${version}";
   };
+  passthru.tests.version = testVersion { package = erlfmt; };
+
   meta = with lib; {
     homepage = "https://github.com/WhatsApp/erlfmt";
     description = "An automated code formatter for Erlang";

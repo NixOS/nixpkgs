@@ -3,6 +3,8 @@
 , fetchFromGitHub
 , rustPlatform
 , Security
+, jsonwatch
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -21,6 +23,8 @@ rustPlatform.buildRustPackage rec {
   buildInputs = lib.optional stdenv.isDarwin [
     Security
   ];
+
+  passthru.tests.version = testVersion { package = jsonwatch; };
 
   meta = with lib; {
     description = "Like watch -d but for JSON";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, groff }:
+{ lib, stdenv, fetchurl, groff, mktemp, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "mktemp";
@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
     url = "ftp://ftp.mktemp.org/pub/mktemp/mktemp-${version}.tar.gz";
     sha256 = "0x969152znxxjbj7387xb38waslr4yv6bnj5jmhb4rpqxphvk54f";
   };
+
+  passthru.tests.version = testVersion { package = mktemp; };
 
   meta = with lib; {
     description = "Simple tool to make temporary file handling in shells scripts safe and simple";

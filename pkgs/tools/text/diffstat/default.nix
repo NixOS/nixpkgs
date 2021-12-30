@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv }:
+{ fetchurl, lib, stdenv, diffstat, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "diffstat";
@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     ];
     sha256 = "sha256-uK7jjZ0uHQWSbmtVgQqdLC3UB/JNaiZzh1Y6RDbj9/w=";
   };
+
+  passthru.tests.version = testVersion { package = diffstat; };
 
   meta = with lib; {
     description = "Read output of diff and display a histogram of the changes";

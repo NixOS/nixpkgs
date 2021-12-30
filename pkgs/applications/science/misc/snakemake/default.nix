@@ -1,4 +1,4 @@
-{ lib, python3Packages }:
+{ lib, python3Packages, snakemake, testVersion }:
 
 python3Packages.buildPythonApplication rec {
   pname = "snakemake";
@@ -35,6 +35,8 @@ python3Packages.buildPythonApplication rec {
   };
 
   doCheck = false; # Tests depend on Google Cloud credentials at ${HOME}/gcloud-service-key.json
+
+  passthru.tests.version = testVersion { package = snakemake; };
 
   meta = with lib; {
     homepage = "https://snakemake.github.io";

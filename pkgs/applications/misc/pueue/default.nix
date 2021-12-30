@@ -1,4 +1,4 @@
-{ stdenv, lib, rustPlatform, fetchFromGitHub, installShellFiles, SystemConfiguration, libiconv }:
+{ stdenv, lib, rustPlatform, fetchFromGitHub, installShellFiles, SystemConfiguration, libiconv, pueue, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "pueue";
@@ -25,6 +25,8 @@ rustPlatform.buildRustPackage rec {
     done
     installShellCompletion pueue.{bash,fish} _pueue
   '';
+
+  passthru.tests.version = testVersion { package = pueue; };
 
   meta = with lib; {
     description = "A daemon for managing long running shell commands";

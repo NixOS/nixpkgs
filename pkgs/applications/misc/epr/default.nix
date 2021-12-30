@@ -1,4 +1,4 @@
-{ lib, python3Packages, fetchFromGitHub }:
+{ lib, python3Packages, fetchFromGitHub, epr, testVersion }:
 
 python3Packages.buildPythonApplication rec {
   pname = "epr";
@@ -10,6 +10,8 @@ python3Packages.buildPythonApplication rec {
     rev = "v${version}";
     sha256 = "1a6md3015284hzmx0sby5kl59p7lwv73sq7sid35vrr15zrl0aw7";
   };
+
+  passthru.tests.version = testVersion { package = epr; };
 
   meta = with lib; {
     description = "CLI Epub Reader";

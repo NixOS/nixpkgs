@@ -16,6 +16,8 @@
 , qtmultimedia
 , qttools
 , wrapQtAppsHook
+, mgba
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -61,6 +63,8 @@ stdenv.mkDerivation rec {
       startupNotify = "false";
     })
   ];
+
+  passthru.tests.version = testVersion { package = mgba; };
 
   meta = with lib; {
     homepage = "https://mgba.io";

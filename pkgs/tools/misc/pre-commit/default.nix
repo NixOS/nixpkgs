@@ -1,4 +1,4 @@
-{ lib, python3Packages }:
+{ lib, python3Packages, pre-commit, testVersion }:
 
 with python3Packages;
 buildPythonPackage rec {
@@ -47,6 +47,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "pre_commit"
   ];
+
+  passthru.tests.version = testVersion { package = pre-commit; };
 
   meta = with lib; {
     description = "A framework for managing and maintaining multi-language pre-commit hooks";

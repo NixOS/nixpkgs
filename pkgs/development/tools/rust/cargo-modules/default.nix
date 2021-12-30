@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub, stdenv, CoreFoundation, CoreServices }:
+{ lib, rustPlatform, fetchFromGitHub, stdenv, CoreFoundation, CoreServices, cargo-modules, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-modules";
@@ -17,6 +17,8 @@ rustPlatform.buildRustPackage rec {
     CoreFoundation
     CoreServices
   ];
+
+  passthru.tests.version = testVersion { package = cargo-modules; };
 
   meta = with lib; {
     description = "A cargo plugin for showing a tree-like overview of a crate's modules";

@@ -1,6 +1,8 @@
 { buildGoModule
 , fetchFromGitHub
 , lib
+, dnsx
+, testVersion
 }:
 
 buildGoModule rec {
@@ -15,6 +17,8 @@ buildGoModule rec {
   };
 
   vendorSha256 = "sha256-692PcWFYNInWcZm9NQHLQmRHGFV9XUSFoCqHo7fcGEU=";
+
+  passthru.tests.version = testVersion { package = dnsx; };
 
   meta = with lib; {
     description = "Fast and multi-purpose DNS toolkit";

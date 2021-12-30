@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub, aha, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "aha";
@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=$(out)" ];
 
   enableParallelBuilding = true;
+
+  passthru.tests.version = testVersion { package = aha; };
 
   meta = with lib; {
     description = "ANSI HTML Adapter";

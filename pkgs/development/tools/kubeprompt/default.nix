@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, kubeprompt, testVersion }:
 
 buildGoModule rec {
   pname = "kubeprompt";
@@ -20,6 +20,8 @@ buildGoModule rec {
   vendorSha256 = "089lfkvyf00f05kkmr935jbrddf2c0v7m2356whqnz7ad6a2whsi";
 
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = kubeprompt; };
 
   meta = with lib; {
     description = "Kubernetes prompt";

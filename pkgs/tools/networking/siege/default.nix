@@ -3,6 +3,8 @@
 , fetchurl
 , openssl
 , zlib
+, siege
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -29,6 +31,8 @@ stdenv.mkDerivation rec {
     "--with-ssl=${openssl.dev}"
     "--with-zlib=${zlib.dev}"
   ];
+
+  passthru.tests.version = testVersion { package = siege; };
 
   meta = with lib; {
     description = "HTTP load tester";

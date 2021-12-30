@@ -1,4 +1,4 @@
-{ rustPlatform, fetchFromGitHub, lib }:
+{ rustPlatform, fetchFromGitHub, lib, pipes-rs, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "pipes-rs";
@@ -23,6 +23,8 @@ rustPlatform.buildRustPackage rec {
       return 1
     fi
   '';
+
+  passthru.tests.version = testVersion { package = pipes-rs; };
 
   meta = with lib; {
     description = "An over-engineered rewrite of pipes.sh in Rust";

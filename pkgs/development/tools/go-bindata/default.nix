@@ -1,4 +1,4 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub, go-bindata, testVersion }:
 
 buildGoPackage rec {
   pname = "go-bindata";
@@ -14,6 +14,8 @@ buildGoPackage rec {
   };
 
   subPackages = [ "go-bindata" ];
+
+  passthru.tests.version = testVersion { package = go-bindata; };
 
   meta = with lib; {
     homepage = "https://github.com/kevinburke/go-bindata";

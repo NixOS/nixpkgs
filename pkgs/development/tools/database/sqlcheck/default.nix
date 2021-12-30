@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake }:
+{ lib, stdenv, fetchFromGitHub, cmake, sqlcheck, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "sqlcheck";
@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   doCheck = true;
+
+  passthru.tests.version = testVersion { package = sqlcheck; };
 
   meta = with lib; {
     inherit (src.meta) homepage;

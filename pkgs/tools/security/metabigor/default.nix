@@ -1,6 +1,8 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, metabigor
+, testVersion
 }:
 
 buildGoModule rec {
@@ -18,6 +20,8 @@ buildGoModule rec {
 
   # Disabled for now as there are some failures ("undefined:")
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = metabigor; };
 
   meta = with lib; {
     description = "Tool to perform OSINT tasks";

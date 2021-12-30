@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, libusb-compat-0_1 }:
+{ lib, stdenv, fetchurl, libusb-compat-0_1, dfu-programmer, testVersion }:
 stdenv.mkDerivation rec {
   pname = "dfu-programmer";
   version = "0.7.2";
@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
   };
 
   configureFlags = [ "--disable-libusb_1_0" ];
+
+  passthru.tests.version = testVersion { package = dfu-programmer; };
 
   meta = with lib; {
     license = licenses.gpl2;

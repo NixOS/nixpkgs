@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, libpng, zlib, lcms2 }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, libpng, zlib, lcms2, pngquant, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "pngquant";
@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ libpng zlib lcms2 ];
 
   doCheck = true;
+
+  passthru.tests.version = testVersion { package = pngquant; };
 
   meta = with lib; {
     homepage = "https://pngquant.org/";

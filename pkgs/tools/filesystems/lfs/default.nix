@@ -1,6 +1,8 @@
 { lib
 , fetchFromGitHub
 , rustPlatform
+, lfs
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -15,6 +17,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "sha256-iAz2s92hWkLCXoQ09mKCyI0yHvH55WaTSl+a5gz44bU=";
+
+  passthru.tests.version = testVersion { package = lfs; };
 
   meta = with lib; {
     description = "Get information on your mounted disks";

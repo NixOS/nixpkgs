@@ -1,4 +1,4 @@
-{ lib, python3Packages }:
+{ lib, python3Packages, autoflake, testVersion }:
 
 with python3Packages;
 buildPythonApplication rec {
@@ -13,6 +13,8 @@ buildPythonApplication rec {
   propagatedBuildInputs = [ pyflakes ];
 
   doCheck = true;
+
+  passthru.tests.version = testVersion { package = autoflake; };
 
   meta = with lib; {
     homepage = "https://github.com/myint/autoflake";

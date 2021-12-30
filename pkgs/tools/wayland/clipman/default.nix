@@ -3,6 +3,8 @@
 , lib
 , wl-clipboard
 , makeWrapper
+, clipman
+, testVersion
 }:
 
 buildGoModule rec {
@@ -26,6 +28,8 @@ buildGoModule rec {
     wrapProgram $out/bin/clipman \
       --prefix PATH : ${lib.makeBinPath [ wl-clipboard ]}
   '';
+
+  passthru.tests.version = testVersion { package = clipman; };
 
   meta = with lib; {
     homepage = "https://github.com/yory8/clipman";

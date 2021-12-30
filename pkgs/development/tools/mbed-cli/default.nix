@@ -1,4 +1,4 @@
-{ lib, python3Packages, git, mercurial }:
+{ lib, python3Packages, git, mercurial, mbed-cli, testVersion }:
 
 with python3Packages;
 
@@ -23,6 +23,8 @@ buildPythonApplication rec {
     export GIT_COMMITTER_DATE=$SOURCE_DATE_EPOCH
     pytest test
   '';
+
+  passthru.tests.version = testVersion { package = mbed-cli; };
 
   meta = with lib; {
     homepage = "https://github.com/ARMmbed/mbed-cli";

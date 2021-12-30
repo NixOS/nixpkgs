@@ -1,6 +1,8 @@
 { lib
 , fetchFromGitHub
 , python3
+, checkov
+, testVersion
 }:
 let
   py = python3.override {
@@ -120,6 +122,8 @@ buildPythonApplication rec {
   pythonImportsCheck = [
     "checkov"
   ];
+
+  passthru.tests.version = testVersion { package = checkov; };
 
   meta = with lib; {
     description = "Static code analysis tool for infrastructure-as-code";

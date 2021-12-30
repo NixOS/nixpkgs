@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, CoreServices }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, CoreServices, mdzk, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "mdzk";
@@ -14,6 +14,8 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-lZ4fc/94ESlhpfa5ylg45oZNeaF1mZPxQUSLZrl2V3o=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
+
+  passthru.tests.version = testVersion { package = mdzk; };
 
   meta = with lib; {
     description = "Plain text Zettelkasten based on mdBook";

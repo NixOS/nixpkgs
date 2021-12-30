@@ -1,4 +1,4 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, pkg-config, curl, openssl, Security }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, pkg-config, curl, openssl, Security, cargo-tarpaulin, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-tarpaulin";
@@ -20,6 +20,8 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-dJey7z0gRUu5MRKOfR909eQNTt3zpZnoWYvRhHzZlGs=";
   #checkFlags = [ "--test-threads" "1" ];
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = cargo-tarpaulin; };
 
   meta = with lib; {
     description = "A code coverage tool for Rust projects";

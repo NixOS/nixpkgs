@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, glib, bison, flex, gnome }:
+{ lib, stdenv, fetchurl, pkg-config, glib, bison, flex, gnome, gob2, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "gob2";
@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
       versionPolicy = "none";
     };
   };
+
+  passthru.tests.version = testVersion { package = gob2; };
 
   meta = {
     description = "Preprocessor for making GObjects with inline C code";

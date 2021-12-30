@@ -1,6 +1,8 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, sphinx-serve
+, testVersion
 }:
 
 buildPythonPackage rec {
@@ -15,6 +17,8 @@ buildPythonPackage rec {
   doCheck = false; # No tests
 
   pythonImportsCheck = [ "sphinx_serve" ];
+
+  passthru.tests.version = testVersion { package = sphinx-serve; };
 
   meta = with lib; {
     description = "Spawns a simple HTTP server to preview your sphinx documents";

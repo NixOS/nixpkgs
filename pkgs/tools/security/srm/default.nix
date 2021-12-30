@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, srm, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "srm";
@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     url = "mirror://sourceforge/project/srm/${version}/srm-${version}.tar.gz";
     sha256 = "10sjarhprs6s4zandndg720528rcnd4xk8dl48pjj7li1q9c30vm";
   };
+
+  passthru.tests.version = testVersion { package = srm; };
 
   meta = with lib; {
     description = "Delete files securely";

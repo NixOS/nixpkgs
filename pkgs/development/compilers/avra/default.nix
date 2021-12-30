@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, autoconf, automake }:
+{ lib, stdenv, fetchurl, autoconf, automake, avra, testVersion }:
 stdenv.mkDerivation rec {
   pname = "avra";
   version = "1.3.0";
@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
     touch NEWS README AUTHORS ChangeLog
     automake -a
   '';
+
+  passthru.tests.version = testVersion { package = avra; };
 
   meta = with lib; {
     description = "Assembler for the Atmel AVR microcontroller family";

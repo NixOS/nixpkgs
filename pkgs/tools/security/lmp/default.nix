@@ -1,6 +1,8 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, lmp
+, testVersion
 }:
 
 buildGoModule rec {
@@ -15,6 +17,8 @@ buildGoModule rec {
   };
 
   vendorSha256 = "sha256-K3jD+r/JFQH5QeLHatCzTdgiABbmKOd/jR3Di10w6mo=";
+
+  passthru.tests.version = testVersion { package = lmp; };
 
   meta = with lib; {
     description = "Scanning and validation toolkit for the Log4J vulnerability";

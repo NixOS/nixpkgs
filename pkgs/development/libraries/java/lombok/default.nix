@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, makeWrapper, jdk }:
+{ lib, stdenv, fetchurl, makeWrapper, jdk, lombok, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "lombok";
@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
       --add-flags "-cp ${jdk}/lib/openjdk/lib/tools.jar:$out/share/java/lombok.jar" \
       --add-flags lombok.launch.Main
   '';
+
+  passthru.tests.version = testVersion { package = lombok; };
 
   meta = {
     description = "A library that can write a lot of boilerplate for your Java project";

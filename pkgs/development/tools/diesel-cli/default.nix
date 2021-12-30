@@ -14,6 +14,8 @@
 , postgresql
 , mariadb
 , zlib
+, diesel-cli
+, testVersion
 }:
 
 assert lib.assertMsg (sqliteSupport == true || postgresqlSupport == true || mysqlSupport == true)
@@ -71,6 +73,8 @@ rustPlatform.buildRustPackage rec {
   # Fix the build with mariadb, which otherwise shows "error adding symbols:
   # DSO missing from command line" errors for libz and libssl.
   NIX_LDFLAGS = optionalString mysqlSupport "-lz -lssl -lcrypto";
+
+  passthru.tests.version = testVersion { package = diesel-cli; };
 
   meta = with lib; {
     description = "Database tool for working with Rust projects that use Diesel";

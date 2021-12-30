@@ -5,6 +5,8 @@
 , libuuid
 , libx86emu
 , perl
+, hwinfo
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -46,6 +48,8 @@ stdenv.mkDerivation rec {
   installFlags = [
     "DESTDIR=$(out)"
   ];
+
+  passthru.tests.version = testVersion { package = hwinfo; };
 
   meta = with lib; {
     description = "Hardware detection tool from openSUSE";

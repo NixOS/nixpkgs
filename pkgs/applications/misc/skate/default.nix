@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, skate, testVersion }:
 
 buildGoModule rec {
   pname = "skate";
@@ -16,6 +16,8 @@ buildGoModule rec {
   doCheck = false;
 
   ldflags = [ "-s" "-w" "-X=main.Version=${version}" ];
+
+  passthru.tests.version = testVersion { package = skate; };
 
   meta = with lib; {
     description = "A personal multi-machine syncable key value store";

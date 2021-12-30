@@ -1,4 +1,4 @@
-{ lib, fetchFromGitLab, rustPlatform, pkg-config, dbus }:
+{ lib, fetchFromGitLab, rustPlatform, pkg-config, dbus, sd-switch, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "sd-switch";
@@ -15,6 +15,8 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ dbus ];
+
+  passthru.tests.version = testVersion { package = sd-switch; };
 
   meta = with lib; {
     description = "A systemd unit switcher for Home Manager";

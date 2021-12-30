@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, makeWrapper, gtk3, json_c, taskwarrior }:
+{ lib, stdenv, fetchurl, pkg-config, makeWrapper, gtk3, json_c, taskwarrior, ptask, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "ptask";
@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
       --prefix PATH : "${taskwarrior}/bin"
   '';
+
+  passthru.tests.version = testVersion { package = ptask; };
 
   meta = with lib; {
     homepage = "http://wpitchoune.net/ptask/";

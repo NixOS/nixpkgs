@@ -1,6 +1,8 @@
 { fetchFromGitHub
 , lib
 , python3Packages
+, barman
+, testVersion
 }:
 python3Packages.buildPythonApplication rec {
   pname = "barman";
@@ -26,6 +28,8 @@ python3Packages.buildPythonApplication rec {
     psycopg2
     python-dateutil
   ];
+
+  passthru.tests.version = testVersion { package = barman; };
 
   meta = with lib; {
     homepage = "https://www.pgbarman.org/";

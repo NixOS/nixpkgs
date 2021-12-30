@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, libevent, file, qrencode, miniupnpc }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, libevent, file, qrencode, miniupnpc, pshs, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "pshs";
@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
 
   # SSL requires libevent at 2.1 with ssl support
   configureFlags = [ "--disable-ssl" ];
+
+  passthru.tests.version = testVersion { package = pshs; };
 
   meta = {
     description = "Pretty small HTTP server - a command-line tool to share files";

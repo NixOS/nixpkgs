@@ -1,6 +1,8 @@
 { lib
 , fetchFromGitHub
 , rustPlatform
+, sad
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -15,6 +17,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "sha256-jej7JKSllBpb13Zq0WrcDPLdMtnjau8I0a4ghstHVqk=";
+
+  passthru.tests.version = testVersion { package = sad; };
 
   meta = with lib; {
     description = "CLI tool to search and replace";

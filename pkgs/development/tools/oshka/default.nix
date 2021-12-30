@@ -1,6 +1,8 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, oshka
+, testVersion
 }:
 
 buildGoModule rec {
@@ -24,6 +26,8 @@ buildGoModule rec {
 
   # Tests requires a running Docker instance
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = oshka; };
 
   meta = with lib; {
     description = "Tool for extracting nested CI/CD supply chains and executing commands";

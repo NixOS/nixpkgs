@@ -1,4 +1,4 @@
-{ lib, stdenv, python3Packages, radicale3 }:
+{ lib, stdenv, python3Packages, radicale3, etesync-dav, testVersion }:
 
 python3Packages.buildPythonApplication rec {
   pname = "etesync-dav";
@@ -18,6 +18,8 @@ python3Packages.buildPythonApplication rec {
   ];
 
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = etesync-dav; };
 
   meta = with lib; {
     homepage = "https://www.etesync.com/";

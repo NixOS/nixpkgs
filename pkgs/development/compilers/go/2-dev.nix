@@ -18,6 +18,8 @@
 , buildPackages
 , pkgsBuildTarget
 , callPackage
+, go_2-dev
+, testVersion
 }:
 
 let
@@ -265,6 +267,8 @@ stdenv.mkDerivation rec {
   '';
 
   disallowedReferences = [ goBootstrap ];
+
+  passthru.tests.version = testVersion { package = go_2-dev; };
 
   meta = with lib; {
     homepage = "https://go.dev/";

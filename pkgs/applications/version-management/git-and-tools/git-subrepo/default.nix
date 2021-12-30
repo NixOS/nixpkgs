@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, git, makeWrapper, which }:
+{ lib, stdenv, fetchFromGitHub, git, makeWrapper, which, git-subrepo, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "git-subrepo";
@@ -47,6 +47,8 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/git-subrepo \
       --prefix PATH : "${git}/bin"
   '';
+
+  passthru.tests.version = testVersion { package = git-subrepo; };
 
   meta = with lib; {
     homepage = "https://github.com/ingydotnet/git-subrepo";

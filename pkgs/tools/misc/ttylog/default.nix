@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake }:
+{ lib, stdenv, fetchFromGitHub, cmake, ttylog, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "ttylog";
@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
+
+  passthru.tests.version = testVersion { package = ttylog; };
 
   meta = with lib; {
     homepage = "http://ttylog.sourceforge.net";

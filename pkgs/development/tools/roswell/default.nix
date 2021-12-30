@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, curl, autoconf, automake, makeWrapper, sbcl }:
+{ lib, stdenv, fetchFromGitHub, curl, autoconf, automake, makeWrapper, sbcl, roswell, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "roswell";
@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoconf automake makeWrapper ];
 
   buildInputs = [ sbcl curl ];
+
+  passthru.tests.version = testVersion { package = roswell; };
 
   meta = with lib; {
     description = "Roswell is a Lisp implementation installer/manager, launcher, and much more";

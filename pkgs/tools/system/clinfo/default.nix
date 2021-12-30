@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, ocl-icd, opencl-headers, OpenCL }:
+{ lib, stdenv, fetchFromGitHub, ocl-icd, opencl-headers, OpenCL, clinfo, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "clinfo";
@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
   ];
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
+
+  passthru.tests.version = testVersion { package = clinfo; };
 
   meta = with lib; {
     description = "Print all known information about all available OpenCL platforms and devices in the system";

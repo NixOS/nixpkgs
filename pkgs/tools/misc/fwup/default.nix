@@ -17,6 +17,8 @@
 , zip
 , which
 , xdelta
+, fwup
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -60,6 +62,8 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = !stdenv.isDarwin;
+
+  passthru.tests.version = testVersion { package = fwup; };
 
   meta = with lib; {
     description = "Configurable embedded Linux firmware update creator and runner";

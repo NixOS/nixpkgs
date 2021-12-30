@@ -2,6 +2,8 @@
 , stdenv
 , fetchFromGitHub
 , openssl
+, sslscan
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -18,6 +20,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ openssl ];
 
   makeFlags = [ "PREFIX=$(out)" "CC=${stdenv.cc.targetPrefix}cc" ];
+
+  passthru.tests.version = testVersion { package = sslscan; };
 
   meta = with lib; {
     description = "Tests SSL/TLS services and discover supported cipher suites";

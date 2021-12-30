@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, python3Packages }:
+{ lib, fetchFromGitHub, python3Packages, grabserial, testVersion }:
 
 python3Packages.buildPythonApplication rec {
   pname = "grabserial";
@@ -15,6 +15,8 @@ python3Packages.buildPythonApplication rec {
 
   # no usable tests
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = grabserial; };
 
   meta = with lib; {
     description = "Python based serial dump and timing program";

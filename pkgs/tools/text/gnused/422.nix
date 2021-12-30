@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, gnused_422, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "gnused";
@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
   configureFlags = lib.optional stdenv.hostPlatform.isMinGW "ac_cv_func__set_invalid_parameter_handler=no";
 
   outputs = [ "out" "info" ];
+
+  passthru.tests.version = testVersion { package = gnused_422; };
 
   meta = {
     homepage = "https://www.gnu.org/software/sed/";

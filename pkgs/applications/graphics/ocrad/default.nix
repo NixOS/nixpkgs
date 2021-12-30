@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, lzip, texinfo }:
+{ fetchurl, lib, stdenv, lzip, texinfo, ocrad, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "ocrad";
@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ texinfo ];
 
   doCheck = true;
+
+  passthru.tests.version = testVersion { package = ocrad; };
 
   meta = with lib; {
     description = "Optical character recognition (OCR) program & library";

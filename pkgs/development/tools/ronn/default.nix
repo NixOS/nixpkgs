@@ -1,4 +1,4 @@
-{ stdenv, lib, bundlerEnv, bundlerUpdateScript, makeWrapper, groff }:
+{ stdenv, lib, bundlerEnv, bundlerUpdateScript, makeWrapper, groff, ronn, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "ronn";
@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.updateScript = bundlerUpdateScript "ronn";
+
+  passthru.tests.version = testVersion { package = ronn; };
 
   meta = with lib; {
     description = "markdown-based tool for building manpages";

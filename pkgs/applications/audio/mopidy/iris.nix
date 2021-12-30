@@ -1,4 +1,4 @@
-{ lib, python3Packages, mopidy }:
+{ lib, python3Packages, mopidy, mopidy-iris, testVersion }:
 
 python3Packages.buildPythonApplication rec {
   pname = "Mopidy-Iris";
@@ -19,6 +19,8 @@ python3Packages.buildPythonApplication rec {
 
   # no tests implemented
   doCheck = false;
+
+  passthru.tests.version = testVersion { package = mopidy-iris; };
 
   meta = with lib; {
     homepage = "https://github.com/jaedb/Iris";

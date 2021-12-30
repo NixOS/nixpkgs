@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, autoreconfHook }:
+{ lib, stdenv, fetchurl, autoreconfHook, gperf_3_0, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "gperf";
@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
   patches = [ ./gperf-ar-fix.patch ];
+  passthru.tests.version = testVersion { package = gperf_3_0; };
+
   meta = {
     description = "Perfect hash function generator";
 

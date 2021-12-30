@@ -5,6 +5,8 @@
 , libXi
 , libXt
 , libXtst
+, remote-touchpad
+, testVersion
 }:
 
 buildGoModule rec {
@@ -22,6 +24,8 @@ buildGoModule rec {
   tags = [ "portal,x11" ];
 
   vendorSha256 = "sha256-Cw4uMnID0nDhSl+ijHMo1VcXLdY1bHFpEkqDQDJOJOw=";
+
+  passthru.tests.version = testVersion { package = remote-touchpad; };
 
   meta = with lib; {
     description = "Control mouse and keyboard from the webbrowser of a smartphone.";

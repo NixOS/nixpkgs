@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, flex, bison, sendmailPath ? "/run/wrappers/bin/sendmail" }:
+{ lib, stdenv, fetchurl, flex, bison, sendmailPath ? "/run/wrappers/bin/sendmail", petidomo, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "petidomo";
@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   doCheck = true;
+
+  passthru.tests.version = testVersion { package = petidomo; };
 
   meta = {
     homepage = "http://petidomo.sourceforge.net/";

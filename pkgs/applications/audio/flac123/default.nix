@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, autoreconfHook, flac, libao, libogg, popt }:
+{ lib, stdenv, fetchurl, autoreconfHook, flac, libao, libogg, popt, flac123, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "flac123";
@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ flac libao libogg popt ];
+
+  passthru.tests.version = testVersion { package = flac123; };
 
   meta = with lib; {
     homepage = "http://flac-tools.sourceforge.net/";

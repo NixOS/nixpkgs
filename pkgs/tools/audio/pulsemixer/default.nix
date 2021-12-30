@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, python3, libpulseaudio }:
+{ lib, stdenv, fetchFromGitHub, python3, libpulseaudio, pulsemixer, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "pulsemixer";
@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
     substituteInPlace "$out/bin/pulsemixer" \
       --replace "libpulse.so.0" "$libpulseaudio/lib/libpulse.so.0"
   '';
+
+  passthru.tests.version = testVersion { package = pulsemixer; };
 
   meta = with lib; {
     description = "Cli and curses mixer for pulseaudio";

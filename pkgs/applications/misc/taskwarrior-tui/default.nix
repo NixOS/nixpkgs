@@ -1,6 +1,8 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+, taskwarrior-tui
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -18,6 +20,8 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   cargoSha256 = "sha256-mUlwpH2XhVDtjV7ChEqlEUXffOIbips4FzQyGejFvWk=";
+
+  passthru.tests.version = testVersion { package = taskwarrior-tui; };
 
   meta = with lib; {
     description = "A terminal user interface for taskwarrior ";

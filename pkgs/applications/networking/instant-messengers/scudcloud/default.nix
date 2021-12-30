@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, python3Packages }:
+{ lib, fetchFromGitHub, python3Packages, scudcloud, testVersion }:
 
 python3Packages.buildPythonPackage rec {
   pname = "scudcloud";
@@ -12,6 +12,8 @@ python3Packages.buildPythonPackage rec {
   };
 
   propagatedBuildInputs = with python3Packages; [ pyqt5_with_qtwebkit dbus-python jsmin ];
+
+  passthru.tests.version = testVersion { package = scudcloud; };
 
   meta = with lib; {
     description = "Non-official desktop client for Slack";

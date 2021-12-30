@@ -7,6 +7,8 @@
 , libmaxminddb
 , pkg-config
 , ronn
+, ipcalc
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -28,6 +30,8 @@ stdenv.mkDerivation rec {
     libmaxminddb
     ronn
   ];
+
+  passthru.tests.version = testVersion { package = ipcalc; };
 
   meta = with lib; {
     description = "Simple IP network calculator";

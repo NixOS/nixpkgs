@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchCrate, stdenv, DiskArbitration, Foundation, IOKit }:
+{ lib, rustPlatform, fetchCrate, stdenv, DiskArbitration, Foundation, IOKit, cargo-tally, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-tally";
@@ -16,6 +16,8 @@ rustPlatform.buildRustPackage rec {
     Foundation
     IOKit
   ];
+
+  passthru.tests.version = testVersion { package = cargo-tally; };
 
   meta = with lib; {
     description = "Graph the number of crates that depend on your crate over time";

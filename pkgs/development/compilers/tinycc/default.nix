@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromRepoOrCz, perl, texinfo, which }:
+{ stdenv, lib, fetchFromRepoOrCz, perl, texinfo, which, tinycc, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "tcc";
@@ -48,6 +48,8 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   checkTarget = "test";
+
+  passthru.tests.version = testVersion { package = tinycc; };
 
   meta = with lib; {
     description = "Small, fast, and embeddable C compiler and interpreter";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, Security }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, Security, xsv, testVersion }:
 
 rustPlatform.buildRustPackage rec {
   pname = "xsv";
@@ -14,6 +14,8 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "1bh60zgflaa5n914irkr4bpq3m4h2ngcj6bp5xx1qj112dwgvmyb";
 
   buildInputs = lib.optional stdenv.isDarwin Security;
+
+  passthru.tests.version = testVersion { package = xsv; };
 
   meta = with lib; {
     description = "A fast CSV toolkit written in Rust";

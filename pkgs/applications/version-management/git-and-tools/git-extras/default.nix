@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, unixtools, which }:
+{ lib, stdenv, fetchFromGitHub, unixtools, which, git-extras, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "git-extras";
@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
     # bash completion is already handled by make install
     install -D etc/git-extras-completion.zsh $out/share/zsh/site-functions/_git_extras
   '';
+
+  passthru.tests.version = testVersion { package = git-extras; };
 
   meta = with lib; {
     homepage = "https://github.com/tj/git-extras";

@@ -1,4 +1,4 @@
-{ stdenv, lib, help2man, python3, fetchFromGitHub }:
+{ stdenv, lib, help2man, python3, fetchFromGitHub, terminal-colors, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "terminal-colors";
@@ -45,6 +45,8 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.tests.version = testVersion { package = terminal-colors; };
 
   meta = with lib; {
     description = "Script displaying terminal colors in various formats";

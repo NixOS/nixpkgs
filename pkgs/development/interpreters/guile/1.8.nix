@@ -9,6 +9,8 @@
 , pkg-config
 , pkgsBuildBuild
 , readline
+, guile_1_8
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -86,6 +88,8 @@ stdenv.mkDerivation rec {
   doInstallCheck = doCheck;
 
   setupHook = ./setup-hook-1.8.sh;
+
+  passthru.tests.version = testVersion { package = guile_1_8; };
 
   meta = with lib; {
     homepage = "https://www.gnu.org/software/guile/";

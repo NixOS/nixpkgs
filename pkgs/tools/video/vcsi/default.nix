@@ -1,4 +1,4 @@
-{ lib, python3Packages, ffmpeg }:
+{ lib, python3Packages, ffmpeg, vcsi, testVersion }:
 
 python3Packages.buildPythonApplication rec {
   pname = "vcsi";
@@ -21,6 +21,8 @@ python3Packages.buildPythonApplication rec {
   pythonImportsCheck = [ "vcsi" ];
 
   makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ ffmpeg ]}" ];
+
+  passthru.tests.version = testVersion { package = vcsi; };
 
   meta = with lib; {
     description = "Create video contact sheets";

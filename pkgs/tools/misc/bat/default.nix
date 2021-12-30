@@ -8,6 +8,8 @@
 , libiconv
 , installShellFiles
 , makeWrapper
+, bat
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -52,6 +54,8 @@ rustPlatform.buildRustPackage rec {
 
     runHook postInstallCheck
   '';
+
+  passthru.tests.version = testVersion { package = bat; };
 
   meta = with lib; {
     description = "A cat(1) clone with syntax highlighting and Git integration";

@@ -1,4 +1,4 @@
-{ lib, nimPackages, fetchFromGitHub, srcOnly, nim }:
+{ lib, nimPackages, fetchFromGitHub, srcOnly, nim, nimlsp, testVersion }:
 
 nimPackages.buildNimPackage rec {
   pname = "nimlsp";
@@ -21,6 +21,8 @@ nimPackages.buildNimPackage rec {
   ];
 
   nimDefines = [ "nimcore" "nimsuggest" "debugCommunication" "debugLogging" ];
+
+  passthru.tests.version = testVersion { package = nimlsp; };
 
   meta = with lib; {
     description = "Language Server Protocol implementation for Nim";

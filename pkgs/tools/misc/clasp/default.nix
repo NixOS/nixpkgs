@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, clasp, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "clasp";
@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cp bin/clasp $out/bin/clasp
   '';
+
+  passthru.tests.version = testVersion { package = clasp; };
 
   meta = with lib; {
     description = "Answer set solver for (extended) normal and disjunctive logic programs";

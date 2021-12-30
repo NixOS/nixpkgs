@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, libpcap, perl }:
+{ lib, stdenv, fetchurl, libpcap, perl, tcpdump, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "tcpdump";
@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
   configureFlags = lib.optional
     (stdenv.hostPlatform != stdenv.buildPlatform)
     "ac_cv_linux_vers=2";
+
+  passthru.tests.version = testVersion { package = tcpdump; };
 
   meta = with lib; {
     description = "Network sniffer";

@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, giblib, xlibsWrapper, autoreconfHook
-, autoconf-archive, libXfixes, libXcursor, libXcomposite }:
+, autoconf-archive, libXfixes, libXcursor, libXcomposite, scrot, testVersion }:
 
 stdenv.mkDerivation rec {
   pname = "scrot";
@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook autoconf-archive ];
   buildInputs = [ giblib xlibsWrapper libXfixes libXcursor libXcomposite ];
+
+  passthru.tests.version = testVersion { package = scrot; };
 
   meta = with lib; {
     homepage = "https://github.com/resurrecting-open-source-projects/scrot";

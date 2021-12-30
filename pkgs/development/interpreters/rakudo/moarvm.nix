@@ -4,6 +4,8 @@
 , perl
 , CoreServices
 , ApplicationServices
+, moarvm
+, testVersion
 }:
 
 stdenv.mkDerivation rec {
@@ -30,6 +32,8 @@ stdenv.mkDerivation rec {
   doCheck = false; # MoarVM does not come with its own test suite
 
   configureScript = "${perl}/bin/perl ./Configure.pl";
+
+  passthru.tests.version = testVersion { package = moarvm; };
 
   meta = with lib; {
     description = "VM with adaptive optimization and JIT compilation, built for Rakudo";
