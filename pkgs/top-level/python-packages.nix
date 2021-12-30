@@ -9756,6 +9756,8 @@ in {
 
   transmissionrpc = callPackage ../development/python-modules/transmissionrpc { };
 
+  treeo = callPackage ../development/python-modules/treeo { };
+
   treq = callPackage ../development/python-modules/treq { };
 
   trezor_agent = callPackage ../development/python-modules/trezor_agent { };
