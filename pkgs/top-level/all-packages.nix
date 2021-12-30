@@ -26156,7 +26156,9 @@ with pkgs;
 
   srain = callPackage ../applications/networking/irc/srain { };
 
-  super-productivity = callPackage ../applications/office/super-productivity { };
+  super-productivity = callPackage ../applications/office/super-productivity {
+    electron = electron_13;
+  };
 
   wlroots = callPackage ../development/libraries/wlroots {
     inherit (xorg) xcbutilrenderutil;
