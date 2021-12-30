@@ -1,18 +1,11 @@
-{ callPackage, lib, pkgs, runCommand, writeText, writeStringReferencesToFile }:
+{ callPackage, lib, pkgs, runCommand, concatText, writeText, hello }:
 let
-  sample = import ./sample.nix { inherit pkgs; };
-  samplePaths = lib.unique (lib.attrValues sample);
-  str2drv = x: "${x}";
-  sampleText = concatText "cample-concat" (lib.unique (map str2drv samplePaths));
-  stringReferencesText =
-    writeStringReferencesToFile
-      ((lib.concatMapStringsSep "fillertext"
-        stri
-        (lib.attrValues sample)) + ''
-        STORE=${builtins.storeDir};\nsystemctl start bar-foo.service
-      '');
+  stri = writeText "pathToTest";
+  txt1 = stri "abc";
+  txt2 = stri hello;
+  res = concatText "textToTest" [ txt1 txt2 ];
 in
-runCommand "test-writeStringReferencesToFile" { } ''
-  diff -U3 <(sort ${stringReferencesText}) <(sort ${sampleText})
+runCommand "test-concatPaths" { } ''
+  diff -U3 <(cat ${txt1} ${txt2}) ${res}
   touch $out
 ''
