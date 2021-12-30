@@ -11,10 +11,10 @@
 , numpy
 , pandas
 , pyarrow
+, pytest
 }:
 
 let
-
   # le sigh, the perils of unrelated versions of software living in the
   # same repo: there's no obvious way to map the top level source repo
   # (arrow-datafusion) version to the version of contained repo
@@ -60,7 +60,14 @@ buildPythonPackage rec {
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
   propagatedBuildInputs = [ numpy pandas pyarrow ];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [ pytest ];
+  pythonImportsCheck = [ "datafusion" ];
+
+  checkPhase = ''
+    runHook preCheck
+    pytest --pyargs "${pname}"
+    runHook postCheck
+  '';
 
   meta = with lib; {
     description = "Extensible query execution framework";
