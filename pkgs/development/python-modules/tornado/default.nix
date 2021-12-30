@@ -13,7 +13,7 @@ buildPythonPackage rec {
   checkPhase = ''
     # FIXME the glob pattern fails. It should work removing the shopt line
     shopt -u failglob
-    ${python.interpreter} -m unittest discover '*_test.py'
+    ${python.interpreter} -m unittest discover *_test.py
   '';
 
   src = fetchPypi {
