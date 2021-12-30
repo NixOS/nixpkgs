@@ -34,6 +34,7 @@
 , pulseaudioSupport ? config.pulseaudio or stdenv.isLinux
 , libpulseaudio
 , libcef
+, pciutils
 , pipewireSupport ? stdenv.isLinux
 , pipewire
 , libdrm
@@ -45,22 +46,19 @@ let
 in
 mkDerivation rec {
   pname = "obs-studio";
-  version = "27.1.3";
+  version = "27.2.0";
 
   src = fetchFromGitHub {
     owner = "obsproject";
     repo = "obs-studio";
     rev = version;
-    sha256 = "EmBzxJHai++cvdYBYuR6mQJapSTDvaiqhxGbNnJWsdk=";
+    sha256 = "KZgwAtyxv2vXDW7vF1eArF5Mqw45NngwChc+5OnXuXg=";
     fetchSubmodules = true;
   };
 
   patches = [
     # Lets obs-browser build against CEF 90.1.0+
     ./Enable-file-access-and-universal-access-for-file-URL.patch
-
-    # Lets obs-browser build against CEF 91.1.0+
-    # ./Change-product_version-to-user_agent_product.patch
   ];
 
   nativeBuildInputs = [
@@ -90,6 +88,7 @@ mkDerivation rec {
     x264
     libvlc
     mbedtls
+    pciutils
   ]
   ++ optionals scriptingSupport [ luajit python3 ]
   ++ optional alsaSupport alsa-lib
