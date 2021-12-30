@@ -53,7 +53,6 @@ let
   # These are the providers that don't fall in line with the default model
   special-providers = {
     # Packages that don't fit the default model
-    cloudfoundry = callPackage ./cloudfoundry { };
     gandi = callPackage ./gandi { };
     hcloud = callPackage ./hcloud { };
     libvirt = callPackage ./libvirt { };
