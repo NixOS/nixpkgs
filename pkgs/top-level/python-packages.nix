@@ -7359,6 +7359,8 @@ in {
 
   pysigset = callPackage ../development/python-modules/pysigset { };
 
+  pysimplegui = callPackage ../development/python-modules/pysimplegui { };
+
   pysingleton = callPackage ../development/python-modules/pysingleton { };
 
   pyslurm = callPackage ../development/python-modules/pyslurm {
