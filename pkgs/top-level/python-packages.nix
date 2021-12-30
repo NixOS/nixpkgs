@@ -1994,6 +1994,8 @@ in {
 
   datadog = callPackage ../development/python-modules/datadog { };
 
+  datafusion = callPackage ../development/python-modules/datafusion { };
+
   datamodeldict = callPackage ../development/python-modules/datamodeldict { };
 
   dataset = callPackage ../development/python-modules/dataset { };
