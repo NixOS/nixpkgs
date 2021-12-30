@@ -4107,7 +4107,7 @@ with pkgs;
 
   circus = callPackage ../tools/networking/circus { };
 
-  citrix_workspace = citrix_workspace_21_09_0;
+  citrix_workspace = citrix_workspace_21_12_0;
 
   inherit (callPackage ../applications/networking/remote/citrix-workspace { })
     citrix_workspace_20_04_0
@@ -4120,6 +4120,7 @@ with pkgs;
     citrix_workspace_21_06_0
     citrix_workspace_21_08_0
     citrix_workspace_21_09_0
+    citrix_workspace_21_12_0
   ;
 
   citra = libsForQt5.callPackage ../misc/emulators/citra { };
@@ -4308,6 +4309,10 @@ with pkgs;
   age = callPackage ../tools/security/age { };
 
   agebox = callPackage ../tools/security/agebox { };
+
+  age-plugin-yubikey = callPackage ../tools/security/age-plugin-yubikey {
+    inherit (pkgs.darwin.apple_sdk.frameworks) PCSC;
+  };
 
   bore = callPackage ../tools/networking/bore {
     inherit (darwin) Libsystem;
@@ -21139,7 +21144,9 @@ with pkgs;
 
   mattermost = callPackage ../servers/mattermost { };
   matterircd = callPackage ../servers/mattermost/matterircd.nix { };
-  matterbridge = callPackage ../servers/matterbridge { };
+  matterbridge = callPackage ../servers/matterbridge {
+    buildGoModule = buildGo117Module;
+  };
 
   mattermost-desktop = callPackage ../applications/networking/instant-messengers/mattermost-desktop { };
 

@@ -253,6 +253,13 @@
           configuration.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The option <literal>services.duplicati.dataDir</literal> has
+          been added to allow changing the location of duplicati’s
+          files.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>

@@ -18,6 +18,11 @@ buildPythonPackage rec {
     sha256 = "655b879217dd445a2023e16154cc231febef802b5c812d5c2e822280ad69e1dc";
   };
 
+  postPatch = ''
+    # fixes build on non-x86_64 architectures
+    rm frozendict/src/3_9/cpython_src/Include/pyconfig.h
+  '';
+
   pythonImportsCheck = [
     "frozendict"
   ];
