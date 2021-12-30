@@ -5642,6 +5642,8 @@ in {
 
   packaging = callPackage ../development/python-modules/packaging { };
 
+  packbits = callPackage ../development/python-modules/packbits { };
+
   packet-python = callPackage ../development/python-modules/packet-python { };
 
   pafy = callPackage ../development/python-modules/pafy { };
