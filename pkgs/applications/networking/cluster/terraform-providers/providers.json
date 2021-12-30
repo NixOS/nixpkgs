@@ -666,6 +666,15 @@
     "sha256": "00d8qx95cxaif636dyh935nv9nn6lmb1ybxy7n4myy9g80y50ap1",
     "version": "1.3.0"
   },
+  "lxd": {
+    "owner": "terraform-lxd",
+    "provider-source-address": "registry.terraform.io/terraform-lxd/lxd",
+    "repo": "terraform-provider-lxd",
+    "rev": "v1.6.0",
+    "sha256": "07h159mjbddkf3ishhdknqn10pyb2wh9yavjps5mwmdbiii6qpvy",
+    "vendorSha256": "11x12jxh4q99hinpljqfchysgkhch93sgv0mz065ws20y0dxzfvs",
+    "version": "1.6.0"
+  },
   "mailgun": {
     "owner": "terraform-providers",
     "repo": "terraform-provider-mailgun",
