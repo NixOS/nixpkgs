@@ -4,7 +4,6 @@
 , fetchpatch
 , variant ? "standalone"
 , fetchFromGitHub
-, fetchFromGitLab
 , cmake
 , pkg-config
 , opencv3
@@ -61,8 +60,7 @@ mkDerivation rec {
     sha256 = "08d37b49qgh5d4rds7hvr5wjj4p1y8cnbidz1cyqsibq0555pwq2";
   };
 
-  CImg = fetchFromGitLab {
-    domain = "framagit.org";
+  CImg = fetchFromGitHub {
     owner = "dtschump";
     repo = "CImg";
     rev = "v.${version}";
