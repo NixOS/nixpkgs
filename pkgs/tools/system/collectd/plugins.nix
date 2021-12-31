@@ -122,7 +122,7 @@ let
     write_prometheus.buildInputs = [ protobufc libmicrohttpd ];
     write_redis.buildInputs = [ hiredis ];
     write_riemann.buildInputs = [ protobufc riemann_c_client ];
-    xencpu.buildInputs = [ xen ];
+    xencpu.buildInputs = lib.optionals (!stdenv.isAarch64) [ xen ];
   };
 
   configureFlags = lib.optionals (enabledPlugins != null) (
