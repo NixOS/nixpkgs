@@ -425,11 +425,12 @@
   "google-beta": {
     "owner": "hashicorp",
     "provider-source-address": "registry.terraform.io/hashicorp/google-beta",
+    "proxyVendor": true,
     "repo": "terraform-provider-google-beta",
-    "rev": "v3.76.0",
-    "sha256": "1bdhk4vfn8pn7ql5q8m4r8js8d73zyp3dbhrmh4p07g7i5z57pjq",
-    "vendorSha256": "0cwvkzw45b057gwbj24z9gyldjpyfgv3fyr5x160spj0ksfn0ki0",
-    "version": "3.76.0"
+    "rev": "v4.5.0",
+    "sha256": "17z2jy8b9gk0id8q0318a6k60fhcqps0p36s7d7kkqmr44shgzs4",
+    "vendorSha256": "0f18fh0qi1v1hkq3j8nrc8x2rah7vk6njjgdakxr1g1xxv8f0nhx",
+    "version": "4.5.0"
   },
   "grafana": {
     "owner": "grafana",
