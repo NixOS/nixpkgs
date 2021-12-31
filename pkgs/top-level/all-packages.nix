@@ -31299,6 +31299,8 @@ with pkgs;
 
   gnome-connections = callPackage ../desktops/gnome/apps/gnome-connections { };
 
+  gnome-text-editor = callPackage ../desktops/gnome/apps/gnome-text-editor { };
+
   gnome-tour = callPackage ../desktops/gnome/core/gnome-tour { };
 
   hhexen = callPackage ../games/hhexen { };
