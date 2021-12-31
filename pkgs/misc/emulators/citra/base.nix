@@ -13,7 +13,7 @@
 , udevSupport      ? stdenv.isLinux,                      udev          ? null
 }:
 
-with lib; 
+with lib;
 let
   cpp-jwt-src = fetchFromGitHub {
     owner = "arun11299";
@@ -81,7 +81,7 @@ in stdenv.mkDerivation {
     "-DCITRA_USE_BUNDLED_FFMPEG=OFF"
     "-DCMAKE_BUILD_TYPE=Release"
     "-DDYNARMIC_ENABLE_CPU_FEATURE_DETECTION=OFF"
-    "-DENABLE_COMPATIBILITY_LIST_DOWNLOAD=OFF" # Sacrifices reproducibility 
+    "-DENABLE_COMPATIBILITY_LIST_DOWNLOAD=OFF" # Sacrifices reproducibility
     "-DCITRA_ENABLE_COMPATIBILITY_REPORTING=ON"
     "-DENABLE_FFMPEG_VIDEO_DUMPER=ON"
     "-DENABLE_QT_TRANSLATION=ON"
@@ -93,7 +93,7 @@ in stdenv.mkDerivation {
     (if onlineSupport  then "-DENABLE_WEB_SERVICE=ON"   else "-DENABLE_WEB_SERVICE=OFF")
   ];
 
-  nativeBuildInputs = [ catch2 cmake ninja pkg-config qttools wrapQtAppsHook 
+  nativeBuildInputs = [ catch2 cmake ninja pkg-config qttools wrapQtAppsHook
     enet fmt inih libressl soundtouch zstd discord-rpc
   ];
   buildInputs = [ boost173 ffmpeg libusb1 qtbase qtdeclarative qtmultimedia rapidjson SDL2
@@ -153,7 +153,7 @@ in stdenv.mkDerivation {
     # Prep inih
     rm -r ./externals/inih/inih
     cp -r ${inih.src} ./externals/inih/inih
-    
+
     # Prep libressl
     rm -r ./externals/libressl
     pushd ./externals
