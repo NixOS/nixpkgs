@@ -415,11 +415,12 @@
   "google": {
     "owner": "hashicorp",
     "provider-source-address": "registry.terraform.io/hashicorp/google",
+    "proxyVendor": true,
     "repo": "terraform-provider-google",
-    "rev": "v3.76.0",
-    "sha256": "1j3q07v4r0a3mlkmpqw8nav5z09fwyms9xmlyk6k6xkkzr520xcp",
-    "vendorSha256": "1ffxfracj4545fzh6p6b0wal0j07807qc2q83qzchbalqvi7yhky",
-    "version": "3.76.0"
+    "rev": "v4.5.0",
+    "sha256": "173aqwrzqdb3y57wiq1dbgb74ksr063qqq1k178n4wrab4s1h3px",
+    "vendorSha256": "0f18fh0qi1v1hkq3j8nrc8x2rah7vk6njjgdakxr1g1xxv8f0nhx",
+    "version": "4.5.0"
   },
   "google-beta": {
     "owner": "hashicorp",
