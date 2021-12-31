@@ -2,7 +2,7 @@
 
 let
   themeName = "Dracula";
-  version = "2.0";
+  version = "3.0";
 in
 stdenv.mkDerivation {
   pname = "dracula-theme";
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     owner = "dracula";
     repo = "gtk";
     rev = "v${version}";
-    sha256 = "10j706gnhdplhykdisp64vzzxpzgn48b5f1fkndcp340x7hf2mf3";
+    sha256 = "sha256-7DUT/DfvCSo9GiJzqhqvegNCARB0eGtPQ6oUQG/Uja0=";
   };
 
   propagatedUserEnvPkgs = [
