@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wl-mirror";
-  version = "0.5.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "Ferdi265";
     repo = "wl-mirror";
     rev = "v${version}";
-    sha256 = "1wjdjzj6h1q51yg70gdrq2yrgg6ihamcwhizxfrjq8955yy2y6ly";
+    sha256 = "sha256-IbFvz3sDXD5v16Kq7s+FYi/cbwy4Mrtb9E63Y3uYWMQ=";
   };
 
   patchPhase = ''
