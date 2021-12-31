@@ -82,11 +82,6 @@ mkDerivation rec {
     # Fix installation path of lumina-sudo
     substituteInPlace src-qt5/desktop-utils/lumina-sudo/lumina-sudo.pro \
       --replace "/usr/bin" "$out/bin"
-
-    # Fix desktop files
-    for i in $(grep -lir 'OnlyShowIn=Lumina' src-qt5); do
-      substituteInPlace $i --replace 'OnlyShowIn=Lumina' 'OnlyShowIn=X-Lumina'
-    done
   '';
 
   postInstall = ''
