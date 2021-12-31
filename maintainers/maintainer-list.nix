@@ -13434,6 +13434,12 @@
     github = "zeri42";
     githubId = 68825133;
   };
+  zombiezen = {
+    name = "Ross Light";
+    email = "ross@zombiezen.com";
+    github = "zombiezen";
+    githubId = 181535;
+  };
   zseri = {
     name = "zseri";
     email = "zseri.devel@ytrizja.de";
