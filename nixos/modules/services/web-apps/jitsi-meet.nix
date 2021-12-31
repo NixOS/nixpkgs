@@ -220,7 +220,6 @@ in
         enabled = true;
         domain = cfg.hostName;
         extraConfig = ''
-          authentication = "anonymous"
           c2s_require_encryption = false
           admins = { "focus@auth.${cfg.hostName}" }
           smacks_max_unacked_stanzas = 5
@@ -332,7 +331,7 @@ in
           proxyWebsockets = true;
         };
         locations."=/http-bind" = {
-          proxyPass = "http://localhost:5280/http-bind";
+          proxyPass = "http://127.0.0.1:5280/http-bind$is_args$args";
           extraConfig = ''
             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
             proxy_set_header Host $host;
