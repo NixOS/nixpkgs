@@ -34109,6 +34109,8 @@ with pkgs;
 
   gortr = callPackage ../servers/gortr {};
 
+  stayrtr = callPackage ../servers/stayrtr {};
+
   sentencepiece = callPackage ../development/libraries/sentencepiece {};
 
   kcli = callPackage ../development/tools/kcli {};
