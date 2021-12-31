@@ -1,15 +1,22 @@
-{ autoPatchelfHook, fetchurl, lib, stdenv }:
+{ autoPatchelfHook, fetchurl, lib, stdenv, undmg }:
 
 stdenv.mkDerivation rec {
   pname = "julia-bin";
   version = "1.7.1";
 
   src = {
+    aarch64-darwin = fetchurl {
+      url = "https://julialang-s3.julialang.org/bin/mac/aarch64/${lib.versions.majorMinor version}/julia-${version}-macaarch64.dmg";
+      sha256 = "sha256-tkidHgDNU539YLKXQ7XYE4iTaL3BqPuUGIk9ta4tQ9Y=";
+    };
     x86_64-linux = fetchurl {
       url = "https://julialang-s3.julialang.org/bin/linux/x64/${lib.versions.majorMinor version}/julia-${version}-linux-x86_64.tar.gz";
       sha256 = "04czipzai5628v1npa2y2xff0bd4rj8d2fcjnnsvkqj5gff8wra4";
     };
   }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+
+  buildInputs = lib.optional stdenv.isDarwin undmg;
+  sourceRoot = lib.optional stdenv.isDarwin "Julia-1.7.app/Contents/Resources/julia";
 
   # Julia’s source files are in different locations for source and binary
   # releases. Thus we temporarily create a symlink to allow us to share patches
@@ -44,7 +51,9 @@ stdenv.mkDerivation rec {
   # Breaks backtraces, etc.
   dontStrip = true;
 
-  doInstallCheck = true;
+  # The test suite is broken on aarch64-darwin, even running outside of the nix
+  # build environment. See https://github.com/JuliaLang/julia/issues/43614.
+  doInstallCheck = stdenv.hostPlatform.system != "aarch64-darwin";
   preInstallCheck = ''
     # Some tests require read/write access to $HOME.
     export HOME="$TMPDIR"
@@ -66,6 +75,6 @@ stdenv.mkDerivation rec {
     # Bundled and linked with various GPL code, although Julia itself is MIT.
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ ninjin raskin ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "aarch64-darwin" "x86_64-linux" ];
   };
 }
