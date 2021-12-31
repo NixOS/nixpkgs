@@ -466,7 +466,6 @@ stdenv.mkDerivation {
     "-Dsysvinit-path="
     "-Dsysvrcnd-path="
 
-    "-Dkill-path=${coreutils}/bin/kill"
     "-Dkmod-path=${kmod}/bin/kmod"
     "-Dsulogin-path=${util-linux}/bin/sulogin"
     "-Dmount-path=${util-linux}/bin/mount"
