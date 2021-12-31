@@ -114,7 +114,7 @@ if [[ -z "$nixFile" ]]; then
     fi
 
     # flake-compat will return paths in the Nix store, we need to correct for that.
-    possiblyOutPath=$(nix-instantiate $systemArg --eval -E "with $importTree; outPath" | tr -d '"')
+    possiblyOutPath=$(nix-instantiate $systemArg --eval -E "with $importTree; outPath" 2>/dev/null | tr -d '"')
     if [[ -n "$possiblyOutPath" ]]; then
         outPathEscaped=$(echo "$possiblyOutPath" | sed 's#[$^*\\.[|]#\\&#g')
         pwdEscaped=$(echo "$PWD" | sed 's#[$^*\\.[|]#\\&#g')
