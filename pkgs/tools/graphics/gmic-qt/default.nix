@@ -1,7 +1,6 @@
 { lib
 , mkDerivation
 , fetchurl
-, fetchpatch
 , variant ? "standalone"
 , fetchFromGitHub
 , cmake
@@ -93,18 +92,6 @@ mkDerivation rec {
     ./fix-gimp-plugin-path.patch
   ];
 
-  unpackPhase = ''
-    cp -r ${gmic} gmic
-    ln -s ${gmic-community} gmic-community
-    cp -r ${gmic_qt} gmic_qt
-    chmod -R +w gmic gmic_qt
-    ln -s ${CImg} CImg
-
-    cp ${gmic_stdlib} gmic/src/gmic_stdlib.h
-
-    cd gmic_qt
-  '';
-
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -128,6 +115,18 @@ mkDerivation rec {
     "-DGMIC_QT_HOST=${if variant == "standalone" then "none" else variant}"
   ];
 
+  unpackPhase = ''
+    cp -r ${gmic} gmic
+    ln -s ${gmic-community} gmic-community
+    cp -r ${gmic_qt} gmic_qt
+    chmod -R +w gmic gmic_qt
+    ln -s ${CImg} CImg
+
+    cp ${gmic_stdlib} gmic/src/gmic_stdlib.h
+
+    cd gmic_qt
+  '';
+
   postFixup = lib.optionalString (variant == "gimp") ''
     echo "wrapping $out/${gimp.targetPluginDir}/gmic_gimp_qt"
     wrapQtApp "$out/${gimp.targetPluginDir}/gmic_gimp_qt"
@@ -136,7 +135,7 @@ mkDerivation rec {
   meta = with lib; {
     description = variants.${variant}.description;
     homepage = "http://gmic.eu/";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     platforms = platforms.unix;
   };
 }
