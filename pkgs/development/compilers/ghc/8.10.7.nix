@@ -194,7 +194,7 @@ stdenv.mkDerivation (rec {
     # cabal passes incorrect --host= when cross-compiling
     # https://github.com/haskell/cabal/issues/5887
     (fetchpatch {
-            url = "https://raw.githubusercontent.com/input-output-hk/haskell.nix/122bd81150386867da07fdc9ad5096db6719545a/overlays/patches/ghc/cabal-host.patch";
+      url = "https://raw.githubusercontent.com/input-output-hk/haskell.nix/122bd81150386867da07fdc9ad5096db6719545a/overlays/patches/ghc/cabal-host.patch";
       sha256 = "sha256:0yd0sajgi24sc1w5m55lkg2lp6kfkgpp3lgija2c8y3cmkwfpdc1";
     })
 
@@ -211,6 +211,11 @@ stdenv.mkDerivation (rec {
     (fetchpatch {
       url = "https://gitlab.haskell.org/ghc/ghc/-/commit/97d0b0a367e4c6a52a17c3299439ac7de129da24.patch";
       sha256 = "0r4zjj0bv1x1m2dgxp3adsf2xkr94fjnyj1igsivd9ilbs5ja0b5";
+    })
+    # Reverts the linking behavior of GHC to not resolve `-libc++` to `c++`.
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/input-output-hk/haskell.nix/613ec38dbd62ab7929178c9c7ffff71df9bb86be/overlays/patches/ghc/ghc-macOS-loadArchive-fix.patch";
+      sha256 = "0IUpuzjZb1G+gP3q6RnwQbW4mFzc/OZ/7QqZy+57kx0=";
     })
   ];
 
