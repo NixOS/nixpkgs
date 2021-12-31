@@ -71,11 +71,6 @@ in stdenv.mkDerivation (rec {
     substituteInPlace cmake/modules/AddLLVM.cmake \
       --replace 'set(_install_name_dir INSTALL_NAME_DIR "@rpath")' "set(_install_name_dir)" \
       --replace 'set(_install_rpath "@loader_path/../''${CMAKE_INSTALL_LIBDIR}''${LLVM_LIBDIR_SUFFIX}" ''${extra_libdir})' ""
-  ''
-  # Patch llvm-config to return correct library path based on --link-{shared,static}.
-  + ''
-    substitute '${./outputs.patch}' ./outputs.patch --subst-var lib
-    patch -p1 < ./outputs.patch
   '' + ''
     # FileSystem permissions tests fail with various special bits
     substituteInPlace unittests/Support/CMakeLists.txt \
