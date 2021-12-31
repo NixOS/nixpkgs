@@ -1,19 +1,29 @@
 { lib
 , mkDerivation
 , fetchFromGitHub
+, fetchpatch
+, substituteAll
+, acpi
+, alsa-utils
+, brightnessctl
+, coreutils
+, dbus
 , fluxbox
 , hicolor-icon-theme
 , libarchive
 , numlockx
+, pavucontrol-qt
+, procps
 , qmake
 , qtbase
 , qtmultimedia
 , qtsvg
 , qttools
 , qtx11extras
+, sysstat
+, wrapGAppsHook
 , xorg
 , xscreensaver
-, wrapGAppsHook
 }:
 
 mkDerivation rec {
@@ -34,14 +44,22 @@ mkDerivation rec {
   ];
 
   buildInputs = [
+    acpi
+    alsa-utils
+    brightnessctl
+    coreutils
+    dbus
     fluxbox # window manager for Lumina DE
     hicolor-icon-theme
     libarchive # make `bsdtar` available for lumina-archiver
     numlockx # required for changing state of numlock at login
+    pavucontrol-qt
+    procps
     qtbase
     qtmultimedia
     qtsvg
     qtx11extras
+    sysstat
     xorg.libXcursor
     xorg.libXdamage
     xorg.libxcb
@@ -53,16 +71,26 @@ mkDerivation rec {
   dontDropIconThemeCache = true;
 
   patches = [
-    ./LuminaOS-NixOS.cpp.patch
+    (fetchpatch {
+      name = "Add-LuminaOS-NixOS.cpp.patch";
+      url = "https://patch-diff.githubusercontent.com/raw/lumina-desktop/lumina/pull/802.patch";
+      sha256 = "sha256-YgTKEvlWd3Ys9IUxcXqvrfV258mXTW/MRhWLj8pP23o=";
+    })
   ];
 
-  prePatch = ''
-    # Copy Gentoo setup as NixOS setup and then patch it
-    # TODO: write a complete NixOS setup?
-    cp -a src-qt5/core/libLumina/LuminaOS-Gentoo.cpp src-qt5/core/libLumina/LuminaOS-NixOS.cpp
-  '';
-
   postPatch = ''
+    # Fix file paths in NixOS distribution specific source code
+    acpi="${acpi}/bin/acpi" \
+      amixer="${alsa-utils}/bin/amixer" \
+      brightnessctl="${brightnessctl}/bin/brightnessctl" \
+      dbus_send="${dbus}/bin/dbus-send" \
+      df="${coreutils}/bin/df" \
+      iostat="${sysstat}/bin/iostat" \
+      md5sum="${coreutils}/bin/md5sum" \
+      pavucontrol_qt="${pavucontrol-qt}/bin/pavucontrol-qt" \
+      top="${procps}/bin/top" \
+      substituteAllInPlace {port-files/NixOS,src-qt5/core/libLumina}/LuminaOS-NixOS.cpp
+
     # Avoid absolute path on sessdir
     substituteInPlace src-qt5/OS-detect.pri \
       --replace L_SESSDIR=/usr/share/xsessions '#L_SESSDIR=/usr/share/xsessions'

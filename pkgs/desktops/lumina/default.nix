@@ -3,7 +3,7 @@
 let
   packages = self: with self; {
 
-    lumina = callPackage ./lumina { };
+    lumina = callPackage ./lumina { inherit (pkgs.lxqt) pavucontrol-qt; };
     lumina-calculator = callPackage ./lumina-calculator { };
     lumina-pdf = callPackage ./lumina-pdf { };
 
