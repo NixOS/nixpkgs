@@ -1,7 +1,7 @@
 { lib, fetchzip }:
 
 let
-  version = "1.5.0";
+  version = "1.5.1";
 in
 fetchzip {
   name = "victor-mono-${version}";
@@ -21,7 +21,7 @@ fetchzip {
     unzip -j $downloadedFile \*.ttf -d $out/share/fonts/truetype
   '';
 
-  sha256 = "1x3dnkq8awn5zniywap78qwp5nxmf14bq8snzsywk70ah0jmbawi";
+  sha256 = "sha256-FHahUp/Ghjv6fwsjj1giVPlAIXRMSZCSLcVMiMHvV3A=";
 
   meta = with lib; {
     description = "Free programming font with cursive italics and ligatures";
