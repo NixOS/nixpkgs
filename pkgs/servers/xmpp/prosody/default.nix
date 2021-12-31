@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, lib, libidn, openssl, makeWrapper, fetchhg
+{ stdenv, fetchurl, lib, libidn, openssl, makeWrapper, fetchhg, fetchFromGitHub
 , lua
 , nixosTests
 , withLibevent ? true
@@ -6,7 +6,8 @@
 # use withExtraLibs to add additional dependencies of community modules
 , withExtraLibs ? [ ]
 , withOnlyInstalledCommunityModules ? [ ]
-, withCommunityModules ? [ ] }:
+, withCommunityModules ? (lib.optionals withJitsiModules ["auth_token"])
+, withJitsiModules ? true }:
 
 with lib;
 
@@ -17,6 +18,7 @@ let
     ]
     ++ lib.optional withLibevent p.luaevent
     ++ lib.optional withDBI p.luadbi
+    ++ lib.optionals withJitsiModules [p.luadbi-sqlite3 p.basexx p.otp p.luatz p.luajwtjitsi]
   );
 in
 stdenv.mkDerivation rec {
@@ -47,6 +49,17 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
+
+  # Be sure to update this whenever jitsi-meet is updated.
+  jitsiMeet = if withJitsiModules then
+    fetchFromGitHub {
+      owner = "jitsi";
+      repo = "jitsi-meet";
+      rev = "5675";
+      sha256 = "qPv7lhKxALq3gYVF8y8ooAB8AljxrpBQ4V4rLTJ6x3I=";
+    }
+    else null;
+
   buildInputs = [
     luaEnv libidn openssl
   ]
@@ -68,6 +81,7 @@ stdenv.mkDerivation rec {
       ${concatMapStringsSep "\n" (module: ''
         cp -r $communityModules/mod_${module} $out/lib/prosody/modules/
       '') (lib.lists.unique(nixosModuleDeps ++ withCommunityModules ++ withOnlyInstalledCommunityModules))}
+      ${lib.optionalString withJitsiModules "cp -R $jitsiMeet/resources/prosody-plugins/* $out/lib/prosody/modules/"}
       wrapProgram $out/bin/prosody \
         --prefix LUA_PATH ';' "$LUA_PATH" \
         --prefix LUA_CPATH ';' "$LUA_CPATH"
