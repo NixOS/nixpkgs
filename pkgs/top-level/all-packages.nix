@@ -3383,8 +3383,7 @@ with pkgs;
 
   merriweather-sans = callPackage ../data/fonts/merriweather-sans { };
 
-  meson = meson_0_57;
-  meson_0_57 = callPackage ../development/tools/build-managers/meson/0.57 { };
+  meson = callPackage ../development/tools/build-managers/meson { };
 
   meson-tools = callPackage ../misc/meson-tools { };
 
