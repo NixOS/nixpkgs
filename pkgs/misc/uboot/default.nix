@@ -395,12 +395,28 @@ in {
     defconfig = "rpi_3_32b_defconfig";
     extraMeta.platforms = ["armv7l-linux"];
     filesToInstall = ["u-boot.bin"];
+    extraPatches = [
+      # Remove when updating to 2022.01
+      # https://patchwork.ozlabs.org/project/uboot/list/?series=273129&archive=both&state=*
+      (fetchpatch {
+        url = "https://patchwork.ozlabs.org/series/273129/mbox/";
+        sha256 = "sha256-/Gu7RNvBNYCGqdFRzQ11qPDDxgGVpwKYYw1CpumIGfU=";
+      })
+    ];
   };
 
   ubootRaspberryPi3_64bit = buildUBoot {
     defconfig = "rpi_3_defconfig";
     extraMeta.platforms = ["aarch64-linux"];
     filesToInstall = ["u-boot.bin"];
+    extraPatches = [
+      # Remove when updating to 2022.01
+      # https://patchwork.ozlabs.org/project/uboot/list/?series=273129&archive=both&state=*
+      (fetchpatch {
+        url = "https://patchwork.ozlabs.org/series/273129/mbox/";
+        sha256 = "sha256-/Gu7RNvBNYCGqdFRzQ11qPDDxgGVpwKYYw1CpumIGfU=";
+      })
+    ];
   };
 
   ubootRaspberryPi4_32bit = buildUBoot {
