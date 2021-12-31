@@ -1,7 +1,6 @@
 { lib
 , python3
 , fetchFromGitHub
-, fetchpatch
 }:
 
 # USAGE:
@@ -16,18 +15,19 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "tts";
-  version = "0.4.1";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "coqui-ai";
     repo = "TTS";
     rev = "v${version}";
-    sha256 = "sha256-ZcQUgr+1XTmXoyf2WNsP8Hept42JTFmKXdo0kcU6QWU=";
+    sha256 = "sha256-8a68iFbqqKwtZvufu1Vnv6hGHIQ3HU34wjuQsmr1NUA=";
   };
 
   postPatch = ''
     sed -i requirements.txt \
       -e 's!librosa==[^"]*!librosa!' \
+      -e 's!gruut\[.*\]~=2.0.0!gruut!' \
       -e 's!mecab-python3==[^"]*!mecab-python3!' \
       -e 's!numba==[^"]*!numba!' \
       -e 's!numpy==[^"]*!numpy!' \
@@ -86,6 +86,7 @@ python3.pkgs.buildPythonApplication rec {
     "test_multiscale_stft_loss"
     # Requires network acccess to download models
     "test_synthesize"
+    "test_run_all_models"
   ];
 
   preCheck = ''
