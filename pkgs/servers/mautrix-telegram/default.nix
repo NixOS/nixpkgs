@@ -37,7 +37,6 @@ in python.pkgs.buildPythonPackage rec {
 
   patches = [ ./0001-Re-add-entrypoint.patch ];
   postPatch = ''
-    sed -i -e '/alembic>/d' requirements.txt
     substituteInPlace requirements.txt \
       --replace "telethon>=1.22,<1.23" "telethon"
   '';
@@ -63,18 +62,6 @@ in python.pkgs.buildPythonPackage rec {
     pycryptodome
     unpaddedbase64
   ]) ++ dbDrivers;
-
-  # `alembic` (a database migration tool) is only needed for the initial setup,
-  # and not needed during the actual runtime. However `alembic` requires `mautrix-telegram`
-  # in its environment to create a database schema from all models.
-  #
-  # Hence we need to patch away `alembic` from `mautrix-telegram` and create an `alembic`
-  # which has `mautrix-telegram` in its environment.
-  passthru.alembic = python.pkgs.alembic.overrideAttrs (old: {
-    propagatedBuildInputs = old.propagatedBuildInputs ++ dbDrivers ++ [
-      mautrix-telegram
-    ];
-  });
 
   # Tests are broken and throw the following for every test:
   #   TypeError: 'Mock' object is not subscriptable

@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "optifine";
-  version = "1.16.5_HD_U_G8";
+  version = "1.18.1_HD_U_H4";
 
   src = fetchurl {
     url = "https://optifine.net/download?f=OptiFine_${version}.jar";
-    sha256 = "0ks91d6n4vkgb5ykdrc67br2c69nqjr0xhp7rrkybg24xn8bqxiw";
+    sha256 = "325168569b21a2dcde82999876f69ec9d8af75202a7021691f2abede4d81dcec";
   };
 
   dontUnpack = true;

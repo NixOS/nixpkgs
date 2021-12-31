@@ -1,20 +1,21 @@
 { lib, fetchFromGitHub
 , meson, ninja, pkg-config, wrapGAppsHook
-, desktop-file-utils, gsettings-desktop-schemas, libnotify, libhandy
+, desktop-file-utils, gsettings-desktop-schemas, libnotify, libhandy, webkitgtk
 , python3Packages, gettext
-, appstream-glib, gdk-pixbuf, glib, gobject-introspection, gspell, gtk3
+, appstream-glib, gdk-pixbuf, glib, gobject-introspection, gspell, gtk3, gnome
 , steam-run, xdg-utils, pciutils, cabextract, wineWowPackages
+, freetype, p7zip, gamemode
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "bottles";
-  version = "2021.7.28-treviso-2";
+  version = "2021.12.28-treviso";
 
   src = fetchFromGitHub {
     owner = "bottlesdevs";
     repo = pname;
     rev = version;
-    sha256 = "0kvwcajm9izvkwfg7ir7bks39bpc665idwa8mc8d536ajyjriysn";
+    sha256 = "lZbSLLBg7XM6PuOmu5rJ15dg+QHHRcjijRYE6u3WT9Y=";
   };
 
   postPatch = ''
@@ -41,10 +42,13 @@ python3Packages.buildPythonApplication rec {
     gtk3
     libhandy
     libnotify
+    webkitgtk
+    gnome.adwaita-icon-theme
   ];
 
   propagatedBuildInputs = with python3Packages; [
     pyyaml
+    pytoml
     requests
     pycairo
     pygobject3
@@ -53,12 +57,16 @@ python3Packages.buildPythonApplication rec {
     gst-python
     liblarch
     patool
+    markdown
   ] ++ [
     steam-run
     xdg-utils
     pciutils
     cabextract
     wineWowPackages.minimal
+    freetype
+    p7zip
+    gamemode # programs.gamemode.enable
   ];
 
   format = "other";
@@ -66,13 +74,9 @@ python3Packages.buildPythonApplication rec {
   dontWrapGApps = true; # prevent double wrapping
 
   preConfigure = ''
-    substituteInPlace build-aux/meson/postinstall.py \
-      --replace "'update-desktop-database'" "'${desktop-file-utils}/bin/update-desktop-database'"
-    substituteInPlace src/runner.py \
-      --replace " {runner}" " ${steam-run}/bin/steam-run {runner}" \
-      --replace " {dxvk_setup}" " ${steam-run}/bin/steam-run {dxvk_setup}"
-      substituteInPlace src/runner_utilities.py \
-        --replace " {runner}" " ${steam-run}/bin/steam-run {runner}" \
+    patchShebangs build-aux/meson/postinstall.py
+    substituteInPlace src/backend/runner.py \
+      --replace "{Paths.runners}" "${steam-run}/bin/steam-run {Paths.runners}"
   '';
 
   preFixup = ''

@@ -538,7 +538,6 @@ self: super: {
   statix = buildVimPluginFrom2Nix rec {
     inherit (statix) pname src meta;
     version = "0.1.0";
-    dependencies = with self; [ statix ];
     postPatch = ''
       # check that version is up to date
       grep 'pname = "statix-vim"' -A 1 flake.nix \

@@ -14,6 +14,7 @@ buildPythonPackage rec {
 
   # Checks needs internet access
   doCheck = false;
+  pythonImportsCheck = [ "aiohttp_socks" ];
 
   disabled = pythonOlder "3.5.3";
 

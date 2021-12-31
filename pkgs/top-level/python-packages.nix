@@ -1320,6 +1320,8 @@ in {
 
   brother = callPackage ../development/python-modules/brother { };
 
+  brother-ql = callPackage ../development/python-modules/brother-ql { };
+
   brotli = callPackage ../development/python-modules/brotli { };
 
   brotlicffi = callPackage ../development/python-modules/brotlicffi {
@@ -2985,6 +2987,8 @@ in {
   fordpass = callPackage ../development/python-modules/fordpass { };
 
   forecast-solar = callPackage ../development/python-modules/forecast-solar { };
+
+  formbox = callPackage ../development/python-modules/formbox { };
 
   fortiosapi = callPackage ../development/python-modules/fortiosapi { };
 
@@ -5640,6 +5644,8 @@ in {
 
   packaging = callPackage ../development/python-modules/packaging { };
 
+  packbits = callPackage ../development/python-modules/packbits { };
+
   packet-python = callPackage ../development/python-modules/packet-python { };
 
   pafy = callPackage ../development/python-modules/pafy { };
@@ -7356,6 +7362,8 @@ in {
   pysideTools = callPackage ../development/python-modules/pyside/tools.nix { };
 
   pysigset = callPackage ../development/python-modules/pysigset { };
+
+  pysimplegui = callPackage ../development/python-modules/pysimplegui { };
 
   pysingleton = callPackage ../development/python-modules/pysingleton { };
 
