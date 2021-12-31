@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b2e9810e09c3a47b73ce9cab5a72243a1258f61e7900969097a817232246ce1c";
+    sha256 = "076f8qi265x8jy89c03r3vv5h4is4ir5mawwrrrpp96314783sdj";
   };
 
   XDG_RUNTIME_DIR = "/tmp";
