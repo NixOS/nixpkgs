@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage {
   #   (/private/tmp/nix-build-clippy-1.36.0.drv-0/rustc-1.36.0-src/src/librustc_llvm)
   doCheck = false;
 
-  postBuild = ''
+  preBuild = ''
     export CARGO_TARGET_DIR="$(pwd)/target"
   '';
 
