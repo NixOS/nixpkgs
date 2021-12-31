@@ -199,6 +199,10 @@ beamPackages.mixRelease rec {
     });
   };
 
+  postBuild = ''
+    mix phx.digest --no-deps-check
+  '';
+
   passthru = {
     tests.pleroma = nixosTests.pleroma;
     inherit mixNixDeps;
