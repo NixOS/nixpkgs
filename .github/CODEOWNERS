@@ -248,3 +248,6 @@
 /pkgs/development/compilers/nim  @ehmry
 /pkgs/development/nim-packages  @ehmry
 /pkgs/top-level/nim-packages.nix  @ehmry
+
+# terraform providers
+/pkgs/applications/networking/cluster/terraform-providers @zowoq
