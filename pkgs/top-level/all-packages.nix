@@ -519,6 +519,8 @@ with pkgs;
 
   packr = callPackage ../development/libraries/packr { };
 
+  perseus-cli = callPackage ../development/tools/perseus-cli { };
+
   pet = callPackage ../development/tools/pet { };
 
   pkger = callPackage ../development/libraries/pkger { };
@@ -2627,6 +2629,8 @@ with pkgs;
   wlrctl = callPackage ../tools/wayland/wlrctl { };
 
   wlsunset = callPackage ../tools/wayland/wlsunset { };
+
+  wluma = callPackage ../tools/wayland/wluma {  };
 
   wob = callPackage ../tools/wayland/wob { };
 
@@ -25127,6 +25131,8 @@ with pkgs;
 
   fnott = callPackage ../applications/misc/fnott { };
 
+  gg-scm = callPackage ../applications/version-management/git-and-tools/gg { };
+
   gigalixir = with python3Packages; toPythonApplication gigalixir;
 
   go-libp2p-daemon = callPackage ../servers/go-libp2p-daemon { };
@@ -31320,6 +31326,8 @@ with pkgs;
   ;
 
   gnome-connections = callPackage ../desktops/gnome/apps/gnome-connections { };
+
+  gnome-text-editor = callPackage ../desktops/gnome/apps/gnome-text-editor { };
 
   gnome-tour = callPackage ../desktops/gnome/core/gnome-tour { };
 
