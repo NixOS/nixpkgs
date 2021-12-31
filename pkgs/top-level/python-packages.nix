@@ -8521,8 +8521,6 @@ in {
 
   seabreeze = callPackage ../development/python-modules/seabreeze { };
 
-  seahub = callPackage ../development/python-modules/seahub { };
-
   seaserv = toPythonModule (pkgs.seafile-server.override {
     python3 = self.python;
   });
