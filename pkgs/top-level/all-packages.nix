@@ -18589,7 +18589,6 @@ with pkgs;
   libvirt = callPackage ../development/libraries/libvirt {
     inherit (darwin.apple_sdk.frameworks) Carbon AppKit;
   };
-  libvirt_5_9_0 = callPackage ../development/libraries/libvirt/5.9.0.nix { };
 
   libvirt-glib = callPackage ../development/libraries/libvirt-glib { };
 
