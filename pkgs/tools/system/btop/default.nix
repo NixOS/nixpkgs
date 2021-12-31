@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , runCommand
 , darwin
+, removeReferencesTo
 }:
 
 stdenv.mkDerivation rec {
@@ -37,6 +38,10 @@ stdenv.mkDerivation rec {
     );
 
   installFlags = [ "PREFIX=$(out)" ];
+
+  postInstall = ''
+    ${removeReferencesTo}/bin/remove-references-to -t ${stdenv.cc.cc} $(readlink -f $out/bin/btop)
+  '';
 
   meta = with lib; {
     description = "A monitor of resources";
