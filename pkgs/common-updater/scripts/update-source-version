@@ -161,7 +161,7 @@ if [[ $(grep --count --extended-regexp "^\s*(let\b)?\s*$versionKey\s*=\s*\"$oldV
 elif [[ $(grep --count --extended-regexp "^\s*(let\b)?\s*name\s*=\s*\"[^\"]+-$oldVersionEscaped\"" "$nixFile") = 1 ]]; then
     pattern="/\bname\b\s*=/ s|-$oldVersionEscaped\"|-$newVersion\"|"
 else
-    die "Couldn't figure out where out where to patch in new version in '$attr'!"
+    die "Couldn't figure out a pattern in .nix to patch in new version in '$attr'!"
 fi
 
 if [[ "$oldHash" =~ ^(sha256|sha512)[:-] ]]; then
