@@ -30,8 +30,6 @@ with self; with super; {
 
   bitbucket_api = callPackage ../development/python-modules/bitbucket-api { };
 
-  bitbucket-cli = callPackage ../development/python-modules/bitbucket-cli { };
-
   blivet = callPackage ../development/python-modules/blivet { };
 
   box2d = callPackage ../development/python-modules/box2d { };
