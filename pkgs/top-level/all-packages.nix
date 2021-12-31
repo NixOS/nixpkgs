@@ -8981,8 +8981,6 @@ with pkgs;
 
   pwndbg = callPackage ../development/tools/misc/pwndbg { };
 
-  pycangjie = pythonPackages.pycangjie;
-
   pycflow2dot = with python3.pkgs; toPythonApplication pycflow2dot;
 
   pydb = callPackage ../development/tools/pydb { };
