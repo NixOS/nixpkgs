@@ -6572,6 +6572,8 @@ in {
 
   py-desmume = callPackage ../development/python-modules/py-desmume { };
 
+  pydevccu = callPackage ../development/python-modules/pydevccu { };
+
   pydexcom = callPackage ../development/python-modules/pydexcom { };
 
   pydicom = callPackage ../development/python-modules/pydicom { };
