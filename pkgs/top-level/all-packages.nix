@@ -31636,6 +31636,8 @@ with pkgs;
 
   whisper = callPackage ../applications/science/biology/whisper { };
 
+  xenomapper = callPackage ../applications/science/biology/xenomapper { };
+
   hmmer = callPackage ../applications/science/biology/hmmer { };
 
   bwa = callPackage ../applications/science/biology/bwa { };

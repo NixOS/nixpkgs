@@ -661,8 +661,6 @@ with self; with super; {
 
   xcaplib = callPackage ../development/python-modules/xcaplib { };
 
-  xenomapper = disabled super.xenomapper;
-
   yenc = callPackage ../development/python-modules/yenc { };
 
   yt = callPackage ../development/python-modules/yt { };
