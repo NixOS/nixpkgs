@@ -1,10 +1,10 @@
-{ lib
-, cmake
-, fetchFromGitHub
-, buildPythonPackage
-, abseil-cpp
+{ abseil-cpp
 , absl-py
 , attrs
+, buildPythonPackage
+, cmake
+, fetchFromGitHub
+, lib
 , numpy
 , pybind11
 , wrapt
@@ -13,13 +13,13 @@
 buildPythonPackage rec {
   pname = "dm-tree";
   # As of 2021-12-29, the latest stable version still builds with Bazel.
-  version = "42e87fda83278e2eb32bb55225e1d1511e77c10c";
+  version = "unstable-2021-12-20";
 
   src = fetchFromGitHub {
     owner = "deepmind";
     repo = "tree";
-    rev = "${version}";
-    sha256 = "0bnvnn6m54jp5sr7lbvakdmhbrh2myv79ffmrgl7yjp13mz03lqi";
+    rev = "b452e5c2743e7489b4ba7f16ecd51c516d7cd8e3";
+    sha256 = "1r187xwpvnnj98lyasngcv3lbxz0ziihpl5dbnjbfbjr0kh6z0j9";
   };
 
   patches = [
