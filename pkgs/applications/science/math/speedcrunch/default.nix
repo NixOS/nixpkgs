@@ -2,13 +2,13 @@
 
 mkDerivation rec {
   pname = "speedcrunch";
-  version = "0.12.0";
+  version = "unstable-2021-10-09";
 
   src = fetchFromBitbucket {
     owner = "heldercorreia";
     repo = pname;
-    rev = "release-${version}";
-    sha256 = "0vh7cd1915bjqzkdp3sk25ngy8cq624mkh8c53c5bnzk357kb0fk";
+    rev = "74756f3438149c01e9edc3259b0f411fa319a22f";
+    sha256 = "sha256-XxQv+A5SfYXFIRK7yacxGHHne1Q93pwCGeHhchIKizU=";
   };
 
   buildInputs = [ qtbase qttools ];
