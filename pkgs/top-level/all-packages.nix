@@ -15158,8 +15158,6 @@ with pkgs;
 
   panopticon = callPackage ../development/tools/analysis/panopticon {};
 
-  pants = callPackage ../development/tools/build-managers/pants {};
-
   parinfer-rust = callPackage ../development/tools/parinfer-rust {};
 
   parse-cli-bin = callPackage ../development/tools/parse-cli-bin { };
