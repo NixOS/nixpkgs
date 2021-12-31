@@ -92,12 +92,6 @@ mkDerivation rec {
     sha256 = "nENXumOArRAHENqnBUjM7m+I5hf/WAFTVfm6cJgnv+0=";
   };
 
-  patches = [
-    # Install GIMP plug-in to a correct destination
-    # https://github.com/c-koi/gmic-qt/pull/78
-    ./fix-gimp-plugin-path.patch
-  ];
-
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -134,8 +128,8 @@ mkDerivation rec {
   '';
 
   postFixup = lib.optionalString (variant == "gimp") ''
-    echo "wrapping $out/${gimp.targetPluginDir}/gmic_gimp_qt"
-    wrapQtApp "$out/${gimp.targetPluginDir}/gmic_gimp_qt"
+    echo "wrapping $out/${gimp.targetPluginDir}/gmic_gimp_qt/gmic_gimp_qt"
+    wrapQtApp "$out/${gimp.targetPluginDir}/gmic_gimp_qt/gmic_gimp_qt"
   '';
 
   passthru = {
