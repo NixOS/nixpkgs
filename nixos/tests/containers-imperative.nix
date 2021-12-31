@@ -11,7 +11,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       # XXX: Sandbox setup fails while trying to hardlink files from the host's
       #      store file system into the prepared chroot directory.
       nix.useSandbox = false;
-      nix.binaryCaches = []; # don't try to access cache.nixos.org
+      nix.substituters = lib.mkForce []; # don't try to access cache.nixos.org
 
       virtualisation.writableStore = true;
       # Make sure we always have all the required dependencies for creating a

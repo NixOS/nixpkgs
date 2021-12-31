@@ -45,7 +45,7 @@ in makeTest {
         ../modules/profiles/base.nix
       ];
 
-      nix.binaryCaches = mkForce [ ];
+      nix.substituters = mkForce [ ];
       nix.extraOptions = ''
         hashed-mirrors =
         connect-timeout = 1

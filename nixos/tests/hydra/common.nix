@@ -42,7 +42,7 @@
         hostName = "localhost";
         systems = [ system ];
       }];
-      binaryCaches = [];
+      substituters = [];
     };
   };
 }

@@ -43,7 +43,7 @@ let
       # vda is a filesystem without partition table
       forceInstall = true;
     };
-    nix.binaryCaches = lib.mkForce [ ];
+    nix.substituters = lib.mkForce [ ];
     nix.extraOptions = ''
       hashed-mirrors =
       connect-timeout = 1

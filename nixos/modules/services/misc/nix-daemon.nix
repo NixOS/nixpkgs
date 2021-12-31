@@ -38,15 +38,15 @@ let
         # your NixOS configuration, typically
         # /etc/nixos/configuration.nix.  Do not edit it!
         build-users-group = nixbld
-        max-jobs = ${toString (cfg.maxJobs)}
-        cores = ${toString (cfg.buildCores)}
-        sandbox = ${if (builtins.isBool cfg.useSandbox) then boolToString cfg.useSandbox else cfg.useSandbox}
+        max-jobs = ${toString cfg.maxJobs}
+        cores = ${toString cfg.buildCores}
+        sandbox = ${if builtins.isBool cfg.useSandbox then boolToString cfg.useSandbox else cfg.useSandbox}
         extra-sandbox-paths = ${toString cfg.sandboxPaths}
-        substituters = ${toString cfg.binaryCaches}
-        trusted-substituters = ${toString cfg.trustedBinaryCaches}
-        trusted-public-keys = ${toString cfg.binaryCachePublicKeys}
+        substituters = ${toString cfg.substituters}
+        trusted-substituters = ${toString cfg.trustedSubstituters}
+        trusted-public-keys = ${toString cfg.trustedPublicKeys}
         auto-optimise-store = ${boolToString cfg.autoOptimiseStore}
-        require-sigs = ${boolToString cfg.requireSignedBinaryCaches}
+        require-sigs = ${boolToString cfg.requireSignedSubstituters}
         trusted-users = ${toString cfg.trustedUsers}
         allowed-users = ${toString cfg.allowedUsers}
         ${optionalString (!cfg.distributedBuilds) ''
@@ -72,10 +72,14 @@ in
 
 {
   imports = [
-    (mkRenamedOptionModule [ "nix" "useChroot" ] [ "nix" "useSandbox" ])
+    (mkRemovedOptionModule [ "nix" "daemonNiceLevel" ] "Consider nix.daemonCPUSchedPolicy instead.")
+    (mkRenamedOptionModule [ "nix" "binaryCachePublicKeys" ] [ "nix" "trustedPublicKeys" ])
+    (mkRenamedOptionModule [ "nix" "binaryCaches" ] [ "nix" "substituters" ])
     (mkRenamedOptionModule [ "nix" "chrootDirs" ] [ "nix" "sandboxPaths" ])
     (mkRenamedOptionModule [ "nix" "daemonIONiceLevel" ] [ "nix" "daemonIOSchedPriority" ])
-    (mkRemovedOptionModule [ "nix" "daemonNiceLevel" ] "Consider nix.daemonCPUSchedPolicy instead.")
+    (mkRenamedOptionModule [ "nix" "requireSignedBinaryCaches" ] [ "nix" "requireSignedSubstituters" ])
+    (mkRenamedOptionModule [ "nix" "trustedBinaryCaches" ] [ "nix" "trustedSubstituters" ])
+    (mkRenamedOptionModule [ "nix" "useChroot" ] [ "nix" "useSandbox" ])
   ];
 
   ###### interface
@@ -391,10 +395,10 @@ in
         '';
       };
 
-      binaryCaches = mkOption {
+      substituters = mkOption {
         type = types.listOf types.str;
         description = ''
-          List of binary cache URLs used to obtain pre-built binaries
+          List of substituter URLs used to obtain pre-built binaries
           of Nix packages.
 
           By default https://cache.nixos.org/ is added,
@@ -402,37 +406,37 @@ in
         '';
       };
 
-      trustedBinaryCaches = mkOption {
+      trustedSubstituters = mkOption {
         type = types.listOf types.str;
         default = [ ];
         example = [ "https://hydra.nixos.org/" ];
         description = ''
-          List of binary cache URLs that non-root users can use (in
+          List of substituter URLs that non-root users can use (in
           addition to those specified using
-          <option>nix.binaryCaches</option>) by passing
-          <literal>--option binary-caches</literal> to Nix commands.
+          <option>nix.substituters</option>) by passing
+          <literal>--option substituters</literal> to Nix commands.
         '';
       };
 
-      requireSignedBinaryCaches = mkOption {
+      requireSignedSubstituters = mkOption {
         type = types.bool;
         default = true;
         description = ''
-          If enabled (the default), Nix will only download binaries from binary caches if
+          If enabled (the default), Nix will only download binaries from substituters if
           they are cryptographically signed with any of the keys listed in
-          <option>nix.binaryCachePublicKeys</option>. If disabled, signatures are neither
+          <option>nix.trustedPublicKeys</option>. If disabled, signatures are neither
           required nor checked, so it's strongly recommended that you use only
           trustworthy caches and https to prevent man-in-the-middle attacks.
         '';
       };
 
-      binaryCachePublicKeys = mkOption {
+      trustedPublicKeys = mkOption {
         type = types.listOf types.str;
         example = [ "hydra.nixos.org-1:CNHJZBh9K4tP3EKF6FkkgeVYsS3ohTl+oS0Qa8bezVs=" ];
         description = ''
-          List of public keys used to sign binary caches. If
-          <option>nix.requireSignedBinaryCaches</option> is enabled,
-          then Nix will use a binary from a binary cache if and only
+          List of public keys used to sign substituters. If
+          <option>nix.requireSignedSubstituters</option> is enabled,
+          then Nix will use a binary from a substituter if and only
           if it is signed by <emphasis>any</emphasis> of the keys
           listed here. By default, only the key for
           <uri>cache.nixos.org</uri> is included.
@@ -446,7 +450,7 @@ in
         description = ''
           A list of names of users that have additional rights when
           connecting to the Nix daemon, such as the ability to specify
-          additional binary caches, or to import unsigned NARs. You
+          additional substituters, or to import unsigned NARs. You
           can also specify groups by prefixing them with
           <literal>@</literal>; for instance,
           <literal>@wheel</literal> means all users in the wheel
@@ -561,8 +565,8 @@ in
 
   config = mkIf cfg.enable {
 
-    nix.binaryCachePublicKeys = [ "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=" ];
-    nix.binaryCaches = [ "https://cache.nixos.org/" ];
+    nix.trustedPublicKeys = [ "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=" ];
+    nix.substituters = [ "https://cache.nixos.org/" ];
 
     environment.systemPackages =
       [ nix

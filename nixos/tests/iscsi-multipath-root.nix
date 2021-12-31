@@ -111,7 +111,7 @@ import ./make-test-python.nix (
 
         environment.etc."initiator-root-disk-closure".source = nodes.initiatorRootDisk.config.system.build.toplevel;
 
-        nix.binaryCaches = lib.mkForce [ ];
+        nix.substituters = lib.mkForce [ ];
         nix.extraOptions = ''
           hashed-mirrors =
           connect-timeout = 1
@@ -263,5 +263,3 @@ import ./make-test-python.nix (
     '';
   }
 )
-
-
