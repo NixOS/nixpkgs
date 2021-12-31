@@ -242,6 +242,11 @@ stdenv.mkDerivation rec {
     ln -s ${nodejs-12_x} $out/externals/node12
     ln -s ${nodejs-16_x} $out/externals/node16
 
+    # Install Nodejs scripts called from workflows
+    install -D src/Misc/layoutbin/hashFiles/index.js $out/lib/hashFiles/index.js
+    mkdir -p $out/lib/checkScripts
+    install src/Misc/layoutbin/checkScripts/* $out/lib/checkScripts/
+
     runHook postInstall
   '';
 

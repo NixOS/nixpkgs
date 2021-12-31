@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "nwdiag";
-  version = "2.0.0";
+  version = "3.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "blockdiag";
     repo = pname;
     rev = version;
-    sha256 = "sha256-PWLFJhXQeuUQQpGkXN2pEJs/1WECpJpUqWbGH3150TI=";
+    sha256 = "sha256-uKrdkXpL5YBr953sRsHknYg+2/WwrZmyDf8BMA2+0tU=";
   };
 
   propagatedBuildInputs = [
