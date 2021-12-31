@@ -7,17 +7,10 @@
 , h2
 , tls-mirage
 , mimic
-, cohttp-lwt
-, letsencrypt
-, emile
 , ke
 , bigstringaf
-, domain-name
-, duration
 , faraday
-, ipaddr
 , tls
-, x509
 , lwt
 , logs
 , fmt
@@ -32,11 +25,11 @@
 
 buildDunePackage rec {
   pname = "paf";
-  version = "0.0.5";
+  version = "0.0.6";
 
   src = fetchurl {
     url = "https://github.com/dinosaure/paf-le-chien/releases/download/${version}/paf-${version}.tbz";
-    sha256 = "e85a018046eb062d2399fdbe8d9d3400a4d5cd51bb62840446503f557c3eeff1";
+    sha256 = "21adbe0f7f9c0242354fa996468d01bf21d5cbcbdd978c911df8e2e299e8f9ae";
   };
 
   useDune2 = true;
@@ -48,17 +41,10 @@ buildDunePackage rec {
     h2
     tls-mirage
     mimic
-    cohttp-lwt
-    letsencrypt
-    emile
     ke
     bigstringaf
-    domain-name
-    ipaddr
-    duration
     faraday
     tls
-    x509
     cstruct
   ];
 

@@ -10069,6 +10069,8 @@ with pkgs;
 
   tarssh = callPackage ../servers/tarssh { };
 
+  tartan = callPackage ../development/tools/analysis/tartan {};
+
   tartube = callPackage ../applications/video/tartube { };
 
   tartube-yt-dlp = callPackage ../applications/video/tartube {
@@ -16337,7 +16339,9 @@ with pkgs;
 
   fflas-ffpack = callPackage ../development/libraries/fflas-ffpack { };
 
-  forge = callPackage ../development/libraries/forge { };
+  forge = callPackage ../development/libraries/forge {
+    cudatoolkit = buildPackages.cudatoolkit_11;
+  };
 
   linbox = callPackage ../development/libraries/linbox { };
 
@@ -17293,8 +17297,6 @@ with pkgs;
     # https://github.com/jemalloc/jemalloc/issues/2091
     stdenv = if stdenv.cc.isClang then llvmPackages_10.stdenv else stdenv;
   };
-
-  jemalloc450 = callPackage ../development/libraries/jemalloc/jemalloc450.nix { };
 
   jose = callPackage ../development/libraries/jose { };
 
@@ -26156,7 +26158,9 @@ with pkgs;
 
   srain = callPackage ../applications/networking/irc/srain { };
 
-  super-productivity = callPackage ../applications/office/super-productivity { };
+  super-productivity = callPackage ../applications/office/super-productivity {
+    electron = electron_13;
+  };
 
   wlroots = callPackage ../development/libraries/wlroots {
     inherit (xorg) xcbutilrenderutil;
@@ -28659,7 +28663,7 @@ with pkgs;
 
   stalonetray = callPackage ../applications/window-managers/stalonetray {};
 
-  inherit (ocaml-ng.ocamlPackages_4_07) stog;
+  inherit (ocamlPackages) stog;
 
   stp = callPackage ../applications/science/logic/stp { };
 

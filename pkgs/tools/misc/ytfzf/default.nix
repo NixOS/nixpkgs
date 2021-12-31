@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , makeWrapper
+, chafa
 , coreutils
 , curl
 , dmenu
@@ -9,26 +10,20 @@
 , gnused
 , jq
 , mpv
-, ncurses
 , ueberzug
-, youtube-dl
+, yt-dlp
 }:
 
 stdenv.mkDerivation rec {
   pname = "ytfzf";
-  version = "1.2.0";
+  version = "2.0";
 
   src = fetchFromGitHub {
     owner = "pystardust";
     repo = "ytfzf";
     rev = "v${version}";
-    sha256 = "sha256-3wbjCtRmnd9tm8kqKaIF6VmMdKsWznhOvQkEsrAJpAE=";
+    sha256 = "sha256-JuLfFC3oz2FvCaD+XPuL1N8tGKmv4atyZIBeDKWYgT8=";
   };
-
-  patches = [
-    # Updates have to be installed through Nix.
-    ./no-update.patch
-  ];
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -38,8 +33,13 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram "$out/bin/ytfzf" --prefix PATH : ${lib.makeBinPath [
-      coreutils curl dmenu fzf gnused jq mpv ncurses ueberzug youtube-dl
+      chafa coreutils curl dmenu fzf gnused jq mpv ueberzug yt-dlp
     ]}
+
+    gzip -c docs/man/ytfzf.1 > docs/man/ytfzf.1.gz
+    gzip -c docs/man/ytfzf.5 > docs/man/ytfzf.5.gz
+    install -Dt "$out/share/man/man1" docs/man/ytfzf.1.gz
+    install -Dt "$out/share/man/man5" docs/man/ytfzf.5.gz
   '';
 
   meta = with lib; {

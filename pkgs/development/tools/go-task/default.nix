@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "go-task";
@@ -15,6 +15,8 @@ buildGoModule rec {
 
   doCheck = false;
 
+  nativeBuildInputs = [ installShellFiles ];
+
   subPackages = [ "cmd/task" ];
 
   ldflags = [
@@ -23,6 +25,8 @@ buildGoModule rec {
 
   postInstall = ''
     ln -s $out/bin/task $out/bin/go-task
+
+    installShellCompletion completion/{bash,fish,zsh}/*
   '';
 
   meta = with lib; {

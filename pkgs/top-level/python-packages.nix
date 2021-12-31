@@ -2986,6 +2986,8 @@ in {
 
   forecast-solar = callPackage ../development/python-modules/forecast-solar { };
 
+  formbox = callPackage ../development/python-modules/formbox { };
+
   fortiosapi = callPackage ../development/python-modules/fortiosapi { };
 
   FormEncode = callPackage ../development/python-modules/FormEncode { };
@@ -7357,6 +7359,8 @@ in {
 
   pysigset = callPackage ../development/python-modules/pysigset { };
 
+  pysimplegui = callPackage ../development/python-modules/pysimplegui { };
+
   pysingleton = callPackage ../development/python-modules/pysingleton { };
 
   pyslurm = callPackage ../development/python-modules/pyslurm {
@@ -9749,6 +9753,8 @@ in {
   trimesh = callPackage ../development/python-modules/trimesh { };
 
   trio = callPackage ../development/python-modules/trio { };
+
+  trio-asyncio = callPackage ../development/python-modules/trio-asyncio { };
 
   trueskill = callPackage ../development/python-modules/trueskill { };
 
