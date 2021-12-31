@@ -1,9 +1,9 @@
-{ libreoffice, runCommand, dbus, bash }:
+{ libreoffice, runCommand, coreutils, gnugrep, dbus, bash }:
 let
   jdk = libreoffice.jdk;
 in
 (runCommand libreoffice.name {
-  inherit dbus libreoffice jdk bash;
+  inherit coreutils dbus gnugrep libreoffice jdk bash;
 } ''
   mkdir -p "$out/bin"
   ln -s "${libreoffice}/share" "$out/share"
