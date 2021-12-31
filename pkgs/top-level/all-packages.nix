@@ -25123,6 +25123,8 @@ with pkgs;
 
   fnott = callPackage ../applications/misc/fnott { };
 
+  gg-scm = callPackage ../applications/version-management/git-and-tools/gg { };
+
   gigalixir = with python3Packages; toPythonApplication gigalixir;
 
   go-libp2p-daemon = callPackage ../servers/go-libp2p-daemon { };
