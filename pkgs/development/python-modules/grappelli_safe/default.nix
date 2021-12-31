@@ -4,12 +4,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.0.0";
+  version = "1.1.0";
   pname = "grappelli_safe";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "84c03ec5373341d980a76480d992389e286fbc50048e91bc2e5c876d02873cc5";
+    sha256 = "80b05085e2e36bf281a3651c5e592703ffcd860f3db1998f4a619af3066100cb";
   };
 
   meta = with lib; {
