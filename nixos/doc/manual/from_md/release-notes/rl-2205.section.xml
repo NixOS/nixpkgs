@@ -30,6 +30,14 @@
           PHP 8.1 is now available
         </para>
       </listitem>
+      <listitem>
+        <para>
+          Mattermost has been updated to version 6.2. Migrations may
+          take a while, see the
+          <link xlink:href="https://docs.mattermost.com/install/self-managed-changelog.html#release-v6.2-feature-release">upgrade
+          notes</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.05-new-services">
