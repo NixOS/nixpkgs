@@ -18,6 +18,12 @@
 , gimp ? null
 , qtbase
 , qttools
+, writeShellScript
+, common-updater-scripts
+, gnugrep
+, gnused
+, coreutils
+, jq
 }:
 
 let
@@ -131,6 +137,33 @@ mkDerivation rec {
     echo "wrapping $out/${gimp.targetPluginDir}/gmic_gimp_qt"
     wrapQtApp "$out/${gimp.targetPluginDir}/gmic_gimp_qt"
   '';
+
+  passthru = {
+    updateScript = writeShellScript "${pname}-update-script" ''
+      set -o errexit
+      PATH=${lib.makeBinPath [ common-updater-scripts curl gnugrep gnused coreutils jq ]}
+
+      latestVersion=$(curl 'https://gmic.eu/files/source/' | grep -E 'gmic_[^"]+\.tar\.gz' | sed -E 's/.+<a href="gmic_([^"]+)\.tar\.gz".+/\1/g' | sort --numeric-sort --reverse | head -n1)
+
+      if [[ "${version}" = "$latestVersion" ]]; then
+          echo "The new version same as the old version."
+          exit 0
+      fi
+
+      # gmic-community is not versioned so let’s just update to master.
+      communityLatestCommit=$(curl "https://api.github.com/repos/dtschump/gmic-community/commits/master")
+      communityLatestSha=$(echo "$communityLatestCommit" | jq .sha --raw-output)
+      communityLatestDate=$(echo "$communityLatestCommit" | jq .commit.committer.date --raw-output | sed 's/T.\+//')
+      update-source-version --source-key=gmic-community "gmic-qt" "unstable-$communityLatestDate" --rev="$communityLatestSha"
+
+      for component in CImg gmic_stdlib gmic gmic_qt; do
+          # The script will not perform an update when the version attribute is up to date from previous platform run
+          # We need to clear it before each run
+          update-source-version "--source-key=$component" "gmic-qt" 0 "$(printf '0%.0s' {1..64})"
+          update-source-version "--source-key=$component" "gmic-qt" $latestVersion
+      done
+    '';
+  };
 
   meta = with lib; {
     description = variants.${variant}.description;
