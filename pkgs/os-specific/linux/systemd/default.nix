@@ -128,6 +128,12 @@ let
   wantCurl = withRemote || withImportd;
   wantGcrypt = withResolved || withImportd;
   version = "250.3";
+
+  # Bump this variable on every (major) version change. See below (in the meson options list) for why.
+  # command:
+  #  $ curl -s https://api.github.com/repos/systemd/systemd/releases/latest | \
+  #     jq '.created_at|strptime("%Y-%m-%dT%H:%M:%SZ")|mktime'
+  releaseTimestamp = "1640290180";
 in
 stdenv.mkDerivation {
   inherit pname version;
@@ -399,6 +405,14 @@ stdenv.mkDerivation {
 
   mesonFlags = [
     "-Dversion-tag=${version}"
+    # We bump this variable on every (major) version change to ensure
+    # that we have known-good value for a timestamp that is in the (not so distant) past.
+    # This serves as a lower bound for valid system timestamps during startup. Systemd will
+    # reset the system timestamp if this date is +- 15 years from the system time.
+    # See the systemd v250 release notes for further details:
+    # https://github.com/systemd/systemd/blob/60e930fc3e6eb8a36fbc184773119eb8d2f30364/NEWS#L258-L266
+    "-Dtime-epoch=${releaseTimestamp}"
+
     "-Ddbuspolicydir=${placeholder "out"}/share/dbus-1/system.d"
     "-Ddbussessionservicedir=${placeholder "out"}/share/dbus-1/services"
     "-Ddbussystemservicedir=${placeholder "out"}/share/dbus-1/system-services"
