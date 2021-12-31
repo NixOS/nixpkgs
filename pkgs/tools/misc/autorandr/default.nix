@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation rec {
   pname = "autorandr";
-  version = "1.11";
+  version = "1.12.1";
 
   buildInputs = [ python3Packages.python ];
 
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     owner = "phillipberndt";
     repo = "autorandr";
     rev = version;
-    sha256 = "0rmnqk2bi6bbd2if1rll37mlzlqxzmnazfffdhcpzskxwyaj4yn5";
+    sha256 = "sha256-7SNnbgV6PeseBD6wdilEIOfOL2KVDpnlkSn9SBgRhhM=";
   };
 
   meta = with lib; {
