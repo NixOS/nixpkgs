@@ -288,9 +288,6 @@ with self; with super; {
 
   mock = callPackage ../development/python-modules/mock/2.nix { };
 
-  # Needed here because moinmoin is loaded as a Python library.
-  moinmoin = callPackage ../development/python-modules/moinmoin { };
-
   monosat = disabled super.monosat;
 
   more-itertools = callPackage ../development/python-modules/more-itertools/2.7.nix { };
