@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage {
   doCheck = false;
 
   postBuild = ''
-    ln -s src/tools/clippy/target target
+    export CARGO_TARGET_DIR="$(pwd)/target"
   '';
 
   preFixup = lib.optionalString stdenv.isDarwin ''
