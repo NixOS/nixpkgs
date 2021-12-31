@@ -19,6 +19,7 @@ let
       };
       vendorSha256 = data.vendorSha256 or null;
       deleteVendor = data.deleteVendor or false;
+      proxyVendor = data.proxyVendor or false;
 
       # Terraform allow checking the provider versions, but this breaks
       # if the versions are not provided via file paths.
