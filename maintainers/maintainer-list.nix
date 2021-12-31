@@ -3665,6 +3665,12 @@
     githubId = 222467;
     name = "Dmitry Ivanov";
   };
+  Etjean = {
+    email = "et.jean@outlook.fr";
+    github = "Etjean";
+    githubId = 32169529;
+    name = "Etienne Jean";
+  };
   etu = {
     email = "elis@hirwing.se";
     matrix = "@etu:semi.social";
