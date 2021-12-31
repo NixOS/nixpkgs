@@ -19,7 +19,7 @@
 let
   reuseLibs = enableShared && withAllTargets;
 
-  version = "2.35.1";
+  version = "2.35.2";
   basename = "binutils";
   # The targetPrefix prepended to binary names to allow multiple binuntils on the
   # PATH to both be usable.
@@ -34,7 +34,7 @@ let
   # HACK to ensure that we preserve source from bootstrap binutils to not rebuild LLVM
   normal-src = stdenv.__bootPackages.binutils-unwrapped.src or (fetchurl {
     url = "mirror://gnu/binutils/${basename}-${version}.tar.bz2";
-    sha256 = "sha256-Mg56HQ9G/Nn0E/EEbiFsviO7K85t62xqYzBEJeSLGUI=";
+    sha256 = "sha256-z6dkTb7PRZHhNutAfBwdoWV4vSsD8MLorNzroZS7nWE=";
   });
 in
 
