@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "tap.py";
-  version = "3.0";
+  version = "3.1";
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-9e7u6/1k5T0yZhdSu0wohYmjuru5bbPzkaTsKfE1nHA=";
+    sha256 = "sha256-PAzUUhKtWiWzVEWWTiUX76AAoRihv8NDfa6CiJLq8eE=";
   };
 
   checkInputs = [ pytestCheckHook ];
