@@ -138,11 +138,6 @@ mkDerivation rec {
     wrapQtApp "$out/${gimp.targetPluginDir}/gmic_gimp_qt"
   '';
 
-  postFixup = lib.optionalString (variant == "gimp") ''
-    echo "wrapping $out/${gimp.targetPluginDir}/gmic_gimp_qt/gmic_gimp_qt"
-    wrapQtApp "$out/${gimp.targetPluginDir}/gmic_gimp_qt/gmic_gimp_qt"
-  '';
-
   passthru = {
     updateScript = writeShellScript "${pname}-update-script" ''
       set -o errexit
