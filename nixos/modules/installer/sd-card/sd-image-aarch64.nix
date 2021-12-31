@@ -24,6 +24,9 @@
         [pi3]
         kernel=u-boot-rpi3.bin
 
+        [pi02]
+        kernel=u-boot-rpi3.bin
+
         [pi4]
         kernel=u-boot-rpi4.bin
         enable_gic=1
