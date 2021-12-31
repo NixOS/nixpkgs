@@ -100,6 +100,27 @@ stdenv.mkDerivation ({
     substituteInPlace unittests/Support/CMakeLists.txt \
       --replace "add_subdirectory(DynamicLibrary)" ""
     rm unittests/Support/DynamicLibrary/DynamicLibraryTest.cpp
+  '' + ''
+    # Tweak tests to ignore namespace part of type to support
+    # gcc-12: https://gcc.gnu.org/PR103598.
+    # The change below mangles strings like:
+    #    CHECK-NEXT: Starting llvm::Function pass manager run.
+    # to:
+    #    CHECK-NEXT: Starting {{.*}}Function pass manager run.
+    for f in \
+      test/Other/new-pass-manager.ll \
+      test/Other/new-pm-defaults.ll \
+      test/Other/new-pm-lto-defaults.ll \
+      test/Other/new-pm-thinlto-defaults.ll \
+      test/Other/pass-pipeline-parsing.ll \
+      test/Transforms/Inline/cgscc-incremental-invalidate.ll \
+      test/Transforms/Inline/clear-analyses.ll \
+      ; do
+      echo "PATCH: $f"
+      substituteInPlace $f \
+        --replace 'Starting llvm::' 'Starting {{.*}}' \
+        --replace 'Finished llvm::' 'Finished {{.*}}'
+    done
   '';
 
   # hacky fix: created binaries need to be run before installation
