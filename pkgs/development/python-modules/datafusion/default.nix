@@ -13,27 +13,24 @@
 , pyarrow
 , pytest
 }:
-
 let
-  # le sigh, the perils of unrelated versions of software living in the
-  # same repo: there's no obvious way to map the top level source repo
+  # le sigh, the perils of unrelated versions of software living in the same
+  # repo: there's no obvious way to map the top level source repo
   # (arrow-datafusion) version to the version of contained repo
   # (arrow-datafusion/python)
   #
-  # A commit hash will do in a pinch, and ultimately the sha256 has
-  # the final say of what the content is when building
+  # A commit hash will do in a pinch, and ultimately the sha256 has the final
+  # say of what the content is when building
   cargoLock = fetchurl {
     url = "https://raw.githubusercontent.com/apache/arrow-datafusion/6.0.0/python/Cargo.lock";
     sha256 = "sha256-xiv3drEU5jOGsEIh0U01ZQ1NBKobxO2ctp4mxy9iigw=";
   };
 
   postUnpack = ''
-    # TODO: apache/arrow-datafusion should ship the Cargo.lock file in the Python package
     cp "${cargoLock}" $sourceRoot/Cargo.lock
     chmod u+w $sourceRoot/Cargo.lock
   '';
 in
-
 buildPythonPackage rec {
   pname = "datafusion";
   version = "0.4.0";
@@ -46,8 +43,11 @@ buildPythonPackage rec {
 
   inherit postUnpack;
 
+  # TODO: remove the patch hacking and postUnpack hooks after
+  # https://github.com/apache/arrow-datafusion/pull/1508 is merged
+  #
   # the lock file isn't up to date as of 6.0.0 so we need to patch the source
-  # lockfile and the vendored cargo deps lockfile :(
+  # lockfile and the vendored cargo deps lockfile
   patches = [ ./Cargo.lock.patch ];
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src pname version postUnpack;
