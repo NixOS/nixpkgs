@@ -55,10 +55,18 @@ buildPythonPackage rec {
     patches = [ ./Cargo.lock.patch ];
   };
 
-  nativeBuildInputs = with rustPlatform; [ cargoSetupHook maturinBuildHook ];
+  nativeBuildInputs = with rustPlatform; [
+    cargoSetupHook
+    maturinBuildHook
+  ];
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
-  propagatedBuildInputs = [ numpy pandas pyarrow ];
+
+  propagatedBuildInputs = [
+    numpy
+    pandas
+    pyarrow
+  ];
 
   checkInputs = [ pytest ];
   pythonImportsCheck = [ "datafusion" ];
