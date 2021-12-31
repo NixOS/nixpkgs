@@ -253,7 +253,9 @@ in
         (e:
           "allow ${e}")
         cfg.allowedBridges;
-      systemPackages = with pkgs; [ libressl.nc iptables cfg.package cfg.qemu.package ];
+      systemPackages =
+        let relocatedQemu = pkgs.linkFarm "relocated-qemu" [{ name = "bin"; path = "${cfg.qemu.package}/libexec"; }];
+        in with pkgs; [ libressl.nc iptables cfg.package cfg.qemu.package relocatedQemu ];
       etc.ethertypes.source = "${pkgs.iptables}/etc/ethertypes";
     };
 
