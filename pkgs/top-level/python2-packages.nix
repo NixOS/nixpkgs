@@ -145,8 +145,6 @@ with self; with super; {
 
   gateone = callPackage ../development/python-modules/gateone { };
 
-  gdrivefs = callPackage ../development/python-modules/gdrivefs { };
-
   gsd = callPackage ../development/python-modules/gsd/1.7.nix { };
 
   gnutls = callPackage ../development/python-modules/gnutls { };

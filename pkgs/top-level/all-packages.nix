@@ -3082,8 +3082,6 @@ with pkgs;
 
   gbsplay = callPackage ../applications/audio/gbsplay { };
 
-  gdrivefs = python27Packages.gdrivefs;
-
   gdrive = callPackage ../applications/networking/gdrive { };
 
   gdu = callPackage ../tools/system/gdu { };
