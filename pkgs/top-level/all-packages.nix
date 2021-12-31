@@ -8997,8 +8997,6 @@ with pkgs;
 
   teapot = callPackage ../applications/office/teapot { };
 
-  pythonIRClib = pythonPackages.pythonIRClib;
-
   pyditz = callPackage ../applications/misc/pyditz {
     pythonPackages = python27Packages;
   };

@@ -493,8 +493,6 @@ with self; with super; {
 
   python2-pythondialog = callPackage ../development/python-modules/python2-pythondialog { };
 
-  pythonIRClib = callPackage ../development/python-modules/pythonirclib { };
-
   pythonmagick = callPackage ../development/python-modules/pythonmagick { };
 
   pyutil = callPackage ../development/python-modules/pyutil { };
