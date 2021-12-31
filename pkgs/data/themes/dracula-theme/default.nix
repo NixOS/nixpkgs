@@ -30,6 +30,11 @@ stdenv.mkDerivation {
     cp -a kde/aurorae/* $out/share/aurorae/themes/
     mkdir -p $out/share/sddm/themes
     cp -a kde/sddm/* $out/share/sddm/themes/
+
+    mkdir -p $out/share/icons/Dracula-cursors
+    mv kde/cursors/Dracula-cursors/index.theme $out/share/icons/Dracula-cursors/cursor.theme
+    mv kde/cursors/Dracula-cursors/cursors $out/share/icons/Dracula-cursors/cursors
+
     runHook postInstall
   '';
 
