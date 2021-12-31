@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/obgm/libcoap";
     description = "A CoAP (RFC 7252) implementation in C";
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     license = licenses.bsd2;
     maintainers = [ maintainers.kmein ];
   };
