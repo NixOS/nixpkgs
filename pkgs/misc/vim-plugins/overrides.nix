@@ -307,6 +307,13 @@ self: super: {
 
   # plenary-nvim = super.toVimPlugin(luaPackages.plenary-nvim);
 
+  plenary-nvim = super.plenary-nvim.overrideAttrs (old: {
+    postPatch = ''
+      sed -Ei lua/plenary/curl.lua \
+          -e 's@(command\s*=\s*")curl(")@\1${curl}/bin/curl\2@'
+    '';
+  });
+
   gruvbox-nvim = super.gruvbox-nvim.overrideAttrs (old: {
     dependencies = with self; [ lush-nvim ];
   });
