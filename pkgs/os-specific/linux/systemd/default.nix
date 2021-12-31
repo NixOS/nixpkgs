@@ -424,7 +424,6 @@ stdenv.mkDerivation {
     "-Dnetworkd=${lib.boolToString withNetworkd}"
     "-Doomd=${lib.boolToString withOomd}"
     "-Dpolkit=${lib.boolToString withPolkit}"
-    "-Dcryptsetup=${lib.boolToString withCryptsetup}"
     "-Dportabled=${lib.boolToString withPortabled}"
     "-Dhwdb=${lib.boolToString withHwdb}"
     "-Dremote=${lib.boolToString withRemote}"
