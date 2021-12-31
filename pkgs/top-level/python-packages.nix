@@ -8738,7 +8738,9 @@ in {
 
   seahub = callPackage ../development/python-modules/seahub { };
 
-  seaserv = toPythonModule pkgs.seafile-server;
+  seaserv = toPythonModule (pkgs.seafile-server.override {
+    python3 = self.python;
+  });
 
   seatconnect = callPackage ../development/python-modules/seatconnect { };
 

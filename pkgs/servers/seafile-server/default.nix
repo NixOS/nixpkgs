@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, pkg-config, python3Packages, autoreconfHook
+{ stdenv, lib, fetchFromGitHub, pkg-config, python3, autoreconfHook
 , libuuid, sqlite, glib, libevent, libsearpc, openssl, fuse, libarchive, which
 , vala, cmake, oniguruma }:
 
@@ -28,7 +28,7 @@ in stdenv.mkDerivation rec {
     glib
     libsearpc
     libevent
-    python3Packages.python
+    python3
     fuse
     libarchive
     which
