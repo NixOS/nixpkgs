@@ -13432,4 +13432,14 @@
     github = "PhilippWoelfel";
     githubId = 19400064;
   };
+  harwiltz = {
+    name = "Harley Wiltzer";
+    email = "harley.wiltzer@mail.mcgill.ca";
+    github = "harwiltz";
+    githubId = 56648659;
+    keys = [{
+      longkeyid = "rsa2048/0xC1F6F58AAF3AB8E1";
+      fingerprint = "B405 F8E3 7504 8BB7 4456  88F9 C1F6 F58A AF3A B8E1";
+    }];
+  };
 }
