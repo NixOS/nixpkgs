@@ -10,6 +10,7 @@
 , libX11
 , Carbon
 , OpenGL
+, x11Support ? !stdenv.isDarwin
 }:
 
 let
@@ -40,7 +41,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ meson ninja pkg-config utilmacros python3 ];
 
-  buildInputs = [
+  buildInputs = lib.optionals x11Support [
     libGL
     libX11
   ] ++ lib.optionals stdenv.isDarwin [
@@ -50,10 +51,10 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dtests=${if doCheck then "true" else "false"}"
-  ]
-  ++ optional stdenv.isDarwin "-Dglx=yes";
+    "-Dglx=${if x11Support then "yes" else "no"}"
+  ];
 
-  NIX_CFLAGS_COMPILE = ''-DLIBGL_PATH="${getLib libGL}/lib"'';
+  NIX_CFLAGS_COMPILE = lib.optionalString x11Support ''-DLIBGL_PATH="${getLib libGL}/lib"'';
 
   # cgl_epoxy_api fails in darwin sandbox and on Hydra (because it's headless?)
   preCheck = lib.optionalString stdenv.isDarwin ''

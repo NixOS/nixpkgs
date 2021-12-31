@@ -104,7 +104,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libxkbcommon
-    libepoxy
+    (libepoxy.override { inherit x11Support; })
     isocodes
   ] ++ lib.optionals stdenv.isDarwin [
     AppKit

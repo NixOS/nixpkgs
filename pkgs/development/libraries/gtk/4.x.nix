@@ -95,7 +95,7 @@ stdenv.mkDerivation rec {
     libpng
     libtiff
     libjpeg
-    libepoxy
+    (libepoxy.override { inherit x11Support; })
     isocodes
   ] ++ lib.optionals vulkanSupport [
     vulkan-headers
