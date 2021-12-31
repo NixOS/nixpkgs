@@ -22,7 +22,7 @@ python3Packages.buildPythonApplication rec {
   format = "other";
   nativeBuildInputs = [ (lib.getBin cups) ];
   # The source image also brings pre-built ppd files,
-  # be we prefer to generate from source where possible, so
+  # but we prefer to generate from source where possible, so
   # the following line generates ppd files from the drv file.
   postBuild = ''
     ppdc -v -d . -I "${cups}/share/cups/ppdc" rastertosag-gdi.drv
