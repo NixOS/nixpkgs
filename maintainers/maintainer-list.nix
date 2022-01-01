@@ -12851,6 +12851,12 @@
     githubId = 2242427;
     name = "Yoann Ono";
   };
+  yana = {
+    email = "yana@riseup.net";
+    github = "alpakido";
+    githubId = 1643293;
+    name = "Yana Timoshenko";
+  };
   yarny = {
     email = "41838844+Yarny0@users.noreply.github.com";
     github = "Yarny0";
@@ -12869,12 +12875,6 @@
     github = "yayayayaka";
     githubId = 73759599;
     name = "Lara A.";
-  };
-  yegortimoshenko = {
-    email = "yegortimoshenko@riseup.net";
-    github = "yegortimoshenko";
-    githubId = 1643293;
-    name = "Yegor Timoshenko";
   };
   yesbox = {
     email = "jesper.geertsen.jonsson@gmail.com";

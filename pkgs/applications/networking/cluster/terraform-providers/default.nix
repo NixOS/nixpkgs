@@ -13,11 +13,13 @@ let
       pname = data.repo;
       version = data.version;
       subPackages = [ "." ];
+      doCheck = false;
       src = fetchFromGitHub {
         inherit (data) owner repo rev sha256;
       };
       vendorSha256 = data.vendorSha256 or null;
       deleteVendor = data.deleteVendor or false;
+      proxyVendor = data.proxyVendor or false;
 
       # Terraform allow checking the provider versions, but this breaks
       # if the versions are not provided via file paths.
@@ -31,6 +33,7 @@ let
       version = data.version;
       goPackagePath = "github.com/${data.owner}/${data.repo}";
       subPackages = [ "." ];
+      doCheck = false;
       src = fetchFromGitHub {
         inherit (data) owner repo rev sha256;
       };
@@ -51,16 +54,10 @@ let
   # These are the providers that don't fall in line with the default model
   special-providers = {
     # Packages that don't fit the default model
-    ansible = callPackage ./ansible { };
-    cloudfoundry = callPackage ./cloudfoundry { };
     gandi = callPackage ./gandi { };
-    hcloud = callPackage ./hcloud { };
     libvirt = callPackage ./libvirt { };
-    linuxbox = callPackage ./linuxbox { };
-    lxd = callPackage ./lxd { };
     teleport = callPackage ./teleport { };
     vpsadmin = callPackage ./vpsadmin { };
-    vercel = callPackage ./vercel { };
   } // (lib.optionalAttrs (config.allowAliases or false) {
     kubernetes-alpha = throw "This has been merged as beta into the kubernetes provider. See https://www.hashicorp.com/blog/beta-support-for-crds-in-the-terraform-provider-for-kubernetes for details";
   });
