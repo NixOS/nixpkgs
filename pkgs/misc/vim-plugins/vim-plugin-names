@@ -497,6 +497,7 @@ natebosch/vim-lsc
 nathanaelkane/vim-indent-guides
 nathangrigg/vim-beancount
 nathanmsmith/nvim-ale-diagnostic
+navarasu/onedark.nvim
 navicore/vissort.vim
 nbouscal/vim-stylish-haskell
 ncm2/float-preview.nvim
