@@ -3394,6 +3394,18 @@ final: prev:
     meta.homepage = "https://github.com/jose-elias-alvarez/minsnip.nvim/";
   };
 
+  mkdir-nvim = buildVimPluginFrom2Nix {
+    pname = "mkdir.nvim";
+    version = "2021-06-20";
+    src = fetchFromGitHub {
+      owner = "jghauser";
+      repo = "mkdir.nvim";
+      rev = "caa4178dae081850230f2f05699fef8e83b59ded";
+      sha256 = "0s87hmna6bl9zy12ni2ih4i7aml009slmsk1pkpr93lmh2mspms7";
+    };
+    meta.homepage = "https://github.com/jghauser/mkdir.nvim/";
+  };
+
   mkdx = buildVimPluginFrom2Nix {
     pname = "mkdx";
     version = "2021-12-06";
