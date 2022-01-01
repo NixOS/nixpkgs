@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildPythonApplication, pexpect, pyyaml, openssh }:
+{ lib, fetchFromGitHub, buildPythonApplication, pexpect, pyyaml, openssh, nixosTests }:
 
 buildPythonApplication rec{
   pname = "xxh";
@@ -12,6 +12,10 @@ buildPythonApplication rec{
   };
 
   propagatedBuildInputs = [ pexpect pyyaml openssh ];
+
+  passthru.tests = {
+    inherit (nixosTests) xxh;
+  };
 
   meta = with lib; {
     description = "Bring your favorite shell wherever you go through ssh";
