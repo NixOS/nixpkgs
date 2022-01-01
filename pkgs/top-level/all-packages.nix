@@ -5929,6 +5929,8 @@ with pkgs;
 
   gnuapl = callPackage ../development/interpreters/gnu-apl { };
 
+  gnu-shepherd = callPackage ../misc/gnu-shepherd { };
+
   dapl = callPackage ../development/interpreters/dzaima-apl {
     buildNativeImage = false;
     stdenv = stdenvNoCC;
