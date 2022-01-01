@@ -211,6 +211,22 @@ rec {
   };
 
   #
+  # Solo5
+  #
+
+  aarch64-solo5 = {
+    config = "aarch64-solo5-none";
+    linker = "lld";
+    useLLVM = true;
+  };
+
+  x86_64-linux-solo5 = {
+    config = "aarch64-solo5-none";
+    linker = "lld";
+    useLLVM = true;
+  };
+
+  #
   # Darwin
   #
 

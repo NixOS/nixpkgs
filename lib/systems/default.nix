@@ -38,6 +38,7 @@ rec {
         else if final.isAndroid             then "bionic"
         else if final.isLinux /* default */ then "glibc"
         else if final.isAvr                 then "avrlibc"
+        else if final.isSolo5               then "none" # XXX
         else if final.isNone                then "newlib"
         else if final.isNetBSD              then "nblibc"
         # TODO(@Ericson2314) think more about other operating systems
@@ -89,7 +90,7 @@ rec {
          # uname -r
          release = null;
       };
-      isStatic = final.isWasm || final.isRedox;
+      isStatic = final.isWasm || final.isRedox || final.isSolo5;
 
       # Just a guess, based on `system`
       inherit
