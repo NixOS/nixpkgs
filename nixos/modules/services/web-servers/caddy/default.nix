@@ -165,10 +165,19 @@ in
         See <https://caddyserver.com/docs/config-adapters>
         for the full list.
 
-        ::: {.note}
-        Any value other than `caddyfile` is only valid when
-        providing your own {option}`configFile`.
-        :::
+        If the empty string is specified, the <literal>--adapter</literal>
+        argument is omitted when starting or restarting Caddy. Notably, this
+        allows specification of a configuration file in Caddy's native JSON
+        format, as long as the filename does not start with
+        <literal>Caddyfile</literal> (in which case the
+        <literal>caddyfile</literal> adapter is implicitly enabled). See
+        <link xlink:href="https://caddyserver.com/docs/command-line#caddy-run"/>
+        for details.
+
+        <note><para>
+          Any value other than <literal>caddyfile</literal> is only valid when
+          providing your own <option>configFile</option>.
+        </para></note>
       '';
     };
 
@@ -295,10 +304,9 @@ in
       serviceConfig = {
         # https://www.freedesktop.org/software/systemd/man/systemd.service.html#ExecStart=
         # If the empty string is assigned to this option, the list of commands to start is reset, prior assignments of this option will have no effect.
-        ExecStart = [ "" "${cfg.package}/bin/caddy run --config ${cfg.configFile} --adapter ${cfg.adapter} ${optionalString cfg.resume "--resume"}" ];
-        ExecReload = [ "" "${cfg.package}/bin/caddy reload --config ${cfg.configFile} --adapter ${cfg.adapter} --force" ];
-
-        ExecStartPre = "${cfg.package}/bin/caddy validate --config ${cfg.configFile} --adapter ${cfg.adapter}";
+        ExecStart = [ "" ''${cfg.package}/bin/caddy run --config ${cfg.configFile} ${optionalString (cfg.adapter != "") "--adapter ${cfg.adapter}"} ${optionalString cfg.resume "--resume"}'' ];
+        ExecReload = [ "" ''${cfg.package}/bin/caddy reload --config ${cfg.configFile} ${optionalString (cfg.adapter != "") "--adapter ${cfg.adapter}"} --force'' ];
+        ExecStartPre = ''${cfg.package}/bin/caddy validate --config ${cfg.configFile} ${optionalString (cfg.adapter != "") "--adapter ${cfg.adapter}"}'';
         User = cfg.user;
         Group = cfg.group;
         ReadWriteDirectories = cfg.dataDir;
