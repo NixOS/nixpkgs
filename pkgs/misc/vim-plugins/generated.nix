@@ -4642,6 +4642,18 @@ final: prev:
     meta.homepage = "https://github.com/nvim-treesitter/nvim-treesitter-textobjects/";
   };
 
+  nvim-ts-autotag = buildVimPluginFrom2Nix {
+    pname = "nvim-ts-autotag";
+    version = "2021-12-19";
+    src = fetchFromGitHub {
+      owner = "windwp";
+      repo = "nvim-ts-autotag";
+      rev = "0ceb4ef342bf1fdbb082ad4fa1fcfd0f864e1cba";
+      sha256 = "0bbjhjngn0wv6f28z437bx9743w366665ygz6pz81059whfp93g7";
+    };
+    meta.homepage = "https://github.com/windwp/nvim-ts-autotag/";
+  };
+
   nvim-ts-context-commentstring = buildVimPluginFrom2Nix {
     pname = "nvim-ts-context-commentstring";
     version = "2021-12-13";
