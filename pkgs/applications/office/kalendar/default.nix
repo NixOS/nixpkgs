@@ -30,6 +30,7 @@
 , calendarsupport
 
 , akonadi
+, akonadi-search
 , akonadi-contacts
 , akonadi-calendar-tools
 , kdepim-runtime
@@ -78,11 +79,17 @@ mkDerivation rec {
     eventviews
     calendarsupport
 
+    akonadi-search
     akonadi-contacts
     akonadi-calendar-tools
+    kdepim-runtime
   ];
 
-  propagatedUserEnvPkgs = [ akonadi kdepim-runtime ];
+  propagatedUserEnvPkgs = [ akonadi kdepim-runtime akonadi-search ];
+  postFixup = ''
+    wrapProgram "$out/bin/kalendar" \
+      --prefix PATH : "${lib.makeBinPath [ akonadi kdepim-runtime akonadi-search ]}"
+  '';
 
   meta = with lib; {
     description = "A calendar application using Akonadi to sync with external services (Nextcloud, GMail, ...)";
