@@ -3136,6 +3136,16 @@
     githubId = 10198051;
     name = "Drew Risinger";
   };
+  drperceptron = {
+    email = "92106371+drperceptron@users.noreply.github.com";
+    github = "drperceptron";
+    githubId = 92106371;
+    name = "Dr Perceptron";
+    keys = [{
+      longkeyid = "rsa4096/0x95EB6DFF26D1CEB0";
+      fingerprint = "7E38 89D9 B1A8 B381 C8DE  A15F 95EB 6DFF 26D1 CEB0";
+    }];
+  };
   drupol = {
     name = "Pol Dellaiera";
     email = "pol.dellaiera@protonmail.com";
