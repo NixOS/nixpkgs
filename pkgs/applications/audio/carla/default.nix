@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "http://kxstudio.sf.net/carla";
+    homepage = "https://kx.studio/Applications:Carla";
     description = "An audio plugin host";
     longDescription = ''
       It currently supports LADSPA (including LRDF), DSSI, LV2, VST2/3
