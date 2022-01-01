@@ -307,6 +307,13 @@ self: super: {
 
   # plenary-nvim = super.toVimPlugin(luaPackages.plenary-nvim);
 
+  plenary-nvim = super.plenary-nvim.overrideAttrs (old: {
+    postPatch = ''
+      sed -Ei lua/plenary/curl.lua \
+          -e 's@(command\s*=\s*")curl(")@\1${curl}/bin/curl\2@'
+    '';
+  });
+
   gruvbox-nvim = super.gruvbox-nvim.overrideAttrs (old: {
     dependencies = with self; [ lush-nvim ];
   });
@@ -538,7 +545,6 @@ self: super: {
   statix = buildVimPluginFrom2Nix rec {
     inherit (statix) pname src meta;
     version = "0.1.0";
-    dependencies = with self; [ statix ];
     postPatch = ''
       # check that version is up to date
       grep 'pname = "statix-vim"' -A 1 flake.nix \

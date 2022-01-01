@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tmatrix";
-  version = "1.3";
+  version = "1.4";
 
   src = fetchFromGitHub {
     owner = "M4444";
     repo = "TMatrix";
     rev = "v${version}";
-    sha256 = "1cvgxmdpdzpl8w4z3sh4g5pbd15rd8s1kcspi9v95yf9rydyy69s";
+    sha256 = "sha256-G3dg0SWfBjCA66TTxkVAcVrFNJOWE9+GJXYKzCUX34w=";
   };
 
   nativeBuildInputs = [ cmake installShellFiles ];

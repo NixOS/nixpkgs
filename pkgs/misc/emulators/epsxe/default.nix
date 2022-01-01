@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     homepage = "http://epsxe.com/";
     description = "Enhanced PSX (PlayStation 1) emulator";
     license = licenses.unfree;
-    maintainers = with maintainers; [ yegortimoshenko ];
+    maintainers = with maintainers; [ yana ];
     platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }

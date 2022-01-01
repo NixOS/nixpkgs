@@ -1320,6 +1320,8 @@ in {
 
   brother = callPackage ../development/python-modules/brother { };
 
+  brother-ql = callPackage ../development/python-modules/brother-ql { };
+
   brotli = callPackage ../development/python-modules/brotli { };
 
   brotlicffi = callPackage ../development/python-modules/brotlicffi {
@@ -2041,6 +2043,8 @@ in {
   deep_merge = callPackage ../development/python-modules/deep_merge { };
 
   deepdiff = callPackage ../development/python-modules/deepdiff { };
+
+  deepdish = callPackage ../development/python-modules/deepdish { };
 
   deepmerge = callPackage ../development/python-modules/deepmerge { };
 
@@ -5456,6 +5460,8 @@ in {
 
   obfsproxy = callPackage ../development/python-modules/obfsproxy { };
 
+  objax = callPackage ../development/python-modules/objax { };
+
   objgraph = callPackage ../development/python-modules/objgraph {
     # requires both the graphviz package and python package
     graphvizPkgs = pkgs.graphviz;
@@ -5641,6 +5647,8 @@ in {
   packageurl-python = callPackage ../development/python-modules/packageurl-python { };
 
   packaging = callPackage ../development/python-modules/packaging { };
+
+  packbits = callPackage ../development/python-modules/packbits { };
 
   packet-python = callPackage ../development/python-modules/packet-python { };
 
