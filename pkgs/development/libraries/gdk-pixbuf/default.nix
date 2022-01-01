@@ -42,6 +42,8 @@ stdenv.mkDerivation rec {
   patches = [
     # Move installed tests to a separate output
     ./installed-tests-path.patch
+    # Allow for multiple loader.cache files specified in $GDK_PIXBUF_MODULE_FILE, delimited by ":"
+    ./multiple-module-files.patch
   ];
 
   # gdk-pixbuf-thumbnailer is not wrapped therefore strictDeps will work

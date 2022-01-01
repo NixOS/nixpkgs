@@ -1,0 +1,28 @@
+diff --git a/gdk-pixbuf/gdk-pixbuf-io.c b/gdk-pixbuf/gdk-pixbuf-io.c
+index 182781178..67b844ea1 100644
+--- a/gdk-pixbuf/gdk-pixbuf-io.c
++++ b/gdk-pixbuf/gdk-pixbuf-io.c
+@@ -668,13 +668,21 @@ static gboolean
+ gdk_pixbuf_io_init (void)
+ {
+ 	char *module_file;
+-	gboolean ret;
++	gboolean ret = FALSE;
+ 
+ 	gdk_pixbuf_io_init_builtin ();
+ #ifdef USE_GMODULE
+ 	module_file = gdk_pixbuf_get_module_file ();
++	gchar **files = g_strsplit(module_file, ":", -1);
++
++	for(gchar **file = files; *file != NULL; file++){
++		if(**file != NULL){
++			ret |= gdk_pixbuf_io_init_modules (*file, NULL);
++		}
++	}
++
++	g_strfreev(files);
+ #endif
+-	ret = gdk_pixbuf_io_init_modules (module_file, NULL);
+ 	g_free (module_file);
+ 	return ret;
+ }
