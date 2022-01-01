@@ -361,6 +361,7 @@ mapAliases ({
   hepmc = hepmc2; # added 2019-08-05
   hexen = throw "hexen (SDL port) has been removed: abandoned by upstream."; # added 2019-12-11
   hicolor_icon_theme = hicolor-icon-theme; # added 2018-02-25
+  holochain-go = throw "holochain-go was abandoned by upstream"; # added 2022-01-01
   ht-rust = xh; # added 2021-02-13
   htmlTidy = html-tidy;  # added 2014-12-06
   hydra-flakes = throw "hydra-flakes: Flakes support has been merged into Hydra's master. Please use `hydra-unstable` now."; # added 2020-04-06
