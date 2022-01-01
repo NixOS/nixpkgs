@@ -9618,6 +9618,8 @@ with pkgs;
 
   sigal = callPackage ../applications/misc/sigal { };
 
+  sigi = callPackage ../applications/misc/sigi { };
+
   sigil = libsForQt5.callPackage ../applications/editors/sigil { };
 
   signald = callPackage ../applications/networking/instant-messengers/signald { };
