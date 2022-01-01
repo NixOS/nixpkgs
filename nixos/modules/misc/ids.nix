@@ -662,6 +662,7 @@ in
       webdav = 322;
       pipewire = 323;
       rstudio-server = 324;
+      pzserver = 325;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal
