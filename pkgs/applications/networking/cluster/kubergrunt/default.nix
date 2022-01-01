@@ -11,13 +11,11 @@ buildGoModule rec {
     sha256 = "1224ssqdz9ak0vylyfbr9c2w0yfdp4hw9jh99qmfi2j5nhw9kzcc";
   };
 
-  vendorSha256 = "1hbb3hn8mzz9h9p1rl35izz3l6c2rqsg8aq6dgpbpsf5krp3zs3v";
+  vendorSha256 = "sha256-95rteSEMOBQnAw0QKuj5Yyi8n3xXGl0Tm97WiyTGxVw=";
 
   # Disable tests since it requires network access and relies on the
   # presence of certain AWS infrastructure
   doCheck = false;
-
-  runVend = true;
 
   postInstall = ''
     # The binary is named kubergrunt

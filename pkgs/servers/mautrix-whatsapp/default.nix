@@ -13,11 +13,9 @@ buildGo117Module rec {
 
   buildInputs = [ olm ];
 
-  vendorSha256 = "sha256-Fr7yVTl8PIdr+SxXhUKG9DS18762HqL9ap6sUM3ziCQ=";
+  vendorSha256 = "sha256-maGnlnxyhrvW0NkHmHWEvNge5c/HxLDm8NuWR6zcdYg=";
 
   doCheck = false;
-
-  runVend = true;
 
   meta = with lib; {
     homepage = "https://github.com/tulir/mautrix-whatsapp";

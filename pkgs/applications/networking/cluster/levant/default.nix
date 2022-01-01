@@ -11,9 +11,7 @@ buildGoModule rec {
     sha256 = "9M7a4i+DPKb1H9jOEVAvhvYxGwtj3dK/40n4GSy4Rqo=";
   };
 
-  vendorSha256 = "5JlrgmIfhX0rPR72sUkFcofw/iIbIaca359GN9C9dhU=";
-
-  runVend = true;
+  vendorSha256 = "sha256-m3WSk5RvCmeIgX6SwHpWHvokgs71cY6XCKtHJ4jnonc=";
 
   # The tests try to connect to a Nomad cluster.
   doCheck = false;
