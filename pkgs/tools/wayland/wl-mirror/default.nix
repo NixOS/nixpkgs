@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Ferdi265/wl-mirror";
     description = "Mirrors an output onto a Wayland surface.";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ twitchyliquid64 ];
+    maintainers = with maintainers; [ synthetica twitchyliquid64 ];
     platforms = platforms.linux;
   };
 }
