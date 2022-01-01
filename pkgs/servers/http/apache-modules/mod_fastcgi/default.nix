@@ -18,8 +18,6 @@ stdenv.mkDerivation rec {
     hash = "sha256-ovir59kCjKkgbraX23nsmzlMzGdeNTyj3MQd8cgvLsg=";
   };
 
-  patches = [ apache-24-patch ];
-
   buildInputs = [ apacheHttpd ];
 
   preBuild = ''
@@ -43,6 +41,5 @@ stdenv.mkDerivation rec {
     '';
 
     platforms = lib.platforms.linux;
-    broken = true; # patch 'compile-against-apache24.diff' no longer works
   };
 }
