@@ -12,6 +12,9 @@
   "floatingDock@sun.wxg@gmail.com" = "floating-dock-2";
   "floating-dock@nandoferreira_prof@hotmail.com" = "floating-dock";
 
+  "lockkeys@vaina.lt" = "lock-keys";
+  "lockkeys@fawtytoo" = "lock-keys-2";
+
   "workspace-indicator@gnome-shell-extensions.gcampax.github.com" = "workspace-indicator";
   "horizontal-workspace-indicator@tty2.io" = "workspace-indicator-2";
 
@@ -23,9 +26,6 @@
   # Make sure to move them up once they are updated
 
   # ####### GNOME 40 #######
-
-  "lockkeys@vaina.lt" = "lock-keys";
-  "lockkeys@fawtytoo" = "lock-keys-2";
 
   "system-monitor@paradoxxx.zero.gmail.com" = "system-monitor"; # manually packaged
   "System_Monitor@bghome.gmail.com" = "system-monitor-2";
