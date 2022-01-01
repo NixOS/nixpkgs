@@ -10362,7 +10362,7 @@ with pkgs;
 
   nms = callPackage ../tools/misc/nms { };
 
-  nomachine-client = callPackage ../tools/admin/nomachine-client { };
+  nomachine = callPackage ../tools/admin/nomachine { };
 
   notify-desktop = callPackage ../tools/misc/notify-desktop { };
 
