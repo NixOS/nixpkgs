@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "python37-docs-pdf-a4";
-  version = "3.7.2";
+  version = "3.10.1";
 
   src = fetchurl {
     url = "http://docs.python.org/ftp/python/doc/${version}/python-${version}-docs-pdf-a4.tar.bz2";
-    sha256 = "0vdx762m30hjaabn6w88awcj2qpbz0b6z59zn9wmamd35k59lfba";
+    sha256 = "sha256-GccVzywQeJunE5Y4A9NPo+P3VEUUSyQ2gVAaNTLVBo8=";
   };
   installPhase = ''
     mkdir -p $out/share/doc/python37
