@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "sbt";
-  version = "1.5.7";
+  version = "1.5.8";
 
   src = fetchurl {
     url = "https://github.com/sbt/sbt/releases/download/v${version}/sbt-${version}.tgz";
-    sha256 = "sha256-6dnG02A0azpycsfdQOyh9GLewvezZl3s8esmIqWJfBk=";
+    sha256 = "sha256-WnT3UrfcIAs7HRxRUyfwHCH++DPpVzjeQsJC+3hA1Ik=";
   };
 
   postPatch = ''
