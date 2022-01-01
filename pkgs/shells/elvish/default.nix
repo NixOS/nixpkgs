@@ -4,7 +4,7 @@ buildGoModule rec {
   pname = "elvish";
   version = "0.17.0";
 
-  excludedPackages = [ "website" ];
+  subPackages = [ "cmd/elvish" ];
 
   ldflags = [ "-s" "-w" "-X github.com/elves/elvish/pkg/buildinfo.Version==${version}" "-X github.com/elves/elvish/pkg/buildinfo.Reproducible=true" ];
 
