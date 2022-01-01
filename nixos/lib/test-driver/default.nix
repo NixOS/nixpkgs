@@ -14,7 +14,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "nixos-test-driver";
-  version = "1.0";
+  version = "1.1";
   src = ./.;
 
   propagatedBuildInputs = [ coreutils netpbm python3Packages.colorama python3Packages.ptpython qemu_pkg socat vde2 ]
