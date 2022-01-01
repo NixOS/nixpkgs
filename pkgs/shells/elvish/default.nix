@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, runCommand, elvish }:
 
 buildGoModule rec {
   pname = "elvish";
@@ -6,7 +6,7 @@ buildGoModule rec {
 
   subPackages = [ "cmd/elvish" ];
 
-  ldflags = [ "-s" "-w" "-X github.com/elves/elvish/pkg/buildinfo.Version==${version}" "-X github.com/elves/elvish/pkg/buildinfo.Reproducible=true" ];
+  ldflags = [ "-s" "-w" "-X src.elv.sh/pkg/buildinfo.Version==${version}" "-X src.elv.sh/pkg/buildinfo.Reproducible=true" ];
 
   src = fetchFromGitHub {
     owner = "elves";
@@ -33,5 +33,20 @@ buildGoModule rec {
 
   passthru = {
     shellPath = "/bin/elvish";
+    tests = runCommand "${pname}-buildinfo-test" {} ''
+      mkdir $out
+
+      ${elvish}/bin/elvish -c "
+        fn expect {|key expected|
+          var actual = \$buildinfo[\$key]
+          if (not-eq \$actual \$expected) {
+            fail '\$buildinfo['\$key']: expected '(to-string \$expected)', got '(to-string \$actual)
+          }
+        }
+
+        expect version ${version}
+        expect reproducible \$true
+      "
+    '';
   };
 }
