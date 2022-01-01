@@ -28105,7 +28105,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices Cocoa Hypervisor;
     inherit (darwin.stubs) rez setfile;
     inherit (darwin) sigtool;
-    python = python3;
   };
 
   qemu-utils = callPackage ../applications/virtualization/qemu/utils.nix {};
