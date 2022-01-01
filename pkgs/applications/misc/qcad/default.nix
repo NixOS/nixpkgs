@@ -1,7 +1,7 @@
 { boost
 , fetchFromGitHub
 , libGLU
-, mkDerivationWith
+, mkDerivation
 , muparser
 , pkg-config
 , qtbase
@@ -11,11 +11,10 @@
 , qtxmlpatterns
 , qttools
 , lib
-, stdenv
 , installShellFiles
 }:
 
-mkDerivationWith stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "qcad";
   version = "3.26.4.10";
 
