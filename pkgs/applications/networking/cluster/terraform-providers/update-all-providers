@@ -14,9 +14,9 @@ providers=$(
 )
 
 echo "Will update providers:"
-echo "$providers"
+echo "${providers}"
 
-for provider in $providers; do
-  echo "Updating $provider"
-  ./update-provider "$provider"
+for provider in ${providers}; do
+  echo "Updating ${provider}"
+  ./update-provider "${provider}"
 done
