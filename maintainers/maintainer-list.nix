@@ -11795,6 +11795,13 @@
     githubId = 1618946;
     name = "Tiago Castro";
   };
+  tilcreator = {
+    name = "Tilman Jackel";
+    email = "contact.nixos@tc-j.de";
+    matrix = "@tilcreator:matrix.org";
+    github = "TilCreator";
+    githubId = 18621411;
+  };
   tilpner = {
     email = "till@hoeppner.ws";
     github = "tilpner";

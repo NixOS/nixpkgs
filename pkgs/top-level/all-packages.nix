@@ -32426,6 +32426,8 @@ with pkgs;
 
   emuflight-configurator = callPackage ../applications/science/robotics/emuflight-configurator { };
 
+  inav-configurator = callPackage ../applications/science/robotics/inav-configurator { };
+
   mission-planner = callPackage ../applications/science/robotics/mission-planner { };
 
   ### MISC
