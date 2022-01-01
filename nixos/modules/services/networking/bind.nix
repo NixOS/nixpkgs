@@ -59,7 +59,7 @@ let
         listen-on-v6 { ${concatMapStrings (entry: " ${entry}; ") cfg.listenOnIpv6} };
         allow-query { cachenetworks; };
         blackhole { badnetworks; };
-        forward first;
+        forward ${cfg.forward};
         forwarders { ${concatMapStrings (entry: " ${entry}; ") cfg.forwarders} };
         directory "${cfg.directory}";
         pid-file "/run/named/named.pid";
@@ -148,6 +148,14 @@ in
         type = types.listOf types.str;
         description = "
           List of servers we should forward requests to.
+        ";
+      };
+
+      forward = mkOption {
+        default = "first";
+        type = types.enum ["first" "only"];
+        description = "
+          Whether to forward 'first' (try forwarding but lookup directly if forwarding fails) or 'only'.
         ";
       };
 
