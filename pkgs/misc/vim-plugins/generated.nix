@@ -5292,6 +5292,18 @@ final: prev:
     meta.homepage = "https://github.com/vim-scripts/Rename/";
   };
 
+  renamer-nvim = buildVimPluginFrom2Nix {
+    pname = "renamer.nvim";
+    version = "2021-12-19";
+    src = fetchFromGitHub {
+      owner = "filipdutescu";
+      repo = "renamer.nvim";
+      rev = "814ddbb11602e3c8b2af166b4d1e029272ab796f";
+      sha256 = "067mn0wzvin7zbbzd8svshi5ga38r5d7nw8kqbyn3aakggpnylm3";
+    };
+    meta.homepage = "https://github.com/filipdutescu/renamer.nvim/";
+  };
+
   ReplaceWithRegister = buildVimPluginFrom2Nix {
     pname = "ReplaceWithRegister";
     version = "2014-10-31";
