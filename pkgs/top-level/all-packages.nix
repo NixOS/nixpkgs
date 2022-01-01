@@ -9787,6 +9787,8 @@ with pkgs;
 
   sonata = callPackage ../applications/audio/sonata { };
 
+  sony-headphones-client = callPackage ../applications/audio/sony-headphones-client { };
+
   soundkonverter = libsForQt5.soundkonverter;
 
   soundwireserver = callPackage ../applications/audio/soundwireserver { };
