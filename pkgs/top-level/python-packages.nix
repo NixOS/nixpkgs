@@ -2044,6 +2044,8 @@ in {
 
   deepdiff = callPackage ../development/python-modules/deepdiff { };
 
+  deepdish = callPackage ../development/python-modules/deepdish { };
+
   deepmerge = callPackage ../development/python-modules/deepmerge { };
 
   deeptoolsintervals = callPackage ../development/python-modules/deeptoolsintervals { };
@@ -5457,6 +5459,8 @@ in {
   oauthlib = callPackage ../development/python-modules/oauthlib { };
 
   obfsproxy = callPackage ../development/python-modules/obfsproxy { };
+
+  objax = callPackage ../development/python-modules/objax { };
 
   objgraph = callPackage ../development/python-modules/objgraph {
     # requires both the graphviz package and python package

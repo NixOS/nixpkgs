@@ -65,6 +65,7 @@ let
           timstott
           zimbatm
           maxeaubrey
+          zowoq
         ];
       };
     } // attrs');

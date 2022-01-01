@@ -16,7 +16,7 @@ let
     version = "20180522.005732";
 
     src = fetchzip {
-      url = "https://github.com/yegortimoshenko/bugsnag-qt/archive/${version}.tar.gz";
+      url = "https://github.com/alpakido/bugsnag-qt/archive/${version}.tar.gz";
       sha256 = "02s6mlggh0i4a856md46dipy6mh47isap82jlwmjr7hfsk2ykgnq";
     };
 
@@ -42,7 +42,7 @@ let
     version = "20190125.190943";
 
     src = fetchzip {
-      url = "https://github.com/yegortimoshenko/qt-oauth-lib/archive/${version}.tar.gz";
+      url = "https://github.com/alpakido/qt-oauth-lib/archive/${version}.tar.gz";
       sha256 = "0zmfgvdf6n79mgfvbda7lkdxxlzjmy86436gqi2r5x05vq04sfrj";
     };
 
@@ -143,7 +143,7 @@ buildEnv {
     description = "Client for Toggl time tracking service";
     homepage = "https://github.com/toggl/toggldesktop";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ yegortimoshenko ];
+    maintainers = with maintainers; [ yana ];
     platforms = platforms.linux;
   };
 }

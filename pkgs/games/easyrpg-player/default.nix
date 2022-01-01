@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     description = "RPG Maker 2000/2003 and EasyRPG games interpreter";
     homepage = "https://easyrpg.org/";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ yegortimoshenko ];
+    maintainers = with maintainers; [ yana ];
     platforms = platforms.linux;
   };
 }
