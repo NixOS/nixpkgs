@@ -13,6 +13,7 @@ stdenv.mkDerivation rec {
   pname = "sqlite";
   version = "3.37.2";
 
+  # nixpkgs-update: no auto update
   # NB! Make sure to update ./tools.nix src (in the same directory).
   src = fetchurl {
     url = "https://sqlite.org/2022/sqlite-autoconf-${archiveVersion version}.tar.gz";
