@@ -20,7 +20,7 @@ let
   );
 in
 stdenv.mkDerivation rec {
-  version = "0.11.10"; # also update communityModules
+  version = "0.11.11"; # also update communityModules
   pname = "prosody";
   # The following community modules are necessary for the nixos module
   # prosody module to comply with XEP-0423 and provide a working
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   ];
   src = fetchurl {
     url = "https://prosody.im/downloads/source/${pname}-${version}.tar.gz";
-    sha256 = "1q84s9cq7cgzd295qxa2iy0r3vd3v3chbck62bdx3pd6skk19my6";
+    sha256 = "sha256-oa+Q4tSsL3z4GzhUdRQOzuYL7B64MAPvta64l2WxN3Q=";
   };
 
   # A note to all those merging automated updates: Please also update this
@@ -42,8 +42,8 @@ stdenv.mkDerivation rec {
   # version.
   communityModules = fetchhg {
     url = "https://hg.prosody.im/prosody-modules";
-    rev = "64fafbeba14d";
-    sha256 = "02gj1b8sdmdvymsdmjpq47zrl7sg578jcdxbbq18s44f3njmc9q1";
+    rev = "8d4b91a703af";
+    sha256 = "sha256-JD+5DO0N1cFALaASuLqPVaExcvivp3Qg0f4/ISkGxWg=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
