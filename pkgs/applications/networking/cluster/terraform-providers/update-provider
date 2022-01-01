@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#! nix-shell -I nixpkgs=../../../../.. -i bash -p coreutils curl jq moreutils nix
+#! nix-shell -I nixpkgs=../../../../.. -i bash -p coreutils curl jq moreutils nix nix-prefetch
 # shellcheck shell=bash
 # vim: ft=sh
 #
@@ -149,22 +149,7 @@ if [[ -z ${vendorSha256} ]]; then
     vendorSha256=null
   elif [[ -n ${old_vendor_sha256} || ${vendor} == 1 ]]; then
     echo "=== Calculating vendorSha256 ==="
-    update_attr vendorSha256 "0000000000000000000000000000000000000000000000000000000000000000"
-    # Hackish way to find out the desired sha256. First build, then extract the
-    # error message from the logs.
-    set +e
-    nix-build --no-out-link "${repo_root}" -A "terraform-providers.${provider_name}.go-modules" 2>vendor_log.txt
-    set -e
-    logs=$(<vendor_log.txt)
-    if ! [[ ${logs} =~ got:\ +([^\ ]+) ]]; then
-      echo "ERROR: could not find new hash in output:"
-      cat vendor_log.txt
-      rm -f vendor_log.txt
-      exit 1
-    fi
-    rm -f vendor_log.txt
-    # trim the results in case it they have a sha256: prefix or contain more than one line
-    vendorSha256=$(echo "${BASH_REMATCH[1]#sha256:}" | head -n 1)
+    vendorSha256=$(nix-prefetch "{ sha256 }: (import ../../../../.. {}).terraform-providers.${provider_name}.go-modules.overrideAttrs (_: { vendorSha256 = sha256; })")
     # Deal with nix unstable
     if [[ ${vendorSha256} == sha256-* ]]; then
       vendorSha256=$(nix --extra-experimental-features nix-command hash to-base32 "${vendorSha256}")
@@ -178,4 +163,4 @@ fi
 
 # Check that the provider builds
 echo "=== Building terraform-providers.${provider_name} ==="
-nix-build "${repo_root}" -A "terraform-providers.${provider_name}"
+nix-build --no-out-link "${repo_root}" -A "terraform-providers.${provider_name}"
