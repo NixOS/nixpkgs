@@ -11184,6 +11184,12 @@
     githubId = 7512804;
     name = "Martin Langlotz";
   };
+  steamwalker = {
+    email = "steamwalker@xs4all.nl";
+    github = "steamwalker";
+    githubId = 94006354;
+    name = "steamwalker";
+  };
   steell = {
     email = "steve@steellworks.com";
     github = "Steell";
