@@ -111,6 +111,13 @@
       </listitem>
       <listitem>
         <para>
+          The MoinMoin wiki engine
+          (<literal>services.moinmoin</literal>) has been removed,
+          because Python 2 is being retired from nixpkgs.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>wafHook</literal> hook now honors
           <literal>NIX_BUILD_CORES</literal> when
           <literal>enableParallelBuilding</literal> is not set
