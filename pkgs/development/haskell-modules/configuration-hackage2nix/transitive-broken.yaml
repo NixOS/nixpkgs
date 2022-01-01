@@ -2251,6 +2251,7 @@ dont-distribute-packages:
  - numhask-histogram
  - numhask-range
  - numhask-test
+ - nyan
  - nymphaea
  - oath
  - obd
@@ -2687,6 +2688,7 @@ dont-distribute-packages:
  - scp-streams
  - scrabble-bot
  - scrapbook
+ - scroll
  - sde-solver
  - seakale-postgresql
  - seakale-tests
