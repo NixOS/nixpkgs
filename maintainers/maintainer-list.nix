@@ -1170,6 +1170,17 @@
     githubId = 56650223;
     name = "Artturi N";
   };
+  azahi = {
+    email = "azahi@teknik.io";
+    matrix = "@azahi:matrix.org";
+    github = "azahi";
+    githubId = 22211000;
+    name = "Azat Bahawi";
+    keys = [{
+      longkeyid = "rsa2048/0xB40FCB6608BBE3B6";
+      fingerprint = "E9F3 483F 31C7 29B4 4CA2  7C38 B40F CB66 08BB E3B6";
+    }];
+  };
   ayazhafiz = {
     email = "ayaz.hafiz.1@gmail.com";
     github = "ayazhafiz";
