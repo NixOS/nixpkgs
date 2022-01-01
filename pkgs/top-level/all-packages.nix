@@ -22943,6 +22943,8 @@ with pkgs;
   sysstat = callPackage ../os-specific/linux/sysstat { };
 
   systemd = callPackage ../os-specific/linux/systemd {
+    # TODO: get rid of this old meson
+    meson = meson_0_57;
     # break some cyclic dependencies
     util-linux = util-linuxMinimal;
     # provide a super minimal gnupg used for systemd-machined
