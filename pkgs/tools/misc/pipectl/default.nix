@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-wa/SKKNXkl8XxE7XORodoAlrMc2QNGXGPE+/yya209Y=";
   };
 
-  buildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ];
 
   meta = with lib; {
     homepage = "https://github.com/Ferdi265/pipectl";
