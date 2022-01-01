@@ -48,6 +48,7 @@ benizi/vim-automkdir
 bhurlow/vim-parinfer
 bitc/vim-hdevtools
 bkad/camelcasemotion
+blackCauldron7/surround.nvim
 bling/vim-bufferline
 blueballs-theme/blueballs-neovim
 blueyed/vim-diminactive
