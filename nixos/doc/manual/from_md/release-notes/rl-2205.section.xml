@@ -74,6 +74,13 @@
           <link xlink:href="options.html#opt-services.powerdns-admin.enable">services.powerdns-admin</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://maddy.email">maddy</link>, a
+          composable all-in-one mail server. Available as
+          <link xlink:href="options.html#opt-services.maddy.enable">services.maddy</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.05-incompatibilities">
