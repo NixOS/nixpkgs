@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, libsoup, graphicsmagick, json-glib, wrapGAppsHook
 , cairo, cmake, ninja, curl, perl, llvm, desktop-file-utils, exiv2, glib
 , ilmbase, gtk3, intltool, lcms2, lensfun, libX11, libexif, libgphoto2, libjpeg
-, libpng, librsvg, libtiff, openexr, osm-gps-map, pkg-config, sqlite, libxslt
+, libpng, librsvg, libtiff, openexr_3, osm-gps-map, pkg-config, sqlite, libxslt
 , openjpeg, lua, pugixml, colord, colord-gtk, libwebp, libsecret, gnome
 , ocl-icd, pcre, gtk-mac-integration, isocodes, llvmPackages, gmic, libavif, icu
 }:
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     cairo curl exiv2 glib gtk3 ilmbase lcms2 lensfun libexif
-    libgphoto2 libjpeg libpng librsvg libtiff openexr sqlite libxslt
+    libgphoto2 libjpeg libpng librsvg libtiff openexr_3 sqlite libxslt
     libsoup graphicsmagick json-glib openjpeg lua pugixml
     libwebp libsecret gnome.adwaita-icon-theme osm-gps-map pcre isocodes gmic libavif icu
   ] ++ lib.optionals stdenv.isLinux [
