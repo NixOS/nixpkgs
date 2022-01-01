@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "json-schema-for-humans";
-  version = "0.39.1";
+  version = "0.39.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "coveooss";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-JoD4XEfIUsAbITWa0LMYgNP6WzrblI4HUIgLpx5gn18=";
+    sha256 = "sha256-rg50AE30R1OErtOKppnkhg8MTuhEY6gdBgc7ipEkONA=";
   };
 
   nativeBuildInputs = [
