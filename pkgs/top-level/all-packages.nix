@@ -30990,6 +30990,8 @@ with pkgs;
 
   pysolfc = python3Packages.callPackage ../games/pysolfc { };
 
+  pz-server = callPackage ../games/pz-server { };
+
   qqwing = callPackage ../games/qqwing { };
 
   quake3wrapper = callPackage ../games/quake3/wrapper { };
