@@ -85,6 +85,7 @@ in stdenv.mkDerivation rec {
   # but fails when the version is empty.
   # See upstream GlusterFS bug https://bugzilla.redhat.com/show_bug.cgi?id=1452705
   preConfigure = ''
+    patchShebangs build-aux/pkg-version
     echo "v${version}" > VERSION
     ./autogen.sh
     export PYTHON=${python3}/bin/python
