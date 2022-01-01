@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
         appear as they should when starting applications.
       - Chainable Keygrabber, usability for everyone.
     '';
-      homepage = "http://www.pekwm.org";
+      homepage = "https://www.pekwm.org/";
       license = licenses.gpl2Plus;
       maintainers = [ maintainers.AndersonTorres ];
       platforms = platforms.linux;
