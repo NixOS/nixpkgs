@@ -11,11 +11,11 @@ buildGoModule rec {
     sha256 = "sha256-6bqtw0hUrRBhTwEDURaTjgl3aVVCbfxjoPRfhSd3LK8=";
   };
 
-  vendorSha256 = "sha256-CO+7WgoTsFCd9vkcALKcJP6Kj3CIWr5FF75/WgbK04g=";
+  vendorSha256 = "sha256-M4pKAxNd8rqluVm+c+X+nxC/vcaVclebo9HP17yEpfo=";
 
   doCheck = false;
 
-  runVend = true;
+  proxyVendor = true;
 
   tags = [ "extended" ];
 
