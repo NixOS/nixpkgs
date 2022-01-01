@@ -233,6 +233,7 @@
 /pkgs/applications/blockchains  @mmahut @RaghavSood
 
 # Go
+/doc/languages-frameworks/go.section.md @kalbasit @Mic92 @zowoq
 /pkgs/development/compilers/go @kalbasit @Mic92 @zowoq
 /pkgs/development/go-modules   @kalbasit @Mic92 @zowoq
 /pkgs/development/go-packages  @kalbasit @Mic92 @zowoq
