@@ -724,6 +724,7 @@ mapAliases ({
   plexpy = tautulli; # plexpy got renamed to tautulli, added 2019-02-22
   pmtools = acpica-tools; # added 2018-11-01
   polarssl = mbedtls; # added 2018-04-25
+  polysh = throw "polysh has been removed from nixpkgs as the upstream has abandoned the project."; # added 2022-01-01
   poppler_qt5 = libsForQt5.poppler;  # added 2015-12-19
   postgresql96 = postgresql_9_6;
   postgresql_9_6 = throw "postgresql_9_6 has been removed from nixpkgs, as this version is no longer supported by upstream"; # added 2021-12-03
