@@ -31965,6 +31965,8 @@ with pkgs;
 
   eprover = callPackage ../applications/science/logic/eprover { };
 
+  eprover-ho = callPackage ../applications/science/logic/eprover { enableHO = true; };
+
   gappa = callPackage ../applications/science/logic/gappa { };
 
   gfan = callPackage ../applications/science/math/gfan {};
@@ -31998,7 +32000,7 @@ with pkgs;
       configureFlags = [ "--enable-intinf-as-int" "--with-gmp" "--disable-shared" ];
     });
 
-    java = openjdk11;
+    java = openjdk17;
     z3 = z3_4_4_0;
   };
 
