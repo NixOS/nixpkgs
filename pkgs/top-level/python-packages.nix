@@ -5354,7 +5354,7 @@ in {
 
   nmapthon2 = callPackage ../development/python-modules/nmapthon2 { };
 
-  nmigen-boards = callPackage ../development/python-modules/nmigen-boards { };
+  amaranth-boards = callPackage ../development/python-modules/amaranth-boards { };
 
   amaranth = callPackage ../development/python-modules/amaranth { };
 
