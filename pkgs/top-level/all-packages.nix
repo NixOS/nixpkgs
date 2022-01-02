@@ -6198,8 +6198,6 @@ with pkgs;
 
   gtkdatabox = callPackage ../development/libraries/gtkdatabox {};
 
-  gtklick = callPackage ../applications/audio/gtklick {};
-
   gtdialog = callPackage ../development/libraries/gtdialog {};
 
   gtkd = callPackage ../development/libraries/gtkd { };

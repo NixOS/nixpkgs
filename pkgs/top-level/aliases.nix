@@ -349,6 +349,7 @@ mapAliases ({
   graalvm11 = graalvm11-ce;
   gsettings_desktop_schemas = gsettings-desktop-schemas; # added 2018-02-25
   gtk_doc = gtk-doc; # added 2018-02-25
+  gtklick = throw "gtklick has been removed from nixpkgs as the project is stuck on python2"; # added 2022-01-01
   guileCairo = guile-cairo; # added 2017-09-24
   guileGnome = guile-gnome; # added 2017-09-24
   gnome3 = gnome; # added 2021-05-07
