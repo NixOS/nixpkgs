@@ -10288,8 +10288,6 @@ with pkgs;
 
   tor = callPackage ../tools/security/tor { };
 
-  tor-arm = callPackage ../tools/security/tor/tor-arm.nix { };
-
   tor-browser-bundle-bin = callPackage ../applications/networking/browsers/tor-browser-bundle-bin { };
 
   touchegg = callPackage ../tools/inputmethods/touchegg { };

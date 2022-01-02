@@ -955,6 +955,7 @@ mapAliases ({
   tomcat7 = throw "tomcat7 has been removed from nixpkgs as it has reached end of life."; # added 2021-06-16
   tomcat8 = throw "tomcat8 has been removed from nixpkgs as it has reached end of life."; # added 2021-06-16
   tomcat85 = throw "tomcat85 has been removed from nixpkgs as it has reached end of life."; # added 2020-03-11
+  tor-arm = throw "tor-arm has been removed from nixpkgs as the upstream project has been abandoned."; # added 2022-01-01
   torbrowser = tor-browser-bundle-bin; # added 2017-04-05
   torch = throw "torch has been removed, as the upstream project has been abandoned"; # added 2020-03-28
   torch-hdf5 = throw "torch-hdf5 has been removed, as the upstream project has been abandoned"; # added 2020-03-28
