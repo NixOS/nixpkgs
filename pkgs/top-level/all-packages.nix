@@ -5699,9 +5699,6 @@ with pkgs;
 
   git-bug = callPackage ../applications/version-management/git-and-tools/git-bug { };
 
-  # support for bugzilla
-  git-bz = callPackage ../applications/version-management/git-and-tools/git-bz { };
-
   git-chglog = callPackage ../applications/version-management/git-and-tools/git-chglog { };
 
   git-cinnabar = callPackage ../applications/version-management/git-and-tools/git-cinnabar { };

@@ -291,6 +291,7 @@ mapAliases ({
   gdk_pixbuf = gdk-pixbuf; # added 2019-05-22
   gettextWithExpat = gettext; # 2016-02-19
   giflib_4_1 = throw "giflib_4_1 has been removed; use giflib instead"; # 2020-02-12
+  git-bz = throw "giz-bz has been removed from nixpkgs as it is stuck on python2."; # added 2022-01-01
   gitAndTools = self // { # added 2021-01-14
     darcsToGit = darcs-to-git;
     gitAnnex = git-annex;
