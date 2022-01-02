@@ -1,7 +1,28 @@
-{ lib, stdenv, fetchFromGitLab, meson_0_60, ninja, pkg-config, wayland-scanner
-, libGL, wayland, wayland-protocols, libinput, libxkbcommon, pixman
-, xcbutilwm, libX11, libcap, xcbutilimage, xcbutilerrors, mesa
-, libpng, ffmpeg, xcbutilrenderutil, seatd, vulkan-loader, glslang
+{ lib
+, stdenv
+, fetchFromGitLab
+, ffmpeg
+, glslang
+, libGL
+, libX11
+, libcap
+, libinput
+, libpng
+, libxkbcommon
+, mesa
+, meson_0_60
+, ninja
+, pixman
+, pkg-config
+, seatd
+, vulkan-loader
+, wayland
+, wayland-protocols
+, wayland-scanner
+, xcbutilerrors
+, xcbutilimage
+, xcbutilrenderutil
+, xcbutilwm
 
 , enableXWayland ? true, xwayland ? null
 }:
@@ -23,19 +44,35 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ pkg-config ];
 
-  nativeBuildInputs = [ meson_0_60 ninja pkg-config wayland-scanner ];
+  nativeBuildInputs = [
+    meson_0_60
+    ninja
+    pkg-config
+    wayland-scanner
+  ];
 
   buildInputs = [
-    libGL wayland wayland-protocols libinput libxkbcommon pixman
-    xcbutilwm libX11 libcap xcbutilimage xcbutilerrors mesa
-    libpng ffmpeg xcbutilrenderutil seatd vulkan-loader glslang
+    ffmpeg
+    libGL
+    libX11
+    libcap
+    libinput
+    libpng
+    libxkbcommon
+    mesa
+    pixman
+    seatd
+    vulkan-loader glslang
+    wayland
+    wayland-protocols
+    xcbutilerrors
+    xcbutilimage
+    xcbutilrenderutil
+    xcbutilwm
   ]
-    ++ lib.optional enableXWayland xwayland
-  ;
+  ++ lib.optional enableXWayland xwayland;
 
-  mesonFlags =
-    lib.optional (!enableXWayland) "-Dxwayland=disabled"
-  ;
+  mesonFlags = lib.optional (!enableXWayland) "-Dxwayland=disabled";
 
   postFixup = ''
     # Install ALL example programs to $examples:
@@ -50,12 +87,12 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    inherit (src.meta) homepage;
     description = "A modular Wayland compositor library";
     longDescription = ''
       Pluggable, composable, unopinionated modules for building a Wayland
       compositor; or about 50,000 lines of code you were going to write anyway.
     '';
-    inherit (src.meta) homepage;
     changelog = "https://gitlab.freedesktop.org/wlroots/wlroots/-/tags/${version}";
     license     = licenses.mit;
     platforms   = platforms.linux;
