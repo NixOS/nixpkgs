@@ -21780,8 +21780,6 @@ with pkgs;
       # see also openssl, which has/had this same trick
   };
 
-  sickbeard = callPackage ../servers/sickbeard { };
-
   sickgear = callPackage ../servers/sickbeard/sickgear.nix { };
 
   sickrage = callPackage ../servers/sickbeard/sickrage.nix { };
