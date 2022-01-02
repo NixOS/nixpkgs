@@ -71,6 +71,8 @@ in lib.init bootStages ++ [
              then throw "no C compiler provided for this platform"
            else if crossSystem.isDarwin
              then buildPackages.llvmPackages.clang
+           else if crossSystem.isSolo5
+             then buildPackages.solo5-toolchain
            else if crossSystem.useLLVM or false
              then buildPackages.llvmPackages.clangUseLLVM
            else buildPackages.gcc;
