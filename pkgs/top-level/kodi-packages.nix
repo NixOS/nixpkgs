@@ -126,6 +126,8 @@ let self = rec {
 
   defusedxml = callPackage ../applications/video/kodi/addons/defusedxml { };
 
+  future = callPackage ../applications/video/kodi/addons/future { };
+
   idna = callPackage ../applications/video/kodi/addons/idna { };
 
   inputstream-adaptive = callPackage ../applications/video/kodi/addons/inputstream-adaptive { };
