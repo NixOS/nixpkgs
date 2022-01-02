@@ -9383,6 +9383,8 @@ with pkgs;
 
   runzip = callPackage ../tools/archivers/runzip { };
 
+  unzoo = callPackage ../tools/archivers/unzoo { };
+
   ruplacer = callPackage ../tools/text/ruplacer {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
