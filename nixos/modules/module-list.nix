@@ -563,7 +563,6 @@
   ./services/misc/mediatomb.nix
   ./services/misc/metabase.nix
   ./services/misc/moonraker.nix
-  ./services/misc/mwlib.nix
   ./services/misc/mx-puppet-discord.nix
   ./services/misc/n8n.nix
   ./services/misc/nitter.nix
@@ -739,7 +738,6 @@
   ./services/networking/eternal-terminal.nix
   ./services/networking/fakeroute.nix
   ./services/networking/ferm.nix
-  ./services/networking/firefox/sync-server.nix
   ./services/networking/fireqos.nix
   ./services/networking/firewall.nix
   ./services/networking/flannel.nix
@@ -1034,7 +1032,6 @@
   ./services/web-apps/sogo.nix
   ./services/web-apps/rss-bridge.nix
   ./services/web-apps/tt-rss.nix
-  ./services/web-apps/trac.nix
   ./services/web-apps/trilium.nix
   ./services/web-apps/selfoss.nix
   ./services/web-apps/shiori.nix

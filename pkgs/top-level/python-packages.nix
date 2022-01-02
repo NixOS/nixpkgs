@@ -10409,8 +10409,6 @@ in {
     inherit (pkgs) graphviz;
   };
 
-  xenomapper = callPackage ../applications/science/biology/xenomapper { };
-
   xgboost = callPackage ../development/python-modules/xgboost {
     inherit (pkgs) xgboost;
   };

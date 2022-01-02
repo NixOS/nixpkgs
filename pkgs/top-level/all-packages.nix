@@ -2192,7 +2192,7 @@ with pkgs;
 
   birdtray = libsForQt5.callPackage ../applications/misc/birdtray { };
 
-  bitbucket-cli = python2Packages.bitbucket-cli;
+  bitbucket-cli = callPackage ../tools/misc/bitbucket-cli { };
 
   bitbucket-server-cli = callPackage ../applications/version-management/git-and-tools/bitbucket-server-cli { };
 
@@ -3081,8 +3081,6 @@ with pkgs;
   gb-backup = callPackage ../tools/backup/gamerbackup { };
 
   gbsplay = callPackage ../applications/audio/gbsplay { };
-
-  gdrivefs = python27Packages.gdrivefs;
 
   gdrive = callPackage ../applications/networking/gdrive { };
 
@@ -4953,8 +4951,6 @@ with pkgs;
 
   tsm-client = callPackage ../tools/backup/tsm-client { jdk8 = null; };
   tsm-client-withGui = callPackage ../tools/backup/tsm-client { };
-
-  trac = pythonPackages.callPackage ../tools/misc/trac { };
 
   tracker = callPackage ../development/libraries/tracker { };
 
@@ -8996,8 +8992,6 @@ with pkgs;
 
   pwndbg = callPackage ../development/tools/misc/pwndbg { };
 
-  pycangjie = pythonPackages.pycangjie;
-
   pycflow2dot = with python3.pkgs; toPythonApplication pycflow2dot;
 
   pydb = callPackage ../development/tools/pydb { };
@@ -9009,8 +9003,6 @@ with pkgs;
   pyspread = libsForQt5.callPackage ../applications/office/pyspread { };
 
   teapot = callPackage ../applications/office/teapot { };
-
-  pythonIRClib = pythonPackages.pythonIRClib;
 
   pyditz = callPackage ../applications/misc/pyditz {
     pythonPackages = python27Packages;
@@ -9147,7 +9139,7 @@ with pkgs;
 
   radvd = callPackage ../tools/networking/radvd { };
 
-  rainbowstream = pythonPackages.rainbowstream;
+  rainbowstream = with python3.pkgs; toPythonApplication rainbowstream;
 
   rambox = callPackage ../applications/networking/instant-messengers/rambox { };
 
@@ -14746,8 +14738,6 @@ with pkgs;
     jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
 
-  fedpkg = callPackage ../development/tools/fedpkg { };
-
   flex_2_5_35 = callPackage ../development/tools/parsing/flex/2.5.35.nix { };
   flex = callPackage ../development/tools/parsing/flex { };
 
@@ -15173,8 +15163,6 @@ with pkgs;
   pahole = callPackage ../development/tools/misc/pahole {};
 
   panopticon = callPackage ../development/tools/analysis/panopticon {};
-
-  pants = callPackage ../development/tools/build-managers/pants {};
 
   parinfer-rust = callPackage ../development/tools/parinfer-rust {};
 
@@ -18609,7 +18597,6 @@ with pkgs;
   libvirt = callPackage ../development/libraries/libvirt {
     inherit (darwin.apple_sdk.frameworks) Carbon AppKit;
   };
-  libvirt_5_9_0 = callPackage ../development/libraries/libvirt/5.9.0.nix { };
 
   libvirt-glib = callPackage ../development/libraries/libvirt-glib { };
 
@@ -21692,7 +21679,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AppKit Carbon Cocoa;
   };
 
-  radicale1 = callPackage ../servers/radicale/1.x.nix { };
   radicale2 = callPackage ../servers/radicale/2.x.nix { };
   radicale3 = callPackage ../servers/radicale/3.x.nix { };
 
@@ -21829,8 +21815,6 @@ with pkgs;
   slurm-spank-x11 = callPackage ../servers/computing/slurm-spank-x11 { };
 
   systemd-journal2gelf = callPackage ../tools/system/systemd-journal2gelf { };
-
-  syncserver = callPackage ../servers/syncserver { };
 
   tailscale = callPackage ../servers/tailscale {
     buildGoModule = buildGo117Module;
@@ -31665,6 +31649,8 @@ with pkgs;
   varscan = callPackage ../applications/science/biology/varscan { };
 
   whisper = callPackage ../applications/science/biology/whisper { };
+
+  xenomapper = callPackage ../applications/science/biology/xenomapper { };
 
   hmmer = callPackage ../applications/science/biology/hmmer { };
 

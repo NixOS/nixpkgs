@@ -1,16 +1,19 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, requests }:
+{ lib
+, python2
+}:
 
-buildPythonPackage rec {
+python2.pkgs.buildPythonApplication rec {
   pname = "bitbucket-cli";
   version = "0.5.1";
-  disabled = isPy3k;
 
-  src = fetchPypi {
+  src = python2.pkgs.fetchPypi {
     inherit pname version;
     sha256 = "1xmn73x6jirnwfwcdy380ncmkai9f9dhmld6zin01ypbqwgf50fq";
   };
 
-  propagatedBuildInputs = [ requests ];
+  propagatedBuildInputs = with python2.pkgs; [
+    requests
+  ];
 
   # No tests
   doCheck = false;

@@ -1,4 +1,4 @@
-{ fetchPypi, buildPythonPackage, lib, singledispatch ? null, isPy3k
+{ fetchPypi, buildPythonPackage, lib, isPy3k
 , click
 , joblib
 , regex
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     joblib
     regex
     tqdm
-  ] ++ lib.optional (!isPy3k) singledispatch;
+  ];
 
   # Tests require some data, the downloading of which is impure. It would
   # probably make sense to make the data another derivation, but then feeding
