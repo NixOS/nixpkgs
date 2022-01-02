@@ -13,6 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
   propagatedBuildInputs = [ expat icu ];
+  enableParallelBuilding = true;
 
   meta = with lib; {
     description = "Library to handle RPG Maker 2000/2003 and EasyRPG projects";
