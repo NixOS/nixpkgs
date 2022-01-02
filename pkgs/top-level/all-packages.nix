@@ -27402,6 +27402,8 @@ with pkgs;
 
   nwg-wrapper = callPackage ../applications/misc/nwg-wrapper { };
 
+  nymphrpc = callPackage ../development/libraries/nymphrpc { };
+
   ocenaudio = callPackage ../applications/audio/ocenaudio { };
 
   onlyoffice-bin = callPackage ../applications/office/onlyoffice-bin { };
