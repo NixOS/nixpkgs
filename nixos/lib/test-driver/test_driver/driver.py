@@ -17,7 +17,7 @@ class Driver:
     tests: str
     vlans: List[VLan]
     machines: List[Machine]
-    polling_conditions: List[Callable]
+    polling_conditions: List[PollingCondition]
 
     def __init__(
         self,
@@ -46,7 +46,7 @@ class Driver:
                 keep_vm_state=keep_vm_state,
                 name=cmd.machine_name,
                 tmp_dir=tmp_dir,
-                fail_early=self.fail_early,
+                callbacks=[self.check_polling_conditions],
             )
             for cmd in cmd(start_scripts)
         ]
@@ -166,8 +166,9 @@ class Driver:
     def serial_stdout_off(self) -> None:
         rootlog._print_serial_logs = False
 
-    def fail_early(self) -> bool:
-        return any(not f() for f in self.polling_conditions)
+    def check_polling_conditions(self) -> None:
+        for condition in self.polling_conditions:
+            condition.maybe_raise()
 
     def polling_condition(
         self,
@@ -184,7 +185,7 @@ class Driver:
                     fun,
                     seconds_interval,
                     description,
-                ).check
+                )
 
             def __enter__(self) -> None:
                 driver.polling_conditions.append(self.condition)

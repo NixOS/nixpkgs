@@ -17,7 +17,7 @@ import threading
 import time
 
 from test_driver.logger import rootlog
-from test_driver.polling_condition import PollingCondition, coopmulti
+from test_driver.polling_condition import PollingCondition
 
 CHAR_TO_KEY = {
     "A": "shift-a",
@@ -319,7 +319,7 @@ class Machine:
     # Store last serial console lines for use
     # of wait_for_console_text
     last_lines: Queue = Queue()
-    fail_early: Callable
+    callbacks: List[Callable]
 
     def __repr__(self) -> str:
         return f"<Machine '{self.name}'>"
@@ -331,14 +331,14 @@ class Machine:
         name: str = "machine",
         keep_vm_state: bool = False,
         allow_reboot: bool = False,
-        fail_early: Callable = lambda: False,
+        callbacks: Optional[List[Callable]] = None,
     ) -> None:
         self.tmp_dir = tmp_dir
         self.keep_vm_state = keep_vm_state
         self.allow_reboot = allow_reboot
         self.name = name
         self.start_command = start_command
-        self.fail_early = fail_early
+        self.callbacks = callbacks if callbacks is not None else []
 
         # set up directories
         self.shared_dir = self.tmp_dir / "shared-xchg"
@@ -409,8 +409,8 @@ class Machine:
                     break
             return answer
 
-    @coopmulti
     def send_monitor_command(self, command: str) -> str:
+        self.run_callbacks()
         with self.nested("sending monitor command: {}".format(command)):
             message = ("{}\n".format(command)).encode()
             assert self.monitor is not None
@@ -511,10 +511,10 @@ class Machine:
                 break
         return "".join(output_buffer)
 
-    @coopmulti
     def execute(
         self, command: str, check_return: bool = True, timeout: Optional[int] = 900
     ) -> Tuple[int, str]:
+        self.run_callbacks()
         self.connect()
 
         if timeout is not None:
@@ -975,3 +975,7 @@ class Machine:
         self.shell.close()
         self.monitor.close()
         self.serial_thread.join()
+
+    def run_callbacks(self) -> None:
+        for callback in self.callbacks:
+            callback()

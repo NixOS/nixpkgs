@@ -10,17 +10,6 @@ class PollingConditionFailed(Exception):
     pass
 
 
-def coopmulti(fun: Callable) -> Callable:
-    @wraps(fun)
-    def wrapper(machine: Any, *args: List[Any], **kwargs: Dict[str, Any]) -> Any:
-        if machine.fail_early():  # type: ignore
-            raise PollingConditionFailed("Test interrupted early...")
-
-        return fun(machine, *args, **kwargs)
-
-    return wrapper
-
-
 class PollingCondition:
     condition: Callable[[], bool]
     seconds_interval: float
@@ -39,7 +28,10 @@ class PollingCondition:
         self.seconds_interval = seconds_interval
 
         if description is None:
-            self.description = condition.__doc__
+            if condition.__doc__:
+                self.description = condition.__doc__
+            else:
+                self.description = condition.__name__
         else:
             self.description = str(description)
 
@@ -57,8 +49,15 @@ class PollingCondition:
             except Exception:
                 res = False
             res = res is None or res
-            rootlog.info(f"Polling condition {'succeeded' if res else 'failed'}")
+            rootlog.info(self.status_message(res))
             return res
+
+    def maybe_raise(self) -> None:
+        if not self.check():
+            raise PollingConditionFailed(self.status_message(False))
+
+    def status_message(self, status: bool) -> str:
+        return f"Polling condition {'succeeded' if status else 'failed'}: {self.description}"
 
     @property
     def nested_message(self) -> str:
