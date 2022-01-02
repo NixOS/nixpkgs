@@ -5131,8 +5131,6 @@ with pkgs;
 
   ettercap = callPackage ../applications/networking/sniffers/ettercap { };
 
-  euca2ools = callPackage ../tools/virtualization/euca2ools { };
-
   eventstat = callPackage ../os-specific/linux/eventstat { };
 
   evillimiter = python3Packages.callPackage ../tools/networking/evillimiter { };

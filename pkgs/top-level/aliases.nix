@@ -233,6 +233,7 @@ mapAliases ({
   envelope = throw "envelope has been removed from nixpkgs, as it was unmaintained."; # added 2021-08-05
   epoxy = libepoxy; # 2021-11-11
   esniper = throw "esniper has been removed because upstream no longer maintains it (and it no longer works)"; # added 2021-04-12
+  euca2tools = throw "euca2ools has been removed because it is unmaintained upstream and still uses python2."; # added 2022-01-01
   evolution_data_server = evolution-data-server; # added 2018-02-25
   etcdctl = etcd; # added 2018-04-25
   exfat-utils = exfat;                  # 2015-09-11
