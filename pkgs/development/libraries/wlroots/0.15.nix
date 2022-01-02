@@ -10,7 +10,7 @@
 , libpng
 , libxkbcommon
 , mesa
-, meson_0_60
+, meson
 , ninja
 , pixman
 , pkg-config
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   depsBuildBuild = [ pkg-config ];
 
   nativeBuildInputs = [
-    meson_0_60
+    meson
     ninja
     pkg-config
     wayland-scanner
