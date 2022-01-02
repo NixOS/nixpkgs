@@ -61,13 +61,6 @@
     "vendorSha256": null,
     "version": "2.2.0"
   },
-  "arukas": {
-    "owner": "terraform-providers",
-    "repo": "terraform-provider-arukas",
-    "rev": "v1.1.0",
-    "sha256": "1akl9fzgm5qv01vz18xjzyqjnlxw699qq4x8vr96j16l1zf10h99",
-    "version": "1.1.0"
-  },
   "auth0": {
     "owner": "terraform-providers",
     "repo": "terraform-provider-auth0",
@@ -139,13 +132,6 @@
     "sha256": "0z0l4j8sn8yf6kw5sbyhp6s0046f738lsm650skcspqa5f63mbd9",
     "version": "1.2.0"
   },
-  "bitbucket": {
-    "owner": "terraform-providers",
-    "repo": "terraform-provider-bitbucket",
-    "rev": "v1.2.0",
-    "sha256": "11n4wpvmaab164g6k077n9dbdbhd5lwl7pxpha5492ks468nd95b",
-    "version": "1.2.0"
-  },
   "brightbox": {
     "owner": "terraform-providers",
     "repo": "terraform-provider-brightbox",
@@ -160,33 +146,12 @@
     "sha256": "0zypjcg1z8fkz31lfhysxx42lpw8ak4aqgdis6rxzqbnkk491fjp",
     "version": "1.0.2"
   },
-  "chef": {
-    "owner": "terraform-providers",
-    "repo": "terraform-provider-chef",
-    "rev": "v0.2.0",
-    "sha256": "0ihn4706fflmf0585w22l7arzxsa9biq4cgh8nlhlp5y0zy934ns",
-    "version": "0.2.0"
-  },
-  "cherryservers": {
-    "owner": "terraform-providers",
-    "repo": "terraform-provider-cherryservers",
-    "rev": "v1.0.0",
-    "sha256": "1z6ai6q8aw38kiy8x13rp0dsvb4jk40cv8pk5c069q15m4jab8lh",
-    "version": "1.0.0"
-  },
   "ciscoasa": {
     "owner": "terraform-providers",
     "repo": "terraform-provider-ciscoasa",
     "rev": "v1.2.0",
     "sha256": "033pgy42qwjpmjyzylpml7sfzd6dvvybs56cid1f6sm4ykmxbal7",
     "version": "1.2.0"
-  },
-  "clc": {
-    "owner": "terraform-providers",
-    "repo": "terraform-provider-clc",
-    "rev": "v0.1.0",
-    "sha256": "0gvsjnwk6xkgxai1gxsjf0hsjxbv8d8jg5hq8yd3hjhc6785fgnf",
-    "version": "0.1.0"
   },
   "cloudflare": {
     "owner": "cloudflare",
@@ -228,20 +193,6 @@
     "rev": "v0.3.0",
     "sha256": "0zmyww6z3j839ydlmv254hr8gcsixng4lcvmiwkhxb3hj1nw8hcw",
     "version": "0.3.0"
-  },
-  "cobbler": {
-    "owner": "terraform-providers",
-    "repo": "terraform-provider-cobbler",
-    "rev": "v1.1.0",
-    "sha256": "08ljqibfi6alpvv8f7pzvjl2k4w6br6g6ac755x4xw4ycrr24xw9",
-    "version": "1.1.0"
-  },
-  "cohesity": {
-    "owner": "terraform-providers",
-    "repo": "terraform-provider-cohesity",
-    "rev": "v0.1.0",
-    "sha256": "1yifipjf51n8q9xyqcmc4zjpszmpyzb330f4zas81hahjml78hgx",
-    "version": "0.1.0"
   },
   "constellix": {
     "owner": "terraform-providers",
@@ -332,13 +283,6 @@
     "sha256": "190q74aaa1v7n7pqcri8kib0g0d4njf9dzm3cygyzmsjs3pxj1lc",
     "version": "1.19.0"
   },
-  "dyn": {
-    "owner": "terraform-providers",
-    "repo": "terraform-provider-dyn",
-    "rev": "v1.2.0",
-    "sha256": "1a3kxmbib2y0nl7gnxknbhsflj5kfknxnm3gjxxrb2h5d2kvqy48",
-    "version": "1.2.0"
-  },
   "elasticsearch": {
     "owner": "phillbaker",
     "provider-source-address": "registry.terraform.io/phillbaker/elasticsearch",
@@ -386,13 +330,6 @@
     "rev": "v1.2.0",
     "sha256": "0sqp23pyldxjkfw33xn5l5fqs4vn00kkfhy9wnl690wn0cwmldbx",
     "version": "1.2.0"
-  },
-  "genymotion": {
-    "owner": "terraform-providers",
-    "repo": "terraform-provider-genymotion",
-    "rev": "v1.1.0",
-    "sha256": "02jpr3cm7rrf810c69sr6lcxzvxpnf7icc5z80gnvg67wwfg4ph4",
-    "version": "1.1.0"
   },
   "github": {
     "owner": "integrations",
@@ -456,13 +393,6 @@
     "sha256": "0rr65bxd0w5r0zqgj975rzxw7j3wrav4dw9gl3ispfhkb9v1302f",
     "vendorSha256": "0g8cbkg5kcddd1x3p6d8mb6mqwsayqby0mrrifkw5icf7rlaa0sl",
     "version": "1.32.2"
-  },
-  "hedvig": {
-    "owner": "terraform-providers",
-    "repo": "terraform-provider-hedvig",
-    "rev": "v1.1.1",
-    "sha256": "1gd26jm9frn52hy2vm5sv003lbai5sjgdign6akhjmw5sdsmfr05",
-    "version": "1.1.1"
   },
   "helm": {
     "owner": "hashicorp",
@@ -528,40 +458,12 @@
     "sha256": "0xwjxb84glhp9viqykziwanj696w2prq4r7k0565k0w3qiaz440v",
     "version": "0.3.0"
   },
-  "ignition": {
-    "owner": "terraform-providers",
-    "repo": "terraform-provider-ignition",
-    "rev": "v1.2.1",
-    "sha256": "0wd29iw0a5w7ykgs9m1mmi0bw5z9dl4z640qyz64x8rlh5hl1wql",
-    "version": "1.2.1"
-  },
-  "incapsula": {
-    "owner": "terraform-providers",
-    "repo": "terraform-provider-incapsula",
-    "rev": "v2.1.0",
-    "sha256": "12zw2m7j52rszfawywbiv9rgv976h1w6bp98012qn45d4ap2kvzy",
-    "version": "2.1.0"
-  },
-  "influxdb": {
-    "owner": "terraform-providers",
-    "repo": "terraform-provider-influxdb",
-    "rev": "v1.3.0",
-    "sha256": "19af40g8hgz2rdz6523v0fs71ww7qdlf2mh5j9vb7pfzriqwa5k9",
-    "version": "1.3.0"
-  },
   "infoblox": {
     "owner": "terraform-providers",
     "repo": "terraform-provider-infoblox",
     "rev": "v1.0.0",
     "sha256": "0p95y5w3fzddygmsjc0j60z0f4aazvy5iwbwszj0i8gs42qhda2f",
     "version": "1.0.0"
-  },
-  "jdcloud": {
-    "owner": "terraform-providers",
-    "repo": "terraform-provider-jdcloud",
-    "rev": "v1.1.0",
-    "sha256": "04vz0m3z9rfw2hp0h3jhn625r2v37b319krznvhqylqzksv39dzf",
-    "version": "1.1.0"
   },
   "kafka": {
     "owner": "Mongey",
@@ -622,13 +524,6 @@
     "sha256": "0vgkivzbf6hcl9by6l0whpwidva7zmmgdabkshjjk0npl2cj8f9n",
     "version": "1.3.2"
   },
-  "librato": {
-    "owner": "terraform-providers",
-    "repo": "terraform-provider-librato",
-    "rev": "v0.1.0",
-    "sha256": "0bxadwj5s7bvc4vlymn3w6qckf14hz82r7q98w2nh55sqr52d923",
-    "version": "0.1.0"
-  },
   "linode": {
     "owner": "terraform-providers",
     "repo": "terraform-provider-linode",
@@ -653,13 +548,6 @@
     "sha256": "0lv1mvy4pkx0sc49xny4j0h30m64lvr3rnmqk85i5p0xhyn77gf2",
     "vendorSha256": null,
     "version": "2.1.0"
-  },
-  "logentries": {
-    "owner": "terraform-providers",
-    "repo": "terraform-provider-logentries",
-    "rev": "v1.0.0",
-    "sha256": "04xprkb9zwdjyzmsdf10bgmn8sa8q7jw0izz8lw0cc9hag97qgbq",
-    "version": "1.0.0"
   },
   "logicmonitor": {
     "owner": "terraform-providers",
@@ -700,26 +588,12 @@
     "vendorSha256": null,
     "version": "3.2.1"
   },
-  "metalcloud": {
-    "owner": "terraform-providers",
-    "repo": "terraform-provider-metalcloud",
-    "rev": "v2.2.0",
-    "sha256": "0xii9gk96srzi9y4pbvlx2cvwypll4igvk89f9qrg18qrw72ags3",
-    "version": "2.2.0"
-  },
   "mongodbatlas": {
     "owner": "terraform-providers",
     "repo": "terraform-provider-mongodbatlas",
     "rev": "v0.5.1",
     "sha256": "0sl5yd1bqj79f7pj49aqh7l3fvdrbf8r7a4g7cv15qbc8g3lr1dh",
     "version": "0.5.1"
-  },
-  "mysql": {
-    "owner": "terraform-providers",
-    "repo": "terraform-provider-mysql",
-    "rev": "v1.9.0",
-    "sha256": "14gxxki3jhncv3s2x828ns2vgmf2xxzigdyp9b54mbkw5rnv1k2g",
-    "version": "1.9.0"
   },
   "ncloud": {
     "owner": "terraform-providers",
@@ -743,13 +617,6 @@
     "rev": "v1.19.0",
     "sha256": "0nmbgw4qyzsw8kxi7p8dy4j1lkxcz7qfs56qsvwf2w07y4qm382p",
     "version": "1.19.0"
-  },
-  "nixos": {
-    "owner": "tweag",
-    "repo": "terraform-provider-nixos",
-    "rev": "v0.0.1",
-    "sha256": "00vz6qjq1pk39iqg4356b8g3c6slla9jifkv2knk46gc9q93q0lf",
-    "version": "0.0.1"
   },
   "nomad": {
     "owner": "hashicorp",
@@ -813,13 +680,6 @@
     "sha256": "093d5r8dz8gryk8qp5var2qrrgkvs1gwgw3zqpxry9xc5cpn30w0",
     "version": "1.0.0"
   },
-  "oneandone": {
-    "owner": "terraform-providers",
-    "repo": "terraform-provider-oneandone",
-    "rev": "v1.3.0",
-    "sha256": "0c412nqg3k17124i51nn3ffra6gcll904h37h7hyvz97cdblcncn",
-    "version": "1.3.0"
-  },
   "opc": {
     "owner": "terraform-providers",
     "repo": "terraform-provider-opc",
@@ -875,13 +735,6 @@
     "vendorSha256": null,
     "version": "0.16.0"
   },
-  "packet": {
-    "owner": "packethost",
-    "repo": "terraform-provider-packet",
-    "rev": "v3.2.0",
-    "sha256": "sha256-YIv4OPRbR00YTVwz0iJ/y6qTbj50nsi5ylrWEx1kZck=",
-    "version": "3.2.0"
-  },
   "pagerduty": {
     "owner": "terraform-providers",
     "repo": "terraform-provider-pagerduty",
@@ -919,20 +772,6 @@
     "sha256": "1mfcj32v66w5gnzbrdkampydl3m9f1155vcdw8l1f2nba59irkgw",
     "version": "1.4.0"
   },
-  "profitbricks": {
-    "owner": "terraform-providers",
-    "repo": "terraform-provider-profitbricks",
-    "rev": "v1.5.2",
-    "sha256": "0gass4gzv8axlzn5rgg35nqvd61q82k041r0sr6x6pv6j8v1ixln",
-    "version": "1.5.2"
-  },
-  "pureport": {
-    "owner": "terraform-providers",
-    "repo": "terraform-provider-pureport",
-    "rev": "v1.1.8",
-    "sha256": "02vmqwjz5m5hj4zghwicjp27dxvc4qsiwj4gjsi66w6djdqnh4h1",
-    "version": "1.1.8"
-  },
   "rabbitmq": {
     "owner": "cyrilgdn",
     "provider-source-address": "registry.terraform.io/cyrilgdn/rabbitmq",
@@ -941,13 +780,6 @@
     "sha256": "0src4d032z3mpv10fgya2izqm8qfdgr87rfhpnld1r90yvxqgnl2",
     "vendorSha256": "sha256-wbnjAM2PYocAtRuY4fjLPGFPJfzsKih6Q0YCvFyMulQ=",
     "version": "1.6.0"
-  },
-  "rancher": {
-    "owner": "terraform-providers",
-    "repo": "terraform-provider-rancher",
-    "rev": "v1.5.0",
-    "sha256": "0yhv9ahj6ajspgnl2f77gpyd6klq44dyl74lvl10bx6yy56abi2m",
-    "version": "1.5.0"
   },
   "rancher2": {
     "owner": "rancher",
@@ -967,26 +799,12 @@
     "vendorSha256": null,
     "version": "3.1.0"
   },
-  "rightscale": {
-    "owner": "terraform-providers",
-    "repo": "terraform-provider-rightscale",
-    "rev": "v1.3.1",
-    "sha256": "0abwxaghrxpahpsk6kd02fjh0rhck4xsdrzcpv629yh8ip9rzcaj",
-    "version": "1.3.1"
-  },
   "rundeck": {
     "owner": "terraform-providers",
     "repo": "terraform-provider-rundeck",
     "rev": "v0.4.0",
     "sha256": "1x131djsny8w84yf7w2il33wlc3ysy3k399dziii2lmq4h8sgrpr",
     "version": "0.4.0"
-  },
-  "runscope": {
-    "owner": "terraform-providers",
-    "repo": "terraform-provider-runscope",
-    "rev": "v0.6.0",
-    "sha256": "1fsph2cnyvzdwa5hwdjabfk4azmc3x8a7afpwpawxfdvqhgpr595",
-    "version": "0.6.0"
   },
   "scaleway": {
     "owner": "terraform-providers",
@@ -1050,13 +868,6 @@
     "sha256": "0ygsdkv7czyhsjsx1q57rmmcl8x66d65yarhg40hlng5c7xpi52g",
     "version": "0.14.1"
   },
-  "softlayer": {
-    "owner": "terraform-providers",
-    "repo": "terraform-provider-softlayer",
-    "rev": "v0.0.1",
-    "sha256": "1xcg5zm2n1pc3l7ng94k589r7ykv6fxsmr5qn9xmmpdf912rdnfq",
-    "version": "0.0.1"
-  },
   "sops": {
     "owner": "carlpett",
     "provider-source-address": "registry.terraform.io/carlpett/sops",
@@ -1094,13 +905,6 @@
     "sha256": "0d7xsfdfs6dj02bh90bhwsa2jgxf84df3pqmsjlmxvpv65dv4vs8",
     "version": "2.0.3"
   },
-  "telefonicaopencloud": {
-    "owner": "terraform-providers",
-    "repo": "terraform-provider-telefonicaopencloud",
-    "rev": "v1.0.0",
-    "sha256": "1761wkjz3d2458xl7855lxklyxgyk05fddh92rp6975y0ca6xa5m",
-    "version": "1.0.0"
-  },
   "template": {
     "owner": "hashicorp",
     "provider-source-address": "registry.terraform.io/hashicorp/template",
@@ -1116,13 +920,6 @@
     "rev": "v1.36.0",
     "sha256": "1sqynm0g1al5hnxzccv8iiqcgd07ys0g828f3xfw53b6f5vzbhfr",
     "version": "1.36.0"
-  },
-  "terraform": {
-    "owner": "terraform-providers",
-    "repo": "terraform-provider-terraform",
-    "rev": "v1.0.2",
-    "sha256": "1aj6g6l68n9kqmxfjlkwwxnac7fhha6wrmvsw4yylf0qyssww75v",
-    "version": "1.0.2"
   },
   "tfe": {
     "owner": "terraform-providers",
@@ -1169,13 +966,6 @@
     "rev": "v1.20.0",
     "sha256": "1s3xgdrngiy7slxwk5cmhij681yyfvc8185yig7jmrm21q2981f6",
     "version": "1.20.0"
-  },
-  "ultradns": {
-    "owner": "terraform-providers",
-    "repo": "terraform-provider-ultradns",
-    "rev": "v0.1.0",
-    "sha256": "0bq2y6bxdax7qnmq6vxh8pz9sqy1r3m05dv7q5dbv2xvba1b88hj",
-    "version": "0.1.0"
   },
   "vault": {
     "owner": "hashicorp",

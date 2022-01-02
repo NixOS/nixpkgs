@@ -941,7 +941,6 @@ mapAliases ({
   terraform-provider-ibm = terraform-providers.ibm; # added 2018-09-28
   terraform-provider-libvirt = terraform-providers.libvirt; # added 2018-09-28
   terraform-provider-lxd = terraform-providers.lxd; # added 2020-03-16
-  terraform-provider-nixos = terraform-providers.nixos; # added 2018-09-28
   tesseract_4 = tesseract4; # added 2018-12-19
   tex-gyre-bonum-math = tex-gyre-math.bonum; # added 2018-04-03
   tex-gyre-pagella-math = tex-gyre-math.pagella; # added 2018-04-03
