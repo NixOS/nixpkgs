@@ -306,13 +306,6 @@ in
 
   citra = mkLibRetroCore {
     core = "citra";
-    # `nix-prefetch-github` doesn't support `deepClone`, necessary for citra
-    # https://github.com/seppeljordan/nix-prefetch-github/issues/41
-    src = fetchFromGitHub {
-      inherit (hashesFile.citra) owner repo rev fetchSubmodules;
-      deepClone = true;
-      sha256 = "sha256-bwnYkMvbtRF5bGZRYVtMWxnCu9P45qeX4+ntOj9eRds=";
-    };
     description = "Port of Citra to libretro";
     license = lib.licenses.gpl2Plus;
     extraNativeBuildInputs = [ cmake pkg-config ];
