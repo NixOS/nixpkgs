@@ -788,8 +788,8 @@ in
           if containerConfig.autoStart then
             {
               wantedBy = [ "machines.target" ];
-              wants = [ "network.target" ];
-              after = [ "network.target" ];
+              wants = [ "network.target" ] ++ (map (i: "sys-subsystem-net-devices-${i}.device") cfg.interfaces);
+              after = [ "network.target" ] ++ (map (i: "sys-subsystem-net-devices-${i}.device") cfg.interfaces);
               restartTriggers = [
                 containerConfig.path
                 config.environment.etc."containers/${name}.conf".source
