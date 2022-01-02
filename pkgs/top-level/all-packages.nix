@@ -21138,6 +21138,7 @@ with pkgs;
   matrix-alertmanager = callPackage ../servers/monitoring/matrix-alertmanager { };
 
   mattermost = callPackage ../servers/mattermost { };
+  mattermost_6 = callPackage ../servers/mattermost/6.nix { };
   matterircd = callPackage ../servers/mattermost/matterircd.nix { };
   matterbridge = callPackage ../servers/matterbridge {
     buildGoModule = buildGo117Module;
