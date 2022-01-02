@@ -379,8 +379,6 @@ with pkgs;
 
   oletools = with python3.pkgs; toPythonApplication oletools;
 
-  creddump = callPackage ../tools/security/creddump {};
-
   credential-detector = callPackage ../tools/security/credential-detector { };
 
   credslayer = callPackage ../tools/security/credslayer { };

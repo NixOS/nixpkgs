@@ -118,6 +118,7 @@ mapAliases ({
   cinepaint = throw "cinepaint has been removed from nixpkgs, as it was unmaintained"; # added 2019-12-10
   cifs_utils = cifs-utils; # added 2016-08
   ckb = ckb-next; # added 2018-10-21
+  creddump = throw "creddump has been removed from nixpkgs as the upstream has abandoned the project."; # added 2022-01-01
 
   # these are for convenience, not for backward compat and shouldn't expire
   clang5Stdenv = lowPrio llvmPackages_5.stdenv;
