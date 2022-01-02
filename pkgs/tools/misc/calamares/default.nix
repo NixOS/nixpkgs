@@ -33,18 +33,17 @@ mkDerivation rec {
 
   postPatch = ''
     sed -e "s,/usr/bin/calamares,$out/bin/calamares," \
-        -i calamares.desktop \
         -i com.github.calamares.calamares.policy
+
+    sed -e "s,pkexec calamares,pkexec $out/bin/calamares," \
+        -i calamares.desktop
 
     sed -e 's,/usr/share/zoneinfo,${tzdata}/share/zoneinfo,' \
         -i src/modules/locale/SetTimezoneJob.cpp \
-        -i src/modules/locale/Tests.cpp \
         -i src/libcalamares/locale/TimeZone.cpp \
-        -i src/libcalamares/locale/zone-extractor.py
 
     sed -e 's,/usr/share/X11/xkb/rules/base.lst,${xkeyboard_config}/share/X11/xkb/rules/base.lst,' \
         -i src/modules/keyboard/keyboardwidget/keyboardglobal.cpp \
-        -i src/modules/keyboard/layout-extractor.py
 
     sed -e 's,"ckbcomp","${ckbcomp}/bin/ckbcomp",' \
         -i src/modules/keyboard/keyboardwidget/keyboardpreview.cpp
