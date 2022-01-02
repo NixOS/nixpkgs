@@ -4,6 +4,8 @@
 , fetchFromGitHub
 , callPackage
 , config
+
+, cdrtools # libvirt
 }:
 let
   list = lib.importJSON ./providers.json;
@@ -55,7 +57,9 @@ let
   special-providers = let archived = throw "the provider has been archived by upsteam"; in {
     # Packages that don't fit the default model
     gandi = callPackage ./gandi { };
-    libvirt = callPackage ./libvirt { };
+    # mkisofs needed to create ISOs holding cloud-init data,
+    # and wrapped to terraform via deecb4c1aab780047d79978c636eeb879dd68630
+    libvirt = automated-providers.libvirt.overrideAttrs (_: { propagatedBuildInputs = [ cdrtools ]; });
     teleport = callPackage ./teleport { };
     vpsadmin = callPackage ./vpsadmin { };
   } // (lib.optionalAttrs (config.allowAliases or false) {
