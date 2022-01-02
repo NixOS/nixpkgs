@@ -30,6 +30,14 @@
           PHP 8.1 is now available
         </para>
       </listitem>
+      <listitem>
+        <para>
+          Mattermost has been updated to version 6.2. Migrations may
+          take a while, see the
+          <link xlink:href="https://docs.mattermost.com/install/self-managed-changelog.html#release-v6.2-feature-release">upgrade
+          notes</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.05-new-services">
@@ -64,6 +72,13 @@
           <link xlink:href="https://github.com/ngoduykhanh/PowerDNS-Admin">PowerDNS-Admin</link>,
           a web interface for the PowerDNS server. Available at
           <link xlink:href="options.html#opt-services.powerdns-admin.enable">services.powerdns-admin</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://maddy.email">maddy</link>, a
+          composable all-in-one mail server. Available as
+          <link xlink:href="options.html#opt-services.maddy.enable">services.maddy</link>.
         </para>
       </listitem>
     </itemizedlist>

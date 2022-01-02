@@ -163,6 +163,7 @@ feline-nvim/feline.nvim
 fenetikm/falcon
 fhill2/floating.nvim
 fiatjaf/neuron.vim
+filipdutescu/renamer.nvim
 fisadev/vim-isort
 flazz/vim-colorschemes
 floobits/floobits-neovim
@@ -286,6 +287,7 @@ jeffkreeftmeijer/neovim-sensible
 jeffkreeftmeijer/vim-numbertoggle
 jelera/vim-javascript-syntax
 jgdavey/tslime.vim
+jghauser/mkdir.nvim@main
 jhradilek/vim-docbk
 jhradilek/vim-snippets as vim-docbk-snippets
 jiangmiao/auto-pairs
@@ -497,6 +499,7 @@ natebosch/vim-lsc
 nathanaelkane/vim-indent-guides
 nathangrigg/vim-beancount
 nathanmsmith/nvim-ale-diagnostic
+navarasu/onedark.nvim
 navicore/vissort.vim
 nbouscal/vim-stylish-haskell
 ncm2/float-preview.nvim

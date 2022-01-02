@@ -1170,6 +1170,17 @@
     githubId = 56650223;
     name = "Artturi N";
   };
+  azahi = {
+    email = "azahi@teknik.io";
+    matrix = "@azahi:matrix.org";
+    github = "azahi";
+    githubId = 22211000;
+    name = "Azat Bahawi";
+    keys = [{
+      longkeyid = "rsa2048/0xB40FCB6608BBE3B6";
+      fingerprint = "E9F3 483F 31C7 29B4 4CA2  7C38 B40F CB66 08BB E3B6";
+    }];
+  };
   ayazhafiz = {
     email = "ayaz.hafiz.1@gmail.com";
     github = "ayazhafiz";
@@ -3124,6 +3135,16 @@
     github = "drewrisinger";
     githubId = 10198051;
     name = "Drew Risinger";
+  };
+  drperceptron = {
+    email = "92106371+drperceptron@users.noreply.github.com";
+    github = "drperceptron";
+    githubId = 92106371;
+    name = "Dr Perceptron";
+    keys = [{
+      longkeyid = "rsa4096/0x95EB6DFF26D1CEB0";
+      fingerprint = "7E38 89D9 B1A8 B381 C8DE  A15F 95EB 6DFF 26D1 CEB0";
+    }];
   };
   drupol = {
     name = "Pol Dellaiera";
@@ -11037,6 +11058,13 @@
     githubId = 26806;
     name = "Scott Olson";
   };
+  SomeoneSerge = {
+    email = "sergei.kozlukov@aalto.fi";
+    matrix = "@ss:someonex.net";
+    github = "SomeoneSerge";
+    githubId = 9720532;
+    name = "Sergei K";
+  };
   sondr3 = {
     email = "nilsen.sondre@gmail.com";
     github = "sondr3";
@@ -11162,6 +11190,12 @@
     github = "stackshadow";
     githubId = 7512804;
     name = "Martin Langlotz";
+  };
+  steamwalker = {
+    email = "steamwalker@xs4all.nl";
+    github = "steamwalker";
+    githubId = 94006354;
+    name = "steamwalker";
   };
   steell = {
     email = "steve@steellworks.com";
@@ -11794,6 +11828,13 @@
     github = "tiagolobocastro";
     githubId = 1618946;
     name = "Tiago Castro";
+  };
+  tilcreator = {
+    name = "Tilman Jackel";
+    email = "contact.nixos@tc-j.de";
+    matrix = "@tilcreator:matrix.org";
+    github = "TilCreator";
+    githubId = 18621411;
   };
   tilpner = {
     email = "till@hoeppner.ws";

@@ -3307,6 +3307,10 @@ with pkgs;
 
   krapslog = callPackage ../tools/misc/krapslog { };
 
+  krill = callPackage ../servers/krill {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   lcdproc = callPackage ../servers/monitoring/lcdproc { };
 
   languagetool = callPackage ../tools/text/languagetool {  };
@@ -5929,6 +5933,8 @@ with pkgs;
 
   gnuapl = callPackage ../development/interpreters/gnu-apl { };
 
+  gnu-shepherd = callPackage ../misc/gnu-shepherd { };
+
   dapl = callPackage ../development/interpreters/dzaima-apl {
     buildNativeImage = false;
     stdenv = stdenvNoCC;
@@ -6411,8 +6417,6 @@ with pkgs;
   hockeypuck = callPackage ../servers/hockeypuck/server.nix { };
 
   hockeypuck-web = callPackage ../servers/hockeypuck/web.nix { };
-
-  holochain-go = callPackage ../servers/holochain-go { };
 
   homesick = callPackage ../tools/misc/homesick { };
 
@@ -7490,6 +7494,9 @@ with pkgs;
   libxl = callPackage ../development/libraries/libxl {};
 
   libx86emu = callPackage ../development/libraries/libx86emu { };
+
+  libzim = callPackage ../development/libraries/libzim {};
+
 
   libzmf = callPackage ../development/libraries/libzmf {};
 
@@ -8621,6 +8628,8 @@ with pkgs;
   pick = callPackage ../tools/misc/pick { };
 
   pipe-rename = callPackage ../tools/misc/pipe-rename { };
+
+  pipectl = callPackage ../tools/misc/pipectl { };
 
   pitivi = callPackage ../applications/video/pitivi { };
 
@@ -9781,6 +9790,8 @@ with pkgs;
   sonarr = callPackage ../servers/sonarr { };
 
   sonata = callPackage ../applications/audio/sonata { };
+
+  sony-headphones-client = callPackage ../applications/audio/sony-headphones-client { };
 
   soundkonverter = libsForQt5.soundkonverter;
 
@@ -11367,9 +11378,6 @@ with pkgs;
 
   any-nix-shell = callPackage ../shells/any-nix-shell { };
 
-  bash_4 = lowPrio (callPackage ../shells/bash/4.4.nix {
-    binutils = stdenv.cc.bintools;
-  });
   bash = lowPrio (callPackage ../shells/bash/5.1.nix {
     binutils = stdenv.cc.bintools;
   });
@@ -11379,12 +11387,6 @@ with pkgs;
     interactive = true;
     withDocs = true;
   };
-
-  bashInteractive_4 = lowPrio (callPackage ../shells/bash/4.4.nix {
-    binutils = stdenv.cc.bintools;
-    interactive = true;
-    withDocs = true;
-  });
 
   bash-completion = callPackage ../shells/bash/bash-completion { };
 
@@ -28103,7 +28105,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices Cocoa Hypervisor;
     inherit (darwin.stubs) rez setfile;
     inherit (darwin) sigtool;
-    python = python3;
   };
 
   qemu-utils = callPackage ../applications/virtualization/qemu/utils.nix {};
@@ -30119,6 +30120,8 @@ with pkgs;
 
   masari = callPackage ../applications/blockchains/masari { boost = boost165; };
 
+  napari = with python3Packages; toPythonApplication napari;
+
   nano-wallet = libsForQt5.callPackage ../applications/blockchains/nano-wallet {
     boost = boost172;
   };
@@ -30614,8 +30617,8 @@ with pkgs;
 
   katagoWithCuda = katago.override {
     enableCuda = true;
-    cudnn = cudnn_cudatoolkit_10_2;
-    cudatoolkit = cudatoolkit_10_2;
+    cudnn = cudnn_cudatoolkit_11;
+    cudatoolkit = cudatoolkit_11;
   };
 
   katagoCPU = katago.override {
@@ -31103,6 +31106,8 @@ with pkgs;
 
   tuxtype = callPackage ../games/tuxtype { };
 
+  tworld2 = callPackage ../games/tworld2 { };
+
   speed_dreams = callPackage ../games/speed-dreams {
     # Torcs wants to make shared libraries linked with plib libraries (it provides static).
     # i686 is the only platform I know than can do that linking without plib built with -fPIC
@@ -31344,7 +31349,7 @@ with pkgs;
     inherit (python3Packages) python pygobject3 pyxdg wrapPython;
     inherit (darwin.apple_sdk.frameworks) CoreLocation ApplicationServices Foundation Cocoa;
     geoclue = geoclue2;
-  }) redshift redshift-wlr gammastep;
+  }) redshift gammastep;
 
   redshift-plasma-applet = libsForQt5.callPackage ../applications/misc/redshift-plasma-applet { };
 
@@ -32429,6 +32434,8 @@ with pkgs;
   betaflight-configurator = callPackage ../applications/science/robotics/betaflight-configurator { };
 
   emuflight-configurator = callPackage ../applications/science/robotics/emuflight-configurator { };
+
+  inav-configurator = callPackage ../applications/science/robotics/inav-configurator { };
 
   mission-planner = callPackage ../applications/science/robotics/mission-planner { };
 
@@ -34103,6 +34110,8 @@ with pkgs;
   nix-store-gcs-proxy = callPackage ../tools/nix/nix-store-gcs-proxy {};
 
   webwormhole = callPackage ../tools/networking/webwormhole { };
+
+  werf = callPackage ../applications/networking/cluster/werf {};
 
   wifi-password = callPackage ../os-specific/darwin/wifi-password {};
 

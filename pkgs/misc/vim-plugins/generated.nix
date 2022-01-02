@@ -3394,6 +3394,18 @@ final: prev:
     meta.homepage = "https://github.com/jose-elias-alvarez/minsnip.nvim/";
   };
 
+  mkdir-nvim = buildVimPluginFrom2Nix {
+    pname = "mkdir.nvim";
+    version = "2021-06-20";
+    src = fetchFromGitHub {
+      owner = "jghauser";
+      repo = "mkdir.nvim";
+      rev = "caa4178dae081850230f2f05699fef8e83b59ded";
+      sha256 = "0s87hmna6bl9zy12ni2ih4i7aml009slmsk1pkpr93lmh2mspms7";
+    };
+    meta.homepage = "https://github.com/jghauser/mkdir.nvim/";
+  };
+
   mkdx = buildVimPluginFrom2Nix {
     pname = "mkdx";
     version = "2021-12-06";
@@ -4762,6 +4774,18 @@ final: prev:
     meta.homepage = "https://github.com/Th3Whit3Wolf/one-nvim/";
   };
 
+  onedark-nvim = buildVimPluginFrom2Nix {
+    pname = "onedark.nvim";
+    version = "2021-11-30";
+    src = fetchFromGitHub {
+      owner = "navarasu";
+      repo = "onedark.nvim";
+      rev = "ce49cf36dc839564e95290e2cdace396c148bca1";
+      sha256 = "1q7y7vhgk8r28nq4q3aamvkg2hfylfxq25i2avj45prap23b73zy";
+    };
+    meta.homepage = "https://github.com/navarasu/onedark.nvim/";
+  };
+
   onedark-vim = buildVimPluginFrom2Nix {
     pname = "onedark.vim";
     version = "2021-10-15";
@@ -5290,6 +5314,18 @@ final: prev:
       sha256 = "1d1myg4zyc281zcc1ba9idbgcgxndb4a0jwqr4yqxhhzdgszw46r";
     };
     meta.homepage = "https://github.com/vim-scripts/Rename/";
+  };
+
+  renamer-nvim = buildVimPluginFrom2Nix {
+    pname = "renamer.nvim";
+    version = "2021-12-19";
+    src = fetchFromGitHub {
+      owner = "filipdutescu";
+      repo = "renamer.nvim";
+      rev = "814ddbb11602e3c8b2af166b4d1e029272ab796f";
+      sha256 = "067mn0wzvin7zbbzd8svshi5ga38r5d7nw8kqbyn3aakggpnylm3";
+    };
+    meta.homepage = "https://github.com/filipdutescu/renamer.nvim/";
   };
 
   ReplaceWithRegister = buildVimPluginFrom2Nix {

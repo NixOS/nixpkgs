@@ -1396,6 +1396,8 @@ in {
 
   cachetools = callPackage ../development/python-modules/cachetools { };
 
+  cachey = callPackage ../development/python-modules/cachey { };
+
   cachy = callPackage ../development/python-modules/cachy { };
 
   cadquery = callPackage ../development/python-modules/cadquery {
@@ -1550,6 +1552,8 @@ in {
   chess = callPackage ../development/python-modules/chess { };
 
   chevron = callPackage ../development/python-modules/chevron { };
+
+  chex = callPackage ../development/python-modules/chex { };
 
   chiabip158 = callPackage ../development/python-modules/chiabip158 { };
 
@@ -2350,6 +2354,8 @@ in {
   docloud = callPackage ../development/python-modules/docloud { };
 
   docstring-to-markdown = callPackage ../development/python-modules/docstring-to-markdown { };
+
+  docstring-parser = callPackage ../development/python-modules/docstring-parser { };
 
   docopt = callPackage ../development/python-modules/docopt { };
 
@@ -4113,6 +4119,8 @@ in {
 
   jmespath = callPackage ../development/python-modules/jmespath { };
 
+  jmp = callPackage ../development/python-modules/jmp { };
+
   joblib = callPackage ../development/python-modules/joblib { };
 
   johnnycanencrypt = callPackage ../development/python-modules/johnnycanencrypt {
@@ -4731,6 +4739,8 @@ in {
 
   magic = callPackage ../development/python-modules/magic { };
 
+  magicgui = callPackage ../development/python-modules/magicgui { };
+
   magic-wormhole = callPackage ../development/python-modules/magic-wormhole { };
 
   magic-wormhole-mailbox-server = callPackage ../development/python-modules/magic-wormhole-mailbox-server { };
@@ -5204,6 +5214,16 @@ in {
 
   nanotime = callPackage ../development/python-modules/nanotime { };
 
+  napari = callPackage ../development/python-modules/napari {
+    inherit (pkgs.libsForQt5) mkDerivationWith wrapQtAppsHook;
+  };
+
+  napari-console = callPackage ../development/python-modules/napari-console { };
+
+  napari-plugin-engine = callPackage ../development/python-modules/napari-plugin-engine { };
+
+  napari-svg = callPackage ../development/python-modules/napari-svg { };
+
   nassl = callPackage ../development/python-modules/nassl { };
 
   nats-python = callPackage ../development/python-modules/nats-python { };
@@ -5591,6 +5611,8 @@ in {
   orjson = callPackage ../development/python-modules/orjson { };
 
   orm = callPackage ../development/python-modules/orm { };
+
+  ormar = callPackage ../development/python-modules/ormar { };
 
   ortools = (toPythonModule (pkgs.or-tools.override { inherit (self) python; })).python;
 
@@ -6287,6 +6309,8 @@ in {
 
   psycopg2cffi = callPackage ../development/python-modules/psycopg2cffi { };
 
+  psygnal = callPackage ../development/python-modules/psygnal { };
+
   ptable = callPackage ../development/python-modules/ptable { };
 
   ptest = callPackage ../development/python-modules/ptest { };
@@ -6959,6 +6983,8 @@ in {
   pymediaroom = callPackage ../development/python-modules/pymediaroom { };
 
   pymeeus = callPackage ../development/python-modules/pymeeus { };
+
+  pymelcloud = callPackage ../development/python-modules/pymelcloud { };
 
   pymemcache = callPackage ../development/python-modules/pymemcache { };
 
@@ -7634,6 +7660,8 @@ in {
   pytest-mpl = callPackage ../development/python-modules/pytest-mpl { };
 
   pytest-mypy = callPackage ../development/python-modules/pytest-mypy { };
+
+  pytest-mypy-plugins = callPackage ../development/python-modules/pytest-mypy-plugins { };
 
   pytest-openfiles = callPackage ../development/python-modules/pytest-openfiles { };
 
@@ -9364,6 +9392,8 @@ in {
   supervise_api = callPackage ../development/python-modules/supervise_api { };
 
   supervisor = callPackage ../development/python-modules/supervisor { };
+
+  superqt = callPackage ../development/python-modules/superqt { };
 
   sure = callPackage ../development/python-modules/sure { };
 
