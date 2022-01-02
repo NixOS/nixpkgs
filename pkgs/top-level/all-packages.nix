@@ -26860,6 +26860,8 @@ with pkgs;
 
   liblinphone = callPackage ../development/libraries/liblinphone { };
 
+  libnymphcast = callPackage ../development/libraries/libnymphcast { };
+
   links2 = callPackage ../applications/networking/browsers/links2 { };
 
   linphone = libsForQt5.callPackage ../applications/networking/instant-messengers/linphone { };
