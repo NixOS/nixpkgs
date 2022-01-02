@@ -32,8 +32,12 @@
       </listitem>
       <listitem>
         <para>
-          Mattermost has been updated to version 6.2. Migrations may
-          take a while, see the
+          Mattermost 6 is now available, and can be selected with
+          <literal>services.mattermost.package</literal> using the
+          <literal>mattermost_6</literal> attribute. The default is
+          still Mattermost 5, as this is Mattermost’s extended support
+          release. If you upgrade from a previous Mattermost version to
+          6, migrations may take a while. See the
           <link xlink:href="https://docs.mattermost.com/install/self-managed-changelog.html#release-v6.2-feature-release">upgrade
           notes</link>.
         </para>
