@@ -5380,6 +5380,12 @@
     githubId = 221929;
     name = "Jean-Baptiste Giraudeau";
   };
+  jbuchermn = {
+    email = "j.bucher.mn@gmail.com";
+    github = "jbuchermn";
+    githubId = 23573451;
+    name = "Jonas Bucher";
+  };
   jceb = {
     name = "jceb";
     email = "jceb@e-jc.de";
