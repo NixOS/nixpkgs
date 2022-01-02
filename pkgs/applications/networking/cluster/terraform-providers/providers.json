@@ -815,13 +815,6 @@
     "vendorSha256": null,
     "version": "1.2.0"
   },
-  "segment": {
-    "owner": "ajbosco",
-    "repo": "terraform-provider-segment",
-    "rev": "v0.2.0",
-    "sha256": "0ic5b9djhnb1bs2bz3zdprgy3r55dng09xgc4d9l9fyp85g2amaz",
-    "version": "0.2.0"
-  },
   "selectel": {
     "owner": "terraform-providers",
     "repo": "terraform-provider-selectel",

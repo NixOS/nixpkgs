@@ -87,6 +87,7 @@ let
     rancher = archived; # added 2022/01
     rightscale = archived; # added 2022/01
     runscope = archived; # added 2022/01
+    segment = throw "removed from nixpkgs"; # added 2022/01
     softlayer = archived; # added 2022/01
     telefonicaopencloud = archived; # added 2022/01
     terraform = archived; # added 2022/01
