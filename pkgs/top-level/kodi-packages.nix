@@ -90,6 +90,8 @@ let self = rec {
 
   netflix = callPackage ../applications/video/kodi/addons/netflix { };
 
+  orftvthek = callPackage ../applications/video/kodi/addons/orftvthek { };
+
   svtplay = callPackage ../applications/video/kodi/addons/svtplay { };
 
   steam-controller = callPackage ../applications/video/kodi/addons/steam-controller { };
