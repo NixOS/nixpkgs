@@ -8657,7 +8657,7 @@
   };
   noreferences = {
     email = "norkus@norkus.net";
-    github = "noreferences";
+    github = "jozuas";
     githubId = 13085275;
     name = "Juozas Norkus";
   };
