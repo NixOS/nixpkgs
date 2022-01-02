@@ -34214,4 +34214,5 @@ with pkgs;
   zthrottle = callPackage ../tools/misc/zthrottle { };
 
   pywm = callPackage ../development/python-modules/pywm {};
+  newm = callPackage ../applications/window-managers/newm {};
 }
