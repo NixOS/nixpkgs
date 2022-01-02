@@ -54,7 +54,7 @@ let
     , description
       # Check https://github.com/libretro/libretro-core-info for license information
     , license
-    , src ? null
+    , src ? (getCoreSrc core)
     , broken ? false
     , version ? "unstable-2021-12-06"
     , platforms ? retroarch.meta.platforms
@@ -63,15 +63,13 @@ let
     , normalizeCore ? true
     , ...
     }@args:
-    lib.makeOverridable stdenv.mkDerivation (
+    stdenv.mkDerivation (
       let
         d2u = if normalizeCore then (lib.replaceChars [ "-" ] [ "_" ]) else (x: x);
-        finalSrc = if src == null then getCoreSrc core else src;
       in
       (rec {
         pname = "libretro-${core}";
-        inherit version;
-        src = finalSrc;
+        inherit version src;
 
         buildInputs = [ zlib ] ++ args.extraBuildInputs or [ ];
         nativeBuildInputs = [ makeWrapper ] ++ args.extraNativeBuildInputs or [ ];
