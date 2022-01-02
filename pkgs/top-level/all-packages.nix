@@ -9137,8 +9137,6 @@ with pkgs;
 
   ratools = callPackage ../tools/networking/ratools { };
 
-  rawdog = callPackage ../applications/networking/feedreaders/rawdog { };
-
   rc = callPackage ../shells/rc { };
 
   rcon = callPackage ../tools/networking/rcon { };
