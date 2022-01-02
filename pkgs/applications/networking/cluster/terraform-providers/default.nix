@@ -92,6 +92,7 @@ let
     telefonicaopencloud = archived; # added 2022/01
     terraform = archived; # added 2022/01
     ultradns = archived; # added 2022/01
+    vthunder = throw "provider was renamed to thunder"; # added 2022/01
   });
 in
 automated-providers // special-providers // { inherit mkProvider; }
