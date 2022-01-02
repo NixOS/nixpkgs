@@ -7355,7 +7355,9 @@ in {
 
   pysdl2 = callPackage ../development/python-modules/pysdl2 { };
 
-  pysearpc = toPythonModule pkgs.libsearpc;
+  pysearpc = toPythonModule (pkgs.libsearpc.override {
+    python3 = self.python;
+  });
 
   pysecuritas = callPackage ../development/python-modules/pysecuritas { };
 
@@ -8772,9 +8774,9 @@ in {
 
   seabreeze = callPackage ../development/python-modules/seabreeze { };
 
-  seahub = callPackage ../development/python-modules/seahub { };
-
-  seaserv = toPythonModule pkgs.seafile-server;
+  seaserv = toPythonModule (pkgs.seafile-server.override {
+    python3 = self.python;
+  });
 
   seatconnect = callPackage ../development/python-modules/seatconnect { };
 
