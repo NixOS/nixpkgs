@@ -5356,7 +5356,7 @@ in {
 
   nmigen-boards = callPackage ../development/python-modules/nmigen-boards { };
 
-  nmigen = callPackage ../development/python-modules/nmigen { };
+  amaranth = callPackage ../development/python-modules/amaranth { };
 
   nmigen-soc = callPackage ../development/python-modules/nmigen-soc { };
 

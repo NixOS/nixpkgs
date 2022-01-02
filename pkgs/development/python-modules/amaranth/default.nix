@@ -18,17 +18,17 @@
 }:
 
 buildPythonPackage rec {
-  pname = "nmigen";
-  version = "unstable-2021-02-09";
+  pname = "amaranth";
+  version = "0.3";
   # python setup.py --version
-  realVersion = "0.3.dev243+g${lib.substring 0 7 src.rev}";
+  realVersion = "0.3";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
-    owner = "nmigen";
-    repo = "nmigen";
-    rev = "f7c2b9419f9de450be76a0e9cf681931295df65f";
-    sha256 = "0cjs9wgmxa76xqmjhsw4fsb2mhgvd85jgs2mrjxqp6fwp8rlgnl1";
+    owner = "amaranth-lang";
+    repo = "amaranth";
+    rev = "39a83f4d995d16364cc9b99da646ff8db6394166";
+    sha256 = "P9AG3t30eGeeCN5+t7mjhRoOWIGZVzWQji9eYXphjA0=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION="${realVersion}";
@@ -59,11 +59,11 @@ buildPythonPackage rec {
       --replace "pyvcd~=0.2.2" "pyvcd"
   '';
 
-  pythonImportsCheck = [ "nmigen" ];
+  pythonImportsCheck = [ "amaranth" ];
 
   meta = with lib; {
-    description = "A refreshed Python toolbox for building complex digital hardware";
-    homepage = "https://nmigen.info/nmigen";
+    description = "A modern hardware definition language and toolchain based on Python";
+    homepage = "https://amaranth-lang.org/docs/amaranth";
     license = licenses.bsd2;
     maintainers = with maintainers; [ emily ];
   };
