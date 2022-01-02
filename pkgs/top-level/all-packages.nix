@@ -3769,6 +3769,10 @@ with pkgs;
     libmaxminddb = null;
   };
 
+  rtrtr = callPackage ../servers/rtrtr {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   xmlbeans = callPackage ../tools/misc/xmlbeans { };
 
   xmlsort = perlPackages.XMLFilterSort;
