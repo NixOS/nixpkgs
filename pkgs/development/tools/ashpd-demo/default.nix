@@ -86,6 +86,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Tool for playing with XDG desktop portals";
     homepage = "https://github.com/bilelmoussaoui/ashpd/tree/master/ashpd-demo";
+    broken = true; # requires older libadwaita
     license = licenses.mit;
     maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.linux;

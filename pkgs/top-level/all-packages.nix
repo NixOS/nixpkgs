@@ -7456,6 +7456,9 @@ with pkgs;
   libpointmatcher = callPackage ../development/libraries/libpointmatcher { };
 
   libportal = callPackage ../development/libraries/libportal { };
+  libportal-gtk3 = libportal.override { variant = "gtk3"; };
+  libportal-gtk4 = libportal.override { variant = "gtk4"; };
+  libportal-qt5 = libportal.override { variant = "qt5"; };
 
   libmicrodns = callPackage ../development/libraries/libmicrodns { };
 
