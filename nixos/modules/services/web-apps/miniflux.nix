@@ -4,6 +4,8 @@ with lib;
 let
   cfg = config.services.miniflux;
 
+  defaultAddress = "localhost:8080";
+
   dbUser = "miniflux";
   dbPassword = "miniflux";
   dbHost = "localhost";
@@ -31,7 +33,7 @@ in
 {
   options = {
     services.miniflux = {
-      enable = mkEnableOption "miniflux";
+      enable = mkEnableOption "miniflux and creates a local postgres database for it";
 
       config = mkOption {
         type = types.attrsOf types.str;
@@ -45,6 +47,9 @@ in
           Configuration for Miniflux, refer to
           <link xlink:href="https://miniflux.app/docs/configuration.html"/>
           for documentation on the supported values.
+
+          Correct configuration for the database is already provided.
+          By default, listens on ${defaultAddress}.
         '';
       };
 
@@ -64,7 +69,7 @@ in
   config = mkIf cfg.enable {
 
     services.miniflux.config =  {
-      LISTEN_ADDR = mkDefault "localhost:8080";
+      LISTEN_ADDR = mkDefault defaultAddress;
       DATABASE_URL = "postgresql://${dbUser}:${dbPassword}@${dbHost}/${dbName}?sslmode=disable";
       RUN_MIGRATIONS = "1";
       CREATE_ADMIN = "1";
