@@ -426,6 +426,7 @@ mapAliases ({
   kramdown-rfc2629 = rubyPackages.kramdown-rfc2629; # added 2021-03-23
   krita-beta = krita; # moved from top-level 2021-12-23
   kvm = qemu_kvm; # added 2018-04-25
+  lastfmsubmitd = throw "lastfmsubmitd was removed from nixpkgs as the project is abandoned"; # added 2022-01-01
   latinmodern-math = lmmath;
   letsencrypt = certbot; # added 2016-05-16
   libaudit = audit; # added 2018-04-25

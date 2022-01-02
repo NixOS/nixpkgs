@@ -26715,8 +26715,6 @@ with pkgs;
 
   caps = callPackage ../applications/audio/caps { };
 
-  lastfmsubmitd = callPackage ../applications/audio/lastfmsubmitd { };
-
   lbdb = callPackage ../tools/misc/lbdb { abook = null; gnupg = null; goobook = null; khard = null; mu = null; };
 
   lbry = callPackage ../applications/video/lbry { };
