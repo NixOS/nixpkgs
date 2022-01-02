@@ -1,5 +1,6 @@
 { lib
 , python3
+, fetchFromGitHub
 , groff
 , less
 }:
@@ -13,6 +14,20 @@ let
           inherit version;
           sha256 = "189n8hpijy14jfan4ha9f5n06mnl33cxz7ay92wjqgkr639s0vg9";
         };
+      });
+      pyyaml = super.pyyaml.overridePythonAttrs (oldAttrs: rec {
+        version = "5.4.1";
+        src = fetchFromGitHub {
+          owner = "yaml";
+          repo = "pyyaml";
+          rev = version;
+          hash = "sha256-VUqnlOF/8zSOqh6JoEYOsfQ0P4g+eYqxyFTywgCS7gM=";
+        };
+        checkPhase = ''
+          runHook preCheck
+          PYTHONPATH="tests/lib3:$PYTHONPATH" ${self.python.interpreter} -m test_all
+          runHook postCheck
+        '';
       });
     };
   };
