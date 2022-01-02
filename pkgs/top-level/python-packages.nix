@@ -5378,7 +5378,7 @@ in {
 
   amaranth = callPackage ../development/python-modules/amaranth { };
 
-  nmigen-soc = callPackage ../development/python-modules/nmigen-soc { };
+  amaranth-soc = callPackage ../development/python-modules/amaranth-soc { };
 
   nocasedict = callPackage ../development/python-modules/nocasedict { };
 
