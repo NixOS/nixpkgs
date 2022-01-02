@@ -150,6 +150,8 @@ let self = rec {
 
   signals = callPackage ../applications/video/kodi/addons/signals { };
 
+  simplejson = callPackage ../applications/video/kodi/addons/simplejson { };
+
   six = callPackage ../applications/video/kodi/addons/six { };
 
   urllib3 = callPackage ../applications/video/kodi/addons/urllib3 { };
