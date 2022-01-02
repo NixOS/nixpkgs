@@ -7,17 +7,18 @@
 # these need to be ran on the host, thus disable when cross-compiling
 , buildContrib ? stdenv.hostPlatform == stdenv.buildPlatform
 , doCheck ? stdenv.hostPlatform == stdenv.buildPlatform
+, nix-update-script
 }:
 
 stdenv.mkDerivation rec {
   pname = "zstd";
-  version = "1.5.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "zstd";
     rev = "v${version}";
-    sha256 = "0icc0x89c35rq5bxd4d241vqxnz2i1qj2wwy01xls63p0z93brj7";
+    sha256 = "sha256-D9+kuIjPYnmg5ht/ezIeYCpyiLkrtdiH3fwpmemIPGM=";
   };
 
   nativeBuildInputs = [ cmake ]
@@ -28,12 +29,6 @@ stdenv.mkDerivation rec {
     # This patches makes sure we do not attempt to use the MD5 implementation
     # of the host platform when running the tests
     ./playtests-darwin.patch
-
-    # Fixes linking for static builds
-    (fetchpatch {
-      url = "https://github.com/facebook/zstd/pull/2724/commits/e1f85dbca3a0ed5ef06c8396912a0914db8dea6a.patch";
-      sha256 = "sha256-PuYAqnJWAE+L9bsroOnnBGJhERW8LHrGSLtIEkKU9vg=";
-    })
   ];
 
   postPatch = lib.optionalString (!static) ''
@@ -89,6 +84,12 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "dev" ]
     ++ lib.optional stdenv.hostPlatform.isUnix "man"
     ++ [ "out" ];
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = pname;
+    };
+  };
 
   meta = with lib; {
     description = "Zstandard real-time compression algorithm";
