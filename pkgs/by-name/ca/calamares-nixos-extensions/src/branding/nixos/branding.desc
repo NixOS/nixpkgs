@@ -1,18 +1,18 @@
-# Product branding information. This influences some global
-# user-visible aspects of Calamares, such as the product
-# name, window behavior, and the slideshow during installation.
-#
-# Additional styling can be done using the stylesheet.qss
-# file, also in the branding directory.
 ---
-componentName:  default-mobile
+componentName:  nixos
+
+
+### WELCOME / OVERALL WORDING
+#
+# These settings affect some overall phrasing and looks,
+# which are most visible in the welcome page.
 
 # This selects between different welcome texts. When false, uses
 # the traditional "Welcome to the %1 installer.", and when true,
 # uses "Welcome to the Calamares installer for %1." This allows
 # to distinguish this installer from other installers for the
 # same distribution.
-welcomeStyleCalamares:   false
+welcomeStyleCalamares:   true
 
 # Should the welcome image (productWelcome, below) be scaled
 # up beyond its natural size? If false, the image does not grow
@@ -20,11 +20,17 @@ welcomeStyleCalamares:   false
 # may have surprising effects on HiDPI monitors).
 welcomeExpandingLogo:   true
 
+### WINDOW CONFIGURATION
+#
+# The settings here affect the placement of the Calamares
+# window through hints to the window manager and initial
+# sizing of the Calamares window.
+
 # Size and expansion policy for Calamares.
 #  - "normal" or unset, expand as needed, use *windowSize*
 #  - "fullscreen", start as large as possible, ignore *windowSize*
 #  - "noexpand", don't expand automatically, use *windowSize*
-windowExpanding:    fullscreen
+windowExpanding:    normal
 
 # Size of Calamares window, expressed as w,h. Both w and h
 # may be either pixels (suffix px) or font-units (suffix em).
@@ -41,6 +47,14 @@ windowSize: 800px,520px
 # *windowExpanding* set to "fullscreen").
 windowPlacement: center
 
+### PANELS CONFIGURATION
+#
+# Calamares has a main content area, and two panels (navigation
+# and progress / sidebar). The panels can be controlled individually,
+# or switched off. If both panels are switched off, the layout of
+# the main content area loses its margins, on the assumption that
+# you're doing something special.
+
 # Kind of sidebar (panel on the left, showing progress).
 #  - "widget" or unset, use traditional sidebar (logo, items)
 #  - "none", hide it entirely
@@ -55,7 +69,7 @@ windowPlacement: center
 # to putting the sidebar on the left. Also valid is "qml,top".
 # While "widget,top" is valid, the widgets code is **not** flexible
 # and results will be terrible.
-sidebar: none
+sidebar: widget
 
 # Kind of navigation (button panel on the bottom).
 #  - "widget" or unset, use traditional navigation
@@ -64,7 +78,13 @@ sidebar: none
 # In addition, you **may** specify a side, separated by a comma,
 # from the kind. The same sides are valid as for *sidebar*,
 # except the default is *bottom*.
-navigation: none
+navigation: widget
+
+
+### STRINGS, IMAGES AND COLORS
+#
+# This section contains the "branding proper" of names
+# and images, rather than global-look settings.
 
 # These are strings shown to the user in the user interface.
 # There is no provision for translating them -- since they
@@ -92,8 +112,18 @@ navigation: none
 # are visible as buttons there if the corresponding *show* keys
 # are set to "true" (they can also be overridden).
 strings:
-    productName:         "NextGenMobileLinuxDistro"
-    shortProductName:    NextGenMobileLinuxDistro
+    productName:         "@{NAME}"
+    shortProductName:    NixOS
+    version:             
+    shortVersion:        
+    versionedName:       NixOS
+    shortVersionedName:  NixOS
+    bootloaderEntryName: NixOS
+    productUrl:          https://nixos.org/
+    supportUrl:          https://nixos.org/manual/nixos
+    knownIssuesUrl:      https://github.com/NixOS/nixpkgs/issues
+    releaseNotesUrl:     https://nixos.org/manual/nixos/stable/release-notes.html
+    donateUrl:           https://nixos.org/donate.html
 
 # These images are loaded from the branding module directory.
 #
@@ -124,14 +154,33 @@ strings:
 # These filenames can also use substitutions from os-release (see above).
 images:
     # productBanner:       "banner.png"
-    productIcon:         "logo.png"
-    productLogo:         "logo.png"
+    productIcon:         "white.png"
+    productLogo:         "white.png"
     # productWallpaper:    "wallpaper.png"
-    productWelcome:      "logo.png"
+    productWelcome:      "nix-snowflake.svg"
 
+# Colors for text and background components.
+#
+#  - sidebarBackground is the background of the sidebar
+#  - sidebarText is the (foreground) text color
+#  - sidebarTextHighlight sets the background of the selected (current) step.
+#    Optional, and defaults to the application palette.
+#  - sidebarSelect is the text color of the selected step.
+#
+# These colors can **also** be set through the stylesheet, if the
+# branding component also ships a stylesheet.qss. Then they are
+# the corresponding CSS attributes of #sidebarApp.
+style:
+   sidebarBackground:    "#5277C3"
+   sidebarText:          "#FFFFFF"
+   sidebarTextSelect:    "#292F34"
+   sidebarTextHighlight: "#7EBAE4"
+
+### SLIDESHOW
+#
 # The slideshow is displayed during execution steps (e.g. when the
 # installer is actually writing to disk and doing other slow things).
-#
+
 # The slideshow can be a QML file (recommended) which can display
 # arbitrary things -- text, images, animations, or even play a game --
 # during the execution step. The QML **is** abruptly stopped when the
@@ -161,19 +210,21 @@ slideshow:               "show.qml"
 slideshowAPI: 2
 
 
-# Colors for text and background components.
-#
-#  - sidebarBackground is the background of the sidebar
-#  - sidebarText is the (foreground) text color
-#  - sidebarTextHighlight sets the background of the selected (current) step.
-#    Optional, and defaults to the application palette.
-#  - sidebarSelect is the text color of the selected step.
-#
-# These colors can **also** be set through the stylesheet, if the
-# branding component also ships a stylesheet.qss. Then they are
-# the corresponding CSS attributes of #sidebarApp.
-style:
-   sidebarBackground:    "#292F34"
-   sidebarText:          "#FFFFFF"
-   sidebarTextSelect:    "#292F34"
-   sidebarTextHighlight: "#D35400"
+# These options are to customize online uploading of logs to pastebins:
+#  - type      : Defines the kind of pastebin service to be used. Currently
+#                it accepts two values:
+#                - none    :    disables the pastebin functionality
+#                - fiche   :    use fiche pastebin server
+#  - url       : Defines the address of pastebin service to be used.
+#                Takes string as input. Important bits are the host and port,
+#                the scheme is not used.
+#  - sizeLimit : Defines maximum size limit (in KiB) of log file to be pasted.
+#                The option must be set, to have the log option work.
+#                Takes integer as input. If < 0, no limit will be forced,
+#                else only last (approximately) 'n' KiB of log file will be pasted.
+#                Please note that upload size may be slightly over the limit (due
+#                to last minute logging), so provide a suitable value.
+uploadServer :
+    type :    "fiche"
+    url :     "http://termbin.com:9999"
+    sizeLimit : -1

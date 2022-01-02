@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
-#   SPDX-FileCopyrightText: 2021 Victor Fuentes <vmf24@cornell.edu>
+#   SPDX-FileCopyrightText: 2022 Victor Fuentes <vmfuentes64@gmail.com>
 #   SPDX-License-Identifier: GPL-3.0-or-later
 #
 #   Calamares is Free Software: see the License-Identifier above.
@@ -25,10 +25,12 @@ _n = _translation.ngettext
 
 
 def pretty_name():
-    return _( "Generating NixOS config files." )
+    return _( "Installing NixOS base system." )
 
 def run():
-    root_mount_point = libcalamares.globalstorage.value("rootMountPoint")
+
+    gs = libcalamares.globalstorage
+    root_mount_point = gs.value("rootMountPoint")
 
     if not root_mount_point:
         return ("No mount point for root partition in globalstorage",
@@ -48,12 +50,23 @@ def run():
         return ("nixos-generate-config failed",
                 "nixos-generate-config did not create configuration.nix")
 
+    bootloader = gs.value("bootLoader")
+    fw_type = gs.value("firmwareType")
+
+    # If we have a BIOS system set the grub device
+    # If no device is specified, disable grub
+    if (fw_type != "efi"):
+        if (bootloader != None):
+            subprocess.check_output(["sed","-i","s,  # boot.loader.grub.device = .*,  boot.loader.grub.device = \"" + bootloader['installPath'] + "\";,g", config], stderr=subprocess.STDOUT)
+        else:
+            subprocess.check_output(["sed","-i","s,  boot.loader.grub.enable = .*,  boot.loader.grub.enable = false;,g", config], stderr=subprocess.STDOUT)
+
     libcalamares.job.setprogress(0.3)
 
     subprocess.check_output(["nixos-install", "--no-root-passwd", "--no-bootloader", "--root", root_mount_point], stderr=subprocess.STDOUT)
 
     libcalamares.job.setprogress(0.9)
-
+    # Fix issues in modules that use chroot
     subprocess.check_output(["chroot", root_mount_point, "/nix/var/nix/profiles/system/activate"], stderr=subprocess.STDOUT)
 
     return None

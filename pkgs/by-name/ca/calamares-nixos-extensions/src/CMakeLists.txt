@@ -1,6 +1,6 @@
 #
 #   SPDX-FileCopyrightText: 2019 Adriaan de Groot <groot@kde.org>
-#   SPDX-FileCopyrightText: 2021 Victor Fuentes <vmf24@cornel.edu>
+#   SPDX-FileCopyrightText: 2022 Victor Fuentes <vmfuentes64@gmail.com>
 #   SPDX-License-Identifier: GPL-3.0-or-later
 #
 ###
@@ -87,9 +87,7 @@ include( CTest )
 # Typically you would use only one branding, since that's
 # the (single) branding for your distro.
 #
-calamares_add_branding_subdirectory( branding/default NAME default )
-calamares_add_branding_subdirectory( branding/default-mobile NAME default-mobile )
-calamares_add_branding_subdirectory( branding/fancy NAME fancy )
+calamares_add_branding_subdirectory( branding/nixos NAME nixos )
 
 ### MODULES
 #
@@ -103,3 +101,17 @@ calamares_add_module_subdirectory( modules/nixos-customize-config LIST_SKIPPED_M
 # If modules cannot be built, they usually call a macro
 # which builds a list of explanations; show that list.
 calamares_explain_skipped_modules( ${LIST_SKIPPED_MODULES} )
+
+# Add config files
+install(
+    FILES
+        config/settings.conf
+    DESTINATION share/calamares
+    COMPONENT config
+)
+
+install(
+    DIRECTORY config/modules
+    DESTINATION share/calamares
+    COMPONENT config
+)
