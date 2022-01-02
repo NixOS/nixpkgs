@@ -17,7 +17,6 @@ import threading
 import time
 
 from test_driver.logger import rootlog
-from test_driver.polling_condition import PollingCondition
 
 CHAR_TO_KEY = {
     "A": "shift-a",

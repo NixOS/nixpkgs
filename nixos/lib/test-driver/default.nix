@@ -26,7 +26,7 @@ python3Packages.buildPythonApplication rec {
     mypy --disallow-untyped-defs \
           --no-implicit-optional \
           --ignore-missing-imports ${src}/test_driver
-    pylint --errors-only ${src}/test_driver
+    pylint --errors-only --enable=unused-import ${src}/test_driver
     black --check --diff ${src}/test_driver
   '';
 }
