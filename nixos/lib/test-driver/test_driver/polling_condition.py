@@ -10,25 +10,15 @@ class PollingConditionFailed(Exception):
     pass
 
 
-def coopmulti(fun: Callable, *, machine: Any = None) -> Callable:
-    assert not (fun is None and machine is None)
+def coopmulti(fun: Callable) -> Callable:
+    @wraps(fun)
+    def wrapper(machine: Any, *args: List[Any], **kwargs: Dict[str, Any]) -> Any:
+        if machine.fail_early():  # type: ignore
+            raise PollingConditionFailed("Test interrupted early...")
 
-    def inner(fun_: Callable) -> Any:
-        @wraps(fun_)
-        def wrapper(*args: List[Any], **kwargs: Dict[str, Any]) -> Any:
-            this_machine = args[0] if machine is None else machine
+        return fun(machine, *args, **kwargs)
 
-            if this_machine.fail_early():  # type: ignore
-                raise PollingConditionFailed("Action interrupted early...")
-
-            return fun_(*args, **kwargs)
-
-        return wrapper
-
-    if fun is None:
-        return inner
-    else:
-        return inner(fun)
+    return wrapper
 
 
 class PollingCondition:
