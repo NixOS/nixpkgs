@@ -94,8 +94,8 @@ stdenv.mkDerivation rec {
       compositor; or about 50,000 lines of code you were going to write anyway.
     '';
     changelog = "https://gitlab.freedesktop.org/wlroots/wlroots/-/tags/${version}";
-    license     = licenses.mit;
-    platforms   = platforms.linux;
+    license = licenses.mit;
     maintainers = with maintainers; [ primeos synthetica ];
+    inherit (wayland.meta) platforms;
   };
 }
