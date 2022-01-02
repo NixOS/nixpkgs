@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, perl, perlPackages, makeWrapper, nettools, java, polyml, z3, veriT, rlwrap, makeDesktopItem }:
+{ lib, stdenv, fetchurl, nettools, java, polyml, z3, veriT, vampire, eprover-ho, rlwrap, makeDesktopItem }:
 # nettools needed for hostname
 
 stdenv.mkDerivation rec {
@@ -17,8 +17,7 @@ stdenv.mkDerivation rec {
       sha256 = "0jfaqckhg388jh9b4msrpkv6wrd6xzlw18m0bngbby8k8ywalp9i";
     };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ perl polyml z3 veriT ]
+  buildInputs = [ polyml z3 veriT vampire eprover-ho ]
              ++ lib.optionals (!stdenv.isDarwin) [ nettools java ];
 
   sourceRoot = dirname;
@@ -35,6 +34,17 @@ stdenv.mkDerivation rec {
 
     cat >contrib/verit-*/etc/settings <<EOF
       ISABELLE_VERIT=${veriT}/bin/veriT
+    EOF
+
+    cat >contrib/e-*/etc/settings <<EOF
+      E_HOME=${eprover-ho}/bin
+      E_VERSION=${eprover-ho.version}
+    EOF
+
+    cat >contrib/vampire-*/etc/settings <<EOF
+      VAMPIRE_HOME=${vampire}/bin
+      VAMPIRE_VERSION=${vampire.version}
+      VAMPIRE_EXTRA_OPTIONS="--mode casc"
     EOF
 
     cat >contrib/polyml-*/etc/settings <<EOF
@@ -56,12 +66,12 @@ stdenv.mkDerivation rec {
 
     echo ISABELLE_LINE_EDITOR=${rlwrap}/bin/rlwrap >>etc/settings
 
-    for comp in contrib/jdk* contrib/polyml-* contrib/z3-* contrib/verit-*; do
+    for comp in contrib/jdk* contrib/polyml-* contrib/z3-* contrib/verit-* contrib/vampire-* contrib/e-*; do
       rm -rf $comp/x86*
     done
     '' + (if ! stdenv.isLinux then "" else ''
     arch=${if stdenv.hostPlatform.system == "x86_64-linux" then "x86_64-linux" else "x86-linux"}
-    for f in contrib/*/$arch/{bash_process,epclextract,eprover,nunchaku,SPASS}; do
+    for f in contrib/*/$arch/{bash_process,epclextract,nunchaku,SPASS}; do
       patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) "$f"
     done
     '');
