@@ -16,6 +16,8 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-sAcDyGNOSm+BnsYyrR2x1vkGo6ZEykhkF7L9lzPrD+o=";
 
+  ldflags = [ "-s" "-w" "-X ktbs.dev/mubeng/common.Version=${version}" ];
+
   meta = with lib; {
     description = "Proxy checker and IP rotator";
     homepage = "https://github.com/kitabisa/mubeng";
