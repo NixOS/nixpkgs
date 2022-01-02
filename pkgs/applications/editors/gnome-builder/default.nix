@@ -5,6 +5,7 @@
 , appstream-glib
 , desktop-file-utils
 , fetchurl
+, fetchpatch
 , flatpak
 , gnome
 , libgit2-glib
@@ -18,7 +19,7 @@
 , jsonrpc-glib
 , libdazzle
 , libpeas
-, libportal
+, libportal-gtk3
 , libxml2
 , meson
 , ninja
@@ -48,6 +49,15 @@ stdenv.mkDerivation rec {
     sha256 = "4iUPyOnp8gAsRS5ZUNgmhXNNPESAs1Fnq1CKyHAlCeE=";
   };
 
+  patches = [
+    # Fix build with latest libportal
+    # https://gitlab.gnome.org/GNOME/gnome-builder/-/merge_requests/486
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-builder/-/commit/b3bfa0df53a3749c3b73cb6c4bad5cab3fa549a1.patch";
+      sha256 = "B/uCcYavFvOAPhLHZ4MRNENDd6VytILiGYwDZRUSxTE=";
+    })
+  ];
+
   nativeBuildInputs = [
     appstream-glib
     desktop-file-utils
@@ -69,7 +79,7 @@ stdenv.mkDerivation rec {
     glade
     libgit2-glib
     libpeas
-    libportal
+    libportal-gtk3
     vte
     gspell
     gtk3
