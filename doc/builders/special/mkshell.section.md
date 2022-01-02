@@ -24,7 +24,7 @@ pkgs.mkShell {
 
 * `name` (default: `nix-shell`). Set the name of the derivation.
 * `packages` (default: `[]`). Add build dependencies to the `nix-shell` environment.
-* `inputsFrom` (default: `[]`). Add build dependencies of the dependencies to the `nix-shell` environment.
+* `inputsFrom` (default: `[]`). Add build dependencies of the listed derivations to the `nix-shell` environment.
 * `shellHook` (default: `""`). Bash script that is executed by `nix-shell`.
 
 ... all the attributes of `stdenv.mkDerivation`.
