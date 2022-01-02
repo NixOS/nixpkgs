@@ -187,13 +187,6 @@
     "sha256": "052pa17a77fkmhvygfgmpz87xlc08qvz1apzc2scg2449xfdv7zb",
     "version": "2.1.2"
   },
-  "cloudstack": {
-    "owner": "terraform-providers",
-    "repo": "terraform-provider-cloudstack",
-    "rev": "v0.3.0",
-    "sha256": "0zmyww6z3j839ydlmv254hr8gcsixng4lcvmiwkhxb3hj1nw8hcw",
-    "version": "0.3.0"
-  },
   "constellix": {
     "owner": "terraform-providers",
     "repo": "terraform-provider-constellix",
