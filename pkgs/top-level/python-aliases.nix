@@ -62,6 +62,9 @@ mapAliases ({
   Keras = keras; # added 2021-11-25
   lammps-cython = throw "lammps-cython no longer builds and is unmaintained"; # added 2021-07-04
   MechanicalSoup = mechanicalsoup; # added 2021-06-01
+  nmigen-boards = throw "nmigen-boards was removed, you may wish to use amaranth-boards"; # added 2022-01-10
+  nmigen = throw "nmigen was removed, you may wish to use amaranth"; # added 2022-01-10
+  nmigen-soc = throw "nmigen-soc was removed, you may wish to use amaranth-soc"; # added 2022-01-10
   pam = python-pam; # added 2020-09-07.
   PasteDeploy = pastedeploy; # added 2021-10-07
   powerlineMemSegment = powerline-mem-segment; # added 2021-10-08
