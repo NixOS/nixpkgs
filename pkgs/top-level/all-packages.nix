@@ -16234,6 +16234,10 @@ with pkgs;
 
   double-conversion = callPackage ../development/libraries/double-conversion { };
 
+  doublecmd-qt = callPackage ../applications/misc/double-commander { widgetset = "qt5"; };
+  doublecmd-gtk = callPackage ../applications/misc/double-commander { widgetset = "gtk2"; };
+  doublecmd = doublecmd-gtk;
+
   dclib = callPackage ../development/libraries/dclib { };
 
   dillo = callPackage ../applications/networking/browsers/dillo {
