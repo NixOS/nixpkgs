@@ -14513,7 +14513,9 @@ with pkgs;
 
   cwltool = callPackage ../applications/science/misc/cwltool { };
 
-  dprint = callPackage ../development/tools/dprint { };
+  dprint = callPackage ../development/tools/dprint {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   libcxx = llvmPackages.libcxx;
   libcxxabi = llvmPackages.libcxxabi;
