@@ -26518,8 +26518,6 @@ with pkgs;
 
   kdevelop = libsForQt5.callPackage ../applications/editors/kdevelop5/wrapper.nix { };
 
-  keepnote = callPackage ../applications/office/keepnote { };
-
   kega-fusion = pkgsi686Linux.callPackage ../misc/emulators/kega-fusion { };
 
   kepubify = callPackage ../tools/misc/kepubify { };

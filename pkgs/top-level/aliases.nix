@@ -395,6 +395,7 @@ mapAliases ({
   json_glib = json-glib; # added 2018-02-25
   kafkacat = kcat; # added 2021-10-07
   kdecoration-viewer = throw "kdecoration-viewer has been removed from nixpkgs, as there is no upstream activity"; # 2020-06-16
+  keepnote = throw "keepnote has been removed from nixpkgs, as it is stuck on python2."; # added 2022-01-01
   k9copy = throw "k9copy has been removed from nixpkgs, as there is no upstream activity"; # 2020-11-06
   kibana7-oss = throw "kibana7-oss has been removed, as the distribution is no longer provided by upstream. https://github.com/NixOS/nixpkgs/pull/114456"; # added 2021-06-09
   kodiGBM = kodi-gbm;
