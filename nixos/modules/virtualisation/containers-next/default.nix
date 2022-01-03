@@ -140,7 +140,7 @@ let
 
   mkImage = name: config:
     { container = import "${toString config.nixpkgs}/nixos/lib/eval-config.nix" {
-        system = pkgs.system;
+        system = pkgs.stdenv.hostPlatform.system;
         modules = [
           ./container-profile.nix
           ({ pkgs, ... }: {
