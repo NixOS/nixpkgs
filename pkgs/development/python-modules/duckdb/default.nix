@@ -5,7 +5,6 @@
 , numpy
 , pandas
 , pybind11
-, mypy
 , setuptools-scm
 , pytestCheckHook
 }:
@@ -32,7 +31,6 @@ buildPythonPackage rec {
   checkInputs = [
     mypy
     pytestCheckHook
-    mypy
   ];
 
   pythonImportsCheck = [
