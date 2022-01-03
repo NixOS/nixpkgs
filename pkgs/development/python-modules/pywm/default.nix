@@ -1,6 +1,7 @@
 { lib,
+pkgs,
+buildPythonPackage,
 fetchFromGitHub,
-python3Packages,
 meson_0_60,
 ninja,
 pkg-config,
@@ -11,7 +12,6 @@ wayland,
 wayland-protocols,
 libinput,
 libxkbcommon,
-mesa,
 pixman,
 seatd,
 vulkan-loader,
@@ -19,10 +19,16 @@ xorg,
 libpng,
 libcap,
 ffmpeg,
-xwayland
+xwayland,
+
+imageio,
+numpy,
+pycairo,
+evdev,
+matplotlib
 }:
 
-python3Packages.buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "pywm";
   version = "0.2";
 
@@ -56,10 +62,10 @@ python3Packages.buildPythonPackage rec {
     xorg.xcbutilerrors
     xorg.xcbutilimage
     xorg.libX11
-    mesa
     seatd
     xwayland
     vulkan-loader
+    pkgs.mesa # Prevent clash with python module mesa
 
     libpng
     ffmpeg
@@ -67,11 +73,11 @@ python3Packages.buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    python3Packages.imageio
-    python3Packages.numpy
-    python3Packages.pycairo
-    python3Packages.evdev
-    python3Packages.matplotlib
+    imageio
+    numpy
+    pycairo
+    evdev
+    matplotlib
   ];
 
   LC_ALL = "en_US.UTF-8";

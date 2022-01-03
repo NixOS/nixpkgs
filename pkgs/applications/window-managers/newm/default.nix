@@ -1,11 +1,18 @@
 { lib,
 fetchFromGitHub,
-python3Packages,
+buildPythonApplication,
 bash,
+
 pywm,
+pycairo,
+psutil,
+websockets,
+python-pam,
+pyfiglet,
+fuzzywuzzy
 }:
 
-python3Packages.buildPythonApplication rec {
+buildPythonApplication rec {
   pname = "newm";
   version = "0.2";
 
@@ -16,7 +23,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "sha256-0nAjQxcZIuenFddpXqfatEvekwTnGIQUzAyhziMJLR4=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = [
     pywm
     pycairo
     psutil

@@ -9020,6 +9020,8 @@ with pkgs;
 
   pystring = callPackage ../development/libraries/pystring {};
 
+  pywm = python3Packages.callPackage ../development/python-modules/pywm {};
+
   rbw = callPackage ../tools/security/rbw {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -18998,6 +19000,8 @@ with pkgs;
   };
 
   nettle = import ../development/libraries/nettle { inherit callPackage fetchurl; };
+
+  newm = python3Packages.callPackage ../applications/window-managers/newm {};
 
   newman = callPackage ../development/web/newman {};
 
@@ -34213,6 +34217,4 @@ with pkgs;
 
   zthrottle = callPackage ../tools/misc/zthrottle { };
 
-  pywm = callPackage ../development/python-modules/pywm {};
-  newm = callPackage ../applications/window-managers/newm {};
 }
