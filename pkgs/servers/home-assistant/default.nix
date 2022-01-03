@@ -302,6 +302,7 @@ in with py.pkgs; buildPythonApplication rec {
       --replace "cryptography==35.0.0" "cryptography" \
       --replace "httpx==0.21.0" "httpx" \
       --replace "pip>=8.0.3,<20.3" "pip" \
+      --replace "PyJWT==2.1.0" "PyJWT" \
       --replace "pyyaml==6.0" "pyyaml" \
       --replace "yarl==1.6.3" "yarl"
     substituteInPlace tests/test_config.py --replace '"/usr"' '"/build/media"'
