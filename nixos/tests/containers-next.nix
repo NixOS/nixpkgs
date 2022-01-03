@@ -330,7 +330,7 @@ in {
 
         server.wait_until_succeeds("ping -4 -c3 container1 >&2")
 
-        server.succeed("machinectl status container1 | grep '   fd' | xargs ping -c3")
+        server.succeed("machinectl status container1 | grep '   fd' | xargs -I % ping % -c3")
         server.succeed(
             "machinectl status ephemeral | grep '192.168' | cut -d: -f2 | xargs ping -c3"
         )
