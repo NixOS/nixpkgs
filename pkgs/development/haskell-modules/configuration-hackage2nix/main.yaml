@@ -459,7 +459,6 @@ unsupported-platforms:
   hbro:                                         [ x86_64-darwin, aarch64-darwin ] # webkitgtk marked broken on darwin
   hbro-contrib:                                 [ x86_64-darwin, aarch64-darwin ] # webkitgtk marked broken on darwin
   hcwiid:                                       [ x86_64-darwin, aarch64-darwin ]
-  hevm:                                         [ aarch64-linux ] # depends on sbv, which is not supported on aarch64-linux
   HFuse:                                        [ x86_64-darwin, aarch64-darwin ]
   hidapi:                                       [ x86_64-darwin, aarch64-darwin ]
   hinotify-bytestring:                          [ x86_64-darwin, aarch64-darwin ]
@@ -514,7 +513,6 @@ unsupported-platforms:
   reflex-localize-dom:                          [ x86_64-darwin, aarch64-darwin, aarch64-linux ]
   rtlsdr:                                       [ x86_64-darwin, aarch64-darwin ]
   rubberband:                                   [ x86_64-darwin, aarch64-darwin ]
-  sbv:                                          [ aarch64-linux ]
   scat:                                         [ aarch64-linux, armv7l-linux ] # uses scrypt, which requries x86
   scrypt:                                       [ aarch64-linux, armv7l-linux ] # https://github.com/informatikr/scrypt/issues/8
   sdl2-mixer:                                   [ x86_64-darwin, aarch64-darwin ]
