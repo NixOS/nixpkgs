@@ -1,14 +1,15 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, isPy27
+, pythonOlder
 , git
 }:
 
 buildPythonPackage rec {
   pname = "limnoria";
   version = "2022.1.1";
-  disabled = isPy27; # abandoned upstream
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
@@ -18,6 +19,7 @@ buildPythonPackage rec {
   postPatch = ''
     sed -i 's/version=version/version="${version}"/' setup.py
   '';
+ 
   buildInputs = [ git ];
 
   # cannot be imported
@@ -29,5 +31,4 @@ buildPythonPackage rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ goibhniu ];
   };
-
 }
