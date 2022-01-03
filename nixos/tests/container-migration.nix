@@ -201,7 +201,7 @@ in {
         legacy.wait_until_unit_stops("container@test2")
 
         legacy.succeed("mkdir -p /var/lib/machines")
-        legacy.succeed("cp -r /var/lib/containers/{test1,test2} /var/lib/machines")
+        legacy.succeed("mv /var/lib/containers/{test1,test2} /var/lib/machines")
         legacy.succeed("test -e /var/lib/machines/test1")
         legacy.succeed("test -e /var/lib/machines/test2")
 
