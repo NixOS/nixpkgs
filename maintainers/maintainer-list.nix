@@ -1888,6 +1888,13 @@
     githubId = 495429;
     name = "Claas Augner";
   };
+  cawilliamson = {
+    email = "home@chrisaw.com";
+    github = "cawilliamson";
+    githubId = 1141769;
+    matrix = "@cawilliamson:nixos.dev";
+    name = "Christopher A. Williamson";
+  };
   cbley = {
     email = "claudio.bley@gmail.com";
     github = "avdv";
@@ -2080,12 +2087,6 @@
     github = "chris-martin";
     githubId = 399718;
     name = "Chris Martin";
-  };
-  chrisaw = {
-    email = "home@chrisaw.com";
-    github = "cawilliamson";
-    githubId = 1141769;
-    name = "Christopher A. Williamson";
   };
   chrisjefferson = {
     email = "chris@bubblescope.net";
