@@ -77,6 +77,7 @@ let
       plasma-dialer = callPackage ./plasma-dialer.nix {};
       plasma-phonebook = callPackage ./plasma-phonebook.nix {};
       plasma-settings = callPackage ./plasma-settings.nix {};
+      plasmatube = callPackage ./plasmatube.nix {};
       spacebar = callPackage ./spacebar.nix {};
     };
 
