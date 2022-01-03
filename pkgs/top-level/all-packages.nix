@@ -12295,6 +12295,10 @@ with pkgs;
 
   remarkable2-toolchain = callPackage ../development/tools/misc/remarkable/remarkable2-toolchain { };
 
+  t-rex = callPackage ../servers/t-rex {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   tacacsplus = callPackage ../servers/tacacsplus { };
 
   tamarin-prover =
