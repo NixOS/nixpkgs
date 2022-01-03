@@ -622,6 +622,15 @@ let
         };
       };
 
+      ethansk.restore-terminals = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "restore-terminals";
+          publisher = "ethansk";
+          version = "1.1.6";
+          sha256 = "sha256-XCgxphXIJ/y85IR/qEQhGsbnqWFRWvbyIDchnVTUqMg=";
+        };
+      };
+
       eugleo.magic-racket = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "magic-racket";
