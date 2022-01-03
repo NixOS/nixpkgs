@@ -117,7 +117,7 @@ mapAliases ({
   cide = throw "cide was deprecated on 2019-09-11: abandoned by upstream";
   cinepaint = throw "cinepaint has been removed from nixpkgs, as it was unmaintained"; # added 2019-12-10
   cifs_utils = cifs-utils; # added 2016-08
-  citra = citra-nightly;
+  citra = citra-nightly; # added 2022-01
   ckb = ckb-next; # added 2018-10-21
 
   # these are for convenience, not for backward compat and shouldn't expire
