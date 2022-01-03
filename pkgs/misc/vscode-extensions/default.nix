@@ -1724,6 +1724,18 @@ let
         };
       };
 
+      xadillax.viml = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "viml";
+          publisher = "xadillax";
+          version = "1.0.1";
+          sha256 = "sha256-mzf2PBSbvmgPjchyKmTaf3nASUi5/S9Djpoeh0y8gH0=";
+        };
+        meta = with lib; {
+          license = licenses.mit;
+        };
+      };
+
       xaver.clang-format = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "clang-format";
