@@ -140,6 +140,10 @@ stdenv.mkDerivation ({
       # nscd needs libgcc, and we don't want it dynamically linked
       # because we don't want it to depend on bootstrap-tools libs.
       echo "LDFLAGS-nscd += -static-libgcc" >> nscd/Makefile
+
+      # Ensure that `__nss_files_fopen` can still be wrapped by `libredirect`.
+      sed -i -e '/libc_hidden_def (__nss_files_fopen)/d' nss/nss_files_fopen.c
+      sed -i -e '/libc_hidden_proto (__nss_files_fopen)/d' include/nss_files.h
     ''
     # FIXME: find a solution for infinite recursion in cross builds.
     # For now it's hopefully acceptable that IDN from libc doesn't reliably work.
