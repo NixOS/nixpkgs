@@ -652,6 +652,15 @@
     "vendorSha256": null,
     "version": "3.2.1"
   },
+  "minio": {
+    "owner": "aminueza",
+    "provider-source-address": "registry.terraform.io/aminueza/minio",
+    "repo": "terraform-provider-minio",
+    "rev": "v1.2.0",
+    "sha256": "07f7kflmy0n8vbcxs2f62iqwm8fw8r97vgwwp38hmz3f1bix42qn",
+    "vendorSha256": "sha256-fBn0AfgdiFQ065SwqwMQeCuvJdkscc5QYsMMc/+p4V0=",
+    "version": "1.2.0"
+  },
   "mongodbatlas": {
     "owner": "mongodb",
     "provider-source-address": "registry.terraform.io/mongodb/mongodbatlas",
