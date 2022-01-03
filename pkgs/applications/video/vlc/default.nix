@@ -62,6 +62,7 @@ stdenv.mkDerivation rec {
   BUILDCC = "${stdenv.cc}/bin/gcc";
 
   patches = [
+    # Required in order to run newer srt plugin. Remove it when next release arrives
     (fetchpatch {
       url = "https://raw.githubusercontent.com/archlinux/svntogit-packages/4250fe8f28c220d883db454cec2b2c76a07473eb/trunk/vlc-3.0.11.1-srt_1.4.2.patch";
       sha256 = "53poWjZfwq/6l316sqiCp0AtcGweyXBntcLDFPSokHQ=";
