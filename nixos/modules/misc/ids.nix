@@ -296,7 +296,7 @@ in
       infinoted = 264;
       sickbeard = 265;
       headphones = 266;
-      couchpotato = 267;
+      # couchpotato = 267; # unused, removed 2022-01-01
       gogs = 268;
       #pdns-recursor = 269; # dynamically allocated as of 2020-20-18
       #kresd = 270; # switched to "knot-resolver" with dynamic ID
@@ -603,7 +603,7 @@ in
       infinoted = 264;
       sickbeard = 265;
       headphones = 266;
-      couchpotato = 267;
+      # couchpotato = 267; # unused, removed 2022-01-01
       gogs = 268;
       #kresd = 270; # switched to "knot-resolver" with dynamic ID
       #rpc = 271; # unused
