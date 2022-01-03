@@ -9536,6 +9536,8 @@ with pkgs;
     pythonPackages = python3Packages;
   };
 
+  sequoia-octopus-librnp = callPackage ../tools/security/sequoia/octopus-librnp.nix { };
+
   sewer = callPackage ../tools/admin/sewer { };
 
   sfeed = callPackage ../tools/misc/sfeed { };
