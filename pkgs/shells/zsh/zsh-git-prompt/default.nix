@@ -14,7 +14,7 @@
 #
 # Or if installed locally:
 #
-#   source ~/.nix-profile/share/zsh-git-prompt/zshrc.sh
+#   source $XDG_DATA_HOME/nix/profile/share/zsh-git-prompt/zshrc.sh
 #
 # Either way, you then have to set a prompt that incorporates
 # git_super_status, for example:

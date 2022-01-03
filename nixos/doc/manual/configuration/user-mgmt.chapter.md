@@ -64,7 +64,7 @@ account named `alice`:
 
 To make all nix tools available to this new user use \`su - USER\` which
 opens a login shell (==shell that loads the profile) for given user.
-This will create the \~/.nix-defexpr symlink. So run:
+This will create the `$XDG_DATA_HOME/nix/defexpr` symlink. So run:
 
 ```ShellSession
 # su - alice -c "true"

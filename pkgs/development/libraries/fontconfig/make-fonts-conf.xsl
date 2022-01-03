@@ -35,9 +35,13 @@
         <xsl:text>&#0010;</xsl:text>
       </xsl:for-each>
 
-      <!-- nix user profile -->
+      <!-- nix user profile (legacy) -->
       <dir>~/.nix-profile/lib/X11/fonts</dir>
       <dir>~/.nix-profile/share/fonts</dir>
+
+      <!-- nix user profile -->
+      <dir prefix="xdg">nix/profile/lib/X11/fonts</dir>
+      <dir prefix="xdg">nix/profile/share/fonts</dir>
 
       <!-- FHS paths for non-NixOS platforms -->
       <dir>/usr/share/fonts</dir>

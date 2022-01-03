@@ -717,7 +717,7 @@ If set to `true`, the standard environment will enable debug information in C/C+
 For example, with GDB, you can add
 
 ```
-set debug-file-directory ~/.nix-profile/lib/debug
+set debug-file-directory ~/.local/share/nix/profile/lib/debug
 ```
 
 to `~/.gdbinit`. GDB will then be able to find debug information installed via `nix-env -i`.

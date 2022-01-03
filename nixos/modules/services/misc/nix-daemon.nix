@@ -642,8 +642,17 @@ in
 
     environment.extraInit =
       ''
-        if [ -e "$HOME/.nix-defexpr/channels" ]; then
-          export NIX_PATH="$HOME/.nix-defexpr/channels''${NIX_PATH:+:$NIX_PATH}"
+        NIX_DEFEXPR="$HOME/.nix-defexpr"
+        if ! [ -e "$NIX_DEFEXPR" ]; then
+            if [ -n "$XDG_DATA_HOME" ]; then
+                NIX_DEFEXPR="$XDG_DATA_HOME/nix/defexpr"
+            else
+                NIX_DEFEXPR="$HOME/.local/share/nix/defexpr"
+            fi
+        fi
+
+        if [ -e "$NIX_DEFEXPR/channels" ]; then
+          export NIX_PATH="$NIX_DEFEXPR/channels''${NIX_PATH:+:$NIX_PATH}"
         fi
       '';
 
@@ -658,7 +667,7 @@ in
         install -m 0755 -d /nix/var/nix/{gcroots,profiles}/per-user
 
         # Subscribe the root user to the NixOS channel by default.
-        if [ ! -e "/root/.nix-channels" ]; then
+        if [ ! -e "/root/.nix-channels" ] && [ ! -e /root/.local/share/nix/channels ]; then
             echo "${config.system.defaultChannel} nixos" > "/root/.nix-channels"
         fi
       '';

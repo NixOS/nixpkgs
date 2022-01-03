@@ -273,7 +273,7 @@ in
               mkdir -p -m 1777 /nix/var/nix/gcroots/per-user
               mkdir -p -m 1777 /nix/var/nix/profiles/per-user
               mkdir -p -m 0755 /nix/var/nix/profiles/per-user/root
-              mkdir -p -m 0700 "$HOME/.nix-defexpr"
+              mkdir -p -m 0700 "$XDG_DATA_HOME/nix/defexpr"
 
               . ''${pkgs.nix}/etc/profile.d/nix.sh
 
