@@ -5892,6 +5892,8 @@ with pkgs;
 
   glogg = libsForQt5.callPackage ../tools/text/glogg { };
 
+  glorytun = callPackage ../tools/networking/glorytun { };
+
   glxinfo = callPackage ../tools/graphics/glxinfo { };
 
   gmrender-resurrect = callPackage ../tools/networking/gmrender-resurrect {
