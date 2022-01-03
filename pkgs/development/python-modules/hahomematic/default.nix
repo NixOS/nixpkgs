@@ -1,7 +1,10 @@
 { lib
+, aiohttp
 , buildPythonPackage
 , fetchFromGitHub
-, aiohttp
+, pydevccu
+, pytest-aiohttp
+, pytestCheckHook
 , pythonOlder
 , voluptuous
 , websocket-client
@@ -27,8 +30,11 @@ buildPythonPackage rec {
     voluptuous
   ];
 
-  # Module has no tests
-  doCheck = false;
+  checkInputs = [
+    pydevccu
+    pytest-aiohttp
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [
     "hahomematic"
