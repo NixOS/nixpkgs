@@ -153,6 +153,15 @@
     "vendorSha256": "07mznpp2mr1n9izgk2s8aibfvqsamj533666s46x1k49p0sh7lqx",
     "version": "2.0.6"
   },
+  "checkly": {
+    "owner": "checkly",
+    "provider-source-address": "registry.terraform.io/checkly/checkly",
+    "repo": "terraform-provider-checkly",
+    "rev": "v1.3.0",
+    "sha256": "11vwl983lh983c1x3f7zc8b7i9f4pymk4j1ikf04vz2kgxry49yr",
+    "vendorSha256": "14wp5sa2fm3hlmyacfy4aacx2cz5bxf24r4fjwd6f2hskzjz6825",
+    "version": "1.3.0"
+  },
   "checkpoint": {
     "deleteVendor": true,
     "owner": "CheckPointSW",
