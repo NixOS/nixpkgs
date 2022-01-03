@@ -147,6 +147,8 @@ with pkgs;
     { name = "auto-patchelf-hook"; deps = [ bintools ]; }
     ../build-support/setup-hooks/auto-patchelf.sh;
 
+  appflowy = callPackage ../applications/office/appflowy { };
+
   appimageTools = callPackage ../build-support/appimage {
     buildFHSUserEnv = buildFHSUserEnvBubblewrap;
   };
