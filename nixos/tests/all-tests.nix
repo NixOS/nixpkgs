@@ -260,6 +260,7 @@ in
   mariadb-galera-rsync = handleTest ./mysql/mariadb-galera-rsync.nix {};
   matomo = handleTest ./matomo.nix {};
   matrix-appservice-irc = handleTest ./matrix-appservice-irc.nix {};
+  matrix-conduit = handleTest ./matrix-conduit.nix {};
   matrix-synapse = handleTest ./matrix-synapse.nix {};
   mattermost = handleTest ./mattermost.nix {};
   mediawiki = handleTest ./mediawiki.nix {};

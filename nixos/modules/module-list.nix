@@ -555,6 +555,7 @@
   ./services/misc/mame.nix
   ./services/misc/matrix-appservice-discord.nix
   ./services/misc/matrix-appservice-irc.nix
+  ./services/misc/matrix-conduit.nix
   ./services/misc/matrix-synapse.nix
   ./services/misc/mautrix-facebook.nix
   ./services/misc/mautrix-telegram.nix
