@@ -28,8 +28,17 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  # tests are determined to use /var/tmp on unix
+  postPatch = ''
+    cat <(find . -name tmpDir.h) <(echo src/test/OpenEXRCoreTest/main.cpp) | while read -r f ; do
+      substituteInPlace $f --replace '/var/tmp' "$TMPDIR"
+    done
+  '';
+
   nativeBuildInputs = [ cmake ];
   propagatedBuildInputs = [ imath zlib ];
+
+  doCheck = true;
 
   meta = with lib; {
     description = "A high dynamic-range (HDR) image file format";
