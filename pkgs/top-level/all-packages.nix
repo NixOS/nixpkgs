@@ -33195,7 +33195,7 @@ with pkgs;
 
   fsuae = callPackage ../misc/emulators/fs-uae { };
 
-  fsuae-launcher = callPackage ../misc/emulators/fs-uae-launcher {
+  fsuae-launcher = callPackage ../misc/emulators/fs-uae/launcher.nix {
     inherit (python3Packages) pyqt5 setuptools requests;
   };
 
