@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "mcstatus";
-  version = "7.0.0";
+  version = "8.0.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "Dinnerbone";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-/EoVM3wEiA2suJHxMu2zZktQhO6T9grWcvWuzmUe6V0=";
+    sha256 = "sha256-19VO5L5abVGm5zEMt88o67ArLjBCnGO2DxfAD+u1hF4=";
   };
 
   nativeBuildInputs = [
