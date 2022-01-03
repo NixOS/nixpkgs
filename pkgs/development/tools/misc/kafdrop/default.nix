@@ -27,7 +27,7 @@ let
     outputHashMode = "recursive";
     outputHash = "sha256-X67wCwxC1Z7H+vDUKPsjx8PGSm7O5JVA7/f9tvKobyA=";
   };
-  
+
 in
 stdenv.mkDerivation rec {
   pname = "kafdrop";
@@ -40,8 +40,8 @@ stdenv.mkDerivation rec {
   '';
   installPhase =''
     mkdir -p $out/bin
-    mkdir -p $out/share/java           
-    mv target/${pname}-${version}-SNAPSHOT.jar $out/share/java/           
+    mkdir -p $out/share/java
+    mv target/${pname}-${version}-SNAPSHOT.jar $out/share/java/
     makeWrapper ${jre}/bin/java $out/bin/${pname} \
         --add-flags "-jar $out/share/java/${pname}-${version}-SNAPSHOT.jar"
                 '';
