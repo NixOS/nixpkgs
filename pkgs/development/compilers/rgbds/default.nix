@@ -11,6 +11,7 @@ stdenv.mkDerivation rec {
   };
   nativeBuildInputs = [ bison flex pkg-config ];
   buildInputs = [ libpng ];
+  NIX_CFLAGS_COMPILE = lib.optional stdenv.isDarwin "-fno-lto";
   installFlags = [ "PREFIX=${placeholder "out"}" ];
 
   meta = with lib; {
@@ -28,6 +29,6 @@ stdenv.mkDerivation rec {
         This is a fork of the original RGBDS which aims to make the programs more like other UNIX tools.
       '';
     maintainers = with maintainers; [ matthewbauer NieDzejkob ];
-    platforms = platforms.linux; # v0.5.x fails on Darwin
+    platforms = platforms.all;
   };
 }
