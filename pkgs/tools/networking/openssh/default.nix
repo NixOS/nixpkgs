@@ -14,7 +14,7 @@ in
     };
 
     extraPatches = [ ./ssh-keysign-8.5.patch ];
-    extraMeta.maintainers = with lib.maintainers; [ das_j ];
+    extraMeta.maintainers = with lib.maintainers; [ aneeshusa das_j ];
   };
 
   openssh_hpn = common rec {
