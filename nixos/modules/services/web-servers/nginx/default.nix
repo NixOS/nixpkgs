@@ -935,7 +935,7 @@ in
       # certs are updated _after_ config has been reloaded.
       before = sslTargets;
       after = sslServices;
-      restartTriggers = optionals (cfg.enableReload) [ configFile ];
+      restartTriggers = optionals (cfg.enableReload) [ configPath ];
       # Block reloading if not all certs exist yet.
       # Happens when config changes add new vhosts/certs.
       unitConfig.ConditionPathExists = optionals (sslServices != []) (map (certName: certs.${certName}.directory + "/fullchain.pem") dependentCertNames);
