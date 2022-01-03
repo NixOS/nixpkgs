@@ -24,7 +24,7 @@ let
   });
 in
 stdenv.mkDerivation rec {
-  name = "bash-${optionalString interactive "interactive-"}${version}-p${toString (builtins.length upstreamPatches)}";
+  name = "bash-${optionalString (!interactive) "noninteractive-"}${version}-p${toString (builtins.length upstreamPatches)}";
   version = "5.1";
 
   src = fetchurl {
@@ -91,11 +91,11 @@ stdenv.mkDerivation rec {
     rm -f $out/lib/bash/Makefile.inc
   '';
 
-  postFixup =
+  preFixup =
     if interactive
     then ''
       substituteInPlace "$out/bin/bashbug" \
-        --replace '${stdenv.shell}' "$out/bin/bash"
+        --replace '/bin/sh' "$out/bin/sh"
     ''
     # most space is taken by locale data
     else ''

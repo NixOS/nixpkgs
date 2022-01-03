@@ -25,7 +25,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "bash-${optionalString interactive "interactive-"}${version}-p${toString (builtins.length upstreamPatches)}";
+  name = "bash-${optionalString (!interactive) "noninteractive-"}${version}-p${toString (builtins.length upstreamPatches)}";
   version = "4.4";
 
   src = fetchurl {
@@ -104,7 +104,7 @@ stdenv.mkDerivation rec {
   postFixup = if interactive
     then ''
       substituteInPlace "$out/bin/bashbug" \
-        --replace '${stdenv.shell}' "$out/bin/bash"
+        --replace '${stdenv.shellPackage}/bin/sh' "$out/bin/sh"
     ''
     # most space is taken by locale data
     else ''

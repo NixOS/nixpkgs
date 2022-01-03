@@ -31,10 +31,10 @@ bootStages ++ [
         inherit (prevStage) stdenvNoCC binutils coreutils gnugrep;
         cc = prevStage.gcc.cc;
         isGNU = true;
-        shell = prevStage.bash + "/bin/sh";
+        shell = prevStage.bashNoninteractive + "/bin/sh";
       };
 
-      shell = prevStage.bash + "/bin/sh";
+      shell = prevStage.bashNoninteractive + "/bin/sh";
 
       fetchurlBoot = prevStage.stdenv.fetchurlBoot;
 
@@ -42,7 +42,7 @@ bootStages ++ [
         inherit cc;
         inherit (cc) binutils;
         inherit (prevStage)
-          gzip bzip2 xz bash coreutils diffutils findutils gawk
+          gzip bzip2 xz bashNoninteractive coreutils diffutils findutils gawk
           gnumake gnused gnutar gnugrep gnupatch perl;
       };
     };
