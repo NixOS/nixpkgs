@@ -8,19 +8,14 @@
 
 stdenv.mkDerivation rec {
   pname = "corrosion";
-  version = "unstable-2021-11-23";
+  version = "unstable-2022-01-03";
 
   src = fetchFromGitHub {
     owner = "AndrewGaspar";
     repo = "corrosion";
-    rev = "f679545a63a8b214a415e086f910126ab66714fa";
-    sha256 = "sha256-K+QdhWc5n5mH6yxiQa/v5HsrqnWJ5SM93IprVpyCVO0=";
+    rev = "ba253b381e99bd87b514db9cee299b849c7625b5";
+    hash = "sha256-r1chLXvWbHtUYSRJis8RNvjDdWERSkqeM4ik30vlfHQ=";
   };
-
-  patches = [
-    # https://github.com/AndrewGaspar/corrosion/issues/84
-    ./cmake-install-full-dir.patch
-  ];
 
   cargoRoot = "generator";
 
@@ -28,7 +23,7 @@ stdenv.mkDerivation rec {
     inherit src;
     sourceRoot = "${src.name}/${cargoRoot}";
     name = "${pname}-${version}";
-    sha256 = "sha256-ZvCRgXv+ASMIL00oc3luegV1qVNDieU9J7mbIhfayGk=";
+    hash = "sha256-xUDmUj73ja8feEh0yyjgkjm7alPaYxucG6sL59mSECg=";
   };
 
   buildInputs = lib.optional stdenv.isDarwin libiconv;
