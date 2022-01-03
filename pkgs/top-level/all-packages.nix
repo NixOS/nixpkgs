@@ -13575,6 +13575,8 @@ with pkgs;
 
   mujs = callPackage ../development/interpreters/mujs { };
 
+  nextflow = callPackage ../development/interpreters/nextflow { };
+
   ngn-k = callPackage ../development/interpreters/ngn-k { };
 
   octave = callPackage ../development/interpreters/octave {
