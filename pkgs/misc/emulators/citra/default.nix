@@ -3,26 +3,26 @@ let inherit libsForQt5 fetchFromGitHub;
 in {
   nightly = libsForQt5.callPackage ./base.nix rec {
     pname = "citra-${branch}";
-    version = "1730";
+    version = "1737";
     branchName = branch;
     branchDesc = "A Nintendo 3DS Emulator, this branch contains already reviewed and tested features";
     src = fetchFromGitHub {
       owner = "citra-emu";
       repo = pname;
       rev = "${branch}-${version}";
-      sha256 = "1a678gvl3dy7f7za8aj5g1p4bz62vy2x0whqc99sh1s6q07l91cy";
+      sha256 = "a6SbUiwWkUc8b5Zwi9k0/IDMbzi2Ctc3I3RLnY4JU0c=";
     };
   };
   canary = libsForQt5.callPackage ./base.nix rec {
     pname = "citra-${branch}";
-    version = "2001";
+    version = "2007";
     branchName = branch;
     branchDesc = "A Nintendo 3DS Emulator, this branch contains additional features still under review";
     src = fetchFromGitHub {
       owner = "citra-emu";
       repo = pname;
       rev = "${branch}-${version}";
-      sha256 = "0zbm4nvjdprj4kyxqpas33ni0q5anxww4gvjw0mrw38ni3a1qlpw";
+      sha256 = "/1U50bDj+EB9o+4eY+aMYt74iA8iBPmv5qTv2TY0T8E=";
     };
   };
 }.${branch}
