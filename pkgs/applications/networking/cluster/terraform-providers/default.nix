@@ -52,7 +52,7 @@ let
   automated-providers = lib.mapAttrs (_: attrs: mkProvider attrs) list;
 
   # These are the providers that don't fall in line with the default model
-  special-providers = let archived = throw "the provider has been archived by upsteam"; in {
+  special-providers = let archived = throw "the provider has been archived by upstream"; in {
     # Packages that don't fit the default model
     gandi = callPackage ./gandi { };
     libvirt = callPackage ./libvirt { };
