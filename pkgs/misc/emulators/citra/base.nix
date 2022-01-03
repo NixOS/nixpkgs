@@ -3,14 +3,14 @@
 , catch2, cmake, ninja, pkg-config, wrapQtAppsHook
 , enet, fmt, inih, libressl, soundtouch, zstd, discord-rpc
 , boost173, ffmpeg, libusb1, qtbase, qtdeclarative, qtmultimedia, qttools, rapidjson, SDL2
-, alsaSupport      ? stdenv.isLinux,                      alsa-lib      ? null
+, alsaSupport      ? stdenv.isLinux,                      alsa-lib
 , discordSupport   ? true
-, fdkSupport       ? true,                                fdk_aac       ? null
-, jackaudioSupport ? true,                                libjack2      ? null
+, fdkSupport       ? true,                                fdk_aac
+, jackaudioSupport ? true,                                libjack2
 , onlineSupport    ? true
-, pulseSupport     ? config.pulseaudio or stdenv.isLinux, libpulseaudio ? null
-, sndioSupport     ? true,                                sndio         ? null
-, udevSupport      ? stdenv.isLinux,                      udev          ? null
+, pulseSupport     ? config.pulseaudio or stdenv.isLinux, libpulseaudio
+, sndioSupport     ? true,                                sndio
+, udevSupport      ? stdenv.isLinux,                      udev
 }:
 
 with lib;
@@ -79,7 +79,6 @@ in stdenv.mkDerivation {
     "-DCITRA_USE_BUNDLED_SDL2=OFF"
     "-DCITRA_USE_BUNDLED_QT=OFF"
     "-DCITRA_USE_BUNDLED_FFMPEG=OFF"
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DDYNARMIC_ENABLE_CPU_FEATURE_DETECTION=OFF"
     "-DENABLE_COMPATIBILITY_LIST_DOWNLOAD=OFF" # Sacrifices reproducibility
     "-DCITRA_ENABLE_COMPATIBILITY_REPORTING=ON"
@@ -88,9 +87,9 @@ in stdenv.mkDerivation {
     "-DUSE_SYSTEM_BOOST=ON"
     "-GNinja"
     "-Wno-dev"
-    (if discordSupport then "-DUSE_DISCORD_PRESENCE=ON" else "-DUSE_DISCORD_PRESENCE=OFF")
+    "-DUSE_DISCORD_PRESENCE=${if discordSupport then "ON" else "OFF"}"
+    "-DENABLE_WEB_SERVICE=${if onlineSupport then "ON" else "OFF"}"
     (if fdkSupport     then "-DENABLE_FDK=ON"           else "-DENABLE_FFMPEG_AUDIO_DECODER=ON")
-    (if onlineSupport  then "-DENABLE_WEB_SERVICE=ON"   else "-DENABLE_WEB_SERVICE=OFF")
   ];
 
   nativeBuildInputs = [ catch2 cmake ninja pkg-config qttools wrapQtAppsHook
@@ -107,88 +106,69 @@ in stdenv.mkDerivation {
   postPatch = ''
     # Manually prepare all our externals instead of fetching git submodules.
     # It's important we copy and not link the sources so we can trick the configure system later on.
-
     # Prep boost
     rm -r ./externals/boost
     pushd ./externals
     tar xf ${boost173.src}
     mv boost_* boost
     popd
-
     # Prep catch
     rm -r ./externals/catch
     cp -r ${catch2.src} ./externals/catch
-
     # Prep cpp-jwt
     rm -r ./externals/cpp-jwt
     cp -r ${cpp-jwt-src} ./externals/cpp-jwt
-
     # Prep cryptopp
     rm -r ./externals/cryptopp/cryptopp
     cp -r ${cryptopp-src} ./externals/cryptopp/cryptopp
-
     # Prep cubeb
     rm -r ./externals/cubeb
     cp -r ${cubeb-src} ./externals/cubeb
-
     # Prep discord-rpc
     rm -r ./externals/discord-rpc
     cp -r ${discord-rpc.src} ./externals/discord-rpc
-
     # Prep dynarmic
     rm -r ./externals/dynarmic
     cp -r ${dynarmic-src} ./externals/dynarmic
-
     # Prep enet
     rm -r ./externals/enet
     pushd ./externals
     tar xf ${enet.src}
     mv enet-* enet
     popd
-
     # Prep fmt
     rm -r ./externals/fmt
     cp -r ${fmt.src} ./externals/fmt
-
     # Prep inih
     rm -r ./externals/inih/inih
     cp -r ${inih.src} ./externals/inih/inih
-
     # Prep libressl
     rm -r ./externals/libressl
     pushd ./externals
     tar xf ${libressl.src}
     mv libressl-* libressl
     popd
-
     # Prep libusb
     rm -r ./externals/libusb/libusb
     cp -r ${libusb1.src} ./externals/libusb/libusb
-
     # Prep lodepng
     rm -r ./externals/lodepng/lodepng
     cp -r ${lodepng-src} ./externals/lodepng/lodepng
-
     # Prep nihstro
     rm -r ./externals/nihstro
     cp -r ${nihstro-src} ./externals/nihstro
-
     # Prep soundtouch
     rm -r ./externals/soundtouch
     cp -r ${soundtouch-src} ./externals/soundtouch
-
     # Prep teakra
     rm -r ./externals/teakra
     cp -r ${teakra-src} ./externals/teakra
-
     # Prep xbyak
     rm -r ./externals/xbyak
     cp -r ${xbyak-src} ./externals/xbyak
-
     # Prep zstd
     rm -r ./externals/zstd
     cp -r ${zstd.src} ./externals/zstd
-
     # Prep compatibilitylist
     cp -r ${compat-src} ./dist/compatibility_list/compatibility_list.json
   '';
@@ -209,7 +189,7 @@ in stdenv.mkDerivation {
       Using the nightly branch is recommanded for general usage.
       Using the canary branch is recommanded if you would like to try out experimental features, with a cost of stability.
     '';
-    maintainers = with maintainers; [ joshuafern ];
+    maintainers = with maintainers; [ ivar joshuafern ];
     platforms = with platforms; linux;
   };
 }
