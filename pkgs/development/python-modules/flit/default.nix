@@ -3,13 +3,12 @@
 , fetchFromGitHub
 , docutils
 , requests
-, requests_download
-, zipfile36
-, pythonOlder
 , pytest
 , testpath
 , responses
 , flit-core
+, tomli
+, tomli-w
 }:
 
 # Flit is actually an application to build universal wheels.
@@ -19,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "flit";
-  version = "3.2.0";
+  version = "3.6.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "takluyver";
     repo = "flit";
     rev = version;
-    sha256 = "sha256-zN+/oAyXBo6Ho7n/xhOQ2mjtPGKA1anCvl3sVf7t+Do=";
+    sha256 = "sha256-D3q/1g6njrrmizooGmzNd9g2nKs00dMGj9jrrv3Y6HQ=";
   };
 
   nativeBuildInputs = [
@@ -36,10 +35,9 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     docutils
     requests
-    requests_download
     flit-core
-  ] ++ lib.optionals (pythonOlder "3.6") [
-    zipfile36
+    tomli
+    tomli-w
   ];
 
   checkInputs = [ pytest testpath responses ];
