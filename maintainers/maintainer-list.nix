@@ -6573,6 +6573,12 @@
     githubId = 55911173;
     name = "Gwendolyn Quasebarth";
   };
+  lammermann = {
+    email = "k.o.b.e.r@web.de";
+    github = "lammermann";
+    githubId = 695526;
+    name = "Benjamin Kober";
+  };
   larsr = {
     email = "Lars.Rasmusson@gmail.com";
     github = "larsr";
