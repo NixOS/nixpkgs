@@ -9716,6 +9716,8 @@ in {
 
   tomli = callPackage ../development/python-modules/tomli { };
 
+  tomli-w = callPackage ../development/python-modules/tomli-w { };
+
   tomlkit = callPackage ../development/python-modules/tomlkit { };
 
   toolz = callPackage ../development/python-modules/toolz { };
