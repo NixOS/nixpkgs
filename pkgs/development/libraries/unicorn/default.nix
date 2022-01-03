@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Lightweight multi-platform CPU emulator library";
-    homepage = "http://www.unicorn-engine.org";
+    homepage = "https://www.unicorn-engine.org";
     license = licenses.gpl2Only;
     platforms = platforms.unix;
     maintainers = with maintainers; [ thoughtpolice luc65r ];
