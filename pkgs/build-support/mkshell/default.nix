@@ -44,9 +44,10 @@ stdenv.mkDerivation ({
   phases = [ "buildPhase" ];
 
   buildPhase = ''
-    echo "-------------------------------------------" >> $out
-    echo " Do not use this file. See the mkShell doc." >>$out
-    echo "-------------------------------------------" >> $out
+    echo "------------------------------------------------------------" >>$out
+    echo " WARNING: this file existence or location is not guaranteed." >>$out
+    echo " It is an internal implementation detail for pkgs.mkShell."   >>$out
+    echo "------------------------------------------------------------" >>$out
     echo >> $out
     # Record all build inputs as runtime dependencies
     export >> $out
