@@ -244,7 +244,7 @@ with pkgs;
 
   castxml = callPackage ../development/tools/castxml {
     inherit (llvmPackages) libclang llvm;
-    inherit (python3Packages) sphinx;
+    inherit (python3.pkgs) sphinx;
   };
 
   catatonit = callPackage ../applications/virtualization/catatonit { };
