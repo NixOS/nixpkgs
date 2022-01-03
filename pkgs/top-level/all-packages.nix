@@ -30842,6 +30842,8 @@ with pkgs;
 
   redeclipse = callPackage ../games/redeclipse { };
 
+  rescrobbled = callPackage ../tools/audio/rescrobbled { };
+
   rftg = callPackage ../games/rftg { };
 
   rigsofrods = callPackage ../games/rigsofrods {
