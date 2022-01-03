@@ -909,6 +909,8 @@ with pkgs;
 
   acme-client = callPackage ../tools/networking/acme-client { stdenv = gccStdenv; };
 
+  adrgen = callPackage ../tools/misc/adrgen { };
+
   adriconf = callPackage ../tools/graphics/adriconf { };
 
   amass = callPackage ../tools/networking/amass { };
