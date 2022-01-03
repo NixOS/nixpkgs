@@ -1266,6 +1266,18 @@ let
         };
       };
 
+      rioj7.commandOnAllFiles = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "commandOnAllFiles";
+          publisher = "rioj7";
+          version = "0.3.0";
+          sha256 = "sha256-tNFHrgFJ22YGQgkYw+0l4G6OtlUYVn9brJPLnsvSwRE=";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
       rubymaniac.vscode-paste-and-indent = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-paste-and-indent";
