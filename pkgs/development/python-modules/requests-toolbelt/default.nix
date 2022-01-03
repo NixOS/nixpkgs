@@ -1,36 +1,48 @@
 { lib
+, betamax
 , buildPythonPackage
 , fetchPypi
-, requests
-, betamax
 , mock
-, pytest
 , pyopenssl
+, pytestCheckHook
+, requests
 }:
 
 buildPythonPackage rec {
   pname = "requests-toolbelt";
   version = "0.9.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "968089d4584ad4ad7c171454f0a5c6dac23971e9472521ea3b6d49d610aa6fc0";
+    hash = "sha256-loCJ1FhK1K18FxRU8KXG2sI5celHJSHqO21J1hCqb8A=";
   };
 
-  checkInputs = [ pyopenssl betamax mock pytest ];
-  propagatedBuildInputs = [ requests ];
+  propagatedBuildInputs = [
+    requests
+  ];
 
-  checkPhase = ''
-    # disabled tests access the network
-    py.test tests -k "not test_no_content_length_header \
-                  and not test_read_file \
-                  and not test_reads_file_from_url_wrapper \
-                  and not test_x509_der \
-                  and not test_x509_pem"
-  '';
+  checkInputs = [
+    betamax
+    mock
+    pyopenssl
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    "test_no_content_length_header"
+    "test_read_file"
+    "test_reads_file_from_url_wrapper"
+    "test_x509_der"
+    "test_x509_pem"
+  ];
+
+  pythonImportsCheck = [
+    "requests_toolbelt"
+  ];
 
   meta = {
-    description = "A toolbelt of useful classes and functions to be used with python-requests";
+    description = "Toolbelt of useful classes and functions to be used with requests";
     homepage = "http://toolbelt.rtfd.org";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ matthiasbeyer ];
