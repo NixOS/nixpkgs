@@ -132,6 +132,7 @@
 , xavs ? null # AVS encoder
 , xvidcore ? null # Xvid encoder, native encoder exists
 , zeromq4 ? null # Message passing
+, zimg ? null
 , zlib ? null
 , vulkan-loader ? null
 , glslang ? null
@@ -403,6 +404,7 @@ stdenv.mkDerivation rec {
     (enableFeature (xavs != null && gplLicensing) "libxavs")
     (enableFeature (xvidcore != null && gplLicensing) "libxvid")
     (enableFeature (zeromq4 != null) "libzmq")
+    (enableFeature (zimg != null) "libzimg")
     (enableFeature (zlib != null) "zlib")
     (enableFeature (isLinux && vulkan-loader != null) "vulkan")
     (enableFeature (isLinux && vulkan-loader != null && glslang != null) "libglslang")
@@ -431,7 +433,7 @@ stdenv.mkDerivation rec {
     libogg libopus librsvg libssh libtheora libvdpau libvorbis libvpx libwebp libX11
     libxcb libXv libXext xz openal openjpeg libpulseaudio rav1e svt-av1 rtmpdump opencore-amr
     samba SDL2 soxr speex srt vid-stab vo-amrwbenc x264 x265 xavs xvidcore
-    zeromq4 zlib
+    zeromq4 zimg zlib
   ] ++ optionals openglExtlib [ libGL libGLU ]
     ++ optionals nonfreeLicensing [ fdk_aac openssl ]
     ++ optional ((isLinux || isFreeBSD) && libva != null) libva
