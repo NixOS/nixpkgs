@@ -1,29 +1,62 @@
 { lib
 , buildPythonPackage
+, chardet
+, cryptography
+, feedparser
 , fetchPypi
+, mock
+, pysocks
+, pytestCheckHook
+, python-dateutil
+, python-gnupg
 , pythonOlder
-, git
+, pytz
 }:
 
 buildPythonPackage rec {
   pname = "limnoria";
   version = "2022.1.1";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b49a94b0d46f4a2a6ebce4dfc49385502a23ae446baebcc880460d4a1ad33fc7";
+    hash = "sha256-tJqUsNRvSipuvOTfxJOFUCojrkRrrrzIgEYNShrTP8c=";
   };
 
-  postPatch = ''
-    sed -i 's/version=version/version="${version}"/' setup.py
-  '';
- 
-  buildInputs = [ git ];
+  propagatedBuildInputs = [
+    chardet
+    cryptography
+    feedparser
+    mock
+    pysocks
+    python-dateutil
+    python-gnupg
+  ] ++ lib.optionals (pythonOlder "3.9") [
+    pytz
+  ];
 
-  # cannot be imported
-  doCheck = false;
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "version=version" 'version="${version}"'
+  '';
+
+  checkPhase = ''
+    runHook preCheck
+    export PATH="$PATH:$out/bin";
+    supybot-test test -v --no-network
+    runHook postCheck
+  '';
+
+  pythonImportsCheck = [
+    # Uses the same names as Supybot
+    "supybot"
+  ];
 
   meta = with lib; {
     description = "A modified version of Supybot, an IRC bot";
