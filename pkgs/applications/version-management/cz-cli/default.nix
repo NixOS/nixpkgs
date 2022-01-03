@@ -7,6 +7,7 @@ let
   };
 in
 nodePackages.commitizen.override {
+  name = "cz-cli";
   meta = with lib; {
     description = "The commitizen command line utility";
     homepage = "https://commitizen.github.io/cz-cli";
