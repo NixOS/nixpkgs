@@ -64,6 +64,7 @@ let
     chef = archived; # added 2022/01
     cherryservers = archived; # added 2022/01
     clc = archived; # added 2022/01
+    cloudstack = throw "removed from nixpkgs"; # added 2022/01
     cobbler = archived; # added 2022/01
     cohesity = archived; # added 2022/01
     dyn = archived; # added 2022/01
@@ -86,10 +87,12 @@ let
     rancher = archived; # added 2022/01
     rightscale = archived; # added 2022/01
     runscope = archived; # added 2022/01
+    segment = throw "removed from nixpkgs"; # added 2022/01
     softlayer = archived; # added 2022/01
     telefonicaopencloud = archived; # added 2022/01
     terraform = archived; # added 2022/01
     ultradns = archived; # added 2022/01
+    vthunder = throw "provider was renamed to thunder"; # added 2022/01
   });
 in
 automated-providers // special-providers // { inherit mkProvider; }

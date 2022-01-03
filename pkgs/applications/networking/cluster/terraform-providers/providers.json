@@ -208,13 +208,6 @@
     "vendorSha256": null,
     "version": "3.2.0"
   },
-  "cloudstack": {
-    "owner": "terraform-providers",
-    "repo": "terraform-provider-cloudstack",
-    "rev": "v0.3.0",
-    "sha256": "0zmyww6z3j839ydlmv254hr8gcsixng4lcvmiwkhxb3hj1nw8hcw",
-    "version": "0.3.0"
-  },
   "constellix": {
     "owner": "Constellix",
     "provider-source-address": "registry.terraform.io/Constellix/constellix",
@@ -923,13 +916,6 @@
     "vendorSha256": null,
     "version": "1.2.0"
   },
-  "segment": {
-    "owner": "ajbosco",
-    "repo": "terraform-provider-segment",
-    "rev": "v0.2.0",
-    "sha256": "0ic5b9djhnb1bs2bz3zdprgy3r55dng09xgc4d9l9fyp85g2amaz",
-    "version": "0.2.0"
-  },
   "selectel": {
     "owner": "selectel",
     "provider-source-address": "registry.terraform.io/selectel/selectel",
@@ -1047,6 +1033,15 @@
     "vendorSha256": "1g77ghz4928kfpidqd92cy6xkrqmz2y97x7g7lb55mw3mxg2bsx5",
     "version": "0.27.0"
   },
+  "thunder": {
+    "owner": "a10networks",
+    "provider-source-address": "registry.terraform.io/a10networks/thunder",
+    "repo": "terraform-provider-thunder",
+    "rev": "v0.5.21-beta",
+    "sha256": "1z52ifdi0nj3miwjz96zkmszh13l3vcbijgacfa28j2shasjyfwd",
+    "vendorSha256": null,
+    "version": "0.5.21-beta"
+  },
   "time": {
     "owner": "hashicorp",
     "provider-source-address": "registry.terraform.io/hashicorp/time",
@@ -1147,13 +1142,6 @@
     "sha256": "0ncl2vs6gcx9wm710hg575hqinkg45ds73n209xwdbpxlbv8qb7m",
     "vendorSha256": null,
     "version": "2.0.2"
-  },
-  "vthunder": {
-    "owner": "terraform-providers",
-    "repo": "terraform-provider-vthunder",
-    "rev": "v0.1.0",
-    "sha256": "1mw55g0kjgp300p6y4s8wc91fgfxjm0cbszfzgbc8ca4b00j8cc2",
-    "version": "0.1.0"
   },
   "vultr": {
     "owner": "vultr",
