@@ -1,12 +1,12 @@
-{ fetchFromGitHub, lib, python2Packages }:
+{ fetchFromGitHub, lib, python3Packages }:
 let
-  pythonPackages = python2Packages;
+  pythonPackages = python3Packages;
 
 in pythonPackages.buildPythonApplication rec {
   pname = "zabbix-cli";
   version = "2.2.1";
 
-  propagatedBuildInputs = with pythonPackages; [ ipaddr requests ];
+  propagatedBuildInputs = with pythonPackages; [ requests ];
 
   # argparse is part of the standardlib
   prePatch = ''
