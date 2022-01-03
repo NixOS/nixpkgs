@@ -94,6 +94,12 @@ in {
   config = mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
     systemd.packages = [ cfg.package ];
+
+    # Enable either system or user units.
+    systemd.services.pipewire-media-session.enable = config.services.pipewire.systemWide;
+    systemd.user.services.pipewire-media-session.enable = !config.services.pipewire.systemWide;
+
+    systemd.services.pipewire-media-session.wantedBy = [ "pipewire.service" ];
     systemd.user.services.pipewire-media-session.wantedBy = [ "pipewire.service" ];
 
     environment.etc."pipewire/media-session.d/media-session.conf" = {
