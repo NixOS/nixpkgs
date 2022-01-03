@@ -288,7 +288,7 @@
       <listitem>
         <para>
           The option
-          <link linkend="opt-services.ssh.enableAskPassword">services.ssh.enableAskPassword</link>
+          <link linkend="opt-programs.ssh.enableAskPassword">programs.ssh.enableAskPassword</link>
           was added, decoupling the setting of
           <literal>SSH_ASKPASS</literal> from
           <literal>services.xserver.enable</literal>. This allows easy
