@@ -33652,7 +33652,7 @@ with pkgs;
     inherit wineBuild;
 
     inherit (callPackage ./wine-packages.nix {})
-      minimal base full stable stableFull unstable unstableFull staging stagingFull fonts;
+      minimal base full stable stableFull unstable unstableFull staging stagingFull wayland waylandFull fonts;
   });
 
   winePackages = recurseIntoAttrs (winePackagesFor (config.wine.build or "wine32"));
@@ -33664,6 +33664,10 @@ with pkgs;
 
   wine-staging = lowPrio (winePackages.full.override {
     wineRelease = "staging";
+  });
+
+  wine-wayland = lowPrio (winePackages.full.override {
+    wineRelease = "wayland";
   });
 
   winetricks = callPackage ../misc/emulators/wine/winetricks.nix {

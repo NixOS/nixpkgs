@@ -1,7 +1,7 @@
 ## Configuration:
 # Control you default wine config in nixpkgs-config:
 # wine = {
-#   release = "stable"; # "stable", "unstable", "staging"
+#   release = "stable"; # "stable", "unstable", "staging", "wayland"
 #   build = "wineWow"; # "wine32", "wine64", "wineWow"
 # };
 # Make additional configurations on demand:
@@ -67,4 +67,11 @@ in if wineRelease == "staging" then
     wineUnstable = wine-build wineBuild "unstable";
   }
 else
-  wine-build wineBuild wineRelease
+  (if wineRelease == "wayland" then
+    callPackage ./wayland.nix {
+      wineWayland = wine-build wineBuild "wayland";
+      inherit vulkanSupport vkd3dSupport;
+    }
+    else
+      wine-build wineBuild wineRelease
+  )
