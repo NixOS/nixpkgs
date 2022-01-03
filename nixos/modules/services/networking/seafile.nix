@@ -8,6 +8,10 @@ let
 
   seafileConf = settingsFormat.generate "seafile.conf" cfg.seafileSettings;
 
+  seafdavConf = settingsFormat.generate "seafdav.conf" {
+    WEBDAV = cfg.seafdavSettings;
+  };
+
   seahubSettings = pkgs.writeText "seahub_settings.py" ''
     FILE_SERVER_ROOT = '${cfg.ccnetSettings.General.SERVICE_URL}/seafhttp'
     DATABASES = {
@@ -89,6 +93,37 @@ in {
       description = ''
         Configuration for seafile-server, see
         <link xlink:href="https://manual.seafile.com/config/seafile-conf/"/>
+        for supported values.
+      '';
+    };
+
+    seafdavSettings = mkOption {
+      type = types.submodule {
+        freeformType = settingsFormat.type;
+
+        options = {
+          enabled = mkEnableOption "seafdav server to access seafile through webdav";
+          port = mkOption {
+            type = types.port;
+            default = 6001;
+            description = ''
+              The tcp port used by seafdav.
+            '';
+          };
+          share_name = mkOption {
+            type = types.str;
+            default = "/";
+            description = ''
+              The location of the seafile webdav share.
+              This could be set to the location of a reverse proxy for seafdav.
+            '';
+          };
+        };
+      };
+      default = { };
+      description = ''
+        Configuration for seafdav set under the WEBDAV section, see
+        <link xlink:href="https://manual.seafile.com/extension/webdav/"/>
         for supported values.
       '';
     };
@@ -281,6 +316,38 @@ in {
               echo "${pkgs.seahub.version}-sqlite" > "${seafRoot}/seahub-setup"
           fi
         '';
+      };
+
+      seafdav = mkIf cfg.seafdavSettings.enabled {
+        description = "seafdav Server for WebDAV access to seafile";
+        wantedBy = [ "seafile.target" ];
+        partOf = [ "seafile.target" ];
+        after = [ "network.target" "seaf-server.service" ];
+        requires = [ "seaf-server" ];
+        restartTriggers = [ seafdavConf ];
+        environment = {
+          PYTHONPATH = "/etc/seafile"; # seafdav imports seahub_settings.py
+          SEAFDAV_CONF = seafdavConf;
+          CCNET_CONF_DIR = ccnetDir;
+          SEAFILE_CONF_DIR = dataDir;
+          SEAFILE_CENTRAL_CONF_DIR = "/etc/seafile";
+          SEAFILE_RPC_PIPE_PATH = "/run/seafile";
+        };
+        serviceConfig = securityOptions // {
+          User = "seafile";
+          Group = "seafile";
+          DynamicUser = true;
+          RuntimeDirectory = "seafile";
+          StateDirectory = "seafile";
+          LogsDirectory = "seafile";
+          ExecStart = ''
+            ${pkgs.seafdav}/bin/wsgidav \
+              --root=/ \
+              --server=gunicorn \
+              --log-file=/var/log/seafile/seafdav.log \
+              --port=${toString cfg.seafdavSettings.port}
+          '';
+        };
       };
     };
   };

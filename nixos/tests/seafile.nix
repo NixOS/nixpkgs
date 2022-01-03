@@ -16,11 +16,16 @@ import ./make-test-python.nix ({ pkgs, ... }:
           ccnetSettings.General.SERVICE_URL = "http://server";
           adminEmail = "admin@example.com";
           initialAdminPassword = "seafile_password";
+          seafdavSettings = {
+            enabled = true;
+            share_name = "/seafdav";
+          };
         };
         services.nginx = {
           enable = true;
           virtualHosts."server" = {
             locations."/".proxyPass = "http://unix:/run/seahub/gunicorn.sock";
+            locations."/seafdav".proxyPass = "http://127.0.0.1:6001";
             locations."/seafhttp" = {
               proxyPass = "http://127.0.0.1:8082";
               extraConfig = ''
@@ -50,6 +55,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
 
       with subtest("start seahub"):
           server.wait_for_unit("seahub.service")
+          server.wait_for_unit("seafdav.service")
           server.wait_for_unit("nginx.service")
           server.wait_for_file("/run/seahub/gunicorn.sock")
 
@@ -117,5 +123,8 @@ import ./make-test-python.nix ({ pkgs, ... }:
           client2.succeed("ls -la test01 >&2")
 
           client2.succeed('[ `cat test01/first_file` = "bla" ]')
+
+      with subtest("seafdav query"):
+          client1.succeed("curl --anyauth --user 'admin@example.com:seafile_password' http://server/seafdav | grep 'Authenticated user' >&2")
     '';
   })
