@@ -28868,6 +28868,8 @@ with pkgs;
     };
   });
 
+  thunderbird-sequoia = callPackage ../applications/networking/mailreaders/thunderbird/sequoia.nix { };
+
   thunderbird-unwrapped = thunderbirdPackages.thunderbird;
   thunderbird = wrapThunderbird thunderbird-unwrapped { };
   thunderbird-wayland = wrapThunderbird thunderbird-unwrapped { forceWayland = true; };
