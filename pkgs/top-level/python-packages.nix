@@ -2038,6 +2038,8 @@ in {
 
   debugpy = callPackage ../development/python-modules/debugpy { };
 
+  decli = callPackage ../development/python-modules/decli { };
+
   decorator = callPackage ../development/python-modules/decorator { };
 
   decopatch = callPackage ../development/python-modules/decopatch { };
