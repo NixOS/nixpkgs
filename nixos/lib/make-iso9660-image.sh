@@ -105,6 +105,7 @@ mkdir -p $out/iso
 # version-5 UUID's work)
 xorriso="xorriso
  -boot_image any gpt_disk_guid=$(uuid -v 5 daed2280-b91e-42c0-aed6-82c825ca41f3 $out | tr -d -)
+ -volume_date all_file_dates =$SOURCE_DATE_EPOCH
  -as mkisofs
  -iso-level 3
  -volid ${volumeID}
