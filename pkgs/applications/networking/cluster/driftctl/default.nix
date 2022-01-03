@@ -24,8 +24,8 @@ buildGoModule rec {
                   /pkg/cmd/scan/output     \
                   /pkg/iac/terraform/state \
                   /pkg/iac/supplier ; do
-      mkdir -p ./source/$prefix/github.com/cloudskiff
-      ln -sf $PWD/source ./source/$prefix/github.com/cloudskiff/driftctl
+      mkdir -p ./${src.name}/$prefix/github.com/cloudskiff
+      ln -sf $PWD/source ./${src.name}/$prefix/github.com/cloudskiff/driftctl
     done
 
     # Disable check for latest version and telemetry, which are opt-out.

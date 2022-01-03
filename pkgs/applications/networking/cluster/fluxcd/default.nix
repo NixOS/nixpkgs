@@ -26,7 +26,7 @@ in buildGoModule rec {
   vendorSha256 = "sha256-/VeJq6l3kSZ9qcYf2ypyyoXVKME+rig6aDdWDoRqNzA=";
 
   postUnpack = ''
-    cp -r ${manifests} source/cmd/flux/manifests
+    cp -r ${manifests} ${src.name}/cmd/flux/manifests
   '';
 
   patches = [ ./patches/disable-tests-ssh_key.patch ];

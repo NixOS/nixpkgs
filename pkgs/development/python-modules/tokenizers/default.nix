@@ -66,7 +66,7 @@ in buildPythonPackage rec {
     sha256 = "1yb4jsx6mp9jgd1g3mli6vr6mri2afnwqlmxq1rpvn34z6b3iw9q";
   };
 
-  sourceRoot = "source/bindings/python";
+  sourceRoot = "${src.name}/bindings/python";
 
   nativeBuildInputs = [ setuptools-rust ] ++ (with rustPlatform; [
     cargoSetupHook

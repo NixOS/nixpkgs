@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     rev = "v${version}";
     sha256 = "161m4y6i4sgqi9mg3f3348f5cr0m45vhix4a4bcw54wnmhiklnnl";
   };
-  sourceRoot = "source/impl";
+  sourceRoot = "${src.name}/impl";
 
   cargoSha256 = "1vlywdq0bx6b1k3w1grisca0hvv2s4s88yxq7bil8nhm5ghjgxdr";
 

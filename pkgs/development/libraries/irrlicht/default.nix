@@ -11,14 +11,14 @@ stdenv.mkDerivation rec {
   src = common.src;
 
   postPatch = ''
-    sed -ie '/sys\/sysctl.h/d' source/Irrlicht/COSOperator.cpp
+    sed -ie '/sys\/sysctl.h/d' ${src.name}/Irrlicht/COSOperator.cpp
   '' + lib.optionalString stdenv.isAarch64 ''
-    substituteInPlace source/Irrlicht/Makefile \
+    substituteInPlace ${src.name}/Irrlicht/Makefile \
       --replace "-DIRRLICHT_EXPORTS=1" "-DIRRLICHT_EXPORTS=1 -DPNG_ARM_NEON_OPT=0"
   '';
 
   preConfigure = ''
-    cd source/Irrlicht
+    cd ${src.name}/Irrlicht
   '';
 
   preBuild = ''

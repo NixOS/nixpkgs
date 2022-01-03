@@ -41,7 +41,7 @@ buildPythonPackage rec {
     sha256 = "sha256-MVfJ8iEeW8gFvCNTqrWfYpNNYuDAufHgcjd7Nh3qp8U=";
   };
 
-  sourceRoot = "source/${pname}";
+  sourceRoot = "${src.name}/${pname}";
 
   patches = [
     # present in upstream master - remove after 0.13.1

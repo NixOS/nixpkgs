@@ -21,7 +21,7 @@ buildPythonApplication (common // rec {
 
   disabled = !isPy3k;
 
-  sourceRoot = "source/daemon";
+  sourceRoot = "${src.name}/daemon";
 
   outputs = [ "out" "man" ];
 

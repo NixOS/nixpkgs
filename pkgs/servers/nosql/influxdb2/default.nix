@@ -37,7 +37,7 @@ let
       rev = "v${libflux_version}";
       sha256 = "sha256-cELeWZXGVLFoPYfBoBP8NeLBVFIb5o+lWyto42BLyXY=";
     };
-    sourceRoot = "source/libflux";
+    sourceRoot = "${src.name}/libflux";
     cargoSha256 = "sha256-wFgawxgqZqoPnOXJD3r5t2n7Y2bTAkBbBxeBtFEF7N4=";
     nativeBuildInputs = [ llvmPackages.libclang ];
     buildInputs = lib.optional stdenv.isDarwin libiconv;

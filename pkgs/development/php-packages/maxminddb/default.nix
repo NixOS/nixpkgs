@@ -14,7 +14,7 @@ buildPecl {
   };
 
   buildInputs = [ libmaxminddb ];
-  sourceRoot = "source/ext";
+  sourceRoot = "${src.name}/ext";
 
   meta = with lib; {
     description = "C extension that is a drop-in replacement for MaxMind\\Db\\Reader";

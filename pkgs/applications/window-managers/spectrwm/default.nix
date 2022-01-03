@@ -24,7 +24,7 @@ stdenv.mkDerivation {
 
   sourceRoot = let
     subdir = if stdenv.isDarwin then "osx" else "linux";
-  in "source/${subdir}";
+  in "${src.name}/${subdir}";
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 

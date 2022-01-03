@@ -5,7 +5,7 @@
 , webgl
 , lib
 }:
-build-idris-package  {
+build-idris-package rec {
   name = "html";
   version = "2017-04-23";
 
@@ -19,7 +19,7 @@ build-idris-package  {
   };
 
   postUnpack = ''
-    sed -i "s/hrTime/hrtime/g" source/html.ipkg
+    sed -i "s/hrTime/hrtime/g" ${src.name}/html.ipkg
   '';
 
   meta = {

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "188yxj8wahlj2yf93rj1vx549j5cq0085d2jmj3vwzbfjq1mi1f0";
   };
 
-  sourceRoot = "source/foma";
+  sourceRoot = "${src.name}/foma";
 
   nativeBuildInputs = [ flex bison ]
     ++ lib.optional stdenv.isDarwin darwin.cctools;

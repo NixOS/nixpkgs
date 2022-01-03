@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DQFUSION_GAME=Warsow" ];
 
   preConfigure = ''
-    cd source/source
+    cd ${src.name}/source
   '';
 
   installPhase = ''

@@ -12,7 +12,7 @@ in
 buildPythonPackage (common // rec {
   pname = "openrazer";
 
-  sourceRoot = "source/pylib";
+  sourceRoot = "${src.name}/pylib";
 
   propagatedBuildInputs = [
     dbus-python

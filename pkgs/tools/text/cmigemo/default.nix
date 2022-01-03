@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ gzip libiconv nkf perl which ];
 
   postUnpack = ''
-    cp ${skk-dicts}/share/SKK-JISYO.L source/dict/
+    cp ${skk-dicts}/share/SKK-JISYO.L ${src.name}/dict/
   '';
 
   patches = [ ./no-http-tool-check.patch ];

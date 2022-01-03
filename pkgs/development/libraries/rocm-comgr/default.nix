@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-enGzu1EOo87/S5oH1eEqPy0AtsBhCcroG3DYemeNgR0=";
   };
 
-  sourceRoot = "source/lib/comgr";
+  sourceRoot = "${src.name}/lib/comgr";
 
   nativeBuildInputs = [ cmake ];
 

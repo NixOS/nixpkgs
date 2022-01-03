@@ -25,8 +25,8 @@ buildGoPackage rec {
   };
 
   unpackPhase = ''
-    mkdir source/
-    tar xvf $src -C source/
+    mkdir ${src.name}/
+    tar xvf $src -C ${src.name}/
   '';
 
   sourceRoot = "source";

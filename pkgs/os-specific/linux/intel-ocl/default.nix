@@ -23,8 +23,8 @@ stdenv.mkDerivation rec {
 
   postUnpack = ''
     # Extract the RPMs contained within the source ZIP.
-    rpmextract source/intel-opencl-r${version}.x86_64.rpm
-    rpmextract source/intel-opencl-cpu-r${version}.x86_64.rpm
+    rpmextract ${src.name}/intel-opencl-r${version}.x86_64.rpm
+    rpmextract ${src.name}/intel-opencl-cpu-r${version}.x86_64.rpm
   '';
 
   patchPhase = ''

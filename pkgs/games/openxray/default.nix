@@ -20,7 +20,7 @@ let
 
     inherit src;
 
-    sourceRoot = "source/Externals/cryptopp";
+    sourceRoot = "${src.name}/Externals/cryptopp";
 
     makeFlags = [ "PREFIX=${placeholder "out"}" ];
     enableParallelBuilding = true;

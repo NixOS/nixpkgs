@@ -25,7 +25,7 @@ mkDerivation {
   pname = "jami-client-qt";
   inherit version src;
 
-  sourceRoot = "source/client-qt";
+  sourceRoot = "${src.name}/client-qt";
 
   preConfigure = ''
     python gen-resources.py

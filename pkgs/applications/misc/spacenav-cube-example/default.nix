@@ -6,7 +6,7 @@ stdenv.mkDerivation {
 
   src = libspnav.src;
 
-  sourceRoot = "source/examples/cube";
+  sourceRoot = "${src.name}/examples/cube";
 
   buildInputs = [ libX11 mesa_glu libspnav ];
 

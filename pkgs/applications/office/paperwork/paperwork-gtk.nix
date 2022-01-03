@@ -33,7 +33,7 @@ python3Packages.buildPythonApplication rec {
   inherit (import ./src.nix { inherit fetchFromGitLab; }) version src sample_documents;
   pname = "paperwork";
 
-  sourceRoot = "source/paperwork-gtk";
+  sourceRoot = "${src.name}/paperwork-gtk";
 
   # Patch out a few paths that assume that we're using the FHS:
   postPatch = ''

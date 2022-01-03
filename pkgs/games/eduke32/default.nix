@@ -49,11 +49,11 @@ in stdenv.mkDerivation rec {
     ++ lib.optional (stdenv.hostPlatform.system == "i686-linux") nasm;
 
   postPatch = lib.optionalString stdenv.isLinux ''
-    substituteInPlace source/build/src/glbuild.cpp \
+    substituteInPlace ${src.name}/build/src/glbuild.cpp \
       --replace libGLU.so ${libGLU}/lib/libGLU.so
 
     for f in glad.c glad_wgl.c ; do
-      substituteInPlace source/glad/src/$f \
+      substituteInPlace ${src.name}/glad/src/$f \
         --replace libGL.so ${libGL}/lib/libGL.so
     done
   '';

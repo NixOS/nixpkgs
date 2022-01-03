@@ -34,7 +34,7 @@ buildPecl rec {
     })
   ];
 
-  sourceRoot = "source/src";
+  sourceRoot = "${src.name}/src";
 
   configureFlags = [
     "--enable-snuffleupagus"

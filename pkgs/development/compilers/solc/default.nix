@@ -13,7 +13,7 @@
 , gmp ? null
 }:
 
-# compiling source/libsmtutil/CVC4Interface.cpp breaks on clang on Darwin,
+# compiling ${src.name}/libsmtutil/CVC4Interface.cpp breaks on clang on Darwin,
 # general commandline tests fail at abiencoderv2_no_warning/ on clang on NixOS
 
 assert z3Support -> z3 != null && lib.versionAtLeast z3.version "4.6.0";

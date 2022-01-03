@@ -48,9 +48,9 @@ stdenv.mkDerivation (rec {
   ];
 
   postUnpack = ''
-    mkdir -p source/build/build_libs/gbenchmark-prefix/src
-    cp -r "$ponygbenchmark"/ source/build/build_libs/gbenchmark-prefix/src/benchmark
-    chmod -R u+w source/build/build_libs/gbenchmark-prefix/src/benchmark
+    mkdir -p ${src.name}/build/build_libs/gbenchmark-prefix/src
+    cp -r "$ponygbenchmark"/ ${src.name}/build/build_libs/gbenchmark-prefix/src/benchmark
+    chmod -R u+w ${src.name}/build/build_libs/gbenchmark-prefix/src/benchmark
   '';
 
   dontConfigure = true;

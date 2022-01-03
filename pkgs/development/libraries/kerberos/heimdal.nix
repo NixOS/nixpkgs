@@ -47,8 +47,8 @@ stdenv.mkDerivation rec {
   ];
 
   postUnpack = ''
-    sed -i '/^DEFAULT_INCLUDES/ s,$, -I..,' source/cf/Makefile.am.common
-    sed -i -e 's/date/date --date="@$SOURCE_DATE_EPOCH"/' source/configure.ac
+    sed -i '/^DEFAULT_INCLUDES/ s,$, -I..,' ${src.name}/cf/Makefile.am.common
+    sed -i -e 's/date/date --date="@$SOURCE_DATE_EPOCH"/' ${src.name}/configure.ac
   '';
 
   preConfigure = ''

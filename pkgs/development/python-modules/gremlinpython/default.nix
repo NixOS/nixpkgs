@@ -24,7 +24,7 @@ buildPythonPackage rec {
     rev = version;
     sha256 = "1vlhxq0f2hanhkv6f17dxgbwr7gnbnh1kkkq0lxcwkbm2l0rdrlr";
   };
-  sourceRoot = "source/gremlin-python/src/main/python";
+  sourceRoot = "${src.name}/gremlin-python/src/main/python";
   postPatch = ''
     substituteInPlace setup.py \
       --replace 'aenum>=1.4.5,<3.0.0' 'aenum' \

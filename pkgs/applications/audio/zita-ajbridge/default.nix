@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ alsa-lib libjack2 zita-alsa-pcmi zita-resampler ];
 
   preConfigure = ''
-    cd ./source/
+    cd ./${src.name}/
   '';
 
   makeFlags = [

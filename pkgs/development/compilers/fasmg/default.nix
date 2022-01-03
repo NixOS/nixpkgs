@@ -18,19 +18,19 @@ stdenv.mkDerivation rec {
     path = {
       x86_64-linux = {
         bin = "fasmg.x64";
-        asm = "source/linux/x64/fasmg.asm";
+        asm = "${src.name}/linux/x64/fasmg.asm";
       };
       x86_64-darwin = {
-        bin = "source/macos/x64/fasmg";
-        asm = "source/macos/x64/fasmg.asm";
+        bin = "${src.name}/macos/x64/fasmg";
+        asm = "${src.name}/macos/x64/fasmg.asm";
       };
       x86-linux = {
         bin = "fasmg";
-        asm = "source/linux/fasmg.asm";
+        asm = "${src.name}/linux/fasmg.asm";
       };
       x86-darwin = {
-        bin = "source/macos/fasmg";
-        asm = "source/macos/fasmg.asm";
+        bin = "${src.name}/macos/fasmg";
+        asm = "${src.name}/macos/fasmg.asm";
       };
     }.${system} or (throw "Unsopported system: ${system}");
 

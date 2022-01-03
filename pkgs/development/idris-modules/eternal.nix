@@ -3,7 +3,7 @@
 , effects
 , lib
 }:
-build-idris-package  {
+build-idris-package rec {
   name = "eternal";
   version = "2018-07-02";
 
@@ -17,10 +17,10 @@ build-idris-package  {
   };
 
   postUnpack = ''
-    printf 'makefile = Makefile\n' >> source/eternal.ipkg
-    printf 'objs = readProcess.o\n' >> source/eternal.ipkg
-    sed -i 's/\/usr\/local\/idris\/readProcess.h/readProcess.h/g' source/Control/Eternal/System/Process.idr
-    sed -i 's/\/usr\/local\/idris\/readProcess.o/readProcess.o/g' source/Control/Eternal/System/Process.idr
+    printf 'makefile = Makefile\n' >> ${src.name}/eternal.ipkg
+    printf 'objs = readProcess.o\n' >> ${src.name}/eternal.ipkg
+    sed -i 's/\/usr\/local\/idris\/readProcess.h/readProcess.h/g' ${src.name}/Control/Eternal/System/Process.idr
+    sed -i 's/\/usr\/local\/idris\/readProcess.o/readProcess.o/g' ${src.name}/Control/Eternal/System/Process.idr
   '';
 
   meta = {

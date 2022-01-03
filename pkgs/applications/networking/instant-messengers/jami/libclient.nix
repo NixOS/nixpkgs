@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   pname = "jami-libclient";
   inherit version src;
 
-  sourceRoot = "source/lrc";
+  sourceRoot = "${src.name}/lrc";
 
   nativeBuildInputs = [
     cmake

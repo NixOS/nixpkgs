@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libjack2 zita-resampler ];
 
   preConfigure = ''
-    cd ./source/
+    cd ./${src.name}/
   '';
 
   makeFlags = [

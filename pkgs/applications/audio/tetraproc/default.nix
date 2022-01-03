@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   ];
 
   preConfigure = ''
-    cd ./source/
+    cd ./${src.name}/
   '';
 
   postInstall = ''

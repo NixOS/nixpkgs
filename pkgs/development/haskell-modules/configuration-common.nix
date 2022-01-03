@@ -616,7 +616,7 @@ self: super: {
   # Remove if a version > 0.1.0.1 ever gets released.
   stunclient = overrideCabal (drv: {
     postPatch = (drv.postPatch or "") + ''
-      substituteInPlace source/Network/Stun/MappedAddress.hs --replace "import Network.Endian" ""
+      substituteInPlace ${src.name}/Network/Stun/MappedAddress.hs --replace "import Network.Endian" ""
     '';
   }) super.stunclient;
 

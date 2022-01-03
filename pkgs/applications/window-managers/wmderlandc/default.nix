@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     sha256 = "0npmlnybblp82mfpinjbz7dhwqgpdqc1s63wc1zs8mlcs19pdh98";
   };
 
-  sourceRoot = "source/ipc-client";
+  sourceRoot = "${src.name}/ipc-client";
 
   nativeBuildInputs = [
     cmake

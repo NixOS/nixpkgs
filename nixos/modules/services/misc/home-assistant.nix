@@ -287,7 +287,7 @@ in {
           # Components that require access to serial devices (/dev/tty*)
           # List generated from home-assistant documentation:
           #   git clone https://github.com/home-assistant/home-assistant.io/
-          #   cd source/_integrations
+          #   cd ${src.name}/_integrations
           #   rg "/dev/tty" -l | cut -d'/' -f3 | cut -d'.' -f1 | sort
           # And then extended by references found in the source code, these
           # mostly the ones using config flows already.

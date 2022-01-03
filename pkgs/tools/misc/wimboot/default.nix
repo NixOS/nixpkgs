@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "12c677agkmiqs35qfpqfj7c4kxkizhbk9l6hig36dslzp4fwpl70";
   };
 
-  sourceRoot = "source/src";
+  sourceRoot = "${src.name}/src";
 
   buildInputs = [ libbfd zlib libiberty ];
   makeFlags = [ "wimboot.x86_64.efi" ];

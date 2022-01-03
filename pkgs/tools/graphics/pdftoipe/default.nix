@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "jlrjrjzZQo79CKMySayhCm1dqLh89wOQuXrXa2aqc0k=";
   };
-  sourceRoot = "source/pdftoipe";
+  sourceRoot = "${src.name}/pdftoipe";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ poppler ];

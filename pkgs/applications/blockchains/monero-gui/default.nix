@@ -42,8 +42,8 @@ stdenv.mkDerivation rec {
   postUnpack = ''
     # copy monero sources here
     # (needs to be writable)
-    cp -r ${monero-cli.source}/* source/monero
-    chmod -R +w source/monero
+    cp -r ${monero-cli.source}/* ${src.name}/monero
+    chmod -R +w ${src.name}/monero
   '';
 
   patches = [

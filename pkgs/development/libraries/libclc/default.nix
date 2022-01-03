@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     rev = "llvmorg-${version}";
     sha256 = "0bxh43hp1vl4axl3s9n2nb2ii8x1cbq98xz9c996f8rl5jy84ags";
   };
-  sourceRoot = "source/libclc";
+  sourceRoot = "${src.name}/libclc";
 
   # cmake expects all required binaries to be in the same place, so it will not be able to find clang without the patch
   postPatch = ''

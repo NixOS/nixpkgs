@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   inherit version;
 
   inherit src;
-  sourceRoot = "source/${pname}";
+  sourceRoot = "${src.name}/${pname}";
 
   patches = [
     ./gnu-install-dirs.patch

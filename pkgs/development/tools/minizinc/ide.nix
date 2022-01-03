@@ -14,7 +14,7 @@ mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  sourceRoot = "source/MiniZincIDE";
+  sourceRoot = "${src.name}/MiniZincIDE";
 
   dontWrapQtApps = true;
 

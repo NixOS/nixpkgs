@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ file zlib ] ++ optionals client [ openal SDL SDL_image libogg libvorbis ];
 
   targets = (optionalString server "server") + (optionalString client " client");
-  makeFlags = [ "-C source/src" "CXX=${stdenv.cc.targetPrefix}c++" targets ];
+  makeFlags = [ "-C ${src.name}/src" "CXX=${stdenv.cc.targetPrefix}c++" targets ];
 
   desktop = makeDesktopItem {
     name = "AssaultCube";
@@ -44,8 +44,8 @@ stdenv.mkDerivation rec {
 
     cp -r config packages $out/$gamedatadir
 
-    if (test -e source/src/ac_client) then
-      cp source/src/ac_client $bindir
+    if (test -e ${src.name}/src/ac_client) then
+      cp ${src.name}/src/ac_client $bindir
       mkdir -p $out/share/applications
       cp ${desktop}/share/applications/* $out/share/applications
       install -Dpm644 packages/misc/icon.png $out/share/icons/assaultcube.png
@@ -55,8 +55,8 @@ stdenv.mkDerivation rec {
         --run "cd $out/$gamedatadir" --add-flags "--home=\$HOME/.assaultcube/v1.2next --init"
     fi
 
-    if (test -e source/src/ac_server) then
-      cp source/src/ac_server $bindir
+    if (test -e ${src.name}/src/ac_server) then
+      cp ${src.name}/src/ac_server $bindir
       makeWrapper $out/bin/ac_server $out/bin/${pname}-server \
         --run "cd $out/$gamedatadir" --add-flags "-Cconfig/servercmdline.txt"
     fi

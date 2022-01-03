@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-65wxhE/XqNK6ly+fxZFLjtImvpJlgU54RStUve40CJA=";
   };
 
-  sourceRoot = "source/klippy";
+  sourceRoot = "${src.name}/klippy";
 
   # there is currently an attempt at moving it to Python 3, but it will remain
   # Python 2 for the foreseeable future.

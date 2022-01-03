@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   postUnpack = ''
     cabextract -F FW_ACC_00U.bin ${firmware}
-    mv FW_ACC_00U.bin source/firmware.bin
+    mv FW_ACC_00U.bin ${src.name}/firmware.bin
   '';
 
   enableParallelBuilding = true;

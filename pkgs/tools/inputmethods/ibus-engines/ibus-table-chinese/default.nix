@@ -22,7 +22,7 @@ in stdenv.mkDerivation {
 
   postUnpack = ''
     chmod u+w -R ${cmakeFedoraSrc.name}
-    mv ${cmakeFedoraSrc.name}/* source/cmake-fedora
+    mv ${cmakeFedoraSrc.name}/* ${src.name}/cmake-fedora
   '';
 
   preConfigure = ''

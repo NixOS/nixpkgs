@@ -74,7 +74,7 @@ let
     name = "libtoggl-${version}";
     inherit src version;
 
-    sourceRoot = "source/src";
+    sourceRoot = "${src.name}/src";
 
     nativeBuildInputs = [ qmake pkg-config ];
     buildInputs = [ jsoncpp lua openssl poco poco-pc-wrapped sqlite libX11 ];
@@ -89,7 +89,7 @@ let
     name = "${name}-unwrapped";
     inherit src version;
 
-    sourceRoot = "source/src/ui/linux/TogglDesktop";
+    sourceRoot = "${src.name}/src/ui/linux/TogglDesktop";
 
     postPatch = ''
       substituteAll ${./TogglDesktop.pro} TogglDesktop.pro

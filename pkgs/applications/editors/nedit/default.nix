@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    cp -p source/nedit source/nc $out/bin
+    cp -p ${src.name}/nedit ${src.name}/nc $out/bin
   '';
 
   meta = with lib; {

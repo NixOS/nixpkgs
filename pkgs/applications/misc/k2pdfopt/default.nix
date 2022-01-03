@@ -85,15 +85,15 @@ in stdenv.mkDerivation rec {
         sha256 = "13nl9nrcx2awz9l83mlv2psi1lmn3hdnfwxvwgwiwbxlkjl3zqq0";
       };
       patchCommands = ''
-        cp ${k2pdfopt_src}/mupdf_mod/{filter-basic,font,stext-device,string}.c ./source/fitz/
-        cp ${k2pdfopt_src}/mupdf_mod/pdf-* ./source/pdf/
+        cp ${k2pdfopt_src}/mupdf_mod/{filter-basic,font,stext-device,string}.c ./${src.name}/fitz/
+        cp ${k2pdfopt_src}/mupdf_mod/pdf-* ./${src.name}/pdf/
       '';
     };
     mupdf_modded = mupdf_1_17.overrideAttrs ({ patches ? [], ... }: {
       patches = patches ++ [ mupdf_patch ];
       # This function is missing in font.c, see font-win32.c
       postPatch = ''
-        echo "void pdf_install_load_system_font_funcs(fz_context *ctx) {}" >> source/fitz/font.c
+        echo "void pdf_install_load_system_font_funcs(fz_context *ctx) {}" >> ${src.name}/fitz/font.c
       '';
     });
 

@@ -5,7 +5,7 @@ mkDerivation {
 
   inherit (gpsbabel) src version;
 
-  sourceRoot = "source/gui";
+  sourceRoot = "${src.name}/gui";
 
   nativeBuildInputs = [ qmake qttools ];
   buildInputs = [ qtwebkit ];

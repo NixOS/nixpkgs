@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-qwddCGMOKWgx76qGwRQXwvv9fCSeVsZbWHmlBwEqGKE=";
   };
 
-  sourceRoot = "source/source";
+  sourceRoot = "${src.name}/source";
 
   postPatch = ''
     substituteInPlace Makefile --replace "/bin/rm" "rm"

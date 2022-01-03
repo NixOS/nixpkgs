@@ -56,7 +56,7 @@ let
       sed -i 's/==.*//' requirements.in
       cp requirements.in requirements.txt
     '';
-    sourceRoot = "source/${args.sourceRoot or pname}";
+    sourceRoot = "${src.name}/${args.sourceRoot or pname}";
     doCheck = false;
   });
 

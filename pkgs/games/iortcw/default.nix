@@ -3,7 +3,7 @@
 let
   sp = callPackage ./sp.nix {};
   mp = sp.overrideAttrs (oldAttrs: rec {
-    sourceRoot = "source/MP";
+    sourceRoot = "${oldAttrs.src.name}/MP";
   });
 in buildEnv {
   name = "iortcw";

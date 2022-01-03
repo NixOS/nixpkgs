@@ -52,8 +52,8 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-mavx"; # Fix some sort of AVX compiler problem.
 
   postUnpack = ''
-    echo ${src.rev} > source/VERSION
-    export sourceRoot="source/client"
+    echo ${src.rev} > ${src.name}/VERSION
+    export sourceRoot="${src.name}/client"
   '';
 
   postInstall = ''

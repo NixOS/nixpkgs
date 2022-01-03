@@ -180,13 +180,13 @@ let
           buildInputs = old.buildInputs ++ [ pkgs.sqlite ];
 
           postBuild = ''
-            cd source/sqlite
+            cd ${src.name}/sqlite
             make
             cd -
           '';
 
           postInstall = ''
-            install -m=755 -D source/sqlite/emacsql-sqlite \
+            install -m=755 -D ${src.name}/sqlite/emacsql-sqlite \
               $out/share/emacs/site-lisp/elpa/emacsql-sqlite-${old.version}/sqlite/emacsql-sqlite
           '';
 
@@ -262,7 +262,7 @@ let
             cd ..
           '';
           checkPhase = ''
-            cd source/server
+            cd ${src.name}/server
             make check
             cd ../..
           '';
@@ -297,7 +297,7 @@ let
           postInstall = ''
             outd=$(echo $out/share/emacs/site-lisp/elpa/libgit-**)
             mkdir $outd/build
-            install -m444 -t $outd/build ./source/src/libegit2.so
+            install -m444 -t $outd/build ./${src.name}/src/libegit2.so
             rm -r $outd/src $outd/Makefile $outd/CMakeLists.txt
           '';
         });
@@ -414,14 +414,14 @@ let
           '';
 
           postBuild = ''
-            cd source/server
+            cd ${src.name}/server
             make
             cd -
           '';
 
           postInstall = ''
             mkdir -p $out/bin
-            install -m755 -Dt $out/bin ./source/server/telega-server
+            install -m755 -Dt $out/bin ./${src.name}/server/telega-server
           '';
         });
 
@@ -527,7 +527,7 @@ let
           # we need the proper out directory to exist, so we do this in the
           # postInstall instead of postBuild
           postInstall = ''
-            pushd source/build >/dev/null
+            pushd ${src.name}/build >/dev/null
             make
             install -m444 -t $out/share/emacs/site-lisp/elpa/vterm-** ../*.so
             popd > /dev/null
