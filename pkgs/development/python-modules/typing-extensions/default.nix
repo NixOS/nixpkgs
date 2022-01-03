@@ -1,24 +1,30 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder, isPy3k, python, typing }:
-let
-  testDir = if isPy3k then "src_py3" else "src_py2";
+{ buildPythonPackage
+, fetchPypi
+, lib
+, python
+, typing
+, flit-core
+}:
 
-in buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "typing_extensions";
-  version = "3.10.0.2";
+  version = "4.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "49f75d16ff11f1cd258e1b988ccff82a3ca5570217d7ad8c5f48205dd99a677e";
+    sha256 = "sha256-TKCR3qFJ+UXsVq+0ja5xTyHoaS7yKjlSI7zTKJYbag4=";
   };
 
-  checkInputs = lib.optional (pythonOlder "3.5") typing;
+  format = "pyproject";
 
-  # Error for Python3.6: ImportError: cannot import name 'ann_module'
-  # See https://github.com/python/typing/pull/280
-  doCheck = pythonOlder "3.6";
+  nativeBuildInputs = [ flit-core ];
+
+  checkInputs = [ typing ];
+
+  doCheck = true;
 
   checkPhase = ''
-    cd ${testDir}
+    cd src
     ${python.interpreter} -m unittest discover
   '';
 
