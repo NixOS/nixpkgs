@@ -2550,7 +2550,7 @@ with pkgs;
 
   colpack = callPackage ../applications/science/math/colpack { };
 
-  commitizen = callPackage ../applications/version-management/commitizen {};
+  cz-cli = callPackage ../applications/version-management/cz-cli {};
 
   common-licenses = callPackage ../data/misc/common-licenses {};
 
