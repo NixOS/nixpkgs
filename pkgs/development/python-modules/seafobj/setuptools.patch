@@ -1,0 +1,24 @@
+diff --git a/setup.py b/setup.py
+new file mode 100644
+index 0000000..898cbe7
+--- /dev/null
++++ b/setup.py
+@@ -0,0 +1,18 @@
++from setuptools import setup, find_packages
++
++__version__ = '7.0.0'
++
++
++setup(name='seafobj',
++      version=__version__,
++      license='ASL2',
++      description='python library for accessing seafile data model',
++      author='Shuai Lin',
++      author_email='linshuai2012@gmail.com',
++      url='http://seafile.com',
++      platforms=['Any'],
++      packages=find_packages(exclude=["test.*", "test"]),
++      classifiers=['Development Status :: 4 - Beta',
++                   'License :: OSI Approved :: Apache Software License',
++                   'Operating System :: OS Independent',
++                   'Programming Language :: Python'])
