@@ -63,6 +63,8 @@ in
     };
     services.openssh.authorizedKeysCommand = "/etc/ssh/authorized_keys_command_google_oslogin %u";
     services.openssh.authorizedKeysCommandUser = "nobody";
+
+    users.requirePrivilegedUser = false;
   };
 
 }

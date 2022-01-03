@@ -473,6 +473,19 @@ in {
       '';
     };
 
+    users.requirePrivilegedUser = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Require that at least one privileged user has a password or an SSH
+        authorized key.  This guards against accidentally creating a
+        configuration that locks the user out of the system.
+        Privileged accounts are root and users in the wheel group.
+
+        By default, this check is performed only when mutableUsers = false.
+      '';
+    };
+
     users.enforceIdUniqueness = mkOption {
       type = types.bool;
       default = true;
@@ -519,6 +532,8 @@ in {
   ###### implementation
 
   config = {
+
+    users.requirePrivilegedUser = mkDefault (!cfg.mutableUsers);
 
     users.users = {
       root = {
@@ -598,12 +613,7 @@ in {
       { assertion = !cfg.enforceIdUniqueness || (uidsAreUnique && gidsAreUnique);
         message = "UIDs and GIDs must be unique!";
       }
-      { # If mutableUsers is false, to prevent users creating a
-        # configuration that locks them out of the system, ensure that
-        # there is at least one "privileged" account that has a
-        # password or an SSH authorized key. Privileged accounts are
-        # root and users in the wheel group.
-        assertion = !cfg.mutableUsers ->
+      { assertion = cfg.requirePrivilegedUser ->
           any id ((mapAttrsToList (_: cfg:
             (cfg.name == "root"
              || cfg.group == "wheel"
@@ -614,12 +624,11 @@ in {
              || cfg.passwordFile != null
              || cfg.openssh.authorizedKeys.keys != []
              || cfg.openssh.authorizedKeys.keyFiles != [])
-          ) cfg.users) ++ [
-            config.security.googleOsLogin.enable
-          ]);
+          ) cfg.users));
         message = ''
           Neither the root account nor any wheel user has a password or SSH authorized key.
-          You must set one to prevent being locked out of your system.'';
+          Set one to prevent being locked out of your system.
+          (Or, set users.requirePrivilegedUser = false if you really intend to create an inaccessible system.'';
       }
     ] ++ flatten (flip mapAttrsToList cfg.users (name: user:
       [
