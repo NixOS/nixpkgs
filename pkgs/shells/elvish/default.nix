@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, runCommand, elvish }:
+{ lib, buildGoModule, fetchFromGitHub, runCommand }:
 
 buildGoModule rec {
   pname = "elvish";
@@ -19,6 +19,25 @@ buildGoModule rec {
 
   doCheck = false;
 
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    $out${passthru.shellPath} -c "
+      fn expect {|key expected|
+        var actual = \$buildinfo[\$key]
+        if (not-eq \$actual \$expected) {
+          fail '\$buildinfo['\$key']: expected '(to-string \$expected)', got '(to-string \$actual)
+        }
+      }
+
+      expect version ${version}
+      expect reproducible \$true
+    "
+
+    runHook postInstallCheck
+  '';
+
   meta = with lib; {
     description = "A friendly and expressive command shell";
     longDescription = ''
@@ -31,22 +50,5 @@ buildGoModule rec {
     maintainers = with maintainers; [ vrthra AndersonTorres ];
   };
 
-  passthru = {
-    shellPath = "/bin/elvish";
-    tests = runCommand "${pname}-buildinfo-test" {} ''
-      mkdir $out
-
-      ${elvish}/bin/elvish -c "
-        fn expect {|key expected|
-          var actual = \$buildinfo[\$key]
-          if (not-eq \$actual \$expected) {
-            fail '\$buildinfo['\$key']: expected '(to-string \$expected)', got '(to-string \$actual)
-          }
-        }
-
-        expect version ${version}
-        expect reproducible \$true
-      "
-    '';
-  };
+  passthru.shellPath = "/bin/elvish";
 }
