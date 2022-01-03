@@ -1,40 +1,26 @@
 { lib
 , stdenv
-, fetchFromGitHub
-, autoreconfHook
+, fetchurl
 , imlib2
 , libX11
 , libXext
 , ncurses
 , pkg-config
-, zlib
 , x11Support ? !stdenv.isDarwin
+, zlib
 }:
 
 stdenv.mkDerivation rec {
   pname = "libcaca";
-  version = "0.99.beta20";
+  version = "0.99.beta19";
 
-  src = fetchFromGitHub {
-    owner = "cacalabs";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-N0Lfi0d4kjxirEbIjdeearYWvStkKMyV6lgeyNKXcVw=";
+  src = fetchurl {
+    urls = [
+      "http://fossies.org/linux/privat/${pname}-${version}.tar.gz"
+      "http://caca.zoy.org/files/libcaca/${pname}-${version}.tar.gz"
+    ];
+    hash = "sha256-EotGfE7QMmTBh0BRcqToMEk0LMjML2VfU6LQ7p03cvQ=";
   };
-
-  nativeBuildInputs = [
-    autoreconfHook
-    pkg-config
-  ];
-
-  buildInputs = [
-    ncurses
-    zlib
-    (imlib2.override { inherit x11Support; })
-  ] ++ lib.optionals x11Support [
-    libX11
-    libXext
-  ];
 
   outputs = [ "bin" "dev" "out" "man" ];
 
@@ -43,6 +29,20 @@ stdenv.mkDerivation rec {
   ];
 
   NIX_CFLAGS_COMPILE = lib.optionalString (!x11Support) "-DX_DISPLAY_MISSING";
+
+  enableParallelBuilding = true;
+
+  nativeBuildInputs = [
+    pkg-config
+  ];
+  buildInputs = [
+    ncurses
+    zlib
+    (imlib2.override { inherit x11Support; })
+  ] ++ lib.optionals x11Support [
+    libX11
+    libXext
+  ];
 
   postInstall = ''
     mkdir -p $dev/bin
