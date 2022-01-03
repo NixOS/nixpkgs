@@ -4,6 +4,7 @@ AckslD/nvim-neoclip.lua
 AckslD/nvim-whichkey-setup.lua
 ackyshake/Spacegray.vim
 ahmedkhalf/lsp-rooter.nvim
+ahmedkhalf/project.nvim
 airblade/vim-gitgutter
 airblade/vim-rooter
 ajmwagar/vim-deus
