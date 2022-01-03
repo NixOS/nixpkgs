@@ -189,7 +189,7 @@ let
         ];
       };
 
-      nativeBuildInputs = [ makeWrapper lndir ];
+      nativeBuildInputs = [ makeWrapper lndir replace ];
       buildInputs = [ browser.gtk3 ];
 
 
@@ -226,14 +226,14 @@ let
         cd "${browser}"
 
         find . -type l -print0 | while read -d $'\0' l; do
-          target="$(readlink "$l" | ${replace}/bin/replace-literal -es -- "${browser}" "$out")"
+          target="$(readlink "$l" | replace-literal -es -- "${browser}" "$out")"
           ln -sfT "$target" "$out/$l"
         done
 
         # This will not patch binaries, only "text" files.
         # Its there for the wrapper mostly.
         cd "$out"
-        ${replace}/bin/replace-literal -esfR -- "${browser}" "$out"
+        replace-literal -esfR -- "${browser}" "$out"
 
         # create the wrapper
 
