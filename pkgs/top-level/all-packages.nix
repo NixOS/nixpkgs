@@ -30125,7 +30125,7 @@ with pkgs;
 
   wasabiwallet = callPackage ../applications/blockchains/wasabiwallet { };
 
-  wasabibackend = callPackage ../applications/blockchains/wasabibackend { Nuget = dotnetPackages.Nuget; };
+  wasabibackend = callPackage ../applications/blockchains/wasabibackend { };
 
   wownero = callPackage ../applications/blockchains/wownero {
     boost = boost175;
