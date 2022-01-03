@@ -29,8 +29,6 @@ pet = buildGoModule rec {
 
   vendorSha256 = "1879j77k96684wi554rkjxydrj8g3hpp0kvxz03sd8dmwr3lh83j";
 
-  runVend = true;
-
   meta = with lib; {
     description = "Simple command-line snippet manager, written in Go";
     homepage = "https://github.com/knqyf263/pet";

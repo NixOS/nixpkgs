@@ -8657,7 +8657,7 @@
   };
   noreferences = {
     email = "norkus@norkus.net";
-    github = "noreferences";
+    github = "jozuas";
     githubId = 13085275;
     name = "Juozas Norkus";
   };
@@ -11633,6 +11633,12 @@
     github = "terlar";
     githubId = 280235;
     name = "Terje Larsen";
+  };
+  terrorjack = {
+    email = "astrohavoc@gmail.com";
+    github = "TerrorJack";
+    githubId = 3889585;
+    name = "Cheng Shao";
   };
   tesq0 = {
     email = "mikolaj.galkowski@gmail.com";
