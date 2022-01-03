@@ -24808,6 +24808,7 @@ with pkgs;
     infobar = callPackage ../applications/audio/deadbeef/plugins/infobar.nix { };
     lyricbar = callPackage ../applications/audio/deadbeef/plugins/lyricbar.nix { };
     mpris2 = callPackage ../applications/audio/deadbeef/plugins/mpris2.nix { };
+    gnome-mmkeys = callPackage ../applications/audio/deadbeef/plugins/gnome-mmkeys.nix { };
     statusnotifier = callPackage ../applications/audio/deadbeef/plugins/statusnotifier.nix { };
   };
 
