@@ -627,6 +627,7 @@ in with py.pkgs; buildPythonApplication rec {
     "mazda"
     "media_player"
     "media_source"
+    "melcloud"
     "meraki"
     "met"
     "met_eireann"

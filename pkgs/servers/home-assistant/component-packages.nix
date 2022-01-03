@@ -503,7 +503,7 @@
     "media_player" = ps: with ps; [ aiohttp-cors ];
     "media_source" = ps: with ps; [ aiohttp-cors ];
     "mediaroom" = ps: with ps; [ pymediaroom ];
-    "melcloud" = ps: with ps; [ ]; # missing inputs: pymelcloud
+    "melcloud" = ps: with ps; [ pymelcloud ];
     "melissa" = ps: with ps; [ ]; # missing inputs: py-melissa-climate
     "meraki" = ps: with ps; [ aiohttp-cors ];
     "message_bird" = ps: with ps; [ ]; # missing inputs: messagebird

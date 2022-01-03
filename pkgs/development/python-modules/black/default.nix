@@ -10,7 +10,6 @@
 , pathspec
 , parameterized
 , platformdirs
-, regex
 , tomli
 , typed-ast
 , typing-extensions
@@ -26,7 +25,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-d7gPaTpWni5SeVhFljTxjfmwuiYluk4MLV2lvkLm8rM=";
+    hash = "sha256-d7gPaTpWni5SeVhFljTxjfmwuiYluk4MLV2lvkLm8rM=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
@@ -68,7 +67,6 @@ buildPythonPackage rec {
     mypy-extensions
     pathspec
     platformdirs
-    regex
     tomli
     typed-ast # required for tests and python2 extra
     uvloop

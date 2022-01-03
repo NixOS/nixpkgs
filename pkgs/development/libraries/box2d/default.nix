@@ -1,18 +1,20 @@
-{ lib, stdenv, fetchurl, unzip, cmake, libGLU, libGL, freeglut, libX11, xorgproto
+{ lib, stdenv, fetchFromGitHub, cmake, libGLU, libGL, freeglut, libX11, xorgproto
 , libXi, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "box2d";
   version = "2.3.1";
 
-  src = fetchurl {
-    url = "https://github.com/erincatto/box2d/archive/v${version}.tar.gz";
-    sha256 = "0p03ngsmyz0r5kbpiaq10ns4fxwkjvvawi8k6pfall46b93wizsq";
+  src = fetchFromGitHub {
+    owner = "erincatto";
+    repo = "box2d";
+    rev = "v${version}";
+    sha256 = "sha256-Z2J17YMzQNZqABIa5eyJDT7BWfXveymzs+DWsrklPIs=";
   };
 
-  sourceRoot = "box2d-${version}/Box2D";
+  sourceRoot = "source/Box2D";
 
-  nativeBuildInputs = [ cmake unzip pkg-config ];
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ libGLU libGL freeglut libX11 xorgproto libXi ];
 
   cmakeFlags = [

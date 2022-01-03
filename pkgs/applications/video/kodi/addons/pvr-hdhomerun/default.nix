@@ -2,13 +2,13 @@
 buildKodiBinaryAddon rec {
   pname = "pvr-hdhomerun";
   namespace = "pvr.hdhomerun";
-  version = "19.0.1";
+  version = "19.0.2";
 
   src = fetchFromGitHub {
     owner = "kodi-pvr";
     repo = "pvr.hdhomerun";
     rev = "${version}-${rel}";
-    sha256 = "sha256-WeokXU4HY22SzL1djORzru5Hju58Ix0+InwZDr++FC8=";
+    sha256 = "sha256-iFAOoQvZAdvJvN8FBg2w+oZWtr8mYdBQ3QX58HLmBho=";
   };
 
   extraBuildInputs = [ jsoncpp libhdhomerun ];

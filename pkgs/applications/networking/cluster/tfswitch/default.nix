@@ -10,13 +10,11 @@ buildGoModule rec {
     sha256 = "sha256-gJa8oVdgerDi0GdTSNus5rHLsFuzg8ZqVeKTMuPXu0o=";
   };
 
-  vendorSha256 = "sha256-tp2Bv/vcHCuB/HCZLfL/zOm/UfPt6XXGE7johrjL3cs=";
+  vendorSha256 = "sha256-z3UDrwlMHFFH56U3oylSWE3wqWOCA4RI2smafHHwYkQ=";
 
   # Disable tests since it requires network access and relies on the
   # presence of release.hashicorp.com
   doCheck = false;
-
-  runVend = true;
 
   postInstall = ''
     # The binary is named tfswitch

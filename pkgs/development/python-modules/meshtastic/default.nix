@@ -12,12 +12,13 @@
 , pythonOlder
 , pyyaml
 , tabulate
+, pytap2
 , timeago
 }:
 
 buildPythonPackage rec {
   pname = "meshtastic";
-  version = "1.2.48";
+  version = "1.2.51";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -26,7 +27,7 @@ buildPythonPackage rec {
     owner = "meshtastic";
     repo = "Meshtastic-python";
     rev = version;
-    sha256 = "sha256-hf+9WmYLRN53cSipNRA+mRYzSLu6NAO6HSQ3NOeCPM8=";
+    sha256 = "sha256-CMoa7FQnGTWS14WmWvuryO2bKMWC05PBIDBlEWRjNRA=";
   };
 
   propagatedBuildInputs = [
@@ -43,6 +44,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
+    pytap2
     pytestCheckHook
   ];
 

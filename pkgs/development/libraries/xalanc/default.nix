@@ -32,7 +32,7 @@ in stdenv.mkDerivation rec {
   enableParallelBuilding = false;
 
   meta = {
-    homepage = "http://xalan.apache.org/";
+    homepage = "https://xalan.apache.org/";
     description = "A XSLT processor for transforming XML documents";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
