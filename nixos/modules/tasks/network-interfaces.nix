@@ -540,7 +540,7 @@ in
       type = types.bool;
       default = false;
       description = ''
-        In containers, whether to use the
+        <emphasis>Deprecated:</emphasis> in containers, whether to use the
         <filename>resolv.conf</filename> supplied by the host.
       '';
     };
