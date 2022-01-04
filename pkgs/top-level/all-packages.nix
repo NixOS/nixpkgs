@@ -21392,8 +21392,6 @@ with pkgs;
 
   mbtileserver = callPackage ../servers/mbtileserver { };
 
-  mediatomb = callPackage ../servers/mediatomb { };
-
   memcached = callPackage ../servers/memcached {};
 
   meteor = callPackage ../servers/meteor { };

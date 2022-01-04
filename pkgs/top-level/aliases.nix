@@ -604,6 +604,7 @@ mapAliases ({
   mathics = throw "mathics has been removed from nixpkgs, as it's unmaintained"; # added 2020-08-15
   matrique = spectral; # added 2020-01-27
   mbedtls_1_3 = throw "mbedtls_1_3 is end of life, see https://tls.mbed.org/kb/how-to/upgrade-2.0"; # added 2019-12-08
+  mediatomb = throw "mediatomb is no longer maintained upstream, use gerbera instead"; # added 2022-01-04
   meme = meme-image-generator; # added 2021-04-21
   mess = mame; # added 2019-10-30
   metamorphose2 = throw "metamorphose2 has been removed from nixpkgs, as it was stuck on python2."; # added 2022-01-12
