@@ -45,7 +45,7 @@ stdenv.mkDerivation ({
 
   buildPhase = ''
     echo "------------------------------------------------------------" >>$out
-    echo " WARNING: this file existence or location is not guaranteed." >>$out
+    echo " WARNING: the existence of this path is not guaranteed." >>$out
     echo " It is an internal implementation detail for pkgs.mkShell."   >>$out
     echo "------------------------------------------------------------" >>$out
     echo >> $out
