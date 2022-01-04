@@ -64,5 +64,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;
+    broken = stdenv.isDarwin;
   };
 }
