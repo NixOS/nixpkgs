@@ -1,7 +1,9 @@
-{ qtModule
-, qtdeclarative, qtlocation, qtwebchannel
+# TODO https://github.com/qt/qtwebengine/releases/tag/v6.2.2
 
-, bison, coreutils, flex, git, gperf, ninja, pkg-config, python2, which
+{ qtModule
+, qtdeclarative, qtwebchannel
+
+, bison, coreutils, flex, git, gperf, /* ninja, */ cmake, pkg-config, python2, which
 , nodejs, qtbase, perl
 
 , xorg, libXcursor, libXScrnSaver, libXrandr, libXtst
@@ -27,14 +29,39 @@
 
 qtModule {
   pname = "qtwebengine";
-  qtInputs = [ qtdeclarative qtlocation qtwebchannel ];
+  qtInputs = [ qtdeclarative qtwebchannel ];
   nativeBuildInputs = [
-    bison coreutils flex git gperf ninja pkg-config python2 which gn nodejs
+    bison coreutils flex git gperf
+    #ninja
+    cmake
+    pkg-config python2 which gn nodejs
   ] ++ lib.optional stdenv.isDarwin xcbuild;
   doCheck = true;
   outputs = [ "bin" "dev" "out" ];
 
+  cmakeFlags = [ "--trace-expand" ]; # debug
+
   enableParallelBuilding = true;
+
+  # debug: install is failing
+  # splitBuildInstall requires cmake, not ninja
+  splitBuildInstall =
+  let
+    # workaround for splitBuildInstall
+    pname = "qtwebengine";
+    version = "6.2.2";
+    self = { inherit qtbase; };
+    args = { postFixup = ""; };
+  in
+  {
+    # needed to disable rebuild
+    installPhase = ''
+      runHook preInstall
+      cd /build/$sourceRoot/build
+      cmake -P cmake_install.cmake
+      runHook postInstall
+    '';
+  };
 
   # Don’t use the gn setup hook
   dontUseGnConfigure = true;
@@ -123,6 +150,13 @@ qtModule {
     if [ -d "$PWD/tools/qmake" ]; then
         QMAKEPATH="$PWD/tools/qmake''${QMAKEPATH:+:}$QMAKEPATH"
     fi
+
+    # TODO verify
+    # locate cmake file /lib/cmake/Qt6Quick/Qt6QuickConfig.cmake
+    # see also: pkgs/applications/graphics/qimgv/default.nix
+    # FIXME qt6: set this automatically when adding buildInputs = [ qtsvg qt5compat ]
+    export LD_LIBRARY_PATH="${qtdeclarative}/lib:$LD_LIBRARY_PATH"
+    export QT_ADDITIONAL_PACKAGES_PREFIX_PATH="${qtdeclarative.dev}"
   '';
 
   qmakeFlags = [ "--" "-system-ffmpeg" ]
