@@ -54,7 +54,7 @@ let
     , description
       # Check https://github.com/libretro/libretro-core-info for license information
     , license
-    , src ? null
+    , src ? (getCoreSrc core)
     , broken ? false
     , version ? "unstable-2021-12-06"
     , platforms ? retroarch.meta.platforms
@@ -63,15 +63,13 @@ let
     , normalizeCore ? true
     , ...
     }@args:
-    lib.makeOverridable stdenv.mkDerivation (
+    stdenv.mkDerivation (
       let
         d2u = if normalizeCore then (lib.replaceChars [ "-" ] [ "_" ]) else (x: x);
-        finalSrc = if src == null then getCoreSrc core else src;
       in
       (rec {
         pname = "libretro-${core}";
-        inherit version;
-        src = finalSrc;
+        inherit version src;
 
         buildInputs = [ zlib ] ++ args.extraBuildInputs or [ ];
         nativeBuildInputs = [ makeWrapper ] ++ args.extraNativeBuildInputs or [ ];
@@ -308,13 +306,6 @@ in
 
   citra = mkLibRetroCore {
     core = "citra";
-    # `nix-prefetch-github` doesn't support `deepClone`, necessary for citra
-    # https://github.com/seppeljordan/nix-prefetch-github/issues/41
-    src = fetchFromGitHub {
-      inherit (hashesFile.citra) owner repo rev fetchSubmodules;
-      deepClone = true;
-      sha256 = "sha256-bwnYkMvbtRF5bGZRYVtMWxnCu9P45qeX4+ntOj9eRds=";
-    };
     description = "Port of Citra to libretro";
     license = lib.licenses.gpl2Plus;
     extraNativeBuildInputs = [ cmake pkg-config ];
