@@ -4,6 +4,7 @@
 , makeWrapper
 , electron
 , xorg
+, pipewire
 }:
 
 stdenv.mkDerivation rec {
@@ -45,7 +46,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     makeWrapper ${electron}/bin/electron $out/bin/${pname} \
       --add-flags $out/share/${pname}/resources/app.asar \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc xorg.libXtst ]}"
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc xorg.libXtst pipewire ]}"
   '';
 
   meta = with lib; {

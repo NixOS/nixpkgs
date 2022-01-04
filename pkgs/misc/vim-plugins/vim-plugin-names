@@ -4,6 +4,7 @@ AckslD/nvim-neoclip.lua
 AckslD/nvim-whichkey-setup.lua
 ackyshake/Spacegray.vim
 ahmedkhalf/lsp-rooter.nvim
+ahmedkhalf/project.nvim
 airblade/vim-gitgutter
 airblade/vim-rooter
 ajmwagar/vim-deus
@@ -17,7 +18,7 @@ alvarosevilla95/luatab.nvim
 alx741/vim-hindent
 alx741/vim-stylishask
 amiorin/ctrlp-z
-andersevenrud/cmp-tmux@cmp
+andersevenrud/cmp-tmux
 andrep/vimacs
 andreshazard/vim-logreview
 AndrewRadev/sideways.vim

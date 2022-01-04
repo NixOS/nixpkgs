@@ -280,6 +280,30 @@ mkShell {
 }
 ```
 
+### Using an overlay
+
+If you need to use an overlay to change some attributes of a derivation, e.g. if you need a bugfix from a version that is not yet available in nixpkgs, you can override attributes such as `version` (and the corresponding `sha256`) and then use this overlay in your development environment:
+
+#### `shell.nix`
+
+```nix
+let
+  elixir_1_13_1_overlay = (self: super: {
+      elixir_1_13 = super.elixir_1_13.override {
+        version = "1.13.1";
+        sha256 = "0z0b1w2vvw4vsnb99779c2jgn9bgslg7b1pmd9vlbv02nza9qj5p";
+      };
+    });
+  pkgs = import <nixpkgs> { overlays = [ elixir_1_13_1_overlay ]; };
+in
+with pkgs;
+mkShell {
+  buildInputs = [
+    elixir_1_13
+  ];
+}
+```
+
 #### Elixir - Phoenix project {#elixir---phoenix-project}
 
 Here is an example `shell.nix`.

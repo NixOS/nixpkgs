@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchurl
+, fetchFromGitHub
 , cmake
 , capnproto
 , sqlite
@@ -25,9 +26,11 @@ let
 in stdenv.mkDerivation rec {
   pname = "laminar";
   version = "1.1";
-  src = fetchurl {
-    url = "https://github.com/ohwgiles/laminar/archive/${version}.tar.gz";
-    sha256 = "1lzfmfjygmbdr2n1q49kwwffw8frz5y6iczhdz5skwmzwg0chbsf";
+  src = fetchFromGitHub {
+    owner = "ohwgiles";
+    repo = "laminar";
+    rev = version;
+    sha256 = "sha256-9JiFO5Vi/NT/o7v/KXZw3/P5s5qQwmQXjrQq+uUXHQk=";
   };
   patches = [ ./patches/no-network.patch ];
   nativeBuildInputs = [ cmake pandoc ];

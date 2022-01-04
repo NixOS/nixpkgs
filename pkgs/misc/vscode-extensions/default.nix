@@ -388,8 +388,8 @@ let
         mktplcRef = {
           name = "vscode-eslint";
           publisher = "dbaeumer";
-          version = "2.1.14";
-          sha256 = "sha256-bVGmp871yu1Llr3uJ+CCosDsrxJtD4b1+CR+omMUfIQ=";
+          version = "2.2.2";
+          sha256 = "sha256-llalyQXl+k/ugZq+Ti9mApHRqAGu6QyoMP51GtZnRJ4=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -619,6 +619,15 @@ let
           publisher = "esbenp";
           version = "9.0.0";
           sha256 = "1nak1hg46wxkl0kb0zhc343kq2f4nd5q1fqscb29jybd4qdb8lgn";
+        };
+      };
+
+      ethansk.restore-terminals = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "restore-terminals";
+          publisher = "ethansk";
+          version = "1.1.6";
+          sha256 = "sha256-XCgxphXIJ/y85IR/qEQhGsbnqWFRWvbyIDchnVTUqMg=";
         };
       };
 
@@ -1266,6 +1275,18 @@ let
         };
       };
 
+      rioj7.commandOnAllFiles = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "commandOnAllFiles";
+          publisher = "rioj7";
+          version = "0.3.0";
+          sha256 = "sha256-tNFHrgFJ22YGQgkYw+0l4G6OtlUYVn9brJPLnsvSwRE=";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
       rubymaniac.vscode-paste-and-indent = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-paste-and-indent";
@@ -1718,6 +1739,18 @@ let
           publisher = "wix";
           version = "2.15.0";
           sha256 = "0d3b6654cdck1syn74vmmd1jmgkrw5v4c4cyrhdxbhggkip732bc";
+        };
+        meta = with lib; {
+          license = licenses.mit;
+        };
+      };
+
+      xadillax.viml = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "viml";
+          publisher = "xadillax";
+          version = "1.0.1";
+          sha256 = "sha256-mzf2PBSbvmgPjchyKmTaf3nASUi5/S9Djpoeh0y8gH0=";
         };
         meta = with lib; {
           license = licenses.mit;

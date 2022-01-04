@@ -61,10 +61,25 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://conduit.rs/">matrix-conduit</link>,
+          a simple, fast and reliable chat server powered by matrix.
+          Available as
+          <link xlink:href="option.html#opt-services.matrix-conduit.enable">services.matrix-conduit</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://www.elastic.co/guide/en/beats/filebeat/current/filebeat-overview.html">filebeat</link>,
           a lightweight shipper for forwarding and centralizing log
           data. Available as
           <link linkend="opt-services.filebeat.enable">services.filebeat</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/hifi/heisenbridge">heisenbridge</link>,
+          a bouncer-style Matrix IRC bridge. Available as
+          <link xlink:href="options.html#opt-services.heisenbridge.enable">services.heisenbridge</link>.
         </para>
       </listitem>
       <listitem>
@@ -288,7 +303,7 @@
       <listitem>
         <para>
           The option
-          <link linkend="opt-services.ssh.enableAskPassword">services.ssh.enableAskPassword</link>
+          <link linkend="opt-programs.ssh.enableAskPassword">programs.ssh.enableAskPassword</link>
           was added, decoupling the setting of
           <literal>SSH_ASKPASS</literal> from
           <literal>services.xserver.enable</literal>. This allows easy
