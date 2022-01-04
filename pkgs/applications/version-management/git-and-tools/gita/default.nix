@@ -29,7 +29,7 @@ buildPythonApplication rec {
   postUnpack = ''
     for case in "\n" ""; do
         substituteInPlace ${src.name}/tests/test_main.py \
-         --replace "'gita$case'" "'source$case'"
+         --replace "'gita$case'" "'${src.name}$case'"
     done
   '';
 
