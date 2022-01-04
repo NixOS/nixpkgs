@@ -1,0 +1,7 @@
+[submodule "vcpkg"]
+	path = vcpkg
+	url = https://github.com/microsoft/vcpkg.git
+[submodule "wfslib"]
+	path = wfslib
+	url = https://github.com/koolkdev/wfslib.git
+	branch = workflow-test

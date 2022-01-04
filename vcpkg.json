@@ -1,0 +1,12 @@
+{
+  "name": "wfs-tools",
+  "version-string": "1.0.0",
+  "dependencies": [
+    "boost-endian",
+    "boost-format",
+    "boost-filesystem",
+    "boost-iostreams",
+    "boost-program-options",
+    "cryptopp"
+  ]
+}

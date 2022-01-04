@@ -1,0 +1,28 @@
+name: Build
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        platform: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{matrix.platform}}
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: 'true'
+
+    - uses: lukka/get-cmake@latest
+
+    - name: Run vcpkg
+      uses: lukka/run-vcpkg@v10
+
+    - name: Run cmake
+      uses: lukka/run-cmake@v10
+      with:
+        configurePreset: 'default'
+        buildPreset: 'release'
+
+
