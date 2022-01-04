@@ -74,7 +74,7 @@ in
   consul = handleTest ./consul.nix {};
   containers-next = handleTest ./containers-next.nix {};
   containers-next-imperative = handleTest ./containers-next-imperative.nix {};
-  container-migration = handleTest ./container-migration.nix {};
+  containers-migration = handleTest ./containers-migration.nix {};
   containers-config-activation = handleTest ./containers-config-activation.nix {};
   containers-bridge = handleTest ./containers-bridge.nix {};
   containers-custom-pkgs.nix = handleTest ./containers-custom-pkgs.nix {};

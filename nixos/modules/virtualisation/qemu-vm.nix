@@ -671,6 +671,10 @@ in
         description = ''
           If enabled, changes written to <filename>/boot</filename> will be
           synced back to <filename>$TMPDIR/disk.img</filename>.
+
+          This is only needed if e.g. a VM test needs to change <filename>/boot</filename>,
+          e.g. to test <command>nixos-rebuild boot</command> and a subsequent
+          reboot.
         '';
       };
 

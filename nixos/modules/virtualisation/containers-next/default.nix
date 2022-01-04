@@ -199,7 +199,6 @@ let
         };
       in pkgs.runCommand "bindmounts.nspawn" { }
         ''
-          touch $out
           echo "[Files]" > $out
 
           cat ${info}/store-paths | while read line

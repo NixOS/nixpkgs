@@ -1,3 +1,5 @@
+# FIXME remove before merging!
+
 { nixpkgs }:
 let
   release = import ./nixos/release.nix {
@@ -9,7 +11,7 @@ in
 {
   container-tests = {
     general = release.tests.containers-next;
-    migration = release.tests.container-migration;
+    migration = release.tests.containers-migration;
     activation = release.tests.containers-config-activation;
     imperative = release.tests.containers-next-imperative;
   };
