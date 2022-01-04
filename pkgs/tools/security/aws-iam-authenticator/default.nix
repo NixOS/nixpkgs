@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "kubernetes-sigs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0ga3vf5gn7533iqnxn7kchb6xg5wvk92livlqzkhi5qvqhl1sbw0";
+    sha256 = "sha256-zHkuFSpD/4M2DheAgf8QJnG5rLDC/3o6d6ExhN4VX+w=";
   };
 
   # Upstream has inconsistent vendoring, see https://github.com/kubernetes-sigs/aws-iam-authenticator/issues/377
