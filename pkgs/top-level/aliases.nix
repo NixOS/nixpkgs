@@ -995,9 +995,10 @@ mapAliases ({
   spice_gtk = spice-gtk; # added 2018-02-25
   spice_protocol = spice-protocol; # added 2018-02-25
   spidermonkey_1_8_5 = throw "spidermonkey_1_8_5 has been removed, because it is based on Firefox 4.0 from 2011."; # added 2021-05-03
-  spidermonkey_38 = throw "spidermonkey_38 has been removed. Please use spidermonkey_78 instead."; # added 2021-03-21
-  spidermonkey_52 = throw "spidermonkey_52 has been removed. Please use spidermonkey_78 instead."; # added 2019-10-16
-  spidermonkey_60 = throw "spidermonkey_60 has been removed. Please use spidermonkey_78 instead."; # added 2021-03-21
+  spidermonkey_38 = throw "spidermonkey_38 has been removed. Please use spidermonkey_91 instead."; # added 2021-03-21
+  spidermonkey_52 = throw "spidermonkey_52 has been removed. Please use spidermonkey_91 instead."; # added 2019-10-16
+  spidermonkey_60 = throw "spidermonkey_60 has been removed. Please use spidermonkey_91 instead."; # added 2021-03-21
+  spidermonkey_68 = throw "spidermonkey_68 has been removed. Please use spidermonkey_91 instead."; # added 2022-01-04
   spring-boot = spring-boot-cli; # added 2020-04-24
   sqlite3_analyzer = sqlite-analyzer; # added 2018-05-22
   sqliteInteractive = sqlite-interactive;  # added 2014-12-06
@@ -1150,7 +1151,7 @@ mapAliases ({
 
   gnome_user_docs = gnome-user-docs; # added 2019-11-20
   # spidermonkey is not ABI upwards-ompatible, so only allow this for nix-shell
-  spidermonkey = spidermonkey_78; # added 2020-10-09
+  spidermonkey = spidermonkey_91; # added 2020-10-09
   libtorrentRasterbar = libtorrent-rasterbar; # added 2020-12-20
   libtorrentRasterbar-2_0_x = libtorrent-rasterbar-2_0_x; # added 2020-12-20
   libtorrentRasterbar-1_2_x = libtorrent-rasterbar-1_2_x; # added 2020-12-20
