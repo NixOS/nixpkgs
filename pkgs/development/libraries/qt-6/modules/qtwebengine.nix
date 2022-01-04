@@ -1,5 +1,3 @@
-# TODO https://github.com/qt/qtwebengine/releases/tag/v6.2.2
-
 { qtModule
 , qtdeclarative, qtwebchannel
 
@@ -38,8 +36,6 @@ qtModule {
   ] ++ lib.optional stdenv.isDarwin xcbuild;
   doCheck = true;
   outputs = [ "bin" "dev" "out" ];
-
-  cmakeFlags = [ "--trace-expand" ]; # debug
 
   enableParallelBuilding = true;
 
