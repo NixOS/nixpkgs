@@ -21,5 +21,8 @@ buildGoModule rec {
     homepage = "https://github.com/drsigned/corsmisc";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
+
+    # https://github.com/drsigned/corsmisc/ no longer exists
+    broken = true;
   };
 }
