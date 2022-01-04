@@ -9894,7 +9894,7 @@ with pkgs;
 
   sudo = callPackage ../tools/security/sudo { };
 
-  sudo-nspawn = callPackage ../tools/security/sudo/nspawn.nix { };
+  sudo-nspawn = sudo.override { withStaticSudoers = true; };
 
   suidChroot = callPackage ../tools/system/suid-chroot { };
 
