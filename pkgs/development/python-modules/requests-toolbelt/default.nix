@@ -6,6 +6,7 @@
 , mock
 , pytest
 , pyopenssl
+, fetchpatch
 }:
 
 buildPythonPackage rec {
@@ -16,6 +17,15 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "968089d4584ad4ad7c171454f0a5c6dac23971e9472521ea3b6d49d610aa6fc0";
   };
+
+  patches = [
+    # https://github.com/requests/toolbelt/pull/246
+    (fetchpatch {
+      name = "fix-collections-abc-deprecation-warning.patch";
+      url = "https://github.com/requests/toolbelt/commit/7188b06330e5260be20bce8cbcf0d5ae44e34eaf.patch";
+      sha256 = "sha256-pRkG77sNglG/KsRX6JaPgk4QxmmSBXypFRp/vNA3ot4=";
+    })
+  ];
 
   checkInputs = [ pyopenssl betamax mock pytest ];
   propagatedBuildInputs = [ requests ];
