@@ -20886,6 +20886,8 @@ with pkgs;
     erlang = erlangR22;
   };
 
+  dcnnt = python3Packages.callPackage ../servers/dcnnt { };
+
   dendrite = callPackage ../servers/dendrite { };
 
   dex-oidc = callPackage ../servers/dex { };
