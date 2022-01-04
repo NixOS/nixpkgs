@@ -33,6 +33,8 @@ stdenv.mkDerivation (args // {
   nativeImageBuildArgs = nativeImageBuildArgs ++ extraNativeImageBuildArgs ++ [ graalvmXmx ];
 
   buildPhase = args.buildPhase or ''
+    export LC_ALL="en_US.UTF-8"
+
     runHook preBuild
 
     native-image ''${nativeImageBuildArgs[@]}
