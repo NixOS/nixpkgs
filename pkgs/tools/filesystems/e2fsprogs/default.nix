@@ -67,6 +67,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://e2fsprogs.sourceforge.net/";
+    changelog = "http://e2fsprogs.sourceforge.net/e2fsprogs-release.html#${version}";
     description = "Tools for creating and checking ext2/ext3/ext4 filesystems";
     license = with licenses; [
       gpl2Plus
