@@ -2032,19 +2032,6 @@ self: super: {
     assert pkgs.lib.versionOlder self.hspec.version "2.8.2";
     doJailbreak super.graphql;
 
-  # gtk2hsC2hs fails to build on certain architectures (aarch64, ppc64(le), ...)
-  # with a linker error. As a workaround, we build gtk2hs-buildtools with -O0
-  # as suggested in the GHC thread below. An alternative to this could be to use
-  # -fllvm. I haven't been able to get this to work without linker errors, though.
-  # See also:
-  # * https://gitlab.haskell.org/ghc/ghc/-/issues/17203
-  # * https://github.com/gtk2hs/gtk2hs/issues/305
-  # * https://github.com/gtk2hs/gtk2hs/issues/279
-  gtk2hs-buildtools = appendConfigureFlags
-    (pkgs.lib.optionals (with pkgs.stdenv.hostPlatform; isAarch64 || isPowerPC) [
-      "--ghc-option=-O0"
-    ]) super.gtk2hs-buildtools;
-
   # https://github.com/ajscholl/basic-cpuid/pull/1
   basic-cpuid = appendPatch (pkgs.fetchpatch {
     url = "https://github.com/ajscholl/basic-cpuid/commit/2f2bd7a7b53103fb0cf26883f094db9d7659887c.patch";
