@@ -1,47 +1,13 @@
+{ lib ? import ../../lib, ... }:
 let
-  # The warning is in a top-level let binding so it is only printed once.
-  experimentalWarning = warn "lib.nixos.evalModules is experimental and subject to change. See nixos/lib/default.nix" null;
-  inherit (nonExtendedLib) warn;
-  nonExtendedLib = import ../../lib;
+  eval-config-minimal = import ./eval-config-minimal.nix { inherit lib; };
 in
-{ lib ? nonExtendedLib, ... }:
-let
-
-  /*
-    Invoke NixOS. Unlike traditional NixOS, this does not include all modules.
-    Any such modules have to be explicitly added via the `modules` parameter,
-    or imported using `imports` in a module.
-
-    A minimal module list improves NixOS evaluation performance and allows
-    modules to be independently usable, supporting new use cases.
-
-    Parameters:
-
-      modules:        A list of modules that constitute the configuration.
-
-      specialArgs:    An attribute set of module arguments. Unlike
-                      `config._module.args`, these are available for use in
-                      `imports`.
-                      `config._module.args` should be preferred when possible.
-
-    Return:
-
-      An attribute set containing `config.system.build.toplevel` among other
-      attributes. See `lib.evalModules` in the Nixpkgs library.
-
-   */
-  evalModules = {
-    prefix ? [],
-    modules ? [],
-    specialArgs ? {},
-  }: lib.evalModules {
-    inherit prefix modules;
-    specialArgs = {
-      modulesPath = builtins.toString ../modules;
-    } // specialArgs;
-  };
-
-in
+/*
+  This attribute set appears as lib.nixos in the flake, or can be imported
+  using a binding like `nixosLib = import (nixpkgs + "/nixos/lib") { }`.
+*/
 {
-  evalModules = builtins.seq experimentalWarning evalModules;
+  inherit (eval-config-minimal)
+    evalModules
+    ;
 }
