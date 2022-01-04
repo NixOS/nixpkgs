@@ -33,6 +33,8 @@ let pkgs_ = pkgs;
 in
 
 let
+  evalModulesMinimal = (import ./eval-config-minimal.nix { inherit lib; bypassEvalModulesWarning = true; }).evalModules;
+
   pkgsModule = rec {
     _file = ./eval-config.nix;
     key = _file;
@@ -70,11 +72,9 @@ let
     };
   allUserModules = modules ++ legacyModules;
 
-  noUserModules = lib.evalModules ({
-    inherit prefix;
+  noUserModules = evalModulesMinimal ({
+    inherit prefix specialArgs;
     modules = baseModules ++ extraModules ++ [ pkgsModule modulesModule ];
-    specialArgs =
-      { modulesPath = builtins.toString ../modules; } // specialArgs;
   });
 
   # Extra arguments that are useful for constructing a similar configuration.

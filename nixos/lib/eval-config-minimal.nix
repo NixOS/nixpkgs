@@ -4,7 +4,7 @@ let
   inherit (nonExtendedLib) warn;
   nonExtendedLib = import ../../lib;
 in
-{ lib ? nonExtendedLib, ... }:
+{ lib ? nonExtendedLib, bypassEvalModulesWarning ? false, ... }:
 let
 
   /*
@@ -43,5 +43,5 @@ let
 
 in
 {
-  evalModules = builtins.seq experimentalWarning evalModules;
+  evalModules = builtins.seq (if bypassEvalModulesWarning then null else experimentalWarning) evalModules;
 }
