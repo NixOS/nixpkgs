@@ -2,7 +2,7 @@
 
 with lib;
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "b2sum";
   version = "unstable-2018-06-11";
 
