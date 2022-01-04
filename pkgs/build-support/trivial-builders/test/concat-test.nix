@@ -1,4 +1,4 @@
-{ callPackage, lib, pkgs, runCommand, concatText, writeText, hello }:
+{ callPackage, lib, pkgs, runCommand, concatText, writeText, hello, emptyFile }:
 let
   stri = writeText "pathToTest";
   txt1 = stri "abc";
@@ -7,5 +7,6 @@ let
 in
 runCommand "test-concatPaths" { } ''
   diff -U3 <(cat ${txt1} ${txt2}) ${res}
+  diff -U3 ${concatText "void" []} ${emptyFile}
   touch $out
 ''
