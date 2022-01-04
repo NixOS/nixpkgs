@@ -32,10 +32,10 @@ jobs:
 
             Created by [update-terraform-providers](https://github.com/NixOS/nixpkgs/blob/master/.github/workflows/update-terraform-providers.yml) action.
 
-            @ofborg build terraform-full
+            Check that all providers build with `@ofborg build terraform-full`
           branch: terraform-providers-update
           delete-branch: false
-          draft: true
+          labels: "2.status: work-in-progress"
           title: ${{ steps.setup.outputs.title }}
           token: ${{ secrets.GITHUB_TOKEN }}
       - name: comment on failure
