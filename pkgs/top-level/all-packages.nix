@@ -27890,6 +27890,8 @@ with pkgs;
 
   picoloop = callPackage ../applications/audio/picoloop { };
 
+  picosnitch = callPackage ../tools/networking/picosnitch { };
+
   pidgin = callPackage ../applications/networking/instant-messengers/pidgin {
     withOpenssl = config.pidgin.openssl or true;
     withGnutls = config.pidgin.gnutls or false;
