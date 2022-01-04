@@ -149,7 +149,7 @@ if [[ -z ${vendorSha256} ]]; then
     vendorSha256=null
   elif [[ -n ${old_vendor_sha256} || ${vendor} == 1 ]]; then
     echo "=== Calculating vendorSha256 ==="
-    vendorSha256=$(nix-prefetch "{ sha256 }: (import ../../../../.. {}).terraform-providers.${provider_name}.go-modules.overrideAttrs (_: { vendorSha256 = sha256; })")
+    vendorSha256=$(nix-prefetch -I nixpkgs=../../../../.. "{ sha256 }: (import ../../../../.. {}).terraform-providers.${provider_name}.go-modules.overrideAttrs (_: { vendorSha256 = sha256; })")
     # Deal with nix unstable
     if [[ ${vendorSha256} == sha256-* ]]; then
       vendorSha256=$(nix --extra-experimental-features nix-command hash to-base32 "${vendorSha256}")
