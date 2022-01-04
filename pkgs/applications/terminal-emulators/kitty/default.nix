@@ -72,6 +72,10 @@ buildPythonApplication rec {
   # Causes build failure due to warning
   hardeningDisable = lib.optional stdenv.cc.isClang "strictoverflow";
 
+  preBuild = lib.optionalString (lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11" && stdenv.isDarwin) ''
+    MACOSX_DEPLOYMENT_TARGET=10.16
+  '';
+
   dontConfigure = true;
 
   buildPhase = ''
