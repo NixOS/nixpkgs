@@ -54,6 +54,8 @@
 , libpulseaudio
 , zeroconfSupport ? true
 , avahi
+, rocSupport ? true
+, roc-toolkit
 }:
 
 let
@@ -134,7 +136,8 @@ let
     ++ lib.optional ffmpegSupport ffmpeg
     ++ lib.optionals bluezSupport [ bluez libfreeaptx ldacbt sbc fdk_aac ]
     ++ lib.optional pulseTunnelSupport libpulseaudio
-    ++ lib.optional zeroconfSupport avahi;
+    ++ lib.optional zeroconfSupport avahi
+    ++ lib.optional rocSupport roc-toolkit;
 
     # Valgrind binary is required for running one optional test.
     checkInputs = lib.optional withValgrind valgrind;
@@ -147,7 +150,7 @@ let
       "-Dpipewire_pulse_prefix=${placeholder "pulse"}"
       "-Dlibjack-path=${placeholder "jack"}/lib"
       "-Dlibcamera=${mesonEnable libcameraSupport}"
-      "-Droc=disabled"
+      "-Droc=${mesonEnable rocSupport}"
       "-Dlibpulse=${mesonEnable pulseTunnelSupport}"
       "-Davahi=${mesonEnable zeroconfSupport}"
       "-Dgstreamer=${mesonEnable gstreamerSupport}"

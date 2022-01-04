@@ -8370,6 +8370,8 @@ with pkgs;
     opendylan-bootstrap = opendylan_bin;
   };
 
+  openfec = callPackage ../development/libraries/openfec { };
+
   ophis = python3Packages.callPackage ../development/compilers/ophis { };
 
   opendylan_bin = callPackage ../development/compilers/opendylan/bin.nix { };
@@ -9306,6 +9308,8 @@ with pkgs;
   rlwrap = callPackage ../tools/misc/rlwrap { };
 
   rmtrash = callPackage ../tools/misc/rmtrash { };
+
+  roc-toolkit = callPackage ../development/libraries/audio/roc-toolkit { };
 
   rockbox_utility = libsForQt5.callPackage ../tools/misc/rockbox-utility { };
 
