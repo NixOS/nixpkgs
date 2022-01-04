@@ -22,15 +22,15 @@ buildDotnetModule rec {
   version = "0.5.3.3";
 
   src = fetchFromGitHub {
-    owner = "InfinityGhost";
+    owner = "OpenTabletDriver";
     repo = "OpenTabletDriver";
     rev = "v${version}";
-    sha256 = "k4SoOMKAwHeYSQ80M8Af1DiiDSZIi3gS7lGr2ZrXrEI=";
+    sha256 = "sha256-k4SoOMKAwHeYSQ80M8Af1DiiDSZIi3gS7lGr2ZrXrEI=";
   };
 
   debPkg = fetchurl {
-    url = "https://github.com/InfinityGhost/OpenTabletDriver/releases/download/v${version}/OpenTabletDriver.deb";
-    sha256 = "0v03qiiz28k1yzgxf5qc1mdg2n7kjx6h8vpx9dxz342wwbgqg6ic";
+    url = "https://github.com/OpenTabletDriver/OpenTabletDriver/releases/download/v${version}/OpenTabletDriver.deb";
+    sha256 = "sha256-LJqH3+JckPF7S/1uBE2X81jxWg0MF9ff92Ei8WPEA2w=";
   };
 
   dotnet-sdk = dotnetCorePackages.sdk_5_0;
@@ -103,9 +103,10 @@ buildDotnetModule rec {
 
   meta = with lib; {
     description = "Open source, cross-platform, user-mode tablet driver";
-    homepage = "https://github.com/InfinityGhost/OpenTabletDriver";
+    homepage = "https://github.com/OpenTabletDriver/OpenTabletDriver";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ thiagokokada ];
     platforms = platforms.linux;
+    mainProgram = "otd";
   };
 }
