@@ -1,10 +1,12 @@
 { lib, stdenv, fetchurl, fetchpatch, buildPackages, pcre, pkg-config, libsepol
 , enablePython ? !stdenv.hostPlatform.isStatic, swig ? null, python3 ? null
-, fts
+, fts, musl-fts
 }:
 
 assert enablePython -> swig != null && python3 != null;
-
+let
+  myFts = if stdenv.hostPlatform.isStatic then musl-fts else fts;
+in
 with lib;
 
 stdenv.mkDerivation rec {
@@ -41,13 +43,14 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ pkg-config python3 ] ++ optionals enablePython [ swig ];
-  buildInputs = [ libsepol pcre fts ] ++ optionals enablePython [ python3 ];
+  buildInputs = [ libsepol pcre myFts ] ++ optionals enablePython [ python3 ];
 
   # drop fortify here since package uses it by default, leading to compile error:
   # command-line>:0:0: error: "_FORTIFY_SOURCE" redefined [-Werror]
   hardeningDisable = [ "fortify" ];
 
   NIX_CFLAGS_COMPILE = "-Wno-error";
+  NIX_CFLAGS_LINK = lib.optionalString stdenv.hostPlatform.isStatic "-lfts";
 
   makeFlags = [
     "PREFIX=$(out)"
