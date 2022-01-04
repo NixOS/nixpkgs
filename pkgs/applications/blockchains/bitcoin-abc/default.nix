@@ -29,7 +29,7 @@ mkDerivation rec {
     owner = "bitcoin-ABC";
     repo = "bitcoin-abc";
     rev = "v${version}";
-    sha256 = "1x8xcdi1vcskggk9bqkwr3ah4vi9b7sj2h8hf7spac6dvz8lmzav";
+    sha256 = "sha256-z3Mjkcd/KaA5+A89pWc3WrnrMVj0JWXnlJdzR5pCinY=";
   };
 
   patches = [ ./fix-bitcoin-qt-build.patch ];
