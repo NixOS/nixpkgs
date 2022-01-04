@@ -65,7 +65,7 @@ let
         hostAddresses = mkOption {
           default = [];
           type = types.listOf types.str;
-          example = literalExample (
+          example = literalExpression (
             if v == 4 then ''[ "10.151.1.1/24" ]''
             else ''[ "fd23::/64" ]''
           );
@@ -77,7 +77,7 @@ let
         containerPool = mkOption {
           default = [];
           type = types.listOf types.str;
-          example = literalExample (
+          example = literalExpression (
             if v == 4 then ''[ "10.151.1.2/24" ]''
             else ''[ "fd23::2/64" ]''
           );
@@ -358,7 +358,7 @@ in {
 
           forwardPorts = mkOption {
             default = [];
-            example = literalExample
+            example = literalExpression
               ''
                 [
                   { containerPort = 80; hostPort = 8080; protocol = "tcp"; }
