@@ -7544,6 +7544,8 @@ with pkgs;
 
   lzip = callPackage ../tools/compression/lzip { };
 
+  lziprecover = callPackage ../tools/compression/lziprecover { };
+
   luxcorerender = callPackage ../tools/graphics/luxcorerender {
     openimagedenoise = openimagedenoise_1_2_x;
   };
