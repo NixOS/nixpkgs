@@ -1,4 +1,4 @@
-{ lib, fetchurl, gettext, wrapGAppsHook
+{ lib, fetchurl, fetchFromGitLab, gettext, wrapGAppsHook
 
 # Native dependencies
 , python3, gtk3, gobject-introspection, gnome
@@ -40,6 +40,21 @@ python3.pkgs.buildPythonApplication rec {
   nativeBuildInputs = [
     gettext wrapGAppsHook
   ];
+
+  # Workaround for https://dev.gajim.org/gajim/gajim/-/issues/10719.
+  # We don't use plugin release URL because it's updated in place.
+  plugins = fetchFromGitLab {
+    domain = "dev.gajim.org";
+    owner = "gajim";
+    repo = "gajim-plugins";
+    rev = "fea522e4360cec6ceacbf1df92644ab3343d4b99";
+    sha256 = "sha256-CmwEiLsdldoOfgHfWL/5hf/dp0HEDNAIlc5N0Np20KE=";
+  };
+
+  postPatch = ''
+    mkdir -p gajim/data/plugins
+    cp -r $plugins/plugin_installer gajim/data/plugins
+  '';
 
   dontWrapGApps = true;
 
