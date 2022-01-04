@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://www.nongnu.org/lzip/lzip.html";
     description = "A lossless data compressor based on the LZMA algorithm";
-    license = lib.licenses.gpl3Plus;
+    license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
   };
 }
