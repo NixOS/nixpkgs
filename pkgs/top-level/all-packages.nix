@@ -27962,9 +27962,7 @@ with pkgs;
 
   pinpoint = callPackage ../applications/office/pinpoint { };
 
-  pinta = callPackage ../applications/graphics/pinta {
-    gtksharp = gtk-sharp-2_0;
-  };
+  pinta = callPackage ../applications/graphics/pinta { };
 
   pistol = callPackage ../tools/misc/pistol { };
 
