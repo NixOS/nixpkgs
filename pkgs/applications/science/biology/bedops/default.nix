@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "bedops";
     repo = "bedops";
     rev = "v${version}";
-    sha256 = "sha256-rJVl3KbzGblyQZ7FtJXeEv/wjQJmzYGNjzhvkoMoBWY=";
+    sha256 = "sha256-Ffd2+R4pLy6bRUZc+E7Qvm+vpo1mS99yoUm/bfkcNaA=";
   };
 
   buildInputs = [ zlib bzip2 jansson ];
