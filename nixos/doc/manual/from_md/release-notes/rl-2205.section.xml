@@ -2347,6 +2347,15 @@
           generating host-global NNCP configuration.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The option <literal>services.snapserver.openFirewall</literal>
+          will no longer default to <literal>true</literal> starting
+          with NixOS 22.11. Enable it explicitly if you need to control
+          Snapserver remotely or connect streamig clients from other
+          hosts.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>
