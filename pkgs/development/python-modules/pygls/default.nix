@@ -36,6 +36,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  postPatch = ''
+    # https://github.com/openlawlibrary/pygls/pull/223
+    substituteInPlace setup.cfg \
+      --replace "pydantic>=1.7,<1.9" "pydantic>=1.7,<1.10"
+  '';
+
   # Fixes hanging tests on Darwin
   __darwinAllowLocalNetworking = true;
 
