@@ -12,11 +12,11 @@ assert unicodeSupport -> ncurses.unicode && ncurses != null;
 
 stdenv.mkDerivation rec {
   pname = "dialog";
-  version = "1.3-20210621";
+  version = "1.3-20211214";
 
   src = fetchurl {
     url = "ftp://ftp.invisible-island.net/dialog/${pname}-${version}.tgz";
-    hash = "sha256-w68izPzZuso4QGIQjdk1ToaZCSnuJwwjnu9pUYxdp8g=";
+    hash = "sha256-zCll4FxqjDcHCza1ZBTqpWDfjYfyzqIXWeKJUOmyeks=";
   };
 
   buildInputs = [
@@ -39,6 +39,6 @@ stdenv.mkDerivation rec {
     description = "Display dialog boxes from shell";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ AndersonTorres spacefrogg ];
-    platforms = ncurses.meta.platforms;
+    inherit (ncurses.meta) platforms;
   };
 }
