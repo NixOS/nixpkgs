@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A resource monitor; python port of bashtop";
     homepage = src.meta.homepage;
-    license = licenses.apsl20;
+    license = licenses.asl20;
     maintainers = with maintainers; [ aw ];
     platforms = with platforms; linux ++ freebsd ++ darwin;
 
