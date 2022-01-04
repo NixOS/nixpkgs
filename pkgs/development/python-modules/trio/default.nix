@@ -1,4 +1,5 @@
 { lib, buildPythonPackage, fetchPypi, pythonOlder
+, pythonAtLeast
 , attrs
 , sortedcontainers
 , async_generator
@@ -35,6 +36,13 @@ buildPythonPackage rec {
     "static_tool_sees_all_symbols"
     # tests pytest more than python
     "fallback_when_no_hook_claims_it"
+  ];
+
+  disabledTestPaths = lib.optionals (pythonAtLeast "3.10") [
+    # using deprecated pyopenssl features
+    # https://github.com/python-trio/trio/issues/2000
+    "trio/tests/test_ssl.py"
+    "trio/tests/test_highlevel_ssl_helpers.py"
   ];
 
   propagatedBuildInputs = [
