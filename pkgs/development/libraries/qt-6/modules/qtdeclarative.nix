@@ -43,7 +43,7 @@ qtModule {
   let
     # workaround for splitBuildInstall
     pname = "qtdeclarative";
-    version = "6.2.1";
+    version = "6.2.2";
     self = { inherit qtbase; };
     args = { postFixup = ""; };
   in
@@ -93,7 +93,12 @@ qtModule {
     s+="s/\\\''${_IMPORT_PREFIX}\/(\.\/)?libexec/\\\''${_''${moduleNAME}_NIX_OUT}\/libexec/g;"
     s+="s/\\\''${_IMPORT_PREFIX}\/(\.\/)?lib/\\\''${_''${moduleNAME}_NIX_OUT}\/lib/g;" # must come after libexec
     s+="s/\\\''${_IMPORT_PREFIX}\/(\.\/)?plugins/\\\''${_''${moduleNAME}_NIX_BIN}\/lib\/qt-${version}\/plugins/g;"
-    s+="s/\\\''${_IMPORT_PREFIX}\/(\.\/)?bin/\\\''${_''${moduleNAME}_NIX_DEV}\/bin/g;" # qmake ...
+
+    # FIXME bin should be in NIX_DEV output
+    # workaround for cycle error
+    #s+="s/\\\''${_IMPORT_PREFIX}\/(\.\/)?bin/\\\''${_''${moduleNAME}_NIX_DEV}\/bin/g;" # qmake, qmldom ...
+    s+="s/\\\''${_IMPORT_PREFIX}\/(\.\/)?bin/\\\''${_''${moduleNAME}_NIX_OUT}\/bin/g;" # qmake, qmldom ...
+
     s+="s/\\\''${_IMPORT_PREFIX}\/(\.\/)?mkspecs/\\\''${_''${moduleNAME}_NIX_DEV}\/mkspecs/g;"
     s+="s/\\\''${_IMPORT_PREFIX}\/(\.\/)?qml/\\\''${_''${moduleNAME}_NIX_OUT}\/lib\/qt-${version}\/lib\/qml/g;"
     s+="s/set\(_IMPORT_PREFIX\)"
