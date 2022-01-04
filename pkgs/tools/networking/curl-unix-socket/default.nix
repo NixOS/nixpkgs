@@ -8,7 +8,7 @@ buildGoPackage rec {
     owner = "Soulou";
     repo = "curl-unix-socket";
     rev = "a7da90b01ed43e8c0d606f760c9da82f8e3ed307";
-    sha256 = "1ynrrav90y3dhk8jq2fxm3jswj5nvrffwslgykj429hk6n0czb3d";
+    sha256 = "sha256-m4QfC37JoiVHUjlJxjV6Dpqtt14dJDLA5I72NhQpBFw=";
   };
 
   goPackagePath = "github.com/Soulou/curl-unix-socket";
