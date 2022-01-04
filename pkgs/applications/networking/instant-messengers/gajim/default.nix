@@ -59,7 +59,8 @@ python3.pkgs.buildPythonApplication rec {
   checkPhase = ''
     xvfb-run dbus-run-session \
       --config-file=${dbus.daemon}/share/dbus-1/session.conf \
-      ${python3.interpreter} setup.py test
+      ${python3.interpreter} -m unittest discover -s test/unit -v
+    ${python3.interpreter} -m unittest discover -s test/no_gui -v
   '';
 
   # necessary for wrapGAppsHook
