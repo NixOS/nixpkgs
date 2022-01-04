@@ -26,8 +26,8 @@ stdenv.mkDerivation {
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
-    owner = "ZanderBrown";
-    repo = "kgx";
+    owner = "GNOME";
+    repo = "console";
     rev = "105adb6a8d09418a3ce622442aef6ae623dee787";
     sha256 = "0m34y0nbcfkyicb40iv0iqaq6f9r3f66w43lr803j3351nxqvcz2";
   };
@@ -68,7 +68,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Simple user-friendly terminal emulator for the GNOME desktop";
-    homepage = "https://gitlab.gnome.org/ZanderBrown/kgx";
+    homepage = "https://gitlab.gnome.org/GNOME/console";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ zhaofengli ];
     platforms = platforms.linux;
