@@ -35,14 +35,15 @@
 
 buildPythonPackage rec {
   pname = "python-lsp-server";
-  version = "1.3.2";
-  disabled = pythonOlder "3.6";
+  version = "1.3.3";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "python-lsp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1whivnhz60mdqvq8m00rf7ghhy8a4k5b4kdsj0h90hbrsl1610p6";
+    sha256 = "sha256-F8f9NAjPWkm01D/KwFH0oA6nQ3EF4ZVCCckZTL4A35Y=";
   };
 
   postPatch = ''
@@ -96,7 +97,9 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d);
   '';
 
-  pythonImportsCheck = [ "pylsp" ];
+  pythonImportsCheck = [
+    "pylsp"
+  ];
 
   meta = with lib; {
     description = "Python implementation of the Language Server Protocol";

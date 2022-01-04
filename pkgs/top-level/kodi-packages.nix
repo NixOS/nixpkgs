@@ -90,6 +90,8 @@ let self = rec {
 
   netflix = callPackage ../applications/video/kodi/addons/netflix { };
 
+  orftvthek = callPackage ../applications/video/kodi/addons/orftvthek { };
+
   svtplay = callPackage ../applications/video/kodi/addons/svtplay { };
 
   steam-controller = callPackage ../applications/video/kodi/addons/steam-controller { };
@@ -126,6 +128,8 @@ let self = rec {
 
   defusedxml = callPackage ../applications/video/kodi/addons/defusedxml { };
 
+  future = callPackage ../applications/video/kodi/addons/future { };
+
   idna = callPackage ../applications/video/kodi/addons/idna { };
 
   inputstream-adaptive = callPackage ../applications/video/kodi/addons/inputstream-adaptive { };
@@ -147,6 +151,8 @@ let self = rec {
   routing = callPackage ../applications/video/kodi/addons/routing { };
 
   signals = callPackage ../applications/video/kodi/addons/signals { };
+
+  simplejson = callPackage ../applications/video/kodi/addons/simplejson { };
 
   six = callPackage ../applications/video/kodi/addons/six { };
 

@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "MathJax resources as a Jupyter Server Extension";
-    homepage = "http://jupyter.org";
+    homepage = "https://jupyter.org";
     license = licenses.bsd3;
     maintainers = with maintainers; [ jonringer ];
   };

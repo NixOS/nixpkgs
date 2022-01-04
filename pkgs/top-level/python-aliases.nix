@@ -106,6 +106,7 @@ mapAliases ({
   tvnamer = throw "tvnamer was moved to pkgs.tvnamer"; # added 2021-07-05
   WazeRouteCalculator = wazeroutecalculator; # added 2021-09-29
   websocket_client = websocket-client; # added 2021-06-15
+  xenomapper = throw "xenomapper was moved to pkgs.xenomapper"; # added 2021-12-31
   zc-buildout221 = zc-buildout; # added 2021-07-21
   zc_buildout_nix = throw "zc_buildout_nix was pinned to a version no longer compatible with other modules";
 })

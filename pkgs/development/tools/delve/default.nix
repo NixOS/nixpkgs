@@ -30,7 +30,7 @@ buildGoPackage rec {
 
   meta = with lib; {
     description = "debugger for the Go programming language";
-    homepage = "https://github.com/derekparker/delve";
+    homepage = "https://github.com/go-delve/delve";
     maintainers = with maintainers; [ SuperSandro2000 vdemeester ];
     license = licenses.mit;
     platforms = [ "x86_64-linux" ] ++ platforms.darwin;

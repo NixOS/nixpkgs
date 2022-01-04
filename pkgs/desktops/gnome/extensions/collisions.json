@@ -101,6 +101,10 @@
       "workspace-indicator@gnome-shell-extensions.gcampax.github.com",
       "horizontal-workspace-indicator@tty2.io"
     ],
+    "lock-keys": [
+      "lockkeys@vaina.lt",
+      "lockkeys@fawtytoo"
+    ],
     "disable-unredirect-fullscreen-windows": [
       "unredirect@vaina.lt",
       "unredirect@aunetx"

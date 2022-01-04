@@ -43,5 +43,7 @@ rustPlatform.buildRustPackage rec {
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ ];
     platforms = platforms.unix;
+    # https://hydra.nixos.org/build/162650896/nixlog/1
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

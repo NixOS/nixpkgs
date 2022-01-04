@@ -260,7 +260,9 @@ in
   mariadb-galera-rsync = handleTest ./mysql/mariadb-galera-rsync.nix {};
   matomo = handleTest ./matomo.nix {};
   matrix-appservice-irc = handleTest ./matrix-appservice-irc.nix {};
+  matrix-conduit = handleTest ./matrix-conduit.nix {};
   matrix-synapse = handleTest ./matrix-synapse.nix {};
+  mattermost = handleTest ./mattermost.nix {};
   mediawiki = handleTest ./mediawiki.nix {};
   meilisearch = handleTest ./meilisearch.nix {};
   memcached = handleTest ./memcached.nix {};
@@ -273,13 +275,19 @@ in
   misc = handleTest ./misc.nix {};
   mjolnir = handleTest ./matrix/mjolnir.nix {};
   mod_perl = handleTest ./mod_perl.nix {};
-  moinmoin = handleTest ./moinmoin.nix {};
   mongodb = handleTest ./mongodb.nix {};
   moodle = handleTest ./moodle.nix {};
   morty = handleTest ./morty.nix {};
   mosquitto = handleTest ./mosquitto.nix {};
   mpd = handleTest ./mpd.nix {};
   mpv = handleTest ./mpv.nix {};
+  mtp = let
+    olderQemu = (import (fetchTarball {
+      url = "https://github.com/nixos/nixpkgs/archive/e1fc1a80a071c90ab65fb6eafae5520579163783.tar.gz";
+      sha256 = "19a0qrx31lp2r8cgk9hv4p6j6six6l82qisxr68y7wb7drw7dhkz";
+    }) { inherit system; }).qemu_test;
+    myPkgs = import ../.. { inherit system; overlays = [ (self: super: { qemu_test = olderQemu; }) ]; };
+  in handleTest ./mtp.nix { pkgs = myPkgs; };
   mumble = handleTest ./mumble.nix {};
   musescore = handleTest ./musescore.nix {};
   munin = handleTest ./munin.nix {};
@@ -476,7 +484,6 @@ in
   tinc = handleTest ./tinc {};
   tinydns = handleTest ./tinydns.nix {};
   tor = handleTest ./tor.nix {};
-  trac = handleTest ./trac.nix {};
   # traefik test relies on docker-containers
   traefik = handleTestOn ["x86_64-linux"] ./traefik.nix {};
   trafficserver = handleTest ./trafficserver.nix {};
