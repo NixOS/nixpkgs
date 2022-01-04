@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ python3 python3.pkgs.wrapPython ];
 
   postPatch = ''
-    sed -i -e '1,2d' ./nixos-nspawn.py
-    sed -i -e '1s;^;#!${python3}/bin/python3;' ./nixos-nspawn.py
+    # remove nix-shell shebang
+    sed -i -e '1,3d' ./nixos-nspawn.py
 
     substituteInPlace ./nixos-nspawn.py \
       --replace "@eval@" "${./eval-container.nix}"
@@ -21,13 +21,6 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   passthru.tests = { inherit (nixosTests) containers-next-imperative; };
-
-  doCheck = true;
-  checkInputs = [ python3.pkgs.flake8 ];
-  checkPhase = ''
-    flake8 ./nixos-nspawn.py --max-line-length 130 \
-      --ignore E722,W503
-  '';
 
   installPhase = ''
     buildPythonPath "${python3.pkgs.rich}"

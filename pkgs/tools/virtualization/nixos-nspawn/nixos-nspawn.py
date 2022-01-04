@@ -1,5 +1,7 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -p python3 -i python3 python3Packages.rich
+#!nix-shell -i python3 -p "python3.withPackages(ps: with ps; [ rich ])"
+
+#!/usr/bin/env python3
 
 from argparse import ArgumentParser
 from configparser import ConfigParser, Interpolation
