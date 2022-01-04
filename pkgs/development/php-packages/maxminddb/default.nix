@@ -13,8 +13,11 @@ buildPecl {
     sha256 = "sha256-Dw1+pYJmZ3U2+rgSOEkx4a6HB8FebSr7YZodOjSipjI=";
   };
 
+  prePatch = ''
+    cd ext
+  '';
+
   buildInputs = [ libmaxminddb ];
-  sourceRoot = "source/ext";
 
   meta = with lib; {
     description = "C extension that is a drop-in replacement for MaxMind\\Db\\Reader";
