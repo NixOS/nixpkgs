@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Conceal messages in ASCII text by appending whitespace to the end of lines";
     homepage = "http://www.darkside.com.au/snow/";
-    license = licenses.apsl20;
+    license = licenses.asl20;
     maintainers = with maintainers; [ siraben ];
     platforms = platforms.unix;
   };
