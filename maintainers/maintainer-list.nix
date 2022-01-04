@@ -2812,6 +2812,11 @@
     email = "d4delta@outlook.fr";
     name = "Delta";
   };
+  deltadelta = {
+    email = "contact@libellules.eu";
+    name = "Dara Ly";
+    github = "tournemire";
+  };
   deltaevo = {
     email = "deltaduartedavid@gmail.com";
     github = "DeltaEvo";
