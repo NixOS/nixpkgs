@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     inherit owner;
     repo = pname;
     rev = "61a035751c9244fcca1edf94d6566fa2a709ce90";
-    sha256 = "0lzirdi1mf4yl8srq7vjn746sbydz7h0wjh7wy8gycy6hq04qrg4";
+    sha256 = "sha256-5ShNbjfAt9FDkXZHRj2T7qI/Kx+0AnoDHXDoO9kVdbI=";
   };
 
   nativeBuildInputs = [ cmake ];
