@@ -40,7 +40,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Creates and manages a simplestreams lxd image server on top of nginx";
     homepage = "https://github.com/Avature/lxd-image-server";
-    license = licenses.apsl20;
+    license = licenses.asl20;
     platforms = platforms.unix;
     maintainers = with maintainers; [ mkg20001 ];
   };

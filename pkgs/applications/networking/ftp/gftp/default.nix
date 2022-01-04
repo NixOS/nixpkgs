@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gftp";
-  version = "2.7.0b";
+  version = "2.8.0b";
 
   src = fetchFromGitHub {
     owner = "masneyb";
     repo = pname;
     rev = version;
-    hash = "sha256-cIB3SneYKavgdI8eTtM1qsOrBJJ0c7/3CEvNPishNog=";
+    hash = "sha256-syeRFpqbd1VhKhhs/fIByDSVpcY+SAlmikDo3J1ZHlo=";
   };
 
   nativeBuildInputs = [
@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
     libtool
     pkg-config
   ];
+
   buildInputs = [
     gtk
     ncurses
@@ -39,11 +40,11 @@ stdenv.mkDerivation rec {
     readline
   ];
 
-  hardeningDisable = [ "format" ];
-
   preConfigure = ''
     ./autogen.sh
   '';
+
+  hardeningDisable = [ "format" ];
 
   meta = with lib; {
     homepage = "https://github.com/masneyb/gftp";
