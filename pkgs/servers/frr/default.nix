@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , python3Packages
 
 # build time
@@ -40,6 +41,15 @@ stdenv.mkDerivation rec {
     rev = "${pname}-${version}";
     sha256 = "sha256-hJcgLiPBxOE5QEh0RhtZhM3dOxFqW5H0TUjN+aP4qRk=";
   };
+
+  patches = [
+    (fetchpatch {
+      # Fix clippy build on aarch64-linux
+      # https://github.com/FRRouting/frr/issues/10267
+      url = "https://github.com/FRRouting/frr/commit/3942ee1f7bc754dd0dd9ae79f89d0f2635be334f.patch";
+      sha256 = "1i0acfy5k9fbm9cxchrcvkhyw9704srq4wm2hyjqgdimm2dq7ryf";
+    })
+  ];
 
   nativeBuildInputs = [
     autoreconfHook
