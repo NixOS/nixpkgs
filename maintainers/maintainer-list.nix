@@ -3320,12 +3320,6 @@
     github = "edlimerkaj";
     githubId = 71988351;
   };
-  edibopp = {
-    email = "eduard.bopp@aepsil0n.de";
-    github = "edibopp";
-    githubId = 3098430;
-    name = "Eduard Bopp";
-  };
   emantor = {
     email = "rouven+nixos@czerwinskis.de";
     github = "emantor";
@@ -7820,6 +7814,12 @@
     github = "milesbreslin";
     githubId = 38543128;
     name = "Miles Breslin";
+  };
+  milibopp = {
+    email = "contact@ebopp.de";
+    github = "milibopp";
+    githubId = 3098430;
+    name = "Emilia Bopp";
   };
   millerjason = {
     email = "mailings-github@millerjason.com";
