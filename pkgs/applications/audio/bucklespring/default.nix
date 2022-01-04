@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     owner = "zevv";
     repo = pname;
     rev = version;
-    sha256 = "114dib4npb7r1z2zd1fwsx71xbf9r6psxqd7n7590cwz1w3r51mz";
+    sha256 = "sha256-XhU78NuJA81MLqsrlZYdg0YNH2IxRGp1kJHWMiNIzBs=";
   };
 
   nativeBuildInputs = [ pkg-config makeWrapper ];
