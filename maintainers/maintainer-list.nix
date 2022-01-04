@@ -12671,6 +12671,12 @@
     email = "tim.williams.public@gmail.com";
     name = "Tim Philip Williams";
   };
+  willcohen = {
+    email = "willcohen@users.noreply.github.com";
+    github = "willcohen";
+    githubId = 5185341;
+    name = "Will Cohen";
+  };
   winden = {
     email = "windenntw@gmail.com";
     name = "Antonio Vargas Gonzalez";
