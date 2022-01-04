@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, pkgsBuildBuild, cmake, python3, ncurses }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "libtapi";
   version = "1100.0.11"; # determined by looking at VERSION.txt
 
