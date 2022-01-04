@@ -28370,7 +28370,7 @@ with pkgs;
 
   udevil = callPackage ../applications/misc/udevil {};
 
-  udiskie = python3Packages.callPackage ../applications/misc/udiskie { };
+  udiskie = python3.pkgs.callPackage ../applications/misc/udiskie { };
 
   sacc = callPackage ../applications/networking/gopher/sacc { };
 
