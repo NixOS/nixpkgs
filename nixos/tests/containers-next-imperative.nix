@@ -45,7 +45,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       imperativeanddeclarative = { pkgs, ... }: {
         imports = [ base ];
         nixos.containers.instances.bar = {
-          config.environment.systemPackages = [ pkgs.hello ];
+          system-config.environment.systemPackages = [ pkgs.hello ];
           zone = "foo";
         };
 
@@ -58,15 +58,15 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       };
     };
 
-  testScript = let empty = pkgs.writeText "foo.nix" "{ config.nixpkgs = \"${../..}\"; }"; in ''
+  testScript = let empty = pkgs.writeText "foo.nix" "{ nixpkgs = \"${../..}\"; }"; in ''
     start_all()
 
     def create_container(vm):
         print(vm.succeed(
           "nixos-nspawn create foo ${pkgs.writeText "foo.nix" ''
             {
-              config.nixpkgs = "${../..}";
-              config.config = { pkgs, ... }:
+              nixpkgs = "${../..}";
+              system-config = { pkgs, ... }:
                 { environment.systemPackages = [ pkgs.hello ]; };
             }
           ''}"
@@ -96,9 +96,9 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
         out = onlyimperative.fail(
             "nixos-nspawn --show-trace create bar ${pkgs.writeText "bar.nix" ''
               {
-                config.sharedNix = false;
-                config.nixpkgs = "${../..}";
-                config.config = { pkgs, ... }: {};
+                sharedNix = false;
+                nixpkgs = "${../..}";
+                system-config = { pkgs, ... }: {};
               }
             ''} 2>&1"
         )
@@ -124,8 +124,8 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
         out = onlyimperative.fail(
             "nixos-nspawn 2>&1 create bar23 ${pkgs.writeText "bar23.nix" ''
               {
-                config.activation.strategy = "dynamic";
-                config.nixpkgs = "${../..}";
+                activation.strategy = "dynamic";
+                nixpkgs = "${../..}";
               }
             ''}"
         )
@@ -135,8 +135,8 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
         out = onlyimperative.succeed(
             "nixos-nspawn update 2>&1 foo --reload --config ${pkgs.writeText "foo2.nix" ''
               {
-                config.nixpkgs = "${../..}";
-                config.config = { pkgs, ... }: {};
+                nixpkgs = "${../..}";
+                system-config = { pkgs, ... }: {};
               }
             ''}"
         )
@@ -163,10 +163,10 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
         out = onlyimperative.succeed(
             "nixos-nspawn create foonet ${pkgs.writeText "foo2.nix" ''
               {
-                config.nixpkgs = "${../..}";
-                config.config = { pkgs, ... }: { services.nginx.enable = true; networking.firewall.allowedTCPPorts = [ 80 ]; };
-                config.network = {};
-                config.forwardPorts = [ { hostPort = 8080; containerPort = 80; } ];
+                nixpkgs = "${../..}";
+                system-config = { pkgs, ... }: { services.nginx.enable = true; networking.firewall.allowedTCPPorts = [ 80 ]; };
+                network = {};
+                forwardPorts = [ { hostPort = 8080; containerPort = 80; } ];
               }
             ''}"
         )
@@ -190,10 +190,10 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
         imperativeanddeclarative.succeed(
             "nixos-nspawn create foozone ${pkgs.writeText "foo2.nix" ''
               {
-                config.nixpkgs = "${../..}";
-                config.config = { pkgs, ... }: { services.nginx.enable = true; networking.firewall.allowedTCPPorts = [ 80 ]; };
-                config.network = {};
-                config.zone = "foo";
+                nixpkgs = "${../..}";
+                system-config = { pkgs, ... }: { services.nginx.enable = true; networking.firewall.allowedTCPPorts = [ 80 ]; };
+                network = {};
+                zone = "foo";
               }
             ''}"
         )
@@ -205,10 +205,10 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
         imperativeanddeclarative.fail(
             "nixos-nspawn create foozone2 ${pkgs.writeText "foo2.nix" ''
               {
-                config.nixpkgs = "${../..}";
-                config.config = { pkgs, ... }: { services.nginx.enable = true; networking.firewall.allowedTCPPorts = [ 80 ]; };
-                config.network = {};
-                config.zone = "foo2";
+                nixpkgs = "${../..}";
+                system-config = { pkgs, ... }: { services.nginx.enable = true; networking.firewall.allowedTCPPorts = [ 80 ]; };
+                network = {};
+                zone = "foo2";
               }
             ''}"
         )
@@ -222,8 +222,8 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
         onlyimperative.succeed(
             "nixos-nspawn create foonet2 ${pkgs.writeText "foonet2.nix" ''
               {
-                config.nixpkgs = "${../..}";
-                config.network.v4.static = {
+                nixpkgs = "${../..}";
+                network.v4.static = {
                   containerPool = [ "10.42.42.2/24" ];
                   hostAddresses = [
                     "10.42.42.1/24"

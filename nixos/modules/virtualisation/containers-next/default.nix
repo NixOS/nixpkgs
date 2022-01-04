@@ -152,7 +152,7 @@ let
               );
             };
           })
-        ] ++ (config.config);
+        ] ++ (config.system-config);
         prefix = [ "nixos" "containers" "instances" name "config" ];
       };
       inherit config;
@@ -409,7 +409,7 @@ in {
             '';
           };
 
-          config = mkOption {
+          system-config = mkOption {
             description = ''
               NixOS configuration for the container. See <citerefentry>
               <refentrytitle>configuration.nix</refentrytitle><manvolnum>5</manvolnum>

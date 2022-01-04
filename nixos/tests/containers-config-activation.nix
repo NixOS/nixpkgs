@@ -35,7 +35,6 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: let
   };
 
   testvm = { ... }: {
-    systemd.services.systemd-networkd.environment.SYSTEMD_LOG_LEVEL = "debug";
     networking = {
       useDHCP = false;
       useNetworkd = true;
@@ -58,7 +57,7 @@ in {
       nixos.containers.instances = lib.mkMerge [
         (lib.filterAttrs (name: lib.const (name != "teststop")) instances)
         {
-          dynamic.config = {
+          dynamic.system-config = {
             services.nginx = {
               enable = true;
               virtualHosts."localhost" = {
@@ -71,7 +70,7 @@ in {
           };
         }
         {
-          dynamic2.config = {
+          dynamic2.system-config = {
             services.nginx.enable = true;
           };
         }

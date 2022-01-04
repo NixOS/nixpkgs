@@ -23,7 +23,7 @@ let
         ];
       }
       ({ config, ... }: {
-        instances.imperative.config.imports = [
+        instances.imperative.system-config.imports = [
           (import (nixpkgs + "/nixos/modules/virtualisation/containers-next/container-profile.nix"))
           {
             systemd.network = {
@@ -51,7 +51,7 @@ let
 
   nixpkgs' = dummy.config.instances.imperative.nixpkgs;
   container = import (nixpkgs' + "/nixos") {
-    configuration.imports = dummy.config.instances.imperative.config;
+    configuration.imports = dummy.config.instances.imperative.system-config;
   };
   pkgs = import nixpkgs' { };
 
@@ -74,6 +74,6 @@ in
     paths = [
       container.system
       (pkgs.writeTextDir "data"
-        (builtins.toJSON (builtins.removeAttrs (dummy.config.instances.imperative) [ "config" ])))
+        (builtins.toJSON (builtins.removeAttrs (dummy.config.instances.imperative) [ "system-config" ])))
     ];
   })

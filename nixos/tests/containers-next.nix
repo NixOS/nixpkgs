@@ -103,7 +103,7 @@ in {
       interfaces.eth0.useDHCP = true;
     };
     nixos.containers = {
-      instances.vlandemo.config = {
+      instances.vlandemo.system-config = {
         systemd.network = {
           networks."10-mv-eth1" = {
             matchConfig.Name = "mv-eth1";
@@ -117,7 +117,7 @@ in {
       };
       instances.ephvlan = {
         ephemeral = true;
-        config.systemd.network = {
+        system-config.systemd.network = {
           networks."10-mv-eth1" = {
             matchConfig.Name = "mv-eth1";
             address = [ "192.168.2.9/24" ];
@@ -179,7 +179,7 @@ in {
             path = "${pkgs.writeText "totallysecret" "abc"}";
           }
         ];
-        config = { pkgs, ... }: {
+        system-config = { pkgs, ... }: {
           environment.systemPackages = [ pkgs.tcpdump pkgs.tmux pkgs.dnsutils ];
           networking.firewall.allowedTCPPorts = [ 80 ];
           systemd.services.systemd-networkd.environment.SYSTEMD_LOG_LEVEL = "debug";
@@ -204,7 +204,7 @@ in {
         network.v6.addrPool = lib.mkForce [];
         network.v4.addrPool = lib.mkForce [];
         network.v4.static.containerPool = [ "10.100.200.10/24" ];
-        config = { pkgs, ... }: {
+        system-config = { pkgs, ... }: {
           environment.systemPackages = [ pkgs.hello pkgs.nmap pkgs.dnsutils ];
           systemd.services.systemd-networkd.environment.SYSTEMD_LOG_LEVEL = "debug";
           systemd.network.networks."20-host0".networkConfig.DNS = "fd24::1";

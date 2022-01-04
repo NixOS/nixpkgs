@@ -121,7 +121,7 @@ in {
       };
 
       nixos.containers.instances = {
-        test1.config = {
+        test1.system-config = {
           systemd.network = {
             networks."10-mv-eth1" = {
               matchConfig.Name = "mv-eth1";
