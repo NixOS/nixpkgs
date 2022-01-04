@@ -12,13 +12,9 @@
 , libpng
 , libtiff
 , openexr
-, python2Packages
+, python3
 }:
 
-let
-  inherit (python2Packages) python numpy;
-  # Might want to use `python2.withPackages(ps: [ps.numpy]);` here...
-in
 stdenv.mkDerivation rec {
   pname = "vigra";
   version = "1.11.1";
@@ -50,12 +46,9 @@ stdenv.mkDerivation rec {
     libjpeg
     libpng
     libtiff
-    numpy
     openexr
-    python
+    python3
   ];
-
-  preConfigure = "cmakeFlags+=\" -DVIGRANUMPY_INSTALL_DIR=$out/lib/${python.libPrefix}/site-packages\"";
 
   cmakeFlags = [ "-DWITH_OPENEXR=1" ]
     ++ lib.optionals (stdenv.hostPlatform.system == "x86_64-linux")
