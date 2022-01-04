@@ -387,6 +387,7 @@ lambdalisue/vim-gista
 lambdalisue/vim-manpager
 lambdalisue/vim-pager
 latex-box-team/latex-box
+ldelossa/litee.nvim
 leafgarland/typescript-vim
 leanprover/lean.vim
 ledger/vim-ledger
