@@ -26483,19 +26483,6 @@ with pkgs;
 
   jwm-settings-manager = callPackage ../applications/window-managers/jwm/jwm-settings-manager.nix { };
 
-  k3d = callPackage ../applications/graphics/k3d {
-    inherit (gnome2) gtkglext;
-    stdenv = gcc6Stdenv;
-    boost = boost155.override {
-      enablePython = true;
-      python = python2;
-      stdenv = gcc6Stdenv;
-      buildPackages = buildPackages // {
-        stdenv = gcc6Stdenv;
-      };
-    };
-  };
-
   k3s = callPackage ../applications/networking/cluster/k3s {};
 
   kconf = callPackage ../applications/networking/cluster/kconf { };
