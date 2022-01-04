@@ -160,6 +160,15 @@ in {
       ];
     };
 
+    networking.firewall.allowedTCPPorts = [ 80 ];
+
+    services.nginx = {
+      enable = true;
+      virtualHosts."localhost" = {
+        locations."/".proxyPass = "http://container0:80";
+      };
+    };
+
     # Several nspawn machines to test different things:
     # * `container0': assign ULA IPv6 address (to demonstrate public addrs) and
     #   let nginx listen on it.
@@ -302,6 +311,7 @@ in {
         server.wait_until_succeeds(
             "curl -sSf 'http://[fd24::2]' | grep -q 'Welcome to nginx'"
         )
+        server.succeed("curl -sSf 'http://localhost' | grep -q 'Welcome to nginx'")
 
         server.succeed(
             "systemd-run -M container0 --pty --quiet -- /bin/sh --login -c 'test -w /var/empty'"
