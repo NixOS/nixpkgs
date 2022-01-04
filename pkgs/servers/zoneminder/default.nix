@@ -201,5 +201,8 @@ in stdenv.mkDerivation rec {
     license = licenses.gpl3;
     maintainers = [ ];
     platforms = platforms.unix;
+
+    # https://github.com/ZoneMinder/ no longer exists
+    broken = true;
   };
 }
