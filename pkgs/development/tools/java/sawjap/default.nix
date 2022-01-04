@@ -8,7 +8,7 @@ stdenv.mkDerivation {
 
   inherit (sawja) src version;
 
-  sourceRoot = "${src.name}/test";
+  prePatch = "cd test";
 
   buildInputs = [ ocaml findlib sawja ];
 
