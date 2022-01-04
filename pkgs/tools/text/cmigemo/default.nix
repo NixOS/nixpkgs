@@ -6,7 +6,7 @@
 let
   iconvBin = if stdenv.isDarwin then libiconv else  buildPackages.stdenv.cc.libc;
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "cmigemo";
   version = "1.3e";
 
