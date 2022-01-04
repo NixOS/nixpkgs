@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "assh";
-  version = "2.12.0";
+  version = "2.12.1";
 
   src = fetchFromGitHub {
     repo = "advanced-ssh-config";
     owner = "moul";
     rev = "v${version}";
-    sha256 = "sha256-FqxxNTsZVmCsIGNHRWusFP2gba2+geqBubw+6PeR75c=";
+    sha256 = "1r3fny4k1crpjasgsp09qf0p3l9vg8c0ddbb8jd6qnqnwwprqfxd";
   };
 
-  vendorSha256 = "sha256-AYBwuRSeam5i2gex9PSG9Qk+FHdEhIpY250CJo01cFE=";
+  vendorSha256 = "14x7m900mxiwgbbxs56pdqsmx56c4qir5j4dz57bwr10rmh25fy4";
 
   doCheck = false;
 
