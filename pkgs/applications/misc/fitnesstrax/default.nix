@@ -41,5 +41,8 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/luminescent-dreams/fitnesstrax";
     license = licenses.bsd3;
     maintainers = with maintainers; [ savannidgerinel ];
+
+    # https://github.com/luminescent-dreams/fitnesstrax/ no longer exists
+    broken = true;
   };
 }
