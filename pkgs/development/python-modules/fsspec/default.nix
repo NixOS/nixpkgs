@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "intake";
     repo = "filesystem_spec";
     rev = version;
-    sha256 = "sha256-LgrOHBXKs2bEgtgrdHb1OEhOeQ5Rbgr6X5YtgiqiCH0=";
+    sha256 = "sha256-9Fsyf6/IYbJV6IA7cQAiyl83X3DgRZOvJFsaKBSUGKM=";
   };
 
   propagatedBuildInputs = [
