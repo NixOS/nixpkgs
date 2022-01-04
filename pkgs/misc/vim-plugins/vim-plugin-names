@@ -388,6 +388,7 @@ lambdalisue/vim-manpager
 lambdalisue/vim-pager
 latex-box-team/latex-box
 ldelossa/litee-calltree.nvim
+ldelossa/litee-filetree.nvim
 ldelossa/litee-symboltree.nvim
 ldelossa/litee.nvim
 leafgarland/typescript-vim

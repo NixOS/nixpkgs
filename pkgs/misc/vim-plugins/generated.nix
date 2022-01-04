@@ -3154,6 +3154,18 @@ final: prev:
     meta.homepage = "https://github.com/ldelossa/litee-calltree.nvim/";
   };
 
+  litee-filetree-nvim = buildVimPluginFrom2Nix {
+    pname = "litee-filetree.nvim";
+    version = "2022-01-03";
+    src = fetchFromGitHub {
+      owner = "ldelossa";
+      repo = "litee-filetree.nvim";
+      rev = "fe7e87130ac73c60247c61d71a7479a696766c22";
+      sha256 = "0scak2xdcq0vxhb21d7sm59b3hhccwwkrn5wcl7cd0akxg5xpp3s";
+    };
+    meta.homepage = "https://github.com/ldelossa/litee-filetree.nvim/";
+  };
+
   litee-symboltree-nvim = buildVimPluginFrom2Nix {
     pname = "litee-symboltree.nvim";
     version = "2022-01-03";
