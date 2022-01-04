@@ -3142,6 +3142,18 @@ final: prev:
     meta.homepage = "https://github.com/tami5/lispdocs.nvim/";
   };
 
+  litee-calltree-nvim = buildVimPluginFrom2Nix {
+    pname = "litee-calltree.nvim";
+    version = "2022-01-03";
+    src = fetchFromGitHub {
+      owner = "ldelossa";
+      repo = "litee-calltree.nvim";
+      rev = "518d9e9e82e8480a81cf3e76c46ba7880a0c0034";
+      sha256 = "0ai2pj4ggjcrl3z0azwrjashqazim51crzk1f5gsbpd4j1r572iv";
+    };
+    meta.homepage = "https://github.com/ldelossa/litee-calltree.nvim/";
+  };
+
   litee-nvim = buildVimPluginFrom2Nix {
     pname = "litee.nvim";
     version = "2022-01-03";
