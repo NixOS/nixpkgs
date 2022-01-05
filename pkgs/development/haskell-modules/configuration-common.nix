@@ -2032,19 +2032,6 @@ self: super: {
     assert pkgs.lib.versionOlder self.hspec.version "2.8.2";
     doJailbreak super.graphql;
 
-  # gtk2hsC2hs fails to build on certain architectures (aarch64, ppc64(le), ...)
-  # with a linker error. As a workaround, we build gtk2hs-buildtools with -O0
-  # as suggested in the GHC thread below. An alternative to this could be to use
-  # -fllvm. I haven't been able to get this to work without linker errors, though.
-  # See also:
-  # * https://gitlab.haskell.org/ghc/ghc/-/issues/17203
-  # * https://github.com/gtk2hs/gtk2hs/issues/305
-  # * https://github.com/gtk2hs/gtk2hs/issues/279
-  gtk2hs-buildtools = appendConfigureFlags
-    (pkgs.lib.optionals (with pkgs.stdenv.hostPlatform; isAarch64 || isPowerPC) [
-      "--ghc-option=-O0"
-    ]) super.gtk2hs-buildtools;
-
   # https://github.com/ajscholl/basic-cpuid/pull/1
   basic-cpuid = appendPatch (pkgs.fetchpatch {
     url = "https://github.com/ajscholl/basic-cpuid/commit/2f2bd7a7b53103fb0cf26883f094db9d7659887c.patch";
@@ -2253,5 +2240,14 @@ self: super: {
   sdp4text = disableLibraryProfiling super.sdp4text;
   sdp4unordered = disableLibraryProfiling super.sdp4unordered;
   sdp4vector = disableLibraryProfiling super.sdp4vector;
+
+  hie-bios = appendPatches [
+    # Accounts for a breaking change in GHC 9.0.2 via CPP
+    (pkgs.fetchpatch {
+      name = "hie-bios-ghc-9.0.2-compat.patch";
+      url = "https://github.com/haskell/hie-bios/commit/da0cb23384cc6e9b393792f8f25a3c174a4edafa.patch";
+      sha256 = "1qj67s93h6pxvdapw1sxy6izwp5y8vjaw67gw3lsnj8gs14fqq4h";
+    })
+  ] super.hie-bios;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
