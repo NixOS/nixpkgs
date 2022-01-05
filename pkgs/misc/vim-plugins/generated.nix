@@ -2577,6 +2577,18 @@ final: prev:
     meta.homepage = "https://github.com/edwinb/idris2-vim/";
   };
 
+  impatient-nvim = buildVimPluginFrom2Nix {
+    pname = "impatient.nvim";
+    version = "2021-12-26";
+    src = fetchFromGitHub {
+      owner = "lewis6991";
+      repo = "impatient.nvim";
+      rev = "3ea9abedb6941995b05fdad654d9cfd51c38a31f";
+      sha256 = "06b8h3g77wrjxvhapkvx149pha29a0zcq28bj2pcvh7686cysz9k";
+    };
+    meta.homepage = "https://github.com/lewis6991/impatient.nvim/";
+  };
+
   Improved-AnsiEsc = buildVimPluginFrom2Nix {
     pname = "Improved-AnsiEsc";
     version = "2015-08-26";
