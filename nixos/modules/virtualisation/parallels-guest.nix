@@ -34,7 +34,8 @@ in
       package = mkOption {
         type = types.nullOr types.package;
         default = config.boot.kernelPackages.prl-tools;
-        defaultText = literalExpression "config.boot.kernelPackages.prl-tools";
+        defaultText = "config.boot.kernelPackages.prl-tools";
+        example = literalExpression "config.boot.kernelPackages.prl-tools";
         description = ''
           Defines which package to use for prl-tools. Override to change the version.
         '';
@@ -45,26 +46,28 @@ in
 
   config = mkIf config.hardware.parallels.enable {
     services.xserver = {
-      drivers = singleton
-        { name = "prlvideo"; modules = [ prl-tools ]; };
+      videoDrivers = [ "prlvideo" ];
 
-      screenSection = ''
-        Option "NoMTRR"
-      '';
+      modules = [ prl-tools ];
 
       config = ''
         Section "InputClass"
-          Identifier "prlmouse"
-          MatchIsPointer "on"
-          MatchTag "prlmouse"
-          Driver "prlmouse"
+          Identifier      "prlmouse"
+          MatchIsPointer  "on"
+          MatchTag        "prlmouse"
+          Driver          "prlmouse"
         EndSection
+      '';
+
+      screenSection = ''
+        Option "NoMTRR"
       '';
     };
 
     hardware.opengl.package = prl-tools;
     hardware.opengl.package32 = pkgs.pkgsi686Linux.linuxPackages.prl-tools.override { libsOnly = true; kernel = null; };
-    hardware.opengl.setLdLibraryPath = true;
+    hardware.opengl.extraPackages = [ pkgs.mesa.drivers ];
+    hardware.opengl.extraPackages32 = [ pkg.pkgsi686Linux.mesa.drivers ];
 
     services.udev.packages = [ prl-tools ];
 
@@ -72,7 +75,7 @@ in
 
     boot.extraModulePackages = [ prl-tools ];
 
-    boot.kernelModules = [ "prl_tg" "prl_eth" "prl_fs" "prl_fs_freeze" ];
+    boot.kernelModules = [ "prl_fs" "prl_fs_freeze" "prl_notifier" "prl_tg" ];
 
     services.timesyncd.enable = false;
 
@@ -119,13 +122,6 @@ in
         wantedBy = [ "graphical-session.target" ];
         serviceConfig = {
           ExecStart = "${prl-tools}/bin/prldnd";
-        };
-      };
-      prl_wmouse_d  = {
-        description = "Parallels Walking Mouse Daemon";
-        wantedBy = [ "graphical-session.target" ];
-        serviceConfig = {
-          ExecStart = "${prl-tools}/bin/prl_wmouse_d";
         };
       };
       prlcp = {
