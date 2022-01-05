@@ -2,6 +2,7 @@
 
 use strict;
 use warnings;
+use Config::IniFiles;
 use File::Path qw(make_path);
 use File::Basename;
 use File::Slurp;
@@ -113,26 +114,85 @@ sub parseFstab {
     return ($fss, $swaps);
 }
 
+# This subroutine takes a single ini file that specified systemd configuration
+# like unit configuration and parses it into a hash where the keys are the sections
+# of the unit file and the values are hashes themselves. These hashes have the unit file
+# keys as their keys (left side of =) and an array of all values that were set as their
+# values. If a value is empty (for example `ExecStart=`), then all current definitions are
+# removed.
+#
+# Instead of returning the hash, this subroutine takes a hashref to return the data in. This
+# allows calling the subroutine multiple times with the same hash to parse override files.
+sub parseSystemdIni {
+    my ($unitContents, $path) = @_;
+    # Tie the ini file to a hash for easier access
+    my %fileContents;
+    tie %fileContents, "Config::IniFiles", (-file => $path, -allowempty => 1, -allowcontinue => 1);
+
+    # Copy over all sections
+    foreach my $sectionName (keys %fileContents) {
+        # Copy over all keys
+        foreach my $iniKey (keys %{$fileContents{$sectionName}}) {
+            # Ensure the value is an array so it's easier to work with
+            my $iniValue = $fileContents{$sectionName}{$iniKey};
+            my @iniValues;
+            if (ref($iniValue) eq "ARRAY") {
+                @iniValues = @{$iniValue};
+            } else {
+                @iniValues = $iniValue;
+            }
+            # Go over all values
+            for my $iniValue (@iniValues) {
+                # If a value is empty, it's an override that tells us to clean the value
+                if ($iniValue eq "") {
+                    delete $unitContents->{$sectionName}->{$iniKey};
+                    next;
+                }
+                push(@{$unitContents->{$sectionName}->{$iniKey}}, $iniValue);
+            }
+        }
+    }
+    return;
+}
+
+# This subroutine takes the path to a systemd configuration file (like a unit configuration),
+# parses it, and returns a hash that contains the contents. The contents of this hash are
+# explained in the `parseSystemdIni` subroutine. Neither the sections nor the keys inside
+# the sections are consistently sorted.
+#
+# If a directory with the same basename ending in .d exists next to the unit file, it will be
+# assumed to contain override files which will be parsed as well and handled properly.
 sub parseUnit {
-    my ($filename) = @_;
-    my $info = {};
-    parseKeyValues($info, read_file($filename)) if -f $filename;
-    parseKeyValues($info, read_file("${filename}.d/overrides.conf")) if -f "${filename}.d/overrides.conf";
-    return $info;
+    my ($unitPath) = @_;
+
+    # Parse the main unit and all overrides
+    my %unitData;
+    parseSystemdIni(\%unitData, $_) for glob("${unitPath}{,.d/*.conf}");
+    return %unitData;
 }
 
 sub parseKeyValues {
     my $info = shift;
     foreach my $line (@_) {
-        # FIXME: not quite correct.
         $line =~ /^([^=]+)=(.*)$/ or next;
         $info->{$1} = $2;
     }
 }
 
-sub boolIsTrue {
-    my ($s) = @_;
-    return $s eq "yes" || $s eq "true";
+# Checks whether a specified boolean in a systemd unit is true
+# or false, with a default that is applied when the value is not set.
+sub parseSystemdBool {
+    my ($unitConfig, $sectionName, $boolName, $default) = @_;
+
+    my @values = @{$unitConfig->{$sectionName}{$boolName} // []};
+    # Return default if value is not set
+    if (scalar @values lt 1 || not defined $values[-1]) {
+        return $default;
+    }
+    # If value is defined multiple times, use the last definition
+    my $last = $values[-1];
+    # These are valid values as of systemd.syntax(7)
+    return $last eq "1" || $last eq "yes" || $last eq "true" || $last eq "on";
 }
 
 sub recordUnit {
@@ -167,17 +227,17 @@ sub handleModifiedUnit {
         # Revert of the attempt: https://github.com/NixOS/nixpkgs/pull/147609
         # More details: https://github.com/NixOS/nixpkgs/issues/74899#issuecomment-981142430
     } else {
-        my $unitInfo = parseUnit($newUnitFile);
-        if (boolIsTrue($unitInfo->{'X-ReloadIfChanged'} // "no")) {
+        my %unitInfo = parseUnit($newUnitFile);
+        if (parseSystemdBool(\%unitInfo, "Service", "X-ReloadIfChanged", 0)) {
             $unitsToReload->{$unit} = 1;
             recordUnit($reloadListFile, $unit);
         }
-        elsif (!boolIsTrue($unitInfo->{'X-RestartIfChanged'} // "yes") || boolIsTrue($unitInfo->{'RefuseManualStop'} // "no") || boolIsTrue($unitInfo->{'X-OnlyManualStart'} // "no")) {
+        elsif (!parseSystemdBool(\%unitInfo, "Service", "X-RestartIfChanged", 1) || parseSystemdBool(\%unitInfo, "Unit", "RefuseManualStop", 0) || parseSystemdBool(\%unitInfo, "Unit", "X-OnlyManualStart", 0)) {
             $unitsToSkip->{$unit} = 1;
         } else {
             # It doesn't make sense to stop and start non-services because
             # they can't have ExecStop=
-            if (!boolIsTrue($unitInfo->{'X-StopIfChanged'} // "yes") || $unit !~ /\.service$/) {
+            if (!parseSystemdBool(\%unitInfo, "Service", "X-StopIfChanged", 1) || $unit !~ /\.service$/) {
                 # This unit should be restarted instead of
                 # stopped and started.
                 $unitsToRestart->{$unit} = 1;
@@ -188,7 +248,7 @@ sub handleModifiedUnit {
                 # socket(s) instead of the service.
                 my $socketActivated = 0;
                 if ($unit =~ /\.service$/) {
-                    my @sockets = split / /, ($unitInfo->{Sockets} // "");
+                    my @sockets = split(/ /, join(" ", @{$unitInfo{Service}{Sockets} // []}));
                     if (scalar @sockets == 0) {
                         @sockets = ("$baseName.socket");
                     }
@@ -254,12 +314,12 @@ while (my ($unit, $state) = each %{$activePrev}) {
 
     if (-e $prevUnitFile && ($state->{state} eq "active" || $state->{state} eq "activating")) {
         if (! -e $newUnitFile || abs_path($newUnitFile) eq "/dev/null") {
-            my $unitInfo = parseUnit($prevUnitFile);
-            $unitsToStop{$unit} = 1 if boolIsTrue($unitInfo->{'X-StopOnRemoval'} // "yes");
+            my %unitInfo = parseUnit($prevUnitFile);
+            $unitsToStop{$unit} = 1 if parseSystemdBool(\%unitInfo, "Unit", "X-StopOnRemoval", 1);
         }
 
         elsif ($unit =~ /\.target$/) {
-            my $unitInfo = parseUnit($newUnitFile);
+            my %unitInfo = parseUnit($newUnitFile);
 
             # Cause all active target units to be restarted below.
             # This should start most changed units we stop here as
@@ -268,7 +328,7 @@ while (my ($unit, $state) = each %{$activePrev}) {
             # active after the system has resumed, which probably
             # should not be the case.  Just ignore it.
             if ($unit ne "suspend.target" && $unit ne "hibernate.target" && $unit ne "hybrid-sleep.target") {
-                unless (boolIsTrue($unitInfo->{'RefuseManualStart'} // "no") || boolIsTrue($unitInfo->{'X-OnlyManualStart'} // "no")) {
+                unless (parseSystemdBool(\%unitInfo, "Unit", "RefuseManualStart", 0) || parseSystemdBool(\%unitInfo, "Unit", "X-OnlyManualStart", 0)) {
                     $unitsToStart{$unit} = 1;
                     recordUnit($startListFile, $unit);
                     # Don't spam the user with target units that always get started.
@@ -287,7 +347,7 @@ while (my ($unit, $state) = each %{$activePrev}) {
             # Stopping a target generally has no effect on other units
             # (unless there is a PartOf dependency), so this is just a
             # bookkeeping thing to get systemd to do the right thing.
-            if (boolIsTrue($unitInfo->{'X-StopOnReconfiguration'} // "no")) {
+            if (parseSystemdBool(\%unitInfo, "Unit", "X-StopOnReconfiguration", 0)) {
                 $unitsToStop{$unit} = 1;
             }
         }
