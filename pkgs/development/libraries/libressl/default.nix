@@ -94,7 +94,7 @@ in {
     ];
   };
   libressl_3_4 = generic {
-    version = "3.4.1";
-    sha256 = "0766yxb599lx7qmlmsddiw9wgminz9mc311mav5q23l0rbkflz0h";
+    version = "3.4.2";
+    sha256 = "sha256-y4LKfVRzNpFzUvvSPbL8SDxsRNNRV7MngCFOx0GXs84=";
   };
 }
