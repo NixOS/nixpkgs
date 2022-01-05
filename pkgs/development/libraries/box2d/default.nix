@@ -12,8 +12,6 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Z2J17YMzQNZqABIa5eyJDT7BWfXveymzs+DWsrklPIs=";
   };
 
-  sourceRoot = "source/Box2D";
-
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ libGLU libGL freeglut libX11 xorgproto libXi ];
 
@@ -24,6 +22,7 @@ stdenv.mkDerivation rec {
   ];
 
   prePatch = ''
+    cd Box2D
     substituteInPlace Box2D/Common/b2Settings.h \
       --replace 'b2_maxPolygonVertices	8' 'b2_maxPolygonVertices	15'
   '';

@@ -14972,6 +14972,8 @@ with pkgs;
 
   kubectx = callPackage ../development/tools/kubectx { };
 
+  kube-linter = callPackage ../development/tools/kube-linter { };
+
   kube-prompt = callPackage ../development/tools/kube-prompt { };
 
   kubei = callPackage ../tools/security/kubei { };

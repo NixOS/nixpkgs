@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "deezer-py";
-  version = "1.3.2";
+  version = "1.3.5";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-G4GREc+PWvaphnOuzBePraj4pHgmhhKqsyVHKOPwGik=";
+    sha256 = "5bc30e8887a7dc1dfec2970d825a69c7c932564300fc84b4e68cbf59bf109baa";
   };
 
   propagatedBuildInputs = [ requests ];
