@@ -466,7 +466,6 @@ in with py.pkgs; buildPythonApplication rec {
     "eafm"
     "ecobee"
     "econet"
-    "ee_brightbox"
     "efergy"
     "elgato"
     "elkm1"
