@@ -678,7 +678,7 @@ in
                 rev = "ff96a0fa5635770390b184ae74debea75c3fd534";
                 ref = "nixos-unstable";
             };
-            image_from_nixpkgs = (import ("${pkgs.sourcehut.buildsrht}/lib/images/nixos/image.nix") {
+            image_from_nixpkgs = (import ("''${pkgs.sourcehut.buildsrht}/lib/images/nixos/image.nix") {
               pkgs = (import pkgs_unstable {});
             });
           in
@@ -696,6 +696,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.git;
+        defaultText = literalExpression "pkgs.git";
         example = literalExpression "pkgs.gitFull";
         description = ''
           Git package for git.sr.ht. This can help silence collisions.
@@ -712,6 +713,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.mercurial;
+        defaultText = literalExpression "pkgs.mercurial";
         description = ''
           Mercurial package for hg.sr.ht. This can help silence collisions.
         '';

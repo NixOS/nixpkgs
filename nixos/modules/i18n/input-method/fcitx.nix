@@ -40,4 +40,7 @@ in
     };
     services.xserver.displayManager.sessionCommands = "${fcitxPackage}/bin/fcitx";
   };
+
+  # uses attributes of the linked package
+  meta.buildDocsInSandbox = false;
 }
