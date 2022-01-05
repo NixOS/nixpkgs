@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "pyhiveapi";
-  version = "0.4.3";
+  version = "0.4.4";
 
   format = "pyproject";
 
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "Pyhass";
     repo = "Pyhiveapi";
     rev = "v${version}";
-    sha256 = "sha256-SCMASYBOdq9nko5RSQ5BEbRLjOB4FlgwOKwdDggiOv8=";
+    sha256 = "189sv3xlbrilfl8mc0953y0j1xakp2fynk0d0bv076rzk8g8sp0w";
   };
 
   postPatch = ''
