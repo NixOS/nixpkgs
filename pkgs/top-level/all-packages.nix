@@ -2504,6 +2504,8 @@ with pkgs;
 
   cht-sh = callPackage ../tools/misc/cht.sh { };
 
+  cinny = callPackage ../applications/networking/instant-messengers/cinny {};
+
   ckbcomp = callPackage ../tools/X11/ckbcomp { };
 
   clac = callPackage ../tools/misc/clac {};
@@ -15601,7 +15603,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreFoundation;
   };
 
-  uddup = python3Packages.callPackage ../tools/security/uddup { };
+  uddup = callPackage ../tools/security/uddup { };
 
   udis86 = callPackage  ../development/tools/udis86 { };
 
@@ -29392,7 +29394,7 @@ with pkgs;
 
   wad = callPackage ../tools/security/wad { };
 
-  wafw00f = python3Packages.callPackage ../tools/security/wafw00f { };
+  wafw00f = callPackage ../tools/security/wafw00f { };
 
   whispers = callPackage ../tools/security/whispers { };
 

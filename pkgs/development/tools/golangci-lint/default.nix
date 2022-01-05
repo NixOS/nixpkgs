@@ -24,7 +24,7 @@ buildGoModule rec {
   ];
 
   postInstall = ''
-    for shell in bash zsh; do
+    for shell in bash zsh fish; do
       HOME=$TMPDIR $out/bin/golangci-lint completion $shell > golangci-lint.$shell
       installShellCompletion golangci-lint.$shell
     done
