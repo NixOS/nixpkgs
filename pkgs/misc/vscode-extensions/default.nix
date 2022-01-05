@@ -1047,6 +1047,18 @@ let
         };
       };
 
+      ritwickdey.liveserver = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "liveserver";
+          publisher = "ritwickdey";
+          version = "5.6.1";
+          sha256 = "sha256-QPMZMttYV+dQfWTniA7nko7kXukqU9g6Wj5YDYfL6hw=";
+        };
+        meta = with lib; {
+          license = licenses.mit;
+        };
+      };
+
       llvm-vs-code-extensions.vscode-clangd = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-clangd";
