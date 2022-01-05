@@ -49,6 +49,9 @@ stdenv.mkDerivation rec {
        else [ "--with-libraries=${openfec}/lib"
               "--with-openfec-includes=${openfec.dev}/include" ]);
 
+  prePatch = lib.optionalString stdenv.isAarch64
+    "sed -i 's/c++98/c++11/g' SConstruct";
+
   preConfigure = ''
     sconsFlags+=" --prefix=$out"
   '';
