@@ -111,6 +111,16 @@ with pkgs;
 
   nix-update-script = callPackage ../common-updater/nix-update.nix { };
 
+  ### Push NixOS images into the fixed point
+
+  nixosImages = let
+    system = stdenv.hostPlatform.system;
+    release-packages = (import ../../nixos/release.nix) {
+      supportedSystems = [ stdenv.hostPlatform.system ];
+    };
+  in lib.mapAttrs (name: value: value.${system})
+    { inherit (release-packages) iso_minimal iso_gnome iso_plasma5 amazonImage; };
+
   ### Push NixOS tests inside the fixed point
 
   nixosTests = import ../../nixos/tests/all-tests.nix {
