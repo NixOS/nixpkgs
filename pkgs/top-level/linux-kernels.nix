@@ -506,7 +506,7 @@ in {
   });
 
   packageAliases = {
-    linux_default = packages.linux_5_15;
+    linux_default = packages.linux_5_10;
     # Update this when adding the newest kernel major version!
     linux_latest = packages.linux_5_15;
     linux_mptcp = packages.linux_mptcp_95;
