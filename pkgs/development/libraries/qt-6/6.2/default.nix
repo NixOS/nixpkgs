@@ -111,6 +111,7 @@ let
       };
 
       qtnetworkauth = callPackage ../modules/qtnetworkauth.nix {};
+      qtpositioning = callPackage ../modules/qtpositioning.nix {};
       qtsensors = callPackage ../modules/qtsensors.nix {};
       qtserialbus = callPackage ../modules/qtserialbus.nix {};
       qtserialport = callPackage ../modules/qtserialport.nix {};
