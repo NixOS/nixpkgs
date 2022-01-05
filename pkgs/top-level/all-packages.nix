@@ -1025,6 +1025,8 @@ with pkgs;
 
   pferd = callPackage ../tools/misc/pferd {};
 
+  pymusic-dl = callPackage ../tools/audio/pymusic-dl { };
+
   qflipper = callPackage ../tools/misc/qflipper { };
 
   quich = callPackage ../tools/misc/quich { } ;
