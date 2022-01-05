@@ -245,7 +245,10 @@ dependencies that are detected during the install."
     "symbol-munger-test" ;; Dependency cycle between lisp-unit2 and symbol-munger
     "cl-postgres-simple-date-tests" ;; Dependency cycle between cl-postgres and simple-date
     "cl-containers/with-variates" ;; Symbol conflict between cl-variates:next-element, metabang.utilities:next-element
-    "serapeum/docs") ;; Weird issue with FUN-INFO redefinition
+    "serapeum/docs" ;; Weird issue with FUN-INFO redefinition
+    "spinneret/cl-markdown" ;; Weird issue with FUN-INFO redefinition
+    "spinneret/ps" ;; Weird issue with FUN-INFO redefinition
+    "spinneret/tests") ;; Weird issue with FUN-INFO redefinition
   "A vector of systems that shouldn't be loaded by `quickload-parasitic-systems'.
 
 These systems are known to be troublemakers.  In some sense, all

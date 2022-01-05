@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchPypi, setuptools-scm }:
 
 buildPythonPackage rec {
   pname = "filelock";
@@ -8,6 +8,10 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "1qry67zv2pmz8px6wdfbjqv75nmryy2ac7asqgs6q6db2722kpcw";
   };
+
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/benediktschmitt/py-filelock";

@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "jgmenu";
-  version = "4.3.0";
+  version = "4.4.0";
 
   src = fetchFromGitHub {
     owner = "johanmalm";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-+JO/A7+6/yeYz0tP7vxSi04cS1bEet+3sAs7CYXKxI8=";
+    sha256 = "sha256-REzrN4tz+cFmKyJeOPOkzjvthsJdY3GButF7RdnzviE=";
   };
 
   nativeBuildInputs = [

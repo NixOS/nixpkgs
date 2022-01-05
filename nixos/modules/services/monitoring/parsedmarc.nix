@@ -1,7 +1,8 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 let
   cfg = config.services.parsedmarc;
+  opt = options.services.parsedmarc;
   ini = pkgs.formats.ini {};
 in
 {
@@ -80,6 +81,9 @@ in
         datasource = lib.mkOption {
           type = lib.types.bool;
           default = cfg.provision.elasticsearch && config.services.grafana.enable;
+          defaultText = lib.literalExpression ''
+            config.${opt.provision.elasticsearch} && config.${options.services.grafana.enable}
+          '';
           apply = x: x && cfg.provision.elasticsearch;
           description = ''
             Whether the automatically provisioned Elasticsearch

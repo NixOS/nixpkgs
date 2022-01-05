@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, options, pkgs, lib, ... }:
 
 with lib;
 
@@ -23,6 +23,10 @@ in {
           take 3 (splitString "." config.services.kubernetes.apiserver.serviceClusterIpRange
         ))
       ) + ".254";
+      defaultText = literalDocBook ''
+        The <literal>x.y.z.254</literal> IP of
+        <literal>config.${options.services.kubernetes.apiserver.serviceClusterIpRange}</literal>.
+      '';
       type = types.str;
     };
 

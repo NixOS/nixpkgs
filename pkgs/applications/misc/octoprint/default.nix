@@ -122,6 +122,45 @@ let
           }
         )
 
+        # Octoprint pulls in celery indirectly but has no support for the up-to-date releases
+        (
+          self: super: {
+            celery = super.celery.overrideAttrs (oldAttrs: rec {
+              version = "5.0.0";
+              src = oldAttrs.src.override {
+                inherit version;
+                sha256 = "sha256-MTkw/d3nA9jjcCmjBL+RQpzRGu72PFfebayp2Vjh8lU=";
+              };
+              doCheck = false;
+            });
+          }
+        )
+
+        # Octoprint would allow later sentry-sdk releases but not later click releases
+        (
+          self: super: {
+            sentry-sdk = super.sentry-sdk.overrideAttrs (oldAttrs: rec {
+              pname = "sentry-sdk";
+              version = "1.4.3";
+
+              src = fetchFromGitHub {
+                owner = "getsentry";
+                repo = "sentry-python";
+                rev = version;
+                sha256 = "sha256-vdE6eqELMM69CWHaNYhF0HMCTV3tQsJlMHAA96oCy8c=";
+              };
+              disabledTests = [
+                "test_apply_simulates_delivery_info"
+                "test_auto_enabling_integrations_catches_import_error"
+              ];
+              disabledTestPaths = [
+                # Don't test integrations
+                "tests/integrations"
+              ];
+            });
+          }
+        )
+
         # Built-in dependency
         (
           self: super: {
@@ -237,9 +276,15 @@ let
                 wrapt
                 zeroconf
                 zipstream-new
-              ] ++ lib.optionals stdenv.isDarwin [ py.pkgs.appdirs ];
+              ] ++ lib.optionals stdenv.isDarwin [
+                py.pkgs.appdirs
+              ];
 
-              checkInputs = with super; [ pytestCheckHook mock ddt ];
+              checkInputs = with super; [
+                ddt
+                mock
+                pytestCheckHook
+              ];
 
               patches = [
                 # substitute pip and let it find out, that it can't write anywhere
@@ -261,6 +306,7 @@ let
                   "colorlog"
                   "emoji"
                   "immutabledict"
+                  "sarge"
                   "sentry-sdk"
                   "watchdog"
                   "wrapt"
@@ -299,7 +345,7 @@ let
               meta = with lib; {
                 homepage = "https://octoprint.org/";
                 description = "The snappy web interface for your 3D printer";
-                license = licenses.agpl3;
+                license = licenses.agpl3Only;
                 maintainers = with maintainers; [ abbradar gebner WhittlesJr ];
               };
             };

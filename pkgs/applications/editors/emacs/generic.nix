@@ -10,7 +10,7 @@
 , Xaw3d, libXcursor,  pkg-config, gettext, libXft, dbus, libpng, libjpeg, giflib
 , libtiff, librsvg, gconf, libxml2, imagemagick, gnutls, libselinux
 , alsa-lib, cairo, acl, gpm, AppKit, GSS, ImageIO, m17n_lib, libotf
-, sigtool, jansson, harfbuzz
+, sigtool, jansson, harfbuzz, sqlite
 , dontRecurseIntoAttrs ,emacsPackagesFor
 , libgccjit, targetPlatform, makeWrapper # native-comp params
 , systemd ? null
@@ -20,10 +20,13 @@
 , withGTK3 ? true, gtk3-x11 ? null, gsettings-desktop-schemas ? null
 , withXwidgets ? false, webkitgtk ? null, wrapGAppsHook ? null, glib-networking ? null
 , withMotif ? false, motif ? null
+, withSQLite3 ? false
 , withCsrc ? true
 , srcRepo ? false, autoreconfHook ? null, texinfo ? null
 , siteStart ? ./site-start.el
 , nativeComp ? false
+, withPgtk ? false
+, withXinput2 ? false
 , withImageMagick ? lib.versionOlder version "27" && (withX || withNS)
 , toolkit ? (
   if withGTK2 then "gtk2"
@@ -62,6 +65,16 @@ let emacs = stdenv.mkDerivation (lib.optionalAttrs nativeComp {
     (lib.optionalString srcRepo ''
       rm -fr .git
     '')
+
+    # Add the name of the wrapped gvfsd
+    # This used to be carried as a patch but it often got out of sync with upstream
+    # and was hard to maintain for emacs-overlay.
+    (lib.concatStrings (map (fn: ''
+      sed -i 's#(${fn} "gvfs-fuse-daemon")#(${fn} "gvfs-fuse-daemon") (${fn} ".gvfsd-fuse-wrapped")#' lisp/net/tramp-gvfs.el
+    '') [
+      "tramp-compat-process-running-p"
+      "tramp-process-running-p"
+    ]))
 
     # Reduce closure size by cleaning the environment of the emacs dumper
     ''
@@ -116,6 +129,7 @@ let emacs = stdenv.mkDerivation (lib.optionalAttrs nativeComp {
     ++ lib.optional (withX && withGTK2) gtk2-x11
     ++ lib.optionals (withX && withGTK3) [ gtk3-x11 gsettings-desktop-schemas ]
     ++ lib.optional (withX && withMotif) motif
+    ++ lib.optional withSQLite3 sqlite
     ++ lib.optionals (withX && withXwidgets) [ webkitgtk glib-networking ]
     ++ lib.optionals withNS [ AppKit GSS ImageIO ]
     ++ lib.optionals stdenv.isDarwin [ sigtool ]
@@ -138,6 +152,8 @@ let emacs = stdenv.mkDerivation (lib.optionalAttrs nativeComp {
     ++ lib.optional withXwidgets "--with-xwidgets"
     ++ lib.optional nativeComp "--with-native-compilation"
     ++ lib.optional withImageMagick "--with-imagemagick"
+    ++ lib.optional withPgtk "--with-pgtk"
+    ++ lib.optional withXinput2 "--with-xinput2"
   ;
 
   installTargets = [ "tags" "install" ];

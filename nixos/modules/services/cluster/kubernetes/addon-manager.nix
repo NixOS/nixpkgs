@@ -58,7 +58,7 @@ in
             "spec" = { ... };
           };
         }
-        // import <nixpkgs/nixos/modules/services/cluster/kubernetes/dashboard.nix> { cfg = config.services.kubernetes; };
+        // import <nixpkgs/nixos/modules/services/cluster/kubernetes/dns.nix> { cfg = config.services.kubernetes; };
       '';
     };
 

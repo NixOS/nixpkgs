@@ -14,7 +14,7 @@ stdenv.mkDerivation (attrs // {
     nim_builder --phase:configure
     runHook postConfigure
   '' else
-    buildPhase;
+    configurePhase;
 
   buildPhase = if isNull buildPhase then ''
     runHook preBuild

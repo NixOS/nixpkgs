@@ -1,7 +1,8 @@
-{ config, pkgs, lib, ... }:
+{ config, options, pkgs, lib, ... }:
 
 let
   cfg = config.services.keycloak;
+  opt = options.services.keycloak;
 in
 {
   options.services.keycloak = {
@@ -139,6 +140,7 @@ in
           lib.mkOption {
             type = lib.types.port;
             default = dbPorts.${cfg.database.type};
+            defaultText = lib.literalDocBook "default port of selected database";
             description = ''
               Port of the database to connect to.
             '';
@@ -147,6 +149,7 @@ in
       useSSL = lib.mkOption {
         type = lib.types.bool;
         default = cfg.database.host != "localhost";
+        defaultText = lib.literalExpression ''config.${opt.database.host} != "localhost"'';
         description = ''
           Whether the database connection should be secured by SSL /
           TLS.

@@ -18,7 +18,6 @@ buildPythonPackage rec {
     python-dateutil
     requests
     pyxdg
-    pre-commit
     responses
     twine
   ];

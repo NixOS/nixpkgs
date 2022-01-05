@@ -13,11 +13,11 @@
 
 buildPythonPackage rec {
   pname = "cliff";
-  version = "3.9.0";
+  version = "3.10.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "95363e9b43e2ec9599e33b5aea27a6953beda2d0673557916fa4f5796857daa3";
+    sha256 = "c68aac08d0d25853234a38fdbf1f33503849af3d5d677a4d0aacd42b0be6a4a1";
   };
 
   postPatch = ''

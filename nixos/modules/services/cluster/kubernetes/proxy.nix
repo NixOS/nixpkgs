@@ -1,10 +1,12 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
   top = config.services.kubernetes;
+  otop = options.services.kubernetes;
   cfg = top.proxy;
+  klib = options.services.kubernetes.lib.default;
 in
 {
   imports = [
@@ -31,6 +33,7 @@ in
     featureGates = mkOption {
       description = "List set of feature gates";
       default = top.featureGates;
+      defaultText = literalExpression "config.${otop.featureGates}";
       type = listOf str;
     };
 
@@ -41,7 +44,7 @@ in
       type = str;
     };
 
-    kubeconfig = top.lib.mkKubeConfigOptions "Kubernetes proxy";
+    kubeconfig = klib.mkKubeConfigOptions "Kubernetes proxy";
 
     verbosity = mkOption {
       description = ''
@@ -70,7 +73,7 @@ in
           ${optionalString (cfg.featureGates != [])
             "--feature-gates=${concatMapStringsSep "," (feature: "${feature}=true") cfg.featureGates}"} \
           --hostname-override=${cfg.hostname} \
-          --kubeconfig=${top.lib.mkKubeConfig "kube-proxy" cfg.kubeconfig} \
+          --kubeconfig=${klib.mkKubeConfig "kube-proxy" cfg.kubeconfig} \
           ${optionalString (cfg.verbosity != null) "--v=${toString cfg.verbosity}"} \
           ${cfg.extraOpts}
         '';
@@ -86,7 +89,7 @@ in
     services.kubernetes.proxy.hostname = with config.networking; mkDefault hostName;
 
     services.kubernetes.pki.certs = {
-      kubeProxyClient = top.lib.mkCert {
+      kubeProxyClient = klib.mkCert {
         name = "kube-proxy-client";
         CN = "system:kube-proxy";
         action = "systemctl restart kube-proxy.service";

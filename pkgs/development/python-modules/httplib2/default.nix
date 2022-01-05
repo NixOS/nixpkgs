@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , buildPythonPackage
+, cryptography
 , fetchFromGitHub
 , isPy27
 , mock
@@ -15,27 +16,22 @@
 
 buildPythonPackage rec {
   pname = "httplib2";
-  version = "0.20.1";
+  version = "0.20.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-1zqs3YRVtm5DwewETLtRg5XhMJPJsMi0QLfeGirOURs=";
+    sha256 = "sha256-Q5KkhVqyHDoIeKjvvYoHRbZPY7LUXGDwgp4CSuyvQ1g=";
   };
 
-  postPatch = ''
-    sed -i "/--cov/d" setup.cfg
-  '';
-
-  propagatedBuildInputs = [ pyparsing ];
-
-  pythonImportsCheck = [ "httplib2" ];
-
-  # Don't run tests for Python 2.7
-  doCheck = !isPy27;
+  propagatedBuildInputs = [
+    pyparsing
+  ];
 
   checkInputs = [
+    cryptography
     mock
     pytest-forked
     pytest-randomly
@@ -45,16 +41,29 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  # Don't run tests for Python 2.7
+  doCheck = !isPy27;
+
+  postPatch = ''
+    sed -i "/--cov/d" setup.cfg
+  '';
+
   disabledTests = lib.optionals (stdenv.isDarwin) [
     # fails with HTTP 408 Request Timeout, instead of expected 200 OK
     "test_timeout_subsequent"
   ];
 
-  pytestFlagsArray = [ "--ignore python2" ];
+  pytestFlagsArray = [
+    "--ignore python2"
+  ];
+
+  pythonImportsCheck = [
+    "httplib2"
+  ];
 
   meta = with lib; {
     description = "A comprehensive HTTP client library";
-    homepage = "https://httplib2.readthedocs.io";
+    homepage = "https://github.com/httplib2/httplib2";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

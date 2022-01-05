@@ -39,6 +39,6 @@ stdenv.mkDerivation rec {
     description = "Simple countdown and alarm plugin for the Xfce panel";
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
-    maintainers = [ ];
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

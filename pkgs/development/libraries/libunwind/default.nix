@@ -1,23 +1,13 @@
-{ stdenv, lib, fetchurl, fetchpatch, autoreconfHook, xz, buildPackages }:
+{ stdenv, lib, fetchurl, autoreconfHook, xz, buildPackages }:
 
 stdenv.mkDerivation rec {
   pname = "libunwind";
-  version = "1.4.0";
+  version = "1.6.2";
 
   src = fetchurl {
     url = "mirror://savannah/libunwind/${pname}-${version}.tar.gz";
-    sha256 = "0dc46flppifrv2z0mrdqi60165ghxm1wk0g47vcbyzjdplqwjnfz";
+    sha256 = "sha256-SmrsZmmR+0XQiJxErt6K1usQgHHDVU/N/2cfnJR5SXY=";
   };
-
-  patches = [
-    ./backtrace-only-with-glibc.patch
-
-    (fetchpatch {
-      # upstream build fix against -fno-common compilers like >=gcc-10
-      url = "https://github.com/libunwind/libunwind/commit/29e17d8d2ccbca07c423e3089a6d5ae8a1c9cb6e.patch";
-      sha256 = "1angwfq6h0jskg6zx8g6w9min38g5mgmrcbppcy5hqn59cgsxbw0";
-    })
-  ];
 
   postPatch = if stdenv.cc.isClang then ''
     substituteInPlace configure.ac --replace "-lgcc_s" ""
@@ -48,7 +38,7 @@ stdenv.mkDerivation rec {
     description = "A portable and efficient API to determine the call-chain of a program";
     maintainers = with maintainers; [ orivej ];
     platforms = platforms.linux;
-    badPlatforms = [ "riscv32-linux" "riscv64-linux" ];
+    badPlatforms = [ "riscv32-linux" ];
     license = licenses.mit;
   };
 }

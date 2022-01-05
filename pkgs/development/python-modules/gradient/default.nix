@@ -22,11 +22,11 @@
 
 buildPythonPackage rec {
   pname = "gradient";
-  version = "1.8.9";
+  version = "1.8.13";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c05913efe7fcc9f75c1fe84c157d2c2cf3ec0983e132d418c6e59fabc6361a1e";
+    sha256 = "0fa4a0553c28839e364d3aac27ec7292d26c1df27b8c54701d57eb7eda0b14f2";
   };
 
   postPatch = ''

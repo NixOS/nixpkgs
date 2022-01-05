@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "aioambient";
-  version = "2021.10.1";
+  version = "2021.12.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "bachya";
     repo = pname;
     rev = version;
-    sha256 = "sha256-DCh/o7p+lO5BhN3JoLdhImkzfxoyqiscA/6CwwvAnc0=";
+    sha256 = "sha256-nFCLMpkuSVPecKrtJ/z7KuyGw4Z9X79wKXmWsewbxvY=";
   };
 
   postPatch = ''

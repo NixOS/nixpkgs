@@ -199,6 +199,7 @@ stdenv.mkDerivation rec {
         "S3RegionResolutionTest.PublicBucket"
         "S3RegionResolutionTest.RestrictedBucket"
         "TestMinioServer.Connect"
+        "TestS3FS.GetFileInfoRoot"
         "TestS3FS.OpenOutputStreamBackgroundWrites"
         "TestS3FS.OpenOutputStreamDestructorBackgroundWrites"
         "TestS3FS.OpenOutputStreamDestructorSyncWrite"

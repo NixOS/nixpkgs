@@ -35,7 +35,7 @@ export DOTNET_NOLOGO=1
 export DOTNET_CLI_TELEMETRY_OPTOUT=1
 
 mkdir ./nuget_pkgs
-for project in OpenTabletDriver.{Console,Daemon,UX.Gtk}; do
+for project in OpenTabletDriver.{Console,Daemon,UX.Gtk,Tests}; do
   dotnet restore $project --packages ./nuget_pkgs
 done
 

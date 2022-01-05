@@ -19,7 +19,6 @@
 , elementary-icon-theme
 , wingpanel-with-indicators
 , elementary-gtk-theme
-, elementary-settings-daemon
 , nixos-artwork
 , lightdm
 , gdk-pixbuf
@@ -33,11 +32,9 @@ stdenv.mkDerivation rec {
   pname = "elementary-greeter";
   version = "6.0.1";
 
-  repoName = "greeter";
-
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "greeter";
     rev = version;
     sha256 = "1f606ds56sp1c58q8dblfpaq9pwwkqw9i4gkwksw45m2xkwlbflq";
   };
@@ -67,7 +64,6 @@ stdenv.mkDerivation rec {
     clutter-gtk # else we get could not generate cargs for mutter-clutter-2
     elementary-gtk-theme
     elementary-icon-theme
-    elementary-settings-daemon
     gnome-settings-daemon
     gdk-pixbuf
     granite
@@ -101,7 +97,7 @@ stdenv.mkDerivation rec {
       # dbus-launch needed in path
       --prefix PATH : "${dbus}/bin"
 
-      # for `wingpanel -g`
+      # for `io.elementary.wingpanel -g`
       --prefix PATH : "${wingpanel-with-indicators}/bin"
 
       # for the compositor

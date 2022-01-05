@@ -226,4 +226,7 @@ in {
       isSystemUser = true;
     };
   };
+
+  # uses attributes of the linked package
+  meta.buildDocsInSandbox = false;
 }

@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "todosrht";
-  version = "0.64.14";
+  version = "0.66.1";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "todo.sr.ht";
     rev = version;
-    sha256 = "sha256-huIAhn6h1F5w5ST4/yBwr82kAzyYwhLu+gpRuOQgnsE=";
+    sha256 = "sha256-P0xaQpK7O9zipGSIa5jL1O0L/fKt51EMNGt7XndYQ+g=";
   };
 
   nativeBuildInputs = srht.nativeBuildInputs;
@@ -42,11 +42,12 @@ buildPythonPackage rec {
   ];
 
   dontUseSetuptoolsCheck = true;
+  pythonImportsCheck = [ "todosrht" ];
 
   meta = with lib; {
     homepage = "https://todo.sr.ht/~sircmpwn/todo.sr.ht";
     description = "Ticket tracking service for the sr.ht network";
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
     maintainers = with maintainers; [ eadwu ];
   };
 }

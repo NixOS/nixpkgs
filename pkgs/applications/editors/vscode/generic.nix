@@ -118,7 +118,7 @@ let
       packed="resources/app/node_modules.asar"
       unpacked="resources/app/node_modules"
       ${nodePackages.asar}/bin/asar extract "$packed" "$unpacked"
-      substituteInPlace $unpacked/sudo-prompt/index.js \
+      substituteInPlace $unpacked/@vscode/sudo-prompt/index.js \
         --replace "/usr/bin/pkexec" "/run/wrappers/bin/pkexec" \
         --replace "/bin/bash" "${bash}/bin/bash"
       rm -rf "$packed"

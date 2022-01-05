@@ -71,6 +71,7 @@ let
     inherit (go) GOOS GOARCH;
 
     patches = args.patches or [];
+    patchFlags = args.patchFlags or [];
     preBuild = args.preBuild or "";
     sourceRoot = args.sourceRoot or "";
 

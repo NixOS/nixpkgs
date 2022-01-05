@@ -117,6 +117,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-Drpath=ON"
     "-DCMAKE_CXX_STANDARD=17"
+    "-DCMAKE_INSTALL_BINDIR=bin"
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
     "-Dbuiltin_llvm=OFF"

@@ -14,13 +14,97 @@
   </itemizedlist>
   <section xml:id="sec-release-22.05-highlights">
     <title>Highlights</title>
-    <para>
-    </para>
+    <itemizedlist>
+      <listitem>
+        <para>
+          <literal>security.acme.defaults</literal> has been added to
+          simplify configuring settings for many certificates at once.
+          This also opens up the the option to use DNS-01 validation
+          when using <literal>enableACME</literal> on web server virtual
+          hosts (e.g.
+          <literal>services.nginx.virtualHosts.*.enableACME</literal>).
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          PHP 8.1 is now available
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Mattermost has been updated to version 6.2. Migrations may
+          take a while, see the
+          <link xlink:href="https://docs.mattermost.com/install/self-managed-changelog.html#release-v6.2-feature-release">upgrade
+          notes</link>.
+        </para>
+      </listitem>
+    </itemizedlist>
   </section>
   <section xml:id="sec-release-22.05-new-services">
     <title>New Services</title>
-    <para>
-    </para>
+    <itemizedlist>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/intel/linux-sgx#install-the-intelr-sgx-psw">aesmd</link>,
+          the Intel SGX Architectural Enclave Service Manager. Available
+          as
+          <link linkend="opt-services.aesmd.enable">services.aesmd</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://docs.docker.com/engine/security/rootless/">rootless
+          Docker</link>, a <literal>systemd --user</literal> Docker
+          service which runs without root permissions. Available as
+          <link xlink:href="options.html#opt-virtualisation.docker.rootless.enable">virtualisation.docker.rootless.enable</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://conduit.rs/">matrix-conduit</link>,
+          a simple, fast and reliable chat server powered by matrix.
+          Available as
+          <link xlink:href="option.html#opt-services.matrix-conduit.enable">services.matrix-conduit</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://www.elastic.co/guide/en/beats/filebeat/current/filebeat-overview.html">filebeat</link>,
+          a lightweight shipper for forwarding and centralizing log
+          data. Available as
+          <link linkend="opt-services.filebeat.enable">services.filebeat</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/hifi/heisenbridge">heisenbridge</link>,
+          a bouncer-style Matrix IRC bridge. Available as
+          <link xlink:href="options.html#opt-services.heisenbridge.enable">services.heisenbridge</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/ngoduykhanh/PowerDNS-Admin">PowerDNS-Admin</link>,
+          a web interface for the PowerDNS server. Available at
+          <link xlink:href="options.html#opt-services.powerdns-admin.enable">services.powerdns-admin</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://maddy.email">maddy</link>, a
+          composable all-in-one mail server. Available as
+          <link xlink:href="options.html#opt-services.maddy.enable">services.maddy</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://tetrd.app">tetrd</link>, share your
+          internet connection from your device to your PC and vice versa
+          through a USB cable. Available at
+          <link linkend="opt-services.tetrd.enable">services.tetrd</link>.
+        </para>
+      </listitem>
+    </itemizedlist>
   </section>
   <section xml:id="sec-release-22.05-incompatibilities">
     <title>Backward Incompatibilities</title>
@@ -59,6 +143,19 @@
       </listitem>
       <listitem>
         <para>
+          <literal>services.kubernetes.addons.dashboard</literal> was
+          removed due to it being an outdated version.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The MoinMoin wiki engine
+          (<literal>services.moinmoin</literal>) has been removed,
+          because Python 2 is being retired from nixpkgs.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>wafHook</literal> hook now honors
           <literal>NIX_BUILD_CORES</literal> when
           <literal>enableParallelBuilding</literal> is not set
@@ -75,11 +172,159 @@
           release based on GTK+3 and Python 3.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The <literal>writers.writePython2</literal> and corresponding
+          <literal>writers.writePython2Bin</literal> convenience
+          functions to create executable Python 2 scripts in the store
+          were removed in preparation of removal of the Python 2
+          interpreter. Scripts have to be converted to Python 3 for use
+          with <literal>writers.writePython3</literal> or
+          <literal>writers.writePyPy2</literal> needs to be used.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          If you previously used
+          <literal>/etc/docker/daemon.json</literal>, you need to
+          incorporate the changes into the new option
+          <literal>virtualisation.docker.daemon.settings</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>autorestic</literal> package has been upgraded
+          from 1.3.0 to 1.5.0 which introduces breaking changes in
+          config file, check
+          <link xlink:href="https://autorestic.vercel.app/migration/1.4_1.5">their
+          migration guide</link> for more details.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          For <literal>pkgs.python3.pkgs.ipython</literal>, its direct
+          dependency
+          <literal>pkgs.python3.pkgs.matplotlib-inline</literal> (which
+          is really an adapter to integrate matplotlib in ipython if it
+          is installed) does not depend on
+          <literal>pkgs.python3.pkgs.matplotlib</literal> anymore. This
+          is closer to a non-Nix install of ipython. This has the added
+          benefit to reduce the closure size of
+          <literal>ipython</literal> from ~400MB to ~160MB (including
+          ~100MB for python itself).
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>documentation.man</literal> has been refactored to
+          support choosing a man implementation other than GNU’s
+          <literal>man-db</literal>. For this,
+          <literal>documentation.man.manualPages</literal> has been
+          renamed to
+          <literal>documentation.man.man-db.manualPages</literal>. If
+          you want to use the new alternative man implementation
+          <literal>mandoc</literal>, add
+          <literal>documentation.man = { enable = true; man-db.enable = false; mandoc.enable = true; }</literal>
+          to your configuration.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.05-notable-changes">
     <title>Other Notable Changes</title>
-    <para>
-    </para>
+    <itemizedlist>
+      <listitem>
+        <para>
+          The option
+          <link linkend="opt-services.redis.servers">services.redis.servers</link>
+          was added to support per-application
+          <literal>redis-server</literal> which is more secure since
+          Redis databases are only mere key prefixes without any
+          configuration or ACL of their own. Backward-compatibility is
+          preserved by mapping old
+          <literal>services.redis.settings</literal> to
+          <literal>services.redis.servers.&quot;&quot;.settings</literal>,
+          but you are strongly encouraged to name each
+          <literal>redis-server</literal> instance after the application
+          using it, instead of keeping that nameless one. Except for the
+          nameless
+          <literal>services.redis.servers.&quot;&quot;</literal> still
+          accessible at <literal>127.0.0.1:6379</literal>, and to the
+          members of the Unix group <literal>redis</literal> through the
+          Unix socket <literal>/run/redis/redis.sock</literal>, all
+          other <literal>services.redis.servers.${serverName}</literal>
+          are only accessible by default to the members of the Unix
+          group <literal>redis-${serverName}</literal> through the Unix
+          socket <literal>/run/redis-${serverName}/redis.sock</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The
+          <literal>writers.writePyPy2</literal>/<literal>writers.writePyPy3</literal>
+          and corresponding
+          <literal>writers.writePyPy2Bin</literal>/<literal>writers.writePyPy3Bin</literal>
+          convenience functions to create executable Python 2/3 scripts
+          using the PyPy interpreter were added.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>influxdb2</literal> package was split into
+          <literal>influxdb2-server</literal> and
+          <literal>influxdb2-cli</literal>, matching the split that took
+          place upstream. A combined <literal>influxdb2</literal>
+          package is still provided in this release for backwards
+          compatibilty, but will be removed at a later date.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>services.unifi.openPorts</literal> option default
+          value of <literal>true</literal> is now deprecated and will be
+          changed to <literal>false</literal> in 22.11. Configurations
+          using this default will print a warning when rebuilt.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>security.acme</literal> certificates will now
+          correctly check for CA revokation before reaching their
+          minimum age.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Removing domains from
+          <literal>security.acme.certs._name_.extraDomainNames</literal>
+          will now correctly remove those domains during rebuild/renew.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The option
+          <link linkend="opt-programs.ssh.enableAskPassword">programs.ssh.enableAskPassword</link>
+          was added, decoupling the setting of
+          <literal>SSH_ASKPASS</literal> from
+          <literal>services.xserver.enable</literal>. This allows easy
+          usage in non-X11 environments, e.g. Wayland.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>services.stubby</literal> module was converted to
+          a
+          <link xlink:href="https://github.com/NixOS/rfcs/blob/master/rfcs/0042-config-option.md">settings-style</link>
+          configuration.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The option <literal>services.duplicati.dataDir</literal> has
+          been added to allow changing the location of duplicati’s
+          files.
+        </para>
+      </listitem>
+    </itemizedlist>
   </section>
 </section>

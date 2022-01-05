@@ -22,8 +22,6 @@ buildPythonApplication rec {
   pname = "expliot";
   version = "0.9.8";
 
-  disabled = python3.pythonOlder "3.7";
-
   src = fetchFromGitLab {
     owner = "expliot_framework";
     repo = pname;
@@ -50,10 +48,18 @@ buildPythonApplication rec {
     zeroconf
   ];
 
+  postPatch = ''
+    # https://gitlab.com/expliot_framework/expliot/-/merge_requests/113
+    substituteInPlace setup.py \
+      --replace "pynetdicom>=1.5.1,<2" "pynetdicom>=2,<3"
+  '';
+
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "expliot" ];
+  pythonImportsCheck = [
+    "expliot"
+  ];
 
   meta = with lib; {
     description = "IoT security testing and exploitation framework";

@@ -1,16 +1,16 @@
-{ lib, stdenv, fetchurl, automake, autoconf, intltool, pkg-config, gtk3, vte, wrapGAppsHook
+{ lib, stdenv, fetchFromGitHub, automake, autoconf, intltool, pkg-config, gtk3, vte, wrapGAppsHook
 , libxslt, docbook_xml_dtd_412, docbook_xsl, libxml2, findXMLCatalogs
 }:
 
-let version = "0.3.2"; in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "lxterminal";
-  inherit version;
+  version = "0.3.2";
 
-  src = fetchurl {
-    url = "https://github.com/lxde/lxterminal/archive/${version}.tar.gz";
-    sha256 = "1iafqmccsm3nnzwp6pb2c04iniqqnscj83bq1rvf58ppzk0bvih3";
+  src = fetchFromGitHub {
+    owner = "lxde";
+    repo = "lxterminal";
+    rev = version;
+    sha256 = "sha256-5J21Xvx43Ie01IxB2usyixDl+WZEeFHn2HXZsRS5imo=";
   };
 
   configureFlags = [

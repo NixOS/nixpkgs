@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "faraday-plugins";
-  version = "1.5.7";
+  version = "1.5.9";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "infobyte";
     repo = "faraday_plugins";
     rev = "v${version}";
-    sha256 = "sha256-EW9p5r7RwWohNGwbITtDrEd1FYLtOwWXhVWFgPCG+Po=";
+    sha256 = "sha256-rU7BF1lXLgJYLed5FVKXroivxKpmmNE5woGCpAcKAwg=";
   };
 
   propagatedBuildInputs = [

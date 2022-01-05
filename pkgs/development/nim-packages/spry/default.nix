@@ -1,4 +1,4 @@
-{ lib, buildNimPackage, fetchFromGitHub, python, rocksdb, snappy, spryvm, stew
+{ lib, buildNimPackage, fetchFromGitHub, rocksdb, snappy, spryvm, stew
 , tempfile, ui }:
 
 buildNimPackage rec {
@@ -10,8 +10,8 @@ buildNimPackage rec {
     rev = "098da7bb34a9113d5db5402fecfc76b1c3fa3b36";
     hash = "sha256-PfWBrG2Z16tLgcN8JYpHaNMysBbbYX812Lkgk0ItMwE=";
   };
-  buildInputs = [ python rocksdb snappy spryvm stew tempfile ui ];
-  patches = [ ./nil.patch ];
+  buildInputs = [ rocksdb snappy spryvm stew tempfile ui ];
+  patches = [ ./nil.patch ./python.patch ];
   doCheck = true;
   meta = with lib;
     src.meta // {

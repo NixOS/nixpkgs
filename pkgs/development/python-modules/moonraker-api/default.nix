@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "moonraker-api";
-  version = "2.0.2";
+  version = "2.0.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "cmroche";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1ODfwuO8XeleOnpp/dD+8jfEAIesXT1BuImtXTn289U=";
+    sha256 = "1hhm3jnl9qm44y4k927fzw1n32c3551kgsk7i57qw25nca9x3k61";
   };
 
   propagatedBuildInputs = [

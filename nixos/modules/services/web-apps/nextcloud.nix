@@ -499,6 +499,7 @@ in {
     occ = mkOption {
       type = types.package;
       default = occ;
+      defaultText = literalDocBook "generated script";
       internal = true;
       description = ''
         The nextcloud-occ program preconfigured to target this Nextcloud instance.
@@ -526,8 +527,8 @@ in {
         # FIXME(@Ma27) remove as soon as nextcloud properly supports
         # mariadb >=10.6.
         isUnsupportedMariadb =
-          # All currently supported Nextcloud versions are affected.
-          (versionOlder cfg.package.version "23")
+          # All currently supported Nextcloud versions are affected (https://github.com/nextcloud/server/issues/25436).
+          (versionOlder cfg.package.version "24")
           # This module uses mysql
           && (cfg.config.dbtype == "mysql")
           # MySQL is managed via NixOS

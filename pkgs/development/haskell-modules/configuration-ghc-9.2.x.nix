@@ -83,7 +83,7 @@ self: super: {
   # Jailbreaks & Version Updates
   assoc = doJailbreak super.assoc;
   async = doJailbreak super.async;
-  attoparsec = super.attoparsec_0_14_2;
+  attoparsec = super.attoparsec_0_14_3;
   base64-bytestring = doJailbreak super.base64-bytestring;
   base-compat = self.base-compat_0_12_1;
   base-compat-batteries = self.base-compat-batteries_0_12_1;
@@ -101,6 +101,19 @@ self: super: {
   genvalidity-property = self.genvalidity-property_1_0_0_0;
   genvalidity-hspec = self.genvalidity-hspec_1_0_0_0;
   ghc-byteorder = doJailbreak super.ghc-byteorder;
+  ghc-exactprint = overrideCabal (drv: {
+    # HACK: ghc-exactprint 1.3.0 is not buildable for GHC < 9.2,
+    # but hackage2nix evaluates the cabal file with GHC 8.10.*,
+    # causing the build-depends to be skipped. Since the dependency
+    # list hasn't changed much since 0.6.4, we can just reuse the
+    # normal expression.
+    inherit (self.ghc-exactprint_1_3_0) src version;
+    revision = null; editedCabalFile = null;
+    libraryHaskellDepends = [
+      self.fail
+      self.ordered-containers
+    ] ++ drv.libraryHaskellDepends or [];
+  }) super.ghc-exactprint;
   ghc-lib = self.ghc-lib_9_2_1_20211101;
   ghc-lib-parser = self.ghc-lib-parser_9_2_1_20211101;
   ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_2_0_1;
@@ -124,6 +137,7 @@ self: super: {
   quickcheck-instances = super.quickcheck-instances_0_3_27;
   regex-posix = doJailbreak super.regex-posix;
   resolv = doJailbreak super.resolv;
+  retrie = doDistribute self.retrie_1_2_0_0;
   semialign = super.semialign_1_2_0_1;
   singleton-bool = doJailbreak super.singleton-bool;
   scientific = doJailbreak super.scientific;
@@ -155,14 +169,11 @@ self: super: {
   validity = pkgs.lib.pipe super.validity_0_12_0_0 [
     # head.hackage patch
     (appendPatch (pkgs.fetchpatch {
-      url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/master/patches/validity-0.11.0.1.patch";
-      sha256 = "0qs6g1naqvcvklk78cadnpsfqnff1yflryi2ms6im203w75f2fsc";
+      url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/9110e6972b5daf085e19cad41f97920d3ddac499/patches/validity-0.12.0.0.patch";
+      sha256 = "0hzns596dxvyn8irgi7aflx76wak1qi13chkkvl0055pkgykm08f";
     }))
     # head.hackage ignores test suite
     dontCheck
-    # 0.12.0.0 disabled CPP in fetched file, breaks haddock
-    (appendConfigureFlag "--ghc-option=-XCPP")
-    dontHaddock
   ];
 
   # lens >= 5.1 supports 9.2.1
@@ -212,9 +223,22 @@ self: super: {
   # Tests have a circular dependency on quickcheck-instances
   text-short = dontCheck super.text-short_0_1_4;
 
-  # hlint 3.3 needs a ghc-lib-parser newer than the one from stackage
-  hlint = super.hlint_3_3_4.overrideScope (self: super: {
-    ghc-lib-parser = self.ghc-lib-parser_9_2_1_20211101;
-    ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_2_0_1;
-  });
+  # Use hlint from git for GHC 9.2.1 support
+  hlint = doDistribute (
+    overrideSrc {
+      version = "unstable-2021-12-12";
+      src = pkgs.fetchFromGitHub {
+        owner = "ndmitchell";
+        repo = "hlint";
+        rev = "77a9702e10b772a7695c08682cd4f450fd0e9e46";
+        sha256 = "0hpp3iw7m7w2abr8vb86gdz3x6c8lj119zxln933k90ia7bmk8jc";
+      };
+    } (super.hlint_3_3_5.overrideScope (self: super: {
+      ghc-lib-parser = self.ghc-lib-parser_9_2_1_20211101;
+      ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_2_0_1;
+    }))
+  );
+
+  # https://github.com/sjakobi/bsb-http-chunked/issues/38
+  bsb-http-chunked = dontCheck super.bsb-http-chunked;
 }

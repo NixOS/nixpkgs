@@ -385,7 +385,7 @@ def check_results(
         sys.exit(1)
 
 def parse_plugin_line(line: str) -> PluginDesc:
-    branch = "master"
+    branch = "HEAD"
     alias = None
     name, repo = line.split("/")
     if " as " in repo:
@@ -401,6 +401,8 @@ def load_plugin_spec(plugin_file: str) -> List[PluginDesc]:
     plugins = []
     with open(plugin_file) as f:
         for line in f:
+            if line.startswith("#"):
+                continue
             plugin = parse_plugin_line(line)
             if not plugin.owner:
                 msg = f"Invalid repository {line}, must be in the format owner/repo[ as alias]"

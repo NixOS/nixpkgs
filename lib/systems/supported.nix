@@ -4,7 +4,9 @@
 { lib }:
 rec {
   # List of systems that are built by Hydra.
-  hydra = tier1 ++ tier2 ++ tier3;
+  hydra = tier1 ++ tier2 ++ tier3 ++ [
+    "aarch64-darwin"
+  ];
 
   tier1 = [
     "x86_64-linux"
@@ -16,7 +18,6 @@ rec {
   ];
 
   tier3 = [
-    "aarch64-darwin"
     "armv6l-linux"
     "armv7l-linux"
     "i686-linux"

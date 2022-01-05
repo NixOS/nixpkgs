@@ -29,7 +29,7 @@ How to add a new (major) version of the Linux kernel to Nixpkgs:
     4.  If needed you can also run `make menuconfig`:
 
         ```ShellSession
-        $ nix-env -i ncurses
+        $ nix-env -f "<nixpkgs>" -iA ncurses
         $ export NIX_CFLAGS_LINK=-lncurses
         $ make menuconfig ARCH=arch
         ```

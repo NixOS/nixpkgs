@@ -5,6 +5,7 @@
 , async-timeout
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , pytestCheckHook
 , pythonOlder
 , pytest-aiohttp
@@ -17,6 +18,8 @@
 buildPythonPackage rec {
   pname = "homematicip";
   version = "1.0.1";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
@@ -25,6 +28,15 @@ buildPythonPackage rec {
     rev = version;
     sha256 = "008snxx9ijpi1zr1pi1v4a6g74j821hyw0khs9lmi08v2mcabm36";
   };
+
+  patches = [
+    (fetchpatch {
+      # Drop loop kwarg from async_timeout.timeout
+      # https://github.com/coreGreenberet/homematicip-rest-api/pull/424
+      url = "https://github.com/coreGreenberet/homematicip-rest-api/commit/90efb335667e3d462b7f9ef113d2e0b8bb4e96b4.patch";
+      sha256 = "0f2bbs0666mf6sc7p4n8fwh29yjilkq36qf5pn0waf6iqdzxqwih";
+    })
+  ];
 
   propagatedBuildInputs = [
     aenum
@@ -41,6 +53,11 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
   ];
+
+  postPatch = ''
+    substituteInPlace homematicip/aio/connection.py \
+      --replace ", loop=self._loop" ""
+  '';
 
   disabledTests = [
     # Assert issues with datetime
@@ -67,7 +84,9 @@ buildPythonPackage rec {
     "test_websocket"
   ];
 
-  pythonImportsCheck = [ "homematicip" ];
+  pythonImportsCheck = [
+    "homematicip"
+  ];
 
   meta = with lib; {
     description = "Python module for the homematicIP REST API";

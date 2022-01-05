@@ -21,15 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-videos";
-  version = "2.8.0";
-
-  repoName = "videos";
+  version = "2.8.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "videos";
     rev = version;
-    sha256 = "sha256-FFCtQ42LygfjowehwZcISWTfv8PBZTH0X8mPrpiG8Ug=";
+    sha256 = "sha256-Ki6i9u+oXOBTH+dVJ9RgBxszD7Wvdrfahd9abyjFYJY=";
   };
 
   nativeBuildInputs = [

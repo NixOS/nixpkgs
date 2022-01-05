@@ -1,4 +1,7 @@
-{ aiohttp
+{ lib
+, stdenv
+, aiohttp
+, asttokens
 , blinker
 , botocore
 , bottle
@@ -7,61 +10,129 @@
 , certifi
 , chalice
 , django
+, executing
+, fakeredis
 , falcon
-, fetchPypi
-, flask
+, fetchFromGitHub
+, flask_login
+, gevent
+, httpx
 , iana-etc
 , isPy3k
+, jsonschema
 , libredirect
+, pure-eval
 , pyramid
+, pyspark
+, pytest-django
+, pytest-forked
+, pytest-localserver
+, pytestCheckHook
 , rq
 , sanic
+, sanic-testing
 , sqlalchemy
-, lib
 , tornado
-, urllib3
 , trytond
+, urllib3
 , werkzeug
-, executing
-, pure-eval
-, asttokens
 }:
 
 buildPythonPackage rec {
   pname = "sentry-sdk";
-  version = "1.4.3";
+  version = "1.5.1";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "b9844751e40710e84a457c5bc29b21c383ccb2b63d76eeaad72f7f1c808c8828";
+  src = fetchFromGitHub {
+    owner = "getsentry";
+    repo = "sentry-python";
+    rev = version;
+    sha256 = "sha256-vQ5zeAscPMQH3L+Ogj50IZZp2pBoYaxHzvcXakaoC4k=";
   };
 
-  checkInputs = [ blinker botocore chalice django flask tornado bottle rq falcon sqlalchemy werkzeug trytond
-    executing pure-eval asttokens ]
-  ++ lib.optionals isPy3k [ celery pyramid sanic aiohttp ];
+  propagatedBuildInputs = [
+    certifi
+    urllib3
+  ];
 
-  propagatedBuildInputs = [ urllib3 certifi ];
+  checkInputs = [
+    asttokens
+    blinker
+    botocore
+    bottle
+    chalice
+    django
+    executing
+    fakeredis
+    falcon
+    flask_login
+    gevent
+    jsonschema
+    pure-eval
+    pytest-django
+    pytest-forked
+    pytest-localserver
+    pytestCheckHook
+    rq
+    sqlalchemy
+    tornado
+    trytond
+    werkzeug
+  ] ++ lib.optionals isPy3k [
+    aiohttp
+    celery
+    httpx
+    pyramid
+    pyspark
+    sanic
+    sanic-testing
+  ];
 
+  doCheck = !stdenv.isDarwin;
 
-  # The Sentry tests need access to `/etc/protocols` (the tests call
-  # `socket.getprotobyname('tcp')`, which reads from this file). Normally
-  # this path isn't available in the sandbox. Therefore, use libredirect
-  # to make on eavailable from `iana-etc`. This is a test-only operation.
-  preCheck = lib.optionalString doCheck ''
-    export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols
-    export LD_PRELOAD=${libredirect}/lib/libredirect.so
-  '';
+  disabledTests = [
+    # Issue with the asseration
+    "test_auto_enabling_integrations_catches_import_error"
+    # Output mismatch in sqlalchemy test
+    "test_too_large_event_truncated"
+    # Failing falcon tests
+    "test_has_context"
+    "uri_template-"
+    "path-"
+    "test_falcon_large_json_request"
+    "test_falcon_empty_json_request"
+    "test_falcon_raw_data_request"
+    # Failing spark tests
+    "test_set_app_properties"
+    "test_start_sentry_listener"
+    # Failing threading test
+    "test_circular_references"
+    # Failing wsgi test
+    "test_session_mode_defaults_to_request_mode_in_wsgi_handler"
+  ];
 
-  postCheck = "unset NIX_REDIRECTS LD_PRELOAD";
+  disabledTestPaths = [
+    # Some tests are failing (network access, assertion errors)
+    "tests/integrations/aiohttp/"
+    "tests/integrations/gcp/"
+    "tests/integrations/httpx/"
+    "tests/integrations/stdlib/test_httplib.py"
+    # Tests are blocking
+    "tests/integrations/celery/"
+    # pytest-chalice is not available in nixpkgs yet
+    "tests/integrations/chalice/"
+    # broken since rq-1.10.1: https://github.com/getsentry/sentry-python/issues/1274
+    "tests/integrations/rq/"
+  ];
 
-  # no tests
-  doCheck = false;
-  pythonImportsCheck = [ "sentry_sdk" ];
+  pythonImportsCheck = [
+    "sentry_sdk"
+  ];
 
   meta = with lib; {
+    description = "Python SDK for Sentry.io";
     homepage = "https://github.com/getsentry/sentry-python";
-    description = "New Python SDK for Sentry.io";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ gebner ];
+    maintainers = with maintainers; [ fab gebner ];
   };
 }

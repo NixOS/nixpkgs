@@ -1,10 +1,12 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
   top = config.services.kubernetes;
+  otop = options.services.kubernetes;
   cfg = top.controllerManager;
+  klib = options.services.kubernetes.lib.default;
 in
 {
   imports = [
@@ -30,6 +32,7 @@ in
     clusterCidr = mkOption {
       description = "Kubernetes CIDR Range for Pods in cluster.";
       default = top.clusterCidr;
+      defaultText = literalExpression "config.${otop.clusterCidr}";
       type = str;
     };
 
@@ -44,6 +47,7 @@ in
     featureGates = mkOption {
       description = "List set of feature gates";
       default = top.featureGates;
+      defaultText = literalExpression "config.${otop.featureGates}";
       type = listOf str;
     };
 
@@ -53,7 +57,7 @@ in
       type = int;
     };
 
-    kubeconfig = top.lib.mkKubeConfigOptions "Kubernetes controller manager";
+    kubeconfig = klib.mkKubeConfigOptions "Kubernetes controller manager";
 
     leaderElect = mkOption {
       description = "Whether to start leader election before executing main loop.";
@@ -67,6 +71,7 @@ in
         service account's token secret.
       '';
       default = top.caFile;
+      defaultText = literalExpression "config.${otop.caFile}";
       type = nullOr path;
     };
 
@@ -125,7 +130,7 @@ in
             "--cluster-cidr=${cfg.clusterCidr}"} \
           ${optionalString (cfg.featureGates != [])
             "--feature-gates=${concatMapStringsSep "," (feature: "${feature}=true") cfg.featureGates}"} \
-          --kubeconfig=${top.lib.mkKubeConfig "kube-controller-manager" cfg.kubeconfig} \
+          --kubeconfig=${klib.mkKubeConfig "kube-controller-manager" cfg.kubeconfig} \
           --leader-elect=${boolToString cfg.leaderElect} \
           ${optionalString (cfg.rootCaFile!=null)
             "--root-ca-file=${cfg.rootCaFile}"} \
@@ -152,7 +157,7 @@ in
       path = top.path;
     };
 
-    services.kubernetes.pki.certs = with top.lib; {
+    services.kubernetes.pki.certs = with klib; {
       controllerManager = mkCert {
         name = "kube-controller-manager";
         CN = "kube-controller-manager";

@@ -38,6 +38,10 @@ stdenv.mkDerivation rec {
     ./sway-config-nixos-paths.patch
   ];
 
+  depsBuildBuild = [
+    pkg-config
+  ];
+
   nativeBuildInputs = [
     meson ninja pkg-config wayland-scanner scdoc
   ];

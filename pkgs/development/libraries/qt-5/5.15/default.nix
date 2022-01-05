@@ -11,7 +11,7 @@ Check for any minor version changes.
 , lib, stdenv, fetchurl, fetchgit, fetchpatch, fetchFromGitHub, makeSetupHook, makeWrapper
 , bison, cups ? null, harfbuzz, libGL, perl
 , gstreamer, gst-plugins-base, gtk3, dconf
-, llvmPackages_5, darwin
+, darwin
 
   # options
 , developerBuild ? false
@@ -24,8 +24,6 @@ let
   srcs = import ./srcs.nix { inherit lib fetchgit fetchFromGitHub; };
 
   qtCompatVersion = srcs.qtbase.version;
-
-  stdenvActual = if stdenv.cc.isClang then llvmPackages_5.stdenv else stdenv;
 
   patches = {
     qtbase = lib.optionals stdenv.isDarwin [
@@ -92,7 +90,7 @@ let
       mkDerivation =
         import ../mkDerivation.nix
         { inherit lib; inherit debug; wrapQtAppsHook = null; }
-        stdenvActual.mkDerivation;
+        stdenv.mkDerivation;
     }
     { inherit self srcs patches; };
 
@@ -107,7 +105,7 @@ let
         import ../mkDerivation.nix
         { inherit lib; inherit debug; inherit (self) wrapQtAppsHook; };
 
-      mkDerivation = mkDerivationWith stdenvActual.mkDerivation;
+      mkDerivation = mkDerivationWith stdenv.mkDerivation;
 
       qtbase = callPackage ../modules/qtbase.nix {
         inherit (srcs.qtbase) src version;
@@ -125,7 +123,9 @@ let
       qtconnectivity = callPackage ../modules/qtconnectivity.nix {};
       qtdeclarative = callPackage ../modules/qtdeclarative.nix {};
       qtdoc = callPackage ../modules/qtdoc.nix {};
-      qtgamepad = callPackage ../modules/qtgamepad.nix {};
+      qtgamepad = callPackage ../modules/qtgamepad.nix {
+        inherit (darwin.apple_sdk.frameworks) GameController;
+      };
       qtgraphicaleffects = callPackage ../modules/qtgraphicaleffects.nix {};
       qtimageformats = callPackage ../modules/qtimageformats.nix {};
       qtlocation = callPackage ../modules/qtlocation.nix {};

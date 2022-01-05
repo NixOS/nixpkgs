@@ -36,6 +36,8 @@ buildPythonPackage rec {
     "test_rsync_report"
     "test_init_rsync_roots"
     "test_rsyncignore"
+    # flakey
+    "test_internal_errors_propagate_to_controller"
   ];
 
   meta = with lib; {

@@ -12,9 +12,10 @@
   libffi ? null
 
   # Libdw.c only supports x86_64, i686 and s390x
-, enableDwarf ? stdenv.targetPlatform.isx86 &&
-                !stdenv.targetPlatform.isDarwin &&
-                !stdenv.targetPlatform.isWindows
+, enableDwarf ? (stdenv.targetPlatform.isx86 ||
+                 (stdenv.targetPlatform.isS390 && stdenv.targetPlatform.is64bit)) &&
+                lib.meta.availableOn stdenv.hostPlatform elfutils &&
+                lib.meta.availableOn stdenv.targetPlatform elfutils
 , elfutils # for DWARF support
 
 , useLLVM ? !(stdenv.targetPlatform.isx86
@@ -63,7 +64,7 @@
 
 , # Whether to disable the large address space allocator
   # necessary fix for iOS: https://www.reddit.com/r/haskell/comments/4ttdz1/building_an_osxi386_to_iosarm64_cross_compiler/d5qvd67/
-  disableLargeAddressSpace ? stdenv.targetPlatform.isDarwin && stdenv.targetPlatform.isAarch64
+  disableLargeAddressSpace ? stdenv.targetPlatform.isiOS
 }:
 
 assert !enableNativeBignum -> gmp != null;

@@ -4,7 +4,8 @@
 , cmake
 , unzip
 , makeWrapper
-, boost
+, boost169
+, pinnedBoost ? boost169
 , llvmPackages
 , llvmPackages_5
 , gmp
@@ -67,7 +68,7 @@ in stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    boost
+    pinnedBoost
     llvmPackages_5.llvm
     llvmPackages_5.clang
     llvmPackages_5.clang-unwrapped

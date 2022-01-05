@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gretl";
-  version = "2021b";
+  version = "2021d";
 
   src = fetchurl {
     url = "mirror://sourceforge/gretl/${pname}-${version}.tar.xz";
-    sha256 = "sha256-3KSAA0UPx3cqMXf/G5nrlCfLjWcDiGtzvJe/syRyE6c=";
+    sha256 = "sha256-zij337P/MemCwvMah2bUE3odv0Kf/KW6fUl2OgMzjuI=";
   };
 
   buildInputs = [

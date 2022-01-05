@@ -1,5 +1,6 @@
 { stdenv
 , lib
+, buildPackages
 , fetchFromGitLab
 , removeReferencesTo
 , python3
@@ -10,7 +11,6 @@
 , docutils
 , doxygen
 , graphviz
-, valgrind
 , glib
 , dbus
 , alsa-lib
@@ -25,31 +25,37 @@
 , webrtc-audio-processing
 , ncurses
 , readline81 # meson can't find <7 as those versions don't have a .pc file
+, lilv
+, openssl
 , makeFontsConf
 , callPackage
 , nixosTests
+, withValgrind ? lib.meta.availableOn stdenv.hostPlatform valgrind
+, valgrind
 , withMediaSession ? true
 , libcameraSupport ? true
 , libcamera
 , libdrm
 , gstreamerSupport ? true
-, gst_all_1 ? null
+, gst_all_1
 , ffmpegSupport ? true
-, ffmpeg ? null
+, ffmpeg
 , bluezSupport ? true
-, bluez ? null
-, sbc ? null
-, libfreeaptx ? null
-, ldacbt ? null
-, fdk_aac ? null
+, bluez
+, sbc
+, libfreeaptx
+, ldacbt
+, fdk_aac
 , nativeHspSupport ? true
 , nativeHfpSupport ? true
 , ofonoSupport ? true
 , hsphfpdSupport ? true
 , pulseTunnelSupport ? true
-, libpulseaudio ? null
+, libpulseaudio
 , zeroconfSupport ? true
-, avahi ? null
+, avahi
+, rocSupport ? true
+, roc-toolkit
 }:
 
 let
@@ -62,7 +68,7 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "pipewire";
-    version = "0.3.40";
+    version = "0.3.42";
 
     outputs = [
       "out"
@@ -80,7 +86,7 @@ let
       owner = "pipewire";
       repo = "pipewire";
       rev = version;
-      sha256 = "sha256-eY6uQa4+sC6yUWhF4IpAgRoppwhHO4s5fIMXOkS0z7A=";
+      sha256 = "sha256-Iyd5snOt+iCT7W0+FlfvhMUZo/gF+zr9JX4HIGVdHto=";
     };
 
     patches = [
@@ -115,13 +121,14 @@ let
       libjack2
       libusb1
       libsndfile
+      lilv
       ncurses
+      openssl
       readline81
       udev
       vulkan-headers
       vulkan-loader
       webrtc-audio-processing
-      valgrind
       SDL2
       systemd
     ] ++ lib.optionals gstreamerSupport [ gst_all_1.gst-plugins-base gst_all_1.gstreamer ]
@@ -129,7 +136,11 @@ let
     ++ lib.optional ffmpegSupport ffmpeg
     ++ lib.optionals bluezSupport [ bluez libfreeaptx ldacbt sbc fdk_aac ]
     ++ lib.optional pulseTunnelSupport libpulseaudio
-    ++ lib.optional zeroconfSupport avahi;
+    ++ lib.optional zeroconfSupport avahi
+    ++ lib.optional rocSupport roc-toolkit;
+
+    # Valgrind binary is required for running one optional test.
+    checkInputs = lib.optional withValgrind valgrind;
 
     mesonFlags = [
       "-Ddocs=enabled"
@@ -139,7 +150,7 @@ let
       "-Dpipewire_pulse_prefix=${placeholder "pulse"}"
       "-Dlibjack-path=${placeholder "jack"}/lib"
       "-Dlibcamera=${mesonEnable libcameraSupport}"
-      "-Droc=disabled"
+      "-Droc=${mesonEnable rocSupport}"
       "-Dlibpulse=${mesonEnable pulseTunnelSupport}"
       "-Davahi=${mesonEnable zeroconfSupport}"
       "-Dgstreamer=${mesonEnable gstreamerSupport}"
@@ -168,12 +179,17 @@ let
 
     postInstall = ''
       mkdir $out/nix-support
-      pushd $lib/share/pipewire
-      for f in *.conf; do
-        echo "Generating JSON from $f"
-        $out/bin/spa-json-dump "$f" > "$out/nix-support/$f.json"
-      done
-      popd
+      ${if (stdenv.hostPlatform == stdenv.buildPlatform) then ''
+        pushd $lib/share/pipewire
+        for f in *.conf; do
+          echo "Generating JSON from $f"
+
+          $out/bin/spa-json-dump "$f" > "$out/nix-support/$f.json"
+        done
+        popd
+      '' else ''
+        cp ${buildPackages.pipewire}/nix-support/*.json "$out/nix-support"
+      ''}
 
       moveToOutput "share/systemd/user/pipewire-pulse.*" "$pulse"
       moveToOutput "lib/systemd/user/pipewire-pulse.*" "$pulse"

@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "tarlz";
-  version = "0.11";
+  version = "0.21";
   outputs = [ "out" "man" "info" ];
 
   nativeBuildInputs = [ lzip texinfo ];
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://savannah/lzip/${pname}/${pname}-${version}.tar.lz";
-    sha256 = "sha256-PalRMerepfYDSaDs4irck+1v5Gy/vlB9CyU6omWUXlk=";
+    sha256 = "sha256-D5chEt0/Emo5TVoEEHaVzLu55gPnsZM2e9FxRgfgrfQ=";
   };
 
   enableParallelBuilding = true;

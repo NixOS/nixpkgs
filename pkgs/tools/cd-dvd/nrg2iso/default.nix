@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "nrg2iso";
-  version = "0.4";
+  version = "0.4.1";
 
   src = fetchurl {
     url = "http://gregory.kokanosky.free.fr/v4/linux/${pname}-${version}.tar.gz";
-    sha256 = "18sam7yy50rbfhjixwd7wx7kmfn1x1y5j80vwfxi5v408s39s115";
+    sha256 = "sha256-O+NqQWdY/BkQRztJqNrfKiqj1R8ZdhlzNrwXS8HjBuU=";
   };
 
   installPhase = ''

@@ -1,8 +1,8 @@
 diff --git i/CMakeLists.txt w/CMakeLists.txt
-index faa9417..059b899 100644
+index 375b17c..106efa9 100644
 --- i/CMakeLists.txt
 +++ w/CMakeLists.txt
-@@ -101,13 +101,11 @@ qt5_add_translation(QM_FILES
+@@ -114,13 +114,11 @@ qt5_add_translation(QM_FILES
  )
  
  configure_file(src/cmake.h.in cmake.h)
@@ -19,7 +19,7 @@ index faa9417..059b899 100644
      src/addlanguagedialog.cpp
      src/addlanguagedialog.ui
 diff --git i/cmake/ExternalLibraries.cmake w/cmake/ExternalLibraries.cmake
-index e2501e1..e15ce6c 100644
+index c92e745..f265f03 100644
 --- i/cmake/ExternalLibraries.cmake
 +++ w/cmake/ExternalLibraries.cmake
 @@ -2,34 +2,28 @@ include(FetchContent)
@@ -46,7 +46,7 @@ index e2501e1..e15ce6c 100644
  
  FetchContent_Declare(QOnlineTranslator
 -    GIT_REPOSITORY https://github.com/crow-translate/QOnlineTranslator
--    GIT_TAG df89083d2f680a8f856b1df00b8846f995cf1fae
+-    GIT_TAG 1.5.2
 +    SOURCE_DIR @qonlinetranslator@
  )
  

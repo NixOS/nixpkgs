@@ -142,6 +142,7 @@ in
       readOnly = true;
       internal = true;
       default = systemActivationScript (removeAttrs config.system.activationScripts [ "script" ]) true;
+      defaultText = literalDocBook "generated activation script";
     };
 
     system.userActivationScripts = mkOption {

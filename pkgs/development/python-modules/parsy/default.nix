@@ -1,26 +1,34 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder, pytest }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "parsy";
-  version = "1.3.0";
+  version = "1.4.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bfc941ea5a69e6ac16bd4f7d9f807bbc17e35edd8b95bcd2499a25b059359012";
+    sha256 = "7c411373e520e97431f0b390db9d2cfc5089bc1d33f4f1584d2cdc9e6368f302";
   };
 
-  checkInputs = [ pytest ];
+  checkInputs = [
+    pytestCheckHook
+  ];
 
-  checkPhase = ''
-    py.test test/
-  '';
-
-  disabled = pythonOlder "3.4";
+  pythonImportsCheck = [
+    "parsy"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/python-parsy/parsy";
     description = "Easy-to-use parser combinators, for parsing in pure Python";
     license = [ licenses.mit ];
-    maintainers = with maintainers; [ edibopp ];
+    maintainers = with maintainers; [ milibopp ];
   };
 }

@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, xlibsWrapper, imlib2 }:
 
 stdenv.mkDerivation rec {
-  name = "giblib-1.2.4";
+  pname = "giblib";
+  version = "1.2.4";
 
   src = fetchurl {
-    url = "http://linuxbrit.co.uk/downloads/${name}.tar.gz";
+    url = "http://linuxbrit.co.uk/downloads/giblib-${version}.tar.gz";
     sha256 = "1b4bmbmj52glq0s898lppkpzxlprq9aav49r06j2wx4dv3212rhp";
   };
 

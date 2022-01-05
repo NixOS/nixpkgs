@@ -1,4 +1,4 @@
-{ mkXfceDerivation, libxfce4util, gobject-introspection, vala }:
+{ lib, mkXfceDerivation, libxfce4util, gobject-introspection, vala }:
 
 mkXfceDerivation {
   category = "xfce";
@@ -11,7 +11,8 @@ mkXfceDerivation {
 
   buildInputs = [ libxfce4util ];
 
-  meta = {
+  meta = with lib; {
     description = "Simple client-server configuration storage and query system for Xfce";
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

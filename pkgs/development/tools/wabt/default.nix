@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wabt";
-  version = "1.0.24";
+  version = "1.0.25";
 
   src = fetchFromGitHub {
     owner = "WebAssembly";
     repo = "wabt";
     rev = version;
-    sha256 = "sha256-/blukivL6+xsnChxDp5gCr5w8S3bBuhO459YkLGxYmA=";
+    sha256 = "sha256-2go4HR/z96ONisXBGZDSIB5vXtHvRqBMhHOQTBL5G5w=";
     fetchSubmodules = true;
   };
 

@@ -49,6 +49,6 @@ stdenv.mkDerivation rec {
     description = "A panel plug-in for different sensors using acpi, lm_sensors and hddtemp";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = [ maintainers.romildo ];
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

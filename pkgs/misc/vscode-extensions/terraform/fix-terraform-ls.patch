@@ -1,8 +1,8 @@
 diff --git a/out/serverPath.js b/out/serverPath.js
-index d25f5d4..289f0dd 100644
+index fafa915..2e6d376 100644
 --- a/out/serverPath.js
 +++ b/out/serverPath.js
-@@ -8,7 +8,13 @@ exports.CUSTOM_BIN_PATH_OPTION_NAME = 'languageServer.pathToBinary';
+@@ -18,7 +18,13 @@ exports.CUSTOM_BIN_PATH_OPTION_NAME = 'languageServer.pathToBinary';
  class ServerPath {
      constructor(context) {
          this.context = context;

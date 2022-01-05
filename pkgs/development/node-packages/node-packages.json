@@ -269,6 +269,7 @@
 , "svelte-language-server"
 , "svgo"
 , "swagger"
+, "tailwindcss"
 , {"tedicross": "git+https://github.com/TediCross/TediCross.git#v0.8.7"}
 , "teck-programmer"
 , "tern"

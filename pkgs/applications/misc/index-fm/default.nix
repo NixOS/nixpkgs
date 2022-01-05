@@ -16,7 +16,7 @@
 }:
 
 mkDerivation rec {
-  pname = "index";
+  pname = "index-fm";
   version = "2.1.0";
 
   src = fetchFromGitLab {

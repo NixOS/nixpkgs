@@ -47,9 +47,6 @@ stdenv.mkDerivation rec {
     ./no-double-relative.patch
   ];
 
-  # 'path' is unavailable: introduced in macOS 10.15
-  CXXFLAGS = lib.optional (stdenv.hostPlatform.system == "x86_64-darwin") "-D_LIBCPP_DISABLE_AVAILABILITY";
-
   meta = with lib; {
     description = "Tool that generates a compilation database for clang tooling";
     longDescription = ''

@@ -5,6 +5,7 @@ with lib;
 let
 
   cfg = config.services.rspamd;
+  opt = options.services.rspamd;
   postfixCfg = config.services.postfix;
 
   bindSocketOpts = {options, config, ... }: {
@@ -285,8 +286,8 @@ in
               bindSockets = [{
                 socket = "/run/rspamd/rspamd.sock";
                 mode = "0660";
-                owner = "${cfg.user}";
-                group = "${cfg.group}";
+                owner = "''${config.${opt.user}}";
+                group = "''${config.${opt.group}}";
               }];
             };
             controller = {

@@ -8,11 +8,12 @@
 , pyjwt
 , pytestCheckHook
 , requests-mock
+, time-machine
 }:
 
 buildPythonPackage rec {
   pname = "bimmer-connected";
-  version = "0.8.2";
+  version = "0.8.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -21,7 +22,7 @@ buildPythonPackage rec {
     owner = "bimmerconnected";
     repo = "bimmer_connected";
     rev = version;
-    hash = "sha256-/AkQ7hEjzgL4/ruXqTdchh+N8PY5q3ILNKKo43EOGg4=";
+    hash = "sha256-nLZdaV341mULXIngkEqiLQeg4G2NDFGNg/AUozgJe74=";
   };
 
   nativeBuildInputs = [
@@ -39,6 +40,7 @@ buildPythonPackage rec {
   checkInputs = [
     pytestCheckHook
     requests-mock
+    time-machine
   ];
 
   meta = with lib; {

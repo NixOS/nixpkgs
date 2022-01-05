@@ -1,9 +1,8 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, pytest
+, fetchFromGitHub
+, pytestCheckHook
 , pytest-asyncio
-, python-rapidjson
 , pretend
 , freezegun
 , twisted
@@ -14,25 +13,23 @@
 
 buildPythonPackage rec {
   pname = "structlog";
-  version = "21.2.0";
+  version = "21.4.0";
+  format = "flit";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "7ac42b565e1295712313f91edbcb64e0840a9037d888c8954f11fa6c43270e99";
+  # sdist is missing conftest.py
+  src = fetchFromGitHub {
+    owner = "hynek";
+    repo = "structlog";
+    rev = version;
+    sha256 = "sha256-uXFSrC1TvQV46uu0sadC3eMq7yk5TnrpQE8m6NSv1Bg=";
   };
 
-  checkInputs = [ pytest pytest-asyncio pretend freezegun simplejson twisted ]
-    ++ lib.optionals (pythonAtLeast "3.6") [ python-rapidjson ];
+  checkInputs = [ pytestCheckHook pytest-asyncio pretend freezegun simplejson twisted ];
   propagatedBuildInputs = [ six ];
-
-  checkPhase = ''
-    # rm tests/test_twisted.py*
-    py.test
-  '';
 
   meta = {
     description = "Painless structural logging";
-    homepage = "http://www.structlog.org/";
+    homepage = "https://github.com/hynek/structlog";
     license = lib.licenses.asl20;
   };
 }

@@ -2,6 +2,6 @@
 
 fetchNimble {
   pname = "zippy";
-  version = "0.5.6";
-  hash = "sha256-axp4t9+8TFSpvnATlRKZyuOGLA0e/XKfvrVSwreXpC4=";
+  version = "0.7.3";
+  hash = "sha256-w64ENRyP3mNTtESSt7CDDxUkjYSfziNVVedkO4HIuJ8=";
 }

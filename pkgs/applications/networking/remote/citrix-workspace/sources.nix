@@ -122,6 +122,17 @@ let
       x86suffix = "25";
       homepage  = "https://www.citrix.com/downloads/workspace-app/linux/workspace-app-for-linux-latest.html";
     };
+
+    "21.12.0" = {
+      major     = "21";
+      minor     = "12";
+      patch     = "0";
+      x64hash   = "de81deab648e1ebe0ddb12aa9591c8014d7fad4eba0db768f25eb156330bb34d";
+      x86hash   = "3746cdbe26727f7f6fb85fbe5f3e6df0322d79bb66e3a70158b22cb4f6b6b292";
+      x64suffix = "18";
+      x86suffix = "18";
+      homepage  = "https://www.citrix.com/downloads/workspace-app/linux/workspace-app-for-linux-latest.html";
+    };
   };
 
   # Retain attribute-names for abandoned versions of Citrix workspace to

@@ -405,6 +405,29 @@ rec {
     created = "now";
   };
 
+  # 23. Ensure that layers are unpacked in the correct order before the
+  # runAsRoot script is executed.
+  layersUnpackOrder =
+  let
+    layerOnTopOf = parent: layerName:
+      pkgs.dockerTools.buildImage {
+        name = "layers-unpack-order-${layerName}";
+        tag = "latest";
+        fromImage = parent;
+        contents = [ pkgs.coreutils ];
+        runAsRoot = ''
+          #!${pkgs.runtimeShell}
+          echo -n "${layerName}" >> /layer-order
+        '';
+      };
+    # When executing the runAsRoot script when building layer C, if layer B is
+    # not unpacked on top of layer A, the contents of /layer-order will not be
+    # "ABC".
+    layerA = layerOnTopOf null   "a";
+    layerB = layerOnTopOf layerA "b";
+    layerC = layerOnTopOf layerB "c";
+  in layerC;
+
   # buildImage without explicit tag
   bashNoTag = pkgs.dockerTools.buildImage {
     name = "bash-no-tag";

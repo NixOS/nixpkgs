@@ -2,13 +2,13 @@
 
 buildGoPackage rec {
   pname = "openldap_exporter";
-  version = "2.1.4";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "tomcz";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-G4bTYFm1Zh+7gfSIZnfrPyQ15967ebEzl33pgZu23D4=";
+    sha256 = "sha256-+lrLA9CbGNzvvbwn79ili/kFRCr6vMKDtkvyfnL9n9k=";
   };
 
   ldflags = [

@@ -161,6 +161,18 @@ let
       ./patches/no-build-timestamps.patch
       # For bundling Widevine (DRM), might be replaceable via bundle_widevine_cdm=true in gnFlags:
       ./patches/widevine-79.patch
+    ] ++ lib.optionals (versionRange "98" "99") [
+      # A critical Ozone/Wayland fix:
+      (githubPatch {
+        # [linux/wayland] Fixed terminate caused by binding to wrong version.
+        commit = "dd4c3ddadbb9869f59cee201a38e9ca3b9154f4d";
+        sha256 = "sha256-FH7lBQTruMzkBT2XQ+kgADmJA0AxJfaV/gvtoqfQ4a4=";
+      })
+      (githubPatch {
+        # [linux/wayland] Fixed terminate caused by binding to wrong version. (fixup)
+        commit = "a84b79daa8897b822336b8f348ef4daaae07af37";
+        sha256 = "sha256-2x6/rGGzTC6lKLMkVyD9RNCTsMVrtRQyr/NjSpaj2is=";
+      })
     ];
 
     postPatch = ''

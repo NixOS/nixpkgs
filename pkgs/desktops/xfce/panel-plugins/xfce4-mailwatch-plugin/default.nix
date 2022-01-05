@@ -38,6 +38,6 @@ stdenv.mkDerivation rec {
     description = "Mail watcher plugin for Xfce panel";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    maintainers = [ ];
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isx86_64 "-mno-fma";
 
   # https://lists.gnu.org/archive/html/bug-gsl/2015-11/msg00012.html
-  doCheck = stdenv.hostPlatform.system != "i686-linux" && stdenv.hostPlatform.system != "aarch64-linux";
+  doCheck = stdenv.hostPlatform.system != "i686-linux";
 
   meta = {
     description = "The GNU Scientific Library, a large numerical library";

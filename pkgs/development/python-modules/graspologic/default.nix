@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "graspologic";
-  version = "0.3";
+  version = "0.3.1";
 
   disabled = isPy27;
 
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "microsoft";
     repo = "graspologic";
     rev = "v${version}";
-    sha256 = "0lab76qiryxvwl6zrcikhnxil1xywl0wkkm2vzi4v9mdzpa7w29r";
+    sha256 = "07dmfb1aplha01d22b41js7634dac4v28pv1l3bzssqhi4yyds7h";
   };
 
   propagatedBuildInputs = [

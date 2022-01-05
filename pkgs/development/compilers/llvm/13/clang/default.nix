@@ -37,6 +37,11 @@ let
       ./purity.patch
       # https://reviews.llvm.org/D51899
       ./gnu-install-dirs.patch
+      # Revert of https://reviews.llvm.org/D100879
+      # The malloc alignment assumption is incorrect for jemalloc and causes
+      # mis-compilation in firefox.
+      # See: https://bugzilla.mozilla.org/show_bug.cgi?id=1741454
+      ./revert-malloc-alignment-assumption.patch
       (substituteAll {
         src = ../../clang-11-12-LLVMgold-path.patch;
         libllvmLibdir = "${libllvm.lib}/lib";

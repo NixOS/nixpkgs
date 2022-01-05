@@ -1,10 +1,12 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
   top = config.services.kubernetes;
+  otop = options.services.kubernetes;
   cfg = top.kubelet;
+  klib = options.services.kubernetes.lib.default;
 
   cniConfig =
     if cfg.cni.config != [] && cfg.cni.configDir != null then
@@ -26,7 +28,7 @@ let
     config.Cmd = ["/bin/pause"];
   };
 
-  kubeconfig = top.lib.mkKubeConfig "kubelet" cfg.kubeconfig;
+  kubeconfig = klib.mkKubeConfig "kubelet" cfg.kubeconfig;
 
   manifestPath = "kubernetes/manifests";
 
@@ -35,6 +37,7 @@ let
       key = mkOption {
         description = "Key of taint.";
         default = name;
+        defaultText = literalDocBook "Name of this submodule.";
         type = str;
       };
       value = mkOption {
@@ -76,12 +79,14 @@ in
     clusterDomain = mkOption {
       description = "Use alternative domain.";
       default = config.services.kubernetes.addons.dns.clusterDomain;
+      defaultText = literalExpression "config.${options.services.kubernetes.addons.dns.clusterDomain}";
       type = str;
     };
 
     clientCaFile = mkOption {
       description = "Kubernetes apiserver CA file for client authentication.";
       default = top.caFile;
+      defaultText = literalExpression "config.${otop.caFile}";
       type = nullOr path;
     };
 
@@ -148,6 +153,7 @@ in
     featureGates = mkOption {
       description = "List set of feature gates";
       default = top.featureGates;
+      defaultText = literalExpression "config.${otop.featureGates}";
       type = listOf str;
     };
 
@@ -172,7 +178,7 @@ in
       type = str;
     };
 
-    kubeconfig = top.lib.mkKubeConfigOptions "Kubelet";
+    kubeconfig = klib.mkKubeConfigOptions "Kubelet";
 
     manifests = mkOption {
       description = "List of manifests to bootstrap with kubelet (only pods can be created as manifest entry)";
@@ -353,7 +359,7 @@ in
       services.kubernetes.kubelet.hostname = with config.networking;
         mkDefault (hostName + optionalString (domain != null) ".${domain}");
 
-      services.kubernetes.pki.certs = with top.lib; {
+      services.kubernetes.pki.certs = with klib; {
         kubelet = mkCert {
           name = "kubelet";
           CN = top.kubelet.hostname;

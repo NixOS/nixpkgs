@@ -2,8 +2,7 @@
 , fetchFromGitLab
 , gnome
 , dconf
-, wxGTK30
-, wxGTK31
+, wxGTK31-gtk3
 , makeWrapper
 , gsettings-desktop-schemas
 , hicolor-icon-theme
@@ -14,42 +13,36 @@
 
 , pname ? "kicad"
 , stable ? true
-, oceSupport ? false
-, withOCE ? false
-, withOCCT ? false
 , withOCC ? true
-, ngspiceSupport ? false
 , withNgspice ? true
 , libngspice
-, scriptingSupport ? false
 , withScripting ? true
 , python3
 , debug ? false
 , sanitizeAddress ? false
 , sanitizeThreads ? false
 , with3d ? true
-, withI18n ? true
+, withI18n ? false
+, withPCM ? true # Plugin and Content Manager
 , srcs ? { }
 }:
 
 # The `srcs` parameter can be used to override the kicad source code
-# and all libraries (including i18n), which are otherwise inaccessible
+# and all libraries, which are otherwise inaccessible
 # to overlays since most of the kicad build expression has been
 # refactored into base.nix, most of the library build expressions have
-# been refactored into libraries.nix, and most the i18n build
-# expression has been refactored into i18n.nix. Overrides are only
-# applied when building `kicad-unstable`. The `srcs` parameter has no
-# effect for stable `kicad`. `srcs` takes an attribute set in which
+# been refactored into libraries.nix. Overrides are only applied when
+# building `kicad-unstable`. The `srcs` parameter has
+# no effect for stable `kicad`. `srcs` takes an attribute set in which
 # any of the following attributes are meaningful (though none are
-# mandatory): "kicad", "kicadVersion", "i18n", "symbols", "templates",
+# mandatory): "kicad", "kicadVersion", "symbols", "templates",
 # "footprints", "packages3d", and "libVersion". "kicadVersion" and
 # "libVersion" should be set to a string with the desired value for
 # the version attribute in kicad's `mkDerivation` and the version
-# attribute in any of the library's or i18n's `mkDerivation`,
-# respectively. "kicad", "i18n", "symbols", "templates", "footprints",
-# and "packages3d" should be set to an appropriate fetcher (e.g.,
-# `fetchFromGitLab`). So, for example, a possible overlay for kicad
-# is:
+# attribute in any of the library's `mkDerivation`, respectively.
+# "kicad", "symbols", "templates", "footprints", and "packages3d"
+# should be set to an appropriate fetcher (e.g. `fetchFromGitLab`).
+# So, for example, a possible overlay for kicad is:
 #
 # final: prev:
 
@@ -68,15 +61,6 @@
 #   });
 # }
 
-assert withNgspice -> libngspice != null;
-assert lib.assertMsg (!ngspiceSupport)
-  "`nspiceSupport` was renamed to `withNgspice` for the sake of consistency with other kicad nix arguments.";
-assert lib.assertMsg (!oceSupport)
-  "`oceSupport` was renamed to `withOCE` for the sake of consistency with other kicad nix arguments.";
-assert lib.assertMsg (!scriptingSupport)
-  "`scriptingSupport` was renamed to `withScripting` for the sake of consistency with other kicad nix arguments.";
-assert lib.assertMsg (!withOCCT)
-  "`withOCCT` was renamed to `withOCC` for the sake of consistency with upstream cmake options.";
 let
   baseName = if (stable) then "kicad" else "kicad-unstable";
   versionsImport = import ./versions.nix;
@@ -89,14 +73,6 @@ let
     repo = "kicad";
     rev = versionsImport.${baseName}.kicadVersion.src.rev;
     sha256 = versionsImport.${baseName}.kicadVersion.src.sha256;
-  };
-
-  i18nSrcFetch = fetchFromGitLab {
-    group = "kicad";
-    owner = "code";
-    repo = "kicad-i18n";
-    rev = versionsImport.${baseName}.libVersion.libSources.i18n.rev;
-    sha256 = versionsImport.${baseName}.libVersion.libSources.i18n.sha256;
   };
 
   libSrcFetch = name: fetchFromGitLab {
@@ -121,36 +97,15 @@ let
     if srcOverridep "kicadVersion" then srcs.kicadVersion
     else versionsImport.${baseName}.kicadVersion.version;
 
-  i18nSrc = if srcOverridep "i18n" then srcs.i18n else i18nSrcFetch;
-  i18nVersion =
-    if srcOverridep "i18nVersion" then srcs.i18nVersion
-    else versionsImport.${baseName}.libVersion.version;
-
   libSrc = name: if srcOverridep name then srcs.${name} else libSrcFetch name;
   # TODO does it make sense to only have one version for all libs?
   libVersion =
     if srcOverridep "libVersion" then srcs.libVersion
     else versionsImport.${baseName}.libVersion.version;
 
-  wxGTK =
-    if (stable)
-    # wxGTK3x may default to withGtk2 = false, see #73145
-    then
-      wxGTK30.override
-        {
-          withGtk2 = false;
-        }
-    # wxGTK31 currently introduces an issue with opening the python interpreter in pcbnew
-    # but brings high DPI support?
-    else
-      wxGTK31.override {
-        withGtk2 = false;
-      };
-
+  wxGTK = wxGTK31-gtk3;
   python = python3;
-  wxPython = if (stable)
-    then python.pkgs.wxPython_4_0
-    else python.pkgs.wxPython_4_1;
+  wxPython = python.pkgs.wxPython_4_1;
 
   inherit (lib) concatStringsSep flatten optionalString optionals;
 in
@@ -158,13 +113,11 @@ stdenv.mkDerivation rec {
 
   # Common libraries, referenced during runtime, via the wrapper.
   passthru.libraries = callPackages ./libraries.nix { inherit libSrc; };
-  passthru.i18n = callPackage ./i18n.nix { src = i18nSrc; };
   base = callPackage ./base.nix {
     inherit stable baseName;
     inherit kicadSrc kicadVersion;
-    inherit (passthru) i18n;
     inherit wxGTK python wxPython;
-    inherit withI18n withOCC withOCE withNgspice withScripting;
+    inherit withOCC withNgspice withScripting withI18n withPCM;
     inherit debug sanitizeAddress sanitizeThreads;
   };
 
@@ -197,27 +150,14 @@ stdenv.mkDerivation rec {
     "--prefix GIO_EXTRA_MODULES : ${dconf}/lib/gio/modules"
     # required to open a bug report link in firefox-wayland
     "--set-default MOZ_DBUS_REMOTE 1"
-  ]
-  ++ optionals (stable)
-  [
-    "--set-default KISYSMOD ${footprints}/share/kicad/modules"
-    "--set-default KICAD_SYMBOL_DIR ${symbols}/share/kicad/library"
-    "--set-default KICAD_TEMPLATE_DIR ${templates}/share/kicad/template"
-    "--prefix KICAD_TEMPLATE_DIR : ${symbols}/share/kicad/template"
-    "--prefix KICAD_TEMPLATE_DIR : ${footprints}/share/kicad/template"
-  ]
-  ++ optionals (stable && with3d) [ "--set-default KISYS3DMOD ${packages3d}/share/kicad/modules/packages3d" ]
-  ++ optionals (!stable)
-  [
     "--set-default KICAD6_FOOTPRINT_DIR ${footprints}/share/kicad/footprints"
     "--set-default KICAD6_SYMBOL_DIR ${symbols}/share/kicad/symbols"
     "--set-default KICAD6_TEMPLATE_DIR ${templates}/share/kicad/template"
     "--prefix KICAD6_TEMPLATE_DIR : ${symbols}/share/kicad/template"
     "--prefix KICAD6_TEMPLATE_DIR : ${footprints}/share/kicad/template"
   ]
-  ++ optionals (!stable && with3d)
+  ++ optionals (with3d)
   [
-    "--set-default KISYS3DMOD ${packages3d}/share/kicad/3dmodels"
     "--set-default KICAD6_3DMODEL_DIR ${packages3d}/share/kicad/3dmodels"
   ]
   ++ optionals (withNgspice) [ "--prefix LD_LIBRARY_PATH : ${libngspice}/lib" ]
@@ -259,9 +199,6 @@ stdenv.mkDerivation rec {
     ln -s ${base}/share/applications $out/share/applications
     ln -s ${base}/share/icons $out/share/icons
     ln -s ${base}/share/mime $out/share/mime
-  '' + optionalString (stable) ''
-    ln -s ${base}/share/appdata $out/share/appdata
-  '' + optionalString (!stable) ''
     ln -s ${base}/share/metainfo $out/share/metainfo
   '';
 

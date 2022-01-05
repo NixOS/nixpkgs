@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, options, pkgs, lib, ... }:
 
 with lib;
 
@@ -7,6 +7,7 @@ let
   registrationFile = "${dataDir}/discord-registration.yaml";
   appDir = "${pkgs.matrix-appservice-discord}/${pkgs.matrix-appservice-discord.passthru.nodeAppDir}";
   cfg = config.services.matrix-appservice-discord;
+  opt = options.services.matrix-appservice-discord;
   # TODO: switch to configGen.json once RFC42 is implemented
   settingsFile = pkgs.writeText "matrix-appservice-discord-settings.json" (builtins.toJSON cfg.settings);
 
@@ -74,6 +75,7 @@ in {
       url = mkOption {
         type = types.str;
         default = "http://localhost:${toString cfg.port}";
+        defaultText = literalExpression ''"http://localhost:''${toString config.${opt.port}}"'';
         description = ''
           The URL where the application service is listening for HS requests.
         '';

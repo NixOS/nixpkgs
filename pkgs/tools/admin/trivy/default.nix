@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "trivy";
-  version = "0.21.1";
+  version = "0.22.0";
 
   src = fetchFromGitHub {
     owner = "aquasecurity";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-KxGG59H5EzIcYigvbQlrwpZLP4zMqErO3vDKhBOPc3w=";
+    sha256 = "sha256-DH4vr6WiGwzT9zTMs/UqVoCHhpOSoT5t8P9plTPt8ZQ=";
   };
 
-  vendorSha256 = "sha256-lITzqPMsZk/G2nG4LcUdyTb3gE3rtlXET/c2UaYODvU=";
+  vendorSha256 = "sha256-1m3izHfxMUvUiz21NRjqdNS95sXf8Rwlu5TuQ411190=";
 
   excludedPackages = "misc";
 
@@ -24,7 +24,11 @@ buildGoModule rec {
     "-X main.version=v${version}"
   ];
 
+  # Tests requires network access
+  doCheck = false;
+
   doInstallCheck = true;
+
   installCheckPhase = ''
     runHook preInstallCheck
     $out/bin/trivy --help

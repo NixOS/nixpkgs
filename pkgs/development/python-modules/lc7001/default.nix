@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "lc7001";
-  version = "1.0.4";
+  version = "1.0.5";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-1qObmGpu6mU3gdxS8stH+4Zc2NA7W1+pS7fOXALC0Ug=";
+    sha256 = "sha256-I4I3vwW1kJsgLFPMGpe9hkD3iEeC3AqI4pCi6SCWPx4=";
   };
 
   nativeBuildInputs = [

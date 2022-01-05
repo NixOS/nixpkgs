@@ -1,8 +1,9 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 with lib;
 let
   pkg = pkgs.moonraker;
   cfg = config.services.moonraker;
+  opt = options.services.moonraker;
   format = pkgs.formats.ini {
     # https://github.com/NixOS/nixpkgs/pull/121613#issuecomment-885241996
     listToValue = l:
@@ -31,6 +32,7 @@ in {
       configDir = mkOption {
         type = types.path;
         default = cfg.stateDir + "/config";
+        defaultText = literalExpression ''config.${opt.stateDir} + "/config"'';
         description = ''
           The directory containing client-writable configuration files.
 

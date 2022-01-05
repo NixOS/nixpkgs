@@ -29,6 +29,8 @@ in {
 
   meta = {
     maintainers = teams.freedesktop.members;
+    # uses attributes of the linked package
+    buildDocsInSandbox = false;
   };
 
   ###### interface

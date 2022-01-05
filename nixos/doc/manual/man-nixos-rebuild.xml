@@ -535,12 +535,8 @@
      </para>
 
      <para>
-      If <option>--build-host</option> is not explicitly specified,
-      <option>--build-host</option> will implicitly be set to the same value as
-      <option>--target-host</option>. So, if you only specify
-      <option>--target-host</option> both building and activation will take
-      place remotely (and no build artifacts will be copied to the local
-      machine).
+      If <option>--build-host</option> is not explicitly specified, building
+      will take place locally.
      </para>
 
      <para>

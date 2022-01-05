@@ -53,12 +53,12 @@ let
   };
 
   withWarnings = x:
-    lib.warnIf (evalConfigArgs?args) "The extraArgs argument to eval-config.nix is deprecated. Please set config._module.args instead."
+    lib.warnIf (evalConfigArgs?extraArgs) "The extraArgs argument to eval-config.nix is deprecated. Please set config._module.args instead."
     lib.warnIf (evalConfigArgs?check) "The check argument to eval-config.nix is deprecated. Please set config._module.check instead."
     x;
 
   legacyModules =
-    lib.optional (evalConfigArgs?args) {
+    lib.optional (evalConfigArgs?extraArgs) {
       config = {
         _module.args = extraArgs;
       };

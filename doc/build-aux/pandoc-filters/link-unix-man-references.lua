@@ -1,6 +1,5 @@
 --[[
-Turns a manpage reference into a link, when a mapping is defined
-in the unix-man-urls.lua file.
+Turns a manpage reference into a link, when a mapping is defined below.
 ]]
 
 local man_urls = {

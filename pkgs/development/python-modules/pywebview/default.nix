@@ -7,18 +7,19 @@
 , pythonOlder
 , qt5
 , xvfb-run
+, proxy_tools
 }:
 
 buildPythonPackage rec {
   pname = "pywebview";
-  version = "3.4";
+  version = "3.5";
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "r0x0r";
     repo = "pywebview";
     rev = version;
-    sha256 = "sha256-3JHwtw8oReolEl4k8cdt7GCVGNkfWWJN6EnZYHxzDO8=";
+    sha256 = "sha256-+At/ToEylSPcLh/u2NHVTXQpMnw+2/afsevg5YAX/4c=";
   };
 
   nativeBuildInputs = [
@@ -27,6 +28,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     pyqtwebengine
+    proxy_tools
   ] ++ lib.optionals (pythonOlder "3.7") [ importlib-resources ];
 
   checkInputs = [
@@ -51,6 +53,8 @@ buildPythonPackage rec {
     xvfb-run -s '-screen 0 800x600x24' ./run.sh
     popd
   '';
+
+  pythonImportsCheck = [ "webview" ];
 
   meta = with lib; {
     homepage = "https://github.com/r0x0r/pywebview";

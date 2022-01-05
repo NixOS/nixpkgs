@@ -5,12 +5,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.0.0";
+  version = "1.1.0";
   pname = "filebrowser_safe";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1209a26abd5a085a6453e020513fd94e920bde3908a2bcf3fe0ad5e4292b943b";
+    sha256 = "14b6e0af9697f1d0f08508cc88bc8459273cd6453636cebe8504dccc80e926e4";
   };
 
   buildInputs = [ django ];

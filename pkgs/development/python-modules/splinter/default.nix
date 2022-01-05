@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "splinter";
-  version = "0.16.0";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "cobrateam";
     repo = "splinter";
     rev = version;
-    sha256 = "sha256-b6zncEAPtKgBPLFRsCSGeBqiD4A/mHEhjQaEIsefc28=";
+    hash = "sha256-7QhFz/qBh2ECyeyvjCyqOYy/YrUK7KVX13VC/gem5BQ=";
   };
 
   propagatedBuildInputs = [

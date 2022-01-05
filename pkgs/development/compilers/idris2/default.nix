@@ -6,6 +6,7 @@
 , chez
 , gmp
 , zsh
+, callPackage
 }:
 
 # NOTICE: An `idris2WithPackages` is available at: https://github.com/claymager/idris2-pkgs
@@ -79,8 +80,11 @@ stdenv.mkDerivation rec {
       --suffix IDRIS2_LIBS ':' "$out/${name}/lib" \
       --suffix IDRIS2_DATA ':' "$out/${name}/support" \
       --suffix IDRIS2_PATH ':' "${additionalIdris2Paths}" \
-      --suffix LD_LIBRARY_PATH ':' "$out/${name}/lib"
+      --suffix ${if stdenv.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH"} ':' "$out/${name}/lib"
   '';
+
+  # Run package tests
+  passthru.tests = callPackage ./tests.nix { inherit pname; };
 
   meta = {
     description = "A purely functional programming language with first class types";

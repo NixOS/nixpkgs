@@ -33,7 +33,7 @@ in
       type = types.listOf types.str;
       default = [];
       description = ''
-        Groups to which the user ${name} should be added.
+        Groups to which the service user should be added.
       '';
     };
 

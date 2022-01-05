@@ -304,7 +304,7 @@ clone_user_rev() {
     local rev="${3:-HEAD}"
 
     if [ -n "$fetchLFS" ]; then
-        tmpHomePath="$(mktemp -d -p nix-prefetch-git-tmp-home-XXXXXXXXXX)"
+        tmpHomePath="$(mktemp -d "${TMPDIR:-/tmp}/nix-prefetch-git-tmp-home-XXXXXXXXXX")"
         exit_handlers+=(remove_tmpHomePath)
         HOME="$tmpHomePath"
         git lfs install

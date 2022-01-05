@@ -107,7 +107,11 @@ lib.makeScope pkgs.newScope (self: with self; {
           (dep: "mkdir -p ext; ln -s ${dep.dev}/include ext/${dep.extensionName}")
           internalDeps}
       '';
-      checkPhase = "runHook preCheck; NO_INTERACTON=yes make test; runHook postCheck";
+      checkPhase = ''
+        runHook preCheck
+        NO_INTERACTON=yes SKIP_PERF_SENSITIVE=yes make test
+        runHook postCheck
+      '';
       outputs = [ "out" "dev" ];
       installPhase = ''
         mkdir -p $out/lib/php/extensions
@@ -543,7 +547,11 @@ lib.makeScope pkgs.newScope (self: with self; {
         { name = "sysvsem"; }
         { name = "sysvshm"; }
         { name = "tidy"; configureFlags = [ "--with-tidy=${html-tidy}" ]; doCheck = false; }
-        { name = "tokenizer"; }
+        {
+          name = "tokenizer";
+          patches = lib.optional (lib.versionAtLeast php.version "8.1")
+            ../development/interpreters/php/fix-tokenizer-php81.patch;
+        }
         {
           name = "wddx";
           buildInputs = [ libxml2 ];

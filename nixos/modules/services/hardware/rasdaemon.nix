@@ -137,7 +137,6 @@ in
         description = "the RAS logging daemon";
         documentation = [ "man:rasdaemon(1)" ];
         wantedBy = [ "multi-user.target" ];
-        after = [ "syslog.target" ];
 
         serviceConfig = {
           StateDirectory = optionalString (cfg.record) "rasdaemon";

@@ -9,7 +9,7 @@ in
 {
 
   meta = {
-    maintainers = with maintainers; [ ];
+    maintainers = teams.xfce.members;
   };
 
   imports = [

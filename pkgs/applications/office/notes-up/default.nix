@@ -2,40 +2,42 @@
 , stdenv
 , fetchFromGitHub
 , nix-update-script
-, pantheon
-, pkg-config
-, vala
-, cmake
+, desktop-file-utils
+, meson
 , ninja
-, gtk3
-, gtksourceview3
-, webkitgtk
-, gtkspell3
-, glib
-, libgee
-, pcre
-, sqlite
-, discount
+, pkg-config
+, python3
+, vala
 , wrapGAppsHook
-, withPantheon ? false
+, discount
+, glib
+, gtk3
+, gtksourceview4
+, gtkspell3
+, libgee
+, pantheon
+, sqlite
+, webkitgtk
 }:
 
 stdenv.mkDerivation rec {
   pname = "notes-up";
-  version = "unstable-2020-12-29";
+  version = "2.0.6";
 
   src = fetchFromGitHub {
     owner = "Philip-Scott";
     repo = "Notes-up";
-    rev = "2ea9f35f588769758f5d2d4436d71c4059141a6f";
-    sha256 = "sha256-lKOM9+s34xYB9bF9pgip9DFu+6AaxSE4HjFVhoWtttk=";
+    rev = version;
+    sha256 = "sha256-t9BCtdWd2JLrKTcmri1Lgl5RLBYD2xWCtMxoVXz0XPk=";
   };
 
   nativeBuildInputs = [
-    cmake
+    desktop-file-utils
+    meson
     ninja
-    vala
     pkg-config
+    python3
+    vala
     wrapGAppsHook
   ];
 
@@ -43,17 +45,18 @@ stdenv.mkDerivation rec {
     discount
     glib
     gtk3
-    gtksourceview3
+    gtksourceview4
     gtkspell3
     libgee
     pantheon.granite
-    pcre
     sqlite
     webkitgtk
   ];
 
-  # Whether to build with contractor support (Pantheon specific)
-  cmakeFlags = lib.optional (!withPantheon) "-Dnoele=yes";
+  postPatch = ''
+    chmod +x meson/post_install.py
+    patchShebangs meson/post_install.py
+  '';
 
   passthru = {
     updateScript = nix-update-script {
@@ -62,12 +65,11 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "Markdown notes editor and manager designed for elementary OS"
-      + lib.optionalString withPantheon " - built with Contractor support";
+    description = "Markdown notes editor and manager designed for elementary OS";
     homepage = "https://github.com/Philip-Scott/Notes-up";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ ] ++ teams.pantheon.members;
     platforms = platforms.linux;
-    mainProgram = "com.github.philip-scott.notes-up";
+    mainProgram = "com.github.philip_scott.notes-up";
   };
 }

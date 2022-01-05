@@ -1,4 +1,4 @@
-{ mkXfceDerivation, gobject-introspection, gtk3, gtksourceview4, gspell }:
+{ lib, mkXfceDerivation, gobject-introspection, gtk3, gtksourceview4, gspell }:
 
 mkXfceDerivation {
   category = "apps";
@@ -15,7 +15,8 @@ mkXfceDerivation {
   # Use the GSettings keyfile backend rather than DConf
   configureFlags = [ "--enable-keyfile-settings" ];
 
-  meta = {
+  meta = with lib; {
     description = "Simple text editor for Xfce";
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

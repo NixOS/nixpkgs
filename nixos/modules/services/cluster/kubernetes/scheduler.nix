@@ -1,10 +1,12 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
   top = config.services.kubernetes;
+  otop = options.services.kubernetes;
   cfg = top.scheduler;
+  klib = options.services.kubernetes.lib.default;
 in
 {
   ###### interface
@@ -27,10 +29,11 @@ in
     featureGates = mkOption {
       description = "List set of feature gates";
       default = top.featureGates;
+      defaultText = literalExpression "config.${otop.featureGates}";
       type = listOf str;
     };
 
-    kubeconfig = top.lib.mkKubeConfigOptions "Kubernetes scheduler";
+    kubeconfig = klib.mkKubeConfigOptions "Kubernetes scheduler";
 
     leaderElect = mkOption {
       description = "Whether to start leader election before executing main loop.";
@@ -67,7 +70,7 @@ in
           --address=${cfg.address} \
           ${optionalString (cfg.featureGates != [])
             "--feature-gates=${concatMapStringsSep "," (feature: "${feature}=true") cfg.featureGates}"} \
-          --kubeconfig=${top.lib.mkKubeConfig "kube-scheduler" cfg.kubeconfig} \
+          --kubeconfig=${klib.mkKubeConfig "kube-scheduler" cfg.kubeconfig} \
           --leader-elect=${boolToString cfg.leaderElect} \
           --port=${toString cfg.port} \
           ${optionalString (cfg.verbosity != null) "--v=${toString cfg.verbosity}"} \
@@ -85,7 +88,7 @@ in
     };
 
     services.kubernetes.pki.certs = {
-      schedulerClient = top.lib.mkCert {
+      schedulerClient = klib.mkCert {
         name = "kube-scheduler-client";
         CN = "system:kube-scheduler";
         action = "systemctl restart kube-scheduler.service";

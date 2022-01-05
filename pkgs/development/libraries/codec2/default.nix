@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "codec2";
-  version = "1.0.1";
+  version = "1.0.3";
 
   src = fetchFromGitHub {
     owner = "drowe67";
     repo = "codec2";
     rev = "v${version}";
-    sha256 = "05xjsb67dzwncl2rnhg6fqih8krf38b7vmvzlsb7y9g6d1b085wg";
+    hash = "sha256-2/Ef5cEe7Kr3a/D8u4BgvTQM6M6vglXsF+ccstFHDUw=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Speech codec designed for communications quality speech at low data rates";
-    homepage = "http://www.rowetel.com/blog/?page_id=452";
+    homepage = "https://www.rowetel.com/codec2.html";
     license = licenses.lgpl21Only;
     platforms = platforms.unix;
     maintainers = with maintainers; [ markuskowa ];
