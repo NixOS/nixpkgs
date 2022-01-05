@@ -121,9 +121,9 @@ self: super: {
 
   # 2021-09-18: ghc-api-compat and ghc-lib-* need >= 9.0.x versions for hls and hlint
   ghc-api-compat = doDistribute super.ghc-api-compat_9_0_1;
-  ghc-lib-parser = self.ghc-lib-parser_9_0_1_20210324;
-  ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_0_0_4;
-  ghc-lib = self.ghc-lib_9_0_1_20210324;
+  ghc-lib-parser = self.ghc-lib-parser_9_0_2_20211226;
+  ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_0_0_6;
+  ghc-lib = self.ghc-lib_9_0_2_20211226;
 
   # 2021-09-18: Need semialign >= 1.2 for correct bounds
   semialign = super.semialign_1_2_0_1;
