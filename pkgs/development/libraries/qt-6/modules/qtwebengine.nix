@@ -1,14 +1,78 @@
+# FIXME configureFlags are ignored
+
+/*
+
+Configure summary:
+
+WebEngine Repository Build Options:
+  Build Ninja ............................ no
+  Build Gn ............................... yes
+  Jumbo Build ............................ yes
+  Developer build ........................ no
+  Build QtWebEngine Modules:
+    Build QtWebEngineCore ................ yes
+    Build QtWebEngineWidgets ............. yes
+    Build QtWebEngineQuick ............... yes
+  Build QtPdf Modules:
+    Build QtPdfWidgets ................... no
+    Build QtPdfQuick ..................... no
+  Optional system libraries:
+    re2 .................................. yes
+    icu .................................. no
+    libwebp, libwebpmux and libwebpdemux . yes
+    opus ................................. yes
+    ffmpeg ............................... no
+    libvpx ............................... yes
+    snappy ............................... yes
+    glib ................................. yes
+    zlib ................................. yes
+    minizip .............................. yes
+    libevent ............................. no
+    libxml2 and libxslt .................. no
+    lcms2 ................................ yes
+    png .................................. yes
+    jpeg ................................. yes
+    harfbuzz ............................. yes
+    freetype ............................. yes
+    libpci ............................... yes
+Qt WebEngineCore:
+  Embedded build ......................... no
+  Full debug information ................. no
+  Sanitizer support ...................... no
+  Pepper Plugins ......................... yes
+  Printing and PDF ....................... yes
+  Proprietary Codecs ..................... no
+  Spellchecker ........................... yes
+  Native Spellchecker .................... no
+  WebRTC ................................. yes
+  PipeWire over GIO ...................... no
+  Geolocation ............................ yes
+  WebChannel support ..................... yes
+  Kerberos Authentication ................ no
+  Extensions ............................. yes
+  Support GLX on qpa-xcb ................. yes
+  Use ALSA ............................... yes
+  Use PulseAudio ......................... yes
+Qt WebEngineQuick:
+  UI Delegates ........................... yes
+
+*/
+
 { qtModule
 , qtdeclarative, qtwebchannel
+, qtpositioning, qtwebsockets
 
-, bison, coreutils, flex, git, gperf, /* ninja, */ cmake, pkg-config, python2, which
+, bison, coreutils, flex, git, gperf, ninja, pkg-config, python2, which
 , nodejs, qtbase, perl
 
 , xorg, libXcursor, libXScrnSaver, libXrandr, libXtst
+, libxshmfence, libXi
 , fontconfig, freetype, harfbuzz, icu, dbus, libdrm
 , zlib, minizip, libjpeg, libpng, libtiff, libwebp, libopus
 , jsoncpp, protobuf, libvpx, srtp, snappy, nss, libevent
+, openssl
 , alsa-lib
+, pulseaudio
 , libcap
 , pciutils
 , systemd
@@ -23,22 +87,27 @@
 , lib, stdenv, fetchpatch
 , version ? null
 , qtCompatVersion
+, glib
+, libxml2
+, libxslt
+, lcms2
+, re2
+
+, libglvnd, libxkbcommon, vulkan-headers, libX11, libXcomposite
 }:
 
-qtModule {
+qtModule rec {
   pname = "qtwebengine";
-  qtInputs = [ qtdeclarative qtwebchannel ];
+  qtInputs = [ qtdeclarative qtwebchannel qtwebsockets qtpositioning ];
   nativeBuildInputs = [
-    bison coreutils flex git gperf
-    #ninja
-    cmake
-    pkg-config python2 which gn nodejs
+    bison coreutils flex git gperf ninja pkg-config python2 which gn nodejs
   ] ++ lib.optional stdenv.isDarwin xcbuild;
   doCheck = true;
   outputs = [ "bin" "dev" "out" ];
 
   enableParallelBuilding = true;
 
+  /* breaks with ninja
   # debug: install is failing
   # splitBuildInstall requires cmake, not ninja
   splitBuildInstall =
@@ -58,6 +127,7 @@ qtModule {
       runHook postInstall
     '';
   };
+  */
 
   # Don’t use the gn setup hook
   dontUseGnConfigure = true;
@@ -141,25 +211,24 @@ qtModule {
   ];
 
   preConfigure = ''
+    # FIXME qt6: set this automatically
+    export QT_ADDITIONAL_PACKAGES_PREFIX_PATH="${qtdeclarative.dev}:${qtwebsockets.dev}:${qtwebchannel.dev}:${qtpositioning.dev}"
+
     export NINJAFLAGS=-j$NIX_BUILD_CORES
 
     if [ -d "$PWD/tools/qmake" ]; then
         QMAKEPATH="$PWD/tools/qmake''${QMAKEPATH:+:}$QMAKEPATH"
     fi
-
-    # TODO verify
-    # locate cmake file /lib/cmake/Qt6Quick/Qt6QuickConfig.cmake
-    # see also: pkgs/applications/graphics/qimgv/default.nix
-    # FIXME qt6: set this automatically when adding buildInputs = [ qtsvg qt5compat ]
-    export LD_LIBRARY_PATH="${qtdeclarative}/lib:$LD_LIBRARY_PATH"
-    export QT_ADDITIONAL_PACKAGES_PREFIX_PATH="${qtdeclarative.dev}"
   '';
 
-  qmakeFlags = [ "--" "-system-ffmpeg" ]
+  # FIXME flags are ignored
+  configureFlags = [ "-system-ffmpeg" ]
     ++ lib.optional stdenv.isLinux "-webengine-webrtc-pipewire"
     ++ lib.optional enableProprietaryCodecs "-proprietary-codecs";
+  qmakeFlags = [ "--" ] ++ configureFlags;
 
   propagatedBuildInputs = [
+
     # Image formats
     libjpeg libpng libtiff libwebp
 
@@ -172,13 +241,25 @@ qtModule {
     # Text rendering
     harfbuzz icu
 
+    openssl
+    glib
+    libxml2
+    libxslt
+    lcms2
+    re2
+
     libevent
     ffmpeg
+
+    # FIXME should be propagated by qtbase
+    libglvnd libxkbcommon vulkan-headers libX11 libXcomposite
+
   ] ++ lib.optionals (!stdenv.isDarwin) [
     dbus zlib minizip snappy nss protobuf jsoncpp
 
     # Audio formats
     alsa-lib
+    pulseaudio
 
     # Text rendering
     fontconfig freetype
@@ -189,6 +270,7 @@ qtModule {
     # X11 libs
     xorg.xrandr libXScrnSaver libXcursor libXrandr xorg.libpciaccess libXtst
     xorg.libXcomposite xorg.libXdamage libdrm xorg.libxkbfile
+    libxshmfence libXi
 
     # Pipewire
     pipewire_0_2
