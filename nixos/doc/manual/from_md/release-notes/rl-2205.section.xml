@@ -228,6 +228,15 @@
           to your configuration.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          Normal users (with <literal>isNormalUser = true</literal>)
+          which have non-empty <literal>subUidRanges</literal> or
+          <literal>subGidRanges</literal> set no longer have additional
+          implicit ranges allocated. To enable automatic allocation back
+          set <literal>autoSubUidGidRange = true</literal>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.05-notable-changes">
