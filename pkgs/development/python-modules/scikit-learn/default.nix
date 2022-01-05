@@ -34,6 +34,12 @@ buildPythonPackage rec {
       url = "https://github.com/scikit-learn/scikit-learn/commit/e7ef22c3ba2334cb3b476e95d7c083cf6b48ce56.patch";
       sha256 = "174554k1pbf92bj7wgq0xjj16bkib32ailyhwavdxaknh4bd9nmv";
     })
+    # This patch fixes numerical issue with openblas 0.3.18. It was merged in scikit-learn v1.0.2.
+    # See details in https://github.com/scikit-learn/scikit-learn/issues/21340
+    ( fetchpatch {
+      url = "https://github.com/scikit-learn/scikit-learn/commit/657454c0e5a73071ec6681a0774fdaa4269adda7.patch";
+      sha256 = "1lv71ashr9wcgxqvqazrdpnm1l6cazcsj2sf6n9ybadpghrqp8yf";
+    })
   ];
 
   buildInputs = [
