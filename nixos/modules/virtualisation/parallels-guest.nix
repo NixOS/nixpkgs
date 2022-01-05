@@ -4,6 +4,7 @@ with lib;
 
 let
   prl-tools = config.hardware.parallels.package;
+  aarch64 = stdenv.hostPlatform.system == "aarch64-linux";
 in
 
 {
@@ -75,7 +76,7 @@ in
 
     boot.extraModulePackages = [ prl-tools ];
 
-    boot.kernelModules = [ "prl_fs" "prl_fs_freeze" "prl_notifier" "prl_tg" ];
+    boot.kernelModules = if aarch64 then [ "prl_fs" "prl_fs_freeze" "prl_notifier" "prl_tg" ] else [ "prl_fs" "prl_fs_freeze" "prl_tg" ];
 
     services.timesyncd.enable = false;
 
