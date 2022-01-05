@@ -6,7 +6,7 @@
 , clojure
 , git
 , jdk
-, callPackage
+, obb
 , fetchFromGitHub
 , makeWrapper
 , runCommand }:
@@ -64,11 +64,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  doInstallCheck = true;
-  installCheckPhase = ''
-    [ $($out/bin/obb -e '(+ 1 2)') = '3' ]
-  '';
-
+  passthru.tests = {
+    simple = runCommand "${pname}-test" {} ''
+      [ $(${obb}/bin/obb -e '(+ 1 2)') = '3' ]
+      touch $out
+    '';
+  };
 
   meta = with lib; {
     description = "Ad-hoc ClojureScript scripting of Mac applications via Apple's Open Scripting Architecture";
