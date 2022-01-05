@@ -952,6 +952,12 @@
     githubId = 59696216;
     name = "Arnold Farkas";
   };
+  arnoutkroeze = {
+    email = "nixpkgs@arnoutkroeze.nl";
+    github = "arnoutkroeze";
+    githubId = 37151054;
+    name = "Arnout Kroeze";
+  };
   arobyn = {
     email = "shados@shados.net";
     github = "shados";
@@ -3319,12 +3325,6 @@
     email = "edli.merkaj@identinet.io";
     github = "edlimerkaj";
     githubId = 71988351;
-  };
-  edibopp = {
-    email = "eduard.bopp@aepsil0n.de";
-    github = "edibopp";
-    githubId = 3098430;
-    name = "Eduard Bopp";
   };
   emantor = {
     email = "rouven+nixos@czerwinskis.de";
@@ -7821,6 +7821,12 @@
     githubId = 38543128;
     name = "Miles Breslin";
   };
+  milibopp = {
+    email = "contact@ebopp.de";
+    github = "milibopp";
+    githubId = 3098430;
+    name = "Emilia Bopp";
+  };
   millerjason = {
     email = "mailings-github@millerjason.com";
     github = "millerjason";
@@ -11611,6 +11617,12 @@
     githubId = 2389333;
     name = "Andy Tockman";
   };
+  techknowlogick = {
+    email = "techknowlogick@gitea.io";
+    github = "techknowlogick";
+    githubId = 164197;
+    name = "techknowlogick";
+  };
   Technical27 = {
     email = "38222826+Technical27@users.noreply.github.com";
     github = "Technical27";
@@ -12664,6 +12676,12 @@
   willtim = {
     email = "tim.williams.public@gmail.com";
     name = "Tim Philip Williams";
+  };
+  willcohen = {
+    email = "willcohen@users.noreply.github.com";
+    github = "willcohen";
+    githubId = 5185341;
+    name = "Will Cohen";
   };
   winden = {
     email = "windenntw@gmail.com";

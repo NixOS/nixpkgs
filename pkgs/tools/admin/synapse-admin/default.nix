@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Admin UI for Synapse Homeservers";
     homepage = "https://github.com/Awesome-Technologies/synapse-admin";
-    license = licenses.apsl20;
+    license = licenses.asl20;
     platforms = platforms.all;
     maintainers = with maintainers; [ mkg20001 ];
   };

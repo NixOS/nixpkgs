@@ -1,5 +1,9 @@
-{ stdenv, lib, fetchurl, makeWrapper, python3, gettext
-, pyqt5, setuptools, requests
+{ lib
+, stdenv
+, fetchurl
+, gettext
+, makeWrapper
+, python3
 }:
 
 stdenv.mkDerivation rec {
@@ -11,18 +15,29 @@ stdenv.mkDerivation rec {
     sha256 = "1dknra4ngz7bpppwqghmza1q68pn1yaw54p9ba0f42zwp427ly97";
   };
 
+  nativeBuildInputs = [
+    gettext
+    makeWrapper
+    python3
+  ];
+
+  buildInputs = with python3.pkgs; [
+    pyqt5
+    requests
+    setuptools
+  ];
+
   makeFlags = [ "prefix=$(out)" ];
-  nativeBuildInputs = [ makeWrapper python3 gettext ];
-  buildInputs = [ pyqt5 setuptools requests ];
+
   postInstall = ''
     wrapProgram $out/bin/fs-uae-launcher --set PYTHONPATH "$PYTHONPATH"
   '';
 
-  meta = {
+  meta = with lib; {
+    homepage = "https://fs-uae.net";
     description = "Graphical front-end for the FS-UAE emulator";
     license = lib.licenses.gpl2Plus;
-    homepage = "https://fs-uae.net";
-    maintainers = with lib; [ maintainers.sander ];
+    maintainers = with  maintainers; [ sander AndersonTorres ];
     platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }

@@ -865,4 +865,6 @@ in
 
   };
 
+  # uses relatedPackages
+  meta.buildDocsInSandbox = false;
 }

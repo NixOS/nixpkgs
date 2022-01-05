@@ -281,13 +281,6 @@ in
   mosquitto = handleTest ./mosquitto.nix {};
   mpd = handleTest ./mpd.nix {};
   mpv = handleTest ./mpv.nix {};
-  mtp = let
-    olderQemu = (import (fetchTarball {
-      url = "https://github.com/nixos/nixpkgs/archive/e1fc1a80a071c90ab65fb6eafae5520579163783.tar.gz";
-      sha256 = "19a0qrx31lp2r8cgk9hv4p6j6six6l82qisxr68y7wb7drw7dhkz";
-    }) { inherit system; }).qemu_test;
-    myPkgs = import ../.. { inherit system; overlays = [ (self: super: { qemu_test = olderQemu; }) ]; };
-  in handleTest ./mtp.nix { pkgs = myPkgs; };
   mumble = handleTest ./mumble.nix {};
   musescore = handleTest ./musescore.nix {};
   munin = handleTest ./munin.nix {};
