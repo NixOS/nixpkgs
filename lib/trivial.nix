@@ -325,6 +325,28 @@ rec {
   */
   warnIf = cond: msg: if cond then warn msg else id;
 
+  /*
+    Like the `assert b; e` expression, but with a custom error message and
+    without the semicolon.
+
+    If true, return the identity function, `r: r`.
+
+    If false, throw the error message.
+
+    Calls can be juxtaposed using function application, as `(r: r) a = a`, so
+    `(r: r) (r: r) a = a`, and so forth.
+
+    Type: bool -> string -> a -> a
+
+    Example:
+
+        throwIfNot (lib.isList overlays) "The overlays argument to nixpkgs must be a list."
+        lib.foldr (x: throwIfNot (lib.isFunction x) "All overlays passed to nixpkgs must be functions.") (r: r) overlays
+        pkgs
+
+  */
+  throwIfNot = cond: msg: if cond then x: x else throw msg;
+
   info = msg: builtins.trace "INFO: ${msg}";
 
   showWarnings = warnings: res: lib.foldr (w: x: warn w x) res warnings;
