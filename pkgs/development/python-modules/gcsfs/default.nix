@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "dask";
     repo = pname;
     rev = version;
-    sha256 = "sha256-BME40kyxZHx9+XrMCqWYp8+q6tjeYwAw/zISMNpQxDU=";
+    sha256 = "sha256-cpV+HKE39Yct1yu5xW9HZftx2Wy9ydFL2YLvPD3YM2M=";
   };
 
   propagatedBuildInputs = [
