@@ -158,13 +158,13 @@ extra-packages:
   - ShellCheck == 0.7.1                 # 2021-05-09: haskell-ci 0.12.1 pins this version
   - cabal-install-parsers == 0.4.2      # 2021-09-04: needed haskell-ci by until it upgrades to Cabal >= 3.6
   - ghc-api-compat == 8.6               # 2021-09-07: preserve for GHC 8.8.4
-  - ghc-lib == 9.0.1.*                  # 2021-11-05: Need one GHC 9.0.1 compatible version
-  - ghc-lib-parser == 9.0.1.*           # 2021-11-05: Need one GHC 9.0.1 compatible version
-  - ghc-lib-parser-ex == 9.0.*          # 2021-11-05: Need one GHC 9.0.1 compatible version
+  - ghc-lib == 9.0.*                    # 2021-11-05: Need one GHC 9.0.2 compatible version
+  - ghc-lib-parser == 9.0.*             # 2021-11-05: Need one GHC 9.0.2 compatible version
+  - ghc-lib-parser-ex == 9.0.*          # 2021-11-05: Need one GHC 9.0.2 compatible version
   - doctest == 0.18.*                   # 2021-11-19: closest to stackage version for GHC 9.*
   - brick == 0.64.*                     # 2021-12-03: matterhorn depends on brick < 0.65
-  - path == 0.9.0                       # 2021-12-03: path version building with stackage genvalidity and GHC 9.0.1
-  - ormolu == 0.3.*                     # 2021-12-03: for HLS with GHC 9.0.1
+  - path == 0.9.0                       # 2021-12-03: path version building with stackage genvalidity and GHC 9.0.2
+  - ormolu == 0.3.*                     # 2021-12-03: for HLS with GHC 9.0.2
 
 package-maintainers:
   abbradar:
@@ -429,7 +429,6 @@ unsupported-platforms:
   btrfs:                                        [ x86_64-darwin, aarch64-darwin ] # depends on linux
   bustle:                                       [ x86_64-darwin, aarch64-darwin ] # uses glibc-specific ptsname_r
   charsetdetect:                                [ aarch64-linux ] # not supported by vendored lib / not configured properly https://github.com/batterseapower/libcharsetdetect/issues/3
-  crackNum:                                     [ aarch64-linux ] # depends on sbv, which is not supported on aarch64-linux
   cut-the-crap:                                 [ x86_64-darwin, aarch64-darwin ]
   d3d11binding:                                 [ i686-linux, x86_64-linux, x86_64-darwin, aarch64-darwin, aarch64-linux, armv7l-linux ]
   DirectSound:                                  [ i686-linux, x86_64-linux, x86_64-darwin, aarch64-darwin, aarch64-linux, armv7l-linux ]
@@ -459,7 +458,6 @@ unsupported-platforms:
   hbro:                                         [ x86_64-darwin, aarch64-darwin ] # webkitgtk marked broken on darwin
   hbro-contrib:                                 [ x86_64-darwin, aarch64-darwin ] # webkitgtk marked broken on darwin
   hcwiid:                                       [ x86_64-darwin, aarch64-darwin ]
-  hevm:                                         [ aarch64-linux ] # depends on sbv, which is not supported on aarch64-linux
   HFuse:                                        [ x86_64-darwin, aarch64-darwin ]
   hidapi:                                       [ x86_64-darwin, aarch64-darwin ]
   hinotify-bytestring:                          [ x86_64-darwin, aarch64-darwin ]
@@ -514,7 +512,6 @@ unsupported-platforms:
   reflex-localize-dom:                          [ x86_64-darwin, aarch64-darwin, aarch64-linux ]
   rtlsdr:                                       [ x86_64-darwin, aarch64-darwin ]
   rubberband:                                   [ x86_64-darwin, aarch64-darwin ]
-  sbv:                                          [ aarch64-linux ]
   scat:                                         [ aarch64-linux, armv7l-linux ] # uses scrypt, which requries x86
   scrypt:                                       [ aarch64-linux, armv7l-linux ] # https://github.com/informatikr/scrypt/issues/8
   sdl2-mixer:                                   [ x86_64-darwin, aarch64-darwin ]

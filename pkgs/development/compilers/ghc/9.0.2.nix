@@ -2,7 +2,7 @@
 
 # build-tools
 , bootPkgs
-, autoconf, automake, coreutils, fetchurl, perl, python3, m4, sphinx
+, autoconf, automake, coreutils, fetchurl, perl, python3, m4, sphinx, xattr
 , autoSignDarwinBinariesHook
 , bash
 
@@ -58,7 +58,7 @@
 
 , # Whether to disable the large address space allocator
   # necessary fix for iOS: https://www.reddit.com/r/haskell/comments/4ttdz1/building_an_osxi386_to_iosarm64_cross_compiler/d5qvd67/
-  disableLargeAddressSpace ? stdenv.targetPlatform.isDarwin && stdenv.targetPlatform.isAarch64
+  disableLargeAddressSpace ? stdenv.targetPlatform.isiOS
 }:
 
 assert !enableIntegerSimple -> gmp != null;
@@ -165,12 +165,12 @@ assert buildTargetLlvmPackages.llvm == llvmPackages.llvm;
 assert stdenv.targetPlatform.isDarwin -> buildTargetLlvmPackages.clang == llvmPackages.clang;
 
 stdenv.mkDerivation (rec {
-  version = "9.0.1";
+  version = "9.0.2";
   pname = "${targetPrefix}ghc${variantSuffix}";
 
   src = fetchurl {
     url = "https://downloads.haskell.org/ghc/${version}/ghc-${version}-src.tar.xz";
-    sha256 = "1y9mi9bq76z04hmggavrn8jwi1gx92bm3zhx6z69ypq6wha068x5";
+    sha256 = "140e42b96346322d1a39eb17602bcdc76e292028ad4a69286b230bab188a9197";
   };
 
   enableParallelBuilding = true;
@@ -280,6 +280,10 @@ stdenv.mkDerivation (rec {
     autoSignDarwinBinariesHook
   ] ++ lib.optionals enableDocs [
     sphinx
+  ] ++ lib.optionals stdenv.isDarwin [
+    # TODO(@sternenseemann): backport addition of XATTR env var like
+    # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/6447
+    xattr
   ];
 
   # For building runtime libs
