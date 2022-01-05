@@ -221,7 +221,7 @@ self: super: {
   semigroupoids = overrideCabal (drv: { postPatch = "sed -i -e 's,hashable >= 1.2.7.0  && < 1.4,hashable >= 1.2.7.0  \\&\\& < 1.5,' semigroupoids.cabal";}) super.semigroupoids;
 
   # Tests have a circular dependency on quickcheck-instances
-  text-short = dontCheck super.text-short_0_1_4;
+  text-short = dontCheck super.text-short_0_1_5;
 
   # Use hlint from git for GHC 9.2.1 support
   hlint = doDistribute (

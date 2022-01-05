@@ -147,7 +147,7 @@ self: super: {
   # https://github.com/lspitzner/butcher/issues/7
   butcher = doJailbreak super.butcher;
   # Fixes a bug triggered on GHC 9.0.1
-  text-short = self.text-short_0_1_4;
+  text-short = self.text-short_0_1_5;
 
   # 2021-09-18: The following plugins don‘t work yet on ghc9.
   haskell-language-server = appendConfigureFlags [
