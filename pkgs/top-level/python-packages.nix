@@ -8290,7 +8290,6 @@ in {
   qscintilla-qt4 = callPackage ../development/python-modules/qscintilla-qt4 { };
 
   qscintilla-qt5 = pkgs.libsForQt5.callPackage ../development/python-modules/qscintilla-qt5 {
-    inherit (pkgs.qt5) qtbase;
     pythonPackages = self;
   };
 

@@ -1,15 +1,12 @@
 { stdenv, lib, fetchurl, unzip
-, withQt5 ? true, qtbase, qtmacextras ? null
+, qtbase, qtmacextras
 , qmake
 , fixDarwinDylibNames
 }:
 
-let
+stdenv.mkDerivation rec {
   pname = "qscintilla-qt5";
   version = "2.13.1";
-
-in stdenv.mkDerivation rec {
-  inherit pname version;
 
   src = fetchurl {
     url = "https://www.riverbankcomputing.com/static/Downloads/QScintilla/${version}/QScintilla_src-${version}.tar.gz";

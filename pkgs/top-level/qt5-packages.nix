@@ -191,13 +191,7 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
 
   qoauth = callPackage ../development/libraries/qoauth { };
 
-  qscintilla = if stdenv.isDarwin then
-    callPackage ../development/libraries/qscintilla {
-      inherit (qt5) qmake qtbase qtmacextras;
-  } else
-    callPackage ../development/libraries/qscintilla {
-      inherit (qt5) qmake qtbase;
-  };
+  qscintilla = callPackage ../development/libraries/qscintilla { };
 
   qt5ct = callPackage ../tools/misc/qt5ct { };
 

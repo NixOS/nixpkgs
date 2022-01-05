@@ -1,12 +1,9 @@
 { stdenv, lib, fetchurl, unzip, qt4, qmake4Hook
 }:
 
-let
+stdenv.mkDerivation rec {
   pname = "qscintilla-qt4";
   version = "2.11.6";
-
-in stdenv.mkDerivation rec {
-  inherit pname version;
 
   src = fetchurl {
     url = "https://www.riverbankcomputing.com/static/Downloads/QScintilla/${version}/QScintilla-${version}.tar.gz";
