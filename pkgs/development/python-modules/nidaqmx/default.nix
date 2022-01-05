@@ -19,7 +19,7 @@ buildPythonPackage rec {
   version = src.rev;
 
   # 3.10 is not supported, upstream inactive
-  disabled = pythonAtleast "3.10";
+  disabled = pythonAtLeast "3.10";
 
   src = fetchFromGitHub {
     owner = "ni";
