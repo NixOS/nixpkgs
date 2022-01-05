@@ -82,5 +82,6 @@ buildDotnetModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ thiagokokada ];
     platforms = with lib.platforms; linux;
+    mainProgram = "pinta";
   };
 }

@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/rapid7/metasploit-framework
-  revision: 0b16a2cd771a6afd286188da1c60c9fd772ab0f1
-  ref: refs/tags/6.1.21
+  revision: 3bfd2d8eeab3f8ab7efd7a46f8125a7a3bb5f2f0
+  ref: refs/tags/6.1.22
   specs:
-    metasploit-framework (6.1.21)
+    metasploit-framework (6.1.22)
       actionpack (~> 6.0)
       activerecord (~> 6.0)
       activesupport (~> 6.0)
@@ -214,7 +214,7 @@ GEM
     httpclient (2.8.3)
     i18n (1.8.11)
       concurrent-ruby (~> 1.0)
-    io-console (0.5.9)
+    io-console (0.5.11)
     irb (1.3.6)
       reline (>= 0.2.5)
     jmespath (1.4.0)
@@ -288,7 +288,7 @@ GEM
       pcaprub
     patch_finder (1.0.2)
     pcaprub (0.12.4)
-    pdf-reader (2.7.0)
+    pdf-reader (2.8.0)
       Ascii85 (~> 1.0)
       afm (~> 0.2.1)
       hashery (~> 2.0)
@@ -375,7 +375,7 @@ GEM
     ruby-macho (2.5.1)
     ruby-rc4 (0.1.5)
     ruby2_keywords (0.0.5)
-    ruby_smb (2.0.12)
+    ruby_smb (2.0.13)
       bindata
       openssl-ccm
       openssl-cmac
@@ -433,7 +433,7 @@ GEM
       activesupport (>= 4.2, < 7.0)
     xmlrpc (0.3.2)
       webrick
-    zeitwerk (2.5.1)
+    zeitwerk (2.5.3)
 
 PLATFORMS
   ruby

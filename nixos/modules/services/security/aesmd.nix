@@ -1,7 +1,8 @@
-{ config, pkgs, lib, ... }:
+{ config, options, pkgs, lib, ... }:
 with lib;
 let
   cfg = config.services.aesmd;
+  opt = options.services.aesmd;
 
   sgx-psw = pkgs.sgx-psw.override { inherit (cfg) debug; };
 
@@ -43,6 +44,9 @@ in
         options.proxyType = mkOption {
           type = with types; nullOr (enum [ "default" "direct" "manual" ]);
           default = if (cfg.settings.proxy != null) then "manual" else null;
+          defaultText = literalExpression ''
+            if (config.${opt.settings}.proxy != null) then "manual" else null
+          '';
           example = "default";
           description = ''
             Type of proxy to use. The <literal>default</literal> uses the system's default proxy.

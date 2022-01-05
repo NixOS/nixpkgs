@@ -11617,6 +11617,12 @@
     githubId = 2389333;
     name = "Andy Tockman";
   };
+  techknowlogick = {
+    email = "techknowlogick@gitea.io";
+    github = "techknowlogick";
+    githubId = 164197;
+    name = "techknowlogick";
+  };
   Technical27 = {
     email = "38222826+Technical27@users.noreply.github.com";
     github = "Technical27";
@@ -12670,6 +12676,12 @@
   willtim = {
     email = "tim.williams.public@gmail.com";
     name = "Tim Philip Williams";
+  };
+  willcohen = {
+    email = "willcohen@users.noreply.github.com";
+    github = "willcohen";
+    githubId = 5185341;
+    name = "Will Cohen";
   };
   winden = {
     email = "windenntw@gmail.com";
