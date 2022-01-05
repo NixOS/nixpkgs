@@ -27839,7 +27839,11 @@ with pkgs;
 
   pdfslicer = callPackage ../applications/misc/pdfslicer { };
 
-  pekwm = callPackage ../applications/window-managers/pekwm { };
+  pekwm = callPackage ../applications/window-managers/pekwm {
+    awk = gawk;
+    grep = gnugrep;
+    sed = gnused;
+  };
 
   pencil = callPackage ../applications/graphics/pencil {
   };
