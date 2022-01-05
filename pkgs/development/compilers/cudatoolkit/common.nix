@@ -119,6 +119,12 @@ stdenv.mkDerivation rec {
         fi
       done
       mv pkg/builds/cuda_nvcc/nvvm $out/nvvm
+
+      mv pkg/builds/cuda_sanitizer_api $out/cuda_sanitizer_api
+      ln -s $out/cuda_sanitizer_api/compute-sanitizer/compute-sanitizer $out/bin/compute-sanitizer
+
+      mv pkg/builds/nsight_systems/target-linux-x64 $out/target-linux-x64
+      mv pkg/builds/nsight_systems/host-linux-x64 $out/host-linux-x64
     ''}
 
     rm -f $out/tools/CUDA_Occupancy_Calculator.xls # FIXME: why?
