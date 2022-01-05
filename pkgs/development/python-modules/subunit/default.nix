@@ -21,6 +21,9 @@ buildPythonPackage {
   propagatedBuildInputs = [ testtools ];
 
   checkInputs = [ testscenarios hypothesis fixtures pytest ];
+
+  # requires unittest2, which no longer supported in 3.10
+  doCheck = pythonOlder "3.10";
   # ignore tests which call shell code, or call methods which haven't been implemented
   checkPhase = ''
     pytest python/subunit \
