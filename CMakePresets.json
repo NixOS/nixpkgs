@@ -19,7 +19,9 @@
     },
     {
       "name": "windows-static",
-      "inherits": ["default"],
+      "inherits": [
+        "default"
+      ],
       "generator": "Ninja",
       "cacheVariables": {
         "VCPKG_TARGET_TRIPLET": "$env{VSCMD_ARG_TGT_ARCH}-windows-static",
