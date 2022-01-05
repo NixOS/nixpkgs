@@ -562,6 +562,7 @@ nvim-orgmode/orgmode
 nvim-pack/nvim-spectre
 nvim-telescope/telescope-cheat.nvim
 nvim-telescope/telescope-dap.nvim
+nvim-telescope/telescope-file-browser.nvim
 nvim-telescope/telescope-frecency.nvim
 nvim-telescope/telescope-fzf-native.nvim
 nvim-telescope/telescope-fzf-writer.nvim
