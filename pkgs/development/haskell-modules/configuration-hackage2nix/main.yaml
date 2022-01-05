@@ -429,7 +429,6 @@ unsupported-platforms:
   btrfs:                                        [ x86_64-darwin, aarch64-darwin ] # depends on linux
   bustle:                                       [ x86_64-darwin, aarch64-darwin ] # uses glibc-specific ptsname_r
   charsetdetect:                                [ aarch64-linux ] # not supported by vendored lib / not configured properly https://github.com/batterseapower/libcharsetdetect/issues/3
-  crackNum:                                     [ aarch64-linux ] # depends on sbv, which is not supported on aarch64-linux
   cut-the-crap:                                 [ x86_64-darwin, aarch64-darwin ]
   d3d11binding:                                 [ i686-linux, x86_64-linux, x86_64-darwin, aarch64-darwin, aarch64-linux, armv7l-linux ]
   DirectSound:                                  [ i686-linux, x86_64-linux, x86_64-darwin, aarch64-darwin, aarch64-linux, armv7l-linux ]
