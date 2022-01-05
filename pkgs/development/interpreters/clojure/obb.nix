@@ -6,7 +6,8 @@
 , clojure
 , git
 , jdk
-, callPackage
+, obb
+, fetchFromGitHub
 , makeWrapper
 , runCommand }:
 
@@ -14,9 +15,11 @@ stdenv.mkDerivation rec {
   pname = "obb";
   version = "0.0.1";
 
-  src = fetchurl {
-    url = "https://github.com/babashka/${pname}/archive/refs/tags/v${version}.tar.gz";
-    sha256 = "sha256-ZVd3VCJ7vdQGQ7iY5v2b+gRX/Ni0/03hzqBElqpPvpI=";
+  src = fetchFromGitHub {
+    owner = "babashka";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-WxQjBg6el6XMiHTurmSo1GgZnTdaJjRmcV3+3X4yohc=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -61,11 +64,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  doInstallCheck = true;
-  installCheckPhase = ''
-    [ $($out/bin/obb -e '(+ 1 2)') = '3' ]
-  '';
-
+  passthru.tests = {
+    simple = runCommand "${pname}-test" {} ''
+      [ $(${obb}/bin/obb -e '(+ 1 2)') = '3' ]
+      touch $out
+    '';
+  };
 
   meta = with lib; {
     description = "Ad-hoc ClojureScript scripting of Mac applications via Apple's Open Scripting Architecture";

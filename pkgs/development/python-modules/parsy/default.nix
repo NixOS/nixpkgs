@@ -1,8 +1,16 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, pytest }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "parsy";
   version = "1.4.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     repo = "parsy";
@@ -11,13 +19,13 @@ buildPythonPackage rec {
     sha256 = "sha256-FislrLb+u4T5m/eEER7kazZHJKEwPHe+Vg/YDJp4PyM=";
   };
 
-  checkInputs = [ pytest ];
+  checkInputs = [
+    pytestCheckHook
+  ];
 
-  checkPhase = ''
-    py.test tests
-  '';
-
-  disabled = pythonOlder "3.4";
+  pythonImportsCheck = [
+    "parsy"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/python-parsy/parsy";
