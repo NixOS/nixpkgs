@@ -2048,11 +2048,11 @@ self: super: {
 
   # 2021-09-13: hls 1.3 needs a newer lsp than stackage-lts. (lsp >= 1.2.0.1)
   # (hls is nearly the only consumer, but consists of 18 packages, so we bump lsp globally.)
-  lsp = doDistribute self.lsp_1_2_0_1;
-  lsp-types = doDistribute self.lsp-types_1_3_0_1;
+  lsp = doDistribute self.lsp_1_4_0_0;
+  lsp-types = doDistribute self.lsp-types_1_4_0_0;
   # Not running the "example" test because it requires a binary from lsps test
   # suite which is not part of the output of lsp.
-  lsp-test = doDistribute (overrideCabal (old: { testTarget = "tests func-test"; }) self.lsp-test_0_14_0_1);
+  lsp-test = doDistribute (overrideCabal (old: { testTarget = "tests func-test"; }) self.lsp-test_0_14_0_2);
 
   # 2021-09-14: Tests are flaky.
   hls-splice-plugin = dontCheck super.hls-splice-plugin;
