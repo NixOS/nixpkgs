@@ -2,13 +2,13 @@
 
 mkDerivation rec {
   pname = "cmst";
-  version = "2021.12.02";
+  version = "2022.01.05";
 
   src = fetchFromGitHub {
     repo = "cmst";
     owner = "andrew-bibb";
     rev = "${pname}-${version}";
-    sha256 = "1561bwc1h62w1zfazcs18aqaz17k5n5gr3jal4aw5cw8dgxhvxcb";
+    sha256 = "0d05vrsjm30q22wpxicnxhjzrjq5kxjhpb6262m46sgkr8yipfhr";
   };
 
   nativeBuildInputs = [ qmake qttools ];
@@ -19,10 +19,6 @@ mkDerivation rec {
     for f in $(find . -name \*.cpp -o -name \*.pri -o -name \*.pro); do
       substituteInPlace $f --replace /etc $out/etc --replace /usr $out
     done
-  '';
-
-  preBuild = ''
-    lrelease translations/*.ts
   '';
 
   meta = {
