@@ -117,7 +117,7 @@ self: super: {
   retry = dontCheck super.retry;
 
   # Hlint needs >= 3.3.4 for ghc 9 support.
-  hlint = doDistribute super.hlint_3_3_5;
+  hlint = doDistribute super.hlint_3_3_6;
 
   # 2021-09-18: ghc-api-compat and ghc-lib-* need >= 9.0.x versions for hls and hlint
   ghc-api-compat = doDistribute super.ghc-api-compat_9_0_1;
