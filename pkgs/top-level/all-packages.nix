@@ -22822,8 +22822,8 @@ with pkgs;
   # Building with `xen` instead of `xen-slim` is possible, but makes no sense.
   qemu_xen = lowPrio (qemu.override { hostCpuOnly = true; xenSupport = true; xen = xen-slim; });
   qemu_xen-light = lowPrio (qemu.override { hostCpuOnly = true; xenSupport = true; xen = xen-light; });
-  qemu_xen_4_10 = lowPrio (qemu.override { hostCpuOnly = true; xenSupport = true; xen = xen_4_10-slim; });
-  qemu_xen_4_10-light = lowPrio (qemu.override { hostCpuOnly = true; xenSupport = true; xen = xen_4_10-light; });
+  qemu_xen_4_12 = lowPrio (qemu.override { hostCpuOnly = true; xenSupport = true; xen = xen_4_12-slim; });
+  qemu_xen_4_12-light = lowPrio (qemu.override { hostCpuOnly = true; xenSupport = true; xen = xen_4_12-light; });
 
   qemu_test = lowPrio (qemu.override { hostCpuOnly = true; nixosTestRunner = true; });
 
@@ -29652,9 +29652,9 @@ with pkgs;
   xen-slim = xenPackages.xen-slim;
   xen-light = xenPackages.xen-light;
 
-  xen_4_10 = xenPackages.xen_4_10-vanilla;
-  xen_4_10-slim = xenPackages.xen_4_10-slim;
-  xen_4_10-light = xenPackages.xen_4_10-light;
+  xen_4_12 = xenPackages.xen_4_12-vanilla;
+  xen_4_12-slim = xenPackages.xen_4_12-slim;
+  xen_4_12-light = xenPackages.xen_4_12-light;
 
   xkbset = callPackage ../tools/X11/xkbset { };
 

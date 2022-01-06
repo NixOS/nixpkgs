@@ -23,14 +23,6 @@ with lib;
 # and try applying all the ones we don't have yet.
 
 let
-  xsa = import ./xsa-patches.nix { inherit fetchpatch; };
-
-  qemuMemfdBuildFix = fetchpatch {
-    name = "xen-4.8-memfd-build-fix.patch";
-    url = "https://github.com/qemu/qemu/commit/75e5b70e6b5dcc4f2219992d7cffa462aa406af0.patch";
-    sha256 = "0gaz93kb33qc0jx6iphvny0yrd17i8zhcl3a9ky5ylc2idz0wiwa";
-  };
-
   qemuDeps = [
     udev pciutils xorg.libX11 SDL pixman acl glusterfs spice-protocol usbredir
     alsa-lib glib python2
@@ -38,11 +30,11 @@ let
 in
 
 callPackage (import ./generic.nix (rec {
-  version = "4.10.4";
+  version = "4.12.4";
 
   src = fetchurl {
     url = "https://downloads.xenproject.org/release/xen/${version}/xen-${version}.tar.gz";
-    sha256 = "0ipkr7b3v3y183n6nfmz7q3gnzxa20011df4jpvxi6pmr8cpnkwh";
+    sha256 = "0k8ahnx4l4wrhjz196is1nrnprmnf0kpn1ly4mj5snv3afqd2w52";
   };
 
   # Sources needed to build tools and firmwares.
@@ -50,10 +42,11 @@ callPackage (import ./generic.nix (rec {
     qemu-xen = {
       src = fetchgit {
         url = "https://xenbits.xen.org/git-http/qemu-xen.git";
+        fetchSubmodules = true;
         # rev = "refs/tags/qemu-xen-${version}";
         # use revision hash - reproducible but must be updated with each new version
         rev = "qemu-xen-${version}";
-        sha256 = "0laxvhdjz1njxjvq3jzw2yqvdr9gdn188kqjf2gcrfzgih7xv2ym";
+        sha256 = "081lglcw2birss6mfqh1ylmdlglfgd05slq6pppz69csz1f01yqs";
       };
       buildInputs = qemuDeps;
       postPatch = ''
@@ -69,12 +62,10 @@ callPackage (import ./generic.nix (rec {
         url = "https://xenbits.xen.org/git-http/qemu-xen-traditional.git";
         # rev = "refs/tags/xen-${version}";
         # use revision hash - reproducible but must be updated with each new version
-        rev = "c8ea0457495342c417c3dc033bba25148b279f60";
-        sha256 = "0v5nl3c08kpjg57fb8l191h1y57ykp786kz6l525jgplif28vx13";
+        rev = "d0d8ad39ecb51cd7497cd524484fe09f50876798";
+        sha256 = "01akka7q8f84zm1rjb9vbls6xw9j288svgxpbidaa6mf1nk3nrsb";
       };
       buildInputs = qemuDeps;
-      patches = [
-      ];
       postPatch = ''
         substituteInPlace xen-hooks.mak \
           --replace /usr/include/pci ${pciutils}/include/pci
