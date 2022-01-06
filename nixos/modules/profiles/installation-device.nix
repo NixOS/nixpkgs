@@ -99,6 +99,7 @@ with lib;
         stdenvNoCC # for runCommand
         busybox
         jq # for closureInfo
+        keyutils
       ];
 
     # Show all debug messages from the kernel but don't log refused packets
