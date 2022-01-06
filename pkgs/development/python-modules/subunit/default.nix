@@ -4,7 +4,7 @@
 , cppunit
 , pkg-config
 , subunit
-, pythonAtLeast
+, pythonOlder
 
 # python dependencies
 , fixtures
@@ -12,6 +12,7 @@
 , pytest
 , testscenarios
 , testtools
+, unittest2
 }:
 
 buildPythonPackage {
@@ -21,10 +22,10 @@ buildPythonPackage {
   buildInputs = [ check cppunit ];
   propagatedBuildInputs = [ testtools ];
 
-  checkInputs = [ testscenarios hypothesis fixtures pytest ];
+  checkInputs = [ testscenarios hypothesis fixtures pytest unittest2 ];
 
   # requires unittest2, which no longer supported in 3.10
-  doCheck = pythonAtLeast "3.10";
+  doCheck = pythonOlder "3.10";
   # ignore tests which call shell code, or call methods which haven't been implemented
   checkPhase = ''
     pytest python/subunit \
