@@ -6,7 +6,7 @@ API_URL="https://api.github.com/repos/pulumi"
 
 # Version of Pulumi from
 # https://www.pulumi.com/docs/get-started/install/versions/
-VERSION="3.19.0"
+VERSION="3.21.0"
 
 # An array of plugin names. The respective repository inside Pulumi's
 # Github organization is called pulumi-$name by convention.
