@@ -4,6 +4,7 @@
 , src
 , extraPatches ? []
 , extraNativeBuildInputs ? []
+, extraConfigureFlags ? []
 , extraMeta ? {}
 }:
 
@@ -94,7 +95,8 @@ stdenv.mkDerivation rec {
     ++ optional withFIDO "--with-security-key-builtin=yes"
     ++ optional withKerberos (assert libkrb5 != null; "--with-kerberos5=${libkrb5}")
     ++ optional stdenv.isDarwin "--disable-libutil"
-    ++ optional (!linkOpenssl) "--without-openssl";
+    ++ optional (!linkOpenssl) "--without-openssl"
+    ++ extraConfigureFlags;
 
   buildFlags = [ "SSH_KEYSIGN=ssh-keysign" ];
 

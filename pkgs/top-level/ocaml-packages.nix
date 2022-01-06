@@ -254,6 +254,8 @@ let
 
     data-encoding = callPackage ../development/ocaml-modules/data-encoding { };
 
+    dbf =  callPackage ../development/ocaml-modules/dbf { };
+
     decompress =  callPackage ../development/ocaml-modules/decompress { };
 
     diet =  callPackage ../development/ocaml-modules/diet { };

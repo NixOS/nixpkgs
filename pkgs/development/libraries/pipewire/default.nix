@@ -2,6 +2,7 @@
 , lib
 , buildPackages
 , fetchFromGitLab
+, fetchpatch
 , removeReferencesTo
 , python3
 , meson
@@ -102,6 +103,15 @@ let
       ./0090-pipewire-config-template-paths.patch
       # Place SPA data files in lib output to avoid dependency cycles
       ./0095-spa-data-dir.patch
+      # Fix attempt to put system service units into pkgs.systemd.
+      (fetchpatch {
+        url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/b666edde787b167c6e19b9356257d48007357acc.diff";
+        sha256 = "1pmnyyvrjykr46ld4a5frq3cc739f8h4jwvfj414lyx8c6ybm63s";
+      })
+      (fetchpatch {
+        url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/5054b48c9de655b4b48f7c801cb305d9eb122520.diff";
+        sha256 = "0myhb7h4g7x2nr08dpx8d7nqhsmzp90yanmkvm627r1xxnnr3ivn";
+      })
     ];
 
     nativeBuildInputs = [
@@ -154,6 +164,7 @@ let
       "-Dlibpulse=${mesonEnable pulseTunnelSupport}"
       "-Davahi=${mesonEnable zeroconfSupport}"
       "-Dgstreamer=${mesonEnable gstreamerSupport}"
+      "-Dsystemd-system-service=enabled"
       "-Dffmpeg=${mesonEnable ffmpegSupport}"
       "-Dbluez5=${mesonEnable bluezSupport}"
       "-Dbluez5-backend-hsp-native=${mesonEnable nativeHspSupport}"

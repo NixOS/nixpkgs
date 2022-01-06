@@ -2812,6 +2812,12 @@
     email = "d4delta@outlook.fr";
     name = "Delta";
   };
+  deltadelta = {
+    email = "contact@libellules.eu";
+    name = "Dara Ly";
+    github = "tournemire";
+    githubId = 20159432;
+  };
   deltaevo = {
     email = "deltaduartedavid@gmail.com";
     github = "DeltaEvo";
@@ -8219,6 +8225,12 @@
     github = "mt-caret";
     githubId = 4996739;
     name = "Masayuki Takeda";
+  };
+  mtesseract = {
+    email = "moritz@stackrox.com";
+    github = "mtesseract";
+    githubId = 11706080;
+    name = "Moritz Clasmeier";
   };
   MtP = {
     email = "marko.nixos@poikonen.de";

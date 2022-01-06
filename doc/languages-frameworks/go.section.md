@@ -34,7 +34,6 @@ pet = buildGoModule rec {
     homepage = "https://github.com/knqyf263/pet";
     license = licenses.mit;
     maintainers = with maintainers; [ kalbasit ];
-    platforms = platforms.linux ++ platforms.darwin;
   };
 }
 ```
