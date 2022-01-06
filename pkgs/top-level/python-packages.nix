@@ -9545,6 +9545,8 @@ in {
 
   tensorflow-estimator = callPackage ../development/python-modules/tensorflow-estimator { };
 
+  tensorflow-metadata = callPackage ../development/python-modules/tensorflow-metadata { };
+
   tensorflow-probability = callPackage ../development/python-modules/tensorflow-probability { };
 
   tensorflow = self.tensorflow-build;
