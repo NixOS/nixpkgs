@@ -7716,6 +7716,8 @@ with pkgs;
     guile = guile_1_8;
   };
 
+  mcstatus = with python3Packages; toPythonApplication mcstatus;
+
   mdbtools = callPackage ../tools/misc/mdbtools { };
 
   mdk = callPackage ../development/tools/mdk { };
@@ -25036,6 +25038,8 @@ with pkgs;
   };
 
   elvis = callPackage ../applications/editors/elvis { };
+
+  em = callPackage ../applications/editors/em { };
 
   emacs = emacs27;
   emacs-nox = emacs27-nox;
