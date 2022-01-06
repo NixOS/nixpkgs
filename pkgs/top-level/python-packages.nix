@@ -9557,6 +9557,8 @@ in {
     lmdb-core = pkgs.lmdb;
   };
 
+  tensorflow-datasets = callPackage ../development/python-modules/tensorflow-datasets { };
+
   tensorflow-estimator = callPackage ../development/python-modules/tensorflow-estimator { };
 
   tensorflow-metadata = callPackage ../development/python-modules/tensorflow-metadata { };
