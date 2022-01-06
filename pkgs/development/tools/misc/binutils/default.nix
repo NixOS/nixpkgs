@@ -94,7 +94,8 @@ stdenv.mkDerivation {
        # indeed GHC will refuse to compile with a binutils suffering from it. See
        # this comment for more information:
        # https://gitlab.haskell.org/ghc/ghc/issues/4210#note_78333
-       lib.optional (stdenv.targetPlatform.isAarch32 && stdenv.hostPlatform.system != stdenv.targetPlatform.system) ./R_ARM_COPY.patch;
+       lib.optional (stdenv.targetPlatform.isAarch32 && stdenv.hostPlatform.system != stdenv.targetPlatform.system) ./R_ARM_COPY.patch
+    ++ lib.optional stdenv.targetPlatform.isWindows ./windres-locate-gcc.patch;
 
   outputs = [ "out" "info" "man" ];
 
