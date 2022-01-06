@@ -242,13 +242,17 @@ stdenv.mkDerivation rec {
   preBuild = "cd build";
 
   # Add a ‘qemu-kvm’ wrapper for compatibility/convenience.
-  postInstall = ''
-    install -m755 -D $emitKvmWarningsPath $out/libexec/emit-kvm-warnings
+  postInstall =
+    lib.optionalString stdenv.isLinux ''
+      install -m755 -D $emitKvmWarningsPath $out/libexec/emit-kvm-warnings
+    '' + ''
     if [ -x $out/bin/qemu-system-${stdenv.hostPlatform.qemuArch} ]; then
       makeWrapper $out/bin/qemu-system-${stdenv.hostPlatform.qemuArch} \
-                  $out/bin/qemu-kvm \
+                  $out/bin/qemu-kvm ${
+      lib.optionalString stdenv.isLinux '' \
                   --run $out/libexec/emit-kvm-warnings \
                   --add-flags "\$([ -r /dev/kvm -a -w /dev/kvm ] && echo -enable-kvm)"
+      ''}
     fi
   '';
 
