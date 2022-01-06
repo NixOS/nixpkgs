@@ -1,4 +1,9 @@
-{ stdenv, lib, fetchurl, unzip, qt4, qmake4Hook
+{ stdenv
+, lib
+, fetchurl
+, unzip
+, qt4
+, qmake4Hook
 }:
 
 stdenv.mkDerivation rec {
@@ -16,12 +21,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ unzip qmake4Hook ];
 
-  patches = ./fix-qt4-build.patch;
+  patches = [
+    ./fix-qt4-build.patch
+  ];
 
   # Make sure that libqscintilla2.so is available in $out/lib since it is expected
   # by some packages such as sqlitebrowser
   postFixup = ''
-    ln -s $out/lib/libqscintilla2_qt?.so $out/lib/libqscintilla2.so
+    ln -s $out/lib/libqscintilla2_qt4.so $out/lib/libqscintilla2.so
   '';
 
   dontWrapQtApps = true;
