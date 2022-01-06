@@ -12629,6 +12629,12 @@
     email = "kirill.wedens@gmail.com";
     name = "wedens";
   };
+  wegank = {
+    name = "Weijia Wang";
+    email = "contact@weijia.wang";
+    github = "wegank";
+    githubId = 9713184;
+  };
   weihua = {
     email = "luwh364@gmail.com";
     github = "weihua-lu";
