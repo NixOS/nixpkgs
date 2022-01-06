@@ -9,7 +9,6 @@
 { lib
 , pkgs
 , qt5
-, stdenv
 }:
 
 (lib.makeScope pkgs.newScope ( self:
