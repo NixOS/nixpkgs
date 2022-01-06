@@ -5070,6 +5070,8 @@ with pkgs;
 
   epubcheck = callPackage ../tools/text/epubcheck { };
 
+  evil-winrm = callPackage ../tools/security/evil-winrm { };
+
   luckybackup = libsForQt5.callPackage ../tools/backup/luckybackup {
     ssh = openssh;
   };
