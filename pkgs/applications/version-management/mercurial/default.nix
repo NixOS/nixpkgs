@@ -77,7 +77,8 @@ let
       test-check-shbang.t
       EOF
 
-      export HGTESTFLAGS="--blacklist blacklists/nix"
+      # extended timeout necessary for tests to pass on the busy CI workers
+      export HGTESTFLAGS="--blacklist blacklists/nix --timeout 600"
       make check
     '';
 
