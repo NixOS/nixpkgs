@@ -2,26 +2,34 @@
 , buildPythonPackage
 , fetchPypi
 , tkinter
+, pythonOlder
 }:
+
 buildPythonPackage rec {
-  pname = "PySimpleGUI";
+  pname = "pysimplegui";
   version = "4.56.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "PySimpleGUI";
+    inherit version;
     sha256 = "1a13a19282f92626cc6a823cbe9f4aa08aa558870f03441a1c4e8b6cef27c9d5";
   };
-
-  pythonImportsCheck = [ "PySimpleGUI" ];
 
   propagatedBuildInputs = [
     tkinter
   ];
 
+  pythonImportsCheck = [
+    "PySimpleGUI"
+  ];
+
   meta = with lib; {
-    description = "Python GUIs for Humans.";
+    description = "Python GUIs for Humans";
     homepage = "https://github.com/PySimpleGUI/PySimpleGUI";
-    license = licenses.gpl3;
+    license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ lucasew ];
   };
 }
