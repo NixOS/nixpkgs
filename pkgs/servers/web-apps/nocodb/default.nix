@@ -29,10 +29,10 @@ let
     '';
 
     meta = with lib; {
-      description = "Online collaborative whiteboard that is simple, free, easy to use and to deploy";
+      description = "Open Source Airtable Alternative";
       license = licenses.agpl3Plus;
-      homepage = "https://github.com/lovasoa/nocodb";
-      maintainers = with maintainers; [ iblech ];
+      homepage = "https://nocodb.com";
+      maintainers = with maintainers; [ onny ];
       platforms = platforms.unix;
     };
   };
