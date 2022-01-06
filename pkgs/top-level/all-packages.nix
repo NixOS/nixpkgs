@@ -7715,6 +7715,8 @@ with pkgs;
     guile = guile_1_8;
   };
 
+  mcstatus = with python3Packages; toPythonApplication mcstatus;
+
   mdbtools = callPackage ../tools/misc/mdbtools { };
 
   mdk = callPackage ../development/tools/mdk { };
