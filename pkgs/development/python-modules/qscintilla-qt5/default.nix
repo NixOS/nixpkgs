@@ -3,7 +3,7 @@
 , qscintilla
 , qtbase
 , qmake
-, qtmacextras ? null
+, qtmacextras
 , stdenv
 }:
 
@@ -19,7 +19,7 @@ in buildPythonPackage rec {
 
   nativeBuildInputs = [ sip qmake pyqt-builder qscintilla ];
   buildInputs = [ qtbase ];
-  propagatedBuildInputs = [ pyqt5 ] ++ lib.optional (stdenv.isDarwin) qtmacextras;
+  propagatedBuildInputs = [ pyqt5 ] ++ lib.optionals stdenv.isDarwin [ qtmacextras ];
 
   dontWrapQtApps = true;
 

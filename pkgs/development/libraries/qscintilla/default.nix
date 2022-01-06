@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ qtbase ];
 
-  propagatedBuildInputs = lib.optional stdenv.isDarwin qtmacextras;
+  propagatedBuildInputs = lib.optionals stdenv.isDarwin [ qtmacextras ];
 
   nativeBuildInputs = [ unzip qmake ]
     ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;

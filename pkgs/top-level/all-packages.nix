@@ -19494,17 +19494,17 @@ with pkgs;
     });
 
   libsForQt512 = recurseIntoAttrs (import ./qt5-packages.nix {
-    inherit lib pkgs stdenv;
+    inherit lib pkgs;
     qt5 = qt512;
   });
 
   libsForQt514 = recurseIntoAttrs (import ./qt5-packages.nix {
-    inherit lib pkgs stdenv;
+    inherit lib pkgs;
     qt5 = qt514;
   });
 
   libsForQt515 = recurseIntoAttrs (import ./qt5-packages.nix {
-    inherit lib pkgs stdenv;
+    inherit lib pkgs;
     qt5 = qt515;
   });
 
