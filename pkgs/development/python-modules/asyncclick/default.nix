@@ -10,7 +10,8 @@
 
 buildPythonPackage rec {
   pname = "asyncclick";
-  version = "8.0.1.3";
+  version = "8.0.3";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
@@ -18,7 +19,7 @@ buildPythonPackage rec {
     owner = "python-trio";
     repo = pname;
     rev = version;
-    sha256 = "03b8zz8i3aqzxr3ffzb4sxnrcm3gsk9r4hmr0fkml1ahi754bx2r";
+    sha256 = "sha256-7yTiRGvYhxPPoQyl5loGmQga4pSYRuvekvpJDN3ru18=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -36,12 +37,9 @@ buildPythonPackage rec {
     trio
   ];
 
-  disabledTests = [
-    # RuntimeWarning: coroutine 'Context.invoke' was never awaited
-    "test_context_invoke_type"
+  pythonImportsCheck = [
+    "click"
   ];
-
-  pythonImportsCheck = [ "asyncclick" ];
 
   meta = with lib; {
     description = "Python composable command line utility";
