@@ -793,7 +793,7 @@ let
       rm $out/bin/wxchordpro # Wx not supported on darwin
     '';
     meta = {
-      homepage = "http://www.chordpro.org";
+      homepage = "https://www.chordpro.org";
       description = "A lyrics and chords formatting program";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
