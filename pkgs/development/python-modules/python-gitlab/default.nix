@@ -11,7 +11,9 @@
 buildPythonPackage rec {
   pname = "python-gitlab";
   version = "3.0.0";
-  disabled = pythonOlder "3.6";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
