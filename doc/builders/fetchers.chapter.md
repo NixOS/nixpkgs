@@ -82,4 +82,11 @@ This is used with repo.or.cz repositories. The arguments expected are very simil
 
 ## `fetchFromSourcehut` {#fetchfromsourcehut}
 
-This is used with sourcehut repositories. The arguments expected are very similar to fetchFromGitHub above. Don't forget the tilde (~) in front of the user name!
+This is used with sourcehut repositories. Similar to `fetchFromGitHub` above,
+it expects `owner`, `repo`, `rev` and `sha256`, but don't forget the tilde (~)
+in front of the username! Expected arguments also include `vc` ("git" (default)
+or "hg"), `domain` and `fetchSubmodules`.
+
+If `fetchSubmodules` is `true`, `fetchFromSourcehut` uses `fetchgit`
+or `fetchhg` with `fetchSubmodules` or `fetchSubrepos` set to `true`,
+respectively. Otherwise the fetcher uses `fetchzip`.
