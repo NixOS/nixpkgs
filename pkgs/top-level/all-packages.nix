@@ -9098,7 +9098,9 @@ with pkgs;
 
   qprint = callPackage ../tools/text/qprint { };
 
-  qscintilla = callPackage ../development/libraries/qscintilla { };
+  qscintilla = libsForQt5.callPackage ../development/libraries/qscintilla { };
+
+  qscintilla-qt4 = callPackage ../development/libraries/qscintilla-qt4 { };
 
   qshowdiff = callPackage ../tools/text/qshowdiff { };
 
@@ -12411,6 +12413,10 @@ with pkgs;
   idris = idrisPackages.with-packages [ idrisPackages.base ] ;
 
   idris2 = callPackage ../development/compilers/idris2 { };
+
+  inherit (callPackage ../development/tools/database/indradb { })
+    indradb-server
+    indradb-client;
 
   intel-graphics-compiler = callPackage ../development/compilers/intel-graphics-compiler { };
 
@@ -27109,6 +27115,8 @@ with pkgs;
   miniaudicle = callPackage ../applications/audio/miniaudicle { };
 
   minicom = callPackage ../tools/misc/minicom { };
+
+  minigalaxy = callPackage ../applications/misc/minigalaxy { };
 
   minimodem = callPackage ../applications/radio/minimodem { };
 

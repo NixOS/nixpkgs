@@ -14,14 +14,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "nextpnr";
-  version = "2021.15.21";
+  version = "2022.01.03";
 
   srcs = [
     (fetchFromGitHub {
       owner = "YosysHQ";
       repo  = "nextpnr";
-      rev   = "d04cfd5f0f6da184f5b8a03f0ce18fbd1d98eca3";
-      hash  = "sha256-gm/+kwIZ/m10+KuCJoK45F56nKZD3tM0myHwbFKIKAs=";
+      rev   = "089ca8258e6f4dc93f8d39594c1109a8578cdc98";
+      hash  = "sha256-N8kX/+fN8Qe+qme8RFlZyYQ/3p1WBkt0ztUwjJIQCIw=";
       name  = "nextpnr";
     })
     (fetchFromGitHub {
