@@ -6,6 +6,12 @@
 , guiSupport ? fullBuild, tk
 , highlightSupport ? fullBuild
 , ApplicationServices
+# test dependencies
+, unzip
+, which
+, sqlite
+, git
+, gnupg
 }:
 
 let
@@ -13,11 +19,11 @@ let
 
   self = python3Packages.buildPythonApplication rec {
     pname = "mercurial";
-    version = "5.9.3";
+    version = "6.0.1";
 
     src = fetchurl {
       url = "https://mercurial-scm.org/release/mercurial-${version}.tar.gz";
-      sha256 = "sha256-O0P2iXetD6dap/HlyPCoO6k1YhqyOWEpq7SY5W0b4I4=";
+      sha256 = "sha256-Bf0LSAOJyWVH9abHaekO4A8dE/esDUZeQKOBxs86VuI=";
     };
 
     format = "other";
@@ -27,10 +33,19 @@ let
     cargoDeps = if rustSupport then rustPlatform.fetchCargoTarball {
       inherit src;
       name = "${pname}-${version}";
-      sha256 = "sha256:1d911jaawdrcv2mdhlp2ylr10791zj7dhb69aiw5yy7vn7gry82n";
+      sha256 = "sha256-leyLb6RqntiuEhmJSUkZRUuO8ah0BZI5OhKkGbWRjxs=";
       sourceRoot = "${pname}-${version}/rust";
     } else null;
     cargoRoot = if rustSupport then "rust" else null;
+
+    postPatch = ''
+      patchShebangs .
+
+      for f in **/*.{py,c,t}; do
+        # not only used in shebangs
+        substituteAllInPlace "$f" '/bin/sh' '${stdenv.shell}'
+      done
+    '';
 
     propagatedBuildInputs = lib.optional re2Support fb-re2
       ++ lib.optional gitSupport pygit2
@@ -46,6 +61,26 @@ let
 
     makeFlags = [ "PREFIX=$(out)" ]
       ++ lib.optional rustSupport "PURE=--rust";
+
+    doCheck = stdenv.isLinux;  # tests seem unstable on Darwin
+    checkInputs = [
+      unzip
+      which
+      sqlite
+      git
+      gnupg
+    ];
+    checkPhase = ''
+      cat << EOF > tests/blacklists/nix
+      # tests enforcing "/usr/bin/env" shebangs, which are patched for nix
+      test-run-tests.t
+      test-check-shbang.t
+      EOF
+
+      # extended timeout necessary for tests to pass on the busy CI workers
+      export HGTESTFLAGS="--blacklist blacklists/nix --timeout 600"
+      make check
+    '';
 
     postInstall = (lib.optionalString guiSupport ''
       mkdir -p $out/etc/mercurial
