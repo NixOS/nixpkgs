@@ -129,7 +129,7 @@ let
     inherit (self.types) isType setType defaultTypeMerge defaultFunctor
       isOptionType mkOptionType;
     inherit (self.asserts)
-      assertMsg assertOneOf;
+      assertMsg assertOneOf assertSubListOf;
     inherit (self.debug) addErrorContextToAttrs traceIf traceVal traceValFn
       traceXMLVal traceXMLValMarked traceSeq traceSeqN traceValSeq
       traceValSeqFn traceValSeqN traceValSeqNFn traceFnSeqN traceShowVal

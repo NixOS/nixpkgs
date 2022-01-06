@@ -41,4 +41,25 @@ rec {
       lib.generators.toPretty {} xs}, but is: ${
         lib.generators.toPretty {} val}";
 
+  /* Specialized `assertMsg` for checking if val is a sublist of a
+     list. Useful for checking enums.
+
+     Example:
+       let colorVariants = ["bright" "dark" "black"]
+       in assertSubListOf "color variants" colorVariants [ "standard" "light" "dark" ];
+       => false
+       stderr> trace: color variants must be a sublist of "standard", "light", "dark", but contains: "bright", "black"
+
+     Type:
+       assertOneOf :: String -> List ComparableVal -> List ComparableVal -> Bool
+  */
+  assertSubListOf = name: val: xs:
+    let
+      unexpected = lib.subtractLists xs val;
+    in
+      lib.assertMsg (unexpected == [])
+        "${name} must be a sublist of ${
+          lib.generators.toPretty {} xs}, but contains: ${
+            lib.generators.toPretty {} unexpected}";
+
 }
