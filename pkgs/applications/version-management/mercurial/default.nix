@@ -78,7 +78,7 @@ let
       EOF
 
       # extended timeout necessary for tests to pass on the busy CI workers
-      export HGTESTFLAGS="--blacklist blacklists/nix --timeout 600"
+      export HGTESTFLAGS="--blacklist blacklists/nix --timeout 1800"
       make check
     '';
 
