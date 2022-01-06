@@ -62,7 +62,7 @@ let
     makeFlags = [ "PREFIX=$(out)" ]
       ++ lib.optional rustSupport "PURE=--rust";
 
-    doCheck = true;
+    doCheck = stdenv.isLinux;  # tests seem unstable on Darwin
     checkInputs = [
       unzip
       which
