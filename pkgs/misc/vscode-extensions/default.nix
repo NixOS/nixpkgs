@@ -144,6 +144,23 @@ let
         };
       };
 
+      apollographql.vscode-apollo = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-apollo";
+          publisher = "apollographql";
+          version = "1.19.9";
+          sha256 = "sha256-iJpzNKcuQrfq4Z0LXuadt6OKXelBbDQg/vuc7NJ2I5o=";
+        };
+        meta = with lib; {
+          changelog = "https://marketplace.visualstudio.com/items/apollographql.vscode-apollo/changelog";
+          description = "Rich editor support for GraphQL client and server development that seamlessly integrates with the Apollo platform";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=apollographql.vscode-apollo";
+          homepage = "https://github.com/apollographql/vscode-graphql";
+          license = licenses.mit;
+          maintainers = with maintainers; [ datafoo ];
+        };
+      };
+
       arcticicestudio.nord-visual-studio-code = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "nord-visual-studio-code";
