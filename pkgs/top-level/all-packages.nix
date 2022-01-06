@@ -26191,6 +26191,8 @@ with pkgs;
 
   rootbar = callPackage ../applications/misc/rootbar {};
 
+  wapanel = callPackage ../applications/misc/wapanel { };
+
   waybar = callPackage ../applications/misc/waybar {};
 
   wbg = callPackage ../applications/misc/wbg { };
