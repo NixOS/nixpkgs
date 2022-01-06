@@ -17,10 +17,14 @@ buildGraalvmNativeImage rec {
   };
 
   # https://github.com/clojure-lsp/clojure-lsp/blob/2021.11.02-15.24.47/graalvm/native-unix-compile.sh#L18-L27
-  DTLV_LIB_EXTRACT_DIR = "/tmp";
+  # Needs to be inject on `nativeImageBuildArgs` inside shell environment,
+  # otherwise we can't expand to the value set in `mktemp -d` call
+  preBuild = ''
+    export DTLV_LIB_EXTRACT_DIR="$(mktemp -d)"
+    nativeImageBuildArgs+=("-H:CLibraryPath=$DTLV_LIB_EXTRACT_DIR")
+  '';
 
   extraNativeImageBuildArgs = [
-    "-H:CLibraryPath=${DTLV_LIB_EXTRACT_DIR}"
     "--no-fallback"
     "--native-image-info"
   ];
