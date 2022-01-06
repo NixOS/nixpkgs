@@ -16818,8 +16818,6 @@ with pkgs;
 
   grab-site = callPackage ../tools/backup/grab-site { };
 
-  grib-api = callPackage ../development/libraries/grib-api { };
-
   grilo = callPackage ../development/libraries/grilo { };
 
   grilo-plugins = callPackage ../development/libraries/grilo-plugins { };
