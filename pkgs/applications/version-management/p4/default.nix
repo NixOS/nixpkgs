@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     # actually  https://cdist2.perforce.com/perforce/r21.2/bin.linux26x86_64/helix-core-server.tgz but upstream deletes releases
-    url = "http://web.archive.org/web/20211118024943/https://cdist2.perforce.com/perforce/r21.2/bin.linux26x86_64/helix-core-server.tgz";
+    url = "https://web.archive.org/web/20211118024943/https://cdist2.perforce.com/perforce/r21.2/bin.linux26x86_64/helix-core-server.tgz";
     sha256 = "sha256-cmIMVek4lwVYJQbW8ziABftPZ0iIoAoSpR7cKuN4I7M=";
   };
 
