@@ -4,7 +4,7 @@ with lib;
 
 let
   prl-tools = config.hardware.parallels.package;
-  aarch64 = stdenv.hostPlatform.system == "aarch64-linux";
+  aarch64 = pkgs.stdenv.hostPlatform.system == "aarch64-linux";
 in
 
 {

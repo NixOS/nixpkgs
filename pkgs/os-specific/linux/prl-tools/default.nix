@@ -1,5 +1,5 @@
 { stdenv, lib, makeWrapper, p7zip
-, gawk, utillinux, xorg, glib, dbus-glib, zlib
+, gawk, util-linux, xorg, glib, dbus-glib, zlib
 , kernel ? null, libsOnly ? false
 , fetchurl, undmg, perl, autoPatchelfHook
 }:
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
 
   kernelVersion = if libsOnly then "" else lib.getVersion kernel.name;
   kernelDir = if libsOnly then "" else "${kernel.dev}/lib/modules/${kernelVersion}";
-  scriptPath = lib.concatStringsSep ":" (lib.optionals (!libsOnly) [ "${utillinux}/bin" "${gawk}/bin" ]);
+  scriptPath = lib.concatStringsSep ":" (lib.optionals (!libsOnly) [ "${util-linux}/bin" "${gawk}/bin" ]);
 
   buildPhase = ''
     if test -z "$libsOnly"; then
@@ -107,6 +107,13 @@ stdenv.mkDerivation rec {
 
       cd $out/lib
       ln -s libPrlWl.so.1.0.0 libPrlWl.so.1
+      ${if aarch64 then "" else "
+      ln -s libGL.so.1.0.0 libGL.so
+      ln -s libGL.so.1.0.0 libGL.so.1
+      ln -s libPrlDRI.so.1.0.0 libPrlDRI.so.1
+      ln -s libEGL.so.1.0.0 libEGL.so.1
+      ln -s libgbm.so.1.0.0 libgbm.so.1
+      "}
     )
   '';
 
