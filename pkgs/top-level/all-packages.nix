@@ -277,6 +277,10 @@ with pkgs;
 
   cm256cc = callPackage ../development/libraries/cm256cc {  };
 
+  cocogitto = callPackage ../development/tools/cocogitto {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   conftest = callPackage ../development/tools/conftest { };
 
   corgi = callPackage ../development/tools/corgi { };
@@ -6685,6 +6689,8 @@ with pkgs;
   };
 
   itm-tools = callPackage ../development/tools/misc/itm-tools { };
+
+  ite-backlight = callPackage ../misc/ite-backlight { };
 
   iwgtk = callPackage ../tools/networking/iwgtk { };
 
@@ -27738,9 +27744,12 @@ with pkgs;
 
   opentimestamps-client = python3Packages.callPackage ../tools/misc/opentimestamps-client {};
 
-  opentoonz = (qt514.overrideScope' (_: _: {
-    libtiff = callPackage ../applications/graphics/opentoonz/libtiff.nix { };
-  })).callPackage ../applications/graphics/opentoonz { };
+  opentoonz = let
+    opentoonz-libtiff = callPackage ../applications/graphics/opentoonz/libtiff.nix { };
+  in qt5.callPackage ../applications/graphics/opentoonz {
+    libtiff = opentoonz-libtiff;
+    opencv = opencv.override { libtiff = opentoonz-libtiff; };
+  };
 
   opentabletdriver = callPackage ../tools/X11/opentabletdriver { };
 
@@ -27848,7 +27857,11 @@ with pkgs;
 
   pdfslicer = callPackage ../applications/misc/pdfslicer { };
 
-  pekwm = callPackage ../applications/window-managers/pekwm { };
+  pekwm = callPackage ../applications/window-managers/pekwm {
+    awk = gawk;
+    grep = gnugrep;
+    sed = gnused;
+  };
 
   pencil = callPackage ../applications/graphics/pencil {
   };
@@ -28379,7 +28392,7 @@ with pkgs;
 
   udevil = callPackage ../applications/misc/udevil {};
 
-  udiskie = python3Packages.callPackage ../applications/misc/udiskie { };
+  udiskie = python3.pkgs.callPackage ../applications/misc/udiskie { };
 
   sacc = callPackage ../applications/networking/gopher/sacc { };
 

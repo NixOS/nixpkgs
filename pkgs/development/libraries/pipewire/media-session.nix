@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitLab
+, fetchpatch
 , meson
 , ninja
 , pkg-config
@@ -30,6 +31,19 @@ let
       sha256 = "sha256-e537gTkiNYMz2YJrOff/MXYWVDgHZDkqkSn8Qh+7Wr4=";
     };
 
+    patches = [
+      # Fix `ERROR: Tried to access unknown option "session-managers".`
+      (fetchpatch {
+        url = "https://gitlab.freedesktop.org/pipewire/media-session/-/commit/dfa740175c83e1cd0d815ad423f90872de566437.diff";
+        sha256 = "01rfwq8ipm8wyv98rxal1s5zrkf0pn9hgrngiq2wdbwj6vjdnr1h";
+      })
+      # Fix attempt to put system service units into pkgs.systemd.
+      (fetchpatch {
+        url = "https://gitlab.freedesktop.org/pipewire/media-session/-/commit/2ff6b0baec7325dde229013b9d37c93f8bc7edee.diff";
+        sha256 = "18gg7ca04ihl4ylnw78wdyrbvg66m8w43gg0wp258x4nv95gpps2";
+      })
+    ];
+
     nativeBuildInputs = [
       doxygen
       graphviz
@@ -48,6 +62,7 @@ let
 
     mesonFlags = [
       "-Ddocs=enabled"
+      "-Dsystemd-system-service=enabled"
       # We generate these empty files from the nixos module, don't bother installing them
       "-Dwith-module-sets=[]"
     ];
