@@ -8,7 +8,6 @@
 , ftgl
 , gl2ps
 , glew
-, gsl
 , libX11
 , libXpm
 , libXft
@@ -59,7 +58,6 @@ stdenv.mkDerivation rec {
     llvm_9
     lz4
     xz
-    gsl
     xxHash
     libAfterImage
     giflib
