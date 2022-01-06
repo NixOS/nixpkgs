@@ -4,7 +4,6 @@
 , cmarkgfm
 , docutils
 , fetchPypi
-, future
 , mock
 , pygments
 , pytestCheckHook
@@ -28,7 +27,6 @@ buildPythonPackage rec {
     bleach
     cmarkgfm
     docutils
-    future
     pygments
   ];
 
@@ -36,6 +34,11 @@ buildPythonPackage rec {
     mock
     pytestCheckHook
   ];
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "cmarkgfm>=0.5.0,<0.7.0" "cmarkgfm>=0.5.0,<1"
+  '';
 
   pythonImportsCheck = [
     "readme_renderer"
