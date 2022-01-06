@@ -39,7 +39,7 @@ cfghead ="""# Edit this configuration file to define what should be installed on
 cfgbootefi = """  # Bootloader.
   boot.loader.systemd-boot.enable = false;
   boot.loader.grub.enable = true;
-  boot.loader.grub.device = "@@bootdev@@";
+  boot.loader.grub.device = "nodev";
   boot.loader.grub.useOSProber = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.grub.efiSupport = true;
@@ -248,7 +248,6 @@ def run():
     # Pick config parts and prepare substitution
     if (fw_type == "efi"):
       cfg += cfgbootefi
-      catenate(variables, "bootdev", bootdev)
     elif (bootdev != "nodev"):
       cfg += cfgbootbios
       catenate(variables, "bootdev", bootdev)
