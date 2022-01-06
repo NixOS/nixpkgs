@@ -5,11 +5,11 @@
 }:
 buildPythonPackage rec {
   pname = "PySimpleGUI";
-  version = "4.55.1";
+  version = "4.56.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-nUDAoMK0w9Luk1hU5I1yT1CK5oEj9LrIByYS3Z5wfew=";
+    sha256 = "1a13a19282f92626cc6a823cbe9f4aa08aa558870f03441a1c4e8b6cef27c9d5";
   };
 
   pythonImportsCheck = [ "PySimpleGUI" ];
