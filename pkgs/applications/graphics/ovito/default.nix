@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchFromGitLab, cmake
+{ mkDerivation, lib, stdenv, fetchFromGitLab, cmake
 , boost, netcdf, hdf5, fftwSinglePrec, muparser, openssl, ffmpeg, python
 , qtbase, qtsvg, qttools, qscintilla }:
 
@@ -37,5 +37,6 @@ mkDerivation rec {
     homepage = "https://ovito.org";
     license = with licenses;  [ gpl3Only mit ];
     maintainers = with maintainers; [ twhitehead ];
+    broken = stdenv.isDarwin; # clang-11: error: no such file or directory: '$-DOVITO_COPYRIGHT_NOTICE=...
   };
 }
