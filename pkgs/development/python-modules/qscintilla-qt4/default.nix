@@ -1,6 +1,5 @@
 { lib
 , buildPythonPackage
-, disabledIf
 , isPy3k
 , isPyPy
 , pkgs
@@ -8,35 +7,36 @@
 , pyqt4
 }:
 
-disabledIf (isPy3k || isPyPy)
-  (buildPythonPackage {
-    pname = "qscintilla";
-    version = pkgs.qscintilla.version;
-    format = "other";
+buildPythonPackage {
+  pname = "qscintilla-qt4";
+  version = pkgs.qscintilla-qt4.version;
+  format = "other";
 
-    src = pkgs.qscintilla.src;
+  disabled = isPyPy;
 
-    nativeBuildInputs = [ pkgs.xorg.lndir ];
+  src = pkgs.qscintilla-qt4.src;
 
-    buildInputs = [ pyqt4.qt pyqt4 ];
+  nativeBuildInputs = [ pkgs.xorg.lndir ];
 
-    preConfigure = ''
-      mkdir -p $out
-      lndir ${pyqt4} $out
-      rm -rf "$out/nix-support"
-      cd Python
-      ${python.executable} ./configure-old.py \
-          --destdir $out/lib/${python.libPrefix}/site-packages/PyQt4 \
-          --apidir $out/api/${python.libPrefix} \
-          -n ${pkgs.qscintilla}/include \
-          -o ${pkgs.qscintilla}/lib \
-          --sipdir $out/share/sip
-    '';
+  buildInputs = [ pyqt4.qt pyqt4 ];
 
-    meta = with lib; {
-      description = "A Python binding to QScintilla, Qt based text editing control";
-      license = licenses.lgpl21Plus;
-      maintainers = with maintainers; [ danbst ];
-      platforms = platforms.linux;
-    };
-  })
+  preConfigure = ''
+    mkdir -p $out
+    lndir ${pyqt4} $out
+    rm -rf "$out/nix-support"
+    cd Python
+    ${python.executable} ./configure-old.py \
+        --destdir $out/lib/${python.libPrefix}/site-packages/PyQt4 \
+        --apidir $out/api/${python.libPrefix} \
+        -n ${pkgs.qscintilla-qt4}/include \
+        -o ${pkgs.qscintilla-qt4}/lib \
+        --sipdir $out/share/sip
+  '';
+
+  meta = with lib; {
+    description = "A Python binding to QScintilla, Qt based text editing control";
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ danbst ];
+    platforms = platforms.linux;
+  };
+}
