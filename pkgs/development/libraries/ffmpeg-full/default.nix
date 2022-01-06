@@ -1,4 +1,4 @@
-{ lib, stdenv, ffmpeg, addOpenGLRunpath, pkg-config, perl, texinfo, yasm
+{ lib, stdenv, buildPackages, ffmpeg, addOpenGLRunpath, pkg-config, perl, texinfo, yasm
 /*
  *  Licensing options (yes some are listed twice, filters and such are not listed)
  */
@@ -260,7 +260,7 @@ stdenv.mkDerivation rec {
 
   configurePlatforms = [];
   configureFlags = [
-    "--target_os=${stdenv.hostPlatform.parsed.kernel.name}"
+    "--target_os=${if stdenv.hostPlatform.isMinGW then "mingw64" else stdenv.hostPlatform.parsed.kernel.name}" #mingw32 and mingw64 doesn't have a difference here, it is internally rewritten as mingw32
     "--arch=${stdenv.hostPlatform.parsed.cpu.name}"
     /*
      *  Licensing flags
@@ -282,7 +282,7 @@ stdenv.mkDerivation rec {
     (enableFeature hardcodedTablesBuild "hardcoded-tables")
     (enableFeature safeBitstreamReaderBuild "safe-bitstream-reader")
     (if multithreadBuild then (
-       if isCygwin then
+       if stdenv.hostPlatform.isWindows then
          "--disable-pthreads --enable-w32threads"
        else # Use POSIX threads by default
          "--enable-pthreads --disable-w32threads")
@@ -420,6 +420,7 @@ stdenv.mkDerivation rec {
   ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "--cross-prefix=${stdenv.cc.targetPrefix}"
     "--enable-cross-compile"
+    "--host-cc=${buildPackages.stdenv.cc}/bin/cc"
   ] ++ optionals stdenv.cc.isClang [
     "--cc=clang"
     "--cxx=clang++"
