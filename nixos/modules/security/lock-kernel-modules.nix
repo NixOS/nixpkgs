@@ -27,7 +27,7 @@ with lib;
           if x.fsType == "vfat"
             then [ "vfat" "nls-cp437" "nls-iso8859-1" ]
             else [ x.fsType ]
-        else []) config.system.build.fileSystems;
+        else []) config.system.fileSystems;
 
     systemd.services.disable-kernel-module-loading = {
       description = "Disable kernel module loading";

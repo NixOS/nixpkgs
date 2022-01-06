@@ -193,6 +193,15 @@ in
       '';
     };
 
+    system.fileSystems = mkOption {
+      internal = true;
+      default = [];
+      type = with types; listOf unspecified;
+      description = ''
+        Topologically ordered list of config.fileSystems
+      '';
+    };
+
     system.fsPackages = mkOption {
       internal = true;
       default = [ ];
@@ -238,7 +247,7 @@ in
     ];
 
     # Export for use in other modules
-    system.build.fileSystems = fileSystems;
+    system.fileSystems = fileSystems;
     system.build.earlyMountScript = makeSpecialMounts (toposort fsBefore (attrValues config.boot.specialFileSystems)).result;
 
     boot.supportedFilesystems = map (fs: fs.fsType) fileSystems;
