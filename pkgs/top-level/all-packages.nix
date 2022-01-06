@@ -25032,6 +25032,8 @@ with pkgs;
 
   elvis = callPackage ../applications/editors/elvis { };
 
+  em = callPackage ../applications/editors/em { };
+
   emacs = emacs27;
   emacs-nox = emacs27-nox;
 
