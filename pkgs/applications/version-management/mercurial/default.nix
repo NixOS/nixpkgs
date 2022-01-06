@@ -11,6 +11,7 @@
 , which
 , sqlite
 , git
+, cacert
 , gnupg
 }:
 
@@ -70,6 +71,7 @@ let
       git
       gnupg
     ];
+    SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";  # needed for git
     checkPhase = ''
       cat << EOF > tests/blacklists/nix
       # tests enforcing "/usr/bin/env" shebangs, which are patched for nix
