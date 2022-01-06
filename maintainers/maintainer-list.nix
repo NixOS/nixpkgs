@@ -3533,6 +3533,12 @@
     github = "ericnorris";
     githubId = 1906605;
   };
+  "3nt3" = {
+    email = "gott@3nt3.de";
+    github = "3nt3";
+    githubId = 39235738;
+    name = "Niels";
+  };
   Enteee = {
     email = "nix@duckpond.ch";
     github = "Enteee";
