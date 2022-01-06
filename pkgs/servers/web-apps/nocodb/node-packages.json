@@ -1,0 +1,3 @@
+[
+  { "nocodb": "git+https://github.com/nocodb/nocodb.git#0.84.1" }
+]
