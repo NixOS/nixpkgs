@@ -1,26 +1,22 @@
-{ stdenv, lib, fetchurl, unzip
-, qtbase, qtmacextras
-, qmake
-, fixDarwinDylibNames
+{ stdenv, lib, fetchurl, unzip, qt4, qmake4Hook
 }:
 
 stdenv.mkDerivation rec {
-  pname = "qscintilla-qt5";
-  version = "2.13.1";
+  pname = "qscintilla-qt4";
+  version = "2.11.6";
 
   src = fetchurl {
-    url = "https://www.riverbankcomputing.com/static/Downloads/QScintilla/${version}/QScintilla_src-${version}.tar.gz";
-    sha256 = "gA49IHGpa8zNdYE0avDS/ij8MM1oUwy4MCaF0BOv1Uo=";
+    url = "https://www.riverbankcomputing.com/static/Downloads/QScintilla/${version}/QScintilla-${version}.tar.gz";
+    sha256 = "5zRgV9tH0vs4RGf6/M/LE6oHQTc8XVk7xytVsvDdIKc=";
   };
 
-  sourceRoot = "QScintilla_src-${version}/src";
+  sourceRoot = "QScintilla-${version}/Qt4Qt5";
 
-  buildInputs = [ qtbase ];
+  buildInputs = [ qt4 ];
 
-  propagatedBuildInputs = lib.optionals stdenv.isDarwin [ qtmacextras ];
+  nativeBuildInputs = [ unzip qmake4Hook ];
 
-  nativeBuildInputs = [ unzip qmake ]
-    ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
+  patches = ./fix-qt4-build.patch;
 
   # Make sure that libqscintilla2.so is available in $out/lib since it is expected
   # by some packages such as sqlitebrowser
@@ -30,12 +26,13 @@ stdenv.mkDerivation rec {
 
   dontWrapQtApps = true;
 
-  preConfigure = ''
+  postPatch = ''
     substituteInPlace qscintilla.pro \
       --replace '$$[QT_INSTALL_LIBS]'         $out/lib \
       --replace '$$[QT_INSTALL_HEADERS]'      $out/include \
       --replace '$$[QT_INSTALL_TRANSLATIONS]' $out/translations \
       --replace '$$[QT_HOST_DATA]/mkspecs'    $out/mkspecs \
+      --replace '$$[QT_INSTALL_DATA]/mkspecs' $out/mkspecs \
       --replace '$$[QT_INSTALL_DATA]'         $out/share
   '';
 
@@ -58,6 +55,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.riverbankcomputing.com/software/qscintilla/intro";
     license = with licenses; [ gpl3 ]; # and commercial
     maintainers = with maintainers; [ peterhoeg ];
-    platforms = platforms.unix;
+    platforms = platforms.linux;
   };
 }

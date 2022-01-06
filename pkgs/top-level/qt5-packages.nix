@@ -190,9 +190,7 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
 
   qoauth = callPackage ../development/libraries/qoauth { };
 
-  qscintilla = callPackage ../development/libraries/qscintilla {
-    withQt5 = true;
-  };
+  qscintilla = callPackage ../development/libraries/qscintilla { };
 
   qt5ct = callPackage ../tools/misc/qt5ct { };
 
