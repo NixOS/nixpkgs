@@ -696,6 +696,7 @@
   ./services/network-filesystems/xtreemfs.nix
   ./services/network-filesystems/ceph.nix
   ./services/networking/3proxy.nix
+  ./services/networking/adguard-dnsproxy.nix
   ./services/networking/adguardhome.nix
   ./services/networking/amuled.nix
   ./services/networking/antennas.nix

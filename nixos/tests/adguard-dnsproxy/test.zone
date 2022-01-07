@@ -1,0 +1,14 @@
+
+$TTL 60
+
+$ORIGIN test.
+@       IN      SOA     dns.test. example@example.com. (
+                        2022010710 ; serial number YYMMDDNN
+                        28800           ; Refresh
+                        7200            ; Retry
+                        864000          ; Expire
+                        86400           ; Min TTL
+                        )
+
+dns IN A 127.0.0.1
+test IN A 100.64.0.1

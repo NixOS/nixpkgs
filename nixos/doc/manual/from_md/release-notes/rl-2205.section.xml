@@ -119,6 +119,14 @@
           <link xlink:href="options.html#opt-services.archisteamfarm.enable">services.archisteamfarm</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/AdguardTeam/dnsproxy">dnsproxy</link>,
+          a simple DNS proxy with DoH, DoT, DoQ and DNSCrypt support.
+          Available at
+          <link xlink:href="options.html#opt-services.adguard-dnscrypt.enable">services.adguard-dnscrypt</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.05-incompatibilities">
