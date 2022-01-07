@@ -1130,6 +1130,8 @@ in {
 
   bayespy = callPackage ../development/python-modules/bayespy { };
 
+  bbox = callPackage ../development/python-modules/bbox { };
+
   bc-python-hcl2 = callPackage ../development/python-modules/bc-python-hcl2 { };
 
   bcdoc = callPackage ../development/python-modules/bcdoc { };
