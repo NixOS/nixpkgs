@@ -342,7 +342,7 @@ class Machine:
         self.callbacks = callbacks if callbacks is not None else []
 
         if out_dir is None:
-            out_dir = Path(".")
+            out_dir = Path(".").resolve()
         self.out_dir = out_dir
 
         # set up directories
