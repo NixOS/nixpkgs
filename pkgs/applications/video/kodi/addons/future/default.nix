@@ -18,7 +18,7 @@ buildKodiAddon rec {
   };
 
   meta = with lib; {
-    homepage = "http://python-future.org";
+    homepage = "https://python-future.org";
     description = "The missing compatibility layer between Python 2 and Python 3";
     license = licenses.mit;
     maintainers = teams.kodi.members;

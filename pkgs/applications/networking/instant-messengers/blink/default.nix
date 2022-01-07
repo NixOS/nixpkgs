@@ -59,7 +59,7 @@ mkDerivationWith python2Packages.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    homepage = "http://icanblink.com/";
+    homepage = "https://icanblink.com/";
     description = "A state of the art, easy to use SIP client for Voice, Video and IM";
     platforms = platforms.linux;
     license = licenses.gpl3;

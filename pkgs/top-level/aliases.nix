@@ -634,6 +634,8 @@ mapAliases ({
   octoprint-plugins = throw "octoprint-plugins are now part of the octoprint.python.pkgs package set."; # added 2021-01-24
   ofp = throw "ofp is not compatible with odp-dpdk";
   olifant = throw "olifant has been removed from nixpkgs, as it was unmaintained."; # added 2021-08-05
+  openbazaar = throw "openbazzar has been removed from nixpkgs as upstream has abandoned the project"; # added 2022-01-06
+  openbazaar-client = throw "openbazzar-client has been removed from nixpkgs as upstream has abandoned the project"; # added 2022-01-06
   opencl-icd = ocl-icd; # added 2017-01-20
   openconnect_pa = throw "openconnect_pa fork has been discontinued, support for GlobalProtect is now available in openconnect"; # added 2021-05-21
   openelec-dvb-firmware = libreelec-dvb-firmware; # added 2021-05-10
