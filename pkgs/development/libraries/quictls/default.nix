@@ -16,13 +16,13 @@ assert (
 
 stdenv.mkDerivation rec {
   pname = "quictls";
-  version = "3.0.0+quick_unstable-2021-11.02";
+  version = "3.0.1+quick_unstable-2021-12.14";
 
   src = fetchFromGitHub {
     owner = "quictls";
     repo = "openssl";
-    rev = "62d4de00abfa82fc01efa2eba1982a86c4864f39";
-    sha256 = "11mi4bkkyy4qd2wml6p7xcsbps0mabk3bp537rp7n43qnhwyg1g3";
+    rev = "ab8b87bdb436b11bf2a10a2a57a897722224f828";
+    sha256 = "sha256-835oZgoM1CTS+JLxPO3oGSTnhLmJXGT1cFaJhCJK++8=";
   };
 
   patches = [

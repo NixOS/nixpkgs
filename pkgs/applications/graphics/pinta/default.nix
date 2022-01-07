@@ -11,7 +11,7 @@
 
 buildDotnetModule rec {
   pname = "Pinta";
-  version = "2.0";
+  version = "2.0.1";
 
   nativeBuildInputs = [
     installShellFiles
@@ -36,7 +36,7 @@ buildDotnetModule rec {
     owner = "PintaProject";
     repo = "Pinta";
     rev = version;
-    sha256 = "sha256-wqqNPyy5h/hTDm2u5MDZx1ds5qWAxy1/BY/fX4PeA88=";
+    sha256 = "sha256-iOKJPB2bI/GjeDxzG7r6ew7SGIzgrJTcRXhEYzOpC9k=";
   };
 
   # FIXME: this should be propagated by wrapGAppsHook already, however for some
