@@ -1304,6 +1304,8 @@ in {
 
   bottleneck = callPackage ../development/python-modules/bottleneck { };
 
+  boxx = callPackage ../development/python-modules/boxx { };
+
   bpycv = callPackage ../development/python-modules/bpycv {};
 
   bpython = callPackage ../development/python-modules/bpython { };
