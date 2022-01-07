@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   pname = "liburing";
-  version = "2.1";
+  version = "2.1"; # remove patch when updating
 
   src = fetchgit {
     url    = "http://git.kernel.dk/${pname}";
@@ -42,6 +42,15 @@ stdenv.mkDerivation rec {
   '' + lib.optionalString stdenv.hostPlatform.isGnu ''
     cp ./examples/ucontext-cp $bin/bin/io_uring-ucontext-cp
   '';
+
+  # fix for compilation on 32-bit ARM, merged by upstream but not released; remove when
+  # upstream releases an update
+  patches = lib.optional stdenv.isAarch32 [
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/axboe/liburing/pull/433.patch";
+      sha256 = "sha256-qQEQXYm5mkws2klLxwuuoPSPRkpP1s6tuylAAEp7+9E=";
+    })
+  ];
 
   meta = with lib; {
     description = "Userspace library for the Linux io_uring API";
