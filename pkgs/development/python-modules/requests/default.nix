@@ -19,11 +19,11 @@
 
 buildPythonPackage rec {
   pname = "requests";
-  version = "2.27.0";
+  version = "2.27.1";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-jlZDkFvyCjCOJeTB3TeRF8CQAL+KguvMxGLPsbNKFrU=";
+    hash = "sha256-aNfFb9WomZiHco7zBKbRLtx7508c+kdxT8i0FFJcmmE=";
   };
 
   patches = [
