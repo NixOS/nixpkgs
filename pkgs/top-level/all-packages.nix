@@ -2859,6 +2859,8 @@ with pkgs;
 
   dtools = callPackage ../development/tools/dtools { };
 
+  dtrx = callPackage ../tools/compression/dtrx { };
+
   dua = callPackage ../tools/misc/dua {
     inherit (darwin.apple_sdk.frameworks) Foundation;
   };
