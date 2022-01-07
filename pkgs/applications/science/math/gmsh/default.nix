@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   version = "4.9.2";
 
   src = fetchurl {
-    url = "http://gmsh.info/src/gmsh-${version}-source.tgz";
+    url = "https://gmsh.info/src/gmsh-${version}-source.tgz";
     sha256 = "sha256-26KB4DNYT12gfi2Y1656PcSBcjyybCxye2X8ILMBYYw=";
   };
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A three-dimensional finite element mesh generator";
-    homepage = "http://gmsh.info/";
+    homepage = "https://gmsh.info/";
     platforms = [ "x86_64-linux" ];
     license = lib.licenses.gpl2Plus;
   };
