@@ -8,6 +8,7 @@
 , ftgl
 , gl2ps
 , glew
+, lapack
 , libX11
 , libXpm
 , libXft
@@ -18,6 +19,7 @@
 , llvm_9
 , lz4
 , xz
+, openblas
 , pcre
 , nlohmann_json
 , pkg-config
@@ -54,10 +56,12 @@ stdenv.mkDerivation rec {
     pcre
     zlib
     zstd
+    lapack
     libxml2
     llvm_9
     lz4
     xz
+    openblas
     xxHash
     libAfterImage
     giflib
