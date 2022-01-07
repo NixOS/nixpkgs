@@ -34232,4 +34232,6 @@ with pkgs;
   };
 
   zthrottle = callPackage ../tools/misc/zthrottle { };
+
+  honeytail = callPackage ../servers/tracing/honeycomb/honeytail { };
 }
