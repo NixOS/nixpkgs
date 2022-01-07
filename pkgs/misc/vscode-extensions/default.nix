@@ -434,11 +434,16 @@ let
         mktplcRef = {
           name = "vscode-markdownlint";
           publisher = "DavidAnson";
-          version = "0.42.1";
-          sha256 = "c8c0647e0dd786fe68becca6dc73eade5f4220a26ab9faff8dd813a14b25df51";
+          version = "0.45.0";
+          sha256 = "sha256-L7y+Lsx1DMS12JtxSl7WkT8jGQLipebNKxknF/Y1ke0=";
         };
         meta = with lib; {
+          changelog = "https://marketplace.visualstudio.com/items/DavidAnson.vscode-markdownlint/changelog";
+          description = "Markdown linting and style checking for Visual Studio Code";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=DavidAnson.vscode-markdownlint";
+          homepage = "https://github.com/DavidAnson/vscode-markdownlint";
           license = licenses.mit;
+          maintainers = with maintainers; [ datafoo ];
         };
       };
 
