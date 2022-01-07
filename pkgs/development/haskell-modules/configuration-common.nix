@@ -2236,6 +2236,10 @@ self: super: {
   sdp4unordered = disableLibraryProfiling super.sdp4unordered;
   sdp4vector = disableLibraryProfiling super.sdp4vector;
 
+  # Test suite fails to compile
+  # https://github.com/kuribas/mfsolve/issues/8
+  mfsolve = dontCheck super.mfsolve;
+
   hie-bios = appendPatches [
     # Accounts for a breaking change in GHC 9.0.2 via CPP
     (pkgs.fetchpatch {
