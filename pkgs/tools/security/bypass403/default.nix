@@ -21,5 +21,8 @@ buildGoModule rec {
     homepage = "https://github.com/drsigned/bypass403";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
+
+    # https://github.com/drsigned/bypass403 no longer exists
+    broken = true;
   };
 }
