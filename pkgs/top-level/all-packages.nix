@@ -14602,6 +14602,8 @@ with pkgs;
 
   drush = callPackage ../development/tools/misc/drush { };
 
+  dura = callPackage ../development/tools/misc/dura { };
+
   dwfv = callPackage ../applications/science/electronics/dwfv { };
 
   dwz = callPackage ../development/tools/misc/dwz { };
