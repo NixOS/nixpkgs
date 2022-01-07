@@ -10545,6 +10545,8 @@ in {
 
   yattag = callPackage ../development/python-modules/yattag { };
 
+  yacs = callPackage ../development/python-modules/yacs { };
+
   ydiff = callPackage ../development/python-modules/ydiff { };
 
   yeelight = callPackage ../development/python-modules/yeelight { };
