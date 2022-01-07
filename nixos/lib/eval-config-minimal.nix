@@ -1,10 +1,7 @@
-let
-  # The warning is in a top-level let binding so it is only printed once.
-  experimentalWarning = warn "lib.nixos.evalModules is experimental and subject to change. See nixos/lib/default.nix" null;
-  inherit (nonExtendedLib) warn;
-  nonExtendedLib = import ../../lib;
-in
-{ lib ? nonExtendedLib, bypassEvalModulesWarning ? false, ... }:
+
+# DO NOT IMPORT. Use nixpkgsFlake.lib.nixos, or import (nixpkgs + "/nixos/lib")
+{ lib }: # read -^
+
 let
 
   /*
@@ -43,5 +40,5 @@ let
 
 in
 {
-  evalModules = builtins.seq (if bypassEvalModulesWarning then null else experimentalWarning) evalModules;
+  inherit evalModules;
 }

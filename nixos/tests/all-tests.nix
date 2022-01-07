@@ -20,7 +20,11 @@ let
     if elem system systems then handleTest path args
     else {};
 
-  nixosLib = import ../lib {};
+  nixosLib = import ../lib {
+    # Experimental features need testing too, but there's no point in warning
+    # about it, so we enable the feature flag.
+    featureFlags.minimalModules = {};
+  };
   evalMinimalConfig = module: nixosLib.evalModules { modules = [ module ]; };
 in
 {
