@@ -7,6 +7,9 @@
 , virtualenv
 , pretend
 , pytest
+
+# coupled downsteam dependencies
+, pip-tools
 }:
 
 buildPythonPackage rec {
@@ -31,6 +34,8 @@ buildPythonPackage rec {
   checkInputs = [ mock scripttest virtualenv pretend pytest ];
   # Pip wants pytest, but tests are not distributed
   doCheck = false;
+
+  passthru.tests = { inherit pip-tools; };
 
   meta = {
     description = "The PyPA recommended tool for installing Python packages";
