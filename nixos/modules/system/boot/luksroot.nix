@@ -432,7 +432,7 @@ let
           echo "Please move your mouse to create needed randomness."
         ''}
           echo "Waiting for your FIDO2 device..."
-          fido2luks open ${dev.device} ${dev.name} ${dev.fido2.credential} --await-dev ${toString dev.fido2.gracePeriod} --salt string:$passphrase
+          setsid cttyhack fido2luks open ${dev.device} ${dev.name} ${dev.fido2.credential} ${optionalString dev.fido2.unlockAuthenticator "--pin"} --await-dev ${toString dev.fido2.gracePeriod} --salt string:$passphrase
         if [ $? -ne 0 ]; then
           echo "No FIDO2 key found, falling back to normal open procedure"
           open_normally
@@ -697,6 +697,14 @@ in
                 Defines whatever to use an empty string as a default salt.
 
                 Enable only when your device is PIN protected, such as <link xlink:href="https://trezor.io/">Trezor</link>.
+              '';
+            };
+
+            unlockAuthenticator = mkOption {
+              default = false;
+              type = types.bool;
+              description = ''
+                Request a pin to unlock the authenticator
               '';
             };
           };
