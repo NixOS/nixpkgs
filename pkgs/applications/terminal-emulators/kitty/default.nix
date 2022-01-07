@@ -125,10 +125,7 @@ buildPythonApplication rec {
       --bash <("$out/bin/kitty" + complete setup bash) \
       --fish <("$out/bin/kitty" + complete setup fish) \
       --zsh  <("$out/bin/kitty" + complete setup zsh)
-    runHook postInstall
-  '';
 
-  postInstall = ''
     terminfo_src=${if stdenv.isDarwin then
       ''"$out/Applications/kitty.app/Contents/Resources/terminfo"''
       else
@@ -139,6 +136,8 @@ buildPythonApplication rec {
 
     mkdir -p $out/nix-support
     echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
+
+    runHook postInstall
   '';
 
   meta = with lib; {
