@@ -3,6 +3,7 @@
   libstartup_notification, libGL, libX11, libXrandr, libXinerama, libXcursor,
   libxkbcommon, libXi, libXext, wayland-protocols, wayland,
   lcms2,
+  librsync,
   installShellFiles,
   dbus,
   Cocoa,
@@ -21,20 +22,21 @@
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.23.1";
+  version = "0.24.1";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     rev = "v${version}";
-    sha256 = "sha256-2RwDU6EOJWF0u2ikJFg9U2yqSXergDkJH3h2i+QJ7G4=";
+    sha256 = "sha256-WPkyub7CwNXRksUmqiZeznnSqEPFpyHTeFLQ+D4Fb5c=";
   };
 
   buildInputs = [
     harfbuzz
     ncurses
     lcms2
+    librsync
   ] ++ lib.optionals stdenv.isDarwin [
     Cocoa
     CoreGraphics
