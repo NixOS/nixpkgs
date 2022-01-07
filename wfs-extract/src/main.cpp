@@ -37,7 +37,7 @@ void dumpdir(const boost::filesystem::path& target,
         std::ofstream output_file((target / npath).string(), std::ios::binary | std::ios::out);
         size_t to_read = file->GetSize();
         File::stream stream(file);
-        std::vector<char> data(0x2000);
+        std::array<char, 0x2000> data;
         while (to_read > 0) {
           stream.read(&*data.begin(), std::min(data.size(), to_read));
           auto read = stream.gcount();
