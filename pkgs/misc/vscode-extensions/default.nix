@@ -1545,11 +1545,16 @@ let
         mktplcRef = {
           name = "code-spell-checker";
           publisher = "streetsidesoftware";
-          version = "1.10.2";
-          sha256 = "1ll046rf5dyc7294nbxqk5ya56g2bzqnmxyciqpz2w5x7j75rjib";
+          version = "2.0.14";
+          sha256 = "sha256-mwcssQvaztrnUuSoo8AWK3FXT4qKmPTRCGVYkAjgfXg=";
         };
         meta = with lib; {
-          license = licenses.mit;
+          changelog = "https://marketplace.visualstudio.com/items/streetsidesoftware.code-spell-checker/changelog";
+          description = "Spelling checker for source code";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=streetsidesoftware.code-spell-checker";
+          homepage = "https://streetsidesoftware.github.io/vscode-spell-checker";
+          license = licenses.gpl3Only;
+          maintainers = with maintainers; [ datafoo ];
         };
       };
 
