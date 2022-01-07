@@ -63,8 +63,11 @@ in
 
     environment.etc.vmware-tools.source = "${open-vm-tools}/etc/vmware-tools/*";
 
-    services.xserver = mkIf (!cfg.headless) {
+    hardware.graphics = mkIf (!cfg.headless) {
       videoDrivers = mkOverride 50 [ "vmware" ];
+    };
+
+    services.xserver = mkIf (!cfg.headless) {
       modules = [ xf86inputvmmouse ];
 
       config = ''

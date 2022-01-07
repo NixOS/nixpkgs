@@ -12,7 +12,7 @@ driver from a set of X.org drivers (such as `vesa` and `intel`). You can
 also specify a driver manually, e.g.
 
 ```nix
-services.xserver.videoDrivers = [ "r128" ];
+hardware.graphics.videoDrivers = [ "r128" ];
 ```
 
 to enable X.org's `xf86-video-r128` driver.
@@ -115,11 +115,11 @@ officially updated since 2015.
 
 The results vary depending on the hardware, so you may have to try both
 drivers. Use the option
-[](#opt-services.xserver.videoDrivers)
+[](#opt-hardware.graphics.videoDrivers)
 to set one. The recommended configuration for modern systems is:
 
 ```nix
-services.xserver.videoDrivers = [ "modesetting" ];
+hardware.graphics.videoDrivers = [ "modesetting" ];
 services.xserver.useGlamor = true;
 ```
 
@@ -127,7 +127,7 @@ If you experience screen tearing no matter what, this configuration was
 reported to resolve the issue:
 
 ```nix
-services.xserver.videoDrivers = [ "intel" ];
+hardware.graphics.videoDrivers = [ "intel" ];
 services.xserver.deviceSection = ''
   Option "DRI" "2"
   Option "TearFree" "true"
@@ -144,16 +144,16 @@ better 3D performance than the X.org drivers. It is not enabled by
 default because it's not free software. You can enable it as follows:
 
 ```nix
-services.xserver.videoDrivers = [ "nvidia" ];
+hardware.graphics.videoDrivers = [ "nvidia" ];
 ```
 
 Or if you have an older card, you may have to use one of the legacy
 drivers:
 
 ```nix
-services.xserver.videoDrivers = [ "nvidiaLegacy390" ];
-services.xserver.videoDrivers = [ "nvidiaLegacy340" ];
-services.xserver.videoDrivers = [ "nvidiaLegacy304" ];
+hardware.graphics.videoDrivers = [ "nvidiaLegacy390" ];
+hardware.graphics.videoDrivers = [ "nvidiaLegacy340" ];
+hardware.graphics.videoDrivers = [ "nvidiaLegacy304" ];
 ```
 
 You may need to reboot after enabling this driver to prevent a clash
@@ -168,7 +168,7 @@ performance. If you still want to use it anyway, you need to explicitly
 set:
 
 ```nix
-services.xserver.videoDrivers = [ "amdgpu-pro" ];
+hardware.graphics.videoDrivers = [ "amdgpu-pro" ];
 ```
 
 You will need to reboot after enabling this driver to prevent a clash

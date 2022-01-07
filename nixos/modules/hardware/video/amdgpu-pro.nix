@@ -6,7 +6,7 @@ with lib;
 
 let
 
-  drivers = config.services.xserver.videoDrivers;
+  drivers = config.hardware.graphics.videoDrivers;
 
   enabled = elem "amdgpu-pro" drivers;
 

@@ -46,7 +46,7 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
-    services.xserver.videoDrivers = ["dummy"];
+    hardware.graphics.videoDrivers = ["dummy"];
 
     services.xserver.monitorSection = ''
       HorizSync   1.0 - 2000.0

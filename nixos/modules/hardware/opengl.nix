@@ -8,7 +8,7 @@ let
 
   kernelPackages = config.boot.kernelPackages;
 
-  videoDrivers = config.services.xserver.videoDrivers;
+  videoDrivers = config.hardware.graphics.videoDrivers;
 
   package = pkgs.buildEnv {
     name = "opengl-drivers";
@@ -41,7 +41,7 @@ in
           like sway and Weston. It is enabled by default
           by the corresponding modules, so you do not usually have to
           set it yourself, only if there is no module for your wayland
-          compositor of choice. See services.xserver.enable and
+          compositor of choice. See hardware.graphics.enable and
           programs.sway.enable.
         '';
         type = types.bool;

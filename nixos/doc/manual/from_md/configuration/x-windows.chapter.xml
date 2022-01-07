@@ -14,7 +14,7 @@ services.xserver.enable = true;
     manually, e.g.
   </para>
   <programlisting language="bash">
-services.xserver.videoDrivers = [ &quot;r128&quot; ];
+hardware.graphics.videoDrivers = [ &quot;r128&quot; ];
 </programlisting>
   <para>
     to enable X.org’s <literal>xf86-video-r128</literal> driver.
@@ -128,11 +128,11 @@ services.xserver.displayManager.autoLogin.user = &quot;alice&quot;;
     <para>
       The results vary depending on the hardware, so you may have to try
       both drivers. Use the option
-      <xref linkend="opt-services.xserver.videoDrivers" /> to set one.
+      <xref linkend="opt-hardware.graphics.videoDrivers" /> to set one.
       The recommended configuration for modern systems is:
     </para>
     <programlisting language="bash">
-services.xserver.videoDrivers = [ &quot;modesetting&quot; ];
+hardware.graphics.videoDrivers = [ &quot;modesetting&quot; ];
 services.xserver.useGlamor = true;
 </programlisting>
     <para>
@@ -140,7 +140,7 @@ services.xserver.useGlamor = true;
       configuration was reported to resolve the issue:
     </para>
     <programlisting language="bash">
-services.xserver.videoDrivers = [ &quot;intel&quot; ];
+hardware.graphics.videoDrivers = [ &quot;intel&quot; ];
 services.xserver.deviceSection = ''
   Option &quot;DRI&quot; &quot;2&quot;
   Option &quot;TearFree&quot; &quot;true&quot;
@@ -161,16 +161,16 @@ services.xserver.deviceSection = ''
       it as follows:
     </para>
     <programlisting language="bash">
-services.xserver.videoDrivers = [ &quot;nvidia&quot; ];
+hardware.graphics.videoDrivers = [ &quot;nvidia&quot; ];
 </programlisting>
     <para>
       Or if you have an older card, you may have to use one of the
       legacy drivers:
     </para>
     <programlisting language="bash">
-services.xserver.videoDrivers = [ &quot;nvidiaLegacy390&quot; ];
-services.xserver.videoDrivers = [ &quot;nvidiaLegacy340&quot; ];
-services.xserver.videoDrivers = [ &quot;nvidiaLegacy304&quot; ];
+hardware.graphics.videoDrivers = [ &quot;nvidiaLegacy390&quot; ];
+hardware.graphics.videoDrivers = [ &quot;nvidiaLegacy340&quot; ];
+hardware.graphics.videoDrivers = [ &quot;nvidiaLegacy304&quot; ];
 </programlisting>
     <para>
       You may need to reboot after enabling this driver to prevent a
@@ -187,7 +187,7 @@ services.xserver.videoDrivers = [ &quot;nvidiaLegacy304&quot; ];
       need to explicitly set:
     </para>
     <programlisting language="bash">
-services.xserver.videoDrivers = [ &quot;amdgpu-pro&quot; ];
+hardware.graphics.videoDrivers = [ &quot;amdgpu-pro&quot; ];
 </programlisting>
     <para>
       You will need to reboot after enabling this driver to prevent a

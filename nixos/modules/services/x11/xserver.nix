@@ -248,32 +248,6 @@ in
         '';
       };
 
-      videoDrivers = mkOption {
-        type = types.listOf types.str;
-        default = [ "amdgpu" "radeon" "nouveau" "modesetting" "fbdev" ];
-        example = [
-          "nvidia" "nvidiaLegacy390" "nvidiaLegacy340" "nvidiaLegacy304"
-          "amdgpu-pro"
-        ];
-        # TODO(@oxij): think how to easily add the rest, like those nvidia things
-        relatedPackages = concatLists
-          (mapAttrsToList (n: v:
-            optional (hasPrefix "xf86video" n) {
-              path  = [ "xorg" n ];
-              title = removePrefix "xf86video" n;
-            }) pkgs.xorg);
-        description = ''
-          The names of the video drivers the configuration
-          supports. They will be tried in order until one that
-          supports your card is found.
-          Don't combine those with "incompatible" OpenGL implementations,
-          e.g. free ones (mesa-based) with proprietary ones.
-
-          For unfree "nvidia*", the supported GPU lists are on
-          https://www.nvidia.com/object/unix.html
-        '';
-      };
-
       videoDriver = mkOption {
         type = types.nullOr types.str;
         default = null;
@@ -281,7 +255,7 @@ in
         description = ''
           The name of the video driver for your graphics card.  This
           option is obsolete; please set the
-          <option>services.xserver.videoDrivers</option> instead.
+          <option>hardware.graphics.videoDrivers</option> instead.
         '';
       };
 
@@ -607,10 +581,10 @@ in
 
     hardware.opengl.enable = mkDefault true;
 
-    services.xserver.videoDrivers = mkIf (cfg.videoDriver != null) [ cfg.videoDriver ];
+    hardware.graphics.videoDrivers = mkIf (cfg.videoDriver != null) [ cfg.videoDriver ];
 
     # FIXME: somehow check for unknown driver names.
-    services.xserver.drivers = flip concatMap cfg.videoDrivers (name:
+    services.xserver.drivers = flip concatMap config.hardware.graphics.videoDrivers (name:
       let driver =
         attrByPath [name]
           (if xorg ? ${"xf86video" + name}
@@ -620,6 +594,9 @@ in
       in optional (driver != null) ({ inherit name; modules = []; driverName = name; display = true; } // driver));
 
     assertions = [
+      { assertion = hardware.graphics.enabled;
+        message = "X11 requires hardware.graphics.enabled to be true, until graphics drivers and X settings are further decoupled.";
+      }
       { assertion = config.security.polkit.enable;
         message = "X11 requires Polkit to be enabled (‘security.polkit.enable = true’).";
       }
@@ -675,7 +652,7 @@ in
         xorg.xf86inputevdev.out # get evdev.4 man page
         pkgs.nixos-icons # needed for gnome and pantheon about dialog, nixos-manual and maybe more
       ]
-      ++ optional (elem "virtualbox" cfg.videoDrivers) xorg.xrefresh;
+      ++ optional (elem "virtualbox" config.hardware.graphics.videoDrivers) xorg.xrefresh;
 
     environment.pathsToLink = [ "/share/X11" ];
 

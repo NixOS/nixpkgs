@@ -6,7 +6,7 @@ with lib;
 
 let
   nvidia_x11 = let
-    drivers = config.services.xserver.videoDrivers;
+    drivers = config.hardware.graphics.videoDrivers;
     isDeprecated = str: (hasPrefix "nvidia" str) && (str != "nvidia");
     hasDeprecated = drivers: any isDeprecated drivers;
   in if (hasDeprecated drivers) then
@@ -107,7 +107,7 @@ in
         without a multiplexer.
 
         Note that this option only has any effect if the "nvidia" driver is specified
-        in <option>services.xserver.videoDrivers</option>, and it should preferably
+        in <option>hardware.graphics.videoDrivers</option>, and it should preferably
         be the only driver there.
 
         If this is enabled, then the bus IDs of the NVIDIA and Intel GPUs have to be
@@ -341,7 +341,7 @@ in
 
     # nvidia-uvm is required by CUDA applications.
     boot.kernelModules = [ "nvidia-uvm" ] ++
-      optionals config.services.xserver.enable [ "nvidia" "nvidia_modeset" "nvidia_drm" ];
+      optionals config.hardware.graphics.enable [ "nvidia" "nvidia_modeset" "nvidia_drm" ];
 
     # If requested enable modesetting via kernel parameter.
     boot.kernelParams = optional (offloadCfg.enable || cfg.modesetting.enable) "nvidia-drm.modeset=1"
