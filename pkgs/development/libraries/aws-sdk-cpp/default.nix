@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   version = "1.9.121";
 
   src = fetchFromGitHub {
-    owner = "awslabs";
+    owner = "aws";
     repo = "aws-sdk-cpp";
     rev = version;
     sha256 = "sha256-VQpWauk0tdJ1QU0HmtdTwQdKbiAuTTXXsUo2cqpqmdU=";
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A C++ interface for Amazon Web Services";
-    homepage = "https://github.com/awslabs/aws-sdk-cpp";
+    homepage = "https://github.com/aws/aws-sdk-cpp";
     license = licenses.asl20;
     platforms = platforms.unix;
     maintainers = with maintainers; [ eelco orivej ];
