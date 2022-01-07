@@ -229,6 +229,9 @@ stdenv.mkDerivation rec {
       # Added in nixpkgs:
       gettext() { "${gettext}/bin/gettext" "$@"; }
       '
+
+      wrapProgram $out/bin/virt-xml-validate \
+        --prefix PATH : ${makeBinPath [ libxml2 ]}
     '' + optionalString stdenv.isLinux ''
       substituteInPlace $out/lib/systemd/system/libvirtd.service --replace /bin/kill ${coreutils}/bin/kill
       rm $out/lib/systemd/system/{virtlockd,virtlogd}.*
