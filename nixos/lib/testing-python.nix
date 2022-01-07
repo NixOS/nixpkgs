@@ -30,7 +30,7 @@ rec {
           # effectively mute the XMLLogger
           export LOGFILE=/dev/null
 
-          ${driver}/bin/nixos-test-driver
+          ${driver}/bin/nixos-test-driver $out
         '';
 
       passthru = driver.passthru // {

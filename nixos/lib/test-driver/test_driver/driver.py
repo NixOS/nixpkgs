@@ -24,9 +24,11 @@ class Driver:
         start_scripts: List[str],
         vlans: List[int],
         tests: str,
+        out_dir: Path,
         keep_vm_state: bool = False,
     ):
         self.tests = tests
+        self.out_dir = out_dir
 
         tmp_dir = Path(os.environ.get("TMPDIR", tempfile.gettempdir()))
         tmp_dir.mkdir(mode=0o700, exist_ok=True)
@@ -46,7 +48,11 @@ class Driver:
                 keep_vm_state=keep_vm_state,
                 name=cmd.machine_name,
                 tmp_dir=tmp_dir,
+<<<<<<< HEAD
                 callbacks=[self.check_polling_conditions],
+=======
+                out_dir=self.out_dir,
+>>>>>>> 68b2e235272 (nixos/test-driver: use an argument instead of the out env-var)
             )
             for cmd in cmd(start_scripts)
         ]
@@ -154,6 +160,7 @@ class Driver:
 
         return Machine(
             tmp_dir=tmp_dir,
+            out_dir=self.out_dir,
             start_command=cmd,
             name=name,
             keep_vm_state=args.get("keep_vm_state", False),

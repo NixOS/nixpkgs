@@ -33,6 +33,18 @@ class EnvDefault(argparse.Action):
         setattr(namespace, self.dest, values)
 
 
+class WriteableDir(argparse.Action):  # type: ignore
+    def __call__(self, parser, namespace, values, option_string=None):  # type: ignore
+        if not values.is_dir():
+            raise argparse.ArgumentTypeError("{0} is not a directory".format(values))
+        if os.access(values, os.W_OK):
+            setattr(namespace, self.dest, values)
+        else:
+            raise argparse.ArgumentTypeError(
+                "{0} is not a writeable directory".format(values)
+            )
+
+
 def main() -> None:
     arg_parser = argparse.ArgumentParser(prog="nixos-test-driver")
     arg_parser.add_argument(
@@ -64,6 +76,13 @@ def main() -> None:
         help="vlans to span by the driver",
     )
     arg_parser.add_argument(
+        "output_directory",
+        action=WriteableDir,
+        help="""The path to the directory where outputs copied from the VM will be placed.
+                By e.g. Machine.copy_from_vm or Machine.screenshot""",
+        type=Path,
+    )
+    arg_parser.add_argument(
         "testscript",
         action=EnvDefault,
         envvar="testScript",
@@ -77,7 +96,11 @@ def main() -> None:
         rootlog.info("Machine state will be reset. To keep it, pass --keep-vm-state")
 
     with Driver(
-        args.start_scripts, args.vlans, args.testscript.read_text(), args.keep_vm_state
+        args.start_scripts,
+        args.vlans,
+        args.testscript.read_text(),
+        args.output_directory,
+        args.keep_vm_state,
     ) as driver:
         if args.interactive:
             ptpython.repl.embed(driver.test_symbols(), {})
@@ -94,7 +117,7 @@ def generate_driver_symbols() -> None:
     in user's test scripts. That list is then used by pyflakes to lint those
     scripts.
     """
-    d = Driver([], [], "")
+    d = Driver([], [], "", Path())
     test_symbols = d.test_symbols()
     with open("driver-symbols", "w") as fp:
         fp.write(",".join(test_symbols.keys()))
