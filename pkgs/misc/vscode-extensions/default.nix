@@ -333,6 +333,23 @@ let
         };
       };
 
+      bungcip.better-toml = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "better-toml";
+          publisher = "bungcip";
+          version = "0.3.2";
+          sha256 = "sha256-g+LfgjAnSuSj/nSmlPdB0t29kqTmegZB5B1cYzP8kCI=";
+        };
+        meta = with lib; {
+          changelog = "https://marketplace.visualstudio.com/items/bungcip.better-toml/changelog";
+          description = "Better TOML Language support";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=bungcip.better-toml";
+          homepage = "https://github.com/bungcip/better-toml/blob/master/README.md";
+          license = licenses.mit;
+          maintainers = with maintainers; [ datafoo ];
+        };
+      };
+
       chenglou92.rescript-vscode = callPackage ./rescript { };
 
       cmschuetz12.wal = buildVscodeMarketplaceExtension {
