@@ -36,10 +36,10 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
     };
 
     mkServer = { mpd, musicService, }:
-      { boot.kernelModules = [ "snd-dummy" ];
-        sound.enable = true;
+      { sound.enable = true;
         services.mpd = mpd;
         systemd.services.musicService = musicService;
+        virtualisation.audio = true;
       };
   in {
     name = "mpd";
@@ -112,13 +112,17 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
         # Check we succeeded adding audio tracks to the playlist
         assert len(added_tracks.splitlines()) > 0
 
-        server.succeed(f"{mpc} play")
+        with server.record_audio(server.name):
+            server.succeed(f"{mpc} play")
 
-        _, output = server.execute(f"{mpc} status")
-        # Assure audio track is playing
-        assert "playing" in output
+            _, output = server.execute(f"{mpc} status")
+            # Assure audio track is playing
+            assert "playing" in output
 
-        server.succeed(f"{mpc} stop")
+            # Give it some time...
+            server.sleep(1)
+
+            server.succeed(f"{mpc} stop")
 
 
     play_some_music(serverALSA)
