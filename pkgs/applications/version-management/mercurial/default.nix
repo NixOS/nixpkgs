@@ -118,7 +118,7 @@ let
       homepage = "https://www.mercurial-scm.org";
       downloadPage = "https://www.mercurial-scm.org/release/";
       license = licenses.gpl2Plus;
-      maintainers = with maintainers; [ eelco lukegb ];
+      maintainers = with maintainers; [ eelco lukegb pacien ];
       updateWalker = true;
       platforms = platforms.unix;
     };
