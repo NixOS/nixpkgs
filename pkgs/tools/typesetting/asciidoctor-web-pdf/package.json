@@ -1,0 +1,80 @@
+{
+  "name": "asciidoctor-pdf",
+  "version": "1.0.0-alpha.14",
+  "description": "A PDF converter for AsciiDoc based on Asciidoctor.js",
+  "engines": {
+    "node": ">=12",
+    "npm": ">=6.0.0"
+  },
+  "bin": {
+    "asciidoctor-pdf": "bin/asciidoctor-pdf",
+    "asciidoctor-web-pdf": "bin/asciidoctor-web-pdf"
+  },
+  "pkg": {
+    "assets": [
+      "css/**/*.css"
+    ],
+    "scripts": [
+      "lib/document/**/*.js"
+    ]
+  },
+  "files": [
+    "bin",
+    "lib",
+    "css"
+  ],
+  "scripts": {
+    "build": "node tasks/prepare-binaries.js",
+    "test": "npm run test:smoke && npm run test:js",
+    "test:smoke": "./bin/asciidoctor-pdf --version",
+    "test:js": "mocha test/**_test.js",
+    "lint": "standard lib/**.js test/**.js tasks/**js",
+    "publish": "node tasks/publish.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mogztter/asciidoctor-pdf.js.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Mogztter/asciidoctor-pdf.js/issues"
+  },
+  "homepage": "https://github.com/Mogztter/asciidoctor-pdf.js#readme",
+  "dependencies": {
+    "@asciidoctor/cli": "^3.5.0",
+    "@fortawesome/fontawesome-svg-core": "1.2.36",
+    "@fortawesome/free-brands-svg-icons": "5.15.4",
+    "@fortawesome/free-regular-svg-icons": "5.15.4",
+    "@fortawesome/free-solid-svg-icons": "5.15.4",
+    "@ggrossetie/pagedjs": "0.2.0-next.1623590414",
+    "chokidar": "3.5.2",
+    "file-url": "3.0.0",
+    "fs-extra": "10.0.0",
+    "html-entities": "^2.1.0",
+    "mathjax": "3.2.0",
+    "pdf-lib": "^1.2.1",
+    "puppeteer": "11.0.0",
+    "yargs": "16.2.0"
+  },
+  "devDependencies": {
+    "@asciidoctor/core": "^2.2.0",
+    "archiver": "^5.2.0",
+    "chai": "4.3.4",
+    "cheerio": "^1.0.0-rc.3",
+    "dirty-chai": "2.0.1",
+    "libnpmpublish": "^4.0.0",
+    "mocha": "9.1.3",
+    "nunjucks": "^3.2.1",
+    "pacote": "^12.0.2",
+    "pixelmatch": "^5.1.0",
+    "pkg": "^5.2.1",
+    "rimraf": "^3.0.0",
+    "sinon": "^12.0.1",
+    "standard": "^16.0.4"
+  },
+  "peerDependencies": {
+    "@asciidoctor/core": "^2.2.0"
+  }
+}

@@ -3837,6 +3837,10 @@ with pkgs;
 
   asciidoctorj = callPackage ../tools/typesetting/asciidoctorj { };
 
+  asciidoctor-web-pdf-unwrapped = callPackage ../tools/typesetting/asciidoctor-web-pdf { };
+  asciidoctor-web-pdf = callPackage ../tools/typesetting/asciidoctor-web-pdf/wrapper.nix { };
+  asciidoctor-web-pdf-plugins = callPackage ../tools/typesetting/asciidoctor-web-pdf/plugins { };
+
   asunder = callPackage ../applications/audio/asunder { };
 
   autossh = callPackage ../tools/networking/autossh { };
