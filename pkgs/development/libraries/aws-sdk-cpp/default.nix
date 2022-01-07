@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, curl, openssl, s2n-tls, zlib
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, curl, openssl, s2n-tls, zlib
 , aws-crt-cpp
 , aws-c-cal, aws-c-common, aws-c-event-stream, aws-c-io, aws-checksums
 , CoreAudio, AudioToolbox
@@ -82,6 +82,12 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./cmake-dirs.patch
+
+    # fix cmake config
+    (fetchpatch {
+      url = "https://github.com/aws/aws-sdk-cpp/commit/b102aaf5693c4165c84b616ab9ffb9edfb705239.diff";
+      sha256 = "sha256-38QBo3MEFpyHPb8jZEURRPkoeu4DqWhVeErJayiHKF0=";
+    })
   ];
 
   # Builds in 2+h with 2 cores, and ~10m with a big-parallel builder.
