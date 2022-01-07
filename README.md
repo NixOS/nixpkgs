@@ -11,7 +11,7 @@ WFS (WiiU File System) Tools based on [wfslib](https://github.com/koolkdev/wfsli
 wfs-extract --help
 ```
 ```
-Usage: wfs-extract --input <input file> --output <output directory> --otp <opt path> [--seeprom <seeprom path>] [--mlc] [--usb] [--dump-path <directory to dump>] [--verbos]
+Usage: wfs-extract --input <input file> --output <output directory> --otp <opt path> [--seeprom <seeprom path>] [--mlc] [--usb] [--dump-path <directory to dump>] [--verbose]
 Allowed options:
   --help                produce help message
   --input arg           input file
@@ -21,7 +21,7 @@ Allowed options:
   --dump-path arg (=/)  directory to dump (default: "/")
   --mlc                 device is mlc (default: device is usb)
   --usb                 device is usb
-  --verbos              verbos output
+  --verbose              verbose output
 ```
 
 ### wfs-file-injector

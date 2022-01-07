@@ -18,7 +18,7 @@
 void dumpdir(const boost::filesystem::path& target,
              const std::shared_ptr<Directory>& dir,
              const boost::filesystem::path& path,
-             bool verbos) {
+             bool verbose) {
   if (!boost::filesystem::exists(target / path)) {
     if (!boost::filesystem::create_directories(target / path)) {
       std::cerr << "Error: Failed to create directory " << (target / path) << std::endl;
@@ -28,10 +28,10 @@ void dumpdir(const boost::filesystem::path& target,
   try {
     for (auto item : *dir) {
       boost::filesystem::path npath = path / item->GetRealName();
-      if (verbos)
+      if (verbose)
         std::cout << "Dumping " << npath << std::endl;
       if (item->IsDirectory())
-        dumpdir(target, std::dynamic_pointer_cast<Directory>(item), npath, verbos);
+        dumpdir(target, std::dynamic_pointer_cast<Directory>(item), npath, verbose);
       else if (item->IsFile()) {
         auto file = std::dynamic_pointer_cast<File>(item);
         std::ofstream output_file((target / npath).string(), std::ios::binary | std::ios::out);
@@ -67,7 +67,7 @@ int main(int argc, char* argv[]) {
         "seeprom", boost::program_options::value<std::string>(), "seeprom file (required if usb)")(
         "dump-path", boost::program_options::value<std::string>(&wfs_path)->default_value("/"),
         "directory to dump (default: \"/\")")("mlc", "device is mlc (default: device is usb)")("usb", "device is usb")(
-        "verbos", "verbos output");
+        "verbose", "verbose output");
 
     boost::program_options::variables_map vm;
     boost::program_options::store(boost::program_options::parse_command_line(argc, argv, desc), vm);
@@ -96,7 +96,7 @@ int main(int argc, char* argv[]) {
     }
     if (vm.count("help") || bad) {
       std::cout << "Usage: wfs-extract --input <input file> --output <output directory> --otp <opt path> [--seeprom "
-                   "<seeprom path>] [--mlc] [--usb] [--dump-path <directory to dump>] [--verbos]"
+                   "<seeprom path>] [--mlc] [--usb] [--dump-path <directory to dump>] [--verbose]"
                 << std::endl;
       std::cout << desc << "\n";
       return 1;
@@ -135,7 +135,7 @@ int main(int argc, char* argv[]) {
     }
     std::cout << "Dumping..." << std::endl;
     dumpdir(boost::filesystem::path(vm["output"].as<std::string>()), dir, boost::filesystem::path(""),
-            !!vm.count("verbos"));
+            !!vm.count("verbose"));
     std::cout << "Done!" << std::endl;
   } catch (std::exception& e) {
     std::cerr << "Error: " << e.what() << std::endl;
