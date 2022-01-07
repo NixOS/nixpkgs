@@ -4171,8 +4171,6 @@ with pkgs;
 
   cpuminer = callPackage ../tools/misc/cpuminer { };
 
-  cpuminer-multi = callPackage ../tools/misc/cpuminer-multi { };
-
   crabz = callPackage ../tools/compression/crabz {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
