@@ -5,35 +5,28 @@
 
 stdenv.mkDerivation rec {
   pname = "tev";
-  version = "1.19";
+  version = "1.21";
 
   src = fetchFromGitHub {
     owner = "Tom94";
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-laP47xOND6PMA6dwTcCupcTIW+9zCaxO6rHzvDSL9JU=";
+    sha256 = "sha256-6bTX0smQDPATwxTJFVKJn71YJzI1fy3tKjewmOe7ZOU=";
   };
 
   nativeBuildInputs = [ cmake wrapGAppsHook ];
   buildInputs = [ libX11 libzip glfw libpng ]
     ++ (with xorg; [ libXrandr libXinerama libXcursor libXi libXxf86vm libXext ]);
 
-  dontWrapGApps = true; # We also need zenity (see below)
-
-  postPatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace "/usr/" "''${out}/"
-  '';
-
   cmakeFlags = [
     "-DTEV_DEPLOY=1" # Only relevant not to append "dev" to the version
   ];
 
-  postInstall = ''
-    wrapProgram $out/bin/tev \
-      "''${gappsWrapperArgs[@]}" \
-      --prefix PATH ":" "${gnome.zenity}/bin"
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix PATH : "${gnome.zenity}/bin"
+    )
   '';
 
   meta = with lib; {
@@ -52,7 +45,7 @@ stdenv.mkDerivation rec {
     inherit (src.meta) homepage;
     changelog = "https://github.com/Tom94/tev/releases/tag/v${version}";
     license = licenses.bsd3;
-    platforms = platforms.unix;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ ];
   };
 }
