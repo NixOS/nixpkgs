@@ -1106,6 +1106,8 @@ in {
 
   base58 = callPackage ../development/python-modules/base58 { };
 
+  base58check = callPackage ../development/python-modules/base58check { };
+
   baseline = callPackage ../development/python-modules/baseline { };
 
   baselines = callPackage ../development/python-modules/baselines { };
@@ -1197,6 +1199,10 @@ in {
   bitcoinlib = callPackage ../development/python-modules/bitcoinlib { };
 
   bitcoin-price-api = callPackage ../development/python-modules/bitcoin-price-api { };
+
+  bitcoin-utils-fork-minimal = callPackage ../development/python-modules/bitcoin-utils-fork-minimal { };
+
+  bitcoinrpc = callPackage ../development/python-modules/bitcoinrpc { };
 
   bitlist = callPackage ../development/python-modules/bitlist { };
 
