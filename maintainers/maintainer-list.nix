@@ -3188,6 +3188,12 @@
     githubId = 24791219;
     name = "Jakob Neufeld";
   };
+  dsalaza4 = {
+    email = "podany270895@gmail.com";
+    github = "dsalaza4";
+    githubId = 11205987;
+    name = "Daniel Salazar";
+  };
   dschrempf = {
     name = "Dominik Schrempf";
     email = "dominik.schrempf@gmail.com";
