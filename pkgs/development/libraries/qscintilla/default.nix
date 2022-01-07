@@ -1,5 +1,9 @@
-{ stdenv, lib, fetchurl, unzip
-, qtbase, qtmacextras
+{ stdenv
+, lib
+, fetchurl
+, unzip
+, qtbase
+, qtmacextras
 , qmake
 , fixDarwinDylibNames
 }:
@@ -20,12 +24,12 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = lib.optionals stdenv.isDarwin [ qtmacextras ];
 
   nativeBuildInputs = [ unzip qmake ]
-    ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
+    ++ lib.optionals stdenv.isDarwin [ fixDarwinDylibNames ];
 
   # Make sure that libqscintilla2.so is available in $out/lib since it is expected
   # by some packages such as sqlitebrowser
   postFixup = ''
-    ln -s $out/lib/libqscintilla2_qt?.so $out/lib/libqscintilla2.so
+    ln -s $out/lib/libqscintilla2_qt5.so $out/lib/libqscintilla2.so
   '';
 
   dontWrapQtApps = true;
