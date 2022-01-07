@@ -69,26 +69,31 @@ buildPythonApplication rec {
 
   propagatedBuildInputs = lib.optional stdenv.isLinux libGL;
 
-  outputs = [ "out" "terminfo" ];
+  outputs = [ "out" "terminfo" "shell_integration" ];
 
   # Causes build failure due to warning
   hardeningDisable = lib.optional stdenv.cc.isClang "strictoverflow";
 
   dontConfigure = true;
 
-  buildPhase = ''
+  buildPhase = let
+    commonOptions = ''
+      --update-check-interval=0 \
+      --shell-integration=enabled\ no-rc
+    '';
+  in ''
     runHook preBuild
     ${if stdenv.isDarwin then ''
       ${python.interpreter} setup.py kitty.app \
-      --update-check-interval=0 \
-      --disable-link-time-optimization
+      --disable-link-time-optimization \
+      ${commonOptions}
       make man
     '' else ''
       ${python.interpreter} setup.py linux-package \
-      --update-check-interval=0 \
       --egl-library='${lib.getLib libGL}/lib/libEGL.so.1' \
       --startup-notification-library='${libstartup_notification}/lib/libstartup-notification-1.so' \
-      --canberra-library='${libcanberra}/lib/libcanberra.so'
+      --canberra-library='${libcanberra}/lib/libcanberra.so' \
+      ${commonOptions}
     ''}
     runHook postBuild
   '';
@@ -138,6 +143,8 @@ buildPythonApplication rec {
 
     mkdir -p $out/nix-support
     echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
+
+    cp -r 'shell-integration' "$shell_integration"
 
     runHook postInstall
   '';
