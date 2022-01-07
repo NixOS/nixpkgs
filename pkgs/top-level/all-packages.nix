@@ -5619,6 +5619,8 @@ with pkgs;
 
   gfbgraph = callPackage ../development/libraries/gfbgraph { };
 
+  gfold = callPackage ../applications/version-management/git-and-tools/gfold { };
+
   ggobi = callPackage ../tools/graphics/ggobi { };
 
   gh = callPackage ../applications/version-management/git-and-tools/gh { };
