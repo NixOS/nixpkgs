@@ -1302,6 +1302,8 @@ in {
 
   bottleneck = callPackage ../development/python-modules/bottleneck { };
 
+  bpycv = callPackage ../development/python-modules/bpycv {};
+
   bpython = callPackage ../development/python-modules/bpython { };
 
   braceexpand = callPackage ../development/python-modules/braceexpand { };
