@@ -1495,11 +1495,16 @@ let
         mktplcRef = {
           publisher = "stkb";
           name = "rewrap";
-          version = "1.14.0";
-          sha256 = "qRwKX36a1aLzE1tqaOkH7JfE//pvKdPZ07zasPF3Dl4=";
+          version = "1.15.4";
+          sha256 = "sha256-yuXyClvhGsonvddYHDMkLSvwEsD21vOeE54Gs9BRpeg=";
         };
         meta = with lib; {
+          changelog = "https://github.com/stkb/Rewrap/blob/master/CHANGELOG.md";
+          description = "Hard word wrapping for comments and other text at a given column.";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=stkb.rewrap";
+          homepage = "https://github.com/stkb/Rewrap#readme";
           license = licenses.asl20;
+          maintainers = with maintainers; [ datafoo ];
         };
       };
 
