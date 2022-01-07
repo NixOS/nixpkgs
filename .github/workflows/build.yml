@@ -19,6 +19,22 @@ jobs:
     - name: Run vcpkg
       uses: lukka/run-vcpkg@v10
 
+    - name: Update gcc
+      run: |
+           sudo apt update
+           sudo apt install gcc-11 g++-11
+           echo "CC=gcc-11" >> $GITHUB_ENV
+           echo "CXX=g++-11" >> $GITHUB_ENV
+      shell: bash
+      if: matrix.platform == 'ubuntu-latest'
+
+    - name: Set clang
+      run: |
+           echo "CC=/usr/local/opt/llvm/bin/clang" >> $GITHUB_ENV
+           echo "CXX=/usr/local/opt/llvm/bin/clang++" >> $GITHUB_ENV
+      shell: bash
+      if: matrix.platform == 'macos-latest'
+
     - name: Run cmake
       uses: lukka/run-cmake@v10
       with:
