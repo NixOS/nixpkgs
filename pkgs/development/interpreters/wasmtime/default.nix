@@ -19,6 +19,10 @@ rustPlatform.buildRustPackage rec {
    lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
   LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
 
+  configurePhase = ''
+    export HOME=$TMP;
+  '';
+
   doCheck = true;
 
   meta = with lib; {
