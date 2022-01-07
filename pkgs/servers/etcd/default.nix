@@ -31,6 +31,5 @@ buildGoPackage rec {
     license = licenses.asl20;
     homepage = "https://etcd.io/";
     maintainers = with maintainers; [ offline zowoq ];
-    platforms = platforms.unix;
   };
 }
