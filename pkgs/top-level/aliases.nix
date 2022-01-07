@@ -108,6 +108,7 @@ mapAliases ({
   buildGo112Module = throw "buildGo112Module has been removed"; # added 2020-04-26
   buildkite-agent3 = buildkite-agent; # added 2018-09-26
   bundler_HEAD = bundler; # added 2015-11-15
+  bunny = throw "bunny has been removed: deleted by upstream"; # added 2022-01-07
   bypass403 = throw "bypass403 has been removed: deleted by upstream"; # added 2022-01-07
   calibre-py2 = throw "calibre-py2 has been removed from nixpkgs, as calibre has upgraded to python 3. Please use calibre as replacement."; # added 2021-01-13
   calibre-py3 = throw "calibre-py3 has been removed from nixpkgs, as calibre's default python version is now 3. Please use calibre as replacement."; # added 2021-01-13
