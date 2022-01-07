@@ -4970,6 +4970,8 @@ in {
 
   millheater = callPackage ../development/python-modules/millheater { };
 
+  minexr = callPackage ../development/python-modules/minexr { };
+
   miniaudio = callPackage ../development/python-modules/miniaudio { };
 
   minidb = callPackage ../development/python-modules/minidb { };
