@@ -71,6 +71,7 @@ mapAliases ({
   azureus = throw "azureus is now known as vuze and the version in nixpkgs was really outdated"; # added 2021-08-02
   badtouch = authoscope; # Project was renamed, added 20210626
   bar-xft = lemonbar-xft;  # added 2015-01-16
+  bashburn = throw "bashburn has been removed: deleted by upstream"; # added 2022-01-07
   bashCompletion = bash-completion; # Added 2016-09-28
   bash_5 = bash; # added 2021-08-20
   bashInteractive_5 = bashInteractive; # added 2021-08-20

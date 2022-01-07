@@ -2135,8 +2135,6 @@ with pkgs;
 
   barcode = callPackage ../tools/graphics/barcode {};
 
-  bashburn = callPackage ../tools/cd-dvd/bashburn { };
-
   bashmount = callPackage ../tools/filesystems/bashmount {};
 
   bat = callPackage ../tools/misc/bat {
