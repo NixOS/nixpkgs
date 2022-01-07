@@ -101,6 +101,7 @@ mapAliases ({
   bitwarden_rs-vault = vaultwarden-vault;
 
   bs1770gain = throw "bs1770gain has been removed from nixpkgs, as it had no maintainer or reverse dependencies."; # added 2021-01-02
+  bsod = throw "bsod has been removed: deleted by upstream"; # added 2022-01-07
   btc1 = throw "btc1 has been removed, it was abandoned by upstream"; # added 2020-11-03
   buildPerlPackage = perlPackages.buildPerlPackage; # added 2018-10-12
   buildGo112Package = throw "buildGo112Package has been removed"; # added 2020-04-26
