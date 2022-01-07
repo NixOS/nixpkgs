@@ -160,8 +160,8 @@ in rec {
 
   mkYarnWorkspace = {
     src,
-    packageJSON ? src + "/package.json",
-    yarnLock ? src + "/yarn.lock",
+    packageJSON,
+    yarnLock,
     packageOverrides ? {},
     ...
   }@attrs:
@@ -228,8 +228,8 @@ in rec {
   mkYarnPackage = {
     name ? null,
     src,
-    packageJSON ? src + "/package.json",
-    yarnLock ? src + "/yarn.lock",
+    packageJSON,
+    yarnLock,
     yarnNix ? mkYarnNix { inherit yarnLock; },
     offlineCache ? importOfflineCache yarnNix,
     yarnFlags ? defaultYarnFlags,
@@ -373,7 +373,7 @@ in rec {
       } // (attrs.meta or {});
     });
 
-  yarn2nix = mkYarnPackage {
+  yarn2nix = mkYarnPackage rec {
     src =
       let
         src = ./.;
@@ -402,6 +402,7 @@ in rec {
     # source results in an error in restricted mode. To circumvent this,
     # we import package.json from the unfiltered source
     packageJSON = ./package.json;
+    yarnLock = src + "/yarn.lock";
 
     yarnFlags = defaultYarnFlags ++ ["--production=true"];
 

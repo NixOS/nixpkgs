@@ -33,9 +33,10 @@ mkYarnPackage rec {
 
   packageJSON = ./element-desktop-package.json;
   offlineCache = fetchYarnDeps {
-    yarnLock = src + "/yarn.lock";
+    inherit yarnLock;
     sha256 = pinData.desktopYarnHash;
   };
+  yarnLock = src + "/yarn.lock";
 
   nativeBuildInputs = [ makeWrapper ];
 

@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
   mastodon-js-modules = mkYarnPackage {
     pname = "${pname}-modules";
     yarnNix = dependenciesDir + "/yarn.nix";
+    yarnLock = src + "/yarn.lock";
     packageJSON = dependenciesDir + "/package.json";
     inherit src version;
   };

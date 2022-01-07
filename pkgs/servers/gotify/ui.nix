@@ -7,6 +7,7 @@ yarn2nix-moretea.mkYarnPackage rec {
 
   packageJSON = ./package.json;
   yarnNix = ./yarndeps.nix;
+  yarnLock = src + "/yarn.lock";
 
   version = import ./version.nix;
 

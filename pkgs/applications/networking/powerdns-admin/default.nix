@@ -33,6 +33,7 @@ let
     inherit src version;
     packageJSON = ./package.json;
     yarnNix = ./yarndeps.nix;
+    yarnLock = src + "/yarn.lock";
 
     nativeBuildInputs = pythonDeps;
     patchPhase = ''

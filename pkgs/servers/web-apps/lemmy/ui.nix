@@ -33,15 +33,16 @@ let
     sha256 = pinData.uiSha256;
   };
 in
-mkYarnPackage {
+mkYarnPackage rec {
 
   inherit src pkgConfig name version;
 
   extraBuildInputs = [ libsass ];
 
   packageJSON = ./package.json;
+  yarnLock = src + "/yarn.lock";
   offlineCache = fetchYarnDeps {
-    yarnLock = src + "/yarn.lock";
+    inherit yarnLock;
     sha256 = pinData.uiYarnDepsSha256;
   };
 

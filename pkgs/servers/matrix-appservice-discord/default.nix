@@ -23,6 +23,7 @@ in mkYarnPackage rec {
 
   packageJSON = ./package.json;
   yarnNix = ./yarn-dependencies.nix;
+  yarnLock = src + "/yarn.lock";
 
   pkgConfig = {
     better-sqlite3 = {
