@@ -3419,6 +3419,8 @@ in {
 
   gpyopt = callPackage ../development/python-modules/gpyopt { };
 
+  gql = callPackage ../development/python-modules/gql { };
+
   gradient = callPackage ../development/python-modules/gradient { };
 
   gradient-utils = callPackage ../development/python-modules/gradient-utils { };
