@@ -156,6 +156,7 @@ mapAliases ({
   coredumper = throw "coredumper has been removed: abandoned by upstream."; # added 2019-11-16
   cpp_ethereum = throw "cpp_ethereum has been removed; abandoned upstream."; # added 2020-11-30
   cpuminer-multi = throw "cpuminer-multi has been removed: deleted by upstream"; # added 2022-01-07
+  crafty = throw "crafty has been removed: deleted by upstream"; # 2022-01-07
   cryptol = throw "cryptol was removed due to prolonged broken build"; # added 2020-08-21
   cpp-gsl = microsoft_gsl; # added 2019-05-24
   cudatoolkit_6 = throw "cudatoolkit_6 has been removed in favor of newer versions"; # added 2021-02-14

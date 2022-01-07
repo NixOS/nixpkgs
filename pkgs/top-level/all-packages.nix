@@ -30342,8 +30342,6 @@ with pkgs;
 
   crack_attack = callPackage ../games/crack-attack { };
 
-  crafty = callPackage ../games/crafty { };
-
   crawlTiles = callPackage ../games/crawl {
     tileMode = true;
   };
