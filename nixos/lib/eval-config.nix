@@ -33,7 +33,11 @@ let pkgs_ = pkgs;
 in
 
 let
-  evalModulesMinimal = (import ./eval-config-minimal.nix { inherit lib; bypassEvalModulesWarning = true; }).evalModules;
+  evalModulesMinimal = (import ./default.nix {
+    inherit lib;
+    # Implicit use of feature is noted in implementation.
+    featureFlags.minimalModules = { };
+  }).evalModules;
 
   pkgsModule = rec {
     _file = ./eval-config.nix;
