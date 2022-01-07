@@ -1,6 +1,6 @@
 from contextlib import contextmanager
 from pathlib import Path
-from typing import Any, Dict, Iterator, List, Union, Optional, Callable, ContextManager
+from typing import Any, Callable, ContextManager, Dict, Iterator, List, Optional, Union
 import os
 import tempfile
 
@@ -25,6 +25,7 @@ class Driver:
         vlans: List[int],
         tests: str,
         keep_vm_state: bool = False,
+        out_dir: Optional[Path] = None,
     ):
         self.tests = tests
 
@@ -47,6 +48,7 @@ class Driver:
                 name=cmd.machine_name,
                 tmp_dir=tmp_dir,
                 callbacks=[self.check_polling_conditions],
+                out_dir=out_dir,
             )
             for cmd in cmd(start_scripts)
         ]

@@ -36,6 +36,13 @@ class EnvDefault(argparse.Action):
 def main() -> None:
     arg_parser = argparse.ArgumentParser(prog="nixos-test-driver")
     arg_parser.add_argument(
+        "-o",
+        "--output-dir",
+        help="specify the directory where the output (screenshots, etc.) should be placed",
+        default=None,
+        type=Path,
+    )
+    arg_parser.add_argument(
         "-K",
         "--keep-vm-state",
         help="re-use a VM state coming from a previous run",
@@ -77,7 +84,11 @@ def main() -> None:
         rootlog.info("Machine state will be reset. To keep it, pass --keep-vm-state")
 
     with Driver(
-        args.start_scripts, args.vlans, args.testscript.read_text(), args.keep_vm_state
+        start_scripts=args.start_scripts,
+        vlans=args.vlans,
+        tests=args.testscript.read_text(),
+        keep_vm_state=args.keep_vm_state,
+        out_dir=args.output_dir,
     ) as driver:
         if args.interactive:
             ptpython.repl.embed(driver.test_symbols(), {})

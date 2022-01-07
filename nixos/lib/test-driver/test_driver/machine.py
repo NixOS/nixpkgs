@@ -302,6 +302,7 @@ class Machine:
     state_dir: Path
     monitor_path: Path
     shell_path: Path
+    out_dir: Path
 
     start_command: StartCommand
     keep_vm_state: bool
@@ -327,6 +328,7 @@ class Machine:
         self,
         tmp_dir: Path,
         start_command: StartCommand,
+        out_dir: Optional[Path] = None,
         name: str = "machine",
         keep_vm_state: bool = False,
         allow_reboot: bool = False,
@@ -338,6 +340,10 @@ class Machine:
         self.name = name
         self.start_command = start_command
         self.callbacks = callbacks if callbacks is not None else []
+
+        if out_dir is None:
+            out_dir = Path(".")
+        self.out_dir = out_dir
 
         # set up directories
         self.shared_dir = self.tmp_dir / "shared-xchg"
@@ -702,19 +708,21 @@ class Machine:
             self.connected = True
 
     def screenshot(self, filename: str) -> None:
-        out_dir = os.environ.get("out", os.getcwd())
-        word_pattern = re.compile(r"^\w+$")
+        word_pattern = re.compile(r"^[\w\-]+$")
         if word_pattern.match(filename):
-            filename = os.path.join(out_dir, "{}.png".format(filename))
-        tmp = "{}.ppm".format(filename)
+            filename = f"{filename}.png"
+
+        # If filename is already absolute, out_dir is ignored.
+        out_file = (self.out_dir / Path(filename)).resolve()
+        tmp = self.tmp_dir / (out_file.stem + ".ppm")
 
         with self.nested(
-            "making screenshot {}".format(filename),
-            {"image": os.path.basename(filename)},
+            f"making screenshot {out_file}",
+            {"image": out_file.name},
         ):
-            self.send_monitor_command("screendump {}".format(tmp))
-            ret = subprocess.run("pnmtopng {} > {}".format(tmp, filename), shell=True)
-            os.unlink(tmp)
+            self.send_monitor_command(f"screendump {tmp}")
+            ret = subprocess.run(f"pnmtopng {tmp} > {out_file}", shell=True)
+            tmp.unlink()
             if ret.returncode != 0:
                 raise Exception("Cannot convert screenshot")
 
@@ -756,7 +764,6 @@ class Machine:
         all the VMs (using a temporary directory).
         """
         # Compute the source, target, and intermediate shared file names
-        out_dir = Path(os.environ.get("out", os.getcwd()))
         vm_src = Path(source)
         with tempfile.TemporaryDirectory(dir=self.shared_dir) as shared_td:
             shared_temp = Path(shared_td)
@@ -766,7 +773,7 @@ class Machine:
             # Copy the file to the shared directory inside VM
             self.succeed(make_command(["mkdir", "-p", vm_shared_temp]))
             self.succeed(make_command(["cp", "-r", vm_src, vm_intermediate]))
-            abs_target = out_dir / target_dir / vm_src.name
+            abs_target = self.out_dir / target_dir / vm_src.name
             abs_target.parent.mkdir(exist_ok=True, parents=True)
             # Copy the file from the shared directory outside VM
             if intermediate.is_dir():
