@@ -7250,6 +7250,8 @@ in {
 
   pyquery = callPackage ../development/python-modules/pyquery { };
 
+  pyquaternion = callPackage ../development/python-modules/pyquaternion { };
+
   pyquil = callPackage ../development/python-modules/pyquil { };
 
   pyrabbit2 = callPackage ../development/python-modules/pyrabbit2 { };
