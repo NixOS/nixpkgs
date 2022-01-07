@@ -329,9 +329,6 @@ in {
         ${pkgs.php}/bin/php artisan cache:clear
         ${pkgs.php}/bin/php artisan config:clear
         ${pkgs.php}/bin/php artisan view:clear
-        ${pkgs.php}/bin/php artisan config:cache
-        ${pkgs.php}/bin/php artisan route:cache
-        ${pkgs.php}/bin/php artisan view:cache
       '';
     };
 

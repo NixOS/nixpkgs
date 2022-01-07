@@ -325,6 +325,15 @@
           files.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <literal>fetchFromSourcehut</literal> now allows fetching
+          repositories recursively using <literal>fetchgit</literal> or
+          <literal>fetchhg</literal> if the argument
+          <literal>fetchSubmodules</literal> is set to
+          <literal>true</literal>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>

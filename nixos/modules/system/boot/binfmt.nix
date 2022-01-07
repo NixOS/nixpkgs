@@ -20,16 +20,20 @@ let
                  optionalString fixBinary "F";
   in ":${name}:${type}:${offset'}:${magicOrExtension}:${mask'}:${interpreter}:${flags}";
 
-  activationSnippet = name: { interpreter, ... }: ''
+  activationSnippet = name: { interpreter, wrapInterpreterInShell, ... }: if wrapInterpreterInShell then ''
     rm -f /run/binfmt/${name}
     cat > /run/binfmt/${name} << 'EOF'
     #!${pkgs.bash}/bin/sh
     exec -- ${interpreter} "$@"
     EOF
     chmod +x /run/binfmt/${name}
+  '' else ''
+    rm -f /run/binfmt/${name}
+    ln -s ${interpreter} /run/binfmt/${name}
   '';
 
   getEmulator = system: (lib.systems.elaborate { inherit system; }).emulator pkgs;
+  getQemuArch = system: (lib.systems.elaborate { inherit system; }).qemuArch;
 
   # Mapping of systems to “magicOrExtension” and “mask”. Mostly taken from:
   # - https://github.com/cleverca22/nixos-configs/blob/master/qemu.nix
@@ -238,6 +242,25 @@ in {
               '';
               type = types.bool;
             };
+
+            wrapInterpreterInShell = mkOption {
+              default = true;
+              description = ''
+                Whether to wrap the interpreter in a shell script.
+
+                This allows a shell command to be set as the interpreter.
+              '';
+              type = types.bool;
+            };
+
+            interpreterSandboxPath = mkOption {
+              internal = true;
+              default = null;
+              description = ''
+                Path of the interpreter to expose in the build sandbox.
+              '';
+              type = types.nullOr types.path;
+            };
           };
         }));
       };
@@ -258,16 +281,37 @@ in {
   config = {
     boot.binfmt.registrations = builtins.listToAttrs (map (system: {
       name = system;
-      value = {
+      value = let
         interpreter = getEmulator system;
+        qemuArch = getQemuArch system;
+
+        preserveArgvZero = "qemu-${qemuArch}" == baseNameOf interpreter;
+        interpreterReg = let
+          wrapperName = "qemu-${qemuArch}-binfmt-P";
+          wrapper = pkgs.wrapQemuBinfmtP wrapperName interpreter;
+        in
+          if preserveArgvZero then "${wrapper}/bin/${wrapperName}"
+          else interpreter;
+      in {
+        inherit preserveArgvZero;
+
+        interpreter = interpreterReg;
+        wrapInterpreterInShell = !preserveArgvZero;
+        interpreterSandboxPath = dirOf (dirOf interpreterReg);
       } // (magics.${system} or (throw "Cannot create binfmt registration for system ${system}"));
     }) cfg.emulatedSystems);
     # TODO: add a nix.extraPlatforms option to NixOS!
     nix.extraOptions = lib.mkIf (cfg.emulatedSystems != []) ''
       extra-platforms = ${toString (cfg.emulatedSystems ++ lib.optional pkgs.stdenv.hostPlatform.isx86_64 "i686-linux")}
     '';
-    nix.sandboxPaths = lib.mkIf (cfg.emulatedSystems != [])
-      ([ "/run/binfmt" "${pkgs.bash}" ] ++ (map (system: dirOf (dirOf (getEmulator system))) cfg.emulatedSystems));
+    nix.sandboxPaths = lib.mkIf (cfg.emulatedSystems != []) (
+      let
+        ruleFor = system: cfg.registrations.${system};
+        hasWrappedRule = lib.any (system: (ruleFor system).wrapInterpreterInShell) cfg.emulatedSystems;
+      in [ "/run/binfmt" ]
+        ++ lib.optional hasWrappedRule "${pkgs.bash}"
+        ++ (map (system: (ruleFor system).interpreterSandboxPath) cfg.emulatedSystems)
+      );
 
     environment.etc."binfmt.d/nixos.conf".source = builtins.toFile "binfmt_nixos.conf"
       (lib.concatStringsSep "\n" (lib.mapAttrsToList makeBinfmtLine config.boot.binfmt.registrations));

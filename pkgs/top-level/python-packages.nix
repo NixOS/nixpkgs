@@ -5600,6 +5600,8 @@ in {
 
   opt-einsum = callPackage ../development/python-modules/opt-einsum { };
 
+  optax = callPackage ../development/python-modules/optax { };
+
   optuna = callPackage ../development/python-modules/optuna { };
 
   opuslib = callPackage ../development/python-modules/opuslib { };
@@ -8287,13 +8289,13 @@ in {
 
   qreactor = callPackage ../development/python-modules/qreactor { };
 
-  qscintilla-qt4 = callPackage ../development/python-modules/qscintilla { };
+  qscintilla-qt4 = callPackage ../development/python-modules/qscintilla-qt4 { };
 
   qscintilla-qt5 = pkgs.libsForQt5.callPackage ../development/python-modules/qscintilla-qt5 {
     pythonPackages = self;
   };
 
-  qscintilla = self.qscintilla-qt4;
+  qscintilla = self.qscintilla-qt5;
 
   qtawesome = callPackage ../development/python-modules/qtawesome { };
 

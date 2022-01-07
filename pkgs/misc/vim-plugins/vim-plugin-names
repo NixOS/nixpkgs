@@ -49,6 +49,7 @@ benizi/vim-automkdir
 bhurlow/vim-parinfer
 bitc/vim-hdevtools
 bkad/camelcasemotion
+blackCauldron7/surround.nvim
 bling/vim-bufferline
 blueballs-theme/blueballs-neovim
 blueyed/vim-diminactive
@@ -388,6 +389,10 @@ lambdalisue/vim-gista
 lambdalisue/vim-manpager
 lambdalisue/vim-pager
 latex-box-team/latex-box
+ldelossa/litee-calltree.nvim
+ldelossa/litee-filetree.nvim
+ldelossa/litee-symboltree.nvim
+ldelossa/litee.nvim
 leafgarland/typescript-vim
 leanprover/lean.vim
 ledger/vim-ledger
@@ -932,6 +937,7 @@ wincent/command-t
 wincent/ferret
 wincent/terminus
 windwp/nvim-autopairs
+windwp/nvim-ts-autotag
 winston0410/cmd-parser.nvim
 winston0410/range-highlight.nvim
 wlangstroth/vim-racket

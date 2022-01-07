@@ -7715,6 +7715,8 @@ with pkgs;
     guile = guile_1_8;
   };
 
+  mcstatus = with python3Packages; toPythonApplication mcstatus;
+
   mdbtools = callPackage ../tools/misc/mdbtools { };
 
   mdk = callPackage ../development/tools/mdk { };
@@ -8530,7 +8532,9 @@ with pkgs;
 
   ovh-ttyrec = callPackage ../tools/misc/ovh-ttyrec { };
 
-  ovito = libsForQt5.callPackage ../applications/graphics/ovito { };
+  ovito = libsForQt5.callPackage ../applications/graphics/ovito {
+    inherit (darwin.apple_sdk.frameworks) VideoDecodeAcceleration;
+  };
 
   owncloud-client = libsForQt5.callPackage ../applications/networking/owncloud-client { };
 
@@ -9092,7 +9096,9 @@ with pkgs;
 
   qprint = callPackage ../tools/text/qprint { };
 
-  qscintilla = callPackage ../development/libraries/qscintilla { };
+  qscintilla = libsForQt5.callPackage ../development/libraries/qscintilla { };
+
+  qscintilla-qt4 = callPackage ../development/libraries/qscintilla-qt4 { };
 
   qshowdiff = callPackage ../tools/text/qshowdiff { };
 
@@ -12405,6 +12411,10 @@ with pkgs;
   idris = idrisPackages.with-packages [ idrisPackages.base ] ;
 
   idris2 = callPackage ../development/compilers/idris2 { };
+
+  inherit (callPackage ../development/tools/database/indradb { })
+    indradb-server
+    indradb-client;
 
   intel-graphics-compiler = callPackage ../development/compilers/intel-graphics-compiler { };
 
@@ -16814,8 +16824,6 @@ with pkgs;
   gperftools = callPackage ../development/libraries/gperftools { };
 
   grab-site = callPackage ../tools/backup/grab-site { };
-
-  grib-api = callPackage ../development/libraries/grib-api { };
 
   grilo = callPackage ../development/libraries/grilo { };
 
@@ -25032,6 +25040,8 @@ with pkgs;
 
   elvis = callPackage ../applications/editors/elvis { };
 
+  em = callPackage ../applications/editors/em { };
+
   emacs = emacs27;
   emacs-nox = emacs27-nox;
 
@@ -27085,6 +27095,8 @@ with pkgs;
 
   minicom = callPackage ../tools/misc/minicom { };
 
+  minigalaxy = callPackage ../applications/misc/minigalaxy { };
+
   minimodem = callPackage ../applications/radio/minimodem { };
 
   minidjvu = callPackage ../applications/graphics/minidjvu { };
@@ -28104,6 +28116,8 @@ with pkgs;
   };
 
   qemu-utils = callPackage ../applications/virtualization/qemu/utils.nix {};
+
+  wrapQemuBinfmtP = callPackage ../applications/virtualization/qemu/binfmt-p-wrapper.nix { };
 
   qgis-unwrapped = libsForQt5.callPackage ../applications/gis/qgis/unwrapped.nix {
     withGrass = false;

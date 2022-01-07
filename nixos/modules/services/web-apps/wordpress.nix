@@ -359,7 +359,7 @@ in
 
             DirectoryIndex index.php
             Require all granted
-            Options +FollowSymLinks
+            Options +FollowSymLinks -Indexes
           </Directory>
 
           # https://wordpress.org/support/article/hardening-wordpress/#securing-wp-config-php
