@@ -51,7 +51,6 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "hydra"
->>>>>>> origin/master
   ];
 
   meta = with lib; {
