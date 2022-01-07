@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchurl, fetchpatch, pcre, pcre2, libxslt, groff, ncurses, pkg-config, readline, libedit, coreutils
-, python3, makeWrapper }:
+{ lib, stdenv, fetchurl, fetchpatch, pcre, pcre2, jemalloc, libxslt, groff, ncurses, pkg-config, readline, libedit
+, coreutils, python3, makeWrapper }:
 
 let
   common = { version, sha256, extraNativeBuildInputs ? [] }:
@@ -19,7 +19,8 @@ let
         libxslt groff ncurses readline libedit makeWrapper python3
       ]
       ++ lib.optional (lib.versionOlder version "7") pcre
-      ++ lib.optional (lib.versionAtLeast version "7") pcre2;
+      ++ lib.optional (lib.versionAtLeast version "7") pcre2
+      ++ lib.optional stdenv.hostPlatform.isLinux jemalloc;
 
       buildFlags = [ "localstatedir=/var/spool" ];
 
