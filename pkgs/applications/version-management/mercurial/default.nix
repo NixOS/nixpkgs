@@ -11,6 +11,7 @@
 , which
 , sqlite
 , git
+, cacert
 , gnupg
 }:
 
@@ -70,6 +71,7 @@ let
       git
       gnupg
     ];
+    SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";  # needed for git
     checkPhase = ''
       cat << EOF > tests/blacklists/nix
       # tests enforcing "/usr/bin/env" shebangs, which are patched for nix
@@ -78,7 +80,7 @@ let
       EOF
 
       # extended timeout necessary for tests to pass on the busy CI workers
-      export HGTESTFLAGS="--blacklist blacklists/nix --timeout 600"
+      export HGTESTFLAGS="--blacklist blacklists/nix --timeout 1800"
       make check
     '';
 
