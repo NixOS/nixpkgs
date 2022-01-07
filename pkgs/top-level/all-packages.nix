@@ -14231,8 +14231,6 @@ with pkgs;
         stdenv;
   };
 
-  bin_replace_string = callPackage ../development/tools/misc/bin_replace_string { };
-
   bingrep = callPackage ../development/tools/analysis/bingrep { };
 
   binutils-unwrapped = callPackage ../development/tools/misc/binutils {

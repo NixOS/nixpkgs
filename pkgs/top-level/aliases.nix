@@ -83,6 +83,7 @@ mapAliases ({
   beret = throw "beret has been removed"; # added 2021-11-16
   blastem = throw "blastem has been removed from nixpkgs as it would still require python2."; # added 2022-01-01
   bluezFull = bluez; # Added 2019-12-03
+  bin_replace_string = throw "bin_replace_string has been removed: deleted by upstream"; # added 2022-01-07
   bpftool = bpftools; # Added 2021-05-03
   brackets = throw "brackets has been removed, it was unmaintained and had open vulnerabilities"; # added 2021-01-24
   bridge_utils = bridge-utils;  # added 2015-02-20
