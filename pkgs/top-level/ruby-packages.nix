@@ -1311,6 +1311,17 @@
     };
     version = "0.1.4";
   };
+  imap-backup = {
+    dependencies = ["highline" "mail" "os" "rake" "thor"];
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "sha256-rdhY5MKSS6mtgoh+OJ6fNx66vs4Ul2OATY7jNkuyxnc=";
+      type = "gem";
+    };
+    version = "4.1.2";
+  };
   jaro_winkler = {
     groups = ["default"];
     platforms = [];
@@ -1913,6 +1924,16 @@
       type = "gem";
     };
     version = "1.0.1";
+  };
+  os = {
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "sha256-V4FtajNOe9au0Ej0sDCCJsX7AnQztn2QqatDXzUQjT8=";
+      type = "gem";
+    };
+    version = "1.1.4";
   };
   osx_keychain = {
     dependencies = ["RubyInline"];
