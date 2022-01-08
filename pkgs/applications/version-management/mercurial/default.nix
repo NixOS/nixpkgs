@@ -77,6 +77,10 @@ let
       # tests enforcing "/usr/bin/env" shebangs, which are patched for nix
       test-run-tests.t
       test-check-shbang.t
+
+      # unstable experimental/unsupported features
+      # https://bz.mercurial-scm.org/show_bug.cgi?id=6633#c1
+      test-git-interop.t
       EOF
 
       # extended timeout necessary for tests to pass on the busy CI workers
