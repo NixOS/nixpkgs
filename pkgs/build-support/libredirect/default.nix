@@ -8,7 +8,7 @@ then throw ''
   builds, using something like following:
 
     nativeBuildInputs =
-      lib.optional (!stdenv.hostPlatform.isStatic) libredirect;
+      lib.optional (!stdenv.buildPlatform.isStatic) libredirect;
 
   and disable tests as necessary, although fixing tests to work without
   libredirect is even better.
