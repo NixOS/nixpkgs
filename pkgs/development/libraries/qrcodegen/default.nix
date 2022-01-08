@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ mcbeth AndersonTorres ];
     platforms = platforms.unix;
+    broken = stdenv.isDarwin;
   };
 }
 # TODO: build the other languages
