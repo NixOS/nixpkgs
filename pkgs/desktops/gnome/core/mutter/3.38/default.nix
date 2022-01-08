@@ -32,6 +32,7 @@
 , mesa
 , meson
 , gnome-settings-daemon
+, libxcvt
 , xorgserver
 , python3
 , wrapGAppsHook
@@ -99,7 +100,8 @@ let self = stdenv.mkDerivation rec {
     pkg-config
     python3
     wrapGAppsHook
-    xorgserver # for cvt command
+    libxcvt
+    xorgserver
   ];
 
   buildInputs = [
