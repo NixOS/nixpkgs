@@ -13,71 +13,40 @@ let
     '';
     default = false;
   };
+  openFirewall = serviceName: mkOption {
+    type = types.bool;
+    default = true;
+    description = "Open firewall ports for ${serviceName}.";
+  };
+  hadoopServiceOption = { serviceName, firewallOption ? true }: {
+    enable = mkEnableOption serviceName;
+    inherit restartIfChanged;
+  } // (if firewallOption then {openFirewall = openFirewall serviceName;} else {});
 in
 {
   options.services.hadoop.hdfs = {
-    namenode = {
-      enable = mkEnableOption "HDFS NameNode";
+    namenode = hadoopServiceOption { serviceName = "HDFS NameNode"; } // {
       formatOnInit = mkOption {
         type = types.bool;
         default = false;
         description = ''
           Format HDFS namenode on first start. This is useful for quickly spinning up ephemeral HDFS clusters with a single namenode.
-          For HA clusters, initialization involves multiple steps across multiple nodes. Follow [this guide](https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-hdfs/HDFSHighAvailabilityWithQJM.html)
-          to initialize an HA cluster manually.
-        '';
-      };
-      inherit restartIfChanged;
-      openFirewall = mkOption {
-        type = types.bool;
-        default = true;
-        description = ''
-          Open firewall ports for namenode
+          For HA clusters, initialization involves multiple steps across multiple nodes. Follow this guide to initialize an HA cluster manually:
+          <link xlink:href="https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-hdfs/HDFSHighAvailabilityWithQJM.html"/>
         '';
       };
     };
-    datanode = {
-      enable = mkEnableOption "HDFS DataNode";
-      inherit restartIfChanged;
-      openFirewall = mkOption {
-        type = types.bool;
-        default = true;
-        description = ''
-          Open firewall ports for datanode
-        '';
-      };
+    datanode = hadoopServiceOption { serviceName = "HDFS DataNode"; };
+    journalnode = hadoopServiceOption { serviceName = "HDFS JournalNode"; };
+    zkfc = hadoopServiceOption {
+      serviceName = "HDFS ZooKeeper failover controller";
+      firewallOption = false;
     };
-    journalnode = {
-      enable = mkEnableOption "HDFS JournalNode";
-      inherit restartIfChanged;
-      openFirewall = mkOption {
-        type = types.bool;
-        default = true;
-        description = ''
-          Open firewall ports for journalnode
-        '';
-      };
-    };
-    zkfc = {
-      enable = mkEnableOption "HDFS ZooKeeper failover controller";
-      inherit restartIfChanged;
-    };
-    httpfs = {
-      enable = mkEnableOption "HDFS HTTPfs server";
+    httpfs = hadoopServiceOption { serviceName = "HDFS JournalNode"; } // {
       tempPath = mkOption {
         type = types.path;
         default = "/tmp/hadoop/httpfs";
-        description = ''
-          HTTPFS_TEMP path used by HTTPFS
-        '';
-      };
-      inherit restartIfChanged;
-      openFirewall = mkOption {
-        type = types.bool;
-        default = true;
-        description = ''
-          Open firewall ports for HTTPFS
-        '';
+        description = "HTTPFS_TEMP path used by HTTPFS";
       };
     };
   };
