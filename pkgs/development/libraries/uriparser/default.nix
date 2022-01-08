@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "uriparser";
-  version = "0.9.5";
+  version = "0.9.6";
 
   # Release tarball differs from source tarball
   src = fetchurl {
     url = "https://github.com/uriparser/uriparser/releases/download/${pname}-${version}/${pname}-${version}.tar.bz2";
-    sha256 = "0v30qr5hl3xybl9nzwaw46kblwn94w5xpri22wanrrpjlzmn306x";
+    sha256 = "9ce4c3f151e78579f23937b44abecb428126863ad02e594e115e882353de905b";
   };
 
   nativeBuildInputs = [ cmake ];
