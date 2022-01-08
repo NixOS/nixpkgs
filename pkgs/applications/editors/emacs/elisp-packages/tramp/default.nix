@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "tramp";
-  version = "2.5.1";
+  version = "2.5.2";
 
   src = fetchurl {
     url = "mirror://gnu/tramp/${pname}-${version}.tar.gz";
-    hash = "sha256-+jjWBcj2dP9Xyj4dzpAX86KnajVa9eFDcjD9xTw6vks=";
+    hash = "sha256-vSwU484g+WahCJXG8T/efT2k1w0nVbeK3dS1Ee2res4=";
   };
 
   buildInputs = [
