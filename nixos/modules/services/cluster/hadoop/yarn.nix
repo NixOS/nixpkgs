@@ -17,7 +17,7 @@ in
 {
   options.services.hadoop.yarn = {
     resourcemanager = {
-      enable = mkEnableOption "Whether to run the Hadoop YARN ResourceManager";
+      enable = mkEnableOption "Hadoop YARN ResourceManager";
       inherit restartIfChanged;
       openFirewall = mkOption {
         type = types.bool;
@@ -28,7 +28,7 @@ in
       };
     };
     nodemanager = {
-      enable = mkEnableOption "Whether to run the Hadoop YARN NodeManager";
+      enable = mkEnableOption "Hadoop YARN NodeManager";
       inherit restartIfChanged;
       addBinBash = mkOption {
         type = types.bool;
