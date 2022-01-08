@@ -15,6 +15,8 @@
 , zlib
 , zstd
 , openssl
+, openssl
+, nixosTests
 }:
 
 with lib;
@@ -22,7 +24,7 @@ with lib;
 assert elem stdenv.system [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ];
 
 let
-  common = { pname, version, untarDir ? "${pname}-${version}", sha256, jdk, openssl ? null, nativeLibs ? [ ], libPatches ? "" }:
+  common = { pname, version, untarDir ? "${pname}-${version}", sha256, jdk, openssl ? null, nativeLibs ? [ ], libPatches ? "", tests }:
     stdenv.mkDerivation rec {
       inherit pname version jdk libPatches untarDir openssl;
       src = fetchurl {
@@ -49,6 +51,8 @@ let
         done
       '' + libPatches;
 
+      passthru = { inherit tests; };
+
       meta = {
         homepage = "https://hadoop.apache.org/";
         description = "Framework for distributed processing of large data sets across clusters of computers";
@@ -73,30 +77,29 @@ in
 {
   # Different version of hadoop support different java runtime versions
   # https://cwiki.apache.org/confluence/display/HADOOP/Hadoop+Java+Versions
-  hadoop_3_3 =
-    common
-      (rec {
-        pname = "hadoop";
-        version = "3.3.1";
-        untarDir = "${pname}-${version}";
-        sha256 = rec {
-          x86_64-linux = "1b3v16ihysqaxw8za1r5jlnphy8dwhivdx2d0z64309w57ihlxxd";
-          x86_64-darwin = x86_64-linux;
-          aarch64-linux = "00ln18vpi07jq2slk3kplyhcj8ad41n0yl880q5cihilk7daclxz";
-          aarch64-darwin = aarch64-linux;
-        };
+  hadoop_3_3 = common rec {
+    pname = "hadoop";
+    version = "3.3.1";
+    untarDir = "${pname}-${version}";
+    sha256 = rec {
+      x86_64-linux = "1b3v16ihysqaxw8za1r5jlnphy8dwhivdx2d0z64309w57ihlxxd";
+      x86_64-darwin = x86_64-linux;
+      aarch64-linux = "00ln18vpi07jq2slk3kplyhcj8ad41n0yl880q5cihilk7daclxz";
+      aarch64-darwin = aarch64-linux;
+    };
 
-        inherit openssl;
-        nativeLibs = [ stdenv.cc.cc.lib protobuf3_7 zlib snappy ];
-        libPatches = ''
-          ln -s ${getLib cyrus_sasl}/lib/libsasl2.so $out/lib/${untarDir}/lib/native/libsasl2.so.2
-          ln -s ${getLib openssl}/lib/libcrypto.so $out/lib/${untarDir}/lib/native/
-          ln -s ${getLib zlib}/lib/libz.so.1 $out/lib/${untarDir}/lib/native/
-          ln -s ${getLib zstd}/lib/libzstd.so.1 $out/lib/${untarDir}/lib/native/
-          ln -s ${getLib bzip2}/lib/libbz2.so.1 $out/lib/${untarDir}/lib/native/
-        '' + optionalString stdenv.isLinux "patchelf --add-rpath ${jdk.home}/lib/server $out/lib/${untarDir}/lib/native/libnativetask.so.1.0.0";
-        jdk = jdk11_headless;
-      });
+    inherit openssl;
+    nativeLibs = [ stdenv.cc.cc.lib protobuf3_7 zlib snappy ];
+    libPatches = ''
+      ln -s ${getLib cyrus_sasl}/lib/libsasl2.so $out/lib/${untarDir}/lib/native/libsasl2.so.2
+      ln -s ${getLib openssl}/lib/libcrypto.so $out/lib/${untarDir}/lib/native/
+      ln -s ${getLib zlib}/lib/libz.so.1 $out/lib/${untarDir}/lib/native/
+      ln -s ${getLib zstd}/lib/libzstd.so.1 $out/lib/${untarDir}/lib/native/
+      ln -s ${getLib bzip2}/lib/libbz2.so.1 $out/lib/${untarDir}/lib/native/
+    '' + optionalString stdenv.isLinux "patchelf --add-rpath ${jdk.home}/lib/server $out/lib/${untarDir}/lib/native/libnativetask.so.1.0.0";
+    jdk = jdk11_headless;
+    tests = nixosTests.hadoop;
+  };
   hadoop_3_2 = common rec {
     pname = "hadoop";
     version = "3.2.2";
@@ -104,11 +107,15 @@ in
     jdk = jdk8_headless;
     # not using native libs because of broken openssl_1_0_2 dependency
     # can be manually overriden
+    # Disable tests involving HDFS till the module adds support for hadoop_3_2
+    tests = nixosTests.hadoop_3_2 // { all = null; hdfs = null; };
   };
   hadoop2 = common rec {
     pname = "hadoop";
     version = "2.10.1";
     sha256.x86_64-linux = "1w31x4bk9f2swnx8qxx0cgwfg8vbpm6cy5lvfnbbpl3rsjhmyg97";
     jdk = jdk8_headless;
+    # Disable tests involving HDFS till the module adds support for hadoop2
+    tests = nixosTests.hadoop2 // { all = null; hdfs = null; };
   };
 }

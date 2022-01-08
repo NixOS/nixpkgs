@@ -1,9 +1,11 @@
 # Test a minimal HDFS cluster with no HA
-import ../make-test-python.nix ({...}: {
+import ../make-test-python.nix ({ package, ... }: {
+  name = "hadoop-hdfs";
+
   nodes = {
-    namenode = {pkgs, ...}: {
+    namenode = { pkgs, ... }: {
       services.hadoop = {
-        package = pkgs.hadoop;
+        inherit package;
         hdfs = {
           namenode = {
             enable = true;
@@ -22,9 +24,9 @@ import ../make-test-python.nix ({...}: {
         };
       };
     };
-    datanode = {pkgs, ...}: {
+    datanode = { pkgs, ... }: {
       services.hadoop = {
-        package = pkgs.hadoop;
+        inherit package;
         hdfs.datanode = {
           enable = true;
           openFirewall = true;
