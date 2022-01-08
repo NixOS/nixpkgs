@@ -495,6 +495,24 @@ Let's say Man-in-the-Middle (MITM) sits close to your network. Then instead of f
 
 - `https://` URLs are not secure in method 5. When obtaining hashes with fake hash method, TLS checks are disabled. So refetch source hash from several different networks to exclude MITM scenario. Alternatively, use fake hash method to make Nix error, but instead of extracting hash from error, extract `https://` URL and prefetch it with method 1.
 
+## Using fake user data for download {#sec-fake-data}
+
+Some software require user data like name and address to download it. When it does not matter which data we put in, we can use this fake data.
+
+```
+First Name: NixOS
+Last Name: Linux
+Email: someone@nixos.org
+Phone: +31 71 452 5670
+Country: Netherlands
+State/Province: Province of Utrecht
+Postcode: 3584CX
+City: Utrecht
+Address: Heidelberglaan 200
+```
+
+This fake data is inspired by the origin of the NixOS project which was started in 2003 as a research project at Utrecht University.
+
 ## Patches {#sec-patches}
 
 Patches available online should be retrieved using `fetchpatch`.
