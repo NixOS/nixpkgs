@@ -16,8 +16,13 @@ buildPythonApplication rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/libexec/tautulli
-    cp -R contrib data lib plexpy Tautulli.py $out/libexec/tautulli
+    cp -R contrib data lib plexpy Tautulli.py CHANGELOG.md $out/libexec/tautulli
+
+    echo "master" > $out/libexec/tautulli/branch.txt
+    echo "v${version}" > $out/libexec/tautulli/version.txt
 
     # Can't just symlink to the main script, since it uses __file__ to
     # import bundled packages and manage the service
@@ -26,6 +31,8 @@ buildPythonApplication rec {
 
     # Creat backwards compatibility symlink to bin/plexpy
     ln -s $out/bin/tautulli $out/bin/plexpy
+
+    runHook postInstall
   '';
 
   checkPhase = ''
@@ -39,7 +46,7 @@ buildPythonApplication rec {
   meta  = with lib; {
     description = "A Python based monitoring and tracking tool for Plex Media Server";
     homepage = "https://tautulli.com/";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ csingley ];
   };
