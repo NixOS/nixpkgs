@@ -2,24 +2,26 @@
 , buildPythonPackage
 , fetchPypi
 , flit-core
-, toml
-, pythonOlder
 , importlib-metadata
-, zipp
-, pytestCheckHook
-, testpath
-, mock
 , pip
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, testpath
+, tomli
+, zipp
 }:
 
 buildPythonPackage rec {
   pname = "pep517";
-  version = "0.9.1";
+  version = "0.12.0";
   format = "pyproject";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0zqidxah03qpnp6zkg3zd1kmd5f79hhdsfmlc0cldaniy80qddxf";
+    hash = "sha256-kxN42T0RspjPUR3WNM9epMskmijvhBYLMkfumvtOirA=";
   };
 
   nativeBuildInputs = [
@@ -27,26 +29,42 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    toml
+    tomli
   ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata zipp
+    importlib-metadata
+    zipp
   ];
 
   checkInputs = [
-    pytestCheckHook
-    testpath
-    mock
     pip
+    pytestCheckHook
+    setuptools
+    testpath
   ];
 
-  preCheck = ''
-    rm pytest.ini # wants flake8
-    rm tests/test_meta.py # wants to run pip
+  postPatch = ''
+    substituteInPlace pytest.ini \
+      --replace "--flake8" ""
   '';
 
-  meta = {
+  disabledTestPaths = [
+    # Tests require network access
+    "tests/test_meta.py"
+  ];
+
+  disabledTests = [
+    "test_issue_104"
+    "test_setup_py"
+  ];
+
+  pythonImportsCheck = [
+    "pep517"
+  ];
+
+  meta = with lib; {
     description = "Wrappers to build Python packages using PEP 517 hooks";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     homepage = "https://github.com/pypa/pep517";
+    maintainers = with maintainers; [ ];
   };
 }
