@@ -122,8 +122,5 @@ stdenv.mkDerivation rec {
     homepage = "https://parallels.com";
     platforms = [ "aarch64-linux" "i686-linux" "x86_64-linux" ];
     license = licenses.unfree;
-    # I was making this package blindly and requesting testing from the real user,
-    # so I can't even test it by myself and won't provide future updates.
-    maintainers = with maintainers; [ abbradar ];
   };
 }
