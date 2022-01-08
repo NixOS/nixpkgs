@@ -442,6 +442,13 @@ self: super:
 
   xf86videoati = super.xf86videoati.overrideAttrs (attrs: {
     NIX_CFLAGS_COMPILE = "-I${self.xorgserver.dev or self.xorgserver}/include/xorg";
+    nativeBuildInputs = with self; attrs.nativeBuildInputs ++ [ autoreconfHook utilmacros ];
+    patches = [
+      (fetchpatch {
+        url = "https://gitlab.freedesktop.org/xorg/driver/xf86-video-ati/-/commit/e0511968d04b42abf11bc0ffb387f143582bc144.patch";
+        sha256 = "sha256-79nqKuJRgMYXDEMB8IWxdmbxtI/m+Oca1wSLYeGMuEk=";
+      })
+    ];
   });
 
   xf86videovmware = super.xf86videovmware.overrideAttrs (attrs: {
