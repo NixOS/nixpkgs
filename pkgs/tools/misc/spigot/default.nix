@@ -33,6 +33,17 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    [ `$out/bin/spigot -b 10 -d 10 e` == "2.7182818284" ] || exit 1
+    [ `$out/bin/spigot -b 10 -d 10 pi` == "3.1415926535" ] || exit 1
+    [ `$out/bin/spigot -b 10 -d 10 sqrt\(2\)` == "1.4142135623" ] || exit 1
+
+    runHook postInstallCheck
+  '';
+
   meta = with lib; {
     homepage = "https://www.chiark.greenend.org.uk/~sgtatham/spigot/";
     description = "A command-line exact real calculator";
