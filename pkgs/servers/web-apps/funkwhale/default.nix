@@ -7,6 +7,7 @@
 , fetchYarnDeps
 , jq
 , ffmpeg
+, nixosTests
 }:
 
 let
@@ -190,6 +191,7 @@ python.pkgs.buildPythonApplication rec {
     inherit frontend path python;
     pythonPath = python.pkgs.makePythonPath propagatedBuildInputs;
     updateScript = ./update.sh;
+    tests = { inherit (nixosTests) funkwhale; };
   };
 
   meta = with lib; {
