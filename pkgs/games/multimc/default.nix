@@ -1,6 +1,9 @@
 { lib
 , mkDerivation
 , fetchFromGitHub
+, makeDesktopItem
+, substituteAll
+, fetchpatch
 , cmake
 , jdk8
 , jdk
@@ -25,40 +28,73 @@ let
     libGL
   ];
 in
-  
+
 mkDerivation rec {
   pname = "multimc";
-  version = "unstable-2021-09-08";
-  
+  version = "0.6.14";
+
   src = fetchFromGitHub {
     owner = "MultiMC";
     repo = "MultiMC5";
-    rev = "e2355eb276bf355ca4acf526a0f3cc390aa88f8b";
-    sha256 = "3G9QPoAbC+uVfUYR0Kq6hnxl9c2mvCzIEYGjwfarQJ8=";
+    rev = version;
+    sha256 = "7tM+z35dtUIN/UioJ7zTP8kdRKlTJIrWRkA08B8ci3A=";
     fetchSubmodules = true;
   };
-  
+
   nativeBuildInputs = [ cmake file makeWrapper ];
   buildInputs = [ qtbase jdk8 zlib ];
 
-  patches = [ ./0001-pick-latest-java-first.patch ];
+  patches = [
+    (fetchpatch {
+      name = "revert-lin-system-installation.patch";
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/0001-Readd-lin-system-and-LAUNCHER_LINUX_DATADIR.patch?h=multimc5&id=baf9bef2b7782abb234be9f879df4fe8fc3cb22a";
+      sha256 = "sha256-JOQ2jIAcSJfzMRqR4jGwK1vyJwTf/V7O/bdh3UMfwUg=";
+    })
+    (fetchpatch {
+      name = "mmc-brand.patch";
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/mmc-brand.patch?h=multimc5&id=baf9bef2b7782abb234be9f879df4fe8fc3cb22a";
+      sha256 = "sha256-1bBEfD9TrQrwuzIDBsj6OW0/kKiKOK4y0IJoFzNk1SY=";
+    })
+    (fetchpatch {
+      name = "fix-jar-locations.patch";
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/fix-jars.patch?h=multimc5&id=baf9bef2b7782abb234be9f879df4fe8fc3cb22a";
+      sha256 = "sha256-QlhlJ5TbXtrmElzHsAnHdzmplWr3G9LJm9UT8HTWmAI=";
+    })
+    (substituteAll {
+      src = ./hardcode-jdk-paths.patch;
+      jdk = jdk;
+      jdk8 = jdk8;
+    })
+  ];
 
   postPatch = ''
-    # hardcode jdk paths
-    substituteInPlace launcher/java/JavaUtils.cpp \
-      --replace 'scanJavaDir("/usr/lib/jvm")' 'javas.append("${jdk}/lib/openjdk/bin/java")' \
-      --replace 'scanJavaDir("/usr/lib32/jvm")' 'javas.append("${jdk8}/lib/openjdk/bin/java")'
-
     # add client ID
     substituteInPlace notsecrets/Secrets.cpp \
       --replace 'QString MSAClientID = "";' 'QString MSAClientID = "${msaClientID}";'
   '';
 
-  cmakeFlags = [ "-DMultiMC_LAYOUT=lin-system" ];
+  cmakeFlags = [
+    "-DLauncher_LAYOUT=lin-system"
+    "-DLauncher_APP_BINARY_NAME=${pname}"
+    "-DLauncher_SHARE_DEST_DIR=share/${pname}"
+  ];
+
+  desktopItem = makeDesktopItem {
+    name = "multimc";
+    exec = "multimc";
+    icon = "multimc";
+    desktopName = "MultiMC";
+    genericName = "Minecraft Launcher";
+    comment = meta.description;
+    categories = "Game;";
+    extraEntries = ''
+      Keywords=game;Minecraft;
+    '';
+  };
 
   postInstall = ''
-    install -Dm644 ../launcher/resources/multimc/scalable/multimc.svg $out/share/pixmaps/multimc.svg
-    install -Dm755 ../launcher/package/linux/multimc.desktop $out/share/applications/multimc.desktop
+    install -Dm644 ../launcher/package/ubuntu/multimc/opt/multimc/icon.svg $out/share/pixmaps/multimc.svg
+    install -Dm755 ${desktopItem}/share/applications/multimc.desktop -t $out/share/applications
 
     # xorg.xrandr needed for LWJGL [2.9.2, 3) https://github.com/LWJGL/lwjgl/issues/128
     wrapProgram $out/bin/multimc \

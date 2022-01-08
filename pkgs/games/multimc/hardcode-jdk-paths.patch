@@ -1,0 +1,63 @@
+diff --git a/launcher/java/JavaInstallList.cpp b/launcher/java/JavaInstallList.cpp
+index 07f2bd8c..a0a60871 100644
+--- a/launcher/java/JavaInstallList.cpp
++++ b/launcher/java/JavaInstallList.cpp
+@@ -120,8 +120,8 @@ void JavaInstallList::updateListData(QList<BaseVersionPtr> versions)
+ 
+ bool sortJavas(BaseVersionPtr left, BaseVersionPtr right)
+ {
+-    auto rleft = std::dynamic_pointer_cast<JavaInstall>(left);
+-    auto rright = std::dynamic_pointer_cast<JavaInstall>(right);
++    auto rleft = std::dynamic_pointer_cast<JavaInstall>(right);
++    auto rright = std::dynamic_pointer_cast<JavaInstall>(left);
+     return (*rleft) > (*rright);
+ }
+ 
+diff --git a/launcher/java/JavaUtils.cpp b/launcher/java/JavaUtils.cpp
+index fd7e43e9..f60de918 100644
+--- a/launcher/java/JavaUtils.cpp
++++ b/launcher/java/JavaUtils.cpp
+@@ -372,41 +372,9 @@ QList<QString> JavaUtils::FindJavaPaths()
+     qDebug() << "Linux Java detection incomplete - defaulting to \"java\"";
+ 
+     QList<QString> javas;
++    javas.append("@jdk@/lib/openjdk/bin/java");
++    javas.append("@jdk8@/lib/openjdk/bin/java");
+     javas.append(this->GetDefaultJava()->path);
+-    auto scanJavaDir = [&](const QString & dirPath)
+-    {
+-        QDir dir(dirPath);
+-        if(!dir.exists())
+-            return;
+-        auto entries = dir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot | QDir::NoSymLinks);
+-        for(auto & entry: entries)
+-        {
+-
+-            QString prefix;
+-            if(entry.isAbsolute())
+-            {
+-                prefix = entry.absoluteFilePath();
+-            }
+-            else
+-            {
+-                prefix = entry.filePath();
+-            }
+-
+-            javas.append(FS::PathCombine(prefix, "jre/bin/java"));
+-            javas.append(FS::PathCombine(prefix, "bin/java"));
+-        }
+-    };
+-    // oracle RPMs
+-    scanJavaDir("/usr/java");
+-    // general locations used by distro packaging
+-    scanJavaDir("/usr/lib/jvm");
+-    scanJavaDir("/usr/lib64/jvm");
+-    scanJavaDir("/usr/lib32/jvm");
+-    // javas stored in MultiMC's folder
+-    scanJavaDir("java");
+-    // manually installed JDKs in /opt
+-    scanJavaDir("/opt/jdk");
+-    scanJavaDir("/opt/jdks");
+     return javas;
+ }
+ #else
