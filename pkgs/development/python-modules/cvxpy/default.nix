@@ -9,6 +9,7 @@
 , osqp
 , scipy
 , scs
+, cylp
 , useOpenmp ? (!stdenv.isDarwin)
   # Check inputs
 , pytestCheckHook
@@ -28,6 +29,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     cvxopt
+    cylp
     ecos
     numpy
     osqp
