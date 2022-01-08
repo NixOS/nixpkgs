@@ -7867,6 +7867,8 @@ with pkgs;
 
   mtr = callPackage ../tools/networking/mtr {};
 
+  mtr-exporter = callPackage ../tools/networking/mtr-exporter {};
+
   mtr-gui = callPackage ../tools/networking/mtr { withGtk = true; };
 
   mtx = callPackage ../tools/backup/mtx {};

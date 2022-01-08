@@ -98,6 +98,13 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://github.com/mgumz/mtr-exporter">mtr-exporter</link>,
+          a Prometheus exporter for mtr metrics. Available as
+          <link xlink:href="options.html#opt-services.mtr-exporter.enable">services.mtr-exporter</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://tetrd.app">tetrd</link>, share your
           internet connection from your device to your PC and vice versa
           through a USB cable. Available at
