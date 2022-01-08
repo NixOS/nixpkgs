@@ -6055,6 +6055,13 @@
     github = "k4leg";
     githubId = 39882583;
   };
+  k900 = {
+    name = "Ilya K.";
+    email = "me@0upti.me";
+    github = "K900";
+    githubId = 386765;
+    matrix = "@k900:0upti.me";
+  };
   kaction = {
     name = "Dmitry Bogatov";
     email = "KAction@disroot.org";
