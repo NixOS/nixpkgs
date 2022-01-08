@@ -10048,6 +10048,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) IOKit;
   };
 
+  tagtime = callPackage ../applications/misc/tagtime { };
+
   inherit (callPackages ../applications/networking/taler { })
     taler-exchange taler-merchant;
 
