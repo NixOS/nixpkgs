@@ -30697,6 +30697,7 @@ with pkgs;
   moon-buggy = callPackage ../games/moon-buggy {};
 
   multimc = libsForQt5.callPackage ../games/multimc { };
+  multimc-bin = libsForQt5.callPackage ../games/multimc/binary.nix { };
 
   inherit (callPackages ../games/minetest {
     inherit (darwin) libiconv;
