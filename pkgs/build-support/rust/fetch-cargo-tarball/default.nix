@@ -72,10 +72,13 @@ in stdenv.mkDerivation ({
   '';
 
   # Build a reproducible tar, per instructions at https://reproducible-builds.org/docs/archives/
+  # Note: rather than calling `tar -czf` and having `tar` call `gzip`, we call
+  # `gzip` manually, because `tar` tries to call it through `/bin/sh -c gzip`,
+  # and `/bin/sh` may not be available with sandboxing enabled.
   installPhase = ''
     tar --owner=0 --group=0 --numeric-owner --format=gnu \
         --sort=name --mtime="@$SOURCE_DATE_EPOCH" \
-        -czf $out $name
+        -c $name | gzip > $out
   '';
 
   inherit (hash_) outputHashAlgo outputHash;
