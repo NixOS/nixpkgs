@@ -313,4 +313,6 @@ in {
                           else "${cfg.masterAddress}:${toString cfg.apiserver.securePort}"}");
     })
   ];
+
+  meta.buildDocsInSandbox = false;
 }
