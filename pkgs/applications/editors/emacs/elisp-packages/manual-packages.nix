@@ -225,8 +225,6 @@
     };
   };
 
-  railgun = callPackage ./railgun { };
-
   structured-haskell-mode = self.shm;
 
   sv-kalender = callPackage ./sv-kalender { };

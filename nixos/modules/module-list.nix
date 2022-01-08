@@ -364,6 +364,7 @@
   ./services/desktops/malcontent.nix
   ./services/desktops/pipewire/pipewire.nix
   ./services/desktops/pipewire/pipewire-media-session.nix
+  ./services/desktops/pipewire/wireplumber.nix
   ./services/desktops/gnome/at-spi2-core.nix
   ./services/desktops/gnome/chrome-gnome-shell.nix
   ./services/desktops/gnome/evolution-data-server.nix

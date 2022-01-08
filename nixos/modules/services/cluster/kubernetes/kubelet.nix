@@ -6,7 +6,6 @@ let
   top = config.services.kubernetes;
   otop = options.services.kubernetes;
   cfg = top.kubelet;
-  klib = options.services.kubernetes.lib.default;
 
   cniConfig =
     if cfg.cni.config != [] && cfg.cni.configDir != null then
@@ -28,7 +27,7 @@ let
     config.Cmd = ["/bin/pause"];
   };
 
-  kubeconfig = klib.mkKubeConfig "kubelet" cfg.kubeconfig;
+  kubeconfig = top.lib.mkKubeConfig "kubelet" cfg.kubeconfig;
 
   manifestPath = "kubernetes/manifests";
 
@@ -178,7 +177,7 @@ in
       type = str;
     };
 
-    kubeconfig = klib.mkKubeConfigOptions "Kubelet";
+    kubeconfig = top.lib.mkKubeConfigOptions "Kubelet";
 
     manifests = mkOption {
       description = "List of manifests to bootstrap with kubelet (only pods can be created as manifest entry)";
@@ -264,8 +263,6 @@ in
         "net.ipv4.ip_forward"                 = 1;
         "net.bridge.bridge-nf-call-ip6tables" = 1;
       };
-
-      systemd.enableUnifiedCgroupHierarchy = false; # true breaks node memory metrics
 
       systemd.services.kubelet = {
         description = "Kubernetes Kubelet Service";
@@ -359,7 +356,7 @@ in
       services.kubernetes.kubelet.hostname = with config.networking;
         mkDefault (hostName + optionalString (domain != null) ".${domain}");
 
-      services.kubernetes.pki.certs = with klib; {
+      services.kubernetes.pki.certs = with top.lib; {
         kubelet = mkCert {
           name = "kubelet";
           CN = top.kubelet.hostname;
@@ -396,4 +393,6 @@ in
     })
 
   ];
+
+  meta.buildDocsInSandbox = false;
 }

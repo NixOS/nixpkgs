@@ -579,6 +579,15 @@
     "vendorSha256": "05gx87dwh49zc5mlqnzcqn46pjf9q4wsv9l15pjr3spczzi11cnz",
     "version": "2.2.0"
   },
+  "libvirt": {
+    "owner": "dmacvicar",
+    "provider-source-address": "registry.terraform.io/dmacvicar/libvirt",
+    "repo": "terraform-provider-libvirt",
+    "rev": "v0.6.12",
+    "sha256": "1kqpy1cr7vg4iclxwd7wa4fmhw63l3z5gn07knfx9in7nm380pyn",
+    "vendorSha256": "0l9wr4g77chmshcfibdbl23rs8y8bxgiar4n152gkr0z12jvr5iq",
+    "version": "0.6.12"
+  },
   "linode": {
     "owner": "linode",
     "provider-source-address": "registry.terraform.io/linode/linode",

@@ -2208,7 +2208,7 @@ in {
 
   django-dynamic-preferences = callPackage ../development/python-modules/django-dynamic-preferences { };
 
-  django_environ = callPackage ../development/python-modules/django_environ { };
+  django-environ = callPackage ../development/python-modules/django_environ { };
 
   django_extensions = callPackage ../development/python-modules/django-extensions { };
 
@@ -3428,6 +3428,8 @@ in {
   gpy = callPackage ../development/python-modules/gpy { };
 
   gpyopt = callPackage ../development/python-modules/gpyopt { };
+
+  gql = callPackage ../development/python-modules/gql { };
 
   gradient = callPackage ../development/python-modules/gradient { };
 
