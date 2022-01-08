@@ -19,6 +19,7 @@
 , withOss ? false
 , withFlite ? true, flite
 , withEspeak ? true, espeak, sonic, pcaudiolib
+, mbrola
 , withPico ? true, svox
 }:
 
@@ -37,6 +38,12 @@ in stdenv.mkDerivation rec {
     (substituteAll {
       src = ./fix-paths.patch;
       utillinux = util-linux;
+    })
+  ] ++ lib.optionals espeak.mbrolaSupport [
+    # Replace FHS paths.
+    (substituteAll {
+      src = ./fix-mbrola-paths.patch;
+      inherit espeak mbrola;
     })
   ];
 
