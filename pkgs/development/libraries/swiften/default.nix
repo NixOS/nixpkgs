@@ -1,10 +1,13 @@
-{ lib, stdenv, python, fetchurl, openssl, boost, sconsPackages }:
+{ lib, stdenv, python, expat, fetchurl, openssl, boost, sconsPackages }:
 stdenv.mkDerivation rec {
   pname = "swiften";
   version = "4.0.2";
 
   nativeBuildInputs = [ sconsPackages.scons_3_1_2 ];
-  buildInputs           = [ python ];
+  buildInputs = [
+    python
+    expat
+  ];
   propagatedBuildInputs = [ openssl boost ];
 
   src = fetchurl {
