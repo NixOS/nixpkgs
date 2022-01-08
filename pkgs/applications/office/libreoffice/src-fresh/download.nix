@@ -637,11 +637,11 @@
     md5name = "cf1ee3ac27a215814a9c80803fcee4f0ede8466ebead40267a9bd115e16a8678-neon-0.31.2.tar.gz";
   }
   {
-    name = "nss-3.55-with-nspr-4.27.tar.gz";
-    url = "https://dev-www.libreoffice.org/src/nss-3.55-with-nspr-4.27.tar.gz";
-    sha256 = "ec6032d78663c6ef90b4b83eb552dedf721d2bce208cec3bf527b8f637db7e45";
+    name = "nss-3.73-with-nspr-4.32.tar.gz";
+    url = "https://dev-www.libreoffice.org/src/nss-3.73-with-nspr-4.32.tar.gz";
+    sha256 = "07a9e5b70f121a62706140d4cacc3006d3efb869da40f3a2bf7a65d37847f4d9";
     md5 = "";
-    md5name = "ec6032d78663c6ef90b4b83eb552dedf721d2bce208cec3bf527b8f637db7e45-nss-3.55-with-nspr-4.27.tar.gz";
+    md5name = "07a9e5b70f121a62706140d4cacc3006d3efb869da40f3a2bf7a65d37847f4d9-nss-3.73-with-nspr-4.32.tar.gz";
   }
   {
     name = "libodfgen-0.1.8.tar.xz";
@@ -714,11 +714,11 @@
     md5name = "505e70834d35383537b6491e7ae8641f1a4bed1876dbfe361201fc80868d88ca-libpng-1.6.37.tar.xz";
   }
   {
-    name = "poppler-21.01.0.tar.xz";
-    url = "https://dev-www.libreoffice.org/src/poppler-21.01.0.tar.xz";
-    sha256 = "016dde34e5f868ea98a32ca99b643325a9682281500942b7113f4ec88d20e2f3";
+    name = "poppler-21.11.0.tar.xz";
+    url = "https://dev-www.libreoffice.org/src/poppler-21.11.0.tar.xz";
+    sha256 = "31b76b5cac0a48612fdd154c02d9eca01fd38fb8eaa77c1196840ecdeb53a584";
     md5 = "";
-    md5name = "016dde34e5f868ea98a32ca99b643325a9682281500942b7113f4ec88d20e2f3-poppler-21.01.0.tar.xz";
+    md5name = "31b76b5cac0a48612fdd154c02d9eca01fd38fb8eaa77c1196840ecdeb53a584-poppler-21.11.0.tar.xz";
   }
   {
     name = "poppler-data-0.4.10.tar.gz";

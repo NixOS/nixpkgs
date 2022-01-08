@@ -27383,9 +27383,12 @@ with pkgs;
 
   opentimestamps-client = python3Packages.callPackage ../tools/misc/opentimestamps-client {};
 
-  opentoonz = (qt514.overrideScope' (_: _: {
-    libtiff = callPackage ../applications/graphics/opentoonz/libtiff.nix { };
-  })).callPackage ../applications/graphics/opentoonz { };
+  opentoonz = let
+    opentoonz-libtiff = callPackage ../applications/graphics/opentoonz/libtiff.nix { };
+  in qt5.callPackage ../applications/graphics/opentoonz {
+    libtiff = opentoonz-libtiff;
+    opencv = opencv.override { libtiff = opentoonz-libtiff; };
+  };
 
   opentabletdriver = callPackage ../tools/X11/opentabletdriver { };
 
