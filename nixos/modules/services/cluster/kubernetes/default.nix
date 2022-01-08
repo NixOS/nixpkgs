@@ -193,8 +193,6 @@ in {
         inherit mkKubeConfigOptions;
       };
       type = types.attrs;
-      readOnly = true;
-      internal = true;
     };
 
     secretsPath = mkOption {
