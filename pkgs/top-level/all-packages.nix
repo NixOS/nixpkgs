@@ -33434,7 +33434,10 @@ with pkgs;
 
   sqsh = callPackage ../development/tools/sqsh { };
 
-  sumneko-lua-language-server = callPackage ../development/tools/sumneko-lua-language-server { };
+  sumneko-lua-language-server = callPackage ../development/tools/sumneko-lua-language-server
+    (lib.optionalAttrs (stdenv.cc.isClang && lib.versionOlder stdenv.cc.version "9") {
+      stdenv = overrideCC stdenv llvmPackages_9.clang;
+    });
 
   sysz = callPackage  ../tools/misc/sysz { };
 
