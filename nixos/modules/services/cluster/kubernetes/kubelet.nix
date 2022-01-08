@@ -395,4 +395,6 @@ in
     })
 
   ];
+
+  meta.buildDocsInSandbox = false;
 }
