@@ -144,6 +144,23 @@ let
         };
       };
 
+      apollographql.vscode-apollo = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-apollo";
+          publisher = "apollographql";
+          version = "1.19.9";
+          sha256 = "sha256-iJpzNKcuQrfq4Z0LXuadt6OKXelBbDQg/vuc7NJ2I5o=";
+        };
+        meta = with lib; {
+          changelog = "https://marketplace.visualstudio.com/items/apollographql.vscode-apollo/changelog";
+          description = "Rich editor support for GraphQL client and server development that seamlessly integrates with the Apollo platform";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=apollographql.vscode-apollo";
+          homepage = "https://github.com/apollographql/vscode-graphql";
+          license = licenses.mit;
+          maintainers = with maintainers; [ datafoo ];
+        };
+      };
+
       arcticicestudio.nord-visual-studio-code = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "nord-visual-studio-code";
@@ -316,6 +333,23 @@ let
         };
       };
 
+      bungcip.better-toml = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "better-toml";
+          publisher = "bungcip";
+          version = "0.3.2";
+          sha256 = "sha256-g+LfgjAnSuSj/nSmlPdB0t29kqTmegZB5B1cYzP8kCI=";
+        };
+        meta = with lib; {
+          changelog = "https://marketplace.visualstudio.com/items/bungcip.better-toml/changelog";
+          description = "Better TOML Language support";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=bungcip.better-toml";
+          homepage = "https://github.com/bungcip/better-toml/blob/master/README.md";
+          license = licenses.mit;
+          maintainers = with maintainers; [ datafoo ];
+        };
+      };
+
       chenglou92.rescript-vscode = callPackage ./rescript { };
 
       cmschuetz12.wal = buildVscodeMarketplaceExtension {
@@ -400,11 +434,16 @@ let
         mktplcRef = {
           name = "vscode-markdownlint";
           publisher = "DavidAnson";
-          version = "0.42.1";
-          sha256 = "c8c0647e0dd786fe68becca6dc73eade5f4220a26ab9faff8dd813a14b25df51";
+          version = "0.45.0";
+          sha256 = "sha256-L7y+Lsx1DMS12JtxSl7WkT8jGQLipebNKxknF/Y1ke0=";
         };
         meta = with lib; {
+          changelog = "https://marketplace.visualstudio.com/items/DavidAnson.vscode-markdownlint/changelog";
+          description = "Markdown linting and style checking for Visual Studio Code";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=DavidAnson.vscode-markdownlint";
+          homepage = "https://github.com/DavidAnson/vscode-markdownlint";
           license = licenses.mit;
+          maintainers = with maintainers; [ datafoo ];
         };
       };
 
@@ -606,19 +645,19 @@ let
       };
 
       esbenp.prettier-vscode = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "prettier-vscode";
+          publisher = "esbenp";
+          version = "9.1.0";
+          sha256 = "sha256-lR5BDbDYURCF1Gq5JIm7BcXVvKXPdNBYom0BiVX/3u0=";
+        };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/esbenp.prettier-vscode/changelog";
           description = "Code formatter using prettier";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode";
           homepage = "https://github.com/prettier/prettier-vscode";
           license = licenses.mit;
-          maintainers = with maintainers; [ ];
-        };
-        mktplcRef = {
-          name = "prettier-vscode";
-          publisher = "esbenp";
-          version = "9.0.0";
-          sha256 = "1nak1hg46wxkl0kb0zhc343kq2f4nd5q1fqscb29jybd4qdb8lgn";
+          maintainers = with maintainers; [ datafoo ];
         };
       };
 
@@ -964,6 +1003,23 @@ let
         };
         meta = with lib; {
           license = licenses.mit;
+        };
+      };
+
+      jakebecker.elixir-ls = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "elixir-ls";
+          publisher = "JakeBecker";
+          version = "0.9.0";
+          sha256 = "sha256-KNfZOrVxK3/rClHPcIyPgE9CRtjkI7NLY0xZ9W+X6OM=";
+        };
+        meta = with lib; {
+          changelog = "https://marketplace.visualstudio.com/items/JakeBecker.elixir-ls/changelog";
+          description = "Elixir support with debugger, autocomplete, and more. Powered by ElixirLS.";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=JakeBecker.elixir-ls";
+          homepage = "https://github.com/elixir-lsp/elixir-ls";
+          license = licenses.mit;
+          maintainers = with maintainers; [ datafoo ];
         };
       };
 
@@ -1472,11 +1528,16 @@ let
         mktplcRef = {
           publisher = "stkb";
           name = "rewrap";
-          version = "1.14.0";
-          sha256 = "qRwKX36a1aLzE1tqaOkH7JfE//pvKdPZ07zasPF3Dl4=";
+          version = "1.15.4";
+          sha256 = "sha256-yuXyClvhGsonvddYHDMkLSvwEsD21vOeE54Gs9BRpeg=";
         };
         meta = with lib; {
+          changelog = "https://github.com/stkb/Rewrap/blob/master/CHANGELOG.md";
+          description = "Hard word wrapping for comments and other text at a given column.";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=stkb.rewrap";
+          homepage = "https://github.com/stkb/Rewrap#readme";
           license = licenses.asl20;
+          maintainers = with maintainers; [ datafoo ];
         };
       };
 
@@ -1484,11 +1545,16 @@ let
         mktplcRef = {
           name = "code-spell-checker";
           publisher = "streetsidesoftware";
-          version = "1.10.2";
-          sha256 = "1ll046rf5dyc7294nbxqk5ya56g2bzqnmxyciqpz2w5x7j75rjib";
+          version = "2.0.14";
+          sha256 = "sha256-mwcssQvaztrnUuSoo8AWK3FXT4qKmPTRCGVYkAjgfXg=";
         };
         meta = with lib; {
-          license = licenses.mit;
+          changelog = "https://marketplace.visualstudio.com/items/streetsidesoftware.code-spell-checker/changelog";
+          description = "Spelling checker for source code";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=streetsidesoftware.code-spell-checker";
+          homepage = "https://streetsidesoftware.github.io/vscode-spell-checker";
+          license = licenses.gpl3Only;
+          maintainers = with maintainers; [ datafoo ];
         };
       };
 

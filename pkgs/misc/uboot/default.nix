@@ -352,6 +352,26 @@ in {
     filesToInstall = ["u-boot.bin"];
   };
 
+  ubootQemuX86 = buildUBoot {
+    defconfig = "qemu-x86_defconfig";
+    extraConfig = ''
+      CONFIG_USB_UHCI_HCD=y
+      CONFIG_USB_EHCI_HCD=y
+      CONFIG_USB_EHCI_GENERIC=y
+      CONFIG_USB_XHCI_HCD=y
+    '';
+    extraPatches = [
+      # https://patchwork.ozlabs.org/project/uboot/list/?series=268007&state=%2A&archive=both
+      # Remove when upgrading to 2022.01
+      (fetchpatch {
+        url = "https://patchwork.ozlabs.org/series/268007/mbox/";
+        sha256 = "sha256-xn4Q959dgoB63zlmJepI41AXAf1kCycIGcmu4IIVjmE=";
+      })
+    ];
+    extraMeta.platforms = [ "i686-linux" "x86_64-linux" ];
+    filesToInstall = [ "u-boot.rom" ];
+  };
+
   ubootRaspberryPi = buildUBoot {
     defconfig = "rpi_defconfig";
     extraMeta.platforms = ["armv6l-linux"];
