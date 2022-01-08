@@ -1,7 +1,11 @@
 { stdenv
 , lib
 , python
+, libidn
+, lua
+, miniupnpc
 , expat
+, zlib
 , fetchurl
 , fetchpatch
 , openssl
@@ -37,7 +41,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     python
+    libidn
+    lua
+    miniupnpc
     expat
+    zlib
   ];
 
   propagatedBuildInputs = [
@@ -55,6 +63,11 @@ stdenv.mkDerivation rec {
     "debug=0"
     "swiften_dll=1"
   ];
+
+  postPatch = ''
+    # Ensure bundled dependencies cannot be used.
+    rm -rf 3rdParty
+  '';
 
   installTargets = "${placeholder "out"}";
 
