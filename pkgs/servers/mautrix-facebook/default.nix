@@ -32,6 +32,11 @@ python3.pkgs.buildPythonPackage rec {
     yarl
   ] ++ lib.optional enableSystemd systemd;
 
+  postPatch = ''
+    # Drop version limiting so that every dependency update doesn't break this package.
+    sed -i -e 's/,<.*//' requirements.txt
+  '';
+
   doCheck = false;
 
   postInstall = ''
