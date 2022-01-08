@@ -29,6 +29,8 @@ stdenv.mkDerivation rec {
   ];
 
   preConfigure = ''
+    # We build V8 as a monolith, so this is unnecessary.
+    substituteInPlace Makefile.shared --replace "-lv8_libplatform" ""
     patchShebangs ./generate_upgrade.sh
     substituteInPlace generate_upgrade.sh \
       --replace " 2.3.10)" " 2.3.10 2.3.11 2.3.12 2.3.13 2.3.14 2.3.15)"
@@ -42,10 +44,14 @@ stdenv.mkDerivation rec {
     rmdir "$out/nix/store"/* "$out/nix/store" "$out/nix"
   '';
 
-  # Without this, PostgreSQL will crash at runtime.
-  # The flags are only included in Makefile, not Makefile.shared.
-  # https://github.com/plv8/plv8/pull/469
-  NIX_CFLAGS_COMPILE = "-DJSONB_DIRECT_CONVERSION -DV8_COMPRESS_POINTERS=1 -DV8_31BIT_SMIS_ON_64BIT_ARCH=1";
+  NIX_CFLAGS_COMPILE = [
+    # V8 depends on C++14.
+    "-std=c++14"
+    # Without this, PostgreSQL will crash at runtime.
+    # The flags are only included in Makefile, not Makefile.shared.
+    # https://github.com/plv8/plv8/pull/469
+    "-DJSONB_DIRECT_CONVERSION" "-DV8_COMPRESS_POINTERS=1" "-DV8_31BIT_SMIS_ON_64BIT_ARCH=1"
+  ];
 
   meta = with lib; {
     description = "V8 Engine Javascript Procedural Language add-on for PostgreSQL";
