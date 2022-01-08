@@ -4,7 +4,6 @@
   "dependencies": [
     "boost-endian",
     "boost-format",
-    "boost-filesystem",
     "boost-iostreams",
     "boost-program-options",
     "cryptopp"

@@ -13,7 +13,7 @@ if (BUILD_STATIC_MSVC)
         MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 endif()
 
-find_package(Boost 1.70.0 COMPONENTS filesystem program_options REQUIRED)
+find_package(Boost 1.70.0 COMPONENTS program_options REQUIRED)
 get_property(wfs_include_dirs TARGET wfslib PROPERTY INCLUDE_DIRECTORIES)
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${wfs_include_dirs})
@@ -22,6 +22,5 @@ target_link_libraries(${PROJECT_NAME}
     PRIVATE
         wfslib
         Boost::boost
-        Boost::filesystem
         Boost::program_options
 )

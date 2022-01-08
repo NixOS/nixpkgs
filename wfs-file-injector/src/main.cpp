@@ -5,7 +5,6 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-#include <boost/filesystem.hpp>
 #include <boost/program_options.hpp>
 #include <cstdio>
 #include <fstream>

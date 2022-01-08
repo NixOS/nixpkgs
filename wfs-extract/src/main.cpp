@@ -5,9 +5,9 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-#include <boost/filesystem.hpp>
 #include <boost/program_options.hpp>
 #include <cstdio>
+#include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <memory>
@@ -15,23 +15,25 @@
 
 #include <wfslib/wfslib.h>
 
-void dumpdir(const boost::filesystem::path& target,
+void dumpdir(const std::filesystem::path& target,
              const std::shared_ptr<Directory>& dir,
-             const boost::filesystem::path& path,
+             const std::filesystem::path& path,
+             const std::string& pretty_path,
              bool verbose) {
-  if (!boost::filesystem::exists(target / path)) {
-    if (!boost::filesystem::create_directories(target / path)) {
+  if (!std::filesystem::exists(target / path)) {
+    if (!std::filesystem::create_directories(target / path)) {
       std::cerr << "Error: Failed to create directory " << (target / path) << std::endl;
       return;
     }
   }
   try {
     for (auto item : *dir) {
-      boost::filesystem::path npath = path / item->GetRealName();
+      auto const npath = path / item->GetRealName();
+      auto const npretty_path = pretty_path + (pretty_path.ends_with("/") ? "" : "/") + item->GetRealName();
       if (verbose)
-        std::cout << "Dumping " << npath << std::endl;
+        std::cout << "Dumping " << npretty_path << std::endl;
       if (item->IsDirectory())
-        dumpdir(target, std::dynamic_pointer_cast<Directory>(item), npath, verbose);
+        dumpdir(target, std::dynamic_pointer_cast<Directory>(item), npath, npretty_path, verbose);
       else if (item->IsFile()) {
         auto file = std::dynamic_pointer_cast<File>(item);
         std::ofstream output_file((target / npath).string(), std::ios::binary | std::ios::out);
@@ -134,8 +136,9 @@ int main(int argc, char* argv[]) {
       return 1;
     }
     std::cout << "Dumping..." << std::endl;
-    dumpdir(boost::filesystem::path(vm["output"].as<std::string>()), dir, boost::filesystem::path(""),
-            !!vm.count("verbose"));
+    auto pretty_path = vm["dump-path"].as<std::string>();
+    dumpdir(std::filesystem::path(vm["output"].as<std::string>()), dir, std::filesystem::path(""),
+            vm["dump-path"].as<std::string>(), !!vm.count("verbose"));
     std::cout << "Done!" << std::endl;
   } catch (std::exception& e) {
     std::cerr << "Error: " << e.what() << std::endl;
