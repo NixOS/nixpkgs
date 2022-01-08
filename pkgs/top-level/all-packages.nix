@@ -19250,8 +19250,6 @@ with pkgs;
 
   paperkey = callPackage ../tools/security/paperkey { };
 
-  pangoxsl = callPackage ../development/libraries/pangoxsl { };
-
   pcaudiolib = callPackage ../development/libraries/pcaudiolib { };
 
   pcg_c = callPackage ../development/libraries/pcg-c { };
