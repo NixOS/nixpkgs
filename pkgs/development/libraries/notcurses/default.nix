@@ -3,6 +3,7 @@
 , pkg-config
 , pandoc
 , libunistring
+, libdeflate
 , ncurses
 , zlib
 , ffmpeg
@@ -13,20 +14,20 @@
 
 stdenv.mkDerivation rec {
   pname = "notcurses";
-  version = "2.4.9";
+  version = "3.0.3";
 
   src = fetchFromGitHub {
     owner = "dankamongmen";
     repo = "notcurses";
     rev = "v${version}";
-    sha256 = "sha256-J7yTNMvmcm69B+yF0PYLXFG8kkcnffWyUx3kEFU0ToI=";
+    sha256 = "sha256-jIUIr7roX9ciYkNmvS9m14RdNgFTElwrKadYzi0lCP0=";
   };
 
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ cmake pkg-config pandoc ];
 
-  buildInputs = [ libunistring ncurses zlib ]
+  buildInputs = [ libunistring libdeflate ncurses zlib ]
     ++ lib.optional multimediaSupport ffmpeg;
 
   cmakeFlags = [ "-DUSE_QRCODEGEN=OFF" ]
