@@ -1,47 +1,89 @@
-{ config, lib, pkgs, ...}:
+{ config, lib, pkgs, ... }:
 with lib;
 let
   cfg = config.services.hadoop;
+
+  # Config files for hadoop services
   hadoopConf = "${import ./conf.nix { inherit cfg pkgs lib; }}/";
-  restartIfChanged  = mkOption {
-    type = types.bool;
-    description = ''
-      Automatically restart the service on config change.
-      This can be set to false to defer restarts on clusters running critical applications.
-      Please consider the security implications of inadvertently running an older version,
-      and the possibility of unexpected behavior caused by inconsistent versions across a cluster when disabling this option.
-    '';
-    default = false;
-  };
-  openFirewall = serviceName: mkOption {
-    type = types.bool;
-    default = true;
-    description = "Open firewall ports for ${serviceName}.";
-  };
+
+  # Generator for HDFS service options
   hadoopServiceOption = { serviceName, firewallOption ? true }: {
     enable = mkEnableOption serviceName;
-    inherit restartIfChanged;
-  } // (if firewallOption then {openFirewall = openFirewall serviceName;} else {});
+    restartIfChanged = mkOption {
+      type = types.bool;
+      description = ''
+        Automatically restart the service on config change.
+        This can be set to false to defer restarts on clusters running critical applications.
+        Please consider the security implications of inadvertently running an older version,
+        and the possibility of unexpected behavior caused by inconsistent versions across a cluster when disabling this option.
+      '';
+      default = false;
+    };
+  } // (optionalAttrs firewallOption {
+    openFirewall = mkOption {
+      type = types.bool;
+      default = true;
+      description = "Open firewall ports for ${serviceName}.";
+    };
+  });
+
+  # Generator for HDFS service configs
+  hadoopServiceConfig =
+    { name
+    , serviceOptions ? cfg.hdfs."${toLower name}"
+    , description ? "Hadoop HDFS ${name}"
+    , User ? "hdfs"
+    , allowedTCPPorts ? [ ]
+    , preStart ? ""
+    , environment ? { }
+    }: (
+
+      mkIf serviceOptions.enable {
+        systemd.services."hdfs-${toLower name}" = {
+          inherit description preStart environment;
+          wantedBy = [ "multi-user.target" ];
+          inherit (serviceOptions) restartIfChanged;
+          serviceConfig = {
+            inherit User;
+            SyslogIdentifier = "hdfs-${toLower name}";
+            ExecStart = "${cfg.package}/bin/hdfs --config ${hadoopConf} ${toLower name}";
+            Restart = "always";
+          };
+        };
+
+        networking.firewall.allowedTCPPorts = mkIf
+          ((builtins.hasAttr "openFirewall" serviceOptions) && serviceOptions.openFirewall)
+          allowedTCPPorts;
+      }
+    );
+
 in
 {
   options.services.hadoop.hdfs = {
+
     namenode = hadoopServiceOption { serviceName = "HDFS NameNode"; } // {
       formatOnInit = mkOption {
         type = types.bool;
         default = false;
         description = ''
-          Format HDFS namenode on first start. This is useful for quickly spinning up ephemeral HDFS clusters with a single namenode.
-          For HA clusters, initialization involves multiple steps across multiple nodes. Follow this guide to initialize an HA cluster manually:
+          Format HDFS namenode on first start. This is useful for quickly spinning up
+          ephemeral HDFS clusters with a single namenode.
+          For HA clusters, initialization involves multiple steps across multiple nodes.
+          Follow this guide to initialize an HA cluster manually:
           <link xlink:href="https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-hdfs/HDFSHighAvailabilityWithQJM.html"/>
         '';
       };
     };
+
     datanode = hadoopServiceOption { serviceName = "HDFS DataNode"; };
+
     journalnode = hadoopServiceOption { serviceName = "HDFS JournalNode"; };
+
     zkfc = hadoopServiceOption {
       serviceName = "HDFS ZooKeeper failover controller";
       firewallOption = false;
     };
+
     httpfs = hadoopServiceOption { serviceName = "HDFS JournalNode"; } // {
       tempPath = mkOption {
         type = types.path;
@@ -49,118 +91,65 @@ in
         description = "HTTPFS_TEMP path used by HTTPFS";
       };
     };
+
   };
 
   config = mkMerge [
-    (mkIf cfg.hdfs.namenode.enable {
-      systemd.services.hdfs-namenode = {
-        description = "Hadoop HDFS NameNode";
-        wantedBy = [ "multi-user.target" ];
-        inherit (cfg.hdfs.namenode) restartIfChanged;
-
-        preStart = (mkIf cfg.hdfs.namenode.formatOnInit ''
-          ${cfg.package}/bin/hdfs --config ${hadoopConf} namenode -format -nonInteractive || true
-        '');
-
-        serviceConfig = {
-          User = "hdfs";
-          SyslogIdentifier = "hdfs-namenode";
-          ExecStart = "${cfg.package}/bin/hdfs --config ${hadoopConf} namenode";
-          Restart = "always";
-        };
-      };
-
-      networking.firewall.allowedTCPPorts = (mkIf cfg.hdfs.namenode.openFirewall [
+    (hadoopServiceConfig {
+      name = "NameNode";
+      allowedTCPPorts = [
         9870 # namenode.http-address
         8020 # namenode.rpc-address
         8022 # namenode. servicerpc-address
-      ]);
+      ];
+      preStart = (mkIf cfg.hdfs.namenode.formatOnInit
+        "${cfg.package}/bin/hdfs --config ${hadoopConf} namenode -format -nonInteractive || true"
+      );
     })
-    (mkIf cfg.hdfs.datanode.enable {
-      systemd.services.hdfs-datanode = {
-        description = "Hadoop HDFS DataNode";
-        wantedBy = [ "multi-user.target" ];
-        inherit (cfg.hdfs.datanode) restartIfChanged;
 
-        serviceConfig = {
-          User = "hdfs";
-          SyslogIdentifier = "hdfs-datanode";
-          ExecStart = "${cfg.package}/bin/hdfs --config ${hadoopConf} datanode";
-          Restart = "always";
-        };
-      };
-
-      networking.firewall.allowedTCPPorts = (mkIf cfg.hdfs.datanode.openFirewall [
+    (hadoopServiceConfig {
+      name = "DataNode";
+      allowedTCPPorts = [
         9864 # datanode.http.address
         9866 # datanode.address
         9867 # datanode.ipc.address
-      ]);
+      ];
     })
-    (mkIf cfg.hdfs.journalnode.enable {
-      systemd.services.hdfs-journalnode = {
-        description = "Hadoop HDFS JournalNode";
-        wantedBy = [ "multi-user.target" ];
-        inherit (cfg.hdfs.journalnode) restartIfChanged;
 
-        serviceConfig = {
-          User = "hdfs";
-          SyslogIdentifier = "hdfs-journalnode";
-          ExecStart = "${cfg.package}/bin/hdfs --config ${hadoopConf} journalnode";
-          Restart = "always";
-        };
-      };
-
-      networking.firewall.allowedTCPPorts = (mkIf cfg.hdfs.journalnode.openFirewall [
+    (hadoopServiceConfig {
+      name = "JournalNode";
+      allowedTCPPorts = [
         8480 # dfs.journalnode.http-address
         8485 # dfs.journalnode.rpc-address
-      ]);
+      ];
     })
-    (mkIf cfg.hdfs.zkfc.enable {
-      systemd.services.hdfs-zkfc = {
-        description = "Hadoop HDFS ZooKeeper failover controller";
-        wantedBy = [ "multi-user.target" ];
-        inherit (cfg.hdfs.zkfc) restartIfChanged;
 
-        serviceConfig = {
-          User = "hdfs";
-          SyslogIdentifier = "hdfs-zkfc";
-          ExecStart = "${cfg.package}/bin/hdfs --config ${hadoopConf} zkfc";
-          Restart = "always";
-        };
-      };
+    (hadoopServiceConfig {
+      name = "zkfc";
+      description = "Hadoop HDFS ZooKeeper failover controller";
     })
-    (mkIf cfg.hdfs.httpfs.enable {
-      systemd.services.hdfs-httpfs = {
-        description = "Hadoop httpfs";
-        wantedBy = [ "multi-user.target" ];
-        inherit (cfg.hdfs.httpfs) restartIfChanged;
 
-        environment.HTTPFS_TEMP = cfg.hdfs.httpfs.tempPath;
-
-        preStart = ''
-          mkdir -p $HTTPFS_TEMP
-        '';
-
-        serviceConfig = {
-          User = "httpfs";
-          SyslogIdentifier = "hdfs-httpfs";
-          ExecStart = "${cfg.package}/bin/hdfs --config ${hadoopConf} httpfs";
-          Restart = "always";
-        };
-      };
-      networking.firewall.allowedTCPPorts = (mkIf cfg.hdfs.httpfs.openFirewall [
+    (hadoopServiceConfig {
+      name = "HTTPFS";
+      environment.HTTPFS_TEMP = cfg.hdfs.httpfs.tempPath;
+      preStart = "mkdir -p $HTTPFS_TEMP";
+      User = "httpfs";
+      allowedTCPPorts = [
         14000 # httpfs.http.port
-      ]);
+      ];
     })
-    (mkIf (
+
+    (mkIf
+      (
         cfg.hdfs.namenode.enable || cfg.hdfs.datanode.enable || cfg.hdfs.journalnode.enable || cfg.hdfs.zkfc.enable
-    ) {
-      users.users.hdfs = {
-        description = "Hadoop HDFS user";
-        group = "hadoop";
-        uid = config.ids.uids.hdfs;
-      };
-    })
+      )
+      {
+        users.users.hdfs = {
+          description = "Hadoop HDFS user";
+          group = "hadoop";
+          uid = config.ids.uids.hdfs;
+        };
+      })
     (mkIf cfg.hdfs.httpfs.enable {
       users.users.httpfs = {
         description = "Hadoop HTTPFS user";
