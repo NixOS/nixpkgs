@@ -1031,6 +1031,7 @@
   ./services/web-apps/plausible.nix
   ./services/web-apps/pgpkeyserver-lite.nix
   ./services/web-apps/powerdns-admin.nix
+  ./services/web-apps/prosody-filer.nix
   ./services/web-apps/matomo.nix
   ./services/web-apps/openwebrx.nix
   ./services/web-apps/restya-board.nix

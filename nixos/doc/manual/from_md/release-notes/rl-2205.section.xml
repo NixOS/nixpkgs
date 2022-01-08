@@ -135,6 +135,13 @@
           <link linkend="opt-services.baget.enable">services.baget</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/ThomasLeister/prosody-filer">prosody-filer</link>,
+          a server for handling XMPP HTTP Upload requests. Available at
+          <link linkend="opt-services.prosody-filer.enable">services.prosody-filer</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.05-incompatibilities">
