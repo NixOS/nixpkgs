@@ -18,14 +18,11 @@
 , withAlsa ? false, alsa-lib
 , withOss ? false
 , withFlite ? true, flite
-# , withFestival ? false, festival-freebsoft-utils
 , withEspeak ? true, espeak, sonic, pcaudiolib
 , withPico ? true, svox
-# , withIvona ? false, libdumbtts
 }:
 
 let
-  inherit (lib) optional optionals;
   inherit (python3Packages) python pyxdg wrapPython;
 in stdenv.mkDerivation rec {
   pname = "speech-dispatcher";
@@ -61,33 +58,37 @@ in stdenv.mkDerivation rec {
     libpulseaudio
     alsa-lib
     python
-  ] ++ optionals withEspeak [
+  ] ++ lib.optionals withEspeak [
     espeak
     sonic
     pcaudiolib
-  ] ++ optional withFlite flite
-    ++ optional withPico svox
-    # TODO: add flint/festival support with festival-freebsoft-utils package
-    # ++ optional withFestival festival-freebsoft-utils
-    # TODO: add Ivona support with libdumbtts package
-    # ++ optional withIvona libdumbtts
-  ;
+  ] ++ lib.optional withFlite [
+    flite
+  ] ++ lib.optional withPico [
+    svox
+  ];
 
-  pythonPath = [ pyxdg ];
+  pythonPath = [
+    pyxdg
+  ];
 
   configureFlags = [
     # Audio method falls back from left to right.
     "--with-default-audio-method=\"libao,pulse,alsa,oss\""
     "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
-  ] ++ optional withPulse "--with-pulse"
-    ++ optional withAlsa "--with-alsa"
-    ++ optional withLibao "--with-libao"
-    ++ optional withOss "--with-oss"
-    ++ optional withEspeak "--with-espeak-ng"
-    ++ optional withPico "--with-pico"
-    # ++ optional withFestival "--with-flint"
-    # ++ optional withIvona "--with-ivona"
-  ;
+  ] ++ lib.optional withPulse [
+  "--with-pulse"
+  ] ++ lib.optional withAlsa [
+    "--with-alsa"
+  ] ++ lib.optional withLibao [
+    "--with-libao"
+  ] ++ lib.optional withOss [
+    "--with-oss"
+  ] ++ lib.optional withEspeak [
+    "--with-espeak-ng"
+  ] ++ lib.optional withPico [
+    "--with-pico"
+  ];
 
   postPatch = ''
     substituteInPlace src/modules/pico.c --replace "/usr/share/pico/lang" "${svox}/share/pico/lang"
