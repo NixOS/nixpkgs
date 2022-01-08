@@ -64,7 +64,7 @@ int main(int argc, char* argv[]) {
       return 1;
     }
 
-    std::vector<uint8_t> key;
+    std::vector<std::byte> key;
     std::unique_ptr<OTP> otp;
     // open otp
     try {
@@ -108,9 +108,9 @@ int main(int argc, char* argv[]) {
       std::cerr << "Error: Didn't find file " << vm["inject-path"].as<std::string>() << " in wfs" << std::endl;
       return 1;
     }
-    if (file_size > file->GetSizeOnDisk()) {
+    if (file_size > file->SizeOnDisk()) {
       std::cerr << "Error: File to inject too big (wanted size: " << file_size
-                << " bytes, available size: " << file->GetSizeOnDisk() << ")" << std::endl;
+                << " bytes, available size: " << file->SizeOnDisk() << ")" << std::endl;
       return 1;
     }
     File::stream stream(file);
@@ -128,7 +128,7 @@ int main(int argc, char* argv[]) {
     }
     input_file.close();
     stream.close();
-    if (file_size < file->GetSize()) {
+    if (file_size < file->Size()) {
       file->Resize(file_size);
     }
     std::cout << "Done!" << std::endl;

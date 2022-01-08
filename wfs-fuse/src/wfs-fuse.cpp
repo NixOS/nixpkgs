@@ -26,7 +26,7 @@ static int wfs_getattr(const char* path, struct stat* stbuf) {
     return -ENOENT;
   if (item->IsDirectory()) {
     stbuf->st_mode = S_IFDIR | 0755;
-    stbuf->st_nlink = 2 + std::dynamic_pointer_cast<Directory>(item)->GetItemsCount();
+    stbuf->st_nlink = 2 + std::dynamic_pointer_cast<Directory>(item)->Size();
   } else if (item->IsLink()) {
     stbuf->st_mode = S_IFLNK | 0777;
     stbuf->st_nlink = 1;
@@ -34,7 +34,7 @@ static int wfs_getattr(const char* path, struct stat* stbuf) {
   } else if (item->IsFile()) {
     stbuf->st_mode = S_IFREG | 0444;
     stbuf->st_nlink = 1;
-    stbuf->st_size = std::dynamic_pointer_cast<File>(item)->GetSize();
+    stbuf->st_size = std::dynamic_pointer_cast<File>(item)->Size();
   } else {
     // Should not happen
     return -ENOENT;
@@ -194,7 +194,7 @@ int main(int argc, char* argv[]) {
   }
 
   try {
-    std::vector<uint8_t> key;
+    std::vector<std::byte> key;
     std::unique_ptr<OTP> otp;
     // open otp
     try {

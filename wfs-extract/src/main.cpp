@@ -35,7 +35,7 @@ void dumpdir(const boost::filesystem::path& target,
       else if (item->IsFile()) {
         auto file = std::dynamic_pointer_cast<File>(item);
         std::ofstream output_file((target / npath).string(), std::ios::binary | std::ios::out);
-        size_t to_read = file->GetSize();
+        size_t to_read = file->Size();
         File::stream stream(file);
         std::array<char, 0x2000> data;
         while (to_read > 0) {
@@ -102,7 +102,7 @@ int main(int argc, char* argv[]) {
       return 1;
     }
 
-    std::vector<uint8_t> key;
+    std::vector<std::byte> key;
     std::unique_ptr<OTP> otp;
     // open otp
     try {
