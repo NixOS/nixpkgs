@@ -916,6 +916,6 @@ in {
 
   meta = {
     maintainers = lib.teams.acme.members;
-    doc = ./acme.xml;
+    doc = ./doc.xml;
   };
 }

@@ -226,7 +226,7 @@
   ./programs/zsh/zsh-autosuggestions.nix
   ./programs/zsh/zsh-syntax-highlighting.nix
   ./rename.nix
-  ./security/acme.nix
+  ./security/acme
   ./security/apparmor.nix
   ./security/audit.nix
   ./security/auditd.nix
