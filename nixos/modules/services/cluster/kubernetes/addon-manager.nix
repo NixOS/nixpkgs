@@ -167,4 +167,5 @@ in
     };
   };
 
+  meta.buildDocsInSandbox = false;
 }

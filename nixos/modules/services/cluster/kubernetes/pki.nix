@@ -1,11 +1,10 @@
-{ config, options, lib, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
 let
   top = config.services.kubernetes;
   cfg = top.pki;
-  klib = options.services.kubernetes.lib;
 
   csrCA = pkgs.writeText "kube-pki-cacert-csr.json" (builtins.toJSON {
     key = {
@@ -30,7 +29,7 @@ let
   cfsslAPITokenLength = 32;
 
   clusterAdminKubeconfig = with cfg.certs.clusterAdmin;
-    klib.mkKubeConfig "cluster-admin" {
+    top.lib.mkKubeConfig "cluster-admin" {
         server = top.apiserverAddress;
         certFile = cert;
         keyFile = key;
@@ -251,7 +250,7 @@ in
       # - it would be better with a more Nix-oriented way of managing addons
       systemd.services.kube-addon-manager = mkIf top.addonManager.enable (mkMerge [{
         environment.KUBECONFIG = with cfg.certs.addonManager;
-          klib.mkKubeConfig "addon-manager" {
+          top.lib.mkKubeConfig "addon-manager" {
             server = top.apiserverAddress;
             certFile = cert;
             keyFile = key;
@@ -344,7 +343,7 @@ in
       '';
 
       services.flannel = with cfg.certs.flannelClient; {
-        kubeconfig = klib.mkKubeConfig "flannel" {
+        kubeconfig = top.lib.mkKubeConfig "flannel" {
           server = top.apiserverAddress;
           certFile = cert;
           keyFile = key;
@@ -402,4 +401,6 @@ in
         };
       };
     });
+
+  meta.buildDocsInSandbox = false;
 }
