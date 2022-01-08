@@ -42,7 +42,7 @@ lib.mapAttrs mk (lib.importJSON ./srcs-generated.json)
       rev = "v${branchName}-lts";
     in
     {
-      version = "${branchName}-${lib.substring 0 7 rev}";
+      version = branchName;
 
       src = fetchgit {
         url = "https://github.com/qt/qtwebengine.git";

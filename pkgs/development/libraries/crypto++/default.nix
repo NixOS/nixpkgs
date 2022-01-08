@@ -5,30 +5,22 @@
 
 stdenv.mkDerivation rec {
   pname = "crypto++";
-  version = "8.4.0";
+  version = "8.6.0";
   underscoredVersion = lib.strings.replaceStrings ["."] ["_"] version;
 
   src = fetchFromGitHub {
     owner = "weidai11";
     repo = "cryptopp";
     rev = "CRYPTOPP_${underscoredVersion}";
-    sha256 = "1gwn8yh1mh41hkh6sgnhb9c3ygrdazd7645msl20i0zdvcp7f5w3";
+    hash = "sha256-a3TYaK34WvKEXN7LKAfGwQ3ZL6a3k/zMZyyVfnkQqO4=";
   };
 
   outputs = [ "out" "dev" ];
 
   postPatch = ''
     substituteInPlace GNUmakefile \
-        --replace "AR = libtool" "AR = ar" \
-        --replace "ARFLAGS = -static -o" "ARFLAGS = -cru"
-
-    # See https://github.com/weidai11/cryptopp/issues/1011
-    substituteInPlace GNUmakefile \
-      --replace "ZOPT = -O0" "ZOPT ="
-  '';
-
-  preConfigure = ''
-    sh TestScripts/configure.sh
+      --replace "AR = libtool" "AR = ar" \
+      --replace "ARFLAGS = -static -o" "ARFLAGS = -cru"
   '';
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
@@ -37,10 +29,11 @@ stdenv.mkDerivation rec {
     ++ lib.optional enableShared "shared"
     ++ [ "libcryptopp.pc" ];
   enableParallelBuilding = true;
+  hardeningDisable = [ "fortify" ];
 
   doCheck = true;
 
-  # built for checks but we don't install static lib into the nix store
+  # always built for checks but install static lib only when necessary
   preInstall = lib.optionalString (!enableStatic) "rm libcryptopp.a";
 
   installTargets = [ "install-lib" ];

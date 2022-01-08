@@ -1,19 +1,24 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config
-, libelf, zlib
+{ fetchFromGitHub
 , fetchpatch
+, libelf
+, pkg-config
+, stdenv
+, zlib
+, lib
+, nixosTests
 }:
 
 with builtins;
 
 stdenv.mkDerivation rec {
   pname = "libbpf";
-  version = "0.5.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
-    owner  = "libbpf";
-    repo   = "libbpf";
-    rev    = "v${version}";
-    sha256 = "sha256-L23Ba+slJW/ALj8AepwByrrHgYMY5/Jh+AoD0p4qryI=";
+    owner = "libbpf";
+    repo = "libbpf";
+    rev = "v${version}";
+    sha256 = "sha256-/MLPflnfooe7Wjy8M3CTowAi5oYpscruSkDsaVzhmYQ=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -23,6 +28,15 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   makeFlags = [ "PREFIX=$(out)" ];
 
+  passthru.tests = {
+    bpf = nixosTests.bpf;
+  };
+
+  postInstall = ''
+    # install linux's libbpf-compatible linux/btf.h
+    install -Dm444 ../include/uapi/linux/btf.h -t $out/include/linux
+  '';
+
   # FIXME: Multi-output requires some fixes to the way the pkg-config file is
   # constructed (it gets put in $out instead of $dev for some reason, with
   # improper paths embedded). Don't enable it for now.
@@ -31,9 +45,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Upstream mirror of libbpf";
-    homepage    = "https://github.com/libbpf/libbpf";
-    license     = with licenses; [ lgpl21 /* or */ bsd2 ];
-    maintainers = with maintainers; [ thoughtpolice vcunat ];
-    platforms   = platforms.linux;
+    homepage = "https://github.com/libbpf/libbpf";
+    license = with licenses; [ lgpl21 /* or */ bsd2 ];
+    maintainers = with maintainers; [ thoughtpolice vcunat saschagrunert martinetd ];
+    platforms = platforms.linux;
   };
 }

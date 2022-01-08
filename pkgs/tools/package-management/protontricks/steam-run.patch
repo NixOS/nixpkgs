@@ -1,5 +1,5 @@
 diff --git a/src/protontricks/cli/main.py b/src/protontricks/cli/main.py
-index d811cb7..a376a34 100755
+index bd651aa..2b82aea 100755
 --- a/src/protontricks/cli/main.py
 +++ b/src/protontricks/cli/main.py
 @@ -14,8 +14,8 @@ import sys
@@ -57,9 +57,9 @@ index d811cb7..a376a34 100755
              use_steam_runtime=use_steam_runtime,
 -            legacy_steam_runtime_path=legacy_steam_runtime_path,
              use_bwrap=use_bwrap,
-             command=[str(winetricks_path)] + args.winetricks_command)
-     elif args.command:
-@@ -296,7 +285,6 @@ def main(args=None):
+             command=[str(winetricks_path)] + args.winetricks_command
+         )
+@@ -297,7 +286,6 @@ def main(args=None):
              steam_app=steam_app,
              command=args.command,
              use_steam_runtime=use_steam_runtime,
@@ -121,7 +121,7 @@ index be5322b..552f894 100644
  APPINFO_STRUCT_SECTION = "<LLLLQ20sL"
  
 diff --git a/src/protontricks/util.py b/src/protontricks/util.py
-index 5252d6c..f16dfec 100644
+index f2482fc..f9c1c33 100644
 --- a/src/protontricks/util.py
 +++ b/src/protontricks/util.py
 @@ -5,15 +5,14 @@ import shutil
@@ -243,7 +243,7 @@ index 5252d6c..f16dfec 100644
          use_bwrap=True,
          **kwargs):
      """Run an arbitrary command with the correct environment variables
-@@ -351,7 +338,7 @@ def run_command(
+@@ -353,7 +340,7 @@ def run_command(
              os.environ["STEAM_RUNTIME_PATH"] = \
                  str(proton_app.required_tool_app.install_path)
              os.environ["PROTON_LD_LIBRARY_PATH"] = \
@@ -252,7 +252,7 @@ index 5252d6c..f16dfec 100644
  
              runtime_name = proton_app.required_tool_app.name
              logger.info(
-@@ -372,11 +359,8 @@ def run_command(
+@@ -374,11 +361,8 @@ def run_command(
                      "Current Steam Runtime not recognized by Protontricks."
                  )
          else:
@@ -265,7 +265,7 @@ index 5252d6c..f16dfec 100644
  
          # When Steam Runtime is enabled, create a set of helper scripts
          # that load the underlying Proton Wine executables with Steam Runtime
-@@ -384,8 +368,6 @@ def run_command(
+@@ -386,8 +370,6 @@ def run_command(
          wine_bin_dir = create_wine_bin_dir(
              proton_app=proton_app, use_bwrap=use_bwrap
          )
@@ -275,7 +275,7 @@ index 5252d6c..f16dfec 100644
          os.environ["PATH"] = "".join([
              str(wine_bin_dir), os.pathsep, os.environ["PATH"]
 diff --git a/tests/cli/test_main.py b/tests/cli/test_main.py
-index f714f2c..b03fac1 100644
+index 605ae26..4bf7e80 100644
 --- a/tests/cli/test_main.py
 +++ b/tests/cli/test_main.py
 @@ -116,15 +116,10 @@ class TestCLIRun:
@@ -324,7 +324,7 @@ index f714f2c..b03fac1 100644
          assert command.env["STEAM_RUNTIME_PATH"] == \
              str(steam_runtime_soldier.install_path)
  
-@@ -335,7 +326,6 @@ class TestCLIRun:
+@@ -344,7 +335,6 @@ class TestCLIRun:
  
          # Also ensure log messages are included in the error message
          assert b"Found Steam directory at" in message
@@ -332,7 +332,7 @@ index f714f2c..b03fac1 100644
  
      def test_run_gui_provider_not_found(self, cli, home_dir, steam_app_factory):
          """
-@@ -349,20 +339,6 @@ class TestCLIRun:
+@@ -358,20 +348,6 @@ class TestCLIRun:
  
          assert "YAD or Zenity is not installed" in result
  
@@ -345,11 +345,11 @@ index f714f2c..b03fac1 100644
 -        steam_app_factory(name="Fake game 1", appid=10)
 -        result = cli(
 -            ["10", "winecfg"], env={"STEAM_RUNTIME": "invalid/path"},
--            expect_exit=True
+-            expect_returncode=1
 -        )
 -
 -        assert "Steam Runtime was enabled but couldn't be found" in result
 -
      def test_run_proton_not_found(self, cli, steam_dir, steam_app_factory):
          steam_app_factory(name="Fake game 1", appid=10)
-         result = cli(["10", "winecfg"], expect_exit=True)
+         result = cli(["10", "winecfg"], expect_returncode=1)

@@ -71,6 +71,10 @@ in
     package = mkOption {
       type = types.package;
       default = crioPackage;
+      defaultText = literalDocBook ''
+        <literal>pkgs.cri-o</literal> built with
+        <literal>config.${opt.extraPackages}</literal>.
+      '';
       internal = true;
       description = ''
         The final CRI-O package (including extra packages).

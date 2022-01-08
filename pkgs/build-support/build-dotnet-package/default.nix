@@ -1,7 +1,7 @@
 { stdenv, lib, makeWrapper, pkg-config, mono, dotnetbuildhelpers }:
 
 attrsOrig @
-{ baseName
+{ pname
 , version
 , nativeBuildInputs ? []
 , xBuildFiles ? [ ]
@@ -17,7 +17,7 @@ attrsOrig @
     arrayToShell = (a: toString (map (lib.escape (lib.stringToCharacters "\\ ';$`()|<>\t") ) a));
 
     attrs = {
-      name = "${baseName}-${version}";
+      inherit pname version;
 
       nativeBuildInputs = [
         pkg-config
@@ -64,7 +64,7 @@ attrsOrig @
       installPhase = ''
         runHook preInstall
 
-        target="$out/lib/dotnet/${baseName}"
+        target="$out/lib/dotnet/${pname}"
         mkdir -p "$target"
 
         cp -rv ${arrayToShell outputFiles} "''${outputFilesArray[@]}" "$target"

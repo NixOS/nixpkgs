@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libspng";
-  version = "0.7.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "randy408";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0zk0w09is4g7gysax4h0f4xj5f40vm6ipc1wi98ymzban89cjjnz";
+    sha256 = "sha256-JBNFYmmd1UnoIfV6iWeDIw/kgvl8AArxfHK+TKjZ9rk=";
   };
 
   doCheck = true;

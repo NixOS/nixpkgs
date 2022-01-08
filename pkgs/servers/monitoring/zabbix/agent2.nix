@@ -33,6 +33,7 @@ import ./versions.nix ({ version, sha256 }:
       ./configure \
         --prefix=${placeholder "out"} \
         --enable-agent2 \
+        --enable-ipv6 \
         --with-iconv \
         --with-libpcre \
         --with-openssl=${openssl.dev}

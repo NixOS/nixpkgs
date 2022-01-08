@@ -5,11 +5,15 @@
 , karton-core
 , mistune
 , prometheus-client
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "karton-dashboard";
   version = "1.2.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "CERT-Polska";
@@ -28,7 +32,7 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace requirements.txt \
       --replace "Flask==1.1.1" "Flask" \
-      --replace "prometheus-client==0.9.0" "prometheus-client"
+      --replace "prometheus_client==0.11.0" "prometheus_client"
   '';
 
   # Project has no tests. pythonImportsCheck requires MinIO configuration

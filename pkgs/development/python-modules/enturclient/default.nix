@@ -11,6 +11,7 @@ buildPythonPackage rec {
   pname = "enturclient";
   version = "0.2.2";
   disabled = pythonOlder "3.8";
+
   format = "pyproject";
 
   src = fetchFromGitHub {
@@ -29,10 +30,17 @@ buildPythonPackage rec {
     async-timeout
   ];
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'async_timeout = "^3.0.1"' 'async_timeout = ">=3.0.1"'
+  '';
+
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "enturclient" ];
+  pythonImportsCheck = [
+    "enturclient"
+  ];
 
   meta = with lib; {
     description = "Python library for interacting with the Entur.org API";

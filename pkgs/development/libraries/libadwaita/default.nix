@@ -5,7 +5,7 @@
 , gi-docgen
 , gtk-doc
 , libxml2
-, meson
+, meson_0_60
 , ninja
 , pkg-config
 , sassc
@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libadwaita";
-  version = "1.0.0.alpha.3";
+  version = "1.0.0.alpha.4";
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "devdoc"; # demo app
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     owner = "GNOME";
     repo = "libadwaita";
     rev = version;
-    sha256 = "sha256-4ED2m8hZMWbu5sFbkH0W6q05+cYCCkx+ubeDqg3W3a0=";
+    sha256 = "sha256-3aVeBaKSl6SaPQLodsyJHwnNOlXlWfIaLnbbl3+mlDA=";
   };
 
   nativeBuildInputs = [
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     gi-docgen
     gtk-doc
     libxml2 # for xmllint
-    meson
+    meson_0_60
     ninja
     pkg-config
     sassc

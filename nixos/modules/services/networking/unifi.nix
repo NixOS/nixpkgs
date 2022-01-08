@@ -1,4 +1,4 @@
-{ config, lib, pkgs, utils, ... }:
+{ config, options, lib, pkgs, utils, ... }:
 with lib;
 let
   cfg = config.services.unifi;
@@ -49,7 +49,7 @@ in
       '';
     };
 
-    services.unifi.openPorts = mkOption {
+    services.unifi.openFirewall = mkOption {
       type = types.bool;
       default = true;
       description = ''
@@ -85,6 +85,10 @@ in
 
   config = mkIf cfg.enable {
 
+    warnings = optional
+      (options.services.unifi.openFirewall.highestPrio >= (mkOptionDefault null).priority)
+      "The current services.unifi.openFirewall = true default is deprecated and will change to false in 22.11. Set it explicitly to silence this warning.";
+
     users.users.unifi = {
       isSystemUser = true;
       group = "unifi";
@@ -93,7 +97,7 @@ in
     };
     users.groups.unifi = {};
 
-    networking.firewall = mkIf cfg.openPorts {
+    networking.firewall = mkIf cfg.openFirewall {
       # https://help.ubnt.com/hc/en-us/articles/218506997
       allowedTCPPorts = [
         8080  # Port for UAP to inform controller.
@@ -191,6 +195,7 @@ in
   };
   imports = [
     (mkRemovedOptionModule [ "services" "unifi" "dataDir" ] "You should move contents of dataDir to /var/lib/unifi/data" )
+    (mkRenamedOptionModule [ "services" "unifi" "openPorts" ] [ "services" "unifi" "openFirewall" ])
   ];
 
   meta.maintainers = with lib.maintainers; [ erictapen pennae ];

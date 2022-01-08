@@ -75,6 +75,7 @@ let
       kweather = callPackage ./kweather.nix {};
       plasma-dialer = callPackage ./plasma-dialer.nix {};
       plasma-phonebook = callPackage ./plasma-phonebook.nix {};
+      plasma-settings = callPackage ./plasma-settings.nix {};
       spacebar = callPackage ./spacebar.nix {};
     };
 

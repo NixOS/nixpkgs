@@ -16,45 +16,41 @@
 
 let
   libdeltachat' = libdeltachat.overrideAttrs (old: rec {
-    version = "1.60.0";
+    version = "1.70.0";
     src = fetchFromGitHub {
       owner = "deltachat";
       repo = "deltachat-core-rust";
       rev = version;
-      sha256 = "1agm5xyaib4ynmw4mhgmkhh4lnxs91wv0q9i1zfihv2vkckfm2s2";
+      hash = "sha256-702XhFWvFG+g++3X97sy6C5DMNWogv1Xbr8QPR8QyLo=";
     };
     cargoDeps = rustPlatform.fetchCargoTarball {
       inherit src;
       name = "${old.pname}-${version}";
-      sha256 = "09d3mw2hb1gmqg7smaqwnfm7izw40znl0h1dz7s2imms2cnkjws1";
+      hash = "sha256-MiSGJMXe8vouv4XEHXq274FHEvBMtd7IX6DyNJIWYeU=";
     };
-    patches = [
-      # https://github.com/deltachat/deltachat-core-rust/pull/2589
-      (fetchpatch {
-        url = "https://github.com/deltachat/deltachat-core-rust/commit/408467e85d04fbbfd6bed5908d84d9e995943487.patch";
-        sha256 = "1j2ywaazglgl6370js34acrg0wrh0b7krqg05dfjf65n527lzn59";
-      })
-      ./no-static-lib.patch
-      # https://github.com/deltachat/deltachat-core-rust/pull/2660
-      (fetchpatch {
-        url = "https://github.com/deltachat/deltachat-core-rust/commit/8fb5e038a97d8ae68564c885d61b93127a68366d.patch";
-        sha256 = "088pzfrrkgfi4646dc72404s3kykcpni7hgkppalwlzg0p4is41x";
-      })
-    ];
   });
   electronExec = if stdenv.isDarwin then
     "${electron}/Applications/Electron.app/Contents/MacOS/Electron"
   else
     "${electron}/bin/electron";
+  esbuild' = esbuild.overrideAttrs (old: rec {
+    version = "0.12.29";
+    src = fetchFromGitHub {
+      owner = "evanw";
+      repo = "esbuild";
+      rev = "v${version}";
+      hash = "sha256-oU++9E3StUoyrMVRMZz8/1ntgPI62M1NoNz9sH/N5Bg=";
+    };
+  });
 in nodePackages.deltachat-desktop.override rec {
   pname = "deltachat-desktop";
-  version = "1.22.2";
+  version = "1.26.0";
 
   src = fetchFromGitHub {
     owner = "deltachat";
     repo = "deltachat-desktop";
     rev = "v${version}";
-    sha256 = "0in6w2vl4ypgjb9gfhyh77vg05ni5p3z24lah7wvvhywcpv1jp2n";
+    hash = "sha256-IDyGV2+/+wHp5N4G10y5OHvw2yoyVxWx394xszIYoj4=";
   };
 
   nativeBuildInputs = [
@@ -72,6 +68,7 @@ in nodePackages.deltachat-desktop.override rec {
   ];
 
   ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+  ESBUILD_BINARY_PATH = "${esbuild'}/bin/esbuild";
   USE_SYSTEM_LIBDELTACHAT = "true";
   VERSION_INFO_GIT_REF = src.rev;
 

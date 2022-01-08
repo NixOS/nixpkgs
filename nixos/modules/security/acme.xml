@@ -7,8 +7,9 @@
  <para>
   NixOS supports automatic domain validation &amp; certificate retrieval and
   renewal using the ACME protocol. Any provider can be used, but by default
-  NixOS uses Let's Encrypt. The alternative ACME client <literal>lego</literal>
-  is used under the hood.
+  NixOS uses Let's Encrypt. The alternative ACME client
+  <link xlink:href="https://go-acme.github.io/lego/">lego</link> is used under
+  the hood.
  </para>
  <para>
   Automatic cert validation and configuration for Apache and Nginx virtual
@@ -29,7 +30,7 @@
   <para>
    You must also set an email address to be used when creating accounts with
    Let's Encrypt. You can set this for all certs with
-   <literal><xref linkend="opt-security.acme.email" /></literal>
+   <literal><xref linkend="opt-security.acme.defaults.email" /></literal>
    and/or on a per-cert basis with
    <literal><xref linkend="opt-security.acme.certs._name_.email" /></literal>.
    This address is only used for registration and renewal reminders,
@@ -38,7 +39,7 @@
 
   <para>
    Alternatively, you can use a different ACME server by changing the
-   <literal><xref linkend="opt-security.acme.server" /></literal> option
+   <literal><xref linkend="opt-security.acme.defaults.server" /></literal> option
    to a provider of your choosing, or just change the server for one cert with
    <literal><xref linkend="opt-security.acme.certs._name_.server" /></literal>.
   </para>
@@ -60,12 +61,12 @@
    = true;</literal> in a virtualHost config. We first create self-signed
    placeholder certificates in place of the real ACME certs. The placeholder
    certs are overwritten when the ACME certs arrive. For
-   <literal>foo.example.com</literal> the config would look like.
+   <literal>foo.example.com</literal> the config would look like this:
   </para>
 
 <programlisting>
 <xref linkend="opt-security.acme.acceptTerms" /> = true;
-<xref linkend="opt-security.acme.email" /> = "admin+acme@example.com";
+<xref linkend="opt-security.acme.defaults.email" /> = "admin+acme@example.com";
 services.nginx = {
   <link linkend="opt-services.nginx.enable">enable</link> = true;
   <link linkend="opt-services.nginx.virtualHosts">virtualHosts</link> = {
@@ -114,7 +115,7 @@ services.nginx = {
 
 <programlisting>
 <xref linkend="opt-security.acme.acceptTerms" /> = true;
-<xref linkend="opt-security.acme.email" /> = "admin+acme@example.com";
+<xref linkend="opt-security.acme.defaults.email" /> = "admin+acme@example.com";
 
 # /var/lib/acme/.challenges must be writable by the ACME user
 # and readable by the Nginx user. The easiest way to achieve
@@ -218,7 +219,7 @@ services.bind = {
 
 # Now we can configure ACME
 <xref linkend="opt-security.acme.acceptTerms" /> = true;
-<xref linkend="opt-security.acme.email" /> = "admin+acme@example.com";
+<xref linkend="opt-security.acme.defaults.email" /> = "admin+acme@example.com";
 <xref linkend="opt-security.acme.certs" />."example.com" = {
   <link linkend="opt-security.acme.certs._name_.domain">domain</link> = "*.example.com";
   <link linkend="opt-security.acme.certs._name_.dnsProvider">dnsProvider</link> = "rfc2136";
@@ -231,25 +232,39 @@ services.bind = {
   <para>
    The <filename>dnskeys.conf</filename> and <filename>certs.secret</filename>
    must be kept secure and thus you should not keep their contents in your
-   Nix config. Instead, generate them one time with these commands:
+   Nix config. Instead, generate them one time with a systemd service:
   </para>
 
 <programlisting>
-mkdir -p /var/lib/secrets
-tsig-keygen rfc2136key.example.com &gt; /var/lib/secrets/dnskeys.conf
-chown named:root /var/lib/secrets/dnskeys.conf
-chmod 400 /var/lib/secrets/dnskeys.conf
+systemd.services.dns-rfc2136-conf = {
+  requiredBy = ["acme-example.com.service", "bind.service"];
+  before = ["acme-example.com.service", "bind.service"];
+  unitConfig = {
+    ConditionPathExists = "!/var/lib/secrets/dnskeys.conf";
+  };
+  serviceConfig = {
+    Type = "oneshot";
+    UMask = 0077;
+  };
+  path = [ pkgs.bind ];
+  script = ''
+    mkdir -p /var/lib/secrets
+    tsig-keygen rfc2136key.example.com &gt; /var/lib/secrets/dnskeys.conf
+    chown named:root /var/lib/secrets/dnskeys.conf
+    chmod 400 /var/lib/secrets/dnskeys.conf
 
-# Copy the secret value from the dnskeys.conf, and put it in
-# RFC2136_TSIG_SECRET below
+    # Copy the secret value from the dnskeys.conf, and put it in
+    # RFC2136_TSIG_SECRET below
 
-cat &gt; /var/lib/secrets/certs.secret &lt;&lt; EOF
-RFC2136_NAMESERVER='127.0.0.1:53'
-RFC2136_TSIG_ALGORITHM='hmac-sha256.'
-RFC2136_TSIG_KEY='rfc2136key.example.com'
-RFC2136_TSIG_SECRET='your secret key'
-EOF
-chmod 400 /var/lib/secrets/certs.secret
+    cat &gt; /var/lib/secrets/certs.secret &lt;&lt; EOF
+    RFC2136_NAMESERVER='127.0.0.1:53'
+    RFC2136_TSIG_ALGORITHM='hmac-sha256.'
+    RFC2136_TSIG_KEY='rfc2136key.example.com'
+    RFC2136_TSIG_SECRET='your secret key'
+    EOF
+    chmod 400 /var/lib/secrets/certs.secret
+  '';
+};
 </programlisting>
 
   <para>
@@ -258,6 +273,106 @@ chmod 400 /var/lib/secrets/certs.secret
    journalctl -fu acme-example.com.service</literal> and watching its log output.
   </para>
  </section>
+
+ <section xml:id="module-security-acme-config-dns-with-vhosts">
+  <title>Using DNS validation with web server virtual hosts</title>
+
+  <para>
+   It is possible to use DNS-01 validation with all certificates,
+   including those automatically configured via the Nginx/Apache
+   <literal><link linkend="opt-services.nginx.virtualHosts._name_.enableACME">enableACME</link></literal>
+   option. This configuration pattern is fully
+   supported and part of the module's test suite for Nginx + Apache.
+  </para>
+
+  <para>
+   You must follow the guide above on configuring DNS-01 validation
+   first, however instead of setting the options for one certificate
+   (e.g. <xref linkend="opt-security.acme.certs._name_.dnsProvider" />)
+   you will set them as defaults
+   (e.g. <xref linkend="opt-security.acme.defaults.dnsProvider" />).
+  </para>
+
+<programlisting>
+# Configure ACME appropriately
+<xref linkend="opt-security.acme.acceptTerms" /> = true;
+<xref linkend="opt-security.acme.defaults.email" /> = "admin+acme@example.com";
+<xref linkend="opt-security.acme.defaults" /> = {
+  <link linkend="opt-security.acme.defaults.dnsProvider">dnsProvider</link> = "rfc2136";
+  <link linkend="opt-security.acme.defaults.credentialsFile">credentialsFile</link> = "/var/lib/secrets/certs.secret";
+  # We don't need to wait for propagation since this is a local DNS server
+  <link linkend="opt-security.acme.defaults.dnsPropagationCheck">dnsPropagationCheck</link> = false;
+};
+
+# For each virtual host you would like to use DNS-01 validation with,
+# set acmeRoot = null
+services.nginx = {
+  <link linkend="opt-services.nginx.enable">enable</link> = true;
+  <link linkend="opt-services.nginx.virtualHosts">virtualHosts</link> = {
+    "foo.example.com" = {
+      <link linkend="opt-services.nginx.virtualHosts._name_.enableACME">enableACME</link> = true;
+      <link linkend="opt-services.nginx.virtualHosts._name_.acmeRoot">acmeRoot</link> = null;
+    };
+  };
+}
+</programlisting>
+
+  <para>
+   And that's it! Next time your configuration is rebuilt, or when
+   you add a new virtualHost, it will be DNS-01 validated.
+  </para>
+ </section>
+
+ <section xml:id="module-security-acme-root-owned">
+  <title>Using ACME with services demanding root owned certificates</title>
+
+  <para>
+   Some services refuse to start if the configured certificate files
+   are not owned by root. PostgreSQL and OpenSMTPD are examples of these.
+   There is no way to change the user the ACME module uses (it will always be
+   <literal>acme</literal>), however you can use systemd's
+   <literal>LoadCredential</literal> feature to resolve this elegantly.
+   Below is an example configuration for OpenSMTPD, but this pattern
+   can be applied to any service.
+  </para>
+
+<programlisting>
+# Configure ACME however you like (DNS or HTTP validation), adding
+# the following configuration for the relevant certificate.
+# Note: You cannot use `systemctl reload` here as that would mean
+# the LoadCredential configuration below would be skipped and
+# the service would continue to use old certificates.
+security.acme.certs."mail.example.com".postRun = ''
+  systemctl restart opensmtpd
+'';
+
+# Now you must augment OpenSMTPD's systemd service to load
+# the certificate files.
+<link linkend="opt-systemd.services._name_.requires">systemd.services.opensmtpd.requires</link> = ["acme-finished-mail.example.com.target"];
+<link linkend="opt-systemd.services._name_.serviceConfig">systemd.services.opensmtpd.serviceConfig.LoadCredential</link> = let
+  certDir = config.security.acme.certs."mail.example.com".directory;
+in [
+  "cert.pem:${certDir}/cert.pem"
+  "key.pem:${certDir}/key.pem"
+];
+
+# Finally, configure OpenSMTPD to use these certs.
+services.opensmtpd = let
+  credsDir = "/run/credentials/opensmtpd.service";
+in {
+  enable = true;
+  setSendmail = false;
+  serverConfiguration = ''
+    pki mail.example.com cert "${credsDir}/cert.pem"
+    pki mail.example.com key "${credsDir}/key.pem"
+    listen on localhost tls pki mail.example.com
+    action act1 relay host smtp://127.0.0.1:10027
+    match for local action act1
+  '';
+};
+</programlisting>
+ </section>
+
  <section xml:id="module-security-acme-regenerate">
   <title>Regenerating certificates</title>
 

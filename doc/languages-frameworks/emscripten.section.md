@@ -15,12 +15,12 @@ Modes of use of `emscripten`:
 
    If you want to work with `emcc`, `emconfigure` and `emmake` as you are used to from Ubuntu and similar distributions you can use these commands:
 
-    * `nix-env -i emscripten`
+    * `nix-env -f "<nixpkgs>" -iA emscripten`
     * `nix-shell -p emscripten`
 
 * **Declarative usage**:
 
-    This mode is far more power full since this makes use of `nix` for dependency management of emscripten libraries and targets by using the `mkDerivation` which is implemented by `pkgs.emscriptenStdenv` and `pkgs.buildEmscriptenPackage`. The source for the packages is in `pkgs/top-level/emscripten-packages.nix` and the abstraction behind it in `pkgs/development/em-modules/generic/default.nix`.
+    This mode is far more power full since this makes use of `nix` for dependency management of emscripten libraries and targets by using the `mkDerivation` which is implemented by `pkgs.emscriptenStdenv` and `pkgs.buildEmscriptenPackage`. The source for the packages is in `pkgs/top-level/emscripten-packages.nix` and the abstraction behind it in `pkgs/development/em-modules/generic/default.nix`. From the root of the nixpkgs repository:
     * build and install all packages:
         * `nix-env -iA emscriptenPackages`
 

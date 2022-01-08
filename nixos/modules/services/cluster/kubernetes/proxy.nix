@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
   top = config.services.kubernetes;
+  otop = options.services.kubernetes;
   cfg = top.proxy;
 in
 {
@@ -31,12 +32,14 @@ in
     featureGates = mkOption {
       description = "List set of feature gates";
       default = top.featureGates;
+      defaultText = literalExpression "config.${otop.featureGates}";
       type = listOf str;
     };
 
     hostname = mkOption {
       description = "Kubernetes proxy hostname override.";
       default = config.networking.hostName;
+      defaultText = literalExpression "config.networking.hostName";
       type = str;
     };
 
@@ -94,4 +97,6 @@ in
 
     services.kubernetes.proxy.kubeconfig.server = mkDefault top.apiserverAddress;
   };
+
+  meta.buildDocsInSandbox = false;
 }

@@ -1,4 +1,4 @@
-{ lib, fetchurl, buildDunePackage
+{ lib, fetchurl, buildDunePackage, ocaml
 , dune-configurator
 , bos, ctypes, fmt, logs, rresult
 , mdx, alcotest, crowbar, junit_alcotest, ezjsonm
@@ -17,7 +17,9 @@ buildDunePackage rec {
 
   buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [ bos ctypes rresult ];
-  checkInputs = [ fmt logs mdx alcotest crowbar junit_alcotest ezjsonm ];
+  # crowbar is not available for OCaml < 4.08
+  doCheck = lib.versionAtLeast ocaml.version "4.08";
+  checkInputs = [ fmt logs mdx.bin alcotest crowbar junit_alcotest ezjsonm ];
 
   meta = {
     description = "Parse and generate YAML 1.1 files";

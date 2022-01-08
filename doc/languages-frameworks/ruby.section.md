@@ -201,6 +201,19 @@ $ nix-shell --run 'ruby -rpg -e "puts PG.library_version"'
 
 Of course for this use-case one could also use overlays since the configuration for `pg` depends on the `postgresql` alias, but for demonstration purposes this has to suffice.
 
+### Platform-specific gems
+
+Right now, bundix has some issues with pre-built, platform-specific gems: [bundix PR #68](https://github.com/nix-community/bundix/pull/68).
+Until this is solved, you can tell bundler to not use platform-specific gems and instead build them from source each time:
+- globally (will be set in `~/.config/.bundle/config`):
+```shell
+$ bundle config set force_ruby_platform true
+```
+- locally (will be set in `<project-root>/.bundle/config`):
+```shell
+$ bundle config set --local force_ruby_platform true
+```
+
 ### Adding a gem to the default gemset {#adding-a-gem-to-the-default-gemset}
 
 Now that you know how to get a working Ruby environment with Nix, it's time to go forward and start actually developing with Ruby. We will first have a look at how Ruby gems are packaged on Nix. Then, we will look at how you can use development mode with your code.

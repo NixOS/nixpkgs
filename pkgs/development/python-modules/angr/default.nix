@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , ailment
 , archinfo
 , buildPythonPackage
@@ -44,15 +45,17 @@ in
 
 buildPythonPackage rec {
   pname = "angr";
-  version = "9.0.10689";
+  version = "9.1.10913";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-UMPJZUtfcUTiL0Ha+p1M09yhLwaCuBLpam4KUgtYvnw=";
+    sha256 = "sha256-AZlqSalTOQh3QR959ZuanFuTZVKi9valKJ3snsquC/A=";
   };
+
+  setupPyBuildFlags = lib.optionals stdenv.isLinux [ "--plat-name" "linux" ];
 
   propagatedBuildInputs = [
     ailment

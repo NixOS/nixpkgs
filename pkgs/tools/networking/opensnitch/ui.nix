@@ -6,16 +6,19 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "opensnitch-ui";
-  version = "1.3.6";
+  version = "1.4.3";
 
   src = fetchFromGitHub {
     owner = "evilsocket";
     repo = "opensnitch";
     rev = "v${version}";
-    sha256 = "sha256-Cgo+bVQQeUZuYYhA1WSqlLyQQGAeXbbNno9LS7oNvhI=";
+    sha256 = "sha256-amtDSDJOyNSxmJICEqN5lKhGyfF5C6I0EWViB1EXW7A=";
   };
 
-  nativeBuildInputs = [ wrapQtAppsHook ];
+  nativeBuildInputs = [
+    python3Packages.pyqt5
+    wrapQtAppsHook
+  ];
 
   propagatedBuildInputs = with python3Packages; [
     grpcio-tools
@@ -25,12 +28,21 @@ python3Packages.buildPythonApplication rec {
     pyinotify
   ];
 
+  preBuild = ''
+    make -C ../proto ../ui/opensnitch/ui_pb2.py
+    pyrcc5 -o opensnitch/resources_rc.py opensnitch/res/resources.qrc
+  '';
+
   preConfigure = ''
     cd ui
   '';
 
   preCheck = ''
     export PYTHONPATH=opensnitch:$PYTHONPATH
+  '';
+
+  postInstall = ''
+    mv $out/lib/python3.9/site-packages/usr/* $out/
   '';
 
   dontWrapQtApps = true;

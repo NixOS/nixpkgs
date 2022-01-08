@@ -11,13 +11,13 @@ let
 
   unwrapped = pythonPackages.buildPythonPackage rec {
     pname = "qtile";
-    version = "0.18.1";
+    version = "0.19.0";
 
     src = fetchFromGitHub {
       owner = "qtile";
       repo = "qtile";
       rev = "v${version}";
-      sha256 = "0ln0fxarin9liy9n76zywmbr31xrjw8f7d3nr1mphci7wkc9bqmm";
+      sha256 = "BLHGVPMQd8O4h5TVx/F/klzSra+FZYogp22V6Yq04T0=";
     };
 
     postPatch = ''

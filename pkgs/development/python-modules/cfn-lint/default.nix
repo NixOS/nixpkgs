@@ -5,6 +5,7 @@
 , aws-sam-translator
 , importlib-metadata
 , importlib-resources
+, jschema-to-python
 , jsonpatch
 , jsonschema
 , junit-xml
@@ -12,6 +13,7 @@
 , pathlib2
 , pyyaml
 , requests
+, sarif-om
 , setuptools
 , six
 , mock
@@ -21,13 +23,13 @@
 
 buildPythonPackage rec {
   pname = "cfn-lint";
-  version = "0.54.2";
+  version = "0.56.2";
 
   src = fetchFromGitHub {
     owner = "aws-cloudformation";
     repo = "cfn-python-lint";
     rev = "v${version}";
-    sha256 = "04d5zyjnrl3b6cb2fxmbpii27mnq77wqsglfxfv2a1zj2p9xby0p";
+    sha256 = "0wpsj719r0p122qmi3nznzqnxqb0nx53isg9fma75894pvq2v5wc";
   };
 
   postPatch = ''
@@ -37,6 +39,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aws-sam-translator
+    jschema-to-python
     jsonpatch
     jsonschema
     junit-xml
@@ -44,6 +47,7 @@ buildPythonPackage rec {
     pathlib2
     pyyaml
     requests
+    sarif-om
     setuptools
     six
   ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata importlib-resources ];
@@ -70,6 +74,7 @@ buildPythonPackage rec {
     # Tests depend on network access (fails in getaddrinfo)
     "test_update_resource_specs_python_2"
     "test_update_resource_specs_python_3"
+    "test_sarif_formatter"
   ];
 
   pythonImportsCheck = [

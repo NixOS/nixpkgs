@@ -102,7 +102,7 @@ with lib;
     };
 
     fastcgiParams = mkOption {
-      type = types.attrsOf types.str;
+      type = types.attrsOf (types.either types.str types.path);
       default = {};
       description = ''
         FastCGI parameters to override.  Unlike in the Nginx

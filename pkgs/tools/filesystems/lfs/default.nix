@@ -5,16 +5,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "lfs";
-  version = "1.2.1";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "Canop";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Cf9W0LnlvMm0XZe6lvx8hQejcwyfxBC6VKltAAfRD5I=";
+    sha256 = "sha256-3zGCVT3SfQm72CF2MasT7k5r1Jx9DRUrXKHBSpvcv10=";
   };
 
-  cargoSha256 = "sha256-skP9VJuRMCyA06YjGbyNIt/DljP3fQQOIQDy6k10zGI=";
+  cargoSha256 = "sha256-Q4eNvOY5c4KybDKVhcOznxGPUgyjgEYPD8+9r6sECXA=";
 
   meta = with lib; {
     description = "Get information on your mounted disks";

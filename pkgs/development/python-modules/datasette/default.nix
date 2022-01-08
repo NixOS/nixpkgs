@@ -31,14 +31,15 @@
 
 buildPythonPackage rec {
   pname = "datasette";
-  version = "0.58.1";
+  version = "0.59.4";
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "simonw";
     repo = pname;
     rev = version;
-    sha256 = "sha256-dtKqp7LV1fRjwOMAlmmAnC19j8hLA1oixGextATW6z0=";
+    sha256 = "sha256-bH/VREo2f84wloA2jgXnQkGNSRRRYmSvUXmI0wMfmYM=";
   };
 
   nativeBuildInputs = [ pytest-runner ];
@@ -79,7 +80,6 @@ buildPythonPackage rec {
       --replace "pint~=0.9" "pint" \
       --replace "pluggy~=0.13.0" "pluggy" \
       --replace "uvicorn~=0.11" "uvicorn" \
-      --replace "PyYAML~=5.3" "PyYAML"
   '';
 
   # takes 30-180 mins to run entire test suite, not worth the CPU resources, slows down reviews
@@ -108,6 +108,6 @@ buildPythonPackage rec {
     description = "Multi-tool for exploring and publishing data";
     homepage = "https://datasette.io/";
     license = licenses.asl20;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }

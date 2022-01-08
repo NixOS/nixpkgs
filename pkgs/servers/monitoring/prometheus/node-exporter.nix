@@ -2,14 +2,14 @@
 
 buildGoModule rec {
   pname = "node_exporter";
-  version = "1.3.0";
+  version = "1.3.1";
   rev = "v${version}";
 
   src = fetchFromGitHub {
     inherit rev;
     owner = "prometheus";
     repo = "node_exporter";
-    sha256 = "sha256-gfRnlKq8F4gfea0JOzRqQDDFVJpNSfUX/cvFE/rUU1Q=";
+    sha256 = "sha256-+0k9LBsHqNHmoOAY1UDzbbqni+ikj+c3ijfT41rCfLc=";
   };
 
   vendorSha256 = "sha256-nAvODyy+PfkGFAaq+3hBhQaPji5GUMU7N8xcgbGQMeI=";

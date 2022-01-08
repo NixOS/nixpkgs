@@ -404,6 +404,7 @@ in {
       path = mkOption {
         description = "Database path.";
         default = "${cfg.dataDir}/data/grafana.db";
+        defaultText = literalExpression ''"''${config.${opt.dataDir}}/data/grafana.db"'';
         type = types.path;
       };
 

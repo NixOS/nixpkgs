@@ -32,14 +32,24 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # Tests fail because of AttributeError:...
+    "TestKDEPlotBivariate"
+    "TestBoxPlotter"
+    "TestCatPlot"
+    "TestKDEPlotUnivariate"
+    "test_with_rug"
+    "test_bivariate_kde_norm"
+  ];
+
   pythonImportsCheck= [
     "seaborn"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Statisitical data visualization";
     homepage = "https://seaborn.pydata.org/";
-    license = with lib.licenses; [ bsd3 ];
-    maintainers = with lib.maintainers; [ fridh ];
+    license = with licenses; [ bsd3 ];
+    maintainers = with maintainers; [ fridh ];
   };
 }

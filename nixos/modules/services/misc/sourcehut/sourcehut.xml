@@ -14,13 +14,12 @@
   <title>Basic usage</title>
   <para>
    Sourcehut is a Python and Go based set of applications.
-   <literal><link linkend="opt-services.sourcehut.enable">services.sourcehut</link></literal>
-   by default will use
+   This NixOS module also provides basic configuration integrating Sourcehut into locally running
    <literal><link linkend="opt-services.nginx.enable">services.nginx</link></literal>,
-   <literal><link linkend="opt-services.nginx.enable">services.redis</link></literal>,
-   <literal><link linkend="opt-services.nginx.enable">services.cron</link></literal>,
+   <literal><link linkend="opt-services.redis.servers">services.redis.servers.sourcehut</link></literal>,
+   <literal><link linkend="opt-services.postfix.enable">services.postfix</link></literal>
    and
-   <literal><link linkend="opt-services.postgresql.enable">services.postgresql</link></literal>.
+   <literal><link linkend="opt-services.postgresql.enable">services.postgresql</link></literal> services.
   </para>
 
   <para>
@@ -42,18 +41,23 @@ in {
 
   services.sourcehut = {
     <link linkend="opt-services.sourcehut.enable">enable</link> = true;
-    <link linkend="opt-services.sourcehut.originBase">originBase</link> = fqdn;
-    <link linkend="opt-services.sourcehut.services">services</link> = [ "meta" "man" "git" ];
+    <link linkend="opt-services.sourcehut.git.enable">git.enable</link> = true;
+    <link linkend="opt-services.sourcehut.man.enable">man.enable</link> = true;
+    <link linkend="opt-services.sourcehut.meta.enable">meta.enable</link> = true;
+    <link linkend="opt-services.sourcehut.nginx.enable">nginx.enable</link> = true;
+    <link linkend="opt-services.sourcehut.postfix.enable">postfix.enable</link> = true;
+    <link linkend="opt-services.sourcehut.postgresql.enable">postgresql.enable</link> = true;
+    <link linkend="opt-services.sourcehut.redis.enable">redis.enable</link> = true;
     <link linkend="opt-services.sourcehut.settings">settings</link> = {
         "sr.ht" = {
           environment = "production";
           global-domain = fqdn;
           origin = "https://${fqdn}";
           # Produce keys with srht-keygen from <package>sourcehut.coresrht</package>.
-          network-key = "SECRET";
-          service-key = "SECRET";
+          network-key = "/run/keys/path/to/network-key";
+          service-key = "/run/keys/path/to/service-key";
         };
-        webhooks.private-key= "SECRET";
+        webhooks.private-key= "/run/keys/path/to/webhook-key";
     };
   };
 

@@ -4,7 +4,9 @@
 # Note it is not possible to use pip
 # https://discuss.python.org/t/pip-download-just-the-source-packages-no-building-no-metadata-etc/4651/12
 
+import os
 import sys
+import netrc
 from urllib.parse import urlparse, urlunparse
 from html.parser import HTMLParser
 import urllib.request
@@ -39,8 +41,18 @@ class Pep503(HTMLParser):
 
 url = sys.argv[1]
 package_name = sys.argv[2]
-index_url = url + "/" + package_name
+index_url = url + "/" + package_name + "/"
 package_filename = sys.argv[3]
+
+# Parse username and password for this host from the netrc file if given.
+username, password = None, None
+if os.environ["NETRC"]:
+    netrc_obj = netrc.netrc(os.environ["NETRC"])
+    host = urlparse(index_url).netloc
+    # Strip port number if present
+    if ":" in host:
+        host = host.split(":")[0]
+    username, _, password = netrc_obj.authenticators(host)
 
 print("Reading index %s" % index_url)
 
@@ -48,8 +60,13 @@ context = ssl.create_default_context()
 context.check_hostname = False
 context.verify_mode = ssl.CERT_NONE
 
+req = urllib.request.Request(index_url)
+if username and password:
+    import base64
+    password_b64 = base64.b64encode(bytes(f"{username}:{password}", "utf-8")).decode("utf-8")
+    req.add_header("Authorization", f"Basic {password_b64}")
 response = urllib.request.urlopen(
-    index_url,
+    req,
     context=context)
 index = response.read()
 
@@ -63,7 +80,13 @@ if package_filename not in parser.sources:
 package_file = open(package_filename, "wb")
 # Sometimes the href is a relative path
 if urlparse(parser.sources[package_filename]).netloc == '':
-    package_url = index_url + "/" + parser.sources[package_filename]
+    parsed_url = urlparse(index_url)
+    package_url = urlunparse((
+        parsed_url.scheme,
+        parsed_url.netloc,
+        parser.sources[package_filename],
+        None, None, None,
+    ))
 else:
     package_url = parser.sources[package_filename]
 
@@ -81,8 +104,11 @@ real_package_url = urlunparse(
 )
 print("Downloading %s" % real_package_url)
 
+req = urllib.request.Request(real_package_url)
+if username and password:
+    req.add_unredirected_header("Authorization", f"Basic {password_b64}")
 response = urllib.request.urlopen(
-    real_package_url,
+    req,
     context=context)
 
 with response as r:

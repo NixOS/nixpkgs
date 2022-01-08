@@ -51,6 +51,8 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabled = pythonOlder "3.6";
+
   meta = with lib; {
     description = "Flake8 is a wrapper around pyflakes, pycodestyle and mccabe.";
     homepage = "https://github.com/pycqa/flake8";

@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "alpine-make-vm-image";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "alpinelinux";
     repo = "alpine-make-vm-image";
     rev = "v${version}";
-    sha256 = "0cjcwq957nsml06kdnnvgzki84agjfvqw3mpyiix4i4q5by91lcl";
+    sha256 = "14rkqlg319h8agiydgknjfv2f7vl6rdj848xfkngvydrf1rr38j6";
   };
 
   nativeBuildInputs = [ makeWrapper ];

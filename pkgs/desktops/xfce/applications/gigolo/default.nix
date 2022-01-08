@@ -10,8 +10,9 @@ mkXfceDerivation {
 
   buildInputs = [ gtk3 glib ];
 
-  meta = {
+  meta = with lib; {
     description = "A frontend to easily manage connections to remote filesystems";
-    license = with lib.licenses; [ gpl2Only ];
+    license = with licenses; [ gpl2Only ];
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

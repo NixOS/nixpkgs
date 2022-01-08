@@ -10,14 +10,14 @@ in
 buildGoModule rec {
   pname = "faas-cli";
   # When updating version change rev.
-  version = "0.13.15";
-  rev = "b562392b12a78a11bcff9c6fca5a47146ea2ba0a";
+  version = "0.14.1";
+  rev = "d94600d2d2be52a66e0a15c219634f3bcac27318";
 
   src = fetchFromGitHub {
     owner = "openfaas";
     repo = "faas-cli";
     rev = version;
-    sha256 = "15kjxn0p8nz8147vsm9q5q6wr2w5ssybvn247kynj2n7139iva2f";
+    sha256 = "132m9kv7a4vv65n8y3sq1drks6n1pci9fhvq0s637imf2vxccxqr";
   };
 
   CGO_ENABLED = 0;

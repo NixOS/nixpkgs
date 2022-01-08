@@ -14,6 +14,7 @@
 buildPythonPackage rec {
   pname = "rpcq";
   version = "3.9.2";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
@@ -42,7 +43,14 @@ buildPythonPackage rec {
       --replace "msgpack>=0.6,<1.0" "msgpack"
   '';
 
-  pythonImportsCheck = [ "rpcq" ];
+  disabledTests = [
+    # Test doesn't work properly on Hydra
+    "test_client_backlog"
+  ];
+
+  pythonImportsCheck = [
+    "rpcq"
+  ];
 
   meta = with lib; {
     description = "The RPC framework and message specification for rigetti Quantum Cloud services";

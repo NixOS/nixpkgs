@@ -250,11 +250,35 @@ self: super: ({
   c2hsc = addTestToolDepends [ pkgs.gcc ] super.c2hsc;
 
   # streamly depends on Cocoa starting with 0.8.0
-  streamly_0_8_0 = overrideCabal (drv: {
+  streamly_0_8_1_1 = overrideCabal (drv: {
     libraryFrameworkDepends = [
       darwin.apple_sdk.frameworks.Cocoa
     ] ++ (drv.libraryFrameworkDepends or []);
-  }) super.streamly_0_8_0;
+  }) super.streamly_0_8_1_1;
+
+  http-client-tls = overrideCabal (drv: {
+    postPatch = ''
+      # This comment has been inserted, so the derivation hash changes, forcing
+      # a rebuild of this derivation which has succeeded to build on Hydra before,
+      # but apparently been corrupted, causing reverse dependencies to fail.
+      #
+      # This workaround can be removed upon the next darwin stdenv rebuild,
+      # presumably https://github.com/NixOS/nixpkgs/pull/152850 or the next
+      # full haskellPackages rebuild.
+    '' + drv.postPatch or "";
+  }) super.http-client-tls;
+
+  foldl = overrideCabal (drv: {
+    postPatch = ''
+      # This comment has been inserted, so the derivation hash changes, forcing
+      # a rebuild of this derivation which has succeeded to build on Hydra before,
+      # but apparently been corrupted, causing reverse dependencies to fail.
+      #
+      # This workaround can be removed upon the next darwin stdenv rebuild,
+      # presumably https://github.com/NixOS/nixpkgs/pull/152850 or the next
+      # full haskellPackages rebuild.
+    '' + drv.postPatch or "";
+  }) super.foldl;
 
 } // lib.optionalAttrs pkgs.stdenv.isAarch64 {  # aarch64-darwin
 

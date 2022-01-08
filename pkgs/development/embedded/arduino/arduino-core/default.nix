@@ -69,17 +69,16 @@ let
     xorg.libXxf86vm
     zlib
   ];
-  teensy_architecture = if stdenv.hostPlatform.isx86_32 then "linux32"
-                        else if stdenv.hostPlatform.isx86_64 then "linux64"
-                        else if stdenv.hostPlatform.isAarch64 then "linuxaarch64"
-                        else if stdenv.hostPlatform.isAarch32 then "linuxarm"
-                        else throw "${stdenv.hostPlatform.system} is not supported in teensy";
+  teensy_architecture =
+    if stdenv.hostPlatform.isx86_32 then "linux32"
+    else if stdenv.hostPlatform.isx86_64 then "linux64"
+    else if stdenv.hostPlatform.isAarch64 then "linuxaarch64"
+    else if stdenv.hostPlatform.isAarch32 then "linuxarm"
+    else throw "${stdenv.hostPlatform.system} is not supported in teensy";
 
-  pname = (if withTeensyduino then "teensyduino" else "arduino")
-             + lib.optionalString (!withGui) "-core";
 in
 stdenv.mkDerivation rec {
-  inherit pname;
+  pname = (if withTeensyduino then "teensyduino" else "arduino") + lib.optionalString (!withGui) "-core";
   version = "1.8.16";
 
   src = fetchFromGitHub {
@@ -195,8 +194,8 @@ stdenv.mkDerivation rec {
       chmod +w ./TeensyduinoInstall.${teensy_architecture}
       upx -d ./TeensyduinoInstall.${teensy_architecture}
       patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-          --set-rpath "${teensy_libpath}" \
-          ./TeensyduinoInstall.${teensy_architecture}
+        --set-rpath "${teensy_libpath}" \
+        ./TeensyduinoInstall.${teensy_architecture}
       chmod +x ./TeensyduinoInstall.${teensy_architecture}
       ./TeensyduinoInstall.${teensy_architecture} --dir=$out/share/arduino
       # Check for successful installation
@@ -213,8 +212,8 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     for file in $(find $out -type f \( -perm /0111 -o -name \*.so\* \) ); do
-        patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$file" || true
-        patchelf --set-rpath ${rpath}:$out/lib $file || true
+      patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$file" || true
+      patchelf --set-rpath ${rpath}:$out/lib $file || true
     done
 
     ${lib.concatMapStringsSep "\n"
@@ -235,15 +234,15 @@ stdenv.mkDerivation rec {
     ${lib.optionalString withTeensyduino ''
       # Patch the Teensy loader binary
       patchelf --debug \
-          --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-          --set-rpath "${teensy_libpath}" \
-          $out/share/arduino/hardware/tools/teensy{,_ports,_reboot,_restart,_serialmon}
+        --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
+        --set-rpath "${teensy_libpath}" \
+        $out/share/arduino/hardware/tools/teensy{,_ports,_reboot,_restart,_serialmon}
     ''}
   '';
 
   meta = with lib; {
     description = "Open-source electronics prototyping platform";
-    homepage = "http://arduino.cc/";
+    homepage = "https://www.arduino.cc/";
     license = if withTeensyduino then licenses.unfreeRedistributable else licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ antono auntie robberer bjornfor bergey ];

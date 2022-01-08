@@ -1,8 +1,8 @@
-{lib, stdenv, fetchFromGitHub, fuse, bison, flex_2_5_35, openssl, python3, ncurses, readline,
+{lib, stdenv, fetchFromGitHub, fuse, bison, flex, openssl, python3, ncurses, readline,
  autoconf, automake, libtool, pkg-config, zlib, libaio, libxml2, acl, sqlite,
  liburcu, liburing, attr, makeWrapper, coreutils, gnused, gnugrep, which,
  openssh, gawk, findutils, util-linux, lvm2, btrfs-progs, e2fsprogs, xfsprogs, systemd,
- rsync, glibc, rpcsvc-proto, libtirpc
+ rsync, glibc, rpcsvc-proto, libtirpc, gperftools, nixosTests
 }:
 let
   # NOTE: On each glusterfs release, it should be checked if gluster added
@@ -14,9 +14,9 @@ let
   #       can help with finding new Python scripts.
 
   buildInputs = [
-    fuse bison flex_2_5_35 openssl ncurses readline
+    fuse bison flex openssl ncurses readline
     autoconf automake libtool pkg-config zlib libaio libxml2
-    acl sqlite liburcu attr makeWrapper util-linux libtirpc
+    acl sqlite liburcu attr makeWrapper util-linux libtirpc gperftools
     liburing
     (python3.withPackages (pkgs: [
       pkgs.flask
@@ -55,13 +55,13 @@ let
   ];
 in stdenv.mkDerivation rec {
   pname = "glusterfs";
-  version = "9.4";
+  version = "10.0";
 
   src = fetchFromGitHub {
     owner = "gluster";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0ybs0dm7jskmfnmbg5fj8wi2aapbrwn4gbrx8ix6d8dzcl3pv78k";
+    sha256 = "sha256-n6HdXs5kLbEI8Gaw2KBtO3i8hhadb+MsshUve/DOYg0=";
   };
   inherit buildInputs propagatedBuildInputs;
 
@@ -85,6 +85,7 @@ in stdenv.mkDerivation rec {
   # but fails when the version is empty.
   # See upstream GlusterFS bug https://bugzilla.redhat.com/show_bug.cgi?id=1452705
   preConfigure = ''
+    patchShebangs build-aux/pkg-version
     echo "v${version}" > VERSION
     ./autogen.sh
     export PYTHON=${python3}/bin/python
@@ -180,6 +181,10 @@ in stdenv.mkDerivation rec {
     # this gets falsely loaded as module by glusterfind
     rm -r $out/bin/conf.py
   '';
+
+  passthru.tests = {
+    glusterfs = nixosTests.glusterfs;
+  };
 
   meta = with lib; {
     description = "Distributed storage system";

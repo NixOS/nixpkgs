@@ -13,7 +13,7 @@ toKodiAddon (stdenv.mkDerivation ({
   installPhase = ''
     runHook preInstall
 
-    cd $src/$sourceDir
+    cd ./$sourceDir
     d=$out${addonDir}/${namespace}
     mkdir -p $d
     sauce="."

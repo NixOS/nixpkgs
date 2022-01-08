@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl
+{ lib, stdenv, fetchurl, fetchpatch
 # native deps.
 , runCommand, pkg-config, meson, ninja, makeWrapper
 # build+runtime deps.
@@ -17,14 +17,22 @@ lua = luajitPackages;
 
 unwrapped = stdenv.mkDerivation rec {
   pname = "knot-resolver";
-  version = "5.4.2";
+  version = "5.4.3";
 
   src = fetchurl {
     url = "https://secure.nic.cz/files/knot-resolver/${pname}-${version}.tar.xz";
-    sha256 = "ea6a219571a752056669bae3f2c0c3ed0bec58af5ab832d505a3ec9c4063a58b";
+    sha256 = "488729eb93190336b6bca10de0d78ecb7919f77fcab105debc0a644aa7d0a506";
   };
 
   outputs = [ "out" "dev" ];
+
+  patches = [
+    (fetchpatch { # https://gitlab.nic.cz/knot/knot-resolver/-/merge_requests/1237
+      name = "console.aws.amazon.com-fix.patch";
+      url = "https://gitlab.nic.cz/knot/knot-resolver/-/commit/f4dabfbec9273703.diff";
+      sha256 = "3J+FDwNQ6CqIGo9pSzhrQZlHX99vXFDpPOBpwpCnOxs=";
+    })
+  ];
 
   # Path fixups for the NixOS service.
   postPatch = ''

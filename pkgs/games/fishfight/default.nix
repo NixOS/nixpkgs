@@ -2,6 +2,7 @@
 , rustPlatform
 , fetchFromGitHub
 , stdenv
+, SDL2
 , alsa-lib
 , libGL
 , libX11
@@ -9,25 +10,28 @@
 , AudioToolbox
 , Cocoa
 , CoreAudio
-, CoreFoundation
-, IOKit
 , OpenGL
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "fishfight";
-  version = "0.1";
+  version = "0.3";
 
   src = fetchFromGitHub {
     owner = "fishfight";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0mbg9zshyg9hlbsk5npslbnwjf8fh6gxszi5hxks380z080cjxs2";
+    sha256 = "sha256-kLdk7zTICZ8iawNttTsWUVKGvh2zykXVsMqUyYoGrBs=";
   };
 
-  cargoSha256 = "sha256-fZXqJ6a2erAQSgAZRwmkor94eMryjiq3gbY102pJb9Q=";
+  # use system sdl2 instead of bundled sdl2
+  cargoPatches = [ ./use-system-sdl2.patch ];
 
-  buildInputs = lib.optionals stdenv.isLinux [
+  cargoSha256 = "sha256-KQiqUzdsVMIjDmmreihekrrFoXeyNzd6ZbqApwH8B4Q=";
+
+  buildInputs =  [
+    SDL2
+  ] ++ lib.optionals stdenv.isLinux [
     alsa-lib
     libGL
     libX11
@@ -36,15 +40,11 @@ rustPlatform.buildRustPackage rec {
     AudioToolbox
     Cocoa
     CoreAudio
-    CoreFoundation
-    IOKit
     OpenGL
   ];
 
   postPatch = ''
-    substituteInPlace assets/levels/levels.toml --replace assets $out/share/assets
-    substituteInPlace src/gui.rs --replace \"assets \"$out/share/assets
-    substituteInPlace src/main.rs --replace \"assets \"$out/share/assets
+    substituteInPlace src/main.rs --replace ./assets $out/share/assets
   '';
 
   postInstall = ''
@@ -57,6 +57,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://fishfight.org/";
     license = with licenses; [ mit /* or */ asl20 ];
     maintainers = with maintainers; [ figsoda ];
-    mainProgram = "fishgame";
   };
 }

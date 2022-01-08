@@ -17,6 +17,8 @@ beamPackages.mixRelease rec {
     sha256 = "sha256-XYZIf8/Vznl4FvVAOy5GVfTBTCwhfUol/3vWWIDwIxQ=";
   };
 
+  patches = [ ./0001-move-result-into-with-guard.patch ];
+
   mixNixDeps = import ./mix.nix {
     inherit beamPackages lib;
     overrides = (final: prev: {
@@ -207,6 +209,6 @@ beamPackages.mixRelease rec {
     homepage = "https://git.pleroma.social/pleroma/pleroma";
     license = licenses.agpl3;
     maintainers = with maintainers; [ petabyteboy ninjatrappeur yuka ];
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    platforms = platforms.unix;
   };
 }

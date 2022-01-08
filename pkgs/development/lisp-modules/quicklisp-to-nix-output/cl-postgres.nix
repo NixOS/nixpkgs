@@ -2,7 +2,7 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = "cl-postgres";
-  version = "postmodern-20211020-git";
+  version = "postmodern-20211209-git";
 
   parasites = [ "cl-postgres/simple-date-tests" "cl-postgres/tests" ];
 
@@ -11,8 +11,8 @@ rec {
   deps = [ args."alexandria" args."bordeaux-threads" args."cl-base64" args."cl-ppcre" args."fiveam" args."ironclad" args."md5" args."simple-date" args."simple-date_slash_postgres-glue" args."split-sequence" args."uax-15" args."uiop" args."usocket" ];
 
   src = fetchurl {
-    url = "http://beta.quicklisp.org/archive/postmodern/2021-10-20/postmodern-20211020-git.tgz";
-    sha256 = "0iw0sbjra3g57ivfqgx3c97mlcdzlh2kgqp12d1r2i9pw8z0ckh6";
+    url = "http://beta.quicklisp.org/archive/postmodern/2021-12-09/postmodern-20211209-git.tgz";
+    sha256 = "1qcbg31mz5r7ibmq2y7r3vqvdwpznxvwdnwd94hfil7pg4j119d6";
   };
 
   packageName = "cl-postgres";
@@ -21,9 +21,9 @@ rec {
   overrides = x: x;
 }
 /* (SYSTEM cl-postgres DESCRIPTION Low-level client library for PostgreSQL
-    SHA256 0iw0sbjra3g57ivfqgx3c97mlcdzlh2kgqp12d1r2i9pw8z0ckh6 URL
-    http://beta.quicklisp.org/archive/postmodern/2021-10-20/postmodern-20211020-git.tgz
-    MD5 84f4ad8ce7ac0f7f78cbfcf2f0bd3aa4 NAME cl-postgres FILENAME cl-postgres
+    SHA256 1qcbg31mz5r7ibmq2y7r3vqvdwpznxvwdnwd94hfil7pg4j119d6 URL
+    http://beta.quicklisp.org/archive/postmodern/2021-12-09/postmodern-20211209-git.tgz
+    MD5 6d14c4b5fec085594dc66d520174e0e6 NAME cl-postgres FILENAME cl-postgres
     DEPS
     ((NAME alexandria FILENAME alexandria)
      (NAME bordeaux-threads FILENAME bordeaux-threads)
@@ -37,5 +37,5 @@ rec {
     DEPENDENCIES
     (alexandria bordeaux-threads cl-base64 cl-ppcre fiveam ironclad md5
      simple-date simple-date/postgres-glue split-sequence uax-15 uiop usocket)
-    VERSION postmodern-20211020-git SIBLINGS (postmodern s-sql simple-date)
+    VERSION postmodern-20211209-git SIBLINGS (postmodern s-sql simple-date)
     PARASITES (cl-postgres/simple-date-tests cl-postgres/tests)) */

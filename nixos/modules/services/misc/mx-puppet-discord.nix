@@ -39,7 +39,7 @@ in {
 
           #defaults to sqlite but can be configured to use postgresql with
           #connstring
-          database.filename = "${dataDir}/mx-puppet-discord/database.db";
+          database.filename = "${dataDir}/database.db";
           logging = {
             console = "info";
             lineDateFormat = "MMM-D HH:mm:ss.SSS";
@@ -67,6 +67,9 @@ in {
       serviceDependencies = mkOption {
         type = with types; listOf str;
         default = optional config.services.matrix-synapse.enable "matrix-synapse.service";
+        defaultText = literalExpression ''
+          optional config.services.matrix-synapse.enable "matrix-synapse.service"
+        '';
         description = ''
           List of Systemd services to require and wait for when starting the application service.
         '';
@@ -110,7 +113,9 @@ in {
         UMask = 0027;
 
         ExecStart = ''
-          ${pkgs.mx-puppet-discord}/bin/mx-puppet-discord -c ${settingsFile}
+          ${pkgs.mx-puppet-discord}/bin/mx-puppet-discord \
+            -c ${settingsFile} \
+            -f ${registrationFile}
         '';
       };
     };

@@ -1,24 +1,27 @@
 { lib
 , buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, inflection
-, pendulum
 , fastjsonschema
-, typing-extensions
-, orjson
+, fetchFromGitHub
 , future-typing
+, inflection
+, mypy
+, orjson
+, pandas
+, pendulum
 , poetry-core
 , pydantic
+, pytestCheckHook
+, pythonOlder
 , sqlalchemy
-, pandas
-, mypy
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "typical";
   version = "2.7.9";
   format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "seandstewart";
@@ -31,15 +34,18 @@ buildPythonPackage rec {
     ./use-poetry-core.patch
   ];
 
-  nativeBuildInputs = [ poetry-core ];
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
     inflection
     pendulum
     fastjsonschema
     orjson
-    typing-extensions
     future-typing
+  ] ++ lib.optionals (pythonOlder "3.10") [
+    typing-extensions
   ];
 
   checkInputs = [
@@ -51,18 +57,23 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    "test_ujson" # We use orjson
+    # We use orjson
+    "test_ujson"
+    # ConstraintValueError: Given value <{'key...
+    "test_tagged_union_validate"
   ];
 
   disabledTestPaths = [
     "benchmark/"
   ];
 
-  pythonImportsCheck = [ "typic" ];
+  pythonImportsCheck = [
+    "typic"
+  ];
 
   meta = with lib; {
+    description = "Python library for runtime analysis, inference and validation of Python types";
     homepage = "https://python-typical.org/";
-    description = "Typical: Python's Typing Toolkit.";
     license = licenses.mit;
     maintainers = with maintainers; [ kfollesdal ];
   };

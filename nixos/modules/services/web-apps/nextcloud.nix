@@ -153,7 +153,7 @@ in {
     package = mkOption {
       type = types.package;
       description = "Which package to use for the Nextcloud instance.";
-      relatedPackages = [ "nextcloud21" "nextcloud22" ];
+      relatedPackages = [ "nextcloud21" "nextcloud22" "nextcloud23" ];
     };
     phpPackage = mkOption {
       type = types.package;
@@ -499,6 +499,7 @@ in {
     occ = mkOption {
       type = types.package;
       default = occ;
+      defaultText = literalDocBook "generated script";
       internal = true;
       description = ''
         The nextcloud-occ program preconfigured to target this Nextcloud instance.
@@ -508,7 +509,7 @@ in {
 
   config = mkIf cfg.enable (mkMerge [
     { warnings = let
-        latest = 22;
+        latest = 23;
         upgradeWarning = major: nixos:
           ''
             A legacy Nextcloud install (from before NixOS ${nixos}) may be installed.
@@ -526,8 +527,8 @@ in {
         # FIXME(@Ma27) remove as soon as nextcloud properly supports
         # mariadb >=10.6.
         isUnsupportedMariadb =
-          # All currently supported Nextcloud versions are affected.
-          (versionOlder cfg.package.version "23")
+          # All currently supported Nextcloud versions are affected (https://github.com/nextcloud/server/issues/25436).
+          (versionOlder cfg.package.version "24")
           # This module uses mysql
           && (cfg.config.dbtype == "mysql")
           # MySQL is managed via NixOS
@@ -543,6 +544,7 @@ in {
         '')
         ++ (optional (versionOlder cfg.package.version "21") (upgradeWarning 20 "21.05"))
         ++ (optional (versionOlder cfg.package.version "22") (upgradeWarning 21 "21.11"))
+        ++ (optional (versionOlder cfg.package.version "23") (upgradeWarning 22 "22.05"))
         ++ (optional isUnsupportedMariadb ''
             You seem to be using MariaDB at an unsupported version (i.e. at least 10.6)!
             Please note that this isn't supported officially by Nextcloud. You can either
@@ -573,7 +575,8 @@ in {
           # nextcloud20 throws an eval-error because it's dropped).
           else if versionOlder stateVersion "21.03" then nextcloud20
           else if versionOlder stateVersion "21.11" then nextcloud21
-          else nextcloud22
+          else if versionOlder stateVersion "22.05" then nextcloud22
+          else nextcloud23
         );
 
       services.nextcloud.datadir = mkOptionDefault config.services.nextcloud.home;

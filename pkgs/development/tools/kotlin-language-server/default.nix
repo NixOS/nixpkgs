@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   pname = "kotlin-language-server";
-  version = "1.1.2";
+  version = "1.2.0";
   src = fetchurl {
     url = "https://github.com/fwcd/kotlin-language-server/releases/download/${version}/server.zip";
-    sha256 = "d8850ee2be8c49e5e642c4a41f52304098ae0bcce009e4d91531a9aeecd64916";
+    sha256 = "sha256-GXr+sOGa09qeQrfaJYRPsoHULwfMst8tTr4y2cv752k=";
   };
 
   dontBuild = true;

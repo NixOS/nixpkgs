@@ -24,7 +24,7 @@ self: super:
 
   # GHCJS does not ship with the same core packages as GHC.
   # https://github.com/ghcjs/ghcjs/issues/676
-  stm = doJailbreak self.stm_2_5_0_1;
+  stm = doJailbreak self.stm_2_5_0_2;
   exceptions = dontCheck self.exceptions_0_10_4;
 
 ## OTHER PACKAGES
@@ -100,9 +100,6 @@ self: super:
   # https://gitlab.haskell.org/ghc/ghc/-/issues/15481 but somehow the issue is
   # still present here https://github.com/glguy/th-abstraction/issues/53
   th-abstraction = dontCheck super.th-abstraction;
-
-  # https://github.com/haskell/vector/issues/410
-  vector = appendPatch super.vector (../compilers/ghcjs/patches/vector-ghcjs-storable-set.patch);
 
   # Need hedgehog for tests, which fails to compile due to dep on concurrent-output
   zenc = dontCheck super.zenc;

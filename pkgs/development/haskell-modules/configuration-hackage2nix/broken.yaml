@@ -88,6 +88,7 @@ broken-packages:
   - aeson-tiled
   - aeson-typescript
   - aeson-utils
+  - aeson-value-parser
   - affection
   - affine-invariant-ensemble-mcmc
   - Agata
@@ -221,6 +222,7 @@ broken-packages:
   - assumpta
   - ast-monad
   - astrds
+  - astro
   - async-combinators
   - async-dejafu
   - asynchronous-exceptions
@@ -1124,6 +1126,7 @@ broken-packages:
   - docopt
   - docrecords
   - doctest-discover-configurator
+  - doctest-parallel
   - doctest-prop
   - docusign-example
   - docvim
@@ -1352,7 +1355,6 @@ broken-packages:
   - fadno-braids
   - failable-list
   - failure-detector
-  - fakedata
   - fake-type
   - faktory
   - f-algebra-gen
@@ -1556,6 +1558,7 @@ broken-packages:
   - fused-effects-mwc-random
   - fused-effects-resumable
   - fusion
+  - futhark-manifest
   - futun
   - future
   - fuzzy-time-gen
@@ -1674,6 +1677,7 @@ broken-packages:
   - gi-gtksheet
   - gi-handy
   - gi-json
+  - gingersnap
   - ginsu
   - gipeda
   - giphy-api
@@ -1687,7 +1691,6 @@ broken-packages:
   - git-cuk
   - git-date
   - gitdo
-  - github
   - github-backup
   - github-data
   - github-tools
@@ -2027,6 +2030,7 @@ broken-packages:
   - hastache
   - haste
   - haste-prim
+  - has-transformers
   - hat
   - hatex-guide
   - hats
@@ -2075,6 +2079,7 @@ broken-packages:
   - hdph-closure
   - hdr-histogram
   - HDRUtils
+  - headed-megaparsec
   - headergen
   - heap-console
   - heapsort
@@ -2104,6 +2109,7 @@ broken-packages:
   - heredocs
   - her-lexer
   - Hermes
+  - hermes-json
   - herms
   - hetero-dict
   - heterogeneous-list-literals
@@ -2432,7 +2438,6 @@ broken-packages:
   - htssets
   - http2-client
   - http2-grpc-proto-lens
-  - http3
   - http-attoparsec
   - http-client-lens
   - http-client-request-modifiers
@@ -2731,6 +2736,7 @@ broken-packages:
   - kmonad
   - kmp-dfa
   - koellner-phonetic
+  - koji-install
   - Konf
   - kontra-config
   - kparams
@@ -2864,6 +2870,7 @@ broken-packages:
   - libsystemd-daemon
   - libtagc
   - libxls
+  - libxlsxwriter-hs
   - libxslt
   - libyaml-streamly
   - lie
@@ -3173,7 +3180,6 @@ broken-packages:
   - monad-mersenne-random
   - monad-mock
   - monad-open
-  - Monadoro
   - monad-parallel-progressbar
   - monad-param
   - monad-persist
@@ -3186,6 +3192,7 @@ broken-packages:
   - monad-ste
   - monad-stlike-io
   - monad-task
+  - monad-throw-exit
   - monad-timing
   - monad-tx
   - monad-unify
@@ -3311,6 +3318,7 @@ broken-packages:
   - NaturalSort
   - naver-translate
   - nbt
+  - ncurses
   - neat
   - needle
   - neet
@@ -3382,7 +3390,6 @@ broken-packages:
   - nix-freeze-tree
   - nixfromnpm
   - nixpkgs-update
-  - nix-thunk
   - nix-tools
   - nkjp
   - nlp-scores
@@ -3499,6 +3506,8 @@ broken-packages:
   - opentelemetry-http-client
   - opentheory-char
   - opentok
+  - opentracing-jaeger
+  - opentracing-zipkin-v1
   - opentype
   - OpenVGRaw
   - Operads
@@ -3540,6 +3549,7 @@ broken-packages:
   - overloaded
   - overloaded-records
   - overture
+  - owoify-hs
   - pack
   - package-description-remote
   - package-o-tron
@@ -3564,11 +3574,13 @@ broken-packages:
   - pandoc-filter-indent
   - pandoc-include
   - pandoc-lens
+  - pandoc-lua-marshal
   - pandoc-markdown-ghci-filter
   - pandoc-placetable
   - pandoc-pyplot
   - pandoc-unlit
   - pandoc-utils
+  - pandora-io
   - pang-a-lambda
   - pangraph
   - pan-os-syslog
@@ -3595,6 +3607,7 @@ broken-packages:
   - pareto
   - parochial
   - Parry
+  - parse
   - parseargs
   - parsec2
   - parsec3
@@ -3723,7 +3736,6 @@ broken-packages:
   - pi-forall
   - pig
   - pi-hoole
-  - pinch
   - pinchot
   - Pipe
   - pipes-async
@@ -3791,8 +3803,9 @@ broken-packages:
   - polydata-core
   - polynom
   - polynomial
-  - polysemy-mocks
-  - polysemy-plugin
+  - polysemy-check
+  - polysemy-http
+  - polysemy-process
   - polysemy-zoo
   - polytypeable
   - pomaps
@@ -3843,6 +3856,7 @@ broken-packages:
   - PPrinter
   - pqc
   - praglude
+  - prairie
   - preamble
   - precis
   - precursor
@@ -4370,6 +4384,8 @@ broken-packages:
   - servant-static-th
   - servant-streaming
   - servant-to-elm
+  - servant-tracing
+  - servant-util-beam-pg
   - servant-yaml
   - servant-zeppelin
   - server-generic
@@ -4782,6 +4798,7 @@ broken-packages:
   - syb-with-class-instances-text
   - sydtest-aeson
   - sydtest-hedis
+  - sydtest-hspec
   - sydtest-mongo
   - sydtest-persistent-postgresql
   - sydtest-rabbitmq

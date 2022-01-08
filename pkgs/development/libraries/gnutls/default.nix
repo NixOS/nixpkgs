@@ -1,8 +1,10 @@
 { config, lib, stdenv, fetchurl, zlib, lzo, libtasn1, nettle, pkg-config, lzip
-, perl, gmp, autoconf, automake, libidn, p11-kit, libiconv
+, perl, gmp, autoconf, automake, libidn, libiconv
 , unbound, dns-root-data, gettext, util-linux
+, cxxBindings ? !stdenv.hostPlatform.isStatic # tries to link libstdc++.so
 , guileBindings ? config.gnutls.guile or false, guile
 , tpmSupport ? false, trousers, which, nettools, libunistring
+, withP11-kit ? !stdenv.hostPlatform.isStatic, p11-kit
 , withSecurity ? false, Security  # darwin Security.framework
 }:
 
@@ -51,11 +53,15 @@ stdenv.mkDerivation rec {
 
   preConfigure = "patchShebangs .";
   configureFlags =
-    lib.optional stdenv.isLinux "--with-default-trust-store-file=/etc/ssl/certs/ca-certificates.crt"
-  ++ [
+    lib.optionals withP11-kit [
+    "--with-default-trust-store-file=/etc/ssl/certs/ca-certificates.crt"
+    "--with-default-trust-store-pkcs11=pkcs11:"
+  ] ++ [
     "--disable-dependency-tracking"
     "--enable-fast-install"
     "--with-unbound-root-key-file=${dns-root-data}/root.key"
+    (lib.withFeature withP11-kit "p11-kit")
+    (lib.enableFeature cxxBindings "cxx")
   ] ++ lib.optional guileBindings [
     "--enable-guile"
     "--with-guile-site-dir=\${out}/share/guile/site"
@@ -65,7 +71,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ lzo lzip libtasn1 libidn p11-kit zlib gmp libunistring unbound gettext libiconv ]
+  buildInputs = [ lzo lzip libtasn1 libidn zlib gmp libunistring unbound gettext libiconv ]
+    ++ lib.optional (withP11-kit) p11-kit
     ++ lib.optional (isDarwin && withSecurity) Security
     ++ lib.optional (tpmSupport && stdenv.isLinux) trousers
     ++ lib.optional guileBindings guile;

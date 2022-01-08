@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "zsh-better-npm-completion";
+  pname = "zsh-better-npm-completion";
   version = "unstable-2019-11-19";
 
   src = fetchFromGitHub {

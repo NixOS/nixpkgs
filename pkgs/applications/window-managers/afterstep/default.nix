@@ -48,6 +48,12 @@ stdenv.mkDerivation rec {
      export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config dbus-1 --cflags)"
   '';
 
+  # Parallel build fails due to missing dependencies between private libaries:
+  #   ld: cannot find ../libAfterConf/libAfterConf.a: No such file or directory
+  # Let's disable parallel builds until it's fixed upstream:
+  #   https://github.com/afterstep/afterstep/issues/8
+  enableParallelBuilding = false;
+
   meta = with lib; {
     description = "A NEXTStep-inspired window manager";
     longDescription = ''

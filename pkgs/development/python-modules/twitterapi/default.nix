@@ -3,18 +3,21 @@
 , fetchFromGitHub
 , requests
 , requests_oauthlib
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "twitterapi";
-  version = "2.7.7";
+  version = "2.7.11";
   format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "geduldig";
     repo = "TwitterAPI";
     rev = "v${version}";
-    sha256 = "sha256-KEJ0lAg6Zi2vps+ZPTkT6ts87qnIBL9pFe1tPEzviCI=";
+    sha256 = "sha256-Rxc0ld0U8fhE3yJV+rgGsOfOdN6xGk0NQuHscpvergs=";
   };
 
   propagatedBuildInputs = [

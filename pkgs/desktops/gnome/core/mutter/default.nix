@@ -46,13 +46,13 @@
 
 let self = stdenv.mkDerivation rec {
   pname = "mutter";
-  version = "41.1";
+  version = "41.2";
 
   outputs = [ "out" "dev" "man" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/mutter/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "WOY/0LxD81E08hMTr/Suv5LIKdbfTcmaBEoeN2aR4/M=";
+    sha256 = "AN+oEvHEhtdKK3P0IEWuEYL5JGx3lNZ9dLXlQ+pwBhc=";
   };
 
   patches = [
@@ -136,7 +136,7 @@ let self = stdenv.mkDerivation rec {
   PKG_CONFIG_UDEV_UDEVDIR = "${placeholder "out"}/lib/udev";
 
   passthru = {
-    libdir = "${self}/lib/mutter-8";
+    libdir = "${self}/lib/mutter-9";
 
     tests = {
       libdirExists = runCommand "mutter-libdir-exists" {} ''

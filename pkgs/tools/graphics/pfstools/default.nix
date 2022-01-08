@@ -6,11 +6,11 @@
 
 mkDerivation rec {
   pname = "pfstools";
-  version = "2.1.0";
+  version = "2.2.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${version}/${pname}-${version}.tgz";
-    sha256 = "04rlb705gmdiphcybf9dyr0d5lla2cfs3c308zz37x0vwi445six";
+    sha256 = "sha256-m/aESYVmMibCGZjutDwmGsuOSziRuakbcpVUQGKJ18o=";
   };
 
   outputs = [ "out" "dev" "man"];

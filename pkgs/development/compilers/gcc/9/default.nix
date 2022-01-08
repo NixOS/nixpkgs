@@ -63,6 +63,11 @@ with lib;
 with builtins;
 
 let majorVersion = "9";
+    /*
+      If you update, please build on aarch64-linux
+      and check braces adjacent to `cplusplus` lines in file
+      ./result/lib/gcc/aarch64-unknown-linux-gnu/9.*.0/include/arm_acle.h
+    */
     version = "${majorVersion}.3.0";
 
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;

@@ -19,12 +19,14 @@ let
   isCross = stdenv.hostPlatform != stdenv.buildPlatform;
 in stdenv.mkDerivation rec {
   pname = "poke";
-  version = "1.3";
+  version = "1.4";
 
   src = fetchurl {
     url = "mirror://gnu/${pname}/${pname}-${version}.tar.gz";
-    hash = "sha256-unhjA0obCABLDuj4i9qUFgcH6aeB1VVvVVtQdYPPDxs=";
+    sha256 = "sha256-zgVN8pVgySEjATJwPuRJ/hMLbiWrA6psx5a7QBUGqiQ=";
   };
+
+  outputs = [ "out" "dev" "info" "lib" "man" ];
 
   postPatch = ''
     patchShebangs .
@@ -46,7 +48,9 @@ in stdenv.mkDerivation rec {
   ++ lib.optional textStylingSupport gettext
   ++ lib.optional (!isCross) dejagnu;
 
-  configureFlags = lib.optionals guiSupport [
+  configureFlags = [
+    "--datadir=${placeholder "lib"}/share"
+  ] ++ lib.optionals guiSupport [
     "--with-tcl=${tcl}/lib"
     "--with-tk=${tk}/lib"
     "--with-tkinclude=${tk.dev}/include"
@@ -56,6 +60,10 @@ in stdenv.mkDerivation rec {
 
   doCheck = !isCross;
   checkInputs = lib.optionals (!isCross) [ dejagnu ];
+
+  postInstall = ''
+    moveToOutput share/emacs "$out"
+  '';
 
   meta = with lib; {
     description = "Interactive, extensible editor for binary data";

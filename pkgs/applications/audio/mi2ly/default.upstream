@@ -1,3 +1,0 @@
-url https://download.savannah.gnu.org/releases/mi2ly/
-ensure_choice
-version '.*/mi2ly[.]([0-9.]+)[.]tar.*' '\1'

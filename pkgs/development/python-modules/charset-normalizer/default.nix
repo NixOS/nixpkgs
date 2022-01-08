@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "charset-normalizer";
-  version = "2.0.5";
+  version = "2.0.8";
 
   src = fetchFromGitHub {
     owner = "Ousret";
     repo = "charset_normalizer";
     rev = version;
-    sha256 = "0pv6yf5ialc82iimsjbq3gp5hh02pg4a7sdma48gd81h4h8qd627";
+    sha256 = "sha256-+acnzdDcujnMa0FYlWaAX7Ga9APMRlvBLKoogIyY8YM=";
   };
 
   checkInputs = [

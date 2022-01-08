@@ -1,7 +1,7 @@
 { lib, buildGoPackage, fetchFromGitLab, fetchurl }:
 
 let
-  version = "14.5.0";
+  version = "14.6.0";
 in
 buildGoPackage rec {
   inherit version;
@@ -19,10 +19,13 @@ buildGoPackage rec {
     owner = "gitlab-org";
     repo = "gitlab-runner";
     rev = "v${version}";
-    sha256 = "sha256-BxnIrjiEW61J6hl7mWNXc2Vb4ae1cWqOypTy9Xo7Hkc=";
+    sha256 = "1sgz8gri51i2pxnzzkcvwx5ncw1rjz7ain82hlcx6f3874qfsniy";
   };
 
-  patches = [ ./fix-shell-path.patch ];
+  patches = [
+    ./fix-shell-path.patch
+    ./0001-gitlab-runner-don-t-checked-for-fixed-runtime.patch
+  ];
 
   meta = with lib; {
     description = "GitLab Runner the continuous integration executor of GitLab";

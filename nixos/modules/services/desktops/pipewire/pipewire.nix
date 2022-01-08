@@ -40,6 +40,8 @@ in {
 
   meta = {
     maintainers = teams.freedesktop.members;
+    # uses attributes of the linked package
+    buildDocsInSandbox = false;
   };
 
   ###### interface
@@ -123,6 +125,22 @@ in {
       pulse = {
         enable = mkEnableOption "PulseAudio server emulation";
       };
+
+      systemWide = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = ''
+          If true, a system-wide PipeWire service and socket is enabled
+          allowing all users in the "pipewire" group to use it simultaneously.
+          If false, then user units are used instead, restricting access to
+          only one user.
+
+          Enabling system-wide PipeWire is however not recommended and disabled
+          by default according to
+          https://github.com/PipeWire/pipewire/blob/master/NEWS
+        '';
+      };
+
     };
   };
 
@@ -148,9 +166,20 @@ in {
 
     # PipeWire depends on DBUS but doesn't list it. Without this booting
     # into a terminal results in the service crashing with an error.
+    systemd.services.pipewire.bindsTo = [ "dbus.service" ];
+    systemd.user.services.pipewire.bindsTo = [ "dbus.service" ];
+
+    # Enable either system or user units.  Note that for pipewire-pulse there
+    # are only user units, which work in both cases.
+    systemd.sockets.pipewire.enable = cfg.systemWide;
+    systemd.services.pipewire.enable = cfg.systemWide;
+    systemd.user.sockets.pipewire.enable = !cfg.systemWide;
+    systemd.user.services.pipewire.enable = !cfg.systemWide;
+
+    systemd.sockets.pipewire.wantedBy = lib.mkIf cfg.socketActivation [ "sockets.target" ];
     systemd.user.sockets.pipewire.wantedBy = lib.mkIf cfg.socketActivation [ "sockets.target" ];
     systemd.user.sockets.pipewire-pulse.wantedBy = lib.mkIf (cfg.socketActivation && cfg.pulse.enable) ["sockets.target"];
-    systemd.user.services.pipewire.bindsTo = [ "dbus.service" ];
+
     services.udev.packages = [ cfg.package ];
 
     # If any paths are updated here they must also be updated in the package test.
@@ -194,7 +223,22 @@ in {
     environment.sessionVariables.LD_LIBRARY_PATH =
       lib.optional cfg.jack.enable "${cfg.package.jack}/lib";
 
+    users = lib.mkIf cfg.systemWide {
+      users.pipewire = {
+        uid = config.ids.uids.pipewire;
+        group = "pipewire";
+        extraGroups = [
+          "audio"
+          "video"
+        ] ++ lib.optional config.security.rtkit.enable "rtkit";
+        description = "Pipewire system service user";
+        isSystemUser = true;
+      };
+      groups.pipewire.gid = config.ids.gids.pipewire;
+    };
+
     # https://gitlab.freedesktop.org/pipewire/pipewire/-/issues/464#note_723554
+    systemd.services.pipewire.environment."PIPEWIRE_LINK_PASSIVE" = "1";
     systemd.user.services.pipewire.environment."PIPEWIRE_LINK_PASSIVE" = "1";
   };
 }

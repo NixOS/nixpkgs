@@ -26,6 +26,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # makes http request to another server
+    # https://github.com/etianen/aiohttp-wsgi/issues/32
+    "testEnviron"
+  ];
+
   pythonImportsCheck = [ "aiohttp_wsgi" ];
 
   meta = with lib; {

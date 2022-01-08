@@ -16,6 +16,8 @@ in rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ nasm cargo-c ];
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 
+  checkType = "debug";
+
   postBuild = ''
     cargo cbuild --release --frozen --prefix=${placeholder "out"} --target ${rustTargetPlatformSpec}
   '';

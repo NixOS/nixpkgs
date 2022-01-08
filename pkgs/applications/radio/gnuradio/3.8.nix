@@ -248,6 +248,11 @@ stdenv.mkDerivation rec {
       url = "https://github.com/gnuradio/gnuradio/commit/9d7343526dd793120b6425cd9a6969416ed32503.patch";
       sha256 = "sha256-usSoRDDuClUfdX4yFbQNu8wDzve6UEhZYTFj1oZbFic=";
     })
+    # Fix compilation with boost 177
+    (fetchpatch {
+      url = "https://github.com/gnuradio/gnuradio/commit/2c767bb260a25b415e8c9c4b3ea37280b2127cec.patch";
+      sha256 = "sha256-l4dSzkXb5s3vcCeuKMMwiKfv83hFI9Yg+EMEX+sl+Uo=";
+    })
   ];
   passthru = shared.passthru // {
     # Deps that are potentially overriden and are used inside GR plugins - the same version must

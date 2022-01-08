@@ -41,6 +41,7 @@ in
       ++ optional postgresqlSupport postgresql;
 
       configureFlags = [
+        "--enable-ipv6"
         "--enable-proxy"
         "--with-iconv"
         "--with-libevent"

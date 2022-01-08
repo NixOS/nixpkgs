@@ -1,10 +1,11 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with builtins;
 with lib;
 
 let
   cfg = config.services.tor;
+  opt = options.services.tor;
   stateDir = "/var/lib/tor";
   runDir = "/run/tor";
   descriptionGeneric = option: ''
@@ -799,6 +800,11 @@ in
           options.SOCKSPort = mkOption {
             description = descriptionGeneric "SOCKSPort";
             default = if cfg.settings.HiddenServiceNonAnonymousMode == true then [{port = 0;}] else [];
+            defaultText = literalExpression ''
+              if config.${opt.settings}.HiddenServiceNonAnonymousMode == true
+              then [ { port = 0; } ]
+              else [ ]
+            '';
             example = [{port = 9090;}];
             type = types.listOf (optionSOCKSPort true);
           };

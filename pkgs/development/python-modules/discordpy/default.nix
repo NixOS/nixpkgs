@@ -6,6 +6,7 @@
 , pynacl
 , pythonOlder
 , withVoice ? true
+, ffmpeg
 }:
 
 buildPythonPackage rec {
@@ -24,9 +25,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
-  ] ++ lib.optionalString withVoice [
+  ] ++ lib.optionals withVoice [
     libopus
     pynacl
+    ffmpeg
   ];
 
   patchPhase = ''
@@ -34,6 +36,9 @@ buildPythonPackage rec {
       --replace "ctypes.util.find_library('opus')" "'${libopus}/lib/libopus.so.0'"
     substituteInPlace requirements.txt \
       --replace "aiohttp>=3.6.0,<3.8.0" "aiohttp>=3.6.0,<4"
+  '' + lib.optionalString withVoice ''
+    substituteInPlace "discord/player.py" \
+      --replace "executable='ffmpeg'" "executable='${ffmpeg}/bin/ffmpeg'"
   '';
 
   # Only have integration tests with discord

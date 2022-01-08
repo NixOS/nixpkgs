@@ -71,9 +71,9 @@ _shortenPerlShebang() {
             print
         }
     ' "$program" > "$temp" || die
-	# Preserve the mode of the original file
-	cp --preserve=mode --attributes-only "$program" "$temp"
-	mv "$temp" "$program"
+    # Preserve the mode of the original file
+    cp --preserve=mode --attributes-only "$program" "$temp"
+    mv "$temp" "$program"
 
     # Measure the new shebang line length and make sure it's okay. We subtract
     # one to account for the trailing newline that "head" included in its

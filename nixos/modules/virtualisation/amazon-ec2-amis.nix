@@ -402,5 +402,43 @@ let self = {
   "21.05".ap-east-1.x86_64-linux.hvm-ebs = "ami-06dc98082bc55c1fc";
   "21.05".sa-east-1.x86_64-linux.hvm-ebs = "ami-04737dd49b98936c6";
 
-  latest = self."21.05";
+  # 21.11.333823.96b4157790f-x86_64-linux
+  "21.11".eu-west-1.x86_64-linux.hvm-ebs = "ami-01d0304a712f2f3f0";
+  "21.11".eu-west-2.x86_64-linux.hvm-ebs = "ami-00e828bfc1e5d09ac";
+  "21.11".eu-west-3.x86_64-linux.hvm-ebs = "ami-0e1ea64430d8103f2";
+  "21.11".eu-central-1.x86_64-linux.hvm-ebs = "ami-0fcf28c07e86142c5";
+  "21.11".eu-north-1.x86_64-linux.hvm-ebs = "ami-0ee83a3c6590fd6b1";
+  "21.11".us-east-1.x86_64-linux.hvm-ebs = "ami-099756bfda4540da0";
+  "21.11".us-east-2.x86_64-linux.hvm-ebs = "ami-0b20a80b82052d23f";
+  "21.11".us-west-1.x86_64-linux.hvm-ebs = "ami-088ea590004b01752";
+  "21.11".us-west-2.x86_64-linux.hvm-ebs = "ami-0025b9d4831b911a7";
+  "21.11".ca-central-1.x86_64-linux.hvm-ebs = "ami-0e67089f898e74443";
+  "21.11".ap-southeast-1.x86_64-linux.hvm-ebs = "ami-0dc8d718279d3402d";
+  "21.11".ap-southeast-2.x86_64-linux.hvm-ebs = "ami-0155e842329970187";
+  "21.11".ap-northeast-1.x86_64-linux.hvm-ebs = "ami-07c95eda953bf5435";
+  "21.11".ap-northeast-2.x86_64-linux.hvm-ebs = "ami-04167df3cd952b3bd";
+  "21.11".ap-south-1.x86_64-linux.hvm-ebs = "ami-0680e05531b3db677";
+  "21.11".ap-east-1.x86_64-linux.hvm-ebs = "ami-0835a3e481dc240f9";
+  "21.11".sa-east-1.x86_64-linux.hvm-ebs = "ami-0f7c354c421348e51";
+
+  # 21.11.333823.96b4157790f-aarch64-linux
+  "21.11".eu-west-1.aarch64-linux.hvm-ebs = "ami-048f3eea6a12c4b3b";
+  "21.11".eu-west-2.aarch64-linux.hvm-ebs = "ami-0e6f18f2009806add";
+  "21.11".eu-west-3.aarch64-linux.hvm-ebs = "ami-0a28d593f5e938d80";
+  "21.11".eu-central-1.aarch64-linux.hvm-ebs = "ami-0b9c95d926ab9474c";
+  "21.11".eu-north-1.aarch64-linux.hvm-ebs = "ami-0f2d400b4a2368a1a";
+  "21.11".us-east-1.aarch64-linux.hvm-ebs = "ami-05afb75585567d386";
+  "21.11".us-east-2.aarch64-linux.hvm-ebs = "ami-07f360673c2fccf8d";
+  "21.11".us-west-1.aarch64-linux.hvm-ebs = "ami-0a6892c61d85774db";
+  "21.11".us-west-2.aarch64-linux.hvm-ebs = "ami-04eaf20283432e852";
+  "21.11".ca-central-1.aarch64-linux.hvm-ebs = "ami-036b69828502e7fdf";
+  "21.11".ap-southeast-1.aarch64-linux.hvm-ebs = "ami-0d52e51e68b6954ef";
+  "21.11".ap-southeast-2.aarch64-linux.hvm-ebs = "ami-000a3019e003f4fb9";
+  "21.11".ap-northeast-1.aarch64-linux.hvm-ebs = "ami-09b0c7928780e25b6";
+  "21.11".ap-northeast-2.aarch64-linux.hvm-ebs = "ami-05f80f3c83083ff62";
+  "21.11".ap-south-1.aarch64-linux.hvm-ebs = "ami-05b2a3ff8489c3f59";
+  "21.11".ap-east-1.aarch64-linux.hvm-ebs = "ami-0aa3b50a4f2822a00";
+  "21.11".sa-east-1.aarch64-linux.hvm-ebs = "ami-00f68eff453d3fe69";
+
+  latest = self."21.11";
 }; in self

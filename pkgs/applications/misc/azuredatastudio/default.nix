@@ -66,14 +66,14 @@ in
 stdenv.mkDerivation rec {
 
   pname = "azuredatastudio";
-  version = "1.33.0";
+  version = "1.33.1";
 
   desktopItems = [ desktopItem urlHandlerDesktopItem ];
 
   src = fetchurl {
     name = "${pname}-${version}.tar.gz";
     url = "https://azuredatastudio-update.azurewebsites.net/${version}/linux-x64/stable";
-    sha256 = "0593xs44ryfyxy0hc31hdbj706q16h58jb0qyfyncn7ngybm3423";
+    sha256 = "sha256-jgZ8iZkic26JSgFTXpu1u1+MM4G5AqyW6Mj1tx5QwcY=";
   };
 
   nativeBuildInputs = [

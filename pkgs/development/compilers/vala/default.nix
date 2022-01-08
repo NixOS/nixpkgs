@@ -28,17 +28,7 @@ let
         #     0.40.12: https://github.com/openembedded/openembedded-core/raw/8553c52f174af4c8c433c543f806f5ed5c1ec48c/meta/recipes-devtools/vala/vala/disable-graphviz.patch
         "0.40" = ./disable-graphviz-0.40.12.patch;
 
-        # NOTE: the openembedded-core project doesn't have a patch for 0.44.1
-        # We've reverted the addition of the "--disable-valadoc" option
-        # and then applied the following patch.
-        #     0.42.4: https://github.com/openembedded/openembedded-core/raw/f2b4f9ec6f44dced7f88df849cca68961419eeb8/meta/recipes-devtools/vala/vala/disable-graphviz.patch
-        "0.44" = ./disable-graphviz-0.44.3.patch;
-
-        "0.46" = ./disable-graphviz-0.46.1.patch;
-
         "0.48" = ./disable-graphviz-0.46.1.patch;
-
-        "0.50" = ./disable-graphviz-0.46.1.patch;
 
         "0.52" = ./disable-graphviz-0.46.1.patch;
 
@@ -113,29 +103,19 @@ in rec {
     sha256 = "1pxpack8rrmywlf47v440hc6rv3vi8q9c6niwqnwikxvb2pwf3w7";
   };
 
-  vala_0_46 = generic {
-    version = "0.46.13";
-    sha256 = "0d7l4vh2xra3q75kw3sy2d9bn5p6s3g3r7j37bdn6ir8l3wp2ivs";
-  };
-
   vala_0_48 = generic {
-    version = "0.48.19";
-    sha256 = "sha256-gLdlijfZhE/NG0Mdr8WATeYWpYGW5PHxGeWyrraLSgE=";
-  };
-
-  vala_0_50 = generic {
-    version = "0.50.10";
-    sha256 = "sha256-vnIf8/AYHqttM+zKzygfZvMI+qHl5VTwj99nFZpFlRU=";
+    version = "0.48.20";
+    sha256 = "sha256-RrHIF/dIUfvMOV/E+eoRlQLPh7kzPMllbhzczAvTN24=";
   };
 
   vala_0_52 = generic {
-    version = "0.52.7";
-    sha256 = "sha256-C7WptPbRdUmewKWAJK3ANapRcAgPUzwo2cNY0aMsU2o=";
+    version = "0.52.8";
+    sha256 = "sha256-d3t9HLVnFewyJUXQEw5/9Y2eem0b2WtuKX6eYOgRh5M=";
   };
 
   vala_0_54 = generic {
-    version = "0.54.2";
-    sha256 = "iE3nRTF9TVbk6M7emT3I8E1Qz8o2z2DS8vJ4wwwrExE=";
+    version = "0.54.3";
+    sha256 = "7R1f5MvAzShF0N5PH/77Fa+waJLSMMfMppV4FnLo+2A=";
   };
 
   vala = vala_0_54;

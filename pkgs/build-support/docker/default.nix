@@ -5,6 +5,7 @@
 , closureInfo
 , coreutils
 , e2fsprogs
+, fakechroot
 , fakeroot
 , findutils
 , go
@@ -34,6 +35,10 @@
 }:
 
 let
+  inherit (lib)
+    optionals
+    optionalString
+    ;
 
   inherit (lib)
     escapeShellArgs
@@ -235,7 +240,7 @@ rec {
           # Unpack all of the parent layers into the image.
           lowerdir=""
           extractionID=0
-          for layerTar in $(tac layer-list); do
+          for layerTar in $(cat layer-list); do
             echo "Unpacking layer $layerTar"
             extractionID=$((extractionID + 1))
 
@@ -811,6 +816,10 @@ rec {
     , # Optional bash script to run inside fakeroot environment.
       # Could be used for changing ownership of files in customisation layer.
       fakeRootCommands ? ""
+    , # Whether to run fakeRootCommands in fakechroot as well, so that they
+      # appear to run inside the image, but have access to the normal Nix store.
+      # Perhaps this could be enabled on by default on pkgs.stdenv.buildPlatform.isLinux
+      enableFakechroot ? false
     , # We pick 100 to ensure there is plenty of room for extension. I
       # believe the actual maximum is 128.
       maxLayers ? 100
@@ -842,16 +851,26 @@ rec {
           name = "${baseName}-customisation-layer";
           paths = contentsList;
           inherit extraCommands fakeRootCommands;
-          nativeBuildInputs = [ fakeroot ];
+          nativeBuildInputs = [
+            fakeroot
+          ] ++ optionals enableFakechroot [
+            fakechroot
+            # for chroot
+            coreutils
+            # fakechroot needs getopt, which is provided by util-linux
+            util-linux
+          ];
           postBuild = ''
             mv $out old_out
             (cd old_out; eval "$extraCommands" )
 
             mkdir $out
-
-            fakeroot bash -c '
+            ${optionalString enableFakechroot ''
+              export FAKECHROOT_EXCLUDE_PATH=/dev:/proc:/sys:${builtins.storeDir}:$out/layer.tar
+            ''}
+            ${optionalString enableFakechroot ''fakechroot chroot $PWD/old_out ''}fakeroot bash -c '
               source $stdenv/setup
-              cd old_out
+              ${optionalString (!enableFakechroot) ''cd old_out''}
               eval "$fakeRootCommands"
               tar \
                 --sort name \
@@ -867,13 +886,13 @@ rec {
         };
 
         closureRoots = lib.optionals includeStorePaths /* normally true */ (
-          [ baseJson ] ++ contentsList
+          [ baseJson customisationLayer ]
         );
         overallClosure = writeText "closure" (lib.concatStringsSep " " closureRoots);
 
         # These derivations are only created as implementation details of docker-tools,
         # so they'll be excluded from the created images.
-        unnecessaryDrvs = [ baseJson overallClosure ];
+        unnecessaryDrvs = [ baseJson overallClosure customisationLayer ];
 
         conf = runCommand "${baseName}-conf.json"
           {

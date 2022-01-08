@@ -2,6 +2,7 @@
   "@angular/cli"
 , "@antora/cli"
 , "@antora/site-generator-default"
+, "@astrojs/language-server"
 , "@bitwarden/cli"
 , "@commitlint/cli"
 , "@commitlint/config-conventional"
@@ -227,6 +228,7 @@
 , "prettier"
 , "prettier-plugin-toml"
 , "prisma"
+, "@prisma/language-server"
 , "pscid"
 , "pulp"
 , "purescript-language-server"
@@ -267,6 +269,7 @@
 , "svelte-language-server"
 , "svgo"
 , "swagger"
+, "tailwindcss"
 , {"tedicross": "git+https://github.com/TediCross/TediCross.git#v0.8.7"}
 , "teck-programmer"
 , "tern"

@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   version = "27.2";
 
   emacsName = "emacs-${version}";
-  macportVersion = "8.2";
+  macportVersion = "8.3";
   name = "emacs-mac-${version}-${macportVersion}";
 
   src = fetchurl {
@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
 
   macportSrc = fetchurl {
     url = "ftp://ftp.math.s.chiba-u.ac.jp/emacs/${emacsName}-mac-${macportVersion}.tar.gz";
-    sha256 = "1bgm2g3ky7rkj1l27wnmyzqsqxzjng7y9bf72ym37wiyhyi2a9za";
+    sha256 = "0q4lbk3nb8rz1ibmf23plgsh8sx2wvhry5bf5mivgz4m4b6s2yij";
+    name = "${emacsName}-mac-${macportVersion}.tar.xz"; # It's actually compressed with xz, not gz
   };
 
   hiresSrc = fetchurl {
@@ -37,11 +38,11 @@ stdenv.mkDerivation rec {
 
   postUnpack = ''
     mv $sourceRoot $name
-    tar xzf $macportSrc -C $name --strip-components=1
+    tar xf $macportSrc -C $name --strip-components=1
     mv $name $sourceRoot
 
     # extract retina image resources
-    tar xzfv $hiresSrc --strip 1 -C $sourceRoot
+    tar xfv $hiresSrc --strip 1 -C $sourceRoot
   '';
 
   postPatch = ''

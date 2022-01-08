@@ -215,6 +215,12 @@ import ./make-test-python.nix ({ pkgs, ... }: {
                 f"docker run --rm  ${examples.layersOrder.imageName} cat /tmp/layer{index}"
             )
 
+    with subtest("Ensure layers unpacked in correct order before runAsRoot runs"):
+        assert "abc" in docker.succeed(
+            "docker load --input='${examples.layersUnpackOrder}'",
+            "docker run --rm ${examples.layersUnpackOrder.imageName} cat /layer-order"
+        )
+
     with subtest("Ensure environment variables are correctly inherited"):
         docker.succeed(
             "docker load --input='${examples.environmentVariables}'"
@@ -276,15 +282,22 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         # Ensure the image has the correct number of layers
         assert len(set_of_layers("layered-bulk-layer")) == 4
 
-    with subtest("Ensure correct behavior when no store is needed"):
+    with subtest("Ensure only minimal paths are added to the store"):
+        # TODO: make an example that has no store paths, for example by making
+        #       busybox non-self-referential.
+
         # This check tests that buildLayeredImage can build images that don't need a store.
         docker.succeed(
             "docker load --input='${pkgs.dockerTools.examples.no-store-paths}'"
         )
 
-        # This check may be loosened to allow an *empty* store rather than *no* store.
-        docker.succeed("docker run --rm no-store-paths ls /")
-        docker.fail("docker run --rm no-store-paths ls /nix/store")
+        docker.succeed("docker run --rm no-store-paths ls / >/dev/console")
+
+        # If busybox isn't self-referential, we need this line
+        #   docker.fail("docker run --rm no-store-paths ls /nix/store >/dev/console")
+        # However, it currently is self-referential, so we check that it is the
+        # only store path.
+        docker.succeed("diff <(docker run --rm no-store-paths ls /nix/store) <(basename ${pkgs.pkgsStatic.busybox}) >/dev/console")
 
     with subtest("Ensure buildLayeredImage does not change store path contents."):
         docker.succeed(
@@ -379,10 +392,20 @@ import ./make-test-python.nix ({ pkgs, ... }: {
             "docker run --rm ${examples.layeredImageWithFakeRootCommands.imageName} sh -c 'stat -c '%u' /home/jane | grep -E ^1000$'"
         )
 
+    with subtest("The image contains store paths referenced by the fakeRootCommands output"):
+        docker.succeed(
+            "docker run --rm ${examples.layeredImageWithFakeRootCommands.imageName} /hello/bin/layeredImageWithFakeRootCommands-hello"
+        )
+
     with subtest("exportImage produces a valid tarball"):
         docker.succeed(
             "tar -tf ${examples.exportBash} | grep '\./bin/bash' > /dev/null"
         )
+
+    with subtest("layered image fakeRootCommands with fakechroot works"):
+        docker.succeed("${examples.imageViaFakeChroot} | docker load")
+        docker.succeed("docker run --rm image-via-fake-chroot | grep -i hello")
+        docker.succeed("docker image rm image-via-fake-chroot:latest")
 
     with subtest("Ensure bare paths in contents are loaded correctly"):
         docker.succeed(

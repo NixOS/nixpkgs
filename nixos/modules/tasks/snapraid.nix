@@ -193,7 +193,6 @@ in
             LockPersonality = true;
             MemoryDenyWriteExecute = true;
             NoNewPrivileges = true;
-            PrivateDevices = true;
             PrivateTmp = true;
             ProtectClock = true;
             ProtectControlGroups = true;
@@ -208,7 +207,8 @@ in
             SystemCallArchitectures = "native";
             SystemCallFilter = "@system-service";
             SystemCallErrorNumber = "EPERM";
-            CapabilityBoundingSet = "CAP_DAC_OVERRIDE";
+            CapabilityBoundingSet = "CAP_DAC_OVERRIDE" +
+              lib.optionalString cfg.touchBeforeSync " CAP_FOWNER";
 
             ProtectSystem = "strict";
             ProtectHome = "read-only";

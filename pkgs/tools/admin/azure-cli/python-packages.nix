@@ -1,4 +1,4 @@
-{ stdenv, python, lib, src, version }:
+{ stdenv, python3, lib, src, version }:
 
 let
   buildAzureCliPackage = with py.pkgs; attrs: buildPythonPackage attrs;
@@ -25,7 +25,7 @@ let
       pythonNamespaces = [ "azure.mgmt" ];
     });
 
-  py = python.override {
+  py = python3.override {
     packageOverrides = self: super: {
       inherit buildAzureCliPackage;
 
@@ -38,6 +38,7 @@ let
 
         propagatedBuildInputs = with self; [
           adal
+          antlr4-python3-runtime
           argcomplete
           azure-common
           azure-cli-telemetry
@@ -63,9 +64,7 @@ let
           requests
           six
           tabulate
-        ]
-        ++ lib.optionals isPy3k [ antlr4-python3-runtime ]
-        ++ lib.optionals (!isPy3k) [ enum34 futures antlr4-python2-runtime ndg-httpsclient ];
+        ];
 
         postPatch = ''
           substituteInPlace setup.py \
@@ -119,9 +118,6 @@ let
         '';
       };
 
-      azure-appconfiguration = overrideAzureMgmtPackage super.azure-appconfiguration "1.1.1" "zip"
-        "sha256-uDzSy2PZMiXehOJ6u/wFkhL43id2b0xY3Tq7g53/C+Q=";
-
       azure-batch = overrideAzureMgmtPackage super.azure-batch "11.0.0" "zip"
         "83d7a2b0be42ca456ac2b56fa3dc6ce704c130e888d37d924072c1d3718f32da";
 
@@ -150,7 +146,7 @@ let
         "sha256-p9MTfVxGD1CsLUQGHWCnC08nedTKhEt3QZtXJeZeCb4=";
 
       azure-mgmt-recoveryservicesbackup = overrideAzureMgmtPackage super.azure-mgmt-recoveryservicesbackup "3.0.0" "zip"
-        "sha256-y5akbJdqXZsRi+mecq1opR1Ye9yTxNblGp/zjiXEqaY=";
+        "sha256-GZJIayjd1tT1l/0wBCF80sr09NyKDOcSJrWudnrOOhg=";
 
       azure-mgmt-resource = overrideAzureMgmtPackage super.azure-mgmt-resource "19.0.0" "zip"
         "bbb60bb9419633c2339569d4e097908638c7944e782b5aef0f5d9535085a9100";
@@ -310,6 +306,17 @@ let
 
       azure-multiapi-storage = overrideAzureMgmtPackage super.azure-multiapi-storage "0.7.0" "tar.gz"
         "cd4f184be8c9ca8aca969f93ed50dc7fe556d28ca11520440fc182cf876abdf9";
+
+      azure-appconfiguration = super.azure-appconfiguration.overrideAttrs(oldAttrs: rec {
+        version = "1.1.1";
+
+        src = super.fetchPypi {
+          inherit (oldAttrs) pname;
+          inherit version;
+          sha256 = "sha256-uDzSy2PZMiXehOJ6u/wFkhL43id2b0xY3Tq7g53/C+Q=";
+          extension = "zip";
+        };
+      });
 
       azure-graphrbac = super.azure-graphrbac.overrideAttrs(oldAttrs: rec {
         version = "0.60.0";

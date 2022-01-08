@@ -6,10 +6,10 @@
 
 mkDerivation rec {
   pname = "minitube";
-  version = "3.9.1";
+  version = "3.9.2";
 
   src = fetchFromGitHub {
-    sha256 = "sha256-1BVHxB7WtXCAJqP+uADszdVPc+T3ctCCzfoJPCb5ZTE=";
+    sha256 = "sha256-MIzfo17eAvpWO2HNq9z+D9XiOKTRiUHvaOdxI1EK1f0=";
     rev = version;
     repo = "minitube";
     owner = "flaviotordini";

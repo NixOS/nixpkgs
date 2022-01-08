@@ -411,8 +411,8 @@ let
         ${lib.concatStringsSep "\n" (mapAttrsToList (dest: source:
             let source' = if source == null then dest else toString source; in
               ''
-                mkdir -p $(dirname "$tmp/${dest}")
-                cp -a ${source'} "$tmp/${dest}"
+                mkdir -p $(dirname "$tmp/.initrd-secrets/${dest}")
+                cp -a ${source'} "$tmp/.initrd-secrets/${dest}"
               ''
           ) config.boot.initrd.secrets)
          }

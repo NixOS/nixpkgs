@@ -6,7 +6,6 @@
 # Python deps
 , logutils
 , Mako
-, singledispatch ? null
 , six
 , webtest
 # Test Inputs
@@ -40,7 +39,6 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     logutils
     Mako
-    singledispatch
     six
     webtest
   ];

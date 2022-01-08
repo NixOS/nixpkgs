@@ -28,12 +28,12 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "spacevim";
-  version = "1.7.0";
+  version = "1.8.0";
   src = fetchFromGitHub {
     owner = "SpaceVim";
     repo = "SpaceVim";
     rev = "v${version}";
-    sha256 = "sha256-TmfPeaGkH1Wq2b5lB29PUYDVddJVN3mBuPAmu9EtiGY=";
+    sha256 = "sha256:11snnh5q47nqhzjb9qya6hpnmlzc060958whqvqrh4hc7gnlnqp8";
   };
 
   nativeBuildInputs = [ makeWrapper vim-customized ];

@@ -2,19 +2,19 @@
 
 with rustPlatform;
 buildRustPackage rec {
-  version = "0.5.1";
+  version = "0.5.2";
   pname = "ripasso-cursive";
 
   src = fetchFromGitHub {
     owner = "cortex";
     repo = "ripasso";
     rev  = "release-${version}";
-    sha256 = "1jx6qv7skikl1ap3g1r34rkz4ab756kra7dgwwv45vl2fb6x74k4";
+    sha256 = "sha256-De/xCDzdRHCslD0j6vT8bwjcMTf5R8KZ32aaB3i+Nig=";
   };
 
   patches = [ ./fix-tests.patch ];
 
-  cargoSha256 = "1li1gmcs7lnjr4qhzs0rrgngdcxy1paiibjwk9zx2rrs71021cgk";
+  cargoSha256 = "sha256-ZmHzxHV4uIxPlLkkOLJApPNLo0GGVj9EopoIwi/j6DE=";
 
   cargoBuildFlags = [ "-p ripasso-cursive" ];
 

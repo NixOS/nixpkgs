@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, libtool
+{ lib, stdenv, fetchurl, pkg-config, libtool
 , bzip2, zlib, libX11, libXext, libXt, fontconfig, freetype, ghostscript, libjpeg, djvulibre
 , lcms2, openexr, libjxl, libpng, liblqr1, libraw, librsvg, libtiff, libxml2, openjpeg, libwebp, libheif
 , ApplicationServices
@@ -18,13 +18,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "imagemagick";
-  version = "7.1.0-16";
+  version = "7.1.0-19";
 
-  src = fetchFromGitHub {
-    owner = "ImageMagick";
-    repo = "ImageMagick";
-    rev = version;
-    sha256 = "sha256-souH5Fop4ss1ysaYylHcykoeB0HvMtqU51xggKoRFDM=";
+  src = fetchurl {
+    url = "https://download.imagemagick.org/ImageMagick/download/releases/ImageMagick-${version}.tar.xz";
+    hash = "sha256-P9eRdKsPMLwWQ68+ZU8dL/zDqVVCY5gRVWiLT0n3/Xc=";
   };
 
   outputs = [ "out" "dev" "doc" ]; # bin/ isn't really big

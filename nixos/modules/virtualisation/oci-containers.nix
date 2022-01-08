@@ -28,7 +28,7 @@ let
             You still need to set the <literal>image</literal> attribute, as it
             will be used as the image name for docker to start a container.
           '';
-          example = literalExpression "pkgs.dockerTools.buildDockerImage {...};";
+          example = literalExpression "pkgs.dockerTools.buildImage {...};";
         };
 
         login = {

@@ -24,9 +24,10 @@ rustPlatform.buildRustPackage rec {
 
   patches = lib.optionals stdenv.isLinux [
     # Run patchelf on the downloaded binaries.
-    # This necessary because Lean 4 now dynamically links to GMP.
+    # This is necessary because Lean 4 is now dynamically linked.
     (runCommand "0001-dynamically-patchelf-binaries.patch" {
         CC = stdenv.cc;
+        cc = "${stdenv.cc}/bin/cc";
         patchelf = patchelf;
         shell = runtimeShell;
       } ''
@@ -34,6 +35,7 @@ rustPlatform.buildRustPackage rec {
      substitute ${./0001-dynamically-patchelf-binaries.patch} $out \
        --subst-var patchelf \
        --subst-var dynamicLinker \
+       --subst-var cc \
        --subst-var shell
     '')
   ];

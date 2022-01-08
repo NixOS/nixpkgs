@@ -1,9 +1,5 @@
 <section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="sec-release-21.11">
   <title>Release 21.11 (“Porcupine”, 2021/11/30)</title>
-  <para>
-    In addition to numerous new and upgraded packages, this release has
-    the following highlights:
-  </para>
   <itemizedlist spacing="compact">
     <listitem>
       <para>
@@ -14,6 +10,10 @@
   </itemizedlist>
   <section xml:id="sec-release-21.11-highlights">
     <title>Highlights</title>
+    <para>
+      In addition to numerous new and upgraded packages, this release
+      has the following highlights:
+    </para>
     <itemizedlist>
       <listitem>
         <para>
@@ -255,14 +255,14 @@
         <para>
           <link xlink:href="https://www.isc.org/kea/">Kea</link>, ISCs
           2nd generation DHCP and DDNS server suite. Available at
-          <link xlink:href="options.html#opt-services.kea">services.kea</link>.
+          <link xlink:href="options.html#opt-services.kea.dhcp4">services.kea</link>.
         </para>
       </listitem>
       <listitem>
         <para>
           <link xlink:href="https://owncast.online/">owncast</link>,
           self-hosted video live streaming solution. Available at
-          <link xlink:href="options.html#opt-services.owncast">services.owncast</link>.
+          <link xlink:href="options.html#opt-services.owncast.enable">services.owncast</link>.
         </para>
       </listitem>
       <listitem>
@@ -270,7 +270,7 @@
           <link xlink:href="https://joinpeertube.org/">PeerTube</link>,
           developed by Framasoft, is the free and decentralized
           alternative to video platforms. Available at
-          <link xlink:href="options.html#opt-services.peertube">services.peertube</link>.
+          <link xlink:href="options.html#opt-services.peertube.enable">services.peertube</link>.
         </para>
       </listitem>
       <listitem>
@@ -522,6 +522,15 @@
           <link xlink:href="https://gitlab.com/ananicy-cpp/ananicy-cpp/">ananicy-cpp</link>.
           Available as
           <link linkend="opt-services.ananicy.enable">services.ananicy</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/prometheus-community/smartctl_exporter">smartctl_exporter</link>,
+          a Prometheus exporter for
+          <link xlink:href="https://en.wikipedia.org/wiki/S.M.A.R.T.">S.M.A.R.T.</link>
+          data. Available as
+          <link xlink:href="options.html#opt-services.prometheus.exporters.smartctl.enable">services.prometheus.exporters.smartctl</link>.
         </para>
       </listitem>
     </itemizedlist>
@@ -2021,6 +2030,12 @@ Superuser created successfully.
           data before upgrading. For details, see
           <link xlink:href="https://hydrusnetwork.github.io/hydrus/help/getting_started_installing.html#big_updates">the
           hydrus manual</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          More jdk and jre versions are now exposed via
+          <literal>java-packages.compiler</literal>.
         </para>
       </listitem>
     </itemizedlist>

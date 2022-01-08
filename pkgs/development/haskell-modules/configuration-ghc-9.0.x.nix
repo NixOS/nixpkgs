@@ -49,7 +49,6 @@ self: super: {
 
   # Jailbreaks & Version Updates
   async = doJailbreak super.async;
-  ChasingBottoms = markBrokenVersion "1.3.1.9" super.ChasingBottoms;
   data-fix = doJailbreak super.data-fix;
   dec = doJailbreak super.dec;
   ed25519 = doJailbreak super.ed25519;
@@ -78,10 +77,10 @@ self: super: {
   # 2021-11-08: Fixed in autoapply-0.4.2
   autoapply = doJailbreak self.autoapply_0_4_1_1;
 
-  # Doesn't allow Dhall 1.39.*
-  weeder_2_3_0 = super.weeder_2_3_0.override {
-    dhall = self.dhall_1_40_1;
-  };
+  # Doesn't allow Dhall 1.39.*; forbids lens 5.1
+  weeder_2_3_0 = doJailbreak (super.weeder_2_3_0.override {
+    dhall = self.dhall_1_40_2;
+  });
 
   # Upstream also disables test for GHC 9: https://github.com/kcsongor/generic-lens/pull/130
   generic-lens_2_2_0_0 = dontCheck super.generic-lens_2_2_0_0;
@@ -118,47 +117,16 @@ self: super: {
   retry = dontCheck super.retry;
 
   # Hlint needs >= 3.3.4 for ghc 9 support.
-  hlint = super.hlint_3_3_4;
+  hlint = doDistribute super.hlint_3_3_5;
 
   # 2021-09-18: ghc-api-compat and ghc-lib-* need >= 9.0.x versions for hls and hlint
   ghc-api-compat = doDistribute super.ghc-api-compat_9_0_1;
-  ghc-lib-parser = self.ghc-lib-parser_9_0_1_20210324;
-  ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_0_0_4;
-  ghc-lib = self.ghc-lib_9_0_1_20210324;
+  ghc-lib-parser = self.ghc-lib-parser_9_0_2_20211226;
+  ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_0_0_6;
+  ghc-lib = self.ghc-lib_9_0_2_20211226;
 
   # 2021-09-18: Need semialign >= 1.2 for correct bounds
   semialign = super.semialign_1_2_0_1;
-
-  # Will probably be needed for brittany support
-  # https://github.com/lspitzner/czipwith/pull/2
-  #czipwith = appendPatch
-  #    (pkgs.fetchpatch {
-  #      url = "https://github.com/lspitzner/czipwith/commit/b6245884ae83e00dd2b5261762549b37390179f8.patch";
-  #      sha256 = "08rpppdldsdwzb09fmn0j55l23pwyls2dyzziw3yjc1cm0j5vic5";
-  #    }) super.czipwith;
-
-  # 2021-09-18: https://github.com/mokus0/th-extras/pull/8
-  # Release is missing, but asked for in the above PR.
-  th-extras = overrideCabal (old: {
-      version = assert old.version == "0.0.0.4"; "unstable-2021-09-18";
-      src = pkgs.fetchFromGitHub  {
-        owner = "mokus0";
-        repo = "th-extras";
-        rev = "0d050b24ec5ef37c825b6f28ebd46787191e2a2d";
-        sha256 = "045f36yagrigrggvyb96zqmw8y42qjsllhhx2h20q25sk5h44xsd";
-      };
-      libraryHaskellDepends = old.libraryHaskellDepends ++ [self.th-abstraction];
-    }) super.th-extras;
-
-  # 2021-09-18: GHC 9 compat release is missing
-  # Issue: https://github.com/obsidiansystems/dependent-sum/issues/65
-  dependent-sum-template = dontCheck (appendPatch
-      (pkgs.fetchpatch {
-        url = "https://github.com/obsidiansystems/dependent-sum/commit/8cf4c7fbc3bfa2be475a17bb7c94a1e1e9a830b5.patch";
-        sha256 = "02wyy0ciicq2x8lw4xxz3x5i4a550mxfidhm2ihh60ni6am498ff";
-        stripLen = 2;
-        extraPrefix = "";
-      }) super.dependent-sum-template);
 
   # 2021-09-18: cabal2nix does not detect the need for ghc-api-compat.
   hiedb = overrideCabal (old: {
@@ -172,6 +140,14 @@ self: super: {
   # 2021-09-18: https://github.com/haskell/haskell-language-server/issues/2206
   # Restrictive upper bound on ormolu
   hls-ormolu-plugin = doJailbreak super.hls-ormolu-plugin;
+
+  # Too strict bounds on base
+  # https://github.com/lspitzner/multistate/issues/9
+  multistate = doJailbreak super.multistate;
+  # https://github.com/lspitzner/butcher/issues/7
+  butcher = doJailbreak super.butcher;
+  # Fixes a bug triggered on GHC 9.0.1
+  text-short = self.text-short_0_1_4;
 
   # 2021-09-18: The following plugins don‘t work yet on ghc9.
   haskell-language-server = appendConfigureFlags [
@@ -191,6 +167,6 @@ self: super: {
 
     hls-fourmolu-plugin = null; # No upstream support, needs new fourmolu release
     hls-stylish-haskell-plugin = null; # No upstream support
-    hls-brittany-plugin = null; # No upstream support, needs new brittany release
+    hls-brittany-plugin = null; # Dependencies don't build with 9.0.1
   });
 }

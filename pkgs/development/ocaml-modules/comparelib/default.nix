@@ -1,4 +1,4 @@
-{lib, buildOcaml, fetchurl, type_conv}:
+{ lib, buildOcaml, fetchFromGitHub, type_conv }:
 
 buildOcaml rec {
   pname = "comparelib";
@@ -6,9 +6,11 @@ buildOcaml rec {
 
   minimumSupportedOcamlVersion = "4.00";
 
-  src = fetchurl {
-    url = "https://github.com/janestreet/comparelib/archive/${version}.tar.gz";
-    sha256 = "02l343drgi4200flfx73nzdk61zajwidsqjk9n80b2d37lvhazlf";
+  src = fetchFromGitHub {
+    owner = "janestreet";
+    repo = "comparelib";
+    rev = version;
+    sha256 = "sha256-gtJvXAUxiIt/L9bCzS+8wHcCQ+QpBubwcjDcyN0K2MA=";
   };
 
   propagatedBuildInputs = [ type_conv ];

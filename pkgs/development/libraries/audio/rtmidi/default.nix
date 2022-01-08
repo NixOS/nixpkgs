@@ -42,6 +42,9 @@ stdenv.mkDerivation rec {
       url = "https://github.com/thestk/rtmidi/pull/230/commits/892fe5492f0e787484fa4a37027b08c265ce001f.patch";
       sha256 = "0ca9m42xa3gmycimzvzvl67wa266xq9pfp1b4v555rh2fp52kbcj";
     })
+
+    # https://github.com/thestk/rtmidi/pull/277
+    ./macos_include_targetconditionals.patch
   ];
 
   postPatch = ''

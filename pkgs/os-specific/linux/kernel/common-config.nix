@@ -41,6 +41,7 @@ let
         (whenAtLeast "5.2" yes)
       ];
       DEBUG_INFO_BTF            = whenAtLeast "5.2" (option yes);
+      BPF_LSM                   = whenAtLeast "5.7" (option yes);
       DEBUG_KERNEL              = yes;
       DEBUG_DEVRES              = no;
       DYNAMIC_DEBUG             = yes;
@@ -472,6 +473,11 @@ let
 
       # Detect buffer overflows on the stack
       CC_STACKPROTECTOR_REGULAR = {optional = true; tristate = whenOlder "4.18" "y";};
+    } // optionalAttrs stdenv.hostPlatform.isx86_64 {
+      # Enable Intel SGX
+      X86_SGX     = whenAtLeast "5.11" yes;
+      # Allow KVM guests to load SGX enclaves
+      X86_SGX_KVM = whenAtLeast "5.13" yes;
     };
 
     microcode = {
@@ -876,6 +882,7 @@ let
 
       SCHED_CORE = whenAtLeast "5.14" yes;
 
+      FSL_MC_UAPI_SUPPORT = mkIf (stdenv.hostPlatform.system == "aarch64-linux") (whenAtLeast "5.12" yes);
     } // optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "aarch64-linux") {
       # Enable CPU/memory hotplug support
       # Allows you to dynamically add & remove CPUs/memory to a VM client running NixOS without requiring a reboot

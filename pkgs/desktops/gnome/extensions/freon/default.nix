@@ -1,8 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, glib }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, glib
+, substituteAll
+, hddtemp
+, liquidctl
+, lm_sensors
+, netcat-gnu
+, nvme-cli
+, procps
+, smartmontools
+}:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-freon";
-  version = "44";
+  version = "45";
 
   passthru = {
     extensionUuid = "freon@UshakovVasilii_Github.yahoo.com";
@@ -13,10 +25,19 @@ stdenv.mkDerivation rec {
     owner = "UshakovVasilii";
     repo = "gnome-shell-extension-freon";
     rev = "EGO-${version}";
-    sha256 = "sha256-4DYAIC9N5id3vQe0WaOFP+MymsrPK18hbYqO4DjG+2U=";
+    sha256 = "sha256-tPb7SzHSwvz7VV+kZTmcw1eAdtL1J7FJ3BOtg4Us8jc=";
   };
 
   nativeBuildInputs = [ glib ];
+
+  patches = [
+    (substituteAll {
+      src = ./fix_paths.patch;
+      inherit hddtemp liquidctl lm_sensors procps smartmontools;
+      netcat = netcat-gnu;
+      nvmecli = nvme-cli;
+    })
+  ];
 
   buildPhase = ''
     runHook preBuild

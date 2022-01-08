@@ -32,10 +32,12 @@ stdenv.mkDerivation rec {
     sh autogen.sh
   '';
 
-  configureFlags = lib.optionals stdenv.isLinux [
+  configureFlags = [
+    (lib.strings.enableFeature stdenv.isLinux "platform")
+    "--enable-examples=no"
+  ] ++ lib.optionals stdenv.isLinux [
     "--x-includes=${lib.getDev libX11}/include"
     "--x-libraries=${lib.getLib libX11}/lib"
-    "--enable-examples=no"
   ];
 
   # libtool --tag=CXX --mode=link g++ -g -O2 libexamples.la ../src/platform/X11/libaggplatformX11.la ../src/libagg.la -o alpha_mask2 alpha_mask2.o

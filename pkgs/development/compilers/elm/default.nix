@@ -1,10 +1,13 @@
 { lib, stdenv, pkgs
-, haskell, haskellPackages, nodejs
+, haskell, haskellPackages, nodejs-14_x
 , fetchurl, fetchpatch, makeWrapper, writeScriptBin
   # Rust dependecies
-, curl, rustPlatform, openssl, pkg-config, Security
+, curl, rustPlatform, openssl, pkg-config, Security, darwin
 }:
 let
+  # To controll nodejs version we pass down
+  nodejs = nodejs-14_x;
+
   fetchElmDeps = import ./fetchElmDeps.nix { inherit stdenv lib fetchurl; };
 
   hsPkgs = haskellPackages.override {
@@ -111,6 +114,17 @@ let
         maintainers = [ maintainers.turbomack ];
       };
     };
+
+    elm-test-rs = import ./packages/elm-test-rs.nix {
+      inherit lib rustPlatform fetchurl openssl stdenv Security darwin;
+    } // {
+      meta = with lib; {
+        description = "Fast and portable executable to run your Elm tests";
+        homepage = "https://github.com/mpizenberg/elm-test-rs";
+        license = licenses.bsd3;
+        maintainers = [ maintainers.jpagex ];
+      };
+    };
   };
 
   elmNodePackages = with elmLib;
@@ -204,7 +218,7 @@ let
         };
       };
 
-      inherit (nodePkgs) elm-doc-preview elm-live elm-upgrade elm-xref elm-analyse;
+      inherit (nodePkgs) elm-doc-preview elm-live elm-upgrade elm-xref elm-analyse elm-git-install;
     };
 
 in hsPkgs.elmPkgs // elmNodePackages // elmRustPackages // {

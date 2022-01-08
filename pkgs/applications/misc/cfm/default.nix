@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Simple and fast TUI file manager with no dependencies";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ legendofmiracles ];
+    maintainers = with maintainers; [ lom ];
     homepage = "https://github.com/willeccles/cfm";
     platforms = platforms.all;
   };

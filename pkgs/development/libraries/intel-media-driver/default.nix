@@ -7,13 +7,14 @@
 , libva
 , libpciaccess
 , intel-gmmlib
+, libdrm
 , enableX11 ? stdenv.isLinux
 , libX11
 }:
 
 stdenv.mkDerivation rec {
   pname = "intel-media-driver";
-  version = "21.4.2";
+  version = "22.1.0";
 
   outputs = [ "out" "dev" ];
 
@@ -21,7 +22,7 @@ stdenv.mkDerivation rec {
     owner = "intel";
     repo = "media-driver";
     rev = "intel-media-${version}";
-    sha256 = "0hphpv3n2cdxmbyiwly7v9r0ijdq6hfnw604xz42jqgh9idi6h55";
+    sha256 = "0giba5274kzpjb5rp3d9bbnvcz7fp8ybi4s3hha2idxk0l5yamf1";
   };
 
   patches = [
@@ -43,7 +44,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [ libva libpciaccess intel-gmmlib ]
+  buildInputs = [ libva libpciaccess intel-gmmlib libdrm ]
     ++ lib.optional enableX11 libX11;
 
   postFixup = lib.optionalString enableX11 ''

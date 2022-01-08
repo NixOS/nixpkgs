@@ -259,6 +259,19 @@ let
       '';
     };
 
+    fastly = {
+      exporterConfig = {
+        enable = true;
+        tokenPath = pkgs.writeText "token" "abc123";
+      };
+
+      # noop: fastly's exporter can't start without first talking to fastly
+      # see: https://github.com/peterbourgon/fastly-exporter/issues/87
+      exporterTest = ''
+        succeed("true");
+      '';
+    };
+
     fritzbox = {
       # TODO add proper test case
       exporterConfig = {
@@ -861,6 +874,9 @@ let
         wait_for_unit("prometheus-postfix-exporter.service")
         wait_for_file("/var/lib/postfix/queue/public/showq")
         wait_for_open_port(9154)
+        wait_until_succeeds(
+            "curl -sSf http://localhost:9154/metrics | grep 'postfix_up{path=\"/var/lib/postfix/queue/public/showq\"} 1'"
+        )
         succeed(
             "curl -sSf http://localhost:9154/metrics | grep 'postfix_smtpd_connects_total 0'"
         )
@@ -936,7 +952,7 @@ let
       exporterConfig = {
         enable = true;
       };
-      metricProvider.services.redis.enable = true;
+      metricProvider.services.redis.servers."".enable = true;
       exporterTest = ''
         wait_for_unit("redis.service")
         wait_for_unit("prometheus-redis-exporter.service")
@@ -1011,6 +1027,25 @@ let
             "curl -sSf 'localhost:9172/probe?name=success' | grep -q '{}'".format(
                 'script_success{script="success"} 1'
             )
+        )
+      '';
+    };
+
+    smartctl = {
+      exporterConfig = {
+        enable = true;
+        devices = [
+          "/dev/vda"
+        ];
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-smartctl-exporter.service")
+        wait_for_open_port("9633")
+        wait_until_succeeds(
+          "curl -sSf 'localhost:9633/metrics'"
+        )
+        wait_until_succeeds(
+            'journalctl -eu prometheus-smartctl-exporter.service -o cat | grep "/dev/vda: Unable to detect device type"'
         )
       '';
     };

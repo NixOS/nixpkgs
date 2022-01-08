@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "pyathena";
-  version = "2.3.0";
+  version = "2.3.2";
 
   src = fetchPypi {
     pname = "PyAthena";
     inherit version;
-    sha256 = "08fl653yayvqi991zvcai5ifcxwy9ip6xh0cr3lbimggjnjgwsl5";
+    sha256 = "20a473c52e76a211c427d2f711af0a04804a70fc036ab884780e42e0dc2025f7";
   };
 
   # Nearly all tests depend on a working AWS Athena instance,

@@ -19,13 +19,13 @@
 
 buildPythonPackage rec {
   pname = "pytenable";
-  version = "1.4.0";
+  version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "tenable";
     repo = "pyTenable";
     rev = version;
-    sha256 = "sha256-JdI0nAX/leTnYgGId2ct04u1a+z7eU2UY6pk2cUM4fg=";
+    sha256 = "sha256-qljoJ+nYFVS5VHr/M4mITtO9Czuyb4HLzVjhprhyJIs=";
   };
 
   propagatedBuildInputs = [

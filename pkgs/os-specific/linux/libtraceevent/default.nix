@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "libtraceevent";
-  version = "1.4.0";
+  version = "1.5.0";
 
   src = fetchgit {
     url = "git://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git";
     rev = "libtraceevent-${version}";
-    sha256 = "1x36qsrcssjywjpwkgyp9hz6y878kivma9pz7zrhxdsrqv2d2zs1";
+    sha256 = "sha256-ysdsuJ9MvmNY0/XSV+aO7Gh8buWed25DQhBE/5HIASU=";
   };
 
   # Don't build and install html documentation

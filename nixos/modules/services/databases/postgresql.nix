@@ -289,14 +289,16 @@ in
         port = cfg.port;
       };
 
-    services.postgresql.package =
+    services.postgresql.package = let
+        mkThrow = ver: throw "postgresql_${ver} was removed, please upgrade your postgresql version.";
+    in
       # Note: when changing the default, make it conditional on
       # ‘system.stateVersion’ to maintain compatibility with existing
       # systems!
       mkDefault (if versionAtLeast config.system.stateVersion "21.11" then pkgs.postgresql_13
             else if versionAtLeast config.system.stateVersion "20.03" then pkgs.postgresql_11
-            else if versionAtLeast config.system.stateVersion "17.09" then pkgs.postgresql_9_6
-            else throw "postgresql_9_5 was removed, please upgrade your postgresql version.");
+            else if versionAtLeast config.system.stateVersion "17.09" then mkThrow "9_6"
+            else mkThrow "9_5");
 
     services.postgresql.dataDir = mkDefault "/var/lib/postgresql/${cfg.package.psqlSchema}";
 

@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "md-toc";
-  version = "8.0.1";
+  version = "8.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.5";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "frnmst";
     repo = pname;
     rev = version;
-    sha256 = "sha256-nh9KxjwF+O4n0qVo9yPP6fvKB5XFICh+Ak6oD2fQVdk=";
+    sha256 = "sha256-FTvHPV/QIpKRF7wcZ6yuik4GzPrwyg4Oxc5/cdCs6Qo=";
   };
 
   propagatedBuildInputs = [
@@ -27,11 +27,6 @@ buildPythonPackage rec {
   checkInputs = [
     pytestCheckHook
   ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "fpyutils>=2.0,<2.1" "fpyutils>=2.0,<3"
-  '';
 
   pytestFlagsArray = [
     "md_toc/tests/*.py"

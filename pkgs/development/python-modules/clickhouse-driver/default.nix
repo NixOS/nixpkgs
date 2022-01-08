@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "clickhouse-driver";
-  version = "0.2.0";
+  version = "0.2.2";
 
   # pypi source doesn't contain tests
   src = fetchFromGitHub {
     owner = "mymarilyn";
     repo = "clickhouse-driver";
-    rev = "96b7ba448c63ca2670cc9aa70d4a0e08826fb650";
-    sha256 = "sha256-HFKUxJOlBCVlu7Ia8heGpwX6+HdKuwSy92s3v+GKGwE=";
+    rev = version;
+    sha256 = "0sx4jbadx9frzhqnj8b9w9l508x1r7j7b9883h7xq93lf00rxkfz";
   };
 
   propagatedBuildInputs = [

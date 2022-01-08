@@ -1,4 +1,4 @@
-{ lib, stdenv, pkgsBuildTarget, targetPackages
+{ lib, stdenv, pkgsBuildTarget, pkgsHostTarget, targetPackages
 
 # build-tools
 , bootPkgs
@@ -12,9 +12,10 @@
   libffi ? null
 
   # Libdw.c only supports x86_64, i686 and s390x
-, enableDwarf ? stdenv.targetPlatform.isx86 &&
-                !stdenv.targetPlatform.isDarwin &&
-                !stdenv.targetPlatform.isWindows
+, enableDwarf ? (stdenv.targetPlatform.isx86 ||
+                 (stdenv.targetPlatform.isS390 && stdenv.targetPlatform.is64bit)) &&
+                lib.meta.availableOn stdenv.hostPlatform elfutils &&
+                lib.meta.availableOn stdenv.targetPlatform elfutils
 , elfutils # for DWARF support
 
 , useLLVM ? !(stdenv.targetPlatform.isx86
@@ -63,7 +64,7 @@
 
 , # Whether to disable the large address space allocator
   # necessary fix for iOS: https://www.reddit.com/r/haskell/comments/4ttdz1/building_an_osxi386_to_iosarm64_cross_compiler/d5qvd67/
-  disableLargeAddressSpace ? stdenv.targetPlatform.isDarwin && stdenv.targetPlatform.isAarch64
+  disableLargeAddressSpace ? stdenv.targetPlatform.isiOS
 }:
 
 assert !enableNativeBignum -> gmp != null;
@@ -161,7 +162,7 @@ let
   # But we cannot avoid BFD when using musl libc due to https://sourceware.org/bugzilla/show_bug.cgi?id=23856
   # see #84670 and #49071 for more background.
   useLdGold = targetPlatform.linker == "gold" ||
-    (targetPlatform.linker == "bfd" && (targetPackages.stdenv.cc.bintools.bintools.hasGold or false) && !targetPlatform.isMusl);
+    (targetPlatform.linker == "bfd" && (targetCC.bintools.bintools.hasGold or false) && !targetPlatform.isMusl);
 
   # Makes debugging easier to see which variant is at play in `nix-store -q --tree`.
   variantSuffix = lib.concatStrings [
@@ -170,6 +171,14 @@ let
   ];
 
 in
+
+# C compiler, bintools and LLVM are used at build time, but will also leak into
+# the resulting GHC's settings file and used at runtime. This means that we are
+# currently only able to build GHC if hostPlatform == buildPlatform.
+assert targetCC == pkgsHostTarget.targetPackages.stdenv.cc;
+assert buildTargetLlvmPackages.llvm == llvmPackages.llvm;
+assert stdenv.targetPlatform.isDarwin -> buildTargetLlvmPackages.clang == llvmPackages.clang;
+
 stdenv.mkDerivation (rec {
   inherit version;
   inherit (src) rev;
@@ -210,15 +219,12 @@ stdenv.mkDerivation (rec {
     export OTOOL="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}otool"
     export INSTALL_NAME_TOOL="${bintoolsFor.install_name_tool}/bin/${bintoolsFor.install_name_tool.targetPrefix}install_name_tool"
   '' + lib.optionalString useLLVM ''
-    export LLC="${lib.getBin llvmPackages.llvm}/bin/llc"
-    export OPT="${lib.getBin llvmPackages.llvm}/bin/opt"
-  '' + lib.optionalString (targetCC.isClang || (useLLVM && stdenv.targetPlatform.isDarwin)) (let
-    # LLVM backend on Darwin needs clang, if we are already using clang, might as well set the environment variable.
-    # See also https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/codegens.html#llvm-code-generator-fllvm
-    clang = if targetCC.isClang then targetCC else llvmPackages.clang;
-  in ''
-    export CLANG="${clang}/bin/${clang.targetPrefix}clang"
-  '') + ''
+    export LLC="${lib.getBin buildTargetLlvmPackages.llvm}/bin/llc"
+    export OPT="${lib.getBin buildTargetLlvmPackages.llvm}/bin/opt"
+  '' + lib.optionalString (useLLVM && stdenv.targetPlatform.isDarwin) ''
+    # LLVM backend on Darwin needs clang: https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/codegens.html#llvm-code-generator-fllvm
+    export CLANG="${buildTargetLlvmPackages.clang}/bin/${buildTargetLlvmPackages.clang.targetPrefix}clang"
+  '' + ''
 
     # otherwise haddock fails when generating the compiler docs
     export LANG=C.UTF-8

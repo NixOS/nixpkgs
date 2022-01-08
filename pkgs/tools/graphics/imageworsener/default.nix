@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "imageworsener";
-  version = "1.3.3";
+  version = "1.3.4";
 
   src = fetchurl {
     url = "https://entropymine.com/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "099ymaqk7gj0plmdx7fxabbdx2n03d25r00ly0vf6cx37mgnwjvw";
+    sha256 = "1dhjhlfrdng50dxxd306adzm54ir62pz99h4v0yi6rg56nxv5q5s";
   };
 
   postPatch = ''
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     homepage = "https://entropymine.com/imageworsener/";
     changelog = "https://github.com/jsummers/${pname}/blob/${version}/changelog.txt";
     license = licenses.mit;
-    maintainers = with maintainers; [ emily ];
+    maintainers = with maintainers; [ emily smitop ];
     platforms = platforms.all;
   };
 }

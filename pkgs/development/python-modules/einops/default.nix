@@ -10,6 +10,7 @@
 , pytorch
 , mxnet
 , tensorflow
+, keras
 }:
 
 buildPythonPackage rec {
@@ -35,6 +36,7 @@ buildPythonPackage rec {
     pytorch
     mxnet
     tensorflow
+    keras
   ];
 
   # No CUDA in sandbox

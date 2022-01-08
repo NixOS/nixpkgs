@@ -1,26 +1,28 @@
-{ buildPythonPackage, fetchFromGitHub, lib, pythonOlder, pytest }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytest
+, pythonOlder
+}:
+
 buildPythonPackage rec {
   pname = "typed-ast";
-  version = "1.4.3";
+  version = "1.5.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
+
   src = fetchFromGitHub {
     owner = "python";
     repo = "typed_ast";
     rev = version;
-    sha256 = "16mn9snwik5n2ib65sw2xcaqdm02j8ps21zgjxf8kyy7qnx2mx4w";
+    hash = "sha256-qfXMT+rSf/WcWHpkg4VZXZMYj/5IKQWAKRsxQ0TRzPU=";
   };
-  # Only works with Python 3.3 and newer;
-  disabled = pythonOlder "3.3";
-
-  pythonImportsCheck = [
-    "typed_ast"
-    "typed_ast.ast27"
-    "typed_ast.ast3"
-    "typed_ast.conversions"
-  ];
 
   checkInputs = [
     pytest
   ];
+
   checkPhase = ''
     runHook preCheck
 
@@ -32,9 +34,17 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  meta = {
+  pythonImportsCheck = [
+    "typed_ast"
+    "typed_ast.ast27"
+    "typed_ast.ast3"
+    "typed_ast.conversions"
+  ];
+
+  meta = with lib; {
+    description = "Python AST modules with type comment support";
     homepage = "https://github.com/python/typed_ast";
-    description = "Python 2 and 3 ast modules with type comment support";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

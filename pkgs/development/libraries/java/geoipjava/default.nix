@@ -1,9 +1,11 @@
 {lib, stdenv, fetchurl, jdk, unzip}:
 
-stdenv.mkDerivation {
-  name = "GeoIPJava-1.2.5";
+stdenv.mkDerivation rec {
+  pname = "GeoIPJava";
+  version = "1.2.5";
+
   src = fetchurl {
-    url = "https://geolite.maxmind.com/download/geoip/api/java/GeoIPJava-1.2.5.zip";
+    url = "https://geolite.maxmind.com/download/geoip/api/java/GeoIPJava-${version}.zip";
     sha256 = "1gb2d0qvvq7xankz7l7ymbr3qprwk9bifpy4hlgw0sq4i6a55ypd";
   };
   nativeBuildInputs = [ unzip ];

@@ -2,14 +2,13 @@
 , fetchFromGitHub, glib, pkg-config }:
 
 stdenv.mkDerivation rec {
-  date    = "2016-12-12";
-  name    = "bluez-tools-${date}";
-  rev     = "97efd29";
+  version = "unstable-2016-12-12";
+  pname = "bluez-tools";
 
   src = fetchFromGitHub {
-    inherit rev;
     owner = "khvzak";
     repo = "bluez-tools";
+    rev = "97efd293491ad7ec96a655665339908f2478b3d1";
     sha256 = "08xp77sf5wnq5086halmyk3vla4bfls06q1zrqdcq36hw6d409i6";
   };
 

@@ -114,8 +114,11 @@ in
       name = "fancyindex";
       owner = "aperezdc";
       repo = "ngx-fancyindex";
-      rev = "v0.4.4";
-      sha256 = "14xmzcl608pr7hb7wng6hpz7by51cfnxlszbka3zhp3kk86ljsi6";
+      rev = "v0.5.2";
+      sha256 = "0nar45lp3jays3p6b01a78a6gwh6v0snpzcncgiphcqmj5kw8ipg";
+    };
+    meta = {
+      maintainers = with lib.maintainers; [ aneeshusa ];
     };
   };
 
@@ -293,10 +296,10 @@ in
   pam = {
     src = fetchFromGitHub {
       name = "pam";
-      owner = "stogh";
+      owner = "sto";
       repo = "ngx_http_auth_pam_module";
-      rev = "v1.5.2";
-      sha256 = "06nydxk82rc9yrw4408nakb197flxh4z1yv935crg65fn9706rl7";
+      rev = "v1.5.3";
+      sha256 = "sha256:09lnljdhjg65643bc4535z378lsn4llbq67zcxlln0pizk9y921a";
     };
     inputs = [ pkgs.pam ];
   };

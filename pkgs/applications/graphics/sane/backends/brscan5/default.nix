@@ -9,15 +9,15 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "brscan5";
-  version = "1.2.6-0";
+  version = "1.2.7-0";
   src = {
     "i686-linux" = fetchurl {
       url = "https://download.brother.com/welcome/dlf104034/${pname}-${version}.i386.deb";
-      sha256 = "102q745pc0168syggd4gym51qf3m3iqld3a4skfnbkm6yky4w4s8";
+      sha256 = "647d06f629c22408d25be7c0bf49a4b1c7280bf78a27aa2cde6c3e3fa8b6807a";
     };
     "x86_64-linux" = fetchurl {
       url = "https://download.brother.com/welcome/dlf104033/${pname}-${version}.amd64.deb";
-      sha256 = "1pwbzhpg5nzpw2rw936vf2cr334v8iny16y8fbb1zimgzmv427wx";
+      sha256 = "867bd88ab0d90f8e9391dc8127385095127e533cb6bd2d5d13449df602b165ae";
     };
   }."${stdenv.hostPlatform.system}";
 
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     pushd $out/$PATH_TO_BRSCAN5
       ln -s libLxBsDeviceAccs.so.1.0.0 libLxBsDeviceAccs.so.1
       ln -s libLxBsNetDevAccs.so.1.0.0 libLxBsNetDevAccs.so.1
-      ln -s libLxBsScanCoreApi.so.3.0.0 libLxBsScanCoreApi.so.3
+      ln -s libLxBsScanCoreApi.so.3.2.0 libLxBsScanCoreApi.so.3
       ln -s libLxBsUsbDevAccs.so.1.0.0 libLxBsUsbDevAccs.so.1
       ln -s libsane-brother5.so.1.0.7 libsane-brother5.so.1
     popd

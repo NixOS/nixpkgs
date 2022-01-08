@@ -1,13 +1,15 @@
 { lib, stdenv, fetchurl, kernel }:
 
-stdenv.mkDerivation {
+let
+  srcs = import (./srcs.nix) { inherit fetchurl; };
+in
+stdenv.mkDerivation rec {
   pname = "mxu11x0";
-  version = "1.4-${kernel.version}";
 
-  src = fetchurl {
-    url = "https://www.moxa.com/Moxa/media/PDIM/S100000385/moxa-uport-1000-series-linux-3.x-and-4.x-for-uport-11x0-series-driver-v1.4.tgz";
-    sha256 = "1hz9ygabbp8pv49k1j4qcsr0v3zw9xy0bh1akqgxp5v29gbdgxjl";
-  };
+  src = if lib.versionAtLeast kernel.version "5.0" then srcs.mxu11x0_5.src else srcs.mxu11x0_4.src;
+  mxu_version = if lib.versionAtLeast kernel.version "5.0" then srcs.mxu11x0_5.version else srcs.mxu11x0_4.version;
+
+  version = mxu_version + "-${kernel.version}";
 
   preBuild = ''
     sed -i -e "s/\$(uname -r).*/${kernel.modDirVersion}/g" driver/mxconf
@@ -33,6 +35,8 @@ stdenv.mkDerivation {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ uralbash ];
     platforms = platforms.linux;
-    broken = kernel.kernelAtLeast "5.4";
+    # broken due to API change in write_room() > v5.14-rc1
+    # https://github.com/torvalds/linux/commit/94cc7aeaf6c0cff0b8aeb7cb3579cee46b923560
+    broken = kernel.kernelAtLeast "5.14";
   };
 }

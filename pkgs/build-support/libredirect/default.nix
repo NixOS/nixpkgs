@@ -1,6 +1,22 @@
-{ stdenv, lib, coreutils }:
+{ stdenv, runCommand, lib, coreutils }:
 
-stdenv.mkDerivation rec {
+if stdenv.hostPlatform.isStatic
+then throw ''
+  libredirect is not available on static builds.
+
+  Please fix your derivation to not depend on libredirect on static
+  builds, using something like following:
+
+    nativeBuildInputs =
+      lib.optional (!stdenv.buildPlatform.isStatic) libredirect;
+
+  and disable tests as necessary, although fixing tests to work without
+  libredirect is even better.
+
+  libredirect uses LD_PRELOAD feature of dynamic loader and does not
+  work on static builds where dynamic loader is not used.
+  ''
+else stdenv.mkDerivation rec {
   pname = "libredirect";
   version = "0";
 

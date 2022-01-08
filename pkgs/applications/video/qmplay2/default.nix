@@ -22,13 +22,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "qmplay2";
-  version = "21.06.07";
+  version = "21.12.24";
 
   src = fetchFromGitHub {
     owner = "zaps166";
     repo = "QMPlay2";
     rev = version;
-    sha256 = "sha256-NV9uglYnqebXhMx8uL0DhGe9l5TBVjlSIaB4IWC8YAc=";
+    sha256 = "sha256-SHReKh+M1rgSIiweYFgVvwMeKWeQD52S4KxEiTsyHrI=";
     fetchSubmodules = true;
   };
 

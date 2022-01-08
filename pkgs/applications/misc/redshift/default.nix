@@ -64,7 +64,16 @@ let
 
       preConfigure = "./bootstrap";
 
-      postFixup = "wrapPythonPrograms";
+      dontWrapGApps = true;
+
+      preFixup = ''
+        makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+      '';
+
+      postFixup = ''
+        wrapPythonPrograms
+        wrapGApp $out/bin/${pname}
+      '';
 
       # the geoclue agent may inspect these paths and expect them to be
       # valid without having the correct $PATH set
@@ -108,25 +117,7 @@ rec {
       license = licenses.gpl3Plus;
       homepage = "http://jonls.dk/redshift";
       platforms = platforms.unix;
-      maintainers = with maintainers; [ yegortimoshenko globin ];
-    };
-  };
-
-  redshift-wlr = mkRedshift {
-    pname = "redshift-wlr";
-    # upstream rebases so this is the push date
-    version = "2019-08-24";
-
-    src = fetchFromGitHub {
-      owner = "minus7";
-      repo = "redshift";
-      rev = "7da875d34854a6a34612d5ce4bd8718c32bec804";
-      sha256 = "0rs9bxxrw4wscf4a8yl776a8g880m5gcm75q06yx2cn3lw2b7v22";
-    };
-
-    meta = redshift.meta // {
-      description = redshift.meta.description + "(with wlroots patches)";
-      homepage = "https://github.com/minus7/redshift";
+      maintainers = with maintainers; [ globin yana ];
     };
   };
 

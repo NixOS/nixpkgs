@@ -13,14 +13,14 @@ in
 
 useStdenv.mkDerivation {
   pname = "ngn-k";
-  version = "unstable-2021-08-30";
+  version = "unstable-2021-12-17";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "ngn";
     repo = "k";
-    rev = "3e2bcb81c723e268015818570f2805547114b5dd";
-    sha256 = "0b16971xgf0sgx7qf41dilrpz02jnas61gfwkyvbxv18874w5vap";
+    rev = "26f83645e9ed4798b43390fb9dcdfa0ab8245a8f";
+    sha256 = "sha256-VcJcLcL1C8yQH6xvpKR0R0gMrhSfsU4tW+Yy0rGdSSw=";
   };
 
   patches = [
@@ -28,8 +28,7 @@ useStdenv.mkDerivation {
   ];
 
   postPatch = ''
-    # make self-reference for LICENSE
-    substituteAllInPlace repl.k
+    patchShebangs a19/a.sh a20/a.sh a21/a.sh dy/a.sh e/a.sh
 
     # don't use hardcoded /bin/sh
     for f in repl.k m.c;do
@@ -38,14 +37,18 @@ useStdenv.mkDerivation {
   '';
 
   makeFlags = [ "-e" ];
-  buildFlags = [ "k" ];
+  buildFlags = [ "k" "libk.so" ];
   checkTarget = "t";
   inherit doCheck;
+
+  outputs = [ "out" "dev" "lib" ];
 
   installPhase = ''
     runHook preInstall
     install -Dm755 k "$out/bin/k"
     install -Dm755 repl.k "$out/bin/k-repl"
+    install -Dm755 libk.so "$lib/lib/libk.so"
+    install -Dm644 k.h "$dev/include/k.h"
     install -Dm644 LICENSE -t "$out/share/ngn-k"
     substituteInPlace "$out/bin/k-repl" --replace "#!k" "#!$out/bin/k"
     runHook postInstall

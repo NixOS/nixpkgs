@@ -108,6 +108,7 @@ let
       "-DUSE_CRYPTODEV_DIGESTS"
     ] ++ lib.optional enableSSL2 "enable-ssl2"
       ++ lib.optional enableSSL3 "enable-ssl3"
+      ++ lib.optional (versionAtLeast version "3.0.0") "enable-ktls"
       ++ lib.optional (versionAtLeast version "1.1.0" && stdenv.hostPlatform.isAarch64) "no-afalgeng"
       # OpenSSL needs a specific `no-shared` configure flag.
       # See https://wiki.openssl.org/index.php/Compilation_and_Installation#Configure_Options
@@ -207,8 +208,8 @@ in {
   };
 
   openssl_3_0 = common {
-    version = "3.0.0";
-    sha256 = "sha256-We7fy0bCUhTJvTftYHgpe03wHQEiZ/6enu4x9hvHBTY=";
+    version = "3.0.1";
+    sha256 = "sha256-wxGthTNTvOeW7a0BqGLFCopYf2Ln4hAO9GWrU+ybBtE=";
     patches = [
       ./3.0/nix-ssl-cert-file.patch
 

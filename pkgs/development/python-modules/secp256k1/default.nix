@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "secp256k1";
-  version = "0.13.2";
+  version = "0.14.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a3b43e02d321c09eafa769a6fc2c156f555cab3a7db62175ef2fd21e16cdf20c";
+    sha256 = "82c06712d69ef945220c8b53c1a0d424c2ff6a1f64aee609030df79ad8383397";
   };
 
   nativeBuildInputs = [ pkg-config ];

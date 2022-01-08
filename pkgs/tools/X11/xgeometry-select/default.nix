@@ -1,8 +1,7 @@
 { lib, stdenv, fetchurl, libX11 }:
 
 stdenv.mkDerivation rec {
-  name     = "${baseName}-${version}";
-  baseName = "xgeometry-select";
+  pname = "xgeometry-select";
   version  = "0.1";
 
   src = fetchurl {
@@ -15,12 +14,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ libX11 ];
 
   buildPhase = ''
-    gcc -Wall -lX11 ${src} -o ${baseName}
+    gcc -Wall -lX11 ${src} -o xgeometry-select
   '';
 
   installPhase = ''
     mkdir -p $out/bin
-    mv -v ${baseName} $out/bin
+    mv -v xgeometry-select $out/bin
   '';
 
   meta = with lib; {

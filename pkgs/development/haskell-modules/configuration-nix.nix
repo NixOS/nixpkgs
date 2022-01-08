@@ -223,6 +223,17 @@ self: super: builtins.intersectAttrs super {
 
   # Nix-specific workaround
   xmonad = appendPatch ./patches/xmonad-nix.patch (dontCheck super.xmonad);
+  xmonad_0_17_0 = doDistribute (appendPatch ./patches/xmonad_0_17_0-nix.patch (super.xmonad_0_17_0));
+
+  # Need matching xmonad version
+  xmonad-contrib_0_17_0 = doDistribute (super.xmonad-contrib_0_17_0.override {
+    xmonad = self.xmonad_0_17_0;
+  });
+
+  xmonad-extras_0_17_0 = doDistribute (super.xmonad-extras_0_17_0.override {
+    xmonad = self.xmonad_0_17_0;
+    xmonad-contrib = self.xmonad-contrib_0_17_0;
+  });
 
   # wxc supports wxGTX >= 3.0, but our current default version points to 2.8.
   # http://hydra.cryp.to/build/1331287/log/raw
@@ -491,12 +502,15 @@ self: super: builtins.intersectAttrs super {
     postPatch = ''
       sed -i -e 's|"abc"|"${pkgs.abc-verifier}/bin/abc"|' Data/SBV/Provers/ABC.hs
       sed -i -e 's|"boolector"|"${pkgs.boolector}/bin/boolector"|' Data/SBV/Provers/Boolector.hs
-      sed -i -e 's|"cvc4"|"${pkgs.cvc4}/bin/cvc4"|' Data/SBV/Provers/CVC4.hs
       sed -i -e 's|"yices-smt2"|"${pkgs.yices}/bin/yices-smt2"|' Data/SBV/Provers/Yices.hs
       sed -i -e 's|"z3"|"${pkgs.z3}/bin/z3"|' Data/SBV/Provers/Z3.hs
-
+    '' + (if pkgs.stdenv.isAarch64 then ''
+      sed -i -e 's|\[abc, boolector, cvc4, mathSAT, yices, z3, dReal\]|[abc, boolector, yices, z3]|' SBVTestSuite/SBVConnectionTest.hs
+    ''
+    else ''
+      sed -i -e 's|"cvc4"|"${pkgs.cvc4}/bin/cvc4"|' Data/SBV/Provers/CVC4.hs
       sed -i -e 's|\[abc, boolector, cvc4, mathSAT, yices, z3, dReal\]|[abc, boolector, cvc4, yices, z3]|' SBVTestSuite/SBVConnectionTest.hs
-   '';
+    '');
   }) super.sbv;
 
   # The test-suite requires a running PostgreSQL server.
@@ -704,8 +718,12 @@ self: super: builtins.intersectAttrs super {
   postgresql-pure = dontCheck super.postgresql-pure;
 
   retrie = overrideCabal (drv: {
-    testToolDepends = [ pkgs.git pkgs.mercurial ];
+    testToolDepends = [ pkgs.git pkgs.mercurial ] ++ drv.testToolDepends or [];
   }) super.retrie;
+
+  retrie_1_2_0_0 = overrideCabal (drv: {
+    testToolDepends = [ pkgs.git pkgs.mercurial ] ++ drv.testToolDepends or [];
+  }) super.retrie_1_2_0_0;
 
   nix-output-monitor = overrideCabal {
     # Can't ran the golden-tests with nix, because they call nix
@@ -1012,4 +1030,22 @@ self: super: builtins.intersectAttrs super {
       fi
     '' + (drv.postConfigure or "");
   }) super.procex;
+
+  # Apply a patch which hardcodes the store path of graphviz instead of using
+  # whatever graphviz is in PATH.
+  graphviz = overrideCabal (drv: {
+    patches = [
+      (pkgs.substituteAll {
+        src = ./patches/graphviz-hardcode-graphviz-store-path.patch;
+        inherit (pkgs) graphviz;
+      })
+    ] ++ (drv.patches or []);
+  }) super.graphviz;
+
+  # Test case tries to contact the network
+  http-api-data-qq = overrideCabal (drv: {
+    testFlags = [
+      "-p" "!/Can be used with http-client/"
+    ] ++ drv.testFlags or [];
+  }) super.http-api-data-qq;
 }

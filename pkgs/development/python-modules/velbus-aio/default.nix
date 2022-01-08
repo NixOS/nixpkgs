@@ -19,7 +19,8 @@ buildPythonPackage rec {
     owner = "Cereal2nd";
     repo = pname;
     rev = version;
-    sha256 = "sha256-itaYSfZm+/vF/tKRO2BW4qXrDXP0YfBrKiq9bMGFj0M=";
+    sha256 = "0i1vfyhyvn908vz55agmfds3zwp6qpbpip055d995nx79ysxz0j9";
+    fetchSubmodules = true;
   };
 
   propagatedBuildInputs = [

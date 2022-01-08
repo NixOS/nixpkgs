@@ -34,13 +34,13 @@
 
 stdenv.mkDerivation rec {
   pname   = "yosys";
-  version = "0.10+1";
+  version = "0.12+54";
 
   src = fetchFromGitHub {
-    owner  = "YosysHQ";
-    repo   = "yosys";
-    rev    = "7a7df9a3b4996b17bb774377483b15de49aa3d9b";
-    sha256 = "sha256-gi/Q6loIQ75NTbS9b/Q8sdrl9NGBDae2+AAGHVYB0WI=";
+    owner = "YosysHQ";
+    repo  = "yosys";
+    rev   = "59a71503448401d2476cf0872808e0a99c3a4d81";
+    hash  = "sha256-cz4PQymaA9UW91lN+6iniFhbcPRpFNIAeC8ZkwYeg0U=";
   };
 
   enableParallelBuilding = true;
@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
     fi
 
     if ! grep -q "YOSYS_VER := $version" Makefile; then
-      echo "ERROR: yosys version in Makefile isn't equivalent to version of the nix package (${version}), failing."
+      echo "ERROR: yosys version in Makefile isn't equivalent to version of the nix package (allegedly ${version}), failing."
       exit 1
     fi
   '';

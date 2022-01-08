@@ -42,6 +42,6 @@ stdenvNoCC.mkDerivation {
     homepage = "https://github.com/rushmj/mpv-video-cutter";
     # repo doesn't have a license
     license = licenses.unfree;
-    maintainers = with maintainers; [ legendofmiracles ];
+    maintainers = with maintainers; [ lom ];
   };
 }

@@ -97,6 +97,7 @@ source 'https://rubygems.org' do
   gem 'patron'
   gem 'pcaprub'
   gem 'pg'
+  gem 'prettier'
   gem 'pry'
   gem 'pry-byebug'
   gem 'pry-doc'

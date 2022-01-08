@@ -34,21 +34,31 @@ let
     rev = "3c5eaba46dab72ecb7d5f5b865a13fdeee95b464";
     sha256 = "sha256-alcGEi+D8CptXzfznnuxQKCvU2mbzn2sQge5jSqLVpg=";
   };
+  armv7 = fetchFromGitHub {
+    owner = "radareorg";
+    repo = "vector35-arch-armv7";
+    rev = "dde39f69ffea19fc37e681874b12cb4707bc4f30";
+
+    sha256 = "sha256-bnWQc0dScM9rhIdzf+iVXvMqYWq/bguEAUQPaZRgdlU=";
+  };
 in
 stdenv.mkDerivation rec {
   pname = "radare2";
-  version = "5.4.2";
+  version = "5.5.4";
 
   src = fetchFromGitHub {
     owner = "radare";
     repo = "radare2";
     rev = version;
-    sha256 = "sha256-5GvJ7J+pAL8GIZ4Tv09wdGyihfMm1bUABhmf7ozQoxc=";
+    sha256 = "sha256-zELmNpbT1JCt0UAzHwzcTDN9QZTLQY0+rG9zVRWxiFg=";
   };
 
   preBuild = ''
     cp -r ${arm64} libr/asm/arch/arm/v35arm64/arch-arm64
     chmod -R +w libr/asm/arch/arm/v35arm64/arch-arm64
+
+    cp -r ${armv7} libr/asm/arch/arm/v35arm64/arch-armv7
+    chmod -R +w libr/asm/arch/arm/v35arm64/arch-armv7
   '';
 
   postFixup = lib.optionalString stdenv.isDarwin ''

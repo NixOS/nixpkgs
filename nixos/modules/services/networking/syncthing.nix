@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
   cfg = config.services.syncthing;
+  opt = options.services.syncthing;
   defaultUser = "syncthing";
   defaultGroup = defaultUser;
 
@@ -431,7 +432,26 @@ in {
           The path where the settings and keys will exist.
         '';
         default = cfg.dataDir + optionalString cond "/.config/syncthing";
-        defaultText = literalExpression "dataDir${optionalString cond " + \"/.config/syncthing\""}";
+        defaultText = literalDocBook ''
+          <variablelist>
+            <varlistentry>
+              <term><literal>stateVersion >= 19.03</literal></term>
+              <listitem>
+                <programlisting>
+                  config.${opt.dataDir} + "/.config/syncthing"
+                </programlisting>
+              </listitem>
+            </varlistentry>
+            <varlistentry>
+              <term>otherwise</term>
+              <listitem>
+                <programlisting>
+                  config.${opt.dataDir}
+                </programlisting>
+              </listitem>
+            </varlistentry>
+          </variablelist>
+        '';
       };
 
       extraFlags = mkOption {

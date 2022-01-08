@@ -1,8 +1,9 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 let
   cfg = config.services.sourcehut;
+  opt = options.services.sourcehut;
   cfgIni = cfg.settings;
   scfg = cfg.dispatch;
   iniKey = "dispatch.sr.ht";
@@ -38,6 +39,7 @@ in
     statePath = mkOption {
       type = types.path;
       default = "${cfg.statePath}/dispatchsrht";
+      defaultText = literalExpression ''"''${config.${opt.statePath}}/dispatchsrht"'';
       description = ''
         State path for dispatch.sr.ht.
       '';

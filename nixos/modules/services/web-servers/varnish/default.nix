@@ -42,6 +42,7 @@ in
       stateDir = mkOption {
         type = types.path;
         default = "/var/spool/varnish/${config.networking.hostName}";
+        defaultText = literalExpression ''"/var/spool/varnish/''${config.networking.hostName}"'';
         description = "
           Directory holding all state for Varnish to run.
         ";

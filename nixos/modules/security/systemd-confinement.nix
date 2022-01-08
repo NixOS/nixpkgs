@@ -1,11 +1,9 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, utils, ... }:
 
 let
   toplevelConfig = config;
   inherit (lib) types;
-  inherit (import ../system/boot/systemd-lib.nix {
-    inherit config pkgs lib;
-  }) mkPathSafeName;
+  inherit (utils.systemdUtils.lib) mkPathSafeName;
 in {
   options.systemd.services = lib.mkOption {
     type = types.attrsOf (types.submodule ({ name, config, ... }: {

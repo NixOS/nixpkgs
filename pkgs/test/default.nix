@@ -27,6 +27,10 @@ with pkgs;
   cc-multilib-gcc = callPackage ./cc-wrapper/multilib.nix { stdenv = gccMultiStdenv; };
   cc-multilib-clang = callPackage ./cc-wrapper/multilib.nix { stdenv = clangMultiStdenv; };
 
+  fetchpatch = callPackages ../build-support/fetchpatch/tests.nix { };
+  fetchgit = callPackages ../build-support/fetchgit/tests.nix { };
+  fetchFirefoxAddon = callPackages ../build-support/fetchfirefoxaddon/tests.nix { };
+
   install-shell-files = callPackage ./install-shell-files {};
 
   kernel-config = callPackage ./kernel.nix {};

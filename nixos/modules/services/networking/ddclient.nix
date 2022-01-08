@@ -31,8 +31,8 @@ let
   preStart = ''
     install ${configFile} /run/${RuntimeDirectory}/ddclient.conf
     ${lib.optionalString (cfg.configFile == null) (if (cfg.passwordFile != null) then ''
-      password=$(head -n 1 ${cfg.passwordFile})
-      sed -i "s/^password=$/password=$password/" /run/${RuntimeDirectory}/ddclient.conf
+      password=$(printf "%q" "$(head -n 1 "${cfg.passwordFile}")")
+      sed -i "s|^password=$|password=$password|" /run/${RuntimeDirectory}/ddclient.conf
     '' else ''
       sed -i '/^password=$/d' /run/${RuntimeDirectory}/ddclient.conf
     '')}

@@ -63,20 +63,21 @@ appleDerivation' stdenv {
     cat <<EOF > $out/include/TargetConditionals.h
     #ifndef __TARGETCONDITIONALS__
     #define __TARGETCONDITIONALS__
-    #define TARGET_OS_MAC           1
-    #define TARGET_OS_OSX           1
-    #define TARGET_OS_WIN32         0
-    #define TARGET_OS_UNIX          0
-    #define TARGET_OS_EMBEDDED      0
-    #define TARGET_OS_IPHONE        0
-    #define TARGET_OS_IOS           0
-    #define TARGET_OS_WATCH         0
-    #define TARGET_OS_BRIDGE        0
-    #define TARGET_OS_TV            0
-    #define TARGET_OS_SIMULATOR     0
-    #define TARGET_IPHONE_SIMULATOR 0
-    #define TARGET_OS_NANO          0
-    #define TARGET_OS_LINUX         0
+    #define TARGET_OS_MAC               1
+    #define TARGET_OS_WIN32             0
+    #define TARGET_OS_UNIX              0
+    #define TARGET_OS_OSX               1
+    #define TARGET_OS_IPHONE            0
+    #define TARGET_OS_IOS               0
+    #define TARGET_OS_WATCH             0
+    #define TARGET_OS_BRIDGE            0
+    #define TARGET_OS_TV                0
+    #define TARGET_OS_SIMULATOR         0
+    #define TARGET_OS_EMBEDDED          0
+    #define TARGET_OS_EMBEDDED_OTHER    0 /* Used in configd */
+    #define TARGET_IPHONE_SIMULATOR     TARGET_OS_SIMULATOR /* deprecated */
+    #define TARGET_OS_NANO              TARGET_OS_WATCH /* deprecated */
+    #define TARGET_OS_LINUX             0
 
     #define TARGET_CPU_PPC          0
     #define TARGET_CPU_PPC64        0
@@ -84,6 +85,7 @@ appleDerivation' stdenv {
     #define TARGET_CPU_X86          0
     #define TARGET_CPU_X86_64       1
     #define TARGET_CPU_ARM          0
+    #define TARGET_CPU_ARM64        0
     #define TARGET_CPU_MIPS         0
     #define TARGET_CPU_SPARC        0
     #define TARGET_CPU_ALPHA        0

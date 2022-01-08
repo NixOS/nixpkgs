@@ -83,6 +83,9 @@ let
   mkArgumentsOption = cmd: mkOption {
     type = types.listOf types.str;
     default = argumentsOf cmd;
+    defaultText = literalDocBook ''
+      calculated from <literal>config.services.thanos.${cmd}</literal>
+    '';
     description = ''
       Arguments to the <literal>thanos ${cmd}</literal> command.
 

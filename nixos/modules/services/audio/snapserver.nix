@@ -54,12 +54,12 @@ let
     # tcp json rpc
     ++ [ "--tcp.enabled ${toString cfg.tcp.enable}" ]
     ++ optionals cfg.tcp.enable [
-      "--tcp.address ${cfg.tcp.listenAddress}"
+      "--tcp.bind_to_address ${cfg.tcp.listenAddress}"
       "--tcp.port ${toString cfg.tcp.port}" ]
      # http json rpc
     ++ [ "--http.enabled ${toString cfg.http.enable}" ]
     ++ optionals cfg.http.enable [
-      "--http.address ${cfg.http.listenAddress}"
+      "--http.bind_to_address ${cfg.http.listenAddress}"
       "--http.port ${toString cfg.http.port}"
     ] ++ optional (cfg.http.docRoot != null) "--http.doc_root \"${toString cfg.http.docRoot}\"");
 

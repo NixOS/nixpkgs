@@ -38,6 +38,7 @@ let
 
       p11Auth = mkOption {
         default = config.security.pam.p11.enable;
+        defaultText = literalExpression "config.security.pam.p11.enable";
         type = types.bool;
         description = ''
           If set, keys listed in
@@ -49,6 +50,7 @@ let
 
       u2fAuth = mkOption {
         default = config.security.pam.u2f.enable;
+        defaultText = literalExpression "config.security.pam.u2f.enable";
         type = types.bool;
         description = ''
           If set, users listed in
@@ -61,6 +63,7 @@ let
 
       yubicoAuth = mkOption {
         default = config.security.pam.yubico.enable;
+        defaultText = literalExpression "config.security.pam.yubico.enable";
         type = types.bool;
         description = ''
           If set, users listed in
@@ -83,6 +86,7 @@ let
 
       usbAuth = mkOption {
         default = config.security.pam.usb.enable;
+        defaultText = literalExpression "config.security.pam.usb.enable";
         type = types.bool;
         description = ''
           If set, users listed in
@@ -93,6 +97,7 @@ let
 
       otpwAuth = mkOption {
         default = config.security.pam.enableOTPW;
+        defaultText = literalExpression "config.security.pam.enableOTPW";
         type = types.bool;
         description = ''
           If set, the OTPW system will be used (if
@@ -126,6 +131,7 @@ let
 
       fprintAuth = mkOption {
         default = config.services.fprintd.enable;
+        defaultText = literalExpression "config.services.fprintd.enable";
         type = types.bool;
         description = ''
           If set, fingerprint reader will be used (if exists and
@@ -135,6 +141,7 @@ let
 
       oathAuth = mkOption {
         default = config.security.pam.oath.enable;
+        defaultText = literalExpression "config.security.pam.oath.enable";
         type = types.bool;
         description = ''
           If set, the OATH Toolkit will be used.
@@ -249,6 +256,7 @@ let
 
       pamMount = mkOption {
         default = config.security.pam.mount.enable;
+        defaultText = literalExpression "config.security.pam.mount.enable";
         type = types.bool;
         description = ''
           Enable PAM mount (pam_mount) system to mount fileystems on user login.
@@ -287,9 +295,14 @@ let
       };
 
       limits = mkOption {
+        default = [];
+        type = limitsType;
         description = ''
           Attribute set describing resource limits.  Defaults to the
           value of <option>security.pam.loginLimits</option>.
+          The meaning of the values is explained in <citerefentry>
+          <refentrytitle>limits.conf</refentrytitle><manvolnum>5</manvolnum>
+          </citerefentry>.
         '';
       };
 
@@ -640,6 +653,51 @@ let
          "${domain} ${type} ${item} ${toString value}\n")
          limits);
 
+  limitsType = with lib.types; listOf (submodule ({ ... }: {
+    options = {
+      domain = mkOption {
+        description = "Username, groupname, or wildcard this limit applies to";
+        example = "@wheel";
+        type = str;
+      };
+
+      type = mkOption {
+        description = "Type of this limit";
+        type = enum [ "-" "hard" "soft" ];
+        default = "-";
+      };
+
+      item = mkOption {
+        description = "Item this limit applies to";
+        type = enum [
+          "core"
+          "data"
+          "fsize"
+          "memlock"
+          "nofile"
+          "rss"
+          "stack"
+          "cpu"
+          "nproc"
+          "as"
+          "maxlogins"
+          "maxsyslogins"
+          "priority"
+          "locks"
+          "sigpending"
+          "msgqueue"
+          "nice"
+          "rtprio"
+        ];
+      };
+
+      value = mkOption {
+        description = "Value of this limit";
+        type = oneOf [ str int ];
+      };
+    };
+  }));
+
   motd = pkgs.writeText "motd" config.users.motd;
 
   makePAMService = name: service:
@@ -661,6 +719,7 @@ in
 
     security.pam.loginLimits = mkOption {
       default = [];
+      type = limitsType;
       example =
         [ { domain = "ftp";
             type   = "hard";
@@ -680,7 +739,8 @@ in
           <varname>domain</varname>, <varname>type</varname>,
           <varname>item</varname>, and <varname>value</varname>
           attribute.  The syntax and semantics of these attributes
-          must be that described in the limits.conf(5) man page.
+          must be that described in <citerefentry><refentrytitle>limits.conf</refentrytitle>
+          <manvolnum>5</manvolnum></citerefentry>.
 
           Note that these limits do not apply to systemd services,
           whose limits can be changed via <option>systemd.extraConfig</option>

@@ -53,13 +53,13 @@ let
   python = python2.withPackages (pp: [ pp.pygtk ]);
 in stdenv.mkDerivation rec {
   pname = "gimp";
-  version = "2.10.28";
+  version = "2.10.30";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "http://download.gimp.org/pub/gimp/v${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
-    sha256 = "T03CLP8atfAm/qoqtV4Fd1s6EeGYGGtHvat5y/oHiCY=";
+    sha256 = "iIFdqnbtfUJ37rNTNYuvoRbNL80shh2VuVE1wdUrZ9w=";
   };
 
   patches = [
@@ -144,9 +144,7 @@ in stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  # on Darwin,
-  # test-eevl.c:64:36: error: initializer element is not a compile-time constant
-  doCheck = !stdenv.isDarwin;
+  doCheck = true;
 
   NIX_CFLAGS_COMPILE = lib.optional stdenv.isDarwin "-DGDK_OSX_BIG_SUR=16";
 

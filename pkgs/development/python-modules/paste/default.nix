@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pytestCheckHook
+, six
 }:
 
 buildPythonPackage rec {
@@ -19,7 +20,7 @@ buildPythonPackage rec {
     patchShebangs tests/cgiapp_data/
   '';
 
-  # propagatedBuildInputs = [ six ];
+  propagatedBuildInputs = [ six ];
 
   checkInputs = [ pytestCheckHook ];
 

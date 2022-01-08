@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "tailscale";
-  version = "0.1.2";
+  version = "0.1.6";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "frenck";
     repo = "python-tailscale";
     rev = "v${version}";
-    sha256 = "1jqx2i8rghfxlb1c76f37viz9fc1vq95xb2jm3bpnx5yy4n5dly1";
+    sha256 = "1dkmjc78mhgbikfz6mi6g63a36w6v29pdbb3pvgpicg0l649rsc9";
   };
 
   nativeBuildInputs = [
@@ -54,7 +54,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python client for the Tailscale API";
-    homepage = "https://github.com/frenck/python-wled";
+    homepage = "https://github.com/frenck/python-tailscale";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

@@ -1,38 +1,40 @@
-{ lib, fetchFromGitHub, buildGoPackage, m4 }:
+{ buildGoModule
+, fetchFromGitHub
+, geoclue2-with-demo-agent
+, lib
+, m4
+}:
 
-buildGoPackage rec {
+buildGoModule {
   pname = "localtime";
-  version = "unstable-2017-11-07";
+  version = "unstable-2021-11-23";
 
   src = fetchFromGitHub {
     owner = "Stebalien";
     repo = "localtime";
-    rev = "2e7b4317c723406bd75b2a1d640219ab9f8090ce";
-    sha256 = "04fyna8p7q7skzx9fzmncd6gx7x5pwa9jh8a84hpljlvj0kldfs8";
+    rev = "3e5d6cd64444b2164e87cea03448bfb8eefd6ccd";
+    sha256 = "sha256-6uxxPq6abtRqM/R2Fw46ynP9PEkHggTSUymLYlQXQRU=";
   };
 
-  goPackagePath = "github.com/Stebalien/localtime";
+  vendorSha256 = "sha256-sf3sL6aO5jSytT2NtBkA3lhg77RIzbYkSC4fkH+cwwk=";
+
+  postPatch = ''
+    demoPath="${geoclue2-with-demo-agent}/libexec/geoclue-2.0/demos/agent"
+    sed -i localtimed.go -e "s#/usr/lib/geoclue-2.0/demos/agent#$demoPath#"
+  '';
 
   nativeBuildInputs = [ m4 ];
 
-  makeFlags = [
-    "PREFIX=${placeholder "out"}"
-    "BINDIR=${placeholder "out"}/bin"
-  ];
-
-  buildPhase = ''
-    cd go/src/${goPackagePath}
-    make $makeFlags
-  '';
-
   installPhase = ''
-    make install $makeFlags
+    runHook preInstall
+    make PREFIX="$out" install
+    runHook postInstall
   '';
 
   meta = with lib; {
     description = "A daemon for keeping the system timezone up-to-date based on the current location";
     homepage = "https://github.com/Stebalien/localtime";
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ lovesegfault ];
     platforms = platforms.linux;
     license = licenses.gpl3;
   };

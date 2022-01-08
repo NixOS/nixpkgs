@@ -13,17 +13,18 @@
 , gtk3
 , pantheon
 , libgee
+, libhandy
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnonograms";
-  version = "1.4.5";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "jeremypw";
     repo = "gnonograms";
     rev = "v${version}";
-    sha256 = "1ly3inp6dvjrixdysz5hdfwlhbs49ks0lf8062z2iq6gaf8ivkb2";
+    sha256 = "sha256-2uXaybpCAm9cr0o7bqfhgD7mMNPwtv1X/PgnFnSDOl0=";
   };
 
   postPatch = ''
@@ -46,6 +47,7 @@ stdenv.mkDerivation rec {
     gtk3
     pantheon.granite
     libgee
+    libhandy
   ];
 
   meta = with lib; {

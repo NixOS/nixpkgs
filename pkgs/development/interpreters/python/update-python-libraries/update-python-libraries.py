@@ -309,8 +309,8 @@ def _update_package(path, target):
     with open(path, 'r') as f:
         text = f.read()
 
-    # Determine pname.
-    pname = _get_unique_value('pname', text)
+    # Determine pname. Many files have more than one pname
+    pnames = _get_values('pname', text)
 
     # Determine version.
     version = _get_unique_value('version', text)
@@ -320,7 +320,18 @@ def _update_package(path, target):
 
     extension = _determine_extension(text, fetcher)
 
-    new_version, new_sha256, prefix = FETCHERS[fetcher](pname, extension, version, target)
+    # Attempt a fetch using each pname, e.g. backports-zoneinfo vs backports.zoneinfo
+    successful_fetch = False
+    for pname in pnames:
+        try:
+            new_version, new_sha256, prefix = FETCHERS[fetcher](pname, extension, version, target)
+            successful_fetch = True
+            break
+        except ValueError:
+            continue
+
+    if not successful_fetch:
+        raise ValueError(f"Unable to find correct package using these pnames: {pnames}")
 
     if new_version == version:
         logging.info("Path {}: no update available for {}.".format(path, pname))
@@ -331,7 +342,15 @@ def _update_package(path, target):
         raise ValueError("no file available for {}.".format(pname))
 
     text = _replace_value('version', new_version, text)
-    text = _replace_value('sha256', new_sha256, text)
+
+    # fetchers can specify a sha256, or a sri hash
+    try:
+        text = _replace_value('sha256', new_sha256, text)
+    except ValueError:
+        # hashes from pypi are 16-bit encoded sha256's, need translate to an sri hash if used with "hash"
+        sri_hash = subprocess.check_output(["nix", "hash", "to-sri", "--type", "sha256", new_sha256]).decode('utf-8').strip()
+        text = _replace_value('hash', sri_hash, text)
+
     if fetcher == 'fetchFromGitHub':
         text = _replace_value('rev', f"{prefix}${{version}}", text)
         # incase there's no prefix, just rewrite without interpolation

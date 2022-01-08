@@ -119,6 +119,18 @@ specialMount() {
 }
 source @earlyMountScript@
 
+# Copy initrd secrets from /.initrd-secrets to their actual destinations
+if [ -d "/.initrd-secrets" ]; then
+    #
+    # Secrets are named by their full destination pathname and stored
+    # under /.initrd-secrets/
+    #
+    for secret in $(cd "/.initrd-secrets"; find . -type f); do
+        mkdir -p $(dirname "/$secret")
+        cp "/.initrd-secrets/$secret" "$secret"
+    done
+fi
+
 # Log the script output to /dev/kmsg or /run/log/stage-1-init.log.
 mkdir -p /tmp
 mkfifo /tmp/stage-1-init.log.fifo
@@ -251,15 +263,6 @@ if test -n "$debug1devices"; then fail; fi
 @postDeviceCommands@
 
 
-# Return true if the machine is on AC power, or if we can't determine
-# whether it's on AC power.
-onACPower() {
-    ! test -d "/proc/acpi/battery" ||
-    ! ls /proc/acpi/battery/BAT[0-9]* > /dev/null 2>&1 ||
-    ! cat /proc/acpi/battery/BAT*/state | grep "^charging state" | grep -q "discharg"
-}
-
-
 # Check the specified file system, if appropriate.
 checkFS() {
     local device="$1"
@@ -301,13 +304,6 @@ checkFS() {
         \( "$fsType" = ext3 -o "$fsType" = ext4 -o "$fsType" = reiserfs \
         -o "$fsType" = xfs -o "$fsType" = jfs -o "$fsType" = f2fs \)
     then
-        return 0
-    fi
-
-    # Don't run `fsck' if the machine is on battery power.  !!! Is
-    # this a good idea?
-    if ! onACPower; then
-        echo "on battery power, so no \`fsck' will be performed on \`$device'"
         return 0
     fi
 
