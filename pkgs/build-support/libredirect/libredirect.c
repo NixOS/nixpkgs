@@ -153,7 +153,7 @@ WRAPPER(FILE *, fopen)(const char * path, const char * mode)
 }
 WRAPPER_DEF(fopen)
 
-#ifndef __APPLE__
+#ifdef __GLIBC__
 WRAPPER(FILE *, __nss_files_fopen)(const char * path)
 {
     FILE * (*__nss_files_fopen_real) (const char *) = LOOKUP_REAL(__nss_files_fopen);
@@ -174,7 +174,7 @@ WRAPPER(FILE *, fopen64)(const char * path, const char * mode)
 WRAPPER_DEF(fopen64)
 #endif
 
-#ifndef __APPLE__
+#ifdef __linux__
 WRAPPER(int, __xstat)(int ver, const char * path, struct stat * st)
 {
     int (*__xstat_real) (int ver, const char *, struct stat *) = LOOKUP_REAL(__xstat);
@@ -184,7 +184,7 @@ WRAPPER(int, __xstat)(int ver, const char * path, struct stat * st)
 WRAPPER_DEF(__xstat)
 #endif
 
-#ifndef __APPLE__
+#ifdef __linux__
 WRAPPER(int, __xstat64)(int ver, const char * path, struct stat64 * st)
 {
     int (*__xstat64_real) (int ver, const char *, struct stat64 *) = LOOKUP_REAL(__xstat64);
