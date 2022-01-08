@@ -55,14 +55,20 @@ import ../make-test-python.nix ({pkgs, ...}: {
     nn1 = {pkgs, options, ...}: {
       services.hadoop = {
         inherit package coreSite hdfsSite;
-        hdfs.namenode.enable = true;
+        hdfs.namenode = {
+          enable = true;
+          openFirewall = true;
+        };
         hdfs.zkfc.enable = true;
       };
     };
     nn2 = {pkgs, options, ...}: {
       services.hadoop = {
         inherit package coreSite hdfsSite;
-        hdfs.namenode.enable = true;
+        hdfs.namenode = {
+          enable = true;
+          openFirewall = true;
+        };
         hdfs.zkfc.enable = true;
       };
     };
@@ -70,26 +76,38 @@ import ../make-test-python.nix ({pkgs, ...}: {
     jn1 = {pkgs, options, ...}: {
       services.hadoop = {
         inherit package coreSite hdfsSite;
-        hdfs.journalnode.enable = true;
+        hdfs.journalnode = {
+          enable = true;
+          openFirewall = true;
+        };
       };
     };
     jn2 = {pkgs, options, ...}: {
       services.hadoop = {
         inherit package coreSite hdfsSite;
-        hdfs.journalnode.enable = true;
+        hdfs.journalnode = {
+          enable = true;
+          openFirewall = true;
+        };
       };
     };
     jn3 = {pkgs, options, ...}: {
       services.hadoop = {
         inherit package coreSite hdfsSite;
-        hdfs.journalnode.enable = true;
+        hdfs.journalnode = {
+          enable = true;
+          openFirewall = true;
+        };
       };
     };
 
     dn1 = {pkgs, options, ...}: {
       services.hadoop = {
         inherit package coreSite hdfsSite;
-        hdfs.datanode.enable = true;
+        hdfs.datanode = {
+          enable = true;
+          openFirewall = true;
+        };
       };
     };
 
@@ -98,14 +116,20 @@ import ../make-test-python.nix ({pkgs, ...}: {
       services.hadoop = {
         inherit package coreSite hdfsSite;
         yarnSite = options.services.hadoop.yarnSite.default // yarnSiteHA;
-        yarn.resourcemanager.enable = true;
+        yarn.resourcemanager = {
+          enable = true;
+          openFirewall = true;
+        };
       };
     };
     rm2 = {pkgs, options, ...}: {
       services.hadoop = {
         inherit package coreSite hdfsSite;
         yarnSite = options.services.hadoop.yarnSite.default // yarnSiteHA;
-        yarn.resourcemanager.enable = true;
+        yarn.resourcemanager = {
+          enable = true;
+          openFirewall = true;
+        };
       };
     };
     nm1 = {pkgs, options, ...}: {
@@ -113,7 +137,10 @@ import ../make-test-python.nix ({pkgs, ...}: {
       services.hadoop = {
         inherit package coreSite hdfsSite;
         yarnSite = options.services.hadoop.yarnSite.default // yarnSiteHA;
-        yarn.nodemanager.enable = true;
+        yarn.nodemanager = {
+          enable = true;
+          openFirewall = true;
+        };
       };
     };
   };

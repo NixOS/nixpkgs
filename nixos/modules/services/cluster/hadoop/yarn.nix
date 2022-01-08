@@ -21,7 +21,7 @@ in
       inherit restartIfChanged;
       openFirewall = mkOption {
         type = types.bool;
-        default = true;
+        default = false;
         description = ''
           Open firewall ports for resourcemanager
         '';
@@ -39,7 +39,7 @@ in
       };
       openFirewall = mkOption {
         type = types.bool;
-        default = true;
+        default = false;
         description = ''
           Open firewall ports for nodemanager.
           Because containers can listen on any ephemeral port, TCP ports 1024–65535 will be opened.
