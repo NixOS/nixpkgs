@@ -20188,6 +20188,8 @@ with pkgs;
 
   v8 = callPackage ../development/libraries/v8 { };
 
+  v8_8_x = callPackage ../development/libraries/v8/8_x.nix { };
+
   vaapiIntel = callPackage ../development/libraries/vaapi-intel { };
 
   vaapi-intel-hybrid = callPackage ../development/libraries/vaapi-intel-hybrid { };
