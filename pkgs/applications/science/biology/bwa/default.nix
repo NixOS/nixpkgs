@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "1zfhv2zg9v1icdlq4p9ssc8k01mca5d1bd87w71py2swfi74s6yy";
   };
 
+  patches = [ ] ++ (lib.optionals stdenv.targetPlatform.isAarch64 [ ./add-arm-support.patch ]);
+
   buildInputs = [ zlib ];
 
   # Avoid hardcoding gcc to allow environments with a different
@@ -33,6 +35,6 @@ stdenv.mkDerivation rec {
     license     = licenses.gpl3;
     homepage    = "http://bio-bwa.sourceforge.net/";
     maintainers = with maintainers; [ luispedro ];
-    platforms = platforms.x86_64;
+    platforms = platforms.unix;
   };
 }
