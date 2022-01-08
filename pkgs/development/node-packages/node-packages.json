@@ -103,6 +103,7 @@
 , "elasticdump"
 , "@electron-forge/cli"
 , "elm-oracle"
+, "emmet-ls"
 , "emoj"
 , "emojione"
 , {"epgstation": "../../applications/video/epgstation"}
