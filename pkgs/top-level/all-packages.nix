@@ -18530,6 +18530,8 @@ with pkgs;
 
   libudev-zero = callPackage ../development/libraries/libudev-zero { };
 
+  libudfread = callPackage ../development/libraries/libudfread { };
+
   libuecc = callPackage ../development/libraries/libuecc { };
 
   libui = callPackage ../development/libraries/libui {
