@@ -6,46 +6,46 @@ API_URL="https://api.github.com/repos/pulumi"
 
 # Version of Pulumi from
 # https://www.pulumi.com/docs/get-started/install/versions/
-VERSION="3.19.0"
+VERSION="3.21.0"
 
-# A hashmap containing a plugin's name and it's respective repository inside
-# Pulumi's Github organization
+# An array of plugin names. The respective repository inside Pulumi's
+# Github organization is called pulumi-$name by convention.
 
-declare -A pulumi_repos
 pulumi_repos=(
-    ["auth0"]="pulumi-auth0"
-    ["aws"]="pulumi-aws"
-    ["azure"]="pulumi-azure"
-    ["cloudflare"]="pulumi-cloudflare"
-    ["consul"]="pulumi-consul"
-    ["datadog"]="pulumi-datadog"
-    ["digitalocean"]="pulumi-digitalocean"
-    ["docker"]="pulumi-docker"
-    ["equinix-metal"]="pulumi-equinix-metal"
-    ["gcp"]="pulumi-gcp"
-    ["github"]="pulumi-github"
-    ["gitlab"]="pulumi-gitlab"
-    ["hcloud"]="pulumi-hcloud"
-    ["kubernetes"]="pulumi-kubernetes"
-    ["linode"]="pulumi-linode"
-    ["mailgun"]="pulumi-mailgun"
-    ["mysql"]="pulumi-mysql"
-    ["openstack"]="pulumi-openstack"
-    ["packet"]="pulumi-packet"
-    ["postgresql"]="pulumi-postgresql"
-    ["random"]="pulumi-random"
-    ["vault"]="pulumi-vault"
-    ["vsphere"]="pulumi-vsphere"
+    "auth0"
+    "aws"
+    "azure"
+    "cloudflare"
+    "consul"
+    "datadog"
+    "digitalocean"
+    "docker"
+    "equinix-metal"
+    "gcp"
+    "github"
+    "gitlab"
+    "hcloud"
+    "kubernetes"
+    "linode"
+    "mailgun"
+    "mysql"
+    "openstack"
+    "packet"
+    "postgresql"
+    "random"
+    "vault"
+    "vsphere"
 )
 
 # Contains latest release ${VERSION} from
 # https://github.com/pulumi/pulumi-${NAME}/releases
 
-# Dynamically builds the plugin array, using the hashmap's key/values and the
-# API for getting the latest version.
+# Dynamically builds the plugin array, using the API for getting the
+# latest version.
 plugins=()
-for key in "${!pulumi_repos[@]}"; do
-    plugins+=("${key}=$(curl -s ${API_URL}/${pulumi_repos[${key}]}/releases/latest | jq -M -r .tag_name | sed 's/v//g')")
+for key in "${pulumi_repos[@]}"; do
+    repo="pulumi-${key}"
+    plugins+=("${key}=$(curl -s ${API_URL}/${repo}/releases/latest | jq -M -r .tag_name | sed 's/v//g')")
     sleep 1
 done
 
