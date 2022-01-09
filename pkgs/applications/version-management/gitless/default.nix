@@ -6,7 +6,7 @@ buildPythonApplication rec {
   version = "0.8.8";
 
   src = fetchFromGitHub {
-    owner = "sdg-mit";
+    owner = "gitless-vcs";
     repo = "gitless";
     rev = "v${version}";
     sha256 = "sha256-xo5EWtP2aN8YzP8ro3bnxZwUGUp0PHD0g8hk+Y+gExE=";
