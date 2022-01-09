@@ -51,7 +51,10 @@ in {
     };
 
     networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPortRanges = [{ from = 9100; to = 9200; }];
+      allowedTCPPortRanges = [
+        { from = 9100; to = 9200; }
+        { from = 9330; to = 9332; }
+      ];
       allowedUDPPorts = [ 9003 ];
       extraCommands = ''
         iptables -A INPUT -s 224.0.0.0/4 -j ACCEPT
