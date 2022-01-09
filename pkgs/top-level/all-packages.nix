@@ -11323,6 +11323,8 @@ with pkgs;
 
   zsh-history = callPackage ../shells/zsh/zsh-history { };
 
+  zsh-history-search-multi-word = callPackage ../shells/zsh/zsh-history-search-multi-word { };
+
   zsh-history-substring-search = callPackage ../shells/zsh/zsh-history-substring-search { };
 
   zsh-navigation-tools = callPackage ../tools/misc/zsh-navigation-tools { };
