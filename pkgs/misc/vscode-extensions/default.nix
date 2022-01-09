@@ -1285,11 +1285,16 @@ let
         mktplcRef = {
           name = "color-highlight";
           publisher = "naumovs";
-          version = "2.3.0";
-          sha256 = "1syzf43ws343z911fnhrlbzbx70gdn930q67yqkf6g0mj8lf2za2";
+          version = "2.5.0";
+          sha256 = "sha256-dYMDV84LEGXUjt/fbsSy3BVM5SsBHcPaDDll8KjPIWY=";
         };
-        meta = {
-          license = lib.licenses.mit;
+        meta = with lib; {
+          changelog = "https://marketplace.visualstudio.com/items/naumovs.color-highlight/changelog";
+          description = "Highlight web colors in your editor";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=naumovs.color-highlight";
+          homepage = "https://github.com/enyancc/vscode-ext-color-highlight";
+          license = licenses.gpl3Only;
+          maintainers = with maintainers; [ datafoo ];
         };
       };
 

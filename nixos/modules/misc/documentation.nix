@@ -76,7 +76,7 @@ let
         } ''
           export NIX_STORE_DIR=$TMPDIR/store
           export NIX_STATE_DIR=$TMPDIR/state
-          ${pkgs.nix}/bin/nix-instantiate \
+          ${pkgs.buildPackages.nix}/bin/nix-instantiate \
             --show-trace \
             --eval --json --strict \
             --argstr libPath "$libPath" \
