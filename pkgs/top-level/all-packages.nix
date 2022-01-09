@@ -182,11 +182,7 @@ with pkgs;
 
   althttpd = callPackage ../servers/althttpd { };
 
-  among-sus = callPackage ../games/among-sus { };
-
   ankisyncd = callPackage ../servers/ankisyncd { };
-
-  antsimulator = callPackage ../games/antsimulator { };
 
   aocd = with python3Packages; toPythonApplication aocd;
 
@@ -288,8 +284,6 @@ with pkgs;
   corgi = callPackage ../development/tools/corgi { };
 
   colmena = callPackage ../tools/admin/colmena { };
-
-  colobot = callPackage ../games/colobot {};
 
   colorz = callPackage ../tools/misc/colorz { };
 
@@ -688,8 +682,6 @@ with pkgs;
   libredirect = callPackage ../build-support/libredirect { };
 
   madonctl = callPackage ../applications/misc/madonctl { };
-
-  maelstrom = callPackage ../games/maelstrom { };
 
   copyDesktopItems = makeSetupHook { } ../build-support/setup-hooks/copy-desktop-items.sh;
 
@@ -2950,8 +2942,6 @@ with pkgs;
 
   enca = callPackage ../tools/text/enca { };
 
-  enigma = callPackage ../games/enigma {};
-
   ent = callPackage ../tools/misc/ent { };
 
   envconsul = callPackage ../tools/system/envconsul { };
@@ -3175,8 +3165,6 @@ with pkgs;
 
   gotify-desktop = callPackage ../tools/misc/gotify-desktop { };
 
-  gotypist = callPackage ../games/gotypist { };
-
   gping = callPackage ../tools/networking/gping { };
 
   gpu-burn = callPackage ../applications/misc/gpu-burn { };
@@ -3203,17 +3191,11 @@ with pkgs;
 
   gti = callPackage ../tools/misc/gti { };
 
-  grapejuice = callPackage ../games/grapejuice {
-    wine = wineWowPackages.unstable;
-  };
-
   hdate = callPackage ../applications/misc/hdate { };
 
   heatseeker = callPackage ../tools/misc/heatseeker { };
 
   hebcal = callPackage ../tools/misc/hebcal {};
-
-  heroic = callPackage ../games/heroic {};
 
   hexio = callPackage ../development/tools/hexio { };
 
@@ -3394,12 +3376,6 @@ with pkgs;
   };
 
   megacmd = callPackage ../applications/misc/megacmd { };
-
-  meritous = callPackage ../games/meritous { };
-
-  oh-my-git = callPackage ../games/oh-my-git { };
-
-  opendune = callPackage ../games/opendune { };
 
   merriweather = callPackage ../data/fonts/merriweather { };
 
@@ -3653,8 +3629,6 @@ with pkgs;
 
   simplenes = callPackage ../misc/emulators/simplenes { };
 
-  snipes = callPackage ../games/snipes { };
-
   snippetpixie = callPackage ../tools/text/snippetpixie { };
 
   snowcat = callPackage ../tools/security/snowcat { };
@@ -3664,8 +3638,6 @@ with pkgs;
   soju = callPackage ../applications/networking/soju { };
 
   spacevim = callPackage ../applications/editors/spacevim { };
-
-  space-cadet-pinball = callPackage ../games/space-cadet-pinball { };
 
   ssmsh = callPackage ../tools/admin/ssmsh { };
 
@@ -3775,8 +3747,6 @@ with pkgs;
   xmlsort = perlPackages.XMLFilterSort;
 
   xmousepasteblock = callPackage ../tools/X11/xmousepasteblock { };
-
-  mar1d = callPackage ../games/mar1d { } ;
 
   mcrypt = callPackage ../tools/misc/mcrypt { };
 
@@ -4755,8 +4725,6 @@ with pkgs;
 
   doomseeker = qt5.callPackage ../applications/misc/doomseeker { };
 
-  doom-bcc = callPackage ../games/zdoom/bcc-git.nix { };
-
   dorkscout = callPackage ../tools/security/dorkscout { };
 
   downonspot = callPackage ../applications/misc/downonspot { };
@@ -5282,10 +5250,6 @@ with pkgs;
   flannel = callPackage ../tools/networking/flannel { };
   cni-plugin-flannel = callPackage ../tools/networking/flannel/plugin.nix {};
 
-  flare = callPackage ../games/flare {
-    inherit (darwin.apple_sdk.frameworks) Cocoa;
-  };
-
   flashbench = callPackage ../os-specific/linux/flashbench { };
 
   flatpak = callPackage ../development/libraries/flatpak { };
@@ -5455,12 +5419,6 @@ with pkgs;
   };
 
   freac = callPackage ../applications/audio/freac { };
-
-  freedroid = callPackage ../games/freedroid { };
-
-  freedroidrpg = callPackage ../games/freedroidrpg { };
-
-  freenukum = callPackage ../games/freenukum { };
 
   freebind = callPackage ../tools/networking/freebind { };
 
@@ -6739,8 +6697,6 @@ with pkgs;
 
   jsvc = callPackage ../tools/system/jsvc { };
 
-  jumpnbump = callPackage ../games/jumpnbump { };
-
   junkie = callPackage ../tools/networking/junkie { };
 
   just = callPackage ../development/tools/just { };
@@ -6849,8 +6805,6 @@ with pkgs;
   kdbplus = pkgsi686Linux.callPackage ../applications/misc/kdbplus { };
 
   keepalived = callPackage ../tools/networking/keepalived { };
-
-  keeperrl = callPackage ../games/keeperrl { };
 
   kexec-tools = callPackage ../os-specific/linux/kexec-tools { };
 
@@ -6963,8 +6917,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
-  lbreakout2 = callPackage ../games/lbreakout2 { };
-
   lefthook = callPackage ../applications/version-management/git-and-tools/lefthook { };
 
   lego = callPackage ../tools/admin/lego { };
@@ -7065,8 +7017,6 @@ with pkgs;
   };
 
   ltwheelconf = callPackage ../applications/misc/ltwheelconf { };
-
-  lunar-client = callPackage ../games/lunar-client {};
 
   lvmsync = callPackage ../tools/backup/lvmsync { };
 
@@ -7564,8 +7514,6 @@ with pkgs;
   lsh = lowPrio (callPackage ../tools/networking/lsh { });
 
   lshw = callPackage ../tools/system/lshw { };
-
-  ltris = callPackage ../games/ltris { };
 
   lunatic = callPackage ../development/interpreters/lunatic { };
 
@@ -8143,8 +8091,6 @@ with pkgs;
 
   pnmixer = callPackage ../tools/audio/pnmixer { };
 
-  pro-office-calculator = libsForQt5.callPackage ../games/pro-office-calculator { };
-
   pulsemixer = callPackage ../tools/audio/pulsemixer { };
 
   pwsafe = callPackage ../applications/misc/pwsafe { };
@@ -8686,8 +8632,6 @@ with pkgs;
   pdf2svg = callPackage ../tools/graphics/pdf2svg { };
 
   pdftoipe = callPackage ../tools/graphics/pdftoipe { };
-
-  fmodex = callPackage ../games/zandronum/fmod.nix { };
 
   pdfminer = with python3Packages; toPythonApplication pdfminer;
 
@@ -9322,8 +9266,6 @@ with pkgs;
 
   rowhammer-test = callPackage ../tools/system/rowhammer-test { };
 
-  rpg-cli = callPackage ../games/rpg-cli { };
-
   rpPPPoE = callPackage ../tools/networking/rp-pppoe { };
 
   rpi-imager = libsForQt5.callPackage ../tools/misc/rpi-imager { };
@@ -9366,10 +9308,6 @@ with pkgs;
   rubocop = rubyPackages.rubocop;
 
   ruffle = callPackage ../misc/emulators/ruffle { };
-
-  runelite = callPackage ../games/runelite { };
-
-  runescape = callPackage ../games/runescape-launcher { };
 
   runningx = callPackage ../tools/X11/runningx { };
 
@@ -9693,8 +9631,6 @@ with pkgs;
     conf = config.slstatus.conf or null;
   };
 
-  sm64ex = callPackage ../games/sm64ex { };
-
   smartdns = callPackage ../tools/networking/smartdns { };
 
   smartmontools = callPackage ../tools/system/smartmontools {
@@ -9804,10 +9740,6 @@ with pkgs;
   sqliteman = callPackage ../applications/misc/sqliteman { };
 
   sqls = callPackage ../applications/misc/sqls { };
-
-  starsector = callPackage ../games/starsector {
-    openjdk = openjdk8;
-  };
 
   stdman = callPackage ../data/documentation/stdman { };
 
@@ -10510,8 +10442,6 @@ with pkgs;
 
   untrunc-anthwlock = callPackage ../tools/video/untrunc-anthwlock { };
 
-  unvanquished = callPackage ../games/unvanquished { };
-
   up = callPackage ../tools/misc/up { };
 
   upterm = callPackage ../tools/misc/upterm { };
@@ -10922,8 +10852,6 @@ with pkgs;
 
   xbanish = callPackage ../tools/X11/xbanish { };
 
-  xbill = callPackage ../games/xbill { };
-
   xbrightness = callPackage ../tools/X11/xbrightness { };
 
   xdg-launch = callPackage ../applications/misc/xdg-launch { };
@@ -11144,8 +11072,6 @@ with pkgs;
 
   xfsprogs = callPackage ../tools/filesystems/xfsprogs { };
   libxfs = xfsprogs.dev;
-
-  xmage = callPackage ../games/xmage { };
 
   xml2 = callPackage ../tools/text/xml/xml2 { };
 
@@ -14697,8 +14623,6 @@ with pkgs;
 
   eztrace = callPackage ../development/tools/profiling/EZTrace { };
 
-  ezquake = callPackage ../games/ezquake { };
-
   faas-cli = callPackage ../development/tools/faas-cli { };
 
   findbugs = callPackage ../development/tools/analysis/findbugs { };
@@ -14793,8 +14717,6 @@ with pkgs;
   gnome-desktop-testing = callPackage ../development/tools/gnome-desktop-testing {};
 
   gnome-firmware-updater = callPackage ../applications/misc/gnome-firmware-updater {};
-
-  gnome-hexgl = callPackage ../games/gnome-hexgl {};
 
   gnome-usage = callPackage ../applications/misc/gnome-usage {};
 
@@ -14941,10 +14863,6 @@ with pkgs;
   jenkins-job-builder = with python3Packages; toPythonApplication jenkins-job-builder;
 
   jpexs = callPackage ../development/tools/jpexs { };
-
-  julius = callPackage ../games/julius { };
-
-  augustus = callPackage ../games/augustus { };
 
   k0sctl = callPackage ../applications/networking/cluster/k0sctl { };
 
@@ -19249,8 +19167,6 @@ with pkgs;
   ortp = callPackage ../development/libraries/ortp { };
 
   openhmd = callPackage ../development/libraries/openhmd { };
-
-  openrct2 = callPackage ../games/openrct2 { };
 
   openwebrx = callPackage ../applications/radio/openwebrx {
     inherit (python3Packages)
@@ -23939,8 +23855,6 @@ with pkgs;
 
   poppler_data = callPackage ../data/misc/poppler-data { };
 
-  qgo = libsForQt5.callPackage ../games/qgo { };
-
   qmc2 = libsForQt514.callPackage ../misc/emulators/qmc2 { };
 
   quattrocento = callPackage ../data/fonts/quattrocento {};
@@ -24429,8 +24343,6 @@ with pkgs;
   backintime-qt = libsForQt5.callPackage ../applications/networking/sync/backintime/qt.nix { };
 
   backintime = backintime-qt;
-
-  ballerburg = callPackage ../games/ballerburg { } ;
 
   balsa = callPackage ../applications/networking/mailreaders/balsa { };
 
@@ -27789,8 +27701,6 @@ with pkgs;
 
   osmium-tool = callPackage ../applications/misc/osmium-tool { };
 
-  osu-lazer = callPackage ../games/osu-lazer { };
-
   owamp = callPackage ../applications/networking/owamp { };
 
   vieb = callPackage ../applications/networking/browsers/vieb { };
@@ -30227,6 +30137,35 @@ with pkgs;
 
   whirlpool-gui = callPackage ../applications/blockchains/whirlpool-gui { };
 
+  saga = libsForQt5.callPackage ../applications/gis/saga {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
+
+  samplv1 = libsForQt5.callPackage ../applications/audio/samplv1 { };
+
+  scaleft = callPackage ../applications/networking/scaleft { };
+
+  scaleway-cli = callPackage ../tools/admin/scaleway-cli { };
+
+  beancount = with python3.pkgs; toPythonApplication beancount;
+
+  bean-add = callPackage ../applications/office/beancount/bean-add.nix { };
+
+  bench = haskell.lib.compose.justStaticExecutables haskellPackages.bench;
+
+  cri-o = callPackage ../applications/virtualization/cri-o/wrapper.nix { };
+  cri-o-unwrapped = callPackage ../applications/virtualization/cri-o { };
+
+  confd = callPackage ../tools/system/confd { };
+
+  conmon = callPackage ../applications/virtualization/conmon { };
+
+  digikam = libsForQt5.callPackage ../applications/graphics/digikam {};
+
+  displaycal = callPackage ../applications/graphics/displaycal {};
+
+  drumkv1 = libsForQt5.callPackage ../applications/audio/drumkv1 { };
+
   ### GAMES
 
   _1oom = callPackage ../games/1oom { };
@@ -30236,6 +30175,82 @@ with pkgs;
   _20kly = callPackage ../games/20kly { };
 
   _90secondportraits = callPackage ../games/90secondportraits { love = love_0_10; };
+
+  among-sus = callPackage ../games/among-sus { };
+
+  antsimulator = callPackage ../games/antsimulator { };
+
+  augustus = callPackage ../games/augustus { };
+
+  ballerburg = callPackage ../games/ballerburg { } ;
+
+  colobot = callPackage ../games/colobot {};
+
+  doom-bcc = callPackage ../games/zdoom/bcc-git.nix { };
+
+  enigma = callPackage ../games/enigma { };
+
+  ezquake = callPackage ../games/ezquake { };
+
+  fmodex = callPackage ../games/zandronum/fmod.nix { };
+
+  freedroid = callPackage ../games/freedroid { };
+
+  freedroidrpg = callPackage ../games/freedroidrpg { };
+
+  freenukum = callPackage ../games/freenukum { };
+
+  gnome-hexgl = callPackage ../games/gnome-hexgl { };
+
+  gotypist = callPackage ../games/gotypist { };
+
+  heroic = callPackage ../games/heroic { };
+
+  julius = callPackage ../games/julius { };
+
+  jumpnbump = callPackage ../games/jumpnbump { };
+
+  keeperrl = callPackage ../games/keeperrl { };
+
+  lbreakout2 = callPackage ../games/lbreakout2 { };
+
+  ltris = callPackage ../games/ltris { };
+
+  lunar-client = callPackage ../games/lunar-client { };
+
+  maelstrom = callPackage ../games/maelstrom { };
+
+  mar1d = callPackage ../games/mar1d { } ;
+
+  meritous = callPackage ../games/meritous { };
+
+  oh-my-git = callPackage ../games/oh-my-git { };
+
+  opendune = callPackage ../games/opendune { };
+
+  openrct2 = callPackage ../games/openrct2 { };
+
+  osu-lazer = callPackage ../games/osu-lazer { };
+
+  pro-office-calculator = libsForQt5.callPackage ../games/pro-office-calculator { };
+
+  qgo = libsForQt5.callPackage ../games/qgo { };
+
+  rpg-cli = callPackage ../games/rpg-cli { };
+
+  runelite = callPackage ../games/runelite { };
+
+  runescape = callPackage ../games/runescape-launcher { };
+
+  sm64ex = callPackage ../games/sm64ex { };
+
+  snipes = callPackage ../games/snipes { };
+
+  unvanquished = callPackage ../games/unvanquished { };
+
+  xbill = callPackage ../games/xbill { };
+
+  xmage = callPackage ../games/xmage { };
 
   abbaye-des-morts = callPackage ../games/abbaye-des-morts { };
 
@@ -30303,12 +30318,6 @@ with pkgs;
 
   bastet = callPackage ../games/bastet {};
 
-  beancount = with python3.pkgs; toPythonApplication beancount;
-
-  bean-add = callPackage ../applications/office/beancount/bean-add.nix { };
-
-  bench = haskell.lib.compose.justStaticExecutables haskellPackages.bench;
-
   black-hole-solver = callPackage ../games/black-hole-solver {
     inherit (perlPackages) PathTiny;
   };
@@ -30365,18 +30374,11 @@ with pkgs;
 
   vintagestory = callPackage ../games/vintagestory { };
 
-  cri-o = callPackage ../applications/virtualization/cri-o/wrapper.nix { };
-  cri-o-unwrapped = callPackage ../applications/virtualization/cri-o { };
-
   ckan = callPackage ../games/ckan { };
 
   cockatrice = libsForQt5.callPackage ../games/cockatrice {  };
 
   commandergenius = callPackage ../games/commandergenius { };
-
-  confd = callPackage ../tools/system/confd { };
-
-  conmon = callPackage ../applications/virtualization/conmon { };
 
   construoBase = lowPrio (callPackage ../games/construo {
     libGL = null;
@@ -30421,13 +30423,7 @@ with pkgs;
 
   dhewm3 = callPackage ../games/dhewm3 {};
 
-  digikam = libsForQt5.callPackage ../applications/graphics/digikam {};
-
-  displaycal = callPackage ../applications/graphics/displaycal {};
-
   domination = callPackage ../games/domination { };
-
-  drumkv1 = libsForQt5.callPackage ../applications/audio/drumkv1 { };
 
   duckmarines = callPackage ../games/duckmarines { love = love_0_10; };
 
@@ -30484,6 +30480,10 @@ with pkgs;
   };
 
   exult = callPackage ../games/exult { };
+
+  flare = callPackage ../games/flare {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
 
   fltrator = callPackage ../games/fltrator {
     fltk = fltk-minimal;
@@ -30612,6 +30612,10 @@ with pkgs;
   gshhg-gmt = callPackage ../applications/gis/gmt/gshhg.nix { };
 
   qtads = qt5.callPackage ../games/qtads { };
+
+  grapejuice = callPackage ../games/grapejuice {
+    wine = wineWowPackages.unstable;
+  };
 
   gtetrinet = callPackage ../games/gtetrinet {
     inherit (gnome2) GConf libgnome libgnomeui;
@@ -30959,17 +30963,13 @@ with pkgs;
 
   rrootage = callPackage ../games/rrootage { };
 
-  saga = libsForQt5.callPackage ../applications/gis/saga {
-    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  space-cadet-pinball = callPackage ../games/space-cadet-pinball { };
+
+  starsector = callPackage ../games/starsector {
+    openjdk = openjdk8;
   };
 
-  samplv1 = libsForQt5.callPackage ../applications/audio/samplv1 { };
-
   sauerbraten = callPackage ../games/sauerbraten {};
-
-  scaleft = callPackage ../applications/networking/scaleft { };
-
-  scaleway-cli = callPackage ../tools/admin/scaleway-cli { };
 
   scid = callPackage ../games/scid {
     tcl = tcl-8_5;
