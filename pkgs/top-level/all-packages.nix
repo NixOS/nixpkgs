@@ -976,6 +976,8 @@ with pkgs;
 
   airtame = callPackage ../applications/misc/airtame { };
 
+  airwindows = callPackage ../applications/audio/airwindows { };
+
   aj-snapshot  = callPackage ../applications/audio/aj-snapshot { };
 
   ajour = callPackage ../tools/games/ajour {
