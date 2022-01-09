@@ -2,16 +2,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "t-rex";
-  version = "0.14.2";
+  version = "0.14.3-beta4";
 
   src = fetchFromGitHub {
     owner = "t-rex-tileserver";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-QNowkQzEYLOgJ2h0yq+gShmW5WgqPF3iiSejqwrOrHo=";
+    hash = "sha256-EG/nnHxnBwlxreJ+RWHvKqLpaVtlU95+YTJynEnypOE=";
+
   };
 
-  cargoHash = "sha256-k10DjLJCJLqjmtEED5pwQDt3mOiey89UYC36lG+3AmM=";
+  cargoHash = "sha256-noDZNFZlfX6lZ4czsSrHXe7xbBLTD0Gz8i5EyfEp8lc=";
 
   nativeBuildInputs = [ pkg-config ];
 
