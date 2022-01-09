@@ -210,13 +210,17 @@ let
       sectionVLAN = checkUnitConfig "VLAN" [
         (assertOnlyFields [
           "Id"
+          "Protocol"
           "GVRP"
           "MVRP"
           "LooseBinding"
           "ReorderHeader"
+          "EgressQOSMaps"
+          "IngressQOSMaps"
         ])
         (assertInt "Id")
         (assertRange "Id" 0 4094)
+        (assertValueOneOf "Protocol" ["802.1q" "802.1ad"])
         (assertValueOneOf "GVRP" boolValues)
         (assertValueOneOf "MVRP" boolValues)
         (assertValueOneOf "LooseBinding" boolValues)
