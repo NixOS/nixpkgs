@@ -228,6 +228,8 @@ let
 
       sectionIPVLAN = checkUnitConfig "IPVLAN" ipvlanChecks;
 
+      sectionIPVTAP = checkUnitConfig "IPVTAP" ipvlanChecks;
+
       sectionVXLAN = checkUnitConfig "VXLAN" [
         (assertOnlyFields [
           "VNI"
@@ -1047,6 +1049,18 @@ let
       '';
     };
 
+    ipvtapConfig = mkOption {
+      default = {};
+      example = { Mode = "L2"; };
+      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionIPVTAP;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[IPVTAP]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
     vxlanConfig = mkOption {
       default = {};
       type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionVXLAN;
@@ -1660,6 +1674,10 @@ let
         + optionalString (def.ipvlanConfig != { }) ''
           [IPVLAN]
           ${attrsToSection def.ipvlanConfig}
+        ''
+        + optionalString (def.ipvtapConfig != { }) ''
+          [IPVTAP]
+          ${attrsToSection def.ipvtapConfig}
         ''
         + optionalString (def.vxlanConfig != { }) ''
           [VXLAN]
