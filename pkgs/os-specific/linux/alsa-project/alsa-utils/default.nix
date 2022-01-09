@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://alsa/utils/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-ah79ih8dnTjkiWM+rsH/+lwxVmOzFsq4BL5IaIfmFF0=";
+    hash = "sha256-ah79ih8dnTjkiWM+rsH/+lwxVmOzFsq4BL5IaIfmFF0=";
   };
 
   nativeBuildInputs = [ gettext makeWrapper ];

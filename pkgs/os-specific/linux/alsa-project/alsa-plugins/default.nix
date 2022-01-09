@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://alsa/plugins/${pname}-${version}.tar.bz2";
-    sha256 = "BogYpLVdjAKdqgABXYU9RRE/VrIkt8ZOHhF5iMglsqA=";
+    hash = "sha256-BogYpLVdjAKdqgABXYU9RRE/VrIkt8ZOHhF5iMglsqA=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     description = "Various plugins for ALSA";
     homepage = "http://alsa-project.org/";
     license = licenses.lgpl21;
-    maintainers = [ maintainers.marcweber maintainers.l-as ];
+    maintainers = with maintainers; [ marcweber l-as ];
     platforms = platforms.linux;
   };
 }

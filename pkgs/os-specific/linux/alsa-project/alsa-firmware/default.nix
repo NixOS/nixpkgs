@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     homepage = "http://www.alsa-project.org/";
     description = "Soundcard firmwares from the alsa project";
     license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ l-as ];
     platforms = platforms.linux;
-    maintainers = [ maintainers.l-as ];
   };
 }

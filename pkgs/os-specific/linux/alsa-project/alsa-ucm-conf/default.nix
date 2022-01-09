@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://alsa/lib/${pname}-${version}.tar.bz2";
-    sha256 = "uKA6o4emJKL2XtwgG/d3QhGQtgUpqSCHZGgjr72Wxc0=";
+    hash = "sha256-uKA6o4emJKL2XtwgG/d3QhGQtgUpqSCHZGgjr72Wxc0=";
   };
 
   dontBuild = true;
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     '';
 
     license = licenses.bsd3;
-    maintainers = [ maintainers.roastiek maintainers.l-as ];
+    maintainers = with maintainers; [ roastiek l-as ];
     platforms = platforms.linux;
   };
 }

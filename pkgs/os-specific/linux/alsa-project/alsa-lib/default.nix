@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://alsa/lib/${pname}-${version}.tar.bz2";
-    sha256 = "rVgpk9Us21+xWaC+q2CmrFfqsMwb34XcTbbWGX8CMz8=";
+    hash = "sha256-rVgpk9Us21+xWaC+q2CmrFfqsMwb34XcTbbWGX8CMz8=";
   };
 
   enableParallelBuilding = true;
@@ -34,6 +34,6 @@ stdenv.mkDerivation rec {
 
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.l-as ];
+    maintainers = with maintainers; [ l-as ];
   };
 }
