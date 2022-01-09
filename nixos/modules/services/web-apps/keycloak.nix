@@ -54,7 +54,11 @@ in
 
     frontendUrl = lib.mkOption {
       type = lib.types.str;
-      apply = x: if lib.hasSuffix "/" x then x else x + "/";
+      apply = x:
+        if x == "" || lib.hasSuffix "/" x then
+          x
+        else
+          x + "/";
       example = "keycloak.example.com/auth";
       description = ''
         The public URL used as base for all frontend requests. Should

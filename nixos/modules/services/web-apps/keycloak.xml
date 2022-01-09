@@ -85,7 +85,12 @@
        The frontend URL is used as base for all frontend requests and
        must be configured through <xref linkend="opt-services.keycloak.frontendUrl" />.
        It should normally include a trailing <literal>/auth</literal>
-       (the default web context).
+       (the default web context). If you use a reverse proxy, you need
+       to set this option to <literal>""</literal>, so that frontend URL
+       is derived from HTTP headers. <literal>X-Forwarded-*</literal> headers
+       support also should be enabled, using <link
+       xlink:href="https://www.keycloak.org/docs/latest/server_installation/index.html#identifying-client-ip-addresses">
+       respective guidelines</link>.
      </para>
 
      <para>
