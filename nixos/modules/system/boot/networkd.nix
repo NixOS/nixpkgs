@@ -105,6 +105,15 @@ let
         (assertValueOneOf "Mode" ["private" "vepa" "bridge" "passthru"])
       ];
 
+      ipvlanChecks = [
+        (assertOnlyFields [
+          "Mode"
+          "Flags"
+        ])
+        (assertValueOneOf "Mode" ["L2" "L3" "L3S"])
+        (assertValueOneOf "Flags" ["bridge" "private" "vepa"])
+      ];
+
       tunChecks = [
         (assertOnlyFields [
           "MultiQueue"
@@ -117,6 +126,7 @@ let
         (assertValueOneOf "PacketInfo" boolValues)
         (assertValueOneOf "VNetHeader" boolValues)
       ];
+
     in {
 
       sectionNetdev = checkUnitConfig "Netdev" [
@@ -189,6 +199,7 @@ let
 
       sectionMACVTAP = checkUnitConfig "MACVTAP" macvlanChecks;
 
+      sectionIPVLAN = checkUnitConfig "IPVLAN" ipvlanChecks;
 
       sectionVXLAN = checkUnitConfig "VXLAN" [
         (assertOnlyFields [
@@ -985,6 +996,18 @@ let
       '';
     };
 
+    ipvlanConfig = mkOption {
+      default = {};
+      example = { Mode = "L2"; };
+      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionIPVLAN;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[IPVLAN]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
     vxlanConfig = mkOption {
       default = {};
       type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionVXLAN;
@@ -1590,6 +1613,10 @@ let
         + optionalString (def.macvtapConfig != { }) ''
           [MACVTAP]
           ${attrsToSection def.macvtapConfig}
+        ''
+        + optionalString (def.ipvlanConfig != { }) ''
+          [IPVLAN]
+          ${attrsToSection def.ipvlanConfig}
         ''
         + optionalString (def.vxlanConfig != { }) ''
           [VXLAN]
