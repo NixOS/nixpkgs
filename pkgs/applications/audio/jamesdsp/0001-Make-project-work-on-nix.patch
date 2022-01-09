@@ -1,0 +1,25 @@
+From a5ba2ae3355a2b7a3f21c4a9469e52e13392395c Mon Sep 17 00:00:00 2001
+From: Pasquale <p3dimaria@hotmail.it>
+Date: Sun, 9 Jan 2022 17:18:34 +0100
+Subject: [PATCH] Make project work on nix
+
+---
+ src/src.pro | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/src.pro b/src/src.pro
+index 54466ee..cd4cb33 100644
+--- a/src/src.pro
++++ b/src/src.pro
+@@ -13,7 +13,7 @@ TEMPLATE = app
+ 
+ USE_PULSEAUDIO: DEFINES += USE_PULSEAUDIO
+ 
+-DEFINES += APP_VERSION=$$system(git describe --tags --long --always)
++DEFINES += APP_VERSION=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ DEFINES += JDSP_VERSION=4.1.0
+ 
+ include(../3rdparty/3rdparty.pri)
+-- 
+2.33.1
+
