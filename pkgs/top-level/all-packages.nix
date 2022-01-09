@@ -33473,7 +33473,9 @@ with pkgs;
 
   termpdfpy = python3Packages.callPackage ../applications/misc/termpdf.py {};
 
-  inherit (callPackage ../applications/networking/cluster/terraform { })
+  inherit (callPackage ../applications/networking/cluster/terraform {
+    buildGoModule = buildGo117Module;
+  })
     mkTerraform
     terraform_0_12
     terraform_0_13
