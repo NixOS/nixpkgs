@@ -28,7 +28,7 @@ mkDerivation rec {
 
   preInstall = ''
     mkdir -p $udev/lib/udev/rules.d
-    sed -n '/^ \+cat > "$tmpfile" <<- EOF$/,/^EOF$/p' ../data/moolticute.sh |
+     sed -n '/^UDEV_RULE=="\$(cat <<-EOF$/,/^EOF$/p' ../data/moolticute.sh |
         sed '1d;$d' > $udev/lib/udev/rules.d/50-mooltipass.rules
  '';
 
