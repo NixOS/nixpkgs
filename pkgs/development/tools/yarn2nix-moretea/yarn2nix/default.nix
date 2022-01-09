@@ -349,7 +349,7 @@ in rec {
         runHook postInstall
       '';
 
-      doDist = true;
+      doDist = attrs.doDist or true;
 
       distPhase = attrs.distPhase or ''
         # pack command ignores cwd option
