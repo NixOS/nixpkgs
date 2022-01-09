@@ -612,6 +612,8 @@ let
           "OriginatorIntervalSec"
           "GatewayBandwithDown"
           "GatewayBandwithUp"
+          "GatewayBandwidthDown"
+          "GatewayBandwidthUp"
           "RoutingAlgorithm"
         ])
         (assertValueOneOf "GatewayMode" ["off" "client" "server"])
