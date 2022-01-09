@@ -8074,7 +8074,7 @@ with pkgs;
 
   noip = callPackage ../tools/networking/noip { };
 
-  nomad = nomad_1_1;
+  nomad = nomad_1_2;
 
   # Nomad never updates major go versions within a release series and is unsupported
   # on Go versions that it did not ship with. Due to historic bugs when compiled
@@ -8088,6 +8088,11 @@ with pkgs;
   };
   nomad_1_1 = callPackage ../applications/networking/cluster/nomad/1.1.nix {
     buildGoModule = buildGo116Module;
+    inherit (linuxPackages) nvidia_x11;
+    nvidiaGpuSupport = config.cudaSupport or false;
+  };
+  nomad_1_2 = callPackage ../applications/networking/cluster/nomad/1.2.nix {
+    buildGoModule = buildGo117Module;
     inherit (linuxPackages) nvidia_x11;
     nvidiaGpuSupport = config.cudaSupport or false;
   };
