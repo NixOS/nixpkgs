@@ -173,6 +173,7 @@ let
           "fou"
           "xfrm"
           "ifb"
+          "bareudp"
           "batadv"
         ])
         (assertByteFormat "MTUBytes")
@@ -304,6 +305,17 @@ let
         (assertRange "FlowLabel" 0 1048575)
         (assertValueOneOf "IPDoNotFragment" (boolValues + ["inherit"]))
         (assertValueOneOf "Independent" boolValues)
+      ];
+
+      sectionBareUDP = checkUnitConfig "BareUDP" [
+        (assertOnlyFields [
+          "DestinationPort"
+          "EtherType"
+        ])
+        (assertHasField "DestinationPort")
+        (assertPort "DestinationPort")
+        (assertHasField "EtherType")
+        (assertValueOneOf "EtherType" ["ipv4" "ipv6" "mpls-uc" "mpls-mc"])
       ];
 
       sectionTunnel = checkUnitConfig "Tunnel" [
@@ -1112,6 +1124,17 @@ let
       '';
     };
 
+    bareudpConfig = mkOption {
+      default = {};
+      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionBareUDP;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[BareUDP]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
     tunnelConfig = mkOption {
       default = {};
       example = { Remote = "192.168.1.1"; };
@@ -1726,6 +1749,10 @@ let
         + optionalString (def.geneveConfig != { }) ''
           [GENEVE]
           ${attrsToSection def.geneveConfig}
+        ''
+        + optionalString (def.bareudpConfig != { }) ''
+          [BareUDP]
+          ${attrsToSection def.bareudpConfig}
         ''
         + optionalString (def.tunnelConfig != { }) ''
           [Tunnel]
