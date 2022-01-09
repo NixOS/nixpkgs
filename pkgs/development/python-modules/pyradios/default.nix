@@ -1,7 +1,17 @@
-{ lib, buildPythonPackage, fetchPypi, appdirs, requests }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, appdirs
+, requests
+, pythonOlder
+}:
+
 buildPythonPackage rec {
   pname = "pyradios";
   version = "1.0.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
@@ -13,6 +23,7 @@ buildPythonPackage rec {
     requests
   ];
 
+  # Tests and pythonImportsCheck require network access
   doCheck = false;
 
   meta = with lib; {
