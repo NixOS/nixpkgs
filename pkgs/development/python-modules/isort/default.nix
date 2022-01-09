@@ -52,6 +52,7 @@ buildPythonPackage rec {
 
   disabledTests = [
     "test_run" # doesn't like paths in /build
+    "test_fuzz_show_unified_diff" # flakey
     "test_pyi_formatting_issue_942"
     "test_requirements_finder"
     "test_pipfile_finder"

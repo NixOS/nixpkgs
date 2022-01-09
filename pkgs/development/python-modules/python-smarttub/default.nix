@@ -38,6 +38,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "pyjwt~=2.1.0" "pyjwt>=2.1.0"
+  '';
+
   pythonImportsCheck = [
     "smarttub"
   ];

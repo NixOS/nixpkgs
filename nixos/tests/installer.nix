@@ -561,24 +561,14 @@ in {
           + " mkpart primary 2048M -1s"  # PV2
           + " set 2 lvm on",
           "udevadm settle",
-          "sleep 1",
           "pvcreate /dev/vda1 /dev/vda2",
-          "sleep 1",
           "vgcreate MyVolGroup /dev/vda1 /dev/vda2",
-          "sleep 1",
           "lvcreate --size 1G --name swap MyVolGroup",
-          "sleep 1",
           "lvcreate --size 3G --name nixos MyVolGroup",
-          "sleep 1",
           "mkswap -f /dev/MyVolGroup/swap -L swap",
           "swapon -L swap",
           "mkfs.xfs -L nixos /dev/MyVolGroup/nixos",
           "mount LABEL=nixos /mnt",
-      )
-    '';
-    postBootCommands = ''
-      assert "loaded active" in machine.succeed(
-          "systemctl list-units 'lvm2-pvscan@*' -ql --no-legend | tee /dev/stderr"
       )
     '';
   };

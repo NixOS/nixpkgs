@@ -3,10 +3,10 @@
 
 # Each of the dependencies below are optional.
 # Gnupg can be built without them at the cost of reduced functionality.
-, guiSupport ? true, enableMinimal ? false
-, adns ? null , bzip2 ? null , gnutls ? null , libusb1 ? null , openldap ? null
-, pcsclite ? null , pinentry ? null , readline ? null , sqlite ? null , zlib ?
-null
+, guiSupport ? stdenv.isDarwin, enableMinimal ? false
+, adns ? null, bzip2 ? null , gnutls ? null , libusb1 ? null , openldap ? null
+, tpm2-tss ? null
+, pcsclite ? null , pinentry ? null , readline ? null , sqlite ? null , zlib ? null
 }:
 
 with lib;
@@ -15,12 +15,11 @@ assert guiSupport -> pinentry != null && enableMinimal == false;
 
 stdenv.mkDerivation rec {
   pname = "gnupg";
-
-  version = "2.2.27";
+  version = "2.3.3";
 
   src = fetchurl {
     url = "mirror://gnupg/gnupg/${pname}-${version}.tar.bz2";
-    sha256 = "1693s2rp9sjwvdslj94n03wnb6rxysjy0dli0q1698af044h1ril";
+    sha256 = "0dz9x0r5021bhk1kjh29m1q13xbslwb8yn9qzcp7b9m1lrnvi2ap";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -28,11 +27,10 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libgcrypt libassuan libksba libiconv npth gettext
     readline libusb1 gnutls adns openldap zlib bzip2 sqlite
-  ];
+  ] ++ optional (!stdenv.isDarwin) tpm2-tss ;
 
   patches = [
     ./fix-libusb-include-path.patch
-    ./0001-dirmngr-Only-use-SKS-pool-CA-for-SKS-pool.patch
     ./tests-add-test-cases-for-import-without-uid.patch
     ./allow-import-of-previously-known-keys-even-without-UI.patch
     ./accept-subkeys-with-a-good-revocation-but-no-self-sig.patch
@@ -42,7 +40,7 @@ stdenv.mkDerivation rec {
     # Fix broken SOURCE_DATE_EPOCH usage - remove on the next upstream update
     sed -i 's/$SOURCE_DATE_EPOCH/''${SOURCE_DATE_EPOCH}/' doc/Makefile.am
     sed -i 's/$SOURCE_DATE_EPOCH/''${SOURCE_DATE_EPOCH}/' doc/Makefile.in
-  '' + lib.optionalString ( stdenv.isLinux && pcsclite != null) ''
+  '' + lib.optionalString (stdenv.isLinux && pcsclite != null) ''
     sed -i 's,"libpcsclite\.so[^"]*","${lib.getLib pcsclite}/lib/libpcsclite.so",g' scd/scdaemon.c
   '';
 
@@ -53,12 +51,12 @@ stdenv.mkDerivation rec {
     "--with-libassuan-prefix=${libassuan.dev}"
     "--with-ksba-prefix=${libksba.dev}"
     "--with-npth-prefix=${npth}"
-  ] ++ optional guiSupport "--with-pinentry-pgm=${pinentry}/${pinentryBinaryPath}";
-
+  ] ++ optional guiSupport "--with-pinentry-pgm=${pinentry}/${pinentryBinaryPath}"
+  ++ optional ( (!stdenv.isDarwin) && (tpm2-tss != null) ) "--with-tss=intel";
   postInstall = if enableMinimal
   then ''
     rm -r $out/{libexec,sbin,share}
-    for f in `find $out/bin -type f -not -name gpg`
+    for f in $(find $out/bin -type f -not -name gpg)
     do
       rm $f
     done
@@ -73,12 +71,17 @@ stdenv.mkDerivation rec {
     ln -s $out/bin/gpg $out/bin/gpg2
 
     # Make libexec tools available in PATH
-    ln -s -t $out/bin $out/libexec/*
+    for f in $out/libexec/; do
+      if [[ "$(basename $f)" == "gpg-wks-client" ]]; then continue; fi
+      ln -s $f $out/bin/$(basename $f)
+    done
   '';
+
+  enableParallelBuilding = true;
 
   meta = with lib; {
     homepage = "https://gnupg.org";
-    description = "Modern (2.1) release of the GNU Privacy Guard, a GPL OpenPGP implementation";
+    description = "Modern release of the GNU Privacy Guard, a GPL OpenPGP implementation";
     license = licenses.gpl3Plus;
     longDescription = ''
       The GNU Privacy Guard is the GNU project's complete and free

@@ -550,6 +550,8 @@ in {
 
   apache-airflow = callPackage ../development/python-modules/apache-airflow { };
 
+  apache-beam = callPackage ../development/python-modules/apache-beam { };
+
   apcaccess = callPackage ../development/python-modules/apcaccess { };
 
   apipkg = callPackage ../development/python-modules/apipkg { };
@@ -8225,7 +8227,9 @@ in {
 
   pywizlight = callPackage ../development/python-modules/pywizlight { };
 
-  pywlroots = callPackage ../development/python-modules/pywlroots { };
+  pywlroots = callPackage ../development/python-modules/pywlroots {
+    wlroots = pkgs.wlroots_0_14;
+  };
 
   pyxattr = callPackage ../development/python-modules/pyxattr { };
 
@@ -9809,6 +9813,8 @@ in {
   transmissionrpc = callPackage ../development/python-modules/transmissionrpc { };
 
   treeo = callPackage ../development/python-modules/treeo { };
+
+  treex = callPackage ../development/python-modules/treex { };
 
   treq = callPackage ../development/python-modules/treq { };
 

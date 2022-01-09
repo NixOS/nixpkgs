@@ -306,6 +306,7 @@ let
                   "colorlog"
                   "emoji"
                   "immutabledict"
+                  "PyYAML"
                   "sarge"
                   "sentry-sdk"
                   "watchdog"

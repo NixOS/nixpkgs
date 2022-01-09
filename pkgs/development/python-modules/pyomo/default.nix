@@ -1,26 +1,28 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , isPy27
 , pyutilib
 , appdirs
 , ply
 , six
 , nose
+, glpk
 }:
 
 buildPythonPackage rec {
   pname = "pyomo";
-  version = "5.6.1";
+  version = "5.7.3";
   disabled = isPy27; # unable to import pyutilib.th
 
-  src = fetchPypi {
-    pname = "Pyomo";
-    inherit version;
-    sha256 = "449be9a4c9b3caee7c89dbe5f0e4e5ad0eaeef8be110a860641cd249986e362c";
+  src = fetchFromGitHub {
+    repo = "pyomo";
+    owner = "pyomo";
+    rev = version;
+    sha256 = "sha256-p0/DdCwyXdzXElzjWewKs0Oi7BMXC+BxgYikdZL0t68=";
   };
 
-  checkInputs = [ nose ];
+  checkInputs = [ nose glpk ];
   propagatedBuildInputs = [
     pyutilib
     appdirs
@@ -30,7 +32,10 @@ buildPythonPackage rec {
 
   checkPhase = ''
     rm pyomo/bilevel/tests/test_blp.py \
-       pyomo/version/tests/test_installer.py
+       pyomo/version/tests/test_installer.py \
+       pyomo/common/tests/test_download.py \
+       pyomo/core/tests/examples/test_pyomo.py
+    export HOME=$TMPDIR
     nosetests
   '';
 

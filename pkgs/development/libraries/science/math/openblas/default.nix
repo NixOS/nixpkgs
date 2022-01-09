@@ -208,15 +208,21 @@ EOF
     done
 
     # Setup symlinks for blas / lapack
+  '' + lib.optionalString enableShared ''
     ln -s $out/lib/libopenblas${shlibExt} $out/lib/libblas${shlibExt}
     ln -s $out/lib/libopenblas${shlibExt} $out/lib/libcblas${shlibExt}
     ln -s $out/lib/libopenblas${shlibExt} $out/lib/liblapack${shlibExt}
     ln -s $out/lib/libopenblas${shlibExt} $out/lib/liblapacke${shlibExt}
-  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
+  '' + lib.optionalString (stdenv.hostPlatform.isLinux && enableShared) ''
     ln -s $out/lib/libopenblas${shlibExt} $out/lib/libblas${shlibExt}.3
     ln -s $out/lib/libopenblas${shlibExt} $out/lib/libcblas${shlibExt}.3
     ln -s $out/lib/libopenblas${shlibExt} $out/lib/liblapack${shlibExt}.3
     ln -s $out/lib/libopenblas${shlibExt} $out/lib/liblapacke${shlibExt}.3
+  '' + lib.optionalString enableStatic ''
+    ln -s $out/lib/libopenblas.a $out/lib/libblas.a
+    ln -s $out/lib/libopenblas.a $out/lib/libcblas.a
+    ln -s $out/lib/libopenblas.a $out/lib/liblapack.a
+    ln -s $out/lib/libopenblas.a $out/lib/liblapacke.a
   '';
 
   meta = with lib; {

@@ -1,10 +1,10 @@
 { lib
 , buildPythonPackage
 , duckdb
+, mypy
 , numpy
 , pandas
 , pybind11
-, mypy
 , setuptools-scm
 , pytestCheckHook
 }:
