@@ -480,6 +480,13 @@ let
         (assertMacAddress "MACAddress")
       ];
 
+      sectionVXCAN = checkUnitConfig "VXCAN" [
+        (assertOnlyFields [
+          "Peer"
+        ])
+        (assertHasField "Peer")
+      ];
+
       sectionTun = checkUnitConfig "Tun" tunChecks;
 
       sectionTap = checkUnitConfig "Tap" tunChecks;
@@ -1371,6 +1378,17 @@ let
       '';
     };
 
+    vxcanConfig = mkOption {
+      default = {};
+      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionVXCAN;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[VXCAN]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
     tunConfig = mkOption {
       default = {};
       example = { User = "openvpn"; };
@@ -1989,6 +2007,10 @@ let
         + optionalString (def.peerConfig != { }) ''
           [Peer]
           ${attrsToSection def.peerConfig}
+        ''
+        + optionalString (def.vxcanConfig != { }) ''
+          [VXCAN]
+          ${attrsToSection def.vxcanConfig}
         ''
         + optionalString (def.tunConfig != { }) ''
           [Tun]
