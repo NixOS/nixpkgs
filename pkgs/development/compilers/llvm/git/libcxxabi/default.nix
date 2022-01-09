@@ -1,4 +1,6 @@
-{ lib, stdenv, llvm_meta, cmake, python3, src, cxx-headers, libunwind, version
+{ lib, stdenv, llvm_meta, cmake, python3
+, monorepoSrc, runCommand
+, cxx-headers, libunwind, version
 , enableShared ? !stdenv.hostPlatform.isStatic
 }:
 
@@ -6,8 +8,19 @@ stdenv.mkDerivation rec {
   pname = "libcxxabi";
   inherit version;
 
-  inherit src;
-  sourceRoot = "source/${pname}";
+  src = runCommand "${pname}-src-${version}" {} ''
+    mkdir -p "$out"
+    cp -r ${monorepoSrc}/cmake "$out"
+    cp -r ${monorepoSrc}/${pname} "$out"
+    mkdir -p "$out/libcxx/src"
+    cp -r ${monorepoSrc}/libcxx/cmake "$out/libcxx"
+    cp -r ${monorepoSrc}/libcxx/include "$out/libcxx"
+    cp -r ${monorepoSrc}/libcxx/src/include "$out/libcxx/src"
+    mkdir -p "$out/llvm"
+    cp -r ${monorepoSrc}/llvm/cmake "$out/llvm"
+  '';
+
+  sourceRoot = "${src.name}/${pname}";
 
   outputs = [ "out" "dev" ];
 

@@ -1,6 +1,7 @@
 { lib, stdenv, llvm_meta
 , pkgsBuildBuild
-, src
+, monorepoSrc
+, runCommand
 , fetchpatch
 , cmake
 , python3
@@ -22,7 +23,7 @@
   || stdenv.isAarch32 # broken for the armv7l builder
 )
 , enablePolly ? false
-}:
+} @args:
 
 let
   inherit (lib) optional optionals optionalString;
@@ -35,8 +36,16 @@ in stdenv.mkDerivation (rec {
   pname = "llvm";
   inherit version;
 
-  inherit src;
-  sourceRoot = "source/${pname}";
+  src = runCommand "${pname}-src-${version}" {} (''
+    mkdir -p "$out"
+    cp -r ${monorepoSrc}/cmake "$out"
+    cp -r ${monorepoSrc}/${pname} "$out"
+    cp -r ${monorepoSrc}/third-party "$out"
+  '' + lib.optionalString enablePolly ''
+    cp -r ${monorepoSrc}/polly "$out/llvm/tools"
+  '');
+
+  sourceRoot = "${src.name}/${pname}";
 
   outputs = [ "out" "lib" "dev" "python" ];
 

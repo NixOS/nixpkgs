@@ -1,16 +1,23 @@
-{ lib, stdenv, llvm_meta, src, substituteAll, cmake, libxml2, libllvm, version, python3
+{ lib, stdenv, llvm_meta
+, monorepoSrc, runCommand
+, substituteAll, cmake, libxml2, libllvm, version, python3
 , buildLlvmTools
 , fixDarwinDylibNames
 , enableManpages ? false
 }:
 
 let
-  self = stdenv.mkDerivation ({
+  self = stdenv.mkDerivation (rec {
     pname = "clang";
     inherit version;
 
-    inherit src;
-    sourceRoot = "source/clang";
+    src = runCommand "${pname}-src-${version}" {} ''
+      mkdir -p "$out"
+      cp -r ${monorepoSrc}/cmake "$out"
+      cp -r ${monorepoSrc}/${pname} "$out"
+    '';
+
+    sourceRoot = "${src.name}/${pname}";
 
     nativeBuildInputs = [ cmake python3 ]
       ++ lib.optional enableManpages python3.pkgs.sphinx

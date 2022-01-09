@@ -1,0 +1,13 @@
+diff --git a/lld/CMakeLists.txt b/lld/CMakeLists.txt
+index e1a29b884d17..9d542f8fbfc1 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -64,7 +64,7 @@ if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
+ 
+   set(LLVM_MAIN_INCLUDE_DIR ${MAIN_INCLUDE_DIR} CACHE PATH "Path to llvm/include")
+   set(LLVM_BINARY_DIR ${LLVM_OBJ_ROOT} CACHE PATH "Path to LLVM build tree")
+-  set(LLVM_MAIN_SRC_DIR ${MAIN_SRC_DIR} CACHE PATH "Path to LLVM source tree")
++  set(LLVM_MAIN_SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../llvm" CACHE PATH "Path to LLVM source tree")
+ 
+   find_program(LLVM_TABLEGEN_EXE "llvm-tblgen" ${LLVM_TOOLS_BINARY_DIR}
+     NO_DEFAULT_PATH)

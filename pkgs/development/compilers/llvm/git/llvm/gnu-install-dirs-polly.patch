@@ -1,20 +1,17 @@
 diff --git a/tools/polly/CMakeLists.txt b/tools/polly/CMakeLists.txt
-index ca7c04c565bb..6ed5db5dd4f8 100644
+index ca7c04c565bb..6a6155806ffa 100644
 --- a/tools/polly/CMakeLists.txt
 +++ b/tools/polly/CMakeLists.txt
-@@ -2,7 +2,11 @@
- if (NOT DEFINED LLVM_MAIN_SRC_DIR)
+@@ -3,6 +3,8 @@ if (NOT DEFINED LLVM_MAIN_SRC_DIR)
    project(Polly)
    cmake_minimum_required(VERSION 3.13.4)
-+endif()
-+
-+include(GNUInstallDirs)
  
-+if (NOT DEFINED LLVM_MAIN_SRC_DIR)
++  include(GNUInstallDirs)
++
    # Where is LLVM installed?
    find_package(LLVM CONFIG REQUIRED)
    set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${LLVM_CMAKE_DIR})
-@@ -122,13 +126,13 @@ include_directories(
+@@ -122,13 +124,13 @@ include_directories(
  
  if (NOT LLVM_INSTALL_TOOLCHAIN_ONLY)
    install(DIRECTORY include/
@@ -91,10 +88,10 @@ index 518a09b45a42..bd9d6f5542ad 100644
    set_property(GLOBAL APPEND PROPERTY LLVM_EXPORTS ${name})
  endmacro(add_polly_library)
 diff --git a/tools/polly/lib/External/CMakeLists.txt b/tools/polly/lib/External/CMakeLists.txt
-index 8991094d92c7..178d8ad606bb 100644
+index e3a5683fccdc..293b482eb28a 100644
 --- a/tools/polly/lib/External/CMakeLists.txt
 +++ b/tools/polly/lib/External/CMakeLists.txt
-@@ -275,7 +275,7 @@ if (POLLY_BUNDLED_ISL)
+@@ -290,7 +290,7 @@ if (POLLY_BUNDLED_ISL)
      install(DIRECTORY
        ${ISL_SOURCE_DIR}/include/
        ${ISL_BINARY_DIR}/include/
