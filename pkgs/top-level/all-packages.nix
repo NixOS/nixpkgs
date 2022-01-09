@@ -28505,6 +28505,8 @@ with pkgs;
 
   sndpeek = callPackage ../applications/audio/sndpeek { };
 
+  maui-station = libsForQt5.callPackage ../applications/misc/maui-station { };
+
   sxhkd = callPackage ../applications/window-managers/sxhkd { };
 
   mpop = callPackage ../applications/networking/mpop {
