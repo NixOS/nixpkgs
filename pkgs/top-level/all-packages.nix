@@ -2704,6 +2704,8 @@ with pkgs;
 
   csv2latex = callPackage ../tools/misc/csv2latex { };
 
+  csv-diff = callPackage ../tools/misc/csv-diff { };
+
   csvs-to-sqlite = callPackage ../tools/misc/csvs-to-sqlite { };
 
   cucumber = callPackage ../development/tools/cucumber {};
