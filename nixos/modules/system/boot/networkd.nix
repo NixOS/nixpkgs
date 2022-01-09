@@ -482,6 +482,7 @@ let
           "Name"
           "MACAddress"
         ])
+        (assertHasField "Name")
         (assertMacAddress "MACAddress")
       ];
 
