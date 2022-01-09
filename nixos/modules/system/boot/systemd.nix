@@ -274,7 +274,7 @@ let
         else if arg ? substitute
           then arg.substitute
         else
-          escapeSystemdExecArg arg;
+          replaceChars [ "%" "$" ] [ "%%" "$$" ] (builtins.toJSON arg);
       maybeArgv0 = optionalString (argv0 != null) (format argv0);
     in
       "${prefixes}${exe} ${maybeArgv0} ${concatMapStringsSep " " format args}";

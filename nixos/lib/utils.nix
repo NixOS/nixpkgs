@@ -45,23 +45,6 @@ rec {
    replaceChars ["/" "-" " "] ["-" "\\x2d" "\\x20"]
    (removePrefix "/" s);
 
-  # Quotes an argument for use in Exec* service lines.
-  # systemd accepts "-quoted strings with escape sequences, toJSON produces
-  # a subset of these.
-  # Additionally we escape % to disallow expansion of % specifiers. Any lone ;
-  # in the input will be turned it ";" and thus lose its special meaning.
-  # Every $ is escaped to $$, this makes it unnecessary to disable environment
-  # substitution for the directive.
-  escapeSystemdExecArg = arg:
-    let
-      s = builtins.toJSON (if builtins.isPath arg then "${arg}" else toString arg);
-    in
-      replaceChars [ "%" "$" ] [ "%%" "$$" ] s;
-
-  # Quotes a list of arguments into a single string for use in a Exec*
-  # line.
-  escapeSystemdExecArgs = concatMapStringsSep " " escapeSystemdExecArg;
-
   # Returns a system path for a given shell package
   toShellPath = shell:
     if types.shellPackage.check shell then

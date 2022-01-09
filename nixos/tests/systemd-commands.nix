@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ runCommand, stdenv, ... }:
 
 let
   args = [ "a%Nything" "lang=\${LANG}" ";" "/bin/sh -c date" { substitute = "%i \${ENV}"; } ];
@@ -16,12 +16,12 @@ let
     };
   };
   eval = import ../lib/eval-config.nix {
-    system = builtins.currentSystem;
+    system = stdenv.hostPlatform.system;
     modules = [ module ];
   };
 in
 
-pkgs.runCommand "systemd-escaping" {
+runCommand "systemd-escaping" {
   expected = ''script  "a%%Nything" "lang=''$''${LANG}" ";" "/bin/sh -c date" %i ''${ENV}'';
 } ''
   grep -qF "$expected" < ${eval.config.system.build.units."echo.service".unit}/echo.service
