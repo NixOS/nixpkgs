@@ -10120,6 +10120,16 @@ with pkgs;
 
   inherit (nodePackages) thelounge;
 
+  theLoungePlugins = with lib; let
+    pkgs = filterAttrs (name: _: hasPrefix "thelounge-" name) nodePackages;
+    getPackagesWithPrefix = prefix: mapAttrs' (name: pkg: nameValuePair (removePrefix ("thelounge-" + prefix + "-") name) pkg)
+      (filterAttrs (name: _: hasPrefix ("thelounge-" + prefix + "-") name) pkgs);
+  in
+  {
+    plugins = getPackagesWithPrefix "plugin";
+    themes = getPackagesWithPrefix "theme";
+  };
+
   thefuck = python3Packages.callPackage ../tools/misc/thefuck { };
 
   thicket = callPackage ../applications/version-management/git-and-tools/thicket { };
