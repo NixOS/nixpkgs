@@ -449,6 +449,8 @@ let
     };
 
     security = {
+      # https://googleprojectzero.blogspot.com/2019/11/bad-binder-android-in-wild-exploit.html
+      DEBUG_LIST                       = yes;
       # Detect writes to read-only module pages
       DEBUG_SET_MODULE_RONX            = { optional = true; tristate = whenOlder "4.11" "y"; };
       RANDOMIZE_BASE                   = option yes;
