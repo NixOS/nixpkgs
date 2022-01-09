@@ -1,6 +1,5 @@
 { lib, stdenv, callPackage, fetchurl, fetchFromGitHub, buildGoModule, fetchYarnDeps, nixosTests
-, esbuild, fixup_yarn_lock, jq, nodejs, yarn
-, nodePackages, youtube-dl
+, fixup_yarn_lock, jq, nodejs, yarn
 }:
 let
   arch =
@@ -37,33 +36,12 @@ let
     sha256 = "3R3dBZyPansTuM77Nmm3f7BbTDkDdiT2HQIrti2Ottc=";
   };
 
-  wrtc_version = "0.4.7";
-  wrtc_lib = fetchurl {
-    url = "https://node-webrtc.s3.amazonaws.com/wrtc/v${wrtc_version}/Release/${arch}.tar.gz";
-    sha256 = "1zd3jlwq3lc2vhmr3bs1h6mrzyswdp3y20vb4d9s67ir9q7jn1zf";
-  };
-
-  esbuild_locked = buildGoModule rec {
-    pname = "esbuild";
-    version = "0.12.17";
-
-    src = fetchFromGitHub {
-      owner = "evanw";
-      repo = "esbuild";
-      rev = "v${version}";
-      sha256 = "16xxscha2y69mgm20rpjdxykyqiy0qy8gayh8046q6m0sf6834y1";
-    };
-    vendorSha256 = "1n5538yik72x94vzfq31qaqrkpxds5xys1wlibw2gn2am0z5c06q";
-  };
-
 in stdenv.mkDerivation rec {
   inherit version;
   pname = "peertube";
   src = source;
 
-  nativeBuildInputs = [ esbuild fixup_yarn_lock jq nodejs yarn ];
-
-  buildInputs = [ nodePackages.node-gyp-build youtube-dl ];
+  nativeBuildInputs = [ fixup_yarn_lock jq nodejs yarn ];
 
   buildPhase = ''
     # Build node modules
@@ -93,30 +71,16 @@ in stdenv.mkDerivation rec {
     fi
     mkdir -p ./lib/binding && tar -C ./lib/binding -xf ${bcrypt_lib}
 
-    # Fix youtube-dl node module
-    cd ~/node_modules/youtube-dl
-    mkdir ./bin
-    ln -s ${youtube-dl}/bin/youtube-dl ./bin/youtube-dl
-    cat > ./bin/details <<EOF
-    {"version":"${youtube-dl.version}","path":null,"exec":"youtube-dl"}
-    EOF
-    # Fix wrtc node module
-    cd ~/server/tools/node_modules/wrtc
-    if [ "${wrtc_version}" != "$(cat package.json | jq -r .version)" ]; then
-      echo "Mismatching version please update wrtc in derivation"
-      exit
-    fi
-    mkdir -p ./build && tar -C ./build -xf ${wrtc_lib}
+    # Return to home directory
+    cd ~
 
     # Build PeerTube server
-    cd ~
     npm run build:server
 
     # Build PeerTube tools
     npm run tsc -- --build ./server/tools/tsconfig.json
 
     # Build PeerTube client
-    export ESBUILD_BINARY_PATH="${esbuild_locked}/bin/esbuild"
     npm run build:client
   '';
 
