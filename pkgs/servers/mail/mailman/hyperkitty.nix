@@ -12,7 +12,7 @@
 , django-paintstore
 , django-q
 , django_compressor
-, django_extensions
+, django-extensions
 , djangorestframework
 , flufl_lock
 , mistune_2_0
@@ -52,7 +52,7 @@ buildPythonPackage rec {
     django-mailman3
     django-q
     django_compressor
-    django_extensions
+    django-extensions
     djangorestframework
     flufl_lock
     mistune_2_0
