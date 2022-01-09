@@ -187,6 +187,8 @@ let
 
       sectionMACVLAN = checkUnitConfig "MACVLAN" macvlanChecks;
 
+      sectionMACVTAP = checkUnitConfig "MACVTAP" macvlanChecks;
+
 
       sectionVXLAN = checkUnitConfig "VXLAN" [
         (assertOnlyFields [
@@ -971,6 +973,18 @@ let
       '';
     };
 
+    macvtapConfig = mkOption {
+      default = {};
+      example = { Mode = "private"; };
+      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionMACVTAP;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[MACVTAP]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
     vxlanConfig = mkOption {
       default = {};
       type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionVXLAN;
@@ -1572,6 +1586,10 @@ let
         + optionalString (def.macvlanConfig != { }) ''
           [MACVLAN]
           ${attrsToSection def.macvlanConfig}
+        ''
+        + optionalString (def.macvtapConfig != { }) ''
+          [MACVTAP]
+          ${attrsToSection def.macvtapConfig}
         ''
         + optionalString (def.vxlanConfig != { }) ''
           [VXLAN]
