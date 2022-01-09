@@ -277,6 +277,35 @@ let
         (assertValueOneOf "IPDoNotFragment" (boolValues + ["inherit"]))
       ];
 
+      sectionGENEVE = checkUnitConfig "GENEVE" [
+        (assertOnlyFields [
+          "Id"
+          "Remote"
+          "TOS"
+          "TTL"
+          "UDPChecksum"
+          "UDP6ZeroChecksumTx"
+          "UDP6ZeroChecksumRx"
+          "DestinationPort"
+          "FlowLabel"
+          "IPDoNotFragment"
+          "Independent"
+        ])
+        (assertHasField "Id")
+        (assertInt "Id")
+        (assertRange "Id" 0 16777215)
+        (assertInt "TOS")
+        (assertRange "TOS" 1 25)
+        (assertValueOneOf "UDPChecksum" boolValues)
+        (assertValueOneOf "UDP6ZeroChecksumTx" boolValues)
+        (assertValueOneOf "UDP6ZeroChecksumRx" boolValues)
+        (assertPort "DestinationPort")
+        (assertInt "FlowLabel")
+        (assertRange "FlowLabel" 0 1048575)
+        (assertValueOneOf "IPDoNotFragment" (boolValues + ["inherit"]))
+        (assertValueOneOf "Independent" boolValues)
+      ];
+
       sectionTunnel = checkUnitConfig "Tunnel" [
         (assertOnlyFields [
           "Local"
@@ -1072,6 +1101,17 @@ let
       '';
     };
 
+    geneveConfig = mkOption {
+      default = {};
+      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionGENEVE;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[GENEVE]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
     tunnelConfig = mkOption {
       default = {};
       example = { Remote = "192.168.1.1"; };
@@ -1682,6 +1722,10 @@ let
         + optionalString (def.vxlanConfig != { }) ''
           [VXLAN]
           ${attrsToSection def.vxlanConfig}
+        ''
+        + optionalString (def.geneveConfig != { }) ''
+          [GENEVE]
+          ${attrsToSection def.geneveConfig}
         ''
         + optionalString (def.tunnelConfig != { }) ''
           [Tunnel]
