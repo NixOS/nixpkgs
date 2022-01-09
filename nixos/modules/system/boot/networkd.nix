@@ -364,6 +364,60 @@ let
         (assertValueOneOf "Layer2SpecificHeader" ["none" "default"])
       ];
 
+      sectionMACsec = checkUnitConfig "MACsec" [
+        (assertOnlyFields [
+          "Port"
+          "Encrypt"
+        ])
+        (assertPort "Port")
+        (assertValueOneOf "Encrypt" boolValues)
+      ];
+
+      sectionMACsecReceiveChannel = checkUnitConfig "MACsecReceiveChannel" [
+        (assertOnlyFields [
+          "Port"
+          "MACAddress"
+        ])
+        (assertHasField "Port")
+        (assertPort "Port")
+        (assertHasField "MACAddress")
+        (assertMacAddress "MACAddress")
+      ];
+
+      # NOTE The Key directive is missing on purpose here, please
+      # do not add it to this list. The nix store is world-readable let's
+      # refrain ourselves from providing a footgun.
+      sectionMACsecTransmitAssociation = checkUnitConfig "MACsecTransmitAssociation" [
+        (assertOnlyFields [
+          "PacketNumber"
+          "KeyId"
+          "KeyFile"
+          "Activate"
+          "UseForEncoding"
+        ])
+        (assertHasField "KeyId")
+        (assertRange "KeyId" 0 255)
+        (assertValueOneOf "Activate" boolValues)
+        (assertValueOneOf "UseForEncoding" boolValues)
+      ];
+
+      # NOTE The Key directive is missing on purpose here, please
+      # do not add it to this list. The nix store is world-readable let's
+      # refrain ourselves from providing a footgun.
+      sectionMACsecReceiveAssociation = checkUnitConfig "MACsecReceiveAssociation" [
+        (assertOnlyFields [
+          "Port"
+          "MACAddress"
+          "PacketNumber"
+          "KeyId"
+          "KeyFile"
+          "Activate"
+        ])
+        (assertHasField "KeyId")
+        (assertRange "KeyId" 0 255)
+        (assertValueOneOf "Activate" boolValues)
+      ];
+
       sectionTunnel = checkUnitConfig "Tunnel" [
         (assertOnlyFields [
           "Local"
@@ -1237,6 +1291,50 @@ let
       '';
     };
 
+    macsecConfig = mkOption {
+      default = {};
+      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionMACsec;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[MACsec]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    macsecReceiveChannelConfig = mkOption {
+      default = {};
+      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionMACsecReceiveChannel;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[MACsecReceiveChannel]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    macsecTransmitAssociationConfig = mkOption {
+      default = {};
+      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionMACsecTransmitAssociation;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[MACsecTransmitAssociation]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    macsecReceiveAssociationConfig = mkOption {
+      default = {};
+      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionMACsecReceiveAssociation;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[MACsecReceiveAssociation]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
     tunnelConfig = mkOption {
       default = {};
       example = { Remote = "192.168.1.1"; };
@@ -1864,6 +1962,22 @@ let
           [L2TPSession]
           ${attrsToSection x.l2tpSessionConfig}
         '')
+        + optionalString (def.macsecConfig != { }) ''
+          [MACsec]
+          ${attrsToSection def.macsecConfig}
+        ''
+        + optionalString (def.macsecReceiveChannelConfig != { }) ''
+          [MACsecReceiveChannel]
+          ${attrsToSection def.macsecReceiveChannelConfig}
+        ''
+        + optionalString (def.macsecTransmitAssociationConfig != { }) ''
+          [MACsecTransmitAssociation]
+          ${attrsToSection def.macsecTransmitAssociationConfig}
+        ''
+        + optionalString (def.macsecReceiveAssociationConfig != { }) ''
+          [MACsecReceiveAssociation]
+          ${attrsToSection def.macsecReceiveAssociationConfig}
+        ''
         + optionalString (def.tunnelConfig != { }) ''
           [Tunnel]
           ${attrsToSection def.tunnelConfig}
