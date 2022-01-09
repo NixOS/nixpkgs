@@ -9812,6 +9812,8 @@ in {
 
   treeo = callPackage ../development/python-modules/treeo { };
 
+  treex = callPackage ../development/python-modules/treex { };
+
   treq = callPackage ../development/python-modules/treq { };
 
   trezor_agent = callPackage ../development/python-modules/trezor_agent { };
