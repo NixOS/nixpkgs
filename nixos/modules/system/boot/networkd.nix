@@ -318,6 +318,48 @@ let
         (assertValueOneOf "EtherType" ["ipv4" "ipv6" "mpls-uc" "mpls-mc"])
       ];
 
+      sectionL2TP = checkUnitConfig "L2TP" [
+        (assertOnlyFields [
+          "TunnelId"
+          "PeerTunnelId"
+          "Remote"
+          "Local"
+          "EncapsulationType"
+          "UDPSourcePort"
+          "UDPDestinationPort"
+          "UDPChecksum"
+          "UDP6ZeroChecksumTx"
+          "UDP6ZeroChecksumRx"
+        ])
+        (assertHasField "TunnelId")
+        (assertRange "TunnelId" 1 4294967295)
+        (assertHasField "PeerTunnelId")
+        (assertRange "PeerTunnelId" 1 4294967295)
+        (assertHasField "Remote")
+        (assertHasField "Local")
+        (assertValueOneOf "EncapsulationType" ["udp" "ip"])
+        (assertPort "UDPSourcePort")
+        (assertPort "UDPDestinationPort")
+        (assertValueOneOf "UDPChecksum" boolValues)
+        (assertValueOneOf "UDP6ZeroChecksumTx" boolValues)
+        (assertValueOneOf "UDP6ZeroChecksumRx" boolValues)
+      ];
+
+      sectionL2TPSession = checkUnitConfig "L2TPSession" [
+        (assertOnlyFields [
+          "Name"
+          "SessionId"
+          "PeerSessionId"
+          "Layer2SpecificHeader"
+        ])
+        (assertHasField "Name")
+        (assertHasField "SessionId")
+        (assertRange "SessionId" 1 4294967295)
+        (assertHasField "PeerSessionId")
+        (assertRange "PeerSessionId" 1 4294967295)
+        (assertValueOneOf "Layer2SpecificHeader" ["none" "default"])
+      ];
+
       sectionTunnel = checkUnitConfig "Tunnel" [
         (assertOnlyFields [
           "Local"
@@ -1002,6 +1044,21 @@ let
 
   };
 
+  l2tpSessionOptions = {
+    options = {
+      l2tpSessionConfig = mkOption {
+        default = {};
+        type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionL2TPSession;
+        description = ''
+          Each attribute in this set specifies an option in the
+          <literal>[L2TPSession]</literal> section of the unit.  See
+          <citerefentry><refentrytitle>systemd.network</refentrytitle>
+          <manvolnum>5</manvolnum></citerefentry> for details.
+        '';
+      };
+    };
+  };
+
   wireguardPeerOptions = {
     options = {
       wireguardPeerConfig = mkOption {
@@ -1132,6 +1189,47 @@ let
         <literal>[BareUDP]</literal> section of the unit.  See
         <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
         <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    l2tpConfig = mkOption {
+      default = {};
+      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionL2TP;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[L2TP]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    l2tpSessionConfig = mkOption {
+      default = {};
+      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionL2TPSession;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[L2TPSession]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    l2tpSessions = mkOption {
+      default = [];
+      example = [ { l2tpSessionConfig={
+        Name = "test";
+        SessionId = 24;
+        PeerSessionId = 42;
+      };}];
+      type = with types; listOf (submodule l2tpSessionOptions);
+      description = ''
+        Each item in this array specifies an option in the
+        <literal>[WireGuardPeer]</literal> section of the unit. See
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+        Use <literal>PresharedKeyFile</literal> instead of
+        <literal>PresharedKey</literal>: the nix store is
+        world-readable.
       '';
     };
 
@@ -1754,6 +1852,14 @@ let
           [BareUDP]
           ${attrsToSection def.bareudpConfig}
         ''
+        + optionalString (def.l2tpConfig != { }) ''
+          [L2TP]
+          ${attrsToSection def.l2tpConfig}
+        ''
+        + flip concatMapStrings def.addresses (x: ''
+          [L2TPSession]
+          ${attrsToSection x.l2tpSessionConfig}
+        '')
         + optionalString (def.tunnelConfig != { }) ''
           [Tunnel]
           ${attrsToSection def.tunnelConfig}
