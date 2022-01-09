@@ -746,8 +746,8 @@ let
         mktplcRef = {
           name = "auto-close-tag";
           publisher = "formulahendry";
-          version = "0.5.6";
-          sha256 = "058jgmllqb0j6gg5anghdp35nkykii28igfcwqgh4bp10pyvspg0";
+          version = "0.5.13";
+          sha256 = "0swyxhcibv6cl54gmfpnbz6bqidjzc77nx369wndhlq264idnwkw";
         };
         meta = {
           license = lib.licenses.mit;
@@ -758,8 +758,8 @@ let
         mktplcRef = {
           name = "auto-rename-tag";
           publisher = "formulahendry";
-          version = "0.1.6";
-          sha256 = "0cqg9mxkyf41brjq2c764w42lzyn6ffphw6ciw7xnqk1h1x8wwbs";
+          version = "0.1.9";
+          sha256 = "1xk8rzda16qgdxhq8bz6f8w09fd9044qczx1wfhszd6w3r4q9262";
         };
         meta = {
           license = lib.licenses.mit;
@@ -1056,8 +1056,8 @@ let
         mktplcRef = {
           name = "svg";
           publisher = "jock";
-          version = "1.4.7";
-          sha256 = "04ghqg4s7g7yylmvbxzwzpnyy4zin2bwlgvflh18m77w4j0ckpiq";
+          version = "1.4.15";
+          sha256 = "0a5w6qxvsdzcmgc0yfiagpmz25y90pmzgrxz9899na5qy3pjcbmz";
         };
         meta = with lib; {
           license = licenses.mit;
@@ -1068,8 +1068,8 @@ let
         mktplcRef = {
           name = "vscode-peacock";
           publisher = "johnpapa";
-          version = "3.9.1";
-          sha256 = "1g7apzzgfm8s9sjavhwr8jpf9slhq8b9jfkww3q5n41mzzx8m94p";
+          version = "4.0.0";
+          sha256 = "1i65w70f0kikah1cx7m0bji6qd800jabfci0xisdqxyzaksg7ysz";
         };
         meta = with lib; {
           license = licenses.mit;
@@ -1213,8 +1213,8 @@ let
         mktplcRef = {
           name = "vscode-docker";
           publisher = "ms-azuretools";
-          version = "1.9.1";
-          sha256 = "1l7pm3s5kbf2vark164ykz4qbpa1ac9ls691hham36f6v91dmff9";
+          version = "1.18.0";
+          sha256 = "0hhlhx3xy7x31xx2v3srvk67immajs6dm9h0wi49ii1rwx61zxah";
         };
         meta = {
           license = lib.licenses.mit;
@@ -1328,8 +1328,8 @@ let
         mktplcRef = {
           name = "vscode-yaml";
           publisher = "redhat";
-          version = "0.13.0";
-          sha256 = "046kdk73a5xbrwq16ff0l64271c6q6ygjvxaph58z29gyiszfkig";
+          version = "1.2.2";
+          sha256 = "06n4fxqr3lqmiyns9jdk3rdnanamcpzhrivllai8z9d997xmwcx6";
         };
         meta = {
           license = lib.licenses.mit;
@@ -1382,9 +1382,9 @@ let
       pkief.material-icon-theme = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "material-icon-theme";
-          publisher = "pkief";
-          version = "4.4.0";
-          sha256 = "1m9mis59j9xnf1zvh67p5rhayaa9qxjiw9iw847nyl9vsy73w8ya";
+          publisher = "PKief";
+          version = "4.11.0";
+          sha256 = "1l2s8j645riqjmj09i3v71s8ycin5vd6brdp35z472fnk6wyi1y6";
         };
         meta = {
           license = lib.licenses.mit;
@@ -1407,8 +1407,8 @@ let
         mktplcRef = {
           name = "partial-diff";
           publisher = "ryu1kn";
-          version = "1.4.1";
-          sha256 = "1r4kg4slgxncdppr4fn7i5vfhvzcg26ljia2r97n6wvwn8534vs9";
+          version = "1.4.3";
+          sha256 = "0x3lkvna4dagr7s99yykji3x517cxk5kp7ydmqa6jb4bzzsv1s6h";
         };
         meta = {
           license = lib.licenses.mit;
@@ -1674,8 +1674,8 @@ let
         mktplcRef = {
           name = "pdf";
           publisher = "tomoki1207";
-          version = "1.1.0";
-          sha256 = "0pcs4iy77v4f04f8m9w2rpdzfq7sqbspr7f2sm1fv7bm515qgsvb";
+          version = "1.2.0";
+          sha256 = "1bcj546bp0w4yndd0qxwr8grhiwjd1jvf33jgmpm0j96y34vcszz";
         };
         meta = {
           license = lib.licenses.mit;
@@ -1686,8 +1686,8 @@ let
         mktplcRef = {
           name = "sort-lines";
           publisher = "Tyriar";
-          version = "1.9.0";
-          sha256 = "0l4wibsjnlbzbrl1wcj18vnm1q4ygvxmh347jvzziv8f1l790qjl";
+          version = "1.9.1";
+          sha256 = "0dds99j6awdxb0ipm15g543a5b6f0hr00q9rz961n0zkyawgdlcb";
         };
         meta = {
           license = lib.licenses.mit;
@@ -1758,8 +1758,8 @@ let
         mktplcRef = {
           name = "highlight-matching-tag";
           publisher = "vincaslt";
-          version = "0.10.0";
-          sha256 = "1albwz3lc9i20if77inm1ipwws8apigvx24rbag3d1h3p4vwda49";
+          version = "0.10.1";
+          sha256 = "0b9jpwiyxax783gyr9zhx7sgrdl9wffq34fi7y67vd68q9183jw1";
         };
         meta = {
           license = lib.licenses.mit;
