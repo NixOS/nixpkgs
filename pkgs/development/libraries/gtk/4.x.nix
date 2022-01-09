@@ -6,7 +6,7 @@
 , gettext
 , graphene
 , gi-docgen
-, meson_0_60
+, meson
 , ninja
 , python3
 , makeWrapper
@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
     gettext
     gobject-introspection
     makeWrapper
-    meson_0_60
+    meson
     ninja
     pkg-config
     python3

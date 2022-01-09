@@ -5,7 +5,7 @@
 , gi-docgen
 , gtk-doc
 , libxml2
-, meson_0_60
+, meson
 , ninja
 , pkg-config
 , sassc
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     gi-docgen
     gtk-doc
     libxml2 # for xmllint
-    meson_0_60
+    meson
     ninja
     pkg-config
     sassc
