@@ -93,7 +93,7 @@ let
 
         # fortify source breaks build since delve compiles with -O0
         wrapProgram $out/bin/goland \
-          --set CGO_CPPFLAGS "-U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=0"
+          --prefix CGO_CPPFLAGS " " "-U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=0"
       '';
     });
 
