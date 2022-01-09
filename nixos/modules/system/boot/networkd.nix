@@ -22,6 +22,9 @@ let
           "Name"
           "AlternativeNamesPolicy"
           "AlternativeName"
+          "TransmitQueues"
+          "ReceiveQueues"
+          "TransmitQueueLength="
           "MTUBytes"
           "BitsPerSecond"
           "Duplex"
@@ -41,10 +44,23 @@ let
           "OtherChannels"
           "CombinedChannels"
           "RxBufferSize"
+          "RxMiniBufferSize"
+          "RxJumboBufferSize"
           "TxBufferSize"
+          "RxFlowControl"
+          "TxFlowControl"
+          "AutoNegotiationFlowControl"
+          "GenericSegmentOffloadMaxBytes"
+          "GenericSegmentOffloadMaxSegments"
         ])
         (assertValueOneOf "MACAddressPolicy" ["persistent" "random" "none"])
         (assertMacAddress "MACAddress")
+        (assertInt "TransmitQueues")
+        (assertRange "TransmitQueues" 0 4096)
+        (assertInt "ReceiveQueues")
+        (assertRange "ReceiveQueues" 0 4096)
+        (assertInt "TransmitQueueLength")
+        (assertRange "TransmitQueueLength" 0 4294967294)
         (assertByteFormat "MTUBytes")
         (assertByteFormat "BitsPerSecond")
         (assertValueOneOf "Duplex" ["half" "full"])
@@ -67,7 +83,14 @@ let
         (assertInt "CombinedChannels")
         (assertRange "CombinedChannels" 1 4294967295)
         (assertInt "RxBufferSize")
+        (assertInt "RxMiniBufferSize")
+        (assertInt "RxJumboBufferSize")
         (assertInt "TxBufferSize")
+        (assertValueOneOf "RxFlowControl" boolValues)
+        (assertValueOneOf "AutoNegotiationFlowControl" boolValues)
+        (assertByteFormat "GenericSegmentOffloadMaxBytes")
+        (assertInt "GenericSegmentOffloadMaxSegments")
+        (assertRange "GenericSegmentOffloadMaxSegments" 1 65535)
       ];
     };
 
