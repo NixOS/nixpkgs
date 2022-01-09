@@ -4570,6 +4570,10 @@ with pkgs;
     inherit (gst_all_1) gstreamer gst-plugins-base;
   };
 
+  modelio = callPackage ../tools/misc/modelio {
+    inherit (eclipses) eclipse-sdk;
+  };
+
   mons = callPackage ../tools/misc/mons {};
 
   monsoon = callPackage ../tools/security/monsoon {};
