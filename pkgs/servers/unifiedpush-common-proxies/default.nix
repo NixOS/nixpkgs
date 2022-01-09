@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "unifiedpush-common-proxies";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "unifiedpush";
     repo = "common-proxies";
     rev = "v${version}";
-    sha256 = "sha256-V6LTEwdnVkxc2wm8anlYeYJpk/mMQEsKrq69H8okHBg=";
+    sha256 = "0wf6kmj8m2c06864qiphf91j5rpaj3bvjrafdk6lqli14p5gmma2";
   };
 
-  vendorSha256 = "sha256-s0uN6PzIaAHLvRb9T07Xvb6mMAuvKHQ4oFJtl5hsvY4=";
+  vendorSha256 = "13mxdjc9fvajl0w78a5g1cqadgmxsx74zz8npp5h2s68zkl8sjxk";
 
   meta = with lib; {
     description = "A set of rewrite proxies and gateways for UnifiedPush";
