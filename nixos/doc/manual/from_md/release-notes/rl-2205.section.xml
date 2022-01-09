@@ -93,6 +93,16 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://funkwhale.audio/">Funkwhale</link>,
+          a social platform to enjoy and share music. It supports
+          streaming and transcoding audio and promotes decentralization
+          by allow you to share parts of your library via ActivityPub.
+          Available as
+          <link linkend="opt-services.funkwhale.enable">services.funkwhale</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://www.elastic.co/guide/en/beats/filebeat/current/filebeat-overview.html">filebeat</link>,
           a lightweight shipper for forwarding and centralizing log
           data. Available as
