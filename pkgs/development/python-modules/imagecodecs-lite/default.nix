@@ -12,6 +12,12 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "0s4xb17qd7vimc46rafbjnibj4sf0lnv8cwl22k1h6zb7jhqmlcm";
   };
+  # this file is generated code from cython, but distributed on
+  # pypi. removing it forces cython to regenerate it from the
+  # actual source code
+  prePatch = ''
+    rm imagecodecs/_imagecodecs_lite.c
+  '';
 
   nativeBuildInputs = [
     cython
