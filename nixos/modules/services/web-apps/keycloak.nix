@@ -438,9 +438,9 @@ in
               # with `expression` to evaluate.
               prefixExpression = string:
                 let
-                  match = (builtins.match ''"\$\{.*}"'' string);
+                  matchResult = builtins.match ''"\$\{.*}"'' string;
                 in
-                  if match != null then
+                  if matchResult != null then
                     "expression " + string
                   else
                     string;
@@ -505,52 +505,57 @@ in
                     ""
                   else
                     throw "Unsupported type '${type}' for attribute '${attribute}'!";
+
             in
               lib.concatStringsSep ", " (lib.mapAttrsToList makeArg set);
 
 
-          /* Recurses into the `attrs` attrset, beginning at the path
-             resolved from `state.path ++ node`; if `node` is `null`,
-             starts from `state.path`. Only subattrsets that are JBoss
-             paths, i.e. follows the `key=value` format, are recursed
+          /* Recurses into the `nodeValue` attrset. Only subattrsets that
+             are JBoss paths, i.e. follows the `key=value` format, are recursed
              into - the rest are considered JBoss attributes / maps.
           */
-          recurse = state: node:
+          recurse = nodePath: nodeValue:
             let
-              path = state.path ++ (lib.optional (node != null) node);
+              nodeContent =
+                if builtins.isAttrs nodeValue && nodeValue._type or "" == "order" then
+                  nodeValue.content
+                else
+                  nodeValue;
               isPath = name:
                 let
-                  value = lib.getAttrFromPath (path ++ [ name ]) attrs;
+                  value = nodeContent.${name};
                 in
                   if (builtins.match ".*([=]).*" name) == [ "=" ] then
                     if builtins.isAttrs value || value == null then
                       true
                     else
-                      throw "Parsing path '${lib.concatStringsSep "." (path ++ [ name ])}' failed: JBoss attributes cannot contain '='!"
+                      throw "Parsing path '${lib.concatStringsSep "." (nodePath ++ [ name ])}' failed: JBoss attributes cannot contain '='!"
                   else
                     false;
-              jbossPath = "/" + (lib.concatStringsSep "/" path);
-              nodeValue = lib.getAttrFromPath path attrs;
-              children = if !builtins.isAttrs nodeValue then {} else nodeValue;
+              jbossPath = "/" + lib.concatStringsSep "/" nodePath;
+              children = if !builtins.isAttrs nodeContent then {} else nodeContent;
               subPaths = builtins.filter isPath (builtins.attrNames children);
+              getPriority = name:
+                let value = children.${name};
+                in if value._type or "" == "order" then value.priority else 1000;
+              orderedSubPaths = lib.sort (a: b: getPriority a < getPriority b) subPaths;
               jbossAttrs = lib.filterAttrs (name: _: !(isPath name)) children;
-            in
-              state // {
-                text = state.text + (
-                  if nodeValue != null then ''
+              text =
+                if nodeContent != null then
+                  ''
                     if (outcome != success) of ${jbossPath}:read-resource()
                         ${jbossPath}:add(${makeArgList jbossAttrs})
                     end-if
-                  '' + (writeAttributes jbossPath jbossAttrs)
-                  else ''
+                  '' + writeAttributes jbossPath jbossAttrs
+                else
+                  ''
                     if (outcome == success) of ${jbossPath}:read-resource()
                         ${jbossPath}:remove()
                     end-if
-                  '') + (builtins.foldl' recurse { text = ""; inherit path; } subPaths).text;
-              };
+                  '';
+            in text + lib.concatMapStringsSep "\n" (name: recurse (nodePath ++ [name]) children.${name}) orderedSubPaths;
         in
-          (recurse { text = ""; path = []; } null).text;
-
+          recurse [] attrs;
 
       jbossCliScript = pkgs.writeText "jboss-cli-script" (mkJbossScript keycloakConfig');
 
