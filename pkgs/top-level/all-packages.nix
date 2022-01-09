@@ -293,6 +293,8 @@ with pkgs;
 
   commitlint = nodePackages."@commitlint/cli";
 
+  commit-formatter = callPackage ../applications/version-management/commit-formatter { };
+
   containerpilot = callPackage ../applications/networking/cluster/containerpilot { };
 
   coordgenlibs  = callPackage ../development/libraries/coordgenlibs { };
