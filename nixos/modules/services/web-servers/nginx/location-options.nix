@@ -128,5 +128,11 @@ with lib;
         a greater priority.
       '';
     };
+
+    clientMaxBodySize = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      description = "Set nginx location block client_max_body_size.";
+    };
   };
 }
