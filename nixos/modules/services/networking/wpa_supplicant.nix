@@ -17,6 +17,7 @@ let
         "ctrl_interface_group=${cfg.userControlled.group}"
         "update_config=1"
       ])
+    ++ [ "pmf=1" ]
     ++ optional cfg.scanOnLowSignal ''bgscan="simple:30:-70:3600"''
     ++ optional (cfg.extraConfig != "") cfg.extraConfig);
 
