@@ -11438,6 +11438,8 @@ with pkgs;
 
   zsh-prezto = callPackage ../shells/zsh/zsh-prezto { };
 
+  yash = callPackage ../shells/yash { };
+
   grml-zsh-config = callPackage ../shells/zsh/grml-zsh-config { };
 
   powerline = with python3Packages; toPythonApplication powerline;
