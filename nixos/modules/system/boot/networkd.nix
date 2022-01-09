@@ -96,6 +96,15 @@ let
 
     netdev = let
 
+      macvlanChecks = [
+        (assertOnlyFields [
+          "Mode"
+          "SourceMACAddress"
+          "BroadcastMulticastQueueLength"
+        ])
+        (assertValueOneOf "Mode" ["private" "vepa" "bridge" "passthru"])
+      ];
+
       tunChecks = [
         (assertOnlyFields [
           "MultiQueue"
@@ -176,12 +185,8 @@ let
         (assertValueOneOf "ReorderHeader" boolValues)
       ];
 
-      sectionMACVLAN = checkUnitConfig "MACVLAN" [
-        (assertOnlyFields [
-          "Mode"
-        ])
-        (assertValueOneOf "Mode" ["private" "vepa" "bridge" "passthru"])
-      ];
+      sectionMACVLAN = checkUnitConfig "MACVLAN" macvlanChecks;
+
 
       sectionVXLAN = checkUnitConfig "VXLAN" [
         (assertOnlyFields [
