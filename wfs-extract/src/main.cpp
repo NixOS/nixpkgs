@@ -5,6 +5,8 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
+#include <boost/algorithm/string/case_conv.hpp>
+#include <boost/algorithm/string/trim.hpp>
 #include <boost/program_options.hpp>
 #include <cstdio>
 #include <filesystem>
@@ -15,25 +17,30 @@
 
 #include <wfslib/wfslib.h>
 
+std::string inline pretify_path(const std::filesystem::path& path) {
+  return "/" + path.generic_string();
+}
+
 void dumpdir(const std::filesystem::path& target,
              const std::shared_ptr<Directory>& dir,
              const std::filesystem::path& path,
-             const std::string& pretty_path,
              bool verbose) {
-  if (!std::filesystem::exists(target / path)) {
-    if (!std::filesystem::create_directories(target / path)) {
-      std::cerr << "Error: Failed to create directory " << (target / path) << std::endl;
+  auto target_dir = target;
+  if (!path.empty())
+    target_dir /= path;
+  if (!std::filesystem::exists(target_dir)) {
+    if (!std::filesystem::create_directories(target_dir)) {
+      std::cerr << "Error: Failed to create directory " << (target_dir) << std::endl;
       return;
     }
   }
   try {
     for (auto item : *dir) {
       auto const npath = path / item->GetRealName();
-      auto const npretty_path = pretty_path + (pretty_path.ends_with("/") ? "" : "/") + item->GetRealName();
       if (verbose)
-        std::cout << "Dumping " << npretty_path << std::endl;
+        std::cout << "Dumping /" << npath.generic_string() << std::endl;
       if (item->IsDirectory())
-        dumpdir(target, std::dynamic_pointer_cast<Directory>(item), npath, npretty_path, verbose);
+        dumpdir(target, std::dynamic_pointer_cast<Directory>(item), npath, verbose);
       else if (item->IsFile()) {
         auto file = std::dynamic_pointer_cast<File>(item);
         std::ofstream output_file((target / npath).string(), std::ios::binary | std::ios::out);
@@ -41,20 +48,20 @@ void dumpdir(const std::filesystem::path& target,
         File::stream stream(file);
         std::array<char, 0x2000> data;
         while (to_read > 0) {
-          stream.read(&*data.begin(), std::min(data.size(), to_read));
+          stream.read(data.data(), std::min(data.size(), to_read));
           auto read = stream.gcount();
           if (read <= 0) {
-            std::cerr << "Error: Failed to read " << npath << std::endl;
+            std::cerr << "Error: Failed to read /" << npath << std::endl;
             break;
           }
-          output_file.write((char*)&*data.begin(), read);
+          output_file.write(data.data(), read);
           to_read -= static_cast<size_t>(read);
         }
         output_file.close();
       }
     }
   } catch (std::exception&) {
-    std::cerr << "Error: Failed to dump folder " << path << std::endl;
+    std::cerr << "Error: Failed to dump folder /" << path << std::endl;
   }
 }
 
@@ -130,15 +137,15 @@ int main(int argc, char* argv[]) {
     }
     auto device = std::make_shared<FileDevice>(vm["input"].as<std::string>(), 9);
     Wfs::DetectDeviceSectorSizeAndCount(device, key);
-    auto dir = Wfs(device, key).GetDirectory(vm["dump-path"].as<std::string>());
+    auto dump_path = std::filesystem::path(vm["dump-path"].as<std::string>()).generic_string();
+    boost::trim_if(dump_path, boost::is_any_of("/"));
+    auto dir = Wfs(device, key).GetDirectory(boost::to_lower_copy(dump_path));
     if (!dir) {
       std::cerr << "Error: Didn't find directory " << vm["dump-path"].as<std::string>() << " in wfs" << std::endl;
       return 1;
     }
     std::cout << "Dumping..." << std::endl;
-    auto pretty_path = vm["dump-path"].as<std::string>();
-    dumpdir(std::filesystem::path(vm["output"].as<std::string>()), dir, std::filesystem::path(""),
-            vm["dump-path"].as<std::string>(), !!vm.count("verbose"));
+    dumpdir(std::filesystem::path(vm["output"].as<std::string>()), dir, dump_path, !!vm.count("verbose"));
     std::cout << "Done!" << std::endl;
   } catch (std::exception& e) {
     std::cerr << "Error: " << e.what() << std::endl;

@@ -2,6 +2,7 @@
   "name": "wfs-tools",
   "version-string": "1.0.0",
   "dependencies": [
+    "boost-algorithm",
     "boost-endian",
     "boost-format",
     "boost-iostreams",

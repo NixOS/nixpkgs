@@ -5,6 +5,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
+#include <boost/algorithm/string/case_conv.hpp>
 #include <boost/program_options.hpp>
 #include <cstdio>
 #include <fstream>
@@ -102,7 +103,7 @@ int main(int argc, char* argv[]) {
 
     auto device = std::make_shared<FileDevice>(vm["image"].as<std::string>(), 9, false);
     Wfs::DetectDeviceSectorSizeAndCount(device, key);
-    auto file = Wfs(device, key).GetFile(vm["inject-path"].as<std::string>());
+    auto file = Wfs(device, key).GetFile(boost::to_lower_copy(vm["inject-path"].as<std::string>()));
     if (!file) {
       std::cerr << "Error: Didn't find file " << vm["inject-path"].as<std::string>() << " in wfs" << std::endl;
       return 1;
@@ -116,13 +117,13 @@ int main(int argc, char* argv[]) {
     std::vector<char> data(0x2000);
     size_t to_copy = file_size;
     while (to_copy > 0) {
-      input_file.read((char*)&*data.begin(), std::min(data.size(), to_copy));
+      input_file.read(data.data(), std::min(data.size(), to_copy));
       auto read = input_file.gcount();
       if (read <= 0) {
         std::cerr << "Error: Failed to read file to inject" << std::endl;
         return 1;
       }
-      stream.write(&*data.begin(), read);
+      stream.write(data.data(), read);
       to_copy -= static_cast<size_t>(read);
     }
     input_file.close();
