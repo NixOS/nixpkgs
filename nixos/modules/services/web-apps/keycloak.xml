@@ -131,6 +131,17 @@
      </warning>
    </section>
 
+   <section xml:id="module-services-keycloak-themes">
+     <title>Themes</title>
+     <para>
+        You can package custom themes and make them visible to Keycloak via
+        <xref linkend="opt-services.keycloak.themes" />
+        option. See the <link xlink:href="https://www.keycloak.org/docs/latest/server_development/#_themes">
+        Themes section of the Keycloak Server Development Guide</link>
+        and respective NixOS option description for more information.
+     </para>
+   </section>
+
    <section xml:id="module-services-keycloak-extra-config">
      <title>Additional configuration</title>
      <para>
