@@ -226,6 +226,20 @@ in
       '';
     };
 
+    themes = lib.mkOption {
+      type = lib.types.attrsOf lib.types.package;
+      default = {};
+      description = ''
+        Additional theme packages for Keycloak. Each theme is linked into
+        subdirectory with a corresponding attribute name.
+
+        Theme packages consist of several subdirectories which provide
+        different theme types: for example, <literal>account</literal>,
+        <literal>login</literal> etc. After adding a theme to this option you
+        can select it by its name in Keycloak administration console.
+      '';
+    };
+
     extraConfig = lib.mkOption {
       type = lib.types.attrsOf lib.types.anything;
       default = { };
@@ -286,16 +300,45 @@ in
         ${pkgs.jre}/bin/keytool -importcert -trustcacerts -alias MySQLCACert -file ${cfg.database.caCert} -keystore $out -storepass notsosecretpassword -noprompt
       '';
 
+      # Both theme and theme type directories need to be actual directories in one hierarchy to pass Keycloak checks.
+      themesBundle = pkgs.runCommand "keycloak-themes" {} ''
+        linkTheme() {
+          theme="$1"
+          name="$2"
+
+          mkdir "$out/$name"
+          for typeDir in "$theme"/*; do
+            if [ -d "$typeDir" ]; then
+              type="$(basename "$typeDir")"
+              mkdir "$out/$name/$type"
+              for file in "$typeDir"/*; do
+                ln -sn "$file" "$out/$name/$type/$(basename "$file")"
+              done
+            fi
+          done
+        }
+
+        mkdir -p "$out"
+        for theme in ${cfg.package}/themes/*; do
+          if [ -d "$theme" ]; then
+            linkTheme "$theme" "$(basename "$theme")"
+          fi
+        done
+
+        ${lib.concatStringsSep "\n" (lib.mapAttrsToList (name: theme: "linkTheme ${theme} ${lib.escapeShellArg name}") cfg.themes)}
+      '';
+
       keycloakConfig' = builtins.foldl' lib.recursiveUpdate {
         "interface=public".inet-address = cfg.bindAddress;
         "socket-binding-group=standard-sockets"."socket-binding=http".port = cfg.httpPort;
-        "subsystem=keycloak-server"."spi=hostname" = {
-          "provider=default" = {
+        "subsystem=keycloak-server" = {
+          "spi=hostname"."provider=default" = {
             enabled = true;
             properties = {
               inherit (cfg) frontendUrl forceBackendUrlToFrontendUrl;
             };
           };
+          "theme=defaults".dir = toString themesBundle;
         };
         "subsystem=datasources"."data-source=KeycloakDS" = {
           max-pool-size = "20";
