@@ -147,6 +147,8 @@ with pkgs;
     { name = "auto-patchelf-hook"; deps = [ bintools ]; }
     ../build-support/setup-hooks/auto-patchelf.sh;
 
+  appflowy = callPackage ../applications/office/appflowy { };
+
   appimageTools = callPackage ../build-support/appimage {
     buildFHSUserEnv = buildFHSUserEnvBubblewrap;
   };
@@ -10134,6 +10136,8 @@ with pkgs;
   termius = callPackage ../applications/networking/termius { };
 
   termplay = callPackage ../tools/misc/termplay { };
+
+  testEqualDerivation = callPackage ../build-support/test-equal-derivation.nix { };
 
   tetrd = callPackage ../applications/networking/tetrd { };
 
@@ -26594,6 +26598,8 @@ with pkgs;
   kiwix = libsForQt5.callPackage ../applications/misc/kiwix { };
 
   klayout = libsForQt5.callPackage ../applications/misc/klayout { };
+
+  klee = callPackage ../applications/science/logic/klee { };
 
   kmetronome = libsForQt5.callPackage ../applications/audio/kmetronome { };
 

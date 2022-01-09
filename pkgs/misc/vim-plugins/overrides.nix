@@ -28,6 +28,7 @@
 , meson
 , nim
 , nodePackages
+, parinfer-rust
 , skim
 , sqlite
 , statix
@@ -514,6 +515,8 @@ self: super: {
   onehalf = super.onehalf.overrideAttrs (old: {
     configurePhase = "cd vim";
   });
+
+  parinfer-rust = parinfer-rust;
 
   range-highlight-nvim = super.range-highlight-nvim.overrideAttrs (old: {
     dependencies = with self; [ cmd-parser-nvim ];
