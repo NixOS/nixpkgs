@@ -1,4 +1,4 @@
-{ lib, systemdUtils }:
+{ pkgs, lib, systemdUtils }:
 
 with systemdUtils.lib;
 with lib;
@@ -235,7 +235,7 @@ in rec {
     name = "systemdCommandExpansion";
     description = "systemd-expanded string";
     check = x: isAttrs x && elem (attrNames x) [ ["env"] ["substitute"] ];
-    merge = mergeOneOption;
+    merge = mergeEqualOption;
   };
 
   serviceCommandType = types.submodule ({ config, options, ... }: {
@@ -259,7 +259,7 @@ in rec {
 
       unrestricted = mkOption {
         default = null;
-        type = with types; nullOr (enum [ "all" "credentials" ]);
+        type = with types; enum [ null "all" "credentials" ];
         description = ''
           If "all": run this command with full privileges, regardless of configured
           privilege restrictions (equivalent to the system "+" command prefix).
@@ -270,7 +270,7 @@ in rec {
       };
 
       exe = mkOption {
-        type = with types; nullOr str;
+        type = with types; nullOr path;
         description = ''
           Command to run. Mutually exclusive with `script`.
         '';
@@ -294,13 +294,16 @@ in rec {
           To expand an environment variable `X` use `{ env = "X"; }`.
 
           To apply all systemd substitutions to a string use `{ substitute = "..."; }`.
+          See "Specifiers" in <literal>man systemd.unit</literal> for `%` syntax and
+          "Command Lines" in <literal>man systemd.service</literal> for environment
+          variable expansion.
         '';
       };
     };
 
     config = {
       exe = mkIf (config.script != null)
-        (mkDerivedConfig (options.script) builtins.toFile);
+        (mkDerivedConfig options.script (pkgs.writeScript "script"));
     };
   });
 
@@ -439,7 +442,7 @@ in rec {
       default = [ ];
       description = ''
         Commands executed after the service's main process
-        has exited.Mutually exclusive with postStop.
+        has exited. Mutually exclusive with postStop.
       '';
     };
 
