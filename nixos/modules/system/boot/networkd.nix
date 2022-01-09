@@ -464,12 +464,17 @@ let
 
       sectionFooOverUDP = checkUnitConfig "FooOverUDP" [
         (assertOnlyFields [
-          "Port"
           "Encapsulation"
+          "Port"
+          "PeerPort"
           "Protocol"
+          "Peer"
+          "Local"
         ])
-        (assertPort "Port")
         (assertValueOneOf "Encapsulation" ["FooOverUDP" "GenericUDPEncapsulation"])
+        (assertHasField "Port")
+        (assertPort "Port")
+        (assertPort "PeerPort")
       ];
 
       sectionPeer = checkUnitConfig "Peer" [
