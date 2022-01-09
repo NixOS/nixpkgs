@@ -3,28 +3,29 @@
 , stdenv
 , fetchurl
 , fetchpatch
+, fetchFromGitHub
+, intltool
+, pkg-config
 , boost
+, dos2unix
 , ffmpeg
 , ffms
 , fftw
 , fontconfig
 , freetype
 , icu
-, intltool
 , libGL
 , libGLU
 , libX11
 , libass
 , libiconv
-, pkg-config
+, lua5_1
+, makeWrapper
 , wxGTK
 , zlib
 
 , spellcheckSupport ? true
 , hunspell ? null
-
-, automationSupport ? true
-, lua ? null
 
 , openalSupport ? false
 , openal ? null
@@ -40,7 +41,6 @@
 }:
 
 assert spellcheckSupport -> (hunspell != null);
-assert automationSupport -> (lua != null);
 assert openalSupport -> (openal != null);
 assert alsaSupport -> (alsa-lib != null);
 assert pulseaudioSupport -> (libpulseaudio != null);
@@ -53,9 +53,12 @@ stdenv.mkDerivation rec {
   pname = "aegisub";
   version = "3.2.2";
 
-  src = fetchurl {
-    url = "http://ftp.aegisub.org/pub/releases/${pname}-${version}.tar.xz";
-    hash = "sha256-xV4zlFuC2FE8AupueC8Ncscmrc03B+lbjAAi9hUeaIU=";
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    name = pname;
+    rev = "v${version}";
+    sha256 = "sha256-iLfDv/pgBuP8drEGJ/hI4NsF7ScMdhE80at4GFiLLPE=";
   };
 
   patches = [
@@ -90,6 +93,12 @@ stdenv.mkDerivation rec {
       url = "https://github.com/Aegisub/Aegisub/commit/7a6da26be6a830f4e1255091952cc0a1326a4520.patch";
       sha256 = "sha256-/aTcIjFlZY4N9+IyHL4nwR0hUR4HTJM7ibbdKmNxq0w=";
     })
+
+    # Remove vendor luajit dependency
+    (fetchpatch {
+      url = "https://sources.debian.org/data/main/a/aegisub/3.2.2%2Bdfsg-6/debian/patches/remove-vendor-luajit-dependency.patch";
+      sha256 = "sha256-XS+LW62J26YalL2qccQv3JJ+RwTGq4ew8Ig56+FebsA=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -98,6 +107,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     boost
+    dos2unix
     ffmpeg
     ffms
     fftw
@@ -109,11 +119,12 @@ stdenv.mkDerivation rec {
     libX11
     libass
     libiconv
+    lua5_1
+    makeWrapper
     wxGTK
     zlib
   ]
   ++ optional alsaSupport alsa-lib
-  ++ optional automationSupport lua
   ++ optional openalSupport openal
   ++ optional portaudioSupport portaudio
   ++ optional pulseaudioSupport libpulseaudio
@@ -129,6 +140,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     sed -i 's/-Wno-c++11-narrowing/-Wno-narrowing/' configure.ac src/Makefile
+    find . -type f '(' -name "*.lua" -o -name "*.moon" ')' -print0 | xargs -0 dos2unix
+    substituteInPlace tools/respack.lua --replace "/usr/bin/lua" "${lua5_1}/bin/lua"
   '';
 
   # compat with icu61+
@@ -154,7 +167,7 @@ stdenv.mkDerivation rec {
     # softwares - so the resulting program will be GPL
     license = licenses.bsd3;
     maintainers = [ maintainers.AndersonTorres ];
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    platforms = platforms.linux;
   };
 }
 # TODO [ AndersonTorres ]: update to fork release
