@@ -28,7 +28,7 @@ in stdenv.mkDerivation rec {
     name = "${pname}-src";
     manifest = "https://github.com/GPUOpen-Drivers/AMDVLK.git";
     rev = "refs/tags/v-${version}";
-    sha256 = "9HKkpWbDiSqMI1KraIXnFioEnTYFh6Sddtm72vZMsK4=";
+    sha256 = "M+58gJjP33yOuq6RYN73HG7wACPaYRz7WFC/AFFGMzw=";
   };
 
   buildInputs = [
