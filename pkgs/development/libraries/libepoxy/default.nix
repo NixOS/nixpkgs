@@ -16,7 +16,7 @@ let
   inherit (lib) getLib optional optionalString;
 
 in
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation rec {
   pname = "libepoxy";
   version = "1.5.9";
 
@@ -55,6 +55,12 @@ stdenv.mkDerivation (rec {
 
   NIX_CFLAGS_COMPILE = ''-DLIBGL_PATH="${getLib libGL}/lib"'';
 
+  # cgl_epoxy_api fails in darwin sandbox and on Hydra (because it's headless?)
+  preCheck = lib.optionalString stdenv.isDarwin ''
+    substituteInPlace ../test/meson.build \
+      --replace "[ 'cgl_epoxy_api', [ 'cgl_epoxy_api.c' ] ]," ""
+  '';
+
   # tests are running from version 1.5.9
   doCheck = true;
 
@@ -65,10 +71,4 @@ stdenv.mkDerivation (rec {
     maintainers = with maintainers; [ goibhniu erictapen ];
     platforms = platforms.unix;
   };
-} // lib.optionalAttrs stdenv.isDarwin {
-  # cgl_epoxy_api fails in darwin sandbox and on Hydra (because it's headless?)
-  preCheck = ''
-    substituteInPlace ../test/meson.build \
-      --replace "[ 'cgl_epoxy_api', [ 'cgl_epoxy_api.c' ] ]," ""
-  '';
-})
+}

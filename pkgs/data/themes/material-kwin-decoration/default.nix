@@ -16,7 +16,7 @@
 
 mkDerivation rec {
   pname = "material-kwin-decoration";
-  version = "unstable-20211028";
+  version = "unstable-2021-10-28";
 
   src = fetchFromGitHub {
     owner = "Zren";
@@ -24,6 +24,11 @@ mkDerivation rec {
     rev = "cc5cc399a546b66907629b28c339693423c894c8";
     sha256 = "sha256-aYlnPFhf+ISVe5Ycryu5BSXY8Lb5OoueMqnWQZiv6Lc=";
   };
+
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace "-Werror" ""
+  '';
 
   nativeBuildInputs = [ cmake extra-cmake-modules ];
 

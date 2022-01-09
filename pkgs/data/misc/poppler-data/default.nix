@@ -1,11 +1,11 @@
 { fetchurl, lib, stdenv, cmake, ninja }:
 
 stdenv.mkDerivation rec {
-  name = "poppler-data-0.4.10";
+  name = "poppler-data-0.4.11";
 
   src = fetchurl {
     url = "https://poppler.freedesktop.org/${name}.tar.gz";
-    sha256 = "0c3vjs3p7rjc4yfacnhd865r27czmzwcr4j2z4jldi68dvvcwbvf";
+    sha256 = "sha256-LOwFzRuwOvmKiwah4i9ubhplseLzgWyzBpuwh0gl8Iw=";
   };
 
   nativeBuildInputs = [ cmake ninja ];

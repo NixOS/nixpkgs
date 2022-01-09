@@ -24,6 +24,10 @@ stdenv.mkDerivation rec {
       Makefile.in
     sed -i 's,PYTHONPATH=,PYTHONPATH=$(PYTHONPATH):,' \
       doc/Makefile.in
+
+    # Pull fix for new pyyaml pending upstream inclusion
+    #   https://sourceforge.net/p/lirc/git/merge-requests/39/
+    substituteInPlace python-pkg/lirc/database.py --replace 'yaml.load(' 'yaml.safe_load('
   '';
 
   preConfigure = ''
