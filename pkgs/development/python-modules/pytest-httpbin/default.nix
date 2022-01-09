@@ -1,8 +1,10 @@
-{ buildPythonPackage
-, lib
-, fetchPypi
-, pytest
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
 , httpbin
+, pytest
+, pytestCheckHook
+, requests
 , six
 }:
 
@@ -15,21 +17,28 @@ buildPythonPackage rec {
     sha256 = "9f73320f97d33cc20bc8a08cb945372948de51402559e87e74e92c56b48da0d7";
   };
 
-  checkInputs = [ pytest ];
+  buildInputs = [
+    pytest
+  ];
 
-  propagatedBuildInputs = [ httpbin six ];
+  propagatedBuildInputs = [
+    httpbin
+    six
+  ];
 
-  checkPhase = ''
-    py.test
-  '';
+  checkInputs = [
+    pytestCheckHook
+    requests
+  ];
 
-  # https://github.com/kevin1024/pytest-httpbin/pull/51
-  doCheck = false;
+  pythonImportsCheck = [
+    "pytest_httpbin"
+  ];
 
-  meta = {
-    description = "Easily test your HTTP library against a local copy of httpbin.org";
+  meta = with lib; {
+    description = "Test your HTTP library against a local copy of httpbin.org";
     homepage = "https://github.com/kevin1024/pytest-httpbin";
-    license = lib.licenses.mit;
+    license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
 }
-
