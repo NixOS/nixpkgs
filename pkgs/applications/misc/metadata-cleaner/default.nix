@@ -9,7 +9,7 @@
 , itstool
 , libadwaita
 , librsvg
-, meson_0_60
+, meson
 , ninja
 , pkg-config
 , poppler_gi
@@ -35,7 +35,7 @@ python3.pkgs.buildPythonApplication rec {
     glib
     gtk4
     itstool
-    meson_0_60
+    meson
     ninja
     pkg-config
     wrapGAppsHook
