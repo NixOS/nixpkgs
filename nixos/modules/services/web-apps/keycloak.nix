@@ -345,11 +345,23 @@ in
         })
         (lib.optionalAttrs (cfg.sslCertificate != null && cfg.sslCertificateKey != null) {
           "socket-binding-group=standard-sockets"."socket-binding=https".port = cfg.httpsPort;
-          "core-service=management"."security-realm=UndertowRealm"."server-identity=ssl" = {
-            keystore-path = "/run/keycloak/ssl/certificate_private_key_bundle.p12";
-            keystore-password = "notsosecretpassword";
+          "subsystem=elytron" = lib.mkOrder 900 {
+            "key-store=httpsKS" = lib.mkOrder 900 {
+              path = "/run/keycloak/ssl/certificate_private_key_bundle.p12";
+              credential-reference.clear-text = "notsosecretpassword";
+              type = "JKS";
+            };
+            "key-manager=httpsKM" = lib.mkOrder 901 {
+              key-store = "httpsKS";
+              credential-reference.clear-text = "notsosecretpassword";
+            };
+            "server-ssl-context=httpsSSC" = lib.mkOrder 902 {
+              key-manager = "httpsKM";
+            };
           };
-          "subsystem=undertow"."server=default-server"."https-listener=https".security-realm = "UndertowRealm";
+          "subsystem=undertow" = lib.mkOrder 901 {
+            "server=default-server"."https-listener=https".ssl-context = "httpsSSC";
+          };
         })
         cfg.extraConfig
       ];
