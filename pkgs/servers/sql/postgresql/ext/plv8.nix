@@ -1,6 +1,8 @@
-{ lib, stdenv, fetchFromGitHub, v8, perl, postgresql }:
+{ lib, stdenv, fetchFromGitHub, v8, perl, postgresql
+# For test
+, runCommand, coreutils, gnugrep }:
 
-stdenv.mkDerivation rec {
+let self = stdenv.mkDerivation rec {
   pname = "plv8";
   version = "3.0.0";
 
@@ -53,6 +55,28 @@ stdenv.mkDerivation rec {
     "-DJSONB_DIRECT_CONVERSION" "-DV8_COMPRESS_POINTERS=1" "-DV8_31BIT_SMIS_ON_64BIT_ARCH=1"
   ];
 
+  passthru.tests.smoke = runCommand "${pname}-test" {} ''
+    export PATH=${lib.makeBinPath [ (postgresql.withPackages (_: [self])) coreutils gnugrep ]}
+    db="$PWD/testdb"
+    initdb "$db"
+    postgres -k "$db" -D "$db" &
+    pid="$!"
+
+    for i in $(seq 1 100); do
+      if psql -h "$db" -d postgres -c "" 2>/dev/null; then
+        break
+      elif ! kill -0 "$pid"; then
+        exit 1
+      else
+        sleep 0.1
+      fi
+    done
+
+    psql -h "$db" -d postgres -c 'CREATE EXTENSION plv8; DO $$ plv8.elog(NOTICE, plv8.version); $$ LANGUAGE plv8;' 2> "$out"
+    grep -q "${version}" "$out"
+    kill -0 "$pid"
+  '';
+
   meta = with lib; {
     description = "V8 Engine Javascript Procedural Language add-on for PostgreSQL";
     homepage = "https://plv8.github.io/";
@@ -60,4 +84,4 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     license = licenses.postgresql;
   };
-}
+}; in self
