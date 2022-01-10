@@ -130,6 +130,9 @@ default-package-overrides:
   - polysemy-resume < 0.1.0.2
   - polysemy-conc < 0.5
   - polysemy-mocks < 0.2
+  # Pinning patch because it is mainly used by the reflex-frp ecosystem which is not yet compatible with it.
+  # https://github.com/reflex-frp/reflex-dom/issues/431
+  - patch < 0.0.5.0
 
 extra-packages:
   - base16-bytestring < 1               # required for cabal-install etc.
