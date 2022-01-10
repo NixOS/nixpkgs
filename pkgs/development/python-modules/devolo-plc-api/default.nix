@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , httpx
 , protobuf
 , pytest-asyncio
@@ -38,13 +39,14 @@ buildPythonPackage rec {
     zeroconf
   ];
 
-
   checkInputs = [
     pytest-asyncio
     pytest-httpx
     pytest-mock
     pytestCheckHook
   ];
+
+
 
   pythonImportsCheck = [
     "devolo_plc_api"
