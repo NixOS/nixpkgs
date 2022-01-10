@@ -23962,6 +23962,8 @@ with pkgs;
 
   theano = callPackage ../data/fonts/theano { };
 
+  tela-circle-icon-theme = callPackage ../data/icons/tela-circle-icon-theme { };
+
   tela-icon-theme = callPackage ../data/icons/tela-icon-theme { };
 
   template-glib = callPackage ../development/libraries/template-glib { };
