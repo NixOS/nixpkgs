@@ -7822,6 +7822,8 @@ with pkgs;
 
   mtr = callPackage ../tools/networking/mtr {};
 
+  mtr-exporter = callPackage ../tools/networking/mtr-exporter {};
+
   mtr-gui = callPackage ../tools/networking/mtr { withGtk = true; };
 
   mtx = callPackage ../tools/backup/mtx {};
@@ -10493,9 +10495,13 @@ with pkgs;
 
   uwufetch = callPackage ../tools/misc/uwufetch { };
 
-  v2ray = callPackage ../tools/networking/v2ray { };
+  v2ray = callPackage ../tools/networking/v2ray {
+    buildGoModule = buildGo117Module;
+  };
 
-  v2ray-domain-list-community = callPackage ../data/misc/v2ray-domain-list-community { };
+  v2ray-domain-list-community = callPackage ../data/misc/v2ray-domain-list-community {
+    pkgsBuildBuild.buildGoModule = pkgsBuildBuild.buildGo117Module;
+  };
 
   v2ray-geoip = callPackage ../data/misc/v2ray-geoip { };
 
@@ -12820,7 +12826,6 @@ with pkgs;
   };
 
   pony-corral = callPackage ../development/compilers/ponyc/pony-corral.nix { };
-  pony-stable = callPackage ../development/compilers/ponyc/pony-stable.nix { };
 
   qbe = callPackage ../development/compilers/qbe { };
 
@@ -13280,6 +13285,7 @@ with pkgs;
   yosys = callPackage ../development/compilers/yosys { };
   yosys-bluespec = callPackage ../development/compilers/yosys/plugins/bluespec.nix { };
   yosys-ghdl = callPackage ../development/compilers/yosys/plugins/ghdl.nix { };
+  yosys-symbiflow = callPackage ../development/compilers/yosys/plugins/symbiflow.nix { };
 
   z88dk = callPackage ../development/compilers/z88dk { };
 
@@ -14621,6 +14627,8 @@ with pkgs;
   efm-langserver = callPackage ../development/tools/efm-langserver { };
 
   egypt = callPackage ../development/tools/analysis/egypt { };
+
+  elf2uf2-rs = callPackage ../development/embedded/elf2uf2-rs { };
 
   elfinfo = callPackage ../development/tools/misc/elfinfo { };
 
@@ -20737,6 +20745,7 @@ with pkgs;
     mod_ca = callPackage ../servers/http/apache-modules/mod_ca { };
     mod_crl = callPackage ../servers/http/apache-modules/mod_crl { };
     mod_csr = callPackage ../servers/http/apache-modules/mod_csr { };
+    mod_cspnonce = callPackage ../servers/http/apache-modules/mod_cspnonce { };
     mod_ocsp = callPackage ../servers/http/apache-modules/mod_ocsp{ };
     mod_scep = callPackage ../servers/http/apache-modules/mod_scep { };
     mod_pkcs12 = callPackage ../servers/http/apache-modules/mod_pkcs12 { };
