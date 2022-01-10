@@ -16544,6 +16544,8 @@ with pkgs;
 
   gifticlib = callPackage ../development/libraries/science/biology/gifticlib { };
 
+  giftless = callPackage ../applications/version-management/giftless { };
+
   gio-sharp = callPackage ../development/libraries/gio-sharp { };
 
   givaro = callPackage ../development/libraries/givaro {};

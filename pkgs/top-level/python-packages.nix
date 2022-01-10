@@ -2885,6 +2885,8 @@ in {
 
   flask = callPackage ../development/python-modules/flask { };
 
+  flask-classful = callPackage ../development/python-modules/flask-classful { };
+
   flask-common = callPackage ../development/python-modules/flask-common { };
 
   flask-compress = callPackage ../development/python-modules/flask-compress { };
