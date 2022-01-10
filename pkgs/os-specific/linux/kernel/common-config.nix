@@ -302,6 +302,8 @@ let
     # Enable Sound Open Firmware support
     } // optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux" &&
                         versionAtLeast version "5.5") {
+      SND_SOC_INTEL_SOUNDWIRE_SOF_MACH       = whenAtLeast "5.10" module;
+      SND_SOC_INTEL_USER_FRIENDLY_LONG_NAMES = whenAtLeast "5.10" yes; # dep of SOF_MACH
       SND_SOC_SOF_TOPLEVEL              = yes;
       SND_SOC_SOF_ACPI                  = module;
       SND_SOC_SOF_PCI                   = module;
