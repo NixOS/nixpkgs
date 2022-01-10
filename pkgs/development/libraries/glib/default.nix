@@ -191,8 +191,12 @@ stdenv.mkDerivation rec {
 
   passthru = rec {
     gioModuleDir = "lib/gio/modules";
-    makeSchemaPath = dir: name: "${dir}/share/gsettings-schemas/${name}/glib-2.0/schemas";
+
+    makeSchemaDataDirPath = dir: name: "${dir}/share/gsettings-schemas/${name}";
+    makeSchemaPath = dir: name: "${makeSchemaDataDirPath dir name}/glib-2.0/schemas";
     getSchemaPath = pkg: makeSchemaPath pkg pkg.name;
+    getSchemaDataDirPath = pkg: makeSchemaDataDirPath pkg pkg.name;
+
     inherit flattenInclude;
     updateScript = gnome.updateScript { packageName = "glib"; };
   };

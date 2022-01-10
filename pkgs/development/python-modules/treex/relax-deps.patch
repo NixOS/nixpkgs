@@ -1,0 +1,13 @@
+diff --git a/pyproject.toml b/pyproject.toml
+index 7b9ef68..ec11f32 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -18,7 +18,7 @@ python = "^3.7"
+ flax = "^0.3.4"
+ PyYAML = "^5.4.1"
+ rich = "^10.7.0"
+-optax = "^0.0.9"
++optax = ">=0.0.9"
+ einops = "^0.3.2"
+ treeo = "^0.0.9"
+ # treeo = { path = "../treeo", develop = true }

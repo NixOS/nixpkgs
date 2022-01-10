@@ -204,6 +204,16 @@ let
         '';
       };
 
+      autoSubUidGidRange = mkOption {
+        type = types.bool;
+        default = false;
+        example = true;
+        description = ''
+          Automatically allocate subordinate user and group ids for this user.
+          Allocated range is currently always of size 65536.
+        '';
+      };
+
       createHome = mkOption {
         type = types.bool;
         default = false;
@@ -320,6 +330,9 @@ let
         (mkIf (!cfg.mutableUsers && config.initialHashedPassword != null) {
           hashedPassword = mkDefault config.initialHashedPassword;
         })
+        (mkIf (config.isNormalUser && config.subUidRanges == [] && config.subGidRanges == []) {
+          autoSubUidGidRange = mkDefault true;
+        })
       ];
 
   };
@@ -419,7 +432,7 @@ let
       { inherit (u)
           name uid group description home createHome isSystemUser
           password passwordFile hashedPassword
-          isNormalUser subUidRanges subGidRanges
+          autoSubUidGidRange subUidRanges subGidRanges
           initialPassword initialHashedPassword;
         shell = utils.toShellPath u.shell;
       }) cfg.users;

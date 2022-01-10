@@ -108,6 +108,7 @@ mkDerivation rec {
       python
       regex
       sip
+      setuptools
       zeroconf
       jeepney
       # the following are distributed with calibre, but we use upstream instead

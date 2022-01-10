@@ -10,7 +10,9 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    ./fix-gnupg-2.2.patch # based on https://gitlab.gnome.org/GNOME/libcryptui/-/commit/b05e301d1b264a5d8f07cb96e5edc243d99bff79.patch
+    # based on https://gitlab.gnome.org/GNOME/libcryptui/-/commit/b05e301d1b264a5d8f07cb96e5edc243d99bff79.patch
+    # https://gitlab.gnome.org/GNOME/libcryptui/-/merge_requests/1
+    ./fix-latest-gnupg.patch
   ];
 
   nativeBuildInputs = [ pkg-config intltool autoreconfHook ];
