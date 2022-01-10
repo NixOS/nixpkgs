@@ -81,13 +81,13 @@
 }:
 
 let
-  version = "1.4.2";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "HandBrake";
     repo = "HandBrake";
     rev = version;
-    sha256 = "sha256-Usz2+U1Wb8yJ5W2HqV0FqBaaE25fuVKk/NwKBHaKzwk=";
+    sha256 = "1kk11zl1mk37d4cvbc75gfndmma7vy3vkp4gmkyl92kiz6zadhyy";
   };
 
   versionFile = writeText "version.txt" ''
