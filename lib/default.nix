@@ -66,7 +66,7 @@ let
       stringLength sub substring tail trace;
     inherit (self.trivial) id const pipe concat or and bitAnd bitOr bitXor
       bitNot boolToString mergeAttrs flip mapNullable inNixShell isFloat min max
-      importJSON importTOML warn warnIf throwIfNot
+      importJSON importTOML warn warnIf throwIfNot checkListOfEnum
       info showWarnings nixpkgsVersion version
       mod compare splitByAndCompare functionArgs setFunctionArgs isFunction
       toHexString toBaseDigits;
