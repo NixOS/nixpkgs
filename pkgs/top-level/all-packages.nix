@@ -4286,7 +4286,9 @@ with pkgs;
     buildGoModule = buildGo117Module;
   };
 
-  agebox = callPackage ../tools/security/agebox { };
+  agebox = callPackage ../tools/security/agebox {
+    buildGoModule = buildGo117Module;
+  };
 
   age-plugin-yubikey = callPackage ../tools/security/age-plugin-yubikey {
     inherit (pkgs.darwin.apple_sdk.frameworks) PCSC;
