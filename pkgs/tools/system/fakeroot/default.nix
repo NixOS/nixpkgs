@@ -25,6 +25,20 @@ stdenv.mkDerivation rec {
       url = "https://raw.githubusercontent.com/archlinux/svntogit-packages/15b01cf37ff64c487f7440df4e09b090cd93b58f/fakeroot/trunk/fakeroot-1.25.3-glibc-2.33-fix-3.patch";
       sha256 = "sha256-o2Xm4C64Ny9TL8fjsZltjO1CdJ4VGwqZ+LnufVL5Sq8=";
     })
+
+    # Remove when updating
+    (fetchpatch {
+      name = "add-stat-ver-defines-for-ppc64le-riscv64-s390x.patch";
+      url = "https://salsa.debian.org/clint/fakeroot/-/commit/57731fb5071b86d70d5a3e207addaabdde23111e.patch";
+      sha256 = "sha256-vaCjAXxQRxoOoFp2YWkhjFOa/qRSxl2ztBj+p+UA2mM=";
+    })
+
+    # "downstream" patches from Debian
+    # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1001961
+    (fetchpatch {
+      url = "https://salsa.debian.org/clint/fakeroot/-/raw/master/debian/patches/also-wrap-stat-library-call.patch";
+      sha256 = "sha256-C/VU+ktGBDyml/rZ4sllQ+E2PVIGxCWtxnnMMKrB9Fw=";
+    })
   ]
   # patchset from brew
   ++ lib.optionals stdenv.isDarwin [
