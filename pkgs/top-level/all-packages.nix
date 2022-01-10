@@ -32357,7 +32357,9 @@ with pkgs;
 
   idsk = callPackage ../tools/filesystems/idsk { };
 
-  colima = callPackage ../applications/virtualization/colima {};
+  colima = callPackage ../applications/virtualization/colima {
+    buildGoModule = buildGo117Module;
+  };
 
   lima = callPackage ../applications/virtualization/lima {};
 
