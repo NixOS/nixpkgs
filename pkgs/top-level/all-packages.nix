@@ -15509,7 +15509,9 @@ with pkgs;
   terraform-lsp = callPackage ../development/tools/misc/terraform-lsp { };
   terraform-ls = callPackage ../development/tools/misc/terraform-ls { };
 
-  terraformer = callPackage ../development/tools/misc/terraformer { };
+  terraformer = callPackage ../development/tools/misc/terraformer {
+    buildGoModule = buildGo117Module;
+  };
 
   terrascan = callPackage ../tools/security/terrascan { };
 
