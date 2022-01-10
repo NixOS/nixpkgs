@@ -2797,6 +2797,8 @@ in {
 
   fields = callPackage ../development/python-modules/fields { };
 
+  figcan = callPackage ../development/python-modules/figcan { };
+
   filebrowser_safe = callPackage ../development/python-modules/filebrowser_safe { };
 
   filebytes = callPackage ../development/python-modules/filebytes { };
