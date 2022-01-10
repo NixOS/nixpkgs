@@ -8887,6 +8887,12 @@
     githubId = 72201;
     name = "Ole Jørgen Brønner";
   };
+  ollieB = {
+    email = "1237862+oliverbunting@users.noreply.github.com";
+    github = "oliverbunting";
+    githubId = 1237862;
+    name = "Ollie Bunting";
+  };
   olynch = {
     email = "owen@olynch.me";
     github = "olynch";

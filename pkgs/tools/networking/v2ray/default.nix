@@ -12,7 +12,7 @@ let
     sha256 = "1yk02n2lllbcwqkz4f3l3d2df1w3m768zxvdawgmafjgmbqf0gjf";
   };
 
-  vendorSha256 = "sha256-7zSIAKcMwtaTvokKuLJ8orqJc2jGuaw5FglEJadeZ9I=";
+  vendorSha256 = "sha256-kTwISKPIFpb/OPh9rIzLH8a6mqpyDBJo2stSu5bc02Q=";
 
   assetsDrv = symlinkJoin {
     name = "v2ray-assets";

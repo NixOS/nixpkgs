@@ -40,10 +40,10 @@
     "owner": "aliyun",
     "provider-source-address": "registry.terraform.io/aliyun/alicloud",
     "repo": "terraform-provider-alicloud",
-    "rev": "v1.150.0",
-    "sha256": "16apk8axn2kkbnlvnzcjwf29vmxyhqhp3bx9vdz4ckvk1ajsw4dw",
+    "rev": "v1.151.0",
+    "sha256": "0pdvbq9kfq7vwkfk75fjy6jaiq5bfkjmvr3z07712b76z29m10bz",
     "vendorSha256": "18chs2723i2cxhhm649mz52pp6wrfqzxgk12zxq9idrhicchqnzg",
-    "version": "1.150.0"
+    "version": "1.151.0"
   },
   "ansible": {
     "owner": "nbering",
