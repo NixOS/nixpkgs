@@ -19,7 +19,7 @@ buildGoModule rec {
     rev = "v${version}";
     sha256 = "sha256-yLrCE0C8+LIXnBm4xG4q0vXtjTyau6mjkZ+/o/lbGhI=";
   };
-  vendorSha256 = "sha256-xALB4QCIVpN0s1rR/fvHZFlFDf2trtG8yJKJLBRH4pw=";
+  vendorSha256 = "sha256-2pJpzu6TDkZ7tecwf7NfxN/gwSBIZmCFi2aJ+KTPkbM=";
   proxyVendor = true;
 
   nativeBuildInputs = [ pkg-config ];
