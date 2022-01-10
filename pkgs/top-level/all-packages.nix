@@ -515,7 +515,9 @@ with pkgs;
 
   graph-easy = callPackage ../tools/graphics/graph-easy { };
 
-  packer = callPackage ../development/tools/packer { };
+  packer = callPackage ../development/tools/packer {
+    buildGoModule = buildGo117Module;
+  };
 
   packr = callPackage ../development/libraries/packr { };
 
