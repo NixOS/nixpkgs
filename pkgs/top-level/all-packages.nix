@@ -14614,6 +14614,8 @@ with pkgs;
 
   egypt = callPackage ../development/tools/analysis/egypt { };
 
+  elf2uf2-rs = callPackage ../development/embedded/elf2uf2-rs { };
+
   elfinfo = callPackage ../development/tools/misc/elfinfo { };
 
   elfkickers = callPackage ../development/tools/misc/elfkickers { };
