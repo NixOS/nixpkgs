@@ -11,11 +11,11 @@ stdenv.mkDerivation rec {
   pname = "pcre"
     + lib.optionalString (variant == "cpp") "-cpp"
     + lib.optionalString (variant != "cpp" && variant != null) variant;
-  version = "8.44";
+  version = "8.45";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/pcre/pcre/${version}/pcre-${version}.tar.bz2";
-    sha256 = "0v9nk51wh55pcbnf2jr36yarz8ayajn6d7ywiq2wagivn9c8c40r";
+    sha256 = "sha256-Ta5v3NK7C7bDe1+Xwzwr6VTadDmFNpzdrDVG4yGL/7g=";
   };
 
   outputs = [ "bin" "dev" "out" "doc" "man" ];

@@ -10,11 +10,11 @@
 }:
 buildPythonPackage rec {
   pname = "pytest-django";
-  version = "4.4.0";
+  version = "4.5.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b5171e3798bf7e3fc5ea7072fe87324db67a4dd9f1192b037fed4cc3c1b7f455";
+    sha256 = "01fe1242e706375d7c942d206a30826bd9c0dffde99bfac627050cdc91f0d792";
   };
 
   nativeBuildInputs = [ pytest setuptools-scm ];

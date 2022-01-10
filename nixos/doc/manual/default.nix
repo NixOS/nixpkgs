@@ -214,7 +214,7 @@ in rec {
 
   manualEpub = runCommand "nixos-manual-epub"
     { inherit sources;
-      buildInputs = [ libxml2.bin libxslt.bin zip ];
+      nativeBuildInputs = [ buildPackages.libxml2.bin buildPackages.libxslt.bin buildPackages.zip ];
     }
     ''
       # Generate the epub manual.

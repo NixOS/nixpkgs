@@ -5957,6 +5957,12 @@
     githubId = 11947756;
     name = "Julien Dehos";
   };
+  julienmalka = {
+    email = "julien.malka@me.com";
+    github = "JulienMalka";
+    githubId = 1792886;
+    name = "Julien Malka";
+  };
   julm = {
     email = "julm+nixpkgs@sourcephile.fr";
     github = "ju1m";
@@ -6609,6 +6615,12 @@
     github = "laikq";
     githubId = 55911173;
     name = "Gwendolyn Quasebarth";
+  };
+  lammermann = {
+    email = "k.o.b.e.r@web.de";
+    github = "lammermann";
+    githubId = 695526;
+    name = "Benjamin Kober";
   };
   larsr = {
     email = "Lars.Rasmusson@gmail.com";
@@ -8886,6 +8898,12 @@
     github = "olejorgenb";
     githubId = 72201;
     name = "Ole Jørgen Brønner";
+  };
+  ollieB = {
+    email = "1237862+oliverbunting@users.noreply.github.com";
+    github = "oliverbunting";
+    githubId = 1237862;
+    name = "Ollie Bunting";
   };
   olynch = {
     email = "owen@olynch.me";
@@ -13588,5 +13606,16 @@
     email = "philipp.woelfel@gmail.com";
     github = "PhilippWoelfel";
     githubId = 19400064;
+  };
+  qbit = {
+    name = "Aaron Bieber";
+    email = "aaron@bolddaemon.com";
+    github = "qbit";
+    githubId = 68368;
+    matrix = "@qbit:tapenet.org";
+    keys = [{
+      longkeyid = "rsa4096/0x1F81112D62A9ADCE";
+      fingerprint = "3586 3350 BFEA C101 DB1A 4AF0 1F81 112D 62A9 ADCE";
+    }];
   };
 }

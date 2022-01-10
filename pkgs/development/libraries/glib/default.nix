@@ -45,11 +45,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "glib";
-  version = "2.70.1";
+  version = "2.70.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "+be85/UXU6H0OFO7ysqL8J4V6ZQmjinP16dvZWNiY8A=";
+    sha256 = "BVFFnIXNPaPVjdyQFv0ovlr1A/XhYVpxultRKslFgG8=";
   };
 
   patches = optionals stdenv.isDarwin [
@@ -191,8 +191,12 @@ stdenv.mkDerivation rec {
 
   passthru = rec {
     gioModuleDir = "lib/gio/modules";
-    makeSchemaPath = dir: name: "${dir}/share/gsettings-schemas/${name}/glib-2.0/schemas";
+
+    makeSchemaDataDirPath = dir: name: "${dir}/share/gsettings-schemas/${name}";
+    makeSchemaPath = dir: name: "${makeSchemaDataDirPath dir name}/glib-2.0/schemas";
     getSchemaPath = pkg: makeSchemaPath pkg pkg.name;
+    getSchemaDataDirPath = pkg: makeSchemaDataDirPath pkg pkg.name;
+
     inherit flattenInclude;
     updateScript = gnome.updateScript { packageName = "glib"; };
   };

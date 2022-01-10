@@ -229,8 +229,6 @@
 
   sv-kalender = callPackage ./sv-kalender { };
 
-  tramp = callPackage ./tramp { };
-
   youtube-dl = callPackage ./youtube-dl { };
 
   # From old emacsPackages (pre emacsPackagesNg)

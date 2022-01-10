@@ -17,21 +17,10 @@ let
   # Contains the ruby version heuristics
   rubyVersion = import ./ruby-version.nix { inherit lib; };
 
-  # Needed during postInstall
-  buildRuby =
-    if stdenv.hostPlatform == stdenv.buildPlatform
-    then "$out/bin/ruby"
-    else "${buildPackages.ruby}/bin/ruby";
-
   generic = { version, sha256 }: let
     ver = version;
     tag = ver.gitTag;
     atLeast30 = lib.versionAtLeast ver.majMin "3.0";
-    baseruby = self.override {
-      useRailsExpress = false;
-      docSupport = false;
-      rubygemsSupport = false;
-    };
     self = lib.makeOverridable (
       { stdenv, buildPackages, lib
       , fetchurl, fetchpatch, fetchFromSavannah, fetchFromGitHub
@@ -59,6 +48,12 @@ let
       , buildEnv, bundler, bundix
       , libiconv, libobjc, libunwind, Foundation
       , makeWrapper, buildRubyGem, defaultGemConfig
+      , baseRuby ? buildPackages.ruby.override {
+          useRailsExpress = false;
+          docSupport = false;
+          rubygemsSupport = false;
+        }
+      , useBaseRuby ? stdenv.hostPlatform != stdenv.buildPlatform || useRailsExpress
       }:
       stdenv.mkDerivation rec {
         pname = "ruby";
@@ -81,7 +76,7 @@ let
 
         nativeBuildInputs = [ autoreconfHook bison ]
           ++ (op docSupport groff)
-          ++ op (stdenv.buildPlatform != stdenv.hostPlatform) buildPackages.ruby;
+          ++ op useBaseRuby baseRuby;
         buildInputs = [ autoconf ]
           ++ (op fiddleSupport libffi)
           ++ (ops cursesSupport [ ncurses readline ])
@@ -104,7 +99,7 @@ let
             inherit patchSet useRailsExpress ops fetchpatch;
             patchLevel = ver.patchLevel;
           }).${ver.majMinTiny}
-          ++ [ ./do-not-regenerate-revision.h.patch ]
+          ++ op (lib.versionOlder ver.majMin "3.1") ./do-not-regenerate-revision.h.patch
           ++ op (atLeast30 && useRailsExpress) ./do-not-update-gems-baseruby.patch
           # Ruby prior to 3.0 has a bug the installer (tools/rbinstall.rb) but
           # the resulting error was swallowed. Newer rubygems no longer swallows
@@ -133,24 +128,24 @@ let
           sed -i ext/io/console/io-console.gemspec -e '/s\.date/d'
         '';
 
-        configureFlags = ["--enable-shared" "--enable-pthread" "--with-soname=ruby-${version}"]
-          ++ op useRailsExpress "--with-baseruby=${baseruby}/bin/ruby"
-          ++ op (!jitSupport) "--disable-jit-support"
-          ++ op (!docSupport) "--disable-install-doc"
-          ++ op (jemallocSupport) "--with-jemalloc"
-          ++ ops stdenv.isDarwin [
-            # on darwin, we have /usr/include/tk.h -- so the configure script detects
-            # that tk is installed
-            "--with-out-ext=tk"
-            # on yosemite, "generating encdb.h" will hang for a very long time without this flag
-            "--with-setjmp-type=setjmp"
-          ]
-          ++ op (stdenv.hostPlatform != stdenv.buildPlatform)
-             "--with-baseruby=${buildRuby}";
+        configureFlags = [
+          (lib.enableFeature (!stdenv.hostPlatform.isStatic) "shared")
+          (lib.enableFeature true "pthread")
+          (lib.withFeatureAs true "soname" "ruby-${version}")
+          (lib.withFeatureAs useBaseRuby "baseruby" "${baseRuby}/bin/ruby")
+          (lib.enableFeature jitSupport "jit-support")
+          (lib.enableFeature docSupport "install-doc")
+          (lib.withFeature jemallocSupport "jemalloc")
+          (lib.withFeatureAs docSupport "ridir" "${placeholder "devdoc"}/share/ri")
+        ] ++ ops stdenv.isDarwin [
+          # on darwin, we have /usr/include/tk.h -- so the configure script detects
+          # that tk is installed
+          "--with-out-ext=tk"
+          # on yosemite, "generating encdb.h" will hang for a very long time without this flag
+          "--with-setjmp-type=setjmp"
+        ];
 
         preConfigure = opString docSupport ''
-          configureFlagsArray+=("--with-ridir=$devdoc/share/ri")
-
           # rdoc creates XDG_DATA_DIR (defaulting to $HOME/.local/share) even if
           # it's not going to be used.
           export HOME=$TMPDIR
@@ -208,13 +203,16 @@ let
           # Add rbconfig shim so ri can find docs
           mkdir -p $devdoc/lib/ruby/site_ruby
           cp ${./rbconfig.rb} $devdoc/lib/ruby/site_ruby/rbconfig.rb
-        '' + opString useRailsExpress ''
+          sed -i '/^  CONFIG\["\(BASERUBY\|SHELL\|GREP\|EGREP\|MKDIR_P\|MAKEDIRS\|INSTALL\)"\]/d' $rbConfig
+        '' + opString useBaseRuby ''
           # Prevent the baseruby from being included in the closure.
-          sed -i '/^  CONFIG\["BASERUBY"\]/d' $rbConfig
-          sed -i "s|'--with-baseruby=${baseruby}/bin/ruby'||" $rbConfig
+          ${removeReferencesTo}/bin/remove-references-to \
+            -t ${baseRuby} \
+            $rbConfig $out/lib/libruby*
         '';
 
-        disallowedRequisites = op (!jitSupport) stdenv.cc.cc;
+        disallowedRequisites = op (!jitSupport) stdenv.cc.cc
+          ++ op useBaseRuby baseRuby;
 
         meta = with lib; {
           description = "The Ruby language";
@@ -227,7 +225,6 @@ let
         passthru = rec {
           version = ver;
           rubyEngine = "ruby";
-          baseRuby = baseruby;
           libPath = "lib/${rubyEngine}/${ver.libDir}";
           gemPath = "lib/${rubyEngine}/gems/${ver.libDir}";
           devEnv = import ./dev.nix {
@@ -246,6 +243,8 @@ let
           minorVersion = ver.minor;
           teenyVersion = ver.tiny;
           patchLevel = ver.patchLevel;
+        } // lib.optionalAttrs useBaseRuby {
+          inherit baseRuby;
         };
       }
     ) args; in self;
@@ -264,6 +263,14 @@ in {
     sha256 = {
       src = "1b4j39zyyvdkf1ax2c6qfa40b4mxfkr87zghhw19fmnzn8f8d1im";
       git = "1q19w5i1jkfxn7qq6f9v9ngax9h52gxwijk7hp312dx6amwrkaim";
+    };
+  };
+
+  ruby_3_1 = generic {
+    version = rubyVersion "3" "1" "0" "";
+    sha256 = {
+      src = "sha256-UKBQTG7ctNYc5rjP292qlXBxlfqw7Ne16SZUsqlBKFQ=";
+      git = "sha256-TcsoWY+zVZeue1/ypV1L0WERp1UVK35WtVtYPYiJh4c=";
     };
   };
 }

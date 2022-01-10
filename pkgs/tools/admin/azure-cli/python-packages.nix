@@ -158,7 +158,7 @@ let
         "73054bd19866577e7e327518afc8f47e1639a11aea29a7466354b81804f4a676";
 
       azure-mgmt-compute = overrideAzureMgmtPackage super.azure-mgmt-compute "23.1.0" "zip"
-        "sha256-N+zUTEnOyn18lDHlkUj+vRXX/sJhZR7XLd1YdV50ULA=";
+        "sha256-Sduw9RAG1VfL0LIpmcuezz6rwr5G2W78xtZRxrM3VLM=";
 
       azure-mgmt-consumption = overrideAzureMgmtPackage super.azure-mgmt-consumption "2.0.0" "zip"
         "12ai4qps73ivawh0yzvgb148ksx02r30pqlvfihx497j62gsi1cs";

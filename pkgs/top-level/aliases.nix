@@ -262,6 +262,7 @@ mapAliases ({
   firefoxWrapper = firefox;           # 2015-09
 
   firestr = throw "firestr has been removed."; # added 2019-12-08
+  firmwareLinuxNonfree = linux-firmware; # added 2022-01-09
   fish-foreign-env = throw "fish-foreign-env has been replaced with fishPlugins.foreign-env"; # added 2020-12-29, modified 2021-01-10
   flameGraph = flamegraph; # added 2018-04-25
   flashplayer = throw "flashplayer has been removed as Adobe Flash Player is now deprecated."; # added 2021-02-07
@@ -507,6 +508,7 @@ mapAliases ({
   linuxPackages_5_4 = linuxKernel.packages.linux_5_4;
   linuxPackages_5_10 = linuxKernel.packages.linux_5_10;
   linuxPackages_5_15 = linuxKernel.packages.linux_5_15;
+  linuxPackages_5_16 = linuxKernel.packages.linux_5_16;
 
   linux_mptcp_95 = linuxKernel.kernels.linux_mptcp_95;
   linux_rpi1 = linuxKernel.kernels.linux_rpi1;
@@ -522,6 +524,7 @@ mapAliases ({
   linux_5_10 = linuxKernel.kernels.linux_5_10;
   linux-rt_5_10 = linuxKernel.kernels.linux_rt_5_10;
   linux_5_15 = linuxKernel.kernels.linux_5_15;
+  linux_5_16 = linuxKernel.kernels.linux_5_16;
 
   # added 2020-04-04
   linuxPackages_testing_hardened = throw "linuxPackages_testing_hardened has been removed, please use linuxPackages_latest_hardened";

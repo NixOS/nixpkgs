@@ -19,7 +19,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];
 
-  vendorSha256 = "sha256-F1ym88JrJWzsBg89Y1ufH4oefIRBwTGOw72BrjtpvBw=";
+  vendorSha256 = "sha256-VGSwu1WBYfcWjA6BczfMY1s+r9s9aGjlQJjPXgss56s=";
 
   postInstall = ''
     wrapProgram $out/bin/colima \
