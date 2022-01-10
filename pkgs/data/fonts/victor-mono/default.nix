@@ -1,9 +1,7 @@
 { lib, fetchzip }:
 
-let
-  version = "1.5.1";
-in
-fetchzip {
+let version = "1.5.2";
+in fetchzip {
   name = "victor-mono-${version}";
 
   # Upstream prefers we download from the website,
@@ -13,7 +11,8 @@ fetchzip {
   # so we extract it from the tagged release.
   # Both methods produce the same file, but this way
   # we can safely reason about what version it is.
-  url = "https://github.com/rubjo/victor-mono/raw/v${version}/public/VictorMonoAll.zip";
+  url =
+    "https://github.com/rubjo/victor-mono/raw/v${version}/public/VictorMonoAll.zip";
 
   postFetch = ''
     mkdir -p $out/share/fonts/
@@ -21,7 +20,7 @@ fetchzip {
     unzip -j $downloadedFile \*.ttf -d $out/share/fonts/truetype
   '';
 
-  sha256 = "sha256-FHahUp/Ghjv6fwsjj1giVPlAIXRMSZCSLcVMiMHvV3A=";
+  sha256 = "sha256-cNDZh0P/enmoKL/6eHzkgl5ghtai2K9cTgWMVmm8GIA=";
 
   meta = with lib; {
     description = "Free programming font with cursive italics and ligatures";
