@@ -31,7 +31,6 @@ in {
       type = types.bool;
       description = ''
         Turn on this option if you want to enable all the firmware with a license allowing redistribution.
-        (i.e. free firmware and <literal>firmware-linux-nonfree</literal>)
       '';
     };
 
@@ -51,7 +50,7 @@ in {
   config = mkMerge [
     (mkIf (cfg.enableAllFirmware || cfg.enableRedistributableFirmware) {
       hardware.firmware = with pkgs; [
-        firmwareLinuxNonfree
+        linux-firmware
         intel2200BGFirmware
         rtl8192su-firmware
         rt5677-firmware

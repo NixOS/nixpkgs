@@ -1138,6 +1138,8 @@ with pkgs;
 
   pikchr = callPackage ../tools/graphics/pikchr { };
 
+  popsicle = callPackage ../tools/misc/popsicle { };
+
   roxterm = callPackage ../applications/terminal-emulators/roxterm { };
 
   rxvt = callPackage ../applications/terminal-emulators/rxvt { };
@@ -2036,7 +2038,6 @@ with pkgs;
 
   aria2 = callPackage ../tools/networking/aria2 {
     inherit (darwin.apple_sdk.frameworks) Security;
-    inherit (python3Packages) sphinx;
   };
   aria = aria2;
 
@@ -10359,6 +10360,8 @@ with pkgs;
   ttylog = callPackage ../tools/misc/ttylog { };
 
   ipbt = callPackage ../tools/misc/ipbt { };
+
+  tuhi = callPackage ../applications/misc/tuhi { };
 
   tuir = callPackage ../applications/misc/tuir { };
 
@@ -22784,7 +22787,7 @@ with pkgs;
 
   qemu_test = lowPrio (qemu.override { hostCpuOnly = true; nixosTestRunner = true; });
 
-  firmwareLinuxNonfree = callPackage ../os-specific/linux/firmware/firmware-linux-nonfree { };
+  linux-firmware = callPackage ../os-specific/linux/firmware/linux-firmware { };
 
   qmk-udev-rules = callPackage ../os-specific/linux/qmk-udev-rules { };
 

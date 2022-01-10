@@ -1,26 +1,25 @@
-{ lib, stdenv, fetchurl }:
+{ stdenv, lib, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  version = "1.2.2";
+  version = "1.3.1";
   pname = "htpdate";
 
-  src = fetchurl {
-    url = "http://www.vervest.org/htp/archive/c/${pname}-${version}.tar.xz";
-    sha256 = "0mgr350qwgzrdrwkb9kaj6z7l6hn6a2pwh7sacqvnal5fyc9a7sz";
+  src = fetchFromGitHub {
+    owner = "twekkel";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "JPaxbu7LlGV+Bh5qxVxeNSPnMQNqLaLYWBRbpETSpQs=";
   };
 
   makeFlags = [
-    "INSTALL=install"
-    "STRIP=${stdenv.cc.bintools.targetPrefix}strip"
     "prefix=$(out)"
   ];
 
-  enableParallelBuilding = true;
-
   meta = with lib; {
     description = "Utility to fetch time and set the system clock over HTTP";
-    homepage = "http://www.vervest.org/htp/";
+    homepage = "https://github.com/twekkel/htpdate";
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ julienmalka ];
   };
 }
