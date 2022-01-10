@@ -15,6 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ErjFfSJDIgZq0qy0Zn5uZ9bZS2AtJq4FuBVuUuQgPTI=";
   };
 
+  strictDeps = true;
   nativeBuildInputs = [ pkg-config autoreconfHook sphinx ];
 
   buildInputs = [ openssl c-ares libxml2 sqlite zlib libssh2 ] ++
@@ -28,7 +29,7 @@ stdenv.mkDerivation rec {
   ];
 
   prePatch = ''
-    patchShebangs doc/manual-src/en/mkapiref.py
+    patchShebangs --build doc/manual-src/en/mkapiref.py
   '';
 
   checkInputs = [ cppunit ];
