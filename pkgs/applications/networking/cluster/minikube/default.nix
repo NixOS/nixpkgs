@@ -13,7 +13,7 @@ buildGoModule rec {
   pname = "minikube";
   version = "1.24.0";
 
-  vendorSha256 = "sha256-I23T1eWPTU9QiIVI4qi5mkaS6CkeGbOHKTHwjCnKTIM=";
+  vendorSha256 = "sha256-jFE4aHHgVmVcQu8eH97h9P3zchtmKv/KUIfv7f2ws3I=";
 
   doCheck = false;
 
