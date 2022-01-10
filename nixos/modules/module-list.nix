@@ -171,6 +171,7 @@
   ./programs/liboping.nix
   ./programs/light.nix
   ./programs/mosh.nix
+  ./programs/minigalaxy.nix
   ./programs/mininet.nix
   ./programs/msmtp.nix
   ./programs/mtr.nix

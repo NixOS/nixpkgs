@@ -27051,7 +27051,8 @@ with pkgs;
 
   minicom = callPackage ../tools/misc/minicom { };
 
-  minigalaxy = callPackage ../applications/misc/minigalaxy { };
+  minigalaxy-unwrapped = callPackage ../applications/misc/minigalaxy { };
+  minigalaxy = callPackage ../applications/misc/minigalaxy/wrapper.nix { };
 
   minimodem = callPackage ../applications/radio/minimodem { };
 
