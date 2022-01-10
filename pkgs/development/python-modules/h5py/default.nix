@@ -17,10 +17,12 @@ in buildPythonPackage rec {
     sha256 = "8752d2814a92aba4e2b2a5922d2782d0029102d99caaf3c201a566bc0b40db29";
   };
 
-  # avoid strict pinning of numpy
+  # avoid strict pinning of numpy and h5py
   postPatch = ''
     substituteInPlace setup.py \
       --replace "numpy ==" "numpy >="
+    substituteInPlace setup.py \
+      --replace 'mpi4py =='  'mpi4py >='
   '';
 
   HDF5_DIR = "${hdf5}";
