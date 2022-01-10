@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, makeWrapper, jre }:
+{ lib, stdenv, fetchurl, makeWrapper, jre, zip }:
 
 stdenv.mkDerivation rec {
   version = "13.7.1";
@@ -8,10 +8,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-yFPyj1Mbgj2eJv4DpvfOtPyTbL9gMAXC5TzSx8AV27o=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper zip ];
 
   installPhase = ''
     mkdir -p $out/{bin,lib}
+
+    # log4j mitigation, see https://logging.apache.org/log4j/2.x/security.html
+    zip -d MediathekView.jar org/apache/logging/log4j/core/lookup/JndiLookup.class
 
     install -m644 MediathekView.jar $out/lib
 
