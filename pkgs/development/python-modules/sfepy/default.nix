@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , numpy
 , scipy
 , matplotlib
@@ -27,6 +28,14 @@ buildPythonPackage rec {
     rev = "release_${version}";
     sha256 = "sha256-+wvFcME02la5JwzD5bvPgBBlkQKF5LWz5MC3+0s5jSs=";
   };
+
+  patches = [
+    # Fix for python3.10
+    (fetchpatch {
+      url = "https://github.com/sfepy/sfepy/commit/d8b595edbc234d5e3b9afee167bc755b3f9c9a57.patch";
+      sha256 = "sha256-NyJy+ddOpQnvA26ifJpZMBEB+yBy1HaGNTiGTsVmNbA=";
+    })
+  ];
 
   propagatedBuildInputs = [
     numpy
