@@ -50,6 +50,6 @@ buildGoModule rec {
     '';
     license = licenses.mit;
     maintainers = with maintainers; [ kuznero jlesquembre ngerstle jk ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }
