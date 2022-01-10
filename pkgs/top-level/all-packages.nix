@@ -30226,6 +30226,8 @@ with pkgs;
 
   ballerburg = callPackage ../games/ballerburg { } ;
 
+  blockattack = callPackage ../games/blockattack { } ;
+
   colobot = callPackage ../games/colobot {};
 
   doom-bcc = callPackage ../games/zdoom/bcc-git.nix { };
