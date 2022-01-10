@@ -891,6 +891,18 @@ final: prev:
     meta.homepage = "https://github.com/iamcco/coc-tailwindcss/";
   };
 
+  coc-svelte = buildVimPluginFrom2Nix {
+    pname = "coc-svelte";
+    version = "2021-11-27";
+    src = fetchFromGitHub {
+      owner = "coc-extensions";
+      repo = "coc-svelte";
+      rev = "5743da35da727ce8bf8a8b9733ee7ff61d476b4e";
+      sha256 = "1467b0bfnn8scgni405xfsj3zk8vfgj44mnm1lvr9ir696r2gmp0";
+    };
+    meta.homepage = "https://github.com/coc-extensions/coc-svelte/";
+  };
+
   coc-nvim = buildVimPluginFrom2Nix {
     pname = "coc.nvim";
     version = "2021-12-27";
