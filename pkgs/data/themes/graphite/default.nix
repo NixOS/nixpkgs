@@ -15,18 +15,11 @@
 let
   pname = "graphite-gtk-theme";
 
-  throwIfNotSubList = name: given: valid:
-    let
-      unexpected = lib.subtractLists valid given;
-    in
-      lib.throwIfNot (unexpected == [])
-        "${name}: ${builtins.concatStringsSep ", " (builtins.map builtins.toString unexpected)} unexpected; valid ones: ${builtins.concatStringsSep ", " (builtins.map builtins.toString valid)}";
-
 in
-throwIfNotSubList "${pname}: theme variants" themeVariants [ "default" "purple" "pink" "red" "orange" "yellow" "green" "teal" "blue" "all" ]
-throwIfNotSubList "${pname}: color variants" colorVariants [ "standard" "light" "dark" ]
-throwIfNotSubList "${pname}: size variants" sizeVariants [ "standard" "compact" ]
-throwIfNotSubList "${pname}: tweaks" tweaks [ "nord" "black" "midblack" "rimless" "normal" ]
+lib.checkListOfEnum "${pname}: theme variants" [ "default" "purple" "pink" "red" "orange" "yellow" "green" "teal" "blue" "all" ] themeVariants
+lib.checkListOfEnum "${pname}: color variants" [ "standard" "light" "dark" ] colorVariants
+lib.checkListOfEnum "${pname}: size variants" [ "standard" "compact" ] sizeVariants
+lib.checkListOfEnum "${pname}: tweaks" [ "nord" "black" "midblack" "rimless" "normal" ] tweaks
 
 stdenvNoCC.mkDerivation {
   inherit pname;
