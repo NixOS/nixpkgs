@@ -253,6 +253,7 @@ hsanson/vim-android
 hsitz/VimOrganizer
 hura/vim-asymptote
 iamcco/coc-spell-checker
+iamcco/coc-tailwindcss
 iamcco/markdown-preview.nvim
 ianks/vim-tsx
 idanarye/vim-merginal
