@@ -198,7 +198,10 @@ stdenv.mkDerivation rec {
     getSchemaDataDirPath = pkg: makeSchemaDataDirPath pkg pkg.name;
 
     inherit flattenInclude;
-    updateScript = gnome.updateScript { packageName = "glib"; };
+    updateScript = gnome.updateScript {
+      packageName = "glib";
+      versionPolicy = "odd-unstable";
+    };
   };
 
   meta = with lib; {
