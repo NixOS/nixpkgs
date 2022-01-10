@@ -228,4 +228,9 @@ respectively `0` because NixOS takes care of updating everything.
       };
     };
   };
+
+  meta = {
+    buildDocsInSandbox = false;
+    maintainers = with maintainers; [ lom ];
+  };
 }
