@@ -127,7 +127,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://isabelle.in.tum.de/";
     license = licenses.bsd3;
-    maintainers = [ maintainers.jwiegley ];
+    maintainers = [ maintainers.jwiegley maintainers.jvanbruegge ];
     platforms = platforms.linux;
   };
 }
