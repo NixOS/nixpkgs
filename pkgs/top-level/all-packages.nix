@@ -22785,7 +22785,7 @@ with pkgs;
 
   qemu_test = lowPrio (qemu.override { hostCpuOnly = true; nixosTestRunner = true; });
 
-  firmwareLinuxNonfree = callPackage ../os-specific/linux/firmware/firmware-linux-nonfree { };
+  linux-firmware = callPackage ../os-specific/linux/firmware/linux-firmware { };
 
   qmk-udev-rules = callPackage ../os-specific/linux/qmk-udev-rules { };
 

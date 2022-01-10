@@ -374,6 +374,12 @@
           <literal>pkgs.theLoungePlugins.themes</literal>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The <literal>firmwareLinuxNonfree</literal> package has been
+          renamed to <literal>linux-firmware</literal>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>
