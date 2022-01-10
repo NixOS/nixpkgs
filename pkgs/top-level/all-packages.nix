@@ -24514,6 +24514,8 @@ with pkgs;
 
   bluejeans-gui = callPackage ../applications/networking/instant-messengers/bluejeans { };
 
+  bluemail = callPackage ../applications/networking/mailreaders/bluemail { };
+
   blugon = callPackage ../applications/misc/blugon { };
 
   bombadillo = callPackage ../applications/networking/browsers/bombadillo { };
