@@ -10231,6 +10231,8 @@ in {
 
   Wand = callPackage ../development/python-modules/Wand { };
 
+  wandb = callPackage ../development/python-modules/wandb { };
+
   warlock = callPackage ../development/python-modules/warlock { };
 
   warrant = callPackage ../development/python-modules/warrant { };
@@ -10544,6 +10546,8 @@ in {
   yarg = callPackage ../development/python-modules/yarg { };
 
   yarl = callPackage ../development/python-modules/yarl { };
+
+  yaspin = callPackage ../development/python-modules/yaspin { };
 
   yaswfp = callPackage ../development/python-modules/yaswfp { };
 
