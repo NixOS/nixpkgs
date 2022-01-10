@@ -11,13 +11,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "cp2k";
-  version = "8.2.0";
+  version = "9.1.0";
 
   src = fetchFromGitHub {
     owner = "cp2k";
     repo = "cp2k";
     rev = "v${version}";
-    sha256 = "0kykq5p318hxjzd4gzqjwv9gqshbdvbg0gnjbd9bdfjx1r6jkjn3";
+    hash = "sha256-P9RwZmrE1E0UTQVasQxWAqa3LBLyJNGeJo8T6u5WWcw=";
     fetchSubmodules = true;
   };
 
@@ -50,7 +50,9 @@ in stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs tools exts/dbcsr/tools/build_utils exts/dbcsr/.cp2k
-    substituteInPlace exts/dbcsr/.cp2k/Makefile --replace '/usr/bin/env python3' '${python3}/bin/python'
+    substituteInPlace exts/build_dbcsr/Makefile \
+      --replace '/usr/bin/env python3' '${python3}/bin/python' \
+      --replace 'SHELL = /bin/sh' 'SHELL = bash'
   '';
 
   configurePhase = ''
