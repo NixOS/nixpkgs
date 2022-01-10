@@ -32826,7 +32826,9 @@ with pkgs;
 
   colima = callPackage ../applications/virtualization/colima {};
 
-  lima = callPackage ../applications/virtualization/lima {};
+  lima = callPackage ../applications/virtualization/lima {
+    buildGoModule = buildGo117Module;
+  };
 
   logtop = callPackage ../tools/misc/logtop { };
 
