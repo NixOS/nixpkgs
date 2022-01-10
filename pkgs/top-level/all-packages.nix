@@ -33629,7 +33629,9 @@ with pkgs;
 
   unixcw = libsForQt5.callPackage ../applications/radio/unixcw { };
 
-  vault = callPackage ../tools/security/vault { };
+  vault = callPackage ../tools/security/vault {
+    buildGoModule = buildGo117Module;
+  };
 
   vault-bin = callPackage ../tools/security/vault/vault-bin.nix { };
 
