@@ -7,6 +7,19 @@ jobs:
     strategy:
       matrix:
         platform: [ubuntu-latest, windows-latest] # macos-latest
+        include:
+          - platform: ubuntu-latest
+            configure_preset: 'static'
+            build_preset: 'static-release'
+            release_name: 'linux-x86-64'
+            cc: 'gcc-11'
+            cxx: 'g++-11'
+
+          - platform: windows-latest
+            configure_preset: 'windows-static'
+            build_preset: 'windows-static-release'
+            release_name: 'windows-x64'
+  
     runs-on: ${{matrix.platform}}
 
     steps:
@@ -18,27 +31,35 @@ jobs:
 
     - name: Run vcpkg
       uses: lukka/run-vcpkg@v10
+      with:
+        vcpkgJsonGlob: 'vcpkg.json'
 
-    - name: Update gcc
-      run: |
-           sudo apt update
-           sudo apt install gcc-11 g++-11
-           echo "CC=gcc-11" >> $GITHUB_ENV
-           echo "CXX=g++-11" >> $GITHUB_ENV
-      shell: bash
+    - name: Install requirements
+      run: sudo apt install gcc-11 g++-11
       if: matrix.platform == 'ubuntu-latest'
 
-    - name: Set clang
+    - name: Set compiler
       run: |
-           echo "CC=/usr/local/opt/llvm/bin/clang" >> $GITHUB_ENV
-           echo "CXX=/usr/local/opt/llvm/bin/clang++" >> $GITHUB_ENV
+           echo "CC=${{matrix.cc}}" >> $GITHUB_ENV
+           echo "CXX=${{matrix.cxx}}" >> $GITHUB_ENV
       shell: bash
-      if: matrix.platform == 'macos-latest'
+      if: matrix.cc != ''
 
     - name: Run cmake
       uses: lukka/run-cmake@v10
       with:
-        configurePreset: 'default'
-        buildPreset: 'release'
+        configurePreset: ${{matrix.configure_preset}}
+        buildPreset: ${{matrix.build_preset}}
 
+    - name: Upload wfs-extract
+      uses: actions/upload-artifact@v2
+      with:
+        name: wfs-extract-${{matrix.release_name}}
+        path: build/${{matrix.configure_preset}}/wfs-extract/Release
+
+    - name: Upload wfs-file-injector
+      uses: actions/upload-artifact@v2
+      with:
+        name: wfs-file-injector-${{matrix.release_name}}
+        path: build/${{matrix.configure_preset}}/wfs-file-injector/Release
 
