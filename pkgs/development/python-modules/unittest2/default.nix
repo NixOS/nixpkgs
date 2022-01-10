@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 , six
 , traceback2
 }:
@@ -8,6 +9,12 @@
 buildPythonPackage rec {
   version = "1.1.0";
   pname = "unittest2";
+
+  # unittest2 has not been updated since 2015 and is no longer supported on
+  # Python 3.10. `unittest2` is a compatability package between Python 2 and 3,
+  # but it's relevance is dwinding as `python2Packages` is getting phased out
+  # anyhow.
+  disabled = !(pythonOlder "3.10");
 
   src = fetchPypi {
     inherit pname version;
