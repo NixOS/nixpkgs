@@ -129,6 +129,7 @@ dylanaraps/wal.vim
 eagletmt/ghcmod-vim
 eagletmt/neco-ghc
 easymotion/vim-easymotion
+echasnovski/mini.nvim
 eddiebergman/nvim-treesitter-pyfold
 eddyekofo94/gruvbox-flat.nvim
 EdenEast/nightfox.nvim
