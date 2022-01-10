@@ -30,13 +30,13 @@ throwIfNotSubList "${pname}: tweaks" tweaks [ "nord" "black" "midblack" "rimless
 
 stdenvNoCC.mkDerivation {
   inherit pname;
-  version = "unstable-2022-01-04";
+  version = "unstable-2022-01-07";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
-    rev = "947cac4966377d8f5b5a4e2966ec2b9a6041d205";
-    sha256 = "11pl8hzk4fwniqdib0ffvjilpspr1n5pg1gw39kal13wxh4sdg28";
+    rev = "78e5421fee63b4c2a2a3d2e321538367b01a24ec";
+    sha256 = "1vfvv1gfbr9yr9mz0kb7c7ij6pxcryni1fjs87gn4hpyzns431wk";
   };
 
   nativeBuildInputs = [
