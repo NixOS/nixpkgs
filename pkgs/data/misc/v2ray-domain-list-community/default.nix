@@ -10,7 +10,7 @@ let
       rev = version;
       sha256 = "sha256-wDz4msCaX6BPzxrg5GeZSrMuxsCx8uimhaHghWdDp8s=";
     };
-    vendorSha256 = "sha256-p0EPYOw3vuqHiVSrZR7SA7vE0DWA7xyupWM+JznjF+o=";
+    vendorSha256 = "sha256-QUbnUnxG1tsNbR49HTl55aiLkBM/ae9mCtzWeN4Ju78=";
     meta = with lib; {
       description = "community managed domain list";
       homepage = "https://github.com/v2fly/domain-list-community";
