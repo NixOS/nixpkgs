@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 , pytestCheckHook
 , pythonAtLeast
 , pythonOlder
@@ -19,6 +20,14 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "0idjhx2s8cy6ppd18k1zy246d97gdd6i217m5q26fwa47xh3asik";
   };
+
+  patches = [
+    # Patch 2.0.6 for python3.10. See https://github.com/explosion/catalogue/issues/27#issuecomment-1009080533
+    (fetchpatch {
+      url = "https://github.com/conda-forge/catalogue-feedstock/raw/cc38d845cf7009f23df1ffbfdb3372fd1dba4942/recipe/patches/0001-skip-entry-points-test.patch";
+      sha256 = "sha256-7dXUMMG7zW2ztoYubmhP+6dfMESz3BMHWVL5wYusEPs=";
+    })
+  ];
 
   propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
     typing-extensions
