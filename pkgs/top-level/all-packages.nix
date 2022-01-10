@@ -8684,7 +8684,7 @@ with pkgs;
   philter = callPackage ../tools/networking/philter { };
 
   phoc = callPackage ../applications/misc/phoc {
-    wlroots = wlroots_0_12;
+    wlroots = wlroots_0_14;
   };
 
   phodav = callPackage ../tools/networking/phodav { };
@@ -26127,7 +26127,6 @@ with pkgs;
   };
 
   wlroots = wlroots_0_15;
-  wlroots_0_12 = callPackage ../development/libraries/wlroots/0.12.nix {};
   wlroots_0_14 = callPackage ../development/libraries/wlroots/0.14.nix {
     inherit (xorg) xcbutilrenderutil;
   };
