@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
     sha256 = "0jgnyaq6ykpbg5hrwc0p3pargmr9hpzqfsj6ymp4k07pxnqal76j";
   };
 
+  patches = [ ./1.0.2-CVE-2021-44078.patch ];
+
   nativeBuildInputs = [ pkg-config cmake ];
 
   meta = with lib; {
