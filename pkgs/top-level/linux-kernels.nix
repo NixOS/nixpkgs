@@ -429,6 +429,8 @@ in {
 
     vhba = callPackage ../misc/emulators/cdemu/vhba.nix { };
 
+    virtio_vmmci  = callPackage ../os-specific/linux/virtio_vmmci { };
+
     virtualbox = callPackage ../os-specific/linux/virtualbox {
       virtualbox = pkgs.virtualboxHardened;
     };
