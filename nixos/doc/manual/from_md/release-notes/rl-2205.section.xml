@@ -343,6 +343,15 @@
           <literal>true</literal>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The option <literal>services.thelounge.plugins</literal> has
+          been added to allow installing plugins for The Lounge. Plugins
+          can be found in
+          <literal>pkgs.theLoungePlugins.plugins</literal> and
+          <literal>pkgs.theLoungePlugins.themes</literal>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>
