@@ -38,8 +38,6 @@ python3.pkgs.buildPythonPackage rec {
     sed -i -e 's/,<.*//' requirements.txt
   '';
 
-  doCheck = false;
-
   postInstall = ''
     mkdir -p $out/bin
 
@@ -48,6 +46,10 @@ python3.pkgs.buildPythonPackage rec {
     PYTHONPATH="$PYTHONPATH" exec ${python3}/bin/python -m mautrix_facebook "\$@"
     END
     chmod +x $out/bin/mautrix-facebook
+  '';
+
+  checkPhase = ''
+    $out/bin/mautrix-facebook --help
   '';
 
   meta = with lib; {
