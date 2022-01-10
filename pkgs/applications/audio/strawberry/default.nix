@@ -72,6 +72,7 @@ mkDerivation rec {
     gstreamer
     gst-plugins-base
     gst-plugins-good
+    gst-plugins-bad
     gst-plugins-ugly
   ]) ++ lib.optional withVlc libvlc;
 
