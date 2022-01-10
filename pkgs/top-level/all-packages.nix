@@ -20982,7 +20982,9 @@ with pkgs;
 
   micronaut = callPackage ../development/tools/micronaut {};
 
-  minio = callPackage ../servers/minio { };
+  minio = callPackage ../servers/minio {
+    buildGoModule = buildGo117Module;
+  };
 
   mkchromecast = libsForQt5.callPackage ../applications/networking/mkchromecast { };
 
