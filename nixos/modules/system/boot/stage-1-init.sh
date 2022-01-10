@@ -81,30 +81,35 @@ ln -s /proc/mounts /etc/mtab # to shut up mke2fs
 touch /etc/udev/hwdb.bin # to shut up udev
 touch /etc/initrd-release
 
-# Function for waiting a device to appear.
+# Function for waiting for device(s) to appear.
 waitDevice() {
     local device="$1"
+    # Split device string using ':' as a delimiter as bcachefs
+    # uses this for multi-device filesystems, i.e. /dev/sda1:/dev/sda2:/dev/sda3
+    local IFS=':'
 
     # USB storage devices tend to appear with some delay.  It would be
     # great if we had a way to synchronously wait for them, but
     # alas...  So just wait for a few seconds for the device to
     # appear.
-    if test ! -e $device; then
-        echo -n "waiting for device $device to appear..."
-        try=20
-        while [ $try -gt 0 ]; do
-            sleep 1
-            # also re-try lvm activation now that new block devices might have appeared
-            lvm vgchange -ay
-            # and tell udev to create nodes for the new LVs
-            udevadm trigger --action=add
-            if test -e $device; then break; fi
-            echo -n "."
-            try=$((try - 1))
-        done
-        echo
-        [ $try -ne 0 ]
-    fi
+    for dev in $device; do
+        if test ! -e $dev; then
+            echo -n "waiting for device $dev to appear..."
+            try=20
+            while [ $try -gt 0 ]; do
+                sleep 1
+                # also re-try lvm activation now that new block devices might have appeared
+                lvm vgchange -ay
+                # and tell udev to create nodes for the new LVs
+                udevadm trigger --action=add
+                if test -e $dev; then break; fi
+                echo -n "."
+                try=$((try - 1))
+            done
+            echo
+            [ $try -ne 0 ]
+        fi
+    done
 }
 
 # Mount special file systems.
