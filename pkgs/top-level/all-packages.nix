@@ -12368,7 +12368,9 @@ with pkgs;
 
   idris = idrisPackages.with-packages [ idrisPackages.base ] ;
 
-  idris2 = callPackage ../development/compilers/idris2 { };
+  idris2Packages = dontRecurseIntoAttrs (callPackage ../development/idris2-modules { });
+
+  idris2 = idris2Packages.with-packages-no-deps idris2Packages.builtins;
 
   inherit (callPackage ../development/tools/database/indradb { })
     indradb-server
