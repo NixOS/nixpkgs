@@ -72,6 +72,6 @@ buildPythonPackage rec {
     description = "Software for Glasgow, a digital interface multitool";
     homepage = "https://github.com/GlasgowEmbedded/Glasgow";
     license = licenses.bsd0;
-    maintainers = with maintainers; [ emily ];
+    maintainers = with maintainers; [ emily thoughtpolice ];
   };
 }

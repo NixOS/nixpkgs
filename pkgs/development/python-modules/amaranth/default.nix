@@ -65,6 +65,6 @@ buildPythonPackage rec {
     description = "A modern hardware definition language and toolchain based on Python";
     homepage = "https://amaranth-lang.org/docs/amaranth";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ emily ];
+    maintainers = with maintainers; [ emily thoughtpolice ];
   };
 }
