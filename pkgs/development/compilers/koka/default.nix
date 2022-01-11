@@ -4,12 +4,12 @@
 , parsec, process, regex-compat, text, time }:
 
 let
-  version = "2.3.6";
+  version = "2.3.8";
   src = fetchFromGitHub {
     owner = "koka-lang";
     repo = "koka";
     rev = "v${version}";
-    sha256 = "sha256-AibS/HudJKFQZlTxGD5LfwjBawIy1xwO2Hm8qzAUP2M=";
+    sha256 = "sha256-4a9UwtiWq9eFpNHpcrlhYUwzXcr1EXFMjBmDFYP933U=";
     fetchSubmodules = true;
   };
   kklib = stdenv.mkDerivation {
