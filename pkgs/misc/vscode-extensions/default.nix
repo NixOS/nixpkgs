@@ -867,8 +867,8 @@ let
           mktplcRef = {
             name = "vscode-pull-request-github";
             publisher = "github";
-            version = "0.35.2021122109";
-            sha256 = "1n7vjwxm92ibwhgn2n57p54dqpi0vvyllmcgjxilgnr14irg5457";
+            version = "0.35.2022010609";
+            sha256 = "06ryx8b605fd1q2zz8jps7j8r506qwym93x1ra1kc0h9g8a8r7sa";
           };
           meta = { license = lib.licenses.mit; };
         };
