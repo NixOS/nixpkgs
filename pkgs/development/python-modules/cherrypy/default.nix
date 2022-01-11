@@ -1,8 +1,23 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, pythonOlder
-, setuptools-scm
-, cheroot, portend, more-itertools, zc_lockfile, routes
+{ lib
+, stdenv
+, buildPythonPackage
+, cheroot
+, fetchPypi
 , jaraco_collections
-, objgraph, pytest, pytest-cov, pathpy, requests-toolbelt, pytest-services
+, more-itertools
+, objgraph
+, pathpy
+, portend
+, pytest-forked
+, pytest-services
+, pytestCheckHook
+, pythonAtLeast
+, pythonOlder
+, requests-toolbelt
+, routes
+, setuptools-scm
+, simplejson
+, zc_lockfile
 }:
 
 buildPythonPackage rec {
@@ -24,39 +39,49 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     # required
-    cheroot portend more-itertools zc_lockfile
+    cheroot
+    portend
+    more-itertools
+    zc_lockfile
     jaraco_collections
     # optional
     routes
+    simplejson
   ];
 
   checkInputs = [
-    objgraph pytest pytest-cov pathpy requests-toolbelt pytest-services
+    objgraph
+    pathpy
+    pytest-forked
+    pytest-services
+    pytestCheckHook
+    requests-toolbelt
   ];
 
-  
-  # daemonize and autoreload tests have issue with sockets within sandbox
-  # Disable doctest plugin because times out
   preCheck = ''
-    substituteInPlace pytest.ini --replace "--doctest-modules" ""
-    pytest \
-      -k 'not KeyboardInterrupt and not daemonize and not Autoreload' \
-      --deselect=cherrypy/test/test_static.py::StaticTest::test_null_bytes \
-      --deselect=cherrypy/test/test_tools.py::ToolTests::testCombinedTools \
-      ${lib.optionalString stdenv.isDarwin
-        "--deselect=cherrypy/test/test_bus.py::BusMethodTests::test_block --deselect=cherrypy/test/test_config_server.py"}
+    # Disable doctest plugin because times out
+    substituteInPlace pytest.ini \
+      --replace "--doctest-modules" "-vvv"
+    sed -i "/--cov/d" pytest.ini
   '';
+
+  pytestFlagsArray = [
+    "-W"
+    "ignore::DeprecationWarning"
+  ];
 
   disabledTests = [
     # Keyboard interrupt ends test suite run
-    ""
-    ""
-    ""
-    ""
+    "KeyboardInterrupt"
+    # daemonize and autoreload tests have issue with sockets within sandbox
+    "daemonize"
+    "Autoreload"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "test_block"
   ];
 
-  disabledTestPaths = [
-    ""
+  disabledTestPaths = lib.optionals stdenv.isDarwin [
+    "cherrypy/test/test_config_server.py"
   ];
 
   __darwinAllowLocalNetworking = true;
