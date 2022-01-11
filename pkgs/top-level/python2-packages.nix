@@ -122,6 +122,8 @@ with self; with super; {
 
   pytest-xdist = callPackage ../development/python-modules/pytest-xdist/1.nix { };
 
+  pyyaml = callPackage ../development/python-modules/pyyaml/5.nix { };
+
   qpid-python = callPackage ../development/python-modules/qpid-python { };
 
   recoll = disabled super.recoll;
