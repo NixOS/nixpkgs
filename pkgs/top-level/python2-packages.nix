@@ -118,6 +118,8 @@ with self; with super; {
 
   pytest = pytest_4;
 
+  pytest-forked = callPackage ../development/python-modules/pytest-forked/1.3.nix { };
+
   pytest-runner = callPackage ../development/python-modules/pytest-runner/2.nix { };
 
   pytest-xdist = callPackage ../development/python-modules/pytest-xdist/1.nix { };
