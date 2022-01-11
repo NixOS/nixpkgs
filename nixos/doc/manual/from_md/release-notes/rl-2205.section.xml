@@ -277,6 +277,27 @@
           follow with upstream changes.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          JupyterHub module (<literal>services.jupyterhub</literal>) has
+          been reworked to run the service as a non-root user. Default
+          spawner has been changed to <literal>SudoSpawner</literal>,
+          which shouldn’t break existing setups and user data but spawns
+          notebooks in a different way. <literal>jupyterhubEnv</literal>
+          and <literal>jupyterlabEnv</literal> have been removed in
+          favor of <literal>jupyterhubExtraPackages</literal> and
+          <literal>jupyterlabExtraPackages</literal>, which allow more
+          composability. The module now adds some packages to these
+          lists automatically depending on which spawners and
+          authenticators are used. We now also support
+          <literal>DockerSpawner</literal>, which doesn’t allow
+          declarative kernels but may be favored for cases when using
+          standard images and Conda packages is preferred. Finally,
+          <literal>stateDirectory</literal> option has been removed and
+          we now always use <literal>/var/lib/jupyterhub</literal> as
+          the state directory.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.05-notable-changes">
