@@ -7,6 +7,8 @@
 mkDerivation {
   pname = "kgeography";
   meta = {
+    homepage = "https://apps.kde.org/kgeography/";
+    description = "Geography trainer";
     license = with lib.licenses; [ gpl2 ];
     maintainers = [ lib.maintainers.globin ];
   };

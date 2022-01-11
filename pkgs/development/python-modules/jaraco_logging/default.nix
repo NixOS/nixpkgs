@@ -1,19 +1,19 @@
-{ lib, buildPythonPackage, fetchPypi, setuptools_scm
+{ lib, buildPythonPackage, fetchPypi, setuptools-scm
 , tempora, six
 }:
 
 buildPythonPackage rec {
   pname = "jaraco.logging";
-  version = "3.0.0";
+  version = "3.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "31716fe84d3d5df39d95572942513bd4bf8ae0a478f64031eff4c2ea9e83434e";
+    sha256 = "150dc8701207b28bc65a16f0e91c07250a8d1b9da324ce674c0e375774944f13";
   };
 
   pythonNamespaces = [ "jaraco" ];
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
   propagatedBuildInputs = [ tempora six ];
 
   # test no longer packaged with pypi

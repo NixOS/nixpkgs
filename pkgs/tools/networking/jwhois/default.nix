@@ -1,10 +1,11 @@
 {lib, stdenv, lynx, fetchurl}:
 
-stdenv.mkDerivation {
-  name = "jwhois-4.0";
+stdenv.mkDerivation rec {
+  pname = "jwhois";
+  version = "4.0";
 
   src = fetchurl {
-    url = "mirror://gnu/jwhois/jwhois-4.0.tar.gz";
+    url = "mirror://gnu/jwhois/jwhois-${version}.tar.gz";
     sha256 = "0knn7iaj5v0n6jpmldyv2yk4bcy9dn3kywmv63bwc5drh9kvi6zs";
   };
 
@@ -16,6 +17,11 @@ stdenv.mkDerivation {
   patches = [ ./connect.patch ./service-name.patch ];
 
   makeFlags = [ "AR=${stdenv.cc.bintools.targetPrefix}ar" ];
+
+  # Work around error from <stdio.h> on aarch64-darwin:
+  #     error: 'TARGET_OS_IPHONE' is not defined, evaluates to 0 [-Werror,-Wundef-prefix=TARGET_OS_]
+  # TODO: this should probably be fixed at a lower level than this?
+  NIX_CFLAGS_COMPILE = lib.optional stdenv.isDarwin "-Wno-undef-prefix";
 
   meta = {
     description = "A client for the WHOIS protocol allowing you to query the owner of a domain name";

@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "widevine";
+  pname = "widevine";
   version = "4.10.1582.1";
 
   src = fetchurl {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0l743f2yyaq1vvc3iicajgnfpjxjsfvjcqvanndbxs23skgjcv6r";
   };
 
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip ];
 
   unpackPhase = ''
     unzip $src

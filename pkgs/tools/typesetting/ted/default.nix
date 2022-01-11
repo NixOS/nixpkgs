@@ -58,7 +58,8 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  buildInputs = [ pkg-config zlib pcre xorg.xlibsWrapper xorg.libXpm libjpeg libtiff libpng gtk2 libpaper makeWrapper ];
+  nativeBuildInputs = [ pkg-config makeWrapper ];
+  buildInputs = [ zlib pcre xorg.xlibsWrapper xorg.libXpm libjpeg libtiff libpng gtk2 libpaper ];
 
   meta = with lib; {
     description = "An easy rich text processor";

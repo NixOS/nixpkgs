@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-spelling";
-  version = "7.1.0";
+  version = "7.3.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5b4240808a6d21eab9c49e69ad5ac0cb3efb03fe2e94763d23c860f85ec6a799";
+    sha256 = "9d66dc4990749c5ac52e7eaf17e82f4dc6b4aff6515d26bbf48821829d41bd02";
   };
 
   propagatedBuildInputs = [ sphinx pyenchant pbr ]
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Sphinx spelling extension";
     homepage = "https://bitbucket.org/dhellmann/sphinxcontrib-spelling";
-    maintainers = with maintainers; [ nand0p ];
+    maintainers = with maintainers; [ ];
     license = licenses.bsd2;
   };
 

@@ -4,6 +4,8 @@ buildDunePackage rec {
   pname = "camomile";
   version = "1.0.2";
 
+  useDune2 = true;
+
   src = fetchFromGitHub {
     owner = "yoriyuki";
     repo = pname;
@@ -13,7 +15,11 @@ buildDunePackage rec {
 
   buildInputs = [ cppo ];
 
-  configurePhase = "ocaml configure.ml --share $out/share/camomile";
+  configurePhase = ''
+    runHook preConfigure
+    ocaml configure.ml --share $out/share/camomile
+    runHook postConfigure
+  '';
 
   meta = {
     inherit (src.meta) homepage;

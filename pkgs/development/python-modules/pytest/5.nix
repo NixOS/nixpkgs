@@ -1,18 +1,15 @@
 { lib, buildPythonPackage, pythonOlder, fetchPypi, isPy3k, isPyPy
 , atomicwrites
 , attrs
-, funcsigs
 , hypothesis
-, mock
 , more-itertools
 , packaging
 , pathlib2
 , pluggy
 , py
 , pygments
-, python
 , setuptools
-, setuptools_scm
+, setuptools-scm
 , six
 , toml
 , wcwidth
@@ -30,8 +27,13 @@ buildPythonPackage rec {
     sha256 = "1n67lk8iwlsmfdm8663k8l7isllg1xd3n9p1yla7885szhdk6ybr";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "pluggy>=0.12,<1.0" "pluggy>=0.12,<2.0"
+  '';
+
   checkInputs = [ hypothesis pygments ];
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
   propagatedBuildInputs = [
     atomicwrites
     attrs
@@ -65,6 +67,19 @@ buildPythonPackage rec {
         find $out -name .pytest_cache -type d -exec rm -rf {} +
     }
     preDistPhases+=" pytestcachePhase"
+
+    # pytest generates it's own bytecode files to improve assertion messages.
+    # These files similar to cpython's bytecode files but are never laoded
+    # by python interpreter directly. We remove them for a few reasons:
+    # - files are non-deterministic: https://github.com/NixOS/nixpkgs/issues/139292
+    #   (file headers are generatedt by pytest directly and contain timestamps)
+    # - files are not needed after tests are finished
+    pytestRemoveBytecodePhase () {
+        # suffix is defined at:
+        #    https://github.com/pytest-dev/pytest/blob/5.4.3/src/_pytest/assertion/rewrite.py#L42-L45
+        find $out -name "*-pytest-*.py[co]" -delete
+    }
+    preDistPhases+=" pytestRemoveBytecodePhase"
   '';
 
   pythonImportsCheck = [

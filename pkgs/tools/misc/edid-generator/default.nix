@@ -6,11 +6,10 @@
 , zsh
 , modelines ? [] # Modeline "1280x800"   83.50  1280 1352 1480 1680  800 803 809 831 -hsync +vsync
 }:
-let
-  version = "unstable-2018-03-15";
-in stdenv.mkDerivation {
+
+stdenv.mkDerivation rec {
   pname = "edid-generator";
-  inherit version;
+  version = "unstable-2018-03-15";
 
   src = fetchFromGitHub {
     owner = "akatrevorjay";
@@ -37,5 +36,6 @@ in stdenv.mkDerivation {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.flokli ];
     platforms = lib.platforms.all;
+    broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/edid-generator.x86_64-darwin
   };
 }

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, Carbon, Cocoa, ScriptingBridge }:
+{ lib, stdenv, fetchFromGitHub, Carbon, Cocoa, ScriptingBridge, SkyLight }:
 
 stdenv.mkDerivation rec {
   pname = "spacebar";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0f5ddn3sx13rwwh0nfl784160s8ml3m5593d5fz2b1996aznzrsx";
   };
 
-  buildInputs = [ Carbon Cocoa ScriptingBridge ];
+  buildInputs = [ Carbon Cocoa ScriptingBridge SkyLight ];
 
   installPhase = ''
     mkdir -p $out/bin

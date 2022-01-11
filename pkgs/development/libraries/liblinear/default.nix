@@ -4,14 +4,20 @@ let
   soVersion = "4";
 in stdenv.mkDerivation rec {
   pname = "liblinear";
-  version = "2.42";
+  version = "2.43";
 
   src = fetchFromGitHub {
     owner = "cjlin1";
     repo = "liblinear";
     rev = "v${builtins.replaceStrings ["."] [""] version}";
-    sha256 = "0p0hpjajfkskhd7jiv5zwhfa8hi49q3mgifjlkqvy99xspv98ijj";
+    sha256 = "sha256-qcSMuWHJgsapWs1xgxv3fKSXcx18q8cwyIn3E4RCGKA=";
   };
+
+  postPatch = ''
+    substituteInPlace blas/Makefile \
+      --replace "ar rcv" "${stdenv.cc.targetPrefix}ar rcv" \
+      --replace "ranlib" "${stdenv.cc.targetPrefix}ranlib"
+  '';
 
   outputs = [ "bin" "dev" "out" ];
 
@@ -36,7 +42,7 @@ in stdenv.mkDerivation rec {
     description = "A library for large linear classification";
     homepage = "https://www.csie.ntu.edu.tw/~cjlin/liblinear/";
     license = licenses.bsd3;
-    maintainers = [ maintainers.danieldk ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

@@ -1,11 +1,13 @@
 { lib, buildFHSUserEnv, lutris-unwrapped
+, extraPkgs ? pkgs: [ ]
+, extraLibraries ? pkgs: [ ]
 , steamSupport ? true
 }:
 
 let
 
   qt5Deps = pkgs: with pkgs.qt5; [ qtbase qtmultimedia ];
-  gnome3Deps = pkgs: with pkgs; [ gnome3.zenity gtksourceview gnome3.gnome-desktop gnome3.libgnome-keyring webkitgtk ];
+  gnomeDeps = pkgs: with pkgs; [ gnome.zenity gtksourceview gnome.gnome-desktop gnome.libgnome-keyring webkitgtk ];
   xorgDeps = pkgs: with pkgs.xorg; [
     libX11 libXrender libXrandr libxcb libXmu libpthreadstubs libXext libXdmcp
     libXxf86vm libXinerama libSM libXv libXaw libXi libXcursor libXcomposite
@@ -28,7 +30,7 @@ in buildFHSUserEnv {
     # DGen // TODO: libarchive is broken
 
     # Dolphin
-    bluez ffmpeg_3 gettext portaudio wxGTK30 miniupnpc mbedtls lzo sfml gsm
+    bluez ffmpeg gettext portaudio wxGTK30 miniupnpc mbedtls lzo sfml gsm
     wavpack orc nettle gmp pcre vulkan-loader
 
     # DOSBox
@@ -65,8 +67,6 @@ in buildFHSUserEnv {
 
     # Redream // "redream is not available for the x86_64 architecture"
 
-    # ResidualVM
-    flac
 
     # rpcs3 // TODO: "error while loading shared libraries: libz.so.1..."
     llvm
@@ -74,8 +74,11 @@ in buildFHSUserEnv {
     # ScummVM
     nasm sndio
 
+    # ResidualVM is now merged with ScummVM and therefore does not exist anymore
+    flac
+
     # Snes9x
-    epoxy minizip
+    libepoxy minizip
 
     # Vice
     bison flex
@@ -86,8 +89,9 @@ in buildFHSUserEnv {
     # ZDOOM
     soundfont-fluid bzip2 game-music-emu
   ] ++ qt5Deps pkgs
-    ++ gnome3Deps pkgs
-    ++ lib.optional steamSupport pkgs.steam;
+    ++ gnomeDeps pkgs
+    ++ lib.optional steamSupport pkgs.steam
+    ++ extraPkgs pkgs;
 
   multiPkgs = pkgs: with pkgs; [
     # Common
@@ -95,7 +99,7 @@ in buildFHSUserEnv {
     libao libevdev udev libgcrypt libxml2 libusb-compat-0_1 libpng libmpeg2 libv4l
     libjpeg libxkbcommon libass libcdio libjack2 libsamplerate libzip libmad libaio
     libcap libtiff libva libgphoto2 libxslt libsndfile giflib zlib glib
-    alsaLib zziplib bash dbus keyutils zip cabextract freetype unzip coreutils
+    alsa-lib zziplib bash dbus keyutils zip cabextract freetype unzip coreutils
     readline gcc SDL SDL2 curl graphite2 gtk2 gtk3 udev ncurses wayland libglvnd
     vulkan-loader xdg-utils sqlite gnutls p11-kit libbsd harfbuzz
 
@@ -110,11 +114,24 @@ in buildFHSUserEnv {
 
     # Winetricks
     fribidi
-  ] ++ xorgDeps pkgs;
+  ] ++ xorgDeps pkgs
+    ++ extraLibraries pkgs;
 
   extraInstallCommands = ''
     mkdir -p $out/share
     ln -sf ${lutris-unwrapped}/share/applications $out/share
     ln -sf ${lutris-unwrapped}/share/icons $out/share
   '';
+
+  meta = {
+    inherit (lutris-unwrapped.meta)
+      homepage
+      description
+      platforms
+      license
+      maintainers
+      broken;
+
+    mainProgram = "lutris";
+  };
 }

@@ -15,15 +15,16 @@
 , lib
 , glibcLocales
 , setuptools
+, urllib3
 }:
 
 buildPythonPackage rec {
   pname = "internetarchive";
-  version = "1.9.9";
+  version = "2.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a1614cbf35499d833e07699ddfd344764f86959fd5535aa9ce1203f57a77f970";
+    sha256 = "ebd11ecd038c71e75a3aef8d87750b46480169ecaefb23074c4ae48440bf2836";
   };
 
   propagatedBuildInputs = [
@@ -36,6 +37,7 @@ buildPythonPackage rec {
     args
     schema
     setuptools
+    urllib3
   ] ++ lib.optionals (!isPy3k) [ backports_csv ];
 
   checkInputs = [ pytest responses glibcLocales ];
@@ -52,7 +54,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A Python and Command-Line Interface to Archive.org";
     homepage = "https://github.com/jjjake/internetarchive";
-    license = licenses.agpl3;
+    changelog = "https://github.com/jjjake/internetarchive/raw/v${version}/HISTORY.rst";
+    license = licenses.agpl3Plus;
     maintainers = [ maintainers.marsam ];
   };
 }

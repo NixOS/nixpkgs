@@ -1,11 +1,10 @@
 { lib, stdenv
 , buildPythonPackage
-, darwin
 , grpc
 , six
 , protobuf
-, enum34
-, futures
+, enum34 ? null
+, futures ? null
 , isPy27
 , pkg-config
 , cython
@@ -20,8 +19,7 @@ buildPythonPackage rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ cython pkg-config ]
-    ++ lib.optional stdenv.isDarwin darwin.cctools;
+  nativeBuildInputs = [ cython pkg-config ];
 
   buildInputs = [ c-ares openssl zlib ];
   propagatedBuildInputs = [ six protobuf ]

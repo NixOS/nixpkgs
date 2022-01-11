@@ -9,24 +9,17 @@
 
   eigen, zlib,
 
-  cfitsio, indilib, xplanet, libnova, libraw, gsl, wcslib, stellarsolver
+  cfitsio, indi-full, xplanet, libnova, libraw, gsl, wcslib, stellarsolver
 }:
 
 mkDerivation rec {
   pname = "kstars";
-  version = "3.5.1";
+  version = "3.5.6";
 
   src = fetchurl {
     url = "mirror://kde/stable/kstars/kstars-${version}.tar.xz";
-    sha256 = "sha256-gf+yaXiYQFuO1/nvdP6OOuD4QrRtPAQTwQZAbYNKxUU=";
+    sha256 = "sha256-n+fGYLzQAGS8828hr7XE9qiTMyg99L+W7VRjd9aEkrQ=";
   };
-
-  patches = [
-    # Patches ksutils.cpp to use nix store prefixes to find program binaries of
-    # indilib and xplanet dependencies. Without the patch, Ekos is unable to spawn
-    # indi servers for local telescope/camera control.
-    ./fs-fixes.patch
-  ];
 
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
@@ -37,12 +30,12 @@ mkDerivation rec {
 
     eigen zlib
 
-    cfitsio indilib xplanet libnova libraw gsl wcslib stellarsolver
+    cfitsio indi-full xplanet libnova libraw gsl wcslib stellarsolver
   ];
 
   cmakeFlags = [
-    "-DINDI_NIX_ROOT=${indilib}"
-    "-DXPLANET_NIX_ROOT=${xplanet}"
+    "-DINDI_PREFIX=${indi-full}"
+    "-DXPLANET_PREFIX=${xplanet}"
   ];
 
   meta = with lib; {
@@ -53,7 +46,7 @@ mkDerivation rec {
       The display includes up to 100 million stars, 13.000 deep-sky objects, all 8 planets, the Sun and Moon, and thousands of comets, asteroids, supernovae, and satellites.
       For students and teachers, it supports adjustable simulation speeds in order to view phenomena that happen over long timescales, the KStars Astrocalculator to predict conjunctions, and many common astronomical calculations.
     '';
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ timput hjones2199 ];
   };

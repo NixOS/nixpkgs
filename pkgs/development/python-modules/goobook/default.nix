@@ -1,6 +1,6 @@
 { lib, buildPythonPackage, fetchPypi, isPy3k
 , docutils, installShellFiles
-, google_api_python_client, simplejson, oauth2client, setuptools, xdg
+, google-api-python-client, simplejson, oauth2client, setuptools, xdg
 }:
 
 buildPythonPackage rec {
@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ docutils installShellFiles ];
   propagatedBuildInputs = [
-    google_api_python_client simplejson oauth2client setuptools xdg
+    google-api-python-client simplejson oauth2client setuptools xdg
   ];
 
   postInstall = ''

@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     description = "Mail sorter for Maildirs";
     homepage = "http://philter.sourceforge.net";
     maintainers = with maintainers; [ raskin ];
-    platforms = platforms.linux;
+    platforms = platforms.all;
     license = licenses.gpl2;
   };
 

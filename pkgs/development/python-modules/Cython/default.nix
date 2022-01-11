@@ -12,8 +12,7 @@
 }:
 
 let
-  excludedTests = []
-    ++ [ "reimport_from_subinterpreter" ]
+  excludedTests = [ "reimport_from_subinterpreter" ]
     # cython's testsuite is not working very well with libc++
     # We are however optimistic about things outside of testsuite still working
     ++ lib.optionals (stdenv.cc.isClang or false) [ "cpdef_extern_func" "libcpp_algo" ]
@@ -26,20 +25,22 @@ let
 
 in buildPythonPackage rec {
   pname = "Cython";
-  version = "0.29.21";
+  version = "0.29.24";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1bcwpra7c6k30yvic3sw2v3rq2dr40ypc4zqif6kr52mpn4wnyp5";
+    sha256 = "sha256-zfBNB8NgCGDowuuq1Oj1KsP+shJFPBdkpJrAjIJ+hEM=";
   };
 
   nativeBuildInputs = [
     pkg-config
   ];
+
   checkInputs = [
-    numpy ncurses
+    gdb numpy ncurses
   ];
-  buildInputs = [ glibcLocales gdb ];
+
+  buildInputs = [ glibcLocales ];
   LC_ALL = "en_US.UTF-8";
 
   patches = [
@@ -48,6 +49,15 @@ in buildPythonPackage rec {
       name = "non-int-conversion-to-pyhash.patch";
       url = "https://github.com/cython/cython/commit/28251032f86c266065e4976080230481b1a1bb29.patch";
       sha256 = "19rg7xs8gr90k3ya5c634bs8gww1sxyhdavv07cyd2k71afr83gy";
+    })
+
+    # backport Cython 3.0 trashcan support (https://github.com/cython/cython/pull/2842) to 0.X series.
+    # it does not affect Python code unless the code explicitly uses the feature.
+    # trashcan support is needed to avoid stack overflows during object deallocation in sage (https://trac.sagemath.org/ticket/27267)
+    (fetchpatch {
+      name = "trashcan.patch";
+      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/cython/patches/trashcan.patch?id=4569a839f070a1a38d5dbce2a4d19233d25aeed2";
+      sha256 = "sha256-+pOF1XNTEtNseLpqPzrc1Jfwt5hGx7doUoccIhNneYY=";
     })
   ];
 
@@ -62,9 +72,7 @@ in buildPythonPackage rec {
   # https://github.com/cython/cython/issues/2785
   # Temporary solution
   doCheck = false;
-
-#   doCheck = !stdenv.isDarwin;
-
+  # doCheck = !stdenv.isDarwin;
 
   meta = {
     description = "An optimising static compiler for both the Python programming language and the extended Cython programming language";

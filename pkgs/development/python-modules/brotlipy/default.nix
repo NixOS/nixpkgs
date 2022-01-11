@@ -19,6 +19,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ cffi enum34 construct ];
 
+  propagatedNativeBuildInputs = [ cffi ];
+
   checkInputs = [ pytest hypothesis ];
 
   checkPhase = ''

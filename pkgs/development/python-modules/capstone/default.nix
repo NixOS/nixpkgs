@@ -1,9 +1,8 @@
-{ lib, stdenv
+{ lib
 , buildPythonPackage
-, fetchPypi
-, fetchpatch
-, setuptools
 , capstone
+, stdenv
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -11,11 +10,12 @@ buildPythonPackage rec {
   version = lib.getVersion capstone;
 
   src = capstone.src;
-  sourceRoot = "${capstone.name}/bindings/python";
+  sourceRoot = "source/bindings/python";
 
   postPatch = ''
     ln -s ${capstone}/lib/libcapstone${stdenv.targetPlatform.extensions.sharedLibrary} prebuilt/
     ln -s ${capstone}/lib/libcapstone.a prebuilt/
+    substituteInPlace setup.py --replace manylinux1 manylinux2014
   '';
 
   propagatedBuildInputs = [ setuptools ];

@@ -34,8 +34,13 @@ in {
             type = "tcp";
             location = "127.0.0.1:${toString tcpStreamPort}";
           };
+          meta = {
+            type = "meta";
+            location = "/mpd/bluetooth/tcp";
+          };
         };
       };
+      environment.systemPackages = [ pkgs.snapcast ];
     };
     client = {
       environment.systemPackages = [ pkgs.snapcast ];
@@ -67,11 +72,18 @@ in {
             "curl --fail http://localhost:${toString httpPort}/jsonrpc -d '{json.dumps(get_rpc_version)}'"
         )
 
-    with subtest("test a connection"):
-        client.execute("systemd-run snapclient -h server -p ${toString port}")
+    with subtest("test a ipv6 connection"):
+        server.execute("systemd-run --unit=snapcast-local-client snapclient -h ::1 -p ${toString port}")
         server.wait_until_succeeds(
             "journalctl -o cat -u snapserver.service | grep -q 'Hello from'"
         )
-        client.wait_until_succeeds("journalctl -o cat -u run-\* | grep -q ${toString bufferSize}")
+        server.wait_until_succeeds("journalctl -o cat -u snapcast-local-client | grep -q 'buffer: ${toString bufferSize}'")
+
+    with subtest("test a connection"):
+        client.execute("systemd-run --unit=snapcast-client snapclient -h server -p ${toString port}")
+        server.wait_until_succeeds(
+            "journalctl -o cat -u snapserver.service | grep -q 'Hello from'"
+        )
+        client.wait_until_succeeds("journalctl -o cat -u snapcast-client | grep -q 'buffer: ${toString bufferSize}'")
   '';
 })

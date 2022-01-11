@@ -1,12 +1,12 @@
 { callPackage, fetchFromGitHub, ... } @ args:
 
 callPackage ./generic.nix (args // rec {
-  version = "3.2.0";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner  = "msgpack";
     repo   = "msgpack-c";
     rev    = "cpp-${version}";
-    sha256 = "07n0kdmdjn3amwfg7fqz3xac1yrrxh7d2l6p4pgc6as087pbm8pl";
+    sha256 = "02dxgzxlwn8g9ca2j4m0rjvdq1k2iciy6ickj615daz5w8pcjajd";
   };
 })

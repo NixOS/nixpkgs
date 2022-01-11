@@ -40,7 +40,8 @@ buildGoModule rec {
   '';
 
   subPackages = [ "." ];
-  buildInputs = [ llvm clang-unwrapped makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ llvm clang-unwrapped ];
   propagatedBuildInputs = [ lld avrgcc avrdude openocd gcc-arm-embedded ];
 
   postInstall = ''

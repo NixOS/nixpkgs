@@ -2,24 +2,24 @@
 
 buildGoModule rec {
   pname = "lab";
-  version = "0.19.0";
+  version = "0.23.0";
 
   src = fetchFromGitHub {
     owner = "zaquestion";
     repo = "lab";
     rev = "v${version}";
-    sha256 = "1l6xsikd1113qd4y0mvjsl64gbi4327m9v4d593f27fxink39j8s";
+    sha256 = "0g8v3cli8rvr0zsxiv4w0afzqmh0d85a832c4hc75b3f9amkr0dl";
   };
 
   subPackages = [ "." ];
 
-  vendorSha256 = "07zl5xhzgrgr5skba6cds5nal58pllf10gak0ap62j1k9gk2ych2";
+  vendorSha256 = "09xn5vycb9shygs13pfwxlb89j6rhrbplm10mfgxi4kzlvm7agl6";
 
   doCheck = false;
 
   nativeBuildInputs = [ makeWrapper installShellFiles ];
 
-  buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
+  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
   postInstall = ''
     wrapProgram $out/bin/lab --prefix PATH ":" "${lib.makeBinPath [ git xdg-utils ]}";
@@ -33,6 +33,6 @@ buildGoModule rec {
     description = "Lab wraps Git or Hub, making it simple to clone, fork, and interact with repositories on GitLab";
     homepage = "https://zaquestion.github.io/lab";
     license = licenses.cc0;
-    maintainers = with maintainers; [ marsam dtzWill ];
+    maintainers = with maintainers; [ marsam dtzWill SuperSandro2000 ];
   };
 }

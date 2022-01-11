@@ -1,9 +1,35 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
   cfg = config.services.kubernetes;
+  opt = options.services.kubernetes;
+
+  defaultContainerdSettings = {
+    version = 2;
+    root = "/var/lib/containerd";
+    state = "/run/containerd";
+    oom_score = 0;
+
+    grpc = {
+      address = "/run/containerd/containerd.sock";
+    };
+
+    plugins."io.containerd.grpc.v1.cri" = {
+      sandbox_image = "pause:latest";
+
+      cni = {
+        bin_dir = "/opt/cni/bin";
+        max_conf_num = 0;
+      };
+
+      containerd.runtimes.runc = {
+        runtime_type = "io.containerd.runc.v2";
+        options.SystemdCgroup = true;
+      };
+    };
+  };
 
   mkKubeConfig = name: conf: pkgs.writeText "${name}-kubeconfig" (builtins.toJSON {
     apiVersion = "v1";
@@ -25,8 +51,9 @@ let
         cluster = "local";
         user = name;
       };
-      current-context = "local";
+      name = "local";
     }];
+    current-context = "local";
   });
 
   caCert = secret "ca";
@@ -58,6 +85,7 @@ let
       description = "${prefix} certificate authority file used to connect to kube-apiserver.";
       type = types.nullOr types.path;
       default = cfg.caFile;
+      defaultText = literalExpression "config.${opt.caFile}";
     };
 
     certFile = mkOption {
@@ -75,6 +103,7 @@ let
 in {
 
   imports = [
+    (mkRemovedOptionModule [ "services" "kubernetes" "addons" "dashboard" ] "Removed due to it being an outdated version")
     (mkRemovedOptionModule [ "services" "kubernetes" "verbose" ] "")
   ];
 
@@ -97,7 +126,7 @@ in {
       description = "Kubernetes package to use.";
       type = types.package;
       default = pkgs.kubernetes;
-      defaultText = "pkgs.kubernetes";
+      defaultText = literalExpression "pkgs.kubernetes";
     };
 
     kubeconfig = mkKubeConfigOptions "Default kubeconfig";
@@ -167,6 +196,9 @@ in {
       description = "Default location for kubernetes secrets. Not a store location.";
       type = types.path;
       default = cfg.dataDir + "/secrets";
+      defaultText = literalExpression ''
+        config.${opt.dataDir} + "/secrets"
+      '';
     };
   };
 
@@ -222,14 +254,9 @@ in {
     })
 
     (mkIf cfg.kubelet.enable {
-      virtualisation.docker = {
+      virtualisation.containerd = {
         enable = mkDefault true;
-
-        # kubernetes needs access to logs
-        logDriver = mkDefault "json-file";
-
-        # iptables must be disabled for kubernetes
-        extraOptions = "--iptables=false --ip-masq=false";
+        settings = mapAttrsRecursive (name: mkDefault) defaultContainerdSettings;
       };
     })
 
@@ -269,7 +296,6 @@ in {
       users.users.kubernetes = {
         uid = config.ids.uids.kubernetes;
         description = "Kubernetes user";
-        extraGroups = [ "docker" ];
         group = "kubernetes";
         home = cfg.dataDir;
         createHome = true;
@@ -284,4 +310,6 @@ in {
                           else "${cfg.masterAddress}:${toString cfg.apiserver.securePort}"}");
     })
   ];
+
+  meta.buildDocsInSandbox = false;
 }

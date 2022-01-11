@@ -28,14 +28,38 @@ let
             You still need to set the <literal>image</literal> attribute, as it
             will be used as the image name for docker to start a container.
           '';
-          example = literalExample "pkgs.dockerTools.buildDockerImage {...};";
+          example = literalExpression "pkgs.dockerTools.buildImage {...};";
+        };
+
+        login = {
+
+          username = mkOption {
+            type = with types; nullOr str;
+            default = null;
+            description = "Username for login.";
+          };
+
+          passwordFile = mkOption {
+            type = with types; nullOr str;
+            default = null;
+            description = "Path to file containing password.";
+            example = "/etc/nixos/dockerhub-password.txt";
+          };
+
+          registry = mkOption {
+            type = with types; nullOr str;
+            default = null;
+            description = "Registry where to login to.";
+            example = "https://docker.pkg.github.com";
+          };
+
         };
 
         cmd = mkOption {
           type =  with types; listOf str;
           default = [];
           description = "Commandline arguments to pass to the image's entrypoint.";
-          example = literalExample ''
+          example = literalExpression ''
             ["--port=9000"]
           '';
         };
@@ -51,11 +75,23 @@ let
           type = with types; attrsOf str;
           default = {};
           description = "Environment variables to set for this container.";
-          example = literalExample ''
+          example = literalExpression ''
             {
               DATABASE_HOST = "db.example.com";
               DATABASE_PORT = "3306";
             }
+        '';
+        };
+
+        environmentFiles = mkOption {
+          type = with types; listOf path;
+          default = [];
+          description = "Environment files for this container.";
+          example = literalExpression ''
+            [
+              /path/to/.env
+              /path/to/.env.secret
+            ]
         '';
         };
 
@@ -124,7 +160,7 @@ let
             <link xlink:href="https://docs.docker.com/engine/reference/run/#expose-incoming-ports">
             Docker engine documentation</link> for full details.
           '';
-          example = literalExample ''
+          example = literalExpression ''
             [
               "8080:9000"
             ]
@@ -155,7 +191,7 @@ let
             <link xlink:href="https://docs.docker.com/engine/reference/run/#volume-shared-filesystems">
             docker engine documentation</link> for details.
           '';
-          example = literalExample ''
+          example = literalExpression ''
             [
               "volume_name:/path/inside/container"
               "/path/on/host:/path/inside/container"
@@ -178,7 +214,7 @@ let
 
             Use the same name as the attribute under <literal>virtualisation.oci-containers.containers</literal>.
           '';
-          example = literalExample ''
+          example = literalExpression ''
             virtualisation.oci-containers.containers = {
               node1 = {};
               node2 = {
@@ -192,7 +228,7 @@ let
           type = with types; listOf str;
           default = [];
           description = "Extra options for <command>${defaultBackend} run</command>.";
-          example = literalExample ''
+          example = literalExpression ''
             ["--network=host"]
           '';
         };
@@ -207,6 +243,8 @@ let
         };
       };
     };
+
+  isValidLogin = login: login.username != null && login.passwordFile != null && login.registry != null;
 
   mkService = name: container: let
     dependsOn = map (x: "${cfg.backend}-${x}.service") container.dependsOn;
@@ -223,6 +261,13 @@ let
 
     preStart = ''
       ${cfg.backend} rm -f ${name} || true
+      ${optionalString (isValidLogin container.login) ''
+        cat ${container.login.passwordFile} | \
+          ${cfg.backend} login \
+            ${container.login.registry} \
+            --username ${container.login.username} \
+            --password-stdin
+        ''}
       ${optionalString (container.imageFile != null) ''
         ${cfg.backend} load -i ${container.imageFile}
         ''}
@@ -236,6 +281,7 @@ let
     ] ++ optional (container.entrypoint != null)
       "--entrypoint=${escapeShellArg container.entrypoint}"
       ++ (mapAttrsToList (k: v: "-e ${escapeShellArg k}=${escapeShellArg v}") container.environment)
+      ++ map (f: "--env-file ${escapeShellArg f}") container.environmentFiles
       ++ map (p: "-p ${escapeShellArg p}") container.ports
       ++ optional (container.user != null) "-u ${escapeShellArg container.user}"
       ++ map (v: "-v ${escapeShellArg v}") container.volumes
@@ -249,9 +295,6 @@ let
     postStop = "${cfg.backend} rm -f ${name} || true";
 
     serviceConfig = {
-      StandardOutput = "null";
-      StandardError = "null";
-
       ### There is no generalized way of supporting `reload` for docker
       ### containers. Some containers may respond well to SIGHUP sent to their
       ### init process, but it is not guaranteed; some apps have other reload

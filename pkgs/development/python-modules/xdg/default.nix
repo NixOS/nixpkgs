@@ -5,7 +5,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "5.0.1";
+  version = "5.1.1";
   pname = "xdg";
   disabled = isPy27;
   format = "pyproject";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "srstevenson";
     repo = pname;
     rev = version;
-    sha256 = "sha256-WMY9Hs9SbErTp8hVBoCWTz4dLQhuzqTRpXFEyE7+woo=";
+    sha256 = "sha256-z/Zvo2WGw9qA+M3Pt9r35DuxtuhL7/I75LlFEdDOJcc=";
   };
 
   nativeBuildInputs = [ poetry-core ];

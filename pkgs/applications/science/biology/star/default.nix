@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "star";
-  version = "2.7.7a";
+  version = "2.7.9a";
 
   src = fetchFromGitHub {
     repo = "STAR";
     owner = "alexdobin";
     rev = version;
-    sha256 = "sha256-0K49yjcnTzC56ZIB20OeTiMJ5EW8mRx+xEpyWEfFcts=";
+    sha256 = "sha256-p1yaIbSGu8K5AkqJj0BAzuoWsXr25eCNoQmLXYQeg4E=";
   };
 
   sourceRoot = "source/source";
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     description = "Spliced Transcripts Alignment to a Reference";
     homepage = "https://github.com/alexdobin/STAR";
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
     maintainers = [ maintainers.arcadio ];
   };
 }

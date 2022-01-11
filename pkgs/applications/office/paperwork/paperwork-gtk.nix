@@ -2,9 +2,9 @@
 , python3Packages
 , gtk3
 , cairo
-, gnome3
+, gnome
 , librsvg
-, xvfb_run
+, xvfb-run
 , dbus
 , libnotify
 , wrapGAppsHook
@@ -12,10 +12,25 @@
 , which
 , gettext
 , gobject-introspection
+, gdk-pixbuf
+, texlive
+, imagemagick
+, perlPackages
 }:
 
+let
+  documentation_deps = [
+    (texlive.combine {
+      inherit (texlive) scheme-small wrapfig was;
+    })
+    xvfb-run
+    imagemagick
+    perlPackages.Po4a
+  ];
+in
+
 python3Packages.buildPythonApplication rec {
-  inherit (import ./src.nix { inherit fetchFromGitLab; }) version src;
+  inherit (import ./src.nix { inherit fetchFromGitLab; }) version src sample_documents;
   pname = "paperwork";
 
   sourceRoot = "source/paperwork-gtk";
@@ -51,19 +66,27 @@ python3Packages.buildPythonApplication rec {
     for i in $site/data/paperwork_*.png; do
       ln -s $i $site/icon/out;
     done
+
+    export XDG_DATA_DIRS=$XDG_DATA_DIRS:${gnome.adwaita-icon-theme}/share
+    # build the user manual
+    PATH=$out/bin:$PATH PAPERWORK_TEST_DOCUMENTS=${sample_documents} make data
+    for i in src/paperwork_gtk/model/help/out/*.pdf; do
+      install -Dt $site/model/help/out $i
+    done
   '';
 
-  checkInputs = [ xvfb_run dbus.daemon ];
+  checkInputs = [ dbus.daemon ];
 
   nativeBuildInputs = [
     wrapGAppsHook
     gobject-introspection
     (lib.getBin gettext)
     which
-  ];
+    gdk-pixbuf # for the setup hook
+  ] ++ documentation_deps;
 
   buildInputs = [
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
     libnotify
     librsvg
     gtk3
@@ -76,13 +99,20 @@ python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  # A few parts of chkdeps need to have a display and a dbus session, so we not
-  # only need to run a virtual X server + dbus but also have a large enough
-  # resolution, because the Cairo test tries to draw a 200x200 window.
-  preCheck = ''
+  checkPhase = ''
+    runHook preCheck
+
+    # A few parts of chkdeps need to have a display and a dbus session, so we not
+    # only need to run a virtual X server + dbus but also have a large enough
+    # resolution, because the Cairo test tries to draw a 200x200 window.
     xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
       --config-file=${dbus.daemon}/share/dbus-1/session.conf \
       $out/bin/paperwork-gtk chkdeps
+
+    # content of make test, without the dep on make install
+    python -m unittest discover --verbose -s tests
+
+    runHook postCheck
   '';
 
   propagatedBuildInputs = with python3Packages; [
@@ -92,9 +122,11 @@ python3Packages.buildPythonApplication rec {
     openpaperwork-core
     pypillowfight
     pyxdg
-    dateutil
+    python-dateutil
     setuptools
   ];
+
+  disallowedRequisites = documentation_deps;
 
   meta = {
     description = "A personal document manager for scanned documents";

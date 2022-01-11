@@ -15,13 +15,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "postgis";
-  version = "3.1.1";
+  version = "3.2.0";
 
   outputs = [ "out" "doc" ];
 
   src = fetchurl {
     url = "https://download.osgeo.org/postgis/source/postgis-${version}.tar.gz";
-    sha256 = "0z9a39243fv37mansbbjq5mmxpnhr7xzn8pv92fr7dkdb3psz5hf";
+    sha256 = "sha256-ernhVMaUfAz/uPoS1wgGrdmqBg5itshqLiBvnUtQfP0=";
   };
 
   buildInputs = [ libxml2 postgresql geos proj gdal json_c protobufc ]

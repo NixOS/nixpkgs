@@ -33,11 +33,11 @@
    <link xlink:href="https://github.com/matrix-org/synapse#synapse-installation">
    installation instructions of Synapse </link>.
 <programlisting>
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 let
   fqdn =
     let
-      join = hostName: domain: hostName + optionalString (domain != null) ".${domain}";
+      join = hostName: domain: hostName + lib.optionalString (domain != null) ".${domain}";
     in join config.networking.hostName config.networking.domain;
 in {
   networking = {
@@ -132,7 +132,7 @@ in {
       }
     ];
   };
-};
+}
 </programlisting>
   </para>
 

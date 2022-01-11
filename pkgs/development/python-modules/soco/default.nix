@@ -1,55 +1,47 @@
-{ buildPythonPackage
-, coveralls
+{ lib
+, buildPythonPackage
 , fetchFromGitHub
-, flake8
 , graphviz
-, lib
+, ifaddr
+, pythonOlder
 , mock
+, nix-update-script
 , pytestCheckHook
 , requests
-, sphinx
-, sphinx_rtd_theme
-, toml
+, requests-mock
 , xmltodict
 }:
 
 buildPythonPackage rec {
   pname = "soco";
-  version = "0.20";
+  version = "0.25.3";
+  disabled = pythonOlder "3.6";
 
-  # N.B. We fetch from GitHub because the PyPI tarball doesn't contain the
-  # required files to run the tests.
   src = fetchFromGitHub {
     owner = "SoCo";
     repo = "SoCo";
     rev = "v${version}";
-    sha256 = "0p87aw7wxgdjz0m0nqqcfvbn24hlbq1hh1zxdq2c0k2jcbmaj8zc";
+    sha256 = "sha256-CoAmpcXy4oHMk0X4iJ/XMbUnI2m3ZWl8QzobH677FrI=";
   };
 
-  # N.B. These exist because:
-  # 1. Upstream's pinning isn't well maintained, leaving dependency versions no
-  #    longer in nixpkgs.
-  # 2. There is no benefit for us to be running linting and coverage tests.
-  postPatch = ''
-    sed -i "/black/d" ./requirements-dev.txt
-    sed -i "/pylint/d" ./requirements-dev.txt
-    sed -i "/pytest-cov/d" ./requirements-dev.txt
-  '';
-
   propagatedBuildInputs = [
+    ifaddr
     requests
-    toml
     xmltodict
   ];
+
   checkInputs = [
     pytestCheckHook
-    coveralls
-    flake8
     graphviz
     mock
-    sphinx
-    sphinx_rtd_theme
+    requests-mock
   ];
+
+  pythonImportsCheck = [ "soco" ];
+
+  passthru.updateScript = nix-update-script {
+    attrPath = "python3Packages.${pname}";
+  };
 
   meta = with lib; {
     homepage = "http://python-soco.com/";

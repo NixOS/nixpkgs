@@ -1,7 +1,8 @@
 {lib, stdenv, fetchurl, unzip}:
 
 stdenv.mkDerivation {
-  name = "ent-1.1";
+  pname = "ent";
+  version = "1.1";
 
   src = fetchurl {
     url = "https://www.fourmilab.ch/random/random.zip";
@@ -12,7 +13,7 @@ stdenv.mkDerivation {
   # case that happens when the archive doesn't have a subdirectory.
   setSourceRoot = "sourceRoot=`pwd`";
 
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip ];
 
   buildFlags = lib.optional stdenv.cc.isClang "CC=clang";
 

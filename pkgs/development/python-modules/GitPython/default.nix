@@ -1,21 +1,24 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, isPy27
+, fetchFromGitHub
 , substituteAll
 , git
 , gitdb
 , ddt
+, pythonOlder
+, typing-extensions
 }:
 
 buildPythonPackage rec {
-  pname = "GitPython";
-  version = "3.1.12";
-  disabled = isPy27; # no longer supported
+  pname = "gitpython";
+  version = "3.1.24";
+  disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-Qtvv2NniV2xJbtAFnzED3O9xJbnOFvnV+cg0rtRKHaw=";
+  src = fetchFromGitHub {
+    owner = "gitpython-developers";
+    repo = "GitPython";
+    rev = version;
+    sha256 = "sha256-KfR14EqXsDgIZUerk/hHDB0Z7IuqncbTNd/yNwrV9I0=";
   };
 
   patches = [
@@ -25,10 +28,16 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [ gitdb ddt ];
+  propagatedBuildInputs = [
+    gitdb
+    ddt
+  ] ++ lib.optionals (pythonOlder "3.10") [
+    typing-extensions
+  ];
 
   # Tests require a git repo
   doCheck = false;
+
   pythonImportsCheck = [ "git" ];
 
   meta = with lib; {

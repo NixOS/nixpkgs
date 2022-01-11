@@ -1,33 +1,55 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, grpc_google_iam_v1
 , google-api-core
 , google-cloud-core
-, pytest
+, grpc-google-iam-v1
+, libcst
 , mock
+, proto-plus
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-bigtable";
-  version = "1.6.1";
+  version = "2.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ace4ff7c6e00fb7d86963503615db85336b6484339f5774bd8c589df224772a8";
+    sha256 = "b8472c91b05159f20121fcca6ebdc2a3b5648d68158ec747860914279b6b983b";
   };
 
-  checkInputs = [ pytest mock ];
-  propagatedBuildInputs = [ grpc_google_iam_v1 google-api-core google-cloud-core ];
+  propagatedBuildInputs = [
+    google-api-core
+    google-cloud-core
+    grpc-google-iam-v1
+    libcst
+    proto-plus
+  ];
+
+  checkInputs = [
+    mock
+    pytestCheckHook
+  ];
 
   checkPhase = ''
+    # Prevent google directory from shadowing google imports
     rm -r google
-    pytest tests/unit -k 'not policy'
   '';
+
+  disabledTests = [
+    "policy"
+  ];
+
+  pythonImportsCheck = [
+    "google.cloud.bigtable_admin_v2"
+    "google.cloud.bigtable_v2"
+    "google.cloud.bigtable"
+  ];
 
   meta = with lib; {
     description = "Google Cloud Bigtable API client library";
-    homepage = "https://github.com/GoogleCloudPlatform/google-cloud-python";
+    homepage = "https://github.com/googleapis/python-bigtable";
     license = licenses.asl20;
     maintainers = [ maintainers.costrouc ];
   };

@@ -1,0 +1,53 @@
+diff --git a/cmd/cluster_kubeconfig.go b/cmd/cluster_kubeconfig.go
+index 54cc0c9..fab288a 100644
+--- a/cmd/cluster_kubeconfig.go
++++ b/cmd/cluster_kubeconfig.go
+@@ -6,7 +6,7 @@ import (
+ 	"io/ioutil"
+ 	"log"
+ 	"os"
+-	"os/user"
++	"path/filepath"
+ 	"strings"
+ 
+ 	"github.com/spf13/cobra"
+@@ -52,9 +52,8 @@ Example 4: hetzner-kube cluster kubeconfig -n my-cluster -p > my-conf.yaml # pri
+ 		} else {
+ 			fmt.Println("create file")
+ 
+-			usr, _ := user.Current()
+-			dir := usr.HomeDir
+-			path := fmt.Sprintf("%s/.kube", dir)
++			dir, _ := os.UserHomeDir()
++			path := filepath.Join(dir, ".kube")
+ 
+ 			if _, err := os.Stat(path); os.IsNotExist(err) {
+ 				os.MkdirAll(path, 0755)
+diff --git a/cmd/config.go b/cmd/config.go
+index ce0f3e5..a03c4ba 100644
+--- a/cmd/config.go
++++ b/cmd/config.go
+@@ -8,7 +8,6 @@ import (
+ 	"io/ioutil"
+ 	"log"
+ 	"os"
+-	"os/user"
+ 	"path/filepath"
+ 
+ 	"github.com/hetznercloud/hcloud-go/hcloud"
+@@ -28,13 +27,8 @@ type AppSSHClient struct {
+ // NewAppConfig creates a new AppConfig struct using the locally saved configuration file. If no local
+ // configuration file is found a new config will be created.
+ func NewAppConfig() AppConfig {
+-	usr, err := user.Current()
+-	if err != nil {
+-		return AppConfig{}
+-	}
+-	if usr.HomeDir != "" {
+-		DefaultConfigPath = filepath.Join(usr.HomeDir, ".hetzner-kube")
+-	}
++	dir, _ := os.UserHomeDir()
++	DefaultConfigPath = filepath.Join(dir, ".hetzner-kube")
+ 
+ 	appConf := AppConfig{
+ 		Context: context.Background(),

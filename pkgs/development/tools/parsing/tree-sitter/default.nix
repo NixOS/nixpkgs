@@ -1,9 +1,21 @@
-{ lib, stdenv
-, fetchgit, fetchFromGitHub, fetchurl
-, writeShellScript, runCommand, which, formats
-, rustPlatform, jq, nix-prefetch-git, xe, curl, emscripten
+{ lib
+, stdenv
+, fetchgit
+, fetchFromGitHub
+, fetchurl
+, writeShellScript
+, runCommand
+, which
+, formats
+, rustPlatform
+, jq
+, nix-prefetch-git
+, xe
+, curl
+, emscripten
 , Security
 , callPackage
+, linkFarm
 
 , enableShared ? !stdenv.hostPlatform.isStatic
 , enableStatic ? stdenv.hostPlatform.isStatic
@@ -16,14 +28,14 @@ let
   # 1) change all these hashes
   # 2) nix-build -A tree-sitter.updater.update-all-grammars
   # 3) run the ./result script that is output by that (it updates ./grammars)
-  version = "0.17.3";
-  sha256 = "sha256-uQs80r9cPX8Q46irJYv2FfvuppwonSS5HVClFujaP+U=";
-  cargoSha256 = "sha256-fonlxLNh9KyEwCj7G5vxa7cM/DlcHNFbQpp0SwVQ3j4=";
+  version = "0.20.1";
+  sha256 = "sha256-JKbL05hFWI0jhAnRT9D0SWCoRPFqoMD4+LQQ1zyWc7g=";
+  cargoSha256 = "sha256-64O+3GrDqhRGth20B2/+jNDYSnwvT3SqYVqYNthiCB0=";
 
   src = fetchFromGitHub {
     owner = "tree-sitter";
     repo = "tree-sitter";
-    rev = version;
+    rev = "v${version}";
     inherit sha256;
     fetchSubmodules = true;
   };
@@ -32,35 +44,65 @@ let
     inherit writeShellScript nix-prefetch-git curl jq xe src formats lib;
   };
 
-  fetchGrammar = (v: fetchgit {inherit (v) url rev sha256 fetchSubmodules; });
+  fetchGrammar = (v: fetchgit { inherit (v) url rev sha256 fetchSubmodules; });
 
   grammars =
-    runCommand "grammars" {} (''
-       mkdir $out
-     '' + (lib.concatStrings (lib.mapAttrsToList
-            (name: grammar: "ln -s ${fetchGrammar grammar} $out/${name}\n")
-            (import ./grammars))));
+    runCommand "grammars" { } (''
+      mkdir $out
+    '' + (lib.concatStrings (lib.mapAttrsToList
+      (name: grammar: "ln -s ${fetchGrammar grammar} $out/${name}\n")
+      (import ./grammars { inherit lib; }))));
 
-  builtGrammars = let
-    change = name: grammar:
-      callPackage ./grammar.nix {} {
-        language = name;
-        inherit version;
-        source = fetchGrammar grammar;
-      };
-  in
-    lib.mapAttrs change (removeAttrs (import ./grammars) [
-      # TODO these don't have parser.c in the same place as others.
-      # They might require more elaborate builds?
-      #  /nix/…/src/parser.c: No such file or directory
-      "tree-sitter-typescript"
-      #  /nix/…/src/parser.c: No such file or directory
-      "tree-sitter-ocaml"
-      # /nix/…/src/parser.c:1:10: fatal error: tree_sitter/parser.h: No such file or directory
-      "tree-sitter-razor"
-    ]);
+  builtGrammars =
+    let
+      change = name: grammar:
+        callPackage ./grammar.nix { } {
+          language = name;
+          inherit version;
+          source = fetchGrammar grammar;
+          location = if grammar ? location then grammar.location else null;
+        };
+      grammars' = (import ./grammars { inherit lib; });
+      grammars = grammars' //
+        { tree-sitter-ocaml = grammars'.tree-sitter-ocaml // { location = "ocaml"; }; } //
+        { tree-sitter-ocaml-interface = grammars'.tree-sitter-ocaml // { location = "interface"; }; } //
+        { tree-sitter-typescript = grammars'.tree-sitter-typescript // { location = "typescript"; }; } //
+        { tree-sitter-tsx = grammars'.tree-sitter-typescript // { location = "tsx"; }; };
+    in
+    lib.mapAttrs change grammars;
 
-in rustPlatform.buildRustPackage {
+  # Usage:
+  # pkgs.tree-sitter.withPlugins (p: [ p.tree-sitter-c p.tree-sitter-java ... ])
+  #
+  # or for all grammars:
+  # pkgs.tree-sitter.withPlugins (_: allGrammars)
+  # which is equivalent to
+  # pkgs.tree-sitter.withPlugins (p: builtins.attrValues p)
+  withPlugins = grammarFn:
+    let
+      grammars = grammarFn builtGrammars;
+    in
+    linkFarm "grammars"
+      (map
+        (drv:
+          let
+            name = lib.strings.getName drv;
+          in
+          {
+            name =
+              (lib.strings.replaceStrings ["-"] ["_"]
+                (lib.strings.removePrefix "tree-sitter-"
+                  (lib.strings.removeSuffix "-grammar" name)))
+              + stdenv.hostPlatform.extensions.sharedLibrary;
+            path = "${drv}/parser";
+          }
+        )
+        grammars);
+
+  allGrammars = builtins.attrValues builtGrammars;
+
+in
+rustPlatform.buildRustPackage {
   pname = "tree-sitter";
   inherit src version cargoSha256;
 
@@ -99,8 +141,7 @@ in rustPlatform.buildRustPackage {
     updater = {
       inherit update-all-grammars;
     };
-    inherit grammars;
-    inherit builtGrammars;
+    inherit grammars builtGrammars withPlugins allGrammars;
 
     tests = {
       # make sure all grammars build
@@ -108,7 +149,7 @@ in rustPlatform.buildRustPackage {
     };
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/tree-sitter/tree-sitter";
     description = "A parser generator tool and an incremental parsing library";
     longDescription = ''
@@ -122,10 +163,7 @@ in rustPlatform.buildRustPackage {
       * Robust enough to provide useful results even in the presence of syntax errors
       * Dependency-free so that the runtime library (which is written in pure C) can be embedded in any application
     '';
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ Profpatsch ];
-    # Aarch has test failures with how tree-sitter compiles the generated C files
-    broken = stdenv.isAarch64;
+    license = licenses.mit;
+    maintainers = with maintainers; [ Profpatsch ];
   };
-
 }

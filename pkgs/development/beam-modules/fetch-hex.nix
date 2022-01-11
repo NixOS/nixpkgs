@@ -1,20 +1,24 @@
 { lib, stdenv, fetchurl }:
 
-{ pkg, version, sha256
-, meta ? {}
+{ pkg
+, version
+, sha256
+, meta ? { }
 }:
 
 with lib;
 
 stdenv.mkDerivation ({
-  name = "hex-source-${pkg}-${version}";
+  pname = "hex-source-${pkg}";
+  inherit version;
+  dontBuild = true;
+  dontConfigure = true;
+  dontFixup = true;
 
   src = fetchurl {
     url = "https://repo.hex.pm/tarballs/${pkg}-${version}.tar";
     inherit sha256;
   };
-
-  phases = [ "unpackPhase" "installPhase" ];
 
   unpackCmd = ''
     tar -xf $curSrc contents.tar.gz

@@ -1,45 +1,50 @@
 {
   "name": "vieb",
   "productName": "Vieb",
-  "version": "3.1.0",
+  "version": "5.3.0",
   "description": "Vim Inspired Electron Browser",
   "main": "app/index.js",
-  "babel": {
-    "plugins": [
-      "@babel/plugin-proposal-optional-chaining"
-    ]
-  },
   "scripts": {
-    "test": "jest -u && eslint .",
-    "start": "electron app",
     "build": "node build.js",
     "buildall": "node build.js --linux --win --mac",
     "buildlinux": "node build.js --linux",
+    "buildmac": "node build.js --mac",
     "buildwin": "node build.js --win",
-    "buildmac": "node build.js --mac"
+    "dev": "electron app --datafolder=./ViebData/",
+    "fix": "eslint --fix app .eslintrc.js build.js",
+    "lint": "eslint app .eslintrc.js build.js",
+    "start": "electron app",
+    "test": "jest --testEnvironment jsdom --coverage --collectCoverageFrom 'app/**/*.js' -u && npm run lint && echo 'All good :)'"
   },
   "repository": "https://github.com/Jelmerro/Vieb",
   "homepage": "https://vieb.dev",
   "keywords": [
+    "Vim",
     "Electron",
     "Browser",
     "Internet"
   ],
   "author": "Jelmer van Arnhem",
   "email": "Jelmerro@users.noreply.github.com",
-  "license": "GPL-3.0+",
+  "license": "GPL-3.0-or-later",
   "devDependencies": {
-    "@babel/plugin-proposal-optional-chaining": "^7.12.7",
-    "archiver": "^5.0.2",
-    "electron": "^11.0.3",
-    "electron-builder": "^22.9.1",
-    "eslint": "^7.15.0",
-    "jest": "^26.6.3"
+    "archiver": "5.3.0",
+    "electron": "13.1.4",
+    "electron-builder": "22.11.7",
+    "eslint": "7.29.0",
+    "eslint-plugin-compat": "3.9.0",
+    "eslint-plugin-sort-keys-fix": "1.1.1",
+    "jest": "27.0.6",
+    "jest-environment-jsdom": "27.0.6"
   },
   "dependencies": {
-    "@cliqz/adblocker-electron": "^1.18.8",
-    "darkreader": "^4.9.26",
-    "is-svg": "^4.2.1",
-    "rimraf": "^3.0.2"
-  }
+    "7zip-bin": "5.1.1",
+    "@cliqz/adblocker-electron": "1.22.2",
+    "@cliqz/adblocker-electron-preload": "1.22.2",
+    "is-svg": "4.3.1",
+    "rimraf": "3.0.2"
+  },
+  "browserslist": [
+    "last 2 Chrome versions"
+  ]
 }

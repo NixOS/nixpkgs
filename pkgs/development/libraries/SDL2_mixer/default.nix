@@ -13,6 +13,7 @@
 , mpg123
 , opusfile
 , smpeg2
+, timidity
 }:
 
 stdenv.mkDerivation rec {
@@ -42,7 +43,15 @@ stdenv.mkDerivation rec {
     mpg123
     opusfile
     smpeg2
+    # MIDI patterns
+    timidity
   ];
+
+  # fix default path to timidity.cfg so MIDI files could be played
+  postPatch = ''
+    substituteInPlace timidity/options.h \
+      --replace "/usr/share/timidity" "${timidity}/share/timidity"
+  '';
 
   configureFlags = [
     "--disable-music-ogg-shared"

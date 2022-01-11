@@ -3,27 +3,23 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "newsboat";
-  version = "2.22.1";
+  version = "2.26";
 
   src = fetchFromGitHub {
     owner = "newsboat";
     repo = "newsboat";
     rev = "r${version}";
-    sha256 = "1j3z34dhqw0f1v6v2lfwcvzqnm2kr2940bgxibfi0npacp74izh3";
+    hash = "sha256-VFeKj8X7gEyxsdsOK6UYJ6xB24gsuzb1Wm4GK5AJCHc=";
   };
 
-  cargoSha256 = "08ywaka1lib8yrqjmfx1i37f7b33y3i6jj7f50pwhw8n6lr9f7lc";
+  cargoHash = "sha256-pr/Vzm321/uX4fIGt3kuWrtcgsnDRbeK3AvNO19NDwQ=";
 
-  postPatch = ''
-    substituteInPlace Makefile --replace "|| true" ""
-  ''
-    # TODO: Check if that's still needed
-    + lib.optionalString stdenv.isDarwin ''
-      # Allow other ncurses versions on Darwin
-      substituteInPlace config.sh \
-        --replace "ncurses5.4" "ncurses"
-    ''
-  ;
+  # TODO: Check if that's still needed
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    # Allow other ncurses versions on Darwin
+    substituteInPlace config.sh \
+      --replace "ncurses5.4" "ncurses"
+  '';
 
   nativeBuildInputs = [
     pkg-config
@@ -37,9 +33,6 @@ rustPlatform.buildRustPackage rec {
   postBuild = ''
     make prefix="$out"
   '';
-
-  # TODO: Check if that's still needed
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin " -Wno-error=format-security";
 
   # https://github.com/NixOS/nixpkgs/pull/98471#issuecomment-703100014 . We set
   # these for all platforms, since upstream's gettext crate behavior might

@@ -7,16 +7,16 @@
 , intltool
 , wrapGAppsHook
 , libsoup
-, gnome3
+, gnome
 }:
 
 stdenv.mkDerivation rec {
   pname = "grisbi";
-  version = "2.0.1";
+  version = "2.0.5";
 
   src = fetchurl {
     url = "mirror://sourceforge/grisbi/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-hFLiVHyEekCP9btO75e5ni70ZcLhjbBGCBjF2gERIqs=";
+    sha256 = "sha256-vTrbq/xLTfwF7/YtKzZFiiSw8A0HzzWin2ry8gPHej8=";
   };
 
   nativeBuildInputs = [ pkg-config wrapGAppsHook ];
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     libofx
     intltool
     libsoup
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
   ];
 
   meta = with lib; {

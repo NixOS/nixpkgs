@@ -19,14 +19,13 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gmp ];
 
-  makeFlags = [ "CC=cc" ];
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
   buildFlags = lib.optional stdenv.isDarwin ["CCFLAGS2=-lgmp -lc -lm" "CCFLAGS=-UUSE_SSE"];
   installFlags = [ "INSTALL_DIR=$(out)" ];
 
   preInstall = ''mkdir -p "$out"/{bin,share,lib,include}'';
 
   meta = {
-    inherit version;
     description = "A program to find rational points on hyperelliptic curves";
     license = lib.licenses.gpl2Plus;
     maintainers = [lib.maintainers.raskin];

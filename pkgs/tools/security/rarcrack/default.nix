@@ -11,7 +11,8 @@ stdenv.mkDerivation {
     sha256 = "134fq84896w5vp8vg4qg0ybpb466njibigyd7bqqm1xydr07qrgn";
   };
 
-  buildInputs = [ libxml2 file p7zip unrar unzip ];
+  nativeBuildInputs = [ unzip ];
+  buildInputs = [ libxml2 file p7zip unrar ];
   buildFlags = lib.optional stdenv.cc.isClang "CC=clang";
   installFlags = [ "PREFIX=\${out}" ];
 

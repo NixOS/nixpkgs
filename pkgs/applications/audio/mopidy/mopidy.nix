@@ -4,13 +4,13 @@
 
 pythonPackages.buildPythonApplication rec {
   pname = "mopidy";
-  version = "3.1.1";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "mopidy";
     repo = "mopidy";
     rev = "v${version}";
-    sha256 = "14m80z9spi2vhfs2bbff7ky80mr6bksl4550y17hwd7zpkid60za";
+    sha256 = "1l1rya48ykiq156spm8pfsm6li8apz66ppz7gs4s91fv7g7l5x2f";
   };
 
   nativeBuildInputs = [ wrapGAppsHook ];
@@ -42,7 +42,7 @@ pythonPackages.buildPythonApplication rec {
     homepage = "https://www.mopidy.com/";
     description = ''
       An extensible music server that plays music from local disk, Spotify,
-      SoundCloud, Google Play Music, and more
+      SoundCloud, and more
     '';
     license = licenses.asl20;
     maintainers = [ maintainers.fpletz ];

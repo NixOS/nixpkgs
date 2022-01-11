@@ -1,4 +1,4 @@
-#! /bin/sh
+#!/usr/bin/env bash
 
 # lists all available versions listed for a package in a site (http)
 

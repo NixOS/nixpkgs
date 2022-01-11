@@ -1,52 +1,69 @@
-{ lib, fetchFromGitHub, asciidoc-full, gettext
-, gobject-introspection, gtk3, libappindicator-gtk3, libnotify, librsvg
-, udisks2, wrapGAppsHook
-, python3Packages
+{ lib
+, fetchFromGitHub
+, buildPythonApplication
+, asciidoc-full
+, docopt
+, gettext
+, gobject-introspection
+, gtk3
+, keyutils
+, libappindicator-gtk3
+, libnotify
+, librsvg
+, nose
+, pygobject3
+, pyyaml
+, udisks2
+, wrapGAppsHook
 }:
 
-python3Packages.buildPythonApplication rec {
+buildPythonApplication rec {
   pname = "udiskie";
-  version = "2.2.0";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "coldfix";
     repo = "udiskie";
-    rev = version;
-    sha256 = "0kn5w6bm3rmbszphzbxpjfnkawb2naa230svzkpmh3n6dcdvk4qa";
+    rev = "v${version}";
+    hash = "sha256-T4kMPMXfehZT7P+TOd1llR2TbHPA/quNL545xxlmJfE=";
   };
 
+  outputs = [ "out" "man" ];
+
   nativeBuildInputs = [
+    asciidoc-full # Man page
     gettext
-    asciidoc-full        # For building man page.
     gobject-introspection
     wrapGAppsHook
   ];
 
   buildInputs = [
-    librsvg              # required for loading svg icons (udiskie uses svg icons)
     gobject-introspection
-    libnotify
     gtk3
-    udisks2
     libappindicator-gtk3
+    libnotify
+    librsvg # SVG icons
+    udisks2
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = [
     docopt
     pygobject3
     pyyaml
   ];
 
-  postBuild = "make -C doc";
-
-  postInstall = ''
-    mkdir -p $out/share/man/man8
-    cp -v doc/udiskie.8 $out/share/man/man8/
+  postBuild = ''
+    make -C doc
   '';
 
-  checkInputs = with python3Packages; [
-    nose
+  postInstall = ''
+    mkdir -p $man/share/man/man8
+    cp -v doc/udiskie.8 $man/share/man/man8/
+  '';
+
+  checkInputs = [
     keyutils
+    nose
   ];
 
   checkPhase = ''
@@ -54,9 +71,23 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "Removable disk automounter for udisks";
-    license = licenses.mit;
     homepage = "https://github.com/coldfix/udiskie";
+    description = "Removable disk automounter for udisks";
+    longDescription = ''
+      udiskie is a udisks2 front-end that allows to manage removeable media such
+      as CDs or flash drives from userspace.
+
+      Its features include:
+      - automount removable media
+      - notifications
+      - tray icon
+      - command line tools for manual un-/mounting
+      - LUKS encrypted devices
+      - unlocking with keyfiles (requires udisks 2.6.4)
+      - loop devices (mounting iso archives)
+      - password caching (requires python keyutils 0.3)
+    '';
+    license = licenses.mit;
     maintainers = with maintainers; [ AndersonTorres ];
   };
 }

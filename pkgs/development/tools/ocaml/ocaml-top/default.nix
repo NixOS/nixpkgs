@@ -1,12 +1,16 @@
-{ lib, fetchzip, ncurses, ocamlPackages }:
+{ lib, fetchFromGitHub, ncurses, ocamlPackages }:
 
 with ocamlPackages; buildDunePackage rec {
   pname = "ocaml-top";
   version = "1.2.0-rc";
 
-  src = fetchzip {
-    url = "https://github.com/OCamlPro/ocaml-top/archive/${version}.tar.gz";
-    sha256 = "1r290m9vvr25lgaanivz05h0kf4fd3h5j61wj4hpp669zffcyyb5";
+  useDune2 = true;
+
+  src = fetchFromGitHub {
+    owner = "OCamlPro";
+    repo = "ocaml-top";
+    rev = version;
+    sha256 = "sha256-ZXnPnPvJmHshkTwYWeBojrgJYAF/R6vUo0XkvVMFSeQ=";
   };
 
   buildInputs = [ ncurses ocp-build lablgtk3-sourceview3 ocp-index ];

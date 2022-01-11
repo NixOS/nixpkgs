@@ -1,11 +1,8 @@
 {
   # general
   lib
-, callPackage
-, runCommand
 , resholvePackage
 , bash
-, shellcheck
 , doCheck ? true
 , doInstallCheck ? true
   # variant-specific
@@ -46,17 +43,19 @@ resholvePackage rec {
   inherit src;
 
   installPhase = ''
+    runHook preInstall
     install -Dt $out/bin bashup.events
+    runHook postInstall
   '';
 
   inherit doCheck;
-  checkInputs = [ shellcheck bash ];
+  checkInputs = [ bash ];
 
-  # check based on https://github.com/bashup/events/blob/master/.dkrc
   checkPhase = ''
-    SHELLCHECK_OPTS='-e SC2016,SC2145' ${shellcheck}/bin/shellcheck ./bashup.events
+    runHook preCheck
     ${bash}/bin/bash -n ./bashup.events
     ${bash}/bin/bash ./bashup.events
+    runHook postCheck
   '';
 
   solutions = {
@@ -70,7 +69,11 @@ resholvePackage rec {
 
   inherit doInstallCheck;
   installCheckInputs = [ bash ];
-  installCheckPhase = installCheck "${bash}/bin/bash";
+  installCheckPhase = ''
+    runHook preInstallCheck
+    ${installCheck "${bash}/bin/bash"}
+    runHook postInstallCheck
+  '';
 
   meta = with lib; {
     inherit branch;

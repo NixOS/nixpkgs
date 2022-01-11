@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, alsaLib, file, fluidsynth, ffmpeg_3, jack2,
+{ lib, stdenv, fetchFromGitHub, alsa-lib, file, fluidsynth, jack2,
   liblo, libpulseaudio, libsndfile, pkg-config, python3Packages,
   which, withFrontend ? true,
   withQt ? true, qtbase ? null, wrapQtAppsHook ? null,
@@ -15,13 +15,13 @@ assert withGtk3 -> gtk3 != null;
 
 stdenv.mkDerivation rec {
   pname = "carla";
-  version = "2.2.0";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "falkTX";
     repo = pname;
     rev = "v${version}";
-    sha256 = "B4xoRuNEW4Lz9haP8fqxOTcysGTNEXFOq9UXqUJLSFw=";
+    sha256 = "sha256-faVLPHPQ4voR/RHiPpUwnZK+5Jx0u4rJWuH5zlydzwY=";
   };
 
   nativeBuildInputs = [
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   ] ++ optional withFrontend pyqt5;
 
   buildInputs = [
-    file liblo alsaLib fluidsynth ffmpeg_3 jack2 libpulseaudio libsndfile
+    file liblo alsa-lib fluidsynth jack2 libpulseaudio libsndfile
   ] ++ optional withQt qtbase
     ++ optional withGtk2 gtk2
     ++ optional withGtk3 gtk3;
@@ -43,6 +43,14 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   installFlags = [ "PREFIX=$(out)" ];
+
+  postPatch = ''
+    # --with-appname="$0" is evaluated with $0=.carla-wrapped instead of carla. Fix that.
+    for file in $(grep -rl -- '--with-appname="$0"'); do
+        filename="$(basename -- "$file")"
+        substituteInPlace "$file" --replace '--with-appname="$0"' "--with-appname=\"$filename\""
+    done
+  '';
 
   dontWrapQtApps = true;
   postFixup = ''
@@ -70,7 +78,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "http://kxstudio.sf.net/carla";
+    homepage = "https://kx.studio/Applications:Carla";
     description = "An audio plugin host";
     longDescription = ''
       It currently supports LADSPA (including LRDF), DSSI, LV2, VST2/3

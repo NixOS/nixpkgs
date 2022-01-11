@@ -1,5 +1,5 @@
 { mkDerivation, lib, fetchurl, fetchgit, fetchpatch
-, qtbase, qtquickcontrols, qtscript, qtdeclarative, qmake, llvmPackages_8
+, qtbase, qtquickcontrols, qtscript, qtdeclarative, qmake, llvmPackages_8, elfutils, perf
 , withDocumentation ? false, withClangPlugins ? true
 }:
 
@@ -20,15 +20,15 @@ in
 
 mkDerivation rec {
   pname = "qtcreator";
-  version = "4.11.0";
+  version = "5.0.2";
   baseVersion = builtins.concatStringsSep "." (lib.take 2 (builtins.splitVersion version));
 
   src = fetchurl {
     url = "http://download.qt-project.org/official_releases/${pname}/${baseVersion}/${version}/qt-creator-opensource-src-${version}.tar.xz";
-    sha256 = "0ibn7bapw7m26nmxl26dns1hnpawfdqk1i1mgg0gjssja8famszg";
+    sha256 = "1bf07150226da46237f26f5eaa9f090ce81ed79b9bc75e0dfa6328043e360103";
   };
 
-  buildInputs = [ qtbase qtscript qtquickcontrols qtdeclarative ] ++
+  buildInputs = [ qtbase qtscript qtquickcontrols qtdeclarative elfutils.dev ] ++
     optionals withClangPlugins [ llvmPackages_8.libclang
                                  clang_qt_vendor
                                  llvmPackages_8.llvm ];
@@ -45,14 +45,16 @@ mkDerivation rec {
 
   doCheck = true;
 
-  enableParallelBuilding = true;
-
   buildFlags = optional withDocumentation "docs";
 
   installFlags = [ "INSTALL_ROOT=$(out)" ] ++ optional withDocumentation "install_docs";
 
+  qtWrapperArgs = [ "--set-default PERFPROFILER_PARSER_FILEPATH ${lib.getBin perf}/bin" ];
+
   preConfigure = ''
     substituteInPlace src/plugins/plugins.pro \
+      --replace '$$[QT_INSTALL_QML]/QtQuick/Controls' '${qtquickcontrols}/${qtbase.qtQmlPrefix}/QtQuick/Controls'
+    substituteInPlace src/libs/libs.pro \
       --replace '$$[QT_INSTALL_QML]/QtQuick/Controls' '${qtquickcontrols}/${qtbase.qtQmlPrefix}/QtQuick/Controls'
     '' + optionalString withClangPlugins ''
     # Fix paths for llvm/clang includes directories.
@@ -60,23 +62,21 @@ mkDerivation rec {
       --replace '$$clean_path($${LLVM_LIBDIR}/clang/$${LLVM_VERSION}/include)' '${clang_qt_vendor}/lib/clang/8.0.0/include' \
       --replace '$$clean_path($${LLVM_BINDIR})' '${clang_qt_vendor}/bin'
 
-    # Fix include path to find clang and clang-c include directories.
-    substituteInPlace src/plugins/clangtools/clangtools.pro \
-      --replace 'INCLUDEPATH += $$LLVM_INCLUDEPATH' 'INCLUDEPATH += $$LLVM_INCLUDEPATH ${clang_qt_vendor}'
-
     # Fix paths to libclang library.
     substituteInPlace src/shared/clang/clang_installation.pri \
-      --replace 'LIBCLANG_LIBS = -L$${LLVM_LIBDIR}' 'LIBCLANG_LIBS = -L${llvmPackages_8.libclang}/lib' \
+      --replace 'LIBCLANG_LIBS = -L$${LLVM_LIBDIR}' 'LIBCLANG_LIBS = -L${llvmPackages_8.libclang.lib}/lib' \
       --replace 'LIBCLANG_LIBS += $${CLANG_LIB}' 'LIBCLANG_LIBS += -lclang' \
       --replace 'LIBTOOLING_LIBS = -L$${LLVM_LIBDIR}' 'LIBTOOLING_LIBS = -L${clang_qt_vendor}/lib' \
       --replace 'LLVM_CXXFLAGS ~= s,-gsplit-dwarf,' '${lib.concatStringsSep "\n" ["LLVM_CXXFLAGS ~= s,-gsplit-dwarf," "    LLVM_CXXFLAGS += -fno-rtti"]}'
   '';
 
-  preBuild = optional withDocumentation ''
+  preBuild = optionalString withDocumentation ''
     ln -s ${getLib qtbase}/$qtDocPrefix $NIX_QT5_TMP/share
   '';
 
   postInstall = ''
+    mkdir -p $out/share/applications
+    cp share/applications/org.qt-project.qtcreator.desktop $out/share/applications
     substituteInPlace $out/share/applications/org.qt-project.qtcreator.desktop \
       --replace "Exec=qtcreator" "Exec=$out/bin/qtcreator"
   '';

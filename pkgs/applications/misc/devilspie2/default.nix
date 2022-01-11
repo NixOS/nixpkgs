@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, intltool, pkg-config, glib, gtk, lua, libwnck3 }:
+{ lib, stdenv, fetchurl, intltool, pkg-config, glib, gtk, lua, libwnck }:
 
 stdenv.mkDerivation rec {
   pname = "devilspie2";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ intltool pkg-config ];
-  buildInputs = [ glib gtk lua libwnck3 ];
+  buildInputs = [ glib gtk lua libwnck ];
 
   installPhase = ''
     mkdir -p $out/bin $out/share/man/man1

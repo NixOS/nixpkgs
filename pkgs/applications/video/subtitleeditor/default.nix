@@ -3,19 +3,15 @@
   libsigcxx, libxmlxx, xdg-utils, isocodes, wrapGAppsHook
 }:
 
-let
-  version = "0.54.0";
-in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "subtitleeditor";
-  inherit version;
+  version = "unstable-2019-11-30";
 
   src = fetchFromGitHub {
     owner = "kitone";
     repo = "subtitleeditor";
-    rev = version;
-    sha256 = "0vxcscc9m6gymgj173ahk2g9hlk9588z5fdaavmkpyriqdlhwm11";
+    rev = "4c215f4cff4483c44361a2f1d45efc4c6670787f";
+    sha256 = "sha256-1Q1nd3GJ6iDGQv4SM2S1ehVW6kPdbqTn8KTtTb0obiQ=";
   };
 
   nativeBuildInputs =  [

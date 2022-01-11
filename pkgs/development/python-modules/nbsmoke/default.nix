@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , pytest
-, jupyter_client
+, jupyter-client
 , ipykernel
 , holoviews
 , nbformat
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     pytest
     holoviews
-    jupyter_client
+    jupyter-client
     ipykernel
     nbformat
     nbconvert
@@ -35,6 +35,7 @@ buildPythonPackage rec {
 
   # tests not included with pypi release
   doCheck = false;
+  pythonImportsCheck = [ "nbsmoke" ];
 
   meta = with lib; {
     description = "Basic notebook checks and linting";

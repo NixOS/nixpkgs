@@ -12,9 +12,7 @@ stdenv.mkDerivation rec {
     else
       throw "${pname}-${version} is not supported on ${stdenv.hostPlatform.system}";
 
-  buildInputs = [ makeWrapper ];
-
-  nativeBuildInputs = [ autoPatchelfHook ];
+  nativeBuildInputs = [ makeWrapper autoPatchelfHook ];
 
   postPatch = ''
     patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" client/insync-portable

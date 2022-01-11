@@ -1,7 +1,8 @@
 { lib, stdenv, fetchFromGitHub }:
 
-stdenv.mkDerivation {
-  name = "swarm-2019-03-11";
+stdenv.mkDerivation rec {
+  pname = "swarm";
+  version = "unstable-2019-03-11";
 
   src = fetchFromGitHub {
     owner = "nimble-code";
@@ -19,7 +20,7 @@ stdenv.mkDerivation {
     description = "Verification script generator for Spin";
     homepage = "http://spinroot.com/";
     license = licenses.free;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ abbradar ];
   };
 }

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, curl, fribidi, rlwrap, gawk, groff, ncurses }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, curl, fribidi, rlwrap, gawk, groff, ncurses, hexdump }:
 
 stdenv.mkDerivation rec {
   pname = "translate-shell";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "075vqnha21rhr1b61dim7dqlfwm1yffyzcaa83s36rpk9r5sddzx";
   };
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installFlags = [ "PREFIX=$(out)" ];
 
@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
         rlwrap
         groff
         fribidi
+        hexdump
       ]}
   '';
 

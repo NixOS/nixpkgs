@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, makeWrapper
 , gawk, gnused, util-linux, file
-, wget, python3, qemu-utils, euca2ools
+, wget, python3, qemu-utils
 , e2fsprogs, cdrkit
 , gptfdisk }:
 

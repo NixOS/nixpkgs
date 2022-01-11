@@ -1,7 +1,8 @@
 { lib, bundlerEnv, bundlerUpdateScript, ruby, perl, autoconf }:
 
 bundlerEnv {
-  name = "chef-dk-4.7.73";
+  pname = "chef-dk";
+  version = "4.13.3";
 
   inherit ruby;
   gemdir = ./.;

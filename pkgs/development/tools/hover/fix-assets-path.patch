@@ -53,7 +53,7 @@ index cb75563..3822e80 100644
 -func ExecuteTemplateFromAssetsBox(boxed, to string, assetsBox *rice.Box, templateData interface{}) {
 -	templateString, err := assetsBox.String(boxed)
 +func ExecuteTemplateFromAssetsBox(boxed, to string, assetsBox string, templateData interface{}) {
-+	templateString, err := ioutil.ReadFile(boxed + "/" + boxed)
++	templateString, err := ioutil.ReadFile(assetsBox + "/" + boxed)
  	if err != nil {
  		log.Errorf("Failed to find template file: %v\n", err)
  		os.Exit(1)

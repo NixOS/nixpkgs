@@ -1,39 +1,51 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , buildPythonPackage
-, isPy3k
+, pythonOlder
 , fetchPypi
-, pytest
+, Babel
 , markupsafe
-, setuptools
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "Jinja2";
-  version = "2.11.2";
+  version = "3.0.3";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "89aab215427ef59c34ad58735269eb58b1a5808103067f7bb9d5836c651b3bb0";
+    sha256 = "611bb273cd68f3b993fabdc4064fc858c5b47a973cb5aa7999ec1ba405c87cd7";
   };
 
-  checkInputs = [ pytest ];
-  propagatedBuildInputs = [ markupsafe setuptools ];
+  propagatedBuildInputs = [
+    Babel
+    markupsafe
+  ];
 
   # Multiple tests run out of stack space on 32bit systems with python2.
   # See https://github.com/pallets/jinja/issues/1158
-  doCheck = !stdenv.is32bit || isPy3k;
+  doCheck = !stdenv.is32bit;
 
-  checkPhase = ''
-    pytest -v tests
-  '';
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    # Avoid failure due to deprecation warning
+    # Fixed in https://github.com/python/cpython/pull/28153
+    # Remove after cpython 3.9.8
+    "-p no:warnings"
+  ];
 
   meta = with lib; {
     homepage = "http://jinja.pocoo.org/";
     description = "Stand-alone template engine";
     license = licenses.bsd3;
     longDescription = ''
-      Jinja2 is a template engine written in pure Python. It provides a
-      Django inspired non-XML syntax but supports inline expressions and
+      Jinja is a fast, expressive, extensible templating engine. Special
+      placeholders in the template allow writing code similar to Python
+      syntax. Then the template is passed data to render the final document.
       an optional sandboxed environment.
     '';
     maintainers = with maintainers; [ pierron sjourdois ];

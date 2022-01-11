@@ -1,17 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, varnish, docutils }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook269, pkg-config, varnish, docutils, version, sha256 }:
 
-stdenv.mkDerivation rec {
-  version = "0.4";
-  name = "${varnish.name}-dynamic-${version}";
+stdenv.mkDerivation {
+  pname = "${varnish.name}-dynamic";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "nigoroll";
     repo = "libvmod-dynamic";
     rev = "v${version}";
-    sha256 = "1n94slrm6vn3hpymfkla03gw9603jajclg84bjhwb8kxsk3rxpmk";
+    inherit sha256;
   };
 
-  nativeBuildInputs = [ pkg-config docutils autoreconfHook varnish.python ];
+  nativeBuildInputs = [ pkg-config docutils autoreconfHook269 varnish.python ];
   buildInputs = [ varnish ];
   postPatch = ''
     substituteInPlace Makefile.am --replace "''${LIBVARNISHAPI_DATAROOTDIR}/aclocal" "${varnish.dev}/share/aclocal"

@@ -1,10 +1,11 @@
 { fetchurl, lib, stdenv, perl, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "sloccount-2.26";
+  pname = "sloccount";
+  version = "2.26";
 
   src = fetchurl {
-    url = "https://www.dwheeler.com/sloccount/${name}.tar.gz";
+    url = "https://www.dwheeler.com/${pname}/${pname}-${version}.tar.gz";
     sha256 = "0ayiwfjdh1946asah861ah9269s5xkc8p5fv1wnxs9znyaxs4zzs";
   };
 
@@ -30,7 +31,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  makeFlags = [ "PREFIX=$(out)" "CC=cc" ];
+  makeFlags = [ "PREFIX=$(out)" "CC=${stdenv.cc.targetPrefix}cc" ];
 
   doCheck = true;
   checkPhase = ''HOME="$TMPDIR" PATH="$PWD:$PATH" make test'';

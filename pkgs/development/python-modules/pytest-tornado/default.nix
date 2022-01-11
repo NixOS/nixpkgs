@@ -17,7 +17,9 @@ buildPythonPackage rec {
   # package has no tests
   doCheck = false;
 
-  propagatedBuildInputs = [ pytest tornado ];
+  buildInputs = [ pytest ];
+
+  propagatedBuildInputs = [ tornado ];
 
   meta = with lib; {
     description = "A py.test plugin providing fixtures and markers to simplify testing of asynchronous tornado applications.";

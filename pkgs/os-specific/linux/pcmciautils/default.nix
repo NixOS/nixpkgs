@@ -1,5 +1,5 @@
 { config, lib, stdenv, fetchurl
-, yacc, flex
+, bison, flex
 , sysfsutils, kmod, udev
 , firmware   ? config.pcmciaUtils.firmware or [] # Special pcmcia cards.
 , configOpts ? config.pcmciaUtils.config or null # Special hardware (map memory & port & irq)
@@ -7,14 +7,15 @@
 
 # FIXME: should add an option to choose between hotplug and udev.
 stdenv.mkDerivation rec {
-  name = "pcmciautils-018";
+  pname = "pcmciautils";
+  version = "018";
 
   src = fetchurl {
-    url = "https://kernel.org/pub/linux/utils/kernel/pcmcia/${name}.tar.gz";
+    url = "https://kernel.org/pub/linux/utils/kernel/pcmcia/pcmciautils-${version}.tar.gz";
     sha256 = "0sfm3w2n73kl5w7gb1m6q8gy5k4rgwvzz79n6yhs9w3sag3ix8sk";
   };
 
-  buildInputs = [udev yacc sysfsutils kmod flex];
+  buildInputs = [udev bison sysfsutils kmod flex];
 
   patchPhase = ''
     sed -i "

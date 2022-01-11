@@ -1,0 +1,105 @@
+diff --git a/tools/polly/CMakeLists.txt b/tools/polly/CMakeLists.txt
+index ca7c04c565bb..6ed5db5dd4f8 100644
+--- a/tools/polly/CMakeLists.txt
++++ b/tools/polly/CMakeLists.txt
+@@ -2,7 +2,11 @@
+ if (NOT DEFINED LLVM_MAIN_SRC_DIR)
+   project(Polly)
+   cmake_minimum_required(VERSION 3.13.4)
++endif()
++
++include(GNUInstallDirs)
+ 
++if (NOT DEFINED LLVM_MAIN_SRC_DIR)
+   # Where is LLVM installed?
+   find_package(LLVM CONFIG REQUIRED)
+   set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${LLVM_CMAKE_DIR})
+@@ -122,13 +126,13 @@ include_directories(
+ 
+ if (NOT LLVM_INSTALL_TOOLCHAIN_ONLY)
+   install(DIRECTORY include/
+-    DESTINATION include
++    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+     FILES_MATCHING
+     PATTERN "*.h"
+     )
+ 
+   install(DIRECTORY ${POLLY_BINARY_DIR}/include/
+-    DESTINATION include
++    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+     FILES_MATCHING
+     PATTERN "*.h"
+     PATTERN "CMakeFiles" EXCLUDE
+diff --git a/tools/polly/cmake/CMakeLists.txt b/tools/polly/cmake/CMakeLists.txt
+index 7cc129ba2e90..137be25e4b80 100644
+--- a/tools/polly/cmake/CMakeLists.txt
++++ b/tools/polly/cmake/CMakeLists.txt
+@@ -79,18 +79,18 @@ file(GENERATE
+ 
+ # Generate PollyConfig.cmake for the install tree.
+ unset(POLLY_EXPORTS)
+-set(POLLY_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
++set(POLLY_INSTALL_PREFIX "")
+ set(POLLY_CONFIG_LLVM_CMAKE_DIR "${LLVM_BINARY_DIR}/${LLVM_INSTALL_PACKAGE_DIR}")
+-set(POLLY_CONFIG_CMAKE_DIR "${POLLY_INSTALL_PREFIX}/${POLLY_INSTALL_PACKAGE_DIR}")
+-set(POLLY_CONFIG_LIBRARY_DIRS "${POLLY_INSTALL_PREFIX}/lib${LLVM_LIBDIR_SUFFIX}")
++set(POLLY_CONFIG_CMAKE_DIR "${POLLY_INSTALL_PREFIX}${CMAKE_INSTALL_PREFIX}/${POLLY_INSTALL_PACKAGE_DIR}")
++set(POLLY_CONFIG_LIBRARY_DIRS "${POLLY_INSTALL_PREFIX}${CMAKE_INSTALL_FULL_LIBDIR}${LLVM_LIBDIR_SUFFIX}")
+ if (POLLY_BUNDLED_ISL)
+   set(POLLY_CONFIG_INCLUDE_DIRS
+-    "${POLLY_INSTALL_PREFIX}/include"
+-    "${POLLY_INSTALL_PREFIX}/include/polly"
++    "${POLLY_INSTALL_PREFIX}${CMAKE_INSTALL_FULL_LIBDIR}"
++    "${POLLY_INSTALL_PREFIX}${CMAKE_INSTALL_FULL_LIBDIR}/polly"
+     )
+ else()
+   set(POLLY_CONFIG_INCLUDE_DIRS
+-    "${POLLY_INSTALL_PREFIX}/include"
++    "${POLLY_INSTALL_PREFIX}${CMAKE_INSTALL_FULL_INCLUDEDIR}"
+     ${ISL_INCLUDE_DIRS}
+     )
+ endif()
+@@ -100,12 +100,12 @@ endif()
+ foreach(tgt IN LISTS POLLY_CONFIG_EXPORTED_TARGETS)
+   get_target_property(tgt_type ${tgt} TYPE)
+   if (tgt_type STREQUAL "EXECUTABLE")
+-    set(tgt_prefix "bin/")
++    set(tgt_prefix "${CMAKE_INSTALL_BINDIR}/")
+   else()
+-    set(tgt_prefix "lib/")
++    set(tgt_prefix "${CMAKE_INSTALL_LIBDIR}/")
+   endif()
+ 
+-  set(tgt_path "${CMAKE_INSTALL_PREFIX}/${tgt_prefix}$<TARGET_FILE_NAME:${tgt}>")
++  set(tgt_path "${tgt_prefix}$<TARGET_FILE_NAME:${tgt}>")
+   file(RELATIVE_PATH tgt_path ${POLLY_CONFIG_CMAKE_DIR} ${tgt_path})
+ 
+   if (NOT tgt_type STREQUAL "INTERFACE_LIBRARY")
+diff --git a/tools/polly/cmake/polly_macros.cmake b/tools/polly/cmake/polly_macros.cmake
+index 518a09b45a42..bd9d6f5542ad 100644
+--- a/tools/polly/cmake/polly_macros.cmake
++++ b/tools/polly/cmake/polly_macros.cmake
+@@ -44,8 +44,8 @@ macro(add_polly_library name)
+   if (NOT LLVM_INSTALL_TOOLCHAIN_ONLY OR ${name} STREQUAL "LLVMPolly")
+     install(TARGETS ${name}
+       EXPORT LLVMExports
+-      LIBRARY DESTINATION lib${LLVM_LIBDIR_SUFFIX}
+-      ARCHIVE DESTINATION lib${LLVM_LIBDIR_SUFFIX})
++	  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}${LLVM_LIBDIR_SUFFIX}
++      ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}${LLVM_LIBDIR_SUFFIX})
+   endif()
+   set_property(GLOBAL APPEND PROPERTY LLVM_EXPORTS ${name})
+ endmacro(add_polly_library)
+diff --git a/tools/polly/lib/External/CMakeLists.txt b/tools/polly/lib/External/CMakeLists.txt
+index 8991094d92c7..178d8ad606bb 100644
+--- a/tools/polly/lib/External/CMakeLists.txt
++++ b/tools/polly/lib/External/CMakeLists.txt
+@@ -275,7 +275,7 @@ if (POLLY_BUNDLED_ISL)
+     install(DIRECTORY
+       ${ISL_SOURCE_DIR}/include/
+       ${ISL_BINARY_DIR}/include/
+-      DESTINATION include/polly
++      DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/polly
+       FILES_MATCHING
+       PATTERN "*.h"
+       PATTERN "CMakeFiles" EXCLUDE

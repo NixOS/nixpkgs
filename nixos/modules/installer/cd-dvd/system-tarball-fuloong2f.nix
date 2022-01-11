@@ -26,7 +26,7 @@ let
   # A clue for the kernel loading
   kernelParams = pkgs.writeText "kernel-params.txt" ''
     Kernel Parameters:
-      init=/boot/init systemConfig=/boot/init ${toString config.boot.kernelParams}
+      init=/boot/init ${toString config.boot.kernelParams}
   '';
 
   # System wide nixpkgs config
@@ -93,7 +93,7 @@ in
   boot.initrd.availableKernelModules =
     [ "vfat" "reiserfs" ];
 
-  boot.kernelPackages = pkgs.linuxPackages_3_10;
+  boot.kernelPackages = pkgs.linuxKernel.packages.linux_3_10;
   boot.kernelParams = [ "console=tty1" ];
 
   boot.postBootCommands =

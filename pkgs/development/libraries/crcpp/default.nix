@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "crcpp";
-  version = "1.0.1.0";
+  version = "1.1.0.0";
 
   src = fetchFromGitHub {
     owner = "d-bahr";
     repo = "CRCpp";
     rev = "release-${version}";
-    sha256 = "138w97kfxnv8rcnvggba6fcxgbgq8amikkmy3jhqfn6xzy6zaimh";
+    sha256 = "sha256-jBvh4dHSFChxNPVgkGVHy3TXSExsfwdVUfsA8XB1cn8=";
   };
 
   dontBuild = true;

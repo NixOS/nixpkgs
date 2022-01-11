@@ -4,7 +4,7 @@
   freetype, tradcpp, fontconfig, meson, ninja, ed, fontforge,
   libGL, spice-protocol, zlib, libGLU, dbus, libunwind, libdrm,
   mesa, udev, bootstrap_cmds, bison, flex, clangStdenv, autoreconfHook,
-  mcpp, epoxy, openssl, pkg-config, llvm_6, libxslt,
+  mcpp, libepoxy, openssl, pkg-config, llvm, libxslt,
   ApplicationServices, Carbon, Cocoa, Xplugin
 }:
 
@@ -52,6 +52,10 @@ self: super:
         test -f $ALIASFILE
         cp $ALIASFILE $out/lib/X11/fonts/misc/fonts.alias
       '';
+  });
+
+  fonttosfnt = super.fonttosfnt.overrideAttrs (attrs: {
+    meta = attrs.meta // { license = lib.licenses.mit; };
   });
 
   imake = super.imake.overrideAttrs (attrs: {
@@ -196,11 +200,19 @@ self: super:
       ++ malloc0ReturnsNullCrossFlag;
 
     patches = [
-      # Adds color emoji rendering support.
+      # The following three patches add color emoji rendering support.
       # https://gitlab.freedesktop.org/xorg/lib/libxft/merge_requests/1
       (fetchpatch {
-        url = "https://gitlab.freedesktop.org/xorg/lib/libxft/commit/fe41537b5714a2301808eed2d76b2e7631176573.patch";
-        sha256 = "045lp1q50i2wlwvpsq6ycxdc6p3asm2r3bk2nbad1dwkqw2xf9jc";
+        url = "https://gitlab.freedesktop.org/xorg/lib/libxft/commit/723092ece088559f1af299236305911f4ee4d450.patch";
+        sha256 = "1y5s6x5b7n2rqxapdx65zlcz35s7i7075qxkfnj859hx7k5ybx53";
+      })
+      (fetchpatch {
+        url = "https://gitlab.freedesktop.org/xorg/lib/libxft/commit/e0fc4ce7e87ab9c4b47e5c8e693f070dfd0d2f7b.patch";
+        sha256 = "1x7cbhdrprrmngyy3l3b45bz6717dzp881687h5hxa4g2bg5c764";
+      })
+      (fetchpatch {
+        url = "https://gitlab.freedesktop.org/xorg/lib/libxft/commit/d385aa3e5320d18918413df0e8aef3a713a47e0b.patch";
+        sha256 = "1acnks2g88hari2708x93ywa9m2f4lm60yhn9va45151ma2qb5n0";
       })
     ];
 
@@ -363,35 +375,35 @@ self: super:
   xf86inputevdev = super.xf86inputevdev.overrideAttrs (attrs: {
     outputs = [ "out" "dev" ]; # to get rid of xorgserver.dev; man is tiny
     preBuild = "sed -e '/motion_history_proc/d; /history_size/d;' -i src/*.c";
-    installFlags = [
-      "sdkdir=${placeholder "out"}/include/xorg"
+    configureFlags = [
+      "--with-sdkdir=${placeholder "dev"}/include/xorg"
     ];
   });
 
   xf86inputmouse = super.xf86inputmouse.overrideAttrs (attrs: {
-    installFlags = [
-      "sdkdir=${placeholder "out"}/include/xorg"
+    configureFlags = [
+      "--with-sdkdir=${placeholder "out"}/include/xorg"
     ];
   });
 
   xf86inputjoystick = super.xf86inputjoystick.overrideAttrs (attrs: {
-    installFlags = [
-      "sdkdir=${placeholder "out"}/include/xorg"
+    configureFlags = [
+      "--with-sdkdir=${placeholder "out"}/include/xorg"
     ];
   });
 
   xf86inputlibinput = super.xf86inputlibinput.overrideAttrs (attrs: {
     outputs = [ "out" "dev" ];
-    installFlags = [
-      "sdkdir=${placeholder "dev"}/include/xorg"
+    configureFlags = [
+      "--with-sdkdir=${placeholder "dev"}/include/xorg"
     ];
   });
 
   xf86inputsynaptics = super.xf86inputsynaptics.overrideAttrs (attrs: {
     outputs = [ "out" "dev" ]; # *.pc pulls xorgserver.dev
-    installFlags = [
-      "sdkdir=${placeholder "out"}/include/xorg"
-      "configdir=${placeholder "out"}/share/X11/xorg.conf.d"
+    configureFlags = [
+      "--with-sdkdir=${placeholder "dev"}/include/xorg"
+      "--with-xorg-conf-dir=${placeholder "out"}/share/X11/xorg.conf.d"
     ];
   });
 
@@ -433,13 +445,23 @@ self: super:
   });
 
   xf86videovmware = super.xf86videovmware.overrideAttrs (attrs: {
-    buildInputs =  attrs.buildInputs ++ [ mesa llvm_6 ]; # for libxatracker
+    buildInputs =  attrs.buildInputs ++ [ mesa mesa.driversdev llvm ]; # for libxatracker
     meta = attrs.meta // {
       platforms = ["i686-linux" "x86_64-linux"];
     };
   });
 
   xf86videoqxl = super.xf86videoqxl.overrideAttrs (attrs: {
+    # https://gitlab.freedesktop.org/xorg/driver/xf86-video-qxl/-/issues/12
+    postPatch = ''
+      patch -p1 <<EOF
+      --- a/src/qxl_option_helpers.c
+      +++ b/src/qxl_option_helpers.c
+      @@ -37 +37 @@
+      -        return options[option_index].value.bool;
+      +        return options[option_index].value.boolean;
+      EOF
+    '';
     buildInputs =  attrs.buildInputs ++ [ spice-protocol ];
   });
 
@@ -627,18 +649,45 @@ self: super:
         ];
         postInstall = ":"; # prevent infinite recursion
       });
+
+      fpgit = commit: sha256: name: fetchpatch (
+        {
+          url = "https://gitlab.freedesktop.org/xorg/xserver/-/commit/${commit}.diff";
+          inherit sha256;
+        } // lib.optionalAttrs (name != null) {
+            name = name + ".patch";
+          }
+      );
     in
       if (!isDarwin)
       then {
         outputs = [ "out" "dev" ];
         patches = [
+          # https://lists.x.org/archives/xorg-announce/2021-December/003122.html
+          (fpgit "ebce7e2d80e7c80e1dda60f2f0bc886f1106ba60"
+            "sNi16FqN4rS4s8j5+PUVeOQBasccCkB5KvywP7xl28M=" "CVE-2021-4008")
+          (fpgit "b5196750099ae6ae582e1f46bd0a6dad29550e02"
+            "5hgzQXBBaJfhSTa9hs8K2N1fQ6+Vp8TTkertmQhkw8Y=" "CVE-2021-4009")
+          (fpgit "6c4c53010772e3cb4cb8acd54950c8eec9c00d21"
+            "1gGG9RpjLMi7Emwh13/z5CN1+ISLsPL3hJXP5gQcNkE=" "CVE-2021-4010")
+          (fpgit "e56f61c79fc3cee26d83cda0f84ae56d5979f768"
+            "e1KgSXGwwI3GgcYeWaF3KHPmkE4tf9VTqvfTYqRpysY=" "CVE-2021-4011")
+
           # The build process tries to create the specified logdir when building.
           #
           # We set it to /var/log which can't be touched from inside the sandbox causing the build to hard-fail
           ./dont-create-logdir-during-build.patch
+
+          # Fix e.g. xorg.xf86videovmware with libdrm 2.4.108
+          # TODO: remove with xorgserver >= 1.21
+          (fetchpatch {
+            name = "stdbool.patch";
+            url = "https://gitlab.freedesktop.org/xorg/xserver/-/commit/454b3a826edb5fc6d0fea3a9cfd1a5e8fc568747.diff";
+            sha256 = "1l9qg905jvlw3r0kx4xfw5m12pbs0782v2g3267d1m6q4m6fj1zy";
+          })
         ];
         buildInputs = commonBuildInputs ++ [ libdrm mesa ];
-        propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ libpciaccess epoxy ] ++ commonPropagatedBuildInputs ++ lib.optionals stdenv.isLinux [
+        propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ libpciaccess libepoxy ] ++ commonPropagatedBuildInputs ++ lib.optionals stdenv.isLinux [
           udev
         ];
         prePatch = lib.optionalString stdenv.hostPlatform.isMusl ''
@@ -655,6 +704,7 @@ self: super:
           "--with-xkb-output=$out/share/X11/xkb/compiled"
           "--with-log-dir=/var/log"
           "--enable-glamor"
+          "--with-os-name=Nix" # r13y, embeds the build machine's kernel version otherwise
         ] ++ lib.optionals stdenv.hostPlatform.isMusl [
           "--disable-tls"
         ];
@@ -664,7 +714,7 @@ self: super:
           ( # assert() keeps runtime reference xorgserver-dev in xf86-video-intel and others
             cd "$dev"
             for f in include/xorg/*.h; do
-              sed "1i#line 1 \"${attrs.name}/$f\"" -i "$f"
+              sed "1i#line 1 \"${attrs.pname}-${attrs.version}/$f\"" -i "$f"
             done
           )
         '';
@@ -766,6 +816,7 @@ self: super:
     stdenv = if isDarwin then clangStdenv else stdenv;
   }).overrideAttrs (attrs: {
     buildInputs = attrs.buildInputs ++ lib.optional isDarwin bootstrap_cmds;
+    depsBuildBuild = [ buildPackages.stdenv.cc ];
     configureFlags = [
       "--with-xserver=${self.xorgserver.out}/bin/X"
     ] ++ lib.optionals isDarwin [
@@ -773,6 +824,18 @@ self: super:
       "--with-launchdaemons-dir=\${out}/LaunchDaemons"
       "--with-launchagents-dir=\${out}/LaunchAgents"
     ];
+    patches = [
+      # don't unset DBUS_SESSION_BUS_ADDRESS in startx
+      (fetchpatch {
+        name = "dont-unset-DBUS_SESSION_BUS_ADDRESS.patch";
+        url = "https://raw.githubusercontent.com/archlinux/svntogit-packages/40f3ac0a31336d871c76065270d3f10e922d06f3/trunk/fs46369.patch";
+        sha256 = "18kb88i3s9nbq2jxl7l2hyj6p56c993hivk8mzxg811iqbbawkp7";
+      })
+    ];
+    postPatch = ''
+      # Avoid replacement of word-looking cpp's builtin macros in Nix's cross-compiled paths
+      substituteInPlace Makefile.in --replace "PROGCPPDEFS =" "PROGCPPDEFS = -Dlinux=linux -Dunix=unix"
+    '';
     propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ self.xauth ]
                          ++ lib.optionals isDarwin [ self.libX11 self.xorgproto ];
     postFixup = ''
@@ -800,6 +863,10 @@ self: super:
     };
   });
 
+  xf86videoopenchrome = super.xf86videoopenchrome.overrideAttrs (attrs: {
+    buildInputs = attrs.buildInputs ++ [ self.libXv ];
+  });
+
   xf86videoxgi = super.xf86videoxgi.overrideAttrs (attrs: {
     patches = [
       # fixes invalid open mode
@@ -821,8 +888,10 @@ self: super:
     '';
   });
 
-  xwd = super.xwd.overrideAttrs (attrs: {
-    buildInputs = with self; attrs.buildInputs ++ [libXt];
+  xorgdocs = super.xorgdocs.overrideAttrs (attrs: {
+    # This makes the man pages discoverable by the default man,
+    # since it looks for packages in $PATH
+    postInstall = "mkdir $out/bin";
   });
 
   xrdb = super.xrdb.overrideAttrs (attrs: {
@@ -885,13 +954,16 @@ self: super:
       "fontbhttf"
       "fontbh100dpi"
       "fontbh75dpi"
+
+      # Bigelow & Holmes fonts
+      # https://www.x.org/releases/current/doc/xorg-docs/License.html#Bigelow_Holmes_Inc_and_URW_GmbH_Luxi_font_license
+      "fontbhlucidatypewriter100dpi"
+      "fontbhlucidatypewriter75dpi"
     ];
 
     # unfree, possibly not redistributable
     unfree = [
       # no license, just a copyright notice
-      "fontbhlucidatypewriter100dpi"
-      "fontbhlucidatypewriter75dpi"
       "fontdaewoomisc"
 
       # unclear license, "permission to use"?

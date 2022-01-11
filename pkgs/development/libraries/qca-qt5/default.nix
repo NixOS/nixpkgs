@@ -9,12 +9,18 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-wThREJq+/EYjNwmJ+uOnRb9rGss8KhOolYU5gj6XTks=";
   };
 
+  patches = [
+    # Pull upstream fix for gcc-11
+    (fetchurl {
+      url = "https://github.com/KDE/qca/commit/32275f1a74c161d2fed8c056b2dd9555687a22f2.patch";
+      sha256 = "sha256-SUH2eyzP2vH/ZjYcX8ybwiqhoTm/QjuEpTKjb2iH1No=";
+    })
+  ];
+
   buildInputs = [ openssl qtbase ];
   nativeBuildInputs = [ cmake pkg-config ];
 
-  # Without this patch cmake fails with a "No known features for CXX compiler"
-  # error on darwin
-  patches = lib.optional stdenv.isDarwin ./move-project.patch ;
+  dontWrapQtApps = true;
 
   # tells CMake to use this CA bundle file if it is accessible
   preConfigure = "export QC_CERTSTORE_PATH=/etc/ssl/certs/ca-certificates.crt";

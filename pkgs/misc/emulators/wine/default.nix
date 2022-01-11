@@ -44,7 +44,8 @@
   sdlSupport ? false,
   faudioSupport ? false,
   vkd3dSupport ? false,
-  mingwSupport ? false,
+  mingwSupport ? wineRelease != "stable",
+  embedInstallers ? false # The Mono and Gecko MSI installers
 }:
 
 let wine-build = build: release:
@@ -57,7 +58,7 @@ let wine-build = build: release:
                   gsmSupport gphoto2Support ldapSupport fontconfigSupport alsaSupport
                   pulseaudioSupport xineramaSupport gtkSupport openclSupport xmlSupport tlsSupport
                   openglSupport gstreamerSupport udevSupport vulkanSupport sdlSupport faudioSupport
-                  vkd3dSupport mingwSupport;
+                  vkd3dSupport mingwSupport embedInstallers;
         };
       });
 

@@ -1,3 +1,7 @@
+# This derivation should be redundant, now that regular smlnj works on Darwin,
+# and is preserved only for pre-existing direct usage. New use cases should
+# just use the regular smlnj derivation.
+
 { lib, stdenv, fetchurl, cpio, rsync, xar, makeWrapper }:
 
 stdenv.mkDerivation rec {
@@ -10,7 +14,8 @@ stdenv.mkDerivation rec {
     sha256 = "12jn50h5jz0ac1vzld2mb94p1dyc8h0mk0hip2wj5xqk1dbzwxl4";
   };
 
-  buildInputs = [ cpio rsync makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ cpio rsync ];
 
   unpackPhase = ''
     ${xar}/bin/xar -xf $src

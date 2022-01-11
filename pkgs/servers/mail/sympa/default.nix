@@ -12,7 +12,6 @@ let
     DBI
     DateTimeFormatMail
     DateTimeTimeZone
-    DigestMD5
     Encode
     FCGI
     FileCopyRecursive
@@ -25,10 +24,9 @@ let
     IO
     IOStringy
     LWP
-    libintl_perl
+    libintl-perl
 
     MHonArc
-    MIMEBase64
     MIMECharset
     MIMETools
     MIMEEncWords
@@ -56,20 +54,20 @@ let
     IOSocketSSL
     MailDKIM
     NetDNS
-    NetLDAP
-    NetSMTP
+    perlldap
+    libnet
     SOAPLite
   ]);
 in
 stdenv.mkDerivation rec {
   pname = "sympa";
-  version = "6.2.60";
+  version = "6.2.66";
 
   src = fetchFromGitHub {
     owner = "sympa-community";
     repo = pname;
     rev = version;
-    sha256 = "0mnpmkvxf3bmrmahkf3d0i5r6sj7xb1yca5v7xdnwnh5wh9vlx7v";
+    sha256 = "sha256-rD6sYsEsAyu+4Vy2wMtWCtlzXoLeZgeu9hkoxOvwiP4=";
   };
 
   configureFlags = [

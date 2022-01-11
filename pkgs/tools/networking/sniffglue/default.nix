@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sniffglue";
-  version = "0.11.1";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "kpcyrd";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0lkz25z0qy1giss4rnhkx9fvsdd8ckf4z1gqw46zl664x96bb705";
+    sha256 = "sha256-s+2YzfSy7+o0VZZ4j/Cfd6F5GvBytthmDJqrPw+7SU0=";
   };
 
-  cargoSha256 = "01ya9535whi2kviw57f25n8h05ckpb4bq1h7qav6srai97rm937s";
+  cargoSha256 = "sha256-4G1OGY7/vE8NKBFeuOZzqyZ0DQN4hy/HBO9qrEtBYlM=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Secure multithreaded packet sniffer";
     homepage = "https://github.com/kpcyrd/sniffglue";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ xrelkd ];
     platforms = platforms.linux;
   };

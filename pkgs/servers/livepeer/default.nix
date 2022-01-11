@@ -4,16 +4,16 @@
 
 buildGoModule rec {
   pname = "livepeer";
-  version = "0.5.13";
+  version = "0.5.20";
 
-  runVend = true;
-  vendorSha256 = "sha256-wAjGgYDyBWqE8KCQ6TQ+LGDDZqF+5XY+NzU74RwPuRE=";
+  proxyVendor = true;
+  vendorSha256 = "sha256-pyPxONcWniJoA0qYusHktF3/taYda2StaMiMhyRYEm4=";
 
   src = fetchFromGitHub {
     owner = "livepeer";
     repo = "go-livepeer";
     rev = "v${version}";
-    sha256 = "sha256-b4O8Hc8A8TN5KFcQ7KYvFPVFgposDgPw06WowrXzpAs=";
+    sha256 = "sha256-cOxIL093Mi+g9Al/SQJ6vdaeBAXUN6ZGsSaVvEIiJpU=";
   };
 
   # livepeer_cli has a vendoring problem

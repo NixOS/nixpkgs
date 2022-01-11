@@ -2,12 +2,12 @@
 
 { pname
 , version
-, internalDeps ? []
-, peclDeps ? []
-, buildInputs ? []
-, nativeBuildInputs ? []
+, internalDeps ? [ ]
+, peclDeps ? [ ]
+, buildInputs ? [ ]
+, nativeBuildInputs ? [ ]
 , postPhpize ? ""
-, makeFlags ? []
+, makeFlags ? [ ]
 , src ? fetchurl {
     url = "http://pecl.php.net/get/${pname}-${version}.tgz";
     inherit (args) sha256;
@@ -33,4 +33,5 @@ stdenv.mkDerivation (args // {
       (dep: "mkdir -p ext; ln -s ${dep.dev}/include ext/${dep.extensionName}")
       internalDeps}
   '';
+  checkPhase = "NO_INTERACTON=yes make test";
 })

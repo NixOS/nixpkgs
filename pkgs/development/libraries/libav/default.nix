@@ -61,7 +61,7 @@ let
       "--enable-avplay"
       "--enable-shared"
       "--enable-runtime-cpudetect"
-      "--cc=cc"
+      "--cc=${stdenv.cc.targetPrefix}cc"
       (enableFeature enableGPL "gpl")
       (enableFeature enableGPL "swscale")
       (enableFeature mp3Support "libmp3lame")

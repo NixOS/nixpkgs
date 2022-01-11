@@ -13,8 +13,6 @@ let
         repo = fontName;
       };
 
-      phases = [ "unpackPhase" "installPhase" ];
-
       installPhase = ''
         local fontsdir="$out/share/lilypond/${lilypond.version}/fonts"
 

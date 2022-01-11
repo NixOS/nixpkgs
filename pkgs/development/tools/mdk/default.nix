@@ -1,9 +1,10 @@
 { lib, stdenv, fetchurl, intltool, pkg-config, glib }:
 
-stdenv.mkDerivation {
-  name = "gnu-mdk-1.3.0";
+stdenv.mkDerivation rec {
+  pname = "gnu-mdk";
+  version = "1.3.0";
   src = fetchurl {
-    url = "https://ftp.gnu.org/gnu/mdk/v1.3.0/mdk-1.3.0.tar.gz";
+    url = "mirror://gnu/gnu/mdk/v${version}/mdk-${version}.tar.gz";
     sha256 = "0bhk3c82kyp8167h71vdpbcr852h5blpnwggcswqqwvvykbms7lb";
   };
   nativeBuildInputs = [ pkg-config ];

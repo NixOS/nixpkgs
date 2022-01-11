@@ -29,6 +29,20 @@ with lib.maintainers; {
     scope = "Maintain ACME-related packages and modules.";
   };
 
+  bazel = {
+    members = [
+      mboes
+      marsam
+      uri-canva
+      cbley
+      olebedev
+      groodt
+      aherrmann
+      ylecornec
+    ];
+    scope = "Bazel build tool & related tools https://bazel.build/";
+  };
+
   beam = {
     members = [
       ankhers
@@ -48,6 +62,14 @@ with lib.maintainers; {
     scope = "Maintain Cinnamon desktop environment and applications made by the LinuxMint team.";
   };
 
+  chia = {
+    members = [
+      atemu
+      lourkeur
+    ];
+    scope = "Maintain the Chia blockchain and its dependencies";
+  };
+
   deshaw = {
     # Verify additions to this team with at least one already existing member of the team.
     members = [
@@ -56,9 +78,27 @@ with lib.maintainers; {
     scope = "Group registration for D. E. Shaw employees who collectively maintain packages.";
   };
 
+  determinatesystems = {
+    # Verify additions to this team with at least one already existing member of the team.
+    members = [
+      cole-h
+      grahamc
+    ];
+    scope = "Group registration for packages maintained by Determinate Systems.";
+  };
+
   freedesktop = {
-    members = [ jtojnar worldofpeace ];
+    members = [ jtojnar ];
     scope = "Maintain Freedesktop.org packages for graphical desktop.";
+  };
+
+  gcc = {
+    members = [
+      synthetica
+      vcunat
+      ericson2314
+    ];
+    scope = "Maintain GCC (GNU Compiler Collection) compilers";
   };
 
   golang = {
@@ -67,7 +107,6 @@ with lib.maintainers; {
       cstrahan
       Frostman
       kalbasit
-      mdlayher
       mic92
       orivej
       rvolosatovs
@@ -80,32 +119,111 @@ with lib.maintainers; {
     members = [
       hedning
       jtojnar
-      worldofpeace
       dasj19
+      maxeaubrey
     ];
     scope = "Maintain GNOME desktop environment and platform.";
   };
 
+  haskell = {
+    members = [
+      cdepillabout
+      expipiplus1
+      maralorn
+      sternenseemann
+    ];
+    scope = "Maintain Haskell packages and infrastructure.";
+  };
+
+  home-assistant = {
+    members = [
+      fab
+      globin
+      hexa
+      mic92
+    ];
+    scope = "Maintain the Home Assistant ecosystem";
+  };
+
+  iog = {
+    members = [
+      cleverca22
+      disassembler
+      jonringer
+      manveru
+      nrdxp
+    ];
+    scope = "Input-Output Global employees, which maintain critical software";
+  };
+
   jitsi = {
     members = [
-      mmilata
+      cleeyv
       petabyteboy
-      prusnak
       ryantm
+      yuka
     ];
     scope = "Maintain Jitsi.";
+  };
+
+  kodi = {
+    members = [
+      aanderse
+      cpages
+      edwtjo
+      minijackson
+      peterhoeg
+      sephalon
+    ];
+    scope = "Maintain Kodi and related packages.";
+  };
+
+  linux-kernel = {
+    members = [
+      TredwellGit
+      ma27
+      nequissimus
+      qyliss
+    ];
+    scope = "Maintain the Linux kernel.";
+  };
+
+  mate = {
+    members = [
+      j03
+      romildo
+    ];
+    scope = "Maintain Mate desktop environment and related packages.";
   };
 
   matrix = {
     members = [
       ma27
-      pacien
       fadenb
       mguentner
       ekleog
       ralith
+      mjlbach
+      dandellion
+      sumnerevans
     ];
     scope = "Maintain the ecosystem around Matrix, a decentralized messenger.";
+  };
+
+  openstack = {
+    members = [
+      angustrau
+      SuperSandro2000
+    ];
+    scope = "Maintain the ecosystem around OpenStack";
+  };
+
+  pantheon = {
+    members = [
+      davidak
+      bobby285271
+    ];
+    scope = "Maintain Pantheon desktop environment and platform.";
   };
 
   php = {
@@ -129,12 +247,46 @@ with lib.maintainers; {
     scope = "Maintain Podman and CRI-O related packages and modules.";
   };
 
+  redcodelabs = {
+    members = [
+      unrooted
+      wr0belj
+      wintrmvte
+    ];
+    scope = "Maintain Red Code Labs related packages and modules.";
+  };
+
   sage = {
     members = [
       timokau
       omasanori
       raskin
+      collares
     ];
     scope = "Maintain SageMath and the dependencies that are likely to break it.";
+  };
+
+  serokell = {
+    # Verify additions by approval of an already existing member of the team.
+    members = [
+      balsoft
+      mkaito
+    ];
+    scope = "Group registration for Serokell employees who collectively maintain packages.";
+  };
+
+  tts = {
+    members = [
+      hexa
+      mic92
+    ];
+    scope = "coqui-ai TTS (formerly Mozilla TTS) and leaf packages";
+  };
+
+  xfce = {
+    members = [
+      romildo
+    ];
+    scope = "Maintain Xfce desktop environment and related packages.";
   };
 }

@@ -10,9 +10,9 @@
 , libxfce4ui
 , libxfce4util
 , libxslt
+, pcre
 , xfconf
 , gobject-introspection
-, gvfs
 , makeWrapper
 , symlinkJoin
 , thunarPlugins ? []
@@ -21,9 +21,9 @@
 let unwrapped = mkXfceDerivation {
   category = "xfce";
   pname = "thunar";
-  version = "1.8.15";
+  version = "4.16.10";
 
-  sha256 = "1y9d88i0kwl7ak4d65gy3qf4bpkiyaqxd4g6px3v1ykf274k8al8";
+  sha256 = "sha256-BeEy8+zEsJ5fJAbvP37tfekqF5LTHil0RDcE5RY0f64=";
 
   nativeBuildInputs = [
     docbook_xsl
@@ -35,12 +35,12 @@ let unwrapped = mkXfceDerivation {
     exo
     gdk-pixbuf
     gtk3
-    gvfs
     libX11
     libgudev
     libnotify
     libxfce4ui
     libxfce4util
+    pcre
     xfconf
   ];
 
@@ -58,8 +58,9 @@ let unwrapped = mkXfceDerivation {
     sed -i -e 's|thunar_dialogs_show_insecure_program (parent, _(".*"), file, exec)|1|' thunar/thunar-file.c
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Xfce file manager";
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 };
 

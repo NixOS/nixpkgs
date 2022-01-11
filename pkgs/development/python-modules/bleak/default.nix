@@ -1,28 +1,29 @@
-{ lib, buildPythonPackage, isPy3k, fetchPypi, bluez, txdbus, pytest, pytestcov }:
+{ lib, buildPythonPackage, isPy3k, fetchPypi
+, bluez, dbus-next, pytestCheckHook, pytest-cov
+}:
 
 buildPythonPackage rec {
   pname = "bleak";
-  version = "0.10.0";
+  version = "0.13.0";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5c3a873965f2910865895e572e7a4f10533d6e150e6ba17936397426bf8d1eee";
+    sha256 = "1vnwk36qfws9amqrdaynf63dcj2gzxm0ns1l75hrczmd5j2ic1zb";
   };
 
   postPatch = ''
-    # bleak checks BlueZ's version with a call to `bluetoothctl -v` twice
-    substituteInPlace bleak/__init__.py \
-      --replace \"bluetoothctl\" \"${bluez}/bin/bluetoothctl\"
-    substituteInPlace bleak/backends/bluezdbus/client.py \
+    # bleak checks BlueZ's version with a call to `bluetoothctl --version`
+    substituteInPlace bleak/backends/bluezdbus/__init__.py \
       --replace \"bluetoothctl\" \"${bluez}/bin/bluetoothctl\"
   '';
 
-  propagatedBuildInputs = [ txdbus ];
-  checkInputs = [ pytest pytestcov ];
+  propagatedBuildInputs = [ dbus-next ];
 
-  checkPhase = "AGENT_OS=linux py.test";
+  checkInputs = [ pytestCheckHook pytest-cov ];
+
+  pythonImportsCheck = [ "bleak" ];
 
   meta = with lib; {
     description = "Bluetooth Low Energy platform Agnostic Klient for Python";

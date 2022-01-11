@@ -11,6 +11,7 @@
 , kwindowsystem
 , liblxqt
 , libqtxdg
+, procps
 , xorg
 , xdg-user-dirs
 , lxqtUpdateScript
@@ -18,13 +19,13 @@
 
 mkDerivation rec {
   pname = "lxqt-session";
-  version = "0.16.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "1lmj0cx4crdjl2qih3scm2gvsx3qna0nb6mjjrcx0f2k7h744pik";
+    sha256 = "6/HTCngjz0GpNAYf66CUiCZtEs5EsBbjDjcObIe3qSk=";
   };
 
   nativeBuildInputs = [
@@ -41,6 +42,7 @@ mkDerivation rec {
     kwindowsystem
     liblxqt
     libqtxdg
+    procps
     xorg.libpthreadstubs
     xorg.libXdmcp
     xdg-user-dirs

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nvtop";
-  version = "1.1.0";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "Syllo";
     repo = "nvtop";
     rev = version;
-    sha256 = "1h24ppdz7l6l0znwbgir49f7r1fshzjavc6i5j33c6bvr318dpqb";
+    sha256 = "sha256-B/SRTOMp3VYShjSGxnF1ll58ijddJG7w/7nPK1fMltk=";
   };
 
   cmakeFlags = [

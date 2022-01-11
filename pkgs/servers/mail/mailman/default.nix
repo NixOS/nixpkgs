@@ -1,38 +1,67 @@
-{ lib, buildPythonPackage, fetchPypi, fetchpatch, isPy3k, alembic, aiosmtpd, dnspython
-, flufl_bounce, flufl_i18n, flufl_lock, lazr_config, lazr_delegates, passlib
-, requests, zope_configuration, click, falcon, importlib-resources
-, zope_component, lynx, postfix, authheaders, gunicorn
+{ lib, buildPythonPackage, fetchPypi, fetchpatch, pythonOlder, python3, postfix, lynx
 }:
+
+let
+  # Mailman does not support sqlalchemy >= 1.4 https://gitlab.com/mailman/mailman/-/issues/845
+  pythonOverride = python3.override {
+    packageOverrides = self: super: {
+      sqlalchemy = super.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
+        version = "1.3.24";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "06bmxzssc66cblk1hamskyv5q3xf1nh1py3vi6dka4lkpxy7gfzb";
+        };
+      });
+    };
+  };
+in
 
 buildPythonPackage rec {
   pname = "mailman";
-  version = "3.3.1";
-  disabled = !isPy3k;
+  version = "3.3.5";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0idfiv48jjgc0jq4731094ddhraqq8bxnwmjk6sg5ask0jss9kxq";
+    sha256 = "12mgxs1ndhdjjkydx48b95na9k9h0disfqgrr6wxx7vda6dqvcwz";
   };
 
-  propagatedBuildInputs = [
-    alembic aiosmtpd click dnspython falcon flufl_bounce flufl_i18n flufl_lock
-    importlib-resources lazr_config passlib requests zope_configuration
-    zope_component authheaders gunicorn
+  propagatedBuildInputs = with pythonOverride.pkgs; [
+    aiosmtpd
+    alembic
+    authheaders
+    click
+    dnspython
+    falcon
+    flufl_bounce
+    flufl_i18n
+    flufl_lock
+    gunicorn
+    importlib-resources
+    lazr_config
+    passlib
+    requests
+    sqlalchemy
+    zope_component
+    zope_configuration
   ];
 
   patches = [
     (fetchpatch {
-      url = https://gitlab.com/mailman/mailman/-/commit/4b206e2a5267a0e17f345fd7b2d957122ba57566.patch;
+      url = "https://gitlab.com/mailman/mailman/-/commit/4b206e2a5267a0e17f345fd7b2d957122ba57566.patch";
       sha256 = "06axmrn74p81wvcki36c7gfj5fp5q15zxz2yl3lrvijic7hbs4n2";
     })
     (fetchpatch {
-      url = https://gitlab.com/mailman/mailman/-/commit/9613154f3c04fa2383fbf017031ef263c291418d.patch;
+      url = "https://gitlab.com/mailman/mailman/-/commit/9613154f3c04fa2383fbf017031ef263c291418d.patch";
       sha256 = "0vyw87s857vfxbf7kihwb6w094xyxmxbi1bpdqi3ybjamjycp55r";
     })
     ./log-stderr.patch
   ];
 
   postPatch = ''
+    substituteInPlace setup.py \
+      --replace "alembic>=1.6.2,<1.7" "alembic>=1.6.2"
+
     substituteInPlace src/mailman/config/postfix.cfg \
       --replace /usr/sbin/postmap ${postfix}/bin/postmap
     substituteInPlace src/mailman/config/schema.cfg \
@@ -48,12 +77,13 @@ buildPythonPackage rec {
   # 'runner' scripts.
   dontWrapPythonPrograms = true;
 
+  # requires flufl.testing, which the upstream has archived
   doCheck = false;
 
   meta = {
     homepage = "https://www.gnu.org/software/mailman/";
     description = "Free software for managing electronic mail discussion and newsletter lists";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ peti ];
+    maintainers = with lib.maintainers; [ qyliss ];
   };
 }

@@ -1,18 +1,18 @@
 { lib
 , fetchFromGitHub
 , python3Packages
-, installShellFiles
+, nixosTests
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "xandikos";
-  version = "0.2.3";
+  version = "0.2.6";
 
   src = fetchFromGitHub {
     owner = "jelmer";
     repo = "xandikos";
     rev = "v${version}";
-    sha256 = "1x0bylmdizirvlcn6ryd43lffpmlq0cklj3jz956scmxgq4p6wby";
+    sha256 = "sha256-Epy6NWtRY2Oj4MHTStdv8ZJ5SvSmUo6IlwL5PJV9pD0=";
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -22,14 +22,18 @@ python3Packages.buildPythonApplication rec {
     icalendar
     jinja2
     multidict
-    prometheus_client
+    prometheus-client
   ];
 
-  nativeBuildInputs = [ installShellFiles ];
+  passthru.tests.xandikos = nixosTests.xandikos;
 
-  postInstall = ''
-    installManPage xandikos.1
-  '';
+  checkInputs = with python3Packages; [ pytestCheckHook ];
+  disabledTests = [
+    # these tests are failing due to the following error:
+    # TypeError: expected str, bytes or os.PathLike object, not int
+    "test_iter_with_etag"
+    "test_iter_with_etag_missing_uid"
+  ];
 
   meta = with lib; {
     description = "Lightweight CalDAV/CardDAV server";

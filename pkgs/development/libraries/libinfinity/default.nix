@@ -46,7 +46,7 @@ let
       homepage = "https://gobby.github.io/";
       description = "An implementation of the Infinote protocol written in GObject-based C";
       license = lib.licenses.lgpl2Plus;
-      maintainers = [ lib.maintainers.phreedom ];
+      maintainers = [ ];
       platforms = with lib.platforms; linux ++ darwin;
     };
   };

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchpatch
+{ stdenv, lib
 , pkg-config, autoreconfHook
 , fetchurl, cpio, zlib, bzip2, file, elfutils, libbfd, libgcrypt, libarchive, nspr, nss, popt, db, xz, python, lua, llvmPackages
 , sqlite, zstd
@@ -6,14 +6,15 @@
 
 stdenv.mkDerivation rec {
   pname = "rpm";
-  version = "4.16.1.2";
+  version = "4.17.0";
 
   src = fetchurl {
     url = "http://ftp.rpm.org/releases/rpm-${lib.versions.majorMinor version}.x/rpm-${version}.tar.bz2";
-    sha256 = "1k6ank2aad7r503w12m6m494mxr6iccj52wqhwbc94pwxsf34mw3";
+    sha256 = "2e0d220b24749b17810ed181ac1ed005a56bbb6bc8ac429c21f314068dc65e6a";
   };
 
   outputs = [ "out" "dev" "man" ];
+  separateDebugInfo = true;
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ cpio zlib zstd bzip2 file libarchive libgcrypt nspr nss db xz python lua sqlite ]
@@ -34,16 +35,6 @@ stdenv.mkDerivation rec {
     "--enable-zstd"
     "--localstatedir=/var"
     "--sharedstatedir=/com"
-  ];
-
-  # Small fixes for ndb on darwin
-  # https://github.com/rpm-software-management/rpm/pull/1465
-  patches = [
-    (fetchpatch {
-      name = "darwin-support.patch";
-      url = "https://github.com/rpm-software-management/rpm/commit/2d20e371d5e38f4171235e5c64068cad30bda557.patch";
-      sha256 = "0p3j5q5a4hl357maf7018k3826jhcpqg6wfrnccrkv30g0ayk171";
-    })
   ];
 
   postPatch = ''
@@ -72,9 +63,11 @@ stdenv.mkDerivation rec {
     ln -sf $out/bin/{rpm,rpmverify}
   '';
 
+  enableParallelBuilding = true;
+
   meta = with lib; {
-    homepage = "http://www.rpm.org/";
-    license = licenses.gpl2;
+    homepage = "https://www.rpm.org/";
+    license = with licenses; [ gpl2Plus lgpl21Plus ];
     description = "The RPM Package Manager";
     maintainers = with maintainers; [ copumpkin ];
     platforms = platforms.linux ++ platforms.darwin;

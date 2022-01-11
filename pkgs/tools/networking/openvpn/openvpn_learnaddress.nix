@@ -1,7 +1,8 @@
-{ lib, stdenv, fetchgit, makeWrapper,  coreutils, gawk, util-linux }:
+{ lib, stdenv, fetchgit, makeWrapper, coreutils, gawk, util-linux }:
 
 stdenv.mkDerivation {
-  name = "openvpn-learnaddress-19b03c3";
+  pname = "openvpn-learnaddress";
+  version = "unstable-2013-10-21";
 
   src = fetchgit {
     url = "https://gist.github.com/4058733.git";
@@ -9,7 +10,8 @@ stdenv.mkDerivation {
     sha256 = "16pcyvyhwsx34i0cjkkx906lmrwdd9gvznvqdwlad4ha8l8f8z42";
   };
 
-  buildInputs = [ makeWrapper coreutils gawk util-linux ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ coreutils gawk util-linux ];
 
   installPhase = ''
     install -Dm555 ovpn-learnaddress $out/libexec/openvpn/openvpn-learnaddress

@@ -1,11 +1,14 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "openlibm";
-  version = "0.7.4";
-  src = fetchurl {
-    url = "https://github.com/JuliaLang/openlibm/archive/v${version}.tar.gz";
-    sha256 = "sha256-61hSBNbJlWkeVUXqT/y4h8FZvwXMXuG7+Spvzd4vzK4=";
+  version = "0.8.0";
+
+  src = fetchFromGitHub {
+    owner = "JuliaLang";
+    repo = "openlibm";
+    rev = "v${version}";
+    sha256 = "sha256-dEM10picZXiPokzSHCfxhS7fwZ0sMjil4bni+PHBCeI=";
   };
 
   makeFlags = [ "prefix=$(out)" ];

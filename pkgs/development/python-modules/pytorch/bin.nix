@@ -5,7 +5,6 @@
 , isPy38
 , isPy39
 , python
-, nvidia_x11
 , addOpenGLRunpath
 , future
 , numpy
@@ -17,10 +16,9 @@
 
 let
   pyVerNoDot = builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion;
-  platform = if stdenv.isDarwin then "darwin" else "linux";
   srcs = import ./binary-hashes.nix version;
   unsupported = throw "Unsupported system";
-  version = "1.7.1";
+  version = "1.10.0";
 in buildPythonPackage {
   inherit version;
 
@@ -52,7 +50,7 @@ in buildPythonPackage {
   '';
 
   postFixup = let
-    rpath = lib.makeLibraryPath [ stdenv.cc.cc.lib nvidia_x11 ];
+    rpath = lib.makeLibraryPath [ stdenv.cc.cc.lib ];
   in ''
     find $out/${python.sitePackages}/torch/lib -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do
       echo "setting rpath for $lib..."
@@ -61,13 +59,20 @@ in buildPythonPackage {
     done
   '';
 
+  # The wheel-binary is not stripped to avoid the error of `ImportError: libtorch_cuda_cpp.so: ELF load command address/offset not properly aligned.`.
+  dontStrip = true;
+
   pythonImportsCheck = [ "torch" ];
 
   meta = with lib; {
     description = "Open source, prototype-to-production deep learning platform";
     homepage = "https://pytorch.org/";
-    license = licenses.unfree; # Includes CUDA and Intel MKL.
+    changelog = "https://github.com/pytorch/pytorch/releases/tag/v${version}";
+    # Includes CUDA and Intel MKL, but redistributions of the binary are not limited.
+    # https://docs.nvidia.com/cuda/eula/index.html
+    # https://www.intel.com/content/www/us/en/developer/articles/license/onemkl-license-faq.html
+    license = licenses.bsd3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ danieldk ];
+    maintainers = with maintainers; [ junjihashimoto ];
   };
 }

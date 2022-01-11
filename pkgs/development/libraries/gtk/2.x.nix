@@ -1,24 +1,31 @@
-{ config, lib, stdenv, fetchurl, pkg-config, gettext, glib, atk, pango, cairo, perl, xorg
+{ config, lib, substituteAll, stdenv, fetchurl, pkg-config, gettext, glib, atk, pango, cairo, perl, xorg
 , gdk-pixbuf, xlibsWrapper, gobject-introspection
 , xineramaSupport ? stdenv.isLinux
-, cupsSupport ? config.gtk2.cups or stdenv.isLinux, cups ? null
+, cupsSupport ? config.gtk2.cups or stdenv.isLinux, cups
 , gdktarget ? if stdenv.isDarwin then "quartz" else "x11"
 , AppKit, Cocoa
-, fetchpatch
+, fetchpatch, buildPackages
 }:
-
-assert xineramaSupport -> xorg.libXinerama != null;
-assert cupsSupport -> cups != null;
 
 with lib;
 
+let
+
+  gtkCleanImmodulesCache = substituteAll {
+    src = ./hooks/clean-immodules-cache.sh;
+    gtk_module_path = "gtk-2.0";
+    gtk_binary_version = "2.10.0";
+  };
+
+in
+
 stdenv.mkDerivation rec {
   pname = "gtk+";
-  version = "2.24.32";
+  version = "2.24.33";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk+/2.24/${pname}-${version}.tar.xz";
-    sha256 = "b6c8a93ddda5eabe3bfee1eb39636c9a03d2a56c7b62828b359bf197943c582e";
+    sha256 = "rCrHV/WULTGKMRpUsMgLXvKV8pnCpzxjL2v7H/Scxto=";
   };
 
   outputs = [ "out" "dev" "devdoc" ];
@@ -27,9 +34,10 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   setupHooks =  [
-    ./hooks/gtk2-clean-immodules-cache.sh
     ./hooks/drop-icon-theme-cache.sh
+    gtkCleanImmodulesCache
   ];
+
 
   nativeBuildInputs = setupHooks ++ [ perl pkg-config gettext gobject-introspection ];
 
@@ -54,6 +62,10 @@ stdenv.mkDerivation rec {
     ++ optionals cupsSupport [ cups ]
     ++ optionals stdenv.isDarwin [ AppKit Cocoa ];
 
+  preConfigure = if (lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11" && stdenv.isDarwin) then ''
+    MACOSX_DEPLOYMENT_TARGET=10.16
+  '' else null;
+
   configureFlags = [
     "--with-gdktarget=${gdktarget}"
     "--with-xinput=yes"
@@ -61,6 +73,9 @@ stdenv.mkDerivation rec {
     "--disable-glibtest"
     "--disable-introspection"
     "--disable-visibility"
+  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "ac_cv_path_GTK_UPDATE_ICON_CACHE=${buildPackages.gtk2}/bin/gtk-update-icon-cache"
+    "ac_cv_path_GDK_PIXBUF_CSOURCE=${buildPackages.gdk-pixbuf.dev}/bin/gdk-pixbuf-csource"
   ];
 
   doCheck = false; # needs X11

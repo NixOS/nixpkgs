@@ -22,8 +22,6 @@ with lib;
   environment.memoryAllocator.provider = mkDefault "scudo";
   environment.variables.SCUDO_OPTIONS = mkDefault "ZeroContents=1";
 
-  security.hideProcessInformation = mkDefault true;
-
   security.lockKernelModules = mkDefault true;
 
   security.protectKernelImage = mkDefault true;
@@ -38,6 +36,7 @@ with lib;
   security.virtualisation.flushL1DataCache = mkDefault "always";
 
   security.apparmor.enable = mkDefault true;
+  security.apparmor.killUnconfinedConfinables = mkDefault true;
 
   boot.kernelParams = [
     # Slab/slub sanity checks, redzoning, and poisoning

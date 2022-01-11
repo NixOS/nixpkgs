@@ -1,8 +1,7 @@
 # Deprecated aliases - for backward compatibility
+lib:
 
-lib: overriden:
-
-with overriden;
+final: prev:
 
 let
   # Removing recurseForDerivation prevents derivations of aliased attribute
@@ -21,22 +20,22 @@ let
 
   # Make sure that we are not shadowing something from
   # all-packages.nix.
-  checkInPkgs = n: alias: if builtins.hasAttr n overriden
+  checkInPkgs = n: alias: if builtins.hasAttr n prev
                           then throw "Alias ${n} is still in vim-plugins"
                           else alias;
 
   mapAliases = aliases:
-     lib.mapAttrs (n: alias: removeDistribute
+    lib.mapAttrs (n: alias: removeDistribute
                              (removeRecurseForDerivations
                               (checkInPkgs n alias)))
                      aliases;
 
   deprecations = lib.mapAttrs (old: info:
     throw "${old} was renamed to ${info.new} on ${info.date}. Please update to ${info.new}."
-  ) (builtins.fromJSON (builtins.readFile ./deprecated.json));
+  ) (lib.importJSON ./deprecated.json);
 
 in
-mapAliases ({
+mapAliases (with prev; {
   airline             = vim-airline;
   alternative         = a-vim; # backwards compat, added 2014-10-21
   bats                = bats-vim;
@@ -83,6 +82,7 @@ mapAliases ({
   hlint-refactor      = hlint-refactor-vim;
   hoogle              = vim-hoogle;
   Hoogle              = vim-hoogle;
+  indent-blankline-nvim-lua = indent-blankline-nvim; # backwards compat, added 2021-07-05
   ipython             = vim-ipython;
   latex-live-preview  = vim-latex-live-preview;
   maktaba             = vim-maktaba;
@@ -94,6 +94,7 @@ mapAliases ({
   neosnippet          = neosnippet-vim;
   The_NERD_Commenter  = nerdcommenter;
   The_NERD_tree       = nerdtree;
+  onedark-nvim        = onedarkpro-nvim; # added 2021-10-22
   open-browser        = open-browser-vim;
   pathogen            = vim-pathogen;
   polyglot            = vim-polyglot;

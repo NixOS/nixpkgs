@@ -4,7 +4,7 @@
 , gfortran
 , blas
 , boost
-, python
+, python3
 , ocl-icd
 , opencl-headers
 , Accelerate, CoreGraphics, CoreVideo, OpenCL
@@ -35,11 +35,10 @@ stdenv.mkDerivation rec {
      "-DBUILD_TEST=OFF"
   ];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake gfortran ];
   buildInputs = [
-    gfortran
     blas
-    python
+    python3
     boost
   ] ++ lib.optionals (!stdenv.isDarwin) [
     ocl-icd
@@ -52,6 +51,8 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = lib.optionals stdenv.isDarwin [
     OpenCL
   ];
+
+  strictDeps = true;
 
   meta = with lib; {
     homepage = "https://github.com/clMathLibraries/clBLAS";

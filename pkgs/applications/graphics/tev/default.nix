@@ -1,23 +1,23 @@
 { lib, stdenv, fetchFromGitHub
 , cmake, wrapGAppsHook
-, libX11, libzip, glfw, libpng, xorg, gnome3
+, libX11, libzip, glfw, libpng, xorg, gnome
 }:
 
 stdenv.mkDerivation rec {
   pname = "tev";
-  version = "1.16";
+  version = "1.19";
 
   src = fetchFromGitHub {
     owner = "Tom94";
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "0fn5j9klzrjvz3bq8p9yp9nqikn2fr7bp98c1sxwpwwaadkqy9xf";
+    sha256 = "sha256-laP47xOND6PMA6dwTcCupcTIW+9zCaxO6rHzvDSL9JU=";
   };
 
   nativeBuildInputs = [ cmake wrapGAppsHook ];
   buildInputs = [ libX11 libzip glfw libpng ]
-    ++ (with xorg; [ libXrandr libXinerama libXcursor libXi libXxf86vm ]);
+    ++ (with xorg; [ libXrandr libXinerama libXcursor libXi libXxf86vm libXext ]);
 
   dontWrapGApps = true; # We also need zenity (see below)
 
@@ -26,10 +26,14 @@ stdenv.mkDerivation rec {
       --replace "/usr/" "''${out}/"
   '';
 
+  cmakeFlags = [
+    "-DTEV_DEPLOY=1" # Only relevant not to append "dev" to the version
+  ];
+
   postInstall = ''
     wrapProgram $out/bin/tev \
       "''${gappsWrapperArgs[@]}" \
-      --prefix PATH ":" "${gnome3.zenity}/bin"
+      --prefix PATH ":" "${gnome.zenity}/bin"
   '';
 
   meta = with lib; {
@@ -49,6 +53,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/Tom94/tev/releases/tag/v${version}";
     license = licenses.bsd3;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [ ];
   };
 }

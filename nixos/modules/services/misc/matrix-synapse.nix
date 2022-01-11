@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
   cfg = config.services.matrix-synapse;
+  opt = options.services.matrix-synapse;
   pg = config.services.postgresql;
   usePostgresql = cfg.database_type == "psycopg2";
   logConfigFile = pkgs.writeText "log_config.yaml" cfg.logConfig;
@@ -86,7 +87,9 @@ account_threepid_delegates:
   ${optionalString (cfg.account_threepid_delegates.email != null) "email: ${cfg.account_threepid_delegates.email}"}
   ${optionalString (cfg.account_threepid_delegates.msisdn != null) "msisdn: ${cfg.account_threepid_delegates.msisdn}"}
 
-room_invite_state_types: ${builtins.toJSON cfg.room_invite_state_types}
+room_prejoin_state:
+  disable_default_event_types: ${boolToString cfg.room_prejoin_state.disable_default_event_types}
+  additional_event_types: ${builtins.toJSON cfg.room_prejoin_state.additional_event_types}
 ${optionalString (cfg.macaroon_secret_key != null) ''
   macaroon_secret_key: "${cfg.macaroon_secret_key}"
 ''}
@@ -120,10 +123,18 @@ in {
   options = {
     services.matrix-synapse = {
       enable = mkEnableOption "matrix.org synapse";
+      configFile = mkOption {
+        type = types.str;
+        readOnly = true;
+        description = ''
+          Path to the configuration file on the target system. Useful to configure e.g. workers
+          that also need this.
+        '';
+      };
       package = mkOption {
         type = types.package;
         default = pkgs.matrix-synapse;
-        defaultText = "pkgs.matrix-synapse";
+        defaultText = literalExpression "pkgs.matrix-synapse";
         description = ''
           Overridable attribute of the matrix synapse server package to use.
         '';
@@ -131,7 +142,7 @@ in {
       plugins = mkOption {
         type = types.listOf types.package;
         default = [ ];
-        example = literalExample ''
+        example = literalExpression ''
           with config.services.matrix-synapse.package.plugins; [
             matrix-synapse-ldap3
             matrix-synapse-pam
@@ -139,6 +150,13 @@ in {
         '';
         description = ''
           List of additional Matrix plugins to make available.
+        '';
+      };
+      withJemalloc = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to preload jemalloc to reduce memory fragmentation and overall usage.
         '';
       };
       no_tls = mkOption {
@@ -180,7 +198,7 @@ in {
       tls_certificate_path = mkOption {
         type = types.nullOr types.str;
         default = null;
-        example = "${cfg.dataDir}/homeserver.tls.crt";
+        example = "/var/lib/matrix-synapse/homeserver.tls.crt";
         description = ''
           PEM encoded X509 certificate for TLS.
           You can replace the self-signed certificate that synapse
@@ -192,7 +210,7 @@ in {
       tls_private_key_path = mkOption {
         type = types.nullOr types.str;
         default = null;
-        example = "${cfg.dataDir}/homeserver.tls.key";
+        example = "/var/lib/matrix-synapse/homeserver.tls.key";
         description = ''
           PEM encoded private key for TLS. Specify null if synapse is not
           speaking TLS directly.
@@ -201,7 +219,7 @@ in {
       tls_dh_params_path = mkOption {
         type = types.nullOr types.str;
         default = null;
-        example = "${cfg.dataDir}/homeserver.tls.dh";
+        example = "/var/lib/matrix-synapse/homeserver.tls.dh";
         description = ''
           PEM dh parameters for ephemeral keys
         '';
@@ -210,11 +228,13 @@ in {
         type = types.str;
         example = "example.com";
         default = config.networking.hostName;
+        defaultText = literalExpression "config.networking.hostName";
         description = ''
           The domain name of the server, with optional explicit port.
-          This is used by remote servers to connect to this server,
-          e.g. matrix.org, localhost:8080, etc.
+          This is used by remote servers to look up the server address.
           This is also the last part of your UserID.
+
+          The server_name cannot be changed later so it is important to configure this correctly before you start Synapse.
         '';
       };
       public_baseurl = mkOption {
@@ -229,7 +249,7 @@ in {
         type = types.listOf (types.submodule {
           options = {
             port = mkOption {
-              type = types.int;
+              type = types.port;
               example = 8448;
               description = ''
                 The port to listen for HTTP(S) requests on.
@@ -361,6 +381,11 @@ in {
         default = if versionAtLeast config.system.stateVersion "18.03"
           then "psycopg2"
           else "sqlite3";
+        defaultText = literalExpression ''
+          if versionAtLeast config.system.stateVersion "18.03"
+            then "psycopg2"
+            else "sqlite3"
+        '';
         description = ''
           The database engine name. Can be sqlite or psycopg2.
         '';
@@ -384,6 +409,29 @@ in {
             database = cfg.database_name;
           };
         }.${cfg.database_type};
+        defaultText = literalDocBook ''
+          <variablelist>
+            <varlistentry>
+              <term>using sqlite3</term>
+              <listitem>
+                <programlisting>
+                  { database = "''${config.${opt.dataDir}}/homeserver.db"; }
+                </programlisting>
+              </listitem>
+            </varlistentry>
+            <varlistentry>
+              <term>using psycopg2</term>
+              <listitem>
+                <programlisting>
+                  psycopg2 = {
+                    user = config.${opt.database_user};
+                    database = config.${opt.database_name};
+                  }
+                </programlisting>
+              </listitem>
+            </varlistentry>
+          </variablelist>
+        '';
         description = ''
           Arguments to pass to the engine.
         '';
@@ -577,11 +625,28 @@ in {
           Delegate SMS sending to this local process (https://localhost:8090)
         '';
       };
-      room_invite_state_types = mkOption {
+      room_prejoin_state.additional_event_types = mkOption {
+        default = [];
         type = types.listOf types.str;
-        default = ["m.room.join_rules" "m.room.canonical_alias" "m.room.avatar" "m.room.name"];
         description = ''
-          A list of event types that will be included in the room_invite_state
+          Additional events to share with users who received an invite.
+        '';
+      };
+      room_prejoin_state.disable_default_event_types = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Whether to disable the default state-event types for users invited to a room.
+          These are:
+
+          <itemizedlist>
+          <listitem><para>m.room.join_rules</para></listitem>
+          <listitem><para>m.room.canonical_alias</para></listitem>
+          <listitem><para>m.room.avatar</para></listitem>
+          <listitem><para>m.room.encryption</para></listitem>
+          <listitem><para>m.room.name</para></listitem>
+          <listitem><para>m.room.create</para></listitem>
+          </itemizedlist>
         '';
       };
       macaroon_secret_key = mkOption {
@@ -679,13 +744,15 @@ in {
       }
     ];
 
+    services.matrix-synapse.configFile = "${configFile}";
+
     users.users.matrix-synapse = {
-        group = "matrix-synapse";
-        home = cfg.dataDir;
-        createHome = true;
-        shell = "${pkgs.bash}/bin/bash";
-        uid = config.ids.uids.matrix-synapse;
-      };
+      group = "matrix-synapse";
+      home = cfg.dataDir;
+      createHome = true;
+      shell = "${pkgs.bash}/bin/bash";
+      uid = config.ids.uids.matrix-synapse;
+    };
 
     users.groups.matrix-synapse = {
       gid = config.ids.gids.matrix-synapse;
@@ -696,24 +763,33 @@ in {
       after = [ "network.target" ] ++ optional hasLocalPostgresDB "postgresql.service";
       wantedBy = [ "multi-user.target" ];
       preStart = ''
-        ${cfg.package}/bin/homeserver \
+        ${cfg.package}/bin/synapse_homeserver \
           --config-path ${configFile} \
           --keys-directory ${cfg.dataDir} \
           --generate-keys
       '';
-      environment.PYTHONPATH = makeSearchPathOutput "lib" cfg.package.python.sitePackages [ pluginsEnv ];
+      environment = {
+        PYTHONPATH = makeSearchPathOutput "lib" cfg.package.python.sitePackages [ pluginsEnv ];
+      } // optionalAttrs (cfg.withJemalloc) {
+        LD_PRELOAD = "${pkgs.jemalloc}/lib/libjemalloc.so";
+      };
       serviceConfig = {
         Type = "notify";
         User = "matrix-synapse";
         Group = "matrix-synapse";
         WorkingDirectory = cfg.dataDir;
+        ExecStartPre = [ ("+" + (pkgs.writeShellScript "matrix-synapse-fix-permissions" ''
+          chown matrix-synapse:matrix-synapse ${cfg.dataDir}/homeserver.signing.key
+          chmod 0600 ${cfg.dataDir}/homeserver.signing.key
+        '')) ];
         ExecStart = ''
-          ${cfg.package}/bin/homeserver \
+          ${cfg.package}/bin/synapse_homeserver \
             ${ concatMapStringsSep "\n  " (x: "--config-path ${x} \\") ([ configFile ] ++ cfg.extraConfigFiles) }
             --keys-directory ${cfg.dataDir}
         '';
         ExecReload = "${pkgs.util-linux}/bin/kill -HUP $MAINPID";
         Restart = "on-failure";
+        UMask = "0077";
       };
     };
   };
@@ -728,6 +804,12 @@ in {
       <nixpkgs/nixos/tests/matrix-synapse.nix>
     '')
     (mkRemovedOptionModule [ "services" "matrix-synapse" "web_client" ] "")
+    (mkRemovedOptionModule [ "services" "matrix-synapse" "room_invite_state_types" ] ''
+      You may add additional event types via
+      `services.matrix-synapse.room_prejoin_state.additional_event_types` and
+      disable the default events via
+      `services.matrix-synapse.room_prejoin_state.disable_default_event_types`.
+    '')
   ];
 
   meta.doc = ./matrix-synapse.xml;

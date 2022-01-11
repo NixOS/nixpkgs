@@ -20,17 +20,17 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "displaylink";
-  version = "5.3.1.34";
+  version = "5.4.1-55.174";
 
   src = requireFile rec {
     name = "displaylink.zip";
-    sha256 = "1c1kbjgpb71f73qnyl44rvwi6l4ivddq789rwvvh0ahw2jm324hy";
+    sha256 = "1biswvjz91gmx7xf9g05h3ra463hf2yv9mr2nkxclyrd283iiiqc";
     message = ''
       In order to install the DisplayLink drivers, you must first
       comply with DisplayLink's EULA and download the binaries and
       sources from here:
 
-      https://www.displaylink.com/downloads/file?id=1576
+      https://www.synaptics.com/products/displaylink-graphics/downloads/ubuntu-5.4.1
 
       Once you have downloaded the file, please use the following
       commands and re-run the installation:

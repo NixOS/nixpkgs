@@ -13,25 +13,22 @@ rec {
   name = "hledger-web";
   meta.maintainers = with lib.maintainers; [ marijanp ];
 
-  nodes = {
-    server = { config, pkgs, ... }: rec {
+  nodes = rec {
+    server = { config, pkgs, ... }: {
       services.hledger-web = {
         host = "127.0.0.1";
         port = 5000;
         enable = true;
-        journalFile = journal;
+        capabilities.manage = true;
       };
-      networking.firewall.allowedTCPPorts = [ services.hledger-web.port ];
+      networking.firewall.allowedTCPPorts = [ config.services.hledger-web.port ];
+      systemd.services.hledger-web.preStart = ''
+        ln -s ${journal} /var/lib/hledger-web/.hledger.journal
+      '';
     };
-    apiserver = { config, pkgs, ... }: rec {
-      services.hledger-web = {
-        host = "127.0.0.1";
-        port = 5000;
-        enable = true;
-        serveApi = true;
-        journalFile = journal;
-      };
-      networking.firewall.allowedTCPPorts = [ services.hledger-web.port ];
+    apiserver = { ... }: {
+      imports = [ server ];
+      services.hledger-web.serveApi = true;
     };
   };
 
@@ -42,7 +39,7 @@ rec {
     server.wait_for_open_port(5000)
     with subtest("Check if web UI is accessible"):
         page = server.succeed("curl -L http://127.0.0.1:5000")
-        assert "test.journal" in page
+        assert ".hledger.journal" in page
 
     apiserver.wait_for_unit("hledger-web.service")
     apiserver.wait_for_open_port(5000)

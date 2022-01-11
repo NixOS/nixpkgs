@@ -1,11 +1,12 @@
 { lib, stdenv, fetchurl, xlibsWrapper, zlib, libjpeg, imake, gccmakedep, libXmu
 , libXaw, libXpm, libXp , perl, xauth, fontDirectories, openssh }:
 
-stdenv.mkDerivation {
-  name = "tightvnc-1.3.10";
+stdenv.mkDerivation rec {
+  pname = "tightvnc";
+  version = "1.3.10";
 
   src = fetchurl {
-    url = "mirror://sourceforge/vnc-tight/tightvnc-1.3.10_unixsrc.tar.bz2";
+    url = "mirror://sourceforge/vnc-tight/tightvnc-${version}_unixsrc.tar.bz2";
     sha256 = "f48c70fea08d03744ae18df6b1499976362f16934eda3275cead87baad585c0d";
   };
 
@@ -81,5 +82,9 @@ stdenv.mkDerivation {
 
     maintainers = [];
     platforms = lib.platforms.unix;
+
+    knownVulnerabilities = [ "CVE-2021-42785" ];
+    # Unfortunately, upstream doesn't maintain the 1.3 branch anymore, and the
+    # new 2.x branch is substantially different (requiring either Windows or Java)
   };
 }

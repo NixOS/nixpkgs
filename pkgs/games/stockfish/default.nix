@@ -1,27 +1,40 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, fetchFromGitHub }:
 
-let arch = if stdenv.isx86_64 then "x86-64" else
+let
+    # The x86-64-modern may need to be refined further in the future
+    # but stdenv.hostPlatform CPU flags do not currently work on Darwin
+    # https://discourse.nixos.org/t/darwin-system-and-stdenv-hostplatform-features/9745
+    archDarwin = if stdenv.isx86_64 then "x86-64-modern" else "x86-64";
+    arch = if stdenv.isDarwin then archDarwin else
+           if stdenv.isx86_64 then "x86-64" else
            if stdenv.isi686 then "x86-32" else
+           if stdenv.isAarch64 then "armv8" else
            "unknown";
 
-    version = "12";
-
-    nnueFile = "nn-82215d0fd0df.nnue";
+    nnueFile = "nn-13406b1dcbe0.nnue";
     nnue = fetchurl {
       name = nnueFile;
-        url = "https://tests.stockfishchess.org/api/nn/${nnueFile}";
-      sha256 = "1r4yqrh4di05syyhl84hqcz84djpbd605b27zhbxwg6zs07ms8c2";
+      url = "https://tests.stockfishchess.org/api/nn/${nnueFile}";
+      sha256 = "sha256-E0BrHcvgo238XgfaUdjbOLekXX2kMHjsJadiTCuDI28=";
     };
 in
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "stockfish";
-  inherit version;
+  version = "14.1";
 
-  src = fetchurl {
-    url = "https://github.com/official-stockfish/Stockfish/archive/sf_${version}.tar.gz";
-    sha256 = "16980aicm5i6i9252239q4f9bcxg1gnqkv6nphrmpz4drg8i3v6i";
+  src = fetchFromGitHub {
+    owner = "official-stockfish";
+    repo = "Stockfish";
+    rev = "sf_${version}";
+    sha256 = "sha256-bb62yezHKXu0J7NKavX8xhHghaUjUFYNG5U6dh/D+Co=";
   };
+
+  # This addresses a linker issue with Darwin
+  # https://github.com/NixOS/nixpkgs/issues/19098
+  preBuild = lib.optionalString stdenv.isDarwin ''
+    sed -i.orig '/^\#\#\# 3.*Link Time Optimization/,/^\#\#\# 3/d' Makefile
+  '';
 
   postUnpack = ''
     sourceRoot+=/src
@@ -29,7 +42,7 @@ stdenv.mkDerivation {
     cp "${nnue}" "$sourceRoot/${nnueFile}"
   '';
 
-  makeFlags = [ "PREFIX=$(out)" "ARCH=${arch}" ];
+  makeFlags = [ "PREFIX=$(out)" "ARCH=${arch}" "CXX=${stdenv.cc.targetPrefix}c++" ];
   buildFlags = [ "build" ];
 
   enableParallelBuilding = true;
@@ -41,9 +54,9 @@ stdenv.mkDerivation {
       Stockfish is one of the strongest chess engines in the world. It is also
       much stronger than the best human chess grandmasters.
       '';
-    maintainers = with maintainers; [ luispedro peti ];
-    platforms = ["x86_64-linux" "i686-linux"];
-    license = licenses.gpl2;
+    maintainers = with maintainers; [ luispedro siraben ];
+    platforms = ["x86_64-linux" "i686-linux" "x86_64-darwin" "aarch64-linux"];
+    license = licenses.gpl3Only;
   };
 
 }

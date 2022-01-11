@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3.pkgs; [ crcmod python-lzo ];
 
-  phases = [ "unpackPhase" "patchPhase" "installPhase" "installCheckPhase" ];
+  dontBuild = true;
 
   patchPhase = ''
     sed -i '1s;^;#!${python3.interpreter}\n;' ubidump.py

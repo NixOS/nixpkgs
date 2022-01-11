@@ -139,5 +139,9 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; linux;
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ yuriaisaka ];
+    # fails to compile with
+    # error: invalid conversion from 'const char*' to 'char*'
+    # TODO: Remove usage of python2, protobuf overwrite
+    broken = true;
   };
 }

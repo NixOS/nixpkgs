@@ -2,13 +2,18 @@
 , fftw, fftwFloat, fftwLongDouble, numpy, scipy, cython, dask }:
 
 buildPythonPackage rec {
-  version = "0.12.0";
+  version = "0.13.0";
   pname = "pyFFTW";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "60988e823ca75808a26fd79d88dbae1de3699e72a293f812aa4534f8a0a58cb0";
+    sha256 = "da85102405c0bd95d57eb19e99b01a0729d8406cb204c3900894b873784253da";
   };
+
+  preConfigure = ''
+    export LDFLAGS="-L${fftw.out}/lib -L${fftwFloat.out}/lib -L${fftwLongDouble.out}/lib"
+    export CFLAGS="-I${fftw.dev}/include -I${fftwFloat.dev}/include -I${fftwLongDouble.dev}/include"
+  '';
 
   buildInputs = [ fftw fftwFloat fftwLongDouble];
 
@@ -16,14 +21,7 @@ buildPythonPackage rec {
 
   # Tests cannot import pyfftw. pyfftw works fine though.
   doCheck = false;
-
-  preConfigure = ''
-    export LDFLAGS="-L${fftw.out}/lib -L${fftwFloat.out}/lib -L${fftwLongDouble.out}/lib"
-    export CFLAGS="-I${fftw.dev}/include -I${fftwFloat.dev}/include -I${fftwLongDouble.dev}/include"
-  '';
-  #+ optionalString isDarwin ''
-  #  export DYLD_LIBRARY_PATH="${pkgs.fftw.out}/lib"
-  #'';
+  pythonImportsCheck = [ "pyfftw" ];
 
   meta = with lib; {
     description = "A pythonic wrapper around FFTW, the FFT library, presenting a unified interface for all the supported transforms";

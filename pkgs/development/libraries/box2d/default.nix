@@ -1,18 +1,18 @@
-{ lib, stdenv, fetchurl, unzip, cmake, libGLU, libGL, freeglut, libX11, xorgproto
+{ lib, stdenv, fetchFromGitHub, cmake, libGLU, libGL, freeglut, libX11, xorgproto
 , libXi, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "box2d";
   version = "2.3.1";
 
-  src = fetchurl {
-    url = "https://github.com/erincatto/Box2D/archive/v${version}.tar.gz";
-    sha256 = "0llpcifl8zbjbpxdwz87drd01m3lwnv82xb4av6kca1xn4w2gmkm";
+  src = fetchFromGitHub {
+    owner = "erincatto";
+    repo = "box2d";
+    rev = "v${version}";
+    sha256 = "sha256-Z2J17YMzQNZqABIa5eyJDT7BWfXveymzs+DWsrklPIs=";
   };
 
-  sourceRoot = "Box2D-${version}/Box2D";
-
-  nativeBuildInputs = [ cmake unzip pkg-config ];
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ libGLU libGL freeglut libX11 xorgproto libXi ];
 
   cmakeFlags = [
@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
   ];
 
   prePatch = ''
+    cd Box2D
     substituteInPlace Box2D/Common/b2Settings.h \
       --replace 'b2_maxPolygonVertices	8' 'b2_maxPolygonVertices	15'
   '';
@@ -30,7 +31,7 @@ stdenv.mkDerivation rec {
     description = "2D physics engine";
     homepage = "https://box2d.org/";
     maintainers = [ maintainers.raskin ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     license = licenses.zlib;
   };
 }

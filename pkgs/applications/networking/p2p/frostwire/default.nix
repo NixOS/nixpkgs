@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, gradle, perl, jre, makeWrapper, makeDesktopItem, mplayer }:
+{ lib, stdenv, fetchFromGitHub, gradle_6, perl, jre, makeWrapper, makeDesktopItem, mplayer }:
 
 let
   version = "6.6.7-build-529";
@@ -25,7 +25,7 @@ let
   deps = stdenv.mkDerivation {
     name = "${name}-deps";
     inherit src;
-    buildInputs = [ gradle perl ];
+    buildInputs = [ gradle_6 perl ];
     buildPhase = ''
       export GRADLE_USER_HOME=$(mktemp -d)
       ( cd desktop
@@ -47,7 +47,7 @@ in stdenv.mkDerivation {
   inherit name src;
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ gradle ];
+  buildInputs = [ gradle_6 ];
 
   buildPhase = ''
     export GRADLE_USER_HOME=$(mktemp -d)

@@ -8,7 +8,8 @@
 , pkg-config
 , pulseaudio
 , python3
-, lib, stdenv
+, lib
+, stdenv
 , xkeyboard_config
 , xorg
 , wrapGAppsHook
@@ -17,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-desktop";
-  version = "4.6.4";
+  version = "5.2.0";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "08z5hgc6dwdp9fczm75axwh8q9665iz4y2lxp92xp62r3k0v9fvd";
+    hash = "sha256-gOlSmcHjBjnLdDpgC5mZ4M3eUBTG3BuET6Kr/Xby14A=";
   };
 
   outputs = [ "out" "dev" ];

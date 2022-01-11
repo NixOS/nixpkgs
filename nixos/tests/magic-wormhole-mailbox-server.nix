@@ -29,7 +29,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
     # Create a secret file and send it to Bob
     client_alice.succeed("echo mysecret > secretfile")
-    client_alice.succeed("wormhole --relay-url=ws://server:4000/v1 send -0 secretfile &")
+    client_alice.succeed("wormhole --relay-url=ws://server:4000/v1 send -0 secretfile >&2 &")
 
     # Retrieve a secret file from Alice and check its content
     client_bob.succeed("wormhole --relay-url=ws://server:4000/v1 receive -0 --accept-file")

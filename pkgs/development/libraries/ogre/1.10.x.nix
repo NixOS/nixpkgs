@@ -8,13 +8,22 @@
 , withNvidiaCg ? false, nvidia_cg_toolkit
 , withSamples ? false }:
 
-stdenv.mkDerivation {
-  name = "ogre-1.10.11";
+stdenv.mkDerivation rec {
+  pname = "ogre";
+  version = "1.10.11";
 
   src = fetchurl {
-     url = "https://bitbucket.org/sinbad/ogre/get/v1-10-11.tar.gz";
+     url = "https://bitbucket.org/sinbad/ogre/get/v${lib.replaceStrings ["."] ["-"] version}.tar.gz";
      sha256 = "1zwvlx5dz9nwjazhnrhzb0w8ilpa84r0hrxrmmy69pgr1p1yif5a";
   };
+
+  # fix for ARM. sys/sysctl.h has moved in later glibcs, and
+  # https://github.com/OGRECave/ogre-next/issues/132 suggests it isn't
+  # needed anyway.
+  postPatch = ''
+    substituteInPlace OgreMain/src/OgrePlatformInformation.cpp \
+      --replace '#include <sys/sysctl.h>' ""
+  '';
 
   cmakeFlags = [ "-DOGRE_BUILD_SAMPLES=${toString withSamples}" ]
     ++ map (x: "-DOGRE_BUILD_PLUGIN_${x}=on")

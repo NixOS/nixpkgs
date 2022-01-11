@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "net-snmp";
-  version = "5.9";
+  version = "5.9.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/net-snmp/${pname}-${version}.tar.gz";
-    sha256 = "0wb0vyafpspw3mcifkjjmf17r1r80kjvslycscb8nvaxz1k3lc04";
+    sha256 = "sha256-63/UpE3mzdv/2akqha0TCeXBBU+51afdkweciVP0jD8=";
   };
 
   patches =
@@ -37,8 +37,8 @@ stdenv.mkDerivation rec {
     substituteInPlace testing/fulltests/support/simple_TESTCONF.sh --replace "/bin/netstat" "${nettools}/bin/netstat"
   '';
 
-  nativeBuildInputs = [ autoreconfHook nettools removeReferencesTo ];
-  buildInputs = with perlPackages; [ file perl unzip openssl ncurses JSON Tk TermReadKey ];
+  nativeBuildInputs = [ autoreconfHook nettools removeReferencesTo unzip ];
+  buildInputs = with perlPackages; [ file perl openssl ncurses JSON Tk TermReadKey ];
 
   enableParallelBuilding = true;
   doCheck = false;  # tries to use networking

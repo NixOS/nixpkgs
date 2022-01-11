@@ -21,6 +21,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/edouarda/brigand";
     license = licenses.boost;
     maintainers = with maintainers; [ pmiddend ];
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 }

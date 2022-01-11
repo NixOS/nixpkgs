@@ -1,28 +1,28 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, python
 , serpent
 , dill
 , cloudpickle
 , msgpack
 , isPy27
-, selectors34
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "Pyro4";
-  version = "4.80";
+  version = "4.81";
+
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "46847ca703de3f483fbd0b2d22622f36eff03e6ef7ec7704d4ecaa3964cb2220";
+    sha256 = "e130da06478b813173b959f7013d134865e07fbf58cc5f1a2598f99479cdac5f";
   };
 
   propagatedBuildInputs = [
     serpent
-  ] ++ lib.optionals isPy27 [ selectors34 ];
+  ];
 
   buildInputs = [
     dill

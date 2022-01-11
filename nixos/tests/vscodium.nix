@@ -1,62 +1,79 @@
-import ./make-test-python.nix ({ pkgs, ...} :
+let
+  tests = {
+    wayland = { pkgs, ... }: {
+      imports = [ ./common/wayland-cage.nix ];
 
-{
-  name = "vscodium";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ turion ];
+      services.cage.program = ''
+        ${pkgs.vscodium}/bin/codium \
+          --enable-features=UseOzonePlatform \
+          --ozone-platform=wayland
+      '';
+
+      fonts.fonts = with pkgs; [ dejavu_fonts ];
+    };
+    xorg = { pkgs, ... }: {
+      imports = [ ./common/user-account.nix ./common/x11.nix ];
+
+      virtualisation.memorySize = 2047;
+      services.xserver.enable = true;
+      services.xserver.displayManager.sessionCommands = ''
+        ${pkgs.vscodium}/bin/codium
+      '';
+      test-support.displayManager.auto.user = "alice";
+    };
   };
 
-  machine = { ... }:
+  mkTest = name: machine:
+    import ./make-test-python.nix ({ pkgs, ... }: {
+      inherit name;
 
-  {
-    imports = [
-      ./common/user-account.nix
-      ./common/x11.nix
-    ];
+      nodes = { "${name}" = machine; };
 
-    virtualisation.memorySize = 2047;
-    services.xserver.enable = true;
-    test-support.displayManager.auto.user = "alice";
-    environment.systemPackages = with pkgs; [
-      vscodium
-    ];
-  };
+      meta = with pkgs.lib.maintainers; {
+        maintainers = [ synthetica turion ];
+      };
+      enableOCR = true;
+      testScript = ''
+        @polling_condition
+        def codium_running():
+            machine.succeed('pgrep -x codium')
 
-  enableOCR = true;
 
-  testScript = { nodes, ... }: ''
-    # Start up X
-    start_all()
-    machine.wait_for_x()
+        start_all()
 
-    # Create a file that we'll open
-    machine.succeed("su - alice -c 'echo \"   Hello World\" > foo.txt'")
+        machine.wait_for_unit('graphical.target')
+        machine.wait_until_succeeds('pgrep -x codium')
 
-    # It's one line long
-    assert "1 foo.txt" in machine.succeed(
-        "su - alice -c 'wc foo.txt -l'"
-    ), "File has wrong length"
+        with codium_running:
+            # Wait until vscodium is visible. "File" is in the menu bar.
+            machine.wait_for_text('Get Started')
+            machine.screenshot('start_screen')
 
-    # Start VSCodium with that file
-    machine.succeed("su - alice -c 'codium foo.txt' &")
+            test_string = 'testfile'
 
-    # Wait for the window to appear
-    machine.wait_for_text("VSCodium")
+            # Create a new file
+            machine.send_key('ctrl-n')
+            machine.wait_for_text('Untitled')
+            machine.screenshot('empty_editor')
 
-    # Add a line
-    machine.send_key("ret")
+            # Type a string
+            machine.send_chars(test_string)
+            machine.wait_for_text(test_string)
+            machine.screenshot('editor')
 
-    # Save file
-    machine.send_key("ctrl-s")
+            # Save the file
+            machine.send_key('ctrl-s')
+            machine.wait_for_text('Save')
+            machine.screenshot('save_window')
+            machine.send_key('ret')
 
-    # Wait until the file has been saved
-    machine.sleep(1)
+            # (the default filename is the first line of the file)
+            machine.wait_for_file(f'/home/alice/{test_string}')
 
-    # Now the file is 2 lines long
-    assert "2 foo.txt" in machine.succeed(
-        "su - alice -c 'wc foo.txt -l'"
-    ), "File has wrong length"
+        machine.send_key('ctrl-q')
+        machine.wait_until_fails('pgrep -x codium')
+      '';
+    });
 
-    machine.screenshot("VSCodium")
-  '';
-})
+in
+builtins.mapAttrs (k: v: mkTest k v { }) tests

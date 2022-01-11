@@ -7,7 +7,7 @@ let
 
   efi = config.boot.loader.efi;
 
-  gummibootBuilder = pkgs.substituteAll {
+  systemdBootBuilder = pkgs.substituteAll {
     src = ./systemd-boot-builder.py;
 
     isExecutable = true;
@@ -24,12 +24,23 @@ let
 
     configurationLimit = if cfg.configurationLimit == null then 0 else cfg.configurationLimit;
 
-    inherit (cfg) consoleMode;
+    inherit (cfg) consoleMode graceful;
 
     inherit (efi) efiSysMountPoint canTouchEfiVariables;
 
     memtest86 = if cfg.memtest86.enable then pkgs.memtest86-efi else "";
   };
+
+  checkedSystemdBootBuilder = pkgs.runCommand "systemd-boot" {
+    nativeBuildInputs = [ pkgs.mypy ];
+  } ''
+    install -m755 ${systemdBootBuilder} $out
+    mypy \
+      --no-implicit-optional \
+      --disallow-untyped-calls \
+      --disallow-untyped-defs \
+      $out
+  '';
 in {
 
   imports =
@@ -115,6 +126,22 @@ in {
         '';
       };
     };
+
+    graceful = mkOption {
+      default = false;
+
+      type = types.bool;
+
+      description = ''
+        Invoke <literal>bootctl install</literal> with the <literal>--graceful</literal> option,
+        which ignores errors when EFI variables cannot be written or when the EFI System Partition
+        cannot be found. Currently only applies to random seed operations.
+
+        Only enable this option if <literal>systemd-boot</literal> otherwise fails to install, as the
+        scope or implication of the <literal>--graceful</literal> option may change in the future.
+      '';
+    };
+
   };
 
   config = mkIf cfg.enable {
@@ -131,7 +158,7 @@ in {
     boot.loader.supportsInitrdSecrets = true;
 
     system = {
-      build.installBootLoader = gummibootBuilder;
+      build.installBootLoader = checkedSystemdBootBuilder;
 
       boot.loader.id = "systemd-boot";
 

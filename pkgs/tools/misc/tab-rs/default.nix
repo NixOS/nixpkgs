@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tab-rs";
-  version = "0.5.6";
+  version = "0.5.7";
 
   src = fetchFromGitHub {
     owner = "austinjones";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1gyl2dxyhh4d2lpxg9s5cx734sfs1kys5z5hjqfgbiny28hp9sw6";
+    sha256 = "1crj0caimin667f9kz34c0sm77892dmqaf1kxryqakqm75az5wfr";
   };
 
-  cargoSha256 = "1apjzn164kakb2snrq1wfl7grm72hkddi3am6d01h5kkngkp68qm";
+  cargoSha256 = "0v5vkxr2sncw4r4pwvk0jbk4as7zwwfvjk2cpj9872zp07s35a77";
 
   buildInputs = lib.optionals stdenv.isDarwin [ IOKit ];
 
@@ -23,5 +23,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/austinjones/tab-rs";
     license = licenses.mit;
     maintainers = with maintainers; [ bbigras ];
+    mainProgram = "tab";
   };
 }

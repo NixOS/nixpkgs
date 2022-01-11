@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "QtAwesome";
-  version = "1.0.1";
+  version = "1.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d612a313e531966d17f5a8fb7604faba961cf7ce3c77a9168c6f60e60140b767";
+    sha256 = "ec02e200231fa68a146a93845890aa0432a7edcba14bf811ff6975cf9acdab5d";
   };
 
   propagatedBuildInputs = [ qtpy six ];

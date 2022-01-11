@@ -1,14 +1,22 @@
-diff --git a/source/config.h.in b/source/config.h.in
-index 2ca8853..2564c63 100644
---- a/source/config.h.in
-+++ b/source/config.h.in
-@@ -65,6 +65,6 @@ constexpr char VERSION[] = "@CMAKE_PROJECT_VERSION@";
+diff --git i/source/config.h.in w/source/config.h.in
+index ffcce3a..0caba6d 100644
+--- i/source/config.h.in
++++ w/source/config.h.in
+@@ -107,7 +107,7 @@ namespace cmd {
+     }
  
- constexpr char CITNAMES_DEFAULT_PATH[] = "@ROOT_INSTALL_PREFIX@/@CMAKE_INSTALL_BINDIR@/citnames";
- constexpr char INTERCEPT_DEFAULT_PATH[] = "@ROOT_INSTALL_PREFIX@/@CMAKE_INSTALL_BINDIR@/intercept";
--constexpr char LIBRARY_DEFAULT_PATH[] = "@ROOT_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBEXECDIR@/@CMAKE_SHARED_LIBRARY_PREFIX@exec@CMAKE_SHARED_LIBRARY_SUFFIX@";
--constexpr char EXECUTOR_DEFAULT_PATH[] = "@ROOT_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBEXECDIR@/er";
--constexpr char WRAPPER_DEFAULT_PATH[] = "@ROOT_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBEXECDIR@/wrapper.d";
-+constexpr char LIBRARY_DEFAULT_PATH[] = "@CMAKE_INSTALL_LIBEXECDIR@/@CMAKE_SHARED_LIBRARY_PREFIX@exec@CMAKE_SHARED_LIBRARY_SUFFIX@";
-+constexpr char EXECUTOR_DEFAULT_PATH[] = "@CMAKE_INSTALL_LIBEXECDIR@/er";
-+constexpr char WRAPPER_DEFAULT_PATH[] = "@CMAKE_INSTALL_LIBEXECDIR@/wrapper.d";
+     namespace wrapper {
+-        constexpr char DEFAULT_PATH[] = "@ROOT_INSTALL_PREFIX@/@PRIVATE_INSTALLDIR@/wrapper";
++        constexpr char DEFAULT_PATH[] = "@PRIVATE_INSTALLDIR@/wrapper";
+         constexpr char DEFAULT_DIR_PATH[] = "@ROOT_INSTALL_PREFIX@/@PRIVATE_INSTALLDIR@/wrapper.d";
+ 
+         constexpr char FLAG_VERBOSE[] = "--verbose";
+@@ -120,7 +120,7 @@ namespace cmd {
+     }
+ 
+     namespace library {
+-        constexpr char DEFAULT_PATH[] = "@ROOT_INSTALL_PREFIX@/@PRIVATE_INSTALLDIR@/@CMAKE_SHARED_LIBRARY_PREFIX@exec@CMAKE_SHARED_LIBRARY_SUFFIX@";
++        constexpr char DEFAULT_PATH[] = "@PRIVATE_INSTALLDIR@/@CMAKE_SHARED_LIBRARY_PREFIX@exec@CMAKE_SHARED_LIBRARY_SUFFIX@";
+ 
+         constexpr char KEY_REPORTER[] = "INTERCEPT_REPORT_COMMAND";
+         constexpr char KEY_DESTINATION[] = "INTERCEPT_REPORT_DESTINATION";

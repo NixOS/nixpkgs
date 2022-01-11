@@ -58,6 +58,8 @@ stdenv.mkDerivation rec {
     "-DCMAKE_BUILD_TYPE=${if debug then "Debug" else "Release"}"
   ];
 
+  dontWrapQtApps = true;
+
   preConfigure = ''
     cmakeFlags+=" -DPHONON_QT_MKSPECS_INSTALL_DIR=''${!outputDev}/mkspecs"
     cmakeFlags+=" -DPHONON_QT_IMPORTS_INSTALL_DIR=''${!outputBin}/$qtQmlPrefix"

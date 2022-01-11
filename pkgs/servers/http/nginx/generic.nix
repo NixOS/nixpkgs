@@ -1,7 +1,9 @@
 { lib, stdenv, fetchurl, fetchpatch, openssl, zlib, pcre, libxml2, libxslt
+
 , nixosTests
 , substituteAll, gd, geoip, perl
 , withDebug ? false
+, withKTLS ? false
 , withStream ? true
 , withMail ? false
 , withPerl ? true
@@ -20,6 +22,7 @@
 , preConfigure ? ""
 , postInstall ? null
 , meta ? null
+, passthru ? { tests = {}; }
 }:
 
 with lib;
@@ -55,7 +58,6 @@ stdenv.mkDerivation {
     "--with-http_realip_module"
     "--with-http_addition_module"
     "--with-http_xslt_module"
-    "--with-http_geoip_module"
     "--with-http_sub_module"
     "--with-http_dav_module"
     "--with-http_flv_module"
@@ -79,9 +81,10 @@ stdenv.mkDerivation {
     "--http-scgi-temp-path=/var/cache/nginx/scgi"
   ] ++ optionals withDebug [
     "--with-debug"
+  ] ++ optionals withKTLS [
+    "--with-openssl-opt=enable-ktls"
   ] ++ optionals withStream [
     "--with-stream"
-    "--with-stream_geoip_module"
     "--with-stream_realip_module"
     "--with-stream_ssl_module"
     "--with-stream_ssl_preread_module"
@@ -94,6 +97,8 @@ stdenv.mkDerivation {
     "--with-perl_modules_path=lib/perl5"
   ]
     ++ optional (gd != null) "--with-http_image_filter_module"
+    ++ optional (geoip != null) "--with-http_geoip_module"
+    ++ optional (withStream && geoip != null) "--with-stream_geoip_module"
     ++ optional (with stdenv.hostPlatform; isLinux || isFreeBSD) "--with-file-aio"
     ++ configureFlags
     ++ map (mod: "--add-module=${mod.src}") modules;
@@ -118,15 +123,15 @@ stdenv.mkDerivation {
     ./nix-skip-check-logs-path.patch
   ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     (fetchpatch {
-      url = "https://raw.githubusercontent.com/openwrt/packages/master/net/nginx/patches/102-sizeof_test_fix.patch";
+      url = "https://raw.githubusercontent.com/openwrt/packages/c057dfb09c7027287c7862afab965a4cd95293a3/net/nginx/patches/102-sizeof_test_fix.patch";
       sha256 = "0i2k30ac8d7inj9l6bl0684kjglam2f68z8lf3xggcc2i5wzhh8a";
     })
     (fetchpatch {
-      url = "https://raw.githubusercontent.com/openwrt/packages/master/net/nginx/patches/101-feature_test_fix.patch";
+      url = "https://raw.githubusercontent.com/openwrt/packages/c057dfb09c7027287c7862afab965a4cd95293a3/net/nginx/patches/101-feature_test_fix.patch";
       sha256 = "0v6890a85aqmw60pgj3mm7g8nkaphgq65dj4v9c6h58wdsrc6f0y";
     })
     (fetchpatch {
-      url = "https://raw.githubusercontent.com/openwrt/packages/master/net/nginx/patches/103-sys_nerr.patch";
+      url = "https://raw.githubusercontent.com/openwrt/packages/c057dfb09c7027287c7862afab965a4cd95293a3/net/nginx/patches/103-sys_nerr.patch";
       sha256 = "0s497x6mkz947aw29wdy073k8dyjq8j99lax1a1mzpikzr4rxlmd";
     })
   ] ++ mapModules "patches");
@@ -141,7 +146,11 @@ stdenv.mkDerivation {
 
   passthru = {
     modules = modules;
-    tests.nginx = nixosTests.nginx;
+    tests = {
+      inherit (nixosTests) nginx nginx-auth nginx-etag nginx-pubhtml nginx-sandbox nginx-sso;
+      variants = lib.recurseIntoAttrs nixosTests.nginx-variants;
+      acme-integration = nixosTests.acme;
+    } // passthru.tests;
   };
 
   meta = if meta != null then meta else {

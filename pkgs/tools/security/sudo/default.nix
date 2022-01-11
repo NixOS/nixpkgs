@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, coreutils, pam, groff, sssd, nixosTests
+{ lib
+, stdenv
+, fetchurl
+, buildPackages
+, coreutils
+, pam
+, groff
+, sssd
+, nixosTests
 , sendmailPath ? "/run/wrappers/bin/sendmail"
 , withInsults ? false
 , withSssd ? false
@@ -6,11 +14,11 @@
 
 stdenv.mkDerivation rec {
   pname = "sudo";
-  version = "1.9.5p2";
+  version = "1.9.8p2";
 
   src = fetchurl {
     url = "https://www.sudo.ws/dist/${pname}-${version}.tar.gz";
-    sha256 = "0y093z4f3822rc88g9asdch12nljdamp817vjxk04mca7ks2x7jk";
+    sha256 = "sha256-njuLjafe9DtuYMJXq+gEZyBWcP0PfAgd4UI8QUtoDy0=";
   };
 
   prePatch = ''
@@ -36,19 +44,20 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlagsArray = [
-    "--with-passprompt=[sudo] password for %p: "  # intentional trailing space
+    "--with-passprompt=[sudo] password for %p: " # intentional trailing space
   ];
 
   postConfigure =
     ''
-    cat >> pathnames.h <<'EOF'
-      #undef _PATH_MV
-      #define _PATH_MV "${coreutils}/bin/mv"
-    EOF
-    makeFlags="install_uid=$(id -u) install_gid=$(id -g)"
-    installFlags="sudoers_uid=$(id -u) sudoers_gid=$(id -g) sysconfdir=$out/etc rundir=$TMPDIR/dummy vardir=$TMPDIR/dummy DESTDIR=/"
+      cat >> pathnames.h <<'EOF'
+        #undef _PATH_MV
+        #define _PATH_MV "${coreutils}/bin/mv"
+      EOF
+      makeFlags="install_uid=$(id -u) install_gid=$(id -g)"
+      installFlags="sudoers_uid=$(id -u) sudoers_gid=$(id -g) sysconfdir=$out/etc rundir=$TMPDIR/dummy vardir=$TMPDIR/dummy DESTDIR=/"
     '';
 
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ groff ];
   buildInputs = [ pam ];
 
@@ -56,10 +65,9 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # needs root
 
-  postInstall =
-    ''
-    rm -f $out/share/doc/sudo/ChangeLog
-    '';
+  postInstall = ''
+    rm $out/share/doc/sudo/ChangeLog
+  '';
 
   passthru.tests = { inherit (nixosTests) sudo; };
 
@@ -68,10 +76,10 @@ stdenv.mkDerivation rec {
 
     longDescription =
       ''
-      Sudo (su "do") allows a system administrator to delegate
-      authority to give certain users (or groups of users) the ability
-      to run some (or all) commands as root or another user while
-      providing an audit trail of the commands and their arguments.
+        Sudo (su "do") allows a system administrator to delegate
+        authority to give certain users (or groups of users) the ability
+        to run some (or all) commands as root or another user while
+        providing an audit trail of the commands and their arguments.
       '';
 
     homepage = "https://www.sudo.ws/";

@@ -1,43 +1,48 @@
-{ fetchurl, lib, stdenv, makeDesktopItem, makeWrapper, unzip, jdk }:
+{ fetchurl, lib, stdenv, makeDesktopItem, makeWrapper, unzip, jre, copyDesktopItems }:
 
 stdenv.mkDerivation rec {
   pname = "gpsprune";
-  version = "20.2";
+  version = "21";
 
   src = fetchurl {
     url = "https://activityworkshop.net/software/gpsprune/gpsprune_${version}.jar";
-    sha256 = "sha256-40GrihCeDAqJCFcg4FMFxCg7bzd6CrDR5JU70e5VHDE=";
+    sha256 = "sha256-FS6nf8K+qfEWDCQwmoxH1laJIONMtwmb/H89SVJtV1E=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ jdk ];
+  dontUnpack = true;
 
-  desktopItem = makeDesktopItem {
-    name = "gpsprune";
-    exec = "gpsprune";
-    icon = "gpsprune";
-    desktopName = "GpsPrune";
-    genericName = "GPS Data Editor";
-    comment = meta.description;
-    categories = "Education;Geoscience;";
-  };
+  nativeBuildInputs = [ makeWrapper copyDesktopItems ];
+  buildInputs = [ jre ];
 
-  buildCommand = ''
-    mkdir -p $out/bin $out/share/java
-    cp -v $src $out/share/java/gpsprune.jar
-    makeWrapper ${jdk}/bin/java $out/bin/gpsprune \
+  desktopItems = [
+    (makeDesktopItem {
+      name = "gpsprune";
+      exec = "gpsprune";
+      icon = "gpsprune";
+      desktopName = "GpsPrune";
+      genericName = "GPS Data Editor";
+      comment = meta.description;
+      categories = "Education;Geoscience;";
+    })
+  ];
+
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm644 ${src} $out/share/java/gpsprune.jar
+    makeWrapper ${jre}/bin/java $out/bin/gpsprune \
       --add-flags "-jar $out/share/java/gpsprune.jar"
-    mkdir -p $out/share/applications
-    cp $desktopItem/share/applications"/"* $out/share/applications
     mkdir -p $out/share/pixmaps
     ${unzip}/bin/unzip -p $src tim/prune/gui/images/window_icon_64.png > $out/share/pixmaps/gpsprune.png
+
+    runHook postInstall
   '';
 
   meta = with lib; {
     description = "Application for viewing, editing and converting GPS coordinate data";
     homepage = "https://activityworkshop.net/software/gpsprune/";
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.rycee ];
+    maintainers = with maintainers; [ rycee ];
     platforms = platforms.all;
   };
 }

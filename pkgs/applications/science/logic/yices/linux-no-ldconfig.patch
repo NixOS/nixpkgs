@@ -1,0 +1,13 @@
+--- a/Makefile.build
++++ b/Makefile.build
+@@ -474,8 +474,9 @@ install-darwin: install-default
+ install-solaris: install-default
+ 	$(LDCONFIG) -n $(DESTDIR)$(libdir) && (cd $(DESTDIR)$(libdir) && $(LN_S) -f libyices.so.$(YICES_VERSION) libyices.so)
+ 
++# avoid ldconfig as it's not present on musl
+ install-linux install-unix: install-default
+-	$(LDCONFIG) -n $(DESTDIR)$(libdir) && (cd $(DESTDIR)$(libdir) && $(LN_S) -f libyices.so.$(YICES_VERSION) libyices.so)
++	(cd $(DESTDIR)$(libdir) && $(LN_S) -f libyices.so.$(YICES_VERSION) libyices.so.$(MAJOR).$(MINOR) && $(LN_S) -f libyices.so.$(MAJOR).$(MINOR) libyices.so)
+ 
+ # on FreeBSD: the library file is libyices.so.X.Y and ldconfig does not take -n
+ # TODO: fix this. We must also create a symbolic link: libyices.so.X in libdir

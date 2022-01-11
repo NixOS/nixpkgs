@@ -1,17 +1,18 @@
-{ mkXfceDerivation, exo, gtk3, libgudev, libxfce4ui, libxfce4util, xfconf }:
+{ lib, mkXfceDerivation, exo, gtk3, libgudev, libxfce4ui, libxfce4util, xfconf }:
 
 mkXfceDerivation {
   category = "xfce";
   pname = "thunar-volman";
-  version = "0.9.5";
+  version = "4.16.0";
 
   buildInputs = [ exo gtk3 libgudev libxfce4ui libxfce4util xfconf ];
 
-  sha256 = "1qrlpn0q5g9psd41l6y80r3bvbg8jaic92m6r400zzwcvivf95z0";
+  sha256 = "sha256-A9APQ5FLshb+MXQErCExegax6hqbHnlfI2hgtnWfVgA=";
 
   odd-unstable = false;
 
-  meta = {
+  meta = with lib; {
     description = "Thunar extension for automatic management of removable drives and media";
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

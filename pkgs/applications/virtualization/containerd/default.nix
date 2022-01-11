@@ -1,6 +1,6 @@
 { lib
 , fetchFromGitHub
-, buildGoPackage
+, buildGoModule
 , btrfs-progs
 , go-md2man
 , installShellFiles
@@ -8,45 +8,41 @@
 , nixosTests
 }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "containerd";
-  version = "1.4.3";
+  version = "1.5.9";
+
+  outputs = [ "out" "man" ];
 
   src = fetchFromGitHub {
     owner = "containerd";
     repo = "containerd";
     rev = "v${version}";
-    sha256 = "09xvhjg5f8h90w1y94kqqnqzhbhd62dcdd9wb9sdqakisjk6zrl0";
+    sha256 = "sha256-v5seKJMfZUVMbydxKiTSy0OSwen6I/3DrGJnL2DyqHg=";
   };
 
-  goPackagePath = "github.com/containerd/containerd";
-  outputs = [ "out" "man" ];
+  vendorSha256 = null;
 
   nativeBuildInputs = [ go-md2man installShellFiles util-linux ];
 
   buildInputs = [ btrfs-progs ];
 
-  buildFlags = [ "VERSION=v${version}" "REVISION=${src.rev}" ];
-
-  BUILDTAGS = [ ]
-    ++ lib.optional (btrfs-progs == null) "no_btrfs";
+  BUILDTAGS = lib.optionals (btrfs-progs == null) [ "no_btrfs" ];
 
   buildPhase = ''
-    cd go/src/${goPackagePath}
+    runHook preBuild
     patchShebangs .
-    make binaries man $buildFlags
+    make binaries man "VERSION=v${version}" "REVISION=${src.rev}"
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
     install -Dm555 bin/* -t $out/bin
     installManPage man/*.[1-9]
-  '';
-
-  # completion installed separately so it can be overridden in docker
-  # can be moved to installPhase when docker uses containerd >= 1.4
-  postInstall = ''
-    installShellFiles --bash contrib/autocomplete/ctr
-    installShellFiles --zsh --name _ctr contrib/autocomplete/zsh_autocomplete
+    installShellCompletion --bash contrib/autocomplete/ctr
+    installShellCompletion --zsh --name _ctr contrib/autocomplete/zsh_autocomplete
+    runHook postInstall
   '';
 
   passthru.tests = { inherit (nixosTests) docker; };
@@ -55,7 +51,7 @@ buildGoPackage rec {
     homepage = "https://containerd.io/";
     description = "A daemon to control runC";
     license = licenses.asl20;
-    maintainers = with maintainers; [ offline vdemeester ];
+    maintainers = with maintainers; [ offline vdemeester endocrimes ];
     platforms = platforms.linux;
   };
 }

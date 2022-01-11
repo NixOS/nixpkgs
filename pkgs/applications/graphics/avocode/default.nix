@@ -1,15 +1,15 @@
 { lib, stdenv, makeDesktopItem, fetchurl, unzip
-, gdk-pixbuf, glib, gtk3, atk, at-spi2-atk, pango, cairo, freetype, fontconfig, dbus, nss, nspr, alsaLib, cups, expat, udev, gnome3
-, xorg, mozjpeg, makeWrapper, wrapGAppsHook, libuuid, at-spi2-core, libdrm, mesa
+, gdk-pixbuf, glib, gtk3, atk, at-spi2-atk, pango, cairo, freetype, fontconfig, dbus, nss, nspr, alsa-lib, cups, expat, udev, gnome
+, xorg, mozjpeg, makeWrapper, wrapGAppsHook, libuuid, at-spi2-core, libdrm, mesa, libxkbcommon
 }:
 
 stdenv.mkDerivation rec {
   pname = "avocode";
-  version = "4.11.1";
+  version = "4.15.5";
 
   src = fetchurl {
     url = "https://media.avocode.com/download/avocode-app/${version}/avocode-${version}-linux.zip";
-    sha256 = "sha256-Qe5mV9GBLHsmzMQg6dKib/sTnNdyOTj4wYQ9xd/iqJM=";
+    sha256 = "sha256-vPS2hTaWjundVjtguy/1eH1qBaipN2Ij8PQODka+IGg=";
   };
 
   libPath = lib.makeLibraryPath (with xorg; [
@@ -27,12 +27,14 @@ stdenv.mkDerivation rec {
     dbus
     nss
     nspr
-    alsaLib
+    alsa-lib
     cups
     expat
     udev
     libX11
     libxcb
+    libxshmfence
+    libxkbcommon
     libXi
     libXcursor
     libXdamage
@@ -58,8 +60,8 @@ stdenv.mkDerivation rec {
     comment = "The bridge between designers and developers";
   };
 
-  nativeBuildInputs = [makeWrapper wrapGAppsHook];
-  buildInputs = [ unzip gtk3 gnome3.adwaita-icon-theme ];
+  nativeBuildInputs = [makeWrapper wrapGAppsHook unzip];
+  buildInputs = [ gtk3 gnome.adwaita-icon-theme ];
 
   # src is producing multiple folder on unzip so we must
   # override unpackCmd to extract it into newly created folder

@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 let
-  inherit (lib) mkEnableOption mkIf mkOption types;
+  inherit (lib) mkEnableOption mkIf mkOption optionalString types;
 
   generic = variant:
     let
@@ -10,8 +10,8 @@ let
       birdBin = if variant == "bird6" then "bird6" else "bird";
       birdc = if variant == "bird6" then "birdc6" else "birdc";
       descr =
-        { bird = "1.9.x with IPv4 suport";
-          bird6 = "1.9.x with IPv6 suport";
+        { bird = "1.6.x with IPv4 support";
+          bird6 = "1.6.x with IPv6 support";
           bird2 = "2.x";
         }.${variant};
     in {
@@ -26,6 +26,14 @@ let
               <link xlink:href='http://bird.network.cz/'/>
             '';
           };
+          checkConfig = mkOption {
+            type = types.bool;
+            default = true;
+            description = ''
+              Whether the config should be checked at build time.
+              Disabling this might become necessary if the config includes files not present during build time.
+            '';
+          };
         };
       };
 
@@ -36,7 +44,7 @@ let
         environment.etc."bird/${variant}.conf".source = pkgs.writeTextFile {
           name = "${variant}.conf";
           text = cfg.config;
-          checkPhase = ''
+          checkPhase = optionalString cfg.checkConfig ''
             ${pkg}/bin/${birdBin} -d -p -c $out
           '';
         };
@@ -50,7 +58,7 @@ let
             Type = "forking";
             Restart = "on-failure";
             ExecStart = "${pkg}/bin/${birdBin} -c /etc/bird/${variant}.conf -u ${variant} -g ${variant}";
-            ExecReload = "${pkg}/bin/${birdc} configure";
+            ExecReload = "/bin/sh -c '${pkg}/bin/${birdBin} -c /etc/bird/${variant}.conf -p && ${pkg}/bin/${birdc} configure'";
             ExecStop = "${pkg}/bin/${birdc} down";
             CapabilityBoundingSet = [ "CAP_CHOWN" "CAP_FOWNER" "CAP_DAC_OVERRIDE" "CAP_SETUID" "CAP_SETGID"
                                       # see bird/sysdep/linux/syspriv.h
@@ -65,6 +73,7 @@ let
           users.${variant} = {
             description = "BIRD Internet Routing Daemon user";
             group = variant;
+            isSystemUser = true;
           };
           groups.${variant} = {};
         };

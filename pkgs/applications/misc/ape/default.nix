@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
   inherit pname;
   version = "2019-08-10";
 
-  buildInputs = [ swiProlog makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ swiProlog ];
 
   src = fetchFromGitHub {
      owner = "Attempto";

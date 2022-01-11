@@ -1,9 +1,8 @@
 { lib, stdenv, fetchFromBitbucket, cmake, removeReferencesTo }:
-let
-  version = "0.6.3";
-in stdenv.mkDerivation {
+
+stdenv.mkDerivation rec {
   pname = "libgme";
-  inherit version;
+  version = "0.6.3";
 
   meta = with lib; {
     description = "A collection of video game music chip emulators";
@@ -21,6 +20,9 @@ in stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ cmake removeReferencesTo ];
+
+  # These checks fail on aarch64-darwin
+  cmakeFlags = [ "-DENABLE_UBSAN=OFF" ];
 
   # It used to reference it, in the past, but thanks to the postFixup hook, now
   # it doesn't.

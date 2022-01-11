@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     "DATA_ROOT_DIR_PURPLE=${placeholder "out"}/share"
   ];
 
-  buildFlags = [ "CC=cc" ]; # fix build on darwin
+  buildFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ]; # fix build on darwin
 
   meta = with lib; {
     homepage = "https://github.com/matrix-org/purple-matrix";

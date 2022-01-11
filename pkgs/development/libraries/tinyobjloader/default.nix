@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tinyobjloader";
-  version = "1.0.6";
+  version = "1.0.7";
 
   src = fetchFromGitHub {
     owner = "tinyobjloader";
     repo = "tinyobjloader";
     rev = "v${version}";
-    sha256 = "162168995f4xch7hm3iy6m57r8iqkpzi5x9qh1gsghlxwdxxqbis";
+    sha256 = "sha256-BNffbicnLTGK2GQ2/bB328LFU9fqHxrpAVj2hJaekWc=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -21,6 +21,6 @@ stdenv.mkDerivation rec {
     description = "Tiny but powerful single file wavefront obj loader";
     license = licenses.mit;
     maintainers = [ maintainers.ivar ];
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 }

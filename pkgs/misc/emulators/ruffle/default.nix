@@ -1,4 +1,4 @@
-{ alsaLib
+{ alsa-lib
 , fetchFromGitHub
 , makeWrapper
 , openssl
@@ -13,13 +13,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ruffle";
-  version = "nightly-2021-01-12";
+  version = "nightly-2021-09-17";
 
   src = fetchFromGitHub {
     owner = "ruffle-rs";
     repo = pname;
     rev = version;
-    sha256 = "1lywxn61w0b3pb8vjpavd9f3v58gq35ypwp41b7rjkc4rjxmf3cd";
+    sha256 = "sha256-N4i13vx/hWzFf2DT3lToAAnbMgIaUL/B2C3WI1el3ps=";
   };
 
   nativeBuildInputs = [
@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     openssl
     wayland
     xorg.libX11
@@ -42,10 +42,13 @@ rustPlatform.buildRustPackage rec {
   ];
 
   postInstall = ''
+    # This name is too generic
+    mv $out/bin/exporter $out/bin/ruffle_exporter
+
     wrapProgram $out/bin/ruffle_desktop --prefix LD_LIBRARY_PATH ':' ${vulkan-loader}/lib
   '';
 
-  cargoSha256 = "113gh8nf2fs9shfvnzpwlc7zaq1l9l9jhlybcc4dq0wr4r8qpff5";
+  cargoSha256 = "sha256-6B6bSIU15Ca1/lLYij9YjpFykbJhOGZieydNXis/Cw8=";
 
   meta = with lib; {
     description = "An Adobe Flash Player emulator written in the Rust programming language.";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchgit, autoreconfHook, pkg-config, pythonPackages
+{ lib, stdenv, fetchgit, autoreconfHook, pkg-config, python3Packages
 , libevdev
 }:
 
@@ -14,9 +14,11 @@ stdenv.mkDerivation rec {
     sha256 = "1m38fxwy2s82vb2qm9aqxinws12akmqqq7q66is931lc3awqkbah";
   };
 
-  nativeBuildInputs = [ pkg-config autoreconfHook ];
+  nativeBuildInputs = [ pkg-config autoreconfHook python3Packages.python ];
 
-  buildInputs = [ pythonPackages.python pythonPackages.evdev libevdev ];
+  buildInputs = [ python3Packages.evdev libevdev ];
+
+  strictDeps = true;
 
   meta = with lib; {
     description = "Records and replays device descriptions and events to emulate input devices through the kernel's input system";

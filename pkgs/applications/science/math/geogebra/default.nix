@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, jre, makeDesktopItem, makeWrapper, unzip, language ? "en_US" }:
 let
   pname = "geogebra";
-  version = "5-0-620-0";
+  version = "5-0-680-0";
 
   srcIcon = fetchurl {
     url = "http://static.geogebra.org/images/geogebra-logo.svg";
@@ -41,9 +41,9 @@ let
     src = fetchurl {
       urls = [
         "https://download.geogebra.org/installers/5.0/GeoGebra-Linux-Portable-${version}.tar.bz2"
-        "http://web.archive.org/web/20210101213140/https://download.geogebra.org/installers/5.0/GeoGebra-Linux-Portable-${version}.tar.bz2"
+        "https://web.archive.org/web/20210910014320/https://download.geogebra.org/installers/5.0/GeoGebra-Linux-Portable-${version}.tar.bz2"
       ];
-      sha256 = "0v4r76b91cj0pns78gh3d432g2jlq2pz37lslg3fnnpvlfh25s9j";
+      sha256 = "0gdvajf220pm1w3nxi2fymxjx2vl978pz7ffn5gr72cx8f2956lm";
     };
 
     nativeBuildInputs = [ makeWrapper ];

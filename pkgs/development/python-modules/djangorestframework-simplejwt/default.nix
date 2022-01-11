@@ -1,23 +1,45 @@
-{ lib, buildPythonPackage, fetchPypi, django, djangorestframework, pyjwt }:
+{ lib
+, buildPythonPackage
+, django
+, djangorestframework
+, fetchPypi
+, pyjwt
+, python-jose
+, setuptools-scm
+}:
 
 buildPythonPackage rec {
-  pname = "djangorestframework_simplejwt";
-  version = "4.6.0";
+  pname = "djangorestframework-simplejwt";
+  version = "5.0.0";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "7adc913ba0d2ed7f46e0b9bf6e86f9bd9248f1c4201722b732b8213e0ea66f9f";
+    pname = "djangorestframework_simplejwt";
+    inherit version;
+    sha256 = "30b10e7732395c44d21980f773214d2b9bdeadf2a6c6809cd1a7c9abe272873c";
   };
 
-  propagatedBuildInputs = [ django djangorestframework pyjwt ];
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
+
+  propagatedBuildInputs = [
+    django
+    djangorestframework
+    pyjwt
+    python-jose
+  ];
 
   # Test raises django.core.exceptions.ImproperlyConfigured
   doCheck = false;
 
+  pythonImportsCheck = [
+    "rest_framework_simplejwt"
+  ];
+
   meta = with lib; {
-    description = "A minimal JSON Web Token authentication plugin for Django REST Framework";
+    description = "JSON Web Token authentication plugin for Django REST Framework";
     homepage = "https://github.com/davesque/django-rest-framework-simplejwt";
     license = licenses.mit;
-    maintainers = [ maintainers.arnoldfarkas ];
+    maintainers = with maintainers; [ arnoldfarkas ];
   };
 }

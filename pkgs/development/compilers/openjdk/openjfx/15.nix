@@ -1,15 +1,15 @@
-{ stdenv, lib, fetchFromGitHub, writeText, openjdk11_headless, gradleGen
-, pkg-config, perl, cmake, gperf, gtk2, gtk3, libXtst, libXxf86vm, glib, alsaLib
-, ffmpeg_3, python, ruby }:
+{ stdenv, lib, fetchFromGitHub, writeText, openjdk11_headless, gradle_5
+, pkg-config, perl, cmake, gperf, gtk2, gtk3, libXtst, libXxf86vm, glib, alsa-lib
+, ffmpeg, python3, ruby }:
 
 let
   major = "15";
   update = ".0.1";
   build = "+1";
   repover = "${major}${update}${build}";
-  gradle_ = (gradleGen.override {
+  gradle_ = (gradle_5.override {
     java = openjdk11_headless;
-  }).gradle_5_6;
+  });
 
   makePackage = args: stdenv.mkDerivation ({
     version = "${major}${update}${build}";
@@ -21,8 +21,8 @@ let
       sha256 = "019glq8rhn6amy3n5jc17vi2wpf1pxpmmywvyz1ga8n09w7xscq1";
     };
 
-    buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsaLib ffmpeg_3 ];
-    nativeBuildInputs = [ gradle_ perl pkg-config cmake gperf python ruby ];
+    buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsa-lib ffmpeg ];
+    nativeBuildInputs = [ gradle_ perl pkg-config cmake gperf python3 ruby ];
 
     dontUseCmakeConfigure = true;
 
@@ -95,8 +95,9 @@ in makePackage {
 
   postFixup = ''
     # Remove references to bootstrap.
+    export openjdkOutPath='${openjdk11_headless.outPath}'
     find "$out" -name \*.so | while read lib; do
-      new_refs="$(patchelf --print-rpath "$lib" | sed -E 's,:?${lib.escape ["+"] openjdk11_headless.outPath}[^:]*,,')"
+      new_refs="$(patchelf --print-rpath "$lib" | perl -pe 's,:?\Q$ENV{openjdkOutPath}\E[^:]*,,')"
       patchelf --set-rpath "$new_refs" "$lib"
     done
   '';

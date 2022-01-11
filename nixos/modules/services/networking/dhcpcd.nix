@@ -191,9 +191,8 @@ in
       { description = "DHCP Client";
 
         wantedBy = [ "multi-user.target" ] ++ optional (!hasDefaultGatewaySet) "network-online.target";
-        wants = [ "network.target" "systemd-udev-settle.service" ];
+        wants = [ "network.target" ];
         before = [ "network-online.target" ];
-        after = [ "systemd-udev-settle.service" ];
 
         restartTriggers = [ exitHook ];
 
@@ -208,12 +207,19 @@ in
 
         serviceConfig =
           { Type = "forking";
-            PIDFile = "/run/dhcpcd.pid";
+            PIDFile = "/run/dhcpcd/pid";
+            RuntimeDirectory = "dhcpcd";
             ExecStart = "@${dhcpcd}/sbin/dhcpcd dhcpcd --quiet ${optionalString cfg.persistent "--persistent"} --config ${dhcpcdConf}";
             ExecReload = "${dhcpcd}/sbin/dhcpcd --rebind";
             Restart = "always";
           };
       };
+
+    users.users.dhcpcd = {
+      isSystemUser = true;
+      group = "dhcpcd";
+    };
+    users.groups.dhcpcd = {};
 
     environment.systemPackages = [ dhcpcd ];
 

@@ -1,27 +1,45 @@
-{ stdenv
-, lib
+{ lib
+, stdenv
 , buildPythonPackage
-, fetchPypi
-, fetchpatch
-, isPy3k
 , certifi
-, cmake
-, enum34
-, openssl
-, six
 , CFNetwork
+, cmake
 , CoreFoundation
+, enum34
+, fetchpatch
+, fetchPypi
+, isPy3k
+, openssl
 , Security
+, six
 }:
 
 buildPythonPackage rec {
   pname = "uamqp";
-  version = "1.2.13";
+  version = "1.4.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-zDUFe/yMCThn+qJqDekMrUHEf1glGxBw4pioExLLoqg=";
+    sha256 = "sha256-L4IQWnxRRL3yopNT91Mk8KKdph9Vg2PHkGH+86uDu7c=";
   };
+
+  nativeBuildInputs = [
+    cmake
+  ];
+
+  buildInputs = lib.optionals stdenv.isDarwin [
+    CoreFoundation
+    CFNetwork
+    Security
+  ];
+
+  propagatedBuildInputs = [
+    certifi
+    openssl
+    six
+  ] ++ lib.optionals (!isPy3k) [
+    enum34
+  ];
 
   patches = [
     (fetchpatch {
@@ -32,26 +50,14 @@ buildPythonPackage rec {
     })
   ];
 
-  buildInputs = [
-    openssl
-    certifi
-    six
-  ] ++ lib.optionals (!isPy3k) [
-    enum34
-  ] ++ lib.optionals stdenv.isDarwin [
-    CoreFoundation
-    CFNetwork
-    Security
-  ];
-
   dontUseCmakeConfigure = true;
 
-  nativeBuildInputs = [
-    cmake
-  ];
-
-  # has no tests
+  # Project has no tests
   doCheck = false;
+
+  pythonImportsCheck = [
+    "uamqp"
+  ];
 
   meta = with lib; {
     description = "An AMQP 1.0 client library for Python";

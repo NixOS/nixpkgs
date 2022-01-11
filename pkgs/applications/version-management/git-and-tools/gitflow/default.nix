@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-kHirHG/bfsU6tKyQ0khNSTyChhzHfzib+HyA3LOtBI8=";
   };
 
-  buildInputs = [ pkgs.makeWrapper ];
+  nativeBuildInputs = [ pkgs.makeWrapper ];
 
   preBuild = ''
     makeFlagsArray+=(prefix="$out")
@@ -22,7 +22,8 @@ stdenv.mkDerivation rec {
   postInstall = ''
     wrapProgram $out/bin/git-flow \
       --set FLAGS_GETOPT_CMD ${pkgs.getopt}/bin/getopt \
-      --suffix PATH : ${pkgs.git}/bin
+      --suffix PATH : ${pkgs.git}/bin \
+      --prefix PATH : ${pkgs.coreutils}/bin
   '';
 
   meta = with lib; {

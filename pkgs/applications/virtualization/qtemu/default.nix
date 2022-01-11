@@ -1,4 +1,4 @@
-{ lib, mkDerivation, fetchFromGitLab, pkg-config, qmake, qtbase, qemu, makeWrapper }:
+{ lib, mkDerivation, fetchFromGitLab, pkg-config, qmake, qtbase, qemu }:
 
 mkDerivation rec {
   pname = "qtemu";

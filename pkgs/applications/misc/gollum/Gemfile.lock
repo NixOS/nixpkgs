@@ -1,20 +1,25 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    concurrent-ruby (1.1.7)
+    RedCloth (4.3.2)
+    asciidoctor (2.0.15)
+    builder (3.2.4)
+    concurrent-ruby (1.1.8)
     crass (1.0.6)
+    creole (0.5.0)
     execjs (2.7.0)
-    ffi (1.13.1)
+    expression_parser (0.9.0)
+    ffi (1.14.2)
     gemojione (4.3.3)
       json
     github-markup (3.0.5)
-    gollum (5.1.2)
+    gollum (5.2.1)
       gemojione (~> 4.1)
-      gollum-lib (~> 5.0)
+      gollum-lib (~> 5.1)
       kramdown (~> 2.3)
       kramdown-parser-gfm (~> 1.1.0)
-      mustache (>= 0.99.5, < 1.0.0)
-      octicons (~> 8.5)
+      mustache-sinatra (~> 1.0)
+      octicons (~> 12.0)
       rss (~> 0.2.9)
       sass (~> 3.5)
       sinatra (~> 2.0)
@@ -22,40 +27,47 @@ GEM
       sprockets (~> 3.7)
       sprockets-helpers (~> 1.2)
       therubyrhino (~> 2.1.0)
-      uglifier (~> 3.2)
+      uglifier (~> 4.2)
       useragent (~> 0.16.2)
-    gollum-lib (5.0.6)
+    gollum-lib (5.1)
       gemojione (~> 4.1)
       github-markup (~> 3.0)
       gollum-rugged_adapter (~> 1.0)
       loofah (~> 2.3)
       nokogiri (~> 1.8)
-      octicons (~> 8.5)
+      octicons (~> 12.0)
       rouge (~> 3.1)
       twitter-text (= 1.14.7)
     gollum-rugged_adapter (1.0)
       mime-types (>= 1.15)
       rugged (~> 0.99)
-    json (2.3.1)
+    htmlentities (4.3.4)
+    json (2.5.1)
     kramdown (2.3.0)
       rexml
     kramdown-parser-gfm (1.1.0)
       kramdown (~> 2.0)
-    loofah (2.8.0)
+    loofah (2.9.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     mime-types (3.3.1)
       mime-types-data (~> 3.2015)
-    mime-types-data (3.2020.1104)
-    mini_portile2 (2.4.0)
+    mime-types-data (3.2021.0225)
+    mini_portile2 (2.5.0)
     multi_json (1.15.0)
     mustache (0.99.8)
+    mustache-sinatra (1.0.1)
+      mustache (<= 0.99.8)
     mustermann (1.1.1)
       ruby2_keywords (~> 0.0.1)
-    nokogiri (1.10.10)
-      mini_portile2 (~> 2.4.0)
-    octicons (8.5.0)
+    nokogiri (1.11.1)
+      mini_portile2 (~> 2.5.0)
+      racc (~> 1.4)
+    octicons (12.1.0)
       nokogiri (>= 1.6.3.1)
+    org-ruby (0.9.12)
+      rubypants (~> 0.2)
+    racc (1.5.2)
     rack (2.2.3)
     rack-protection (2.1.0)
       rack
@@ -63,10 +75,11 @@ GEM
     rb-inotify (0.10.1)
       ffi (~> 1.0)
     rexml (3.2.4)
-    rouge (3.25.0)
+    rouge (3.26.0)
     rss (0.2.9)
       rexml
-    ruby2_keywords (0.0.2)
+    ruby2_keywords (0.0.4)
+    rubypants (0.7.1)
     rugged (0.99.0)
     sass (3.7.4)
       sass-listen (~> 4.0.0)
@@ -95,18 +108,29 @@ GEM
     tilt (2.0.10)
     twitter-text (1.14.7)
       unf (~> 0.1.0)
-    uglifier (3.2.0)
+    uglifier (4.2.0)
       execjs (>= 0.3.0, < 3)
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.7.7)
     useragent (0.16.10)
+    wikicloth (0.8.3)
+      builder
+      expression_parser
+      htmlentities
+      nokogiri
+      twitter-text
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  RedCloth
+  asciidoctor
+  creole
   gollum
+  org-ruby
+  wikicloth
 
 BUNDLED WITH
-   2.1.4
+   2.2.20

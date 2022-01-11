@@ -1,12 +1,22 @@
-{ lib, buildPythonPackage, fetchPypi, pep517, toml, mock, breezy, git, build }:
+{ lib
+, breezy
+, build
+, buildPythonPackage
+, fetchPypi
+, git
+, mock
+, pep517
+, pytestCheckHook
+, toml
+}:
 
 buildPythonPackage rec {
   pname = "check-manifest";
-  version = "0.46";
+  version = "0.47";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5895e42a012989bdc51854a02c82c8d6898112a4ab11f2d7878200520b49d428";
+    sha256 = "56dadd260a9c7d550b159796d2894b6d0bcc176a94cbc426d9bb93e5e48d12ce";
   };
 
   # Test requires filesystem access
@@ -14,9 +24,20 @@ buildPythonPackage rec {
     substituteInPlace tests.py --replace "test_build_sdist" "no_test_build_sdist"
   '';
 
-  propagatedBuildInputs = [ build pep517 toml ];
+  propagatedBuildInputs = [
+    build
+    pep517
+    toml
+  ];
 
-  checkInputs = [ mock breezy git ];
+  checkInputs = [
+    breezy
+    git
+    mock
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [ "check_manifest" ];
 
   meta = with lib; {
     homepage = "https://github.com/mgedmin/check-manifest";

@@ -4,10 +4,12 @@
 , pkg-config
 , meson
 , ninja
+, wayland-scanner
+, libGL
 , libX11
 , mesa
-, libGL
 , wayland
+, wayland-protocols
 }:
 
 let
@@ -40,7 +42,7 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "egl-wayland";
-  version = "1.1.4";
+  version = "1.1.9";
 
   outputs = [ "out" "dev" ];
 
@@ -48,26 +50,35 @@ in stdenv.mkDerivation rec {
     owner = "Nvidia";
     repo = pname;
     rev = version;
-    sha256 = "0wvamjcfycd7rgk7v14g2rin55xin9rfkxmivyay3cm08vnl7y1d";
+    sha256 = "sha256-rcmGVEcOtKTR8sVkHV7Xb+8NuKWUapYn+/Fswi4z6Mc=";
   };
 
-  # Add missing include
-  # https://github.com/NVIDIA/egl-wayland/pull/24
-  patches = [ ./eglmesaext.patch ];
+  depsBuildBuild = [
+    pkg-config
+  ];
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
+    wayland-scanner
   ];
 
   buildInputs = [
     eglexternalplatform
+    libGL
     libX11
     mesa
-    libGL
     wayland
+    wayland-protocols
   ];
+
+  postFixup = ''
+    # Doubled prefix in pc file after postbuild hook replaces includedir prefix variable with dev output path
+    substituteInPlace $dev/lib/pkgconfig/wayland-eglstream.pc \
+      --replace "=$dev/$dev" "=$dev" \
+      --replace "Requires:" "Requires.private:"
+  '';
 
   meta = with lib; {
     description = "The EGLStream-based Wayland external platform";

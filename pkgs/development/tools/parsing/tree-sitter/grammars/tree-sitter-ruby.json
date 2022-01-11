@@ -1,9 +1,10 @@
 {
   "url": "https://github.com/tree-sitter/tree-sitter-ruby",
-  "rev": "f86d90cce578e28c824afdcdbdca7d031b88c0b0",
-  "date": "2020-11-02T20:49:49-08:00",
-  "path": "/nix/store/gs0hhb1dlgmv0y60zyyz7ki30yvpddfx-tree-sitter-ruby",
-  "sha256": "1n1irdjfmv27p5ia2vqzv8zfsq19pxi0as0wrkb7z7s1lqr1gwrb",
+  "rev": "888e2e563ed3b43c417f17e57f7e29c39ce9aeea",
+  "date": "2021-12-03T16:33:06+01:00",
+  "path": "/nix/store/6g101r5pwy6iqicch9srlhwfz9xdrvzd-tree-sitter-ruby",
+  "sha256": "0xfcqafslxlpkw7agw4a179w3c6k6ivi3fzlf32pqfd5bjrlx9d7",
+  "fetchLFS": false,
   "fetchSubmodules": false,
   "deepClone": false,
   "leaveDotGit": false

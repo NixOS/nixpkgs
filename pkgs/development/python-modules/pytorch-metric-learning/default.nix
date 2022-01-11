@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , isPy27
 , numpy
-, scikitlearn
+, scikit-learn
 , pytestCheckHook
 , pytorch
 , torchvision
@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname   = "pytorch-metric-learning";
-  version = "0.9.95";
+  version = "0.9.99";
 
   disabled = isPy27;
 
@@ -20,13 +20,13 @@ buildPythonPackage rec {
     owner = "KevinMusgrave";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1msvs1j3n47762ahm21bnkk2qqabxw8diiyi7s420x4zg24mr23g";
+    sha256 = "1ahs2b7q3hxi6yv4g2fjy7mvl899h56dvlpc2r9301440qsgkdzr";
   };
 
   propagatedBuildInputs = [
     numpy
     pytorch
-    scikitlearn
+    scikit-learn
     torchvision
     tqdm
   ];
@@ -41,10 +41,16 @@ buildPythonPackage rec {
   disabledTests = [
     # requires FAISS (not in Nixpkgs)
     "test_accuracy_calculator_and_faiss"
+    "test_global_embedding_space_tester"
+    "test_with_same_parent_label_tester"
     # require network access:
     "test_get_nearest_neighbors"
     "test_tuplestoweights_sampler"
     "test_untrained_indexer"
+    "test_metric_loss_only"
+    "test_pca"
+    # flaky
+    "test_distributed_classifier_loss_and_miner"
   ];
 
   meta = {

@@ -1,0 +1,12 @@
+diff --git a/src/main.cpp b/src/main.cpp
+index 39dfaa24..634b004b 100644
+--- a/src/main.cpp
++++ b/src/main.cpp
+@@ -237,6 +237,7 @@ static char * main_check_latest_version() {
+ 
+ 
+ void * main_check_latest_version_thread(void *arg) {
++	return NULL;
+ 	char * latest_version = main_check_latest_version();
+ 	if (latest_version) {
+ 		if (

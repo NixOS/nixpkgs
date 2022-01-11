@@ -1,4 +1,4 @@
-{ lib, stdenv, darwin, fetchurl, SDL2 }:
+{ lib, stdenv, pkg-config, darwin, fetchurl, SDL2 }:
 
 stdenv.mkDerivation rec {
   pname = "SDL2_net";
@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     url = "https://www.libsdl.org/projects/SDL_net/release/${pname}-${version}.tar.gz";
     sha256 = "08cxc1bicmyk89kiks7izw1rlx5ng5n6xpy8fy0zxni3b9z8mkhm";
   };
+
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = lib.optional stdenv.isDarwin darwin.libobjc;
 

@@ -9,7 +9,7 @@
 , udev
 , libusb1
 , libv4l
-, alsaLib
+, alsa-lib
 , gsl
 , libpng
 , sfml
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     SDL2
-    alsaLib
+    alsa-lib
     ffmpeg
     libusb1
     libv4l

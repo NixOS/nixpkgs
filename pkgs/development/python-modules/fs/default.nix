@@ -4,9 +4,9 @@
 , fetchPypi
 , six
 , appdirs
-, scandir
-, backports_os
-, typing
+, scandir ? null
+, backports_os ? null
+, typing ? null
 , pytz
 , enum34
 , pyftpdlib
@@ -20,14 +20,17 @@
 
 buildPythonPackage rec {
   pname = "fs";
-  version = "2.4.11";
+  version = "2.4.14";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cc99d476b500f993df8ef697b96dc70928ca2946a455c396a566efe021126767";
+    sha256 = "9555dc2bc58c58cac03478ac7e9f622d29fe2d20a4384c24c90ab50de2c7b36c";
   };
 
   buildInputs = [ glibcLocales ];
+
+  # strong cycle with paramaterized
+  doCheck = false;
   checkInputs = [ pyftpdlib mock psutil pytestCheckHook ];
   propagatedBuildInputs = [ six appdirs pytz ]
     ++ lib.optionals (!isPy3k) [ backports_os ]

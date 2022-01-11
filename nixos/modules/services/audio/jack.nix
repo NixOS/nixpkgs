@@ -8,7 +8,7 @@ let
   pcmPlugin = cfg.jackd.enable && cfg.alsa.enable;
   loopback = cfg.jackd.enable && cfg.loopback.enable;
 
-  enable32BitAlsaPlugins = cfg.alsa.support32Bit && pkgs.stdenv.isx86_64 && pkgs.pkgsi686Linux.alsaLib != null;
+  enable32BitAlsaPlugins = cfg.alsa.support32Bit && pkgs.stdenv.isx86_64 && pkgs.pkgsi686Linux.alsa-lib != null;
 
   umaskNeeded = versionOlder cfg.jackd.package.version "1.9.12";
   bridgeNeeded = versionAtLeast cfg.jackd.package.version "1.9.12";
@@ -25,8 +25,8 @@ in {
           internal = true;
           type = types.package;
           default = pkgs.jack2;
-          defaultText = "pkgs.jack2";
-          example = literalExample "pkgs.jack1";
+          defaultText = literalExpression "pkgs.jack2";
+          example = literalExpression "pkgs.jack1";
           description = ''
             The JACK package to use.
           '';
@@ -37,7 +37,7 @@ in {
           default = [
             "-dalsa"
           ];
-          example = literalExample ''
+          example = literalExpression ''
             [ "-dalsa" "--device" "hw:1" ];
           '';
           description = ''
@@ -129,9 +129,9 @@ in {
     (mkIf pcmPlugin {
       sound.extraConfig = ''
         pcm_type.jack {
-          libs.native = ${pkgs.alsaPlugins}/lib/alsa-lib/libasound_module_pcm_jack.so ;
+          libs.native = ${pkgs.alsa-plugins}/lib/alsa-lib/libasound_module_pcm_jack.so ;
           ${lib.optionalString enable32BitAlsaPlugins
-          "libs.32Bit = ${pkgs.pkgsi686Linux.alsaPlugins}/lib/alsa-lib/libasound_module_pcm_jack.so ;"}
+          "libs.32Bit = ${pkgs.pkgsi686Linux.alsa-plugins}/lib/alsa-lib/libasound_module_pcm_jack.so ;"}
         }
         pcm.!default {
           @func getenv
@@ -234,7 +234,7 @@ in {
 
       environment = {
         systemPackages = [ cfg.jackd.package ];
-        etc."alsa/conf.d/50-jack.conf".source = "${pkgs.alsaPlugins}/etc/alsa/conf.d/50-jack.conf";
+        etc."alsa/conf.d/50-jack.conf".source = "${pkgs.alsa-plugins}/etc/alsa/conf.d/50-jack.conf";
         variables.JACK_PROMISCUOUS_SERVER = "jackaudio";
       };
 
@@ -290,5 +290,5 @@ in {
 
   ];
 
-  meta.maintainers = [ maintainers.gnidorah ];
+  meta.maintainers = [ ];
 }

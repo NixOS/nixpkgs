@@ -10,15 +10,16 @@
 , six
 , testresources
 , wadllib
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "launchpadlib";
-  version = "1.10.13";
+  version = "1.10.15.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5804d68ec93247194449d17d187e949086da0a4d044f12155fad269ef8515435";
+    sha256 = "4891f5b0c9bafbbb78aa06eeba1635629663c6aa80f621bcd1fc1057c8dd14b5";
   };
 
   propagatedBuildInputs = [
@@ -32,6 +33,8 @@ buildPythonPackage rec {
     wadllib
   ];
 
+  checkInputs = [ pytestCheckHook ];
+
   preCheck = ''
     export HOME=$TMPDIR
   '';
@@ -41,7 +44,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Script Launchpad through its web services interfaces. Officially supported";
     homepage = "https://help.launchpad.net/API/launchpadlib";
-    license = licenses.lgpl3;
+    license = licenses.lgpl3Only;
     maintainers = [ maintainers.marsam ];
   };
 }

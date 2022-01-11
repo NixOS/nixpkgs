@@ -1,15 +1,63 @@
-{ lib, python3, fetchPypi, appdirs, attrs, requests,
-beautifulsoup4, click-plugins, elasticsearch, flask_login, flask_wtf,
-pypandoc, python-dotenv, python-frontmatter, tinydb, validators,
-watchdog, wtforms, html2text, flask-compress }:
+{ lib, stdenv, python3, fetchPypi }:
 
-python3.pkgs.buildPythonApplication rec {
+let
+  defaultOverrides = [
+    (self: super: {
+      flask = super.flask.overridePythonAttrs (oldAttrs: rec {
+        version = "1.1.2";
+        pname = "Flask";
+
+        src = super.fetchPypi {
+          inherit pname version;
+          sha256 = "sha256-Tvoa4tfJhlr0iYbeiuuFBL8yx/PW/ck1PTSyH0sScGA=";
+        };
+
+        checkInputs = [ self.pytest ];
+        propagatedBuildInputs = with self; [ itsdangerous click werkzeug jinja2 ];
+
+        doCheck = false;
+      });
+    })
+
+    (self: super: {
+      flask_login = super.flask_login.overridePythonAttrs (oldAttrs: rec {
+        pname = "Flask";
+        version = "0.5.0";
+
+        src = fetchPypi {
+          inherit pname version;
+          sha256 = "6d33aef15b5bcead780acc339464aae8a6e28f13c90d8b1cf9de8b549d1c0b4b";
+        };
+        doCheck = false;
+      });
+    })
+  ];
+
+  mkOverride = attrname: version: sha256:
+    self: super: {
+      ${attrname} = super.${attrname}.overridePythonAttrs (oldAttrs: {
+        inherit version;
+        src = oldAttrs.src.override {
+          inherit version sha256;
+        };
+      });
+    };
+
+  py = python3.override {
+    # Put packageOverrides at the start so they are applied after defaultOverrides
+    packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) (defaultOverrides);
+  };
+
+in
+with py.pkgs;
+
+buildPythonApplication rec {
   pname = "archivy";
-  version = "1.0.0";
+  version = "1.6.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "FDyUfahjv4zqOVFr0nRhcgxr7mskFP1W/PlhZWx/6E8=";
+    sha256 = "sha256-nwpH3V6hkPC8G3df+0hTZqvIbvT1Z796uOI/iKnXS1w=";
   };
 
   # Relax some dependencies
@@ -22,6 +70,9 @@ python3.pkgs.buildPythonApplication rec {
       --replace 'python_frontmatter == 0.5.0' 'python_frontmatter' \
       --replace 'requests ==' 'requests >=' \
       --replace 'validators ==' 'validators >=' \
+      --replace 'tinydb ==' 'tinydb >=' \
+      --replace 'Flask_WTF == 0.14.3' 'Flask_WTF' \
+      --replace 'Werkzeug ==' 'Werkzeug >='
   '';
 
   propagatedBuildInputs = [
@@ -30,18 +81,18 @@ python3.pkgs.buildPythonApplication rec {
     beautifulsoup4
     click-plugins
     elasticsearch
+    flask-compress
     flask_login
     flask_wtf
-    pypandoc
+    html2text
     python-dotenv
     python-frontmatter
-    tinydb
     requests
+    setuptools
+    tinydb
     validators
-    watchdog
+    werkzeug
     wtforms
-    html2text
-    flask-compress
   ];
 
   # __init__.py attempts to mkdir in read-only file system

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, vala, gtk3, libgee, fetchpatch
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, vala, gtk3, libgee
 , poppler, libpthreadstubs, gstreamer, gst-plugins-base, gst-plugins-good, gst-libav, librsvg, pcre, gobject-introspection, wrapGAppsHook
 , webkitgtk, discount, json-glib }:
 

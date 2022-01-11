@@ -1,26 +1,25 @@
-{ lib, fetchurl, python3Packages, cmake, python3 }:
+{ stdenv, lib, fetchurl, python3Packages, cmake, python3 }:
 
-let
-  pythonPackages = python3Packages;
-in
-
-pythonPackages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "obitools3";
-  version = "3.0.0-beta14";
+  version = "3.0.1b11";
 
   src = fetchurl {
     url = "https://git.metabarcoding.org/obitools/${pname}/repository/v${version}/archive.tar.gz";
-    sha256 = "17krklxfvxl6baf2m394gm1a88y0lg0bwqx20cf5q39zyw04z442";
+    sha256 = "1x7a0nrr9agg1pfgq8i1j8r1p6c0jpyxsv196ylix1dd2iivmas1";
   };
+
+  nativeBuildInputs = [ python3Packages.cython cmake ];
+
+  postPatch = lib.optionalString stdenv.isAarch64 ''
+      substituteInPlace setup.py \
+      --replace "'-msse2'," ""
+  '';
 
   preBuild = ''
     substituteInPlace src/CMakeLists.txt --replace \$'{PYTHONLIB}' "$out/lib/${python3.libPrefix}/site-packages";
     export NIX_CFLAGS_COMPILE="-L $out/lib/${python3.libPrefix}/site-packages $NIX_CFLAGS_COMPILE"
   '';
-
-  disabled = !pythonPackages.isPy3k;
-
-  nativeBuildInputs = [ pythonPackages.cython cmake ];
 
   dontConfigure = true;
 

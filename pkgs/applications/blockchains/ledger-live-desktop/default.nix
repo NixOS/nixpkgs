@@ -1,20 +1,33 @@
-{ lib, fetchurl, makeDesktopItem, appimageTools, imagemagick }:
+{ lib, fetchurl, appimageTools, imagemagick, systemd }:
 
 let
   pname = "ledger-live-desktop";
-  version = "2.20.0";
+  version = "2.36.3";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://github.com/LedgerHQ/${pname}/releases/download/v${version}/${pname}-${version}-linux-x86_64.AppImage";
-    sha256 = "10gi29mcvs4d5flqycwid190pnlciznzbvg36250mxaxxs58rq7j";
+    hash = "sha256:1sxsr70nm86fyx2m3wf694x1p6kvmkwxw6fqnslpbyjpyi9x73cd";
   };
 
   appimageContents = appimageTools.extractType2 {
     inherit name src;
   };
-in appimageTools.wrapType2 rec {
+
+  # Hotplug events from udevd are fired into the kernel, which then re-broadcasts them over a
+  # special socket, to every libudev client listening for hotplug when the kernel does that. It will
+  # try to preserve the uid of the sender but a non-root namespace (like the fhs-env) cant map root
+  # to a uid, for security reasons, so the uid of the sender becomes nobody and libudev actively
+  # rejects such messages. This patch disables that bit of security in libudev.
+  # See: https://github.com/NixOS/nixpkgs/issues/116361
+  systemdPatched = systemd.overrideAttrs ({ patches ? [ ], ... }: {
+    patches = patches ++ [ ./systemd.patch ];
+  });
+in
+appimageTools.wrapType2 rec {
   inherit name src;
+
+  extraPkgs = pkgs: [ systemdPatched ];
 
   extraInstallCommands = ''
     mv $out/bin/${name} $out/bin/${pname}
@@ -30,7 +43,7 @@ in appimageTools.wrapType2 rec {
     description = "Wallet app for Ledger Nano S and Ledger Blue";
     homepage = "https://www.ledger.com/live";
     license = licenses.mit;
-    maintainers = with maintainers; [ thedavidmeister nyanloutre RaghavSood th0rgal ];
+    maintainers = with maintainers; [ andresilva thedavidmeister nyanloutre RaghavSood th0rgal ];
     platforms = [ "x86_64-linux" ];
   };
 }

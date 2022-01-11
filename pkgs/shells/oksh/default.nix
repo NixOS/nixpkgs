@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "oksh";
-  version = "6.8.1";
+  version = "7.0";
 
   src = fetchFromGitHub {
     owner = "ibara";
     repo = pname;
     rev = "${pname}-${version}";
-    sha256 = "0lny550qfanysc4pqs0mxxx8zyz6plv9ll8y05gz0xmq9vx5384r";
+    sha256 = "sha256-076nD0aPps6n5qkR3LQJ6Kn2g3mkov+/M0qSvxNLZ6o=";
   };
 
   meta = with lib; {
@@ -17,5 +17,9 @@ stdenv.mkDerivation rec {
     license = licenses.publicDomain;
     maintainers = with maintainers; [ siraben ];
     platforms = platforms.all;
+  };
+
+  passthru = {
+    shellPath = "/bin/oksh";
   };
 }

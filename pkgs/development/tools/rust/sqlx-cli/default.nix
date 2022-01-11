@@ -1,23 +1,24 @@
-{ lib, rustPlatform, fetchFromGitHub, pkg-config, openssl }:
+{ stdenv, lib, rustPlatform, fetchFromGitHub, pkg-config, openssl, SystemConfiguration, CoreFoundation, Security, libiconv }:
 
 rustPlatform.buildRustPackage rec {
   pname = "sqlx-cli";
-  version = "0.4.2";
+  version = "0.5.10";
 
   src = fetchFromGitHub {
     owner = "launchbadge";
     repo = "sqlx";
     rev = "v${version}";
-    sha256 = "1q6p4qly9qjn333nj72sar6nbyclfdw9i9l6rnimswylj0rr9n27";
+    sha256 = "sha256-OBIuURj0C/ws71KTGN9EbMwN4QsGMEdgoWyctmHaHjQ=";
   };
 
-  cargoSha256 = "1393mwx6iccnqrry4ia4prcnnjxhp4zjq1s3gzwzfyzsrqyad54g";
+  cargoSha256 = "sha256-9+I4mi7w1WK2NkmN65EtC52KtSZR9GjrHCPE9w82IXw=";
 
   doCheck = false;
   cargoBuildFlags = [ "-p sqlx-cli" ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl ];
+  buildInputs = lib.optionals stdenv.isLinux [ openssl ]
+    ++ lib.optionals stdenv.isDarwin [ SystemConfiguration CoreFoundation Security libiconv ];
 
   meta = with lib; {
     description =

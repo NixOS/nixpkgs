@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchPypi, buildbot, setuptoolsTrial, mock, twisted,
-  future, coreutils }:
+  future, coreutils, nixosTests }:
 
 buildPythonPackage (rec {
   pname = "buildbot-worker";
@@ -7,7 +7,7 @@ buildPythonPackage (rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "10ap7jlxs9vcmnyafr62mxlgsp709165nw55xmv9sw18r7m8wsm6";
+    sha256 = "sha256-SFZ0Q51hrBb7eBMGzvVOhc/ogFCIO/Mo7U9652WJ2GU=";
   };
 
   propagatedBuildInputs = [ twisted future ];
@@ -19,10 +19,14 @@ buildPythonPackage (rec {
       --replace /usr/bin/tail "${coreutils}/bin/tail"
   '';
 
+  passthru.tests = {
+    smoke-test = nixosTests.buildbot;
+  };
+
   meta = with lib; {
     homepage = "https://buildbot.net/";
     description = "Buildbot Worker Daemon";
-    maintainers = with maintainers; [ nand0p ryansydnor lopsided98 ];
+    maintainers = with maintainers; [ ryansydnor lopsided98 ];
     license = licenses.gpl2;
   };
 })

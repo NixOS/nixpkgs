@@ -79,7 +79,7 @@ in with localPython.pkgs; buildPythonApplication rec {
     # Otherwise, awsebcli will try to install it using pip when using some
     # commands (like "eb local run").
     blessed botocore cement colorama dockerpty docopt pathspec pyyaml
-    requests semantic-version setuptools tabulate termcolor websocket_client
+    requests semantic-version setuptools tabulate termcolor websocket-client
   ];
 
   postInstall = ''
@@ -92,5 +92,6 @@ in with localPython.pkgs; buildPythonApplication rec {
     description = "A command line interface for Elastic Beanstalk";
     maintainers = with maintainers; [ eqyiel ];
     license = licenses.asl20;
+    broken = true;
   };
 }

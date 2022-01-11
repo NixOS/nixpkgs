@@ -1,58 +1,69 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchFromGitHub
-, fetchpatch
 , meson
 , ninja
 , pkg-config
-, gtk-doc
-, docbook-xsl-nons
-, docbook_xml_dtd_45
+, gobject-introspection
+, vala
+, gi-docgen
 , glib
+, gtk3
+, gtk4
+, libsForQt5
+, variant ? null
 }:
 
+assert variant == null || variant == "gtk3" || variant == "gtk4" || variant == "qt5";
+
 stdenv.mkDerivation rec {
-  pname = "libportal";
-  version = "0.3";
+  pname = "libportal" + lib.optionalString (variant != null) "-${variant}";
+  version = "0.5";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchFromGitHub {
     owner = "flatpak";
-    repo = pname;
+    repo = "libportal";
     rev = version;
-    sha256 = "1s3g17zbbmq3m5jfs62fl94p4irln9hfhpybj7jb05z0p1939rk3";
+    sha256 = "oPPO2f6NNeok0SGh4jELkkOP6VUxXZiwPM/n6CUHm0Q=";
   };
-
-  patches = [
-    # Fix build and .pc file
-    # https://github.com/flatpak/libportal/pull/20
-    (fetchpatch {
-      url = "https://github.com/flatpak/libportal/commit/7828be4ec8f05f8de7b129a1e35b5039d8baaee3.patch";
-      sha256 = "04nadcxx69mbnzljwjrzm88cgapn14x3mghpkhr8b9yrjn7yj86h";
-    })
-    (fetchpatch {
-      url = "https://github.com/flatpak/libportal/commit/bf5de2f6fefec65f701b4ec8712b48b29a33fb71.patch";
-      sha256 = "1v0b09diq49c01j5gg2bpvn5f5gfw1a5nm1l8grc4qg4z9jck1z8";
-    })
-  ];
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
-    gtk-doc
-    docbook-xsl-nons
-    docbook_xml_dtd_45
+    gi-docgen
+  ] ++ lib.optionals (variant != "qt5") [
+    gobject-introspection
+    vala
   ];
 
   propagatedBuildInputs = [
     glib
+  ] ++ lib.optionals (variant == "gtk3") [
+    gtk3
+  ] ++ lib.optionals (variant == "gtk4") [
+    gtk4
+  ] ++ lib.optionals (variant == "qt5") [
+    libsForQt5.qtbase
   ];
+
+  mesonFlags = [
+    "-Dbackends=${lib.optionalString (variant != null) variant}"
+    "-Dvapi=${if variant != "qt5" then "true" else "false"}"
+    "-Dintrospection=${if variant != "qt5" then "true" else "false"}"
+  ];
+
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
+  '';
 
   meta = with lib; {
     description = "Flatpak portal library";
     homepage = "https://github.com/flatpak/libportal";
-    license = licenses.lgpl2Plus;
+    license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.linux;
   };

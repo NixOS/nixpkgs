@@ -37,7 +37,7 @@ let
   srcDeps = lib.attrsets.attrValues srcDepsSet;
   srcDepsSet =
     let
-      srcs = (builtins.fromJSON (builtins.readFile ./src-deps.json));
+      srcs = lib.importJSON ./src-deps.json;
       toFetchurl = d: lib.attrsets.nameValuePair d.name (fetchurl {
         urls = d.urls;
         sha256 = d.sha256;
@@ -62,6 +62,7 @@ let
       srcs.rules_cc
       srcs.rules_java
       srcs.rules_proto
+      srcs.com_google_protobuf
       ]);
 
   distDir = runCommand "bazel-deps" {} ''
@@ -163,7 +164,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/bazelbuild/bazel/";
     description = "Build tool that builds code quickly and reliably";
     license = licenses.asl20;
-    maintainers = [ maintainers.mboes ];
+    maintainers = lib.teams.bazel.members;
     inherit platforms;
   };
 
@@ -370,7 +371,7 @@ stdenv.mkDerivation rec {
 
       # libcxx includes aren't added by libcxx hook
       # https://github.com/NixOS/nixpkgs/pull/41589
-      export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -isystem ${libcxx}/include/c++/v1"
+      export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -isystem ${lib.getDev libcxx}/include/c++/v1"
 
       # don't use system installed Xcode to run clang, use Nix clang instead
       sed -i -E "s;/usr/bin/xcrun (--sdk macosx )?clang;${stdenv.cc}/bin/clang $NIX_CFLAGS_COMPILE $(bazelLinkFlags) -framework CoreFoundation;g" \
@@ -404,8 +405,8 @@ stdenv.mkDerivation rec {
       substituteInPlace tools/objc/j2objc_dead_code_pruner.py --replace "$!/usr/bin/python2.7" "#!${python27}/bin/python"
 
       # md5sum is part of coreutils
-      sed -i 's|/sbin/md5|md5sum|' \
-        src/BUILD
+      sed -i 's|/sbin/md5|md5sum|g' \
+        src/BUILD third_party/ijar/test/testenv.sh tools/objc/libtool.sh
 
       # replace initial value of pythonShebang variable in BazelPythonSemantics.java
       substituteInPlace src/main/java/com/google/devtools/build/lib/bazel/rules/python/BazelPythonSemantics.java \
@@ -527,6 +528,13 @@ stdenv.mkDerivation rec {
         --output=./bazel_src/output/bazel-complete.bash \
         --prepend=./bazel_src/scripts/bazel-complete-header.bash \
         --prepend=./bazel_src/scripts/bazel-complete-template.bash
+
+    # need to change directory for bazel to find the workspace
+    cd ./bazel_src
+    # build execlog tooling
+    export HOME=$(mktemp -d)
+    ./output/bazel build  src/tools/execlog:parser_deploy.jar
+    cd -
   '';
 
   installPhase = ''
@@ -537,7 +545,15 @@ stdenv.mkDerivation rec {
     # The binary _must_ exist with this naming if your project contains a .bazelversion
     # file.
     cp ./bazel_src/scripts/packages/bazel.sh $out/bin/bazel
+
+    mkdir $out/share
+    cp ./bazel_src/bazel-bin/src/tools/execlog/parser_deploy.jar $out/share/parser_deploy.jar
     mv ./bazel_src/output/bazel $out/bin/bazel-${version}-${system}-${arch}
+    cat <<EOF > $out/bin/bazel-execlog
+    #!${runtimeShell} -e
+    ${runJdk}/bin/java -jar $out/share/parser_deploy.jar \$@
+    EOF
+    chmod +x $out/bin/bazel-execlog
 
     # shell completion files
     installShellCompletion --bash \

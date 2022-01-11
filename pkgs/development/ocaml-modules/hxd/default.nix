@@ -1,11 +1,11 @@
 { lib, buildDunePackage, fetchurl
-, dune-configurator, cmdliner, angstrom
-, rresult, stdlib-shims, fmt, fpath
+, ocaml, dune-configurator, cmdliner
+, lwt, withLwt ? lib.versionAtLeast ocaml.version "4.07"
 }:
 
 buildDunePackage rec {
   pname = "hxd";
-  version = "0.2.0";
+  version = "0.3.1";
 
   useDune2 = true;
 
@@ -13,24 +13,25 @@ buildDunePackage rec {
 
   src = fetchurl {
     url = "https://github.com/dinosaure/hxd/releases/download/v${version}/hxd-v${version}.tbz";
-    sha256 = "1lyfrq058cc9x0c0hzsf3hv3ys0h8mxkwin9lldidlnj10izqf1l";
+    sha256 = "1c226c91e17cd329dec0c287bfd20f36302aa533069ff9c6ced32721f96b29bc";
   };
+
+  # ignore yes stderr output due to trapped SIGPIPE
+  postPatch = ''
+    sed -i 's|yes ".\+"|& 2> /dev/null|' test/*.t
+  '';
 
   nativeBuildInputs = [
     dune-configurator
   ];
 
+  propagatedBuildInputs = lib.optional withLwt lwt;
+
   buildInputs = [
     cmdliner
-    angstrom
-    rresult
-    fmt
-    fpath
   ];
 
-  propagatedBuildInputs = [
-    stdlib-shims
-  ];
+  doCheck = true;
 
   meta = with lib; {
     description = "Hexdump in OCaml";

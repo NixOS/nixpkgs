@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, validatePkgConfig }:
 
 stdenv.mkDerivation rec {
   pname = "duktape";
@@ -8,6 +8,16 @@ stdenv.mkDerivation rec {
     sha256 = "19szwxzvl2g65fw95ggvb8h0ma5bd9vvnnccn59hwnc4dida1x4n";
   };
 
+  nativeBuildInputs = [ validatePkgConfig ];
+
+  postPatch = ''
+    substituteInPlace Makefile.sharedlibrary \
+      --replace 'gcc' '${stdenv.cc.targetPrefix}cc' \
+      --replace 'g++' '${stdenv.cc.targetPrefix}c++'
+    substituteInPlace Makefile.cmdline \
+      --replace 'gcc' '${stdenv.cc.targetPrefix}cc' \
+      --replace 'g++' '${stdenv.cc.targetPrefix}c++'
+  '';
   buildPhase = ''
     make -f Makefile.sharedlibrary
     make -f Makefile.cmdline
@@ -15,9 +25,10 @@ stdenv.mkDerivation rec {
   installPhase = ''
     install -d $out/bin
     install -m755 duk $out/bin/
-    install -d $out/lib
+    install -d $out/lib/pkgconfig
     install -d $out/include
     make -f Makefile.sharedlibrary install INSTALL_PREFIX=$out
+    substituteAll ${./duktape.pc.in} $out/lib/pkgconfig/duktape.pc
   '';
   enableParallelBuilding = true;
 
@@ -27,6 +38,6 @@ stdenv.mkDerivation rec {
     downloadPage = "https://duktape.org/download.html";
     license = licenses.mit;
     maintainers = [ maintainers.fgaz ];
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 }

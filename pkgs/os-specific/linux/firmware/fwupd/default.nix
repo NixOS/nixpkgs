@@ -1,9 +1,10 @@
 # Updating? Keep $out/etc synchronized with passthru keys
 
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchurl
+, fetchpatch
 , fetchFromGitHub
-, substituteAll
 , gtk-doc
 , pkg-config
 , gobject-introspection
@@ -15,13 +16,11 @@
 , sqlite
 , libarchive
 , curl
-, help2man
 , libjcat
 , libxslt
 , elfutils
 , libsmbios
 , efivar
-, gnu-efi
 , valgrind
 , meson
 , libuuid
@@ -31,6 +30,7 @@
 , ninja
 , gcab
 , gnutls
+, protobufc
 , python3
 , wrapGAppsHook
 , json-glib
@@ -40,39 +40,34 @@
 , vala
 , makeFontsConf
 , freefont_ttf
-, cairo
-, freetype
-, fontconfig
 , pango
 , tpm2-tss
 , bubblewrap
 , efibootmgr
 , flashrom
 , tpm2-tools
+, fwupd-efi
 , nixosTests
 , runCommand
+, unstableGitUpdater
 }:
 
 let
   python = python3.withPackages (p: with p; [
     pygobject3
-    pycairo
-    pillow
     setuptools
   ]);
 
-  installedTestsPython = python3.withPackages (p: with p; [
-    pygobject3
-    requests
-  ]);
-
-  isx86 = stdenv.isx86_64 || stdenv.isi686;
+  isx86 = stdenv.hostPlatform.isx86;
 
   # Dell isn't supported on Aarch64
   haveDell = isx86;
 
   # only redfish for x86_64
   haveRedfish = stdenv.isx86_64;
+
+  # only use msr if x86 (requires cpuid)
+  haveMSR = isx86;
 
   # # Currently broken on Aarch64
   # haveFlashrom = isx86;
@@ -86,9 +81,38 @@ let
     exec python3 -c "$buildCommandPython"
   '';
 
+  test-firmware =
+    let
+      version = "unstable-2021-11-02";
+      src = fetchFromGitHub {
+        name = "fwupd-test-firmware-${version}";
+        owner = "fwupd";
+        repo = "fwupd-test-firmware";
+        rev = "aaa2f9fd68a40684c256dd85b86093cba38ffd9d";
+        sha256 = "Slk7CNfkmvmOh3WtIBkPs3NYT96co6i8PwqcbpeVFgA=";
+        passthru = {
+          inherit src version; # For update script
+          updateScript = unstableGitUpdater {
+            url = "${test-firmware.meta.homepage}.git";
+          };
+        };
+      };
+    in
+      src // {
+        meta = src.meta // {
+          # For update script
+          position =
+            let
+              pos = builtins.unsafeGetAttrPos "updateScript" test-firmware;
+            in
+            pos.file + ":" + toString pos.line;
+        };
+      };
+
+
   self = stdenv.mkDerivation rec {
     pname = "fwupd";
-    version = "1.5.5";
+    version = "1.7.2";
 
     # libfwupd goes to lib
     # daemon, plug-ins and libfwupdplugin go to out
@@ -97,27 +121,30 @@ let
 
     src = fetchurl {
       url = "https://people.freedesktop.org/~hughsient/releases/fwupd-${version}.tar.xz";
-      sha256 = "0c2m9qz1g7zxqc6w90w9hksf8y9hvlh0vyvx06q01x893j5hzxh6";
+      sha256 = "sha256-hjLfacO6/Fk4fNy1F8POMaWXoJAm5E9ZB9g4RnG5+DQ=";
     };
 
     patches = [
-      # Do not try to create useless paths in /var.
-      ./fix-paths.patch
-
-      # Allow installing
+      # Since /etc is the domain of NixOS, not Nix,
+      # we cannot install files there.
+      # Let’s install the files to $prefix/etc
+      # while still reading them from /etc.
+      # NixOS module for fwupd will take take care of copying the files appropriately.
       ./add-option-for-installation-sysconfdir.patch
 
-      # Install plug-ins and libfwupdplugin to out,
+      # Install plug-ins and libfwupdplugin to $out output,
       # they are not really part of the library.
       ./install-fwupdplugin-to-out.patch
 
       # Installed tests are installed to different output
       # we also cannot have fwupd-tests.conf in $out/etc since it would form a cycle.
-      (substituteAll {
-        src = ./installed-tests-path.patch;
-        # Needs a different set of modules than po/make-images.
-        inherit installedTestsPython;
-      })
+      ./installed-tests-path.patch
+
+      # Tests detect fwupd is installed when prefix is /usr.
+      ./fix-install-detection.patch
+
+      # EFI capsule is located in fwupd-efi now.
+      ./efi-app-path.patch
     ];
 
     nativeBuildInputs = [
@@ -133,8 +160,8 @@ let
       gnutls
       docbook_xml_dtd_43
       docbook-xsl-nons
-      help2man
       libxslt
+      protobufc # for protoc
       python
       wrapGAppsHook
       vala
@@ -148,7 +175,6 @@ let
       libarchive
       curl
       elfutils
-      gnu-efi
       libgudev
       colord
       libjcat
@@ -156,18 +182,17 @@ let
       json-glib
       umockdev
       bash-completion
-      cairo
-      freetype
-      fontconfig
       pango
       tpm2-tss
       efivar
+      fwupd-efi
+      protobufc
     ] ++ lib.optionals haveDell [
       libsmbios
     ];
 
     mesonFlags = [
-      "-Dgtkdoc=true"
+      "-Ddocs=gtkdoc"
       "-Dplugin_dummy=true"
       # We are building the official releases.
       "-Dsupported_build=true"
@@ -177,12 +202,10 @@ let
       "-Dudevdir=lib/udev"
       "-Dsystemd_root_prefix=${placeholder "out"}"
       "-Dinstalled_test_prefix=${placeholder "installedTests"}"
-      "-Defi-libdir=${gnu-efi}/lib"
-      "-Defi-ldsdir=${gnu-efi}/lib"
-      "-Defi-includedir=${gnu-efi}/include/efi"
       "--localstatedir=/var"
       "--sysconfdir=/etc"
       "-Dsysconfdir_install=${placeholder "out"}/etc"
+      "-Defi_os_dir=nixos"
 
       # We do not want to place the daemon into lib (cyclic reference)
       "--libexecdir=${placeholder "out"}/libexec"
@@ -196,6 +219,8 @@ let
       "-Dplugin_redfish=false"
     ] ++ lib.optionals haveFlashrom [
       "-Dplugin_flashrom=true"
+    ] ++ lib.optionals (!haveMSR) [
+      "-Dplugin_msr=false"
     ];
 
     # TODO: wrapGAppsHook wraps efi capsule even though it is not ELF
@@ -222,11 +247,8 @@ let
 
     postPatch = ''
       patchShebangs \
-        contrib/get-version.py \
         contrib/generate-version-script.py \
         meson_post_install.sh \
-        po/make-images \
-        po/make-images.sh \
         po/test-deps
     '';
 
@@ -234,18 +256,20 @@ let
       addToSearchPath XDG_DATA_DIRS "${shared-mime-info}/share"
     '';
 
-    postInstall =
-      let
-        testFw = fetchFromGitHub {
-          owner = "fwupd";
-          repo = "fwupd-test-firmware";
-          rev = "42b62c62dc85ecfb8e38099fe5de0625af87a722";
-          sha256 = "XUpxE003DZSeLJMtyV5UN5CNHH89/nEVKpCbMStm91Q=";
-        };
-      in ''
-        # These files have weird licenses so they are shipped separately.
-        cp --recursive --dereference "${testFw}/installed-tests/tests" "$installedTests/libexec/installed-tests/fwupd"
-      '';
+    preInstall = ''
+      # We have pkexec on PATH so Meson will try to use it when installation fails
+      # due to being unable to write to e.g. /etc.
+      # Let’s pretend we already ran pkexec –
+      # the pkexec on PATH would complain it lacks setuid bit,
+      # obscuring the underlying error.
+      # https://github.com/mesonbuild/meson/blob/492cc9bf95d573e037155b588dc5110ded4d9a35/mesonbuild/minstall.py#L558
+      export PKEXEC_UID=-1
+    '';
+
+    postInstall = ''
+      # These files have weird licenses so they are shipped separately.
+      cp --recursive --dereference "${test-firmware}/installed-tests/tests" "$installedTests/libexec/installed-tests/fwupd"
+    '';
 
     preFixup = let
       binPath = [
@@ -277,30 +301,34 @@ let
     passthru = {
       filesInstalledToEtc = [
         "fwupd/daemon.conf"
-        "fwupd/redfish.conf"
         "fwupd/remotes.d/lvfs-testing.conf"
         "fwupd/remotes.d/lvfs.conf"
         "fwupd/remotes.d/vendor.conf"
         "fwupd/remotes.d/vendor-directory.conf"
         "fwupd/thunderbolt.conf"
-        "fwupd/upower.conf"
         "fwupd/uefi_capsule.conf"
-        "pki/fwupd/GPG-KEY-Hughski-Limited"
         "pki/fwupd/GPG-KEY-Linux-Foundation-Firmware"
         "pki/fwupd/GPG-KEY-Linux-Vendor-Firmware-Service"
         "pki/fwupd/LVFS-CA.pem"
         "pki/fwupd-metadata/GPG-KEY-Linux-Foundation-Metadata"
         "pki/fwupd-metadata/GPG-KEY-Linux-Vendor-Firmware-Service"
         "pki/fwupd-metadata/LVFS-CA.pem"
+        "grub.d/35_fwupd"
       ] ++ lib.optionals haveDell [
         "fwupd/remotes.d/dell-esrt.conf"
+      ] ++ lib.optionals haveRedfish [
+        "fwupd/redfish.conf"
       ];
 
       # DisabledPlugins key in fwupd/daemon.conf
       defaultDisabledPlugins = [
         "test"
+        "test_ble"
         "invalid"
       ];
+
+      # For updating.
+      inherit test-firmware;
 
       tests = let
         listToPy = list: "[${lib.concatMapStringsSep ", " (f: "'${f}'") list}]";

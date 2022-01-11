@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#! nix-shell -i bash -p curl nix-prefetch-github
+#! nix-shell -i bash -p curl nix-prefetch-github jq
 
 rev=$(curl -s https://api.github.com/repos/python-poetry/poetry/releases/latest | jq -r '.name')
 nix-prefetch-github --rev "$rev" python-poetry poetry > src.json
@@ -7,4 +7,5 @@ echo >> src.json
 
 src=$(nix-build --no-out-link --expr 'with import <nixpkgs> {}; fetchFromGitHub (lib.importJSON ./src.json)')
 cp $src/pyproject.toml $src/poetry.lock .
+nix-shell -p poetry --run 'poetry lock'
 nix-build --expr '(import <nixpkgs> { overlays = [ (import ../../overlay.nix) ]; }).poetry'

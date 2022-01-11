@@ -22,11 +22,7 @@ stdenv.mkDerivation rec {
   # if we use stdenv vs clangStdenv, we don't know which, and CC=cc in all
   # cases.) it's unclear exactly what should be done if we want those flags,
   # but the defaults work fine.
-  buildPhase = "PREFIX=$out bmake -r -j$NIX_BUILD_CORES";
-  installPhase = ''
-    PREFIX=$out bmake -r install
-    runHook postInstall
-  '';
+  makeFlags = [ "-r" "PREFIX=$(out)" ];
 
   # fix up multi-output install. we also have to fix the pkg-config libdir
   # file; it uses prefix=$out; libdir=${prefix}/lib, which is wrong in

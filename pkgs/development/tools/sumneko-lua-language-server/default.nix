@@ -1,14 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, ninja, makeWrapper }:
-
+{ lib, stdenv, fetchFromGitHub, ninja, makeWrapper, darwin }:
+let
+  target = if stdenv.isDarwin then "macOS" else "Linux";
+in
 stdenv.mkDerivation rec {
   pname = "sumneko-lua-language-server";
-  version = "1.11.2";
+  version = "2.5.6";
 
   src = fetchFromGitHub {
     owner = "sumneko";
     repo = "lua-language-server";
     rev = version;
-    sha256 = "1cnzwfqmzlzi6797l37arhhx2l6wsvs3jjgxdxwdbgq3rfz1ncr8";
+    sha256 = "sha256-dSj3wNbQghiGfqe7dNDbWnbXYLSiG+0mYv2yFmGsAc8=";
     fetchSubmodules = true;
   };
 
@@ -17,13 +19,33 @@ stdenv.mkDerivation rec {
     makeWrapper
   ];
 
+  buildInputs = lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.CoreFoundation
+    darwin.apple_sdk.frameworks.Foundation
+  ];
+
   preBuild = ''
     cd 3rd/luamake
+  ''
+  + lib.optionalString stdenv.isDarwin ''
+    # Needed for the test
+    export HOME=/var/empty
+    # This package uses the program clang for C and C++ files. The language
+    # is selected via the command line argument -std, but this do not work
+    # in combination with the nixpkgs clang wrapper. Therefor we have to
+    # find all c++ compiler statements and replace $cc (which expands to
+    # clang) with clang++.
+    sed -i compile/ninja/macos.ninja \
+      -e '/c++/s,$cc,clang++,' \
+      -e '/test.lua/s,= .*,= true,' \
+      -e '/ldl/s,$cc,clang++,'
+    sed -i scripts/compiler/gcc.lua \
+      -e '/cxx_/s,$cc,clang++,'
   '';
 
   ninjaFlags = [
-    "-f ninja/linux.ninja"
-    ];
+    "-fcompile/ninja/${lib.toLower target}.ninja"
+  ];
 
   postBuild = ''
     cd ../..
@@ -31,15 +53,23 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    mkdir -p $out/bin $out/extras
-    cp -r ./{locale,meta,script,*.lua} $out/extras/
-    cp ./bin/Linux/{bee.so,lpeglabel.so} $out/extras
-    cp ./bin/Linux/lua-language-server $out/extras/.lua-language-server-unwrapped
-    makeWrapper $out/extras/.lua-language-server-unwrapped \
+    runHook preInstall
+
+    install -Dt "$out"/share/lua-language-server/bin bin/lua-language-server
+    install -m644 -t "$out"/share/lua-language-server/bin bin/*.*
+    install -m644 -t "$out"/share/lua-language-server {debugger,main}.lua
+    cp -r locale meta script "$out"/share/lua-language-server
+
+    # necessary for --version to work:
+    install -m644 -t "$out"/share/lua-language-server changelog.md
+
+    makeWrapper "$out"/share/lua-language-server/bin/lua-language-server \
       $out/bin/lua-language-server \
-      --add-flags "-E $out/extras/main.lua \
+      --add-flags "-E $out/share/lua-language-server/main.lua \
       --logpath='~/.cache/sumneko_lua/log' \
       --metapath='~/.cache/sumneko_lua/meta'"
+
+    runHook postInstall
   '';
 
   meta = with lib; {
@@ -47,6 +77,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/sumneko/lua-language-server";
     license = licenses.mit;
     maintainers = with maintainers; [ mjlbach ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
+    mainProgram = "lua-language-server";
   };
 }

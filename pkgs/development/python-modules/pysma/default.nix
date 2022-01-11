@@ -4,28 +4,33 @@
 , buildPythonPackage
 , fetchPypi
 , jmespath
-, async-timeout
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pysma";
-  version = "0.3.5";
+  version = "0.6.9";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1awcsbk14i2aw01f7b7hrmpn9q6vr9v6la0i9n7ldv1h8rzq6j16";
+    sha256 = "sha256-2ZU3UjDNo+fpnYK4WlYSu7XqkbpcK7Xz5cUKDABhwdk=";
   };
 
   propagatedBuildInputs = [
     aiohttp
-    async-timeout
     attrs
     jmespath
   ];
 
   # pypi does not contain tests and GitHub archive not available
   doCheck = false;
-  pythonImportsCheck = [ "pysma" ];
+
+  pythonImportsCheck = [
+    "pysma"
+  ];
 
   meta = with lib; {
     description = "Python library for interacting with SMA Solar's WebConnect";

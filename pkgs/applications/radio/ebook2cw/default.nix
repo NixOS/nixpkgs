@@ -1,18 +1,24 @@
-{ lib, stdenv, fetchgit, lame, libvorbis, gettext }:
+{ lib, stdenv, fetchgit, fetchpatch, lame, libvorbis, gettext }:
 
 stdenv.mkDerivation rec {
   pname = "ebook2cw";
-  version = "0.8.3";
+  version = "0.8.4";
 
   src = fetchgit {
     url = "https://git.fkurz.net/dj1yfk/ebook2cw.git";
     rev = "${pname}-${version}";
-    sha256 = "0jqmnjblv3wzr0ppqzndzd8wg02nlkvzg1fqw14vyyp76sdjsh46";
+    sha256 = "0h7lg59m3dcydzkc8szipnwzag8fqwwvppa9fspn5xqd4blpcjd5";
   };
 
-  buildInputs = [ lame libvorbis gettext ];
+  patches = [
+    # Fixes non-GCC compilers and a missing directory in the install phase.
+    (fetchpatch {
+      url = "https://git.fkurz.net/dj1yfk/ebook2cw/commit/eb5742e70b042cf98a04440395c34390b171c035.patch";
+      sha256 = "1m5f819cj3fj1piss0a5ciib3jqrqdc14lp3i3dszw4bg9v1pgyd";
+    })
+  ];
 
-  patches = [ ./Makefile.patch ];
+  buildInputs = [ lame libvorbis gettext ];
 
   makeFlags = [ "DESTDIR=$(out)" ];
 

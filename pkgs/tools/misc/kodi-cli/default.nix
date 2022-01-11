@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, curl, bash, jq, youtube-dl, gnome3 }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, curl, bash, jq, youtube-dl, gnome }:
 
 stdenv.mkDerivation rec {
   pname = "kodi-cli";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     cp -a kodi-cli $out/bin
     wrapProgram $out/bin/kodi-cli --prefix PATH : ${lib.makeBinPath [ curl bash ]}
     cp -a playlist_to_kodi $out/bin
-    wrapProgram $out/bin/playlist_to_kodi --prefix PATH : ${lib.makeBinPath [ curl bash gnome3.zenity jq youtube-dl ]}
+    wrapProgram $out/bin/playlist_to_kodi --prefix PATH : ${lib.makeBinPath [ curl bash gnome.zenity jq youtube-dl ]}
   '';
 
   meta = with lib; {

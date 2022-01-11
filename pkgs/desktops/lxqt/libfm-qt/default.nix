@@ -16,13 +16,13 @@
 
 mkDerivation rec {
   pname = "libfm-qt";
-  version = "0.16.0";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "libfm-qt";
     rev = version;
-    sha256 = "0b52bczqvw4brxv5fszjrl1375yid6xzjm49ns9rx1jw71422w0p";
+    sha256 = "1kk2cv9cp2gdj2pzdgm72c009iyl3mhrvsiz05kdxd4v1kn38ci1";
   };
 
   nativeBuildInputs = [

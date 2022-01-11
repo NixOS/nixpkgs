@@ -10,9 +10,9 @@ dependencies = [
 
 [[package]]
 name = "compiler_builtins"
-version = "0.1.36"
+version = "0.1.52"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7cd0782e0a7da7598164153173e5a5d4d9b1da094473c98dce0ff91406112369"
+checksum = "b6591c2442ee984e2b264638a8b5e7ae44fd47b32d28e3a08e2e9c3cdb0c2fb0"
 dependencies = [
  "rustc-std-workspace-core",
 ]
@@ -22,8 +22,21 @@ name = "core"
 version = "0.0.0"
 
 [[package]]
+name = "nixpkgs-sysroot-stub-crate"
+version = "0.0.0"
+dependencies = [
+ "alloc",
+ "compiler_builtins",
+ "core",
+]
+
+[[package]]
 name = "rustc-std-workspace-core"
 version = "1.99.0"
 dependencies = [
  "core",
 ]
+
+[[patch.unused]]
+name = "rustc-std-workspace-alloc"
+version = "1.99.0"

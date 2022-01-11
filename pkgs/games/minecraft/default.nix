@@ -15,7 +15,7 @@
 , pango
 , cairo
 , expat
-, alsaLib
+, alsa-lib
 , cups
 , dbus
 , atk
@@ -45,13 +45,13 @@ let
     curl
     libpulseaudio
     systemd
-    alsaLib # needed for narrator
+    alsa-lib # needed for narrator
     flite # needed for narrator
     libXxf86vm # needed only for versions <1.13
   ];
 
   libPath = lib.makeLibraryPath ([
-    alsaLib
+    alsa-lib
     atk
     cairo
     cups

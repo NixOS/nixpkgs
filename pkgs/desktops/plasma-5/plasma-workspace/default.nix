@@ -16,12 +16,15 @@
 
   qtgraphicaleffects, qtquickcontrols, qtquickcontrols2, qtscript, qttools,
   qtwayland, qtx11extras, qqc2-desktop-style,
+
+  pipewire, libdrm
 }:
 
 let inherit (lib) getBin getLib; in
 
 mkDerivation {
   name = "plasma-workspace";
+  passthru.providedSessions = [ "plasma" "plasmawayland" ];
 
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
@@ -36,6 +39,8 @@ mkDerivation {
 
     qtgraphicaleffects qtquickcontrols qtquickcontrols2 qtscript qtwayland
     qtx11extras qqc2-desktop-style
+
+    pipewire libdrm
   ];
   propagatedUserEnvPkgs = [ qtgraphicaleffects ];
   outputs = [ "out" "dev" ];
@@ -49,9 +54,10 @@ mkDerivation {
     ./0002-absolute-wallpaper-install-dir.patch
   ];
 
+  # QT_INSTALL_BINS refers to qtbase, and qdbus is in qttools
   postPatch = ''
-    substituteInPlace wallpapers/image/wallpaper.knsrc.cmake \
-      --replace '@QtBinariesDir@/qdbus' ${getBin qttools}/bin/qdbus
+    substituteInPlace CMakeLists.txt \
+      --replace 'query_qmake(QtBinariesDir QT_INSTALL_BINS)' 'set(QtBinariesDir "${lib.getBin qttools}/bin")'
   '';
 
   NIX_CFLAGS_COMPILE = [

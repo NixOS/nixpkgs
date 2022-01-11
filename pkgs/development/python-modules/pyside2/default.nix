@@ -1,4 +1,4 @@
-{ buildPythonPackage, python, fetchurl, lib, stdenv,
+{ python, fetchurl, lib, stdenv,
   cmake, ninja, qt5, shiboken2 }:
 
 stdenv.mkDerivation rec {
@@ -29,6 +29,8 @@ stdenv.mkDerivation rec {
     qtwebsockets qtwebengine qtwebchannel qtcharts qtsensors qtsvg
   ];
   propagatedBuildInputs = [ shiboken2 ];
+
+  dontWrapQtApps = true;
 
   meta = with lib; {
     description = "LGPL-licensed Python bindings for Qt";

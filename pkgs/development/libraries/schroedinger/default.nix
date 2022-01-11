@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, orc, pkg-config, fetchpatch, autoreconfHook }:
 
-stdenv.mkDerivation {
-  name = "schroedinger-1.0.11";
+stdenv.mkDerivation rec {
+  pname = "schroedinger";
+  version = "1.0.11";
 
   src = fetchurl {
-    url = "https://download.videolan.org/contrib/schroedinger-1.0.11.tar.gz";
+    url = "https://download.videolan.org/contrib/${pname}-${version}.tar.gz";
     sha256 = "04prr667l4sn4zx256v1z36a0nnkxfdqyln48rbwlamr6l3jlmqy";
   };
 

@@ -1,17 +1,17 @@
 { lib, stdenv, fetchFromGitHub
-, ffmpeg, libjpeg_turbo, gtk3, alsaLib, speex, libusbmuxd, libappindicator-gtk3
+, ffmpeg, libjpeg_turbo, gtk3, alsa-lib, speex, libusbmuxd, libappindicator-gtk3
 , pkg-config
 }:
 
 stdenv.mkDerivation rec {
   pname = "droidcam";
-  version = "1.7.1";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "aramg";
     repo = "droidcam";
     rev = "v${version}";
-    sha256 = "sha256-f7wLi4ReExkqb+SfOK0juzKbwdcqUVkklIUOIMtmnxM=";
+    sha256 = "sha256-3iA7GDTiCx5vHawj8ZBFAK0BIfmxEFuQrVfL7Gi6FhM=";
   };
 
   nativeBuildInputs = [
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     ffmpeg
     libjpeg_turbo
     gtk3
-    alsaLib
+    alsa-lib
     speex
     libusbmuxd
     libappindicator-gtk3

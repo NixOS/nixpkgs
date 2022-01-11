@@ -1,11 +1,11 @@
-{ config, lib, stdenv, fetchurl, pkg-config, freetype, yasm, ffmpeg_3
+{ config, lib, stdenv, fetchurl, pkg-config, freetype, yasm, ffmpeg
 , aalibSupport ? true, aalib ? null
 , fontconfigSupport ? true, fontconfig ? null, freefont_ttf ? null
 , fribidiSupport ? true, fribidi ? null
 , x11Support ? true, libX11 ? null, libXext ? null, libGLU, libGL ? null
 , xineramaSupport ? true, libXinerama ? null
 , xvSupport ? true, libXv ? null
-, alsaSupport ? stdenv.isLinux, alsaLib ? null
+, alsaSupport ? stdenv.isLinux, alsa-lib ? null
 , screenSaverSupport ? true, libXScrnSaver ? null
 , vdpauSupport ? false, libvdpau ? null
 , cddaSupport ? !stdenv.isDarwin, cdparanoia ? null
@@ -36,7 +36,7 @@ assert fribidiSupport -> (fribidi != null);
 assert x11Support -> (libX11 != null && libXext != null && libGLU != null && libGL != null);
 assert xineramaSupport -> (libXinerama != null && x11Support);
 assert xvSupport -> (libXv != null && x11Support);
-assert alsaSupport -> alsaLib != null;
+assert alsaSupport -> alsa-lib != null;
 assert screenSaverSupport -> libXScrnSaver != null;
 assert vdpauSupport -> libvdpau != null;
 assert cddaSupport -> cdparanoia != null;
@@ -106,15 +106,17 @@ stdenv.mkDerivation rec {
     rm -rf ffmpeg
   '';
 
+  patches = [ ./svn-r38199-ffmpeg44fix.patch ];
+
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ pkg-config yasm ];
   buildInputs = with lib;
-    [ freetype ffmpeg_3 ]
+    [ freetype ffmpeg ]
     ++ optional aalibSupport aalib
     ++ optional fontconfigSupport fontconfig
     ++ optional fribidiSupport fribidi
     ++ optionals x11Support [ libX11 libXext libGLU libGL ]
-    ++ optional alsaSupport alsaLib
+    ++ optional alsaSupport alsa-lib
     ++ optional xvSupport libXv
     ++ optional theoraSupport libtheora
     ++ optional cacaSupport libcaca
@@ -172,7 +174,7 @@ stdenv.mkDerivation rec {
          (useUnfreeCodecs && codecs != null && !crossBuild)
          "--codecsdir=${codecs}"
     ++ optional
-         ((stdenv.hostPlatform.isi686 || stdenv.hostPlatform.isx86_64) && !crossBuild)
+         (stdenv.hostPlatform.isx86 && !crossBuild)
          "--enable-runtime-cpudetection"
     ++ optional fribidiSupport "--enable-fribidi"
     ++ optional stdenv.isLinux "--enable-vidix"
@@ -203,6 +205,7 @@ stdenv.mkDerivation rec {
        optional  fontconfigSupport "-lfontconfig"
     ++ optional  fribidiSupport "-lfribidi"
     ++ optionals x11Support [ "-lX11" "-lXext" ]
+    ++ optional  x264Support "-lx264"
     ++ [ "-lfreetype" ]
   );
 
@@ -220,11 +223,11 @@ stdenv.mkDerivation rec {
       fi
     '';
 
-  meta = {
+  meta = with lib; {
     description = "A movie player that supports many video formats";
     homepage = "http://mplayerhq.hu";
-    license = "GPL";
-    maintainers = [ lib.maintainers.eelco ];
-    platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ eelco ];
+    platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
   };
 }

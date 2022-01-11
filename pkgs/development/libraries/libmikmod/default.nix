@@ -1,17 +1,19 @@
-{ lib, stdenv, fetchurl, texinfo, alsaLib, libpulseaudio, CoreAudio }:
+{ lib, stdenv, fetchurl, texinfo, alsa-lib, libpulseaudio, CoreAudio }:
 
 let
   inherit (lib) optional optionalString;
 
 in stdenv.mkDerivation rec {
-  name = "libmikmod-3.3.11.1";
+  pname = "libmikmod";
+  version = "3.3.11.1";
+
   src = fetchurl {
-    url = "mirror://sourceforge/mikmod/${name}.tar.gz";
+    url = "mirror://sourceforge/mikmod/libmikmod-${version}.tar.gz";
     sha256 = "06bdnhb0l81srdzg6gn2v2ydhhaazza7rshrcj3q8dpqr3gn97dd";
   };
 
   buildInputs = [ texinfo ]
-    ++ optional stdenv.isLinux alsaLib
+    ++ optional stdenv.isLinux alsa-lib
     ++ optional stdenv.isDarwin CoreAudio;
   propagatedBuildInputs =
     optional stdenv.isLinux libpulseaudio;

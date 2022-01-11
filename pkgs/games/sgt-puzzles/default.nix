@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "sgt-puzzles-r${version}";
+  pname = "sgt-puzzles";
   version = "20200610.9aa7b7c";
 
   src = fetchurl {

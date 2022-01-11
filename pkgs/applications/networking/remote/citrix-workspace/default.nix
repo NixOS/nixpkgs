@@ -14,7 +14,7 @@ let
       Citrix Workspace at version ${x} is not supported anymore!
 
       Actively supported releases are listed here:
-      https://www.citrix.com/en-gb/support/product-lifecycle/milestones/receiver.html
+      https://www.citrix.com/support/product-lifecycle/milestones/receiver.html
     '')) unsupportedVersions
   );
 

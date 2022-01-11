@@ -2,11 +2,12 @@
 , fetchFromGitHub
 , gobject-introspection
 , pkg-config
-, lib, stdenv
+, lib
+, stdenv
 , wrapGAppsHook
 , python3
 , cairo
-, gnome3
+, gnome
 , xapps
 , keybinder3
 , upower
@@ -19,28 +20,29 @@
 , meson
 , sysprof
 , dbus
-, xvfb_run
+, xvfb-run
 , ninja
 , makeWrapper
 , which
 , libxml2
+, gtk4
 }:
 
 stdenv.mkDerivation rec {
-  pname = "cjs-unstable";
-  version = "2020-10-19";
+  pname = "cjs";
+  version = "5.2.0";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cjs";
-    rev = "befc11adb5ba10681464e6fa81b1a79f108ce61c";
-    hash = "sha256-F2t8uKV2r29NxX2+3mYp5x1bug2lwihJZTK1dSS8rPg=";
+    rev = version;
+    hash = "sha256-06sTk513qVMdznSHJzzB3XIPTcfjgxTB2o+ALqwPpHM=";
   };
 
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [
-    meson # ADDING cmake breaks the build, ignore meson warning
+    meson
     ninja
     pkg-config
     makeWrapper
@@ -49,6 +51,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    gtk4
     gobject-introspection
     cairo
     readline
@@ -57,14 +60,14 @@ stdenv.mkDerivation rec {
   ];
 
   checkInputs = [
-    xvfb_run
+    xvfb-run
   ];
 
   propagatedBuildInputs = [
     glib
 
     # bindings
-    gnome3.caribou
+    gnome.caribou
     keybinder3
     upower
     xapps

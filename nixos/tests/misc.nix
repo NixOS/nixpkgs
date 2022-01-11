@@ -16,7 +16,7 @@ import ./make-test-python.nix ({ pkgs, ...} : rec {
       environment.variables.EDITOR = mkOverride 0 "emacs";
       documentation.nixos.enable = mkOverride 0 true;
       systemd.tmpfiles.rules = [ "d /tmp 1777 root root 10d" ];
-      fileSystems = mkVMOverride { "/tmp2" =
+      virtualisation.fileSystems = { "/tmp2" =
         { fsType = "tmpfs";
           options = [ "mode=1777" "noauto" ];
         };
@@ -50,17 +50,18 @@ import ./make-test-python.nix ({ pkgs, ...} : rec {
 
 
       def get_path_info(path):
-          result = machine.succeed(f"nix path-info --json {path}")
+          result = machine.succeed(f"nix --option experimental-features nix-command path-info --json {path}")
           parsed = json.loads(result)
           return parsed
 
 
       with subtest("nix-db"):
           info = get_path_info("${foo}")
+          print(info)
 
           if (
               info[0]["narHash"]
-              != "sha256:0afw0d9j1hvwiz066z93jiddc33nxg6i6qyp26vnqyglpyfivlq5"
+              != "sha256-BdMdnb/0eWy3EddjE83rdgzWWpQjfWPAj3zDIFMD3Ck="
           ):
               raise Exception("narHash not set")
 

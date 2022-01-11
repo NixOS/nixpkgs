@@ -25,7 +25,8 @@ stdenv.mkDerivation rec {
         --replace /etc/linode /run/longview
   '';
 
-  buildInputs = [ perl makeWrapper glibc ]
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ perl glibc ]
     ++ (with perlPackages; [
       LWP
       LWPProtocolHttps

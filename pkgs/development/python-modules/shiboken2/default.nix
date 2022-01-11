@@ -1,4 +1,4 @@
-{ buildPythonPackage, python, fetchurl, lib, stdenv, pyside2
+{ python, lib, stdenv, pyside2
 , cmake, qt5, llvmPackages }:
 
 stdenv.mkDerivation {
@@ -22,6 +22,8 @@ stdenv.mkDerivation {
   cmakeFlags = [
     "-DBUILD_TESTS=OFF"
   ];
+
+  dontWrapQtApps = true;
 
   postInstall = ''
     rm $out/bin/shiboken_tool.py

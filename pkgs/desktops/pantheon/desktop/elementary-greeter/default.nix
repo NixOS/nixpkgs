@@ -1,10 +1,10 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , nix-update-script
 , linkFarm
 , substituteAll
 , elementary-greeter
-, pantheon
 , pkg-config
 , meson
 , ninja
@@ -13,7 +13,8 @@
 , gtk3
 , granite
 , libgee
-, elementary-settings-daemon
+, libhandy
+, gnome-settings-daemon
 , mutter
 , elementary-icon-theme
 , wingpanel-with-indicators
@@ -29,15 +30,13 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-greeter";
-  version = "5.0.4";
-
-  repoName = "greeter";
+  version = "6.0.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "greeter";
     rev = version;
-    sha256 = "sha256-Enn+ekALWbk7FVJJuea/rNiwEZDIyb3kyMcZNNraOv8=";
+    sha256 = "1f606ds56sp1c58q8dblfpaq9pwwkqw9i4gkwksw45m2xkwlbflq";
   };
 
   passthru = {
@@ -65,11 +64,12 @@ stdenv.mkDerivation rec {
     clutter-gtk # else we get could not generate cargs for mutter-clutter-2
     elementary-gtk-theme
     elementary-icon-theme
-    elementary-settings-daemon
+    gnome-settings-daemon
     gdk-pixbuf
     granite
     gtk3
     libgee
+    libhandy
     lightdm
     mutter
     wingpanel-with-indicators
@@ -80,9 +80,7 @@ stdenv.mkDerivation rec {
     "--sbindir=${placeholder "out"}/bin"
     # baked into the program for discovery of the greeter configuration
     "--sysconfdir=/etc"
-    # We use the patched gnome-settings-daemon
-    "-Dubuntu-patched-gsd=true"
-    "-Dgsd-dir=${elementary-settings-daemon}/libexec/" # trailing slash is needed
+    "-Dgsd-dir=${gnome-settings-daemon}/libexec/" # trailing slash is needed
   ];
 
   patches = [
@@ -99,7 +97,7 @@ stdenv.mkDerivation rec {
       # dbus-launch needed in path
       --prefix PATH : "${dbus}/bin"
 
-      # for `wingpanel -g`
+      # for `io.elementary.wingpanel -g`
       --prefix PATH : "${wingpanel-with-indicators}/bin"
 
       # for the compositor
@@ -125,6 +123,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/elementary/greeter";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
+    mainProgram = "io.elementary.greeter";
   };
 }

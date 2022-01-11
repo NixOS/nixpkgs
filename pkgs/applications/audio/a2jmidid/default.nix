@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, makeWrapper, pkg-config, alsaLib, dbus, libjack2
+{ lib, stdenv, fetchFromGitHub, fetchpatch, makeWrapper, pkg-config, alsa-lib, dbus, libjack2
 , python3Packages , meson, ninja }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config makeWrapper meson ninja ];
-  buildInputs = [ alsaLib dbus libjack2 ] ++
+  buildInputs = [ alsa-lib dbus libjack2 ] ++
                 (with python3Packages; [ python dbus-python ]);
 
   postInstall = ''

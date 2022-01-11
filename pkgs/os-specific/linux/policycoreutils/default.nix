@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "policycoreutils";
-  version = "2.9";
-  inherit (libsepol) se_release se_url;
+  version = "3.3";
+  inherit (libsepol) se_url;
 
   src = fetchurl {
-    url = "${se_url}/${se_release}/policycoreutils-${version}.tar.gz";
-    sha256 = "0yqg5ws5gbl1cbn8msxdk1c3ilmmx58qg5dx883kqyq0517k8g65";
+    url = "${se_url}/${version}/policycoreutils-${version}.tar.gz";
+    sha256 = "0y0hl32b2ks7r0fhbx3k2j1gqqms5aplyasjs3fz50caxl6096a1";
   };
 
   postPatch = ''
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "PREFIX=$(out)"
-    "SBINDIR=$(out)/sbin"
+    "SBINDIR=$(out)/bin"
     "ETCDIR=$(out)/etc"
     "BASHCOMPLETIONDIR=$out/share/bash-completion/completions"
     "LOCALEDIR=$(out)/share/locale"

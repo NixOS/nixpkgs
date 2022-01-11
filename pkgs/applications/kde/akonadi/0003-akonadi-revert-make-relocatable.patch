@@ -1,6 +1,6 @@
-From 7afe018382cf68b477b35f87b666424d62d19ef4 Mon Sep 17 00:00:00 2001
+From 4b90a0bd4411a66bbe6ecf85ce89a60a58bee969 Mon Sep 17 00:00:00 2001
 From: Thomas Tuegel <ttuegel@mailbox.org>
-Date: Mon, 13 Jul 2020 11:41:55 -0500
+Date: Sun, 25 Apr 2021 08:01:21 -0500
 Subject: [PATCH 3/3] akonadi revert make relocatable
 
 ---
@@ -9,10 +9,10 @@ Subject: [PATCH 3/3] akonadi revert make relocatable
  2 files changed, 3 insertions(+), 6 deletions(-)
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index d927471..83a74c0 100644
+index 4e8cc81..63161b7 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -330,9 +330,6 @@ configure_package_config_file(
+@@ -368,9 +368,6 @@ configure_package_config_file(
      "${CMAKE_CURRENT_SOURCE_DIR}/KF5AkonadiConfig.cmake.in"
      "${CMAKE_CURRENT_BINARY_DIR}/KF5AkonadiConfig.cmake"
      INSTALL_DESTINATION ${CMAKECONFIG_INSTALL_DIR}
@@ -23,29 +23,23 @@ index d927471..83a74c0 100644
  
  install(FILES
 diff --git a/KF5AkonadiConfig.cmake.in b/KF5AkonadiConfig.cmake.in
-index 421e1df..e3abf27 100644
+index bcf7320..1574319 100644
 --- a/KF5AkonadiConfig.cmake.in
 +++ b/KF5AkonadiConfig.cmake.in
-@@ -24,8 +24,8 @@ if(BUILD_TESTING)
-     find_dependency(Qt5Test "@QT_REQUIRED_VERSION@")
- endif()
+@@ -1,10 +1,10 @@
+ @PACKAGE_INIT@
  
 -set_and_check(AKONADI_DBUS_INTERFACES_DIR  "@PACKAGE_AKONADI_DBUS_INTERFACES_INSTALL_DIR@")
 -set_and_check(AKONADI_INCLUDE_DIR          "@PACKAGE_AKONADI_INCLUDE_DIR@")
 +set_and_check(AKONADI_DBUS_INTERFACES_DIR  "@AKONADI_DBUS_INTERFACES_INSTALL_DIR@")
 +set_and_check(AKONADI_INCLUDE_DIR          "@AKONADI_INCLUDE_DIR@")
  
- find_dependency(Boost "@Boost_MINIMUM_VERSION@")
- 
-@@ -33,7 +33,7 @@ include(${CMAKE_CURRENT_LIST_DIR}/KF5AkonadiTargets.cmake)
- include(${CMAKE_CURRENT_LIST_DIR}/KF5AkonadiMacros.cmake)
- 
  # The directory where akonadi-xml.xsd and kcfg2dbus.xsl are installed
 -set(KF5Akonadi_DATA_DIR "@PACKAGE_KF5Akonadi_DATA_DIR@")
 +set(KF5Akonadi_DATA_DIR "@KF5Akonadi_DATA_DIR@")
  
- ####################################################################################
- # CMAKE_AUTOMOC
+ # set the directories
+ if(NOT AKONADI_INSTALL_DIR)
 -- 
-2.25.4
+2.31.1
 

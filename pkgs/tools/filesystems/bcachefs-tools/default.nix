@@ -1,28 +1,45 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, attr, libuuid, libscrypt, libsodium, keyutils
-, liburcu, zlib, libaio, udev, zstd, lz4, valgrind, python3Packages
-, fuseSupport ? false, fuse3 ? null }:
-
-assert fuseSupport -> fuse3 != null;
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, docutils
+, libuuid
+, libscrypt
+, libsodium
+, keyutils
+, liburcu
+, zlib
+, libaio
+, zstd
+, lz4
+, python3Packages
+, udev
+, valgrind
+, nixosTests
+, fuse3
+, fuseSupport ? false
+}:
 
 stdenv.mkDerivation {
   pname = "bcachefs-tools";
-  version = "2020-11-17";
+  version = "unstable-2021-12-25";
 
   src = fetchFromGitHub {
     owner = "koverstreet";
     repo = "bcachefs-tools";
-    rev = "41bec63b265a38dd9fa168b6042ea5bf07135048";
-    sha256 = "1y3187kpw1bmnl97isv28k2sw8cmrnsn31a0dw745adwm0n7z6fj";
+    rev = "07b18011cc885f0ef5cadc299d0321322f442388";
+    sha256 = "0yvdbjasl05w1afiszygrfv7hn39fxx7kcy42vk39rb6fb3xpvzy";
   };
 
   postPatch = ''
+    patchShebangs .
     substituteInPlace Makefile \
       --replace "pytest-3" "pytest --verbose" \
       --replace "INITRAMFS_DIR=/etc/initramfs-tools" \
                 "INITRAMFS_DIR=${placeholder "out"}/etc/initramfs-tools"
   '';
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config docutils python3Packages.python ];
 
   buildInputs = [
     libuuid libscrypt libsodium keyutils liburcu zlib libaio
@@ -38,6 +55,10 @@ stdenv.mkDerivation {
   '';
 
   installFlags = [ "PREFIX=${placeholder "out"}" ];
+
+  passthru.tests = {
+    smoke-test = nixosTests.bcachefs;
+  };
 
   meta = with lib; {
     description = "Tool for managing bcachefs filesystems";

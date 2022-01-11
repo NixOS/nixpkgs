@@ -10,9 +10,10 @@
 , libGL
 , freetype
 , xorg
-, alsaLib
+, alsa-lib
 , cairo
 , libuuid
+, libnsl
 , makeWrapper
 , ... }:
 
@@ -29,10 +30,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ unzip cmake gcc makeWrapper ];
 
   buildInputs = [ bash glibc openssl libGLU libGL freetype
-                  xorg.libX11 xorg.libICE xorg.libSM alsaLib cairo pharo-share ];
+                  xorg.libX11 xorg.libICE xorg.libSM alsa-lib cairo pharo-share libnsl ];
 
   LD_LIBRARY_PATH = lib.makeLibraryPath
-    [ cairo libGLU libGL freetype openssl libuuid alsaLib
+    [ cairo libGLU libGL freetype openssl libuuid alsa-lib
       xorg.libICE xorg.libSM ];
 
   preConfigure = ''

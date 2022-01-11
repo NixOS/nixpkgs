@@ -75,7 +75,6 @@ in stdenv.mkDerivation rec {
   patches = [ ./cflags-prune.diff ] ++ lib.optional ftNixSupport ./ft-nix-support.patch;
 
   configureFlags = [
-    "--enable-gui=${guiSupport}"
     "--with-features=${features}"
     "--disable-xsmp"              # XSMP session management
     "--disable-xsmp_interact"     # XSMP interaction
@@ -94,7 +93,18 @@ in stdenv.mkDerivation rec {
     "--disable-nextaf_check"
     "--disable-carbon_check"
     "--disable-gtktest"
+  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "vim_cv_toupper_broken=no"
+    "--with-tlib=ncurses"
+    "vim_cv_terminfo=yes"
+    "vim_cv_tgetent=zero" # it does on native anyway
+    "vim_cv_tty_group=tty"
+    "vim_cv_tty_mode=0660"
+    "vim_cv_getcwd_broken=no"
+    "vim_cv_stat_ignores_slash=yes"
+    "vim_cv_memmove_handles_overlap=yes"
   ]
+    ++ lib.optional (guiSupport == "gtk2" || guiSupport == "gtk3") "--enable-gui=${guiSupport}"
   ++ lib.optional stdenv.isDarwin
      (if darwinSupport then "--enable-darwin" else "--disable-darwin")
   ++ lib.optionals luaSupport [
@@ -127,8 +137,22 @@ in stdenv.mkDerivation rec {
   ++ lib.optional (guiSupport == "gtk3") wrapGAppsHook
   ;
 
-  buildInputs = [ ncurses libX11 libXext libSM libXpm libXt libXaw libXau
-    libXmu glib libICE ]
+  buildInputs = [
+    ncurses
+    glib
+  ]
+    # All X related dependencies
+    ++ lib.optionals (guiSupport == "gtk2" || guiSupport == "gtk3") [
+      libSM
+      libICE
+      libX11
+      libXext
+      libXpm
+      libXt
+      libXaw
+      libXau
+      libXmu
+    ]
     ++ lib.optional (guiSupport == "gtk2") gtk2-x11
     ++ lib.optional (guiSupport == "gtk3") gtk3-x11
     ++ lib.optionals darwinSupport [ CoreServices CoreData Cocoa Foundation libobjc ]
@@ -161,7 +185,8 @@ in stdenv.mkDerivation rec {
 
     ln -sfn '${nixosRuntimepath}' "$out"/share/vim/vimrc
   '' + lib.optionalString wrapPythonDrv ''
-    wrapProgram "$out/bin/vim" --prefix PATH : "${python3}/bin"
+    wrapProgram "$out/bin/vim" --prefix PATH : "${python3}/bin" \
+      --set NIX_PYTHONPATH "${python3}/${python3.sitePackages}"
   '' + lib.optionalString (guiSupport == "gtk3") ''
 
     rewrap () {

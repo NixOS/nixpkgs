@@ -21,7 +21,7 @@ buildGoPackage rec {
   meta = with lib; {
     description = "Color temperature setting library and CLI that operates in a similar way to f.lux and Redshift";
     license = licenses.mit;
-    maintainers = with maintainers; [ rvolosatovs cstrahan ];
+    maintainers = with maintainers; [ cstrahan ];
     platforms = platforms.linux ++ platforms.windows;
   };
 }

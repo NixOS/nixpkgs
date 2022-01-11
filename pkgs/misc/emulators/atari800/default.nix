@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook
-, unzip, zlib, SDL, readline, libGLU, libGL, libX11 }:
+, zlib, SDL, readline, libGLU, libGL, libX11 }:
 
 with lib;
 stdenv.mkDerivation rec {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  buildInputs = [ unzip zlib SDL readline libGLU libGL libX11 ];
+  buildInputs = [ zlib SDL readline libGLU libGL libX11 ];
 
   configureFlags = [
     "--target=default"

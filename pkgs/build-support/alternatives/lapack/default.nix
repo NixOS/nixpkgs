@@ -89,7 +89,7 @@ EOF
     ln -s $out/lib/liblapacke.so.3 $out/lib/liblapacke.so
   fi
 
-  cp ${lib.getDev lapack-reference}/include/lapacke{,_mangling,_config}.h $dev/include
+  cp ${lib.getDev lapack-reference}/include/lapacke{,_mangling,_config,_utils}.h $dev/include
 
   cat <<EOF > $dev/lib/pkgconfig/lapacke.pc
 Name: lapacke

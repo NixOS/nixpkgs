@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "doc" ];
 
   setOutputFlags = false;
-  enableParallelBuilding = true;
   NIX_QT_SUBMODULE = true;
+  dontWrapQtApps = true;
 
   installPhase = ''
     mkdir -p $out/{bin,lib,share/qt-installer-framework}

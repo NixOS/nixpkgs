@@ -1,7 +1,11 @@
-{ appleDerivation, ed, unifdef, Libc_old, Libc_10-9 }:
+{ appleDerivation', stdenvNoCC, ed, unifdef, Libc_old, Libc_10-9 }:
 
-appleDerivation {
+appleDerivation' stdenvNoCC {
   nativeBuildInputs = [ ed unifdef ];
+
+  patches = [
+    ./0001-Define-TARGET_OS_EMBEDDED-in-std-lib-io-if-not-defin.patch
+  ];
 
   # TODO: asl.h actually comes from syslog project now
   installPhase = ''
@@ -29,4 +33,6 @@ appleDerivation {
     cp ${Libc_old}/include/libkern/OSAtomic.h       $out/include/libkern
     cp ${Libc_old}/include/libkern/OSCacheControl.h $out/include/libkern
   '';
+
+  appleHeaders = builtins.readFile ./headers.txt;
 }

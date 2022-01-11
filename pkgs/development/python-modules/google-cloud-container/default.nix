@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , google-api-core
-, grpc_google_iam_v1
+, grpc-google-iam-v1
 , libcst
 , mock
 , proto-plus
@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-container";
-  version = "2.3.0";
+  version = "2.10.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "04f9mx1wxy3l9dvzvvr579fnjp1fdqhgplv5y2gl7h2mvn281k8d";
+    sha256 = "939970cd09384dde6d6f6758b03648fd8f52fe5c2f83f73300575f7e4e3b2ee0";
   };
 
-  propagatedBuildInputs = [ google-api-core grpc_google_iam_v1 libcst proto-plus ];
+  propagatedBuildInputs = [ google-api-core grpc-google-iam-v1 libcst proto-plus ];
 
   checkInputs = [ mock pytestCheckHook pytest-asyncio ];
 

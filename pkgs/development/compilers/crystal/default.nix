@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , fetchurl
 , lib
-# Dependencies
+  # Dependencies
 , boehmgc
 , coreutils
 , git
@@ -25,18 +25,12 @@
 , zlib
 }:
 
-# We need multiple binaries as a given binary isn't always able to build
-# (even slightly) older or newer versions.
-# - 0.26.1 can build 0.25.x and 0.26.x but not 0.27.x
-# - 0.27.2 can build 0.27.x but not 0.25.x, 0.26.x and 0.29.x
-#
 # We need to keep around at least the latest version released with a stable
 # NixOS
-
 let
   archs = {
-    x86_64-linux  = "linux-x86_64";
-    i686-linux    = "linux-i686";
+    x86_64-linux = "linux-x86_64";
+    i686-linux = "linux-i686";
     x86_64-darwin = "darwin-x86_64";
   };
 
@@ -45,223 +39,209 @@ let
   checkInputs = [ git gmp openssl readline libxml2 libyaml ];
 
   genericBinary = { version, sha256s, rel ? 1 }:
-  stdenv.mkDerivation rec {
-    pname = "crystal-binary";
-    inherit version;
+    stdenv.mkDerivation rec {
+      pname = "crystal-binary";
+      inherit version;
 
-    src = fetchurl {
-      url = "https://github.com/crystal-lang/crystal/releases/download/${version}/crystal-${version}-${toString rel}-${arch}.tar.gz";
-      sha256 = sha256s.${stdenv.system};
+      src = fetchurl {
+        url = "https://github.com/crystal-lang/crystal/releases/download/${version}/crystal-${version}-${toString rel}-${arch}.tar.gz";
+        sha256 = sha256s.${stdenv.system};
+      };
+
+      buildCommand = ''
+        mkdir -p $out
+        tar --strip-components=1 -C $out -xf ${src}
+        patchShebangs $out/bin/crystal
+      '';
     };
 
-    buildCommand = ''
-      mkdir -p $out
-      tar --strip-components=1 -C $out -xf ${src}
-    '';
-  };
-
   commonBuildInputs = extraBuildInputs: [
-    boehmgc libatomic_ops pcre libevent libyaml zlib libxml2 openssl
+    boehmgc
+    libatomic_ops
+    pcre
+    libevent
+    libyaml
+    zlib
+    libxml2
+    openssl
   ] ++ extraBuildInputs
-    ++ lib.optionals stdenv.isDarwin [ libiconv ];
+  ++ lib.optionals stdenv.isDarwin [ libiconv ];
 
   generic = (
     { version
     , sha256
     , binary
     , doCheck ? true
-    , extraBuildInputs ? []
-    , buildFlags ? ["all" "docs"]
+    , extraBuildInputs ? [ ]
+    , buildFlags ? [ "all" "docs" ]
     }:
-      lib.fix (compiler: stdenv.mkDerivation {
-        pname = "crystal";
-        inherit buildFlags doCheck version;
+    lib.fix (compiler: stdenv.mkDerivation {
+      pname = "crystal";
+      inherit buildFlags doCheck version;
 
-        src = fetchFromGitHub {
-          owner = "crystal-lang";
-          repo  = "crystal";
-          rev   = version;
-          inherit sha256;
-        };
+      src = fetchFromGitHub {
+        owner = "crystal-lang";
+        repo = "crystal";
+        rev = version;
+        inherit sha256;
+      };
 
-        outputs = [ "out" "lib" "bin" ];
+      outputs = [ "out" "lib" "bin" ];
 
-        postPatch = ''
-          # Add dependency of crystal to docs to avoid issue on flag changes between releases
-          # https://github.com/crystal-lang/crystal/pull/8792#issuecomment-614004782
-          substituteInPlace Makefile \
-            --replace 'docs: ## Generate standard library documentation' 'docs: crystal ## Generate standard library documentation'
+      postPatch = ''
+        export TMP=$(mktemp -d)
+        export HOME=$TMP
+        mkdir -p $HOME/test
 
-          substituteInPlace src/crystal/system/unix/time.cr \
-            --replace /usr/share/zoneinfo ${tzdata}/share/zoneinfo
+        # Add dependency of crystal to docs to avoid issue on flag changes between releases
+        # https://github.com/crystal-lang/crystal/pull/8792#issuecomment-614004782
+        substituteInPlace Makefile \
+          --replace 'docs: ## Generate standard library documentation' 'docs: crystal ## Generate standard library documentation'
 
-          ln -sf spec/compiler spec/std
+        substituteInPlace src/crystal/system/unix/time.cr \
+          --replace /usr/share/zoneinfo ${tzdata}/share/zoneinfo
 
-          # Dirty fix for when no sandboxing is enabled
-          rm -rf /tmp/crystal
-          mkdir -p /tmp/crystal
+        ln -sf spec/compiler spec/std
 
-          substituteInPlace spec/std/file_spec.cr \
-            --replace '/bin/ls' '${coreutils}/bin/ls' \
-            --replace '/usr/share' '/tmp/crystal' \
-            --replace '/usr' '/tmp'
+        mkdir -p $TMP/crystal
 
-          substituteInPlace spec/std/process_spec.cr \
-            --replace '/bin/cat' '${coreutils}/bin/cat' \
-            --replace '/bin/ls' '${coreutils}/bin/ls' \
-            --replace '/usr/bin/env' '${coreutils}/bin/env' \
-            --replace '"env"' '"${coreutils}/bin/env"' \
-            --replace '"/usr"' '"/tmp"'
+        substituteInPlace spec/std/file_spec.cr \
+          --replace '/bin/ls' '${coreutils}/bin/ls' \
+          --replace '/usr/share' "$TMP/crystal" \
+          --replace '/usr' "$TMP" \
+          --replace '/tmp' "$TMP"
 
-          substituteInPlace spec/std/socket/tcp_server_spec.cr \
-            --replace '{% if flag?(:gnu) %}"listen: "{% else %}"bind: "{% end %}' '"bind: "'
+        substituteInPlace spec/std/process_spec.cr \
+          --replace '/bin/cat' '${coreutils}/bin/cat' \
+          --replace '/bin/ls' '${coreutils}/bin/ls' \
+          --replace '/usr/bin/env' '${coreutils}/bin/env' \
+          --replace '"env"' '"${coreutils}/bin/env"' \
+          --replace '/usr' "$TMP" \
+          --replace '/tmp' "$TMP"
 
-          substituteInPlace spec/std/system_spec.cr \
-            --replace '`hostname`' '`${hostname}/bin/hostname`'
+        substituteInPlace spec/std/system_spec.cr \
+          --replace '`hostname`' '`${hostname}/bin/hostname`'
 
-          # See https://github.com/crystal-lang/crystal/pull/8640
-          substituteInPlace spec/std/http/cookie_spec.cr \
-            --replace '01 Jan 2020' '01 Jan #{Time.utc.year + 2}'
+        # See https://github.com/crystal-lang/crystal/issues/8629
+        substituteInPlace spec/std/socket/udp_socket_spec.cr \
+          --replace 'it "joins and transmits to multicast groups"' 'pending "joins and transmits to multicast groups"'
+      '';
 
-          # See https://github.com/crystal-lang/crystal/issues/8629
-          substituteInPlace spec/std/socket/udp_socket_spec.cr \
-            --replace 'it "joins and transmits to multicast groups"' 'pending "joins and transmits to multicast groups"'
+      # Defaults are 4
+      preBuild = ''
+        export CRYSTAL_WORKERS=$NIX_BUILD_CORES
+        export threads=$NIX_BUILD_CORES
+        export CRYSTAL_CACHE_DIR=$TMP
+      '';
 
-          # See https://github.com/crystal-lang/crystal/pull/8699
-          substituteInPlace spec/std/xml/xml_spec.cr \
-            --replace 'it "handles errors"' 'pending "handles errors"'
-        '';
+      buildInputs = commonBuildInputs extraBuildInputs;
 
-        buildInputs = commonBuildInputs extraBuildInputs;
+      nativeBuildInputs = [ binary makeWrapper which pkg-config llvmPackages.llvm ];
 
-        nativeBuildInputs = [ binary makeWrapper which pkg-config llvmPackages.llvm ];
+      makeFlags = [
+        "CRYSTAL_CONFIG_VERSION=${version}"
+      ];
 
-        makeFlags = [
-          "CRYSTAL_CONFIG_VERSION=${version}"
-        ];
+      LLVM_CONFIG = "${llvmPackages.llvm.dev}/bin/llvm-config";
 
-        LLVM_CONFIG = "${llvmPackages.llvm}/bin/llvm-config";
+      FLAGS = [
+        "--release"
+        "--single-module" # needed for deterministic builds
+      ];
 
-        FLAGS = [
-          "--release"
-          "--single-module" # needed for deterministic builds
-        ];
+      # This makes sure we don't keep depending on the previous version of
+      # crystal used to build this one.
+      CRYSTAL_LIBRARY_PATH = "${placeholder "lib"}/crystal";
 
-        # This makes sure we don't keep depending on the previous version of
-        # crystal used to build this one.
-        CRYSTAL_LIBRARY_PATH = "${placeholder "lib"}/crystal";
+      # We *have* to add `which` to the PATH or crystal is unable to build
+      # stuff later if which is not available.
+      installPhase = ''
+        runHook preInstall
 
-        # We *have* to add `which` to the PATH or crystal is unable to build
-        # stuff later if which is not available.
-        installPhase = ''
-          runHook preInstall
+        install -Dm755 .build/crystal $bin/bin/crystal
+        wrapProgram $bin/bin/crystal \
+          --suffix PATH : ${lib.makeBinPath [ pkg-config llvmPackages.clang which ]} \
+          --suffix CRYSTAL_PATH : lib:$lib/crystal \
+          --suffix CRYSTAL_LIBRARY_PATH : ${
+            lib.makeLibraryPath (commonBuildInputs extraBuildInputs)
+          }
+        install -dm755 $lib/crystal
+        cp -r src/* $lib/crystal/
 
-          install -Dm755 .build/crystal $bin/bin/crystal
-          wrapProgram $bin/bin/crystal \
-            --suffix PATH : ${lib.makeBinPath [ pkg-config llvmPackages.clang which ]} \
-            --suffix CRYSTAL_PATH : lib:$lib/crystal \
-            --suffix CRYSTAL_LIBRARY_PATH : ${
-              lib.makeLibraryPath (commonBuildInputs extraBuildInputs)
-            }
-          install -dm755 $lib/crystal
-          cp -r src/* $lib/crystal/
+        install -dm755 $out/share/doc/crystal/api
+        cp -r docs/* $out/share/doc/crystal/api/
+        cp -r samples $out/share/doc/crystal/
 
-          install -dm755 $out/share/doc/crystal/api
-          cp -r docs/* $out/share/doc/crystal/api/
-          cp -r samples $out/share/doc/crystal/
+        install -Dm644 etc/completion.bash $out/share/bash-completion/completions/crystal
+        install -Dm644 etc/completion.zsh $out/share/zsh/site-functions/_crystal
 
-          install -Dm644 etc/completion.bash $out/share/bash-completion/completions/crystal
-          install -Dm644 etc/completion.zsh $out/share/zsh/site-functions/_crystal
+        install -Dm644 man/crystal.1 $out/share/man/man1/crystal.1
 
-          install -Dm644 man/crystal.1 $out/share/man/man1/crystal.1
+        install -Dm644 -t $out/share/licenses/crystal LICENSE README.md
 
-          install -Dm644 -t $out/share/licenses/crystal LICENSE README.md
+        mkdir -p $out
+        ln -s $bin/bin $out/bin
+        ln -s $lib $out/lib
 
-          mkdir -p $out
-          ln -s $bin/bin $out/bin
-          ln -s $lib $out/lib
+        runHook postInstall
+      '';
 
-          runHook postInstall
-        '';
+      enableParallelBuilding = true;
 
-        enableParallelBuilding = true;
+      dontStrip = true;
 
-        dontStrip = true;
+      checkTarget = "compiler_spec";
 
-        checkTarget = "compiler_spec";
+      preCheck = ''
+        export LIBRARY_PATH=${lib.makeLibraryPath checkInputs}:$LIBRARY_PATH
+        export PATH=${lib.makeBinPath checkInputs}:$PATH
+      '';
 
-        preCheck = ''
-          export HOME=/tmp
-          mkdir -p $HOME/test
+      passthru.buildCrystalPackage = callPackage ./build-package.nix {
+        crystal = compiler;
+      };
 
-          export LIBRARY_PATH=${lib.makeLibraryPath checkInputs}:$LIBRARY_PATH
-          export PATH=${lib.makeBinPath checkInputs}:$PATH
-        '';
-
-        passthru.buildCrystalPackage = callPackage ./build-package.nix {
-          crystal = compiler;
-        };
-
-        meta = with lib; {
-          description = "A compiled language with Ruby like syntax and type inference";
-          homepage = "https://crystal-lang.org/";
-          license = licenses.asl20;
-          maintainers = with maintainers; [ david50407 fabianhjr manveru peterhoeg ];
-          platforms = builtins.attrNames archs;
-        };
-      })
+      meta = with lib; {
+        description = "A compiled language with Ruby like syntax and type inference";
+        homepage = "https://crystal-lang.org/";
+        license = licenses.asl20;
+        maintainers = with maintainers; [ david50407 fabianhjr manveru peterhoeg ];
+        platforms = builtins.attrNames archs;
+        broken = lib.versionOlder version "0.36.1" && stdenv.isDarwin;
+      };
+    })
   );
 
-in rec {
-  binaryCrystal_0_31 = genericBinary {
-    version = "0.31.1";
+in
+rec {
+  binaryCrystal_1_0 = genericBinary {
+    version = "1.0.0";
     sha256s = {
-      x86_64-linux  = "0r8salf572xrnr4m6ll9q5hz6jj8q7ff1rljlhmqb1r26a8mi2ih";
-      i686-linux    = "0hridnis5vvrswflx0q67xfg5hryhz6ivlwrb9n4pryj5d1gwjrr";
-      x86_64-darwin = "1dgxgv0s3swkc5cwawzgpbc6bcd2nx4hjxc7iw2h907y1vgmbipz";
+      x86_64-linux = "1949argajiyqyq09824yj3wjyv88gd8wbf20xh895saqfykiq880";
+      i686-linux = "0w0f4fwr2ijhx59i7ppicbh05hfmq7vffmgl7lal6im945m29vch";
+      x86_64-darwin = "01n0rf8zh551vv8wq3h0ifnsai0fz9a77yq87xx81y9dscl9h099";
     };
   };
 
-  crystal_0_31 = generic {
-    version = "0.31.1";
-    sha256  = "1dswxa32w16gnc6yjym12xj7ibg0g6zk3ngvl76lwdjqb1h6lwz8";
-    doCheck = false; # 5 checks are failing now
-    binary = binaryCrystal_0_31;
+  crystal_1_0 = generic {
+    version = "1.0.0";
+    sha256 = "sha256-RI+a3w6Rr+uc5jRf7xw0tOenR+q6qii/ewWfID6dbQ8=";
+    binary = binaryCrystal_1_0;
   };
 
-  crystal_0_32 = generic {
-    version = "0.32.1";
-    sha256  = "120ndi3nhh2r52hjvhwfb49cdggr1bzdq6b8xg7irzavhjinfza6";
-    binary = crystal_0_31;
+  crystal_1_1 = generic {
+    version = "1.1.1";
+    sha256 = "sha256-hhhT3reia8acZiPsflwfuD638Ll2JiXwMfES1TyGyNQ=";
+    binary = crystal_1_0;
   };
 
-  crystal_0_33 = generic {
-    version = "0.33.0";
-    sha256  = "1zg0qixcws81s083wrh54hp83ng2pa8iyyafaha55mzrh8293jbi";
-    binary = crystal_0_32;
+  crystal_1_2 = generic {
+    version = "1.2.2";
+    sha256 = "sha256-nyOXhsutVBRdtJlJHe2dALl//BUXD1JeeQPgHU4SwiU=";
+    binary = crystal_1_1;
   };
 
-  crystal_0_34 = generic {
-    version = "0.34.0";
-    sha256  = "110lfpxk9jnqyznbfnilys65ixj5sdmy8pvvnlhqhc3ccvrlnmq4";
-    binary = crystal_0_33;
-  };
+  crystal = crystal_1_2;
 
-  crystal_0_35 = generic {
-    version = "0.35.1";
-    sha256  = "0p51bjl1nsvwsm64lqq421dcsxa201w7wwq8plw4r8wqarpq0g69";
-    binary = crystal_0_34;
-    # Needs git to build as per https://github.com/crystal-lang/crystal/issues/9789
-    extraBuildInputs = [ git ];
-  };
-
-  crystal_0_36 = generic {
-    version = "0.36.0";
-    sha256  = "0s7g13mrh2jrxxrrrg4hy3gi49rp7fmpn9zg9kj4nbc8w8yir20r";
-    binary = crystal_0_35;
-  };
-
-  crystal = crystal_0_36;
-
-  crystal2nix = callPackage ./crystal2nix.nix {};
+  crystal2nix = callPackage ./crystal2nix.nix { };
 }

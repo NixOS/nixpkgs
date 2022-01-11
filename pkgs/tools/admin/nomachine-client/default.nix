@@ -1,10 +1,10 @@
 { lib, stdenv, file, fetchurl, makeWrapper,
   autoPatchelfHook, jsoncpp, libpulseaudio }:
 let
-  versionMajor = "7.0";
-  versionMinor = "211";
+  versionMajor = "7.6";
+  versionMinor = "2";
   versionBuild_x86_64 = "4";
-  versionBuild_i686 = "4";
+  versionBuild_i686 = "1";
 in
   stdenv.mkDerivation rec {
     pname = "nomachine-client";
@@ -14,12 +14,12 @@ in
       if stdenv.hostPlatform.system == "x86_64-linux" then
         fetchurl {
           url = "https://download.nomachine.com/download/${versionMajor}/Linux/nomachine_${version}_${versionBuild_x86_64}_x86_64.tar.gz";
-          sha256 = "06habqsl5gp13sym519r3qp188qwqqfw8p48wcs4zj3kcri6fjz0";
+          sha256 = "1kkdf9dlp4j453blnwp1sds4r3h3fy863pvhdh466mrq3f10qca8";
         }
       else if stdenv.hostPlatform.system == "i686-linux" then
         fetchurl {
           url = "https://download.nomachine.com/download/${versionMajor}/Linux/nomachine_${version}_${versionBuild_i686}_i686.tar.gz";
-          sha256 = "1y4lr95mwilwr7gqsxqvygq4w3dcp4cjh8m06wdi3avwdzrjkgj9";
+          sha256 = "0h4c90hzhbg0qdb585bc9gry9cf9hd8r53m2jha4fdqhzd95ydln";
         }
       else
         throw "NoMachine client is not supported on ${stdenv.hostPlatform.system}";
@@ -90,4 +90,3 @@ in
       platforms = [ "x86_64-linux" "i686-linux" ];
     };
   }
-

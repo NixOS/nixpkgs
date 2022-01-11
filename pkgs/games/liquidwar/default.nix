@@ -3,7 +3,8 @@
 , expat, gettext, perl, guile
 , SDL, SDL_image, SDL_mixer, SDL_ttf
 , curl, sqlite, libtool, readline
-, libogg, libvorbis, libcaca, csound, cunit } :
+, libogg, libvorbis, libcaca, csound, cunit
+, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "liquidwar6";
@@ -24,6 +25,8 @@ stdenv.mkDerivation rec {
     libXrender libcaca cunit
     libtool readline
   ];
+
+  nativeBuildInputs = [ pkg-config ];
 
   hardeningDisable = [ "format" ];
 

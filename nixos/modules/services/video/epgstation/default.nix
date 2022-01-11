@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
   cfg = config.services.epgstation;
+  opt = options.services.epgstation;
 
   username = config.users.users.epgstation.name;
   groupname = config.users.users.epgstation.group;
@@ -27,13 +28,13 @@ let
 
     # NOTE: Use password authentication, since mysqljs does not yet support auth_socket
     if [ ! -e /var/lib/epgstation/db-created ]; then
-      ${pkgs.mysql}/bin/mysql -e \
+      ${pkgs.mariadb}/bin/mysql -e \
         "GRANT ALL ON \`${cfg.database.name}\`.* TO '${username}'@'localhost' IDENTIFIED by '$DB_PASSWORD';"
       touch /var/lib/epgstation/db-created
     fi
   '';
 
-  streamingConfig = builtins.fromJSON (builtins.readFile ./streaming.json);
+  streamingConfig = lib.importJSON ./streaming.json;
   logConfig = {
     appenders.stdout.type = "stdout";
     categories = {
@@ -48,7 +49,7 @@ let
 in
 {
   options.services.epgstation = {
-    enable = mkEnableOption pkgs.epgstation.meta.description;
+    enable = mkEnableOption "EPGStation: DTV Software in Japan";
 
     usePreconfiguredStreaming = mkOption {
       type = types.bool;
@@ -72,6 +73,7 @@ in
     socketioPort = mkOption {
       type = types.port;
       default = cfg.port + 1;
+      defaultText = literalExpression "config.${opt.port} + 1";
       description = ''
         Socket.io port for EPGStation to listen on.
       '';
@@ -80,6 +82,7 @@ in
     clientSocketioPort = mkOption {
       type = types.port;
       default = cfg.socketioPort;
+      defaultText = literalExpression "config.${opt.socketioPort}";
       description = ''
         Socket.io port that the web client is going to connect to. This may be
         different from <option>socketioPort</option> if EPGStation is hidden
@@ -126,6 +129,7 @@ in
       passwordFile = mkOption {
         type = types.path;
         default = pkgs.writeText "epgstation-password" defaultPassword;
+        defaultText = literalDocBook ''a file containing <literal>${defaultPassword}</literal>'';
         example = "/run/keys/epgstation-password";
         description = ''
           A file containing the password for <option>basicAuth.user</option>.
@@ -145,6 +149,7 @@ in
       passwordFile = mkOption {
         type = types.path;
         default = pkgs.writeText "epgstation-db-password" defaultPassword;
+        defaultText = literalDocBook ''a file containing <literal>${defaultPassword}</literal>'';
         example = "/run/keys/epgstation-db-password";
         description = ''
           A file containing the password for the database named
@@ -181,6 +186,9 @@ in
         in {
           type = types.str;
           default = "http+unix://${replaceStrings ["/"] ["%2F"] sockPath}";
+          defaultText = literalExpression ''
+            "http+unix://''${replaceStrings ["/"] ["%2F"] config.${options.services.mirakurun.unixSocket}}"
+          '';
           example = "http://localhost:40772";
           description = "URL to connect to Mirakurun.";
         });
@@ -189,14 +197,33 @@ in
           type = with types; listOf attrs;
           description = "Encoding presets for recorded videos.";
           default = [
-            { name = "H264";
+            {
+              name = "H264";
               cmd = "${pkgs.epgstation}/libexec/enc.sh main";
               suffix = ".mp4";
-              default = true; }
-            { name = "H264-sub";
+              default = true;
+            }
+            {
+              name = "H264-sub";
               cmd = "${pkgs.epgstation}/libexec/enc.sh sub";
-              suffix = "-sub.mp4"; }
+              suffix = "-sub.mp4";
+            }
           ];
+          defaultText = literalExpression ''
+            [
+              {
+                name = "H264";
+                cmd = "''${pkgs.epgstation}/libexec/enc.sh main";
+                suffix = ".mp4";
+                default = true;
+              }
+              {
+                name = "H264-sub";
+                cmd = "''${pkgs.epgstation}/libexec/enc.sh sub";
+                suffix = "-sub.mp4";
+              }
+            ]
+          '';
         };
       };
     };
@@ -224,7 +251,7 @@ in
 
     services.mysql = {
       enable = mkDefault true;
-      package = mkDefault pkgs.mysql;
+      package = mkDefault pkgs.mariadb;
       ensureDatabases = [ cfg.database.name ];
       # FIXME: enable once mysqljs supports auth_socket
       # ensureUsers = [ {

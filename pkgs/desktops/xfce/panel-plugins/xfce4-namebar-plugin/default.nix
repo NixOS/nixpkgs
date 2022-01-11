@@ -1,5 +1,5 @@
-{ lib, stdenv, pkg-config, fetchFromGitHub, python3, vala_0_46
-, gtk3, libwnck3, libxfce4util, xfce4-panel, wafHook, xfce }:
+{ lib, stdenv, pkg-config, fetchFromGitHub, python3, vala_0_40
+, gtk3, libwnck, libxfce4util, xfce4-panel, wafHook, xfce }:
 
 stdenv.mkDerivation rec {
   pname = "xfce4-namebar-plugin";
@@ -9,16 +9,21 @@ stdenv.mkDerivation rec {
     owner = "HugLifeTiZ";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0l70f6mzkscsj4wr43wp5c0l2qnf85vj24cv02bjrh3bzz6wkak8";
+    sha256 = "sha256-aKrJzf9rwCyXAJsRIXdBzmJBASuXD5I5kZrp+atx4FA=";
   };
 
-  nativeBuildInputs = [ pkg-config vala_0_46 wafHook python3 ];
-  buildInputs = [ gtk3 libwnck3 libxfce4util xfce4-panel ];
+  # Does not build with vala 0.48 or later
+  # Upstream has no activity for a while
+  # libxfce4panel-2.0.vapi:92.3-92.41: error: overriding method `Xfce.PanelPlugin.remote_event' is incompatible
+  # with base method `bool Xfce.PanelPluginProvider.remote_event (string, GLib.Value, uint)': too few parameters.
+  #               public virtual signal bool remote_event (string name, GLib.Value value);
+  #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  nativeBuildInputs = [ pkg-config vala_0_40 wafHook python3 ];
+  buildInputs = [ gtk3 libwnck libxfce4util xfce4-panel ];
 
   postPatch = ''
-    for f in src/preferences.vala src/namebar.vala; do
-      substituteInPlace $f --replace 'var dirs = Environment.get_system_data_dirs()' "string[] dirs = { \"$out/share\" }"
-    done
+    substituteInPlace src/namebar.vala --replace 'var dirs = Environment.get_system_data_dirs()' "string[] dirs = { \"$out/share\" }"
+    substituteInPlace src/preferences.vala --replace 'var dir_strings = Environment.get_system_data_dirs()' "string[] dir_strings = { \"$out/share\" }"
   '';
 
   passthru.updateScript = xfce.updateScript {
@@ -33,6 +38,6 @@ stdenv.mkDerivation rec {
     description = "Plugin which integrates titlebar and window controls into the xfce4-panel";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = [ maintainers.volth ];
+    maintainers = with maintainers; [ volth ] ++ teams.xfce.members;
   };
 }

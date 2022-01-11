@@ -1,15 +1,15 @@
-{ lib, stdenv, fetchurl, fetchpatch, pidgin, telepathy-glib, glib, dbus-glib, pkg-config, libxslt }:
+{ lib, stdenv, fetchurl, fetchpatch, pidgin, telepathy-glib, python2, glib, dbus-glib, pkg-config, libxslt }:
 
 stdenv.mkDerivation rec {
   pname = "telepathy-haze";
-  name = "${pname}-0.8.0";
+  version = "0.8.0";
 
   src = fetchurl {
-    url = "https://telepathy.freedesktop.org/releases/${pname}/${name}.tar.gz";
+    url = "https://telepathy.freedesktop.org/releases/telepathy-haze/telepathy-haze${version}.tar.gz";
     sha256 = "1jgrp32p6rllj089ynbsk3n9xrvsvzmwzhf0ql05kkgj0nf08xiy";
   };
 
-  buildInputs = [ glib telepathy-glib dbus-glib pidgin telepathy-glib.python ];
+  buildInputs = [ glib telepathy-glib dbus-glib pidgin python2 ];
 
   nativeBuildInputs = [ pkg-config libxslt ];
 

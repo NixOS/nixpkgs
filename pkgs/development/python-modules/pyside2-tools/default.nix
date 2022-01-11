@@ -1,4 +1,4 @@
-{ buildPythonPackage, wrapPython, python, fetchurl, lib, stdenv, cmake, qt5,
+{ wrapPython, python, lib, stdenv, cmake, qt5,
   shiboken2, pyside2 }:
 
 stdenv.mkDerivation {
@@ -24,6 +24,8 @@ stdenv.mkDerivation {
   cmakeFlags = [
     "-DBUILD_TESTS=OFF"
   ];
+
+  dontWrapQtApps = true;
 
   # The upstream build system consists of a `setup.py` whichs builds three
   # different python libraries and calls cmake as a subprocess.  We call cmake

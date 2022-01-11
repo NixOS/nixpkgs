@@ -3,7 +3,7 @@
 , fetchPypi
 , lxml
 , networkx
-, dateutil
+, python-dateutil
 , rdflib
 , pydot
 }:
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     lxml
     networkx
-    dateutil
+    python-dateutil
     rdflib
   ];
 
@@ -28,8 +28,15 @@ buildPythonPackage rec {
     pydot
   ];
 
+  # Multiple tests are out-dated and failing
+  doCheck = false;
+
+  pythonImportsCheck = [
+    "prov"
+  ];
+
   meta = with lib; {
-    description = "A Python library for W3C Provenance Data Model (PROV)";
+    description = "Python library for W3C Provenance Data Model (PROV)";
     homepage = "https://github.com/trungdong/prov";
     license = licenses.mit;
     maintainers = with maintainers; [ ashgillman ];

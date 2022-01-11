@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation rec {
   pname = "fig2dev";
-  version = "3.2.8";
+  version = "3.2.8b";
 
   src = fetchurl {
     url = "mirror://sourceforge/mcj/fig2dev-${version}.tar.xz";
-    sha256 = "0zg29yqknfafyzmmln4k7kydfb2dapk3r8ffvlqhj3cm8fp5h4lk";
+    sha256 = "1jv8rg71dsy00lpg434r5zqs5qrg8mxqvv2gpcjjvmzsm551d2j1";
   };
 
   nativeBuildInputs = [ makeWrapper ];

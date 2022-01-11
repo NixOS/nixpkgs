@@ -1,20 +1,32 @@
-{ stdenv, lib, buildGoModule, fetchFromGitHub, makeWrapper, nixosTests, systemd
+{ stdenv
+, lib
+, buildGoModule
+, fetchFromGitHub
+, makeWrapper
+, nixosTests
+, systemd
 }:
 
 buildGoModule rec {
-  version = "2.1.0";
+  version = "2.4.1";
   pname = "grafana-loki";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "grafana";
     repo = "loki";
-    sha256 = "O/3079a67j1i9pgf18SBx0iJcQPVmb0H+K/PzQVBCDQ=";
+    sha256 = "sha256-QLHhGAeTtXe/76uMombWBORXGvfaUQMGCgkeGCnI0Ag=";
   };
 
   vendorSha256 = null;
 
-  subPackages = [ "..." ];
+  subPackages = [
+    # TODO split every executable into its own package
+    "cmd/loki"
+    "cmd/loki-canary"
+    "clients/cmd/promtail"
+    "cmd/logcli"
+  ];
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = lib.optionals stdenv.isLinux [ systemd.dev ];
@@ -26,11 +38,21 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests) loki; };
 
+  ldflags = let t = "github.com/grafana/loki/pkg/util/build"; in [
+    "-s"
+    "-w"
+    "-X ${t}.Version=${version}"
+    "-X ${t}.BuildUser=nix@nixpkgs"
+    "-X ${t}.BuildDate=unknown"
+    "-X ${t}.Branch=unknown"
+    "-X ${t}.Revision=unknown"
+  ];
+
   doCheck = true;
 
   meta = with lib; {
     description = "Like Prometheus, but for logs";
-    license = licenses.asl20;
+    license = with licenses; [ agpl3Only asl20 ];
     homepage = "https://grafana.com/oss/loki/";
     maintainers = with maintainers; [ willibutz globin mmahut ];
     platforms = platforms.unix;

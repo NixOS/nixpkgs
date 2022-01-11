@@ -2,12 +2,14 @@
 , fetchFromGitHub
 , fetchurl
 , makeWrapper
-, dotnet-sdk
+, dotnetCorePackages
 , mono
 , Nuget
 }:
 
 let
+
+  dotnet-sdk = dotnetCorePackages.sdk_5_0;
 
   deps = import ./deps.nix { inherit fetchurl; };
 
@@ -76,7 +78,7 @@ stdenv.mkDerivation rec {
     description = "Event sourcing database with processing logic in JavaScript";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ puffnfresh ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" ];
   };
 
 }

@@ -17,11 +17,10 @@ let
     inherit ignoreCollisions;
     extraOutputsToInstall = [ "out" ] ++ extraOutputsToInstall;
 
+    nativeBuildInputs = [ makeWrapper ];
+
     # we create wrapper for the binaries in the different packages
     postBuild = ''
-
-      . "${makeWrapper}/nix-support/setup-hook"
-
       if [ -L "$out/bin" ]; then
           unlink "$out/bin"
       fi

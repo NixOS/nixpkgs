@@ -1,36 +1,33 @@
 { lib, stdenv, python3, openssl
 , enableSystemd ? stdenv.isLinux, nixosTests
-, enableRedis ? false
+, enableRedis ? true
 , callPackage
 }:
-
-with python3.pkgs;
 
 let
   plugins = python3.pkgs.callPackage ./plugins { };
   tools = callPackage ./tools { };
 in
+with python3.pkgs;
 buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "1.26.0";
+  version = "1.49.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1jppwqxamj3a65fw2a87brz4iqgijaa4lja51wlxh2xdkqj0sn6l";
+    sha256 = "7b795ecfc36e3f57eb7cffbc5ef9da1745b777536416c31509b3e6220c39ca4d";
   };
 
-  patches = [
-    # adds an entry point for the service
-    ./homeserver-script.patch
-  ];
+  buildInputs = [ openssl ];
 
   propagatedBuildInputs = [
-    setuptools
+    authlib
     bcrypt
     bleach
     canonicaljson
     daemonize
     frozendict
+    ijson
     jinja2
     jsonschema
     lxml
@@ -38,34 +35,33 @@ buildPythonApplication rec {
     netaddr
     phonenumbers
     pillow
-    prometheus_client
+    prometheus-client
     psutil
     psycopg2
     pyasn1
+    pyjwt
     pymacaroons
     pynacl
     pyopenssl
     pysaml2
     pyyaml
     requests
+    setuptools
     signedjson
     sortedcontainers
     treq
     twisted
-    unpaddedbase64
     typing-extensions
-    authlib
-    pyjwt
+    unpaddedbase64
   ] ++ lib.optional enableSystemd systemd
-    ++ lib.optional enableRedis hiredis;
+    ++ lib.optionals enableRedis [ hiredis txredisapi ];
 
   checkInputs = [ mock parameterized openssl ];
 
   doCheck = !stdenv.isDarwin;
 
   checkPhase = ''
-    ${lib.optionalString (!enableRedis) "rm -r tests/replication # these tests need the optional dependency 'hiredis'"}
-    PYTHONPATH=".:$PYTHONPATH" ${python3.interpreter} -m twisted.trial tests
+    PYTHONPATH=".:$PYTHONPATH" ${python3.interpreter} -m twisted.trial -j $NIX_BUILD_CORES tests
   '';
 
   passthru.tests = { inherit (nixosTests) matrix-synapse; };

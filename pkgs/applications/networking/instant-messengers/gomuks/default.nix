@@ -13,20 +13,21 @@
 
 buildGoModule rec {
   pname = "gomuks";
-  version = "0.2.2";
+  version = "0.2.4";
 
   src = fetchFromGitHub {
     owner = "tulir";
     repo = pname;
     rev = "v${version}";
-    sha256 = "169xyd44jyfh5njwmhsmkah8njfgnp9q9c2b13p0ry5saicwm5h5";
+    sha256 = "bTOfnEmJHTuniewH//SugNNDuKIFMQb1Safs0UVKH1c=";
   };
 
-  vendorSha256 = "1l8qnz0qy90zpywfx7pbkqpxg7rkvc9j622zcmkf38kdc1z6w20a";
+  vendorSha256 = "PuNROoxL7UmcuYDgfnsMUsGk9i1jnQyWtaUmT7vXdKE=";
 
   doCheck = false;
 
-  buildInputs = [ makeWrapper olm ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ olm ];
 
   # Upstream issue: https://github.com/tulir/gomuks/issues/260
   patches = lib.optional stdenv.isLinux (substituteAll {
@@ -54,8 +55,8 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://maunium.net/go/gomuks/";
     description = "A terminal based Matrix client written in Go";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ charvp emily ];
+    license = licenses.agpl3Plus;
+    maintainers = with maintainers; [ chvp emily ];
     platforms = platforms.unix;
   };
 }

@@ -2,7 +2,8 @@
 , autoconf, automake, libtool, jdk, perl }:
 
 stdenv.mkDerivation {
-  name = "aldor-1.2.0";
+  pname = "aldor";
+  version = "1.2.0";
 
   src = fetchgit {
     url = "https://github.com/pippijn/aldor";
@@ -10,8 +11,8 @@ stdenv.mkDerivation {
     rev = "15471e75f3d65b93150f414ebcaf59a03054b68d";
   };
 
-  buildInputs = [ gmp which flex bison makeWrapper autoconf automake libtool
-                  jdk perl ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ gmp which flex bison autoconf automake libtool jdk perl ];
 
   preConfigure = ''
     cd aldor ;

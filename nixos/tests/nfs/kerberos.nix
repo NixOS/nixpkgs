@@ -40,7 +40,7 @@ in
         networking.domain = "nfs.test";
         networking.hostName = "client";
 
-        fileSystems = lib.mkVMOverride
+        virtualisation.fileSystems =
           { "/data" = {
               device  = "server.nfs.test:/";
               fsType  = "nfs";
@@ -88,8 +88,8 @@ in
           "kdb5_util create -s -r NFS.TEST -P master_key",
           "systemctl restart kadmind.service kdc.service",
       )
-      server.wait_for_unit(f"kadmind.service")
-      server.wait_for_unit(f"kdc.service")
+      server.wait_for_unit("kadmind.service")
+      server.wait_for_unit("kdc.service")
 
       # create principals
       server.succeed(
@@ -102,8 +102,8 @@ in
       # add principals to server keytab
       server.succeed("kadmin.local ktadd nfs/server.nfs.test")
       server.succeed("systemctl start rpc-gssd.service rpc-svcgssd.service")
-      server.wait_for_unit(f"rpc-gssd.service")
-      server.wait_for_unit(f"rpc-svcgssd.service")
+      server.wait_for_unit("rpc-gssd.service")
+      server.wait_for_unit("rpc-svcgssd.service")
 
       client.wait_for_unit("network-online.target")
 

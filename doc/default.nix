@@ -15,11 +15,7 @@ in pkgs.stdenv.mkDerivation {
     xmlformat
   ];
 
-  src = ./.;
-
-  makeFlags = [
-    "PANDOC_LUA_FILTERS_DIR=${pkgs.pandoc-lua-filters}/share/pandoc/filters"
-  ];
+  src = lib.cleanSource ./.;
 
   postPatch = ''
     ln -s ${doc-support} ./doc-support/result
@@ -37,4 +33,7 @@ in pkgs.stdenv.mkDerivation {
     echo "doc manual $dest manual.html" >> $out/nix-support/hydra-build-products
     echo "doc manual $dest nixpkgs-manual.epub" >> $out/nix-support/hydra-build-products
   '';
+
+  # Environment variables
+  PANDOC_LUA_FILTERS_DIR = "${pkgs.pandoc-lua-filters}/share/pandoc/filters";
 }

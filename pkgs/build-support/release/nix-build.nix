@@ -83,9 +83,9 @@ stdenv.mkDerivation (
     '';
   }
 
-  // args //
+  // removeAttrs args [ "lib" ] # Propagating lib causes the evaluation to fail, because lib is a function that can't be converted to a string
 
-  {
+  // {
     name = name + (if src ? version then "-" + src.version else "");
 
     postHook = ''

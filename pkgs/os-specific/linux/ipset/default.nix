@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ipset";
-  version = "7.10";
+  version = "7.15";
 
   src = fetchurl {
-    url = "http://ipset.netfilter.org/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-skkGukPi/jIr1BhjR2dh10mkvd9c5MImW6BLA7x+nPY=";
+    url = "https://ipset.netfilter.org/${pname}-${version}.tar.bz2";
+    sha256 = "sha256-ClVFqq22QBQsH4iNNmp43fhyR5mWf6IGhqcAU71iF1E=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--with-kmod=no" ];
 
   meta = with lib; {
-    homepage = "http://ipset.netfilter.org/";
+    homepage = "https://ipset.netfilter.org/";
     description = "Administration tool for IP sets";
     license = licenses.gpl2;
     platforms = platforms.linux;

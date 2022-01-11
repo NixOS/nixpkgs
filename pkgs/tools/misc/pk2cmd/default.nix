@@ -1,9 +1,10 @@
 {lib, stdenv, fetchurl, libusb-compat-0_1, makeWrapper}:
 
-stdenv.mkDerivation {
-  name = "pk2cmd-1.20";
+stdenv.mkDerivation rec {
+  pname = "pk2cmd";
+  version = "1.20";
   src = fetchurl {
-    url = "https://ww1.microchip.com/downloads/en/DeviceDoc/pk2cmdv1.20LinuxMacSource.tar.gz";
+    url = "https://ww1.microchip.com/downloads/en/DeviceDoc/pk2cmdv${version}LinuxMacSource.tar.gz";
     sha256 = "1yjpi2qshnqfpan4w3ggakkr3znfrx5cxkny92ka7v9na3g2fc4h";
   };
 
@@ -16,7 +17,8 @@ stdenv.mkDerivation {
     wrapProgram $out/bin/pk2cmd --prefix PATH : $out/share/pk2
   '';
 
-  buildInputs = [ libusb-compat-0_1 makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ libusb-compat-0_1 ];
 
   meta = {
     homepage = "https://www.microchip.com/pickit2";

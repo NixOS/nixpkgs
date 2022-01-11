@@ -44,7 +44,7 @@ python2Packages.buildPythonApplication rec {
     homepage = "https://www.mailpile.is/";
     license = [ licenses.asl20 licenses.agpl3 ];
     platforms = platforms.linux;
-    maintainers = [ maintainers.domenkozar ];
+    maintainers = [ ];
     knownVulnerabilities = [
       "Numerous and uncounted, upstream has requested we not package it. See more: https://github.com/NixOS/nixpkgs/pull/23058#issuecomment-283515104"
     ];

@@ -1,38 +1,35 @@
 { lib, stdenv, fetchFromGitHub
 , cmake, pkg-config, flex, bison
-, llvmPackages, kernel, elfutils
+, llvmPackages, elfutils
 , libelf, libbfd, libbpf, libopcodes, bcc
+, cereal, asciidoctor
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "bpftrace";
-  version = "0.11.4";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner  = "iovisor";
     repo   = "bpftrace";
-    rev    = "refs/tags/v${version}";
-    sha256 = "0y4qgm2cpccrsm20rnh92hqplddqsc5q5zhw9nqn2igm3h9i0z7h";
+    rev    = "v${version}";
+    sha256 = "sha256-rlaajNfpoiMtU/4aNAnbQ0VixPz9/302TZMarGzsb58=";
   };
 
+  # libbpf 0.6.0 relies on typeof in bpf/btf.h to pick the right version of
+  # btf_dump__new() but that's not valid c++.
+  # see https://github.com/iovisor/bpftrace/issues/2068
+  patches = [ ./btf-dump-new-0.6.0.patch ];
+
   buildInputs = with llvmPackages;
-    [ llvm clang-unwrapped
-      kernel elfutils libelf bcc
+    [ llvm libclang
+      elfutils libelf bcc
       libbpf libbfd libopcodes
+      cereal asciidoctor
     ];
 
-  nativeBuildInputs = [ cmake pkg-config flex bison ]
-    # libelf is incompatible with elfutils-libelf
-    ++ lib.filter (x: x != libelf) kernel.moduleBuildDependencies;
-
-  # patch the source, *then* substitute on @NIX_KERNEL_SRC@ in the result. we could
-  # also in theory make this an environment variable around bpftrace, but this works
-  # nicely without wrappers.
-  patchPhase = ''
-    patch -p1 < ${./fix-kernel-include-dir.patch}
-    substituteInPlace ./src/utils.cpp \
-      --subst-var-by NIX_KERNEL_SRC '${kernel.dev}/lib/modules/${kernel.modDirVersion}'
-  '';
+  nativeBuildInputs = [ cmake pkg-config flex bison llvmPackages.llvm.dev ];
 
   # tests aren't built, due to gtest shenanigans. see:
   #
@@ -52,10 +49,14 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "man" ];
 
+  passthru.tests = {
+    bpf = nixosTests.bpf;
+  };
+
   meta = with lib; {
     description = "High-level tracing language for Linux eBPF";
     homepage    = "https://github.com/iovisor/bpftrace";
     license     = licenses.asl20;
-    maintainers = with maintainers; [ rvl thoughtpolice ];
+    maintainers = with maintainers; [ rvl thoughtpolice martinetd ];
   };
 }

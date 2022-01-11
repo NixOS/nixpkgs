@@ -11,18 +11,18 @@
 , pango
 , gdk-pixbuf
 , gobject-introspection
-, xvfb_run
+, xvfb-run
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "gtg";
-  version = "unstable-2020-10-22";
+  version = "0.5";
 
   src = fetchFromGitHub {
     owner = "getting-things-gnome";
     repo = "gtg";
-    rev = "144814c16723fa9d00e17e047df5d79ab443fc5f";
-    sha256 = "1lpanfbj8y8b6cqp92lgbvfs8irrc5bsdffzcjcycazv19qm7z2n";
+    rev = "v${version}";
+    sha256 = "0b2slm7kjq6q8c7v4m7aqc8m1ynjxn3bl7445srpv1xc0dilq403";
   };
 
 
@@ -53,8 +53,12 @@ python3Packages.buildPythonApplication rec {
   checkInputs = with python3Packages; [
     nose
     mock
-    xvfb_run
+    xvfb-run
   ];
+
+  preBuild = ''
+    export HOME="$TMP"
+  '';
 
   format = "other";
   strictDeps = false; # gobject-introspection does not run with strictDeps (https://github.com/NixOS/nixpkgs/issues/56943)

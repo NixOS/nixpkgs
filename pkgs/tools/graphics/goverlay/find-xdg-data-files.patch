@@ -1,0 +1,40 @@
+diff --git a/overlayunit.pas b/overlayunit.pas
+index 97a088d..4c42414 100644
+--- a/overlayunit.pas
++++ b/overlayunit.pas
+@@ -5007,7 +5007,7 @@ begin
+    //Determine Mangohud dependency status
+ 
+           //locate MangoHud and store result in tmp folder
+-          RunCommand('bash -c ''find /usr/share/vulkan/implicit_layer.d/MangoHud.json >> /tmp/goverlay/dependency_mangohud''', s);
++          RunCommand('bash -c ''find-xdg-data-files vulkan/implicit_layer.d/MangoHud.json >> /tmp/goverlay/dependency_mangohud''', s);
+ 
+           // Assign Text file dependency_mangohud to variable mangohudVAR
+           AssignFile(mangohudVAR, '/tmp/goverlay/dependency_mangohud');
+@@ -5016,7 +5016,7 @@ begin
+           CloseFile(mangohudVAR);
+ 
+           // Read String and store value on mangohuddependencyVALUE based on result
+-          if mangohudSTR = '/usr/share/vulkan/implicit_layer.d/MangoHud.json' then
++          if mangohudSTR <> '' then
+           mangohuddependencyVALUE := 1
+           else
+           mangohuddependencyVALUE := 0;
+@@ -5025,7 +5025,7 @@ begin
+    //Determine vkBasalt dependency staus
+ 
+            //locate vkBasalt and store result in tmp folder
+-           RunCommand('bash -c ''find /usr/share/vulkan/implicit_layer.d/vkBasalt.json >> /tmp/goverlay/dependency_vkbasalt''', s);
++           RunCommand('bash -c ''find-xdg-data-files vulkan/implicit_layer.d/vkBasalt.json >> /tmp/goverlay/dependency_vkbasalt''', s);
+ 
+            // Assign Text file dependency_mangohud to variable mangohudVAR
+            AssignFile(vkbasaltVAR, '/tmp/goverlay/dependency_vkbasalt');
+@@ -5034,7 +5034,7 @@ begin
+            CloseFile(vkbasaltVAR);
+ 
+            // Read String and store value on vkbasaltdependencyVALUE based on result
+-           if vkbasaltSTR = '/usr/share/vulkan/implicit_layer.d/vkBasalt.json' then
++           if vkbasaltSTR <> '' then
+            vkbasaltdependencyVALUE := 1
+            else
+            vkbasaltdependencyVALUE := 0;

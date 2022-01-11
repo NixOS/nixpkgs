@@ -1,45 +1,53 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pytestCheckHook, pythonOlder
+{ lib
 , attrs
-, coverage
+, buildPythonPackage
+, fetchFromGitHub
+, linkify-it-py
+, mdurl
 , psutil
 , pytest-benchmark
+, pytest-regressions
+, pytestCheckHook
+, pythonOlder
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "markdown-it-py";
-  version = "0.5.6";
+  version = "2.0.0";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "executablebooks";
-    repo = "markdown-it-py";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "1m9g8xvd7jiz80x9hl8bw9x0ppndqq5nlcn5y8bjxnfj5s31vpbi";
+    sha256 = "sha256-ahg+aAVpAh07PZ1mfrne0EP9K2J4tb8eLp5XXFpWp00=";
   };
 
-  propagatedBuildInputs = [ attrs ];
+  propagatedBuildInputs = [
+    attrs
+    linkify-it-py
+    mdurl
+  ] ++ lib.optional (pythonOlder "3.8") [
+    typing-extensions
+  ];
 
   checkInputs = [
-    coverage
-    pytest-benchmark
     psutil
+    pytest-benchmark
+    pytest-regressions
     pytestCheckHook
   ];
 
-  disabledTests = [
-    # Requires the unpackaged pytest-regressions fixture plugin
-    "test_amsmath"
-    "test_container"
-    "test_deflist"
-    "test_dollarmath"
-    "test_spec"
-    "test_texmath"
+  pythonImportsCheck = [
+    "markdown_it"
   ];
 
   meta = with lib; {
-    description = "Markdown parser done right";
-    homepage = "https://markdown-it-py.readthedocs.io/en/latest";
+    description = "Markdown parser in Python";
+    homepage = "https://markdown-it-py.readthedocs.io/";
     changelog = "https://github.com/executablebooks/markdown-it-py/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ bhipple ];

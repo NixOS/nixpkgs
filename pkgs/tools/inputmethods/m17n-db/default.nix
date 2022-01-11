@@ -1,14 +1,18 @@
-{ lib, stdenv, fetchurl, gettext }:
+{ lib, stdenv, fetchurl, gettext, gawk, bash }:
 
 stdenv.mkDerivation rec {
-  name = "m17n-db-1.8.0";
+  pname = "m17n-db";
+  version = "1.8.0";
 
   src = fetchurl {
-    url = "https://download.savannah.gnu.org/releases/m17n/${name}.tar.gz";
+    url = "https://download.savannah.gnu.org/releases/m17n/m17n-db-${version}.tar.gz";
     sha256 = "0vfw7z9i2s9np6nmx1d4dlsywm044rkaqarn7akffmb6bf1j6zv5";
   };
 
-  buildInputs = [ gettext ];
+  nativeBuildInputs = [ gettext ];
+  buildInputs = [ gettext gawk bash ];
+
+  strictDeps = true;
 
   configureFlags = lib.optional (stdenv ? glibc)
     "--with-charmaps=${stdenv.glibc.out}/share/i18n/charmaps"

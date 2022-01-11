@@ -4,13 +4,13 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "libytnef";
-  version = "1.9.3";
+  version = "2.0";
 
   src = fetchFromGitHub {
     owner = "Yeraze";
     repo = "ytnef";
     rev = "v${version}";
-    sha256 = "07h48s5qf08503pp9kafqbwipdqghiif22ghki7z8j67gyp04l6l";
+    sha256 = "sha256-P5eTH5pKK+v4LCMAe6JbEbTYOJypmLMYVDYk5tGVZ14=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, glib, gobject-introspection, gnome3 }:
+{ lib, stdenv, fetchurl, pkg-config, gettext, glib, gobject-introspection, gnome }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-menus";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ glib gobject-introspection ];
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "none";
     };

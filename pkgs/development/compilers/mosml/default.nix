@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gmp perl ];
 
-  makeFlags = [ "PREFIX=$(out)" ] ++ lib.optionals stdenv.isDarwin [ "CC=cc" ];
+  makeFlags = [ "PREFIX=$(out)" "CC=${stdenv.cc.targetPrefix}cc" ];
 
   src = fetchurl {
     url = "https://github.com/kfl/mosml/archive/ver-${version}.tar.gz";
@@ -14,6 +14,10 @@ stdenv.mkDerivation rec {
   };
 
   setSourceRoot = ''export sourceRoot="$(echo */src)"'';
+
+  # MosML needs a specific RPATH entry pointing to $(out)/lib (added
+  # by the build system), which patchelf will remove.
+  dontPatchELF = true;
 
   meta = with lib; {
     description = "A light-weight implementation of Standard ML";

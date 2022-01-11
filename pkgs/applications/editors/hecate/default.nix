@@ -21,6 +21,5 @@ buildGoPackage rec {
     longDescription = "The Hex Editor From Hell!";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ ramkromberg ];
-    platforms = with platforms; linux;
   };
 }

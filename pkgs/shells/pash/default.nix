@@ -1,7 +1,7 @@
 { lib, fetchFromGitHub, buildDotnetPackage }:
 
 buildDotnetPackage {
-  baseName = "pash";
+  pname = "pash";
   version = "git-2016-07-06";
 
   src = fetchFromGitHub {

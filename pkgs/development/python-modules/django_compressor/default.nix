@@ -1,16 +1,18 @@
 { lib, buildPythonPackage, fetchPypi,
   rcssmin, rjsmin, django_appconf }:
+
 buildPythonPackage rec {
     pname = "django_compressor";
-    version = "2.4";
+    version = "3.1";
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "0kx7bclfa0sxlsz6ka70zr9ra00lks0hmv1kc99wbanx6xhirvfj";
+      sha256 = "c4a87bf65f9a534cfaf1c321a000a229c24e50c6d62ba6ab089482db42e819d9";
     };
     postPatch = ''
-      substituteInPlace setup.py --replace 'rcssmin == 1.0.6' 'rcssmin' \
-        --replace 'rjsmin == 1.0.12' 'rjsmin'
+      substituteInPlace setup.py \
+        --replace 'rcssmin == 1.0.6' 'rcssmin' \
+        --replace 'rjsmin == 1.1.0' 'rjsmin'
     '';
 
     # requires django-sekizai, which we don't have packaged yet

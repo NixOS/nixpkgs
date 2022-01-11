@@ -1,5 +1,5 @@
-{ lib, stdenv
-, fetchFromGitLab
+{ lib
+, stdenv
 , cmake
 , libGLU
 , libGL
@@ -15,86 +15,121 @@
 , boost
 , pkg-config
 , doxygen
+, graphviz
 , pcre
 , libpthreadstubs
 , libXdmcp
-, fetchpatch
 , lndir
-, callPackage
+
+, util-linux
+, libselinux
+, libsepol
+, libthai
+, libdatrie
+, libxkbcommon
+, libepoxy
+, dbus
+, at-spi2-core
+, libXtst
+
+, swig
+, python
+, wxPython
+, opencascade-occt
+, libngspice
+, valgrind
 
 , stable
 , baseName
 , kicadSrc
 , kicadVersion
-, i18n
-, withOCE
-, opencascade
 , withOCC
-, opencascade-occt
 , withNgspice
-, libngspice
 , withScripting
-, swig
-, python
-, wxPython
-, debug
-, valgrind
 , withI18n
-, gtk3
+, withPCM
+, debug
+, sanitizeAddress
+, sanitizeThreads
 }:
 
-assert lib.asserts.assertMsg (!(withOCE && stdenv.isAarch64)) "OCE fails a test on Aarch64";
-assert lib.asserts.assertMsg (!(withOCC && withOCE))
-  "Only one of OCC and OCE may be enabled";
+assert lib.assertMsg (!(sanitizeAddress && sanitizeThreads))
+  "'sanitizeAddress' and 'sanitizeThreads' are mutually exclusive, use one.";
+
 let
-  inherit (lib) optional optionals;
+  inherit (lib) optional optionals optionalString;
 in
 stdenv.mkDerivation rec {
   pname = "kicad-base";
-  version = kicadVersion;
+  version = if (stable) then kicadVersion else builtins.substring 0 10 src.rev;
 
   src = kicadSrc;
 
   # tagged releases don't have "unknown"
   # kicad nightlies use git describe --dirty
   # nix removes .git, so its approximated here
-  # "-1" appended to indicate we're adding a patch
+  # "6.99.0" doesn't have "-unknown", yet; so leaving this in case it returns
   postPatch = ''
     substituteInPlace CMakeModules/KiCadVersion.cmake \
-      --replace "unknown" "${builtins.substring 0 10 src.rev}-1" \
-      --replace "${version}" "${version}-1"
+      --replace "unknown" "${builtins.substring 0 10 src.rev}" \
   '';
 
-  makeFlags = optional (debug) [ "CFLAGS+=-Og" "CFLAGS+=-ggdb" ];
+  makeFlags = optionals (debug) [ "CFLAGS+=-Og" "CFLAGS+=-ggdb" ];
 
-  cmakeFlags =
-    optionals (withScripting) [
-      "-DKICAD_SCRIPTING=ON"
-      "-DKICAD_SCRIPTING_MODULES=ON"
-      "-DKICAD_SCRIPTING_PYTHON3=ON"
-      "-DKICAD_SCRIPTING_WXPYTHON_PHOENIX=ON"
-    ]
-    ++ optional (!withScripting)
-      "-DKICAD_SCRIPTING=OFF"
-    ++ optional (withNgspice) "-DKICAD_SPICE=ON"
-    ++ optional (!withOCE) "-DKICAD_USE_OCE=OFF"
-    ++ optional (!withOCC) "-DKICAD_USE_OCC=OFF"
-    ++ optionals (withOCE) [
-      "-DKICAD_USE_OCE=ON"
-      "-DOCE_DIR=${opencascade}"
-    ]
-    ++ optionals (withOCC) [
-      "-DKICAD_USE_OCC=ON"
-      "-DOCC_INCLUDE_DIR=${opencascade-occt}/include/opencascade"
-    ]
-    ++ optionals (debug) [
-      "-DCMAKE_BUILD_TYPE=Debug"
-      "-DKICAD_STDLIB_DEBUG=ON"
-      "-DKICAD_USE_VALGRIND=ON"
-    ]
-  ;
+  cmakeFlags = optionals (withScripting) [
+    "-DKICAD_SCRIPTING_WXPYTHON=ON"
+  ]
+  ++ optionals (!withScripting) [
+    "-DKICAD_SCRIPTING_WXPYTHON=OFF"
+  ]
+  ++ optional (!withNgspice) "-DKICAD_SPICE=OFF"
+  ++ optional (!withOCC) "-DKICAD_USE_OCC=OFF"
+  ++ optionals (withOCC) [
+    "-DKICAD_USE_OCC=ON"
+    "-DOCC_INCLUDE_DIR=${opencascade-occt}/include/opencascade"
+  ]
+  ++ optionals (debug) [
+    "-DCMAKE_BUILD_TYPE=Debug"
+    "-DKICAD_STDLIB_DEBUG=ON"
+    "-DKICAD_USE_VALGRIND=ON"
+  ]
+  ++ optionals (!doInstallCheck) [
+    "-DKICAD_BUILD_QA_TESTS=OFF"
+  ]
+  ++ optionals (sanitizeAddress) [
+    "-DKICAD_SANITIZE_ADDRESS=ON"
+  ]
+  ++ optionals (sanitizeThreads) [
+    "-DKICAD_SANITIZE_THREADS=ON"
+  ]
+  ++ optionals (withI18n) [
+    "-DKICAD_BUILD_I18N=ON"
+  ]
+  ++ optionals (!withPCM) [
+    "-DKICAD_PCM=OFF"
+  ];
 
-  nativeBuildInputs = [ cmake doxygen pkg-config lndir ];
+  nativeBuildInputs = [
+    cmake
+    doxygen
+    graphviz
+    pkg-config
+    lndir
+  ]
+  # wanted by configuration on linux, doesn't seem to affect performance
+  # no effect on closure size
+  ++ optionals (stdenv.isLinux) [
+    util-linux
+    libselinux
+    libsepol
+    libthai
+    libdatrie
+    libxkbcommon
+    libepoxy
+    dbus.daemon
+    at-spi2-core
+    libXtst
+  ];
 
   buildInputs = [
     libGLU
@@ -102,6 +137,7 @@ stdenv.mkDerivation rec {
     zlib
     libX11
     wxGTK
+    wxGTK.gtk
     pcre
     libXdmcp
     gettext
@@ -112,34 +148,29 @@ stdenv.mkDerivation rec {
     curl
     openssl
     boost
-    gtk3
+    swig
+    python
   ]
-  ++ optionals (withScripting) [ swig python wxPython ]
+  ++ optional (withScripting) wxPython
   ++ optional (withNgspice) libngspice
-  ++ optional (withOCE) opencascade
   ++ optional (withOCC) opencascade-occt
   ++ optional (debug) valgrind
   ;
 
   # debug builds fail all but the python test
-  # 5.1.x fails the eeschema test
-  doInstallCheck = !debug && !stable;
+  #doInstallCheck = !debug;
+  # temporarily disabled until upstream issue 9888 is resolved
+  doInstallCheck = false;
   installCheckTarget = "test";
 
   dontStrip = debug;
 
-  postInstall = optional (withI18n) ''
-    mkdir -p $out/share
-    lndir ${i18n}/share $out/share
-  '';
-
   meta = {
     description = "Just the built source without the libraries";
     longDescription = ''
-      Just the build products, optionally with the i18n linked in
-      the libraries are passed via an env var in the wrapper, default.nix
+      Just the build products, the libraries are passed via an env var in the wrapper, default.nix
     '';
-    homepage = "https://www.kicad-pcb.org/";
+    homepage = "https://www.kicad.org/";
     license = lib.licenses.agpl3;
     platforms = lib.platforms.all;
   };

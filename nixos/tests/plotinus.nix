@@ -9,12 +9,12 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
     { imports = [ ./common/x11.nix ];
       programs.plotinus.enable = true;
-      environment.systemPackages = [ pkgs.gnome3.gnome-calculator pkgs.xdotool ];
+      environment.systemPackages = [ pkgs.gnome.gnome-calculator pkgs.xdotool ];
     };
 
   testScript = ''
     machine.wait_for_x()
-    machine.succeed("gnome-calculator &")
+    machine.succeed("gnome-calculator >&2 &")
     machine.wait_for_window("gnome-calculator")
     machine.succeed(
         "xdotool search --sync --onlyvisible --class gnome-calculator "

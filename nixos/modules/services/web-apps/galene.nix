@@ -1,8 +1,9 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 let
   cfg = config.services.galene;
+  opt = options.services.galene;
   defaultstateDir = "/var/lib/galene";
   defaultrecordingsDir = "${cfg.stateDir}/recordings";
   defaultgroupsDir = "${cfg.stateDir}/groups";
@@ -80,6 +81,7 @@ in
       staticDir = mkOption {
         type = types.str;
         default = "${cfg.package.static}/static";
+        defaultText = literalExpression ''"''${package.static}/static"'';
         example = "/var/lib/galene/static";
         description = "Web server directory.";
       };
@@ -87,6 +89,7 @@ in
       recordingsDir = mkOption {
         type = types.str;
         default = defaultrecordingsDir;
+        defaultText = literalExpression ''"''${config.${opt.stateDir}}/recordings"'';
         example = "/var/lib/galene/recordings";
         description = "Recordings directory.";
       };
@@ -94,6 +97,7 @@ in
       dataDir = mkOption {
         type = types.str;
         default = defaultdataDir;
+        defaultText = literalExpression ''"''${config.${opt.stateDir}}/data"'';
         example = "/var/lib/galene/data";
         description = "Data directory.";
       };
@@ -101,13 +105,14 @@ in
       groupsDir = mkOption {
         type = types.str;
         default = defaultgroupsDir;
+        defaultText = literalExpression ''"''${config.${opt.stateDir}}/groups"'';
         example = "/var/lib/galene/groups";
         description = "Web server directory.";
       };
 
       package = mkOption {
         default = pkgs.galene;
-        defaultText = "pkgs.galene";
+        defaultText = literalExpression "pkgs.galene";
         type = types.package;
         description = ''
           Package for running Galene.
@@ -133,8 +138,10 @@ in
       wantedBy = [ "multi-user.target" ];
 
       preStart = ''
-        install -m 700 -o '${cfg.user}' -g '${cfg.group}' ${cfg.certFile} ${cfg.dataDir}/cert.pem
-        install -m 700 -o '${cfg.user}' -g '${cfg.group}' ${cfg.keyFile} ${cfg.dataDir}/key.pem
+        ${optionalString (cfg.insecure != true) ''
+           install -m 700 -o '${cfg.user}' -g '${cfg.group}' ${cfg.certFile} ${cfg.dataDir}/cert.pem
+           install -m 700 -o '${cfg.user}' -g '${cfg.group}' ${cfg.keyFile} ${cfg.dataDir}/key.pem
+        ''}
       '';
 
       serviceConfig = mkMerge [

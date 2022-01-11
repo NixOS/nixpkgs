@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation {
   pname = "das_watchdog";
-  version = "git-2015-09-12";
+  version = "unstable-2015-09-12";
 
   src = fetchgit {
     url = "https://github.com/kmatheussen/das_watchdog.git";

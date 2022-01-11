@@ -1,13 +1,13 @@
-{ lib, stdenv, fetchgit, yasm, perl, cmake, pkg-config, python3 }:
+{ lib, stdenv, fetchzip, yasm, perl, cmake, pkg-config, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "libaom";
-  version = "2.0.0";
+  version = "3.2.0";
 
-  src = fetchgit {
-    url = "https://aomedia.googlesource.com/aom";
-    rev	= "v${version}";
-    sha256 = "1616xjhj6770ykn82ml741h8hx44v507iky3s9h7a5lnk9d4cxzy";
+  src = fetchzip {
+    url = "https://aomedia.googlesource.com/aom/+archive/v${version}.tar.gz";
+    sha256 = "0fmnbzpl481i7kchx4hbvb507r5pfgyrzfrlrs7jk3bicycm75qv";
+    stripRoot = false;
   };
 
   patches = [ ./outputs.patch ];
@@ -32,6 +32,15 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
     "-DENABLE_TESTS=OFF"
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    # CPU detection isn't supported on Darwin and breaks the aarch64-darwin build:
+    "-DCONFIG_RUNTIME_CPU_DETECT=0"
+  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "-DAS_EXECUTABLE=${stdenv.cc.targetPrefix}as"
+  ] ++ lib.optionals stdenv.isAarch32 [
+    # armv7l-hf-multiplatform does not support NEON
+    # see lib/systems/platform.nix
+    "-DENABLE_NEON=0"
   ];
 
   postFixup = ''

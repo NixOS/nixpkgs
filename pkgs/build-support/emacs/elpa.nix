@@ -1,6 +1,6 @@
 # builder for Emacs packages built for packages.el
 
-{ lib, stdenv, emacs, texinfo }:
+{ lib, stdenv, emacs, texinfo, writeText, gcc }:
 
 with lib;
 
@@ -19,16 +19,16 @@ let
 
 in
 
-import ./generic.nix { inherit lib stdenv emacs texinfo; } ({
+import ./generic.nix { inherit lib stdenv emacs texinfo writeText gcc; } ({
 
-  phases = "installPhase fixupPhase distPhase";
+  dontUnpack = true;
 
   installPhase = ''
     runHook preInstall
 
     emacs --batch -Q -l ${./elpa2nix.el} \
         -f elpa2nix-install-package \
-        "${src}" "$out/share/emacs/site-lisp/elpa"
+        "$src" "$out/share/emacs/site-lisp/elpa"
 
     runHook postInstall
   '';

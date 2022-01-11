@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
     license = lib.licenses.lgpl2Plus;
 
-    maintainers = with lib.maintainers; [ raskin vcunat ];
+    maintainers = with lib.maintainers; [ raskin ];
     platforms = lib.platforms.unix;
   };
 }

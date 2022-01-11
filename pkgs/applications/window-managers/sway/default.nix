@@ -1,44 +1,65 @@
 { lib, stdenv, fetchFromGitHub, substituteAll, swaybg
-, meson, ninja, pkg-config, wayland, scdoc
-, libxkbcommon, pcre, json_c, dbus, libevdev
+, meson, ninja, pkg-config, wayland-scanner, scdoc
+, wayland, libxkbcommon, pcre, json_c, dbus, libevdev
 , pango, cairo, libinput, libcap, pam, gdk-pixbuf, librsvg
-, wlroots, wayland-protocols
+, wlroots, wayland-protocols, libdrm
+, nixosTests
+# Used by the NixOS module:
+, isNixOS ? false
+
+, enableXWayland ? true
 }:
 
 stdenv.mkDerivation rec {
   pname = "sway-unwrapped";
-  version = "1.5.1";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "swaywm";
     repo = "sway";
     rev = version;
-    sha256 = "1xsa3h8zhf29p0mi90baxpr76jkd9pd1gr97ky8cnjbcs4isj9j0";
+    sha256 = "0j4sdbsrlvky1agacc0pcz9bwmaxjmrapjnzscbd2i0cria2fc5j";
   };
 
   patches = [
-    ./sway-config-no-nix-store-references.patch
     ./load-configuration-from-etc.patch
 
     (substituteAll {
       src = ./fix-paths.patch;
       inherit swaybg;
     })
+  ] ++ lib.optionals (!isNixOS) [
+    # References to /nix/store/... will get GC'ed which causes problems when
+    # copying the default configuration:
+    ./sway-config-no-nix-store-references.patch
+  ] ++ lib.optionals isNixOS [
+    # Use /run/current-system/sw/share and /etc instead of /nix/store
+    # references:
+    ./sway-config-nixos-paths.patch
+  ];
+
+  depsBuildBuild = [
+    pkg-config
   ];
 
   nativeBuildInputs = [
-    meson ninja pkg-config wayland scdoc
+    meson ninja pkg-config wayland-scanner scdoc
   ];
 
   buildInputs = [
     wayland libxkbcommon pcre json_c dbus libevdev
     pango cairo libinput libcap pam gdk-pixbuf librsvg
-    wlroots wayland-protocols
+    wayland-protocols libdrm
+    (wlroots.override { inherit enableXWayland; })
   ];
 
   mesonFlags = [
-    "-Ddefault-wallpaper=false"
-  ];
+    "-Dsd-bus-provider=libsystemd"
+  ]
+    ++ lib.optional (!enableXWayland) "-Dxwayland=disabled"
+  ;
+
+  passthru.tests.basic = nixosTests.sway;
 
   meta = with lib; {
     description = "An i3-compatible tiling Wayland compositor";

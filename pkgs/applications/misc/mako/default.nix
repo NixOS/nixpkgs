@@ -5,19 +5,22 @@
 
 stdenv.mkDerivation rec {
   pname = "mako";
-  version = "1.4.1";
+  version = "1.6";
 
   src = fetchFromGitHub {
     owner = "emersion";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0hwvibpnrximb628w9dsfjpi30b5jy7nfkm4d94z5vhp78p43vxh";
+    sha256 = "sha256-RcPwZ5NeO9vxwPWfgj5x3wVdCYGKumnYT3ngHEAWfW0=";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config scdoc wayland-protocols wrapGAppsHook ];
   buildInputs = [ systemd pango cairo gdk-pixbuf wayland ];
 
-  mesonFlags = [ "-Dzsh-completions=true" ];
+  mesonFlags = [
+    "-Dzsh-completions=true"
+    "-Dsd-bus-provider=libsystemd"
+  ];
 
   meta = with lib; {
     description = "A lightweight Wayland notification daemon";

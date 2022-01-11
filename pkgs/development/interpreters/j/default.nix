@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "j";
-  version = "901";
-  jtype = "release-f";
+  version = "902";
+  jtype = "release-b";
   src = fetchFromGitHub {
     owner = "jsoftware";
     repo = "jsource";
     rev = "j${version}-${jtype}";
-    sha256 = "1776021m0j1aanzwg60by83n53pw7i6afd5wplfzczwk8bywax4p";
+    sha256 = "0j67vgikqflwjqacsdicasvyv1k54s2c8vjgwmf0ix7l41p4xqz0";
     name = "jsource";
   };
 
@@ -29,6 +29,10 @@ stdenv.mkDerivation rec {
 
   # Causes build failure due to warning
   hardeningDisable = lib.optional stdenv.cc.isClang "strictoverflow";
+
+  # Causes build failure due to warning
+  # https://github.com/jsoftware/jsource/issues/16
+  NIX_CFLAGS_COMPILE = "-Wno-error=return-local-addr";
 
   buildPhase = ''
     export SOURCE_DIR=$(pwd)

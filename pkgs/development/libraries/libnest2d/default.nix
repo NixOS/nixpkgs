@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, cmake, clipper, nlopt, boost, python3 }:
 
 stdenv.mkDerivation rec {
-  version = "2020-10-09-unstable";
+  version = "4.12.0";
   pname = "libnest2d";
 
   # This revision is waiting to be merged upstream
@@ -25,6 +25,6 @@ stdenv.mkDerivation rec {
       "2D irregular bin packaging and nesting library written in modern C++";
     homepage = "https://github.com/Ultimaker/libnest2d";
     license = licenses.lgpl3;
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 }

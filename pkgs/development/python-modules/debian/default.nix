@@ -1,13 +1,17 @@
-{ lib, buildPythonPackage, fetchPypi
-, chardet, six}:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, chardet
+, six
+}:
 
 buildPythonPackage rec {
   pname = "python-debian";
-  version = "0.1.39";
+  version = "0.1.42";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6cca96239b5981f5203216d2113fea522477628607ed0a8427e15094a792541c";
+    sha256 = "a794f4c4ee2318ae7260c2e32dac252b833bdaf6686efc2a1afbc6ecf3f0931f";
   };
 
   propagatedBuildInputs = [ chardet six ];
@@ -15,8 +19,11 @@ buildPythonPackage rec {
   # No tests in archive
   doCheck = false;
 
-  meta = {
+  pythonImportsCheck = [ "debian" ];
+
+  meta = with lib; {
     description = "Debian package related modules";
-    license = lib.licenses.gpl2;
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ ];
   };
 }

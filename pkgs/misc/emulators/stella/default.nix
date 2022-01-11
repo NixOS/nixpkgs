@@ -7,19 +7,22 @@
 
 stdenv.mkDerivation rec {
   pname = "stella";
-  version = "6.5.1";
+  version = "6.6";
 
   src = fetchFromGitHub {
     owner = "stella-emu";
     repo = pname;
     rev = version;
-    sha256 = "2O7pN0xByEbWVL32VZw9191tG+kCMOuivJZRpXssQIw=";
+    hash = "sha256-+ZvSCnnoKGyToSFqUQOArolFdgUcBBFNjFw8aoVDkYI=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ SDL2 ];
+  nativeBuildInputs = [
+    pkg-config
+  ];
 
-  enableParallelBuilding = true;
+  buildInputs = [
+    SDL2
+  ];
 
   meta = with lib;{
     homepage = "https://stella-emu.github.io/";
@@ -35,8 +38,8 @@ stdenv.mkDerivation rec {
 
       As of its 3.5 release, Stella is officially donationware.
     '';
-    license = licenses.gpl2;
-    maintainers = [ maintainers.AndersonTorres ];
-    platforms = platforms.linux;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.unix;
   };
 }

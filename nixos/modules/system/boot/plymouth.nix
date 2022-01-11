@@ -1,13 +1,13 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
 
-  inherit (pkgs) plymouth;
-  inherit (pkgs) nixos-icons;
+  inherit (pkgs) plymouth nixos-icons;
 
   cfg = config.boot.plymouth;
+  opt = options.boot.plymouth;
 
   nixosBreezePlymouth = pkgs.plasma5Packages.breeze-plymouth.override {
     logoFile = cfg.logo;
@@ -16,14 +16,37 @@ let
     osVersion = config.system.nixos.release;
   };
 
+  plymouthLogos = pkgs.runCommand "plymouth-logos" { inherit (cfg) logo; } ''
+    mkdir -p $out
+
+    # For themes that are compiled with PLYMOUTH_LOGO_FILE
+    mkdir -p $out/etc/plymouth
+    ln -s $logo $out/etc/plymouth/logo.png
+
+    # Logo for bgrt theme
+    # Note this is technically an abuse of watermark for the bgrt theme
+    # See: https://gitlab.freedesktop.org/plymouth/plymouth/-/issues/95#note_813768
+    mkdir -p $out/share/plymouth/themes/spinner
+    ln -s $logo $out/share/plymouth/themes/spinner/watermark.png
+
+    # Logo for spinfinity theme
+    # See: https://gitlab.freedesktop.org/plymouth/plymouth/-/issues/106
+    mkdir -p $out/share/plymouth/themes/spinfinity
+    ln -s $logo $out/share/plymouth/themes/spinfinity/header-image.png
+  '';
+
   themesEnv = pkgs.buildEnv {
     name = "plymouth-themes";
-    paths = [ plymouth ] ++ cfg.themePackages;
+    paths = [
+      plymouth
+      plymouthLogos
+    ] ++ cfg.themePackages;
   };
 
   configFile = pkgs.writeText "plymouthd.conf" ''
     [Daemon]
     ShowDelay=0
+    DeviceTimeout=8
     Theme=${cfg.theme}
     ${cfg.extraConfig}
   '';
@@ -38,8 +61,22 @@ in
 
       enable = mkEnableOption "Plymouth boot splash screen";
 
+      font = mkOption {
+        default = "${pkgs.dejavu_fonts.minimal}/share/fonts/truetype/DejaVuSans.ttf";
+        defaultText = literalExpression ''"''${pkgs.dejavu_fonts.minimal}/share/fonts/truetype/DejaVuSans.ttf"'';
+        type = types.path;
+        description = ''
+          Font file made available for displaying text on the splash screen.
+        '';
+      };
+
       themePackages = mkOption {
-        default = [ nixosBreezePlymouth ];
+        default = lib.optional (cfg.theme == "breeze") nixosBreezePlymouth;
+        defaultText = literalDocBook ''
+          A NixOS branded variant of the breeze theme when
+          <literal>config.${opt.theme} == "breeze"</literal>, otherwise
+          <literal>[ ]</literal>.
+        '';
         type = types.listOf types.package;
         description = ''
           Extra theme packages for plymouth.
@@ -47,7 +84,7 @@ in
       };
 
       theme = mkOption {
-        default = "breeze";
+        default = "bgrt";
         type = types.str;
         description = ''
           Splash screen theme.
@@ -56,8 +93,9 @@ in
 
       logo = mkOption {
         type = types.path;
-        default = "${nixos-icons}/share/icons/hicolor/128x128/apps/nix-snowflake.png";
-        defaultText = ''pkgs.fetchurl {
+        # Dimensions are 48x48 to match GDM logo
+        default = "${nixos-icons}/share/icons/hicolor/48x48/apps/nix-snowflake-white.png";
+        defaultText = literalExpression ''pkgs.fetchurl {
           url = "https://nixos.org/logo/nixos-hires.png";
           sha256 = "1ivzgd7iz0i06y36p8m5w48fd8pjqwxhdaavc0pxs7w1g7mcy5si";
         }'';
@@ -102,37 +140,62 @@ in
     systemd.services.plymouth-poweroff.wantedBy = [ "poweroff.target" ];
     systemd.services.plymouth-reboot.wantedBy = [ "reboot.target" ];
     systemd.services.plymouth-read-write.wantedBy = [ "sysinit.target" ];
-    systemd.services.systemd-ask-password-plymouth.wantedBy = ["multi-user.target"];
-    systemd.paths.systemd-ask-password-plymouth.wantedBy = ["multi-user.target"];
+    systemd.services.systemd-ask-password-plymouth.wantedBy = [ "multi-user.target" ];
+    systemd.paths.systemd-ask-password-plymouth.wantedBy = [ "multi-user.target" ];
 
     boot.initrd.extraUtilsCommands = ''
-      copy_bin_and_libs ${pkgs.plymouth}/bin/plymouthd
-      copy_bin_and_libs ${pkgs.plymouth}/bin/plymouth
+      copy_bin_and_libs ${plymouth}/bin/plymouth
+      copy_bin_and_libs ${plymouth}/bin/plymouthd
+
+      # Check if the actual requested theme is here
+      if [[ ! -d ${themesEnv}/share/plymouth/themes/${cfg.theme} ]]; then
+          echo "The requested theme: ${cfg.theme} is not provided by any of the packages in boot.plymouth.themePackages"
+          exit 1
+      fi
 
       moduleName="$(sed -n 's,ModuleName *= *,,p' ${themesEnv}/share/plymouth/themes/${cfg.theme}/${cfg.theme}.plymouth)"
 
       mkdir -p $out/lib/plymouth/renderers
       # module might come from a theme
-      cp ${themesEnv}/lib/plymouth/{text,details,$moduleName}.so $out/lib/plymouth
+      cp ${themesEnv}/lib/plymouth/{text,details,label,$moduleName}.so $out/lib/plymouth
       cp ${plymouth}/lib/plymouth/renderers/{drm,frame-buffer}.so $out/lib/plymouth/renderers
 
       mkdir -p $out/share/plymouth/themes
       cp ${plymouth}/share/plymouth/plymouthd.defaults $out/share/plymouth
 
-      # copy themes into working directory for patching
+      # Copy themes into working directory for patching
       mkdir themes
-      # use -L to copy the directories proper, not the symlinks to them
-      cp -r -L ${themesEnv}/share/plymouth/themes/{text,details,${cfg.theme}} themes
 
-      # patch out any attempted references to the theme or plymouth's themes directory
+      # Use -L to copy the directories proper, not the symlinks to them.
+      # Copy all themes because they're not large assets, and bgrt depends on the ImageDir of
+      # the spinner theme.
+      cp -r -L ${themesEnv}/share/plymouth/themes/* themes
+
+      # Patch out any attempted references to the theme or plymouth's themes directory
       chmod -R +w themes
       find themes -type f | while read file
       do
         sed -i "s,/nix/.*/share/plymouth/themes,$out/share/plymouth/themes,g" $file
       done
 
+      # Install themes
       cp -r themes/* $out/share/plymouth/themes
-      cp ${cfg.logo} $out/share/plymouth/logo.png
+
+      # Install logo
+      mkdir -p $out/etc/plymouth
+      cp -r -L ${themesEnv}/etc/plymouth $out
+
+      # Setup font
+      mkdir -p $out/share/fonts
+      cp ${cfg.font} $out/share/fonts
+      mkdir -p $out/etc/fonts
+      cat > $out/etc/fonts/fonts.conf <<EOF
+      <?xml version="1.0"?>
+      <!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd">
+      <fontconfig>
+          <dir>$out/share/fonts</dir>
+      </fontconfig>
+      EOF
     '';
 
     boot.initrd.extraUtilsCommandsTest = ''
@@ -154,6 +217,7 @@ in
       ln -s $extraUtils/share/plymouth/logo.png /etc/plymouth/logo.png
       ln -s $extraUtils/share/plymouth/themes /etc/plymouth/themes
       ln -s $extraUtils/lib/plymouth /etc/plymouth/plugins
+      ln -s $extraUtils/etc/fonts /etc/fonts
 
       plymouthd --mode=boot --pid-file=/run/plymouth/pid --attach-to-session
       plymouth show-splash

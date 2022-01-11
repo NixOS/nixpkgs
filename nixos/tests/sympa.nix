@@ -5,7 +5,6 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
   machine =
     { ... }:
     {
-      virtualisation.memorySize = 1024;
 
       services.sympa = {
         enable = true;

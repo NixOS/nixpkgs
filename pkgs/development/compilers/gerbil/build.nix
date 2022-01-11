@@ -1,4 +1,4 @@
-{ pkgs, gccStdenv, lib, coreutils, bash, # makeStaticLibraries,
+{ pkgs, gccStdenv, lib, coreutils,
   openssl, zlib, sqlite, libxml2, libyaml, libmysqlclient, lmdb, leveldb, postgresql,
   version, git-version,
   gambit-support,
@@ -20,6 +20,15 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gambit ]
     ++ buildInputs_libraries; # ++ buildInputs_staticLibraries;
+
+  # disable stackprotector on aarch64-darwin for now
+  # build error:
+  # ```
+  # /private/tmp/nix-build-gerbil-unstable-2020-11-05.drv-0/ccjyhWKi.s:326:15: error: index must be an integer in range [-256, 255].
+  #         ldr     x2, [x2, ___stack_chk_guard];momd
+  #                          ^
+  # ```
+  hardeningDisable = lib.optionals (gccStdenv.isAarch64 && gccStdenv.isDarwin) [ "stackprotector" ];
 
   NIX_CFLAGS_COMPILE = "-I${libmysqlclient}/include/mysql -L${libmysqlclient}/lib/mysql";
 

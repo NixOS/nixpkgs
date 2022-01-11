@@ -1,43 +1,23 @@
-{ lib, fetchFromGitHub, fetchurl, linkFarm, buildGoModule, runCommand, makeWrapper, nixosTests
-, assetOverrides ? {}
+{ lib, fetchFromGitHub, fetchurl, symlinkJoin, buildGoModule, runCommand, makeWrapper, nixosTests
+, v2ray-geoip, v2ray-domain-list-community, assets ? [ v2ray-geoip v2ray-domain-list-community ]
 }:
 
 let
-  version = "4.34.0";
+  version = "4.44.0";
 
   src = fetchFromGitHub {
     owner = "v2fly";
     repo = "v2ray-core";
     rev = "v${version}";
-    sha256 = "0x6smffpvnrk76plnsk31qqznkyz06dh4sazncp2l3y9va8k2jb1";
+    sha256 = "1yk02n2lllbcwqkz4f3l3d2df1w3m768zxvdawgmafjgmbqf0gjf";
   };
 
-  vendorSha256 = "077jnjsmhzr0idrk7pifr5s2r9yjf1v9bvj177n2k2ln8w3wgx3g";
+  vendorSha256 = "sha256-kTwISKPIFpb/OPh9rIzLH8a6mqpyDBJo2stSu5bc02Q=";
 
-  assets = {
-    # MIT licensed
-    "geoip.dat" = let
-      geoipRev = "202101070033";
-      geoipSha256 = "11naj51pzchdrjmkp1dqzcby1i2fhbq0mncwm4d5q5mh3chyizsf";
-    in fetchurl {
-      url = "https://github.com/v2fly/geoip/releases/download/${geoipRev}/geoip.dat";
-      sha256 = geoipSha256;
-    };
-
-    # MIT licensed
-    "geosite.dat" = let
-      geositeRev = "20210106164413";
-      geositeSha256 = "0chc7jb3yzgrrjkpd3s1rlim5qgf6j2kp952fvkhpwmnap86aip7";
-    in fetchurl {
-      url = "https://github.com/v2fly/domain-list-community/releases/download/${geositeRev}/dlc.dat";
-      sha256 = geositeSha256;
-    };
-
-  } // assetOverrides;
-
-  assetsDrv = linkFarm "v2ray-assets" (lib.mapAttrsToList (name: path: {
-    inherit name path;
-  }) assets);
+  assetsDrv = symlinkJoin {
+    name = "v2ray-assets";
+    paths = assets;
+  };
 
   core = buildGoModule rec {
     pname = "v2ray-core";
@@ -68,7 +48,7 @@ let
   };
 
 in runCommand "v2ray-${version}" {
-  inherit version;
+  inherit src version;
   inherit (core) meta;
 
   nativeBuildInputs = [ makeWrapper ];
@@ -84,6 +64,6 @@ in runCommand "v2ray-${version}" {
 } ''
   for file in ${core}/bin/*; do
     makeWrapper "$file" "$out/bin/$(basename "$file")" \
-      --set-default V2RAY_LOCATION_ASSET ${assetsDrv}
+      --set-default V2RAY_LOCATION_ASSET ${assetsDrv}/share/v2ray
   done
 ''

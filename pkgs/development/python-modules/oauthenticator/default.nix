@@ -1,41 +1,48 @@
 { lib
 , buildPythonPackage
-, jupyterhub
-, globus-sdk
-, mwoauth
-, codecov
-, flake8
-, pyjwt
-, pytest
-, pytestcov
-, pytest-tornado
-, requests-mock
 , pythonOlder
 , fetchPypi
+, google-api-python-client
+, google-auth-oauthlib
+, jupyterhub
+, mwoauth
+, pyjwt
+, pytest-asyncio
+, pytestCheckHook
+, requests-mock
 }:
 
 buildPythonPackage rec {
   pname = "oauthenticator";
-  version = "0.12.3";
+  version = "14.2.0";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f86e18e954ae37796ee149fe01ab0be0707d9e0415d62336ba3447e7b4383461";
+    sha256 = "4baa02ff2c159cbba06f8d07fe11a6e624285ca2f813b1258b4c68766c0ee46b";
   };
 
-  checkPhase = ''
-    py.test oauthenticator/tests
-  '';
+  propagatedBuildInputs = [
+    jupyterhub
+  ];
 
-  # No tests in archive
-  doCheck = false;
+  checkInputs = [
+    google-api-python-client
+    google-auth-oauthlib
+    mwoauth
+    pyjwt
+    pytest-asyncio
+    pytestCheckHook
+    requests-mock
+  ];
 
-  checkInputs = [  globus-sdk mwoauth codecov flake8 pytest
-    pytestcov pytest-tornado requests-mock pyjwt ];
+  disabledTests = [
+    # Test are outdated, https://github.com/jupyterhub/oauthenticator/issues/432
+    "test_azuread"
+    "test_mediawiki"
+  ];
 
-  propagatedBuildInputs = [ jupyterhub ];
-
-  disabled = pythonOlder "3.4";
+  pythonImportsCheck = [ "oauthenticator" ];
 
   meta = with lib; {
     description = "Authenticate JupyterHub users with common OAuth providers, including GitHub, Bitbucket, and more.";

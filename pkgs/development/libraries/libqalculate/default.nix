@@ -3,20 +3,19 @@
 
 stdenv.mkDerivation rec {
   pname = "libqalculate";
-  version = "3.16.0";
+  version = "3.22.0";
 
   src = fetchFromGitHub {
     owner = "qalculate";
     repo = "libqalculate";
     rev = "v${version}";
-    sha256 = "0nrf03q3qrsvxf6kjpv69l49yfal79834a3jv75mzi6y674ach9g";
+    sha256 = "sha256-yj6adBP9nZLXZVg62bYenfuiMeyULEql25KbDen9ljA=";
   };
 
   outputs = [ "out" "dev" "doc" ];
 
   nativeBuildInputs = [ intltool pkg-config autoreconfHook doxygen ];
   buildInputs = [ curl gettext libiconv readline ];
-  configureFlags = ["--with-readline=${readline.dev}"];
   propagatedBuildInputs = [ libxml2 mpfr icu ];
   enableParallelBuilding = true;
 
@@ -42,7 +41,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "An advanced calculator library";
     homepage = "http://qalculate.github.io";
-    maintainers = with maintainers; [ gebner ];
+    maintainers = with maintainers; [ gebner doronbehar ];
     license = licenses.gpl2Plus;
     platforms = platforms.all;
   };

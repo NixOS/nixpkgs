@@ -10,14 +10,19 @@ in
 deployAndroidPackage {
   inherit package os;
   nativeBuildInputs = [ autoPatchelfHook makeWrapper ];
+  autoPatchelfIgnoreMissingDeps = true;
   buildInputs = lib.optional (os == "linux") [ pkgs.glibc pkgs.stdenv.cc.cc pkgs.python2 pkgs.ncurses5 pkgs.zlib pkgs.libcxx.out pkgs.libxml2 ];
   patchInstructions = lib.optionalString (os == "linux") (''
     patchShebangs .
 
+    # Fix the shebangs of the auto-generated scripts.
+    substituteInPlace ./build/tools/make_standalone_toolchain.py \
+      --replace '#!/bin/bash' '#!${pkgs.bash}/bin/bash'
+
   '' + lib.optionalString (builtins.compareVersions (lib.getVersion package) "21" > 0) ''
     patch -p1 \
       --no-backup-if-mismatch < ${./make_standalone_toolchain.py_18.patch} || true
-    wrapProgram $(pwd)/build/tools/make_standalone_toolchain.py --prefix PATH : "${runtime_paths}"
+    wrapProgram ./build/tools/make_standalone_toolchain.py --prefix PATH : "${runtime_paths}"
   '' + ''
 
     # TODO: allow this stuff

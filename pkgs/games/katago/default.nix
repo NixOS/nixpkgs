@@ -1,12 +1,10 @@
 { stdenv
-, gcc8Stdenv
 , boost
 , cmake
 , cudatoolkit
 , cudnn
 , eigen
 , fetchFromGitHub
-, fetchpatch
 , gperftools
 , lib
 , libzip
@@ -27,21 +25,18 @@
 assert !enableGPU -> (
   !enableCuda);
 
-let
-  env = if enableCuda
-    then gcc8Stdenv
-    else stdenv;
-
-in env.mkDerivation rec {
+# N.b. older versions of cuda toolkit (e.g. 10) do not support newer versions
+# of gcc.  If you need to use cuda10, please override stdenv with gcc8Stdenv
+stdenv.mkDerivation rec {
   pname = "katago";
-  version = "1.8.0";
-  githash = "8ffda1fe05c69c67342365013b11225d443445e8";
+  version = "1.10.0";
+  githash = "ff49d04ad6bcfa056c63492439a41e2f3bce0847";
 
   src = fetchFromGitHub {
     owner = "lightvector";
     repo = "katago";
     rev = "v${version}";
-    sha256 = "18r75xjj6vv2gbl92k9aa5bd0cxf09zl1vxlji148y0xbvgv6p8c";
+    sha256 = "sha256-ZLJNNjZ5RdOktWDp88d/ItpokANl2EJ0Gbt9oMGm1Og=";
   };
 
   fakegit = writeShellScriptBin "git" "echo ${githash}";
@@ -96,10 +91,13 @@ in env.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin; cp katago $out/bin;
   '' + lib.optionalString enableCuda ''
     wrapProgram $out/bin/katago \
       --prefix LD_LIBRARY_PATH : "/run/opengl-driver/lib"
+  '' + ''
+    runHook postInstall
   '';
 
   meta = with lib; {

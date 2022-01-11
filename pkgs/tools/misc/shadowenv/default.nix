@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "shadowenv";
-  version = "2.0.3";
+  version = "2.0.6";
 
   src = fetchFromGitHub {
     owner = "Shopify";
     repo = pname;
     rev = version;
-    sha256 = "1h8hfyxxl4bpx8azzxj0snmzccn6xjd9vc2iyp8i2ar7aiyhf5yd";
+    sha256 = "sha256-OfrK5eQ2oJ7ZeUem4PZPE2tsjIObQ+aao6GrtrK8AqA=";
   };
 
-  cargoSha256 = "1bjkwn57vm3in8lajhm7p9fjwyqhmkrb3fyq1k7lqjvrrh9jysb2";
+  cargoSha256 = "sha256-gno44ZdLthcp5/+NP12d0C+x1jrmJHNkHSnyuHWl3Zk=";
 
   nativeBuildInputs = [ installShellFiles ];
 

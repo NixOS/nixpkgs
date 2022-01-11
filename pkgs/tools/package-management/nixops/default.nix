@@ -2,12 +2,9 @@
 , fetchurl, fetchpatch
 }:
 
-let
-  version = "1.7";
-
-in python2Packages.buildPythonApplication {
+python2Packages.buildPythonApplication rec {
   pname = "nixops";
-  inherit version;
+  version = "1.7";
 
   src = fetchurl {
     url = "https://nixos.org/releases/nixops/nixops-${version}/nixops-${version}.tar.bz2";
@@ -63,7 +60,7 @@ in python2Packages.buildPythonApplication {
   meta = {
     homepage = "https://github.com/NixOS/nixops";
     description = "NixOS cloud provisioning and deployment tool";
-    maintainers = with lib.maintainers; [ aminechikhaoui eelco rob domenkozar ];
+    maintainers = with lib.maintainers; [ aminechikhaoui eelco rob ];
     platforms = lib.platforms.unix;
     license = lib.licenses.lgpl3;
   };

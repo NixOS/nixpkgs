@@ -1,20 +1,24 @@
 { lib, fetchFromGitLab, git, buildGoModule }:
-
+let
+  data = lib.importJSON ../data.json;
+in
 buildGoModule rec {
   pname = "gitlab-workhorse";
 
-  version = "8.58.2";
+  version = "14.6.1";
 
   src = fetchFromGitLab {
-    owner = "gitlab-org";
-    repo = "gitlab-workhorse";
-    rev = "v${version}";
-    sha256 = "1ks8rla6hm618dxhr41x1ckzk3jxv0f7vl2547f7f1fl3zqna1zp";
+    owner = data.owner;
+    repo = data.repo;
+    rev = data.rev;
+    sha256 = data.repo_hash;
   };
 
-  vendorSha256 = "0vkw12w7vr0g4hf4f0im79y7l36d3ah01n1vl7siy94si47g8ir5";
+  sourceRoot = "source/workhorse";
+
+  vendorSha256 = "sha256-ps/MjNY2woHrfcsNZTurnO2TbasWdS3LiuPUfVD2Ypc=";
   buildInputs = [ git ];
-  buildFlagsArray = "-ldflags=-X main.Version=${version}";
+  ldflags = [ "-X main.Version=${version}" ];
   doCheck = false;
 
   meta = with lib; {

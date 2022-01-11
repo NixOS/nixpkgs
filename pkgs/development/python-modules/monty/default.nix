@@ -1,45 +1,47 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, isPy27
-, nose
-, numpy
-, six
-, ruamel_yaml
+, pythonOlder
 , msgpack
-, coverage
-, coveralls
+, pytestCheckHook
+, numpy
+, pandas
+, pydantic
 , pymongo
-, lsof
+, ruamel-yaml
+, tqdm
 }:
 
 buildPythonPackage rec {
   pname = "monty";
-  version = "3.0.2";
-  disabled = isPy27; # uses type annotations
+  version = "2021.12.1";
+  disabled = pythonOlder "3.5"; # uses type annotations
 
-  # No tests in Pypi
   src = fetchFromGitHub {
     owner = "materialsvirtuallab";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1wxqxp0j7i6czdpr2r1imgmy3qbgn2l7d4za2h1lg3hllvx6jra1";
+    sha256 = "0zcbdh7pqv4dq3fan0zh912w9bvmf2p0zj1fhp0ayhdsc50cwldh";
   };
 
-  checkInputs = [ lsof nose numpy msgpack coverage coveralls pymongo];
-  propagatedBuildInputs = [ six ruamel_yaml ];
-
-  # test suite tries to decode bytes, but msgpack now returns a str
-  # https://github.com/materialsvirtuallab/monty/pull/121
   postPatch = ''
-    substituteInPlace tests/test_serialization.py \
-      --replace ".decode('utf-8')" ""
-  '';
-
-  preCheck = ''
     substituteInPlace tests/test_os.py \
       --replace 'self.assertEqual("/usr/bin/find", which("/usr/bin/find"))' '#'
   '';
+
+  propagatedBuildInputs = [
+    ruamel-yaml
+    tqdm
+    msgpack
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+    numpy
+    pandas
+    pydantic
+    pymongo
+  ];
 
   meta = with lib; {
     description = "Serves as a complement to the Python standard library by providing a suite of tools to solve many common problems";

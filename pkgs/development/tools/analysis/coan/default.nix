@@ -28,6 +28,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://coan2.sourceforge.net/";
     license = licenses.bsd3;
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 }

@@ -2,24 +2,20 @@
 , lib
 , fetchurl
 , makeWrapper
-, electron_9
+, electron
 , common-updater-scripts
 , writeShellScript
-, jq
 , makeDesktopItem
 }:
 
-let
-  electron = electron_9;
-in
 stdenv.mkDerivation rec {
 
   pname = "stretchly";
-  version = "1.2.0";
+  version = "1.8.1";
 
   src = fetchurl {
     url = "https://github.com/hovancik/stretchly/releases/download/v${version}/stretchly-${version}.tar.xz";
-    sha256 = "07v9yk9qgya9ladfgbfkwwnbzvczs1cv6yn3zrg9rviyv8zlqjls";
+    sha256 = "sha256-/v74vDGxD5iiOPeBXPAaV42JpyBjeJSO/Lk88pCkDng=";
   };
 
   icon = fetchurl {
@@ -33,7 +29,7 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     mkdir -p $out/bin $out/share/${pname}/
-    mv resources/app.asar $out/share/${pname}/
+    mv resources/app.asar* $out/share/${pname}/
 
     mkdir -p $out/share/applications
     ln -s ${desktopItem}/share/applications/* $out/share/applications/
@@ -78,7 +74,7 @@ stdenv.mkDerivation rec {
     homepage = "https://hovancik.net/stretchly";
     downloadPage = "https://hovancik.net/stretchly/downloads/";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ _1000101 ];
+    maintainers = with maintainers; [ _1000101 oxalica ];
     platforms = platforms.linux;
   };
 }

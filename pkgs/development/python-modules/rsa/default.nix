@@ -6,16 +6,15 @@
 , mock
 , isPy3k
 , pythonOlder
-, poetry
 }:
 
 buildPythonPackage rec {
   pname = "rsa";
-  version = "4.6";
+  version = "4.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "109ea5a66744dd859bf16fe904b8d8b627adafb9408753161e766a92e7d681fa";
+    sha256 = "5c6bd9dc7a543b7fe4304a631f8a8a3b674e2bbfc49c2ae96200cdbe55df6b17";
   };
 
   checkInputs = [ unittest2 mock ];

@@ -1,27 +1,31 @@
-{ buildGoModule
+{ lib
+, buildGoModule
 , fetchFromGitHub
-, lib
 , libpcap
 }:
 
 buildGoModule rec {
   pname = "naabu";
-  version = "2.0.3";
+  version = "2.0.5";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "naabu";
     rev = "v${version}";
-    sha256 = "05iybf7q3y0piyw202yzld89fiz2dv2pmnpm1pd905phk5a23n1x";
+    sha256 = "0kbpfb1ryfqy8a54ksm7zm8pqy8f4adh06jc1ccpdxks3k0rygid";
   };
 
-  vendorSha256 = "111qvkqdcdgir3dz267xckzlnfx72flnyi7ki7fa6ml7mkfyf70y";
+  vendorSha256 = "0kkkx8p0r04gg3pp0qy835afaxnqxjggnr7q7l6azdvg8qvgxfms";
 
-  buildInputs = [ libpcap ];
+  buildInputs = [
+    libpcap
+  ];
 
-  preBuild = ''
-    mv v2/* .
-  '';
+  modRoot = "./v2";
+
+  subPackages = [
+    "cmd/naabu/"
+  ];
 
   meta = with lib; {
     description = "Fast SYN/CONNECT port scanner";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, libxml2, glibmm, perl, gnome3 }:
+{ lib, stdenv, fetchurl, pkg-config, libxml2, glibmm, perl, gnome }:
 
 stdenv.mkDerivation rec {
   pname = "libxml++";
@@ -16,8 +16,11 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ libxml2 glibmm ];
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
+      attrPath = "libxmlxx";
       packageName = pname;
+      versionPolicy = "odd-unstable";
+      freeze = true;
     };
   };
 
@@ -26,6 +29,6 @@ stdenv.mkDerivation rec {
     description = "C++ wrapper for the libxml2 XML parser library";
     license = licenses.lgpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ phreedom ];
+    maintainers = with maintainers; [ ];
   };
 }

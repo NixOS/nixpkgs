@@ -6,17 +6,18 @@
 
 buildPythonPackage rec {
   pname = "Pygments";
-  version = "2.7.2";
+  version = "2.10.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "381985fcc551eb9d37c52088a32914e00517e57f4a21609f48141ba08e193fa0";
+    sha256 = "f398865f7eb6874156579fdf36bc840a03cab64d1cde9e93d68f46a425ec52c6";
   };
 
   propagatedBuildInputs = [ docutils ];
 
   # Circular dependency with sphinx
   doCheck = false;
+  pythonImportsCheck = [ "pygments" ];
 
   meta = {
     homepage = "https://pygments.org/";

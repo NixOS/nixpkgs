@@ -11,9 +11,15 @@ in {
 
       package = mkOption {
         default = pkgs.whitebophir;
-        defaultText = "pkgs.whitebophir";
+        defaultText = literalExpression "pkgs.whitebophir";
         type = types.package;
         description = "Whitebophir package to use.";
+      };
+
+      listenAddress = mkOption {
+        type = types.str;
+        default = "0.0.0.0";
+        description = "Address to listen on (use 0.0.0.0 to allow access from any address).";
       };
 
       port = mkOption {
@@ -30,7 +36,8 @@ in {
       wantedBy    = [ "multi-user.target" ];
       after       = [ "network.target" ];
       environment = {
-        PORT            = "${toString cfg.port}";
+        PORT            = toString cfg.port;
+        HOST            = toString cfg.listenAddress;
         WBO_HISTORY_DIR = "/var/lib/whitebophir";
       };
 

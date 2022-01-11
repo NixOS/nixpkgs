@@ -3,7 +3,7 @@
 }:
 
 let
-  version = "12.2";
+  version = "12.6";
   desktopItem = makeDesktopItem {
     name = "netbeans";
     exec = "netbeans";
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   inherit version;
   src = fetchurl {
     url = "mirror://apache/netbeans/netbeans/${version}/netbeans-${version}-bin.zip";
-    sha512 = "b25cda9830e8fe1d05687b08cc5fa9bcac7e8e6d12776998a4da7e483b3be0d04493345e56be7e6198fa8f86428d57d4459bfa7372c2e3f918f4a1101d0a31a7";
+    hash = "sha512-K0HjEO/yw9h+2+Y5CvxyYG1+kx+KH9NSn+QsKCsvh/rG/ilYLYyy93iZfx+wzwrgEfRtfMpZGtDAxd6nyUSnCA==";
   };
 
   buildCommand = ''
@@ -36,7 +36,8 @@ stdenv.mkDerivation {
     makeWrapper $out/netbeans/bin/netbeans $out/bin/netbeans \
       --prefix PATH : ${lib.makeBinPath [ jdk which ]} \
       --prefix JAVA_HOME : ${jdk.home} \
-      --add-flags "--jdkhome ${jdk.home}"
+      --add-flags "--jdkhome ${jdk.home} \
+      -J-Dawt.useSystemAAFontSettings=on -J-Dswing.aatext=true"
 
     # Extract pngs from the Apple icon image and create
     # the missing ones from the 1024x1024 image.
@@ -56,7 +57,8 @@ stdenv.mkDerivation {
     ln -s ${desktopItem}/share/applications/* $out/share/applications
   '';
 
-  buildInputs = [ makeWrapper perl python unzip libicns imagemagick ];
+  nativeBuildInputs = [ makeWrapper unzip ];
+  buildInputs = [ perl python libicns imagemagick ];
 
   meta = {
     description = "An integrated development environment for Java, C, C++ and PHP";

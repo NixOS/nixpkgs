@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "sqlparse";
-  version = "0.4.1";
+  version = "0.4.2";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0f91fd2e829c44362cbcfab3e9ae12e22badaa8a29ad5ff599f9ec109f0454e8";
+    sha256 = "0c00730c74263a94e5a9919ade150dfc3b19c574389985446148402998287dae";
   };
 
   nativeBuildInputs = [ installShellFiles ];

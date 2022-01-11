@@ -1,19 +1,20 @@
 { mkDerivation, lib, fetchFromGitHub, cmake, pkg-config
-, alsaLib, freetype, libjack2, lame, libogg, libpulseaudio, libsndfile, libvorbis
+, alsa-lib, freetype, libjack2, lame, libogg, libpulseaudio, libsndfile, libvorbis
 , portaudio, portmidi, qtbase, qtdeclarative, qtgraphicaleffects
 , qtquickcontrols2, qtscript, qtsvg, qttools
 , qtwebengine, qtxmlpatterns
+, nixosTests
 }:
 
 mkDerivation rec {
   pname = "musescore";
-  version = "3.6";
+  version = "3.6.2";
 
   src = fetchFromGitHub {
     owner = "musescore";
     repo = "MuseScore";
     rev = "v${version}";
-    sha256 = "sha256-0M+idYnrgXyH6WLp+2jIYRnFzTB93v+dG1XHmSNyPjE=";
+    sha256 = "sha256-GBGAD/qdOhoNfDzI+O0EiKgeb86GFJxpci35T6tZ+2s=";
   };
 
   patches = [
@@ -26,25 +27,29 @@ mkDerivation rec {
   ];
 
   qtWrapperArgs = [
-    # Work around crash on update from 3.4.2 to 3.5.0
-    # https://bugreports.qt.io/browse/QTBUG-85967
-    "--set QML_DISABLE_DISK_CACHE 1"
+    # MuseScore JACK backend loads libjack at runtime.
+    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libjack2 ]}"
+    # There are some issues with using the wayland backend, see:
+    # https://musescore.org/en/node/321936
+    "--set QT_QPA_PLATFORM xcb"
   ];
 
   nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [
-    alsaLib libjack2 freetype lame libogg libpulseaudio libsndfile libvorbis
+    alsa-lib libjack2 freetype lame libogg libpulseaudio libsndfile libvorbis
     portaudio portmidi # tesseract
     qtbase qtdeclarative qtgraphicaleffects qtquickcontrols2
     qtscript qtsvg qttools qtwebengine qtxmlpatterns
   ];
 
+  passthru.tests = nixosTests.musescore;
+
   meta = with lib; {
     description = "Music notation and composition software";
     homepage = "https://musescore.org/";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ vandenoever turion ];
+    maintainers = with maintainers; [ vandenoever turion doronbehar ];
     platforms = platforms.linux;
     repositories.git = "https://github.com/musescore/MuseScore";
   };

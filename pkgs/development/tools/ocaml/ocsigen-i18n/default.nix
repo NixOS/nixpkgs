@@ -1,9 +1,8 @@
-{ lib, stdenv, fetchzip, ocamlPackages }:
+{ lib, stdenv, fetchFromGitHub, ocamlPackages }:
 
-stdenv.mkDerivation rec
-{
+stdenv.mkDerivation rec {
   pname = "ocsigen-i18n";
-  version = "3.5.0";
+  version = "3.7.0";
 
   buildInputs = with ocamlPackages; [ ocaml findlib ppx_tools ];
 
@@ -14,9 +13,11 @@ stdenv.mkDerivation rec
     make bindir=$out/bin install
   '';
 
-  src = fetchzip {
-    url = "https://github.com/besport/${pname}/archive/${version}.tar.gz";
-    sha256 = "1qsgwfl64b53w235wm7nnchqinzgsvd2gb52xm0kra2wlwp69rfq";
+  src = fetchFromGitHub {
+    owner = "besport";
+    repo = "ocsigen-i18n";
+    rev = version;
+    sha256 = "sha256-PmdDyn+MUcNFrZpP/KLGQzdXUFRr+dYRAZjTZxHSeaw=";
   };
 
   meta = {

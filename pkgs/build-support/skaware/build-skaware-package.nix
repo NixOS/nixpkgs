@@ -15,12 +15,15 @@
   # TODO(Profpatsch): automatically infer most of these
   # : list string
 , configureFlags
+  # : string
+, postConfigure ? null
   # mostly for moving and deleting files from the build directory
   # : lines
 , postInstall
   # : list Maintainer
 , maintainers ? []
-
+  # : passtrhu arguments (e.g. tests)
+, passthru ? {}
 
 }:
 
@@ -47,6 +50,8 @@ let
     "CHANGELOG"
     "README"
     "README.*"
+    "DCO"
+    "CONTRIBUTING"
   ];
 
 in stdenv.mkDerivation {
@@ -79,6 +84,8 @@ in stdenv.mkDerivation {
     ++ (lib.optional stdenv.isDarwin
          "--build=${stdenv.hostPlatform.system}");
 
+  inherit postConfigure;
+
   # TODO(Profpatsch): ensure that there is always a $doc output!
   postInstall = ''
     echo "Cleaning & moving common files"
@@ -99,7 +106,9 @@ in stdenv.mkDerivation {
     inherit description platforms;
     license = lib.licenses.isc;
     maintainers = with lib.maintainers;
-      [ pmahoney Profpatsch ] ++ maintainers;
+      [ pmahoney Profpatsch qyliss ] ++ maintainers;
   };
+
+  inherit passthru;
 
 }

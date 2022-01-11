@@ -1,11 +1,11 @@
-{ lib, buildPythonPackage, olm,
-  cffi, future, isPy3k, typing }:
+{ lib, buildPythonPackage, isPy3k, olm
+, cffi, future, typing }:
 
 buildPythonPackage {
   pname = "python-olm";
   inherit (olm) src version;
 
-  sourceRoot = "${olm.name}/python";
+  sourceRoot = "source/python";
   buildInputs = [ olm ];
 
   preBuild = ''
@@ -17,12 +17,17 @@ buildPythonPackage {
     future
   ] ++ lib.optionals (!isPy3k) [ typing ];
 
-  doCheck = false;
+  propagatedNativeBuildInputs = [
+    cffi
+  ];
 
-  meta = with lib; {
+  # Some required libraries for testing are not packaged yet.
+  doCheck = false;
+  pythonImportsCheck = [ "olm" ];
+
+  meta = {
+    inherit (olm.meta) license maintainers;
     description = "Python bindings for Olm";
     homepage = "https://gitlab.matrix.org/matrix-org/olm/tree/master/python";
-    license = olm.meta.license;
-    maintainers = [ maintainers.tilpner ];
   };
 }

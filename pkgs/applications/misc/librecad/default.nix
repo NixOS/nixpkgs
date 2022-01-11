@@ -1,9 +1,8 @@
 { lib
 , boost
 , fetchFromGitHub
-, fetchpatch
 , installShellFiles
-, mkDerivationWith
+, mkDerivation
 , muparser
 , pkg-config
 , qmake
@@ -11,35 +10,18 @@
 , qtsvg
 , qttools
 , runtimeShell
-, gcc8Stdenv
 }:
 
-let
-  stdenv = gcc8Stdenv;
-in
-
-  # Doesn't build with gcc9
-mkDerivationWith stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "librecad";
-  version = "2.2.0-rc1";
+  version = "2.2.0-rc2";
 
   src = fetchFromGitHub {
     owner = "LibreCAD";
     repo = "LibreCAD";
     rev = version;
-    sha256 = "0kwj838hqzbw95gl4x6scli9gj3gs72hdmrrkzwq5rjxam18k3f3";
+    sha256 = "sha256-RNg7ioMriH4A7V65+4mh8NhsUHs/8IbTt38nVkYilCE=";
   };
-
-  patches = [
-    ./fix_qt_5_11_build.patch
-    (
-      fetchpatch {
-        # Fix missing app name and icon on Wayland.
-        url = "https://github.com/LibreCAD/LibreCAD/commit/a17f8281093403f0c7c36996232665ed21906688.patch";
-        sha256 = "1x46psh4bcx2hxck4l83ki43g1252vb033i2x94h4rpai9hww4d5";
-      }
-    )
-  ];
 
   postPatch = ''
     substituteInPlace scripts/postprocess-unix.sh \
@@ -88,16 +70,11 @@ mkDerivationWith stdenv.mkDerivation rec {
     qttools
   ];
 
-  enableParallelBuilding = true;
-
   meta = with lib; {
     description = "2D CAD package based on Qt";
     homepage = "https://librecad.org";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [
-      kiwi
-      viric
-    ];
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ kiwi viric ];
     platforms = platforms.linux;
   };
 }

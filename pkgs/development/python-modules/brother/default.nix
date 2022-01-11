@@ -1,25 +1,33 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
 , pysnmp
-, asynctest, pytestcov, pytestrunner, pytest-asyncio, pytest-trio, pytest-tornasync }:
+, pytest-asyncio
+, pytest-error-for-skips
+, pytest-runner
+, pytestCheckHook
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "brother";
-  version = "0.2.0";
+  version = "1.1.0";
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "bieniu";
     repo = pname;
     rev = version;
-    sha256 = "0d984apw73kzd6bid65bqhp26gvvgqjni56nqr0gnb2sv7mknnm8";
+    sha256 = "sha256-ZDQIpzdr3XkYrSUgrBDZsUwUZRQCdJdvmniMezvJxzU=";
   };
 
-  # pytest-error-for-skips is not packaged
+  nativeBuildInputs = [
+    pytest-runner
+  ];
+
   postPatch = ''
-    substituteInPlace pytest.ini \
-      --replace " --error-for-skips" ""
-    substituteInPlace setup.py \
-      --replace "\"pytest-error-for-skips\"" ""
+    substituteInPlace setup.cfg \
+      --replace "--cov --cov-report term-missing " ""
   '';
 
   propagatedBuildInputs = [
@@ -27,16 +35,15 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    asynctest
-    pytestcov
-    pytestrunner
     pytest-asyncio
-    pytest-trio
-    pytest-tornasync
+    pytest-error-for-skips
+    pytestCheckHook
   ];
 
+  pythonImportsCheck = [ "brother" ];
+
   meta = with lib; {
-    description = "Python wrapper for getting data from Brother laser and inkjet printers via SNMP.";
+    description = "Python wrapper for getting data from Brother laser and inkjet printers via SNMP";
     homepage = "https://github.com/bieniu/brother";
     license = licenses.asl20;
     maintainers = with maintainers; [ hexa ];

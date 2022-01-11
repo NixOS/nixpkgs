@@ -1,48 +1,31 @@
 { buildGoModule
-, buildGoPackage
 , fetchFromGitHub
+, fetchurl
 , go-bindata
 , lib
 , llvmPackages
-, mkYarnPackage
+, perl
 , pkg-config
 , rustPlatform
+, stdenv
+, libiconv
 }:
 
-# Note for maintainers: use ./update-influxdb2.sh to update the Yarn
-# dependencies nix expression.
-
 let
-  version = "2.0.2";
-  shorthash = "84496e507a"; # git rev-parse HEAD with 2.0.2 checked out
-  libflux_version = "0.95.0";
+  version = "2.1.1";
+  ui_version = "2.1.2";
+  libflux_version = "0.139.0";
 
   src = fetchFromGitHub {
     owner = "influxdata";
     repo = "influxdb";
     rev = "v${version}";
-    sha256 = "05s09crqgbyfdck33zwax5l47jpc4wh04yd8zsm658iksdgzpmnn";
+    sha256 = "sha256-wf01DhB1ampZuWPkHUEOf3KJK4GjeOAPL3LG2+g4NGY=";
   };
 
-  ui = mkYarnPackage {
-    src = src;
-    packageJSON = ./influx-ui-package.json;
-    yarnLock = "${src}/ui/yarn.lock";
-    yarnNix = ./influx-ui-yarndeps.nix;
-    configurePhase = ''
-      cp -r $node_modules ui/node_modules
-      rsync -r $node_modules/../deps/chronograf-ui/node_modules/ ui/node_modules
-    '';
-    INFLUXDB_SHA = shorthash;
-    buildPhase = ''
-      pushd ui
-      yarn build:ci
-      popd
-    '';
-    installPhase = ''
-      mv ui/build $out
-    '';
-    distPhase = "true";
+  ui = fetchurl {
+    url = "https://github.com/influxdata/ui/releases/download/OSS-${ui_version}/build.tar.gz";
+    sha256 = "sha256-fXjShNJfKN/ZQNQHoX9/Ou4XBrXavCN+rcO+8AMc5Ug=";
   };
 
   flux = rustPlatform.buildRustPackage {
@@ -52,12 +35,13 @@ let
       owner = "influxdata";
       repo = "flux";
       rev = "v${libflux_version}";
-      sha256 = "07jz2nw3zswg9f4p5sb5r4hpg3n4qibjcgs9sk9csns70h5rp9j3";
+      sha256 = "sha256-cELeWZXGVLFoPYfBoBP8NeLBVFIb5o+lWyto42BLyXY=";
     };
     sourceRoot = "source/libflux";
-    cargoSha256 = "0y5xjkqpaxp9qq1qj39zw3mnvkbbb9g4fa5cli77nhfwz288xx6h";
+    cargoSha256 = "sha256-wFgawxgqZqoPnOXJD3r5t2n7Y2bTAkBbBxeBtFEF7N4=";
     nativeBuildInputs = [ llvmPackages.libclang ];
-    LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
+    buildInputs = lib.optional stdenv.isDarwin libiconv;
+    LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
     pkgcfg = ''
       Name: flux
       Version: ${libflux_version}
@@ -71,8 +55,11 @@ let
       cp -r $NIX_BUILD_TOP/source/libflux/include/influxdata $out/include
       substitute $pkgcfgPath $out/pkgconfig/flux.pc \
         --replace /out $out
+    '' + lib.optionalString stdenv.isDarwin ''
+      install_name_tool -id $out/lib/libflux.dylib $out/lib/libflux.dylib
     '';
   };
+
 in buildGoModule {
   pname = "influxdb";
   version = version;
@@ -80,33 +67,42 @@ in buildGoModule {
 
   nativeBuildInputs = [ go-bindata pkg-config ];
 
-  vendorSha256 = "0lviz7l5zbghyfkp0lvlv8ykpak5hhkfal8d7xwvpsm8q3sghc8a";
-  subPackages = [ "cmd/influxd" "cmd/influx" ];
+  vendorSha256 = "sha256-GVLAzVJzSsC10ZWDZPP8upydwZG21E+zQ6sMKm1lCY0=";
+  subPackages = [ "cmd/influxd" "cmd/telemetryd" ];
 
   PKG_CONFIG_PATH = "${flux}/pkgconfig";
-  # We have to run a bunch of go:generate commands to embed the UI
-  # assets into the source code. Ideally we'd run `make generate`, but
-  # that ends up running a ton of non-hermetic stuff. Instead, we find
-  # the relevant go:generate directives, and run them by hand without
-  # breaking hermeticity.
+  # Check that libflux and the UI are at the right version, and embed
+  # the UI assets into the Go source tree.
   preBuild = ''
-    ln -s ${ui} ui/build
-    grep -RI -e 'go:generate.*go-bindata' | cut -f1 -d: | while read -r filename; do
-      sed -i -e 's/go:generate.*go-bindata/go:generate go-bindata/' $filename
-      pushd $(dirname $filename)
-      go generate
-      popd
-    done
-    export buildFlagsArray=(
-      -tags="assets"
-      -ldflags="-X main.commit=${shorthash} -X main.version=${version}"
+    (
+      flux_ver=$(grep github.com/influxdata/flux go.mod | awk '{print $2}')
+      if [ "$flux_ver" != "v${libflux_version}" ]; then
+        echo "go.mod wants libflux $flux_ver, but nix derivation provides ${libflux_version}"
+        exit 1
+      fi
+
+      ui_ver=$(grep influxdata/ui/releases scripts/fetch-ui-assets.sh | ${perl}/bin/perl -pe 's#.*/OSS-([^/]+)/.*#$1#')
+      if [ "$ui_ver" != "${ui_version}" ]; then
+        echo "scripts/fetch-ui-assets.sh wants UI $ui_ver, but nix derivation provides ${ui_version}"
+        exit 1
+      fi
     )
+
+    mkdir -p static/data
+    tar -xzf ${ui} -C static/data
+    pushd static
+    go generate
+    popd
   '';
+
+  tags = [ "assets" ];
+
+  ldflags = [ "-X main.commit=v${version}" "-X main.version=${version}" ];
 
   meta = with lib; {
     description = "An open-source distributed time series database";
     license = licenses.mit;
     homepage = "https://influxdata.com/";
-    maintainers = with maintainers; [ danderson ];
+    maintainers = with maintainers; [ abbradar danderson ];
   };
 }

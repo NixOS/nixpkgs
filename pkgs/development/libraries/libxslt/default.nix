@@ -1,4 +1,6 @@
-{ lib, stdenv, fetchurl, fetchpatch, libxml2, findXMLCatalogs, gettext, python, libgcrypt
+{ lib, stdenv, fetchurl
+, pkg-config
+, libxml2, findXMLCatalogs, gettext, python3, libgcrypt
 , cryptoSupport ? false
 , pythonSupport ? stdenv.buildPlatform == stdenv.hostPlatform
 }:
@@ -14,19 +16,22 @@ stdenv.mkDerivation rec {
 
   outputs = [ "bin" "dev" "out" "man" "doc" ] ++ lib.optional pythonSupport "py";
 
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
   buildInputs = [ libxml2.dev ]
     ++ lib.optional stdenv.isDarwin gettext
-    ++ lib.optionals pythonSupport [ libxml2.py python ]
+    ++ lib.optionals pythonSupport [ libxml2.py python3 ]
     ++ lib.optionals cryptoSupport [ libgcrypt ];
 
   propagatedBuildInputs = [ findXMLCatalogs ];
 
   configureFlags = [
-    "--with-libxml-prefix=${libxml2.dev}"
     "--without-debug"
     "--without-mem-debug"
     "--without-debugger"
-  ] ++ lib.optional pythonSupport "--with-python=${python}"
+  ] ++ lib.optional pythonSupport "--with-python=${python3}"
     ++ lib.optional (!cryptoSupport) "--without-crypto";
 
   postFixup = ''
@@ -36,7 +41,7 @@ stdenv.mkDerivation rec {
   '' + lib.optionalString pythonSupport ''
     mkdir -p $py/nix-support
     echo ${libxml2.py} >> $py/nix-support/propagated-build-inputs
-    moveToOutput ${python.libPrefix} "$py"
+    moveToOutput ${python3.libPrefix} "$py"
   '';
 
   passthru = {

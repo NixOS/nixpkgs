@@ -1,53 +1,41 @@
-{ lib, stdenv, fetchurl, graalvm11-ce, glibcLocales }:
+{ lib, buildGraalvmNativeImage, fetchurl, writeScript }:
 
-with lib;
-stdenv.mkDerivation rec {
+buildGraalvmNativeImage rec {
   pname = "babashka";
-  version = "0.2.3";
-
-  reflectionJson = fetchurl {
-    name = "reflection.json";
-    url = "https://github.com/borkdude/${pname}/releases/download/v${version}/${pname}-${version}-reflection.json";
-    sha256 = "0lbdh3v3g3j00bn99bjhjj3gk1q9ks2alpvl9bxc00xpyw86f7z8";
-  };
+  version = "0.7.3";
 
   src = fetchurl {
-    url = "https://github.com/borkdude/${pname}/releases/download/v${version}/${pname}-${version}-standalone.jar";
-    sha256 = "0vh6k3dkzyk346jjzg6n4mdi65iybrmhb3js9lm73yc3ay2c5dyi";
+    url = "https://github.com/babashka/${pname}/releases/download/v${version}/${pname}-${version}-standalone.jar";
+    sha256 = "sha256-zbxFMc02hbsU2ERlUzqMBHwHYfORB7TkMINrKC52PPU=";
   };
 
-  dontUnpack = true;
+  executable = "bb";
 
-  LC_ALL = "en_US.UTF-8";
-  nativeBuildInputs = [ graalvm11-ce glibcLocales ];
+  extraNativeImageBuildArgs = [
+    "-H:+ReportExceptionStackTraces"
+    "--no-fallback"
+    "--native-image-info"
+  ];
 
-  buildPhase = ''
-    native-image \
-      -jar ${src} \
-      -H:Name=bb \
-      ${optionalString stdenv.isDarwin ''-H:-CheckToolchain''} \
-      -H:+ReportExceptionStackTraces \
-      -J-Dclojure.spec.skip-macros=true \
-      -J-Dclojure.compiler.direct-linking=true \
-      "-H:IncludeResources=BABASHKA_VERSION" \
-      "-H:IncludeResources=SCI_VERSION" \
-      -H:ReflectionConfigurationFiles=${reflectionJson} \
-      --initialize-at-build-time \
-      -H:Log=registerResource: \
-      -H:EnableURLProtocols=http,https \
-      --enable-all-security-services \
-      -H:+JNI \
-      --verbose \
-      --no-fallback \
-      --no-server \
-      --report-unsupported-elements-at-runtime \
-      "--initialize-at-run-time=org.postgresql.sspi.SSPIClient" \
-      "-J-Xmx4500m"
+  installCheckPhase = ''
+    $out/bin/bb --version | grep '${version}'
+    $out/bin/bb '(+ 1 2)' | grep '3'
+    $out/bin/bb '(vec (dedupe *input*))' <<< '[1 1 1 1 2]' | grep '[1 2]'
   '';
 
-  installPhase = ''
-    mkdir -p $out/bin
-    cp bb $out/bin/bb
+  passthru.updateScript = writeScript "update-babashka" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p curl common-updater-scripts jq
+
+    set -euo pipefail
+
+    readonly latest_version="$(curl \
+      ''${GITHUB_TOKEN:+"-u \":$GITHUB_TOKEN\""} \
+      -s "https://api.github.com/repos/babashka/babashka/releases/latest" \
+      | jq -r '.tag_name')"
+
+    # v0.6.2 -> 0.6.2
+    update-source-version babashka "''${latest_version/v/}"
   '';
 
   meta = with lib; {
@@ -76,9 +64,15 @@ stdenv.mkDerivation rec {
     - Batteries included (tools.cli, cheshire, ...)
     - Library support via popular tools like the clojure CLI
     '';
-    homepage = "https://github.com/borkdude/babashka";
+    homepage = "https://github.com/babashka/babashka";
+    changelog = "https://github.com/babashka/babashka/blob/v${version}/CHANGELOG.md";
     license = licenses.epl10;
-    platforms = graalvm11-ce.meta.platforms;
-    maintainers = with maintainers; [ bandresen bhougland DerGuteMoritz jlesquembre ];
+    maintainers = with maintainers; [
+      bandresen
+      bhougland
+      DerGuteMoritz
+      jlesquembre
+      thiagokokada
+    ];
   };
 }

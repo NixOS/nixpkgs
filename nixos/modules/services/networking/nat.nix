@@ -247,7 +247,7 @@ in
           loopbackIPs = mkOption {
             type = types.listOf types.str;
             default = [];
-            example = literalExample ''[ "55.1.2.3" ]'';
+            example = literalExpression ''[ "55.1.2.3" ]'';
             description = "Public IPs for NAT reflection; for connections to `loopbackip:sourcePort' from the host itself and from other hosts behind NAT";
           };
         };

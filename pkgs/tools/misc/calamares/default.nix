@@ -1,17 +1,17 @@
 { lib, fetchurl, boost, cmake, extra-cmake-modules, kparts, kpmcore
 , kservice, libatasmart, libxcb, libyamlcpp, parted, polkit-qt, python, qtbase
-, qtquickcontrols, qtsvg, qttools, qtwebengine, util-linux, glibc, tzdata
+, qtquickcontrols, qtsvg, qttools, qtwebengine, util-linux, tzdata
 , ckbcomp, xkeyboard_config, mkDerivation
 }:
 
 mkDerivation rec {
   pname = "calamares";
-  version = "3.2.36";
+  version = "3.2.44.3";
 
   # release including submodule
   src = fetchurl {
     url = "https://github.com/${pname}/${pname}/releases/download/v${version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-pgA0mRglIBObNNUQIozNy6EvJQSmHRF+kN4EjqL4tt4=";
+    sha256 = "sha256-p3ctULrzXPt9dNs8Ckb7cqdOBpp4qOmEwu0dEVq8lEw=";
   };
 
   nativeBuildInputs = [ cmake extra-cmake-modules ];
@@ -20,8 +20,6 @@ mkDerivation rec {
     libatasmart libxcb libyamlcpp parted polkit-qt python qtbase
     qtquickcontrols qtsvg qttools qtwebengine.dev util-linux
   ];
-
-  enableParallelBuilding = false;
 
   cmakeFlags = [
     "-DPYTHON_LIBRARY=${python}/lib/lib${python.libPrefix}.so"

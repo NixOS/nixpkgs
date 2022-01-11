@@ -1,22 +1,34 @@
-{ stdenv, lib, fetchFromGitHub, autoreconfHook, ldc, installShellFiles, pkg-config
-, curl, sqlite, libnotify
-, withSystemd ? stdenv.isLinux, systemd ? null }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, autoreconfHook
+, ldc
+, installShellFiles
+, pkg-config
+, curl
+, sqlite
+, libnotify
+, withSystemd ? stdenv.isLinux
+, systemd
+}:
 
 stdenv.mkDerivation rec {
   pname = "onedrive";
-  version = "2.4.7";
+  version = "2.4.15";
 
   src = fetchFromGitHub {
     owner = "abraunegg";
     repo = pname;
     rev = "v${version}";
-    sha256 = "12g2z6c4f65y8cc7vyhk9nlg1mpbsmlsj7ghlny452qhr13m7qpn";
+    sha256 = "sha256-nYko7htg16Sp/Fs+KuPflrpHn8WShM0OKozhr9BFH5U=";
   };
 
   nativeBuildInputs = [ autoreconfHook ldc installShellFiles pkg-config ];
 
   buildInputs = [
-    curl sqlite libnotify
+    curl
+    sqlite
+    libnotify
   ] ++ lib.optional withSystemd systemd;
 
   configureFlags = [
@@ -36,8 +48,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A complete tool to interact with OneDrive on Linux";
     homepage = "https://github.com/abraunegg/onedrive";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ srgom ianmjones ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ srgom peterhoeg ];
     platforms = platforms.linux;
   };
 }

@@ -1,44 +1,47 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
-, setuptools_scm
-, pytest
-, pytestcov
+, setuptools-scm
+, pytestCheckHook
+, pytest-asyncio
+, pytest-tornado
 , sqlalchemy
 , tornado
 , twisted
 , mock
-, trollius
 , gevent
 , six
 , pytz
 , tzlocal
 , funcsigs
-, futures
-, isPy3k
+, setuptools
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "APScheduler";
-  version = "3.7.0";
+  version = "3.8.1";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1cab7f2521e107d07127b042155b632b7a1cd5e02c34be5a28ff62f77c900c6a";
+    sha256 = "5cf344ebcfbdaa48ae178c029c055cec7bc7a4a47c21e315e4d1f08bd35f2355";
   };
 
   buildInputs = [
-    setuptools_scm
+    setuptools-scm
   ];
 
   checkInputs = [
-    pytest
-    pytestcov
+    pytest-asyncio
+    pytest-tornado
+    pytestCheckHook
     sqlalchemy
     tornado
     twisted
     mock
-    trollius
     gevent
   ];
 
@@ -47,18 +50,27 @@ buildPythonPackage rec {
     pytz
     tzlocal
     funcsigs
-  ] ++ lib.optional (!isPy3k) futures;
+    setuptools
+  ];
 
-  checkPhase = ''
-    py.test
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace " --cov --tb=short" ""
   '';
 
-  # Somehow it cannot find pytestcov
-  doCheck = false;
+  disabledTests = [
+    "test_broken_pool"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "test_submit_job"
+    "test_max_instances"
+  ];
+
+  pythonImportsCheck = [ "apscheduler" ];
 
   meta = with lib; {
     description = "A Python library that lets you schedule your Python code to be executed";
-    homepage = "https://pypi.python.org/pypi/APScheduler/";
+    homepage = "https://github.com/agronholm/apscheduler";
     license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
 }

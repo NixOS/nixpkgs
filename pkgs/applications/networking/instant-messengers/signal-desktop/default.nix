@@ -1,8 +1,8 @@
 { stdenv, lib, fetchurl, autoPatchelfHook, dpkg, wrapGAppsHook, nixosTests
 , gnome2, gtk3, atk, at-spi2-atk, cairo, pango, gdk-pixbuf, glib, freetype, fontconfig
 , dbus, libX11, xorg, libXi, libXcursor, libXdamage, libXrandr, libXcomposite
-, libXext, libXfixes, libXrender, libXtst, libXScrnSaver, nss, nspr, alsaLib
-, cups, expat, libuuid, at-spi2-core, libappindicator-gtk3
+, libXext, libXfixes, libXrender, libXtst, libXScrnSaver, nss, nspr, alsa-lib
+, cups, expat, libuuid, at-spi2-core, libappindicator-gtk3, mesa
 # Runtime dependencies:
 , systemd, libnotify, libdbusmenu, libpulseaudio
 # Unfortunately this also overwrites the UI language (not just the spell
@@ -18,14 +18,13 @@ let
       # E.g. "de_DE" -> "de-de" (spellcheckerLanguage -> hunspellDict)
       spellLangComponents = splitString "_" spellcheckerLanguage;
       hunspellDict = elemAt spellLangComponents 0 + "-" + toLower (elemAt spellLangComponents 1);
-    in if spellcheckerLanguage != null
-      then ''
-        --set HUNSPELL_DICTIONARIES "${hunspellDicts.${hunspellDict}}/share/hunspell" \
-        --set LC_MESSAGES "${spellcheckerLanguage}"''
-      else "");
+    in lib.optionalString (spellcheckerLanguage != null) ''
+      --set HUNSPELL_DICTIONARIES "${hunspellDicts.${hunspellDict}}/share/hunspell" \
+      --set LC_MESSAGES "${spellcheckerLanguage}"'');
+
 in stdenv.mkDerivation rec {
   pname = "signal-desktop";
-  version = "1.39.6"; # Please backport all updates to the stable channel.
+  version = "5.27.0"; # Please backport all updates to the stable channel.
   # All releases have a limited lifetime and "expire" 90 days after the release.
   # When releases "expire" the application becomes unusable until an update is
   # applied. The expiration date for the current release can be extracted with:
@@ -35,7 +34,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://updates.signal.org/desktop/apt/pool/main/s/signal-desktop/signal-desktop_${version}_amd64.deb";
-    sha256 = "04fd81vc0dxk0b47crm5zacf4x79pdn483xicygnc1z6v7mnrmgk";
+    sha256 = "1agxn4fcgln5lsccvw5b7g2psv6nv2y7qm5df201c9pbwjak74nm";
   };
 
   nativeBuildInputs = [
@@ -45,7 +44,7 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     at-spi2-atk
     at-spi2-core
     atk
@@ -73,11 +72,13 @@ in stdenv.mkDerivation rec {
     libappindicator-gtk3
     libnotify
     libuuid
+    mesa # for libgbm
     nspr
     nss
     pango
     systemd
     xorg.libxcb
+    xorg.libxshmfence
   ];
 
   runtimeDependencies = [
@@ -96,6 +97,8 @@ in stdenv.mkDerivation rec {
   dontAutoPatchelf = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib
 
     mv usr/share $out/share
@@ -109,6 +112,8 @@ in stdenv.mkDerivation rec {
     # Symlink to bin
     mkdir -p $out/bin
     ln -s $out/lib/Signal/signal-desktop $out/bin/signal-desktop
+
+    runHook postInstall
   '';
 
   preFixup = ''
@@ -122,7 +127,7 @@ in stdenv.mkDerivation rec {
       --replace /opt/Signal/signal-desktop $out/bin/signal-desktop
 
     autoPatchelf --no-recurse -- $out/lib/Signal/
-    patchelf --add-needed ${libpulseaudio}/lib/libpulse.so $out/lib/Signal/resources/app.asar.unpacked/node_modules/ringrtc/build/linux/libringrtc.node
+    patchelf --add-needed ${libpulseaudio}/lib/libpulse.so $out/lib/Signal/resources/app.asar.unpacked/node_modules/ringrtc/build/linux/libringrtc-x64.node
   '';
 
   # Tests if the application launches and waits for "Link your phone to Signal Desktop":
@@ -136,7 +141,7 @@ in stdenv.mkDerivation rec {
     '';
     homepage    = "https://signal.org/";
     changelog   = "https://github.com/signalapp/Signal-Desktop/releases/tag/v${version}";
-    license     = lib.licenses.gpl3;
+    license     = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ ixmatus primeos equirosa ];
     platforms   = [ "x86_64-linux" ];
   };

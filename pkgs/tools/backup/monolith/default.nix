@@ -3,25 +3,26 @@
 , fetchFromGitHub
 , pkg-config
 , openssl
+, libiconv
 , Security
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "monolith";
-  version = "2.4.0";
+  version = "2.6.1";
 
   src = fetchFromGitHub {
     owner = "Y2Z";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-kCyfVeGTXBzdwmTTDJM1eaR6ANoIXAydj1ePmrZehqE=";
+    sha256 = "sha256-JhQkoVGJpMesNz2hRe+kWNX4zYrIcKzT0Z6owrXlRN4=";
   };
 
-  cargoSha256 = "sha256-juxaL/zjfqzFMqZe9tpevdjjVU7fPK8zalksAARWHC8=";
+  cargoSha256 = "sha256-BikzJr50Aua9llyQgbP/paIoC7dvsG0RYyVXmbdeGIA=";
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [ pkg-config ];
   buildInputs = lib.optionals stdenv.isLinux [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ Security ];
+    ++ lib.optionals stdenv.isDarwin [ libiconv Security ];
 
   checkFlagsArray = [ "--skip=tests::cli" ];
 

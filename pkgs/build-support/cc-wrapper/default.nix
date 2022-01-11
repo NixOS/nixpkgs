@@ -64,6 +64,7 @@ let
 
   useGccForLibs = isClang
     && libcxx == null
+    && !stdenv.targetPlatform.isDarwin
     && !(stdenv.targetPlatform.useLLVM or false)
     && !(stdenv.targetPlatform.useAndroidPrebuilt or false)
     && !(stdenv.targetPlatform.isiOS or false)
@@ -100,6 +101,18 @@ let
     else
       false;
 
+
+  darwinPlatformForCC = optionalString stdenv.targetPlatform.isDarwin (
+    if (targetPlatform.darwinPlatform == "macos" && isGNU) then "macosx"
+    else targetPlatform.darwinPlatform
+  );
+
+  darwinMinVersion = optionalString stdenv.targetPlatform.isDarwin (
+    stdenv.targetPlatform.darwinMinVersion
+  );
+
+  darwinMinVersionVariable = optionalString stdenv.targetPlatform.isDarwin
+    stdenv.targetPlatform.darwinMinVersionVariable;
 in
 
 # Ensure bintools matches
@@ -122,6 +135,7 @@ stdenv.mkDerivation {
   gnugrep_bin = if nativeTools then "" else gnugrep;
 
   inherit targetPrefix suffixSalt;
+  inherit darwinPlatformForCC darwinMinVersion darwinMinVersionVariable;
 
   outputs = [ "out" ] ++ optionals propagateDoc [ "man" "info" ];
 
@@ -160,6 +174,7 @@ stdenv.mkDerivation {
         local dst="$1"
         local wrapper="$2"
         export prog="$3"
+        export use_response_file_by_default=${if isClang then "1" else "0"}
         substituteAll "$wrapper" "$out/bin/$dst"
         chmod +x "$out/bin/$dst"
       }
@@ -219,6 +234,11 @@ stdenv.mkDerivation {
       wrap ${targetPrefix}gnatmake ${./gnat-wrapper.sh} $ccPath/${targetPrefix}gnatmake
       wrap ${targetPrefix}gnatbind ${./gnat-wrapper.sh} $ccPath/${targetPrefix}gnatbind
       wrap ${targetPrefix}gnatlink ${./gnat-wrapper.sh} $ccPath/${targetPrefix}gnatlink
+
+      # this symlink points to the unwrapped gnat's output "out". It is used by
+      # our custom gprconfig compiler description to find GNAT's ada runtime. See
+      # ../../development/tools/build-managers/gprbuild/{boot.nix, nixpkgs-gnat.xml}
+      ln -sf ${cc} $out/nix-support/gprconfig-gnat-unwrapped
     ''
 
     + optionalString cc.langD or false ''
@@ -298,7 +318,11 @@ stdenv.mkDerivation {
     # vs libstdc++, etc.) since Darwin isn't `useLLVM` on all counts. (See
     # https://clang.llvm.org/docs/Toolchain.html for all the axes one might
     # break `useLLVM` into.)
-    + optionalString (isClang && gccForLibs != null && targetPlatform.isLinux && !(stdenv.targetPlatform.useLLVM or false)) ''
+    + optionalString (isClang
+                      && targetPlatform.isLinux
+                      && !(stdenv.targetPlatform.useAndroidPrebuilt or false)
+                      && !(stdenv.targetPlatform.useLLVM or false)
+                      && gccForLibs != null) ''
       echo "--gcc-toolchain=${gccForLibs}" >> $out/nix-support/cc-cflags
     ''
 
@@ -352,7 +376,7 @@ stdenv.mkDerivation {
       done
     ''
     + optionalString (libcxx.isLLVM or false) (''
-      echo "-isystem ${libcxx}/include/c++/v1" >> $out/nix-support/libcxx-cxxflags
+      echo "-isystem ${lib.getDev libcxx}/include/c++/v1" >> $out/nix-support/libcxx-cxxflags
       echo "-stdlib=libc++" >> $out/nix-support/libcxx-ldflags
     '' + lib.optionalString stdenv.targetPlatform.isLinux ''
       echo "-lc++abi" >> $out/nix-support/libcxx-ldflags
@@ -386,7 +410,7 @@ stdenv.mkDerivation {
       echo "$ccLDFlags" >> $out/nix-support/cc-ldflags
       echo "$ccCFlags" >> $out/nix-support/cc-cflags
     '' + optionalString (targetPlatform.isDarwin && (libcxx != null) && (cc.isClang or false)) ''
-      echo " -L${libcxx}/lib" >> $out/nix-support/cc-ldflags
+      echo " -L${lib.getLib libcxx}/lib" >> $out/nix-support/cc-ldflags
     ''
 
     ##
@@ -414,14 +438,16 @@ stdenv.mkDerivation {
     # Always add -march based on cpu in triple. Sometimes there is a
     # discrepency (x86_64 vs. x86-64), so we provide an "arch" arg in
     # that case.
-    + optionalString ((targetPlatform ? gcc.arch) &&
+    # TODO: aarch64-darwin has mcpu incompatible with gcc
+    + optionalString ((targetPlatform ? gcc.arch) && (isClang || !(stdenv.isDarwin && stdenv.isAarch64)) &&
                       isGccArchSupported targetPlatform.gcc.arch) ''
       echo "-march=${targetPlatform.gcc.arch}" >> $out/nix-support/cc-cflags-before
     ''
 
     # -mcpu is not very useful. You should use mtune and march
     # instead. It’s provided here for backwards compatibility.
-    + optionalString (targetPlatform ? gcc.cpu) ''
+    # TODO: aarch64-darwin has mcpu incompatible with gcc
+    + optionalString ((targetPlatform ? gcc.cpu) && (isClang || !(stdenv.isDarwin && stdenv.isAarch64))) ''
       echo "-mcpu=${targetPlatform.gcc.cpu}" >> $out/nix-support/cc-cflags-before
     ''
 
@@ -437,6 +463,9 @@ stdenv.mkDerivation {
     + optionalString (targetPlatform ? gcc.mode) ''
       echo "-mmode=${targetPlatform.gcc.mode}" >> $out/nix-support/cc-cflags-before
     ''
+    + optionalString (targetPlatform ? gcc.thumb) ''
+      echo "-m${if targetPlatform.gcc.thumb then "thumb" else "arm"}" >> $out/nix-support/cc-cflags-before
+    ''
     + optionalString (targetPlatform ? gcc.tune &&
                       isGccArchSupported targetPlatform.gcc.tune) ''
       echo "-mtune=${targetPlatform.gcc.tune}" >> $out/nix-support/cc-cflags-before
@@ -446,11 +475,13 @@ stdenv.mkDerivation {
     + optionalString hostPlatform.isCygwin ''
       hardening_unsupported_flags+=" pic"
     '' + optionalString targetPlatform.isMinGW ''
-      hardening_unsupported_flags+=" stackprotector"
+      hardening_unsupported_flags+=" stackprotector fortify"
     '' + optionalString targetPlatform.isAvr ''
       hardening_unsupported_flags+=" stackprotector pic"
     '' + optionalString (targetPlatform.libc == "newlib") ''
       hardening_unsupported_flags+=" stackprotector fortify pie pic"
+    '' + optionalString (targetPlatform.libc == "musl" && targetPlatform.isx86_32) ''
+      hardening_unsupported_flags+=" stackprotector"
     '' + optionalString targetPlatform.isNetBSD ''
       hardening_unsupported_flags+=" stackprotector fortify"
     '' + optionalString cc.langAda or false ''
@@ -465,6 +496,14 @@ stdenv.mkDerivation {
       for isa in avr5 avr3 avr4 avr6 avr25 avr31 avr35 avr51 avrxmega2 avrxmega4 avrxmega5 avrxmega6 avrxmega7 tiny-stack; do
         echo "-B${getLib libc}/avr/lib/$isa" >> $out/nix-support/libc-crt1-cflags
       done
+    ''
+
+    + optionalString stdenv.targetPlatform.isDarwin ''
+        echo "-arch ${targetPlatform.darwinArch}" >> $out/nix-support/cc-cflags
+    ''
+
+    + optionalString targetPlatform.isAndroid ''
+      echo "-D__ANDROID_API__=${targetPlatform.sdkVer}" >> $out/nix-support/cc-cflags
     ''
 
     # There are a few tools (to name one libstdcxx5) which do not work

@@ -23,9 +23,12 @@ let
         mkdir -p $out/${gimp.targetScriptDir}/${name};
         for p in "$@"; do cp "$p" -r $out/${gimp.targetScriptDir}/${name}; done
       }
-      installPlugins(){
-        mkdir -p $out/${gimp.targetPluginDir}/${name};
-        for p in "$@"; do cp "$p" -r $out/${gimp.targetPluginDir}/${name}; done
+      installPlugin() {
+        # The base name of the first argument is the plug-in name and the main executable.
+        # GIMP only allows a single plug-in per directory:
+        # https://gitlab.gnome.org/GNOME/gimp/-/commit/efae55a73e98389e38fa0e59ebebcda0abe3ee96
+        pluginDir=$out/${gimp.targetPluginDir}/$(basename "$1")
+        install -Dt "$pluginDir" "$@"
       }
     '';
 
@@ -35,7 +38,7 @@ let
   }
   // attrs
   // {
-      name = "${gimp.name}-plugin-${name}";
+      name = "${gimp.pname}-plugin-${name}";
       buildInputs = [
         gimp
         gimp.gtk
@@ -50,8 +53,13 @@ let
   );
 
   scriptDerivation = {src, ...}@attrs : pluginDerivation ({
-    phases = [ "extraLib" "installPhase" ];
-    installPhase = "installScripts ${src}";
+    prePhases = "extraLib";
+    dontUnpack = true;
+    installPhase = ''
+      runHook preInstall
+      installScripts ${src}
+      runHook postInstall
+    '';
   } // attrs);
 in
 {
@@ -78,20 +86,58 @@ in
     };
   };
 
+  farbfeld = pluginDerivation rec {
+    pname = "farbfeld";
+    version = "unstable-2019-08-12";
+
+    src = fetchFromGitHub {
+      owner = "ids1024";
+      repo = "gimp-farbfeld";
+      rev = "5feacebf61448bd3c550dda03cd08130fddc5af4";
+      sha256 = "1vmw7k773vrndmfffj0m503digdjmkpcqy2r3p3i5x0qw9vkkkc6";
+    };
+
+    installPhase = ''
+      installPlugin farbfeld
+    '';
+
+    meta = {
+      description = "Gimp plug-in for the farbfeld image format";
+      homepage = "https://github.com/ids1024/gimp-farbfeld";
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [ sikmir ];
+    };
+  };
+
   fourier = pluginDerivation rec {
     /* menu:
        Filters/Generic/FFT Forward
        Filters/Generic/FFT Inverse
     */
-    name = "fourier-0.4.3";
-    buildInputs = with pkgs; [ fftw ];
+    pname = "fourier";
+    version = "0.4.3";
 
     src = fetchurl {
-      url = "https://www.lprp.fr/files/old-web/soft/gimp/${name}.tar.gz";
+      url = "https://www.lprp.fr/files/old-web/soft/gimp/${pname}-${version}.tar.gz";
       sha256 = "0mf7f8vaqs2madx832x3kcxw3hv3w3wampvzvaps1mkf2kvrjbsn";
     };
 
-    installPhase = "installPlugins fourier";
+    buildInputs = with pkgs; [ fftw ];
+
+    postPatch = ''
+      substituteInPlace Makefile --replace '$(GCC)' '$(CC)'
+
+      # The tarball contains a prebuilt binary.
+      make clean
+    '';
+
+    installPhase = ''
+      runHook preInstall
+
+      installPlugin fourier
+
+      runHook postInstall
+    '';
 
     meta = with lib; {
       description = "GIMP plug-in to do the fourier transform";
@@ -124,15 +170,19 @@ in
   };
 
   texturize = pluginDerivation {
-    name = "texturize-2.2.2017-07-28";
+    pname = "texturize";
+    version = "2.2+unstable=2021-12-03";
     src = fetchFromGitHub {
       owner = "lmanul";
       repo = "gimp-texturize";
-      rev = "de4367f71e40fe6d82387eaee68611a80a87e0e1";
-      sha256 = "1zzvbczly7k456c0y6s92a1i8ph4ywmbvdl8i4rcc29l4qd2z8fw";
+      rev = "9ceff0d411cda018108e5477320669b8d00d811e";
+      sha256 = "haYS0K3oAPlHtHB8phOCX5/gtWq9uiVQhG5ZhAFX0t0=";
     };
-    installPhase = "installPlugins src/texturize";
-    meta.broken = true; # https://github.com/lmanul/gimp-texturize/issues/1
+    nativeBuildInputs = with pkgs; [
+      meson
+      ninja
+      gettext
+    ];
   };
 
   waveletSharpen = pluginDerivation {
@@ -145,7 +195,7 @@ in
       url = "https://github.com/pixlsus/registry.gimp.org_static/raw/master/registry.gimp.org/files/wavelet-sharpen-0.1.2.tar.gz";
       sha256 = "0vql1k67i21g5ivaa1jh56rg427m0icrkpryrhg75nscpirfxxqw";
     };
-    installPhase = "installPlugins src/wavelet-sharpen"; # TODO translations are not copied .. How to do this on nix?
+    installPhase = "installPlugin src/wavelet-sharpen"; # TODO translations are not copied .. How to do this on nix?
   };
 
   lqrPlugin = pluginDerivation rec {
@@ -181,7 +231,7 @@ in
     buildInputs = with pkgs; [ lensfun gexiv2 ];
 
     installPhase = "
-      installPlugins gimp-lensfun
+      installPlugin gimp-lensfun
     ";
 
     meta = {

@@ -1,14 +1,14 @@
-{ lib, stdenv, mkDerivation, fetchFromGitHub, qmake, qttools, qttranslations, substituteAll }:
+{ lib, stdenv, fetchFromGitHub, qmake, qttools, qttranslations, qtlocation, wrapQtAppsHook, substituteAll }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "gpxsee";
-  version = "8.3";
+  version = "10.1";
 
   src = fetchFromGitHub {
     owner = "tumic0";
     repo = "GPXSee";
     rev = version;
-    sha256 = "sha256-D58Q9qZ7x2j//pOQa+oIgVK/9F0du2FUoZprSFEKViU=";
+    sha256 = "sha256-tU37dKBxzz+sxe4R7xbscpD28if8QOm6xpZEOdhK8lE=";
   };
 
   patches = (substituteAll {
@@ -17,16 +17,17 @@ mkDerivation rec {
     inherit qttranslations;
   });
 
-  nativeBuildInputs = [ qmake qttools ];
+  buildInputs = [ qtlocation ];
+
+  nativeBuildInputs = [ qmake qttools wrapQtAppsHook ];
 
   preConfigure = ''
     lrelease gpxsee.pro
   '';
 
-  postInstall = with stdenv; lib.optionalString isDarwin ''
+  postInstall = lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/Applications
     mv GPXSee.app $out/Applications
-    wrapQtApp $out/Applications/GPXSee.app/Contents/MacOS/GPXSee
   '';
 
   meta = with lib; {
@@ -39,6 +40,6 @@ mkDerivation rec {
     changelog = "https://build.opensuse.org/package/view_file/home:tumic:GPXSee/gpxsee/gpxsee.changes";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ womfoo sikmir ];
-    platforms = with platforms; linux ++ darwin;
+    platforms = platforms.unix;
   };
 }

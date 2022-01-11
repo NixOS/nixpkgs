@@ -1,9 +1,11 @@
 { lib, stdenv, fetchurl, unzip, perl, libX11, libXpm, gpm, ncurses, slang }:
 
 stdenv.mkDerivation rec {
-  name = "fte-0.50.02";
+  pname = "fte";
+  version = "0.50.02";
 
-  buildInputs = [ unzip perl libX11 libXpm gpm ncurses slang ];
+  nativeBuildInputs = [ unzip ];
+  buildInputs = [ perl libX11 libXpm gpm ncurses slang ];
 
   ftesrc = fetchurl {
     url = "mirror://sourceforge/fte/fte-20110708-src.zip";

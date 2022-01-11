@@ -12,6 +12,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     };
     mutable = { ... }: {
       users.mutableUsers = true;
+      users.users.dry-test.isNormalUser = true;
     };
   };
 
@@ -41,5 +42,32 @@ import ./make-test-python.nix ({ pkgs, ...} : {
             "${mutableSystem}/bin/switch-to-configuration test"
         )
         assert "/run/wrappers/" in machine.succeed("which passwd")
+
+    with subtest("dry-activation does not change files"):
+        machine.succeed('test -e /home/dry-test')  # home was created
+        machine.succeed('rm -rf /home/dry-test')
+
+        files_to_check = ['/etc/group',
+                          '/etc/passwd',
+                          '/etc/shadow',
+                          '/etc/subuid',
+                          '/etc/subgid',
+                          '/var/lib/nixos/uid-map',
+                          '/var/lib/nixos/gid-map',
+                          '/var/lib/nixos/declarative-groups',
+                          '/var/lib/nixos/declarative-users'
+                         ]
+        expected_hashes = {}
+        expected_stats = {}
+        for file in files_to_check:
+            expected_hashes[file] = machine.succeed(f"sha256sum {file}")
+            expected_stats[file] = machine.succeed(f"stat {file}")
+
+        machine.succeed("/run/current-system/bin/switch-to-configuration dry-activate")
+
+        machine.fail('test -e /home/dry-test')  # home was not recreated
+        for file in files_to_check:
+            assert machine.succeed(f"sha256sum {file}") == expected_hashes[file]
+            assert machine.succeed(f"stat {file}") == expected_stats[file]
   '';
 })

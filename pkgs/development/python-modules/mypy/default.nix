@@ -1,54 +1,60 @@
-{ lib, stdenv, fetchFromGitHub, buildPythonPackage, typed-ast, psutil, isPy3k
-, mypy-extensions
-, typing-extensions
+{ lib
+, stdenv
+, fetchFromGitHub
 , fetchpatch
+, buildPythonPackage
+, mypy-extensions
+, python
+, pythonOlder
+, typed-ast
+, typing-extensions
+, tomli
+, types-typed-ast
 }:
+
 buildPythonPackage rec {
   pname = "mypy";
-  version = "0.790";
-  disabled = !isPy3k;
+  version = "0.931";
+  disabled = pythonOlder "3.6";
 
-  # Fetch 0.790 from GitHub temporarily because mypyc.analysis is missing from
-  # the Pip package (see also https://github.com/python/mypy/issues/9584). It
-  # should be possible to move back to Pypi for the next release.
   src = fetchFromGitHub {
     owner = "python";
-    repo = pname;
+    repo = "mypy";
     rev = "v${version}";
-    sha256 = "0zq3lpdf9hphcklk40wz444h8w3dkhwa12mqba5j9lmg11klnhz7";
-    fetchSubmodules = true;
+    sha256 = "1v83flrdxh8grcp40qw04q4hzjflih9xwib64078vsxv2w36f817";
   };
 
-  propagatedBuildInputs = [ typed-ast psutil mypy-extensions typing-extensions ];
+  patches = [
+    # FIXME: Remove patch after upstream has decided the proper solution.
+    #        https://github.com/python/mypy/pull/11143
+    (fetchpatch {
+      url = "https://github.com/python/mypy/commit/f1755259d54330cd087cae763cd5bbbff26e3e8a.patch";
+      sha256 = "sha256-5gPahX2X6+/qUaqDQIGJGvh9lQ2EDtks2cpQutgbOHk=";
+    })
+  ];
+
+  buildInputs = [
+    types-typed-ast
+  ];
+
+  propagatedBuildInputs = [
+    mypy-extensions
+    tomli
+    typed-ast
+    typing-extensions
+  ];
 
   # Tests not included in pip package.
   doCheck = false;
 
   pythonImportsCheck = [
     "mypy"
-    "mypy.types"
     "mypy.api"
     "mypy.fastparse"
     "mypy.report"
+    "mypy.types"
     "mypyc"
     "mypyc.analysis"
-  ];
-
-  # These three patches are required to make compilation with mypyc work for
-  # 0.790, see also https://github.com/python/mypy/issues/9584.
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/python/mypy/commit/f6522ae646a8d87ce10549f29fcf961dc014f154.patch";
-      sha256 = "0d3jp4d0b7vdc0prk07grhajsy7x3wcynn2xysnszawiww93bfrh";
-    })
-    (fetchpatch {
-      url = "https://github.com/python/mypy/commit/acd603496237a78b109ca9d89991539633cbbb99.patch";
-      sha256 = "0ry1rxpz2ws7zzrmq09pra9dlzxb84zhs8kxwf5xii1k1bgmrljr";
-    })
-    (fetchpatch {
-      url = "https://github.com/python/mypy/commit/81818b23b5d53f31caf3515d6f0b54e3c018d790.patch";
-      sha256 = "002y24kfscywkw4mz9lndsps543j4xhr2kcnfbrqr4i0yxlvdbca";
-    })
   ];
 
   # Compile mypy with mypyc, which makes mypy about 4 times faster. The compiled
@@ -56,10 +62,13 @@ buildPythonPackage rec {
   # is64bit: unfortunately the build would exhaust all possible memory on i686-linux.
   MYPY_USE_MYPYC = stdenv.buildPlatform.is64bit;
 
+  # when testing reduce optimisation level to drastically reduce build time
+  MYPYC_OPT_LEVEL = 1;
+
   meta = with lib; {
     description = "Optional static typing for Python";
-    homepage    = "http://www.mypy-lang.org";
-    license     = licenses.mit;
-    maintainers = with maintainers; [ martingms lnl7 ];
+    homepage = "http://www.mypy-lang.org";
+    license = licenses.mit;
+    maintainers = with maintainers; [ martingms lnl7 SuperSandro2000 ];
   };
 }

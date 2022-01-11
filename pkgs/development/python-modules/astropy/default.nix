@@ -1,6 +1,6 @@
 { lib
 , fetchPypi
-, setuptools_scm
+, setuptools-scm
 , buildPythonPackage
 , isPy3k
 , cython
@@ -15,17 +15,17 @@
 
 buildPythonPackage rec {
   pname = "astropy";
-  version = "4.2";
+  version = "4.3.1";
   format = "pyproject";
 
   disabled = !isPy3k; # according to setup.py
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2c194f8a429b8399de64a413a06881ea49f0525cabaa2d78fc132b9e970adc6a";
+    sha256 = "sha256-LTlRIjtOt/No/K2Mg0DSc3TF2OO2NaY2J1rNs481zVE=";
   };
 
-  nativeBuildInputs = [ setuptools_scm astropy-helpers astropy-extension-helpers cython jinja2 ];
+  nativeBuildInputs = [ setuptools-scm astropy-helpers astropy-extension-helpers cython jinja2 ];
   propagatedBuildInputs = [ numpy pyerfa ];
   checkInputs = [ pytest pytest-astropy ];
 

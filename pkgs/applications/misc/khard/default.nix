@@ -1,4 +1,4 @@
-{ lib, glibcLocales, python3 }:
+{ lib, python3 }:
 
 python3.pkgs.buildPythonApplication rec {
   version = "0.17.0";
@@ -9,13 +9,17 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "062nv4xkfsjc11k9m52dh6xjn9z68a4a6x1s8z05wwv4jbp1lkhn";
   };
 
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  nativeBuildInputs = [
+    python3.pkgs.setuptools-scm
+  ];
+
   propagatedBuildInputs = with python3.pkgs; [
     atomicwrites
     configobj
-    vobject
-    ruamel_yaml
-    ruamel_base
+    ruamel-yaml
     unidecode
+    vobject
   ];
 
   postInstall = ''
@@ -26,6 +30,8 @@ python3.pkgs.buildPythonApplication rec {
     # see https://github.com/scheibler/khard/issues/263
     export COLUMNS=80
   '';
+
+  pythonImportsCheck = [ "khard" ];
 
   meta = {
     homepage = "https://github.com/scheibler/khard";

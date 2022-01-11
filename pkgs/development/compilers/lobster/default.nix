@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lobster";
-  version = "unstable-2020-10-04";
+  version = "2021.3";
 
   src = fetchFromGitHub {
     owner = "aardappel";
-    repo = pname;
-    rev = "4c5e78f021ce9d06592fb3a66388e5e31fac1adb";
-    sha256 = "1wnbc8kr1dyfs53nlcxah22ghphmazzrlcj9z47cgkdsj1qfy84x";
+    repo = "lobster";
+    rev = "v${version}";
+    sha256 = "sha256-ENs2Jy2l6fogZdCSaIyfV9wQm57qaZfx5HVHOnQBrRk=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -44,15 +44,14 @@ stdenv.mkDerivation rec {
       xorg.libXext
     ];
 
-  preConfigure = "cd dev";
+  preConfigure = ''
+    cd dev
+  '';
 
-  passthru = {
-    tests.can-run-hello-world = callPackage ./test-can-run-hello-world.nix {};
-    updateScript = unstableGitUpdater { };
-  };
+  passthru.tests.can-run-hello-world = callPackage ./test-can-run-hello-world.nix {};
 
   meta = with lib; {
-    homepage = "http://strlen.com/lobster";
+    homepage = "https://strlen.com/lobster/";
     description = "The Lobster programming language";
     longDescription = ''
       Lobster is a programming language that tries to combine the advantages of

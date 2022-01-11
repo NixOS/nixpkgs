@@ -1,29 +1,35 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , rustPlatform
 , fetchFromGitHub
-, IOKit
 , Security
+, DiskArbitration
+, Foundation
 }:
 
-rustPlatform.buildRustPackage rec {
+let version = "0.23.1";
+in
+rustPlatform.buildRustPackage {
   pname = "meilisearch";
-  version = "0.9.0";
-
+  inherit version;
   src = fetchFromGitHub {
     owner = "meilisearch";
     repo = "MeiliSearch";
     rev = "v${version}";
-    sha256 = "00i5vsbcyrbsvhr5n1b3pxa87v0kfw6pg931i2kzyf4wh021k6sw";
+    sha256 = "sha256-4F7noByC9ZgqYwPfkm8VE15QU2jbBvUAH4Idxa+J+Aw=";
   };
-
-  cargoSha256 = "0axjygk8a7cykpa5skk4a6mkm8rndkr76l10h3z3gjdc88b17qcz";
-
-  buildInputs = lib.optionals stdenv.isDarwin [ IOKit Security ];
-
+  cargoPatches = [
+    # feature mini-dashboard tries to download a file from the internet
+    # feature analitycs should be opt-in
+    ./remove-default-feature.patch
+  ];
+  cargoSha256 = "sha256-dz+1IQZRSeMEagI2dnOtR3A8prg4UZ2Om0pd1BUhuhE=";
+  buildInputs = lib.optionals stdenv.isDarwin [ Security DiskArbitration Foundation ];
   meta = with lib; {
-    description = "Ultra relevant and instant full-text search API";
-    homepage = "https://meilisearch.com/";
+    description = "Powerful, fast, and an easy to use search engine ";
+    homepage = "https://docs.meilisearch.com/";
     license = licenses.mit;
-    maintainers = with maintainers; [ Br1ght0ne ];
+    maintainers = with maintainers; [ happysalada ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" ];
   };
 }

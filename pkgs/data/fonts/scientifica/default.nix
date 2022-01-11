@@ -1,25 +1,25 @@
 { lib, fetchurl }:
 
 let
-  version = "2.1";
+  version = "2.3";
 in fetchurl rec {
   name = "scientifica-${version}";
 
-  url = "https://github.com/NerdyPepper/scientifica/releases/download/v${version}/scientifica-v${version}.tar";
+  url = "https://github.com/NerdyPepper/scientifica/releases/download/v${version}/scientifica.tar";
 
   downloadToTemp = true;
 
   recursiveHash = true;
 
-  sha256 = "081faa48d6g86pacmgjqa96in72rjldavnwxq6bdq2br33h3qwrz";
+  sha256 = "sha256-pVWkj/2lFpmWk0PPDrIMU4Gey7/m/9tzUsuD3ZDUAdc=";
 
   postFetch = ''
-    tar xvf $downloadedFile
+    tar xf $downloadedFile
     mkdir -p $out/share/fonts/truetype
     mkdir -p $out/share/fonts/misc
-    cp scientifica/ttf/*.ttf $out/share/fonts/truetype
-    cp scientifica/otb/*.otb $out/share/fonts/misc
-    cp scientifica/bdf/*.bdf $out/share/fonts/misc
+    install scientifica/ttf/*.ttf $out/share/fonts/truetype
+    install scientifica/otb/*.otb $out/share/fonts/misc
+    install scientifica/bdf/*.bdf $out/share/fonts/misc
   '';
 
   meta = with lib; {

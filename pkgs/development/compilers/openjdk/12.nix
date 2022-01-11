@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, bash, pkg-config, autoconf, cpio, file, which, unzip
-, zip, perl, cups, freetype, alsaLib, libjpeg, giflib, libpng, zlib, lcms2
+, zip, perl, cups, freetype, alsa-lib, libjpeg, giflib, libpng, zlib, lcms2
 , libX11, libICE, libXrender, libXext, libXt, libXtst, libXi, libXinerama
 , libXcursor, libXrandr, fontconfig, openjdk11, fetchpatch
 , setJavaClassPath
@@ -22,9 +22,9 @@ let
       sha256 = "1ndlxmikyy298z7lqpr1bd0zxq7yx6xidj8y3c8mw9m9fy64h9c7";
     };
 
-    nativeBuildInputs = [ pkg-config autoconf ];
+    nativeBuildInputs = [ pkg-config autoconf unzip ];
     buildInputs = [
-      cpio file which unzip zip perl zlib cups freetype alsaLib libjpeg giflib
+      cpio file which zip perl zlib cups freetype alsa-lib libjpeg giflib
       libpng zlib lcms2 libX11 libICE libXrender libXext libXtst libXt libXtst
       libXi libXinerama libXcursor libXrandr fontconfig openjdk11
     ] ++ lib.optionals (!headless && enableGnome2) [
@@ -82,6 +82,12 @@ let
     ] ++ lib.optionals (!headless && enableGnome2) [
       "-lgtk-3" "-lgio-2.0" "-lgnomevfs-2" "-lgconf-2"
     ];
+
+    # -j flag is explicitly rejected by the build system:
+    #     Error: 'make -jN' is not supported, use 'make JOBS=N'
+    # Note: it does not make build sequential. Build system
+    # still runs in parallel.
+    enableParallelBuilding = false;
 
     buildFlags = [ "all" ];
 
@@ -145,13 +151,7 @@ let
 
     disallowedReferences = [ openjdk11 ];
 
-    meta = with lib; {
-      homepage = "http://openjdk.java.net/";
-      license = licenses.gpl2;
-      description = "The open-source Java Development Kit";
-      maintainers = with maintainers; [ edwtjo ];
-      platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" "armv7l-linux" "armv6l-linux" ];
-    };
+    meta = import ./meta.nix lib;
 
     passthru = {
       architecture = "";

@@ -1,37 +1,60 @@
-{ buildPythonPackage
+{ lib
+, amqtt
+, buildPythonPackage
 , fetchFromGitHub
-, hbmqtt
-, lib
 , paho-mqtt
-, poetry
+, poetry-core
 , pytest-asyncio
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "roombapy";
-  version = "1.6.2-1";
+  version = "1.6.5";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pschmitt";
     repo = "roombapy";
     rev = version;
-    sha256 = "14k7bys479xwpa4alpdwphzmxm3x8kc48nfqnshn1wj94vyxc425";
+    sha256 = "sha256-Xjeh29U+FCzI5n/i5s6wC0B88Ktmb8pnNDdOzCiKWi4=";
   };
 
-  format = "pyproject";
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
-  nativeBuildInputs = [ poetry ];
-  propagatedBuildInputs = [ paho-mqtt ];
+  propagatedBuildInputs = [
+    paho-mqtt
+  ];
 
-  checkInputs = [ hbmqtt pytest-asyncio pytestCheckHook ];
-  pytestFlagsArray = [ "tests/" "--ignore=tests/test_discovery.py" ];
-  pythonImportsCheck = [ "roombapy" ];
+  checkInputs = [
+    amqtt
+    pytest-asyncio
+    pytestCheckHook
+  ];
+
+  disabledTestPaths = [
+    # Requires network access
+    "tests/test_discovery.py"
+  ];
+
+  disabledTests = [
+    # Test want to connect to a local MQTT broker
+    "test_roomba_connect"
+  ];
+
+  pythonImportsCheck = [
+    "roombapy"
+  ];
 
   meta = with lib; {
-    homepage = "https://github.com/pschmitt/roombapy";
     description = "Python program and library to control Wi-Fi enabled iRobot Roombas";
-    maintainers = with maintainers; [ justinas ];
+    homepage = "https://github.com/pschmitt/roombapy";
     license = licenses.mit;
+    maintainers = with maintainers; [ justinas ];
   };
 }

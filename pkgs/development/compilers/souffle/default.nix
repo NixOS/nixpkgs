@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub, fetchpatch
 , perl, ncurses, zlib, sqlite, libffi
 , autoreconfHook, mcpp, bison, flex, doxygen, graphviz
 , makeWrapper
@@ -19,6 +19,16 @@ stdenv.mkDerivation rec {
     sha256 = "1fa6yssgndrln8qbbw2j7j199glxp63irfrz1c2y424rq82mm2r5";
   };
 
+  patches = [
+    # Pull pending unstream inclusion fix for ncurses-6.3:
+    #  https://github.com/souffle-lang/souffle/pull/2134
+    (fetchpatch {
+      name = "ncurses-6.3.patch";
+      url = "https://github.com/souffle-lang/souffle/commit/9e4bdf86d051ef2e1b1a1be64aff7e498fd5dd20.patch";
+      sha256 = "0jw1b6qfdf49dx2qlzn1b2yzrgpnkil4w9y3as1m28w8ws7iphpa";
+    })
+  ];
+
   nativeBuildInputs = [ autoreconfHook bison flex mcpp doxygen graphviz makeWrapper perl ];
   buildInputs = [ ncurses zlib sqlite libffi ];
 
@@ -29,7 +39,7 @@ stdenv.mkDerivation rec {
 
   # see 565a8e73e80a1bedbb6cc037209c39d631fc393f and parent commits upstream for
   # Wno-error fixes
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace ./src/Makefile.am \
       --replace '-Werror' '-Werror -Wno-error=deprecated -Wno-error=other'
 

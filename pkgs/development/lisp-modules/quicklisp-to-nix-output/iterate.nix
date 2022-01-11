@@ -1,7 +1,8 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
   baseName = "iterate";
-  version = "20200610-git";
+  version = "release-b0f9a9c6-git";
 
   parasites = [ "iterate/tests" ];
 
@@ -10,8 +11,8 @@ rec {
   deps = [ ];
 
   src = fetchurl {
-    url = "http://beta.quicklisp.org/archive/iterate/2020-06-10/iterate-20200610-git.tgz";
-    sha256 = "0xz3v321b8zgjsgak432frs0gmpr2n24sf5gq97qnqvwqfn4infb";
+    url = "http://beta.quicklisp.org/archive/iterate/2021-05-31/iterate-release-b0f9a9c6-git.tgz";
+    sha256 = "1fqk0iaqg7xjwhdr8q05birlpwh4zvmlranmsmfps3wmldccc4ck";
   };
 
   packageName = "iterate";
@@ -21,8 +22,8 @@ rec {
 }
 /* (SYSTEM iterate DESCRIPTION
     Jonathan Amsterdam's iterator/gatherer/accumulator facility SHA256
-    0xz3v321b8zgjsgak432frs0gmpr2n24sf5gq97qnqvwqfn4infb URL
-    http://beta.quicklisp.org/archive/iterate/2020-06-10/iterate-20200610-git.tgz
-    MD5 289e02704d6312910d07601bc563f0a5 NAME iterate FILENAME iterate DEPS NIL
-    DEPENDENCIES NIL VERSION 20200610-git SIBLINGS NIL PARASITES
+    1fqk0iaqg7xjwhdr8q05birlpwh4zvmlranmsmfps3wmldccc4ck URL
+    http://beta.quicklisp.org/archive/iterate/2021-05-31/iterate-release-b0f9a9c6-git.tgz
+    MD5 0b2661e9b8195f3e5891aa14601e5a69 NAME iterate FILENAME iterate DEPS NIL
+    DEPENDENCIES NIL VERSION release-b0f9a9c6-git SIBLINGS NIL PARASITES
     (iterate/tests)) */

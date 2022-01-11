@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , rustPlatform
-, fetchpatch
 , fetchFromGitHub
 , pkg-config
 , dbus
@@ -11,33 +10,27 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tiny";
-  version = "0.8.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "osa1";
     repo = pname;
     rev = "v${version}";
-    sha256 = "07a50shv6k4fwl2gmv4j0maxaqqkjpwwmqkxkqs0gvx38lc5f7m7";
+    sha256 = "177d1x4z0mh0p7c5ldq70cn1j3pac50d8cil2ni50hl49c3x6yy1";
   };
 
-  cargoSha256 = "009jqizj4qg1bqslna35myxcark40hwlqsz58fbps9nsgp1i0hq2";
-
-  cargoPatches = [
-    # Fix Cargo.lock version. Remove with the next release.
-    (fetchpatch {
-      url = "https://github.com/osa1/tiny/commit/b1caf48a6399dad8875de1d965d1ad445e49585d.patch";
-      sha256 = "1zkjhx94nwmd69cfwwwzg51ipcwq01wyvgsmn0vq7iaa2h0d286i";
-    })
-  ];
+  cargoSha256 = "05q3f1wp48mwkz8n0102rwb6jzrgpx3dlbxzf3zcw8r1mblgzim1";
 
   nativeBuildInputs = lib.optional stdenv.isLinux pkg-config;
   buildInputs = lib.optionals stdenv.isLinux [ dbus openssl ] ++ lib.optional stdenv.isDarwin Foundation;
 
+  buildFeatures = lib.optional stdenv.isLinux "desktop-notifications";
+
   meta = with lib; {
     description = "A console IRC client";
     homepage = "https://github.com/osa1/tiny";
-    changelog = "https://github.com/osa1/tiny/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/osa1/tiny/raw/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ Br1ght0ne ];
+    maintainers = with maintainers; [ Br1ght0ne vyp ];
   };
 }

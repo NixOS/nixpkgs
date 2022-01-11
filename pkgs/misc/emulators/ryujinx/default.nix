@@ -1,111 +1,83 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl, makeWrapper, makeDesktopItem, linkFarmFromDrvs
-, dotnet-sdk_5, dotnetPackages, dotnetCorePackages, cacert
-, SDL2, libX11, ffmpeg, openal, libsoundio
+{ lib, buildDotnetModule, fetchFromGitHub, makeDesktopItem, copyDesktopItems
+, libX11, libgdiplus, ffmpeg
+, SDL2_mixer, openal, libsoundio, sndio, pulseaudio
 , gtk3, gobject-introspection, gdk-pixbuf, wrapGAppsHook
 }:
 
-let
-  runtimeDeps = [
-    SDL2
-    gtk3
-    libX11
-    ffmpeg
-    openal
-    libsoundio
-  ];
-in stdenv.mkDerivation rec {
+buildDotnetModule rec {
   pname = "ryujinx";
-  version = "1.0.6498"; # Versioning is based off of the official appveyor builds: https://ci.appveyor.com/project/gdkchan/ryujinx
+  version = "1.0.7105"; # Versioning is based off of the official appveyor builds: https://ci.appveyor.com/project/gdkchan/ryujinx
 
   src = fetchFromGitHub {
     owner = "Ryujinx";
     repo = "Ryujinx";
-    rev = "67033ed8e05eb70860ac6af2b83deab0256c11eb";
-    sha256 = "1lg0cybbrf0x3jl10jwdwcg1zyhxsqfdnwnsvdm1lah75xg15ymw";
+    rev = "b9d83cc97ee1cb8c60d9b01c162bab742567fe6e";
+    sha256 = "0plchh8f9xhhza1wfw3ys78f0pa1bh3898fqhfhcc0kxb39px9is";
   };
 
-  nativeBuildInputs = [ dotnet-sdk_5 dotnetPackages.Nuget cacert makeWrapper wrapGAppsHook gobject-introspection gdk-pixbuf ];
+  projectFile = "Ryujinx.sln";
+  nugetDeps = ./deps.nix;
 
-  nugetDeps = linkFarmFromDrvs "${pname}-nuget-deps" (import ./deps.nix {
-    fetchNuGet = { name, version, sha256 }: fetchurl {
-      name = "nuget-${name}-${version}.nupkg";
-      url = "https://www.nuget.org/api/v2/package/${name}/${version}";
-      inherit sha256;
-    };
-  });
+  dotnetFlags = [ "/p:ExtraDefineConstants=DISABLE_UPDATER" ];
+
+  # TODO: Add the headless frontend. Currently errors on the following:
+  # System.Exception: SDL2 initlaization failed with error "No available video device"
+  executables = [ "Ryujinx" ];
+
+  nativeBuildInputs = [
+    copyDesktopItems
+    wrapGAppsHook
+    gobject-introspection
+    gdk-pixbuf
+  ];
+
+  runtimeDeps = [
+    gtk3
+    libX11
+    libgdiplus
+    ffmpeg
+    SDL2_mixer
+    openal
+    libsoundio
+    sndio
+    pulseaudio
+  ];
 
   patches = [
     ./log.patch # Without this, Ryujinx attempts to write logs to the nix store. This patch makes it write to "~/.config/Ryujinx/Logs" on Linux.
-    ./disable-updater.patch # This disables the auto-updater, which does not work as it attempts to modify the nix store.
   ];
 
-  configurePhase = ''
-    runHook preConfigure
+  preInstall = ''
+    # TODO: fix this hack https://github.com/Ryujinx/Ryujinx/issues/2349
+    mkdir -p $out/lib/sndio-6
+    ln -s ${sndio}/lib/libsndio.so $out/lib/sndio-6/libsndio.so.6
 
-    export HOME=$(mktemp -d)
-    export DOTNET_CLI_TELEMETRY_OPTOUT=1
-    export DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1
-
-    nuget sources Add -Name nixos -Source "$PWD/nixos"
-    nuget init "$nugetDeps" "$PWD/nixos"
-
-    # FIXME: https://github.com/NuGet/Home/issues/4413
-    mkdir -p $HOME/.nuget/NuGet
-    cp $HOME/.config/NuGet/NuGet.Config $HOME/.nuget/NuGet
-
-    dotnet restore --source "$PWD/nixos" Ryujinx.sln
-
-    runHook postConfigure
-  '';
-
-  buildPhase = ''
-    runHook preBuild
-    dotnet build Ryujinx.sln \
-      --no-restore \
-      --configuration Release \
-      -p:Version=${version}
-    runHook postBuild
-  '';
-
-  installPhase = ''
-    runHook preInstall
-
-    dotnet publish Ryujinx.sln \
-      --no-build \
-      --configuration Release \
-      --no-self-contained \
-      --output $out/lib/ryujinx
-    shopt -s extglob
-
-    makeWrapper $out/lib/ryujinx/Ryujinx $out/bin/Ryujinx \
-      --set DOTNET_ROOT "${dotnetCorePackages.net_5_0}" \
-      --suffix LD_LIBRARY_PATH : "${lib.makeLibraryPath runtimeDeps}" \
-      ''${gappsWrapperArgs[@]}
+    makeWrapperArgs+=(
+      --suffix LD_LIBRARY_PATH : "$out/lib/sndio-6"
+    )
 
     for i in 16 32 48 64 96 128 256 512 1024; do
       install -D ${src}/Ryujinx/Ui/Resources/Logo_Ryujinx.png $out/share/icons/hicolor/''${i}x$i/apps/ryujinx.png
     done
-    cp -r ${makeDesktopItem {
-      desktopName = "Ryujinx";
-      name = "ryujinx";
-      exec = "Ryujinx";
-      icon = "ryujinx";
-      comment = meta.description;
-      type = "Application";
-      categories = "Game;";
-    }}/share/applications $out/share
-
-    runHook postInstall
   '';
 
-  # Strip breaks the executable.
-  dontStrip = true;
+  desktopItems = [(makeDesktopItem {
+    desktopName = "Ryujinx";
+    name = "ryujinx";
+    exec = "Ryujinx";
+    icon = "ryujinx";
+    comment = meta.description;
+    type = "Application";
+    categories = "Game;";
+  })];
 
   meta = with lib; {
     description = "Experimental Nintendo Switch Emulator written in C#";
     homepage = "https://ryujinx.org/";
     license = licenses.mit;
+    changelog = "https://github.com/Ryujinx/Ryujinx/wiki/Changelog";
     maintainers = [ maintainers.ivar ];
     platforms = [ "x86_64-linux" ];
   };
+  passthru.updateScript = ./updater.sh;
 }

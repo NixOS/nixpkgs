@@ -98,6 +98,7 @@ in
         the public and private keys respectively.
       '';
       default = "${config.services.cfssl.dataDir}/ca";
+      defaultText = literalExpression ''"''${config.services.cfssl.dataDir}/ca"'';
       type = str;
     };
 
@@ -189,6 +190,7 @@ in
         # manually paste it in place. Just symlink.
         # otherwise, create the target file, ready for users to insert the token
 
+        mkdir -p "$(dirname "${certmgrAPITokenPath}")"
         if [ -f "${cfsslAPITokenPath}" ]; then
           ln -fs "${cfsslAPITokenPath}" "${certmgrAPITokenPath}"
         else
@@ -361,6 +363,7 @@ in
           tlsCertFile = mkDefault cert;
           tlsKeyFile = mkDefault key;
           serviceAccountKeyFile = mkDefault cfg.certs.serviceAccount.cert;
+          serviceAccountSigningKeyFile = mkDefault cfg.certs.serviceAccount.key;
           kubeletClientCaFile = mkDefault caCert;
           kubeletClientCertFile = mkDefault cfg.certs.apiserverKubeletClient.cert;
           kubeletClientKeyFile = mkDefault cfg.certs.apiserverKubeletClient.key;
@@ -398,4 +401,6 @@ in
         };
       };
     });
+
+  meta.buildDocsInSandbox = false;
 }

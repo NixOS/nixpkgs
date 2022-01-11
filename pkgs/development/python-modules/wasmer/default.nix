@@ -1,71 +1,99 @@
-{ lib
+{ stdenv
+, lib
 , rustPlatform
+, callPackage
 , fetchFromGitHub
-, maturin
 , buildPythonPackage
-, isPy38
-, python
+, libiconv
+, llvm_11
+, libffi
+, libxml2
+, ncurses
+, zlib
 }:
+
 let
-  pname = "wasmer";
-  version = "1.0.0";
+  common =
+    { pname
+    , buildAndTestSubdir
+    , cargoHash
+    , extraNativeBuildInputs ? [ ]
+    , extraBuildInputs ? [ ]
+    }: buildPythonPackage rec {
+      inherit pname;
+      version = "1.0.0";
+      format = "pyproject";
 
-  wheel = rustPlatform.buildRustPackage rec {
-    inherit pname version;
+      outputs = [ "out" ] ++ lib.optional (pname == "wasmer") "testsout";
 
-    src = fetchFromGitHub {
-      owner = "wasmerio";
-      repo = "wasmer-python";
-      rev = version;
-      hash = "sha256-I1GfjLaPYMIHKh2m/5IQepUsJNiVUEJg49wyuuzUYtY=";
+      src = fetchFromGitHub {
+        owner = "wasmerio";
+        repo = "wasmer-python";
+        rev = version;
+        hash = "sha256-I1GfjLaPYMIHKh2m/5IQepUsJNiVUEJg49wyuuzUYtY=";
+      };
+
+      cargoDeps = rustPlatform.fetchCargoTarball {
+        inherit src;
+        name = "${pname}-${version}";
+        sha256 = cargoHash;
+      };
+
+      nativeBuildInputs = (with rustPlatform; [ cargoSetupHook maturinBuildHook ])
+        ++ extraNativeBuildInputs;
+
+      buildInputs = lib.optionals stdenv.isDarwin [ libiconv ]
+        ++ extraBuildInputs;
+
+      inherit buildAndTestSubdir;
+
+      postInstall = lib.optionalString (pname == "wasmer") ''
+        mkdir $testsout
+        cp -R tests $testsout/tests
+      '';
+
+      # check in passthru.tests.pytest because all packages are required to run the tests
+      doCheck = false;
+
+      passthru.tests = lib.optionalAttrs (pname == "wasmer") {
+        pytest = callPackage ./tests.nix { };
+      };
+
+      pythonImportsCheck = [ "${lib.replaceStrings ["-"] ["_"] pname}" ];
+
+      meta = with lib; {
+        description = "Python extension to run WebAssembly binaries";
+        homepage = "https://github.com/wasmerio/wasmer-python";
+        license = licenses.mit;
+        platforms = platforms.unix;
+        maintainers = with maintainers; [ SuperSandro2000 ];
+      };
     };
-
+in
+rec {
+  wasmer = common {
+    pname = "wasmer";
+    buildAndTestSubdir = "packages/api";
     cargoHash = "sha256-txOOia1C4W+nsXuXp4EytEn82CFfSmiOYwRLC4WPImc=";
-
-    nativeBuildInputs = [ maturin python ];
-
-    preBuild = ''
-      cd packages/api
-    '';
-
-    buildPhase = ''
-      runHook preBuild
-      maturin build --release --manylinux off --strip
-      runHook postBuild
-    '';
-
-    postBuild = ''
-      cd ../..
-    '';
-
-    doCheck = false;
-
-    installPhase = ''
-      runHook preInstall
-      install -Dm644 -t $out target/wheels/*.whl
-      runHook postInstall
-    '';
   };
 
-in
-buildPythonPackage rec {
-  inherit pname version;
+  wasmer-compiler-cranelift = common {
+    pname = "wasmer-compiler-cranelift";
+    buildAndTestSubdir = "packages/compiler-cranelift";
+    cargoHash = "sha256-cHgAUwqnbQV3E5nUYGYQ48ntbIFfq4JXfU5IrSFZ3zI=";
+  };
 
-  format = "wheel";
-  src = wheel;
+  wasmer-compiler-llvm = common {
+    pname = "wasmer-compiler-llvm";
+    buildAndTestSubdir = "packages/compiler-llvm";
+    cargoHash = "sha256-Jm22CC5S3pN/vdVvsGZdvtoAgPzWVLto8wavSJdxY3A=";
+    extraNativeBuildInputs = [ llvm_11 ];
+    extraBuildInputs = [ libffi libxml2.out ncurses zlib ];
+  };
 
-  unpackPhase = ''
-    mkdir -p dist
-    cp $src/*.whl dist
-  '';
-
-  pythonImportsCheck = [ "wasmer" ];
-
-  meta = with lib; {
-    description = "Python extension to run WebAssembly binaries";
-    homepage = "https://github.com/wasmerio/wasmer-python";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+  wasmer-compiler-singlepass = common {
+    pname = "wasmer-compiler-singlepass";
+    buildAndTestSubdir = "packages/compiler-singlepass";
+    cargoHash = "sha256-lmqEo3+jYoN+4EEYphcoE4b84jdFcvYVycjrJ956Bh8=";
   };
 }

@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libva-utils";
-  version = "2.10.0";
+  version = "2.13.0";
 
   src = fetchFromGitHub {
     owner  = "intel";
     repo   = "libva-utils";
     rev    = version;
-    sha256 = "14v4mw0asjgg4l0683hn87d8jai8lrmcpbfcm9z93p4mpn2sp7aw";
+    sha256 = "0ahbwikdb0chf76whm62zz0a7zqil3gzsxmq38ccbqlmnnyjkbbb";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config ];

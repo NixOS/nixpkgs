@@ -2,26 +2,29 @@
 
 buildGoModule rec {
   pname = "popeye";
-  version = "0.9.0";
+  version = "0.9.8";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "derailed";
     repo = "popeye";
-    sha256 = "1rslmcdjs53zvv0xaf00vxqsfc3jh2p584j3q6nfgrghc978xmpf";
+    sha256 = "sha256-uGy2BbZS4SGT0w9ICYPUIfFawSvIVMsEezPfPAPQU/Q=";
   };
 
-  buildFlagsArray = ''
-    -ldflags=
-      -s -w
-      -X github.com/derailed/popeye/cmd.version=${version}
-      -X github.com/derailed/popeye/cmd.commit=022c3104b642aab6bdb287468fb79068a33e1b0d
-      -X github.com/derailed/popeye/cmd.date=2020-10-31T16:44:45Z
+  ldflags = [
+    "-s" "-w"
+    "-X github.com/derailed/popeye/cmd.version=${version}"
+    "-X github.com/derailed/popeye/cmd.commit=${version}"
+  ];
+
+  vendorSha256 = "sha256-vUUDLMicop5QzZmAHi5qrc0hx8oV2xWNFHvCWioLhl8=";
+
+  doCheck = true;
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    $out/bin/popeye version | grep ${version} > /dev/null
   '';
-
-  vendorSha256 = "08195dnka7rs38py3kjii9zh9nifg2fnbi1wzjl0pc38i2bbrz0k";
-
-  doCheck = false;
 
   meta = with lib; {
     description = "A Kubernetes cluster resource sanitizer";

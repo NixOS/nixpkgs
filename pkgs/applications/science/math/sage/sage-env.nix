@@ -2,6 +2,7 @@
 , lib
 , writeTextFile
 , sagelib
+, sage_docbuild
 , env-locations
 , gfortran
 , bash
@@ -14,8 +15,7 @@
 , pkg-config
 , pari
 , gap
-, ecl
-, maxima-ecl
+, maxima
 , singular
 , fflas-ffpack
 , givaro
@@ -76,8 +76,8 @@ let
     pkg-config
     pari
     gap
-    ecl
-    maxima-ecl
+    maxima.lisp-compiler
+    maxima
     singular
     giac
     palp
@@ -191,6 +191,7 @@ writeTextFile rec {
   # for find_library
     export DYLD_LIBRARY_PATH="${lib.makeLibraryPath [stdenv.cc.libc singular]}''${DYLD_LIBRARY_PATH:+:}$DYLD_LIBRARY_PATH"
   '';
-} // {
-  lib = sagelib; # equivalent of `passthru`, which `writeTextFile` doesn't support
+} // { # equivalent of `passthru`, which `writeTextFile` doesn't support
+  lib = sagelib;
+  docbuild = sage_docbuild;
 }

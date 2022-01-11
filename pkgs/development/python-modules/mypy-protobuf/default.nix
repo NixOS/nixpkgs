@@ -1,15 +1,18 @@
-{ lib, fetchPypi, buildPythonApplication, protobuf }:
+{ lib, fetchPypi, buildPythonApplication, protobuf, types-protobuf, grpcio-tools, pythonOlder }:
 
 buildPythonApplication rec {
   pname = "mypy-protobuf";
-  version = "1.23";
+  version = "2.10";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cf79c77e828a2de9bdc74b43ad4abd4c2a3a30f0471b46e9b4e01b9877f166fb";
+    sha256 = "1fed214e16351b09946770794a321a818abb744078b1d863a479da070028684c";
   };
 
-  propagatedBuildInputs = [ protobuf ];
+  propagatedBuildInputs = [ protobuf types-protobuf grpcio-tools ];
 
   meta = with lib; {
     description = "Generate mypy stub files from protobuf specs";

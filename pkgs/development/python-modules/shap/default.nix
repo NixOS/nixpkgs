@@ -5,7 +5,7 @@
 , pytestCheckHook
 , numpy
 , scipy
-, scikitlearn
+, scikit-learn
 , pandas
 , tqdm
 , slicer
@@ -17,20 +17,20 @@
 
 buildPythonPackage rec {
   pname = "shap";
-  version = "0.36.0";
+  version = "0.40.0";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "slundberg";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1wxnxvbz6avzzfqjfbcqd4v879hvpq4021v31fhdpccr2q317rr9";
+    sha256 = "0ra0dp319qj13wxaqh2vz4xhn59m9h3bfg1m6wf3cxsix737b1k4";
   };
 
   propagatedBuildInputs = [
     numpy
     scipy
-    scikitlearn
+    scikit-learn
     pandas
     tqdm
     slicer
@@ -66,5 +66,7 @@ buildPythonPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ evax ];
     platforms = platforms.unix;
+    # ModuleNotFoundError: No module named 'sklearn.ensemble.iforest'
+    broken = true;
   };
 }

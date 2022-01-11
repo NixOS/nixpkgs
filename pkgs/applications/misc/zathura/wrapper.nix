@@ -4,8 +4,7 @@ symlinkJoin {
 
   paths = with zathura_core; [ man dev out ] ++ plugins;
 
-
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   postBuild = let
     fishCompletion = "share/fish/vendor_completions.d/zathura.fish";
@@ -34,5 +33,6 @@ symlinkJoin {
     license = licenses.zlib;
     platforms = platforms.unix;
     maintainers = with maintainers; [ smironov globin TethysSvensson ];
+    mainProgram = "zathura";
   };
 }

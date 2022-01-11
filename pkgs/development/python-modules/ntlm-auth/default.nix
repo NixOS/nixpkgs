@@ -1,10 +1,10 @@
 { lib
 , buildPythonPackage
+, cryptography
 , fetchFromGitHub
 , mock
-, pytest
+, pytestCheckHook
 , requests
-, unittest2
 , six
 }:
 
@@ -19,13 +19,18 @@ buildPythonPackage rec {
     sha256 = "00dpf5bfsy07frsjihv1k10zmwcyq4bvkilbxha7h6nlwpcm2409";
   };
 
-  checkInputs = [ mock pytest requests unittest2 ];
-  propagatedBuildInputs = [ six ];
+  propagatedBuildInputs = [
+    cryptography
+    six
+  ];
 
-  # Functional tests require networking
-  checkPhase = ''
-    py.test --ignore=tests/functional/test_iis.py
-  '';
+  checkInputs = [
+    mock
+    pytestCheckHook
+    requests
+  ];
+
+  pythonImportsCheck = [ "ntlm_auth" ];
 
   meta = with lib; {
     description = "Calculates NTLM Authentication codes";

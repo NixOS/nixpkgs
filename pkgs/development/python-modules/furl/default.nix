@@ -1,25 +1,35 @@
-{ lib, buildPythonPackage, fetchPypi, flake8, six, orderedmultidict, pytest }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, flake8
+, orderedmultidict
+, pytestCheckHook
+, six
+}:
 
 buildPythonPackage rec {
   pname = "furl";
-  version = "2.1.0";
+  version = "2.1.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "08dnw3bs1mk0f1ccn466a5a7fi1ivwrp0jspav9arqpf3wd27q60";
+    sha256 = "5a6188fe2666c484a12159c18be97a1977a71d632ef5bb867ef15f54af39cc4e";
   };
 
-  checkInputs = [ flake8 pytest ];
+  propagatedBuildInputs = [
+    orderedmultidict
+    six
+  ];
 
-  propagatedBuildInputs = [ six orderedmultidict ];
+  checkInputs = [
+    flake8
+    pytestCheckHook
+  ];
 
-  # see https://github.com/gruns/furl/issues/121
-  checkPhase = ''
-    pytest -k 'not join'
-  '';
+  pythonImportsCheck = [ "furl" ];
 
   meta = with lib; {
-    description = "furl is a small Python library that makes parsing and manipulating URLs easy";
+    description = "Python library that makes parsing and manipulating URLs easy";
     homepage = "https://github.com/gruns/furl";
     license = licenses.unlicense;
     maintainers = with maintainers; [ vanzef ];

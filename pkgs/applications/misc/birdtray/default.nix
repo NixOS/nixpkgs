@@ -36,11 +36,15 @@ mkDerivation rec {
       --subst-var-by qttranslations ${qttranslations}
   '';
 
+  # Wayland support is broken.
+  # https://github.com/gyunaev/birdtray/issues/113#issuecomment-621742315
+  qtWrapperArgs = [ "--set QT_QPA_PLATFORM xcb" ];
+
   meta = with lib; {
     description = "Mail system tray notification icon for Thunderbird";
     homepage = "https://github.com/gyunaev/birdtray";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ Flakebi ];
+    maintainers = with maintainers; [ Flakebi oxalica ];
     platforms = platforms.linux;
   };
 }

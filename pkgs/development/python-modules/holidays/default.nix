@@ -1,53 +1,44 @@
 { lib
 , buildPythonPackage
-, fetchPypi
 , convertdate
-, dateutil
+, python-dateutil
+, fetchPypi
 , hijri-converter
 , korean-lunar-calendar
-, six
-, python
-, flake8
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "holidays";
-  version = "0.10.5.2";
+  version = "0.11.3.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0g4hqbb94cwxlcwsjzrzxzlann1ks2r4mgnfzqz74a2rg1nih5zd";
+    sha256 = "sha256-SFWv4Ov0KO+8+EhHeCi4ifhRW+f08VriZoKRk2nZJ3Q=";
   };
-
-  postPatch = ''
-    # ignore too long line issues
-    # https://github.com/dr-prodigy/python-holidays/issues/423
-    substituteInPlace tests.py \
-      --replace "flake8.get_style_guide(ignore=[" "flake8.get_style_guide(ignore=['E501', "
-  '';
-
 
   propagatedBuildInputs = [
     convertdate
-    dateutil
+    python-dateutil
     hijri-converter
     korean-lunar-calendar
-    six
   ];
 
   checkInputs = [
-    flake8
+    pytestCheckHook
   ];
 
-  checkPhase = ''
-    ${python.interpreter} -m unittest
-  '';
-
-  pythonImportsCheck = [ "holidays" ];
+  pythonImportsCheck = [
+    "holidays"
+  ];
 
   meta = with lib; {
-    homepage = "https://github.com/dr-prodigy/python-holidays";
     description = "Generate and work with holidays in Python";
+    homepage = "https://github.com/dr-prodigy/python-holidays";
     license = licenses.mit;
     maintainers = with maintainers; [ jluttine ];
   };

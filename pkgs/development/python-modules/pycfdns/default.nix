@@ -7,13 +7,14 @@
 
 buildPythonPackage rec {
   pname = "pycfdns";
-  version = "1.2.1";
+  version = "1.2.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ludeeus";
     repo = pname;
     rev = version;
-    sha256 = "0df4695cb0h6f2lnn6dx4h5al2ra93zp1hzfaz07nj2gvirswp83";
+    sha256 = "sha256-bsalfZEkZrBG0/SyEXCWOZyrhOYU/3YJR/78FQTpXYk=";
   };
 
   propagatedBuildInputs = [
@@ -23,7 +24,10 @@ buildPythonPackage rec {
 
   # Project has no tests
   doCheck = false;
-  pythonImportsCheck = [ "pycfdns" ];
+
+  pythonImportsCheck = [
+    "pycfdns"
+  ];
 
   meta = with lib; {
     description = "Python module for updating Cloudflare DNS A records";

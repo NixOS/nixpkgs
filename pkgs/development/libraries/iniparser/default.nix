@@ -36,6 +36,9 @@ stdenv.mkDerivation rec {
     cp libiniparser.a $out/lib
     cp libiniparser.so.1 $out/lib
     ln -s libiniparser.so.1 $out/lib/libiniparser.so
+
+    mkdir -p $out/lib/pkgconfig
+    substituteAll ${./iniparser.pc.in} $out/lib/pkgconfig/iniparser.pc
   '';
 
   meta = with lib; {

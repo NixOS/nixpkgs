@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
   };
 
   patches = [ ./nagios.patch ];
-  buildInputs = [ php perl gd libpng zlib unzip ];
+  nativeBuildInputs = [ unzip ];
+  buildInputs = [ php perl gd libpng zlib ];
 
   configureFlags = [ "--localstatedir=/var/lib/nagios" ];
   buildFlags = [ "all" ];

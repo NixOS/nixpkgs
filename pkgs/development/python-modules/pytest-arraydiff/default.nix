@@ -4,7 +4,6 @@
 , numpy
 , six
 , pytest
-, astropy
 }:
 
 buildPythonPackage rec {
@@ -16,10 +15,11 @@ buildPythonPackage rec {
     sha256 = "de2d62f53ecc107ed754d70d562adfa7573677a263216a7f19aa332f20dc6c15";
   };
 
+  buildInputs = [ pytest ];
+
   propagatedBuildInputs = [
     numpy
     six
-    pytest
   ];
 
   # The tests requires astropy, which itself requires

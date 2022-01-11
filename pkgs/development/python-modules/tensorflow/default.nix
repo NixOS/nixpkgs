@@ -1,18 +1,18 @@
 { stdenv, bazel_3, buildBazelPackage, isPy3k, lib, fetchFromGitHub, symlinkJoin
-, addOpenGLRunpath
+, addOpenGLRunpath, fetchpatch, patchelfUnstable
 # Python deps
-, buildPythonPackage, pythonOlder, pythonAtLeast, python
+, buildPythonPackage, pythonOlder, python
 # Python libraries
-, numpy, tensorflow-tensorboard_2, absl-py
-, future, setuptools, wheel, keras-preprocessing, google-pasta
+, numpy, tensorflow-tensorboard, absl-py
+, setuptools, wheel, keras, keras-preprocessing, google-pasta
 , opt-einsum, astunparse, h5py
-, termcolor, grpcio, six, wrapt, protobuf, tensorflow-estimator_2
+, termcolor, grpcio, six, wrapt, protobuf-python, tensorflow-estimator
 , dill, flatbuffers-python, tblib, typing-extensions
 # Common deps
 , git, pybind11, which, binutils, glibcLocales, cython, perl
 # Common libraries
 , jemalloc, mpi, gast, grpc, sqlite, boringssl, jsoncpp
-, curl, snappy, flatbuffers-core, lmdb-core, icu, double-conversion, libpng, libjpeg_turbo, giflib
+, curl, snappy, flatbuffers-core, lmdb-core, icu, double-conversion, libpng, libjpeg_turbo, giflib, protobuf-core
 # Upsteam by default includes cuda support since tensorflow 1.15. We could do
 # that in nix as well. It would make some things easier and less confusing, but
 # it would also make the default tensorflow package unfree. See
@@ -28,7 +28,7 @@
 , avx2Support  ? stdenv.hostPlatform.avx2Support
 , fmaSupport   ? stdenv.hostPlatform.fmaSupport
 # Darwin deps
-, Foundation, Security
+, Foundation, Security, cctools, llvmPackages_11
 }:
 
 assert cudaSupport -> cudatoolkit != null
@@ -72,7 +72,7 @@ let
 
   tfFeature = x: if x then "1" else "0";
 
-  version = "2.4.0";
+  version = "2.7.0";
   variant = if cudaSupport then "-gpu" else "";
   pname = "tensorflow${variant}";
 
@@ -90,19 +90,94 @@ let
       keras-preprocessing
       numpy
       opt-einsum
-      protobuf
+      protobuf-python
       setuptools
       six
       tblib
-      tensorflow-estimator_2
-      tensorflow-tensorboard_2
+      tensorflow-estimator
+      tensorflow-tensorboard
       termcolor
       typing-extensions
       wheel
       wrapt
   ]);
 
-  bazel-build = buildBazelPackage {
+  rules_cc_darwin_patched = stdenv.mkDerivation {
+    name = "rules_cc-${pname}-${version}";
+
+    src = _bazel-build.deps;
+
+    prePatch = "pushd rules_cc";
+    patches = [
+      # https://github.com/bazelbuild/rules_cc/issues/122
+      (fetchpatch {
+        name = "tensorflow-rules_cc-libtool-path.patch";
+        url = "https://github.com/bazelbuild/rules_cc/commit/8c427ab30bf213630dc3bce9d2e9a0e29d1787db.diff";
+        sha256 = "sha256-C4v6HY5+jm0ACUZ58gBPVejCYCZfuzYKlHZ0m2qDHCk=";
+      })
+
+      # https://github.com/bazelbuild/rules_cc/pull/124
+      (fetchpatch {
+        name = "tensorflow-rules_cc-install_name_tool-path.patch";
+        url = "https://github.com/bazelbuild/rules_cc/commit/156497dc89100db8a3f57b23c63724759d431d05.diff";
+        sha256 = "sha256-NES1KeQmMiUJQVoV6dS4YGRxxkZEjOpFSCyOq9HZYO0=";
+      })
+    ];
+    postPatch = "popd";
+
+    dontConfigure = true;
+    dontBuild = true;
+
+    installPhase = ''
+      runHook preInstall
+
+      mv rules_cc/ "$out"
+
+      runHook postInstall
+    '';
+  };
+  llvm-raw_darwin_patched = stdenv.mkDerivation {
+    name = "llvm-raw-${pname}-${version}";
+
+    src = _bazel-build.deps;
+
+    prePatch = "pushd llvm-raw";
+    patches = [
+      # Fix a vendored config.h that requires the 10.13 SDK
+      ./llvm_bazel_fix_macos_10_12_sdk.patch
+    ];
+    postPatch = ''
+      touch {BUILD,WORKSPACE}
+      popd
+    '';
+
+    dontConfigure = true;
+    dontBuild = true;
+
+    installPhase = ''
+      runHook preInstall
+
+      mv llvm-raw/ "$out"
+
+      runHook postInstall
+    '';
+  };
+  bazel-build = if stdenv.isDarwin then _bazel-build.overrideAttrs (prev: {
+    bazelBuildFlags = prev.bazelBuildFlags ++ [
+      "--override_repository=rules_cc=${rules_cc_darwin_patched}"
+      "--override_repository=llvm-raw=${llvm-raw_darwin_patched}"
+    ];
+    preBuild = ''
+      export AR="${cctools}/bin/libtool"
+    '';
+  }) else _bazel-build;
+
+  _bazel-build = (buildBazelPackage.override (lib.optionalAttrs stdenv.isDarwin {
+    # clang 7 fails to emit a symbol for
+    # __ZN4llvm11SmallPtrSetIPKNS_10AllocaInstELj8EED1Ev in any of the
+    # translation units, so the build fails at link time
+    stdenv = llvmPackages_11.stdenv;
+  })) {
     name = "${pname}-${version}";
     bazel = bazel_3;
 
@@ -110,21 +185,19 @@ let
       owner = "tensorflow";
       repo = "tensorflow";
       rev = "v${version}";
-      sha256 = "0yl06aypfxrcs35828xf04mkidz1x0j89v0q5h4d2xps1cb5rv3f";
+      sha256 = "sha256-n7jRDPeXsyq4pEWSWmOCas4c8VsArIKlCuwvSU/Ro/c=";
     };
 
     patches = [
-      # Relax too strict Python packages versions dependencies.
-      ./relax-dependencies.patch
-      # Add missing `io_bazel_rules_docker` dependency.
-      ./workspace.patch
+      # Patch the sources to compile with protobuf >= 3.16.
+      ./system-protobuf.patch
     ];
 
     # On update, it can be useful to steal the changes from gentoo
     # https://gitweb.gentoo.org/repo/gentoo.git/tree/sci-libs/tensorflow
 
     nativeBuildInputs = [
-      which pythonEnv cython perl
+      which pythonEnv cython perl protobuf-core
     ] ++ lib.optional cudaSupport addOpenGLRunpath;
 
     buildInputs = [
@@ -173,12 +246,7 @@ let
       # "com_github_googleapis_googleapis"
       # "com_github_googlecloudplatform_google_cloud_cpp"
       "com_github_grpc_grpc"
-      # Multiple issues with custom protobuf.
-      # First `com_github_googleapis` fails to configure. Can be worked around by disabling `com_github_googleapis`
-      # and related functionality, but then the next error is about "dangling symbolic link", and in general
-      # looks like that's only the beginning: see
-      # https://stackoverflow.com/questions/55578884/how-to-build-tensorflow-1-13-1-with-custom-protobuf
-      # "com_google_protobuf"
+      "com_google_protobuf"
       # Fails with the error: external/org_tensorflow/tensorflow/core/profiler/utils/tf_op_utils.cc:46:49: error: no matching function for call to 're2::RE2::FullMatch(absl::lts_2020_02_25::string_view&, re2::RE2&)'
       # "com_googlesource_code_re2"
       "curl"
@@ -200,7 +268,6 @@ let
       "opt_einsum_archive"
       "org_sqlite"
       "pasta"
-      "pcre"
       "png"
       "pybind11"
       "six_archive"
@@ -213,6 +280,11 @@ let
     ];
 
     INCLUDEDIR = "${includes_joined}/include";
+
+    # This is needed for the Nix-provided protobuf dependency to work,
+    # as otherwise the rule `link_proto_files` tries to create the links
+    # to `/usr/include/...` which results in build failures.
+    PROTOBUF_INCLUDE_PATH = "${protobuf-core}/include";
 
     PYTHON_BIN_PATH = pythonEnv.interpreter;
 
@@ -277,6 +349,7 @@ let
     bazelBuildFlags = [
       "--config=opt" # optimize using the flags set in the configure phase
     ]
+    ++ lib.optionals stdenv.cc.isClang [ "--cxxopt=-x" "--cxxopt=c++" "--host_cxxopt=-x" "--host_cxxopt=c++" ]
     ++ lib.optionals (mklSupport) [ "--config=mkl" ];
 
     bazelTarget = "//tensorflow/tools/pip_package:build_pip_package //tensorflow/tools/lib_package:libtensorflow";
@@ -288,9 +361,12 @@ let
     fetchAttrs = {
       # cudaSupport causes fetch of ncclArchive, resulting in different hashes
       sha256 = if cudaSupport then
-        "1i7z2a7bc2q1vn1h9nx1xc6g1r1cby2xvbcs20fj9h6c2fgaw9j4"
+        "sha256-+szc2mRoImwijzbj3nw6HmZp3DeRjjPRU5yC+5AEbkg="
       else
-        "0s8q5rxq8abr50c5jpwv96ncfc0k8jw7w70ri8viqy031g9v9v45";
+        if stdenv.isDarwin then
+          "sha256-+bwIzp6t7gRJPcI8B5oyuf9z0AjCAyggUR7x+vv5kFs="
+        else
+          "sha256-5yOYmeGpJq4Chi55H7iblxyRXVktgnePtpYTPvBs538=";
     };
 
     buildAttrs = {
@@ -325,6 +401,10 @@ let
           addOpenGLRunpath "$lib"
         done
       '';
+
+      requiredSystemFeatures = [
+        "big-parallel"
+      ];
     };
 
     meta = with lib; {
@@ -333,6 +413,7 @@ let
       license = licenses.asl20;
       maintainers = with maintainers; [ jyp abbradar ];
       platforms = with platforms; linux ++ darwin;
+      timeout = 86400; # 24 hours, needed for darwin
       broken = !(xlaSupport -> cudaSupport);
     };
   };
@@ -342,6 +423,18 @@ in buildPythonPackage {
   disabled = !isPy3k;
 
   src = bazel-build.python;
+
+  # Adjust dependency requirements:
+  # - Relax gast version requirement that doesn't match what we have packaged
+  # - The purpose of python3Packages.libclang is not clear at the moment and we don't have it packaged yet
+  # - keras and tensorlow-io-gcs-filesystem will be considered as optional for now.
+  postPatch = ''
+    sed -i setup.py \
+      -e "s/'gast[^']*',/'gast',/" \
+      -e "/'libclang[^']*',/d" \
+      -e "/'keras[^']*',/d" \
+      -e "/'tensorflow-io-gcs-filesystem[^']*',/d"
+  '';
 
   # Upstream has a pip hack that results in bin/tensorboard being in both tensorflow
   # and the propagated input tensorflow-tensorboard, which causes environment collisions.
@@ -366,18 +459,19 @@ in buildPythonPackage {
     keras-preprocessing
     numpy
     opt-einsum
-    protobuf
+    protobuf-python
     six
     tblib
-    tensorflow-estimator_2
+    tensorflow-estimator
     termcolor
     typing-extensions
     wrapt
   ] ++ lib.optionals withTensorboard [
-    tensorflow-tensorboard_2
+    tensorflow-tensorboard
   ];
 
-  nativeBuildInputs = lib.optional cudaSupport addOpenGLRunpath;
+  # remove patchelfUnstable once patchelf 0.14 with https://github.com/NixOS/patchelf/pull/256 becomes the default
+  nativeBuildInputs = lib.optional cudaSupport [ addOpenGLRunpath patchelfUnstable ];
 
   postFixup = lib.optionalString cudaSupport ''
     find $out -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do
@@ -390,6 +484,7 @@ in buildPythonPackage {
   # Actual tests are slow and impure.
   # TODO try to run them anyway
   # TODO better test (files in tensorflow/tools/ci_build/builds/*test)
+  checkInputs = [ keras ];
   checkPhase = ''
     ${python.interpreter} <<EOF
     # A simple "Hello world"

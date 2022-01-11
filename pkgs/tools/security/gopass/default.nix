@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , makeWrapper
 , buildGoModule
 , fetchFromGitHub
@@ -12,7 +13,7 @@
 
 buildGoModule rec {
   pname = "gopass";
-  version = "1.11.0";
+  version = "1.13.0";
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];
 
@@ -20,14 +21,16 @@ buildGoModule rec {
     owner = "gopasspw";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0plg3hck6yqxcazjczx9m5palzz5h3qs5minzmmq8yzvfwi0shic";
+    sha256 = "sha256-MBpk84H3Ng/+rCjW2Scm/su0/5kgs7IzvFk/bFLNzXY=";
   };
 
-  vendorSha256 = "1sycbcld5qyriqb771l52drxy4vhzm4nh9q5s6kn70nq1s2a3h7x";
+  vendorSha256 = "sha256-HGc6jUp4WO5P5dwfa0r7+X78a8us9fWrf+/IOotZHqk=";
+
+  subPackages = [ "." ];
 
   doCheck = false;
 
-  buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version} -X main.commit=${src.rev}" ];
+  ldflags = [ "-s" "-w" "-X main.version=${version}" "-X main.commit=${src.rev}" ];
 
   wrapperPath = lib.makeBinPath (
     [
@@ -38,18 +41,18 @@ buildGoModule rec {
   );
 
   postInstall = ''
-    for shell in bash fish zsh; do
-      $out/bin/gopass completion $shell > gopass.$shell
-      installShellCompletion gopass.$shell
-    done
+    installManPage gopass.1
+    installShellCompletion --zsh --name _gopass zsh.completion
+    installShellCompletion --bash --name gopass.bash bash.completion
+    installShellCompletion --fish --name gopass.fish fish.completion
   '' + lib.optionalString passAlias ''
     ln -s $out/bin/gopass $out/bin/pass
   '';
 
   postFixup = ''
-    for bin in $out/bin/*; do
-      wrapProgram $bin --prefix PATH : "${wrapperPath}"
-    done
+    wrapProgram $out/bin/gopass \
+      --prefix PATH : "${wrapperPath}" \
+      --set GOPASS_NO_REMINDER true
   '';
 
   meta = with lib; {
@@ -57,7 +60,7 @@ buildGoModule rec {
     homepage = "https://www.gopass.pw/";
     license = licenses.mit;
     maintainers = with maintainers; [ andir rvolosatovs ];
-    platforms = platforms.unix;
+    changelog = "https://github.com/gopasspw/gopass/raw/v${version}/CHANGELOG.md";
 
     longDescription = ''
       gopass is a rewrite of the pass password manager in Go with the aim of

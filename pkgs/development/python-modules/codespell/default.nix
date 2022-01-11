@@ -1,31 +1,31 @@
-{ lib, buildPythonApplication, fetchPypi, pytest, chardet }:
+{ lib, buildPythonApplication, fetchFromGitHub, pytestCheckHook, pytest-cov, pytest-dependency, aspell-python, aspellDicts, chardet }:
 
 buildPythonApplication rec {
   pname = "codespell";
-  version = "2.0.0";
+  version = "2.1.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "dd9983e096b9f7ba89dd2d2466d1fc37231d060f19066331b9571341363c77b8";
+  src = fetchFromGitHub {
+    owner = "codespell-project";
+    repo = "codespell";
+    rev = "v${version}";
+    sha256 = "sha256-BhYVztSr2MalILEcOcvMl07CObYa73o3kW8S/idqAO8=";
   };
 
-  # no tests in pypi tarball
-  doCheck = false;
-  checkInputs = [ pytest chardet ];
-  checkPhase = ''
-    # We don't want to be affected by the presence of these
-    rm -r codespell_lib setup.cfg
-    # test_command assumes too much about the execution environment
-    pytest --pyargs codespell_lib.tests -k "not test_command"
+  checkInputs = [ aspell-python chardet pytestCheckHook pytest-cov pytest-dependency ];
+
+  preCheck = ''
+    export ASPELL_CONF="dict-dir ${aspellDicts.en}/lib/aspell"
   '';
+
+  # tries to run not fully installed script
+  disabledTests = [ "test_command" ];
 
   pythonImportsCheck = [ "codespell_lib" ];
 
-  meta = {
+  meta = with lib; {
     description = "Fix common misspellings in source code";
     homepage = "https://github.com/codespell-project/codespell";
-    license = with lib.licenses; [ gpl2 cc-by-sa-30 ];
-    maintainers = with lib.maintainers; [ johnazoidberg ];
-    platforms = lib.platforms.all;
+    license = with licenses; [ gpl2Only cc-by-sa-30 ];
+    maintainers = with maintainers; [ johnazoidberg SuperSandro2000 ];
   };
 }

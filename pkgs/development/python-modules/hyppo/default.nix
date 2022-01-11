@@ -1,35 +1,42 @@
 { lib
 , buildPythonPackage
-, isPy27
+, pythonOlder
 , fetchFromGitHub
-, pytestCheckHook , pytestcov , numba
+, pytestCheckHook
+, numba
 , numpy
-, scikitlearn
+, scikit-learn
 , scipy
+, matplotlib
+, seaborn
 }:
 
 buildPythonPackage rec {
   pname = "hyppo";
-  version = "0.1.3";
+  version = "0.2.2";
 
-  disabled = isPy27;
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "neurodata";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0qdnb1l4hz4dgwhapz1fp9sb2vxxvr8h2ngsbvyf50h3kapcn19r";
+    sha256 = "1wrzrppyjq0pc03bn6qcslxzcnwn7fr2z5lm71gfpli5k05i26nr";
   };
 
   propagatedBuildInputs = [
     numba
     numpy
-    scikitlearn
+    scikit-learn
     scipy
   ];
 
-  checkInputs = [ pytestCheckHook pytestcov ];
-  pytestFlagsArray = [ "--ignore=docs" ];
+  checkInputs = [ pytestCheckHook matplotlib seaborn ];
+  disabledTestPaths = [
+    "docs"
+    "benchmarks"
+    "examples"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/neurodata/hyppo";

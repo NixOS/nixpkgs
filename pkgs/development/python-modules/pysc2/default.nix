@@ -12,7 +12,7 @@
 , pygame
 , s2clientprotocol
 , six
-, websocket_client
+, websocket-client
 , sc2-headless
 }:
 
@@ -49,7 +49,7 @@ buildPythonPackage {
     pygame
     s2clientprotocol
     six
-    websocket_client
+    websocket-client
     sc2-headless
   ];
 

@@ -3,7 +3,7 @@
 , libXfixes, libXrandr, libSM, freetype, fontconfig, zlib, libjpeg, libpng
 , libmng, which, libGLU, openssl, dbus, cups, pkg-config
 , libtiff, glib, icu, libmysqlclient, postgresql, sqlite, perl, coreutils, libXi
-, alsaLib
+, alsa-lib
 , libGLSupported ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
 , gtkStyle ? stdenv.hostPlatform == stdenv.buildPlatform, gtk2, gdk-pixbuf
 , gnomeStyle ? false, libgnomeui, GConf, gnome_vfs
@@ -96,6 +96,16 @@ stdenv.mkDerivation rec {
         url = "https://salsa.debian.org/qt-kde-team/qt/qt4-x11/raw/"
           + "0d4a3dd61ccb156dee556c214dbe91c04d44a717/debian/patches/gcc9-qforeach.patch";
         sha256 = "0dzn6qxrgxb75rvck9kmy5gspawdn970wsjw56026dhkih8cp3pg";
+      })
+
+      # Pull upstream fix for gcc-11 support.
+      (fetchpatch {
+        name = "gcc11-ptr-cmp.patch";
+        url = "https://github.com/qt/qttools/commit/7138c963f9d1258bc1b49cb4d63c3e2b7d0ccfda.patch";
+        sha256 = "1a9g05r267c94qpw3ssb6k4lci200vla3vm5hri1nna6xwdsmrhc";
+        # "src/" -> "tools/"
+        stripLen = 2;
+        extraPrefix = "tools/";
       })
     ]
     ++ lib.optional gtkStyle (substituteAll ({
@@ -204,7 +214,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional stdenv.isLinux "-std=gnu++98" # gnu++ in (Obj)C flags is no good on Darwin
     ++ lib.optionals (stdenv.isFreeBSD || stdenv.isDarwin)
       [ "-I${glib.dev}/include/glib-2.0" "-I${glib.out}/lib/glib-2.0/include" ]
-    ++ lib.optional stdenv.isDarwin "-I${libcxx}/include/c++/v1");
+    ++ lib.optional stdenv.isDarwin "-I${lib.getDev libcxx}/include/c++/v1");
 
   NIX_LDFLAGS = lib.optionalString (stdenv.isFreeBSD || stdenv.isDarwin) "-lglib-2.0";
 
@@ -229,10 +239,10 @@ stdenv.mkDerivation rec {
   dontStrip = stdenv.hostPlatform != stdenv.buildPlatform;
 
   meta = {
-    homepage    = "http://qt-project.org/";
+    homepage    = "https://qt-project.org/";
     description = "A cross-platform application framework for C++";
     license     = lib.licenses.lgpl21Plus; # or gpl3
-    maintainers = with lib.maintainers; [ orivej lovek323 phreedom sander ];
+    maintainers = with lib.maintainers; [ orivej lovek323 sander ];
     platforms   = lib.platforms.unix;
     badPlatforms = [ "x86_64-darwin" ];
   };

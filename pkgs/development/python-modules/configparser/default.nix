@@ -1,20 +1,18 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, setuptools_scm
-, toml
-}:
+{ lib, stdenv, buildPythonPackage, fetchPypi, setuptools-scm }:
 
 buildPythonPackage rec {
   pname = "configparser";
-  version = "5.0.1";
+  version = "5.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "005c3b102c96f4be9b8f40dafbd4997db003d07d1caa19f37808be8031475f2a";
+    sha256 = "1b35798fdf1713f1c3139016cfcbc461f09edbf099d1fb658d4b7479fcaa3daa";
   };
 
   # No tests available
   doCheck = false;
 
-  nativeBuildInputs = [ setuptools_scm toml ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   preConfigure = ''
     export LC_ALL=${if stdenv.isDarwin then "en_US" else "C"}.UTF-8

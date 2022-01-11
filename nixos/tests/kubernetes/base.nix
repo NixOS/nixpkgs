@@ -40,7 +40,7 @@ let
                   allowedTCPPorts = [
                     10250 # kubelet
                   ];
-                  trustedInterfaces = ["docker0"];
+                  trustedInterfaces = ["mynet"];
 
                   extraCommands = concatMapStrings  (node: ''
                     iptables -A INPUT -s ${node.config.networking.primaryIPAddress} -j ACCEPT
@@ -51,7 +51,6 @@ let
               environment.systemPackages = [ kubectl ];
               services.flannel.iface = "eth1";
               services.kubernetes = {
-                addons.dashboard.enable = true;
                 proxy.hostname = "${masterName}.${domain}";
 
                 easyCerts = true;

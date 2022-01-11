@@ -1,7 +1,8 @@
-{ lib, stdenv, fetchurl, php73, which, makeWrapper, bash, coreutils, ncurses }:
+{ lib, stdenv, fetchurl, fetchFromGitHub, php, which, makeWrapper, bash, coreutils, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "drush-6.1.0";
+  pname = "drush";
+  version = "6.1.0";
 
   meta = with lib; {
     description = "Command-line shell and Unix scripting interface for Drupal";
@@ -11,9 +12,11 @@ stdenv.mkDerivation rec {
     platforms   = platforms.all;
   };
 
-  src = fetchurl {
-    url    = "https://github.com/drush-ops/drush/archive/6.1.0.tar.gz";
-    sha256 = "1jgnc4jjyapyn04iczvcz92ic0vq8d1w8xi55ismqyy5cxhqj6bp";
+  src = fetchFromGitHub {
+    owner = "drush-ops";
+    repo  = pname;
+    rev = version;
+    sha256 = "sha256-0nf/m+xJmfHsFLuordiMp8UyrGGXuS70+zFHkIxLWhU=";
   };
 
   consoleTable = fetchurl {
@@ -32,7 +35,7 @@ stdenv.mkDerivation rec {
     mkdir -p "$out"
     cp -r . "$out/src"
     mkdir "$out/bin"
-    wrapProgram "$out/src/drush" --prefix PATH : "${lib.makeBinPath [ which php73 bash coreutils ncurses ]}"
+    wrapProgram "$out/src/drush" --prefix PATH : "${lib.makeBinPath [ which php bash coreutils ncurses ]}"
     ln -s "$out/src/drush" "$out/bin/drush"
   '';
 }

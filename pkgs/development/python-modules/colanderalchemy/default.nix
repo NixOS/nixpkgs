@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, unittest2
 , colander
 , sqlalchemy
 }:

@@ -24,6 +24,10 @@ stdenv.mkDerivation rec {
     libXinerama
   ];
 
+  postPatch = lib.optionalString (!stdenv.cc.isGNU) ''
+    sed -i -e '/--no-as-needed/d' Makefile
+  '';
+
   makeFlags = [ "PREFIX=$(out)" ];
 
   preInstall = ''

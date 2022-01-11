@@ -3,18 +3,19 @@
 let
   versions = {
     atom = {
-      version = "1.48.0";
-      sha256 = "1693bxbylf6jhld9bdcr5pigk36wqlbj89praldpz9s96yxig9s1";
+      version = "1.58.0";
+      sha256 = "sha256-QxDhr4gwlS9O/lk0nfqsw5sFiPckSTFL15XtRpQh0tU=";
     };
 
     atom-beta = {
-      version = "1.49.0";
+      version = "1.59.0";
       beta = 0;
-      sha256 = "1fr6m4a7shdj3wpn6g4n95cqpkkg2x9srwjf7bqxv9f3d5jb1y33";
+      sha256 = "sha256-s1XHR2e4JPywdLiIcjTqMRILARDthHxBeTQOCIkhmXE=";
+      broken = true;
     };
   };
 
-  common = pname: {version, sha256, beta ? null}:
+  common = pname: {version, sha256, beta ? null, broken ? false}:
       let fullVersion = version + lib.optionalString (beta != null) "-beta${toString beta}";
       name = "${pname}-${fullVersion}";
   in stdenv.mkDerivation {
@@ -88,6 +89,7 @@ let
       license = licenses.mit;
       maintainers = with maintainers; [ offline ysndr ];
       platforms = platforms.x86_64;
+      inherit broken;
     };
   };
 in lib.mapAttrs common versions

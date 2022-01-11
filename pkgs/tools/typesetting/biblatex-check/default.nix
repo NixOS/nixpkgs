@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, python }:
+{ lib, stdenv, fetchFromGitHub, python3 }:
 
 stdenv.mkDerivation {
   pname = "biblatex-check";
@@ -11,7 +11,9 @@ stdenv.mkDerivation {
     sha256 = "1bq0yqckhssazwkivipdjmn1jpsf301i4ppyl88qhc5igx39wg25";
   };
 
-  buildInputs = [ python ];
+  buildInputs = [ python3 ];
+
+  strictDeps = true;
 
   installPhase = ''
     install -Dm755 biblatex_check.py $out/bin/biblatex-check

@@ -21,7 +21,6 @@ let
 
       isAllowed = mkOption {
         type = types.bool;
-        default = null;
         description = ''
           Whether the application will be allowed access to location information.
         '';
@@ -29,7 +28,6 @@ let
 
       isSystem = mkOption {
         type = types.bool;
-        default = null;
         description = ''
           Whether the application is a system component or not.
         '';
@@ -162,7 +160,7 @@ in
       appConfig = mkOption {
         type = types.attrsOf appConfigModule;
         default = {};
-        example = literalExample ''
+        example = literalExpression ''
           "com.github.app" = {
             isAllowed = true;
             isSystem = true;
@@ -188,7 +186,8 @@ in
 
     systemd.packages = [ package ];
 
-    # we cannot use DynamicUser as we need the the geoclue user to exist for the dbus policy to work
+    # we cannot use DynamicUser as we need the the geoclue user to exist for the
+    # dbus policy to work
     users = {
       users.geoclue = {
         isSystemUser = true;
@@ -217,6 +216,7 @@ in
         # we can't be part of a system service, and the agent should
         # be okay with the main service coming and going
         wantedBy = [ "default.target" ];
+        unitConfig.ConditionUser = "!@system";
         serviceConfig = {
           Type = "exec";
           ExecStart = "${package}/libexec/geoclue-2.0/demos/agent";
@@ -264,5 +264,7 @@ in
       } // mapAttrs' appConfigToINICompatible cfg.appConfig);
   };
 
-  meta.maintainers = with lib.maintainers; [ worldofpeace ];
+  meta = with lib; {
+    maintainers = with maintainers; [ ] ++ teams.pantheon.members;
+  };
 }

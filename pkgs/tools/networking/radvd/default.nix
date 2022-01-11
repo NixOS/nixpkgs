@@ -12,6 +12,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config bison flex check ];
   buildInputs = [ libdaemon ];
 
+  # Needed for cross-compilation
+  makeFlags = [
+    "AR=${stdenv.cc.targetPrefix}ar"
+  ];
+
   meta = with lib; {
     homepage = "http://www.litech.org/radvd/";
     description = "IPv6 Router Advertisement Daemon";

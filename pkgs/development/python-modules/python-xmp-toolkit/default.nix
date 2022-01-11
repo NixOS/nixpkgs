@@ -35,6 +35,9 @@ buildPythonPackage {
       --replace "ctypes.util.find_library('exempi')" "'${exempi}/lib/libexempi${stdenv.hostPlatform.extensions.sharedLibrary}'"
   '';
 
+  # hangs on darwin + sandbox
+  doCheck = !stdenv.isDarwin;
+
   meta = with lib; {
     homepage = "https://github.com/python-xmp-toolkit/python-xmp-toolkit";
     description = "Python XMP Toolkit for working with metadata";

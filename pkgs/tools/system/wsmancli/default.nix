@@ -31,6 +31,5 @@ stdenv.mkDerivation rec {
     '';
     downloadPage = "https://github.com/Openwsman/wsmancli/releases";
     inherit (openwsman.meta) homepage license maintainers platforms;
-    inherit version;
   };
 }

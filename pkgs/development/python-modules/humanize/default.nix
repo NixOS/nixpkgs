@@ -1,32 +1,47 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, isPy27
-, mock
-, setuptools_scm
+, fetchFromGitHub
+, pythonOlder
+, setuptools-scm
+, setuptools
+, pytestCheckHook
+, freezegun
 }:
 
 buildPythonPackage rec {
-  version = "3.1.0";
+  version = "3.13.1";
   pname = "humanize";
-  disabled = isPy27; # setup.py no longer compatible
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "fd3eb915310335c63a54d4507289ecc7b3a7454cd2c22ac5086d061a3cbfd592";
+  disabled = pythonOlder "3.6";
+
+  src = fetchFromGitHub {
+    owner = "jmoiron";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-lgGBvYb3ciqETBOR31gxQVD7YyopTtmr++nCwvm63Zs=";
   };
 
-  nativeBuildInputs = [ setuptools_scm ];
-  checkInputs = [ mock ];
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
-  doCheck = false;
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
+
+  propagatedBuildInputs = [
+    setuptools
+  ];
+
+  checkInputs = [
+    freezegun
+    pytestCheckHook
+  ];
 
   meta = with lib; {
     description = "Python humanize utilities";
     homepage = "https://github.com/jmoiron/humanize";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
-    platforms = platforms.unix;
+    maintainers = with maintainers; [ rmcgibbo ];
   };
 
 }

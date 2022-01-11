@@ -6,16 +6,18 @@ in
 
 stdenv.mkDerivation rec {
   pname = "spoofer";
-  version = "1.4.5";
+  version = "1.4.7";
 
   src = fetchurl {
     url = "https://www.caida.org/projects/spoofer/downloads/${pname}-${version}.tar.gz";
-    sha256 = "0pnim3xyfsmv6alsvhwjs4v9lp39wwiyj63rxsqyz4wx4vkmn12z";
+    sha256 = "sha256-6ov1dZbxmBRIhfIzUaxiaHUeiU6SbNKhiQX1W4lmhD8=";
   };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl protobuf libpcap traceroute ]
                 ++ optional withGUI qt5.qtbase ;
+
+  dontWrapQtApps = true;
 
   meta = with lib; {
     homepage = "https://www.caida.org/projects/spoofer";

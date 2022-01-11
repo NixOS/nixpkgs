@@ -5,7 +5,7 @@
 
 buildPythonPackage rec {
   pname = "plumbum";
-  version = "1.6.9";
+  version = "1.7.2";
 
   checkInputs = [ pytest ];
 
@@ -14,6 +14,6 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1ps37vamqav6p277dlp51jnacd5q4x4z1x8y0nfjw3y8jsfy3f8n";
+    sha256 = "0d1bf908076bbd0484d16412479cb97d6843069ee19f99e267e11dd980040523";
   };
 }

@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, pkg-config, libraw1394 }:
 
 stdenv.mkDerivation rec {
-  name = "libavc1394-0.5.4";
+  pname = "libavc1394";
+  version = "0.5.4";
 
   src = fetchurl {
-    url = "mirror://sourceforge/libavc1394/${name}.tar.gz";
+    url = "mirror://sourceforge/libavc1394/${pname}-${version}.tar.gz";
     sha256 = "0lsv46jdqvdx5hx92v0z2cz3yh6212pz9gk0k3513sbaa04zzcbw";
   };
 

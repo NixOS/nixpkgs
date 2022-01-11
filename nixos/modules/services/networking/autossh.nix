@@ -79,7 +79,7 @@ in
 
     systemd.services =
 
-      lib.fold ( s : acc : acc //
+      lib.foldr ( s : acc : acc //
         {
           "autossh-${s.name}" =
             let

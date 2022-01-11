@@ -1,8 +1,8 @@
 { lib, buildPythonPackage, fetchFromGitHub, python3, cmake
-, pythonOlder, libnest2d, sip, clipper }:
+, libnest2d, sip_4, clipper }:
 
 buildPythonPackage rec {
-  version = "4.8.0";
+  version = "4.12.0";
   pname = "pynest2d";
   format = "other";
 
@@ -10,10 +10,10 @@ buildPythonPackage rec {
     owner = "Ultimaker";
     repo = "pynest2d";
     rev = version;
-    sha256 = "18dn92vgr4gvf9scfh93yg9bwrhdjvq62di08rpi7pqjrrvq2nvp";
+    sha256 = "sha256-QQdTDhO4i9NVhegGTmdEQSNv3gooaZzTX/Rv86h3GEo=";
   };
 
-  propagatedBuildInputs = [ libnest2d sip clipper ];
+  propagatedBuildInputs = [ libnest2d sip_4 clipper ];
   nativeBuildInputs = [ cmake ];
 
   CLIPPER_PATH = "${clipper.out}";

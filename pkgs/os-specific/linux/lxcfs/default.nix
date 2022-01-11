@@ -5,17 +5,17 @@
 with lib;
 stdenv.mkDerivation rec {
   pname = "lxcfs";
-  version = "4.0.7";
+  version = "4.0.11";
 
   src = fetchFromGitHub {
     owner = "lxc";
     repo = "lxcfs";
     rev = "lxcfs-${version}";
-    sha256 = "sha256-gC1Q+kG/oKfYvuHVKstpRWfL/thsemULrimPrV/eeaI=";
+    sha256 = "sha256-jWOmGV85uTYjBFQZKR3+TgPWZix2vuN8TLA/dhL8jwk=";
   };
 
-  nativeBuildInputs = [ pkg-config help2man autoreconfHook ];
-  buildInputs = [ fuse makeWrapper ];
+  nativeBuildInputs = [ pkg-config help2man autoreconfHook makeWrapper ];
+  buildInputs = [ fuse ];
 
   preConfigure = lib.optionalString enableDebugBuild ''
     sed -i 's,#AM_CFLAGS += -DDEBUG,AM_CFLAGS += -DDEBUG,' Makefile.am

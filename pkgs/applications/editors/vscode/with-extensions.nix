@@ -1,4 +1,4 @@
-{ lib, runCommand, buildEnv, vscode, makeWrapper
+{ lib, stdenv, runCommand, buildEnv, vscode, makeWrapper
 , vscodeExtensions ? [] }:
 
 /*
@@ -11,7 +11,7 @@
 
         # When the extension is already available in the default extensions set.
         vscodeExtensions = with vscode-extensions; [
-          bbenoist.Nix
+          bbenoist.nix
         ]
 
         # Concise version from the vscode market place when not available in the default set.
@@ -42,8 +42,7 @@
 */
 
 let
-
-  inherit (vscode) executableName;
+  inherit (vscode) executableName longName;
   wrappedPkgVersion = lib.getVersion vscode;
   wrappedPkgName = lib.removeSuffix "-${wrappedPkgVersion}" vscode.name;
 
@@ -52,16 +51,30 @@ let
     paths = vscodeExtensions;
   };
 
+  extensionsFlag = lib.optionalString (vscodeExtensions != []) ''
+    --add-flags "--extensions-dir ${combinedExtensionsDrv}/share/vscode/extensions"
+  '';
 in
 
 # When no extensions are requested, we simply redirect to the original
 # non-wrapped vscode executable.
 runCommand "${wrappedPkgName}-with-extensions-${wrappedPkgVersion}" {
-  buildInputs = [ vscode makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ vscode ];
   dontPatchELF = true;
   dontStrip = true;
   meta = vscode.meta;
-} ''
+} (if stdenv.isDarwin then ''
+  mkdir -p $out/bin/
+  mkdir -p "$out/Applications/${longName}.app/Contents/MacOS"
+
+  for path in PkgInfo Frameworks Resources _CodeSignature Info.plist; do
+    ln -s "${vscode}/Applications/${longName}.app/Contents/$path" "$out/Applications/${longName}.app/Contents/"
+  done
+
+  makeWrapper "${vscode}/bin/${executableName}" "$out/bin/${executableName}" ${extensionsFlag}
+  makeWrapper "${vscode}/Applications/${longName}.app/Contents/MacOS/Electron" "$out/Applications/${longName}.app/Contents/MacOS/Electron" ${extensionsFlag}
+'' else ''
   mkdir -p "$out/bin"
   mkdir -p "$out/share/applications"
   mkdir -p "$out/share/pixmaps"
@@ -69,7 +82,5 @@ runCommand "${wrappedPkgName}-with-extensions-${wrappedPkgVersion}" {
   ln -sT "${vscode}/share/pixmaps/code.png" "$out/share/pixmaps/code.png"
   ln -sT "${vscode}/share/applications/${executableName}.desktop" "$out/share/applications/${executableName}.desktop"
   ln -sT "${vscode}/share/applications/${executableName}-url-handler.desktop" "$out/share/applications/${executableName}-url-handler.desktop"
-  makeWrapper "${vscode}/bin/${executableName}" "$out/bin/${executableName}" ${lib.optionalString (vscodeExtensions != []) ''
-    --add-flags "--extensions-dir ${combinedExtensionsDrv}/share/vscode/extensions"
-  ''}
-''
+  makeWrapper "${vscode}/bin/${executableName}" "$out/bin/${executableName}" ${extensionsFlag}
+'')

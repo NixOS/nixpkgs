@@ -1,19 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, fpc, zip, makeWrapper
+{ lib, stdenv, fetchFromGitHub, fpc, zip, makeWrapper
 , SDL2, freetype, physfs, openal, gamenetworkingsockets
-, xorg, autoPatchelfHook
+, xorg, autoPatchelfHook, cmake
 }:
 
 let
   base = stdenv.mkDerivation rec {
     pname = "soldat-base";
-    version = "unstable-2020-11-26";
+    version = "unstable-2021-09-05";
 
     src = fetchFromGitHub {
       name = "base";
       owner = "Soldat";
       repo = "base";
-      rev = "e5f9c35ec12562595b248a7a921dd3458b36b605";
-      sha256 = "0qg0p2adb5v6di44iqczswldhypdqvn1nl96vxkfkxdg9i8x90w3";
+      rev = "6c74d768d511663e026e015dde788006c74406b5";
+      sha256 = "175gmkdccy8rnkd95h2zqldqfydyji1hfby8b1qbnl8wz4dh08mz";
     };
 
     nativeBuildInputs = [ zip ];
@@ -38,66 +38,38 @@ let
 in
 
 stdenv.mkDerivation rec {
-  pname = "soldat-unstable";
-  version = "2020-11-26";
+  pname = "soldat";
+  version = "unstable-2021-11-01";
 
   src = fetchFromGitHub {
     name = "soldat";
     owner = "Soldat";
     repo = "soldat";
-    rev = "2280296ac56883f6a9cad4da48025af8ae7782e7";
-    sha256 = "17i3nlhxm4x4zx00i00aivhxmagbnyizxnpwiqzg57bf23hrvdj3";
+    rev = "7780d2948b724970af9f2aaf4fb4e4350d5438d9";
+    sha256 = "0r39d1394q7kabsgq6vpdlzwsajxafsg23i0r273nggfvs3m805z";
   };
 
-  nativeBuildInputs = [ fpc makeWrapper autoPatchelfHook ];
-
-  buildInputs = [ SDL2 freetype physfs openal gamenetworkingsockets ];
-  runtimeDependencies = [ xorg.libX11 ];
-
   patches = [
-    # fix an argument parsing issue which prevents
-    # us from passing nix store paths to soldat
-    (fetchpatch {
-      url = "https://github.com/sternenseemann/soldat/commit/9f7687430f5fe142c563b877d2206f5c9bbd5ca0.patch";
-      sha256 = "0wsrazb36i7v4idg06jlzfhqwf56q9szzz7jp5cg4wsvcky3wajf";
-    })
+    # Don't build GameNetworkingSockets as an ExternalProject,
+    # see https://github.com/Soldat/soldat/issues/73
+    ./gamenetworkingsockets-no-external.patch
   ];
 
-  postPatch = ''
-    for f in client/Makefile server/Makefile; do
-      # fix unportable uname invocation
-      substituteInPlace "$f" --replace "uname -p" "uname -m"
-    done
-  '';
+  nativeBuildInputs = [ fpc makeWrapper autoPatchelfHook cmake ];
 
-  buildPhase = ''
-    mkdir -p client/build server/build
+  cmakeFlags = [
+    "-DADD_ASSETS=OFF" # We provide base's smods via nix
+  ];
 
-    # build .so from stb headers
-    pushd client/libs/stb
-    make
-    popd
+  buildInputs = [ SDL2 freetype physfs openal gamenetworkingsockets ];
+  # TODO(@sternenseemann): set proper rpath via cmake, so we don't need autoPatchelfHook
+  runtimeDependencies = [ xorg.libX11 ];
 
-    # build client
-    pushd client
-    make mode=release
-    popd
-
-    # build server
-    pushd server
-    make mode=release
-    popd
-  '';
-
-  installPhase = ''
-    install -Dm644 client/libs/stb/libstb.so -t $out/lib
-    install -Dm755 client/build/soldat_* $out/bin/soldat
-    install -Dm755 server/build/soldatserver_* $out/bin/soldatserver
-
-    # make sure soldat{,server} find their game archive,
-    # let them write their state and configuration files
-    # to $XDG_CONFIG_HOME/soldat/soldat{,server} unless
-    # the user specifies otherwise.
+  # make sure soldat{,server} find their game archive,
+  # let them write their state and configuration files
+  # to $XDG_CONFIG_HOME/soldat/soldat{,server} unless
+  # the user specifies otherwise.
+  postInstall = ''
     for p in $out/bin/soldatserver $out/bin/soldat; do
       configDir="\''${XDG_CONFIG_HOME:-\$HOME/.config}/soldat/$(basename "$p")"
 
@@ -114,7 +86,7 @@ stdenv.mkDerivation rec {
     license = [ licenses.mit base.meta.license ];
     inherit (src.meta) homepage;
     maintainers = [ maintainers.sternenseemann ];
-    platforms = platforms.x86_64 ++ platforms.i686;
+    platforms = [ "x86_64-linux" "i686-linux" ];
     # portability currently mainly limited by fpc
     # in nixpkgs which doesn't work on darwin,
     # aarch64 and arm support should be possible:

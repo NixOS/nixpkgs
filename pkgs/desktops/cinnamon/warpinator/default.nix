@@ -14,16 +14,15 @@
 
 python3.pkgs.buildPythonApplication rec  {
   pname = "warpinator";
-  version = "1.0.8";
+  version = "1.2.5";
 
   format = "other";
-  doCheck = false;
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "0n1b50j2w76qnhfj5yg5q2j7fgxr9gbmzpazmbml4q41h8ybcmxm";
+    hash = "sha256-pTLM4CrkBLEZS9IdM9IBSGH0WPOj1rlAgvWLOUy6MxY=";
   };
 
   nativeBuildInputs = [
@@ -55,6 +54,10 @@ python3.pkgs.buildPythonApplication rec  {
     netifaces
   ];
 
+  mesonFlags = [
+    "-Dbundle-zeroconf=false"
+  ];
+
   postPatch = ''
     chmod +x install-scripts/*
     patchShebangs .
@@ -74,6 +77,6 @@ python3.pkgs.buildPythonApplication rec  {
     description = "Share files across the LAN";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.mkg20001 ];
+    maintainers = teams.cinnamon.members;
   };
 }

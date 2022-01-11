@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
      description = "A simple and efficient MsgPack binary serialization library in a self-contained header file";
      homepage = "https://github.com/rtsisyk/msgpuck";
      license = licenses.bsd2;
-     platforms = platforms.linux;
+     platforms = platforms.all;
      maintainers = with maintainers; [ izorkin ];
  };
 }

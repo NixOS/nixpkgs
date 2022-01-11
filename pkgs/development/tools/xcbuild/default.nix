@@ -30,6 +30,8 @@ in stdenv.mkDerivation {
     sha256 = "1xxwg2849jizxv0g1hy0b1m3i7iivp9bmc4f5pi76swsn423d41m";
   };
 
+  patches = [ ./includes.patch ];
+
   prePatch = ''
     rmdir ThirdParty/*
     cp -r --no-preserve=all ${googletest} ThirdParty/googletest
@@ -51,6 +53,7 @@ in stdenv.mkDerivation {
   postInstall = ''
     mv $out/usr/* $out
     rmdir $out/usr
+    cp liblinenoise.* $out/lib/
   '';
 
   NIX_CFLAGS_COMPILE = "-Wno-error";

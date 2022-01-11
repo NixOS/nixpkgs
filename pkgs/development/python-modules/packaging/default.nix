@@ -5,21 +5,21 @@
 , six
 , pytestCheckHook
 , pretend
-, flit-core
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "packaging";
-  version = "20.7";
+  version = "21.3";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "Ba87uF0yA3fbKBzyVKsFDhp+vL9UEGhamkB+GKH4EjY=";
+    sha256 = "sha256-3UfEKSfYmrkR5gZRiQfMLTofOLvQJjhZcGQ/nFuOz+s=";
   };
 
   nativeBuildInputs = [
-    flit-core
+    setuptools
   ];
 
   propagatedBuildInputs = [ pyparsing six ];
@@ -28,10 +28,6 @@ buildPythonPackage rec {
     pytestCheckHook
     pretend
   ];
-
-  checkPhase = ''
-    py.test tests
-  '';
 
   # Prevent circular dependency
   doCheck = false;

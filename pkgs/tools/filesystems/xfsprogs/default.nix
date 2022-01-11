@@ -1,14 +1,14 @@
-{ lib, stdenv, buildPackages, fetchpatch, fetchurl, autoconf, automake, gettext, libtool, pkg-config
+{ lib, stdenv, buildPackages, fetchurl, autoconf, automake, gettext, libtool, pkg-config
 , icu, libuuid, readline, inih
 }:
 
 stdenv.mkDerivation rec {
   pname = "xfsprogs";
-  version = "5.10.0";
+  version = "5.13.0";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/fs/xfs/xfsprogs/${pname}-${version}.tar.xz";
-    sha256 = "1schqzjx836jd54l10pqds7hyli2m77df3snk95xbr23dpj1fh70";
+    sha256 = "sha256-ThQtS6vghq35AW2MYGyAWCnaCORjiaRDP0A0YgT5DNs=";
   };
 
   outputs = [ "bin" "dev" "out" "doc" ];
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://xfs.org/";
     description = "SGI XFS utilities";
-    license = licenses.lgpl21;
+    license = with licenses; [ gpl2Only lgpl21 gpl3Plus ];  # see https://git.kernel.org/pub/scm/fs/xfs/xfsprogs-dev.git/tree/debian/copyright
     platforms = platforms.linux;
     maintainers = with maintainers; [ dezgeg ajs124 ];
   };

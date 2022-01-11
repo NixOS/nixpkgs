@@ -19,7 +19,7 @@ in {
       enable = lib.mkEnableOption "Blackfire profiler agent";
       settings = lib.mkOption {
         description = ''
-          See https://blackfire.io/docs/configuration/agent
+          See https://blackfire.io/docs/up-and-running/configuration/agent
         '';
         type = lib.types.submodule {
           freeformType = with lib.types; attrsOf str;
@@ -53,13 +53,8 @@ in {
 
     services.blackfire-agent.settings.socket = "unix:///run/${agentSock}";
 
-    systemd.services.blackfire-agent = {
-      description = "Blackfire agent";
-
-      serviceConfig = {
-        ExecStart = "${pkgs.blackfire}/bin/blackfire-agent";
-        RuntimeDirectory = "blackfire";
-      };
-    };
+    systemd.packages = [
+      pkgs.blackfire
+    ];
   };
 }

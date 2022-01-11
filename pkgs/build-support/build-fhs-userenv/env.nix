@@ -1,8 +1,11 @@
 { stdenv, buildEnv, writeText, pkgs, pkgsi686Linux }:
 
-{ name, profile ? ""
-, targetPkgs ? pkgs: [], multiPkgs ? pkgs: []
-, extraBuildCommands ? "", extraBuildCommandsMulti ? ""
+{ name
+, profile ? ""
+, targetPkgs ? pkgs: []
+, multiPkgs ? pkgs: []
+, extraBuildCommands ? ""
+, extraBuildCommandsMulti ? ""
 , extraOutputsToInstall ? []
 }:
 
@@ -23,7 +26,8 @@
 
 let
   is64Bit = stdenv.hostPlatform.parsed.cpu.bits == 64;
-  isMultiBuild  = multiPkgs != null && is64Bit;
+  # multi-lib glibc is only supported on x86_64
+  isMultiBuild  = multiPkgs != null && stdenv.hostPlatform.system == "x86_64-linux";
   isTargetBuild = !isMultiBuild;
 
   # list of packages (usually programs) which are only be installed for the
@@ -80,6 +84,9 @@ let
 
       # compatibility with NixOS
       ln -s /host/etc/static static
+
+      # symlink nix config
+      ln -s /host/etc/nix nix
 
       # symlink some NSS stuff
       ln -s /host/etc/passwd passwd
@@ -177,7 +184,7 @@ let
     done
     cd ..
 
-    for i in var etc; do
+    for i in var etc opt; do
       if [ -d "${staticUsrProfileTarget}/$i" ]; then
         cp -rsHf "${staticUsrProfileTarget}/$i" "$i"
       fi

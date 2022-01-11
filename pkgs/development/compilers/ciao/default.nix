@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "ciao";
-  version = "1.19.0";
+  version = "1.20.0";
   src = fetchFromGitHub {
     owner = "ciao-lang";
     repo = "ciao";
     rev = "v${version}";
-    sha256 = "03qzcb4ivgkiwdpw7a94dn74xqyxjwz5ilrr53rcblsh5ng299jp";
+    sha256 = "sha256-Xp0ZQRi7mOO2WN/2hO6zgobDG3S0BEV+SgsaduBZ30U=";
   };
 
   configurePhase = ''
@@ -28,5 +28,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21;
     maintainers = with maintainers; [ suhr ];
     platforms = platforms.unix;
+    broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/ciao.x86_64-darwin
   };
 }

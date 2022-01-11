@@ -9,9 +9,9 @@ stdenv.mkDerivation rec {
     gemdir = ./.;
   };
 
-  phases = ["installPhase"];
+  dontUnpack = true;
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     mkdir -p $out/bin

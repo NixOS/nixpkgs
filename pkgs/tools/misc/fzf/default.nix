@@ -1,34 +1,26 @@
-{ lib, buildGoModule, fetchFromGitHub, writeText, runtimeShell, ncurses, perl, fetchpatch }:
+{ lib, buildGoModule, fetchFromGitHub, writeText, runtimeShell, ncurses, perl }:
 
 buildGoModule rec {
   pname = "fzf";
-  version = "0.25.0";
+  version = "0.29.0";
 
   src = fetchFromGitHub {
     owner = "junegunn";
     repo = pname;
     rev = version;
-    sha256 = "1j5bfxl4w8w3n89p051y8dhxg0py9l98v7r2gkr63bg4lj32faz8";
+    sha256 = "sha256-m+mW9R50VXWUMaRmhMzpr7v8iQJxLYexYvcUMHPz3UM=";
   };
 
-  vendorSha256 = "0dd0qm1fxp3jnlrhfaas8fw87cj7rygaac35a9nk3xh2xsk7q35p";
+  vendorSha256 = "sha256-omvCzM5kH3nAE57S33NV0OFRJmU+Ty7hhriaG/Dc0o0=";
 
   outputs = [ "out" "man" ];
-
-  patches = [
-    # Fix test failure on go 1.15
-    (fetchpatch {
-      url = "https://github.com/junegunn/fzf/commit/82791f7efccde5b30da0b4d44f10d214ae5c0c0d.patch";
-      sha256 = "1nybsz09h8cnvxjnkmx9c52g8z0x6pvrn230hw1va5a3pvmg01z1";
-    })
-  ];
 
   fishHook = writeText "load-fzf-keybindings.fish" "fzf_key_bindings";
 
   buildInputs = [ ncurses ];
 
-  buildFlagsArray = [
-    "-ldflags=-s -w -X main.version=${version} -X main.revision=${src.rev}"
+  ldflags = [
+    "-s" "-w" "-X main.version=${version} -X main.revision=${src.rev}"
   ];
 
   # The vim plugin expects a relative path to the binary; patch it to abspath.
@@ -79,5 +71,6 @@ buildGoModule rec {
     license = licenses.mit;
     maintainers = with maintainers; [ Br1ght0ne ma27 zowoq ];
     platforms = platforms.unix;
+    changelog = "https://github.com/junegunn/fzf/blob/${version}/CHANGELOG.md";
   };
 }

@@ -2,23 +2,29 @@
 , buildPythonPackage
 , fetchPypi
 , glibcLocales
-, setuptools_scm
+, setuptools-scm
 , wcwidth
+, importlib-metadata
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "prettytable";
-  version = "2.0.0";
+  version = "2.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e37acd91976fe6119172771520e58d1742c8479703489321dc1d9c85e7259922";
+    sha256 = "18e56447f636b447096977d468849c1e2d3cfa0af8e7b5acfcf83a64790c0aca";
   };
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
   buildInputs = [ glibcLocales ];
 
-  propagatedBuildInputs = [ wcwidth ];
+  propagatedBuildInputs = [
+    wcwidth
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    importlib-metadata
+  ];
 
   preCheck = ''
     export LANG="en_US.UTF-8"

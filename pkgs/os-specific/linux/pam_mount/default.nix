@@ -2,16 +2,15 @@
 
 stdenv.mkDerivation rec {
   pname = "pam_mount";
-  version = "2.16";
+  version = "2.17";
 
   src = fetchurl {
-    url = "mirror://sourceforge/pam-mount/pam_mount/${version}/${pname}-${version}.tar.xz";
-    sha256 = "1rvi4irb7ylsbhvx1cr6islm2xxw1a4b19q6z4a9864ndkm0f0mf";
+    url = "mirror://sourceforge/pam-mount/pam_mount/${pname}-${version}.tar.xz";
+    sha256 = "1q2n6a2ah6nghdn8i6ad2wj247njwb5nx48cggxknaa6lqxylidy";
   };
 
   patches = [
     ./insert_utillinux_path_hooks.patch
-    ./support_luks2.patch
   ];
 
   postPatch = ''
@@ -31,7 +30,6 @@ stdenv.mkDerivation rec {
     "--sbindir=${placeholder "out"}/bin"
     "--sysconfdir=${placeholder "out"}/etc"
     "--with-slibdir=${placeholder "out"}/lib"
-    "--with-ssbindir=${placeholder "out"}/bin"
   ];
 
   postInstall = ''

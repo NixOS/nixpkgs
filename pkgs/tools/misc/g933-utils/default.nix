@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "g933-utils";
-  version = "unstable-2019-08-04";
+  version = "unstable-2021-11-19";
 
   src = fetchFromGitHub {
     owner = "ashkitten";
     repo = "g933-utils";
-    rev = "b80cfd59fc41ae5d577c147311376dd7f7882493";
-    sha256 = "06napzpk3nayzixb4l4fzdiwpgmcrsbc5j9m4qip1yn6dfkin3p0";
+    rev = "1fc8cec375ed0d6f72191eadec788a49f51032d1";
+    sha256 = "sha256-kGLMRqZHzRuXQNTjIuLz8JPC1c/ZK38msfkTIVnaomg=";
   };
 
-  cargoSha256 = "16xgk4rc36d6lylh2dzv63ryq9s7fli3h2qva1m1p6f0gpasnk7w";
+  cargoSha256 = "sha256-FBX5hrS8tNWN83XX+x+s/mYyvO1h6V63bXCx7y0R8bY=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ udev ];

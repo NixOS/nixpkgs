@@ -3,7 +3,7 @@
 , buildPythonPackage
 , python
 , pygobject3
-, xvfb_run
+, xvfb-run
 , gobject-introspection
 , gtk3
 , pythonOlder
@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   checkPhase = ''
     runHook preCheck
-    ${xvfb_run}/bin/xvfb-run -s '-screen 0 800x600x24' \
+    ${xvfb-run}/bin/xvfb-run -s '-screen 0 800x600x24' \
       ${python.interpreter} nix_run_setup test
     runHook postCheck
   '';

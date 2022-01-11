@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, lib, ... }:
 
 with lib;
 let
@@ -32,6 +32,7 @@ in
 
     services.resolved.domains = mkOption {
       default = config.networking.search;
+      defaultText = literalExpression "config.networking.search";
       example = [ "example.com" ];
       type = types.listOf types.str;
       description = ''
@@ -140,7 +141,8 @@ in
 
     # add resolve to nss hosts database if enabled and nscd enabled
     # system.nssModules is configured in nixos/modules/system/boot/systemd.nix
-    system.nssDatabases.hosts = optional config.services.nscd.enable "resolve [!UNAVAIL=return]";
+    # added with order 501 to allow modules to go before with mkBefore
+    system.nssDatabases.hosts = (mkOrder 501 ["resolve [!UNAVAIL=return]"]);
 
     systemd.additionalUpstreamSystemUnits = [
       "systemd-resolved.service"
@@ -150,9 +152,6 @@ in
       wantedBy = [ "multi-user.target" ];
       aliases = [ "dbus-org.freedesktop.resolve1.service" ];
       restartTriggers = [ config.environment.etc."systemd/resolved.conf".source ];
-      # Upstream bug: https://github.com/systemd/systemd/issues/18078
-      # systemd-resolved without libidn2 is broken
-      environment.LD_LIBRARY_PATH = "${lib.getLib pkgs.libidn2}/lib";
     };
 
     environment.etc = {

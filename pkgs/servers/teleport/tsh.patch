@@ -1,0 +1,17 @@
+diff --git a/tool/tsh/tsh.go b/tool/tsh/tsh.go
+index 57379c40f..cb4d7b84c 100644
+--- a/tool/tsh/tsh.go
++++ b/tool/tsh/tsh.go
+@@ -514,10 +514,11 @@ func Run(args []string, opts ...cliOption) error {
+ 		}
+ 	}
+ 
+-	cf.executablePath, err = os.Executable()
++	tempBinaryPath, err := os.Executable()
+ 	if err != nil {
+ 		return trace.Wrap(err)
+ 	}
++	cf.executablePath = path.Dir(tempBinaryPath) + "/tsh"
+ 
+ 	if err := client.ValidateAgentKeyOption(cf.AddKeysToAgent); err != nil {
+ 		return trace.Wrap(err)

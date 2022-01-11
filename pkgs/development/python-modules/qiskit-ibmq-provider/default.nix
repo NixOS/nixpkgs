@@ -7,9 +7,9 @@
 , qiskit-terra
 , requests
 , requests_ntlm
-, websockets
+, websocket-client
   # Visualization inputs
-, withVisualization ? false
+, withVisualization ? true
 , ipython
 , ipyvuetify
 , ipywidgets
@@ -22,6 +22,8 @@
 , nbconvert
 , nbformat
 , pproxy
+, qiskit-aer
+, websockets
 , vcrpy
 }:
 
@@ -38,7 +40,7 @@ let
 in
 buildPythonPackage rec {
   pname = "qiskit-ibmq-provider";
-  version = "0.11.1";
+  version = "0.18.1";
 
   disabled = pythonOlder "3.6";
 
@@ -46,7 +48,7 @@ buildPythonPackage rec {
     owner = "Qiskit";
     repo = pname;
     rev = version;
-    sha256 = "0b5mnq8f5844idnsmp84lpkvlpszfwwi998yvggcgaayw1dbk53h";
+    sha256 = "sha256-rySSCyI+62G7kL1ZRtjX1WeWj3LPXECvrlXAcIDINF4=";
   };
 
   propagatedBuildInputs = [
@@ -55,8 +57,12 @@ buildPythonPackage rec {
     qiskit-terra
     requests
     requests_ntlm
-    websockets
+    websocket-client
   ] ++ lib.optionals withVisualization visualizationPackages;
+
+  postPatch = ''
+    substituteInPlace setup.py --replace "websocket-client>=1.0.1" "websocket-client"
+  '';
 
   # Most tests require credentials to run on IBMQ
   checkInputs = [
@@ -64,7 +70,9 @@ buildPythonPackage rec {
     nbconvert
     nbformat
     pproxy
+    qiskit-aer
     vcrpy
+    websockets
   ] ++ lib.optionals (!withVisualization) visualizationPackages;
 
   pythonImportsCheck = [ "qiskit.providers.ibmq" ];
@@ -73,6 +81,7 @@ buildPythonPackage rec {
     "test_old_api_url"
     "test_non_auth_url"
     "test_non_auth_url_with_hub"
+    "test_coder_optimizers" # TODO: reenable when package scikit-quant is packaged, either in NUR or nixpkgs
 
     # slow tests
     "test_websocket_retry_failure"
@@ -81,7 +90,9 @@ buildPythonPackage rec {
 
   # Skip tests that rely on internet access (mostly to IBM Quantum Experience cloud).
   # Options defined in qiskit.terra.test.testing_options.py::get_test_options
-  QISKIT_TESTS = "skip_online";
+  preCheck = ''
+    export QISKIT_TESTS=skip_online
+  '';
 
   meta = with lib; {
     description = "Qiskit provider for accessing the quantum devices and simulators at IBMQ";

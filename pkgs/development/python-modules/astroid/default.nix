@@ -1,35 +1,61 @@
-{ lib, fetchPypi, buildPythonPackage, pythonOlder, isPyPy, pythonAtLeast
-, lazy-object-proxy, six, wrapt, typing, typed-ast
-, pytestrunner, pytest
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, isPyPy
+, lazy-object-proxy
+, wrapt
+, typing-extensions
+, typed-ast
+, pytestCheckHook
+, setuptools-scm
+, pylint
 }:
 
 buildPythonPackage rec {
   pname = "astroid";
-  version = "2.4.2";
+  version = "2.9.0"; # Check whether the version is compatible with pylint
 
-  disabled = pythonOlder "3.4" || pythonAtLeast "3.9";
+  disabled = pythonOlder "3.6.2";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "2f4078c2a41bf377eea06d71c9d2ba4eb8f6b1af2135bec27bbbb7d8f12bb703";
+  src = fetchFromGitHub {
+    owner = "PyCQA";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-sImWiWULZ1HS3JyQHfEhc4ZRZ6anOUTqZZGNIYj2MaY=";
   };
 
-  postPatch = ''
-    substituteInPlace astroid/__pkginfo__.py --replace "lazy_object_proxy==1.4.*" "lazy_object_proxy"
-  '';
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
-  # From astroid/__pkginfo__.py
-  propagatedBuildInputs = [ lazy-object-proxy six wrapt ]
-    ++ lib.optional (pythonOlder "3.5") typing
-    ++ lib.optional (!isPyPy) typed-ast;
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
-  checkInputs = [ pytestrunner pytest ];
+  propagatedBuildInputs = [
+    lazy-object-proxy
+    wrapt
+  ] ++ lib.optionals (pythonOlder "3.10") [
+    typing-extensions
+  ] ++ lib.optional (!isPyPy && pythonOlder "3.8") typed-ast;
+
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # assert (1, 1) == (1, 16)
+    "test_end_lineno_string"
+  ];
+
+  passthru.tests = {
+    inherit pylint;
+  };
 
   meta = with lib; {
     description = "An abstract syntax tree for Python with inference support";
     homepage = "https://github.com/PyCQA/astroid";
-    license = licenses.lgpl2;
+    license = licenses.lgpl21Plus;
     platforms = platforms.all;
-    maintainers = with maintainers; [ nand0p ];
+    maintainers = with maintainers; [ ];
   };
 }

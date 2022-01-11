@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "-C sources"
-    "CC=${stdenv.cc}/bin/cc"
+    "CC=${stdenv.cc.targetPrefix}cc"
   ];
 
   preInstall = ''
@@ -34,6 +34,6 @@ stdenv.mkDerivation rec {
     description = "A portable Forth compiler";
     homepage = "https://thebeez.home.xs4all.nl/4tH/index.html";
     license = licenses.lgpl3;
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 }

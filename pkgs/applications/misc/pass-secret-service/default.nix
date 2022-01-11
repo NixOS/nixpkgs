@@ -19,9 +19,8 @@ python3.pkgs.buildPythonApplication rec {
   # /etc/ in check phase.
   postPatch = ''
     substituteInPlace Makefile \
-      --replace \
-        "dbus-run-session" \
-        "dbus-run-session --config-file=${dbus}/share/dbus-1/session.conf"
+      --replace "dbus-run-session" "dbus-run-session --config-file=${dbus}/share/dbus-1/session.conf" \
+      --replace '-p $(relpassstore)' '-p $(PASSWORD_STORE_DIR)'
   '';
 
   propagatedBuildInputs = with python3.pkgs; [

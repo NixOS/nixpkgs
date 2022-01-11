@@ -1,4 +1,4 @@
-{ system ? builtins.currentSystem, pkgs ? import <nixpkgs> { inherit system; } }:
+{ system ? builtins.currentSystem, pkgs ? import ../../.. { inherit system; } }:
 with import ./base.nix { inherit system; };
 let
 
@@ -85,7 +85,7 @@ let
     name = "kubectl";
     tag = "latest";
     contents = [ kubectl pkgs.busybox kubectlPod2 ];
-    config.Entrypoint = "/bin/sh";
+    config.Entrypoint = ["/bin/sh"];
   };
 
   base = {
@@ -97,7 +97,7 @@ let
       machine1.wait_until_succeeds("kubectl get node machine1.my.zyx | grep -w Ready")
 
       machine1.wait_until_succeeds(
-          "docker load < ${kubectlImage}"
+          "${pkgs.gzip}/bin/zcat ${kubectlImage} | ${pkgs.containerd}/bin/ctr -n k8s.io image import -"
       )
 
       machine1.wait_until_succeeds(
@@ -115,9 +115,9 @@ let
 
       machine1.wait_until_succeeds("kubectl get pod kubectl | grep Running")
 
-      machine1.wait_until_succeeds("kubectl exec -ti kubectl -- kubectl get pods")
-      machine1.fail("kubectl exec -ti kubectl -- kubectl create -f /kubectl-pod-2.json")
-      machine1.fail("kubectl exec -ti kubectl -- kubectl delete pods -l name=kubectl")
+      machine1.wait_until_succeeds("kubectl exec kubectl -- kubectl get pods")
+      machine1.fail("kubectl exec kubectl -- kubectl create -f /kubectl-pod-2.json")
+      machine1.fail("kubectl exec kubectl -- kubectl delete pods -l name=kubectl")
     '';
   };
 
@@ -134,7 +134,7 @@ let
       machine1.wait_until_succeeds("kubectl get node machine2.my.zyx | grep -w Ready")
 
       machine2.wait_until_succeeds(
-          "docker load < ${kubectlImage}"
+          "${pkgs.gzip}/bin/zcat ${kubectlImage} | ${pkgs.containerd}/bin/ctr -n k8s.io image import -"
       )
 
       machine1.wait_until_succeeds(
@@ -152,9 +152,9 @@ let
 
       machine1.wait_until_succeeds("kubectl get pod kubectl | grep Running")
 
-      machine1.wait_until_succeeds("kubectl exec -ti kubectl -- kubectl get pods")
-      machine1.fail("kubectl exec -ti kubectl -- kubectl create -f /kubectl-pod-2.json")
-      machine1.fail("kubectl exec -ti kubectl -- kubectl delete pods -l name=kubectl")
+      machine1.wait_until_succeeds("kubectl exec kubectl -- kubectl get pods")
+      machine1.fail("kubectl exec kubectl -- kubectl create -f /kubectl-pod-2.json")
+      machine1.fail("kubectl exec kubectl -- kubectl delete pods -l name=kubectl")
     '';
   };
 

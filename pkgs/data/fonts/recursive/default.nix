@@ -1,7 +1,7 @@
 { lib, fetchzip }:
 
 let
-  version = "1.071";
+  version = "1.084";
 in
 fetchzip {
   name = "recursive-${version}";
@@ -14,7 +14,7 @@ fetchzip {
     unzip -j $downloadedFile \*.ttf -d $out/share/fonts/truetype
   '';
 
-  sha256 = "0db410vcvgawb89f11l2v7w3b7l70wzlwwv8df3vnangl3mdv13z";
+  sha256 = "sha256-YL09RVU9pgP0/aGRKECHzd5t1VmNDPtOFcRygWqIisg=";
 
   meta = with lib; {
     homepage = "https://recursive.design/";

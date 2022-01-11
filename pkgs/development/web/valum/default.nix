@@ -20,6 +20,6 @@ stdenv.mkDerivation rec {
     description = "Web micro-framework written in Vala";
     license = licenses.lgpl3;
     platforms = platforms.linux;
-    maintainers = [ maintainers.lethalman ];
+    maintainers = [ ];
   };
 }

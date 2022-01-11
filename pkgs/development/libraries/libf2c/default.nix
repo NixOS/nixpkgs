@@ -1,7 +1,8 @@
 {lib, stdenv, fetchurl, unzip}:
 
 stdenv.mkDerivation rec {
-  name = "libf2c-20160102";
+  pname = "libf2c";
+  version = "20160102";
 
   src = fetchurl {
     url = "http://www.netlib.org/f2c/libf2c.zip";
@@ -22,7 +23,7 @@ stdenv.mkDerivation rec {
     cp f2c.h $out/include
   '';
 
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip ];
 
   hardeningDisable = [ "format" ];
 

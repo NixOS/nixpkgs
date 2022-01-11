@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cpu-x";
-  version = "4.0.1";
+  version = "4.2.0";
 
   src = fetchFromGitHub {
     owner = "X0rg";
     repo = "CPU-X";
     rev = "v${version}";
-    sha256 = "191zkkswlbbsw492yygc3idf7wh3bxs97drrqvqqw0mqvrzykxm3";
+    sha256 = "sha256-LWIcE86o+uU8G9DtumiH6iTqHhvq4y/QyQX7J3FhKEc=";
   };
 
   nativeBuildInputs = [ cmake pkg-config wrapGAppsHook nasm makeWrapper ];
@@ -27,6 +27,6 @@ stdenv.mkDerivation rec {
     homepage = src.meta.homepage;
     license = licenses.gpl3;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ gnidorah ];
+    maintainers = with maintainers; [ ];
   };
 }

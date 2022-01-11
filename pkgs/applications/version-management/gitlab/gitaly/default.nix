@@ -4,15 +4,15 @@
 , libgit2, openssl, zlib, pcre, http-parser }:
 
 let
-  # libgit2 was updated to 1.1.0 in nixpkgs, but gitlab doesn't support that yet.
-  # See https://github.com/NixOS/nixpkgs/pull/106909
-  libgit = libgit2.overrideAttrs (attrs: rec {
-    version = "1.0.0";
+  # git2go 32.0.5 does not support libgit2 1.2.0 or 1.3.0.
+  # It needs a specific commit in between those two releases.
+  libgit2_custom = libgit2.overrideAttrs (oldAttrs: rec {
+    version = "1.2.0";
     src = fetchFromGitHub {
       owner = "libgit2";
       repo = "libgit2";
-      rev = "v${version}";
-      sha256 = "06cwrw93ycpfb5kisnsa5nsy95pm11dbh0vvdjg1jn25h9q5d3vc";
+      rev = "109b4c887ffb63962c7017a66fc4a1f48becb48e";
+      sha256 = "sha256-w029FHpOv5K49wE1OJMOlkTe+2cv+ORYqEHxs59GDBI=";
     };
   });
 
@@ -32,31 +32,39 @@ let
         };
       };
   };
-in buildGoModule rec {
-  version = "13.7.4";
+
+  version = "14.6.1";
+  gitaly_package = "gitlab.com/gitlab-org/gitaly/v${lib.versions.major version}";
+in
+
+buildGoModule {
   pname = "gitaly";
+  inherit version;
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitaly";
     rev = "v${version}";
-    sha256 = "1inb7xlv8admzy9q1bgxccbrhks0mmc8lng356h39crj5sgaqkmg";
+    sha256 = "sha256-nbE71s+KoDC6EK26cmq+YIw9MFSQv1y6qwZAJXVXGj4=";
   };
 
-  vendorSha256 = "15i1ajvrff1bfpv3kmb1wm1mmriswwfw2v4cml0nv0zp6a5n5187";
+  vendorSha256 = "sha256-ZLd4E3+e25Hqmd6ZyF3X6BveMEg7OF0FX9IvNBWn3v0=";
 
   passthru = {
     inherit rubyEnv;
   };
 
-  buildFlags = [ "-tags=static,system_libgit2" ];
+  ldflags = "-X ${gitaly_package}/internal/version.version=${version} -X ${gitaly_package}/internal/version.moduleVersion=${version}";
+
+  tags = [ "static,system_libgit2" ];
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ rubyEnv.wrappedRuby libgit openssl zlib pcre http-parser ];
+  buildInputs = [ rubyEnv.wrappedRuby libgit2_custom openssl zlib pcre http-parser ];
   doCheck = false;
 
   postInstall = ''
     mkdir -p $ruby
     cp -rv $src/ruby/{bin,lib,proto,git-hooks} $ruby
+    mv $out/bin/gitaly-git2go $out/bin/gitaly-git2go-${version}
   '';
 
   outputs = [ "out" "ruby" ];
@@ -64,7 +72,7 @@ in buildGoModule rec {
   meta = with lib; {
     homepage = "https://gitlab.com/gitlab-org/gitaly";
     description = "A Git RPC service for handling all the git calls made by GitLab";
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ [ "x86_64-darwin" ];
     maintainers = with maintainers; [ roblabla globin fpletz talyz ];
     license = licenses.mit;
   };

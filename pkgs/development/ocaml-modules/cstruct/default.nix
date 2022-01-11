@@ -2,7 +2,7 @@
 
 buildDunePackage rec {
   pname = "cstruct";
-  version = "6.0.0";
+  version = "6.0.1";
 
   useDune2 = true;
 
@@ -10,7 +10,7 @@ buildDunePackage rec {
 
   src = fetchurl {
     url = "https://github.com/mirage/ocaml-cstruct/releases/download/v${version}/cstruct-v${version}.tbz";
-    sha256 = "0xi6cj85z033fqrqdkwac6gg07629vzdhx03c3lhiwwc4lpnv8bq";
+    sha256 = "4a67bb8f042753453c59eabf0e47865631253ba694091ce6062aac05d47a9bed";
   };
 
   propagatedBuildInputs = [ bigarray-compat ];

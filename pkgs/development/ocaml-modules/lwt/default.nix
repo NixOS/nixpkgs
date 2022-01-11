@@ -1,21 +1,26 @@
-{ lib, fetchzip, pkg-config, ncurses, libev, buildDunePackage, ocaml
-, cppo, ocaml-migrate-parsetree, ocplib-endian, result
+{ lib, fetchFromGitHub, pkg-config, ncurses, libev, buildDunePackage, ocaml
+, cppo, dune-configurator, ocplib-endian, result
 , mmap, seq
+, ocaml-syntax-shims
 }:
 
 let inherit (lib) optional versionAtLeast; in
 
 buildDunePackage rec {
   pname = "lwt";
-  version = "5.3.0";
+  version = "5.4.1";
 
-  src = fetchzip {
-    url = "https://github.com/ocsigen/${pname}/archive/${version}.tar.gz";
-    sha256 = "15hgy3220m2b8imipa514n7l65m1h5lc6l1hanqwwvs7ghh2aqp2";
+  useDune2 = true;
+
+  src = fetchFromGitHub {
+    owner = "ocsigen";
+    repo = "lwt";
+    rev = version;
+    sha256 = "sha256-XpoRKcdNo2j05Gxm5wmKSdwqimFDSWvmLyooPYTHAjM=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ cppo ocaml-migrate-parsetree ]
+  nativeBuildInputs = [ pkg-config cppo dune-configurator ];
+  buildInputs = optional (!versionAtLeast ocaml.version "4.08") ocaml-syntax-shims
    ++ optional (!versionAtLeast ocaml.version "4.07") ncurses;
   propagatedBuildInputs = [ libev mmap ocplib-endian seq result ];
 

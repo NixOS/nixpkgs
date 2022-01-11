@@ -1,31 +1,26 @@
 { lib, buildDunePackage, fetchurl
-, fmt, mirage-flow, result, rresult, cstruct, logs, ke
+, fmt, mirage-flow, result, rresult, cstruct, logs, ke, lwt
 , alcotest, alcotest-lwt, bigstringaf, bigarray-compat
 }:
 
 buildDunePackage rec {
   pname = "mimic";
-  version = "0.0.1";
+  version = "0.0.3";
 
   minimumOCamlVersion = "4.08";
   useDune2 = true;
 
   src = fetchurl {
-    url = "https://github.com/mirage/ocaml-git/releases/download/${pname}-v${version}/${pname}-${pname}-v${version}.tbz";
-    sha256 = "0j4l99sgm5mdmv67vakkz2pw45l6i89bpza88xqkgmskfk50c5pk";
+    url = "https://github.com/dinosaure/mimic/releases/download/${version}/mimic-${version}.tbz";
+    sha256 = "e4743cd2e4f8242eb1ce9d8086fd2affba0eb6a62131309ffa279108bd3dbbcb";
   };
-
-  # don't install changelogs for other packages
-  postPatch = ''
-    rm -f CHANGES.md CHANGES.carton.md
-  '';
 
   propagatedBuildInputs = [
     fmt
+    lwt
     mirage-flow
     result
     rresult
-    cstruct
     logs
   ];
 
@@ -35,6 +30,7 @@ buildDunePackage rec {
     alcotest-lwt
     bigstringaf
     bigarray-compat
+    cstruct
     ke
   ];
 

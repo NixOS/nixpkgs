@@ -50,6 +50,7 @@ in {
         type = types.nullOr types.str;
         description = "DNS name or IP address that will be used for the stream directory lookups or possibily the playlist generation if a Host header is not provided.";
         default = config.networking.domain;
+        defaultText = literalExpression "config.networking.domain";
       };
 
       admin = {

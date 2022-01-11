@@ -1,21 +1,21 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, SDL2, SDL2_mixer, alsaLib, libpng
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, SDL2, SDL2_mixer, alsa-lib, libpng
 , pcre, makeDesktopItem }:
 
 stdenv.mkDerivation rec {
 
   pname = "ivan";
-  version = "058";
+  version = "059";
 
   src = fetchFromGitHub {
     owner = "Attnam";
     repo = "ivan";
     rev = "v${version}";
-    sha256 = "04jzs8wad2b3g9hvnijr4r89iiw6b1i44zdzkg0dy447lrw6l6xc";
+    sha256 = "sha256-5Ijy28LLx1TGnZE6ZNQXPYfvW2KprF+91fKx2MzLEms=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [ SDL2 SDL2_mixer alsaLib libpng pcre ];
+  buildInputs = [ SDL2 SDL2_mixer alsa-lib libpng pcre ];
 
   hardeningDisable = ["all"];
 

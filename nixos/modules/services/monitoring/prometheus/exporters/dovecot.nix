@@ -35,13 +35,28 @@ in
         {
           <xref linkend="opt-services.prometheus.exporters.dovecot.enable" /> = true;
           <xref linkend="opt-services.prometheus.exporters.dovecot.socketPath" /> = "/var/run/dovecot2/old-stats";
+          <xref linkend="opt-services.dovecot2.mailPlugins.globally.enable" /> = [ "old_stats" ];
           <xref linkend="opt-services.dovecot2.extraConfig" /> = '''
-            mail_plugins = $mail_plugins old_stats
             service old-stats {
               unix_listener old-stats {
                 user = dovecot-exporter
                 group = dovecot-exporter
+                mode = 0660
               }
+              fifo_listener old-stats-mail {
+                mode = 0660
+                user = dovecot
+                group = dovecot
+              }
+              fifo_listener old-stats-user {
+                mode = 0660
+                user = dovecot
+                group = dovecot
+              }
+            }
+            plugin {
+              old_stats_refresh = 30 secs
+              old_stats_track_cmds = yes
             }
           ''';
         }
@@ -68,6 +83,10 @@ in
           --dovecot.scopes ${concatStringsSep "," cfg.scopes} \
           ${concatStringsSep " \\\n  " cfg.extraFlags}
       '';
+      RestrictAddressFamilies = [
+        # Need AF_UNIX to collect data
+        "AF_UNIX"
+      ];
     };
   };
 }

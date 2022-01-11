@@ -13,10 +13,10 @@ let
   archive_fmt = if system == "x86_64-darwin" then "zip" else "tar.gz";
 
   sha256 = {
-    x86_64-linux = "1ckg279vvg8h1n8ippa9vlyw4vk3frinb6fvvi47zggs31168m7b";
-    x86_64-darwin = "168g34v2b8r1pdbnqrs0c0k9aa60n5rspixziywnq7m61i23nlgd";
-    aarch64-linux = "1cd4sg6k7sqmj3yzmprq1rz928bvc3zrch8agfd8zfap1d6nfaal";
-    armv7l-linux = "0f8z4lws027dyqhcrkzm9rvifwid5m0icprg0xk01l7y18n3q923";
+    x86_64-linux = "0pczrbifjgm905371i8c6bk90ka291cmny6hr1nzfix7bn5psjx0";
+    x86_64-darwin = "12g2jlrhng3i56a4v9jf7nrj045jivnfdx4dhka1fiv60nn4gc46";
+    aarch64-linux = "1bhhz4yvmk3zqljy3b77hlsxbwm2l675pslhwr44p6fb4hmn8fai";
+    armv7l-linux = "15nbskq92b85zdyg7pgagi9mqhnbyisfkipqb3brc2rvmyxpzclb";
   }.${system};
 
   sourceRoot = {
@@ -28,12 +28,10 @@ let
 in
   callPackage ./generic.nix rec {
     inherit sourceRoot;
-    # The update script doesn't correctly change the hash for darwin, so please:
-    # nixpkgs-update: no auto update
 
     # Please backport all compatible updates to the stable release.
     # This is important for the extension ecosystem.
-    version = "1.52.1";
+    version = "1.63.2";
     pname = "vscodium";
 
     executableName = "codium";
@@ -46,6 +44,8 @@ in
     };
 
     tests = nixosTests.vscodium;
+
+    updateScript = ./update-vscodium.sh;
 
     meta = with lib; {
       description = ''
@@ -62,7 +62,7 @@ in
       homepage = "https://github.com/VSCodium/vscodium";
       downloadPage = "https://github.com/VSCodium/vscodium/releases";
       license = licenses.mit;
-      maintainers = with maintainers; [ synthetica turion ];
+      maintainers = with maintainers; [ synthetica turion bobby285271 ];
       platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "armv7l-linux" ];
     };
   }

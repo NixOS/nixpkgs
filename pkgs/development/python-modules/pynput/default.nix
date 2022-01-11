@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "pynput";
-  version = "1.7.1";
+  version = "1.7.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5a5598bfb14322eff980ac6ca820635fce9028faa4f64a8e1581243aaf6785ee";
+    sha256 = "3a5726546da54116b687785d38b1db56997ce1d28e53e8d22fc656d8b92e533c";
   };
 
   nativeBuildInputs = [ sphinx ];

@@ -14,7 +14,7 @@
 , file
 , acpi
 , coreutils
-, alsaUtils
+, alsa-utils
 , i3
 , procps
 , lm_sensors
@@ -24,11 +24,11 @@
 
 buildPythonPackage rec {
   pname = "py3status";
-  version = "3.31";
+  version = "3.40";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "426cff33c1d3a5ee6ae388089fd41dc47c4221800f43bd51779f823c781fb83b";
+    sha256 = "9eb6f721f94f28a17a8599ca2743a2bedd58c16cfe74e9817ffa948c13dbb79c";
   };
 
   doCheck = false;
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     sed -i -e "s|\[\"acpi\"|\[\"${acpi}/bin/acpi\"|" py3status/modules/battery_level.py
     sed -i -e "s|notify-send|${libnotify}/bin/notify-send|" py3status/modules/battery_level.py
     sed -i -e "s|/usr/bin/whoami|${coreutils}/bin/whoami|" py3status/modules/external_script.py
-    sed -i -e "s|'amixer|'${alsaUtils}/bin/amixer|" py3status/modules/volume_status.py
+    sed -i -e "s|'amixer|'${alsa-utils}/bin/amixer|" py3status/modules/volume_status.py
     sed -i -e "s|'i3-nagbar|'${i3}/bin/i3-nagbar|" py3status/modules/pomodoro.py
     sed -i -e "s|'free|'${procps}/bin/free|" py3status/modules/sysdata.py
     sed -i -e "s|'sensors|'${lm_sensors}/bin/sensors|" py3status/modules/sysdata.py

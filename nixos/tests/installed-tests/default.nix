@@ -97,11 +97,13 @@ in
   gsconnect = callInstalledTest ./gsconnect.nix {};
   ibus = callInstalledTest ./ibus.nix {};
   libgdata = callInstalledTest ./libgdata.nix {};
+  librsvg = callInstalledTest ./librsvg.nix {};
   glib-testing = callInstalledTest ./glib-testing.nix {};
   libjcat = callInstalledTest ./libjcat.nix {};
   libxmlb = callInstalledTest ./libxmlb.nix {};
   malcontent = callInstalledTest ./malcontent.nix {};
   ostree = callInstalledTest ./ostree.nix {};
   pipewire = callInstalledTest ./pipewire.nix {};
+  power-profiles-daemon = callInstalledTest ./power-profiles-daemon.nix {};
   xdg-desktop-portal = callInstalledTest ./xdg-desktop-portal.nix {};
 }

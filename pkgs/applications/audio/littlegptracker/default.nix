@@ -43,7 +43,9 @@ stdenv.mkDerivation rec {
   installPhase = let extension = if stdenv.isDarwin then "app" else "deb-exe";
     in "install -Dm555 lgpt.${extension} $out/bin/lgpt";
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = unstableGitUpdater {
+    url = "https://github.com/Mdashdotdashn/littlegptracker.git";
+  };
 
   meta = with lib; {
     description = "A music tracker similar to lsdj optimised to run on portable game consoles";

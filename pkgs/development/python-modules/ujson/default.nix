@@ -1,27 +1,36 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, isPy3k
 , isPyPy
-, setuptools_scm
+, pytestCheckHook
+, pythonOlder
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "ujson";
-  version = "4.0.1";
-  disabled = isPyPy || (!isPy3k);
+  version = "4.3.0";
+  disabled = isPyPy || pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "26cf6241b36ff5ce4539ae687b6b02673109c5e3efc96148806a7873eaa229d3";
+    sha256 = "baee56eca35cb5fbe02c28bd9c0936be41a96fa5c0812d9d4b7edeb5c3d568a0";
   };
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [ "ujson" ];
 
   meta = with lib; {
-    homepage = "https://pypi.python.org/pypi/ujson";
     description = "Ultra fast JSON encoder and decoder for Python";
+    homepage = "https://pypi.python.org/pypi/ujson";
     license = licenses.bsd3;
+    maintainers = with maintainers; [ ];
   };
-
 }

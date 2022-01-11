@@ -28,7 +28,7 @@ stdenv.mkDerivation {
     homepage = "https://ebassi.github.io/mutest/mutest.md.html";
     description = "A BDD testing framework for C, inspired by Mocha";
     license = licenses.mit;
-    maintainers = with maintainers; [ jtojnar worldofpeace ];
+    maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.all;
   };
 }

@@ -37,7 +37,7 @@ let
         homepage = "http://fmtlib.net/";
         downloadPage = "https://github.com/fmtlib/fmt/";
         maintainers = [ maintainers.jdehaas ];
-        license = licenses.bsd2;
+        license = licenses.mit;
         platforms = platforms.all;
       };
     };
@@ -46,5 +46,10 @@ in
   fmt_7 = generic {
     version = "7.1.3";
     sha256 = "08hyv73qp2ndbs0isk8pspsphdzz5qh8czl3wgyxy3mmif9xdg29";
+  };
+
+  fmt_8 = generic {
+    version = "8.0.1";
+    sha256 = "1mnvxqsan034d2jiqnw2yvkljl7lwvhakmj5bscwp1fpkn655bbw";
   };
 }

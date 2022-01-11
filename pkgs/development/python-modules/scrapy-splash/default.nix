@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "scrapy-splash";
-  version = "0.7.2";
+  version = "0.8.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1dg7csdza2hzqskd9b9gx0v3saqsch4f0fwdp0a3p0822aqqi488";
+    sha256 = "a7c17735415151ae01f07b03c7624e7276a343779b3c5f4546f655f6133df42f";
   };
 
   propagatedBuildInputs = [ scrapy six ];

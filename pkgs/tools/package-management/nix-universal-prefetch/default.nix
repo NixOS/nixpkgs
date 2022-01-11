@@ -6,13 +6,13 @@
 # No gems used, so mkDerivation is fine.
 stdenv.mkDerivation rec {
   pname = "nix-universal-prefetch";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "samueldr";
     repo = "nix-universal-prefetch";
     rev = "v${version}";
-    sha256 = "1nmxp6846ip2x3mibys3ymgi0813g18p9szqnsciiib3dbis4kwf";
+    sha256 = "sha256-HGn4qHWqpUwlS3yQrD3j5oH0yOlphsoSPD2vkyyRv+0=";
   };
 
   installPhase = ''

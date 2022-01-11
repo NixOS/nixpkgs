@@ -19,7 +19,11 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   dontUseQmakeConfigure = true;
-  configureFlags = [ "-config" "release" ];
+  configureFlags = [ "-config" "release" ]
+    # Build mixes up dylibs/frameworks if one is not explicitely specified.
+    ++ lib.optionals stdenv.isDarwin [ "-config" "qt_framework" ];
+
+  dontWrapQtApps = true;
 
   preConfigure = ''
     sed -i -e 's|/bin/pwd|pwd|g' configure

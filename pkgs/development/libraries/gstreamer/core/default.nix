@@ -21,20 +21,20 @@
 
 stdenv.mkDerivation rec {
   pname = "gstreamer";
-  version = "1.18.2";
+  version = "1.18.5";
 
   outputs = [
+    "bin"
     "out"
     "dev"
     # "devdoc" # disabled until `hotdoc` is packaged in nixpkgs, see:
     # - https://github.com/NixOS/nixpkgs/pull/98767
     # - https://github.com/NixOS/nixpkgs/issues/98769#issuecomment-702296551
   ];
-  outputBin = "dev";
 
   src = fetchurl {
-    url = "${meta.homepage}/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "0ijlmvr660m8zn09xlmnq1ajrziqsivp2hig5a9mabhcjx7ypkb6";
+    url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-VYYiMqY0Wbv1ar694whcqa7CEbR46JHazqTW34yv6Ao=";
   };
 
   patches = [
@@ -76,6 +76,8 @@ stdenv.mkDerivation rec {
     "-Ddbghelp=disabled" # not needed as we already provide libunwind and libdw, and dbghelp is a fallback to those
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
     "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
+  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "-Dintrospection=disabled"
   ] ++ lib.optionals stdenv.isDarwin [
     # darwin.libunwind doesn't have pkg-config definitions so meson doesn't detect it.
     "-Dlibunwind=disabled"
@@ -92,14 +94,14 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    for prog in "$dev/bin/"*; do
+    for prog in "$bin/bin/"*; do
         # We can't use --suffix here due to quoting so we craft the export command by hand
         wrapProgram "$prog" --run 'export GST_PLUGIN_SYSTEM_PATH_1_0=$GST_PLUGIN_SYSTEM_PATH_1_0''${GST_PLUGIN_SYSTEM_PATH_1_0:+:}$(unset _tmp; for profile in $NIX_PROFILES; do _tmp="$profile/lib/gstreamer-1.0''${_tmp:+:}$_tmp"; done; printf '%s' "$_tmp")'
     done
   '';
 
   preFixup = ''
-    moveToOutput "share/bash-completion" "$dev"
+    moveToOutput "share/bash-completion" "$bin"
   '';
 
   setupHook = ./setup-hook.sh;

@@ -1,18 +1,16 @@
-{ lib, stdenv, fetchurl, cmake, boost, python2}:
+{ lib, stdenv, fetchurl, cmake, boost, python3 }:
 
-let version = "1.8.2"; in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "avro-c++";
-  inherit version;
+  version = "1.8.2";
 
   src = fetchurl {
     url = "mirror://apache/avro/avro-${version}/cpp/avro-cpp-${version}.tar.gz";
     sha256 = "1ars58bfw83s8f1iqbhnqp4n9wc9cxsph0gs2a8k7r9fi09vja2k";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ python2 boost ];
+  nativeBuildInputs = [ cmake python3 ];
+  buildInputs = [ boost ];
 
   preConfigure = ''
     substituteInPlace test/SchemaTests.cc --replace "BOOST_CHECKPOINT" "BOOST_TEST_CHECKPOINT"

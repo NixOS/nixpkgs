@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "OpenCL ICD definition for AMD GPUs using the ROCm stack";
     license = licenses.mit;
-    maintainers = with maintainers; [ danieldk ];
+    maintainers = with maintainers; [ lovesegfault ];
     platforms = platforms.linux;
   };
 }

@@ -29,9 +29,9 @@ in stdenv.mkDerivation {
 
   meta = with lib; {
     description = "C++ library for building bitcoin applications";
-    homepage = "https://libbitcoin.org/";
+    homepage = "https://libbitcoin.info/";
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ chris-martin ];
+    maintainers = with maintainers; [ ];
 
     # AGPL with a lesser clause
     license = licenses.agpl3;

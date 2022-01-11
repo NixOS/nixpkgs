@@ -1,48 +1,43 @@
 diff --git a/Cargo.lock b/Cargo.lock
-index f4d95f5..6830b3d 100644
+index 5440d72..6e173fa 100644
 --- a/Cargo.lock
 +++ b/Cargo.lock
-@@ -625,14 +625,6 @@ name = "openssl-probe"
- version = "0.1.2"
+@@ -774,15 +774,6 @@ version = "0.1.2"
  source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "77af24da69f9d9341038eba93a073b1fdaaa1b788221b00a69bce9e762cb32de"
  
 -[[package]]
 -name = "openssl-src"
--version = "111.9.0+1.1.1g"
+-version = "111.11.0+1.1.1h"
 -source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "380fe324132bea01f45239fadfec9343adb044615f29930d039bec1ae7b9fa5b"
 -dependencies = [
-- "cc 1.0.54 (registry+https://github.com/rust-lang/crates.io-index)",
+- "cc",
 -]
 -
  [[package]]
  name = "openssl-sys"
- version = "0.9.56"
-@@ -641,7 +633,6 @@ dependencies = [
-  "autocfg 1.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
-  "cc 1.0.54 (registry+https://github.com/rust-lang/crates.io-index)",
-  "libc 0.2.70 (registry+https://github.com/rust-lang/crates.io-index)",
-- "openssl-src 111.9.0+1.1.1g (registry+https://github.com/rust-lang/crates.io-index)",
-  "pkg-config 0.3.17 (registry+https://github.com/rust-lang/crates.io-index)",
-  "vcpkg 0.2.8 (registry+https://github.com/rust-lang/crates.io-index)",
+ version = "0.9.58"
+@@ -792,7 +783,6 @@ dependencies = [
+  "autocfg",
+  "cc",
+  "libc",
+- "openssl-src",
+  "pkg-config",
+  "vcpkg",
  ]
-@@ -1162,7 +1153,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
- "checksum object 0.19.0 (registry+https://github.com/rust-lang/crates.io-index)" = "9cbca9424c482ee628fa549d9c812e2cd22f1180b9222c9200fdfa6eb31aecb2"
- "checksum once_cell 1.4.0 (registry+https://github.com/rust-lang/crates.io-index)" = "0b631f7e854af39a1739f401cf34a8a013dfe09eac4fa4dba91e9768bd28168d"
- "checksum openssl-probe 0.1.2 (registry+https://github.com/rust-lang/crates.io-index)" = "77af24da69f9d9341038eba93a073b1fdaaa1b788221b00a69bce9e762cb32de"
--"checksum openssl-src 111.9.0+1.1.1g (registry+https://github.com/rust-lang/crates.io-index)" = "a2dbe10ddd1eb335aba3780eb2eaa13e1b7b441d2562fd962398740927f39ec4"
- "checksum openssl-sys 0.9.56 (registry+https://github.com/rust-lang/crates.io-index)" = "f02309a7f127000ed50594f0b50ecc69e7c654e16d41b4e8156d1b3df8e0b52e"
- "checksum petgraph 0.5.0 (registry+https://github.com/rust-lang/crates.io-index)" = "29c127eea4a29ec6c85d153c59dc1213f33ec74cead30fe4730aecc88cc1fd92"
- "checksum pin-project 0.4.17 (registry+https://github.com/rust-lang/crates.io-index)" = "edc93aeee735e60ecb40cf740eb319ff23eab1c5748abfdb5c180e4ce49f7791"
 diff --git a/Cargo.toml b/Cargo.toml
-index adfab25..37ae0c2 100644
+index 4d319f2..6f4d0e5 100644
 --- a/Cargo.toml
 +++ b/Cargo.toml
-@@ -21,7 +21,7 @@ colored = "1.9"
+@@ -21,8 +21,8 @@ colored = "2.0"
  dialoguer = "0.6"
- dirs = "2.0"
+ dirs = "3.0"
  fs2 = "0.4"
 -isahc = { version = "0.9", features = ["static-ssl"] }
+-curl = {version = "0.4", features = ["static-curl", "static-ssl", "force-system-lib-on-osx", "http2"]}
 +isahc = "0.9"
++curl = {version = "0.4", features = ["force-system-lib-on-osx", "http2"]}
+ ctrlc = "3.1"
+ console = "0.12"
  
- [dev-dependencies]
- assert_cmd = "0.11"

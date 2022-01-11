@@ -1,25 +1,48 @@
-{ lib, buildPythonPackage, isPy3k, fetchPypi, aiohttp, async-timeout }:
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, poetry-core
+, httpx
+, pytest-asyncio
+, pytest-httpx
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "luftdaten";
-  version = "0.6.4";
+  version = "0.7.1";
+  format = "pyproject";
 
-  disabled = !isPy3k;
+  disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1w1f0kmiwslg1dxn7gq0ak8f5wajlwl03r5zklshjc11j34b4d5i";
+  src = fetchFromGitHub {
+    owner = "home-assistant-ecosystem";
+    repo = "python-luftdaten";
+    rev = version;
+    sha256 = "sha256-76Y5TJet0WtzYXuK8Og0rmpsUIlXK7b37oesh+MliU8=";
   };
 
-  propagatedBuildInputs = [ aiohttp async-timeout ];
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
-  # No tests implemented
-  doCheck = false;
+  propagatedBuildInputs = [
+    httpx
+  ];
+
+  checkInputs = [
+    pytest-asyncio
+    pytest-httpx
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [ "luftdaten" ];
 
   meta = with lib; {
     description = "Python API for interacting with luftdaten.info";
-    homepage = "https://github.com/fabaff/python-luftdaten";
+    homepage = "https://github.com/home-assistant-ecosystem/python-luftdaten";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [ dotlambda fab ];
   };
 }

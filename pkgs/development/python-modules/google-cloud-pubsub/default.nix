@@ -4,7 +4,8 @@
 , pytestCheckHook
 , google-api-core
 , google-cloud-testutils
-, grpc_google_iam_v1
+, grpc-google-iam-v1
+, grpcio-status
 , libcst
 , mock
 , proto-plus
@@ -13,23 +14,38 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-pubsub";
-  version = "2.3.0";
+  version = "2.9.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b19f0556c252b805a52c976e3317c53d91e36f56dc8d28192eea190627faf343";
+    sha256 = "2b3d9336afab0e5df67201234976519a28da3ccb7c9a0e463be28e2827a9fdaa";
   };
 
-  propagatedBuildInputs = [ grpc_google_iam_v1 google-api-core libcst proto-plus ];
+  propagatedBuildInputs = [
+    grpc-google-iam-v1
+    google-api-core
+    grpcio-status
+    libcst
+    proto-plus
+  ];
 
-  checkInputs = [ google-cloud-testutils mock pytestCheckHook pytest-asyncio ];
+  checkInputs = [
+    google-cloud-testutils
+    mock
+    pytestCheckHook
+    pytest-asyncio
+  ];
 
   preCheck = ''
     # prevent google directory from shadowing google imports
     rm -r google
-    # Tests in pubsub_v1 attempt to contact pubsub.googleapis.com
-    rm -r tests/unit/pubsub_v1
   '';
+
+  disabledTestPaths = [
+    # Tests in pubsub_v1 attempt to contact pubsub.googleapis.com
+    "tests/unit/pubsub_v1"
+  ];
 
   pythonImportsCheck = [ "google.cloud.pubsub" ];
 

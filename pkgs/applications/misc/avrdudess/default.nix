@@ -1,16 +1,18 @@
 { lib, stdenv, runtimeShell, fetchurl, unzip, mono, avrdude, gtk2, xdg-utils }:
 
 stdenv.mkDerivation {
-  name = "avrdudess-2.2.20140102";
+  pname = "avrdudess";
+  version = "2.2.20140102";
 
   src = fetchurl {
     url = "http://blog.zakkemble.co.uk/download/avrdudess_20140102.zip";
     sha256 = "18llpvjsfhypzijrvfbzmcg3g141f307mzsrg11wcdxh9syxqak6";
   };
 
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip ];
 
-  phases = [ "buildPhase" ];
+  dontUnpack = true;
+  dontInstall = true;
 
   buildPhase = ''
     mkdir -p "$out/avrdudess"

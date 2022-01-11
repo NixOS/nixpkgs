@@ -6,7 +6,7 @@
 , pkg-config
 , glib
 , gtk3
-, gnome3
+, libgee
 , meson
 , ninja
 , gobject-introspection
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     pantheon.elementary-icon-theme
     pantheon.granite
     glib
-    gnome3.libgee
+    libgee
     gsettings-desktop-schemas
     gtk3
   ];

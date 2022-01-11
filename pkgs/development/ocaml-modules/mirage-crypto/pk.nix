@@ -1,5 +1,5 @@
 { buildDunePackage, ounit, randomconv, mirage-crypto, mirage-crypto-rng
-, cstruct, sexplib, ppx_sexp_conv, zarith, eqaf, rresult, gmp }:
+, cstruct, sexplib0, zarith, eqaf, gmp }:
 
 buildDunePackage {
   pname = "mirage-crypto-pk";
@@ -8,7 +8,7 @@ buildDunePackage {
 
   buildInputs = [ gmp ];
   propagatedBuildInputs = [ cstruct mirage-crypto mirage-crypto-rng
-                            zarith eqaf rresult sexplib ppx_sexp_conv ];
+                            zarith eqaf sexplib0 ];
 
   doCheck = true;
   checkInputs = [ ounit randomconv ];

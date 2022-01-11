@@ -6,6 +6,7 @@
 , unrar
 , p7zip
 , makeWrapper
+, nixosTests
 }:
 
 let
@@ -17,35 +18,46 @@ let
     configobj
     feedparser
     sabyenc3
+    puremagic
+    guessit
   ]);
   path = lib.makeBinPath [ par2cmdline unrar unzip p7zip ];
 in stdenv.mkDerivation rec {
-  version = "3.1.1";
+  version = "3.4.2";
   pname = "sabnzbd";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "0m39r2il7d014kf2p6v28lw2hzshm6bhhdchqa8wzyvvmygqmwf2";
+    sha256 = "sha256-Pl2i/k5tilPvMWLRtzZ2imOJQdZYKDAz8bt847ZAXF8=";
   };
 
-  buildInputs = [ pythonEnv makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ pythonEnv ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
     cp -R * $out/
     mkdir $out/bin
     echo "${pythonEnv}/bin/python $out/SABnzbd.py \$*" > $out/bin/sabnzbd
     chmod +x $out/bin/sabnzbd
     wrapProgram $out/bin/sabnzbd --set PATH ${path}
+
+    runHook postInstall
   '';
+
+  passthru.tests = {
+    smoke-test = nixosTests.sabnzbd;
+  };
 
   meta = with lib; {
     description = "Usenet NZB downloader, par2 repairer and auto extracting server";
     homepage = "https://sabnzbd.org";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with lib.maintainers; [ fridh ];
+    maintainers = with lib.maintainers; [ fridh jojosch ];
   };
 }

@@ -1,37 +1,26 @@
 { lib, buildPythonPackage, fetchFromGitHub, pythonOlder
-, colorama, mypy, pyyaml, regex
-, dataclasses, typing
-, pytestrunner, pytest-mypy
+, colorama, regex
+, pytest-runner, pytestCheckHook, pytest-mypy
 }:
 
 buildPythonPackage rec {
-  pname = "TatSu";
-  version = "5.0.0";
+  pname = "tatsu";
+  version = "5.7.1";
+  # upstream only supports 3.10+
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "neogeny";
-    repo = pname;
+    repo = "TatSu";
     rev = "v${version}";
-    sha256 = "1c16fcxf0xjkh5py9bnj6ljb9krhrj57mkwayl1w1dvzwl5lkgj3";
+    sha256 = "12ljff6l29q92625pgsg4f7xf4dz6iz1c3zdkzz188s4lnwpy8b8";
   };
 
-  # Since version 5.0.0 only >=3.8 is officially supported, but ics is not
-  # compatible with Python 3.8 due to aiohttp:
-  disabled = pythonOlder "3.7";
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "python_requires='>=3.8'," "python_requires='>=3.7',"
-  '';
+  nativeBuildInputs = [ pytest-runner ];
+  propagatedBuildInputs = [ colorama regex ];
+  checkInputs = [ pytestCheckHook pytest-mypy ];
 
-  nativeBuildInputs = [ pytestrunner ];
-  propagatedBuildInputs = [ colorama mypy pyyaml regex ]
-    ++ lib.optionals (pythonOlder "3.7") [ dataclasses ]
-    ++ lib.optionals (pythonOlder "3.5") [ typing ];
-  checkInputs = [ pytest-mypy ];
-
-  checkPhase = ''
-    pytest test/
-  '';
+  pythonImportsCheck = [ "tatsu" ];
 
   meta = with lib; {
     description = "Generates Python parsers from grammars in a variation of EBNF";

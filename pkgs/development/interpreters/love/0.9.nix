@@ -5,9 +5,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "love-0.9.1";
+  pname = "love";
+  version = "0.9.1";
+
   src = fetchurl {
-    url = "https://bitbucket.org/rude/love/downloads/${name}-linux-src.tar.gz";
+    url = "https://bitbucket.org/rude/love/downloads/love-${version}-linux-src.tar.gz";
     sha256 = "1pikd0bzb44r4bf0jbgn78whz1yswpq1n5jc8nf87v42pm30kp84";
   };
 

@@ -1,23 +1,36 @@
-{ lib, stdenv, fetchurl, perl, gdb, cctools, xnu, bootstrap_cmds }:
+{ lib, stdenv, fetchurl, fetchpatch
+, autoreconfHook, perl
+, gdb, cctools, xnu, bootstrap_cmds
+}:
 
 stdenv.mkDerivation rec {
-  name = "valgrind-3.16.1";
+  pname = "valgrind";
+  version = "3.18.1";
 
   src = fetchurl {
-    url = "https://sourceware.org/pub/valgrind/${name}.tar.bz2";
-    sha256 = "1jik19rcd34ip8a5c9nv5wfj8k8maqb8cyclr4xhznq2gcpkl7y9";
+    url = "https://sourceware.org/pub/${pname}/${pname}-${version}.tar.bz2";
+    sha256 = "sha256-AIWaoTp3Lt33giIl9LRu4NOa++Bx0yd42k2ZmECB9/U=";
   };
+
+  patches = [
+    # Fix tests on Musl.
+    # https://bugs.kde.org/show_bug.cgi?id=445300
+    (fetchpatch {
+      url = "https://bugsfiles.kde.org/attachment.cgi?id=143535";
+      sha256 = "036zyk30rixjvpylw3c7n171n4gpn6zcp7h6ya2dz4h5r478l9i6";
+    })
+  ];
 
   outputs = [ "out" "dev" "man" "doc" ];
 
-  hardeningDisable = [ "stackprotector" ];
+  hardeningDisable = [ "pie" "stackprotector" ];
 
   # GDB is needed to provide a sane default for `--db-command'.
   # Perl is needed for `callgrind_{annotate,control}'.
   buildInputs = [ gdb perl ]  ++ lib.optionals (stdenv.isDarwin) [ bootstrap_cmds xnu ];
 
   # Perl is also a native build input.
-  nativeBuildInputs = [ perl ];
+  nativeBuildInputs = [ autoreconfHook perl ];
 
   enableParallelBuilding = true;
   separateDebugInfo = stdenv.isLinux;
@@ -53,10 +66,10 @@ stdenv.mkDerivation rec {
     lib.optional (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "x86_64-darwin") "--enable-only64bit"
     ++ lib.optional stdenv.hostPlatform.isDarwin "--with-xcodedir=${xnu}/include";
 
-  doCheck = false; # fails
+  doCheck = true;
 
   postInstall = ''
-    for i in $out/lib/valgrind/*.supp; do
+    for i in $out/libexec/valgrind/*.supp; do
       substituteInPlace $i \
         --replace 'obj:/lib' 'obj:*/lib' \
         --replace 'obj:/usr/X11R6/lib' 'obj:*/lib' \
@@ -86,6 +99,6 @@ stdenv.mkDerivation rec {
       "riscv32-linux" "riscv64-linux"
       "alpha-linux"
     ];
-    broken = stdenv.isDarwin; # https://hydra.nixos.org/build/128521440/nixlog/2
+    broken = stdenv.isDarwin || stdenv.hostPlatform.isStatic; # https://hydra.nixos.org/build/128521440/nixlog/2
   };
 }

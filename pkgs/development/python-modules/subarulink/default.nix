@@ -1,39 +1,55 @@
 { lib
-, buildPythonPackage
-, fetchFromGitHub
 , aiohttp
 , asynctest
-, stdiomask
+, buildPythonPackage
 , cryptography
-, pytestcov
+, fetchFromGitHub
 , pytest-asyncio
 , pytestCheckHook
+, pythonOlder
+, stdiomask
 }:
 
 buildPythonPackage rec {
   pname = "subarulink";
-  version = "0.3.11";
+  version = "0.3.16";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "G-Two";
     repo = pname;
-    rev = "subaru-v${version}";
-    sha256 = "1ink9bhph6blidnfsqwq01grhp7ghacmkd4vzgb9hnhl9l52s1jq";
+    rev = "v${version}";
+    sha256 = "sha256-7waY5AOONi+u056JRH9KcoBWSB4AlMw4QcMW0uoCARc=";
   };
 
-  propagatedBuildInputs = [ aiohttp stdiomask ];
+  propagatedBuildInputs = [
+    aiohttp
+    stdiomask
+  ];
 
   checkInputs = [
     asynctest
     cryptography
     pytest-asyncio
-    pytestcov
     pytestCheckHook
   ];
 
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "--cov=subarulink" ""
+  '';
+
   __darwinAllowLocalNetworking = true;
 
-  pythonImportsCheck = [ "subarulink" ];
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  pythonImportsCheck = [
+    "subarulink"
+  ];
 
   meta = with lib; {
     description = "Python module for interacting with STARLINK-enabled vehicle";

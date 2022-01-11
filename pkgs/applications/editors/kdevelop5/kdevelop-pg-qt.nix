@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ qtbase ];
 
+  dontWrapQtApps = true;
+
   meta = with lib; {
     maintainers = [ maintainers.ambrop72 ];
     platforms = platforms.linux;

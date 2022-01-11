@@ -1,9 +1,9 @@
 { config, pkgs, lib, options, ... }:
 
 let
-  inherit (lib) concatStrings foldl foldl' genAttrs literalExample maintainers
+  inherit (lib) concatStrings foldl foldl' genAttrs literalExpression maintainers
                 mapAttrsToList mkDefault mkEnableOption mkIf mkMerge mkOption
-                optional types;
+                optional types mkOptionDefault flip attrNames;
 
   cfg = config.services.prometheus.exporters;
 
@@ -22,15 +22,24 @@ let
 
   exporterOpts = genAttrs [
     "apcupsd"
+    "artifactory"
     "bind"
     "bird"
+    "bitcoin"
     "blackbox"
+    "buildkite-agent"
     "collectd"
     "dnsmasq"
+    "domain"
     "dovecot"
+    "fastly"
     "fritzbox"
+    "influxdb"
     "json"
+    "jitsi"
+    "kea"
     "keylight"
+    "knot"
     "lnd"
     "mail"
     "mikrotik"
@@ -40,22 +49,30 @@ let
     "nginx"
     "nginxlog"
     "node"
+    "openldap"
     "openvpn"
+    "pihole"
     "postfix"
     "postgres"
+    "process"
     "py-air-control"
     "redis"
     "rspamd"
     "rtl_433"
+    "script"
     "snmp"
+    "smartctl"
     "smokeping"
     "sql"
     "surfboard"
+    "systemd"
     "tor"
+    "unbound"
     "unifi"
     "unifi-poller"
     "varnish"
     "wireguard"
+    "flow"
   ] (name:
     import (./. + "/exporters/${name}.nix") { inherit config lib pkgs options; }
   );
@@ -63,7 +80,7 @@ let
   mkExporterOpts = ({ name, port }: {
     enable = mkEnableOption "the prometheus ${name} exporter";
     port = mkOption {
-      type = types.int;
+      type = types.port;
       default = port;
       description = ''
         Port to listen on.
@@ -91,10 +108,9 @@ let
       '';
     };
     firewallFilter = mkOption {
-      type = types.str;
-      default = "-p tcp -m tcp --dport ${toString cfg.${name}.port}";
-      defaultText = "-p tcp -m tcp --dport ${toString port}";
-      example = literalExample ''
+      type = types.nullOr types.str;
+      default = null;
+      example = literalExpression ''
         "-i eth0 -p tcp -m tcp --dport ${toString port}"
       '';
       description = ''
@@ -121,12 +137,14 @@ let
 
   mkSubModule = { name, port, extraOpts, imports }: {
     ${name} = mkOption {
-      type = types.submodule {
+      type = types.submodule [{
         inherit imports;
         options = (mkExporterOpts {
           inherit name port;
         } // extraOpts);
-      };
+      } ({ config, ... }: mkIf config.openFirewall {
+        firewallFilter = mkDefault "-p tcp -m tcp --dport ${toString config.port}";
+      })];
       internal = true;
       default = {};
     };
@@ -166,8 +184,30 @@ let
         serviceConfig.PrivateTmp = mkDefault true;
         serviceConfig.WorkingDirectory = mkDefault /tmp;
         serviceConfig.DynamicUser = mkDefault enableDynamicUser;
-        serviceConfig.User = conf.user;
+        serviceConfig.User = mkDefault conf.user;
         serviceConfig.Group = conf.group;
+        # Hardening
+        serviceConfig.CapabilityBoundingSet = mkDefault [ "" ];
+        serviceConfig.DeviceAllow = [ "" ];
+        serviceConfig.LockPersonality = true;
+        serviceConfig.MemoryDenyWriteExecute = true;
+        serviceConfig.NoNewPrivileges = true;
+        serviceConfig.PrivateDevices = true;
+        serviceConfig.ProtectClock = mkDefault true;
+        serviceConfig.ProtectControlGroups = true;
+        serviceConfig.ProtectHome = true;
+        serviceConfig.ProtectHostname = true;
+        serviceConfig.ProtectKernelLogs = true;
+        serviceConfig.ProtectKernelModules = true;
+        serviceConfig.ProtectKernelTunables = true;
+        serviceConfig.ProtectSystem = mkDefault "strict";
+        serviceConfig.RemoveIPC = true;
+        serviceConfig.RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+        serviceConfig.RestrictNamespaces = true;
+        serviceConfig.RestrictRealtime = true;
+        serviceConfig.RestrictSUIDSGID = true;
+        serviceConfig.SystemCallArchitectures = "native";
+        serviceConfig.UMask = "0077";
       } serviceOpts ]);
   };
 in
@@ -187,7 +227,7 @@ in
     };
     description = "Prometheus exporter configuration";
     default = {};
-    example = literalExample ''
+    example = literalExpression ''
       {
         node = {
           enable = true;
@@ -231,7 +271,13 @@ in
         Please specify either 'services.prometheus.exporters.sql.configuration' or
           'services.prometheus.exporters.sql.configFile'
       '';
-    } ];
+    } ] ++ (flip map (attrNames cfg) (exporter: {
+      assertion = cfg.${exporter}.firewallFilter != null -> cfg.${exporter}.openFirewall;
+      message = ''
+        The `firewallFilter'-option of exporter ${exporter} doesn't have any effect unless
+        `openFirewall' is set to `true'!
+      '';
+    }));
   }] ++ [(mkIf config.services.minio.enable {
     services.prometheus.exporters.minio.minioAddress  = mkDefault "http://localhost:9000";
     services.prometheus.exporters.minio.minioAccessKey = mkDefault config.services.minio.accessKey;

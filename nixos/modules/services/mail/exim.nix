@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 let
-  inherit (lib) mkIf mkOption singleton types;
+  inherit (lib) literalExpression mkIf mkOption singleton types;
   inherit (pkgs) coreutils;
   cfg = config.services.exim;
 in
@@ -60,13 +60,20 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.exim;
-        defaultText = "pkgs.exim";
+        defaultText = literalExpression "pkgs.exim";
         description = ''
           The Exim derivation to use.
           This can be used to enable features such as LDAP or PAM support.
         '';
       };
 
+      queueRunnerInterval = mkOption {
+        type = types.str;
+        default = "5m";
+        description = ''
+          How often to spawn a new queue runner.
+        '';
+      };
     };
 
   };
@@ -97,14 +104,19 @@ in
       gid = config.ids.gids.exim;
     };
 
-    security.wrappers.exim.source = "${cfg.package}/bin/exim";
+    security.wrappers.exim =
+      { setuid = true;
+        owner = "root";
+        group = "root";
+        source = "${cfg.package}/bin/exim";
+      };
 
     systemd.services.exim = {
       description = "Exim Mail Daemon";
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ config.environment.etc."exim.conf".source ];
       serviceConfig = {
-        ExecStart   = "${cfg.package}/bin/exim -bdf -q30m";
+        ExecStart   = "${cfg.package}/bin/exim -bdf -q${cfg.queueRunnerInterval}";
         ExecReload  = "${coreutils}/bin/kill -HUP $MAINPID";
       };
       preStart = ''

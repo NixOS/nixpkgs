@@ -18,12 +18,13 @@
  <para>
   If you encounter problems, please report them on the
   <literal
-   xlink:href="https://discourse.nixos.org">Discourse</literal> or
-  on the <link
-   xlink:href="irc://irc.freenode.net/#nixos">
-  <literal>#nixos</literal> channel on Freenode</link>, or
-  consider
-  <link
+   xlink:href="https://discourse.nixos.org">Discourse</literal>,
+  the <link
+   xlink:href="https://matrix.to/#nix:nixos.org">Matrix room</link>,
+  or on the <link
+   xlink:href="irc://irc.libera.chat/#nixos">
+  <literal>#nixos</literal> channel on Libera.Chat</link>.
+  Alternatively, consider <link
    xlink:href="#chap-contributing">
    contributing to this manual</link>. Bugs should be
   reported in

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip, libGLU, libGL, unzip, fetchFromGitHub, cmake, Cocoa, OpenGL, IOKit }:
+{ lib, stdenv, fetchzip, libGLU, libGL, fetchFromGitHub, cmake, Cocoa, OpenGL, IOKit }:
 
 let
   common = import ./common.nix { inherit fetchzip; };
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ unzip OpenGL Cocoa IOKit ];
+  buildInputs = [ OpenGL Cocoa IOKit ];
 
   meta = {
     homepage = "http://irrlicht.sourceforge.net/";

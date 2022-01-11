@@ -1,21 +1,28 @@
 { lib
+, stdenv
 , archinfo
 , bitstring
-, fetchPypi
-, cffi
 , buildPythonPackage
+, cffi
+, fetchPypi
 , future
 , pycparser
 }:
 
 buildPythonPackage rec {
   pname = "pyvex";
-  version = "9.0.5739";
+  version = "9.1.10913";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1jwxxw2kw7wkz7kh8m8vbavzw6m5k6xph7mazfn3k2qbsshh3lk3";
+    sha256 = "sha256-EUgCyjD5ia5KQMvZWVAsXeKRjmSVE7tRRYH5u/Ozug0=";
   };
+
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    substituteInPlace vex/Makefile-gcc --replace '/usr/bin/ar' 'ar'
+  '';
+
+  setupPyBuildFlags = lib.optionals stdenv.isLinux [ "--plat-name" "linux" ];
 
   propagatedBuildInputs = [
     archinfo
@@ -24,6 +31,11 @@ buildPythonPackage rec {
     future
     pycparser
   ];
+
+  preBuild = ''
+    export CC=${stdenv.cc.targetPrefix}cc
+    substituteInPlace pyvex_c/Makefile --replace 'AR=ar' 'AR=${stdenv.cc.targetPrefix}ar'
+  '';
 
   # No tests are available on PyPI, GitHub release has tests
   # Switch to GitHub release after all angr parts are present

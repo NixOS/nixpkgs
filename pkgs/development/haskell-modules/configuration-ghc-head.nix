@@ -11,8 +11,7 @@ with haskellLib;
 
 self: super: {
 
-  # This compiler version needs llvm 6.x.
-  llvmPackages = pkgs.llvmPackages_6;
+  llvmPackages = pkgs.lib.dontRecurseIntoAttrs self.ghc.llvmPackages;
 
   # Disable GHC 8.7.x core libraries.
   array = null;
@@ -74,8 +73,5 @@ self: super: {
 
   # Break out of "yaml >=0.10.4.0 && <0.11": https://github.com/commercialhaskell/stack/issues/4485
   stack = doJailbreak super.stack;
-
-  # Fix build with ghc 8.6.x.
-  git-annex = appendPatch super.git-annex ./patches/git-annex-fix-ghc-8.6.x-build.patch;
 
 }

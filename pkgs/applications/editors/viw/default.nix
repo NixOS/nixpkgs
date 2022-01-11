@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses ];
 
-  makeFlags = [ "CC=cc" ];
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
   checkFlags = [ "test-command" "test-buffer" "test-state" ];
 
   installPhase = ''

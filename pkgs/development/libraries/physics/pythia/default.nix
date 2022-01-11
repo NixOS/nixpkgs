@@ -2,14 +2,15 @@
 
 stdenv.mkDerivation rec {
   pname = "pythia";
-  version = "8.303";
+  version = "8.306";
 
   src = fetchurl {
-    url = "http://home.thep.lu.se/~torbjorn/pythia8/pythia${builtins.replaceStrings ["."] [""] version}.tgz";
-    sha256 = "0gli6zf8931i7kyminppisc9d0q69xxnalvhld5fgnkh4q82nz6d";
+    url = "https://pythia.org/download/pythia83/pythia${builtins.replaceStrings ["."] [""] version}.tgz";
+    sha256 = "sha256-c0gDtyKxwbU8jPLw08MHR8gPwt3l4LoUG8k5fa03qPY=";
   };
 
-  buildInputs = [ boost fastjet hepmc zlib rsync lhapdf ];
+  nativeBuildInputs = [ rsync ];
+  buildInputs = [ boost fastjet hepmc zlib lhapdf ];
 
   preConfigure = ''
     patchShebangs ./configure
@@ -26,11 +27,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     description = "A program for the generation of high-energy physics events";
-    license     = lib.licenses.gpl2;
-    homepage    = "http://home.thep.lu.se/~torbjorn/Pythia.html";
-    platforms   = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ veprbl ];
+    license = licenses.gpl2Only;
+    homepage = "https://pythia.org";
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ veprbl ];
   };
 }

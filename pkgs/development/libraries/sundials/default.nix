@@ -17,11 +17,11 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "examples" ];
 
   src = fetchurl {
-    url = "https://computation.llnl.gov/projects/${pname}/download/${pname}-${version}.tar.gz";
-    sha256 = "jW3QlP7Mu41uzEE0DsFqZfq6yC7UQVAj9tfBwjkOovM=";
+    url = "https://github.com/LLNL/sundials/releases/download/v${version}/sundials-${version}.tar.gz";
+    hash = "sha256-SNp7qoFS3bIq7RsC2C0du0+/6iKs9nY0ARqgMDoQCkM=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake gfortran ];
 
   buildInputs = [
     python
@@ -29,7 +29,6 @@ stdenv.mkDerivation rec {
     ++ lib.optionals (lapackSupport)
     # Check that the same index size is used for both libraries
     (assert (blas.isILP64 == lapack.isILP64); [
-      gfortran
       blas
       lapack
     ])

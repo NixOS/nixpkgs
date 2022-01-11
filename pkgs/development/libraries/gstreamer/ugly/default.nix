@@ -16,18 +16,20 @@
 , libintl
 , lib
 , opencore-amr
-, darwin
+, IOKit
+, CoreFoundation
+, DiskArbitration
 }:
 
 stdenv.mkDerivation rec {
   pname = "gst-plugins-ugly";
-  version = "1.18.2";
+  version = "1.18.5";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "${meta.homepage}/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "1nwbcv5yaib3d8icvyja3zf6lyjf5zf1hndbijrhj8j7xlia0dx3";
+    url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-3zKAPpj4qZeTc/osp+BeYvl3sQl1dtOoBhnZ9cafZtk=";
   };
 
   nativeBuildInputs = [
@@ -49,11 +51,11 @@ stdenv.mkDerivation rec {
     x264
     libintl
     opencore-amr
-  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+  ] ++ lib.optionals stdenv.isDarwin [
     IOKit
     CoreFoundation
     DiskArbitration
-  ]);
+  ];
 
   mesonFlags = [
     "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing

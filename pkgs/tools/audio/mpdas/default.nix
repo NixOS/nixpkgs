@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, mpd_clientlib, curl }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, libmpdclient
+, curl
+}:
 
 stdenv.mkDerivation rec {
   pname = "mpdas";
@@ -13,7 +19,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ mpd_clientlib curl ];
+  buildInputs = [ libmpdclient curl ];
 
   makeFlags = [ "CONFIG=/etc" "DESTDIR=" "PREFIX=$(out)" ];
 

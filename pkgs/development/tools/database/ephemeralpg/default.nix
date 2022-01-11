@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
     url = "http://ephemeralpg.org/code/${pname}-${version}.tar.gz";
     sha256 = "1ap22ki8yz6agd0qybcjgs4b9izw1rwwcgpxn3jah2ccfyax34s6";
   };
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
   installPhase = ''
     mkdir -p $out
     PREFIX=$out make install

@@ -1,54 +1,40 @@
-{ buildPythonPackage
+{ lib
+, buildPythonPackage
 , fetchFromGitHub
-, lib
-
-, coveralls
-, promise
-, pytest
 , pytest-benchmark
-, pytest-mock
-, rx
-, six
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "graphql-core";
-  version = "3.1.2";
+  version = "3.1.7";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "graphql-python";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0kvbj9dwpx8mjfj86kqx54dbz9k72ki147ssyj0ca2syvb8jm3wb";
+    sha256 = "1mwwh55qd5bcpvgy6pyliwn8jkmj4yk4d2pqb6mdkgqhdic2081l";
   };
 
-  propagatedBuildInputs = [
-    promise
-    rx
-    six
-  ];
-
   checkInputs = [
-    coveralls
-    pytest
+    pytest-asyncio
     pytest-benchmark
-    pytest-mock
+    pytestCheckHook
   ];
 
-  checkPhase = "pytest";
-
-  configurePhase = ''
-    substituteInPlace setup.py \
-      --replace 'pytest-mock==1.2' 'pytest-mock==1.13.0' \
-      --replace 'pytest-benchmark==3.0.0' 'pytest-benchmark==3.2.2'
-  '';
+  pythonImportsCheck = [
+    "graphql"
+  ];
 
   meta = with lib; {
     description = "Port of graphql-js to Python";
     homepage = "https://github.com/graphql-python/graphql-core";
     license = licenses.mit;
-    maintainers = with maintainers; [
-      kamadorueda
-    ];
+    maintainers = with maintainers; [ kamadorueda ];
   };
 }

@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pipx";
-  version = "0.16.0.0";
+  version = "0.17.0";
 
   disabled = pythonOlder "3.6";
 
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "pipxproject";
     repo = pname;
     rev = version;
-    sha256 = "08mn7vm8iw20pg0gfn491y1jx8wcyjijps6f1hy7ipzd5ckynscn";
+    sha256 = "sha256-vR/tKV+ZB0nZaxEcB83dwoSI7kBC1rA+6fo30rizroM=";
   };
 
   propagatedBuildInputs = [
@@ -37,9 +37,17 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  # disable tests, which require internet connection
-  pytestFlagsArray = [ "--ignore=tests/test_install_all_packages.py" ];
+  pytestFlagsArray = [
+    "--ignore=tests/test_install_all_packages.py"
+    # start local pypi server and use in tests
+    "--net-pypiserver"
+  ];
   disabledTests = [
+    # disable tests which are difficult to emulate due to shell manipulations
+    "path_warning"
+    "script_from_internet"
+    "ensure_null_pythonpath"
+    # disable tests, which require internet connection
     "install"
     "inject"
     "ensure_null_pythonpath"
@@ -52,6 +60,7 @@ buildPythonPackage rec {
     "suffix"
     "legacy_venv"
     "determination"
+    "json"
   ];
 
   meta = with lib; {

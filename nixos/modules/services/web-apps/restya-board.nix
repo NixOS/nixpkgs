@@ -30,7 +30,6 @@ in
       dataDir = mkOption {
         type = types.path;
         default = "/var/lib/restya-board";
-        example = "/var/lib/restya-board";
         description = ''
           Data of the application.
         '';
@@ -39,7 +38,6 @@ in
       user = mkOption {
         type = types.str;
         default = "restya-board";
-        example = "restya-board";
         description = ''
           User account under which the web-application runs.
         '';
@@ -48,7 +46,6 @@ in
       group = mkOption {
         type = types.str;
         default = "nginx";
-        example = "nginx";
         description = ''
           Group account under which the web-application runs.
         '';

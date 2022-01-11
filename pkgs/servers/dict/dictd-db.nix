@@ -12,7 +12,7 @@ let
      inherit src;
      locale = _locale;
      dbName = _name;
-     buildPhase = ":";
+     dontBuild = true;
      unpackPhase = ''
        tar xf  ${src}
      '';
@@ -91,5 +91,5 @@ in rec {
     locale = "en_UK";
   };
   wordnet = callPackage ./dictd-wordnet.nix {};
-  wiktionary = callPackage ./dictd-wiktionary.nix {};
+  wiktionary = callPackage ./wiktionary {};
 }

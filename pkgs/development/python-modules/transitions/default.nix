@@ -1,21 +1,40 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, six, pytestCheckHook, mock, dill, pycodestyle }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, six
+, pygraphviz
+, pytestCheckHook
+, mock
+, graphviz
+, pycodestyle
+, fontconfig
+}:
 
 buildPythonPackage rec {
   pname = "transitions";
-  version = "0.8.6";
+  version = "0.8.10";
 
-  # test_codestyle.py fails in PyPI sdist
-  src = fetchFromGitHub {
-    owner = "pytransitions";
-    repo = "transitions";
-    rev = version;
-    sha256 = "1d913hzzyqhdhhbkbvjw65dqkajrw50a4sxhyxk0jlg8pcs7bs7v";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "b0385975a842e885c1a55c719d2f90164471665794d39d51f9eb3f11e1d9c8ac";
   };
 
-  propagatedBuildInputs = [ six ];
+  propagatedBuildInputs = [
+    six
+    pygraphviz # optional
+  ];
 
-  checkInputs = [ pytestCheckHook mock dill pycodestyle ];
+  checkInputs = [
+    pytestCheckHook
+    mock
+    graphviz
+    pycodestyle
+  ];
+
+  preCheck = ''
+    export FONTCONFIG_FILE=${fontconfig.out}/etc/fonts/fonts.conf
+    export HOME=$TMPDIR
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/pytransitions/transitions";

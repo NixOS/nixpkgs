@@ -1,30 +1,38 @@
 { fetchurl, lib, stdenv, pkg-config, makeWrapper, meson, ninja, installShellFiles, libxcb, xcbutilkeysyms
 , xcbutil, xcbutilwm, xcbutilxrm, libstartup_notification, libX11, pcre, libev
 , yajl, xcb-util-cursor, perl, pango, perlPackages, libxkbcommon
-, xorgserver, xvfb_run }:
+, xorgserver, xvfb-run
+, asciidoc, xmlto, docbook_xml_dtd_45, docbook_xsl, findXMLCatalogs
+}:
 
 stdenv.mkDerivation rec {
   pname = "i3";
-  version = "4.19";
+  version = "4.20.1";
 
   src = fetchurl {
     url = "https://i3wm.org/downloads/${pname}-${version}.tar.xz";
-    sha256 = "0wjq6lkidg0g474xsln1fhbxci7zclq3748sda10f1n7q01qp95c";
+    sha256 = "1rpwdgykcvmrmdz244f0wm7446ih1dcw8rlc1hm1c7cc42pyrq93";
   };
 
-  nativeBuildInputs = [ pkg-config makeWrapper meson ninja installShellFiles ];
+  nativeBuildInputs = [
+    pkg-config makeWrapper meson ninja installShellFiles perl
+    asciidoc xmlto docbook_xml_dtd_45 docbook_xsl findXMLCatalogs
+  ];
+
+  mesonFlags = [
+    "-Ddocs=true"
+    "-Dmans=true"
+  ];
 
   buildInputs = [
     libxcb xcbutilkeysyms xcbutil xcbutilwm xcbutilxrm libxkbcommon
     libstartup_notification libX11 pcre libev yajl xcb-util-cursor perl pango
     perlPackages.AnyEventI3 perlPackages.X11XCB perlPackages.IPCRun
     perlPackages.ExtUtilsPkgConfig perlPackages.InlineC
-    xorgserver xvfb_run
+    xorgserver xvfb-run
   ];
 
   configureFlags = [ "--disable-builddir" ];
-
-  enableParallelBuilding = true;
 
   postPatch = ''
     patchShebangs .

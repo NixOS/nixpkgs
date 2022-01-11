@@ -1,7 +1,8 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
   baseName = "anaphora";
-  version = "20191007-git";
+  version = "20211209-git";
 
   parasites = [ "anaphora/test" ];
 
@@ -10,8 +11,8 @@ rec {
   deps = [ args."rt" ];
 
   src = fetchurl {
-    url = "http://beta.quicklisp.org/archive/anaphora/2019-10-07/anaphora-20191007-git.tgz";
-    sha256 = "0iwfddh3cycjr9vhjnr1ldd5xc3qwqhrp41904s1dvysf99277kv";
+    url = "http://beta.quicklisp.org/archive/anaphora/2021-12-09/anaphora-20211209-git.tgz";
+    sha256 = "1pi166qwf3zwswhgq8c4r84rl5d6lnn0rkb3cdf5afyxmminsadg";
   };
 
   packageName = "anaphora";
@@ -20,8 +21,8 @@ rec {
   overrides = x: x;
 }
 /* (SYSTEM anaphora DESCRIPTION The Anaphoric Macro Package from Hell SHA256
-    0iwfddh3cycjr9vhjnr1ldd5xc3qwqhrp41904s1dvysf99277kv URL
-    http://beta.quicklisp.org/archive/anaphora/2019-10-07/anaphora-20191007-git.tgz
-    MD5 bfaae44cfb6226f35f0afde335e51ca4 NAME anaphora FILENAME anaphora DEPS
-    ((NAME rt FILENAME rt)) DEPENDENCIES (rt) VERSION 20191007-git SIBLINGS NIL
+    1pi166qwf3zwswhgq8c4r84rl5d6lnn0rkb3cdf5afyxmminsadg URL
+    http://beta.quicklisp.org/archive/anaphora/2021-12-09/anaphora-20211209-git.tgz
+    MD5 81827cd43d29293e967916bb11c4df88 NAME anaphora FILENAME anaphora DEPS
+    ((NAME rt FILENAME rt)) DEPENDENCIES (rt) VERSION 20211209-git SIBLINGS NIL
     PARASITES (anaphora/test)) */

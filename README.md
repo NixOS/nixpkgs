@@ -8,7 +8,7 @@
 </p>
 
 [Nixpkgs](https://github.com/nixos/nixpkgs) is a collection of over
-60,000 software packages that can be installed with the
+80,000 software packages that can be installed with the
 [Nix](https://nixos.org/nix/) package manager. It also implements
 [NixOS](https://nixos.org/nixos/), a purely-functional Linux distribution.
 
@@ -21,10 +21,10 @@
 # Community
 
 * [Discourse Forum](https://discourse.nixos.org/)
-* [IRC - #nixos on freenode.net](irc://irc.freenode.net/#nixos)
+* [Matrix Chat](https://matrix.to/#/#community:nixos.org)
 * [NixOS Weekly](https://weekly.nixos.org/)
 * [Community-maintained wiki](https://nixos.wiki/)
-* [Community-maintained list of ways to get in touch](https://nixos.wiki/wiki/Get_In_Touch#Chat) (Discord, Matrix, Telegram, other IRC channels, etc.)
+* [Community-maintained list of ways to get in touch](https://nixos.wiki/wiki/Get_In_Touch#Chat) (Discord, Telegram, IRC, etc.)
 
 # Other Project Repositories
 
@@ -46,14 +46,14 @@ Nixpkgs and NixOS are built and tested by our continuous integration
 system, [Hydra](https://hydra.nixos.org/).
 
 * [Continuous package builds for unstable/master](https://hydra.nixos.org/jobset/nixos/trunk-combined)
-* [Continuous package builds for the NixOS 20.09 release](https://hydra.nixos.org/jobset/nixos/release-20.09)
+* [Continuous package builds for the NixOS 21.11 release](https://hydra.nixos.org/jobset/nixos/release-21.11)
 * [Tests for unstable/master](https://hydra.nixos.org/job/nixos/trunk-combined/tested#tabs-constituents)
-* [Tests for the NixOS 20.09 release](https://hydra.nixos.org/job/nixos/release-20.09/tested#tabs-constituents)
+* [Tests for the NixOS 21.11 release](https://hydra.nixos.org/job/nixos/release-21.11/tested#tabs-constituents)
 
 Artifacts successfully built with Hydra are published to cache at
 https://cache.nixos.org/. When successful build and test criteria are
 met, the Nixpkgs expressions are distributed via [Nix
-channels](https://nixos.org/nix/manual/#sec-channels).
+channels](https://nixos.org/manual/nix/stable/package-management/channels.html).
 
 # Contributing
 
@@ -87,7 +87,7 @@ Most contributions are based on and merged into these branches:
   deemed of sufficiently high quality
 
 For more information about contributing to the project, please visit
-the [contributing page](https://github.com/NixOS/nixpkgs/blob/master/.github/CONTRIBUTING.md).
+the [contributing page](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md).
 
 # Donations
 
@@ -97,7 +97,8 @@ Foundation](https://nixos.org/nixos/foundation.html). To ensure the
 continuity and expansion of the NixOS infrastructure, we are looking
 for donations to our organization.
 
-You can donate to the NixOS foundation by using Open Collective:
+You can donate to the NixOS foundation through [SEPA bank
+transfers](https://nixos.org/donate.html) or by using Open Collective:
 
 <a href="https://opencollective.com/nixos#support"><img src="https://opencollective.com/nixos/tiers/supporter.svg?width=890" /></a>
 

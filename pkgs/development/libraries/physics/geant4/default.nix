@@ -21,6 +21,7 @@
 
 # For enableQT.
 , qtbase
+, wrapQtAppsHook
 
 # For enableXM.
 , motif
@@ -48,23 +49,13 @@ let
 in
 
 stdenv.mkDerivation rec {
-  version = "10.7.0";
+  version = "11.0.0";
   pname = "geant4";
 
   src = fetchurl{
-    url = "https://geant4-data.web.cern.ch/geant4-data/releases/geant4.10.07.tar.gz";
-    sha256 = "0jmdxb8z20d4l6sf2w0gk9ska48kylm38yngy3mzyvyj619a8vkp";
+    url = "https://cern.ch/geant4-data/releases/geant4-v${version}.tar.gz";
+    sha256 = "sha256-PMin350/8ceiGmLS6zoQvhX2uxWNOTI78yEzScnvdbk=";
   };
-
-  boost_python_lib = "python${builtins.replaceStrings ["."] [""] python3.pythonVersion}";
-  postPatch = ''
-    # Fix for boost 1.67+
-    substituteInPlace environments/g4py/CMakeLists.txt \
-      --replace "REQUIRED python" \
-                "REQUIRED COMPONENTS $boost_python_lib"
-    substituteInPlace environments/g4py/G4PythonHelpers.cmake \
-      --replace "Boost::python" "Boost::$boost_python_lib"
-  '';
 
   cmakeFlags = [
     "-DGEANT4_INSTALL_DATA=OFF"
@@ -87,7 +78,13 @@ stdenv.mkDerivation rec {
     "-DINVENTOR_LIBRARY_RELEASE=${coin3d}/lib/libCoin.so"
   ];
 
-  nativeBuildInputs =  [ cmake ];
+  nativeBuildInputs =  [
+    cmake
+  ] ++ lib.optionals enableQT [
+    wrapQtAppsHook
+  ];
+
+  dontWrapQtApps = !enableQT;
 
   buildInputs = [ libGLU xlibsWrapper libXmu ]
     ++ lib.optionals enableInventor [ libXpm coin3d soxt motif ]
@@ -101,6 +98,8 @@ stdenv.mkDerivation rec {
   postFixup = ''
     # Don't try to export invalid environment variables.
     sed -i 's/export G4\([A-Z]*\)DATA/#export G4\1DATA/' "$out"/bin/geant4.sh
+  '' + lib.optionalString enableQT ''
+    wrapQtAppsHook
   '';
 
   setupHook = ./geant4-hook.sh;
@@ -128,7 +127,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://www.geant4.org";
     license = licenses.g4sl;
-    maintainers = with maintainers; [ tmplt omnipotententity ];
+    maintainers = with maintainers; [ omnipotententity ];
     platforms = platforms.linux;
   };
 }

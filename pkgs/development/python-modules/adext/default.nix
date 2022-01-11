@@ -1,27 +1,36 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
+, setuptools-scm
 , alarmdecoder
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "adext";
-  version = "0.3";
+  version = "0.4.2";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "184qxw6i5ixnhgkjnby4zwn4jg90mxb8xy9vbg80x5w331p4z50f";
+  src = fetchFromGitHub {
+    owner = "ajschmidt8";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "0h5k9kzms2f0r48pdhsgv8pimk0vsxw8vs0k6880mank8ij914wr";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "alarmdecoder==1.13.2" "alarmdecoder>=1.13.2"
-  '';
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
-  propagatedBuildInputs = [ alarmdecoder ];
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
-  # Tests are not published yet
-  doCheck = false;
+  propagatedBuildInputs = [
+    alarmdecoder
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+  ];
+
   pythonImportsCheck = [ "adext" ];
 
   meta = with lib; {

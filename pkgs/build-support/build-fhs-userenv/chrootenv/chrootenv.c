@@ -18,7 +18,7 @@
   if (expr)                                                                    \
     fail(#expr, errno);
 
-const gchar *bind_blacklist[] = {"bin", "etc", "host", "real-host", "usr", "lib", "lib64", "lib32", "sbin", NULL};
+const gchar *bind_blacklist[] = {"bin", "etc", "host", "real-host", "usr", "lib", "lib64", "lib32", "sbin", "opt", NULL};
 
 int pivot_root(const char *new_root, const char *put_old) {
   return syscall(SYS_pivot_root, new_root, put_old);
@@ -43,7 +43,6 @@ const gchar *create_tmpdir() {
 void pivot_host(const gchar *guest) {
   g_autofree gchar *point = g_build_filename(guest, "host", NULL);
   fail_if(g_mkdir(point, 0755));
-  fail_if(mount(0, "/", 0, MS_PRIVATE | MS_REC, 0));
   fail_if(pivot_root(guest, point));
 }
 
@@ -121,6 +120,9 @@ int main(gint argc, gchar **argv) {
 
       fail("unshare", unshare_errno);
     }
+
+    // hide all mounts we do from the parent
+    fail_if(mount(0, "/", 0, MS_SLAVE | MS_REC, 0));
 
     if (uid != 0) {
       spit("/proc/self/setgroups", "deny");

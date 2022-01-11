@@ -3,7 +3,7 @@
 , genericUpdater
 , substituteAll
 , common-updater-scripts
-, ffmpeg_3
+, ffmpeg
 , python3Packages
 , sox
 }:
@@ -20,12 +20,10 @@ python3Packages.buildPythonApplication rec {
   };
 
   patches = [
-    (
-      substituteAll {
-        src = ./ffmpeg-location.patch;
-        ffmpeg = ffmpeg_3;
-      }
-    )
+    (substituteAll {
+      src = ./ffmpeg-location.patch;
+      inherit ffmpeg;
+    })
   ];
 
   propagatedBuildInputs = with python3Packages; [ crcmod ffmpeg-python mutagen tqdm ];

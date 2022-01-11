@@ -2,16 +2,17 @@
 
 stdenv.mkDerivation rec {
   pname = "fast-export";
-  version = "200213";
+  version = "210917";
 
   src = fetchFromGitHub {
     owner = "frej";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0hzyh66rlawxip4n2pvz7pbs0cq82clqv1d6c7hf60v1drjxw287";
+    sha256 = "0xg8r9rbqv7mriraqxdks2mgj7j4c9gap3kc05y1kxi3nniywyd3";
   };
 
-  buildInputs = [mercurial.python mercurial makeWrapper];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [mercurial.python mercurial];
 
   installPhase = ''
     binPath=$out/bin

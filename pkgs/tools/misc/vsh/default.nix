@@ -2,24 +2,20 @@
 
 buildGoModule rec {
   pname = "vsh";
-  version = "0.9.0";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "fishi0x01";
     repo = "vsh";
     rev = "v${version}";
-    sha256 = "1f6szcdakfx3zap1zpkrcs134plv7vnyilzcxs5jbhrrbr6q1807";
+    sha256 = "0skd16j969mb2kgq503wskaw8clyhkw135ny2nsqv5j2zjpr71ap";
   };
 
-  vendorSha256 = "0a2kjql4ibglxkq5dgzr2sxxxm38nf83s4rsk2gd1cf7v0flr02j";
-
-  # vendor dir in vsh repo is incomplete
-  deleteVendor = true;
-
-  runVend = true;
+  # vendor directory is part of repository
+  vendorSha256 = null;
 
   # make sure version gets set at compile time
-  buildFlagsArray = [ "-ldflags=-s -w -X main.vshVersion=v${version}" ];
+  ldflags = [ "-s" "-w" "-X main.vshVersion=v${version}" ];
 
   meta = with lib; {
     description = "HashiCorp Vault interactive shell";

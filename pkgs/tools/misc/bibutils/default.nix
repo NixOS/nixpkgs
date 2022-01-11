@@ -1,19 +1,35 @@
-{ lib, stdenv, fetchurl }:
+{ lib
+, stdenv
+, fetchurl
+, static ? stdenv.hostPlatform.isStatic
+}:
 
 stdenv.mkDerivation rec {
   pname = "bibutils";
-  version = "6.10";
+  version = "7.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/bibutils/bibutils_${version}_src.tgz";
-    sha256 = "15p4av74ihsg03j854dkdqihpspwnp58p9g1lhx48w8kz91c0ml6";
+    sha256 = "sha256-bgKK7x6Kaz5azvCYWEp7tocI81z+dAEbNBwR/qXktcM=";
   };
 
-  configureFlags = [ "--dynamic" "--install-dir" "$(out)/bin" "--install-lib" "$(out)/lib" ];
+  preConfigure = lib.optionalString stdenv.isDarwin ''
+    substituteInPlace lib/Makefile.dynamic \
+      --replace '-Wl,-soname,$(SONAME)' ""
+  '';
+
+  configureFlags = [
+    (if static then "--static" else "--dynamic")
+    "--install-dir" "$(out)/bin"
+    "--install-lib" "$(out)/lib"
+  ];
   dontAddPrefix = true;
 
   doCheck = true;
   checkTarget = "test";
+  preCheck = lib.optionalString stdenv.isDarwin ''
+    export DYLD_LIBRARY_PATH=`pwd`/lib
+  '';
 
   meta = with lib; {
     description = "Bibliography format interconversion";
@@ -21,6 +37,6 @@ stdenv.mkDerivation rec {
     homepage = "https://sourceforge.net/p/bibutils/home/Bibutils/";
     license = licenses.gpl2;
     maintainers = [ maintainers.garrison ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

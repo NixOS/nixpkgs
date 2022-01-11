@@ -1,16 +1,19 @@
-{ lib, stdenv, fetchurl, perl }:
+{ lib, stdenv, fetchFromGitHub, perl, coreutils }:
 
 stdenv.mkDerivation rec {
   pname = "libfaketime";
-  version = "0.9.8";
+  version = "0.9.9";
 
-  src = fetchurl {
-    url = "https://github.com/wolfcw/libfaketime/archive/v${version}.tar.gz";
-    sha256 = "18s2hjm4sbrlg6sby944z87yslnq9s85p7j892hyr42qrlvq4a06";
+  src = fetchFromGitHub {
+    owner = "wolfcw";
+    repo = "libfaketime";
+    rev = "v${version}";
+    sha256 = "sha256-P1guVggteGtoq8+eeE966hDPkRwsn0m7oLCohyPrIb4=";
   };
 
   patches = [
     ./no-date-in-gzip-man-page.patch
+    ./nix-store-date.patch
   ] ++ (lib.optionals stdenv.cc.isClang [
     # https://github.com/wolfcw/libfaketime/issues/277
     ./0001-Remove-unsupported-clang-flags.patch
@@ -22,6 +25,7 @@ stdenv.mkDerivation rec {
       substituteInPlace $a \
         --replace /bin/bash ${stdenv.shell}
     done
+    substituteInPlace src/faketime.c --replace @DATE_CMD@ ${coreutils}/bin/date
   '';
 
   PREFIX = placeholder "out";
@@ -37,5 +41,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     platforms = platforms.all;
     maintainers = [ maintainers.bjornfor ];
+    mainProgram = "faketime";
   };
 }

@@ -1,22 +1,27 @@
-{ lib, stdenv, fetchurl, texinfo }:
+{ lib, stdenv, fetchurl, texinfo, buildPackages, pkgsStatic }:
 
 stdenv.mkDerivation rec {
-  name = "indent-2.2.12";
+  pname = "indent";
+  version = "2.2.12";
 
   src = fetchurl {
-    url = "mirror://gnu/indent/${name}.tar.gz";
+    url = "mirror://gnu/${pname}/${pname}-${version}.tar.gz";
     sha256 = "12xvcd16cwilzglv9h7sgh4h1qqjd1h8s48ji2dla58m4706hzg7";
   };
 
   patches = [ ./darwin.patch ];
+  makeFlags = [ "AR=${stdenv.cc.targetPrefix}ar" ];
 
-  buildInputs = [ texinfo ];
+  strictDeps = true;
+  nativeBuildInputs = [ texinfo ];
+  pkgsBuildBuild = [ buildPackages.stdenv.cc ]; # needed when cross-compiling
 
   NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang
     "-Wno-implicit-function-declaration";
 
   hardeningDisable = [ "format" ];
 
+  passthru.tests.static = pkgsStatic.indent;
   meta = {
     homepage = "https://www.gnu.org/software/indent/";
     description = "A source code reformatter";

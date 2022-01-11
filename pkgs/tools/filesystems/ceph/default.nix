@@ -1,18 +1,27 @@
 { lib, stdenv, runCommand, fetchurl
-, fetchpatch
 , ensureNewerSourcesHook
 , cmake, pkg-config
 , which, git
-, boost, python3Packages
+, boost
 , libxml2, zlib, lz4
 , openldap, lttng-ust
 , babeltrace, gperf
 , gtest
 , cunit, snappy
-, rocksdb, makeWrapper
+, makeWrapper
 , leveldb, oathToolkit
 , libnl, libcap_ng
 , rdkafka
+, nixosTests
+, cryptsetup
+, sqlite
+, lua
+, icu
+, bzip2
+, doxygen
+, graphviz
+, fmt
+, python3
 
 # Optional Dependencies
 , yasm ? null, fcgi ? null, expat ? null
@@ -29,7 +38,7 @@
 
 # Linux Only Dependencies
 , linuxHeaders, util-linux, libuuid, udev, keyutils, rdma-core, rabbitmq-c
-, libaio ? null, libxfs ? null, zfs ? null
+, libaio ? null, libxfs ? null, zfs ? null, liburing ? null
 , ...
 }:
 
@@ -76,26 +85,28 @@ let
   };
 
   getMeta = description: with lib; {
-     homepage = "https://ceph.com/";
+     homepage = "https://ceph.io/en/";
      inherit description;
      license = with licenses; [ lgpl21 gpl2 bsd3 mit publicDomain ];
      maintainers = with maintainers; [ adev ak johanot krav ];
      platforms = [ "x86_64-linux" "aarch64-linux" ];
    };
 
-  ceph-common = python3Packages.buildPythonPackage rec{
+  ceph-common = python.pkgs.buildPythonPackage rec{
     pname = "ceph-common";
     inherit src version;
 
     sourceRoot = "ceph-${version}/src/python-common";
 
-    checkInputs = [ python3Packages.pytest ];
-    propagatedBuildInputs = with python3Packages; [ pyyaml six ];
+    checkInputs = [ python.pkgs.pytest ];
+    propagatedBuildInputs = with python.pkgs; [ pyyaml six ];
 
     meta = getMeta "Ceph common module for code shared by manager modules";
   };
 
-  ceph-python-env = python3Packages.python.withPackages (ps: [
+  python = python3;
+
+  ceph-python-env = python.withPackages (ps: [
     ps.sphinx
     ps.flask
     ps.cython
@@ -105,26 +116,26 @@ let
     ps.Mako
     ceph-common
     ps.cherrypy
-    ps.dateutil
+    ps.cmd2
+    ps.colorama
+    ps.python-dateutil
     ps.jsonpatch
     ps.pecan
     ps.prettytable
+    ps.pyopenssl
     ps.pyjwt
     ps.webob
     ps.bcrypt
-    # scipy > 1.3 breaks diskprediction_local, leading to mgr hang on startup
-    # Bump (and get rid of scipy_1_3) once these issues are resolved:
-    # https://tracker.ceph.com/issues/42764 https://tracker.ceph.com/issues/45147
-    ps.scipy_1_3
+    ps.scipy
     ps.six
     ps.pyyaml
   ]);
   sitePackages = ceph-python-env.python.sitePackages;
 
-  version = "15.2.8";
+  version = "16.2.7";
   src = fetchurl {
     url = "http://download.ceph.com/tarballs/ceph-${version}.tar.gz";
-    sha256 = "1nmrras3g2zapcd06qr5m7y4zkymnr0r53jkpicjw2g4q7wfmib4";
+    sha256 = "0n7vpdcxji49bqaa5b7zxif1r80rrkbh0dfacbibvf20kzzbn2fz";
   };
 in rec {
   ceph = stdenv.mkDerivation {
@@ -133,22 +144,27 @@ in rec {
 
     patches = [
       ./0000-fix-SPDK-build-env.patch
-      ./ceph-glibc-2-32-sigdescr_np.patch
     ];
 
     nativeBuildInputs = [
       cmake
-      pkg-config which git python3Packages.wrapPython makeWrapper
-      python3Packages.python # for the toPythonPath function
+      pkg-config which git python.pkgs.wrapPython makeWrapper
+      python.pkgs.python # for the toPythonPath function
       (ensureNewerSourcesHook { year = "1980"; })
+      python
+      fmt
+      # for building docs/man-pages presumably
+      doxygen
+      graphviz
     ];
 
     buildInputs = cryptoLibsMap.${cryptoStr} ++ [
       boost ceph-python-env libxml2 optYasm optLibatomic_ops optLibs3
       malloc zlib openldap lttng-ust babeltrace gperf gtest cunit
-      snappy rocksdb lz4 oathToolkit leveldb libnl libcap_ng rdkafka
+      snappy lz4 oathToolkit leveldb libnl libcap_ng rdkafka
+      cryptsetup sqlite lua icu bzip2
     ] ++ lib.optionals stdenv.isLinux [
-      linuxHeaders util-linux libuuid udev keyutils optLibaio optLibxfs optZfs
+      linuxHeaders util-linux libuuid udev keyutils liburing optLibaio optLibxfs optZfs
       # ceph 14
       rdma-core rabbitmq-c
     ] ++ lib.optionals hasRadosgw [
@@ -160,6 +176,7 @@ in rec {
     preConfigure =''
       substituteInPlace src/common/module.c --replace "/sbin/modinfo"  "modinfo"
       substituteInPlace src/common/module.c --replace "/sbin/modprobe" "modprobe"
+      substituteInPlace src/common/module.c --replace "/bin/grep" "grep"
 
       # for pybind/rgw to find internal dep
       export LD_LIBRARY_PATH="$PWD/build/lib''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
@@ -170,20 +187,20 @@ in rec {
     '';
 
     cmakeFlags = [
-      "-DWITH_PYTHON3=ON"
-      "-DWITH_SYSTEM_ROCKSDB=OFF"
+      "-DWITH_SYSTEM_ROCKSDB=OFF"  # breaks Bluestore
       "-DCMAKE_INSTALL_DATADIR=${placeholder "lib"}/lib"
 
-
       "-DWITH_SYSTEM_BOOST=ON"
-      "-DWITH_SYSTEM_ROCKSDB=ON"
       "-DWITH_SYSTEM_GTEST=ON"
       "-DMGR_PYTHON_VERSION=${ceph-python-env.python.pythonVersion}"
       "-DWITH_SYSTEMD=OFF"
       "-DWITH_TESTS=OFF"
+      "-DWITH_CEPHFS_SHELL=ON"
       # TODO breaks with sandbox, tries to download stuff with npm
       "-DWITH_MGR_DASHBOARD_FRONTEND=OFF"
-    ];
+      # WITH_XFS has been set default ON from Ceph 16, keeping it optional in nixpkgs for now
+      ''-DWITH_XFS=${if optLibxfs != null then "ON" else "OFF"}''
+    ] ++ lib.optional stdenv.isLinux "-DWITH_SYSTEM_LIBURING=ON";
 
     postFixup = ''
       wrapPythonPrograms
@@ -198,19 +215,26 @@ in rec {
 
     doCheck = false; # uses pip to install things from the internet
 
+    # Takes 7+h to build with 2 cores.
+    requiredSystemFeatures = [ "big-parallel" ];
+
     meta = getMeta "Distributed storage system";
 
     passthru.version = version;
+    passthru.tests = { inherit (nixosTests) ceph-single-node ceph-multi-node ceph-single-node-bluestore; };
   };
 
   ceph-client = runCommand "ceph-client-${version}" {
-      meta = getMeta "Tools needed to mount Ceph's RADOS Block Devices";
+      meta = getMeta "Tools needed to mount Ceph's RADOS Block Devices/Cephfs";
     } ''
       mkdir -p $out/{bin,etc,${sitePackages},share/bash-completion/completions}
       cp -r ${ceph}/bin/{ceph,.ceph-wrapped,rados,rbd,rbdmap} $out/bin
       cp -r ${ceph}/bin/ceph-{authtool,conf,dencoder,rbdnamer,syn} $out/bin
       cp -r ${ceph}/bin/rbd-replay* $out/bin
-      cp -r ${ceph}/${sitePackages} $out/${sitePackages}
+      cp -r ${ceph}/sbin/mount.ceph $out/bin
+      cp -r ${ceph}/sbin/mount.fuse.ceph $out/bin
+      ln -s bin $out/sbin
+      cp -r ${ceph}/${sitePackages}/* $out/${sitePackages}
       cp -r ${ceph}/etc/bash_completion.d $out/share/bash-completion/completions
       # wrapPythonPrograms modifies .ceph-wrapped, so lets just update its paths
       substituteInPlace $out/bin/ceph          --replace ${ceph} $out

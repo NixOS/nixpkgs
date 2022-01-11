@@ -20,7 +20,7 @@ in {
       description = "Package to use for flannel";
       type = types.package;
       default = pkgs.flannel;
-      defaultText = "pkgs.flannel";
+      defaultText = literalExpression "pkgs.flannel";
     };
 
     publicIp = mkOption {
@@ -93,6 +93,9 @@ in {
       '';
       type = types.nullOr types.str;
       default = with config.networking; (hostName + optionalString (domain != null) ".${domain}");
+      defaultText = literalExpression ''
+        with config.networking; (hostName + optionalString (domain != null) ".''${domain}")
+      '';
       example = "node1.example.com";
     };
 
@@ -162,12 +165,9 @@ in {
         NODE_NAME = cfg.nodeName;
       };
       path = [ pkgs.iptables ];
-      preStart = ''
-        mkdir -p /run/flannel
-        touch /run/flannel/docker
-      '' + optionalString (cfg.storageBackend == "etcd") ''
+      preStart = optionalString (cfg.storageBackend == "etcd") ''
         echo "setting network configuration"
-        until ${pkgs.etcdctl}/bin/etcdctl set /coreos.com/network/config '${builtins.toJSON networkConfig}'
+        until ${pkgs.etcd}/bin/etcdctl set /coreos.com/network/config '${builtins.toJSON networkConfig}'
         do
           echo "setting network configuration, retry"
           sleep 1
@@ -177,6 +177,7 @@ in {
         ExecStart = "${cfg.package}/bin/flannel";
         Restart = "always";
         RestartSec = "10s";
+        RuntimeDirectory = "flannel";
       };
     };
 

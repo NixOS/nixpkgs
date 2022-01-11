@@ -8,7 +8,7 @@ let lispPackages = rec {
 
   quicklisp = buildLispPackage rec {
     baseName = "quicklisp";
-    version = "2019-02-16";
+    version = "2021-02-13";
 
     buildSystems = [];
 
@@ -17,15 +17,15 @@ let lispPackages = rec {
     src = pkgs.fetchgit {
       url = "https://github.com/quicklisp/quicklisp-client/";
       rev = "refs/tags/version-${version}";
-      sha256 = "0x9b4vf36n2hh102gqgjxg5f5ymxcr9j5khn4rskjdprfgd8d1y9";
+      sha256 = "sha256:102f1chpx12h5dcf659a9kzifgfjc482ylf73fg1cs3w34zdawnl";
     };
     overrides = x: rec {
       inherit clwrapper;
       quicklispdist = pkgs.fetchurl {
         # Will usually be replaced with a fresh version anyway, but needs to be
         # a valid distinfo.txt
-        url = "https://beta.quicklisp.org/dist/quicklisp/2020-10-16/distinfo.txt";
-        sha256 = "sha256:090xjcnyqcv8az9n1a7m0f6vzz2nwcncy95ha7ixb7fnd2rj1n65";
+        url = "http://beta.quicklisp.org/dist/quicklisp/2021-12-09/distinfo.txt";
+        sha256 = "sha256:0gc4cv73nl7xkfwvmkmfhfx6yqf876nfm2v24v6fky9n24sh4y6w";
       };
       buildPhase = "true; ";
       postInstall = ''
@@ -124,15 +124,21 @@ let lispPackages = rec {
   };
   nyxt = pkgs.lispPackages.buildLispPackage rec {
     baseName = "nyxt";
-    version = "2020-10-23";
-
-    buildSystems = [ "nyxt" "nyxt-ext" ];
+    version = "2.2.3";
 
     description = "Browser";
 
     overrides = x: {
       postInstall = ''
         echo "Building nyxt binary"
+        (
+          source "$out/lib/common-lisp-settings"/*-shell-config.sh
+          cd "$out/lib/common-lisp"/*/
+          makeFlags="''${makeFlags:-}"
+          make LISP=common-lisp.sh NYXT_INTERNAL_QUICKLISP=false PREFIX="$out" $makeFlags all
+          make LISP=common-lisp.sh NYXT_INTERNAL_QUICKLISP=false PREFIX="$out" $makeFlags install
+          cp nyxt "$out/bin/nyxt"
+        )
         NIX_LISP_PRELAUNCH_HOOK='
           nix_lisp_build_system nyxt/gtk-application \
            "(asdf/system:component-entry-point (asdf:find-system :nyxt/gtk-application))" \
@@ -140,61 +146,66 @@ let lispPackages = rec {
         ' "$out/bin/nyxt-lisp-launcher.sh"
         cp "$out/lib/common-lisp/nyxt/nyxt" "$out/bin/"
       '';
+
+      # Prevent nyxt from trying to obtain dependencies as submodules
+      makeFlags = [ "NYXT_SUBMODULES=false" ] ++ x.buildFlags or [];
     };
 
     deps = with pkgs.lispPackages; [
-      alexandria
-      bordeaux-threads
-      chanl
-      cl-annot
-      cl-ansi-text
-      cl-containers
-      cl-css
-      cl-json
-      cl-markup
-      cl-ppcre
-      cl-ppcre-unicode
-      cl-prevalence
-      cl-webkit2
-      closer-mop
-      cluffer
-      dbus
-      dexador
-      enchant
-      fset
-      hu_dot_dwim_dot_defclass-star
-      ironclad
-      local-time
-      log4cl
-      lparallel
-      mk-string-metrics
-      osicat
-      parenscript
-      plump
-      prove-asdf
-      quri
-      serapeum
-      sqlite
-      str
-      swank
-      trivia
-      trivial-clipboard
-      trivial-features
-      trivial-package-local-nicknames
-      trivial-types
-      unix-opts
+            alexandria
+            bordeaux-threads
+            calispel
+            cl-css
+            cl-json
+            cl-markup
+            cl-ppcre
+            cl-ppcre-unicode
+            cl-prevalence
+            closer-mop
+            cl-containers
+            cl-qrencode
+            clss
+            cluffer
+            moptilities
+            dexador
+            enchant
+            file-attributes
+            iolib
+            local-time
+            log4cl
+            lparallel
+            mk-string-metrics
+            osicat
+            parenscript
+            quri
+            serapeum
+            spinneret
+            str
+            plump
+            swank
+            trivia
+            trivial-clipboard
+            trivial-features
+            trivial-garbage
+            trivial-package-local-nicknames
+            trivial-types
+            unix-opts
+            cl-html-diff
+            hu_dot_dwim_dot_defclass-star
+            cl-custom-hash-table
+            fset
+            cl-cffi-gtk
+            cl-webkit2
+            cl-gobject-introspection
     ];
     src = pkgs.fetchFromGitHub {
       owner = "atlas-engineer";
       repo = "nyxt";
-      rev = "f744af5233b3636460ce71650de2b0c7dcb9fa8e";
-      sha256 = "1m4jic7nbm2jmxlm8k0zqg62z91g2f2s86by086brgfw056idjmz";
-      # date = 2020-10-23T19:06:04+02:00;
+      rev = "${version}";
+      sha256 = "1v1szbj44pwxh3k70fvg78xjfkab29dqnlafa722sppdyqd06cqp";
     };
 
     packageName = "nyxt";
-
-    asdFilesToKeep = [ "nyxt.asd" "nyxt-ext.asd" ];
 
     propagatedBuildInputs = [
       pkgs.libressl.out
@@ -202,5 +213,48 @@ let lispPackages = rec {
       pkgs.sbcl
     ];
   };
+
+  mgl = buildLispPackage rec {
+    baseName = "mgl";
+    version = "2021-10-07";
+    description = "MGL is a machine learning library for backpropagation neural networks, boltzmann machines, gaussian processes and more";
+    deps = with pkgs.lispPackages; [
+      alexandria closer-mop array-operations lla cl-reexport mgl-mat mgl-pax
+      named-readtables pythonic-string-reader
+    ];
+    src = pkgs.fetchFromGitHub {
+      owner = "melisgl";
+      repo = "mgl";
+      rev = "e697791a9bcad3b6e7b3845246a2aa55238cfef7";
+      sha256 = "sha256:09sf7nq7nmf9q7bh3a5ygl2i2n0nhrx5fk2kv5ili0ckv7g9x72s";
+      # date = 2021-10-18T14:15+02:00
+    };
+    buildSystems = [ "mgl" "mgl/test" ];
+    packageName = "mgl";
+    parasites = [ "mgl/test" ];
+    asdFilesToKeep = [ "mgl.asd" "mgl-example.asd" "gnuplot/mgl-gnuplot.asd" "visuals/mgl-visuals.asd" ];
+  };
+
+  mgl-mat = buildLispPackage rec {
+    baseName = "mgl-mat";
+    version = "2021-10-11";
+    description = "Multi-dimensional arrays with FFI/CUDA support";
+    deps = with pkgs.lispPackages; [
+      alexandria bordeaux-threads cffi cffi-grovel cl-cuda flexi-streams ieee-floats
+      lla mgl-pax static-vectors trivial-garbage cl-fad
+    ];
+    src = pkgs.fetchFromGitHub {
+      owner = "melisgl";
+      repo = "mgl-mat";
+      rev = "3710858bc876b1b86e50f1db2abe719e92d810e7";
+      sha256 = "sha256:1aa2382mi55rp8pd31dz4d94yhfzh30vkggcvmvdfrr4ngffj0dx";
+      # date = 2021-10-18T14:15+02:00
+    };
+    packageName = "mgl-mat";
+    buildSystems = [ "mgl-mat" "mgl-mat/test" ];
+    parasites = [ "mgl-mat/test" ];
+    asdFilesToKeep = [ "mgl-mat.asd" ];
+  };
+
 };
 in lispPackages

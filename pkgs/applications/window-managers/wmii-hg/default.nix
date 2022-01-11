@@ -29,8 +29,8 @@ stdenv.mkDerivation rec {
     EOF
   '';
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ unzip libixp_hg txt2tags dash python which
+  nativeBuildInputs = [ pkg-config unzip ];
+  buildInputs = [ libixp_hg txt2tags dash python which
                   libX11 libXrender libXext libXinerama libXrandr libXft ];
 
   # For some reason including mercurial in buildInputs did not help
@@ -41,7 +41,6 @@ stdenv.mkDerivation rec {
     description = "A small window manager controlled by a 9P filesystem";
     maintainers = with lib.maintainers; [ kovirobi ];
     license = lib.licenses.mit;
-    inherit version;
     platforms = with lib.platforms; linux;
   };
 }

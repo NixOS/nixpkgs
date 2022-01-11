@@ -1,22 +1,24 @@
 { lib, stdenv, fetchFromGitHub, makeWrapper
-, libaio, python, zlib
+, libaio, python3, zlib
 , withGnuplot ? false, gnuplot ? null }:
 
 stdenv.mkDerivation rec {
   pname = "fio";
-  version = "3.25";
+  version = "3.29";
 
   src = fetchFromGitHub {
     owner  = "axboe";
     repo   = "fio";
     rev    = "fio-${version}";
-    sha256 = "1f20ihynwnz8jqqlr73i5glr8ziplz4mmcjgk340mj2yqqcnsqag";
+    sha256 = "sha256-SSQFZK8oVarenp/I37QX/N4F4Es2r2bVyWw6U2OcCHw=";
   };
 
-  buildInputs = [ python zlib ]
+  buildInputs = [ python3 zlib ]
     ++ lib.optional (!stdenv.isDarwin) libaio;
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper python3.pkgs.wrapPython ];
+
+  strictDeps = true;
 
   enableParallelBuilding = true;
 
@@ -27,9 +29,14 @@ stdenv.mkDerivation rec {
     substituteInPlace tools/plot/fio2gnuplot --replace /usr/share/fio $out/share/fio
   '';
 
-  postInstall = lib.optionalString withGnuplot ''
-    wrapProgram $out/bin/fio2gnuplot \
-      --prefix PATH : ${lib.makeBinPath [ gnuplot ]}
+  pythonPath = [ python3.pkgs.six ];
+
+  makeWrapperArgs = lib.optional withGnuplot [
+    "--prefix PATH : ${lib.makeBinPath [ gnuplot ]}"
+  ];
+
+  postInstall = ''
+    wrapPythonProgramsIn "$out/bin" "$out $pythonPath"
   '';
 
   meta = with lib; {

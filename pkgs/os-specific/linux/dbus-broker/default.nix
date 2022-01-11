@@ -3,19 +3,21 @@
 
 stdenv.mkDerivation rec {
   pname = "dbus-broker";
-  version = "22";
+  version = "29";
 
   src = fetchFromGitHub {
     owner  = "bus1";
     repo   = "dbus-broker";
     rev    = "v${version}";
-    sha256 = "0vxr73afix5wjxy8g4cckwhl242rrlazm52673iwmdyfz5nskj2x";
+    sha256 = "1abbi8c0mgdqjidlp2wnmy0a88xv173hq88sh5m966c5r1h6alkq";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ docutils meson ninja pkg-config ];
 
   buildInputs = [ dbus linuxHeaders systemd ];
+
+  mesonFlags = [ "-D=system-console-users=gdm,sddm,lightdm" ];
 
   PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
   PKG_CONFIG_SYSTEMD_SYSTEMDUSERUNITDIR = "${placeholder "out"}/lib/systemd/user";

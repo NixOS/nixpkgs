@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "gitjacker";
-  version = "0.0.2";
+  version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "liamg";
     repo = "gitjacker";
     rev = "v${version}";
-    sha256 = "0fg95i2y8sj7dsvqj8mx0k5pps7d0h1i4a3lk85l8jjab4kxx8h9";
+    sha256 = "sha256-rEn9FpcRfEt2yGepIPEAO9m8JeVb+nMhYMBWhC/barc=";
   };
 
   vendorSha256 = null;

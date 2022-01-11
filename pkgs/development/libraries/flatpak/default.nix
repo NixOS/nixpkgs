@@ -1,7 +1,7 @@
 { lib, stdenv
 , fetchurl
+, fetchpatch
 , autoreconfHook
-, docbook_xml_dtd_412
 , docbook_xml_dtd_45
 , docbook-xsl-nons
 , which
@@ -14,7 +14,7 @@
 , xmlto
 , appstream-glib
 , substituteAll
-, yacc
+, bison
 , xdg-dbus-proxy
 , p11-kit
 , bubblewrap
@@ -36,7 +36,7 @@
 , fuse
 , nixosTests
 , libsoup
-, lzma
+, xz
 , zstd
 , ostree
 , polkit
@@ -49,18 +49,19 @@
 , dconf
 , gsettings-desktop-schemas
 , librsvg
+, makeWrapper
 }:
 
 stdenv.mkDerivation rec {
   pname = "flatpak";
-  version = "1.10.1";
+  version = "1.12.2";
 
   # TODO: split out lib once we figure out what to do with triggerdir
   outputs = [ "out" "dev" "man" "doc" "devdoc" "installedTests" ];
 
   src = fetchurl {
     url = "https://github.com/flatpak/flatpak/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "1dywvfpmszvp2wy5hvpzy8z6gz2gzmi9p302njp52p9vpx14ydf1";
+    sha256 = "df1eb464f9142c11627f99f04f6a5c02c868bbb145489b8902cb6c105e774b75"; # Taken from https://github.com/flatpak/flatpak/releases/
   };
 
   patches = [
@@ -90,24 +91,24 @@ stdenv.mkDerivation rec {
     # Patch taken from gtk-doc expression.
     ./respect-xml-catalog-files-var.patch
 
-    # Don’t hardcode flatpak binary path in launchers stored under user’s profile otherwise they will break after Flatpak update.
-    # https://github.com/NixOS/nixpkgs/issues/43581
-    ./use-flatpak-from-path.patch
-
     # Nix environment hacks should not leak into the apps.
     # https://github.com/NixOS/nixpkgs/issues/53441
     ./unset-env-vars.patch
 
     # But we want the GDK_PIXBUF_MODULE_FILE from the wrapper affect the icon validator.
     ./validate-icon-pixbuf.patch
+
+    # Tests don't respect the FLATPAK_BINARY override that was added, this is a workaround.
+    # https://github.com/flatpak/flatpak/pull/4496 (Can be removed once included).
+    (fetchpatch {
+      url = "https://github.com/flatpak/flatpak/commit/96dbe28cfa96e80b23fa1d8072eb36edad41279c.patch";
+      sha256 = "1jczk06ymfs98h3nsg245g0jwxvml7wg2x6pb7mrfpsdmrpz2czd";
+    })
   ];
 
   nativeBuildInputs = [
     autoreconfHook
     libxml2
-    # Remove 4.1.2 again once the following is merged
-    # https://github.com/flatpak/flatpak/pull/4102
-    docbook_xml_dtd_412
     docbook_xml_dtd_45
     docbook-xsl-nons
     which
@@ -118,7 +119,7 @@ stdenv.mkDerivation rec {
     pkg-config
     xmlto
     appstream-glib
-    yacc
+    bison
     wrapGAppsNoGuiHook
   ];
 
@@ -133,7 +134,7 @@ stdenv.mkDerivation rec {
     libcap
     libseccomp
     libsoup
-    lzma
+    xz
     zstd
     polkit
     python3
@@ -183,7 +184,14 @@ stdenv.mkDerivation rec {
   in ''
     patchShebangs buildutil
     patchShebangs tests
-    PATH=${lib.makeBinPath [vsc-py]}:$PATH patchShebangs --build variant-schema-compiler/variant-schema-compiler
+    PATH=${lib.makeBinPath [vsc-py]}:$PATH patchShebangs --build subprojects/variant-schema-compiler/variant-schema-compiler
+  '';
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      # Use flatpak from PATH in exported assets (e.g. desktop files).
+      --set FLATPAK_BINARY flatpak
+    )
   '';
 
   passthru = {

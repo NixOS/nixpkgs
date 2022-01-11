@@ -14,13 +14,13 @@ let
   plugins =
     if pluginSupport
     then plain
-    else haskell.lib.disableCabalFlag plain "plugins";
-  static = haskell.lib.justStaticExecutables plugins;
+    else haskell.lib.compose.disableCabalFlag "plugins" plain;
+  static = haskell.lib.compose.justStaticExecutables plugins;
 
 in
-  (haskell.lib.overrideCabal static (drv: {
+  (haskell.lib.compose.overrideCabal (drv: {
     buildTools = (drv.buildTools or []) ++ [ removeReferencesTo ];
-  })).overrideAttrs (drv: {
+  }) static).overrideAttrs (drv: {
 
     # These libraries are still referenced, because they generate
     # a `Paths_*` module for figuring out their version.

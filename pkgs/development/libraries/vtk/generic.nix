@@ -18,7 +18,7 @@ in stdenv.mkDerivation rec {
   version = "${majorVersion}.${minorVersion}";
 
   src = fetchurl {
-    url = "${meta.homepage}files/release/${majorVersion}/VTK-${version}.tar.gz";
+    url = "https://www.vtk.org/files/release/${majorVersion}/VTK-${version}.tar.gz";
     sha256 = sourceSha256;
   };
 
@@ -57,6 +57,8 @@ in stdenv.mkDerivation rec {
     export LD_LIBRARY_PATH="$(pwd)/lib";
   '';
 
+  dontWrapQtApps = true;
+
   # Shared libraries don't work, because of rpath troubles with the current
   # nixpkgs cmake approach. It wants to call a binary at build time, just
   # built and requiring one of the shared objects.
@@ -65,14 +67,17 @@ in stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DCMAKE_C_FLAGS=-fPIC"
     "-DCMAKE_CXX_FLAGS=-fPIC"
-    "-DVTK_USE_SYSTEM_PNG=ON"
-    "-DVTK_USE_SYSTEM_TIFF=1"
+    "-D${if lib.versionOlder version "9.0" then "VTK_USE_SYSTEM_PNG" else "VTK_MODULE_USE_EXTERNAL_vtkpng"}=ON"
+    "-D${if lib.versionOlder version "9.0" then "VTK_USE_SYSTEM_TIFF" else "VTK_MODULE_USE_EXTERNAL_vtktiff"}=1"
     "-DOPENGL_INCLUDE_DIR=${libGL}/include"
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
     "-DCMAKE_INSTALL_BINDIR=bin"
+  ] ++ optionals enableQt [
+    "-D${if lib.versionOlder version "9.0" then "VTK_Group_Qt:BOOL=ON" else "VTK_GROUP_ENABLE_Qt:STRING=YES"}"
+  ] ++ optionals (enableQt && lib.versionOlder version "8.0") [
+    "-DVTK_QT_VERSION=5"
   ]
-    ++ optionals enableQt [ "-DVTK_Group_Qt:BOOL=ON" ]
     ++ optionals stdenv.isDarwin [ "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks" ]
     ++ optionals enablePython [
       "-DVTK_WRAP_PYTHON:BOOL=ON"
@@ -91,5 +96,7 @@ in stdenv.mkDerivation rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ knedlsepp tfmoraes lheckemann ];
     platforms = with platforms; unix;
+    # /nix/store/xxxxxxx-apple-framework-Security/Library/Frameworks/Security.framework/Headers/Authorization.h:192:7: error: variably modified 'bytes' at file scope
+    broken = stdenv.isDarwin && (lib.versions.major majorVersion == "7" || lib.versions.major majorVersion == "8");
   };
 }

@@ -1,30 +1,44 @@
-{ lib, fetchFromGitHub, buildGoPackage, installShellFiles, nixosTests }:
+{ stdenv, lib, fetchFromGitHub, buildGoModule, installShellFiles, nixosTests
+, makeWrapper
+, gawk
+, glibc
+}:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "vault";
-  version = "1.6.2";
+  version = "1.9.2";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "vault";
     rev = "v${version}";
-    sha256 = "1g6fz6dl90cb5pnvvmkndqgncfjy50j9jw3xzn8s91yzvvld8ds7";
+    sha256 = "sha256-vuwVPBB7zxpmJsBZ+J/vl0E49gx7CUGGi5j1Grgv2Jo=";
   };
 
-  goPackagePath = "github.com/hashicorp/vault";
+  vendorSha256 = "sha256-i7f/7BRn++m+0KAK1V9dWJykgGobzmB2OZ6ltR//kRg=";
 
   subPackages = [ "." ];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [ installShellFiles makeWrapper ];
 
-  buildFlagsArray = [ "-tags=vault" "-ldflags=-s -w -X ${goPackagePath}/sdk/version.GitCommit=${src.rev}" ];
+  tags = [ "vault" ];
+
+  ldflags = [
+    "-s" "-w"
+    "-X github.com/hashicorp/vault/sdk/version.GitCommit=${src.rev}"
+    "-X github.com/hashicorp/vault/sdk/version.Version=${version}"
+    "-X github.com/hashicorp/vault/sdk/version.VersionPrerelease="
+  ];
 
   postInstall = ''
     echo "complete -C $out/bin/vault vault" > vault.bash
     installShellCompletion vault.bash
+  '' + lib.optionalString stdenv.isLinux ''
+    wrapProgram $out/bin/vault \
+      --prefix PATH ${lib.makeBinPath [ gawk glibc ]}
   '';
 
-  passthru.tests.vault = nixosTests.vault;
+  passthru.tests = { inherit (nixosTests) vault vault-postgresql; };
 
   meta = with lib; {
     homepage = "https://www.vaultproject.io/";
@@ -32,6 +46,6 @@ buildGoPackage rec {
     changelog = "https://github.com/hashicorp/vault/blob/v${version}/CHANGELOG.md";
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.mpl20;
-    maintainers = with maintainers; [ rushmorem lnl7 offline pradeepchhetri ];
+    maintainers = with maintainers; [ rushmorem lnl7 offline pradeepchhetri Chili-Man ];
   };
 }

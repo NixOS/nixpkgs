@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, faust2jack, faust2lv2, helmholtz, mrpeach, puredata-with-plugins }:
+{ lib, stdenv, fetchFromGitHub, faust2jack, faust2lv2, helmholtz, mrpeach, puredata-with-plugins }:
 stdenv.mkDerivation rec {
   pname = "VoiceOfFaust";
   version = "1.1.4";

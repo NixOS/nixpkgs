@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "quandl";
-  version = "3.5.0";
+  version = "3.7.0";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit version;
     pname = "Quandl";
-    sha256 = "0zpw0nwqr4g56l9z4my0fahfgpcmfx74acbmv6nfx1dmq5ggraf3";
+    sha256 = "6e0b82fbc7861610b3577c5397277c4220e065eee0fed4e46cd6b6021655b64c";
   };
 
   checkInputs = [
@@ -46,9 +46,12 @@ buildPythonPackage rec {
     importlib-metadata
   ];
 
+  pythonImportsCheck = [ "quandl" ];
+
   meta = with lib; {
     description = "Quandl Python client library";
     homepage = "https://github.com/quandl/quandl-python";
+    changelog = "https://github.com/quandl/quandl-python/blob/master/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ ilya-kolpakov ];
   };

@@ -1,14 +1,18 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, autoreconfHook, python3, pkg-config, libX11, libXext, xorgproto, addOpenGLRunpath }:
+{ stdenv, lib, fetchFromGitLab
+, autoreconfHook, pkg-config, python3, addOpenGLRunpath
+, libX11, libXext, xorgproto
+}:
 
 stdenv.mkDerivation rec {
   pname = "libglvnd";
-  version = "1.3.2";
+  version = "1.4.0";
 
-  src = fetchFromGitHub {
-    owner = "NVIDIA";
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = "glvnd";
     repo = "libglvnd";
     rev = "v${version}";
-    sha256 = "10x7fgb114r4gikdg6flszl3kwzcb9y5qa7sj9936mk0zxhjaylz";
+    sha256 = "06y7m486kgg566krbhb0gvmpzy6ayd98psnrmmkrnw8p513lg8k3";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config python3 addOpenGLRunpath ];
@@ -31,8 +35,11 @@ stdenv.mkDerivation rec {
     "-Wno-error=array-bounds"
   ] ++ lib.optional stdenv.cc.isClang "-Wno-error");
 
-  # Indirectly: https://bugs.freedesktop.org/show_bug.cgi?id=35268
-  configureFlags  = lib.optional stdenv.hostPlatform.isMusl "--disable-tls";
+  configureFlags  = []
+    # Indirectly: https://bugs.freedesktop.org/show_bug.cgi?id=35268
+    ++ lib.optional stdenv.hostPlatform.isMusl "--disable-tls"
+    # Remove when aarch64-darwin asm support is upstream: https://gitlab.freedesktop.org/glvnd/libglvnd/-/issues/216
+    ++ lib.optional (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) "--disable-asm";
 
   outputs = [ "out" "dev" ];
 
@@ -47,8 +54,18 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "The GL Vendor-Neutral Dispatch library";
-    homepage = "https://github.com/NVIDIA/libglvnd";
-    license = licenses.bsd2;
+    longDescription = ''
+      libglvnd is a vendor-neutral dispatch layer for arbitrating OpenGL API
+      calls between multiple vendors. It allows multiple drivers from different
+      vendors to coexist on the same filesystem, and determines which vendor to
+      dispatch each API call to at runtime.
+      Both GLX and EGL are supported, in any combination with OpenGL and OpenGL ES.
+    '';
+    inherit (src.meta) homepage;
+    # https://gitlab.freedesktop.org/glvnd/libglvnd#libglvnd:
+    changelog = "https://gitlab.freedesktop.org/glvnd/libglvnd/-/tags/v${version}";
+    license = with licenses; [ mit bsd1 bsd3 gpl3Only asl20 ];
     platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ primeos ];
   };
 }

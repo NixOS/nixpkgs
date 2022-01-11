@@ -1,12 +1,12 @@
 { stdenv, fetchurl, dpkg, xorg
 , glib, libGLU, libGL, libpulseaudio, zlib, dbus, fontconfig, freetype
 , gtk3, pango
-, makeWrapper , python2Packages, lib
-, lsof, curl, libuuid, cups, mesa, lzma, libxkbcommon
+, makeWrapper , python3Packages, lib
+, lsof, curl, libuuid, cups, mesa, xz, libxkbcommon
 }:
 
 let
-  all_data = builtins.fromJSON (builtins.readFile ./data.json);
+  all_data = lib.importJSON ./data.json;
   system_map = {
     # i686-linux = "i386"; Uncomment if enpass 6 becomes available on i386
     x86_64-linux = "amd64";
@@ -38,7 +38,7 @@ let
     curl
     libuuid
     cups
-    lzma
+    xz
     libxkbcommon
   ]);
   package = stdenv.mkDerivation {
@@ -59,8 +59,8 @@ let
       maintainers = with maintainers; [ ewok ];
     };
 
-    buildInputs = [makeWrapper dpkg];
-    phases = [ "unpackPhase" "installPhase" ];
+    nativeBuildInputs = [ makeWrapper ];
+    buildInputs = [dpkg];
 
     unpackPhase = "dpkg -X $src .";
     installPhase=''
@@ -89,7 +89,7 @@ let
       name = "enpass-update-script";
       SCRIPT =./update_script.py;
 
-      buildInputs = with python2Packages; [python requests pathlib2 six attrs ];
+      buildInputs = with python3Packages; [python requests pathlib2 six attrs ];
       shellHook = ''
         exec python $SCRIPT --target pkgs/tools/security/enpass/data.json --repo ${baseUrl}
       '';

@@ -2,42 +2,42 @@
 , fetchurl
 , gcc-unwrapped
 , dpkg
-, polkit
 , util-linux
 , bash
-, nodePackages
 , makeWrapper
-, electron_7
+, electron
 }:
 
 let
+  inherit (stdenv.hostPlatform) system;
+
+  throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
+
   sha256 = {
-    "x86_64-linux" = "1yvqi86bw0kym401zwknhwq9041fxg047sbj3aydnfcqf11vrrmk";
-    "i686-linux" = "12lghzhsl16h3jvzm3vw4hrly32fz99z6rdmybl8viralrxy8mb8";
-  }."${stdenv.system}";
+    "x86_64-linux" = "sha256-n8i4ZqjugeUfXpTzVgIwVomfPk6HvPEbTZLe/jFgwFg=";
+    "i686-linux" = "sha256-lLGfhW6el2ZOcaykH1kTjGldXo7/0q5O8QnslnDlWAQ=";
+  }."${system}" or throwSystem;
 
   arch = {
     "x86_64-linux" = "amd64";
     "i686-linux" = "i386";
-  }."${stdenv.system}";
-
-  electron = electron_7;
+  }."${system}" or throwSystem;
 
 in
 
 stdenv.mkDerivation rec {
   pname = "etcher";
-  version = "1.5.86";
+  version = "1.6.0";
 
   src = fetchurl {
     url = "https://github.com/balena-io/etcher/releases/download/v${version}/balena-etcher-electron_${version}_${arch}.deb";
     inherit sha256;
   };
 
-  dontBuild = true;
-  dontConfigure = true;
-
   nativeBuildInputs = [ makeWrapper ];
+
+  dontConfigure = true;
+  dontBuild = true;
 
   unpackPhase = ''
     ${dpkg}/bin/dpkg-deb -x $src .
@@ -45,15 +45,12 @@ stdenv.mkDerivation rec {
 
   # sudo-prompt has hardcoded binary paths on Linux and we patch them here
   # along with some other paths
-  patchPhase = ''
-    ${nodePackages.asar}/bin/asar extract opt/balenaEtcher/resources/app.asar tmp
+  postPatch = ''
     # use Nix(OS) paths
-    sed -i "s|/usr/bin/pkexec|/usr/bin/pkexec', '/run/wrappers/bin/pkexec|" tmp/node_modules/sudo-prompt/index.js
-    sed -i 's|/bin/bash|${bash}/bin/bash|' tmp/node_modules/sudo-prompt/index.js
-    sed -i "s|'lsblk'|'${util-linux}/bin/lsblk'|" tmp/node_modules/drivelist/js/lsblk/index.js
-    sed -i "s|process.resourcesPath|'$out/share/${pname}/resources/'|" tmp/generated/gui.js
-    ${nodePackages.asar}/bin/asar pack tmp opt/balenaEtcher/resources/app.asar
-    rm -rf tmp
+    substituteInPlace opt/balenaEtcher/resources/app/generated/gui.js \
+      --replace '/usr/bin/pkexec' '/usr/bin/pkexec", "/run/wrappers/bin/pkexec' \
+      --replace '/bin/bash' '${bash}/bin/bash' \
+      --replace '"lsblk"' '"${util-linux}/bin/lsblk"'
   '';
 
   installPhase = ''
@@ -65,14 +62,14 @@ stdenv.mkDerivation rec {
     cp -a opt/balenaEtcher/{locales,resources} $out/share/${pname}
 
     substituteInPlace $out/share/applications/balena-etcher-electron.desktop \
-      --replace 'Exec=/opt/balenaEtcher/balena-etcher-electron' 'Exec=${pname}'
+      --replace /opt/balenaEtcher/balena-etcher-electron ${pname}
 
     runHook postInstall
   '';
 
   postFixup = ''
     makeWrapper ${electron}/bin/electron $out/bin/${pname} \
-      --add-flags $out/share/${pname}/resources/app.asar \
+      --add-flags $out/share/${pname}/resources/app \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ gcc-unwrapped.lib ]}"
   '';
 

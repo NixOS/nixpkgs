@@ -6,7 +6,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0ymqkjz1zk4gs0hkxjh07napc4k24xxb8f3pganw27fca60xcii0";
+    sha256 = "sha256-NAc85JomnxS052SjCu8+UQ/hik2gbq1u7/gc21Nj67Q=";
   };
 
   postPatch = ''
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://buildbot.net/";
     description = "Buildbot Packaging Helper";
-    maintainers = with maintainers; [ nand0p ryansydnor lopsided98 ];
+    maintainers = with maintainers; [ ryansydnor lopsided98 ];
     license = licenses.gpl2;
   };
 }

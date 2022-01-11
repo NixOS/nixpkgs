@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, xorg, freetype, fontconfig, openssl, glib, nss, nspr, expat
-, alsaLib, dbus, zlib, libxml2, libxslt, makeWrapper, xkeyboard_config, systemd
+, alsa-lib, dbus, zlib, libxml2, libxslt, makeWrapper, xkeyboard_config, systemd
 , libGL, xcbutilkeysyms, xdg-utils, libtool }:
 
 let
@@ -28,7 +28,7 @@ let
     nss
     nspr
     dbus
-    alsaLib
+    alsa-lib
     zlib
     libtool
     libxml2
@@ -47,7 +47,7 @@ in stdenv.mkDerivation {
     sha256 = "03pz8wskafn848yvciq29kwdvqcgjrk6sjnm8nk9acl89xf0sn96";
   };
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   buildCommand = ''
     ar x $src

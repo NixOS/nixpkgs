@@ -4,7 +4,6 @@
 , daemonize
 , dbus-python
 , fetchFromGitHub
-, fetchpatch
 , gobject-introspection
 , gtk3
 , makeWrapper
@@ -37,6 +36,10 @@ buildPythonApplication (common // rec {
     pyudev
     setproctitle
   ];
+
+  postPatch = ''
+    substituteInPlace openrazer_daemon/daemon.py --replace "plugdev" "openrazer"
+  '';
 
   postBuild = ''
     DESTDIR="$out" PREFIX="" make install manpages

@@ -1,16 +1,17 @@
-{ lib, stdenv, fetchurl, unzip, libogg, libvorbis }:
+{ lib, stdenv, fetchurl, libogg, libvorbis }:
 
 stdenv.mkDerivation rec {
-  name = "vorbisgain-0.37";
+  pname = "vorbisgain";
+  version = "0.37";
 
   src = fetchurl {
-    url = "https://sjeng.org/ftp/vorbis/${name}.tar.gz";
+    url = "https://sjeng.org/ftp/vorbis/vorbisgain-${version}.tar.gz";
     sha256 = "1v1h6mhnckmvvn7345hzi9abn5z282g4lyyl4nnbqwnrr98v0vfx";
   };
 
   hardeningDisable = [ "format" ];
 
-  buildInputs = [ unzip libogg libvorbis ];
+  buildInputs = [ libogg libvorbis ];
 
   patchPhase = ''
     chmod -v +x configure

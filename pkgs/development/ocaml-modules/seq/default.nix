@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation ({
   version = "0.1";
-  name = "ocaml${ocaml.version}-seq-0.1";
+  pname = "ocaml${ocaml.version}-seq";
 
   meta = {
     license = lib.licenses.lgpl21;
@@ -20,7 +20,8 @@ stdenv.mkDerivation ({
     sha256 = "1cjpsc7q76yfgq9iyvswxgic4kfq2vcqdlmxjdjgd4lx87zvcwrv";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild ];
+  nativeBuildInputs = [ ocaml findlib ocamlbuild ];
+  strictDeps = true;
 
   createFindlibDestdir = true;
 

@@ -23,6 +23,7 @@ buildPythonPackage rec {
 
   # not everything packaged with pypi release
   doCheck = false;
+  pythonImportsCheck = [ "pims" ];
 
   meta = with lib; {
     homepage = "https://github.com/soft-matter/pims";

@@ -48,6 +48,7 @@ let
 in
 pkgs.stdenv.mkDerivation {
   name = "nixpkgs-update-script";
+  buildInputs = [ pkgs.hydra-check ];
   buildCommand = ''
     echo ""
     echo "----------------------------------------------------------------"

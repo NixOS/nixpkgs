@@ -15,9 +15,10 @@ in
       sha256 = "1kn84rsvms1v5l1j2xgrk7dc7mnsmxkc6sqd94mnim22vnwvl8mz";
     };
 
-    buildInputs = [ jre makeWrapper ];
+    nativeBuildInputs = [ makeWrapper ];
+    buildInputs = [ jre ];
 
-    phases = "installPhase";
+    dontUnpack = true;
 
     installPhase = ''
       mkdir -p $out/share/java

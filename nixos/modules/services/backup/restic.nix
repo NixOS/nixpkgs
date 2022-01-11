@@ -1,17 +1,17 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, utils, ... }:
 
 with lib;
 
 let
   # Type for a valid systemd unit option. Needed for correctly passing "timerConfig" to "systemd.timers"
-  unitOption = (import ../../system/boot/systemd-unit-options.nix { inherit config lib; }).unitOption;
+  inherit (utils.systemdUtils.unitOptions) unitOption;
 in
 {
   options.services.restic.backups = mkOption {
     description = ''
       Periodic backups to create with Restic.
     '';
-    type = types.attrsOf (types.submodule ({ name, ... }: {
+    type = types.attrsOf (types.submodule ({ config, name, ... }: {
       options = {
         passwordFile = mkOption {
           type = types.str;
@@ -19,6 +19,17 @@ in
             Read the repository password from a file.
           '';
           example = "/etc/nixos/restic-password";
+        };
+
+        environmentFile = mkOption {
+          type = with types; nullOr str;
+          # added on 2021-08-28, s3CredentialsFile should
+          # be removed in the future (+ remember the warning)
+          default = config.s3CredentialsFile;
+          description = ''
+            file containing the credentials to access the repository, in the
+            format of an EnvironmentFile as described by systemd.exec(5)
+          '';
         };
 
         s3CredentialsFile = mkOption {
@@ -93,10 +104,12 @@ in
         };
 
         paths = mkOption {
-          type = types.listOf types.str;
-          default = [];
+          type = types.nullOr (types.listOf types.str);
+          default = null;
           description = ''
-            Which paths to backup.
+            Which paths to backup.  If null or an empty array, no
+            backup command will be run.  This can be used to create a
+            prune-only job.
           '';
           example = [
             "/var/lib/postgresql"
@@ -210,6 +223,7 @@ in
   };
 
   config = {
+    warnings = mapAttrsToList (n: v: "services.restic.backups.${n}.s3CredentialsFile is deprecated, please use services.restic.backups.${n}.environmentFile instead.") (filterAttrs (n: v: v.s3CredentialsFile != null) config.services.restic.backups);
     systemd.services =
       mapAttrs' (name: backup:
         let
@@ -217,7 +231,7 @@ in
           resticCmd = "${pkgs.restic}/bin/restic${extraOptions}";
           filesFromTmpFile = "/run/restic-backups-${name}/includes";
           backupPaths = if (backup.dynamicFilesFrom == null)
-                        then concatStringsSep " " backup.paths
+                        then if (backup.paths != null) then concatStringsSep " " backup.paths else ""
                         else "--files-from ${filesFromTmpFile}";
           pruneCmd = optionals (builtins.length backup.pruneOpts > 0) [
             ( resticCmd + " forget --prune " + (concatStringsSep " " backup.pruneOpts) )
@@ -243,13 +257,14 @@ in
           restartIfChanged = false;
           serviceConfig = {
             Type = "oneshot";
-            ExecStart = [ "${resticCmd} backup --cache-dir=%C/restic-backups-${name} ${concatStringsSep " " backup.extraBackupArgs} ${backupPaths}" ] ++ pruneCmd;
+            ExecStart = (optionals (backupPaths != "") [ "${resticCmd} backup --cache-dir=%C/restic-backups-${name} ${concatStringsSep " " backup.extraBackupArgs} ${backupPaths}" ])
+                        ++ pruneCmd;
             User = backup.user;
             RuntimeDirectory = "restic-backups-${name}";
             CacheDirectory = "restic-backups-${name}";
             CacheDirectoryMode = "0700";
-          } // optionalAttrs (backup.s3CredentialsFile != null) {
-            EnvironmentFile = backup.s3CredentialsFile;
+          } // optionalAttrs (backup.environmentFile != null) {
+            EnvironmentFile = backup.environmentFile;
           };
         } // optionalAttrs (backup.initialize || backup.dynamicFilesFrom != null) {
           preStart = ''

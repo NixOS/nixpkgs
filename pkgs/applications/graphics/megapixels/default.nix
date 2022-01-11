@@ -1,16 +1,18 @@
 { stdenv
 , lib
-, fetchgit
+, fetchFromGitLab
+, glib
 , meson
 , ninja
 , pkg-config
 , wrapGAppsHook
-, gtk3
-, gnome3
+, libepoxy
+, gtk4
+, zbar
 , tiffSupport ? true
 , libraw
 , jpgSupport ? true
-, imagemagick
+, graphicsmagick
 , exiftool
 }:
 
@@ -20,24 +22,37 @@ let
   inherit (lib) makeBinPath optional optionals optionalString;
   runtimePath = makeBinPath (
     optional tiffSupport libraw
-    ++ optionals jpgSupport [ imagemagick exiftool ]
+    ++ optionals jpgSupport [ graphicsmagick exiftool ]
   );
 in
 stdenv.mkDerivation rec {
   pname = "megapixels";
-  version = "0.14.0";
+  version = "1.4.3";
 
-  src = fetchgit {
-    url = "https://git.sr.ht/~martijnbraam/megapixels";
+  src = fetchFromGitLab {
+    owner = "postmarketOS";
+    repo = "megapixels";
     rev = version;
-    sha256 = "136rv9sx0kgfkpqn5s90j7j4qhb8h04p14g5qhqshb89kmmsmxiw";
+    hash = "sha256-UHJ3Fayf+lS3nRuuhHHLN6mbHfHIPssWkghPMPF5ECg=";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config wrapGAppsHook ];
+  nativeBuildInputs = [
+    glib
+    meson
+    ninja
+    pkg-config
+    wrapGAppsHook
+  ];
 
-  buildInputs = [ gtk3 gnome3.adwaita-icon-theme ]
-  ++ optional tiffSupport libraw
-  ++ optional jpgSupport imagemagick;
+  buildInputs = [
+    libepoxy
+    gtk4
+    zbar
+  ];
+
+  postInstall = ''
+    glib-compile-schemas $out/share/glib-2.0/schemas
+  '';
 
   preFixup = optionalString (tiffSupport || jpgSupport) ''
     gappsWrapperArgs+=(
@@ -46,10 +61,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "GTK3 camera application using raw v4l2 and media-requests";
-    homepage = "https://sr.ht/~martijnbraam/Megapixels";
+    description = "GTK4 camera application that knows how to deal with the media request api";
+    homepage = "https://gitlab.com/postmarketOS/megapixels";
+    changelog = "https://gitlab.com/postmarketOS/megapixels/-/tags/${version}";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ OPNA2608 ];
+    maintainers = with maintainers; [ OPNA2608 dotlambda ];
     platforms = platforms.linux;
   };
 }

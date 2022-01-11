@@ -3,13 +3,17 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.8.0";
+  version = "1.10.1";
   pname = "Flask-Compress";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c132590e7c948877a96d675c13cbfa64edec0faafa2381678dea6f36aa49a552";
+    sha256 = "28352387efbbe772cfb307570019f81957a13ff718d994a9125fa705efb73680";
   };
+
+  postPatch = ''
+    sed -i -e 's/use_scm_version=.*/version="${version}",/' setup.py
+  '';
 
   propagatedBuildInputs = [ flask brotli ];
 

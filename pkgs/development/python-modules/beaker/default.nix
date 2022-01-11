@@ -1,6 +1,8 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchFromGitHub
+, glibcLocales
 , nose
 , pylibmc
 , memcached
@@ -13,20 +15,20 @@
 , cryptography
 , isPy27
 , isPy3k
-, funcsigs
-, pycryptopp
+, funcsigs ? null
+, pycryptopp ? null
 }:
 
 buildPythonPackage rec {
   pname = "Beaker";
-  version = "1.10.1";
+  version = "1.11.0";
 
   # The pypy release do not contains the tests
   src = fetchFromGitHub {
     owner = "bbangert";
     repo = "beaker";
     rev = version;
-    sha256 = "0xrvg503xmi28w0hllr4s7fkap0p09fgw2wax3p1s2r6b3xjvbz7";
+    sha256 = "059sc7iar90lc2y9mppdis5ddfcxyirz03gmsfb0307f5dsa1dhj";
   };
 
   propagatedBuildInputs = [
@@ -39,15 +41,15 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    nose
-    mock
-    webtest
-    pylibmc
+    glibcLocales
     memcached
-    redis
+    mock
+    nose
+    pylibmc
     pymongo
+    redis
+    webtest
   ];
-
 
   # Can not run memcached tests because it immediately tries to connect
   postPatch = lib.optionalString isPy3k ''
@@ -66,6 +68,7 @@ buildPythonPackage rec {
     nosetests \
       -e ".*test_ext_.*" \
       -e "test_upgrade" \
+      ${lib.optionalString (!stdenv.isLinux) ''-e "test_cookie_expires_different_locale"''} \
       -vv tests
   '';
 

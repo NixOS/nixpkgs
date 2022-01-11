@@ -17,14 +17,22 @@ lua = luajitPackages;
 
 unwrapped = stdenv.mkDerivation rec {
   pname = "knot-resolver";
-  version = "5.2.1";
+  version = "5.4.3";
 
   src = fetchurl {
     url = "https://secure.nic.cz/files/knot-resolver/${pname}-${version}.tar.xz";
-    sha256 = "aa37b744c400f437acba7a54aebcbdbe722ece743d342cbc39f2dd8087f05826";
+    sha256 = "488729eb93190336b6bca10de0d78ecb7919f77fcab105debc0a644aa7d0a506";
   };
 
   outputs = [ "out" "dev" ];
+
+  patches = [
+    (fetchpatch { # https://gitlab.nic.cz/knot/knot-resolver/-/merge_requests/1237
+      name = "console.aws.amazon.com-fix.patch";
+      url = "https://gitlab.nic.cz/knot/knot-resolver/-/commit/f4dabfbec9273703.diff";
+      sha256 = "3J+FDwNQ6CqIGo9pSzhrQZlHX99vXFDpPOBpwpCnOxs=";
+    })
+  ];
 
   # Path fixups for the NixOS service.
   postPatch = ''
@@ -43,7 +51,8 @@ unwrapped = stdenv.mkDerivation rec {
     # some tests have issues with network sandboxing, apparently
   + optionalString doInstallCheck ''
     echo 'os.exit(77)' > daemon/lua/trust_anchors.test/bootstrap.test.lua
-    sed '/^[[:blank:]]*test_dstaddr,$/d' -i tests/config/doh2.test.lua
+    sed -E '/^[[:blank:]]*test_(dstaddr|headers),?$/d' -i \
+      tests/config/doh2.test.lua modules/http/http_doh.test.lua
   '';
 
   preConfigure = ''
@@ -78,7 +87,8 @@ unwrapped = stdenv.mkDerivation rec {
     rm -r "$out"/lib/sysusers.d/ # ATM more likely to harm than help
   '';
 
-  doInstallCheck = with stdenv; hostPlatform == buildPlatform;
+  doInstallCheck = with stdenv; hostPlatform == buildPlatform
+    && !(isDarwin && isAarch64); # avoid luarocks, as it's broken ATM on the platform
   installCheckInputs = [ cmocka which cacert lua.cqueues lua.basexx lua.http ];
   installCheckPhase = ''
     meson test --print-errorlogs

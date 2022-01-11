@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ibus-anthy";
-  version = "1.5.11";
+  version = "1.5.14";
 
   src = fetchurl {
     url = "https://github.com/ibus/ibus-anthy/releases/download/${version}/${pname}-${version}.tar.gz";
-    sha256 = "1zwgswpibh67sgbza8kvg03v06maxc08ihkgm5hmh333sjq9d5c0";
+    sha256 = "sha256-yGlNoY0LiRpI9NdaDezjfsvKbRsay2QQGnqEytEEbZs=";
   };
 
   buildInputs = [

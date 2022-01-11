@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, alsaLib, cmake, pkg-config, glib
+{ lib, stdenv, fetchFromGitHub, alsa-lib, cmake, pkg-config, glib
 , tracingSupport ? true, logToStderr ? true }:
 
 let oz = x: if x then "1" else "0"; in
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [ alsaLib glib ];
+  buildInputs = [ alsa-lib glib ];
 
   cmakeFlags = [
     "-DWITH_TRACE=${oz tracingSupport}"

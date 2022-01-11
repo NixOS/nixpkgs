@@ -1,32 +1,37 @@
 { lib
+, stdenv
 , fetchPypi
 , buildPythonPackage
 , aplpy
 , joblib
 , astropy
+, casa-formats-io
 , radio_beam
-, pytest
+, six
+, dask
+, pytestCheckHook
 , pytest-astropy
 , astropy-helpers
 }:
 
 buildPythonPackage rec {
   pname = "spectral-cube";
-  version = "0.5.0";
+  version = "0.6.0";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "17zisr26syfb8kn89xj17lrdycm0hsmy5yp5zrn236wgd8rjriki";
+    sha256 = "1c0pp82wgl680w2vcwlrrz46sy83z1qs74w5bd691wg0512hv2jx";
   };
 
-  nativeBuildInputs = [ astropy-helpers ];
-  propagatedBuildInputs = [ astropy radio_beam joblib ];
-  checkInputs = [ aplpy pytest pytest-astropy ];
+  propagatedBuildInputs = [ astropy casa-formats-io radio_beam joblib six dask ];
+  checkInputs = [ pytestCheckHook aplpy pytest-astropy ];
 
-  checkPhase = ''
-    pytest spectral_cube
-  '';
+  # On x86_darwin, this test fails with "Fatal Python error: Aborted"
+  # when sandbox = true.
+  disabledTestPaths = lib.optionals stdenv.isDarwin [
+    "spectral_cube/tests/test_visualization.py"
+  ];
 
   meta = {
     description = "Library for reading and analyzing astrophysical spectral data cubes";

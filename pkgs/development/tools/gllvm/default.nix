@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   pname = "gllvm";
-  version = "1.2.9";
+  version = "1.3.0";
 
   goPackagePath = "github.com/SRI-CSL/gllvm";
 
@@ -10,7 +10,7 @@ buildGoPackage rec {
     owner = "SRI-CSL";
     repo = "gllvm";
     rev = "v${version}";
-    sha256 = "15cgngvd9mg057iz32fk5kcprcvvavahbvfvl5ds8x7shbm60g7s";
+    sha256 = "sha256-nu6PRFk+GoN1gT1RTbX6mTPZByAGf0bSsj2C5YriGp8=";
   };
 
   meta = with lib; {

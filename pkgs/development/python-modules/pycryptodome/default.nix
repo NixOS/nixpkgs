@@ -1,17 +1,29 @@
-{ lib, fetchPypi, buildPythonPackage }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pycryptodome-test-vectors
+}:
 
 buildPythonPackage rec {
-  version = "3.9.9";
   pname = "pycryptodome";
+  version = "3.12.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "910e202a557e1131b1c1b3f17a63914d57aac55cf9fb9b51644962841c3995c4";
+    hash = "sha256-Esc0OuxaOz31xHJlKBsSthHybsk2e2EpGZ1n2lS3aME=";
+    extension = "zip";
   };
 
+  pythonImportsCheck = [
+    "Crypto"
+  ];
+
   meta = with lib; {
-    homepage = "https://www.pycryptodome.org/";
     description = "Python Cryptography Toolkit";
+    homepage = "https://www.pycryptodome.org/";
+    license = with licenses; [ bsd2 /* and */ asl20 ];
+    maintainers = with maintainers; [ fab ];
     platforms = platforms.unix;
   };
 }

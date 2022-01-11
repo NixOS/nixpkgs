@@ -1,4 +1,5 @@
 { lib, stdenv, fetchurl, perl, zlib, apr, aprutil, pcre, libiconv, lynx
+, nixosTests
 , proxySupport ? true
 , sslSupport ? true, openssl
 , http2Support ? true, nghttp2
@@ -8,35 +9,28 @@
 , luaSupport ? false, lua5
 }:
 
-let inherit (lib) optional;
-in
-
-assert sslSupport -> aprutil.sslSupport && openssl != null;
-assert ldapSupport -> aprutil.ldapSupport && openldap != null;
-assert http2Support -> nghttp2 != null;
-
 stdenv.mkDerivation rec {
-  version = "2.4.46";
   pname = "apache-httpd";
+  version = "2.4.52";
 
   src = fetchurl {
     url = "mirror://apache/httpd/httpd-${version}.tar.bz2";
-    sha256 = "1sj1rwgbcjgkzac3ybjy7j68c9b3dv3ap71m48mrjhf6w7vds3kl";
+    sha256 = "sha256-ASf33El+mYPpxRR0vtdeRWB/L4cKdnWobckK9tVy9ck=";
   };
 
   # FIXME: -dev depends on -doc
   outputs = [ "out" "dev" "man" "doc" ];
   setOutputFlags = false; # it would move $out/modules, etc.
 
-  buildInputs = [perl] ++
-    optional brotliSupport brotli ++
-    optional sslSupport openssl ++
-    optional ldapSupport openldap ++    # there is no --with-ldap flag
-    optional libxml2Support libxml2 ++
-    optional http2Support nghttp2 ++
-    optional stdenv.isDarwin libiconv;
+  buildInputs = [ perl ] ++
+    lib.optional brotliSupport brotli ++
+    lib.optional sslSupport openssl ++
+    lib.optional ldapSupport openldap ++    # there is no --with-ldap flag
+    lib.optional libxml2Support libxml2 ++
+    lib.optional http2Support nghttp2 ++
+    lib.optional stdenv.isDarwin libiconv;
 
-  prePatch = ''
+  postPatch = ''
     sed -i config.layout -e "s|installbuilddir:.*|installbuilddir: $dev/share/build|"
     sed -i support/apachectl.in -e 's|@LYNX_PATH@|${lynx}/bin/lynx|'
   '';
@@ -85,13 +79,18 @@ stdenv.mkDerivation rec {
 
   passthru = {
     inherit apr aprutil sslSupport proxySupport ldapSupport luaSupport lua5;
+    tests = {
+      acme-integration = nixosTests.acme;
+      proxy = nixosTests.proxy;
+      php = nixosTests.php.httpd;
+    };
   };
 
   meta = with lib; {
     description = "Apache HTTPD, the world's most popular web server";
-    homepage    = "http://httpd.apache.org/";
+    homepage    = "https://httpd.apache.org/";
     license     = licenses.asl20;
-    platforms   = lib.platforms.linux ++ lib.platforms.darwin;
-    maintainers = with maintainers; [ lovek323 peti ];
+    platforms   = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ lovek323 ];
   };
 }

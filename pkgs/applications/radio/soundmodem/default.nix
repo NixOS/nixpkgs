@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, alsaLib, audiofile, gtk2, libxml2 }:
+{ lib, stdenv, fetchurl, pkg-config, alsa-lib, audiofile, gtk2, libxml2 }:
 
 stdenv.mkDerivation rec {
   name = "soundmodem";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ alsaLib audiofile gtk2 libxml2 ];
+  buildInputs = [ alsa-lib audiofile gtk2 libxml2 ];
 
   patches = [ ./matFix.patch ];
 

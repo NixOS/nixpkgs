@@ -7,22 +7,22 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "genpass";
-  version = "0.4.9";
+  version = "0.5.1";
 
   src = fetchgit {
     url = "https://git.sr.ht/~cyplo/genpass";
     rev = "v${version}";
-    sha256 = "1dpv2iyd48xd8yw9bmymjjrkhsgmpwvsl5b9zx3lpaaq59ypi9g9";
+    sha256 = "UyEgOlKtDyneRteN3jHA2BJlu5U1HFL8HA2MTQz5rns=";
   };
 
-  cargoSha256 = "1cwxpc3xkw673wiamr4v7clrzwxl8ma1vdr6bw0hixm37gxdxz7x";
+  cargoSha256 = "ls3tzZ+gtZQlObmbtwJDq6N/f5nY+Ps7RL5R/fR5Vgg=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ CoreFoundation libiconv Security ];
 
   meta = with lib; {
     description = "A simple yet robust commandline random password generator";
     homepage = "https://sr.ht/~cyplo/genpass/";
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
     maintainers = with maintainers; [ cyplo ];
   };
 }

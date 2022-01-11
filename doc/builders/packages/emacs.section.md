@@ -36,7 +36,7 @@ You can install it like any other packages via `nix-env -iA myEmacs`. However, t
       ;; load some packages
 
       (use-package company
-        :bind ("&lt;C-tab&gt;" . company-complete)
+        :bind ("<C-tab>" . company-complete)
         :diminish company-mode
         :commands (company-mode global-company-mode)
         :defer 1
@@ -110,7 +110,7 @@ overrides = self: super: rec {
   haskell-mode = self.melpaPackages.haskell-mode;
   ...
 };
-((emacsPackagesFor emacs).overrideScope' overrides).emacs.pkgs.withPackages
+((emacsPackagesFor emacs).overrideScope' overrides).withPackages
   (p: with p; [
     # here both these package will use haskell-mode of our own choice
     ghc-mod

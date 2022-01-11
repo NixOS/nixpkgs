@@ -5,28 +5,27 @@
 
 stdenv.mkDerivation rec {
   pname = "emacs";
-  version = "27.1";
+  version = "27.2";
 
   emacsName = "emacs-${version}";
-  macportVersion = "8.0";
+  macportVersion = "8.3";
   name = "emacs-mac-${version}-${macportVersion}";
 
   src = fetchurl {
     url = "mirror://gnu/emacs/${emacsName}.tar.xz";
-    sha256 = "0h9f2wpmp6rb5rfwvqwv1ia1nw86h74p7hnz3vb3gjazj67i4k2a";
+    sha256 = "1ff182gjw9wqsbx1kj5gl2r5pbqhp4ar54g04j33fgz6g17cr9xl";
   };
 
   macportSrc = fetchurl {
     url = "ftp://ftp.math.s.chiba-u.ac.jp/emacs/${emacsName}-mac-${macportVersion}.tar.gz";
-    sha256 = "0rjk82k9qp1g701pfd4f0q2myzvsnp9q8xzphlxwi5yzwbs91kjq";
+    sha256 = "0q4lbk3nb8rz1ibmf23plgsh8sx2wvhry5bf5mivgz4m4b6s2yij";
+    name = "${emacsName}-mac-${macportVersion}.tar.xz"; # It's actually compressed with xz, not gz
   };
 
   hiresSrc = fetchurl {
     url = "ftp://ftp.math.s.chiba-u.ac.jp/emacs/emacs-hires-icons-3.0.tar.gz";
     sha256 = "0f2wzdw2a3ac581322b2y79rlj3c9f33ddrq9allj97r1si6v5xk";
   };
-
-  patches = [ ./clean-env.patch ];
 
   enableParallelBuilding = true;
 
@@ -39,11 +38,11 @@ stdenv.mkDerivation rec {
 
   postUnpack = ''
     mv $sourceRoot $name
-    tar xzf $macportSrc -C $name --strip-components=1
+    tar xf $macportSrc -C $name --strip-components=1
     mv $name $sourceRoot
 
     # extract retina image resources
-    tar xzfv $hiresSrc --strip 1 -C $sourceRoot
+    tar xfv $hiresSrc --strip 1 -C $sourceRoot
   '';
 
   postPatch = ''
@@ -57,6 +56,11 @@ stdenv.mkDerivation rec {
     # Fix sandbox impurities.
     substituteInPlace Makefile.in --replace '/bin/pwd' 'pwd'
     substituteInPlace lib-src/Makefile.in --replace '/bin/pwd' 'pwd'
+
+
+    # Reduce closure size by cleaning the environment of the emacs dumper
+    substituteInPlace src/Makefile.in \
+      --replace 'RUN_TEMACS = ./temacs' 'RUN_TEMACS = env -i ./temacs'
   '';
 
   configureFlags = [

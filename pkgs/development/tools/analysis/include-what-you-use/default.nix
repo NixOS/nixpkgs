@@ -1,17 +1,17 @@
-{ lib, stdenv, fetchurl, cmake, llvmPackages, python2 }:
+{ lib, stdenv, fetchurl, cmake, llvmPackages, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "include-what-you-use";
   # Also bump llvmPackages in all-packages.nix to the supported version!
-  version = "0.14";
+  version = "0.17";
 
   src = fetchurl {
-    sha256 = "1vq0c8jqspvlss8hbazml44fi0mbslgnp2i9wcr0qrjpvfbl6623";
+    sha256 = "sha256-7KfAT4tBa2OF7QDjNmmn+kaTzSbLcrUizeVYgo6wxmU=";
     url = "${meta.homepage}/downloads/${pname}-${version}.src.tar.gz";
   };
 
-  buildInputs = with llvmPackages; [ clang-unwrapped llvm python2 ];
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = with llvmPackages; [ cmake llvm.dev llvm python3];
+  buildInputs = with llvmPackages; [ libclang clang-unwrapped ];
 
   cmakeFlags = [ "-DIWYU_LLVM_ROOT_PATH=${llvmPackages.clang-unwrapped}" ];
 

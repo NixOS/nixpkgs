@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "wasabi";
-  version = "0.8.1";
+  version = "0.9.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6e5228a51f5550844ef5080e74759e7ecb6e344241989d018686ba968f0b4f5a";
+    sha256 = "152245d892030a3a7b511038e9472acff6d0e237cfe4123fef0d147f2d3274fc";
   };
 
   checkInputs = [ pytestCheckHook ];

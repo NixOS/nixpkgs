@@ -7,12 +7,10 @@
 , libxml2
 , gtk3
 , openssl
-, gnome3
+, gnome
 , gobject-introspection
 , vala
 , libgee
-, overrideCC
-, gcc6
 , fetchpatch
 , autoreconfHook
 , gtk-doc
@@ -27,7 +25,7 @@
 assert mysqlSupport -> libmysqlclient != null;
 assert postgresSupport -> postgresql != null;
 
-(if stdenv.isAarch64 then overrideCC stdenv gcc6 else stdenv).mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "libgda";
   version = "5.2.10";
 
@@ -84,8 +82,10 @@ assert postgresSupport -> postgresql != null;
   hardeningDisable = [ "format" ];
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
+      freeze = true;
     };
   };
 

@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , cmake
 , pkg-config
-, alsaLib
+, alsa-lib
 , kguiaddons
 , kwindowsystem
 , libXdamage
@@ -30,13 +30,13 @@
 
 mkDerivation rec {
   pname = "lxqt-panel";
-  version = "0.16.1";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "1mm23fys5npm5fi47y3h2mzvlhlcaz7k1p4wwmc012f0hqcrvqik";
+    sha256 = "0i63jyjg31336davjdak7z3as34gazx1lri65fk2f07kka9dx1jl";
   };
 
   nativeBuildInputs = [
@@ -46,7 +46,7 @@ mkDerivation rec {
   ];
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     kguiaddons
     kwindowsystem
     libXdamage

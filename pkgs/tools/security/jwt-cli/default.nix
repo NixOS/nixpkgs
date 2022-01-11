@@ -2,21 +2,25 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "jwt-cli";
-  version = "3.3.0";
+  version = "5.0.0";
 
   src = fetchFromGitHub {
     owner = "mike-engel";
     repo = pname;
     rev = version;
-    sha256 = "09zi55ffkhsckvqj84xnxn9bgfkrj9wnzqbh9hfsxzbk4xy7fc2h";
+    sha256 = "0za4mpzry6i5gki524kp4by0n74pbc96cvzrkq286v8w033wj01i";
   };
 
-  cargoSha256 = "1k13pw202fr5mvd0ys39n3dxwcl3sd01j6izfb28k06b6pav3wc8";
+  cargoSha256 = "1l5fhr5c2ygdlnpwsx62fm8di8li0wf15nvvcnnivjcic7f9b5j0";
 
   buildInputs = lib.optional stdenv.isDarwin Security;
 
   doInstallCheck = true;
-  installCheckPhase = "$out/bin/jwt --version";
+  installCheckPhase = ''
+    $out/bin/jwt --version > /dev/null
+    $out/bin/jwt decode eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c \
+      | grep -q 'John Doe'
+  '';
 
   meta = with lib; {
     description = "Super fast CLI tool to decode and encode JWTs";

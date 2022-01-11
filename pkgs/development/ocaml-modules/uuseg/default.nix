@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, uchar, uucp, uutf, cmdliner }:
+{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, uucp, uutf, cmdliner }:
 
 let
   pname = "uuseg";
@@ -8,22 +8,22 @@ in
 stdenv.mkDerivation rec {
 
   name = "ocaml${ocaml.version}-${pname}-${version}";
-  version = "11.0.0";
+  version = "14.0.0";
 
   src = fetchurl {
     url = "${webpage}/releases/${pname}-${version}.tbz";
-    sha256 = "17mn8p9pn340kmvfgnl1m64zbpy60r6svkwsdn2lcg3yi2jlbrwp";
+    sha256 = "sha256:1g9zyzjkhqxgbb9mh3cgaawscwdazv6y8kdqvmy6yhnimmfqv25p";
   };
 
   buildInputs = [ ocaml findlib ocamlbuild cmdliner topkg uutf ];
-  propagatedBuildInputs = [ uucp uchar ];
+  propagatedBuildInputs = [ uucp ];
 
   inherit (topkg) buildPhase installPhase;
 
   meta = with lib; {
     description = "An OCaml library for segmenting Unicode text";
     homepage = webpage;
-    platforms = ocaml.meta.platforms or [];
+    inherit (ocaml.meta) platforms;
     license = licenses.bsd3;
     maintainers = [ maintainers.vbgl ];
   };

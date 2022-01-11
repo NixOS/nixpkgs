@@ -43,7 +43,7 @@ let
 
     meta = with lib; {
       description = "Unicode and globalization support library";
-      homepage = "http://site.icu-project.org/";
+      homepage = "https://icu.unicode.org/";
       maintainers = with maintainers; [ raskin ];
       platforms = platforms.all;
     };

@@ -1,7 +1,8 @@
 { lib, stdenv, fetchFromGitHub, makeWrapper, bash, gnumake }:
 
-stdenv.mkDerivation {
-  name = "makefile2graph-2018-01-03";
+stdenv.mkDerivation rec {
+  pname = "makefile2graph";
+  version = "unstable-2018-01-03";
 
   src = fetchFromGitHub {
     owner = "lindenb";
@@ -27,6 +28,6 @@ stdenv.mkDerivation {
     description = "Creates a graph of dependencies from GNU-Make; Output is a graphiz-dot file or a Gexf-XML file";
     maintainers = with maintainers; [ cmcdragonkai ];
     license = licenses.mit;
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 }

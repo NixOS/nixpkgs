@@ -3,11 +3,11 @@
 
 buildPythonApplication rec {
   pname = "MAVProxy";
-  version = "1.8.31";
+  version = "1.8.46";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "51d4a21372fcac615a0191cb29c444889ecfede402e95c847346842400a86273";
+    sha256 = "c740c11551af4bcb1378772bde77ca6c846c6fd261b79d932c0ecbb164afe3bd";
   };
 
   postPatch = ''
@@ -30,7 +30,7 @@ buildPythonApplication rec {
   meta = with lib; {
     description = "MAVLink proxy and command line ground station";
     homepage = "https://github.com/ArduPilot/MAVProxy";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ lopsided98 ];
   };
 }

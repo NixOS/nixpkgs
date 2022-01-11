@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   pname = "ocaml${ocaml.version}-z3";
   inherit (z3-with-ocaml) version;
 
-  phases = [ "installPhase" "fixupPhase" ];
+  dontUnpack = true;
 
   installPhase = ''
     runHook preInstall

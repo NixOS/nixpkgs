@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, pkg-config, libevent, openssl, zlib, torsocks
-, libseccomp, systemd, libcap, lzma, zstd, scrypt, nixosTests
+, libseccomp, systemd, libcap, xz, zstd, scrypt, nixosTests
 , writeShellScript
 
 # for update.nix
@@ -30,17 +30,17 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "tor";
-  version = "0.4.4.7";
+  version = "0.4.6.9";
 
   src = fetchurl {
     url = "https://dist.torproject.org/${pname}-${version}.tar.gz";
-    sha256 = "1vh5kdx7s74il8a6gr7jydbpv0an01nla4y2r8w7h33z2wk2jv9j";
+    sha256 = "1ad99k4wysxrnlaprv7brxr2nc0h5zdnrh0rma10pqlck2037sf7";
   };
 
   outputs = [ "out" "geoip" ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libevent openssl zlib lzma zstd scrypt ] ++
+  buildInputs = [ libevent openssl zlib xz zstd scrypt ] ++
     lib.optionals stdenv.isLinux [ libseccomp systemd libcap ];
 
   patches = [ ./disable-monotonic-timer-tests.patch ];
@@ -61,7 +61,14 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  doCheck = true;
+  # disable tests on aarch64-darwin, the following tests fail there:
+  # oom/circbuf: [forking]
+  #   FAIL src/test/test_oom.c:187: assert(c1->marked_for_close)
+  #   [circbuf FAILED]
+  # oom/streambuf: [forking]
+  #   FAIL src/test/test_oom.c:287: assert(x_ OP_GE 500 - 5): 0 vs 495
+  #   [streambuf FAILED]
+  doCheck = !(stdenv.isDarwin && stdenv.isAarch64);
 
   postInstall = ''
     mkdir -p $geoip/share/tor
@@ -106,7 +113,7 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
 
     maintainers = with maintainers;
-      [ phreedom thoughtpolice joachifm prusnak ];
+      [ thoughtpolice joachifm prusnak ];
     platforms = platforms.unix;
   };
 }

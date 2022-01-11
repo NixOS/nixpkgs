@@ -1,19 +1,19 @@
-{ gnustep, lib, fetchFromGitHub, fetchpatch, makeWrapper, python2, lndir
-, openssl_1_1, openldap, sope, libmemcached, curl, libsodium, libzip, pkg-config }:
-with lib; gnustep.stdenv.mkDerivation rec {
+{ gnustep, lib, fetchFromGitHub, fetchpatch, makeWrapper, python3, lndir
+, openssl, openldap, sope, libmemcached, curl, libsodium, libytnef, libzip, pkg-config, nixosTests
+, oathToolkit }:
+gnustep.stdenv.mkDerivation rec {
   pname = "SOGo";
-  version = "5.0.1";
+  version = "5.4.0";
 
   src = fetchFromGitHub {
     owner = "inverse-inc";
     repo = pname;
     rev = "SOGo-${version}";
-    sha256 = "145hdlwnqds5zmpxbh4yainsbv5vy99ji93d6pl7xkbqwncfi80i";
+    sha256 = "0fwc9ia84f4ijnl5ymn4f6s1n8v3g7rqvpqaaadyw8jwj9x26a6k";
   };
 
-  nativeBuildInputs = [ gnustep.make makeWrapper python2 ];
-  buildInputs = [ gnustep.base sope openssl_1_1 libmemcached (curl.override { openssl = openssl_1_1; }) libsodium libzip pkg-config ]
-    ++ optional (openldap != null) openldap;
+  nativeBuildInputs = [ gnustep.make makeWrapper python3 ];
+  buildInputs = [ gnustep.base sope openssl libmemcached curl libsodium libytnef libzip pkg-config openldap oathToolkit ];
 
   patches = [
     # TODO: take a closer look at other patches in https://sources.debian.org/patches/sogo/ and https://github.com/Skrupellos/sogo-patches
@@ -41,7 +41,11 @@ with lib; gnustep.stdenv.mkDerivation rec {
     find . -type f -name GNUmakefile -exec sed -i "s:\\$.GNUSTEP_MAKEFILES.:$PWD/makefiles:g" {} +
   '';
 
-  configureFlags = [ "--disable-debug" "--with-ssl=ssl" ];
+  configureFlags = [
+    "--disable-debug"
+    "--with-ssl=ssl"
+    "--enable-mfa"
+  ];
 
   preFixup = ''
     # Create gnustep.conf
@@ -66,9 +70,11 @@ with lib; gnustep.stdenv.mkDerivation rec {
     done
   '';
 
-  meta = {
+  passthru.tests.sogo = nixosTests.sogo;
+
+  meta = with lib; {
     description = "A very fast and scalable modern collaboration suite (groupware)";
-    license = with licenses; [ gpl2 lgpl21 ];
+    license = with licenses; [ gpl2Only lgpl21Only ];
     homepage = "https://sogo.nu/";
     platforms = platforms.linux;
     maintainers = with maintainers; [ ajs124 das_j ];

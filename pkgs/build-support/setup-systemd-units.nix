@@ -58,7 +58,7 @@
 
           unitDir=/etc/systemd/system
           if [ ! -w "$unitDir" ]; then
-            unitDir=/etc/systemd-mutable/system
+            unitDir=/nix/var/nix/profiles/default/lib/systemd/system
             mkdir -p "$unitDir"
           fi
           declare -a unitsToStop unitsToStart

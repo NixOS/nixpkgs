@@ -1,8 +1,8 @@
 { lib, stdenv, config, fetchurl, pkg-config
 , libGLSupported ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
 , openglSupport ? libGLSupported, libGL
-, alsaSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid, alsaLib
-, x11Support ? !stdenv.isCygwin && !stdenv.hostPlatform.isAndroid
+, alsaSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid, alsa-lib
+, x11Support ? !stdenv.targetPlatform.isWindows && !stdenv.hostPlatform.isAndroid
 , libX11, xorgproto, libICE, libXi, libXScrnSaver, libXcursor
 , libXinerama, libXext, libXxf86vm, libXrandr
 , waylandSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid
@@ -35,7 +35,11 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
   outputBin = "dev"; # sdl-config
 
-  patches = [ ./find-headers.patch ];
+  patches = [
+    ./find-headers.patch
+    # To fix the build with wayland 1.20.0:
+    ./Fix-build-against-wayland-1.20.patch
+  ];
 
   # Fix with mesa 19.2: https://bugzilla.libsdl.org/show_bug.cgi?id=4797
   postPatch = ''
@@ -60,7 +64,7 @@ stdenv.mkDerivation rec {
     ++ optionals x11Support [ libX11 xorgproto ];
 
   dlopenBuildInputs = [ ]
-    ++ optionals  alsaSupport [ alsaLib audiofile ]
+    ++ optionals  alsaSupport [ alsa-lib audiofile ]
     ++ optional  dbusSupport dbus
     ++ optional  pulseaudioSupport libpulseaudio
     ++ optional  udevSupport udev
@@ -78,7 +82,8 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--disable-oss"
   ] ++ optional (!x11Support) "--without-x"
-    ++ optional alsaSupport "--with-alsa-prefix=${alsaLib.out}/lib"
+    ++ optional alsaSupport "--with-alsa-prefix=${alsa-lib.out}/lib"
+    ++ optional stdenv.targetPlatform.isWindows "--disable-video-opengles"
     ++ optional stdenv.isDarwin "--disable-sdltest";
 
   # We remove libtool .la files when static libs are requested,

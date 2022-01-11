@@ -1,7 +1,8 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, isPy27
+, pythonOlder
+, dataclasses
 , kafka-python
 , cython
 , zlib
@@ -9,15 +10,14 @@
 
 buildPythonPackage rec {
   pname = "aiokafka";
-  version = "0.7.0";
-
-  disabled = isPy27;
+  version = "0.7.2";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "aio-libs";
-    repo = "aiokafka";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "16pcgv38syqy6sj3w7zx95zgynpd642n3i95dpiw0ivhpqrxxhrf";
+    sha256 = "sha256-D+91k4zVg28qPbWIrvyXi6WtDs1jeJt9jFGsrSBA3cs=";
   };
 
   nativeBuildInputs = [
@@ -30,15 +30,14 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     kafka-python
+  ] ++ lib.optionals (pythonOlder "3.7") [
+    dataclasses
   ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-       --replace "kafka-python==1.4.6" "kafka-python"
-  '';
 
   # checks require running kafka server
   doCheck = false;
+
+  pythonImportsCheck = [ "aiokafka" ];
 
   meta = with lib; {
     description = "Kafka integration with asyncio";

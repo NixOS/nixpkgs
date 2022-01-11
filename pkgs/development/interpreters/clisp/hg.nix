@@ -8,8 +8,8 @@
 , libffi, libffcall, automake
 , coreutils
 # build options
-, threadSupport ? (stdenv.isi686 || stdenv.isx86_64)
-, x11Support ? (stdenv.isi686 || stdenv.isx86_64)
+, threadSupport ? stdenv.hostPlatform.isx86
+, x11Support ? stdenv.hostPlatform.isx86
 , dllSupport ? true
 , withModules ? [
     "pcre"

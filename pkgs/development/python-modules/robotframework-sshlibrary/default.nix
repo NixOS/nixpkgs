@@ -7,12 +7,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "3.5.1";
+  version = "3.8.0";
   pname = "robotframework-sshlibrary";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "843af44722d1d4e39f616e5441d6f49e82202cd1a8cc9d16637a6475a8ecb023";
+    sha256 = "aedf8a02bcb7344404cf8575d0ada25d6c7dc2fcb65de2113c4e07c63d2446c2";
   };
 
   # unit tests are impure

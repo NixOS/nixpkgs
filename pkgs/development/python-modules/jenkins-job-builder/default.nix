@@ -1,5 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
-, fasteners
+{ lib, buildPythonPackage, fetchPypi, fasteners
 , jinja2
 , pbr
 , python-jenkins
@@ -10,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "jenkins-job-builder";
-  version = "3.8.0";
+  version = "3.11.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-uRyeRP1y3GS7tXb0kHLBi7+trJRme/Ke3xgOY+LqZ6k=";
+    sha256 = "42ea423f44beafee0e985009124968e300447f6e3be4180e83568cf21520d1b1";
   };
 
   postPatch = ''

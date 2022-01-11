@@ -10,6 +10,8 @@ mkDerivation {
   nativeBuildInputs = [ qmake qttools ];
   buildInputs = [ qtwebkit ];
 
+  dontWrapQtApps = true;
+
   postPatch = ''
     substituteInPlace mainwindow.cc \
       --replace "QApplication::applicationDirPath() + \"/" "\"" \

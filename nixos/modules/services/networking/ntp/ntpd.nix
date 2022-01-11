@@ -10,8 +10,6 @@ let
 
   stateDir = "/var/lib/ntp";
 
-  ntpUser = "ntp";
-
   configFile = pkgs.writeText "ntp.conf" ''
     driftfile ${stateDir}/ntp.drift
 
@@ -27,7 +25,7 @@ let
     ${cfg.extraConfig}
   '';
 
-  ntpFlags = "-c ${configFile} -u ${ntpUser}:nogroup ${toString cfg.extraFlags}";
+  ntpFlags = "-c ${configFile} -u ntp:ntp ${toString cfg.extraFlags}";
 
 in
 
@@ -79,6 +77,7 @@ in
 
       servers = mkOption {
         default = config.networking.timeServers;
+        defaultText = literalExpression "config.networking.timeServers";
         type = types.listOf types.str;
         description = ''
           The set of NTP servers from which to synchronise.
@@ -99,7 +98,7 @@ in
       extraFlags = mkOption {
         type = types.listOf types.str;
         description = "Extra flags passed to the ntpd command.";
-        example = literalExample ''[ "--interface=eth0" ]'';
+        example = literalExpression ''[ "--interface=eth0" ]'';
         default = [];
       };
 
@@ -119,11 +118,13 @@ in
 
     systemd.services.systemd-timedated.environment = { SYSTEMD_TIMEDATED_NTP_SERVICES = "ntpd.service"; };
 
-    users.users.${ntpUser} =
-      { uid = config.ids.uids.ntp;
+    users.users.ntp =
+      { isSystemUser = true;
+        group = "ntp";
         description = "NTP daemon user";
         home = stateDir;
       };
+    users.groups.ntp = {};
 
     systemd.services.ntpd =
       { description = "NTP Daemon";
@@ -135,7 +136,7 @@ in
         preStart =
           ''
             mkdir -m 0755 -p ${stateDir}
-            chown ${ntpUser} ${stateDir}
+            chown ntp ${stateDir}
           '';
 
         serviceConfig = {

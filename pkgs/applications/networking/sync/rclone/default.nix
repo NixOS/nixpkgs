@@ -1,25 +1,31 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub, buildPackages, installShellFiles }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub, buildPackages, installShellFiles
+, makeWrapper
+, enableCmount ? true, fuse, macfuse-stubs
+}:
 
 buildGoModule rec {
   pname = "rclone";
-  version = "1.54.0";
+  version = "1.57.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-A0c5bHP5W/NTwAh1ifGaw4AG37qYXK9P/Fjk68gkUNk=";
+    sha256 = "0pwbprbkx5y0c93b61k8znan4aimk7dkssapjhkhzw4c38xd4lza";
   };
 
-  vendorSha256 = "sha256-Cpn/dUD9E2BzUlAISC+IDCW59OkEKZTpqdlvF/clV+M=";
+  vendorSha256 = "0353pff07lwpa1jmi095kb2izcw09z73x6nninnnpyqppwzas6ha";
 
   subPackages = [ "." ];
 
   outputs = [ "out" "man" ];
 
-  nativeBuildInputs = [ installShellFiles ];
+  buildInputs = lib.optional enableCmount (if stdenv.isDarwin then macfuse-stubs else fuse);
+  nativeBuildInputs = [ installShellFiles makeWrapper ];
 
-  buildFlagsArray = [ "-ldflags=-s -w -X github.com/rclone/rclone/fs.Version=${version}" ];
+  tags = lib.optionals enableCmount [ "cmount" ];
+
+  ldflags = [ "-s" "-w" "-X github.com/rclone/rclone/fs.Version=${version}" ];
 
   postInstall =
     let
@@ -34,6 +40,8 @@ buildGoModule rec {
         ${rcloneBin}/bin/rclone genautocomplete $shell rclone.$shell
         installShellCompletion rclone.$shell
       done
+    '' + lib.optionalString (enableCmount && !stdenv.isDarwin) ''
+      wrapProgram $out/bin/rclone --prefix LD_LIBRARY_PATH : "${fuse}/lib"
     '';
 
   meta = with lib; {
@@ -41,6 +49,6 @@ buildGoModule rec {
     homepage = "https://rclone.org";
     changelog = "https://github.com/rclone/rclone/blob/v${version}/docs/content/changelog.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ danielfullmer marsam ];
+    maintainers = with maintainers; [ danielfullmer marsam SuperSandro2000 ];
   };
 }

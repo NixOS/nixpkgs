@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, config, wrapGAppsHook
-, alsaLib
+, alsa-lib
 , atk
 , cairo
 , curl
@@ -13,7 +13,7 @@
 , glibc
 , gtk2
 , gtk3
-, kerberos
+, libkrb5
 , libX11
 , libXScrnSaver
 , libxcb
@@ -25,14 +25,18 @@
 , libXi
 , libXinerama
 , libXrender
+, libXrandr
 , libXt
+, libXtst
 , libcanberra
 , libnotify
-, gnome3
+, adwaita-icon-theme
 , libGLU, libGL
 , nspr
 , nss
 , pango
+, pipewire
+, pciutils
 , libheimdal
 , libpulseaudio
 , systemd
@@ -48,7 +52,7 @@
 , ffmpeg
 , runtimeShell
 , mesa # firefox wants gbm for drm+dmabuf
-, systemLocale ? config.i18n.defaultLocale or "en-US"
+, systemLocale ? config.i18n.defaultLocale or "en_US"
 }:
 
 let
@@ -70,29 +74,31 @@ let
 
   policies = {
     DisableAppUpdate = true;
-  };
+  } // config.firefox.policies or {};
 
-  policiesJson = writeText "no-update-firefox-policy.json" (builtins.toJSON { inherit policies; });
+  policiesJson = writeText "firefox-policies.json" (builtins.toJSON { inherit policies; });
 
   defaultSource = lib.findFirst (sourceMatches "en-US") {} sources;
 
-  source = lib.findFirst (sourceMatches systemLocale) defaultSource sources;
+  mozLocale =
+    if systemLocale == "ca_ES@valencia"
+    then "ca-valencia"
+    else lib.replaceStrings ["_"] ["-"] systemLocale;
 
-  name = "firefox-${channel}-bin-unwrapped-${version}";
+  source = lib.findFirst (sourceMatches mozLocale) defaultSource sources;
+
+  pname = "firefox-${channel}-bin-unwrapped";
 
 in
 
 stdenv.mkDerivation {
-  inherit name;
+  inherit pname version;
 
   src = fetchurl { inherit (source) url sha256; };
 
-  phases = [ "unpackPhase" "patchPhase" "installPhase" "fixupPhase" ];
-
   libPath = lib.makeLibraryPath
     [ stdenv.cc.cc
-      alsaLib
-      (lib.getDev alsaLib)
+      alsa-lib
       atk
       cairo
       curl
@@ -106,7 +112,7 @@ stdenv.mkDerivation {
       glibc
       gtk2
       gtk3
-      kerberos
+      libkrb5
       mesa
       libX11
       libXScrnSaver
@@ -119,16 +125,19 @@ stdenv.mkDerivation {
       libXi
       libXinerama
       libXrender
+      libXrandr
       libXt
+      libXtst
       libcanberra
       libnotify
       libGLU libGL
       nspr
       nss
       pango
+      pipewire
+      pciutils
       libheimdal
       libpulseaudio
-      (lib.getDev libpulseaudio)
       systemd
       ffmpeg
     ] + ":" + lib.makeSearchPathOutput "lib" "lib64" [
@@ -137,7 +146,7 @@ stdenv.mkDerivation {
 
   inherit gtk3;
 
-  buildInputs = [ wrapGAppsHook gtk3 gnome3.adwaita-icon-theme ];
+  buildInputs = [ wrapGAppsHook gtk3 adwaita-icon-theme ];
 
   # "strip" after "patchelf" may break binaries.
   # See: https://github.com/NixOS/patchelf/issues/10
@@ -187,7 +196,7 @@ stdenv.mkDerivation {
   # update with:
   # $ nix-shell maintainers/scripts/update.nix --argstr package firefox-bin-unwrapped
   passthru.updateScript = import ./update.nix {
-    inherit name channel writeScript xidel coreutils gnused gnugrep gnupg curl runtimeShell;
+    inherit pname channel writeScript xidel coreutils gnused gnugrep gnupg curl runtimeShell;
     baseUrl =
       if channel == "devedition"
         then "http://archive.mozilla.org/pub/devedition/releases/"
@@ -196,11 +205,9 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Mozilla Firefox, free web browser (binary package)";
     homepage = "http://www.mozilla.org/firefox/";
-    license = {
-      free = false;
-      url = "http://www.mozilla.org/en-US/foundation/trademarks/policy/";
-    };
+    license = licenses.mpl20;
     platforms = builtins.attrNames mozillaPlatforms;
+    hydraPlatforms = [];
     maintainers = with maintainers; [ taku0 lovesegfault ];
   };
 }

@@ -3,21 +3,22 @@
 , lib, stdenv
 , fetchurl
 , makeWrapper
+, nixosTests
 , jre
 }:
 
 with lib;
 
-stdenv.mkDerivation rec {
+let this = stdenv.mkDerivation rec {
   version = elk6Version;
-  name = "logstash-${optionalString (!enableUnfree) "oss-"}${version}";
+  pname = "logstash${optionalString (!enableUnfree) "-oss"}";
 
   src = fetchurl {
-    url = "https://artifacts.elastic.co/downloads/logstash/${name}.tar.gz";
+    url = "https://artifacts.elastic.co/downloads/logstash/${pname}-${version}.tar.gz";
     sha256 =
       if enableUnfree
-      then "00pwi7clgdflzzg15bh3y30gzikvvy7p5fl88fww7xhhy47q8053"
-      else "0spxgqsyh72n0l0xh6rljp0lbqz46xmr02sqz25ybycr4qkxdhgk";
+      then "0hij1byw5b3xmk3vshr9p7gxwbjrywr7ylps05ydc2dmnz8q2a79"
+      else "1fa236pvhj7spys54nqi3k64rwzf6zi6gaccmqg4p4sh92jzsybv";
   };
 
   dontBuild         = true;
@@ -52,4 +53,12 @@ stdenv.mkDerivation rec {
     platforms   = platforms.unix;
     maintainers = with maintainers; [ wjlroe offline basvandijk ];
   };
-}
+  passthru.tests =
+    optionalAttrs (!enableUnfree) (
+      assert this.drvPath == nixosTests.elk.ELK-6.elkPackages.logstash.drvPath;
+      {
+        elk = nixosTests.elk.ELK-6;
+      }
+    );
+};
+in this

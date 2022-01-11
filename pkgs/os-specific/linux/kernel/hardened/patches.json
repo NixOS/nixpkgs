@@ -1,26 +1,52 @@
 {
     "4.14": {
-        "extra": "-hardened1",
-        "name": "linux-hardened-4.14.220-hardened1.patch",
-        "sha256": "083jc9lwr8lwxyfk4r39jcncf2g89srd50crj17jw9ysrp1jpyks",
-        "url": "https://github.com/anthraxx/linux-hardened/releases/download/4.14.220-hardened1/linux-hardened-4.14.220-hardened1.patch"
+        "patch": {
+            "extra": "-hardened1",
+            "name": "linux-hardened-4.14.261-hardened1.patch",
+            "sha256": "0m5bb9lpaxw1kq01s9hqsxkmmsyj4ag8s5swrgdca1cf6q84r7bb",
+            "url": "https://github.com/anthraxx/linux-hardened/releases/download/4.14.261-hardened1/linux-hardened-4.14.261-hardened1.patch"
+        },
+        "sha256": "08s7idxpsjb29ccj0gkrj87xhbdqj9nc417qc7gd2kmbjd6amymz",
+        "version": "4.14.261"
     },
     "4.19": {
-        "extra": "-hardened1",
-        "name": "linux-hardened-4.19.174-hardened1.patch",
-        "sha256": "1ggh7rjqm68gih41a9z2pzm1wm483165lvmigdp604p152157974",
-        "url": "https://github.com/anthraxx/linux-hardened/releases/download/4.19.174-hardened1/linux-hardened-4.19.174-hardened1.patch"
+        "patch": {
+            "extra": "-hardened1",
+            "name": "linux-hardened-4.19.224-hardened1.patch",
+            "sha256": "0sma7hwznyf8h3fr7r63nbfb85120nz8xq95ynp6m0lxayj5alxs",
+            "url": "https://github.com/anthraxx/linux-hardened/releases/download/4.19.224-hardened1/linux-hardened-4.19.224-hardened1.patch"
+        },
+        "sha256": "0c8h457n52qzpw4kgr16ndhsl35si99amc6fadb31fy32csgrk01",
+        "version": "4.19.224"
     },
     "5.10": {
-        "extra": "-hardened1",
-        "name": "linux-hardened-5.10.14-hardened1.patch",
-        "sha256": "1l84hmwdkyd1nkby0w7vy9j0jhg866bpiw6hriav208dw2r0binx",
-        "url": "https://github.com/anthraxx/linux-hardened/releases/download/5.10.14-hardened1/linux-hardened-5.10.14-hardened1.patch"
+        "patch": {
+            "extra": "-hardened1",
+            "name": "linux-hardened-5.10.89-hardened1.patch",
+            "sha256": "0gpfyykm66h4hdazqw1xkg514cglin6zmd754xala924kj6x0k8b",
+            "url": "https://github.com/anthraxx/linux-hardened/releases/download/5.10.89-hardened1/linux-hardened-5.10.89-hardened1.patch"
+        },
+        "sha256": "0c5v8fsv9sazdmdw4m1canm54x2p8777yavxq2gcpw8q98d8n8cj",
+        "version": "5.10.89"
+    },
+    "5.15": {
+        "patch": {
+            "extra": "-hardened1",
+            "name": "linux-hardened-5.15.12-hardened1.patch",
+            "sha256": "1xxyh87pbk7961zc5554f3gwr65n5msaxyxbi1kpd4q19gcw86xz",
+            "url": "https://github.com/anthraxx/linux-hardened/releases/download/5.15.12-hardened1/linux-hardened-5.15.12-hardened1.patch"
+        },
+        "sha256": "182iwy2288layl2290cxla0k6y436lxlx43yaa8par325dviksbx",
+        "version": "5.15.12"
     },
     "5.4": {
-        "extra": "-hardened1",
-        "name": "linux-hardened-5.4.96-hardened1.patch",
-        "sha256": "05cb303llr2m5ik5f4v5ykr8ycldkrdb8gvjdr02zm8g0as7agil",
-        "url": "https://github.com/anthraxx/linux-hardened/releases/download/5.4.96-hardened1/linux-hardened-5.4.96-hardened1.patch"
+        "patch": {
+            "extra": "-hardened1",
+            "name": "linux-hardened-5.4.170-hardened1.patch",
+            "sha256": "0sy1114vw8lrbf4a1p3skg67am1f9bvl15d81mplx2bd98cpx0y8",
+            "url": "https://github.com/anthraxx/linux-hardened/releases/download/5.4.170-hardened1/linux-hardened-5.4.170-hardened1.patch"
+        },
+        "sha256": "0b1qdmp2q0lpngfvvnwb248cnqn9akk2z4xawrfwziszrzh797xh",
+        "version": "5.4.170"
     }
 }

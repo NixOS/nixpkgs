@@ -1,25 +1,32 @@
-{ lib, mkDerivation, fetchFromGitLab, qmake, libusb1, hidapi, pkg-config }:
+{ lib, mkDerivation, fetchFromGitLab, qmake, libusb1, hidapi, pkg-config, coreutils, mbedtls }:
 
 mkDerivation rec {
   pname = "openrgb";
-  version = "0.5";
+  version = "0.7";
 
   src = fetchFromGitLab {
     owner = "CalcProgrammer1";
     repo = "OpenRGB";
     rev = "release_${version}";
-    sha256 = "001x2ycfmlb9s21sp91aw5gxizcn6kzm8x7bvkps4b1iq0ap5fzv";
+    sha256 = "0xhfaz0b74nfnh7il2cz5c0338xlzay00g6hc2h3lsncarj8d5n7";
   };
 
   nativeBuildInputs = [ qmake pkg-config ];
-  buildInputs = [ libusb1 hidapi ];
+  buildInputs = [ libusb1 hidapi mbedtls ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp openrgb $out/bin
 
+    substituteInPlace 60-openrgb.rules \
+      --replace /bin/chmod "${coreutils}/bin/chmod"
+
     mkdir -p $out/etc/udev/rules.d
     cp 60-openrgb.rules $out/etc/udev/rules.d
+
+    runHook postInstall
   '';
 
   doInstallCheck = true;
@@ -27,13 +34,11 @@ mkDerivation rec {
     HOME=$TMPDIR $out/bin/openrgb --help > /dev/null
   '';
 
-  enableParallelBuilding = true;
-
   meta = with lib; {
     description = "Open source RGB lighting control";
     homepage = "https://gitlab.com/CalcProgrammer1/OpenRGB";
     maintainers = with maintainers; [ jonringer ];
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };
 }

@@ -8,7 +8,6 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     environment.systemPackages = with pkgs; [ dbus ];
     services.packagekit = {
       enable = true;
-      backend = "test_nop";
     };
   };
 

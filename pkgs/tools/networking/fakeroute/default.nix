@@ -1,13 +1,17 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "fakeroute";
   version = "0.3";
 
-  src = fetchurl {
-    url = "https://moxie.org/software/fakeroute/${pname}-${version}.tar.gz";
-    sha256 = "1sp342rxgm1gz4mvi5vvz1knz7kn9px9s39ii3jdjp4ks7lr5c8f";
+  src = fetchFromGitHub {
+    owner = "museoa";
+    repo = "fakeroute";
+    rev = "f8cb9c0ae3abb4c0662d9e1fcac67eefeeac3963";
+    sha256 = "12dhahwlpjzv79wpdpryjihamfbh4d8cfzfw4wi1jkl0dv2d41jg";
   };
+
+  sourceRoot = "source/fakeroute-0.3";
 
   meta = with lib; {
     description = ''

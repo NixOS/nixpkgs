@@ -8,7 +8,6 @@ stdenv.mkDerivation rec {
     owner = "vmt";
     repo = "udis86";
     rev = "v${version}";
-    url = "https://github.com/vmt/udis86/archive/v${version}.tar.gz";
     sha256 = "0c60zwimim6jrm4saw36s38w5sg5v8n9mr58pkqmjrlf7q9g6am1";
   };
 
@@ -27,6 +26,6 @@ stdenv.mkDerivation rec {
     description = ''
       Easy-to-use, minimalistic x86 disassembler library (libudis86)
     '';
-    platforms = platforms.all ;
+    platforms = platforms.all;
   };
 }

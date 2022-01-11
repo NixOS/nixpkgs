@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchgit
 , wrapLisp
 , sbcl
@@ -7,28 +8,50 @@
 
 stdenv.mkDerivation rec {
   pname = "clpm";
-  version = "0.3.5";
+  version = "0.4.1";
 
   src = fetchgit {
     url = "https://gitlab.common-lisp.net/clpm/clpm";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "0jivnnp3z148yf4c2nzzr5whz76w5kjhsb97z2vs5maiwf79y2if";
+    sha256 = "sha256-UhaLmbdsIPj6O+s262HUMxuz/5t43JR+TlOjq8Y2CDs=";
   };
 
   buildInputs = [
     (wrapLisp sbcl)
+  ];
+
+  propagatedBuildInputs = [
     openssl
   ];
 
+  postPatch = ''
+    # patch cl-plus-ssl to ensure that it finds libssl and libcrypto
+    sed 's|libssl.so|${openssl.out}/lib/libssl.so|' -i ext/cl-plus-ssl/src/reload.lisp
+    sed 's|libcrypto.so|${openssl.out}/lib/libcrypto.so|' -i ext/cl-plus-ssl/src/reload.lisp
+    # patch dexador to avoid error due to dexador being loaded multiple times
+    sed -i 's/defpackage/uiop:define-package/g' ext/dexador/src/dexador.lisp
+  '';
+
   buildPhase = ''
-    ln -s ${openssl.out}/lib/libcrypto.so.* .
-    ln -s ${openssl.out}/lib/libssl.so.* .
-    common-lisp.sh --script scripts/build.lisp
+    runHook preBuild
+
+    # exporting home to avoid using /homeless-shelter/.cache/ as this will cause
+    # ld to complaing about `impure path used in link`.
+    export HOME=$TMP
+
+    common-lisp.sh --script scripts/build-release.lisp
+
+    runHook postBuild
   '';
 
   installPhase = ''
-    INSTALL_ROOT=$out sh install.sh
+    runHook preInstall
+
+    cd build/release-staging/dynamic/clpm-${version}*/
+    INSTALL_ROOT=$out/ bash install.sh
+
+    runHook postInstall
   '';
 
   # fixupPhase results in fatal error in SBCL, `Can't find sbcl.core`
@@ -39,6 +62,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.clpm.dev/";
     license = licenses.bsd2;
     maintainers = [ maintainers.petterstorvik ];
-    platforms = platforms.all;
+    platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }

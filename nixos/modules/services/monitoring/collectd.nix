@@ -5,7 +5,7 @@ with lib;
 let
   cfg = config.services.collectd;
 
-  conf = pkgs.writeText "collectd.conf" ''
+  unvalidated_conf = pkgs.writeText "collectd-unvalidated.conf" ''
     BaseDir "${cfg.dataDir}"
     AutoLoadPlugin ${boolToString cfg.autoLoadPlugin}
     Hostname "${config.networking.hostName}"
@@ -30,6 +30,15 @@ let
     ${cfg.extraConfig}
   '';
 
+  conf = if cfg.validateConfig then
+    pkgs.runCommand "collectd.conf" {} ''
+      echo testing ${unvalidated_conf}
+      # collectd -t fails if BaseDir does not exist.
+      sed '1s/^BaseDir.*$/BaseDir "."/' ${unvalidated_conf} > collectd.conf
+      ${package}/bin/collectd -t -C collectd.conf
+      cp ${unvalidated_conf} $out
+    '' else unvalidated_conf;
+
   package =
     if cfg.buildMinimalPackage
     then minimalPackage
@@ -43,9 +52,19 @@ in {
   options.services.collectd = with types; {
     enable = mkEnableOption "collectd agent";
 
+    validateConfig = mkOption {
+      default = true;
+      description = ''
+        Validate the syntax of collectd configuration file at build time.
+        Disable this if you use the Include directive on files unavailable in
+        the build sandbox, or when cross-compiling.
+      '';
+      type = types.bool;
+    };
+
     package = mkOption {
       default = pkgs.collectd;
-      defaultText = "pkgs.collectd";
+      defaultText = literalExpression "pkgs.collectd";
       description = ''
         Which collectd package to use.
       '';
@@ -57,7 +76,7 @@ in {
       description = ''
         Build a minimal collectd package with only the configured `services.collectd.plugins`
       '';
-      type = types.bool;
+      type = bool;
     };
 
     user = mkOption {
@@ -98,7 +117,7 @@ in {
       description = ''
         Attribute set of plugin names to plugin config segments
       '';
-      type = types.attrsOf types.str;
+      type = attrsOf lines;
     };
 
     extraConfig = mkOption {
@@ -132,7 +151,12 @@ in {
     users.users = optionalAttrs (cfg.user == "collectd") {
       collectd = {
         isSystemUser = true;
+        group = "collectd";
       };
+    };
+
+    users.groups = optionalAttrs (cfg.user == "collectd") {
+      collectd = {};
     };
   };
 }

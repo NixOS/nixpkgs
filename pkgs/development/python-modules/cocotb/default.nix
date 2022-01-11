@@ -1,19 +1,31 @@
-{ lib, buildPythonPackage, fetchFromGitHub, setuptools, swig, verilog }:
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, setuptools-scm
+, cocotb-bus
+, pytestCheckHook
+, swig
+, verilog
+}:
 
 buildPythonPackage rec {
   pname = "cocotb";
-  version = "1.4.0";
+  version = "1.6.1";
 
-  src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "0fv0mg8zh40ffq0q39s195y6hvjrzihpx0i3f7ba5881syw3x7p4";
+  # - we need to use the tarball from PyPi
+  #   or the full git checkout (with .git)
+  # - using fetchFromGitHub will cause a build failure,
+  #   because it does not include required metadata
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "b644a15ea1e62c55041176468976541cba30a8a5e99a5e9a2c07ee595c2b4e95";
   };
 
-  propagatedBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
+
+  buildInputs = [ setuptools ];
 
   postPatch = ''
     patchShebangs bin/*.py
@@ -26,21 +38,14 @@ buildPythonPackage rec {
       substituteInPlace $f --replace 'shell which' 'shell command -v'
     done
 
-    # This can perhaps be removed in the next update after 1.3.2?
-    substituteInPlace cocotb/share/makefiles/Makefile.inc --replace "-Werror" ""
+    # remove circular dependency cocotb-bus from setup.py
+    substituteInPlace setup.py --replace "'cocotb-bus<1.0'" ""
   '';
 
-  checkInputs = [ swig verilog ];
+  checkInputs = [ cocotb-bus pytestCheckHook swig verilog ];
 
   checkPhase = ''
-    # test expected failures actually pass because of a fix in our icarus version
-    # https://github.com/cocotb/cocotb/issues/1952
-    substituteInPlace tests/test_cases/test_discovery/test_discovery.py \
-      --replace 'def access_single_bit' $'def foo(x): pass\ndef foo' \
-      --replace 'def access_single_bit_assignment' $'def foo(x): pass\ndef foo'
-
     export PATH=$out/bin:$PATH
-    make test
   '';
 
   meta = with lib; {
@@ -48,5 +53,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/cocotb/cocotb";
     license = licenses.bsd3;
     maintainers = with maintainers; [ matthuszagh ];
+    broken = stdenv.isDarwin;
   };
 }

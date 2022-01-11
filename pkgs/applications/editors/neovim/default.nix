@@ -1,12 +1,13 @@
 { lib, stdenv, fetchFromGitHub, cmake, gettext, msgpack, libtermkey, libiconv
 , libuv, lua, ncurses, pkg-config
-, unibilium, xsel, gperf
+, unibilium, gperf
 , libvterm-neovim
+, tree-sitter
 , glibcLocales ? null, procps ? null
 
 # now defaults to false because some tests can be flaky (clipboard etc)
 , doCheck ? false
-, nodejs ? null, fish ? null, python ? null
+, nodejs ? null, fish ? null, python3 ? null
 }:
 
 with lib;
@@ -19,7 +20,7 @@ let
       ]
     ));
 
-  pyEnv = python.withPackages(ps: [ ps.pynvim ps.msgpack ]);
+  pyEnv = python3.withPackages(ps: with ps; [ pynvim msgpack ]);
 
   # FIXME: this is verry messy and strange.
   # see https://github.com/NixOS/nixpkgs/pull/80528
@@ -31,13 +32,13 @@ let
 in
   stdenv.mkDerivation rec {
     pname = "neovim-unwrapped";
-    version = "0.4.4";
+    version = "0.6.1";
 
     src = fetchFromGitHub {
       owner = "neovim";
       repo = "neovim";
       rev = "v${version}";
-      sha256 = "11zyj6jvkwas3n6w1ckj3pk6jf81z1g7ngg4smmwm7c27y2a6f2m";
+      sha256 = "sha256-0XCW047WopPr3pRTy9rF3Ff6MvNRHT4FletzOERD41A=";
     };
 
     patches = [
@@ -49,6 +50,8 @@ in
 
     dontFixCmake = true;
 
+    inherit lua;
+
     buildInputs = [
       gperf
       libtermkey
@@ -58,6 +61,7 @@ in
       msgpack
       ncurses
       neovimLuaEnv
+      tree-sitter
       unibilium
     ] ++ optional stdenv.isDarwin libiconv
       ++ optionals doCheck [ glibcLocales procps ]
@@ -96,6 +100,7 @@ in
       "-DGPERF_PRG=${gperf}/bin/gperf"
       "-DLUA_PRG=${neovimLuaEnv.interpreter}"
       "-DLIBLUV_LIBRARY=${luvpath}"
+      "-DUSE_BUNDLED=OFF"
     ]
     ++ optional doCheck "-DBUSTED_PRG=${neovimLuaEnv}/bin/busted"
     ++ optional (!lua.pkgs.isLuaJIT) "-DPREFER_LUA=ON"
@@ -106,10 +111,6 @@ in
 
     preConfigure = lib.optionalString stdenv.isDarwin ''
       substituteInPlace src/nvim/CMakeLists.txt --replace "    util" ""
-    '';
-
-    postInstall = lib.optionalString stdenv.isLinux ''
-      sed -i -e "s|'xsel|'${xsel}/bin/xsel|g" $out/share/nvim/runtime/autoload/provider/clipboard.vim
     '';
 
     # export PATH=$PWD/build/bin:${PATH}
@@ -128,6 +129,7 @@ in
         - Improve extensibility with a new plugin architecture
       '';
       homepage    = "https://www.neovim.io";
+      mainProgram = "nvim";
       # "Contributions committed before b17d96 by authors who did not sign the
       # Contributor License Agreement (CLA) remain under the Vim license.
       # Contributions committed after b17d96 are licensed under Apache 2.0 unless

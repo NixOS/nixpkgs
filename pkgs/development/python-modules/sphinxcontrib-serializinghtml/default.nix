@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-serializinghtml";
-  version = "1.1.4";
+  version = "1.1.5";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "eaa0eccc86e982a9b939b2b82d12cc5d013385ba5eadcc7e4fed23f4405f77bc";
+    sha256 = "aa5f6de5dfdf809ef505c4895e51ef5c9eac17d0f287933eb49ec495280b6952";
   };
 
 

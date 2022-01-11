@@ -1,22 +1,21 @@
 { lib, fetchFromGitHub, makeWrapper, clang, haskellPackages }:
 
 haskellPackages.mkDerivation rec {
-
   pname = "carp";
-  version = "0.3.0";
+  version = "0.5.4";
 
   src = fetchFromGitHub {
     owner = "carp-lang";
     repo = "Carp";
     rev = "v${version}";
-    sha256 = "07yk3gy4l6h3k7sh8al7lgwk75a13zxwfp7siqpb5gnnqr1z3brc";
+    sha256 = "sha256-o7NLd7jC1BvcoVzbD18LvHg/SqOnfn9yELUrpg2uZtY=";
   };
 
-  buildDepends = [ makeWrapper ];
+  buildTools = [ makeWrapper ];
 
   executableHaskellDepends = with haskellPackages; [
-    HUnit blaze-markup blaze-html split cmdargs ansi-terminal cmark
-    edit-distance
+    HUnit blaze-markup blaze-html split ansi-terminal cmark
+    edit-distance hashable open-browser optparse-applicative
   ];
 
   isExecutable = true;

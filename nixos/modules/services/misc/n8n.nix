@@ -66,7 +66,7 @@ in
         RestrictNamespaces = "yes";
         RestrictRealtime = "yes";
         RestrictSUIDSGID = "yes";
-        MemoryDenyWriteExecute = "yes";
+        MemoryDenyWriteExecute = "no"; # v8 JIT requires memory segments to be Writable-Executable.
         LockPersonality = "yes";
       };
     };

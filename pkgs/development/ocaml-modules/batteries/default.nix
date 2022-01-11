@@ -1,20 +1,28 @@
-{ stdenv, lib, fetchurl, ocaml, findlib, ocamlbuild, qtest, num }:
+{ stdenv, lib, fetchFromGitHub, ocaml, findlib, ocamlbuild, qtest, num
+, doCheck ? lib.versionAtLeast ocaml.version "4.08" && !stdenv.isAarch64
+}:
 
-let version = "3.2.0"; in
+if !lib.versionAtLeast ocaml.version "4.02"
+then throw "batteries is not available for OCaml ${ocaml.version}"
+else
+
+let version = "3.4.0"; in
 
 stdenv.mkDerivation {
   name = "ocaml${ocaml.version}-batteries-${version}";
 
-  src = fetchurl {
-    url = "https://github.com/ocaml-batteries-team/batteries-included/releases/download/v${version}/batteries-${version}.tar.gz";
-    sha256 = "0a77njgc6c6kz4rpwqgmnii7f1na6hzsa55nqqm3dndhq9xh628w";
+  src = fetchFromGitHub {
+    owner = "ocaml-batteries-team";
+    repo = "batteries-included";
+    rev = "v${version}";
+    sha256 = "sha256:1cd7475n1mxhq482aidmhh27mq5p2vmb8d9fkb1mlza9pz5z66yq";
   };
 
   buildInputs = [ ocaml findlib ocamlbuild ];
   checkInputs = [ qtest ];
   propagatedBuildInputs = [ num ];
 
-  doCheck = lib.versionAtLeast ocaml.version "4.04" && !stdenv.isAarch64;
+  inherit doCheck;
   checkTarget = "test";
 
   createFindlibDestdir = true;
@@ -28,7 +36,7 @@ stdenv.mkDerivation {
       language.
     '';
     license = lib.licenses.lgpl21Plus;
-    platforms = ocaml.meta.platforms or [];
+    inherit (ocaml.meta) platforms;
     maintainers = [
       lib.maintainers.maggesi
     ];

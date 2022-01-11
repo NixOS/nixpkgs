@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "cppcheck";
-  version = "2.3";
+  version = "2.6";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "0mlw0z20qf0g9qrmdmbykzf87wlcgmah8bacmp4mk6dwfzr9g9n3";
+    sha256 = "sha256-rQuvhVgpVBdwCCekraG+cqxR9PUs/wm5pjVQHzTpaKI=";
   };
 
   buildInputs = [ pcre ] ++ lib.optionals withZ3 [ z3 ];

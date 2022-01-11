@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
       devices.
     '';
     license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ infinisil ];
   };
 }

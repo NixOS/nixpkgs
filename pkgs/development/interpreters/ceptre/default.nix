@@ -1,7 +1,8 @@
 { lib, stdenv, fetchgit, mlton }:
 
 stdenv.mkDerivation {
-  name = "ceptre-2016-11-27";
+  pname = "ceptre";
+  version = "unstable-2016-11-27";
 
   src = fetchgit {
     url = "https://github.com/chrisamaphone/interactive-lp";
@@ -20,6 +21,6 @@ stdenv.mkDerivation {
     description = "A linear logic programming language for modeling generative interactive systems";
     homepage = "https://github.com/chrisamaphone/interactive-lp";
     maintainers = with maintainers; [ pSub ];
-    platforms = with platforms; linux;
+    platforms = platforms.unix;
   };
 }

@@ -10,7 +10,7 @@
 # See the documentation at doc/languages-frameworks/coq.section.md.        #
 ############################################################################
 
-{ lib, ncurses, which, graphviz, lua,
+{ lib, ncurses, which, graphviz, lua, fetchzip,
   mkCoqDerivation, recurseIntoAttrs, withDoc ? false, single ? false,
   coqPackages, coq, ocamlPackages, version ? null }@args:
 with builtins // lib;
@@ -19,7 +19,8 @@ let
   owner = "math-comp";
   withDoc = single && (args.withDoc or false);
   defaultVersion = with versions; switch coq.coq-version [
-      { case = isGe  "8.13";        out = "1.12.0"; } # lower version of coq to 8.10 when all mathcomp packages are ported
+      { case = isGe  "8.14";        out = "1.13.0"; }
+      { case = range "8.10" "8.13"; out = "1.12.0"; }
       { case = range "8.7"  "8.12"; out = "1.11.0"; }
       { case = range "8.7" "8.11";  out = "1.10.0"; }
       { case = range "8.7" "8.11";  out = "1.9.0";  }
@@ -28,6 +29,7 @@ let
       { case = range "8.5" "8.7";   out = "1.6.4";  }
     ] null;
   release = {
+    "1.13.0".sha256 = "0j4cz2y1r1aw79snkcf1pmicgzf8swbaf9ippz0vg99a572zqzri";
     "1.12.0".sha256 = "1ccfny1vwgmdl91kz5xlmhq4wz078xm4z5wpd0jy5rn890dx03wp";
     "1.11.0".sha256 = "06a71d196wd5k4wg7khwqb7j7ifr7garhwkd54s86i0j7d6nhl3c";
     "1.10.0".sha256 = "1b9m6pwxxyivw7rgx82gn5kmgv2mfv3h3y0mmjcjfypi8ydkrlbv";
@@ -55,27 +57,51 @@ let
       derivation = mkCoqDerivation ({
         inherit version pname defaultVersion release releaseRev repo owner;
 
-        nativeBuildInputs = optional withDoc graphviz;
+        nativeBuildInputs = optionals withDoc [ graphviz lua ];
         mlPlugin = versions.isLe "8.6" coq.coq-version;
-        extraBuildInputs = [ ncurses which ] ++ optional withDoc lua;
+        extraBuildInputs = [ ncurses which ];
         propagatedBuildInputs = mathcomp-deps;
 
         buildFlags = optional withDoc "doc";
 
         preBuild = ''
-          patchShebangs etc/utils/ssrcoqdep || true
+          if [[ -f etc/utils/ssrcoqdep ]]
+          then patchShebangs etc/utils/ssrcoqdep
+          fi
+          if [[ -f etc/buildlibgraph ]]
+          then patchShebangs etc/buildlibgraph
+          fi
         '' + ''
           cd ${pkgpath}
         '' + optionalString (package == "all") pkgallMake;
-
-        installTargets = "install" + optionalString withDoc " doc";
 
         meta = {
           homepage    = "https://math-comp.github.io/";
           license     = licenses.cecill-b;
           maintainers = with maintainers; [ vbgl jwiegley cohencyril ];
         };
-      } // optionalAttrs (package != "single") { passthru = genAttrs packages mathcomp_; });
+      } // optionalAttrs (package != "single")
+        { passthru = genAttrs packages mathcomp_; }
+        // optionalAttrs withDoc {
+            htmldoc_template =
+              fetchzip {
+                url = "https://github.com/math-comp/math-comp.github.io/archive/doc-1.12.0.zip";
+                sha256 = "0y1352ha2yy6k2dl375sb1r68r1qi9dyyy7dyzj5lp9hxhhq69x8";
+              };
+            postBuild = ''
+              cp -rf _build_doc/* .
+              rm -r _build_doc
+            '';
+            postInstall =
+              let tgt = "$out/share/coq/${coq.coq-version}/"; in
+              optionalString withDoc ''
+              mkdir -p ${tgt}
+              cp -r htmldoc ${tgt}
+              cp -r $htmldoc_template/htmldoc_template/* ${tgt}/htmldoc/
+            '';
+            buildTargets = "doc";
+            extraInstallFlags = [ "-f Makefile.coq" ];
+          });
     patched-derivation1 = derivation.overrideAttrs (o:
       optionalAttrs (o.pname != null && o.pname == "mathcomp-all" &&
          o.version != null && o.version != "dev" && versions.isLt "1.7" o.version)

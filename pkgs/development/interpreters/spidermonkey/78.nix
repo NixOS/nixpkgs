@@ -15,18 +15,27 @@
 , rustc
 , rust-cbindgen
 , yasm
-, llvmPackages
+, llvmPackages_12
 , nspr
 }:
 
 stdenv.mkDerivation rec {
   pname = "spidermonkey";
-  version = "78.4.0";
+  version = "78.15.0";
 
   src = fetchurl {
     url = "mirror://mozilla/firefox/releases/${version}esr/source/firefox-${version}esr.source.tar.xz";
-    sha256 = "1z3hj45bnd12z3g6ajv9qrgclca7fymi1sxj9l9nh9q6y6xz0g4f";
+    sha256 = "0l91cxdc5v9fps79ckb1kid4gw6v5qng1jd9zvaacwaiv628shx4";
   };
+
+  patches = [
+    # Fix build failure on armv7l using Debian patch
+    # Upstream bug: https://bugzilla.mozilla.org/show_bug.cgi?id=1526653
+    (fetchpatch {
+      url = "https://salsa.debian.org/mozilla-team/firefox/commit/fd6847c9416f9eebde636e21d794d25d1be8791d.patch";
+      sha256 = "02b7zwm6vxmk61aj79a6m32s1k5sr0hwm3q1j4v6np9jfyd10g1j";
+    })
+  ];
 
   outputs = [ "out" "dev" ];
   setOutputFlags = false; # Configure script only understands --includedir
@@ -34,7 +43,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoconf213
     cargo
-    llvmPackages.llvm # for llvm-objdump
+    llvmPackages_12.llvm # for llvm-objdump
     perl
     pkg-config
     python3
@@ -83,6 +92,8 @@ stdenv.mkDerivation rec {
     "--target=${stdenv.hostPlatform.config}"
   ];
 
+  # mkDerivation by default appends --build/--host to configureFlags when cross compiling
+  # These defaults are bogus for Spidermonkey - avoid passing them by providing an empty list
   configurePlatforms = [ ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -96,9 +107,19 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  postPatch = ''
+    # This patch is a manually applied fix of
+    #   https://bugzilla.mozilla.org/show_bug.cgi?id=1644600
+    # Once that bug is fixed, this can be removed.
+    # This is needed in, for example, `zeroad`.
+    substituteInPlace js/public/StructuredClone.h \
+         --replace "class SharedArrayRawBufferRefs {" \
+                   "class JS_PUBLIC_API SharedArrayRawBufferRefs {"
+  '';
+
   meta = with lib; {
     description = "Mozilla's JavaScript engine written in C/C++";
-    homepage = "https://developer.mozilla.org/en/SpiderMonkey";
+    homepage = "https://spidermonkey.dev/";
     license = licenses.gpl2; # TODO: MPL/GPL/LGPL tri-license.
     maintainers = with maintainers; [ abbradar lostnet ];
     platforms = platforms.linux;

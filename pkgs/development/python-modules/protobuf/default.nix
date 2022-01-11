@@ -1,15 +1,13 @@
 { buildPackages
 , lib
-, stdenv
 , fetchpatch
 , python
 , buildPythonPackage
 , isPy37
 , protobuf
-, google-apputils
+, google-apputils ? null
 , six
 , pyext
-, libcxx
 , isPy27
 , disabled
 , doCheck ? true
@@ -19,14 +17,6 @@ buildPythonPackage {
   inherit (protobuf) pname src version;
   inherit disabled;
   doCheck = doCheck && !isPy27; # setuptools>=41.4 no longer collects correctly on python2
-
-  NIX_CFLAGS_COMPILE = toString (
-    # work around python distutils compiling C++ with $CC
-    lib.optional stdenv.isDarwin "-I${libcxx}/include/c++/v1"
-    ++ lib.optional (lib.versionOlder protobuf.version "2.7.0") "-std=c++98"
-  );
-
-  outputs = [ "out" "dev" ];
 
   propagatedBuildInputs = [ six ] ++ lib.optionals isPy27 [ google-apputils ];
   propagatedNativeBuildInputs = [ buildPackages.protobuf ]; # For protoc.
@@ -49,32 +39,20 @@ buildPythonPackage {
     cd python
   '';
 
-  preConfigure = lib.optionalString (lib.versionAtLeast protobuf.version "2.6.0") ''
-    export PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=cpp
-    export PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION_VERSION=2
-  '';
+  setupPyGlobalFlags = lib.optional (lib.versionAtLeast protobuf.version "2.6.0")
+    "--cpp_implementation";
 
-  preBuild = ''
-    # Workaround for https://github.com/google/protobuf/issues/2895
-    ${python.pythonForBuild.interpreter} setup.py build
-  '' + lib.optionalString (lib.versionAtLeast protobuf.version "2.6.0") ''
-    ${python.pythonForBuild.interpreter} setup.py build_ext --cpp_implementation
-  '';
-
-  installFlags = lib.optional (lib.versionAtLeast protobuf.version "2.6.0")
-    "--install-option='--cpp_implementation'";
-
-  # the _message.so isn't installed, so we'll do that manually.
-  # if someone can figure out a less hacky way to get the _message.so to
-  # install, please do replace this.
-  postInstall = lib.optionalString (lib.versionAtLeast protobuf.version "2.6.0") ''
-    cp -v $(find build -name "_message*") $out/${python.sitePackages}/google/protobuf/pyext
-  '';
+  pythonImportsCheck = [
+    "google.protobuf"
+  ] ++ lib.optionals (lib.versionAtLeast protobuf.version "2.6.0") [
+    "google.protobuf.internal._api_implementation" # Verify that --cpp_implementation worked
+  ];
 
   meta = with lib; {
     description = "Protocol Buffers are Google's data interchange format";
     homepage = "https://developers.google.com/protocol-buffers/";
     license = licenses.bsd3;
+    maintainers = with maintainers; [ knedlsepp ];
   };
 
   passthru.protobuf = protobuf;

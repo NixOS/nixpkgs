@@ -11,6 +11,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gsl ];
 
+  makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+  ];
+
   installPhase = ''
     mkdir -p $out/bin
     mkdir -p $out/share/doc/${pname}

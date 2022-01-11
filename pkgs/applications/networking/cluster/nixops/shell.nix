@@ -1,9 +1,9 @@
-{ pkgs ? import <nixpkgs> {} }:
+{ pkgs ? import <nixpkgs> { } }:
 
 pkgs.mkShell {
-  buildInputs = [
+  packages = [
     pkgs.poetry2nix.cli
-    pkgs.pkgconfig
+    pkgs.pkg-config
     pkgs.libvirt
     pkgs.poetry
   ];

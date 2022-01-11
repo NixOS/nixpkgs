@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, libspotify, alsaLib, readline, pkg-config, apiKey ? null, unzip, gnused }:
+{ lib, stdenv, fetchurl, libspotify, alsa-lib, readline, pkg-config, apiKey ? null, unzip, gnused }:
 
 let
   version = "12.1.51";
@@ -47,7 +47,7 @@ else stdenv.mkDerivation {
 
 
   # darwin-specific
-  buildInputs = lib.optional (stdenv.hostPlatform.system == "x86_64-darwin") unzip;
+  nativeBuildInputs = lib.optional (stdenv.hostPlatform.system == "x86_64-darwin") unzip;
 
   # linux-specific
   installFlags = lib.optional isLinux
@@ -67,7 +67,7 @@ else stdenv.mkDerivation {
         src = libspotify.src;
   nativeBuildInputs = [ pkg-config ];
         buildInputs = [ libspotify readline ]
-          ++ lib.optional (!stdenv.isDarwin) alsaLib;
+          ++ lib.optional (!stdenv.isDarwin) alsa-lib;
         postUnpack = "sourceRoot=$sourceRoot/share/doc/libspotify/examples";
         patchPhase = "cp ${apiKey} appkey.c";
         installPhase = ''

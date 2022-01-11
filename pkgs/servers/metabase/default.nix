@@ -1,12 +1,12 @@
-{ lib, stdenv, fetchurl, makeWrapper, jdk11 }:
+{ lib, stdenv, fetchurl, makeWrapper, jdk11, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "metabase";
-  version = "0.37.8";
+  version = "0.41.5";
 
   src = fetchurl {
     url = "https://downloads.metabase.com/v${version}/metabase.jar";
-    sha256 = "sha256-T3isJcnDUvN4TCd9tZA1p46pamhdPSwIKKAOr6+1F30=";
+    sha256 = "sha256-DH1xy1cTVDNNXyOIaayGHzOi4g0ZukNFFbZjufY+XLk=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -23,5 +23,8 @@ stdenv.mkDerivation rec {
     license     = licenses.agpl3;
     platforms   = platforms.all;
     maintainers = with maintainers; [ schneefux thoughtpolice mmahut ];
+  };
+  passthru.tests = {
+    inherit (nixosTests) metabase;
   };
 }

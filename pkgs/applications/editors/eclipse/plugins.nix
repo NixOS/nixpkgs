@@ -110,7 +110,6 @@ rec {
       description = "Provides fast jumps to text based on initial letter";
       license = licenses.mit;
       platforms = platforms.all;
-      maintainers = [ maintainers.rycee ];
     };
   };
 
@@ -133,7 +132,6 @@ rec {
       description = "Adds support for ANSI escape sequences in the Eclipse console";
       license = licenses.asl20;
       platforms = platforms.all;
-      maintainers = [ maintainers.rycee ];
     };
   };
 
@@ -156,7 +154,6 @@ rec {
       homepage = "https://www.antlr.org/";
       license = licenses.bsd3;
       platforms = platforms.all;
-      maintainers = [ maintainers.rycee ];
     };
   };
 
@@ -179,7 +176,6 @@ rec {
       homepage = "https://www.antlr.org/";
       license = licenses.bsd3;
       platforms = platforms.all;
-      maintainers = [ maintainers.rycee ];
     };
   };
 
@@ -202,7 +198,6 @@ rec {
       description = "Adds new tools to the context menu of text-based editors";
       license = licenses.epl10;
       platforms = platforms.all;
-      maintainers = [ maintainers.rycee ];
     };
   };
 
@@ -225,7 +220,6 @@ rec {
       description = "Show file encoding and line ending for the active editor in the eclipse status bar";
       license = licenses.epl10;
       platforms = platforms.all;
-      maintainers = [ maintainers.rycee ];
     };
   };
 
@@ -248,19 +242,18 @@ rec {
       description = "Shows disassembled bytecode of current java editor or class file";
       license = licenses.bsd2;
       platforms = platforms.all;
-      maintainers = [ maintainers.rycee ];
     };
   };
 
   cdt = buildEclipseUpdateSite rec {
     name = "cdt-${version}";
     # find current version at https://www.eclipse.org/cdt/downloads.php
-    version = "10.1.0";
+    version = "10.5.0";
 
     src = fetchzip {
       stripRoot = false;
-      url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/tools/cdt/releases/10.1/${name}/${name}.zip";
-      sha256 = "1hbswcar3a5cw20mwrj82w9pvpkvvj6jrvqqf1lincva0r5sl7h8";
+      url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/tools/cdt/releases/${lib.versions.majorMinor version}/${name}/${name}.zip";
+      hash = "sha256-0sf38Ekw9mMjiEmJDcunVL3VS3KqWVXKZlQIGBk4V4g=";
     };
 
     meta = with lib; {
@@ -287,7 +280,6 @@ rec {
       description = "Checkstyle integration into the Eclipse IDE";
       license = licenses.lgpl21;
       platforms = platforms.all;
-      maintainers = [ maintainers.rycee ];
     };
 
   };
@@ -311,7 +303,6 @@ rec {
       description = "Plugin to switch color themes conveniently and without side effects";
       license = licenses.epl10;
       platforms = platforms.all;
-      maintainers = [ maintainers.rycee ];
     };
   };
 
@@ -386,7 +377,6 @@ rec {
       description = "EclEmma is a free Java code coverage tool for Eclipse";
       license = licenses.epl10;
       platforms = platforms.all;
-      maintainers = [ maintainers.rycee ];
     };
   };
 
@@ -409,7 +399,22 @@ rec {
       description = "Plugin that uses static analysis to look for bugs in Java code";
       license = licenses.epl10;
       platforms = platforms.all;
-      maintainers = [ maintainers.rycee ];
+    };
+  };
+
+  freemarker = buildEclipseUpdateSite rec {
+    name = "freemarker-${version}";
+    version = "1.5.305";
+
+    src = fetchzip {
+      url = "https://github.com/ddekany/jbosstools-freemarker/releases/download/v${version}/freemarker.site-${version}.zip";
+      sha256 = "1qrhi300vk07gi14r445wvy0bvghbjd6c4k7q09pqpaxv6raiczn";
+      stripRoot = false;
+    };
+
+    meta = with lib; {
+      homepage = "https://github.com/ddekany/jbosstools-freemarker";
+      description = "Plugin that provides an editor for Apache FreeMarker files";
     };
   };
 
@@ -466,26 +471,6 @@ rec {
       homepage = "https://github.com/boothen/Json-Eclipse-Plugin";
       license = licenses.epl10;
       platforms = platforms.all;
-      maintainers = [ maintainers.rycee ];
-    };
-  };
-
-  jdt = buildEclipseUpdateSite rec {
-    name = "jdt-${version}";
-    version = "4.18";
-
-    src = fetchzip {
-      stripRoot = false;
-      url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-${version}-202012021800/org.eclipse.jdt-${version}.zip";
-      sha256 = "q0O6OE2u0bdz1+nOkzXDrrOOzoEbVaXnejx4lX7uZgk=";
-    };
-
-    meta = with lib; {
-      homepage = "https://www.eclipse.org/jdt/";
-      description = "Eclipse Java development tools";
-      license = licenses.epl10;
-      platforms = platforms.all;
-      maintainers = [ maintainers.rycee ];
     };
   };
 
@@ -508,7 +493,6 @@ rec {
       description = "Provides JDT Java CodeMining";
       license = licenses.epl10;
       platforms = platforms.all;
-      maintainers = [ maintainers.rycee ];
     };
   };
 
@@ -551,7 +535,6 @@ rec {
       description = "The Scala IDE for Eclipse";
       license = licenses.bsd3;
       platforms = platforms.all;
-      maintainers = [ maintainers.rycee ];
     };
   };
 
@@ -570,7 +553,6 @@ rec {
       description = "Plugin that uses static analysis to look for bugs in Java code";
       license = licenses.lgpl21;
       platforms = platforms.all;
-      maintainers = [ maintainers.rycee ];
     };
   };
 
@@ -593,7 +575,6 @@ rec {
       description = "Eclipse plugin for the TestNG testing framework";
       license = licenses.asl20;
       platforms = platforms.all;
-      maintainers = [ maintainers.rycee ];
     };
   };
 
@@ -638,7 +619,6 @@ rec {
       description = "A YAML editor plugin for Eclipse";
       license = licenses.epl10;
       platforms = platforms.all;
-      maintainers = [ maintainers.rycee ];
     };
   };
 
@@ -659,4 +639,99 @@ rec {
     };
   };
 
+  ivyde = buildEclipsePlugin rec {
+    name = "ivyde-${version}";
+    version = "2.2.0.final-201311091524-RELEASE";
+
+    srcFeature = fetchurl {
+      url = "https://downloads.apache.org/ant/ivyde/updatesite/ivyde-${version}/features/org.apache.ivyde.feature_${version}.jar";
+      sha1 = "c8fb6c4aab32db13db0bd81c1a148032667fff31";
+    };
+
+    srcPlugin = fetchurl {
+      url = "https://downloads.apache.org/ant/ivyde/updatesite/ivyde-${version}/plugins/org.apache.ivyde.eclipse_${version}.jar";
+      sha1 = "0c80c2e228a07f18efab1c56ea026448eda70c06";
+    };
+
+    meta = with lib; {
+      homepage = "https://ant.apache.org/ivy/ivyde/index.html";
+      description = "A plugin which integrates Apache Ivy's dependency management";
+      license = licenses.asl20;
+      platforms = platforms.all;
+      maintainers = [ maintainers.r3dl3g ];
+    };
+  };
+
+  ivyderv = buildEclipsePlugin rec {
+    name = "ivyderv-${version}";
+    version = "2.2.0.final-201311091524-RELEASE";
+
+    srcFeature = fetchurl {
+      url = "https://downloads.apache.org/ant/ivyde/updatesite/ivyde-${version}/features/org.apache.ivyde.eclipse.resolvevisualizer.feature_${version}.jar";
+      sha1 = "fb1941eaa2c0de54259de01b0da6d5a6b4a2cab1";
+    };
+
+    srcPlugin = fetchurl {
+      url = "https://downloads.apache.org/ant/ivyde/updatesite/ivyde-${version}/plugins/org.apache.ivyde.eclipse.resolvevisualizer_${version}.jar";
+      sha1 = "225e0c8ccb010d622c159560638578c2fc51a67e";
+    };
+
+    meta = with lib; {
+      homepage = "https://ant.apache.org/ivy/ivyde/index.html";
+      description = "A graph viewer of the resolved dependencies.";
+      longDescription = ''
+        Apache IvyDE Resolve Visualizer is an optional dependency of Apache IvyDE since
+        it requires additional plugins to be installed (Zest).
+      '';
+      license = licenses.asl20;
+      platforms = platforms.all;
+      maintainers = [ maintainers.r3dl3g ];
+    };
+  };
+
+  ivy = buildEclipsePlugin rec {
+    name = "ivy-${version}";
+    version = "2.5.0.final_20191020104435";
+
+    srcFeature = fetchurl {
+      url = "https://downloads.apache.org/ant/ivyde/updatesite/ivy-${version}/features/org.apache.ivy.eclipse.ant.feature_${version}.jar";
+      sha256 = "de6134171a0edf569bb9b4c3a91639d469f196e86804d218adfdd60a5d7fa133";
+    };
+
+    srcPlugin = fetchurl {
+      url = "https://downloads.apache.org/ant/ivyde/updatesite/ivy-${version}/plugins/org.apache.ivy.eclipse.ant_${version}.jar";
+      sha256 = "9e8ea20480cf73d0f0f3fb032d263c7536b24fd2eef71beb7d62af4e065f9ab5";
+    };
+
+    meta = with lib; {
+      homepage = "https://ant.apache.org/ivy/index.html";
+      description = "A popular dependency manager focusing on flexibility and simplicity";
+      license = licenses.asl20;
+      platforms = platforms.all;
+      maintainers = [ maintainers.r3dl3g ];
+    };
+  };
+
+  ivyant = buildEclipsePlugin rec {
+    name = "ivyant-${version}";
+    version = "2.5.0.final_20191020104435";
+
+    srcFeature = fetchurl {
+      url = "https://downloads.apache.org/ant/ivyde/updatesite/ivy-${version}/features/org.apache.ivy.eclipse.ant.feature_${version}.jar";
+      sha256 = "de6134171a0edf569bb9b4c3a91639d469f196e86804d218adfdd60a5d7fa133";
+    };
+
+    srcPlugin = fetchurl {
+      url = "https://downloads.apache.org/ant/ivyde/updatesite/ivy-${version}/plugins/org.apache.ivy.eclipse.ant_${version}.jar";
+      sha256 = "9e8ea20480cf73d0f0f3fb032d263c7536b24fd2eef71beb7d62af4e065f9ab5";
+    };
+
+    meta = with lib; {
+      homepage = "https://ant.apache.org/ivy/ivyde/index.html";
+      description = "Ant Tasks integrated into Eclipse's Ant runtime";
+      license = licenses.asl20;
+      platforms = platforms.all;
+      maintainers = [ maintainers.r3dl3g ];
+    };
+  };
 }

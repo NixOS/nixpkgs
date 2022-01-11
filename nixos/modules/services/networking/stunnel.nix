@@ -25,8 +25,8 @@ let
       };
 
       connect = mkOption {
-        type = types.int;
-        description = "To which port the decrypted connection should be forwarded.";
+        type = types.either types.str types.int;
+        description = "Port or IP:Port to which the decrypted connection should be forwarded.";
       };
 
       cert = mkOption {
@@ -69,6 +69,7 @@ let
       CAFile = mkOption {
         type = types.nullOr types.path;
         default = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
+        defaultText = literalExpression ''"''${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt"'';
         description = "Path to a file containing certificates to validate against.";
       };
 

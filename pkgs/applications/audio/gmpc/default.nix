@@ -1,6 +1,22 @@
-{ lib, stdenv, fetchurl, libtool, intltool, pkg-config, glib
-, gtk2, curl, mpd_clientlib, libsoup, gob2, vala, libunique
-, libSM, libICE, sqlite, hicolor-icon-theme, wrapGAppsHook
+{ lib
+, stdenv
+, fetchurl
+, libtool
+, intltool
+, pkg-config
+, glib
+, gtk2
+, curl
+, libmpdclient
+, libsoup
+, gob2
+, vala
+, libunique
+, libSM
+, libICE
+, sqlite
+, hicolor-icon-theme
+, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -26,8 +42,17 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config libtool intltool gob2 vala wrapGAppsHook ];
   buildInputs = [
-    glib gtk2 curl mpd_clientlib libsoup
-    libunique libmpd libSM libICE sqlite hicolor-icon-theme
+    glib
+    gtk2
+    curl
+    libmpdclient
+    libsoup
+    libunique
+    libmpd
+    libSM
+    libICE
+    sqlite
+    hicolor-icon-theme
   ];
 
   meta = with lib; {
@@ -38,3 +63,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
   };
 }
+# TODO: what is this libmpd derivation embedded above?

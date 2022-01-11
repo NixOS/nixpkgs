@@ -1,9 +1,16 @@
 { lib
 , stdenv
+# The unwrapped gnuradio derivation
 , unwrapped
+# If it's a minimal build, we don't want to wrap it with lndir and
+# wrapProgram..
+, doWrap ? true
+# For the wrapper
 , makeWrapper
 # For lndir
 , xorg
+# To define a the gnuradio.pkgs scope
+, newScope
 # For Emulating wrapGAppsHook
 , gsettings-desktop-schemas
 , glib
@@ -26,31 +33,30 @@
 }:
 
 let
+  # We don't check if `python-support` feature is on, as it's unlikely someone
+  # may wish to wrap GR without python support.
   pythonPkgs = extraPythonPackages
+    ++ [ (unwrapped.python.pkgs.toPythonModule unwrapped) ]
     # Add the extraPackages as python modules as well
     ++ (builtins.map unwrapped.python.pkgs.toPythonModule extraPackages)
     ++ lib.flatten (lib.mapAttrsToList (
       feat: info: (
-        if unwrapped.hasFeature feat unwrapped.features then
+        if unwrapped.hasFeature feat then
           (if builtins.hasAttr "pythonRuntime" info then info.pythonRuntime else [])
         else
           []
       )
       ) unwrapped.featuresInfo)
-    ++ lib.optionals (unwrapped.hasFeature "python-support" unwrapped.features) [
-      # Add unwrapped itself as a python module
-      (unwrapped.python.pkgs.toPythonModule unwrapped)
-    ]
   ;
-  python3Env = unwrapped.python.withPackages(ps: pythonPkgs);
+  pythonEnv = unwrapped.python.withPackages(ps: pythonPkgs);
 
   name = (lib.appendToName "wrapped" unwrapped).name;
   makeWrapperArgs = builtins.concatStringsSep " " ([
   ]
     # Emulating wrapGAppsHook & wrapQtAppsHook working together
     ++ lib.optionals (
-      (unwrapped.hasFeature "gnuradio-companion" unwrapped.features)
-      || (unwrapped.hasFeature "gr-qtgui" unwrapped.features)
+      (unwrapped.hasFeature "gnuradio-companion")
+      || (unwrapped.hasFeature "gr-qtgui")
       ) [
       "--prefix" "XDG_DATA_DIRS" ":" "$out/share"
       "--prefix" "XDG_DATA_DIRS" ":" "$out/share/gsettings-schemas/${name}"
@@ -60,7 +66,7 @@ let
       # https://www.mail-archive.com/debian-bugs-dist@lists.debian.org/msg1764890.html
       "--prefix" "PATH" ":" "${lib.getBin glib}/bin"
     ]
-    ++ lib.optionals (unwrapped.hasFeature "gnuradio-companion" unwrapped.features) [
+    ++ lib.optionals (unwrapped.hasFeature "gnuradio-companion") [
       "--set" "GDK_PIXBUF_MODULE_FILE" "${librsvg}/${gdk-pixbuf.moduleDir}.cache"
       "--prefix" "GIO_EXTRA_MODULES" ":" "${lib.getLib dconf}/lib/gio/modules"
       "--prefix" "XDG_DATA_DIRS" ":" "${unwrapped.gtk}/share"
@@ -83,53 +89,89 @@ let
     ++ lib.optionals (extraPackages != []) [
       "--prefix" "GRC_BLOCKS_PATH" ":" "${lib.makeSearchPath "share/gnuradio/grc/blocks" extraPackages}"
     ]
-    ++ lib.optionals (unwrapped.hasFeature "gr-qtgui" unwrapped.features)
+    ++ lib.optionals (unwrapped.hasFeature "gr-qtgui")
       # 3.7 builds with qt4
-      (if unwrapped.versionAttr.major == "3.8" then
+      (if lib.versionAtLeast unwrapped.versionAttr.major "3.8" then
         [
           "--prefix" "QT_PLUGIN_PATH" ":"
-          "${lib.getBin unwrapped.qt.qtbase}/${unwrapped.qt.qtbase.qtPluginPrefix}"
+          "${
+            lib.makeSearchPath
+            unwrapped.qt.qtbase.qtPluginPrefix
+            (builtins.map lib.getBin [
+              unwrapped.qt.qtbase
+              unwrapped.qt.qtwayland
+            ])
+          }"
           "--prefix" "QML2_IMPORT_PATH" ":"
-          "${lib.getBin unwrapped.qt.qtbase}/${unwrapped.qt.qtbase.qtQmlPrefix}"
+          "${
+            lib.makeSearchPath
+            unwrapped.qt.qtbase.qtQmlPrefix
+            (builtins.map lib.getBin [
+              unwrapped.qt.qtbase
+              unwrapped.qt.qtwayland
+            ])
+          }"
         ]
       else
-        # TODO: Add here qt4 related environment for 3.7?
+        # Add here qt4 related environment for 3.7?
         [
 
         ]
       )
     ++ extraMakeWrapperArgs
   );
-in
-stdenv.mkDerivation {
-  inherit name;
 
-  buildInputs = [
-    makeWrapper
-    xorg.lndir
-  ];
-
-  passthru = {
-    inherit python3Env pythonPkgs unwrapped;
+  packages = import ../../../top-level/gnuradio-packages.nix {
+    inherit lib stdenv newScope;
+    gnuradio = unwrapped;
   };
-
-  buildCommand = ''
-    mkdir $out
-    cd $out
-    lndir -silent ${unwrapped}
-    for i in $out/bin/*; do
-      if [[ ! -x "$i" ]]; then
-        continue
-      fi
-      cp -L "$i" "$i".tmp
-      mv -f "$i".tmp "$i"
-      if head -1 "$i" | grep -q ${unwrapped.python}; then
-        substituteInPlace "$i" \
-          --replace ${unwrapped.python} ${python3Env}
-      fi
-      wrapProgram "$i" ${makeWrapperArgs}
-    done
-  '';
-
-  inherit (unwrapped) meta;
-}
+  passthru = unwrapped.passthru // {
+    inherit
+      pythonEnv
+      pythonPkgs
+      unwrapped
+    ;
+    pkgs = packages;
+  };
+  self = if doWrap then
+    stdenv.mkDerivation {
+      inherit name passthru;
+      buildInputs = [
+        makeWrapper
+        xorg.lndir
+      ];
+      buildCommand = ''
+        mkdir $out
+        cd $out
+        lndir -silent ${unwrapped}
+        ${lib.optionalString
+          (extraPackages != [])
+          (builtins.concatStringsSep "\n"
+            (builtins.map (pkg: ''
+              if [[ -d ${lib.getBin pkg}/bin/ ]]; then
+                lndir -silent ${pkg}/bin ./bin
+              fi
+            '') extraPackages)
+          )
+        }
+        for i in $out/bin/*; do
+          if [[ ! -x "$i" ]]; then
+            continue
+          fi
+          cp -L "$i" "$i".tmp
+          mv -f "$i".tmp "$i"
+          if head -1 "$i" | grep -q ${unwrapped.python}; then
+            substituteInPlace "$i" \
+              --replace ${unwrapped.python} ${pythonEnv}
+          fi
+          wrapProgram "$i" ${makeWrapperArgs}
+        done
+      '';
+      inherit (unwrapped) meta;
+    }
+  else
+    unwrapped.overrideAttrs(_: {
+      inherit passthru;
+    })
+  ;
+in self

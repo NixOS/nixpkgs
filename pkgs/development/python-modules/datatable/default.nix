@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, substituteAll, pythonOlder
+{ stdenv, lib, buildPythonPackage, fetchPypi, pythonOlder
 , pipInstallHook, writeText
 , blessed
 , docutils
@@ -20,13 +20,16 @@ buildPythonPackage rec {
   # authors seem to have created their own build system
   format = "other";
 
-  # tarball doesn't appear to have been shipped totally ready-to-build
   postPatch = ''
+    # tarball doesn't appear to have been shipped totally ready-to-build
     substituteInPlace ci/ext.py \
       --replace \
         'shell_cmd(["git"' \
         '"0000000000000000000000000000000000000000" or shell_cmd(["git"'
     echo '${version}' > VERSION.txt
+
+    # don't make assumptions about architecture
+    sed -i '/-m64/d' ci/ext.py
   '';
   DT_RELEASE = "1";
 
@@ -39,7 +42,7 @@ buildPythonPackage rec {
   checkInputs = [ docutils pytestCheckHook ];
 
   LLVM = llvm;
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-isystem ${libcxx}/include/c++/v1";
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-isystem ${lib.getDev libcxx}/include/c++/v1";
 
   pytestFlagsArray = let
     # ini file (not included in tarball) required to change python_files setting,

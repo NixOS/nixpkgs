@@ -17,12 +17,16 @@
   };
 in stdenv.mkDerivation (rec {
   pname = "libgpg-error";
-  version = "1.38";
+  version = "1.42";
 
   src = fetchurl {
     url = "mirror://gnupg/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "00px79xzyc5lj8aig7i4fhk29h1lkqp4840wjfgi9mv9m9sq566q";
+    sha256 = "sha256-/AfnD2xhX4xPWQqON6m43S4soelAj45gRZxnRSuSXiM=";
   };
+
+  # 1.42 breaks (some?) cross-compilation (e.g. x86_64 -> aarch64).
+  # Backporting this fix (merged in upstream master but no release cut) by David Michael <fedora.dm0@gmail.com> https://dev.gnupg.org/rE33593864cd54143db594c4237bba41e14179061c
+  patches = [ ./fix-1.42-cross-compilation.patch ];
 
   postPatch = ''
     sed '/BUILD_TIMESTAMP=/s/=.*/=1970-01-01T00:01+0000/' -i ./configure
@@ -31,19 +35,11 @@ in stdenv.mkDerivation (rec {
     ln -s lock-obj-pub.arm-unknown-linux-gnueabi.h src/syscfg/lock-obj-pub.linux-gnueabi.h
   '' + lib.optionalString (stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isMusl) ''
     ln -s lock-obj-pub.x86_64-pc-linux-musl.h src/syscfg/lock-obj-pub.linux-musl.h
+  '' + lib.optionalString (stdenv.hostPlatform.isi686 && stdenv.hostPlatform.isMusl) ''
+    ln -s lock-obj-pub.i686-unknown-linux-gnu.h src/syscfg/lock-obj-pub.linux-musl.h
   '' + lib.optionalString (stdenv.hostPlatform.isAarch32 && stdenv.hostPlatform.isMusl) ''
-    ln -s src/syscfg/lock-obj-pub.arm-unknown-linux-gnueabi.h src/syscfg/lock-obj-pub.arm-unknown-linux-musleabihf.h
-    ln -s src/syscfg/lock-obj-pub.arm-unknown-linux-gnueabi.h src/syscfg/lock-obj-pub.linux-musleabihf.h
-  ''
-  # This file was accidentally excluded from the sdist until
-  # 013720333c6ec1d38791689bc49ba039d98e16b3, post release.
-  # TODO make unconditional next mass rebuild
-  + lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
-    cp ${fetchurl {
-      url = "https://raw.githubusercontent.com/gpg/libgpg-error/50e62b36ea01ed25d12c443088b85d4f41a2b3e1/src/gen-lock-obj.sh";
-      sha256 = "10cslipa6npalj869asaamj0w941dhmx0yjafpyyh69ypsg2m2c3";
-    }} ./src/gen-lock-obj.sh
-    chmod +x ./src/gen-lock-obj.sh
+    ln -s lock-obj-pub.arm-unknown-linux-gnueabi.h src/syscfg/lock-obj-pub.arm-unknown-linux-musleabihf.h
+    ln -s lock-obj-pub.arm-unknown-linux-gnueabi.h src/syscfg/lock-obj-pub.linux-musleabihf.h
   '';
 
   outputs = [ "out" "dev" "info" ];
@@ -66,7 +62,8 @@ in stdenv.mkDerivation (rec {
   doCheck = true; # not cross
 
   meta = with lib; {
-    homepage = "https://www.gnupg.org/related_software/libgpg-error/index.html";
+    homepage = "https://www.gnupg.org/software/libgpg-error/index.html";
+    changelog = "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgpg-error.git;a=blob;f=NEWS;hb=refs/tags/libgpg-error-${version}";
     description = "A small library that defines common error values for all GnuPG components";
 
     longDescription = ''

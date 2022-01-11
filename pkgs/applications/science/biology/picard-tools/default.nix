@@ -2,17 +2,17 @@
 
 stdenv.mkDerivation rec {
   pname = "picard-tools";
-  version = "2.24.2";
+  version = "2.26.9";
 
   src = fetchurl {
     url = "https://github.com/broadinstitute/picard/releases/download/${version}/picard.jar";
-    sha256 = "sha256-O+bA7vP7Y9AbFA+nEjE6O1i0DcAWVLO2Guw0ntq55s4=";
+    sha256 = "sha256-5e60StDQil9SMR9G6Gs+OPWMjADn96fOpfHDlNoZSGc=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ jre ];
 
-  phases = [ "installPhase" ];
+  dontUnpack = true;
 
   installPhase = ''
     mkdir -p $out/libexec/picard

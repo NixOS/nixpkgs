@@ -12,9 +12,8 @@
 , tornado
 , ipython_genutils
 , traitlets
-, jupyter
 , jupyter_core
-, jupyter_client
+, jupyter-client
 , nbformat
 , nbconvert
 , ipykernel
@@ -22,18 +21,18 @@
 , requests
 , send2trash
 , pexpect
-, prometheus_client
+, prometheus-client
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "notebook";
-  version = "6.1.5";
+  version = "6.4.6";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3db37ae834c5f3b6378381229d0e5dfcbfb558d08c8ce646b1ad355147f5e91d";
+    sha256 = "7bcdf79bd1cda534735bd9830d2cbedab4ee34d8fe1df6e7b946b3aab0902ba3";
   };
 
   LC_ALL = "en_US.utf8";
@@ -43,8 +42,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     jinja2 tornado ipython_genutils traitlets jupyter_core send2trash
-    jupyter_client nbformat nbconvert ipykernel terminado requests pexpect
-    prometheus_client argon2_cffi
+    jupyter-client nbformat nbconvert ipykernel terminado requests pexpect
+    prometheus-client argon2_cffi
   ];
 
   # disable warning_filters
@@ -72,6 +71,12 @@ buildPythonPackage rec {
   ] ++ lib.optional stdenv.isDarwin [
     "test_delete"
     "test_checkpoints_follow_file"
+  ];
+
+  disabledTestPaths = lib.optionals stdenv.isDarwin [
+    # requires local networking
+    "notebook/auth/tests/test_login.py"
+    "notebook/bundler/tests/test_bundler_api.py"
   ];
 
   # Some of the tests use localhost networking.

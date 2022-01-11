@@ -2,11 +2,11 @@
 
 let
   pname = "diylc";
-  version = "4.15.1";
+  version = "4.18.0";
   files = {
     app = fetchurl {
       url = "https://github.com/bancika/diy-layout-creator/releases/download/v${version}/diylc-${version}.zip";
-      sha256 = "09vzbxas654n8npxljqljf930y5gcjfvv3r4dv97dwk5sy66xvaf";
+      sha256 = "09fpp3dn086clgnjz5yj4fh5bnjvj6mvxkx9n3zamcwszjmxr40d";
     };
     icon16 = fetchurl {
       url = "https://raw.githubusercontent.com/bancika/diy-layout-creator/v${version}/diylc/diylc-core/src/org/diylc/core/images/icon_small.png";
@@ -39,8 +39,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ unzip ];
 
   installPhase = ''
-    install -d $out/share/diylc
-    ${unzip}/bin/unzip -UU ${files.app} -d $out/share/diylc
+    runHook preInstall
+
+    mkdir -p $out/share/diylc
+    unzip -UU ${files.app} -d $out/share/diylc
     rm $out/share/diylc/diylc.exe
     rm $out/share/diylc/run.sh
 
@@ -49,16 +51,18 @@ stdenv.mkDerivation rec {
     install -Dm644 ${files.icon32} $out/share/icons/hicolor/32x32/apps/diylc_icon.png
     install -Dm644 ${files.icon48} $out/share/icons/hicolor/48x48/apps/diylc_icon.png
 
-    install -d $out/share/applications
+    mkdir -p $out/share/applications
     ln -s ${launcher}/share/applications/* $out/share/applications/
 
-    install -d $out/bin
+    mkdir -p $out/bin
     cat <<EOF > $out/bin/diylc
     #!${bash}/bin/sh
     cd $out/share/diylc
     ${jre8}/bin/java -Xms512m -Xmx2048m -Dorg.diylc.scriptRun=true -Dfile.encoding=UTF-8 -cp diylc.jar:lib org.diylc.DIYLCStarter
     EOF
     chmod +x $out/bin/diylc
+
+    runHook postInstall
   '';
 
   meta = with lib; {
@@ -67,5 +71,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/bancika/diy-layout-creator/releases";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
+    maintainers = with maintainers; [ ];
   };
 }

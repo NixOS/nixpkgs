@@ -91,6 +91,11 @@ sub hasCPUFeature {
 }
 
 
+sub cpuManufacturer {
+    my $id = shift;
+    return $cpuinfo =~ /^vendor_id\s*:.* $id$/m;
+}
+
 
 # Determine CPU governor to use
 if (-e "/sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors") {
@@ -110,6 +115,9 @@ if (-e "/sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors") {
 # Virtualization support?
 push @kernelModules, "kvm-intel" if hasCPUFeature "vmx";
 push @kernelModules, "kvm-amd" if hasCPUFeature "svm";
+
+push @attrs, "hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;" if cpuManufacturer "AuthenticAMD";
+push @attrs, "hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;" if cpuManufacturer "GenuineIntel";
 
 
 # Look at the PCI devices and add necessary modules.  Note that most
@@ -585,6 +593,22 @@ EOF
     return $config;
 }
 
+sub generateXserverConfig {
+    my $xserverEnabled = "@xserverEnabled@";
+
+    my $config = "";
+    if ($xserverEnabled eq "1") {
+        $config = <<EOF;
+  # Enable the X11 windowing system.
+  services.xserver.enable = true;
+EOF
+    } else {
+        $config = <<EOF;
+  # Enable the X11 windowing system.
+  # services.xserver.enable = true;
+EOF
+    }
+}
 
 if ($showHardwareConfig) {
     print STDOUT $hwConfig;
@@ -629,6 +653,8 @@ EOF
         }
 
         my $networkingDhcpConfig = generateNetworkingDhcpConfig();
+
+        my $xserverConfig = generateXserverConfig();
 
         (my $desktopConfiguration = <<EOF)=~s/^/  /gm;
 @desktopConfiguration@

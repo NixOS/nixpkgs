@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pcb2gcode";
-  version = "2.2.2";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "pcb2gcode";
     repo = "pcb2gcode";
     rev = "v${version}";
-    sha256 = "sha256-GSLWpLp/InAxVolKmBIjljpe3ZzmS/87TWKwzax5SkY=";
+    sha256 = "sha256-3VQlYtSi6yWWNuxTlBzvBtkM5hAss47xat+sEW+P79E=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];

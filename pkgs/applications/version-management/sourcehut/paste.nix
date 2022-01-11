@@ -1,15 +1,20 @@
-{ lib, fetchgit, buildPythonPackage
+{ lib
+, fetchFromSourcehut
+, buildPythonPackage
+, srht
+, pyyaml
 , python
-, srht, pyyaml }:
+}:
 
 buildPythonPackage rec {
   pname = "pastesrht";
-  version = "0.11.2";
+  version = "0.13.6";
 
-  src = fetchgit {
-    url = "https://git.sr.ht/~sircmpwn/paste.sr.ht";
+  src = fetchFromSourcehut {
+    owner = "~sircmpwn";
+    repo = "paste.sr.ht";
     rev = version;
-    sha256 = "15hm5165v8a7ryw6i0vlf189slw4rp22cfgzznih18pbml7d0c8s";
+    sha256 = "sha256-Khcqk86iD9nxiKXN3+8mSLNoDau2qXNFOrLdkVu+rH8=";
   };
 
   nativeBuildInputs = srht.nativeBuildInputs;
@@ -21,14 +26,15 @@ buildPythonPackage rec {
 
   preBuild = ''
     export PKGVER=${version}
+    export SRHT_PATH=${srht}/${python.sitePackages}/srht
   '';
 
-  dontUseSetuptoolsCheck = true;
+  pythonImportsCheck = [ "pastesrht" ];
 
   meta = with lib; {
     homepage = "https://git.sr.ht/~sircmpwn/paste.sr.ht";
     description = "Ad-hoc text file hosting service for the sr.ht network";
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
     maintainers = with maintainers; [ eadwu ];
   };
 }

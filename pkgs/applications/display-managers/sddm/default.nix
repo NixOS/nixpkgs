@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchFromGitHub
+{ mkDerivation, lib, fetchFromGitHub, fetchpatch
 , cmake, extra-cmake-modules, pkg-config, libxcb, libpthreadstubs
 , libXdmcp, libXau, qtbase, qtdeclarative, qtquickcontrols2, qttools, pam, systemd
 }:
@@ -19,6 +19,19 @@ in mkDerivation {
 
   patches = [
     ./sddm-ignore-config-mtime.patch
+    ./sddm-default-session.patch
+    # Load `/etc/profile` for `environment.variables` with zsh default shell.
+    # See: https://github.com/sddm/sddm/pull/1382
+    (fetchpatch {
+      url = "https://github.com/sddm/sddm/commit/e1dedeeab6de565e043f26ac16033e613c222ef9.patch";
+      sha256 = "sha256-OPyrUI3bbH+PGDBfoL4Ohb4wIvmy9TeYZhE0JxR/D58=";
+    })
+    # Fix build with Qt 5.15.3
+    # See: https://github.com/sddm/sddm/pull/1325
+    (fetchpatch {
+      url = "https://github.com/sddm/sddm/commit/e93bf95c54ad8c2a1604f8d7be05339164b19308.patch";
+      sha256 = "sha256:1rh6sdvzivjcl5b05fczarvxhgpjhi7019hvf2gadnwgwdg104r4";
+    })
   ];
 
   postPatch =

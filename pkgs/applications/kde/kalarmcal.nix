@@ -1,7 +1,7 @@
 {
   mkDerivation, lib, kdepimTeam,
   extra-cmake-modules, kdoctools,
-  akonadi, kcalendarcore, kdelibs4support, kholidays, kidentitymanagement,
+  akonadi, kcalendarcore, kholidays, kidentitymanagement,
   kpimtextedit, kcalutils
 }:
 
@@ -13,7 +13,7 @@ mkDerivation {
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   propagatedBuildInputs = [
-    akonadi kcalendarcore kdelibs4support kholidays kidentitymanagement kpimtextedit kcalutils
+    akonadi kcalendarcore kholidays kidentitymanagement kpimtextedit kcalutils
   ];
   outputs = [ "out" "dev" ];
 }

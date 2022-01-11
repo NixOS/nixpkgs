@@ -5,7 +5,7 @@
 , azure-common
 , azure-storage-common
 , azure-cosmosdb-nspkg
-, futures
+, futures ? null
 , isPy3k
 }:
 

@@ -4,14 +4,13 @@
 
 stdenv.mkDerivation {
   pname = "anura-engine";
-  version = "unstable-2018-11-28";
+  version = "unstable-2021-11-23";
 
   src = fetchFromGitHub {
     owner = "anura-engine";
     repo = "anura";
-    # trunk branch as of 2018-11-28
-    rev = "a05f413f255d2854019134be817c253a03da3d9f";
-    sha256 = "1hd57q8gbn1zdpibnqd3ma0z1ycayc2f4r9j4m2m9kc6yf4v7w7b";
+    rev = "816425df31624066e2815e26a25b1c5d3d355cb4";
+    sha256 = "1k7fnfgz003gcbyygv4aakhkkz3w3z9nyz7dlwz01xa6122zqyir";
     fetchSubmodules = true;
   };
 

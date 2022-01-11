@@ -1,9 +1,8 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, setuptools_scm
+, setuptools-scm
 , pytest
-, fetchpatch
 }:
 
 buildPythonPackage rec {
@@ -16,7 +15,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    setuptools_scm
+    setuptools-scm
   ];
 
   checkInputs = [

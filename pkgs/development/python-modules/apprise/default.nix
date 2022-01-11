@@ -1,25 +1,25 @@
 { lib, buildPythonPackage, fetchPypi, installShellFiles
-, Babel, requests, requests_oauthlib, six, click, markdown, pyyaml
-, pytestrunner, coverage, flake8, mock, pytestCheckHook, pytestcov, tox, gntp, sleekxmpp
+, Babel, requests, requests_oauthlib, six, click, markdown, pyyaml, cryptography
+, pytest-runner, coverage, flake8, mock, pytestCheckHook, pytest-cov, tox, gntp, sleekxmpp
 }:
 
 buildPythonPackage rec {
   pname = "apprise";
-  version = "0.9.0";
+  version = "0.9.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bab3563bc1e0c64938c4c7700112797bd99f20eb5d4a3e6038338bc8f060e153";
+    sha256 = "sha256-Fe0GIIGXydKP2DzWnnJ7SCgIeaTGEa/Wta6l0N7zl/g=";
   };
 
   nativeBuildInputs = [ Babel installShellFiles ];
 
   propagatedBuildInputs = [
-    requests requests_oauthlib six click markdown pyyaml
+    cryptography requests requests_oauthlib six click markdown pyyaml
   ];
 
   checkInputs = [
-    pytestrunner coverage flake8 mock pytestCheckHook pytestcov tox gntp sleekxmpp
+    pytest-runner coverage flake8 mock pytestCheckHook pytest-cov tox gntp sleekxmpp
   ];
 
   disabledTests = [ "test_apprise_cli_nux_env"  ];
@@ -27,6 +27,8 @@ buildPythonPackage rec {
   postInstall = ''
     installManPage packaging/man/apprise.1
   '';
+
+  pythonImportsCheck = [ "apprise" ];
 
   meta = with lib; {
     homepage = "https://github.com/caronc/apprise";

@@ -1,25 +1,19 @@
 { lib, stdenv, fetchFromGitLab
 , meson, ninja, pkg-config, scdoc
-, openssh
 , mesa, lz4, zstd, ffmpeg, libva
 }:
 
 stdenv.mkDerivation rec {
-  pname = "waypipe-unstable";
-  version = "0.7.2";
+  pname = "waypipe";
+  version = "0.8.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "mstoeckl";
     repo = "waypipe";
     rev = "v${version}";
-    sha256 = "sha256-LtfrSEwZikOXp/fdyJ/+EylRx19zdsHMkrl1eEf1/aY=";
+    sha256 = "02q8l1qaahmd41h6v3r46akh7xlqz7fpwwsy15qww4jdvypg6vg4";
   };
-
-  postPatch = ''
-    substituteInPlace src/waypipe.c \
-      --replace "/usr/bin/ssh" "${openssh}/bin/ssh"
-  '';
 
   nativeBuildInputs = [ meson ninja pkg-config scdoc ];
 

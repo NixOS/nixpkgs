@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation rec {
   pname = "bzip2";
-  version = "1.0.6.0.1";
+  version = "1.0.6.0.2";
 
   /* We use versions patched to use autotools style properly,
       saving lots of trouble. */
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
         "ftp://ftp.mplayerhq.hu/pub/linux/suse"
         "http://ftp.suse.com/pub" # the original patched version but slow
       ];
-    sha256 = "0b5b5p8c7bslc6fslcr1nj9136412v3qcvbg6yxi9argq9g72v8c";
+    sha256 = "sha256-FnhwNy4OHe8d5M6iYCClkxzcB/EHXg0veXwv43ZlxbA=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -46,6 +46,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "High-quality data compression program";
+    homepage = "https://www.sourceware.org/bzip2";
+    changelog = "https://sourceware.org/git/?p=bzip2.git;a=blob;f=CHANGES;hb=HEAD";
     license = licenses.bsdOriginal;
     platforms = platforms.all;
     maintainers = with maintainers; [ mic92 ];

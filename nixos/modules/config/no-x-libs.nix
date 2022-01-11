@@ -29,6 +29,7 @@ with lib;
     nixpkgs.overlays = singleton (const (super: {
       cairo = super.cairo.override { x11Support = false; };
       dbus = super.dbus.override { x11Support = false; };
+      beam = super.beam_nox;
       networkmanager-fortisslvpn = super.networkmanager-fortisslvpn.override { withGnome = false; };
       networkmanager-iodine = super.networkmanager-iodine.override { withGnome = false; };
       networkmanager-l2tp = super.networkmanager-l2tp.override { withGnome = false; };

@@ -48,5 +48,25 @@ rec {
     version = "0.16.0";
   };
 
-  ocamlformat = ocamlformat_0_16_0;
+  ocamlformat_0_17_0 = mkOCamlformat {
+    version = "0.17.0";
+  };
+
+  ocamlformat_0_18_0 = mkOCamlformat {
+    version = "0.18.0";
+  };
+
+  ocamlformat_0_19_0 = mkOCamlformat {
+    version = "0.19.0";
+  };
+
+  ocamlformat_0_20_0 = mkOCamlformat {
+    version = "0.20.0";
+  };
+
+  ocamlformat_0_20_1 = mkOCamlformat {
+    version = "0.20.1";
+  };
+
+  ocamlformat = ocamlformat_0_20_1;
 }

@@ -1,12 +1,12 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, itstool, glib, libwnck3, librsvg, libxml2, dconf, gtk3, mate, hicolor-icon-theme, gobject-introspection, wrapGAppsHook }:
+{ lib, stdenv, fetchurl, pkg-config, gettext, itstool, glib, libwnck, librsvg, libxml2, dconf, gtk3, mate, hicolor-icon-theme, gobject-introspection, wrapGAppsHook, mateUpdateScript }:
 
 stdenv.mkDerivation rec {
   pname = "mate-panel";
-  version = "1.24.1";
+  version = "1.26.1";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0xblqrhfazd01h0jdmx4hvavkb7f9anbd4rjsk5r6wxhp027l64l";
+    sha256 = "038irkjl9ap7kqacf1c0i74h0rwkcpaw685vyml50vj5hg23hc38";
   };
 
   nativeBuildInputs = [
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib
-    libwnck3
+    libwnck
     librsvg
     libxml2
     gtk3
@@ -39,11 +39,13 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  passthru.updateScript = mateUpdateScript { inherit pname version; };
+
   meta = with lib; {
     description = "The MATE panel";
     homepage = "https://github.com/mate-desktop/mate-panel";
-    license = with licenses; [ gpl2 lgpl2 ];
+    license = with licenses; [ gpl2Plus lgpl2Plus fdl11Plus ];
     platforms = platforms.unix;
-    maintainers = [ maintainers.romildo ];
+    maintainers = teams.mate.members;
   };
 }

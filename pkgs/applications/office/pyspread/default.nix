@@ -1,69 +1,57 @@
 { lib
-, buildPythonApplication
-, fetchPypi
+, copyDesktopItems
 , makeDesktopItem
-, makePythonPath
-, dateutil
-, matplotlib
-, numpy
-, pyenchant
-, pyqt5
-, pytest
-, python
+, python3
 , qtsvg
-, runtimeShell
 , wrapQtAppsHook
 }:
 
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "pyspread";
-  version = "1.99.5";
+  version = "2.0.2";
 
-  src = fetchPypi {
+  src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "sha256-05bC+Uvx72FAh3qxkgXm8jdb/gHRv1D/M7tjOEdE3Xg=";
+    hash = "sha256-rg2T9Y9FU2a+aWg0XM8jyQB9t8zDVlpad3TjUcx4//8=";
   };
 
-  pythonLibs = [
-    dateutil
+  nativeBuildInputs = [
+    copyDesktopItems
+    wrapQtAppsHook
+  ];
+
+  buildInputs = [
+    qtsvg
+  ];
+
+  propagatedBuildInputs = with python3.pkgs; [
+    python-dateutil
+    markdown2
     matplotlib
     numpy
     pyenchant
     pyqt5
-  ];
-
-  nativeBuildInputs = [ wrapQtAppsHook ];
-  buildInputs = pythonLibs ++ [
-    qtsvg
+    setuptools
   ];
 
   doCheck = false; # it fails miserably with a core dump
 
-  desktopItem = makeDesktopItem rec {
-    name = pname;
-    exec = name;
-    icon = name;
-    desktopName = "Pyspread";
-    genericName = "Spreadsheet";
-    comment = meta.description;
-    categories = "Office;Development;Spreadsheet;";
-  };
+  pythonImportsCheck = [ "pyspread" ];
 
-  postInstall = ''
-    runHook preInstall
-    install -D $out/share/applications
-    install -m 644 $desktopItem/share/applications/* $out/share/applications
-    runHook postInstall
-  '';
+  desktopItems = [
+    (makeDesktopItem rec {
+      name = pname;
+      exec = name;
+      icon = name;
+      desktopName = "Pyspread";
+      genericName = "Spreadsheet";
+      comment = meta.description;
+      categories = "Office;Development;Spreadsheet;";
+    })
+  ];
 
-  fixupPhase = ''
-    runHook preFixup
-    sed -i -e "s|#!/bin/bash|#!${runtimeShell}|" $out/bin/pyspread
-    wrapProgram $out/bin/pyspread \
-      --prefix PYTHONPATH ':' $(toPythonPath $out):${makePythonPath pythonLibs} \
-      --prefix PATH ':' ${python}/bin/ \
-      ''${qtWrapperArgs[@]}
-    runHook postFixup
+  preFixup = ''
+    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
 
   meta = with lib; {

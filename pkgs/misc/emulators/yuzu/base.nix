@@ -1,7 +1,7 @@
 { pname, version, src, branchName
-, stdenv, lib, fetchFromGitHub, wrapQtAppsHook
+, stdenv, lib, wrapQtAppsHook
 , cmake, pkg-config
-, libpulseaudio, libjack2, alsaLib, sndio, ecasound
+, libpulseaudio, libjack2, alsa-lib, sndio
 , vulkan-loader, vulkan-headers
 , qtbase, qtwebengine, qttools
 , nlohmann_json, rapidjson
@@ -9,7 +9,7 @@
 , glslang
 , boost173
 , catch2
-, fmt
+, fmt_8
 , SDL2
 , udev
 , libusb1
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
   buildInputs = [
-    libpulseaudio libjack2 alsaLib sndio ecasound
+    libpulseaudio libjack2 alsa-lib sndio
     vulkan-loader vulkan-headers
     qtbase qtwebengine qttools
     nlohmann_json rapidjson
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     glslang
     boost173
     catch2
-    fmt
+    fmt_8
     SDL2
     udev
     libusb1
@@ -37,14 +37,27 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
+    "-DYUZU_USE_BUNDLED_QT=OFF"
+    "-DYUZU_USE_BUNDLED_SDL2=OFF"
+    "-DYUZU_USE_BUNDLED_FFMPEG=OFF"
     "-DENABLE_QT_TRANSLATION=ON"
     "-DYUZU_USE_QT_WEB_ENGINE=ON"
     "-DUSE_DISCORD_PRESENCE=ON"
   ];
 
-  # Trick the configure system. This prevents a check for submodule directories.
+  # This changes `ir/opt` to `ir/var/empty` in `externals/dynarmic/src/dynarmic/CMakeLists.txt`
+  # making the build fail, as that path does not exist
+  dontFixCmake = true;
+
   preConfigure = ''
+    # Trick the configure system. This prevents a check for submodule directories.
     rm -f .gitmodules
+
+    # see https://github.com/NixOS/nixpkgs/issues/114044, setting this through cmakeFlags does not work.
+    cmakeFlagsArray+=(
+      "-DTITLE_BAR_FORMAT_IDLE=yuzu ${branchName} ${version}"
+      "-DTITLE_BAR_FORMAT_RUNNING=yuzu ${branchName} ${version} | {3}"
+    )
   '';
 
   # Fix vulkan detection
@@ -68,5 +81,6 @@ stdenv.mkDerivation rec {
     ];
     maintainers = with maintainers; [ ivar joshuafern ];
     platforms = platforms.linux;
+    broken = stdenv.isAarch64; # Currently aarch64 is not supported.
   };
 }

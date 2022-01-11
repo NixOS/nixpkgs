@@ -7,7 +7,7 @@ in symlinkJoin {
 
   paths = [ puredata ] ++ plugins;
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   postBuild = ''
     wrapProgram $out/bin/pd \

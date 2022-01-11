@@ -1,29 +1,32 @@
-{ lib, stdenv, fetchurl, fetchsvn, makeWrapper, unzip, jre, libXxf86vm }:
+{ lib, stdenv, fetchurl, fetchsvn, makeWrapper, unzip, jre, libXxf86vm
+, extraJavaOpts ? "-Djosm.restart=true -Djava.net.useSystemProxies=true"
+}:
 let
   pname = "josm";
-  version = "17428";
+  version = "18360";
   srcs = {
     jar = fetchurl {
       url = "https://josm.openstreetmap.de/download/josm-snapshot-${version}.jar";
-      sha256 = "0fhnq0836jp72br808hhw1ki70zc9wqcwfhnizb8pzjvs4wgx36w";
+      sha256 = "sha256-1OMEPMtUGkxQCgpmyVP1h25gSDa2MKF7l1rodr61O5s=";
     };
     macosx = fetchurl {
-      url = "https://josm.openstreetmap.de/download/macosx/josm-macosx-${version}.zip";
-      sha256 = "126yy6y7mkpqzkrkqkzzn3mwnl1yjkmd5k895k7mmk2inmcsvqgm";
+      url = "https://josm.openstreetmap.de/download/macosx/josm-macos-${version}-java17.zip";
+      sha256 = "sha256-ZCybgaLwPfQVG2gJ+dtElIY7bGZUe9R8a/0B6QK8yK8=";
     };
     pkg = fetchsvn {
       url = "https://josm.openstreetmap.de/svn/trunk/native/linux/tested";
       rev = version;
-      sha256 = "198kq490y5wzxz0a5prb9anykq6dzg0imxfkchsas233inbzggql";
+      sha256 = "sha256-GbIWZTJmmUT8r9L63/6mcnRt7dvavqGAVbozxlbF89g=";
     };
   };
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   inherit pname version;
 
   dontUnpack = true;
 
-  buildInputs = lib.optionals (!stdenv.isDarwin) [ jre makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = lib.optionals (!stdenv.isDarwin) [ jre ];
 
   installPhase =
     if stdenv.isDarwin then ''
@@ -35,8 +38,7 @@ stdenv.mkDerivation {
 
       # Add libXxf86vm to path because it is needed by at least Kendzi3D plugin
       makeWrapper ${jre}/bin/java $out/bin/josm \
-        --add-flags "-Djosm.restart=true -Djava.net.useSystemProxies=true" \
-        --add-flags "-jar $out/share/josm/josm.jar" \
+        --add-flags "${extraJavaOpts} -jar $out/share/josm/josm.jar" \
         --prefix LD_LIBRARY_PATH ":" '${libXxf86vm}/lib'
     '';
 

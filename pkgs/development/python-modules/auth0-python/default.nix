@@ -1,22 +1,24 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, requests
 , mock
+, pyjwt
 , pytestCheckHook
+, requests
 }:
 
 buildPythonPackage rec {
   pname = "auth0-python";
-  version = "3.14.0";
+  version = "3.19.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ac7808d00676c5e7ffa9eaa228807ca1f8db7a0f4dc115337c80fb6d7eb2b50a";
+    sha256 = "ed33557f252cf8b022b788ebd2b851c681979f200171498acde2b92d760db026";
   };
 
   propagatedBuildInputs = [
     requests
+    pyjwt
   ];
 
   checkInputs = [
@@ -24,20 +26,19 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    # jwt package is not available in nixpkgs
-    "--ignore=auth0/v3/test/authentication/test_token_verifier.py"
+  disabledTests = [
+    # tries to ping websites (e.g. google.com)
+    "can_timeout"
+    "test_options_are_created_by_default"
+    "test_options_are_used_and_override"
   ];
 
-  # tries to ping websites (e.g. google.com)
-  disabledTests = [
-    "can_timeout"
-  ];
+  pythonImportsCheck = [ "auth0" ];
 
   meta = with lib; {
     description = "Auth0 Python SDK";
     homepage = "https://github.com/auth0/auth0-python";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }

@@ -1,8 +1,7 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , nix-update-script
-, fetchpatch
-, pantheon
 , pkg-config
 , meson
 , ninja
@@ -12,6 +11,7 @@
 , gtk3
 , libxml2
 , granite
+, libhandy
 , libnotify
 , vte
 , libgee
@@ -23,21 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-terminal";
-  version = "5.5.2";
-
-  repoName = "terminal";
+  version = "6.0.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "terminal";
     rev = version;
-    sha256 = "sha256-giVmL0zYEVYJ40ZBQ9dDb4hOx4HaYRt7tUTOu37lMYU=";
-  };
-
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    sha256 = "sha256-4q7YQ4LxuiM/TRae1cc3ncmw7QwE1soC2Sh+GZ+Gpq0=";
   };
 
   nativeBuildInputs = [
@@ -57,6 +49,7 @@ stdenv.mkDerivation rec {
     granite
     gtk3
     libgee
+    libhandy
     libnotify
     pcre2
     vte
@@ -70,6 +63,12 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
+
   meta = with lib; {
     description = "Terminal emulator designed for elementary OS";
     longDescription = ''
@@ -79,6 +78,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/elementary/terminal";
     license = licenses.lgpl3;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
+    mainProgram = "io.elementary.terminal";
   };
 }

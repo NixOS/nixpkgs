@@ -2,25 +2,25 @@
 
 buildGoModule rec {
   pname = "lf";
-  version = "20";
+  version = "26";
 
   src = fetchFromGitHub {
     owner = "gokcehan";
     repo = "lf";
     rev = "r${version}";
-    sha256 = "056g2g503ppbqqbq5nk90sl8ki1q4fixdc25a6wv15gm1inxrb4b";
+    sha256 = "0a2kybaajpmhlq708fsdyyab388lkmz17gfn0qcv352i2d4lli0s";
   };
 
-  vendorSha256 = "12njqs39ympi2mqal1cdn0smp80yzcs8xmca1iih8pbmxv51r2gg";
+  vendorSha256 = "sha256-ujQh4aE++K/fn3PJqkAbTtwRyJPSI9TJQ1DvwLF9etU=";
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildFlagsArray = [ "-ldflags=-s -w -X main.gVersion=r${version}" ];
+  ldflags = [ "-s" "-w" "-X main.gVersion=r${version}" ];
 
   postInstall = ''
     install -D --mode=444 lf.desktop $out/share/applications/lf.desktop
     installManPage lf.1
-    installShellCompletion etc/lf.{zsh,fish}
+    installShellCompletion etc/lf.{bash,zsh,fish}
   '';
 
   meta = with lib; {
@@ -35,6 +35,6 @@ buildGoModule rec {
     changelog = "https://github.com/gokcehan/lf/releases/tag/r${version}";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

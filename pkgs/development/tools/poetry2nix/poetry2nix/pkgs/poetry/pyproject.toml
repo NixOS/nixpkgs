@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "poetry"
-version = "1.1.4"
+version = "1.1.12"
 description = "Python dependency management and packaging made easy."
 authors = [
     "Sébastien Eustace <sebastien@eustace.io>"
@@ -24,14 +24,17 @@ classifiers = [
 [tool.poetry.dependencies]
 python = "~2.7 || ^3.5"
 
-poetry-core = "^1.0.0"
+poetry-core = "~1.0.7"
 cleo = "^0.8.1"
 clikit = "^0.6.2"
 crashtest = { version = "^0.3.0", python = "^3.6" }
 requests = "^2.18"
 cachy = "^0.3.0"
 requests-toolbelt = "^0.9.1"
-cachecontrol = { version = "^0.12.4", extras = ["filecache"] }
+cachecontrol = [
+    { version = "^0.12.4", extras = ["filecache"], python = "<3.6" },
+    { version = "^0.12.9", extras = ["filecache"], python = "^3.6" }
+]
 pkginfo = "^1.4"
 html5lib = "^1.0"
 shellingham = "^1.1"
@@ -71,6 +74,10 @@ pre-commit = { version = "^2.6", python = "^3.6.1" }
 tox = "^3.0"
 pytest-sugar = "^0.9.2"
 httpretty = "^0.9.6"
+# We need to restrict the version of urllib3 to avoid
+# httpretty breaking. This is fixed in httpretty >= 1.0.3
+# but it's not compatible with Python 2.7 and 3.5.
+urllib3 = "~1.25.10"
 
 [tool.poetry.scripts]
 poetry = "poetry.console:main"

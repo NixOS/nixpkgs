@@ -12,8 +12,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1zv87nqhrzsxx0m891df4vagzssj3kblfv9yp7j96dw0vn9950qa";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ cmake pkg-config makeWrapper ];
   propagatedBuildInputs = with qt5; [
      qt5.qtbase
      qtdeclarative
@@ -23,7 +22,9 @@ rustPlatform.buildRustPackage rec {
      git
   ];
 
-  cargoSha256 = "1hdsn011y9invfy7can8c02zwa7birj9y1rxhrj7wyv4gh3659i0";
+  dontWrapQtApps = true;
+
+  cargoSha256 = "0vhcb3kw1zgchx3nrk8lyrz8p5071y99vsysxvi71klv7dcvn0am";
   doCheck = false;
 
   postInstall = ''

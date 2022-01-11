@@ -1,25 +1,52 @@
-{ lib, stdenv, fetchFromGitHub , cmake, libjack2, libsndfile, pkg-config }:
+{ lib, stdenv, fetchFromGitHub, libjack2, libsndfile, xorg, freetype
+, libxkbcommon, cairo, glib, gnome, flac, libogg, libvorbis, libopus, cmake
+, pango, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "sfizz";
-  version = "0.4.0";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "sfztools";
     repo = pname;
     rev = version;
-    sha256 = "0zpmvmh7n0064rxfqxb7z9rnz493k7yq7nl0vxppqnasg97jn5f3";
+    sha256 = "1gzpbns89j6ggzfjjvyhgigynsv20synrs7lmc32hwp4g73l0j7n";
     fetchSubmodules = true;
   };
 
+  buildInputs = [
+    libjack2
+    libsndfile
+    flac
+    libogg
+    libvorbis
+    libopus
+    xorg.libX11
+    xorg.libxcb
+    xorg.libXau
+    xorg.libXdmcp
+    xorg.xcbutil
+    xorg.xcbutilcursor
+    xorg.xcbutilrenderutil
+    xorg.xcbutilkeysyms
+    xorg.xcbutilimage
+    libxkbcommon
+    cairo
+    glib
+    gnome.zenity
+    freetype
+    pango
+  ];
   nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [ libjack2 libsndfile ];
+  postPatch = ''
+    substituteInPlace plugins/editor/external/vstgui4/vstgui/lib/platform/linux/x11fileselector.cpp \
+      --replace 'zenitypath = "zenity"' 'zenitypath = "${gnome.zenity}/bin/zenity"'
+    substituteInPlace plugins/editor/src/editor/NativeHelpers.cpp \
+      --replace '/usr/bin/zenity' '${gnome.zenity}/bin/zenity'
+  '';
 
-  cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
-    "-DSFIZZ_TESTS=ON"
-  ];
+  cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" "-DSFIZZ_TESTS=ON" ];
 
   meta = with lib; {
     homepage = "https://github.com/sfztools/sfizz";

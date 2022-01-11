@@ -1,38 +1,44 @@
-{ rustPlatform, stdenv, lib, fetchFromGitHub, fetchurl
-, pkg-config, openssl
-, CoreFoundation, libiconv, Security
+{ lib
+, rustPlatform
+, fetchCrate
+, pkg-config
+, curl
+, openssl
+, stdenv
+, CoreFoundation
+, libiconv
+, Security
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-c";
-  version = "0.7.2";
+  version = "0.9.2";
 
-  src = stdenv.mkDerivation rec {
-    name = "${pname}-source-${version}";
-
-    src = fetchFromGitHub {
-      owner = "lu-zero";
-      repo = pname;
-      rev = "v${version}";
-      sha256 = "1rgwj3kf31n4rz0b7jw67wsgyapdycfic7plm5gm4n9rlslp5ax5";
-    };
-    cargoLock = fetchurl {
-      url = "https://github.com/lu-zero/${pname}/releases/download/v${version}/Cargo.lock";
-      sha256 = "0jnawnkf4m7cqcq9iahnxa53l61a5riax400n96vxrqf3fa752c6";
-    };
-
-    installPhase = ''
-      mkdir -p $out
-      cp -R ./* $out/
-      cp ${cargoLock} $out/Cargo.lock
-    '';
+  src = fetchCrate {
+    inherit pname;
+    # this version may need to be updated along with package version
+    version = "${version}+cargo-0.55";
+    sha256 = "sha256-yh5vAtKlBvoSlJBsW2RSduSK6T8aOssM84WQMNjLZqA=";
   };
 
-  cargoSha256 = "0svmhq64aqw1vidq8jmw7w4xhhnyp04vcs9yzhjyz25c4cn9grsf";
+  cargoSha256 = "sha256-YikTjAeroaHyNe3ygUWRHSXJwdm2BSBV7RgIDN4suZ4=";
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl ]
-  ++ lib.optionals stdenv.isDarwin [ CoreFoundation libiconv Security ];
+  nativeBuildInputs = [ pkg-config (lib.getDev curl) ];
+  buildInputs = [ openssl curl ] ++ lib.optionals stdenv.isDarwin [
+    CoreFoundation
+    libiconv
+    Security
+  ];
+
+  # Ensure that we are avoiding build of the curl vendored in curl-sys
+  doInstallCheck = stdenv.hostPlatform.libc == "glibc";
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    ldd "$out/bin/cargo-cbuild" | grep libcurl.so
+
+    runHook postInstallCheck
+  '';
 
   meta = with lib; {
     description = "A cargo subcommand to build and install C-ABI compatibile dynamic and static libraries";
@@ -44,7 +50,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/lu-zero/cargo-c";
     changelog = "https://github.com/lu-zero/cargo-c/releases/tag/v${version}";
     license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [ ];
   };
 }

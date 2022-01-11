@@ -3,24 +3,23 @@
 
 stdenv.mkDerivation rec {
   pname = "leiningen";
-  version = "2.9.5";
+  version = "2.9.7";
 
   src = fetchurl {
     url = "https://raw.github.com/technomancy/leiningen/${version}/bin/lein-pkg";
-    sha256 = "12kv3286a2vkm3qpm2msiks87mkspxddgl7bwiacdias9dfda09n";
+    sha256 = "sha256-948g0ZMfAoJw53vA8MAKWg76Tst6VnYwSjSuT0aeKB0=";
   };
 
   jarsrc = fetchurl {
-    # NOTE: This is actually a .jar, Github has issues
-    url = "https://github.com/technomancy/leiningen/releases/download/${version}/${pname}-${version}-standalone.zip";
-    sha256 = "1shyvg1471sc3bv4h3ax51626xw8a8w05f43bny6gmp8pyc0qjfz";
+    url = "https://github.com/technomancy/leiningen/releases/download/${version}/${pname}-${version}-standalone.jar";
+    sha256 = "sha256-gvAUFKzs3bsOvW1XFQW7Zxpv0JMja82sJGjP5fLqqAI=";
   };
 
   JARNAME = "${pname}-${version}-standalone.jar";
 
   dontUnpack = true;
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
   propagatedBuildInputs = [ jdk ];
 
   # the jar is not in share/java, because it's a standalone jar and should
@@ -49,5 +48,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.epl10;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ thiagokokada ];
+    mainProgram = "lein";
   };
 }

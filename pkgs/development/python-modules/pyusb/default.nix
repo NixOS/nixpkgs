@@ -1,16 +1,16 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage, libusb1, setuptools_scm }:
+{ lib, stdenv, fetchPypi, buildPythonPackage, libusb1, setuptools-scm }:
 
 buildPythonPackage rec {
   pname = "pyusb";
-  version = "1.1.0";
+  version = "1.2.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d69ed64bff0e2102da11b3f49567256867853b861178689671a163d30865c298";
+    sha256 = "a4cc7404a203144754164b8b40994e2849fde1cfff06b08492f12fff9d9de7b9";
   };
 
   nativeBuildInputs = [
-    setuptools_scm
+    setuptools-scm
   ];
 
   # Fix the USB backend library lookup

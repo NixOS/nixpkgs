@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "asyncio-throttle";
-  version = "1.0.1";
+  version = "1.0.2";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "hallazzang";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0raqnrnp42cn1c7whbm7ajbgaczx33k6hbxsj30nh998pqxhh4sj";
+    sha256 = "1hsjcymdcm0hf4l68scf9n8j7ba89azgh96xhxrnyvwxfs5acnmv";
   };
 
   checkInputs = [

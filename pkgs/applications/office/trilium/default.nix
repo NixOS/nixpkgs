@@ -1,4 +1,4 @@
-{ lib, stdenv, nixosTests, fetchurl, autoPatchelfHook, atomEnv, makeWrapper, makeDesktopItem, gtk3, wrapGAppsHook, zlib, libxkbfile }:
+{ lib, stdenv, nixosTests, fetchurl, autoPatchelfHook, atomEnv, makeWrapper, makeDesktopItem, gtk3, libxshmfence, wrapGAppsHook }:
 
 let
   description = "Trilium Notes is a hierarchical note taking application with focus on building large personal knowledge bases";
@@ -14,21 +14,21 @@ let
   meta = with lib; {
     inherit description;
     homepage = "https://github.com/zadam/trilium";
-    license = licenses.agpl3;
+    license = licenses.agpl3Plus;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ emmanuelrosa dtzWill ];
+    maintainers = with maintainers; [ fliegendewurst ];
   };
 
-  version = "0.43.4";
+  version = "0.48.8";
 
   desktopSource = {
     url = "https://github.com/zadam/trilium/releases/download/v${version}/trilium-linux-x64-${version}.tar.xz";
-    sha256 = "0kjysam5alsmnj93fcqq1ivawnra42gn7dch99rrfmvbkxp7hhr8";
+    sha256 = "1dz4wdx3d1pmm3yrvipqa929f6gqilhfc3sp6xcgbn9faypp6qra";
   };
 
   serverSource = {
     url = "https://github.com/zadam/trilium/releases/download/v${version}/trilium-linux-x64-server-${version}.tar.xz";
-    sha256 = "128mvmp15mjpb5ipkmr0yn7ahby26shbix3f8q094f4zpxjp83zx";
+    sha256 = "0jp1hj51x5wz27f7739nwwli119pzpskg269cxk4i04xxbhr145j";
   };
 
 in {
@@ -40,33 +40,26 @@ in {
 
     src = fetchurl desktopSource;
 
-    # Fetch from source repo, no longer included in release.
-    # (they did special-case icon.png but we want the scalable svg)
-    # Use the version here to ensure we get any changes.
-    trilium_svg = fetchurl {
-      url = "https://raw.githubusercontent.com/zadam/trilium/v${version}/images/trilium.svg";
-      sha256 = "1rgj7pza20yndfp8n12k93jyprym02hqah36fkk2b3if3kcmwnfg";
-    };
-
-
     nativeBuildInputs = [
       autoPatchelfHook
       makeWrapper
       wrapGAppsHook
     ];
 
-    buildInputs = atomEnv.packages ++ [ gtk3 ];
+    buildInputs = atomEnv.packages ++ [ gtk3 libxshmfence ];
 
     installPhase = ''
+      runHook preInstall
       mkdir -p $out/bin
       mkdir -p $out/share/trilium
-      mkdir -p $out/share/{applications,icons/hicolor/scalable/apps}
+      mkdir -p $out/share/{applications,icons/hicolor/128x128/apps}
 
       cp -r ./* $out/share/trilium
       ln -s $out/share/trilium/trilium $out/bin/trilium
 
-      ln -s ${trilium_svg} $out/share/icons/hicolor/scalable/apps/trilium.svg
+      ln -s $out/share/trilium/icon.png $out/share/icons/hicolor/128x128/apps/trilium.png
       cp ${desktopItem}/share/applications/* $out/share/applications
+      runHook postInstall
     '';
 
     # LD_LIBRARY_PATH "shouldn't" be needed, remove when possible :)
@@ -91,16 +84,20 @@ in {
 
     buildInputs = [
       stdenv.cc.cc.lib
-      zlib
-      libxkbfile
     ];
 
-    patches = [ ./0001-Use-console-logger-instead-of-rolling-files.patch ] ;
+    patches = [
+      # patch logger to use console instead of rolling files
+      ./0001-Use-console-logger-instead-of-rolling-files.patch
+    ];
+
     installPhase = ''
+      runHook preInstall
       mkdir -p $out/bin
       mkdir -p $out/share/trilium-server
 
       cp -r ./* $out/share/trilium-server
+      runHook postInstall
     '';
 
     postFixup = ''

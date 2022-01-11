@@ -10,6 +10,7 @@
 , gtk3
 , glib
 , libnotify
+, libpst
 , gspell
 , evolution-data-server
 , libgdata
@@ -23,7 +24,7 @@
 , db
 , gcr
 , sqlite
-, gnome3
+, gnome
 , librsvg
 , gdk-pixbuf
 , libsecret
@@ -41,11 +42,11 @@
 
 stdenv.mkDerivation rec {
   pname = "evolution";
-  version = "3.38.3";
+  version = "3.42.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/evolution/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1kfshljvkpbh965rjlyy1qjjm0ic3rdxisyy9c5jjvv2qlk65b3z";
+    sha256 = "C+QT8W3WjsjUNCpPJpVlryp0oZpb+hxcv2Y1I6W1ujg=";
   };
 
   nativeBuildInputs = [
@@ -59,7 +60,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
     bogofilter
     db
     evolution-data-server
@@ -67,7 +68,7 @@ stdenv.mkDerivation rec {
     gdk-pixbuf
     glib
     glib-networking
-    gnome3.gnome-desktop
+    gnome.gnome-desktop
     gsettings-desktop-schemas
     gst_all_1.gst-plugins-base
     gst_all_1.gstreamer
@@ -80,6 +81,7 @@ stdenv.mkDerivation rec {
     libgweather
     libical
     libnotify
+    libpst
     librsvg
     libsecret
     nspr
@@ -99,7 +101,6 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DENABLE_AUTOAR=OFF"
     "-DENABLE_LIBCRYPTUI=OFF"
-    "-DENABLE_PST_IMPORT=OFF"
     "-DENABLE_YTNEF=OFF"
     "-DWITH_SPAMASSASSIN=${spamassassin}/bin/spamassassin"
     "-DWITH_SA_LEARN=${spamassassin}/bin/sa-learn"
@@ -113,13 +114,10 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  patches = [
-    ./moduledir_from_env.patch
-  ];
-
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = "evolution";
+      versionPolicy = "odd-unstable";
     };
   };
 

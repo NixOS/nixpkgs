@@ -1,6 +1,7 @@
---- SConstruct.orig	2020-12-03 12:39:40.759793977 -0600
-+++ gpsd-3.21/SConstruct	2020-12-03 12:44:30.858761753 -0600
-@@ -516,9 +516,11 @@
+diff -Naur gpsd-3.22.orig/SConscript gpsd-3.22/SConscript
+--- gpsd-3.22.orig/SConscript	2021-01-09 05:35:30.000000000 +0300
++++ gpsd-3.22/SConscript	2021-02-25 21:06:47.921044438 +0300
+@@ -518,9 +518,11 @@
      'CWRAPPERS_CONFIG_DIR',      # pkgsrc
      # Variables used in testing
      'WRITE_PAD',       # So we can test WRITE_PAD values on the fly.

@@ -12,34 +12,40 @@
 , qtkeychain
 , qttools
 , qtwebengine
+, qtwebsockets
 , qtquickcontrols2
 , qtgraphicaleffects
 , sqlite
+, inkscape
 }:
 
 mkDerivation rec {
   pname = "nextcloud-client";
-  version = "3.0.3";
+  version = "3.4.1";
 
   src = fetchFromGitHub {
     owner = "nextcloud";
     repo = "desktop";
     rev = "v${version}";
-    sha256 = "0idh8i71jivdjjs2y62l22yl3qxwgcr0hf53dad587bzgkkkr223";
+    sha256 = "sha256-1fUk4PUFkWcLOvrYvM+K+ZarUSeq/JtDU2bHHPoAoC8=";
   };
 
   patches = [
+    # Explicitly move dbus configuration files to the store path rather than `/etc/dbus-1/services`.
     ./0001-Explicitly-copy-dbus-files-into-the-store-dir.patch
+    ./0001-When-creating-the-autostart-entry-do-not-use-an-abso.patch
   ];
 
   nativeBuildInputs = [
     pkg-config
     cmake
+    inkscape
   ];
 
   buildInputs = [
     inotify-tools
     libcloudproviders
+    libsecret
     openssl
     pcre
     qtbase
@@ -48,11 +54,14 @@ mkDerivation rec {
     qtwebengine
     qtquickcontrols2
     qtgraphicaleffects
+    qtwebsockets
     sqlite
   ];
 
   qtWrapperArgs = [
     "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libsecret ]}"
+    # See also: https://bugreports.qt.io/browse/QTBUG-85967
+    "--set QML_DISABLE_DISK_CACHE 1"
   ];
 
   cmakeFlags = [
@@ -63,8 +72,8 @@ mkDerivation rec {
   meta = with lib; {
     description = "Nextcloud themed desktop client";
     homepage = "https://nextcloud.com";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ caugner ];
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ kranzes ];
     platforms = platforms.linux;
   };
 }

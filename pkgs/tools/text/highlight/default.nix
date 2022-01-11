@@ -1,26 +1,30 @@
 { lib, stdenv, fetchFromGitLab, getopt, lua, boost, pkg-config, swig, perl, gcc }:
 
-with lib;
-
 let
   self = stdenv.mkDerivation rec {
     pname = "highlight";
-    version = "3.60";
+    version = "4.1";
 
     src = fetchFromGitLab {
       owner = "saalen";
       repo = "highlight";
       rev = "v${version}";
-      sha256 = "sha256-1EBdtORd9P5DJUmbZa9KjR3UUoHOKLbjqbxpFi5WFvQ=";
+      sha256 = "sha256-KktwbnL13Tcc2iWAjgqQSMSenUN6nYBEGbFrpB1kkr0=";
     };
 
     enableParallelBuilding = true;
 
-    nativeBuildInputs = [ pkg-config swig perl ] ++ optional stdenv.isDarwin gcc;
+    nativeBuildInputs = [ pkg-config swig perl ]
+      ++ lib.optional stdenv.isDarwin gcc;
 
     buildInputs = [ getopt lua boost ];
 
-    prePatch = lib.optionalString stdenv.cc.isClang ''
+    postPatch = ''
+      substituteInPlace src/makefile \
+        --replace "shell pkg-config" "shell $PKG_CONFIG"
+      substituteInPlace makefile \
+        --replace 'gzip' 'gzip -n'
+    '' + lib.optionalString stdenv.cc.isClang ''
       substituteInPlace src/makefile \
           --replace 'CXX=g++' 'CXX=clang++'
     '';
@@ -31,15 +35,15 @@ let
 
     # This has to happen _before_ the main build because it does a
     # `make clean' for some reason.
-    preBuild = optionalString (!stdenv.isDarwin) ''
+    preBuild = lib.optionalString (!stdenv.isDarwin) ''
       make -C extras/swig $makeFlags perl
     '';
 
-    postCheck = optionalString (!stdenv.isDarwin) ''
+    postCheck = lib.optionalString (!stdenv.isDarwin) ''
       perl -Iextras/swig extras/swig/testmod.pl
     '';
 
-    preInstall = optionalString (!stdenv.isDarwin) ''
+    preInstall = lib.optionalString (!stdenv.isDarwin) ''
       mkdir -p $out/${perl.libPrefix}
       install -m644 extras/swig/highlight.{so,pm} $out/${perl.libPrefix}
       make -C extras/swig clean # Clean up intermediate files.

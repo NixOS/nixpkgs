@@ -1,24 +1,30 @@
-{ buildPythonPackage
+{ lib
+, buildPythonPackage
 , isPyPy
 , fetchPypi
 , pythonOlder
 , curl
 , openssl
 , bottle
-, pytest
+, pytestCheckHook
 , nose
 , flaky
 }:
 
 buildPythonPackage rec {
   pname = "pycurl";
-  version = "7.43.0.6";
+  version = "7.44.1";
   disabled = isPyPy || (pythonOlder "3.5"); # https://github.com/pycurl/pycurl/issues/208
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8301518689daefa53726b59ded6b48f33751c383cf987b0ccfbbc4ed40281325";
+    sha256 = "5bcef4d988b74b99653602101e17d8401338d596b9234d263c728a0c3df003e8";
   };
+
+  preConfigure = ''
+    substituteInPlace setup.py --replace '--static-libs' '--libs'
+    export PYCURL_SSL_LIBRARY=openssl
+  '';
 
   buildInputs = [
     curl
@@ -31,34 +37,48 @@ buildPythonPackage rec {
 
   checkInputs = [
     bottle
-    pytest
+    pytestCheckHook
     nose
     flaky
   ];
 
-  # skip impure or flakey tests
-  # See also:
-  #   * https://github.com/NixOS/nixpkgs/issues/77304
-  checkPhase = ''
-    HOME=$TMPDIR pytest tests -k "not test_ssl_in_static_libs \
-                     and not test_keyfunction \
-                     and not test_keyfunction_bogus_return \
-                     and not test_libcurl_ssl_gnutls \
-                     and not test_libcurl_ssl_nss \
-                     and not test_libcurl_ssl_openssl" \
-                 --ignore=tests/getinfo_test.py \
-                 --ignore=tests/memory_mgmt_test.py \
-                 --ignore=tests/multi_memory_mgmt_test.py \
-                 --ignore=tests/multi_timer_test.py
+  pytestFlagsArray = [
+    # don't pick up the tests directory below examples/
+    "tests"
+  ];
+
+  preCheck = ''
+    export HOME=$TMPDIR
   '';
 
-  preConfigure = ''
-    substituteInPlace setup.py --replace '--static-libs' '--libs'
-    export PYCURL_SSL_LIBRARY=openssl
-  '';
+  disabledTests = [
+    # libcurl stopped passing the reason phrase from the HTTP status line
+    # https://github.com/pycurl/pycurl/issues/679
+    "test_failonerror"
+    "test_failonerror_status_line_invalid_utf8_python3"
+    # bottle>=0.12.17 escapes utf8 properly, so these test don't work anymore
+    # https://github.com/pycurl/pycurl/issues/669
+    "test_getinfo_content_type_invalid_utf8_python3"
+    "test_getinfo_cookie_invalid_utf8_python3"
+    "test_getinfo_raw_content_type_invalid_utf8"
+    "test_getinfo_raw_cookie_invalid_utf8"
+    # tests that require network access
+    "test_keyfunction"
+    "test_keyfunction_bogus_return"
+    # OSError: tests/fake-curl/libcurl/with_openssl.so: cannot open shared object file: No such file or directory
+    "test_libcurl_ssl_openssl"
+    # OSError: tests/fake-curl/libcurl/with_nss.so: cannot open shared object file: No such file or directory
+    "test_libcurl_ssl_nss"
+    # OSError: tests/fake-curl/libcurl/with_gnutls.so: cannot open shared object file: No such file or directory
+    "test_libcurl_ssl_gnutls"
+    # AssertionError: assert 'crypto' in ['curl']
+    "test_ssl_in_static_libs"
+  ];
 
-  meta = {
+  meta = with lib; {
     homepage = "http://pycurl.sourceforge.net/";
     description = "Python wrapper for libcurl";
+    license = licenses.lgpl2Only;
+    maintainers = with maintainers; [];
   };
 }

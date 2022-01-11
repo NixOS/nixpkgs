@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , mkDerivation
 , fetchFromGitHub
 , cmake
@@ -6,19 +7,27 @@
 , pcre
 , qtbase
 , glib
+, perl
 , lxqtUpdateScript
 }:
 
 mkDerivation rec {
   pname = "lxqt-build-tools";
-  version = "0.8.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "1wf6mhcfgk64isy7bk018szlm18xa3hjjnmhpcy2whnnjfq0jal6";
+    sha256 = "1hb04zgpalxv6da3myf1dxsbjix15dczzfq8a24g5dg2zfhwpx21";
   };
+
+  # Nix clang on darwin identifies as 'Clang', not 'AppleClang'
+  # Without this, dependants fail to link.
+  postPatch = ''
+    substituteInPlace cmake/modules/LXQtCompilerSettings.cmake \
+      --replace AppleClang Clang
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -30,6 +39,10 @@ mkDerivation rec {
     qtbase
     glib
     pcre
+  ];
+
+  propagatedBuildInputs = [
+    perl # needed by LXQtTranslateDesktop.cmake
   ];
 
   setupHook = ./setup-hook.sh;

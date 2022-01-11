@@ -4,8 +4,7 @@ with haskellLib;
 
 self: super: {
 
-  # This compiler version needs llvm 9.x.
-  llvmPackages = pkgs.llvmPackages_9;
+  llvmPackages = pkgs.lib.dontRecurseIntoAttrs self.ghc.llvmPackages;
 
   # Disable GHC 8.10.x core libraries.
   array = null;
@@ -42,20 +41,18 @@ self: super: {
   unix = null;
   xhtml = null;
 
-  # The proper 3.2.0.0 release does not compile with ghc-8.10.1, so we take the
-  # hitherto unreleased next version from the '3.2' branch of the upstream git
-  # repository for the time being.
-  cabal-install = assert super.cabal-install.version == "3.2.0.0";
-                  overrideCabal super.cabal-install (drv: {
-    postUnpack = "sourceRoot+=/cabal-install; echo source root reset to $sourceRoot";
-    version = "3.2.0.0-git";
-    editedCabalFile = null;
-    src = pkgs.fetchgit {
-      url = "git://github.com/haskell/cabal.git";
-      rev = "9bd4cc0591616aeae78e17167338371a2542a475";
-      sha256 = "005q1shh7vqgykkp72hhmswmrfpz761x0q0jqfnl3wqim4xd9dg0";
-    };
+  # cabal-install needs more recent versions of Cabal and base16-bytestring.
+  cabal-install = super.cabal-install.overrideScope (self: super: {
+    Cabal = self.Cabal_3_6_2_0;
   });
+
+  # cabal-install-parsers is written for Cabal 3.6
+  cabal-install-parsers = super.cabal-install-parsers.override { Cabal = super.Cabal_3_6_2_0; };
+
+  # older version of cabal-install-parsers for reverse dependencies that use Cabal 3.4
+  cabal-install-parsers_0_4_2 = super.cabal-install-parsers_0_4_2.override {
+    Cabal = self.Cabal_3_4_1_0;
+  };
 
   # Jailbreak to fix the build.
   base-noprelude = doJailbreak super.base-noprelude;
@@ -74,29 +71,22 @@ self: super: {
   shower = doJailbreak super.shower;
 
   # The shipped Setup.hs file is broken.
-  csv = overrideCabal super.csv (drv: { preCompileBuildDriver = "rm Setup.hs"; });
+  csv = overrideCabal (drv: { preCompileBuildDriver = "rm Setup.hs"; }) super.csv;
 
   # Apply patch from https://github.com/finnsson/template-helper/issues/12#issuecomment-611795375 to fix the build.
-  language-haskell-extract = appendPatch (doJailbreak super.language-haskell-extract) (pkgs.fetchpatch {
+  language-haskell-extract = appendPatch (pkgs.fetchpatch {
     name = "language-haskell-extract-0.2.4.patch";
     url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/e48738ee1be774507887a90a0d67ad1319456afc/patches/language-haskell-extract-0.2.4.patch?inline=false";
     sha256 = "0rgzrq0513nlc1vw7nw4km4bcwn4ivxcgi33jly4a7n3c1r32v1f";
-  });
+  }) (doJailbreak super.language-haskell-extract);
 
   # hnix 0.9.0 does not provide an executable for ghc < 8.10, so define completions here for now.
   hnix = generateOptparseApplicativeCompletion "hnix"
-    (overrideCabal super.hnix (drv: {
+    (overrideCabal (drv: {
       # executable is allowed for ghc >= 8.10 and needs repline
       executableHaskellDepends = drv.executableToolDepends or [] ++ [ self.repline ];
-    }));
+    }) super.hnix);
 
-  # Break out of "Cabal < 3.2" constraint.
-  stylish-haskell = doJailbreak super.stylish-haskell;
+  mime-string = disableOptimization super.mime-string;
 
-  # Agda 2.6.1.2 only declares a transformers dependency for ghc < 8.10.3.
-  # https://github.com/agda/agda/issues/5109
-  Agda = appendPatch super.Agda (pkgs.fetchpatch {
-    url = "https://github.com/agda/agda/commit/76278c23d447b49f59fac581ca4ac605792aabbc.patch";
-    sha256 = "1g34g8a09j73h89pk4cdmri0nb0qg664hkff45amcr9kyz14a9f3";
-  });
 }

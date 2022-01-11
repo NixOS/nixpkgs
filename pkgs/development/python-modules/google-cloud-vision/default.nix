@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-vision";
-  version = "2.1.0";
+  version = "2.6.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2bae8b4aca9aa38ad7459102cc5743c506adf9060ad2b3b15cff1e8021085017";
+    sha256 = "54b7f63c746ab95a504bd6b9b1d806192483976a3452a1a59a7faa0eaaa03491";
   };
 
   propagatedBuildInputs = [ libcst google-api-core proto-plus];

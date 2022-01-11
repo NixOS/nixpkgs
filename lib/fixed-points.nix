@@ -72,10 +72,10 @@ rec {
   # into one where changes made in the first are available in the
   # 'super' of the second
   composeExtensions =
-    f: g: self: super:
-      let fApplied = f self super;
-          super' = super // fApplied;
-      in fApplied // g self super';
+    f: g: final: prev:
+      let fApplied = f final prev;
+          prev' = prev // fApplied;
+      in fApplied // g final prev';
 
   # Compose several extending functions of the type expected by 'extends' into
   # one where changes made in preceding functions are made available to
@@ -84,7 +84,7 @@ rec {
   # composeManyExtensions : [packageSet -> packageSet -> packageSet] -> packageSet -> packageSet -> packageSet
   #                          ^final        ^prev         ^overrides     ^final        ^prev         ^overrides
   composeManyExtensions =
-    lib.foldr (x: y: composeExtensions x y) (self: super: {});
+    lib.foldr (x: y: composeExtensions x y) (final: prev: {});
 
   # Create an overridable, recursive attribute set. For example:
   #

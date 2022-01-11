@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "atomicparsley";
-  version = "20210114.184825.1dbe1be";
+  version = "20210715.151551.e7ad03a";
 
   src = fetchFromGitHub {
     owner = "wez";
     repo = pname;
     rev = version;
-    sha256 = "sha256-dyrfr3bsRzEWaAr9K+7SchFVl63cZawyIjmstOI9e5I=";
+    sha256 = "sha256-77yWwfdEul4uLsUNX1dLwj8K0ilcuBaTVKMyXDvKVx4=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -20,6 +20,23 @@ stdenv.mkDerivation rec {
     runHook preInstall
     install -D AtomicParsley $out/bin/AtomicParsley
     runHook postInstall
+  '';
+
+  doCheck = true;
+
+  postPatch = ''
+    patchShebangs tests/test.sh
+  '';
+
+  # copying files so that we dont need to patch the test.sh
+  checkPhase = ''
+    (
+    cp AtomicParsley ../tests
+    cd ../tests
+    mkdir tests
+    mv *.mp4 tests
+    ./test.sh
+    )
   '';
 
   meta = with lib; {

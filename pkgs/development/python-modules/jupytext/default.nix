@@ -1,39 +1,74 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, GitPython
+, jupyter-client
+, jupyter-packaging
+, jupyterlab
 , markdown-it-py
+, mdit-py-plugins
 , nbformat
-, pytest
+, notebook
+, pytestCheckHook
+, pythonOlder
 , pyyaml
 , toml
 }:
 
 buildPythonPackage rec {
   pname = "jupytext";
-  version = "1.7.1";
+  version = "1.13.5";
+  format = "pyproject";
 
-  disabled = isPy27;
+  disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "23123b90c267c67716fe6a022dfae49b84fd3809370d83211f2920eb3106bf40";
+  src = fetchFromGitHub {
+    owner = "mwouts";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "0rapp2baqml1z3n8k7ijf5461b3p8wgr45y3njz54q75v0jk7v45";
   };
+
+  buildInputs = [
+    jupyter-packaging
+    jupyterlab
+  ];
 
   propagatedBuildInputs = [
     markdown-it-py
+    mdit-py-plugins
     nbformat
     pyyaml
     toml
   ];
 
   checkInputs = [
-    pytest
+    GitPython
+    jupyter-client
+    notebook
+    pytestCheckHook
   ];
 
-  # requires test notebooks which are not shipped with the pypi release
-  # also, pypi no longer includes tests
-  doCheck = false;
-  checkPhase = ''
-    pytest
+  postPatch = ''
+    # https://github.com/mwouts/jupytext/pull/885
+    substituteInPlace setup.py \
+      --replace "markdown-it-py~=1.0" "markdown-it-py>=1.0.0,<3.0.0"
   '';
+
+  preCheck = ''
+    # Tests that use a Jupyter notebook require $HOME to be writable
+    export HOME=$(mktemp -d);
+  '';
+
+  pytestFlagsArray = [
+    # Pre-commit tests expect the source directory to be a Git repository
+    "--ignore-glob='tests/test_pre_commit_*.py'"
+  ];
+
+  pythonImportsCheck = [
+    "jupytext"
+    "jupytext.cli"
+  ];
 
   meta = with lib; {
     description = "Jupyter notebooks as Markdown documents, Julia, Python or R scripts";

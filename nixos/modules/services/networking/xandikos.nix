@@ -14,7 +14,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.xandikos;
-        defaultText = "pkgs.xandikos";
+        defaultText = literalExpression "pkgs.xandikos";
         description = "The Xandikos package to use.";
       };
 
@@ -45,7 +45,7 @@ in
       extraOptions = mkOption {
         default = [];
         type = types.listOf types.str;
-        example = literalExample ''
+        example = literalExpression ''
           [ "--autocreate"
             "--defaults"
             "--current-user-principal user"

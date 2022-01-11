@@ -11,19 +11,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "starship";
-  version = "0.50.0";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "starship";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1bnnqrxsmp3z2qksd8h4lfbq4kxxy1cg4yynadz66lxyzabv2v21";
+    sha256 = "sha256-Rr0HCr/uJDsBQiKJIPdEL3WOaLgMY2Nq2JGOq4dEUxQ=";
   };
 
   nativeBuildInputs = [ installShellFiles ] ++ lib.optionals stdenv.isLinux [ pkg-config ];
 
   buildInputs = lib.optionals stdenv.isLinux [ openssl ]
     ++ lib.optionals stdenv.isDarwin [ libiconv Security ];
+
+  buildFeatures = lib.optional (!stdenv.isDarwin) "notify-rust";
 
   postInstall = ''
     for shell in bash fish zsh; do
@@ -32,7 +34,7 @@ rustPlatform.buildRustPackage rec {
     done
   '';
 
-  cargoSha256 = "0plk47i2xrn3x5yr3gw3pq74maqf4krb8d6i4sf8gil4mnpcgxir";
+  cargoSha256 = "sha256-UT6t1GbyON/wrIF/oXXhsT3Z61LFjggSPWKpSDHp+PI=";
 
   preCheck = ''
     HOME=$TMPDIR

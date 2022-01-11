@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "bash_unit";
-  version = "1.7.1";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "pgrange";
     repo = pname;
     rev = "v${version}";
-    sha256 = "02cam5gkhnlwhb9aqcqmkl8kskgikih0bmyx09ybi3gpaf4z82f7";
+    sha256 = "sha256-QWZnzliiqUfg6kXq1VGTNczupxNCgz1gFURrB/K2b4A=";
   };
 
   installPhase = ''
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Bash unit testing enterprise edition framework for professionals";
     maintainers = with maintainers; [ pamplemousse ];
-    platforms = platforms.linux;
+    platforms = platforms.all;
     license = licenses.gpl3Plus;
   };
 }

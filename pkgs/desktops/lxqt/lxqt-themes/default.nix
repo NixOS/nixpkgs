@@ -8,13 +8,13 @@
 
 mkDerivation rec {
   pname = "lxqt-themes";
-  version = "0.16.0";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "12pbba7a2rk0kjn3hl2lvn90di58w0s5psbq51kz39ah3rlp9dzz";
+    sha256 = "1viaqmcq4axwsq5vrr08j95swapbqnwmv064kaijm1jj9csadsvv";
   };
 
   nativeBuildInputs = [

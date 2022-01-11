@@ -1,12 +1,12 @@
-{ lib, stdenv, fetchurl, getopt, util-linux, gperf }:
+{ lib, stdenv, fetchurl, getopt, util-linux, gperf, nix-update-script }:
 
 stdenv.mkDerivation rec {
   pname = "libseccomp";
-  version = "2.5.1";
+  version = "2.5.3";
 
   src = fetchurl {
     url = "https://github.com/seccomp/libseccomp/releases/download/v${version}/libseccomp-${version}.tar.gz";
-    sha256 = "0m8dlg1v7kflcxvajs4p76p275qwsm2abbf5mfapkakp7hw7wc7f";
+    sha256 = "sha256-WQZchzM2RyXpchukjDqZu8Uq+SHa9I30seAS+8exCnY=";
   };
 
   outputs = [ "out" "lib" "dev" "man" "pythonsrc" ];
@@ -31,10 +31,16 @@ stdenv.mkDerivation rec {
     tar -zcf $pythonsrc --mtime="@$SOURCE_DATE_EPOCH" --sort=name --transform s/tmp-pythonsrc/python-foundationdb/ ./tmp-pythonsrc/
   '';
 
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = pname;
+    };
+  };
+
   meta = with lib; {
     description = "High level library for the Linux Kernel seccomp filter";
     homepage = "https://github.com/seccomp/libseccomp";
-    license = licenses.lgpl21;
+    license = licenses.lgpl21Only;
     platforms = platforms.linux;
     badPlatforms = [
       "alpha-linux"

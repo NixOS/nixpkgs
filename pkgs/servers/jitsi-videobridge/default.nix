@@ -2,10 +2,10 @@
 
 let
   pname = "jitsi-videobridge2";
-  version = "2.1-273-g072dd44b";
+  version = "2.1-570-gb802be83";
   src = fetchurl {
     url = "https://download.jitsi.org/stable/${pname}_${version}-1_all.deb";
-    sha256 = "12l84wjn5iqnsg0816icgbx8jfcgyfnqclgyx303w4ncbvymlkv9";
+    sha256 = "0SLaCIjMN2/+Iushyz8OQpRHHBYVqn6+DpwNGbQEzy4=";
   };
 in
 stdenv.mkDerivation {
@@ -15,9 +15,10 @@ stdenv.mkDerivation {
 
   unpackCmd = "${dpkg}/bin/dpkg-deb -x $src debcontents";
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
     substituteInPlace usr/share/jitsi-videobridge/jvb.sh \
       --replace "exec java" "exec ${jre_headless}/bin/java"
 
@@ -30,11 +31,14 @@ stdenv.mkDerivation {
     # work around https://github.com/jitsi/jitsi-videobridge/issues/1547
     wrapProgram $out/bin/jitsi-videobridge \
       --set VIDEOBRIDGE_GC_TYPE G1GC
+    runHook postInstall
   '';
 
   passthru.tests = {
     single-host-smoke-test = nixosTests.jitsi-meet;
   };
+
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     description = "A WebRTC compatible video router";

@@ -1,4 +1,4 @@
-{ stdenv, callPackage, lib, fetchurl, fetchFromGitHub, installShellFiles
+{ stdenv, callPackage, lib, fetchurl, fetchpatch, fetchFromGitHub, installShellFiles
 , runCommand, runCommandCC, makeWrapper, recurseIntoAttrs
 # this package (through the fixpoint glass)
 , bazel_self
@@ -27,12 +27,12 @@
 }:
 
 let
-  version = "4.0.0";
+  version = "4.2.2";
   sourceRoot = ".";
 
   src = fetchurl {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    sha256 = "1lfdx54dpzwrqysg5ngqhq7a0i01xk981crd4pdk4jb5f07ghl6k";
+    sha256 = "mYHQ1To1bE6HlihHdQqXyegFTkYIVHSABsgPDX4rLTM=";
   };
 
   # Update with `eval $(nix-build -A bazel.updater)`,
@@ -40,7 +40,7 @@ let
   srcDeps = lib.attrsets.attrValues srcDepsSet;
   srcDepsSet =
     let
-      srcs = (builtins.fromJSON (builtins.readFile ./src-deps.json));
+      srcs = lib.importJSON ./src-deps.json;
       toFetchurl = d: lib.attrsets.nameValuePair d.name (fetchurl {
         urls = d.urls;
         sha256 = d.sha256;
@@ -52,11 +52,11 @@ let
       srcs.io_bazel_rules_sass
       srcs.platforms
       (if stdenv.hostPlatform.isDarwin
-       then srcs."java_tools_javac11_darwin-v10.5.zip"
-       else srcs."java_tools_javac11_linux-v10.5.zip")
+       then srcs."java_tools_javac11_darwin-v10.6.zip"
+       else srcs."java_tools_javac11_linux-v10.6.zip")
       srcs."coverage_output_generator-v2.5.zip"
       srcs.build_bazel_rules_nodejs
-      srcs."android_tools_pkg-0.19.0rc3.tar.gz"
+      srcs."android_tools_pkg-0.23.0.tar.gz"
       srcs.bazel_toolchains
       srcs.com_github_grpc_grpc
       srcs.upb
@@ -75,7 +75,7 @@ let
     for i in ${builtins.toString srcDeps}; do cp $i $out/$(stripHash $i); done
   '';
 
-  defaultShellPath = lib.makeBinPath
+  defaultShellUtils =
     # Keep this list conservative. For more exotic tools, prefer to use
     # @rules_nixpkgs to pull in tools from the nix repository. Example:
     #
@@ -103,7 +103,27 @@ let
     #        ],
     #     )
     #
-    [ bash coreutils findutils gawk gnugrep gnutar gnused gzip which unzip file zip python27 python3 ];
+    # Some of the scripts explicitly depend on Python 2.7. Otherwise, we
+    # default to using python3. Therefore, both python27 and python3 are
+    # runtime dependencies.
+    [
+      bash
+      coreutils
+      file
+      findutils
+      gawk
+      gnugrep
+      gnused
+      gnutar
+      gzip
+      python27
+      python3
+      unzip
+      which
+      zip
+    ];
+
+  defaultShellPath = lib.makeBinPath defaultShellUtils;
 
   # Java toolchain used for the build and tests
   javaToolchain = "@bazel_tools//tools/jdk:toolchain_${buildJdkName}";
@@ -120,7 +140,7 @@ let
   remote_java_tools = stdenv.mkDerivation {
     name = "remote_java_tools_${system}";
 
-    src = srcDepsSet."java_tools_javac11_${system}-v10.5.zip";
+    src = srcDepsSet."java_tools_javac11_${system}-v10.6.zip";
 
     nativeBuildInputs = [ autoPatchelfHook unzip ];
     buildInputs = [ gcc-unwrapped ];
@@ -128,12 +148,20 @@ let
     sourceRoot = ".";
 
     buildPhase = ''
+      runHook preBuild
+
       mkdir $out;
+
+      runHook postBuild
     '';
 
     installPhase = ''
+      runHook preInstall
+
       cp -Ra * $out/
       touch $out/WORKSPACE
+
+      runHook postInstall
     '';
   };
 
@@ -169,7 +197,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/bazelbuild/bazel/";
     description = "Build tool that builds code quickly and reliably";
     license = licenses.asl20;
-    maintainers = [ maintainers.mboes ];
+    maintainers = lib.teams.bazel.members;
     inherit platforms;
   };
 
@@ -200,6 +228,11 @@ stdenv.mkDerivation rec {
       strictActionEnvPatch = defaultShellPath;
     })
 
+    (substituteAll {
+      src = ./actions_path.patch;
+      actionsPathPatch = defaultShellPath;
+    })
+
     # bazel reads its system bazelrc in /etc
     # override this path to a builtin one
     (substituteAll {
@@ -219,7 +252,7 @@ stdenv.mkDerivation rec {
       runLocal = name: attrs: script:
       let
         attrs' = removeAttrs attrs [ "buildInputs" ];
-        buildInputs = [ python3 ] ++ (attrs.buildInputs or []);
+        buildInputs = [ python3 which ] ++ (attrs.buildInputs or []);
       in
       runCommandCC name ({
         inherit buildInputs;
@@ -315,10 +348,14 @@ stdenv.mkDerivation rec {
   src_for_updater = stdenv.mkDerivation rec {
     name = "updater-sources";
     inherit src;
-    buildInputs = [ unzip ];
+    nativeBuildInputs = [ unzip ];
     inherit sourceRoot;
     installPhase = ''
+      runHook preInstall
+
       cp -r . "$out"
+
+      runHook postInstall
     '';
   };
   # update the list of workspace dependencies
@@ -337,32 +374,6 @@ stdenv.mkDerivation rec {
   # Necessary for the tests to pass on Darwin with sandbox enabled.
   # Bazel starts a local server and needs to bind a local address.
   __darwinAllowLocalNetworking = true;
-
-  # Bazel expects several utils to be available in Bash even without PATH. Hence this hack.
-  customBash = writeCBin "bash" ''
-    #include <stdio.h>
-    #include <stdlib.h>
-    #include <string.h>
-    #include <unistd.h>
-
-    extern char **environ;
-
-    int main(int argc, char *argv[]) {
-      char *path = getenv("PATH");
-      char *pathToAppend = "${defaultShellPath}";
-      char *newPath;
-      if (path != NULL) {
-        int length = strlen(path) + 1 + strlen(pathToAppend) + 1;
-        newPath = malloc(length * sizeof(char));
-        snprintf(newPath, length, "%s:%s", path, pathToAppend);
-      } else {
-        newPath = pathToAppend;
-      }
-      setenv("PATH", newPath, 1);
-      execve("${bash}/bin/bash", argv, environ);
-      return 0;
-    }
-  '';
 
   postPatch = let
 
@@ -388,7 +399,7 @@ stdenv.mkDerivation rec {
 
       # libcxx includes aren't added by libcxx hook
       # https://github.com/NixOS/nixpkgs/pull/41589
-      export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -isystem ${libcxx}/include/c++/v1"
+      export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -isystem ${lib.getDev libcxx}/include/c++/v1"
 
       # don't use system installed Xcode to run clang, use Nix clang instead
       sed -i -E "s;/usr/bin/xcrun (--sdk macosx )?clang;${stdenv.cc}/bin/clang $NIX_CFLAGS_COMPILE $(bazelLinkFlags) -framework CoreFoundation;g" \
@@ -422,22 +433,22 @@ stdenv.mkDerivation rec {
       substituteInPlace tools/objc/j2objc_dead_code_pruner.py --replace "$!/usr/bin/python2.7" "#!${python27}/bin/python"
 
       # md5sum is part of coreutils
-      sed -i 's|/sbin/md5|md5sum|' \
-        src/BUILD
+      sed -i 's|/sbin/md5|md5sum|g' \
+        src/BUILD third_party/ijar/test/testenv.sh tools/objc/libtool.sh
 
       # replace initial value of pythonShebang variable in BazelPythonSemantics.java
       substituteInPlace src/main/java/com/google/devtools/build/lib/bazel/rules/python/BazelPythonSemantics.java \
         --replace '"#!/usr/bin/env " + pythonExecutableName' "\"#!${python3}/bin/python\""
 
       # substituteInPlace is rather slow, so prefilter the files with grep
-      grep -rlZ /bin src/main/java/com/google/devtools | while IFS="" read -r -d "" path; do
+      grep -rlZ /bin/ src/main/java/com/google/devtools | while IFS="" read -r -d "" path; do
         # If you add more replacements here, you must change the grep above!
         # Only files containing /bin are taken into account.
         # We default to python3 where possible. See also `postFixup` where
         # python3 is added to $out/nix-support
         substituteInPlace "$path" \
-          --replace /bin/bash ${customBash}/bin/bash \
-          --replace "/usr/bin/env bash" ${customBash}/bin/bash \
+          --replace /bin/bash ${bash}/bin/bash \
+          --replace "/usr/bin/env bash" ${bash}/bin/bash \
           --replace "/usr/bin/env python" ${python3}/bin/python \
           --replace /usr/bin/env ${coreutils}/bin/env \
           --replace /bin/true ${coreutils}/bin/true
@@ -445,17 +456,17 @@ stdenv.mkDerivation rec {
 
       # bazel test runner include references to /bin/bash
       substituteInPlace tools/build_rules/test_rules.bzl \
-        --replace /bin/bash ${customBash}/bin/bash
+        --replace /bin/bash ${bash}/bin/bash
 
       for i in $(find tools/cpp/ -type f)
       do
         substituteInPlace $i \
-          --replace /bin/bash ${customBash}/bin/bash
+          --replace /bin/bash ${bash}/bin/bash
       done
 
       # Fixup scripts that generate scripts. Not fixed up by patchShebangs below.
       substituteInPlace scripts/bootstrap/compile.sh \
-          --replace /bin/bash ${customBash}/bin/bash
+          --replace /bin/bash ${bash}/bin/bash
 
       # add nix environment vars to .bazelrc
       cat >> .bazelrc <<EOF
@@ -476,6 +487,8 @@ stdenv.mkDerivation rec {
       build --host_javabase='@local_jdk//:jdk'
       build --host_java_toolchain='${javaToolchain}'
       build --verbose_failures
+      build --curses=no
+      build --sandbox_debug
       EOF
 
       # add the same environment vars to compile.sh
@@ -488,6 +501,8 @@ stdenv.mkDerivation rec {
           -e "/\$command \\\\$/a --host_javabase='@local_jdk//:jdk' \\\\" \
           -e "/\$command \\\\$/a --host_java_toolchain='${javaToolchain}' \\\\" \
           -e "/\$command \\\\$/a --verbose_failures \\\\" \
+          -e "/\$command \\\\$/a --curses=no \\\\" \
+          -e "/\$command \\\\$/a --sandbox_debug \\\\" \
           -i scripts/bootstrap/compile.sh
 
       # This is necessary to avoid:
@@ -509,21 +524,19 @@ stdenv.mkDerivation rec {
     in lib.optionalString stdenv.hostPlatform.isDarwin darwinPatches
      + genericPatches;
 
-  buildInputs = [
-    buildJdk
-    python3
-  ];
+  buildInputs = [buildJdk] ++ defaultShellUtils;
 
   # when a command can’t be found in a bazel build, you might also
   # need to add it to `defaultShellPath`.
   nativeBuildInputs = [
+    coreutils
     installShellFiles
-    zip
+    makeWrapper
     python3
     unzip
-    makeWrapper
     which
-    customBash
+    zip
+    python3.pkgs.absl-py   # Needed to build fish completion
   ] ++ lib.optionals (stdenv.isDarwin) [ cctools libcxx CoreFoundation CoreServices Foundation ];
 
   # Bazel makes extensive use of symlinks in the WORKSPACE.
@@ -537,9 +550,9 @@ stdenv.mkDerivation rec {
     shopt -s dotglob extglob
     mv !(bazel_src) bazel_src
   '';
-  # Needed to build fish completion
-  propagatedBuildInputs = [ python3.pkgs.absl-py ];
   buildPhase = ''
+    runHook preBuild
+
     # Increasing memory during compilation might be necessary.
     # export BAZEL_JAVAC_OPTS="-J-Xmx2g -J-Xms200m"
 
@@ -551,7 +564,7 @@ stdenv.mkDerivation rec {
     # Note that .bazelversion is always correct and is based on bazel-*
     # executable name, version checks should work fine
     export EMBED_LABEL="${version}- (@non-git)"
-    ${customBash}/bin/bash ./bazel_src/compile.sh
+    ${bash}/bin/bash ./bazel_src/compile.sh
     ./bazel_src/scripts/generate_bash_completion.sh \
         --bazel=./bazel_src/output/bazel \
         --output=./bazel_src/output/bazel-complete.bash \
@@ -560,9 +573,20 @@ stdenv.mkDerivation rec {
     ${python3}/bin/python3 ./bazel_src/scripts/generate_fish_completion.py \
         --bazel=./bazel_src/output/bazel \
         --output=./bazel_src/output/bazel-complete.fish
+
+    # need to change directory for bazel to find the workspace
+    cd ./bazel_src
+    # build execlog tooling
+    export HOME=$(mktemp -d)
+    ./output/bazel build  src/tools/execlog:parser_deploy.jar
+    cd -
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
 
     # official wrapper scripts that searches for $WORKSPACE_ROOT/tools/bazel
@@ -571,6 +595,14 @@ stdenv.mkDerivation rec {
     # file.
     cp ./bazel_src/scripts/packages/bazel.sh $out/bin/bazel
     mv ./bazel_src/output/bazel $out/bin/bazel-${version}-${system}-${arch}
+
+    mkdir $out/share
+    cp ./bazel_src/bazel-bin/src/tools/execlog/parser_deploy.jar $out/share/parser_deploy.jar
+    cat <<EOF > $out/bin/bazel-execlog
+    #!${runtimeShell} -e
+    ${runJdk}/bin/java -jar $out/share/parser_deploy.jar \$@
+    EOF
+    chmod +x $out/bin/bazel-execlog
 
     # shell completion files
     installShellCompletion --bash \
@@ -584,7 +616,9 @@ stdenv.mkDerivation rec {
       ./bazel_src/output/bazel-complete.fish
   '';
 
-  doInstallCheck = true;
+  # Install check fails on `aarch64-darwin`
+  # https://github.com/NixOS/nixpkgs/issues/145587
+  doInstallCheck = stdenv.hostPlatform.system != "aarch64-darwin";
   installCheckPhase = ''
     export TEST_TMPDIR=$(pwd)
 
@@ -617,19 +651,15 @@ stdenv.mkDerivation rec {
 
     # second call succeeds because it defers to $out/bin/bazel-{version}-{os_arch}
     hello_test
+
+    runHook postInstall
   '';
 
   # Save paths to hardcoded dependencies so Nix can detect them.
+  # This is needed because the templates get tar’d up into a .jar.
   postFixup = ''
     mkdir -p $out/nix-support
-    echo "${customBash} ${defaultShellPath}" >> $out/nix-support/depends
-    # The templates get tar’d up into a .jar,
-    # so nix can’t detect python is needed in the runtime closure
-    # Some of the scripts explicitly depend on Python 2.7. Otherwise, we
-    # default to using python3. Therefore, both python27 and python3 are
-    # runtime dependencies.
-    echo "${python27}" >> $out/nix-support/depends
-    echo "${python3}" >> $out/nix-support/depends
+    echo "${defaultShellPath}" >> $out/nix-support/depends
   '' + lib.optionalString stdenv.isDarwin ''
     echo "${cctools}" >> $out/nix-support/depends
   '';

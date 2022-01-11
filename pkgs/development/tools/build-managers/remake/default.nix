@@ -1,27 +1,40 @@
-{ lib, stdenv, fetchurl, readline }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, readline
+, guileSupport ? false
+, guile
+}:
 
 stdenv.mkDerivation rec {
   pname = "remake";
-  remakeVersion = "4.1";
-  dbgVersion = "1.1";
+  remakeVersion = "4.3";
+  dbgVersion = "1.5";
   version = "${remakeVersion}+dbg-${dbgVersion}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/bashdb/remake/${version}/remake-${remakeVersion}+dbg${dbgVersion}.tar.bz2";
-    sha256 = "1zi16pl7sqn1aa8b7zqm9qnd9vjqyfywqm8s6iap4clf86l7kss2";
+    url = "mirror://sourceforge/project/bashdb/remake/${version}/remake-${remakeVersion}+dbg-${dbgVersion}.tar.gz";
+    sha256 = "0xlx2485y0israv2pfghmv74lxcv9i5y65agy69mif76yc4vfvif";
   };
 
   patches = [
     ./glibc-2.27-glob.patch
   ];
 
-  buildInputs = [ readline ];
+  nativeBuildInputs = [
+    pkg-config
+  ];
+  buildInputs = [ readline ]
+    ++ lib.optionals guileSupport [ guile ];
+
+  # make check fails, see https://github.com/rocky/remake/issues/117
 
   meta = {
     homepage = "http://bashdb.sourceforge.net/remake/";
-    license = lib.licenses.gpl3;
+    license = lib.licenses.gpl3Plus;
     description = "GNU Make with comprehensible tracing and a debugger";
     platforms = with lib.platforms; linux ++ darwin;
-    maintainers = with lib.maintainers; [ bjornfor ];
+    maintainers = with lib.maintainers; [ bjornfor shamilton ];
   };
 }

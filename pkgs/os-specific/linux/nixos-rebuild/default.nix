@@ -3,7 +3,6 @@
 , coreutils
 , gnused
 , gnugrep
-, jq
 , nix
 , lib
 }:
@@ -18,5 +17,6 @@ substituteAll {
   inherit runtimeShell nix;
   nix_x86_64_linux = fallback.x86_64-linux;
   nix_i686_linux = fallback.i686-linux;
-  path = lib.makeBinPath [ coreutils jq gnused gnugrep ];
+  nix_aarch64_linux = fallback.aarch64-linux;
+  path = lib.makeBinPath [ coreutils gnused gnugrep ];
 }

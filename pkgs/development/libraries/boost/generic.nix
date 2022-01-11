@@ -1,8 +1,9 @@
-{ lib, stdenv, icu, expat, zlib, bzip2, python, fixDarwinDylibNames, libiconv
+{ lib, stdenv, icu, expat, zlib, bzip2, python ? null, fixDarwinDylibNames, libiconv
+, boost-build
 , fetchpatch
 , which
-, buildPackages
 , toolset ? /**/ if stdenv.cc.isClang  then "clang"
+            else if stdenv.cc.isGNU    then "gcc"
             else null
 , enableRelease ? true
 , enableDebug ? false
@@ -67,6 +68,8 @@ let
     else
       "$NIX_BUILD_CORES";
 
+  needUserConfig = stdenv.hostPlatform != stdenv.buildPlatform || useMpi || stdenv.isDarwin;
+
   b2Args = concatStringsSep " " ([
     "--includedir=$dev/include"
     "--libdir=$out/lib"
@@ -95,7 +98,7 @@ let
     ++ optional (variant == "release") "debug-symbols=off"
     ++ optional (toolset != null) "toolset=${toolset}"
     ++ optional (!enablePython) "--without-python"
-    ++ optional (useMpi || stdenv.hostPlatform != stdenv.buildPlatform) "--user-config=user-config.jam"
+    ++ optional needUserConfig "--user-config=user-config.jam"
     ++ optionals (stdenv.hostPlatform.libc == "msvcrt") [
     "threadapi=win32"
   ] ++ extraB2Args
@@ -132,22 +135,43 @@ stdenv.mkDerivation {
     license = licenses.boost;
     platforms = platforms.unix ++ platforms.windows;
     badPlatforms = optional (versionOlder version "1.59") "aarch64-linux"
-                 ++ optional ((versionOlder version "1.57") || version == "1.58") "x86_64-darwin";
-    maintainers = with maintainers; [ peti ];
+                 ++ optional ((versionOlder version "1.57") || version == "1.58") "x86_64-darwin"
+                 ++ optionals (versionOlder version "1.73") lib.platforms.riscv;
+    maintainers = with maintainers; [ hjones2199 ];
   };
 
-  preConfigure = ''
-    if test -f tools/build/src/tools/clang-darwin.jam ; then
-        substituteInPlace tools/build/src/tools/clang-darwin.jam \
-          --replace '@rpath/$(<[1]:D=)' "$out/lib/\$(<[1]:D=)";
-    fi;
-  '' + optionalString useMpi ''
+  preConfigure = optionalString useMpi ''
     cat << EOF >> user-config.jam
     using mpi : ${mpi}/bin/mpiCC ;
     EOF
-  '' + optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+  ''
+  # On darwin we need to add the `$out/lib` to the libraries' rpath explicitly,
+  # otherwise the dynamic linker is unable to resolve the reference to @rpath
+  # when the boost libraries want to load each other at runtime.
+  + optionalString (stdenv.isDarwin && enableShared) ''
     cat << EOF >> user-config.jam
-    using gcc : cross : ${stdenv.cc.targetPrefix}c++ ;
+    using clang-darwin : : ${stdenv.cc.targetPrefix}c++
+      : <linkflags>"-rpath $out/lib/"
+      ;
+    EOF
+  ''
+  # b2 has trouble finding the correct compiler and tools for cross compilation
+  # since it apparently ignores $CC, $AR etc. Thus we need to set everything
+  # in user-config.jam. To keep things simple we just set everything in an
+  # uniform way for clang and gcc (which works thanks to our cc-wrapper).
+  # We pass toolset later which will make b2 invoke everything in the right
+  # way -- the other toolset in user-config.jam will be ignored.
+  + optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+    cat << EOF >> user-config.jam
+    using gcc : cross : ${stdenv.cc.targetPrefix}c++
+      : <archiver>$AR
+        <ranlib>$RANLIB
+      ;
+
+    using clang : cross : ${stdenv.cc.targetPrefix}c++
+      : <archiver>$AR
+        <ranlib>$RANLIB
+      ;
     EOF
   '';
 
@@ -156,9 +180,8 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ which ]
+  nativeBuildInputs = [ which boost-build ]
     ++ optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
   buildInputs = [ expat zlib bzip2 libiconv ]
     ++ optional (stdenv.hostPlatform == stdenv.buildPlatform) icu
     ++ optional enablePython python
@@ -166,16 +189,19 @@ stdenv.mkDerivation {
 
   configureScript = "./bootstrap.sh";
   configurePlatforms = [];
+  dontDisableStatic = true;
+  dontAddStaticConfigureFlags = true;
   configureFlags = [
     "--includedir=$(dev)/include"
     "--libdir=$(out)/lib"
+    "--with-bjam=b2" # prevent bootstrapping b2 in configurePhase
   ] ++ optional enablePython "--with-python=${python.interpreter}"
-    ++ [ (if stdenv.hostPlatform == stdenv.buildPlatform then "--with-icu=${icu.dev}" else "--without-icu") ]
-    ++ optional (toolset != null) "--with-toolset=${toolset}";
+    ++ optional (toolset != null) "--with-toolset=${toolset}"
+    ++ [ (if stdenv.hostPlatform == stdenv.buildPlatform then "--with-icu=${icu.dev}" else "--without-icu") ];
 
   buildPhase = ''
     runHook preBuild
-    ./b2 ${b2Args}
+    b2 ${b2Args}
     runHook postBuild
   '';
 
@@ -187,7 +213,7 @@ stdenv.mkDerivation {
     cp -a tools/boostbook/{xsl,dtd} $dev/share/boostbook/
 
     # Let boost install everything else
-    ./b2 ${b2Args} install
+    b2 ${b2Args} install
 
     runHook postInstall
   '';

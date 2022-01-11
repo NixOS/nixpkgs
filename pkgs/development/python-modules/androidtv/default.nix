@@ -7,19 +7,18 @@
 , mock
 , pure-python-adb
 , pytestCheckHook
-, python
 }:
 
 buildPythonPackage rec {
   pname = "androidtv";
-  version = "0.0.57";
+  version = "0.0.60";
 
   # pypi does not contain tests, using github sources instead
   src = fetchFromGitHub {
     owner = "JeffLIrion";
     repo = "python-androidtv";
     rev = "v${version}";
-    sha256 = "sha256-xOLMUf72VHeBzbMnhJGOnUIKkflnY4rV9NS/P1aYLJc=";
+    sha256 = "sha256-GWCiRxZ6pHrcVkOKNGxSK8lUD0RohtED8czXIWUoVaM=";
   };
 
   propagatedBuildInputs = [ adb-shell pure-python-adb ]

@@ -14,6 +14,11 @@ buildDunePackage rec {
     sha256 = "0wmb2zhiyp8n78xgcspcsyd19bhcml3kyli2caw3778wc1gyvfpc";
   };
 
+  # Make tests compatible with alcotest 1.4.0
+  postPatch = ''
+    substituteInPlace test/test_channel.ml --replace 'Fmt.kstrf Alcotest.fail' 'Fmt.kstrf (fun s -> Alcotest.fail s)'
+  '';
+
   propagatedBuildInputs = [ cstruct logs lwt mirage-flow ];
 
   doCheck = true;

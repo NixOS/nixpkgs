@@ -55,7 +55,6 @@ in stdenv.mkDerivation {
     gsettings-desktop-schemas
   ] ++ gst_plugins;
 
-  enableParallelBuilding = true;
   postInstall = ''
     glib-compile-schemas "$out"/share/glib-2.0/schemas
   '';

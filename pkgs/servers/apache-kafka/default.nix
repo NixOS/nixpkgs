@@ -1,21 +1,23 @@
-{ lib, stdenv, fetchurl, jre8, makeWrapper, bash, coreutils, gnugrep, gnused, ps,
+{ lib, stdenv, fetchurl, jdk8_headless, jdk11_headless, makeWrapper, bash, coreutils, gnugrep, gnused, ps,
   majorVersion ? "1.0" }:
 
 let
+  jre8 = jdk8_headless;
+  jre11 = jdk11_headless;
   versionMap = {
-    "2.4" = {
-      kafkaVersion = "2.4.1";
-      scalaVersion = "2.12";
-      sha256 = "0ahsprmpjz026mhbr79187wfdrxcg352iipyfqfrx68q878wnxr1";
-    };
-    "2.5" = {
-      kafkaVersion = "2.5.0";
+    "2.7" = {
+      kafkaVersion = "2.7.1";
       scalaVersion = "2.13";
-      sha256 = "0w3g7ii8x63m2blv2a8c491d0diczpliaqm9f7w5yn98hikh0aqi";
+      sha256 = "1qv6blf99211bc80xnd4k42r9v9c5vilyqkplyhsa6hqymg32gfa";
+      jre = jre11;
+    };
+    "2.8" = {
+      kafkaVersion = "2.8.1";
+      scalaVersion = "2.13";
+      sha256 = "0fgil47hxdnc374k0p9sxv6b163xknp3pkihv3r99p977czb1228";
+      jre = jre11;
     };
   };
-
-  jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
 in
 
 with versionMap.${majorVersion};
@@ -29,7 +31,8 @@ stdenv.mkDerivation rec {
     inherit sha256;
   };
 
-  buildInputs = [ jre makeWrapper bash gnugrep gnused coreutils ps ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ jre bash gnugrep gnused coreutils ps ];
 
   installPhase = ''
     mkdir -p $out
@@ -56,11 +59,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "http://kafka.apache.org";
+    homepage = "https://kafka.apache.org";
     description = "A high-throughput distributed messaging system";
     license = licenses.asl20;
     maintainers = [ maintainers.ragge ];
     platforms = platforms.unix;
   };
-
+  passthru = { inherit jre; };
 }

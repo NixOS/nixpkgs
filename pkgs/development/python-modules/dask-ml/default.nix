@@ -6,28 +6,29 @@
 , numpy, toolz # dask[array]
 , numba
 , pandas
-, scikitlearn
+, scikit-learn
 , scipy
 , dask-glm
 , six
 , multipledispatch
 , packaging
-, pytest
-, xgboost
-, tensorflow
-, joblib
 , distributed
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
-  version = "1.8.0";
+  version = "2021.11.30";
   pname = "dask-ml";
   disabled = pythonOlder "3.6"; # >= 3.6
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8fc4ac3ec1915e382fb8cae9ff1ec9b5ac1bee0b6f4c6975d6e6cb7191a4a815";
+    sha256 = "4f73306b5ee56e9b41b133697062d0028d30b1ece883ac6b56532fea5bd3e94a";
   };
+
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = [
     dask
@@ -38,7 +39,7 @@ buildPythonPackage rec {
     numpy
     packaging
     pandas
-    scikitlearn
+    scikit-learn
     scipy
     six
     toolz

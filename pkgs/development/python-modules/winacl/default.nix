@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "winacl";
-  version = "0.1.0";
+  version = "0.1.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "05xhdhbvzs1hcd8lxmdr9mpr6ifx5flhlvk6jr0qi6h25imhqclp";
+    sha256 = "187b4394ef247806f50e1d8320bdb9e33ad1f759d9e61e2e391b97b9adf5f58a";
   };
 
   # Project doesn't have tests

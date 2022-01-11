@@ -5,10 +5,10 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "jotta-cli";
-  version = "0.9.39536";
+  version = "0.12.51202";
   src = fetchzip {
       url = "https://repo.jotta.us/archives/linux/${arch}/jotta-cli-${version}_linux_${arch}.tar.gz";
-      sha256 = "sha256-JZtc6Si3ZQoRG3q+ctzPPQm7WbMYRailIuq/Y5Avd2s=";
+      sha256 = "sha256-B7Rn/0hFVUsEK2Wo8KbqAnzOwQmMKkAssfmaN3dPAUY=";
       stripRoot = false;
     };
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) $out/bin/jotta-cli
     patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) $out/bin/jottad
-    $out/bin/jotta-cli completion > $out/share/bash-completion/completions/jotta-cli.bash
+    $out/bin/jotta-cli completion bash > $out/share/bash-completion/completions/jotta-cli.bash
   '';
 
   meta = with lib; {

@@ -47,11 +47,13 @@ stdenv.mkDerivation rec {
     })
 
     ./uncompress2.patch
+    ./0001-libpcsxcore-fix-build-with-ffmpeg-4.patch
   ];
 
   nativeBuildInputs = [ autoreconfHook intltool pkg-config wrapGAppsHook ];
   buildInputs = [
     gtk3 SDL2 xorg.libXv xorg.libXtst libcdio nasm ffmpeg file
+    xorg.libXxf86vm
   ];
 
   dynarecTarget =

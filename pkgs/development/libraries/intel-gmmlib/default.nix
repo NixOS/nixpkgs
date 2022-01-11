@@ -1,16 +1,18 @@
-{ lib, stdenv, fetchFromGitHub
+{ lib
+, stdenv
+, fetchFromGitHub
 , cmake
 }:
 
 stdenv.mkDerivation rec {
   pname = "intel-gmmlib";
-  version = "20.4.1";
+  version = "22.0.1";
 
   src = fetchFromGitHub {
-    owner  = "intel";
-    repo   = "gmmlib";
-    rev    = "${pname}-${version}";
-    sha256 = "0qb0wpinfv8lg1pq1pxkl6v0kd8ax86m8zxzm6zjx91alsch1mi6";
+    owner = "intel";
+    repo = "gmmlib";
+    rev = "intel-gmmlib-${version}";
+    sha256 = "1s46vwcs26hdlsa8h51gq4fyi9i8k5hrcx5ffbv9g7v3x706nplf";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -24,7 +26,7 @@ stdenv.mkDerivation rec {
       and buffer management for the Intel(R) Graphics Compute Runtime for
       OpenCL(TM) and the Intel(R) Media Driver for VAAPI.
     '';
-    platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ primeos ];
+    platforms = [ "x86_64-linux" "i686-linux" ];
+    maintainers = with maintainers; [ primeos SuperSandro2000 ];
   };
 }

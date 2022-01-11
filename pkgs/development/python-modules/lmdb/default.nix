@@ -4,21 +4,18 @@
 , pytestCheckHook
 , cffi
 , lmdb
-, ludios_wpull
 }:
 
 buildPythonPackage rec {
   pname = "lmdb";
-  version = "1.0.0";
+  version = "1.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4136ffdf0aad61da86d1402808029d002a771b2a9ccc9b39c6bcafa7847c21b6";
+    sha256 = "60a11efc21aaf009d06518996360eed346f6000bfc9de05114374230879f992e";
   };
 
   buildInputs = [ lmdb ];
-
-  propogatedBuildInputs = [ ludios_wpull ];
 
   checkInputs = [ cffi pytestCheckHook ];
 

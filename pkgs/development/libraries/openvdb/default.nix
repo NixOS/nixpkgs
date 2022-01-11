@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, unzip, openexr, boost, jemalloc, c-blosc, ilmbase, tbb }:
+{ lib, stdenv, fetchFromGitHub, openexr, boost, jemalloc, c-blosc, ilmbase, tbb }:
 
 stdenv.mkDerivation rec
 {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec
 
   outputs = [ "out" ];
 
-  buildInputs = [ unzip openexr boost tbb jemalloc c-blosc ilmbase ];
+  buildInputs = [ openexr boost tbb jemalloc c-blosc ilmbase ];
 
   setSourceRoot = ''
     sourceRoot=$(echo */openvdb)

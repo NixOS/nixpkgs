@@ -1,13 +1,13 @@
-{ mkDerivation, base, containers, fetchgit, hedgehog
-, optparse-applicative, parsec, lib, template-haskell, text
+{ mkDerivation, base, containers, fetchgit, hedgehog, lib
+, optparse-applicative, parsec, template-haskell, text
 }:
 mkDerivation {
   pname = "dconf2nix";
-  version = "0.0.7";
+  version = "0.0.10";
   src = fetchgit {
     url = "https://github.com/gvolpe/dconf2nix.git";
-    sha256 = "04p8di1ckv5fkfa61pjg5xp8vcw091lz1kw39lh4w8ks2zjwaha1";
-    rev = "34c523e920b79208c3b4c0ad371900b0948799f7";
+    sha256 = "0ddjgd97nhcbdkry3668mnjb0kbkklzab7zr12km3p8fv99xzva4";
+    rev = "629faff2deb6a1131c67e241b688000f859dac48";
     fetchSubmodules = true;
   };
   isLibrary = true;

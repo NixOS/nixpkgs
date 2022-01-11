@@ -42,7 +42,7 @@ stdenv.mkDerivation {
 
   setupHook = ./setup-hook.sh;
 
-  phases="installPhase fixupPhase";
+  dontUnpack = true;
 
   ASDF_OUTPUT_TRANSLATIONS="${builtins.storeDir}/:${builtins.storeDir}";
 

@@ -5,17 +5,16 @@ with lib;
 let
   cfg = config.services.getty;
 
-  loginArgs = [
-    "--login-program" "${pkgs.shadow}/bin/login"
+  baseArgs = [
+    "--login-program" "${cfg.loginProgram}"
   ] ++ optionals (cfg.autologinUser != null) [
     "--autologin" cfg.autologinUser
   ] ++ optionals (cfg.loginOptions != null) [
     "--login-options" cfg.loginOptions
-  ];
+  ] ++ cfg.extraArgs;
 
-  gettyCmd = extraArgs:
-    "@${pkgs.util-linux}/sbin/agetty agetty ${escapeShellArgs loginArgs} "
-      + extraArgs;
+  gettyCmd = args:
+    "@${pkgs.util-linux}/sbin/agetty agetty ${escapeShellArgs baseArgs} ${args}";
 
 in
 
@@ -25,6 +24,7 @@ in
 
   imports = [
     (mkRenamedOptionModule [ "services" "mingetty" ] [ "services" "getty" ])
+    (mkRemovedOptionModule [ "services" "getty" "serialSpeed" ] ''set non-standard baudrates with `boot.kernelParams` i.e. boot.kernelParams = ["console=ttyS2,1500000"];'')
   ];
 
   options = {
@@ -37,6 +37,15 @@ in
         description = ''
           Username of the account that will be automatically logged in at the console.
           If unspecified, a login prompt is shown as usual.
+        '';
+      };
+
+      loginProgram = mkOption {
+        type = types.path;
+        default = "${pkgs.shadow}/bin/login";
+        defaultText = literalExpression ''"''${pkgs.shadow}/bin/login"'';
+        description = ''
+          Path to the login binary executed by agetty.
         '';
       };
 
@@ -54,7 +63,16 @@ in
           will not be invoked with a <option>--login-options</option>
           option.
         '';
-        example = "-h darkstar -- \u";
+        example = "-h darkstar -- \\u";
+      };
+
+      extraArgs = mkOption {
+        type = types.listOf types.str;
+        default = [ ];
+        description = ''
+          Additional arguments passed to agetty.
+        '';
+        example = [ "--nohostname" ];
       };
 
       greetingLine = mkOption {
@@ -72,17 +90,6 @@ in
           Help line printed by agetty below the welcome line.
           Used by the installation CD to give some hints on
           how to proceed.
-        '';
-      };
-
-      serialSpeed = mkOption {
-        type = types.listOf types.int;
-        default = [ 115200 57600 38400 9600 ];
-        example = [ 38400 9600 ];
-        description = ''
-            Bitrates to allow for agetty's listening on serial ports. Listing more
-            bitrates gives more interoperability but at the cost of long delays
-            for getting a sync on the line.
         '';
       };
 
@@ -107,10 +114,17 @@ in
       };
 
     systemd.services."serial-getty@" =
-      let speeds = concatStringsSep "," (map toString config.services.getty.serialSpeed); in
       { serviceConfig.ExecStart = [
           "" # override upstream default with an empty ExecStart
-          (gettyCmd "%I ${speeds} $TERM")
+          (gettyCmd "%I --keep-baud $TERM")
+        ];
+        restartIfChanged = false;
+      };
+
+    systemd.services."autovt@" =
+      { serviceConfig.ExecStart = [
+          "" # override upstream default with an empty ExecStart
+          (gettyCmd "--noclear %I $TERM")
         ];
         restartIfChanged = false;
       };

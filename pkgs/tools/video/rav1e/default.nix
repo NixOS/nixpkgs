@@ -1,40 +1,29 @@
-{ stdenv, rustPlatform, fetchurl, fetchFromGitHub, lib, nasm, cargo-c }:
+{ lib, rust, stdenv, rustPlatform, fetchCrate, nasm, cargo-c, libiconv }:
 
-rustPlatform.buildRustPackage rec {
+let
+  rustTargetPlatformSpec = rust.toRustTargetSpec stdenv.hostPlatform;
+in rustPlatform.buildRustPackage rec {
   pname = "rav1e";
-  version = "0.4.0";
+  version = "0.5.0";
 
-  src = stdenv.mkDerivation rec {
-    name = "${pname}-${version}-source";
-
-    src = fetchFromGitHub {
-      owner = "xiph";
-      repo = "rav1e";
-      rev = "v${version}";
-      sha256 = "09w4476x6bdmh9pv4lchrzvfvbjvxxraa9f4dlbwgli89lcg9fcf";
-    };
-
-    cargoLock = fetchurl {
-      url = "https://github.com/xiph/rav1e/releases/download/v${version}/Cargo.lock";
-      sha256 = "0rkyi010z6qmwdpvzlzyrrhs8na929g11lszhbqx5y0gh3y5nyik";
-    };
-
-    installPhase = ''
-      mkdir -p $out
-      cp -r ./* $out/
-      cp ${cargoLock} $out/Cargo.lock
-    '';
+  src = fetchCrate {
+    inherit pname version;
+    sha256 = "sha256-3g2wqQJk26KUfzmneKdTxfNSRI/ioMa5MR6AEeR7eKs=";
   };
 
-  cargoSha256 = "1iza2cws28hd4a3q90mc90l8ql4bsgapdznfr6bl65cjam43i5sg";
+  cargoSha256 = "sha256-sPUAWQj8UDHV7IvYnerASltSPPGVB7f1tThqFYBu6t4=";
+
   nativeBuildInputs = [ nasm cargo-c ];
+  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
+
+  checkType = "debug";
 
   postBuild = ''
-    cargo cbuild --release --frozen --prefix=${placeholder "out"}
+    cargo cbuild --release --frozen --prefix=${placeholder "out"} --target ${rustTargetPlatformSpec}
   '';
 
   postInstall = ''
-    cargo cinstall --release --frozen --prefix=${placeholder "out"}
+    cargo cinstall --release --frozen --prefix=${placeholder "out"} --target ${rustTargetPlatformSpec}
   '';
 
   meta = with lib; {
@@ -48,6 +37,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/xiph/rav1e";
     changelog = "https://github.com/xiph/rav1e/releases/tag/v${version}";
     license = licenses.bsd2;
-    maintainers = [ maintainers.primeos ];
+    maintainers = [ ];
   };
 }

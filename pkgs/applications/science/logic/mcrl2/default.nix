@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ libGLU libGL qt5.qtbase boost ];
 
+  dontWrapQtApps = true;
+
   meta = with lib; {
     description = "A toolset for model-checking concurrent systems and protocols";
     longDescription = ''

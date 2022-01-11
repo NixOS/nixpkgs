@@ -1,20 +1,27 @@
-{ lib, stdenv, fetchurl, htslib, zlib, bzip2, lzma, curl, perl, python, bash }:
+{ lib, stdenv, fetchurl, htslib, zlib, bzip2, xz, curl, perl, python3, bash }:
 
 stdenv.mkDerivation rec {
   pname = "bcftools";
-  version = "1.11";
+  version = "1.14";
 
   src = fetchurl {
     url = "https://github.com/samtools/bcftools/releases/download/${version}/${pname}-${version}.tar.bz2";
-    sha256 = "0r508mp15pqzf8r1269kb4v5naw9zsvbwd3cz8s1yj7carsf9viw";
+    sha256 = "sha256-t++Iron8tVZYxb6i6MuOdWsFXhOGADbWvhN1Z4KqGcs=";
   };
 
-  buildInputs = [ htslib zlib bzip2 lzma curl perl python ];
+  nativeBuildInputs = [
+    perl
+    python3
+  ];
+
+  buildInputs = [ htslib zlib bzip2 xz curl ];
+
+  strictDeps = true;
 
   makeFlags = [
     "HSTDIR=${htslib}"
     "prefix=$(out)"
-    "CC=cc"
+    "CC=${stdenv.cc.targetPrefix}cc"
   ];
 
   preCheck = ''

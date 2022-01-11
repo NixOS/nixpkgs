@@ -1,16 +1,17 @@
 { lib, stdenv, fetchurl, fetchFromGitHub, autoreconfHook, cmake, wrapQtAppsHook, pkg-config, qmake
 , curl, grantlee, libgit2, libusb-compat-0_1, libssh2, libxml2, libxslt, libzip, zlib
 , qtbase, qtconnectivity, qtlocation, qtsvg, qttools, qtwebkit, libXcomposite
+, bluez
 }:
 
 let
-  version = "4.9.6";
+  version = "5.0.2";
 
   subsurfaceSrc = (fetchFromGitHub {
     owner = "Subsurface";
     repo = "subsurface";
     rev = "v${version}";
-    sha256 = "1w1ak0fi6ljhg2jc4mjqyrbpax3iawrnsaqq6ls7qdzrhi37rggf";
+    sha256 = "1yay06m8p9qp2ghrg8dxavdq55y09apcgdnb7rihgs3hq86k539n";
     fetchSubmodules = true;
   });
 
@@ -39,18 +40,20 @@ let
   googlemaps = stdenv.mkDerivation rec {
     pname = "googlemaps";
 
-    version = "2018-06-02";
+    version = "2021-03-19";
 
     src = fetchFromGitHub {
       owner = "vladest";
       repo = "googlemaps";
-      rev = "54a357f9590d9cf011bf1713589f66bad65e00eb";
-      sha256 = "159kslp6rj0qznzxijppwvv8jnswlfgf2pw4x8ladi8vp6bzxnzi";
+      rev = "8f7def10c203fd3faa5ef96c5010a7294dca0759";
+      sha256 = "1irz398g45hk6xizwzd07qcx1ln8f7l6bhjh15f56yc20waqpx1x";
     };
 
     nativeBuildInputs = [ qmake ];
 
     buildInputs = [ qtbase qtlocation libXcomposite ];
+
+    dontWrapQtApps = true;
 
     pluginsSubdir = "lib/qt-${qtbase.qtCompatVersion}/plugins";
 
@@ -60,8 +63,6 @@ let
       mv *.so ${pluginsSubdir}/geoservices
       mv lib $out/
     '';
-
-    enableParallelBuilding = true;
 
     meta = with lib; {
       inherit (src.meta) homepage;
@@ -82,6 +83,7 @@ in stdenv.mkDerivation {
     libdc googlemaps
     curl grantlee libgit2 libssh2 libusb-compat-0_1 libxml2 libxslt libzip
     qtbase qtconnectivity qtsvg qttools qtwebkit
+    bluez
   ];
 
   nativeBuildInputs = [ cmake wrapQtAppsHook pkg-config ];
@@ -103,7 +105,7 @@ in stdenv.mkDerivation {
     '';
     homepage = "https://subsurface-divelog.org";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ mguentner ];
+    maintainers = with maintainers; [ mguentner adisbladis ];
     platforms = platforms.all;
   };
 }

@@ -1,29 +1,38 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
+{ lib
+, buildPythonPackage
 , click
+, fetchPypi
 , ipython
-, pytest
-, sh
-, typing
 , mock
+, pytestCheckHook
+, pythonOlder
+, sh
 }:
 
 buildPythonPackage rec {
   pname = "python-dotenv";
-  version = "0.15.0";
+  version = "0.19.2";
+  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "587825ed60b1711daea4832cf37524dfd404325b7db5e25ebe88c495c9f807a0";
+    sha256 = "a5de49a31e953b45ff2d2fd434bbc2670e8db5273606c1e737cc6b93eff3655f";
   };
 
-  propagatedBuildInputs = [ click ] ++ lib.optionals isPy27 [ typing ];
+  propagatedBuildInputs = [ click ];
 
-  checkInputs = [ ipython mock pytest sh ];
+  checkInputs = [
+    ipython
+    mock
+    pytestCheckHook
+    sh
+  ];
 
-  # cli tests are impure
-  checkPhase = ''
-    pytest tests/ -k 'not cli'
-  '';
+  disabledTests = [
+    "cli"
+  ];
+
+  pythonImportsCheck = [ "dotenv" ];
 
   meta = with lib; {
     description = "Add .env support to your django/flask apps in development and deployments";

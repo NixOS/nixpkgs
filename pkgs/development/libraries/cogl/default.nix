@@ -1,16 +1,14 @@
 { lib, stdenv, fetchurl, fetchpatch, pkg-config, libGL, glib, gdk-pixbuf, xorg, libintl
-, pangoSupport ? true, pango, cairo, gobject-introspection, wayland, gnome3
+, pangoSupport ? true, pango, cairo, gobject-introspection, wayland, gnome
 , mesa, automake, autoconf
 , gstreamerSupport ? true, gst_all_1 }:
 
-let
+stdenv.mkDerivation rec {
   pname = "cogl";
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   version = "1.22.8";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/cogl-${version}.tar.xz";
     sha256 = "0nfph4ai60ncdx7hy6hl1i1cmp761jgnyjfhagzi0iqq36qb41d8";
   };
 
@@ -59,8 +57,9 @@ in stdenv.mkDerivation rec {
   #doCheck = true; # all tests fail (no idea why)
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   };
 

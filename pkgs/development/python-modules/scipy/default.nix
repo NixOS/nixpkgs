@@ -1,25 +1,34 @@
-{lib, fetchPypi, python, buildPythonPackage, gfortran, nose, pytest, numpy, pybind11}:
+{ lib
+, stdenv
+, fetchPypi
+, python
+, buildPythonPackage
+, cython
+, gfortran
+, pythran
+, nose
+, pytest
+, pytest-xdist
+, numpy
+, pybind11
+}:
 
-let
-  pybind = pybind11.overridePythonAttrs(oldAttrs: {
-    cmakeFlags = oldAttrs.cmakeFlags ++ [
-      "-DPYBIND11_TEST=off"
-    ];
-    doCheck = false; # Circular test dependency
-  });
-in buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "scipy";
-  version = "1.6.0";
+  version = "1.7.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0rh5b1rwdcvvagld8vpxnpaibszy1skpx39a0fwzd5gx5pwcjvfb";
+    sha256 = "ab5875facfdef77e0a47d5fd39ea178b58e60e454a4c85aa1e52fcb80db7babf";
   };
 
-  checkInputs = [ nose pytest ];
-  nativeBuildInputs = [ gfortran ];
-  buildInputs = [ numpy.blas pybind ];
+  nativeBuildInputs = [ cython gfortran pythran ];
+
+  buildInputs = [ numpy.blas pybind11 ];
+
   propagatedBuildInputs = [ numpy ];
+
+  checkInputs = [ nose pytest pytest-xdist ];
 
   # Remove tests because of broken wrapper
   prePatch = ''
@@ -37,10 +46,20 @@ in buildPythonPackage rec {
     ln -s ${numpy.cfg} site.cfg
   '';
 
+  # disable stackprotector on aarch64-darwin for now
+  #
+  # build error:
+  #
+  # /private/tmp/nix-build-python3.9-scipy-1.6.3.drv-0/ccDEsw5U.s:109:15: error: index must be an integer in range [-256, 255].
+  #
+  #         ldr     x0, [x0, ___stack_chk_guard];momd
+  #
+  hardeningDisable = lib.optionals (stdenv.isAarch64 && stdenv.isDarwin) [ "stackprotector" ];
+
   checkPhase = ''
     runHook preCheck
     pushd dist
-    ${python.interpreter} -c 'import scipy; scipy.test("fast", verbose=10)'
+    ${python.interpreter} -c "import scipy; scipy.test('fast', verbose=10, parallel=$NIX_BUILD_CORES)"
     popd
     runHook postCheck
   '';
@@ -53,9 +72,10 @@ in buildPythonPackage rec {
 
   SCIPY_USE_G77_ABI_WRAPPER = 1;
 
-  meta = {
-    description = "SciPy (pronounced 'Sigh Pie') is open-source software for mathematics, science, and engineering. ";
+  meta = with lib; {
+    description = "SciPy (pronounced 'Sigh Pie') is open-source software for mathematics, science, and engineering";
     homepage = "https://www.scipy.org/";
-    maintainers = with lib.maintainers; [ fridh ];
+    license = licenses.bsd3;
+    maintainers = [ maintainers.fridh ];
   };
 }

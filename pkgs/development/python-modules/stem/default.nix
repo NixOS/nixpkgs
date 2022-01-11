@@ -12,6 +12,8 @@ buildPythonPackage rec {
   postPatch = ''
     rm test/unit/installation.py
     sed -i "/test.unit.installation/d" test/settings.cfg
+    # https://github.com/torproject/stem/issues/56
+    sed -i '/MOCK_VERSION/d' run_tests.py
   '';
 
   checkInputs = [ mock ];
@@ -25,6 +27,6 @@ buildPythonPackage rec {
     description = "Controller library that allows applications to interact with Tor";
     homepage = "https://stem.torproject.org/";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ phreedom ];
+    maintainers = with maintainers; [ ];
   };
 }

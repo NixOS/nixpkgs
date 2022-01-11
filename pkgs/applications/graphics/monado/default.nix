@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitLab
 , fetchpatch
 , writeText
@@ -18,6 +19,7 @@
 , libXau
 , libXdmcp
 , libXrandr
+, libbsd
 , libffi
 , libjpeg
 # , librealsense
@@ -44,21 +46,22 @@
 
 stdenv.mkDerivation rec {
   pname = "monado";
-  version = "0.4.1";
+  version = "21.0.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "114aif79dqyn2qg07mkv6lzmqn15k6fdcii818rdf5g4bp7zzzgm";
+    sha256 = "07zxs96i3prjqww1f68496cl2xxqaidx32lpfyy0pn5am4c297zc";
   };
 
   patches = [
-    # fix libsurvive autodetection, drop with the next version update
+    # https://github.com/NixOS/nixpkgs/issues/137245
+    # Fix warning after Vulkan 1.2.174 VK_NULL_HANDLE change
     (fetchpatch {
-      url = "https://gitlab.freedesktop.org/monado/monado/-/commit/345e9eab56e2de9e8b07cf72c2a67cf2ebd01e62.patch";
-      sha256 = "17c110an6sxc8rn7dfz30rfkbayg64w68licicwc8cqabi6cgrm3";
+      url = "https://gitlab.freedesktop.org/monado/monado/-/commit/c47775a95d8e139a2f234063793eb6726f830510.patch";
+      sha256 = "093ymvi9ifpk4vyjcwhhci9cnscxwbv5f80xdbppcqa0j92nmkmp";
     })
   ];
 
@@ -86,6 +89,7 @@ stdenv.mkDerivation rec {
     libXau
     libXdmcp
     libXrandr
+    libbsd
     libjpeg
     libffi
     # librealsense.dev - see below

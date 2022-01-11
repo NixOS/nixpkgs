@@ -5,20 +5,36 @@
   # passing them in this array enables Salt to find them.
 , extraInputs ? []
 }:
-python3.pkgs.buildPythonApplication rec {
-  pname = "salt";
-  version = "3002.2";
 
-  src = python3.pkgs.fetchPypi {
+let
+  py = python3.override {
+    packageOverrides = self: super: {
+      # Incompatible with pyzmq 22
+      pyzmq = super.pyzmq.overridePythonAttrs (oldAttrs: rec {
+        version = "21.0.2";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "CYwTxhmJE8KgaQI1+nTS5JFhdV9mtmO+rsiWUVVMx5w=";
+        };
+      });
+   };
+  };
+in
+py.pkgs.buildPythonApplication rec {
+  pname = "salt";
+  version = "3004";
+
+  src = py.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "vW0pYhzo4JlBJ3fNOWrzVHSqESuwmZtdqAQ4fYcpAHU=";
+    sha256 = "PVNWG8huAU3KLsPcmBB5vgTVXqBHiQyr3iXlsQv6WxM=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = with py.pkgs; [
     distro
     jinja2
     markupsafe
     msgpack
+    psutil
     pycryptodomex
     pyyaml
     pyzmq
@@ -31,6 +47,8 @@ python3.pkgs.buildPythonApplication rec {
   postPatch = ''
     substituteInPlace "salt/utils/rsax931.py" \
       --subst-var-by "libcrypto" "${openssl.out}/lib/libcrypto.so"
+    substituteInPlace requirements/base.txt \
+      --replace contextvars ""
   '';
 
   # The tests fail due to socket path length limits at the very least;
@@ -39,8 +57,8 @@ python3.pkgs.buildPythonApplication rec {
   doCheck = false;
 
   meta = with lib; {
-    homepage = "https://saltstack.com/";
-    changelog = "https://docs.saltstack.com/en/latest/topics/releases/${version}.html";
+    homepage = "https://saltproject.io/";
+    changelog = "https://docs.saltproject.io/en/latest/topics/releases/${version}.html";
     description = "Portable, distributed, remote execution and configuration management system";
     maintainers = with maintainers; [ Flakebi ];
     license = licenses.asl20;

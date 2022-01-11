@@ -6,7 +6,7 @@ in symlinkJoin {
   name = "brasero-${brasero-original.version}";
 
   paths = [ brasero-original ];
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   postBuild = ''
     wrapProgram $out/bin/brasero \

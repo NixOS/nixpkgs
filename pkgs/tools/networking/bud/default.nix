@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchgit, python, gyp, util-linux }:
+{ stdenv, lib, fetchgit, python2, util-linux }:
 
 stdenv.mkDerivation {
   pname = "bud";
@@ -11,9 +11,11 @@ stdenv.mkDerivation {
     sha256 = "08yr6l4lc2m6rng06253fcaznf6sq0v053wfr8bbym42c32z0xdh";
   };
 
-  buildInputs = [
-    python gyp
+  nativeBuildInputs = [
+    python2 python2.pkgs.gyp
   ] ++ lib.optional stdenv.isLinux util-linux;
+
+  strictDeps = true;
 
   buildPhase = ''
     python ./gyp_bud -f make

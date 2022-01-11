@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , gdk-pixbuf
 , gtk-engine-murrine
@@ -8,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "marwaita-peppermint";
-  version = "0.6";
+  version = "10.3";
 
   src = fetchFromGitHub {
     owner = "darkomarko42";
     repo = pname;
     rev = version;
-    sha256 = "0mhkkx2qa66z4b2h5iynhy63flwdf6b2phd21r1j8kp4m08dynms";
+    sha256 = "09lqp82aymj3silpwmjkkf4mgv3b1xw7181ck89lz2nxb98sr9im";
   };
 
   buildInputs = [
@@ -39,7 +40,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Marwaita GTK theme with Peppermint Os Linux style";
     homepage = "https://www.pling.com/p/1399569/";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     platforms = platforms.unix;
     maintainers = [ maintainers.romildo ];
   };

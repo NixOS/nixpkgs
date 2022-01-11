@@ -1,4 +1,4 @@
-{  lib, stdenv, fetchFromGitHub, libX11, unzip, cmake, ois, freetype, libuuid,
+{  lib, stdenv, fetchFromGitHub, libX11, cmake, ois, freetype, libuuid,
    boost, pkg-config, withOgre ? false, ogre ? null, libGL, libGLU ? null } :
 
 let
@@ -15,7 +15,7 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ libX11 unzip ois freetype libuuid boost ]
+  buildInputs = [ libX11 ois freetype libuuid boost ]
     ++ (if withOgre then [ ogre ] else [ libGL libGLU ]);
 
   # Tools are disabled due to compilation failures.
