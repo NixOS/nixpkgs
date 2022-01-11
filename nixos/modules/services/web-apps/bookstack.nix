@@ -28,6 +28,7 @@ let
 
 in {
   imports = [
+    (mkRemovedOptionModule [ "services" "bookstack" "extraConfig" ] "Use services.bookstack.config instead.")
     (mkRemovedOptionModule [ "services" "bookstack" "cacheDir" ] "The cache directory is now handled automatically.")
   ];
 
@@ -49,8 +50,9 @@ in {
 
     appKeyFile = mkOption {
       description = ''
-        A file containing the AppKey.
-        Used for encryption where needed. Can be generated with <code>head -c 32 /dev/urandom| base64</code> and must be prefixed with <literal>base64:</literal>.
+        A file containing the Laravel APP_KEY - a 32 character long,
+        base64 encoded key used for encryption where needed. Can be
+        generated with <code>head -c 32 /dev/urandom | base64</code>.
       '';
       example = "/run/keys/bookstack-appkey";
       type = types.path;
@@ -216,16 +218,59 @@ in {
       '';
     };
 
-    extraConfig = mkOption {
-      type = types.nullOr types.lines;
-      default = null;
-      example = ''
-        ALLOWED_IFRAME_HOSTS="https://example.com"
-        WKHTMLTOPDF=/home/user/bins/wkhtmltopdf
+    config = mkOption {
+      type = with types;
+        attrsOf
+          (nullOr
+            (either
+              (oneOf [
+                bool
+                int
+                port
+                path
+                str
+              ])
+              (submodule {
+                options = {
+                  _secret = mkOption {
+                    type = nullOr str;
+                    description = ''
+                      The path to a file containing the value the
+                      option should be set to in the final
+                      configuration file.
+                    '';
+                  };
+                };
+              })));
+      default = {};
+      example = literalExpression ''
+        {
+          ALLOWED_IFRAME_HOSTS = "https://example.com";
+          WKHTMLTOPDF = "/home/user/bins/wkhtmltopdf";
+          AUTH_METHOD = "oidc";
+          OIDC_NAME = "MyLogin";
+          OIDC_DISPLAY_NAME_CLAIMS = "name";
+          OIDC_CLIENT_ID = "bookstack";
+          OIDC_CLIENT_SECRET = {_secret = "/run/keys/oidc_secret"};
+          OIDC_ISSUER = "https://keycloak.example.com/auth/realms/My%20Realm";
+          OIDC_ISSUER_DISCOVER = true;
+        }
       '';
       description = ''
-        Lines to be appended verbatim to the BookStack configuration.
-        Refer to <link xlink:href="https://www.bookstackapp.com/docs/"/> for details on supported values.
+        BookStack configuration options to set in the
+        <filename>.env</filename> file.
+
+        Refer to <link xlink:href="https://www.bookstackapp.com/docs/"/>
+        for details on supported values.
+
+        Settings containing secret data should be set to an attribute
+        set containing the attribute <literal>_secret</literal> - a
+        string pointing to a file containing the value the option
+        should be set to. See the example to get a better picture of
+        this: in the resulting <filename>.env</filename> file, the
+        <literal>OIDC_CLIENT_SECRET</literal> key will be set to the
+        contents of the <filename>/run/keys/oidc_secret</filename>
+        file.
       '';
     };
 
@@ -241,6 +286,30 @@ in {
         message = "services.bookstack.database.passwordFile cannot be specified if services.bookstack.database.createLocally is set to true.";
       }
     ];
+
+    services.bookstack.config = {
+      APP_KEY._secret = cfg.appKeyFile;
+      APP_URL = cfg.appURL;
+      DB_HOST = db.host;
+      DB_PORT = db.port;
+      DB_DATABASE = db.name;
+      DB_USERNAME = db.user;
+      MAIL_DRIVER = mail.driver;
+      MAIL_FROM_NAME = mail.fromName;
+      MAIL_FROM = mail.from;
+      MAIL_HOST = mail.host;
+      MAIL_PORT = mail.port;
+      MAIL_USERNAME = mail.user;
+      MAIL_ENCRYPTION = mail.encryption;
+      DB_PASSWORD._secret = db.passwordFile;
+      MAIL_PASSWORD._secret = mail.passwordFile;
+      APP_SERVICES_CACHE = "/run/bookstack/cache/services.php";
+      APP_PACKAGES_CACHE = "/run/bookstack/cache/packages.php";
+      APP_CONFIG_CACHE = "/run/bookstack/cache/config.php";
+      APP_ROUTES_CACHE = "/run/bookstack/cache/routes-v7.php";
+      APP_EVENTS_CACHE = "/run/bookstack/cache/events.php";
+      SESSION_SECURE_COOKIE = tlsEnabled;
+    };
 
     environment.systemPackages = [ artisan ];
 
@@ -305,34 +374,41 @@ in {
         RuntimeDirectory = "bookstack/cache";
         RuntimeDirectoryMode = 0700;
       };
-      script = ''
+      path = [ pkgs.replace-secret ];
+      script =
+        let
+          isSecret = v: isAttrs v && v ? _secret && isString v._secret;
+          bookstackEnvVars = lib.generators.toKeyValue {
+            mkKeyValue = lib.flip lib.generators.mkKeyValueDefault "=" {
+              mkValueString = v: with builtins;
+                if isInt         v then toString v
+                else if isString v then v
+                else if true  == v then "true"
+                else if false == v then "false"
+                else if isSecret v then v._secret
+                else throw "unsupported type ${typeOf v}: ${(lib.generators.toPretty {}) v}";
+            };
+          };
+          secretPaths = lib.mapAttrsToList (_: v: v._secret) (lib.filterAttrs (_: isSecret) cfg.config);
+          mkSecretReplacement = file: ''
+            replace-secret ${escapeShellArgs [ file file "${cfg.dataDir}/.env" ]}
+          '';
+          secretReplacements = lib.concatMapStrings mkSecretReplacement secretPaths;
+          filteredConfig = lib.converge (lib.filterAttrsRecursive (_: v: ! elem v [ {} null ])) cfg.config;
+          bookstackEnv = pkgs.writeText "bookstack.env" (bookstackEnvVars filteredConfig);
+        in ''
+        # error handling
+        set -euo pipefail
+
         # set permissions
         umask 077
+
         # create .env file
-        echo "
-        APP_KEY=base64:$(head -n1 ${cfg.appKeyFile})
-        APP_URL=${cfg.appURL}
-        DB_HOST=${db.host}
-        DB_PORT=${toString db.port}
-        DB_DATABASE=${db.name}
-        DB_USERNAME=${db.user}
-        MAIL_DRIVER=${mail.driver}
-        MAIL_FROM_NAME=\"${mail.fromName}\"
-        MAIL_FROM=${mail.from}
-        MAIL_HOST=${mail.host}
-        MAIL_PORT=${toString mail.port}
-        ${optionalString (mail.user != null) "MAIL_USERNAME=${mail.user};"}
-        ${optionalString (mail.encryption != null) "MAIL_ENCRYPTION=${mail.encryption};"}
-        ${optionalString (db.passwordFile != null) "DB_PASSWORD=$(head -n1 ${db.passwordFile})"}
-        ${optionalString (mail.passwordFile != null) "MAIL_PASSWORD=$(head -n1 ${mail.passwordFile})"}
-        APP_SERVICES_CACHE=/run/bookstack/cache/services.php
-        APP_PACKAGES_CACHE=/run/bookstack/cache/packages.php
-        APP_CONFIG_CACHE=/run/bookstack/cache/config.php
-        APP_ROUTES_CACHE=/run/bookstack/cache/routes-v7.php
-        APP_EVENTS_CACHE=/run/bookstack/cache/events.php
-        ${optionalString (cfg.nginx.addSSL || cfg.nginx.forceSSL || cfg.nginx.onlySSL || cfg.nginx.enableACME) "SESSION_SECURE_COOKIE=true"}
-        ${toString cfg.extraConfig}
-        " > "${cfg.dataDir}/.env"
+        install -T -m 0600 -o ${user} ${bookstackEnv} "${cfg.dataDir}/.env"
+        ${secretReplacements}
+        if ! grep 'APP_KEY=base64:' "${cfg.dataDir}/.env" >/dev/null; then
+            sed -i 's/APP_KEY=/APP_KEY=base64:/' "${cfg.dataDir}/.env"
+        fi
 
         # migrate db
         ${pkgs.php}/bin/php artisan migrate --force

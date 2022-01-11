@@ -398,6 +398,16 @@
           systemd.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The <literal>services.bookstack.extraConfig</literal> option
+          has been replaced by
+          <literal>services.bookstack.config</literal> which implements
+          a
+          <link xlink:href="https://github.com/NixOS/rfcs/blob/master/rfcs/0042-config-option.md">settings-style</link>
+          configuration.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.05-notable-changes">
