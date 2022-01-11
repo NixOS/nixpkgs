@@ -2,6 +2,7 @@
 , substituteAll
 , buildPythonPackage
 , fetchPypi
+, catch2
 , cmake
 , cxxopts
 , ghc_filesystem
@@ -27,6 +28,7 @@ buildPythonPackage rec {
     (substituteAll {
       src = ./dont_fetch_dependencies.patch;
       inherit cxxopts ghc_filesystem;
+      catch2_src = catch2.src;
       pybind11_src = pybind11.src;
     })
   ];

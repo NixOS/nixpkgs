@@ -1,7 +1,7 @@
 { stdenvNoCC, fetchgit, lib }:
 
 stdenvNoCC.mkDerivation rec {
-  pname = "firmware-linux-nonfree";
+  pname = "linux-firmware";
   version = "20211216";
 
   src = fetchgit {

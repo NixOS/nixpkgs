@@ -166,6 +166,13 @@ in {
       ];
     };
 
+    linux_5_16 = callPackage ../os-specific/linux/kernel/linux-5.16.nix {
+      kernelPatches = [
+        kernelPatches.bridge_stp_helper
+        kernelPatches.request_key_helper
+      ];
+    };
+
     linux_testing = let
       testing = callPackage ../os-specific/linux/kernel/linux-testing.nix {
         kernelPatches = [
@@ -439,6 +446,8 @@ in {
 
     vm-tools = callPackage ../os-specific/linux/vm-tools { };
 
+    vmm_clock = callPackage ../os-specific/linux/vmm_clock { };
+
     wireguard = if lib.versionOlder kernel.version "5.6" then callPackage ../os-specific/linux/wireguard { } else null;
 
     x86_energy_perf_policy = callPackage ../os-specific/linux/x86_energy_perf_policy { };
@@ -472,6 +481,7 @@ in {
     linux_5_4 = recurseIntoAttrs (packagesFor kernels.linux_5_4);
     linux_5_10 = recurseIntoAttrs (packagesFor kernels.linux_5_10);
     linux_5_15 = recurseIntoAttrs (packagesFor kernels.linux_5_15);
+    linux_5_16 = recurseIntoAttrs (packagesFor kernels.linux_5_16);
   };
 
   rtPackages = {
@@ -516,7 +526,7 @@ in {
   packageAliases = {
     linux_default = packages.linux_5_10;
     # Update this when adding the newest kernel major version!
-    linux_latest = packages.linux_5_15;
+    linux_latest = packages.linux_5_16;
     linux_mptcp = packages.linux_mptcp_95;
     linux_rt_default = packages.linux_rt_5_4;
     linux_rt_latest = packages.linux_rt_5_10;

@@ -98,10 +98,25 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://github.com/mgumz/mtr-exporter">mtr-exporter</link>,
+          a Prometheus exporter for mtr metrics. Available as
+          <link xlink:href="options.html#opt-services.mtr-exporter.enable">services.mtr-exporter</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://tetrd.app">tetrd</link>, share your
           internet connection from your device to your PC and vice versa
           through a USB cable. Available at
           <link linkend="opt-services.tetrd.enable">services.tetrd</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/JustArchiNET/ArchiSteamFarm">ArchiSteamFarm</link>,
+          a C# application with primary purpose of idling Steam cards
+          from multiple accounts simultaneously. Available as
+          <link xlink:href="options.html#opt-services.archisteamfarm.enable">services.archisteamfarm</link>.
         </para>
       </listitem>
     </itemizedlist>
@@ -237,6 +252,13 @@
           set <literal>autoSubUidGidRange = true</literal>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <literal>services.thelounge.private</literal> was removed in
+          favor of <literal>services.thelounge.public</literal>, to
+          follow with upstream changes.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.05-notable-changes">
@@ -350,6 +372,12 @@
           can be found in
           <literal>pkgs.theLoungePlugins.plugins</literal> and
           <literal>pkgs.theLoungePlugins.themes</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>firmwareLinuxNonfree</literal> package has been
+          renamed to <literal>linux-firmware</literal>.
         </para>
       </listitem>
     </itemizedlist>

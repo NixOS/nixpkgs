@@ -302,6 +302,9 @@ let
     # Enable Sound Open Firmware support
     } // optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux" &&
                         versionAtLeast version "5.5") {
+      SND_SOC_INTEL_SOUNDWIRE_SOF_MACH       = whenAtLeast "5.10" module;
+      SND_SOC_INTEL_USER_FRIENDLY_LONG_NAMES = whenAtLeast "5.10" yes; # dep of SOF_MACH
+      SND_SOC_SOF_INTEL_SOUNDWIRE_LINK = whenBetween "5.10" "5.11" yes; # dep of SOF_MACH
       SND_SOC_SOF_TOPLEVEL              = yes;
       SND_SOC_SOF_ACPI                  = module;
       SND_SOC_SOF_PCI                   = module;
@@ -449,10 +452,13 @@ let
     };
 
     security = {
+      # https://googleprojectzero.blogspot.com/2019/11/bad-binder-android-in-wild-exploit.html
+      DEBUG_LIST                       = yes;
       # Detect writes to read-only module pages
       DEBUG_SET_MODULE_RONX            = { optional = true; tristate = whenOlder "4.11" "y"; };
       RANDOMIZE_BASE                   = option yes;
-      STRICT_DEVMEM                    = option yes; # Filter access to /dev/mem
+      STRICT_DEVMEM                    = mkDefault yes; # Filter access to /dev/mem
+      IO_STRICT_DEVMEM                 = whenAtLeast "4.5" (mkDefault yes);
       SECURITY_SELINUX_BOOTPARAM_VALUE = whenOlder "5.1" (freeform "0"); # Disable SELinux by default
       # Prevent processes from ptracing non-children processes
       SECURITY_YAMA                    = option yes;

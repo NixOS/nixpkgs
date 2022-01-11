@@ -4,6 +4,7 @@
 , fetchPypi
 , pikepdf
 , pillow
+, stdenv
 , exiftool
 , ghostscript
 , imagemagick
@@ -29,6 +30,9 @@ buildPythonPackage rec {
     pikepdf
     pillow
   ];
+
+  # https://gitlab.mister-muffin.de/josch/img2pdf/issues/128
+  doCheck = !stdenv.isAarch64;
 
   checkInputs = [
     exiftool
