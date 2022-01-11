@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   # upstream releases an update
   patches = lib.optional stdenv.isAarch32 [
     (fetchpatch {
-      url = "https://patch-diff.githubusercontent.com/raw/axboe/liburing/pull/433.patch";
+      url = "https://github.com/axboe/liburing/commit/e75a6cfa085fc9b5dbf5140fc1efb5a07b6b829e.diff";
       sha256 = "sha256-qQEQXYm5mkws2klLxwuuoPSPRkpP1s6tuylAAEp7+9E=";
     })
   ];
