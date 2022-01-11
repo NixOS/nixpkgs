@@ -78,7 +78,7 @@ let majorVersion = "9";
       # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=96796
       #
       # This patch can most likely be removed by a post 9.3.0-release.
-      [ ./avoid-cycling-subreg-reloads.patch ]
+      [ ./avoid-cycling-subreg-reloads.patch ./gcc9-asan-glibc-2.34.patch ]
       ++ optional (targetPlatform != hostPlatform) ../libstdc++-target.patch
       ++ optional targetPlatform.isNetBSD ../libstdc++-netbsd-ctypes.patch
       ++ optional noSysDirs ../no-sys-dirs.patch

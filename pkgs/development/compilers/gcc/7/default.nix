@@ -63,6 +63,9 @@ let majorVersion = "7";
         ./riscv-pthread-reentrant.patch
         # https://gcc.gnu.org/ml/gcc-patches/2018-03/msg00297.html
         ./riscv-no-relax.patch
+        # Fix for asan w/glibc-2.34. Although there's no upstream backport to v7,
+        # the patch from gcc 8 seems to work perfectly fine.
+        ./gcc8-asan-glibc-2.34.patch
 
         ./0001-Fix-build-for-glibc-2.31.patch
       ]
