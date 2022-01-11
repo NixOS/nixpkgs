@@ -1,5 +1,5 @@
 { fetchurl, lib, stdenv, libxml2, freetype, libGLU, libGL, glew, qt4
-, cmake, makeWrapper, libjpeg, python }:
+, cmake, makeWrapper, libjpeg, python2 }:
 
 let version = "5.2.1"; in
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0bqmqy6sri87a8xv5xf7ffaq5zin4hiaa13g0l64b84i7yckfwky";
   };
 
-  buildInputs = [ libxml2 freetype glew libGLU libGL qt4 libjpeg python ];
+  buildInputs = [ libxml2 freetype glew libGLU libGL qt4 libjpeg python2 ];
 
   nativeBuildInputs = [ cmake makeWrapper ];
 
