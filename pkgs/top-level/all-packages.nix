@@ -14879,6 +14879,8 @@ with pkgs;
 
   jam = callPackage ../development/tools/build-managers/jam { };
 
+  ftjam = callPackage ../development/tools/build-managers/jam/ftjam.nix { };
+
   javacc = callPackage ../development/tools/parsing/javacc {
     jdk = jdk8;
   };
