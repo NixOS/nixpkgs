@@ -48,6 +48,7 @@ buildPythonPackage rec {
   };
 
   patches = [
+    # addresses https://github.com/tensorflow/datasets/issues/3673
     ./corruptions.patch
   ];
 
