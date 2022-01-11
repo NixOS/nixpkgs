@@ -671,6 +671,7 @@ mapAliases ({
   packet-cli = metal-cli; # added 2021-10-25
   paperless = paperless-ng; # added 2021-06-06
   parity = openethereum; # added 2020-08-01
+  parity-ui = throw "parity-ui was removed because it was broken and unmaintained by upstream"; # added 2022-01-10
   parquet-cpp = arrow-cpp; # added 2018-09-08
   pass-otp = pass.withExtensions (ext: [ext.pass-otp]); # added 2018-05-04
   pdfread = throw "pdfread has been remove because it is unmaintained for years and the sources are no longer available"; # added 2021-07-22
