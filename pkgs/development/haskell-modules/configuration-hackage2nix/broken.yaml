@@ -1783,6 +1783,7 @@ broken-packages:
   - graph-rewriting
   - graph-serialize
   - graphted
+  - graph-trace-dot
   - graphula-core
   - graph-utils
   - graql
@@ -1801,6 +1802,7 @@ broken-packages:
   - gross
   - GroteTrap
   - groundhog-converters
+  - groundhog-inspector
   - groundhog-mysql
   - grouped-list
   - group-theory
@@ -4081,6 +4083,7 @@ broken-packages:
   - refined-http-api-data
   - reflection-extras
   - reflex-basic-host
+  - reflex-dom-ace
   - reflex-dom-contrib
   - reflex-dom-helper
   - reflex-dom-helpers
@@ -4108,6 +4111,7 @@ broken-packages:
   - regex-posix-unittest
   - regexpr-symbolic
   - regexqq
+  - regex-rure
   - regex-tdfa-pipes
   - regex-tdfa-quasiquoter
   - regex-tdfa-rc

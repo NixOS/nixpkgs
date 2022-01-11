@@ -41,11 +41,6 @@ self: super: {
   ghcjs-base = null;
   ghcjs-prim = null;
 
-  # enable using a local hoogle with extra packagages in the database
-  # nix-shell -p "haskellPackages.hoogleLocal { packages = with haskellPackages; [ mtl lens ]; }"
-  # $ hoogle server
-  hoogleLocal = { packages ? [] }: self.callPackage ./hoogle.nix { inherit packages; };
-
   # Needs older QuickCheck version
   attoparsec-varword = dontCheck super.attoparsec-varword;
 
@@ -82,7 +77,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "1x2d0gfqxxfygzigm34n0spaxh8bwipxs9317f6c5lkpj916p957";
+      sha256 = "14zzs4j9dpc6rdnna80m0vi7s1awlz0mrmwfh8l4zvglx75avpw5";
       # delete android and Android directories which cause issues on
       # darwin (case insensitive directory). Since we don't need them
       # during the build process, we can delete it to prevent a hash
@@ -2010,7 +2005,7 @@ self: super: {
   ghcup = doJailbreak (super.ghcup.overrideScope (self: super: {
     hspec-golden-aeson = self.hspec-golden-aeson_0_9_0_0;
     optics = self.optics_0_4;
-    streamly = self.streamly_0_8_1_1;
+    streamly = doJailbreak self.streamly_0_8_1_1;
     Cabal = self.Cabal_3_6_2_0;
     libyaml-streamly = markUnbroken super.libyaml-streamly;
   }));
@@ -2240,6 +2235,10 @@ self: super: {
   sdp4text = disableLibraryProfiling super.sdp4text;
   sdp4unordered = disableLibraryProfiling super.sdp4unordered;
   sdp4vector = disableLibraryProfiling super.sdp4vector;
+
+  # Test suite fails to compile
+  # https://github.com/kuribas/mfsolve/issues/8
+  mfsolve = dontCheck super.mfsolve;
 
   hie-bios = appendPatches [
     # Accounts for a breaking change in GHC 9.0.2 via CPP

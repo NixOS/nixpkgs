@@ -867,8 +867,8 @@ let
           mktplcRef = {
             name = "vscode-pull-request-github";
             publisher = "github";
-            version = "0.35.2021122109";
-            sha256 = "1n7vjwxm92ibwhgn2n57p54dqpi0vvyllmcgjxilgnr14irg5457";
+            version = "0.35.2022010609";
+            sha256 = "06ryx8b605fd1q2zz8jps7j8r506qwym93x1ra1kc0h9g8a8r7sa";
           };
           meta = { license = lib.licenses.mit; };
         };
@@ -1385,6 +1385,18 @@ let
           publisher = "PKief";
           version = "4.11.0";
           sha256 = "1l2s8j645riqjmj09i3v71s8ycin5vd6brdp35z472fnk6wyi1y6";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
+      pkief.material-product-icons = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "material-product-icons";
+          publisher = "PKief";
+          version = "1.1.1";
+          sha256 = "a0bd0eff67793828768135fd839f28db0949da9a310db312beb0781f2164fd47";
         };
         meta = {
           license = lib.licenses.mit;
