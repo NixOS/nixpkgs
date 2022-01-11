@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     done
     '' + (if ! stdenv.isLinux then "" else ''
     arch=${if stdenv.hostPlatform.system == "x86_64-linux" then "x86_64-linux" else "x86-linux"}
-    for f in contrib/*/$arch/{bash_process,epclextract,nunchaku,SPASS}; do
+    for f in contrib/*/$arch/{bash_process,epclextract,nunchaku,SPASS,zipperposition}; do
       patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) "$f"
     done
     '');
