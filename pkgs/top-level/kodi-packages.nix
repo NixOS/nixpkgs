@@ -52,6 +52,8 @@ let self = rec {
 
   a4ksubtitles = callPackage ../applications/video/kodi/addons/a4ksubtitles { };
 
+  arteplussept = callPackage ../applications/video/kodi/addons/arteplussept { };
+
   controllers = {
     default = callPackage ../applications/video/kodi/addons/controllers { controller = "default"; };
 
