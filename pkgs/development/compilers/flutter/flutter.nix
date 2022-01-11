@@ -174,6 +174,9 @@ runCommand drvName
 } ''
   mkdir -p $out/bin
 
+  mkdir -p $out/bin/cache/
+  ln -sf ${dart} $out/bin/cache/dart-sdk
+
   echo -n "$startScript" > $out/bin/${pname}
   chmod +x $out/bin/${pname}
 ''
