@@ -22,6 +22,7 @@ in
               auth_token = "60bdc117-8ff4-478d-95e4-9914597847eb";
               auth_servers = [ "192.168.1.1:3025" ];
               log.severity = "DEBUG";
+            };
             ssh_service = {
               enabled = true;
               labels = {
