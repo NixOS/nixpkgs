@@ -8843,6 +8843,8 @@ with pkgs;
 
   poly2tri-c = callPackage ../development/libraries/poly2tri-c { };
 
+  polymc = libsForQt5.callPackage ../games/polymc { };
+
   ponysay = callPackage ../tools/misc/ponysay { };
 
   popfile = callPackage ../tools/text/popfile { };
@@ -30839,8 +30841,6 @@ with pkgs;
   minecraft-server = callPackage ../games/minecraft-server { };
 
   moon-buggy = callPackage ../games/moon-buggy {};
-
-  multimc = libsForQt5.callPackage ../games/multimc { };
 
   inherit (callPackages ../games/minetest {
     inherit (darwin) libiconv;
