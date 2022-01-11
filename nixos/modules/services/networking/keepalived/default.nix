@@ -273,7 +273,7 @@ in
 
     systemd.timers.keepalived-boot-delay = {
       description = "Keepalive Daemon delay to avoid instant transition to MASTER state";
-      after = [ "network.target" "network-online.target" "syslog.target" ];
+      after = [ "network.target" "network-online.target" ];
       requires = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       timerConfig = {
@@ -284,7 +284,7 @@ in
 
     systemd.services.keepalived = {
       description = "Keepalive Daemon (LVS and VRRP)";
-      after = [ "network.target" "network-online.target" "syslog.target" ];
+      after = [ "network.target" "network-online.target" ];
       wants = [ "network-online.target" ];
       serviceConfig = {
         Type = "forking";
