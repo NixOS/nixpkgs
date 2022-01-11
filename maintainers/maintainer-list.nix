@@ -3435,6 +3435,12 @@
     githubId = 4742;
     name = "Aaron Bull Schaefer";
   };
+  elatov = {
+    email = "elatov@gmail.com";
+    github = "elatov";
+    githubId = 7494394;
+    name = "Karim Elatov";
+  };
   eleanor = {
     email = "dejan@proteansec.com";
     github = "proteansec";
