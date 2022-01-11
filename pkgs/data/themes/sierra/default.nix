@@ -6,10 +6,22 @@
 , jdupes
 , librsvg
 , libxml2
+, buttonVariants ? [] # default to all
+, colorVariants ? [] # default to all
+, opacityVariants ? [] # default to all
+, sizeVariants ? [] # default to all
 }:
 
-stdenv.mkDerivation rec {
+let
   pname = "sierra-gtk-theme";
+in
+lib.checkListOfEnum "${pname}: button variants" [ "standard" "alt" ] buttonVariants
+lib.checkListOfEnum "${pname}: color variants" [ "light" "dark" ] colorVariants
+lib.checkListOfEnum "${pname}: opacity variants" [ "standard" "solid" ] opacityVariants
+lib.checkListOfEnum "${pname}: size variants" [ "standard" "compact" ] sizeVariants
+
+stdenv.mkDerivation {
+  inherit pname;
   version = "unstable-2021-05-24";
 
   src = fetchFromGitHub {
@@ -39,7 +51,11 @@ stdenv.mkDerivation rec {
     patchShebangs .
 
     mkdir -p $out/share/themes
-    name= ./install.sh --dest $out/share/themes
+    name= ./install.sh --dest $out/share/themes \
+      ${lib.optionalString (buttonVariants != []) "--alt " + builtins.toString buttonVariants} \
+      ${lib.optionalString (colorVariants != []) "--color " + builtins.toString colorVariants} \
+      ${lib.optionalString (opacityVariants != []) "--opacity " + builtins.toString opacityVariants} \
+      ${lib.optionalString (sizeVariants != []) "--flat " + builtins.toString sizeVariants}
 
     # Replace duplicate files with hardlinks to the first file in each
     # set of duplicates, reducing the installed size in about 79%
