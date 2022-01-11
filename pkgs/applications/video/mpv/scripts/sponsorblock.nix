@@ -39,7 +39,10 @@ stdenvNoCC.mkDerivation {
     cp -r sponsorblock.lua sponsorblock_shared $out/share/mpv/scripts/
   '';
 
-  passthru.scriptName = "sponsorblock.lua";
+  passthru = {
+    scriptName = "sponsorblock.lua";
+    updateScript = ./update-sponsorblock.sh;
+  };
 
   meta = with lib; {
     description = "Script for mpv to skip sponsored segments of YouTube videos";
