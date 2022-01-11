@@ -1,32 +1,27 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, types-urllib3
 }:
 
 buildPythonPackage rec {
-  pname = "types-requests";
-  version = "2.27.5";
+  pname = "types-urllib3";
+  version = "1.26.4";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-pn3BqFEjErjLifO6lfmg5p7zQ2rnfJvU8yjNiPF63aI=";
+    hash = "sha256-NcF74J4bzvOx4hAcUXK5fNt4MwkVlzx0H0wZedhAXvk=";
   };
-
-  propagatedBuildInputs = [
-    types-urllib3
-  ];
 
   # Module doesn't have tests
   doCheck = false;
 
   pythonImportsCheck = [
-    "requests-stubs"
+    "urllib3-stubs"
   ];
 
   meta = with lib; {
-    description = "Typing stubs for requests";
+    description = "Typing stubs for urllib3";
     homepage = "https://github.com/python/typeshed";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];

@@ -9938,6 +9938,8 @@ in {
 
   types-typed-ast = callPackage ../development/python-modules/types-typed-ast { };
 
+  types-urllib3 = callPackage ../development/python-modules/types-urllib3 { };
+
   typesentry = callPackage ../development/python-modules/typesentry { };
 
   typesystem = callPackage ../development/python-modules/typesystem { };
