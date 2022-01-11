@@ -2126,6 +2126,8 @@ with pkgs;
 
   badvpn = callPackage ../tools/networking/badvpn {};
 
+  baget = callPackage ../servers/web-apps/baget { };
+
   barcode = callPackage ../tools/graphics/barcode {};
 
   bashmount = callPackage ../tools/filesystems/bashmount {};
@@ -9038,6 +9040,8 @@ with pkgs;
 
   qmk = callPackage ../tools/misc/qmk { };
 
+  qodem = callPackage ../tools/networking/qodem { };
+
   qosmic = libsForQt5.callPackage ../applications/graphics/qosmic { };
 
   qownnotes = libsForQt514.callPackage ../applications/office/qownnotes { };
@@ -14878,6 +14882,8 @@ with pkgs;
   itstool = callPackage ../development/tools/misc/itstool { };
 
   jam = callPackage ../development/tools/build-managers/jam { };
+
+  ftjam = callPackage ../development/tools/build-managers/jam/ftjam.nix { };
 
   javacc = callPackage ../development/tools/parsing/javacc {
     jdk = jdk8;
@@ -30230,6 +30236,8 @@ with pkgs;
 
   ballerburg = callPackage ../games/ballerburg { } ;
 
+  blockattack = callPackage ../games/blockattack { } ;
+
   colobot = callPackage ../games/colobot {};
 
   doom-bcc = callPackage ../games/zdoom/bcc-git.nix { };
@@ -31147,6 +31155,8 @@ with pkgs;
   taisei = callPackage ../games/taisei { };
 
   tcl2048 = callPackage ../games/tcl2048 { };
+
+  the-legend-of-edgar = callPackage ../games/the-legend-of-edgar { };
 
   the-powder-toy = callPackage ../games/the-powder-toy {
     lua = lua5_1;

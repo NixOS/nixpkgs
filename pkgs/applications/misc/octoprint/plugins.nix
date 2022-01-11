@@ -75,13 +75,13 @@ in
 
   costestimation = buildPlugin rec {
     pname = "CostEstimation";
-    version = "3.3.0";
+    version = "3.4.0";
 
     src = fetchFromGitHub {
       owner = "OllisGit";
       repo = "OctoPrint-${pname}";
       rev = version;
-      sha256 = "sha256-d7miGMCNJD0siaZb6EnoMZCkKot7vnZjxNZX2TunJcs=";
+      sha256 = "sha256-04OPa/RpM8WehUmOp195ocsAjAvKdVY7iD5ybzQO7Dg=";
     };
 
     meta = with lib; {

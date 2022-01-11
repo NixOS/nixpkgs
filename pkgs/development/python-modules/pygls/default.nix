@@ -29,6 +29,12 @@ buildPythonPackage rec {
     pydantic
     typeguard
   ];
+  # We don't know why an early version of pydantic is required, see:
+  # https://github.com/openlawlibrary/pygls/issues/221
+  preBuild = ''
+    substituteInPlace setup.cfg \
+      --replace "pydantic>=1.7,<1.9" "pydantic"
+  '';
 
   checkInputs = [
     mock

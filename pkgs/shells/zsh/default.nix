@@ -55,9 +55,7 @@ stdenv.mkDerivation {
   checkFlags = map (T: "TESTNUM=${T}") (lib.stringToCharacters "ABCDEVW");
 
   # XXX: think/discuss about this, also with respect to nixos vs nix-on-X
-  postInstall = lib.optionalString stdenv.isDarwin ''
-    make install.bin install.modules install.fns
-    '' + lib.optionalString stdenv.isLinux ''
+  postInstall = lib.optionalString stdenv.isLinux ''
     make install.info install.html
     '' + ''
     mkdir -p $out/etc/

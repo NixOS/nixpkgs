@@ -144,6 +144,21 @@ let
         };
       };
 
+      antyos.openscad = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "openscad";
+          publisher = "Antyos";
+          version = "1.1.1";
+          sha256 = "1adcw9jj3npk3l6lnlfgji2l529c4s5xp9jl748r9naiy3w3dpjv";
+        };
+        meta = with lib; {
+          changelog = "https://marketplace.visualstudio.com/items/Antyos.openscad/changelog";
+          description = "OpenSCAD highlighting, snippets, and more for VSCode";
+          homepage = "https://github.com/Antyos/vscode-openscad";
+          license = licenses.gpl3;
+        };
+      };
+
       apollographql.vscode-apollo = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-apollo";
