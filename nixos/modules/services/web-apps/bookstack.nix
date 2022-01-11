@@ -24,6 +24,7 @@ let
     $sudo ${pkgs.php}/bin/php artisan $*
   '';
 
+  tlsEnabled = cfg.nginx.addSSL || cfg.nginx.forceSSL || cfg.nginx.onlySSL || cfg.nginx.enableACME;
 
 in {
   imports = [
@@ -55,11 +56,26 @@ in {
       type = types.path;
     };
 
+    hostname = lib.mkOption {
+      type = lib.types.str;
+      default = if config.networking.domain != null then
+                  config.networking.fqdn
+                else
+                  config.networking.hostName;
+      defaultText = lib.literalExpression "config.networking.fqdn";
+      example = "bookstack.example.com";
+      description = ''
+        The hostname to serve BookStack on.
+      '';
+    };
+
     appURL = mkOption {
       description = ''
         The root URL that you want to host BookStack on. All URLs in BookStack will be generated using this value.
         If you change this in the future you may need to run a command to update stored URLs in the database. Command example: <code>php artisan bookstack:update-url https://old.example.com https://new.example.com</code>
       '';
+      default = "http${lib.optionalString tlsEnabled "s"}://${cfg.hostname}";
+      defaultText = ''http''${lib.optionalString tlsEnabled "s"}://''${cfg.hostname}'';
       example = "https://example.com";
       type = types.str;
     };
@@ -256,7 +272,7 @@ in {
 
     services.nginx = {
       enable = mkDefault true;
-      virtualHosts.bookstack = mkMerge [ cfg.nginx {
+      virtualHosts.${cfg.hostname} = mkMerge [ cfg.nginx {
         root = mkForce "${bookstack}/public";
         extraConfig = optionalString (cfg.nginx.addSSL || cfg.nginx.forceSSL || cfg.nginx.onlySSL || cfg.nginx.enableACME) "fastcgi_param HTTPS on;";
         locations = {
