@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/rapid7/metasploit-framework
-  revision: 7682d9ab9c404b55cfc4a221db22f74a740a6f7f
-  ref: refs/tags/6.1.23
+  revision: 0991344df7a2b343b99e83507bf217137f11801d
+  ref: refs/tags/6.1.24
   specs:
-    metasploit-framework (6.1.23)
+    metasploit-framework (6.1.24)
       actionpack (~> 6.0)
       activerecord (~> 6.0)
       activesupport (~> 6.0)
@@ -19,11 +19,12 @@ GIT
       em-http-request
       eventmachine
       faker
-      faraday
+      faraday (= 1.8.0)
       faye-websocket
       filesize
       hrr_rb_ssh-ed25519
       http-cookie
+      io-console (= 0.5.9)
       irb
       jsobfu
       json
@@ -129,12 +130,12 @@ GEM
       activerecord (>= 3.1.0, < 8)
     aws-eventstream (1.2.0)
     aws-partitions (1.547.0)
-    aws-sdk-core (3.125.1)
+    aws-sdk-core (3.125.2)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.525.0)
       aws-sigv4 (~> 1.1)
       jmespath (~> 1.0)
-    aws-sdk-ec2 (1.290.0)
+    aws-sdk-ec2 (1.291.0)
       aws-sdk-core (~> 3, >= 3.125.0)
       aws-sigv4 (~> 1.1)
     aws-sdk-iam (1.65.0)
@@ -175,33 +176,29 @@ GEM
     eventmachine (1.2.7)
     faker (2.19.0)
       i18n (>= 1.6, < 2)
-    faraday (1.9.3)
+    faraday (1.8.0)
       faraday-em_http (~> 1.0)
       faraday-em_synchrony (~> 1.0)
       faraday-excon (~> 1.1)
-      faraday-httpclient (~> 1.0)
-      faraday-multipart (~> 1.0)
+      faraday-httpclient (~> 1.0.1)
       faraday-net_http (~> 1.0)
-      faraday-net_http_persistent (~> 1.0)
+      faraday-net_http_persistent (~> 1.1)
       faraday-patron (~> 1.0)
       faraday-rack (~> 1.0)
-      faraday-retry (~> 1.0)
+      multipart-post (>= 1.2, < 3)
       ruby2_keywords (>= 0.0.4)
     faraday-em_http (1.0.0)
     faraday-em_synchrony (1.0.0)
     faraday-excon (1.1.0)
     faraday-httpclient (1.0.1)
-    faraday-multipart (1.0.2)
-      multipart-post (>= 1.2, < 3)
     faraday-net_http (1.0.1)
     faraday-net_http_persistent (1.2.0)
     faraday-patron (1.0.0)
     faraday-rack (1.0.0)
-    faraday-retry (1.0.3)
     faye-websocket (0.11.1)
       eventmachine (>= 0.12.0)
       websocket-driver (>= 0.5.1)
-    ffi (1.15.4)
+    ffi (1.15.5)
     filesize (0.2.0)
     gssapi (1.3.1)
       ffi (>= 1.0.1)
@@ -218,10 +215,10 @@ GEM
     httpclient (2.8.3)
     i18n (1.8.11)
       concurrent-ruby (~> 1.0)
-    io-console (0.5.11)
+    io-console (0.5.9)
     irb (1.3.6)
       reline (>= 0.2.5)
-    jmespath (1.4.0)
+    jmespath (1.5.0)
     jsobfu (0.4.2)
       rkelly-remix
     json (2.6.1)
