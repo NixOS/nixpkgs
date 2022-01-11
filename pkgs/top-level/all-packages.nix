@@ -10096,7 +10096,9 @@ with pkgs;
     pythonPackages = python3Packages;
   };
 
-  telepresence2 = callPackage ../tools/networking/telepresence2 { };
+  telepresence2 = callPackage ../tools/networking/telepresence2 {
+    buildGoModule = buildGo116Module;
+  };
 
   teler = callPackage ../tools/security/teler { };
 
