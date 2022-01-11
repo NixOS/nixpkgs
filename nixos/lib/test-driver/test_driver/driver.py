@@ -18,6 +18,7 @@ class Driver:
     vlans: List[VLan]
     machines: List[Machine]
     polling_conditions: List[PollingCondition]
+    out_dir: Path
 
     def __init__(
         self,
@@ -30,7 +31,18 @@ class Driver:
         self.tests = tests
 
         tmp_dir = Path(os.environ.get("TMPDIR", tempfile.gettempdir()))
+        tmp_dir = tmp_dir.resolve()
         tmp_dir.mkdir(mode=0o700, exist_ok=True)
+
+        if out_dir is None:
+            out_dir = Path(".")
+        out_dir = out_dir.resolve()
+        self.out_dir = out_dir
+
+        # Check that these are 1. a directory 2. writable
+        for (p, name) in [(tmp_dir, "tmp_dir"), (out_dir, "out_dir")]:
+            if not (p.is_dir() and os.access(p, os.W_OK)):
+                raise RuntimeError(f"{name} ({p}) is not a writable directory")
 
         with rootlog.nested("start all VLans"):
             self.vlans = [VLan(nr, tmp_dir) for nr in vlans]
@@ -160,6 +172,7 @@ class Driver:
             name=name,
             keep_vm_state=args.get("keep_vm_state", False),
             allow_reboot=args.get("allow_reboot", False),
+            out_dir=self.out_dir,
         )
 
     def serial_stdout_on(self) -> None:

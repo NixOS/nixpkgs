@@ -328,7 +328,7 @@ class Machine:
         self,
         tmp_dir: Path,
         start_command: StartCommand,
-        out_dir: Optional[Path] = None,
+        out_dir: Path,
         name: str = "machine",
         keep_vm_state: bool = False,
         allow_reboot: bool = False,
@@ -339,11 +339,8 @@ class Machine:
         self.allow_reboot = allow_reboot
         self.name = name
         self.start_command = start_command
-        self.callbacks = callbacks if callbacks is not None else []
-
-        if out_dir is None:
-            out_dir = Path(".").resolve()
         self.out_dir = out_dir
+        self.callbacks = callbacks if callbacks is not None else []
 
         # set up directories
         self.shared_dir = self.tmp_dir / "shared-xchg"
