@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2021.12.7";
+  version = "2021.12.8";
   components = {
     "abode" = ps: with ps; [ abodepy ];
     "accuweather" = ps: with ps; [ accuweather ];
@@ -217,7 +217,6 @@
     "eddystone_temperature" = ps: with ps; [ construct ]; # missing inputs: beacontools[scan]
     "edimax" = ps: with ps; [ pyedimax ];
     "edl21" = ps: with ps; [ pysml ];
-    "ee_brightbox" = ps: with ps; [ eebrightbox ];
     "efergy" = ps: with ps; [ pyefergy ];
     "egardia" = ps: with ps; [ pythonegardia ];
     "eight_sleep" = ps: with ps; [ pyeight ];
@@ -335,7 +334,6 @@
     "google_translate" = ps: with ps; [ gtts ];
     "google_travel_time" = ps: with ps; [ googlemaps ];
     "google_wifi" = ps: with ps; [ ];
-    "gpmdp" = ps: with ps; [ websocket-client ];
     "gpsd" = ps: with ps; [ gps3 ];
     "gpslogger" = ps: with ps; [ aiohttp-cors ];
     "graphite" = ps: with ps; [ ];
