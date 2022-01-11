@@ -224,7 +224,7 @@ let
           "''${dotnetInstallFlags[@]}"  \
           "''${dotnetFlags[@]}"
       done
-    '' + (lib.optionalString packNupkg ''
+    '' + lib.optionalString packNupkg ''
       for project in ''${projectFile[@]}; do
         dotnet pack "$project" \
           -p:ContinuousIntegrationBuild=true \
@@ -235,16 +235,24 @@ let
           "''${dotnetPackFlags[@]}"  \
           "''${dotnetFlags[@]}"
       done
-    '') + (if executables != null then ''
-      for executable in $executables; do
+    '' + ''
+      runHook postInstall
+    '';
+
+    preFixup = ''
+      _wrapDotnetProgram() {
+        makeWrapper "$1" "$out/bin/$(basename "$executable")" \
+          --set DOTNET_ROOT "${dotnet-runtime}" \
+          --suffix LD_LIBRARY_PATH : "${lib.makeLibraryPath runtimeDeps}" \
+          "''${gappsWrapperArgs[@]}" \
+          "''${makeWrapperArgs[@]}"
+      }
+    '' + (if executables != null then ''
+      for executable in ''${executables[@]}; do
         execPath="$out/lib/${args.pname}/$executable"
 
         if [[ -f "$execPath" && -x "$execPath" ]]; then
-          makeWrapper "$execPath" "$out/bin/$(basename "$executable")" \
-            --set DOTNET_ROOT "${dotnet-runtime}" \
-            --suffix LD_LIBRARY_PATH : "${lib.makeLibraryPath runtimeDeps}" \
-            "''${gappsWrapperArgs[@]}" \
-            "''${makeWrapperArgs[@]}"
+          _wrapDotnetProgram $execPath
         else
           echo "Specified binary \"$executable\" is either not an executable, or does not exist!"
           exit 1
@@ -253,16 +261,10 @@ let
     '' else ''
       for executable in $out/lib/${args.pname}/*; do
         if [[ -f "$executable" && -x "$executable" && "$executable" != *"dll"* ]]; then
-          makeWrapper "$executable" "$out/bin/$(basename "$executable")" \
-            --set DOTNET_ROOT "${dotnet-runtime}" \
-            --suffix LD_LIBRARY_PATH : "${lib.makeLibraryPath runtimeDeps}" \
-            "''${gappsWrapperArgs[@]}" \
-            "''${makeWrapperArgs[@]}"
+          _wrapDotnetProgram $executable
         fi
       done
-    '') + ''
-      runHook postInstall
-    '';
+    '');
   });
 in
   package
