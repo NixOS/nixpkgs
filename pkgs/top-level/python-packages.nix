@@ -8459,8 +8459,6 @@ in {
 
   reparser = callPackage ../development/python-modules/reparser { };
 
-  repeated_test = callPackage ../development/python-modules/repeated_test { };
-
   repocheck = callPackage ../development/python-modules/repocheck { };
 
   reportlab = callPackage ../development/python-modules/reportlab { };
