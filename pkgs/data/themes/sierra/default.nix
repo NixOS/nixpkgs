@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, libxml2, gdk-pixbuf, librsvg, gtk-engine-murrine }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, gdk-pixbuf
+, gtk-engine-murrine
+, librsvg
+, libxml2
+}:
 
 stdenv.mkDerivation rec {
   pname = "sierra-gtk-theme";
@@ -11,11 +18,18 @@ stdenv.mkDerivation rec {
     sha256 = "174l5mryc34ma1r42pk6572c6i9hmzr9vj1a6w06nqz5qcfm1hds";
   };
 
-  nativeBuildInputs = [ libxml2 ];
+  nativeBuildInputs = [
+    libxml2
+  ];
 
-  buildInputs = [ gdk-pixbuf librsvg ];
+  buildInputs = [
+    gdk-pixbuf
+    librsvg
+  ];
 
-  propagatedUserEnvPkgs = [ gtk-engine-murrine ];
+  propagatedUserEnvPkgs = [
+    gtk-engine-murrine
+  ];
 
   installPhase = ''
     patchShebangs .
