@@ -226,7 +226,7 @@
   ./programs/zsh/zsh-autosuggestions.nix
   ./programs/zsh/zsh-syntax-highlighting.nix
   ./rename.nix
-  ./security/acme.nix
+  ./security/acme
   ./security/apparmor.nix
   ./security/audit.nix
   ./security/auditd.nix
@@ -891,6 +891,7 @@
   ./services/networking/tcpcrypt.nix
   ./services/networking/teamspeak3.nix
   ./services/networking/tedicross.nix
+  ./services/networking/teleport.nix
   ./services/networking/thelounge.nix
   ./services/networking/tinc.nix
   ./services/networking/tinydns.nix
@@ -991,6 +992,7 @@
   ./services/web-apps/bookstack.nix
   ./services/web-apps/calibre-web.nix
   ./services/web-apps/code-server.nix
+  ./services/web-apps/baget.nix
   ./services/web-apps/convos.nix
   ./services/web-apps/cryptpad.nix
   ./services/web-apps/dex.nix

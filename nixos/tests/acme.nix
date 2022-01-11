@@ -54,14 +54,14 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: let
     baseConfig = { nodes, config, specialConfig ? {} }: lib.mkMerge [
       {
         security.acme = {
-          defaults = (dnsConfig nodes) // {
-            inherit group;
-          };
+          defaults = (dnsConfig nodes);
           # One manual wildcard cert
           certs."example.test" = {
             domain = "*.example.test";
           };
         };
+
+        users.users."${config.services."${server}".user}".extraGroups = ["acme"];
 
         services."${server}" = {
           enable = true;
@@ -252,14 +252,14 @@ in {
       } // (let
         baseCaddyConfig = { nodes, config, ... }: {
           security.acme = {
-            defaults = (dnsConfig nodes) // {
-              group = config.services.caddy.group;
-            };
+            defaults = (dnsConfig nodes);
             # One manual wildcard cert
             certs."example.test" = {
               domain = "*.example.test";
             };
           };
+
+          users.users."${config.services.caddy.user}".extraGroups = ["acme"];
 
           services.caddy = {
             enable = true;

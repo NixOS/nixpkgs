@@ -18,6 +18,11 @@ stdenv.mkDerivation rec {
     sha256 = "wfLO7kf2iXESItcgWvKj/npKnYwy5OCyStZviN9qR9M=";
   };
 
+  patches = [
+    # https://nmbug.notmuchmail.org/nmweb/show/87o84iza9r.fsf%40starbuck.i-did-not-set--mail-host-address--so-tickle-me
+    ./test-fix-support-for-gpgsm-in-gnupg-2.3.patch
+  ];
+
   nativeBuildInputs = [
     pkg-config
     doxygen                   # (optional) api docs
