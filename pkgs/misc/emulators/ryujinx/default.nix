@@ -1,7 +1,7 @@
 { lib, buildDotnetModule, fetchFromGitHub, makeDesktopItem, copyDesktopItems
 , libX11, libgdiplus, ffmpeg
 , SDL2_mixer, openal, libsoundio, sndio, pulseaudio
-, gtk3, gobject-introspection, gdk-pixbuf, wrapGAppsHook
+, gtk3, gdk-pixbuf, wrapGAppsHook
 }:
 
 buildDotnetModule rec {
@@ -27,7 +27,10 @@ buildDotnetModule rec {
   nativeBuildInputs = [
     copyDesktopItems
     wrapGAppsHook
-    gobject-introspection
+  ];
+
+  buildInputs = [
+    gtk3
     gdk-pixbuf
   ];
 
@@ -78,6 +81,7 @@ buildDotnetModule rec {
     changelog = "https://github.com/Ryujinx/Ryujinx/wiki/Changelog";
     maintainers = [ maintainers.ivar ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "Ryujinx";
   };
   passthru.updateScript = ./updater.sh;
 }
