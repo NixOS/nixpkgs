@@ -254,6 +254,4 @@ rec {
   };
 
   crystal = crystal_1_2;
-
-  crystal2nix = callPackage ./crystal2nix.nix { };
 }
