@@ -38,14 +38,14 @@
 
 mkDerivation rec {
   pname = "kalendar";
-  version = "0.3.1";
+  version = "0.4.0";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "pim";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-foG8j/MRbDZyzM9KmxEARfWUQXMz8ylQgersE1/gtnQ=";
+    sha256 = "sha256-j383I40lChsI/VOgceaHYGhE61p3SpvInUrkUV5HnHY=";
   };
 
   nativeBuildInputs = [
