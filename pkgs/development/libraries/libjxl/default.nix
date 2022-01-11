@@ -8,6 +8,7 @@
 , giflib
 , gperftools
 , gtest
+, libhwy
 , libjpeg
 , libpng
 , libwebp
@@ -37,19 +38,16 @@ stdenv.mkDerivation rec {
       url = "https://github.com/libjxl/libjxl/commit/88fe3fff3dc70c72405f57c69feffd9823930034.patch";
       sha256 = "1419fyiq4srpj72cynwyvqy8ldi7vn9asvkp5fsbmiqkyhb15jpk";
     })
-  ];
 
-  postPatch = ''
     # "robust statistics" have been removed in upstream mainline as they are
     # conidered to cause "interoperability problems". sure enough the tests
     # fail with precision issues on aarch64.
-    sed -i '/robust_statistics_test.cc/d' lib/{jxl_tests.cmake,lib.gni}
-  '' + lib.optionalString stdenv.isDarwin ''
-    # hydra's darwin machines run into https://github.com/libjxl/libjxl/issues/408
-    # unless we disable highway's tests
-    substituteInPlace third_party/highway/CMakeLists.txt \
-      --replace 'if(BUILD_TESTING)' 'if(false)'
-  '';
+    (fetchpatch {
+      name = "remove-robust-and-descriptive-statistics.patch";
+      url = "https://github.com/libjxl/libjxl/commit/204f87a5e4d684544b13900109abf040dc0b402b.patch";
+      sha256 = "sha256-DoAaYWLmQ+R9GZbHMTYGe0gBL9ZesgtB+2WhmbARna8=";
+    })
+  ];
 
   nativeBuildInputs = [
     asciidoc # for docs
@@ -81,6 +79,7 @@ stdenv.mkDerivation rec {
     brotli
     giflib
     gperftools # provides `libtcmalloc`
+    libhwy
     libjpeg
     libpng
     libwebp
@@ -96,6 +95,9 @@ stdenv.mkDerivation rec {
     # using the vendorered ones is easier.
     "-DJPEGXL_FORCE_SYSTEM_BROTLI=ON"
 
+    # Use our version of highway, though it is still statically linked in
+    "-DJPEGXL_FORCE_SYSTEM_HWY=ON"
+
     # TODO: Update this package to enable this (overridably via an option):
     # Viewer tools for evaluation.
     # "-DJPEGXL_ENABLE_VIEWERS=ON"
@@ -106,6 +108,8 @@ stdenv.mkDerivation rec {
     # * the `gimp` one, which allows GIMP to load jpeg-xl files
     # "-DJPEGXL_ENABLE_PLUGINS=ON"
   ];
+
+  LDFLAGS = lib.optionalString stdenv.hostPlatform.isRiscV "-latomic";
 
   doCheck = true;
 

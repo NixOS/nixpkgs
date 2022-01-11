@@ -17940,6 +17940,8 @@ with pkgs;
 
   libhugetlbfs = callPackage ../development/libraries/libhugetlbfs { };
 
+  libhwy = callPackage ../development/libraries/libhwy { };
+
   libHX = callPackage ../development/libraries/libHX { };
 
   libibmad = callPackage ../development/libraries/libibmad { };
