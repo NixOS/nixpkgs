@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , gdk-pixbuf
 , gtk-engine-murrine
+, jdupes
 , librsvg
 , libxml2
 }:
@@ -19,6 +20,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
+    jdupes
     libxml2
   ];
 
@@ -33,9 +35,16 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
+
     patchShebangs .
+
     mkdir -p $out/share/themes
     name= ./install.sh --dest $out/share/themes
+
+    # Replace duplicate files with hardlinks to the first file in each
+    # set of duplicates, reducing the installed size in about 79%
+    jdupes -L -r $out/share
+
     runHook postInstall
   '';
 
