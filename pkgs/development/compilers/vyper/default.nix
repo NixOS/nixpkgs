@@ -14,11 +14,11 @@ in
 
 buildPythonPackage rec {
   pname = "vyper";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3e50cd802696ea3f5e6ab1bf4c9a90a39c332591d416c99f3d2fa93d7d7ba394";
+    sha256 = "sha256-fXug5v3zstz19uexMWokHBVsfcl2ZCdIOIXKeLVyh/Q=";
   };
 
   nativeBuildInputs = [ pytest-runner ];

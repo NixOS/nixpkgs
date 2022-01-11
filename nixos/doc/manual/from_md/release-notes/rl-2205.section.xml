@@ -254,6 +254,15 @@
       </listitem>
       <listitem>
         <para>
+          <literal>idris2</literal> now requires
+          <literal>--package</literal> when using packages
+          <literal>contrib</literal> and <literal>network</literal>,
+          while previously these idris2 packages were automatically
+          loaded.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The iputils package, which is installed by default, no longer
           provides the legacy tools <literal>tftpd</literal> and
           <literal>traceroute6</literal>. More tools

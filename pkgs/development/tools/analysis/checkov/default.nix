@@ -6,30 +6,6 @@ let
   py = python3.override {
     packageOverrides = self: super: {
 
-      boto3 = super.boto3.overridePythonAttrs (oldAttrs: rec {
-        version = "1.17.112";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "1byqrffbgpp1mq62gnn3w3hnm54dfar0cwgvmkl7mrgbwz5xmdh8";
-        };
-      });
-
-      botocore = super.botocore.overridePythonAttrs (oldAttrs: rec {
-        version = "1.20.112";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "1ksdjh3mwbzgqgfj58vyrhann23b9gqam8id2svmpdmmdq5vgffh";
-        };
-      });
-
-      s3transfer = super.s3transfer.overridePythonAttrs (oldAttrs: rec {
-        version = "0.4.2";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "1cp169vz9rvng7dwbn33fgdbl3b014zpsdqsnfxxw7jm2r5jy0nb";
-        };
-      });
-
       dpath = super.dpath.overridePythonAttrs (oldAttrs: rec {
         version = "1.5.0";
         src = oldAttrs.src.override {
@@ -52,7 +28,7 @@ buildPythonApplication rec {
     owner = "bridgecrewio";
     repo = pname;
     rev = version;
-    sha256 = "sha256-qnRYxbw42vN0w+x1ARRz60e8q9LCPWglprOBm7rkxsE=";
+    hash = "sha256-qnRYxbw42vN0w+x1ARRz60e8q9LCPWglprOBm7rkxsE=";
   };
 
   nativeBuildInputs = with py.pkgs; [
