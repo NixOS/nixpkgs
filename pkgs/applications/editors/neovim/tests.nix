@@ -151,7 +151,7 @@ rec {
   # plugin is not registered.
   test_nvim_with_remote_plugin = neovim.override {
     extraName = "-pathogen-remote";
-    configure.pathogen.pluginNames = with vimPlugins; [ deoplete-nvim ];
+    configure.pathogen.pluginNames = with vimPlugins; [ deoplete-nvim vim-addon-nix ];
   };
 
   # only neovim makes use of `requiredPlugins`, test this here
