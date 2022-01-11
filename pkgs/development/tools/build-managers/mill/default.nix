@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "https://www.lihaoyi.com/mill";
+    homepage = "https://com-lihaoyi.github.io/mill/";
     license = licenses.mit;
     description = "A build tool for Scala, Java and more";
     longDescription = ''
