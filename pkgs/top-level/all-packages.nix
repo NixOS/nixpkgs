@@ -5335,6 +5335,8 @@ with pkgs;
 
   fabric-installer = callPackage ../tools/games/minecraft/fabric-installer { };
 
+  faraday-agent-dispatcher = callPackage ../tools/security/faraday-agent-dispatcher { };
+
   faraday-cli = callPackage ../tools/security/faraday-cli { };
 
   fastlane = callPackage ../tools/admin/fastlane { };
