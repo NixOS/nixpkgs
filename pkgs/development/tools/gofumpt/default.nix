@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, runCommand, gofumpt }:
 
 buildGoModule rec {
   pname = "gofumpt";
@@ -13,7 +13,22 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-RZPfdj+rimKGvRZKaXOirkd7ietri55rBofwa/l2z8s=";
 
-  doCheck = false;
+  # editorconfig-checker-disable
+  passthru.tests = {
+    simple = runCommand "gofumpt-test" { } ''
+      ${gofumpt}/bin/gofumpt > $out <<EOF
+      package main
+      import  "fmt" 
+
+      func main (    ){
+      fmt.  Println("Hello World!") 
+      }
+      EOF
+
+      [ "$(cat $out)" = "$(cat ${./hello.go})" ]
+    '';
+  };
+  # editorconfig-checker-enable
 
   meta = with lib; {
     description = "A stricter gofmt";
