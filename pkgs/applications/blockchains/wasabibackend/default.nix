@@ -36,7 +36,7 @@ buildDotnetModule rec {
     )
   '';
 
-  postInstall = ''
+  postFixup = ''
     mv $out/bin/WalletWasabi.Backend $out/bin/WasabiBackend
   '';
 
