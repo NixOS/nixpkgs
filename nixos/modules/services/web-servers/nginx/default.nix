@@ -374,6 +374,8 @@ let
       ${user}:{PLAIN}${password}
     '') authDef)
   );
+
+  mkCertOwnershipAssertion = import ../../../security/acme/mk-cert-ownership-assertion.nix;
 in
 
 {
@@ -842,7 +844,11 @@ in
           services.nginx.virtualHosts.<name>.useACMEHost are mutually exclusive.
         '';
       }
-    ];
+    ] ++ map (name: mkCertOwnershipAssertion {
+      inherit (cfg) group user;
+      cert = config.security.acme.certs.${name};
+      groups = config.users.groups;
+    }) dependentCertNames;
 
     systemd.services.nginx = {
       description = "Nginx Web Server";
