@@ -1,5 +1,5 @@
 diff --git a/docshell/base/nsAboutRedirector.cpp b/docshell/base/nsAboutRedirector.cpp
-index 038136a..1709f1f 100644
+index e7be91a248..5eb98534ee 100644
 --- a/docshell/base/nsAboutRedirector.cpp
 +++ b/docshell/base/nsAboutRedirector.cpp
 @@ -66,9 +66,6 @@ static const RedirEntry kRedirMap[] = {
@@ -13,13 +13,13 @@ index 038136a..1709f1f 100644
       nsIAboutModule::URI_SAFE_FOR_UNTRUSTED_CONTENT |
           nsIAboutModule::ALLOW_SCRIPT},
 diff --git a/toolkit/content/jar.mn b/toolkit/content/jar.mn
-index 9ac4305..916b4ad 100644
+index 74c0ae8f34..a5d9645a96 100644
 --- a/toolkit/content/jar.mn
 +++ b/toolkit/content/jar.mn
-@@ -39,8 +39,6 @@ toolkit.jar:
-    content/global/plugins.html
+@@ -41,8 +41,6 @@ toolkit.jar:
     content/global/plugins.css
     content/global/plugins.js
+ #endif
 -*   content/global/buildconfig.html
 -   content/global/buildconfig.css
     content/global/contentAreaUtils.js
