@@ -428,6 +428,14 @@
           wrapper for <literal>assert</literal> conditions.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <literal>pkgs.vimPlugins.onedark-nvim</literal> now refers to
+          <link xlink:href="https://github.com/navarasu/onedark.nvim">navarasu/onedark.nvim</link>
+          (formerly refers to
+          <link xlink:href="https://github.com/olimorris/onedarkpro.nvim">olimorris/onedarkpro.nvim</link>).
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.05-notable-changes">
