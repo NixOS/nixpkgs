@@ -32,9 +32,11 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
     patchShebangs .
     mkdir -p $out/share/themes
     name= ./install.sh --dest $out/share/themes
+    runHook postInstall
   '';
 
   meta = with lib; {
