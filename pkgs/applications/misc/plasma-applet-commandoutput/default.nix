@@ -1,4 +1,4 @@
-{ lib, stdenv, cmake, extra-cmake-modules, plasma-framework, kwindowsystem, plasma-pa, fetchFromGitHub }:
+{ lib, stdenv, cmake, extra-cmake-modules, plasma-framework, kwindowsystem, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "plasma-applet-commandoutput";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   patches = [ ./cmake.patch ];
   postPatch = "rm build";
   nativeBuildInputs = [ cmake extra-cmake-modules ];
-  buildInputs = [ plasma-framework kwindowsystem plasma-pa ];
+  buildInputs = [ plasma-framework kwindowsystem ];
 
   dontWrapQtApps = true;
 
