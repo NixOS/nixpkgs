@@ -17,10 +17,7 @@
 , udev
 # Darwin dependencies
 , libicns
-, Carbon
-, Cocoa
-, OpenAL
-, OpenGL
+, darwin
 }:
 
 stdenv.mkDerivation rec {
@@ -54,12 +51,13 @@ stdenv.mkDerivation rec {
     libpulseaudio
     openal
     udev
-  ] ++ lib.optionals stdenv.isDarwin [
+  ]
+  ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
     Carbon
     Cocoa
     OpenAL
     OpenGL
-  ];
+  ]);
 
   patches = [
     # Includes cmath header
@@ -151,6 +149,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;
+    broken = stdenv.isDarwin;
   };
 }
 # TODO: select between Qt, GTK2 and GTK3
