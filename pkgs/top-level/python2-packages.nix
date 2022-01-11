@@ -52,6 +52,8 @@ with self; with super; {
 
   ipaddr = callPackage ../development/python-modules/ipaddr { };
 
+  iso8601 = callPackage ../development/python-modules/iso8601/0.nix { };
+
   itsdangerous = callPackage ../development/python-modules/itsdangerous/1.nix { };
 
   jinja2 = callPackage ../development/python-modules/jinja2/2.nix { };
