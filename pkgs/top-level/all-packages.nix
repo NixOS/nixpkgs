@@ -9112,6 +9112,8 @@ with pkgs;
 
   ratools = callPackage ../tools/networking/ratools { };
 
+  ratt = callPackage ../applications/misc/ratt { };
+
   rc = callPackage ../shells/rc { };
 
   rcon = callPackage ../tools/networking/rcon { };
