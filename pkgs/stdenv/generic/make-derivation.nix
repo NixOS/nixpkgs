@@ -19,7 +19,14 @@ let
   # Based off lib.makeExtensible, with modifications:
   makeDerivationExtensible = mkDerivationSimple: rattrs:
     let
+      # NOTE: The following is a hint that will be printed by the Nix cli when
+      # encountering an infinite recursion. It must not be formatted into
+      # separate lines, because Nix would only show the last line of the comment.
+
+      # An infinite recursion here can be caused by having the attribute names of expression `e` in `.overrideAttrs(finalAttrs: previousAttrs: e)` depend on `finalAttrs`. Only the attribute values of `e` can depend on `finalAttrs`.
       args = rattrs (args // { inherit public; });
+      #              ^^^^
+
       public =
         mkDerivationSimple
           (f0:
