@@ -108,6 +108,8 @@ let
       timerConfig = {
         Persistent = cfg.persistentTimer;
       };
+      # if remote-backup wait for network
+      after = optional (cfg.persistentTimer && !isLocalPath cfg.repo) "network-online.target";
     };
 
   # utility function around makeWrapper
