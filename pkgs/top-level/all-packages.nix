@@ -31433,6 +31433,8 @@ with pkgs;
 
   plasma-applet-volumewin7mixer = libsForQt5.callPackage ../applications/misc/plasma-applet-volumewin7mixer { };
 
+  plasma-applet-commandoutput = libsForQt5.callPackage ../applications/misc/plasma-applet-commandoutput { };
+
   plasma-pass = libsForQt5.callPackage ../tools/security/plasma-pass { };
 
   inherit (callPackages ../applications/misc/redshift {
