@@ -9,6 +9,7 @@ import queue
 import re
 import shlex
 import shutil
+import select
 import socket
 import string
 import subprocess
@@ -121,8 +122,7 @@ class StartCommand:
             display_opts += " -nographic"
 
         # qemu options
-        qemu_opts = ""
-        qemu_opts += (
+        qemu_opts = (
             " -no-reboot"
             " -device virtio-serial"
             " -device virtconsole,chardev=shell"
@@ -814,8 +814,17 @@ class Machine:
             self.monitor_path,
             self.shell_path,
         )
-        self.monitor, _ = monitor_socket.accept()
-        self.shell, _ = shell_socket.accept()
+
+        def accept(sock):  # type: ignore
+            while True:
+                if self.process.poll() is not None:
+                    raise Exception("VM exited")
+                r, w, e = select.select([sock], [], [], 1)
+                for s in r:
+                    return sock.accept()
+
+        self.monitor, _ = accept(monitor_socket)
+        self.shell, _ = accept(shell_socket)
 
         # Store last serial console lines for use
         # of wait_for_console_text
