@@ -128,6 +128,13 @@
           <link linkend="opt-services.teleport.enable">services.teleport</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://loic-sharma.github.io/BaGet/">BaGet</link>,
+          a lightweight NuGet and symbol server. Available at
+          <link linkend="opt-services.baget.enable">services.baget</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.05-incompatibilities">
