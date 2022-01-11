@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, pythonOlder
 , fetchPypi
 , pytest
 , pytestCheckHook
@@ -11,6 +12,8 @@ buildPythonPackage rec {
   pname = "pytest-timeout";
   version = "2.0.1";
   format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
