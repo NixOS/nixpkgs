@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, gtk-engine-murrine }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, gtk-engine-murrine
+, jdupes
+}:
 
 stdenv.mkDerivation rec {
   pname = "nordic";
@@ -72,6 +77,8 @@ stdenv.mkDerivation rec {
 
   sourceRoot = ".";
 
+  nativeBuildInputs = [ jdupes ];
+
   propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
   installPhase = ''
@@ -100,6 +107,10 @@ stdenv.mkDerivation rec {
     mv -v $out/share/themes/Nordic/kde/plasma/look-and-feel $out/share/plasma/
     mv -v $out/share/themes/Nordic/kde/sddm/* $out/share/sddm/themes/Nordic/
     rm -rf $out/share/themes/Nordic/kde
+
+    # Replace duplicate files with hardlinks to the first file in each
+    # set of duplicates, reducing the installed size in about 65%
+    jdupes -L -r $out/share
 
     runHook postInstall
   '';
