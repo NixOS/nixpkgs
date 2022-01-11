@@ -6374,7 +6374,7 @@
   };
 
   kmein = {
-    email = "kieran.meinhardt@gmail.com";
+    email = "kmein@posteo.de";
     name = "Kierán Meinhardt";
     github = "kmein";
     githubId = 10352507;
