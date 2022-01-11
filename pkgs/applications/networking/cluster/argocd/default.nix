@@ -3,7 +3,7 @@
 buildGoModule rec {
   pname = "argocd";
   version = "2.2.2";
-  commit = "122ecefc3abfe8b691a08d9f3cecf9a170cc8c37";
+  commit = "03b17e0233e64787ffb5fcf65c740cc2a20822ba";
   tag = "v${version}";
 
   src = fetchFromGitHub {
