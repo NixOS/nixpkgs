@@ -160,4 +160,6 @@ let self = rec {
 
   websocket = callPackage ../applications/video/kodi/addons/websocket { };
 
+  xbmcswift2 = callPackage ../applications/video/kodi/addons/xbmcswift2 { };
+
 }; in self
