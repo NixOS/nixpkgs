@@ -23,9 +23,4 @@ machine: QEMU running (pid 8841)
 After building/downloading all required dependencies, this will perform
 a build that starts a QEMU/KVM virtual machine containing a NixOS
 system. The virtual machine mounts the Nix store of the host; this makes
-VM creation very fast, as no disk image needs to be created. Afterwards,
-you can view a pretty-printed log of the test:
-
-```ShellSession
-$ firefox result/log.html
-```
+VM creation very fast, as no disk image needs to be created.
