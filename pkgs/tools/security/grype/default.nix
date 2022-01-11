@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "grype";
-  version = "0.30.0";
+  version = "0.31.1";
 
   src = fetchFromGitHub {
     owner = "anchore";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-nUNjC1NNscqv+cirC/4/FlrbOomBXxnOoHvCVpBUOUs=";
+    sha256 = "sha256-3V8qBgRIogZNisUshhs9Va9cbZ5D2hBJwqXPvqSmEWw=";
   };
 
-  vendorSha256 = "sha256-XUj9Az/N/ZzCJF6a7EipPTntwlFYuVhg8JoS+GJES+w=";
+  vendorSha256 = "sha256-/Z0tRzd7v84h8TSfbT4EqwyHWpAb30VNr4EDrNlHyd4=";
 
   nativeBuildInputs = [ installShellFiles ];
 
