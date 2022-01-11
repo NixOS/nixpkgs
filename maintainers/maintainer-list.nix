@@ -4116,12 +4116,6 @@
     githubId = 7551358;
     name = "Frede Emil";
   };
-  freepotion = {
-    email = "42352817+freepotion@users.noreply.github.com";
-    github = "freepotion";
-    githubId = 42352817;
-    name = "Free Potion";
-  };
   freezeboy = {
     email = "freezeboy@users.noreply.github.com";
     github = "freezeboy";
