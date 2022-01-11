@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
     homepage = "https://lh3.github.io/minimap2";
     license = licenses.mit;
     platforms = platforms.all;
+    badPlatforms = [ platforms.aarch64 ];
     maintainers = [ maintainers.arcadio ];
   };
 }
