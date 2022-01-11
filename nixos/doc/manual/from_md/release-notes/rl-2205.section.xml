@@ -391,6 +391,13 @@
           <literal>reloadIfChanged</literal> of the units.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The <literal>services.bookstack.cacheDir</literal> option has
+          been removed, since the cache directory is now handled by
+          systemd.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.05-notable-changes">

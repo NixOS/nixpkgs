@@ -26,6 +26,10 @@ let
 
 
 in {
+  imports = [
+    (mkRemovedOptionModule [ "services" "bookstack" "cacheDir" ] "The cache directory is now handled automatically.")
+  ];
+
   options.services.bookstack = {
 
     enable = mkEnableOption "BookStack";
@@ -58,12 +62,6 @@ in {
       '';
       example = "https://example.com";
       type = types.str;
-    };
-
-    cacheDir = mkOption {
-      description = "BookStack cache directory";
-      default = "/var/cache/bookstack";
-      type = types.path;
     };
 
     dataDir = mkOption {
@@ -290,8 +288,11 @@ in {
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         Type = "oneshot";
+        RemainAfterExit = true;
         User = user;
         WorkingDirectory = "${bookstack}";
+        RuntimeDirectory = "bookstack/cache";
+        RuntimeDirectoryMode = 0700;
       };
       script = ''
         # set permissions
@@ -313,27 +314,21 @@ in {
         ${optionalString (mail.encryption != null) "MAIL_ENCRYPTION=${mail.encryption};"}
         ${optionalString (db.passwordFile != null) "DB_PASSWORD=$(head -n1 ${db.passwordFile})"}
         ${optionalString (mail.passwordFile != null) "MAIL_PASSWORD=$(head -n1 ${mail.passwordFile})"}
-        APP_SERVICES_CACHE=${cfg.cacheDir}/services.php
-        APP_PACKAGES_CACHE=${cfg.cacheDir}/packages.php
-        APP_CONFIG_CACHE=${cfg.cacheDir}/config.php
-        APP_ROUTES_CACHE=${cfg.cacheDir}/routes-v7.php
-        APP_EVENTS_CACHE=${cfg.cacheDir}/events.php
+        APP_SERVICES_CACHE=/run/bookstack/cache/services.php
+        APP_PACKAGES_CACHE=/run/bookstack/cache/packages.php
+        APP_CONFIG_CACHE=/run/bookstack/cache/config.php
+        APP_ROUTES_CACHE=/run/bookstack/cache/routes-v7.php
+        APP_EVENTS_CACHE=/run/bookstack/cache/events.php
         ${optionalString (cfg.nginx.addSSL || cfg.nginx.forceSSL || cfg.nginx.onlySSL || cfg.nginx.enableACME) "SESSION_SECURE_COOKIE=true"}
         ${toString cfg.extraConfig}
         " > "${cfg.dataDir}/.env"
 
         # migrate db
         ${pkgs.php}/bin/php artisan migrate --force
-
-        # clear & create caches (needed in case of update)
-        ${pkgs.php}/bin/php artisan cache:clear
-        ${pkgs.php}/bin/php artisan config:clear
-        ${pkgs.php}/bin/php artisan view:clear
       '';
     };
 
     systemd.tmpfiles.rules = [
-      "d ${cfg.cacheDir}                           0700 ${user} ${group} - -"
       "d ${cfg.dataDir}                            0710 ${user} ${group} - -"
       "d ${cfg.dataDir}/public                     0750 ${user} ${group} - -"
       "d ${cfg.dataDir}/public/uploads             0750 ${user} ${group} - -"
