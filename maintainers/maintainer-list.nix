@@ -10051,6 +10051,13 @@
     githubId = 16779;
     name = "Rickard Nilsson";
   };
+  ricochet = {
+    email = "behayes2@gmail.com";
+    github = "ricochet";
+    githubId = 974323;
+    matrix = "@ricochetcode:matrix.org";
+    name = "Bailey Hayes";
+  };
   riey = {
     email = "creeper844@gmail.com";
     github = "Riey";
