@@ -124,6 +124,8 @@ with self; with super; {
 
   pytest-runner = callPackage ../development/python-modules/pytest-runner/2.nix { };
 
+  pytest-timeout = callPackage ../development/python-modules/pytest-timeout/1.nix { };
+
   pytest-xdist = callPackage ../development/python-modules/pytest-xdist/1.nix { };
 
   pyyaml = callPackage ../development/python-modules/pyyaml/5.nix { };
