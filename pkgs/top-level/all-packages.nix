@@ -30234,6 +30234,8 @@ with pkgs;
 
   ballerburg = callPackage ../games/ballerburg { } ;
 
+  blockattack = callPackage ../games/blockattack { } ;
+
   colobot = callPackage ../games/colobot {};
 
   doom-bcc = callPackage ../games/zdoom/bcc-git.nix { };
@@ -31151,6 +31153,8 @@ with pkgs;
   taisei = callPackage ../games/taisei { };
 
   tcl2048 = callPackage ../games/tcl2048 { };
+
+  the-legend-of-edgar = callPackage ../games/the-legend-of-edgar { };
 
   the-powder-toy = callPackage ../games/the-powder-toy {
     lua = lua5_1;
