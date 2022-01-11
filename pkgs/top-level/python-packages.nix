@@ -3425,6 +3425,8 @@ in {
 
   grandalf = callPackage ../development/python-modules/grandalf { };
 
+  grapheme = callPackage ../development/python-modules/grapheme { };
+
   graphite_api = callPackage ../development/python-modules/graphite-api { };
 
   graphite_beacon = callPackage ../development/python-modules/graphite_beacon { };
