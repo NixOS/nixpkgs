@@ -1391,6 +1391,18 @@ let
         };
       };
 
+      pkief.material-product-icons = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "material-product-icons";
+          publisher = "PKief";
+          version = "1.1.1";
+          sha256 = "a0bd0eff67793828768135fd839f28db0949da9a310db312beb0781f2164fd47";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
       rubbersheep.gi = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "gi";
