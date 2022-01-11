@@ -10026,7 +10026,13 @@ in {
 
   units = callPackage ../development/python-modules/units { };
 
-  unittest2 = callPackage ../development/python-modules/unittest2 { };
+  unittest2 = if pythonAtLeast "3.10" then
+      # unittest2 has not been updated since 2015 and is no longer supported on
+      # Python 3.10. `unittest2` is a compatability package between Python 2 and 3,
+      # but it's relevance is dwinding as `python2Packages` is deprecated.
+      null
+    else
+      callPackage ../development/python-modules/unittest2 { };
 
   unittest-data-provider = callPackage ../development/python-modules/unittest-data-provider { };
 
