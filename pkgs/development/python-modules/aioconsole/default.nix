@@ -17,7 +17,9 @@
 buildPythonPackage rec {
   pname = "aioconsole";
   version = "0.3.3";
-  disabled = pythonOlder "3.6";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "vxgmichel";
@@ -36,7 +38,13 @@ buildPythonPackage rec {
       --replace "--cov aioconsole --count 2" ""
   '';
 
-  pythonImportsCheck = [ "aioconsole" ];
+  disabledTests = [
+    "test_interact_syntax_error"
+  ];
+
+  pythonImportsCheck = [
+    "aioconsole"
+  ];
 
   meta = with lib; {
     description = "Asynchronous console and interfaces for asyncio";
