@@ -10532,6 +10532,18 @@ final: prev:
     meta.homepage = "https://github.com/evanleck/vim-svelte/";
   };
 
+  vim-svelte-plugin = buildVimPluginFrom2Nix {
+    name = "vim-svelte-plugin";
+    version = "2021-11-29";
+    src = fetchFromGitHub {
+      owner = "leafOfTree";
+      repo = "vim-svelte-plugin";
+      rev = "8b2325b51c7b62493484f0547ff55620af3276ab";
+      sha256 = "1nvqah0jz49wz8gpl9kqbzngn1wcmaks9ilxs69vma6sbjkwwzhh";
+    };
+    meta.homepage = "https://github.com/leafOfTree/vim-svelte-plugin/";
+  };
+
   vim-swap = buildVimPluginFrom2Nix {
     pname = "vim-swap";
     version = "2021-08-08";

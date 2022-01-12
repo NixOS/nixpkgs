@@ -397,6 +397,7 @@ ldelossa/litee-filetree.nvim
 ldelossa/litee-symboltree.nvim
 ldelossa/litee.nvim
 leafgarland/typescript-vim
+leafOfTree/vim-svelte-plugin
 leanprover/lean.vim
 ledger/vim-ledger
 lepture/vim-jinja
