@@ -1,30 +1,54 @@
-{ lib, stdenv, fetchFromGitHub, glib }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, glib
+, substituteAll
+, hddtemp
+, liquidctl
+, lm_sensors
+, netcat-gnu
+, nvme-cli
+, procps
+, smartmontools
+}:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-freon";
-  version = "44";
+  version = "45";
 
-  uuid = "freon@UshakovVasilii_Github.yahoo.com";
+  passthru = {
+    extensionUuid = "freon@UshakovVasilii_Github.yahoo.com";
+    extensionPortalSlug = "freon";
+  };
 
   src = fetchFromGitHub {
     owner = "UshakovVasilii";
     repo = "gnome-shell-extension-freon";
     rev = "EGO-${version}";
-    sha256 = "sha256-4DYAIC9N5id3vQe0WaOFP+MymsrPK18hbYqO4DjG+2U=";
+    sha256 = "sha256-tPb7SzHSwvz7VV+kZTmcw1eAdtL1J7FJ3BOtg4Us8jc=";
   };
 
   nativeBuildInputs = [ glib ];
 
+  patches = [
+    (substituteAll {
+      src = ./fix_paths.patch;
+      inherit hddtemp liquidctl lm_sensors procps smartmontools;
+      netcat = netcat-gnu;
+      nvmecli = nvme-cli;
+    })
+  ];
+
   buildPhase = ''
     runHook preBuild
-    glib-compile-schemas --strict --targetdir=${uuid}/schemas ${uuid}/schemas
+    glib-compile-schemas --strict --targetdir="freon@UshakovVasilii_Github.yahoo.com/schemas" "freon@UshakovVasilii_Github.yahoo.com/schemas"
     runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
     mkdir -p $out/share/gnome-shell/extensions
-    cp -r ${uuid} $out/share/gnome-shell/extensions
+    cp -r "freon@UshakovVasilii_Github.yahoo.com" $out/share/gnome-shell/extensions
     runHook postInstall
   '';
 

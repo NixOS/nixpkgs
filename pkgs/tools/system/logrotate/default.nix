@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ popt ] ++ lib.optionals aclSupport [ acl ];
 
   meta = with lib; {
-    homepage = "https://fedorahosted.org/releases/l/o/logrotate/";
+    homepage = "https://github.com/logrotate/logrotate";
     description = "Rotates and compresses system logs";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.viric ];

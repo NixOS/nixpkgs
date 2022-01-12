@@ -35,7 +35,6 @@ in
     programs.xwayland.enable = true;
     environment.systemPackages = [ pkgs.cagebreak pkgs.wayland-utils ];
 
-    virtualisation.memorySize = 1024;
     # Need to switch to a different GPU driver than the default one (-vga std) so that Cagebreak can launch:
     virtualisation.qemu.options = [ "-vga none -device virtio-gpu-pci" ];
   };

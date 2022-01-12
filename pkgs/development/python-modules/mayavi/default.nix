@@ -1,17 +1,17 @@
-{ lib, buildPythonPackage, isPy27, fetchPypi, wrapQtAppsHook
+{ lib, buildPythonPackage, pythonOlder, fetchPypi, wrapQtAppsHook
 , pyface, pygments, numpy, vtk, traitsui, envisage, apptools, pyqt5
 }:
 
 buildPythonPackage rec {
   pname = "mayavi";
-  version = "4.7.1";
+  version = "4.7.4";
 
-  disabled = isPy27;
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    extension = "tar.bz2";
-    sha256 = "095p7mds6kqqrp7xqv24iygr3mw85rm7x41wb5y4yc3gi1pznldy";
+    extension = "tar.gz";
+    sha256 = "ec50e7ec6afb0f9224ad1863d104a0d1ded6c8deb13e720652007aaca2303332";
   };
 
   postPatch = ''
@@ -31,6 +31,7 @@ buildPythonPackage rec {
   ];
 
   doCheck = false; # Needs X server
+  pythonImportsCheck = [ "mayavi" ];
 
   preFixup = ''
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")

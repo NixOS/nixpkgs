@@ -1,6 +1,6 @@
-{ lib, buildPythonPackage, fetchFromGitHub }:
+{ lib, python3, fetchFromGitHub }:
 
-buildPythonPackage rec {
+python3.pkgs.buildPythonPackage rec {
   pname = "me_cleaner";
   version = "1.2";
 

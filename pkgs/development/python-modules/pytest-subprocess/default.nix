@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pytest-subprocess";
-  version = "1.1.1";
+  version = "1.3.2";
 
   disabled = pythonOlder "3.6";
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "aklajnert";
     repo = "pytest-subprocess";
     rev = version;
-    sha256 = "sha256-o8wDZhNHGPV1BQ5Zi2kFNlWq5w0cqebaJUhUUwTK6So=";
+    sha256 = "sha256-auPpqoPeYxmkWTVbbKhEZI6gJGH9Pf1D9YLkuD3FaX0=";
   };
 
   buildInputs = [

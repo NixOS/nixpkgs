@@ -5,11 +5,11 @@
 
 mkDerivation rec {
   pname = "alkimia";
-  version = "8.0.4";
+  version = "8.1.0";
 
   src = fetchurl {
     url = "mirror://kde/stable/alkimia/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-AASnBo3/CqLLb0f3DSHBKQc74R8u2yHxRRK8RHBIfR8=";
+    sha256 = "sha256-kWgHNScHsEkM3ZymVoLv9zsAylIwKb2m/nonSaG8knw=";
   };
 
   nativeBuildInputs = [ extra-cmake-modules doxygen graphviz ];

@@ -9,7 +9,23 @@ stdenv.mkDerivation rec {
     sha256 = "1xpl0s2yjyjwlf832b6kbkaa5921liybaar13k7n45ckd9lxd700";
   };
 
-  patches = lib.optional stdenv.isLinux ./einval.patch
+  patches = lib.optionals stdenv.isLinux [
+    ./einval.patch
+
+    # glibc 2.33 patches from ArchLinux
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/archlinux/svntogit-packages/15b01cf37ff64c487f7440df4e09b090cd93b58f/fakeroot/trunk/fakeroot-1.25.3-glibc-2.33-fix-1.patch";
+      sha256 = "sha256-F6BcxYInSLu7Fxg6OmMZDhTWoLqsc//yYPlTZqQQl68=";
+    })
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/archlinux/svntogit-packages/15b01cf37ff64c487f7440df4e09b090cd93b58f/fakeroot/trunk/fakeroot-1.25.3-glibc-2.33-fix-2.patch";
+      sha256 = "sha256-ifpJxhk6MyQpFolC1hIAAUjcHmOHVU1D25tRwpu2S/k=";
+    })
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/archlinux/svntogit-packages/15b01cf37ff64c487f7440df4e09b090cd93b58f/fakeroot/trunk/fakeroot-1.25.3-glibc-2.33-fix-3.patch";
+      sha256 = "sha256-o2Xm4C64Ny9TL8fjsZltjO1CdJ4VGwqZ+LnufVL5Sq8=";
+    })
+  ]
   # patchset from brew
   ++ lib.optionals stdenv.isDarwin [
     (fetchpatch {

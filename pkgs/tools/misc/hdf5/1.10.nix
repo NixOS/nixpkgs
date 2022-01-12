@@ -1,7 +1,9 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , removeReferencesTo
-, zlib ? null
+, zlibSupport ? true
+, zlib
 , enableShared ? !stdenv.hostPlatform.isStatic
 , javaSupport ? false
 , jdk
@@ -24,10 +26,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ removeReferencesTo ];
 
-  propagatedBuildInputs = optional (zlib != null) zlib;
+  propagatedBuildInputs = optional zlibSupport zlib;
 
-  configureFlags = []
-    ++ optional enableShared "--enable-shared"
+  configureFlags = optional enableShared "--enable-shared"
     ++ optional javaSupport "--enable-java";
 
   patches = [

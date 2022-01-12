@@ -6,7 +6,7 @@
 , wxGTK30-gtk3
 , wxmac
 , ffmpeg
-, proj
+, proj_7
 , perl532
 , unscii
 , python
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ docbook5 docbook2x autoreconfHook pkg-config perlenv python ];
 
   buildInputs = [
-    libGL libGLU ffmpeg proj
+    libGL libGLU ffmpeg proj_7
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     wxmac Carbon Cocoa
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [

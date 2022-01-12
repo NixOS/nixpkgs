@@ -5,7 +5,6 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
   };
 
   machine = { pkgs, ... }: {
-    virtualisation.memorySize = 768;
     virtualisation.writableStore = true;
 
     containers.webserver = {

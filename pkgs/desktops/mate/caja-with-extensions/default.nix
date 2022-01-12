@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   pname = "${caja.pname}-with-extensions";
   version = caja.version;
 
-  phases = [ "installPhase" ];
+  dontUnpack = true;
 
   nativeBuildInputs = [ makeWrapper ];
 

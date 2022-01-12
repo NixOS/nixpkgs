@@ -1,14 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, fetchpatch, six
+{ lib, buildPythonPackage, fetchPypi, six
 , wcwidth, pytest, mock, glibcLocales
 }:
 
 buildPythonPackage rec {
   pname = "blessed";
-  version = "1.18.0";
+  version = "1.19.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1312879f971330a1b7f2c6341f2ae7e2cbac244bfc9d0ecfbbecd4b0293bc755";
+    sha256 = "4db0f94e5761aea330b528e84a250027ffe996b5a94bf03e502600c9a5ad7a61";
   };
 
   checkInputs = [ pytest mock glibcLocales ];

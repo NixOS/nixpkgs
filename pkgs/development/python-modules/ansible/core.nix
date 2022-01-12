@@ -23,17 +23,17 @@
 
 let
   ansible-collections = callPackage ./collections.nix {
-    version = "4.1.0";
-    sha256 = "0rrivq1g0vizah8zmf012lzig2xxfk5x1371k16s3nn4zfkwqqgm";
+    version = "5.0.1";
+    sha256 = "sha256:0xn3lpinmflkxwak7zb36wjs9w2y1k5s295apn3v77xnpc2cfz5l";
   };
 in
 buildPythonPackage rec {
   pname = "ansible-core";
-  version = "2.11.2";
+  version = "2.12.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1syadgzn5ww5bhq9s2py4h1hkh11h7aac5b37zi8rw2xfvdc7r2s";
+    sha256 = "sha256-pFCHByYr4Ru03ZigBvGxSBeHmgVea2xGrZ/KiJT7MHM=";
   };
 
   # ansible_connection is already wrapped, so don't pass it through
@@ -42,9 +42,6 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace lib/ansible/executor/task_executor.py \
       --replace "[python," "["
-
-    substituteInPlace requirements.txt \
-      --replace "resolvelib >= 0.5.3, < 0.6.0" "resolvelib"
   '';
 
   nativeBuildInputs = [

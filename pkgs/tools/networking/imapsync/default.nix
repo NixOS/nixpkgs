@@ -1,9 +1,11 @@
 {lib, stdenv, makeWrapper, fetchurl, perl, openssl, perlPackages }:
 
 stdenv.mkDerivation rec {
-  name = "imapsync-1.727";
+  pname = "imapsync";
+  version = "1.727";
+
   src = fetchurl {
-    url = "https://releases.pagure.org/imapsync/${name}.tgz";
+    url = "https://releases.pagure.org/imapsync/imapsync-${version}.tgz";
     sha256 = "1axacjw2wyaphczfw3kfmi5cl83fyr8nb207nks40fxkbs8q5dlr";
   };
 

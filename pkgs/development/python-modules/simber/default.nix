@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "simber";
-  version = "0.2.2";
+  version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "deepjyoti30";
     repo = pname;
     rev = version;
-    sha256 = "0ksc2m61j5ijj0sq6kkc0hhkmfy9f51h9z3cl2sf8g6wbr9vc47h";
+    sha256 = "04dp9b4s7zb166vlacsaypc6iw1p75azqas1wf0flp570qqf3rkx";
   };
 
   propagatedBuildInputs = [ colorama ];

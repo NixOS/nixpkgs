@@ -2,17 +2,18 @@
 , stdenv
 , fetchFromGitHub
 , cmake
+, coreutils
 }:
 
 stdenv.mkDerivation rec {
   pname = "aws-c-common";
-  version = "0.5.11";
+  version = "0.6.18";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-4CYbL+ICabKvpfjlALJ0wRbuwgy+JKJnKqYbQFsHQsI=";
+    sha256 = "sha256-5Y+cfiVtZGmExPuE3s5m8hnd0HrPwSiKptj0DM1mtUY=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -21,6 +22,23 @@ stdenv.mkDerivation rec {
     "-DBUILD_SHARED_LIBS=ON"
     "-DCMAKE_SKIP_BUILD_RPATH=OFF" # for tests
   ];
+
+  # aws-c-common misuses cmake modules, so we need
+  # to manually add a MODULE_PATH to its consumers
+  setupHook = ./setup-hook.sh;
+
+  # Prevent the execution of tests known to be flaky.
+  preCheck = let
+    ignoreTests = [
+      "promise_test_multiple_waiters"
+    ] ++ lib.optionals stdenv.hostPlatform.isMusl [
+      "sba_metrics" # https://github.com/awslabs/aws-c-common/issues/839
+    ];
+  in ''
+    cat <<EOW >CTestCustom.cmake
+    SET(CTEST_CUSTOM_TESTS_IGNORE ${toString ignoreTests})
+    EOW
+  '';
 
   doCheck = true;
 

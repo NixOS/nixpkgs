@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libqmi";
-  version = "1.28.4";
+  version = "1.30.2";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "https://www.freedesktop.org/software/libqmi/${pname}-${version}.tar.xz";
-    sha256 = "sha256-OxTNKrUiGnrbs5/tFu9pdTjqHHkwiCGtLRm1BeHarqA=";
+    sha256 = "sha256-vgHs4OosIZTL6ldEv1qvBsBLpft+x4h6ExFsdtEU/t0=";
   };
 
   nativeBuildInputs = [
@@ -64,5 +64,6 @@ stdenv.mkDerivation rec {
       # Tools
       gpl2Plus
     ];
+    changelog = "https://gitlab.freedesktop.org/mobile-broadband/libqmi/-/blob/${version}/NEWS";
   };
 }

@@ -19,6 +19,8 @@ buildPythonPackage {
   pname = "dogtail";
   version = "0.9.11";
 
+  outputs = [ "out" "dev" ];
+
   # https://gitlab.com/dogtail/dogtail/issues/1
   # src = fetchPypi {
   #   inherit pname version;

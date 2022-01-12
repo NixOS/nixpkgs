@@ -30,7 +30,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://beta.unity3d.com/download/6e9a27477296/LinuxEditorInstaller/Unity.tar.xz";
-    sha1 = "083imikkrgha5w9sihjvv1m74naxm5yv";
+    sha256 = "10gppnqacs1qzahj077nkcgbfz2lryd0dxnfcmvyc64xpxnj9nlk";
   };
 
   nosuidLib = ./unity-nosuid.c;

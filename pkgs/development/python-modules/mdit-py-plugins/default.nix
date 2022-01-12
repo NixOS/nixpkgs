@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "mdit-py-plugins";
-  version = "0.2.8";
+  version = "0.3.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -18,13 +18,21 @@ buildPythonPackage rec {
     owner = "executablebooks";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-MXQjaVDuguGbmby6BQnrTdpq6Mih3HabXuyFxf9jB18=";
+    sha256 = "sha256-3zFSTjqwjUV6+fU6falYbIzj/Hp7E/9EXKZIi00tkg4=";
   };
 
-  propagatedBuildInputs = [ markdown-it-py ];
+  propagatedBuildInputs = [
+    markdown-it-py
+  ];
 
-  checkInputs = [ pytestCheckHook pytest-regressions ];
-  pythonImportsCheck = [ "mdit_py_plugins" ];
+  checkInputs = [
+    pytestCheckHook
+    pytest-regressions
+  ];
+
+  pythonImportsCheck = [
+    "mdit_py_plugins"
+  ];
 
   meta = with lib; {
     description = "Collection of core plugins for markdown-it-py";

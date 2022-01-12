@@ -3,40 +3,46 @@
 , fetchFromGitHub
 , httpcore
 , httpx
+, flask
 , pytest-asyncio
-, pytest-cov
 , pytestCheckHook
+, starlette
 , trio
 }:
 
 buildPythonPackage rec {
   pname = "respx";
-  version = "0.17.0";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "lundberg";
     repo = pname;
     rev = version;
-    sha256 = "sha256-unGAIsslGXOUHXr0FKzC9bX6+Q3mNGZ9Z/dtjz0gkj4=";
+    sha256 = "sha256-xiAt42kc1+rro99KMwzYKi3XC+wxYVqOY11tM+M/uV8=";
   };
 
-  # Coverage is under 100 % due to the excluded tests
-  postPatch = ''
-    substituteInPlace setup.cfg --replace "--cov-fail-under 100" ""
-  '';
-
-  propagatedBuildInputs = [ httpx ];
+  propagatedBuildInputs = [
+    httpx
+  ];
 
   checkInputs = [
     httpcore
     httpx
+    flask
     pytest-asyncio
-    pytest-cov
     pytestCheckHook
+    starlette
     trio
   ];
 
-  disabledTests = [ "test_pass_through" ];
+  postPatch = ''
+    sed -i "/--cov/d" setup.cfg
+  '';
+
+  disabledTests = [
+    "test_pass_through"
+  ];
+
   pythonImportsCheck = [ "respx" ];
 
   meta = with lib; {

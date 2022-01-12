@@ -88,6 +88,9 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gnome-settings-daemon = callPackage ./core/gnome-settings-daemon { };
 
+  # Using 3.38 to match Mutter used in Pantheon
+  gnome-settings-daemon338 = callPackage ./core/gnome-settings-daemon/3.38 { };
+
   gnome-software = callPackage ./core/gnome-software { };
 
   gnome-system-monitor = callPackage ./core/gnome-system-monitor { };
@@ -106,9 +109,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   mutter = callPackage ./core/mutter { };
 
-  # Needed for elementary's gala and greeter until 3.36 support has more bugfixes
-  # https://github.com/elementary/gala/issues/763
-  mutter334 = callPackage ./core/mutter/3.34 { };
+  # Needed for elementary's gala and greeter until support for higher versions is provided
+  mutter338 = callPackage ./core/mutter/3.38 { };
 
   nautilus = callPackage ./core/nautilus { };
 
@@ -312,7 +314,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   # added 2019-02-08
   inherit (pkgs) atk glib gobject-introspection gspell webkitgtk gtk3 gtkmm3
-      libgtop libgudev libhttpseverywhere librsvg libsecret gdk_pixbuf gtksourceview gtksourceviewmm gtksourceview4
+      libgtop libgudev libhttpseverywhere librsvg libsecret gdk-pixbuf gtksourceview gtksourceviewmm gtksourceview4
       easytag meld orca rhythmbox shotwell gnome-usage
       clutter clutter-gst clutter-gtk cogl gtk-vnc libdazzle libgda libgit2-glib libgxps libgdata libgepub libpeas libgee geocode-glib libgweather librest libzapojit libmediaart gfbgraph gexiv2 folks totem-pl-parser gcr gsound libgnomekbd vte vte_290 gnome-menus gdl;
   inherit (pkgs) gsettings-desktop-schemas; # added 2019-04-16
@@ -339,8 +341,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   inherit (pkgs) gnome-user-docs; # added 2019-11-20
 
-  inherit (pkgs) gegl_0_4; # added 2019-10-31
-
   inherit (pkgs) gjs; # added 2019-01-05
 
   inherit (pkgs) yelp-tools; # added 2019-11-20
@@ -357,7 +357,9 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   maintainers = lib.teams.gnome.members;
 
-  mutter328 = throw "Removed as Pantheon is upgraded to mutter334.";
+  mutter328 = throw "Removed as Pantheon is upgraded to mutter338.";
+
+  mutter334 = throw "Removed as Pantheon is upgraded to mutter338.";
 
   gnome-getting-started-docs = throw "Removed in favour of gnome-tour.";
 

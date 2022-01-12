@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "openring";
-  version = "unstable-2021-04-03";
+  version = "1.0.1";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = pname;
-    rev = "f13edb5dfd882ce608d61cf6b6740650ce9d84a3";
-    sha256 = "sha256-Z65V77JZ9jCzBg7T2+d5Agxxd+MV2R7nYcLedYP5eOE=";
+    rev = version;
+    sha256 = "sha256-BY2AtgZXzPLqHk3hd6D+XXbrwvWS9DNTKwLqsua/3uw=";
   };
 
   vendorSha256 = "sha256-BbBTmkGyLrIWphXC+dBaHaVzHuXRZ+4N/Jt2k3nF7Z4=";
@@ -18,7 +18,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "A webring for static site generators";
-    homepage = "https://git.sr.ht/~sircmpwn/openring";
+    homepage = "https://sr.ht/~sircmpwn/openring";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ sumnerevans ];
   };

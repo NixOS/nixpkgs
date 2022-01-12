@@ -4,7 +4,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "2.4.1";
+  version = "2.5.1";
   pname = "gsd";
   disabled = isPy27;
 
@@ -12,7 +12,7 @@ buildPythonPackage rec {
     owner = "glotzerlab";
     repo = pname;
     rev = "v${version}";
-    sha256 = "02zxfmqw7a5kz8qjdph9a9961mbkd4haxwwa28yjkxs5hzs5x3c8";
+    sha256 = "00cy4lw7xnl2skfx7fg7cs1c8lrbaxvkym9j6zfi1dbvsdd0r103";
   };
 
   nativeBuildInputs = [ cython ];

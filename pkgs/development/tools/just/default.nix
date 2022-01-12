@@ -2,16 +2,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "just";
-  version = "0.9.5";
+  version = "0.10.5";
 
   src = fetchFromGitHub {
     owner = "casey";
     repo = pname;
     rev = version;
-    sha256 = "sha256-fDbnOfT2BTCLF2knUf3ccDnuA0mhM+gkbja7xgmWoaY=";
+    sha256 = "sha256-PbWV8It/ubDbZooJdt/KWihnp221Pexs0U6zMa8KSMw=";
   };
-
-  cargoSha256 = "sha256-mBrFw5d0LXTKj7Nm8XmT5hsq/d/x84U/Gp02+lay2OY=";
+  cargoSha256 = "sha256-VRfk6566SNmvCxtD9EdDxDdBvQuEfjPVggXzt4VoYRg=";
 
   nativeBuildInputs = [ installShellFiles ];
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
@@ -48,11 +47,14 @@ rustPlatform.buildRustPackage rec {
   checkFlags = [
     "--skip=edit" # trying to run "vim" fails as there's no /usr/bin/env or which in the sandbox to find vim and the dependency is not easily patched
     "--skip=run_shebang" # test case very rarely fails with "Text file busy"
+    "--skip=invoke_error_function" # wants JUST_CHOOSER to be fzf
+    "--skip=status_error" # "exit status" instead of "exit code"
+    "--skip=exit_status" # "exit status" instead of "exit code"
   ];
 
   meta = with lib; {
     homepage = "https://github.com/casey/just";
-    changelog = "https://github.com/casey/just/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/casey/just/blob/${version}/CHANGELOG.md";
     description = "A handy way to save and run project-specific commands";
     license = licenses.cc0;
     maintainers = with maintainers; [ xrelkd jk ];

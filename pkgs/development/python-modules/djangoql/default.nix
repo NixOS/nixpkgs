@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "djangoql";
-  version = "0.14.3";
+  version = "0.16.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d1b1344cb1e037f094c04ccc67b809e8df80dea1e88cfb919078426131737018";
+    sha256 = "23cea52eca76e605fa2f34b13ae8d2bf60240737ee9ed3f60c667a4f64d28adf";
   };
 
   propagatedBuildInputs = [ ply ];

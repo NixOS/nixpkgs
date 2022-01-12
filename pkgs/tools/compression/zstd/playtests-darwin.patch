@@ -1,6 +1,6 @@
 --- a/tests/playTests.sh
 +++ b/tests/playTests.sh
-@@ -112,17 +112,10 @@ case "$OS" in
+@@ -112,22 +112,12 @@ case "$OS" in
  esac
  
  case "$UNAME" in
@@ -16,9 +16,14 @@
 -    Darwin | FreeBSD | OpenBSD | NetBSD) MTIME="stat -f %m" ;;
 -esac
  
- DIFF="diff"
- case "$UNAME" in
-@@ -842,7 +835,6 @@ $MD5SUM dirTestDict/* > tmph1
+ GET_PERMS="stat -c %a"
+-case "$UNAME" in
+-    Darwin | FreeBSD | OpenBSD | NetBSD) GET_PERMS="stat -f %Lp" ;;
+-esac
+ 
+ assertFilePermissions() {
+     STAT1=$($GET_PERMS "$1")
+@@ -967,7 +957,6 @@ $MD5SUM dirTestDict/* > tmph1
  zstd -f --rm dirTestDict/* -D tmpDictC
  zstd -d --rm dirTestDict/*.zst -D tmpDictC  # note : use internal checksum by default
  case "$UNAME" in

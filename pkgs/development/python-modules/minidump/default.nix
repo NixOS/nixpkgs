@@ -1,25 +1,32 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "minidump";
-  version = "0.0.18";
+  version = "0.0.21";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-uf4KZc9C1gWRgHu4ttk1fpL2pG8oUb79uvCIlHItB/8=";
+    sha256 = "sha256-g9YSr7bFdyfr84rKQztVD4P5+MfDtlYq0quXBx/YXzo=";
   };
 
   # Upstream doesn't have tests
   doCheck = false;
-  pythonImportsCheck = [ "minidump" ];
+
+  pythonImportsCheck = [
+    "minidump"
+  ];
 
   meta = with lib; {
     description = "Python library to parse and read Microsoft minidump file format";
     homepage = "https://github.com/skelsec/minidump";
     license = with licenses; [ mit ];
-    maintainers = [ maintainers.fab ];
+    maintainers = with maintainers; [ fab ];
   };
 }

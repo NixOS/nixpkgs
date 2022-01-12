@@ -40,6 +40,7 @@ in {
       # want to pass in JUPYTER_PATH but use .environment instead,
       # saving a rebuild.
       default = pkgs.python3.pkgs.notebook;
+      defaultText = literalExpression "pkgs.python3.pkgs.notebook";
       description = ''
         Jupyter package to use.
       '';
@@ -105,10 +106,7 @@ in {
           "open('/path/secret_file', 'r', encoding='utf8').read().strip()"
         It will be interpreted at the end of the notebookConfig.
       '';
-      example = [
-        "'sha1:1b961dc713fb:88483270a63e57d18d43cf337e629539de1436ba'"
-        "open('/path/secret_file', 'r', encoding='utf8').read().strip()"
-      ];
+      example = "'sha1:1b961dc713fb:88483270a63e57d18d43cf337e629539de1436ba'";
     };
 
     notebookConfig = mkOption {
@@ -125,7 +123,7 @@ in {
       })));
 
       default = null;
-      example = literalExample ''
+      example = literalExpression ''
         {
           python3 = let
             env = (pkgs.python3.withPackages (pythonPackages: with pythonPackages; [

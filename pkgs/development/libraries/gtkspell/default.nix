@@ -1,10 +1,11 @@
 {lib, stdenv, fetchurl, gtk2, aspell, pkg-config, enchant, intltool}:
 
-stdenv.mkDerivation {
-  name = "gtkspell-2.0.16";
+stdenv.mkDerivation rec {
+  pname = "gtkspell";
+  version = "2.0.16";
 
   src = fetchurl {
-    url = "mirror://sourceforge/gtkspell/gtkspell-2.0.16.tar.gz";
+    url = "mirror://sourceforge/gtkspell/${pname}-${version}.tar.gz";
     sha256 = "00hdv28bp72kg1mq2jdz1sdw2b8mb9iclsp7jdqwpck705bdriwg";
   };
 

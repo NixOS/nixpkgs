@@ -1,15 +1,14 @@
-{ lib, stdenv, fetchurl, ruby, makeWrapper, git }:
+{ lib, stdenv, fetchFromGitHub, ruby, makeWrapper, git }:
 
-let
-  version = "2.4.0";
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "svn2git";
-  inherit version;
+  version = "2.4.0";
 
-  src = fetchurl {
-    url = "https://github.com/nirvdrum/svn2git/archive/v${version}.tar.gz";
-    sha256 = "0ly2vrv6q31n0xhciwb7a1ilr5c6ndyi3bg81yfp4axiypps7l41";
+  src = fetchFromGitHub {
+    owner = "nirvdrum";
+    repo = "svn2git";
+    rev = "v${version}";
+    sha256 = "sha256-w649l/WO68vYYxZOBKzI8XhGFkaSwWx/O3oVOtnGg6w=";
   };
 
   nativeBuildInputs = [ ruby makeWrapper ];

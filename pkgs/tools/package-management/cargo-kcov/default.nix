@@ -1,6 +1,8 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+, makeWrapper
+, kcov
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -16,6 +18,13 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "0m5gfyjzzwd8wkbb388vmd785dy334x0migq3ssi7dlah9zx62bj";
   doCheck = false;
+
+  nativeBuildInputs = [ makeWrapper ];
+
+  postInstall = ''
+    wrapProgram $out/bin/cargo-kcov \
+        --prefix PATH : ${lib.makeBinPath [ kcov ]}
+  '';
 
   meta = with lib; {
     description = "Cargo subcommand to run kcov to get coverage report on Linux";

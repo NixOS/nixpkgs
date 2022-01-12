@@ -1,13 +1,13 @@
 { lib, stdenv, fetchFromGitHub }:
 stdenv.mkDerivation rec {
   pname = "redo-c";
-  version = "0.2";
+  version = "0.3";
 
   src = fetchFromGitHub {
     owner = "leahneukirchen";
     repo = pname;
     rev = "v${version}";
-    sha256 = "11wc2sgw1ssdm83cjdc6ndnp1bv5mzhbw7njw47mk7ri1ic1x51b";
+    sha256 = "sha256-oZcaBgESIaD7/SUBE7luh7axucKTEzXPVkQAQs2NCXE=";
   };
 
   postPatch = ''

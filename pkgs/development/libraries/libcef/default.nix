@@ -1,4 +1,7 @@
-{ lib, stdenv, fetchurl, cmake
+{ lib
+, stdenv
+, fetchurl
+, cmake
 , glib
 , nss
 , nspr
@@ -52,18 +55,39 @@ let
     cups
     libxshmfence
   ];
-in stdenv.mkDerivation rec {
+  platforms = {
+    "aarch64-linux" = {
+      platformStr = "linuxarm64";
+      projectArch = "arm64";
+      sha256 = "1j93qawh9h6k2ic70i10npppv5f9dch961lc1wxwsi68daq8r081";
+    };
+    "i686-linux" = {
+      platformStr = "linux32";
+      projectArch = "x86";
+      sha256 = "0ki4zr8ih06kirgbpxbinv4baw3qvacx208q6qy1cvpfh6ll4fwb";
+    };
+    "x86_64-linux" = {
+      platformStr = "linux64";
+      projectArch = "x86_64";
+      sha256 = "1ja711x9fdlf21qw1k9xn3lvjc5zsfgnjga1w1r8sysam73jk7xj";
+    };
+  };
+
+  platformInfo = builtins.getAttr stdenv.targetPlatform.system platforms;
+in
+stdenv.mkDerivation rec {
   pname = "cef-binary";
   version = "90.6.7";
   gitRevision = "19ba721";
   chromiumVersion = "90.0.4430.212";
 
   src = fetchurl {
-    url = "https://cef-builds.spotifycdn.com/cef_binary_${version}+g${gitRevision}+chromium-${chromiumVersion}_linux64_minimal.tar.bz2";
-    sha256 = "1ja711x9fdlf21qw1k9xn3lvjc5zsfgnjga1w1r8sysam73jk7xj";
+    url = "https://cef-builds.spotifycdn.com/cef_binary_${version}+g${gitRevision}+chromium-${chromiumVersion}_${platformInfo.platformStr}_minimal.tar.bz2";
+    inherit (platformInfo) sha256;
   };
 
   nativeBuildInputs = [ cmake ];
+  cmakeFlags = "-DPROJECT_ARCH=${platformInfo.projectArch}";
   makeFlags = [ "libcef_dll_wrapper" ];
   dontStrip = true;
   dontPatchELF = true;
@@ -83,6 +107,6 @@ in stdenv.mkDerivation rec {
     homepage = "https://cef-builds.spotifycdn.com/index.html";
     maintainers = with maintainers; [ puffnfresh ];
     license = licenses.bsd3;
-    platforms = with platforms; linux;
+    platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" ];
   };
 }

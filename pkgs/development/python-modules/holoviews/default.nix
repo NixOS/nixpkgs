@@ -16,29 +16,26 @@
 
 buildPythonPackage rec {
   pname = "holoviews";
-  version = "1.14.2";
+  version = "1.14.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "64f85cf2c99b083b96f26cd26452aec4b41ced6d9e57f56ae8d72b88defc61c9";
+    sha256 = "8d8d171227e9c9eaadd4b037b3ddaa01055a33bacbdbeb57a5efbd273986665f";
   };
 
   propagatedBuildInputs = [
     colorcet
-    param
     numpy
-    pyviz-comms
-    ipython
-    notebook
     pandas
-    matplotlib
-    bokeh
-    scipy
     panel
+    param
+    pyviz-comms
   ];
 
   # tests not fully included with pypi release
   doCheck = false;
+
+  pythonImportsCheck = [ "holoviews" ];
 
   meta = with lib; {
     description = "Python data analysis and visualization seamless and simple";

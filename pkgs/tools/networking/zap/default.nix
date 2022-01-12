@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   pname = "zap";
-  version = "2.10.0";
+  version = "2.11.1";
   src = fetchurl {
     url = "https://github.com/zaproxy/zaproxy/releases/download/v${version}/ZAP_${version}_Linux.tar.gz";
-    sha256 = "1mz9s56pbs62g4pnd1ml8y6jpf9ilisdwwvjv5kn6yxrcdi2zzqh";
+    sha256 = "0b1qqrjm4m76djy0az9hnz3rqpz1qkql4faqmi7gkx33b1p6d0sz";
   };
 
   buildInputs = [ jre ];

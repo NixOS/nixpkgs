@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "yadm";
-  version = "3.1.0";
+  version = "3.1.1";
 
   buildInputs = [ git gnupg ];
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner  = "TheLocehiliosan";
     repo   = "yadm";
     rev    = version;
-    sha256 = "0ga0p28nvqilswa07bzi93adk7wx6d5pgxlacr9wl9v1h6cds92s";
+    sha256 = "sha256-bgiRBlqEjDq0gQ0+aUWpFDeE2piFX3Gy2gEAXgChAOk=";
   };
 
   dontConfigure = true;

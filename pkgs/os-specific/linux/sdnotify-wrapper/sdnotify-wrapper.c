@@ -2,9 +2,9 @@
    Copyright: (C)2015-2020 Laurent Bercot.  http://skarnet.org/
    ISC license. See http://opensource.org/licenses/ISC
 
-   Build-time requirements: skalibs.  http://skarnet.org/software/skalibs/
+   Build-time requirements: skalibs.  https://skarnet.org/software/skalibs/
    Run-time requirements: none, if you link skalibs statically.
- 
+
    Compilation:
      gcc -o sdnotify-wrapper -L/usr/lib/skalibs sdnotify-wrapper.c -lskarnet
    Use /usr/lib/skalibs/libskarnet.a instead of -lskarnet to link statically.
@@ -67,8 +67,6 @@
 #include <skalibs/tai.h>
 #include <skalibs/iopause.h>
 #include <skalibs/djbunix.h>
-//#include <skalibs/webipc.h>
-// svanderburg: This header no longer exists, but socket.h provides the functions this module needs
 #include <skalibs/socket.h>
 #include <skalibs/exec.h>
 
@@ -106,7 +104,7 @@ static inline int run_child (int fd, unsigned int timeout, pid_t pid, char const
 {
   char dummy[4096] ;
   iopause_fd x = { .fd = fd, .events = IOPAUSE_READ } ;
-  tain_t deadline ;
+  tain deadline ;
   tain_now_g() ;
   if (timeout) tain_from_millisecs(&deadline, timeout) ;
   else deadline = tain_infinite_relative ;
@@ -135,7 +133,7 @@ int main (int argc, char const *const *argv)
   int df = 1, keep = 0 ;
   PROG = "sdnotify-wrapper" ;
   {
-    subgetopt_t l = SUBGETOPT_ZERO ;
+    subgetopt l = SUBGETOPT_ZERO ;
     for (;;)
     {
       int opt = subgetopt_r(argc, argv, "d:ft:k", &l) ;

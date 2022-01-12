@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchPypi
 , minikerberos
-, pythonAtLeast
 }:
 
 buildPythonPackage rec {

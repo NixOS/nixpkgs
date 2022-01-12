@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "audiowaveform";
-  version = "1.4.2";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "bbc";
     repo = "audiowaveform";
     rev = version;
-    sha256 = "0k2s2f2hgq4pnjzfkgvjwgsflihmzdq7shicfjn0z2mzw4d1bvp2";
+    sha256 = "sha256-WODAgiwZ7UfoukTcujXE5atw/Z03+Vo6aR2jubPwQeU=";
   };
 
   nativeBuildInputs = [ cmake gtest ];
@@ -16,8 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ boost gd libsndfile libmad libid3tag ];
 
   preConfigure = ''
-    ln -s ${gtest.src}/googletest googletest
-    ln -s ${gtest.src}/googlemock googlemock
+    ln -s ${gtest.src} googletest
   '';
 
   # One test is failing, see PR #101947

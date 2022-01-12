@@ -1,0 +1,80 @@
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="sec-custom-packages">
+  <title>Adding Custom Packages</title>
+  <para>
+    It’s possible that a package you need is not available in NixOS. In
+    that case, you can do two things. First, you can clone the Nixpkgs
+    repository, add the package to your clone, and (optionally) submit a
+    patch or pull request to have it accepted into the main Nixpkgs
+    repository. This is described in detail in the
+    <link xlink:href="https://nixos.org/nixpkgs/manual">Nixpkgs
+    manual</link>. In short, you clone Nixpkgs:
+  </para>
+  <programlisting>
+$ git clone https://github.com/NixOS/nixpkgs
+$ cd nixpkgs
+</programlisting>
+  <para>
+    Then you write and test the package as described in the Nixpkgs
+    manual. Finally, you add it to
+    <xref linkend="opt-environment.systemPackages" />, e.g.
+  </para>
+  <programlisting language="bash">
+environment.systemPackages = [ pkgs.my-package ];
+</programlisting>
+  <para>
+    and you run <literal>nixos-rebuild</literal>, specifying your own
+    Nixpkgs tree:
+  </para>
+  <programlisting>
+# nixos-rebuild switch -I nixpkgs=/path/to/my/nixpkgs
+</programlisting>
+  <para>
+    The second possibility is to add the package outside of the Nixpkgs
+    tree. For instance, here is how you specify a build of the
+    <link xlink:href="https://www.gnu.org/software/hello/">GNU
+    Hello</link> package directly in
+    <literal>configuration.nix</literal>:
+  </para>
+  <programlisting language="bash">
+environment.systemPackages =
+  let
+    my-hello = with pkgs; stdenv.mkDerivation rec {
+      name = &quot;hello-2.8&quot;;
+      src = fetchurl {
+        url = &quot;mirror://gnu/hello/${name}.tar.gz&quot;;
+        sha256 = &quot;0wqd8sjmxfskrflaxywc7gqw7sfawrfvdxd9skxawzfgyy0pzdz6&quot;;
+      };
+    };
+  in
+  [ my-hello ];
+</programlisting>
+  <para>
+    Of course, you can also move the definition of
+    <literal>my-hello</literal> into a separate Nix expression, e.g.
+  </para>
+  <programlisting language="bash">
+environment.systemPackages = [ (import ./my-hello.nix) ];
+</programlisting>
+  <para>
+    where <literal>my-hello.nix</literal> contains:
+  </para>
+  <programlisting language="bash">
+with import &lt;nixpkgs&gt; {}; # bring all of Nixpkgs into scope
+
+stdenv.mkDerivation rec {
+  name = &quot;hello-2.8&quot;;
+  src = fetchurl {
+    url = &quot;mirror://gnu/hello/${name}.tar.gz&quot;;
+    sha256 = &quot;0wqd8sjmxfskrflaxywc7gqw7sfawrfvdxd9skxawzfgyy0pzdz6&quot;;
+  };
+}
+</programlisting>
+  <para>
+    This allows testing the package easily:
+  </para>
+  <programlisting>
+$ nix-build my-hello.nix
+$ ./result/bin/hello
+Hello, world!
+</programlisting>
+</section>

@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-sound-output-device-chooser";
-  version = "38";
+  version = "39";
 
   src = fetchFromGitHub {
     owner = "kgshank";
     repo = "gse-sound-output-device-chooser";
     rev = version;
-    sha256 = "sha256-LZ+C9iK+j7+DEscYCIObxXc0Bn0Z0xSsEFMZxc8REWA=";
+    sha256 = "sha256-RFdBdpKsz2MjdzxWX4UFwah+e68dqrkvm7ql0RAZZwg=";
   };
 
   patches = [
@@ -27,7 +27,10 @@ stdenv.mkDerivation rec {
 
   dontBuild = true;
 
-  uuid = "sound-output-device-chooser@kgshank.net";
+  passthru = {
+    extensionUuid = "sound-output-device-chooser@kgshank.net";
+    extensionPortalSlug = "sound-output-device-chooser";
+  };
 
   makeFlags = [
     "INSTALL_DIR=${placeholder "out"}/share/gnome-shell/extensions"

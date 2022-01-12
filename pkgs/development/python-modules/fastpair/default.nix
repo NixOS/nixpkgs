@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pytestrunner, pytest, scipy, pytestCheckHook }:
+{ lib, buildPythonPackage, fetchFromGitHub, pytest-runner, pytest, scipy, pytestCheckHook }:
 
 buildPythonPackage {
   pname = "fastpair";
@@ -11,7 +11,7 @@ buildPythonPackage {
     sha256 = "1l8zgr8awg27lhlkpa2dsvghrb7b12jl1bkgpzg5q7pg8nizl9mx";
   };
 
-  nativeBuildInputs = [ pytestrunner ];
+  nativeBuildInputs = [ pytest-runner ];
 
   checkInputs = [ pytest pytestCheckHook ];
 

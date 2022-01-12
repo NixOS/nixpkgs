@@ -1,32 +1,28 @@
-{ lib, stdenv, fetchurl, libarchive, python3, file }:
+{ lib, stdenv, fetchurl, libarchive, python3, file, which }:
 
 stdenv.mkDerivation rec {
   pname = "remarkable2-toolchain";
-  version = "2.5.2";
+  version = "3.1.2";
 
   src = fetchurl {
-    url = "https://storage.googleapis.com/codex-public-bucket/codex-x86_64-cortexa7hf-neon-rm11x-toolchain-${version}.sh";
-    sha256 = "1v410q1jn8flisdpkrymxd4pa1ylawd0rh3rljjpkqw1bp8a5vw1";
+    url = "https://storage.googleapis.com/remarkable-codex-toolchain/codex-x86_64-cortexa7hf-neon-rm11x-toolchain-${version}.sh";
+    sha256 = "sha256-JKMDRbkvoxwHiTm/o4JdLn3Mm2Ld1LyxTnCCwvnxk4c=";
+    executable = true;
   };
 
   nativeBuildInputs = [
     libarchive
     python3
     file
+    which
   ];
 
-  unpackCmd = ''
-    mkdir src
-    install $curSrc src/install-toolchain.sh
-  '';
-
+  dontUnpack = true;
   dontBuild = true;
 
   installPhase = ''
-    patchShebangs install-toolchain.sh
-    sed -i -e '3,9d' install-toolchain.sh # breaks PATH
-    sed -i 's|PYTHON=.*$|PYTHON=${python3}/bin/python|' install-toolchain.sh
-    ./install-toolchain.sh -D -y -d $out
+    mkdir -p $out
+    ENVCLEANED=1 $src -y -d $out
   '';
 
   meta = with lib; {
@@ -34,6 +30,6 @@ stdenv.mkDerivation rec {
     homepage = "https://remarkable.engineering/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ tadfisher ];
-    platforms = platforms.x86_64;
+    platforms = [ "x86_64-linux" ];
   };
 }

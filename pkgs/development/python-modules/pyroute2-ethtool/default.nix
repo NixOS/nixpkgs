@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "pyroute2-ethtool";
-  version = "0.6.1";
+  version = "0.6.5";
 
   src = fetchPypi {
     pname = "pyroute2.ethtool";
     inherit version;
-    sha256 = "1gd2vvdkjf6ppiql3znrlzc9xg8c4gsyg2jfm76c2xf329hi66n7";
+    sha256 = "sha256-yvgBS2dlIRNcR2DXLPWu72q7x/onUhD36VMzBzzHcVo=";
   };
 
   propagatedBuildInputs = [

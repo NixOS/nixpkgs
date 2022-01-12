@@ -2,25 +2,28 @@
 
 buildGoModule rec {
   pname = "eksctl";
-  version = "0.54.0";
+  version = "0.76.0";
 
   src = fetchFromGitHub {
     owner = "weaveworks";
     repo = pname;
     rev = version;
-    sha256 = "sha256-hWrSjkEdhb0F5lwFGwjkR2G6gQ8T8HommH2lxJE+0bk=";
+    sha256 = "sha256-KhAS8JUM6dobcSJ/QaRhxv2jNpn6AFqiDRCdxeKHwZE=";
   };
 
-  vendorSha256 = "sha256-499c3Y9IUV8lc+O9qcEeFKQDT4QDvOPmu0rmps7M47w=";
+  vendorSha256 = "sha256-6eiJR7DRx3zYKT3B1wBTGSvPQwYw3815K1V/Y9aBX5E=";
 
   doCheck = false;
 
   subPackages = [ "cmd/eksctl" ];
 
-  buildFlags = [ "-tags netgo" "-tags release" ];
+  tags = [ "netgo" "release" ];
 
-  buildFlagsArray = [
-    "-ldflags=-s -w -X github.com/weaveworks/eksctl/pkg/version.gitCommit=${src.rev} -X github.com/weaveworks/eksctl/pkg/version.buildDate=19700101-00:00:00"
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/weaveworks/eksctl/pkg/version.gitCommit=${src.rev}"
+    "-X github.com/weaveworks/eksctl/pkg/version.buildDate=19700101-00:00:00"
   ];
 
   nativeBuildInputs = [ installShellFiles ];

@@ -3,7 +3,7 @@
 , buildPythonApplication
 , click
 , pyfiglet
-, dateutil
+, python-dateutil
 , setuptools
 }:
 
@@ -18,7 +18,7 @@ buildPythonApplication rec {
     owner = "trehn";
   };
 
-  propagatedBuildInputs = [ dateutil click pyfiglet setuptools ];
+  propagatedBuildInputs = [ python-dateutil click pyfiglet setuptools ];
 
   meta = with lib; {
     description = "Starts a countdown to or from TIMESPEC";

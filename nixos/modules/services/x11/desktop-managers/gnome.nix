@@ -186,7 +186,7 @@ in
       sessionPath = mkOption {
         default = [];
         type = types.listOf types.package;
-        example = literalExample "[ pkgs.gnome.gpaste ]";
+        example = literalExpression "[ pkgs.gnome.gpaste ]";
         description = ''
           Additional list of packages to be added to the session search path.
           Useful for GNOME Shell extensions or GSettings-conditional autostart.
@@ -200,9 +200,11 @@ in
         internal = true; # this is messy
         default = defaultFavoriteAppsOverride;
         type = types.lines;
-        example = literalExample ''
-          [org.gnome.shell]
-          favorite-apps=[ 'firefox.desktop', 'org.gnome.Calendar.desktop' ]
+        example = literalExpression ''
+          '''
+            [org.gnome.shell]
+            favorite-apps=[ 'firefox.desktop', 'org.gnome.Calendar.desktop' ]
+          '''
         '';
         description = "List of desktop files to put as favorite apps into gnome-shell. These need to be installed somehow globally.";
       };
@@ -242,13 +244,13 @@ in
               wmCommand = mkOption {
                 type = types.str;
                 description = "The executable of the window manager to use.";
-                example = "\${pkgs.haskellPackages.xmonad}/bin/xmonad";
+                example = literalExpression ''"''${pkgs.haskellPackages.xmonad}/bin/xmonad"'';
               };
 
               enableGnomePanel = mkOption {
                 type = types.bool;
                 default = true;
-                example = "false";
+                example = false;
                 description = "Whether to enable the GNOME panel in this session.";
               };
             };
@@ -259,20 +261,20 @@ in
 
         panelModulePackages = mkOption {
           default = [ pkgs.gnome.gnome-applets ];
+          defaultText = literalExpression "[ pkgs.gnome.gnome-applets ]";
           type = types.listOf types.path;
           description = ''
             Packages containing modules that should be made available to <literal>gnome-panel</literal> (usually for applets).
 
             If you're packaging something to use here, please install the modules in <literal>$out/lib/gnome-panel/modules</literal>.
           '';
-          example = literalExample "[ pkgs.gnome.gnome-applets ]";
         };
       };
     };
 
     environment.gnome.excludePackages = mkOption {
       default = [];
-      example = literalExample "[ pkgs.gnome.totem ]";
+      example = literalExpression "[ pkgs.gnome.totem ]";
       type = types.listOf types.package;
       description = "Which packages gnome should exclude from the default environment";
     };
@@ -370,7 +372,20 @@ in
       services.xserver.libinput.enable = mkDefault true; # for controlling touchpad settings via gnome control center
 
       xdg.portal.enable = true;
-      xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+      xdg.portal.extraPortals = [
+        pkgs.xdg-desktop-portal-gnome
+        (pkgs.xdg-desktop-portal-gtk.override {
+          # Do not build portals that we already have.
+          buildPortalsInGnome = false;
+        })
+      ];
+
+      # Harmonize Qt5 application style and also make them use the portal for file chooser dialog.
+      qt5 = {
+        enable = mkDefault true;
+        platformTheme = mkDefault "gnome";
+        style = mkDefault "adwaita";
+      };
 
       networking.networkmanager.enable = mkDefault true;
 
@@ -438,7 +453,7 @@ in
         cantarell-fonts
         dejavu_fonts
         source-code-pro # Default monospace font in 3.32
-        source-sans-pro
+        source-sans
       ];
 
       # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/blob/gnome-3-38/elements/core/meta-gnome-core-shell.bst
@@ -469,6 +484,8 @@ in
     (mkIf serviceCfg.experimental-features.realtime-scheduling {
       security.wrappers.".gnome-shell-wrapped" = {
         source = "${pkgs.gnome.gnome-shell}/bin/.gnome-shell-wrapped";
+        owner = "root";
+        group = "root";
         capabilities = "cap_sys_nice=ep";
       };
 

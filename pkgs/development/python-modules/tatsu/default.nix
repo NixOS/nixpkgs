@@ -1,22 +1,22 @@
 { lib, buildPythonPackage, fetchFromGitHub, pythonOlder
 , colorama, regex
-, pytestrunner, pytestCheckHook, pytest-mypy
+, pytest-runner, pytestCheckHook, pytest-mypy
 }:
 
 buildPythonPackage rec {
   pname = "tatsu";
-  version = "5.6.1";
+  version = "5.7.1";
+  # upstream only supports 3.10+
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "neogeny";
     repo = "TatSu";
     rev = "v${version}";
-    sha256 = "149ra1lwax5m1svlv4dwjfqw00lc5vwyfj6zw2v0ammmfm1b94x9";
+    sha256 = "12ljff6l29q92625pgsg4f7xf4dz6iz1c3zdkzz188s4lnwpy8b8";
   };
 
-  disabled = pythonOlder "3.8";
-
-  nativeBuildInputs = [ pytestrunner ];
+  nativeBuildInputs = [ pytest-runner ];
   propagatedBuildInputs = [ colorama regex ];
   checkInputs = [ pytestCheckHook pytest-mypy ];
 

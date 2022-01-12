@@ -29,5 +29,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsdOriginal;
     maintainers = [ maintainers.ebzzry ];
     platforms = platforms.unix;
+    badPlatforms = [ "aarch64-darwin" ];
   };
 }

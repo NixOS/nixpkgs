@@ -7,7 +7,7 @@ let
     name = "${baseName}-deps-${version}";
     buildCommand = ''
       export COURSIER_CACHE=$(pwd)
-      ${coursier}/bin/coursier fetch ch.epfl.scala:scalafix-cli_2.12.7:${version} > deps
+      ${coursier}/bin/cs fetch ch.epfl.scala:scalafix-cli_2.12.7:${version} > deps
       mkdir -p $out/share/java
       cp $(< deps) $out/share/java/
     '';
@@ -17,21 +17,20 @@ let
   };
 in
 stdenv.mkDerivation {
-  name = "${baseName}-${version}";
+  pname = baseName;
+  inherit version;
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ jdk deps ];
 
-  doCheck = true;
-
-  phases = [ "installPhase" "checkPhase" ];
+  dontUnpack = true;
 
   installPhase = ''
     makeWrapper ${jre}/bin/java $out/bin/${baseName} \
       --add-flags "-cp $CLASSPATH scalafix.cli.Cli"
   '';
 
-  checkPhase = ''
+  installCheckPhase = ''
     $out/bin/${baseName} --version | grep -q "${version}"
   '';
 

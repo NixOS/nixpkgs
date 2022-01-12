@@ -6,12 +6,13 @@
 , lxml
 , relatorio
 , genshi
-, dateutil
+, python-dateutil
 , polib
 , python-sql
 , werkzeug
 , wrapt
 , passlib
+, pillow
 , bcrypt
 , pydot
 , python-Levenshtein
@@ -23,12 +24,14 @@
 
 buildPythonApplication rec {
   pname = "trytond";
-  version = "5.8.5";
-  disabled = pythonOlder "3.5";
+  version = "6.2.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "62753cebdae2d9e2d6bf8a5dde840ef77540414c4df76c8ed202c0c0d0bedb02";
+    sha256 = "9494016dd8b4da5a06dccdd1afbd918248d42da9f2c19b1eb8958052c747e193";
   };
 
   # Tells the tests which database to use
@@ -37,15 +40,17 @@ buildPythonApplication rec {
   buildInputs = [
     mock
   ];
+
   propagatedBuildInputs = [
     lxml
     relatorio
     genshi
-    dateutil
+    python-dateutil
     polib
     python-sql
     werkzeug
     wrapt
+    pillow
     passlib
 
     # extra dependencies

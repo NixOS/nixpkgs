@@ -18,7 +18,7 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = [ wrapGAppsHook gettext ];
 
-  checkInputs = [ gdk-pixbuf hicolor-icon-theme ] ++ (with python3.pkgs; [ pytest pytest_xdist polib xvfb-run dbus.daemon glibcLocales ]);
+  checkInputs = [ gdk-pixbuf hicolor-icon-theme ] ++ (with python3.pkgs; [ pytest pytest-xdist polib xvfb-run dbus.daemon glibcLocales ]);
 
   buildInputs = [ gnome.adwaita-icon-theme libsoup glib glib-networking gtk3 webkitgtk gdk-pixbuf keybinder3 gtksourceview libmodplug libappindicator-gtk3 kakasi gobject-introspection ]
     ++ (if xineBackend then [ xine-lib ] else with gst_all_1;

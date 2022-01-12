@@ -2,14 +2,21 @@
 
 stdenv.mkDerivation rec {
   pname = "roswell";
-  version = "21.01.14.108";
+  version = "21.10.14.111";
 
   src = fetchFromGitHub {
     owner = "roswell";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1hj9q3ig7naky3pb3jkl9yjc9xkg0k7js3glxicv0aqffx9hkp3p";
+    sha256 = "sha256-K4RDNTY8g6MNjjiwXMmYaZm0fChJ1C1eTpc0h7ja1ds=";
   };
+
+  patches = [
+    # Load the name of the image from the environment variable so that
+    # it can be consistently overwritten. Using the command line
+    # argument in the wrapper did not work.
+    ./0001-get-image-from-environment.patch
+  ];
 
   preConfigure = ''
     sh bootstrap
@@ -19,7 +26,8 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/ros \
-      --add-flags 'lisp=sbcl-bin/system sbcl-bin.version=system' \
+      --set image `basename $out` \
+      --add-flags 'lisp=sbcl-bin/system sbcl-bin.version=system -L sbcl-bin' \
       --prefix PATH : ${lib.makeBinPath [ sbcl ]} --argv0 ros
   '';
 

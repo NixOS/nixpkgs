@@ -6,19 +6,21 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "libsemanage";
-  version = "2.9";
-  inherit (libsepol) se_release se_url;
+  version = "3.3";
+  inherit (libsepol) se_url;
 
   src = fetchurl {
-    url = "${se_url}/${se_release}/libsemanage-${version}.tar.gz";
-    sha256 = "075w6y3l9hiy5hicgwrmijyxmhfyd1r7cnc08qxyg4j46jfk8xi5";
+    url = "${se_url}/${version}/libsemanage-${version}.tar.gz";
+    sha256 = "1s3wb66l47blc15s6lkqs11j9l8pycdqqbb03x3vpfrlz9dfrl44";
    };
 
   outputs = [ "out" "dev" "man" ] ++ optional enablePython "py";
 
-  nativeBuildInputs = [ bison flex pkg-config ];
+  strictDeps = true;
+
+  nativeBuildInputs = [ bison flex pkg-config ] ++ optional enablePython swig;
   buildInputs = [ libsepol libselinux bzip2 audit ]
-    ++ optionals enablePython [ swig python ];
+    ++ optional enablePython python;
 
   makeFlags = [
     "PREFIX=$(out)"
@@ -26,6 +28,7 @@ stdenv.mkDerivation rec {
     "MAN3DIR=$(man)/share/man/man3"
     "MAN5DIR=$(man)/share/man/man5"
     "PYTHON=python"
+    "PYPREFIX=python"
     "PYTHONLIBDIR=$(py)/${python.sitePackages}"
     "DEFAULT_SEMANAGE_CONF_LOCATION=$(out)/etc/selinux/semanage.conf"
   ];
@@ -41,6 +44,8 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = [ "-Wno-error=clobbered" ];
 
   installTargets = [ "install" ] ++ optionals enablePython [ "install-pywrap" ];
+
+  enableParallelBuilding = true;
 
   meta = removeAttrs libsepol.meta ["outputsToInstall"] // {
     description = "Policy management tools for SELinux";

@@ -4,7 +4,6 @@
 , cryptography
 , curve25519-donna
 , ecdsa
-, ed25519
 , fetchFromGitHub
 , h11
 , pyqrcode
@@ -17,15 +16,14 @@
 
 buildPythonPackage rec {
   pname = "hap-python";
-  version = "3.5.0";
-  disabled = pythonOlder "3.5";
+  version = "4.3.0";
+  disabled = pythonOlder "3.6";
 
-  # pypi package does not include tests
   src = fetchFromGitHub {
     owner = "ikalchev";
     repo = "HAP-python";
     rev = "v${version}";
-    sha256 = "1vzlfx0gpidl0rzv4z94pziwm6rj4lrilly5pykgq984y708pcqf";
+    sha256 = "sha256-G4KL6iMeVn/tmvFtFL8vyqHGNfqk6j8iG4tDK9VpCyM=";
   };
 
   propagatedBuildInputs = [
@@ -33,7 +31,6 @@ buildPythonPackage rec {
     cryptography
     curve25519-donna
     ecdsa
-    ed25519
     h11
     pyqrcode
     zeroconf
@@ -45,8 +42,8 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  # Disable tests requiring network access
   disabledTestPaths = [
+    # Disable tests requiring network access
     "tests/test_accessory_driver.py"
     "tests/test_hap_handler.py"
     "tests/test_hap_protocol.py"
@@ -59,7 +56,10 @@ buildPythonPackage rec {
     "test_we_can_start_stop"
     "test_push_event"
     "test_bridge_run_stop"
+    "test_migration_to_include_client_properties"
   ];
+
+  pythonImportsCheck = [ "pyhap" ];
 
   meta = with lib; {
     homepage = "https://github.com/ikalchev/HAP-python";

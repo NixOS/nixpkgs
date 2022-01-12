@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchFromGitHub
+, fetchPypi
 , six
 , beautifulsoup4
 , lxml
@@ -8,15 +8,11 @@
 
 buildPythonPackage rec {
   pname = "ofxparse";
-  version = "unstable-2020-02-05";
+  version = "0.21";
 
-  # The newer changes haven't been released yet and ledger-autosync
-  # depends on them:
-  src = fetchFromGitHub {
-    owner = "jseutter";
-    repo = "ofxparse";
-    rev = "3236cfd96434feb6bc79a8b66f3400f18e2ad3c4";
-    sha256 = "1rkp174102q7hwjrg3na0qnfd612xb3r360b9blkbprjhzxy7gr7";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "19y4sp5l9jqiqzzlbqdfiab42qx7d84n4xm4s7jfq397666vcyh5";
   };
 
   propagatedBuildInputs = [ six beautifulsoup4 lxml ];

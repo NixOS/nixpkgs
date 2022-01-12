@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-htmlhelp";
-  version = "1.0.3";
+  version = "2.0.0";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e8f5bb7e31b2dbb25b9cc435c8ab7a79787ebf7f906155729338f3156d93659b";
+    sha256 = "f5f8bb2d0d629f398bf47d0d69c07bc13b65f75a81ad9e2f71a63d4b7a2f6db2";
   };
 
 

@@ -95,6 +95,15 @@ rec {
     finalImageTag = "2.2.1";
     finalImageName = "nix";
   };
+  # Same example, but re-fetches every time the fetcher implementation changes.
+  # NOTE: Only use this for testing, or you'd be wasting a lot of time, network and space.
+  testNixFromDockerHub = pkgs.invalidateFetcherByDrvHash pullImage {
+    imageName = "nixos/nix";
+    imageDigest = "sha256:85299d86263a3059cf19f419f9d286cc9f06d3c13146a8ebbb21b3437f598357";
+    sha256 = "19fw0n3wmddahzr20mhdqv6jkjn1kanh6n2mrr08ai53dr8ph5n7";
+    finalImageTag = "2.2.1";
+    finalImageName = "nix";
+  };
 
   # 5. example of multiple contents, emacs and vi happily coexisting
   editors = buildImage {
@@ -341,6 +350,9 @@ rec {
       # This removes sharing of busybox and is not recommended. We do this
       # to make the example suitable as a test case with working binaries.
       cp -r ${pkgs.pkgsStatic.busybox}/* .
+
+      # This is a "build" dependency that will not appear in the image
+      ${pkgs.hello}/bin/hello
     '';
   };
 
@@ -392,6 +404,29 @@ rec {
     contents = [ pkgs.coreutils ];
     created = "now";
   };
+
+  # 23. Ensure that layers are unpacked in the correct order before the
+  # runAsRoot script is executed.
+  layersUnpackOrder =
+  let
+    layerOnTopOf = parent: layerName:
+      pkgs.dockerTools.buildImage {
+        name = "layers-unpack-order-${layerName}";
+        tag = "latest";
+        fromImage = parent;
+        contents = [ pkgs.coreutils ];
+        runAsRoot = ''
+          #!${pkgs.runtimeShell}
+          echo -n "${layerName}" >> /layer-order
+        '';
+      };
+    # When executing the runAsRoot script when building layer C, if layer B is
+    # not unpacked on top of layer A, the contents of /layer-order will not be
+    # "ABC".
+    layerA = layerOnTopOf null   "a";
+    layerB = layerOnTopOf layerA "b";
+    layerC = layerOnTopOf layerB "c";
+  in layerC;
 
   # buildImage without explicit tag
   bashNoTag = pkgs.dockerTools.buildImage {
@@ -463,7 +498,7 @@ rec {
   layeredStoreSymlink =
   let
     target = pkgs.writeTextDir "dir/target" "Content doesn't matter.";
-    symlink = pkgs.runCommandNoCC "symlink" {} "ln -s ${target} $out";
+    symlink = pkgs.runCommand "symlink" {} "ln -s ${target} $out";
   in
     pkgs.dockerTools.buildLayeredImage {
       name = "layeredstoresymlink";
@@ -495,6 +530,11 @@ rec {
     fakeRootCommands = ''
       mkdir -p ./home/jane
       chown 1000 ./home/jane
+      ln -s ${pkgs.hello.overrideAttrs (o: {
+        # A unique `hello` to make sure that it isn't included via another mechanism by accident.
+        configureFlags = o.configureFlags or "" + " --program-prefix=layeredImageWithFakeRootCommands-";
+        doCheck = false;
+      })} ./hello
     '';
   };
 
@@ -540,5 +580,34 @@ rec {
     ];
     config.Cmd = [ "hello" ];
     includeStorePaths = false;
+  };
+
+  # Example export of the bash image
+  exportBash = pkgs.dockerTools.exportImage { fromImage = bash; };
+
+  imageViaFakeChroot = pkgs.dockerTools.streamLayeredImage {
+    name = "image-via-fake-chroot";
+    tag = "latest";
+    config.Cmd = [ "hello" ];
+    enableFakechroot = true;
+    # Crucially, instead of a relative path, this creates /bin, which is
+    # intercepted by fakechroot.
+    # This functionality is not available on darwin as of 2021.
+    fakeRootCommands = ''
+      mkdir /bin
+      ln -s ${pkgs.hello}/bin/hello /bin/hello
+    '';
+  };
+
+  build-image-with-path = buildImage {
+    name = "build-image-with-path";
+    tag = "latest";
+    contents = [ pkgs.bashInteractive ./test-dummy ];
+  };
+
+  layered-image-with-path = pkgs.dockerTools.streamLayeredImage {
+    name = "layered-image-with-path";
+    tag = "latest";
+    contents = [ pkgs.bashInteractive ./test-dummy ];
   };
 }

@@ -2,7 +2,6 @@
 , buildPythonPackage, fetchPypi, pythonOlder, setuptools-scm, pytestCheckHook
 , aiohttp
 , aiohttp-cors
-, appdirs
 , attrs
 , click
 , colorama
@@ -10,8 +9,8 @@
 , mypy-extensions
 , pathspec
 , parameterized
-, regex
-, toml
+, platformdirs
+, tomli
 , typed-ast
 , typing-extensions
 , uvloop
@@ -20,13 +19,13 @@
 
 buildPythonPackage rec {
   pname = "black";
-  version = "21.6b0";
+  version = "21.12b0";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "016f6bhnnnbcrrh3cvmpk77ww0nykv5n1qvgf8b3044dm14264yw";
+    hash = "sha256-d7gPaTpWni5SeVhFljTxjfmwuiYluk4MLV2lvkLm8rM=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
@@ -54,19 +53,21 @@ buildPythonPackage rec {
   ] ++ lib.optionals stdenv.isDarwin [
     # fails on darwin
     "test_expression_diff"
+    # Fail on Hydra, see https://github.com/NixOS/nixpkgs/pull/130785
+    "test_bpo_2142_workaround"
+    "test_skip_magic_trailing_comma"
   ];
 
   propagatedBuildInputs = [
     aiohttp
     aiohttp-cors
-    appdirs
     attrs
     click
     colorama
     mypy-extensions
     pathspec
-    regex
-    toml
+    platformdirs
+    tomli
     typed-ast # required for tests and python2 extra
     uvloop
   ] ++ lib.optional (pythonOlder "3.7") dataclasses
@@ -77,6 +78,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/psf/black";
     changelog = "https://github.com/psf/black/blob/${version}/CHANGES.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ sveitser ];
+    maintainers = with maintainers; [ sveitser autophagy ];
   };
 }

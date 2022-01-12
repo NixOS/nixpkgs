@@ -1,4 +1,4 @@
-{ stdenv, lib, elixir, erlang, findutils, hex, rebar, rebar3, fetchMixDeps, makeWrapper, git, ripgrep }:
+{ stdenv, lib, elixir, erlang, findutils, hex, rebar, rebar3, fetchMixDeps, makeWrapper, git, ripgrep }@inputs:
 
 { pname
 , version
@@ -15,6 +15,8 @@
   # each dependency needs to have a setup hook to add the lib path to $ERL_LIBS
   # this is how mix will find dependencies
 , mixNixDeps ? { }
+, elixir ? inputs.elixir
+, hex ? inputs.hex.override { inherit elixir; }
 , ...
 }@attrs:
 let
@@ -58,6 +60,7 @@ stdenv.mkDerivation (overridable // {
   configurePhase = attrs.configurePhase or ''
     runHook preConfigure
 
+    ${./mix-configure-hook.sh}
     # this is needed for projects that have a specific compile step
     # the dependency needs to be compiled in order for the task
     # to be available
@@ -103,8 +106,12 @@ stdenv.mkDerivation (overridable // {
     if [ -e $out/erts-* ]; then
       echo "ERTS found in $out - removing references to erlang to reduce closure size"
       # there is a link in $out/erts-*/bin/start always
+      # TODO:
       # sometimes there are links in dependencies like bcrypt compiled binaries
-      for file in $(rg "${erlang}/lib/erlang" "$out" --text --files-with-matches); do
+      # at the moment those are not removed since substituteInPlace will
+      # error on binaries
+      for file in $(rg "${erlang}/lib/erlang" "$out" --files-with-matches); do
+        echo "removing reference to erlang in $file"
         substituteInPlace "$file" --replace "${erlang}/lib/erlang" "$out"
       done
     fi

@@ -26,11 +26,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "blender";
-  version = "2.93.0";
+  version = "2.93.5";
 
   src = fetchurl {
     url = "https://download.blender.org/source/${pname}-${version}.tar.xz";
-    sha256 = "0f2rpqa39sir6g90khd2d2fs4kss0zhk7vya1nscf5yp8r566fxs";
+    sha256 = "1fsw8w80h8k5w4zmy659bjlzqyn5i198hi1kbpzfrdn8psxg2bfj";
   };
 
   patches = lib.optional stdenv.isDarwin ./darwin.patch;
@@ -136,8 +136,11 @@ stdenv.mkDerivation rec {
   NIX_LDFLAGS = optionalString cudaSupport "-rpath ${stdenv.cc.cc.lib}/lib";
 
   blenderExecutable =
-    placeholder "out" + (if stdenv.isDarwin then "/Blender.app/Contents/MacOS/Blender" else "/bin/blender");
-  postInstall = ''
+    placeholder "out" + (if stdenv.isDarwin then "/Applications/Blender.app/Contents/MacOS/Blender" else "/bin/blender");
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    mkdir $out/Applications
+    mv $out/Blender.app $out/Applications
+  '' + ''
     buildPythonPath "$pythonPath"
     wrapProgram $blenderExecutable \
       --prefix PATH : $program_PATH \

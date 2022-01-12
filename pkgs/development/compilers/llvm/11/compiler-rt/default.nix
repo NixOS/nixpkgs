@@ -1,4 +1,4 @@
-{ lib, stdenv, llvm_meta, version, fetch, cmake, python3, llvm, libcxxabi }:
+{ lib, stdenv, llvm_meta, version, fetch, cmake, python3, libllvm, libcxxabi }:
 
 let
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   inherit version;
   src = fetch "compiler-rt" "0x1j8ngf1zj63wlnns9vlibafq48qcm72p4jpaxkmkb4qw0grwfy";
 
-  nativeBuildInputs = [ cmake python3 llvm.dev ];
+  nativeBuildInputs = [ cmake python3 libllvm.dev ];
 
   NIX_CFLAGS_COMPILE = [
     "-DSCUDO_DEFAULT_OPTIONS=DeleteSizeMismatch=0:DeallocationTypeMismatch=0"
@@ -58,8 +58,8 @@ stdenv.mkDerivation {
     # ld-wrapper dislikes `-rpath-link //nix/store`, so we normalize away the
     # extra `/`.
     ./normalize-var.patch
-  ]# ++ lib.optional stdenv.hostPlatform.isMusl ./sanitizers-nongnu.patch
-    ++ lib.optional stdenv.hostPlatform.isAarch32 ./armv7l.patch;
+    ../../common/compiler-rt/libsanitizer-no-cyclades-11.patch
+  ] ++ lib.optional stdenv.hostPlatform.isAarch32 ./armv7l.patch;
 
 
   preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -112,5 +112,8 @@ stdenv.mkDerivation {
     # "All of the code in the compiler-rt project is dual licensed under the MIT
     # license and the UIUC License (a BSD-like license)":
     license = with lib.licenses; [ mit ncsa ];
+    # compiler-rt requires a Clang stdenv on 32-bit RISC-V:
+    # https://reviews.llvm.org/D43106#1019077
+    broken = stdenv.hostPlatform.isRiscV && stdenv.hostPlatform.is32bit && !stdenv.cc.isClang;
   };
 }

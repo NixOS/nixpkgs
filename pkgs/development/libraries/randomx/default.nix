@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "randomX";
-  version = "1.1.8";
+  version = "1.1.9";
 
   nativeBuildInputs = [ cmake ];
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner = "tevador";
     repo = pname;
     rev = "v${version}";
-    sha256 = "13h2cw8drq7xn3v8fbpxrlsl8zq3fs8gd2pc1pv28ahr9qqjz1gc";
+    sha256 = "188fh4l8wda1y9vxa9asbk8nw35gyapw7gyn4w2p2qspdjhi5mnq";
   };
 
   meta = with lib; {

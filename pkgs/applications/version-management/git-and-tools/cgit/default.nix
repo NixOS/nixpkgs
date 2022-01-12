@@ -22,9 +22,9 @@ stdenv.mkDerivation rec {
     sha256 = "09lzwa183nblr6l8ib35g2xrjf9wm9yhk3szfvyzkwivdv69c9r2";
   };
 
-  nativeBuildInputs = [ pkg-config ] ++ [ python wrapPython ];
+  nativeBuildInputs = [ pkg-config asciidoc ] ++ [ python wrapPython ];
   buildInputs = [
-    openssl zlib asciidoc libxml2 libxslt docbook_xsl luajit
+    openssl zlib libxml2 libxslt docbook_xsl luajit
   ];
   pythonPath = [ pygments markdown ];
 
@@ -48,9 +48,14 @@ stdenv.mkDerivation rec {
   preBuild = ''
     mkdir -p git
     tar --strip-components=1 -xf "$gitSrc" -C git
-
-    makeFlagsArray+=(prefix="$out" CGIT_SCRIPT_PATH="$out/cgit/")
   '';
+
+  makeFlags = [
+    "prefix=$(out)"
+    "CGIT_SCRIPT_PATH=$(out)/cgit/"
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "AR=${stdenv.cc.targetPrefix}ar"
+  ];
 
   # Install manpage.
   postInstall = ''

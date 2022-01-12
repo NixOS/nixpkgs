@@ -1,17 +1,17 @@
-{ stdenv, lib, fetchurl, autoreconfHook, xz, coreutils }:
+{ stdenv, lib, fetchurl, autoreconfHook, xz, buildPackages }:
 
 stdenv.mkDerivation rec {
   pname = "libunwind";
-  version = "1.4.0";
+  version = "1.6.2";
 
   src = fetchurl {
     url = "mirror://savannah/libunwind/${pname}-${version}.tar.gz";
-    sha256 = "0dc46flppifrv2z0mrdqi60165ghxm1wk0g47vcbyzjdplqwjnfz";
+    sha256 = "sha256-SmrsZmmR+0XQiJxErt6K1usQgHHDVU/N/2cfnJR5SXY=";
   };
 
-  patches = [ ./backtrace-only-with-glibc.patch ];
-
-  postPatch = lib.optionalString stdenv.hostPlatform.isMusl ''
+  postPatch = if stdenv.cc.isClang then ''
+    substituteInPlace configure.ac --replace "-lgcc_s" ""
+  '' else lib.optionalString stdenv.hostPlatform.isMusl ''
     substituteInPlace configure.ac --replace "-lgcc_s" "-lgcc_eh"
   '';
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   # Without latex2man, no man pages are installed despite being
   # prebuilt in the source tarball.
-  configureFlags = [ "LATEX2MAN=${coreutils}/bin/true" ];
+  configureFlags = [ "LATEX2MAN=${buildPackages.coreutils}/bin/true" ];
 
   propagatedBuildInputs = [ xz ];
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     description = "A portable and efficient API to determine the call-chain of a program";
     maintainers = with maintainers; [ orivej ];
     platforms = platforms.linux;
-    badPlatforms = [ "riscv32-linux" "riscv64-linux" ];
+    badPlatforms = [ "riscv32-linux" ];
     license = licenses.mit;
   };
 }

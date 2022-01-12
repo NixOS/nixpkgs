@@ -23,6 +23,5 @@ stdenv.mkDerivation rec {
     license     = licenses.cpl10;
     maintainers = with maintainers; [ deepfire ];
     platforms   = platforms.unix;
-    inherit version;
   };
 }

@@ -57,7 +57,7 @@ lib.fix (noweb: stdenv.mkDerivation rec {
         # NOTE: substituteInPlace breaks Icon binaries, so make sure the script
         #       uses (n)awk before calling.
         if grep -q nawk "$f"; then
-            substituteInPlace "$f" --replace "nawk" "${nawk}/bin/awk"
+            substituteInPlace "$f" --replace "nawk" "${nawk}/bin/nawk"
         fi
     done
 

@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "fabulous";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "jart";
     repo = pname;
     rev = version;
-    sha256 = "0yxdaz6yayp1a57kdb2i8q7kwwdlwy4a3d0lr012h2ji9m89c8q7";
+    sha256 = "sha256-hchlxuB5QP+VxCx+QZ2739/mR5SQmYyE+9kXLKJ2ij4=";
   };
 
   patches = [

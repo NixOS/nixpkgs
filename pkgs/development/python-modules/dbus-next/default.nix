@@ -2,25 +2,24 @@
 , buildPythonPackage
 , fetchFromGitHub
 , python
-, dbus, dbus-python, pytest, pytestcov, pytest-asyncio, pytest-timeout
+, dbus, pytest, pytest-cov, pytest-asyncio, pytest-timeout
 }:
 
 buildPythonPackage rec {
   pname = "dbus-next";
-  version = "0.2.2";
+  version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "altdesktop";
     repo = "python-dbus-next";
     rev = "v${version}";
-    sha256 = "0x78ghkci4las13gwbrm8fzg671lx1q2cn8h0f64ki8yag1myia1";
+    sha256 = "sha256-EKEQZFRUe+E65Z6DNCJFL5uCI5kbXrN7Tzd4O0X5Cqo=";
   };
 
   checkInputs = [
     dbus
-    dbus-python
     pytest
-    pytestcov
+    pytest-cov
     pytest-asyncio
     pytest-timeout
   ];

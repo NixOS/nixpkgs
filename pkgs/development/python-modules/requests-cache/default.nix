@@ -1,21 +1,78 @@
-{ lib, buildPythonPackage, fetchPypi
-, mock, requests, six, urllib3 }:
+{ lib
+, appdirs
+, attrs
+, buildPythonPackage
+, bson
+, cattrs
+, fetchFromGitHub
+, itsdangerous
+, poetry-core
+, pytestCheckHook
+, pythonOlder
+, pyyaml
+, requests
+, requests-mock
+, rich
+, timeout-decorator
+, ujson
+, url-normalize
+}:
 
 buildPythonPackage rec {
   pname = "requests-cache";
-  version = "0.5.2";
+  version = "0.9.0";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "813023269686045f8e01e2289cc1e7e9ae5ab22ddd1e2849a9093ab3ab7270eb";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "reclosedev";
+    repo = "requests-cache";
+    rev = "v${version}";
+    sha256 = "0gz6fyc6lgbab9k92cihrp3711r1wcp4xhs25qp176zbzgccbj43";
   };
 
-  buildInputs = [ mock ];
-  propagatedBuildInputs = [ requests six urllib3 ];
+  nativeBuildInputs = [
+    poetry-core
+  ];
+
+  propagatedBuildInputs = [
+    appdirs
+    attrs
+    bson
+    cattrs
+    itsdangerous
+    pyyaml
+    requests
+    ujson
+    url-normalize
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+    requests-mock
+    rich
+    timeout-decorator
+  ];
+
+  pytestFlagsArray = [
+    # Integration tests require local DBs
+    "tests/unit"
+  ];
+
+  disabledTests = [
+    # Tests are flaky in the sandbox
+    "test_remove_expired_responses"
+  ];
+
+  pythonImportsCheck = [
+    "requests_cache"
+  ];
 
   meta = with lib; {
     description = "Persistent cache for requests library";
-    homepage = "https://pypi.python.org/pypi/requests-cache";
+    homepage = "https://github.com/reclosedev/requests-cache";
     license = licenses.bsd3;
+    maintainers = with maintainers; [ fab ];
   };
 }

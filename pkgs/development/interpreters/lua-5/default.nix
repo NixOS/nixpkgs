@@ -19,10 +19,6 @@ rec {
 
     patches =
       lib.optionals stdenv.isDarwin [ ./5.2.darwin.patch ];
-
-    postBuild = lib.optionalString (!stdenv.isDarwin) ''
-      ( cd src; make $makeFlags "''${makeFlagsArray[@]}" liblua.so )
-    '';
   };
 
   lua5_3_compat = lua5_3.override({

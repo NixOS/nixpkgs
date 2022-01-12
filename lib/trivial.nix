@@ -171,7 +171,7 @@ rec {
      On each release the first letter is bumped and a new animal is chosen
      starting with that new letter.
   */
-  codeName = "Porcupine";
+  codeName = "Quokka";
 
   /* Returns the current nixpkgs version suffix as string. */
   versionSuffix =
@@ -303,12 +303,70 @@ rec {
   # TODO: figure out a clever way to integrate location information from
   # something like __unsafeGetAttrPos.
 
-  warn = msg: builtins.trace "[1;31mwarning: ${msg}[0m";
+  /*
+    Print a warning before returning the second argument. This function behaves
+    like `builtins.trace`, but requires a string message and formats it as a
+    warning, including the `warning: ` prefix.
+
+    To get a call stack trace and abort evaluation, set the environment variable
+    `NIX_ABORT_ON_WARN=true` and set the Nix options `--option pure-eval false --show-trace`
+
+    Type: string -> a -> a
+  */
+  warn =
+    if lib.elem (builtins.getEnv "NIX_ABORT_ON_WARN") ["1" "true" "yes"]
+    then msg: builtins.trace "[1;31mwarning: ${msg}[0m" (abort "NIX_ABORT_ON_WARN=true; warnings are treated as unrecoverable errors.")
+    else msg: builtins.trace "[1;31mwarning: ${msg}[0m";
+
+  /*
+    Like warn, but only warn when the first argument is `true`.
+
+    Type: bool -> string -> a -> a
+  */
   warnIf = cond: msg: if cond then warn msg else id;
+
+  /*
+    Like the `assert b; e` expression, but with a custom error message and
+    without the semicolon.
+
+    If true, return the identity function, `r: r`.
+
+    If false, throw the error message.
+
+    Calls can be juxtaposed using function application, as `(r: r) a = a`, so
+    `(r: r) (r: r) a = a`, and so forth.
+
+    Type: bool -> string -> a -> a
+
+    Example:
+
+        throwIfNot (lib.isList overlays) "The overlays argument to nixpkgs must be a list."
+        lib.foldr (x: throwIfNot (lib.isFunction x) "All overlays passed to nixpkgs must be functions.") (r: r) overlays
+        pkgs
+
+  */
+  throwIfNot = cond: msg: if cond then x: x else throw msg;
+
+  /* Check if the elements in a list are valid values from a enum, returning the identity function, or throwing an error message otherwise.
+
+     Example:
+       let colorVariants = ["bright" "dark" "black"]
+       in checkListOfEnum "color variants" [ "standard" "light" "dark" ] colorVariants;
+       =>
+       error: color variants: bright, black unexpected; valid ones: standard, light, dark
+
+     Type: String -> List ComparableVal -> List ComparableVal -> a -> a
+  */
+  checkListOfEnum = msg: valid: given:
+    let
+      unexpected = lib.subtractLists valid given;
+    in
+      lib.throwIfNot (unexpected == [])
+        "${msg}: ${builtins.concatStringsSep ", " (builtins.map builtins.toString unexpected)} unexpected; valid ones: ${builtins.concatStringsSep ", " (builtins.map builtins.toString valid)}";
 
   info = msg: builtins.trace "INFO: ${msg}";
 
-  showWarnings = warnings: res: lib.fold (w: x: warn w x) res warnings;
+  showWarnings = warnings: res: lib.foldr (w: x: warn w x) res warnings;
 
   ## Function annotations
 
@@ -334,7 +392,10 @@ rec {
      has the same return type and semantics as builtins.functionArgs.
      setFunctionArgs : (a → b) → Map String Bool.
   */
-  functionArgs = f: f.__functionArgs or (builtins.functionArgs f);
+  functionArgs = f:
+    if f ? __functor
+    then f.__functionArgs or (lib.functionArgs (f.__functor f))
+    else builtins.functionArgs f;
 
   /* Check whether something is a function or something
      annotated with function args.

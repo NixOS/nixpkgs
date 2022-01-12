@@ -11,7 +11,10 @@ stdenv.mkDerivation rec {
     sha256 = "0igfxgrjdqq6z6xg4rsawxn261pk25g5dw2pm3bhwz5sqsy4bq3i";
   };
 
-  uuid = "drop-down-terminal@gs-extensions.zzrough.org";
+  passthru = {
+    extensionUuid = "drop-down-terminal@gs-extensions.zzrough.org";
+    extensionPortalSlug = "drop-down-terminal";
+  };
 
   patches = [
     (substituteAll {
@@ -23,7 +26,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
     mkdir -p $out/share/gnome-shell/extensions
-    cp -r ${uuid} $out/share/gnome-shell/extensions/
+    cp -r "drop-down-terminal@gs-extensions.zzrough.org" $out/share/gnome-shell/extensions/
     runHook postInstall
   '';
 

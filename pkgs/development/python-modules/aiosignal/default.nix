@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "aiosignal";
-  version = "1.1.1";
+  version = "1.2.0";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0a9md2dy83qwg2an57nqrzp9nb7krq27y9zz0f7qxcrv0xd42djy";
+    sha256 = "1pamfc2l95s1q86jvmbp17chjy129gk01kwy8xm88d2ijy8s1caq";
   };
 
   propagatedBuildInputs = [

@@ -1,8 +1,8 @@
 { pkgs, lib, ... }:
 
 {
-  config = lib.mkIf (lib.meta.availableOn pkgs.stdenv.hostPlatform pkgs.kexectools) {
-    environment.systemPackages = [ pkgs.kexectools ];
+  config = lib.mkIf (lib.meta.availableOn pkgs.stdenv.hostPlatform pkgs.kexec-tools) {
+    environment.systemPackages = [ pkgs.kexec-tools ];
 
     systemd.services.prepare-kexec =
       { description = "Preparation for kexec";
@@ -10,7 +10,7 @@
         before = [ "systemd-kexec.service" ];
         unitConfig.DefaultDependencies = false;
         serviceConfig.Type = "oneshot";
-        path = [ pkgs.kexectools ];
+        path = [ pkgs.kexec-tools ];
         script =
           ''
             # Don't load the current system profile if we already have a kernel loaded

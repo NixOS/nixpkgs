@@ -47,10 +47,14 @@ python3Packages.buildPythonApplication rec {
 
   setupPyGlobalFlags = [ "--no-update-icon-cache" ];
 
+  dontWrapGApps = true;
+
   preFixup = ''
     gappsWrapperArgs+=(--set PYTHONPATH "$PYTHONPATH")
     # these are called from virt-install in initrdinject.py
     gappsWrapperArgs+=(--prefix PATH : "${makeBinPath [ cpio e2fsprogs file findutils gzip ]}")
+
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
   checkInputs = with python3Packages; [ cpio cdrtools pytestCheckHook ];
@@ -59,6 +63,7 @@ python3Packages.buildPythonApplication rec {
     "tests/test_cli.py"
     "tests/test_disk.py"
     "tests/test_checkprops.py"
+    "tests/test_storage.py"
   ]; # Error logs: https://gist.github.com/superherointj/fee040872beaafaaa19b8bf8f3ff0be5
 
   preCheck = ''

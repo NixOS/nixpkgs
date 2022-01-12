@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, python3Packages }:
+{ lib, fetchFromGitHub, python3Packages, ffmpeg }:
 
 python3Packages.buildPythonApplication rec {
   pname = "gphotos-sync";
@@ -19,10 +19,14 @@ python3Packages.buildPythonApplication rec {
     pyyaml
     requests_oauthlib
   ];
+
+  buildInputs = [ ffmpeg ];
+
   checkInputs = with python3Packages; [
     pytestCheckHook
     mock
   ];
+
   checkPhase = ''
     export HOME=$(mktemp -d)
 

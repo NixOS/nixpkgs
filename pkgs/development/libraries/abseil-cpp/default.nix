@@ -1,14 +1,21 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, static ? stdenv.hostPlatform.isStatic }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, static ? stdenv.hostPlatform.isStatic
+, cxxStandard ? null
+}:
 
 stdenv.mkDerivation rec {
   pname = "abseil-cpp";
-  version = "20210324.1";
+  version = "20210324.2";
 
   src = fetchFromGitHub {
     owner = "abseil";
     repo = "abseil-cpp";
     rev = version;
-    sha256 = "16w63brfwgiayiyhvawsnr14xyy5hpp68k8fj0z6yk0bjzw6jvjw";
+    sha256 = "0g9rbhk3mwjdfxk7cscd04vm8fphd5flz9yykpgvyy1nwa34zk3x";
   };
 
   patches = [
@@ -21,8 +28,9 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DCMAKE_CXX_STANDARD=17"
     "-DBUILD_SHARED_LIBS=${if static then "OFF" else "ON"}"
+  ] ++ lib.optionals (cxxStandard != null) [
+    "-DCMAKE_CXX_STANDARD=${cxxStandard}"
   ];
 
   nativeBuildInputs = [ cmake ];

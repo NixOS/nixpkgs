@@ -1,7 +1,7 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , nix-update-script
-, pantheon
 , wrapGAppsHook
 , pkg-config
 , meson
@@ -22,19 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel";
-  version = "2.3.2";
+  version = "3.0.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-mXi600gufUK81Uks9p4+al0tCI7H9KpizZGyoomp42s=";
-  };
-
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    sha256 = "sha256-WvkQx+9YjKCINpyVg8KjCV0GAb0rJfblSFaO14/4oas=";
   };
 
   nativeBuildInputs = [
@@ -75,6 +69,12 @@ stdenv.mkDerivation rec {
     )
   '';
 
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
+
   meta = with lib; {
     description = "The extensible top panel for Pantheon";
     longDescription = ''
@@ -82,8 +82,9 @@ stdenv.mkDerivation rec {
       including the applications menu.
     '';
     homepage = "https://github.com/elementary/wingpanel";
-    license = licenses.gpl2Plus;
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
+    mainProgram = "io.elementary.wingpanel";
   };
 }

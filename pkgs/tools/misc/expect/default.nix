@@ -25,10 +25,9 @@ tcl.mkTclDerivation rec {
   strictDeps = true;
   hardeningDisable = [ "format" ];
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
-    for i in $out/bin/*; do
-      wrapProgram $i --prefix DYLD_LIBRARY_PATH : $out/lib/expect${version}
-    done
+  postInstall = ''
+    tclWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ tcl ]})
+    ${lib.optionalString stdenv.isDarwin "tclWrapperArgs+=(--prefix DYLD_LIBRARY_PATH : $out/lib/expect${version})"}
   '';
 
   outputs = [ "out" "dev" ];

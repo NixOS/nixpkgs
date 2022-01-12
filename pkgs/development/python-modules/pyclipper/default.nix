@@ -3,16 +3,18 @@
 , buildPythonPackage
 , setuptools-scm
 , cython
+, pytestCheckHook
+, unittest2
 }:
 
 buildPythonPackage rec {
   pname = "pyclipper";
-  version = "1.2.1";
+  version = "1.3.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "ca3751e93559f0438969c46f17459d07f983281dac170c3479de56492e152855";
+    sha256 = "48a1b5c585aea10e5b9c0b82d6abe2642fafd9ef158b9921852bc4af815ca20c";
   };
 
   nativeBuildInputs = [
@@ -20,10 +22,7 @@ buildPythonPackage rec {
     cython
   ];
 
-  # Requires pytest_runner to perform tests, which requires deprecated
-  # features of setuptools. Seems better to not run tests. This should
-  # be fixed upstream.
-  doCheck = false;
+  checkInputs = [ pytestCheckHook unittest2 ];
   pythonImportsCheck = [ "pyclipper" ];
 
   meta = with lib; {

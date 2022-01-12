@@ -1,30 +1,33 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, dateutil
-, text-unidecode
 , freezegun
+, pillow
 , pytestCheckHook
+, python-dateutil
+, text-unidecode
 , ukpostcodeparser
 , validators
 }:
 
 buildPythonPackage rec {
-  pname = "Faker";
-  version = "6.6.2";
+  pname = "faker";
+  version = "9.9.0";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "f43ac743c34affb1c7fccca8b06450371cd482b6ddcb4110e420acb24356e70b";
+    pname = "Faker";
+    inherit version;
+    hash = "sha256-cidwOj2zbtgkEQhUdUREX0WqRdsvP2PohcubVpk4Pw4=";
   };
 
   propagatedBuildInputs = [
-    dateutil
+    python-dateutil
     text-unidecode
   ];
 
   checkInputs = [
     freezegun
+    pillow
     pytestCheckHook
     ukpostcodeparser
     validators

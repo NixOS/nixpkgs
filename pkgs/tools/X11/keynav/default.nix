@@ -1,9 +1,23 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, libX11, xorgproto, libXtst, libXi, libXext
-, libXinerama, libXrandr, glib, cairo, xdotool }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, libX11
+, xorgproto
+, libXtst
+, libXi
+, libXext
+, libXinerama
+, libXrandr
+, glib
+, cairo
+, xdotool
+}:
 
 let release = "20180821"; in
 stdenv.mkDerivation {
-  name = "keynav-0.${release}.0";
+  pname = "keynav";
+  version = "0.${release}.0";
 
   src = fetchFromGitHub {
     owner = "jordansissel";
@@ -13,21 +27,30 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libX11 xorgproto libXtst libXi libXext libXinerama libXrandr
-                  glib cairo xdotool ];
+  buildInputs = [
+    libX11
+    xorgproto
+    libXtst
+    libXi
+    libXext
+    libXinerama
+    libXrandr
+    glib
+    cairo
+    xdotool
+  ];
 
-  patchPhase = ''
+  postPatch = ''
     echo >>VERSION MAJOR=0
     echo >>VERSION RELEASE=${release}
     echo >>VERSION REVISION=0
   '';
 
-  installPhase =
-    ''
-      mkdir -p $out/bin $out/share/keynav/doc
-      cp keynav $out/bin
-      cp keynavrc $out/share/keynav/doc
-    '';
+  installPhase = ''
+    mkdir -p $out/bin $out/share/keynav/doc
+    cp keynav $out/bin
+    cp keynavrc $out/share/keynav/doc
+  '';
 
   meta = with lib; {
     description = "Generate X11 mouse clicks from keyboard";

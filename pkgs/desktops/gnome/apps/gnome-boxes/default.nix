@@ -50,15 +50,16 @@
 , vte
 , glib-networking
 , qemu-utils
+, qemu
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-boxes";
-  version = "40.2";
+  version = "41.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "hzN1mi2GpWNnWWpTSQRjO4HKqlxFpWNtsulZDHFK6Nk=";
+    sha256 = "u3G2zflFOBjyblV0Tl5ZUN2TJ5PQ6Ot+n/h78Mvvwz0=";
   };
 
   doCheck = true;
@@ -121,7 +122,7 @@ stdenv.mkDerivation rec {
   ];
 
   preFixup = ''
-    gappsWrapperArgs+=(--prefix PATH : "${lib.makeBinPath [ mtools cdrkit libcdio qemu-utils ]}")
+    gappsWrapperArgs+=(--prefix PATH : "${lib.makeBinPath [ mtools cdrkit libcdio qemu-utils qemu ]}")
   '';
 
   postPatch = ''

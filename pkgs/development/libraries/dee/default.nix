@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
     "${src}/debian/patches/gtkdocize.patch"
     "${src}/debian/patches/strict-prototype.patch"
     "${src}/debian/patches/vapi-skip-properties.patch"
+    ./0001-Fix-build-with-Vala-0.54.patch
 
     # Fixes glib 2.62 deprecations
     (fetchpatch {

@@ -2,15 +2,15 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "flashfocus";
-  version = "2.2.2";
+  version = "2.2.3";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "1z20d596rnc7cs0rrd221gjn14dmbr11djv94y9p4v7rr788sswv";
+    sha256 = "0cn44hryvz2wl7xklaslxsb3l2i3f8jkgmml0n9v2ks22j5l4r4h";
   };
 
   nativeBuildInputs = with python3.pkgs; [
-    pytestrunner
+    pytest-runner
   ];
 
   propagatedBuildInputs = with python3.pkgs; [

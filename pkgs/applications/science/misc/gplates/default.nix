@@ -1,31 +1,69 @@
-{ lib, stdenv, fetchurl, qt4, qwt6_qt4, libGLU, libGL, glew, gdal, cgal
-, proj, boost, cmake, python2, doxygen, graphviz, gmp, mpfr }:
+{ lib
+, mkDerivation
+, fetchurl
+, cmake
+, doxygen
+, graphviz
+, boost
+, cgal_5
+, gdal
+, glew
+, gmp
+, libGL
+, libGLU
+, mpfr
+, proj
+, python3
+, qtxmlpatterns
+, qwt
+}:
 
-stdenv.mkDerivation rec {
+let
+  python = python3.withPackages (ps: with ps; [
+    numpy
+  ]);
+  boost' = boost.override {
+    enablePython = true;
+    inherit python;
+  };
+  cgal = cgal_5.override {
+    boost = boost';
+  };
+in mkDerivation rec {
   pname = "gplates";
-  version = "2.2.0";
+  version = "2.3.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/gplates/${pname}-${version}-unixsrc.tar.bz2";
-    sha256 = "1jrcv498vpcs8xklhbsgg12yfa90f96p2mwq6x5sjnrlpf8mh50b";
+    name = "gplates_${version}_src.tar.bz2";
+    url = "https://www.earthbyte.org/download/8421/?uid=b89bb31428";
+    sha256 = "0lrcmcxc924ixddii8cyglqlwwxvk7f00g4yzbss5i3fgcbh8n96";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [
-    qt4 qwt6_qt4 libGLU libGL glew gdal cgal proj python2
-    doxygen graphviz gmp mpfr
-    (boost.override {
-      enablePython = true;
-      python = python2;
-    })
+  nativeBuildInputs = [
+    cmake
+    doxygen
+    graphviz
   ];
 
-  NIX_CFLAGS_LINK="-ldl -lpthread -lutil";
+  buildInputs = [
+    boost'
+    cgal
+    gdal
+    glew
+    gmp
+    libGL
+    libGLU
+    mpfr
+    proj
+    python
+    qtxmlpatterns
+    qwt
+  ];
 
   meta = with lib; {
     description = "Desktop software for the interactive visualisation of plate-tectonics";
     homepage = "https://www.gplates.org";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.all;
   };
 }

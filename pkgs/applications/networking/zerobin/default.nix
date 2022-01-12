@@ -7,6 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "zerobin";
   version = "1.0.5";
+
   src = fetchFromGitHub {
     owner = "Tygs";
     repo = "0bin";
@@ -21,6 +22,7 @@ python3Packages.buildPythonApplication rec {
     python3Packages.pyscss
     nodePackages.uglify-js
   ];
+
   propagatedBuildInputs = with python3Packages; [
     appdirs
     beaker
@@ -30,16 +32,19 @@ python3Packages.buildPythonApplication rec {
     lockfile
     paste
   ];
+
   prePatch = ''
     # replace /bin/bash in compress.sh
     patchShebangs .
 
     # relax version constraints of some dependencies
     substituteInPlace setup.cfg \
-      --replace "bleach==3.1.5" "bleach>=3.1.5,<4" \
+      --replace "clize==4.1.1" "clize" \
+      --replace "bleach==3.1.5" "bleach>=3.1.5,<5" \
       --replace "bottle==0.12.18" "bottle>=0.12.18,<1" \
       --replace "Paste==3.4.3" "Paste>=3.4.3,<4"
   '';
+
   buildPhase = ''
     runHook preBuild
     doit build
@@ -50,6 +55,8 @@ python3Packages.buildPythonApplication rec {
   # nix_run_setup runserver: Received extra arguments: test
   # See https://github.com/NixOS/nixpkgs/pull/98734#discussion_r495823510
   doCheck = false;
+
+  pythonImportsCheck = [ "zerobin" ];
 
   meta = with lib; {
     description = "A client side encrypted pastebin";

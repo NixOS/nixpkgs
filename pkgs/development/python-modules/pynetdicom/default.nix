@@ -6,17 +6,21 @@
 , pyfakefs
 , pytestCheckHook
 , sqlalchemy
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pynetdicom";
-  version = "1.5.6";
+  version = "2.0.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pydicom";
     repo = pname;
     rev = "v${version}";
-    sha256 = "09v0bp9zgwbs4zwcncvfccrna5rnihkhs3l4qy0f1lq8gnzjg365";
+    sha256 = "sha256-28SoOdS6sAj3KrfJT8PR2k8XLEY2zh0k9w1eq1y7V8M=";
   };
 
   propagatedBuildInputs = [
@@ -33,6 +37,7 @@ buildPythonPackage rec {
     # Some tests needs network capabilities
     "test_str_types_empty"
     "test_associate_reject"
+    "TestAEGoodAssociation"
     "TestEchoSCP"
     "TestEchoSCPCLI"
     "TestFindSCP"
@@ -50,7 +55,9 @@ buildPythonPackage rec {
     "TestState"
   ];
 
-  pythonImportsCheck = [ "pynetdicom" ];
+  pythonImportsCheck = [
+    "pynetdicom"
+  ];
 
   meta = with lib; {
     description = "Python implementation of the DICOM networking protocol";

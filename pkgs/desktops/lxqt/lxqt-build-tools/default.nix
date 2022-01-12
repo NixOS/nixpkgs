@@ -13,13 +13,13 @@
 
 mkDerivation rec {
   pname = "lxqt-build-tools";
-  version = "0.9.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "0zhcv6cbdn9fr5lpglz26gzssbxkpi824sgc0g7w3hh1z6nqqf8l";
+    sha256 = "1hb04zgpalxv6da3myf1dxsbjix15dczzfq8a24g5dg2zfhwpx21";
   };
 
   # Nix clang on darwin identifies as 'Clang', not 'AppleClang'

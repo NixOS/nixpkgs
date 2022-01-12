@@ -5,6 +5,7 @@ with lib;
 let
 
   cfg = config.services.rspamd;
+  opt = options.services.rspamd;
   postfixCfg = config.services.postfix;
 
   bindSocketOpts = {options, config, ... }: {
@@ -240,7 +241,7 @@ in
         description = ''
           Local configuration files, written into <filename>/etc/rspamd/local.d/{name}</filename>.
         '';
-        example = literalExample ''
+        example = literalExpression ''
           { "redis.conf".source = "/nix/store/.../etc/dir/redis.conf";
             "arc.conf".text = "allow_envfrom_empty = true;";
           }
@@ -253,7 +254,7 @@ in
         description = ''
           Overridden configuration files, written into <filename>/etc/rspamd/override.d/{name}</filename>.
         '';
-        example = literalExample ''
+        example = literalExpression ''
           { "redis.conf".source = "/nix/store/.../etc/dir/redis.conf";
             "arc.conf".text = "allow_envfrom_empty = true;";
           }
@@ -278,15 +279,15 @@ in
           normal = {};
           controller = {};
         };
-        example = literalExample ''
+        example = literalExpression ''
           {
             normal = {
               includes = [ "$CONFDIR/worker-normal.inc" ];
               bindSockets = [{
                 socket = "/run/rspamd/rspamd.sock";
                 mode = "0660";
-                owner = "${cfg.user}";
-                group = "${cfg.group}";
+                owner = "''${config.${opt.user}}";
+                group = "''${config.${opt.group}}";
               }];
             };
             controller = {
@@ -338,10 +339,6 @@ in
             smtpd_milters = ["unix:/run/rspamd/rspamd-milter.sock"];
             non_smtpd_milters = ["unix:/run/rspamd/rspamd-milter.sock"];
           };
-          example = {
-            smtpd_milters = ["unix:/run/rspamd/rspamd-milter.sock"];
-            non_smtpd_milters = ["unix:/run/rspamd/rspamd-milter.sock"];
-          };
         };
       };
     };
@@ -371,8 +368,9 @@ in
     };
     services.postfix.config = mkIf cfg.postfix.enable cfg.postfix.config;
 
-    systemd.services.postfix.serviceConfig.SupplementaryGroups =
-      mkIf cfg.postfix.enable [ postfixCfg.group ];
+    systemd.services.postfix = mkIf cfg.postfix.enable {
+      serviceConfig.SupplementaryGroups = [ postfixCfg.group ];
+    };
 
     # Allow users to run 'rspamc' and 'rspamadm'.
     environment.systemPackages = [ pkgs.rspamd ];

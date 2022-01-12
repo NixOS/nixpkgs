@@ -93,6 +93,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   xfburn = callPackage ./applications/xfburn { };
 
+  xfce4-panel-profiles = callPackage ./applications/xfce4-panel-profiles { };
+
   #### ART
 
   xfce4-icon-theme = callPackage ./art/xfce4-icon-theme { };

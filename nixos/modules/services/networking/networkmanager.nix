@@ -6,7 +6,6 @@ let
   cfg = config.networking.networkmanager;
 
   basePackages = with pkgs; [
-    crda
     modemmanager
     networkmanager
     networkmanager-fortisslvpn
@@ -49,6 +48,7 @@ let
       rc-manager =
         if config.networking.resolvconf.enable then "resolvconf"
         else "unmanaged";
+      firewall-backend = cfg.firewallBackend;
     })
     (mkSection "keyfile" {
       unmanaged-devices =
@@ -244,6 +244,15 @@ in {
         '';
       };
 
+      firewallBackend = mkOption {
+        type = types.enum [ "iptables" "nftables" "none" ];
+        default = "iptables";
+        description = ''
+          Which firewall backend should be used for configuring masquerading with shared mode.
+          If set to none, NetworkManager doesn't manage the configuration at all.
+        '';
+      };
+
       logLevel = mkOption {
         type = types.enum [ "OFF" "ERR" "WARN" "INFO" "DEBUG" "TRACE" ];
         default = "WARN";
@@ -344,7 +353,7 @@ in {
           };
         });
         default = [];
-        example = literalExample ''
+        example = literalExpression ''
         [ {
               source = pkgs.writeText "upHook" '''
 
@@ -404,6 +413,8 @@ in {
       }
     ];
 
+    hardware.wirelessRegulatoryDatabase = true;
+
     environment.etc = with pkgs; {
       "NetworkManager/NetworkManager.conf".source = configFile;
 
@@ -453,6 +464,7 @@ in {
     users.users = {
       nm-openvpn = {
         uid = config.ids.uids.nm-openvpn;
+        group = "nm-openvpn";
         extraGroups = [ "networkmanager" ];
       };
       nm-iodine = {
@@ -490,13 +502,6 @@ in {
 
     systemd.services.ModemManager.aliases = [ "dbus-org.freedesktop.ModemManager1.service" ];
 
-    # override unit as recommended by upstream - see https://github.com/NixOS/nixpkgs/issues/88089
-    # TODO: keep an eye on modem-manager releases as this will eventually be added to the upstream unit
-    systemd.services.ModemManager.serviceConfig.ExecStart = [
-      ""
-      "${pkgs.modemmanager}/sbin/ModemManager --filter-policy=STRICT"
-    ];
-
     systemd.services.NetworkManager-dispatcher = {
       wantedBy = [ "network.target" ];
       restartTriggers = [ configFile overrideNameserversScript ];
@@ -522,7 +527,6 @@ in {
 
       {
         networkmanager.connectionConfig = {
-          "ipv6.ip6-privacy" = 2;
           "ethernet.cloned-mac-address" = cfg.ethernet.macAddress;
           "wifi.cloned-mac-address" = cfg.wifi.macAddress;
           "wifi.powersave" =

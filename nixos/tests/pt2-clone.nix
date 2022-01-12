@@ -22,7 +22,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       # Add a dummy sound card, or the program won't start
       machine.execute("modprobe snd-dummy")
 
-      machine.execute("pt2-clone &")
+      machine.execute("pt2-clone >&2 &")
 
       machine.wait_for_window(r"ProTracker")
       machine.sleep(5)

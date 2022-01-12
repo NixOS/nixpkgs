@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, dateutil
+, python-dateutil
 , jmespath
 , docutils
 , ordereddict
@@ -13,15 +13,15 @@
 
 buildPythonPackage rec {
   pname = "botocore";
-  version = "1.20.88"; # N.B: if you change this, change boto3 and awscli to a matching version
+  version = "1.23.21"; # N.B: if you change this, change boto3 and awscli to a matching version
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-vJie2rUtR4iq3Y0a/5JfXGp8vGiQC/2443mWWurBcxc=";
+    sha256 = "d7f8e82cba38aa1e66015cab0a5ca3204503e90afc4695e97228e28329a14c04";
   };
 
   propagatedBuildInputs = [
-    dateutil
+    python-dateutil
     jmespath
     docutils
     ordereddict

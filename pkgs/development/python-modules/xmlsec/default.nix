@@ -9,18 +9,17 @@
 , xmlsec
 , pkgconfig
 , setuptools-scm
-, toml
 , lxml
 , hypothesis
 }:
 
 buildPythonPackage rec {
   pname = "xmlsec";
-  version = "1.3.11";
+  version = "1.3.12";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-zS6q/38xeEoH3ZnOgfp2cxPfO6GDT6pBQ+4sBwAMrHo=";
+    sha256 = "2c86ac6ce570c9e04f04da0cd5e7d3db346e4b5b1d006311606368f17c756ef9";
   };
 
   # https://github.com/mehcode/python-xmlsec/issues/84#issuecomment-632930116
@@ -28,7 +27,7 @@ buildPythonPackage rec {
     ./reset-lxml-in-tests.patch
   ];
 
-  nativeBuildInputs = [ pkg-config pkgconfig setuptools-scm toml ];
+  nativeBuildInputs = [ pkg-config pkgconfig setuptools-scm ];
 
   buildInputs = [ xmlsec libxslt libxml2 libtool ];
 

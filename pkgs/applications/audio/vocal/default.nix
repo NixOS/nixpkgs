@@ -86,7 +86,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/needle-and-thread/vocal";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ ] ++ teams.pantheon.members;
     platforms = platforms.linux;
+    mainProgram = "com.github.needleandthread.vocal";
   };
 }

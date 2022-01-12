@@ -13,6 +13,14 @@ cargoBuildHook() {
         cargoBuildProfileFlag="--${cargoBuildType}"
     fi
 
+    if [ -n "${cargoBuildNoDefaultFeatures-}" ]; then
+        cargoBuildNoDefaultFeaturesFlag=--no-default-features
+    fi
+
+    if [ -n "${cargoBuildFeatures-}" ]; then
+        cargoBuildFeaturesFlag="--features=${cargoBuildFeatures// /,}"
+    fi
+
     (
     set -x
     env \
@@ -24,6 +32,8 @@ cargoBuildHook() {
         --target @rustTargetPlatformSpec@ \
         --frozen \
         ${cargoBuildProfileFlag} \
+        ${cargoBuildNoDefaultFeaturesFlag} \
+        ${cargoBuildFeaturesFlag} \
         ${cargoBuildFlags}
     )
 

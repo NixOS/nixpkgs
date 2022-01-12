@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/makefile --replace "CC=g++" "CC=c++"
+    # avoid timestamp non-determinism with '-n'
+    substituteInPlace makefile --replace 'gzip -9f' 'gzip -9nf'
   '';
 
   makeFlags = [

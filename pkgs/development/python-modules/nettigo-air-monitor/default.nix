@@ -2,6 +2,7 @@
 , aiohttp
 , aioresponses
 , buildPythonPackage
+, dacite
 , fetchFromGitHub
 , pytest-asyncio
 , pytest-error-for-skips
@@ -11,18 +12,21 @@
 
 buildPythonPackage rec {
   pname = "nettigo-air-monitor";
-  version = "0.2.6";
-  disabled = pythonOlder "3.6";
+  version = "1.2.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "bieniu";
     repo = pname;
     rev = version;
-    sha256 = "0zs14g02m1ahyrhl2ihk74fp390g4672r1jjiaawmkxrvib07dvp";
+    sha256 = "sha256-hKEXTzJMSVBRDiqrN90/fETEhirwSWLdgRULRvlQjbY=";
   };
 
   propagatedBuildInputs = [
     aiohttp
+    dacite
   ];
 
   checkInputs = [
@@ -39,7 +43,9 @@ buildPythonPackage rec {
       --replace "--cov --cov-report term-missing " ""
   '';
 
-  pythonImportsCheck = [ "nettigo_air_monitor" ];
+  pythonImportsCheck = [
+    "nettigo_air_monitor"
+  ];
 
   meta = with lib; {
     description = "Python module to get air quality data from Nettigo Air Monitor devices";

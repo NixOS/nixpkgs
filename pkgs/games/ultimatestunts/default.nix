@@ -1,11 +1,12 @@
 {lib, stdenv, fetchurl, SDL, libGLU, libGL, SDL_image, freealut, openal, libvorbis,
 pkg-config}:
 
-stdenv.mkDerivation {
-  name = "ultimate-stunts-0.7.6.1";
+stdenv.mkDerivation rec {
+  pname = "ultimate-stunts";
+  version = "0.7.7.1";
   src = fetchurl {
-    url = "mirror://sourceforge/ultimatestunts/ultimatestunts-srcdata-0761.tar.gz";
-    sha256 = "0rd565ml6l927gyq158klhni7myw8mgllhv0xl1fg9m8hlzssgrv";
+    url = "mirror://sourceforge/ultimatestunts/ultimatestunts-srcdata-${lib.replaceStrings ["."] [""] version}.tar.gz";
+    sha256 = "sha256-/MBuSi/yxcG9k3ZwrNsHkUDzzg798AV462VZog67JtM=";
   };
 
   nativeBuildInputs = [ pkg-config ];

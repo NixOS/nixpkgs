@@ -16,8 +16,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libcommuni qtbase ];
 
-  enableParallelBuilding = true;
-
   dontWrapQtApps = true;
 
   preConfigure = ''
@@ -40,8 +38,6 @@ stdenv.mkDerivation rec {
     install_name_tool \
       -add_rpath @executable_path/../Frameworks \
       $out/Applications/Communi.app/Contents/MacOS/Communi
-
-    wrapQtApp $out/Applications/Communi.app/Contents/MacOS/Communi
   '' else ''
     substituteInPlace "$out/share/applications/communi.desktop" \
       --replace "/usr/bin" "$out/bin"

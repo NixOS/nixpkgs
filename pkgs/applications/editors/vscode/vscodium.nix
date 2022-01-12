@@ -13,10 +13,10 @@ let
   archive_fmt = if system == "x86_64-darwin" then "zip" else "tar.gz";
 
   sha256 = {
-    x86_64-linux = "16s3hznyrz9w0cns8fk3pzk9ai5dj9y5p4n1rf3hrpg5hi9yxi5j";
-    x86_64-darwin = "133p032c8gv3hx4x7kxdfhz4xvkpjmjnvy02sf05dxqv5nly4xx4";
-    aarch64-linux = "183f674qyrlz0wqx6x48z6jhl8z30zmwsj8021hqi8px5ny99l1f";
-    armv7l-linux = "0rf3ybha861r5pfp6rvh21abfagaiwqlsbxm7fhphrc5382lmxbs";
+    x86_64-linux = "0pczrbifjgm905371i8c6bk90ka291cmny6hr1nzfix7bn5psjx0";
+    x86_64-darwin = "12g2jlrhng3i56a4v9jf7nrj045jivnfdx4dhka1fiv60nn4gc46";
+    aarch64-linux = "1bhhz4yvmk3zqljy3b77hlsxbwm2l675pslhwr44p6fb4hmn8fai";
+    armv7l-linux = "15nbskq92b85zdyg7pgagi9mqhnbyisfkipqb3brc2rvmyxpzclb";
   }.${system};
 
   sourceRoot = {
@@ -31,7 +31,7 @@ in
 
     # Please backport all compatible updates to the stable release.
     # This is important for the extension ecosystem.
-    version = "1.57.1";
+    version = "1.63.2";
     pname = "vscodium";
 
     executableName = "codium";
@@ -62,7 +62,7 @@ in
       homepage = "https://github.com/VSCodium/vscodium";
       downloadPage = "https://github.com/VSCodium/vscodium/releases";
       license = licenses.mit;
-      maintainers = with maintainers; [ synthetica turion ];
+      maintainers = with maintainers; [ synthetica turion bobby285271 ];
       platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "armv7l-linux" ];
     };
   }

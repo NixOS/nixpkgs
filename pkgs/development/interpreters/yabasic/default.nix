@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation rec {
   pname = "yabasic";
-  version = "2.89.1";
+  version = "2.90.1";
 
   src = fetchurl {
     url = "http://www.yabasic.de/download/${pname}-${version}.tar.gz";
-    hash = "sha256-k8QmQCpszLyotEiWDrG878RM2wqSq7I4W9j6Z2Ub3Yg=";
+    hash = "sha256-9LqiwS3Udql3YZoufo3spVpE46me3McI8L08TpNJpJo=";
   };
 
   buildInputs = [
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    homepage = "http://www.yabasic.de/";
+    homepage = "http://2484.de/yabasic/";
     description = "Yet another BASIC";
     longDescription = ''
       Yabasic is a traditional basic-interpreter. It comes with goto and various

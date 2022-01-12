@@ -1,6 +1,0 @@
---- a/toolkit/xre/nsXREDirProvider.cpp        2019-02-28 21:00:14.157543388 +0100
-+++ b/toolkit/xre/nsXREDirProvider.cpp   2019-02-28 21:01:28.731128320 +0100
-@@ -302 +302,2 @@
--  rv = NS_NewNativeLocalFile(dirname, false, getter_AddRefs(localDir));
-+  const char* pathVar = PR_GetEnv("MOZ_SYSTEM_DIR");
-+  rv = NS_NewNativeLocalFile((pathVar && *pathVar) ? nsDependentCString(pathVar) : reinterpret_cast<const nsCString&>(dirname), false, getter_AddRefs(localDir));

@@ -5,10 +5,7 @@
 The easiest way to get a working idris version is to install the `idris` attribute:
 
 ```ShellSession
-$ # On NixOS
-$ nix-env -i nixos.idris
-$ # On non-NixOS
-$ nix-env -i nixpkgs.idris
+$ nix-env -f "<nixpkgs>" -iA idris
 ```
 
 This however only provides the `prelude` and `base` libraries. To install idris with additional libraries, you can use the `idrisPackages.with-packages` function, e.g. in an overlay in `~/.config/nixpkgs/overlays/my-idris.nix`:

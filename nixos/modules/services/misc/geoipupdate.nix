@@ -99,9 +99,22 @@ in
       LockFile = "/run/geoipupdate/.lock";
     };
 
+    systemd.services.geoipupdate-create-db-dir = {
+      serviceConfig.Type = "oneshot";
+      script = ''
+        mkdir -p ${cfg.settings.DatabaseDirectory}
+        chmod 0755 ${cfg.settings.DatabaseDirectory}
+      '';
+    };
+
     systemd.services.geoipupdate = {
       description = "GeoIP Updater";
-      after = [ "network-online.target" "nss-lookup.target" ];
+      requires = [ "geoipupdate-create-db-dir.service" ];
+      after = [
+        "geoipupdate-create-db-dir.service"
+        "network-online.target"
+        "nss-lookup.target"
+      ];
       wants = [ "network-online.target" ];
       startAt = cfg.interval;
       serviceConfig = {
@@ -119,11 +132,9 @@ in
               };
             };
 
-            geoipupdateConf = pkgs.writeText "discourse.conf" (geoipupdateKeyValue cfg.settings);
+            geoipupdateConf = pkgs.writeText "geoipupdate.conf" (geoipupdateKeyValue cfg.settings);
 
             script = ''
-              mkdir -p "${cfg.settings.DatabaseDirectory}"
-              chmod 755 "${cfg.settings.DatabaseDirectory}"
               chown geoip "${cfg.settings.DatabaseDirectory}"
 
               cp ${geoipupdateConf} /run/geoipupdate/GeoIP.conf
@@ -139,7 +150,38 @@ in
         ReadWritePaths = cfg.settings.DatabaseDirectory;
         RuntimeDirectory = "geoipupdate";
         RuntimeDirectoryMode = 0700;
+        CapabilityBoundingSet = "";
+        PrivateDevices = true;
+        PrivateMounts = true;
+        PrivateUsers = true;
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        ProcSubset = "pid";
+        SystemCallFilter = [ "@system-service" "~@privileged" "~@resources" ];
+        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+        RestrictRealtime = true;
+        RestrictNamespaces = true;
+        MemoryDenyWriteExecute = true;
+        LockPersonality = true;
+        SystemCallArchitectures = "native";
+      };
+    };
+
+    systemd.timers.geoipupdate-initial-run = {
+      wantedBy = [ "timers.target" ];
+      unitConfig.ConditionPathExists = "!${cfg.settings.DatabaseDirectory}";
+      timerConfig = {
+        Unit = "geoipupdate.service";
+        OnActiveSec = 0;
       };
     };
   };
+
+  meta.maintainers = [ lib.maintainers.talyz ];
 }

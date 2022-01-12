@@ -2,27 +2,27 @@
 , nixosTests
 , fetchurl, autoreconfHook
 , zlib, pcre, w3m, man
-, mbedtls, brotli
+, openssl, brotli
 }:
 
 stdenv.mkDerivation rec {
 
   pname = "privoxy";
-  version = "3.0.32";
+  version = "3.0.33";
 
   src = fetchurl {
     url = "mirror://sourceforge/ijbswa/Sources/${version}%20%28stable%29/${pname}-${version}-stable-src.tar.gz";
-    sha256 = "sha256-xh3kAIxiRF7Bjx8nBAfL8jcuq6k76szcnjI4uy3v7tc=";
+    sha256 = "sha256-BLEE5w2sYVYbndEQaEslD6/IwT2+Q3pg+uGN3ZqIH64=";
   };
 
   hardeningEnable = [ "pie" ];
 
   nativeBuildInputs = [ autoreconfHook w3m man ];
-  buildInputs = [ zlib pcre mbedtls brotli ];
+  buildInputs = [ zlib pcre openssl brotli ];
 
   makeFlags = [ "STRIP=" ];
   configureFlags = [
-    "--with-mbedtls"
+    "--with-openssl"
     "--with-brotli"
     "--enable-external-filters"
     "--enable-compression"
@@ -39,9 +39,9 @@ stdenv.mkDerivation rec {
     description = "Non-caching web proxy with advanced filtering capabilities";
     # When linked with mbedtls, the license becomes GPLv3 (or later), otherwise
     # GPLv2 (or later). See https://www.privoxy.org/user-manual/copyright.html
-    license = licenses.gpl3Plus;
+    license = licenses.gpl2Plus;
     platforms = platforms.all;
-    maintainers = [ maintainers.phreedom ];
+    maintainers = [ ];
   };
 
 }

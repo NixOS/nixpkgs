@@ -8,22 +8,32 @@ Because it's completely bypassing argv0! This looks at the executable
 file in-use according to the kernel!
 
 Wrappers cannot affect the `/proc/.../exe` symlink!
----
- service_utils.h | 28 +++++++++++++++++++++++++++-
- 1 file changed, 27 insertions(+), 1 deletion(-)
 
-diff --git a/service_utils.h b/service_utils.h
-index 8a70c1fad..6674f553b 100644
---- a/service_utils.h
-+++ b/service_utils.h
-@@ -26,8 +26,34 @@ namespace KWin
- const static QString s_waylandInterfaceName = QStringLiteral("X-KDE-Wayland-Interfaces");
- const static QString s_dbusRestrictedInterfaceName = QStringLiteral("X-KDE-DBUS-Restricted-Interfaces");
- 
--static QStringList fetchProcessServiceField(const QString &executablePath, const QString &fieldName)
-+static QStringList fetchProcessServiceField(const QString &in_executablePath, const QString &fieldName)
- {
-+    // !! Start NixOS fix
+Co-authored-by: Yaroslav Bolyukin <iam@lach.pw>
+---
+ src/nixos_utils.h     | 41 +++++++++++++++++++++++++++++++++++++++++
+ src/service_utils.h   |  4 +++-
+ src/waylandclient.cpp |  5 ++++-
+ 3 files changed, 48 insertions(+), 2 deletions(-)
+ create mode 100644 src/nixos_utils.h
+
+diff --git a/src/nixos_utils.h b/src/nixos_utils.h
+new file mode 100644
+index 0000000..726065d
+--- /dev/null
++++ b/src/nixos_utils.h
+@@ -0,0 +1,41 @@
++#ifndef NIXOS_UTILS_H
++#define NIXOS_UTILS_H
++
++// kwin
++#include <kwinglobals.h>
++
++namespace KWin
++{
++
++static QString unwrapExecutablePath(const QString &in_executablePath)
++{
 +    // NixOS fixes many packaging issues through "wrapper" scripts that manipulates the environment or does
 +    // miscellaneous trickeries and mischievous things to make the programs work.
 +    // In turn, programs often employs different mischievous schemes and trickeries to do *other things.
@@ -47,11 +57,58 @@ index 8a70c1fad..6674f553b 100644
 +        // Approximately equivalent to s;/\.;/;
 +        executablePath.remove(executablePath.lastIndexOf("/")+1, 1);
 +    }
-+    // !! End NixOS fix
 +
++    return executablePath;
++}
++
++}// namespace
++
++#endif // SERVICE_UTILS_H
+diff --git a/src/service_utils.h b/src/service_utils.h
+index 8a70c1f..475b15d 100644
+--- a/src/service_utils.h
++++ b/src/service_utils.h
+@@ -19,6 +19,7 @@
+ #include <QLoggingCategory>
+ //KF
+ #include <KApplicationTrader>
++#include "nixos_utils.h"
+ 
+ namespace KWin
+ {
+@@ -26,8 +27,9 @@ namespace KWin
+ const static QString s_waylandInterfaceName = QStringLiteral("X-KDE-Wayland-Interfaces");
+ const static QString s_dbusRestrictedInterfaceName = QStringLiteral("X-KDE-DBUS-Restricted-Interfaces");
+ 
+-static QStringList fetchProcessServiceField(const QString &executablePath, const QString &fieldName)
++static QStringList fetchProcessServiceField(const QString &in_executablePath, const QString &fieldName)
+ {
++    const QString executablePath = unwrapExecutablePath(in_executablePath);
      // needed to be able to use the logging category in a header static function
      static QLoggingCategory KWIN_UTILS ("KWIN_UTILS", QtWarningMsg);
      const auto servicesFound = KApplicationTrader::query([&executablePath] (const KService::Ptr &service) {
+diff --git a/src/waylandclient.cpp b/src/waylandclient.cpp
+index fd2c0c1..ae8cf96 100644
+--- a/src/waylandclient.cpp
++++ b/src/waylandclient.cpp
+@@ -10,6 +10,7 @@
+ #include "screens.h"
+ #include "wayland_server.h"
+ #include "workspace.h"
++#include "nixos_utils.h"
+ 
+ #include <KWaylandServer/display.h>
+ #include <KWaylandServer/clientbuffer.h>
+@@ -173,7 +174,9 @@ void WaylandClient::updateIcon()
+ 
+ void WaylandClient::updateResourceName()
+ {
+-    const QFileInfo fileInfo(surface()->client()->executablePath());
++    const QString in_path = surface()->client()->executablePath();
++    const QString path = unwrapExecutablePath(in_path);
++    const QFileInfo fileInfo(path);
+     if (fileInfo.exists()) {
+         const QByteArray executableFileName = fileInfo.fileName().toUtf8();
+         setResourceClass(executableFileName, executableFileName);
 -- 
-2.28.0
-
+2.32.0

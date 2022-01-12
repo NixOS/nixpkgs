@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchPypi
 , isPy27
-, fetchpatch
 , flake8
 , hypothesis
 , pycodestyle

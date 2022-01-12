@@ -1,8 +1,8 @@
 { version, sha256 }:
 
-{ fetchurl, python3Packages, lib }:
+{ fetchurl, python, lib }:
 
-python3Packages.buildPythonApplication rec {
+python.pkgs.buildPythonApplication rec {
   pname = "scons";
   inherit version;
 
@@ -28,6 +28,12 @@ python3Packages.buildPythonApplication rec {
     mkdir -p "$out/share/man/man1"
     mv "$out/"*.1 "$out/share/man/man1/"
   '';
+
+  passthru = {
+    # expose the used python version so tools using this (and extensing scos with other python modules)
+    # can use the exact same python version.
+    inherit python;
+  };
 
   meta = with lib; {
     description = "An improved, cross-platform substitute for Make";

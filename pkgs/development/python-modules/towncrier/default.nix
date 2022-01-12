@@ -3,6 +3,7 @@
 , click-default-group
 , incremental
 , jinja2
+, mock
 , pytestCheckHook
 , toml
 , twisted
@@ -11,11 +12,11 @@
 
 buildPythonPackage rec {
   pname = "towncrier";
-  version = "19.2.0";
+  version = "21.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "15l1gb0hhi9pf3mhhb9vpc93w6w3hrih2ljmzbkgfb3dwqd1l9a8";
+    sha256 = "6eed0bc924d72c98c000cb8a64de3bd566e5cb0d11032b73fcccf8a8f956ddfe";
   };
 
   propagatedBuildInputs = [
@@ -28,7 +29,12 @@ buildPythonPackage rec {
 
   # zope.interface collision
   doCheck = !isPy27;
-  checkInputs = [ git twisted pytestCheckHook ];
+  checkInputs = [
+    git
+    mock
+    twisted
+    pytestCheckHook
+  ];
   pythonImportsCheck = [ "towncrier" ];
 
   meta = with lib; {

@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   version = "unstable-2020-11-02";
-  name = "dydisnix-${version}";
+  pname = "dydisnix";
 
   src = fetchFromGitHub {
     owner = "svanderburg";

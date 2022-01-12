@@ -10,14 +10,21 @@
 
 buildPythonPackage rec {
   pname = "sanic-testing";
-  version = "0.4.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "sanic-org";
     repo = "sanic-testing";
     rev = "v${version}";
-    sha256 = "0li984imqmqc001iw4m4b6cqik3d9nb4b3yvamvbwkb6hgd94sck";
+    sha256 = "0ib6rf1ly1059lfprc3hpmy377c3wfgfhnar6n4jgbxiyin7vzm7";
   };
+
+  postPatch = ''
+    # https://github.com/sanic-org/sanic-testing/issues/19
+    substituteInPlace setup.py \
+      --replace '"websockets==8.1",' '"websockets>=9.1",' \
+      --replace "httpx==0.18.*" "httpx"
+  '';
 
   propagatedBuildInputs = [
     httpx
@@ -29,12 +36,6 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
   ];
-
-  postPatch = ''
-    # https://github.com/sanic-org/sanic-testing/issues/19
-    substituteInPlace setup.py \
-      --replace '"websockets==8.1",' '"websockets>=9.1",'
-  '';
 
   # `sanic` is explicitly set to null when building `sanic` itself
   # to prevent infinite recursion.  In that case we skip running

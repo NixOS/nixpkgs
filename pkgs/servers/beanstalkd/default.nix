@@ -1,12 +1,14 @@
-{ lib, stdenv, fetchurl, installShellFiles, nixosTests }:
+{ lib, stdenv, fetchFromGitHub, installShellFiles, nixosTests }:
 
 stdenv.mkDerivation rec {
   version = "1.12";
   pname = "beanstalkd";
 
-  src = fetchurl {
-    url = "https://github.com/kr/beanstalkd/archive/v${version}.tar.gz";
-    sha256 = "0gw8aygysnjzzfjgfzivy5vajla9adg2zcr4h8rrdf0xyykpwfpl";
+  src = fetchFromGitHub {
+    owner = "kr";
+    repo = "beanstalkd";
+    rev = "v${version}";
+    hash = "sha256-HChpVZ02l08CObrb4+ZEjBiXeQMMYi6zhSWUTDxuEao=";
   };
 
   hardeningDisable = [ "fortify" ];

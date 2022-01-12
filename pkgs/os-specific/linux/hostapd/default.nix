@@ -106,7 +106,7 @@ stdenv.mkDerivation rec {
     repositories.git = "git://w1.fi/hostap.git";
     description = "A user space daemon for access point and authentication servers";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ phreedom ninjatrappeur hexa ];
+    maintainers = with maintainers; [ ninjatrappeur hexa ];
     platforms = platforms.linux;
   };
 }

@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "skytemple-icons";
-  version = "1.2.0";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "SkyTemple";
     repo = pname;
     rev = version;
-    sha256 = "036bxy0n3p0ivcdaymj11z0nw555xjxxj15ja0rpjsvq1mqamd80";
+    sha256 = "0wagdvzks9irdl5lj8sfqkkvfwwmdpvjyzx6424shvpp5mk28dcv";
   };
 
   doCheck = false; # there are no tests

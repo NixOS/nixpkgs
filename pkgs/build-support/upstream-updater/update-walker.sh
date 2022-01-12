@@ -69,8 +69,8 @@ version_link () {
 
 redirect () {
   CURRENT_URL="$(curl -I -L --max-redirs "${1:-99}" "$CURRENT_URL" | 
-    grep -E '^Location: ' | position_choice "${2:-999999}" "$3" |
-    sed -e 's/^Location: //; s/\r//')"
+    grep -E '^[Ll]ocation: ' | position_choice "${2:-999999}" "$3" |
+    sed -e 's/^[Ll]ocation: //; s/\r//')"
   echo "Redirected: $*"
   echo "URL: $CURRENT_URL" >&2
 }

@@ -2,18 +2,18 @@
 
 buildGoModule rec {
   pname = "fission";
-  version = "1.13.0";
+  version = "1.14.1";
 
   src = fetchFromGitHub {
     owner = "fission";
     repo = "fission";
     rev = version;
-    sha256 = "sha256-WCynU5+d789d584JH99jmTZSEbyco2ysuBXIC2pW1r4=";
+    sha256 = "sha256-U/UV5NZXmycDp8+g5XV6P2b+4SutR51rVHdPp9HdPjM=";
   };
 
-  vendorSha256 = "sha256-V3/IFCbW3wXfNiFzucLeyFDc6SA2nE+NwO0sNEBmIYg=";
+  vendorSha256 = "sha256-1ujJuhK7pm/A1Dd+Wm9dtc65mx9pwLBWMWwEJnbja8s=";
 
-  buildFlagsArray = "-ldflags=-s -w -X info.Version=${version}";
+  ldflags = [ "-s" "-w" "-X info.Version=${version}" ];
 
   subPackages = [ "cmd/fission-cli" ];
 

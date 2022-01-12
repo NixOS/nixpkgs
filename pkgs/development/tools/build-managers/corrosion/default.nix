@@ -3,17 +3,18 @@
 , fetchFromGitHub
 , cmake
 , rustPlatform
+, libiconv
 }:
 
 stdenv.mkDerivation rec {
   pname = "corrosion";
-  version = "unstable-2021-02-23";
+  version = "unstable-2021-11-23";
 
   src = fetchFromGitHub {
     owner = "AndrewGaspar";
     repo = "corrosion";
-    rev = "e6c35c7e55a59c8223577b5abc4d253b4a82898b";
-    sha256 = "0vq6g3ggnqiln0q8gsr8rr5rrdgpfcgfly79jwcygxrviw37m44d";
+    rev = "f679545a63a8b214a415e086f910126ab66714fa";
+    sha256 = "sha256-K+QdhWc5n5mH6yxiQa/v5HsrqnWJ5SM93IprVpyCVO0=";
   };
 
   patches = [
@@ -27,8 +28,10 @@ stdenv.mkDerivation rec {
     inherit src;
     sourceRoot = "${src.name}/${cargoRoot}";
     name = "${pname}-${version}";
-    sha256 = "1fsq8zzzq28fj2fh92wmg8kmdj4y10mcpdmlgxsygy5lbh4xs13f";
+    sha256 = "sha256-ZvCRgXv+ASMIL00oc3luegV1qVNDieU9J7mbIhfayGk=";
   };
+
+  buildInputs = lib.optional stdenv.isDarwin libiconv;
 
   nativeBuildInputs = [
     cmake

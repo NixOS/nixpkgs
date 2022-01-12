@@ -70,6 +70,9 @@ in stdenv.mkDerivation {
     mkdir -p $out
     cp -r ./* "$out/"
 
+    # jni.h expects jni_md.h to be in the header search path.
+    ln -s $out/include/linux/*_md.h $out/include/
+
     mkdir -p $out/nix-support
     printWords ${setJavaClassPath} > $out/nix-support/propagated-build-inputs
 

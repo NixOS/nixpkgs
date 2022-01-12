@@ -66,18 +66,24 @@ in {
         defaults for configuration but you can override anything since
         this is a python file.
       '';
-      example = literalExample ''
-         c.SystemdSpawner.mem_limit = '8G'
-         c.SystemdSpawner.cpu_limit = 2.0
+      example = ''
+        c.SystemdSpawner.mem_limit = '8G'
+        c.SystemdSpawner.cpu_limit = 2.0
       '';
     };
 
     jupyterhubEnv = mkOption {
       type = types.package;
-      default = (pkgs.python3.withPackages (p: with p; [
+      default = pkgs.python3.withPackages (p: with p; [
         jupyterhub
         jupyterhub-systemdspawner
-      ]));
+      ]);
+      defaultText = literalExpression ''
+        pkgs.python3.withPackages (p: with p; [
+          jupyterhub
+          jupyterhub-systemdspawner
+        ])
+      '';
       description = ''
         Python environment to run jupyterhub
 
@@ -90,10 +96,16 @@ in {
 
     jupyterlabEnv = mkOption {
       type = types.package;
-      default = (pkgs.python3.withPackages (p: with p; [
+      default = pkgs.python3.withPackages (p: with p; [
         jupyterhub
         jupyterlab
-      ]));
+      ]);
+      defaultText = literalExpression ''
+        pkgs.python3.withPackages (p: with p; [
+          jupyterhub
+          jupyterlab
+        ])
+      '';
       description = ''
         Python environment to run jupyterlab
 
@@ -111,7 +123,7 @@ in {
       })));
 
       default = null;
-      example = literalExample ''
+      example = literalExpression ''
         {
           python3 = let
             env = (pkgs.python3.withPackages (pythonPackages: with pythonPackages; [

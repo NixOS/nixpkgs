@@ -1,16 +1,33 @@
-{ stdenv, fetchurl, makeWrapper, emacs, tcl, tclx, espeak-ng, lib }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, emacs
+, tcl
+, tclx
+, espeak-ng
+}:
 
 stdenv.mkDerivation rec {
   pname = "emacspeak";
-  version = "51.0";
+  version = "54.0";
 
-  src = fetchurl {
-    url = "https://github.com/tvraman/emacspeak/releases/download/${version}/${pname}-${version}.tar.bz2";
-    sha256 = "09a0ywxlqa8jmc0wmvhaf7bdydnkyhy9nqfsdqcpbsgdzj6qpg90";
+  src = fetchFromGitHub {
+    owner = "tvraman";
+    repo = pname;
+    rev = version;
+    hash= "sha256-aOZ8PmkASJKETPhXhE9WQXyJS7SPe+d97fK/piqqzqc=";
   };
 
-  nativeBuildInputs = [ makeWrapper emacs ];
-  buildInputs = [ tcl tclx espeak-ng ];
+  nativeBuildInputs = [
+    emacs
+    makeWrapper
+  ];
+  buildInputs = [
+    espeak-ng
+    tcl
+    tclx
+  ];
 
   preConfigure = ''
     make config
@@ -32,11 +49,11 @@ stdenv.mkDerivation rec {
         --add-flags '-l "${placeholder "out"}/share/emacs/site-lisp/emacspeak/lisp/emacspeak-setup.elc"'
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/tvraman/emacspeak/";
     description = "Emacs extension that provides spoken output";
-    license = lib.licenses.gpl2;
-    maintainers = [ ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.AndersonTorres ];
+    platforms = platforms.linux;
   };
 }

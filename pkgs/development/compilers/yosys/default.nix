@@ -6,13 +6,19 @@
 , fetchFromGitHub
 , flex
 , libffi
+, makeWrapper
 , pkg-config
 , protobuf
 , python3
 , readline
+, symlinkJoin
 , tcl
 , verilog
 , zlib
+, yosys
+, yosys-bluespec
+, yosys-ghdl
+, yosys-symbiflow
 }:
 
 # NOTE: as of late 2020, yosys has switched to an automation robot that
@@ -32,15 +38,47 @@
 # yosys version number helps users report better bugs upstream, and is
 # ultimately less confusing than using dates.
 
-stdenv.mkDerivation rec {
+let
+
+  # Provides a wrapper for creating a yosys with the specifed plugins preloaded
+  #
+  # Example:
+  #
+  #     my_yosys = yosys.withPlugins (with yosys.allPlugins; [
+  #        fasm
+  #        bluespec
+  #     ]);
+  withPlugins = plugins:
+    let
+      paths = lib.closePropagation plugins;
+      module_flags = with builtins; concatStringsSep " "
+        (map (n: "--add-flags -m --add-flags ${n.plugin}") plugins);
+    in lib.appendToName "with-plugins" ( symlinkJoin {
+      inherit (yosys) name;
+      paths = paths ++ [ yosys ] ;
+      buildInputs = [ makeWrapper ];
+      postBuild = ''
+        wrapProgram $out/bin/yosys \
+          --set NIX_YOSYS_PLUGIN_DIRS $out/share/yosys/plugins \
+          ${module_flags}
+      '';
+    });
+
+  allPlugins = {
+    bluespec = yosys-bluespec;
+    ghdl     = yosys-ghdl;
+  } // (yosys-symbiflow);
+
+
+in stdenv.mkDerivation rec {
   pname   = "yosys";
-  version = "0.9+4052";
+  version = "0.12+54";
 
   src = fetchFromGitHub {
-    owner  = "YosysHQ";
-    repo   = "yosys";
-    rev    = "687f381b6985d9dda7e11535628e2fafff267af5";
-    sha256 = "15lcj798ckh9zwvdqb5gnvicilsxjyxv01gcviijg310hq62n7vf";
+    owner = "YosysHQ";
+    repo  = "yosys";
+    rev   = "59a71503448401d2476cf0872808e0a99c3a4d81";
+    hash  = "sha256-cz4PQymaA9UW91lN+6iniFhbcPRpFNIAeC8ZkwYeg0U=";
   };
 
   enableParallelBuilding = true;
@@ -51,6 +89,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./plugin-search-dirs.patch
+    ./fix-clang-build.patch # see https://github.com/YosysHQ/yosys/issues/2011
   ];
 
   postPatch = ''
@@ -77,7 +116,7 @@ stdenv.mkDerivation rec {
     fi
 
     if ! grep -q "YOSYS_VER := $version" Makefile; then
-      echo "ERROR: yosys version in Makefile isn't equivalent to version of the nix package (${version}), failing."
+      echo "ERROR: yosys version in Makefile isn't equivalent to version of the nix package (allegedly ${version}), failing."
       exit 1
     fi
   '';
@@ -98,18 +137,15 @@ stdenv.mkDerivation rec {
 
   setupHook = ./setup-hook.sh;
 
+  passthru = {
+    inherit withPlugins allPlugins;
+  };
+
   meta = with lib; {
     description = "Open RTL synthesis framework and tools";
     homepage    = "http://www.clifford.at/yosys/";
     license     = licenses.isc;
     platforms   = platforms.all;
     maintainers = with maintainers; [ shell thoughtpolice emily ];
-    #In file included from kernel/driver.cc:20:
-    #./kernel/yosys.h:42:10: fatal error: 'map' file not found
-    ##include <map>
-
-    #https://github.com/YosysHQ/yosys/issues/681
-    #https://github.com/YosysHQ/yosys/issues/2011
-    broken = stdenv.isDarwin;
   };
 }

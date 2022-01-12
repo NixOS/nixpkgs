@@ -61,7 +61,7 @@
           <link linkend="opt-fileSystems._name_.neededForBoot">neededForBoot</link>).
           As a motivating example, this could be useful if you’ve
           forgotten to set
-          <link xlink:href="options.html#opt-fileSystems._name_.neededForBoot">neededForBoot</link>
+          <link linkend="opt-fileSystems._name_.neededForBoot">neededForBoot</link>
           on a file system.
         </para>
       </listitem>
@@ -102,6 +102,23 @@
           Make systemd very verbose and send log messages to the console
           instead of the journal. For more parameters recognised by
           systemd, see systemd(1).
+        </para>
+      </listitem>
+    </varlistentry>
+  </variablelist>
+  <para>
+    In addition, these arguments are recognised by the live image only:
+  </para>
+  <variablelist>
+    <varlistentry>
+      <term>
+        <literal>live.nixos.passwd=password</literal>
+      </term>
+      <listitem>
+        <para>
+          Set the password for the <literal>nixos</literal> live user.
+          This can be used for SSH access if there are issues using the
+          terminal.
         </para>
       </listitem>
     </varlistentry>

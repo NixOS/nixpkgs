@@ -194,7 +194,7 @@ let
       # We need to handle the last column specially here, because it's
       # open-ended (command + args).
       lines = [ labels labelDefaults ] ++ (map (l: init l ++ [""]) masterCf);
-    in fold foldLine (genList (const 0) (length labels)) lines;
+    in foldr foldLine (genList (const 0) (length labels)) lines;
 
     # Pad a string with spaces from the right (opposite of fixedWidthString).
     pad = width: str: let
@@ -203,7 +203,7 @@ let
     in str + optionalString (padWidth > 0) padding;
 
     # It's + 2 here, because that's the amount of spacing between columns.
-    fullWidth = fold (width: acc: acc + width + 2) 0 maxWidths;
+    fullWidth = foldr (width: acc: acc + width + 2) 0 maxWidths;
 
     formatLine = line: concatStringsSep "  " (zipListsWith pad maxWidths line);
 
@@ -294,7 +294,7 @@ in
       };
 
       submissionOptions = mkOption {
-        type = types.attrs;
+        type = with types; attrsOf str;
         default = {
           smtpd_tls_security_level = "encrypt";
           smtpd_sasl_auth_enable = "yes";
@@ -312,7 +312,7 @@ in
       };
 
       submissionsOptions = mkOption {
-        type = types.attrs;
+        type = with types; attrsOf str;
         default = {
           smtpd_sasl_auth_enable = "yes";
           smtpd_client_restrictions = "permit_sasl_authenticated,reject";
@@ -505,6 +505,7 @@ in
       tlsTrustedAuthorities = mkOption {
         type = types.str;
         default = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
+        defaultText = literalExpression ''"''${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt"'';
         description = ''
           File containing trusted certification authorities (CA) to verify certificates of mailservers contacted for mail delivery. This basically sets smtp_tls_CAfile and enables opportunistic tls. Defaults to NixOS trusted certification authorities.
         '';
@@ -544,7 +545,7 @@ in
         type = types.lines;
         default = "";
         description = "
-          Entries for the virtual alias map, cf. man-page virtual(8).
+          Entries for the virtual alias map, cf. man-page virtual(5).
         ";
       };
 
@@ -673,6 +674,7 @@ in
       services.mail.sendmailSetuidWrapper = mkIf config.services.postfix.setSendmail {
         program = "sendmail";
         source = "${pkgs.postfix}/bin/sendmail";
+        owner = "root";
         group = setgidGroup;
         setuid = false;
         setgid = true;
@@ -681,6 +683,7 @@ in
       security.wrappers.mailq = {
         program = "mailq";
         source = "${pkgs.postfix}/bin/mailq";
+        owner = "root";
         group = setgidGroup;
         setuid = false;
         setgid = true;
@@ -689,6 +692,7 @@ in
       security.wrappers.postqueue = {
         program = "postqueue";
         source = "${pkgs.postfix}/bin/postqueue";
+        owner = "root";
         group = setgidGroup;
         setuid = false;
         setgid = true;
@@ -697,6 +701,7 @@ in
       security.wrappers.postdrop = {
         program = "postdrop";
         source = "${pkgs.postfix}/bin/postdrop";
+        owner = "root";
         group = setgidGroup;
         setuid = false;
         setgid = true;

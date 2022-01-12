@@ -2,7 +2,7 @@
 
 buildPythonPackage rec {
   pname = "flufl.i18n";
-  version = "3.1.4";
+  version = "3.2";
 
   propagatedBuildInputs = [ atpublic ];
 
@@ -12,6 +12,6 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e19036292a825a69f0e0a87566d1628830c69eecd3b0295d22f582039477a6bb";
+    sha256 = "sha256-w1yPjqtmrbf9ZKFCCGAQUGbSs2y2VbM/+xSv6OIj7WI=";
   };
 }

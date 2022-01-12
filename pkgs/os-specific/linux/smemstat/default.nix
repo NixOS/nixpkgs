@@ -1,21 +1,26 @@
-{ stdenv, lib, fetchurl, ncurses }:
+{ stdenv, lib, fetchFromGitHub, ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "smemstat";
-  version = "0.02.08";
-  src = fetchurl {
-    url = "https://kernel.ubuntu.com/~cking/tarballs/smemstat/smemstat-${version}.tar.xz";
-    sha256 = "1agigvkv1868cskivzrwyiixl658x5bv7xpz4xjc8mlii4maivpp";
+  version = "0.02.11";
+
+  src = fetchFromGitHub {
+    owner = "ColinIanKing";
+    repo = pname;
+    rev = "V${version}";
+    hash = "sha256-RvHBrcyNB/zqxEY27twgMsjHNg8kzJryqnIAM7+vpg8=";
   };
+
   buildInputs = [ ncurses ];
-  installFlags = [ "DESTDIR=$(out)" ];
-  postInstall = ''
-    mv $out/usr/* $out
-    rm -r $out/usr
-  '';
+  installFlags = [
+    "BINDIR=${placeholder "out"}/bin"
+    "MANDIR=${placeholder "out"}/share/man/man8"
+    "BASHDIR=${placeholder "out"}/share/bash-completion/completions"
+  ];
+
   meta = with lib; {
     description = "Memory usage monitoring tool";
-    homepage = "https://kernel.ubuntu.com/~cking/smemstat/";
+    homepage = "https://github.com/ColinIanKing/smemstat";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ womfoo ];

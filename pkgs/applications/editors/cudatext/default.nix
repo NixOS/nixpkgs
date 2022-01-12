@@ -34,17 +34,17 @@ let
         inherit (spec) owner rev sha256;
       }
     )
-    (builtins.fromJSON (builtins.readFile ./deps.json));
+    (lib.importJSON ./deps.json);
 in
 stdenv.mkDerivation rec {
   pname = "cudatext";
-  version = "1.133.5";
+  version = "1.152.1";
 
   src = fetchFromGitHub {
     owner = "Alexey-T";
     repo = "CudaText";
     rev = version;
-    sha256 = "sha256-0QWYitlOS3x7BQpFTYDAjIgkw83IkRFfA/slyEvQUnw=";
+    sha256 = "sha256-rFmgf/wg6/jIObBDN+viKX3KrewVWgxs8uVF1gCY72s=";
   };
 
   postPatch = ''
@@ -98,6 +98,8 @@ stdenv.mkDerivation rec {
       exit 1
     fi
   '') additionalLexers;
+
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     description = "Cross-platform code editor";

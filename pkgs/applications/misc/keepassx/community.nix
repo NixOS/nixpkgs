@@ -11,7 +11,7 @@
 , libXtst
 , libargon2
 , libgcrypt
-, libgpgerror
+, libgpg-error
 , libsodium
 , libyubikey
 , pkg-config
@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
     libXtst
     libargon2
     libgcrypt
-    libgpgerror
+    libgpg-error
     libsodium
     libyubikey
     qrencode
@@ -114,11 +114,6 @@ stdenv.mkDerivation rec {
   ++ optional stdenv.isDarwin qtmacextras
   ++ optional (stdenv.isDarwin && withKeePassTouchID)
     darwin.apple_sdk.frameworks.LocalAuthentication;
-
-  preFixup = optionalString stdenv.isDarwin ''
-    # Make it work without Qt in PATH.
-    wrapQtApp $out/Applications/KeePassXC.app/Contents/MacOS/KeePassXC
-  '';
 
   passthru.tests = nixosTests.keepassxc;
 

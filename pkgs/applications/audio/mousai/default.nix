@@ -1,7 +1,7 @@
 { lib
 , python3
 , fetchFromGitHub
-, fetchpatch
+, substituteAll
 , appstream-glib
 , desktop-file-utils
 , gettext
@@ -14,12 +14,13 @@
 , meson
 , ninja
 , pkg-config
+, pulseaudio
 , wrapGAppsHook
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "mousai";
-  version = "0.4.1";
+  version = "0.6.6";
 
   format = "other";
 
@@ -27,14 +28,13 @@ python3.pkgs.buildPythonApplication rec {
     owner = "SeaDve";
     repo = "Mousai";
     rev = "v${version}";
-    sha256 = "sha256-AfR5n1dIm9X5OoPiikQEhHBFQq0rmQH4h7cCJ2yXoXI=";
+    sha256 = "sha256-nCbFVFg+nVF8BOBfdzQVgdTRXR5UF18PJFC266yTFwg=";
   };
 
   patches = [
-    (fetchpatch {
-      name = "fix-ABI-breakage-from-libadwaita.patch";
-      url = "https://github.com/SeaDve/Mousai/commit/e3db2d9d1949300f49399209b56d667746e539df.patch";
-      sha256 = "078kvmyhw4jd1m2npai0yl00lwh47jys2n03pkgxp6jf873y83vs";
+    (substituteAll {
+      src = ./paths.patch;
+      pactl = "${lib.getBin pulseaudio}/bin/pactl";
     })
   ];
 
@@ -62,6 +62,7 @@ python3.pkgs.buildPythonApplication rec {
     gtk4
     libadwaita
     librsvg
+    pulseaudio
   ];
 
   propagatedBuildInputs = with python3.pkgs; [

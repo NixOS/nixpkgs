@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sameboy";
-  version = "0.14.2";
+  version = "0.14.7";
 
   src = fetchFromGitHub {
     owner = "LIJI32";
     repo = "SameBoy";
     rev = "v${version}";
-    sha256 = "sha256-VGyB0Em9VFU1Z1K2XfbS9wGs6gZ8/eH/FiaFAKnFdaA=";
+    sha256 = "sha256-rvcR1mp+lJ6ZFc9WYUK9FBVcG2vD5MoX6lY+AJsMaeQ=";
   };
 
   enableParallelBuilding = true;

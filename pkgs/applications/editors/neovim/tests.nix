@@ -84,6 +84,33 @@ rec {
     viAlias = true;
   };
 
+  nvim_with_plug = neovim.override {
+    extraName = "-with-plug";
+    configure.plug.plugins = with pkgs.vimPlugins; [
+      (base16-vim.overrideAttrs(old: { pname = old.pname + "-unique-for-tests-please-dont-use"; }))
+    ];
+    configure.customRC = ''
+      color base16-tomorrow-night
+      set background=dark
+    '';
+  };
+
+  run_nvim_with_plug = runTest nvim_with_plug ''
+    export HOME=$TMPDIR
+    ${nvim_with_plug}/bin/nvim -i NONE -c 'color base16-tomorrow-night'  +quit! -e
+  '';
+
+
+  # check that the vim-doc hook correctly generates the tag
+  # we know for a fact packer has a doc folder
+  checkForTags = vimPlugins.packer-nvim.overrideAttrs(oldAttrs: {
+    doInstallCheck = true;
+    installCheckPhase = ''
+      [ -f $out/doc/tags ]
+    '';
+  });
+
+
   # nixpkgs should detect that no wrapping is necessary
   nvimShouldntWrap = wrapNeovim2 "-should-not-wrap" nvimAutoDisableWrap;
 
@@ -132,4 +159,16 @@ rec {
     extraName = "-pathogen";
     configure.pathogen.pluginNames = [ "vim-nix" ];
   };
+
+  nvimWithLuaPackages = wrapNeovim2 "-with-lua-packages" (makeNeovimConfig {
+    extraLuaPackages = ps: [ps.mpack];
+    customRC = ''
+      lua require("mpack")
+    '';
+  });
+
+  nvim_with_lua_packages = runTest nvimWithLuaPackages ''
+    export HOME=$TMPDIR
+    ${nvimWithLuaPackages}/bin/nvim -i NONE --noplugin -es
+  '';
 })

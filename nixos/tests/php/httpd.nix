@@ -1,4 +1,4 @@
-import ../make-test-python.nix ({pkgs, lib, php, ...}: {
+import ../make-test-python.nix ({ pkgs, lib, php, ... }: {
   name = "php-${php.version}-httpd-test";
   meta.maintainers = lib.teams.php.members;
 
@@ -6,14 +6,16 @@ import ../make-test-python.nix ({pkgs, lib, php, ...}: {
     services.httpd = {
       enable = true;
       adminAddr = "admin@phpfpm";
-      virtualHosts."phpfpm" = let
-        testdir = pkgs.writeTextDir "web/index.php" "<?php phpinfo();";
-      in {
-        documentRoot = "${testdir}/web";
-        locations."/" = {
-          index = "index.php index.html";
+      virtualHosts."phpfpm" =
+        let
+          testdir = pkgs.writeTextDir "web/index.php" "<?php phpinfo();";
+        in
+        {
+          documentRoot = "${testdir}/web";
+          locations."/" = {
+            index = "index.php index.html";
+          };
         };
-      };
       phpPackage = php;
       enablePHP = true;
     };

@@ -174,7 +174,7 @@ stdenv.mkDerivation rec {
          (useUnfreeCodecs && codecs != null && !crossBuild)
          "--codecsdir=${codecs}"
     ++ optional
-         ((stdenv.hostPlatform.isi686 || stdenv.hostPlatform.isx86_64) && !crossBuild)
+         (stdenv.hostPlatform.isx86 && !crossBuild)
          "--enable-runtime-cpudetection"
     ++ optional fribidiSupport "--enable-fribidi"
     ++ optional stdenv.isLinux "--enable-vidix"
@@ -223,11 +223,11 @@ stdenv.mkDerivation rec {
       fi
     '';
 
-  meta = {
+  meta = with lib; {
     description = "A movie player that supports many video formats";
     homepage = "http://mplayerhq.hu";
-    license = "GPL";
-    maintainers = [ lib.maintainers.eelco ];
-    platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ eelco ];
+    platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
   };
 }

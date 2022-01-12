@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation ( rec {
   pname = "corral";
-  version = "0.5.1";
+  version = "0.5.4";
 
   src = fetchFromGitHub {
     owner = "ponylang";
     repo = pname;
     rev = version;
-    sha256 = "1g4dkf5hsnykn3x6yx6ycjzmzzr1nwl59lj13j7zyka1ibv53hwf";
+    sha256 = "1chw56khx5akjxkq0vwrw9ryjpyc3fzdmksh496llc513l01hpkl";
   };
 
   buildInputs = [ ponyc ];

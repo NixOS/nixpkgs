@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, libtool
+{ lib, stdenv, fetchurl, pkg-config, libtool
 , bzip2, zlib, libX11, libXext, libXt, fontconfig, freetype, ghostscript, libjpeg, djvulibre
-, lcms2, openexr, libpng, librsvg, libtiff, libxml2, openjpeg, libwebp, libheif
+, lcms2, openexr, libjxl, libpng, liblqr1, libraw, librsvg, libtiff, libxml2, openjpeg, libwebp, libheif
 , ApplicationServices
 , Foundation
 , testVersion, imagemagick
@@ -18,13 +18,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "imagemagick";
-  version = "7.0.11-12";
+  version = "7.1.0-19";
 
-  src = fetchFromGitHub {
-    owner = "ImageMagick";
-    repo = "ImageMagick";
-    rev = version;
-    sha256 = "sha256-vTCfpHcja0z/aplcunUDlg/90EbfrR/xQ9bzdG0n2RY=";
+  src = fetchurl {
+    url = "https://download.imagemagick.org/ImageMagick/download/releases/ImageMagick-${version}.tar.xz";
+    hash = "sha256-P9eRdKsPMLwWQ68+ZU8dL/zDqVVCY5gRVWiLT0n3/Xc=";
   };
 
   outputs = [ "out" "dev" "doc" ]; # bin/ isn't really big
@@ -36,6 +34,10 @@ stdenv.mkDerivation rec {
     [ "--with-frozenpaths" ]
     ++ (if arch != null then [ "--with-gcc-arch=${arch}" ] else [ "--without-gcc-arch" ])
     ++ lib.optional (librsvg != null) "--with-rsvg"
+    ++ lib.optional (liblqr1 != null) "--with-lqr"
+    # libjxl is broken on aarch64 (see meta.broken in libjxl) for now,
+    # let's disable it for now to unbreak the imagemagick build.
+    ++ lib.optional (libjxl != null && !stdenv.isAarch64) "--with-jxl"
     ++ lib.optionals (ghostscript != null)
       [ "--with-gs-font-dir=${ghostscript}/share/ghostscript/fonts"
         "--with-gslib"
@@ -48,8 +50,12 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ zlib fontconfig freetype ghostscript
-      libpng libtiff libxml2 libheif djvulibre
+      liblqr1 libpng libraw libtiff libxml2 libheif djvulibre
     ]
+    # libjxl is broken on aarch64 (see meta.broken in libjxl) for now,
+    # let's disable it for now to unbreak the imagemagick build.
+    ++ lib.optionals (!stdenv.isAarch64)
+      [ libjxl ]
     ++ lib.optionals (!stdenv.hostPlatform.isMinGW)
       [ openexr librsvg openjpeg ]
     ++ lib.optionals stdenv.isDarwin [
@@ -84,7 +90,7 @@ stdenv.mkDerivation rec {
     homepage = "http://www.imagemagick.org/";
     description = "A software suite to create, edit, compose, or convert bitmap images";
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ erictapen ];
+    maintainers = with maintainers; [ erictapen dotlambda ];
     license = licenses.asl20;
     mainProgram = "magick";
   };

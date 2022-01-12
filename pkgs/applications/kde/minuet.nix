@@ -8,6 +8,8 @@
 mkDerivation {
   pname = "minuet";
   meta = with lib; {
+    homepage = "https://apps.kde.org/minuet/";
+    description = "Music Education Software";
     license = with licenses; [ lgpl21 gpl3 ];
     maintainers = with maintainers; [ peterhoeg HaoZeke ];
     broken = lib.versionOlder qtbase.version "5.14";

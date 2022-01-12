@@ -2,13 +2,14 @@
 , lib
 , buildPythonApplication
 , fetchFromGitHub
-, dateutil
+, python-dateutil
 , pandas
 , requests
 , lxml
 , openpyxl
 , xlrd
 , h5py
+, odfpy
 , psycopg2
 , pyshp
 , fonttools
@@ -24,19 +25,19 @@
 }:
 buildPythonApplication rec {
   pname = "visidata";
-  version = "2.4";
+  version = "2.8";
 
   src = fetchFromGitHub {
     owner = "saulpw";
     repo = "visidata";
     rev = "v${version}";
-    sha256 = "0mvf2603d9b0s6rh7sl7mg4ipbh0nk05xgh1078mwvx31qjsmq1i";
+    sha256 = "1lcx444yrzmcvix977cgaf18lfrf9yrn2r14ln7knx8ghc15vkqb";
   };
 
   propagatedBuildInputs = [
     # from visidata/requirements.txt
     # packages not (yet) present in nixpkgs are commented
-    dateutil
+    python-dateutil
     pandas
     requests
     lxml
@@ -60,6 +61,7 @@ buildPythonApplication rec {
     tabulate
     wcwidth
     zstandard
+    odfpy
     setuptools
   ] ++ lib.optionals withPcap [ dpkt dnslib ];
 
@@ -76,12 +78,6 @@ buildPythonApplication rec {
     rm tests/graph-cursor-nosave.vd  # http
     rm tests/messenger-nosave.vd     # dns
 
-    # disable some tests which expect Python == 3.6 (not our current version)
-    # see https://github.com/saulpw/visidata/issues/1014
-    rm tests/describe.vd
-    rm tests/describe-error.vd
-    rm tests/edit-type.vd
-
     # tests use git to compare outputs to references
     git init -b "test-reference"
     git config user.name "nobody"; git config user.email "no@where"
@@ -92,10 +88,9 @@ buildPythonApplication rec {
   '';
 
   meta = {
-    inherit version;
     description = "Interactive terminal multitool for tabular data";
     license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.raskin ];
+    maintainers = with lib.maintainers; [ raskin markus1189 ];
     homepage = "http://visidata.org/";
     changelog = "https://github.com/saulpw/visidata/blob/v${version}/CHANGELOG.md";
   };

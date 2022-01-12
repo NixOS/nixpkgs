@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "consul";
-  version = "1.10.0";
+  version = "1.11.1";
   rev = "v${version}";
 
   # Note: Currently only release tags are supported, because they have the Consul UI
@@ -17,7 +17,7 @@ buildGoModule rec {
     owner = "hashicorp";
     repo = pname;
     inherit rev;
-    sha256 = "sha256:0gc5shz1nbya7jdkggw2izbw1p4lwkbqgbc5ihlvnwrfdgksfqqd";
+    sha256 = "0x374capaz6h8mzvq2pfz4zg3gz27fjbqax65f23zqyl46haj01p";
   };
 
   passthru.tests.consul = nixosTests.consul;
@@ -26,24 +26,21 @@ buildGoModule rec {
   # has a split module structure in one repo
   subPackages = ["." "connect/certgen"];
 
-  vendorSha256 = "sha256:0sxnnzzsp58ma42ylysdgxibqf65f4f9vbf8c20r44426vg75as7";
+  vendorSha256 = "09rz2xv407ym71dap7f6bbqhdnqvylvbd9zg6f6h7qsb88nvyzsp";
 
   doCheck = false;
 
-  deleteVendor = true;
-
-  preBuild = ''
-    buildFlagsArray+=("-ldflags"
-                      "-X github.com/hashicorp/consul/version.GitDescribe=v${version}
-                       -X github.com/hashicorp/consul/version.Version=${version}
-                       -X github.com/hashicorp/consul/version.VersionPrerelease=")
-  '';
+  ldflags = [
+    "-X github.com/hashicorp/consul/version.GitDescribe=v${version}"
+    "-X github.com/hashicorp/consul/version.Version=${version}"
+    "-X github.com/hashicorp/consul/version.VersionPrerelease="
+  ];
 
   meta = with lib; {
     description = "Tool for service discovery, monitoring and configuration";
     homepage = "https://www.consul.io/";
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.mpl20;
-    maintainers = with maintainers; [ pradeepchhetri vdemeester nh2 ];
+    maintainers = with maintainers; [ pradeepchhetri vdemeester nh2 techknowlogick];
   };
 }

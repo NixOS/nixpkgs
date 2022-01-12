@@ -22,9 +22,11 @@
 , uhd
 , SDL
 , gsl
+, soapysdr
 , libsodium
 , libsndfile
 , libunwind
+, thrift
 , cppzmq
 , zeromq
 # Needed only if qt-gui is disabled, from some reason
@@ -44,14 +46,13 @@
 , pname ? "gnuradio"
 , versionAttr ? {
   major = "3.9";
-  minor = "1";
+  minor = "5";
   patch = "0";
 }
-, fetchSubmodules ? false
 }:
 
 let
-  sourceSha256 = "0zydmrr3gkaqiv4jv8f42awrfzs177bqb349q34rnr6j3d32z2vp";
+  sourceSha256 = "sha256-TWCXLoS+ImKNd2zkxMks4FXsQMvGKgcW5/MW8S1Y1TY=";
   featuresInfo = {
     # Needed always
     basic = {
@@ -68,7 +69,7 @@ let
       ]
         # when gr-qtgui is disabled, icu needs to be included, otherwise
         # building with boost 1.7x fails
-        ++ lib.optionals (!(hasFeature "gr-qtgui" features)) [ icu ];
+        ++ lib.optionals (!(hasFeature "gr-qtgui")) [ icu ];
       pythonNative = with python.pkgs; [
         Mako
         six
@@ -77,6 +78,9 @@ let
     doxygen = {
       native = [ doxygen ];
       cmakeEnableFlag = "DOXYGEN";
+    };
+    man-pages = {
+      cmakeEnableFlag = "MANPAGES";
     };
     python-support = {
       pythonRuntime = [ python.pkgs.six ];
@@ -99,11 +103,15 @@ let
       ];
     };
     gr-ctrlport = {
-      # Thrift support is not really working well, and even the patch they
-      # recommend applying on 0.9.2 won't apply. See:
-      # https://github.com/gnuradio/gnuradio/blob/v3.9.0.0/gnuradio-runtime/lib/controlport/thrift/README
       runtime = [
         libunwind
+        thrift
+      ];
+      pythonRuntime = with python.pkgs; [
+        python.pkgs.thrift
+        # For gr-perf-monitorx
+        matplotlib
+        networkx
       ];
       cmakeEnableFlag = "GR_CTRLPORT";
     };
@@ -139,6 +147,10 @@ let
     gr-filter = {
       runtime = [ fftwFloat ];
       cmakeEnableFlag = "GR_FILTER";
+      pythonRuntime = with python.pkgs; [
+        scipy
+        pyqtgraph
+      ];
     };
     gr-analog = {
       cmakeEnableFlag = "GR_ANALOG";
@@ -173,11 +185,22 @@ let
       ];
       cmakeEnableFlag = "GR_UHD";
     };
+    gr-uhd-rfnoc = {
+      runtime = [
+        uhd
+      ];
+      cmakeEnableFlag = "UHD_RFNOC";
+    };
     gr-utils = {
       cmakeEnableFlag = "GR_UTILS";
+      pythonRuntime = with python.pkgs; [
+        # For gr_plot
+        matplotlib
+      ];
     };
     gr-modtool = {
       pythonRuntime = with python.pkgs; [
+        setuptools
         click
         click-plugins
       ];
@@ -205,6 +228,12 @@ let
     gr-network = {
       cmakeEnableFlag = "GR_NETWORK";
     };
+    gr-soapy = {
+      cmakeEnableFlag = "GR_SOAPY";
+      runtime = [
+        soapysdr
+      ];
+    };
   };
   shared = (import ./shared.nix {
     inherit
@@ -218,7 +247,6 @@ let
       sourceSha256
       overrideSrc
       fetchFromGitHub
-      fetchSubmodules
     ;
     qt = qt5;
     gtk = gtk3;
@@ -233,6 +261,7 @@ stdenv.mkDerivation rec {
     src
     nativeBuildInputs
     buildInputs
+    cmakeFlags
     disallowedReferences
     stripDebugList
     doCheck
@@ -240,34 +269,22 @@ stdenv.mkDerivation rec {
     dontWrapQtApps
     meta
   ;
+  patches = [
+    # Not accepted upstream, see https://github.com/gnuradio/gnuradio/pull/5227
+    ./modtool-newmod-permissions.patch
+  ];
   passthru = shared.passthru // {
     # Deps that are potentially overriden and are used inside GR plugins - the same version must
     inherit boost volk;
-  } // lib.optionalAttrs (hasFeature "gr-uhd" features) {
+  } // lib.optionalAttrs (hasFeature "gr-uhd") {
     inherit uhd;
-  } // lib.optionalAttrs (hasFeature "gr-qtgui" features) {
+  } // lib.optionalAttrs (hasFeature "gr-qtgui") {
     inherit (libsForQt5) qwt;
   };
-  cmakeFlags = shared.cmakeFlags
-    # From some reason, if these are not set, libcodec2 and gsm are not
-    # detected properly.
-    ++ lib.optionals (hasFeature "gr-vocoder" features) [
-      "-DLIBCODEC2_FOUND=TRUE"
-      "-DLIBCODEC2_LIBRARIES=${codec2}/lib/libcodec2.so"
-      "-DLIBCODEC2_INCLUDE_DIRS=${codec2}/include"
-      "-DLIBCODEC2_HAS_FREEDV_API=ON"
-      "-DLIBGSM_FOUND=TRUE"
-      "-DLIBGSM_LIBRARIES=${gsm}/lib/libgsm.so"
-      "-DLIBGSM_INCLUDE_DIRS=${gsm}/include/gsm"
-    ]
-  ;
 
   postInstall = shared.postInstall
     # This is the only python reference worth removing, if needed.
-    # Even if python support is enabled, and we don't care about this
-    # reference, pybind's path is not properly set. See:
-    # https://github.com/gnuradio/gnuradio/issues/4380
-    + lib.optionalString (!hasFeature "python-support" features) ''
+    + lib.optionalString (!hasFeature "python-support") ''
       ${removeReferencesTo}/bin/remove-references-to -t ${python} $out/lib/cmake/gnuradio/GnuradioConfig.cmake
       ${removeReferencesTo}/bin/remove-references-to -t ${python} $(readlink -f $out/lib/libgnuradio-runtime.so)
       ${removeReferencesTo}/bin/remove-references-to -t ${python.pkgs.pybind11} $out/lib/cmake/gnuradio/gnuradio-runtimeTargets.cmake

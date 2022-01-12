@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url =
-    "https://repo1.maven.org/maven2/org/apache/avro/avro-tools/${version}/${pname}-${version}.jar";
+    "mirror://maven/org/apache/avro/avro-tools/${version}/${pname}-${version}.jar";
     sha256 = "169cv4fjsj69fa2s87gh1i7wk0xzh3l7sx5yyz3cgyjalg4a12n1";
   };
 

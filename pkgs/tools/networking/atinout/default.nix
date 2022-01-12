@@ -1,7 +1,7 @@
 { lib, stdenv, fetchgit, ronn, mount }:
 
 stdenv.mkDerivation rec {
-  name = "atinout-${version}";
+  pname = "atinout";
   version = "0.9.2-alpha";
 
   NIX_CFLAGS_COMPILE = lib.optionalString (!stdenv.cc.isClang) "-Werror=implicit-fallthrough=0";

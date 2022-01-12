@@ -5,7 +5,7 @@
   opencl-headers,
   cmake,
   jsoncpp,
-  boost,
+  boost16x,
   makeWrapper,
   cudatoolkit,
   cudaSupport,
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     cli11
-    boost
+    boost16x # 1.7x support is broken, see https://github.com/ethereum-mining/ethminer/issues/2393
     opencl-headers
     mesa
     ethash
@@ -62,6 +62,11 @@ stdenv.mkDerivation rec {
     jsoncpp
   ] ++ lib.optionals cudaSupport [
     cudatoolkit
+  ];
+
+  patches = [
+    # global context library is separated from libethash
+    ./add-global-context.patch
   ];
 
   preConfigure = ''

@@ -4,6 +4,15 @@
 
 let
   sources = {
+    "@mcrowe/minibloom-0.2.0" = {
+      name = "_at_mcrowe_slash_minibloom";
+      packageName = "@mcrowe/minibloom";
+      version = "0.2.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/@mcrowe/minibloom/-/minibloom-0.2.0.tgz";
+        sha1 = "1bed96aec18388198da37443899b2c3ff5948053";
+      };
+    };
     "accepts-1.3.7" = {
       name = "accepts";
       packageName = "accepts";
@@ -49,22 +58,22 @@ let
         sha1 = "d32815404d689699f85a4ea4fa8755dd13a96048";
       };
     };
-    "chainpad-crypto-0.2.5" = {
+    "chainpad-crypto-0.2.6" = {
       name = "chainpad-crypto";
       packageName = "chainpad-crypto";
-      version = "0.2.5";
+      version = "0.2.6";
       src = fetchurl {
-        url = "https://registry.npmjs.org/chainpad-crypto/-/chainpad-crypto-0.2.5.tgz";
-        sha512 = "K9vRsAspuX+uU1goXPz0CawpLIaOHq+1JP3WfDLqaz67LbCX/MLIUt9aMcSeIJcwZ9uMpqnbMGRktyVPoz6MCA==";
+        url = "https://registry.npmjs.org/chainpad-crypto/-/chainpad-crypto-0.2.6.tgz";
+        sha512 = "yk7bBj22rs9PaX6LiqQxiw+Vj/afBStsNP1xP/B4Uh9a8iyJ7JrSZJ2Hj3d6fyqxJlBrMAX82Aj5PCZb5dzzHw==";
       };
     };
-    "chainpad-server-4.0.9" = {
+    "chainpad-server-5.1.0" = {
       name = "chainpad-server";
       packageName = "chainpad-server";
-      version = "4.0.9";
+      version = "5.1.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/chainpad-server/-/chainpad-server-4.0.9.tgz";
-        sha512 = "8h1W41ktE05TM6LuXrklpW2TUxWeNyIDiRaQygKsXaA/7pyJxF7+AmPVS+xW0c31VkHjQDPiaMzPoxhcxXnIyA==";
+        url = "https://registry.npmjs.org/chainpad-server/-/chainpad-server-5.1.0.tgz";
+        sha512 = "BdjgOOLTXXo1EjQ7lURDe7oqsqfQISNvwhILfp3K3diY2K1hxpPLbjYzOSgxNOTADeOAff0xnInR5eUCESVWaQ==";
       };
     };
     "content-disposition-0.5.2" = {
@@ -184,13 +193,13 @@ let
         sha512 = "Y1GUDo39ez4aHAw7MysnUD5JzYX+WaIj8I57kO3aEPT1fFRL4sr7mjei97FgnwhAyyzRYmQZaTHb2+9uZ1dPtg==";
       };
     };
-    "forwarded-0.1.2" = {
+    "forwarded-0.2.0" = {
       name = "forwarded";
       packageName = "forwarded";
-      version = "0.1.2";
+      version = "0.2.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/forwarded/-/forwarded-0.1.2.tgz";
-        sha1 = "98c23dab1175657b8c0573e8ceccd91b0ff18c84";
+        url = "https://registry.npmjs.org/forwarded/-/forwarded-0.2.0.tgz";
+        sha512 = "buRG0fpBtRHSTCOASe6hD258tEubFoRLb4ZNA6NxMVHNw2gOcwHo9wyablzMzOA5z9xA9L1KNjk/Nt6MT9aYow==";
       };
     };
     "fresh-0.5.2" = {
@@ -229,13 +238,13 @@ let
         sha512 = "+CEb+GDCM7tkOS2wdMKTn9vU7DgnKUTuDlehkNJKNSovdCOVxs14OfKCk4cvSaR3za4gj+OBdl9opPN9xrJ0zA==";
       };
     };
-    "graceful-fs-4.2.4" = {
+    "graceful-fs-4.2.8" = {
       name = "graceful-fs";
       packageName = "graceful-fs";
-      version = "4.2.4";
+      version = "4.2.8";
       src = fetchurl {
-        url = "https://registry.npmjs.org/graceful-fs/-/graceful-fs-4.2.4.tgz";
-        sha512 = "WjKPNJF79dtJAVniUlGGWHYGz2jWxT6VhN/4m1NdkbZ2nOsEF+cI1Edgql5zCRhs/VsQYRvrXctxktVXZUkixw==";
+        url = "https://registry.npmjs.org/graceful-fs/-/graceful-fs-4.2.8.tgz";
+        sha512 = "qkIilPUYcNhJpd33n0GBXTB1MMPp14TxEsEs0pTrsSVucApsYzW5V+Q8Qxhik6KU3evy+qkAAowTByymK0avdg==";
       };
     };
     "http-errors-1.6.3" = {
@@ -337,22 +346,22 @@ let
         sha512 = "KI1+qOZu5DcW6wayYHSzR/tXKCDC5Om4s1z2QJjDULzLcmf3DvzS7oluY4HCTrc+9FiKmWUgeNLg7W3uIQvxtQ==";
       };
     };
-    "mime-db-1.45.0" = {
+    "mime-db-1.50.0" = {
       name = "mime-db";
       packageName = "mime-db";
-      version = "1.45.0";
+      version = "1.50.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/mime-db/-/mime-db-1.45.0.tgz";
-        sha512 = "CkqLUxUk15hofLoLyljJSrukZi8mAtgd+yE5uO4tqRZsdsAJKv0O+rFMhVDRJgozy+yG6md5KwuXhD4ocIoP+w==";
+        url = "https://registry.npmjs.org/mime-db/-/mime-db-1.50.0.tgz";
+        sha512 = "9tMZCDlYHqeERXEHO9f/hKfNXhre5dK2eE/krIvUjZbS2KPcqGDfNShIWS1uW9XOTKQKqK6qbeOci18rbfW77A==";
       };
     };
-    "mime-types-2.1.28" = {
+    "mime-types-2.1.33" = {
       name = "mime-types";
       packageName = "mime-types";
-      version = "2.1.28";
+      version = "2.1.33";
       src = fetchurl {
-        url = "https://registry.npmjs.org/mime-types/-/mime-types-2.1.28.tgz";
-        sha512 = "0TO2yJ5YHYr7M2zzT7gDU1tbwHxEUWBCLt0lscSNpcdAfFyJOVEpRYNS7EXVcTLNj/25QO8gulHC5JtTzSE2UQ==";
+        url = "https://registry.npmjs.org/mime-types/-/mime-types-2.1.33.tgz";
+        sha512 = "plLElXp7pRDd0bNZHw+nMd52vRYjLwQjygaNg7ddJ2uJtTlmnTCjWuPKxVu6//AdaRuME84SvLW91sIkBqGT0g==";
       };
     };
     "ms-2.0.0" = {
@@ -373,13 +382,13 @@ let
         sha512 = "hZXc7K2e+PgeI1eDBe/10Ard4ekbfrrqG8Ep+8Jmf4JID2bNg7NvCPOZN+kfF574pFQI7mum2AUqDidoKqcTOw==";
       };
     };
-    "netflux-websocket-0.1.20" = {
+    "netflux-websocket-0.1.21" = {
       name = "netflux-websocket";
       packageName = "netflux-websocket";
-      version = "0.1.20";
+      version = "0.1.21";
       src = fetchurl {
-        url = "https://registry.npmjs.org/netflux-websocket/-/netflux-websocket-0.1.20.tgz";
-        sha512 = "svFkw4ol4gmkcXKnx5kF/8tR9mmtTCDzUlLy4mSlcNl/4iWlbDmgwp/+aJ3nqtv8fg12m+DAFGX2+fbC0//dcg==";
+        url = "https://registry.npmjs.org/netflux-websocket/-/netflux-websocket-0.1.21.tgz";
+        sha512 = "Zjl5lefg8urC0a0T7YCPGiUgRsISZBsTZl1STylmQz8Bq4ohcZ8cP3r6VoCpeVcvJ1Y/e3ZCXPxndWlNP9Jfug==";
       };
     };
     "nthen-0.1.8" = {
@@ -418,13 +427,13 @@ let
         sha1 = "df604178005f522f15eb4490e7247a1bfaa67f8c";
       };
     };
-    "proxy-addr-2.0.6" = {
+    "proxy-addr-2.0.7" = {
       name = "proxy-addr";
       packageName = "proxy-addr";
-      version = "2.0.6";
+      version = "2.0.7";
       src = fetchurl {
-        url = "https://registry.npmjs.org/proxy-addr/-/proxy-addr-2.0.6.tgz";
-        sha512 = "dh/frvCBVmSsDYzw6n926jv974gddhkFPfiN8hPOi30Wax25QZyZEGveluCgliBnqmuM+UJmBErbAUFIoDbjOw==";
+        url = "https://registry.npmjs.org/proxy-addr/-/proxy-addr-2.0.7.tgz";
+        sha512 = "llQsMLSUDUPT44jdrU/O37qlnifitDP+ZwrmmZcoSKyLKvtZxpyV0n2/bD/N4tBAAZ/gJEdZU7KMraoK1+XYAg==";
       };
     };
     "pull-stream-3.6.14" = {
@@ -647,27 +656,28 @@ let
   };
 in
 {
-  "cryptpad-git+https://github.com/xwiki-labs/cryptpad.git#3.20.1" = nodeEnv.buildNodePackage {
+  "cryptpad-git+https://github.com/xwiki-labs/cryptpad.git#4.11.0" = nodeEnv.buildNodePackage {
     name = "cryptpad";
     packageName = "cryptpad";
-    version = "3.20.1";
+    version = "4.11.0";
     src = fetchgit {
       url = "https://github.com/xwiki-labs/cryptpad.git";
-      rev = "9bc27d7d0d50d17c345bd545a45341a05293c558";
-      sha256 = "4a1fc833b38b2097741500cef38c6b04f5b752c21736e95eb492c33012016332";
+      rev = "390e38acf63a9d7ae581eaa926ea678a519fcc14";
+      sha256 = "d75f0568fd146da6512646d9516138f94b0bbbd9a4691eef11d370bf5810176a";
     };
     dependencies = [
+      sources."@mcrowe/minibloom-0.2.0"
       sources."accepts-1.3.7"
       sources."array-flatten-1.1.1"
       sources."async-limiter-1.0.1"
       sources."body-parser-1.18.3"
       sources."bytes-3.0.0"
-      (sources."chainpad-crypto-0.2.5" // {
+      (sources."chainpad-crypto-0.2.6" // {
         dependencies = [
           sources."tweetnacl-git+https://github.com/dchest/tweetnacl-js.git#v0.12.2"
         ];
       })
-      sources."chainpad-server-4.0.9"
+      sources."chainpad-server-5.1.0"
       sources."content-disposition-0.5.2"
       sources."content-type-1.0.4"
       sources."cookie-0.3.1"
@@ -681,12 +691,12 @@ in
       sources."etag-1.8.1"
       sources."express-4.16.4"
       sources."finalhandler-1.1.1"
-      sources."forwarded-0.1.2"
+      sources."forwarded-0.2.0"
       sources."fresh-0.5.2"
       sources."fs-extra-7.0.1"
       sources."gar-1.0.4"
       sources."get-folder-size-2.0.1"
-      sources."graceful-fs-4.2.4"
+      sources."graceful-fs-4.2.8"
       sources."http-errors-1.6.3"
       sources."iconv-lite-0.4.23"
       sources."inherits-2.0.3"
@@ -698,16 +708,16 @@ in
       sources."merge-descriptors-1.0.1"
       sources."methods-1.1.2"
       sources."mime-1.4.1"
-      sources."mime-db-1.45.0"
-      sources."mime-types-2.1.28"
+      sources."mime-db-1.50.0"
+      sources."mime-types-2.1.33"
       sources."ms-2.0.0"
       sources."negotiator-0.6.2"
-      sources."netflux-websocket-0.1.20"
+      sources."netflux-websocket-0.1.21"
       sources."nthen-0.1.8"
       sources."on-finished-2.3.0"
       sources."parseurl-1.3.3"
       sources."path-to-regexp-0.1.7"
-      sources."proxy-addr-2.0.6"
+      sources."proxy-addr-2.0.7"
       sources."pull-stream-3.6.14"
       sources."qs-6.5.2"
       sources."range-parser-1.2.1"

@@ -1,18 +1,20 @@
 { lib, fetchzip }:
 
 let
-  version = "3.0.4";
+  version = "3.0.5";
 in fetchzip rec {
   name = "overpass-${version}";
 
-  url = "https://github.com/RedHatBrand/Overpass/archive/${version}.zip";
+  url = "https://github.com/RedHatOfficial/Overpass/releases/download/v${version}/overpass-${version}.zip";
 
   postFetch = ''
-    mkdir -p $out/share/fonts/opentype ; unzip -j $downloadedFile \*.otf -d $out/share/fonts/opentype
-    mkdir -p $out/share/doc/${name}    ; unzip -j $downloadedFile \*.md  -d $out/share/doc/${name}
+    mkdir -p $out/share/fonts $out/share/doc
+    unzip -j $downloadedFile \*.otf -d $out/share/fonts/opentype
+    unzip -j $downloadedFile \*.ttf -d $out/share/fonts/truetype
+    unzip -j $downloadedFile \*.md  -d $out/share/doc/${name}
   '';
 
-  sha256 = "13b4yam0nycclccxidzj2fa3nwms5qji7gfkixdnl4ybf0f56b64";
+  sha256 = "1fpyhd6x3i3g0xxjmyfnjsri1kkvci15fv7jp1bnza7k0hz0bnha";
 
   meta = with lib; {
     homepage = "https://overpassfont.org/";

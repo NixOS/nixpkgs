@@ -12,19 +12,20 @@
 , pixman
 , udev
 , libevdev
+, libinput
 , libX11
 , libGL
 }:
 
 stdenv.mkDerivation rec {
   pname = "river";
-  version = "unstable-2021-06-06";
+  version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "ifreund";
     repo = pname;
-    rev = "0e9dc089d14e2b5c923d483c62d342af29493cf0";
-    sha256 = "sha256-2rIZYr9Y+IBrox5MVrPpHeI8OVSXHsMZmcCagsX56lU=";
+    rev = "v${version}";
+    sha256 = "03pdgrcpj8db9s14249815z76dyjwwma8xv6p9hpw79flk6rk7v7";
     fetchSubmodules = true;
   };
 
@@ -33,11 +34,11 @@ stdenv.mkDerivation rec {
   buildInputs = [
     wayland-protocols
     wlroots
-    pixman
     libxkbcommon
     pixman
     udev
     libevdev
+    libinput
     libX11
     libGL
   ];

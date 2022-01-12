@@ -24,6 +24,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.sollya.org/";
     license = licenses.cecill-c;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ eduardosm ];
+    maintainers = with maintainers; [ ];
   };
 }

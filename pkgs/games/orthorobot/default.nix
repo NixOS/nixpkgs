@@ -1,8 +1,14 @@
 { lib, stdenv, fetchurl, fetchFromGitHub, zip, love, lua, makeWrapper, makeDesktopItem }:
-
-let
+stdenv.mkDerivation rec {
   pname = "orthorobot";
   version = "1.1.1";
+
+  src = fetchFromGitHub {
+    owner = "Stabyourself";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "1ca6hvd890kxmamsmsfiqzw15ngsvb4lkihjb6kabgmss61a6s5p";
+  };
 
   icon = fetchurl {
     url = "http://stabyourself.net/images/screenshots/orthorobot-5.png";
@@ -17,18 +23,6 @@ let
     desktopName = "Orthorobot";
     genericName = "orthorobot";
     categories = "Game;";
-  };
-
-in
-
-stdenv.mkDerivation {
-  name = "${pname}-${version}";
-
-  src = fetchFromGitHub {
-    owner = "Stabyourself";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "1ca6hvd890kxmamsmsfiqzw15ngsvb4lkihjb6kabgmss61a6s5p";
   };
 
   nativeBuildInputs = [ makeWrapper ];

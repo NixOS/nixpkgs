@@ -1,11 +1,8 @@
 { lib, stdenv, fetchbzr, xlibsWrapper }:
 
-let
-  version = "4";
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "xwinwrap";
-  inherit version;
+  version = "4";
 
   src = fetchbzr {
     url = "https://code.launchpad.net/~shantanu-goel/xwinwrap/devel";

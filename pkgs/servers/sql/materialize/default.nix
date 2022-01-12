@@ -40,21 +40,24 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "materialize";
-  version = "0.8.0";
-  rev = "b2fe225f1afcfec4912976bdaa4a44caf3ca0842";
+  version = "0.15.0";
+  MZ_DEV_BUILD_SHA = "f79f63205649d6011822893c5b55396b2bef7b0b";
 
   src = fetchFromGitHub {
     owner = "MaterializeInc";
     repo = pname;
-    inherit rev;
-    hash = "sha256:09q1bfgsp6j8l8wv2abgibndwfkg2w3nm4dif4qgdkd52fdg0kc5";
+    rev = "v${version}";
+    hash = "sha256-/A6+0fehBa8XEB8P8QUV5Lsl9Lwfz4FhQLgotvBG1Gw=";
   };
 
-  cargoSha256 = "sha256:0y2r4980dyajf2ql9vb2jxcsn0a2q0gd3f8v932fgjqw13ysmi0s";
+  cargoHash = "sha256-NJvAIy9b39HWJaG860Mlf3WasanUnz+Nq39k4WpddB0=";
 
   nativeBuildInputs = [ cmake perl pkg-config ]
     # Provides the mig command used by the krb5-src build script
     ++ lib.optional stdenv.isDarwin bootstrap_cmds;
+
+  # Needed to get openssl-sys to use pkg-config.
+  OPENSSL_NO_VENDOR = 1;
 
   buildInputs = [ openssl ]
     ++ lib.optionals stdenv.isDarwin [ libiconv DiskArbitration Foundation ];
@@ -64,8 +67,14 @@ rustPlatform.buildRustPackage rec {
     "--exact"
     "--skip test_client"
     "--skip test_client_errors"
+    "--skip test_client_all_subjects"
+    "--skip test_client_subject_and_references"
     "--skip test_no_block"
     "--skip test_safe_mode"
+    # this test is broken on 0.15.0
+    # TODO: re-add it in a subsequent release
+    "--skip test_threads"
+    "--skip test_tls"
   ];
 
   postPatch = ''
@@ -75,8 +84,7 @@ rustPlatform.buildRustPackage rec {
       --replace _Materialize root
   '';
 
-  MZ_DEV_BUILD_SHA = rev;
-  cargoBuildFlags = [ "--package materialized" ];
+  cargoBuildFlags = [ "--bin materialized" ];
 
   postInstall = ''
     install --mode=444 -D ./misc/dist/materialized.service $out/etc/systemd/system/materialized.service
@@ -86,7 +94,7 @@ rustPlatform.buildRustPackage rec {
     homepage    = "https://materialize.com";
     description = "A streaming SQL materialized view engine for real-time applications";
     license     = licenses.bsl11;
-    platforms   = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms   = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" ];
     maintainers = [ maintainers.petrosagg ];
   };
 }

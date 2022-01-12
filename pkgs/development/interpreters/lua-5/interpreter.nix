@@ -1,17 +1,23 @@
 { lib, stdenv, fetchurl, readline
 , compat ? false
 , callPackage
-, packageOverrides ? (self: super: {})
+, makeWrapper
+, packageOverrides ? (final: prev: {})
 , sourceVersion
 , hash
 , patches ? []
 , postConfigure ? null
 , postBuild ? null
+, staticOnly ? stdenv.hostPlatform.isStatic
 }:
 let
-luaPackages = callPackage ../../lua-modules {lua=self; overrides=packageOverrides;};
+  luaPackages = callPackage ../../lua-modules {
+    lua = self;
+    overrides = packageOverrides;
+  };
 
-plat = if stdenv.isLinux then "linux"
+plat = if (stdenv.isLinux && lib.versionOlder self.luaversion "5.4") then "linux"
+       else if (stdenv.isLinux && lib.versionAtLeast self.luaversion "5.4") then "linux-readline"
        else if stdenv.isDarwin then "macosx"
        else if stdenv.hostPlatform.isMinGW then "mingw"
        else if stdenv.isFreeBSD then "freebsd"
@@ -30,21 +36,32 @@ self = stdenv.mkDerivation rec {
     sha256 = hash;
   };
 
-  LuaPathSearchPaths    = luaPackages.getLuaPathList luaversion;
-  LuaCPathSearchPaths   = luaPackages.getLuaCPathList luaversion;
+  LuaPathSearchPaths    = luaPackages.lib.luaPathList;
+  LuaCPathSearchPaths   = luaPackages.lib.luaCPathList;
   setupHook = luaPackages.lua-setup-hook LuaPathSearchPaths LuaCPathSearchPaths;
 
+  nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ readline ];
 
   inherit patches;
 
-  postPatch = lib.optionalString (!stdenv.isDarwin) ''
+  # we can't pass flags to the lua makefile because for portability, everything is hardcoded
+  postPatch = ''
+    {
+      echo -e '
+        #undef  LUA_PATH_DEFAULT
+        #define LUA_PATH_DEFAULT "./share/lua/${luaversion}/?.lua;./?.lua;./?/init.lua"
+        #undef  LUA_CPATH_DEFAULT
+        #define LUA_CPATH_DEFAULT "./lib/lua/${luaversion}/?.so;./?.so;./lib/lua/${luaversion}/loadall.so"
+      '
+    } >> src/luaconf.h
+  '' + lib.optionalString (!stdenv.isDarwin && !staticOnly) ''
     # Add a target for a shared library to the Makefile.
     sed -e '1s/^/LUA_SO = liblua.so/' \
         -e 's/ALL_T *= */&$(LUA_SO) /' \
         -i src/Makefile
     cat ${./lua-dso.make} >> src/Makefile
-  '';
+  '' ;
 
   # see configurePhase for additional flags (with space)
   makeFlags = [
@@ -56,6 +73,10 @@ self = stdenv.mkDerivation rec {
     "PLAT=${plat}"
     "CC=${stdenv.cc.targetPrefix}cc"
     "RANLIB=${stdenv.cc.targetPrefix}ranlib"
+    # Lua links with readline wich depends on ncurses. For some reason when
+    # building pkgsStatic.lua it fails because symbols from ncurses are not
+    # found. Adding ncurses here fixes the problem.
+    "MYLIBS=-lncurses"
   ];
 
   configurePhase = ''
@@ -66,7 +87,8 @@ self = stdenv.mkDerivation rec {
     makeFlagsArray+=(${lib.optionalString stdenv.isDarwin "CC=\"$CC\""}${lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) " 'AR=${stdenv.cc.targetPrefix}ar rcu'"})
 
     installFlagsArray=( TO_BIN="lua luac" INSTALL_DATA='cp -d' \
-      TO_LIB="${if stdenv.isDarwin then "liblua.${version}.dylib" else "liblua.a liblua.so liblua.so.${luaversion} liblua.so.${version}"}" )
+      TO_LIB="${if stdenv.isDarwin then "liblua.${version}.dylib"
+                else ("liblua.a" + lib.optionalString (!staticOnly) " liblua.so liblua.so.${luaversion} liblua.so.${version}" )}" )
 
     runHook postConfigure
   '';

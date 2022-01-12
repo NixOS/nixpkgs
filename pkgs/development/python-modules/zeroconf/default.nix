@@ -1,32 +1,41 @@
 { stdenv
 , lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , ifaddr
+, pytest-asyncio
 , pythonOlder
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "zeroconf";
-  version = "0.31.0";
-  disabled = pythonOlder "3.6";
+  version = "0.38.1";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-U6GAJIRxxvgb0f/8vOA+2T19jq8QkFyRIaweqZbRmEQ=";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "jstasiak";
+    repo = "python-zeroconf";
+    rev = version;
+    sha256 = "sha256-8bJEH+m+83rkKdN5GjD4THs1CUy/wstoBFiXR7kHKtw=";
   };
 
-  propagatedBuildInputs = [ ifaddr ];
+  propagatedBuildInputs = [
+    ifaddr
+  ];
 
-  checkInputs = [ pytestCheckHook ];
-
-  pytestFlagsArray = [ "zeroconf/test.py" ];
+  checkInputs = [
+    pytest-asyncio
+    pytestCheckHook
+  ];
 
   disabledTests = [
-    # disable tests that expect some sort of networking in the build container
+    # tests that require network interaction
     "test_close_multiple_times"
     "test_launch_and_close"
+    "test_launch_and_close_context_manager"
     "test_launch_and_close_v4_v6"
     "test_launch_and_close_v6_only"
     "test_integration_with_listener_ipv6"
@@ -36,7 +45,10 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  pythonImportsCheck = [ "zeroconf" ];
+  pythonImportsCheck = [
+    "zeroconf"
+    "zeroconf.asyncio"
+  ];
 
   meta = with lib; {
     description = "Python implementation of multicast DNS service discovery";

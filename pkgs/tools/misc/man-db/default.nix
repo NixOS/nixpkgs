@@ -1,10 +1,11 @@
-{ lib, stdenv, fetchurl, pkg-config, libpipeline, db, groff, libiconv, makeWrapper, buildPackages }:
+{ lib, stdenv, fetchurl, pkg-config, libpipeline, db, groff, libiconv, makeWrapper, buildPackages, nixosTests }:
 
 stdenv.mkDerivation rec {
-  name = "man-db-2.9.4";
+  pname = "man-db";
+  version = "2.9.4";
 
   src = fetchurl {
-    url = "mirror://savannah/man-db/${name}.tar.xz";
+    url = "mirror://savannah/man-db/man-db-${version}.tar.xz";
     sha256 = "sha256-tmyZ7frRatkoyIn4fPdjgCY8FgkyPCgLOp5pY/2xZ1Y=";
   };
 
@@ -72,10 +73,15 @@ stdenv.mkDerivation rec {
 
   doCheck = !stdenv.hostPlatform.isMusl /* iconv binary */ && !stdenv.hostPlatform.isDarwin;
 
+  passthru.tests = {
+    nixos = nixosTests.man;
+  };
+
   meta = with lib; {
     homepage = "http://man-db.nongnu.org";
     description = "An implementation of the standard Unix documentation system accessed using the man command";
     license = licenses.gpl2;
     platforms = lib.platforms.unix;
+    mainProgram = "man";
   };
 }

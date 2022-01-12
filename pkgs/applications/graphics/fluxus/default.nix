@@ -17,7 +17,7 @@
 , ode
 , openal
 , openssl
-, racket
+, racket_7_9
 , sconsPackages
 , zlib
 }:
@@ -42,6 +42,7 @@ let
     openssl
     zlib
   ];
+  racket = racket_7_9;
 in
 stdenv.mkDerivation rec {
   pname = "fluxus";
@@ -67,7 +68,7 @@ stdenv.mkDerivation rec {
     ode
     openal
     openssl.dev
-    racket
+    racket_7_9
   ];
   nativeBuildInputs = [ sconsPackages.scons_3_1_2 ];
 

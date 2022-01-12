@@ -24,6 +24,8 @@ let
 
   availableComponents = cfg.package.availableComponents;
 
+  explicitComponents = cfg.package.extraComponents;
+
   usedPlatforms = config:
     if isAttrs config then
       optional (config ? platform) config.platform
@@ -42,10 +44,13 @@ let
   # } ];
   useComponentPlatform = component: elem component (usedPlatforms cfg.config);
 
-  # Returns whether component is used in config
+  useExplicitComponent = component: elem component explicitComponents;
+
+  # Returns whether component is used in config or explicitly passed into package
   useComponent = component:
     hasAttrByPath (splitString "." component) cfg.config
-    || useComponentPlatform component;
+    || useComponentPlatform component
+    || useExplicitComponent component;
 
   # List of components used in config
   extraComponents = filter useComponent availableComponents;
@@ -78,7 +83,7 @@ in {
 
     port = mkOption {
       default = 8123;
-      type = types.int;
+      type = types.port;
       description = "The port on which to listen.";
     };
 
@@ -112,7 +117,7 @@ in {
             emptyValue.value = {};
           };
         in valueType;
-      example = literalExample ''
+      example = literalExpression ''
         {
           homeassistant = {
             name = "Home";
@@ -152,7 +157,7 @@ in {
       default = null;
       type = with types; nullOr attrs;
       # from https://www.home-assistant.io/lovelace/yaml-mode/
-      example = literalExample ''
+      example = literalExpression ''
         {
           title = "My Awesome Home";
           views = [ {
@@ -188,13 +193,13 @@ in {
       default = pkgs.home-assistant.overrideAttrs (oldAttrs: {
         doInstallCheck = false;
       });
-      defaultText = literalExample ''
+      defaultText = literalExpression ''
         pkgs.home-assistant.overrideAttrs (oldAttrs: {
           doInstallCheck = false;
         })
       '';
       type = types.package;
-      example = literalExample ''
+      example = literalExpression ''
         pkgs.home-assistant.override {
           extraPackages = ps: with ps; [ colorlog ];
         }
@@ -285,6 +290,7 @@ in {
           "alarmdecoder"
           "arduino"
           "blackbird"
+          "deconz"
           "dsmr"
           "edl21"
           "elkm1"
@@ -309,10 +315,13 @@ in {
           "serial_pm"
           "sms"
           "upb"
+          "usb"
           "velbus"
           "w800rf32"
           "xbee"
           "zha"
+          "zwave"
+          "zwave_js"
         ];
       in {
         ExecStart = "${package}/bin/hass --runner --config '${cfg.configDir}'";

@@ -7,24 +7,24 @@
 
 buildGoModule rec {
   pname = "expenses";
-  version = "0.2.1";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "manojkarthick";
     repo = "expenses";
     rev = "v${version}";
-    sha256 = "11wxaqbnrrg0rykx5905chi6rhmai1nqggdbhh6hiappr5rksl0j";
+    sha256 = "sha256-CaIbLtP7ziv9UBQE+QsNnqX65OV+6GIvkLwKm1G++iY=";
   };
 
-  vendorSha256 = "1kwj63wl4kb16zl3lmi9bzj1az7vi453asdy52na0mjx4ymmjyk1";
+  vendorSha256 = "sha256-NWTFxF4QCH1q1xx+hmVmpvDeOlqH5Ai2+0ParE5px9M=";
 
-  # package does not contain any tests as of v0.2.1
+  # package does not contain any tests as of v0.2.2
   doCheck = false;
 
   buildInputs = [ sqlite ];
 
-  buildFlagsArray = [
-    "-ldflags=-s -w -X github.com/manojkarthick/expenses/cmd.Version=${version}"
+  ldflags = [
+    "-s" "-w" "-X github.com/manojkarthick/expenses/cmd.Version=${version}"
   ];
 
   meta = with lib; {

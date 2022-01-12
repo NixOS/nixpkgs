@@ -11,13 +11,13 @@
 
 buildGoModule rec{
   pname = "ignite";
-  version = "0.9.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "weaveworks";
     repo = "ignite";
     rev = "v${version}";
-    sha256 = "sha256-rjCsZ12DHcSw5GZu6jGTtqCPOZDSbYoMplkqvspbvO8=";
+    sha256 = "sha256-WCgNh+iLtxLslzcHuIwVLZpUEhvBJFe1Y84PaPtbtcY=";
     leaveDotGit = true;
   };
 

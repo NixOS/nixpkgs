@@ -6,11 +6,11 @@ declare scriptDir
 scriptDir=$(cd "$(dirname "$0")"; pwd)
 1>&2 echo "scriptDir='$scriptDir'"
 
-. "$scriptDir/update-bin-srcs-lib.sh"
+. "$scriptDir/../_maintainers/update-bin-srcs-lib.sh"
 
 declare extPublisher="ms-dotnettools"
 declare extName="csharp"
-declare defaultExtVersion="1.23.2"
+declare defaultExtVersion="1.23.15"
 declare extVersion="${1:-$defaultExtVersion}"
 
 formatExtRuntimeDeps \
@@ -19,7 +19,3 @@ formatExtRuntimeDeps \
   | jqStreamToJson \
   | tee "$scriptDir/rt-deps-bin-srcs.json" \
   | jq '.'
-
-# TODO: Unfortunatly no simple json to nix implementation available.
-# This would allow us to dump to './rt-deps-bin-srcs.nix' instead.
-# jsonToNix

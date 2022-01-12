@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "gnunn1";
     repo = "tilix";
-    rev = "${version}";
+    rev = version;
     sha256 = "sha256:020gr4q7kmqq8vnsh8rw97gf1p2n1yq4d7ncyjjh9l13zkaxqqv9";
   };
 

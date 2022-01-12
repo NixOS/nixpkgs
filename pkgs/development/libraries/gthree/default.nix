@@ -11,7 +11,7 @@
 , glib
 , gtk3
 , graphene
-, epoxy
+, libepoxy
 , json-glib
 }:
 
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    epoxy
+    libepoxy
     json-glib
   ];
 

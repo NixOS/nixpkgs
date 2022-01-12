@@ -1,12 +1,14 @@
-{ lib, stdenv, fetchurl, util-linux, coreutils}:
+{ lib, stdenv, fetchFromGitHub, util-linux, coreutils }:
 
 stdenv.mkDerivation rec {
-  version = "6.44";
   pname = "profile-sync-daemon";
+  version = "6.44";
 
-  src = fetchurl {
-    url = "https://github.com/graysky2/profile-sync-daemon/archive/v${version}.tar.gz";
-    sha256 = "sha256-+iQr7T99X/jYYgq0xNHLPCJG5mZU/6dN76Z1FB51Z54=";
+  src = fetchFromGitHub {
+    owner = "graysky2";
+    repo = "profile-sync-daemon";
+    rev = "v${version}";
+    hash = "sha256-7sEC2b4mzgbDTFgpH5abZ/kiwEmGdbKkTLiD73Efdls=";
   };
 
   installPhase = ''
@@ -20,8 +22,6 @@ stdenv.mkDerivation rec {
       --replace "PATH=/usr/bin:/bin" "PATH=${util-linux.bin}/bin:${coreutils}/bin" \
       --replace "sudo " "/run/wrappers/bin/sudo "
   '';
-
-  preferLocalBuild = true;
 
   meta = with lib; {
     description = "Syncs browser profile dirs to RAM";

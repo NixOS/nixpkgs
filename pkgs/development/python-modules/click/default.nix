@@ -1,20 +1,33 @@
-{ lib, buildPythonPackage, fetchPypi, locale, pytestCheckHook }:
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, importlib-metadata
+, locale
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "click";
-  version = "7.1.2";
+  version = "8.0.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d2b5255c7c6349bc1bd1e59e08cd12acbbd63ce649f2588755783aa94dfb6b1a";
+    sha256 = "sha256-QQ6TKwUPXu13PEzalN51lxyJzbMVWnKggxE5p55ey1s=";
   };
 
   postPatch = ''
     substituteInPlace src/click/_unicodefun.py \
-      --replace "'locale'" "'${locale}/bin/locale'"
+      --replace '"locale"' "'${locale}/bin/locale'"
   '';
 
-  checkInputs = [ pytestCheckHook ];
+  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
+    importlib-metadata
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+  ];
 
   meta = with lib; {
     homepage = "https://click.palletsprojects.com/";

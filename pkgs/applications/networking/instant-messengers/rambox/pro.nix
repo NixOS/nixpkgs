@@ -19,7 +19,7 @@ in mkRambox rec {
     description = "Messaging and emailing app that combines common web applications into one";
     homepage = "https://rambox.pro";
     license = licenses.unfree;
-    maintainers = with maintainers; [ chrisaw ];
+    maintainers = with maintainers; [ cawilliamson ];
     platforms = [ "x86_64-linux" ];
   };
 }

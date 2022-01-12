@@ -3,9 +3,9 @@
 
 buildGoModule rec {
   pname = "drone.io${lib.optionalString (!enableUnfree) "-oss"}";
-  version = "2.0.0";
+  version = "2.0.3";
 
-  vendorSha256 = "sha256-cnbZSnHU+ORm7/dV+U9NfM18Zrzi24vf7qITPJsusU8=";
+  vendorSha256 = "sha256-3qTH/p0l6Ke1F9SUcvK2diqZooOMnlXYO1PHLdJJ8PM=";
 
   doCheck = false;
 
@@ -13,12 +13,10 @@ buildGoModule rec {
     owner = "drone";
     repo = "drone";
     rev = "v${version}";
-    sha256 = "sha256-BxwCJf3uY34rqegZJ6H/zb63orELhq41trOgzGXQe80=";
+    sha256 = "sha256-MKV5kor+Wm9cuIFFcjSNyCgVKtY+/B9sgBOXMMRvMPI=";
   };
 
-  preBuild = ''
-    buildFlagsArray+=( "-tags" "${lib.optionalString (!enableUnfree) "oss nolimit"}" )
-  '';
+  tags = lib.optionals (!enableUnfree) [ "oss" "nolimit" ];
 
   meta = with lib; {
     maintainers = with maintainers; [ elohmeier vdemeester ];

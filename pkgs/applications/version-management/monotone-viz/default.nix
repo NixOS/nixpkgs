@@ -46,7 +46,6 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    inherit version;
     description = "Monotone ancestry visualiser";
     license = lib.licenses.gpl2Plus ;
     maintainers = [lib.maintainers.raskin];

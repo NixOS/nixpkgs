@@ -3,8 +3,8 @@
 buildPecl {
   pname = "protobuf";
 
-  version = "3.17.2";
-  sha256 = "0i4npj4sl8ihkzxc6m3vv3nlqk952z9bfwnrk90a9yakw5gfhlz5";
+  version = "3.19.1";
+  sha256 = "sha256-kAPNPnvbCrmGITM3Hjpsn62TASV8eNCizFN8+1+I6bY=";
 
   buildInputs = [ pcre2 ];
 

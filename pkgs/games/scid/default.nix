@@ -31,6 +31,7 @@ tcl.mkTclDerivation {
 
   dontPatchShebangs = true;
 
+  # TODO: can this use tclWrapperArgs?
   postFixup = ''
     for cmd in sc_addmove sc_eco sc_epgn scidpgn \
                sc_import sc_spell sc_tree spliteco

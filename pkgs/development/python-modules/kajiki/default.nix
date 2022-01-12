@@ -4,20 +4,20 @@
 , Babel
 , pytz
 , nine
-, nose
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
-  pname = "Kajiki";
-  version = "0.8.2";
+  pname = "kajiki";
+  version = "0.9.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bbec46b19285d42769d7c4f5a8a0195b72a62b54cd360a26a8875319d58efef6";
+    sha256 = "f0d6dfa27eb2b6c0d2a28ae21d69dceb5363cc0432f4045bcc98aac42a662ccb";
   };
 
   propagatedBuildInputs = [ Babel pytz nine ];
-  checkInputs = [ nose ];
+  checkInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Kajiki provides fast well-formed XML templates";

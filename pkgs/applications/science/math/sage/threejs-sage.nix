@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
-    mkdir -p $out/lib/node_modules/three
-    cp -r build version $out/lib/node_modules/three
+    mkdir -p "$out/lib/node_modules/three/"
+    cp version "$out/lib/node_modules/three"
+    cp -r build "$out/lib/node_modules/three/$(cat version)"
   '';
 }

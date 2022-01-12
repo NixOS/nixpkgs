@@ -1,4 +1,4 @@
-{ lib, stdenv, callPackage, makeSetupHook, makeWrapper
+{ lib, stdenv, callPackage, makeSetupHook
 
 # Version specific stuff
 , release, version, src
@@ -51,9 +51,9 @@ let
         inherit release version;
         libPrefix = "tcl${release}";
         libdir = "lib/${libPrefix}";
-        tclPackageHook = callPackage ({}: makeSetupHook {
+        tclPackageHook = callPackage ({ buildPackages }: makeSetupHook {
           name = "tcl-package-hook";
-          deps = [ makeWrapper ];
+          deps = [ buildPackages.makeWrapper ];
         } ./tcl-package-hook.sh) {};
       };
     };

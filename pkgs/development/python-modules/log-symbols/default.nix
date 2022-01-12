@@ -2,7 +2,6 @@
 , colorama
 , fetchPypi
 , isPy27
-, pytestCheckHook
 , lib }:
 
 buildPythonPackage rec {

@@ -1,23 +1,23 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, isPy3k
+, fetchFromGitHub
 , pythonOlder
 , importlib-metadata
 , matplotlib
 , numpy
-, exdown
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "dufte";
-  version = "0.2.12";
-  disabled = !isPy3k;
+  version = "0.2.27";
+  disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0ag1d7h1wijkc7v2vpgkbqjlnpiwd4nh8zhxiby0989bpmlp3jr3";
+  src = fetchFromGitHub {
+    owner = "nschloe";
+    repo = pname;
+    rev = version;
+    sha256 = "1i68h224hx9clxj3l0rd2yigsi6fqsr3x10vj5hf3j6s69iah7r3";
   };
   format = "pyproject";
 
@@ -28,13 +28,10 @@ buildPythonPackage rec {
     importlib-metadata
   ];
 
-  preCheck = ''
-    export HOME=$TMPDIR
-    mkdir -p $HOME/.matplotlib
-    echo "backend: ps" > $HOME/.matplotlib/matplotlibrc
-  '';
+  checkInputs = [
+    pytestCheckHook
+  ];
 
-  checkInputs = [ exdown pytestCheckHook ];
   pythonImportsCheck = [ "dufte" ];
 
   meta = with lib; {

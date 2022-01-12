@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , flask
-, prometheus_client
+, prometheus-client
 , pytestCheckHook
 }:
 
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "1dwisp681w0f6zf0000rxd3ksdb48zb9mr38qfdqk2ir24y8w370";
   };
 
-  propagatedBuildInputs = [ flask prometheus_client ];
+  propagatedBuildInputs = [ flask prometheus-client ];
 
   checkInputs = [ pytestCheckHook ];
   pytestFlagsArray = [ "tests/" ];

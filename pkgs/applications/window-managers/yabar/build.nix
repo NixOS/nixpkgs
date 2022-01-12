@@ -19,16 +19,33 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "format" ];
 
-  nativeBuildInputs = [ pkg-config ];
+  strictDeps = true;
+  depsBuildBuild = [
+    pkg-config
+  ];
+  nativeBuildInputs = [
+    pkg-config
+    asciidoc
+    docbook_xsl
+    libxslt
+    makeWrapper
+    libconfig
+    pango
+  ];
   buildInputs = [
-    cairo gdk-pixbuf libconfig pango xcbutilwm docbook_xsl
-    alsa-lib wirelesstools asciidoc libxslt makeWrapper
+    cairo
+    gdk-pixbuf
+    libconfig
+    pango
+    xcbutilwm
+    alsa-lib
+    wirelesstools
   ];
 
   postPatch = ''
     substituteInPlace ./Makefile \
       --replace "\$(shell git describe)" "${version}" \
-      --replace "a2x" "${asciidoc}/bin/a2x --no-xmllint"
+      --replace "a2x" "a2x --no-xmllint"
   '';
 
   makeFlags = [ "DESTDIR=$(out)" "PREFIX=/" ];

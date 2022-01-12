@@ -1,28 +1,36 @@
-{ buildPythonPackage
+{ lib
+, buildPythonPackage
 , fetchFromGitHub
-, isPy27
-, lib
+, pythonOlder
 , pytestCheckHook
 , tokenize-rt
 }:
 
 buildPythonPackage rec {
   pname = "pyupgrade";
-  version = "2.19.1";
-  disabled = isPy27;
+  version = "2.31.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "asottile";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-zDT8VskHEX4uldMvxnb9A+FKMuvZbtEcmdVl5mghTs4=";
+    sha256 = "sha256-nuYWJ4nilbXa/1KOuGhc6rB7uXDE4+lcESNud4Ug+3Y=";
   };
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [
+    pytestCheckHook
+  ];
 
-  propagatedBuildInputs = [ tokenize-rt ];
+  propagatedBuildInputs = [
+    tokenize-rt
+  ];
 
-  pythonImportsCheck = [ "pyupgrade" ];
+  pythonImportsCheck = [
+    "pyupgrade"
+  ];
 
   meta = with lib; {
     description = "Tool to automatically upgrade syntax for newer versions of the language";

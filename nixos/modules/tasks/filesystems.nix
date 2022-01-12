@@ -163,7 +163,7 @@ in
 
     fileSystems = mkOption {
       default = {};
-      example = literalExample ''
+      example = literalExpression ''
         {
           "/".device = "/dev/hda1";
           "/data" = {
@@ -255,7 +255,7 @@ in
         # https://wiki.archlinux.org/index.php/fstab#Filepath_spaces
         escape = string: builtins.replaceStrings [ " " "\t" ] [ "\\040" "\\011" ] string;
         swapOptions = sw: concatStringsSep "," (
-          [ "defaults" ]
+          sw.options
           ++ optional (sw.priority != null) "pri=${toString sw.priority}"
           ++ optional (sw.discardPolicy != null) "discard${optionalString (sw.discardPolicy != "both") "=${toString sw.discardPolicy}"}"
         );
@@ -264,6 +264,8 @@ in
         #
         # To make changes, edit the fileSystems and swapDevices NixOS options
         # in your /etc/nixos/configuration.nix file.
+        #
+        # <file system> <mount point>   <type>  <options>       <dump>  <pass>
 
         # Filesystems.
         ${concatMapStrings (fs:
@@ -324,28 +326,33 @@ in
       in listToAttrs (map formatDevice (filter (fs: fs.autoFormat) fileSystems)) // {
     # Mount /sys/fs/pstore for evacuating panic logs and crashdumps from persistent storage onto the disk using systemd-pstore.
     # This cannot be done with the other special filesystems because the pstore module (which creates the mount point) is not loaded then.
-    # Since the pstore filesystem is usually empty right after mounting because the backend isn't registered yet, and a path unit cannot detect files inside of it, the same service waits for that to happen. systemd's restart mechanism can't be used here because the first failure also fails all dependent units.
         "mount-pstore" = {
           serviceConfig = {
             Type = "oneshot";
-            ExecStart = "${pkgs.util-linux}/bin/mount -t pstore -o nosuid,noexec,nodev pstore /sys/fs/pstore";
-            ExecStartPost = pkgs.writeShellScript "wait-for-pstore.sh" ''
+            # skip on kernels without the pstore module
+            ExecCondition = "${pkgs.kmod}/bin/modprobe -b pstore";
+            ExecStart = pkgs.writeShellScript "mount-pstore.sh" ''
               set -eu
-              TRIES=0
-              while [ $TRIES -lt 20 ] && [ "$(cat /sys/module/pstore/parameters/backend)" = "(null)" ]; do
-                sleep 0.1
-                TRIES=$((TRIES+1))
+              # if the pstore module is builtin it will have mounted the persistent store automatically. it may also be already mounted for other reasons.
+              ${pkgs.util-linux}/bin/mountpoint -q /sys/fs/pstore || ${pkgs.util-linux}/bin/mount -t pstore -o nosuid,noexec,nodev pstore /sys/fs/pstore
+              # wait up to 1.5 seconds for the backend to be registered and the files to appear. a systemd path unit cannot detect this happening; and succeeding after a restart would not start dependent units.
+              TRIES=15
+              while [ "$(cat /sys/module/pstore/parameters/backend)" = "(null)" ]; do
+                if (( $TRIES )); then
+                  sleep 0.1
+                  TRIES=$((TRIES-1))
+                else
+                  echo "Persistent Storage backend was not registered in time." >&2
+                  break
+                fi
               done
             '';
             RemainAfterExit = true;
           };
           unitConfig = {
-            ConditionPathIsMountPoint = "!/sys/fs/pstore";
             ConditionVirtualization = "!container";
             DefaultDependencies = false; # needed to prevent a cycle
           };
-          after = [ "modprobe@pstore.service" ];
-          requires = [ "modprobe@pstore.service" ];
           before = [ "systemd-pstore.service" ];
           wantedBy = [ "systemd-pstore.service" ];
         };

@@ -12,7 +12,6 @@
 , pillow
 #, pytestCheckHook#
 , pytest
-, python
 , python-dateutil
 , pyyaml
 , selenium
@@ -34,11 +33,11 @@
 buildPythonPackage rec {
   pname = "bokeh";
   # update together with panel which is not straightforward
-  version = "2.3.0";
+  version = "2.4.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "dd417708f90702190222b1068a645acae99e66d4b58d7a336d545aeaa04e9b40";
+    sha256 = "f0a4b53364ed3b7eb936c5cb1a4f4132369e394c7ae0a8ef420459410958033d";
   };
 
   patches = [

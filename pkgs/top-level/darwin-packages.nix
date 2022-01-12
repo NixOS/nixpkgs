@@ -156,6 +156,8 @@ impure-cmds // appleSourcePackages // chooseLibs // {
 
   usr-include = callPackage ../os-specific/darwin/usr-include { };
 
+  xattr = pkgs.python3Packages.callPackage ../os-specific/darwin/xattr { };
+
   inherit (pkgs.callPackages ../os-specific/darwin/xcode { })
     xcode_8_1 xcode_8_2
     xcode_9_1 xcode_9_2 xcode_9_4 xcode_9_4_1

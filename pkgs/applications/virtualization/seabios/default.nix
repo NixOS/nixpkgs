@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, iasl, python3 }:
+{ lib, stdenv, fetchurl, acpica-tools, python3 }:
 
 stdenv.mkDerivation rec {
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ python3 ];
 
-  buildInputs = [ iasl ];
+  buildInputs = [ acpica-tools ];
 
   strictDeps = true;
 
@@ -47,4 +47,3 @@ stdenv.mkDerivation rec {
     platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }
-

@@ -13,11 +13,10 @@
 , decorator
 , pickleshare
 , traitlets
-, prompt_toolkit
+, prompt-toolkit
 , pexpect
 , appnope
 , backcall
-, fetchpatch
 }:
 
 buildPythonPackage rec {
@@ -43,7 +42,7 @@ buildPythonPackage rec {
     decorator
     pickleshare
     traitlets
-    prompt_toolkit
+    prompt-toolkit
     pygments
     pexpect
     backcall

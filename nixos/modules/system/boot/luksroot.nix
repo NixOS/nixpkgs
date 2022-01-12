@@ -332,6 +332,7 @@ let
 
         if [ $? == 0 ]; then
             echo -ne "$new_salt\n$new_iterations" > /crypt-storage${dev.yubikey.storage.path}
+            sync /crypt-storage${dev.yubikey.storage.path}
         else
             echo "Warning: Could not update LUKS key, current challenge persists!"
         fi
@@ -621,6 +622,8 @@ in
               Whether to allow TRIM requests to the underlying device. This option
               has security implications; please read the LUKS documentation before
               activating it.
+              This option is incompatible with authenticated encryption (dm-crypt
+              stacked over dm-integrity).
             '';
           };
 
@@ -661,13 +664,11 @@ in
                 };
 
                 encryptedPass = mkOption {
-                  default = "";
                   type = types.path;
                   description = "Path to the GPG encrypted passphrase.";
                 };
 
                 publicKey = mkOption {
-                  default = "";
                   type = types.path;
                   description = "Path to the Public Key.";
                 };

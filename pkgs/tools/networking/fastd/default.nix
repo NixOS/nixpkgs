@@ -5,6 +5,7 @@
 , meson
 , ninja
 , pkg-config
+, libmnl
 , libuecc
 , libsodium
 , libcap
@@ -14,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fastd";
-  version = "21";
+  version = "22";
 
   src = fetchFromGitHub {
     owner  = "Neoraider";
     repo = "fastd";
     rev = "v${version}";
-    sha256 = "1p4k50dk8byrghbr0fwmgwps8df6rlkgcd603r14i71m5g27z5gw";
+    sha256 = "0qni32j7d3za9f87m68wq8zgalvfxdrx1zxi6l4x7vvmpcw5nhpq";
   };
 
   nativeBuildInputs = [
@@ -36,10 +37,12 @@ stdenv.mkDerivation rec {
     libsodium
     libuecc
     openssl
+  ] ++ lib.optionals (stdenv.isLinux) [
+    libmnl
   ];
 
   # some options are only available on x86
-  mesonFlags = lib.optionals (!stdenv.isx86_64 && !stdenv.isi686) [
+  mesonFlags = lib.optionals (!stdenv.hostPlatform.isx86) [
     "-Dcipher_salsa20_xmm=disabled"
     "-Dcipher_salsa2012_xmm=disabled"
     "-Dmac_ghash_pclmulqdq=disabled"

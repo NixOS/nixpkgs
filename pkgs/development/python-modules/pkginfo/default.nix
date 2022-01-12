@@ -1,21 +1,30 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "pkginfo";
-  version = "1.7.0";
+  version = "1.8.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "029a70cb45c6171c329dfc890cde0879f8c52d6f3922794796e06f577bb03db4";
+    sha256 = "sha256-VC4NC2dQ4uIcIBeYA+QKtQWY2AZtUQl6Djgsup6wK/8=";
   };
 
-  doCheck = false; # I don't know why, but with doCheck = true it fails.
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "pkginfo"
+  ];
 
   meta = with lib; {
-    homepage = "https://pypi.python.org/pypi/pkginfo";
-    license = licenses.mit;
-    description = "Query metadatdata from sdists / bdists / installed packages";
-
+    description = "Query metadatdata from sdists, bdists or installed packages";
+    homepage = "https://pythonhosted.org/pkginfo/";
     longDescription = ''
       This package provides an API for querying the distutils metadata
       written in the PKG-INFO file inside a source distriubtion (an sdist)
@@ -24,5 +33,7 @@ buildPythonPackage rec {
       *.egg-info stored in a “development checkout” (e.g, created by running
       setup.py develop).
     '';
+    license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
 }

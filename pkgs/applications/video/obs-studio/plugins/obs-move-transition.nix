@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "obs-move-transition";
-  version = "2.3.0";
+  version = "2.4.3";
 
   src = fetchFromGitHub {
     owner = "exeldro";
     repo = "obs-move-transition";
     rev = version;
-    sha256 = "0cl6z3cvdjmbisvfcy281pcg6rhxmyfs31rwv7q4x39352rcs1nw";
+    sha256 = "sha256-/6PcNLOnBBqLZHVKMg1tdX9OktcllEEqnL93nXpuXL0=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     cp ${obs-studio.src}/cmake/external/FindLibobs.cmake FindLibobs.cmake
   '';
 
-  patches = [ ./rename-obs-move-transition-cmake.patch ];
+  patches = [ ./obs-move-transition-use-FindLibobs.cmake.patch ];
 
   postPatch = ''
     substituteInPlace move-source-filter.c --replace '<../UI/obs-frontend-api/obs-frontend-api.h>' '<obs-frontend-api.h>'

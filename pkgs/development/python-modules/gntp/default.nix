@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, nose }:
+{ lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "gntp";

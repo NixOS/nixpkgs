@@ -6,7 +6,6 @@
 , harfbuzz
 , libintl
 , libthai
-, gobject-introspection
 , darwin
 , fribidi
 , gnome
@@ -16,26 +15,40 @@
 , meson
 , ninja
 , glib
+, python3
 , x11Support? !stdenv.isDarwin, libXft
+, withIntrospection ? (stdenv.buildPlatform == stdenv.hostPlatform)
+, gobject-introspection
+, withDocs ? (stdenv.buildPlatform == stdenv.hostPlatform)
 }:
 
 stdenv.mkDerivation rec {
   pname = "pango";
-  version = "1.48.4";
+  version = "1.50.0";
 
-  outputs = [ "bin" "out" "dev" "devdoc" ];
+  outputs = [ "bin" "out" "dev" ]
+    ++ lib.optionals withDocs [ "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0ym3cvajy2asapj8xbhfpy05rak79afrhi32hiss0w900vxi72a1";
+    sha256 = "26i2Ld+G4Q9z+Tw9Ila3MjiyvK+HA3yiKbQL3AQOs/M=";
   };
+
+  strictDeps = !withIntrospection;
+
+  depsBuildBuild = [
+    pkg-config
+  ];
 
   nativeBuildInputs = [
     meson ninja
     glib # for glib-mkenum
     pkg-config
+  ] ++ lib.optionals withIntrospection [
     gobject-introspection
+  ] ++ lib.optionals withDocs [
     gi-docgen
+    python3
   ];
 
   buildInputs = [
@@ -58,7 +71,8 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dgtk_doc=true"
+    "-Dgtk_doc=${lib.boolToString withDocs}"
+    "-Dintrospection=${if withIntrospection then "enabled" else "disabled"}"
   ] ++ lib.optionals (!x11Support) [
     "-Dxft=disabled" # only works with x11
   ];
@@ -70,7 +84,7 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # test-font: FAIL
 
-  postInstall = ''
+  postInstall = lib.optionalString withDocs ''
     # So that devhelp can find this.
     # https://gitlab.gnome.org/GNOME/pango/merge_requests/293/diffs#note_1058448
     mkdir -p "$devdoc/share/devhelp"

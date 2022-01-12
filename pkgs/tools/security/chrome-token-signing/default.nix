@@ -2,13 +2,13 @@
 
 mkDerivation rec {
   pname = "chrome-token-signing";
-  version = "1.1.2-1";
+  version = "1.1.5";
 
   src = fetchFromGitHub {
     owner = "open-eid";
     repo = "chrome-token-signing";
     rev = "v${version}";
-    sha256 = "1vbghy12fjmq4m5l7hisq1ylnzy0rdnnd920xwamjamlx38jj3ln";
+    sha256 = "sha256-wKy/RVR7jx5AkMJgHXsuV+jlzyfH5nDRggcIUgh2ML4=";
   };
 
   buildInputs = [ qmake pcsclite pkg-config ];

@@ -47,12 +47,13 @@
   cpu-cgroup-v2 = import ./cpu-cgroup-v2-patches;
 
   hardened = let
-    mkPatch = kernelVersion: src: {
+    mkPatch = kernelVersion: { version, sha256, patch }: let src = patch; in {
       name = lib.removeSuffix ".patch" src.name;
       patch = fetchurl (lib.filterAttrs (k: v: k != "extra") src);
       extra = src.extra;
+      inherit version sha256;
     };
-    patches = builtins.fromJSON (builtins.readFile ./hardened/patches.json);
+    patches = lib.importJSON ./hardened/patches.json;
   in lib.mapAttrs mkPatch patches;
 
   # https://bugzilla.kernel.org/show_bug.cgi?id=197591#c6
@@ -101,14 +102,5 @@
   mac_nvme_t2 = rec {
     name = "mac_nvme_t2";
     patch = ./mac-nvme-t2.patch;
-  };
-
-  rtnetlink_fix_regression_in_bridge_vlan_configuration = rec {
-    name = "rtnetlink_fix_regression_in_bridge_vlan_configuration";
-    patch = fetchpatch {
-      name = name + ".patch";
-      url = "https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/patch/?id=d2e381c4963663bca6f30c3b996fa4dbafe8fcb5";
-      sha256 = "0ragdi13yh5ypp9x49vrdjqx8ddh7sq7i1qjp8fyrbk3n0jdaac3";
-    };
   };
 }

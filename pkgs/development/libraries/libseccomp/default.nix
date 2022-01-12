@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libseccomp";
-  version = "2.5.1";
+  version = "2.5.2";
 
   src = fetchurl {
     url = "https://github.com/seccomp/libseccomp/releases/download/v${version}/libseccomp-${version}.tar.gz";
-    sha256 = "0m8dlg1v7kflcxvajs4p76p275qwsm2abbf5mfapkakp7hw7wc7f";
+    sha256 = "sha256-F6ZS37SR2Wvok5YOm3kZFJNu4WwTt3ejyvVi/kjLh98=";
   };
 
   outputs = [ "out" "lib" "dev" "man" "pythonsrc" ];
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "High level library for the Linux Kernel seccomp filter";
     homepage = "https://github.com/seccomp/libseccomp";
-    license = licenses.lgpl21;
+    license = licenses.lgpl21Only;
     platforms = platforms.linux;
     badPlatforms = [
       "alpha-linux"

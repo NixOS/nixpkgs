@@ -1,10 +1,8 @@
 { lib, stdenv, cmake, fetchurl, pkg-config, jansson, zlib }:
 
-let
-  version = "1.10.2";
-in stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "avro-c";
-  inherit version;
+  version = "1.10.2";
 
   src = fetchurl {
     url = "mirror://apache/avro/avro-${version}/c/avro-c-${version}.tar.gz";

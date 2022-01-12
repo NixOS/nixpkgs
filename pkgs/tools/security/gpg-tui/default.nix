@@ -1,35 +1,49 @@
 { lib
+, stdenv
 , rustPlatform
 , fetchFromGitHub
 , gpgme
-, libgpgerror
+, libgpg-error
 , libxcb
+, libxkbcommon
 , python3
+, AppKit
+, Foundation
+, libiconv
+, libobjc
+, libresolv
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "gpg-tui";
-  version = "0.5.0";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "orhun";
     repo = "gpg-tui";
     rev = "v${version}";
-    sha256 = "sha256-D3H1tJ+7ObNssrc/eMzYQPxeA8cOpGgRF/5VX2kfha0=";
+    hash = "sha256-jddkws4TXuW0AdLBEpS5RPk1a/mEkwYWMbYiLjt22LU=";
   };
 
-  cargoSha256 = "sha256-0NctI16ZsOAEkuCRQ45aOl4p2a3N6Nx88HwtbWht/UY=";
+  cargoHash = "sha256-bj77fMmpXeOqb1MzOPsEPQUh5AnZxBrapzt864V+IUU=";
 
   nativeBuildInputs = [
     gpgme # for gpgme-config
-    libgpgerror # for gpg-error-config
+    libgpg-error # for gpg-error-config
     python3
   ];
 
   buildInputs = [
     gpgme
-    libgpgerror
+    libgpg-error
     libxcb
+    libxkbcommon
+  ] ++ lib.optionals stdenv.isDarwin [
+    AppKit
+    Foundation
+    libiconv
+    libobjc
+    libresolv
   ];
 
   meta = with lib; {

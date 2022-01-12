@@ -158,7 +158,23 @@ This can be overridden.
 
 By default, Agda sources are files ending on `.agda`, or literate Agda files ending on `.lagda`, `.lagda.tex`, `.lagda.org`, `.lagda.md`, `.lagda.rst`. The list of recognised Agda source extensions can be extended by setting the `extraExtensions` config variable.
 
-## Adding Agda packages to Nixpkgs {#adding-agda-packages-to-nixpkgs}
+## Maintaining the Agda package set on Nixpkgs {#maintaining-the-agda-package-set-on-nixpkgs}
+
+We are aiming at providing all common Agda libraries as packages on `nixpkgs`,
+and keeping them up to date.
+Contributions and maintenance help is always appreciated,
+but the maintenance effort is typically low since the Agda ecosystem is quite small.
+
+The `nixpkgs` Agda package set tries to take up a role similar to that of [Stackage](https://www.stackage.org/) in the Haskell world.
+It is a curated set of libraries that:
+
+1. Always work together.
+2. Are as up-to-date as possible.
+
+While the Haskell ecosystem is huge, and Stackage is highly automatised,
+the Agda package set is small and can (still) be maintained by hand.
+
+### Adding Agda packages to Nixpkgs {#adding-agda-packages-to-nixpkgs}
 
 To add an Agda package to `nixpkgs`, the derivation should be written to `pkgs/development/libraries/agda/${library-name}/` and an entry should be added to `pkgs/top-level/agda-packages.nix`. Here it is called in a scope with access to all other Agda libraries, so the top line of the `default.nix` can look like:
 
@@ -192,3 +208,49 @@ mkDerivation {
 This library has a file called `.agda-lib`, and so we give an empty string to `libraryFile` as nothing precedes `.agda-lib` in the filename. This file contains `name: IAL-1.3`, and so we let `libraryName =  "IAL-1.3"`. This library does not use an `Everything.agda` file and instead has a Makefile, so there is no need to set `everythingFile` and we set a custom `buildPhase`.
 
 When writing an Agda package it is essential to make sure that no `.agda-lib` file gets added to the store as a single file (for example by using `writeText`). This causes Agda to think that the nix store is a Agda library and it will attempt to write to it whenever it typechecks something. See [https://github.com/agda/agda/issues/4613](https://github.com/agda/agda/issues/4613).
+
+In the pull request adding this library,
+you can test whether it builds correctly by writing in a comment:
+
+```
+@ofborg build agdaPackages.iowa-stdlib
+```
+
+### Maintaining Agda packages
+
+As mentioned before, the aim is to have a compatible, and up-to-date package set.
+These two conditions sometimes exclude each other:
+For example, if we update `agdaPackages.standard-library` because there was an upstream release,
+this will typically break many reverse dependencies,
+i.e. downstream Agda libraries that depend on the standard library.
+In `nixpkgs` we are typically among the first to notice this,
+since we have build tests in place to check this.
+
+In a pull request updating e.g. the standard library, you should write the following comment:
+
+```
+@ofborg build agdaPackages.standard-library.passthru.tests
+```
+
+This will build all reverse dependencies of the standard library,
+for example `agdaPackages.agda-categories`, or `agdaPackages.generic`.
+
+In some cases it is useful to build _all_ Agda packages.
+This can be done with the following Github comment:
+
+```
+@ofborg build agda.passthru.tests.allPackages
+```
+
+Sometimes, the builds of the reverse dependencies fail because they have not yet been updated and released.
+You should drop the maintainers a quick issue notifying them of the breakage,
+citing the build error (which you can get from the ofborg logs).
+If you are motivated, you might even send a pull request that fixes it.
+Usually, the maintainers will answer within a week or two with a new release.
+Bumping the version of that reverse dependency should be a further commit on your PR.
+
+In the rare case that a new release is not to be expected within an acceptable time,
+simply mark the broken package as broken by setting `meta.broken = true;`.
+This will exclude it from the build test.
+It can be added later when it is fixed,
+and does not hinder the advancement of the whole package set in the meantime.

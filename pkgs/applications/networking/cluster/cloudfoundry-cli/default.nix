@@ -2,31 +2,28 @@
 
 buildGoModule rec {
   pname = "cloudfoundry-cli";
-  version = "7.2.0";
+  version = "8.0.0";
 
   src = fetchFromGitHub {
     owner = "cloudfoundry";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "0cf5vshyz6j70sv7x43r1404hdcmkzxgdb7514kjilp5z6wsr1nv";
+    sha256 = "00cwnfylra0msbb423ad21if98s6smzccsyidqsl4r2mrlkhahwm";
   };
-  # vendor directory stale
-  deleteVendor = true;
-  vendorSha256 = "0p0s0dr7kpmmnim4fps62vj4zki2qxxdq5ww0fzrf1372xbl4kp2";
+  vendorSha256 = "0fcgyyd11xfhn8i11bqnaw3h51bj1y8s37b4d8wzv31dr8zswqsc";
 
   subPackages = [ "." ];
 
   # upstream have helpfully moved the bash completion script to a separate
   # repo which receives no releases or even tags
   bashCompletionScript = fetchurl {
-    url = "https://raw.githubusercontent.com/cloudfoundry/cli-ci/6087781a0e195465a35c79c8e968ae708c6f6351/ci/installers/completion/cf7";
-    sha256 = "1vhg9jcgaxcvvb4pqnhkf27b3qivs4d3w232j0gbh9393m3qxrvy";
+    url = "https://raw.githubusercontent.com/cloudfoundry/cli-ci/5f4f0d5d01e89c6333673f0fa96056749e71b3cd/ci/installers/completion/cf8";
+    sha256 = "06w26kpnjd3f2wdjhb4pp0kaq2gb9kf87v7pjd9n2g7s7qhdqyhy";
   };
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildFlagsArray = [
-    "-ldflags="
+  ldflags = [
     "-s"
     "-w"
     "-X code.cloudfoundry.org/cli/version.binaryBuildDate=1970-01-01"

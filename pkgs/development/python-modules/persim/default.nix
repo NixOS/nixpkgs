@@ -13,11 +13,11 @@
 
 buildPythonPackage rec {
   pname = "persim";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5db2f7f65b1ad7b2cbfa254afb692ca0a91aeb686e82d6905838c41f516e6a13";
+    sha256 = "ef0f0a247adcf6104ecac14117db0b24581710ea8a8d964816805395700b4975";
   };
 
   propagatedBuildInputs = [

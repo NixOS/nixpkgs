@@ -1,26 +1,33 @@
 { lib
 , buildPythonPackage
 , dotmap
-, fetchPypi
+, fetchFromGitHub
 , pexpect
 , protobuf
 , pygatt
 , pypubsub
 , pyqrcode
 , pyserial
+, pytestCheckHook
 , pythonOlder
+, pyyaml
 , tabulate
+, pytap2
 , timeago
 }:
 
 buildPythonPackage rec {
   pname = "meshtastic";
-  version = "1.2.30";
+  version = "1.2.53";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1kjflc2jwnsgxyr2zx1gyykhak9fsgy6hxaxlggsz5sw9b8rdrby";
+  src = fetchFromGitHub {
+    owner = "meshtastic";
+    repo = "Meshtastic-python";
+    rev = version;
+    sha256 = "sha256-UJ0bq/xBE+qyd//tk/xlI3wtUcE0+PLCIVGmjFMZ+VQ=";
   };
 
   propagatedBuildInputs = [
@@ -31,22 +38,23 @@ buildPythonPackage rec {
     pypubsub
     pyqrcode
     pyserial
+    pyyaml
     tabulate
     timeago
   ];
 
-  postPatch = ''
-    # https://github.com/meshtastic/Meshtastic-python/pull/87
-    substituteInPlace setup.py \
-      --replace 'with open("README.md", "r") as fh:' "" \
-      --replace "long_description = fh.read()" "" \
-      --replace "long_description=long_description," 'long_description="",'
+  checkInputs = [
+    pytap2
+    pytestCheckHook
+  ];
+
+  preCheck = ''
+    export PATH="$PATH:$out/bin";
   '';
 
-  # Project only provides PyPI releases which don't contain the tests
-  # https://github.com/meshtastic/Meshtastic-python/issues/86
-  doCheck = false;
-  pythonImportsCheck = [ "meshtastic" ];
+  pythonImportsCheck = [
+    "meshtastic"
+  ];
 
   meta = with lib; {
     description = "Python API for talking to Meshtastic devices";

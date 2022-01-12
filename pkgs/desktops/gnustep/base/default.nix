@@ -1,7 +1,8 @@
 { aspell, audiofile
 , gsmakeDerivation
 , cups
-, fetchurl, fetchpatch
+, fetchzip
+, fetchpatch
 , gmp, gnutls
 , libffi, binutils-unwrapped
 , libjpeg, libtiff, libpng, giflib
@@ -11,14 +12,12 @@
 , pkg-config, portaudio
 , libiberty
 }:
-let
-  version = "1.27.0";
-in
-gsmakeDerivation {
-  name = "gnustep-base-${version}";
-  src = fetchurl {
-    url = "ftp://ftp.gnustep.org/pub/gnustep/core/gnustep-base-${version}.tar.gz";
-    sha256 = "10xjrv5d443wzll6lf9y65p6v9kvx7xxklhsm1j05y93vwgzl0w8";
+gsmakeDerivation rec {
+  pname = "gnustep-base";
+  version = "1.28.0";
+  src = fetchzip {
+    url = "ftp://ftp.gnustep.org/pub/gnustep/core/${pname}-${version}.tar.gz";
+    sha256 = "05vjz19v1w7yb7hm8qrc41bqh6xd8in7sgg2p0h1vldyyaa5sh90";
   };
   nativeBuildInputs = [ pkg-config ];
   propagatedBuildInputs = [
@@ -35,13 +34,16 @@ gsmakeDerivation {
   ];
   patches = [
     ./fixup-paths.patch
-    (fetchpatch {  # for icu68 compatibility, remove with next update(?)
-      url = "https://github.com/gnustep/libs-base/commit/06fa7792a51cb970e5d010a393cb88eb127830d7.patch";
-      sha256 = "150n1sa34av9ywc04j36jvj7ic9x6pgr123rbn2mx5fj76q23852";
+    # https://github.com/gnustep/libs-base/issues/212 / https://www.sogo.nu/bugs/view.php?id=5416#c15585
+    (fetchpatch {
+      url = "https://github.com/gnustep/libs-base/commit/bd5f2909e6edc8012a0a6e44ea1402dfbe1353a4.patch";
+      revert = true;
+      sha256 = "02awigkbhqa60hfhqfh2wjsa960y3q6557qck1k2l231piz2xasa";
     })
   ];
 
   meta = {
     description = "An implementation of AppKit and Foundation libraries of OPENSTEP and Cocoa";
+    changelog = "https://github.com/gnustep/libs-base/releases/tag/base-${builtins.replaceStrings [ "." ] [ "_" ] version}";
   };
 }

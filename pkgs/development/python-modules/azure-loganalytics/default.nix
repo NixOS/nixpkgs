@@ -1,20 +1,18 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, python
-, isPy3k
 , msrest
 , azure-common
 }:
 
 buildPythonPackage rec {
-  version = "0.1.0";
+  version = "0.1.1";
   pname = "azure-loganalytics";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "3ceb350def677a351f34b0a0d1637df6be0c6fe87ff32a5270b17f540f6da06e";
+    sha256 = "68ffb9a2206e06b9672100a8e6351cc04f75bb81867f30d416c68b55d624d793";
   };
 
   propagatedBuildInputs = [

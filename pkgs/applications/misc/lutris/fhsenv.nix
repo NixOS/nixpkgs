@@ -1,4 +1,6 @@
 { lib, buildFHSUserEnv, lutris-unwrapped
+, extraPkgs ? pkgs: [ ]
+, extraLibraries ? pkgs: [ ]
 , steamSupport ? true
 }:
 
@@ -65,8 +67,6 @@ in buildFHSUserEnv {
 
     # Redream // "redream is not available for the x86_64 architecture"
 
-    # ResidualVM
-    flac
 
     # rpcs3 // TODO: "error while loading shared libraries: libz.so.1..."
     llvm
@@ -74,8 +74,11 @@ in buildFHSUserEnv {
     # ScummVM
     nasm sndio
 
+    # ResidualVM is now merged with ScummVM and therefore does not exist anymore
+    flac
+
     # Snes9x
-    epoxy minizip
+    libepoxy minizip
 
     # Vice
     bison flex
@@ -87,7 +90,8 @@ in buildFHSUserEnv {
     soundfont-fluid bzip2 game-music-emu
   ] ++ qt5Deps pkgs
     ++ gnomeDeps pkgs
-    ++ lib.optional steamSupport pkgs.steam;
+    ++ lib.optional steamSupport pkgs.steam
+    ++ extraPkgs pkgs;
 
   multiPkgs = pkgs: with pkgs; [
     # Common
@@ -110,11 +114,24 @@ in buildFHSUserEnv {
 
     # Winetricks
     fribidi
-  ] ++ xorgDeps pkgs;
+  ] ++ xorgDeps pkgs
+    ++ extraLibraries pkgs;
 
   extraInstallCommands = ''
     mkdir -p $out/share
     ln -sf ${lutris-unwrapped}/share/applications $out/share
     ln -sf ${lutris-unwrapped}/share/icons $out/share
   '';
+
+  meta = {
+    inherit (lutris-unwrapped.meta)
+      homepage
+      description
+      platforms
+      license
+      maintainers
+      broken;
+
+    mainProgram = "lutris";
+  };
 }

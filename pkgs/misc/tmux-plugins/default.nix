@@ -63,6 +63,33 @@ in rec {
     };
   };
 
+  better-mouse-mode = mkTmuxPlugin {
+    pluginName = "better-mouse-mode";
+    version = "unstable-2021-08-02";
+    src = fetchFromGitHub {
+      owner = "NHDaly";
+      repo = "tmux-better-mouse-mode";
+      rev = "aa59077c635ab21b251bd8cb4dc24c415e64a58e";
+      sha256 = "06346ih3hzwszhkj25g4xv5av7292s6sdbrdpx39p0n3kgf5mwww";
+    };
+    rtpFilePath = "scroll_copy_mode.tmux";
+    meta = {
+      homepage = "https://github.com/NHDaly/tmux-better-mouse-mode";
+      description = "better mouse support for tmux";
+      longDescription =
+      ''
+        Features:
+
+          * Emulate mouse-support for full-screen programs like less that don't provide built in mouse support.
+          * Exit copy-mode and return to your prompt by scrolling back all the way down to the bottom.
+          * Adjust your scrolling speed.
+      '';
+      license = lib.licenses.mit;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ chrispickard ];
+    };
+  };
+
   continuum = mkTmuxPlugin {
     pluginName = "continuum";
     version = "unstable-2020-10-16";
@@ -127,12 +154,12 @@ in rec {
 
   dracula = mkTmuxPlugin rec {
     pluginName = "dracula";
-    version = "1.0";
+    version = "2.0.0";
     src = fetchFromGitHub {
       owner = "dracula";
       repo = "tmux";
       rev = "v${version}";
-      sha256 = "YINyER/HT3L7RpTclD3UNiCRj1CL4GPCBBEUJRqUyEQ=";
+      sha256 = "ILs+GMltb2AYNUecFMyQZ/AuETB0PCFF2InSnptVBos=";
     };
     meta = with lib; {
       homepage = "https://draculatheme.com/tmux";

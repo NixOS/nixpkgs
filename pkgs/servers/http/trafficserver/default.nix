@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchurl
+, fetchzip
 , fetchpatch
 , makeWrapper
 , nixosTests
@@ -49,11 +49,11 @@
 
 stdenv.mkDerivation rec {
   pname = "trafficserver";
-  version = "9.0.1";
+  version = "9.1.1";
 
-  src = fetchurl {
+  src = fetchzip {
     url = "mirror://apache/trafficserver/trafficserver-${version}.tar.bz2";
-    sha256 = "1q164pvfmbqh3gzy3bqy96lwd0fdbhz78r06pd92p7rmkqwx005z";
+    sha256 = "sha256-oicRqKFE6hOpcNG9o3BmrMujtEzi4hrPhBWaljOW+VI=";
   };
 
   patches = [
@@ -64,11 +64,11 @@ stdenv.mkDerivation rec {
       sha256 = "0z1ikgpp00rzrrcqh97931586yn9wbksgai9xlkcjd5cg8gq0150";
     })
 
-    # Fixes a bug in tspush which pushes incorrect contents to cache
-    # https://github.com/apache/trafficserver/pull/7696
+    # Fix build against ncurses-6.3:
+    #  https://github.com/apache/trafficserver/pull/8437
     (fetchpatch {
-      url = "https://github.com/apache/trafficserver/commit/b08215272872f452787915cd3a8e0b0ea0b88385.diff";
-      sha256 = "0axk8x1xvd8wvpgcxgyqqg7kgxyxwfgwmisq3xnk1da0cqv9cx9f";
+      url = "https://github.com/apache/trafficserver/commit/66c86c6b082903a92b9db33c60e3ed947e77d540.patch";
+      sha256 = "1hgpp80xnnjr4k5i6gcllrb7dw4q4xcdrkwxpc1xk2np5cbyxd16";
     })
   ];
 

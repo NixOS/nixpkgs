@@ -1,7 +1,9 @@
 { stdenv, lib, fetchFromGitHub, pkg-config, fontconfig, ocaml }:
 
 stdenv.mkDerivation {
-  name = "ocaml-fontconfig-20131103";
+  pname = "ocaml-fontconfig";
+  version = "unstable-2013-11-03";
+
   src = fetchFromGitHub {
     owner = "flh";
     repo = "ocaml-fontconfig";
@@ -19,7 +21,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Fontconfig bindings for OCaml";
     license = lib.licenses.gpl2Plus;
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms or [ ];
     maintainers = with lib.maintainers; [ vbgl ];
   };
 }

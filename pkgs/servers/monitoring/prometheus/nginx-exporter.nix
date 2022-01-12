@@ -6,8 +6,8 @@ buildGoPackage rec {
 
   goPackagePath = "github.com/nginxinc/nginx-prometheus-exporter";
 
-  buildFlagsArray = [
-    "-ldflags=" "-X main.version=${version}"
+  ldflags = [
+    "-X main.version=${version}"
   ];
 
   src = fetchFromGitHub {

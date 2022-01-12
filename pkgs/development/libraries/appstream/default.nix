@@ -26,7 +26,7 @@
 
 stdenv.mkDerivation rec {
   pname = "appstream";
-  version = "0.14.3";
+  version = "0.14.4";
 
   outputs = [ "out" "dev" ];
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     owner = "ximion";
     repo = "appstream";
     rev = "v${version}";
-    sha256 = "sha256-wCQR+4/F5lVqWHHcH/WS4irBGRivz3c1imasyLDIZIs=";
+    sha256 = "sha256-DJXCw50f+8c58bJw6xx0ECfkc9/KcWaeA+ne2zmTyhg=";
   };
 
   patches = [

@@ -1,6 +1,6 @@
-let lib = import ../../../lib; in lib.makeOverridable (
+let lib = import ../../../lib; stdenv-overridable = lib.makeOverridable (
 
-{ name ? "stdenv", preHook ? "", initialPath
+argsStdenv@{ name ? "stdenv", preHook ? "", initialPath
 
 , # If we don't have a C compiler, we might either have `cc = null` or `cc =
   # throw ...`, but if we do have a C compiler we should definiely have `cc !=
@@ -48,6 +48,10 @@ let lib = import ../../../lib; in lib.makeOverridable (
 
 , # The platform which build tools (especially compilers) build for in this stage,
   targetPlatform
+
+, # The implementation of `mkDerivation`, parameterized with the final stdenv so we can tie the knot.
+  # This is convient to have as a parameter so the stdenv "adapters" work better
+  mkDerivationFromStdenv ? import ./make-derivation.nix { inherit lib config; }
 }:
 
 let
@@ -77,8 +81,10 @@ let
 
   defaultBuildInputs = extraBuildInputs;
 
+  stdenv = (stdenv-overridable argsStdenv);
+
   # The stdenv that we are producing.
-  stdenv =
+  in
     derivation (
     lib.optionalAttrs (allowedRequisites != null) {
       allowedRequisites = allowedRequisites
@@ -155,9 +161,7 @@ let
       # to correct type of machine.
       inherit (hostPlatform) system;
 
-      inherit (import ./make-derivation.nix {
-        inherit lib config stdenv;
-      }) mkDerivation;
+      mkDerivation = mkDerivationFromStdenv stdenv;
 
       inherit fetchurlBoot;
 
@@ -170,6 +174,5 @@ let
     # "lift" packages like curl from the final stdenv for Linux to
     # all-packages.nix for that platform (meaning that it has a line
     # like curl = if stdenv ? curl then stdenv.curl else ...).
-    // extraAttrs;
-
-in stdenv)
+    // extraAttrs
+); in stdenv-overridable

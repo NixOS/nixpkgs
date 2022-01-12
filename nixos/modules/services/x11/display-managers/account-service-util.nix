@@ -39,6 +39,6 @@ python3.pkgs.buildPythonApplication {
   '';
 
   meta = with lib; {
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ ] ++ teams.pantheon.members;
   };
 }

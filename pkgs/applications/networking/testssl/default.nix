@@ -3,18 +3,18 @@
 
 stdenv.mkDerivation rec {
   pname = "testssl.sh";
-  version = "3.0.5";
+  version = "3.0.6";
 
   src = fetchFromGitHub {
     owner = "drwetter";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-p2jPpPHtOOmv0CCsXOECgMT9sqa4ZykcJwuGOSkYLaY=";
+    rev = "v${version}";
+    sha256 = "016qpsb4dv9qb3ab3hmvk4vzf4ipr3xgmzv2cx46pxxsj0gnigd8";
   };
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [
-    coreutils # for pwd and printf
+    coreutils # for printf
     dnsutils  # for dig
     nettools  # for hostname
     openssl   # for openssl
@@ -24,7 +24,6 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace testssl.sh                                               \
-      --replace /bin/pwd                    pwd                                \
       --replace TESTSSL_INSTALL_DIR:-\"\"   TESTSSL_INSTALL_DIR:-\"$out\"      \
       --replace PROG_NAME=\"\$\(basename\ \"\$0\"\)\" PROG_NAME=\"testssl.sh\"
   '';

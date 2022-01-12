@@ -16,9 +16,9 @@ buildGoPackage rec {
 
   goPackagePath = "github.com/variadico/noti";
 
-  preBuild = ''
-    buildFlagsArray+=("-ldflags" "-X ${goPackagePath}/internal/command.Version=${version}")
-  '';
+  ldflags = [
+    "-X ${goPackagePath}/internal/command.Version=${version}"
+  ];
 
   postInstall = ''
     install -Dm444 -t $out/share/man/man1 $src/docs/man/*.1

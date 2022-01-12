@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchPypi
 , azure-common
-, azure-mgmt-common
 , azure-mgmt-core
 , msrest
 , msrestazure
@@ -10,14 +9,14 @@
 }:
 
 buildPythonPackage rec {
-  version = "19.0.0";
+  version = "19.3.0";
   pname = "azure-mgmt-network";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "5e39a26ae81fa58c13c02029700f8c7b22c3fd832a294c543e3156a91b9459e8";
+    sha256 = "0b6a1ccdffd76e057ab16a6c319740a0ca68d59fedf7e9c02f2437396e72aa11";
   };
 
   propagatedBuildInputs = [

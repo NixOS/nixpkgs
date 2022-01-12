@@ -1,10 +1,12 @@
-{ lib, stdenv, fetchurl, fetchpatch, makeWrapper, glibcLocales, mono, dotnetPackages, unzip, dotnet-sdk, writeText, roslyn }:
+{ lib, stdenv, fetchurl, fetchpatch, makeWrapper, glibcLocales, mono, dotnetPackages, unzip, dotnetCorePackages, writeText, roslyn }:
 
 let
 
+  dotnet-sdk = dotnetCorePackages.sdk_5_0;
+
   xplat = fetchurl {
-    url = "https://github.com/mono/msbuild/releases/download/0.08/mono_msbuild_6.4.0.208.zip";
-    sha256 = "05k7qmnhfvrdgyjn6vp81jb97y21m261jnwdyqpjqpcmzz18j93g";
+    url = "https://github.com/mono/msbuild/releases/download/v16.9.0/mono_msbuild_6.12.0.137.zip";
+    sha256 = "1wnzbdpk4s9bmawlh359ak2b8zi0sgx1qvcjnvfncr1wsck53v7q";
   };
 
   deps = map (package: package.src)
@@ -23,11 +25,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "msbuild";
-  version = "16.8+xamarinxplat.2020.07.30.15.02";
+  version = "16.10.1+xamarinxplat.2021.05.26.14.00";
 
   src = fetchurl {
     url = "https://download.mono-project.com/sources/msbuild/msbuild-${version}.tar.xz";
-    sha256 = "10amyca78b6pjfsy54b1rgwz2c1bx0sfky9zhldvzy4divckp25g";
+    sha256 = "05ghqqkdj4s3d0xkp7mkdzjig5zj3k6ajx71j0g2wv6rdbvg6899";
   };
 
   nativeBuildInputs = [
@@ -47,16 +49,17 @@ stdenv.mkDerivation rec {
   LOCALE_ARCHIVE = lib.optionalString stdenv.isLinux
       "${glibcLocales}/lib/locale/locale-archive";
 
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/mono/msbuild/commit/cad85cefabdaa001fb4bdbea2f5bf1d1cdb83c9b.patch";
-      sha256 = "1s8agc7nxxs69b3fl1v1air0c4dpig3hy4sk11l1560jrlx06dhh";
-    })
-  ];
-
   postPatch = ''
+    # not patchShebangs, there is /bin/bash in the body of the script as well
+    substituteInPlace ./eng/cibuild_bootstrapped_msbuild.sh --replace /bin/bash ${stdenv.shell}
+
+    patchShebangs eng/*.sh mono/build/*.sh
+
     sed -i -e "/<\/projectImportSearchPaths>/a <property name=\"MSBuildExtensionsPath\" value=\"$out/lib/mono/xbuild\"/>" \
       src/MSBuild/app.config
+
+    # license check is case sensitive
+    mv LICENSE license.bak && mv license.bak license
   '';
 
   buildPhase = ''
@@ -70,9 +73,6 @@ stdenv.mkDerivation rec {
       nuget add $package -Source nixos
     done
 
-    # license check is case sensitive
-    mv LICENSE license.bak && mv license.bak license
-
     mkdir -p artifacts
     unzip ${xplat} -d artifacts
     mv artifacts/msbuild artifacts/mono-msbuild
@@ -82,9 +82,10 @@ stdenv.mkDerivation rec {
 
     # overwrite the file
     echo "#!${stdenv.shell}" > eng/common/dotnet-install.sh
+    echo "#!${stdenv.shell}" > mono/build/get_sdk_files.sh
 
-    # not patchShebangs, there is /bin/bash in the body of the script as well
-    substituteInPlace ./eng/cibuild_bootstrapped_msbuild.sh --replace /bin/bash ${stdenv.shell}
+    mkdir -p mono/dotnet-overlay/msbuild-bin
+    cp ${dotnet-sdk}/sdk/*/{Microsoft.NETCoreSdk.BundledVersions.props,RuntimeIdentifierGraph.json} mono/dotnet-overlay/msbuild-bin
 
     # DisableNerdbankVersioning https://gitter.im/Microsoft/msbuild/archives/2018/06/27?at=5b33dbc4ce3b0f268d489bfa
     # TODO there are some (many?) failing tests

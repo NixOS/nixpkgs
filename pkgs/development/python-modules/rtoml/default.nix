@@ -5,24 +5,25 @@
 , setuptools-rust
 , rustPlatform
 , pytestCheckHook
+, libiconv
 }:
 
 buildPythonPackage rec {
   pname = "rtoml";
-  version = "0.6.1";
+  version = "0.7";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "samuelcolvin";
     repo = pname;
     rev = "v${version}";
-    sha256 = "07bf30if1wmbqjp5n4ib43n6frx8ybyxc9fndxncq7aylkrhd7hy";
+    sha256 = "sha256-h4vY63pDkrMHt2X244FssLxHsphsfjNd6gnVFUeZZTY=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    sha256 = "1q082sdac5vm4l3b45rfjp4vppp9y9qhagdjqqfdz8gdhm1k8yyy";
+    sha256 = "05fwcs6w023ihw3gyihzbnfwjaqy40d6h0z2yas4kqkkvz9x4f8j";
   };
 
   nativeBuildInputs = with rustPlatform; [
@@ -31,6 +32,8 @@ buildPythonPackage rec {
     rust.cargo
     cargoSetupHook
   ];
+
+  buildInputs = [ libiconv ];
 
   pythonImportsCheck = [ "rtoml" ];
 

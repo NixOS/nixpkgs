@@ -4,7 +4,7 @@
 , pythonOlder
 , attrs
 , isodate
-, dateutil
+, python-dateutil
 , rfc3986
 , uritemplate
 , mock
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     attrs
     isodate
-    dateutil
+    python-dateutil
     rfc3986
     uritemplate
   ];

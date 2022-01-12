@@ -26,6 +26,7 @@ let
     genericName = "File Synchronizer";
     categories = "Network;FileTransfer;";
     startupNotify = "false";
+    icon = "dropbox";
   };
 in
 

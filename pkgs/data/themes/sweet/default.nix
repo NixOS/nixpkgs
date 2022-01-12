@@ -1,31 +1,33 @@
-{ lib, stdenv, fetchurl, gtk-engine-murrine }:
+{ lib, stdenv, fetchurl, unzip, gtk-engine-murrine }:
 
 stdenv.mkDerivation rec {
   pname = "sweet";
-  version = "2.0";
+  version = "3.0";
 
   srcs = [
     (fetchurl {
-      url = "https://github.com/EliverLara/Sweet/releases/download/${version}/Sweet-Ambar-Blue.tar.xz";
-      sha256 = "028pk07im7pab8a2vh3bvjm8jg37dpvn4c1mwn6vhb6wcr9v5c75";
+      url = "https://github.com/EliverLara/Sweet/releases/download/v${version}/Sweet-Ambar-Blue.zip";
+      sha256 = "sha256-6ZrjH5L7Yox7riR+2I7vVbFoG4k7xHGyOq1OnkllyiY";
     })
     (fetchurl {
-      url = "https://github.com/EliverLara/Sweet/releases/download/${version}/Sweet-Ambar.tar.xz";
-      sha256 = "0zmdmqndj65kr43g3z57blrmv0y856zlfprm6y45zbf4xz3ybkg6";
+      url = "https://github.com/EliverLara/Sweet/releases/download/v${version}/Sweet-Ambar.zip";
+      sha256 = "sha256-FAbf682YJCCt8NKSdFoaFLwxLDU1aCcTgNdlybZtPMo=";
     })
     (fetchurl {
-      url = "https://github.com/EliverLara/Sweet/releases/download/${version}/Sweet-Dark.tar.xz";
-      sha256 = "02sw664fkrfpsygspq8fn4zgk8rxs9rd29nnx6nyvkji68mb51s6";
+      url = "https://github.com/EliverLara/Sweet/releases/download/v${version}/Sweet-Dark.zip";
+      sha256 = "sha256-t6fczOnKwi4B9hSFhHQaQ533o7MFL+7HPtUJ/p2CIXM=";
     })
     (fetchurl {
-      url = "https://github.com/EliverLara/Sweet/releases/download/${version}/Sweet-mars.tar.xz";
-      sha256 = "14rl3il61jyqwiqlpgbh397q3rcs7jcf2pvr2763ar5a9czmy8h6";
+      url = "https://github.com/EliverLara/Sweet/releases/download/v${version}/Sweet-mars.zip";
+      sha256 = "sha256-QGkkpUqkxGPM1DXrvToB3taajk7vK3rqibQF2M4N9i0=";
     })
     (fetchurl {
-      url = "https://github.com/EliverLara/Sweet/releases/download/${version}/Sweet.tar.xz";
-      sha256 = "0rza3yxwj256ibqimymjhd6lpjzr7fkhggq0ijdg1wab3q91x66q";
+      url = "https://github.com/EliverLara/Sweet/releases/download/v${version}/Sweet.zip";
+      sha256 = "sha256-1qVC2n7ypN1BFuSzBpbY7QzJUzF1anYNAVcMkNpGTMM";
     })
   ];
+
+  nativeBuildInputs = [ unzip ];
 
   propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 

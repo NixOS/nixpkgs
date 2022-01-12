@@ -1,4 +1,5 @@
-{ mkXfceDerivation
+{ lib
+, mkXfceDerivation
 , exo
 , garcon
 , glib
@@ -51,7 +52,8 @@ mkXfceDerivation {
   # Workaround https://bugzilla.xfce.org/show_bug.cgi?id=15825
   NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
-  meta = {
+  meta = with lib; {
     description = "Panel for the Xfce desktop environment";
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

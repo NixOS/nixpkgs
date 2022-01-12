@@ -2,22 +2,22 @@
 
 buildGoModule rec {
   pname = "pack";
-  version = "0.18.0";
+  version = "0.23.0";
 
   src = fetchFromGitHub {
     owner = "buildpacks";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-+fYw5dIDJJKGQKBL6RQh1SCQufbAkKeuJpPlywzbbnM=";
+    sha256 = "sha256-dtDciyQyTYhgYwqRCcxV0kAbPMl3KXhDM0BelPTWymA=";
   };
 
-  vendorSha256 = "sha256-fSUTl5W/DyloCuCpEqA5z4bhB7wYxzPt6E0SfjorfQ0=";
+  vendorSha256 = "sha256-mIXt3rWXQ6lVbV4hT7KRK7VZ4iFuDX6kZjgoE1WvJxI=";
 
   nativeBuildInputs = [ installShellFiles ];
 
   subPackages = [ "cmd/pack" ];
 
-  buildFlagsArray = [ "-ldflags=-s -w -X github.com/buildpacks/pack.Version=${version}" ];
+  ldflags = [ "-s" "-w" "-X github.com/buildpacks/pack.Version=${version}" ];
 
   postInstall = ''
     installShellCompletion --bash --name pack.bash $(PACK_HOME=$PWD $out/bin/pack completion --shell bash)

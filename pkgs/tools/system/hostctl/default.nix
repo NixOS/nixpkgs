@@ -2,18 +2,18 @@
 
 buildGoModule rec {
   pname = "hostctl";
-  version = "1.0.14";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "guumaster";
     repo = pname;
     rev = "v${version}";
-    sha256 = "02bjii97l4fy43v2rb93m9b0ad8y6mjvbvp4sz6a5n0w9dm1z1q9";
+    sha256 = "sha256-VjFjGvIoymGVVRiZUk/qoq/PTYoklp+Jz89zndX0e5A=";
   };
 
-  vendorSha256 = "1lqk3cda0frqp2vwkqa4b3xkdw814wgkbr7g9r2mwxn85fpdcq5c";
+  vendorSha256 = "sha256-rGDWrivIdl5FTu/kNR8nAfE2+1hE4cm3uDg7oBobE9M=";
 
-  buildFlagsArray = [ "-ldflags=-s -w -X github.com/guumaster/hostctl/cmd/hostctl/actions.version=${version}" ];
+  ldflags = [ "-s" "-w" "-X github.com/guumaster/hostctl/cmd/hostctl/actions.version=${version}" ];
 
   nativeBuildInputs = [ installShellFiles ];
   postInstall = ''
@@ -33,4 +33,3 @@ buildGoModule rec {
     maintainers = with maintainers; [ blaggacao ];
   };
 }
-

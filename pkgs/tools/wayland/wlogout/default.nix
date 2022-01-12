@@ -9,6 +9,7 @@
 , libxkbcommon
 , wayland
 , wayland-protocols
+, gtk-layer-shell
 }:
 
 stdenv.mkDerivation rec {
@@ -28,6 +29,7 @@ stdenv.mkDerivation rec {
     libxkbcommon
     wayland
     wayland-protocols
+    gtk-layer-shell
   ];
 
   postPatch = ''

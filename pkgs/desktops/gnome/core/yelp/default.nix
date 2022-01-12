@@ -1,23 +1,47 @@
-{ lib, stdenv, gettext, fetchurl, webkitgtk, pkg-config, gtk3, glib
-, gnome, sqlite
-, itstool, libxml2, libxslt, gst_all_1
-, wrapGAppsHook }:
+{ lib
+, stdenv
+, gettext
+, fetchurl
+, webkitgtk_4_1
+, pkg-config
+, gtk3
+, glib
+, gnome
+, sqlite
+, itstool
+, libxml2
+, libxslt
+, gst_all_1
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "yelp";
-  version = "40.0";
+  version = "41.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/yelp/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-B3dfoGzSg2Xs2Cm7FqhaaCiXqyHYzONFlrvvXNRVquA=";
+    sha256 = "sha256-sAvwM/At15ttPyVQMccd+NbtOOVSyHC485GjdHJMQ8U=";
   };
 
-  nativeBuildInputs = [ pkg-config gettext itstool wrapGAppsHook ];
+  nativeBuildInputs = [
+    pkg-config
+    gettext
+    itstool
+    wrapGAppsHook
+  ];
+
   buildInputs = [
-    gtk3 glib webkitgtk sqlite
-    libxml2 libxslt gnome.yelp-xsl
+    gtk3
+    glib
+    webkitgtk_4_1
+    sqlite
+    libxml2
+    libxslt
+    gnome.yelp-xsl
     gnome.adwaita-icon-theme
-    gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
   ];
 
   passthru = {

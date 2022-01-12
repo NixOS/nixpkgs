@@ -4,6 +4,7 @@
 , gobject-introspection
 , gtk3
 , libgee
+, libhandy
 , libsecret
 , libsoup
 , meson
@@ -18,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "taxi";
-  version = "0.0.1-unstable=2020-09-03";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "Alecaddd";
     repo = pname;
-    rev = "74aade67fd9ba9e5bc10c950ccd8d7e48adc2ea1";
-    sha256 = "sha256-S/FeKJxIdA30CpfFVrQsALdq7Gy4F4+P50Ky5tmqKvM=";
+    rev = version;
+    sha256 = "1a4a14b2d5vqbk56drzbbldp0nngfqhwycpyv8d3svi2nchkvpqa";
   };
 
   nativeBuildInputs = [
@@ -40,6 +41,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gtk3
     libgee
+    libhandy
     libsecret
     libsoup
     pantheon.granite
@@ -50,15 +52,16 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
+  passthru.updateScript = nix-update-script {
+    attrPath = pname;
+  };
+
   meta = with lib; {
     homepage = "https://github.com/Alecaddd/taxi";
     description = "The FTP Client that drives you anywhere";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ AndersonTorres ] ++ teams.pantheon.members;
     platforms = platforms.linux;
-  };
-
-  passthru.updateScript = nix-update-script {
-    attrPath = pname;
+    mainProgram = "com.github.alecaddd.taxi";
   };
 }

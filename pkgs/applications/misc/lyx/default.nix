@@ -1,4 +1,4 @@
-{ fetchurl, lib, mkDerivation, pkg-config, python, file, bc
+{ fetchurl, lib, mkDerivation, pkg-config, python3, file, bc
 , qtbase, qtsvg, hunspell, makeWrapper #, mythes, boost
 }:
 
@@ -14,7 +14,7 @@ mkDerivation rec {
   # LaTeX is used from $PATH, as people often want to have it with extra pkgs
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    qtbase qtsvg python file/*for libmagic*/ bc
+    qtbase qtsvg python3 file/*for libmagic*/ bc
     hunspell makeWrapper # enchant
   ];
 
@@ -31,7 +31,7 @@ mkDerivation rec {
 
   # python is run during runtime to do various tasks
   qtWrapperArgs = [
-    " --prefix PATH : ${python}/bin"
+    " --prefix PATH : ${python3}/bin"
   ];
 
   meta = with lib; {

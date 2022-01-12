@@ -11,7 +11,8 @@ mkDerivation {
     sha256 = "1i8qgzxniw5d8zjpypalm384y7qfczapfq70xmg129laq6xiqlqb";
   };
 
-  phases = [ "installPhase" ];
+  dontUnpack = true;
+
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
@@ -26,6 +27,6 @@ mkDerivation {
     license = licenses.bsd3;
     homepage = "https://phpmd.org/";
     maintainers = teams.php.members;
-    broken = versionAtLeast php.version "7.4";
+    broken = versionOlder php.version "7.4";
   };
 }

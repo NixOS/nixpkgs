@@ -1,7 +1,8 @@
-{ config, pkgs, lib, ... }:
+{ config, options, pkgs, lib, ... }:
 
 let
   cfg = config.services.keycloak;
+  opt = options.services.keycloak;
 in
 {
   options.services.keycloak = {
@@ -139,6 +140,7 @@ in
           lib.mkOption {
             type = lib.types.port;
             default = dbPorts.${cfg.database.type};
+            defaultText = lib.literalDocBook "default port of selected database";
             description = ''
               Port of the database to connect to.
             '';
@@ -147,6 +149,7 @@ in
       useSSL = lib.mkOption {
         type = lib.types.bool;
         default = cfg.database.host != "localhost";
+        defaultText = lib.literalExpression ''config.${opt.database.host} != "localhost"'';
         description = ''
           Whether the database connection should be secured by SSL /
           TLS.
@@ -210,6 +213,7 @@ in
     package = lib.mkOption {
       type = lib.types.package;
       default = pkgs.keycloak;
+      defaultText = lib.literalExpression "pkgs.keycloak";
       description = ''
         Keycloak package to use.
       '';
@@ -228,7 +232,7 @@ in
     extraConfig = lib.mkOption {
       type = lib.types.attrs;
       default = { };
-      example = lib.literalExample ''
+      example = lib.literalExpression ''
         {
           "subsystem=keycloak-server" = {
             "spi=hostname" = {
@@ -281,7 +285,7 @@ in
       createLocalPostgreSQL = databaseActuallyCreateLocally && cfg.database.type == "postgresql";
       createLocalMySQL = databaseActuallyCreateLocally && cfg.database.type == "mysql";
 
-      mySqlCaKeystore = pkgs.runCommandNoCC "mysql-ca-keystore" {} ''
+      mySqlCaKeystore = pkgs.runCommand "mysql-ca-keystore" {} ''
         ${pkgs.jre}/bin/keytool -importcert -trustcacerts -alias MySQLCACert -file ${cfg.database.caCert} -keystore $out -storepass notsosecretpassword -noprompt
       '';
 
@@ -553,7 +557,7 @@ in
 
       jbossCliScript = pkgs.writeText "jboss-cli-script" (mkJbossScript keycloakConfig');
 
-      keycloakConfig = pkgs.runCommandNoCC "keycloak-config" {
+      keycloakConfig = pkgs.runCommand "keycloak-config" {
         nativeBuildInputs = [ cfg.package ];
       } ''
         export JBOSS_BASE_DIR="$(pwd -P)";

@@ -3,7 +3,7 @@
 , boto3
 , botocore
 , certifi
-, dateutil
+, python-dateutil
 , jsonpatch
 , jsonschema
 , pyyaml
@@ -26,7 +26,7 @@ buildPythonApplication rec {
     boto3
     botocore
     certifi
-    dateutil
+    python-dateutil
     jsonpatch
     jsonschema
     pyyaml

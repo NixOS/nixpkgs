@@ -16,12 +16,14 @@
 
 buildPythonPackage rec {
   pname = "fakeredis";
-  version = "1.5.0";
+  version = "1.7.0";
+  format = "setuptools";
+
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1ac0cef767c37f51718874a33afb5413e69d132988cb6a80c6e6dbeddf8c7623";
+    sha256 = "sha256-yb0S5DAzbL0+GJ+uDpHrmZl7k+dtv91u1n+jUtxoTHE=";
   };
 
   propagatedBuildInputs = [
@@ -40,7 +42,14 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "fakeredis" ];
+  disabledTestPaths = [
+    # AttributeError: 'AsyncGenerator' object has no attribute XXXX
+    "test/test_aioredis2.py"
+  ];
+
+  pythonImportsCheck = [
+    "fakeredis"
+  ];
 
   meta = with lib; {
     description = "Fake implementation of Redis API";

@@ -16,7 +16,7 @@ If NixOS fails to boot, there are a number of kernel command line parameters tha
 
 `boot.debug1mounts`
 
-: Like `boot.debug1` or `boot.debug1devices`, but runs stage1 until all filesystems that are mounted during initrd are mounted (see [neededForBoot](#opt-fileSystems._name_.neededForBoot)). As a motivating example, this could be useful if you've forgotten to set [neededForBoot](options.html#opt-fileSystems._name_.neededForBoot) on a file system.
+: Like `boot.debug1` or `boot.debug1devices`, but runs stage1 until all filesystems that are mounted during initrd are mounted (see [neededForBoot](#opt-fileSystems._name_.neededForBoot)). As a motivating example, this could be useful if you've forgotten to set [neededForBoot](#opt-fileSystems._name_.neededForBoot) on a file system.
 
 `boot.trace`
 
@@ -29,6 +29,12 @@ If NixOS fails to boot, there are a number of kernel command line parameters tha
 `systemd.log_level=debug` `systemd.log_target=console`
 
 : Make systemd very verbose and send log messages to the console instead of the journal. For more parameters recognised by systemd, see systemd(1).
+
+In addition, these arguments are recognised by the live image only:
+
+`live.nixos.passwd=password`
+
+: Set the password for the `nixos` live user. This can be used for SSH access if there are issues using the terminal.
 
 Notice that for `boot.shell_on_fail`, `boot.debug1`, `boot.debug1devices`, and `boot.debug1mounts`, if you did **not** select "start the new shell as pid 1", and you `exit` from the new shell, boot will proceed normally from the point where it failed, as if you'd chosen "ignore the error and continue".
 

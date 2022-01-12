@@ -51,7 +51,7 @@ python3.pkgs.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3.pkgs; [
     beautifulsoup4
-    dateutil
+    python-dateutil
     feedparser
     html5lib
     listparser

@@ -1,14 +1,14 @@
-{ lib, stdenv, buildPackages, fetchpatch, fetchurl, autoconf, automake, gettext, libtool, pkg-config
+{ lib, stdenv, buildPackages, fetchurl, autoconf, automake, gettext, libtool, pkg-config
 , icu, libuuid, readline, inih
 }:
 
 stdenv.mkDerivation rec {
   pname = "xfsprogs";
-  version = "5.11.0";
+  version = "5.13.0";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/fs/xfs/xfsprogs/${pname}-${version}.tar.xz";
-    sha256 = "0lxks616nmdk8zkdbwpq5sf9zz19smgy5rpmp3hpk2mvrl7kk70f";
+    sha256 = "sha256-ThQtS6vghq35AW2MYGyAWCnaCORjiaRDP0A0YgT5DNs=";
   };
 
   outputs = [ "bin" "dev" "out" "doc" ];

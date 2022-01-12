@@ -13,25 +13,58 @@ let
   # Fetch a diff between `base` and `rev` on sage's git server.
   # Used to fetch trac tickets by setting the `base` to the last release and the
   # `rev` to the last commit of the ticket.
-  fetchSageDiff = { base, name, rev, sha256, ...}@args: (
+  fetchSageDiff = { base, name, rev, sha256, squashed ? false, ...}@args: (
     fetchpatch ({
       inherit name sha256;
-      url = "https://git.sagemath.org/sage.git/patch?id2=${base}&id=${rev}";
+
+      # There are three places to get changes from:
+      #
+      # 1) From Sage's Trac. Contains all release tags (like "9.4") and all developer
+      # branches (wip patches from tickets), but exports each commit as a separate
+      # patch, so merge commits can lead to conflicts. Used if squashed == false.
+      #
+      # The above is the preferred option. To use it, find a Trac ticket and pass the
+      # "Commit" field from the ticket as "rev", choosing "base" as an appropriate
+      # release tag, i.e. a tag that doesn't cause the patch to include a lot of
+      # unrelated changes. If there is no such tag (due to nonlinear history, for
+      # example), there are two other options, listed below.
+      #
+      # 2) From GitHub's sagemath/sage repo. This lets us use a GH feature that allows
+      # us to choose between a .patch file, with one patch per commit, or a .diff file,
+      # which squashes all commits into a single diff. This is used if squashed ==
+      # true. This repo has all release tags. However, it has no developer branches, so
+      # this option can't be used if a change wasn't yet shipped in a (possibly beta)
+      # release.
+      #
+      # 3) From GitHub's sagemath/sagetrac-mirror repo. Mirrors all developer branches,
+      # but has no release tags. The only use case not covered by 1 or 2 is when we need
+      # to apply a patch from an open ticket that contains merge commits.
+      #
+      # Item 3 could cover all use cases if the sagemath/sagetrack-mirror repo had
+      # release tags, but it requires a sha instead of a release number in "base", which
+      # is inconvenient.
+      urls = if squashed
+             then [
+               "https://github.com/sagemath/sage/compare/${base}...${rev}.diff"
+               "https://github.com/sagemath/sagetrac-mirror/compare/${base}...${rev}.diff"
+             ]
+             else [ "https://git.sagemath.org/sage.git/patch?id2=${base}&id=${rev}" ];
+
       # We don't care about sage's own build system (which builds all its dependencies).
       # Exclude build system changes to avoid conflicts.
       excludes = [ "build/*" ];
-    } // builtins.removeAttrs args [ "rev" "base" "sha256" ])
+    } // builtins.removeAttrs args [ "rev" "base" "sha256" "squashed" ])
   );
 in
 stdenv.mkDerivation rec {
-  version = "9.3";
+  version = "9.4";
   pname = "sage-src";
 
   src = fetchFromGitHub {
     owner = "sagemath";
     repo = "sage";
     rev = version;
-    sha256 = "sha256-l9DX8jcDdKA7GJ6xU+nBsmlZxrcZ9ZUAJju621ooBEo=";
+    sha256 = "sha256-jqkr4meG02KbTCMsGvyr1UbosS4ZuUJhPXU/InuS+9A=";
   };
 
   # Patches needed because of particularities of nix or the way this is packaged.
@@ -72,39 +105,64 @@ stdenv.mkDerivation rec {
   # be empty since dependencies update all the time.
   packageUpgradePatches = [
     # After updating smypow to (https://trac.sagemath.org/ticket/3360) we can
-    # now set the cache dir to be withing the .sage directory. This is not
+    # now set the cache dir to be within the .sage directory. This is not
     # strictly necessary, but keeps us from littering in the user's HOME.
     ./patches/sympow-cache.patch
 
-    # ignore a deprecation warning for usage of `cmp` in the attrs library in the doctests
-    ./patches/ignore-cmp-deprecation.patch
+    # fonttools 4.26.2, used by matplotlib, uses deprecated methods internally.
+    # This is fixed in fonttools 4.27.0, but since fonttools is a dependency of
+    # 2000+ packages and DeprecationWarnings are hidden almost everywhere by
+    # default (not on Sage's doctest harness, though), it doesn't make sense to
+    # backport the fix (see https://github.com/NixOS/nixpkgs/pull/151415).
+    # Let's just assume warnings are expected until we update to 4.27.0.
+    ./patches/fonttools-deprecation-warnings.patch
 
-    # sphinx 3.5 pretty-prints code slightly differently than sphinx
-    # 3.1--3.3. a similar patch is available at the sphinx 4 ticket
-    # (https://trac.sagemath.org/ticket/31696), but sphinx 3.5 uses
-    # <code> tags while sphinx 4 uses <span> tags so we cannot just
-    # import the patch from trac.
-    ./patches/sphinx-3.5-code-output.patch
-
-    # remove use of matplotlib function deprecated in 3.4
-    # https://trac.sagemath.org/ticket/31827
+    # https://trac.sagemath.org/ticket/32305
     (fetchSageDiff {
-      base = "9.3";
-      name = "remove-matplotlib-deprecated-function.patch";
-      rev = "32b2bcaefddc4fa3d2aee6fa690ce1466cbb5948";
-      sha256 = "sha256-SXcUGBMOoE9HpuBzgKC3P6cUmM5MiktXbe/7dVdrfWo=";
+      base = "9.4";
+      name = "networkx-2.6-upgrade.patch";
+      rev = "9808325853ba9eb035115e5b056305a1c9d362a0";
+      sha256 = "sha256-gJSqycCtbAVr5qnVEbHFUvIuTOvaxFIeffpzd6nH4DE=";
     })
 
-    # https://trac.sagemath.org/ticket/30801. this patch has
-    # positive_review but has not been merged upstream yet, so we
-    # don't use fetchSageDiff because it returns a file that contains
-    # each commit as a separate patch instead of a single diff, and
-    # some commits from the pari update branch are already in 9.3.rc5
-    # (auto-resolvable merge conflicts).
-    (fetchpatch {
-      name = "pari-2.13.1.patch";
-      url = "https://github.com/sagemath/sagetrac-mirror/compare/d6c5cd9be78cc448ee4c54bac93385b1244a234c...10a4531721d2700fd717e2b3a1364508ffd971c3.diff";
-      sha256 = "sha256-zMjRMEReoiTvmt+vvV0Ij1jtyLSLwSXBEVXqgvmq1D4=";
+    # https://trac.sagemath.org/ticket/32420
+    (fetchSageDiff {
+      base = "9.5.beta2";
+      name = "sympy-1.9-update.patch";
+      rev = "beed4e16aff32e47d0c3b1c58cb1e2f4c38590f8";
+      sha256 = "sha256-3eJPfWfCrCAQ5filIn7FbzjRQeO9QyTIVl/HyRuqFtE=";
+    })
+
+    # https://trac.sagemath.org/ticket/32567
+    (fetchSageDiff {
+      base = "9.5.beta2";
+      name = "arb-2.21.0-update.patch";
+      rev = "eb3304dd521a3d5a9334e747a08e234bbf16b4eb";
+      sha256 = "sha256-XDkaY4VQGyESXI6zuD7nCNzyQOl/fmBFvAESH9+RRvk=";
+    })
+
+    # https://trac.sagemath.org/ticket/32797
+    (fetchSageDiff {
+      base = "9.5.beta7";
+      name = "pari-2.13.3-update.patch";
+      rev = "f5f7a86908daf60b25e66e6a189c51ada7e0a732";
+      sha256 = "sha256-H/caGx3q4KcdsyGe+ojV9bUTQ5y0siqM+QHgDbeEnbw=";
+    })
+
+    # https://trac.sagemath.org/ticket/32909
+    (fetchSageDiff {
+      base = "9.5.beta7";
+      name = "matplotlib-3.5-deprecation-warnings.patch";
+      rev = "a5127dc56fdf5c2e82f6bc781cfe78dbd04e97b7";
+      sha256 = "sha256-p23qUu9mgEUbdbX6cy7ArxZAtpcFjCKbgyxN4jWvj1o=";
+    })
+
+    # https://trac.sagemath.org/ticket/32968
+    (fetchSageDiff {
+      base = "9.5.beta8";
+      name = "sphinx-4.3-update.patch";
+      rev = "fc84f82f52b6f05f512cb359ec7c100f93cf8841";
+      sha256 = "sha256-bBbfdcnw/9LUOlY8rHJRbFJEdMXK4shosqTNaobTS1Q=";
     })
   ];
 

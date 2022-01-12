@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
   top = config.services.kubernetes;
+  otop = options.services.kubernetes;
   cfg = top.scheduler;
 in
 {
@@ -27,6 +28,7 @@ in
     featureGates = mkOption {
       description = "List set of feature gates";
       default = top.featureGates;
+      defaultText = literalExpression "config.${otop.featureGates}";
       type = listOf str;
     };
 
@@ -79,6 +81,9 @@ in
         Restart = "on-failure";
         RestartSec = 5;
       };
+      unitConfig = {
+        StartLimitIntervalSec = 0;
+      };
     };
 
     services.kubernetes.pki.certs = {
@@ -91,4 +96,6 @@ in
 
     services.kubernetes.scheduler.kubeconfig.server = mkDefault top.apiserverAddress;
   };
+
+  meta.buildDocsInSandbox = false;
 }

@@ -38,7 +38,7 @@
 
 # Linux Only Dependencies
 , linuxHeaders, util-linux, libuuid, udev, keyutils, rdma-core, rabbitmq-c
-, libaio ? null, libxfs ? null, zfs ? null
+, libaio ? null, libxfs ? null, zfs ? null, liburing ? null
 , ...
 }:
 
@@ -85,7 +85,7 @@ let
   };
 
   getMeta = description: with lib; {
-     homepage = "https://ceph.com/";
+     homepage = "https://ceph.io/en/";
      inherit description;
      license = with licenses; [ lgpl21 gpl2 bsd3 mit publicDomain ];
      maintainers = with maintainers; [ adev ak johanot krav ];
@@ -104,21 +104,7 @@ let
     meta = getMeta "Ceph common module for code shared by manager modules";
   };
 
-  python = python3.override {
-    packageOverrides = self: super: {
-      # scipy > 1.3 breaks diskprediction_local, leading to mgr hang on startup
-      # Bump once these issues are resolved:
-      # https://tracker.ceph.com/issues/42764 https://tracker.ceph.com/issues/45147
-      scipy = super.scipy.overridePythonAttrs (oldAttrs: rec {
-        version = "1.3.3";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "02iqb7ws7fw5fd1a83hx705pzrw1imj7z0bphjsl4bfvw254xgv4";
-        };
-        doCheck = false;
-      });
-    };
-  };
+  python = python3;
 
   ceph-python-env = python.withPackages (ps: [
     ps.sphinx
@@ -130,7 +116,9 @@ let
     ps.Mako
     ceph-common
     ps.cherrypy
-    ps.dateutil
+    ps.cmd2
+    ps.colorama
+    ps.python-dateutil
     ps.jsonpatch
     ps.pecan
     ps.prettytable
@@ -144,10 +132,10 @@ let
   ]);
   sitePackages = ceph-python-env.python.sitePackages;
 
-  version = "16.2.4";
+  version = "16.2.7";
   src = fetchurl {
     url = "http://download.ceph.com/tarballs/ceph-${version}.tar.gz";
-    sha256 = "sha256-J6FVK7feNN8cGO5BSDlfRGACAzchmRUSWR+a4ZgeWy0=";
+    sha256 = "0n7vpdcxji49bqaa5b7zxif1r80rrkbh0dfacbibvf20kzzbn2fz";
   };
 in rec {
   ceph = stdenv.mkDerivation {
@@ -176,7 +164,7 @@ in rec {
       snappy lz4 oathToolkit leveldb libnl libcap_ng rdkafka
       cryptsetup sqlite lua icu bzip2
     ] ++ lib.optionals stdenv.isLinux [
-      linuxHeaders util-linux libuuid udev keyutils optLibaio optLibxfs optZfs
+      linuxHeaders util-linux libuuid udev keyutils liburing optLibaio optLibxfs optZfs
       # ceph 14
       rdma-core rabbitmq-c
     ] ++ lib.optionals hasRadosgw [
@@ -207,11 +195,12 @@ in rec {
       "-DMGR_PYTHON_VERSION=${ceph-python-env.python.pythonVersion}"
       "-DWITH_SYSTEMD=OFF"
       "-DWITH_TESTS=OFF"
+      "-DWITH_CEPHFS_SHELL=ON"
       # TODO breaks with sandbox, tries to download stuff with npm
       "-DWITH_MGR_DASHBOARD_FRONTEND=OFF"
       # WITH_XFS has been set default ON from Ceph 16, keeping it optional in nixpkgs for now
       ''-DWITH_XFS=${if optLibxfs != null then "ON" else "OFF"}''
-    ];
+    ] ++ lib.optional stdenv.isLinux "-DWITH_SYSTEM_LIBURING=ON";
 
     postFixup = ''
       wrapPythonPrograms
@@ -236,13 +225,16 @@ in rec {
   };
 
   ceph-client = runCommand "ceph-client-${version}" {
-      meta = getMeta "Tools needed to mount Ceph's RADOS Block Devices";
+      meta = getMeta "Tools needed to mount Ceph's RADOS Block Devices/Cephfs";
     } ''
       mkdir -p $out/{bin,etc,${sitePackages},share/bash-completion/completions}
       cp -r ${ceph}/bin/{ceph,.ceph-wrapped,rados,rbd,rbdmap} $out/bin
       cp -r ${ceph}/bin/ceph-{authtool,conf,dencoder,rbdnamer,syn} $out/bin
       cp -r ${ceph}/bin/rbd-replay* $out/bin
-      cp -r ${ceph}/${sitePackages} $out/${sitePackages}
+      cp -r ${ceph}/sbin/mount.ceph $out/bin
+      cp -r ${ceph}/sbin/mount.fuse.ceph $out/bin
+      ln -s bin $out/sbin
+      cp -r ${ceph}/${sitePackages}/* $out/${sitePackages}
       cp -r ${ceph}/etc/bash_completion.d $out/share/bash-completion/completions
       # wrapPythonPrograms modifies .ceph-wrapped, so lets just update its paths
       substituteInPlace $out/bin/ceph          --replace ${ceph} $out

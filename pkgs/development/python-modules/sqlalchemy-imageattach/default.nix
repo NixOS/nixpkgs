@@ -36,6 +36,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/dahlia/sqlalchemy-imageattach";
     description = "SQLAlchemy extension for attaching images to entity objects";
     license = licenses.mit;
+    broken = true; # Incompatible with sqlalchemy>=1.4 (https://github.com/dahlia/sqlalchemy-imageattach/issues/47)
   };
 
 }

@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "async-profiler";
-  version = "1.8.5";
+  version = "2.0";
 
   src = fetchFromGitHub {
     owner = "jvm-profiling-tools";

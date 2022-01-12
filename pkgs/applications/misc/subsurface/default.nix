@@ -5,13 +5,13 @@
 }:
 
 let
-  version = "5.0.1";
+  version = "5.0.2";
 
   subsurfaceSrc = (fetchFromGitHub {
     owner = "Subsurface";
     repo = "subsurface";
     rev = "v${version}";
-    sha256 = "01r836ckvrmgprjf4cqxn2n3w5w4pa2fjrhspjndsspic8nwlrwg";
+    sha256 = "1yay06m8p9qp2ghrg8dxavdq55y09apcgdnb7rihgs3hq86k539n";
     fetchSubmodules = true;
   });
 
@@ -63,8 +63,6 @@ let
       mv *.so ${pluginsSubdir}/geoservices
       mv lib $out/
     '';
-
-    enableParallelBuilding = true;
 
     meta = with lib; {
       inherit (src.meta) homepage;

@@ -1,38 +1,50 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, poetry
-, prompt_toolkit
-, pytest-cov
+, poetry-core
+, prompt-toolkit
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "questionary";
-  version = "1.9.0";
+  version = "1.10.0";
   format = "pyproject";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "tmbo";
     repo = pname;
     rev = version;
-    sha256 = "1x748bz7l2r48031dj6vr6jvvac28pv6vx1bina4lz60h1qac1kf";
+    sha256 = "14k24fq2nmk90iv0k7pnmmdhmk8z261397wg52sfcsccyhpdw3i7";
   };
 
-  nativeBuildInputs = [ poetry ];
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
-  propagatedBuildInputs = [ prompt_toolkit ];
+  propagatedBuildInputs = [
+    prompt-toolkit
+  ];
 
   checkInputs = [
-    pytest-cov
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "questionary" ];
+  disabledTests = [
+    # TypeError: <lambda>() missing 1 required...
+    "test_print_with_style"
+  ];
+
+  pythonImportsCheck = [
+    "questionary"
+  ];
 
   meta = with lib; {
     description = "Python library to build command line user prompts";
-    homepage = "https://github.com/bachya/regenmaschine";
+    homepage = "https://github.com/tmbo/questionary";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

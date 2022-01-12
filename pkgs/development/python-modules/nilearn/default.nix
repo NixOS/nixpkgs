@@ -3,15 +3,16 @@
 
 buildPythonPackage rec {
   pname = "nilearn";
-  version = "0.7.1";
+  version = "0.8.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8b1409a5e1f0f6d1a1f02555c2f11115a2364f45f1e57bcb5fb3c9ea11f346fa";
+    sha256 = "a0489940855130f35bbc4cac0750479a6f82025215ea7b1d778faca064219298";
   };
 
   checkInputs = [ pytestCheckHook ];
   disabledTests = [ "test_clean_confounds" ];  # https://github.com/nilearn/nilearn/issues/2608
+  pytestFlagsArray = [ "nilearn" ];
 
   propagatedBuildInputs = [
     joblib

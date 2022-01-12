@@ -3,7 +3,7 @@
 let
 
   inherit (lib) mkDefault mkEnableOption mkForce mkIf mkMerge mkOption;
-  inherit (lib) literalExample mapAttrs optional optionalString types;
+  inherit (lib) literalExpression mapAttrs optional optionalString types;
 
   cfg = config.services.limesurvey;
   fpm = config.services.phpfpm.pools.limesurvey;
@@ -51,7 +51,7 @@ in
       port = mkOption {
         type = types.int;
         default = if cfg.database.type == "pgsql" then 5442 else 3306;
-        defaultText = "3306";
+        defaultText = literalExpression "3306";
         description = "Database host port.";
       };
 
@@ -84,14 +84,14 @@ in
           else if pgsqlLocal then "/run/postgresql"
           else null
         ;
-        defaultText = "/run/mysqld/mysqld.sock";
+        defaultText = literalExpression "/run/mysqld/mysqld.sock";
         description = "Path to the unix socket file to use for authentication.";
       };
 
       createLocally = mkOption {
         type = types.bool;
         default = cfg.database.type == "mysql";
-        defaultText = "true";
+        defaultText = literalExpression "true";
         description = ''
           Create the database and database user locally.
           This currently only applies if database type "mysql" is selected.
@@ -101,7 +101,7 @@ in
 
     virtualHost = mkOption {
       type = types.submodule (import ../web-servers/apache-httpd/vhost-options.nix);
-      example = literalExample ''
+      example = literalExpression ''
         {
           hostName = "survey.example.org";
           adminAddr = "webmaster@example.org";

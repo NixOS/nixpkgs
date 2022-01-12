@@ -19,14 +19,14 @@ let
 in
 buildPythonPackage rec {
   pname = "ttp";
-  version = "0.7.1";
+  version = "0.7.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "dmulyalin";
     repo = pname;
     rev = version;
-    sha256 = "1fmg5gz297bpr550s4vfq6vs7j042bp1mrdmqz1b7nz29c2khbz6";
+    sha256 = "sha256-dYjE+EMfCVHLRAqT1KM7o8VEopJ/TwAEMphYXuj38Wk=";
   };
 
   propagatedBuildInputs = [

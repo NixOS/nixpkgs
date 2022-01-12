@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
+  dontBuild = true;
 
   installPhase = ''
     make PREFIX="$out" install

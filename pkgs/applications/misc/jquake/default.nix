@@ -1,12 +1,14 @@
-{ lib, stdenv, fetchurl, copyDesktopItems, makeDesktopItem, unzip, jre8 }:
+{ lib, stdenv, fetchurl, copyDesktopItems, makeDesktopItem, unzip, jre8
+, logOutput ? false
+}:
 
 stdenv.mkDerivation rec {
   pname = "jquake";
-  version = "1.6.1";
+  version = "1.6.2";
 
   src = fetchurl {
     url = "https://fleneindre.github.io/downloads/JQuake_${version}_linux.zip";
-    sha256 = "0nw6xjc3i1b8rk15arc5d0ji2bycc40rz044qd03vzxvh0h8yvgl";
+    sha256 = "1k12yw9fwq1z3gg0d38dxs4mmyn912zfcm6zsbjkv27q6lvhvwng";
   };
 
   nativeBuildInputs = [ unzip copyDesktopItems ];
@@ -14,10 +16,9 @@ stdenv.mkDerivation rec {
   sourceRoot = ".";
 
   postPatch = ''
-    # JQuake emits a lot of debug-like messages in console, but I
-    # don't think it's in our interest to void them by default. Log them at
-    # the appropriate level.
-    sed -i "/^java/ s/$/\ | logger -p user.debug/" JQuake.sh
+    # JQuake emits a lot of debug-like messages on stdout. Either drop the output
+    # stream entirely or log them at 'user.debug' level.
+    sed -i "/^java/ s/$/ ${if logOutput then "| logger -p user.debug" else "> \\/dev\\/null"}/" JQuake.sh
 
     # By default, an 'errors.log' file is created in the current directory.
     # cd into a temporary directory and let it be created there.
@@ -56,7 +57,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Real-time earthquake map of Japan";
-    homepage = "http://jquake.net";
+    homepage = "https://jquake.net";
     downloadPage = "https://jquake.net/?down";
     changelog = "https://jquake.net/?docu";
     maintainers = with maintainers; [ nessdoor ];

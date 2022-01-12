@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "ijq";
-  version = "0.3.5";
+  version = "0.3.6";
 
   src = fetchFromSourcehut {
     owner = "~gpanders";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-0xLmjidPxjSkYmLI4lWieT2rswZsWBY/IUXFOrUFAMo=";
+    sha256 = "sha256-mPO3P+NGFIoHuvMFwj87S8H8LQx7QpfPy2zi91la2C0=";
   };
 
-  vendorSha256 = "sha256-7UuQXnQdlUMC0ZIgHydQ5bZMB5XrE7dhx5+1NI+zFkM=";
+  vendorSha256 = "sha256-HbrmfZ/P5bUF7Qio5L1sb/HAYk/tL2SOmxHCXvSw72I=";
 
   nativeBuildInputs = [ installShellFiles makeWrapper scdoc ];
 
@@ -31,6 +31,6 @@ buildGoModule rec {
     description = "Interactive wrapper for jq";
     homepage = "https://git.sr.ht/~gpanders/ijq";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ justinas ];
+    maintainers = with maintainers; [ justinas SuperSandro2000 ];
   };
 }

@@ -1,4 +1,4 @@
-{ mkXfceDerivation, dbus, dbus-glib
+{ lib, mkXfceDerivation, dbus, dbus-glib
 , gst_all_1, gtk3, libnotify, libxfce4ui, libxfce4util
 , taglib, xfconf }:
 
@@ -31,7 +31,8 @@ mkXfceDerivation {
     xfconf
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Modern simple media player";
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

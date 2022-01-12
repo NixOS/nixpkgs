@@ -1,12 +1,14 @@
-{ lib, stdenv, fetchzip, cmake }:
+{ lib, stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "clingo";
-  version = "5.5.0";
+  version = "5.5.1";
 
-  src = fetchzip {
-    url = "https://github.com/potassco/clingo/archive/v${version}.tar.gz";
-    sha256 = "sha256-6xKtNi5IprjaFNadfk8kKjKzuPRanUjycLWCytnk0mU=";
+  src = fetchFromGitHub {
+    owner = "potassco";
+    repo = "clingo";
+    rev = "v${version}";
+    sha256 = "sha256-KBCwGNkz5HqbgXbDxPVcqxMXC8B2+wRI8eZVVXMVpLI=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -14,7 +16,6 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DCLINGO_BUILD_WITH_PYTHON=OFF" ];
 
   meta = {
-    inherit version;
     description = "ASP system to ground and solve logic programs";
     license = lib.licenses.mit;
     maintainers = [lib.maintainers.raskin];

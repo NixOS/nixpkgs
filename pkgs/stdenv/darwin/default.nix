@@ -4,7 +4,7 @@
 , config
 , overlays
 , crossOverlays ? [ ]
-, bootstrapLlvmVersion ? if localSystem.isAarch64 then "11.1.0" else "7.1.0"
+, bootstrapLlvmVersion ? "11.1.0"
   # Allow passing in bootstrap files directly so we can test the stdenv bootstrap process when changing the bootstrap tools
 , bootstrapFiles ? if localSystem.isAarch64 then
     let
@@ -23,16 +23,16 @@
   else
     let
       fetch = { file, sha256, executable ? true }: import <nix/fetchurl.nix> {
-        url = "http://tarballs.nixos.org/stdenv-darwin/x86_64/5ab5783e4f46c373c6de84deac9ad59b608bb2e6/${file}";
+        url = "http://tarballs.nixos.org/stdenv-darwin/x86_64/c253216595572930316f2be737dc288a1da22558/${file}";
         inherit (localSystem) system;
         inherit sha256 executable;
       }; in
     {
-      sh = fetch { file = "sh"; sha256 = "sha256-nbb4XEk3go7ttiWrQyKQMLzPr+qUnwnHkWMtVCZsMCs="; };
-      bzip2 = fetch { file = "bzip2"; sha256 = "sha256-ybnA+JWrKhXSfn20+GVKXkHFTp2Zt79hat8hAVmsUOc="; };
-      mkdir = fetch { file = "mkdir"; sha256 = "sha256-nmvMxmfcY41/60Z/E8L9u0vgePW5l30Dqw1z+Nr02Hk="; };
-      cpio = fetch { file = "cpio"; sha256 = "sha256-cB36rN3NLj19Tk37Kc5bodMFMO+mCpEQkKKo0AEMkaU="; };
-      tarball = fetch { file = "bootstrap-tools.cpio.bz2"; sha256 = "sha256-kh2vKmjCr/HvR06czZbxUxV5KDRxSF27M6nN3cyofRI="; executable = false; };
+      sh = fetch { file = "sh"; sha256 = "sha256-igMAVEfumFv/LUNTGfNi2nSehgTNIP4Sg+f3L7u6SMA="; };
+      bzip2 = fetch { file = "bzip2"; sha256 = "sha256-K3rhkJZipudT1Jgh+l41Y/fNsMkrPtiAsNRDha/lpZI="; };
+      mkdir = fetch { file = "mkdir"; sha256 = "sha256-VddFELwLDJGNADKB1fWwWPBtIAlEUgJv2hXRmC4NEeM="; };
+      cpio = fetch { file = "cpio"; sha256 = "sha256-SWkwvLaFyV44kLKL2nx720SvcL4ej/p2V/bX3uqAGO0="; };
+      tarball = fetch { file = "bootstrap-tools.cpio.bz2"; sha256 = "sha256-kRC/bhCmlD4L7KAvJQgcukk7AinkMz4IwmG1rqlh5tA="; executable = false; };
     }
 }:
 
@@ -61,9 +61,6 @@ rec {
     export NIX_ENFORCE_PURITY=''${NIX_ENFORCE_PURITY-1}
     export NIX_IGNORE_LD_THROUGH_GCC=1
     unset SDKROOT
-
-    # Workaround for https://openradar.appspot.com/22671534 on 10.11.
-    export gl_cv_func_getcwd_abort_bug=no
 
     stripAllFlags=" " # the Darwin "strip" command doesn't know "-s"
   '';
@@ -268,6 +265,12 @@ rec {
               ${bootstrapTools}/bin/codesign > $out/bin/codesign
             chmod a+x $out/bin/codesign
           '';
+          # on next bootstrap tools update, use the following:
+          # installPhase = ''
+          #   mkdir -p $out/bin
+          #   ln -s ${bootstrapTools}/bin/sigtool  $out/bin
+          #   ln -s ${bootstrapTools}/bin/codesign $out/bin
+          # '';
         };
 
         print-reexports = stdenv.mkDerivation {
@@ -452,7 +455,7 @@ rec {
           libxml2 gettext sharutils gmp libarchive ncurses pkg-config libedit groff
           openssh sqlite sed serf openldap db cyrus-sasl expat apr-util subversion xz
           findfreetype libssh curl cmake autoconf automake libtool ed cpio coreutils
-          libssh2 nghttp2 libkrb5 ninja brotli;
+          libssh2 nghttp2 libkrb5 ninja brotli libiconv;
 
         "${finalLlvmPackages}" = super."${finalLlvmPackages}" // (
           let
@@ -466,7 +469,7 @@ rec {
               };
               libcxxabi = libSuper.libcxxabi.override ({
                 stdenv = overrideCC self.stdenv self.ccNoLibcxx;
-              } // lib.optionalAttrs (finalLlvmVersion == "7") {
+              } // lib.optionalAttrs (builtins.any (v: finalLlvmVersion == v) [ 7 11 12 13 ]) {
                 # TODO: the bootstrapping of llvm packages isn't consistent.
                 # `standalone` may be redundant if darwin behaves like useLLVM (or
                 # has useLLVM = true).

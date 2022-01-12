@@ -5,10 +5,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "tony-2.1.1";
+  pname = "tony";
+  version = "2.1.1";
 
   src = fetchurl {
-    url = "https://code.soundsoftware.ac.uk/attachments/download/2616/${name}.tar.gz";
+    url = "https://code.soundsoftware.ac.uk/attachments/download/2616/${pname}-${version}.tar.gz";
     sha256 = "03g2bmlj08lmgvh54dyd635xccjn730g4wwlhpvsw04bffz8b7fp";
   };
 

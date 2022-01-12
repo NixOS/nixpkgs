@@ -2,7 +2,6 @@
 , lib
 , fetchurl
 , coreutils
-, util-linux
 , which
 , gnused
 , gnugrep
@@ -134,7 +133,7 @@ let
 
   fish = stdenv.mkDerivation rec {
     pname = "fish";
-    version = "3.2.2";
+    version = "3.3.1";
 
     src = fetchurl {
       # There are differences between the release tarball and the tarball GitHub
@@ -144,7 +143,7 @@ let
       # --version`), as well as the local documentation for all builtins (and
       # maybe other things).
       url = "https://github.com/fish-shell/fish-shell/releases/download/${version}/${pname}-${version}.tar.xz";
-      sha256 = "WUTaGoiT0RsIKKT9kTbuF0VJ2v+z0K392JF4Vv5rQAk=";
+      sha256 = "sha256-tbTuGlJpdiy76ZOkvWUH5nXkEAzpu+hCFKXusrGfrok=";
     };
 
     # Fix FHS paths in tests
@@ -253,8 +252,6 @@ let
       EOF
 
     '' + optionalString stdenv.isLinux ''
-      sed -e "s| ul| ${util-linux}/bin/ul|" \
-          -i "$out/share/fish/functions/__fish_print_help.fish"
       for cur in $out/share/fish/functions/*.fish; do
         sed -e "s|/usr/bin/getent|${getent}/bin/getent|" \
             -i "$cur"
@@ -273,7 +270,7 @@ let
 
     meta = with lib; {
       description = "Smart and user-friendly command line shell";
-      homepage = "http://fishshell.com/";
+      homepage = "https://fishshell.com/";
       license = licenses.gpl2;
       platforms = platforms.unix;
       maintainers = with maintainers; [ cole-h ];

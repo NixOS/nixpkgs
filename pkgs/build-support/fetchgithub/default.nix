@@ -2,15 +2,15 @@
 
 { owner, repo, rev, name ? "source"
 , fetchSubmodules ? false, leaveDotGit ? null
-, deepClone ? false, private ? false
+, deepClone ? false, private ? false, forceFetchGit ? false
 , githubBase ? "github.com", varPrefix ? null
 , ... # For hash agility
 }@args:
 let
   baseUrl = "https://${githubBase}/${owner}/${repo}";
-  passthruAttrs = removeAttrs args [ "owner" "repo" "rev" "fetchSubmodules" "private" "githubBase" "varPrefix" ];
+  passthruAttrs = removeAttrs args [ "owner" "repo" "rev" "fetchSubmodules" "forceFetchGit" "private" "githubBase" "varPrefix" ];
   varBase = "NIX${if varPrefix == null then "" else "_${varPrefix}"}_GITHUB_PRIVATE_";
-  useFetchGit = fetchSubmodules || (leaveDotGit == true) || deepClone;
+  useFetchGit = fetchSubmodules || (leaveDotGit == true) || deepClone || forceFetchGit;
   # We prefer fetchzip in cases we don't need submodules as the hash
   # is more stable in that case.
   fetcher = if useFetchGit then fetchgit else fetchzip;
@@ -32,10 +32,8 @@ let
     then {
       inherit rev deepClone fetchSubmodules; url = "${baseUrl}.git";
     } // lib.optionalAttrs (leaveDotGit != null) { inherit leaveDotGit; }
-    else ({ url = "${baseUrl}/archive/${rev}.tar.gz"; } // privateAttrs)
-  ) // passthruAttrs // { inherit name; };
+    else { url = "${baseUrl}/archive/${rev}.tar.gz"; }
+  ) // privateAttrs // passthruAttrs // { inherit name; };
 in
-
-assert private -> !useFetchGit;
 
 fetcher fetcherArgs // { meta.homepage = baseUrl; inherit rev; }

@@ -34,6 +34,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/TaylanUB/scheme-bytestructures";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ethancedwards8 ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

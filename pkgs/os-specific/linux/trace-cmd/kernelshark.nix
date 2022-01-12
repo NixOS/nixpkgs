@@ -1,39 +1,30 @@
-{ lib, mkDerivation, fetchgit, qtbase, cmake, asciidoc, docbook_xsl, json_c, mesa_glu, freeglut, trace-cmd, pkg-config }:
+{ lib, mkDerivation, fetchgit, qtbase, cmake, asciidoc
+, docbook_xsl, json_c, mesa_glu, freeglut, trace-cmd, pkg-config
+, libtraceevent, libtracefs, freefont_ttf
+}:
+
 mkDerivation rec {
   pname = "kernelshark";
-  version = "1.2";
+  version = "2.0.2";
 
   src = fetchgit {
-    url    = "git://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/";
-    rev    = "kernelshark-v${version}";
-    sha256 = "0wzzm2imk9n94v96v6sbvbff6j47lz4qj0snhiyv3nj3slg0anvh";
+    url = "https://git.kernel.org/pub/scm/utils/trace-cmd/kernel-shark.git/";
+    rev = "kernelshark-v${version}";
+    sha256 = "0vy5wa1kccrxr973l870jy5hl6lac7sk3zyg3hxrwmivin1yf0cv";
   };
 
-  patches = [ ./fix-Makefiles.patch ];
+  outputs = [ "out" ];
 
-  outputs = [ "out" "doc" ];
+  nativeBuildInputs = [ pkg-config cmake ];
 
-  preConfigure = "pushd kernel-shark";
-
-  nativeBuildInputs = [ pkg-config cmake asciidoc ];
-
-  buildInputs = [ qtbase json_c mesa_glu freeglut ];
+  buildInputs = [ qtbase json_c mesa_glu freeglut libtraceevent libtracefs trace-cmd ];
 
   cmakeFlags = [
     "-D_INSTALL_PREFIX=${placeholder "out"}"
-    "-DTRACECMD_BIN_DIR=${trace-cmd}/bin"
-    "-DTRACECMD_INCLUDE_DIR=${trace-cmd.dev}/include"
-    "-DTRACECMD_LIBRARY=${trace-cmd.lib}/lib/trace-cmd/libtracecmd.a"
-    "-DTRACEEVENT_LIBRARY=${trace-cmd.lib}/lib/traceevent/libtraceevent.a"
-    "-DTRACEFS_LIBRARY=${trace-cmd.lib}/lib/tracefs/libtracefs.a"
+    "-D_POLKIT_INSTALL_PREFIX=${placeholder "out"}"
+    "-DPKG_CONGIG_DIR=${placeholder "out"}/lib/pkgconfig"
+    "-DTT_FONT_FILE=${freefont_ttf}/share/fonts/truetype/FreeSans.ttf"
   ];
-
-  preInstall = ''
-    popd
-    make install_doc_gui prefix=$doc \
-      FIND_MANPAGE_DOCBOOK_XSL=${docbook_xsl}/share/xml/docbook-xsl-nons/manpages/docbook.xsl
-    pushd kernel-shark/build
-  '';
 
   meta = with lib; {
     description = "GUI for trace-cmd which is an interface for the Linux kernel ftrace subsystem";

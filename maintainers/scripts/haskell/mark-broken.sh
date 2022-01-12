@@ -17,9 +17,9 @@ trap "rm ${tmpfile}" 0
 
 echo "Remember that you need to manually run 'maintainers/scripts/haskell/hydra-report.hs get-report' sometime before running this script."
 echo "Generating a list of broken builds and displaying for manual confirmation ..."
-maintainers/scripts/haskell/hydra-report.hs mark-broken-list | sort -i > $tmpfile
+maintainers/scripts/haskell/hydra-report.hs mark-broken-list | sort -i > "$tmpfile"
 
-$EDITOR $tmpfile
+$EDITOR "$tmpfile"
 
 tail -n +3 "$broken_config" >> "$tmpfile"
 
@@ -28,10 +28,12 @@ broken-packages:
   # These packages don't compile.
 EOF
 
+# clear environment here to avoid things like allowing broken builds in
 sort -iu "$tmpfile" >> "$broken_config"
-maintainers/scripts/haskell/regenerate-hackage-packages.sh
-maintainers/scripts/haskell/regenerate-transitive-broken-packages.sh
-maintainers/scripts/haskell/regenerate-hackage-packages.sh
+clear="env -u HOME -u NIXPKGS_CONFIG"
+$clear maintainers/scripts/haskell/regenerate-hackage-packages.sh
+$clear maintainers/scripts/haskell/regenerate-transitive-broken-packages.sh
+$clear maintainers/scripts/haskell/regenerate-hackage-packages.sh
 
 if [[ "${1:-}" == "--do-commit" ]]; then
 git add $broken_config

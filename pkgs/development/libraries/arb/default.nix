@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "arb";
-  version = "2.19.0";
+  version = "2.21.1";
 
   src = fetchFromGitHub {
     owner = "fredrik-johansson";
     repo = pname;
     rev = version;
-    sha256 = "sha256-J/LQVZ8gmssazE7ru89EtvW6cVjaLEHgUHuwjW1nuOE=";
+    sha256 = "sha256-OBY2gKVnvrZLVrv+d6rXQLo026mrGB9eyNV4LESgrNI=";
   };
 
   buildInputs = [ mpir gmp mpfr flint ];

@@ -74,7 +74,7 @@ in
       };
 
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 9418;
         description = "Port to listen on.";
       };
@@ -107,6 +107,7 @@ in
     users.users = optionalAttrs (cfg.user == "git") {
       git = {
         uid = config.ids.uids.git;
+        group = "git";
         description = "Git daemon user";
       };
     };

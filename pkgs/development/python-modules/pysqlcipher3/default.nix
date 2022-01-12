@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "pysqlcipher3";
-  version = "1.0.3";
+  version = "1.0.4";
 
   disabled = pythonAtLeast "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0c54m18h52llwkfc9zaag3qkmfzzp5a1w9jzsm5hd2nfdsxmnkk9";
+    sha256 = "75d6b9d023d7ab76c841f97fd9d108d87516e281268e61518411d08cb7062663";
   };
 
   buildInputs = [ sqlcipher ];

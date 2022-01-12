@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage rec {
   ];
   buildInputs = [ xorg.libxcb ];
 
-  cargoBuildFlags = [ "--features=all" ];
+  buildFeatures = [ "all" ];
 
   postInstall = ''
     installShellCompletion --bash completions/bash-completion/completions/*

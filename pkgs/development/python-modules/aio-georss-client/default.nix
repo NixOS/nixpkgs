@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "aio-georss-client";
-  version = "0.7";
+  version = "0.8";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "exxamalte";
     repo = "python-aio-georss-client";
     rev = "v${version}";
-    sha256 = "1nhw2sf92dbizxdcil1wdmbaa3hbmsiriy8jfzpqxsliw5dc0kmh";
+    sha256 = "0447scp5n906p8kfzy0lwdq06f6hkq71r2zala6g3vr6b3kla6h8";
   };
 
   propagatedBuildInputs = [

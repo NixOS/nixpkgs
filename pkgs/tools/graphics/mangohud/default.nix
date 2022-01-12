@@ -46,14 +46,14 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "mangohud";
-  version = "0.6.3";
+  version = "0.6.5";
 
   src = fetchFromGitHub {
     owner = "flightlessmango";
     repo = "MangoHud";
     rev = "v${version}";
-    sha256 = "wL+/wAqvVFph1QzuXPBbSEFjs33VA0S6euNWr/1J1Mk=";
     fetchSubmodules = true;
+    sha256 = "sha256-RRtti0VnB6SXrpFYaEqANvpgvP/Dkvc+x/I40AXaspU=";
   };
 
   outputs = [ "out" "doc" "man" ];

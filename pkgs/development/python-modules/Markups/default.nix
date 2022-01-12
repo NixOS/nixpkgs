@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "Markups";
-  version = "3.1.1";
+  version = "3.1.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e309d79dde0935576ce1def6752f2127a12e2c2ea2ae8b0c69f99ff8bc12181d";
+    sha256 = "ab9747a72c1c6457418eb4276c79871977c13a654618e4f12e2a1f0990fbf2fc";
   };
 
   checkInputs = [ markdown docutils pygments pyyaml ];

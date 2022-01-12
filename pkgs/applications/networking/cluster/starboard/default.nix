@@ -2,23 +2,23 @@
 
 buildGoModule rec {
   pname = "starboard";
-  version = "0.10.3";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "aquasecurity";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-SJogepww3IJt+NAkJ0G/lLgZ3rMWDTC+jHIrzzkzJGA=";
+    sha256 = "sha256-6QIQsxqTKERo5x2Knv4IBeNt5KjvfoW0ryFJLlALqrA=";
   };
 
-  vendorSha256 = "sha256-vNsYGlcVIj/cDijCFz8fG5Ht/s7koM62GV8zkOyA/fA=";
+  vendorSha256 = "sha256-r6wMSeW5Et6hYwoEKufmcOmucuHlYuBDOMuXXMT4W2Y=";
 
   # Don't build and check the integration tests
   excludedPackages = "itest";
 
-  preBuild = ''
-    buildFlagsArray+=("-ldflags" "-s -w -X main.version=v${version}")
-  '';
+  ldflags = [
+    "-s" "-w" "-X main.version=v${version}"
+  ];
 
   preCheck = ''
     # Remove test that requires networking

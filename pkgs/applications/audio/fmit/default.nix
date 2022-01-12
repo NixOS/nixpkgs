@@ -38,8 +38,6 @@ mkDerivation rec {
       PREFIXSHORTCUT=$out"
   '';
 
-  enableParallelBuilding = true;
-
   meta = {
     description = "Free Musical Instrument Tuner";
     longDescription = ''

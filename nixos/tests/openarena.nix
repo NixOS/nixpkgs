@@ -38,8 +38,8 @@ in {
       client1.wait_for_x()
       client2.wait_for_x()
 
-      client1.execute("openarena +set r_fullscreen 0 +set name Foo +connect server &")
-      client2.execute("openarena +set r_fullscreen 0 +set name Bar +connect server &")
+      client1.execute("openarena +set r_fullscreen 0 +set name Foo +connect server >&2 &")
+      client2.execute("openarena +set r_fullscreen 0 +set name Bar +connect server >&2 &")
 
       server.wait_until_succeeds(
           "journalctl -u openarena -e | grep -q 'Foo.*entered the game'"

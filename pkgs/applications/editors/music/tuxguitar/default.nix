@@ -1,16 +1,16 @@
-{ lib, stdenv, fetchurl, swt, jdk, makeWrapper, alsa-lib, jack2, fluidsynth, libpulseaudio }:
+{ lib, stdenv, fetchurl, swt, jre, makeWrapper, alsa-lib, jack2, fluidsynth, libpulseaudio }:
 
 let metadata = assert stdenv.hostPlatform.system == "i686-linux" || stdenv.hostPlatform.system == "x86_64-linux";
   if stdenv.hostPlatform.system == "i686-linux" then
-    { arch = "x86"; sha256 = "27675c358db237df74d20e8676000c25a87b9de0bb0a6d1c325e8d6db807d296"; }
+    { arch = "x86"; sha256 = "afa4b1116aee18e3ddd93132467809d0bcf03715cf9ad55b895f021a13e1cb8a"; }
   else
-    { arch = "x86_64"; sha256 = "298555a249adb3ad72f3aef72a124e30bfa01cd069c7b5d152a738140e7903a2"; };
+    { arch = "x86_64"; sha256 = "55ab653c601727a2077080e7ea4d76fe7a897379934ed9a5b544e20d490f53f9"; };
 in stdenv.mkDerivation rec {
-  version = "1.5.2";
+  version = "1.5.4";
   pname = "tuxguitar";
 
   src = fetchurl {
-    url = "mirror://sourceforge/tuxguitar/${pname}-${version}-linux-${metadata.arch}.tar.gz";
+    url = "mirror://sourceforge/${pname}/${pname}-${version}-linux-${metadata.arch}.tar.gz";
     sha256 = metadata.sha256;
   };
 
@@ -26,7 +26,7 @@ in stdenv.mkDerivation rec {
     ln -s $out/share $out/bin/share
 
     wrapProgram $out/bin/tuxguitar \
-      --set JAVA "${jdk}/bin/java" \
+      --set JAVA "${jre}/bin/java" \
       --prefix LD_LIBRARY_PATH : "$out/lib/:${lib.makeLibraryPath [ swt alsa-lib jack2 fluidsynth libpulseaudio ]}" \
       --prefix CLASSPATH : "${swt}/jars/swt.jar:$out/lib/tuxguitar.jar:$out/lib/itext.jar"
   '';

@@ -1,34 +1,32 @@
-{ lib, buildGoModule, fetchFromGitHub, git }:
+{ lib, buildGoModule, fetchFromGitHub }:
+
+let
+  srcInfo = lib.importJSON ./src.json;
+in
 
 buildGoModule rec {
   pname = "chroma";
-  version = "0.9.1";
+  version = "0.9.4";
 
+  # To update:
+  # nix-prefetch-git --rev v${version} https://github.com/alecthomas/chroma.git > src.json
   src = fetchFromGitHub {
     owner  = "alecthomas";
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "sha256-+4UaQrJh3PBf68rlW1lOEyEVw3vWxfc+Casa5+H8F9A=";
-    leaveDotGit = true;
+    inherit (srcInfo) sha256;
   };
 
-  nativeBuildInputs = [ git ];
+  vendorSha256 = "1l5ryhwifhff41r4z1d2lifpvjcc4yi1vzrzlvkx3iy9dmxqcssl";
 
-  # populate values otherwise taken care of by goreleaser
-  # https://github.com/alecthomas/chroma/issues/435
-  postPatch = ''
-    commit="$(git rev-parse HEAD)"
-    date=$(git show -s --format=%aI "$commit")
+  modRoot = "./cmd/chroma";
 
-    substituteInPlace cmd/chroma/main.go \
-      --replace 'version = "?"' 'version = "${version}"' \
-      --replace 'commit  = "?"' "commit = \"$commit\"" \
-      --replace 'date    = "?"' "date = \"$date\""
-  '';
-
-  vendorSha256 = "0y8mp08zccn9qxrsj9j7vambz8dwzsxbbgrlppzam53rg8rpxhrg";
-
-  subPackages = [ "cmd/chroma" ];
+  # substitute version info as done in goreleaser builds
+  ldflags = [
+    "-X" "main.version=${version}"
+    "-X" "main.commit=${srcInfo.rev}"
+    "-X" "main.date=${srcInfo.date}"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/alecthomas/chroma";

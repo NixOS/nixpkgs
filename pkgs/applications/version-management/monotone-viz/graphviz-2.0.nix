@@ -1,25 +1,49 @@
-{ lib, stdenv, fetchurl, pkg-config, xlibsWrapper, libpng, libjpeg, expat, libXaw
-, bison, libtool, fontconfig, pango, gd, libwebp
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, xlibsWrapper
+, libpng
+, libjpeg
+, expat
+, libXaw
+, bison
+, libtool
+, fontconfig
+, pango
+, gd
+, libwebp
 }:
 
 stdenv.mkDerivation rec {
-  name = "graphviz-2.0";
+  pname = "graphviz";
+  version = "2.0";
 
   src = fetchurl {
-    url = "http://www.graphviz.org/pub/graphviz/ARCHIVE/${name}.tar.gz";
+    url = "http://www.graphviz.org/pub/graphviz/ARCHIVE/graphviz-${version}.tar.gz";
     sha256 = "39b8e1f2ba4cc1f5bdc8e39c7be35e5f831253008e4ee2c176984f080416676c";
   };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    xlibsWrapper libpng libjpeg expat libXaw bison
-    libtool fontconfig pango gd libwebp
+    xlibsWrapper
+    libpng
+    libjpeg
+    expat
+    libXaw
+    bison
+    libtool
+    fontconfig
+    pango
+    gd
+    libwebp
   ];
 
   hardeningDisable = [ "format" "fortify" ];
 
   configureFlags =
-    [ "--with-pngincludedir=${libpng.dev}/include"
+    [
+      "--with-pngincludedir=${libpng.dev}/include"
       "--with-pnglibdir=${libpng.out}/lib"
       "--with-jpegincludedir=${libjpeg.dev}/include"
       "--with-jpeglibdir=${libjpeg.out}/lib"

@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchFromGitHub, requests, pycountry, mypy }:
+{ lib, buildPythonPackage, fetchFromGitHub, requests, pycountry }:
 
 buildPythonPackage rec {
   pname = "itunespy";
@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "0yc3az5531qs8nbcw4rhgrszwczgy4bikfwfar7xb2044360sslw";
   };
 
-  propagatedBuildInputs = [ requests pycountry mypy ];
+  propagatedBuildInputs = [ requests pycountry ];
 
   # This module has no tests
   doCheck = false;

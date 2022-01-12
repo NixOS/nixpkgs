@@ -9,7 +9,7 @@
 , singular
 , gap
 , giac
-, maxima-ecl
+, maxima
 , pari
 , gmp
 , gfan
@@ -42,7 +42,7 @@ let
     pari
     gmp
     gfan
-    maxima-ecl
+    maxima
     eclib
     flintqs
     ntl

@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "jupyter_core";
-  version = "4.7.1";
+  version = "4.9.1";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "79025cb3225efcd36847d0840f3fc672c0abd7afd0de83ba8a1d3837619122b4";
+    sha256 = "dce8a7499da5a53ae3afd5a9f4b02e5df1d57250cf48f3ad79da23b4778cd6fa";
   };
 
   checkInputs = [ pytest mock glibcLocales nose ];

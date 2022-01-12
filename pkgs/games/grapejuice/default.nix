@@ -15,13 +15,13 @@
 
 python3Packages.buildPythonApplication rec  {
   pname = "grapejuice";
-  version = "3.12.5";
+  version = "3.64.16";
 
   src = fetchFromGitLab {
     owner = "BrinkerVII";
     repo = "grapejuice";
-    rev = "v${version}";
-    sha256 = "1xgxyfwwghy9l17i6y40axdrpp4fgxgdr5y97flwmfivif01ifs1";
+    rev = "a5bc65e094bbfb86e6142ac1da59017ddccff69e";
+    sha256 = "sha256-3+5LWn+UBgLAX683MPHRHQMpW+gC5hGIwTtRVJHRWeE=";
   };
 
   nativeBuildInputs = [
@@ -49,13 +49,10 @@ python3Packages.buildPythonApplication rec  {
 
   makeWrapperArgs = [
     "\${gappsWrapperArgs[@]}"
-    "--prefix PATH : ${lib.makeBinPath [ xdg-user-dirs xdg-utils wine (winetricks.override { wine = wine; }) ]}"
+    "--prefix PATH : ${lib.makeBinPath [ xdg-user-dirs xdg-utils wine winetricks ]}"
   ];
 
   postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "PyGObject-stubs" ""
-
     substituteInPlace src/grapejuice_common/assets/desktop/grapejuice.desktop \
       --replace \$GRAPEJUICE_EXECUTABLE "$out/bin/grapejuice" \
       --replace \$GRAPEJUICE_ICON grapejuice

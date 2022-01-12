@@ -116,15 +116,27 @@ On Linux, `stdenv` also includes the `patchelf` utility.
 
 ## Specifying dependencies {#ssec-stdenv-dependencies}
 
-As described in the Nix manual, almost any `*.drv` store path in a derivation’s attribute set will induce a dependency on that derivation. `mkDerivation`, however, takes a few attributes intended to, between them, include all the dependencies of a package. This is done both for structure and consistency, but also so that certain other setup can take place. For example, certain dependencies need their bin directories added to the `PATH`. That is built-in, but other setup is done via a pluggable mechanism that works in conjunction with these dependency attributes. See [](#ssec-setup-hooks) for details.
+As described in the Nix manual, almost any `*.drv` store path in a derivation’s attribute set will induce a dependency on that derivation. `mkDerivation`, however, takes a few attributes intended to include all the dependencies of a package. This is done both for structure and consistency, but also so that certain other setup can take place. For example, certain dependencies need their bin directories added to the `PATH`. That is built-in, but other setup is done via a pluggable mechanism that works in conjunction with these dependency attributes. See [](#ssec-setup-hooks) for details.
 
 Dependencies can be broken down along three axes: their host and target platforms relative to the new derivation’s, and whether they are propagated. The platform distinctions are motivated by cross compilation; see [](#chap-cross) for exactly what each platform means. [^footnote-stdenv-ignored-build-platform] But even if one is not cross compiling, the platforms imply whether or not the dependency is needed at run-time or build-time, a concept that makes perfect sense outside of cross compilation. By default, the run-time/build-time distinction is just a hint for mental clarity, but with `strictDeps` set it is mostly enforced even in the native case.
 
 The extension of `PATH` with dependencies, alluded to above, proceeds according to the relative platforms alone. The process is carried out only for dependencies whose host platform matches the new derivation’s build platform i.e. dependencies which run on the platform where the new derivation will be built. [^footnote-stdenv-native-dependencies-in-path] For each dependency \<dep\> of those dependencies, `dep/bin`, if present, is added to the `PATH` environment variable.
 
-The dependency is propagated when it forces some of its other-transitive (non-immediate) downstream dependencies to also take it on as an immediate dependency. Nix itself already takes a package’s transitive dependencies into account, but this propagation ensures nixpkgs-specific infrastructure like setup hooks (mentioned above) also are run as if the propagated dependency.
+A dependency is said to be **propagated** when some of its other-transitive (non-immediate) downstream dependencies also need it as an immediate dependency.
+[^footnote-stdenv-propagated-dependencies]
 
-It is important to note that dependencies are not necessarily propagated as the same sort of dependency that they were before, but rather as the corresponding sort so that the platform rules still line up. The exact rules for dependency propagation can be given by assigning to each dependency two integers based one how its host and target platforms are offset from the depending derivation’s platforms. Those offsets are given below in the descriptions of each dependency list attribute. Algorithmically, we traverse propagated inputs, accumulating every propagated dependency’s propagated dependencies and adjusting them to account for the “shift in perspective” described by the current dependency’s platform offsets. This results in sort a transitive closure of the dependency relation, with the offsets being approximately summed when two dependency links are combined. We also prune transitive dependencies whose combined offsets go out-of-bounds, which can be viewed as a filter over that transitive closure removing dependencies that are blatantly absurd.
+It is important to note that dependencies are not necessarily propagated as the same sort of dependency that they were before, but rather as the corresponding sort so that the platform rules still line up. To determine the exact rules for dependency propagation, we start by assigning to each dependency a couple of ternary numbers (`-1` for `build`, `0` for `host`, and `1` for `target`), representing how respectively its host and target platforms are "offset" from the depending derivation’s platforms. The following table summarize the different combinations that can be obtained:
+
+| `host → target`     | attribute name      | offset   |
+| ------------------- | ------------------- | -------- |
+| `build --> build`   | `depsBuildBuild`    | `-1, -1` |
+| `build --> host`    | `nativeBuildInputs` | `-1, 0`  |
+| `build --> target`  | `depsBuildTarget`   | `-1, 1`  |
+| `host --> host`     | `depsHostHost`      | `0, 0`   |
+| `host --> target`   | `buildInputs`       | `0, 1`   |
+| `target --> target` | `depsTargetTarget`  | `1, 1`   |
+
+Algorithmically, we traverse propagated inputs, accumulating every propagated dependency’s propagated dependencies and adjusting them to account for the “shift in perspective” described by the current dependency’s platform offsets. This results is sort of a transitive closure of the dependency relation, with the offsets being approximately summed when two dependency links are combined. We also prune transitive dependencies whose combined offsets go out-of-bounds, which can be viewed as a filter over that transitive closure removing dependencies that are blatantly absurd.
 
 We can define the process precisely with [Natural Deduction](https://en.wikipedia.org/wiki/Natural_deduction) using the inference rules. This probably seems a bit obtuse, but so is the bash code that actually implements it! [^footnote-stdenv-find-inputs-location] They’re confusing in very different ways so… hopefully if something doesn’t make sense in one presentation, it will in the other!
 
@@ -179,37 +191,37 @@ Overall, the unifying theme here is that propagation shouldn’t be introducing 
 
 #### `depsBuildBuild` {#var-stdenv-depsBuildBuild}
 
-A list of dependencies whose host and target platforms are the new derivation’s build platform. This means a `-1` host and `-1` target offset from the new derivation’s platforms. These are programs and libraries used at build time that produce programs and libraries also used at build time. If the dependency doesn’t care about the target platform (i.e. isn’t a compiler or similar tool), put it in `nativeBuildInputs` instead. The most common use of this `buildPackages.stdenv.cc`, the default C compiler for this role. That example crops up more than one might think in old commonly used C libraries.
+A list of dependencies whose host and target platforms are the new derivation’s build platform. These are programs and libraries used at build time that produce programs and libraries also used at build time. If the dependency doesn’t care about the target platform (i.e. isn’t a compiler or similar tool), put it in `nativeBuildInputs` instead. The most common use of this `buildPackages.stdenv.cc`, the default C compiler for this role. That example crops up more than one might think in old commonly used C libraries.
 
 Since these packages are able to be run at build-time, they are always added to the `PATH`, as described above. But since these packages are only guaranteed to be able to run then, they shouldn’t persist as run-time dependencies. This isn’t currently enforced, but could be in the future.
 
 #### `nativeBuildInputs` {#var-stdenv-nativeBuildInputs}
 
-A list of dependencies whose host platform is the new derivation’s build platform, and target platform is the new derivation’s host platform. This means a `-1` host offset and `0` target offset from the new derivation’s platforms. These are programs and libraries used at build-time that, if they are a compiler or similar tool, produce code to run at run-time—i.e. tools used to build the new derivation. If the dependency doesn’t care about the target platform (i.e. isn’t a compiler or similar tool), put it here, rather than in `depsBuildBuild` or `depsBuildTarget`. This could be called `depsBuildHost` but `nativeBuildInputs` is used for historical continuity.
+A list of dependencies whose host platform is the new derivation’s build platform, and target platform is the new derivation’s host platform. These are programs and libraries used at build-time that, if they are a compiler or similar tool, produce code to run at run-time—i.e. tools used to build the new derivation. If the dependency doesn’t care about the target platform (i.e. isn’t a compiler or similar tool), put it here, rather than in `depsBuildBuild` or `depsBuildTarget`. This could be called `depsBuildHost` but `nativeBuildInputs` is used for historical continuity.
 
 Since these packages are able to be run at build-time, they are added to the `PATH`, as described above. But since these packages are only guaranteed to be able to run then, they shouldn’t persist as run-time dependencies. This isn’t currently enforced, but could be in the future.
 
 #### `depsBuildTarget` {#var-stdenv-depsBuildTarget}
 
-A list of dependencies whose host platform is the new derivation’s build platform, and target platform is the new derivation’s target platform. This means a `-1` host offset and `1` target offset from the new derivation’s platforms. These are programs used at build time that produce code to run with code produced by the depending package. Most commonly, these are tools used to build the runtime or standard library that the currently-being-built compiler will inject into any code it compiles. In many cases, the currently-being-built-compiler is itself employed for that task, but when that compiler won’t run (i.e. its build and host platform differ) this is not possible. Other times, the compiler relies on some other tool, like binutils, that is always built separately so that the dependency is unconditional.
+A list of dependencies whose host platform is the new derivation’s build platform, and target platform is the new derivation’s target platform. These are programs used at build time that produce code to run with code produced by the depending package. Most commonly, these are tools used to build the runtime or standard library that the currently-being-built compiler will inject into any code it compiles. In many cases, the currently-being-built-compiler is itself employed for that task, but when that compiler won’t run (i.e. its build and host platform differ) this is not possible. Other times, the compiler relies on some other tool, like binutils, that is always built separately so that the dependency is unconditional.
 
-This is a somewhat confusing concept to wrap one’s head around, and for good reason. As the only dependency type where the platform offsets are not adjacent integers, it requires thinking of a bootstrapping stage *two* away from the current one. It and its use-case go hand in hand and are both considered poor form: try to not need this sort of dependency, and try to avoid building standard libraries and runtimes in the same derivation as the compiler produces code using them. Instead strive to build those like a normal library, using the newly-built compiler just as a normal library would. In short, do not use this attribute unless you are packaging a compiler and are sure it is needed.
+This is a somewhat confusing concept to wrap one’s head around, and for good reason. As the only dependency type where the platform offsets, `-1` and `1`, are not adjacent integers, it requires thinking of a bootstrapping stage *two* away from the current one. It and its use-case go hand in hand and are both considered poor form: try to not need this sort of dependency, and try to avoid building standard libraries and runtimes in the same derivation as the compiler produces code using them. Instead strive to build those like a normal library, using the newly-built compiler just as a normal library would. In short, do not use this attribute unless you are packaging a compiler and are sure it is needed.
 
 Since these packages are able to run at build time, they are added to the `PATH`, as described above. But since these packages are only guaranteed to be able to run then, they shouldn’t persist as run-time dependencies. This isn’t currently enforced, but could be in the future.
 
 #### `depsHostHost` {#var-stdenv-depsHostHost}
 
-A list of dependencies whose host and target platforms match the new derivation’s host platform. This means a `0` host offset and `0` target offset from the new derivation’s host platform. These are packages used at run-time to generate code also used at run-time. In practice, this would usually be tools used by compilers for macros or a metaprogramming system, or libraries used by the macros or metaprogramming code itself. It’s always preferable to use a `depsBuildBuild` dependency in the derivation being built over a `depsHostHost` on the tool doing the building for this purpose.
+A list of dependencies whose host and target platforms match the new derivation’s host platform. In practice, this would usually be tools used by compilers for macros or a metaprogramming system, or libraries used by the macros or metaprogramming code itself. It’s always preferable to use a `depsBuildBuild` dependency in the derivation being built over a `depsHostHost` on the tool doing the building for this purpose.
 
 #### `buildInputs` {#var-stdenv-buildInputs}
 
-A list of dependencies whose host platform and target platform match the new derivation’s. This means a `0` host offset and a `1` target offset from the new derivation’s host platform. This would be called `depsHostTarget` but for historical continuity. If the dependency doesn’t care about the target platform (i.e. isn’t a compiler or similar tool), put it here, rather than in `depsBuildBuild`.
+A list of dependencies whose host platform and target platform match the new derivation’s. This would be called `depsHostTarget` but for historical continuity. If the dependency doesn’t care about the target platform (i.e. isn’t a compiler or similar tool), put it here, rather than in `depsBuildBuild`.
 
 These are often programs and libraries used by the new derivation at *run*-time, but that isn’t always the case. For example, the machine code in a statically-linked library is only used at run-time, but the derivation containing the library is only needed at build-time. Even in the dynamic case, the library may also be needed at build-time to appease the linker.
 
 #### `depsTargetTarget` {#var-stdenv-depsTargetTarget}
 
-A list of dependencies whose host platform matches the new derivation’s target platform. This means a `1` offset from the new derivation’s platforms. These are packages that run on the target platform, e.g. the standard library or run-time deps of standard library that a compiler insists on knowing about. It’s poor form in almost all cases for a package to depend on another from a future stage \[future stage corresponding to positive offset\]. Do not use this attribute unless you are packaging a compiler and are sure it is needed.
+A list of dependencies whose host platform matches the new derivation’s target platform. These are packages that run on the target platform, e.g. the standard library or run-time deps of standard library that a compiler insists on knowing about. It’s poor form in almost all cases for a package to depend on another from a future stage \[future stage corresponding to positive offset\]. Do not use this attribute unless you are packaging a compiler and are sure it is needed.
 
 #### `depsBuildBuildPropagated` {#var-stdenv-depsBuildBuildPropagated}
 
@@ -373,11 +385,11 @@ Additional file types can be supported by setting the `unpackCmd` variable (see 
 
 ##### `srcs` / `src` {#var-stdenv-src}
 
-The list of source files or directories to be unpacked or copied. One of these must be set.
+The list of source files or directories to be unpacked or copied. One of these must be set. Note that if you use `srcs`, you should also set `sourceRoot` or `setSourceRoot`.
 
 ##### `sourceRoot` {#var-stdenv-sourceRoot}
 
-After running `unpackPhase`, the generic builder changes the current directory to the directory created by unpacking the sources. If there are multiple source directories, you should set `sourceRoot` to the name of the intended directory.
+After running `unpackPhase`, the generic builder changes the current directory to the directory created by unpacking the sources. If there are multiple source directories, you should set `sourceRoot` to the name of the intended directory. Set `sourceRoot = ".";` if you use `srcs` and control the unpack phase yourself.
 
 ##### `setSourceRoot` {#var-stdenv-setSourceRoot}
 
@@ -463,6 +475,12 @@ The prefix under which the package must be installed, passed via the `--prefix` 
 
 The key to use when specifying the prefix. By default, this is set to `--prefix=` as that is used by the majority of packages.
 
+##### `dontAddStaticConfigureFlags`
+
+By default, when building statically, stdenv will try to add build system appropriate configure flags to try to enable static builds.
+
+If this is undesirable, set this variable to true.
+
 ##### `dontAddDisableDepTrack` {#var-stdenv-dontAddDisableDepTrack}
 
 By default, the flag `--disable-dependency-tracking` is added to the configure flags to speed up Automake-based builds. If this is undesirable, set this variable to true.
@@ -475,7 +493,7 @@ By default, the configure phase applies some special hackery to all files called
 
 By default, when the configure script has `--enable-static`, the option `--disable-static` is added to the configure flags.
 
-If this is undesirable, set this variable to true.
+If this is undesirable, set this variable to true.  It is automatically set to true when building statically, for example through `pkgsStatic`.
 
 ##### `configurePlatforms` {#var-stdenv-configurePlatforms}
 
@@ -708,6 +726,8 @@ to `~/.gdbinit`. GDB will then be able to find debug information installed via `
 
 The installCheck phase checks whether the package was installed correctly by running its test suite against the installed directories. The default `installCheck` calls `make installcheck`.
 
+It is often better to add tests that are not part of the source distribution to `passthru.tests` (see <xref linkend="var-meta-tests"/>). This avoids adding overhead to every build and enables us to run them independently.
+
 #### Variables controlling the installCheck phase {#variables-controlling-the-installcheck-phase}
 
 ##### `doInstallCheck` {#var-stdenv-doInstallCheck}
@@ -776,7 +796,7 @@ The standard environment provides a number of useful functions.
 
 ### `makeWrapper` \<executable\> \<wrapperfile\> \<args\> {#fun-makeWrapper}
 
-Constructs a wrapper for a program with various possible arguments. For example:
+Constructs a wrapper for a program with various possible arguments. It is defined as part of 2 setup-hooks named `makeWrapper` and `makeBinaryWrapper` that implement the same bash functions. Hence, to use it you have to add `makeWrapper` to your `nativeBuildInputs`. Here's an example usage:
 
 ```bash
 # adds `FOOBAR=baz` to `$out/bin/foo`’s environment
@@ -788,9 +808,11 @@ makeWrapper $out/bin/foo $wrapperfile --set FOOBAR baz
 makeWrapper $out/bin/foo $wrapperfile --prefix PATH : ${lib.makeBinPath [ hello git ]}
 ```
 
-There’s many more kinds of arguments, they are documented in `nixpkgs/pkgs/build-support/setup-hooks/make-wrapper.sh`.
+There’s many more kinds of arguments, they are documented in `nixpkgs/pkgs/build-support/setup-hooks/make-wrapper.sh` for the `makeWrapper` implementation and in `nixpkgs/pkgs/build-support/setup-hooks/make-binary-wrapper.sh` for the `makeBinaryWrapper` implementation.
 
-`wrapProgram` is a convenience function you probably want to use most of the time.
+`wrapProgram` is a convenience function you probably want to use most of the time, implemented by both `makeWrapper` and `makeBinaryWrapper`.
+
+Using the `makeBinaryWrapper` implementation is usually preferred, as it creates a tiny _compiled_ wrapper executable, that can be used as a shebang interpreter. This is needed mostly on Darwin, where shebangs cannot point to scripts, [due to a limitation with the `execve`-syscall](https://stackoverflow.com/questions/67100831/macos-shebang-with-absolute-path-not-working). Compiled wrappers generated by `makeBinaryWrapper` can be inspected with `less <path-to-wrapper>` - by scrolling past the binary data you should be able to see the shell command that generated the executable and there see the environment variables that were injected into the wrapper.
 
 ### `substitute` \<infile\> \<outfile\> \<subs\> {#fun-substitute}
 
@@ -865,9 +887,9 @@ someVar=$(stripHash $name)
 
 ### `wrapProgram` \<executable\> \<makeWrapperArgs\> {#fun-wrapProgram}
 
-Convenience function for `makeWrapper` that automatically creates a sane wrapper file. It takes all the same arguments as `makeWrapper`, except for `--argv0`.
+Convenience function for `makeWrapper` that replaces `<\executable\>` with a wrapper that executes the original program. It takes all the same arguments as `makeWrapper`, except for `--inherit-argv0` (used by the `makeBinaryWrapper` implementation) and `--argv0` (used by both `makeWrapper` and `makeBinaryWrapper` wrapper implementations).
 
-It cannot be applied multiple times, since it will overwrite the wrapper file.
+If you will apply it multiple times, it will overwrite the wrapper file and you will end up with double wrapping, which should be avoided.
 
 ## Package setup hooks {#ssec-setup-hooks}
 
@@ -1119,9 +1141,13 @@ There are flags available to harden packages at compile or link-time. These can 
 
 Both parameters take a list of flags as strings. The special `"all"` flag can be passed to `hardeningDisable` to turn off all hardening. These flags can also be used as environment variables for testing or development purposes.
 
+For more in-depth information on these hardening flags and hardening in general, refer to the [Debian Wiki](https://wiki.debian.org/Hardening), [Ubuntu Wiki](https://wiki.ubuntu.com/Security/Features), [Gentoo Wiki](https://wiki.gentoo.org/wiki/Project:Hardened), and the [Arch Wiki](https://wiki.archlinux.org/title/Security).
+
+### Hardening flags enabled by default {#sec-hardening-flags-enabled-by-default}
+
 The following flags are enabled by default and might require disabling with `hardeningDisable` if the program to package is incompatible.
 
-### `format` {#format}
+#### `format` {#format}
 
 Adds the `-Wformat -Wformat-security -Werror=format-security` compiler options. At present, this warns about calls to `printf` and `scanf` functions where the format string is not a string literal and there are no format arguments, as in `printf(foo);`. This may be a security hole if the format string came from untrusted input and contains `%n`.
 
@@ -1134,7 +1160,7 @@ This needs to be turned off or fixed for errors similar to:
 cc1plus: some warnings being treated as errors
 ```
 
-### `stackprotector` {#stackprotector}
+#### `stackprotector` {#stackprotector}
 
 Adds the `-fstack-protector-strong --param ssp-buffer-size=4` compiler options. This adds safety checks against stack overwrites rendering many potential code injection attacks into aborting situations. In the best case this turns code injection vulnerabilities into denial of service or into non-issues (depending on the application).
 
@@ -1145,7 +1171,7 @@ bin/blib.a(bios_console.o): In function `bios_handle_cup':
 /tmp/nix-build-ipxe-20141124-5cbdc41.drv-0/ipxe-5cbdc41/src/arch/i386/firmware/pcbios/bios_console.c:86: undefined reference to `__stack_chk_fail'
 ```
 
-### `fortify` {#fortify}
+#### `fortify` {#fortify}
 
 Adds the `-O2 -D_FORTIFY_SOURCE=2` compiler options. During code generation the compiler knows a great deal of information about buffer sizes (where possible), and attempts to replace insecure unlimited length buffer function calls with length-limited ones. This is especially useful for old, crufty code. Additionally, format strings in writable memory that contain `%n` are blocked. If an application depends on such a format string, it will need to be worked around.
 
@@ -1166,7 +1192,7 @@ installwatch.c:3751:5: error: conflicting types for '__open_2'
 fcntl2.h:50:4: error: call to '__open_missing_mode' declared with attribute error: open with O_CREAT or O_TMPFILE in second argument needs 3 arguments
 ```
 
-### `pic` {#pic}
+#### `pic` {#pic}
 
 Adds the `-fPIC` compiler options. This options adds support for position independent code in shared libraries and thus making ASLR possible.
 
@@ -1179,19 +1205,19 @@ ccbLfRgg.s: Assembler messages:
 ccbLfRgg.s:33: Error: missing or invalid displacement expression `private_key_len@GOTOFF'
 ```
 
-### `strictoverflow` {#strictoverflow}
+#### `strictoverflow` {#strictoverflow}
 
 Signed integer overflow is undefined behaviour according to the C standard. If it happens, it is an error in the program as it should check for overflow before it can happen, not afterwards. GCC provides built-in functions to perform arithmetic with overflow checking, which are correct and faster than any custom implementation. As a workaround, the option `-fno-strict-overflow` makes gcc behave as if signed integer overflows were defined.
 
 This flag should not trigger any build or runtime errors.
 
-### `relro` {#relro}
+#### `relro` {#relro}
 
 Adds the `-z relro` linker option. During program load, several ELF memory sections need to be written to by the linker, but can be turned read-only before turning over control to the program. This prevents some GOT (and .dtors) overwrite attacks, but at least the part of the GOT used by the dynamic linker (.got.plt) is still vulnerable.
 
 This flag can break dynamic shared object loading. For instance, the module systems of Xorg and OpenCV are incompatible with this flag. In almost all cases the `bindnow` flag must also be disabled and incompatible programs typically fail with similar errors at runtime.
 
-### `bindnow` {#bindnow}
+#### `bindnow` {#bindnow}
 
 Adds the `-z bindnow` linker option. During program load, all dynamic symbols are resolved, allowing for the complete GOT to be marked read-only (due to `relro`). This prevents GOT overwrite attacks. For very large applications, this can incur some performance loss during initial load while symbols are resolved, but this shouldn’t be an issue for daemons.
 
@@ -1201,16 +1227,22 @@ This flag can break dynamic shared object loading. For instance, the module syst
 intel_drv.so: undefined symbol: vgaHWFreeHWRec
 ```
 
+### Hardening flags disabled by default {#sec-hardening-flags-disabled-by-default}
+
 The following flags are disabled by default and should be enabled with `hardeningEnable` for packages that take untrusted input like network services.
 
-### `pie` {#pie}
+#### `pie` {#pie}
+
+This flag is disabled by default for normal `glibc` based NixOS package builds, but enabled by default for `musl` based package builds.
 
 Adds the `-fPIE` compiler and `-pie` linker options. Position Independent Executables are needed to take advantage of Address Space Layout Randomization, supported by modern kernel versions. While ASLR can already be enforced for data areas in the stack and heap (brk and mmap), the code areas must be compiled as position-independent. Shared libraries already do this with the `pic` flag, so they gain ASLR automatically, but binary .text regions need to be build with `pie` to gain ASLR. When this happens, ROP attacks are much harder since there are no static locations to bounce off of during a memory corruption attack.
 
-For more in-depth information on these hardening flags and hardening in general, refer to the [Debian Wiki](https://wiki.debian.org/Hardening), [Ubuntu Wiki](https://wiki.ubuntu.com/Security/Features), [Gentoo Wiki](https://wiki.gentoo.org/wiki/Project:Hardened), and the [Arch Wiki](https://wiki.archlinux.org/index.php/DeveloperWiki:Security).
+Static libraries need to be compiled with `-fPIE` so that executables can link them in with the `-pie` linker option.
+If the libraries lack `-fPIE`, you will get the error `recompile with -fPIE`.
 
 [^footnote-stdenv-ignored-build-platform]: The build platform is ignored because it is a mere implementation detail of the package satisfying the dependency: As a general programming principle, dependencies are always *specified* as interfaces, not concrete implementation.
 [^footnote-stdenv-native-dependencies-in-path]: Currently, this means for native builds all dependencies are put on the `PATH`. But in the future that may not be the case for sake of matching cross: the platforms would be assumed to be unique for native and cross builds alike, so only the `depsBuild*` and `nativeBuildInputs` would be added to the `PATH`.
+[^footnote-stdenv-propagated-dependencies]: Nix itself already takes a package’s transitive dependencies into account, but this propagation ensures nixpkgs-specific infrastructure like setup hooks (mentioned above) also are run as if the propagated dependency.
 [^footnote-stdenv-find-inputs-location]: The `findInputs` function, currently residing in `pkgs/stdenv/generic/setup.sh`, implements the propagation logic.
 [^footnote-stdenv-sys-lib-search-path]: It clears the `sys_lib_*search_path` variables in the Libtool script to prevent Libtool from using libraries in `/usr/lib` and such.
 [^footnote-stdenv-build-time-guessing-impurity]: Eventually these will be passed building natively as well, to improve determinism: build-time guessing, as is done today, is a risk of impurity.

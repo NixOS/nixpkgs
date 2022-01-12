@@ -75,8 +75,8 @@ in
         description = ''
           The name of the savegame that will be used by the server.
 
-          When not present in ${stateDir}/saves, a new map with default
-          settings will be generated before starting the service.
+          When not present in /var/lib/''${config.services.factorio.stateDirName}/saves,
+          a new map with default settings will be generated before starting the service.
         '';
       };
       # TODO Add more individual settings as nixos-options?
@@ -86,7 +86,7 @@ in
       configFile = mkOption {
         type = types.path;
         default = configFile;
-        defaultText = "configFile";
+        defaultText = literalExpression "configFile";
         description = ''
           The server's configuration file.
 
@@ -162,8 +162,8 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.factorio-headless;
-        defaultText = "pkgs.factorio-headless";
-        example = "pkgs.factorio-headless-experimental";
+        defaultText = literalExpression "pkgs.factorio-headless";
+        example = literalExpression "pkgs.factorio-headless-experimental";
         description = ''
           Factorio version to use. This defaults to the stable channel.
         '';

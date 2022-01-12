@@ -2,29 +2,32 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-emoji-selector";
-  version = "19";
+  version = "20";
 
   src = fetchFromGitHub {
     owner = "maoschanz";
     repo = "emoji-selector-for-gnome";
     rev = version;
-    sha256 = "0x60pg5nl5d73av494dg29hyfml7fbf2d03wm053vx1q8a3pxbyb";
+    sha256 = "sha256-I5aEHDC5GaGkAoH+1l4eyhBmJ+lmyZZoDw2Fq2SSlmo=";
   };
 
-  uuid = "emoji-selector@maestroschan.fr";
+  passthru = {
+    extensionUuid = "emoji-selector@maestroschan.fr";
+    extensionPortalSlug = "emoji-selector";
+  };
 
   nativeBuildInputs = [ glib ];
 
   buildPhase = ''
     runHook preBuild
-    glib-compile-schemas ./${uuid}/schemas
+    glib-compile-schemas "./emoji-selector@maestroschan.fr/schemas"
     runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
     mkdir -p $out/share/gnome-shell/extensions
-    cp -r ${uuid} $out/share/gnome-shell/extensions
+    cp -r "emoji-selector@maestroschan.fr" $out/share/gnome-shell/extensions
     runHook postInstall
   '';
 

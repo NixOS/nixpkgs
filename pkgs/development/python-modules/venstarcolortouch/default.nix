@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "venstarcolortouch";
-  version = "0.14";
+  version = "0.15";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-wrsu1SffD4/RvDiE6yABfZN/oSDH8Ao/RJK7yL2QKy8=";
+    sha256 = "sha256-7JUqXHk/yL+/EvfQoGLaKmPPy4DkljT9olqK0a/Nmkk=";
   };
 
   propagatedBuildInputs = [

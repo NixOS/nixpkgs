@@ -2,43 +2,49 @@
 , buildPythonApplication
 , fetchFromGitHub
 , gitMinimal
-, arrow
-, click
-, sh
-, wheel
+, python3
 }:
 
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "gitlint";
-  version = "0.15.1";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "jorisroovers";
     repo = "gitlint";
     rev = "v${version}";
-    sha256 = "sha256-CqmE4V+svSuQAsoX0I3NpUqPU5CQf3fyCHJPrjUjHF4=";
+    sha256 = "sha256-RXBMb43BBiJ23X0eKC1kqgLw8iFKJnP5iejY0AWcUrU=";
   };
 
-  nativeBuildInputs = [ wheel ];
+  # Upstream splitted the project into gitlint and gitlint-core to
+  # simplify the dependency handling
+  sourceRoot = "source/gitlint-core";
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3.pkgs; [
     arrow
     click
     sh
   ];
 
-  preCheck = ''
-    export PATH="$out/bin:$PATH"
-  '';
-
-  checkInputs = [
+  checkInputs = with python3.pkgs; [
     gitMinimal
+    pytestCheckHook
   ];
 
-  meta = {
+  postPatch = ''
+    # We don't need gitlint-core
+    substituteInPlace setup.py \
+      --replace "'gitlint-core[trusted-deps]==' + version," ""
+  '';
+
+  pythonImportsCheck = [
+    "gitlint"
+  ];
+
+  meta = with lib; {
     description = "Linting for your git commit messages";
-    homepage = "http://jorisroovers.github.io/gitlint";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ethancedwards8 ];
+    homepage = "https://jorisroovers.com/gitlint/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ ethancedwards8 fab ];
   };
 }

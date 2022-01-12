@@ -1,6 +1,6 @@
 # This module defines global configuration for the zshell.
 
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
@@ -9,6 +9,7 @@ let
   cfge = config.environment;
 
   cfg = config.programs.zsh;
+  opt = options.programs.zsh;
 
   zshAliases = concatStringsSep "\n" (
     mapAttrsFlatten (k: v: "alias ${k}=${escapeShellArg v}")
@@ -53,7 +54,7 @@ in
       };
 
       shellAliases = mkOption {
-        default = {};
+        default = { };
         description = ''
           Set of aliases for zsh shell, which overrides <option>environment.shellAliases</option>.
           See <option>environment.shellAliases</option> for an option format description.
@@ -91,7 +92,7 @@ in
           # before setting your PS1 and etc. Otherwise this will likely to interact with
           # your ~/.zshrc configuration in unexpected ways as the default prompt sets
           # a lot of different prompt variables.
-          autoload -U promptinit && promptinit && prompt walters && setopt prompt_sp
+          autoload -U promptinit && promptinit && prompt suse && setopt prompt_sp
         '';
         description = ''
           Shell script code used to initialise the zsh prompt.
@@ -118,7 +119,9 @@ in
       setOptions = mkOption {
         type = types.listOf types.str;
         default = [
-          "HIST_IGNORE_DUPS" "SHARE_HISTORY" "HIST_FCNTL_LOCK"
+          "HIST_IGNORE_DUPS"
+          "SHARE_HISTORY"
+          "HIST_FCNTL_LOCK"
         ];
         example = [ "EXTENDED_HISTORY" "RM_STAR_WAIT" ];
         description = ''
@@ -145,6 +148,7 @@ in
 
       enableGlobalCompInit = mkOption {
         default = cfg.enableCompletion;
+        defaultText = literalExpression "config.${opt.enableCompletion}";
         description = ''
           Enable execution of compinit call for all interactive zsh shells.
 
@@ -276,7 +280,10 @@ in
         fi
       '';
 
-    environment.etc.zinputrc.source = ./zinputrc;
+    # Bug in nix flakes:
+    # If we use `.source` here the path is garbage collected also we point to it with a symlink
+    # see https://github.com/NixOS/nixpkgs/issues/132732
+    environment.etc.zinputrc.text = builtins.readFile ./zinputrc;
 
     environment.systemPackages = [ pkgs.zsh ]
       ++ optional cfg.enableCompletion pkgs.nix-zsh-completions;
@@ -286,7 +293,8 @@ in
     #users.defaultUserShell = mkDefault "/run/current-system/sw/bin/zsh";
 
     environment.shells =
-      [ "/run/current-system/sw/bin/zsh"
+      [
+        "/run/current-system/sw/bin/zsh"
         "${pkgs.zsh}/bin/zsh"
       ];
 

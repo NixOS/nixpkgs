@@ -45,6 +45,6 @@ in stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     broken = true; # unmaintained plugin; no longer compatible with xfce 4.16
-    maintainers = [ ];
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

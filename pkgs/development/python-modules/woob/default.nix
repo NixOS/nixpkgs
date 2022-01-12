@@ -5,7 +5,7 @@
 , Babel
 , colorama
 , cssselect
-, dateutil
+, python-dateutil
 , feedparser
 , gdata
 , gnupg
@@ -49,7 +49,7 @@ buildPythonPackage rec {
     Babel
     colorama
     cssselect
-    dateutil
+    python-dateutil
     feedparser
     gdata
     gnupg

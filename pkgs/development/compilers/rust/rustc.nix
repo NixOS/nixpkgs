@@ -1,5 +1,5 @@
 { lib, stdenv, removeReferencesTo, pkgsBuildBuild, pkgsBuildHost, pkgsBuildTarget
-, llvmShared, llvmSharedForBuild, llvmSharedForHost, llvmSharedForTarget
+, llvmShared, llvmSharedForBuild, llvmSharedForHost, llvmSharedForTarget, llvmPackagesForBuild
 , fetchurl, file, python3
 , darwin, cmake, rust, rustPlatform
 , pkg-config, openssl
@@ -159,6 +159,9 @@ in stdenv.mkDerivation rec {
     # remove references to llvm-config in lib/rustlib/x86_64-unknown-linux-gnu/codegen-backends/librustc_codegen_llvm-llvm.so
     # and thus a transitive dependency on ncurses
     find $out/lib -name "*.so" -type f -exec remove-references-to -t ${llvmShared} '{}' '+'
+
+    # remove uninstall script that doesn't really make sense for Nix.
+    rm $out/lib/rustlib/uninstall.sh
   '';
 
   configurePlatforms = [];
@@ -171,7 +174,10 @@ in stdenv.mkDerivation rec {
 
   requiredSystemFeatures = [ "big-parallel" ];
 
-  passthru.llvm = llvmShared;
+  passthru = {
+    llvm = llvmShared;
+    llvmPackages = llvmPackagesForBuild;
+  };
 
   meta = with lib; {
     homepage = "https://www.rust-lang.org/";

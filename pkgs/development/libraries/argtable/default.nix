@@ -1,28 +1,33 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , cmake
 }:
 
 stdenv.mkDerivation rec {
   pname = "argtable";
-  version = "3.1.5";
-  srcVersion = "v${version}.1c1bb23";
+  version = "3.2.1";
+  srcVersion = "v${version}.52f24e5";
 
   src = fetchFromGitHub {
     owner = "argtable";
     repo = "argtable3";
     rev = srcVersion;
-    sha256 = "sha256-sL6mnxsuL1K0DY26jLF/2Czo0RxHYJ3xU3VyavISiMM=";
+    hash = "sha256-HFsk91uJXQ0wpvAQxP4/yZwRQx9kLH7KgB3Y/+zcZC0=";
   };
 
   nativeBuildInputs = [ cmake ];
+
+  cmakeFlags = [
+    "-DBUILD_SHARED_LIBS=ON"
+  ];
 
   postPatch = ''
     patchShebangs tools/build
   '';
 
   meta = with lib; {
-    homepage = "https://argtable.org";
+    homepage = "https://github.com/argtable/argtable3";
     description = "A single-file, ANSI C command-line parsing library";
     longDescription = ''
       Argtable is an open source ANSI C library that parses GNU-style
@@ -37,4 +42,7 @@ stdenv.mkDerivation rec {
     platforms = with platforms; all;
   };
 }
-# TODO [ AndersonTorres ]: a NixOS test suite
+# TODO: a NixOS test suite
+# TODO: multiple outputs
+# TODO: documentation
+# TODO: build both shared and static libs

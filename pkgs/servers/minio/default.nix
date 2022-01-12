@@ -15,26 +15,28 @@ let
 in
 buildGoModule rec {
   pname = "minio";
-  version = "2021-05-16T05-32-34Z";
+  version = "2021-12-27T07-23-18Z";
 
   src = fetchFromGitHub {
     owner = "minio";
     repo = "minio";
     rev = "RELEASE.${version}";
-    sha256 = "sha256-+zanqJMYNg/1c20cMm+bqVsW8VquucxEK5NiFAqOmS0=";
+    sha256 = "sha256-Gkn3sl6oPozOy0FMIJ1w3EeiJocI5cGBiXRlG94K4Wg=";
   };
 
-  vendorSha256 = "sha256-5aDD68nugFyWsySLEj7LXAdtFXFKWnqfz+5zF5wC2qw=";
+  vendorSha256 = "sha256-gwxmn/339n/avhclRj2BNLl8NTmAYBK+6R7tl4oxLcI=";
 
   doCheck = false;
 
   subPackages = [ "." ];
 
-  preBuild = let t = "github.com/minio/minio/cmd"; in
-    ''
-      export CGO_ENABLED=0
-      buildFlagsArray+=("-tags" "kqueue" "-ldflags" "-s -w -X ${t}.Version=${versionToTimestamp version} -X ${t}.ReleaseTag=RELEASE.${version} -X ${t}.CommitID=${src.rev}")
-    '';
+  CGO_ENABLED = 0;
+
+  tags = [ "kqueue" ];
+
+  ldflags = let t = "github.com/minio/minio/cmd"; in [
+    "-s" "-w" "-X ${t}.Version=${versionToTimestamp version}" "-X ${t}.ReleaseTag=RELEASE.${version}" "-X ${t}.CommitID=${src.rev}"
+  ];
 
   passthru.tests.minio = nixosTests.minio;
 

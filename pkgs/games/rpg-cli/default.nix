@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rpg-cli";
-  version = "0.4.1";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "facundoolano";
     repo = pname;
     rev = version;
-    sha256 = "07ar7almaz005jch7zm63kxyxvk3bphi2gl88xsb2rk5srkbb2s2";
+    sha256 = "sha256-Ih+1qO/VHkRp766WDe09xXL/pkby+sURopy7m5wRn4Y=";
   };
 
-  cargoSha256 = "sha256-wJPRI3jfV+v/XpIU9+j1jXlyfjkFCEHZdFJx/KMNT9o=";
+  cargoSha256 = "sha256-Au7Nlpl4XOSG8rW0DaHFDqBr1kUY5Emyw6ff0htPc+I=";
 
   # tests assume the authors macbook, and thus fail
   doCheck = false;
@@ -20,6 +20,6 @@ rustPlatform.buildRustPackage rec {
     description = "Your filesystem as a dungeon";
     homepage = "https://github.com/facundoolano/rpg-cli";
     license = licenses.mit;
-    maintainers = with maintainers; [ legendofmiracles ];
+    maintainers = with maintainers; [ lom ];
   };
 }

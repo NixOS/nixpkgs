@@ -1,0 +1,41 @@
+diff --git a/src/main/java/com/google/devtools/build/lib/exec/local/PosixLocalEnvProvider.java b/src/main/java/com/google/devtools/build/lib/exec/local/PosixLocalEnvProvider.java
+index 6fff2af..7e2877e 100644
+--- a/src/main/java/com/google/devtools/build/lib/exec/local/PosixLocalEnvProvider.java
++++ b/src/main/java/com/google/devtools/build/lib/exec/local/PosixLocalEnvProvider.java
+@@ -47,6 +47,16 @@ public final class PosixLocalEnvProvider implements LocalEnvProvider {
+       Map<String, String> env, BinTools binTools, String fallbackTmpDir) {
+     ImmutableMap.Builder<String, String> result = ImmutableMap.builder();
+     result.putAll(Maps.filterKeys(env, k -> !k.equals("TMPDIR")));
++
++    // In case we are running on NixOS.
++    // If bash is called with an unset PATH on this platform,
++    // it will set it to /no-such-path and default tools will be missings.
++    // See, https://github.com/NixOS/nixpkgs/issues/94222
++    // So we ensure that minimal dependencies are present.
++    if (!env.containsKey("PATH")){
++        result.put("PATH", "@actionsPathPatch@");
++    }
++ 
+     String p = clientEnv.get("TMPDIR");
+     if (Strings.isNullOrEmpty(p)) {
+       // Do not use `fallbackTmpDir`, use `/tmp` instead. This way if the user didn't export TMPDIR
+index 95642767c6..39d3c62461 100644
+--- a/src/main/java/com/google/devtools/build/lib/exec/local/XcodeLocalEnvProvider.java
++++ b/src/main/java/com/google/devtools/build/lib/exec/local/XcodeLocalEnvProvider.java
+@@ -74,6 +74,16 @@ public final class XcodeLocalEnvProvider implements LocalEnvProvider {
+
+     ImmutableMap.Builder<String, String> newEnvBuilder = ImmutableMap.builder();
+     newEnvBuilder.putAll(Maps.filterKeys(env, k -> !k.equals("TMPDIR")));
++
++    // In case we are running on NixOS.
++    // If bash is called with an unset PATH on this platform,
++    // it will set it to /no-such-path and default tools will be missings.
++    // See, https://github.com/NixOS/nixpkgs/issues/94222
++    // So we ensure that minimal dependencies are present.
++    if (!env.containsKey("PATH")){
++      newEnvBuilder.put("PATH", "@actionsPathPatch@");
++    }
++
+     String p = clientEnv.get("TMPDIR");
+     if (Strings.isNullOrEmpty(p)) {
+       // Do not use `fallbackTmpDir`, use `/tmp` instead. This way if the user didn't export TMPDIR

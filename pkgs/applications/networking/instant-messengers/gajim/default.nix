@@ -1,4 +1,4 @@
-{ lib, fetchurl, gettext, wrapGAppsHook
+{ lib, fetchurl, fetchFromGitLab, gettext, wrapGAppsHook
 
 # Native dependencies
 , python3, gtk3, gobject-introspection, gnome
@@ -15,16 +15,17 @@
 , enableSpelling ? true, gspell
 , enableUPnP ? true, gupnp-igd
 , enableOmemoPluginDependencies ? true
+, enableAppIndicator ? true, libappindicator-gtk3
 , extraPythonPackages ? ps: []
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gajim";
-  version = "1.3.2";
+  version = "1.3.3";
 
   src = fetchurl {
     url = "https://gajim.org/downloads/${lib.versions.majorMinor version}/gajim-${version}.tar.gz";
-    sha256 = "1vjzv8zg9s393xw81klcgbkn4h6j2blzla9iil5kqfrw7wmldskh";
+    sha256 = "1337qkpcv7j0fgws9scnk82mn2l7s17060vmrbh3ihinmxmbxg6x";
   };
 
   buildInputs = [
@@ -33,11 +34,27 @@ python3.pkgs.buildPythonApplication rec {
   ] ++ lib.optionals enableJingle [ farstream gstreamer gst-plugins-base gst-libav gst-plugins-good libnice ]
     ++ lib.optional enableSecrets libsecret
     ++ lib.optional enableSpelling gspell
-    ++ lib.optional enableUPnP gupnp-igd;
+    ++ lib.optional enableUPnP gupnp-igd
+    ++ lib.optional enableAppIndicator libappindicator-gtk3;
 
   nativeBuildInputs = [
     gettext wrapGAppsHook
   ];
+
+  # Workaround for https://dev.gajim.org/gajim/gajim/-/issues/10719.
+  # We don't use plugin release URL because it's updated in place.
+  plugins = fetchFromGitLab {
+    domain = "dev.gajim.org";
+    owner = "gajim";
+    repo = "gajim-plugins";
+    rev = "fea522e4360cec6ceacbf1df92644ab3343d4b99";
+    sha256 = "sha256-CmwEiLsdldoOfgHfWL/5hf/dp0HEDNAIlc5N0Np20KE=";
+  };
+
+  postPatch = ''
+    mkdir -p gajim/data/plugins
+    cp -r $plugins/plugin_installer gajim/data/plugins
+  '';
 
   dontWrapGApps = true;
 
@@ -55,12 +72,10 @@ python3.pkgs.buildPythonApplication rec {
   checkInputs = [ xvfb-run dbus.daemon ];
 
   checkPhase = ''
-    # https://dev.gajim.org/gajim/gajim/-/issues/10478
-    rm test/lib/gajim_mocks.py test/unit/test_gui_interface.py
-
     xvfb-run dbus-run-session \
       --config-file=${dbus.daemon}/share/dbus-1/session.conf \
-      ${python3.interpreter} setup.py test
+      ${python3.interpreter} -m unittest discover -s test/unit -v
+    ${python3.interpreter} -m unittest discover -s test/no_gui -v
   '';
 
   # necessary for wrapGAppsHook

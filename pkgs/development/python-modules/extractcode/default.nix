@@ -9,13 +9,14 @@
 , pytestCheckHook
 , pytest-xdist
 }:
+
 buildPythonPackage rec {
   pname = "extractcode";
-  version = "21.2.24";
+  version = "30.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f91638dbf523b80df90ac184c25d5cd1ea24cac53f67a6bb7d7b389867e0744b";
+    sha256 = "5a660d1b9e3bae4aa87828e6947dc3b31dc2fa6705acb28a514874602b40bc90";
   };
 
   dontConfigure = true;
@@ -36,7 +37,7 @@ buildPythonPackage rec {
     pytest-xdist
   ];
 
-  # cli test tests the cli which we can't do until after install
+  # CLI test tests the cli which we can't do until after install
   disabledTestPaths = [
     "tests/test_extractcode_cli.py"
   ];
@@ -45,6 +46,11 @@ buildPythonPackage rec {
   disabledTests = [
     "test_uncompress_lz4_basic"
     "test_extract_tarlz4_basic"
+    "test_extract_rar_with_trailing_data"
+    # tries to parse /boot/vmlinuz-*, which is not available in the nix sandbox
+    "test_can_extract_qcow2_vm_image_as_tarball"
+    "test_can_extract_qcow2_vm_image_not_as_tarball"
+    "test_can_listfs_from_qcow2_image"
   ];
 
   pythonImportsCheck = [
@@ -52,7 +58,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A mostly universal archive extractor using z7zip, libarchve, other libraries and the Python standard library for reliable archive extraction";
+    description = "Universal archive extractor using z7zip, libarchve, other libraries and the Python standard library";
     homepage = "https://github.com/nexB/extractcode";
     license = licenses.asl20;
     maintainers = teams.determinatesystems.members;

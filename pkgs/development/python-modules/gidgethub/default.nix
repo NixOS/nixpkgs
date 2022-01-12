@@ -3,7 +3,7 @@
 , fetchPypi
 , pythonOlder
 , setuptools
-, pytestrunner
+, pytest-runner
 , pytest
 , pytest-asyncio
 , twisted
@@ -16,16 +16,16 @@
 
 buildPythonPackage rec {
   pname = "gidgethub";
-  version = "5.0.0";
+  version = "5.0.1";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a4a8d8b1ab629757b557d3bcb98a5a77790a3d00b320f5f881a1754cf0e21086";
+    sha256 = "3efbd6998600254ec7a2869318bd3ffde38edc3a0d37be0c14bc46b45947b682";
   };
 
-  nativeBuildInputs = [ setuptools pytestrunner ];
+  nativeBuildInputs = [ setuptools pytest-runner ];
   checkInputs = [ pytest pytest-asyncio twisted treq tornado aiohttp ];
   propagatedBuildInputs = [
     uritemplate

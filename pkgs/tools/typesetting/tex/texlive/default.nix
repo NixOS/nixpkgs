@@ -19,7 +19,6 @@ let
   };
 
   # map: name -> fixed-output hash
-  # sha1 in base32 was chosen as a compromise between security and length
   fixedHashes = lib.optionalAttrs useFixedHashes (import ./fixedHashes.nix);
 
   # function for creating a working environment from a set of TL packages
@@ -109,8 +108,13 @@ let
       pkgs =
         # tarball of a collection/scheme itself only contains a tlobj file
         [( if (attrs.hasRunfiles or false) then mkPkgV "run"
-            # the fake derivations are used for filtering of hyphenation patterns
-          else { inherit pname version; tlType = "run"; }
+            # the fake derivations are used for filtering of hyphenation patterns and formats
+          else {
+            inherit pname version;
+            tlType = "run";
+            hasFormats = attrs.hasFormats or false;
+            hasHyphens = attrs.hasHyphens or false;
+          }
         )]
         ++ lib.optional (attrs.sha512 ? doc) (mkPkgV "doc")
         ++ lib.optional (attrs.sha512 ? source) (mkPkgV "source")
@@ -160,44 +164,28 @@ let
         "https://texlive.info/tlnet-archive/${snapshot.year}/${snapshot.month}/${snapshot.day}/tlnet/archive"
       ];
 
-      src = fetchurl { inherit urls sha512; };
-
-      passthru = {
-        inherit pname tlType version;
-      } // lib.optionalAttrs (sha512 != "") { inherit src; };
-      unpackCmd = file: ''
-        tar -xf ${file} \
-          '--strip-components=${toString stripPrefix}' \
-          -C "$out" --anchored --exclude=tlpkg --keep-old-files
-      '' + postUnpack;
-
-    in if sha512 == "" then
-      # hash stripped from pkgs.nix to save space -> fetch&unpack in a single step
-      # currently unused as we prefer to keep the sha512 hashes for reproducibility
-      fetchurl {
-        inherit urls;
-        sha1 = if fixedHash == null then throw "TeX Live package ${tlName} is missing hash!"
-          else fixedHash;
-        name = tlName;
-        recursiveHash = true;
-        downloadToTemp = true;
-        postFetch = ''mkdir "$out";'' + unpackCmd "$downloadedFile";
-        # TODO: perhaps override preferHashedMirrors and allowSubstitutes
-     }
-        // passthru
-
-    else runCommand "texlive-${tlName}"
+    in runCommand "texlive-${tlName}"
       ( {
-          inherit passthru;
+          src = fetchurl { inherit urls sha512; };
+          inherit stripPrefix;
+          # metadata for texlive.combine
+          passthru = {
+            inherit pname tlType version;
+            hasFormats = args.hasFormats or false;
+            hasHyphens = args.hasHyphens or false;
+          };
         } // lib.optionalAttrs (fixedHash != null) {
           outputHash = fixedHash;
-          outputHashAlgo = "sha1";
+          outputHashAlgo = "sha256";
           outputHashMode = "recursive";
         }
       )
       ( ''
           mkdir "$out"
-        '' + unpackCmd "'${src}'"
+          tar -xf "$src" \
+          --strip-components="$stripPrefix" \
+          -C "$out" --anchored --exclude=tlpkg --keep-old-files
+        '' + postUnpack
       );
 
   # combine a set of TL packages into a single TL meta-package

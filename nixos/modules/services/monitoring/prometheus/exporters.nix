@@ -1,7 +1,7 @@
 { config, pkgs, lib, options, ... }:
 
 let
-  inherit (lib) concatStrings foldl foldl' genAttrs literalExample maintainers
+  inherit (lib) concatStrings foldl foldl' genAttrs literalExpression maintainers
                 mapAttrsToList mkDefault mkEnableOption mkIf mkMerge mkOption
                 optional types mkOptionDefault flip attrNames;
 
@@ -27,11 +27,14 @@ let
     "bird"
     "bitcoin"
     "blackbox"
+    "buildkite-agent"
     "collectd"
     "dnsmasq"
     "domain"
     "dovecot"
+    "fastly"
     "fritzbox"
+    "influxdb"
     "json"
     "jitsi"
     "kea"
@@ -58,6 +61,7 @@ let
     "rtl_433"
     "script"
     "snmp"
+    "smartctl"
     "smokeping"
     "sql"
     "surfboard"
@@ -106,7 +110,7 @@ let
     firewallFilter = mkOption {
       type = types.nullOr types.str;
       default = null;
-      example = literalExample ''
+      example = literalExpression ''
         "-i eth0 -p tcp -m tcp --dport ${toString port}"
       '';
       description = ''
@@ -180,8 +184,30 @@ let
         serviceConfig.PrivateTmp = mkDefault true;
         serviceConfig.WorkingDirectory = mkDefault /tmp;
         serviceConfig.DynamicUser = mkDefault enableDynamicUser;
-        serviceConfig.User = conf.user;
+        serviceConfig.User = mkDefault conf.user;
         serviceConfig.Group = conf.group;
+        # Hardening
+        serviceConfig.CapabilityBoundingSet = mkDefault [ "" ];
+        serviceConfig.DeviceAllow = [ "" ];
+        serviceConfig.LockPersonality = true;
+        serviceConfig.MemoryDenyWriteExecute = true;
+        serviceConfig.NoNewPrivileges = true;
+        serviceConfig.PrivateDevices = true;
+        serviceConfig.ProtectClock = mkDefault true;
+        serviceConfig.ProtectControlGroups = true;
+        serviceConfig.ProtectHome = true;
+        serviceConfig.ProtectHostname = true;
+        serviceConfig.ProtectKernelLogs = true;
+        serviceConfig.ProtectKernelModules = true;
+        serviceConfig.ProtectKernelTunables = true;
+        serviceConfig.ProtectSystem = mkDefault "strict";
+        serviceConfig.RemoveIPC = true;
+        serviceConfig.RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+        serviceConfig.RestrictNamespaces = true;
+        serviceConfig.RestrictRealtime = true;
+        serviceConfig.RestrictSUIDSGID = true;
+        serviceConfig.SystemCallArchitectures = "native";
+        serviceConfig.UMask = "0077";
       } serviceOpts ]);
   };
 in
@@ -201,7 +227,7 @@ in
     };
     description = "Prometheus exporter configuration";
     default = {};
-    example = literalExample ''
+    example = literalExpression ''
       {
         node = {
           enable = true;

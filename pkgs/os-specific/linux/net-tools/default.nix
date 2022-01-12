@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
     "HAVE_SERIAL_TOOLS=1"
     "HAVE_HOSTNAME_TOOLS=1"
     "HAVE_HOSTNAME_SYMLINKS=1"
+    "HAVE_MII=1"
   ];
 
   meta = {

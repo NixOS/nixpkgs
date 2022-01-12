@@ -28,15 +28,16 @@
 , nss
 , pango
 , systemd
+, udev
 , xdg-utils
 }:
 stdenv.mkDerivation rec {
   pname = "1password";
-  version = "8.0.34";
+  version = "8.3.0";
 
   src = fetchurl {
     url = "https://downloads.1password.com/linux/tar/stable/x86_64/1password-${version}.x64.tar.gz";
-    sha256 = "0mp119v5vgsva7pnxpsbq4xhh4vbhwv7ga9b5b7f6slx3biy1wmh";
+    sha256 = "1cakv316ipwyw6s3x4a6qhl0nmg17bxhh08c969gma3svamh1grw";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -85,6 +86,9 @@ stdenv.mkDerivation rec {
       substituteInPlace $out/share/applications/${pname}.desktop \
         --replace 'Exec=/opt/1Password/${pname}' 'Exec=${pname}'
 
+      # Polkit file
+      install -Dm 0644 -t $out/share/polkit-1/actions com.1password.1Password.policy
+
       # Icons
       cp -a resources/icons $out/share
 
@@ -95,8 +99,12 @@ stdenv.mkDerivation rec {
         patchelf --set-rpath ${rpath}:$out/share/1password $file
       done
 
+      # Electron is trying to open udev via dlopen()
+      # and for some reason that doesn't seem to be impacted from the rpath.
+      # Adding udev to LD_LIBRARY_PATH fixes that.
       makeWrapper $out/share/1password/1password $out/bin/1password \
-        --prefix PATH : ${xdg-utils}/bin
+        --prefix PATH : ${lib.makeBinPath [ xdg-utils ]} \
+        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ udev ]}
 
       runHook postInstall
     '';
@@ -107,7 +115,7 @@ stdenv.mkDerivation rec {
     description = "Multi-platform password manager";
     homepage = "https://1password.com/";
     license = licenses.unfree;
-    maintainers = with maintainers; [ danieldk timstott savannidgerinel ];
+    maintainers = with maintainers; [ timstott savannidgerinel ];
     platforms = [ "x86_64-linux" ];
   };
 }

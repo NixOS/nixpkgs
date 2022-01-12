@@ -1,9 +1,9 @@
 { stdenv, lib, makeDesktopItem, makeWrapper, patchelf, writeText
-, coreutils, gnugrep, which, git, unzip, libsecret, libnotify
+, coreutils, gnugrep, which, git, unzip, libsecret, libnotify, e2fsprogs
 , vmopts ? null
 }:
 
-{ name, product, version, src, wmClass, jdk, meta, extraLdPath ? [] }@args:
+{ name, product, version, src, wmClass, jdk, meta, extraLdPath ? [], extraWrapperArgs ? [] }@args:
 
 with lib;
 
@@ -17,7 +17,7 @@ let loName = toLower product;
                + ".vmoptions";
 in
 
-with stdenv; lib.makeOverridable mkDerivation rec {
+with stdenv; lib.makeOverridable mkDerivation (rec {
   inherit name src;
   meta = args.meta // { inherit mainProgram; };
 
@@ -38,7 +38,7 @@ with stdenv; lib.makeOverridable mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper patchelf unzip ];
 
-  patchPhase = lib.optionalString (!stdenv.isDarwin) ''
+  postPatch = lib.optionalString (!stdenv.isDarwin) ''
       get_file_size() {
         local fname="$1"
         echo $(ls -l $fname | cut -d ' ' -f5)
@@ -52,7 +52,7 @@ with stdenv; lib.makeOverridable mkDerivation rec {
       }
 
       interpreter=$(echo ${stdenv.glibc.out}/lib/ld-linux*.so.2)
-      if [ "${stdenv.hostPlatform.system}" == "x86_64-linux" ]; then
+      if [[ "${stdenv.hostPlatform.system}" == "x86_64-linux" && -e bin/fsnotifier64 ]]; then
         target_size=$(get_file_size bin/fsnotifier64)
         patchelf --set-interpreter "$interpreter" bin/fsnotifier64
         munge_size_hack bin/fsnotifier64 $target_size
@@ -64,6 +64,8 @@ with stdenv; lib.makeOverridable mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{bin,$name,share/pixmaps,libexec/${name}}
     cp -a . $out/$name
     ln -s $out/$name/bin/${loName}.png $out/share/pixmaps/${mainProgram}.png
@@ -76,9 +78,10 @@ with stdenv; lib.makeOverridable mkDerivation rec {
       --prefix PATH : "$out/libexec/${name}:${lib.optionalString (stdenv.isDarwin) "${jdk}/jdk/Contents/Home/bin:"}${lib.makeBinPath [ jdk coreutils gnugrep which git ]}" \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath ([
         # Some internals want libstdc++.so.6
-        stdenv.cc.cc.lib libsecret
+        stdenv.cc.cc.lib libsecret e2fsprogs
         libnotify
       ] ++ extraLdPath)}" \
+      ${lib.concatStringsSep " " extraWrapperArgs} \
       --set JDK_HOME "$jdk" \
       --set ${hiName}_JDK "$jdk" \
       --set ANDROID_JAVA_HOME "$jdk" \
@@ -86,8 +89,10 @@ with stdenv; lib.makeOverridable mkDerivation rec {
       --set ${hiName}_VM_OPTIONS ${vmoptsFile}
 
     ln -s "$item/share/applications" $out/share
+
+    runHook postInstall
   '';
 
 } // lib.optionalAttrs (!(meta.license.free or true)) {
   preferLocalBuild = true;
-}
+})

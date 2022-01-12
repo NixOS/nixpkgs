@@ -16,12 +16,11 @@ buildGoModule rec {
 
   doCheck = false;
 
-  buildFlagsArray = ''
-    -ldflags=
-      -X github.com/MichaelMure/git-bug/commands.GitCommit=${rev}
-      -X github.com/MichaelMure/git-bug/commands.GitLastTag=${version}
-      -X github.com/MichaelMure/git-bug/commands.GitExactTag=${version}
-  '';
+  ldflags = [
+    "-X github.com/MichaelMure/git-bug/commands.GitCommit=${rev}"
+    "-X github.com/MichaelMure/git-bug/commands.GitLastTag=${version}"
+    "-X github.com/MichaelMure/git-bug/commands.GitExactTag=${version}"
+  ];
 
   postInstall = ''
     install -D -m 0644 misc/bash_completion/git-bug "$out/share/bash-completion/completions/git-bug"

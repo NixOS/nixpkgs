@@ -20,6 +20,10 @@ let
   backend =
     if (stdenv.isx86_32 || stdenv.isx86_64) then "OpenGL" else "GLES";
 
+  withVLC = stdenv.isDarwin;
+
+  inherit (lib) optional optionalString;
+
 in
 stdenv.mkDerivation rec {
   pname = "gemrb";
@@ -39,19 +43,23 @@ stdenv.mkDerivation rec {
     libGL
     libiconv
     libpng
-    libvlc
     libvorbis
     openal
     python2
     zlib
-  ];
+  ]
+  ++ optional withVLC libvlc;
 
   nativeBuildInputs = [ cmake ];
 
-  LIBVLC_INCLUDE_PATH = "${lib.getDev libvlc}/include";
-  LIBVLC_LIBRARY_PATH = "${lib.getLib libvlc}/lib";
+  # libvlc isn't being detected properly as of 0.9.0, so set it
+  LIBVLC_INCLUDE_PATH = optionalString withVLC "${lib.getDev libvlc}/include";
+  LIBVLC_LIBRARY_PATH = optionalString withVLC "${lib.getLib libvlc}/lib";
 
   cmakeFlags = [
+    "-DDATA_DIR=${placeholder "out"}/share/gemrb"
+    "-DEXAMPLE_CONF_DIR=${placeholder "out"}/share/doc/gemrb/examples"
+    "-DSYSCONF_DIR=/etc"
     # use the Mesa drivers for video on ARM (harmless on x86)
     "-DDISABLE_VIDEOCORE=ON"
     "-DLAYOUT=opt"

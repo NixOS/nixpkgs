@@ -242,7 +242,10 @@ stdenv.mkDerivation ((builtins.removeAttrs attrs ["source"]) // {
   propagatedUserEnvPkgs = gemPath ++ propagatedUserEnvPkgs;
 
   passthru = passthru // { isRubyGem = true; };
-  inherit meta;
+  meta = {
+    # default to Ruby's platforms
+    platforms = ruby.meta.platforms;
+  } // meta;
 })
 
 )

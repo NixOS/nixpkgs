@@ -5,6 +5,7 @@
 , meson
 , ninja
 , exiv2
+, libheif
 , libjpeg
 , libtiff
 , gst_all_1
@@ -32,11 +33,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gthumb";
-  version = "3.11.3";
+  version = "3.12.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "11bvcimamdcksgqj1ymh54yzhpwc5j8glda8brqqhwq3h2wj0j9d";
+    sha256 = "sha256-Pe/8AwOE5ktXNhxDfHm0ga4Uie9EyHroVugbsQ2OOD8=";
   };
 
   nativeBuildInputs = [
@@ -66,6 +67,7 @@ stdenv.mkDerivation rec {
     json-glib
     lcms2
     libchamplain
+    libheif
     libjpeg
     libraw
     librsvg

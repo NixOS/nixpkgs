@@ -21,14 +21,14 @@
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.21.1";
+  version = "0.23.1";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     rev = "v${version}";
-    sha256 = "sha256-/+OSVjC4++A4kaxEfI2kIgjXxL67lfoXCdH2PykLWxA=";
+    sha256 = "sha256-2RwDU6EOJWF0u2ikJFg9U2yqSXergDkJH3h2i+QJ7G4=";
   };
 
   buildInputs = [
@@ -52,8 +52,14 @@ buildPythonApplication rec {
   ];
 
   nativeBuildInputs = [
-    pkg-config sphinx ncurses
     installShellFiles
+    ncurses
+    pkg-config
+    sphinx
+    furo
+    sphinx-copybutton
+    sphinxext-opengraph
+    sphinx-inline-tabs
   ] ++ lib.optionals stdenv.isDarwin [
     imagemagick
     libicns  # For the png2icns tool.
@@ -94,6 +100,9 @@ buildPythonApplication rec {
         else "linux-package/bin";
     in
     ''
+      # Fontconfig error: Cannot load default config file: No such file: (null)
+      export FONTCONFIG_FILE=${fontconfig.out}/etc/fonts/fonts.conf
+
       env PATH="${buildBinPath}:$PATH" ${python.interpreter} test.py
     '';
 
@@ -111,12 +120,12 @@ buildPythonApplication rec {
     cp -r linux-package/{bin,share,lib} $out
     ''}
     wrapProgram "$out/bin/kitty" --prefix PATH : "$out/bin:${lib.makeBinPath [ imagemagick xsel ncurses.dev ]}"
-    runHook postInstall
 
     installShellCompletion --cmd kitty \
       --bash <("$out/bin/kitty" + complete setup bash) \
       --fish <("$out/bin/kitty" + complete setup fish) \
       --zsh  <("$out/bin/kitty" + complete setup zsh)
+    runHook postInstall
   '';
 
   postInstall = ''
@@ -136,7 +145,7 @@ buildPythonApplication rec {
     homepage = "https://github.com/kovidgoyal/kitty";
     description = "A modern, hackable, featureful, OpenGL based terminal emulator";
     license = licenses.gpl3Only;
-    changelog = "https://sw.kovidgoyal.net/kitty/changelog.html";
+    changelog = "https://sw.kovidgoyal.net/kitty/changelog/";
     platforms = platforms.darwin ++ platforms.linux;
     maintainers = with maintainers; [ tex rvolosatovs Luflosi ];
   };

@@ -1,9 +1,9 @@
 { lib, stdenv, requireFile, makeWrapper, autoPatchelfHook, wrapGAppsHook, which, more
-, file, atk, alsa-lib, cairo, fontconfig, gdk-pixbuf, glib, gnome, gtk2-x11, gtk3
+, file, atk, alsa-lib, cairo, fontconfig, gdk-pixbuf, glib, webkitgtk, gtk2-x11, gtk3
 , heimdal, krb5, libsoup, libvorbis, speex, openssl, zlib, xorg, pango, gtk2
 , gnome2, mesa, nss, nspr, gtk_engines, freetype, dconf, libpng12, libxml2
 , libjpeg, libredirect, tzdata, cacert, systemd, libcxxabi, libcxx, e2fsprogs, symlinkJoin
-, libpulseaudio, pcsclite
+, libpulseaudio, pcsclite, glib-networking, llvmPackages_12
 
 , homepage, version, prefix, hash
 
@@ -70,7 +70,8 @@ stdenv.mkDerivation rec {
     freetype
     gdk-pixbuf
     gnome2.gtkglext
-    gnome.webkitgtk
+    glib-networking
+    webkitgtk
     gtk2
     gtk2-x11
     gtk3
@@ -98,10 +99,12 @@ stdenv.mkDerivation rec {
     xorg.libXtst
     zlib
   ] ++ lib.optional (lib.versionOlder version "20.04") e2fsprogs
-    ++ lib.optional (lib.versionAtLeast version "20.10") libpulseaudio;
+    ++ lib.optional (lib.versionAtLeast version "20.10") libpulseaudio
+    ++ lib.optional (lib.versionAtLeast version "21.12") llvmPackages_12.libunwind;
 
   runtimeDependencies = [
     glib
+    glib-networking
     pcsclite
 
     xorg.libX11
@@ -118,10 +121,11 @@ stdenv.mkDerivation rec {
   installPhase = let
     icaFlag = program:
       if (builtins.match "selfservice(.*)" program) != null then "--icaroot"
+      else if (lib.versionAtLeast version "21.12" && builtins.match "wfica(.*)" program != null) then null
       else "-icaroot";
     wrap = program: ''
       wrapProgram $out/opt/citrix-icaclient/${program} \
-        --add-flags "${icaFlag program} $ICAInstDir" \
+        ${lib.optionalString (icaFlag program != null) ''--add-flags "${icaFlag program} $ICAInstDir"''} \
         --set ICAROOT "$ICAInstDir" \
         --prefix LD_LIBRARY_PATH : "$ICAInstDir:$ICAInstDir/lib" \
         --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \

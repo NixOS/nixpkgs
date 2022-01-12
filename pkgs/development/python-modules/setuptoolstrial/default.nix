@@ -3,7 +3,7 @@
 , fetchPypi
 , pytest
 , virtualenv
-, pytestrunner
+, pytest-runner
 , pytest-virtualenv
 , twisted
 , pathlib2
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "14220f8f761c48ba1e2526f087195077cf54fad7098b382ce220422f0ff59b12";
   };
 
-  buildInputs = [ pytest virtualenv pytestrunner pytest-virtualenv ];
+  buildInputs = [ pytest virtualenv pytest-runner pytest-virtualenv ];
   propagatedBuildInputs = [ twisted pathlib2 ];
 
   postPatch = ''

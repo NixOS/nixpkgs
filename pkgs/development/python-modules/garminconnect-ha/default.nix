@@ -1,21 +1,23 @@
 { lib
 , buildPythonPackage
+, cloudscraper
 , fetchFromGitHub
 , requests
 }:
 
 buildPythonPackage rec {
   pname = "garminconnect-ha";
-  version = "0.1.6";
+  version = "0.1.13";
 
   src = fetchFromGitHub {
     owner = "cyberjunky";
     repo = "python-garminconnect-ha";
     rev = version;
-    sha256 = "0ngas6zikhpja1cdkq64m9pjm4b0z3qaj9g3x88mggy60jsxm1d7";
+    sha256 = "sha256-1O1EcG5FvpwUvI8rwcdlQLzEEStyFAwvmkaL97u6hZ4=";
   };
 
   propagatedBuildInputs = [
+    cloudscraper
     requests
   ];
 

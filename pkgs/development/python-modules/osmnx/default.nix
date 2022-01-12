@@ -1,18 +1,19 @@
-{ lib, buildPythonPackage, fetchFromGitHub, geopandas, descartes, matplotlib, networkx, numpy
-, pandas, requests, Rtree, shapely, folium, scikit-learn, scipy}:
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, geopandas, matplotlib, networkx, numpy
+, pandas, requests, Rtree, shapely, folium, scikit-learn, scipy, gdal, rasterio}:
 
 buildPythonPackage rec {
   pname = "osmnx";
-  version = "0.9";
+  version = "1.1.1";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner  = "gboeing";
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "1k3y5kl4k93vxaxyanc040x44s2fyyc3m1ndy2j3kg0037z8ad4z";
+    sha256 = "0dkv3fnlq23d7d30lhdf4a313lxy3a5qfldidvszs1z9n16ycnwb";
   };
 
-  propagatedBuildInputs = [ geopandas descartes matplotlib networkx numpy pandas requests Rtree shapely folium scikit-learn scipy ];
+  propagatedBuildInputs = [ geopandas matplotlib networkx numpy pandas requests Rtree shapely folium scikit-learn scipy gdal rasterio ];
 
   # requires network
   doCheck = false;

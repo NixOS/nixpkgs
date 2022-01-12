@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchgit, flex, bison, python3, autoconf, automake, gnulib, libtool
+{ lib, stdenv, fetchurl, flex, bison, python3, autoreconfHook, gnulib, libtool, bash
 , gettext, ncurses, libusb-compat-0_1, freetype, qemu, lvm2, unifont, pkg-config
 , buildPackages
 , fetchpatch
@@ -39,7 +39,7 @@ let
   canEfi = any (system: stdenv.hostPlatform.system == system) (mapAttrsToList (name: _: name) efiSystemsBuild);
   inPCSystems = any (system: stdenv.hostPlatform.system == system) (mapAttrsToList (name: _: name) pcSystems);
 
-  version = "2.06-rc1";
+  version = "2.06";
 
 in (
 
@@ -51,10 +51,9 @@ stdenv.mkDerivation rec {
   pname = "grub";
   inherit version;
 
-  src = fetchgit {
-    url = "git://git.savannah.gnu.org/grub.git";
-    rev = "${pname}-${version}";
-    sha256 = "1ngc960g4w91rg13l724v6nlj6fq1adxp6is2mrq4bnp7sm9mysa";
+  src = fetchurl {
+    url = "mirror://gnu/grub/grub-${version}.tar.xz";
+    sha256 = "sha256-t56kSvkbk9F80/6Ava5u1DdwZ4qaWuGSzOqAPrtlfuE=";
   };
 
   patches = [
@@ -75,8 +74,8 @@ stdenv.mkDerivation rec {
   '';
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ bison flex python3 pkg-config autoconf automake gettext freetype ];
-  buildInputs = [ ncurses libusb-compat-0_1 freetype lvm2 fuse libtool ]
+  nativeBuildInputs = [ bison flex python3 pkg-config gettext freetype autoreconfHook ];
+  buildInputs = [ ncurses libusb-compat-0_1 freetype lvm2 fuse libtool bash ]
     ++ optional doCheck qemu
     ++ optional zfsSupport zfs;
 
@@ -108,8 +107,6 @@ stdenv.mkDerivation rec {
       unset CPP # setting CPP intereferes with dependency calculation
 
       patchShebangs .
-
-      ./bootstrap --no-git --gnulib-srcdir=${gnulib}
 
       substituteInPlace ./configure --replace '/usr/share/fonts/unifont' '${unifont}/share/fonts'
     '';
@@ -144,6 +141,9 @@ stdenv.mkDerivation rec {
   postInstall = ''
     # Avoid a runtime reference to gcc
     sed -i $out/lib/grub/*/modinfo.sh -e "/grub_target_cppflags=/ s|'.*'|' '|"
+    # just adding bash to buildInputs wasn't enough to fix the shebang
+    substituteInPlace $out/lib/grub/*/modinfo.sh \
+      --replace ${buildPackages.bash} "/usr/bin/bash"
   '';
 
   passthru.tests = {

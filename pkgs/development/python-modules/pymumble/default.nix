@@ -1,6 +1,5 @@
 { buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , isPy27
 , lib
 , opuslib

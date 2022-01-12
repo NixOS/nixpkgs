@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "arrow";
-  version = "1.0.3";
+  version = "1.2.1";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "399c9c8ae732270e1aa58ead835a79a40d7be8aa109c579898eb41029b5a231d";
+    sha256 = "c2dde3c382d9f7e6922ce636bf0b318a7a853df40ecb383b29192e6c5cc82840";
   };
 
   postPatch = ''
@@ -40,6 +40,8 @@ buildPythonPackage rec {
   disabledTests = [
     "test_parse_tz_name_zzz"
   ];
+
+  pythonImportsCheck = [ "arrow" ];
 
   meta = with lib; {
     description = "Python library for date manipulation";

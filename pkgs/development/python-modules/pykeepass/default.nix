@@ -1,6 +1,6 @@
 { lib, fetchFromGitHub, buildPythonPackage
 , lxml, pycryptodomex, construct
-, argon2_cffi, dateutil, future
+, argon2_cffi, python-dateutil, future
 , python
 }:
 
@@ -21,8 +21,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     lxml pycryptodomex construct
-    argon2_cffi dateutil future
+    argon2_cffi python-dateutil future
   ];
+
+  propagatedNativeBuildInputs = [ argon2_cffi ];
 
   checkPhase = ''
     ${python.interpreter} -m unittest tests.tests

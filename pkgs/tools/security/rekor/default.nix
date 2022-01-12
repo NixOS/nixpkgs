@@ -1,24 +1,31 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 let
   generic = { pname, packageToBuild, description }:
     buildGoModule rec {
       inherit pname;
-      version = "0.2.0";
+      version = "0.4.0";
 
       src = fetchFromGitHub {
         owner = "sigstore";
         repo = "rekor";
         rev = "v${version}";
-        sha256 = "1y6qw55r30jgkcwc6434ly0v9dcfa2lc7z5djn7rjcqrjg3gn7yv";
+        sha256 = "sha256-15p4hm4Cvs/yLaQIcxctVdMKRWPjIIFwBcbru6QcjXo=";
       };
 
-      vendorSha256 = "1wlh505ypwyr91wi80fpbap3far3fljwjd4mql2qcqgg0b1yay9s";
+      vendorSha256 = "sha256-XCCO4Vamzj5pJFmu1A8mpTLlVAtocrn20myYJVWtBrY=";
+
+      nativeBuildInputs = [ installShellFiles ];
 
       subPackages = [ packageToBuild ];
 
-      preBuild = ''
-        buildFlagsArray+=("-ldflags" "-s -w -X github.com/sigstore/rekor/${packageToBuild}/app.gitVersion=v${version}")
+      ldflags = [ "-s" "-w" "-X github.com/sigstore/rekor/${packageToBuild}/app.GitVersion=v${version}" ];
+
+      postInstall = ''
+        installShellCompletion --cmd ${pname} \
+          --bash <($out/bin/${pname} completion bash) \
+          --fish <($out/bin/${pname} completion fish) \
+          --zsh <($out/bin/${pname} completion zsh)
       '';
 
       meta = with lib; {
@@ -26,7 +33,7 @@ let
         homepage = "https://github.com/sigstore/rekor";
         changelog = "https://github.com/sigstore/rekor/releases/tag/v${version}";
         license = licenses.asl20;
-        maintainers = with maintainers; [ lesuisse ];
+        maintainers = with maintainers; [ lesuisse jk ];
       };
     };
 in {

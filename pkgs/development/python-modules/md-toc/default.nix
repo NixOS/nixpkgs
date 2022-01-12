@@ -8,14 +8,16 @@
 
 buildPythonPackage rec {
   pname = "md-toc";
-  version = "7.2.0";
+  version = "8.1.0";
+  format = "setuptools";
+
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "frnmst";
     repo = pname;
     rev = version;
-    sha256 = "1v74iddfk5d6170frg89vzrkz9xrycl1f50g59imc7x7g50i6c2x";
+    sha256 = "sha256-FTvHPV/QIpKRF7wcZ6yuik4GzPrwyg4Oxc5/cdCs6Qo=";
   };
 
   propagatedBuildInputs = [
@@ -26,13 +28,13 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py --replace "fpyutils>=1.2,<1.3" "fpyutils>=1.2"
-  '';
+  pytestFlagsArray = [
+    "md_toc/tests/*.py"
+  ];
 
-  pytestFlagsArray = [ "md_toc/tests/*.py" ];
-
-  pythonImportsCheck = [ "md_toc" ];
+  pythonImportsCheck = [
+    "md_toc"
+  ];
 
   meta = with lib; {
     description = "Table of contents generator for Markdown";

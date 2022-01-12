@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchurl
+, fetchFromGitHub
 , autoconf
 , automake
 , bc
@@ -17,9 +17,11 @@ stdenv.mkDerivation rec {
   pname = "fme";
   version = "1.1.3";
 
-  src = fetchurl {
-    url = "https://github.com/rdehouss/fme/archive/v${version}.tar.gz";
-    hash = "sha256-0cgaajjA+q0ClDrWXW0DFL0gXG3oQWaaLv5D5MUD5j0=";
+  src = fetchFromGitHub {
+    owner = "rdehouss";
+    repo = "fme";
+    rev = "v${version}";
+    sha256 = "sha256-P67OmExBdWM6NZhDyYceVJOZiy8RC+njk/QvgQcWZeQ=";
   };
 
   nativeBuildInputs = [

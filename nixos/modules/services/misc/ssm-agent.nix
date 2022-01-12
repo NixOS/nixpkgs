@@ -23,7 +23,7 @@ in {
       type = types.path;
       description = "The SSM agent package to use";
       default = pkgs.ssm-agent.override { overrideEtc = false; };
-      defaultText = "pkgs.ssm-agent.override { overrideEtc = false; }";
+      defaultText = literalExpression "pkgs.ssm-agent.override { overrideEtc = false; }";
     };
   };
 

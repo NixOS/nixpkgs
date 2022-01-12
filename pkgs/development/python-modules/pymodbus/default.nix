@@ -5,7 +5,7 @@
 , click
 , fetchFromGitHub
 , mock
-, prompt_toolkit
+, prompt-toolkit
 , pygments
 , pyserial
 , pyserial-asyncio
@@ -18,20 +18,20 @@
 
 buildPythonPackage rec {
   pname = "pymodbus";
-  version = "2.5.2";
+  version = "2.5.3";
 
   src = fetchFromGitHub {
     owner = "riptideio";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-jqVfBAjIdRBB5AYd0ZkMi7qAUR6vSYeBI4OYEv+mKwE=";
+    sha256 = "sha256-pf1TU/imBqNVYdG4XX8fnma8O8kQHuOHu6DT3E/PUk4=";
   };
 
   # Twisted asynchronous version is not supported due to a missing dependency
   propagatedBuildInputs = [
     aiohttp
     click
-    prompt_toolkit
+    prompt-toolkit
     pygments
     pyserial
     pyserial-asyncio

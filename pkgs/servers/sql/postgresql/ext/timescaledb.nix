@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   pname = "timescaledb";
-  version = "2.3.0";
+  version = "2.5.1";
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ postgresql openssl libkrb5 ];
@@ -16,11 +16,12 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner  = "timescale";
     repo   = "timescaledb";
+    # some branches are named like tags which confuses git
     rev    = "refs/tags/${version}";
-    sha256 = "03k6skl3191i5jby710xr1caq85cvzbjqmqv59mfkfbvihn2zfx2";
+    sha256 = "sha256-3G/foe4TlKEKP0Vi60oD7ZoxYdkNipyoOhGoF+GojZw=";
   };
 
-  cmakeFlags = [ "-DSEND_TELEMETRY_DEFAULT=OFF" "-DREGRESS_CHECKS=OFF" ]
+  cmakeFlags = [ "-DSEND_TELEMETRY_DEFAULT=OFF" "-DREGRESS_CHECKS=OFF" "-DTAP_CHECKS=OFF" ]
     ++ lib.optionals stdenv.isDarwin [ "-DLINTER=OFF" ];
 
   # Fix the install phase which tries to install into the pgsql extension dir,
@@ -44,5 +45,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ volth marsam ];
     platforms   = postgresql.meta.platforms;
     license     = licenses.asl20;
+    broken      = versionOlder postgresql.version "12";
   };
 }

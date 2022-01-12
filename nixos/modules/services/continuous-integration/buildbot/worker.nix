@@ -1,11 +1,12 @@
 # NixOS module for Buildbot Worker.
 
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
   cfg = config.services.buildbot-worker;
+  opt = options.services.buildbot-worker;
 
   python = cfg.package.pythonModule;
 
@@ -77,6 +78,7 @@ in {
 
       buildbotDir = mkOption {
         default = "${cfg.home}/worker";
+        defaultText = literalExpression ''"''${config.${opt.home}}/worker"'';
         type = types.path;
         description = "Specifies the Buildbot directory.";
       };
@@ -128,14 +130,14 @@ in {
       package = mkOption {
         type = types.package;
         default = pkgs.python3Packages.buildbot-worker;
-        defaultText = "pkgs.python3Packages.buildbot-worker";
+        defaultText = literalExpression "pkgs.python3Packages.buildbot-worker";
         description = "Package to use for buildbot worker.";
-        example = literalExample "pkgs.python2Packages.buildbot-worker";
+        example = literalExpression "pkgs.python2Packages.buildbot-worker";
       };
 
       packages = mkOption {
         default = with pkgs; [ git ];
-        example = literalExample "[ pkgs.git ]";
+        defaultText = literalExpression "[ pkgs.git ]";
         type = types.listOf types.package;
         description = "Packages to add to PATH for the buildbot process.";
       };

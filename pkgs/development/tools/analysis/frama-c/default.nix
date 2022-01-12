@@ -17,6 +17,12 @@ let
     ocamlgraph
     stdlib-shims
     why3
+    re
+    seq
+    sexplib
+    sexplib0
+    parsexp
+    base
     yojson
     zarith
   ];
@@ -25,12 +31,12 @@ in
 
 stdenv.mkDerivation rec {
   pname = "frama-c";
-  version = "22.0";
-  slang   = "Titanium";
+  version = "24.0";
+  slang   = "Chromium";
 
   src = fetchurl {
-    url    = "http://frama-c.com/download/frama-c-${version}-${slang}.tar.gz";
-    sha256 = "1mq1fijka95ydrla486yr4w6wdl9l7vmp512s1q00b0p6lmfwmkh";
+    url    = "https://frama-c.com/download/frama-c-${version}-${slang}.tar.gz";
+    sha256 = "sha256:0x1xgip50jdz1phsb9rzwf2ra8lshn1hmd9g967xia402wrg3sjf";
   };
 
   preConfigure = lib.optionalString stdenv.cc.isClang "configureFlagsArray=(\"--with-cpp=clang -E -C\")";

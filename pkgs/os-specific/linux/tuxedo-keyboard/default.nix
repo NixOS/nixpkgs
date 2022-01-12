@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, kernel, linuxHeaders}:
+{ lib, stdenv, fetchFromGitHub, kernel, linuxHeaders }:
 
 stdenv.mkDerivation rec {
   pname = "tuxedo-keyboard-${kernel.version}";
-  version = "3.0.5";
+  version = "3.0.8";
 
   src = fetchFromGitHub {
     owner = "tuxedocomputers";
     repo = "tuxedo-keyboard";
     rev = "v${version}";
-    sha256 = "123ady2bi2dwbajy3pgv10l3g2pyhi5k31c1ii0zcrvl2qqhndck";
+    sha256 = "1rv3ns4n61v18cpnp36zi47jpnqhj410yzi8b307ghiyriapbijv";
   };
 
   buildInputs = [ linuxHeaders ];
@@ -17,7 +17,10 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p "$out/lib/modules/${kernel.modDirVersion}"
-    mv src/tuxedo_keyboard.ko $out/lib/modules/${kernel.modDirVersion}
+
+    for module in clevo_acpi.ko clevo_wmi.ko tuxedo_keyboard.ko tuxedo_io/tuxedo_io.ko; do
+        mv src/$module $out/lib/modules/${kernel.modDirVersion}
+    done
   '';
 
   meta = with lib; {

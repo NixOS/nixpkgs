@@ -1,29 +1,17 @@
 { lib, python3, fetchFromGitHub }:
 
-let
-  python = python3.override {
-    packageOverrides = self: super: {
-      mautrix = super.mautrix.overridePythonAttrs (oldAttrs: rec {
-        version = "0.8.18";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "32daf7a7dcf5d4013b37321df7b319f36523f38884ccc3e2e965917d0a5c73c1";
-        };
-      });
-    };
-  };
-in python.pkgs.buildPythonPackage rec {
+python3.pkgs.buildPythonPackage rec {
   pname = "mautrix-signal";
-  version = "0.1.1";
+  version = "unstable-2021-11-12";
 
   src = fetchFromGitHub {
-    owner = "tulir";
-    repo = "mautrix-signal";
-    rev = "v${version}";
-    sha256 = "11snsl7i407855h39g1fgk26hinnq0inr8sjrgd319li0d3jwzxl";
+    owner = "mautrix";
+    repo = "signal";
+    rev = "2e57810e964c1701df2e69273c2f8cebbe021464";
+    sha256 = "sha256-xgn01nbY3LR4G1Yk2MgUhq116/wEhG+5vLH6HKqZE+8=";
   };
 
-  propagatedBuildInputs = with python.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     CommonMark
     aiohttp
     asyncpg
@@ -31,12 +19,12 @@ in python.pkgs.buildPythonPackage rec {
     mautrix
     phonenumbers
     pillow
-    prometheus_client
+    prometheus-client
     pycryptodome
     python-olm
     python_magic
     qrcode
-    ruamel_yaml
+    ruamel-yaml
     unpaddedbase64
     yarl
   ];
@@ -53,12 +41,12 @@ in python.pkgs.buildPythonPackage rec {
     " > $out/bin/mautrix-signal
     chmod +x $out/bin/mautrix-signal
     wrapProgram $out/bin/mautrix-signal \
-      --set PATH ${python}/bin \
+      --set PATH ${python3}/bin \
       --set PYTHONPATH "$PYTHONPATH"
   '';
 
   meta = with lib; {
-    homepage = "https://github.com/tulir/mautrix-signal";
+    homepage = "https://github.com/mautrix/signal";
     description = "A Matrix-Signal puppeting bridge";
     license = licenses.agpl3Plus;
     platforms = platforms.linux;

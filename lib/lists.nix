@@ -642,7 +642,7 @@ rec {
        unique [ 3 2 3 4 ]
        => [ 3 2 4 ]
    */
- unique = foldl' (acc: e: if elem e acc then acc else acc ++ [ e ]) [];
+  unique = foldl' (acc: e: if elem e acc then acc else acc ++ [ e ]) [];
 
   /* Intersects list 'e' and another list. O(nm) complexity.
 
@@ -663,9 +663,6 @@ rec {
   /* Test if two lists have no common element.
      It should be slightly more efficient than (intersectLists a b == [])
   */
-  mutuallyExclusive = a: b:
-    (builtins.length a) == 0 ||
-    (!(builtins.elem (builtins.head a) b) &&
-     mutuallyExclusive (builtins.tail a) b);
+  mutuallyExclusive = a: b: length a == 0 || !(any (x: elem x a) b);
 
 }

@@ -1,12 +1,16 @@
-{ lib, buildPythonPackage, fetchPypi, numpy }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, numpy
+}:
 
 buildPythonPackage rec {
   pname = "trimesh";
-  version = "3.9.10";
+  version = "3.9.42";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7ed243bc818f7a9a021d8dd39f69ae7ed366dfd9582b13d686e1b1e8c8326bcf";
+    sha256 = "d9a6e977989f1f8344b1f86dbce0511dc431733deb0ad21ff8375f6f47282b39";
   };
 
   propagatedBuildInputs = [ numpy ];
@@ -15,8 +19,10 @@ buildPythonPackage rec {
   # optional dependencies
   doCheck = false;
 
+  pythonImportsCheck = [ "trimesh" ];
+
   meta = with lib; {
-    description = "Python library for loading and using triangular meshes.";
+    description = "Python library for loading and using triangular meshes";
     homepage = "https://trimsh.org/";
     license = licenses.mit;
     maintainers = with maintainers; [ gebner ];

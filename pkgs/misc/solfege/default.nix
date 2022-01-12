@@ -5,10 +5,11 @@
 }:
 
 buildPythonApplication rec {
-  name = "solfege-3.23.4";
+  pname = "solfege";
+  version = "3.23.4";
 
   src = fetchurl {
-    url = "mirror://sourceforge/solfege/${name}.tar.gz";
+    url = "mirror://sourceforge/solfege/solfege-${version}.tar.gz";
     sha256 = "0sc17vf4xz6gy0s0z9ghi68yskikdmyb4gdaxx6imrm40734k8mp";
   };
 

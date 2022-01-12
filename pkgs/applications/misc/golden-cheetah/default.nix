@@ -1,6 +1,6 @@
 { lib, fetchFromGitHub, fetchpatch, mkDerivation
 , qtbase, qtsvg, qtserialport, qtwebengine, qtmultimedia, qttools
-, qtconnectivity, qtcharts, libusb-compat-0_1
+, qtconnectivity, qtcharts, libusb-compat-0_1, gsl, blas
 , bison, flex, zlib, qmake, makeDesktopItem, makeWrapper
 }:
 
@@ -16,33 +16,41 @@ let
   };
 in mkDerivation rec {
   pname = "golden-cheetah";
-  version = "3.5";
+  version = "3.6-DEV2111";
 
   src = fetchFromGitHub {
     owner = "GoldenCheetah";
     repo = "GoldenCheetah";
-    rev = "V${version}";
-    sha256 = "1lyd0b2s3s9c2ppj7l4hf3s4gfzscaaam2pbiaby714bi9nr0ka7";
+    rev = "v${version}";
+    sha256 = "17sk89szvaq31bcv6rgfn1bbw132k7w8zlalfb3ayflavdxbk6sa";
   };
 
   buildInputs = [
-    qtbase qtsvg qtserialport qtwebengine qtmultimedia qttools zlib
-    qtconnectivity qtcharts libusb-compat-0_1
+    qtbase
+    qtsvg
+    qtserialport
+    qtwebengine
+    qtmultimedia
+    qttools
+    zlib
+    qtconnectivity
+    qtcharts
+    libusb-compat-0_1
+    gsl
+    blas
   ];
   nativeBuildInputs = [ flex makeWrapper qmake bison ];
 
   patches = [
     # allow building with bison 3.7
-    # PR at https://github.com/GoldenCheetah/GoldenCheetah/pull/3590
-    (fetchpatch {
-      url = "https://github.com/GoldenCheetah/GoldenCheetah/commit/e1f42f8b3340eb4695ad73be764332e75b7bce90.patch";
-      sha256 = "1h0y9vfji5jngqcpzxna5nnawxs77i1lrj44w8a72j0ah0sznivb";
-    })
+    # Included in https://github.com/GoldenCheetah/GoldenCheetah/pull/3590,
+    # which is periodically rebased but pre 3.6 release, as it'll break other CI systems
+    ./0001-Fix-building-with-bison-3.7.patch
   ];
 
-  NIX_LDFLAGS = "-lz";
+  NIX_LDFLAGS = "-lz -lgsl -lblas";
 
-  qtWrapperArgs = [ "--set LD_LIBRARY_PATH ${zlib.out}/lib" ];
+  qtWrapperArgs = [ "--prefix" "LD_LIBRARY_PATH" ":" "${zlib.out}/lib" ];
 
   preConfigure = ''
     cp src/gcconfig.pri.in src/gcconfig.pri
@@ -52,10 +60,6 @@ in mkDerivation rec {
     echo 'LIBUSB_INCLUDE = ${libusb-compat-0_1.dev}/include' >> src/gcconfig.pri
     echo 'LIBUSB_LIBS = -L${libusb-compat-0_1}/lib -lusb' >> src/gcconfig.pri
     sed -i -e '21,23d' qwt/qwtconfig.pri # Removed forced installation to /usr/local
-
-    # Use qtwebengine instead of qtwebkit
-    substituteInPlace src/gcconfig.pri \
-      --replace "#DEFINES += NOWEBKIT" "DEFINES += NOWEBKIT"
   '';
 
   installPhase = ''
@@ -73,6 +77,6 @@ in mkDerivation rec {
     description = "Performance software for cyclists, runners and triathletes";
     platforms = platforms.linux;
     maintainers = [ ];
-    license = licenses.gpl3;
+    license = licenses.gpl2Plus;
   };
 }

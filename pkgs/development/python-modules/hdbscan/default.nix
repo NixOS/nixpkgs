@@ -44,6 +44,8 @@ buildPythonPackage rec {
     "test_hdbscan_boruvka_balltree_matches"
   ];
 
+  pythonImportsCheck = [ "hdbscan" ];
+
   meta = with lib; {
     description = "Hierarchical Density-Based Spatial Clustering of Applications with Noise, a clustering algorithm with a scikit-learn compatible API";
     homepage =  "https://github.com/scikit-learn-contrib/hdbscan";

@@ -10,7 +10,7 @@
 , nbclient
 , six
 , tqdm
-, jupyter_client
+, jupyter-client
 , requests
 , entrypoints
 , tenacity
@@ -19,7 +19,7 @@
 , backports_tempfile
 , isPy27
 , pytest
-, pytestcov
+, pytest-cov
 , pytest-mock
 }:
 
@@ -42,7 +42,7 @@ buildPythonPackage rec {
     nbclient
     six
     tqdm
-    jupyter_client
+    jupyter-client
     requests
     entrypoints
     tenacity
@@ -54,7 +54,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytest
-    pytestcov
+    pytest-cov
     pytest-mock
   ];
 

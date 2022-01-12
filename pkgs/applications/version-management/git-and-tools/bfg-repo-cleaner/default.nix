@@ -18,7 +18,7 @@ in
     nativeBuildInputs = [ makeWrapper ];
     buildInputs = [ jre ];
 
-    phases = "installPhase";
+    dontUnpack = true;
 
     installPhase = ''
       mkdir -p $out/share/java

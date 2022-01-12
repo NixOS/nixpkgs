@@ -53,6 +53,8 @@
 mkDerivation {
   pname = "kmail";
   meta = {
+    homepage = "https://apps.kde.org/kmail2/";
+    description = "Mail client";
     license = with lib.licenses; [ gpl2 lgpl21 fdl12 ];
     maintainers = kdepimTeam;
   };

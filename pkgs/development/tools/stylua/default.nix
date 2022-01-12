@@ -8,19 +8,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "stylua";
-  version = "0.9.2";
+  version = "0.11.3";
 
   src = fetchFromGitHub {
     owner = "johnnymorganz";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0idx4664p9ggv8p2pwgpch42li9ksiilszpwva19y4fa5xrmcyr2";
+    sha256 = "sha256-9V8vuFfyEdSzOG3Azk/e55N+Oh1VtMgcM+/PEMwJ6DI=";
   };
 
-  cargoSha256 = "1hc7zvrfiiijk4wr6i5jk6k32nz0lf64gqin3n8b8x5pp9d8fcfk";
+  cargoSha256 = "sha256-PrZojkObidzzVv6KwFtI1QUGj5UB5TiMmzdBKq45Ci4=";
 
-  cargoBuildFlags = lib.optionals lua52Support [ "--features" "lua52" ]
-    ++ lib.optionals luauSupport [ "--features" "luau" ];
+  buildFeatures = lib.optional lua52Support "lua52"
+    ++ lib.optional luauSupport "luau";
 
   # test_standard fails on darwin
   doCheck = !stdenvNoCC.isDarwin;

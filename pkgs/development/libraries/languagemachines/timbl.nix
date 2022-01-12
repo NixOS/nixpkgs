@@ -5,7 +5,7 @@
 }:
 
 let
-  release = builtins.fromJSON (builtins.readFile ./release-info/LanguageMachines-timbl.json);
+  release = lib.importJSON ./release-info/LanguageMachines-timbl.json;
 in
 
 stdenv.mkDerivation {

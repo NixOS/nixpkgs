@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sidplayfp";
-  version = "2.2.0";
+  version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "libsidplayfp";
     repo = "sidplayfp";
     rev = "v${version}";
-    sha256 = "sha256-hN7225lhuYyo4wPDiiEc9FaPg90pZ13mLw93V8tb/P0=";
+    sha256 = "sha256-DBZZf3A0AYkeQxQvHGyHHbsQ2EDuxsZnZPbxkWTNcHA=";
   };
 
   nativeBuildInputs = [ autoreconfHook perl pkg-config ];

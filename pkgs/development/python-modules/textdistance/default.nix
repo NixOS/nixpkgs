@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "textdistance";
-  version = "4.2.1";
+  version = "4.2.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "114j3ignw4y9yq1cp08p4bfw518vyr3p0h8ba2mikwy74qxxzy26";
+    sha256 = "a43bb6f71dcccd3fc2060065c9513a7927879680512889749fd1fd800c4bad8e";
   };
 
   # There aren't tests
@@ -18,6 +18,6 @@ buildPythonPackage rec {
     description = "Python library for comparing distance between two or more sequences";
     homepage = "https://github.com/life4/textdistance";
     license = licenses.mit;
-    maintainers = with maintainers; [ eduardosm ];
+    maintainers = with maintainers; [ ];
   };
 }

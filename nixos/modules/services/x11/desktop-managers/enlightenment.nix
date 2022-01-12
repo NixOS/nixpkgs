@@ -36,6 +36,7 @@ in
       enlightenment.econnman
       enlightenment.efl
       enlightenment.enlightenment
+      enlightenment.ecrire
       enlightenment.ephoto
       enlightenment.rage
       enlightenment.terminology
@@ -65,9 +66,24 @@ in
 
     # Wrappers for programs installed by enlightenment that should be setuid
     security.wrappers = {
-      enlightenment_ckpasswd.source = "${pkgs.enlightenment.enlightenment}/lib/enlightenment/utils/enlightenment_ckpasswd";
-      enlightenment_sys.source = "${pkgs.enlightenment.enlightenment}/lib/enlightenment/utils/enlightenment_sys";
-      enlightenment_system.source = "${pkgs.enlightenment.enlightenment}/lib/enlightenment/utils/enlightenment_system";
+      enlightenment_ckpasswd =
+        { setuid = true;
+          owner = "root";
+          group = "root";
+          source = "${pkgs.enlightenment.enlightenment}/lib/enlightenment/utils/enlightenment_ckpasswd";
+        };
+      enlightenment_sys =
+        { setuid = true;
+          owner = "root";
+          group = "root";
+          source = "${pkgs.enlightenment.enlightenment}/lib/enlightenment/utils/enlightenment_sys";
+        };
+      enlightenment_system =
+        { setuid = true;
+          owner = "root";
+          group = "root";
+          source = "${pkgs.enlightenment.enlightenment}/lib/enlightenment/utils/enlightenment_system";
+        };
     };
 
     environment.etc."X11/xkb".source = xcfg.xkbDir;

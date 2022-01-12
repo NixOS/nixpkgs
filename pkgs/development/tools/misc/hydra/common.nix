@@ -26,6 +26,7 @@ let
         CatalystPluginAccessLog
         CatalystPluginAuthorizationRoles
         CatalystPluginCaptcha
+        CatalystPluginPrometheusTiny
         CatalystPluginSessionStateCookie
         CatalystPluginSessionStoreFastMmap
         CatalystPluginSmartURI
@@ -59,6 +60,7 @@ let
         NetPrometheus
         NetStatsd
         PadWalker
+        PrometheusTinyShared
         Readonly
         SQLSplitStatement
         SetScalar

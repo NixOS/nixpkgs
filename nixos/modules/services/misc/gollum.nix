@@ -100,6 +100,7 @@ in
       serviceConfig = {
         User = config.users.users.gollum.name;
         Group = config.users.groups.gollum.name;
+        WorkingDirectory = cfg.stateDir;
         ExecStart = ''
           ${pkgs.gollum}/bin/gollum \
             --port ${toString cfg.port} \

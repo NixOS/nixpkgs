@@ -4,7 +4,7 @@
 , pythonOlder
 , pybind11
 , pytestCheckHook
-, dateutil
+, python-dateutil
 , doxygen
 , python
 , pelican
@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "pytomlpp";
-  version = "0.3.5";
+  version = "1.0.6";
 
   src = fetchFromGitHub {
     owner = "bobfang1992";
     repo = pname;
-    rev = version;
+    rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "1h06a2r0f5q4mml485113mn7a7585zmhqsk2p1apcybyydllcqda";
+    sha256 = "sha256-QyjIJCSgiSKjqMBvCbOlWYx6rBbKIoDvXez2YnYaPUo=";
   };
 
   buildInputs = [ pybind11 ];
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   checkInputs = [
     pytestCheckHook
 
-    dateutil
+    python-dateutil
     doxygen
     python
     pelican

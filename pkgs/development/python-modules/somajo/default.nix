@@ -2,14 +2,14 @@
 
 buildPythonPackage rec {
   pname = "SoMaJo";
-  version = "2.1.3";
+  version = "2.1.6";
   disabled = !isPy3k;
 
   src = fetchFromGitHub {
     owner = "tsproisl";
     repo = pname;
     rev = "v${version}";
-    sha256 = "07jkkg5ph5m47xf8w5asy5930qcpy6p11j0admll2y6yjynd2b47";
+    sha256 = "1q88x05729qdnl1gbahisjk3s97wha0b5dj3n63kq2qyvyy0929s";
   };
 
   propagatedBuildInputs = [ regex ];
@@ -21,6 +21,6 @@ buildPythonPackage rec {
     description = "Tokenizer and sentence splitter for German and English web texts";
     homepage = "https://github.com/tsproisl/SoMaJo";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ danieldk ];
+    maintainers = with maintainers; [ ];
   };
 }

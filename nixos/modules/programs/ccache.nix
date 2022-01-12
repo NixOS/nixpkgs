@@ -28,7 +28,9 @@ in {
 
       # "nix-ccache --show-stats" and "nix-ccache --clear"
       security.wrappers.nix-ccache = {
+        owner = "root";
         group = "nixbld";
+        setuid = false;
         setgid = true;
         source = pkgs.writeScript "nix-ccache.pl" ''
           #!${pkgs.perl}/bin/perl

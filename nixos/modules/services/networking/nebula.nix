@@ -30,7 +30,7 @@ in
             package = mkOption {
               type = types.package;
               default = pkgs.nebula;
-              defaultText = "pkgs.nebula";
+              defaultText = literalExpression "pkgs.nebula";
               description = "Nebula derivation to use.";
             };
 
@@ -59,9 +59,7 @@ in
                 The static host map defines a set of hosts with fixed IP addresses on the internet (or any network).
                 A host can have multiple fixed IP addresses defined here, and nebula will try each when establishing a tunnel.
               '';
-              example = literalExample ''
-                { "192.168.100.1" = [ "100.64.22.11:4242" ]; }
-              '';
+              example = { "192.168.100.1" = [ "100.64.22.11:4242" ]; };
             };
 
             isLighthouse = mkOption {
@@ -77,7 +75,7 @@ in
                 List of IPs of lighthouse hosts this node should report to and query from. This should be empty on lighthouse
                 nodes. The IPs should be the lighthouse's Nebula IPs, not their external IPs.
               '';
-              example = ''[ "192.168.100.1" ]'';
+              example = [ "192.168.100.1" ];
             };
 
             listen.host = mkOption {
@@ -110,14 +108,14 @@ in
               type = types.listOf types.attrs;
               default = [];
               description = "Firewall rules for outbound traffic.";
-              example = ''[ { port = "any"; proto = "any"; host = "any"; } ]'';
+              example = [ { port = "any"; proto = "any"; host = "any"; } ];
             };
 
             firewall.inbound = mkOption {
               type = types.listOf types.attrs;
               default = [];
               description = "Firewall rules for inbound traffic.";
-              example = ''[ { port = "any"; proto = "any"; host = "any"; } ]'';
+              example = [ { port = "any"; proto = "any"; host = "any"; } ];
             };
 
             settings = mkOption {
@@ -128,7 +126,7 @@ in
                 <link xlink:href="https://github.com/slackhq/nebula/blob/master/examples/config.yml"/>
                 for details on supported values.
               '';
-              example = literalExample ''
+              example = literalExpression ''
                 {
                   lighthouse.dns = {
                     host = "0.0.0.0";

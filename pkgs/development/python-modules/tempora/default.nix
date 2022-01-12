@@ -1,16 +1,16 @@
 { lib, buildPythonPackage, fetchPypi
 , setuptools-scm, pytest, pytest-freezegun, freezegun, backports_unittest-mock
 , six, pytz, jaraco_functools, pythonOlder
-, pytest-flake8, pytestcov, pytest-black, pytest-mypy
+, pytest-flake8, pytest-cov, pytest-black, pytest-mypy
 }:
 
 buildPythonPackage rec {
   pname = "tempora";
-  version = "4.0.1";
+  version = "4.1.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9af06854fafb26d3d40d3dd6402e8baefaf57f90e48fdc9a94f6b22827a60fb3";
+    sha256 = "fd6cafd66b01390d53a760349cf0b3123844ec6ae3d1043d7190473ea9459138";
   };
 
   disabled = pythonOlder "3.2";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytest-freezegun pytest freezegun backports_unittest-mock
-    pytest-flake8 pytestcov pytest-black pytest-mypy
+    pytest-flake8 pytest-cov pytest-black pytest-mypy
   ];
 
   checkPhase = ''

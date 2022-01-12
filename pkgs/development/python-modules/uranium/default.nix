@@ -2,7 +2,7 @@
 , pyqt5, numpy, scipy, shapely, libarcus, cryptography, doxygen, gettext, pythonOlder }:
 
 buildPythonPackage rec {
-  version = "4.9.0";
+  version = "4.12.0";
   pname = "uranium";
   format = "other";
 
@@ -10,7 +10,7 @@ buildPythonPackage rec {
     owner = "Ultimaker";
     repo = "Uranium";
     rev = version;
-    sha256 = "0bqrc4g4pd7b209swlv06bm5sx7df96h9kjpqpra4mfz469km4nn";
+    sha256 = "sha256-SE9xqrloPXIRTJiiqUdRKFmb4c0OjmJK5CMn6VXMFmk=";
   };
 
   disabled = pythonOlder "3.5.0";

@@ -12,23 +12,17 @@
 , GitPython
 , prettytable
 , idna
+, packageurl-python
 }:
+
 buildPythonPackage rec {
   pname = "tern";
-  version = "2.5.0";
+  version = "2.9.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "606c62944991b2cbcccf3f5353be693305d6d7d318c3865b9ecca49dbeab2727";
+    sha256 = "9cb509dba91718feecefd302388a89d4782454f6613e8f931ec8de87a6594de0";
   };
-
-  patches = [
-    # debut was renamed to debian-inspector
-    # https://github.com/tern-tools/tern/pull/962
-    # NOTE: Has to be in-tree because the upstream patch doesn't apply cleanly
-    # to the PyPi source.
-    ./0001-Replace-debut-with-debian-inspector.patch
-  ];
 
   preBuild = ''
     cp requirements.{in,txt}
@@ -49,6 +43,7 @@ buildPythonPackage rec {
     GitPython
     prettytable
     idna
+    packageurl-python
   ];
 
   # No tests

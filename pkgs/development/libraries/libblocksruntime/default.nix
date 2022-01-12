@@ -1,7 +1,8 @@
 { lib, stdenv, fetchFromGitHub, clang }:
 
 stdenv.mkDerivation {
-  name = "blocksruntime-20140624";
+  pname = "blocksruntime";
+  version = "unstable-2014-06-24";
 
   src = fetchFromGitHub {
     owner = "mackyle";

@@ -214,6 +214,7 @@ in stdenv.mkDerivation (fBuildAttrs // {
       --output_base="$bazelOut" \
       --output_user_root="$bazelUserRoot" \
       build \
+      --curses=no \
       -j $NIX_BUILD_CORES \
       "''${copts[@]}" \
       "''${host_copts[@]}" \

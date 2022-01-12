@@ -19,7 +19,6 @@ let
         };
 
         networking.firewall.allowedTCPPorts = [ 2181 ];
-        virtualisation.memorySize = 1024;
       };
       kafka = { ... }: {
         services.apache-kafka = {
@@ -75,7 +74,6 @@ let
   }) { inherit system; });
 
 in with pkgs; {
-  kafka_2_4  = makeKafkaTest "kafka_2_4"  apacheKafka_2_4;
-  kafka_2_5  = makeKafkaTest "kafka_2_5"  apacheKafka_2_5;
-  kafka_2_6  = makeKafkaTest "kafka_2_6"  apacheKafka_2_6;
+  kafka_2_7  = makeKafkaTest "kafka_2_7"  apacheKafka_2_7;
+  kafka_2_8  = makeKafkaTest "kafka_2_8"  apacheKafka_2_8;
 }

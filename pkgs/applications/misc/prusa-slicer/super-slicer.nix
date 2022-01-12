@@ -1,22 +1,30 @@
 { lib, fetchFromGitHub, makeDesktopItem, prusa-slicer }:
 let
   appname = "SuperSlicer";
-  version = "2.3.56.5";
   pname = "super-slicer";
   description = "PrusaSlicer fork with more features and faster development cycle";
-  override = super: {
+
+  versions = {
+    stable = { version = "2.3.57.9"; sha256 = "sha256-JWZ6PdzKwxdyp7StYuW69XGbTPoxaIJ2R4Ynmc65hvE="; };
+    latest = { version = "2.3.57.9"; sha256 = "sha256-JWZ6PdzKwxdyp7StYuW69XGbTPoxaIJ2R4Ynmc65hvE="; };
+  };
+
+  override = { version, sha256 }: super: {
     inherit version pname;
 
     src = fetchFromGitHub {
       owner = "supermerill";
       repo = "SuperSlicer";
-      sha256 = "sha256-Gg+LT1YKyUGNJE9XvWE1LSlIQ6Vq5GfVBTUw/A7Qx7E=";
+      inherit sha256;
       rev = version;
       fetchSubmodules = true;
     };
 
+    patches = null;
+
     # We don't need PS overrides anymore, and gcode-viewer is embedded in the binary.
     postInstall = null;
+    separateDebugInfo = true;
 
     # See https://github.com/supermerill/SuperSlicer/issues/432
     cmakeFlags = super.cmakeFlags ++ [
@@ -40,7 +48,13 @@ let
       homepage = "https://github.com/supermerili/SuperSlicer";
       license = licenses.agpl3;
       maintainers = with maintainers; [ cab404 moredread ];
+      mainProgram = "superslicer";
     };
 
+    passthru = allVersions;
+
   };
-in prusa-slicer.overrideAttrs override
+
+  allVersions = builtins.mapAttrs (_name: version: (prusa-slicer.overrideAttrs (override version))) versions;
+in
+allVersions.stable

@@ -1,34 +1,106 @@
-{ lib, mkDerivation, fetchFromGitHub, cmake, pkg-config, SDL2, qtbase
-, wrapQtAppsHook, qttools, ninja, gtk3 }:
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, SDL2
+, cmake
+, curl
+, extra-cmake-modules
+, gtk3
+, libevdev
+, libpulseaudio
+, mesa
+, ninja
+, pkg-config
+, qtbase
+, qttools
+, sndio
+, vulkan-loader
+, wayland
+, wrapQtAppsHook
+}:
+
 mkDerivation rec {
   pname = "duckstation";
-  version = "unstable-2020-12-29";
+  version = "0.pre+date=2021-12-16";
 
   src = fetchFromGitHub {
     owner = "stenzek";
     repo = pname;
-    rev = "f8dcfabc44ff8391b2d41eab2e883dc8f21a88b7";
-    sha256 = "0v6w4di4yj1hbxpqqrcw8rbfjg18g9kla8mnb3b5zgv7i4dyzykw";
+    rev = "59cb7c03432f5f8d9f6283c71a34825d05e118c6";
+    sha256 = "sha256-vF3YEpicbwCtR6QW2huNk0+pJ7BBjn/x9/Ae1c00gN4=";
   };
 
-  nativeBuildInputs = [ cmake wrapQtAppsHook qttools ];
+  nativeBuildInputs = [
+    cmake
+    extra-cmake-modules
+    ninja
+    pkg-config
+    qttools
+    wrapQtAppsHook
+  ];
 
-  buildInputs = [ SDL2 qtbase gtk3 pkg-config ];
+  buildInputs = [
+    SDL2
+    curl
+    gtk3
+    libevdev
+    libpulseaudio
+    mesa
+    qtbase
+    sndio
+    vulkan-loader
+    wayland
+  ];
 
-  installPhase = ''
-    mkdir -p $out/
-    mv bin $out/
+  cmakeFlags = [
+    "-DUSE_DRMKMS=ON"
+    "-DUSE_WAYLAND=ON"
+  ];
+
+  postPatch = ''
+    substituteInPlace extras/linux-desktop-files/duckstation-qt.desktop \
+      --replace "duckstation-qt" "duckstation" \
+      --replace "TryExec=duckstation" "tryExec=duckstation-qt" \
+      --replace "Exec=duckstation" "Exec=duckstation-qt"
+    substituteInPlace extras/linux-desktop-files/duckstation-nogui.desktop \
+      --replace "duckstation-nogui" "duckstation" \
+      --replace "TryExec=duckstation" "tryExec=duckstation-nogui" \
+      --replace "Exec=duckstation" "Exec=duckstation-nogui"
   '';
 
-  # TODO:
-  # - vulkan graphics backend (OpenGL works).
-  # - default sound backend (cubeb) does not work, but SDL does.
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/bin $out/share $out/share/pixmaps $out/share/applications
+    rm bin/common-tests
+
+    cp -r bin $out/share/duckstation
+    ln -s $out/share/duckstation/duckstation-{qt,nogui} $out/bin/
+
+    cp ../extras/icons/icon-256px.png $out/share/pixmaps/duckstation.png
+    cp ../extras/linux-desktop-files/* $out/share/applications/
+
+    runHook postInstall
+  '';
+
+  doCheck = true;
+  checkPhase = ''
+    runHook preCheck
+    ./bin/common-tests
+    runHook postCheck
+  '';
+
+  qtWrapperArgs = [
+    "--prefix LD_LIBRARY_PATH : ${vulkan-loader}/lib"
+  ];
+
   meta = with lib; {
-    description =
-      "PlayStation 1 emulator focusing on playability, speed and long-term maintainability";
     homepage = "https://github.com/stenzek/duckstation";
-    license = licenses.gpl3;
+    description = "Fast PlayStation 1 emulator for x86-64/AArch32/AArch64";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ guibou AndersonTorres ];
     platforms = platforms.linux;
-    maintainers = [ maintainers.guibou ];
   };
 }
+# TODO: default sound backend (cubeb) does not work, but SDL does. Strangely,
+# switching to cubeb while a game is running makes it work.

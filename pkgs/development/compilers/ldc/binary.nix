@@ -3,8 +3,8 @@
 
 let
   inherit (stdenv) hostPlatform;
-  OS = if stdenv.hostPlatform.isDarwin then "osx" else hostPlatform.parsed.kernel.name;
-  ARCH = toString hostPlatform.parsed.cpu.name;
+  OS = if hostPlatform.isDarwin then "osx" else hostPlatform.parsed.kernel.name;
+  ARCH = if hostPlatform.isDarwin && hostPlatform.isAarch64 then "arm64" else hostPlatform.parsed.cpu.name;
 in stdenv.mkDerivation {
   pname = "ldc-bootstrap";
   inherit version;
@@ -32,12 +32,11 @@ in stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    inherit version;
     description = "The LLVM-based D Compiler";
     homepage = "https://github.com/ldc-developers/ldc";
     # from https://github.com/ldc-developers/ldc/blob/master/LICENSE
     license = with licenses; [ bsd3 boost mit ncsa gpl2Plus ];
     maintainers = with maintainers; [ ThomasMader lionello ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ];
   };
 }

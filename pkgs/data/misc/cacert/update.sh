@@ -28,7 +28,7 @@ BASEDIR="$(dirname "$0")/../../../.."
 
 
 CURRENT_PATH=$(nix-build --no-out-link -A cacert.out)
-PATCHED_PATH=$(nix-build --no-out-link -E "with import $BASEDIR {}; let nss_pkg = pkgs.nss_latest or pkgs.nss; in (cacert.overrideAttrs (_: { inherit (nss_pkg) src version; })).out")
+PATCHED_PATH=$(nix-build --no-out-link -E "with import $BASEDIR {}; let nss_pkg = pkgs.nss_latest or pkgs.nss; in (cacert.override { nssOverride = nss_pkg; }).out")
 
 # Check the hash of the etc subfolder
 # We can't check the entire output as that contains the nix-support folder
@@ -38,5 +38,5 @@ PATCHED_HASH=$(nix-hash "$PATCHED_PATH/etc")
 
 if [[ "$CURRENT_HASH" !=  "$PATCHED_HASH" ]]; then
     NSS_VERSION=$(nix-instantiate --json --eval -E "with import $BASEDIR {}; nss.version" | jq -r .)
-    update-source-version cacert "$NSS_VERSION"
+    update-source-version --version-key=srcVersion cacert.src "$NSS_VERSION"
 fi

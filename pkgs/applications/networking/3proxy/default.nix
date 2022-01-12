@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "3proxy";
-  version = "0.9.3";
+  version = "0.9.4";
 
   src = fetchFromGitHub {
     owner = "z3APA3A";
     repo = pname;
     rev = version;
-    sha256 = "9aopwyz0U2bYTvx5YWLJo9EE8Xfb51IOguHRJodjpm8=";
+    sha256 = "sha256-4bLlQ/ULvpjs6fr19yBBln5mRRc+yj+zVLiTs1e/Ypc=";
   };
 
   makeFlags = [

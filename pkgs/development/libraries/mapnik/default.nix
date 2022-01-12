@@ -1,6 +1,6 @@
 { lib, stdenv, fetchzip
 , boost, cairo, freetype, gdal, harfbuzz, icu, libjpeg, libpng, libtiff
-, libwebp, libxml2, proj, python, sqlite, zlib
+, libwebp, libxml2, proj, python3, python ? python3, sqlite, zlib
 
 # supply a postgresql package to enable the PostGIS input plugin
 , postgresql ? null
@@ -19,15 +19,15 @@ stdenv.mkDerivation rec {
   # a distinct dev output makes python-mapnik fail
   outputs = [ "out" ];
 
-  nativeBuildInputs = [ python ];
+  nativeBuildInputs = [ python3 ];
 
-  buildInputs =
-    [ boost cairo freetype gdal harfbuzz icu libjpeg libpng libtiff
-      libwebp proj python sqlite zlib
+  buildInputs = [
+    boost cairo freetype gdal harfbuzz icu libjpeg libpng libtiff
+    libwebp proj python sqlite zlib
 
-      # optional inputs
-      postgresql
-    ];
+    # optional inputs
+    postgresql
+  ];
 
   propagatedBuildInputs = [ libxml2 ];
 
@@ -93,8 +93,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "An open source toolkit for developing mapping applications";
     homepage = "https://mapnik.org";
-    maintainers = with maintainers; [ hrdinka ];
+    maintainers = with maintainers; [ hrdinka erictapen ];
     license = licenses.lgpl21;
     platforms = platforms.all;
+    # https://github.com/mapnik/mapnik/issues/4232
+    broken = lib.versionAtLeast proj.version "8.0.0";
   };
 }

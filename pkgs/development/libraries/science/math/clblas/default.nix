@@ -35,9 +35,8 @@ stdenv.mkDerivation rec {
      "-DBUILD_TEST=OFF"
   ];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake gfortran ];
   buildInputs = [
-    gfortran
     blas
     python3
     boost

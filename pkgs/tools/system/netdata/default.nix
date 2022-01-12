@@ -16,14 +16,14 @@ with lib;
 let
   go-d-plugin = callPackage ./go.d.plugin.nix {};
 in stdenv.mkDerivation rec {
-  version = "1.31.0";
+  version = "1.32.1";
   pname = "netdata";
 
   src = fetchFromGitHub {
     owner = "netdata";
     repo = "netdata";
     rev = "v${version}";
-    sha256 = "0735cxmljrp8zlkcq7hcxizy4j4xiv7vf782zkz5chn06n38mcik";
+    sha256 = "sha256-DbuR3x7d6synJELOxI+frK4LY9zFgPKmY7hGY8B5z7o=";
     fetchSubmodules = true;
   };
 
@@ -42,6 +42,11 @@ in stdenv.mkDerivation rec {
     # required to prevent plugins from relying on /etc
     # and /var
     ./no-files-in-etc-and-var.patch
+    # The current IPC location is unsafe as it writes
+    # a fixed path in /tmp, which is world-writable.
+    # Therefore we put it into `/run/netdata`, which is owned
+    # by netdata only.
+    ./ipc-socket-in-run.patch
   ];
 
   NIX_CFLAGS_COMPILE = optionalString withDebug "-O1 -ggdb -DNETDATA_INTERNAL_CHECKS=1";
@@ -82,7 +87,10 @@ in stdenv.mkDerivation rec {
     wrapProgram $out/bin/netdata-claim.sh --prefix PATH : ${lib.makeBinPath [ openssl ]}
   '';
 
-  passthru.tests.netdata = nixosTests.netdata;
+  passthru = {
+    inherit withIpmi;
+    tests.netdata = nixosTests.netdata;
+  };
 
   meta = {
     description = "Real-time performance monitoring tool";

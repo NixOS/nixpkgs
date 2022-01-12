@@ -2,15 +2,15 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = "chipz";
-  version = "20190202-git";
+  version = "20210807-git";
 
   description = "A library for decompressing deflate, zlib, and gzip data";
 
   deps = [ ];
 
   src = fetchurl {
-    url = "http://beta.quicklisp.org/archive/chipz/2019-02-02/chipz-20190202-git.tgz";
-    sha256 = "1vk8nml2kvkpwydcnm49gz2j9flvl8676kbvci5qa7qm286dhn5a";
+    url = "http://beta.quicklisp.org/archive/chipz/2021-08-07/chipz-20210807-git.tgz";
+    sha256 = "0g7xhh4yq9azjq7gnszaq2kbxima2q30apb3rrglc1ign973hr8x";
   };
 
   packageName = "chipz";
@@ -20,7 +20,7 @@ rec {
 }
 /* (SYSTEM chipz DESCRIPTION
     A library for decompressing deflate, zlib, and gzip data SHA256
-    1vk8nml2kvkpwydcnm49gz2j9flvl8676kbvci5qa7qm286dhn5a URL
-    http://beta.quicklisp.org/archive/chipz/2019-02-02/chipz-20190202-git.tgz
-    MD5 e3533408ca6899fe996eede390e820c7 NAME chipz FILENAME chipz DEPS NIL
-    DEPENDENCIES NIL VERSION 20190202-git SIBLINGS NIL PARASITES NIL) */
+    0g7xhh4yq9azjq7gnszaq2kbxima2q30apb3rrglc1ign973hr8x URL
+    http://beta.quicklisp.org/archive/chipz/2021-08-07/chipz-20210807-git.tgz
+    MD5 11438e3bc60c39294c337cb232ae8040 NAME chipz FILENAME chipz DEPS NIL
+    DEPENDENCIES NIL VERSION 20210807-git SIBLINGS NIL PARASITES NIL) */

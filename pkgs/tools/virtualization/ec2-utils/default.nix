@@ -1,7 +1,7 @@
 { stdenv, lib, rpmextract, fetchurl, python2, tree }:
 
 stdenv.mkDerivation {
-  name = "ec2-utils";
+  pname = "ec2-utils";
   version = "0.5.1";
 
   # The url can be determined by booting an "Amazon Linux 2" and running:

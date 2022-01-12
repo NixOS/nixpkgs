@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, fetchpatch, openssl, libpcap, python2, withPython ? false }:
 
 stdenv.mkDerivation rec {
-  name = "vde2-2.3.2";
+  pname = "vde2";
+  version = "2.3.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/vde/vde2/2.3.1/${name}.tar.gz";
+    url = "mirror://sourceforge/vde/vde2/${version}/vde2-${version}.tar.gz";
     sha256 = "14xga0ib6p1wrv3hkl4sa89yzjxv7f1vfqaxsch87j6scdm59pr2";
   };
 
@@ -12,7 +13,7 @@ stdenv.mkDerivation rec {
     # Fix build with openssl 1.1.0
     (fetchpatch {
       name = "vde_cryptcab-compile-against-openssl-1.1.0.patch";
-      url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/vde_cryptcab-compile-against-openssl-1.1.0.patch?h=packages/vde2&id=15b11be49997fa94b603e366064690b7cc6bce61";
+      url = "https://raw.githubusercontent.com/archlinux/svntogit-packages/15b11be49997fa94b603e366064690b7cc6bce61/trunk/vde_cryptcab-compile-against-openssl-1.1.0.patch";
       sha256 = "07z1yabwigq35mkwzqa934n7vjnjlqz5xfzq8cfj87lgyjjp00qi";
     })
   ] ++ lib.optional stdenv.hostPlatform.isMusl [
@@ -32,6 +33,13 @@ stdenv.mkDerivation rec {
     ++ lib.optional withPython python2;
 
   hardeningDisable = [ "format" ];
+
+  # Disable parallel build as it fails as:
+  #   make: *** No rule to make target '../../src/lib/libvdemgmt.la',
+  #    needed by 'libvdesnmp.la'.  Stop.
+  # Next release should address it with
+  #     https://github.com/virtualsquare/vde-2/commit/7dd9ed46d5dca125ca45d679ac9f3acbfb0f9300.patch
+  enableParallelBuilding = false;
 
   meta = with lib; {
     homepage = "https://github.com/virtualsquare/vde-2";

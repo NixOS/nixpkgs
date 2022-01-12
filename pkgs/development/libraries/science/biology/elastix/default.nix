@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   ";
 
   meta = with lib; {
-    homepage = "http://elastix.isi.uu.nl/";
+    homepage = "https://elastix.lumc.nl";
     description = "Image registration toolkit based on ITK";
     maintainers = with maintainers; [ bcdarwin ];
     platforms = platforms.x86_64;  # libitkpng linker issues with ITK 5.1

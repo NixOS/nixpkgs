@@ -18,13 +18,13 @@ let
 in
 pythonPackages.buildPythonApplication rec {
   pname = "picard";
-  version = "2.6.3";
+  version = "2.6.4";
 
   src = fetchFromGitHub {
     owner = "metabrainz";
     repo = pname;
     rev = "release-${version}";
-    sha256 = "sha256-bSqGgRXqHGjT+OYCEafsT/btVe+n91+L0kB8fnrywss=";
+    sha256 = "0lm7s9jy7z4an3xxj3gnxxf2xx045i157qaxysbdhcq5lwlmznc7";
   };
 
   nativeBuildInputs = [ gettext qt5.wrapQtAppsHook qt5.qtbase ]
@@ -40,7 +40,7 @@ pythonPackages.buildPythonApplication rec {
 
   propagatedBuildInputs = with pythonPackages; [
     chromaprint
-    dateutil
+    python-dateutil
     discid
     fasteners
     mutagen

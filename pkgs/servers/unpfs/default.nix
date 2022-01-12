@@ -2,18 +2,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "unpfs";
-  version = "0.0.2019-05-17";
+  version = "unstable-2021-04-23";
 
   src = fetchFromGitHub {
     owner = "pfpacket";
     repo = "rust-9p";
-    rev = "01cf9c60bff0f35567d876db7be7fb86032b44eb";
-    sha256 = "0mhmr1912z5nyfpcvhnlgb3v67a5n7i2n9l5abi05sfqffqssi79";
+    rev = "6d9b62aa182c5764e00b96f93109feb605d9eac9";
+    sha256 = "sha256-zyDkUb+bFsVnxAE4UODbnRtDim7gqUNuY22vuxMsLZM=";
   };
 
   sourceRoot = "source/example/unpfs";
 
-  cargoSha256 = "1vdk99qz23lkh5z03qjjs3d6p2vdmxrmd2km9im94gzgcyb2fvjs";
+  cargoSha256 = "sha256-v8hbxKuxux0oYglEIK5dM9q0oBQzjyYDP1JB1cYR/T0=";
 
   RUSTC_BOOTSTRAP = 1;
 

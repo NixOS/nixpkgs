@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname   = "pysam";
-  version = "0.16.0.1";
+  version = "0.18.0";
 
   # Fetching from GitHub instead of PyPi cause the 0.13 src release on PyPi is
   # missing some files which cause test failures.
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "pysam-developers";
     repo = "pysam";
     rev = "v${version}";
-    sha256 = "168bwwm8c2k22m7paip8q0yajyl7xdxgnik0bgjl7rhqg0majz0f";
+    sha256 = "042ca27r6634xg2ixgvq1079cp714wmm6ml7bwc1snn0wxxzywfg";
   };
 
   nativeBuildInputs = [ samtools ];

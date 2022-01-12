@@ -1,15 +1,17 @@
 diff --git a/dolphin/mat2.desktop b/dolphin/mat2.desktop
-index e623962..5d69ae2 100644
+index d365bc5..56313e2 100644
 --- a/dolphin/mat2.desktop
 +++ b/dolphin/mat2.desktop
-@@ -7,5 +7,5 @@ Type=Service
- [Desktop Action cleanMetadata]
+@@ -8,6 +8,6 @@ Type=Service
  Name=Clean metadata
+ Name[de]=Metadaten löschen
  Name[es]=Limpiar metadatos
 -Icon=/usr/share/icons/hicolor/scalable/apps/mat2.svg
 -Exec=kdialog --yesno  "$( mat2 -s %U )" --title "Clean Metadata?" && mat2 %U
+-Exec[de]=kdialog --yesno  "$( mat2 -s %U )" --title "Metadaten löschen?" && mat2 %U
 +Icon=@mat2svg@
-+Exec=@kdialog@ --yesno  "$( @mat2@ -s %U )" --title "Clean Metadata?" && @mat2@ %U
++Exec=@kdialog@ --yesno  "$( mat2 -s %U )" --title "Clean Metadata?" && mat2 %U
++Exec[de]=@kdialog@ --yesno  "$( mat2 -s %U )" --title "Metadaten löschen?" && mat2 %U
 diff --git a/libmat2/bubblewrap.py b/libmat2/bubblewrap.py
 index 970d5dd..5d3c0b7 100644
 --- a/libmat2/bubblewrap.py

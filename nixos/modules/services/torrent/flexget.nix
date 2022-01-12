@@ -39,7 +39,7 @@ in {
 
       systemScheduler = mkOption {
         default = true;
-        example = "false";
+        example = false;
         type = types.bool;
         description = "When true, execute the runs via the flexget-runner.timer. If false, you have to specify the settings yourself in the YML file.";
       };

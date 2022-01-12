@@ -95,7 +95,7 @@ config.security.apparmor.includes = {
      include "${pkgs.apparmor-profiles}/etc/apparmor.d/abstractions/consoles"
   '';
   "abstractions/cups-client" = ''
-    include "${pkgs.apparmor-profiles}/etc/apparmor.d/abstractions/cpus-client"
+    include "${pkgs.apparmor-profiles}/etc/apparmor.d/abstractions/cups-client"
     ${etcRule "cups/cups-client.conf"}
   '';
   "abstractions/dbus-session-strict" = ''

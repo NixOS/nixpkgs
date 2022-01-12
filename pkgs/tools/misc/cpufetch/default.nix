@@ -1,17 +1,23 @@
-{ stdenv, lib, fetchFromGitHub, installShellFiles }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, installShellFiles
+}:
 
 stdenv.mkDerivation rec {
   pname = "cpufetch";
-  version = "0.94";
+  version = "1.01";
 
   src = fetchFromGitHub {
-    owner  = "Dr-Noob";
-    repo   = "cpufetch";
-    rev    = "v${version}";
-    sha256 = "1gncgkhqd8bnz254qa30yyl10qm28dwx6aif0dwrj38z5ql40ck9";
+    owner = "Dr-Noob";
+    repo = "cpufetch";
+    rev = "v${version}";
+    sha256 = "sha256-vae/59eEDuZUDsTHE93mi+L8WBr3H4zp+mzXg7WWusA=";
   };
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -19,7 +25,7 @@ stdenv.mkDerivation rec {
     mkdir $out
     install -Dm755 cpufetch   $out/bin/cpufetch
     install -Dm644 LICENSE    $out/share/licenses/cpufetch/LICENSE
-    installManPage cpufetch.8
+    installManPage cpufetch.1
 
     runHook postInstall
   '';

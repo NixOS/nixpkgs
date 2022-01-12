@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchPypi
 , numpy
-, pytest
 , pythonOlder
 }:
 

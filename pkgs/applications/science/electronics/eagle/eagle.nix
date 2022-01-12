@@ -66,8 +66,8 @@ let
       # Make desktop item
       mkdir -p "$out"/share/applications
       cp "$desktopItem"/share/applications/* "$out"/share/applications/
-      mkdir -p "$out"/share/icons
-      ln -s "$out/eagle-${version}/bin/eagle-logo.png" "$out"/share/icons/eagle.png
+      mkdir -p "$out"/share/pixmaps
+      ln -s "$out/eagle-${version}/bin/eagle-logo.png" "$out"/share/pixmaps/eagle.png
     '';
 
     meta = with lib; {
@@ -75,6 +75,6 @@ let
       homepage = "https://www.autodesk.com/products/eagle/overview";
       license = licenses.unfree;
       platforms = [ "x86_64-linux" ];
-      maintainers = [ maintainers.rittelle ];
+      maintainers = [ ];
     };
   }

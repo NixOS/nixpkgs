@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pipx";
-  version = "0.16.3";
+  version = "0.17.0";
 
   disabled = pythonOlder "3.6";
 
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "pipxproject";
     repo = pname;
     rev = version;
-    sha256 = "1w5pzn5mgl9rr9zbmqza5is4mvjvcgjps1q9qa1mvbnyvakdkr4c";
+    sha256 = "sha256-vR/tKV+ZB0nZaxEcB83dwoSI7kBC1rA+6fo30rizroM=";
   };
 
   propagatedBuildInputs = [

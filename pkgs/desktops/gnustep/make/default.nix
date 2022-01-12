@@ -1,12 +1,8 @@
 { lib, stdenv, fetchurl, clang, which, libobjc }:
 
-let
-  version = "2.9.0";
-in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "gnustep-make";
-  inherit version;
+  version = "2.9.0";
 
   src = fetchurl {
     url = "ftp://ftp.gnustep.org/pub/gnustep/core/gnustep-make-${version}.tar.gz";
@@ -32,6 +28,7 @@ stdenv.mkDerivation {
   meta = {
     description = "A build manager for GNUstep";
     homepage = "http://gnustep.org/";
+    changelog = "https://github.com/gnustep/tools-make/releases/tag/make-${builtins.replaceStrings [ "." ] [ "_" ] version}";
     license = lib.licenses.lgpl2Plus;
     maintainers = with lib.maintainers; [ ashalkhakov matthewbauer ];
     platforms = lib.platforms.unix;

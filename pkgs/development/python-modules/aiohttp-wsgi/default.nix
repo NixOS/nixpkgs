@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "aiohttp-wsgi";
-  version = "0.8.2";
+  version = "0.9.1";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "etianen";
     repo = pname;
     rev = version;
-    sha256 = "0wirn3xqxxgkpy5spicd7p1bkdnsrch61x2kcpdwpixmx961pq7x";
+    sha256 = "sha256-lQ0mAUqsOmozUIMd6nwRATaq8C5SUFGoyQu1v0RBnas=";
   };
 
   propagatedBuildInputs = [
@@ -24,6 +24,12 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # makes http request to another server
+    # https://github.com/etianen/aiohttp-wsgi/issues/32
+    "testEnviron"
   ];
 
   pythonImportsCheck = [ "aiohttp_wsgi" ];

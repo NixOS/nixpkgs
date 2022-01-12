@@ -17,6 +17,10 @@
 , target ? null
 # Select whether DYNAMIC_ARCH is enabled or not.
 , dynamicArch ? null
+# enable AVX512 optimized kernels.
+# These kernels have been a source of trouble in the past.
+# Use with caution.
+, enableAVX512 ? false
 , enableStatic ? stdenv.hostPlatform.isStatic
 , enableShared ? !stdenv.hostPlatform.isStatic
 }:
@@ -71,6 +75,7 @@ let
       BINARY = 64;
       TARGET = setTarget "ATHLON";
       DYNAMIC_ARCH = setDynamicArch true;
+      NO_AVX512 = !enableAVX512;
       USE_OPENMP = false;
       MACOSX_DEPLOYMENT_TARGET = "10.7";
     };
@@ -79,6 +84,7 @@ let
       BINARY = 64;
       TARGET = setTarget "ATHLON";
       DYNAMIC_ARCH = setDynamicArch true;
+      NO_AVX512 = !enableAVX512;
       USE_OPENMP = !stdenv.hostPlatform.isMusl;
     };
 
@@ -87,6 +93,13 @@ let
       TARGET = setTarget "POWER5";
       DYNAMIC_ARCH = setDynamicArch true;
       USE_OPENMP = !stdenv.hostPlatform.isMusl;
+    };
+
+    riscv64-linux = {
+      BINARY = 64;
+      TARGET = setTarget "RISCV64_GENERIC";
+      DYNAMIC_ARCH = setDynamicArch false;
+      USE_OPENMP = true;
     };
   };
 in
@@ -116,7 +129,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "openblas";
-  version = "0.3.15";
+  version = "0.3.18";
 
   outputs = [ "out" "dev" ];
 
@@ -124,7 +137,7 @@ stdenv.mkDerivation rec {
     owner = "xianyi";
     repo = "OpenBLAS";
     rev = "v${version}";
-    sha256 = "1qjr02cqncv20abdp1yzr55n7smhx6h9chqvb0xbp18byynvj87w";
+    sha256 = "sha256-b5i52rjsH65qAIlYGXQrzVxChi8/fwbD4eJTrxVq7Z8=";
   };
 
   inherit blas64;
@@ -195,15 +208,21 @@ EOF
     done
 
     # Setup symlinks for blas / lapack
+  '' + lib.optionalString enableShared ''
     ln -s $out/lib/libopenblas${shlibExt} $out/lib/libblas${shlibExt}
     ln -s $out/lib/libopenblas${shlibExt} $out/lib/libcblas${shlibExt}
     ln -s $out/lib/libopenblas${shlibExt} $out/lib/liblapack${shlibExt}
     ln -s $out/lib/libopenblas${shlibExt} $out/lib/liblapacke${shlibExt}
-  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
+  '' + lib.optionalString (stdenv.hostPlatform.isLinux && enableShared) ''
     ln -s $out/lib/libopenblas${shlibExt} $out/lib/libblas${shlibExt}.3
     ln -s $out/lib/libopenblas${shlibExt} $out/lib/libcblas${shlibExt}.3
     ln -s $out/lib/libopenblas${shlibExt} $out/lib/liblapack${shlibExt}.3
     ln -s $out/lib/libopenblas${shlibExt} $out/lib/liblapacke${shlibExt}.3
+  '' + lib.optionalString enableStatic ''
+    ln -s $out/lib/libopenblas.a $out/lib/libblas.a
+    ln -s $out/lib/libopenblas.a $out/lib/libcblas.a
+    ln -s $out/lib/libopenblas.a $out/lib/liblapack.a
+    ln -s $out/lib/libopenblas.a $out/lib/liblapacke.a
   '';
 
   meta = with lib; {

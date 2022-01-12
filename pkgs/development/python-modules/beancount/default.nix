@@ -5,7 +5,7 @@
 , beautifulsoup4
 , bottle
 , chardet
-, dateutil
+, python-dateutil
 , google-api-python-client
 , google-auth-oauthlib
 , lxml
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     beautifulsoup4
     bottle
     chardet
-    dateutil
+    python-dateutil
     google-api-python-client
     google-auth-oauthlib
     lxml
@@ -48,7 +48,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    homepage = "http://furius.ca/beancount/";
+    homepage = "https://github.com/beancount/beancount";
     description = "Double-entry bookkeeping computer language";
     longDescription = ''
         A double-entry bookkeeping computer language that lets you define

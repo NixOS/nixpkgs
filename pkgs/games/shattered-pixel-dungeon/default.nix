@@ -10,23 +10,23 @@
 
 let
   pname = "shattered-pixel-dungeon";
-  version = "0.9.3";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "00-Evan";
     repo = "shattered-pixel-dungeon";
     # NOTE: always use the commit sha, not the tag. Tags _will_ disappear!
     # https://github.com/00-Evan/shattered-pixel-dungeon/issues/596
-    rev = "785c869f2b61013a15fddbf5f0c65d67fe900e80";
-    sha256 = "sha256-d7Fc1IPOW/0RwLYe9vwaD3gFw6div2/J0DOFdWYDXWY=";
+    rev = "7f29a03078647ea503d3c866476568511aa5af84";
+    sha256 = "sha256-+d8X7WFGX8YGb2rGu8jVO82QdlF9ec+6+Ti5wGEIwRg=";
   };
 
   postPatch = ''
     # disable gradle plugins with native code and their targets
     perl -i.bak1 -pe "s#(^\s*id '.+' version '.+'$)#// \1#" build.gradle
-    perl -i.bak2 -pe "s#(.*)#// \1# if /^(buildscript|task portable|task nsis|task proguard|task tgz|task\(afterEclipseImport\)|launch4j|macAppBundle|buildRpm|buildDeb|shadowJar)/ ... /^}/" build.gradle
-    # Remove unbuildable android stuff
-    rm android/build.gradle
+    perl -i.bak2 -pe "s#(.*)#// \1# if /^(buildscript|task portable|task nsis|task proguard|task tgz|task\(afterEclipseImport\)|launch4j|macAppBundle|buildRpm|buildDeb|shadowJar|robovm)/ ... /^}/" build.gradle
+    # Remove unbuildable Android/iOS stuff
+    rm android/build.gradle ios/build.gradle
   '';
 
   # fake build to pre-download deps into fixed-output derivation
@@ -46,9 +46,8 @@ let
         | perl -pe 's#(.*/([^/]+)/([^/]+)/([^/]+)/[0-9a-f]{30,40}/([^/\s]+))$# ($x = $2) =~ tr|\.|/|; "install -Dm444 $1 \$out/$x/$3/$4/$5" #e' \
         | sh
     '';
-    outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "0ih10c6c85vhrqgilqmkzqjx3dc8cscvs9wkh90zgdj10qv0iba3";
+    outputHash = "sha256-UI5/ZJbUtEz1Fr+qn6a8kzi9rrP+lVrpBbuDv8TG5y0=";
   };
 
 in stdenv.mkDerivation rec {

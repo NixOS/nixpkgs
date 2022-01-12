@@ -1,17 +1,18 @@
 { mkDerivation, fetchurl, makeWrapper, lib, php }:
 let
   pname = "psalm";
-  version = "4.6.1";
+  version = "4.15.0";
 in
 mkDerivation {
   inherit pname version;
 
   src = fetchurl {
-    url = "https://github.com/vimeo/psalm/releases/download/${version}/psalm.phar";
-    sha256 = "sha256-YFeTSIfZ2u1KmpoKV5I7pMMvCk3u5ILktsunvoDnBsg=";
+    url = "https://github.com/vimeo/psalm/releases/download/v${version}/psalm.phar";
+    sha256 = "jvUNnA5OTmw3h1O1Ur7pUojgU5IRgwq2U/JF/ByO0EA=";
   };
 
-  phases = [ "installPhase" ];
+  dontUnpack = true;
+
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''

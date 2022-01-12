@@ -4,38 +4,46 @@
 , nix-update-script
 , cmake
 , pkg-config
+, fribidi
+, harfbuzz
 , libunistring
+, libwebp
 , mpg123
 , openssl
 , pcre
 , SDL2
 , AppKit
+, zip
 , zlib
 }:
 
 stdenv.mkDerivation rec {
   pname = "lagrange";
-  version = "1.5.2";
+  version = "1.9.5";
 
   src = fetchFromGitHub {
     owner = "skyjake";
     repo = "lagrange";
     rev = "v${version}";
-    sha256 = "sha256-NjiTjY2YuxUs/Wny7aDqHGw/2ML1fenjHrl089rLXFI=";
+    sha256 = "sha256-jvknhGTvb2Qw2587TmCJxES2DSv+9+BfMk2IOyqqLt8=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  postPatch = ''
+    rm -r lib/fribidi lib/harfbuzz
+  '';
 
-  buildInputs = [ libunistring mpg123 openssl pcre SDL2 zlib ]
+  nativeBuildInputs = [ cmake pkg-config zip ];
+
+  buildInputs = [ fribidi harfbuzz libunistring libwebp mpg123 openssl pcre SDL2 zlib ]
     ++ lib.optional stdenv.isDarwin AppKit;
 
   hardeningDisable = lib.optional (!stdenv.cc.isClang) "format";
 
-  installPhase = if stdenv.isDarwin then ''
+  installPhase = lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/Applications
     mv Lagrange.app $out/Applications
-  '' else null;
+  '';
 
   passthru = {
     updateScript = nix-update-script {

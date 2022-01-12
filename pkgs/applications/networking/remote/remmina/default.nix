@@ -3,7 +3,7 @@
 , freerdp, libssh, libgcrypt, gnutls
 , pcre2, libdbusmenu-gtk3, libappindicator-gtk3
 , libvncserver, libpthreadstubs, libXdmcp, libxkbcommon
-, libsecret, libsoup, spice-protocol, spice-gtk, epoxy, at-spi2-core
+, libsecret, libsoup, spice-protocol, spice-gtk, libepoxy, at-spi2-core
 , openssl, gsettings-desktop-schemas, json-glib, libsodium, webkitgtk, harfbuzz
 # The themes here are soft dependencies; only icons are missing without them.
 , gnome
@@ -13,13 +13,13 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "remmina";
-  version = "1.4.13";
+  version = "1.4.20";
 
   src = fetchFromGitLab {
     owner  = "Remmina";
     repo   = "Remmina";
     rev    = "v${version}";
-    sha256 = "sha256-R+RfczAnt5R0YmXt5SmH8gOuWOH0LZ/70pOMDAXJgsE=";
+    sha256 = "sha256-m3DUaoOD8COxMwCVBTipzCAz3mqIdunEbVPjyjAl9So=";
   };
 
   nativeBuildInputs = [ cmake ninja pkg-config wrapGAppsHook ];
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     freerdp libssh libgcrypt gnutls
     pcre2 libdbusmenu-gtk3 libappindicator-gtk3
     libvncserver libpthreadstubs libXdmcp libxkbcommon
-    libsecret libsoup spice-protocol spice-gtk epoxy at-spi2-core
+    libsecret libsoup spice-protocol spice-gtk libepoxy at-spi2-core
     openssl gnome.adwaita-icon-theme json-glib libsodium webkitgtk
     harfbuzz
   ];

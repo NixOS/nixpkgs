@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "gipc";
-  version = "1.1.1";
+  version = "1.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f9a9d557e65e17bab8d7ff727ee3f1935e25bd52b01e63c23c7b3b52415728a5";
+    sha256 = "a25ccfd2f8c94b24d2113fa50a0de5c7a44499ca9f2ab7c91c3bec0ed96ddeb1";
   };
 
   propagatedBuildInputs = [ gevent ];

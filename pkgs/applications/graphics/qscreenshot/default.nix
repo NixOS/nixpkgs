@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, dos2unix, which, qt, Carbon }:
 
 stdenv.mkDerivation rec {
-  name = "qscreenshot-1.0";
+  pname = "qscreenshot";
+  version = "1.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/qscreenshot/${name}-src.tar.gz";
+    url = "mirror://sourceforge/qscreenshot/qscreenshot-${version}-src.tar.gz";
     sha256 = "1spj5fg2l8p5bk81xsv6hqn1kcrdiy54w19jsfb7g5i94vcb1pcx";
   };
 

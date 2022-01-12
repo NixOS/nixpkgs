@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "althttpd";
-  version = "unstable-2021-05-07";
+  version = "unstable-2021-06-09";
 
   src = fetchfossil {
     url = "https://sqlite.org/althttpd/";
-    rev = "2c5e3f9f7051a578";
-    sha256 = "sha256-+RuogtQAc+zjCWTOiOunu1pXf3LxfdWYQX+24ysJ7uY=";
+    rev = "0d3b5e232c57e188";
+    sha256 = "sha256-vZwpjYYMdP/FgPTAQ9Kdh2RRMovpONqu2v73cCoYyxE=";
   };
 
   installPhase = ''

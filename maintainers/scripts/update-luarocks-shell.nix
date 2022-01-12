@@ -1,12 +1,13 @@
 { nixpkgs ? import ../.. { }
 }:
 with nixpkgs;
+let
+  pyEnv = python3.withPackages(ps: [ ps.GitPython ]);
+in
 mkShell {
   packages = [
-    bash
+    pyEnv
     luarocks-nix
     nix-prefetch-scripts
-    parallel
   ];
-  LUAROCKS_NIXPKGS_PATH = toString nixpkgs.path;
 }

@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "python-ecobee-api";
-  version = "0.2.13";
+  version = "0.2.15";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7c39f5aac854a2fb8fb33f41b351769a92ff784bc6112e7a5c1b9e1949a0fefe";
+    sha256 = "91929b0dda6acc2af6661d0fb539eb6375323d7529d3d64b67915efb1dc1a6ca";
   };
 
   propagatedBuildInputs = [

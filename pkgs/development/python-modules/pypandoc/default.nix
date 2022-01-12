@@ -1,25 +1,23 @@
-{ lib, substituteAll, buildPythonPackage, fetchFromGitHub
+{ lib, substituteAll, buildPythonPackage, fetchPypi
 , pandoc, texlive
 }:
 
 buildPythonPackage rec {
   pname = "pypandoc";
-  version = "1.5";
+  version = "1.7.2";
 
-  src = fetchFromGitHub {
-    owner = "bebraw";
-    repo = pname;
-    rev = version;
-    sha256 = "1lpslfns6zxx7b0xr13bzg921lwrj5am8za0b2dviywk6iiib0ld";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "1wk8jxnysb7sa55zhxx5brylv00ivamqbk1b4lbzi58ziij08p03";
   };
 
   patches = [
     (substituteAll {
       src = ./static-pandoc-path.patch;
       pandoc = "${lib.getBin pandoc}/bin/pandoc";
+      pandocVersion = pandoc.version;
     })
     ./skip-tests.patch
-    ./new-pandoc-headings.patch
   ];
 
   checkInputs = [
@@ -28,7 +26,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Thin wrapper for pandoc";
-    homepage = "https://github.com/bebraw/pypandoc";
+    homepage = "https://github.com/NicklasTegner/pypandoc";
     license = licenses.mit;
     maintainers = with maintainers; [ sternenseemann bennofs ];
   };

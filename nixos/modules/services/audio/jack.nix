@@ -25,8 +25,8 @@ in {
           internal = true;
           type = types.package;
           default = pkgs.jack2;
-          defaultText = "pkgs.jack2";
-          example = literalExample "pkgs.jack1";
+          defaultText = literalExpression "pkgs.jack2";
+          example = literalExpression "pkgs.jack1";
           description = ''
             The JACK package to use.
           '';
@@ -37,7 +37,7 @@ in {
           default = [
             "-dalsa"
           ];
-          example = literalExample ''
+          example = literalExpression ''
             [ "-dalsa" "--device" "hw:1" ];
           '';
           description = ''

@@ -4,10 +4,12 @@ with lib; mkCoqDerivation {
 
   namePrefix = [ "coq" "mathcomp" ];
   pname = "multinomials";
+
   owner = "math-comp";
+
   inherit version;
   defaultVersion =  with versions; switch [ coq.version mathcomp.version ] [
-      { cases = [ (range "8.10" "8.13") "1.12.0" ];             out = "1.5.4"; }
+      { cases = [ (range "8.10" "8.14") (isGe "1.12.0") ];      out = "1.5.4"; }
       { cases = [ (range "8.10" "8.12") "1.12.0" ];             out = "1.5.3"; }
       { cases = [ (range "8.7" "8.12")  "1.11.0" ];             out = "1.5.2"; }
       { cases = [ (range "8.7" "8.11")  (range "1.8" "1.10") ]; out = "1.5.0"; }
@@ -28,7 +30,11 @@ with lib; mkCoqDerivation {
     "1.0".sha256   = "1qmbxp1h81cy3imh627pznmng0kvv37k4hrwi2faa101s6bcx55m";
   };
 
-  useDune2ifVersion = versions.isGe "1.5.3";
+  useDune2ifVersion = v: versions.isGe "1.5.3" v || v == "dev";
+
+  preConfigure = ''
+    patchShebangs configure || true
+  '';
 
   propagatedBuildInputs =
     [ mathcomp.ssreflect mathcomp.algebra mathcomp-finmap mathcomp-bigenough ];

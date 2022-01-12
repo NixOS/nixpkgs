@@ -1,28 +1,28 @@
 diff --git a/src/daemon/pipewire.conf.in b/src/daemon/pipewire.conf.in
-index bbafa134..227d3e06 100644
+index 648e13069..50f767f0c 100644
 --- a/src/daemon/pipewire.conf.in
 +++ b/src/daemon/pipewire.conf.in
-@@ -116,7 +116,7 @@ context.modules = [
+@@ -131,7 +131,7 @@ context.modules = [
              # access.allowed to list an array of paths of allowed
              # apps.
              #access.allowed = [
--            #    @media_session_path@
-+            #    <media_session_path>
+-            #    @session_manager_path@
++            #    <session_manager_path>
              #]
  
              # An array of rejected paths.
-@@ -220,12 +220,12 @@ context.exec = [
+@@ -235,12 +235,12 @@ context.exec = [
      # but it is better to start it as a systemd service.
      # Run the session manager with -h for options.
      #
--    @comment@{ path = "@media_session_path@"  args = "" }
-+    @comment@{ path = "<media_session_path>"  args = "" }
+-    @sm_comment@{ path = "@session_manager_path@" args = "@session_manager_args@" }
++    @sm_comment@{ path = "<session_manager_path>" args = "@session_manager_args@" }
      #
      # You can optionally start the pulseaudio-server here as well
      # but it is better to start it as a systemd service.
      # It can be interesting to start another daemon here that listens
      # on another address with the -a option (eg. -a tcp:4713).
      #
--    @comment@{ path = "@pipewire_path@" args = "-c pipewire-pulse.conf" }
-+    @comment@{ path = "<pipewire_path>" args = "-c pipewire-pulse.conf" }
+-    @pulse_comment@{ path = "@pipewire_path@" args = "-c pipewire-pulse.conf" }
++    @pulse_comment@{ path = "<pipewire_path>" args = "-c pipewire-pulse.conf" }
  ]

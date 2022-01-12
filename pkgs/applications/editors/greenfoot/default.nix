@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "greenfoot";
-  version = "3.6.1";
+  version = "3.7.0";
   src = fetchurl {
     # We use the deb here. First instinct might be to go for the "generic" JAR
     # download, but that is actually a graphical installer that is much harder
     # to unpack than the deb.
     url = "https://www.greenfoot.org/download/files/Greenfoot-linux-${builtins.replaceStrings ["."] [""] version}.deb";
-    sha256 = "112h6plpclj8kbv093m4pcczljhpd8d47d7a2am1yfgbyckx6hf0";
+    sha256 = "sha256-K9faU3ZarcR4g8riHpoZYVH0sXtueqfm3Fo+sZAHJA8=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

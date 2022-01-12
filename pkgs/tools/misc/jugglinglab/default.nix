@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, jre, makeWrapper, ant, jdk }:
 stdenv.mkDerivation rec {
   version = "1.2.1";
-  name = "jugglinglab";
+  pname = "jugglinglab";
   src = fetchFromGitHub {
     owner = "jkboyce";
     repo = "jugglinglab";

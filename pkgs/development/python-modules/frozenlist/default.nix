@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "frozenlist";
-  version = "1.1.1";
+  version = "1.2.0";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "07z33vid7s8fjwvybyn8357yvs0f6nlhizv1l3qj1bczi3jbdkbh";
+    sha256 = "sha256-rTbekdceC5QK0aiySi/4QUwaEoDfTlLrx2t6Kb9bH7U=";
   };
 
   nativeBuildInputs = [

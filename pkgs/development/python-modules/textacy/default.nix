@@ -21,12 +21,12 @@
 
 buildPythonPackage rec {
   pname = "textacy";
-  version = "0.11.0";
+  version = "0.12.0";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-d/tyTCewoERA15iBv4H2LORFzgco15fnnN1sneeGuF4=";
+    sha256 = "2c92bdd6b47305447b64e4cb6cc43c11675f021f910a8074bc8149dbf5325e5b";
   };
 
   propagatedBuildInputs = [

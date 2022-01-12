@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "Pygments";
-  version = "2.8.1";
+  version = "2.10.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "153zyxigm879sk2n71lfv03y2pgxb7dl0dlsbwkz9aydxnkf2mi6";
+    sha256 = "f398865f7eb6874156579fdf36bc840a03cab64d1cde9e93d68f46a425ec52c6";
   };
 
   propagatedBuildInputs = [ docutils ];

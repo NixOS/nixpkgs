@@ -1,5 +1,5 @@
 { lib, fetchFromGitHub, cmake, pkg-config, alsa-lib ? null, fftwFloat, fltk13
-, fluidsynth_1 ? null, lame ? null, libgig ? null, libjack2 ? null, libpulseaudio ? null
+, fluidsynth ? null, lame ? null, libgig ? null, libjack2 ? null, libpulseaudio ? null
 , libsamplerate, libsoundio ? null, libsndfile, libvorbis ? null, portaudio ? null
 , qtbase, qtx11extras, qttools, SDL ? null, mkDerivation }:
 
@@ -21,7 +21,7 @@ mkDerivation rec {
     alsa-lib
     fftwFloat
     fltk13
-    fluidsynth_1
+    fluidsynth
     lame
     libgig
     libjack2
@@ -43,6 +43,6 @@ mkDerivation rec {
     homepage = "https://lmms.io";
     license = licenses.gpl2Plus;
     platforms = [ "x86_64-linux" "i686-linux" ];
-    maintainers = with maintainers; [ goibhniu yegortimoshenko ];
+    maintainers = with maintainers; [ goibhniu yana ];
   };
 }

@@ -1,15 +1,15 @@
-{ lib, fetchFromGitHub, python3Packages, qtbase, fetchpatch, wrapQtAppsHook
+{ lib, stdenv, fetchFromGitHub, python3Packages, qtbase, fetchpatch, wrapQtAppsHook
 , secp256k1 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "electron-cash";
-  version = "4.2.4";
+  version = "4.2.5";
 
   src = fetchFromGitHub {
     owner = "Electron-Cash";
     repo = "Electron-Cash";
     rev = version;
-    sha256 = "sha256-hiOS0cTaPqllb31p+6nU4GYvw/E1Hdn8yd3sppzGkqg=";
+    sha256 = "sha256-ALIrNnhpX46xdQdfJdx/9e/QtdyBEgi5xLrbuOBJR7o=";
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -61,7 +61,7 @@ python3Packages.buildPythonApplication rec {
     pytest electroncash/tests
   '';
 
-  postInstall = ''
+  postInstall = lib.optionalString stdenv.isLinux ''
     substituteInPlace $out/share/applications/electron-cash.desktop \
       --replace "Exec=electron-cash" "Exec=$out/bin/electron-cash"
   '';
@@ -92,7 +92,7 @@ python3Packages.buildPythonApplication rec {
       of the blockchain.
     '';
     homepage = "https://www.electroncash.org/";
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ lassulus nyanloutre oxalica ];
     license = licenses.mit;
   };

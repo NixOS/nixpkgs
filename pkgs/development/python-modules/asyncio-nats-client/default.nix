@@ -5,18 +5,19 @@
 , nats-server
 , pytestCheckHook
 , pythonOlder
+, uvloop
 }:
 
 buildPythonPackage rec {
   pname = "asyncio-nats-client";
-  version = "0.11.4";
+  version = "0.11.5";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "nats-io";
     repo = "nats.py";
     rev = "v${version}";
-    sha256 = "1aj57xi2rj1xswq8air13xdsll1ybpi0nmz5f6jq01azm0zy9xyd";
+    sha256 = "0zwiijaswmfdk71diqmdpb6nx54fmgi8hy0vwx2m3ihhsyjxj82h";
   };
 
   propagatedBuildInputs = [
@@ -26,6 +27,7 @@ buildPythonPackage rec {
   checkInputs = [
     nats-server
     pytestCheckHook
+    uvloop
   ];
 
   postPatch = ''
@@ -37,6 +39,8 @@ buildPythonPackage rec {
     # RuntimeError: Event loop is closed
     "test_subscribe_no_echo"
     "test_reconnect_to_new_server_with_auth"
+    "test_drain_connection"
+    "test_discover_servers_on_first_connect"
   ];
 
   pythonImportsCheck = [ "nats.aio" ];

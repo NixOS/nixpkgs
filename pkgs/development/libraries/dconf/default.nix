@@ -52,6 +52,10 @@ stdenv.mkDerivation rec {
     "-Dgtk_doc=${lib.boolToString (!isCross)}" # gtk-doc does do some gobject introspection, which doesn't yet cross-compile.
   ] ++ lib.optional isCross "-Dvapi=false";
 
+  checkInputs = [
+    dbus # for dbus-daemon
+  ];
+
   doCheck = !stdenv.isAarch32 && !stdenv.isAarch64 && !stdenv.isDarwin;
 
   postPatch = ''

@@ -1,10 +1,11 @@
 {lib, stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  name = "STLport-5.2.1";
+  pname = "STLport";
+  version = "5.2.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/stlport/${name}.tar.bz2";
+    url = "mirror://sourceforge/stlport/${pname}-${version}.tar.bz2";
     sha256 = "1jbgak1m1qk7d4gyn1p2grbws2icsf7grbs3dh44ai9ck1xh0nvm";
   };
 

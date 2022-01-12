@@ -11,6 +11,7 @@
 , kdialog
 , zenity
 , openssl
+, libglvnd
 , libX11
 , libxcb
 , libXcursor
@@ -23,6 +24,7 @@
 
 let
   rpathLibs = [
+    libglvnd
     libXcursor
     libXi
     libxkbcommon
@@ -34,16 +36,16 @@ let
 
 in rustPlatform.buildRustPackage rec {
   pname = "Ajour";
-  version = "1.2.0";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "casperstorm";
     repo = "ajour";
     rev = version;
-    sha256 = "0xmjr8brjmkk13dsn3yvcl5ss6b214hpka0idk072n46qsyhg2wh";
+    sha256 = "sha256-oVaNLclU0EVNtxAASE8plXcC+clkwhBeb9pz1vXufV0=";
   };
 
-  cargoSha256 = "06d1h2c2abg56567znxh65d4ddpi6wvxip9rbzkmdnzgy3b3y2wl";
+  cargoSha256 = "sha256-Q+wYBLsZN8YQtUJfrxmjImbnWRPmngJPB8sDG65LuJY=";
 
   nativeBuildInputs = [
     autoPatchelfHook
@@ -59,6 +61,7 @@ in rustPlatform.buildRustPackage rec {
     openssl
     libxcb
     libX11
+    libxkbcommon
   ];
 
   fixupPhase = ''

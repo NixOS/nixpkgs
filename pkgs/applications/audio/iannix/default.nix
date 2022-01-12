@@ -19,8 +19,6 @@ mkDerivation rec {
 
   installFlags = [ "INSTALL_ROOT=$(out)" ];
 
-  enableParallelBuilding = true;
-
   meta = with lib; {
     description = "Graphical open-source sequencer";
     homepage = "https://www.iannix.org/";

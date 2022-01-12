@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, qt4, qmake4Hook }:
 
 stdenv.mkDerivation rec {
-  name = "qwt-5.2.3";
+  pname = "qwt";
+  version = "5.2.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/qwt/${name}.tar.bz2";
+    url = "mirror://sourceforge/qwt/${pname}-${version}.tar.bz2";
     sha256 = "1dqa096mm6n3bidfq2b67nmdsvsw4ndzzd1qhl6hn8skcwqazzip";
   };
 
@@ -17,7 +18,7 @@ stdenv.mkDerivation rec {
   '';
 
   preConfigure = ''
-    qmakeFlags="$qmakeFlags INSTALLBASE=$out -after doc.path=$out/share/doc/${name}"
+    qmakeFlags="$qmakeFlags INSTALLBASE=$out -after doc.path=$out/share/doc/${pname}-${version}"
   '';
 
   meta = with lib; {

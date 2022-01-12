@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "snippetpixie";
-  version = "1.5.2";
+  version = "1.5.3";
 
   src = fetchFromGitHub {
     owner = "bytepixie";
     repo = pname;
     rev = version;
-    sha256 = "173fm9h7lnhhbg5qbjz40g0fy60dwd2l55mdcc1j8dh73vz96pfr";
+    sha256 = "0gs3d9hdywg4vcfbp4qfcagfjqalfgw9xpvywg4pw1cm3rzbdqmz";
   };
 
   nativeBuildInputs = [
@@ -86,9 +86,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.snippetpixie.com";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
-      ianmjones
-    ] ++ pantheon.maintainers;
+    maintainers = with maintainers; [ ianmjones ] ++ teams.pantheon.members;
     platforms = platforms.linux;
+    mainProgram = "com.github.bytepixie.snippetpixie";
   };
 }

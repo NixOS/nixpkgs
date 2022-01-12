@@ -87,7 +87,9 @@ let majorVersion = "6";
       ++ optional (targetPlatform.libc == "musl" && targetPlatform.isx86_32) (fetchpatch {
         url = "https://git.alpinelinux.org/aports/plain/main/gcc/gcc-6.1-musl-libssp.patch?id=5e4b96e23871ee28ef593b439f8c07ca7c7eb5bb";
         sha256 = "1jf1ciz4gr49lwyh8knfhw6l5gvfkwzjy90m7qiwkcbsf4a3fqn2";
-      });
+      })
+
+      ++ [ ../libsanitizer-no-cyclades-9.patch ];
 
     javaEcj = fetchurl {
       # The `$(top_srcdir)/ecj.jar' file is automatically picked up at
@@ -199,7 +201,9 @@ stdenv.mkDerivation ({
   nativeBuildInputs = [ texinfo which gettext ]
     ++ (optional (perl != null) perl)
     ++ (optional javaAwtGtk pkg-config)
-    ++ (optional (with stdenv.targetPlatform; isVc4 || isRedox) flex);
+    ++ (optional (with stdenv.targetPlatform; isVc4 || isRedox) flex)
+    ++ (optional langAda gnatboot)
+    ;
 
   # For building runtime libs
   depsBuildTarget =
@@ -222,7 +226,6 @@ stdenv.mkDerivation ({
     # The builder relies on GNU sed (for instance, Darwin's `sed' fails with
     # "-i may not be used with stdin"), and `stdenvNative' doesn't provide it.
     ++ (optional hostPlatform.isDarwin gnused)
-    ++ (optional langAda gnatboot)
     ;
 
   depsTargetTarget = optional (!crossStageStatic && threadsCross != null) threadsCross;
@@ -340,8 +343,6 @@ stdenv.mkDerivation ({
       GCC development is a part of the GNU Project, aiming to improve the
       compiler used in the GNU system including the GNU/Linux variant.
     '';
-
-    maintainers = with lib.maintainers; [ peti ];
 
     platforms = lib.platforms.unix;
   };

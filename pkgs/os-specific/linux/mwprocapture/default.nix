@@ -4,25 +4,25 @@ with lib;
 
 let
   bits =
-  if stdenv.is64bit then "64"
-  else "32";
+    if stdenv.is64bit then "64"
+    else "32";
 
   libpath = makeLibraryPath [ stdenv.cc.cc stdenv.glibc alsa-lib ];
 
 in
 stdenv.mkDerivation rec {
-  name = "mwprocapture-1.3.0.${version}-${kernel.version}";
-  version = "4236";
+  pname = "mwprocapture";
+  subVersion = "4236";
+  version = "1.3.0.${subVersion}-${kernel.version}";
 
   src = fetchurl {
-    url = "https://www.magewell.com/files/drivers/ProCaptureForLinux_${version}.tar.gz";
+    url = "https://www.magewell.com/files/drivers/ProCaptureForLinux_${subVersion}.tar.gz";
     sha256 = "1mfgj84km276sq5i8dny1vqp2ycqpvgplrmpbqwnk230d0w3qs74";
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  preConfigure =
-  ''
+  preConfigure = ''
     cd ./src
     export INSTALL_MOD_PATH="$out"
   '';

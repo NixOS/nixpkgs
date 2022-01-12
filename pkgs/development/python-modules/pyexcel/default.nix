@@ -2,40 +2,37 @@
 , buildPythonPackage
 , fetchPypi
 , isPy3k
+, chardet
 , lml
 , pyexcel-io
 , texttable
-, nose
 }:
 
 buildPythonPackage rec {
   pname = "pyexcel";
-  version = "0.6.6";
+  version = "0.6.7";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "39b0bb8f033d9b5523b126cf5a5259d1990ea82b8a23c8eab7aa5e23116803df";
+    sha256 = "cbbd9875729767564b3b64b6ed6a9870b14631184943d13646833d94157dd10f";
   };
 
   propagatedBuildInputs = [
+    chardet
     lml
     pyexcel-io
     texttable
   ];
 
-  checkInputs = [
-    nose
+  pythonImportsCheck = [
+    "pyexcel"
   ];
 
   # Tests depend on pyexcel-xls & co. causing circular dependency.
   # https://github.com/pyexcel/pyexcel/blob/dev/tests/requirements.txt
   doCheck = false;
-
-  pythonImportsCheck = [ "pyexcel" ];
-
-  checkPhase = "nosetests";
 
   meta = {
     description = "Single API for reading, manipulating and writing data in csv, ods, xls, xlsx and xlsm files";

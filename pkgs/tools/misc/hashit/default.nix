@@ -43,7 +43,8 @@ stdenv.mkDerivation rec {
     description = "A simple app for checking usual checksums - Designed for elementary OS";
     homepage = "https://github.com/artemanufrij/hashit";
     license = licenses.gpl2Plus;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
     platforms = platforms.linux;
+    mainProgram = "com.github.artemanufrij.hashit";
   };
 }

@@ -2,24 +2,27 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-night-theme-switcher";
-  version = "50";
+  version = "53";
 
   src = fetchFromGitLab {
     owner = "rmnvgr";
     repo = "nightthemeswitcher-gnome-shell-extension";
-    rev = "v${version}";
-    sha256 = "0rs08kr3wizs1vpkmm6pbcvnn7rz47yrq7vnb1s8d58yda9a850d";
+    rev = version;
+    sha256 = "0dgnh1aj0y89jzfkpj8zs4gdbmyc1v8lbki2q30gld17ljv4l6lh";
   };
 
   nativeBuildInputs = [ unzip ];
   buildInputs = [ glib gnome.gnome-shell ];
 
-  uuid = "nightthemeswitcher@romainvigier.fr";
+  passthru = {
+    extensionUuid = "nightthemeswitcher@romainvigier.fr";
+    extensionPortalSlug = "night-theme-switcher";
+  };
 
   installPhase = ''
     runHook preInstall
     mkdir -p $out/share/gnome-shell/extensions/
-    unzip build/${uuid}.shell-extension.zip -d $out/share/gnome-shell/extensions/${uuid}
+    unzip "build/nightthemeswitcher@romainvigier.fr.shell-extension.zip" -d "$out/share/gnome-shell/extensions/nightthemeswitcher@romainvigier.fr"
     runHook postInstall
   '';
 

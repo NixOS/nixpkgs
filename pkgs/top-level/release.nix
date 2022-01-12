@@ -90,10 +90,13 @@ let
           meta.description = "Release-critical builds for the Nixpkgs unstable channel";
           constituents =
             [ jobs.tarball
+              jobs.metrics
               jobs.manual
               jobs.lib-tests
               jobs.pkgs-lib-tests
               jobs.stdenv.x86_64-linux
+              jobs.cargo.x86_64-linux
+              jobs.go.x86_64-linux
               jobs.linux.x86_64-linux
               jobs.pandoc.x86_64-linux
               jobs.python.x86_64-linux
@@ -104,7 +107,7 @@ let
               jobs.nix-info.x86_64-linux
               jobs.nix-info-tested.x86_64-linux
               # Ensure that X11/GTK are in order.
-              jobs.thunderbird.x86_64-linux
+              jobs.thunderbird-unwrapped.x86_64-linux
               jobs.cachix.x86_64-linux
 
               /*
@@ -129,6 +132,8 @@ let
             ++ lib.collect lib.isDerivation jobs.stdenvBootstrapTools
             ++ lib.optionals supportDarwin [
               jobs.stdenv.x86_64-darwin
+              jobs.cargo.x86_64-darwin
+              jobs.go.x86_64-darwin
               jobs.python.x86_64-darwin
               jobs.python3.x86_64-darwin
               jobs.nixpkgs-review.x86_64-darwin
@@ -174,8 +179,7 @@ let
               # Lightweight distribution and test
               inherit (bootstrap) dist test;
               # Test a full stdenv bootstrap from the bootstrap tools definition
-              # TODO re-enable with https://github.com/NixOS/nixpkgs/pull/126411
-              # inherit (bootstrap.test-pkgs) stdenv;
+              inherit (bootstrap.test-pkgs) stdenv;
             };
 
           # Cross compiled bootstrap tools
@@ -194,6 +198,7 @@ let
       idrisPackages = packagePlatforms pkgs.idrisPackages;
       agdaPackages = packagePlatforms pkgs.agdaPackages;
 
+      pkgsLLVM.stdenv = [ "x86_64-linux" "aarch64-linux" ];
       pkgsMusl.stdenv = [ "x86_64-linux" "aarch64-linux" ];
       pkgsStatic.stdenv = [ "x86_64-linux" "aarch64-linux" ];
 

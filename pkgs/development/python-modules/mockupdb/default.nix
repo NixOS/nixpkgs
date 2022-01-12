@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "mockupdb";
-  version = "1.8.0";
+  version = "1.8.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "130z5g96r52h362qc5jbf1g3gw3irb2wr946xlhgcv9ww9z64cl8";
+    sha256 = "d36d0e5b6445ff9141e34d012fa2b5dfe589847aa1e3ecb8d774074962af944e";
   };
 
   propagatedBuildInputs = [ pymongo ];

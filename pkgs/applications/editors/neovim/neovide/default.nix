@@ -3,70 +3,67 @@
 , lib
 , fetchFromGitHub
 , fetchgit
+, fetchurl
 , makeWrapper
 , pkg-config
 , python2
-, expat
 , openssl
 , SDL2
-, vulkan-loader
 , fontconfig
+, freetype
 , ninja
 , gn
 , llvmPackages
 , makeFontsConf
+, libglvnd
+, libxkbcommon
+, stdenv
+, enableWayland ? stdenv.isLinux
+, wayland
+, xorg
 }:
 rustPlatform.buildRustPackage rec {
   pname = "neovide";
-  version = "20210515";
+  version = "unstable-2021-10-09";
 
-  src =
-    let
-      repo = fetchFromGitHub {
-        owner = "Kethku";
-        repo = "neovide";
-        rev = "0b976c3d28bbd24e6c83a2efc077aa96dde1e9eb";
-        sha256 = "sha256-asaOxcAenKdy/yJvch3HFfgnrBnQagL02UpWYnz7sa8=";
-      };
-    in
-    runCommand "source" { } ''
-      cp -R ${repo} $out
-      chmod -R +w $out
-      # Reasons for patching Cargo.toml:
-      # - I got neovide built with latest compatible skia-save version 0.35.1
-      #   and I did not try to get it with 0.32.1 working. Changing the skia
-      #   version is time consuming, because of manual dependecy tracking and
-      #   long compilation runs.
-      sed -i $out/Cargo.toml \
-        -e '/skia-safe/s;0.32.1;0.35.1;'
-      cp ${./Cargo.lock} $out/Cargo.lock
-    '';
+  src = fetchFromGitHub {
+    owner = "Kethku";
+    repo = "neovide";
+    rev = "7f76ad4764197ba75bb9263d25b265d801563ccf";
+    sha256 = "sha256-kcP0WSk3quTaWCGQYN4zYlDQ9jhx/Vu6AamSLGFszwQ=";
+  };
 
-  cargoSha256 = "sha256-XMPRM3BAfCleS0LXQv03A3lQhlUhAP8/9PdVbAUnfG0=";
+  cargoSha256 = "sha256-TQEhz9FtvIb/6Qtyz018dPle0+nub1oMZMFtKAqYcoI=";
 
-  SKIA_OFFLINE_SOURCE_DIR =
+  SKIA_SOURCE_DIR =
     let
       repo = fetchFromGitHub {
         owner = "rust-skia";
         repo = "skia";
-        # see rust-skia/Cargo.toml#package.metadata skia
-        rev = "m86-0.35.0";
-        sha256 = "sha256-uTSgtiEkbE9e08zYOkRZyiHkwOLr/FbBYkr2d+NZ8J0=";
+        # see rust-skia:skia-bindings/Cargo.toml#package.metadata skia
+        rev = "m91-0.39.4";
+        sha256 = "sha256-ovlR1vEZaQqawwth/UYVUSjFu+kTsywRpRClBaE1CEA=";
       };
       # The externals for skia are taken from skia/DEPS
       externals = lib.mapAttrs (n: v: fetchgit v) (lib.importJSON ./skia-externals.json);
     in
-    runCommand "source" { } (''
-      cp -R ${repo} $out
-      chmod -R +w $out
+      runCommand "source" {} (
+        ''
+          cp -R ${repo} $out
+          chmod -R +w $out
 
-      mkdir -p $out/third_party/externals
-      cd $out/third_party/externals
-    '' + (builtins.concatStringsSep "\n" (lib.mapAttrsToList (name: value: "cp -ra ${value} ${name}") externals)));
+          mkdir -p $out/third_party/externals
+          cd $out/third_party/externals
+        '' + (builtins.concatStringsSep "\n" (lib.mapAttrsToList (name: value: "cp -ra ${value} ${name}") externals))
+      );
 
-  SKIA_OFFLINE_NINJA_COMMAND = "${ninja}/bin/ninja";
-  SKIA_OFFLINE_GN_COMMAND = "${gn}/bin/gn";
+  SKIA_NINJA_COMMAND = "${ninja}/bin/ninja";
+  SKIA_GN_COMMAND = "${gn}/bin/gn";
   LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
+
+  preConfigure = ''
+    unset CC CXX
+  '';
 
   # test needs a valid fontconfig file
   FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
@@ -85,16 +82,35 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   buildInputs = [
-    expat
     openssl
     SDL2
-    fontconfig
+    (fontconfig.overrideAttrs (old: {
+      propagatedBuildInputs = [
+        # skia is not compatible with freetype 2.11.0
+        (freetype.overrideAttrs (old: rec {
+          version = "2.10.4";
+          src = fetchurl {
+            url = "mirror://savannah/${old.pname}/${old.pname}-${version}.tar.xz";
+            sha256 = "112pyy215chg7f7fmp2l9374chhhpihbh8wgpj5nj6avj3c59a46";
+          };
+        }))
+      ];
+    }))
   ];
 
-  postFixup = ''
-    wrapProgram $out/bin/neovide \
-      --prefix LD_LIBRARY_PATH : ${vulkan-loader}/lib
-  '';
+  postFixup = let
+    libPath = lib.makeLibraryPath ([
+      libglvnd
+      libxkbcommon
+      xorg.libXcursor
+      xorg.libXext
+      xorg.libXrandr
+      xorg.libXi
+    ] ++ lib.optionals enableWayland [ wayland ]);
+  in ''
+      wrapProgram $out/bin/neovide \
+        --prefix LD_LIBRARY_PATH : ${libPath}
+    '';
 
   postInstall = ''
     for n in 16x16 32x32 48x48 256x256; do
@@ -110,6 +126,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Kethku/neovide";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ ck3d ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
+    mainProgram = "neovide";
   };
 }

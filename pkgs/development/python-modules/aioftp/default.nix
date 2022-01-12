@@ -1,43 +1,47 @@
 { lib
+, async-timeout
 , buildPythonPackage
 , fetchPypi
-, isPy27
-, pytest
 , pytest-asyncio
-, pytestcov
+, pytest-cov
+, pytestCheckHook
+, pythonOlder
+, siosocks
 , trustme
-, async-timeout
 }:
 
 buildPythonPackage rec {
   pname = "aioftp";
-  version = "0.18.1";
-  disabled = isPy27;
+  version = "0.20.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b5a412c748722dd679c4c2e30dd40d70a7c8879636f6eb4489fdbca72965b125";
+    sha256 = "sha256-N8qiKsWPaFT/t5p1eSHS0BydoXv4AL6y8gP4z4P9fsE=";
   };
 
-  checkInputs = [
-    pytest
-    pytest-asyncio
-    pytestcov
-    trustme
-    async-timeout
+  propagatedBuildInputs = [
+    siosocks
   ];
 
-  doCheck = false; # requires siosocks, not packaged yet
-  checkPhase = ''
-    pytest
-  '';
+  checkInputs = [
+    async-timeout
+    pytest-asyncio
+    pytest-cov
+    pytestCheckHook
+    trustme
+  ];
 
-  pythonImportsCheck = [ "aioftp" ];
+  pythonImportsCheck = [
+    "aioftp"
+  ];
 
   meta = with lib; {
-    description = "Ftp client/server for asyncio";
+    description = "Python FTP client/server for asyncio";
     homepage = "https://github.com/aio-libs/aioftp";
     license = licenses.asl20;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }

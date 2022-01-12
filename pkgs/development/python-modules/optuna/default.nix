@@ -9,7 +9,7 @@
 , xgboost
 , mpi4py
 , lightgbm
-, Keras
+, keras
 , mxnet
 , scikit-optimize
 , tensorflow
@@ -30,14 +30,14 @@
 
 buildPythonPackage rec {
   pname = "optuna";
-  version = "2.6.0";
+  version = "2.10.0";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "optuna";
     repo = pname;
     rev = "v${version}";
-    sha256 = "11mskhb7i55i04cy0vkxi7kpaifbz8zc2m8x9s5y6yyyjinvly36";
+    sha256 = "0fha0pwxq6n3mbpvpz3vk8hh61zqncj5cnq063kzfl5d8rd48vcd";
   };
 
   checkInputs = [
@@ -49,7 +49,7 @@ buildPythonPackage rec {
     xgboost
     mpi4py
     lightgbm
-    Keras
+    keras
     mxnet
     scikit-optimize
     tensorflow

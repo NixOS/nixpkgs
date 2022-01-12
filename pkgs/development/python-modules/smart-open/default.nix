@@ -1,39 +1,75 @@
 { lib
 , buildPythonPackage
-, fetchPypi
 , pythonOlder
-, boto
+, fetchFromGitHub
+, azure-common
+, azure-core
+, azure-storage-blob
 , boto3
-, bz2file
-, mock
-, moto
+, google-cloud-storage
 , requests
-, responses
+, moto
+, parameterizedtestcase
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "smart-open";
-  version = "4.2.0";
+  version = "5.2.1";
+
   disabled = pythonOlder "3.5";
 
-  src = fetchPypi {
-    pname = "smart_open";
-    inherit version;
-    sha256 = "d9f5a0f173ccb9bbae528db5a3804f57145815774f77ef755b9b0f3b4b2a9dcb";
+  src = fetchFromGitHub {
+    owner = "RaRe-Technologies";
+    repo = "smart_open";
+    rev = "v${version}";
+    sha256 = "13a1qsb4vwrhx45hz4qcl0d7bgv20ai5vsy7cq0q6qbj212nff19";
   };
 
-  # moto>=1.0.0 is backwards-incompatible and some tests fail with it,
-  # so disable tests for now
-  doCheck = false;
+  propagatedBuildInputs = [
+    azure-common
+    azure-core
+    azure-storage-blob
+    boto3
+    google-cloud-storage
+    requests
+  ];
 
-  checkInputs = [ mock moto responses ];
+  checkInputs = [
+    moto
+    parameterizedtestcase
+    pytestCheckHook
+  ];
 
-  # upstream code requires both boto and boto3
-  propagatedBuildInputs = [ boto boto3 bz2file requests ];
+  pytestFlagsArray = [ "smart_open" ];
 
-  meta = {
-    license = lib.licenses.mit;
+  disabledTestPaths = [
+    "smart_open/tests/test_http.py"
+    "smart_open/tests/test_s3.py"
+    "smart_open/tests/test_s3_version.py"
+    "smart_open/tests/test_sanity.py"
+  ];
+
+  disabledTests = [
+    "test_compression_invalid"
+    "test_gs_uri_contains_question_mark"
+    "test_gzip_compress_sanity"
+    "test_http"
+    "test_ignore_ext"
+    "test_initialize_write"
+    "test_read_explicit"
+    "test_s3_handles_querystring"
+    "test_s3_uri_contains_question_mark"
+    "test_webhdfs"
+    "test_write"
+  ];
+
+  pythonImportsCheck = [ "smart_open" ];
+
+  meta = with lib; {
     description = "Library for efficient streaming of very large file";
-    maintainers = with lib.maintainers; [ jyp ];
+    homepage = "https://github.com/RaRe-Technologies/smart_open";
+    license = licenses.mit;
+    maintainers = with maintainers; [ jyp ];
   };
 }

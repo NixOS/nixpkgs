@@ -7,22 +7,24 @@ let
     x86_64-linux = "linux-x64";
     x86_64-darwin = "darwin";
     aarch64-linux = "linux-arm64";
+    aarch64-darwin = "darwin-arm64";
     armv7l-linux = "linux-armhf";
   }.${system};
 
-  archive_fmt = if system == "x86_64-darwin" then "zip" else "tar.gz";
+  archive_fmt = if stdenv.isDarwin then "zip" else "tar.gz";
 
   sha256 = {
-    x86_64-linux = "0cklp0mp7qylzrqnfbvzs308q0bzpswlqw5n98qhl1jb5783svx1";
-    x86_64-darwin = "04yyv0wpkzdjfiy9kj2jslhv7nc5i6nw2207vfnbzysgs55l3x63";
-    aarch64-linux = "1ygk51902g0q7x3r6kd3s7gi2gx86x10svpvbipl494qcyfngqzs";
-    armv7l-linux = "0z5rg1nl8lz7zsvml6dfz093dbyrkr4zvvfssqiyarw4n24d2mim";
+    x86_64-linux = "1bglf1a8b5whv9pk811fdnx0mvfcfasjxbik73p67msp4yy68lm4";
+    x86_64-darwin = "0cv6i2i69xf6hn0vrfl3gk3ky7r5yvp4k7zx2k695gzck5s9bx8y";
+    aarch64-linux = "1jggspj5q4vfgs4xdvx5p8qsfm98wf17jmxqzs68lmlhmhadyh22";
+    aarch64-darwin = "0c1nz7a54xq20a2a4fqcmlhry6gqwz5f1ys7dx0x5whaxbybh8my";
+    armv7l-linux = "0p2rdxbqpzk79ra7br7wfs8kr0hnh3l022mqb7y16gc426xjlfn4";
   }.${system};
 in
   callPackage ./generic.nix rec {
     # Please backport all compatible updates to the stable release.
     # This is important for the extension ecosystem.
-    version = "1.57.1";
+    version = "1.63.2";
     pname = "vscode";
 
     executableName = "code" + lib.optionalString isInsiders "-insiders";
@@ -37,7 +39,7 @@ in
 
     sourceRoot = "";
 
-    updateScript = ./update-vscodium.sh;
+    updateScript = ./update-vscode.sh;
 
     meta = with lib; {
       description = ''
@@ -55,7 +57,7 @@ in
       homepage = "https://code.visualstudio.com/";
       downloadPage = "https://code.visualstudio.com/Updates";
       license = licenses.unfree;
-      maintainers = with maintainers; [ eadwu synthetica ];
-      platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "armv7l-linux" ];
+      maintainers = with maintainers; [ eadwu synthetica maxeaubrey bobby285271 ];
+      platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" "aarch64-linux" "armv7l-linux" ];
     };
   }

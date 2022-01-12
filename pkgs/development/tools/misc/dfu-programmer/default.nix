@@ -1,10 +1,7 @@
 { lib, stdenv, fetchurl, libusb-compat-0_1 }:
-let
-  version = "0.7.2";
-in
 stdenv.mkDerivation rec {
   pname = "dfu-programmer";
-  inherit version;
+  version = "0.7.2";
 
   buildInputs = [ libusb-compat-0_1 ];
 

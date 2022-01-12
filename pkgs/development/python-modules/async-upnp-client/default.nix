@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , aiohttp
 , async-timeout
 , buildPythonPackage
@@ -13,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "async-upnp-client";
-  version = "0.18.0";
-  disabled = pythonOlder "3.5";
+  version = "0.23.1";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "StevenLooman";
     repo = "async_upnp_client";
     rev = version;
-    sha256 = "sha256-pntOy7J4dPtAS8ZzxLLV79VQ36r+0sXMImJFhDk9bQw=";
+    sha256 = "sha256-m8oTqGbsJ99ImtnSlL4LX1qR0bUhGtVPPWmjsZfV6sE=";
   };
 
   propagatedBuildInputs = [
@@ -34,6 +35,28 @@ buildPythonPackage rec {
   checkInputs = [
     pytestCheckHook
     pytest-asyncio
+  ];
+
+  disabledTests = [
+    # socket.gaierror: [Errno -2] Name or service not known
+    "test_async_get_local_ip"
+    "test_get_local_ip"
+    # OSError: [Errno 101] Network is unreachable
+    "test_auto_resubscribe_fail"
+    "test_init"
+    "test_on_notify_dlna_event"
+    "test_on_notify_upnp_event"
+    "test_server_init"
+    "test_server_start"
+    "test_start_server"
+    "test_subscribe"
+    "test_subscribe_auto_resubscribe"
+    "test_subscribe_fail"
+    "test_subscribe_manual_resubscribe"
+    "test_subscribe_renew"
+    "test_unsubscribe"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "test_deferred_callback_url"
   ];
 
   pythonImportsCheck = [ "async_upnp_client" ];

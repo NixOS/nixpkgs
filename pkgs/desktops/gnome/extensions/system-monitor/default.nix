@@ -1,14 +1,14 @@
-{ lib, stdenv, substituteAll, fetchFromGitHub, glib, glib-networking, libgtop, gnome }:
+{ lib, stdenv, substituteAll, fetchFromGitHub, fetchpatch, glib, glib-networking, libgtop, gnome }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-system-monitor";
-  version = "unstable-2021-06-19";
+  version = "unstable-2021-09-07";
 
   src = fetchFromGitHub {
     owner = "paradoxxxzero";
     repo = "gnome-shell-system-monitor-applet";
-    rev = "bece7be22352b81d3d81e64e18a385812851b8de";
-    sha256 = "08nnsg7z3cqk25hfgy4wm02hd2wpz13kig498kn4mf5f1q4hslmx";
+    rev = "133f9f32bca5d159515d709bbdee81bf497ebdc5";
+    sha256 = "1vz1s1x22xmmzaayrzv5jyzlmxslhfaybbnv959szvfp4mdrhch9";
   };
 
   buildInputs = [
@@ -24,27 +24,35 @@ stdenv.mkDerivation rec {
       gtop_path = "${libgtop}/lib/girepository-1.0";
       glib_net_path = "${glib-networking}/lib/girepository-1.0";
     })
+    # Support GNOME 41
+    (fetchpatch {
+      url = "https://github.com/paradoxxxzero/gnome-shell-system-monitor-applet/pull/718/commits/f4ebc29afa707326b977230329e634db169f55b1.patch";
+      sha256 = "0ndnla41mvrww6ldf9d55ar1ibyj8ak5pp1dkjg75jii9slgzjqb";
+    })
   ];
 
   buildPhase = ''
     runHook preBuild
-    glib-compile-schemas --targetdir=${uuid}/schemas ${uuid}/schemas
+    glib-compile-schemas --targetdir="system-monitor@paradoxxx.zero.gmail.com/schemas" "system-monitor@paradoxxx.zero.gmail.com/schemas"
     runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
     mkdir -p $out/share/gnome-shell/extensions
-    cp -r ${uuid} $out/share/gnome-shell/extensions
+    cp -r "system-monitor@paradoxxx.zero.gmail.com" $out/share/gnome-shell/extensions
     runHook postInstall
   '';
 
-  uuid = "system-monitor@paradoxxx.zero.gmail.com";
+  passthru = {
+    extensionUuid = "system-monitor@paradoxxx.zero.gmail.com";
+    extensionPortalSlug = "system-monitor";
+  };
 
   meta = with lib; {
     description = "Display system informations in gnome shell status bar";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ tiramiseb ];
+    maintainers = with maintainers; [ andersk ];
     homepage = "https://github.com/paradoxxxzero/gnome-shell-system-monitor-applet";
   };
 }

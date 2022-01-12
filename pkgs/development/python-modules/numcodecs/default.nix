@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "numcodecs";
-  version = "0.7.3";
+  version = "0.9.1";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "022b12ad83eb623ec53f154859d49f6ec43b15c36052fa864eaf2d9ee786dd85";
+    sha256 = "35adbcc746b95e3ac92e949a161811f5aa2602b9eb1ef241b5ea6f09bb220997";
   };
 
   nativeBuildInputs = [
@@ -49,7 +49,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib;{
-    homepage = "https://github.com/alimanfoo/numcodecs";
+    homepage = "https://github.com/zarr-developers/numcodecs";
     license = licenses.mit;
     description = "Buffer compression and transformation codecs for use in data storage and communication applications";
     maintainers = [ maintainers.costrouc ];

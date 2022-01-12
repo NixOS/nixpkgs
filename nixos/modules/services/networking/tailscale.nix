@@ -24,7 +24,7 @@ in {
     package = mkOption {
       type = types.package;
       default = pkgs.tailscale;
-      defaultText = "pkgs.tailscale";
+      defaultText = literalExpression "pkgs.tailscale";
       description = "The package to use for tailscale";
     };
   };
@@ -34,7 +34,7 @@ in {
     systemd.packages = [ cfg.package ];
     systemd.services.tailscaled = {
       wantedBy = [ "multi-user.target" ];
-      path = [ pkgs.openresolv ];
+      path = [ pkgs.openresolv pkgs.procps ];
       serviceConfig.Environment = [
         "PORT=${toString cfg.port}"
         ''"FLAGS=--tun ${lib.escapeShellArg cfg.interfaceName}"''

@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, unzip, portaudio }:
 
 stdenv.mkDerivation rec {
-  name = "espeak-1.48.04";
+  pname = "espeak";
+  version = "1.48.04";
 
   src = fetchurl {
-    url = "mirror://sourceforge/espeak/${name}-source.zip";
+    url = "mirror://sourceforge/espeak/espeak-${version}-source.zip";
     sha256 = "0n86gwh9pw0jqqpdz7mxggllfr8k0r7pc67ayy7w5z6z79kig6mz";
   };
 

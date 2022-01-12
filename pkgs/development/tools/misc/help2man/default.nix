@@ -6,15 +6,18 @@
 # files.
 
 stdenv.mkDerivation rec {
-  name = "help2man-1.48.1";
+  pname = "help2man";
+  version = "1.48.5";
 
   src = fetchurl {
-    url = "mirror://gnu/help2man/${name}.tar.xz";
-    sha256 = "sha256-3op0dAvQWGRlZ7kqtOzeudqfGgfMfE9gejwU3TjRB5k=";
+    url = "mirror://gnu/${pname}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-ZznkyqQuau0zmb5Dh8p5OZZAlnM06RcohjuOqpIlgr4=";
   };
 
-  nativeBuildInputs = [ gettext perlPackages.LocaleGettext ];
-  buildInputs = [ perlPackages.perl perlPackages.LocaleGettext ];
+  strictDeps = true;
+
+  nativeBuildInputs = [ gettext perlPackages.perl perlPackages.LocaleGettext ];
+  buildInputs = [ perlPackages.LocaleGettext ];
 
   doCheck = false;                                # target `check' is missing
 

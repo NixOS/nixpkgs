@@ -15,7 +15,7 @@ let
 
       buildInputs = lib.optional build-manual [ transfig ghostscript tex ];
 
-      preConfigure = lib.optional build-manual ''
+      preConfigure = lib.optionalString build-manual ''
         sed -i "s/build_manual=no/build_manual=yes/g" DIST
       '';
 

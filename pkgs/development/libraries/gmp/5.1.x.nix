@@ -6,10 +6,11 @@
 let inherit (lib) optional; in
 
 let self = stdenv.mkDerivation rec {
-  name = "gmp-5.1.3";
+  pname = "gmp";
+  version = "5.1.3";
 
   src = fetchurl { # we need to use bz2, others aren't in bootstrapping stdenv
-    urls = [ "mirror://gnu/gmp/${name}.tar.bz2" "ftp://ftp.gmplib.org/pub/${name}/${name}.tar.bz2" ];
+    urls = [ "mirror://gnu/gmp/gmp-${version}.tar.bz2" "ftp://ftp.gmplib.org/pub/gmp-${version}/gmp-${version}.tar.bz2" ];
     sha256 = "0q5i39pxrasgn9qdxzpfbwhh11ph80p57x6hf48m74261d97j83m";
   };
 
@@ -21,7 +22,11 @@ let self = stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ m4 ];
 
-  patches = if stdenv.isDarwin then [ ./need-size-t.patch ] else null;
+  patches = [
+    ./5.1.3-CVE-2021-43618.patch
+  ] ++ lib.optionals stdenv.isDarwin [
+    ./need-size-t.patch
+  ];
 
   configureFlags = [
     "--with-pic"
@@ -75,7 +80,6 @@ let self = stdenv.mkDerivation rec {
 
     platforms = platforms.all;
     badPlatforms = [ "x86_64-darwin" ];
-    maintainers = [ maintainers.peti ];
   };
 };
   in self

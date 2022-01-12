@@ -1,7 +1,7 @@
 { stdenv, lib, python3, fetchFromGitHub, installShellFiles }:
 
 let
-  version = "2.24.2";
+  version = "2.30.0";
   srcName = "azure-cli-${version}-src";
 
   src = fetchFromGitHub {
@@ -9,13 +9,12 @@ let
     owner = "Azure";
     repo = "azure-cli";
     rev = "azure-cli-${version}";
-    sha256 = "sha256-4XmwM0/89hacA8ARs5Zq/ahzeqIc9wS18zT/ale+wQ4=";
+    sha256 = "sha256-b4hNacraNomhiFGEiHcMweqbEq3vTHus+xbFPv5X5HQ=";
   };
 
   # put packages that needs to be overriden in the py package scope
   py = import ./python-packages.nix {
-    inherit stdenv lib src version;
-    python = python3;
+    inherit stdenv lib src version python3;
   };
 in
 py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
@@ -26,8 +25,11 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
 
   prePatch = ''
     substituteInPlace setup.py \
-      --replace "javaproperties==0.5.1" "javaproperties" \
+      --replace "chardet~=3.0.4" "chardet" \
+      --replace "javaproperties~=0.5.1" "javaproperties" \
       --replace "pytz==2019.1" "pytz" \
+      --replace "scp~=0.13.2" "scp" \
+      --replace "jsondiff~=1.2.0" "jsondiff~=1.2" \
       --replace "antlr4-python3-runtime~=4.7.2" "antlr4-python3-runtime~=4.7" \
       --replace "mock~=4.0" "mock"
 
@@ -53,6 +55,7 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
     azure-identity
     azure-keyvault
     azure-keyvault-administration
+    azure-keyvault-keys
     azure-loganalytics
     azure-mgmt-advisor
     azure-mgmt-apimanagement
@@ -80,6 +83,7 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
     azure-mgmt-dns
     azure-mgmt-eventgrid
     azure-mgmt-eventhub
+    azure-mgmt-extendedlocation
     azure-mgmt-hdinsight
     azure-mgmt-imagebuilder
     azure-mgmt-iotcentral
@@ -112,6 +116,7 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
     azure-mgmt-servicebus
     azure-mgmt-servicefabric
     azure-mgmt-servicefabricmanagedclusters
+    azure-mgmt-servicelinker
     azure-mgmt-signalr
     azure-mgmt-sql
     azure-mgmt-sqlvirtualmachine
@@ -123,9 +128,11 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
     azure-storage-blob
     azure-synapse-accesscontrol
     azure-synapse-artifacts
+    azure-synapse-managedprivateendpoints
     azure-synapse-spark
     colorama
     cryptography
+    distro
     Fabric
     jsmin
     knack

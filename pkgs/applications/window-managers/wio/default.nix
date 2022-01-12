@@ -1,39 +1,40 @@
 { lib
 , stdenv
-, fetchFromBitbucket
-, meson
-, ninja
-, pkg-config
+, fetchFromGitHub
 , alacritty
 , cage
 , cairo
 , libxkbcommon
+, makeWrapper
+, mesa
+, meson
+, ninja
+, pkg-config
 , udev
 , wayland
 , wayland-protocols
 , wlroots
-, mesa
 , xwayland
-, makeWrapper
 }:
 
 stdenv.mkDerivation rec {
   pname = "wio";
-  version = "0.0.0+unstable=2021-06-01";
+  version = "0.pre+unstable=2021-06-27";
 
-  src = fetchFromBitbucket {
-    owner = "anderson_torres";
+  src = fetchFromGitHub {
+    owner = "museoa";
     repo = pname;
-    rev = "ad57eb45ba0459cd0b16ba486cb6e01626079c29";
-    sha256 = "sha256-mCggAscQ+Ej3SNwhA6QxecV1nH6Rw8RDf8yAsbadqjE=";
+    rev = "e0b258777995055d69e61a0246a6a64985743f42";
+    sha256 = "sha256-8H9fOnZsNjjq9XvOv68F4RRglGNluxs5/jp/h4ROLiI=";
   };
 
   nativeBuildInputs = [
+    makeWrapper
     meson
     ninja
     pkg-config
-    makeWrapper
   ];
+
   buildInputs = [
     cairo
     libxkbcommon
@@ -59,7 +60,7 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.mit;
     maintainers = with maintainers; [ AndersonTorres ];
-    platforms = with platforms; linux;
+    inherit (wayland.meta) platforms;
   };
 
   passthru.providedSessions = [ "wio" ];

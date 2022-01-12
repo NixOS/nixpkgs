@@ -1,5 +1,5 @@
 { lib, fetchFromGitHub, buildPythonApplication, fuse
-, appdirs, colorama, dateutil, requests, requests_toolbelt
+, appdirs, colorama, python-dateutil, requests, requests-toolbelt
 , fusepy, sqlalchemy, setuptools }:
 
 buildPythonApplication rec {
@@ -15,8 +15,8 @@ buildPythonApplication rec {
     sha256 = "0a0fr632l24a3jmgla3b1vcm50ayfa9hdbp677ch1chwj5dq4zfp";
   };
 
-  propagatedBuildInputs = [ appdirs colorama dateutil fusepy requests
-                            requests_toolbelt setuptools sqlalchemy ];
+  propagatedBuildInputs = [ appdirs colorama python-dateutil fusepy requests
+                            requests-toolbelt setuptools sqlalchemy ];
 
   makeWrapperArgs = [ "--prefix LIBFUSE_PATH : ${fuse}/lib/libfuse.so" ];
 

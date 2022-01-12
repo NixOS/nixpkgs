@@ -15,7 +15,6 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.isLinux [ "--enable-fat" ];
 
   meta = {
-    inherit version;
     description = "A highly optimised library for bignum arithmetic forked from GMP";
     license = lib.licenses.lgpl3Plus;
     maintainers = [lib.maintainers.raskin];

@@ -1,19 +1,20 @@
 { lib, stdenv, requireFile, SDL, libpulseaudio, alsa-lib, runtimeShell }:
 
 stdenv.mkDerivation rec {
-  name = "vessel-12082012";
+  pname = "vessel";
+  version = "12082012";
 
   goBuyItNow = ''
     We cannot download the full version automatically, as you require a license.
     Once you bought a license, you need to add your downloaded version to the nix store.
-    You can do this by using "nix-prefetch-url file://\$PWD/${name}-bin" in the
+    You can do this by using "nix-prefetch-url file://\$PWD/vessel-${version}-bin" in the
     directory where you saved it.
   '';
 
   src = if (stdenv.isi686) then
     requireFile {
       message = goBuyItNow;
-      name = "${name}-bin";
+      name = "vessel-${version}-bin";
       sha256 = "1vpwcrjiln2mx43h7ib3jnccyr3chk7a5x2bw9kb4lw8ycygvg96";
     } else throw "unsupported platform ${stdenv.hostPlatform.system} only i686-linux supported for now.";
 

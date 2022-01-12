@@ -1,30 +1,34 @@
-{ cmake, fetchFromGitHub, lib, stdenv }:
+{ lib, stdenv, fetchFromGitHub, substituteAll, antlr4, libargs, catch2, cmake, libyamlcpp }:
 
 stdenv.mkDerivation rec {
   pname = "luaformatter";
   version = "1.3.6";
 
   src = fetchFromGitHub {
-    owner = "koihik";
-    repo = "luaformatter";
+    owner = "Koihik";
+    repo = "LuaFormatter";
     rev = version;
-    sha256 = "0440kdab5i0vhlk71sbprdrhg362al8jqpy7w2vdhcz1fpi5cm0b";
-    fetchSubmodules = true;
+    sha256 = "14l1f9hrp6m7z3cm5yl0njba6gfixzdirxjl8nihp9val0685vm0";
   };
+
+  patches = [
+    (substituteAll {
+      src = ./fix-lib-paths.patch;
+      antlr4RuntimeCpp = antlr4.runtime.cpp.dev;
+      inherit libargs catch2 libyamlcpp;
+    })
+  ];
 
   nativeBuildInputs = [ cmake ];
 
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out/bin
-    cp lua-format $out/bin
-    runHook postInstall
-  '';
+  buildInputs = [ antlr4.runtime.cpp libyamlcpp ];
 
   meta = with lib; {
-    description = "Code formatter for lua";
-    homepage = "https://github.com/koihik/luaformatter";
+    description = "Code formatter for Lua";
+    homepage = "https://github.com/Koihik/LuaFormatter";
     license = licenses.asl20;
-    maintainers = with maintainers; [ figsoda ];
+    platforms = platforms.all;
+    maintainers = with maintainers; [ figsoda SuperSandro2000 ];
+    mainProgram = "lua-format";
   };
 }

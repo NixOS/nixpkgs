@@ -1,19 +1,22 @@
-{ fetchurl, lib, melpaBuild, writeText }:
+{ lib
+, fetchFromGitHub
+, trivialBuild
+}:
 
-melpaBuild {
-  pname = "font-lock+";
-  version = "20180101.25";
+trivialBuild {
+  pname = "font-lock-plus";
+  version = "208+unstable=2018-01-01";
 
-  src = fetchurl {
-    url = "https://www.emacswiki.org/emacs/download/font-lock%2b.el?revision=25";
-    sha256 = "0197yzn4hbjmw5h3m08264b7zymw63pdafph5f3yzfm50q8p7kp4";
-    name = "font-lock+.el";
+  src = fetchFromGitHub {
+    owner = "emacsmirror";
+    repo = "font-lock-plus";
+    rev = "f2c1ddcd4c9d581bd32be88fad026b49f98b6541";
+    hash = "sha256-lFmdVMXIIXZ9ZohAJw5rhxpTv017qIyzmpuKOWDdeJ4=";
   };
 
-  recipe = writeText "recipe" "(font-lock+ :fetcher github :repo \"\")";
-
-  meta = {
-    homepage = "https://melpa.org/#/font-lock+";
-    license = lib.licenses.gpl2Plus;
+  meta = with lib; {
+    homepage = "https://github.com/emacsmirror/font-lock-plus";
+    description = "Enhancements to standard library font-lock.el";
+    license = licenses.gpl2Plus;
   };
 }

@@ -13,12 +13,17 @@ buildPythonPackage rec {
   nativeBuildInputs = [ cython ];
 
   checkInputs = [ pytestCheckHook ];
-  # Hack needed to make pytest + cython work
-  # https://github.com/NixOS/nixpkgs/pull/82410#issuecomment-827186298
   preCheck = ''
+    # Hack needed to make pytest + cython work
+    # https://github.com/NixOS/nixpkgs/pull/82410#issuecomment-827186298
     export HOME=$(mktemp -d)
     cp -r $TMP/$sourceRoot/tests $HOME
     pushd $HOME
+
+    # locale settings used by upstream, has the effect of skipping
+    # otherwise-failing tests on darwin
+    export LC_ALL='C.UTF-8'
+    export LANG='C.UTF-8'
   '';
   postCheck = "popd";
 
@@ -29,6 +34,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/sebastinas/cwcwidth";
     changelog = "https://github.com/sebastinas/cwcwidth/blob/main/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ eduardosm ];
+    maintainers = with maintainers; [ ];
   };
 }

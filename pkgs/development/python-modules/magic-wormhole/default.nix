@@ -62,5 +62,6 @@ buildPythonPackage rec {
     # https://github.com/NixOS/nixpkgs/issues/71826
     broken = isPy27;
     maintainers = with maintainers; [ asymmetric ];
+    mainProgram = "wormhole";
   };
 }

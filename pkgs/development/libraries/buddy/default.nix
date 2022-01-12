@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, bison }:
 
 stdenv.mkDerivation rec {
-  name = "buddy-2.4";
+  pname = "buddy";
+  version = "2.4";
 
   src = fetchurl {
-    url = "mirror://sourceforge/buddy/${name}.tar.gz";
+    url = "mirror://sourceforge/buddy/${pname}-${version}.tar.gz";
     sha256 = "0dl86l9xkl33wnkz684xa9axhcxx2zzi4q5lii0axnb9lsk81pyk";
   };
 
@@ -20,6 +21,5 @@ stdenv.mkDerivation rec {
     license = "as-is";
 
     platforms = lib.platforms.unix; # Once had cygwin problems
-    maintainers = [ lib.maintainers.peti ];
   };
 }

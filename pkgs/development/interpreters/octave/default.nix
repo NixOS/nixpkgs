@@ -114,12 +114,12 @@ let
   };
 
   self = mkDerivation rec {
-    version = "6.2.0";
+    version = "6.4.0";
     pname = "octave";
 
     src = fetchurl {
       url = "mirror://gnu/octave/${pname}-${version}.tar.gz";
-      sha256 = "sha256-RX0f2oY0qDni/Xz8VbmL1W82tq5z0xu530Pd4wEsqnw=";
+      sha256 = "sha256-tI8z1Pzq85TPvqc6jIUAAJNtg6QXOaJPdWi1sKezms0=";
     };
 
     buildInputs = [
@@ -184,6 +184,9 @@ let
 
     enableParallelBuilding = true;
 
+    # Fix linker error on Darwin (see https://trac.macports.org/ticket/61865)
+    NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-lobjc";
+
     # See https://savannah.gnu.org/bugs/?50339
     F77_INTEGER_8_FLAG = if use64BitIdx then "-fdefault-integer-8" else "";
 
@@ -232,7 +235,7 @@ let
       homepage = "https://www.gnu.org/software/octave/";
       license = lib.licenses.gpl3Plus;
       maintainers = with lib.maintainers; [ raskin doronbehar ];
-      description = "Scientific Pragramming Language";
+      description = "Scientific Programming Language";
       # https://savannah.gnu.org/bugs/?func=detailitem&item_id=56425 is the best attempt to fix JIT
       broken = enableJIT;
       platforms = if overridePlatforms == null then

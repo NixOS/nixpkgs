@@ -16,6 +16,7 @@
       armv7l-linux = import ./bootstrap-files/armv7l.nix;
       aarch64-linux = import ./bootstrap-files/aarch64.nix;
       mipsel-linux = import ./bootstrap-files/loongson2f.nix;
+      riscv64-linux = import ./bootstrap-files/riscv64.nix;
     };
     musl = {
       aarch64-linux = import ./bootstrap-files/aarch64-musl.nix;
@@ -258,8 +259,31 @@ in
         # Rewrap the binutils with the new glibc, so both the next
         # stage's wrappers use it.
         libc = getLibc self;
+
+        # Unfortunately, when building gcc in the next stage, its LTO plugin
+        # would use the final libc but `ld` would use the bootstrap one,
+        # and that can fail to load.  Therefore we upgrade `ld` to use newer libc;
+        # apparently the interpreter needs to match libc, too.
+        bintools = self.stdenvNoCC.mkDerivation {
+          inherit (prevStage.bintools.bintools) name;
+          dontUnpack = true;
+          dontBuild = true;
+          # We wouldn't need to *copy* all, but it's easier and the result is temporary anyway.
+          installPhase = ''
+            mkdir -p "$out"/bin
+            cp -a '${prevStage.bintools.bintools}'/bin/* "$out"/bin/
+            chmod +w "$out"/bin/ld.bfd
+            patchelf --set-interpreter '${getLibc self}'/lib/ld*.so.? \
+              --set-rpath "${getLibc self}/lib:$(patchelf --print-rpath "$out"/bin/ld.bfd)" \
+              "$out"/bin/ld.bfd
+          '';
+        };
       };
     };
+
+    # `libtool` comes with obsolete config.sub/config.guess that don't recognize Risc-V.
+    extraNativeBuildInputs =
+      lib.optional (localSystem.isRiscV) prevStage.updateAutotoolsGnuConfigScriptsHook;
   })
 
 
@@ -356,12 +380,7 @@ in
       targetPlatform = localSystem;
       inherit config;
 
-      preHook = ''
-        # Make "strip" produce deterministic output, by setting
-        # timestamps etc. to a fixed value.
-        commonStripFlags="--enable-deterministic-archives"
-        ${commonPreHook}
-      '';
+      preHook = commonPreHook;
 
       initialPath =
         ((import ../common-path.nix) {pkgs = prevStage;});

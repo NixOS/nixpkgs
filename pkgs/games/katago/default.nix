@@ -1,5 +1,4 @@
 { stdenv
-, gcc8Stdenv
 , boost
 , cmake
 , cudatoolkit
@@ -26,21 +25,18 @@
 assert !enableGPU -> (
   !enableCuda);
 
-let
-  env = if enableCuda
-    then gcc8Stdenv
-    else stdenv;
-
-in env.mkDerivation rec {
+# N.b. older versions of cuda toolkit (e.g. 10) do not support newer versions
+# of gcc.  If you need to use cuda10, please override stdenv with gcc8Stdenv
+stdenv.mkDerivation rec {
   pname = "katago";
-  version = "1.8.2";
-  githash = "b846bddd88fbc5353e4a93fa514f6cbf45358362";
+  version = "1.10.0";
+  githash = "ff49d04ad6bcfa056c63492439a41e2f3bce0847";
 
   src = fetchFromGitHub {
     owner = "lightvector";
     repo = "katago";
     rev = "v${version}";
-    sha256 = "sha256-kL+y2rsEiC5GGDlWrbzxlJvLxHDCuvVT6CDOlUtXpDk=";
+    sha256 = "sha256-ZLJNNjZ5RdOktWDp88d/ItpokANl2EJ0Gbt9oMGm1Og=";
   };
 
   fakegit = writeShellScriptBin "git" "echo ${githash}";

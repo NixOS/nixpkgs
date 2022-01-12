@@ -1,6 +1,6 @@
 { stdenv
 , lib
-, fetchFromGitHub
+, fetchFromSourcehut
 , asciidoc
 , cmocka
 , docbook_xsl
@@ -56,13 +56,14 @@ assert builtins.all
 
 stdenv.mkDerivation rec {
   pname = "imv";
-  version = "4.2.0";
+  version = "4.3.1";
+  outputs = [ "out" "man" ];
 
-  src = fetchFromGitHub {
-    owner = "eXeC64";
+  src = fetchFromSourcehut {
+    owner = "~exec64";
     repo = "imv";
     rev = "v${version}";
-    sha256 = "07pcpppmfvvj0czfvp1cyq03ha0jdj4whl13lzvw37q3vpxs5qqh";
+    sha256 = "sha256-gMAd8skst72QT4jGFH7aRdWeAd4tf/uQgXhGaM/Dpgc=";
   };
 
   mesonFlags = [

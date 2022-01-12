@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , aiohttp
 , buildPythonPackage
 , codecov
@@ -10,7 +11,7 @@
 , pytest-cov
 , pytest-mock
 , pytestCheckHook
-, pytestrunner
+, pytest-runner
 , requests
 , responses
 , six
@@ -45,13 +46,24 @@ buildPythonPackage rec {
     pytest-cov
     pytest-mock
     pytestCheckHook
-    pytestrunner
+    pytest-runner
     responses
   ];
 
   # Exclude tests that requires network features
   pytestFlagsArray = [ "--ignore=integration_tests" ];
-  disabledTests = [ "test_start_raises_an_error_if_rtm_ws_url_is_not_returned" ];
+
+  disabledTests = [
+    "test_start_raises_an_error_if_rtm_ws_url_is_not_returned"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # these fail with `ConnectionResetError: [Errno 54] Connection reset by peer`
+    "test_issue_690_oauth_access"
+    "test_issue_690_oauth_v2_access"
+    "test_send"
+    "test_send_attachments"
+    "test_send_blocks"
+    "test_send_dict"
+  ];
 
   pythonImportsCheck = [ "slack" ];
 
