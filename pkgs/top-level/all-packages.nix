@@ -31669,8 +31669,6 @@ with pkgs;
 
   last = callPackage ../applications/science/biology/last { };
 
-  lumpy = callPackage ../applications/science/biology/lumpy { };
-
   macse = callPackage ../applications/science/biology/macse { };
 
   MACS2 = callPackage ../applications/science/biology/MACS2 { };

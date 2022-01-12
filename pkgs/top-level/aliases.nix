@@ -568,6 +568,7 @@ mapAliases ({
   lua5_1_sockets = lua51Packages.luasocket; # added 2017-05-02
   lua5_expat = luaPackages.luaexpat; # added 2017-05-02
   lua5_sec = luaPackages.luasec; # added 2017-05-02
+  lumpy = throw "lumpy has been removed from nixpkgs, as it is stuck on python2."; # added 2022-01-12
   lxappearance-gtk3 = throw "lxappearance-gtk3 has been removed. Use lxappearance instead, which now defaults to Gtk3";  # added 2020-06-03
   lzma = xz; # moved from top-level 2021-03-14
   m3d-linux = m33-linux; # added 2016-08-13
