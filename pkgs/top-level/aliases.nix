@@ -217,6 +217,7 @@ mapAliases ({
   desktop_file_utils = desktop-file-utils; # added 2018-02-25
   devicemapper = lvm2; # added 2018-04-25
   digikam5 = digikam; # added 2017-02-18
+  displaycal = throw "displaycal has been removed from nixpkgs, as it hasn't migrated to python3."; # added 2022-01-12
   dmtx = dmtx-utils; # added 2018-04-25
   dnnl = oneDNN; # added 2020-04-22
   docbook5_xsl = docbook_xsl_ns; # added 2018-04-25

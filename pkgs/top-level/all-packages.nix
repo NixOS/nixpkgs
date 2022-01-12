@@ -30229,8 +30229,6 @@ with pkgs;
 
   digikam = libsForQt5.callPackage ../applications/graphics/digikam {};
 
-  displaycal = callPackage ../applications/graphics/displaycal {};
-
   drumkv1 = libsForQt5.callPackage ../applications/audio/drumkv1 { };
 
   ### GAMES
