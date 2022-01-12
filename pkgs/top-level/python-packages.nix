@@ -8391,9 +8391,7 @@ in {
     inherit (pkgs) libarchive;
   };
 
-  rasterio = callPackage ../development/python-modules/rasterio {
-    gdal = pkgs.gdal_2;
-  };
+  rasterio = callPackage ../development/python-modules/rasterio { };
 
   ratelim = callPackage ../development/python-modules/ratelim { };
 
