@@ -17,6 +17,8 @@ beamPackages.mixRelease rec {
     sha256 = "sha256-RcqqNNNCR4cxETUCyjChkpq+cQ1QzNOHHzdqBLtOc6g=";
   };
 
+  patches = [ ./0001-nixos-move-RELEASE_COOKIE-to-var-lib-pleroma-.cookie.patch ];
+
   mixNixDeps = import ./mix.nix {
     inherit beamPackages lib;
     overrides = (final: prev: {
