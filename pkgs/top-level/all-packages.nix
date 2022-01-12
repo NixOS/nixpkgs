@@ -1011,6 +1011,8 @@ with pkgs;
 
   godspeed = callPackage ../tools/networking/godspeed { };
 
+  fwbuilder = libsForQt5.callPackage ../tools/security/fwbuilder { };
+
   ksnip = libsForQt5.callPackage ../tools/misc/ksnip { };
 
   linux-router = callPackage ../tools/networking/linux-router { };
@@ -8711,6 +8713,8 @@ with pkgs;
 
   phodav = callPackage ../tools/networking/phodav { };
 
+  photon-rss = callPackage ../applications/networking/feedreaders/photon { };
+
   pim6sd = callPackage ../servers/pim6sd { };
 
   phosh = callPackage ../applications/window-managers/phosh { };
@@ -9123,6 +9127,8 @@ with pkgs;
   rarian = callPackage ../development/libraries/rarian { };
 
   ratools = callPackage ../tools/networking/ratools { };
+
+  ratt = callPackage ../applications/misc/ratt { };
 
   rc = callPackage ../shells/rc { };
 
@@ -16624,10 +16630,10 @@ with pkgs;
   glew110 = callPackage ../development/libraries/glew/1.10.nix {
     inherit (darwin.apple_sdk.frameworks) AGL OpenGL;
   };
-  glew-egl = glew.overrideAttrs (oldAttrs: {
-    pname = "glew-egl";
-    makeFlags = oldAttrs.makeFlags ++ [ "SYSTEM=linux-egl" ];
-  });
+  glew-egl = callPackage ../development/libraries/glew {
+    inherit (darwin.apple_sdk.frameworks) OpenGL;
+    enableEGL = true;
+  };
 
   glfw = glfw3;
   glfw-wayland = glfw.override {
@@ -26504,19 +26510,6 @@ with pkgs;
 
   jwm-settings-manager = callPackage ../applications/window-managers/jwm/jwm-settings-manager.nix { };
 
-  k3d = callPackage ../applications/graphics/k3d {
-    inherit (gnome2) gtkglext;
-    stdenv = gcc6Stdenv;
-    boost = boost155.override {
-      enablePython = true;
-      python = python2;
-      stdenv = gcc6Stdenv;
-      buildPackages = buildPackages // {
-        stdenv = gcc6Stdenv;
-      };
-    };
-  };
-
   k3s = callPackage ../applications/networking/cluster/k3s {};
 
   kconf = callPackage ../applications/networking/cluster/kconf { };
@@ -30196,8 +30189,6 @@ with pkgs;
   lightwalletd = callPackage ../applications/blockchains/lightwalletd { };
 
   openethereum = callPackage ../applications/blockchains/openethereum { };
-
-  parity-ui = callPackage ../applications/blockchains/parity-ui { };
 
   polkadot = callPackage ../applications/blockchains/polkadot { };
 

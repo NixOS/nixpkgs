@@ -53,6 +53,7 @@
   ./hardware/flirc.nix
   ./hardware/gpgsmartcards.nix
   ./hardware/i2c.nix
+  ./hardware/hackrf.nix
   ./hardware/sensor/hddtemp.nix
   ./hardware/sensor/iio.nix
   ./hardware/keyboard/teck.nix

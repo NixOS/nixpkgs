@@ -3435,6 +3435,12 @@
     githubId = 4742;
     name = "Aaron Bull Schaefer";
   };
+  elatov = {
+    email = "elatov@gmail.com";
+    github = "elatov";
+    githubId = 7494394;
+    name = "Karim Elatov";
+  };
   eleanor = {
     email = "dejan@proteansec.com";
     github = "proteansec";
@@ -4115,12 +4121,6 @@
     github = "fredeeb";
     githubId = 7551358;
     name = "Frede Emil";
-  };
-  freepotion = {
-    email = "42352817+freepotion@users.noreply.github.com";
-    github = "freepotion";
-    githubId = 42352817;
-    name = "Free Potion";
   };
   freezeboy = {
     email = "freezeboy@users.noreply.github.com";
@@ -6374,7 +6374,7 @@
   };
 
   kmein = {
-    email = "kieran.meinhardt@gmail.com";
+    email = "kmein@posteo.de";
     name = "Kierán Meinhardt";
     github = "kmein";
     githubId = 10352507;
