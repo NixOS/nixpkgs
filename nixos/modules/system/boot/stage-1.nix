@@ -633,7 +633,7 @@ in
 
           <itemizedlist>
             <listitem><para><literal>boot.consoleLogLevel = 0;</literal></para></listitem>
-            <listitem><para><literal>boot.kernelParams = [ "quiet" "udev.log_priority=3" ];</literal></para></listitem>
+            <listitem><para><literal>boot.kernelParams = [ "quiet" "udev.log_level=3" ];</literal></para></listitem>
           </itemizedlist>
         '';
     };
