@@ -4,6 +4,7 @@
 , wxGTK
 , cmake
 , ninja
+, wrapGAppsHook
 , unstableGitUpdater
 }:
 
@@ -21,6 +22,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     ninja
+    wrapGAppsHook
   ];
 
   buildInputs = [
