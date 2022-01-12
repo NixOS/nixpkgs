@@ -3,12 +3,15 @@
 , fetchFromGitHub
 , mock
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "python_http_client";
   version = "3.3.4";
   format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "sendgrid";
@@ -20,6 +23,12 @@ buildPythonPackage rec {
   checkInputs = [
     mock
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # Test is failing as the test is dynamic
+    # https://github.com/sendgrid/python-http-client/issues/153
+    "test__daterange"
   ];
 
   pythonImportsCheck = [
