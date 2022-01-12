@@ -2728,6 +2728,12 @@
       fingerprint = "5B08 313C 6853 E5BF FA91  A817 0176 0B4F 9F53 F154";
     }];
   };
+  davidwilemski = {
+    email = "nix@wilemski.org";
+    github = "davidwilemski";
+    githubId = 403152;
+    name = "David Wilemski";
+  };
   davorb = {
     email = "davor@davor.se";
     github = "davorb";
