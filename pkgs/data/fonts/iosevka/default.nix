@@ -61,7 +61,7 @@ let
       (throw "no 'iosevka' package found in nodePackages")
       (throw "multiple 'iosevka' packages found in nodePackages")
       (lib.attrValues nodePackages)
-  ).override (drv: { dontNpmInstall = true; });
+  ).override (_drv: { dontNpmInstall = true; });
 in
 stdenv.mkDerivation rec {
   pname = if set != null then "iosevka-${set}" else "iosevka";
