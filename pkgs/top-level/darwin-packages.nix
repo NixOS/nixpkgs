@@ -23,7 +23,7 @@ let
 in
 
 lib.makeScopeWithSplicing splicePackages newScope otherSplices (_: {}) (spliced: spliced.apple_sdk.frameworks) (self: let
-  inherit (self) mkDerivation callPackage;
+  inherit (self) callPackage;
 
   # Must use pkgs.callPackage to avoid infinite recursion.
 
@@ -183,7 +183,7 @@ impure-cmds // appleSourcePackages // chooseLibs // {
       # This may seem unimportant, but without it packages (e.g., bacula) will
       # fail with linker errors referring ___CFConstantStringClassReference.
       # It's not clear to me why some packages need this extra setup.
-      lib.overrideDerivation apple_sdk.frameworks.CoreFoundation (drv: {
+      lib.overrideDerivation apple_sdk.frameworks.CoreFoundation (_drv: {
         setupHook = null;
       })
     else callPackage ../os-specific/darwin/swift-corelibs/corefoundation.nix { };

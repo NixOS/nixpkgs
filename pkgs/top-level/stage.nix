@@ -98,7 +98,7 @@ let
       stdenvAdapters = res;
     };
 
-  trivialBuilders = self: super:
+  trivialBuilders = self: _super:
     import ../build-support/trivial-builders.nix {
       inherit lib;
       inherit (self) runtimeShell stdenv stdenvNoCC;
@@ -106,7 +106,7 @@ let
       inherit (self.pkgsBuildHost.xorg) lndir;
     };
 
-  stdenvBootstappingAndPlatforms = self: super: let
+  stdenvBootstappingAndPlatforms = self: _super: let
     withFallback = thisPkgs:
       (if adjacentPackages == null then self else thisPkgs)
       // { recurseForDerivations = false; };
@@ -138,13 +138,13 @@ let
 
   # The old identifiers for cross-compiling. These should eventually be removed,
   # and the packages that rely on them refactored accordingly.
-  platformCompat = self: super: let
+  platformCompat = _self: super: let
     inherit (super.stdenv) buildPlatform hostPlatform targetPlatform;
   in {
     inherit buildPlatform hostPlatform targetPlatform;
   };
 
-  splice = self: super: import ./splice.nix lib self (adjacentPackages != null);
+  splice = self: _super: import ./splice.nix lib self (adjacentPackages != null);
 
   allPackages = self: super:
     let res = import ./all-packages.nix
@@ -167,9 +167,9 @@ let
   # (un-overridden) set of packages, allowing packageOverrides
   # attributes to refer to the original attributes (e.g. "foo =
   # ... pkgs.foo ...").
-  configOverrides = self: super:
+  configOverrides = _self: super:
     lib.optionalAttrs allowCustomOverrides
-      ((config.packageOverrides or (super: {})) super);
+      ((config.packageOverrides or (_super: {})) super);
 
   # Convenience attributes for instantitating package sets. Each of
   # these will instantiate a new version of allPackages. Currently the
@@ -178,19 +178,19 @@ let
   # - pkgsCross.<system> where system is a member of lib.systems.examples
   # - pkgsMusl
   # - pkgsi686Linux
-  otherPackageSets = self: super: {
+  otherPackageSets = self: _super: {
     # This maps each entry in lib.systems.examples to its own package
     # set. Each of these will contain all packages cross compiled for
     # that target system. For instance, pkgsCross.raspberryPi.hello,
     # will refer to the "hello" package built for the ARM6-based
     # Raspberry Pi.
-    pkgsCross = lib.mapAttrs (n: crossSystem:
+    pkgsCross = lib.mapAttrs (_n: crossSystem:
                               nixpkgsFun { inherit crossSystem; })
                               lib.systems.examples;
 
     pkgsLLVM = nixpkgsFun {
       overlays = [
-        (self': super': {
+        (_self': super': {
           pkgsLLVM = super';
         })
       ] ++ overlays;
@@ -207,7 +207,7 @@ let
     # default GNU libc on Linux systems. Non-Linux systems are not
     # supported.
     pkgsMusl = if stdenv.hostPlatform.isLinux then nixpkgsFun {
-      overlays = [ (self': super': {
+      overlays = [ (_self': super': {
         pkgsMusl = super';
       })] ++ overlays;
       ${if stdenv.hostPlatform == stdenv.buildPlatform
@@ -219,7 +219,7 @@ let
     # All packages built for i686 Linux.
     # Used by wine, firefox with debugging version of Flash, ...
     pkgsi686Linux = if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86 then nixpkgsFun {
-      overlays = [ (self': super': {
+      overlays = [ (_self': super': {
         pkgsi686Linux = super';
       })] ++ overlays;
       ${if stdenv.hostPlatform == stdenv.buildPlatform
@@ -250,7 +250,7 @@ let
     # Fully static packages.
     # Currently uses Musl on Linux (couldn’t get static glibc to work).
     pkgsStatic = nixpkgsFun ({
-      overlays = [ (self': super': {
+      overlays = [ (_self': super': {
         pkgsStatic = super';
       })] ++ overlays;
     } // lib.optionalAttrs stdenv.hostPlatform.isLinux {
@@ -266,7 +266,7 @@ let
   # The complete chain of package set builders, applied from top to bottom.
   # stdenvOverlays must be last as it brings package forward from the
   # previous bootstrapping phases which have already been overlayed.
-  toFix = lib.foldl' (lib.flip lib.extends) (self: {}) ([
+  toFix = lib.foldl' (lib.flip lib.extends) (_self: {}) ([
     stdenvBootstappingAndPlatforms
     platformCompat
     stdenvAdapters

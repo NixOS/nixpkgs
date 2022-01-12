@@ -36,7 +36,7 @@ let
       })
       else if builtins.isFunction ff then {
         overridePythonAttrs = newArgs: makeOverridablePythonPackage f (overrideWith newArgs);
-        __functor = self: ff;
+        __functor = _self: ff;
       }
       else ff;
 
@@ -5109,7 +5109,7 @@ in {
   meshtastic = callPackage ../development/python-modules/meshtastic { };
 
   meson = toPythonModule ((pkgs.meson.override { python3 = python; }).overrideAttrs
-    (oldAttrs: { # We do not want the setup hook in Python packages because the build is performed differently.
+    (_oldAttrs: { # We do not want the setup hook in Python packages because the build is performed differently.
       setupHook = null;
     }));
 

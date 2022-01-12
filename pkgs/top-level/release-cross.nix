@@ -211,5 +211,5 @@ in
     mkBootstrapToolsJob = drv:
       assert lib.elem drv.system supportedSystems;
       hydraJob' (lib.addMetaAttrs { inherit maintainers; } drv);
-  in lib.mapAttrsRecursiveCond (as: !lib.isDerivation as) (name: mkBootstrapToolsJob) tools;
+  in lib.mapAttrsRecursiveCond (as: !lib.isDerivation as) (_name: mkBootstrapToolsJob) tools;
 }

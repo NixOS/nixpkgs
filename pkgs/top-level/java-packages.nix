@@ -61,9 +61,6 @@ in {
       headless = openjdk.override { headless = true; };
     };
 
-    openjdkDarwinMissing = version:
-      abort "OpenJDK ${builtins.toString version} is currently not supported on Darwin by nixpkgs.";
-
   in rec {
 
     adoptopenjdk-8 = mkAdoptopenjdk

@@ -143,7 +143,7 @@ rec {
 
   /* Recursively map a (nested) set of derivations to an isomorphic
      set of meta.platforms values. */
-  packagePlatforms = mapAttrs (name: value:
+  packagePlatforms = mapAttrs (_name: value:
       if isDerivation value then
         value.meta.hydraPlatforms
           or (value.meta.platforms or [ "x86_64-linux" ])

@@ -1,7 +1,7 @@
 { lib, newScope, pkgs, config }:
 
 let
-  liftJaneStreet = self: super: super.janeStreet // super;
+  liftJaneStreet = _self: super: super.janeStreet // super;
 
   mkOcamlPackages = ocaml:
     (lib.makeScope newScope (self: with self;

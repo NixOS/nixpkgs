@@ -16,7 +16,7 @@ with import ./release-lib.nix {inherit supportedSystems nixpkgsArgs; };
 with lib;
 
 let
-  packagePython = mapAttrs (name: value:
+  packagePython = mapAttrs (_name: value:
     let res = builtins.tryEval (
       if isDerivation value then
         value.meta.isBuildPythonPackage or []

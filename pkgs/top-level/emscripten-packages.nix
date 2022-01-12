@@ -9,7 +9,7 @@ rec {
   json_c = (pkgs.json_c.override {
     stdenv = pkgs.emscriptenStdenv;
   }).overrideDerivation
-    (old: {
+    (_old: {
       nativeBuildInputs = [ pkg-config cmake ];
       propagatedBuildInputs = [ zlib ];
       configurePhase = ''

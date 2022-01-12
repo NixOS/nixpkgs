@@ -178,7 +178,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
   };
 
   Dafny = let
-    z3 = pkgs.z3.overrideAttrs (oldAttrs: rec {
+    z3 = pkgs.z3.overrideAttrs (_oldAttrs: rec {
       version = "4.8.4";
       name = "z3-${version}";
 

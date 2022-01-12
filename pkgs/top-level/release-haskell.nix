@@ -69,7 +69,7 @@ let
       (lib.mapAttrs (
         ghc: jobs:
         lib.filterAttrs (
-          jobName: platforms:
+          jobName: _platforms:
           lib.elem ghc (config."${jobName}" or [])
         ) jobs
       ) compilerPlatforms);
