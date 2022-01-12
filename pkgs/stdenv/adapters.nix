@@ -167,8 +167,8 @@ rec {
      # remove all maintainers.
      defaultStdenv = replaceMaintainersField allStdenvs.stdenv pkgs [];
   */
-  replaceMaintainersField = stdenv: pkgs: maintainers:
-    stdenv.override (old: {
+  replaceMaintainersField = stdenv: _pkgs: maintainers:
+    stdenv.override (_old: {
       mkDerivationFromStdenv = overrideMkDerivationResult (pkg:
         lib.recursiveUpdate pkg { meta.maintainers = maintainers; });
     });
@@ -178,7 +178,7 @@ rec {
      license name.
   */
   traceDrvLicenses = stdenv:
-    stdenv.override (old: {
+    stdenv.override (_old: {
       mkDerivationFromStdenv = overrideMkDerivationResult (pkg:
         let
           printDrvPath = val: let
@@ -209,7 +209,7 @@ rec {
      feature of ~/.config/nixpkgs/config.nix .
   */
   validateLicenses = licensePred: stdenv:
-    stdenv.override (old: {
+    stdenv.override (_old: {
       mkDerivationFromStdenv = overrideMkDerivationResult (pkg:
         let
           drv = builtins.unsafeDiscardStringContext pkg.drvPath;

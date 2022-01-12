@@ -80,7 +80,7 @@ let
   # the bootstrap.  In all stages, we build an stdenv and the package
   # set that can be built with that stdenv.
   stageFun = prevStage:
-    { name, overrides ? (self: super: {}), extraNativeBuildInputs ? [] }:
+    { name, overrides ? (_self: _super: {}), extraNativeBuildInputs ? [] }:
 
     let
 
@@ -148,7 +148,7 @@ in
   (prevStage: stageFun prevStage {
     name = "bootstrap-stage0";
 
-    overrides = self: super: {
+    overrides = self: _super: {
       # We thread stage0's stdenv through under this name so downstream stages
       # can use it for wrapping gcc too. This way, downstream stages don't need
       # to refer to this stage directly, which violates the principle that each
@@ -202,7 +202,7 @@ in
     name = "bootstrap-stage1";
 
     # Rebuild binutils to use from stage2 onwards.
-    overrides = self: super: {
+    overrides = _self: super: {
       binutils-unwrapped = super.binutils-unwrapped.override {
         gold = false;
       };
@@ -232,7 +232,7 @@ in
         ccWrapperStdenv
         gcc-unwrapped coreutils gnugrep
         perl gnum4 bison;
-      dejagnu = super.dejagnu.overrideAttrs (a: { doCheck = false; } );
+      dejagnu = super.dejagnu.overrideAttrs (_a: { doCheck = false; } );
 
       # We need libidn2 and its dependency libunistring as glibc dependency.
       # To avoid the cycle, we build against bootstrap libc, nuke references,
@@ -424,7 +424,7 @@ in
           ++ lib.optionals (!localSystem.isx86 || localSystem.libc == "musl")
             [ prevStage.updateAutotoolsGnuConfigScriptsHook prevStage.gnu-config ];
 
-      overrides = self: super: {
+      overrides = _self: super: {
         inherit (prevStage)
           gzip bzip2 xz bash coreutils diffutils findutils gawk
           gnumake gnused gnutar gnugrep gnupatch patchelf

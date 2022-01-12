@@ -8,7 +8,7 @@ let
 in with pkgs; rec {
 
 
-  coreutilsMinimal = coreutils.override (args: {
+  coreutilsMinimal = coreutils.override (_args: {
     # We want coreutils without ACL/attr support.
     aclSupport = false;
     attrSupport = false;

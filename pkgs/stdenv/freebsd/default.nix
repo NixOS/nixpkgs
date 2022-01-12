@@ -210,7 +210,7 @@ in
       shell = "${bootstrapTools}/bin/bash";
       fetchurlBoot = null;
       cc = null;
-      overrides = self: super: {
+      overrides = _self: _super: {
       };
     };
   })

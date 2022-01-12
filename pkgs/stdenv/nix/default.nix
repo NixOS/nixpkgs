@@ -38,7 +38,7 @@ bootStages ++ [
 
       fetchurlBoot = prevStage.stdenv.fetchurlBoot;
 
-      overrides = self: super: {
+      overrides = _self: _super: {
         inherit cc;
         inherit (cc) binutils;
         inherit (prevStage)

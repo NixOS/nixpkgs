@@ -61,7 +61,7 @@ let
   #   allowUnfree = false;
   #   allowUnfreePredicate = (x: pkgs.lib.hasPrefix "vscode" x.name);
   # }
-  allowUnfreePredicate = config.allowUnfreePredicate or (x: false);
+  allowUnfreePredicate = config.allowUnfreePredicate or (_x: false);
 
   # Check whether unfree packages are allowed and if not, whether the
   # package has an unfree license and is not explicitely allowed by the
@@ -85,12 +85,12 @@ let
 
   remediation = {
     unfree = remediate_allowlist "Unfree" remediate_unfree_predicate;
-    broken = remediate_allowlist "Broken" (x: "");
-    unsupported = remediate_allowlist "UnsupportedSystem" (x: "");
-    blocklisted = x: "";
+    broken = remediate_allowlist "Broken" (_x: "");
+    unsupported = remediate_allowlist "UnsupportedSystem" (_x: "");
+    blocklisted = _x: "";
     insecure = remediate_insecure;
     broken-outputs = remediateOutputsToInstall;
-    unknown-meta = x: "";
+    unknown-meta = _x: "";
   };
   remediation_env_var = allow_attr: {
     Unfree = "NIXPKGS_ALLOW_UNFREE";

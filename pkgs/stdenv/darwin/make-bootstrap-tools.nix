@@ -15,9 +15,8 @@ in with import pkgspath ({ inherit system; } // cross // custom-bootstrap);
 
 let
   llvmPackages = llvmPackages_11;
-  storePrefixLen = builtins.stringLength builtins.storeDir;
 in rec {
-  coreutils_ = coreutils.override (args: {
+  coreutils_ = coreutils.override (_args: {
     # We want coreutils without ACL support.
     aclSupport = false;
     # Cannot use a single binary build, or it gets dynamically linked against gmp.
@@ -27,10 +26,10 @@ in rec {
   cctools_ = darwin.cctools;
 
   # Avoid debugging larger changes for now.
-  bzip2_ = bzip2.override (args: { linkStatic = true; });
+  bzip2_ = bzip2.override (_args: { linkStatic = true; });
 
   # Avoid messing with libkrb5 and libnghttp2.
-  curl_ = curlMinimal.override (args: { gssSupport = false; http2Support = false; });
+  curl_ = curlMinimal.override (_args: { gssSupport = false; http2Support = false; });
 
   build = stdenv.mkDerivation {
     name = "stdenv-bootstrap-tools";

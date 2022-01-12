@@ -6,7 +6,7 @@ let
     inherit crossSystem;
   };
   lib = import ../../../lib;
-in lib.mapAttrs (n: make) (with lib.systems.examples; {
+in lib.mapAttrs (_n: make) (with lib.systems.examples; {
   armv5tel   = sheevaplug;
   scaleway   = scaleway-c1;
   pogoplug4  = pogoplug4;

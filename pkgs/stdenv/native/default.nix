@@ -78,7 +78,7 @@ let
   # A function that builds a "native" stdenv (one that uses tools in
   # /usr etc.).
   makeStdenv =
-    { cc, fetchurl, extraPath ? [], overrides ? (self: super: { }), extraNativeBuildInputs ? [] }:
+    { cc, fetchurl, extraPath ? [], overrides ? (_self: _super: { }), extraNativeBuildInputs ? [] }:
 
     import ../generic {
       buildPlatform = localSystem;
@@ -162,7 +162,7 @@ in
     stdenv = makeStdenv {
       inherit (prevStage.stdenv) cc fetchurl;
       extraPath = [ prevStage.xz ];
-      overrides = self: super: { inherit (prevStage) xz; };
+      overrides = _self: _super: { inherit (prevStage) xz; };
       extraNativeBuildInputs = if localSystem.isLinux then [ prevStage.patchelf ] else [];
     };
   })

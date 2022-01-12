@@ -10,7 +10,7 @@ argsStdenv@{ name ? "stdenv", preHook ? "", initialPath
   hasCC ? cc != null, cc
 
 , shell
-, allowedRequisites ? null, extraAttrs ? {}, overrides ? (self: super: {}), config
+, allowedRequisites ? null, extraAttrs ? {}, overrides ? (_self: _super: {}), config
 
 , # The `fetchurl' to use for downloading curl and its dependencies
   # (see all-packages.nix).

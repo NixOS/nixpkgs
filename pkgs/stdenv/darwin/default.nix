@@ -82,7 +82,7 @@ rec {
   });
 
   stageFun = step: last: { shell ? "${bootstrapTools}/bin/bash"
-                         , overrides ? (self: super: { })
+                         , overrides ? (_self: _super: { })
                          , extraPreHook ? ""
                          , extraNativeBuildInputs
                          , extraBuildInputs
@@ -529,7 +529,7 @@ rec {
 
   stage3 = prevStage:
     let
-      persistent = self: super: with prevStage; {
+      persistent = _self: super: with prevStage; {
         inherit
           patchutils m4 scons flex perl bison unifdef unzip openssl python3
           gettext sharutils libarchive pkg-config groff bash subversion
@@ -606,7 +606,7 @@ rec {
 
   stage4 = prevStage:
     let
-      persistent = self: super: with prevStage; {
+      persistent = _self: super: with prevStage; {
         inherit
           gnumake gzip gnused bzip2 gawk ed xz patch bash python3
           ncurses libffi zlib gmp pcre gnugrep cmake
@@ -627,7 +627,7 @@ rec {
               clang-unwrapped-all-outputs = pkgs."${finalLlvmPackages}".clang-unwrapped-all-outputs.override { llvm = llvmSelf.llvm; };
               libllvm = pkgs."${finalLlvmPackages}".libllvm.override { inherit libxml2; };
             });
-            libraries = super."${finalLlvmPackages}".libraries.extend (llvmSelf: _: {
+            libraries = super."${finalLlvmPackages}".libraries.extend (_llvmSelf: _: {
               inherit (pkgs."${finalLlvmPackages}") libcxx libcxxabi compiler-rt;
             });
           in
@@ -662,7 +662,7 @@ rec {
     let
       doSign = localSystem.isAarch64;
       pkgs = prevStage;
-      persistent = self: super: with prevStage; {
+      persistent = _self: super: with prevStage; {
         inherit
           gnumake gzip gnused bzip2 gawk ed xz patch bash
           ncurses libffi zlib gmp pcre gnugrep
@@ -679,7 +679,7 @@ rec {
         # Need to get rid of these when cross-compiling.
         "${finalLlvmPackages}" = super."${finalLlvmPackages}" // (
           let
-            tools = super."${finalLlvmPackages}".tools.extend (_: super: {
+            tools = super."${finalLlvmPackages}".tools.extend (_: _super: {
               inherit (pkgs."${finalLlvmPackages}") llvm clang-unwrapped;
             });
             libraries = super."${finalLlvmPackages}".libraries.extend (_: _: {
@@ -796,7 +796,7 @@ rec {
       ] ++ lib.optional useAppleSDKLibs objc4
       ++ lib.optionals doSign [ postLinkSignHook sigtool signingUtils ]);
 
-      overrides = lib.composeExtensions persistent (self: super: {
+      overrides = lib.composeExtensions persistent (_self: super: {
         darwin = super.darwin.overrideScope (_: superDarwin: {
           inherit (prevStage.darwin) CF darwin-stubs;
           xnu = superDarwin.xnu.override { inherit (prevStage) python3; };
