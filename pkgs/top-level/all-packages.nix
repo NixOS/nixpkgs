@@ -13805,8 +13805,6 @@ with pkgs;
 
   inherit (ocamlPackages) reason;
 
-  renpy = callPackage ../development/interpreters/renpy { };
-
   pixie = callPackage ../development/interpreters/pixie { };
   dust = callPackage ../development/interpreters/pixie/dust.nix { };
 
