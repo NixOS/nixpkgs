@@ -345,7 +345,7 @@ class Editor:
             dest="proc",
             type=int,
             default=30,
-            help="Number of concurrent processes to spawn.",
+            help="Number of concurrent processes to spawn. Export GITHUB_API_TOKEN allows higher values.",
         )
         parser.add_argument(
             "--no-commit", "-n", action="store_true", default=False,
