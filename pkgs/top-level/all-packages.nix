@@ -23604,6 +23604,8 @@ with pkgs;
 
   lmodern = callPackage ../data/fonts/lmodern { };
 
+  logiops = callPackage ../tools/system/logiops { };
+
   logitech-udev-rules = callPackage ../os-specific/linux/logitech-udev-rules {};
 
   # lohit-fonts.assamese lohit-fonts.bengali lohit-fonts.devanagari lohit-fonts.gujarati lohit-fonts.gurmukhi
