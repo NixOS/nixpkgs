@@ -20,6 +20,5 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     homepage = "https://wiki.documentfoundation.org/DLP/Libraries/libzmf";
     downloadPage = "http://dev-www.libreoffice.org/src/libzmf/";
-    updateWalker = true;
   };
 }
