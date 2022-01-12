@@ -3262,6 +3262,17 @@ final: prev:
     meta.homepage = "https://github.com/nvim-lua/lsp_extensions.nvim/";
   };
 
+  lsp_lines-nvim = buildVimPluginFrom2Nix {
+    pname = "lsp_lines.nvim";
+    version = "2022-01-10";
+    src = fetchgit {
+            url = "https://git.sr.ht/~whynothugo/lsp_lines.nvim";
+            rev = "44dfd84c62eb5e73eb912ca71e5ffcc73b8fc3b4";
+            sha256 = "1zsiwzwq5g2ykzy4cl4y2rnwym9fp935gxvy2szk10bvhavsxrw5";
+        };
+    meta.homepage = "https://git.sr.ht/~whynothugo/lsp_lines.nvim";
+  };
+
   lsp_signature-nvim = buildVimPluginFrom2Nix {
     pname = "lsp_signature.nvim";
     version = "2022-01-14";
