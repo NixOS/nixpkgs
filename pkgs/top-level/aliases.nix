@@ -100,6 +100,7 @@ mapAliases ({
   bitwarden_rs-postgresql = vaultwarden-postgresql;
   bitwarden_rs-vault = vaultwarden-vault;
 
+  blink = throw "blink has been removed from nixpkgs, it was unmaintained and required python2 at the time of removal."; # added 2022-01-12
   bs1770gain = throw "bs1770gain has been removed from nixpkgs, as it had no maintainer or reverse dependencies."; # added 2021-01-02
   bsod = throw "bsod has been removed: deleted by upstream"; # added 2022-01-07
   btc1 = throw "btc1 has been removed, it was abandoned by upstream"; # added 2020-11-03
