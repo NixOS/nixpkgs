@@ -27,7 +27,7 @@
 }:
 
 let
-  version = "8.0.1";
+  version = "8.1.0";
 
   ptFiles = stdenv.mkDerivation {
     name = "PacketTracer8Drv";
@@ -35,8 +35,8 @@ let
 
     dontUnpack = true;
     src = requireFile {
-      name = "CiscoPacketTracer_${builtins.replaceStrings ["."] [""] version}_Ubuntu_64bit.deb";
-      sha256 = "77a25351b016faed7c78959819c16c7013caa89c6b1872cb888cd96edd259140";
+      name = "Cisco_Packet_Tracer_${builtins.replaceStrings ["."] [""] version}_Ubuntu_64bit.deb";
+      sha256 = "1y5wqbr94mj76prjf3d1j7wrpycgk8wxv66ij4qw63ikgms11j3x";
       url = "https://www.netacad.com";
     };
 
@@ -72,6 +72,7 @@ let
       libXrandr
       libXrender
       libXScrnSaver
+      libXtst
       xcbutilimage
       xcbutilkeysyms
       xcbutilrenderutil
