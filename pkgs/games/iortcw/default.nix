@@ -2,7 +2,7 @@
 
 let
   sp = callPackage ./sp.nix {};
-  mp = sp.overrideAttrs (oldAttrs: rec {
+  mp = sp.overrideAttrs (_oldAttrs: rec {
     sourceRoot = "source/MP";
   });
 in buildEnv {

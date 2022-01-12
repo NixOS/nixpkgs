@@ -86,7 +86,7 @@ let
     popd
   '';
 
-  gradle = (gradle_6.override (old: { java = jdk; }));
+  gradle = (gradle_6.override (_old: { java = jdk; }));
 
   # fake build to pre-download deps into fixed-output derivation
   deps = stdenv.mkDerivation {

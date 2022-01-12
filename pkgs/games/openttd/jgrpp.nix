@@ -1,6 +1,6 @@
 { fetchFromGitHub, openttd, ... }:
 
-openttd.overrideAttrs (oldAttrs: rec {
+openttd.overrideAttrs (_oldAttrs: rec {
   pname = "openttd-jgrpp";
   version = "0.44.0";
 

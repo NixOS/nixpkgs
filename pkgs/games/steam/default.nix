@@ -31,6 +31,6 @@ let
     selfHostHost = pkgsHostHost.${steamPackagesAttr};
     selfTargetTarget = pkgsTargetTarget.${steamPackagesAttr};
   };
-  keep = self: { };
-  extra = spliced0: { };
+  keep = _self: { };
+  extra = _spliced0: { };
 in lib.makeScopeWithSplicing splicePackages newScope otherSplices keep extra steamPackagesFun

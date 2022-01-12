@@ -60,7 +60,7 @@ let
 
   fhsEnv = buildFHSUserEnv {
     name = "unvanquished-fhs-wrapper";
-    targetPkgs = pkgs: [ libstdcpp-preload-for-unvanquished-nacl ];
+    targetPkgs = _pkgs: [ libstdcpp-preload-for-unvanquished-nacl ];
   };
 
   wrapBinary = binary: wrappername: ''

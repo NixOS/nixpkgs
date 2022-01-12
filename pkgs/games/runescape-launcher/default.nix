@@ -90,7 +90,7 @@ in
   */
   buildFHSUserEnv {
    name = "RuneScape";
-   targetPkgs = pkgs: [
+   targetPkgs = _pkgs: [
      runescape
      dpkg glibc gcc-unwrapped
      libSM libXxf86vm libX11 glib pango cairo gtk2-x11 zlib openssl
@@ -98,6 +98,6 @@ in
      xorg.libX11
      SDL2 xorg_sys_opengl libGL
    ];
-   multiPkgs = pkgs: [ libGL ];
+   multiPkgs = _pkgs: [ libGL ];
    runScript = "runescape-launcher";
 }
