@@ -2,7 +2,7 @@
 
 let
 
-  testedSystems = lib.filterAttrs (name: value: let
+  testedSystems = lib.filterAttrs (_name: value: let
     platform = lib.systems.elaborate value;
   in platform.isLinux || platform.isWindows
   ) lib.systems.examples;

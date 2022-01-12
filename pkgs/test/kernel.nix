@@ -33,11 +33,6 @@ let
     { "NIXOS_TEST_BOOLEAN"  = no; }
   ];
 
-  optionalNoWins = mkMerge [
-    { NIXOS_FAKE_USB_DEBUG = option yes;}
-    { NIXOS_FAKE_USB_DEBUG = yes;}
-  ];
-
   allOptionalRemainOptional = mkMerge [
     { NIXOS_FAKE_USB_DEBUG = option yes;}
     { NIXOS_FAKE_USB_DEBUG = option yes;}
