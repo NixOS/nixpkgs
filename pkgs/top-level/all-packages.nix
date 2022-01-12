@@ -30235,6 +30235,8 @@ with pkgs;
 
   _90secondportraits = callPackage ../games/90secondportraits { love = love_0_10; };
 
+  ace-of-penguins = callPackage ../games/ace-of-penguins { };
+
   among-sus = callPackage ../games/among-sus { };
 
   antsimulator = callPackage ../games/antsimulator { };
