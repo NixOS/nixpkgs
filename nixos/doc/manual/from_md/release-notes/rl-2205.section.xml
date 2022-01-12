@@ -290,6 +290,12 @@
           follow with upstream changes.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <literal>pkgs.docbookrx</literal> was removed since it’s
+          unmaintained
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.05-notable-changes">
