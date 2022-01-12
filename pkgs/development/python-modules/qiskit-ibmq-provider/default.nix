@@ -40,7 +40,7 @@ let
 in
 buildPythonPackage rec {
   pname = "qiskit-ibmq-provider";
-  version = "0.18.1";
+  version = "0.18.3";
 
   disabled = pythonOlder "3.6";
 
@@ -48,7 +48,7 @@ buildPythonPackage rec {
     owner = "Qiskit";
     repo = pname;
     rev = version;
-    sha256 = "sha256-rySSCyI+62G7kL1ZRtjX1WeWj3LPXECvrlXAcIDINF4=";
+    sha256 = "sha256-J0T78NDhrv7CeBbVy7srs1PcEN9tGgshJIl3gS0NPNg=";
   };
 
   propagatedBuildInputs = [
@@ -86,6 +86,8 @@ buildPythonPackage rec {
     # slow tests
     "test_websocket_retry_failure"
     "test_invalid_url"
+    "test_result_decoder"
+    "test_invalid_response"
   ];
 
   # Skip tests that rely on internet access (mostly to IBM Quantum Experience cloud).
