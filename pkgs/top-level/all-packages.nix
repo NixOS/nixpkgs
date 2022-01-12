@@ -18676,7 +18676,9 @@ with pkgs;
 
   libxmp = callPackage ../development/libraries/libxmp { };
 
-  libxslt = callPackage ../development/libraries/libxslt { };
+  libxslt = callPackage ../development/libraries/libxslt {
+    python = python3;
+  };
 
   libxsmm = callPackage ../development/libraries/libxsmm { };
 
