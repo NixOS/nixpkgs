@@ -49,7 +49,7 @@ buildGoModule rec {
       multi-node k3s cluster on a single machine using docker.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ kuznero jlesquembre ngerstle jk ];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ kuznero jlesquembre ngerstle jk ricochet ];
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }
