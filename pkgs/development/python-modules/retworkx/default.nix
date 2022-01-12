@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "retworkx";
-  version = "0.9.0";
+  version = "0.10.2";
   format = "pyproject";
   disabled = pythonOlder "3.6";
 
@@ -25,13 +25,13 @@ buildPythonPackage rec {
     owner = "Qiskit";
     repo = "retworkx";
     rev = version;
-    hash = "sha256-1W7DexS+ECAPsxyZAF36xcEguFkjUMX9lDBylNVPqyk=";
+    sha256 = "sha256-F2hcVUsuHcNfsg3rXYt/erc0zB6W7GdepVOReP3u4lg=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-y5l7jqrlk3ONHefZPS31IvcaO9ttXWLM7fIUmNVwbco=";
+      inherit src;
+      name = "${pname}-${version}";
+      sha256 = "1ajzxwx0rrzzq844sbv986h4yg6krzhfagc0q6px3sbhnkm9s2i3";
   };
 
   nativeBuildInputs = with rustPlatform; [ cargoSetupHook maturinBuildHook ];
