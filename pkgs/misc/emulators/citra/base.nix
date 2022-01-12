@@ -12,10 +12,12 @@
 , udevSupport      ? stdenv.isLinux,                      udev
 }:
 
-with lib;
-let compat-src = ./compatibility_list.json; # Updated 1/12/22 from https://api.citra-emu.org/gamedb/
+let
+  inherit (lib) optional;
+  compat-src = ./compatibility_list.json; # Updated 1/12/22 from https://api.citra-emu.org/gamedb/
 in stdenv.mkDerivation {
   inherit pname version src;
+
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=OFF"
     "-DCITRA_ENABLE_COMPATIBILITY_REPORTING=ON"
