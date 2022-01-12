@@ -134,6 +134,9 @@ software floating point emulation.  `libgcc` would be a "target→ *" dependency
 
 Some frequently encountered problems when packaging for cross-compilation should be answered here. Ideally, the information above is exhaustive, so this section cannot provide any new information, but it is ludicrous and cruel to expect everyone to spend effort working through the interaction of many features just to figure out the same answer to the same common problem. Feel free to add to this list!
 
+#### How do I test cross-compilation using emulation? {#cross-qa-emulation}
+Compile the package and run `nix-shell -p qemu`, then run `qemu-system-<arch>` where `<arch>` is the architecture of interest.  Alternatively, Nixpkgs has some logic to dispatch to the right emulator, see [\#106375](https://github.com/NixOS/nixpkgs/issues/106375)
+
 #### My package fails to find a binutils command (`cc`/`ar`/`ld` etc.) {#cross-qa-fails-to-find-binutils}
 Many packages assume that an unprefixed binutils (`cc`/`ar`/`ld` etc.) is available, but Nix doesn't provide one. It only provides a prefixed one, just as it only does for all the other binutils programs. It may be necessary to patch the package to fix the build system to use a prefix. For instance, instead of `cc`, use `${stdenv.cc.targetPrefix}cc`.
 
@@ -159,7 +162,6 @@ Add the following to your `mkDerivation` invocation.
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 }
 ```
-
 #### My package’s testsuite needs to run host platform code. {#cross-testsuite-runs-host-code}
 
 Add the following to your `mkDerivation` invocation.
