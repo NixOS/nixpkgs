@@ -9903,6 +9903,8 @@ with pkgs;
 
   node2nix = nodePackages.node2nix;
 
+  nosql-workbench = callPackage ../applications/misc/nosql-workbench { };
+
   notesnook = callPackage ../applications/misc/notesnook { };
 
   oddjob = callPackage ../os-specific/linux/oddjob { };
