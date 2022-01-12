@@ -583,6 +583,7 @@ mapAliases ({
   mbedtls_1_3 = throw "mbedtls_1_3 is end of life, see https://tls.mbed.org/kb/how-to/upgrade-2.0"; # added 2019-12-08
   meme = meme-image-generator; # added 2021-04-21
   mess = mame; # added 2019-10-30
+  metamorphose2 = throw "metamorphose2 has been removed from nixpkgs, as it was stuck on python2."; # added 2022-01-12
   mcgrid = throw "mcgrid has been removed from nixpkgs, as it's not compatible with rivet 3"; # added 2020-05-23
   mcomix = throw "mcomix has been removed from nixpkgs, as it's unmaintained; try mcomix3 a Python 3 fork"; # added 2019-12-10, modified 2020-11-25
   mimms = throw "mimms has been removed from nixpkgs as the upstream project is stuck on python2."; # added 2022-01-01
