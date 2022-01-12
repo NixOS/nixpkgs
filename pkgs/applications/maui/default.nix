@@ -65,6 +65,7 @@ let
       mauikit = callPackage ./mauikit.nix { };
       mauikit-accounts = callPackage ./mauikit-accounts.nix { };
       mauikit-filebrowsing = callPackage ./mauikit-filebrowsing.nix { };
+      mauikit-imagetools = callPackage ./mauikit-imagetools.nix { };
       mauikit-texteditor = callPackage ./mauikit-texteditor.nix { };
 
       # applications
