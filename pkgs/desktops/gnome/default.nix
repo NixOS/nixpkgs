@@ -1,6 +1,14 @@
-{ config, pkgs, lib }:
+{ config, pkgs, lib, splicePackages, newScope
+, pkgsBuildBuild, pkgsBuildHost, pkgsBuildTarget, pkgsHostHost, pkgsTargetTarget }:
 
-lib.makeScope pkgs.newScope (self: with self; {
+lib.makeScopeWithSplicing splicePackages newScope {
+  selfBuildBuild = pkgsBuildBuild.gnome;
+  selfBuildHost = pkgsBuildHost.gnome;
+  selfBuildTarget = pkgsBuildTarget.gnome;
+  selfHostHost = pkgsHostHost.gnome;
+  selfTargetTarget = pkgsTargetTarget.gnome or {};
+} (self: { }) (spliced0: { })
+(self: let inherit (self) callPackage; in {
   updateScript = callPackage ./update.nix { };
 
   /* Remove packages of packagesToRemove from packages, based on their names
@@ -19,7 +27,7 @@ lib.makeScope pkgs.newScope (self: with self; {
       lib.filter (x: !(builtins.elem (lib.getName x) namesToRemove)) packages;
 
   libsoup = pkgs.libsoup.override { gnomeSupport = true; };
-  libchamplain = pkgs.libchamplain.override { libsoup = libsoup; };
+  libchamplain = pkgs.libchamplain.override { libsoup = self.libsoup; };
 
 # ISO installer
 # installerIso = callPackage ./installer.nix {};
