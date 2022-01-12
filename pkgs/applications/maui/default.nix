@@ -74,6 +74,7 @@ let
       communicator = callPackage ./communicator.nix { };
       index = callPackage ./index.nix { };
       nota = callPackage ./nota.nix { };
+      pix = callPackage ./pix.nix { };
       shelf = callPackage ./shelf.nix { };
       vvave = callPackage ./vvave.nix { };
     };
