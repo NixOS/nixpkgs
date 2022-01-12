@@ -171,8 +171,8 @@ rec {
         then "${pkgs.mmixware}/bin/mmix"
         else throw "Don't know how to run ${final.config} executables.";
 
-    } // mapAttrs (n: v: v final.parsed) inspect.predicates
-      // mapAttrs (n: v: v final.gcc.arch or "default") architectures.predicates
+    } // mapAttrs (_n: v: v final.parsed) inspect.predicates
+      // mapAttrs (_n: v: v final.gcc.arch or "default") architectures.predicates
       // args;
   in assert final.useAndroidPrebuilt -> final.isAndroid;
      assert lib.foldl

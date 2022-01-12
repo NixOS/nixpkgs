@@ -102,7 +102,7 @@ rec {
     type    = types.${name} or null;
     wrapped = null;
     payload = null;
-    binOp   = a: b: null;
+    binOp   = _a: _b: null;
   };
 
   isOptionType = isType "option-type";
@@ -114,7 +114,7 @@ rec {
       description ? null
     , # Function applied to each definition that should return true if
       # its type-correct, false otherwise.
-      check ? (x: true)
+      check ? (_x: true)
     , # Merge a list of definitions together into a single value.
       # This function is called with two arguments: the location of
       # the option in the configuration as a list of strings
@@ -129,12 +129,12 @@ rec {
       emptyValue ? {}
     , # Return a flat list of sub-options.  Used to generate
       # documentation.
-      getSubOptions ? prefix: {}
+      getSubOptions ? _prefix: {}
     , # List of modules if any, or null if none.
       getSubModules ? null
     , # Function for building the same option type with a different list of
       # modules.
-      substSubModules ? m: null
+      substSubModules ? _m: null
     , # Function that merge type declarations.
       # internal, takes a functor as argument and returns the merged type.
       # returning null means the type is not mergeable
@@ -176,7 +176,7 @@ rec {
     anything = mkOptionType {
       name = "anything";
       description = "anything";
-      check = value: true;
+      check = _value: true;
       merge = loc: defs:
         let
           getType = value:
@@ -340,7 +340,7 @@ rec {
         else "strings concatenated with ${builtins.toJSON sep}"
       ;
       check = isString;
-      merge = loc: defs: concatStringsSep sep (getValues defs);
+      merge = _loc: defs: concatStringsSep sep (getValues defs);
       functor = (defaultFunctor name) // {
         payload = sep;
         binOp = sepLhs: sepRhs:
@@ -364,7 +364,7 @@ rec {
       name = "attrs";
       description = "attribute set";
       check = isAttrs;
-      merge = loc: foldl' (res: def: res // def.value) {};
+      merge = _loc: foldl' (res: def: res // def.value) {};
       emptyValue = { value = {}; };
     };
 
@@ -429,11 +429,11 @@ rec {
       description = "attribute set of ${elemType.description}s";
       check = isAttrs;
       merge = loc: defs:
-        mapAttrs (n: v: v.value) (filterAttrs (n: v: v ? value) (zipAttrsWith (name: defs:
+        mapAttrs (_n: v: v.value) (filterAttrs (_n: v: v ? value) (zipAttrsWith (name: defs:
             (mergeDefinitions (loc ++ [name]) elemType defs).optionalValue
           )
           # Push down position info.
-          (map (def: mapAttrs (n: v: { inherit (def) file; value = v; }) def.value) defs)));
+          (map (def: mapAttrs (_n: v: { inherit (def) file; value = v; }) def.value) defs)));
       emptyValue = { value = {}; };
       getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["<name>"]);
       getSubModules = elemType.getSubModules;
@@ -458,7 +458,7 @@ rec {
           in merged.optionalValue.value or elemType.emptyValue.value or merged.mergedValue
         )
         # Push down position info.
-        (map (def: mapAttrs (n: v: { inherit (def) file; value = v; }) def.value) defs);
+        (map (def: mapAttrs (_n: v: { inherit (def) file; value = v; }) def.value) defs);
       emptyValue = { value = {}; };
       getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["<name>"]);
       getSubModules = elemType.getSubModules;
@@ -743,7 +743,7 @@ rec {
         getSubOptions = finalType.getSubOptions;
         getSubModules = finalType.getSubModules;
         substSubModules = m: coercedTo coercedType coerceFunc (finalType.substSubModules m);
-        typeMerge = t1: t2: null;
+        typeMerge = _t1: _t2: null;
         functor = (defaultFunctor name) // { wrapped = finalType; };
         nestedTypes.coercedType = coercedType;
         nestedTypes.finalType = finalType;

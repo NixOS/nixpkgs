@@ -369,7 +369,7 @@ rec {
          { n = { a = "A"; m = { b = "B"; c = "C"; }; }; d = "D"; }
        => { n = { a = "n-a-A"; m = { b = "n-m-b-B"; c = "n-m-c-C"; }; }; d = "d-D"; }
   */
-  mapAttrsRecursive = mapAttrsRecursiveCond (as: true);
+  mapAttrsRecursive = mapAttrsRecursiveCond (_as: true);
 
 
   /* Like `mapAttrsRecursive', but it takes an additional predicate
@@ -483,7 +483,7 @@ rec {
       zipAttrs [{a = "x";} {a = "y"; b = "z";}]
       => { a = ["x" "y"]; b = ["z"] }
   */
-  zipAttrs = zipAttrsWith (name: values: values);
+  zipAttrs = zipAttrsWith (_name: values: values);
 
   /* Does the same as the update operator '//' except that attributes are
      merged until the given predicate is verified.  The predicate should

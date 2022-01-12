@@ -198,7 +198,7 @@ rec {
   toYAML = {}@args: toJSON args;
 
   withRecursion =
-    args@{
+    {
       /* If this option is not null, the given value will stop evaluating at a certain depth */
       depthLimit
       /* If this option is true, an error will be thrown, if a certain given depth is exceeded */
@@ -232,7 +232,7 @@ rec {
     allowPrettyValues ? false,
     /* If this option is true, the output is indented with newlines for attribute sets and lists */
     multiline ? true
-  }@args:
+  }:
     let
     go = indent: v: with builtins;
     let     isPath   = v: typeOf v == "path";
@@ -286,7 +286,7 @@ rec {
 
   # PLIST handling
   toPlist = {}: v: let
-    isFloat = builtins.isFloat or (x: false);
+    isFloat = builtins.isFloat or (_x: false);
     expr = ind: x:  with builtins;
       if x == null  then "" else
       if isBool x   then bool ind x else

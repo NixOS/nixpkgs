@@ -27,7 +27,7 @@ rec {
     # Value to return
     x:
     # Value to ignore
-    y: x;
+    _y: x;
 
   /* Pipes a value through a list of functions, left to right.
 
@@ -420,7 +420,7 @@ rec {
   */
   setFunctionArgs = f: args:
     { # TODO: Should we add call-time "type" checking like built in?
-      __functor = self: f;
+      __functor = _self: f;
       __functionArgs = args;
     };
 

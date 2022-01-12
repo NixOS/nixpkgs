@@ -4,7 +4,7 @@
 # This test shows that an alias with a high priority is able to override
 # a non-aliased option.
 
-{ config, lib, ... }:
+{ lib, ... }:
 
 with lib;
 
@@ -39,14 +39,14 @@ with lib;
 
     # Disable the aliased option with a high priority so it
     # should override the next import.
-    ( { config, lib, ... }:
+    ( { lib, ... }:
       {
         enableAlias = lib.mkForce false;
       }
     )
 
     # Enable the normal (non-aliased) option.
-    ( { config, lib, ... }:
+    ( { ... }:
       {
         enable = true;
       }

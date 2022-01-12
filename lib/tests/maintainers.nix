@@ -8,7 +8,7 @@
 let
   inherit (lib) types;
 
-  maintainerModule = { config, ... }: {
+  maintainerModule = { ... }: {
     options = {
       name = lib.mkOption {
         type = types.str;

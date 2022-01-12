@@ -79,8 +79,8 @@ runTests {
 
   testComposeExtensions = {
     expr = let obj = makeExtensible (self: { foo = self.bar; });
-               f = self: super: { bar = false; baz = true; };
-               g = self: super: { bar = super.baz or false; };
+               f = _self: _super: { bar = false; baz = true; };
+               g = _self: super: { bar = super.baz or false; };
                f_o_g = composeExtensions f g;
                composed = obj.extend f_o_g;
            in composed.foo;
@@ -88,7 +88,7 @@ runTests {
   };
 
   testComposeManyExtensions0 = {
-    expr = let obj = makeExtensible (self: { foo = true; });
+    expr = let obj = makeExtensible (_self: { foo = true; });
                emptyComposition = composeManyExtensions [];
                composed = obj.extend emptyComposition;
            in composed.foo;
@@ -96,9 +96,9 @@ runTests {
   };
 
   testComposeManyExtensions =
-    let f = self: super: { bar = false; baz = true; };
-        g = self: super: { bar = super.baz or false; };
-        h = self: super: { qux = super.bar or false; };
+    let f = _self: _super: { bar = false; baz = true; };
+        g = _self: super: { bar = super.baz or false; };
+        h = _self: super: { qux = super.bar or false; };
         obj = makeExtensible (self: { foo = self.qux; });
     in {
     expr = let composition = composeManyExtensions [f g h];
@@ -133,7 +133,7 @@ runTests {
   };
 
   testFunctionArgsFunctor = {
-    expr = functionArgs { __functor = self: { a, b }: null; };
+    expr = functionArgs { __functor = _self: { a, b }: null; };
     expected = { a = false; b = false; };
   };
 
@@ -333,7 +333,7 @@ runTests {
 
   # code from the example
   testRecursiveUpdateUntil = {
-    expr = recursiveUpdateUntil (path: l: r: path == ["foo"]) {
+    expr = recursiveUpdateUntil (path: _l: _r: path == ["foo"]) {
       # first attribute set
       foo.bar = 1;
       foo.baz = 2;

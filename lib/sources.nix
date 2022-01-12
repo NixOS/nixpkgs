@@ -140,7 +140,7 @@ let
       isFiltered = src ? _isLibCleanSourceWith;
       origSrc = if isFiltered then src.origSrc else src;
     in lib.cleanSourceWith {
-      filter = (path: type:
+      filter = (path: _type:
         let relPath = lib.removePrefix (toString origSrc + "/") (toString path);
         in lib.any (re: match re relPath != null) regexes);
       inherit src;

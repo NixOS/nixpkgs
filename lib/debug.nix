@@ -201,7 +201,7 @@ rec {
      Example:
        { testX = allTrue [ true ]; }
   */
-  testAllTrue = expr: { inherit expr; expected = map (x: true) expr; };
+  testAllTrue = expr: { inherit expr; expected = map (_x: true) expr; };
 
 
   # -- DEPRECATED --

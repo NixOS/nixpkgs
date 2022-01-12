@@ -383,7 +383,7 @@ rec {
         config = addFreeformType (addMeta (removeAttrs m ["_file" "key" "disabledModules" "require" "imports" "freeformType"]));
       };
 
-  applyModuleArgsIfFunction = key: f: args@{ config, options, lib, ... }: if isFunction f then
+  applyModuleArgsIfFunction = key: f: args@{ config, lib, ... }: if isFunction f then
     let
       # Module arguments are resolved in a strict manner when attribute set
       # deconstruction is used.  As the arguments are now defined with the
@@ -460,7 +460,7 @@ rec {
         }
       */
       byName = attr: f: modules:
-        zipAttrsWith (n: concatLists)
+        zipAttrsWith (_n: concatLists)
           (map (module: let subtree = module.${attr}; in
               if !(builtins.isAttrs subtree) then
                 throw ''
@@ -473,7 +473,7 @@ rec {
                   this option by e.g. referring to `man 5 configuration.nix'!
                 ''
               else
-                mapAttrs (n: f module) subtree
+                mapAttrs (_n: f module) subtree
               ) modules);
       # an attrset 'name' => list of submodules that declare ‘name’.
       declsByName = byName "options" (module: option:
@@ -546,12 +546,12 @@ rec {
           else
             mergeModules' loc decls defns) declsByName;
 
-      matchedOptions = mapAttrs (n: v: v.matchedOptions) resultsByName;
+      matchedOptions = mapAttrs (_n: v: v.matchedOptions) resultsByName;
 
       # an attrset 'name' => list of unmatched definitions for 'name'
       unmatchedDefnsByName =
         # Propagate all unmatched definitions from nested option sets
-        mapAttrs (n: v: v.unmatchedDefns) resultsByName
+        mapAttrs (_n: v: v.unmatchedDefns) resultsByName
         # Plus the definitions for the current prefix that don't have a matching option
         // removeAttrs defnsByName' (attrNames matchedOptions);
     in {
@@ -720,9 +720,9 @@ rec {
     if cfg._type or "" == "merge" then
       concatMap pushDownProperties cfg.contents
     else if cfg._type or "" == "if" then
-      map (mapAttrs (n: v: mkIf cfg.condition v)) (pushDownProperties cfg.content)
+      map (mapAttrs (_n: v: mkIf cfg.condition v)) (pushDownProperties cfg.content)
     else if cfg._type or "" == "override" then
-      map (mapAttrs (n: v: mkOverride cfg.priority v)) (pushDownProperties cfg.content)
+      map (mapAttrs (_n: v: mkOverride cfg.priority v)) (pushDownProperties cfg.content)
     else # FIXME: handle mkOrder?
       [ cfg ];
 
@@ -900,7 +900,7 @@ rec {
     { options, ... }:
     { options = setAttrByPath optionName (mkOption {
         visible = false;
-        apply = x: throw "The option `${showOption optionName}' can no longer be used since it's been removed. ${replacementInstructions}";
+        apply = _x: throw "The option `${showOption optionName}' can no longer be used since it's been removed. ${replacementInstructions}";
       });
       config.assertions =
         let opt = getAttrFromPath optionName options; in [{
@@ -1070,7 +1070,7 @@ rec {
       options = setAttrByPath from (mkOption {
         inherit visible;
         description = "Alias of <option>${showOption to}</option>.";
-        apply = x: use (toOf config);
+        apply = _x: use (toOf config);
       } // optionalAttrs (toType != null) {
         type = toType;
       });

@@ -5,7 +5,7 @@
   };
 
   options.applied = lib.mkOption {
-    default = lib.mapAttrs (name: fun: fun null) config.value;
+    default = lib.mapAttrs (_name: fun: fun null) config.value;
   };
 
   config = lib.mkMerge [
