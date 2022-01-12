@@ -12,6 +12,7 @@
 , gtk3
 , bluez
 , switchboard
+, wingpanel-indicator-bluetooth
 }:
 
 stdenv.mkDerivation rec {
@@ -53,6 +54,7 @@ stdenv.mkDerivation rec {
     gtk3
     libgee
     switchboard
+    wingpanel-indicator-bluetooth # settings schema
   ];
 
   meta = with lib; {
