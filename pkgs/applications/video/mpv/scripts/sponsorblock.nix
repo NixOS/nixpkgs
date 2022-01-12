@@ -42,7 +42,7 @@ stdenvNoCC.mkDerivation {
   passthru.scriptName = "sponsorblock.lua";
 
   meta = with lib; {
-    description = "mpv script to skip sponsored segments of YouTube videos";
+    description = "Script for mpv to skip sponsored segments of YouTube videos";
     homepage = "https://github.com/po5/mpv_sponsorblock";
     license = licenses.gpl3;
     platforms = platforms.all;
