@@ -148,6 +148,8 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
 
   mauikit-filebrowsing = callPackage ../development/libraries/mauikit-filebrowsing { };
 
+  mauikit-texteditor = callPackage ../development/libraries/mauikit-texteditor { };
+
   mlt = callPackage ../development/libraries/mlt/qt-5.nix { };
 
   openbr = callPackage ../development/libraries/openbr { };
