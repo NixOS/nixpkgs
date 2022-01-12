@@ -19,15 +19,15 @@
     }
   },
   "beta": {
-    "version": "97.0.4692.71",
-    "sha256": "0z7ximvm4a78kxyp4j0i2jzklxazpw6jcqi9jkaf8bvq9ga8kqca",
-    "sha256bin64": "18wr4pgzfcvvdpvvxhpd4as2qnyggq9f8z90ikdz8yj8i71l5wnc",
+    "version": "98.0.4758.48",
+    "sha256": "0c6lxmr8xxjhifm28v9ri05v5al9ph6infksx9qgd045svmfynxs",
+    "sha256bin64": "0m7vbd7fy4wrbk28hw3hy6x8yb8vyyyisnicdhkp6j0xq9ni5jhj",
     "deps": {
       "gn": {
-        "version": "2021-11-03",
+        "version": "2021-12-07",
         "url": "https://gn.googlesource.com/gn",
-        "rev": "90294ccdcf9334ed25a76ac9b67689468e506342",
-        "sha256": "0n0jml8s00ayy186jzrf207hbz70pxiq426znxwxd4gjcp60scsa"
+        "rev": "fc295f3ac7ca4fe7acc6cb5fb052d22909ef3a8f",
+        "sha256": "02bx3bp85kkis704gndb6jvjph7gv3ij746bq4anl30kfrkpcifh"
       }
     }
   },
