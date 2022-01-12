@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pylaunches";
-  version = "1.2.0";
+  version = "1.2.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "ludeeus";
     repo = pname;
     rev = version;
-    sha256 = "0mczxkwczyh9kva4xzpmnawy0hjha1fdrwj6igip9w5z1q48zs49";
+    sha256 = "sha256-WwtNgKP5YM9i7au02taOfJuKQy6DDmmBrE34EPvJYmA=";
   };
 
   propagatedBuildInputs = [
