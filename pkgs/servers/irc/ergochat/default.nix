@@ -1,4 +1,4 @@
-{ buildGo117Module, fetchFromGitHub, lib }:
+{ buildGo117Module, fetchFromGitHub, lib, nixosTests }:
 
 buildGo117Module rec {
   pname = "ergo";
@@ -12,6 +12,8 @@ buildGo117Module rec {
   };
 
   vendorSha256 = null;
+
+  passthru.tests.ergochat = nixosTests.ergochat;
 
   meta = {
     changelog = "https://github.com/ergochat/ergo/blob/v${version}/CHANGELOG.md";
