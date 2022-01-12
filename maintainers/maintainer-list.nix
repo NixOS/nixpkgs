@@ -10819,6 +10819,16 @@
     githubId = 6720672;
     name = "Shane Pearlman";
   };
+  shanesveller = {
+    email = "shane@sveller.dev";
+    github = "shanesveller";
+    githubId = 831;
+    keys = [{
+      longkeyid = "rsa4096/0x9210C218023C15CD";
+      fingerprint = "F83C 407C ADC4 5A0F 1F2F  44E8 9210 C218 023C 15CD";
+    }];
+    name = "Shane Sveller";
+  };
   shawndellysse = {
     email = "sdellysse@gmail.com";
     github = "shawndellysse";
