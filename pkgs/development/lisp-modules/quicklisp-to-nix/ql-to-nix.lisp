@@ -260,9 +260,10 @@ This function stores results for memoization purposes in files within
 (defun print-usage-and-quit ()
   "Does what it says on the tin."
   (format *error-output* "Usage:
-    ~A [--help] [--cacheSystemInfoDir <path>] <work-dir>
+    ~A [--help] [--cacheSystemInfoDir <path>] [--cacheFaslDir <path>] <work-dir>
 Arguments:
     --cacheSystemInfoDir Store computed system info in the given directory
+    --cacheFaslDir Store intermediate fast load files in the given directory
     --help Print usage and exit
     <work-dir> Path to directory with quicklisp-to-nix-systems.txt
 " (uiop:argv0))
