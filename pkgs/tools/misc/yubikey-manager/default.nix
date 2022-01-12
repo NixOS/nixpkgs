@@ -61,6 +61,6 @@ python3Packages.buildPythonPackage rec {
 
     license = licenses.bsd2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ benley lassulus ];
+    maintainers = with maintainers; [ benley lassulus  pinpox  ];
   };
 }
