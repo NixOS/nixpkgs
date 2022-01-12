@@ -46,16 +46,27 @@ let
               )
             else
               extern;
+          opts = lib.optionalString (dep.stdlib or false) "noprelude:";
+          filename =
+            if lib.any (x: x == "lib" || x == "rlib") dep.crateType
+            then "${dep.metadata}.rlib"
+            else "${dep.metadata}${stdenv.hostPlatform.extensions.sharedLibrary}";
         in
-        (if lib.any (x: x == "lib" || x == "rlib") dep.crateType then
-          " --extern ${name}=${dep.lib}/lib/lib${extern}-${dep.metadata}.rlib"
-        else
-          " --extern ${name}=${dep.lib}/lib/lib${extern}-${dep.metadata}${stdenv.hostPlatform.extensions.sharedLibrary}")
+        " --extern ${opts}${name}=${dep.lib}/lib/lib${extern}-${filename}"
       )
       dependencies;
 
   # Create feature arguments for rustc.
   mkRustcFeatureArgs = lib.concatMapStringsSep " " (f: ''--cfg feature=\"${f}\"'');
+
+  # Whether we need to use unstable command line flags
+  #
+  # Currently just needed for standard library dependencies, which have a
+  # special "noprelude:" modifier. If in later versions of Rust this is
+  # stabilized we can account for that here, too, so we don't opt into
+  # instability unnecessarily.
+  needUnstableCLI = dependencies:
+    lib.any (dep: dep.stdlib or false) dependencies;
 
   inherit (import ./log.nix { inherit lib; }) noisily echo_colored;
 
@@ -64,7 +75,7 @@ let
   };
 
   buildCrate = import ./build-crate.nix {
-    inherit lib stdenv mkRustcDepArgs mkRustcFeatureArgs rust;
+    inherit lib stdenv mkRustcDepArgs mkRustcFeatureArgs needUnstableCLI rust;
   };
 
   installCrate = import ./install-crate.nix { inherit stdenv; };

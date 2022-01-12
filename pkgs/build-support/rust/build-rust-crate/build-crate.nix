@@ -1,4 +1,8 @@
-{ lib, stdenv, mkRustcDepArgs, mkRustcFeatureArgs, rust }:
+{ lib, stdenv
+, mkRustcDepArgs, mkRustcFeatureArgs, needUnstableCLI
+, rust
+}:
+
 { crateName,
   dependencies,
   crateFeatures, crateRenames, libName, release, libPath,
@@ -17,6 +21,8 @@
         (mkRustcFeatureArgs crateFeatures)
       ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
         "--target" (rust.toRustTargetSpec stdenv.hostPlatform)
+      ] ++ lib.optionals (needUnstableCLI dependencies) [
+        "-Z" "unstable-options"
       ] ++ extraRustcOpts
       # since rustc 1.42 the "proc_macro" crate is part of the default crate prelude
       # https://github.com/rust-lang/cargo/commit/4d64eb99a4#diff-7f98585dbf9d30aa100c8318e2c77e79R1021-R1022
