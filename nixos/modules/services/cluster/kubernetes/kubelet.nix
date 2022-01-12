@@ -41,7 +41,8 @@ let
       };
       value = mkOption {
         description = "Value of taint.";
-        type = str;
+        default = null;
+        type = nullOr str;
       };
       effect = mkOption {
         description = "Effect of taint.";
@@ -51,7 +52,7 @@ let
     };
   };
 
-  taints = concatMapStringsSep "," (v: "${v.key}=${v.value}:${v.effect}") (mapAttrsToList (n: v: v) cfg.taints);
+  taints = concatMapStringsSep "," (v: "${v.key}${lib.optionalString (v.value != null) "=${v.value}"}:${v.effect}") (mapAttrsToList (n: v: v) cfg.taints);
 in
 {
   imports = [
