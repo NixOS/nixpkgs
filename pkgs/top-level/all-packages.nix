@@ -33938,9 +33938,7 @@ with pkgs;
     python = python3;
   };
 
-  higan = callPackage ../misc/emulators/higan {
-    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa OpenGL OpenAL;
-  };
+  higan = callPackage ../misc/emulators/higan { };
 
   bsnes-hd = callPackage ../misc/emulators/bsnes-hd {
     inherit (gnome2) gtksourceview;
