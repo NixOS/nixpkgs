@@ -9409,6 +9409,8 @@ in {
 
   subzerod = callPackage ../development/python-modules/subzerod { };
 
+  sudospawner = callPackage ../development/python-modules/sudospawner { };
+
   suds-jurko = callPackage ../development/python-modules/suds-jurko { };
 
   sumo = callPackage ../development/python-modules/sumo { };
