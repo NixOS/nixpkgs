@@ -1,34 +1,36 @@
-{ lib, fetchPypi, buildPythonPackage, isPy3k, pythonOlder
-# runtime dependencies
-, pandas, numpy, requests, inflection, python-dateutil, six, more-itertools, importlib-metadata
-# test suite dependencies
-, nose, unittest2, flake8, httpretty, mock, jsondate, parameterized, faker, factory_boy
-# additional runtime dependencies are required on Python 2.x
-, pyopenssl, ndg-httpsclient, pyasn1
+{ lib
+, buildPythonPackage
+, factory_boy
+, faker
+, fetchPypi
+, httpretty
+, importlib-metadata
+, inflection
+, jsondate
+, mock
+, more-itertools
+, numpy
+, pandas
+, parameterized
+, pytestCheckHook
+, python-dateutil
+, pythonOlder
+, requests
+, six
 }:
 
 buildPythonPackage rec {
   pname = "quandl";
   version = "3.7.0";
-  disabled = !isPy3k;
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit version;
     pname = "Quandl";
     sha256 = "6e0b82fbc7861610b3577c5397277c4220e065eee0fed4e46cd6b6021655b64c";
   };
-
-  checkInputs = [
-    nose
-    unittest2
-    flake8
-    httpretty
-    mock
-    jsondate
-    parameterized
-    faker
-    factory_boy
-  ];
 
   propagatedBuildInputs = [
     pandas
@@ -38,15 +40,23 @@ buildPythonPackage rec {
     python-dateutil
     six
     more-itertools
-  ] ++ lib.optionals (!isPy3k) [
-    pyopenssl
-    ndg-httpsclient
-    pyasn1
   ] ++ lib.optionals (pythonOlder "3.8") [
     importlib-metadata
   ];
 
-  pythonImportsCheck = [ "quandl" ];
+  checkInputs = [
+    factory_boy
+    faker
+    httpretty
+    jsondate
+    mock
+    parameterized
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "quandl"
+  ];
 
   meta = with lib; {
     description = "Quandl Python client library";
