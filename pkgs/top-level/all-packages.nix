@@ -14666,6 +14666,19 @@ with pkgs;
 
   eweb = callPackage ../development/tools/literate-programming/eweb { };
 
+  funnelweb = callPackage ../development/tools/literate-programming/funnelweb { };
+
+  Literate = callPackage ../development/tools/literate-programming/Literate { };
+
+  md-tangle = callPackage ../development/tools/literate-programming/md-tangle { };
+
+  # NOTE: Override and set useIcon = false to use Awk instead of Icon.
+  noweb = callPackage ../development/tools/literate-programming/noweb { };
+
+  nuweb = callPackage ../development/tools/literate-programming/nuweb {
+    tex = texlive.combined.scheme-medium;
+  };
+
   eztrace = callPackage ../development/tools/profiling/EZTrace { };
 
   faas-cli = callPackage ../development/tools/faas-cli { };
@@ -14713,8 +14726,6 @@ with pkgs;
   };
 
   fundoc = callPackage ../development/tools/fundoc { };
-
-  funnelweb = callPackage ../development/tools/literate-programming/funnelweb { };
 
   gede = libsForQt5.callPackage ../development/tools/misc/gede { };
 
@@ -14987,8 +14998,6 @@ with pkgs;
 
   laminar = callPackage ../development/tools/continuous-integration/laminar { };
 
-  Literate = callPackage ../development/tools/literate-programming/Literate {};
-
   lcov = callPackage ../development/tools/analysis/lcov { };
 
   leiningen = callPackage ../development/tools/build-managers/leiningen { };
@@ -15120,11 +15129,6 @@ with pkgs;
   nwjs_0_12 = callPackage ../development/tools/node-webkit/nw12.nix {
     gconf = gnome2.GConf;
   };
-
-  # NOTE: Override and set useIcon = false to use Awk instead of Icon.
-  noweb = callPackage ../development/tools/literate-programming/noweb { };
-
-  nuweb = callPackage ../development/tools/literate-programming/nuweb { tex = texlive.combined.scheme-medium; };
 
   nrfutil = callPackage ../development/tools/misc/nrfutil { };
 
