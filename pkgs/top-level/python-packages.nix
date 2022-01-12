@@ -4215,6 +4215,8 @@ in {
 
   jsonstreams = callPackage ../development/python-modules/jsonstreams { };
 
+  json-tricks = callPackage ../development/python-modules/json-tricks { };
+
   jug = callPackage ../development/python-modules/jug { };
 
   junitparser = callPackage ../development/python-modules/junitparser { };
@@ -5372,11 +5374,11 @@ in {
 
   nmapthon2 = callPackage ../development/python-modules/nmapthon2 { };
 
-  nmigen-boards = callPackage ../development/python-modules/nmigen-boards { };
+  amaranth-boards = callPackage ../development/python-modules/amaranth-boards { };
 
-  nmigen = callPackage ../development/python-modules/nmigen { };
+  amaranth = callPackage ../development/python-modules/amaranth { };
 
-  nmigen-soc = callPackage ../development/python-modules/nmigen-soc { };
+  amaranth-soc = callPackage ../development/python-modules/amaranth-soc { };
 
   nocasedict = callPackage ../development/python-modules/nocasedict { };
 
@@ -9467,6 +9469,8 @@ in {
 
   synologydsm-api = callPackage ../development/python-modules/synologydsm-api { };
 
+  syslog-rfc5424-formatter = callPackage ../development/python-modules/syslog-rfc5424-formatter { };
+
   systembridge = callPackage ../development/python-modules/systembridge { };
 
   systemd = callPackage ../development/python-modules/systemd {
@@ -9558,6 +9562,8 @@ in {
     protobuf-python = self.protobuf;
     lmdb-core = pkgs.lmdb;
   };
+
+  tensorflow-datasets = callPackage ../development/python-modules/tensorflow-datasets { };
 
   tensorflow-estimator = callPackage ../development/python-modules/tensorflow-estimator { };
 
@@ -9935,6 +9941,8 @@ in {
   types-toml = callPackage ../development/python-modules/types-toml { };
 
   types-typed-ast = callPackage ../development/python-modules/types-typed-ast { };
+
+  types-urllib3 = callPackage ../development/python-modules/types-urllib3 { };
 
   typesentry = callPackage ../development/python-modules/typesentry { };
 

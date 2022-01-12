@@ -144,6 +144,21 @@ let
         };
       };
 
+      antyos.openscad = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "openscad";
+          publisher = "Antyos";
+          version = "1.1.1";
+          sha256 = "1adcw9jj3npk3l6lnlfgji2l529c4s5xp9jl748r9naiy3w3dpjv";
+        };
+        meta = with lib; {
+          changelog = "https://marketplace.visualstudio.com/items/Antyos.openscad/changelog";
+          description = "OpenSCAD highlighting, snippets, and more for VSCode";
+          homepage = "https://github.com/Antyos/vscode-openscad";
+          license = licenses.gpl3;
+        };
+      };
+
       apollographql.vscode-apollo = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-apollo";
@@ -867,8 +882,8 @@ let
           mktplcRef = {
             name = "vscode-pull-request-github";
             publisher = "github";
-            version = "0.35.2021122109";
-            sha256 = "1n7vjwxm92ibwhgn2n57p54dqpi0vvyllmcgjxilgnr14irg5457";
+            version = "0.35.2022010609";
+            sha256 = "06ryx8b605fd1q2zz8jps7j8r506qwym93x1ra1kc0h9g8a8r7sa";
           };
           meta = { license = lib.licenses.mit; };
         };
@@ -1385,6 +1400,18 @@ let
           publisher = "PKief";
           version = "4.11.0";
           sha256 = "1l2s8j645riqjmj09i3v71s8ycin5vd6brdp35z472fnk6wyi1y6";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
+      pkief.material-product-icons = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "material-product-icons";
+          publisher = "PKief";
+          version = "1.1.1";
+          sha256 = "a0bd0eff67793828768135fd839f28db0949da9a310db312beb0781f2164fd47";
         };
         meta = {
           license = lib.licenses.mit;

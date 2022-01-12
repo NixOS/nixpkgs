@@ -265,7 +265,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2021.12.7";
+  hassVersion = "2021.12.8";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
@@ -282,7 +282,7 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    hash = "sha256:0jcnk43wm3xwvsfyvbswq681v2c3xmki1bakn0l12j6paida784y";
+    hash = "sha256:HxSEXaqNHh2hSr1fmu3xpC212PXhzvnD4CwR1Ulw9ok=";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling
@@ -467,7 +467,6 @@ in with py.pkgs; buildPythonApplication rec {
     "eafm"
     "ecobee"
     "econet"
-    "ee_brightbox"
     "efergy"
     "elgato"
     "elkm1"

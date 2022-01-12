@@ -7,18 +7,22 @@ stdenv.mkDerivation rec {
 
   dirname = "Isabelle${version}";
 
-  src = if stdenv.isDarwin
-    then fetchurl {
-      url = "https://isabelle.in.tum.de/website-${dirname}/dist/${dirname}_macos.tar.gz";
-      sha256 = "0n1ls9vwf0ps1x8zpb7c1xz1wkasgvc34h5bz280hy2z6iqwmwbc";
-    }
-    else fetchurl {
-      url = "https://isabelle.in.tum.de/website-${dirname}/dist/${dirname}_linux.tar.gz";
-      sha256 = "0jfaqckhg388jh9b4msrpkv6wrd6xzlw18m0bngbby8k8ywalp9i";
-    };
+  src =
+    if stdenv.isDarwin
+    then
+      fetchurl
+        {
+          url = "https://isabelle.in.tum.de/website-${dirname}/dist/${dirname}_macos.tar.gz";
+          sha256 = "0n1ls9vwf0ps1x8zpb7c1xz1wkasgvc34h5bz280hy2z6iqwmwbc";
+        }
+    else
+      fetchurl {
+        url = "https://isabelle.in.tum.de/website-${dirname}/dist/${dirname}_linux.tar.gz";
+        sha256 = "0jfaqckhg388jh9b4msrpkv6wrd6xzlw18m0bngbby8k8ywalp9i";
+      };
 
   buildInputs = [ polyml z3 veriT vampire eprover-ho ]
-             ++ lib.optionals (!stdenv.isDarwin) [ nettools java ];
+    ++ lib.optionals (!stdenv.isDarwin) [ nettools java ];
 
   sourceRoot = dirname;
 
@@ -69,12 +73,15 @@ stdenv.mkDerivation rec {
     for comp in contrib/jdk* contrib/polyml-* contrib/z3-* contrib/verit-* contrib/vampire-* contrib/e-*; do
       rm -rf $comp/x86*
     done
-    '' + (if ! stdenv.isLinux then "" else ''
+  '' + (if ! stdenv.isLinux then "" else ''
     arch=${if stdenv.hostPlatform.system == "x86_64-linux" then "x86_64-linux" else "x86-linux"}
-    for f in contrib/*/$arch/{bash_process,epclextract,nunchaku,SPASS}; do
+    for f in contrib/*/$arch/{bash_process,epclextract,nunchaku,SPASS,zipperposition}; do
       patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) "$f"
     done
-    '');
+    for d in contrib/kodkodi-*/jni/$arch; do
+      patchelf --set-rpath "${lib.concatStringsSep ":" [ "${java}/lib/openjdk/lib/server" "${stdenv.cc.cc.lib}/lib" ]}" $d/*.so
+    done
+  '');
 
   installPhase = ''
     mkdir -p $out/bin
