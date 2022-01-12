@@ -52,6 +52,8 @@ let self = rec {
 
   a4ksubtitles = callPackage ../applications/video/kodi/addons/a4ksubtitles { };
 
+  arteplussept = callPackage ../applications/video/kodi/addons/arteplussept { };
+
   controllers = {
     default = callPackage ../applications/video/kodi/addons/controllers { controller = "default"; };
 
@@ -159,5 +161,7 @@ let self = rec {
   urllib3 = callPackage ../applications/video/kodi/addons/urllib3 { };
 
   websocket = callPackage ../applications/video/kodi/addons/websocket { };
+
+  xbmcswift2 = callPackage ../applications/video/kodi/addons/xbmcswift2 { };
 
 }; in self

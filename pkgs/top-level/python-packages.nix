@@ -4598,8 +4598,7 @@ in {
 
   libxslt = (toPythonModule (pkgs.libxslt.override {
     pythonSupport = true;
-    python3 = python;
-    inherit (self) libxml2;
+    inherit (self) python libxml2;
   })).py;
 
   license-expression = callPackage ../development/python-modules/license-expression { };
