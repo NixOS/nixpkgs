@@ -443,6 +443,7 @@ let
         patch -d $out/lib/node_modules/thelounge -p1 < ${./thelounge-packages-path.patch}
       '';
       passthru.tests = { inherit (nixosTests) thelounge; };
+      meta = super.thelounge.meta // { maintainers = with lib.maintainers; [ winter ]; };
     };
 
     yaml-language-server = super.yaml-language-server.override {
