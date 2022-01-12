@@ -124,7 +124,7 @@ rec {
         transformedValue =
           if listToValue != null
           then
-            lib.mapAttrs (section: lib.mapAttrs (key: val:
+            lib.mapAttrs (_section: lib.mapAttrs (_key: val:
               if lib.isList val then listToValue val else val
             )) value
           else value;
