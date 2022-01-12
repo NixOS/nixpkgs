@@ -210,6 +210,13 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>mailpile</literal> email webclient
+          (<literal>services.mailpile</literal>) has been removed due to
+          its reliance on python2.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The MoinMoin wiki engine
           (<literal>services.moinmoin</literal>) has been removed,
           because Python 2 is being retired from nixpkgs.
