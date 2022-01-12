@@ -15,6 +15,8 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];
 
+  ldflags = [ "-s" "-w" "-X github.com/alajmo/mani/cmd.version=${version}" ];
+
   postInstall = ''
     installShellCompletion --cmd mani \
       --bash <($out/bin/mani completion bash) \
