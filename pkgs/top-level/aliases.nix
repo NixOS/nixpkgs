@@ -801,6 +801,9 @@ mapAliases ({
   pybind11 = throw "pybind11 was removed because pythonPackages.pybind11 for the appropriate version of Python should be used"; # added 2021-05-14
   pybitmessage = throw "pybitmessage was removed from nixpkgs as it is stuck on python2."; # added 2022-01-01
   pynagsystemd = throw "pynagsystemd was removed as it was unmaintained and incompatible with recent systemd versions. Instead use its fork check_systemd."; # added 2020-10-24
+  pyrex = throw "pyrex has been removed from nixpkgs as the project is still stuck on python2."; # added 2022-01-12
+  pyrex095 = throw "pyrex has been removed from nixpkgs as the project is still stuck on python2."; # added 2022-01-12
+  pyrex096 = throw "pyrex has been removed from nixpkgs as the project is still stuck on python2."; # added 2022-01-12
   pyrit = throw "pyrit has been removed from nixpkgs as the project is still stuck on python2."; # added 2022-01-01
   python2nix = throw "python2nix has been removed as it is outdated. Use e.g. nixpkgs-pytools instead."; # added 2021-03-08
   python-swiftclient = swiftclient; # added 2021-09-09
