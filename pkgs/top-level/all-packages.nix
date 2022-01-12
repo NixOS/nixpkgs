@@ -6036,6 +6036,8 @@ with pkgs;
     hamlib = hamlib_4;
   };
 
+  gprojector = callPackage ../applications/science/astronomy/gprojector { };
+
   gptfdisk = callPackage ../tools/system/gptfdisk { };
 
   grafx2 = callPackage ../applications/graphics/grafx2 {};
