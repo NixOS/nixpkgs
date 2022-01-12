@@ -16,7 +16,7 @@ pypy2Packages.buildPythonApplication  rec {
 
   checkInputs = [ subversion git breezy ];
 
-  checkPhase = "pypy2 run-tests.py";
+  checkPhase = "${pypy2Packages.python.interpreter} run-tests.py";
 
   doCheck = false; # Couldn't find node 'transaction...' in expected output tree
 
