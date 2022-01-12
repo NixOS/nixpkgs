@@ -85,7 +85,7 @@ let
         else
           builtins.getAttr maintainer' lib.maintainers;
     in
-      packagesWithUpdateScriptMatchingPredicate (path: pkg:
+      packagesWithUpdateScriptMatchingPredicate (_path: pkg:
                          (if builtins.hasAttr "maintainers" pkg.meta
                            then (if builtins.isList pkg.meta.maintainers
                                    then builtins.elem maintainer pkg.meta.maintainers
@@ -105,7 +105,7 @@ let
       if pathContent == null then
         builtins.throw "Attribute path `${path}` does not exist."
       else
-        packagesWithPath prefix (path: pkg: builtins.hasAttr "updateScript" pkg)
+        packagesWithPath prefix (_path: pkg: builtins.hasAttr "updateScript" pkg)
                        pathContent;
 
   /* Find a package under `path` in `pkgs` and require that it has an updateScript.

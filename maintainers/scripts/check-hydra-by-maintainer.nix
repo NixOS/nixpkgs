@@ -29,7 +29,7 @@ let
     );
 
   packages = packagesWith
-    (name: pkg:
+    (_name: pkg:
       (
         if builtins.hasAttr "meta" pkg && builtins.hasAttr "maintainers" pkg.meta
         then
