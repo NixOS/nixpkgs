@@ -8720,6 +8720,8 @@ with pkgs;
 
   pinnwand = callPackage ../servers/pinnwand { };
 
+  pinsel = callPackage ../tools/misc/pinsel { };
+
   piping-server-rust = callPackage ../servers/piping-server-rust {
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;
   };
