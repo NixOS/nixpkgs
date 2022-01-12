@@ -2,8 +2,14 @@
 
 let
   # NOTE: raspberrypifw & raspberryPiWirelessFirmware should be updated with this
-  modDirVersion = "5.10.52";
-  tag = "1.20210805";
+
+  # rapsberrypi isn't super consistent about tagging firmware or linux releases.
+  # Use the raspberrypi/firmware "stable" branch, and the rev used for `raspberrypifw` and this url:
+  # https://github.com/raspberrypi/firmware/blob/{{raspberrypifw->src->rev}}/extra/git_hash
+  # At that the "stable" revision, that file has the contents we use for rev:
+  rev = "a0cc201e35c06dbd8d0dd4a025731988d52da87e";
+  tag = lib.substring 0 7 rev;
+  modDirVersion = "5.10.89";
 in
 lib.overrideDerivation (buildLinux (args // {
   version = "${modDirVersion}-${tag}";
@@ -12,8 +18,8 @@ lib.overrideDerivation (buildLinux (args // {
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "linux";
-    rev = tag;
-    sha256 = "1j71xblflslfi4c3zx2srw6fahnhp3bjx4yjfqrp39kzaa41ij0b";
+    rev = rev;
+    sha256 = "sha256-gsKP1SD2W7f5JEi75ary1b/8KMkp2S8Dre4dLJnX/To=";
   };
 
   defconfig = {
