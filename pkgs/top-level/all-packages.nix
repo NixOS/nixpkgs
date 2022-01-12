@@ -2464,7 +2464,7 @@ with pkgs;
   };
 
   craftos-pc = callPackage ../misc/emulators/craftos-pc {
-    inherit (darwin.apple_sdk.frameworks) ApplicationServices Cocoa;
+    inherit (darwin.apple_sdk.frameworks) ApplicationServices Cocoa Carbon;
   };
 
   gcdemu = callPackage ../misc/emulators/cdemu/gui.nix { };
