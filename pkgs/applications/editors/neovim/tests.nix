@@ -151,7 +151,22 @@ rec {
   # plugin is not registered.
   test_nvim_with_remote_plugin = neovim.override {
     extraName = "-pathogen-remote";
-    configure.pathogen.pluginNames = with vimPlugins; [ deoplete-nvim vim-addon-nix ];
+    configure.pathogen.pluginNames = with vimPlugins; [ deoplete-nvim ];
+  };
+
+  test_nvim_with_remote_plugin_non_pathogen = neovim.override {
+    extraName = "-nonpathogen-remote";
+    configure.packages.foo.start = with vimPlugins; [ deoplete-nvim ];
+  };
+
+  test_nvim_with_nix_plugin = neovim.override {
+    extraName = "-nix-pathogen-remote";
+    configure.pathogen.pluginNames = with vimPlugins; [ vim-addon-nix ];
+  };
+
+  test_nvim_with_nix_plugin_non_pathogen = neovim.override {
+    extraName = "-nix-nonpathogen-remote";
+    configure.packages.foo.start = with vimPlugins; [ vim-addon-nix ];
   };
 
   # only neovim makes use of `requiredPlugins`, test this here
@@ -171,4 +186,5 @@ rec {
     export HOME=$TMPDIR
     ${nvimWithLuaPackages}/bin/nvim -i NONE --noplugin -es
   '';
+
 })
