@@ -1,0 +1,26 @@
+diff --git a/py3nvml/py3nvml.py b/py3nvml/py3nvml.py
+index 56b1fd0..2b97191 100644
+--- a/py3nvml/py3nvml.py
++++ b/py3nvml/py3nvml.py
+@@ -1128,7 +1128,7 @@ def _LoadNvmlLibrary():
+                             nvmlLib = CDLL(nvmlPath)
+                     else:
+                         # assume linux
+-                        nvmlLib = CDLL("libnvidia-ml.so.1")
++                        nvmlLib = CDLL("@nvidia_x11@/lib/libnvidia-ml.so.1")
+                 except OSError as ose:
+                     _nvmlCheckReturn(NVML_ERROR_LIBRARY_NOT_FOUND)
+                 if (nvmlLib == None):
+diff --git a/tests/out.py b/tests/out.py
+index 70eea98..8338ef4 100644
+--- a/tests/out.py
++++ b/tests/out.py
+@@ -1121,7 +1121,7 @@ def _LoadNvmlLibrary():
+                         nvmlLib = CDLL(os.path.join(os.getenv("ProgramFiles", "C:/Program Files"), "NVIDIA Corporation/NVSMI/nvml.dll"))
+                     else:
+                         # assume linux
+-                        nvmlLib = CDLL("libnvidia-ml.so.1")
++                        nvmlLib = CDLL("@nvidia_x11@/lib/libnvidia-ml.so.1")
+                 except OSError as ose:
+                     _nvmlCheckReturn(NVML_ERROR_LIBRARY_NOT_FOUND)
+                 if (nvmlLib == None):
