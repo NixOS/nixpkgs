@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "bpftrace";
-  version = "0.14.0";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner  = "iovisor";
     repo   = "bpftrace";
     rev    = "v${version}";
-    sha256 = "sha256-rlaajNfpoiMtU/4aNAnbQ0VixPz9/302TZMarGzsb58=";
+    sha256 = "sha256-QDqHAEVM/XHCFMS0jMLdKJfDUOpkUqONOf8+Fbd5dCY=";
   };
 
   # libbpf 0.6.0 relies on typeof in bpf/btf.h to pick the right version of

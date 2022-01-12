@@ -5346,6 +5346,8 @@ with pkgs;
 
   fabric-installer = callPackage ../tools/games/minecraft/fabric-installer { };
 
+  faraday-agent-dispatcher = callPackage ../tools/security/faraday-agent-dispatcher { };
+
   faraday-cli = callPackage ../tools/security/faraday-cli { };
 
   fastlane = callPackage ../tools/admin/fastlane { };
@@ -20961,6 +20963,8 @@ with pkgs;
     lua = lua5_2_compat;
     withExtraLibs = [];
   };
+
+  prosody-filer = callPackage ../servers/xmpp/prosody-filer { };
 
   biboumi = callPackage ../servers/xmpp/biboumi { };
 
