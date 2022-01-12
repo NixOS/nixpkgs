@@ -8736,6 +8736,8 @@ with pkgs;
 
   pinnwand = callPackage ../servers/pinnwand { };
 
+  pinsel = callPackage ../tools/misc/pinsel { };
+
   piping-server-rust = callPackage ../servers/piping-server-rust {
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;
   };
@@ -18181,6 +18183,8 @@ with pkgs;
   liblinear = callPackage ../development/libraries/liblinear { };
 
   libmad = callPackage ../development/libraries/libmad { };
+
+  llama = callPackage ../applications/misc/llama { };
 
   malcontent = callPackage ../development/libraries/malcontent { };
 
