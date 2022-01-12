@@ -10,6 +10,7 @@ res: pkgs: super:
 
 with pkgs;
 
+
 {
 
   # A stdenv capable of building 32-bit binaries.  On x86_64-linux,
@@ -34341,4 +34342,24 @@ with pkgs;
   };
 
   zthrottle = callPackage ../tools/misc/zthrottle { };
+
+  # Only expose images for mono-platform stdenv's
+  #
+  # Conditional logic must use super, as using pkgs will
+  # cause infinite recursion when trying to determine a fixed point
+
+} // lib.optionalAttrs (super.stdenv.isLinux && (super.hostPlatform.system == super.targetPlatform.system)) {
+  ### Conditionally add nixosImages for testing purposes
+
+  nixosImages = let
+    inherit (hostPlatform) system;
+    release-packages = (import ../../nixos/release.nix) {
+      # make impure settings do not leak into images
+      nixpkgs = { outPath = lib.cleanSource ../../.; revCount = 130979; shortRev = "gfedcba"; };
+      stableBranch = false;
+      supportedSystems = [ system ];
+      configuration = { };
+    };
+  in lib.mapAttrs (name: value: value.${system})
+    { inherit (release-packages) iso_minimal iso_gnome iso_plasma5 amazonImage; };
 }
