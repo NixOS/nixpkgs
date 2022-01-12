@@ -433,6 +433,20 @@ let
         };
       };
 
+      cweijan.vscode-database-client2 = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-database-client2";
+          publisher = "cweijan";
+          version = "4.3.3";
+          sha256 = "06bj23y5rbpz0lw45p1sxssalgn19iqfqbijw2ym22grm0i9hcby";
+        };
+        meta = {
+          description = "Database Client For Visual Studio Code";
+          homepage = "https://marketplace.visualstudio.com/items?itemName=cweijan.vscode-mysql-client2";
+          license = lib.licenses.mit;
+        };
+      };
+
       dbaeumer.vscode-eslint = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-eslint";
@@ -1216,8 +1230,8 @@ let
         mktplcRef = {
           name = "rainbow-csv";
           publisher = "mechatroner";
-          version = "1.7.1";
-          sha256 = "0w5mijs4ll5qjkpyw7qpn1k40pq8spm0b3q72x150ydbcini5hxw";
+          version = "2.0.0";
+          sha256 = "0wjlp6lah9jb0646sbi6x305idfgydb6a51pgw4wdnni02gipbrs";
         };
         meta = {
           license = lib.licenses.mit;
@@ -1470,8 +1484,8 @@ let
         mktplcRef = {
           name = "crates";
           publisher = "serayuzgur";
-          version = "0.5.9";
-          sha256 = "0l26pyvw7n3bszf97yx6qps72acq112akg3q4jq5mvlibng1nwk0";
+          version = "0.5.10";
+          sha256 = "1dbhd6xbawbnf9p090lpmn8i5gg1f7y8xk2whc9zhg4432kdv3vd";
         };
         meta = {
           license = lib.licenses.mit;
@@ -1709,6 +1723,21 @@ let
         };
       };
 
+      tuttieee.emacs-mcx = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "emacs-mcx";
+          publisher = "tuttieee";
+          version = "0.37.1";
+          sha256 = "19969qb6ink70km4wawh4w238igdm6npwskyr3hx38qgf69nd748";
+        };
+        meta = {
+          changelog = "https://github.com/whitphx/vscode-emacs-mcx/blob/main/CHANGELOG.md";
+          description = "Awesome Emacs Keymap - VSCode emacs keybinding with multi cursor support";
+          homepage = "https://github.com/whitphx/vscode-emacs-mcx";
+          license = lib.licenses.mit;
+        };
+      };
+
       tyriar.sort-lines = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "sort-lines";
@@ -1725,8 +1754,8 @@ let
         mktplcRef = {
           name = "errorlens";
           publisher = "usernamehw";
-          version = "3.4.0";
-          sha256 = "1x9rkyhbp15dwp6dikzpk9lzjnh9cnxac89gzx533681zld906m8";
+          version = "3.4.1";
+          sha256 = "1mr8si7jglpjw8qzl4af1k7r68vz03fpal1dr8i0iy4ly26pz7bh";
         };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/usernamehw.errorlens/changelog";
