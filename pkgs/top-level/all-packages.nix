@@ -27075,6 +27075,8 @@ with pkgs;
 
   pmbootstrap = python3Packages.callPackage ../tools/misc/pmbootstrap { };
 
+  shelf = libsForQt5.callPackage ../applications/office/shelf { };
+
   shepherd = nodePackages."@nerdwallet/shepherd";
 
   skate = callPackage ../applications/misc/skate { };
