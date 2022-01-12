@@ -627,6 +627,7 @@ mapAliases ({
   nagiosPluginsOfficial = monitoring-plugins;
   navit = throw "navit has been removed from nixpkgs, due to being unmaintained"; # added 2021-06-07
   ncat = nmap;  # added 2016-01-26
+  neap = throw "neap was removed from nixpkgs, as it relies on python2"; # added 2022-01-12
   netcat-openbsd = libressl.nc; # added 2018-04-25
   netease-cloud-music = throw "netease-cloud-music has been removed together with deepin"; # added 2020-08-31
   networkmanager_fortisslvpn = networkmanager-fortisslvpn; # added 2018-02-25
