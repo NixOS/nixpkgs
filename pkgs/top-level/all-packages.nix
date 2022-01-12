@@ -5815,8 +5815,6 @@ with pkgs;
 
   github-runner = callPackage ../development/tools/continuous-integration/github-runner { };
 
-  gitinspector = callPackage ../applications/version-management/gitinspector { };
-
   gitkraken = callPackage ../applications/version-management/gitkraken { };
 
   gitlab = callPackage ../applications/version-management/gitlab { };
