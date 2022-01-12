@@ -1,79 +1,66 @@
 { stdenv
 , lib
-, curl
-, dpkg
 , fetchurl
+, autoPatchelfHook
 , gtk3
-, icu
-, kerberos
-, libredirect
+, dpkg
+, curl
 , lttng-ust
-, numactl
 , wrapGAppsHook
-, zlib
+, libredirect
 }:
 
 stdenv.mkDerivation rec {
   pname = "aws-client-vpn";
-  version = "1.0.0";
+  version = "1.0.3";
 
   src = fetchurl {
     url = "https://d20adtppz83p9s.cloudfront.net/GTK/${version}/awsvpnclient_amd64.deb";
-    sha256 = "0nxmx83wbzgx648fcw5rqbdzi6v93qkpcnbb6qf1z6zzpg17c4br";
+    sha256 = "sha256-kqeV1DlOW1UWd+l0C5qQN4G/wUr5JAAqIa5vXCfzIqM=";
   };
 
-  nativeBuildInputs = [ dpkg wrapGAppsHook ];
+  nativeBuildInputs = [
+    autoPatchelfHook
+    wrapGAppsHook
+  ];
+
+  buildInputs = [
+    stdenv.cc.cc.lib
+    curl
+    lttng-ust
+    gtk3
+  ];
 
   unpackPhase = ''
-    dpkg -x $src .
+    ${dpkg}/bin/dpkg -x $src .
   '';
 
   installPhase = ''
-    mkdir -p $out/bin $out/lib
-    cp -av opt/awsvpnclient $out/lib/awsvpnclient
-    cp -av etc usr/share $out
-    ln -s "$out/lib/awsvpnclient/AWS VPN Client" "$out/bin/AWS VPN Client"
-    ln -s "$out/lib/awsvpnclient/Service/ACVC.GTK.Service" "$out/bin/ACVC.GTK.Service"
+    mkdir -p $out/bin
+    mv opt/awsvpnclient/* $out/bin
+
+    for app in "$out/bin/AWS VPN Client" "$out/bin/Service/ACVC.GTK.Service"; do
+      wrapProgram "$app" \
+        --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
+        --set NIX_REDIRECTS /opt/awsvpnclient=$out/bin \
+        --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath buildInputs}" \
+        "''${gappsWrapperArgs[@]}"
+    done
+  '';
+
+  preFixup = ''
+    patchelf --replace-needed liblttng-ust.so.0 liblttng-ust.so $out/bin/libcoreclrtraceptprovider.so
+    patchelf --replace-needed liblttng-ust.so.0 liblttng-ust.so $out/bin/Service/libcoreclrtraceptprovider.so
+  '';
+
+  postInstall = ''
+    install --mode=444 -D etc/systemd/system/awsvpnclient.service $out/etc/systemd/system/awsvpnclient.service
   '';
 
   dontWrapGApps = true;
 
-  postFixup =
-    let
-      libPath = lib.makeLibraryPath [
-        curl
-        gtk3
-        icu
-        kerberos
-        lttng-ust
-        numactl
-        stdenv.cc.cc.lib
-        zlib
-      ]; in
-    ''
-      patchPrefix() {
-        prefix="$1"
-        shift
-        for exe in "$@"; do
-          patchelf --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" --set-rpath "$prefix:${libPath}" "$prefix/$exe"
-        done
-
-        while IFS= read -r -d $'\0' elf; do
-          patchelf --set-rpath "$prefix:${libPath}" "$elf"
-        done < <(find $prefix -name '*.so' -maxdepth 1 -print0)
-      }
-
-      patchPrefix $out/lib/awsvpnclient "AWS VPN Client" createdump
-      patchPrefix $out/lib/awsvpnclient/Service ACVC.GTK.Service createdump
-
-      for prog in $out/lib/awsvpnclient/"AWS VPN Client" $out/lib/awsvpnclient/Service/ACVC.GTK.Service; do
-        wrapProgram "$prog" \
-          --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
-          --set NIX_REDIRECTS /opt/awsvpnclient=$out/lib/awsvpnclient \
-          "''${gappsWrapperArgs[@]}"
-      done
-    '';
-
+  # Without this, crashes at startup with:
+  # "Failed to create CoreCLR, HRESULT: 0x80004005"
   dontStrip = true;
 
   meta = with lib; {
