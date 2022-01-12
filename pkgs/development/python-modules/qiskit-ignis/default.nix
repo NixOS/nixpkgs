@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "qiskit-ignis";
-  version = "0.6.0";
+  version = "0.7.0";
 
   disabled = pythonOlder "3.6";
 
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     owner = "Qiskit";
     repo = "qiskit-ignis";
     rev = version;
-    hash = "sha256-L5fwCMsN03ojiDvKIyqsGfUnwej1P7bpyHlL6mu7nh0=";
+    sha256 = "sha256-5dsRKsz/nruWKuox/WJBghp2CWSDuYvax+G5ZxjZG4s=";
   };
 
   propagatedBuildInputs = [
@@ -46,7 +46,6 @@ buildPythonPackage rec {
 
   # Tests
   pythonImportsCheck = [ "qiskit.ignis" ];
-  dontUseSetuptoolsCheck = true;
   preCheck = ''
     export HOME=$TMPDIR
   '';
@@ -58,6 +57,9 @@ buildPythonPackage rec {
   ];
   disabledTests = [
     "test_tensored_meas_cal_on_circuit" # Flaky test, occasionally returns result outside bounds
+    # Slow tests
+    "test_graph_construction"
+    "test_rb"
   ] ++ lib.optionals stdenv.isAarch64 [
     "test_fitters" # Fails check that arrays are close. Might be due to aarch64 math issues.
   ];
