@@ -499,11 +499,12 @@ self: super: {
   # or for all grammars:
   # pkgs.vimPlugins.nvim-treesitter.withPlugins (_: tree-sitter.allGrammars)
   nvim-treesitter = super.nvim-treesitter.overrideAttrs (old: {
-    passthru.withPlugins =
-      grammarFn: self.nvim-treesitter.overrideAttrs (_: {
+    passthru.withPlugins = grammarFn:
+      self.nvim-treesitter.overrideAttrs (_: {
+        patches = lib.optional stdenv.isDarwin
+          ./patches/nvim-treesitter/macos-dyld.patch;
         postPatch =
-          let
-            grammars = tree-sitter.withPlugins grammarFn;
+          let grammars = tree-sitter.withPlugins grammarFn;
           in
           ''
             rm -r parser
