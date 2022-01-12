@@ -161,6 +161,7 @@ in {
 
     # NOTE: please keep in mind that the trailing whitespaces in the following strings
     # are intentional as the output is compared against the raw `iproute2`-output.
+    # editorconfig-checker-disable
     client_ipv4_table = """
     192.168.1.2 dev vrf1 proto static metric 100 
     192.168.2.3 dev vrf2 proto static metric 100
@@ -177,6 +178,7 @@ in {
     local 192.168.2.1 dev eth2 proto kernel scope host src 192.168.2.1 
     broadcast 192.168.2.255 dev eth2 proto kernel scope link src 192.168.2.1
     """.strip()
+    # editorconfig-checker-enable
 
     # Check that networkd properly configures the main routing table
     # and the routing tables for the VRF.
