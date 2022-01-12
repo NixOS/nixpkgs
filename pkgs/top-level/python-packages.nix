@@ -5841,6 +5841,8 @@ in {
 
   pdfx = callPackage ../development/python-modules/pdfx { };
 
+  pdm-pep517 = callPackage ../development/python-modules/pdm-pep517 { };
+
   pdoc3 = callPackage ../development/python-modules/pdoc3 { };
 
   pebble = callPackage ../development/python-modules/pebble { };
@@ -6099,6 +6101,8 @@ in {
   python-swiftclient = callPackage ../development/python-modules/python-swiftclient { };
 
   python-tado = callPackage ../development/python-modules/python-tado { };
+
+  pythonfinder = callPackage ../development/python-modules/pythonfinder { };
 
   pyutil = callPackage ../development/python-modules/pyutil { };
 

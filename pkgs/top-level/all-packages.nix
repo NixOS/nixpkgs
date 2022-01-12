@@ -8688,6 +8688,8 @@ with pkgs;
 
   pcapc = callPackage ../tools/networking/pcapc { };
 
+  pdm = callPackage ../tools/package-management/pdm { };
+
   pdnsd = callPackage ../tools/networking/pdnsd { };
 
   peco = callPackage ../tools/text/peco { };

@@ -12,13 +12,13 @@ buildPythonPackage rec {
   # is compatible with Ansible
   # https://github.com/NixOS/nixpkgs/pull/128636
   # https://github.com/ansible/ansible/blob/devel/requirements.txt
-  version = "0.5.5";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "sarugaku";
     repo = "resolvelib";
     rev = version;
-    sha256 = "198vfv78hilpg0d0mjzchzp9zk6239wnra61vlsgwpcgz66d2bgv";
+    sha256 = "sha256-QDHEdVET7HN2ZCKxNUMofabR+rxJy0erWhNQn94D7eI=";
   };
 
   checkInputs = [
