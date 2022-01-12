@@ -22,13 +22,13 @@ with py.pkgs;
 
 buildPythonApplication rec {
   pname = "checkov";
-  version = "2.0.708";
+  version = "2.0.710";
 
   src = fetchFromGitHub {
     owner = "bridgecrewio";
     repo = pname;
     rev = version;
-    hash = "sha256-qnRYxbw42vN0w+x1ARRz60e8q9LCPWglprOBm7rkxsE=";
+    hash = "sha256-8cvnCGqfS4ToDhjMsCpMf+d6V8gSmSJeGsoL4Q5hgFM=";
   };
 
   nativeBuildInputs = with py.pkgs; [
@@ -54,6 +54,8 @@ buildPythonApplication rec {
     dpath
     GitPython
     jmespath
+    jsonpath-ng
+    jsonschema
     junit-xml
     networkx
     packaging
@@ -76,6 +78,11 @@ buildPythonApplication rec {
     pytest-xdist
     pytestCheckHook
   ];
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "jsonschema==3.0.2" "jsonschema>=3.0.2"
+  '';
 
   disabledTests = [
     # No API key available

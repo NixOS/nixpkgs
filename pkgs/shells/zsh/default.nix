@@ -37,7 +37,8 @@ stdenv.mkDerivation {
     })
   ];
 
-  nativeBuildInputs = [ autoreconfHook perl groff util-linux texinfo ] ++ lib.optionals stdenv.isLinux [ yodl ];
+  nativeBuildInputs = [ autoreconfHook perl groff texinfo ]
+                      ++ lib.optionals stdenv.isLinux [ util-linux yodl ];
 
   buildInputs = [ ncurses pcre ];
 

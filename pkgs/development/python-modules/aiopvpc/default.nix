@@ -33,10 +33,11 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
-    backports-zoneinfo
     holidays
     tzdata
     async-timeout
+  ] ++ lib.optionals (pythonOlder "3.9") [
+    backports-zoneinfo
   ];
 
   checkInputs = [

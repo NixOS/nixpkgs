@@ -5374,11 +5374,11 @@ in {
 
   nmapthon2 = callPackage ../development/python-modules/nmapthon2 { };
 
-  nmigen-boards = callPackage ../development/python-modules/nmigen-boards { };
+  amaranth-boards = callPackage ../development/python-modules/amaranth-boards { };
 
-  nmigen = callPackage ../development/python-modules/nmigen { };
+  amaranth = callPackage ../development/python-modules/amaranth { };
 
-  nmigen-soc = callPackage ../development/python-modules/nmigen-soc { };
+  amaranth-soc = callPackage ../development/python-modules/amaranth-soc { };
 
   nocasedict = callPackage ../development/python-modules/nocasedict { };
 
