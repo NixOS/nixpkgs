@@ -44,7 +44,7 @@
 (wrap :ql-dist short-description)
 
 (defun escape-filename (s)
-  (format 
+  (format
    nil "~a~{~a~}"
    (if (scan "^[a-zA-Z_]" s) "" "_")
    (loop
