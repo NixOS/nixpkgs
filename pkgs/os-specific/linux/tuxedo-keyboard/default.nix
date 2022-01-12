@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
       This driver provides support for Fn keys, brightness/color/mode for most TUXEDO
       keyboards (except white backlight-only models).
 
-      Use the hardware.tuxedo-keyboard NixOS module to use this driver.
+      Can be used with the "hardware.tuxedo-keyboard" NixOS module.
     '';
     homepage = "https://github.com/tuxedocomputers/tuxedo-keyboard/";
     license = licenses.gpl3Plus;
