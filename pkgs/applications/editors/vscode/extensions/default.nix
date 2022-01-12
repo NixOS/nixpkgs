@@ -28,7 +28,7 @@ let
   # So an extension's attribute name should be of the form:
   # "${mktplcRef.publisher}.${mktplcRef.name}".
   #
-  baseExtensions = self: lib.mapAttrs (_n: lib.recurseIntoAttrs)
+  baseExtensions = _self: lib.mapAttrs (_n: lib.recurseIntoAttrs)
     {
       _4ops.terraform = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -2320,7 +2320,7 @@ let
       };
     };
 
-  aliases = self: super: {
+  aliases = _self: super: {
     # aliases
     ms-vscode = lib.recursiveUpdate super.ms-vscode { inherit (super.golang) go; };
   };

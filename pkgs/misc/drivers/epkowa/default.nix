@@ -289,7 +289,7 @@ let plugins = {
 in
 let fwdir = symlinkJoin {
   name = "esci-firmware-dir";
-  paths = lib.mapAttrsToList (name: value: value + /share/esci) plugins;
+  paths = lib.mapAttrsToList (_name: value: value + /share/esci) plugins;
 };
 in
 let iscan-data = stdenv.mkDerivation rec {
@@ -367,7 +367,7 @@ stdenv.mkDerivation rec {
     registry=$out/bin/iscan-registry;
   '' +
   lib.concatStrings (lib.mapAttrsToList
-    (name: value: ''
+    (_name: value: ''
       plugin=${value};
       ${value.passthru.registrationCommand}
     '')
@@ -378,7 +378,7 @@ stdenv.mkDerivation rec {
       Includes gui-less iscan (aka. Image Scan! for Linux).
       Supported hardware: at least :
     '' +
-    lib.concatStringsSep ", " (lib.mapAttrsToList (name: value: value.passthru.hw) plugins);
+    lib.concatStringsSep ", " (lib.mapAttrsToList (_name: value: value.passthru.hw) plugins);
     maintainers = with lib.maintainers; [ symphorien dominikh ];
   };
 }

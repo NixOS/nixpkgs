@@ -42,7 +42,7 @@ assert lib.assertOneOf "withSDLVersion" withSDLVersion [ "1" "2" ];
 assert enableHAXM -> (lib.assertMsg enableX11
   "Must enable X11 graphics interface for HAXM build.");
 let
-  inherit (lib) optional optionals optionalString;
+  inherit (lib) optionals optionalString;
   inherit (lib.strings) concatStringsSep concatMapStringsSep;
   isSDL2 = (withSDLVersion == "2");
   sdlInfix = optionalString isSDL2 "2";

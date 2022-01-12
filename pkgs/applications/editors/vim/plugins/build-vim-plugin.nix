@@ -5,7 +5,7 @@
 }:
 
 rec {
-  addRtp = path: attrs: derivation:
+  addRtp = _path: attrs: derivation:
     derivation // { rtp = "${derivation}"; } // {
       overrideAttrs = f: buildVimPlugin (attrs // f attrs);
     };

@@ -12,7 +12,7 @@
 assert ctagsUseFixed -> null != ctags;
 
 let
-  liburcu-0-12 = liburcu.overrideAttrs (oldAttrs: rec {
+  liburcu-0-12 = liburcu.overrideAttrs (_oldAttrs: rec {
     version = "0.12.2";
     src = fetchurl {
       url = "https://lttng.org/files/urcu/userspace-rcu-${version}.tar.bz2";
@@ -22,7 +22,7 @@ let
 
   lttng-ust-2-10 = (lttng-ust.override {
     liburcu = liburcu-0-12;
-  }).overrideAttrs (oldAttrs: rec {
+  }).overrideAttrs (_oldAttrs: rec {
     version = "2.10.5";
     src = fetchurl {
       url = "https://lttng.org/files/lttng-ust/lttng-ust-${version}.tar.bz2";

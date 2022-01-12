@@ -7,7 +7,7 @@ let
 
   inherit (lib) extends;
 
-  initialPackages = self: {
+  initialPackages = _self: {
     # Convert derivation to a vim plugin.
     toVimPlugin = drv:
       drv.overrideAttrs(oldAttrs: {
@@ -35,7 +35,7 @@ let
     inherit llvmPackages luaPackages;
   };
 
-  aliases = if (config.allowAliases or true) then (import ./aliases.nix lib) else final: prev: {};
+  aliases = if (config.allowAliases or true) then (import ./aliases.nix lib) else _final: _prev: {};
 
   extensible-self = lib.makeExtensible
     (extends aliases

@@ -1,7 +1,7 @@
 # Deprecated aliases - for backward compatibility
 lib:
 
-final: prev:
+_final: prev:
 
 let
   # Removing recurseForDerivation prevents derivations of aliased attribute
