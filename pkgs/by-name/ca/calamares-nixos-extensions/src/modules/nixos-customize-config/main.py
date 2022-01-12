@@ -306,7 +306,7 @@ def run():
     cfg += cfgpkgs
 
     cfg += cfgtail
-    version = ".".join(subprocess.getoutput(["nixos-version"]).split(".")[:2])
+    version = ".".join(subprocess.getoutput(["nixos-version"]).split(".")[:2])[:5]
     catenate(variables, "nixosversion", version)
 
     # Check that all variables are used
