@@ -20945,6 +20945,8 @@ with pkgs;
     withExtraLibs = [];
   };
 
+  prosody-filer = callPackage ../servers/xmpp/prosody-filer { };
+
   biboumi = callPackage ../servers/xmpp/biboumi { };
 
   elasticmq-server-bin = callPackage ../servers/elasticmq-server-bin {
