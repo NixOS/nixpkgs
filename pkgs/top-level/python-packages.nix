@@ -1609,8 +1609,6 @@ in {
 
   cjkwrap = callPackage ../development/python-modules/cjkwrap { };
 
-  cjson = callPackage ../development/python-modules/cjson { };
-
   ckcc-protocol = callPackage ../development/python-modules/ckcc-protocol { };
 
   claripy = callPackage ../development/python-modules/claripy { };
