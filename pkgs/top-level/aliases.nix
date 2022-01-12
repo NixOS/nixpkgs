@@ -423,6 +423,7 @@ mapAliases ({
   kodiGBM = kodi-gbm;
   kodiPlain = kodi;
   kodiPlainWayland = kodi-wayland;
+  ino = throw "ino has been removed from nixpkgs, the project is stuck on python2 and upstream has archived the project."; # added 2022-01-12
   jellyfin_10_5 = throw "Jellyfin 10.5 is no longer supported and contains a security vulnerability. Please upgrade to a newer version."; # added 2021-04-26
   julia_07 = throw "julia_07 has been deprecated in favor of the latest LTS version"; # added 2020-09-15
   julia_1 = throw "julia_1 has been deprecated in favor of julia_10 as it was ambiguous"; # added 2021-03-13
