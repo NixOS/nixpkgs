@@ -8300,8 +8300,6 @@ in {
 
   qiskit-aer = callPackage ../development/python-modules/qiskit-aer { };
 
-  qiskit-aqua = callPackage ../development/python-modules/qiskit-aqua { };
-
   qiskit-finance = callPackage ../development/python-modules/qiskit-finance { };
 
   qiskit-ibmq-provider = callPackage ../development/python-modules/qiskit-ibmq-provider { };
