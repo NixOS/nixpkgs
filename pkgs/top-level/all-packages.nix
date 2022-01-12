@@ -3398,8 +3398,6 @@ with pkgs;
 
   midicsv = callPackage ../tools/audio/midicsv { };
 
-  mididings = callPackage ../tools/audio/mididings { };
-
   miniscript = callPackage ../applications/blockchains/miniscript { };
 
   miniserve = callPackage ../tools/misc/miniserve {
