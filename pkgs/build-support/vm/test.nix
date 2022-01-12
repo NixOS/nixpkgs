@@ -9,7 +9,7 @@ with vmTools;
 
   buildHelloInVM = runInLinuxVM hello;
 
-  buildPcmanrmInVM = runInLinuxVM (pcmanfm.overrideAttrs (old: {
+  buildPcmanrmInVM = runInLinuxVM (pcmanfm.overrideAttrs (_old: {
     # goes out-of-memory with many cores
     enableParallelBuilding = false;
   }));

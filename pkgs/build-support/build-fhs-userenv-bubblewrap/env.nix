@@ -1,7 +1,7 @@
 { stdenv, lib, buildEnv, writeText, writeShellScriptBin, pkgs, pkgsi686Linux }:
 
 { name, profile ? ""
-, targetPkgs ? pkgs: [], multiPkgs ? pkgs: []
+, targetPkgs ? _pkgs: [], multiPkgs ? _pkgs: []
 , extraBuildCommands ? "", extraBuildCommandsMulti ? ""
 , extraOutputsToInstall ? []
 }:

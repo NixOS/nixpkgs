@@ -1,7 +1,7 @@
 { pkgs, config, buildPackages, lib, stdenv, libiconv, mkNugetDeps, mkNugetSource, gawk, gnused, gixy }:
 
 let
-  aliases = if (config.allowAliases or true) then (import ./aliases.nix lib) else prev: {};
+  aliases = if (config.allowAliases or true) then (import ./aliases.nix lib) else _prev: {};
 
   writers = with lib; rec {
   # Base implementation for non-compiled executables.
@@ -222,7 +222,7 @@ let
   #   ''
   writePerl = name: { libraries ? [] }:
     makeScriptWriter {
-      interpreter = "${pkgs.perl.withPackages (p: libraries)}/bin/perl";
+      interpreter = "${pkgs.perl.withPackages (_p: libraries)}/bin/perl";
     } name;
 
   # writePerlBin takes the same arguments as writePerl but outputs a directory (like writeScriptBin)
@@ -240,7 +240,7 @@ let
     interpreter =
       if libraries == []
       then "${python}/bin/python"
-      else "${python.withPackages (ps: libraries)}/bin/python"
+      else "${python.withPackages (_ps: libraries)}/bin/python"
     ;
     check = optionalString python.isPy3k (writeDash "pythoncheck.sh" ''
       exec ${pythonPackages.flake8}/bin/flake8 --show-source ${ignoreAttribute} "$1"

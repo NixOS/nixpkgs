@@ -34,42 +34,42 @@ let
   inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
 in
 {
-  cairo-rs = attrs: {
+  cairo-rs = _attrs: {
     buildInputs = [ cairo ];
   };
 
-  capnp-rpc = attrs: {
+  capnp-rpc = _attrs: {
     nativeBuildInputs = [ capnproto ];
   };
 
-  cargo = attrs: {
+  cargo = _attrs: {
     buildInputs = [ openssl zlib curl ]
       ++ lib.optionals stdenv.isDarwin [ CoreFoundation Security ];
   };
 
-  libz-sys = attrs: {
+  libz-sys = _attrs: {
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ zlib ];
     extraLinkFlags = [ "-L${zlib.out}/lib" ];
   };
 
-  curl-sys = attrs: {
+  curl-sys = _attrs: {
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ zlib curl ];
     propagatedBuildInputs = [ curl zlib ];
     extraLinkFlags = [ "-L${zlib.out}/lib" ];
   };
 
-  dbus = attrs: {
+  dbus = _attrs: {
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ dbus ];
   };
 
-  expat-sys = attrs: {
+  expat-sys = _attrs: {
     nativeBuildInputs = [ cmake ];
   };
 
-  foundationdb-sys = attrs: {
+  foundationdb-sys = _attrs: {
     buildInputs = [ foundationdb ];
     # needed for 0.4+ release, when the FFI bindings are auto-generated
     #
@@ -79,145 +79,145 @@ in
     # '';
   };
 
-  foundationdb = attrs: {
+  foundationdb = _attrs: {
     buildInputs = [ foundationdb ];
   };
 
-  freetype-sys = attrs: {
+  freetype-sys = _attrs: {
     nativeBuildInputs = [ cmake ];
     buildInputs = [ freetype ];
   };
 
-  glib-sys = attrs: {
+  glib-sys = _attrs: {
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ glib ];
   };
 
-  gobject-sys = attrs: {
+  gobject-sys = _attrs: {
     buildInputs = [ dbus-glib ];
   };
 
-  gio-sys = attrs: {
+  gio-sys = _attrs: {
     buildInputs = [ dbus-glib ];
   };
 
-  gdk-pixbuf-sys = attrs: {
+  gdk-pixbuf-sys = _attrs: {
     buildInputs = [ dbus-glib ];
   };
 
-  gdk-pixbuf = attrs: {
+  gdk-pixbuf = _attrs: {
     buildInputs = [ gdk-pixbuf ];
   };
 
-  libgit2-sys = attrs: {
+  libgit2-sys = _attrs: {
     LIBGIT2_SYS_USE_PKG_CONFIG = true;
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ openssl zlib libgit2 ];
   };
 
-  libsqlite3-sys = attrs: {
+  libsqlite3-sys = _attrs: {
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ sqlite ];
   };
 
-  libssh2-sys = attrs: {
+  libssh2-sys = _attrs: {
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ openssl zlib libssh2 ];
   };
 
-  libdbus-sys = attrs: {
+  libdbus-sys = _attrs: {
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ dbus ];
   };
 
-  libudev-sys = attrs: {
+  libudev-sys = _attrs: {
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ udev ];
   };
 
-  nettle-sys = attrs: {
+  nettle-sys = _attrs: {
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ nettle clang ];
     LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
   };
 
-  openssl = attrs: {
+  openssl = _attrs: {
     buildInputs = [ openssl ];
   };
 
-  openssl-sys = attrs: {
+  openssl-sys = _attrs: {
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ openssl ];
   };
 
-  pam-sys = attr: {
+  pam-sys = _attr: {
     buildInputs = [ linux-pam ];
   };
 
-  pq-sys = attr: {
+  pq-sys = _attr: {
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ postgresql ];
   };
 
-  rdkafka-sys = attr: {
+  rdkafka-sys = _attr: {
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ rdkafka ];
   };
 
-  rink = attrs: {
+  rink = _attrs: {
     buildInputs = [ gmp ];
     crateBin = [{ name = "rink"; path = "src/bin/rink.rs"; }];
   };
 
-  security-framework-sys = attr: {
+  security-framework-sys = _attr: {
     propagatedBuildInputs = [ Security ];
   };
 
-  sequoia-openpgp = attrs: {
+  sequoia-openpgp = _attrs: {
     buildInputs = [ gmp ];
   };
 
-  sequoia-openpgp-ffi = attrs: {
+  sequoia-openpgp-ffi = _attrs: {
     buildInputs = [ gmp ];
   };
 
-  sequoia-ipc = attrs: {
+  sequoia-ipc = _attrs: {
     buildInputs = [ gmp ];
   };
 
-  sequoia-guide = attrs: {
+  sequoia-guide = _attrs: {
     buildInputs = [ gmp ];
   };
 
-  sequoia-store = attrs: {
+  sequoia-store = _attrs: {
     nativeBuildInputs = [ capnproto ];
     buildInputs = [ sqlite gmp ];
   };
 
-  sequoia-sq = attrs: {
+  sequoia-sq = _attrs: {
     buildInputs = [ sqlite gmp ];
   };
 
-  sequoia-tool = attrs: {
+  sequoia-tool = _attrs: {
     nativeBuildInputs = [ capnproto ];
     buildInputs = [ sqlite gmp ];
   };
 
-  serde_derive = attrs: {
+  serde_derive = _attrs: {
     buildInputs = lib.optional stdenv.isDarwin Security;
   };
 
-  servo-fontconfig-sys = attrs: {
+  servo-fontconfig-sys = _attrs: {
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ freetype ];
   };
 
-  thrussh-libsodium = attrs: {
+  thrussh-libsodium = _attrs: {
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ libsodium ];
   };
 
-  xcb = attrs: {
+  xcb = _attrs: {
     buildInputs = [ python3 ];
   };
 }

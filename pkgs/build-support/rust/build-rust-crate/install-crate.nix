@@ -1,5 +1,5 @@
 { stdenv }:
-crateName: metadata: buildTests:
+_crateName: metadata: buildTests:
 if !buildTests then ''
   runHook preInstall
   # always create $out even if we do not have binaries. We are detecting binary targets during compilation, if those are missing there is no way to only have $lib

@@ -206,7 +206,7 @@ crate_: lib.makeOverridable
     }:
 
     let
-      crate = crate_ // (lib.attrByPath [ crate_.crateName ] (attr: { }) crateOverrides crate_);
+      crate = crate_ // (lib.attrByPath [ crate_.crateName ] (_attr: { }) crateOverrides crate_);
       dependencies_ = dependencies;
       buildDependencies_ = buildDependencies;
       processedAttrs = [

@@ -22,7 +22,7 @@
 with lib;
 
 let
-  warn = if verbose then builtins.trace else (x: y: y);
+  warn = if verbose then builtins.trace else (_x: y: y);
   references = import (runCommand "references.nix" { exportReferencesGraph = [ "graph" drv ]; } ''
     (echo {
     while read path
@@ -74,7 +74,7 @@ let
   rewriteMemo = listToAttrs (map
     (drv: { name = discard (toString drv);
             value = rewriteHashes (builtins.storePath drv)
-              (filterAttrs (n: v: builtins.elem (builtins.storePath (discard (toString n))) (referencesOf drv)) rewriteMemo);
+              (filterAttrs (n: _v: builtins.elem (builtins.storePath (discard (toString n))) (referencesOf drv)) rewriteMemo);
           })
     (filter dependsOnOld (builtins.attrNames references))) // rewrittenDeps;
 

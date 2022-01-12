@@ -47,13 +47,13 @@ in {
     }
    '';
 
-  noisily = colors: verbose: ''
+  noisily = _colors: verbose: ''
     noisily() {
-  	  ${lib.optionalString verbose ''
+      ${lib.optionalString verbose ''
         echo_colored -n "Running "
         echo $@
-  	  ''}
-  	  $@
+      ''}
+      $@
     }
   '';
 }

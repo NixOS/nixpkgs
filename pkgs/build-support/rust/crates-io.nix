@@ -215,7 +215,7 @@ rec {
     authors = [ "Josh Stone <cuviper@gmail.com>" ];
     sha256 = "0dv81dwnp1al3j4ffz007yrjv4w1c7hw09gnf0xs3icxiw6qqfs3";
   };
-  features_.autocfg."0.1.2" = deps: f: updateFeatures f ({
+  features_.autocfg."0.1.2" = _deps: f: updateFeatures f ({
     autocfg."0.1.2".default = (f.autocfg."0.1.2".default or true);
   }) [];
 
@@ -509,7 +509,7 @@ rec {
     sha256 = "1g1wmz2001qmfrd37dnd5qiss5njrw26aywmg6yhkmkbyrhjxb08";
     features = mkFeatures (features."bitflags"."1.0.4" or {});
   };
-  features_.bitflags."1.0.4" = deps: f: updateFeatures f ({
+  features_.bitflags."1.0.4" = _deps: f: updateFeatures f ({
     bitflags."1.0.4".default = (f.bitflags."1.0.4".default or true);
   }) [];
 
@@ -810,7 +810,7 @@ rec {
 ]);
     features = mkFeatures (features."cc"."1.0.25" or {});
   };
-  features_.cc."1.0.25" = deps: f: updateFeatures f (rec {
+  features_.cc."1.0.25" = _deps: f: updateFeatures f (rec {
     cc = fold recursiveUpdate {} [
       { "1.0.25".default = (f.cc."1.0.25".default or true); }
       { "1.0.25".rayon =
@@ -834,7 +834,7 @@ rec {
 ]);
     features = mkFeatures (features."cc"."1.0.32" or {});
   };
-  features_.cc."1.0.32" = deps: f: updateFeatures f (rec {
+  features_.cc."1.0.32" = _deps: f: updateFeatures f (rec {
     cc = fold recursiveUpdate {} [
       { "1.0.32"."rayon" =
         (f.cc."1.0.32"."rayon" or false) ||
@@ -854,7 +854,7 @@ rec {
     authors = [ "Alex Crichton <alex@alexcrichton.com>" ];
     sha256 = "11qrix06wagkplyk908i3423ps9m9np6c4vbcq81s9fyl244xv3n";
   };
-  features_.cfg_if."0.1.6" = deps: f: updateFeatures f ({
+  features_.cfg_if."0.1.6" = _deps: f: updateFeatures f ({
     cfg_if."0.1.6".default = (f.cfg_if."0.1.6".default or true);
   }) [];
 
@@ -869,7 +869,7 @@ rec {
     authors = [ "Alex Crichton <alex@alexcrichton.com>" ];
     sha256 = "13gvcx1dxjq4mpmpj26hpg3yc97qffkx2zi58ykr1dwr8q2biiig";
   };
-  features_.cfg_if."0.1.7" = deps: f: updateFeatures f ({
+  features_.cfg_if."0.1.7" = _deps: f: updateFeatures f ({
     cfg_if."0.1.7".default = (f.cfg_if."0.1.7".default or true);
   }) [];
 
@@ -1001,7 +1001,7 @@ rec {
     authors = [ "Cesar Eduardo Barros <cesarb@cesarb.eti.br>" ];
     sha256 = "03qri9hjf049gwqg9q527lybpg918q6y5q4g9a5lma753nff49wd";
   };
-  features_.constant_time_eq."0.1.3" = deps: f: updateFeatures f ({
+  features_.constant_time_eq."0.1.3" = _deps: f: updateFeatures f ({
     constant_time_eq."0.1.3".default = (f.constant_time_eq."0.1.3".default or true);
   }) [];
 
@@ -1093,7 +1093,7 @@ rec {
 ]);
     features = mkFeatures (features."either"."1.5.0" or {});
   };
-  features_.either."1.5.0" = deps: f: updateFeatures f (rec {
+  features_.either."1.5.0" = _deps: f: updateFeatures f (rec {
     either = fold recursiveUpdate {} [
       { "1.5.0".default = (f.either."1.5.0".default or true); }
       { "1.5.0".use_std =
@@ -1117,7 +1117,7 @@ rec {
 ]);
     features = mkFeatures (features."either"."1.5.1" or {});
   };
-  features_.either."1.5.1" = deps: f: updateFeatures f (rec {
+  features_.either."1.5.1" = _deps: f: updateFeatures f (rec {
     either = fold recursiveUpdate {} [
       { "1.5.1"."use_std" =
         (f.either."1.5.1"."use_std" or false) ||
@@ -1417,7 +1417,7 @@ rec {
     edition = "2018";
     sha256 = "07apwv9dj716yjlcj29p94vkqn5zmfh7hlrqvrjx3wzshphc95h9";
   };
-  features_.fuchsia_cprng."0.1.1" = deps: f: updateFeatures f ({
+  features_.fuchsia_cprng."0.1.1" = _deps: f: updateFeatures f ({
     fuchsia_cprng."0.1.1".default = (f.fuchsia_cprng."0.1.1".default or true);
   }) [];
 
@@ -1454,7 +1454,7 @@ rec {
     authors = [ "Raph Levien <raph@google.com>" ];
     sha256 = "08jp1zxrm9jbrr6l26bjal4dbm8bxfy57ickdgibsqxr1n9j3hf5";
   };
-  features_.fuchsia_zircon_sys."0.3.3" = deps: f: updateFeatures f ({
+  features_.fuchsia_zircon_sys."0.3.3" = _deps: f: updateFeatures f ({
     fuchsia_zircon_sys."0.3.3".default = (f.fuchsia_zircon_sys."0.3.3".default or true);
   }) [];
 
@@ -1593,7 +1593,7 @@ rec {
     sha256 = "0zadimmdgvili3gdwxqg7ljv3r4wcdg1kkdfp9nl15vnm23vrhy1";
     features = mkFeatures (features."itoa"."0.4.3" or {});
   };
-  features_.itoa."0.4.3" = deps: f: updateFeatures f (rec {
+  features_.itoa."0.4.3" = _deps: f: updateFeatures f (rec {
     itoa = fold recursiveUpdate {} [
       { "0.4.3".default = (f.itoa."0.4.3".default or true); }
       { "0.4.3".std =
@@ -1652,7 +1652,7 @@ rec {
 ]);
     features = mkFeatures (features."lazy_static"."1.3.0" or {});
   };
-  features_.lazy_static."1.3.0" = deps: f: updateFeatures f (rec {
+  features_.lazy_static."1.3.0" = _deps: f: updateFeatures f (rec {
     lazy_static = fold recursiveUpdate {} [
       { "1.3.0"."spin" =
         (f.lazy_static."1.3.0"."spin" or false) ||
@@ -1673,7 +1673,7 @@ rec {
     sha256 = "0pshydmsq71kl9276zc2928ld50sp524ixcqkcqsgq410dx6c50b";
     features = mkFeatures (features."libc"."0.2.43" or {});
   };
-  features_.libc."0.2.43" = deps: f: updateFeatures f (rec {
+  features_.libc."0.2.43" = _deps: f: updateFeatures f (rec {
     libc = fold recursiveUpdate {} [
       { "0.2.43".default = (f.libc."0.2.43".default or true); }
       { "0.2.43".use_std =
@@ -1698,7 +1698,7 @@ rec {
 ]);
     features = mkFeatures (features."libc"."0.2.50" or {});
   };
-  features_.libc."0.2.50" = deps: f: updateFeatures f (rec {
+  features_.libc."0.2.50" = _deps: f: updateFeatures f (rec {
     libc = fold recursiveUpdate {} [
       { "0.2.50"."align" =
         (f.libc."0.2.50"."align" or false) ||
@@ -1770,7 +1770,7 @@ rec {
     sha256 = "03hl636fg6xggy0a26200xs74amk3k9n0908rga2szn68agyz3cv";
     libPath = "lib.rs";
   };
-  features_.matches."0.1.8" = deps: f: updateFeatures f ({
+  features_.matches."0.1.8" = _deps: f: updateFeatures f ({
     matches."0.1.8".default = (f.matches."0.1.8".default or true);
   }) [];
 
@@ -1875,7 +1875,7 @@ rec {
 ]);
     features = mkFeatures (features."memchr"."2.2.0" or {});
   };
-  features_.memchr."2.2.0" = deps: f: updateFeatures f (rec {
+  features_.memchr."2.2.0" = _deps: f: updateFeatures f (rec {
     memchr = fold recursiveUpdate {} [
       { "2.2.0"."use_std" =
         (f.memchr."2.2.0"."use_std" or false) ||
@@ -1898,7 +1898,7 @@ rec {
 ]);
     features = mkFeatures (features."nodrop"."0.1.12" or {});
   };
-  features_.nodrop."0.1.12" = deps: f: updateFeatures f (rec {
+  features_.nodrop."0.1.12" = _deps: f: updateFeatures f (rec {
     nodrop = fold recursiveUpdate {} [
       { "0.1.12".default = (f.nodrop."0.1.12".default or true); }
       { "0.1.12".nodrop-union =
@@ -1926,7 +1926,7 @@ rec {
 ]);
     features = mkFeatures (features."nodrop"."0.1.13" or {});
   };
-  features_.nodrop."0.1.13" = deps: f: updateFeatures f (rec {
+  features_.nodrop."0.1.13" = _deps: f: updateFeatures f (rec {
     nodrop = fold recursiveUpdate {} [
       { "0.1.13"."nodrop-union" =
         (f.nodrop."0.1.13"."nodrop-union" or false) ||
@@ -2004,7 +2004,7 @@ rec {
     sha256 = "04ahrp7aw4ip7fmadb0bknybmkfav0kk0gw4ps3ydq5w6hr0ib5i";
     libPath = "lib.rs";
   };
-  features_.percent_encoding."1.0.1" = deps: f: updateFeatures f ({
+  features_.percent_encoding."1.0.1" = _deps: f: updateFeatures f ({
     percent_encoding."1.0.1".default = (f.percent_encoding."1.0.1".default or true);
   }) [];
 
@@ -2077,7 +2077,7 @@ rec {
     authors = [ "Paul Colomiets <paul@colomiets.name>" "Colin Kiegel <kiegel@gmx.de>" ];
     sha256 = "192a3adc5phgpibgqblsdx1b421l5yg9bjbmv552qqq9f37h60k5";
   };
-  features_.quick_error."1.2.2" = deps: f: updateFeatures f ({
+  features_.quick_error."1.2.2" = _deps: f: updateFeatures f ({
     quick_error."1.2.2".default = (f.quick_error."1.2.2".default or true);
   }) [];
 
@@ -2313,7 +2313,7 @@ rec {
 ]);
     features = mkFeatures (features."rand_core"."0.4.0" or {});
   };
-  features_.rand_core."0.4.0" = deps: f: updateFeatures f (rec {
+  features_.rand_core."0.4.0" = _deps: f: updateFeatures f (rec {
     rand_core = fold recursiveUpdate {} [
       { "0.4.0"."alloc" =
         (f.rand_core."0.4.0"."alloc" or false) ||
@@ -2426,7 +2426,7 @@ rec {
     sha256 = "132rnhrq49l3z7gjrwj2zfadgw6q0355s6a7id7x7c0d7sk72611";
     libName = "syscall";
   };
-  features_.redox_syscall."0.1.40" = deps: f: updateFeatures f ({
+  features_.redox_syscall."0.1.40" = _deps: f: updateFeatures f ({
     redox_syscall."0.1.40".default = (f.redox_syscall."0.1.40".default or true);
   }) [];
 
@@ -2442,7 +2442,7 @@ rec {
     sha256 = "1a61cv7yydx64vpyvzr0z0hwzdvy4gcvcnfc6k70zpkngj5sz3ip";
     libName = "syscall";
   };
-  features_.redox_syscall."0.1.51" = deps: f: updateFeatures f ({
+  features_.redox_syscall."0.1.51" = _deps: f: updateFeatures f ({
     redox_syscall."0.1.51".default = (f.redox_syscall."0.1.51".default or true);
   }) [];
 
@@ -2692,7 +2692,7 @@ rec {
     authors = [ "Alex Crichton <alex@alexcrichton.com>" ];
     sha256 = "0sr6cr02araqnlqwc5ghvnafjmkw11vzjswqaz757lvyrcl8xcy6";
   };
-  features_.rustc_demangle."0.1.13" = deps: f: updateFeatures f ({
+  features_.rustc_demangle."0.1.13" = _deps: f: updateFeatures f ({
     rustc_demangle."0.1.13".default = (f.rustc_demangle."0.1.13".default or true);
   }) [];
 
@@ -2706,7 +2706,7 @@ rec {
     authors = [ "Alex Crichton <alex@alexcrichton.com>" ];
     sha256 = "00ma4r9haq0zv5krps617mym6y74056pfcivyld0kpci156vfaax";
   };
-  features_.rustc_demangle."0.1.9" = deps: f: updateFeatures f ({
+  features_.rustc_demangle."0.1.9" = _deps: f: updateFeatures f ({
     rustc_demangle."0.1.9".default = (f.rustc_demangle."0.1.9".default or true);
   }) [];
 
@@ -2724,7 +2724,7 @@ rec {
 ]);
     features = mkFeatures (features."ryu"."0.2.6" or {});
   };
-  features_.ryu."0.2.6" = deps: f: updateFeatures f ({
+  features_.ryu."0.2.6" = _deps: f: updateFeatures f ({
     ryu."0.2.6".default = (f.ryu."0.2.6".default or true);
   }) [];
 
@@ -2743,7 +2743,7 @@ rec {
 ]);
     features = mkFeatures (features."ryu"."0.2.7" or {});
   };
-  features_.ryu."0.2.7" = deps: f: updateFeatures f ({
+  features_.ryu."0.2.7" = _deps: f: updateFeatures f ({
     ryu."0.2.7".default = (f.ryu."0.2.7".default or true);
   }) [];
 
@@ -2758,7 +2758,7 @@ rec {
     sha256 = "1arqj2skcfr46s1lcyvnlmfr5456kg5nhn8k90xyfjnxkp5yga2v";
     features = mkFeatures (features."scoped_threadpool"."0.1.9" or {});
   };
-  features_.scoped_threadpool."0.1.9" = deps: f: updateFeatures f ({
+  features_.scoped_threadpool."0.1.9" = _deps: f: updateFeatures f ({
     scoped_threadpool."0.1.9".default = (f.scoped_threadpool."0.1.9".default or true);
   }) [];
 
@@ -2776,7 +2776,7 @@ rec {
 ]);
     features = mkFeatures (features."serde"."1.0.80" or {});
   };
-  features_.serde."1.0.80" = deps: f: updateFeatures f (rec {
+  features_.serde."1.0.80" = _deps: f: updateFeatures f (rec {
     serde = fold recursiveUpdate {} [
       { "1.0.80".default = (f.serde."1.0.80".default or true); }
       { "1.0.80".serde_derive =
@@ -2808,7 +2808,7 @@ rec {
 ]);
     features = mkFeatures (features."serde"."1.0.84" or {});
   };
-  features_.serde."1.0.84" = deps: f: updateFeatures f (rec {
+  features_.serde."1.0.84" = _deps: f: updateFeatures f (rec {
     serde = fold recursiveUpdate {} [
       { "1.0.84".default = (f.serde."1.0.84".default or true); }
       { "1.0.84".serde_derive =
@@ -2841,7 +2841,7 @@ rec {
 ]);
     features = mkFeatures (features."serde"."1.0.89" or {});
   };
-  features_.serde."1.0.89" = deps: f: updateFeatures f (rec {
+  features_.serde."1.0.89" = _deps: f: updateFeatures f (rec {
     serde = fold recursiveUpdate {} [
       { "1.0.89"."serde_derive" =
         (f.serde."1.0.89"."serde_derive" or false) ||
@@ -3004,7 +3004,7 @@ rec {
 ]);
     features = mkFeatures (features."smallvec"."0.6.9" or {});
   };
-  features_.smallvec."0.6.9" = deps: f: updateFeatures f (rec {
+  features_.smallvec."0.6.9" = _deps: f: updateFeatures f (rec {
     smallvec = fold recursiveUpdate {} [
       { "0.6.9"."std" =
         (f.smallvec."0.6.9"."std" or false) ||
@@ -3024,7 +3024,7 @@ rec {
     authors = [ "Danny Guo <dannyguo91@gmail.com>" ];
     sha256 = "0fy0k5f2705z73mb3x9459bpcvrx4ky8jpr4zikcbiwan4bnm0iv";
   };
-  features_.strsim."0.7.0" = deps: f: updateFeatures f ({
+  features_.strsim."0.7.0" = _deps: f: updateFeatures f ({
     strsim."0.7.0".default = (f.strsim."0.7.0".default or true);
   }) [];
 
@@ -3437,7 +3437,7 @@ rec {
     authors = [ "Andrew Gallant <jamslam@gmail.com>" ];
     sha256 = "02a8h3siipx52b832xc8m8rwasj6nx9jpiwfldw8hp6k205hgkn0";
   };
-  features_.ucd_util."0.1.1" = deps: f: updateFeatures f ({
+  features_.ucd_util."0.1.1" = _deps: f: updateFeatures f ({
     ucd_util."0.1.1".default = (f.ucd_util."0.1.1".default or true);
   }) [];
 
@@ -3452,7 +3452,7 @@ rec {
     authors = [ "Andrew Gallant <jamslam@gmail.com>" ];
     sha256 = "1n1qi3jywq5syq90z9qd8qzbn58pcjgv1sx4sdmipm4jf9zanz15";
   };
-  features_.ucd_util."0.1.3" = deps: f: updateFeatures f ({
+  features_.ucd_util."0.1.3" = _deps: f: updateFeatures f ({
     ucd_util."0.1.3".default = (f.ucd_util."0.1.3".default or true);
   }) [];
 
@@ -3502,7 +3502,7 @@ rec {
     authors = [ "kwantam <kwantam@gmail.com>" ];
     sha256 = "1da2hv800pd0wilmn4idwpgv5p510hjxizjcfv6xzb40xcsjd8gs";
   };
-  features_.unicode_normalization."0.1.7" = deps: f: updateFeatures f ({
+  features_.unicode_normalization."0.1.7" = _deps: f: updateFeatures f ({
     unicode_normalization."0.1.7".default = (f.unicode_normalization."0.1.7".default or true);
   }) [];
 
@@ -3538,7 +3538,7 @@ rec {
     sha256 = "0886lc2aymwgy0lhavwn6s48ik3c61ykzzd3za6prgnw51j7bi4w";
     features = mkFeatures (features."unicode_width"."0.1.5" or {});
   };
-  features_.unicode_width."0.1.5" = deps: f: updateFeatures f ({
+  features_.unicode_width."0.1.5" = _deps: f: updateFeatures f ({
     unicode_width."0.1.5".default = (f.unicode_width."0.1.5".default or true);
   }) [];
 
@@ -3553,7 +3553,7 @@ rec {
     sha256 = "05wdmwlfzxhq3nhsxn6wx4q8dhxzzfb9szsz6wiw092m1rjj01zj";
     features = mkFeatures (features."unicode_xid"."0.1.0" or {});
   };
-  features_.unicode_xid."0.1.0" = deps: f: updateFeatures f ({
+  features_.unicode_xid."0.1.0" = _deps: f: updateFeatures f ({
     unicode_xid."0.1.0".default = (f.unicode_xid."0.1.0".default or true);
   }) [];
 
@@ -3604,7 +3604,7 @@ rec {
     authors = [ "Andrew Gallant <jamslam@gmail.com>" ];
     sha256 = "1s56ihd2c8ba6191078wivvv59247szaiszrh8x2rxqfsxlfrnpp";
   };
-  features_.utf8_ranges."1.0.1" = deps: f: updateFeatures f ({
+  features_.utf8_ranges."1.0.1" = _deps: f: updateFeatures f ({
     utf8_ranges."1.0.1".default = (f.utf8_ranges."1.0.1".default or true);
   }) [];
 
@@ -3619,7 +3619,7 @@ rec {
     authors = [ "Andrew Gallant <jamslam@gmail.com>" ];
     sha256 = "1my02laqsgnd8ib4dvjgd4rilprqjad6pb9jj9vi67csi5qs2281";
   };
-  features_.utf8_ranges."1.0.2" = deps: f: updateFeatures f ({
+  features_.utf8_ranges."1.0.2" = _deps: f: updateFeatures f ({
     utf8_ranges."1.0.2".default = (f.utf8_ranges."1.0.2".default or true);
   }) [];
 
@@ -3636,7 +3636,7 @@ rec {
 ]);
     features = mkFeatures (features."vec_map"."0.8.1" or {});
   };
-  features_.vec_map."0.8.1" = deps: f: updateFeatures f (rec {
+  features_.vec_map."0.8.1" = _deps: f: updateFeatures f (rec {
     vec_map = fold recursiveUpdate {} [
       { "0.8.1".default = (f.vec_map."0.8.1".default or true); }
       { "0.8.1".serde =
@@ -3656,7 +3656,7 @@ rec {
     authors = [ "Sergio Benitez <sb@sergio.bz>" ];
     sha256 = "1yrx9xblmwbafw2firxyqbj8f771kkzfd24n3q7xgwiqyhi0y8qd";
   };
-  features_.version_check."0.1.5" = deps: f: updateFeatures f ({
+  features_.version_check."0.1.5" = _deps: f: updateFeatures f ({
     version_check."0.1.5".default = (f.version_check."0.1.5".default or true);
   }) [];
 
@@ -3698,7 +3698,7 @@ rec {
     sha256 = "05ihkij18r4gamjpxj4gra24514can762imjzlmak5wlzidplzrp";
     build = "build.rs";
   };
-  features_.winapi_i686_pc_windows_gnu."0.4.0" = deps: f: updateFeatures f ({
+  features_.winapi_i686_pc_windows_gnu."0.4.0" = _deps: f: updateFeatures f ({
     winapi_i686_pc_windows_gnu."0.4.0".default = (f.winapi_i686_pc_windows_gnu."0.4.0".default or true);
   }) [];
 
@@ -3777,7 +3777,7 @@ rec {
     sha256 = "0n1ylmlsb8yg1v583i4xy0qmqg42275flvbc51hdqjjfjcl9vlbj";
     build = "build.rs";
   };
-  features_.winapi_x86_64_pc_windows_gnu."0.4.0" = deps: f: updateFeatures f ({
+  features_.winapi_x86_64_pc_windows_gnu."0.4.0" = _deps: f: updateFeatures f ({
     winapi_x86_64_pc_windows_gnu."0.4.0".default = (f.winapi_x86_64_pc_windows_gnu."0.4.0".default or true);
   }) [];
 
@@ -4027,7 +4027,7 @@ rec {
     sha256 = "15249xzi3qlm72p4glxgavwyq70fx2sp4df6ii0sdlrixrrp77pl";
     features = mkFeatures (features."build_const"."0.2.1" or {});
   };
-  features_.build_const."0.2.1" = deps: f: updateFeatures f (rec {
+  features_.build_const."0.2.1" = _deps: f: updateFeatures f (rec {
     build_const = fold recursiveUpdate {} [
       { "0.2.1"."std" =
         (f.build_const."0.2.1"."std" or false) ||
@@ -4050,7 +4050,7 @@ rec {
     build = "build.rs";
     features = mkFeatures (features."byteorder"."1.3.1" or {});
   };
-  features_.byteorder."1.3.1" = deps: f: updateFeatures f (rec {
+  features_.byteorder."1.3.1" = _deps: f: updateFeatures f (rec {
     byteorder = fold recursiveUpdate {} [
       { "1.3.1"."std" =
         (f.byteorder."1.3.1"."std" or false) ||
@@ -4104,7 +4104,7 @@ rec {
     dependencies = mapFeatures features ([
 ]);
   };
-  features_.bytesize."1.0.0" = deps: f: updateFeatures f ({
+  features_.bytesize."1.0.0" = _deps: f: updateFeatures f ({
     bytesize."1.0.0".default = (f.bytesize."1.0.0".default or true);
   }) [];
 
@@ -4335,7 +4335,7 @@ rec {
 ]);
     features = mkFeatures (features."cc"."1.0.35" or {});
   };
-  features_.cc."1.0.35" = deps: f: updateFeatures f (rec {
+  features_.cc."1.0.35" = _deps: f: updateFeatures f (rec {
     cc = fold recursiveUpdate {} [
       { "1.0.35"."rayon" =
         (f.cc."1.0.35"."rayon" or false) ||
@@ -4549,7 +4549,7 @@ rec {
     build = "build.rs";
     features = mkFeatures (features."core_foundation_sys"."0.6.2" or {});
   };
-  features_.core_foundation_sys."0.6.2" = deps: f: updateFeatures f ({
+  features_.core_foundation_sys."0.6.2" = _deps: f: updateFeatures f ({
     core_foundation_sys."0.6.2".default = (f.core_foundation_sys."0.6.2".default or true);
   }) [];
 
@@ -4959,7 +4959,7 @@ rec {
 ]);
     features = mkFeatures (features."either"."1.5.2" or {});
   };
-  features_.either."1.5.2" = deps: f: updateFeatures f (rec {
+  features_.either."1.5.2" = _deps: f: updateFeatures f (rec {
     either = fold recursiveUpdate {} [
       { "1.5.2"."use_std" =
         (f.either."1.5.2"."use_std" or false) ||
@@ -5078,7 +5078,7 @@ rec {
     sha256 = "128mlh23y3gg6ag5h8iiqlcbl59smisdzraqy88ldrf75kbw27ip";
     libPath = "lib.rs";
   };
-  features_.fnv."1.0.6" = deps: f: updateFeatures f ({
+  features_.fnv."1.0.6" = _deps: f: updateFeatures f ({
     fnv."1.0.6".default = (f.fnv."1.0.6".default or true);
   }) [];
 
@@ -5114,7 +5114,7 @@ rec {
     authors = [ "Steven Fackler <sfackler@gmail.com>" ];
     sha256 = "0b6cnvqbflws8dxywk4589vgbz80049lz4x1g9dfy4s1ppd3g4z5";
   };
-  features_.foreign_types_shared."0.1.1" = deps: f: updateFeatures f ({
+  features_.foreign_types_shared."0.1.1" = _deps: f: updateFeatures f ({
     foreign_types_shared."0.1.1".default = (f.foreign_types_shared."0.1.1".default or true);
   }) [];
 
@@ -5303,7 +5303,7 @@ rec {
     authors = [ "The Rust Project Developers" ];
     sha256 = "104389jjxs8r2f5cc9p0axhjmndgln60ih5x4f00ccgg9d3zarlf";
   };
-  features_.glob."0.2.11" = deps: f: updateFeatures f ({
+  features_.glob."0.2.11" = _deps: f: updateFeatures f ({
     glob."0.2.11".default = (f.glob."0.2.11".default or true);
   }) [];
 
@@ -5381,7 +5381,7 @@ rec {
     sha256 = "0hs0xfb4x67y4ss9mmbjmibkwakbn3xf23i21m409bw2zqk9b6kz";
     features = mkFeatures (features."hex"."0.3.2" or {});
   };
-  features_.hex."0.3.2" = deps: f: updateFeatures f ({
+  features_.hex."0.3.2" = _deps: f: updateFeatures f ({
     hex."0.3.2".default = (f.hex."0.3.2".default or true);
   }) [];
 
@@ -5663,7 +5663,7 @@ rec {
 ]);
     features = mkFeatures (features."lazycell"."1.2.1" or {});
   };
-  features_.lazycell."1.2.1" = deps: f: updateFeatures f (rec {
+  features_.lazycell."1.2.1" = _deps: f: updateFeatures f (rec {
     lazycell = fold recursiveUpdate {} [
       { "1.2.1"."clippy" =
         (f.lazycell."1.2.1"."clippy" or false) ||
@@ -5692,7 +5692,7 @@ rec {
 ]);
     features = mkFeatures (features."libc"."0.2.51" or {});
   };
-  features_.libc."0.2.51" = deps: f: updateFeatures f (rec {
+  features_.libc."0.2.51" = _deps: f: updateFeatures f (rec {
     libc = fold recursiveUpdate {} [
       { "0.2.51"."align" =
         (f.libc."0.2.51"."align" or false) ||
@@ -6176,7 +6176,7 @@ rec {
     build = "build.rs";
     features = mkFeatures (features."num_traits"."0.2.6" or {});
   };
-  features_.num_traits."0.2.6" = deps: f: updateFeatures f (rec {
+  features_.num_traits."0.2.6" = _deps: f: updateFeatures f (rec {
     num_traits = fold recursiveUpdate {} [
       { "0.2.6"."std" =
         (f.num_traits."0.2.6"."std" or false) ||
@@ -6321,7 +6321,7 @@ rec {
     authors = [ "Alex Crichton <alex@alexcrichton.com>" ];
     sha256 = "1a89fznx26vvaxyrxdvgf6iwai5xvs6xjvpjin68fgvrslv6n15a";
   };
-  features_.openssl_probe."0.1.2" = deps: f: updateFeatures f ({
+  features_.openssl_probe."0.1.2" = _deps: f: updateFeatures f ({
     openssl_probe."0.1.2".default = (f.openssl_probe."0.1.2".default or true);
   }) [];
 
@@ -6518,7 +6518,7 @@ rec {
     authors = [ "Alex Crichton <alex@alexcrichton.com>" ];
     sha256 = "0207fsarrm412j0dh87lfcas72n8mxar7q3mgflsbsrqnb140sv6";
   };
-  features_.pkg_config."0.3.14" = deps: f: updateFeatures f ({
+  features_.pkg_config."0.3.14" = _deps: f: updateFeatures f ({
     pkg_config."0.3.14".default = (f.pkg_config."0.3.14".default or true);
   }) [];
 
@@ -6896,7 +6896,7 @@ rec {
     authors = [ "bluss" ];
     sha256 = "0hblv2cv310ixf5f1jw4nk9w5pb95wh4dwqyjv07g2xrshbw6j04";
   };
-  features_.rawpointer."0.1.0" = deps: f: updateFeatures f ({
+  features_.rawpointer."0.1.0" = _deps: f: updateFeatures f ({
     rawpointer."0.1.0".default = (f.rawpointer."0.1.0".default or true);
   }) [];
 
@@ -6912,7 +6912,7 @@ rec {
     sha256 = "1ndcp7brnvii87ndcd34fk846498r07iznphkslcy0shic9cp4rr";
     libName = "syscall";
   };
-  features_.redox_syscall."0.1.54" = deps: f: updateFeatures f ({
+  features_.redox_syscall."0.1.54" = _deps: f: updateFeatures f ({
     redox_syscall."0.1.54".default = (f.redox_syscall."0.1.54".default or true);
   }) [];
 
@@ -6995,7 +6995,7 @@ rec {
 ]);
     features = mkFeatures (features."rustc_demangle"."0.1.14" or {});
   };
-  features_.rustc_demangle."0.1.14" = deps: f: updateFeatures f (rec {
+  features_.rustc_demangle."0.1.14" = _deps: f: updateFeatures f (rec {
     rustc_demangle = fold recursiveUpdate {} [
       { "0.1.14"."compiler_builtins" =
         (f.rustc_demangle."0.1.14"."compiler_builtins" or false) ||
@@ -7020,7 +7020,7 @@ rec {
     authors = [ "Alex Crichton <alex@alexcrichton.com>" ];
     sha256 = "0arpdp472j4lrwxbmf4z21d8kh95rbbphnzccf605pqq2rvczv3p";
   };
-  features_.rustc_workspace_hack."1.0.0" = deps: f: updateFeatures f ({
+  features_.rustc_workspace_hack."1.0.0" = _deps: f: updateFeatures f ({
     rustc_workspace_hack."1.0.0".default = (f.rustc_workspace_hack."1.0.0".default or true);
   }) [];
 
@@ -7147,7 +7147,7 @@ rec {
     sha256 = "0i1l013csrqzfz6c68pr5pi01hg5v5yahq8fsdmaxy6p8ygsjf3r";
     features = mkFeatures (features."scopeguard"."0.3.3" or {});
   };
-  features_.scopeguard."0.3.3" = deps: f: updateFeatures f (rec {
+  features_.scopeguard."0.3.3" = _deps: f: updateFeatures f (rec {
     scopeguard = fold recursiveUpdate {} [
       { "0.3.3"."use_std" =
         (f.scopeguard."0.3.3"."use_std" or false) ||
@@ -7199,7 +7199,7 @@ rec {
     authors = [ "Steve Klabnik <steve@steveklabnik.com>" ];
     sha256 = "1da66c8413yakx0y15k8c055yna5lyb6fr0fw9318kdwkrk5k12h";
   };
-  features_.semver_parser."0.7.0" = deps: f: updateFeatures f ({
+  features_.semver_parser."0.7.0" = _deps: f: updateFeatures f ({
     semver_parser."0.7.0".default = (f.semver_parser."0.7.0".default or true);
   }) [];
 
@@ -7304,7 +7304,7 @@ rec {
     authors = [ "Steven Fackler <sfackler@gmail.com>" ];
     sha256 = "02ik28la039b8anx0sx8mbdp2yx66m64mjrjyy6x0dgpbmfxmc24";
   };
-  features_.shell_escape."0.1.4" = deps: f: updateFeatures f ({
+  features_.shell_escape."0.1.4" = _deps: f: updateFeatures f ({
     shell_escape."0.1.4".default = (f.shell_escape."0.1.4".default or true);
   }) [];
 
@@ -7383,7 +7383,7 @@ rec {
     authors = [ "Danny Guo <dannyguo91@gmail.com>" ];
     sha256 = "0d3jsdz22wgjyxdakqnvdgmwjdvkximz50d9zfk4qlalw635qcvy";
   };
-  features_.strsim."0.8.0" = deps: f: updateFeatures f ({
+  features_.strsim."0.8.0" = _deps: f: updateFeatures f ({
     strsim."0.8.0".default = (f.strsim."0.8.0".default or true);
   }) [];
 
@@ -7595,7 +7595,7 @@ rec {
     build = "build/main.rs";
     features = mkFeatures (features."typenum"."1.10.0" or {});
   };
-  features_.typenum."1.10.0" = deps: f: updateFeatures f ({
+  features_.typenum."1.10.0" = _deps: f: updateFeatures f ({
     typenum."1.10.0".default = (f.typenum."1.10.0".default or true);
   }) [];
 
@@ -7634,7 +7634,7 @@ rec {
     authors = [ "Jim McGrath <jimmc2@gmail.com>" ];
     sha256 = "1ig6jqpzzl1z9vk4qywgpfr4hfbd8ny8frqsgm3r449wkc4n1i5x";
   };
-  features_.vcpkg."0.2.6" = deps: f: updateFeatures f ({
+  features_.vcpkg."0.2.6" = _deps: f: updateFeatures f ({
     vcpkg."0.2.6".default = (f.vcpkg."0.2.6".default or true);
   }) [];
 
@@ -7682,7 +7682,7 @@ rec {
     authors = [ "Peter Atashian <retep998@gmail.com>" ];
     sha256 = "0a45b58ywf12vb7gvj6h3j264nydynmzyqz8d8rqxsj6icqv82as";
   };
-  features_.winapi."0.2.8" = deps: f: updateFeatures f ({
+  features_.winapi."0.2.8" = _deps: f: updateFeatures f ({
     winapi."0.2.8".default = (f.winapi."0.2.8".default or true);
   }) [];
 
@@ -7732,7 +7732,7 @@ rec {
     sha256 = "1lxlpi87rkhxcwp2ykf1ldw3p108hwm24nywf3jfrvmff4rjhqga";
     libName = "build";
   };
-  features_.winapi_build."0.1.1" = deps: f: updateFeatures f ({
+  features_.winapi_build."0.1.1" = _deps: f: updateFeatures f ({
     winapi_build."0.1.1".default = (f.winapi_build."0.1.1".default or true);
   }) [];
 
@@ -7747,7 +7747,7 @@ rec {
     authors = [ "Remi Rampin <remirampin@gmail.com>" ];
     sha256 = "1z3mvjgw02mbqk98kizzibrca01d5wfkpazsrp3vkkv3i56pn6fb";
   };
-  features_.adler32."1.0.3" = deps: f: updateFeatures f ({
+  features_.adler32."1.0.3" = _deps: f: updateFeatures f ({
     adler32."1.0.3".default = (f.adler32."1.0.3".default or true);
   }) [];
 

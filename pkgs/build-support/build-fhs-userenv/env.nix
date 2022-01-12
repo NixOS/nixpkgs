@@ -2,8 +2,8 @@
 
 { name
 , profile ? ""
-, targetPkgs ? pkgs: []
-, multiPkgs ? pkgs: []
+, targetPkgs ? _pkgs: []
+, multiPkgs ? _pkgs: []
 , extraBuildCommands ? ""
 , extraBuildCommandsMulti ? ""
 , extraOutputsToInstall ? []

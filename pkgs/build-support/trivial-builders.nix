@@ -608,10 +608,10 @@ rec {
       # Taken from https://github.com/NixOS/nix/blob/130284b8508dad3c70e8160b15f3d62042fc730a/src/libutil/hash.cc#L84
       nixHashChars = "0123456789abcdfghijklmnpqrsvwxyz";
       context = builtins.getContext string;
-      derivations = lib.filterAttrs (n: v: v ? outputs) context;
+      derivations = lib.filterAttrs (_n: v: v ? outputs) context;
       # Objects copied from outside of the store, such as paths and
       # `builtins.fetch*`ed ones
-      sources = lib.attrNames (lib.filterAttrs (n: v: v ? path) context);
+      sources = lib.attrNames (lib.filterAttrs (_n: v: v ? path) context);
       packages =
         lib.mapAttrs'
           (name: value:
@@ -726,7 +726,7 @@ rec {
   # Nix automatically copies files to the store before stringifying paths.
   # If you need the store path of a file, ${copyPathToStore <path>} can be
   # shortened to ${<path>}.
-  copyPathToStore = builtins.filterSource (p: t: true);
+  copyPathToStore = builtins.filterSource (_p: _t: true);
 
 
   # Copy a list of paths to the Nix store.

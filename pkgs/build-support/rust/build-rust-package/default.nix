@@ -74,7 +74,6 @@ let
 
   # If we have a cargoSha256 fixed-output derivation, validate it at build time
   # against the src fixed-output derivation to check consistency.
-  validateCargoDeps = args ? cargoHash || args ? cargoSha256;
 
   target = rust.toRustTargetSpec stdenv.hostPlatform;
   targetIsJSON = lib.hasSuffix ".json" target;

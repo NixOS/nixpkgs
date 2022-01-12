@@ -1,6 +1,6 @@
 rec {
   cat = {
-    executable = pkgs: "cat";
+    executable = _pkgs: "cat";
     ubootName = "none";
     extension = ".cpio";
   };

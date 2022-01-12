@@ -26,7 +26,7 @@ in
   dropAttrs ? [],
   keepAttrs ? [],
   dropDerivationAttrs ? [],
-  useDune2ifVersion ? (x: false),
+  useDune2ifVersion ? (_x: false),
   useDune2 ? false,
   opam-name ? (concatStringsSep "-" (namePrefix ++ [ pname ])),
   ...

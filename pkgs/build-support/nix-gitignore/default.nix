@@ -10,7 +10,6 @@
 with builtins;
 
 let
-  debug = a: trace a a;
   last = l: elemAt l ((length l) - 1);
 in rec {
   # [["good/relative/source/file" true] ["bad.tmpfile" false]] -> root -> path
@@ -91,7 +90,7 @@ in rec {
   gitignoreFilter = ign: root: filterPattern (gitignoreToPatterns ign) root;
 
   # string|[string|file] (→ [string|file] → [string]) -> string
-  gitignoreCompileIgnore = file_str_patterns: root:
+  gitignoreCompileIgnore = file_str_patterns: _root:
     let
       onPath = f: a: if typeOf a == "path" then f a else a;
       str_patterns = map (onPath readFile) (lib.toList file_str_patterns);

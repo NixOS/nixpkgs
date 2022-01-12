@@ -88,8 +88,8 @@ with builtins; with lib; recursiveUpdate lib (rec {
     inter = p: q: x: p x && q x;
     union = p: q: x: p x || q x;
     compl = p:    x: ! p x;
-    true  = p: true;
-    false = p: false;
+    true  = _p: true;
+    false = _p: false;
 
     /* predicate "being equal to y" */
     equal = y:    x: x == y;
