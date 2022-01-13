@@ -2,7 +2,9 @@
 WFS (WiiU File System) Tools based on [wfslib](https://github.com/koolkdev/wfslib)
 
 ## Status
-![Build](https://github.com/koolkdev/wfs-tools/actions/workflows/build.yml/badge.svg)
+[![Build status](https://img.shields.io/github/workflow/status/koolkdev/wfs-tools/Build.svg?style=flat&logo=github)](https://github.com/koolkdev/wfs-tools/actions)
+[![Github stats](https://img.shields.io/github/downloads/koolkdev/wfslib/total.svg?style=flat&logo=github)](https://github.com/koolkdev/wfs-tools/releases)
+[![Latest release](https://img.shields.io/github/release-pre/koolkdev/wfs-tools?style=flat&logo=github)](https://github.com/koolkdev/wfs-tools/releases)
 
 ## Usage
 
@@ -21,7 +23,7 @@ Allowed options:
   --dump-path arg (=/)  directory to dump (default: "/")
   --mlc                 device is mlc (default: device is usb)
   --usb                 device is usb
-  --verbose              verbose output
+  --verbose             verbose output
 ```
 
 ### wfs-file-injector
