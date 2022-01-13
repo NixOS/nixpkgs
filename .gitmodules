@@ -4,4 +4,3 @@
 [submodule "wfslib"]
 	path = wfslib
 	url = https://github.com/koolkdev/wfslib.git
-	branch = workflow-test
