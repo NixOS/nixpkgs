@@ -1,5 +1,6 @@
 { stdenv
 , lib
+, fetchzip
 , jre
 , makeDesktopItem
 , makeWrapper
@@ -10,9 +11,9 @@ stdenv.mkDerivation rec {
   pname = "gprojector";
   version = "3.0.2";
 
-  src = builtins.fetchTarball {
+  src = fetchzip {
     url = "https://www.giss.nasa.gov/tools/gprojector/download/G.ProjectorJ-${version}.tgz";
-    sha256 = "sha256:01bp1pyhy7jk1s24j7cl2qx8wjn2dcsjf2ahnsbccxvnicwrkw92";
+    sha256 = "sha256-IvGZOYt2d8aWtlAJJzVrwkqOOhaUHUmEDlMeD/0NdwU=";
   };
 
   desktopItem = makeDesktopItem {
