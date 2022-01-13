@@ -76,9 +76,15 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
+
     name= ./install.sh --theme all --dest $out/share/themes
+
     install -D -t $out/share/wallpapers ../"macOS Mojave Wallpapers"/*
-    jdupes -l -r $out/share
+
+    # Replace duplicate files with hardlinks to the first file in each
+    # set of duplicates, reducing the installed size in about 53%
+    jdupes -L -r $out/share
+
     runHook postInstall
   '';
 
