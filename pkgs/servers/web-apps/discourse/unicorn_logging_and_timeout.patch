@@ -1,11 +1,11 @@
 diff --git a/config/unicorn.conf.rb b/config/unicorn.conf.rb
-index ffcafcb618..31ba691983 100644
+index e69979adfe..68cb04a036 100644
 --- a/config/unicorn.conf.rb
 +++ b/config/unicorn.conf.rb
-@@ -27,18 +27,10 @@ pid (ENV["UNICORN_PID_PATH"] || "#{discourse_path}/tmp/pids/unicorn.pid")
+@@ -27,17 +27,9 @@ pid (ENV["UNICORN_PID_PATH"] || "#{discourse_path}/tmp/pids/unicorn.pid")
  
  if ENV["RAILS_ENV"] != "production"
-   logger Logger.new($stdout)
+   logger Logger.new(STDOUT)
 -  # we want a longer timeout in dev cause first request can be really slow
 -  timeout (ENV["UNICORN_TIMEOUT"] && ENV["UNICORN_TIMEOUT"].to_i || 60)
 -else
