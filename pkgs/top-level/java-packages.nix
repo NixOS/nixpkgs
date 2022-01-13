@@ -6,14 +6,13 @@ let
   mavenbuild = callPackage ../development/java-modules/build-maven-package.nix { };
   fetchMaven = callPackage ../development/java-modules/m2install.nix { };
 
-  openjfx11 = callPackage ../development/compilers/openjdk/openjfx/11.nix { };
   openjfx15 = callPackage ../development/compilers/openjdk/openjfx/15.nix { };
   openjfx17 = callPackage ../development/compilers/openjdk/openjfx/17.nix { };
 
   mavenfod = callPackage ../development/java-modules/maven-fod.nix { };
 
 in {
-  inherit mavenbuild mavenfod fetchMaven openjfx11 openjfx15 openjfx17;
+  inherit mavenbuild mavenfod fetchMaven openjfx15 openjfx17;
 
   compiler = let
 
@@ -22,7 +21,7 @@ in {
     };
 
     bootstrapArgs = gnomeArgs // {
-      openjfx = openjfx11; /* need this despite next line :-( */
+      openjfx = openjfx15; /* need this despite next line :-( */
       enableJavaFX = false;
       headless = true;
     };
@@ -137,22 +136,22 @@ in {
     openjdk11 = mkOpenjdk
       ../development/compilers/openjdk/11.nix
       ../development/compilers/openjdk/darwin/11.nix
-      { openjfx = openjfx11; };
+      { openjfx = openjfx15; };
 
     openjdk12 = mkOpenjdkLinuxOnly ../development/compilers/openjdk/12.nix {
         /* build segfaults with gcc9 or newer, so use gcc8 like Debian does */
         stdenv = gcc8Stdenv;
-        openjfx = openjfx11;
+        openjfx = openjfx15;
     };
 
     openjdk13 = mkOpenjdkLinuxOnly ../development/compilers/openjdk/13.nix {
       inherit openjdk13-bootstrap;
-      openjfx = openjfx11;
+      openjfx = openjfx15;
     };
 
     openjdk14 = mkOpenjdkLinuxOnly ../development/compilers/openjdk/14.nix {
       inherit openjdk14-bootstrap;
-      openjfx = openjfx11;
+      openjfx = openjfx15;
     };
 
     openjdk15 = mkOpenjdkLinuxOnly ../development/compilers/openjdk/15.nix {
