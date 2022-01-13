@@ -40,6 +40,7 @@ buildPythonPackage rec {
     substituteInPlace setup.py \
       --replace '"pytest==6.2.5"' '"pytest"' \
       --replace '"gunicorn==20.0.4"' '"gunicorn"' \
+      --replace '"sanic-routing~=0.7"' '"sanic-routing"' \
       --replace '"pytest-sanic",' "" \
     # Patch a request headers test to allow brotli encoding
     # (we build httpx with brotli support, upstream doesn't).
@@ -101,6 +102,13 @@ buildPythonPackage rec {
     "test_num_workers"
     "test_server_run"
     "test_version"
+    # output changes in 21.12
+    "test_tls_options"
+  ];
+
+  disabledTestPaths = [
+    # Fails in python3.10, with async changes
+    "tests/test_app.py"
   ];
 
   # avoid usage of nixpkgs-review in darwin since tests will compete usage
