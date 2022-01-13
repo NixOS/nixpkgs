@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
 , pkg-config
 , meson
@@ -21,14 +22,21 @@ stdenv.mkDerivation rec {
   pname = "elementary-capnet-assist";
   version = "2.4.0";
 
-  repoName = "capnet-assist";
-
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "capnet-assist";
     rev = version;
     sha256 = "sha256-UdkS+w61c8z2TCJyG7YsDb0n0b2LOpFyaHzMbdCJsZI=";
   };
+
+  patches = [
+    # Fix build with meson 0.61
+    # https://github.com/elementary/capnet-assist/pull/76
+    (fetchpatch {
+      url = "https://github.com/elementary/capnet-assist/commit/0e77bf8023ba1b35e3a5badb72c246cabf6552b9.patch";
+      sha256 = "sha256-B/KEs/TCxR+i3uQSRtWxTi2+cu0n6QLcfKCbMCvSsvs=";
+    })
+  ];
 
   nativeBuildInputs = [
     desktop-file-utils
