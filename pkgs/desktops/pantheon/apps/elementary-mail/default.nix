@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
 , pkg-config
 , meson
@@ -33,6 +34,15 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "sha256-wOu9jvvwG53vzcNa38nk4eREZWW7Cin8el4qApQ8gI8=";
   };
+
+  patches = [
+    # Fix build with meson 0.61
+    # https://github.com/elementary/mail/pull/751
+    (fetchpatch {
+      url = "https://github.com/elementary/mail/commit/bbadc56529276d8e0ff98e9df7d9bb1bf8fc5783.patch";
+      sha256 = "sha256-lJEnX5/G6e8PdKy1XGlwFIoCeSy6SR5p68tS4noj+44=";
+    })
+  ];
 
   nativeBuildInputs = [
     appstream
