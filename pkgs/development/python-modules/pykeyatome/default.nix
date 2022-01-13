@@ -52,7 +52,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python module to get data from Atome Key";
-    homepage = "hhttps://github.com/jugla/pyKeyAtome";
+    homepage = "https://github.com/jugla/pyKeyAtome";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
