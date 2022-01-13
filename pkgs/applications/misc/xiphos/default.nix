@@ -65,12 +65,11 @@ stdenv.mkDerivation rec {
     # https://github.com/crosswire/xiphos/issues/1083#issuecomment-820304874
     (fetchpatch {
       name ="xiphos-glibc.patch";
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/xiphos-glibc.patch?h=xiphos";
-      sha256 = "sha256-0WadztJKXW2adqsDP8iSAYVShbdqHoDvP+aVJC0cQB0=";
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/xiphos-glibc.patch?h=xiphos&id=bb816f43ba764ffac1287ab1e2a649c2443e3ce8";
+      sha256 = "he3U7phU2/QCrZidHviupA7YwzudnQ9Jbb8eMZw6/ck=";
+      extraPrefix = "";
     })
   ];
-
-  patchFlags = [ "-p0" ];
 
   nativeBuildInputs = [
     appstream-glib # for appstream-util
