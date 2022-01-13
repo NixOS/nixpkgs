@@ -2077,7 +2077,7 @@ with pkgs;
 
   avro-c = callPackage ../development/libraries/avro-c { };
 
-  avro-cpp = callPackage ../development/libraries/avro-c++ { boost = boost160; };
+  avro-cpp = callPackage ../development/libraries/avro-c++ { };
 
   aws = callPackage ../tools/virtualization/aws { };
 
