@@ -383,13 +383,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   pidgin-im-gnome-shell-extension = throw "The ‘gnome.pidgin-im-gnome-shell-extension’ alias was removed on 2022-01-13. Please use ‘pkgs.gnomeExtensions.pidgin-im-integration’ directly."; # added 2019-08-01
 
-  # added 2019-08-25
-  corePackages = throw "gnome.corePackages is removed since 2019-08-25: please use `services.gnome.core-shell.enable`";
-  optionalPackages = throw "gnome.optionalPackages is removed since 2019-08-25: please use `services.gnome.core-utilities.enable`";
-  gamesPackages = throw "gnome.gamesPackages is removed since 2019-08-25: please use `services.gnome.games.enable`";
-
-  nautilus-sendto = throw "nautilus-sendto is removed since 2019-09-17: abandoned upstream";
-
   vala = throw "The ‘gnome.vala’ alias was removed on 2022-01-13. Please use ‘pkgs.vala’ directly."; # added 2019-10-10
 
   gnome-user-docs = throw "The ‘gnome.gnome-user-docs’ alias was removed on 2022-01-13. Please use ‘pkgs.gnome-user-docs’ directly."; # added 2019-11-20
@@ -403,10 +396,6 @@ lib.makeScope pkgs.newScope (self: with self; {
   networkmanagerapplet = throw "The ‘gnome.networkmanagerapplet’ alias was removed on 2022-01-13. Please use ‘pkgs.networkmanagerapplet’ directly."; # added 2019-12-12
 
   glade = throw "The ‘gnome.glade’ alias was removed on 2022-01-13. Please use ‘pkgs.glade’ directly."; # added 2020-05-15
-
-  vino = throw "vino is deprecated, use gnome-remote-desktop instead."; # added 2020-03-13
-
-  gnome-screensaver = throw "gnome-screensaver is deprecated. If you are using GNOME Flashback, it now has a built-in lock screen. If you are using it elsewhere, you can try xscreenlock or other alternatives."; # added 2020-03-19
 
   maintainers = throw "The ‘gnome.maintainers’ alias was removed on 2022-01-13. Please use ‘lib.teams.gnome.members’ directly."; # added 2020-04-01
 
