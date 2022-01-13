@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     python-socks
-   ];
+  ];
 
   checkInputs = [
     pytestCheckHook
