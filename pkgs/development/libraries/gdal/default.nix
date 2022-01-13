@@ -86,6 +86,46 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  doInstallCheck = true;
+  # preCheck rather than preInstallCheck because this is what pytestCheckHook
+  # calls (coming from the python world)
+  preCheck = ''
+    pushd ../autotest
+    # something has made files here read-only by this point
+    chmod -R u+w .
+
+    export HOME=$(mktemp -d)
+    export PYTHONPATH="$out/${pythonPackages.python.sitePackages}:$PYTHONPATH"
+  '';
+  installCheckInputs = with pythonPackages; [
+    pytestCheckHook
+    pytest-env
+    lxml
+  ];
+  disabledTestPaths = [
+    # tests that attempt to make network requests
+    "gcore/vsis3.py"
+    "gdrivers/gdalhttp.py"
+    "gdrivers/wms.py"
+  ];
+  disabledTests = [
+    # tests that attempt to make network requests
+    "test_jp2openjpeg_45"
+    # tests that require the full proj dataset which we don't package yet
+    # https://github.com/OSGeo/gdal/issues/5523
+    "test_transformer_dem_overrride_srs"
+    "test_osr_ct_options_area_of_interest"
+  ] ++ lib.optionals (!stdenv.isx86_64) [
+    # likely precision-related expecting x87 behaviour
+    "test_jp2openjpeg_22"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # flaky on macos
+    "test_rda_download_queue"
+  ];
+  postCheck = ''
+    popd # ../autotest
+  '';
+
   meta = {
     description = "Translator library for raster geospatial data formats";
     homepage = "https://www.gdal.org/";
