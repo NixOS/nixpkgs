@@ -27464,6 +27464,8 @@ with pkgs;
 
   pijul = callPackage ../applications/version-management/pijul { };
 
+  pijuice = with python3Packages; toPythonApplication pijuice;
+
   ping = callPackage ../applications/networking/ping { };
 
   piper = callPackage ../os-specific/linux/piper { };

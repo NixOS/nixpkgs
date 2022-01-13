@@ -5953,6 +5953,8 @@ in {
 
   piexif = callPackage ../development/python-modules/piexif { };
 
+  pijuice = callPackage ../development/python-modules/pijuice { };
+
   pika = callPackage ../development/python-modules/pika { };
 
   pika-pool = callPackage ../development/python-modules/pika-pool { };
