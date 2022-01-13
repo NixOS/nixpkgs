@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
 , linkFarm
 , substituteAll
@@ -89,6 +90,12 @@ stdenv.mkDerivation rec {
     (substituteAll {
       src = ./hardcode-fallback-background.patch;
       default_wallpaper = "${nixos-artwork.wallpapers.simple-dark-gray.gnomeFilePath}";
+    })
+    # Fix build with meson 0.61
+    # https://github.com/elementary/greeter/pull/590
+    (fetchpatch {
+      url = "https://github.com/elementary/greeter/commit/a4b25244058fce794a9f13f6b22a8ff7735ebde9.patch";
+      sha256 = "sha256-qPXhdvmYG8YMDU/CjbEkfZ0glgRzxnu0TsOPtvWHxLY=";
     })
   ];
 
