@@ -83,6 +83,6 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   checkPhase = ''
-    ${sage-with-env}/bin/sage -t --optional=dochtml --all
+    ${sage-with-env}/bin/sage -t --optional=sagemath_doc_html --all
   '';
 }

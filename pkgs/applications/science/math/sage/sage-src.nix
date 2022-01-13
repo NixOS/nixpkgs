@@ -70,11 +70,16 @@ stdenv.mkDerivation rec {
   # Patches needed because of particularities of nix or the way this is packaged.
   # The goal is to upstream all of them and get rid of this list.
   nixPatches = [
-    # Make sure py2/py3 tests are only run when their expected context (all "sage"
-    # tests) are also run. That is necessary to test dochtml individually. See
-    # https://trac.sagemath.org/ticket/26110 for an upstream discussion.
-    # TODO: Determine if it is still necessary.
-    ./patches/Only-test-py2-py3-optional-tests-when-all-of-sage-is.patch
+    # Since https://trac.sagemath.org/ticket/32174, some external features are
+    # marked as "safe" and get auto-detected, in which case the corresponding
+    # optional tests are executed. We disable auto-detection of safe features if
+    # we are doctesting with an "--optional" argument which does not include
+    # "sage", because tests from autodetected features expect context provided
+    # by running basic sage tests. This is necessary to test sagemath_doc_html
+    # separately. See https://trac.sagemath.org/ticket/26110 for a related
+    # upstream discussion (from the time when Sage still had optional py2/py3
+    # tags).
+    ./patches/Only-test-external-software-when-all-of-sage-is.patch
 
     # Fixes a potential race condition which can lead to transient doctest failures.
     ./patches/fix-ecl-race.patch
