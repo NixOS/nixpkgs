@@ -115,6 +115,12 @@ let
           else super.fold-dwim;
 
         # upstream issue: missing file header
+        gl-conf-mode =
+          if super.gl-conf-mode.version == "0.3"
+          then markBroken super.gl-conf-mode
+          else super.gl-conf-mode;
+
+        # upstream issue: missing file header
         link = markBroken super.link;
 
         # upstream issue: missing file header
