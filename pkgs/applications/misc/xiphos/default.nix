@@ -1,18 +1,52 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config
-, python
-, intltool
-, docbook2x, docbook_xml_dtd_412, libxslt
-, sword, clucene_core, biblesync
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, appstream-glib
+, at-spi2-core
+, biblesync
+, brotli
+, clucene_core
+, cmake
+, dbus
+, dbus-glib
+, desktop-file-utils
+, docbook2x
+, docbook_xml_dtd_412
+, enchant
+, gconf
+, glib
 , gnome-doc-utils
-, libgsf, gconf
-, libglade, scrollkeeper
+, gtk2
+, gtkhtml
+, icu
+, intltool
+, isocodes
+, itstool
+, libdatrie
+, libepoxy
+, libglade
+, libgsf
+, libpsl
+, libselinux
+, libsepol
+, libsysprof-capture
+, libthai
+, libuuid
+, libxkbcommon
+, libxslt
+, minizip
+, pcre
+, pkg-config
+, python
+, scrollkeeper
+, sqlite
+, sword
 , webkitgtk
-, dbus-glib, enchant, isocodes, libuuid, icu
-, cmake, itstool, desktop-file-utils, appstream-glib, yelp-tools
-, zip, minizip, pcre, libselinux, xorg, libsepol, libthai, libdatrie
-, libxkbcommon, libepoxy, at-spi2-core, libsysprof-capture, sqlite
-, libpsl, brotli, gtk2, glib, dbus, gtkhtml
 , wrapGAppsHook
+, xorg
+, yelp-tools
+, zip
 }:
 
 stdenv.mkDerivation rec {
@@ -26,20 +60,59 @@ stdenv.mkDerivation rec {
     hash = "sha256-H5Q+azE2t3fgu77C9DxrkeUCJ7iJz3Cc91Ln4dqLvD8=";
   };
 
-  nativeBuildInputs = [ pkg-config  wrapGAppsHook cmake itstool
-    appstream-glib # for appstream-util
-    desktop-file-utils # for desktop-file-validate
-    yelp-tools # for yelp-build
+  nativeBuildInputs = [
+    appstream-glib
+    cmake
+    desktop-file-utils
+    itstool
+    pkg-config
+    wrapGAppsHook
+    yelp-tools
   ];
 
   buildInputs = [
-    python intltool docbook2x docbook_xml_dtd_412 libxslt
-    sword clucene_core biblesync gnome-doc-utils libgsf gconf
-    libglade scrollkeeper webkitgtk dbus-glib enchant isocodes libuuid icu
-    zip minizip pcre xorg.libXdmcp libselinux libsepol libthai libdatrie
-    libxkbcommon libepoxy at-spi2-core libsysprof-capture xorg.libXtst
-    sqlite libpsl brotli gtk2 glib dbus dbus-glib gtkhtml
-  ];
+    at-spi2-core
+    biblesync
+    brotli
+    clucene_core
+    dbus
+    dbus-glib
+    docbook2x
+    docbook_xml_dtd_412
+    enchant
+    gconf
+    glib
+    gnome-doc-utils
+    gtk2
+    gtkhtml
+    icu
+    intltool
+    isocodes
+    libdatrie
+    libepoxy
+    libglade
+    libgsf
+    libpsl
+    libselinux
+    libsepol
+    libsysprof-capture
+    libthai
+    libuuid
+    libxkbcommon
+    libxslt
+    minizip
+    pcre
+    python
+    scrollkeeper
+    sqlite
+    sword
+    webkitgtk
+    zip
+  ]
+  ++ (with xorg; [
+    libXdmcp
+    libXtst
+  ]);
 
   cmakeFlags = [
     "-DDBUS=OFF"
