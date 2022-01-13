@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "SDL2_ttf";
-  version = "2.0.15";
+  version = "2.0.18";
 
   src = fetchurl {
     url = "https://www.libsdl.org/projects/SDL_ttf/release/${pname}-${version}.tar.gz";
-    sha256 = "0cyd48dipc0m399qy8s03lci8b0bpiy8xlkvrm2ia7wcv0dfpv59";
+    sha256 = "sha256-cjTriINRTgGed0fHA+SndFdbGNQ1wipKKdBoy3aKIlE=";
   };
 
   configureFlags = lib.optional stdenv.isDarwin "--disable-sdltest";
@@ -17,9 +17,9 @@ stdenv.mkDerivation rec {
     ++ lib.optional stdenv.isDarwin darwin.libobjc;
 
   meta = with lib; {
-    description = "SDL TrueType library";
+    description = "Support for TrueType (.ttf) font files with Simple Directmedia Layer";
     platforms = platforms.unix;
     license = licenses.zlib;
-    homepage = "https://www.libsdl.org/projects/SDL_ttf/";
+    homepage = "https://github.com/libsdl-org/SDL_ttf";
   };
 }
