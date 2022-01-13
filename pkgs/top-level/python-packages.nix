@@ -6398,6 +6398,8 @@ in {
 
   py-synologydsm-api = callPackage ../development/python-modules/py-synologydsm-api { };
 
+  py-tes = callPackage ../development/python-modules/py-tes { };
+
   py-ubjson = callPackage ../development/python-modules/py-ubjson { };
 
   py-zabbix = callPackage ../development/python-modules/py-zabbix { };
