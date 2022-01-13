@@ -7,14 +7,14 @@
 
 beamPackages.mixRelease rec {
   pname = "pleroma";
-  version = "2.4.1";
+  version = "2.4.2";
 
   src = fetchFromGitLab {
     domain = "git.pleroma.social";
     owner = "pleroma";
     repo = "pleroma";
     rev = "v${version}";
-    sha256 = "sha256-XYZIf8/Vznl4FvVAOy5GVfTBTCwhfUol/3vWWIDwIxQ=";
+    sha256 = "sha256-RcqqNNNCR4cxETUCyjChkpq+cQ1QzNOHHzdqBLtOc6g=";
   };
 
   mixNixDeps = import ./mix.nix {
@@ -118,13 +118,11 @@ beamPackages.mixRelease rec {
         name = "crypt";
         version = "0.4.3";
 
-        src = fetchFromGitLab {
-          domain = "git.pleroma.social";
-          group = "pleroma";
-          owner = "elixir-libraries";
+        src = fetchFromGitHub {
+          owner = "msantos";
           repo = "crypt";
-          rev = "cf2aa3f11632e8b0634810a15b3e612c7526f6a3";
-          sha256 = "0fnzljxy9pwabh1nzx0vawn131d5pdfb0p98kvpkqs441jr0ii73";
+          rev = "f75cd55325e33cbea198fb41fe41871392f8fb76";
+          sha256 = "sha256-ZYhZTe7cTITkl8DZ4z2IOlxTX5gnbJImu/lVJ2ZjR1o=";
         };
 
         postInstall = "mv $out/lib/erlang/lib/crypt-${version}/priv/{source,crypt}.so";

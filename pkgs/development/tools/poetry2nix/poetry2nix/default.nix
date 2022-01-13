@@ -5,7 +5,7 @@
 }:
 let
   # Poetry2nix version
-  version = "1.24.1";
+  version = "1.26.0";
 
   inherit (poetryLib) isCompatible readTOML moduleName;
 
@@ -122,10 +122,10 @@ lib.makeScope pkgs.newScope (self: {
       # Example: { my-app = ./src; }
     , editablePackageSources ? { }
     , __isBootstrap ? false  # Hack: Always add Poetry as a build input unless bootstrapping
+    , pyProject ? readTOML pyproject
     }@attrs:
     let
       poetryPkg = poetry.override { inherit python; };
-      pyProject = readTOML pyproject;
 
       scripts = pyProject.tool.poetry.scripts or { };
       hasScripts = scripts != { };
@@ -133,9 +133,11 @@ lib.makeScope pkgs.newScope (self: {
         inherit python scripts;
       };
 
-      hasEditable = editablePackageSources != { };
+      editablePackageSources' = lib.filterAttrs (name: path: path != null) editablePackageSources;
+      hasEditable = editablePackageSources' != { };
       editablePackage = self.mkPoetryEditablePackage {
-        inherit pyProject python editablePackageSources;
+        inherit pyProject python;
+        editablePackageSources = editablePackageSources';
       };
 
       poetryLock = readTOML poetrylock;
@@ -190,7 +192,10 @@ lib.makeScope pkgs.newScope (self: {
               (lib.reverseList compatible)
           );
         in
-        lockPkgs;
+        lockPkgs // {
+          # Create a dummy null package for the current project in case any dependencies depend on the root project (issue #307)
+          ${pyProject.tool.poetry.name} = null;
+        };
       overlays = builtins.map
         getFunctorFn
         (
@@ -264,14 +269,34 @@ lib.makeScope pkgs.newScope (self: {
     , extraPackages ? ps: [ ]
     }:
     let
+      inherit (lib) elem hasAttr;
+
+      pyProject = readTOML pyproject;
+
+      # Automatically add dependencies with develop = true as editable packages, but only if path dependencies
+      getEditableDeps = set: lib.mapAttrs
+        (name: value: projectDir + "/${value.path}")
+        (lib.filterAttrs (name: dep: dep.develop or false && hasAttr "path" dep) set);
+
+      editablePackageSources' = (
+        (getEditableDeps (pyProject.tool.poetry."dependencies" or { }))
+        // (getEditableDeps (pyProject.tool.poetry."dev-dependencies" or { }))
+        // editablePackageSources
+      );
+
       poetryPython = self.mkPoetryPackages {
-        inherit pyproject poetrylock overrides python pwd preferWheels editablePackageSources;
+        inherit pyproject poetrylock overrides python pwd preferWheels pyProject;
+        editablePackageSources = editablePackageSources';
       };
 
       inherit (poetryPython) poetryPackages;
 
+      # Don't add editable sources to the environment since they will sometimes fail to build and are not useful in the development env
+      editableAttrs = lib.attrNames editablePackageSources';
+      envPkgs = builtins.filter (drv: ! lib.elem (drv.pname or drv.name or "") editableAttrs) poetryPackages;
+
     in
-    poetryPython.python.withPackages (ps: poetryPackages ++ (extraPackages ps));
+    poetryPython.python.withPackages (ps: envPkgs ++ (extraPackages ps));
 
   /* Creates a Python application from pyproject.toml and poetry.lock
 
@@ -282,7 +307,10 @@ lib.makeScope pkgs.newScope (self: {
   */
   mkPoetryApplication =
     { projectDir ? null
-    , src ? self.cleanPythonSources { src = projectDir; }
+    , src ? (
+        # Assume that a project which is the result of a derivation is already adequately filtered
+        if lib.isDerivation projectDir then projectDir else self.cleanPythonSources { src = projectDir; }
+      )
     , pyproject ? projectDir + "/pyproject.toml"
     , poetrylock ? projectDir + "/poetry.lock"
     , overrides ? self.defaultPoetryOverrides
