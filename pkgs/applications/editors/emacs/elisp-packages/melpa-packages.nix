@@ -135,6 +135,11 @@ let
           then markBroken super.org-dp
           else super.org-dp;
 
+        # upstream issue: missing file header
+        revbufs =
+          if super.revbufs.version == "1.2"
+          then markBroken super.revbufs
+          else super.revbufs;
 
         # upstream issue: missing file header
         elmine = markBroken super.elmine;
