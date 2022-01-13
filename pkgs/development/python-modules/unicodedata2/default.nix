@@ -1,23 +1,36 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pytest }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "unicodedata2";
-  version = "13.0.0-2";
+  version = "14.0.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
-    owner  = "mikekap";
-    repo   = pname;
-    rev    = version;
-    sha256 = "0p9brbiwyg98q52y0gfyps52xv57fwqfpq0mn18p1xc1imip3h2b";
+    owner = "mikekap";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-pNnsRVVO03vkDiFIh7x0M7+PULaPZCzJ9OKlidsIKO0=";
   };
 
-  checkInputs = [ pytest ];
-  checkPhase = "pytest tests";
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "unicodedata2"
+  ];
 
   meta = with lib; {
     description = "Backport and updates for the unicodedata module";
     homepage = "https://github.com/mikekap/unicodedata2";
     license = licenses.asl20;
-    maintainers = [ maintainers.sternenseemann ];
+    maintainers = with maintainers; [ sternenseemann ];
   };
 }
