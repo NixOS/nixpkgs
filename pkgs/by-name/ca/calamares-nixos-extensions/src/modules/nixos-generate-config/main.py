@@ -61,6 +61,9 @@ def run():
         else:
             subprocess.check_output(["sed","-i","s,  boot.loader.grub.enable = .*,  boot.loader.grub.enable = false;,g", config], stderr=subprocess.STDOUT)
 
+    # Remove services, we'll install them later
+    subprocess.check_output(["sed","-i","/  services.*/d", config], stderr=subprocess.STDOUT)
+
     libcalamares.job.setprogress(0.3)
 
     subprocess.check_output(["nixos-install", "--no-root-passwd", "--no-bootloader", "--root", root_mount_point], stderr=subprocess.STDOUT)
