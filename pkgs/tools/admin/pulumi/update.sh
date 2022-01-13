@@ -30,7 +30,6 @@ pulumi_repos=(
     "mailgun"
     "mysql"
     "openstack"
-    "packet"
     "postgresql"
     "random"
     "vault"

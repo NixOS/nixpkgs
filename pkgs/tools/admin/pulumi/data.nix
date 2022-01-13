@@ -81,10 +81,6 @@
         sha256 = "0xaa2gaqgx5lf1vfg0s8y0nr6ygjcy7dbksf0jszizn08ifgpy8h";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-packet-v3.2.2-linux-amd64.tar.gz";
-        sha256 = "0glbjhgrb2hiyhd6kwmy7v384j8zw641pw9737g1fczv3x16a3s3";
-      }
-      {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-postgresql-v3.3.0-linux-amd64.tar.gz";
         sha256 = "05nfdwgfzi5f3hgj2g6dccaidqf9a9xzlv5vp3cd1rsxd159yk9j";
       }
@@ -177,10 +173,6 @@
       {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-openstack-v3.7.0-darwin-amd64.tar.gz";
         sha256 = "0fbc60l3v7mar0g16mbwgqckp9i4kckwlacv165kkwrkvj8nrbym";
-      }
-      {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-packet-v3.2.2-darwin-amd64.tar.gz";
-        sha256 = "0621njipng32x43lw8n49mapq10lnvibg8vlvgciqsfvrbpz1yp5";
       }
       {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-postgresql-v3.3.0-darwin-amd64.tar.gz";
@@ -276,7 +268,6 @@
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-openstack-v3.7.0-linux-arm64.tar.gz";
         sha256 = "1xh93187s86x4pjm4j9djh2mfqqxrmkal761fhj2bldkgki2rkq8";
       }
-      # pulumi-resource-packet skipped (does not exist on remote)
       {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-postgresql-v3.3.0-linux-arm64.tar.gz";
         sha256 = "0j2c23ii4dn9yhpw6nymij65gv82y1xp4gi8lgxxf41b1i9bpb2i";
@@ -371,7 +362,6 @@
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-openstack-v3.7.0-darwin-arm64.tar.gz";
         sha256 = "0w7gbdzs47ndvfig8qcnn5mar22plxjjsx0d4dgyhf1k391fz1jh";
       }
-      # pulumi-resource-packet skipped (does not exist on remote)
       {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-postgresql-v3.3.0-darwin-arm64.tar.gz";
         sha256 = "1i5ipmidg0yspayxyglbjaihajhj1bsk46saxkncfrkvqnh4iq50";
