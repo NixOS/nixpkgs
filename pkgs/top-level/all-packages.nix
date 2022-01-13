@@ -29680,7 +29680,7 @@ with pkgs;
     inherit (gnome2) libglade scrollkeeper;
     gtkhtml = gnome2.gtkhtml4;
     python = python27;
-    enchant = enchant1;
+    enchant = enchant2;
   };
 
   xournal = callPackage ../applications/graphics/xournal {
