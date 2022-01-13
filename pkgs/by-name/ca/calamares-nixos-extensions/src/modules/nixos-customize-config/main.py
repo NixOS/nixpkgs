@@ -11,7 +11,6 @@
 import libcalamares
 import os
 import subprocess
-from time import gmtime, strftime, sleep
 
 import gettext
 _ = gettext.translation("calamares-python",
@@ -23,7 +22,7 @@ _ = gettext.translation("calamares-python",
 # The following strings contain pieces of a nix-configuration file.
 # They are adapted from the default config generated from the nixos-generate-config command.
 
-cfghead ="""# Edit this configuration file to define what should be installed on
+cfghead = """# Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
@@ -215,8 +214,10 @@ cfgtail = """  # Some programs need SUID wrappers, can be configured further or 
 }
 """
 
+
 def pretty_name():
     return _("Configuring NixOS.")
+
 
 def catenate(d, key, *values):
     """
@@ -243,31 +244,33 @@ def run():
     root_mount_point = gs.value("rootMountPoint")
     config = os.path.join(root_mount_point, "etc/nixos/configuration.nix")
     fw_type = gs.value("firmwareType")
-    bootdev = "nodev" if gs.value("bootLoader") is None else gs.value("bootLoader")['installPath']
+    bootdev = "nodev" if gs.value("bootLoader") is None else gs.value(
+        "bootLoader")['installPath']
 
     # Pick config parts and prepare substitution
     if (fw_type == "efi"):
-      cfg += cfgbootefi
+        cfg += cfgbootefi
     elif (bootdev != "nodev"):
-      cfg += cfgbootbios
-      catenate(variables, "bootdev", bootdev)
+        cfg += cfgbootbios
+        catenate(variables, "bootdev", bootdev)
     else:
-      cfg += cfgbootnone
+        cfg += cfgbootnone
 
     for part in gs.value("partitions"):
-      if part["claimed"] == True and part["fsName"] == "luks":
-        cfg += cfgbootcrypt
-        break
-    
+        if part["claimed"] == True and part["fsName"] == "luks":
+            cfg += cfgbootcrypt
+            break
+
     cfg += cfgnetwork
     if (gs.value("hostname") is None):
-      catenate(variables, "hostname", "nixos")
+        catenate(variables, "hostname", "nixos")
     else:
-      catenate(variables, "hostname", gs.value("hostname"))
+        catenate(variables, "hostname", gs.value("hostname"))
 
     if (gs.value("locationRegion") is not None and gs.value("locationZone") is not None):
-      cfg += cfgtime
-      catenate(variables, "timezone", gs.value("locationRegion"), "/", gs.value("locationZone"))
+        cfg += cfgtime
+        catenate(variables, "timezone", gs.value(
+            "locationRegion"), "/", gs.value("locationZone"))
 
     if (gs.value("localeConf") is not None):
         localeconf = gs.value("localeConf")
@@ -275,45 +278,52 @@ def run():
         cfg += cfglocale
         catenate(variables, "LANG", locale)
         if (len(set(localeconf.values())) != 1 or list(set(localeconf.values()))[0] != locale):
-          cfg += cfglocaleextra
-          for conf in localeconf:
-            catenate(variables, conf, localeconf.get(conf))
+            cfg += cfglocaleextra
+            for conf in localeconf:
+                catenate(variables, conf, localeconf.get(conf))
 
     cfg += cfggnome
 
     if (gs.value("KeyboardLayout") is not None and gs.value("KeyboardVariant") is not None):
-      cfg += cfgkeymap
-      catenate(variables, "kblayout", gs.value("keyboardLayout"))
-      catenate(variables, "kbvariant", gs.value("keyboardVariant"))
+        cfg += cfgkeymap
+        catenate(variables, "kblayout", gs.value("keyboardLayout"))
+        catenate(variables, "kbvariant", gs.value("keyboardVariant"))
 
     cfg += cfgmisc
 
     if (gs.value("username") is not None):
-      passwd = subprocess.check_output(["chroot", root_mount_point, "getent","passwd", gs.value("username")], stderr=subprocess.STDOUT).decode("utf-8").rstrip("\n").split(":")
-      fullname = passwd[4]
-      groups = subprocess.check_output(["chroot", root_mount_point, "groups",gs.value("username")]).decode("utf-8").rstrip("\n").split(":")[1].lstrip().split(" ")
-      groups.remove("users")
-      groups.remove(gs.value("username"))
-      cfg += cfgusers
-      catenate(variables, "username", gs.value("username"))
-      catenate(variables, "fullname", fullname)
-      catenate(variables, "groups", (" ").join(["\"" + s + "\"" for s in groups]))
-      print("AUTOLOGINUSER")
-      print(gs.value("autologinUser"))
-      if (gs.value("autoLoginUser") is not None):
-        cfg += cfgautologin
+        passwd = subprocess.check_output(["chroot", root_mount_point, "getent", "passwd", gs.value(
+            "username")], stderr=subprocess.STDOUT).decode("utf-8").rstrip("\n").split(":")
+        fullname = passwd[4]
+        groups = subprocess.check_output(["chroot", root_mount_point, "groups", gs.value(
+            "username")]).decode("utf-8").rstrip("\n").split(":")[1].lstrip().split(" ")
+
+        if "users" in groups:
+            groups.remove("users")
+        if gs.value("username") in groups:
+            groups.remove(gs.value("username"))
+
+        cfg += cfgusers
+        catenate(variables, "username", gs.value("username"))
+        catenate(variables, "fullname", fullname)
+        catenate(variables, "groups", (" ").join(
+            ["\"" + s + "\"" for s in groups]))
+        if (gs.value("autoLoginUser") is not None):
+            cfg += cfgautologin
 
     cfg += cfgpkgs
 
     cfg += cfgtail
-    version = ".".join(subprocess.getoutput(["nixos-version"]).split(".")[:2])[:5]
+    version = ".".join(subprocess.getoutput(
+        ["nixos-version"]).split(".")[:2])[:5]
     catenate(variables, "nixosversion", version)
 
     # Check that all variables are used
     for key in variables.keys():
         pattern = "@@{key}@@".format(key=key)
         if not pattern in cfg:
-            libcalamares.utils.warning("Variable '{key}' is not used.".format(key=key))
+            libcalamares.utils.warning(
+                "Variable '{key}' is not used.".format(key=key))
 
     # Check that all patterns exist
     import re
@@ -321,7 +331,8 @@ def run():
     for match in variable_pattern.finditer(cfg):
         variable_name = cfg[match.start()+2:match.end()-2]
         if not variable_name in variables:
-            libcalamares.utils.warning("Variable '{key}' is used but not defined.".format(key=variable_name))
+            libcalamares.utils.warning(
+                "Variable '{key}' is used but not defined.".format(key=variable_name))
 
     # Do the substitutions
     for key in variables.keys():
@@ -335,9 +346,12 @@ def run():
     libcalamares.job.setprogress(0.1)
 
     # Install customizations
-    subprocess.check_output(["nixos-install", "--no-root-passwd", "--no-bootloader", "--root", root_mount_point], stderr=subprocess.STDOUT)
-    subprocess.check_output(["nixos-enter", "--root", root_mount_point, "--", "nix-collect-garbage","-d"], stderr=subprocess.STDOUT)
+    subprocess.check_output(["nixos-install", "--no-root-passwd", "--no-bootloader",
+                            "--root", root_mount_point], stderr=subprocess.STDOUT)
+    subprocess.check_output(["nixos-enter", "--root", root_mount_point,
+                            "--", "nix-collect-garbage", "-d"], stderr=subprocess.STDOUT)
     libcalamares.job.setprogress(0.4)
-    subprocess.check_output(["nixos-enter", "--root", root_mount_point, "--", "nixos-rebuild", "boot"], stderr=subprocess.STDOUT)
+    subprocess.check_output(["nixos-enter", "--root", root_mount_point,
+                            "--", "nixos-rebuild", "boot"], stderr=subprocess.STDOUT)
 
     return None

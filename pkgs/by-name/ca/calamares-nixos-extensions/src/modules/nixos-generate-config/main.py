@@ -9,8 +9,6 @@
 
 import os
 import subprocess
-import shutil
-import re
 
 import libcalamares
 from libcalamares.utils import gettext_path, gettext_languages
@@ -25,7 +23,8 @@ _n = _translation.ngettext
 
 
 def pretty_name():
-    return _( "Installing NixOS base system." )
+    return _("Installing NixOS base system.")
+
 
 def run():
 
@@ -36,13 +35,15 @@ def run():
         return ("No mount point for root partition in globalstorage",
                 "globalstorage does not contain a \"rootMountPoint\" key, "
                 "doing nothing")
-    
+
     if not os.path.exists(root_mount_point):
         return ("Bad mount point for root partition in globalstorage",
                 "globalstorage[\"rootMountPoint\"] is \"{}\", which does not "
                 "exist, doing nothing".format(root_mount_point))
-    subprocess.check_output(["chmod", "o+rx", root_mount_point], stderr=subprocess.STDOUT)
-    subprocess.check_output(["nixos-generate-config", "--root", root_mount_point], stderr=subprocess.STDOUT)
+    subprocess.check_output(
+        ["chmod", "o+rx", root_mount_point], stderr=subprocess.STDOUT)
+    subprocess.check_output(
+        ["nixos-generate-config", "--root", root_mount_point], stderr=subprocess.STDOUT)
 
     config = os.path.join(root_mount_point, "etc/nixos/configuration.nix")
 
@@ -57,19 +58,24 @@ def run():
     # If no device is specified, disable grub
     if (fw_type != "efi"):
         if (bootloader != None):
-            subprocess.check_output(["sed","-i","s,  # boot.loader.grub.device = .*,  boot.loader.grub.device = \"" + bootloader['installPath'] + "\";,g", config], stderr=subprocess.STDOUT)
+            subprocess.check_output(["sed", "-i", "s,  # boot.loader.grub.device = .*,  boot.loader.grub.device = \"" +
+                                    bootloader['installPath'] + "\";,g", config], stderr=subprocess.STDOUT)
         else:
-            subprocess.check_output(["sed","-i","s,  boot.loader.grub.enable = .*,  boot.loader.grub.enable = false;,g", config], stderr=subprocess.STDOUT)
+            subprocess.check_output(
+                ["sed", "-i", "s,  boot.loader.grub.enable = .*,  boot.loader.grub.enable = false;,g", config], stderr=subprocess.STDOUT)
 
     # Remove services, we'll install them later
-    subprocess.check_output(["sed","-i","/  services.*/d", config], stderr=subprocess.STDOUT)
+    subprocess.check_output(
+        ["sed", "-i", "/  services.*/d", config], stderr=subprocess.STDOUT)
 
     libcalamares.job.setprogress(0.3)
 
-    subprocess.check_output(["nixos-install", "--no-root-passwd", "--no-bootloader", "--root", root_mount_point], stderr=subprocess.STDOUT)
+    subprocess.check_output(["nixos-install", "--no-root-passwd", "--no-bootloader",
+                            "--root", root_mount_point], stderr=subprocess.STDOUT)
 
     libcalamares.job.setprogress(0.9)
     # Fix issues in modules that use chroot
-    subprocess.check_output(["chroot", root_mount_point, "/nix/var/nix/profiles/system/activate"], stderr=subprocess.STDOUT)
+    subprocess.check_output(
+        ["chroot", root_mount_point, "/nix/var/nix/profiles/system/activate"], stderr=subprocess.STDOUT)
 
     return None
