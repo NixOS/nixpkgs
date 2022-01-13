@@ -17,8 +17,8 @@
         sha256 = "0c61m2q7944a29dkcqcv5fv9jn2bz8mdfhnd33z8qaybhw2804rd";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-azure-v4.32.0-linux-amd64.tar.gz";
-        sha256 = "1g0v7vqrf5237vv0ki74j6zb18zas8i3ii5w9fvy4mg9x4k37d4k";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-azure-v4.33.0-linux-amd64.tar.gz";
+        sha256 = "0k5bpg6lmhj3cxsg43dkyw9jlwyllwwdhml3brkyfgb307cypl9b";
       }
       {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-cloudflare-v4.2.0-linux-amd64.tar.gz";
@@ -61,8 +61,8 @@
         sha256 = "0qv3a4d6hnpga7lli7xnbwiig56h080hxrxjr8jbqsy9ymsqb39a";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-kubernetes-v3.13.0-linux-amd64.tar.gz";
-        sha256 = "09ypf45nlpsz75g8cffaly3kyqwkv2k28rbcdrj357pl3jkcblx2";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-kubernetes-v3.14.0-linux-amd64.tar.gz";
+        sha256 = "02xgkwfsfkqv38cjyc62rlsldbdd5j801gmlh9pf3qjdjj5d1fl3";
       }
       {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-linode-v3.7.1-linux-amd64.tar.gz";
@@ -115,8 +115,8 @@
         sha256 = "1a26schi28ci0zbm85yx4hlhwlwx0j0kk6d6nk9x1zldc3qzhw4y";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-azure-v4.32.0-darwin-amd64.tar.gz";
-        sha256 = "1nabijlwgp6jfhs9pjv5h4bg5s4nwiaqqa315q30ykna8dd7nl5r";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-azure-v4.33.0-darwin-amd64.tar.gz";
+        sha256 = "04sblbjnxvxhxvzvsgjm83p6qahswwb2mvlylfpgq74ay86l6hki";
       }
       {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-cloudflare-v4.2.0-darwin-amd64.tar.gz";
@@ -159,8 +159,8 @@
         sha256 = "1xminhpv7b4nnvfdy5ahlcfrkan1fsmn0sp6gzkp5y4kkjd4a6vy";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-kubernetes-v3.13.0-darwin-amd64.tar.gz";
-        sha256 = "1rh0kpcwfpp4yj7jv71kng3l2iim86i5ic74mcv0anarasd2j09b";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-kubernetes-v3.14.0-darwin-amd64.tar.gz";
+        sha256 = "1dpr4h35zby8say0kcvin5y5k4yryx06p3qcx16zrlsjaz6lj84k";
       }
       {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-linode-v3.7.1-darwin-amd64.tar.gz";
@@ -213,8 +213,8 @@
         sha256 = "0639dl0hj2l33mc4vqbcyywpkfn30fikmiw10zjikcdg1jxzj4nd";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-azure-v4.32.0-linux-arm64.tar.gz";
-        sha256 = "0zg7g4m9rvm24njn90m9ppfprzl08cmm0min0p467h617pyxlii2";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-azure-v4.33.0-linux-arm64.tar.gz";
+        sha256 = "15lxfilkgh9ansy9n2yv693fms3x718lrxz0g2nxi32hz9hq0ysl";
       }
       {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-cloudflare-v4.2.0-linux-arm64.tar.gz";
@@ -257,8 +257,8 @@
         sha256 = "14xqlgy0wy223hg9wp1rc4hbj1pvxrqnzxzv901dqjf5434n6aa0";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-kubernetes-v3.13.0-linux-arm64.tar.gz";
-        sha256 = "05lsnpam4jz7j0mr7lchhqk6z8xmwg8sj1fqdmqi88cvggxq5rgk";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-kubernetes-v3.14.0-linux-arm64.tar.gz";
+        sha256 = "12lnh8hk02w1n28v6i46kxxpkzw1j9zp84ha5p6bnarza6g4wxnk";
       }
       {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-linode-v3.7.1-linux-arm64.tar.gz";
@@ -308,8 +308,8 @@
         sha256 = "1rzds5wrq51mzs7sgzwna016qcay3dzp5ys25cxmr47025kyv84p";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-azure-v4.32.0-darwin-arm64.tar.gz";
-        sha256 = "12rx7cma3mi8a6w09qzz138dns93y5rdgm5l9z422vjynhs0jpm4";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-azure-v4.33.0-darwin-arm64.tar.gz";
+        sha256 = "1lqmjkqqq3rlsixv2kam50d5m95c81mn23y3dblbkh8d6qpwkfdp";
       }
       {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-cloudflare-v4.2.0-darwin-arm64.tar.gz";
@@ -352,8 +352,8 @@
         sha256 = "0n0303423gkwi3b6dwzaqmzsbn2rh4vki6n54mmgd44a3cxbhkak";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-kubernetes-v3.13.0-darwin-arm64.tar.gz";
-        sha256 = "1jmav121dd4i5d9zhpicbiqy506hwmxsym1zy65x92b9jvb4w8jv";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-kubernetes-v3.14.0-darwin-arm64.tar.gz";
+        sha256 = "1rq2wxw0kch7xrk0sr1l6fyz1sslyvk44l3jilzbm7mgi0d77w23";
       }
       {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-linode-v3.7.1-darwin-arm64.tar.gz";
