@@ -40,7 +40,7 @@ in {
           executable = mkOption {
             type = types.path;
             description = "Executable to run sandboxed";
-            example = literalExpression ''"''${lib.getBin pkgs.firefox}/bin/firefox"'';
+            example = literalExpression ''"''${pkgs.lib.getBin pkgs.firefox}/bin/firefox"'';
           };
           profile = mkOption {
             type = types.nullOr types.path;
@@ -60,11 +60,11 @@ in {
       example = literalExpression ''
         {
           firefox = {
-            executable = "''${lib.getBin pkgs.firefox}/bin/firefox";
+            executable = "''${pkgs.lib.getBin pkgs.firefox}/bin/firefox";
             profile = "''${pkgs.firejail}/etc/firejail/firefox.profile";
           };
           mpv = {
-            executable = "''${lib.getBin pkgs.mpv}/bin/mpv";
+            executable = "''${pkgs.lib.getBin pkgs.mpv}/bin/mpv";
             profile = "''${pkgs.firejail}/etc/firejail/mpv.profile";
           };
         }
