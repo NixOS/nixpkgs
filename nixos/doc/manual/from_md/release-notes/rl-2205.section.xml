@@ -391,6 +391,24 @@
       </listitem>
       <listitem>
         <para>
+          The terraform 0.12 compatibility has been removed and the
+          <literal>terraform.withPlugins</literal> and
+          <literal>terraform-providers.mkProvider</literal>
+          implementations simplified. Providers now need to be stored
+          under
+          <literal>$out/libexec/terraform-providers/&lt;registry&gt;/&lt;owner&gt;/&lt;name&gt;/&lt;version&gt;/&lt;os&gt;_&lt;arch&gt;/terraform-provider-&lt;name&gt;_v&lt;version&gt;</literal>
+          (which mkProvider does).
+        </para>
+        <para>
+          This breaks back-compat so it’s not possible to mix-and-match
+          with previous versions of nixpkgs. In exchange, it now becomes
+          possible to use the providers from
+          <link xlink:href="https://github.com/numtide/nixpkgs-terraform-providers-bin">nixpkgs-terraform-providers-bin</link>
+          directly.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>pkgs.noto-fonts-cjk</literal> is now deprecated in
           favor of <literal>pkgs.noto-fonts-cjk-sans</literal> and
           <literal>pkgs.noto-fonts-cjk-serif</literal> because they each
