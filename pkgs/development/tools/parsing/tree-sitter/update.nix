@@ -360,9 +360,15 @@ let
   # generic bash script to find the latest github release for a repo
   latestGithubRelease = { orga, repo }: writeShellScript "latest-github-release" ''
     set -euo pipefail
-    res=$(${curl}/bin/curl \
-      --silent \
-      "https://api.github.com/repos/${urlEscape orga}/${urlEscape repo}/releases/latest")
+
+    args=( '--silent' )
+    if [ -n "$GITHUB_TOKEN" ]; then
+      args+=( "-H" "Authorization: token ''${GITHUB_TOKEN}" )
+    fi
+    args+=( "https://api.github.com/repos/${urlEscape orga}/${urlEscape repo}/releases/latest" )
+
+    res=$(${curl}/bin/curl "''${args[@]}")
+
     if [[ "$(printf "%s" "$res" | ${jq}/bin/jq '.message?')" =~ "rate limit" ]]; then
       echo "rate limited" >&2
     fi
@@ -378,9 +384,14 @@ let
   # find the latest repos of a github organization
   latestGithubRepos = { orga }: writeShellScript "latest-github-repos" ''
     set -euo pipefail
-    res=$(${curl}/bin/curl \
-      --silent \
-      'https://api.github.com/orgs/${urlEscape orga}/repos?per_page=100')
+
+    args=( '--silent' )
+    if [ -n "$GITHUB_TOKEN" ]; then
+      args+=( "-H" "Authorization: token ''${GITHUB_TOKEN}" )
+    fi
+    args+=( 'https://api.github.com/orgs/${urlEscape orga}/repos?per_page=100' )
+
+    res=$(${curl}/bin/curl "''${args[@]}")
 
     if [[ "$(printf "%s" "$res" | ${jq}/bin/jq '.message?')" =~ "rate limit" ]]; then
       echo "rate limited" >&2   #
