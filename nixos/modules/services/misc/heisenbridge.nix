@@ -177,9 +177,9 @@ in
         User = "heisenbridge";
         Group = "heisenbridge";
         RuntimeDirectory = "heisenbridge";
-        RuntimeDirectoryMode = "0755";
+        RuntimeDirectoryMode = "0700";
         StateDirectory = "heisenbridge";
-        StateDirectoryMode = "755";
+        StateDirectoryMode = "0755";
 
         ProtectSystem = "strict";
         ProtectHome = true;
@@ -204,7 +204,7 @@ in
         NoNewPrivileges = true;
         LockPersonality = true;
         RestrictRealtime = true;
-        SystemCallFilter = "@system-service";
+        SystemCallFilter = ["@system-service" "~@priviledged" "@chown"];
         SystemCallArchitectures = "native";
         RestrictAddressFamilies = "AF_INET AF_INET6";
       };
