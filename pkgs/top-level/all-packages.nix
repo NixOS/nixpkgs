@@ -8102,6 +8102,8 @@ with pkgs;
 
   pandoc-imagine = python3Packages.callPackage ../tools/misc/pandoc-imagine { };
 
+  pandoc-drawio-filter = python3Packages.callPackage ../tools/misc/pandoc-drawio-filter { };
+
   pandoc-plantuml-filter = python3Packages.callPackage ../tools/misc/pandoc-plantuml-filter { };
 
   patray = callPackage ../tools/audio/patray { };
