@@ -22,7 +22,12 @@ def main(input, output, fields_to_remove):
                 if any_removed:
                     dep["version"] = "*"
 
-    json.dump(data, output, separators=(",", ":"))
+    # Set ensure_ascii to False because TOML is valid UTF-8 so text that can't
+    # be represented in ASCII is perfectly legitimate
+    # HACK: Setting ensure_asscii to False breaks Python2 for some dependencies (like cachy==0.3.0)
+    json.dump(
+        data, output, separators=(",", ":"), ensure_ascii=sys.version_info.major < 3
+    )
 
 
 if __name__ == "__main__":
