@@ -7961,6 +7961,8 @@ with pkgs;
 
   netboot = callPackage ../tools/networking/netboot {};
 
+  netbootxyz-efi = callPackage ../tools/misc/netbootxyz-efi { };
+
   netcat = libressl.nc;
 
   netcat-gnu = callPackage ../tools/networking/netcat { };
