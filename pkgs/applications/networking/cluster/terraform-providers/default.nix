@@ -40,49 +40,58 @@ let
   automated-providers = lib.mapAttrs (_: attrs: mkProvider attrs) list;
 
   # These are the providers that don't fall in line with the default model
-  special-providers = let archived = throw "the provider has been archived by upstream"; in {
-    # Packages that don't fit the default model
-    gandi = callPackage ./gandi { };
-    # mkisofs needed to create ISOs holding cloud-init data,
-    # and wrapped to terraform via deecb4c1aab780047d79978c636eeb879dd68630
-    libvirt = automated-providers.libvirt.overrideAttrs (_: { propagatedBuildInputs = [ cdrtools ]; });
-    teleport = callPackage ./teleport { };
-    vpsadmin = callPackage ./vpsadmin { };
-  } // (lib.optionalAttrs (config.allowAliases or false) {
-    arukas = archived; # added 2022/01
-    bitbucket = archived; # added 2022/01
-    chef = archived; # added 2022/01
-    cherryservers = archived; # added 2022/01
-    clc = archived; # added 2022/01
-    cloudstack = throw "removed from nixpkgs"; # added 2022/01
-    cobbler = archived; # added 2022/01
-    cohesity = archived; # added 2022/01
-    dyn = archived; # added 2022/01
-    genymotion = archived; # added 2022/01
-    hedvig = archived; # added 2022/01
-    ignition = archived; # added 2022/01
-    incapsula = archived; # added 2022/01
-    influxdb = archived; # added 2022/01
-    jdcloud = archived; # added 2022/01
-    kubernetes-alpha = throw "This has been merged as beta into the kubernetes provider. See https://www.hashicorp.com/blog/beta-support-for-crds-in-the-terraform-provider-for-kubernetes for details";
-    librato = archived; # added 2022/01
-    logentries = archived; # added 2022/01
-    metalcloud = archived; # added 2022/01
-    mysql = archived; # added 2022/01
-    nixos = archived; # added 2022/01
-    oneandone = archived; # added 2022/01
-    packet = archived; # added 2022/01
-    profitbricks = archived; # added 2022/01
-    pureport = archived; # added 2022/01
-    rancher = archived; # added 2022/01
-    rightscale = archived; # added 2022/01
-    runscope = archived; # added 2022/01
-    segment = throw "removed from nixpkgs"; # added 2022/01
-    softlayer = archived; # added 2022/01
-    telefonicaopencloud = archived; # added 2022/01
-    terraform = archived; # added 2022/01
-    ultradns = archived; # added 2022/01
-    vthunder = throw "provider was renamed to thunder"; # added 2022/01
-  });
+  special-providers =
+    {
+      # Packages that don't fit the default model
+      gandi = callPackage ./gandi { };
+      # mkisofs needed to create ISOs holding cloud-init data,
+      # and wrapped to terraform via deecb4c1aab780047d79978c636eeb879dd68630
+      libvirt = automated-providers.libvirt.overrideAttrs (_: { propagatedBuildInputs = [ cdrtools ]; });
+      teleport = callPackage ./teleport { };
+      vpsadmin = callPackage ./vpsadmin { };
+    };
+
+  # Put all the providers we not longer support in this list.
+  removed-providers =
+    let
+      archived = date: throw "the provider has been archived by upstream on ${date}";
+      removed = date: throw "removed from nixpkgs on ${date}";
+    in
+    lib.optionalAttrs (config.allowAliases or false) {
+      arukas = archived "2022/01";
+      bitbucket = archived "2022/01";
+      chef = archived "2022/01";
+      cherryservers = archived "2022/01";
+      clc = archived "2022/01";
+      cloudstack = removed "2022/01";
+      cobbler = archived "2022/01";
+      cohesity = archived "2022/01";
+      dyn = archived "2022/01";
+      genymotion = archived "2022/01";
+      hedvig = archived "2022/01";
+      ignition = archived "2022/01";
+      incapsula = archived "2022/01";
+      influxdb = archived "2022/01";
+      jdcloud = archived "2022/01";
+      kubernetes-alpha = throw "This has been merged as beta into the kubernetes provider. See https://www.hashicorp.com/blog/beta-support-for-crds-in-the-terraform-provider-for-kubernetes for details";
+      librato = archived "2022/01";
+      logentries = archived "2022/01";
+      metalcloud = archived "2022/01";
+      mysql = archived "2022/01";
+      nixos = archived "2022/01";
+      oneandone = archived "2022/01";
+      packet = archived "2022/01";
+      profitbricks = archived "2022/01";
+      pureport = archived "2022/01";
+      rancher = archived "2022/01";
+      rightscale = archived "2022/01";
+      runscope = archived "2022/01";
+      segment = removed "2022/01";
+      softlayer = archived "2022/01";
+      telefonicaopencloud = archived "2022/01";
+      terraform = archived "2022/01";
+      ultradns = archived "2022/01";
+      vthunder = throw "provider was renamed to thunder on 2022/01";
+    };
 in
-automated-providers // special-providers // { inherit mkProvider; }
+automated-providers // special-providers // removed-providers // { inherit mkProvider; }
