@@ -2212,7 +2212,7 @@ in {
 
   django-environ = callPackage ../development/python-modules/django_environ { };
 
-  django_extensions = callPackage ../development/python-modules/django-extensions { };
+  django-extensions = callPackage ../development/python-modules/django-extensions { };
 
   django-filter = callPackage ../development/python-modules/django-filter { };
 
