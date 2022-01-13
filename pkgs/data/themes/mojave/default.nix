@@ -14,14 +14,14 @@
 
 stdenv.mkDerivation rec {
   pname = "mojave-gtk-theme";
-  version = "2021-07-20";
+  version = "unstable-2021-12-20";
 
   srcs = [
     (fetchFromGitHub {
       owner = "vinceliuice";
       repo = pname;
-      rev = version;
-      sha256 = "08j70kmjhvh06c3ahcracarrfq4vpy0zsp6zkcivbw4nf3bzp2zc";
+      rev = "c148646ccab382f7a2d5fdc421fc32d843cb4172";
+      sha256 = "sha256-h4MSSh8cu9M81bM+WJSyl1SQ7CVth1DvjIVOUJXqpxs";
     })
     (fetchurl {
       url = "https://github.com/vinceliuice/Mojave-gtk-theme/raw/11741a99d96953daf9c27e44c94ae50a7247c0ed/macOS_Mojave_Wallpapers.tar.xz";
