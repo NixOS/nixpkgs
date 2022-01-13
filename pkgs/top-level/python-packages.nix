@@ -1132,6 +1132,8 @@ in {
 
   bayespy = callPackage ../development/python-modules/bayespy { };
 
+  bbox = callPackage ../development/python-modules/bbox { };
+
   bc-python-hcl2 = callPackage ../development/python-modules/bc-python-hcl2 { };
 
   bcdoc = callPackage ../development/python-modules/bcdoc { };
@@ -1303,6 +1305,10 @@ in {
   bottle = callPackage ../development/python-modules/bottle { };
 
   bottleneck = callPackage ../development/python-modules/bottleneck { };
+
+  boxx = callPackage ../development/python-modules/boxx { };
+
+  bpycv = callPackage ../development/python-modules/bpycv {};
 
   bpython = callPackage ../development/python-modules/bpython { };
 
@@ -4975,6 +4981,8 @@ in {
 
   millheater = callPackage ../development/python-modules/millheater { };
 
+  minexr = callPackage ../development/python-modules/minexr { };
+
   miniaudio = callPackage ../development/python-modules/miniaudio { };
 
   minidb = callPackage ../development/python-modules/minidb { };
@@ -7250,6 +7258,8 @@ in {
   };
 
   pyquery = callPackage ../development/python-modules/pyquery { };
+
+  pyquaternion = callPackage ../development/python-modules/pyquaternion { };
 
   pyquil = callPackage ../development/python-modules/pyquil { };
 
@@ -10562,6 +10572,8 @@ in {
 
   yattag = callPackage ../development/python-modules/yattag { };
 
+  yacs = callPackage ../development/python-modules/yacs { };
+
   ydiff = callPackage ../development/python-modules/ydiff { };
 
   yeelight = callPackage ../development/python-modules/yeelight { };
@@ -10617,6 +10629,8 @@ in {
   zc_lockfile = callPackage ../development/python-modules/zc_lockfile { };
 
   zconfig = callPackage ../development/python-modules/zconfig { };
+
+  zcs = callPackage ../development/python-modules/zcs { };
 
   zdaemon = callPackage ../development/python-modules/zdaemon { };
 

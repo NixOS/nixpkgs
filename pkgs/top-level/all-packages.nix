@@ -24507,6 +24507,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Cocoa CoreGraphics ForceFeedback OpenAL OpenGL;
   };
 
+  blender-with-packages = callPackage ../applications/misc/blender/wrapper.nix {};
+
   blflash = callPackage ../tools/misc/blflash { };
 
   blogc = callPackage ../applications/misc/blogc { };
