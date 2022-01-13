@@ -217,6 +217,7 @@ mapAliases ({
   dmtx = dmtx-utils; # added 2018-04-25
   dnnl = oneDNN; # added 2020-04-22
   docbook5_xsl = docbook_xsl_ns; # added 2018-04-25
+  docbookrx = throw "docbookrx has been removed since it was unmaintained"; # added 2021-01-12
   docbook_xml_xslt = docbook_xsl; # added 2018-04-25
   dolphinEmu = dolphin-emu; # added 2021-11-10
   dolphinEmuMaster = dolphin-emu-beta; # added 2021-11-10

@@ -1,9 +1,9 @@
 { lib, fetchurl, makeWrapper
-, python2Packages
+, pypy2Packages
 , cvs, subversion, git, breezy
 }:
 
-python2Packages.buildPythonApplication  rec {
+pypy2Packages.buildPythonApplication  rec {
   pname = "cvs2svn";
   version = "2.5.0";
 
@@ -16,7 +16,7 @@ python2Packages.buildPythonApplication  rec {
 
   checkInputs = [ subversion git breezy ];
 
-  checkPhase = "python run-tests.py";
+  checkPhase = "${pypy2Packages.python.interpreter} run-tests.py";
 
   doCheck = false; # Couldn't find node 'transaction...' in expected output tree
 

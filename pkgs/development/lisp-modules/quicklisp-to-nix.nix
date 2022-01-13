@@ -4312,6 +4312,15 @@ let quicklisp-to-nix-packages = rec {
        }));
 
 
+  "cl-mustache" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."cl-mustache" or (x: {}))
+       (import ./quicklisp-to-nix-output/cl-mustache.nix {
+         inherit fetchurl;
+           "uiop" = quicklisp-to-nix-packages."uiop";
+       }));
+
+
   "cl-markup" = buildLispPackage
     ((f: x: (x // (f x)))
        (qlOverrides."cl-markup" or (x: {}))

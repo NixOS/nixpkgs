@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "jedi-language-server";
-  version = "0.34.12";
+  version = "0.35.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pappasam";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0v2292sn0c9bl4gsw698hpzcgm115gk4929nx726vh2139qnazqp";
+    sha256 = "sha256-+bhvWWiG0cA36oc2PFvgRTIvqnjIt5BUN82DY0tvuPo=";
   };
 
   nativeBuildInputs = [

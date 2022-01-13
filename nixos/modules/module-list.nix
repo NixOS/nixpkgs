@@ -198,6 +198,7 @@
   ./programs/ssmtp.nix
   ./programs/sysdig.nix
   ./programs/systemtap.nix
+  ./programs/starship.nix
   ./programs/steam.nix
   ./programs/sway.nix
   ./programs/system-config-printer.nix
@@ -746,6 +747,7 @@
   ./services/networking/flannel.nix
   ./services/networking/freenet.nix
   ./services/networking/freeradius.nix
+  ./services/networking/frr.nix
   ./services/networking/gateone.nix
   ./services/networking/gdomap.nix
   ./services/networking/ghostunnel.nix
@@ -1032,6 +1034,7 @@
   ./services/web-apps/plausible.nix
   ./services/web-apps/pgpkeyserver-lite.nix
   ./services/web-apps/powerdns-admin.nix
+  ./services/web-apps/prosody-filer.nix
   ./services/web-apps/matomo.nix
   ./services/web-apps/openwebrx.nix
   ./services/web-apps/restya-board.nix

@@ -77,6 +77,14 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://frrouting.org/">FRRouting</link>, a
+          popular suite of Internet routing protocol daemons (BGP, BFD,
+          OSPF, IS-IS, VVRP and others). Available as
+          <link linkend="opt-services.ffr.babel.enable">services.frr</link>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://github.com/hifi/heisenbridge">heisenbridge</link>,
           a bouncer-style Matrix IRC bridge. Available as
           <link xlink:href="options.html#opt-services.heisenbridge.enable">services.heisenbridge</link>.
@@ -133,6 +141,13 @@
           <link xlink:href="https://loic-sharma.github.io/BaGet/">BaGet</link>,
           a lightweight NuGet and symbol server. Available at
           <link linkend="opt-services.baget.enable">services.baget</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/ThomasLeister/prosody-filer">prosody-filer</link>,
+          a server for handling XMPP HTTP Upload requests. Available at
+          <link linkend="opt-services.prosody-filer.enable">services.prosody-filer</link>.
         </para>
       </listitem>
     </itemizedlist>
@@ -290,6 +305,12 @@
           follow with upstream changes.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <literal>pkgs.docbookrx</literal> was removed since it’s
+          unmaintained
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.05-notable-changes">
@@ -409,6 +430,15 @@
         <para>
           The <literal>firmwareLinuxNonfree</literal> package has been
           renamed to <literal>linux-firmware</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          A new module was added for the
+          <link xlink:href="https://starship.rs/">Starship</link> shell
+          prompt, providing the options
+          <literal>programs.starship.enable</literal> and
+          <literal>programs.starship.settings</literal>.
         </para>
       </listitem>
     </itemizedlist>

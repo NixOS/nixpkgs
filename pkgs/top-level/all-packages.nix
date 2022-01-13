@@ -4706,8 +4706,6 @@ with pkgs;
 
   docbook2mdoc = callPackage ../tools/misc/docbook2mdoc { };
 
-  docbookrx = callPackage ../tools/typesetting/docbookrx { };
-
   docear = callPackage ../applications/office/docear { };
 
   dockbarx = callPackage ../applications/misc/dockbarx { };
@@ -5323,6 +5321,8 @@ with pkgs;
 
   flvstreamer = callPackage ../tools/networking/flvstreamer { };
 
+  frr = callPackage ../servers/frr { };
+
   hmetis = pkgsi686Linux.callPackage ../applications/science/math/hmetis { };
 
   libbsd = callPackage ../development/libraries/libbsd { };
@@ -5336,6 +5336,8 @@ with pkgs;
   };
 
   fabric-installer = callPackage ../tools/games/minecraft/fabric-installer { };
+
+  faraday-agent-dispatcher = callPackage ../tools/security/faraday-agent-dispatcher { };
 
   faraday-cli = callPackage ../tools/security/faraday-cli { };
 
@@ -5594,6 +5596,8 @@ with pkgs;
   gfs2-utils = callPackage ../tools/filesystems/gfs2-utils { };
 
   gfbgraph = callPackage ../development/libraries/gfbgraph { };
+
+  gfold = callPackage ../applications/version-management/git-and-tools/gfold { };
 
   ggobi = callPackage ../tools/graphics/ggobi { };
 
@@ -8724,6 +8728,8 @@ with pkgs;
 
   pinnwand = callPackage ../servers/pinnwand { };
 
+  pinsel = callPackage ../tools/misc/pinsel { };
+
   piping-server-rust = callPackage ../servers/piping-server-rust {
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;
   };
@@ -9706,6 +9712,11 @@ with pkgs;
   spglib = callPackage ../development/libraries/spglib { };
 
   spicy = callPackage ../development/tools/spicy { };
+
+  spire = callPackage ../tools/security/spire { };
+  # to match naming of other package repositories
+  spire-agent = spire.agent;
+  spire-server = spire.server;
 
   spoof-mac = python3Packages.callPackage ../tools/networking/spoof-mac { };
 
@@ -14662,6 +14673,19 @@ with pkgs;
 
   eweb = callPackage ../development/tools/literate-programming/eweb { };
 
+  funnelweb = callPackage ../development/tools/literate-programming/funnelweb { };
+
+  Literate = callPackage ../development/tools/literate-programming/Literate { };
+
+  md-tangle = callPackage ../development/tools/literate-programming/md-tangle { };
+
+  # NOTE: Override and set useIcon = false to use Awk instead of Icon.
+  noweb = callPackage ../development/tools/literate-programming/noweb { };
+
+  nuweb = callPackage ../development/tools/literate-programming/nuweb {
+    tex = texlive.combined.scheme-medium;
+  };
+
   eztrace = callPackage ../development/tools/profiling/EZTrace { };
 
   faas-cli = callPackage ../development/tools/faas-cli { };
@@ -14709,8 +14733,6 @@ with pkgs;
   };
 
   fundoc = callPackage ../development/tools/fundoc { };
-
-  funnelweb = callPackage ../development/tools/literate-programming/funnelweb { };
 
   gede = libsForQt5.callPackage ../development/tools/misc/gede { };
 
@@ -14983,8 +15005,6 @@ with pkgs;
 
   laminar = callPackage ../development/tools/continuous-integration/laminar { };
 
-  Literate = callPackage ../development/tools/literate-programming/Literate {};
-
   lcov = callPackage ../development/tools/analysis/lcov { };
 
   leiningen = callPackage ../development/tools/build-managers/leiningen { };
@@ -15116,11 +15136,6 @@ with pkgs;
   nwjs_0_12 = callPackage ../development/tools/node-webkit/nw12.nix {
     gconf = gnome2.GConf;
   };
-
-  # NOTE: Override and set useIcon = false to use Awk instead of Icon.
-  noweb = callPackage ../development/tools/literate-programming/noweb { };
-
-  nuweb = callPackage ../development/tools/literate-programming/nuweb { tex = texlive.combined.scheme-medium; };
 
   nrfutil = callPackage ../development/tools/misc/nrfutil { };
 
@@ -18161,6 +18176,8 @@ with pkgs;
 
   libmad = callPackage ../development/libraries/libmad { };
 
+  llama = callPackage ../applications/misc/llama { };
+
   malcontent = callPackage ../development/libraries/malcontent { };
 
   malcontent-ui = callPackage ../development/libraries/malcontent/ui.nix { };
@@ -18672,7 +18689,9 @@ with pkgs;
 
   libxmp = callPackage ../development/libraries/libxmp { };
 
-  libxslt = callPackage ../development/libraries/libxslt { };
+  libxslt = callPackage ../development/libraries/libxslt {
+    python = python3;
+  };
 
   libxsmm = callPackage ../development/libraries/libxsmm { };
 
@@ -18687,6 +18706,8 @@ with pkgs;
   libyamlcpp = callPackage ../development/libraries/libyaml-cpp { };
 
   libyamlcpp_0_3 = callPackage ../development/libraries/libyaml-cpp/0.3.0.nix { };
+
+  libyang = callPackage ../development/libraries/libyang { };
 
   libcyaml = callPackage ../development/libraries/libcyaml { };
 
@@ -20938,6 +20959,8 @@ with pkgs;
     lua = lua5_2_compat;
     withExtraLibs = [];
   };
+
+  prosody-filer = callPackage ../servers/xmpp/prosody-filer { };
 
   biboumi = callPackage ../servers/xmpp/biboumi { };
 
@@ -26701,6 +26724,8 @@ with pkgs;
   helm-docs = callPackage ../applications/networking/cluster/helm-docs { };
 
   kubetail = callPackage ../applications/networking/cluster/kubetail { } ;
+
+  kup = libsForQt5.callPackage ../applications/misc/kup { };
 
   kupfer = callPackage ../applications/misc/kupfer { };
 
@@ -33932,9 +33957,7 @@ with pkgs;
     python = python3;
   };
 
-  higan = callPackage ../misc/emulators/higan {
-    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa OpenGL OpenAL;
-  };
+  higan = callPackage ../misc/emulators/higan { };
 
   bsnes-hd = callPackage ../misc/emulators/bsnes-hd {
     inherit (gnome2) gtksourceview;
@@ -34318,4 +34341,10 @@ with pkgs;
   };
 
   zthrottle = callPackage ../tools/misc/zthrottle { };
+
+  honeymarker = callPackage ../servers/tracing/honeycomb/honeymarker { };
+
+  honeytail = callPackage ../servers/tracing/honeycomb/honeytail { };
+
+  honeyvent = callPackage ../servers/tracing/honeycomb/honeyvent { };
 }
