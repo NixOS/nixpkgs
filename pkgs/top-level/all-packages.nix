@@ -8102,6 +8102,8 @@ with pkgs;
 
   pandoc-imagine = python3Packages.callPackage ../tools/misc/pandoc-imagine { };
 
+  pandoc-drawio-filter = python3Packages.callPackage ../tools/misc/pandoc-drawio-filter { };
+
   pandoc-plantuml-filter = python3Packages.callPackage ../tools/misc/pandoc-plantuml-filter { };
 
   patray = callPackage ../tools/audio/patray { };
@@ -24505,6 +24507,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Cocoa CoreGraphics ForceFeedback OpenAL OpenGL;
   };
 
+  blender-with-packages = callPackage ../applications/misc/blender/wrapper.nix {};
+
   blflash = callPackage ../tools/misc/blflash { };
 
   blogc = callPackage ../applications/misc/blogc { };
@@ -27460,6 +27464,8 @@ with pkgs;
 
   pijul = callPackage ../applications/version-management/pijul { };
 
+  pijuice = with python3Packages; toPythonApplication pijuice;
+
   ping = callPackage ../applications/networking/ping { };
 
   piper = callPackage ../os-specific/linux/piper { };
@@ -28774,6 +28780,8 @@ with pkgs;
 
   syncplay = python3.pkgs.callPackage ../applications/networking/syncplay { };
 
+  syncterm = callPackage ../applications/terminal-emulators/syncterm { };
+
   inherit (callPackages ../applications/networking/syncthing { })
     syncthing
     syncthing-discovery
@@ -29739,7 +29747,7 @@ with pkgs;
     inherit (gnome2) libglade scrollkeeper;
     gtkhtml = gnome2.gtkhtml4;
     python = python27;
-    enchant = enchant1;
+    enchant = enchant2;
   };
 
   xournal = callPackage ../applications/graphics/xournal {
@@ -30255,6 +30263,8 @@ with pkgs;
   _20kly = callPackage ../games/20kly { };
 
   _90secondportraits = callPackage ../games/90secondportraits { love = love_0_10; };
+
+  ace-of-penguins = callPackage ../games/ace-of-penguins { };
 
   among-sus = callPackage ../games/among-sus { };
 

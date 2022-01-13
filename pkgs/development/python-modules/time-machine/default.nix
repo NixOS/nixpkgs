@@ -10,16 +10,16 @@
 
 buildPythonPackage rec {
   pname = "time-machine";
-  version = "2.5.0";
+  version = "2.6.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "adamchainz";
     repo = pname;
     rev = version;
-    sha256 = "sha256-U/OgkwRgZMdEkMIQuN9bWXWeeMHiduy1C1xOBUl8NsQ=";
+    sha256 = "sha256-D3cbArF09b5+LkkdosNbYMfndnzCPWwNqzIww23pOtk=";
   };
 
   propagatedBuildInputs = [

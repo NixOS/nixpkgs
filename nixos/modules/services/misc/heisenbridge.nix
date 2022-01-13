@@ -23,7 +23,7 @@ let
 in
 {
   options.services.heisenbridge = {
-    enable = mkEnableOption "the Matrix<->IRC bridge";
+    enable = mkEnableOption "A bouncer-style Matrix IRC bridge";
 
     package = mkOption {
       type = types.package;
