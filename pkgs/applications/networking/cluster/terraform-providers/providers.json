@@ -144,6 +144,15 @@
     "vendorSha256": null,
     "version": "1.12.2"
   },
+  "bitbucket": {
+    "owner": "terraform-providers",
+    "provider-source-address": "registry.terraform.io/nixpkgs/bitbucket",
+    "repo": "terraform-provider-bitbucket",
+    "rev": "v1.2.0",
+    "sha256": "11n4wpvmaab164g6k077n9dbdbhd5lwl7pxpha5492ks468nd95b",
+    "vendorSha256": null,
+    "version": "1.2.0"
+  },
   "brightbox": {
     "owner": "brightbox",
     "provider-source-address": "registry.terraform.io/brightbox/brightbox",
