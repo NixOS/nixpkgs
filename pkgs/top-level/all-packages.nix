@@ -6719,12 +6719,15 @@ with pkgs;
   ipfs = callPackage ../applications/networking/ipfs {
     buildGoModule = buildGo116Module;
   };
-  ipfs-migrator = callPackage ../applications/networking/ipfs-migrator {
-    buildGoModule = buildGo116Module;
-  };
   ipfs-cluster = callPackage ../applications/networking/ipfs-cluster {
     buildGoModule = buildGo116Module;
   };
+
+  ipfs-migrator-all-fs-repo-migrations = callPackage ../applications/networking/ipfs-migrator/all-migrations.nix {
+    buildGoModule = buildGo116Module;
+  };
+  ipfs-migrator-unwrapped = callPackage ../applications/networking/ipfs-migrator/unwrapped.nix { };
+  ipfs-migrator = callPackage ../applications/networking/ipfs-migrator { };
 
   ipget = callPackage ../applications/networking/ipget { };
 
