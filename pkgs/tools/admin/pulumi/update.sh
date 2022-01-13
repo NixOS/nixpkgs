@@ -10,29 +10,29 @@ VERSION="3.21.0"
 
 declare -a pulumi_repos
 pulumi_repos=(
-    "auth0"
-    "aws"
-    "azure"
-    "cloudflare"
-    "consul"
-    "datadog"
-    "digitalocean"
-    "docker"
-    "equinix-metal"
-    "gcp"
-    "github"
-    "gitlab"
-    "hcloud"
-    "kubernetes"
-    "linode"
-    "mailgun"
-    "mysql"
-    "openstack"
-    "packet"
-    "postgresql"
-    "random"
-    "vault"
-    "vsphere"
+  "auth0"
+  "aws"
+  "azure"
+  "cloudflare"
+  "consul"
+  "datadog"
+  "digitalocean"
+  "docker"
+  "equinix-metal"
+  "gcp"
+  "github"
+  "gitlab"
+  "hcloud"
+  "kubernetes"
+  "linode"
+  "mailgun"
+  "mysql"
+  "openstack"
+  "packet"
+  "postgresql"
+  "random"
+  "vault"
+  "vsphere"
 )
 
 # Contains latest release ${VERSION} from
@@ -43,68 +43,68 @@ pulumi_repos=(
 plugin_num=0
 plugins=()
 for key in "${pulumi_repos[@]}"; do
-    plugin="${key}=$(gh api "repos/pulumi/pulumi-${key}/releases/latest" --jq '.tag_name | sub("^v"; "")')"
-    printf "%20s: %s of %s\r" "${plugin}" "${plugin_num}" "${#pulumi_repos[@]}"
-    plugins+=("${plugin}")
-    sleep 1
-    ((++plugin_num))
+  plugin="${key}=$(gh api "repos/pulumi/pulumi-${key}/releases/latest" --jq '.tag_name | sub("^v"; "")')"
+  printf "%20s: %s of %s\r" "${plugin}" "${plugin_num}" "${#pulumi_repos[@]}"
+  plugins+=("${plugin}")
+  sleep 1
+  ((++plugin_num))
 done
 printf "\n"
 
 function genMainSrc() {
-    local url="https://get.pulumi.com/releases/sdk/pulumi-v${VERSION}-${1}-${2}.tar.gz"
-    local sha256
-    sha256=$(nix-prefetch-url "$url")
-    echo "      {"
-    echo "        url = \"${url}\";"
-    echo "        sha256 = \"$sha256\";"
-    echo "      }"
+  local url="https://get.pulumi.com/releases/sdk/pulumi-v${VERSION}-${1}-${2}.tar.gz"
+  local sha256
+  sha256=$(nix-prefetch-url "$url")
+  echo "      {"
+  echo "        url = \"${url}\";"
+  echo "        sha256 = \"$sha256\";"
+  echo "      }"
 }
 
 function genSrc() {
-    local url="${1}"
-    local plug="${2}"
-    local tmpdir="${3}"
+  local url="${1}"
+  local plug="${2}"
+  local tmpdir="${3}"
 
-    local sha256
-    sha256=$(nix-prefetch-url "$url")
+  local sha256
+  sha256=$(nix-prefetch-url "$url")
 
-    {
-      if [ -n "$sha256" ]; then  # file exists
-          echo "      {"
-          echo "        url = \"${url}\";"
-          echo "        sha256 = \"$sha256\";"
-          echo "      }"
-      else
-          echo "      # pulumi-resource-${plug} skipped (does not exist on remote)"
-      fi
-    } > "${tmpdir}/${plug}.nix"
+  {
+    if [ -n "$sha256" ]; then # file exists
+      echo "      {"
+      echo "        url = \"${url}\";"
+      echo "        sha256 = \"$sha256\";"
+      echo "      }"
+    else
+      echo "      # pulumi-resource-${plug} skipped (does not exist on remote)"
+    fi
+  } > "${tmpdir}/${plug}.nix"
 }
 
 function genSrcs() {
-    local tmpdir
-    tmpdir="$(mktemp -d)"
+  local tmpdir
+  tmpdir="$(mktemp -d)"
 
-    local i=0
+  local i=0
 
-    for plugVers in "${plugins[@]}"; do
-        local plug=${plugVers%=*}
-        local version=${plugVers#*=}
-        # url as defined here
-        # https://github.com/pulumi/pulumi/blob/06d4dde8898b2a0de2c3c7ff8e45f97495b89d82/pkg/workspace/plugins.go#L197
-        local url="https://api.pulumi.com/releases/plugins/pulumi-resource-${plug}-v${version}-${1}-${2}.tar.gz"
-        genSrc "${url}" "${plug}" "${tmpdir}" &
-        ((++i))
-    done
+  for plugVers in "${plugins[@]}"; do
+    local plug=${plugVers%=*}
+    local version=${plugVers#*=}
+    # url as defined here
+    # https://github.com/pulumi/pulumi/blob/06d4dde8898b2a0de2c3c7ff8e45f97495b89d82/pkg/workspace/plugins.go#L197
+    local url="https://api.pulumi.com/releases/plugins/pulumi-resource-${plug}-v${version}-${1}-${2}.tar.gz"
+    genSrc "${url}" "${plug}" "${tmpdir}" &
+    ((++i))
+  done
 
-    wait
+  wait
 
-    find "${tmpdir}" -name '*.nix' -print0 | sort -z | xargs -r0 cat
-    rm -r "${tmpdir}"
+  find "${tmpdir}" -name '*.nix' -print0 | sort -z | xargs -r0 cat
+  rm -r "${tmpdir}"
 }
 
 {
-  cat <<EOF
+  cat << EOF
 # DO NOT EDIT! This file is generated automatically by update.sh
 { }:
 {
