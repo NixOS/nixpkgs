@@ -13,19 +13,30 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       };
     };
 
-    services.getty.autologinUser = "root";
+    environment.systemPackages = map
+      (shell: pkgs.writeScriptBin "expect-${shell}" ''
+        #!${pkgs.expect}/bin/expect -f
+
+        spawn env TERM=xterm ${shell} -i
+
+        expect "<starship>" {
+          send "exit\n"
+        } timeout {
+          send_user "\n${shell} failed to display Starship\n"
+          exit 1
+        }
+
+        expect eof
+      '')
+      [ "bash" "fish" "zsh" ];
   };
 
   testScript = ''
     start_all()
     machine.wait_for_unit("default.target")
 
-    for shell in ["bash", "fish", "zsh"]:
-      machine.send_chars(f"script -c {shell} /tmp/{shell}.txt\n")
-      machine.wait_until_tty_matches(1, f"Script started.*{shell}.txt")
-      machine.send_chars("exit\n")
-      machine.wait_until_tty_matches(1, "Script done")
-      machine.sleep(1)
-      machine.succeed(f"grep -q '<starship>' /tmp/{shell}.txt")
+    machine.succeed("expect-bash")
+    machine.succeed("expect-fish")
+    machine.succeed("expect-zsh")
   '';
 })
