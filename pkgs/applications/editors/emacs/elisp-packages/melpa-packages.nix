@@ -121,6 +121,12 @@ let
           else super.gl-conf-mode;
 
         # upstream issue: missing file header
+        ligo-mode =
+          if super.ligo-mode.version == "0.3"
+          then markBroken super.ligo-mode
+          else super.ligo-mode;
+
+        # upstream issue: missing file header
         link = markBroken super.link;
 
         # upstream issue: missing file header
