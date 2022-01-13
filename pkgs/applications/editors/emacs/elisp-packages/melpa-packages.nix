@@ -79,6 +79,9 @@ let
           else super.abridge-diff;
 
         # upstream issue: missing file header
+        bufshow = markBroken super.bufshow;
+
+        # upstream issue: missing file header
         speech-tagger = markBroken super.speech-tagger;
 
         # upstream issue: missing file header
@@ -109,7 +112,6 @@ let
         link = markBroken super.link;
 
         # upstream issue: missing file header
-        bufshow = markBroken super.bufshow;
 
         # upstream issue: missing file header
         elmine = markBroken super.elmine;
