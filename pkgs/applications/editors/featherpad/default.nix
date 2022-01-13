@@ -3,13 +3,13 @@
 
 mkDerivation rec {
   pname = "featherpad";
-  version = "1.0.1";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "tsujan";
     repo = "FeatherPad";
     rev = "V${version}";
-    sha256 = "sha256-FeqTPDix2tqTJ3UU6i2e6FkmCO0KMNt4tLtrPjX57fc=";
+    sha256 = "sha256-qDhubKk6FLZmVxp4SkGm1B7zIg6rPtPRoFGCcBYUDFA=";
   };
 
   nativeBuildInputs = [ cmake pkg-config qttools ];

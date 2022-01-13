@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "turbovnc";
-  version = "2.2.6";
+  version = "2.2.7";
 
   src = fetchFromGitHub {
     owner = "TurboVNC";
     repo = "turbovnc";
     rev = version;
-    sha256 = "sha256-HSppHPBBkTf+88ZBaYG6JK4A/5lOBCxPFv6898TD7PE=";
+    sha256 = "sha256-mEdatfTBx4nNmMTgv1Z+xefPFEiE2rCrsxyB7Dd03rg=";
   };
 
   # TODO:

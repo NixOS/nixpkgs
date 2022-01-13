@@ -4,19 +4,19 @@ The test itself can be run interactively. This is particularly useful
 when developing or debugging a test:
 
 ```ShellSession
-$ nix-build nixos/tests/login.nix -A driverInteractive
+$ nix-build . -A nixosTests.login.driverInteractive
 $ ./result/bin/nixos-test-driver --interactive
-starting VDE switch for network 1
->
+[...]
+>>>
 ```
 
 You can then take any Python statement, e.g.
 
 ```py
-> start_all()
-> test_script()
-> machine.succeed("touch /tmp/foo")
-> print(machine.succeed("pwd")) # Show stdout of command
+>>> start_all()
+>>> test_script()
+>>> machine.succeed("touch /tmp/foo")
+>>> print(machine.succeed("pwd")) # Show stdout of command
 ```
 
 The function `test_script` executes the entire test script and drops you

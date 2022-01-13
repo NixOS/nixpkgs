@@ -141,6 +141,15 @@
 /pkgs/development/tools/build-managers/rebar3   @gleber
 /pkgs/development/tools/erlang                  @gleber
 
+# Audio
+/nixos/modules/services/audio/botamusique.nix @mweinelt
+/nixos/modules/services/audio/snapserver.nix @mweinelt
+/nixos/tests/modules/services/audio/botamusique.nix @mweinelt
+/nixos/tests/snapcast.nix @mweinelt
+
+# Browsers
+/pkgs/applications/networking/browsers/firefox @mweinelt
+
 # Jetbrains
 /pkgs/applications/editors/jetbrains @edwtjo
 
@@ -167,11 +176,29 @@
 /nixos/tests/hardened.nix @joachifm
 /pkgs/os-specific/linux/kernel/hardened-config.nix @joachifm
 
+# Home Automation
+/nixos/modules/services/misc/home-assistant.nix @mweinelt
+/nixos/modules/services/misc/zigbee2mqtt.nix @mweinelt
+/nixos/tests/home-assistant.nix @mweinelt
+/nixos/tests/zigbee2mqtt.nix @mweinelt
+/pkgs/servers/home-assistant @mweinelt
+/pkgs/tools/misc/esphome @mweinelt
+
 # Network Time Daemons
 /pkgs/tools/networking/chrony @thoughtpolice
 /pkgs/tools/networking/ntp @thoughtpolice
 /pkgs/tools/networking/openntpd @thoughtpolice
 /nixos/modules/services/networking/ntp @thoughtpolice
+
+# Network
+/pkgs/tools/networking/kea/default.nix @mweinelt
+/pkgs/tools/networking/babeld/default.nix @mweinelt
+/nixos/modules/services/networking/babeld.nix @mweinelt
+/nixos/modules/services/networking/kea.nix @mweinelt
+/nixos/modules/services/networking/knot.nix @mweinelt
+/nixos/tests/babeld.nix @mweinelt
+/nixos/tests/kea.nix @mweinelt
+/nixos/tests/knot.nix @mweinelt
 
 # Dhall
 /pkgs/development/dhall-modules      @Gabriel439 @Profpatsch @ehmry
@@ -233,6 +260,7 @@
 /pkgs/applications/blockchains  @mmahut @RaghavSood
 
 # Go
+/doc/languages-frameworks/go.section.md @kalbasit @Mic92 @zowoq
 /pkgs/development/compilers/go @kalbasit @Mic92 @zowoq
 /pkgs/development/go-modules   @kalbasit @Mic92 @zowoq
 /pkgs/development/go-packages  @kalbasit @Mic92 @zowoq
@@ -248,3 +276,6 @@
 /pkgs/development/compilers/nim  @ehmry
 /pkgs/development/nim-packages  @ehmry
 /pkgs/top-level/nim-packages.nix  @ehmry
+
+# terraform providers
+/pkgs/applications/networking/cluster/terraform-providers @zowoq

@@ -1,15 +1,12 @@
-{ stdenv , lib , fetchurl , appimageTools , makeWrapper , electron_11 }:
+{ stdenv , lib , fetchurl , appimageTools , makeWrapper , electron }:
 
-let
-  electron = electron_11;
-in
 stdenv.mkDerivation rec {
   pname = "super-productivity";
-  version = "7.6.0";
+  version = "7.9.2";
 
   src = fetchurl {
     url = "https://github.com/johannesjo/super-productivity/releases/download/v${version}/superProductivity-${version}.AppImage";
-    sha256 = "f02a451a44f48a8e85a0c1269625d89fb1e0b8a75b7e217d96352064e6464ae5";
+    sha256 = "sha256-qeHFFG1Y8qZwFvo3CFIs1+BKQo287HJfOnKKguUOlu8=";
     name = "${pname}-${version}.AppImage";
   };
 

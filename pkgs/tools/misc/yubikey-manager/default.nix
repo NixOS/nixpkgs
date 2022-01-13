@@ -3,6 +3,7 @@
 python3Packages.buildPythonPackage rec {
   pname = "yubikey-manager";
   version = "4.0.7";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     repo = "yubikey-manager";
@@ -12,11 +13,11 @@ python3Packages.buildPythonPackage rec {
   };
 
   postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'cryptography = "^2.1 || ^3.0"' 'cryptography = "*"'
     substituteInPlace "ykman/pcsc/__init__.py" \
-      --replace '/usr/bin/pkill' '${procps}/bin/pkill'
+      --replace 'pkill' '${procps}/bin/pkill'
   '';
-
-  format = "pyproject";
 
   nativeBuildInputs = with python3Packages; [ poetry-core ];
 
@@ -60,6 +61,6 @@ python3Packages.buildPythonPackage rec {
 
     license = licenses.bsd2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ benley mic92 ];
+    maintainers = with maintainers; [ benley lassulus pinpox ];
   };
 }

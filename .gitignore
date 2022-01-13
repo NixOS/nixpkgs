@@ -3,6 +3,7 @@
 .*.swp
 .*.swo
 .idea/
+.vscode/
 outputs/
 result
 result-*

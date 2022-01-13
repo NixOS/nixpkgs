@@ -270,7 +270,7 @@ let
 
     meta = with lib; {
       description = "Smart and user-friendly command line shell";
-      homepage = "http://fishshell.com/";
+      homepage = "https://fishshell.com/";
       license = licenses.gpl2;
       platforms = platforms.unix;
       maintainers = with maintainers; [ cole-h ];

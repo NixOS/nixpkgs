@@ -764,7 +764,7 @@ and in this case the `python38` interpreter is automatically used.
 
 ### Interpreters {#interpreters}
 
-Versions 2.7, 3.6, 3.7, 3.8 and 3.9 of the CPython interpreter are available as
+Versions 2.7, 3.7, 3.8 and 3.9 of the CPython interpreter are available as
 respectively `python27`, `python37`, `python38` and `python39`. The
 aliases `python2` and `python3` correspond to respectively `python27` and
 `python39`. The attribute `python` maps to `python2`. The PyPy interpreters

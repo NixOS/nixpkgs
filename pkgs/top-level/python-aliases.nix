@@ -44,6 +44,8 @@ mapAliases ({
   diff_cover = diff-cover; # added 2021-07-02
   discogs_client = discogs-client; # added 2021-07-02
   djangorestframework-jwt = drf-jwt; # added 2021-07-20
+  django_environ = django-environ; # added 2021-12-25
+  django_extensions = django-extensions; # added 2022-01-09
   django_redis = django-redis; # added 2021-10-11
   django_taggit = django-taggit; # added 2021-10-11
   dns = dnspython; # added 2017-12-10
@@ -106,6 +108,7 @@ mapAliases ({
   tvnamer = throw "tvnamer was moved to pkgs.tvnamer"; # added 2021-07-05
   WazeRouteCalculator = wazeroutecalculator; # added 2021-09-29
   websocket_client = websocket-client; # added 2021-06-15
+  xenomapper = throw "xenomapper was moved to pkgs.xenomapper"; # added 2021-12-31
   zc-buildout221 = zc-buildout; # added 2021-07-21
   zc_buildout_nix = throw "zc_buildout_nix was pinned to a version no longer compatible with other modules";
 })

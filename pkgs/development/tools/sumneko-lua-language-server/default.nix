@@ -4,13 +4,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "sumneko-lua-language-server";
-  version = "2.5.1";
+  version = "2.5.6";
 
   src = fetchFromGitHub {
     owner = "sumneko";
     repo = "lua-language-server";
     rev = version;
-    sha256 = "sha256-3iWD0kXbF8Rad7fQ36ppD5q8V8COacLrT+vasCkygDc=";
+    sha256 = "sha256-dSj3wNbQghiGfqe7dNDbWnbXYLSiG+0mYv2yFmGsAc8=";
     fetchSubmodules = true;
   };
 
@@ -55,15 +55,15 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    install -Dt "$out"/share/lua-language-server/bin/${target} bin/${target}/lua-language-server
-    install -m644 -t "$out"/share/lua-language-server/bin/${target} bin/${target}/*.*
+    install -Dt "$out"/share/lua-language-server/bin bin/lua-language-server
+    install -m644 -t "$out"/share/lua-language-server/bin bin/*.*
     install -m644 -t "$out"/share/lua-language-server {debugger,main}.lua
     cp -r locale meta script "$out"/share/lua-language-server
 
     # necessary for --version to work:
     install -m644 -t "$out"/share/lua-language-server changelog.md
 
-    makeWrapper "$out"/share/lua-language-server/bin/${target}/lua-language-server \
+    makeWrapper "$out"/share/lua-language-server/bin/lua-language-server \
       $out/bin/lua-language-server \
       --add-flags "-E $out/share/lua-language-server/main.lua \
       --logpath='~/.cache/sumneko_lua/log' \

@@ -248,4 +248,7 @@ in
       )
     ];
   };
+
+  # needs a full nixpkgs path to import nixpkgs
+  meta.buildDocsInSandbox = false;
 }

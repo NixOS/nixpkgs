@@ -153,7 +153,7 @@ gem 'faraday_middleware-aws-sigv4', '~>0.3.0'
 # Markdown and HTML processing
 gem 'html-pipeline', '~> 2.13.2'
 gem 'deckar01-task_list', '2.3.1'
-gem 'gitlab-markup', '~> 1.7.1'
+gem 'gitlab-markup', '~> 1.8.0'
 gem 'github-markup', '~> 1.7.0', require: 'github/markup'
 gem 'commonmarker', '~> 0.23.2'
 gem 'kramdown', '~> 2.3.1'
@@ -185,7 +185,7 @@ gem 'rack', '~> 2.2.3'
 gem 'rack-timeout', '~> 0.5.1', require: 'rack/timeout/base'
 
 group :puma do
-  gem 'puma', '~> 5.3.1', require: false
+  gem 'puma', '~> 5.5.2', require: false
   gem 'puma_worker_killer', '~> 0.3.1', require: false
   gem 'sd_notify', '~> 0.1.0', require: false
 end
@@ -194,10 +194,10 @@ end
 gem 'state_machines-activerecord', '~> 0.8.0'
 
 # Issue tags
-gem 'acts-as-taggable-on', '~> 7.0'
+gem 'acts-as-taggable-on', '~> 8.1'
 
 # Background jobs
-gem 'sidekiq', '~> 6.2.2'
+gem 'sidekiq', '~> 6.3'
 gem 'sidekiq-cron', '~> 1.0'
 gem 'redis-namespace', '~> 1.8.1'
 gem 'gitlab-sidekiq-fetcher', '0.8.0', require: 'sidekiq-reliable-fetch'
@@ -376,7 +376,7 @@ group :development, :test do
   gem 'spring', '~> 2.1.0'
   gem 'spring-commands-rspec', '~> 1.0.4'
 
-  gem 'gitlab-styles', '~> 6.4.0', require: false
+  gem 'gitlab-styles', '~> 6.6.0', require: false
 
   gem 'haml_lint', '~> 0.36.0', require: false
   gem 'bundler-audit', '~> 0.7.0.1', require: false
@@ -400,17 +400,22 @@ group :development, :test do
 end
 
 group :development, :test, :danger do
-  gem 'gitlab-dangerfiles', '~> 2.5.0', require: false
+  gem 'gitlab-dangerfiles', '~> 2.6.1', require: false
 end
 
 group :development, :test, :coverage do
   gem 'simplecov', '~> 0.18.5', require: false
+  gem 'simplecov-lcov', '~> 0.8.0', require: false
   gem 'simplecov-cobertura', '~> 1.3.1', require: false
+  gem 'undercover', '~> 0.4.4', require: false
 end
 
 # Gems required in omnibus-gitlab pipeline
 group :development, :test, :omnibus do
-  gem 'license_finder', '~> 6.0', require: false
+  # Using a fork until https://github.com/pivotal/LicenseFinder/pull/816 is
+  # resolved. For details, check discussion in
+  # https://gitlab.com/gitlab-org/gitlab/-/merge_requests/74881
+  gem 'gitlab-license_finder', '~> 6.0', require: false
 end
 
 group :test do
@@ -459,7 +464,7 @@ gem 'health_check', '~> 3.0'
 
 # System information
 gem 'vmstat', '~> 2.3.0'
-gem 'sys-filesystem', '~> 1.1.6'
+gem 'sys-filesystem', '~> 1.4.3'
 
 # NTP client
 gem 'net-ntp'
@@ -471,7 +476,7 @@ gem 'sshkey', '~> 2.0'
 # Required for ED25519 SSH host key support
 group :ed25519 do
   gem 'ed25519', '~> 1.2'
-  gem 'bcrypt_pbkdf', '~> 1.0'
+  gem 'bcrypt_pbkdf', '~> 1.1'
 end
 
 # Spamcheck GRPC protocol definitions
@@ -494,7 +499,7 @@ gem 'flipper', '~> 0.21.0'
 gem 'flipper-active_record', '~> 0.21.0'
 gem 'flipper-active_support_cache_store', '~> 0.21.0'
 gem 'unleash', '~> 3.2.2'
-gem 'gitlab-experiment', '~> 0.6.4'
+gem 'gitlab-experiment', '~> 0.6.5'
 
 # Structured logging
 gem 'lograge', '~> 0.5'
@@ -539,4 +544,4 @@ gem 'ipaddress', '~> 0.8.3'
 
 gem 'parslet', '~> 1.8'
 
-gem 'ipynbdiff', '0.3.7'
+gem 'ipynbdiff', '0.3.8'

@@ -193,7 +193,8 @@ in with passthru; stdenv.mkDerivation {
   prePatch = optionalString stdenv.isDarwin ''
     substituteInPlace configure --replace '`/usr/bin/arch`' '"i386"'
     substituteInPlace configure --replace '-Wl,-stack_size,1000000' ' '
-  '' + optionalString (stdenv.isDarwin && x11Support) ''
+  '' + optionalString (pythonOlder "3.9" && stdenv.isDarwin && x11Support) ''
+    # Broken on >= 3.9; replaced with ./3.9/darwin-tcl-tk.patch
     substituteInPlace setup.py --replace /Library/Frameworks /no-such-path
   '';
 

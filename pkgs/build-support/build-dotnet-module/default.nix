@@ -117,40 +117,42 @@ let
     DOTNET_NOLOGO = true; # This disables the welcome message.
     DOTNET_CLI_TELEMETRY_OPTOUT = true;
 
-    passthru.fetch-deps = args.passthru.fetch-deps or writeScript "fetch-${args.pname}-deps" ''
-      set -euo pipefail
-      cd "$(dirname "''${BASH_SOURCE[0]}")"
+    passthru = {
+      fetch-deps = writeScript "fetch-${args.pname}-deps" ''
+        set -euo pipefail
+        cd "$(dirname "''${BASH_SOURCE[0]}")"
 
-      export HOME=$(mktemp -d)
-      deps_file="/tmp/${args.pname}-deps.nix"
+        export HOME=$(mktemp -d)
+        deps_file="/tmp/${args.pname}-deps.nix"
 
-      store_src="${package.src}"
-      src="$(mktemp -d /tmp/${args.pname}.XXX)"
-      cp -rT "$store_src" "$src"
-      chmod -R +w "$src"
+        store_src="${package.src}"
+        src="$(mktemp -d /tmp/${args.pname}.XXX)"
+        cp -rT "$store_src" "$src"
+        chmod -R +w "$src"
 
-      trap "rm -rf $src $HOME" EXIT
-      pushd "$src"
+        trap "rm -rf $src $HOME" EXIT
+        pushd "$src"
 
-      export DOTNET_NOLOGO=1
-      export DOTNET_CLI_TELEMETRY_OPTOUT=1
+        export DOTNET_NOLOGO=1
+        export DOTNET_CLI_TELEMETRY_OPTOUT=1
 
-      mkdir -p "$HOME/nuget_pkgs"
+        mkdir -p "$HOME/nuget_pkgs"
 
-      for project in "${lib.concatStringsSep "\" \"" ((lib.toList projectFile) ++ lib.optionals (testProjectFile != "") (lib.toList testProjectFile))}"; do
-        ${dotnet-sdk}/bin/dotnet restore "$project" \
-          ${lib.optionalString (!enableParallelBuilding) "--disable-parallel"} \
-          -p:ContinuousIntegrationBuild=true \
-          -p:Deterministic=true \
-          --packages "$HOME/nuget_pkgs" \
-          "''${dotnetRestoreFlags[@]}" \
-          "''${dotnetFlags[@]}"
-      done
+        for project in "${lib.concatStringsSep "\" \"" ((lib.toList projectFile) ++ lib.optionals (testProjectFile != "") (lib.toList testProjectFile))}"; do
+          ${dotnet-sdk}/bin/dotnet restore "$project" \
+            ${lib.optionalString (!enableParallelBuilding) "--disable-parallel"} \
+            -p:ContinuousIntegrationBuild=true \
+            -p:Deterministic=true \
+            --packages "$HOME/nuget_pkgs" \
+            "''${dotnetRestoreFlags[@]}" \
+            "''${dotnetFlags[@]}"
+        done
 
-      echo "Writing lockfile..."
-      ${nuget-to-nix}/bin/nuget-to-nix "$HOME/nuget_pkgs" > "$deps_file"
-      echo "Succesfully wrote lockfile to: $deps_file"
-    '';
+        echo "Writing lockfile..."
+        ${nuget-to-nix}/bin/nuget-to-nix "$HOME/nuget_pkgs" > "$deps_file"
+        echo "Succesfully wrote lockfile to: $deps_file"
+      '';
+    } // args.passthru or {};
 
     configurePhase = args.configurePhase or ''
       runHook preConfigure

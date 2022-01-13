@@ -10,17 +10,24 @@
 
 stdenv.mkDerivation rec {
   pname = "free42";
-  version = "3.0.7";
+  version = "3.0.9";
 
   src = fetchFromGitHub {
     owner = "thomasokken";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-wGzZRp+7KBV/sxm08XCkCDx+A8nR9To5MCmcdWdlttM=";
+    hash = "sha256-ZSwqgHsfe9apyYZ1fkvDMnQxdNb9E8U1l9jvC9t693w=";
   };
 
-  nativeBuildInputs = [ copyDesktopItems pkg-config ];
-  buildInputs = [ gtk3 alsa-lib ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    pkg-config
+  ];
+
+  buildInputs = [
+    alsa-lib
+    gtk3
+  ];
 
   postPatch = ''
     sed -i -e "s|/bin/ls|ls|" gtk/Makefile
@@ -30,23 +37,24 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''
     runHook preBuild
+
     make -C gtk cleaner
     make --jobs=$NIX_BUILD_CORES -C gtk
     make -C gtk clean
     make --jobs=$NIX_BUILD_CORES -C gtk BCD_MATH=1
+
     runHook postBuild
   '';
 
-  preInstall = ''
+  installPhase = ''
+    runHook preInstall
+
     install --directory $out/bin \
                         $out/share/doc/${pname} \
                         $out/share/${pname}/skins \
                         $out/share/icons/hicolor/48x48/apps \
                         $out/share/icons/hicolor/128x128/apps
-  '';
 
-  installPhase = ''
-    runHook preInstall
     install -m755 gtk/free42dec gtk/free42bin $out/bin
     install -m644 gtk/README $out/share/doc/${pname}/README-GTK
     install -m644 README $out/share/doc/${pname}/README
@@ -54,6 +62,7 @@ stdenv.mkDerivation rec {
     install -m644 gtk/icon-48x48.xpm $out/share/icons/hicolor/48x48/apps
     install -m644 gtk/icon-128x128.xpm $out/share/icons/hicolor/128x128/apps
     install -m644 skins/* $out/share/${pname}/skins
+
     runHook postInstall
   '';
 

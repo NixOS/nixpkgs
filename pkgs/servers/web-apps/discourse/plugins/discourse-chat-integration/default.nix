@@ -5,8 +5,8 @@ mkDiscoursePlugin {
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse-chat-integration";
-    rev = "ae0389ca89f26401a6c4cffaaae6adcf14af0e15";
-    sha256 = "sha256-wT9S2mMz2MOpWpYv/FrHYhZibStRIGC4P2Vrqs04bkA=";
+    rev = "46b2c05cbd00dbc49bff87d78f8e1ec4fdd43735";
+    sha256 = "sha256-G17obAc03FR3Qzn/IR++Y5Z1TkpP6lY5UDJsm4Lmj0M=";
   };
   meta = with lib; {
     homepage = "https://github.com/discourse/discourse-chat-integration";

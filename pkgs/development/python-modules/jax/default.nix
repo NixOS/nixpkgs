@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "jax";
-  version = "0.2.25";
+  version = "0.2.26";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -21,9 +21,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "google";
     repo = pname;
-    rev = "jax-v${version}";
-    sha256 = "0f32is9896g4shfhjipj3rlgpjxci5y607lp8gxlgsdzdqfpckm2";
+    rev = "${pname}-v${version}";
+    sha256 = "155hhwgq6axdrj4x4hw72322qv1wc068n4cv4z2vf5jpl05fg93g";
   };
+
+  patches = [
+    # See https://github.com/google/jax/issues/7944
+    ./cache-fix.patch
+  ];
 
   # jaxlib is _not_ included in propagatedBuildInputs because there are
   # different versions of jaxlib depending on the desired target hardware. The

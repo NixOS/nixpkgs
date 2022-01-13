@@ -34,7 +34,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     description = "A process and socket manager";
-    homepage = "https://github.circus.com/circus-tent/circus";
+    homepage = "https://github.com/circus-tent/circus";
     license = licenses.asl20;
   };
 }

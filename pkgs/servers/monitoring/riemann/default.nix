@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "riemann";
-  version = "0.3.6";
+  version = "0.3.7";
 
   src = fetchurl {
     url = "https://github.com/riemann/riemann/releases/download/${version}/${pname}-${version}.tar.bz2";
-    sha256 = "0hz69rka4f9h8i8cnswfz80fs0nm7j5436iiyd5i8lzd2avj4bps";
+    sha256 = "sha256-WpJsmb74RhMMKGdNHcYcG4TA+QgpliQ2Ae89JkIjaAo=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

@@ -75,7 +75,7 @@ let base = {
       owner = "FirebirdSQL";
       repo = "firebird";
       rev = "v${version}";
-      sha256 = "sha256-a4ex19FMfiJsUEhWUYd2YXKgJ24Jnpoab2t6x9sUuyQ=";
+      sha256 = "sha256-Pc3hUAhXgpa6VOkjidfh/vS/60Gtjenid8nHnIH7s0E=";
     };
 
     buildInputs = base.buildInputs ++ [ zlib unzip libtommath libtomcrypt ];

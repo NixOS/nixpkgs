@@ -60,7 +60,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Banking application for small screens";
-    homepage = "https://tabos.gitlab.io/project/banking/";
+    homepage = "https://tabos.gitlab.io/projects/banking/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dotlambda ];
   };

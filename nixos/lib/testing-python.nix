@@ -17,7 +17,7 @@ rec {
   inherit pkgs;
 
   # Run an automated test suite in the given virtual network.
-  runTests = { driver, pos }:
+  runTests = { driver, driverInteractive, pos }:
     stdenv.mkDerivation {
       name = "vm-test-run-${driver.testName}";
 
@@ -34,7 +34,7 @@ rec {
         '';
 
       passthru = driver.passthru // {
-        inherit driver;
+        inherit driver driverInteractive;
       };
 
       inherit pos; # for better debugging
@@ -224,7 +224,7 @@ rec {
           passMeta = drv: drv // lib.optionalAttrs (t ? meta) {
             meta = (drv.meta or { }) // t.meta;
           };
-        in passMeta (runTests { inherit driver pos; });
+        in passMeta (runTests { inherit driver pos driverInteractive; });
 
     in
       test // {

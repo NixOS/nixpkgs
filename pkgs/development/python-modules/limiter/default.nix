@@ -7,15 +7,16 @@
 
 buildPythonPackage rec {
   pname = "limiter";
-  version = "0.1.2";
+  version = "0.2.0";
+  format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "alexdelorenzo";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0cdqw08qw3cid1yjknlh4hqfl46xh4madkjrl7sxk2c1pbwils8r";
+    hash = "sha256-h3XiCR/8rcCBwdhO6ExrrUE9piba5mssad3+t41scSk=";
   };
 
   propagatedBuildInputs = [

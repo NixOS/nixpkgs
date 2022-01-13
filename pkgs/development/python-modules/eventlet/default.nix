@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pythonOlder
 , dnspython
 , greenlet
@@ -10,22 +10,35 @@
 , nose
 , pyopenssl
 , iana-etc
+, pytestCheckHook
 , libredirect
 }:
 
 buildPythonPackage rec {
   pname = "eventlet";
   version = "0.33.0";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "80144f489c1bb273a51b6f96ff9785a382d2866b9bab1f5bd748385019f4141f";
+  src = fetchFromGitHub {
+    owner = "eventlet";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-kE/eYBbaTt1mPGoUIMhonvFBlQOdAfPU5GvCvPaRHvs=";
   };
 
-  propagatedBuildInputs = [ dnspython greenlet pyopenssl six ]
-    ++ lib.optional (pythonOlder "3.5") monotonic;
+  propagatedBuildInputs = [
+    dnspython
+    greenlet
+    pyopenssl
+    six
+  ] ++ lib.optional (pythonOlder "3.5") [
+    monotonic
+  ];
 
-  checkInputs = [ nose ];
+  checkInputs = [
+    pytestCheckHook
+    nose
+  ];
 
   doCheck = !stdenv.isDarwin;
 
@@ -37,23 +50,48 @@ buildPythonPackage rec {
     export EVENTLET_IMPORT_VERSION_ONLY=0
   '';
 
-  checkPhase = ''
-    runHook preCheck
+  disabledTests = [
+    # Tests requires network access
+    "test_017_ssl_zeroreturnerror"
+    "test_getaddrinfo"
+    "test_hosts_no_network"
+    "test_leakage_from_tracebacks"
+    "test_patcher_existing_locks_locked"
+  ];
 
-    # test_fork-after_monkey_patch fails on aarch64 on hydra only
-    #   AssertionError: Expected single line "pass" in stdout
-    nosetests --exclude test_getaddrinfo --exclude test_hosts_no_network --exclude test_fork_after_monkey_patch
-
-    runHook postCheck
-  '';
+  disabledTestPaths = [
+    # Tests are out-dated
+    "tests/stdlib/test_asynchat.py"
+    "tests/stdlib/test_asyncore.py"
+    "tests/stdlib/test_ftplib.py"
+    "tests/stdlib/test_httplib.py"
+    "tests/stdlib/test_httpservers.py"
+    "tests/stdlib/test_os.py"
+    "tests/stdlib/test_queue.py"
+    "tests/stdlib/test_select.py"
+    "tests/stdlib/test_SimpleHTTPServer.py"
+    "tests/stdlib/test_socket_ssl.py"
+    "tests/stdlib/test_socket.py"
+    "tests/stdlib/test_socketserver.py"
+    "tests/stdlib/test_ssl.py"
+    "tests/stdlib/test_subprocess.py"
+    "tests/stdlib/test_thread__boundedsem.py"
+    "tests/stdlib/test_thread.py"
+    "tests/stdlib/test_threading_local.py"
+    "tests/stdlib/test_threading.py"
+    "tests/stdlib/test_timeout.py"
+    "tests/stdlib/test_urllib.py"
+    "tests/stdlib/test_urllib2_localnet.py"
+    "tests/stdlib/test_urllib2.py"
+  ];
 
   # unfortunately, it needs /etc/protocol to be present to not fail
   # pythonImportsCheck = [ "eventlet" ];
 
   meta = with lib; {
-    homepage = "https://github.com/eventlet/eventlet/";
     description = "A concurrent networking library for Python";
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    homepage = "https://github.com/eventlet/eventlet/";
     license = licenses.mit;
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

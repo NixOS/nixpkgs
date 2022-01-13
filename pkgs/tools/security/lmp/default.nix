@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "lmp";
-  version = "1.1";
+  version = "2.0";
 
   src = fetchFromGitHub {
     owner = "0xInfection";
     repo = "LogMePwn";
     rev = "v${version}";
-    sha256 = "sha256-3kxMtkHkqo5Gwk864Bb8MqRtuC8HP38Xl22ktiTgr5k=";
+    sha256 = "sha256-VL/Hp7YaXNcV9JPb3kgRHcdhJJ5p3KHUf3hHbT3gKVk=";
   };
 
-  vendorSha256 = "sha256-X7Djcp4reOXL6SX4jiSLicolENu7Uo5webSePYrPKug=";
+  vendorSha256 = "sha256-K3jD+r/JFQH5QeLHatCzTdgiABbmKOd/jR3Di10w6mo=";
 
   meta = with lib; {
     description = "Scanning and validation toolkit for the Log4J vulnerability";

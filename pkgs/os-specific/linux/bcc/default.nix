@@ -2,6 +2,7 @@
 , makeWrapper, cmake, llvmPackages
 , flex, bison, elfutils, python, luajit, netperf, iperf, libelf
 , bash, libbpf, nixosTests
+, audit
 }:
 
 python.pkgs.buildPythonApplication rec {
@@ -41,9 +42,16 @@ python.pkgs.buildPythonApplication rec {
     "-DCMAKE_USE_LIBBPF_PACKAGE=ON"
   ];
 
+  # to replace this executable path:
+  # https://github.com/iovisor/bcc/blob/master/src/python/bcc/syscall.py#L384
+  ausyscall = "${audit}/bin/ausyscall";
+
   postPatch = ''
     substituteAll ${./libbcc-path.patch} ./libbcc-path.patch
     patch -p1 < libbcc-path.patch
+
+    substituteAll ${./absolute-ausyscall.patch} ./absolute-ausyscall.patch
+    patch -p1 < absolute-ausyscall.patch
   '';
 
   postInstall = ''

@@ -37,6 +37,10 @@ buildPythonPackage rec {
     "fallback_when_no_hook_claims_it"
   ];
 
+  pytestFlagsArray = [
+    "-W" "ignore::DeprecationWarning"
+  ];
+
   propagatedBuildInputs = [
     attrs
     sortedcontainers

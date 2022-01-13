@@ -35,8 +35,8 @@ stdenv.mkDerivation {
     license = lib.licenses.asl20;
     maintainers = [lib.maintainers.raskin];
     platforms = lib.platforms.linux;
-    homepage = "http://jena.apache.org";
-    downloadPage = "http://archive.apache.org/dist/jena/binaries/";
+    homepage = "https://jena.apache.org";
+    downloadPage = "https://archive.apache.org/dist/jena/binaries/";
     downloadURLRegexp = "apache-jena-fuseki-.*[.]tar[.]gz\$";
   };
 }

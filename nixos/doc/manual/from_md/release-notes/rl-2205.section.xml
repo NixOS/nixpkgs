@@ -14,10 +14,28 @@
   </itemizedlist>
   <section xml:id="sec-release-22.05-highlights">
     <title>Highlights</title>
-    <itemizedlist spacing="compact">
+    <itemizedlist>
+      <listitem>
+        <para>
+          <literal>security.acme.defaults</literal> has been added to
+          simplify configuring settings for many certificates at once.
+          This also opens up the the option to use DNS-01 validation
+          when using <literal>enableACME</literal> on web server virtual
+          hosts (e.g.
+          <literal>services.nginx.virtualHosts.*.enableACME</literal>).
+        </para>
+      </listitem>
       <listitem>
         <para>
           PHP 8.1 is now available
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Mattermost has been updated to version 6.2. Migrations may
+          take a while, see the
+          <link xlink:href="https://docs.mattermost.com/install/self-managed-changelog.html#release-v6.2-feature-release">upgrade
+          notes</link>.
         </para>
       </listitem>
     </itemizedlist>
@@ -35,10 +53,41 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://docs.docker.com/engine/security/rootless/">rootless
+          Docker</link>, a <literal>systemd --user</literal> Docker
+          service which runs without root permissions. Available as
+          <link xlink:href="options.html#opt-virtualisation.docker.rootless.enable">virtualisation.docker.rootless.enable</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://conduit.rs/">matrix-conduit</link>,
+          a simple, fast and reliable chat server powered by matrix.
+          Available as
+          <link xlink:href="option.html#opt-services.matrix-conduit.enable">services.matrix-conduit</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://www.elastic.co/guide/en/beats/filebeat/current/filebeat-overview.html">filebeat</link>,
           a lightweight shipper for forwarding and centralizing log
           data. Available as
           <link linkend="opt-services.filebeat.enable">services.filebeat</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://frrouting.org/">FRRouting</link>, a
+          popular suite of Internet routing protocol daemons (BGP, BFD,
+          OSPF, IS-IS, VVRP and others). Available as
+          <link linkend="opt-services.ffr.babel.enable">services.frr</link>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/hifi/heisenbridge">heisenbridge</link>,
+          a bouncer-style Matrix IRC bridge. Available as
+          <link xlink:href="options.html#opt-services.heisenbridge.enable">services.heisenbridge</link>.
         </para>
       </listitem>
       <listitem>
@@ -54,6 +103,59 @@
           web application for managing and creating invoices. Available
           at
           <link xlink:href="options.html#opt-services.invoiceplane.enable">services.invoiceplane</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://maddy.email">maddy</link>, a
+          composable all-in-one mail server. Available as
+          <link xlink:href="options.html#opt-services.maddy.enable">services.maddy</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/mgumz/mtr-exporter">mtr-exporter</link>,
+          a Prometheus exporter for mtr metrics. Available as
+          <link xlink:href="options.html#opt-services.mtr-exporter.enable">services.mtr-exporter</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://tetrd.app">tetrd</link>, share your
+          internet connection from your device to your PC and vice versa
+          through a USB cable. Available at
+          <link linkend="opt-services.tetrd.enable">services.tetrd</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/JustArchiNET/ArchiSteamFarm">ArchiSteamFarm</link>,
+          a C# application with primary purpose of idling Steam cards
+          from multiple accounts simultaneously. Available as
+          <link xlink:href="options.html#opt-services.archisteamfarm.enable">services.archisteamfarm</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://goteleport.com">teleport</link>,
+          allows engineers and security professionals to unify access
+          for SSH servers, Kubernetes clusters, web applications, and
+          databases across all environments. Available at
+          <link linkend="opt-services.teleport.enable">services.teleport</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://loic-sharma.github.io/BaGet/">BaGet</link>,
+          a lightweight NuGet and symbol server. Available at
+          <link linkend="opt-services.baget.enable">services.baget</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/ThomasLeister/prosody-filer">prosody-filer</link>,
+          a server for handling XMPP HTTP Upload requests. Available at
+          <link linkend="opt-services.prosody-filer.enable">services.prosody-filer</link>.
         </para>
       </listitem>
     </itemizedlist>
@@ -95,6 +197,19 @@
       </listitem>
       <listitem>
         <para>
+          <literal>services.kubernetes.addons.dashboard</literal> was
+          removed due to it being an outdated version.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The MoinMoin wiki engine
+          (<literal>services.moinmoin</literal>) has been removed,
+          because Python 2 is being retired from nixpkgs.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>wafHook</literal> hook now honors
           <literal>NIX_BUILD_CORES</literal> when
           <literal>enableParallelBuilding</literal> is not set
@@ -128,6 +243,80 @@
           <literal>/etc/docker/daemon.json</literal>, you need to
           incorporate the changes into the new option
           <literal>virtualisation.docker.daemon.settings</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          opensmtpd-extras is no longer build with python2 scripting
+          support due to python2 deprecation in nixpkgs
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>autorestic</literal> package has been upgraded
+          from 1.3.0 to 1.5.0 which introduces breaking changes in
+          config file, check
+          <link xlink:href="https://autorestic.vercel.app/migration/1.4_1.5">their
+          migration guide</link> for more details.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          For <literal>pkgs.python3.pkgs.ipython</literal>, its direct
+          dependency
+          <literal>pkgs.python3.pkgs.matplotlib-inline</literal> (which
+          is really an adapter to integrate matplotlib in ipython if it
+          is installed) does not depend on
+          <literal>pkgs.python3.pkgs.matplotlib</literal> anymore. This
+          is closer to a non-Nix install of ipython. This has the added
+          benefit to reduce the closure size of
+          <literal>ipython</literal> from ~400MB to ~160MB (including
+          ~100MB for python itself).
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>documentation.man</literal> has been refactored to
+          support choosing a man implementation other than GNU’s
+          <literal>man-db</literal>. For this,
+          <literal>documentation.man.manualPages</literal> has been
+          renamed to
+          <literal>documentation.man.man-db.manualPages</literal>. If
+          you want to use the new alternative man implementation
+          <literal>mandoc</literal>, add
+          <literal>documentation.man = { enable = true; man-db.enable = false; mandoc.enable = true; }</literal>
+          to your configuration.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Normal users (with <literal>isNormalUser = true</literal>)
+          which have non-empty <literal>subUidRanges</literal> or
+          <literal>subGidRanges</literal> set no longer have additional
+          implicit ranges allocated. To enable automatic allocation back
+          set <literal>autoSubUidGidRange = true</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>idris2</literal> now requires
+          <literal>--package</literal> when using packages
+          <literal>contrib</literal> and <literal>network</literal>,
+          while previously these idris2 packages were automatically
+          loaded.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>services.thelounge.private</literal> was removed in
+          favor of <literal>services.thelounge.public</literal>, to
+          follow with upstream changes.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>pkgs.docbookrx</literal> was removed since it’s
+          unmaintained
         </para>
       </listitem>
     </itemizedlist>
@@ -190,8 +379,22 @@
       </listitem>
       <listitem>
         <para>
+          <literal>security.acme</literal> certificates will now
+          correctly check for CA revokation before reaching their
+          minimum age.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Removing domains from
+          <literal>security.acme.certs._name_.extraDomainNames</literal>
+          will now correctly remove those domains during rebuild/renew.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The option
-          <link linkend="opt-services.ssh.enableAskPassword">services.ssh.enableAskPassword</link>
+          <link linkend="opt-programs.ssh.enableAskPassword">programs.ssh.enableAskPassword</link>
           was added, decoupling the setting of
           <literal>SSH_ASKPASS</literal> from
           <literal>services.xserver.enable</literal>. This allows easy
@@ -204,6 +407,46 @@
           a
           <link xlink:href="https://github.com/NixOS/rfcs/blob/master/rfcs/0042-config-option.md">settings-style</link>
           configuration.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The option <literal>services.duplicati.dataDir</literal> has
+          been added to allow changing the location of duplicati’s
+          files.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>fetchFromSourcehut</literal> now allows fetching
+          repositories recursively using <literal>fetchgit</literal> or
+          <literal>fetchhg</literal> if the argument
+          <literal>fetchSubmodules</literal> is set to
+          <literal>true</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The option <literal>services.thelounge.plugins</literal> has
+          been added to allow installing plugins for The Lounge. Plugins
+          can be found in
+          <literal>pkgs.theLoungePlugins.plugins</literal> and
+          <literal>pkgs.theLoungePlugins.themes</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>firmwareLinuxNonfree</literal> package has been
+          renamed to <literal>linux-firmware</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          A new module was added for the
+          <link xlink:href="https://starship.rs/">Starship</link> shell
+          prompt, providing the options
+          <literal>programs.starship.enable</literal> and
+          <literal>programs.starship.settings</literal>.
         </para>
       </listitem>
     </itemizedlist>

@@ -1,68 +1,76 @@
-{ alsa-lib
-, curl
-, fetchFromGitHub
-, freeglut
-, freetype
-, libGL
-, libXcursor
-, libXext
-, libXinerama
-, libXrandr
-, libjack2
-, pkg-config
-, python3
-, stdenv
-, lib
-}:
+{ alsa-lib, at-spi2-core, cmake, curl, dbus, libepoxy, fetchFromGitHub, freeglut
+, freetype, gcc-unwrapped, gtk3, lib, libGL, libXcursor, libXdmcp, libXext
+, libXinerama, libXrandr, libXtst, libdatrie, libjack2, libpsl, libselinux
+, libsepol, libsysprof-capture, libthai, libxkbcommon, lv2, pcre, pkg-config
+, python3, sqlite, stdenv }:
 
 stdenv.mkDerivation rec {
   pname = "CHOWTapeModel";
-  version = "unstable-2020-12-12";
+  version = "2.10.0";
 
   src = fetchFromGitHub {
     owner = "jatinchowdhury18";
     repo = "AnalogTapeModel";
-    rev = "a7cf10c3f790d306ce5743bb731e4bc2c1230d70";
-    sha256 = "09nq8x2dwabncbp039dqm1brzcz55zg9kpxd4p5348xlaz5m4661";
+    rev = "v${version}";
+    sha256 = "sha256-iuT7OBRBtMkjcTHayCcne1mNqkcxzKnEYl62n65V7Z4=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config cmake ];
 
   buildInputs = [
     alsa-lib
+    at-spi2-core
     curl
+    dbus
+    libepoxy
     freeglut
     freetype
+    gtk3
     libGL
     libXcursor
+    libXdmcp
     libXext
     libXinerama
     libXrandr
+    libXtst
+    libdatrie
     libjack2
+    libpsl
+    libselinux
+    libsepol
+    libsysprof-capture
+    libthai
+    libxkbcommon
+    lv2
+    pcre
     python3
+    sqlite
+    gcc-unwrapped
   ];
 
-  buildPhase = ''
-    cd Plugin/
-    ./build_linux.sh
-  '';
+  cmakeFlags = [
+    "-DCMAKE_AR=${gcc-unwrapped}/bin/gcc-ar"
+    "-DCMAKE_RANLIB=${gcc-unwrapped}/bin/gcc-ranlib"
+    "-DCMAKE_NM=${gcc-unwrapped}/bin/gcc-nm"
+  ];
+
+  postPatch = "cd Plugin";
 
   installPhase = ''
     mkdir -p $out/lib/lv2 $out/lib/vst3 $out/bin $out/share/doc/CHOWTapeModel/
-    cd Builds/LinuxMakefile/build/
-    cp CHOWTapeModel.a  $out/lib
-    cp -r CHOWTapeModel.lv2 $out/lib/lv2
-    cp -r CHOWTapeModel.vst3 $out/lib/vst3
-    cp CHOWTapeModel  $out/bin
+    cd CHOWTapeModel_artefacts/Release
+    cp libCHOWTapeModel_SharedCode.a  $out/lib
+    cp -r LV2/CHOWTapeModel.lv2 $out/lib/lv2
+    cp -r VST3/CHOWTapeModel.vst3 $out/lib/vst3
+    cp Standalone/CHOWTapeModel  $out/bin
     cp ../../../../Manual/ChowTapeManual.pdf $out/share/doc/CHOWTapeModel/
   '';
 
   meta = with lib; {
     homepage = "https://github.com/jatinchowdhury18/AnalogTapeModel";
-    description = "Physical modelling signal processing for analog tape recording. LV2, VST3 and standalone";
+    description =
+      "Physical modelling signal processing for analog tape recording. LV2, VST3 and standalone";
     license = with licenses; [ gpl3Only ];
     maintainers = with maintainers; [ magnetophon ];
     platforms = platforms.linux;

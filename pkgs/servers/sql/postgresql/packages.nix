@@ -26,11 +26,7 @@ self: super: {
 
     plr = super.callPackage ./ext/plr.nix { };
 
-    plv8 = super.callPackage ./ext/plv8.nix {
-        v8 = super.callPackage ../../../development/libraries/v8/plv8_6_x.nix {
-            python = self.python2;
-        };
-    };
+    plv8 = super.callPackage ./ext/plv8.nix { };
 
     pgjwt = super.callPackage ./ext/pgjwt.nix { };
 

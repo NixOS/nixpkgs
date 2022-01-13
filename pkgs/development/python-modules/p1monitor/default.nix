@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "p1monitor";
-  version = "1.0.0";
+  version = "1.1.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "klaasnicolaas";
     repo = "python-p1monitor";
     rev = "v${version}";
-    sha256 = "1xfr097hmjppp6cfdvfjypxmr1sb9dasq1s3np2vd5d93w0p5123";
+    sha256 = "1ciaclgq4aknldjqlqa08jcab28sbqrjxy5nqqwlnb2wlprg5ijz";
   };
 
   nativeBuildInputs = [

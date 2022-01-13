@@ -96,4 +96,6 @@ in
 
     services.kubernetes.scheduler.kubeconfig.server = mkDefault top.apiserverAddress;
   };
+
+  meta.buildDocsInSandbox = false;
 }

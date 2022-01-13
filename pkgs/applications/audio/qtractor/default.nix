@@ -30,11 +30,11 @@
 
 mkDerivation rec {
   pname = "qtractor";
-  version = "0.9.23";
+  version = "0.9.24";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-GgDc7WM4nVGlq+8EcwxJ7MnSPYwAej51IMrN0glCTbQ=";
+    sha256 = "sha256-YTT7ko5HjKrZ8DKU3L06EI7bZeBtvPl21pqUf6EaeS4=";
   };
 
   nativeBuildInputs = [

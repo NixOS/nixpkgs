@@ -16,6 +16,22 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "sha256-rR5pUB3A0WNQxq7ZJ6ykua7hMlzs49aMmVbBUOkOVfA=";
   };
 
+  propagatedBuildInputs = with python3Packages; [
+    backports_abc
+    flask-babel
+    flask_login
+    flask_principal
+    flask_wtf
+    iso-639
+    lxml
+    pypdf3
+    requests
+    sqlalchemy
+    tornado
+    unidecode
+    Wand
+  ];
+
   patches = [
     # default-logger.patch switches default logger to /dev/stdout. Otherwise calibre-web tries to open a file relative
     # to its location, which can't be done as the store is read-only. Log file location can later be configured using UI
@@ -36,39 +52,24 @@ python3.pkgs.buildPythonApplication rec {
     mv cps src/calibreweb
 
     substituteInPlace setup.cfg \
-      --replace "requests>=2.11.1,<2.25.0" "requests" \
       --replace "cps = calibreweb:main" "calibre-web = calibreweb:main" \
+      --replace "flask-wtf>=0.14.2,<0.16.0" "flask-wtf>=0.14.2" \
+      --replace "lxml>=3.8.0,<4.7.0" "lxml>=3.8.0" \
       --replace "PyPDF3>=1.0.0,<1.0.4" "PyPDF3>=1.0.0" \
-      --replace "unidecode>=0.04.19,<1.3.0" "unidecode>=0.04.19" \
-      --replace "flask-wtf>=0.14.2,<0.16.0" "flask-wtf>=0.14.2"
+      --replace "requests>=2.11.1,<2.25.0" "requests" \
+      --replace "unidecode>=0.04.19,<1.3.0" "unidecode>=0.04.19"
   '';
 
   # Upstream repo doesn't provide any tests.
   doCheck = false;
 
-  propagatedBuildInputs = with python3Packages; [
-    backports_abc
-    flask-babel
-    flask_login
-    flask_principal
-    flask_wtf
-    iso-639
-    lxml
-    pypdf3
-    requests
-    sqlalchemy
-    tornado
-    unidecode
-    Wand
-  ];
-
   passthru.tests.calibre-web = nixosTests.calibre-web;
 
   meta = with lib; {
     description = "Web app for browsing, reading and downloading eBooks stored in a Calibre database";
-    maintainers = with maintainers; [ pborzenkov ];
     homepage = "https://github.com/janeczku/calibre-web";
     license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ pborzenkov ];
     platforms = platforms.all;
   };
 }

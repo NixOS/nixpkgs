@@ -29,6 +29,22 @@ let
     inherit (efi) efiSysMountPoint canTouchEfiVariables;
 
     memtest86 = if cfg.memtest86.enable then pkgs.memtest86-efi else "";
+
+    netbootxyz = if cfg.netbootxyz.enable then pkgs.netbootxyz-efi else "";
+
+    copyExtraFiles = pkgs.writeShellScript "copy-extra-files" ''
+      empty_file=$(mktemp)
+
+      ${concatStrings (mapAttrsToList (n: v: ''
+        ${pkgs.coreutils}/bin/install -Dp "${v}" "${efi.efiSysMountPoint}/"${escapeShellArg n}
+        ${pkgs.coreutils}/bin/install -D $empty_file "${efi.efiSysMountPoint}/efi/nixos/.extra-files/"${escapeShellArg n}
+      '') cfg.extraFiles)}
+
+      ${concatStrings (mapAttrsToList (n: v: ''
+        ${pkgs.coreutils}/bin/install -Dp "${pkgs.writeText n v}" "${efi.efiSysMountPoint}/loader/entries/"${escapeShellArg n}
+        ${pkgs.coreutils}/bin/install -D $empty_file "${efi.efiSysMountPoint}/efi/nixos/.extra-files/loader/entries/"${escapeShellArg n}
+      '') cfg.extraEntries)}
+    '';
   };
 
   checkedSystemdBootBuilder = pkgs.runCommand "systemd-boot" {
@@ -125,6 +141,74 @@ in {
           <literal>true</literal>.
         '';
       };
+
+      entryFilename = mkOption {
+        default = "memtest86.conf";
+        type = types.str;
+        description = ''
+          <literal>systemd-boot</literal> orders the menu entries by the config file names,
+          so if you want something to appear after all the NixOS entries,
+          it should start with <filename>o</filename> or onwards.
+        '';
+      };
+    };
+
+    netbootxyz = {
+      enable = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Make <literal>netboot.xyz</literal> available from the
+          <literal>systemd-boot</literal> menu. <literal>netboot.xyz</literal>
+          is a menu system that allows you to boot OS installers and
+          utilities over the network.
+        '';
+      };
+
+      entryFilename = mkOption {
+        default = "o_netbootxyz.conf";
+        type = types.str;
+        description = ''
+          <literal>systemd-boot</literal> orders the menu entries by the config file names,
+          so if you want something to appear after all the NixOS entries,
+          it should start with <filename>o</filename> or onwards.
+        '';
+      };
+    };
+
+    extraEntries = mkOption {
+      type = types.attrsOf types.lines;
+      default = {};
+      example = literalExpression ''
+        { "memtest86.conf" = '''
+          title MemTest86
+          efi /efi/memtest86/memtest86.efi
+        '''; }
+      '';
+      description = ''
+        Any additional entries you want added to the <literal>systemd-boot</literal> menu.
+        These entries will be copied to <filename>/boot/loader/entries</filename>.
+        Each attribute name denotes the destination file name,
+        and the corresponding attribute value is the contents of the entry.
+
+        <literal>systemd-boot</literal> orders the menu entries by the config file names,
+        so if you want something to appear after all the NixOS entries,
+        it should start with <filename>o</filename> or onwards.
+      '';
+    };
+
+    extraFiles = mkOption {
+      type = types.attrsOf types.path;
+      default = {};
+      example = literalExpression ''
+        { "efi/memtest86/memtest86.efi" = "''${pkgs.memtest86-efi}/BOOTX64.efi"; }
+      '';
+      description = ''
+        A set of files to be copied to <filename>/boot</filename>.
+        Each attribute name denotes the destination file name in
+        <filename>/boot</filename>, while the corresponding
+        attribute value specifies the source file.
+      '';
     };
 
     graceful = mkOption {
@@ -148,14 +232,63 @@ in {
     assertions = [
       {
         assertion = (config.boot.kernelPackages.kernel.features or { efiBootStub = true; }) ? efiBootStub;
-
         message = "This kernel does not support the EFI boot stub";
       }
-    ];
+    ] ++ concatMap (filename: [
+      {
+        assertion = !(hasInfix "/" filename);
+        message = "boot.loader.systemd-boot.extraEntries.${lib.strings.escapeNixIdentifier filename} is invalid: entries within folders are not supported";
+      }
+      {
+        assertion = hasSuffix ".conf" filename;
+        message = "boot.loader.systemd-boot.extraEntries.${lib.strings.escapeNixIdentifier filename} is invalid: entries must have a .conf file extension";
+      }
+    ]) (builtins.attrNames cfg.extraEntries)
+      ++ concatMap (filename: [
+        {
+          assertion = !(hasPrefix "/" filename);
+          message = "boot.loader.systemd-boot.extraFiles.${lib.strings.escapeNixIdentifier filename} is invalid: paths must not begin with a slash";
+        }
+        {
+          assertion = !(hasInfix ".." filename);
+          message = "boot.loader.systemd-boot.extraFiles.${lib.strings.escapeNixIdentifier filename} is invalid: paths must not reference the parent directory";
+        }
+        {
+          assertion = !(hasInfix "nixos/.extra-files" (toLower filename));
+          message = "boot.loader.systemd-boot.extraFiles.${lib.strings.escapeNixIdentifier filename} is invalid: files cannot be placed in the nixos/.extra-files directory";
+        }
+      ]) (builtins.attrNames cfg.extraFiles);
 
     boot.loader.grub.enable = mkDefault false;
 
     boot.loader.supportsInitrdSecrets = true;
+
+    boot.loader.systemd-boot.extraFiles = mkMerge [
+      # TODO: This is hard-coded to use the 64-bit EFI app, but it could probably
+      # be updated to use the 32-bit EFI app on 32-bit systems.  The 32-bit EFI
+      # app filename is BOOTIA32.efi.
+      (mkIf cfg.memtest86.enable {
+        "efi/memtest86/BOOTX64.efi" = "${pkgs.memtest86-efi}/BOOTX64.efi";
+      })
+      (mkIf cfg.netbootxyz.enable {
+        "efi/netbootxyz/netboot.xyz.efi" = "${pkgs.netbootxyz-efi}";
+      })
+    ];
+
+    boot.loader.systemd-boot.extraEntries = mkMerge [
+      (mkIf cfg.memtest86.enable {
+        "${cfg.memtest86.entryFilename}" = ''
+          title  MemTest86
+          efi    /efi/memtest86/BOOTX64.efi
+        '';
+      })
+      (mkIf cfg.netbootxyz.enable {
+        "${cfg.netbootxyz.entryFilename}" = ''
+          title  netboot.xyz
+          efi    /efi/netbootxyz/netboot.xyz.efi
+        '';
+      })
+    ];
 
     system = {
       build.installBootLoader = checkedSystemdBootBuilder;
