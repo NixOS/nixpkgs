@@ -7,6 +7,8 @@
 # Make additional configurations on demand:
 # wine.override { wineBuild = "wine32"; wineRelease = "staging"; };
 { lib, stdenv, callPackage,
+  pkgs,
+  pkgsi686Linux,
   wineRelease ? "stable",
   wineBuild ? if stdenv.hostPlatform.system == "x86_64-linux" then "wineWow" else "wine32",
   pngSupport ? false,
@@ -70,7 +72,9 @@ else
   (if wineRelease == "wayland" then
     callPackage ./wayland.nix {
       wineWayland = wine-build wineBuild "wayland";
-      inherit vulkanSupport vkd3dSupport;
+      inherit pulseaudioSupport vulkanSupport vkd3dSupport;
+
+      pkgArches = lib.optionals (wineBuild == "wine32" || wineBuild == "wineWow") [ pkgsi686Linux ] ++ lib.optionals (wineBuild == "wine64" || wineBuild == "wineWow") [ pkgs ];
     }
     else
       wine-build wineBuild wineRelease
