@@ -19,6 +19,11 @@ buildPythonPackage rec {
   checkInputs = [ pytestCheckHook pytest-asyncio ];
   pythonImportsCheck = [ "sanic_routing" ];
 
+  disabledTests = [
+    # Deprecation errors
+    "test_casting"
+  ];
+
   meta = with lib; {
     description = "Core routing component for the Sanic web framework";
     homepage = "https://github.com/sanic-org/sanic-routing";
