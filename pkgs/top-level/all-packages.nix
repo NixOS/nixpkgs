@@ -20864,6 +20864,8 @@ with pkgs;
   dnsutils = bind.dnsutils;
   dig = bind.dnsutils;
 
+  dog-dns = callPackage ../tools/networking/dog-dns { };
+
   inherit (callPackages ../servers/bird { })
     bird bird6 bird2;
 
