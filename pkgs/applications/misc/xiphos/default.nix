@@ -1,5 +1,5 @@
-{ lib
-, stdenv
+{ stdenv
+, lib
 , fetchFromGitHub
 , fetchpatch
 , appstream-glib
@@ -60,14 +60,26 @@ stdenv.mkDerivation rec {
     hash = "sha256-H5Q+azE2t3fgu77C9DxrkeUCJ7iJz3Cc91Ln4dqLvD8=";
   };
 
+  patches = [
+    # GLIB_VERSION_MIN_REQUIRED is not defined.
+    # https://github.com/crosswire/xiphos/issues/1083#issuecomment-820304874
+    (fetchpatch {
+      name ="xiphos-glibc.patch";
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/xiphos-glibc.patch?h=xiphos";
+      sha256 = "sha256-0WadztJKXW2adqsDP8iSAYVShbdqHoDvP+aVJC0cQB0=";
+    })
+  ];
+
+  patchFlags = [ "-p0" ];
+
   nativeBuildInputs = [
-    appstream-glib
+    appstream-glib # for appstream-util
     cmake
-    desktop-file-utils
+    desktop-file-utils # for desktop-file-validate
     itstool
     pkg-config
     wrapGAppsHook
-    yelp-tools
+    yelp-tools # for yelp-build
   ];
 
   buildInputs = [
@@ -107,12 +119,10 @@ stdenv.mkDerivation rec {
     sqlite
     sword
     webkitgtk
+    xorg.libXdmcp
+    xorg.libXtst
     zip
-  ]
-  ++ (with xorg; [
-    libXdmcp
-    libXtst
-  ]);
+  ];
 
   cmakeFlags = [
     "-DDBUS=OFF"
@@ -126,18 +136,6 @@ stdenv.mkDerivation rec {
     export CLUCENE_HOME=${clucene_core};
     export SWORD_HOME=${sword};
   '';
-
-  patchFlags = [ "-p0" ];
-
-  patches = [
-    # GLIB_VERSION_MIN_REQUIRED is not defined.
-    # https://github.com/crosswire/xiphos/issues/1083#issuecomment-820304874
-    (fetchpatch {
-      name ="xiphos-glibc.patch";
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/xiphos-glibc.patch?h=xiphos";
-      sha256 = "sha256-0WadztJKXW2adqsDP8iSAYVShbdqHoDvP+aVJC0cQB0=";
-    })
-  ];
 
   meta = with lib; {
     description = "A GTK Bible study tool";
