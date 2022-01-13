@@ -2,6 +2,7 @@
 , billiard
 , boto3
 , buildPythonPackage
+, case
 , click
 , click-didyoumean
 , click-plugins
@@ -45,6 +46,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     boto3
+    case
     dnspython
     moto
     pymongo
