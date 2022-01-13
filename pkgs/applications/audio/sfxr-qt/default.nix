@@ -2,6 +2,7 @@
 , mkDerivation
 , fetchFromGitHub
 , cmake
+, extra-cmake-modules
 , qtbase
 , qtquickcontrols2
 , SDL
@@ -10,18 +11,22 @@
 
 mkDerivation rec {
   pname = "sfxr-qt";
-  version = "1.3.0";
+  version = "1.4.0";
+
   src = fetchFromGitHub {
     owner = "agateau";
     repo = "sfxr-qt";
     rev = version;
-    sha256 = "15yjgjl1c5k816mnpc09104zq0ack2a3mjsxmhcik7cmjkfiipr5";
+    sha256 = "sha256-Mn+wcwu70BwsTLFlc12sOOe6U1AJ8hR7bCIPlPnCooE=";
     fetchSubmodules = true;
   };
+
   nativeBuildInputs = [
     cmake
+    extra-cmake-modules
     (python3.withPackages (pp: with pp; [ pyyaml jinja2 setuptools ]))
   ];
+
   buildInputs = [
     qtbase
     qtquickcontrols2
@@ -36,4 +41,3 @@ mkDerivation rec {
     platforms = platforms.linux;
   };
 }
-
