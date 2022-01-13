@@ -6355,7 +6355,9 @@ with pkgs;
 
   heimdall-gui = heimdall.override { enableGUI = true; };
 
-  headscale = callPackage ../servers/headscale { };
+  headscale = callPackage ../servers/headscale {
+    buildGoModule = buildGo117Module;
+  };
 
   heisenbridge = callPackage ../servers/heisenbridge { };
 
@@ -7970,6 +7972,8 @@ with pkgs;
   neopg = callPackage ../tools/security/neopg { };
 
   netboot = callPackage ../tools/networking/netboot {};
+
+  netbootxyz-efi = callPackage ../tools/misc/netbootxyz-efi { };
 
   netcat = libressl.nc;
 

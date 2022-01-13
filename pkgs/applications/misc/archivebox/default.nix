@@ -4,7 +4,7 @@
 , requests
 , mypy-extensions
 , django_3
-, django_extensions
+, django-extensions
 , dateparser
 , youtube-dl
 , python-crontab
@@ -37,7 +37,7 @@ buildPythonApplication rec {
     requests
     mypy-extensions
     django_3'
-    django_extensions
+    django-extensions
     dateparser
     youtube-dl
     python-crontab
