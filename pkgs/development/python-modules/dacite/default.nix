@@ -2,12 +2,15 @@
 , fetchFromGitHub
 , buildPythonPackage
 , pythonOlder
+, pythonAtLeast
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "dacite";
   version = "1.6.0";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
@@ -21,7 +24,14 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "dacite" ];
+  disabledTests = lib.optionals (pythonAtLeast "3.10") [
+    # https://github.com/konradhalas/dacite/issues/167
+    "test_from_dict_with_union_and_wrong_data"
+  ];
+
+  pythonImportsCheck = [
+    "dacite"
+  ];
 
   meta = with lib; {
     description = "Python helper to create data classes from dictionaries";
