@@ -4,7 +4,7 @@ with lib;
 
 buildGoPackage rec {
   pname   = "nats-server";
-  version = "2.6.6";
+  version = "2.6.3";
 
   goPackagePath = "github.com/nats-io/${pname}";
 
