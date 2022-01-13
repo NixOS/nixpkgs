@@ -73,6 +73,12 @@ let
       overrides = lib.optionalAttrs (variant == "stable") {
 
         # upstream issue: missing file header
+        abridge-diff =
+          if super.abridge-diff.version == "0.1"
+          then markBroken super.abridge-diff
+          else super.abridge-diff;
+
+        # upstream issue: missing file header
         speech-tagger = markBroken super.speech-tagger;
 
         # upstream issue: missing file header
