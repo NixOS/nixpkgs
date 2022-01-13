@@ -130,6 +130,11 @@ let
         link = markBroken super.link;
 
         # upstream issue: missing file header
+        org-dp =
+          if super.org-dp.version == "1"
+          then markBroken super.org-dp
+          else super.org-dp;
+
 
         # upstream issue: missing file header
         elmine = markBroken super.elmine;
