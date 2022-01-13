@@ -109,6 +109,12 @@ let
         dictionary = markBroken super.dictionary;
 
         # upstream issue: missing file header
+        fold-dwim =
+          if super.fold-dwim.version == "1.2"
+          then markBroken super.fold-dwim
+          else super.fold-dwim;
+
+        # upstream issue: missing file header
         link = markBroken super.link;
 
         # upstream issue: missing file header
