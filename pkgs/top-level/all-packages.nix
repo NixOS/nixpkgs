@@ -29399,8 +29399,9 @@ with pkgs;
   };
 
   code-server = callPackage ../servers/code-server {
-    inherit (darwin.apple_sdk.frameworks) AppKit Cocoa Security;
+    inherit (darwin.apple_sdk.frameworks) AppKit Cocoa CoreServices Security;
     inherit (darwin) cctools;
+    inherit (nodePackages) node-gyp;
   };
 
   vue = callPackage ../applications/misc/vue { };
