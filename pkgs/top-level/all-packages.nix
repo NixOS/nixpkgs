@@ -26297,6 +26297,19 @@ with pkgs;
     wlroots = wlroots_0_14;
   };
 
+  wrapWaterfox = callPackage ../applications/networking/browsers/waterfox/wrapper.nix { };
+
+  waterfox-bin-unwrapped = callPackage ../applications/networking/browsers/waterfox-bin {
+    inherit (gnome) adwaita-icon-theme;
+    generated = import ../applications/networking/browsers/waterfox-bin/release_sources.nix;
+  };
+
+  waterfox-bin = wrapWaterfox waterfox-bin-unwrapped {
+    applicationName = "waterfox";
+    pname = "waterfox-bin";
+    desktopName = "Waterfox";
+  };
+
   workstyle = callPackage ../applications/window-managers/i3/workstyle.nix { };
 
   windowchef = callPackage ../applications/window-managers/windowchef { };

@@ -564,6 +564,11 @@
           </listitem>
         </itemizedlist>
       </listitem>
+      <listitem>
+        <para>
+          The <literal>waterfox-bin</literal> package has been added.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>

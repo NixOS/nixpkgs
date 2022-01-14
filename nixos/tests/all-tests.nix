@@ -514,6 +514,7 @@ in
   virtualbox = handleTestOn ["x86_64-linux"] ./virtualbox.nix {};
   vscodium = discoverTests (import ./vscodium.nix);
   wasabibackend = handleTest ./wasabibackend.nix {};
+  waterfox = handleText ./waterfox.nix {};
   wiki-js = handleTest ./wiki-js.nix {};
   wireguard = handleTest ./wireguard {};
   without-nix = handleTest ./without-nix.nix {};
