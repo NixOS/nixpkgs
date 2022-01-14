@@ -37,6 +37,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  postPatch = ''
+    # hbmqtt was replaced by amqtt
+    substituteInPlace tests/test_roomba_integration.py \
+      --replace "from hbmqtt.broker import Broker" "from amqtt.broker import Broker"
+  '';
+
   disabledTestPaths = [
     # Requires network access
     "tests/test_discovery.py"
