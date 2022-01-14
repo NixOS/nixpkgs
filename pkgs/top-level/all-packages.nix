@@ -31396,6 +31396,10 @@ with pkgs;
 
   sympow = callPackage ../development/libraries/science/math/sympow { };
 
+  trilinos = callPackage ../development/libraries/science/math/trilinos {};
+
+  trilinos-mpi = callPackage ../development/libraries/science/math/trilinos { withMPI = true; };
+
   ipopt = callPackage ../development/libraries/science/math/ipopt { };
 
   gmsh = callPackage ../applications/science/math/gmsh { };
