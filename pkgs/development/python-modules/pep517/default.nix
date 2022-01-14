@@ -2,11 +2,12 @@
 , buildPythonPackage
 , fetchPypi
 , flit-core
-, toml
+, tomli
 , pythonOlder
 , importlib-metadata
 , zipp
 , pytestCheckHook
+, setuptools
 , testpath
 , mock
 , pip
@@ -27,16 +28,22 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    toml
+    tomli
   ] ++ lib.optionals (pythonOlder "3.8") [
     importlib-metadata zipp
   ];
 
   checkInputs = [
     pytestCheckHook
+    setuptools
     testpath
     mock
     pip
+  ];
+
+  disabledTests = [
+    "test_setup_py"
+    "test_issue_104"
   ];
 
   preCheck = ''
