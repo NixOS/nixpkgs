@@ -1880,7 +1880,10 @@ self: super: {
       rev = "8311a999b8e8be3aa31f65f314def256aa2d5535";
       sha256 = "169jaqm4xs2almmvqsk567wayxs0g6kn0l5877c03hzr3d9ykrav";
     };
-  } self.haskell-ci;
+  } super.haskell-ci).overrideScope (self: super: {
+    attoparsec = self.attoparsec_0_14_4;
+    Cabal = self.Cabal_3_6_2_0;
+  });
 
   Frames-streamly = super.Frames-streamly.override {
     relude = super.relude_1_0_0_1;
