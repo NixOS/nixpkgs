@@ -45,6 +45,7 @@ mapAliases ({
   discogs_client = discogs-client; # added 2021-07-02
   djangorestframework-jwt = drf-jwt; # added 2021-07-20
   django_environ = django-environ; # added 2021-12-25
+  django_extensions = django-extensions; # added 2022-01-09
   django_redis = django-redis; # added 2021-10-11
   django_taggit = django-taggit; # added 2021-10-11
   dns = dnspython; # added 2017-12-10

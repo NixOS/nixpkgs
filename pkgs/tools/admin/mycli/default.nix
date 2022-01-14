@@ -7,11 +7,11 @@ with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "mycli";
-  version = "1.24.1";
+  version = "1.24.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-dI2Yvj2llI9TlMFbs35ijYeFuGqoTovZyRh+ILhNMmY=";
+    sha256 = "sha256-XrPho+bPjyzj2d6W4KR4P09T1/FXkrQvhGPotgooIB4=";
   };
 
   propagatedBuildInputs = [
@@ -29,7 +29,7 @@ buildPythonApplication rec {
     sqlparse
   ];
 
-  checkInputs = [ pytest mock glibcLocales ];
+  checkInputs = [ pytest glibcLocales ];
 
   checkPhase = ''
     export HOME=.

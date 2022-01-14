@@ -1,21 +1,21 @@
-{ stdenv, lib, fetchFromGitHub
-, python3Packages
+{ lib
+, stdenv
+, fetchFromGitHub
+, gexiv2
+, gobject-introspection
+, gtk3
+, hicolor-icon-theme
+, intltool
+, libnotify
+, librsvg
+, python3
+, runtimeShell
+, wrapGAppsHook
 , fehSupport ? false, feh
 , imagemagickSupport ? true, imagemagick
-, intltool
-, gtk3
-, gexiv2
-, libnotify
-, gobject-introspection
-, hicolor-icon-theme
-, librsvg
-, wrapGAppsHook
-, makeWrapper
 }:
 
-with python3Packages;
-
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "variety";
   version = "0.8.5";
 
@@ -26,9 +26,34 @@ buildPythonApplication rec {
     sha256 = "sha256-6dLz4KXavXwnk5GizBH46d2EHMHPjRo0WnnUuVMtI1M=";
   };
 
-  nativeBuildInputs = [ makeWrapper intltool wrapGAppsHook ];
+  nativeBuildInputs = [
+    intltool
+    wrapGAppsHook
+  ];
 
-  buildInputs = [ distutils_extra ];
+  propagatedBuildInputs = [
+   gexiv2
+   gobject-introspection
+   gtk3
+   hicolor-icon-theme
+   libnotify
+   librsvg
+  ]
+  ++ (with python3.pkgs; [
+    beautifulsoup4
+    configobj
+    dbus-python
+    distutils_extra
+    httplib2
+    lxml
+    pillow
+    pycairo
+    pygobject3
+    requests
+    setuptools
+  ])
+  ++ lib.optional fehSupport feh
+  ++ lib.optional imagemagickSupport imagemagick;
 
   doCheck = false;
 
@@ -38,32 +63,13 @@ buildPythonApplication rec {
 
   prePatch = ''
     substituteInPlace variety_lib/varietyconfig.py \
-      --replace "__variety_data_directory__ = \"../data\"" "__variety_data_directory__ = \"$out/share/variety\""
+      --replace "__variety_data_directory__ = \"../data\"" \
+                "__variety_data_directory__ = \"$out/share/variety\""
     substituteInPlace data/scripts/set_wallpaper \
-      --replace /bin/bash ${stdenv.shell}
+      --replace /bin/bash ${runtimeShell}
     substituteInPlace data/scripts/get_wallpaper \
-      --replace /bin/bash ${stdenv.shell}
+      --replace /bin/bash ${runtimeShell}
   '';
-
-  propagatedBuildInputs = [
-    beautifulsoup4
-    configobj
-    dbus-python
-    gexiv2
-    gobject-introspection
-    gtk3
-    hicolor-icon-theme
-    httplib2
-    libnotify
-    librsvg
-    lxml
-    pillow
-    pycairo
-    pygobject3
-    requests
-    setuptools
-  ] ++ lib.optional fehSupport feh
-    ++ lib.optional imagemagickSupport imagemagick;
 
   meta = with lib; {
     homepage = "https://github.com/varietywalls/variety";
@@ -80,8 +86,7 @@ buildPythonApplication rec {
       Variety also includes a range of image effects, such as oil painting and
       blur, as well as options to layer quotes and a clock onto the background.
     '';
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ p3psi AndersonTorres zfnmxt ];
-    platforms = with platforms; linux;
   };
 }

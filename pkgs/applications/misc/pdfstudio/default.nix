@@ -18,7 +18,7 @@
 let
   year = "2021";
   major = "1";
-  minor = "1";
+  minor = "2";
 in stdenv.mkDerivation rec {
   pname = "pdfstudio";
   version = "${year}.${major}.${minor}";
@@ -26,7 +26,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://download.qoppa.com/${pname}/v${year}/PDFStudio_v${year}_${major}_${minor}_linux64.deb";
-    sha256 = "089jfpbsxwjhx245g8svlmg213kny3z5nl6ra1flishnrsfjjcxb";
+    sha256 = "1188ll2qz58rr2slavqxisbz4q3fdzidpasb1p33926z0ym3rk45";
   };
 
   nativeBuildInputs = [
