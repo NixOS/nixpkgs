@@ -241,7 +241,7 @@ in
       {
         etc."fish/generated_completions".source =
         let
-          patchedGenerator = pkgs.stdenv.mkDerivation {
+          patchedGenerator = pkgs.stdenvNoCC.mkDerivation {
             name = "fish_patched-completion-generator";
             srcs = [
               "${pkgs.fish}/share/fish/tools/create_manpage_completions.py"

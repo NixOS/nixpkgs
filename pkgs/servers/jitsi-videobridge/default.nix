@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, makeWrapper, dpkg, jre_headless, nixosTests }:
+{ lib, stdenvNoCC, fetchurl, makeWrapper, dpkg, jre_headless, nixosTests }:
 
 let
   pname = "jitsi-videobridge2";
@@ -8,7 +8,7 @@ let
     sha256 = "0SLaCIjMN2/+Iushyz8OQpRHHBYVqn6+DpwNGbQEzy4=";
   };
 in
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   inherit pname version src;
 
   dontBuild = true;

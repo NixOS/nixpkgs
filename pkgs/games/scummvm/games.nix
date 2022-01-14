@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, makeDesktopItem, unzip, writeText
+{ stdenvNoCC, lib, fetchurl, makeDesktopItem, unzip, writeText
 , scummvm, runtimeShell }:
 
 let
@@ -25,7 +25,7 @@ let
     let
       attrs' = builtins.removeAttrs attrs [ "plong" "pshort" "pcode" "description" "docs" "files" "version" ];
       pname = lib.replaceStrings [ " " ":" ] [ "-" "" ] (lib.toLower plong);
-    in stdenv.mkDerivation ({
+    in stdenvNoCC.mkDerivation ({
       name = "${pname}-${version}";
 
       nativeBuildInputs = [ unzip ];

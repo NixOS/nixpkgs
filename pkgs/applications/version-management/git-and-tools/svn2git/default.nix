@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, ruby, makeWrapper, git }:
+{ lib, stdenvNoCC, fetchFromGitHub, ruby, makeWrapper, git }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "svn2git";
   version = "2.4.0";
 
@@ -12,8 +12,6 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ ruby makeWrapper ];
-
-  dontBuild = true;
 
   installPhase = ''
     mkdir -p $out

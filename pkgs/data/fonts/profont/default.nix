@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchzip, mkfontscale }:
+{ lib, stdenvNoCC, fetchzip, mkfontscale }:
 
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   pname = "profont";
   version = "2019-11";
 

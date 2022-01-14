@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, scsh, sox, libnotify }:
+{ lib, stdenvNoCC, fetchFromGitHub, scsh, sox, libnotify }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "pell";
   version = "0.0.4";
 

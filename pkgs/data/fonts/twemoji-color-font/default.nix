@@ -1,9 +1,9 @@
 { lib
-, stdenv
+, stdenvNoCC
 , fetchurl
 }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "twemoji-color-font";
   version = "13.1.0";
 

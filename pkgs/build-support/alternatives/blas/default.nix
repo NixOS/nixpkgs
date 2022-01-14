@@ -1,4 +1,4 @@
-{ lib, stdenv
+{ lib, stdenvNoCC
 , lapack-reference, openblasCompat, openblas
 , isILP64 ? false
 , blasProvider ? if isILP64 then openblas else openblasCompat }:
@@ -26,9 +26,9 @@ let
   ];
 
   version = "3";
-  canonicalExtension = if stdenv.hostPlatform.isLinux
-                       then "${stdenv.hostPlatform.extensions.sharedLibrary}.${version}"
-                       else stdenv.hostPlatform.extensions.sharedLibrary;
+  canonicalExtension = if stdenvNoCC.hostPlatform.isLinux
+                       then "${stdenvNoCC.hostPlatform.extensions.sharedLibrary}.${version}"
+                       else stdenvNoCC.hostPlatform.extensions.sharedLibrary;
 
 
   blasImplementation = lib.getName blasProvider;
@@ -37,7 +37,7 @@ in
 
 assert isILP64 -> (blasImplementation == "openblas" && blasProvider.blas64) || blasImplementation == "mkl";
 
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   pname = "blas";
   inherit version;
 
@@ -77,18 +77,18 @@ stdenv.mkDerivation {
   cp -L "$libblas" $out/lib/libblas${canonicalExtension}
   chmod +w $out/lib/libblas${canonicalExtension}
 
-'' + (if stdenv.hostPlatform.parsed.kernel.execFormat.name == "elf" then ''
+'' + (if stdenvNoCC.hostPlatform.parsed.kernel.execFormat.name == "elf" then ''
   patchelf --set-soname libblas${canonicalExtension} $out/lib/libblas${canonicalExtension}
   patchelf --set-rpath "$(patchelf --print-rpath $out/lib/libblas${canonicalExtension}):${lib.getLib blasProvider}/lib" $out/lib/libblas${canonicalExtension}
-'' else if stdenv.hostPlatform.isDarwin then ''
+'' else if stdenvNoCC.hostPlatform.isDarwin then ''
   install_name_tool \
     -id $out/lib/libblas${canonicalExtension} \
     -add_rpath ${lib.getLib blasProvider}/lib \
     $out/lib/libblas${canonicalExtension}
 '' else "") + ''
 
-  if [ "$out/lib/libblas${canonicalExtension}" != "$out/lib/libblas${stdenv.hostPlatform.extensions.sharedLibrary}" ]; then
-    ln -s $out/lib/libblas${canonicalExtension} "$out/lib/libblas${stdenv.hostPlatform.extensions.sharedLibrary}"
+  if [ "$out/lib/libblas${canonicalExtension}" != "$out/lib/libblas${stdenvNoCC.hostPlatform.extensions.sharedLibrary}" ]; then
+    ln -s $out/lib/libblas${canonicalExtension} "$out/lib/libblas${stdenvNoCC.hostPlatform.extensions.sharedLibrary}"
   fi
 
   cat <<EOF > $dev/lib/pkgconfig/blas.pc
@@ -109,17 +109,17 @@ EOF
   cp -L "$libcblas" $out/lib/libcblas${canonicalExtension}
   chmod +w $out/lib/libcblas${canonicalExtension}
 
-'' + (if stdenv.hostPlatform.parsed.kernel.execFormat.name == "elf" then ''
+'' + (if stdenvNoCC.hostPlatform.parsed.kernel.execFormat.name == "elf" then ''
   patchelf --set-soname libcblas${canonicalExtension} $out/lib/libcblas${canonicalExtension}
   patchelf --set-rpath "$(patchelf --print-rpath $out/lib/libcblas${canonicalExtension}):${lib.getLib blasProvider}/lib" $out/lib/libcblas${canonicalExtension}
-'' else if stdenv.hostPlatform.isDarwin then ''
+'' else if stdenvNoCC.hostPlatform.isDarwin then ''
   install_name_tool \
     -id $out/lib/libcblas${canonicalExtension} \
     -add_rpath ${lib.getLib blasProvider}/lib \
     $out/lib/libcblas${canonicalExtension}
 '' else "") + ''
-  if [ "$out/lib/libcblas${canonicalExtension}" != "$out/lib/libcblas${stdenv.hostPlatform.extensions.sharedLibrary}" ]; then
-    ln -s $out/lib/libcblas${canonicalExtension} "$out/lib/libcblas${stdenv.hostPlatform.extensions.sharedLibrary}"
+  if [ "$out/lib/libcblas${canonicalExtension}" != "$out/lib/libcblas${stdenvNoCC.hostPlatform.extensions.sharedLibrary}" ]; then
+    ln -s $out/lib/libcblas${canonicalExtension} "$out/lib/libcblas${stdenvNoCC.hostPlatform.extensions.sharedLibrary}"
   fi
 
   cp ${lib.getDev lapack-reference}/include/cblas{,_mangling}.h $dev/include
@@ -134,7 +134,7 @@ EOF
 '' + lib.optionalString (blasImplementation == "mkl") ''
   mkdir -p $out/nix-support
   echo 'export MKL_INTERFACE_LAYER=${lib.optionalString isILP64 "I"}LP64,GNU' > $out/nix-support/setup-hook
-  ln -s $out/lib/libblas${canonicalExtension} $out/lib/libmkl_rt${stdenv.hostPlatform.extensions.sharedLibrary}
+  ln -s $out/lib/libblas${canonicalExtension} $out/lib/libmkl_rt${stdenvNoCC.hostPlatform.extensions.sharedLibrary}
   ln -sf ${blasProvider}/include/* $dev/include
 '');
 }

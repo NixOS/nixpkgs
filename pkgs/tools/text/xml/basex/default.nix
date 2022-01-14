@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchurl, unzip, jre, coreutils, makeDesktopItem, copyDesktopItems }:
+{ lib, stdenvNoCC, fetchurl, unzip, jre, coreutils, makeDesktopItem, copyDesktopItems }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "basex";
   version = "9.6.3";
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ unzip copyDesktopItems ];
   buildInputs = [ jre ];
 
-  desktopItems = lib.optional (!stdenv.isDarwin) (makeDesktopItem {
+  desktopItems = lib.optional (!stdenvNoCC.isDarwin) (makeDesktopItem {
     name = "basex";
     exec = "basexgui %f";
     icon = "${./basex.svg}"; # icon copied from Ubuntu basex package
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
     # Use substitutions instead of wrapper scripts
     for file in "$out"/bin/*; do
-        sed -i -e "s|/usr/bin/env bash|${stdenv.shell}|" \
+        sed -i -e "s|/usr/bin/env bash|${stdenvNoCC.shell}|" \
                -e "s|java|${jre}/bin/java|" \
                -e "s|readlink|${coreutils}/bin/readlink|" \
                -e "s|dirname|${coreutils}/bin/dirname|" \

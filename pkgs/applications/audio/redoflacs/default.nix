@@ -1,4 +1,4 @@
-{ stdenv
+{ stdenvNoCC
 , lib
 , fetchFromGitHub
 , makeWrapper
@@ -7,7 +7,7 @@
 , sox
 }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "redoflacs";
   version = "0.30.20190903";
 

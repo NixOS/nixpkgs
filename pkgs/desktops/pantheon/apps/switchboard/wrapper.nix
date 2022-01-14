@@ -1,7 +1,7 @@
 { wrapGAppsHook
 , glib
 , lib
-, stdenv
+, stdenvNoCC
 , xorg
 , switchboard
 , switchboardPlugs
@@ -18,7 +18,7 @@ let
 
   testingName = lib.optionalString (testName != null) "${testName}-";
 in
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   name = "${testingName}${switchboard.name}-with-plugs";
 
   src = null;

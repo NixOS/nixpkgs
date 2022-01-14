@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, lib, python3, nixosTests }:
+{ stdenvNoCC, fetchFromGitHub, lib, python3, nixosTests }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "knot-exporter";
   version = "unstable-2021-08-21";
 
