@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pythonocc-core";
-  version = "0.18.1";
+  version = "7.5.1";
 
   src = fetchFromGitHub {
     owner = "tpaviot";
     repo = "pythonocc-core";
     rev = version;
-    sha256 = "1jk4y7f75z9lyawffpfkr50qw5452xzi1imcdlw9pdvf4i0y86k3";
+    sha256 = "1md6x60pnfq0qv4lsnmjv6i96mzdrcpxcgpb316i7wmv9b5ci01s";
   };
 
   postPatch = ''
