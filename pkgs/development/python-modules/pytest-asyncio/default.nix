@@ -1,10 +1,12 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, flaky
 , hypothesis
 , pytest
 , pytestCheckHook
 , pythonOlder
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
@@ -21,11 +23,18 @@ buildPythonPackage rec {
     sha256 = "1c7xddg76pixwlwdl4zxwpy48q2q619i8kzjx2c67a0i8xbx1q5r";
   };
 
-  buildInputs = [
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
+
+  propagatedBuildInputs = [
     pytest
   ];
 
   checkInputs = [
+    flaky
     hypothesis
     pytestCheckHook
   ];
