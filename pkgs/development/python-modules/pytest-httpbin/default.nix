@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "pytest-httpbin";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0wlvw5qgkax7f0i5ks1562s37h2hdmn5yxnp1rajcc2289zm9knq";
+    sha256 = "9f73320f97d33cc20bc8a08cb945372948de51402559e87e74e92c56b48da0d7";
   };
 
   checkInputs = [ pytest ];
