@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "pep257";
-  version = "0.7.0";
+  version = "6.1.1";
 
   src = fetchFromGitHub {
     owner = "GreenSteam";
     repo = "pep257";
     rev = version;
-    sha256 = "sha256-RkE9kkNkRTmZ8zJVwQzMsxU1hcjlxX6UA+ehnareynQ=";
+    sha256 = "0hcf3nyvzl8kd6gmc9qsiigz7vpwrjxcd1bd50dd63cad87qqicg";
   };
 
   checkInputs = [ pytestCheckHook mock ];
