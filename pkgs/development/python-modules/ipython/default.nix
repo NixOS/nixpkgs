@@ -9,6 +9,7 @@
 , nose
 , pygments
 # Runtime dependencies
+, black
 , jedi
 , decorator
 , matplotlib-inline
@@ -18,6 +19,7 @@
 , pexpect
 , appnope
 , backcall
+, stack-data
 }:
 
 buildPythonPackage rec {
@@ -39,10 +41,12 @@ buildPythonPackage rec {
   checkInputs = [ nose pygments ];
 
   propagatedBuildInputs = [
+    black
     jedi
     decorator
     matplotlib-inline
     pickleshare
+    stack-data
     traitlets
     prompt-toolkit
     pygments
