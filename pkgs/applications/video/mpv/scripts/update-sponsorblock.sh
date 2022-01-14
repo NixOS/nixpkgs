@@ -26,7 +26,7 @@ if [ ! -d "$git_dir" ]; then
     git init --initial-branch="$git_branch" "$git_dir"
     git -C "$git_dir" remote add origin "$git_url"
 fi
-git -C "$git_dir" fetch --depth=1 origin "$git_branch"
+git -C "$git_dir" fetch origin "$git_branch"
 
 # use latest commit before today, we should not call the version *today*
 # because there might still be commits coming
