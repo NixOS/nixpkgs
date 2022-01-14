@@ -47,6 +47,8 @@ let
     "test_fallback_default_verify_paths"
     # https://github.com/pyca/pyopenssl/issues/768
     "test_wantWriteError"
+    # https://github.com/pyca/pyopenssl/issues/1043
+    "test_alpn_call_failure"
   ] ++ (
     lib.optionals (lib.hasPrefix "libressl" openssl.meta.name) failingLibresslTests
   ) ++ (
