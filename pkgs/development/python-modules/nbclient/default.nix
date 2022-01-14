@@ -7,7 +7,7 @@
 buildPythonPackage rec {
   pname = "nbclient";
   version = "0.5.10";
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
