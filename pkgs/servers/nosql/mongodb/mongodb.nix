@@ -17,7 +17,7 @@ let
             mozjsVersion = "60";
             mozjsReplace = "defined(HAVE___SINCOS)";
           }
-    else rec { python = scons.python.withPackages (ps: with ps; [ pyyaml typing cheetah ]);
+    else rec { python = scons.python.withPackages (ps: with ps; [ pyyaml typing cheetah3 setuptools ]);
             scons = sconsPackages.scons_3_1_2;
             mozjsVersion = "45";
             mozjsReplace = "defined(HAVE_SINCOS)";
