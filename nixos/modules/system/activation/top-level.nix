@@ -317,4 +317,6 @@ in
 
   };
 
+  # uses extendModules to generate a type
+  meta.buildDocsInSandbox = false;
 }

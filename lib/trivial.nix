@@ -325,6 +325,45 @@ rec {
   */
   warnIf = cond: msg: if cond then warn msg else id;
 
+  /*
+    Like the `assert b; e` expression, but with a custom error message and
+    without the semicolon.
+
+    If true, return the identity function, `r: r`.
+
+    If false, throw the error message.
+
+    Calls can be juxtaposed using function application, as `(r: r) a = a`, so
+    `(r: r) (r: r) a = a`, and so forth.
+
+    Type: bool -> string -> a -> a
+
+    Example:
+
+        throwIfNot (lib.isList overlays) "The overlays argument to nixpkgs must be a list."
+        lib.foldr (x: throwIfNot (lib.isFunction x) "All overlays passed to nixpkgs must be functions.") (r: r) overlays
+        pkgs
+
+  */
+  throwIfNot = cond: msg: if cond then x: x else throw msg;
+
+  /* Check if the elements in a list are valid values from a enum, returning the identity function, or throwing an error message otherwise.
+
+     Example:
+       let colorVariants = ["bright" "dark" "black"]
+       in checkListOfEnum "color variants" [ "standard" "light" "dark" ] colorVariants;
+       =>
+       error: color variants: bright, black unexpected; valid ones: standard, light, dark
+
+     Type: String -> List ComparableVal -> List ComparableVal -> a -> a
+  */
+  checkListOfEnum = msg: valid: given:
+    let
+      unexpected = lib.subtractLists valid given;
+    in
+      lib.throwIfNot (unexpected == [])
+        "${msg}: ${builtins.concatStringsSep ", " (builtins.map builtins.toString unexpected)} unexpected; valid ones: ${builtins.concatStringsSep ", " (builtins.map builtins.toString valid)}";
+
   info = msg: builtins.trace "INFO: ${msg}";
 
   showWarnings = warnings: res: lib.foldr (w: x: warn w x) res warnings;

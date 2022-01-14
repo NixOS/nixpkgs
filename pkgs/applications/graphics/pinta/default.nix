@@ -1,91 +1,87 @@
 { lib
+, buildDotnetModule
+, dotnetCorePackages
 , fetchFromGitHub
-, buildDotnetPackage
-, dotnetPackages
-, gtksharp
-, gettext
+, gtk3
+, installShellFiles
+, librsvg
+, makeDesktopItem
+, wrapGAppsHook
 }:
 
-let
-  mono-addins = dotnetPackages.MonoAddins;
-in
-buildDotnetPackage rec {
+buildDotnetModule rec {
   pname = "Pinta";
-  version = "1.7.1";
+  version = "2.0.1";
 
-  outputFiles = [ "bin/*" ];
-  buildInputs = [ gtksharp mono-addins gettext ];
-  xBuildFiles = [ "Pinta.sln" ];
+  nativeBuildInputs = [
+    installShellFiles
+    wrapGAppsHook
+  ];
+
+  runtimeDeps = [ gtk3 ];
+
+  dotnet-sdk = dotnetCorePackages.sdk_6_0;
+  dotnet-runtime = dotnetCorePackages.runtime_6_0;
+
+  # How-to update deps:
+  # $ nix-build -A pinta.fetch-deps
+  # $ ./result
+  # $ cp /tmp/Pinta-deps.nix ./pkgs/applications/graphics/pinta/default.nix
+  # TODO: create update script
+  nugetDeps = ./deps.nix;
+
+  projectFile = "Pinta";
 
   src = fetchFromGitHub {
     owner = "PintaProject";
     repo = "Pinta";
     rev = version;
-    sha256 = "sha256-yRp/dpJ9T4DieqHTj3vhyuASPGe4vjHw0rSXFrTNZVc=";
+    sha256 = "sha256-iOKJPB2bI/GjeDxzG7r6ew7SGIzgrJTcRXhEYzOpC9k=";
   };
 
-  # Remove version information from nodes <Reference Include="... Version=... ">
-  postPatch = with lib; let
-    csprojFiles = [
-      "Pinta/Pinta.csproj"
-      "Pinta.Core/Pinta.Core.csproj"
-      "Pinta.Effects/Pinta.Effects.csproj"
-      "Pinta.Gui.Widgets/Pinta.Gui.Widgets.csproj"
-      "Pinta.Resources/Pinta.Resources.csproj"
-      "Pinta.Tools/Pinta.Tools.csproj"
-    ];
-    versionedNames = [
-      "Mono\\.Addins"
-      "Mono\\.Posix"
-      "Mono\\.Addins\\.Gui"
-      "Mono\\.Addins\\.Setup"
-    ];
-
-    stripVersion = name: file:
-      let
-        match = ''<Reference Include="${name}([ ,][^"]*)?"'';
-        replace = ''<Reference Include="${name}"'';
-      in
-      "sed -i -re 's/${match}/${replace}/g' ${file}\n";
-
-    # Map all possible pairs of two lists
-    map2 = f: listA: listB: concatMap (a: map (f a) listB) listA;
-    concatMap2Strings = f: listA: listB: concatStrings (map2 f listA listB);
-  in
-  concatMap2Strings stripVersion versionedNames csprojFiles
-  + ''
-    # For some reason there is no Microsoft.Common.tasks file
-    # in ''${mono}/lib/mono/3.5 .
-    substituteInPlace Pinta.Install.proj \
-      --replace 'ToolsVersion="3.5"' 'ToolsVersion="4.0"' \
-      --replace "/usr/local" "$out"
+  # FIXME: this should be propagated by wrapGAppsHook already, however for some
+  # reason it is not working. Maybe a bug in buildDotnetModule?
+  preInstall = ''
+    gappsWrapperArgs+=(
+      --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}"
+      --set GDK_PIXBUF_MODULE_FILE ${librsvg}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache
+    )
   '';
 
-  makeWrapperArgs = [
-    "--prefix MONO_GAC_PREFIX : ${gtksharp}"
-    "--prefix LD_LIBRARY_PATH : ${gtksharp}/lib"
-    "--prefix LD_LIBRARY_PATH : ${gtksharp.gtk.out}/lib"
-  ];
-
   postInstall = ''
-    # Do automake's job manually
-    substitute xdg/pinta.desktop.in xdg/pinta.desktop \
+    # Rename the binary
+    mv $out/bin/Pinta $out/bin/pinta
+
+    # Copy desktop icons
+    for size in 16x16 22x22 24x24 32x32 96x96 scalable; do
+      mkdir -p $out/share/icons/hicolor/$size/apps
+      cp xdg/$size/* $out/share/icons/hicolor/$size/apps/
+    done
+
+    # Copy runtime icons
+    cp -r Pinta.Resources/icons/hicolor/16x16/* $out/share/icons/hicolor/16x16/
+
+    # Install manpage
+    installManPage xdg/pinta.1
+
+    # Fix and copy desktop file
+    # TODO: fix this propely by using the autoreconf+pkg-config build system
+    # from upstream
+    mkdir -p $out/share/applications
+    substitute xdg/pinta.desktop.in $out/share/applications/Pinta.desktop \
       --replace _Name Name \
       --replace _Comment Comment \
       --replace _GenericName GenericName \
-      --replace _X-GNOME-FullName X-GNOME-FullName
-    substitute xdg/pinta.appdata.xml.in xdg/pinta.appdata.xml \
-      --replace _p p
-
-    xbuild /target:CompileTranslations Pinta.Install.proj
-    xbuild /target:Install Pinta.Install.proj
+      --replace _X-GNOME-FullName X-GNOME-FullName \
+      --replace _Keywords Keywords
   '';
 
   meta = {
     homepage = "https://www.pinta-project.com/";
     description = "Drawing/editing program modeled after Paint.NET";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ thiagokokada ];
     platforms = with lib.platforms; linux;
+    mainProgram = "pinta";
   };
 }

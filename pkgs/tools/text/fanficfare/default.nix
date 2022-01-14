@@ -2,18 +2,20 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "FanFicFare";
-  version = "3.21.0";
+  version = "4.8.0";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "16hklfbww6ibmjr32gg98nlnzl4dwanz6lm3fzg2x3vd7d54m92c";
+    sha256 = "0h20cw9z6k3z42fhl48pfxcqrk3i45zp4f4xm6pz7jqjzi17h9fk";
   };
 
   propagatedBuildInputs = with python3Packages; [
     beautifulsoup4
     chardet
+    cloudscraper
     html5lib
     html2text
+    requests-file
   ];
 
   doCheck = false; # no tests exist

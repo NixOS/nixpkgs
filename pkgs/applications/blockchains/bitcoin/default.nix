@@ -98,7 +98,7 @@ stdenv.mkDerivation rec {
       parties. Users hold the crypto keys to their own money and transact directly
       with each other, with the help of a P2P network to check for double-spending.
     '';
-    homepage = "https://bitcoin.org/";
+    homepage = "https://bitcoin.org/en/";
     downloadPage = "https://bitcoincore.org/bin/bitcoin-core-${version}/";
     changelog = "https://bitcoincore.org/en/releases/${version}/";
     maintainers = with maintainers; [ prusnak roconnor ];

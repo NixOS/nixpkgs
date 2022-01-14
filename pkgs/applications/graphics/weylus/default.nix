@@ -9,6 +9,8 @@
 , copyDesktopItems
 , fontconfig
 , libpng
+, pipewire
+, makeWrapper
 , autoPatchelfHook
 }:
 
@@ -38,6 +40,7 @@ stdenv.mkDerivation rec {
     fontconfig
     libva
     gst_all_1.gst-plugins-base
+    pipewire
     # autoPatchelfHook complains if these are missing, even on wayland
     xorg.libXft
     xorg.libXinerama
@@ -47,12 +50,22 @@ stdenv.mkDerivation rec {
     xorg.libXtst
   ];
 
-  nativeBuildInputs = [ copyDesktopItems autoPatchelfHook ];
+  nativeBuildInputs = [ copyDesktopItems autoPatchelfHook makeWrapper ];
+
+  postFixup = let
+    GST_PLUGIN_PATH = lib.makeSearchPathOutput  "lib" "lib/gstreamer-1.0" [
+      gst_all_1.gst-plugins-base
+      pipewire
+    ];
+  in ''
+    wrapProgram $out/bin/weylus --prefix GST_PLUGIN_PATH : ${GST_PLUGIN_PATH}
+  '';
 
   meta = with lib; {
     description = "Use your tablet as graphic tablet/touch screen on your computer";
     homepage = "https://github.com/H-M-H/Weylus";
     license = with licenses; [ agpl3Only ];
     maintainers = with maintainers; [ lom ];
+    platforms = [ "x86_64-linux" ];
   };
 }

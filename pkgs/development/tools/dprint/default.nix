@@ -1,15 +1,17 @@
-{ lib, fetchCrate, rustPlatform }:
+{ lib, stdenv, fetchCrate, rustPlatform, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "dprint";
-  version = "0.18.2";
+  version = "0.19.2";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-5vWkIQtbeQzPgc1BDjxfWCmCYseOUiV0LXapypcLItI=";
+    sha256 = "sha256-mTurSfYyLDmHCiza/noToRFtQL0zsdzib69PCtUseSI=";
   };
 
-  cargoSha256 = "sha256-ezfVDgZs0QemYHm/o3aX2QGO2WuMweE8LuNZaX4whhw=";
+  cargoSha256 = "sha256-B4b6RSegtS3FQ4BHFVmw9+jlA/oKEmB5i/kdb6nuzkQ=";
+
+  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
   # Tests fail because they expect a test WASM plugin. Tests already run for
   # every commit upstream on GitHub Actions

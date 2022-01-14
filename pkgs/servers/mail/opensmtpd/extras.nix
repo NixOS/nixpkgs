@@ -1,6 +1,5 @@
-{ lib, stdenv, fetchurl, openssl, libevent, libasr,
-  python2, pkg-config, lua5, perl, libmysqlclient, postgresql, sqlite, hiredis,
-  enablePython ? true,
+{ lib, stdenv, fetchurl, openssl, libevent, libasr, ncurses,
+  pkg-config, lua5, perl, libmysqlclient, postgresql, sqlite, hiredis,
   enableLua ? true,
   enablePerl ? true,
   enableMysql ? true,
@@ -20,7 +19,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl libevent
-    libasr python2 lua5 perl libmysqlclient postgresql sqlite hiredis ];
+    libasr lua5 perl libmysqlclient postgresql sqlite hiredis ];
 
   configureFlags = [
     "--sysconfdir=/etc"
@@ -47,13 +46,6 @@ stdenv.mkDerivation rec {
     "--with-table-stub"
     "--with-scheduler-ram"
     "--with-scheduler-stub"
-
-  ] ++ lib.optionals enablePython [
-    "--with-python=${python2}"
-    "--with-filter-python"
-    "--with-queue-python"
-    "--with-table-python"
-    "--with-scheduler-python"
 
   ] ++ lib.optionals enableLua [
     "--with-lua=${pkg-config}"

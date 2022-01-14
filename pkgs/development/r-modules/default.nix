@@ -492,6 +492,7 @@ let
     RcppMeCab = [ pkgs.pkg-config ];
     HilbertVisGUI = with pkgs; [ pkg-config which ];
     textshaping = [ pkgs.pkg-config ];
+    ragg = [ pkgs.pkg-config ];
   };
 
   packagesWithBuildInputs = {
@@ -647,6 +648,7 @@ let
     textshaping = with pkgs; [ harfbuzz.dev freetype.dev fribidi libpng ];
     DropletUtils = [ pkgs.zlib.dev ];
     RMariaDB = [ pkgs.libmysqlclient.dev ];
+    ragg = with pkgs; [ freetype.dev libpng.dev libtiff.dev zlib.dev libjpeg.dev bzip2.dev ];
   };
 
   packagesRequiringX = [
@@ -1297,6 +1299,10 @@ let
     RandomFieldsUtils = old.RandomFieldsUtils.override { platforms = lib.platforms.x86_64 ++ lib.platforms.x86; };
 
     flowClust = old.flowClust.override { platforms = lib.platforms.x86_64 ++ lib.platforms.x86; };
+
+    geomorph = old.geomorph.overrideDerivation (attrs: {
+      RGL_USE_NULL = "true";
+    });
   };
 in
   self

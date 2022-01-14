@@ -52,6 +52,8 @@ let self = rec {
 
   a4ksubtitles = callPackage ../applications/video/kodi/addons/a4ksubtitles { };
 
+  arteplussept = callPackage ../applications/video/kodi/addons/arteplussept { };
+
   controllers = {
     default = callPackage ../applications/video/kodi/addons/controllers { controller = "default"; };
 
@@ -90,6 +92,8 @@ let self = rec {
 
   netflix = callPackage ../applications/video/kodi/addons/netflix { };
 
+  orftvthek = callPackage ../applications/video/kodi/addons/orftvthek { };
+
   svtplay = callPackage ../applications/video/kodi/addons/svtplay { };
 
   steam-controller = callPackage ../applications/video/kodi/addons/steam-controller { };
@@ -126,6 +130,8 @@ let self = rec {
 
   defusedxml = callPackage ../applications/video/kodi/addons/defusedxml { };
 
+  future = callPackage ../applications/video/kodi/addons/future { };
+
   idna = callPackage ../applications/video/kodi/addons/idna { };
 
   inputstream-adaptive = callPackage ../applications/video/kodi/addons/inputstream-adaptive { };
@@ -148,10 +154,14 @@ let self = rec {
 
   signals = callPackage ../applications/video/kodi/addons/signals { };
 
+  simplejson = callPackage ../applications/video/kodi/addons/simplejson { };
+
   six = callPackage ../applications/video/kodi/addons/six { };
 
   urllib3 = callPackage ../applications/video/kodi/addons/urllib3 { };
 
   websocket = callPackage ../applications/video/kodi/addons/websocket { };
+
+  xbmcswift2 = callPackage ../applications/video/kodi/addons/xbmcswift2 { };
 
 }; in self

@@ -650,7 +650,6 @@ dont-distribute-packages:
  - cakyrespa
  - cal3d-examples
  - cal3d-opengl
- - calamity-commands
  - calc
  - calculator
  - caldims
@@ -795,6 +794,7 @@ dont-distribute-packages:
  - condor
  - conductive-hsc3
  - conductive-song
+ - conduit-aeson
  - conduit-vfs-zip
  - confcrypt
  - conferer-provider-dhall
@@ -930,6 +930,7 @@ dont-distribute-packages:
  - delta
  - delta-h
  - dep-t-advice
+ - dep-t-dynamic
  - dependent-literals-plugin
  - dependent-state
  - dephd
@@ -1087,6 +1088,7 @@ dont-distribute-packages:
  - falling-turnip
  - fallingblocks
  - family-tree
+ - fast-bech32
  - fastirc
  - fault-tree
  - fbrnch
@@ -1184,6 +1186,7 @@ dont-distribute-packages:
  - funnyprint
  - funsat
  - fused-effects-squeal
+ - futhark_0_21_2
  - fwgl-glfw
  - fwgl-javascript
  - fxpak
@@ -1295,6 +1298,7 @@ dont-distribute-packages:
  - graph-rewriting-strategies
  - graph-rewriting-trs
  - graph-rewriting-ww
+ - graph-trace-viz
  - graph-visit
  - graphicsFormats
  - graphicstools
@@ -1514,6 +1518,7 @@ dont-distribute-packages:
  - hedgehog-gen-json
  - hedis-pile
  - heist-aeson
+ - helic
  - helics
  - helics-wai
  - helium
@@ -2155,6 +2160,7 @@ dont-distribute-packages:
  - mpretty
  - mprover
  - mps
+ - mptcp
  - msgpack-aeson
  - msgpack-idl
  - msgpack-rpc
@@ -2249,7 +2255,9 @@ dont-distribute-packages:
  - numhask-histogram
  - numhask-range
  - numhask-test
+ - nyan
  - nymphaea
+ - oath
  - obd
  - obdd
  - oberon0
@@ -2375,18 +2383,9 @@ dont-distribute-packages:
  - polh-lexicon
  - polydata
  - polysemy-RandomFu
- - polysemy-check
- - polysemy-conc
- - polysemy-http
- - polysemy-log
  - polysemy-log-co
- - polysemy-log-di
  - polysemy-methodology-co-log
  - polysemy-optics
- - polysemy-process
- - polysemy-readline
- - polysemy-resume
- - polysemy-webserver
  - polyseq
  - polytypeable-utils
  - pomodoro
@@ -2693,6 +2692,7 @@ dont-distribute-packages:
  - scp-streams
  - scrabble-bot
  - scrapbook
+ - scroll
  - sde-solver
  - seakale-postgresql
  - seakale-tests
@@ -2834,6 +2834,7 @@ dont-distribute-packages:
  - sounddelay
  - soundgen
  - source-code-server
+ - spade
  - sparkle
  - sparrow
  - sparsebit
@@ -3019,6 +3020,7 @@ dont-distribute-packages:
  - toktok
  - too-many-cells
  - top
+ - topaz
  - topkata
  - total-map
  - toxcore
@@ -3080,6 +3082,7 @@ dont-distribute-packages:
  - typed-encoding-encoding
  - typed-spreadsheet
  - typed-streams
+ - typelet
  - typelevel
  - typelevel-rewrite-rules
  - typescript-docs

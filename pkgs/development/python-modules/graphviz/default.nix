@@ -8,13 +8,14 @@
 , makeFontsConf
 , freefont_ttf
 , mock
-, pytestCheckHook
+, pytest
 , pytest-mock
+, python
 }:
 
 buildPythonPackage rec {
   pname = "graphviz";
-  version = "0.18.1";
+  version = "0.19.1";
 
   disabled = pythonOlder "3.6";
 
@@ -23,7 +24,7 @@ buildPythonPackage rec {
     owner = "xflr6";
     repo = "graphviz";
     rev = version;
-    sha256 = "sha256-Y3w9btjYvKfcEQGuAzV+o6edJ9VmVcWhc+ICOqy87uM=";
+    sha256 = "sha256-pE1lsx/r/BjvW5W2niDx/UeRXxx4kvCyHzAUAG3bdGc=";
   };
 
   patches = [
@@ -43,10 +44,18 @@ buildPythonPackage rec {
     fontDirectories = [ freefont_ttf ];
   };
 
-  checkInputs = [ mock pytestCheckHook pytest-mock ];
+  checkInputs = [
+    mock
+    pytest
+    pytest-mock
+  ];
 
-  preCheck = ''
-    export HOME=$TMPDIR
+  checkPhase = ''
+    runHook preCheck
+
+    HOME=$TMPDIR ${python.interpreter} run-tests.py
+
+    runHook postCheck
   '';
 
   meta = with lib; {

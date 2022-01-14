@@ -1,10 +1,13 @@
 { lib, stdenv, pkgs
-, haskell, haskellPackages, nodejs
+, haskell, haskellPackages, nodejs-14_x
 , fetchurl, fetchpatch, makeWrapper, writeScriptBin
   # Rust dependecies
 , curl, rustPlatform, openssl, pkg-config, Security, darwin
 }:
 let
+  # To controll nodejs version we pass down
+  nodejs = nodejs-14_x;
+
   fetchElmDeps = import ./fetchElmDeps.nix { inherit stdenv lib fetchurl; };
 
   hsPkgs = haskellPackages.override {

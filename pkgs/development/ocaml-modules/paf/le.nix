@@ -8,6 +8,7 @@
 , mirage-stack
 , mirage-time
 , tls-mirage
+, x509
 }:
 
 buildDunePackage {
@@ -29,6 +30,7 @@ buildDunePackage {
     mirage-stack
     mirage-time
     tls-mirage
+    x509
   ];
 
   doCheck = true;

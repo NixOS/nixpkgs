@@ -10,6 +10,7 @@ let
   interfaces = attrValues cfg.interfaces;
   hasVirtuals = any (i: i.virtual) interfaces;
   hasSits = cfg.sits != { };
+  hasGres = cfg.greTunnels != { };
   hasBonds = cfg.bonds != { };
   hasFous = cfg.fooOverUDP != { }
     || filterAttrs (_: s: s.encapsulation != null) cfg.sits != { };
@@ -997,6 +998,65 @@ in
       });
     };
 
+    networking.greTunnels = mkOption {
+      default = { };
+      example = literalExpression ''
+        {
+          greBridge = {
+            remote = "10.0.0.1";
+            local = "10.0.0.22";
+            dev = "enp4s0f0";
+            type = "tap";
+          };
+        }
+      '';
+      description = ''
+        This option allows you to define Generic Routing Encapsulation (GRE) tunnels.
+      '';
+      type = with types; attrsOf (submodule {
+        options = {
+
+          remote = mkOption {
+            type = types.nullOr types.str;
+            default = null;
+            example = "10.0.0.1";
+            description = ''
+              The address of the remote endpoint to forward traffic over.
+            '';
+          };
+
+          local = mkOption {
+            type = types.nullOr types.str;
+            default = null;
+            example = "10.0.0.22";
+            description = ''
+              The address of the local endpoint which the remote
+              side should send packets to.
+            '';
+          };
+
+          dev = mkOption {
+            type = types.nullOr types.str;
+            default = null;
+            example = "enp4s0f0";
+            description = ''
+              The underlying network device on which the tunnel resides.
+            '';
+          };
+
+          type = mkOption {
+            type = with types; enum [ "tun" "tap" ];
+            default = "tap";
+            example = "tap";
+            apply = v: if v == "tun" then "gre" else "gretap";
+            description = ''
+              Whether the tunnel routes layer 2 (tap) or layer 3 (tun) traffic.
+            '';
+          };
+        };
+      });
+    };
+
     networking.vlans = mkOption {
       default = { };
       example = literalExpression ''
@@ -1229,6 +1289,7 @@ in
     boot.kernelModules = [ ]
       ++ optional hasVirtuals "tun"
       ++ optional hasSits "sit"
+      ++ optional hasGres "gre"
       ++ optional hasBonds "bonding"
       ++ optional hasFous "fou";
 

@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "funcy";
-  version = "1.16";
+  version = "1.17";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2775409b7dc9106283f1224d97e6df5f2c02e7291c8caed72764f5a115dffb50";
+    sha256 = "40b9b9a88141ae6a174df1a95861f2b82f2fdc17669080788b73a3ed9370e968";
   };
 
   # No tests

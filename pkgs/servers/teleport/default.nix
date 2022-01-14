@@ -6,6 +6,7 @@
 , protobuf
 , stdenv
 , xdg-utils
+, nixosTests
 
 , withRoleTester ? true
 }:
@@ -94,6 +95,8 @@ buildGo117Module rec {
     $out/bin/tctl version | grep ${version} > /dev/null
     $out/bin/teleport version | grep ${version} > /dev/null
   '';
+
+  passthru.tests = nixosTests.teleport;
 
   meta = with lib; {
     description = "Certificate authority and access plane for SSH, Kubernetes, web applications, and databases";

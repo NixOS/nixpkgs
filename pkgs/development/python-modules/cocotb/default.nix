@@ -5,14 +5,14 @@
 , setuptools
 , setuptools-scm
 , cocotb-bus
-, pytest
+, pytestCheckHook
 , swig
 , verilog
 }:
 
 buildPythonPackage rec {
   pname = "cocotb";
-  version = "1.6.0";
+  version = "1.6.1";
 
   # - we need to use the tarball from PyPi
   #   or the full git checkout (with .git)
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   #   because it does not include required metadata
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a695544ab314e6d795b72ece9e67b51c6668c569b21303158e00452db43c5756";
+    sha256 = "b644a15ea1e62c55041176468976541cba30a8a5e99a5e9a2c07ee595c2b4e95";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
@@ -42,11 +42,10 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace "'cocotb-bus<1.0'" ""
   '';
 
-  checkInputs = [ cocotb-bus pytest swig verilog ];
+  checkInputs = [ cocotb-bus pytestCheckHook swig verilog ];
 
   checkPhase = ''
     export PATH=$out/bin:$PATH
-    make test
   '';
 
   meta = with lib; {

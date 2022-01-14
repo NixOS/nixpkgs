@@ -4,6 +4,7 @@ AckslD/nvim-neoclip.lua
 AckslD/nvim-whichkey-setup.lua
 ackyshake/Spacegray.vim
 ahmedkhalf/lsp-rooter.nvim
+ahmedkhalf/project.nvim
 airblade/vim-gitgutter
 airblade/vim-rooter
 ajmwagar/vim-deus
@@ -17,7 +18,7 @@ alvarosevilla95/luatab.nvim
 alx741/vim-hindent
 alx741/vim-stylishask
 amiorin/ctrlp-z
-andersevenrud/cmp-tmux@cmp
+andersevenrud/cmp-tmux
 andrep/vimacs
 andreshazard/vim-logreview
 AndrewRadev/sideways.vim
@@ -48,6 +49,7 @@ benizi/vim-automkdir
 bhurlow/vim-parinfer
 bitc/vim-hdevtools
 bkad/camelcasemotion
+blackCauldron7/surround.nvim
 bling/vim-bufferline
 blueballs-theme/blueballs-neovim
 blueyed/vim-diminactive
@@ -127,6 +129,7 @@ dylanaraps/wal.vim
 eagletmt/ghcmod-vim
 eagletmt/neco-ghc
 easymotion/vim-easymotion
+echasnovski/mini.nvim
 eddiebergman/nvim-treesitter-pyfold
 eddyekofo94/gruvbox-flat.nvim
 EdenEast/nightfox.nvim
@@ -163,10 +166,12 @@ feline-nvim/feline.nvim
 fenetikm/falcon
 fhill2/floating.nvim
 fiatjaf/neuron.vim
+filipdutescu/renamer.nvim
 fisadev/vim-isort
 flazz/vim-colorschemes
 floobits/floobits-neovim
 folke/lsp-colors.nvim
+folke/lua-dev.nvim
 folke/todo-comments.nvim
 folke/tokyonight.nvim
 folke/trouble.nvim
@@ -286,6 +291,7 @@ jeffkreeftmeijer/neovim-sensible
 jeffkreeftmeijer/vim-numbertoggle
 jelera/vim-javascript-syntax
 jgdavey/tslime.vim
+jghauser/mkdir.nvim@main
 jhradilek/vim-docbk
 jhradilek/vim-snippets as vim-docbk-snippets
 jiangmiao/auto-pairs
@@ -384,12 +390,17 @@ lambdalisue/vim-gista
 lambdalisue/vim-manpager
 lambdalisue/vim-pager
 latex-box-team/latex-box
+ldelossa/litee-calltree.nvim
+ldelossa/litee-filetree.nvim
+ldelossa/litee-symboltree.nvim
+ldelossa/litee.nvim
 leafgarland/typescript-vim
 leanprover/lean.vim
 ledger/vim-ledger
 lepture/vim-jinja
 lervag/vimtex
 lewis6991/gitsigns.nvim
+lewis6991/impatient.nvim
 lf-lang/lingua-franca.vim
 lfe-support/vim-lfe
 lfilho/cosco.vim
@@ -497,6 +508,7 @@ natebosch/vim-lsc
 nathanaelkane/vim-indent-guides
 nathangrigg/vim-beancount
 nathanmsmith/nvim-ale-diagnostic
+navarasu/onedark.nvim
 navicore/vissort.vim
 nbouscal/vim-stylish-haskell
 ncm2/float-preview.nvim
@@ -556,10 +568,12 @@ nvim-orgmode/orgmode
 nvim-pack/nvim-spectre
 nvim-telescope/telescope-cheat.nvim
 nvim-telescope/telescope-dap.nvim
+nvim-telescope/telescope-file-browser.nvim
 nvim-telescope/telescope-frecency.nvim
 nvim-telescope/telescope-fzf-native.nvim
 nvim-telescope/telescope-fzf-writer.nvim
 nvim-telescope/telescope-fzy-native.nvim
+nvim-telescope/telescope-github.nvim
 nvim-telescope/telescope-project.nvim
 nvim-telescope/telescope-symbols.nvim
 nvim-telescope/telescope-z.nvim
@@ -642,6 +656,7 @@ rbong/vim-flog
 rcarriga/nvim-dap-ui
 rcarriga/nvim-notify
 rcarriga/vim-ultest
+rebelot/kanagawa.nvim
 rhysd/clever-f.vim
 rhysd/committia.vim
 rhysd/conflict-marker.vim
@@ -923,6 +938,7 @@ wincent/command-t
 wincent/ferret
 wincent/terminus
 windwp/nvim-autopairs
+windwp/nvim-ts-autotag
 winston0410/cmd-parser.nvim
 winston0410/range-highlight.nvim
 wlangstroth/vim-racket

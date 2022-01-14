@@ -28,11 +28,7 @@ let
     let
       Caddyfile = pkgs.writeText "Caddyfile" ''
         {
-          ${optionalString (cfg.email != null) "email ${cfg.email}"}
-          ${optionalString (cfg.acmeCA != null) "acme_ca ${cfg.acmeCA}"}
-          log {
-            ${cfg.logFormat}
-          }
+          ${cfg.globalConfig}
         }
         ${cfg.extraConfig}
       '';
@@ -42,6 +38,10 @@ let
       '';
     in
       if pkgs.stdenv.buildPlatform == pkgs.stdenv.hostPlatform then Caddyfile-formatted else Caddyfile;
+
+  acmeHosts = unique (catAttrs "useACMEHost" acmeVHosts);
+
+  mkCertOwnershipAssertion = import ../../../security/acme/mk-cert-ownership-assertion.nix;
 in
 {
   imports = [
@@ -183,6 +183,26 @@ in
       '';
     };
 
+    globalConfig = mkOption {
+      type = types.lines;
+      default = "";
+      example = ''
+        debug
+        servers {
+          protocol {
+            experimental_http3
+          }
+        }
+      '';
+      description = ''
+        Additional lines of configuration appended to the global config section
+        of the <literal>Caddyfile</literal>.
+
+        Refer to <link xlink:href="https://caddyserver.com/docs/caddyfile/options#global-options"/>
+        for details on supported values.
+      '';
+    };
+
     extraConfig = mkOption {
       type = types.lines;
       default = "";
@@ -250,9 +270,20 @@ in
       { assertion = cfg.adapter != "caddyfile" -> cfg.configFile != configFile;
         message = "Any value other than 'caddyfile' is only valid when providing your own `services.caddy.configFile`";
       }
-    ];
+    ] ++ map (name: mkCertOwnershipAssertion {
+      inherit (cfg) group user;
+      cert = config.security.acme.certs.${name};
+      groups = config.users.groups;
+    }) acmeHosts;
 
     services.caddy.extraConfig = concatMapStringsSep "\n" mkVHostConf virtualHosts;
+    services.caddy.globalConfig = ''
+      ${optionalString (cfg.email != null) "email ${cfg.email}"}
+      ${optionalString (cfg.acmeCA != null) "acme_ca ${cfg.acmeCA}"}
+      log {
+        ${cfg.logFormat}
+      }
+    '';
 
     systemd.packages = [ cfg.package ];
     systemd.services.caddy = {
@@ -300,8 +331,7 @@ in
 
     security.acme.certs =
       let
-        eachACMEHost = unique (catAttrs "useACMEHost" acmeVHosts);
-        reloads = map (useACMEHost: nameValuePair useACMEHost { reloadServices = [ "caddy.service" ]; }) eachACMEHost;
+        reloads = map (useACMEHost: nameValuePair useACMEHost { reloadServices = [ "caddy.service" ]; }) acmeHosts;
       in
         listToAttrs reloads;
 

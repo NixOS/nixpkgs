@@ -11,7 +11,9 @@ buildGoModule rec {
     sha256 = "sha256-2wNC3APKbJ3Ug8M3w4nllfWlKTd10W7W/Csq/3xbXAI=";
   };
 
-  vendorSha256 = "sha256-RzAQnuOjT8eMH+rJm+/JrF96PZbCgzDVNPQYUeXPWnY=";
+  vendorSha256 = "sha256-tBm4yPeH02kie77A8KvylfH/wI2OsLyAlUb1zBJgT0g=";
+
+  ldflags = ["-X github.com/docker/compose/v2/internal.Version=${version}"];
 
   doCheck = false;
   installPhase = ''

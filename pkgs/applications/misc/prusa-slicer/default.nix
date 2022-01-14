@@ -1,10 +1,10 @@
 { stdenv, lib, fetchFromGitHub, cmake, copyDesktopItems, makeDesktopItem, pkg-config, wrapGAppsHook
 , boost, cereal, cgal_5, curl, dbus, eigen, expat, glew, glib, gmp, gtest, gtk3, hicolor-icon-theme
-, ilmbase, libpng, mpfr, nlopt, openvdb, pcre, qhull, systemd, tbb, wxGTK31-gtk3, xorg
+, ilmbase, libpng, mpfr, nlopt, openvdb, pcre, qhull, systemd, tbb, wxGTK31-gtk3, xorg, fetchpatch
 }:
 stdenv.mkDerivation rec {
   pname = "prusa-slicer";
-  version = "2.3.3";
+  version = "2.4.0";
 
   nativeBuildInputs = [
     cmake
@@ -38,8 +38,18 @@ stdenv.mkDerivation rec {
     xorg.libX11
   ] ++ checkInputs;
 
+  patches = [
+    # Fix detection of TBB, see https://github.com/prusa3d/PrusaSlicer/issues/6355
+    (fetchpatch {
+      url = "https://github.com/prusa3d/PrusaSlicer/commit/76f4d6fa98bda633694b30a6e16d58665a634680.patch";
+      sha256 = "1r806ycp704ckwzgrw1940hh1l6fpz0k1ww3p37jdk6mygv53nv6";
+    })
+  ];
+
   doCheck = true;
   checkInputs = [ gtest ];
+
+  separateDebugInfo = true;
 
   # The build system uses custom logic - defined in
   # cmake/modules/FindNLopt.cmake in the package source - for finding the nlopt
@@ -56,11 +66,6 @@ stdenv.mkDerivation rec {
   NIX_LDFLAGS = "-ludev";
 
   prePatch = ''
-    # In nix ioctls.h isn't available from the standard kernel-headers package
-    # like in other distributions. The copy in glibc seems to be identical to the
-    # one in the kernel though, so we use that one instead.
-    sed -i 's|"/usr/include/asm-generic/ioctls.h"|<asm-generic/ioctls.h>|g' src/libslic3r/GCodeSender.cpp
-
     # Since version 2.5.0 of nlopt we need to link to libnlopt, as libnlopt_cxx
     # now seems to be integrated into the main lib.
     sed -i 's|nlopt_cxx|nlopt|g' cmake/modules/FindNLopt.cmake
@@ -69,7 +74,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "prusa3d";
     repo = "PrusaSlicer";
-    sha256 = "0w0synqi3iz9aigsgv6x1c6sg123fasbx19h4w3ic1l48r8qmpwm";
+    sha256 = "1mb7v0khrmsgy3inmh4mjn709jlhx422kvbnrhsqziph2wwak9bz";
     rev = "version_${version}";
   };
 

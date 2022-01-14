@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "unicode-character-database";
-  version = "13.0.0";
+  version = "14.0.0";
 
   src = fetchurl {
     url = "https://www.unicode.org/Public/zipped/${version}/UCD.zip";
-    sha256 = "0ld97ppkb5f8d5b3mlkxfwnr6f3inijyqias9xc4bbin9lxrfxig";
+    sha256 = "sha256-AzpSdrXXr4hEWJ+ONILzl3qDhecdEH03UFVGUXjCNgA=";
   };
 
   nativeBuildInputs = [

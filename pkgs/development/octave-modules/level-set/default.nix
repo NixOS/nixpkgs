@@ -1,4 +1,5 @@
 { buildOctavePackage
+, stdenv
 , lib
 , fetchgit
 , automake
@@ -50,5 +51,7 @@ buildOctavePackage rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ KarlJoad ];
     description = "Routines for calculating the time-evolution of the level-set equation and extracting geometric information from the level-set function";
+    # /build/level-set-2019-04-13.tar.gz: Cannot open: No such file or directory
+    broken = stdenv.isDarwin;
   };
 }

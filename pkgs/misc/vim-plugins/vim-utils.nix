@@ -258,7 +258,7 @@ let
 
         packages = { home-manager = { start = [vimPlugins.vim-fugitive]; opt = [];};
         beforePlugins = '';
-        customRc = ''let mapleader = " "'';
+        customRC = ''let mapleader = " "'';
 
       };
    */

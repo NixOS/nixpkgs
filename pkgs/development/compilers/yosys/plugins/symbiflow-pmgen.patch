@@ -1,0 +1,15 @@
+diff --git a/yql-qlf-plugin/Makefile b/ql-qlf-plugin/Makefile
+index 2819055c9fe..0e391581012 100644
+--- a/ql-qlf-plugin/Makefile
++++ b/ql-qlf-plugin/Makefile
+@@ -55,10 +55,6 @@ VERILOG_MODULES = $(COMMON)/cells_sim.v         \
+                   $(PP3_DIR)/mult_sim.v        \
+                   $(PP3_DIR)/qlal3_sim.v       \
+
+-retrieve-pmgen:=$(shell mkdir -p pmgen && wget -nc -O pmgen/pmgen.py https://raw.githubusercontent.com/SymbiFlow/yosys/master%2Bwip/passes/pmgen/pmgen.py)
+-
+-pre-build:=$(shell python3 pmgen/pmgen.py -o pmgen/ql-dsp-pm.h -p ql_dsp ql_dsp.pmg)
+-
+ install_modules: $(VERILOG_MODULES)
+ 	$(foreach f,$^,install -D $(f) $(DATA_DIR)/quicklogic/$(f);)
+
