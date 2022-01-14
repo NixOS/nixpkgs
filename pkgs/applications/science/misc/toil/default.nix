@@ -1,39 +1,46 @@
-{ lib, fetchFromGitHub, python3Packages }:
+{ lib
+, fetchFromGitHub
+, python3
+}:
 
-python3Packages.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "toil";
-  version = "5.4.0";
+  version = "5.6.0";
+  format = "setuptools";
 
-  src = python3Packages.fetchPypi {
+  src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "73c0648828bd3610c07b7648dd06d6ec27efefdb09473bf01d05d91eb899c9fd";
+    sha256 = "sha256-m6tzrRCCLULO+wB8htUlt0KESLm/vdIeTzBrihnAo/I=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "docker = " "docker = 'docker' #" \
-      --replace "addict = " "addict = 'addict' #"
-  '';
-
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = with python3.pkgs; [
     addict
     docker
     pytz
     pyyaml
     enlighten
     psutil
+    py-tes
     python-dateutil
     dill
   ];
-  checkInputs = with python3Packages; [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "src/toil/test" ];
-  pythonImportsCheck = [ "toil" ];
+  checkInputs = with python3.pkgs; [
+    pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    "src/toil/test"
+  ];
+
+  pythonImportsCheck = [
+    "toil"
+  ];
 
   meta = with lib; {
+    description = "Workflow engine written in pure Python";
     homepage = "https://toil.ucsc-cgl.org/";
     license = with licenses; [ asl20 ];
-    description = "Workflow engine written in pure Python";
     maintainers = with maintainers; [ veprbl ];
   };
 }

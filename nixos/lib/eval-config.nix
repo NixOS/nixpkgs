@@ -88,13 +88,8 @@ let
 
   nixosWithUserModules = noUserModules.extendModules { modules = allUserModules; };
 
-in withWarnings {
-
-  # Merge the option definitions in all modules, forming the full
-  # system configuration.
-  inherit (nixosWithUserModules) config options _module type;
-
+in
+withWarnings nixosWithUserModules // {
   inherit extraArgs;
-
   inherit (nixosWithUserModules._module.args) pkgs;
 }

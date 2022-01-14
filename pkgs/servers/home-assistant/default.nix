@@ -232,6 +232,33 @@ let
       });
     })
 
+    # Remove as soon the dependency is updated and pytest-httpx > 0.15
+    (self: super: {
+      luftdaten = super.luftdaten.overridePythonAttrs (oldAttrs: rec {
+        version = "0.7.1";
+        src = fetchFromGitHub {
+          owner = "home-assistant-ecosystem";
+          repo = "python-luftdaten";
+          rev = version;
+          sha256 = "sha256-76Y5TJet0WtzYXuK8Og0rmpsUIlXK7b37oesh+MliU8=";
+        };
+      });
+    })
+
+    # Remove as soon the dependency is updated and pytest-httpx > 0.15
+    (self: super: {
+      pyrmvtransport = super.pyrmvtransport.overridePythonAttrs (oldAttrs: rec {
+        version = "0.3.3";
+        src = fetchFromGitHub {
+          owner = "cgtobi";
+          repo = "pyrmvtransport";
+          rev = "v${version}";
+          sha256 = "sha256-nFxGEyO+wyRzPayjjv8WNIJ+XIWbVn0dyyjQKHiyr40=";
+        };
+        doCheck = false;
+      });
+    })
+
     # home-assistant-frontend does not exist in python3.pkgs
     (self: super: {
       home-assistant-frontend = self.callPackage ./frontend.nix { };
@@ -986,6 +1013,9 @@ in with py.pkgs; buildPythonApplication rec {
     # august/test_lock.py: AssertionError: assert 'unlocked' == 'locked' / assert 'off' == 'on'
     "test_lock_update_via_pubnub"
     "test_door_sense_update_via_pubnub"
+    # Tests are flaky
+    "test_config_platform_valid"
+    "test_hls_stream"
   ];
 
   preCheck = ''

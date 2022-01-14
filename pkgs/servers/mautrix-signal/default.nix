@@ -2,13 +2,13 @@
 
 python3.pkgs.buildPythonPackage rec {
   pname = "mautrix-signal";
-  version = "unstable-2021-11-12";
+  version = "unstable-2022-01-13";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "signal";
-    rev = "2e57810e964c1701df2e69273c2f8cebbe021464";
-    sha256 = "sha256-xgn01nbY3LR4G1Yk2MgUhq116/wEhG+5vLH6HKqZE+8=";
+    rev = "e015852a9969ac169e215c80872199ba3f3d838f";
+    sha256 = "sha256-7+0JubSGmQDMr7n1PK6i7homR1WknMz9ikC4164XmMo=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [

@@ -22,24 +22,6 @@
           import ./nixos/lib/eval-config.nix (args // {
             modules =
               let
-                vmConfig = (import ./nixos/lib/eval-config.nix
-                  (args // {
-                    modules = modules ++ [ ./nixos/modules/virtualisation/qemu-vm.nix ];
-                  })).config;
-
-                vmWithBootLoaderConfig = (import ./nixos/lib/eval-config.nix
-                  (args // {
-                    modules = modules ++ [
-                      ./nixos/modules/virtualisation/qemu-vm.nix
-                      { virtualisation.useBootLoader = true; }
-                      ({ config, ... }: {
-                        virtualisation.useEFIBoot =
-                          config.boot.loader.systemd-boot.enable ||
-                          config.boot.loader.efi.canTouchEfiVariables;
-                      })
-                    ];
-                  })).config;
-
                 moduleDeclarationFile =
                   let
                     # Even though `modules` is a mandatory argument for `nixosSystem`, it doesn't
@@ -63,11 +45,6 @@
                   system.nixos.versionSuffix =
                     ".${final.substring 0 8 (self.lastModifiedDate or self.lastModified or "19700101")}.${self.shortRev or "dirty"}";
                   system.nixos.revision = final.mkIf (self ? rev) self.rev;
-
-                  system.build = {
-                    vm = vmConfig.system.build.vm;
-                    vmWithBootLoader = vmWithBootLoaderConfig.system.build.vm;
-                  };
                 }
               ];
           });
