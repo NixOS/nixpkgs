@@ -14,6 +14,7 @@
 buildPythonPackage rec {
   pname = "jsonschema";
   version = "4.4.0";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
