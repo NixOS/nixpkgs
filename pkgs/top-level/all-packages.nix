@@ -14655,6 +14655,8 @@ with pkgs;
 
   drush = callPackage ../development/tools/misc/drush { };
 
+  dura = callPackage ../development/tools/misc/dura { };
+
   dwfv = callPackage ../applications/science/electronics/dwfv { };
 
   dwz = callPackage ../development/tools/misc/dwz { };
@@ -27098,6 +27100,10 @@ with pkgs;
   mercurialFull = appendToName "full" (mercurial.override { fullBuild = true; });
 
   merkaartor = libsForQt5.callPackage ../applications/misc/merkaartor { };
+
+  mepo = callPackage ../applications/misc/mepo {
+    zig = zig_0_8_1;
+  };
 
   meshcentral = callPackage ../tools/admin/meshcentral { };
 

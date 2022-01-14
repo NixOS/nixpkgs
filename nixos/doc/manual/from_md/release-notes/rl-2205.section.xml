@@ -356,6 +356,28 @@
       </listitem>
       <listitem>
         <para>
+          The option
+          <link linkend="opt-virtualisation.vmVariant">virtualisation.vmVariant</link>
+          was added to allow users to make changes to the
+          <literal>nixos-rebuild build-vm</literal> configuration that
+          do not apply to their normal system.
+        </para>
+        <para>
+          The <literal>config.system.build.vm</literal> attribute now
+          always exists and defaults to the value from
+          <literal>vmVariant</literal>. Configurations that import the
+          <literal>virtualisation/qemu-vm.nix</literal> module
+          themselves will override this value, such that
+          <literal>vmVariant</literal> is not used.
+        </para>
+        <para>
+          Similarly
+          <link linkend="opt-virtualisation.vmVariantWithBootLoader">virtualisation.vmVariantWithBootloader</link>
+          was added.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The
           <literal>writers.writePyPy2</literal>/<literal>writers.writePyPy3</literal>
           and corresponding

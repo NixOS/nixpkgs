@@ -8461,8 +8461,6 @@ in {
 
   reparser = callPackage ../development/python-modules/reparser { };
 
-  repeated_test = callPackage ../development/python-modules/repeated_test { };
-
   repocheck = callPackage ../development/python-modules/repocheck { };
 
   reportlab = callPackage ../development/python-modules/reportlab { };
@@ -8584,10 +8582,6 @@ in {
   rnginline = callPackage ../development/python-modules/rnginline { };
 
   robomachine = callPackage ../development/python-modules/robomachine { };
-
-  roboschool = callPackage ../development/python-modules/roboschool {
-    inherit (pkgs.qt5) qtbase;
-  };
 
   robot-detection = callPackage ../development/python-modules/robot-detection { };
 
