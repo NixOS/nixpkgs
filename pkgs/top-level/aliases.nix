@@ -507,6 +507,8 @@ mapAliases ({
   libqmatrixclient = throw "libqmatrixclient was renamed to libquotient"; # added 2020-04-09
   libwnck3 = libwnck;
   lilypond-unstable = lilypond; # added 2021-03-11
+  lilyterm = throw "lilyterm has been removed from nixpkgs, because it was relying on a vte version that depended on python2."; # added 2022-01-14
+  lilyterm-git = throw "lilyterm-git has been removed from nixpkgs, because it was relying on a vte version that depended on python2."; # added 2022-01-14
   links = links2; # added 2016-01-31
   linuxband = throw "linuxband has been removed from nixpkgs, as it's abandoned upstream."; # added 2021-12-09
   linux_rpi0 = linuxKernel.kernels.linux_rpi1;
