@@ -6,6 +6,7 @@
 , semantic-version
 , setuptools
 , setuptools-scm
+, typing-extensions
 , toml
 }:
 
@@ -21,7 +22,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools-scm ];
 
-  propagatedBuildInputs = [ semantic-version setuptools toml ];
+  propagatedBuildInputs = [ semantic-version setuptools toml typing-extensions ];
 
   doCheck = false;
   pythonImportsCheck = [ "setuptools_rust" ];
