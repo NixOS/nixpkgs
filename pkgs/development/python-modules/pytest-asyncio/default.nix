@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pytest-asyncio";
-  version = "0.16.0";
+  version = "0.17.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "pytest-dev";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-4zMbzdDtiLRKo5C12wZRoBNguXLn3f26NuDwQ+pHA0I=";
+    sha256 = "1c7xddg76pixwlwdl4zxwpy48q2q619i8kzjx2c67a0i8xbx1q5r";
   };
 
   buildInputs = [
