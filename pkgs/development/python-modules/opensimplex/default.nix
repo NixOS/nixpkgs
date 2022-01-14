@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "opensimplex";
-  version = "0.3";
+  version = "0.4";
 
   src = fetchFromGitHub {
     owner = "lmas";
     repo = pname;
     rev = "v${version}";
-    sha256 = "idF5JQGnAye6z3c3YU9rsHaebB3rlHJfA8vSpjDnFeM=";
+    sha256 = "0djc50v3hcay04a3i2g9qpviniyx98rkxsc6gmmrz2fyxsa5z5ya";
   };
 
   checkInputs = [ nose ];
