@@ -33596,7 +33596,7 @@ with pkgs;
 
   pgadmin4 = callPackage ../tools/admin/pgadmin { };
 
-  pgadmin3 = callPackage ../applications/misc/pgadmin {
+  pgadmin3 = callPackage ../tools/admin/pgadmin/3.nix {
     openssl = openssl_1_0_2;
   };
 
