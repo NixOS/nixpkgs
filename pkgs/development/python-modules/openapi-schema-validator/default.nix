@@ -13,11 +13,11 @@
 
 buildPythonPackage rec {
   pname = "openapi-schema-validator";
-  version = "0.1.5";
+  version = "0.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a4b2712020284cee880b4c55faa513fbc2f8f07f365deda6098f8ab943c9f0df";
+    sha256 = "71889d1cb69d9fb46eb04243b24e9c0cd7989d9153d29d8770e626874bf68f80";
   };
 
   propagatedBuildInputs = [ isodate jsonschema six strict-rfc3339 rfc3339-validator ];
