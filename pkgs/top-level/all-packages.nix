@@ -22978,6 +22978,9 @@ with pkgs;
     enableDmeventd = true;
     enableCmdlib = true;
   };
+  lvm2_vdo = lvm2_dmeventd.override {
+    enableVDO = true;
+  };
 
   maddy = callPackage ../servers/maddy { };
 
