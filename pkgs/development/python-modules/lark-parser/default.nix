@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "lark-parser";
-  version = "0.12.0";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "lark-parser";
     repo = "lark";
     rev = version;
-    sha256 = "sha256-zcMGCn3ixD3dJg3GlC/ijs+U1JN1BodHLTXZc/5UR7Y=";
+    sha256 = "0pfvjh4ydc49gs6m8b3ip85c8nd4da2bhz9714fwcyl3hdp33q7n";
   };
 
   # Optional import, but fixes some re known bugs & allows advanced regex features
