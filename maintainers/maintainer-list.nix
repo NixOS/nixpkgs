@@ -13641,4 +13641,14 @@
       fingerprint = "3586 3350 BFEA C101 DB1A 4AF0 1F81 112D 62A9 ADCE";
     }];
   };
+  andreoss = {
+    name = "andreoss";
+    email = "andreoss@sdf.org";
+    github = "andreoss";
+    githubId = 49783909;
+    keys = [{
+      longkeyid = "rsa3072/0x2DB39B412CDF97C7";
+      fingerprint = "DC8C DAFD 4571 C1BA A867  09D6 2DB3 9B41 2CDF 97C7";
+    }];
+  };
 }
