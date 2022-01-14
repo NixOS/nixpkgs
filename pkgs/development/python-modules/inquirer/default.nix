@@ -2,14 +2,14 @@
 
 buildPythonPackage rec {
   pname = "inquirer";
-  version = "2.7.0";
+  version = "2.9.1";
 
   # PyPi archive currently broken: https://github.com/magmax/python-inquirer/issues/106
   src = fetchFromGitHub rec {
     owner = "magmax";
     repo = "python-inquirer";
     rev = version;
-    sha256 = "152l5qjgkag8zkr69ax2i5s8xcac1qvyngisrplbnbzwbpf77d0d";
+    sha256 = "0vdly2k4i7bfcqc8zh2miv9dbpmqvayxk72qn9d4hr7z15wph233";
   };
 
   propagatedBuildInputs = [ blessed python-editor readchar ];
