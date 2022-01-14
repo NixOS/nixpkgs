@@ -3492,6 +3492,8 @@ with pkgs;
 
   nrsc5 = callPackage ../applications/misc/nrsc5 { };
 
+  nsync = callPackage ../development/libraries/nsync { };
+
   nwipe = callPackage ../tools/security/nwipe { };
 
   nx2elf = callPackage ../tools/compression/nx2elf { };
