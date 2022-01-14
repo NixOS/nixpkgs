@@ -22,6 +22,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # output of pytest has changed
+    "test_used_with_"
+    "test_plain_stopall"
+  ];
+
   pythonImportsCheck = [ "pytest_mock" ];
 
   meta = with lib; {
