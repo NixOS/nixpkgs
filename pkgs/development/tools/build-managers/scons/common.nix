@@ -1,8 +1,8 @@
 { version, sha256 }:
 
-{ fetchurl, python, lib }:
+{ fetchurl, python3, lib }:
 
-python.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "scons";
   inherit version;
 
@@ -32,7 +32,7 @@ python.pkgs.buildPythonApplication rec {
   passthru = {
     # expose the used python version so tools using this (and extensing scos with other python modules)
     # can use the exact same python version.
-    inherit python;
+    python = python3;
   };
 
   meta = with lib; {
