@@ -27081,6 +27081,10 @@ with pkgs;
 
   merkaartor = libsForQt5.callPackage ../applications/misc/merkaartor { };
 
+  mepo = callPackage ../applications/misc/mepo {
+    zig = zig_0_8_1;
+  };
+
   meshcentral = callPackage ../tools/admin/meshcentral { };
 
   meshlab = libsForQt5.callPackage ../applications/graphics/meshlab { };
