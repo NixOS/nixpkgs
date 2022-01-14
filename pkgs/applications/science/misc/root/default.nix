@@ -157,6 +157,7 @@ stdenv.mkDerivation rec {
     "-Droot7=OFF"
     "-Dsqlite=OFF"
     "-Dssl=OFF"
+    "-Dtmva=ON"
     "-Dvdt=OFF"
     "-Dwebgui=OFF"
     "-Dxml=ON"
