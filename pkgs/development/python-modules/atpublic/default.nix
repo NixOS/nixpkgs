@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "atpublic";
-  version = "2.3";
+  version = "3.0.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d6b9167fc3e09a2de2d2adcfc9a1b48d84eab70753c97de3800362e1703e3367";
+    sha256 = "bb072b50e6484490404e5cb4034e782aaa339fdd6ac36434e53c10791aef18bf";
   };
 
   propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
