@@ -137,7 +137,7 @@ self: super: {
   quickcheck-instances = super.quickcheck-instances_0_3_27;
   regex-posix = doJailbreak super.regex-posix;
   resolv = doJailbreak super.resolv;
-  retrie = doDistribute self.retrie_1_2_0_0;
+  retrie = doDistribute self.retrie_1_2_0_1;
   semialign = super.semialign_1_2_0_1;
   singleton-bool = doJailbreak super.singleton-bool;
   scientific = doJailbreak super.scientific;
