@@ -1,9 +1,6 @@
 { buildPythonPackage
 , fetchFromGitHub
 , lib
-
-# pythonPackages
-, coverage
 }:
 
 buildPythonPackage rec {
@@ -17,11 +14,10 @@ buildPythonPackage rec {
     sha256 = "0n89ky7rx5yg09ssji8liahnyxip08hz7syc2k4pmlgs4978181a";
   };
 
-  # https://github.com/pyparsing/pyparsing/blob/847af590154743bae61a32c3dc1a6c2a19009f42/tox.ini#L6
-  checkInputs = [ coverage ];
+  # only do unit tests, as diagram tests require railroad, which has
+  # been unmaintained since 2015
   checkPhase = ''
-    coverage run --branch simple_unit_tests.py
-    coverage run --branch unitTests.py
+    python -m unittest -k 'not testEmptyExpressionsAreHandledProperly' tests/test_unit.py
   '';
 
   meta = with lib; {
