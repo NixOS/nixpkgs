@@ -7678,6 +7678,8 @@ in {
 
   pytest-localserver = callPackage ../development/python-modules/pytest-localserver { };
 
+  pytest-logdog = callPackage ../development/python-modules/pytest-logdog{ };
+
   pytest-metadata = callPackage ../development/python-modules/pytest-metadata { };
 
   pytest-mock = callPackage ../development/python-modules/pytest-mock { };
