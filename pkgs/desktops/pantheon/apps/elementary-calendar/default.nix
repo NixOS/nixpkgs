@@ -64,7 +64,6 @@ stdenv.mkDerivation rec {
     libhandy
     libical
     libnotify
-    libgdata # required by some dependency transitively
   ];
 
   postPatch = ''

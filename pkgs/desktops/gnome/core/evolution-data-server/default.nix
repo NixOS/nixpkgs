@@ -38,7 +38,15 @@ stdenv.mkDerivation rec {
     libcanberra-gtk3 pcre libphonenumber boost protobuf
   ];
 
-  propagatedBuildInputs = [ libsecret nss nspr libical db libsoup ];
+  propagatedBuildInputs = [
+    db
+    libsecret
+    nss
+    nspr
+    libical
+    libgdata # needed for GObject inspection, https://gitlab.gnome.org/GNOME/evolution-data-server/-/merge_requests/57/diffs
+    libsoup
+  ];
 
   cmakeFlags = [
     "-DENABLE_UOA=OFF"
