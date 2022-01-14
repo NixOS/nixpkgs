@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "enlighten";
-  version = "1.10.1";
+  version = "1.10.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3391916586364aedced5d6926482b48745e4948f822de096d32258ba238ea984";
+    sha256 = "7a5b83cd0f4d095e59d80c648ebb5f7ffca0cd8bcf7ae6639828ee1ad000632a";
   };
 
   propagatedBuildInputs = [
