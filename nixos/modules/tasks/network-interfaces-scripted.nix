@@ -180,7 +180,7 @@ let
             # order before network-setup because the routes that are configured
             # there may need ip addresses configured
             before = [ "network-setup.service" ];
-            bindsTo = deviceDependency i.name;
+            bindsTo = mkIf i.neededForBoot (deviceDependency i.name);
             after = [ "network-pre.target" ] ++ (deviceDependency i.name);
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
