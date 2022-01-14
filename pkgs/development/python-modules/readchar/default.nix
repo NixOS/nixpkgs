@@ -2,14 +2,14 @@
 
 buildPythonPackage rec {
   pname = "readchar";
-  version = "2.0.0";
+  version = "3.0.5";
 
   # Don't use wheels on PyPI
   src = fetchFromGitHub {
     owner = "magmax";
     repo = "python-${pname}";
     rev = version;
-    sha256 = "0j1vj4f2j8x5f40rs6h8qplklcxcdbvkkvjpkpmr1xagw05i12bm";
+    sha256 = "01bjw3ipdzxq1ijn9354nlya625i26ri7jac1dnlj1d1gdd8m5lx";
   };
 
   nativeBuildInputs = [ flake8 ];
