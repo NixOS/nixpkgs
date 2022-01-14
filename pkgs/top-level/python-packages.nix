@@ -8571,10 +8571,6 @@ in {
 
   robomachine = callPackage ../development/python-modules/robomachine { };
 
-  roboschool = callPackage ../development/python-modules/roboschool {
-    inherit (pkgs.qt5) qtbase;
-  };
-
   robot-detection = callPackage ../development/python-modules/robot-detection { };
 
   robotframework = callPackage ../development/python-modules/robotframework { };
