@@ -5,11 +5,11 @@
 }:
 buildPythonPackage rec {
   pname = "requirements-parser";
-  version = "0.2.0";
+  version = "0.3.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5963ee895c2d05ae9f58d3fc641082fb38021618979d6a152b6b1398bd7d4ed4";
+    sha256 = "3852277618e653dd1d8fa4129e59b4338358dffafeb3d5106e9f88504db9c460";
   };
 
   checkInputs = [
