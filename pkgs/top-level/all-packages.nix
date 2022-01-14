@@ -315,6 +315,8 @@ with pkgs;
 
   deadcode = callPackage ../development/tools/deadcode { };
 
+  deadnix = callPackage ../development/tools/deadnix { };
+
   each = callPackage ../tools/text/each { };
 
   eclipse-mat = callPackage ../development/tools/eclipse-mat { };
