@@ -32,6 +32,10 @@ let
     load-module module-position-event-sounds
   '';
 
+  monitorsXmlFile = if cfg.gdm.monitorsXml != null then
+                    pkgs.writeText "monitors.xml" cfg.gdm.monitorsXml
+                    else null;
+
   defaultSessionName = config.services.xserver.displayManager.defaultSession;
 
   setSessionScript = pkgs.callPackage ./account-service-util.nix { };
@@ -109,6 +113,16 @@ in
         '';
       };
 
+      monitorsXml = mkOption {
+        default = null;
+        type = types.nullOr types.lines;
+        description = lib.mdDoc ''
+          Contents of {file}`.config/monitors.xml` inside {file}`/run/gdm`.
+          This is typically used to specify the same monitor configuration as
+          has been created by a desktop manager display configuration program.
+        '';
+      };
+
     };
 
   };
@@ -162,6 +176,8 @@ in
 
     systemd.tmpfiles.rules = [
       "d /run/gdm/.config 0711 gdm gdm"
+    ] ++ optionals (monitorsXmlFile != null) [
+      "L+ /run/gdm/.config/${monitorsXmlFile.name} - - - - ${monitorsXmlFile}"
     ] ++ optionals config.hardware.pulseaudio.enable [
       "d /run/gdm/.config/pulse 0711 gdm gdm"
       "L+ /run/gdm/.config/pulse/${pulseConfig.name} - - - - ${pulseConfig}"
