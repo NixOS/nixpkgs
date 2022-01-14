@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pylitterbot";
-  version = "2021.11.0";
+  version = "2021.12.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "natekspencer";
     repo = pname;
     rev = version;
-    sha256 = "sha256-HdIxi6RfdXBYEYFEcv/f9wAqKZg/MsEZd6mDYwE45to=";
+    sha256 = "1vm6fzsw10j9v9ki3ds5f7by5p8dqc3aflz2j34gwvb87i0qqgw7";
   };
 
   propagatedBuildInputs = [
