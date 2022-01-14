@@ -32256,6 +32256,12 @@ with pkgs;
 
   xoscope = callPackage ../applications/science/electronics/xoscope { };
 
+  xyce = callPackage ../applications/science/electronics/xyce { };
+
+  xyce-parallel = callPackage ../applications/science/electronics/xyce {
+    withMPI = true;
+    trilinos = trilinos-mpi;
+  };
 
   ### SCIENCE / MATH
 
