@@ -6,7 +6,6 @@
 , at-spi2-core
 , biblesync
 , brotli
-, clucene_core
 , cmake
 , dbus
 , dbus-glib
@@ -85,7 +84,6 @@ stdenv.mkDerivation rec {
     at-spi2-core
     biblesync
     brotli
-    clucene_core
     dbus
     dbus-glib
     docbook2x
@@ -132,7 +130,6 @@ stdenv.mkDerivation rec {
     # The build script won't continue without the version saved locally.
     echo "${version}" > cmake/source_version.txt
 
-    export CLUCENE_HOME=${clucene_core};
     export SWORD_HOME=${sword};
   '';
 
