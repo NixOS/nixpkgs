@@ -11,4 +11,5 @@
   obs-nvfbc = callPackage ./obs-nvfbc.nix {};
   obs-pipewire-audio-capture = callPackage ./obs-pipewire-audio-capture.nix {};
   obs-vkcapture = callPackage ./obs-vkcapture.nix {};
+  obs-backgroundremoval = callPackage ./obs-backgroundremoval.nix {};
 }
