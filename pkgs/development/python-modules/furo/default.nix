@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "furo";
-  version = "2021.10.9";
+  version = "2022.1.2";
   format = "flit";
   disable = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-K6pCoi7ePm6Vxhgqs2S6wuwVt5vH+cp/sJ/ZrsSzVAw=";
+    sha256 = "b217f218cbcd423ffbfe69baa79389d4ecebf2d86f0d593c44ef31da7b5aed30";
   };
 
   propagatedBuildInputs = [
