@@ -1,8 +1,8 @@
 { lib
-, buildPythonPackage
-, fetchPypi
 , attrdict
+, buildPythonPackage
 , cairosvg
+, fetchPypi
 , pillow
 , pytestCheckHook
 , setuptools-scm
@@ -14,9 +14,11 @@
 buildPythonPackage rec {
   pname = "wavedrom";
   version = "2.0.3.post2";
+  format = "setuptools";
+
   src = fetchPypi {
     inherit pname version;
-    sha256 = "239b3435ff116b09007d5517eed755fc8591891b7271a1cd40db9e400c02448d";
+    hash = "sha256-I5s0Nf8RawkAfVUX7tdV/IWRiRtycaHNQNueQAwCRI0=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -32,22 +34,25 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
+    cairosvg
+    pillow
     pytestCheckHook
     xmldiff
-    pillow
-    cairosvg
   ];
 
   disabledTests = [
-    "test_upstream"  # requires to clone a full git repository
+    # Requires to clone a full git repository
+    "test_upstream"
   ];
 
-  pythonImportsCheck = [ "wavedrom" ];
+  pythonImportsCheck = [
+    "wavedrom"
+  ];
 
-  meta = {
+  meta = with lib; {
     description = "WaveDrom compatible Python command line";
     homepage = "https://github.com/wallento/wavedrompy";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ airwoodix ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ airwoodix ];
   };
 }
