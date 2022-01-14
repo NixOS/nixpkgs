@@ -118,7 +118,7 @@ self: super: {
   ghc-lib-parser = self.ghc-lib-parser_9_2_1_20211101;
   ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_2_0_1;
   hackage-security = doJailbreak super.hackage-security;
-  hashable = super.hashable_1_4_0_1;
+  hashable = super.hashable_1_4_0_2;
   hashable-time = doJailbreak super.hashable-time_0_3;
   hedgehog = doJailbreak super.hedgehog;
   HTTP = overrideCabal (drv: { postPatch = "sed -i -e 's,! Socket,!Socket,' Network/TCP.hs"; }) (doJailbreak super.HTTP);
