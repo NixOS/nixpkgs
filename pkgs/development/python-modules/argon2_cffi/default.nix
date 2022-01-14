@@ -14,6 +14,7 @@
 buildPythonPackage rec {
   pname = "argon2_cffi";
   version = "21.3.0";
+  format = "flit";
 
   src = fetchPypi {
     pname = "argon2-cffi";
