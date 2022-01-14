@@ -600,6 +600,8 @@ in {
 
   argon2_cffi = callPackage ../development/python-modules/argon2_cffi { };
 
+  argon2-cffi-bindings = callPackage ../development/python-modules/argon2-cffi-bindings { };
+
   args = callPackage ../development/python-modules/args { };
 
   aria2p = callPackage ../development/python-modules/aria2p { };
