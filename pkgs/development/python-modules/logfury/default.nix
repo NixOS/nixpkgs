@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, funcsigs
 , setuptools-scm
 , pytestCheckHook
 , pythonOlder
@@ -11,6 +10,7 @@
 buildPythonPackage rec {
   pname = "logfury";
   version = "1.0.1";
+  format = "setuptools";
 
   disabled = pythonOlder "3.5";
 
@@ -21,10 +21,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools-scm
-  ];
-
-  propagatedBuildInputs = [
-    funcsigs
   ];
 
   checkInputs = [
