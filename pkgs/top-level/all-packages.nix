@@ -14104,10 +14104,6 @@ with pkgs;
 
   inherit (callPackages ../development/tools/electron { })
     electron
-    electron_3
-    electron_4
-    electron_5
-    electron_6
     electron_7
     electron_8
     electron_9
