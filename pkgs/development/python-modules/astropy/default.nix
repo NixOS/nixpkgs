@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "astropy";
-  version = "4.3.1";
+  version = "5.0";
   format = "pyproject";
 
   disabled = !isPy3k; # according to setup.py
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-LTlRIjtOt/No/K2Mg0DSc3TF2OO2NaY2J1rNs481zVE=";
+    sha256 = "70203e151e13292586a817b4069ce1aad4643567aff38b1d191c173bc54f3927";
   };
 
   nativeBuildInputs = [ setuptools-scm astropy-helpers astropy-extension-helpers cython jinja2 ];
