@@ -114,8 +114,8 @@ self: super: {
       self.ordered-containers
     ] ++ drv.libraryHaskellDepends or [];
   }) super.ghc-exactprint;
-  ghc-lib = self.ghc-lib_9_2_1_20211101;
-  ghc-lib-parser = self.ghc-lib-parser_9_2_1_20211101;
+  ghc-lib = self.ghc-lib_9_2_1_20220109;
+  ghc-lib-parser = self.ghc-lib-parser_9_2_1_20220109;
   ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_2_0_1;
   hackage-security = doJailbreak super.hackage-security;
   hashable = super.hashable_1_4_0_2;
@@ -234,7 +234,7 @@ self: super: {
         sha256 = "0hpp3iw7m7w2abr8vb86gdz3x6c8lj119zxln933k90ia7bmk8jc";
       };
     } (super.hlint_3_3_6.overrideScope (self: super: {
-      ghc-lib-parser = self.ghc-lib-parser_9_2_1_20211101;
+      ghc-lib-parser = self.ghc-lib-parser_9_2_1_20220109;
       ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_2_0_1;
     }))
   );
