@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "anonip";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "DigitaleGesellschaft";
     repo = "Anonip";
     rev = "v${version}";
-    sha256 = "0y5xqivcinp6pwx4whc8ca1n2wxrvff7a2lpbz2dhivilfanmljs";
+    sha256 = "0cssdcridadjzichz1vv1ng7jwphqkn8ihh83hpz9mcjmxyb94qc";
   };
 
   propagatedBuildInputs = lib.optionals isPy27 [ ipaddress ];
