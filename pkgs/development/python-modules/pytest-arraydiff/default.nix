@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "pytest-arraydiff";
-  version = "0.3";
+  version = "0.5.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "de2d62f53ecc107ed754d70d562adfa7573677a263216a7f19aa332f20dc6c15";
+    sha256 = "714149beffd0dfa085477c65791c1139b619602b049536353ce1a91397fb3bd2";
   };
 
   buildInputs = [ pytest ];
