@@ -131,7 +131,7 @@ self: super: {
   ormolu = self.ormolu_0_4_0_0;
   OneTuple = super.OneTuple_0_3_1;
   parallel = doJailbreak super.parallel;
-  path = doJailbreak super.path_0_9_1;
+  path = doJailbreak super.path_0_9_2;
   polyparse = overrideCabal (drv: { postPatch = "sed -i -e 's, <0.11, <0.12,' polyparse.cabal"; }) (doJailbreak super.polyparse);
   primitive = doJailbreak super.primitive;
   quickcheck-instances = super.quickcheck-instances_0_3_27;
