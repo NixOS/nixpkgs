@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "rdflib";
-  version = "6.0.2";
+  version = "6.1.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-YTauBWABR07ir/X8W5VuYqEcOpxmuw89nAqqX7tWhU4=";
+    sha256 = "8dbfa0af2990b98471dacbc936d6494c997ede92fd8ed693fb84ee700ef6f754";
   };
 
   propagatedBuildInputs = [
