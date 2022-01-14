@@ -8,7 +8,7 @@ let
     , stdenv
     , nixosTests
     , tests
-    , fetchurl
+    , fetchFromGitHub
     , makeWrapper
     , symlinkJoin
     , writeText
@@ -296,8 +296,10 @@ let
                $dev/share/man/man1/
           '';
 
-          src = fetchurl {
-            url = "https://www.php.net/distributions/php-${version}.tar.bz2";
+          src = fetchFromGitHub {
+            owner = "php";
+            repo = "php-src";
+            rev = "php-${version}";
             inherit sha256;
           };
 
