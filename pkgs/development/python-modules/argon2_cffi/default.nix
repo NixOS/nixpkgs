@@ -9,6 +9,7 @@
 , isPy3k
 , lib
 , stdenv
+, argon2-cffi-bindings
 }:
 
 buildPythonPackage rec {
@@ -24,7 +25,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ cffi six ] ++ lib.optional (!isPy3k) enum34;
 
-  propagatedNativeBuildInputs = [ cffi ];
+  propagatedNativeBuildInputs = [
+    argon2-cffi-bindings
+    cffi
+  ];
 
   ARGON2_CFFI_USE_SSE2 = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) "0";
 
