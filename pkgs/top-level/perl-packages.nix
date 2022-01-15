@@ -17024,6 +17024,20 @@ let
     doCheck = false;
   };
 
+  OpenOfficeOODoc = buildPerlPackage {
+    pname = "OpenOffice-OODoc";
+    version = "2.125";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JM/JMGDOC/OpenOffice-OODoc-2.125.tar.gz";
+      sha256 = "1dnsj63svxq0hi3aci4x7binql8kr754inlkks5jmi4k0sblh561";
+    };
+    propagatedBuildInputs = [ ArchiveZip XMLTwig ];
+    meta = {
+      license = with lib.licenses; [ lgpl21 ];
+      maintainers = [ maintainers.wentasah ];
+    };
+  };
+
   NetOpenIDCommon = buildPerlPackage {
     pname = "Net-OpenID-Common";
     version = "1.20";
