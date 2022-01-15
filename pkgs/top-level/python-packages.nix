@@ -5488,6 +5488,8 @@ in {
 
   moku = callPackage ../development/python-modules/moku { };
 
+  molecule = callPackage ../development/python-modules/molecule { };
+
   monero = callPackage ../development/python-modules/monero { };
 
   mongomock = callPackage ../development/python-modules/mongomock { };
