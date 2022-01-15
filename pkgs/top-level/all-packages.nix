@@ -28402,6 +28402,10 @@ with pkgs;
 
   rubyripper = callPackage ../applications/audio/rubyripper {};
 
+  rucredstash = callPackage ../tools/security/rucredstash {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   runc = callPackage ../applications/virtualization/runc {};
 
   rymcast = callPackage ../applications/audio/rymcast {
