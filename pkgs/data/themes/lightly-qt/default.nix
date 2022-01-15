@@ -1,13 +1,12 @@
-{
-  mkDerivation,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  extra-cmake-modules,
-  kdecoration,
-  plasma-workspace,
-  qtbase,
-  qt5
+{ mkDerivation
+, lib
+, fetchFromGitHub
+, cmake
+, extra-cmake-modules
+, kdecoration
+, plasma-workspace
+, qtbase
+, qt5
 }:
 
 mkDerivation rec {
