@@ -7820,6 +7820,8 @@ in {
 
   python-baseconv = callPackage ../development/python-modules/python-baseconv { };
 
+  python-benedict = callPackage ../development/python-modules/python-benedict { };
+
   python-bidi = callPackage ../development/python-modules/python-bidi { };
 
   python-binance = callPackage ../development/python-modules/python-binance { };
