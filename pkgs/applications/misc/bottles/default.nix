@@ -100,7 +100,7 @@ python3Packages.buildPythonApplication rec {
     description = "An easy-to-use wineprefix manager";
     homepage = "https://usebottles.com/";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ bloomvdomino shamilton ];
+    maintainers = with maintainers; [ bloomvdomino psydvl shamilton ];
     platforms = platforms.linux;
   };
 }
