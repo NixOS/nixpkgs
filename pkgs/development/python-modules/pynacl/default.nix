@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , pytestCheckHook
@@ -6,13 +7,13 @@
 , libsodium
 , cffi
 , hypothesis
-, stdenv
-, six
 }:
 
 buildPythonPackage rec {
   pname = "pynacl";
   version = "1.5.0";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
@@ -31,7 +32,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     cffi
-    six
   ];
 
   checkInputs = [
@@ -41,11 +41,14 @@ buildPythonPackage rec {
 
   SODIUM_INSTALL = "system";
 
-  pythonImportsCheck = [ "nacl" ];
+  pythonImportsCheck = [
+    "nacl"
+  ];
 
   meta = with lib; {
     description = "Python binding to the Networking and Cryptography (NaCl) library";
     homepage = "https://github.com/pyca/pynacl/";
     license = licenses.asl20;
+    maintainers = with maintainers; [ ];
   };
 }
