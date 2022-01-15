@@ -1865,13 +1865,17 @@ self: super: {
   # 2021-05-09: Restrictive bound on hspec-golden. Dep removed in newer versions.
   tomland = assert super.tomland.version == "1.3.2.0"; doJailbreak super.tomland;
 
-  # 2022-01-16 haskell-ci needs Cabal 3.6,
+  # 2021-05-09 haskell-ci pins ShellCheck 0.7.1
+  # https://github.com/haskell-CI/haskell-ci/issues/507
+  # 2021-09-05 haskell-ci needs Cabal 3.4,
+  # cabal-install-parsers uses Cabal 3.6 since 0.4.3
   haskell-ci = super.haskell-ci.overrideScope (self: super: {
     attoparsec = self.attoparsec_0_14_4;
     Cabal = self.Cabal_3_6_2_0;
   });
 
-  # Build haskell-ci from git repository
+  # Build haskell-ci from git repository, including some useful fixes,
+  # e. g. required for generating the workflows for the cabal2nix repository
   haskell-ci-unstable = overrideSrc rec {
     version = "0.14.1-${builtins.substring 0 7 src.rev}";
     src = pkgs.fetchFromGitHub {
@@ -1880,10 +1884,7 @@ self: super: {
       rev = "8311a999b8e8be3aa31f65f314def256aa2d5535";
       sha256 = "169jaqm4xs2almmvqsk567wayxs0g6kn0l5877c03hzr3d9ykrav";
     };
-  } super.haskell-ci).overrideScope (self: super: {
-    attoparsec = self.attoparsec_0_14_4;
-    Cabal = self.Cabal_3_6_2_0;
-  });
+  } self.haskell-ci;
 
   Frames-streamly = super.Frames-streamly.override {
     relude = super.relude_1_0_0_1;
