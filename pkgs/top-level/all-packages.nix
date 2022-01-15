@@ -1939,6 +1939,8 @@ with pkgs;
 
   git-credential-gopass = callPackage ../tools/security/gopass/git-credential.nix { };
 
+  gopass-summon-provider = callPackage ../tools/security/gopass/summon.nix { };
+
   gosh = callPackage ../tools/security/gosh { };
 
   gospider = callPackage ../tools/security/gospider { };
