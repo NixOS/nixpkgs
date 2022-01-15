@@ -7,13 +7,13 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "timetagger";
-  version = "21.11.2";
+  version = "22.1.2";
 
   src = fetchFromGitHub {
     owner = "almarklein";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0fyxlm5l3xhbp2p9di51pkkb65mrwzyix74nizr2ady43ylpm07p";
+    sha256 = "0xrajx0iij7r70ch17m4y6ydyh368dn6nbjsv74pn1x8frd686rw";
   };
 
   meta = with lib; {
