@@ -30700,8 +30700,6 @@ with pkgs;
 
   harmonist = callPackage ../games/harmonist { };
 
-  hawkthorne = callPackage ../games/hawkthorne { love = love_0_9; };
-
   hedgewars = libsForQt514.callPackage ../games/hedgewars {
     inherit (haskellPackages) ghcWithPackages;
   };
