@@ -24,7 +24,7 @@ let
           "AlternativeName"
           "TransmitQueues"
           "ReceiveQueues"
-          "TransmitQueueLength="
+          "TransmitQueueLength"
           "MTUBytes"
           "BitsPerSecond"
           "Duplex"
@@ -56,7 +56,7 @@ let
         (assertValueOneOf "MACAddressPolicy" ["persistent" "random" "none"])
         (assertMacAddress "MACAddress")
         (assertInt "TransmitQueues")
-        (assertRange "TransmitQueues" 0 4096)
+        (assertRange "TransmitQueues" 1 4096)
         (assertInt "ReceiveQueues")
         (assertRange "ReceiveQueues" 0 4096)
         (assertInt "TransmitQueueLength")
@@ -87,6 +87,7 @@ let
         (assertInt "RxJumboBufferSize")
         (assertInt "TxBufferSize")
         (assertValueOneOf "RxFlowControl" boolValues)
+        (assertValueOneOf "TxFlowControl" boolValues)
         (assertValueOneOf "AutoNegotiationFlowControl" boolValues)
         (assertByteFormat "GenericSegmentOffloadMaxBytes")
         (assertInt "GenericSegmentOffloadMaxSegments")
@@ -102,7 +103,7 @@ let
           "SourceMACAddress"
           "BroadcastMulticastQueueLength"
         ])
-        (assertValueOneOf "Mode" ["private" "vepa" "bridge" "passthru"])
+        (assertValueOneOf "Mode" ["private" "vepa" "bridge" "passthru" "source"])
       ];
 
       ipvlanChecks = [
@@ -203,7 +204,6 @@ let
         (assertValueOneOf "VLANFiltering" boolValues)
         (assertValueOneOf "VLANProtocol" ["802.1q" "802.1ad"])
         (assertValueOneOf "STP" boolValues)
-        (assertInt "MulticastIGMPVersion")
         (assertValueOneOf "MulticastIGMPVersion" [2 3])
       ];
 
@@ -300,7 +300,7 @@ let
         (assertInt "Id")
         (assertRange "Id" 0 16777215)
         (assertInt "TOS")
-        (assertRange "TOS" 1 25)
+        (assertRange "TOS" 1 255)
         (assertValueOneOf "UDPChecksum" boolValues)
         (assertValueOneOf "UDP6ZeroChecksumTx" boolValues)
         (assertValueOneOf "UDP6ZeroChecksumRx" boolValues)
@@ -468,11 +468,8 @@ let
           "Port"
           "PeerPort"
           "Protocol"
-          "Peer"
-          "Local"
         ])
         (assertValueOneOf "Encapsulation" ["FooOverUDP" "GenericUDPEncapsulation"])
-        (assertHasField "Port")
         (assertPort "Port")
         (assertPort "PeerPort")
       ];
@@ -1297,7 +1294,7 @@ let
       type = with types; listOf (submodule l2tpSessionOptions);
       description = ''
         Each item in this array specifies an option in the
-        <literal>[WireGuardPeer]</literal> section of the unit. See
+        <literal>[L2TPSession]</literal> section of the unit. See
         <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
         <manvolnum>5</manvolnum></citerefentry> for details.
         Use <literal>PresharedKeyFile</literal> instead of
@@ -1984,7 +1981,7 @@ let
           [L2TP]
           ${attrsToSection def.l2tpConfig}
         ''
-        + flip concatMapStrings def.addresses (x: ''
+        + flip concatMapStrings def.l2tpSessions (x: ''
           [L2TPSession]
           ${attrsToSection x.l2tpSessionConfig}
         '')
