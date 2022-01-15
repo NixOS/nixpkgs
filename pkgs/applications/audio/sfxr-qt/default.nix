@@ -8,6 +8,7 @@
 , qtquickcontrols2
 , SDL
 , python3
+, callPackage
 }:
 
 mkDerivation rec {
@@ -40,6 +41,10 @@ mkDerivation rec {
     qtquickcontrols2
     SDL
   ];
+
+  passthru.tests = {
+    export-square-wave = callPackage ./test-export-square-wave {};
+  };
 
   meta = with lib; {
     homepage = "https://github.com/agateau/sfxr-qt";
