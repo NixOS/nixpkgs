@@ -6,9 +6,8 @@
 , which
 # Dependencies
 , bzip2
-, sqlite
 , zlib
-, openssl
+, openssl_1_0_2
 , expat
 , ncurses6
 , tcl-8_5
@@ -28,12 +27,12 @@ with lib;
 
 let
   isPy3k = majorVersion == "3";
-  passthru = passthruFun rec {
+  passthru = passthruFun {
     inherit self sourceVersion pythonVersion packageOverrides;
     implementation = "pypy";
     libPrefix = "pypy${pythonVersion}";
     executable = "pypy${if isPy3k then "3" else ""}";
-    sitePackages = "lib/${libPrefix}/site-packages";
+    sitePackages = "site-packages";
     hasDistutilsCxxPatch = false;
 
     # Not possible to cross-compile with.
@@ -50,9 +49,8 @@ let
 
   deps = [
     bzip2
-    sqlite
     zlib
-    openssl
+    openssl_1_0_2
     expat
     ncurses6
     tcl-8_5
@@ -70,9 +68,10 @@ in with passthru; stdenv.mkDerivation {
   buildInputs = [ which ];
 
   installPhase = ''
-    mkdir -p $out
+    mkdir -p $out/lib
     echo "Moving files to $out"
-    mv -t $out bin include lib
+    mv -t $out bin include lib-python lib_pypy site-packages
+    mv lib/libffi.so.6* $out/lib/
 
     mv $out/bin/libpypy*-c.so $out/lib/
 
@@ -85,9 +84,8 @@ in with passthru; stdenv.mkDerivation {
              $out/bin/pypy*
 
     pushd $out
-
-    find ./lib -name "*.so" -exec patchelf --remove-needed libncursesw.so.6 --replace-needed libtinfow.so.6 libncursesw.so.6 {} \;
-    find ./lib -name "*.so" -exec patchelf --set-rpath ${lib.makeLibraryPath deps}:$out/lib {} \;
+    find {lib,lib_pypy*} -name "*.so" -exec patchelf --remove-needed libncursesw.so.6 --replace-needed libtinfow.so.6 libncursesw.so.6 {} \;
+    find {lib,lib_pypy*} -name "*.so" -exec patchelf --set-rpath ${lib.makeLibraryPath deps}:$out/lib {} \;
 
     echo "Removing bytecode"
     find . -name "__pycache__" -type d -depth -exec rm -rf {} \;
