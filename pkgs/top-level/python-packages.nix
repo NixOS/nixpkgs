@@ -6408,6 +6408,8 @@ in {
 
   py-synologydsm-api = callPackage ../development/python-modules/py-synologydsm-api { };
 
+  py-tes = callPackage ../development/python-modules/py-tes { };
+
   py-ubjson = callPackage ../development/python-modules/py-ubjson { };
 
   py-zabbix = callPackage ../development/python-modules/py-zabbix { };
@@ -9768,6 +9770,8 @@ in {
   torchaudio-bin = callPackage ../development/python-modules/torchaudio/bin.nix { };
 
   torchgpipe = callPackage ../development/python-modules/torchgpipe { };
+
+  torchinfo = callPackage ../development/python-modules/torchinfo { };
 
   torchvision = callPackage ../development/python-modules/torchvision { };
 
