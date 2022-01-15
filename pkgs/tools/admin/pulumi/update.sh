@@ -45,7 +45,7 @@ pulumi_repos=(
 # Contains latest release ${VERSION} from
 # https://github.com/pulumi/pulumi-${NAME}/releases
 
-# Dynamically builds the plugin array, using the API for getting the
+# Dynamically builds the plugin array, using the GitHub API for getting the
 # latest version.
 plugin_num=1
 plugins=()
