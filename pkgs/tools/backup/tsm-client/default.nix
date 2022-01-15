@@ -97,10 +97,10 @@ let
 
   unwrapped = stdenv.mkDerivation rec {
     name = "tsm-client-${version}-unwrapped";
-    version = "8.1.13.2";
+    version = "8.1.13.3";
     src = fetchurl {
       url = mkSrcUrl version;
-      sha256 = "0cspxr96g93kb8vy6m86ks16sfw1zghkd2fmxk95mwphs762d5xm";
+      sha256 = "1dwczf236drdaf4jcfzz5154vdwvxf5zraxhrhiddl6n80hnvbcd";
     };
     inherit meta;
 
