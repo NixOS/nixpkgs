@@ -2128,6 +2128,8 @@ in {
 
   dict2xml = callPackage ../development/python-modules/dict2xml { };
 
+  dictdiffer = callPackage ../development/python-modules/dictdiffer { };
+
   dictionaries = callPackage ../development/python-modules/dictionaries { };
 
   dictpath = callPackage ../development/python-modules/dictpath { };
