@@ -1,4 +1,6 @@
-#!/usr/bin/env bash
+#!/usr/bin/env nix-shell
+#!nix-shell -i bash -p gh
+# shellcheck shell=bash
 # Bash 3 compatible for Darwin
 
 # Version of Pulumi from
