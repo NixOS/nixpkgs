@@ -19,8 +19,6 @@ assert (
 # cgit) that are needed here should be included directly in Nixpkgs as
 # files.
 
-with lib;
-
 let
   common = { version, sha256, patches ? [], withDocs ? false, extraMeta ? {} }:
    stdenv.mkDerivation rec {
@@ -36,7 +34,7 @@ let
 
     postPatch = ''
       patchShebangs Configure
-    '' + optionalString (versionOlder version "1.1.0") ''
+    '' + lib.optionalString (lib.versionOlder version "1.1.0") ''
       patchShebangs test/*
       for a in test/t* ; do
         substituteInPlace "$a" \
@@ -44,15 +42,15 @@ let
       done
     ''
     # config is a configure script which is not installed.
-    + optionalString (versionAtLeast version "1.1.1") ''
+    + lib.optionalString (lib.versionAtLeast version "1.1.1") ''
       substituteInPlace config --replace '/usr/bin/env' '${buildPackages.coreutils}/bin/env'
-    '' + optionalString (versionAtLeast version "1.1.0" && stdenv.hostPlatform.isMusl) ''
+    '' + lib.optionalString (lib.versionAtLeast version "1.1.0" && stdenv.hostPlatform.isMusl) ''
       substituteInPlace crypto/async/arch/async_posix.h \
         --replace '!defined(__ANDROID__) && !defined(__OpenBSD__)' \
                   '!defined(__ANDROID__) && !defined(__OpenBSD__) && 0'
     '';
 
-    outputs = [ "bin" "dev" "out" "man" ] ++ optional withDocs "doc";
+    outputs = [ "bin" "dev" "out" "man" ] ++ lib.optional withDocs "doc";
     setOutputFlags = false;
     separateDebugInfo =
       !stdenv.hostPlatform.isDarwin &&
@@ -86,7 +84,7 @@ let
         else if stdenv.hostPlatform.isBSD
           then "./Configure BSD-generic${toString stdenv.hostPlatform.parsed.cpu.bits}"
         else if stdenv.hostPlatform.isMinGW
-          then "./Configure mingw${optionalString
+          then "./Configure mingw${lib.optionalString
                                      (stdenv.hostPlatform.parsed.cpu.bits != 32)
                                      (toString stdenv.hostPlatform.parsed.cpu.bits)}"
         else if stdenv.hostPlatform.isLinux
@@ -108,11 +106,11 @@ let
       "-DUSE_CRYPTODEV_DIGESTS"
     ] ++ lib.optional enableSSL2 "enable-ssl2"
       ++ lib.optional enableSSL3 "enable-ssl3"
-      ++ lib.optional (versionAtLeast version "1.1.0" && stdenv.hostPlatform.isAarch64) "no-afalgeng"
+      ++ lib.optional (lib.versionAtLeast version "1.1.0" && stdenv.hostPlatform.isAarch64) "no-afalgeng"
       # OpenSSL needs a specific `no-shared` configure flag.
       # See https://wiki.openssl.org/index.php/Compilation_and_Installation#Configure_Options
       # for a comprehensive list of configuration options.
-      ++ lib.optional (versionAtLeast version "1.1.0" && static) "no-shared";
+      ++ lib.optional (lib.versionAtLeast version "1.1.0" && static) "no-shared";
 
     makeFlags = [
       "MANDIR=$(man)/share/man"
