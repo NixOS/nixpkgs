@@ -10762,6 +10762,8 @@ with pkgs;
 
   wg-friendly-peer-names = callPackage ../tools/networking/wg-friendly-peer-names { };
 
+  wg-netmanager = callPackage ../tools/networking/wg-netmanager { };
+
   woff2 = callPackage ../development/web/woff2 { };
 
   woof = callPackage ../tools/misc/woof { };
