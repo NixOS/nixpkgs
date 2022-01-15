@@ -7854,6 +7854,8 @@ in {
 
   python-editor = callPackage ../development/python-modules/python-editor { };
 
+  python-fsutil = callPackage ../development/python-modules/python-fsutil { };
+
   pythonefl = callPackage ../development/python-modules/python-efl { };
 
   pythonegardia = callPackage ../development/python-modules/pythonegardia { };
