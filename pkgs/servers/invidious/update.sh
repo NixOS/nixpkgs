@@ -1,9 +1,8 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p common-updater-scripts curl crystal2nix jq git gnused nix nix-prefetch-git nix-update
+#!nix-shell -i bash -p common-updater-scripts curl crystal crystal2nix jq git gnused nix nix-prefetch-git nix-update pkg-config
 git_url='https://github.com/iv-org/invidious.git'
 git_branch='master'
 git_dir='/var/tmp/invidious.git'
-nix_file="$(dirname "${BASH_SOURCE[0]}")/default.nix"
 pkg='invidious'
 
 set -euo pipefail
@@ -45,17 +44,23 @@ update-source-version "$pkg" \
     "$new_version" \
     "$new_sha256" \
     --rev="$new_rev"
-git add "$nix_file"
 commit_msg="$pkg: $old_version -> $new_version"
 
-cd "${nix_file%/*}"
+cd "$(dirname "${BASH_SOURCE[0]}")"
+
+# fetch video.js dependencies
+info "Running scripts/fetch-player-dependencies.cr..."
+git -C "$git_dir" reset --hard "$new_rev"
+(cd "$git_dir" && crystal run scripts/fetch-player-dependencies.cr -- --minified)
+rm -f "$git_dir/assets/videojs/.gitignore"
+videojs_new_sha256=$(nix hash-path --type sha256 --base32 "$git_dir/assets/videojs")
+sed -e "s,\boutputHash = .*,outputHash = \"$videojs_new_sha256\";," -i 'videojs.nix'
+
 if git -C "$git_dir" diff-tree --quiet "${old_rev}..${new_rev}" -- 'shard.lock'; then
     info "shard.lock did not change since $old_rev."
 else
     info "Updating shards.nix..."
-    git -C "$git_dir" reset --hard "$new_rev"
     crystal2nix -- "$git_dir/shard.lock"  # argv's index seems broken
-    git add 'shards.nix'
 
     lsquic_old_version=$(nix-instantiate --eval --strict --json -A "${pkg}.lsquic.version" '../../..' | jq -r)
     lsquic_new_version=$(nix eval --raw -f 'shards.nix' lsquic.rev \
@@ -72,8 +77,7 @@ else
                 | jq -r .sha256)
             sed -e "0,/^ *version = .*/ s//    version = \"$boringssl_new_version\";/" \
                 -e "0,/^ *sha256 = .*/ s//      sha256 = \"$boringssl_new_sha256\";/" \
-                -i lsquic.nix
-            git add 'lsquic.nix'
+                -i 'lsquic.nix'
             commit_msg="$commit_msg
 
 lsquic: $lsquic_old_version -> $lsquic_new_version"
@@ -81,4 +85,4 @@ lsquic: $lsquic_old_version -> $lsquic_new_version"
     fi
 fi
 
-git commit --verbose --message "$commit_msg"
+git commit --verbose --message "$commit_msg" *.nix

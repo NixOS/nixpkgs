@@ -1,4 +1,4 @@
-{ lib, crystal, fetchFromGitHub, librsvg, pkg-config, libxml2, openssl, sqlite, lsquic, nixosTests }:
+{ lib, crystal, fetchFromGitHub, librsvg, pkg-config, libxml2, openssl, shards, sqlite, lsquic, videojs, nixosTests }:
 let
   # When updating, always update the following:
   #  * the git revision
@@ -8,17 +8,17 @@ let
   #  * shards.nix (by running `crystal2nix` in invidious’ source tree)
   #  * If the lsquic.cr dependency changed: lsquic in lsquic.nix (version, sha256)
   #  * If the lsquic version changed: boringssl' in lsquic.nix (version, sha256)
-  rev = "00904ae3f2ab6a3cf5f96012d36c5672c3aa17b4";
+  rev = "081fd541afc9b2f9b821e0f8f4c66dda0839295c";
 in
 crystal.buildCrystalPackage rec {
   pname = "invidious";
-  version = "unstable-2021-11-13";
+  version = "unstable-2022-02-25";
 
   src = fetchFromGitHub {
     owner = "iv-org";
     repo = pname;
     inherit rev;
-    sha256 = "sha256-DET4jvB5epkpl5/HTORNTWDL4Ck4IsqhdTApJE8t6Tg=";
+    sha256 = "12m1fd8yfs6fqchvf9masr837dcghsg5x2nb8vcpzakzia5qc2kf";
   };
 
   postPatch =
@@ -33,6 +33,8 @@ crystal.buildCrystalPackage rec {
       assetCommitTemplate = ''{{ "#{`git rev-list HEAD --max-count=1 --abbrev-commit -- assets`.strip}" }}'';
     in
     ''
+      for d in ${videojs}/*; do ln -s "$d" assets/videojs; done
+
       # Use the version metadata from the derivation instead of using git at
       # build-time
       substituteInPlace src/invidious.cr \
@@ -48,19 +50,22 @@ crystal.buildCrystalPackage rec {
           --replace 'File.read("locales/' 'File.read("${placeholder "out"}/share/invidious/locales/'
 
       # Reference sql initialisation/migration scripts by absolute path
-      substituteInPlace src/invidious/helpers/helpers.cr \
+      substituteInPlace src/invidious/database/base.cr \
             --replace 'config/sql' '${placeholder "out"}/share/invidious/config/sql'
 
-      substituteInPlace src/invidious/users.cr \
+      substituteInPlace src/invidious/user/captcha.cr \
           --replace 'Process.run(%(rsvg-convert' 'Process.run(%(${lib.getBin librsvg}/bin/rsvg-convert'
     '';
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config shards ];
   buildInputs = [ libxml2 openssl sqlite ];
 
   format = "crystal";
   shardsFile = ./shards.nix;
-  crystalBinaries.invidious.src = "src/invidious.cr";
+  crystalBinaries.invidious = {
+    src = "src/invidious.cr";
+    options = [ "--release" "--progress" "--verbose" "--no-debug" "-Dskip_videojs_download" ];
+  };
 
   postConfigure = ''
     # lib includes nix store paths which can’t be patched, so the links have to
