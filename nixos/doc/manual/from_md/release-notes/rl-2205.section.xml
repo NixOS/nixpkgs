@@ -92,6 +92,13 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://ergo.chat">ergochat</link>, a modern
+          IRC with IRCv3 features. Available as
+          <link xlink:href="options.html#opt-services.ergochat.enable">services.ergochat</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://github.com/ngoduykhanh/PowerDNS-Admin">PowerDNS-Admin</link>,
           a web interface for the PowerDNS server. Available at
           <link xlink:href="options.html#opt-services.powerdns-admin.enable">services.powerdns-admin</link>.
