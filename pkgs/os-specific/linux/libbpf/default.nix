@@ -21,12 +21,16 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-/MLPflnfooe7Wjy8M3CTowAi5oYpscruSkDsaVzhmYQ=";
   };
 
+  patches = [(fetchpatch {
+    url = "https://github.com/libbpf/libbpf/pull/41.diff";
+    sha256 = "sha256-pg5WARqh6z0nkTHMBhftxwdV2SyswC2lfaCXCpez0VA=";
+  })];
+
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libelf zlib ];
 
-  sourceRoot = "source/src";
   enableParallelBuilding = true;
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = [ "PREFIX=$(out)" "-C src" ];
 
   passthru.tests = {
     bpf = nixosTests.bpf;
@@ -34,7 +38,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     # install linux's libbpf-compatible linux/btf.h
-    install -Dm444 ../include/uapi/linux/btf.h -t $out/include/linux
+    install -Dm444 include/uapi/linux/btf.h -t $out/include/linux
   '';
 
   # FIXME: Multi-output requires some fixes to the way the pkg-config file is
