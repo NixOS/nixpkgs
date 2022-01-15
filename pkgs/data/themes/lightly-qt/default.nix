@@ -35,7 +35,7 @@ mkDerivation rec {
   meta = {
     description = "A fork of breeze theme style that aims to be visually modern and minimalistic";
     homepage = "https://github.com/Luwx/Lightly";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ pwoelfel ];
     platforms = lib.platforms.all;
   };
