@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , attrs
 , beautifulsoup4
 , buildPythonPackage
@@ -47,6 +48,11 @@ buildPythonPackage rec {
   checkInputs = [
     pytestCheckHook
     pytest-xdist
+  ];
+  disabledTests = lib.optionals stdenv.isDarwin [
+    # expected result is tailored towards the quirks of upstream's
+    # CI environment on darwin
+    "test_searchable_paths"
   ];
 
   pythonImportsCheck = [

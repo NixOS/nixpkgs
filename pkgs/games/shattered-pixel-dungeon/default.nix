@@ -10,15 +10,15 @@
 
 let
   pname = "shattered-pixel-dungeon";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "00-Evan";
     repo = "shattered-pixel-dungeon";
     # NOTE: always use the commit sha, not the tag. Tags _will_ disappear!
     # https://github.com/00-Evan/shattered-pixel-dungeon/issues/596
-    rev = "1f296a2d1088ad35421f5f8040a9f0803fa46ba8";
-    sha256 = "sha256-MzHdUAzCR2JtIdY1SGuge3xgR6qIhNYxUPOxA+TZtLE=";
+    rev = "7f29a03078647ea503d3c866476568511aa5af84";
+    sha256 = "sha256-+d8X7WFGX8YGb2rGu8jVO82QdlF9ec+6+Ti5wGEIwRg=";
   };
 
   postPatch = ''
@@ -47,7 +47,7 @@ let
         | sh
     '';
     outputHashMode = "recursive";
-    outputHash = "sha256-0P/BcjNnbDN25DguRcCyzPuUG7bouxEx1ySodIbSwvg=";
+    outputHash = "sha256-UI5/ZJbUtEz1Fr+qn6a8kzi9rrP+lVrpBbuDv8TG5y0=";
   };
 
 in stdenv.mkDerivation rec {

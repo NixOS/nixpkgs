@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation {
   pname = "apfsprogs";
-  version = "unstable-2021-08-24";
+  version = "unstable-2021-10-26";
 
   src = fetchFromGitHub {
     owner = "linux-apfs";
     repo = "apfsprogs";
-    rev = "5efac5a701bcb56e23cfc182b5b3901bff27d343";
-    sha256 = "sha256-vQE586HwrPkF0uaTKrJ7yXb24ntRI0QmBla7N2ErAU8=";
+    rev = "05ecfa367a8142e289dc76333294271b5edfe395";
+    sha256 = "sha256-McGQG8f12DTp/It8KjMHGyfE5tgmgLd7MZlZIn/xC+E=";
   };
 
   buildPhase = ''
@@ -23,8 +23,8 @@ stdenv.mkDerivation {
 
   installPhase = ''
     runHook preInstall
-    make -C apfsck install BINDIR="$out/bin" MANDIR="$out/share/man8" $installFlags
-    make -C mkapfs install BINDIR="$out/bin" MANDIR="$out/share/man8" $installFlags
+    make -C apfsck install DESTDIR="$out" $installFlags
+    make -C mkapfs install DESTDIR="$out" $installFlags
     runHook postInstall
   '';
 

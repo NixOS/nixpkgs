@@ -5,39 +5,18 @@
 }:
 
 let
-py = python3.override {
-  packageOverrides = self: super: {
-    frozendict = super.frozendict.overridePythonAttrs (oldAttrs: rec {
-      version = "1.2";
-      src = oldAttrs.src.override {
-        inherit version;
-        sha256 = "0ibf1wipidz57giy53dh7mh68f2hz38x8f4wdq88mvxj5pr7jhbp";
-      };
-      doCheck = false;
-    });
-  };
-};
-in
-
-with py.pkgs;
-
-let
-  plugins = py.pkgs.callPackage ./plugins { };
+  plugins = python3.pkgs.callPackage ./plugins { };
   tools = callPackage ./tools { };
 in
+with python3.pkgs;
 buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "1.46.0";
+  version = "1.49.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-RcB+RSb/LZE8Q+UunyrYh28S7c7VsTmqg4mJIDVCX5U=";
+    sha256 = "7b795ecfc36e3f57eb7cffbc5ef9da1745b777536416c31509b3e6220c39ca4d";
   };
-
-  patches = [
-    ./0001-setup-add-homeserver-as-console-script.patch
-    ./0002-Expose-generic-worker-as-binary-under-NixOS.patch
-  ];
 
   buildInputs = [ openssl ];
 
@@ -82,13 +61,13 @@ buildPythonApplication rec {
   doCheck = !stdenv.isDarwin;
 
   checkPhase = ''
-    PYTHONPATH=".:$PYTHONPATH" ${py.interpreter} -m twisted.trial -j $NIX_BUILD_CORES tests
+    PYTHONPATH=".:$PYTHONPATH" ${python3.interpreter} -m twisted.trial -j $NIX_BUILD_CORES tests
   '';
 
   passthru.tests = { inherit (nixosTests) matrix-synapse; };
   passthru.plugins = plugins;
   passthru.tools = tools;
-  passthru.python = py;
+  passthru.python = python3;
 
   meta = with lib; {
     homepage = "https://matrix.org";

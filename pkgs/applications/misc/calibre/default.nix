@@ -27,21 +27,25 @@
 
 mkDerivation rec {
   pname = "calibre";
-  version = "5.30.0";
+  version = "5.34.0";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${version}/${pname}-${version}.tar.xz";
-    sha256 = "058dqqxhc3pl4is1idlnc3pz80k4r681d5aj4a26v9acp8j7zy4f";
+    hash = "sha256-1NQB7vrcU0hR308/8keUn/rHhdvJk5Ab0pOMPyiU1+M=";
   };
 
-  # https://sources.debian.org/patches/calibre/5.30.0+dfsg-1
+  # https://sources.debian.org/patches/calibre/${version}+dfsg-1
   patches = [
     #  allow for plugin update check, but no calibre version check
     (fetchpatch {
-      name = "0001_only_plugin_update.patch";
-      url =
-        "https://sources.debian.org/data/main/c/calibre/${version}%2Bdfsg-1/debian/patches/0001-only-plugin-update.patch";
-      sha256 = "sha256-aGT8rJ/eQKAkmyHBWdY0ouZuWvDwtLVJU5xY6d3hY3k=";
+      name = "0001-only-plugin-update.patch";
+      url = "https://raw.githubusercontent.com/debian-calibre/calibre/debian/${version}%2Bdfsg-1/debian/patches/0001-only-plugin-update.patch";
+      sha256 = "sha256:1h2hl4z9qm17crms4d1lq2cq44cnxbga1dv6qckhxvcg6pawxg3l";
+    })
+    (fetchpatch {
+      name = "0007-Hardening-Qt-code.patch";
+      url = "https://raw.githubusercontent.com/debian-calibre/calibre/debian/${version}%2Bdfsg-1/debian/patches/0007-Hardening-Qt-code.patch";
+      sha256 = "sha256:18wps7fn0cpzb7gf78f15pmbaff4vlygc9g00hq7zynfa4pcgfdg";
     })
   ]
   ++ lib.optional (!unrarSupport) ./dont_build_unrar_plugin.patch;
@@ -104,8 +108,10 @@ mkDerivation rec {
       python
       regex
       sip
+      setuptools
       zeroconf
       jeepney
+      pycryptodome
       # the following are distributed with calibre, but we use upstream instead
       odfpy
     ] ++ lib.optional (unrarSupport) unrardll

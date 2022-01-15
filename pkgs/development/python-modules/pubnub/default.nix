@@ -13,13 +13,13 @@
 
 buildPythonPackage rec {
   pname = "pubnub";
-  version = "5.4.0";
+  version = "5.5.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = "python";
     rev = "v${version}";
-    sha256 = "sha256-FyDsTqDQTI/Xxu4Sl4eHqwmgwN+ip+8WKGJs/h/kl2Y=";
+    sha256 = "133sis24jd40yq4sgp8lmg2kac5wiiccisjpkhm50rb9wdbpn6kh";
   };
 
   propagatedBuildInputs = [

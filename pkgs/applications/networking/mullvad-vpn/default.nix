@@ -33,6 +33,7 @@ let deps = [
     xorg.libXrender
     xorg.libXtst
     xorg.libxcb
+    xorg.libxshmfence
     nspr
     nss
     systemd
@@ -42,11 +43,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "mullvad-vpn";
-  version = "2021.5";
+  version = "2021.6";
 
   src = fetchurl {
     url = "https://github.com/mullvad/mullvadvpn-app/releases/download/${version}/MullvadVPN-${version}_amd64.deb";
-    sha256 = "186va4pllimmcqnlbry5ni8gi8p3mbpgjf7sdspmhy2hlfjvlz47";
+    sha256 = "0vpahryw4hm1k9p4vang84ji88znz67s7wxnwqndf02a627n7fcm";
   };
 
   nativeBuildInputs = [
@@ -72,7 +73,7 @@ stdenv.mkDerivation rec {
     mv usr/bin/* $out/bin
     mv opt/Mullvad\ VPN/* $out/share/mullvad
 
-    sed -i 's|\/opt\/Mullvad.*VPN|env MULLVAD_DISABLE_UPDATE_NOTIFICATION=1 '$out'/bin|g' $out/share/applications/mullvad-vpn.desktop
+    sed -i 's|"\/opt\/Mullvad.*VPN|env MULLVAD_DISABLE_UPDATE_NOTIFICATION=1 "'$out'/bin|g' $out/share/applications/mullvad-vpn.desktop
 
     ln -s $out/share/mullvad/mullvad-{gui,vpn} $out/bin/
     ln -s $out/share/mullvad/resources/mullvad-daemon $out/bin/mullvad-daemon

@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchFromGitHub, cython, pytest, numpy }:
+{ lib, buildPythonPackage, pythonOlder, fetchFromGitHub, cython, pytest, importlib-resources, numpy }:
 
 buildPythonPackage rec {
   pname = "pyjet";
@@ -13,7 +13,11 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ cython ];
-  propagatedBuildInputs = [ numpy ];
+  propagatedBuildInputs = [
+    numpy
+  ] ++ lib.optionals (pythonOlder "3.9") [
+    importlib-resources
+  ];
 
   checkInputs = [ pytest ];
   checkPhase = ''

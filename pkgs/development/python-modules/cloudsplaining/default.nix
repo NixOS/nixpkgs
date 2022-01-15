@@ -17,7 +17,8 @@
 
 buildPythonPackage rec {
   pname = "cloudsplaining";
-  version = "0.4.6";
+  version = "0.4.10";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
@@ -25,7 +26,7 @@ buildPythonPackage rec {
     owner = "salesforce";
     repo = pname;
     rev = version;
-    sha256 = "sha256-TFUOsfQ1QxdpmRUJPoHMCuCpmYpQodLkP5EVXKm+qsw=";
+    hash = "sha256-zTsqrHu8eQsQ4ZFocvHdVsgCjWE6JVrlyaztFNir2fk=";
   };
 
   propagatedBuildInputs = [

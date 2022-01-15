@@ -29,5 +29,7 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ thesola10 Yumasi ];
     platforms = platforms.unix;
+    # Upstream currently broken for macOS https://cirrus-ci.com/build/5624937369042944
+    broken = stdenv.targetPlatform.isDarwin;
   };
 }

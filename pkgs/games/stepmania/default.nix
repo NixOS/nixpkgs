@@ -14,6 +14,10 @@ stdenv.mkDerivation rec {
     sha256 = "0a7y9l7xm510vgnpmj1is7p9m6d6yd0fcaxrjcickz295k5w3rdn";
   };
 
+  patches = [
+    ./0001-fix-build-with-ffmpeg-4.patch
+  ];
+
   nativeBuildInputs = [ cmake nasm ];
 
   buildInputs = [

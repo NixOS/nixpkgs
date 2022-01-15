@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, fetchpatch, python, coverage, lsof, glibcLocales, coreutils }:
+{ lib, buildPythonPackage, fetchPypi, python, coverage, lsof, glibcLocales, coreutils }:
 
 buildPythonPackage rec {
   pname = "sh";

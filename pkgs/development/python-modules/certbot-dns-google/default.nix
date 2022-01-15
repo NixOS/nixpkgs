@@ -2,7 +2,6 @@
 , acme
 , certbot
 , google-api-python-client
-, isPy3k
 , oauth2client
 , pytestCheckHook
 , pythonOlder

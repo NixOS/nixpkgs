@@ -4,12 +4,12 @@ let
   pythonEnv = python3.withPackages (ps: with ps; [ pyqt5_with_qtmultimedia ]);
 in mkDerivation {
   pname = "qarte";
-  version = "4.12.0";
+  version = "4.15.1";
 
   src = fetchbzr {
     url = "http://bazaar.launchpad.net/~vincent-vandevyvre/qarte/qarte-4";
-    rev = "56";
-    sha256 = "0cq9dg04grl45xw43gi9wsb0vm8c4bcvh813h5lm4ry8b94lfx2i";
+    rev = "67";
+    sha256 = "sha256:0ajvrvpyqyyxnq9nv69p3sr6c1kplphvrpph75k76yl0av94j2s3";
   };
 
   buildInputs = [ pythonEnv ];

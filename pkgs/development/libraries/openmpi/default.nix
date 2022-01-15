@@ -27,11 +27,11 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "openmpi";
-  version = "4.1.1";
+  version = "4.1.2";
 
   src = with lib.versions; fetchurl {
     url = "https://www.open-mpi.org/software/ompi/v${major version}.${minor version}/downloads/${pname}-${version}.tar.bz2";
-    sha256 = "1nkwq123vvmggcay48snm9qqmrh0bdzpln0l1jnp26niidvplkz2";
+    sha256 = "09xmlr4mfs02kwcf5cmdgkcdjj81fjwjmpa3rz2k28f3gz7wfy4v";
   };
 
   postPatch = ''

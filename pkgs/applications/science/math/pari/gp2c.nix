@@ -1,7 +1,9 @@
-{ lib, stdenv
-, pari
+{ lib
+, stdenv
 , fetchurl
-, perl }:
+, pari
+, perl
+}:
 
 stdenv.mkDerivation rec {
   pname = "gp2c";
@@ -12,11 +14,15 @@ stdenv.mkDerivation rec {
     sha256 = "039ip7qkwwv46wrcdrz7y12m30kazzkjr44kqbc0h137g4wzd7zf";
   };
 
-  buildInputs = [ pari perl ];
+  buildInputs = [
+    pari
+    perl
+  ];
 
   configureFlags = [
     "--with-paricfg=${pari}/lib/pari/pari.cfg"
-    "--with-perl=${perl}/bin/perl" ];
+    "--with-perl=${perl}/bin/perl"
+  ];
 
   meta = with lib; {
     description =  "A compiler to translate GP scripts to PARI programs";

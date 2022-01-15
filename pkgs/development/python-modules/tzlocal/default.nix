@@ -1,19 +1,38 @@
-{ lib, buildPythonPackage, fetchPypi
-, pytz }:
+{ lib
+, stdenv
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, pytz-deprecation-shim
+, pytest-mock
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "tzlocal";
-  version = "2.1"; # version needs to be compatible with APScheduler
+  version = "4.1"; # version needs to be compatible with APScheduler
 
-  propagatedBuildInputs = [ pytz ];
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "643c97c5294aedc737780a49d9df30889321cbe1204eac2c2ec6134035a92e44";
+    sha256 = "sha256-DygBWsaKXAZyEEAKkZf8XTa6m8P46vHaPL1ZrN/tngk=";
   };
 
-  # test fail (timezone test fail)
-  doCheck = false;
+  propagatedBuildInputs = [
+    pytz-deprecation-shim
+  ];
+
+  checkInputs = [
+    pytest-mock
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    "test_conflicting"
+    "test_noconflict"
+    "test_symlink_localtime"
+  ] ++ lib.optional stdenv.isDarwin "test_assert_tz_offset";
 
   pythonImportsCheck = [ "tzlocal" ];
 

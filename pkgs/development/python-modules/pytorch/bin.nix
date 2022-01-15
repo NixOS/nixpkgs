@@ -11,6 +11,7 @@
 , patchelf
 , pyyaml
 , requests
+, setuptools
 , typing-extensions
 }:
 
@@ -18,7 +19,7 @@ let
   pyVerNoDot = builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion;
   srcs = import ./binary-hashes.nix version;
   unsupported = throw "Unsupported system";
-  version = "1.9.1";
+  version = "1.10.0";
 in buildPythonPackage {
   inherit version;
 
@@ -41,6 +42,7 @@ in buildPythonPackage {
     numpy
     pyyaml
     requests
+    setuptools
     typing-extensions
   ];
 
@@ -59,14 +61,20 @@ in buildPythonPackage {
     done
   '';
 
+  # The wheel-binary is not stripped to avoid the error of `ImportError: libtorch_cuda_cpp.so: ELF load command address/offset not properly aligned.`.
+  dontStrip = true;
+
   pythonImportsCheck = [ "torch" ];
 
   meta = with lib; {
     description = "Open source, prototype-to-production deep learning platform";
     homepage = "https://pytorch.org/";
     changelog = "https://github.com/pytorch/pytorch/releases/tag/v${version}";
-    license = licenses.unfree; # Includes CUDA and Intel MKL.
-    platforms = platforms.linux;
+    # Includes CUDA and Intel MKL, but redistributions of the binary are not limited.
+    # https://docs.nvidia.com/cuda/eula/index.html
+    # https://www.intel.com/content/www/us/en/developer/articles/license/onemkl-license-faq.html
+    license = licenses.bsd3;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ junjihashimoto ];
   };
 }

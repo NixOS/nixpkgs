@@ -75,6 +75,6 @@ let
       homepage = "https://www.autodesk.com/products/eagle/overview";
       license = licenses.unfree;
       platforms = [ "x86_64-linux" ];
-      maintainers = [ maintainers.rittelle ];
+      maintainers = [ ];
     };
   }

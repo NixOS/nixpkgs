@@ -2,13 +2,13 @@
 
 buildGoPackage rec {
   pname = "kubecfg";
-  version = "0.21.0";
+  version = "0.22.0";
 
   src = fetchFromGitHub {
     owner = "bitnami";
     repo = "kubecfg";
     rev = "v${version}";
-    sha256 = "sha256-Wu7+Xmb7ha3OG37DzLg2+/Sr9hB5oD3OIkC9h9Fa4QA=";
+    sha256 = "sha256-8U/A4F4DboS46ftpuk5fQGT2Y0V+X0y0L3/o4x8qpnY=";
   };
 
   goPackagePath = "github.com/bitnami/kubecfg";

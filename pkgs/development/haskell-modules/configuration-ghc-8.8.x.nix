@@ -4,8 +4,7 @@ with haskellLib;
 
 self: super: {
 
-  # This compiler version needs llvm 7.x.
-  llvmPackages = pkgs.lib.dontRecurseIntoAttrs pkgs.llvmPackages_7;
+  llvmPackages = pkgs.lib.dontRecurseIntoAttrs self.ghc.llvmPackages;
 
   # Disable GHC 8.8.x core libraries.
   array = null;
@@ -85,10 +84,10 @@ self: super: {
   vault = dontHaddock super.vault;
 
   # https://github.com/snapframework/snap-core/issues/288
-  snap-core = overrideCabal super.snap-core (drv: { prePatch = "substituteInPlace src/Snap/Internal/Core.hs --replace 'fail   = Fail.fail' ''"; });
+  snap-core = overrideCabal (drv: { prePatch = "substituteInPlace src/Snap/Internal/Core.hs --replace 'fail   = Fail.fail' ''"; }) super.snap-core;
 
   # Upstream ships a broken Setup.hs file.
-  csv = overrideCabal super.csv (drv: { prePatch = "rm Setup.hs"; });
+  csv = overrideCabal (drv: { prePatch = "rm Setup.hs"; }) super.csv;
 
   # https://github.com/kowainik/relude/issues/241
   relude = dontCheck super.relude;
@@ -120,13 +119,15 @@ self: super: {
 
   # ghc versions which don‘t match the ghc-lib-parser-ex version need the
   # additional dependency to compile successfully.
-  ghc-lib-parser-ex = addBuildDepend super.ghc-lib-parser-ex self.ghc-lib-parser;
+  ghc-lib-parser-ex = addBuildDepend self.ghc-lib-parser super.ghc-lib-parser-ex;
 
   # Older compilers need the latest ghc-lib to build this package.
-  hls-hlint-plugin = addBuildDepend super.hls-hlint-plugin self.ghc-lib;
+  hls-hlint-plugin = addBuildDepend self.ghc-lib super.hls-hlint-plugin;
 
   # vector 0.12.2 indroduced doctest checks that don‘t work on older compilers
   vector = dontCheck super.vector;
 
   ghc-api-compat = doDistribute super.ghc-api-compat_8_6;
+
+  mime-string = disableOptimization super.mime-string;
 }

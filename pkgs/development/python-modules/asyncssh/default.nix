@@ -18,12 +18,14 @@
 
 buildPythonPackage rec {
   pname = "asyncssh";
-  version = "2.7.2";
+  version = "2.8.1";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "96b09239c3cc134cfb66ae1138313fdb48cc390806f21f831dd44f8a1d8252a1";
+    sha256 = "0648eba58d72653755f28e26c9bd83147d9652c1f2f5e87fbf5a87d7f8fbf83a";
   };
 
   propagatedBuildInputs = [
@@ -62,9 +64,13 @@ buildPythonPackage rec {
   disabledTests = [
     # No PIN set
     "TestSKAuthCTAP2"
+    # Requires network access
+    "test_connect_timeout_exceeded"
   ];
 
-  pythonImportsCheck = [ "asyncssh" ];
+  pythonImportsCheck = [
+    "asyncssh"
+  ];
 
   meta = with lib; {
     description = "Asynchronous SSHv2 Python client and server library";

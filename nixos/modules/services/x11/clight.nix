@@ -71,6 +71,14 @@ in {
   };
 
   config = mkIf cfg.enable {
+    assertions = let
+      inRange = v: l: r: v >= l && v <= r;
+    in [
+      { assertion = config.location.provider == "manual" ->
+          inRange config.location.latitude (-90) 90 && inRange config.location.longitude (-180) 180;
+        message = "You must specify a valid latitude and longitude if manually providing location"; }
+    ];
+
     boot.kernelModules = [ "i2c_dev" ];
     environment.systemPackages = with pkgs; [ clight clightd ];
     services.dbus.packages = with pkgs; [ clight clightd ];

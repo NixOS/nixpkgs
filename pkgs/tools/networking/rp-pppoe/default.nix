@@ -1,16 +1,16 @@
 { lib, stdenv, fetchurl, ppp } :
 let
-  version = "3.12";
 in
-stdenv.mkDerivation {
-  name = "rp-pppoe-" + version;
+stdenv.mkDerivation rec {
+  pname = "rp-pppoe";
+  version = "3.12";
+
   src = fetchurl {
     url = "https://www.roaringpenguin.com/files/download/rp-pppoe-${version}.tar.gz";
     sha256 = "1hl6rjvplapgsyrap8xj46kc9kqwdlm6ya6gp3lv0ihm0c24wy80";
   };
 
   buildInputs = [ ppp ];
-
 
   preConfigure = ''
     cd src

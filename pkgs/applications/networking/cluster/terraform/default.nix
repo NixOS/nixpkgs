@@ -27,6 +27,8 @@ let
         inherit sha256;
       };
 
+      ldflags = [ "-s" "-w" ];
+
       postConfigure = ''
         # speakeasy hardcodes /bin/stty https://github.com/bgentry/speakeasy/issues/22
         substituteInPlace vendor/github.com/bgentry/speakeasy/speakeasy_unix.go \
@@ -63,6 +65,7 @@ let
           timstott
           zimbatm
           maxeaubrey
+          zowoq
         ];
       };
     } // attrs');
@@ -181,7 +184,7 @@ rec {
   terraform_0_14 = mkTerraform {
     version = "0.14.11";
     sha256 = "1yi1jj3n61g1kn8klw6l78shd23q79llb7qqwigqrx3ki2mp279j";
-    vendorSha256 = "1d93aqkjdrvabkvix6h1qaxpjzv7w1wa7xa44czdnjs2lapx4smm";
+    vendorSha256 = "sha256-tWrSr6JCS9s+I0T1o3jgZ395u8IBmh73XGrnJidWI7U=";
     patches = [ ./provider-path.patch ];
     passthru = { inherit plugins; };
   };
@@ -189,15 +192,15 @@ rec {
   terraform_0_15 = mkTerraform {
     version = "0.15.5";
     sha256 = "18f4a6l24s3cym7gk40agxikd90i56q84wziskw1spy9rgv2yx6d";
-    vendorSha256 = "12hrpxay6k3kz89ihyhl91c4lw4wp821ppa245w9977fq09fhnx0";
+    vendorSha256 = "sha256-oFvoEsDunJR4IULdGwS6nHBKWEgUehgT+nNM41W/GYo=";
     patches = [ ./provider-path-0_15.patch ];
     passthru = { inherit plugins; };
   };
 
-  terraform_1_0 = mkTerraform {
-    version = "1.0.10";
-    sha256 = "1jcgp9q99785m85754ipza7b3dd3g58adpnyh5w2imqj01cas6mb";
-    vendorSha256 = "00cl42w1mzsi9qd09wydfvp5f2h7lxaay6s2dv0mf47k6h7prf42";
+  terraform_1 = mkTerraform {
+    version = "1.1.3";
+    sha256 = "sha256-dvAuzVmwnM2PQcILzw3xNacBwuRY7cZEU3nv4/DzOKE=";
+    vendorSha256 = "sha256-Rk2hHtJfaS553MJIea6n51irMas3qcBrWAD+adzTi1Y=";
     patches = [ ./provider-path-0_15.patch ];
     passthru = { inherit plugins; };
   };
@@ -211,7 +214,7 @@ rec {
       mainTf = writeText "main.tf" ''
         resource "random_id" "test" {}
       '';
-      terraform = terraform_1_0.withPlugins (p: [ p.random ]);
+      terraform = terraform_1.withPlugins (p: [ p.random ]);
       test =
         runCommand "terraform-plugin-test" { buildInputs = [ terraform ]; } ''
           set -e

@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, perl, autoconf }:
 
 stdenv.mkDerivation rec {
-  name = "automake-1.15.1";
+  pname = "automake";
+  version = "1.15.1";
 
   src = fetchurl {
-    url = "mirror://gnu/automake/${name}.tar.xz";
+    url = "mirror://gnu/automake/automake-${version}.tar.xz";
     sha256 = "1bzd9g32dfm4rsbw93ld9x7b5nc1y6i4m6zp032qf1i28a8s6sxg";
   };
 

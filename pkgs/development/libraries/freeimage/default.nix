@@ -24,6 +24,9 @@ stdenv.mkDerivation {
       --replace "pkg-config" "$PKG_CONFIG"
     substituteInPlace Makefile.gnu \
       --replace "pkg-config" "$PKG_CONFIG"
+  '' + lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+    # Upstream Makefile hardcodes i386 and x86_64 architectures only
+    substituteInPlace Makefile.osx --replace "x86_64" "arm64"
   '';
 
   nativeBuildInputs = [

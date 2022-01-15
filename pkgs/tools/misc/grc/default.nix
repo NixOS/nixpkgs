@@ -1,4 +1,7 @@
-{ lib, fetchFromGitHub, buildPythonApplication }:
+{ lib
+, fetchFromGitHub
+, buildPythonApplication
+}:
 
 buildPythonApplication rec {
   pname = "grc";
@@ -27,7 +30,7 @@ buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    homepage = "http://korpus.juls.savba.sk/~garabik/software/grc.html";
+    homepage = "http://kassiopeia.juls.savba.sk/~garabik/software/grc.html";
     description = "A generic text colouriser";
     longDescription = ''
       Generic Colouriser is yet another colouriser (written in Python) for

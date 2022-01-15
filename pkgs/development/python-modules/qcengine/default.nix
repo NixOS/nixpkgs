@@ -1,28 +1,31 @@
-{ buildPythonPackage, lib, fetchPypi, pyyaml, qcelemental, pydantic
-, py-cpuinfo, psutil, pytest-runner, pytest, pytest-cov
-} :
+{ buildPythonPackage
+, lib
+, fetchPypi
+, psutil
+, py-cpuinfo
+, pydantic
+, pyyaml
+, qcelemental
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "qcengine";
-  version = "0.20.1";
+  version = "0.21.0";
 
-  checkInputs = [
-    pytest-runner
-    pytest-cov
-    pytest
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   propagatedBuildInputs = [
+    psutil
+    py-cpuinfo
+    pydantic
     pyyaml
     qcelemental
-    pydantic
-    py-cpuinfo
-    psutil
   ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "hZxE7b0bOx/B8Kz4cgBC7wV23OikRxwrdZ4UQ8G/yhg=";
+    sha256 = "sha256-ZsPKvbaZ7BBZuOmzq12ism/HyWYcLlQHgZaTzmIsMq4=";
   };
 
   doCheck = true;

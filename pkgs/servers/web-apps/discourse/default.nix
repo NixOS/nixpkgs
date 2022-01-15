@@ -1,22 +1,22 @@
 { stdenv, pkgs, makeWrapper, runCommand, lib, writeShellScript
 , fetchFromGitHub, bundlerEnv, callPackage
 
-, ruby, replace, gzip, gnutar, git, cacert, util-linux, gawk
+, ruby, replace, gzip, gnutar, git, cacert, util-linux, gawk, nettools
 , imagemagick, optipng, pngquant, libjpeg, jpegoptim, gifsicle, jhead
-, libpsl, redis, postgresql, which, brotli, procps, rsync
-, nodePackages, v8
+, libpsl, redis, postgresql, which, brotli, procps, rsync, icu
+, nodePackages, nodejs-16_x
 
 , plugins ? []
 }@args:
 
 let
-  version = "2.7.9";
+  version = "2.8.0.beta10";
 
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse";
     rev = "v${version}";
-    sha256 = "sha256-SOERjFbG4l/tUfOl51XEW0nVbza3L4adjiPhz4Hj0YU=";
+    sha256 = "sha256-mlTOsHR8p0mTdhZHBESyDAa1XtMJ4uIht0VUcGD6Ses=";
   };
 
   runtimeDeps = [
@@ -33,6 +33,7 @@ let
     procps       # For ps and kill
     util-linux   # For renice
     gawk
+    nettools     # For hostname
 
     # Image optimization
     imagemagick
@@ -110,16 +111,21 @@ let
         gems = import ./rubyEnv/gemset.nix;
       in
         gems // {
+          mini_racer = gems.mini_racer // {
+            buildInputs = [ icu ];
+            dontBuild = false;
+            NIX_LDFLAGS = "-licui18n";
+          };
           libv8-node =
             let
               noopScript = writeShellScript "noop" "exit 0";
               linkFiles = writeShellScript "link-files" ''
                 cd ../..
 
-                mkdir -p vendor/v8/out.gn/libv8/obj/
-                ln -s "${v8}/lib/libv8.a" vendor/v8/out.gn/libv8/obj/libv8_monolith.a
+                mkdir -p vendor/v8/${stdenv.hostPlatform.system}/libv8/obj/
+                ln -s "${nodejs-16_x.libv8}/lib/libv8.a" vendor/v8/${stdenv.hostPlatform.system}/libv8/obj/libv8_monolith.a
 
-                ln -s ${v8}/include vendor/v8/include
+                ln -s ${nodejs-16_x.libv8}/include vendor/v8/include
 
                 mkdir -p ext/libv8-node
                 echo '--- !ruby/object:Libv8::Node::Location::Vendor {}' >ext/libv8-node/.location.yml
@@ -155,13 +161,9 @@ let
     pname = "discourse-assets";
     inherit version src;
 
-    nativeBuildInputs = [
-      rubyEnv.wrappedRuby
+    nativeBuildInputs = runtimeDeps ++ [
       postgresql
       redis
-      which
-      brotli
-      procps
       nodePackages.uglify-js
       nodePackages.terser
     ];
@@ -255,10 +257,6 @@ let
       # one constructed by bundlerEnv
       ./plugin_gem_api_version.patch
 
-      # Use mv instead of rename, since rename doesn't work across
-      # device boundaries
-      ./use_mv_instead_of_rename.patch
-
       # Change the path to the auto generated plugin assets, which
       # defaults to the plugin's directory and isn't writable at the
       # time of asset generation
@@ -266,11 +264,6 @@ let
 
       # Make sure the notification email setting applies
       ./notification_email.patch
-
-      # Change the path to the public directory reported by Discourse
-      # to its real path instead of the symlink in the store, since
-      # the store path won't be matched by any nginx rules
-      ./public_dir_path.patch
     ];
 
     postPatch = ''
@@ -320,7 +313,11 @@ let
       enabledPlugins = plugins;
       plugins = callPackage ./plugins/all-plugins.nix { inherit mkDiscoursePlugin; };
       ruby = rubyEnv.wrappedRuby;
-      tests = import ../../../../nixos/tests/discourse.nix { package = pkgs.discourse.override args; };
+      tests = import ../../../../nixos/tests/discourse.nix {
+        inherit (stdenv) system;
+        inherit pkgs;
+        package = pkgs.discourse.override args;
+      };
     };
   };
 in discourse

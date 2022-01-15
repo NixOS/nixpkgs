@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
       '';
     changelog = "https://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/docs/changes.txt";
     license = licenses.mit;
-    maintainers = [ maintainers.xbreak ];
+    maintainers = with maintainers; [ xbreak hjones2199 ];
     platforms = with platforms; linux ++ darwin;
   };
 }

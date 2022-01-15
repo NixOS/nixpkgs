@@ -1,7 +1,7 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , nix-update-script
-, pantheon
 , pkg-config
 , meson
 , ninja
@@ -64,7 +64,6 @@ stdenv.mkDerivation rec {
     libhandy
     libical
     libnotify
-    libgdata # required by some dependency transitively
   ];
 
   postPatch = ''

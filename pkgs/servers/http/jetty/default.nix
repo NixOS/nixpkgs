@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   pname = "jetty";
   version = "9.4.43.v20210629";
   src = fetchurl {
-    url = "https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-distribution/${version}/jetty-distribution-${version}.tar.gz";
+    url = "mirror://maven/org/eclipse/jetty/jetty-distribution/${version}/jetty-distribution-${version}.tar.gz";
     sha256 = "sha256-AfrmVLCZMuRGAZqoWeevbgXifbreErVM17rjJJ/HI9k=";
   };
 

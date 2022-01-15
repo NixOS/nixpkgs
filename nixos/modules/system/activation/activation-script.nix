@@ -142,6 +142,7 @@ in
       readOnly = true;
       internal = true;
       default = systemActivationScript (removeAttrs config.system.activationScripts [ "script" ]) true;
+      defaultText = literalDocBook "generated activation script";
     };
 
     system.userActivationScripts = mkOption {
@@ -150,7 +151,7 @@ in
       example = literalExpression ''
         { plasmaSetup = {
             text = '''
-              ${pkgs.libsForQt5.kservice}/bin/kbuildsycoca5"
+              ''${pkgs.libsForQt5.kservice}/bin/kbuildsycoca5"
             ''';
             deps = [];
           };

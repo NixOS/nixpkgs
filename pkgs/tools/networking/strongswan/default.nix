@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchpatch, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , pkg-config, autoreconfHook, perl, gperf, bison, flex
 , gmp, python3, iptables, ldns, unbound, openssl, pcsclite, glib
 , openresolv
@@ -17,13 +17,13 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "strongswan";
-  version = "5.8.1"; # Make sure to also update <nixpkgs/nixos/modules/services/networking/strongswan-swanctl/swanctl-params.nix> when upgrading!
+  version = "5.9.4"; # Make sure to also update <nixpkgs/nixos/modules/services/networking/strongswan-swanctl/swanctl-params.nix> when upgrading!
 
   src = fetchFromGitHub {
     owner = "strongswan";
     repo = "strongswan";
     rev = version;
-    sha256 = "1a1hw2jsbwvkdhhxjmq87hz13ivbgvqwks1q3adz14mqgbc64snd";
+    sha256 = "1y1gs232x7hsbccjga9nbkf4bbi5wxazlkg00qd2v1nz86sfy4cd";
   };
 
   dontPatchELF = true;
@@ -40,19 +40,6 @@ stdenv.mkDerivation rec {
     ./ext_auth-path.patch
     ./firewall_defaults.patch
     ./updown-path.patch
-
-    # Don't use etc/dbus-1/system.d
-    (fetchpatch {
-      url = "https://patch-diff.githubusercontent.com/raw/strongswan/strongswan/pull/150.patch";
-      sha256 = "1irfxb99blb8v3hs0kmlhzkkwbmds1p0gq319z8lmacz36cgyj2c";
-    })
-
-    # fix build with -fno-common tollchain
-    (fetchpatch {
-      name = "fno-common.patch";
-      url = "https://git.strongswan.org/?p=strongswan.git;a=patch;h=91c6387e69c09beaa9b9ca1e28471751a834fc24";
-      sha256 = "0jp9walxwffp5cl7q0hb80h3s2gdj1nn3n8bvnbmwgh2s6pi148f";
-    })
   ];
 
   postPatch = optionalString stdenv.isLinux ''

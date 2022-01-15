@@ -1,24 +1,26 @@
-{ cmake, fetchFromGitHub, lib, rustPlatform }:
+{ lib, rustPlatform, fetchFromGitHub, cmake, stdenv }:
 
 rustPlatform.buildRustPackage rec {
   pname = "lunatic";
-  version = "0.6.2";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "lunatic-solutions";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1dz8v19jw9v55p3mz4932v6z24ihp6wk238n4d4lx9xj91mf3g6r";
+    sha256 = "sha256-+4014p+4QJ7nytFHHszAOYQHXLYXqR+Cip+vHxsH9l8=";
   };
 
-  cargoSha256 = "1rkxl27l6ydmcq3flc6qbnd7zmpkfmyc86b8q4pi7dwhqnd5g70g";
+  cargoSha256 = "sha256-RnaAiumTP4cW2eHUbnwyPdgJQLK65gqDI/NP2SOrO4E=";
 
   nativeBuildInputs = [ cmake ];
 
   meta = with lib; {
     description = "An Erlang inspired runtime for WebAssembly";
     homepage = "https://lunatic.solutions";
+    changelog = "https://github.com/lunatic-solutions/lunatic/blob/v${version}/RELEASES.md";
     license = with licenses; [ mit /* or */ asl20 ];
     maintainers = with maintainers; [ figsoda ];
+    broken = stdenv.isDarwin;
   };
 }

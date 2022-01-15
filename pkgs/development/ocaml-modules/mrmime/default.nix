@@ -36,15 +36,6 @@ buildDunePackage rec {
 
   useDune2 = true;
 
-  buildInputs = [
-    afl-persistent
-    bigarray-compat
-    bigarray-overlap
-    bigstringaf
-    fpath
-    mirage-crypto-rng
-  ];
-
   propagatedBuildInputs = [
     angstrom
     base64
@@ -59,6 +50,12 @@ buildDunePackage rec {
     rresult
     unstrctrd
     uutf
+    afl-persistent
+    bigarray-compat
+    bigarray-overlap
+    bigstringaf
+    fpath
+    mirage-crypto-rng
   ];
 
   checkInputs = [

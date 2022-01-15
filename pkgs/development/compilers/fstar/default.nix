@@ -1,36 +1,20 @@
 { lib, stdenv, fetchFromGitHub, z3, ocamlPackages, makeWrapper, installShellFiles }:
 
-let
-  # FStar requires sedlex < 2.4
-  # see https://github.com/FStarLang/FStar/issues/2343
-  sedlex-2_3 = ocamlPackages.sedlex_2.overrideAttrs (_: rec {
-    pname = "sedlex";
-    version = "2.3";
-    src = fetchFromGitHub {
-       owner = "ocaml-community";
-       repo = "sedlex";
-       rev = "v${version}";
-       sha256 = "WXUXUuIaBUrFPQOKtZ7dgDZYdpEVnoJck0dkrCi8g0c=";
-    };
-  });
-in
-
 stdenv.mkDerivation rec {
   pname = "fstar";
-  version = "2021.10.16";
+  version = "2021.12.25";
 
   src = fetchFromGitHub {
     owner = "FStarLang";
     repo = "FStar";
     rev = "v${version}";
-    sha256 = "03b693s7s7dzflv5qkf61gd8ji9bn6fq4pxd8pd3a6ppkwj6b5vc";
+    sha256 = "RmXKv/admC1w26z/ClNhH11J8n87WTfDr2lYOF6Fx7I=";
   };
 
   nativeBuildInputs = [ makeWrapper installShellFiles ];
 
   buildInputs = [
     z3
-    sedlex-2_3
   ] ++ (with ocamlPackages; [
     ocaml
     findlib
@@ -43,6 +27,7 @@ stdenv.mkDerivation rec {
     menhir
     menhirLib
     pprint
+    sedlex_2
     ppxlib
     ppx_deriving
     ppx_deriving_yojson

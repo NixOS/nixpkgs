@@ -5,7 +5,6 @@
 , pytest-cov
 , cython
 , numpy
-, python
 }:
 
 buildPythonPackage rec {

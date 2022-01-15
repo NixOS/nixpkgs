@@ -15,6 +15,8 @@ buildDunePackage rec {
   pname = "ppx_cstubs";
   version = "0.6.1.2";
 
+  minimalOCamlVersion = "4.08";
+
   useDune2 = true;
 
   src = fetchFromGitHub {

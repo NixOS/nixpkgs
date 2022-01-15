@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 let
 
@@ -6,6 +6,7 @@ let
   inherit (lib) literalExpression mapAttrs optionalString versionAtLeast;
 
   cfg = config.services.zabbixWeb;
+  opt = options.services.zabbixWeb;
   fpm = config.services.phpfpm.pools.zabbix;
 
   user = "zabbix";
@@ -21,7 +22,8 @@ let
     $DB['PORT'] = '${toString cfg.database.port}';
     $DB['DATABASE'] = '${cfg.database.name}';
     $DB['USER'] = '${cfg.database.user}';
-    $DB['PASSWORD'] = ${if cfg.database.passwordFile != null then "file_get_contents('${cfg.database.passwordFile}')" else "''"};
+    # NOTE: file_get_contents adds newline at the end of returned string
+    $DB['PASSWORD'] = ${if cfg.database.passwordFile != null then "trim(file_get_contents('${cfg.database.passwordFile}'), \"\\r\\n\")" else "''"};
     // Schema name. Used for IBM DB2 and PostgreSQL.
     $DB['SCHEMA'] = ''';
     $ZBX_SERVER = '${cfg.server.address}';
@@ -81,6 +83,11 @@ in
             if cfg.database.type == "mysql" then config.services.mysql.port
             else if cfg.database.type == "pgsql" then config.services.postgresql.port
             else 1521;
+          defaultText = literalExpression ''
+            if config.${opt.database.type} == "mysql" then config.${options.services.mysql.port}
+            else if config.${opt.database.type} == "pgsql" then config.${options.services.postgresql.port}
+            else 1521
+          '';
           description = "Database host port.";
         };
 

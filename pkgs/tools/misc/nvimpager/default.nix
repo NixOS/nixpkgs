@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nvimpager";
-  version = "0.10";
+  version = "0.10.4";
 
   src = fetchFromGitHub {
     owner = "lucc";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-okYnPwuxU/syxcKIMUBc25r791D6Bug2w2axH4vvmAY=";
+    sha256 = "sha256-0guSL4RvYQFwok7zGuevhQY6DHjnETRLpEIEQfGslcg=";
   };
 
   buildInputs = [
@@ -26,9 +26,6 @@ stdenv.mkDerivation rec {
   preBuild = ''
     patchShebangs nvimpager
     substituteInPlace nvimpager --replace ':-nvim' ':-${neovim}/bin/nvim'
-    # remove git command from makefile as we run from a tarball
-    # replace with actual timestamp of the commit
-    substituteInPlace makefile --replace '$(shell git log -1 --no-show-signature --pretty="%ct")' 1623019602
     '';
 
   doCheck = true;

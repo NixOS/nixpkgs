@@ -12,6 +12,7 @@
 , bos
 , fpath
 , randomconv
+, cstruct
 }:
 
 buildDunePackage {
@@ -37,6 +38,7 @@ buildDunePackage {
     bos
     fpath
     randomconv
+    cstruct
   ];
 
   meta = letsencrypt.meta // {

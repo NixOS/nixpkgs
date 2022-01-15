@@ -106,7 +106,13 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Software modular synth with controllers support, scripting and VST";
     homepage = "https://github.com/awwbees/BespokeSynth";
-    license = licenses.gpl3Plus;
+    license = with licenses; [
+      gpl3Plus
+
+      # This package is unfree and not distributable due to the license of VST2.
+      # see #145607
+      unfree
+    ];
     maintainers = with maintainers; [ astro ];
     platforms = platforms.all;
   };

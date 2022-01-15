@@ -48,7 +48,7 @@
 let
   # HTTP support is disabled in order to force that HTTP dependencies are built
   # using Nix instead of using Dhall's support for HTTP imports.
-  dhallNoHTTP = haskell.lib.appendConfigureFlag dhall "-f-with-http";
+  dhallNoHTTP = haskell.lib.compose.appendConfigureFlag "-f-with-http" dhall;
 
   file = writeText "${name}.dhall" code;
 

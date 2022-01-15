@@ -123,6 +123,8 @@ in {
     ];
     environment = {
       systemPackages = [ swayPackage ] ++ cfg.extraPackages;
+      # Needed for the default wallpaper:
+      pathsToLink = [ "/share/backgrounds/sway" ];
       etc = {
         "sway/config".source = mkOptionDefault "${swayPackage}/etc/sway/config";
         "sway/config.d/nixos.conf".source = pkgs.writeText "nixos.conf" ''

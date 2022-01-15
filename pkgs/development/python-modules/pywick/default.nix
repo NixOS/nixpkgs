@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname   = "pywick";
-  version = "0.5.6";
+  version = "0.6.5";
 
   disabled = pythonOlder "3.6";
 
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "achaiah";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1gmlifnv9kji0d1jwg1pa8d96zg48w17qg0sgxwy1y1jf3hn37bm";
+    sha256 = "0wnijdvqgdpzfdsy1cga3bsr0n7zzsl8hp4dskqwxx087g5h1r84";
   };
 
   propagatedBuildInputs = [

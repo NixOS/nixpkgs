@@ -5,7 +5,6 @@
 , pytest
 , pytest-flake8
 , more-itertools
-, toml
 }:
 
 buildPythonPackage rec {

@@ -5,7 +5,7 @@
 , gi-docgen
 , gtk-doc
 , libxml2
-, meson
+, meson_0_60
 , ninja
 , pkg-config
 , sassc
@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libadwaita";
-  version = "1.0.0.alpha.3";
+  version = "1.0.0.alpha.4";
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "devdoc"; # demo app
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     owner = "GNOME";
     repo = "libadwaita";
     rev = version;
-    sha256 = "sha256-4ED2m8hZMWbu5sFbkH0W6q05+cYCCkx+ubeDqg3W3a0=";
+    sha256 = "sha256-3aVeBaKSl6SaPQLodsyJHwnNOlXlWfIaLnbbl3+mlDA=";
   };
 
   nativeBuildInputs = [
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     gi-docgen
     gtk-doc
     libxml2 # for xmllint
-    meson
+    meson_0_60
     ninja
     pkg-config
     sassc
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
       # AdwSettings needs to be initialized from “org.gnome.desktop.interface” GSettings schema when portal is not used for color scheme.
       # It will not actually be used since the “color-scheme” key will only have been introduced in GNOME 42, falling back to detecting theme name.
       # See adw_settings_constructed function in https://gitlab.gnome.org/GNOME/libadwaita/commit/60ec69f0a5d49cad8a6d79e4ecefd06dc6e3db12
-      "XDG_DATA_DIRS=${glib.getSchemaPath gsettings-desktop-schemas}/../.."
+      "XDG_DATA_DIRS=${glib.getSchemaDataDirPath gsettings-desktop-schemas}"
 
       # Tests need a cache directory
       "HOME=$TMPDIR"

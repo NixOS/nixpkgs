@@ -9,8 +9,6 @@ python3Packages.buildPythonApplication rec {
     sha256 = "1x7a0nrr9agg1pfgq8i1j8r1p6c0jpyxsv196ylix1dd2iivmas1";
   };
 
-  disabled = python3Packages.pythonOlder "3.5";
-
   nativeBuildInputs = [ python3Packages.cython cmake ];
 
   postPatch = lib.optionalString stdenv.isAarch64 ''

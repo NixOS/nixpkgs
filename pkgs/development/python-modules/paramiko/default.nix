@@ -13,15 +13,18 @@
 
 buildPythonPackage rec {
   pname = "paramiko";
-  version = "2.7.2";
+  version = "2.8.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7f36f4ba2c0d81d219f4595e35f70d56cc94f9ac40a6acdf51d6ca210ce65035";
+    sha256 = "85b1245054e5d7592b9088cc6d08da22445417912d3a3e48138675c7a8616438";
   };
 
   propagatedBuildInputs = [ bcrypt cryptography pynacl pyasn1 ];
 
+  # with python 3.9.6+, the deprecation warnings will fail the test suite
+  # see: https://github.com/pyinvoke/invoke/issues/829
+  doCheck = false;
   checkInputs = [ invoke pytestCheckHook pytest-relaxed mock ];
 
   disabledTestPaths = [

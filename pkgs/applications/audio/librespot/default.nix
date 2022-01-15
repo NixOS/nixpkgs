@@ -15,23 +15,17 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "1sal85gsbnrabxi39298w9njdc08csnwl40akd6k9fsc0fmpn1b0";
 
-  cargoBuildFlags = with lib; [
-    "--no-default-features"
-    "--features"
-    (concatStringsSep "," (filter (x: x != "") [
-      (optionalString withRodio "rodio-backend")
-      (optionalString withALSA "alsa-backend")
-      (optionalString withPulseAudio "pulseaudio-backend")
-      (optionalString withPortAudio "portaudio-backend")
-
-    ]))
-  ];
-
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl ] ++ lib.optional withALSA alsa-lib
     ++ lib.optional withPulseAudio libpulseaudio
     ++ lib.optional withPortAudio portaudio;
+
+  buildNoDefaultFeatures = true;
+  buildFeatures = lib.optional withRodio "rodio-backend"
+    ++ lib.optional withALSA "alsa-backend"
+    ++ lib.optional withPulseAudio "pulseaudio-backend"
+    ++ lib.optional withPortAudio "portaudio-backend";
 
   doCheck = false;
 

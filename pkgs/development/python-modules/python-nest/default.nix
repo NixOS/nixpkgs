@@ -1,4 +1,4 @@
-{ buildPythonPackage, fetchPypi, lib, python, python-dateutil, requests
+{ buildPythonPackage, fetchPypi, lib, python-dateutil, requests
 , six, sseclient-py }:
 
 buildPythonPackage rec {

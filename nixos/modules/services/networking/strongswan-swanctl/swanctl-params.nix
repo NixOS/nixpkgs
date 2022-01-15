@@ -569,6 +569,16 @@ in {
         these sections offer more flexibility.
       '';
 
+      ca_id = mkOptionalStrParam ''
+        Identity in CA certificate to accept for authentication. The specified
+        identity must be contained in one (intermediate) CA of the remote peer
+        trustchain, either as subject or as subjectAltName. This has the same
+        effect as specifying <literal>cacerts</literal> to force clients under
+        a CA to specific connections; it does not require the CA certificate
+        to be available locally, and can be received from the peer during the
+        IKE exchange.
+      '';
+
       cacerts = mkCommaSepListParam [] ''
         List of CA certificates to accept for
         authentication. The certificates may use a relative path from the

@@ -60,6 +60,8 @@
 , ceph
 , enableGlusterfs ? false
 , glusterfs
+, Carbon
+, AppKit
 }:
 
 with lib;
@@ -70,14 +72,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "libvirt";
-  version = "7.8.0";
+  version = "7.10.0";
 
   src =
     if buildFromTarball then
       fetchurl
         {
           url = "https://libvirt.org/sources/${pname}-${version}.tar.xz";
-          sha256 = "sha256-pyfNCke/ok+n3ih00j86n58Czra0m6FSiPbZoJixmSE=";
+          sha256 = "sha256-yzGAFK8JcyeSjG49cpIuO+AqPmQBJHsqpS2auOC0gPk=";
         }
     else
       fetchFromGitLab
@@ -85,7 +87,7 @@ stdenv.mkDerivation rec {
           owner = pname;
           repo = pname;
           rev = "v${version}";
-          sha256 = "sha256-/tSMJFgLPAiQXcZ2qZLM4XZqf96NtW3+zwKyrwGho2s=";
+          sha256 = "sha256-bB8LsjZFeJbMmmC0YRPyMag2MBhwagUFC7aB1KhZEkA=";
           fetchSubmodules = true;
         };
 
@@ -152,6 +154,8 @@ stdenv.mkDerivation rec {
   ] ++ optionals stdenv.isDarwin [
     libiconv
     gmp
+    Carbon
+    AppKit
   ];
 
   preConfigure =

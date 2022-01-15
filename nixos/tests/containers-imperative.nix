@@ -14,7 +14,6 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       nix.binaryCaches = []; # don't try to access cache.nixos.org
 
       virtualisation.writableStore = true;
-      virtualisation.memorySize = 1024;
       # Make sure we always have all the required dependencies for creating a
       # container available within the VM, because we don't have network access.
       virtualisation.additionalPaths = let
@@ -119,7 +118,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
 
       with subtest("Stop a container early"):
           machine.succeed(f"nixos-container stop {id1}")
-          machine.succeed(f"nixos-container start {id1} &")
+          machine.succeed(f"nixos-container start {id1} >&2 &")
           machine.wait_for_console_text("Stage 2")
           machine.succeed(f"nixos-container stop {id1}")
           machine.wait_for_console_text(f"Container {id1} exited successfully")

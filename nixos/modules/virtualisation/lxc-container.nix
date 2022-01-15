@@ -61,7 +61,7 @@ in
         description = "Templates for LXD";
         type = types.attrsOf (types.submodule (templateSubmodule));
         default = {};
-        example = literalExample ''
+        example = literalExpression ''
           {
             # create /etc/hostname on container creation
             "hostname" = {

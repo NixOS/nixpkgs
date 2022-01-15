@@ -84,12 +84,15 @@ in {
         "bdev"
         "binfmt"
         "binfmt_misc"
+        "ceph"
         "cgroup"
+        "cgroup2"
         "cifs"
         "coda"
         "configfs"
         "cramfs"
         "cpuset"
+        "curlftpfs"
         "debugfs"
         "devfs"
         "devpts"
@@ -101,6 +104,13 @@ in {
         "ftpfs"
         "fuse"
         "fusectl"
+        "fusesmb"
+        "fuse.ceph"
+        "fuse.glusterfs"
+        "fuse.gvfsd-fuse"
+        "fuse.mfs"
+        "fuse.rclone"
+        "fuse.rozofs"
         "fuse.sshfs"
         "gfs"
         "gfs2"
@@ -110,9 +120,15 @@ in {
         "iso9660"
         "jffs2"
         "lustre"
+        "lustre_lite"
         "misc"
+        "mfs"
         "mqueue"
         "ncpfs"
+        "nfs"
+        "NFS"
+        "nfs4"
+        "nfsd"
         "nnpfs"
         "ocfs"
         "ocfs2"
@@ -127,16 +143,14 @@ in {
         "smbfs"
         "sockfs"
         "spufs"
-        "nfs"
-        "NFS"
-        "nfs4"
-        "nfsd"
         "sshfs"
         "subfs"
         "supermount"
         "sysfs"
         "tmpfs"
+        "tracefs"
         "ubifs"
+        "udev"
         "udf"
         "usbfs"
         "vboxsf"
@@ -149,7 +163,7 @@ in {
 
     prunePaths = mkOption {
       type = listOf path;
-      default = ["/tmp" "/var/tmp" "/var/cache" "/var/lock" "/var/run" "/var/spool" "/nix/store"];
+      default = [ "/tmp" "/var/tmp" "/var/cache" "/var/lock" "/var/run" "/var/spool" "/nix/store" "/nix/var/log/nix" ];
       description = ''
         Which paths to exclude from indexing
       '';
@@ -157,7 +171,7 @@ in {
 
     pruneNames = mkOption {
       type = listOf str;
-      default = [];
+      default = [ ".bzr" ".cache" ".git" ".hg" ".svn" ];
       description = ''
         Directory components which should exclude paths containing them from indexing
       '';
@@ -202,7 +216,7 @@ in {
           PRUNEFS="${lib.concatStringsSep " " cfg.pruneFS}"
           PRUNENAMES="${lib.concatStringsSep " " cfg.pruneNames}"
           PRUNEPATHS="${lib.concatStringsSep " " cfg.prunePaths}"
-          PRUNE_BIND_MOUNTSFR="${lib.boolToString cfg.pruneBindMounts}"
+          PRUNE_BIND_MOUNTS="${if cfg.pruneBindMounts then "yes" else "no"}"
         '';
       };
     };

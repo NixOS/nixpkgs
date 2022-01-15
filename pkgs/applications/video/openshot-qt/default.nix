@@ -1,7 +1,14 @@
-{ lib, stdenv, mkDerivationWith, fetchFromGitHub, fetchpatch
-, doxygen, python3Packages, libopenshot
-, wrapGAppsHook, gtk3
-, qtsvg }:
+{ lib
+, stdenv
+, mkDerivationWith
+, fetchFromGitHub
+, doxygen
+, gtk3
+, libopenshot
+, python3Packages
+, qtsvg
+, wrapGAppsHook
+}:
 
 mkDerivationWith python3Packages.buildPythonApplication rec {
   pname = "openshot-qt";
@@ -14,11 +21,23 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
     sha256 = "0pa8iwl217503bjlqg2zlrw5lxyq5hvxrf5apxrh3843hj1w1myv";
   };
 
-  nativeBuildInputs = [ doxygen wrapGAppsHook ];
+  nativeBuildInputs = [
+    doxygen
+    wrapGAppsHook
+  ];
 
-  buildInputs = [ gtk3 ];
+  buildInputs = [
+    gtk3
+  ];
 
-  propagatedBuildInputs = with python3Packages; [ libopenshot pyqt5_with_qtwebkit requests sip_4 httplib2 pyzmq ];
+  propagatedBuildInputs = with python3Packages; [
+    httplib2
+    libopenshot
+    pyqt5_with_qtwebkit
+    pyzmq
+    requests
+    sip_4
+  ];
 
   dontWrapGApps = true;
   dontWrapQtApps = true;
@@ -55,5 +74,10 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
     license = with licenses; gpl3Plus;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = with platforms; unix;
+  };
+
+  passthru = {
+    inherit libopenshot;
+    inherit (libopenshot) libopenshot-audio;
   };
 }

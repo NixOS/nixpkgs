@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "deactivated";
     repo = "python-iso3166";
     rev = version;
-    sha256 = "0zs9za9dr2nl5srxir08yibmp6nffcapmzala0fgh8ny7y6rafrx";
+    sha256 = "sha256-/y7c2qSA6+WKUP9YTSaMBjBxtqAuF4nB3MKvL5P6vL0=";
   };
 
   checkInputs = [

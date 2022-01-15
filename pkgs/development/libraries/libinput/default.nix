@@ -3,6 +3,7 @@
 , documentationSupport ? false, doxygen, graphviz # Documentation
 , eventGUISupport ? false, cairo, glib, gtk3 # GUI event viewer support
 , testsSupport ? false, check, valgrind, python3
+, nixosTests
 }:
 
 let
@@ -75,6 +76,10 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = testsSupport && stdenv.hostPlatform == stdenv.buildPlatform;
+
+  passthru.tests = {
+    libinput-module = nixosTests.libinput;
+  };
 
   meta = with lib; {
     description = "Handles input devices in Wayland compositors and provides a generic X.Org input driver";

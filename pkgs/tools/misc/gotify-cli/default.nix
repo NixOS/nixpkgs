@@ -2,18 +2,16 @@
 
 buildGoModule rec {
   pname = "gotify-cli";
-  version = "2.2.0";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "gotify";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "0hgh1i8rdmf12qmk66cgksv8hz5qzkfbfb6cfmrkhbq765xkm4ir";
+    sha256 = "sha256-X41m7bCilDgnTMJy3ISz8g7dAtaz/lphwaCPZDGMDXk=";
   };
 
-  vendorSha256 = "1l47s0h0v4cgqcsm5008cknvfa4vnv6f7n43d8ga0xq5ikqqzmja";
-
-  doCheck = false;
+  vendorSha256 = "sha256-EKscJM8r1dbKRQPSZFwFqJYACkQynIS347460PuxQiU=";
 
   postInstall = ''
     mv $out/bin/cli $out/bin/gotify

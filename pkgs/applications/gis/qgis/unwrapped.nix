@@ -1,7 +1,6 @@
 { lib
 , mkDerivation
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , ninja
 , flex
@@ -57,22 +56,15 @@ let
     six
   ];
 in mkDerivation rec {
-  version = "3.16.10";
+  version = "3.16.14";
   pname = "qgis-unwrapped";
 
   src = fetchFromGitHub {
     owner = "qgis";
     repo = "QGIS";
     rev = "final-${lib.replaceStrings [ "." ] [ "_" ] version}";
-    sha256 = "sha256-/lsfyTDlkZNIVHg5qgZW7qfOyTC2+1r3ZbsnQmEdy30=";
+    sha256 = "sha256-3FUGSBdlhJhhpTPtYuzKOznsC7PJV3kRL9Il2Yryi1Q=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/qgis/QGIS/commit/fc1ac8bef8dcc3194857ecd32519aca4867b4fa1.patch";
-      sha256 = "106smg3drx8c7yxzfhd1c7xrq757l5cfxx8lklihyvr4a7wc9gpy";
-    })
-  ];
 
   passthru = {
     inherit pythonBuildInputs;
@@ -122,7 +114,7 @@ in mkDerivation rec {
   cmakeFlags = [
     "-DCMAKE_SKIP_BUILD_RPATH=OFF"
     "-DPYQT5_SIP_DIR=${python3Packages.pyqt5}/${python3Packages.python.sitePackages}/PyQt5/bindings"
-    "-DQSCI_SIP_DIR=${python3Packages.qscintilla-qt5}/share/sip/PyQt5"
+    "-DQSCI_SIP_DIR=${python3Packages.qscintilla-qt5}/${python3Packages.python.sitePackages}/PyQt5/bindings"
   ] ++ lib.optional (!withWebKit) "-DWITH_QTWEBKIT=OFF"
     ++ lib.optional withGrass "-DGRASS_PREFIX7=${grass}/${grass.name}";
 
@@ -131,6 +123,6 @@ in mkDerivation rec {
     homepage = "https://www.qgis.org";
     license = lib.licenses.gpl2Plus;
     platforms = with lib.platforms; linux;
-    maintainers = with lib.maintainers; [ lsix sikmir ];
+    maintainers = with lib.maintainers; [ lsix sikmir erictapen ];
   };
 }

@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "scowl";
-  version = "2019.10.06";
+  version = "2020.12.07";
 
   src = fetchFromGitHub {
     owner = "en-wl";
     repo = "wordlist";
     rev = "rel-${version}";
-    sha256 = "1daag7h63gdijp1lv3v93bx5kmcb5zsyydsd57kv0a6kk3vs819x";
+    sha256 = "sha256-J61jhpnZcXMnoGlSuSCrKDZnnyp3Snjr+fUpTVKX64g=";
   };
 
   postPatch = ''

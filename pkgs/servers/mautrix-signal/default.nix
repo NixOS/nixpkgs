@@ -2,13 +2,13 @@
 
 python3.pkgs.buildPythonPackage rec {
   pname = "mautrix-signal";
-  version = "unstable-2021-08-12";
+  version = "unstable-2022-01-13";
 
   src = fetchFromGitHub {
-    owner = "tulir";
-    repo = "mautrix-signal";
-    rev = "a592baaaa6c9ab7ec29edc84f069b9e9e2fc1b03";
-    sha256 = "0rvidf4ah23x8m7k7hbkwm2xrs838wnli99gh99b5hr6fqmacbwl";
+    owner = "mautrix";
+    repo = "signal";
+    rev = "e015852a9969ac169e215c80872199ba3f3d838f";
+    sha256 = "sha256-7+0JubSGmQDMr7n1PK6i7homR1WknMz9ikC4164XmMo=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -24,7 +24,7 @@ python3.pkgs.buildPythonPackage rec {
     python-olm
     python_magic
     qrcode
-    ruamel_yaml
+    ruamel-yaml
     unpaddedbase64
     yarl
   ];
@@ -46,7 +46,7 @@ python3.pkgs.buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    homepage = "https://github.com/tulir/mautrix-signal";
+    homepage = "https://github.com/mautrix/signal";
     description = "A Matrix-Signal puppeting bridge";
     license = licenses.agpl3Plus;
     platforms = platforms.linux;

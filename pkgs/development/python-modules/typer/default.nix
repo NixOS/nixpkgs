@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , click
@@ -42,6 +43,11 @@ buildPythonPackage rec {
   preCheck = ''
     export HOME=$(mktemp -d);
   '';
+  disabledTests = lib.optionals stdenv.isDarwin [
+    # likely related to https://github.com/sarugaku/shellingham/issues/35
+    "test_show_completion"
+    "test_install_completion"
+  ];
 
   pythonImportsCheck = [ "typer" ];
 

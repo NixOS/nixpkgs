@@ -2,22 +2,20 @@
 
 stdenv.mkDerivation rec {
   pname = "vlang";
-  version = "weekly.2021.25";
+  version = "weekly.2021.51";
 
   src = fetchFromGitHub {
     owner = "vlang";
     repo = "v";
     rev = version;
-    sha256 = "0y4a5rmpcdqina32d6azbmsbi3zqqfl413sicg72x6a1pm2vg33j";
+    sha256 = "1jvq3fxckl2jidiigkvclacjxbg5k38268mck7bl1ky1yspgfrnq";
   };
 
-  # V compiler source translated to C for bootstrap.
-  # Use matching v.c release commit for now, 0.1.21 release is not available.
   vc = fetchFromGitHub {
     owner = "vlang";
     repo = "vc";
-    rev = "3201d2dd2faadfa370da0bad2a749a664ad5ade3";
-    sha256 = "0xzkjdph5wfjr3qfkihgc27vsbbjh2l31rp8z2avq9hc531hwvrz";
+    rev = "c8ed2cd82b247e94c33217dba35c420cfc02fef3";
+    sha256 = "1acgx1qp480jmsv1xvqy1zf7iyy90mvg9x1m1b0zrwx09wz4y1cq";
   };
 
   propagatedBuildInputs = [ glfw freetype openssl ]

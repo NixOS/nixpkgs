@@ -31,7 +31,11 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--sysconfdir=/etc"
     "--localstatedir=/var"
-    "--with-trust-paths=/etc/ssl/trust-source:/etc/ssl/certs/ca-certificates.crt"
+    "--with-trust-paths=${lib.concatStringsSep ":" [
+      "/etc/ssl/trust-source"               # p11-kit trust source
+      "/etc/ssl/certs/ca-certificates.crt"  # NixOS + Debian/Ubuntu/Arch/Gentoo...
+      "/etc/pki/tls/certs/ca-bundle.crt"    # Fedora/CentOS
+    ]}"
   ];
 
   enableParallelBuilding = true;

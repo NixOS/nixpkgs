@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Curve fitting and peak fitting software";
     license = lib.licenses.gpl2;
-    homepage = "http://fityk.nieto.pl/";
+    homepage = "https://fityk.nieto.pl/";
     platforms = lib.platforms.linux;
   };
 }

@@ -44,6 +44,6 @@ in stdenv.mkDerivation rec {
     description = "Generic monitor plugin for the Xfce panel";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ ];
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

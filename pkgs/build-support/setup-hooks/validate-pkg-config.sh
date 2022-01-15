@@ -7,7 +7,7 @@ _validatePkgConfig() {
     for pc in $(find "$prefix" -name '*.pc'); do
         # Do not fail immediately. It's nice to see all errors when
         # there are multiple pkgconfig files.
-        if ! pkg-config --validate "$pc"; then
+        if ! $PKG_CONFIG --validate "$pc"; then
             bail=1
         fi
     done

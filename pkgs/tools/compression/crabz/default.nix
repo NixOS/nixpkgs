@@ -29,6 +29,15 @@ rustPlatform.buildRustPackage rec {
     Security
   ];
 
+  # link System as a dylib instead of a framework on macos
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    core_affinity=../$(stripHash $cargoDeps)/core_affinity
+    oldHash=$(sha256sum $core_affinity/src/lib.rs | cut -d " " -f 1)
+    substituteInPlace $core_affinity/src/lib.rs --replace framework dylib
+    substituteInPlace $core_affinity/.cargo-checksum.json \
+      --replace $oldHash $(sha256sum $core_affinity/src/lib.rs | cut -d " " -f 1)
+  '';
+
   meta = with lib; {
     description = "A cross platform, fast, compression and decompression tool";
     homepage = "https://github.com/sstadick/crabz";

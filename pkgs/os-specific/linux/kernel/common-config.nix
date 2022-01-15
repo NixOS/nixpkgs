@@ -41,6 +41,7 @@ let
         (whenAtLeast "5.2" yes)
       ];
       DEBUG_INFO_BTF            = whenAtLeast "5.2" (option yes);
+      BPF_LSM                   = whenAtLeast "5.7" (option yes);
       DEBUG_KERNEL              = yes;
       DEBUG_DEVRES              = no;
       DYNAMIC_DEBUG             = yes;
@@ -129,6 +130,7 @@ let
       XDP_SOCKETS        = whenAtLeast "4.19" yes;
       XDP_SOCKETS_DIAG   = whenAtLeast "5.1" yes;
       WAN                = yes;
+      TCP_CONG_ADVANCED  = yes;
       TCP_CONG_CUBIC     = yes; # This is the default congestion control algorithm since 2.6.19
       # Required by systemd per-cgroup firewalling
       CGROUP_BPF                  = option yes;
@@ -212,6 +214,10 @@ let
       MPTCP           = whenAtLeast "5.6" yes;
       MPTCP_IPV6      = whenAtLeast "5.6" yes;
       INET_MPTCP_DIAG = whenAtLeast "5.9" (mkDefault module);
+
+      # Kernel TLS
+      TLS         = whenAtLeast "4.13" module;
+      TLS_DEVICE  = whenAtLeast "4.18" yes;
     };
 
     wireless = {
@@ -296,6 +302,9 @@ let
     # Enable Sound Open Firmware support
     } // optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux" &&
                         versionAtLeast version "5.5") {
+      SND_SOC_INTEL_SOUNDWIRE_SOF_MACH       = whenAtLeast "5.10" module;
+      SND_SOC_INTEL_USER_FRIENDLY_LONG_NAMES = whenAtLeast "5.10" yes; # dep of SOF_MACH
+      SND_SOC_SOF_INTEL_SOUNDWIRE_LINK = whenBetween "5.10" "5.11" yes; # dep of SOF_MACH
       SND_SOC_SOF_TOPLEVEL              = yes;
       SND_SOC_SOF_ACPI                  = module;
       SND_SOC_SOF_PCI                   = module;
@@ -443,10 +452,13 @@ let
     };
 
     security = {
+      # https://googleprojectzero.blogspot.com/2019/11/bad-binder-android-in-wild-exploit.html
+      DEBUG_LIST                       = yes;
       # Detect writes to read-only module pages
       DEBUG_SET_MODULE_RONX            = { optional = true; tristate = whenOlder "4.11" "y"; };
       RANDOMIZE_BASE                   = option yes;
-      STRICT_DEVMEM                    = option yes; # Filter access to /dev/mem
+      STRICT_DEVMEM                    = mkDefault yes; # Filter access to /dev/mem
+      IO_STRICT_DEVMEM                 = whenAtLeast "4.5" (mkDefault yes);
       SECURITY_SELINUX_BOOTPARAM_VALUE = whenOlder "5.1" (freeform "0"); # Disable SELinux by default
       # Prevent processes from ptracing non-children processes
       SECURITY_YAMA                    = option yes;
@@ -467,6 +479,11 @@ let
 
       # Detect buffer overflows on the stack
       CC_STACKPROTECTOR_REGULAR = {optional = true; tristate = whenOlder "4.18" "y";};
+    } // optionalAttrs stdenv.hostPlatform.isx86_64 {
+      # Enable Intel SGX
+      X86_SGX     = whenAtLeast "5.11" yes;
+      # Allow KVM guests to load SGX enclaves
+      X86_SGX_KVM = whenAtLeast "5.13" yes;
     };
 
     microcode = {
@@ -747,10 +764,18 @@ let
 
       BSD_PROCESS_ACCT_V3 = yes;
 
+      SERIAL_DEV_BUS = whenAtLeast "4.11" yes; # enables support for serial devices
+      SERIAL_DEV_CTRL_TTYPORT = whenAtLeast "4.11" yes; # enables support for TTY serial devices
+
+      BT_HCIBTUSB_MTK = whenAtLeast "5.3" yes; # MediaTek protocol support
+      BT_HCIUART_QCA = whenAtLeast "4.3" yes; # Qualcomm Atheros protocol support
+      BT_HCIUART_SERDEV = whenAtLeast "4.12" yes; # required by BT_HCIUART_QCA
+      BT_HCIUART = whenAtLeast "2.5.45" module; # required for BT devices with serial port interface (QCA6390)
       BT_HCIUART_BCSP = option yes;
       BT_HCIUART_H4   = option yes; # UART (H4) protocol support
       BT_HCIUART_LL   = option yes;
       BT_RFCOMM_TTY   = option yes; # RFCOMM TTY support
+      BT_QCA = whenAtLeast "4.3" module; # enables QCA6390 bluetooth
 
       CLEANCACHE = option yes;
       CRASH_DUMP = option no;
@@ -758,6 +783,8 @@ let
       DVB_DYNAMIC_MINORS = option yes; # we use udev
 
       EFI_STUB            = yes; # EFI bootloader in the bzImage itself
+      EFI_GENERIC_STUB_INITRD_CMDLINE_LOADER =
+          whenAtLeast "5.8" yes; # initrd kernel parameter for EFI
       CGROUPS             = yes; # used by systemd
       FHANDLE             = yes; # used by systemd
       SECCOMP             = yes; # used by systemd >= 231
@@ -859,6 +886,15 @@ let
 
       LIRC = mkMerge [ (whenOlder "4.16" module) (whenAtLeast "4.17" yes) ];
 
+      SCHED_CORE = whenAtLeast "5.14" yes;
+
+      FSL_MC_UAPI_SUPPORT = mkIf (stdenv.hostPlatform.system == "aarch64-linux") (whenAtLeast "5.12" yes);
+
+      ASHMEM =                 { optional = true; tristate = whenAtLeast "5.0" "y";};
+      ANDROID =                { optional = true; tristate = whenAtLeast "5.0" "y";};
+      ANDROID_BINDER_IPC =     { optional = true; tristate = whenAtLeast "5.0" "y";};
+      ANDROID_BINDERFS =       { optional = true; tristate = whenAtLeast "5.0" "y";};
+      ANDROID_BINDER_DEVICES = { optional = true; freeform = whenAtLeast "5.0" "binder,hwbinder,vndbinder";};
     } // optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "aarch64-linux") {
       # Enable CPU/memory hotplug support
       # Allows you to dynamically add & remove CPUs/memory to a VM client running NixOS without requiring a reboot

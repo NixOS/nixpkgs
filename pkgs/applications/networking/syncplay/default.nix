@@ -27,6 +27,6 @@ buildPythonApplication rec {
     description = "Free software that synchronises media players";
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ enzime ];
+    maintainers = with maintainers; [ Enzime ];
   };
 }

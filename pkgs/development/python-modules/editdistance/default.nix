@@ -13,8 +13,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "roy-ht";
     repo = pname;
-    rev = version;
-    sha256 = "1qajskfyx2ki81ybksf0lgl1pdyw7al4ci39zrj66ylsn8fssg89";
+    rev = "v${version}";
+    sha256 = "17xkndwdyf14nfxk25z1qnhkzm0yxw65fpj78c01haq241zfzjr5";
   };
 
   nativeBuildInputs = [ cython ];

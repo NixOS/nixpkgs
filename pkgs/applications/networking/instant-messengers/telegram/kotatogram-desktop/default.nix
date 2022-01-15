@@ -4,7 +4,7 @@
 , ffmpeg, openalSoft, minizip, libopus, alsa-lib, libpulseaudio, range-v3
 , tl-expected, hunspell, glibmm, webkitgtk
 # Transitive dependencies:
-, pcre, xorg, util-linux, libselinux, libsepol, epoxy
+, pcre, xorg, util-linux, libselinux, libsepol, libepoxy
 , at-spi2-core, libXtst, libthai, libdatrie
 }:
 
@@ -41,7 +41,7 @@ in mkDerivation rec {
     tl-expected hunspell glibmm webkitgtk
     tg_owt
     # Transitive dependencies:
-    pcre xorg.libXdmcp util-linux libselinux libsepol epoxy
+    pcre xorg.libXdmcp util-linux libselinux libsepol libepoxy
     at-spi2-core libXtst libthai libdatrie
   ];
 

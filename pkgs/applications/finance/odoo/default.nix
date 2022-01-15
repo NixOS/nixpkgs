@@ -56,6 +56,7 @@ buildPythonApplication rec {
     libsass
     lxml
     markupsafe
+    mock
     num2words
     ofxparse
     passlib
@@ -76,7 +77,7 @@ buildPythonApplication rec {
     reportlab
     requests
     vobject
-    werkzeug1
+    werkzeug
     xlrd
     XlsxWriter
     xlwt
@@ -92,6 +93,6 @@ buildPythonApplication rec {
     description = "Open Source ERP and CRM";
     homepage = "https://www.odoo.com/";
     license = licenses.lgpl3Only;
-    maintainers = [ maintainers.mkg20001 ];
+    maintainers = with maintainers; [ mkg20001 ];
   };
 }

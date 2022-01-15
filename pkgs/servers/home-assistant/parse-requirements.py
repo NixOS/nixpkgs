@@ -79,7 +79,8 @@ def parse_components(version: str = "master"):
         )
         for domain in sorted(integrations):
             integration = integrations[domain]
-            components[domain] = integration.manifest
+            if not integration.disabled:
+                components[domain] = integration.manifest
     return components
 
 

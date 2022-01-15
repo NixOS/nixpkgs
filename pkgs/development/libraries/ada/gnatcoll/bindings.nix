@@ -33,13 +33,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gnatcoll-${component}";
-  version = "21.0.0";
+  version = "22.0.0";
 
   src = fetchFromGitHub {
     owner = "AdaCore";
     repo = "gnatcoll-bindings";
     rev = "v${version}";
-    sha256 = "1214hf0m8iz289rjpxdiddnixj65l2xjwbcr7mq5ysbddmig5992";
+    sha256 = "0wbwnd6jccwfd4jdxbnzhc0jhm8ad4phz6y9b1gk8adykkk6jcz4";
   };
 
   patches = [
@@ -68,13 +68,13 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''
     runHook preBuild
-    python3 ${component}/setup.py build $buildFlags
+    ${python3.interpreter} ${component}/setup.py build --prefix $out $buildFlags
     runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
-    python3 ${component}/setup.py install --prefix $out
+    ${python3.interpreter} ${component}/setup.py install --prefix $out
     runHook postInstall
   '';
 

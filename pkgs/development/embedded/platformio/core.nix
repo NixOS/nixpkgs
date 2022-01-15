@@ -9,6 +9,16 @@
 let
   python = python3.override {
     packageOverrides = self: super: {
+      aiofiles = super.aiofiles.overridePythonAttrs (oldAttrs: rec {
+        version = "0.8.0";
+        src = fetchFromGitHub {
+          owner = "Tinche";
+          repo = "aiofiles";
+          rev = "v${version}";
+          sha256 = "0mr9pzji4vqyf2yzh8yxz5q7fm8mgmkimx1xh49wh625m72pxcap";
+        };
+      });
+
       asgiref = super.asgiref.overridePythonAttrs (oldAttrs: rec {
         version = "3.4.1";
         src = fetchFromGitHub {
@@ -19,13 +29,34 @@ let
         };
       });
 
+      click = super.click.overridePythonAttrs (oldAttrs: rec {
+        version = "8.0.3";
+        src = fetchFromGitHub {
+          owner = "pallets";
+          repo = "click";
+          rev = version;
+          sha256 = "0pxvxgfhqjgsjbgfnilqjki1l24r0rdfd98cl77i71yqdd2f497g";
+        };
+      });
+
+      starlette = super.starlette.overridePythonAttrs (oldAttrs: rec {
+        version = "0.17.0";
+        src = fetchFromGitHub {
+          owner = "encode";
+          repo = "starlette";
+          rev = version;
+          sha256 = "1g76qpvqzivmwll5ir4bf45jx5kilnkadvy6b7qjisvr402i3qmw";
+        };
+        disabledTestPaths = [];
+      });
+
       uvicorn = super.uvicorn.overridePythonAttrs (oldAttrs: rec {
-        version = "0.15.0";
+        version = "0.16.0";
         src = fetchFromGitHub {
           owner = "encode";
           repo = "uvicorn";
           rev = version;
-          sha256 = "074smp3448wcazlhc7sb8r54l4kfavr6yks3w5x60zl1qpijf52r";
+          sha256 = "14jih6j4q2qp5c9rgl798i5p51b4y6zkkj434q2l1naw0csphk4s";
         };
       });
     };
@@ -143,7 +174,7 @@ with python.pkgs; buildPythonApplication rec {
       --subst-var-by SPDX_LICENSE_LIST_DATA '${spdx-license-list-data}'
 
     substituteInPlace setup.py \
-      --replace "zeroconf==0.28.*" "zeroconf"
+      --replace "zeroconf==0.37.*" "zeroconf"
   '';
 
   meta = with lib; {

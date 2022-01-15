@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pktgen";
-  version = "21.05.0";
+  version = "21.11.0";
 
   src = fetchFromGitHub {
     owner = "pktgen";
     repo = "Pktgen-DPDK";
     rev = "pktgen-${version}";
-    sha256 = "sha256-7lLDtbd14olEHO+1BuI6KTEUNRM/zAyRXau/OZbYbGA=";
+    sha256 = "sha256-3z5DSkggHTwjzsRzRG5zzZTcNsn/5YankJT8CKSN8b4=";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config ];
@@ -25,7 +25,6 @@ stdenv.mkDerivation rec {
   RTE_SDK = dpdk;
   GUI = lib.optionalString withGtk "true";
 
-  NIX_CFLAGS_COMPILE = "-msse3";
   # requires symbols from this file
   NIX_LDFLAGS = "-lrte_net_bond";
 
@@ -43,7 +42,7 @@ stdenv.mkDerivation rec {
     description = "Traffic generator powered by DPDK";
     homepage = "http://dpdk.org/";
     license = licenses.bsdOriginal;
-    platforms =  [ "x86_64-linux" ];
+    platforms =  platforms.linux;
     maintainers = [ maintainers.abuibrahim ];
   };
 }

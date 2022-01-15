@@ -1,17 +1,28 @@
 { lib
 , buildPythonPackage
-, fetchPypi
 , pythonOlder
+, fetchPypi
+, pytestCheckHook
 , aiofiles
 , cbor2
+, ddt
+, gunicorn
 , httpx
+, hypercorn
+, jsonschema
 , msgpack
+, mujson
+, nose
+, orjson
 , pecan
 , pytest-asyncio
-, pytestCheckHook
+, python-mimeparse
 , pyyaml
+, rapidjson
 , requests
 , testtools
+, ujson
+, uvicorn
 , websockets
 }:
 
@@ -29,24 +40,31 @@ buildPythonPackage rec {
   checkInputs = [
     aiofiles
     cbor2
+    ddt
+    gunicorn
     httpx
+    hypercorn
+    jsonschema
     msgpack
+    mujson
+    nose
+    orjson
     pecan
     pytest-asyncio
     pytestCheckHook
+    python-mimeparse
     pyyaml
+    rapidjson
     requests
     testtools
+    ujson
+    uvicorn
     websockets
   ];
 
   disabledTestPaths = [
     # missing optional nuts package
     "falcon/bench/nuts/nuts/tests/test_functional.py"
-    # missing optional mujson package
-    "tests/test_media_handlers.py"
-    # tries to run uvicorn binary and doesn't find it
-    "tests/asgi/test_asgi_servers.py"
   ];
 
   meta = with lib; {

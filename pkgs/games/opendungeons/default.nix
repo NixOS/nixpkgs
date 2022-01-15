@@ -2,20 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "opendungeons";
-  version = "0.7.1";
+  version = "unstable-2021-11-06";
 
   src = fetchFromGitHub {
     owner = "OpenDungeons";
     repo = "OpenDungeons";
-    rev = version;
-    sha256 = "0nipb2h0gn628yxlahjgnfhmpfqa19mjdbj3aqabimdfqds9pryh";
+    rev = "c180ed1864eab5fbe847d1dd5c5c936c4e45444e";
+    sha256 = "0xf7gkpy8ll1h59wyaljf0hr8prg7p4ixz80mxqwcnm9cglpgn63";
   };
 
   patches = [ ./cmakepaths.patch ];
 
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ ogre cegui boost sfml openal ois ];
-  NIX_LDFLAGS = "-lpthread";
 
   meta = with lib; {
     description = "An open source, real time strategy game sharing game elements with the Dungeon Keeper series and Evil Genius";

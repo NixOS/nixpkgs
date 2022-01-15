@@ -119,8 +119,10 @@ pythonPackages.callPackage
         pythonPackages.poetry2nixFixupHook
       ]
       ++ lib.optional (!isSource && (getManyLinuxDeps fileInfo.name).str != null) autoPatchelfHook
-      ++ lib.optional (format == "pyproject") pythonPackages.removePathDependenciesHook
-      ;
+      ++ lib.optionals (format == "pyproject") [
+        pythonPackages.removePathDependenciesHook
+        pythonPackages.removeGitDependenciesHook
+      ];
 
       buildInputs = (
         baseBuildInputs

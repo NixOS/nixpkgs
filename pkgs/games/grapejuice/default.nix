@@ -49,7 +49,7 @@ python3Packages.buildPythonApplication rec  {
 
   makeWrapperArgs = [
     "\${gappsWrapperArgs[@]}"
-    "--prefix PATH : ${lib.makeBinPath [ xdg-user-dirs xdg-utils wine (winetricks.override { wine = wine; }) ]}"
+    "--prefix PATH : ${lib.makeBinPath [ xdg-user-dirs xdg-utils wine winetricks ]}"
   ];
 
   postPatch = ''

@@ -104,6 +104,8 @@ in stdenv.mkDerivation {
   binpath = makeBinPath deps;
 
   installPhase = ''
+    runHook preInstall
+
     case ${channel} in
       beta) appname=chrome-beta      dist=beta     ;;
       dev)  appname=chrome-unstable  dist=unstable ;;
@@ -154,6 +156,8 @@ in stdenv.mkDerivation {
       patchelf --set-rpath $rpath $elf
       patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $elf
     done
+
+    runHook postInstall
   '';
 
   meta = {

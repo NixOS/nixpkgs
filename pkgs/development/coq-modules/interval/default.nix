@@ -6,7 +6,7 @@ mkCoqDerivation rec {
   domain = "gitlab.inria.fr";
   inherit version;
   defaultVersion = with lib.versions; lib.switch coq.coq-version [
-    { case = isGe "8.8" ;        out = "4.3.0"; }
+    { case = range "8.8" "8.14"; out = "4.3.0"; }
     { case = range "8.8" "8.12"; out = "4.0.0"; }
     { case = range "8.7" "8.11"; out = "3.4.2"; }
     { case = range "8.5" "8.6";  out = "3.3.0"; }

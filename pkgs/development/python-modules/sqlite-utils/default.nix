@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 , pythonOlder
 , click
 , click-default-group
@@ -13,13 +14,22 @@
 
 buildPythonPackage rec {
   pname = "sqlite-utils";
-  version = "3.17.1";
+  version = "3.19";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0cfde0c46a2d4c09d6df8609fe53642bc3ab443bcef3106d8f1eabeb3fccbe3d";
+    sha256 = "509099fce5f25faada6e76b6fb90e8ef5ba0f1715177933a816718be0c8e7244";
   };
+
+  patches = [
+    # https://github.com/simonw/sqlite-utils/pull/347
+    (fetchpatch {
+      name = "sqlite-utils-better-test_rebuild_fts.patch";
+      url = "https://github.com/simonw/sqlite-utils/pull/347/commits/1a7ef2fe2064ace01d5535fb771f941296fb642a.diff";
+      sha256 = "sha256-WKCQGMqr8WYjG7cmAH5pYBhgikowbt3r6hObwtMDDUY=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace setup.py \

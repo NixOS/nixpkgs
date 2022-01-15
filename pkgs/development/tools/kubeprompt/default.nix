@@ -2,17 +2,18 @@
 
 buildGoModule rec {
   pname = "kubeprompt";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "jlesquembre";
     repo = pname;
     rev = version;
-    sha256 = "1a0xi31bd7n2zrx2z4srhvixlbj028h63dlrjzqxgmgn2w6akbz2";
+    sha256 = "0ib61af6fwsl35gmid9jj0fp8zxgzrw4qk32r03hxzkh9g7r3kla";
   };
 
   ldflags = [
-    "-w" "-s"
+    "-w"
+    "-s"
     "-X github.com/jlesquembre/kubeprompt/pkg/version.Version=${version}"
   ];
 

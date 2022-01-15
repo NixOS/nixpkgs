@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wsdd";
-  version = "0.6.4";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "christgau";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0lfvpbk1lkri597ac4gz5x4csfyik8axz4b41i03xsqv9bci2vh6";
+    sha256 = "sha256-9cwzkF2mg6yOIsurLMXTLoEIOsKbPIWMicpWBQ0XVhE=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

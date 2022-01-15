@@ -1,32 +1,34 @@
-{ lib, stdenv, fetchFromGitHub, cmake
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, python3
+, withAnimation ? true
+, withTranscoder ? true
 }:
 
+let
+  cmakeBool = b: if b then "ON" else "OFF";
+in
 stdenv.mkDerivation rec {
-  version = "1.4.3";
+  version = "1.5.0";
   pname = "draco";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "draco";
     rev = version;
-    sha256 = "sha256-eSu6tkWbRHzJkWwPgljaScAuL0gRkp8PJUHWC8mUvOw=";
+    hash = "sha256-BoJg2lZBPVVm6Nc0XK8QSISpe+B8tpgRg9PFncN4+fY=";
+    fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake python3 ];
 
   cmakeFlags = [
-    # Fake these since we are building from a tarball
-    "-Ddraco_git_hash=${version}"
-    "-Ddraco_git_desc=${version}"
-
-    "-DBUILD_UNITY_PLUGIN=1"
+    "-DDRACO_ANIMATION_ENCODING=${cmakeBool withAnimation}"
+    "-DDRACO_TRANSCODER_SUPPORTED=${cmakeBool withTranscoder}"
+    "-DBUILD_SHARED_LIBS=${cmakeBool true}"
   ];
-
-  # Upstream mistakenly installs to /nix/store/.../nix/store/.../*, work around that
-  postInstall = ''
-    mv $out/nix/store/*/* $out
-    rm -rf $out/nix
-  '';
 
   meta = with lib; {
     description = "Library for compressing and decompressing 3D geometric meshes and point clouds";

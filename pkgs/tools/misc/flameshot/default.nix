@@ -11,17 +11,19 @@
 
 mkDerivation rec {
   pname = "flameshot";
-  version = "0.10.1";
+  version = "0.10.2";
 
   src = fetchFromGitHub {
     owner = "flameshot-org";
     repo = "flameshot";
     rev = "v${version}";
-    sha256 = "1ncknjayl6am740f49g0lc28z1zsifbicxz1j1kwps3ksj15nl7a";
+    sha256 = "sha256-rZUiaS32C77tFJmEkw/9MGbVTVscb6LOCyWaWO5FyR4=";
   };
 
   patches = [
-    # Support for USE_LAUNCHER_ABSOLUTE_PATH.
+    # Use absolute install path for `Exec=` in the desktop file.
+    # This is required since KWin relies on absolute paths in `Exec=` to find a process'
+    # corresponding desktop file and check if it's allowed to take screenshot.
     # Should be removed when the next release comes out.
     (fetchpatch {
       url = "https://github.com/flameshot-org/flameshot/commit/1031980ed1e62d24d7f719998b7951d48801e3fa.patch";
@@ -43,9 +45,6 @@ mkDerivation rec {
 
   nativeBuildInputs = [ cmake qttools qtsvg ];
   buildInputs = [ qtbase ];
-
-  # Use relative path for the .desktop file.
-  cmakeFlags = [ "-DUSE_LAUNCHER_ABSOLUTE_PATH=OFF" ];
 
   meta = with lib; {
     description = "Powerful yet simple to use screenshot software";

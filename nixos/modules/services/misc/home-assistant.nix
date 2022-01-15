@@ -24,6 +24,8 @@ let
 
   availableComponents = cfg.package.availableComponents;
 
+  explicitComponents = cfg.package.extraComponents;
+
   usedPlatforms = config:
     if isAttrs config then
       optional (config ? platform) config.platform
@@ -42,10 +44,13 @@ let
   # } ];
   useComponentPlatform = component: elem component (usedPlatforms cfg.config);
 
-  # Returns whether component is used in config
+  useExplicitComponent = component: elem component explicitComponents;
+
+  # Returns whether component is used in config or explicitly passed into package
   useComponent = component:
     hasAttrByPath (splitString "." component) cfg.config
-    || useComponentPlatform component;
+    || useComponentPlatform component
+    || useExplicitComponent component;
 
   # List of components used in config
   extraComponents = filter useComponent availableComponents;

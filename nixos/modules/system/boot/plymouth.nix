@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
@@ -7,6 +7,7 @@ let
   inherit (pkgs) plymouth nixos-icons;
 
   cfg = config.boot.plymouth;
+  opt = options.boot.plymouth;
 
   nixosBreezePlymouth = pkgs.plasma5Packages.breeze-plymouth.override {
     logoFile = cfg.logo;
@@ -71,6 +72,11 @@ in
 
       themePackages = mkOption {
         default = lib.optional (cfg.theme == "breeze") nixosBreezePlymouth;
+        defaultText = literalDocBook ''
+          A NixOS branded variant of the breeze theme when
+          <literal>config.${opt.theme} == "breeze"</literal>, otherwise
+          <literal>[ ]</literal>.
+        '';
         type = types.listOf types.package;
         description = ''
           Extra theme packages for plymouth.

@@ -1,12 +1,12 @@
 { lib, stdenv, fetchurl, nixosTests, jre_headless }:
 stdenv.mkDerivation {
   pname = "minecraft-server";
-  version = "1.17.1";
+  version = "1.18.1";
 
   src = fetchurl {
-    url = "https://launcher.mojang.com/v1/objects/a16d67e5807f57fc4e550299cf20226194497dc2/server.jar";
+    url = "https://launcher.mojang.com/v1/objects/125e5adf40c659fd3bce3e66e67a16bb49ecc1b9/server.jar";
     # sha1 because that comes from mojang via api
-    sha1 = "a16d67e5807f57fc4e550299cf20226194497dc2";
+    sha1 = "125e5adf40c659fd3bce3e66e67a16bb49ecc1b9";
   };
 
   preferLocalBuild = true;

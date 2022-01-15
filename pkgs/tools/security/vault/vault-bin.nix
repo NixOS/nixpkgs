@@ -1,26 +1,30 @@
 { lib, stdenv, fetchurl, unzip, makeWrapper, gawk, glibc }:
 
 let
-  version = "1.8.4";
+  version = "1.9.1";
 
   sources = let
     base = "https://releases.hashicorp.com/vault/${version}";
   in {
     x86_64-linux = fetchurl {
       url = "${base}/vault_${version}_linux_amd64.zip";
-      sha256 = "sha256-zrCRnIScIWJ8ocrgYPNhtvuX3PBLF9HX0dyZU/zY4yk=";
+      sha256 = "sha256-kP1wLbkktVCTZopVaT0h/WKqAG3Pd9g7qeruk4MIWJM=";
     };
     i686-linux = fetchurl {
       url = "${base}/vault_${version}_linux_386.zip";
-      sha256 = "0sh9q29b0bi5ap6nvll0ykxd5vf4wliksj31cmm4gw5vp90irvl3";
+      sha256 = "sha256-cTZ/hek8wQo9FxIRQ/cc23h7Nqjfonvprf492/lSzLw=";
     };
     x86_64-darwin = fetchurl {
       url = "${base}/vault_${version}_darwin_amd64.zip";
-      sha256 = "09nhfdw20g46fnrn82my7a59pfa81dxncxhiswmha3cdy8n0p6wb";
+      sha256 = "sha256-uKW9Yl4PjxWJ886OVAHl1sbPhgYWoL6IJK44vczLQsY=";
+    };
+    aarch64-darwin = fetchurl {
+      url = "${base}/vault_${version}_darwin_arm64.zip";
+      sha256 = "sha256-J0qwUBcnZRZU5TTQB3K8wNE6rdQC1Boy/gKNQRvUYEI=";
     };
     aarch64-linux = fetchurl {
       url = "${base}/vault_${version}_linux_arm64.zip";
-      sha256 = "01ra0xrgivf01ff87p0gqmi1flnac9y02x7jpv5j6a9czr1sqw1j";
+      sha256 = "sha256-eU5s15tBuZFThJGNtnjOV07tiBoVjSSHMS9sY2WqO1o=";
     };
   };
 
@@ -47,10 +51,12 @@ in stdenv.mkDerivation {
     runHook postInstall
   '';
 
+  dontStrip = stdenv.isDarwin;
+
   meta = with lib; {
     homepage = "https://www.vaultproject.io";
     description = "A tool for managing secrets, this binary includes the UI";
-    platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" "aarch64-linux" ];
+    platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" "aarch64-darwin" "aarch64-linux" ];
     license = licenses.mpl20;
     maintainers = with maintainers; teams.serokell.members ++ [ offline psyanticy Chili-Man ];
   };

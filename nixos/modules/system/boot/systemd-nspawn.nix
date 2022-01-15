@@ -1,8 +1,8 @@
-{ config, lib , pkgs, ...}:
+{ config, lib, pkgs, utils, ...}:
 
+with utils.systemdUtils.unitOptions;
+with utils.systemdUtils.lib;
 with lib;
-with import ./systemd-unit-options.nix { inherit config lib; };
-with import ./systemd-lib.nix { inherit config lib pkgs; };
 
 let
   cfg = config.systemd.nspawn;

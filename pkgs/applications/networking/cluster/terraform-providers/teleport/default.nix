@@ -1,16 +1,18 @@
-{ lib, fetchFromGitHub, buildGoModule }:
+{ lib, fetchFromGitHub, buildGoModule, teleport }:
 
 buildGoModule rec {
   pname = "terraform-provider-teleport";
-  version = "7.3.0";
+  version = "8.0.6";
 
   src = fetchFromGitHub {
     owner = "gravitational";
     repo = "teleport-plugins";
     rev = "v${version}";
-    sha256 = "19zn78nn64gc0nm7ycblzi4549a0asql07pfxvrphi6s9fjr5m3y";
+    sha256 = "1rhvpbw4dga256dp2cr5f912d2j7rh8pd1v88dlgq3mmw8n5c7vy";
   };
   vendorSha256 = null;
+
+  checkInputs = [ teleport ];
 
   sourceRoot = "source/terraform";
 
@@ -23,7 +25,7 @@ buildGoModule rec {
   passthru.provider-source-address = "gravitational.com/teleport/teleport";
 
   meta = with lib; {
-    description = "Provider for managing resources in Teleport, a SSH CA management suite";
+    description = "Provider for managing resources in Teleport access plane";
     homepage = "https://github.com/gravitational/teleport-plugins";
     license = licenses.asl20;
     maintainers = with maintainers; [ justinas ];

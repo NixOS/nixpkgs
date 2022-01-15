@@ -19,6 +19,7 @@
 , libXau
 , libXdmcp
 , libXrandr
+, libbsd
 , libffi
 , libjpeg
 # , librealsense
@@ -88,6 +89,7 @@ stdenv.mkDerivation rec {
     libXau
     libXdmcp
     libXrandr
+    libbsd
     libjpeg
     libffi
     # librealsense.dev - see below

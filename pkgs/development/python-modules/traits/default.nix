@@ -1,29 +1,29 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, isPy27
-, python
-, pytest
+, pythonOlder
 , numpy
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "traits";
-  version = "6.3.0";
-  disabled = isPy27;
+  version = "6.3.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "770241df047feb9e3ed4c26a36c2468a5b754e6082a78eeb737f058bd45344f5";
+    sha256 = "4520ef4a675181f38be4a5bab1b1d5472691597fe2cfe4faf91023e89407e2c6";
   };
 
-  propagatedBuildInputs = [ numpy ];
-
-  # Test suite is broken for 3.x on latest release
-  # https://github.com/enthought/traits/issues/187
-  # https://github.com/enthought/traits/pull/188
-  # Furthermore, some tests fail due to being in a chroot
+  # Circular dependency
   doCheck = false;
+
+  pythonImportsCheck = [
+    "traits"
+  ];
 
   meta = with lib; {
     description = "Explicitly typed attributes for Python";

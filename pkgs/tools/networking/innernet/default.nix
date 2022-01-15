@@ -1,16 +1,27 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, llvmPackages, sqlite, installShellFiles, Security, libiconv }:
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, llvmPackages
+, sqlite
+, installShellFiles
+, Security
+, libiconv
+, innernet
+, testVersion
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "innernet";
-  version = "1.5.0";
+  version = "1.5.2";
 
   src = fetchFromGitHub {
     owner = "tonarino";
-    repo = pname;
+    repo = "innernet";
     rev = "v${version}";
-    sha256 = "sha256-9oL91jacfUADaPvdTTvvXhpwzr9OnNnVLwy1okORss4=";
+    sha256 = "141zjfl125m5lrimam1dbpk40dqfq4vnaz42sbiq1v1avyg684fq";
   };
-  cargoSha256 = "sha256-jHWt7Jqv4B7u6Mvo3q69Omcn8kdnXGJSyzod1lDzvKE=";
+  cargoSha256 = "0559d0ayysvqs4k46fhgd4r8wa89abgx6rvhlh0gnlnga8vacpw5";
 
   nativeBuildInputs = with llvmPackages; [
     llvm
@@ -28,21 +39,10 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion doc/innernet-server.completions.{bash,fish,zsh}
   '';
 
-  doInstallCheck = true;
-  installCheckPhase = ''
-    if [[ "$("$out/bin/${pname}"-server --version)" == "${pname}-server ${version}" ]]; then
-      echo '${pname}-server smoke check passed'
-    else
-      echo '${pname}-server smoke check failed'
-      return 1
-    fi
-    if [[ "$("$out/bin/${pname}" --version)" == "${pname} ${version}" ]]; then
-      echo '${pname} smoke check passed'
-    else
-      echo '${pname} smoke check failed'
-      return 1
-    fi
-  '';
+  passthru.tests = {
+    serverVersion = testVersion { package = innernet; command = "innernet-server --version"; };
+    version = testVersion { package = innernet; command = "innernet --version"; };
+  };
 
   meta = with lib; {
     description = "A private network system that uses WireGuard under the hood";

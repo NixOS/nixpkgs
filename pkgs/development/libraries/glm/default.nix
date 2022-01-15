@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, cmake }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+}:
 
 stdenv.mkDerivation rec {
   version = "0.9.9.8";
@@ -10,6 +15,14 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "sha256-F//+3L5Ozrw6s7t4LrcUmO7sN30ZSESdrPAYX57zgr8=";
   };
+
+  # https://github.com/g-truc/glm/pull/1055
+  # Fix more implicit-int-float-conversion warnings
+  # (https://github.com/g-truc/glm/pull/986 wasn't enough, and -Werror is used)
+  patches = [(fetchpatch {
+    url = "https://github.com/kraj/glm/commit/bd9b5060bc3b9581090d44f15b4e236566ea86a6.patch";
+    sha256 = "sha256-QO4o/wV564kJimBcEyr9TWzREEnRJ1n0j0HPojN4pkI=";
+  })];
 
   outputs = [ "out" "doc" ];
 

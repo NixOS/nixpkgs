@@ -13,10 +13,10 @@ let
   # Use upstream config files passed through spa-json-dump as the base
   # Patched here as necessary for them to work with this module
   defaults = {
-    alsa-monitor = (builtins.fromJSON (builtins.readFile ./media-session/alsa-monitor.conf.json));
-    bluez-monitor = (builtins.fromJSON (builtins.readFile ./media-session/bluez-monitor.conf.json));
-    media-session = (builtins.fromJSON (builtins.readFile ./media-session/media-session.conf.json));
-    v4l2-monitor = (builtins.fromJSON (builtins.readFile ./media-session/v4l2-monitor.conf.json));
+    alsa-monitor = lib.importJSON ./media-session/alsa-monitor.conf.json;
+    bluez-monitor = lib.importJSON ./media-session/bluez-monitor.conf.json;
+    media-session = lib.importJSON ./media-session/media-session.conf.json;
+    v4l2-monitor = lib.importJSON ./media-session/v4l2-monitor.conf.json;
   };
 
   configs = {
@@ -29,6 +29,8 @@ in {
 
   meta = {
     maintainers = teams.freedesktop.members;
+    # uses attributes of the linked package
+    buildDocsInSandbox = false;
   };
 
   ###### interface
@@ -94,6 +96,12 @@ in {
   config = mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
     systemd.packages = [ cfg.package ];
+
+    # Enable either system or user units.
+    systemd.services.pipewire-media-session.enable = config.services.pipewire.systemWide;
+    systemd.user.services.pipewire-media-session.enable = !config.services.pipewire.systemWide;
+
+    systemd.services.pipewire-media-session.wantedBy = [ "pipewire.service" ];
     systemd.user.services.pipewire-media-session.wantedBy = [ "pipewire.service" ];
 
     environment.etc."pipewire/media-session.d/media-session.conf" = {

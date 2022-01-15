@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchFromGitHub } :
+{ lib
+, stdenv
+, fetchFromGitHub
+, netpbm
+}:
 
 stdenv.mkDerivation rec {
   pname = "fbcat";
@@ -11,16 +15,15 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ORzcd8XGy2BfwuPK5UX+K5Z+FYkb+tdg/gHl3zHjvbk=";
   };
 
-  # hardcoded because makefile target "install" depends on libxslt dependencies from network
-  # that are just too hard to monkeypatch here
-  # so this is the simple fix.
-  installPhase = ''
-    mkdir -p $out
-    install -d $out/bin
-    install -m755 fbcat $out/bin/
-    install -m755 fbgrab $out/bin/
-    install -d $out/share/man/man1
+  postPatch = ''
+    substituteInPlace fbgrab \
+      --replace 'pnmtopng' '${netpbm}/bin/pnmtopng' \
+      --replace 'fbcat' "$out/bin/fbcat"
   '';
+
+  installFlags = [
+    "PREFIX=${placeholder "out"}"
+  ];
 
   meta = with lib; {
     homepage = "http://jwilk.net/software/fbcat";

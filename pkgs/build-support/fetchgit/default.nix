@@ -12,7 +12,7 @@
       else "";
   in "${if matched == null then base else builtins.head matched}${appendShort}";
 in
-{ url, rev ? "HEAD", md5 ? "", sha256 ? "", leaveDotGit ? deepClone
+{ url, rev ? "HEAD", md5 ? "", sha256 ? "", hash ? "", leaveDotGit ? deepClone
 , fetchSubmodules ? true, deepClone ? false
 , branchName ? null
 , name ? urlToName url rev
@@ -54,6 +54,8 @@ assert deepClone -> leaveDotGit;
 
 if md5 != "" then
   throw "fetchgit does not support md5 anymore, please use sha256"
+else if hash != "" && sha256 != "" then
+  throw "Only one of sha256 or hash can be set"
 else
 stdenvNoCC.mkDerivation {
   inherit name;
@@ -63,9 +65,14 @@ stdenvNoCC.mkDerivation {
   nativeBuildInputs = [ git ]
     ++ lib.optionals fetchLFS [ git-lfs ];
 
-  outputHashAlgo = "sha256";
+  outputHashAlgo = if hash != "" then null else "sha256";
   outputHashMode = "recursive";
-  outputHash = sha256;
+  outputHash = if hash != "" then
+    hash
+  else if sha256 != "" then
+    sha256
+  else
+    lib.fakeSha256;
 
   inherit url rev leaveDotGit fetchLFS fetchSubmodules deepClone branchName postFetch;
 

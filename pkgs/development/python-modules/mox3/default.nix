@@ -2,14 +2,12 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
-, python
 , subunit
 , testrepository
 , testtools
 , six
 , pbr
 , fixtures
-, isPy36
 }:
 
 buildPythonPackage rec {

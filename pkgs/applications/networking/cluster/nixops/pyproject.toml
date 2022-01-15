@@ -8,10 +8,12 @@ authors = ["Adam Hoese <adam.hose@tweag.io>"]
 python = "^3.8"
 nixops = {git = "https://github.com/NixOS/nixops.git"}
 nixops-aws = {git = "https://github.com/NixOS/nixops-aws.git"}
-nixops-gcp = {git = "https://github.com/nix-community/nixops-gce.git"}
-nixopsvbox = {git = "https://github.com/nix-community/nixops-vbox.git"}
+nixops-digitalocean = {git = "https://github.com/nix-community/nixops-digitalocean.git"}
 nixops-encrypted-links = {git = "https://github.com/nix-community/nixops-encrypted-links.git"}
+nixops-gcp = {git = "https://github.com/nix-community/nixops-gce.git"}
 nixops-hercules-ci = {git = "https://github.com/hercules-ci/nixops-hercules-ci.git"}
+nixops-hetzner = {git = "https://github.com/NixOS/nixops-hetzner"}
+nixopsvbox = {git = "https://github.com/nix-community/nixops-vbox.git"}
 nixops-virtd = {git = "https://github.com/nix-community/nixops-libvirtd.git"}
 
 [tool.poetry.dev-dependencies]

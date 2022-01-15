@@ -23,6 +23,12 @@ let
       # branches (wip patches from tickets), but exports each commit as a separate
       # patch, so merge commits can lead to conflicts. Used if squashed == false.
       #
+      # The above is the preferred option. To use it, find a Trac ticket and pass the
+      # "Commit" field from the ticket as "rev", choosing "base" as an appropriate
+      # release tag, i.e. a tag that doesn't cause the patch to include a lot of
+      # unrelated changes. If there is no such tag (due to nonlinear history, for
+      # example), there are two other options, listed below.
+      #
       # 2) From GitHub's sagemath/sage repo. This lets us use a GH feature that allows
       # us to choose between a .patch file, with one patch per commit, or a .diff file,
       # which squashes all commits into a single diff. This is used if squashed ==
@@ -103,12 +109,60 @@ stdenv.mkDerivation rec {
     # strictly necessary, but keeps us from littering in the user's HOME.
     ./patches/sympow-cache.patch
 
+    # fonttools 4.26.2, used by matplotlib, uses deprecated methods internally.
+    # This is fixed in fonttools 4.27.0, but since fonttools is a dependency of
+    # 2000+ packages and DeprecationWarnings are hidden almost everywhere by
+    # default (not on Sage's doctest harness, though), it doesn't make sense to
+    # backport the fix (see https://github.com/NixOS/nixpkgs/pull/151415).
+    # Let's just assume warnings are expected until we update to 4.27.0.
+    ./patches/fonttools-deprecation-warnings.patch
+
     # https://trac.sagemath.org/ticket/32305
     (fetchSageDiff {
       base = "9.4";
       name = "networkx-2.6-upgrade.patch";
       rev = "9808325853ba9eb035115e5b056305a1c9d362a0";
       sha256 = "sha256-gJSqycCtbAVr5qnVEbHFUvIuTOvaxFIeffpzd6nH4DE=";
+    })
+
+    # https://trac.sagemath.org/ticket/32420
+    (fetchSageDiff {
+      base = "9.5.beta2";
+      name = "sympy-1.9-update.patch";
+      rev = "beed4e16aff32e47d0c3b1c58cb1e2f4c38590f8";
+      sha256 = "sha256-3eJPfWfCrCAQ5filIn7FbzjRQeO9QyTIVl/HyRuqFtE=";
+    })
+
+    # https://trac.sagemath.org/ticket/32567
+    (fetchSageDiff {
+      base = "9.5.beta2";
+      name = "arb-2.21.0-update.patch";
+      rev = "eb3304dd521a3d5a9334e747a08e234bbf16b4eb";
+      sha256 = "sha256-XDkaY4VQGyESXI6zuD7nCNzyQOl/fmBFvAESH9+RRvk=";
+    })
+
+    # https://trac.sagemath.org/ticket/32797
+    (fetchSageDiff {
+      base = "9.5.beta7";
+      name = "pari-2.13.3-update.patch";
+      rev = "f5f7a86908daf60b25e66e6a189c51ada7e0a732";
+      sha256 = "sha256-H/caGx3q4KcdsyGe+ojV9bUTQ5y0siqM+QHgDbeEnbw=";
+    })
+
+    # https://trac.sagemath.org/ticket/32909
+    (fetchSageDiff {
+      base = "9.5.beta7";
+      name = "matplotlib-3.5-deprecation-warnings.patch";
+      rev = "a5127dc56fdf5c2e82f6bc781cfe78dbd04e97b7";
+      sha256 = "sha256-p23qUu9mgEUbdbX6cy7ArxZAtpcFjCKbgyxN4jWvj1o=";
+    })
+
+    # https://trac.sagemath.org/ticket/32968
+    (fetchSageDiff {
+      base = "9.5.beta8";
+      name = "sphinx-4.3-update.patch";
+      rev = "fc84f82f52b6f05f512cb359ec7c100f93cf8841";
+      sha256 = "sha256-bBbfdcnw/9LUOlY8rHJRbFJEdMXK4shosqTNaobTS1Q=";
     })
   ];
 

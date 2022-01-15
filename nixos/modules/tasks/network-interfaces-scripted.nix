@@ -532,6 +532,33 @@ let
             '';
           });
 
+        createGreDevice = n: v: nameValuePair "${n}-netdev"
+          (let
+            deps = deviceDependency v.dev;
+          in
+          { description = "GRE Tunnel Interface ${n}";
+            wantedBy = [ "network-setup.service" (subsystemDevice n) ];
+            bindsTo = deps;
+            partOf = [ "network-setup.service" ];
+            after = [ "network-pre.target" ] ++ deps;
+            before = [ "network-setup.service" ];
+            serviceConfig.Type = "oneshot";
+            serviceConfig.RemainAfterExit = true;
+            path = [ pkgs.iproute2 ];
+            script = ''
+              # Remove Dead Interfaces
+              ip link show "${n}" >/dev/null 2>&1 && ip link delete "${n}"
+              ip link add name "${n}" type ${v.type} \
+                ${optionalString (v.remote != null) "remote \"${v.remote}\""} \
+                ${optionalString (v.local != null) "local \"${v.local}\""} \
+                ${optionalString (v.dev != null) "dev \"${v.dev}\""}
+              ip link set "${n}" up
+            '';
+            postStop = ''
+              ip link delete "${n}" || true
+            '';
+          });
+
         createVlanDevice = n: v: nameValuePair "${n}-netdev"
           (let
             deps = deviceDependency v.interface;
@@ -570,6 +597,7 @@ let
          // mapAttrs' createMacvlanDevice cfg.macvlans
          // mapAttrs' createFouEncapsulation cfg.fooOverUDP
          // mapAttrs' createSitDevice cfg.sits
+         // mapAttrs' createGreDevice cfg.greTunnels
          // mapAttrs' createVlanDevice cfg.vlans
          // {
            network-setup = networkSetup;

@@ -248,7 +248,7 @@ in {
     systemd.services = {
       openafs-server = {
         description = "OpenAFS server";
-        after = [ "syslog.target" "network.target" ];
+        after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
         restartIfChanged = false;
         unitConfig.ConditionPathExists = [

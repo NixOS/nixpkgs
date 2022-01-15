@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , pythonOlder
 , isPyPy
 , lazy-object-proxy
@@ -15,32 +14,23 @@
 
 buildPythonPackage rec {
   pname = "astroid";
-  version = "2.8.2"; # Check whether the version is compatible with pylint
+  version = "2.9.0"; # Check whether the version is compatible with pylint
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.6.2";
 
   src = fetchFromGitHub {
     owner = "PyCQA";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0140h4l7licwdw0scnfzsbi5b2ncxi7fxhdab7c1i3sk01r4asp6";
+    sha256 = "sha256-sImWiWULZ1HS3JyQHfEhc4ZRZ6anOUTqZZGNIYj2MaY=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION=version;
-
-  patches = [
-    (fetchpatch {
-      # Allow wrapt 1.13 (https://github.com/PyCQA/astroid/pull/1203)
-      url = "https://github.com/PyCQA/astroid/commit/fd510e08c2ee862cd284861e02b9bcc9a7fd9809.patch";
-      sha256 = "1s10whslcqnyz251fb76qkc9p41gagxljpljsmw89id1wywmjib4";
-    })
-  ];
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools-scm
   ];
 
-  # From astroid/__pkginfo__.py
   propagatedBuildInputs = [
     lazy-object-proxy
     wrapt
@@ -50,6 +40,11 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # assert (1, 1) == (1, 16)
+    "test_end_lineno_string"
   ];
 
   passthru.tests = {

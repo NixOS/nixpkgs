@@ -6,20 +6,22 @@
 , pkg-config
 , libiconv
 , openssl
+, zellij
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "zellij";
-  version = "0.19.0";
+  version = "0.24.0";
 
   src = fetchFromGitHub {
     owner = "zellij-org";
     repo = "zellij";
     rev = "v${version}";
-    sha256 = "sha256-/1ngmthzWp9K7pBBOBiSMUv0yC66K3Tg2g2PoBskpTU=";
+    sha256 = "sha256-GYbRu2ZEFswyOBUbg6jdAZQRogIDT/YolEElZT8h744=";
   };
 
-  cargoSha256 = "sha256-eFWsqjXO6QFTO26ppZ4tiJXc/PEYD+5ZdbTBMoDoLFI=";
+  cargoSha256 = "sha256-ogWFAO3xMH4vho9SRjyeHCDxRtAx6exGkMpNhz2VOLA";
 
   nativeBuildInputs = [
     installShellFiles
@@ -43,9 +45,12 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/zellij setup --generate-completion zsh)
   '';
 
+  passthru.tests.version = testVersion { package = zellij; };
+
   meta = with lib; {
     description = "A terminal workspace with batteries included";
     homepage = "https://zellij.dev/";
+    changelog = "https://github.com/zellij-org/zellij/blob/v${version}/Changelog.md";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ therealansh _0x4A6F ];
   };

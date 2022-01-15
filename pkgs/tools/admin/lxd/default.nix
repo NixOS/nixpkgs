@@ -11,22 +11,14 @@
 
 buildGoPackage rec {
   pname = "lxd";
-  version = "4.19";
+  version = "4.21";
 
   goPackagePath = "github.com/lxc/lxd";
 
   src = fetchurl {
     url = "https://linuxcontainers.org/downloads/lxd/lxd-${version}.tar.gz";
-    sha256 = "0mxbzg8xra0qpd3g3z1b230f0519h56x4jnn09lbbqa92p5zck3f";
+    sha256 = "1b2jls3jgvgdl0136nar8zm3hfrp0gqxxq9fh7vxc52r1aslarvs";
   };
-
-  patches = [
-    # lxd/checkfeature: check whether the kernel supports core scheduling
-    (fetchpatch {
-      url = "https://github.com/lxc/lxd/commit/ba6be1043714458b29c4b37687d4f624ee421943.patch";
-      sha256 = "0716129n70c6i695fyi1j8q6cls7g62vkdpcrlfrr9i324y3w1dx";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace shared/usbid/load.go \

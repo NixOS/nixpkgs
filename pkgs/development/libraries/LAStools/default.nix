@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Software for rapid LiDAR processing";
-    homepage = http://lastools.org/;
+    homepage = "http://lastools.org/";
     license = licenses.unfree;
     maintainers = with maintainers; [ stephenwithph ];
     platforms = platforms.unix;

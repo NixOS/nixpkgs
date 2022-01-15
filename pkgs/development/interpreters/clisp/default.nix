@@ -9,8 +9,8 @@
 , libffcall
 , coreutils
 # build options
-, threadSupport ? (stdenv.isi686 || stdenv.isx86_64)
-, x11Support ? (stdenv.isi686 || stdenv.isx86_64)
+, threadSupport ? stdenv.hostPlatform.isx86
+, x11Support ? stdenv.hostPlatform.isx86
 , dllSupport ? true
 , withModules ? [
     "pcre"
@@ -81,6 +81,10 @@ stdenv.mkDerivation rec {
     sed -e '/avcall.h/a\#include "config.h"' -i src/foreign.d
     cd builddir
   '';
+
+  # Fails to build in parallel due to missing gnulib header dependency used in charstrg.d:
+  #   ../src/charstrg.d:319:10: fatal error: uniwidth.h: No such file or directory
+  enableParallelBuilding = false;
 
   postInstall =
     lib.optionalString (withModules != [])

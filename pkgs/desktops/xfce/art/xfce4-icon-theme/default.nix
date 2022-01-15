@@ -39,6 +39,6 @@ stdenv.mkDerivation rec {
     description = "Icons for Xfce";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.eelco ];
+    maintainers = with maintainers; [ eelco ] ++ teams.xfce.members;
   };
 }

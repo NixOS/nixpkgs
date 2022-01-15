@@ -1,5 +1,7 @@
 { stdenv, lib, fetchzip, buildDunePackage, camlp5
-, ppxlib, ppx_deriving, re, perl, ncurses
+, re, perl, ncurses
+, ppxlib, ppx_deriving
+, ppxlib_0_15, ppx_deriving_0_15
 , version ? "1.13.7"
 }:
 with lib;
@@ -23,7 +25,11 @@ buildDunePackage rec {
 
   buildInputs = [ perl ncurses ];
 
-  propagatedBuildInputs = [ camlp5 ppxlib ppx_deriving re ];
+  propagatedBuildInputs = [ camlp5 re ]
+  ++ (if lib.versionAtLeast version "1.13"
+     then [ ppxlib ppx_deriving ]
+     else [ ppxlib_0_15 ppx_deriving_0_15 ]
+  );
 
   meta = {
     description = "Embeddable λProlog Interpreter";

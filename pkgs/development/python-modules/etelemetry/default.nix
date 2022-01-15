@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27, ci-info, ci-py, requests, pytest }:
+{ lib, buildPythonPackage, fetchPypi, isPy27, ci-info, ci-py, requests }:
 
 buildPythonPackage rec {
   version = "0.2.1";

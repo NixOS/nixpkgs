@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "boost-histogram";
-  version = "1.1.0";
+  version = "1.2.1";
   disabled = !isPy3k;
 
   src = fetchPypi {
     pname = "boost_histogram";
     inherit version;
-    sha256 = "370e8e44a0bac4ebbedb7e62570be3a75a7a3807a297d6e82a94301b4681fc22";
+    sha256 = "a27842b2f1cfecc509382da2b25b03056354696482b38ec3c0220af0fc9b7579";
   };
 
   buildInputs = [ boost ];

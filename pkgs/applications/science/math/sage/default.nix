@@ -15,7 +15,7 @@ let
       sagelib = self.callPackage ./sagelib.nix {
         inherit flint arb;
         inherit sage-src env-locations pynac singular;
-        ecl = maxima-ecl.ecl;
+        inherit (maxima) lisp-compiler;
         linbox = pkgs.linbox.override { withSage = true; };
         pkg-config = pkgs.pkg-config; # not to confuse with pythonPackages.pkg-config
       };
@@ -48,9 +48,8 @@ let
   # the files its looking fore are located. Also see `sage-env`.
   env-locations = callPackage ./env-locations.nix {
     inherit pari_data;
-    inherit singular maxima-ecl;
+    inherit singular maxima;
     inherit three;
-    ecl = maxima-ecl.ecl;
     cysignals = python3.pkgs.cysignals;
     mathjax = nodePackages.mathjax;
   };
@@ -61,22 +60,21 @@ let
     sagelib = python3.pkgs.sagelib;
     sage_docbuild = python3.pkgs.sage_docbuild;
     inherit env-locations;
-    inherit python3 singular palp flint pynac pythonEnv maxima-ecl;
-    ecl = maxima-ecl.ecl;
+    inherit python3 singular palp flint pynac pythonEnv maxima;
     pkg-config = pkgs.pkg-config; # not to confuse with pythonPackages.pkg-config
   };
 
   # The documentation for sage, building it takes a lot of ram.
   sagedoc = callPackage ./sagedoc.nix {
     inherit sage-with-env;
-    inherit python3 maxima-ecl;
+    inherit python3 maxima;
   };
 
   # sagelib with added wrappers and a dependency on sage-tests to make sure thet tests were run.
   sage-with-env = callPackage ./sage-with-env.nix {
     inherit python3 pythonEnv;
     inherit sage-env;
-    inherit pynac singular maxima-ecl;
+    inherit pynac singular maxima;
     inherit three;
     pkg-config = pkgs.pkg-config; # not to confuse with pythonPackages.pkg-config
   };
@@ -118,8 +116,8 @@ let
 
   singular = pkgs.singular.override { inherit flint; };
 
-  maxima-ecl = pkgs.maxima-ecl.override {
-    ecl = pkgs.ecl.override {
+  maxima = pkgs.maxima.override {
+    lisp-compiler = pkgs.ecl.override {
       # "echo syntax error | ecl > /dev/full 2>&1" segfaults in
       # ECL. We apply a patch to fix it (write_error.patch), but it
       # only works if threads are disabled.  sage 9.2 tests this

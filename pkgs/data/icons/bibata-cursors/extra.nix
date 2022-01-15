@@ -1,51 +1,54 @@
-{ lib, stdenvNoCC, fetchFromGitHub, gnome-themes-extra, inkscape, xcursorgen, python3 }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchurl
+, clickgen
+, unzip
+}:
 
-let
-  py = python3.withPackages(ps: [ ps.pillow ]);
-in stdenvNoCC.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "bibata-extra-cursors";
-  version = "0.3";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
-    owner = "KaizIqbal";
+    owner = "ful1e5";
     repo = "Bibata_Extra_Cursor";
     rev = "v${version}";
-    sha256 = "1bh945hvakbh985jkr6g6x0myw3k49pvn24m1clvqdv35v65nfxk";
+    sha256 = "0wndl4c547k99y0gq922hn7z1mwdgxvvyjfm6757g6shfbcmkz7m";
   };
 
-  postPatch = ''
-    patchShebangs .
-    substituteInPlace build.sh --replace "sudo" ""
+  bitmaps = fetchurl {
+    url = "https://github.com/ful1e5/Bibata_Extra_Cursor/releases/download/v${version}/bitmaps.zip";
+    sha256 = "0vf14ln53wigaq3dkqdk5avarqplsq751nlv72da04ms6gqjfhdl";
+  };
 
-    # Don't generate windows cursors,
-    # they aren't used and aren't installed
-    # by the project's install script anyway.
-    echo "exit 0" > w32-make.sh
-  '';
+  nativeBuildInputs = [ unzip ];
 
-  nativeBuildInputs  = [
-    gnome-themes-extra
-    inkscape
-    xcursorgen
-    py
-  ];
+  buildInputs = [ clickgen ];
 
   buildPhase = ''
-    HOME="$NIX_BUILD_ROOT" ./build.sh
+    mkdir bitmaps
+    unzip $bitmaps -d bitmaps
+    rm -rf themes
+    cd builder && make build_unix
   '';
 
   installPhase = ''
     install -dm 0755 $out/share/icons
-    for x in Bibata_*; do
-      cp -pr $x/out/X11/$x $out/share/icons/
-    done
+    cd ../
+    cp -rf themes/* $out/share/icons/
+  '';
+
+  postPatch = ''
+    substituteInPlace "builder/Makefile" \
+      --replace "/bin/bash" "bash"
   '';
 
   meta = with lib; {
-    description = "Cursors Based on Bibata";
-    homepage = "https://github.com/KaizIqbal/Bibata_Extra_Cursor";
+    description = "Material Based Cursor Theme";
+    homepage = "https://github.com/ful1e5/Bibata_Extra_Cursor";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ dtzWill ];
+    maintainers = with maintainers; [ dtzWill AdsonCicilioti ];
   };
 }

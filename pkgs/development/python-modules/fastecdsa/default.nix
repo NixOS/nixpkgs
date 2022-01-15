@@ -7,21 +7,22 @@
 
 buildPythonPackage rec {
   pname = "fastecdsa";
-  version = "2.2.2";
+  version = "2.2.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1eb6f3ac86ec483a10df62fcda1fb9a9d5d895a436871a8aa935dd20ccd82c6f";
+    sha256 = "269bdb0f618b38f8f6aec9d23d23db518046c3cee01a954fa6aa7322a1a7db8f";
   };
 
   buildInputs = [ gmp ];
 
   checkInputs = [ pytestCheckHook ];
 
-  # skip tests which require being online to download test vectors
-  pytestFlags = [
-     "--ignore=fastecdsa/tests/test_wycheproof_vectors.py"
-     "--ignore=fastecdsa/tests/test_rfc6979_ecdsa.py"
+  disabledTestPaths = [
+    # skip tests which require being online to download test vectors
+    "fastecdsa/tests/test_wycheproof_vectors.py"
+    "fastecdsa/tests/test_rfc6979_ecdsa.py"
   ];
 
   # skip tests for now, they fail with

@@ -2,7 +2,7 @@
 
 /* The python script shouldn't be needed for users of this kernel module.
   https://github.com/rr-debugger/rr/blob/master/scripts/zen_workaround.py
-  The module itself is called "zen_workaround" (a bit generic unfortunatelly).
+  The module itself is called "zen_workaround" (a bit generic unfortunately).
 */
 stdenv.mkDerivation rec {
   pname = "rr-zen_workaround";
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/rr-debugger/rr/wiki/Zen#kernel-module";
     license = licenses.gpl2;
     maintainers = [ maintainers.vcunat ];
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
     broken = versionOlder kernel.version "4.19"; # 4.14 breaks and 4.19 works
   };
 }

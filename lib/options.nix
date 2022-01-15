@@ -177,7 +177,7 @@ rec {
         docOption = rec {
           loc = opt.loc;
           name = showOption opt.loc;
-          description = opt.description or (lib.warn "Option `${name}' has no description." "This option has no description.");
+          description = opt.description or null;
           declarations = filter (x: x != unknownModule) opt.declarations;
           internal = opt.internal or false;
           visible =

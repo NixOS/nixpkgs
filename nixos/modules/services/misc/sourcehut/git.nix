@@ -1,8 +1,9 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 let
   cfg = config.services.sourcehut;
+  opt = options.services.sourcehut;
   scfg = cfg.git;
   iniKey = "git.sr.ht";
 
@@ -41,6 +42,7 @@ in
     statePath = mkOption {
       type = types.path;
       default = "${cfg.statePath}/gitsrht";
+      defaultText = literalExpression ''"''${config.${opt.statePath}}/gitsrht"'';
       description = ''
         State path for git.sr.ht.
       '';

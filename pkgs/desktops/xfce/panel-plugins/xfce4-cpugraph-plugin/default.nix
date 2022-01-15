@@ -56,6 +56,6 @@ in stdenv.mkDerivation rec {
     description = "CPU graph show for Xfce panel";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ ];
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

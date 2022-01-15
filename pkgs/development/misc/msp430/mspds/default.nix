@@ -48,7 +48,7 @@ in stdenv.mkDerivation {
 
   meta = {
     description = "TI MSP430 FET debug driver";
-    homepage = https://www.ti.com/tool/MSPDS;
+    homepage = "https://www.ti.com/tool/MSPDS";
     license = licenses.bsd3;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ aerialx ];

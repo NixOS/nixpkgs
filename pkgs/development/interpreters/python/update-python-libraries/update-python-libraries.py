@@ -242,7 +242,9 @@ DEFAULT_SETUPTOOLS_EXTENSION = 'tar.gz'
 
 FORMATS = {
     'setuptools'        :   DEFAULT_SETUPTOOLS_EXTENSION,
-    'wheel'             :   'whl'
+    'wheel'             :   'whl',
+    'pyproject'         :   'tar.gz',
+    'flit'              :   'tar.gz'
 }
 
 def _determine_fetcher(text):
@@ -281,12 +283,8 @@ def _determine_extension(text, fetcher):
         if extension is None:
             if src_format is None:
                 src_format = 'setuptools'
-            elif src_format == 'flit':
-                raise ValueError("Don't know how to update a Flit package.")
             elif src_format == 'other':
                 raise ValueError("Don't know how to update a format='other' package.")
-            elif src_format == 'pyproject':
-                raise ValueError("Don't know how to update a pyproject package.")
             extension = FORMATS[src_format]
 
     elif fetcher == 'fetchurl':
@@ -309,8 +307,8 @@ def _update_package(path, target):
     with open(path, 'r') as f:
         text = f.read()
 
-    # Determine pname.
-    pname = _get_unique_value('pname', text)
+    # Determine pname. Many files have more than one pname
+    pnames = _get_values('pname', text)
 
     # Determine version.
     version = _get_unique_value('version', text)
@@ -320,7 +318,18 @@ def _update_package(path, target):
 
     extension = _determine_extension(text, fetcher)
 
-    new_version, new_sha256, prefix = FETCHERS[fetcher](pname, extension, version, target)
+    # Attempt a fetch using each pname, e.g. backports-zoneinfo vs backports.zoneinfo
+    successful_fetch = False
+    for pname in pnames:
+        try:
+            new_version, new_sha256, prefix = FETCHERS[fetcher](pname, extension, version, target)
+            successful_fetch = True
+            break
+        except ValueError:
+            continue
+
+    if not successful_fetch:
+        raise ValueError(f"Unable to find correct package using these pnames: {pnames}")
 
     if new_version == version:
         logging.info("Path {}: no update available for {}.".format(path, pname))
@@ -331,11 +340,29 @@ def _update_package(path, target):
         raise ValueError("no file available for {}.".format(pname))
 
     text = _replace_value('version', new_version, text)
-    text = _replace_value('sha256', new_sha256, text)
+
+    # fetchers can specify a sha256, or a sri hash
+    try:
+        text = _replace_value('sha256', new_sha256, text)
+    except ValueError:
+        # hashes from pypi are 16-bit encoded sha256's, need translate to an sri hash if used with "hash"
+        sri_hash = subprocess.check_output(["nix", "hash", "to-sri", "--type", "sha256", new_sha256]).decode('utf-8').strip()
+        text = _replace_value('hash', sri_hash, text)
+
     if fetcher == 'fetchFromGitHub':
-        text = _replace_value('rev', f"{prefix}${{version}}", text)
-        # incase there's no prefix, just rewrite without interpolation
-        text = text.replace('"${version}";', 'version;')
+        # in the case of fetchFromGitHub, it's common to see `rev = version;`
+        # in which no string value is meant to be substituted.
+        # Verify that the attribute is set to a variable
+        regex = '(rev\s+=\s+([_a-zA-Z][_a-zA-Z0-9\.]*);)'
+        regex = re.compile(regex)
+        value = regex.findall(text)
+        n = len(value)
+
+        if n == 0:
+            # value is set to a string, e.g. `rev = "v${version}";`
+            text = _replace_value('rev', f"{prefix}${{version}}", text)
+            # incase there's no prefix, just rewrite without interpolation
+            text = text.replace('"${version}";', 'version;')
 
     with open(path, 'w') as f:
         f.write(text)

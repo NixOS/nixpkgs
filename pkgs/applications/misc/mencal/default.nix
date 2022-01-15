@@ -1,17 +1,18 @@
 { lib, stdenv, fetchurl, perl }:
 
 stdenv.mkDerivation rec {
-  name = "mencal-3.0";
+  pname = "mencal";
+  version = "3.0";
 
   src = fetchurl {
-    url = "http://kyberdigi.cz/projects/mencal/files/${name}.tar.gz";
+    url = "http://kyberdigi.cz/projects/mencal/files/mencal-${version}.tar.gz";
     sha256 = "9328d0b2f3f57847e8753c5184531f4832be7123d1b6623afdff892074c03080";
   };
 
   installPhase = ''
-      mkdir -p $out/bin
-      cp mencal $out/bin/
-    '';
+    mkdir -p $out/bin
+    cp mencal $out/bin/
+  '';
 
   buildInputs = [ perl ];
 

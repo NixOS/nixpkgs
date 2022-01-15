@@ -14,6 +14,8 @@ buildPythonPackage rec {
     sha256 = "eaae2d3e8fdf8bfe269628385087e4b648beef85bb0c187644e7df4fb0fe9046";
   };
 
+  propagatedNativeBuildInputs = [ cffi ];
+
   propagatedBuildInputs = [ cffi ];
 
   checkInputs = [ hypothesis ];

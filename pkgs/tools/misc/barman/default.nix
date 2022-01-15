@@ -4,13 +4,13 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "barman";
-  version = "2.15";
+  version = "2.17";
 
   src = fetchFromGitHub {
     owner = "EnterpriseDB";
     repo = pname;
     rev = "release/${version}";
-    sha256 = "127cqndg0405rad9jzba1mfhpqmyfa3kx16w345kd4n822w17ak9";
+    sha256 = "0c4gcs4kglbb2qma4nlvw0ycj1wnsg934p9vs50dvqi9099hxkmb";
   };
 
   checkInputs = with python3Packages; [
@@ -20,7 +20,6 @@ python3Packages.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3Packages; [
     argcomplete
-    argh
     azure-identity
     azure-storage-blob
     boto3

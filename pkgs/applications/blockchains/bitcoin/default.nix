@@ -5,6 +5,7 @@
 , pkg-config
 , util-linux
 , hexdump
+, autoSignDarwinBinariesHook
 , wrapQtAppsHook ? null
 , boost
 , libevent
@@ -47,6 +48,7 @@ stdenv.mkDerivation rec {
     [ autoreconfHook pkg-config ]
     ++ optionals stdenv.isLinux [ util-linux ]
     ++ optionals stdenv.isDarwin [ hexdump ]
+    ++ optionals (stdenv.isDarwin && stdenv.isAarch64) [ autoSignDarwinBinariesHook ]
     ++ optionals withGui [ wrapQtAppsHook ];
 
   buildInputs = [ boost libevent miniupnpc zeromq zlib ]
@@ -77,7 +79,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   checkFlags =
-    [ "LC_ALL=C.UTF-8" ]
+    [ "LC_ALL=en_US.UTF-8" ]
     # QT_PLUGIN_PATH needs to be set when executing QT, which is needed when testing Bitcoin's GUI.
     # See also https://github.com/NixOS/nixpkgs/issues/24256
     ++ optional withGui "QT_PLUGIN_PATH=${qtbase}/${qtbase.qtPluginPrefix}";
@@ -96,7 +98,7 @@ stdenv.mkDerivation rec {
       parties. Users hold the crypto keys to their own money and transact directly
       with each other, with the help of a P2P network to check for double-spending.
     '';
-    homepage = "https://bitcoin.org/";
+    homepage = "https://bitcoin.org/en/";
     downloadPage = "https://bitcoincore.org/bin/bitcoin-core-${version}/";
     changelog = "https://bitcoincore.org/en/releases/${version}/";
     maintainers = with maintainers; [ prusnak roconnor ];

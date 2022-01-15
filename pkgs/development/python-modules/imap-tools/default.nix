@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "imap-tools";
-  version = "0.49.1";
+  version = "0.50.2";
 
   disabled = isPy27;
 
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "ikvk";
     repo = "imap_tools";
     rev = "v${version}";
-    sha256 = "071bri1h6j8saqqlb50zibdrk5hgkpwp4ysiskl1zin18794bq82";
+    hash = "sha256-ki38Kr+eDEIQPRuoQePR7dCRDSgq2ZLXws1pq2gtQrI=";
   };
 
   checkInputs = [
@@ -26,12 +26,9 @@ buildPythonPackage rec {
     # tests require a network connection
     "test_action"
     "test_folders"
-    "test_connectio"
+    "test_connection"
     "test_attributes"
     "test_live"
-    # logic operator tests broken in 0.49.0
-    # https://github.com/ikvk/imap_tools/issues/143
-    "test_logic_operators"
   ];
 
   pythonImportsCheck = [ "imap_tools" ];

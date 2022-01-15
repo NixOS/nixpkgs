@@ -88,6 +88,8 @@ starting them in parallel:
 start_all()
 ```
 
+## Machine objects {#ssec-machine-objects}
+
 The following methods are available on machine objects:
 
 `start`
@@ -159,6 +161,12 @@ The following methods are available on machine objects:
 `execute`
 
 :   Execute a shell command, returning a list `(status, stdout)`.
+    If the command detaches, it must close stdout, as `execute` will wait
+    for this to consume all output reliably. This can be achieved by
+    redirecting stdout to stderr `>&2`, to `/dev/console`, `/dev/null` or
+    a file. Examples of detaching commands are `sleep 365d &`, where the
+    shell forks a new process that can write to stdout and `xclip -i`, where
+    the `xclip` command itself forks without closing stdout.
     Takes an optional parameter `check_return` that defaults to `True`.
     Setting this parameter to `False` will not check for the return code
     and return -1 instead. This can be used for commands that shut down
@@ -178,6 +186,9 @@ The following methods are available on machine objects:
         (if there is one, zero will be returned otherwise).
 
     -   Dereferencing unset variables fail the command.
+
+    -   It will wait for stdout to be closed. See `execute` for the
+        implications.
 
 `fail`
 
@@ -304,3 +315,52 @@ repository):
       # fmt: on
     '';
 ```
+
+## Failing tests early {#ssec-failing-tests-early}
+
+To fail tests early when certain invariables are no longer met (instead of waiting for the build to time out), the decorator `polling_condition` is provided. For example, if we are testing a program `foo` that should not quit after being started, we might write the following:
+
+```py
+@polling_condition
+def foo_running():
+    machine.succeed("pgrep -x foo")
+
+
+machine.succeed("foo --start")
+machine.wait_until_succeeds("pgrep -x foo")
+
+with foo_running:
+    ...  # Put `foo` through its paces
+```
+
+
+`polling_condition` takes the following (optional) arguments:
+
+`seconds_interval`
+
+:
+    specifies how often the condition should be polled:
+
+    ```py
+    @polling_condition(seconds_interval=10)
+    def foo_running():
+        machine.succeed("pgrep -x foo")
+    ```
+
+`description`
+
+:
+    is used in the log when the condition is checked. If this is not provided, the description is pulled from the docstring of the function. These two are therefore equivalent:
+
+    ```py
+    @polling_condition
+    def foo_running():
+        "check that foo is running"
+        machine.succeed("pgrep -x foo")
+    ```
+
+    ```py
+    @polling_condition(description="check that foo is running")
+    def foo_running():
+        machine.succeed("pgrep -x foo")
+    ```

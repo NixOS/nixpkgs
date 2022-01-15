@@ -52,5 +52,6 @@ python3.pkgs.buildPythonApplication rec {
       bsd3  # from https://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-projects/pax-utils/lddtree.py
     ];
     maintainers = with maintainers; [ davhau ];
+    platforms = platforms.linux;
   };
 }

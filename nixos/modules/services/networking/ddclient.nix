@@ -13,7 +13,7 @@ let
     foreground=YES
     use=${cfg.use}
     login=${cfg.username}
-    password=
+    password=${lib.optionalString (cfg.protocol == "nsupdate") "/run/${RuntimeDirectory}/ddclient.key"}
     protocol=${cfg.protocol}
     ${lib.optionalString (cfg.script != "") "script=${cfg.script}"}
     ${lib.optionalString (cfg.server != "") "server=${cfg.server}"}
@@ -27,6 +27,18 @@ let
     ${lib.concatStringsSep "," cfg.domains}
   '';
   configFile = if (cfg.configFile != null) then cfg.configFile else configFile';
+
+  preStart = ''
+    install --owner ddclient -m600 ${configFile} /run/${RuntimeDirectory}/ddclient.conf
+    ${lib.optionalString (cfg.configFile == null) (if (cfg.protocol == "nsupdate") then ''
+      install --owner ddclient -m600 ${cfg.passwordFile} /run/${RuntimeDirectory}/ddclient.key
+    '' else if (cfg.passwordFile != null) then ''
+      password=$(printf "%q" "$(head -n 1 "${cfg.passwordFile}")")
+      sed -i "s|^password=$|password=$password|" /run/${RuntimeDirectory}/ddclient.conf
+    '' else ''
+      sed -i '/^password=$/d' /run/${RuntimeDirectory}/ddclient.conf
+    '')}
+  '';
 
 in
 
@@ -57,6 +69,15 @@ with lib;
         '';
       };
 
+      package = mkOption {
+        type = package;
+        default = pkgs.ddclient;
+        defaultText = "pkgs.ddclient";
+        description = ''
+          The ddclient executable package run by the service.
+        '';
+      };
+
       domains = mkOption {
         default = [ "" ];
         type = listOf str;
@@ -66,7 +87,9 @@ with lib;
       };
 
       username = mkOption {
-        default = "";
+        # For `nsupdate` username contains the path to the nsupdate executable
+        default = lib.optionalString (config.services.ddclient.protocol == "nsupdate") "${pkgs.bind.dnsutils}/bin/nsupdate";
+        defaultText = "";
         type = str;
         description = ''
           User name.
@@ -77,7 +100,7 @@ with lib;
         default = null;
         type = nullOr str;
         description = ''
-          A file containing the password.
+          A file containing the password or a TSIG key in named format when using the nsupdate protocol.
         '';
       };
 
@@ -195,20 +218,13 @@ with lib;
 
       serviceConfig = {
         DynamicUser = true;
+        RuntimeDirectoryMode = "0700";
         inherit RuntimeDirectory;
         inherit StateDirectory;
         Type = "oneshot";
-        ExecStart = "${lib.getBin pkgs.ddclient}/bin/ddclient -file /run/${RuntimeDirectory}/ddclient.conf";
+        ExecStartPre = "!${pkgs.writeShellScript "ddclient-prestart" preStart}";
+        ExecStart = "${lib.getBin cfg.package}/bin/ddclient -file /run/${RuntimeDirectory}/ddclient.conf";
       };
-      preStart = ''
-        install -m 600 ${configFile} /run/${RuntimeDirectory}/ddclient.conf
-        ${optionalString (cfg.configFile == null) (if (cfg.passwordFile != null) then ''
-          password=$(head -n 1 ${cfg.passwordFile})
-          sed -i "s/^password=$/password=$password/" /run/${RuntimeDirectory}/ddclient.conf
-        '' else ''
-          sed -i '/^password=$/d' /run/${RuntimeDirectory}/ddclient.conf
-        '')}
-      '';
     };
 
     systemd.timers.ddclient = {

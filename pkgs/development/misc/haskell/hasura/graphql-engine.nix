@@ -32,8 +32,8 @@ mkDerivation {
   version = "1.0.0";
   src = fetchgit {
     url = "https://github.com/hasura/graphql-engine.git";
-    sha256 = "0ky23f700pmzb6anx44xzh6dixixmn7kq1ypj0yy4kqiqzqdb2dg";
-    rev = "7c35ffb36561214390d0d545d418746f29a29ba4";
+    sha256 = "04ns40wk1760pxi18pyqzgrk8h28mw6402zkjc1g52ny6afchs05";
+    rev = "8be851c2a1326b2caada13a3c43becd2e848db6c";
     fetchSubmodules = true;
   };
   postUnpack = "sourceRoot+=/server; echo source root reset to $sourceRoot";

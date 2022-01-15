@@ -2,6 +2,7 @@
 , lib
 , rustPlatform
 , fetchFromGitHub
+, Security
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,6 +20,8 @@ rustPlatform.buildRustPackage rec {
 
   # a nightly compiler is required unless we use this cheat code.
   RUSTC_BOOTSTRAP = 1;
+
+  buildInputs = lib.optional stdenv.isDarwin Security;
 
   meta = with lib; {
     description = "Tool to automatically sign git commits, replacing gpg for that purpose";

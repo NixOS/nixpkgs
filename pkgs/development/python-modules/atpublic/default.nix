@@ -1,6 +1,8 @@
-{ lib, isPy3k, pythonOlder, fetchPypi, buildPythonPackage
-, pytest
-, pytest-cov
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pytestCheckHook
+, pythonOlder
 , sybil
 , typing-extensions
 }:
@@ -8,7 +10,9 @@
 buildPythonPackage rec {
   pname = "atpublic";
   version = "2.3";
-  disabled = !isPy3k;
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
@@ -20,25 +24,25 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    pytest pytest-cov sybil
+    pytestCheckHook
+    sybil
   ];
 
-  checkPhase = ''
-    pytest
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "--cov=public" ""
   '';
 
+  pythonImportsCheck = [
+    "public"
+  ];
+
   meta = with lib; {
-    homepage = "https://public.readthedocs.io/en/latest/";
-    description = "A decorator and function which populates a module's __all__ and globals";
+    description = "Python decorator and function which populates a module's __all__ and globals";
+    homepage = "https://public.readthedocs.io/";
     longDescription = ''
       This is a very simple decorator and function which populates a module's
       __all__ and optionally the module globals.
-
-      This provides both a pure-Python implementation and a C implementation. It is
-      proposed that the C implementation be added to builtins_ for Python 3.6.
-
-      This proposal seems to have been rejected, for more information see
-      https://bugs.python.org/issue26632.
     '';
     license = licenses.asl20;
     maintainers = with maintainers; [ eadwu ];

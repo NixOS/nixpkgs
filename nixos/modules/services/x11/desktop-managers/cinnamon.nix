@@ -202,6 +202,13 @@ in
         blueberry
         warpinator
 
+        # cinnamon xapps
+        xviewer
+        xreader
+        xed
+        xplayer
+        pix
+
         # external apps shipped with linux-mint
         hexchat
         gnome-calculator

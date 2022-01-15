@@ -4,7 +4,6 @@
 , fetchFromGitHub
 , django
 , tablib
-, django-filter
 , python
 }:
 

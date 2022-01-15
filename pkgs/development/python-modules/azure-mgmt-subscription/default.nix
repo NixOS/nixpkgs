@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-subscription";
-  version = "1.0.0";
+  version = "2.0.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "22f606f298419f466a8149811fc762686c93da00a7dc15d3b7cdbf22b96cf5db";
+    sha256 = "70ec6e3395549c434bfd981f8f76cb8b6863339bad9b31924c1510af661dbf45";
   };
 
   propagatedBuildInputs = [

@@ -2,7 +2,6 @@
 , buildPythonPackage
 , isPy3k
 , fetchFromGitHub
-, fetchpatch
 , python-dateutil
 , pytz
 , regex
@@ -14,7 +13,7 @@
 , parameterized
 , pytestCheckHook
 , GitPython
-, ruamel_yaml
+, ruamel-yaml
 }:
 
 buildPythonPackage rec {
@@ -41,7 +40,7 @@ buildPythonPackage rec {
     parameterized
     pytestCheckHook
     GitPython
-    ruamel_yaml
+    ruamel-yaml
   ];
 
   preCheck = ''

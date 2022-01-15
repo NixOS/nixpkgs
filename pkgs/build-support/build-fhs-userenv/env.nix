@@ -184,7 +184,7 @@ let
     done
     cd ..
 
-    for i in var etc; do
+    for i in var etc opt; do
       if [ -d "${staticUsrProfileTarget}/$i" ]; then
         cp -rsHf "${staticUsrProfileTarget}/$i" "$i"
       fi

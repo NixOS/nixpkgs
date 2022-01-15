@@ -52,7 +52,6 @@ buildDotnetModule rec {
   ];
 
   autoPatchelfIgnoreMissingDeps = true; # Attempts to patchelf unneeded SOs
-  dontWrapGApps = true; # gappsWrapperArgs gets included when wrapping the application for dotnet.
 
   meta = with lib; {
     description = "A tracking application for A Link to the Past Randomizer";

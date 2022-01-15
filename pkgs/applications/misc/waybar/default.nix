@@ -10,7 +10,6 @@
 , gtkmm3
 , libsigcxx
 , jsoncpp
-, fmt
 , scdoc
 , spdlog
 , gtk-layer-shell
@@ -51,7 +50,7 @@ stdenv.mkDerivation rec {
   strictDeps = false;
 
   buildInputs = with lib;
-    [ wayland wlroots gtkmm3 libsigcxx jsoncpp fmt spdlog gtk-layer-shell howard-hinnant-date libxkbcommon ]
+    [ wayland wlroots gtkmm3 libsigcxx jsoncpp spdlog gtk-layer-shell howard-hinnant-date libxkbcommon ]
     ++ optional  traySupport  libdbusmenu-gtk3
     ++ optional  pulseSupport libpulseaudio
     ++ optional  sndioSupport sndio

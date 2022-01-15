@@ -1,10 +1,11 @@
 {lib, stdenv, fetchurl, pkg-config }:
 
 stdenv.mkDerivation rec {
-  name = "liboil-0.3.17";
+  pname = "liboil";
+  version = "0.3.17";
 
   src = fetchurl {
-    url = "${meta.homepage}/download/${name}.tar.gz";
+    url = "${meta.homepage}/download/liboil-${version}.tar.gz";
     sha256 = "0sgwic99hxlb1av8cm0albzh8myb7r3lpcwxfm606l0bkc3h4pqh";
   };
 

@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , isPy27
-, fetchpatch
 , setuptools-scm
 , libdeltachat
 , cffi

@@ -2,7 +2,6 @@
 , buildPythonPackage
 , isPy27
 , fetchPypi
-, nose
 , setuptools-scm
 , six
 , dnspython

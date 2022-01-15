@@ -2,7 +2,7 @@
 
 let
   # having the full version string here makes it easier to update
-  modDirVersion = "5.14.14-zen1";
+  modDirVersion = "5.15.11-zen1";
   parts = lib.splitString "-" modDirVersion;
   version = lib.elemAt parts 0;
   suffix = lib.elemAt parts 1;
@@ -19,7 +19,7 @@ buildLinux (args // {
     owner = "zen-kernel";
     repo = "zen-kernel";
     rev = "v${modDirVersion}";
-    sha256 = "sha256-cW3i672F7dmU3tzR1cJCkrm8T6F9uYt4DyMFDL37Fpo=";
+    sha256 = "sha256-KOy1bmNnfa8LtnE+03Y+0pr9r1OCimY0bjGsVmGnPN4=";
   };
 
   structuredExtraConfig = with lib.kernel; {

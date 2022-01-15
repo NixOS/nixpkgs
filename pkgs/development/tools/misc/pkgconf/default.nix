@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "pkgconf";
-  version = "1.7.4";
+  version = "1.8.0";
 
   nativeBuildInputs = [ removeReferencesTo ];
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://distfiles.dereferenced.org/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-1z8ywkikWRE5prF3d8gNTeq2tBTsKz0h0KJL40jEdqs=";
+    sha256 = "sha256-75x+YYIrfLg1bm6eHcpY2VVvMgDXisqzXkNH6dTCu68=";
   };
 
   # Debian has outputs like these too:

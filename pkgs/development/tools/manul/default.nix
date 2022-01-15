@@ -1,7 +1,8 @@
 { lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage {
-  name = "manul-unstable-2016-09-30";
+  pname = "manul";
+  version = "unstable-2016-09-30";
 
   goPackagePath = "github.com/kovetskiy/manul";
   excludedPackages = "tests";

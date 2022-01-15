@@ -7,7 +7,6 @@
 , attrs
 , od
 , docutils
-, repeated_test
 , pygments
 , unittest2
 , pytestCheckHook
@@ -15,18 +14,20 @@
 
 buildPythonPackage rec {
   pname = "clize";
-  version = "4.2.0";
+  version = "4.2.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "06p47i6hri006v7xbx7myj02as1a6f34rv88wfa9rb067p13nmyz";
+    sha256 = "3177a028e4169d8865c79af82bdd441b24311d4bd9c0ae8803641882d340a51d";
   };
 
+  # repeated_test no longer exists in nixpkgs
+  # also see: https://github.com/epsy/clize/issues/74
+  doCheck = false;
   checkInputs = [
     pytestCheckHook
     python-dateutil
     pygments
-    repeated_test
     unittest2
   ];
 

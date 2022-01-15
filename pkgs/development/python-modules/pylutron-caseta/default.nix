@@ -11,14 +11,16 @@
 
 buildPythonPackage rec {
   pname = "pylutron-caseta";
-  version = "0.11.0";
-  disabled = pythonOlder "3.5";
+  version = "0.13.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "gurumitts";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-2w8kRSZK9Bq3O6r6i0CJgxEXGo8KsWah9bMLlDNzMGk=";
+    sha256 = "sha256-pVBFlGguVN6b3YY2lFF8KG83tBuotLmWLq/dKjRKAUQ=";
   };
 
   propagatedBuildInputs = [
@@ -32,7 +34,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "pylutron_caseta" ];
+  pythonImportsCheck = [
+    "pylutron_caseta"
+  ];
 
   meta = with lib; {
     description = "Python module o control Lutron Caseta devices";

@@ -90,7 +90,16 @@ stdenv.mkDerivation rec {
     cd Installer
     # don't restrict PATH, that has already been done
     sed -i -e 's/^PATH=/# PATH=/' MathInstaller
-    sed -i -e 's/\/bin\/bash/\/bin\/sh/' MathInstaller
+
+    # Fix the installation script as follows:
+    # 1. Adjust the shebang
+    # 2. Use the wrapper in the desktop items
+    substituteInPlace MathInstaller \
+      --replace "/bin/bash" "/bin/sh" \
+      --replace "Executables/Mathematica" "../../bin/mathematica"
+
+    # Install the desktop items
+    export XDG_DATA_HOME="$out/share"
 
     echo "=== Running MathInstaller ==="
     ./MathInstaller -auto -createdir=y -execdir=$out/bin -targetdir=$out/libexec/Mathematica -silent

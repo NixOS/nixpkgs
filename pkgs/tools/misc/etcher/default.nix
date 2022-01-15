@@ -5,7 +5,7 @@
 , util-linux
 , bash
 , makeWrapper
-, electron_12
+, electron
 }:
 
 let
@@ -22,8 +22,6 @@ let
     "x86_64-linux" = "amd64";
     "i686-linux" = "i386";
   }."${system}" or throwSystem;
-
-  electron = electron_12;
 
 in
 

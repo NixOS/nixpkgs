@@ -1,6 +1,6 @@
 { lib, stdenv, fetchpatch, fetchurl, fetchzip
 # build tools
-, gfortran, m4, makeWrapper, patchelf, perl, which, python2
+, gfortran, m4, makeWrapper, patchelf, perl, which, python3
 , cmake
 # libjulia dependencies
 , libunwind, readline, utf8proc, zlib
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
     sha256 = src_sha256;
   };
 
-  nativeBuildInputs = [ cmake curl gfortran m4 makeWrapper patchelf perl python2 which ];
+  nativeBuildInputs = [ cmake curl gfortran m4 makeWrapper patchelf perl python3 which ];
   # cmake is only used to build the bundled deps
   dontUseCmakeConfigure = true;
 

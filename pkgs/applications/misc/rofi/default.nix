@@ -1,7 +1,8 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, autoreconfHook
+, meson
+, ninja
 , pkg-config
 , libxkbcommon
 , pango
@@ -22,14 +23,14 @@
 
 stdenv.mkDerivation rec {
   pname = "rofi-unwrapped";
-  version = "1.7.0";
+  version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "davatorium";
     repo = "rofi";
     rev = version;
     fetchSubmodules = true;
-    sha256 = "03wdy56b3g8p2czb0qydrddyyhj3x037pirnhyqr5qbfczb9a63v";
+    sha256 = "vre8kFou01P7S6KBBtfzvfFP554mhV+d6rjvY+GfWXk=";
   };
 
   preConfigure = ''
@@ -38,7 +39,7 @@ stdenv.mkDerivation rec {
     sed -i 's/~root/~nobody/g' test/helper-expand.c
   '';
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [ meson ninja pkg-config ];
   buildInputs = [
     libxkbcommon
     pango

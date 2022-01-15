@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   pname = "apache-felix";
-  version = "7.0.0";
+  version = "7.0.1";
   src = fetchurl {
     url = "mirror://apache/felix/org.apache.felix.main.distribution-${version}.tar.gz";
-    sha256 = "sha256-ea1QYUqf6m3HB17TrEQ7UEc48fl5QHQMYsN3t0T9VD4=";
+    sha256 = "sha256-WypiOdJhqKngIFVNf/XXAUDRdS8rANxWrcT846hcWTo=";
   };
   buildCommand =
   ''

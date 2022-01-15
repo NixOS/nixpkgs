@@ -11,23 +11,23 @@ let
            if stdenv.isAarch64 then "armv8" else
            "unknown";
 
-    nnueFile = "nn-3475407dc199.nnue";
+    nnueFile = "nn-13406b1dcbe0.nnue";
     nnue = fetchurl {
       name = nnueFile;
       url = "https://tests.stockfishchess.org/api/nn/${nnueFile}";
-      sha256 = "sha256-NHVAfcGZc+pERnZ4Y0zOAj1iDkGXcMERzIk3/maJ7Ic=";
+      sha256 = "sha256-E0BrHcvgo238XgfaUdjbOLekXX2kMHjsJadiTCuDI28=";
     };
 in
 
 stdenv.mkDerivation rec {
   pname = "stockfish";
-  version = "14";
+  version = "14.1";
 
   src = fetchFromGitHub {
     owner = "official-stockfish";
     repo = "Stockfish";
     rev = "sf_${version}";
-    sha256 = "sha256-fX0Tr1yqjmNRSxmisFRKUY1E5//qF3zAfJ8innAeyxA=";
+    sha256 = "sha256-bb62yezHKXu0J7NKavX8xhHghaUjUFYNG5U6dh/D+Co=";
   };
 
   # This addresses a linker issue with Darwin
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
       '';
     maintainers = with maintainers; [ luispedro siraben ];
     platforms = ["x86_64-linux" "i686-linux" "x86_64-darwin" "aarch64-linux"];
-    license = licenses.gpl2;
+    license = licenses.gpl3Only;
   };
 
 }

@@ -66,6 +66,6 @@ buildPythonPackage rec {
     description = "Terminal MUA using notmuch mail";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ edibopp ];
+    maintainers = with maintainers; [ milibopp ];
   };
 }

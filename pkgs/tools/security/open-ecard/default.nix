@@ -2,7 +2,6 @@
 
 let
   version = "1.2.4";
-
   srcs = {
     richclient = fetchurl {
       url = "https://jnlp.openecard.org/richclient-${version}-20171212-0958.jar";
@@ -18,8 +17,8 @@ let
     };
   };
 in stdenv.mkDerivation rec {
-  appName = "open-ecard";
-  name = "${appName}-${version}";
+  pname = "open-ecard";
+  inherit version;
 
   src = srcs.richclient;
 
@@ -28,12 +27,12 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   desktopItem = makeDesktopItem {
-    name = appName;
+    name = pname;
     desktopName = "Open eCard App";
     genericName = "eCard App";
     comment = "Client side implementation of the eCard-API-Framework";
     icon = "oec_logo_bg-transparent.svg";
-    exec = appName;
+    exec = pname;
     categories = "Utility;Security;";
   };
 
@@ -47,7 +46,7 @@ in stdenv.mkDerivation rec {
     cp ${srcs.logo} $out/share/pixmaps/oec_logo_bg-transparent.svg
 
     mkdir -p $out/bin
-    makeWrapper ${jre}/bin/java $out/bin/${appName} \
+    makeWrapper ${jre}/bin/java $out/bin/${pname} \
       --add-flags "-cp $out/share/java/cifs-${version}.jar" \
       --add-flags "-jar $out/share/java/richclient-${version}.jar" \
       --suffix LD_LIBRARY_PATH ':' ${lib.getLib pcsclite}/lib

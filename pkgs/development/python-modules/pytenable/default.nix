@@ -14,17 +14,18 @@
 , responses
 , restfly
 , semver
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "pytenable";
-  version = "1.3.3";
+  version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "tenable";
     repo = "pyTenable";
     rev = version;
-    sha256 = "19vhy7mf972545abydywyig82gkxalp6sfwinvj71hzbihwwzjpq";
+    sha256 = "sha256-qljoJ+nYFVS5VHr/M4mITtO9Czuyb4HLzVjhprhyJIs=";
   };
 
   propagatedBuildInputs = [
@@ -40,6 +41,7 @@ buildPythonPackage rec {
     requests
     requests-pkcs12
     restfly
+    typing-extensions
   ];
 
   checkInputs = [

@@ -1,5 +1,7 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
+, fetchpatch
 , meson
 , ninja
 , pkg-config
@@ -46,20 +48,23 @@
 
 stdenv.mkDerivation rec {
   pname = "evince";
-  version = "41.2";
+  version = "41.3";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/evince/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "lautDW/urJVg2zq4C6fF6rsf3xyg47PJMzmvBUU6JNg=";
+    sha256 = "M0awH5vcjy1f/qkvEQoJDGSjYklCtbVDqtRZKp3jO7A=";
   };
 
   patches = lib.optionals withPantheon [
     # Make this respect dark mode settings from Pantheon
-    # https://github.com/elementary/evince
-    # The patch currently differs from upstream (updated for evince 41).
-    ./pantheon-dark-style.patch
+    # https://github.com/elementary/evince/pull/21
+    # https://github.com/elementary/evince/pull/31
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/elementary/evince/c8364019ee2c2dffd2a1bccf79b8f4e526aa22af/dark-style.patch";
+      sha256 = "sha256-nKELRXnM6gMRTGmWdO1Qqlo9ciy+4HOK5z2CYOoi2Lo=";
+    })
   ];
 
   postPatch = ''

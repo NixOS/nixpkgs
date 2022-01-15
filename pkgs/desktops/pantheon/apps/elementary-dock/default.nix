@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , vala
 , atk
@@ -20,7 +21,6 @@
 , gnome-menus
 , libgee
 , wrapGAppsHook
-, pantheon
 , meson
 , ninja
 , granite
@@ -28,17 +28,15 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-dock";
-  version = "unstable-2021-07-16";
+  version = "unstable-2021-12-08";
 
   outputs = [ "out" "dev" ];
 
-  repoName = "dock";
-
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
-    rev = "05fd6fccdf1a769f6737a0d7e57e092825348660";
-    sha256 = "0lqqq5cx0kk8y7qyjx7z2k3v1kw2xxzns968ianarcji19wzcns4";
+    repo = "dock";
+    rev = "5e4b5ba2eec3b522e107ad834a59c0f1271d4699";
+    sha256 = "sha256-/Ul21t9VFxhmlQbfx4eY86UKU33hiRfXF9OPHBzPe5o=";
   };
 
   nativeBuildInputs = [

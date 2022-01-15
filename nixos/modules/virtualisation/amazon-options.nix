@@ -1,6 +1,6 @@
 { config, lib, pkgs, ... }:
 let
-  inherit (lib) types;
+  inherit (lib) literalExpression types;
 in {
   options = {
     ec2 = {
@@ -50,6 +50,7 @@ in {
       };
       efi = lib.mkOption {
         default = pkgs.stdenv.hostPlatform.isAarch64;
+        defaultText = literalExpression "pkgs.stdenv.hostPlatform.isAarch64";
         internal = true;
         description = ''
           Whether the EC2 instance is using EFI.

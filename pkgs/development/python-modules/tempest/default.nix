@@ -29,11 +29,11 @@
 
 buildPythonApplication rec {
   pname = "tempest";
-  version = "29.0.0";
+  version = "29.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2045963560f91241c56940af741f081e59212c65c9867dfcdabfe07f9dd4d255";
+    sha256 = "0521d3042360c0fb469b16f99174a9abddbae8a2d2a81268cfc664f1ccfdd0f9";
   };
 
   propagatedBuildInputs = [

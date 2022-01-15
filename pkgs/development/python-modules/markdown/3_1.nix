@@ -6,7 +6,6 @@
 , pyyaml
 , pythonOlder
 , importlib-metadata
-, isPy3k
 }:
 
 buildPythonPackage rec {

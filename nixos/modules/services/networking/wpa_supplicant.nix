@@ -1,4 +1,4 @@
-{ config, lib, pkgs, utils, ... }:
+{ config, lib, options, pkgs, utils, ... }:
 
 with lib;
 
@@ -8,6 +8,7 @@ let
     else pkgs.wpa_supplicant;
 
   cfg = config.networking.wireless;
+  opt = options.networking.wireless;
 
   # Content of wpa_supplicant.conf
   generatedConfig = concatStringsSep "\n" (
@@ -421,6 +422,7 @@ in {
       dbusControlled = mkOption {
         type = types.bool;
         default = lib.length cfg.interfaces < 2;
+        defaultText = literalExpression "length config.${opt.interfaces} < 2";
         description = ''
           Whether to enable the DBus control interface.
           This is only needed when using NetworkManager or connman.

@@ -12,7 +12,7 @@
 , at-spi2-core
 , dbus
 , elfutils
-, epoxy
+, libepoxy
 , gexiv2
 , glib
 , gobject-introspection
@@ -35,6 +35,7 @@
 , udev
 , util-linux
 , xorg
+, zstd
 }:
 
 stdenv.mkDerivation rec {
@@ -63,7 +64,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     at-spi2-core
     dbus
-    epoxy
+    libepoxy
     elfutils
     gexiv2
     glib
@@ -86,6 +87,7 @@ stdenv.mkDerivation rec {
     pcre
     udev
     util-linux
+    zstd
   ] ++ (with xorg; [
     libXdmcp
     libXtst

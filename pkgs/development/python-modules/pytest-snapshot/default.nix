@@ -1,23 +1,45 @@
-{ lib, buildPythonPackage, fetchPypi, packaging, pytest, setuptools-scm }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, packaging
+, pytest
+, setuptools-scm
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "pytest-snapshot";
-  version = "0.7.0";
+  version = "0.8.0";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "427b5ab088b25a1c8b63ce99725040664c840ff1f5a3891252723cce972897f9";
+  src = fetchFromGitHub {
+    owner = "joseph-roitman";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-xnfsB4wmsvqq5FfhLasSpxZh7+vhQsND6+Lxu0OuCvs=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
-  buildInputs = [ pytest ];
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
-  propagatedBuildInputs = [ packaging ];
+  buildInputs = [
+    pytest
+  ];
 
-  # pypi does not contain tests and GitHub archive is not supported because setuptools-scm can't detect the version
-  doCheck = false;
-  pythonImportsCheck = [ "pytest_snapshot" ];
+  propagatedBuildInputs = [
+    packaging
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "pytest_snapshot"
+  ];
 
   meta = with lib; {
     description = "A plugin to enable snapshot testing with pytest";

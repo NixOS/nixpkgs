@@ -11,7 +11,7 @@ let
     systemd.services.invidious = {
       description = "Invidious (An alternative YouTube front-end)";
       wants = [ "network-online.target" ];
-      after = [ "syslog.target" "network-online.target" ];
+      after = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
 
       script =
@@ -225,6 +225,7 @@ in
       port = lib.mkOption {
         type = types.port;
         default = options.services.postgresql.port.default;
+        defaultText = lib.literalExpression "options.services.postgresql.port.default";
         description = ''
           The port of the database Invidious should use.
 

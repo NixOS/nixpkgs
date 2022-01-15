@@ -2,23 +2,25 @@
 # Based on the work of Hauleth
 # None of this would have happened without him
 
-mixRelease rec {
+let
   pname = "elixir-ls";
-  version = "0.8.1";
-  inherit elixir;
-
+  pinData = lib.importJSON ./pin.json;
+  version = pinData.version;
   src = fetchFromGitHub {
     owner = "elixir-lsp";
     repo = "elixir-ls";
     rev = "v${version}";
-    sha256 = "sha256-KlZq12RCor9GrwA8QMP3R+jUQ/xFHRjkLwwkvthiMU0=";
+    sha256 = pinData.sha256;
     fetchSubmodules = true;
   };
+in
+mixRelease  {
+  inherit pname version src elixir;
 
   mixFodDeps = fetchMixDeps {
     pname = "mix-deps-${pname}";
     inherit src version elixir;
-    sha256 = "sha256-OzjToAg+q/ybCyqzNFk28OBsItjFTbdPi416EPh2qX0=";
+    sha256 = pinData.depsSha256;
   };
 
   # elixir_ls is an umbrella app

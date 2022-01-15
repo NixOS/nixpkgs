@@ -3,6 +3,7 @@
 , lib
 , fetchFromGitHub
 , ncurses
+, perl
 , pkg-config
 , python3
 , fontconfig
@@ -17,7 +18,6 @@
 , xcbutilwm
 , wayland
 , zlib
-  # Apple frameworks
 , CoreGraphics
 , Cocoa
 , Foundation
@@ -26,7 +26,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wezterm";
-  version = "20210814-124438-54e29167";
+  version = "20220101-133340-7edc5b5a";
 
   outputs = [ "out" "terminfo" ];
 
@@ -35,20 +35,23 @@ rustPlatform.buildRustPackage rec {
     repo = pname;
     rev = version;
     fetchSubmodules = true;
-    sha256 = "sha256-6HXTftgAs6JMzOMCY+laN74in8xfjE8yJc5xSl9PQCE=";
+    sha256 = "sha256-UZCvKbZdZ7K4RtvVLmr44M612tqd4rkrjF2tys0JHNM=";
   };
 
   postPatch = ''
     echo ${version} > .tag
+
+    # tests are failing with: Unable to exchange encryption keys
+    rm -r wezterm-ssh/tests
   '';
 
-  cargoSha256 = "sha256-yjTrWoqIKoRV4oZQ0mfTGrIGmm89AaKJd16WL1Ozhnw=";
+  cargoSha256 = "1imil15n9mf1r71qdp4cb4q7kzrrc2cspml0d54825yqaq8vjhsc";
 
   nativeBuildInputs = [
     pkg-config
     python3
     ncurses # tic for terminfo
-  ];
+  ] ++ lib.optional stdenv.isDarwin perl;
 
   buildInputs = [
     fontconfig
@@ -102,5 +105,7 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ SuperSandro2000 ];
     platforms = platforms.unix;
+    # Fails on missing UserNotifications framework while linking
+    broken = stdenv.isDarwin;
   };
 }

@@ -4,15 +4,15 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "waypipe-unstable";
-  version = "0.8.1";
+  pname = "waypipe";
+  version = "0.8.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "mstoeckl";
     repo = "waypipe";
     rev = "v${version}";
-    sha256 = "1v08dv3dfz420v51ahz7qgv3429073kmgrf8f66s4c3jlpch2pa1";
+    sha256 = "02q8l1qaahmd41h6v3r46akh7xlqz7fpwwsy15qww4jdvypg6vg4";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config scdoc ];

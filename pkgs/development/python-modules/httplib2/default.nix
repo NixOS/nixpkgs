@@ -1,8 +1,8 @@
 { lib
 , stdenv
 , buildPythonPackage
+, cryptography
 , fetchFromGitHub
-, fetchpatch
 , isPy27
 , mock
 , pyparsing
@@ -16,35 +16,22 @@
 
 buildPythonPackage rec {
   pname = "httplib2";
-  version = "0.19.1";
+  version = "0.20.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-e0Mq9AVJEWQ9GEtYFXk2fMIs7GtAUsyJN6XheqAnD3I=";
+    sha256 = "sha256-Q5KkhVqyHDoIeKjvvYoHRbZPY7LUXGDwgp4CSuyvQ1g=";
   };
 
-  patches = [
-    # fix test_inject_space
-    (fetchpatch {
-      url = "https://github.com/httplib2/httplib2/commit/08d6993b69256fbc6c0b1c615c24910803c4d610.patch";
-      sha256 = "0kbd1skn58m20kfkh4qzd66g9bvj31xlkbhsg435dkk4qz6l3yn3";
-    })
+  propagatedBuildInputs = [
+    pyparsing
   ];
 
-  postPatch = ''
-    sed -i "/--cov/d" setup.cfg
-  '';
-
-  propagatedBuildInputs = [ pyparsing ];
-
-  pythonImportsCheck = [ "httplib2" ];
-
-  # Don't run tests for Python 2.7
-  doCheck = !isPy27;
-
   checkInputs = [
+    cryptography
     mock
     pytest-forked
     pytest-randomly
@@ -54,16 +41,33 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = lib.optionals (stdenv.isDarwin) [
+  # Don't run tests for Python 2.7
+  doCheck = !isPy27;
+
+  postPatch = ''
+    sed -i "/--cov/d" setup.cfg
+  '';
+
+  disabledTests = [
+    # ValueError: Unable to load PEM file.
+    # https://github.com/httplib2/httplib2/issues/192#issuecomment-993165140
+    "test_client_cert_password_verified"
+  ] ++ lib.optionals (stdenv.isDarwin) [
     # fails with HTTP 408 Request Timeout, instead of expected 200 OK
     "test_timeout_subsequent"
   ];
 
-  pytestFlagsArray = [ "--ignore python2" ];
+  pytestFlagsArray = [
+    "--ignore python2"
+  ];
+
+  pythonImportsCheck = [
+    "httplib2"
+  ];
 
   meta = with lib; {
     description = "A comprehensive HTTP client library";
-    homepage = "https://httplib2.readthedocs.io";
+    homepage = "https://github.com/httplib2/httplib2";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

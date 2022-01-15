@@ -9,6 +9,7 @@
 , fetchPypi
 , gradient_statsd
 , gradient-utils
+, gql
 , halo
 , marshmallow
 , progressbar2
@@ -22,17 +23,19 @@
 
 buildPythonPackage rec {
   pname = "gradient";
-  version = "1.8.9";
+  version = "1.9.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c05913efe7fcc9f75c1fe84c157d2c2cf3ec0983e132d418c6e59fabc6361a1e";
+    hash = "sha256-zimOh4bc9EQGpqMky/etwnAF04onJ2m/KAl29IaAeAY=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
       --replace 'attrs<=' 'attrs>=' \
       --replace 'colorama==' 'colorama>=' \
+      --replace 'gql[requests]==3.0.0a6' 'gql' \
       --replace 'PyYAML==' 'PyYAML>=' \
       --replace 'marshmallow<' 'marshmallow>=' \
       --replace 'websocket-client==' 'websocket-client>='
@@ -45,6 +48,7 @@ buildPythonPackage rec {
     click-didyoumean
     click-help-colors
     colorama
+    gql
     gradient_statsd
     gradient-utils
     halo
@@ -58,8 +62,14 @@ buildPythonPackage rec {
     websocket-client
   ];
 
-  # tries to use /homeless-shelter to mimic container usage, etc
+  # Tries to use /homeless-shelter to mimic container usage, etc
   doCheck = false;
+
+  # marshmallow.exceptions.StringNotCollectionError: "only" should be a collection of strings.
+  # Support for marshmallow > 3
+  # pythonImportsCheck = [
+  #   "gradient"
+  # ];
 
   meta = with lib; {
     description = "The command line interface for Gradient";
@@ -67,8 +77,5 @@ buildPythonPackage rec {
     license = licenses.isc;
     platforms = platforms.unix;
     maintainers = with maintainers; [ thoughtpolice ];
-    # There is no support for click > 8
-    # https://github.com/Paperspace/gradient-cli/issues/368
-    broken = true;
   };
 }

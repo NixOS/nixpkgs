@@ -3,6 +3,6 @@
 fetchFromGitHub {
   owner = "nitely";
   repo = "nim-regex";
-  rev = "2e32fdc";
-  sha256 = "1hrl40mwql7nh4wc7sdhmk8bj5728b93v5a93j49v660l0rn4qx8";
+  rev = "eeefb4f";
+  sha256 = "13gn0qhnxz07474kv94br5qlac9j8pz2555fk83538fiq83vgbm5";
 }

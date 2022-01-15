@@ -1,28 +1,35 @@
 { lib
 , buildPythonPackage
+, editdistance-s
 , fetchFromGitHub
 , pytestCheckHook
-, editdistance-s
+, pythonOlder
+, ukkonen
 }:
 
 buildPythonPackage rec {
   pname = "identify";
-  version = "2.3.1";
+  version = "2.4.3";
+  format = "setuptools";
 
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pre-commit";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-6sErta+YnaXe7lHR3kR7UAoWuaw8He7e3gCML9vWYj8=";
+    sha256 = "sha256-r7Ta/OumYdm+brM6UgAPTWvxODpex1Mg0Arq94tPdnM=";
   };
 
   checkInputs = [
     editdistance-s
     pytestCheckHook
+    ukkonen
   ];
 
-  pythonImportsCheck = [ "identify" ];
+  pythonImportsCheck = [
+    "identify"
+  ];
 
   meta = with lib; {
     description = "File identification library for Python";

@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "nexia";
-  version = "0.9.11";
+  version = "0.9.12";
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = pname;
     rev = version;
-    sha256 = "0ql08nfvh6rjhjdh78gzih7az95m0fc9wxc22yqmlc9grifnp9i5";
+    sha256 = "sha256-YZHAWRTYquUm3Ymi/3mSQqxYZuoxsH5Q/LZOPDftEzU=";
   };
 
   propagatedBuildInputs = [

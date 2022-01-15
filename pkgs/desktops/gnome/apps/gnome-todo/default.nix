@@ -36,8 +36,10 @@ stdenv.mkDerivation rec {
   patches = [
     # fix build race bug https://bugs.freebsd.org/bugzilla/show_bug.cgi?id=257667
     (fetchpatch {
-      url = "https://cgit.freebsd.org/ports/patch/?id=a4faaf6cf7835014b5f69a337b544ea4ee7f9655";
-      sha256 = "sha256-IMBfqtrqBw3DdmJG0qchZFR6Am1PICMnM5P6BcS8oqI=";
+      url = "https://cgit.freebsd.org/ports/plain/deskutils/gnome-todo/files/patch-src_meson.build?id=a4faaf6cf7835014b5f69a337b544ea4ee7f9655";
+      sha256 = "sha256:0ihixyq72yhx6njij7bldsqb80x3y217yh6livknlf5r1wr3hakn";
+      extraPrefix = "";
+      name = "gnome-todo_meson-build.patch";
     })
   ];
 

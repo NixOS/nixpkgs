@@ -11,8 +11,8 @@ let
   };
 
   opensfx = fetchzip {
-    url = "https://cdn.openttd.org/opensfx-releases/1.0.2/opensfx-1.0.2-all.zip";
-    sha256 = "sha256-yRCb49/k8uUUAe9VzUG0LQaBDFP7n9QdrLSJDIthdbA=";
+    url = "https://cdn.openttd.org/opensfx-releases/1.0.3/opensfx-1.0.3-all.zip";
+    sha256 = "sha256-QmfXizrRTu/fUcVOY7tCndv4t4BVW+fb0yUi8LgSYzM=";
   };
 
   openmsx = fetchzip {
@@ -29,11 +29,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "openttd";
-  version = "12.0";
+  version = "12.1";
 
   src = fetchurl {
     url = "https://cdn.openttd.org/openttd-releases/${version}/${pname}-${version}-source.tar.xz";
-    sha256 = "sha256-u6D9OADfA3AlnmQtJR82LHwAtHii41Mfa6f4TBwrMtw=";
+    sha256 = "sha256-JYv1uZgwEIkLoQUYtQa8SrgPfAjM7FlJfpulWkqj5+M=";
   };
 
   nativeBuildInputs = [ cmake makeWrapper ];

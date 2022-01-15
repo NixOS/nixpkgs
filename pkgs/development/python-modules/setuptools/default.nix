@@ -1,11 +1,7 @@
 { stdenv
-, fetchurl
 , buildPythonPackage
 , fetchFromGitHub
 , python
-, wrapPython
-, unzip
-, callPackage
 , bootstrapped-pip
 , lib
 , pipInstallHook

@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "miniserve";
-  version = "0.17.0";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "svenstaro";
     repo = "miniserve";
     rev = "v${version}";
-    sha256 = "sha256-DqH/6Uu4L0fWbnGX8s3jCGwBgPE2PLIkS/dZIj+BA9Q=";
+    sha256 = "sha256-5rFxVk+D11Iqr0SP2VYdMEnFwijpxQT8e5EoK2PYtmQ=";
   };
 
-  cargoSha256 = "sha256-LgdVO41e56DIRkky1aF0X80ixs7ZH93Qk9Yx67vkO9E=";
+  cargoSha256 = "sha256-40TJzhaD1bi/u8k472K89A51wKhm/XjBs13W6oU/06Q=";
 
   nativeBuildInputs = [ installShellFiles pkg-config zlib ];
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
@@ -41,7 +41,9 @@ rustPlatform.buildRustPackage rec {
     description = "For when you really just want to serve some files over HTTP right now!";
     homepage = "https://github.com/svenstaro/miniserve";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ zowoq ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
+    # https://hydra.nixos.org/build/162650896/nixlog/1
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

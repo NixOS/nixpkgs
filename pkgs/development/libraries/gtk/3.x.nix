@@ -24,7 +24,7 @@
 , gobject-introspection
 , fribidi
 , xorg
-, epoxy
+, libepoxy
 , libxkbcommon
 , libxml2
 , gmp
@@ -104,7 +104,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libxkbcommon
-    epoxy
+    libepoxy
     isocodes
   ] ++ lib.optionals stdenv.isDarwin [
     AppKit
@@ -148,6 +148,8 @@ stdenv.mkDerivation rec {
     "-Dtests=false"
     "-Dtracker3=${lib.boolToString trackerSupport}"
     "-Dbroadway_backend=${lib.boolToString broadwaySupport}"
+    "-Dx11_backend=${lib.boolToString x11Support}"
+    "-Dquartz_backend=${lib.boolToString (stdenv.isDarwin && !x11Support)}"
   ];
 
   doCheck = false; # needs X11
@@ -159,6 +161,10 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-DG_ENABLE_DEBUG -DG_DISABLE_CAST_CHECKS";
 
   postPatch = ''
+    # See https://github.com/NixOS/nixpkgs/issues/132259
+    substituteInPlace meson.build \
+      --replace "x11_enabled = false" ""
+
     files=(
       build-aux/meson/post-install.py
       demos/gtk-demo/geninclude.py

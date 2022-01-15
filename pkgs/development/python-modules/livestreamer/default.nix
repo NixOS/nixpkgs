@@ -6,7 +6,6 @@
 , rtmpdump
 , pycrypto
 , requests
-, isPy27
 }:
 
 buildPythonPackage rec {

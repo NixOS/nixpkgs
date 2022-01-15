@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, cmake, pkg-config, boost, gd, libogg, libtheora, libvorbis }:
+{ lib, stdenv, fetchurl, fetchpatch, cmake, pkg-config, boost, gd, libogg, libtheora, libvorbis }:
 
 stdenv.mkDerivation rec {
   pname = "oggvideotools";
@@ -10,8 +10,29 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    ./fix-compile.patch
+    # Fix pending upstream inclusion for missing includes:
+    #  https://sourceforge.net/p/oggvideotools/bugs/12/
+    (fetchpatch {
+      name = "gcc-10.patch";
+      url = "https://sourceforge.net/p/oggvideotools/bugs/12/attachment/fix-compile.patch";
+      sha256 = "sha256-mJttoC3jCLM3vmPhlyqh+W0ryp2RjJGIBXd6sJfLJA4=";
+    })
+
+    # Fix pending upstream inclusion for build failure on gcc-12:
+    #  https://sourceforge.net/p/oggvideotools/bugs/13/
+    (fetchpatch {
+      name = "gcc-12.patch";
+      url = "https://sourceforge.net/p/oggvideotools/bugs/13/attachment/fix-gcc-12.patch";
+      sha256 = "sha256-zuDXe86djWkR8SgYZHkuAJJ7Lf2VYsVRBrlEaODtMKE=";
+      # svn patch, rely on prefix added by fetchpatch:
+      extraPrefix = "";
+    })
   ];
+
+  postPatch = ''
+    # Don't disable optimisations
+    substituteInPlace CMakeLists.txt --replace " -O0 " ""
+  '';
 
   nativeBuildInputs = [ cmake pkg-config ];
 

@@ -1,5 +1,5 @@
 { lib, stdenv, fetchgit, pkg-config, linkFarm, lightdm-enso-os-greeter
-, dbus, pcre, epoxy, libXdmcp, at-spi2-core, libxklavier, libxkbcommon, libpthreadstubs
+, dbus, pcre, libepoxy, libXdmcp, at-spi2-core, libxklavier, libxkbcommon, libpthreadstubs
 , gtk3, vala, cmake, libgee, libX11, lightdm, gdk-pixbuf, clutter-gtk, wrapGAppsHook, librsvg }:
 
 stdenv.mkDerivation {
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
     dbus
     gtk3
     pcre
-    epoxy
+    libepoxy
     libgee
     libX11
     lightdm

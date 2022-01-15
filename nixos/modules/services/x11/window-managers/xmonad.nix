@@ -29,7 +29,6 @@ let
       } ''
         install -D ${xmonadEnv}/share/man/man1/xmonad.1.gz $out/share/man/man1/xmonad.1.gz
         makeWrapper ${configured}/bin/xmonad $out/bin/xmonad \
-          --set NIX_GHC "${xmonadEnv}/bin/ghc" \
           --set XMONAD_XMESSAGE "${pkgs.xorg.xmessage}/bin/xmessage"
       '';
 
@@ -40,10 +39,12 @@ in {
   options = {
     services.xserver.windowManager.xmonad = {
       enable = mkEnableOption "xmonad";
+
       haskellPackages = mkOption {
         default = pkgs.haskellPackages;
         defaultText = literalExpression "pkgs.haskellPackages";
         example = literalExpression "pkgs.haskell.packages.ghc784";
+        type = types.attrs;
         description = ''
           haskellPackages used to build Xmonad and other packages.
           This can be used to change the GHC version used to build
@@ -93,6 +94,8 @@ in {
           <literal>(restart "xmonad" True)</literal> instead, which will just restart
           xmonad from PATH. This allows e.g. switching to the new xmonad binary
           after rebuilding your system with nixos-rebuild.
+          For the same reason, ghc is not added to the environment when this
+          option is set.
 
           If you actually want to run xmonad with a config specified here, but
           also be able to recompile and restart it from a copy of that source in

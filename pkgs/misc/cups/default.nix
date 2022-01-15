@@ -8,7 +8,7 @@
 , libtiff
 , pam
 , dbus
-, enableSystemd ? stdenv.isLinux && !stdenv.hostPlatform.isMusl
+, enableSystemd ? stdenv.isLinux
 , systemd
 , acl
 , gmp
@@ -39,6 +39,8 @@ stdenv.mkDerivation rec {
   });
 
   outputs = [ "out" "lib" "dev" "man" ];
+
+  patches = lib.optional (version == "2.2.6") ./0001-TargetConditionals.patch;
 
   postPatch = ''
     substituteInPlace cups/testfile.c \

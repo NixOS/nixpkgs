@@ -2,7 +2,7 @@
 
 buildPythonPackage rec {
   pname = "precis-i18n";
-  version = "1.0.2";
+  version = "1.0.3";
 
   disabled = !isPy3k;
 
@@ -10,7 +10,7 @@ buildPythonPackage rec {
     owner = "byllyfish";
     repo = "precis_i18n";
     rev = "v${version}";
-    hash = "sha256:1r9pah1kgik6valf15ac7ybw0szr92cq84kwjvm6mq3z46j1pmkr";
+    hash = "sha256-pBmllX1RVdFnZsDSW7Hh5uVqK2d++kcp1NQLN/phXdU=";
   };
 
   meta = {

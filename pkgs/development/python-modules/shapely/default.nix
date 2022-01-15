@@ -8,7 +8,6 @@
 , pytestCheckHook
 , cython
 , numpy
-, fetchpatch
 }:
 
 buildPythonPackage rec {

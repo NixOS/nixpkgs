@@ -6,16 +6,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "kalker";
-  version = "1.0.1-2";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "PaddiM8";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-fXTsCHqm+wO/ygyg0y+44G9pgaaEEH9fgePCDH86/vU=";
+    sha256 = "sha256-NnX4+VmV4oZg/8Z3ZCWHGZ6dqDfvH30XErnrvKMxyls=";
   };
 
-  cargoSha256 = "sha256-Ul21otEYCJuX5GnfV9OTpk/+3y32biASYZQpOecr8aU=";
+  cargoSha256 = "sha256-nSLbe3EhcLYylvyzOWuLIehBnD6mMofsNpFQVEybV8k=";
 
   buildInputs = [ gmp mpfr libmpc ];
 

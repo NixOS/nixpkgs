@@ -1,5 +1,5 @@
 { lib, pythonOlder, fetchFromGitHub, buildPythonPackage
-, six, enum34, pyasn1, cryptography, singledispatch ? null
+, six, enum34, pyasn1, cryptography
 , pytestCheckHook }:
 
 buildPythonPackage rec {
@@ -18,7 +18,6 @@ buildPythonPackage rec {
     pyasn1
     cryptography
   ] ++ lib.optionals (pythonOlder "3.4") [
-    singledispatch
     enum34
   ];
 

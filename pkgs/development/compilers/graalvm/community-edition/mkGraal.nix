@@ -1,13 +1,41 @@
-{ version, javaVersion, platforms, hashes ? import ./hashes.nix }:
+{ version
+, javaVersion
+, platforms
+, hashes ? import ./hashes.nix
+, useMusl ? false
+}:
 
-{ stdenv, lib, fetchurl, autoPatchelfHook, setJavaClassPath, makeWrapper
-# minimum dependencies
-, Foundation, alsa-lib, fontconfig, freetype, glibc, openssl, perl, unzip, xorg
+{ stdenv
+, lib
+, autoPatchelfHook
+, fetchurl
+, makeWrapper
+, setJavaClassPath
+, writeShellScriptBin
+  # minimum dependencies
+, alsa-lib
+, fontconfig
+, Foundation
+, freetype
+, glibc
+, openssl
+, perl
+, unzip
+, xorg
 , zlib
-# runtime dependencies
+  # runtime dependencies
+, binutils
 , cups
-# runtime dependencies for GTK+ Look and Feel
-, gtkSupport ? true, cairo, glib, gtk3 }:
+, gcc
+, musl
+  # runtime dependencies for GTK+ Look and Feel
+, gtkSupport ? stdenv.isLinux
+, cairo
+, glib
+, gtk3
+}:
+
+assert useMusl -> stdenv.isLinux;
 
 let
   platform = {
@@ -16,10 +44,17 @@ let
     x86_64-darwin = "darwin-amd64";
   }.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
 
-  runtimeDependencies = [ cups ]
-    ++ lib.optionals gtkSupport [ cairo glib gtk3 ];
+  runtimeLibraryPath = lib.makeLibraryPath
+    ([ cups ] ++ lib.optionals gtkSupport [ cairo glib gtk3 ]);
 
-  runtimeLibraryPath = lib.makeLibraryPath runtimeDependencies;
+  runtimeDependencies = lib.makeBinPath ([
+    binutils
+    stdenv.cc
+  ] ++ lib.optionals useMusl [
+    (lib.getDev musl)
+    # GraalVM 21.3.0+ expects musl-gcc as <system>-musl-gcc
+    (writeShellScriptBin "${stdenv.system}-musl-gcc" ''${lib.getDev musl}/bin/musl-gcc "$@"'')
+  ]);
 
   javaVersionPlatform = "${javaVersion}-${platform}";
 
@@ -50,10 +85,6 @@ let
       xorg.libXtst
       zlib
     ];
-
-    # Workaround for libssl.so.10 wanted by TruffleRuby
-    # Resulting TruffleRuby cannot use `openssl` library.
-    autoPatchelfIgnoreMissingDeps = true;
 
     nativeBuildInputs = [ unzip perl autoPatchelfHook makeWrapper ];
 
@@ -108,55 +139,73 @@ let
 
     outputs = [ "out" "lib" ];
 
-    installPhase = let
-      copyClibrariesToOut = basepath: ''
-        # provide libraries needed for static compilation
-        for f in ${glibc}/lib/* ${glibc.static}/lib/* ${zlib.static}/lib/*; do
-          ln -s $f ${basepath}/${platform}/$(basename $f)
-        done
-      '';
-      copyClibrariesToLib = ''
-        # add those libraries to $lib output too, so we can use them with
-        # `native-image -H:CLibraryPath=''${graalvm11-ce.lib}/lib ...` and reduce
-        # closure size by not depending on GraalVM $out (that is much bigger)
+    installPhase =
+      let
+        copyClibrariesToOut = basepath: ''
+          # provide libraries needed for static compilation
+          ${
+            if useMusl then
+              "for f in ${musl.stdenv.cc.cc}/lib/* ${musl}/lib/* ${zlib.static}/lib/*; do"
+            else
+              "for f in ${glibc}/lib/* ${glibc.static}/lib/* ${zlib.static}/lib/*; do"
+          }
+            ln -s $f ${basepath}/${platform}/$(basename $f)
+          done
+        '';
+        copyClibrariesToLib = ''
+          # add those libraries to $lib output too, so we can use them with
+          # `native-image -H:CLibraryPath=''${lib.getLib graalvm11-ce}/lib ...` and reduce
+          # closure size by not depending on GraalVM $out (that is much bigger)
+          mkdir -p $lib/lib
+          for f in ${glibc}/lib/*; do
+            ln -s $f $lib/lib/$(basename $f)
+          done
+        '';
+      in
+      {
+        "11-linux-amd64" = ''
+          ${copyClibrariesToOut "$out/lib/svm/clibraries"}
+
+          ${copyClibrariesToLib}
+        '';
+        "17-linux-amd64" = ''
+          ${copyClibrariesToOut "$out/lib/svm/clibraries"}
+
+          ${copyClibrariesToLib}
+        '';
+        "11-linux-aarch64" = ''
+          ${copyClibrariesToOut "$out/lib/svm/clibraries"}
+
+          ${copyClibrariesToLib}
+        '';
+        "17-linux-aarch64" = ''
+          ${copyClibrariesToOut "$out/lib/svm/clibraries"}
+
+          ${copyClibrariesToLib}
+        '';
+        "11-darwin-amd64" = "";
+        "17-darwin-amd64" = "";
+      }.${javaVersionPlatform} + ''
+        # ensure that $lib/lib exists to avoid breaking builds
         mkdir -p $lib/lib
-        for f in ${glibc}/lib/*; do
-          ln -s $f $lib/lib/$(basename $f)
-        done
-      '';
-    in {
-      "11-linux-amd64" = ''
-        ${copyClibrariesToOut "$out/lib/svm/clibraries"}
+        # jni.h expects jni_md.h to be in the header search path.
+        ln -s $out/include/linux/*_md.h $out/include/
 
-        ${copyClibrariesToLib}
+        # copy-paste openjdk's preFixup
+        # Set JAVA_HOME automatically.
+        mkdir -p $out/nix-support
+        cat <<EOF > $out/nix-support/setup-hook
+          if [ -z "\''${JAVA_HOME-}" ]; then export JAVA_HOME=$out; fi
+        EOF
       '';
-      "17-linux-amd64" = ''
-        ${copyClibrariesToOut "$out/lib/svm/clibraries"}
-
-        ${copyClibrariesToLib}
-      '';
-      "11-linux-aarch64" = ''
-        ${copyClibrariesToOut "$out/lib/svm/clibraries"}
-
-        ${copyClibrariesToLib}
-      '';
-      "17-linux-aarch64" = ''
-        ${copyClibrariesToOut "$out/lib/svm/clibraries"}
-
-        ${copyClibrariesToLib}
-      '';
-      "11-darwin-amd64" = "";
-      "17-darwin-amd64" = "";
-    }.${javaVersionPlatform} + ''
-      # ensure that $lib/lib exists to avoid breaking builds
-      mkdir -p $lib/lib
-      # jni.h expects jni_md.h to be in the header search path.
-      ln -s $out/include/linux/*_md.h $out/include/
-    '';
 
     dontStrip = true;
 
-    preFixup = ''
+    # Workaround for libssl.so.10 wanted by TruffleRuby
+    # Resulting TruffleRuby cannot use `openssl` library.
+    autoPatchelfIgnoreMissingDeps = stdenv.isDarwin;
+
+    preFixup = lib.optionalString (stdenv.isLinux) ''
       # We cannot use -exec since wrapProgram is a function but not a
       # command.
       #
@@ -165,19 +214,18 @@ let
       for bin in $( find "$out" -executable -type f -not -path '*/languages/ruby/lib/gems/*' -not -name jspawnhelper ); do
         if patchelf --print-interpreter "$bin" &> /dev/null || head -n 1 "$bin" | grep '^#!' -q; then
           wrapProgram "$bin" \
-            --prefix LD_LIBRARY_PATH : "${runtimeLibraryPath}"
+            --prefix LD_LIBRARY_PATH : "${runtimeLibraryPath}" \
+            --prefix PATH : "${runtimeDependencies}"
         fi
       done
 
-      # copy-paste openjdk's preFixup
-      # Set JAVA_HOME automatically.
-      mkdir -p $out/nix-support
-      cat <<EOF > $out/nix-support/setup-hook
-        if [ -z "\''${JAVA_HOME-}" ]; then export JAVA_HOME=$out; fi
-      EOF
-
       find "$out" -name libfontmanager.so -exec \
         patchelf --add-needed libfontconfig.so {} \;
+
+      # Workaround for libssl.so.10/libcrypto.so.10 wanted by TruffleRuby
+      patchelf $out/languages/ruby/lib/mri/openssl.so \
+        --replace-needed libssl.so.10 libssl.so \
+        --replace-needed libcrypto.so.10 libcrypto.so
     '';
 
     # $out/bin/native-image needs zlib to build native executables.
@@ -204,15 +252,22 @@ let
       # run on JVM with Graal Compiler
       $out/bin/java -XX:+UnlockExperimentalVMOptions -XX:+EnableJVMCI -XX:+UseJVMCICompiler HelloWorld | fgrep 'Hello World'
 
-      # Ahead-Of-Time compilation
-      $out/bin/native-image -H:-CheckToolchain -H:+ReportExceptionStackTraces --no-server HelloWorld
-      ./helloworld | fgrep 'Hello World'
+      ${# --static flag doesn't work for darwin
+        lib.optionalString (stdenv.isLinux && !useMusl) ''
+          echo "Ahead-Of-Time compilation"
+          $out/bin/native-image -H:-CheckToolchain -H:+ReportExceptionStackTraces --no-server HelloWorld
+          ./helloworld | fgrep 'Hello World'
 
-      ${
-        lib.optionalString stdenv.isLinux ''
-          # Ahead-Of-Time compilation with --static
-          # --static flag doesn't work for darwin
+          echo "Ahead-Of-Time compilation with --static"
           $out/bin/native-image --no-server --static HelloWorld
+          ./helloworld | fgrep 'Hello World'
+        ''
+      }
+
+      ${# --static flag doesn't work for darwin
+        lib.optionalString (stdenv.isLinux && useMusl) ''
+          echo "Ahead-Of-Time compilation with --static and --libc=musl"
+          $out/bin/native-image --no-server --libc=musl --static HelloWorld
           ./helloworld | fgrep 'Hello World'
         ''
       }
@@ -275,4 +330,5 @@ let
       ];
     };
   };
-in graalvmXXX-ce
+in
+graalvmXXX-ce

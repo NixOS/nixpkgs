@@ -1,20 +1,20 @@
-{ buildGoModule
+{ lib
+, buildGoModule
 , fetchFromGitHub
-, lib
 }:
 
 buildGoModule rec {
   pname = "gospider";
-  version = "1.1.5";
+  version = "1.1.6";
 
   src = fetchFromGitHub {
     owner = "jaeles-project";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-yfW94sQzT1u6O0s1sqpeANlukC5y8fNvHNL2c77+dxU=";
+    rev = "v${version}";
+    sha256 = "sha256-1EnKheHaS1kxw0cjxCahT3rUWBXiqxjKefrDBI2xIvY=";
   };
 
-  vendorSha256 = "sha256-1aOw0lk+khcX9IETA0+wGx91BFXrJ79zYWhEI2JrhDU=";
+  vendorSha256 = "sha256-egjjSEZH8F6UMbnkz3xytIzdW/oITB3RL1ddxrmvSZM=";
 
   # tests require internet access and API keys
   doCheck = false;

@@ -1,11 +1,14 @@
-{ fetchurl, lib, stdenv, libXrandr}:
+{ lib, stdenv, fetchFromGitHub, libXrandr}:
 
 stdenv.mkDerivation rec {
-  version = "0.02";
   pname = "xrandr-invert-colors";
-  src = fetchurl {
-    url = "https://github.com/zoltanp/xrandr-invert-colors/archive/v${version}.tar.gz";
-    sha256 = "sha256-7rIiBV9zbiLzu5RO5legHfGiqUSU2BuwqOc1dX/7ozA=";
+  version = "0.02";
+
+  src = fetchFromGitHub {
+    owner = "zoltanp";
+    repo = "xrandr-invert-colors";
+    rev = "v${version}";
+    sha256 = "sha256-MIbHNJFDQsvjPUbperTKKbHY5GSgItvRyV5OsfpzYT4=";
   };
 
   buildInputs = [ libXrandr ];

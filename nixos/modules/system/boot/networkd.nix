@@ -1,8 +1,8 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, utils, ... }:
 
+with utils.systemdUtils.unitOptions;
+with utils.systemdUtils.lib;
 with lib;
-with import ./systemd-unit-options.nix { inherit config lib; };
-with import ./systemd-lib.nix { inherit config lib pkgs; };
 
 let
 
@@ -131,6 +131,7 @@ let
           "fou"
           "xfrm"
           "ifb"
+          "batadv"
         ])
         (assertByteFormat "MTUBytes")
         (assertMacAddress "MACAddress")
@@ -381,6 +382,29 @@ let
         (assertInt "Table")
         (assertMinimum "Table" 0)
       ];
+
+      sectionBatmanAdvanced = checkUnitConfig "BatmanAdvanced" [
+        (assertOnlyFields [
+          "GatewayMode"
+          "Aggregation"
+          "BridgeLoopAvoidance"
+          "DistributedArpTable"
+          "Fragmentation"
+          "HopPenalty"
+          "OriginatorIntervalSec"
+          "GatewayBandwithDown"
+          "GatewayBandwithUp"
+          "RoutingAlgorithm"
+        ])
+        (assertValueOneOf "GatewayMode" ["off" "client" "server"])
+        (assertValueOneOf "Aggregation" boolValues)
+        (assertValueOneOf "BridgeLoopAvoidance" boolValues)
+        (assertValueOneOf "DistributedArpTable" boolValues)
+        (assertValueOneOf "Fragmentation" boolValues)
+        (assertInt "HopPenalty")
+        (assertRange "HopPenalty" 0 255)
+        (assertValueOneOf "RoutingAlgorithm" ["batman-v" "batman-iv"])
+      ];
     };
 
     network = {
@@ -473,6 +497,7 @@ let
           "IgnoreCarrierLoss"
           "Xfrm"
           "KeepConfiguration"
+          "BatmanAdvanced"
         ])
         # Note: For DHCP the values both, none, v4, v6 are deprecated
         (assertValueOneOf "DHCP" ["yes" "no" "ipv4" "ipv6"])
@@ -547,6 +572,7 @@ let
           "Family"
           "User"
           "SuppressPrefixLength"
+          "Type"
         ])
         (assertInt "TypeOfService")
         (assertRange "TypeOfService" 0 255)
@@ -559,6 +585,7 @@ let
         (assertValueOneOf "Family" ["ipv4" "ipv6" "both"])
         (assertInt "SuppressPrefixLength")
         (assertRange "SuppressPrefixLength" 0 128)
+        (assertValueOneOf "Type" ["blackhole" "unreachable" "prohibit"])
       ];
 
       sectionRoute = checkUnitConfig "Route" [
@@ -794,6 +821,16 @@ let
         ])
         (assertValueOneOf "AddressAutoconfiguration" boolValues)
         (assertValueOneOf "OnLink" boolValues)
+      ];
+
+      sectionDHCPServerStaticLease = checkUnitConfig "DHCPServerStaticLease" [
+        (assertOnlyFields [
+          "MACAddress"
+          "Address"
+        ])
+        (assertHasField "MACAddress")
+        (assertHasField "Address")
+        (assertMacAddress "MACAddress")
       ];
 
     };
@@ -1056,6 +1093,21 @@ let
       '';
     };
 
+    batmanAdvancedConfig = mkOption {
+      default = {};
+      example = {
+        GatewayMode = "server";
+        RoutingAlgorithm = "batman-v";
+      };
+      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionBatmanAdvanced;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[BatmanAdvanced]</literal> section of the unit. See
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
   };
 
   addressOptions = {
@@ -1116,6 +1168,25 @@ let
           <literal>[IPv6Prefix]</literal> section of the unit.  See
           <citerefentry><refentrytitle>systemd.network</refentrytitle>
           <manvolnum>5</manvolnum></citerefentry> for details.
+        '';
+      };
+    };
+  };
+
+  dhcpServerStaticLeaseOptions = {
+    options = {
+      dhcpServerStaticLeaseConfig = mkOption {
+        default = {};
+        example = { MACAddress = "65:43:4a:5b:d8:5f"; Address = "192.168.1.42"; };
+        type = types.addCheck (types.attrsOf unitOption) check.network.sectionDHCPServerStaticLease;
+        description = ''
+          Each attribute in this set specifies an option in the
+          <literal>[DHCPServerStaticLease]</literal> section of the unit.  See
+          <citerefentry><refentrytitle>systemd.network</refentrytitle>
+          <manvolnum>5</manvolnum></citerefentry> for details.
+
+          Make sure to configure the corresponding client interface to use
+          <literal>ClientIdentifier=mac</literal>.
         '';
       };
     };
@@ -1228,6 +1299,17 @@ let
       description = ''
         Each attribute in this set specifies an option in the
         <literal>[IPv6SendRA]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.network</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    dhcpServerStaticLeases = mkOption {
+      default = [];
+      example = [ { MACAddress = "65:43:4a:5b:d8:5f"; Address = "192.168.1.42"; } ];
+      type = with types; listOf (submodule dhcpServerStaticLeaseOptions);
+      description = ''
+        A list of DHCPServerStaticLease sections to be added to the unit.  See
         <citerefentry><refentrytitle>systemd.network</refentrytitle>
         <manvolnum>5</manvolnum></citerefentry> for details.
       '';
@@ -1507,6 +1589,10 @@ let
           [VRF]
           ${attrsToSection def.vrfConfig}
         ''
+        + optionalString (def.batmanAdvancedConfig != { }) ''
+          [BatmanAdvanced]
+          ${attrsToSection def.batmanAdvancedConfig}
+        ''
         + def.extraConfig;
     };
 
@@ -1599,6 +1685,10 @@ let
         + flip concatMapStrings def.ipv6Prefixes (x: ''
           [IPv6Prefix]
           ${attrsToSection x.ipv6PrefixConfig}
+        '')
+        + flip concatMapStrings def.dhcpServerStaticLeases (x: ''
+          [DHCPServerStaticLease]
+          ${attrsToSection x.dhcpServerStaticLeaseConfig}
         '')
         + def.extraConfig;
     };

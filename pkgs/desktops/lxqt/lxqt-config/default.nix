@@ -13,19 +13,20 @@
 , libkscreen
 , liblxqt
 , libqtxdg
+, xkeyboard_config
 , xorg
 , lxqtUpdateScript
 }:
 
 mkDerivation rec {
   pname = "lxqt-config";
-  version = "0.17.1";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "0b9jihmsqgdfdsisz15j3p53fgf1w30s8irj9zjh52fsj58p924p";
+    sha256 = "0yllqjmj4xbqi5681ffjxmlwlf9k9bpy3hgs7li6lnn90yy46qmr";
   };
 
   nativeBuildInputs = [
@@ -57,6 +58,10 @@ mkDerivation rec {
     substituteInPlace lxqt-config-appearance/configothertoolkits.cpp \
       --replace 'QStringLiteral("gsettings' \
                 'QStringLiteral("${glib.bin}/bin/gsettings'
+
+    substituteInPlace lxqt-config-input/keyboardlayoutconfig.h \
+      --replace '/usr/share/X11/xkb/rules/base.lst' \
+                '${xkeyboard_config}/share/X11/xkb/rules/base.lst'
   '';
 
   passthru.updateScript = lxqtUpdateScript { inherit pname version src; };

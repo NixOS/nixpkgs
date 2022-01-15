@@ -4,6 +4,7 @@
 , asynctest
 , backoff
 , buildPythonPackage
+, docutils
 , fetchFromGitHub
 , poetry-core
 , pytest-aiohttp
@@ -18,22 +19,26 @@
 
 buildPythonPackage rec {
   pname = "simplisafe-python";
-  version = "12.0.2";
+  version = "2021.12.2";
   format = "pyproject";
-  disabled = pythonOlder "3.7";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "bachya";
     repo = pname;
     rev = version;
-    sha256 = "sha256-/KnDsnx+Jrirj6uBkdao6PI2jhtzKqDK6cmmQgsO5T4=";
+    sha256 = "sha256-XVSoPPBdjSQBYrUs0AFGsGFRrQOWbPzlB2mmEBSbFI4=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
     aiohttp
     backoff
+    docutils
     pytz
     types-pytz
     voluptuous
@@ -48,15 +53,25 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'docutils = "<0.18"' 'docutils = "*"'
+  '';
+
   disabledTests = [
     # simplipy/api.py:253: InvalidCredentialsError
     "test_request_error_failed_retry"
     "test_update_error"
   ];
 
-  disabledTestPaths = [ "examples/" ];
+  disabledTestPaths = [
+    # Ignore the examples as they are prefixed with test_
+    "examples/"
+  ];
 
-  pythonImportsCheck = [ "simplipy" ];
+  pythonImportsCheck = [
+    "simplipy"
+  ];
 
   __darwinAllowLocalNetworking = true;
 

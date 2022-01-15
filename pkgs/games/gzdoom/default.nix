@@ -28,13 +28,13 @@ let
 
   gzdoom = stdenv.mkDerivation rec {
     pname = "gzdoom";
-    version = "4.7.0";
+    version = "4.7.1";
 
     src = fetchFromGitHub {
       owner = "coelckers";
       repo = "gzdoom";
       rev = "g${version}";
-      sha256 = "0xxxy7k2zr5g0vr1lnwv4n5amiwq1wln7r6hr37gmrjr72zkcjqn";
+      sha256 = "sha256-3wO83RgxzeJnoxykKQxb1S1GA6QZlhZMw6GrV3YEm/0=";
       fetchSubmodules = true;
     };
 

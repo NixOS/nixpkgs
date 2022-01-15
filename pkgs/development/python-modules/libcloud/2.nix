@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A unified interface to many cloud providers";
-    homepage = "http://incubator.apache.org/libcloud/";
+    homepage = "https://libcloud.apache.org/";
     license = licenses.asl20;
   };
 

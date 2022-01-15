@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, libpipeline, db, groff, libiconv, makeWrapper, buildPackages }:
+{ lib, stdenv, fetchurl, pkg-config, libpipeline, db, groff, libiconv, makeWrapper, buildPackages, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "man-db";
@@ -72,6 +72,10 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   doCheck = !stdenv.hostPlatform.isMusl /* iconv binary */ && !stdenv.hostPlatform.isDarwin;
+
+  passthru.tests = {
+    nixos = nixosTests.man;
+  };
 
   meta = with lib; {
     homepage = "http://man-db.nongnu.org";

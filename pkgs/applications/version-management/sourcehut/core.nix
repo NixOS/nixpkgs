@@ -25,17 +25,16 @@
 , sassc
 , nodejs
 , redis
-, writeText
 }:
 
 buildPythonPackage rec {
   pname = "srht";
-  version = "0.67.4";
+  version = "0.68.13";
 
   src = fetchgit {
     url = "https://git.sr.ht/~sircmpwn/core.sr.ht";
     rev = version;
-    sha256 = "sha256-XvzFfcBK5Mq8p7xEBAF/eupUE1kkUBh5k+ByM/WA9bc=";
+    sha256 = "sha256-LPyEfpNlmod18Fj16xpihKOrsU/hQUfAeOmWMmUeVPQ=";
     fetchSubmodules = true;
   };
 
@@ -46,6 +45,7 @@ buildPythonPackage rec {
   };
 
   patches = [
+    # Disable check for npm
     ./disable-npm-install.patch
   ];
 
@@ -87,6 +87,7 @@ buildPythonPackage rec {
   '';
 
   dontUseSetuptoolsCheck = true;
+  pythonImportsCheck = [ "srht" ];
 
   meta = with lib; {
     homepage = "https://git.sr.ht/~sircmpwn/srht";

@@ -95,6 +95,8 @@ let
               jobs.lib-tests
               jobs.pkgs-lib-tests
               jobs.stdenv.x86_64-linux
+              jobs.cargo.x86_64-linux
+              jobs.go.x86_64-linux
               jobs.linux.x86_64-linux
               jobs.pandoc.x86_64-linux
               jobs.python.x86_64-linux
@@ -130,6 +132,8 @@ let
             ++ lib.collect lib.isDerivation jobs.stdenvBootstrapTools
             ++ lib.optionals supportDarwin [
               jobs.stdenv.x86_64-darwin
+              jobs.cargo.x86_64-darwin
+              jobs.go.x86_64-darwin
               jobs.python.x86_64-darwin
               jobs.python3.x86_64-darwin
               jobs.nixpkgs-review.x86_64-darwin
@@ -175,8 +179,7 @@ let
               # Lightweight distribution and test
               inherit (bootstrap) dist test;
               # Test a full stdenv bootstrap from the bootstrap tools definition
-              # TODO re-enable with https://github.com/NixOS/nixpkgs/pull/126411
-              # inherit (bootstrap.test-pkgs) stdenv;
+              inherit (bootstrap.test-pkgs) stdenv;
             };
 
           # Cross compiled bootstrap tools

@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mate-themes";
-  version = "3.22.22";
+  version = "3.22.23";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/themes/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "18crdwfpfm3br4pv94wy7rpmzzb69im4j8dgq1b7c8gcbbzay05x";
+    sha256 = "1avgzccdmr7y18rnp3xrhwk82alv2dlig3wh7ivgahcqdiiavrb1";
   };
 
   nativeBuildInputs = [ pkg-config gettext gtk3 ];

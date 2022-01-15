@@ -14,7 +14,6 @@ buildGoModule rec {
   };
 
   subPackages = [ "cli" ];
-  runVend = true;
 
   preBuild = ''
     env GOFLAGS="" go generate ./pkg/charts/static

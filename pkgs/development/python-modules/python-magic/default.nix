@@ -3,6 +3,7 @@
 , python
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , substituteAll
 , file
 , glibcLocales
@@ -20,6 +21,13 @@ buildPythonPackage rec {
   };
 
   patches = [
+    # pull upstream patch to support file-5.41
+    (fetchpatch {
+      name = "file-5.41-compat.patch";
+      url = "https://github.com/ahupp/python-magic/commit/0ae7e7ceac0e80e03adc75c858bb378c0427331a.patch";
+      sha256 = "0vclaamb56nza1mcy88wjbkh81hnish2gzvl8visa2cknhgdmk50";
+    })
+
     (substituteAll {
       src = ./libmagic-path.patch;
       libmagic = "${file}/lib/libmagic${stdenv.hostPlatform.extensions.sharedLibrary}";

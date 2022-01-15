@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , ailment
 , archinfo
 , buildPythonPackage
@@ -30,28 +31,31 @@
 let
   # Only the pinned release in setup.py works properly
   unicorn' = unicorn.overridePythonAttrs (old: rec {
-      pname = "unicorn";
-      version = "1.0.2-rc4";
-      src =  fetchFromGitHub {
-        owner = "unicorn-engine";
-        repo = pname;
-        rev = version;
-        sha256 = "17nyccgk7hpc4hab24yn57f1xnmr7kq4px98zbp2bkwcrxny8gwy";
+    pname = "unicorn";
+    version = "1.0.2-rc4";
+    src =  fetchFromGitHub {
+      owner = "unicorn-engine";
+      repo = pname;
+      rev = version;
+      sha256 = "17nyccgk7hpc4hab24yn57f1xnmr7kq4px98zbp2bkwcrxny8gwy";
     };
+    doCheck = false;
   });
 in
 
 buildPythonPackage rec {
   pname = "angr";
-  version = "9.0.10409";
+  version = "9.1.10913";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-etBXFDl5TPGpLHXRCH+ImQDnbpsp30vKxCU+O4pF7PY=";
+    sha256 = "sha256-AZlqSalTOQh3QR959ZuanFuTZVKi9valKJ3snsquC/A=";
   };
+
+  setupPyBuildFlags = lib.optionals stdenv.isLinux [ "--plat-name" "linux" ];
 
   propagatedBuildInputs = [
     ailment

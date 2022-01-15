@@ -167,4 +167,7 @@ in
       "d ${cfg.dataDir}/async/ 0750 ${user} ${group} - -"
     ];
   };
+
+  # uses attributes of the linked package
+  meta.buildDocsInSandbox = false;
 }

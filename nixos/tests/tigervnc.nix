@@ -35,13 +35,13 @@ makeTest {
     for host in [server, client]:
         host.succeed("echo foobar | vncpasswd -f > vncpasswd")
 
-    server.succeed("Xvnc -geometry 720x576 :1 -PasswordFile vncpasswd &")
+    server.succeed("Xvnc -geometry 720x576 :1 -PasswordFile vncpasswd >&2 &")
     server.wait_until_succeeds("nc -z localhost 5901", timeout=10)
     server.succeed("DISPLAY=:1 xwininfo -root | grep 720x576")
-    server.execute("DISPLAY=:1 display -size 360x200 -font sans -gravity south label:'HELLO VNC WORLD' &")
+    server.execute("DISPLAY=:1 display -size 360x200 -font sans -gravity south label:'HELLO VNC WORLD' >&2 &")
 
     client.wait_for_x()
-    client.execute("vncviewer server:1 -PasswordFile vncpasswd &")
+    client.execute("vncviewer server:1 -PasswordFile vncpasswd >&2 &")
     client.wait_for_window(r"VNC")
     client.screenshot("screenshot")
     text = client.get_screen_text()

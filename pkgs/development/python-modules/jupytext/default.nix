@@ -1,23 +1,23 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, pythonOlder
 , GitPython
-, jupyter-packaging
 , jupyter-client
+, jupyter-packaging
 , jupyterlab
 , markdown-it-py
 , mdit-py-plugins
 , nbformat
 , notebook
 , pytestCheckHook
+, pythonOlder
 , pyyaml
 , toml
 }:
 
 buildPythonPackage rec {
   pname = "jupytext";
-  version = "1.11.2";
+  version = "1.13.5";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -26,10 +26,14 @@ buildPythonPackage rec {
     owner = "mwouts";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-S2SKAC2oT4VIVMMDbu/Puo87noAgnQs1hh88JphutA8=";
+    sha256 = "0rapp2baqml1z3n8k7ijf5461b3p8wgr45y3njz54q75v0jk7v45";
   };
 
-  buildInputs = [ jupyter-packaging jupyterlab ];
+  buildInputs = [
+    jupyter-packaging
+    jupyterlab
+  ];
+
   propagatedBuildInputs = [
     markdown-it-py
     mdit-py-plugins
@@ -39,16 +43,32 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    pytestCheckHook
     GitPython
     jupyter-client
     notebook
+    pytestCheckHook
   ];
-  # Tests that use a Jupyter notebook require $HOME to be writable.
-  HOME = "$TMPDIR";
-  # Pre-commit tests expect the source directory to be a Git repository.
-  pytestFlagsArray = [ "--ignore-glob='tests/test_pre_commit_*.py'" ];
-  pythonImportsCheck = [ "jupytext" "jupytext.cli" ];
+
+  postPatch = ''
+    # https://github.com/mwouts/jupytext/pull/885
+    substituteInPlace setup.py \
+      --replace "markdown-it-py~=1.0" "markdown-it-py>=1.0.0,<3.0.0"
+  '';
+
+  preCheck = ''
+    # Tests that use a Jupyter notebook require $HOME to be writable
+    export HOME=$(mktemp -d);
+  '';
+
+  pytestFlagsArray = [
+    # Pre-commit tests expect the source directory to be a Git repository
+    "--ignore-glob='tests/test_pre_commit_*.py'"
+  ];
+
+  pythonImportsCheck = [
+    "jupytext"
+    "jupytext.cli"
+  ];
 
   meta = with lib; {
     description = "Jupyter notebooks as Markdown documents, Julia, Python or R scripts";

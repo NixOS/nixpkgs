@@ -1,5 +1,4 @@
 { lib
-, python
 , buildPythonPackage
 , bootstrapped-pip
 , fetchFromGitHub
@@ -8,8 +7,6 @@
 , virtualenv
 , pretend
 , pytest
-, setuptools
-, wheel
 }:
 
 buildPythonPackage rec {

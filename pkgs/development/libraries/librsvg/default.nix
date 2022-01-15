@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "librsvg";
-  version = "2.52.0";
+  version = "2.52.4";
 
   outputs = [ "out" "dev" "installedTests" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "14zkdd7a9mymnfs3laqj0gr69c16nwixvbc5a4gvd534w6riz0mx";
+    sha256 = "Zg7Ig2o6kVh7yThJIBMtTDjR0XGMZ/4WDFIT/k3sKSg=";
   };
 
   cargoVendorDir = "vendor";
@@ -105,6 +105,9 @@ stdenv.mkDerivation rec {
     # Fix thumbnailer path
     sed -e "s#@bindir@\(/gdk-pixbuf-thumbnailer\)#${gdk-pixbuf}/bin\1#g" \
         -i gdk-pixbuf-loader/librsvg.thumbnailer.in
+
+    # 'error: linker `cc` not found' when cross-compiling
+    export RUSTFLAGS="-Clinker=$CC"
   '';
 
   # Not generated when cross compiling.

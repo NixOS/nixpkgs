@@ -1,8 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
-, isPy3k
 , docutils
 , requests
 , requests_download

@@ -20,11 +20,11 @@
 
 buildPythonApplication rec {
   pname = "python-ironicclient";
-  version = "4.9.0";
+  version = "4.10.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "99d45e914b2845731ac44fbfc63ae3e1bd52211396748797b588f2adc4b3f341";
+    sha256 = "8f3ad8ae1fc4df524ea05a458ad2567b58144e881807dbbb985e282902d732fd";
   };
 
   propagatedBuildInputs = [

@@ -1,23 +1,23 @@
 { lib
 , python3
 , fetchFromGitHub
-, nixUnstable
+, nix
 , git
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "nixpkgs-review";
-  version = "2.6.3";
+  version = "2.6.4";
 
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = "nixpkgs-review";
     rev = version;
-    sha256 = "sha256-DzqttjYkCSgsHjF1YN93zioGpTGDm9H0F8JzKmHPHro=";
+    sha256 = "sha256-6vKMaCTilPXd8K3AuLqtYInVyyFhdun0o9cX1WRMmWo=";
   };
 
   makeWrapperArgs = [
-    "--prefix" "PATH" ":" "${lib.makeBinPath [ nixUnstable git ]}"
+    "--prefix" "PATH" ":" "${lib.makeBinPath [ nix git ]}"
   ];
 
   doCheck = false;

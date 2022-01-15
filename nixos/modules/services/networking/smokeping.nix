@@ -241,6 +241,12 @@ in
           + FPing
           binary = ${config.security.wrapperDir}/fping
         '';
+        defaultText = literalExpression ''
+          '''
+            + FPing
+            binary = ''${config.security.wrapperDir}/fping
+          '''
+        '';
         description = "Probe configuration";
       };
       sendmail = mkOption {

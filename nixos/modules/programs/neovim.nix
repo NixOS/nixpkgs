@@ -41,7 +41,19 @@ in {
     withRuby = mkOption {
       type = types.bool;
       default = true;
-      description = "Enable ruby provider.";
+      description = "Enable Ruby provider.";
+    };
+
+    withPython3 = mkOption {
+      type = types.bool;
+      default = true;
+      description = "Enable Python 3 provider.";
+    };
+
+    withNodeJs = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Enable Node provider.";
     };
 
     configure = mkOption {
@@ -142,7 +154,7 @@ in {
     environment.variables.EDITOR = mkIf cfg.defaultEditor (mkOverride 900 "nvim");
 
     programs.neovim.finalPackage = pkgs.wrapNeovim cfg.package {
-      inherit (cfg) viAlias vimAlias;
+      inherit (cfg) viAlias vimAlias withPython3 withNodeJs withRuby;
       configure = cfg.configure // {
 
         customRC = (cfg.configure.customRC or "") + ''

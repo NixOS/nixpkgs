@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchurl, fetchpatch, pcre, pcre2, libxslt, groff, ncurses, pkg-config, readline, libedit, coreutils
-, python3, makeWrapper }:
+{ lib, stdenv, fetchurl, fetchpatch, pcre, pcre2, jemalloc, libxslt, groff, ncurses, pkg-config, readline, libedit
+, coreutils, python3, makeWrapper }:
 
 let
   common = { version, sha256, extraNativeBuildInputs ? [] }:
@@ -19,7 +19,8 @@ let
         libxslt groff ncurses readline libedit makeWrapper python3
       ]
       ++ lib.optional (lib.versionOlder version "7") pcre
-      ++ lib.optional (lib.versionAtLeast version "7") pcre2;
+      ++ lib.optional (lib.versionAtLeast version "7") pcre2
+      ++ lib.optional stdenv.hostPlatform.isLinux jemalloc;
 
       buildFlags = [ "localstatedir=/var/spool" ];
 
@@ -47,12 +48,12 @@ let
 in
 {
   varnish60 = common {
-    version = "6.0.8";
-    sha256 = "1zk83hfxgjq1d0n4zx86q3f05y9f2zc6a1miz1zcvfa052q4bljx";
+    version = "6.0.9";
+    sha256 = "1g0pwyckc0xh6ag6wj082x9wn4q6p6krjgc16fkw1arl71c18wsh";
   };
   varnish70 = (common {
-    version = "7.0.0";
-    sha256 = "11z0pa618lh925ih67wmp1gqk7i46l486j4spjy71g1n3w5mqylc";
+    version = "7.0.1";
+    sha256 = "0q265fzarz5530g8lasvfpgks8z1kq1yh7rn88bn2qfly3pmpry4";
   }).overrideAttrs (oA: {
     patches = [
       (fetchpatch {

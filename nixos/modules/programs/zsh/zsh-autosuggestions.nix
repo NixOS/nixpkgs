@@ -36,6 +36,13 @@ in
       '';
     };
 
+    async = mkOption {
+      type = types.bool;
+      default = true;
+      description = "Whether to fetch suggestions asynchronously";
+      example = false;
+    };
+
     extraConfig = mkOption {
       type = with types; attrsOf str;
       default = {};
@@ -56,6 +63,7 @@ in
 
       export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="${cfg.highlightStyle}"
       export ZSH_AUTOSUGGEST_STRATEGY=("${cfg.strategy}")
+      ${optionalString (!cfg.async) "unset ZSH_AUTOSUGGEST_USE_ASYNC"}
 
       ${concatStringsSep "\n" (mapAttrsToList (key: value: ''export ${key}="${value}"'') cfg.extraConfig)}
     '';

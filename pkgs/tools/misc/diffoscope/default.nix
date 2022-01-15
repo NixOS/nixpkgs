@@ -9,11 +9,11 @@
 # Note: when upgrading this package, please run the list-missing-tools.sh script as described below!
 python3Packages.buildPythonApplication rec {
   pname = "diffoscope";
-  version = "188";
+  version = "197";
 
   src = fetchurl {
     url = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
-    sha256 = "sha256-kB3EnmnQYqal4cdzwArH+QdHe5wnUOnbjbQAz52g1Us=";
+    sha256 = "sha256-EKTknFa6gGqd1kpy/k1Vh1Zya+XvBMlU5G6Rg2p66es=";
   };
 
   outputs = [ "out" "man" ];
@@ -79,6 +79,7 @@ python3Packages.buildPythonApplication rec {
     # Disable flaky tests on Darwin
     "test_non_unicode_filename"
     "test_listing"
+    "test_symlink_root"
   ];
 
   # flaky tests on Darwin

@@ -30,5 +30,6 @@ buildGoModule rec {
     homepage = "https://github.com/burrowers/garble/";
     maintainers = with lib.maintainers; [ davhau ];
     license = lib.licenses.bsd3;
+    broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/garble.x86_64-darwin
   };
 }

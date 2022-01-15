@@ -31,7 +31,6 @@ in {
       type = types.bool;
       description = ''
         Turn on this option if you want to enable all the firmware with a license allowing redistribution.
-        (i.e. free firmware and <literal>firmware-linux-nonfree</literal>)
       '';
     };
 
@@ -51,7 +50,7 @@ in {
   config = mkMerge [
     (mkIf (cfg.enableAllFirmware || cfg.enableRedistributableFirmware) {
       hardware.firmware = with pkgs; [
-        firmwareLinuxNonfree
+        linux-firmware
         intel2200BGFirmware
         rtl8192su-firmware
         rt5677-firmware
@@ -83,7 +82,7 @@ in {
         b43Firmware_5_1_138
         b43Firmware_6_30_163_46
         b43FirmwareCutter
-      ] ++ optional (pkgs.stdenv.hostPlatform.isi686 || pkgs.stdenv.hostPlatform.isx86_64) facetimehd-firmware;
+      ] ++ optional pkgs.stdenv.hostPlatform.isx86 facetimehd-firmware;
     })
     (mkIf cfg.wirelessRegulatoryDatabase {
       hardware.firmware = [ pkgs.wireless-regdb ];

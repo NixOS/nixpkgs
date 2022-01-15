@@ -2,7 +2,6 @@
 , acme
 , certbot
 , dnspython
-, isPy3k
 , pytestCheckHook
 , pythonOlder
 }:

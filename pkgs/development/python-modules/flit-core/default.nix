@@ -3,8 +3,6 @@
 , callPackage
 , flit
 , toml
-, pytestCheckHook
-, testpath
 }:
 
 buildPythonPackage rec {
