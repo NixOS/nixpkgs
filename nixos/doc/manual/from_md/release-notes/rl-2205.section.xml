@@ -254,6 +254,14 @@
       </listitem>
       <listitem>
         <para>
+          The backward compatibility in
+          <literal>services.dokuwiki</literal> to configure sites with
+          the old interface has been removed. Please use
+          <literal>services.dokuwiki.sites</literal> instead.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           opensmtpd-extras is no longer build with python2 scripting
           support due to python2 deprecation in nixpkgs
         </para>
