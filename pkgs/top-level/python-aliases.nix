@@ -72,6 +72,7 @@ mapAliases ({
   prometheus_client = prometheus-client; # added 2021-06-10
   prompt_toolkit = prompt-toolkit; # added 2021-07-22
   pur = throw "pur has been renamed to pkgs.pur"; # added 2021-11-08
+  pyGtkGlade = throw "Glade support for pygtk has been removed"; # added 2022-01-15
   pylibgen = throw "pylibgen is unmaintained upstreamed, and removed from nixpkgs"; # added 2020-06-20
   pymssql = throw "pymssql has been abandoned upstream."; # added 2020-05-04
   pysmart-smartx = pysmart; # added 2021-10-22
