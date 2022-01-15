@@ -272,10 +272,20 @@
 # Cinnamon
 /pkgs/desktops/cinnamon @mkg20001
 
-#nim
-/pkgs/development/compilers/nim  @ehmry
-/pkgs/development/nim-packages  @ehmry
+# nim
+/pkgs/development/compilers/nim   @ehmry
+/pkgs/development/nim-packages    @ehmry
 /pkgs/top-level/nim-packages.nix  @ehmry
 
 # terraform providers
 /pkgs/applications/networking/cluster/terraform-providers @zowoq
+
+# Matrix
+/pkgs/servers/heisenbridge                                 @piegamesde
+/pkgs/servers/matrix-conduit                               @piegamesde @pstn
+/pkgs/servers/matrix-synapse/matrix-appservice-irc         @piegamesde
+/nixos/modules/services/misc/heisenbridge.nix              @piegamesde
+/nixos/modules/services/misc/matrix-appservice-irc.nix     @piegamesde
+/nixos/modules/services/misc/matrix-conduit.nix            @piegamesde @pstn
+/nixos/tests/matrix-appservice-irc.nix                     @piegamesde
+/nixos/tests/matrix-conduit.nix                            @piegamesde @pstn
