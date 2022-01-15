@@ -5490,6 +5490,8 @@ in {
 
   molecule = callPackage ../development/python-modules/molecule { };
 
+  molecule-docker = callPackage ../development/python-modules/molecule-docker { };
+
   monero = callPackage ../development/python-modules/monero { };
 
   mongomock = callPackage ../development/python-modules/mongomock { };
