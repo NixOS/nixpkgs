@@ -254,5 +254,6 @@ stdenv.mkDerivation (rec {
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ eelco tstrobel oxij ];
     license = lib.licenses.gpl2;
+    knownVulnerabilities = optional (versionOlder version "4.12") "This version of Xen no longer receives security support. See https://xenbits.xen.org/docs/unstable/support-matrix.html.";
   } // (config.meta or {});
 } // removeAttrs config [ "xenfiles" "buildInputs" "patches" "postPatch" "meta" ])
