@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub
 , cmake, pkg-config, flex, bison
 , llvmPackages, elfutils
-, libelf, libbfd, libbpf, libopcodes, bcc
+, libelf, libbfd, libopcodes, bcc
 , cereal, asciidoctor
 , nixosTests
 }:
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   buildInputs = with llvmPackages;
     [ llvm libclang
       elfutils libelf bcc
-      libbpf libbfd libopcodes
+      libbfd libopcodes
       cereal asciidoctor
     ];
 
