@@ -31276,8 +31276,6 @@ with pkgs;
 
   ut2004demo = res.ut2004Packages.ut2004 [ res.ut2004Packages.ut2004-demo ];
 
-  vapor = callPackage ../games/vapor { love = love_0_8; };
-
   vapoursynth = callPackage ../development/libraries/vapoursynth {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
   };

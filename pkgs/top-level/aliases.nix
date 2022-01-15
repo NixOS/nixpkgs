@@ -1040,6 +1040,7 @@ mapAliases ({
   uzbl = throw "uzbl has been removed from nixpkgs, as it's unmaintained and uses insecure libraries";
   v4l_utils = v4l-utils; # added 2019-08-07
   v8_3_16_14 = throw "v8_3_16_14 was removed in 2019-11-01: no longer referenced by other packages";
+  vapor = throw "vapor was removed because it was unmaintained and upstream service no longer exists";
   vamp = { vampSDK = vamp-plugin-sdk; }; # added 2020-03-26
   varnish62 = throw "varnish62 was removed from nixpkgs, because it is unmaintained upstream. Please switch to a different release."; # 2021-07-26
   varnish63 = throw "varnish63 was removed from nixpkgs, because it is unmaintained upstream. Please switch to a different release."; # 2021-07-26
