@@ -149,7 +149,7 @@ in
         environment = {
           GDM_X_SERVER_EXTRA_ARGS = toString
             (filter (arg: arg != "-terminate") cfg.xserverArgs);
-          XDG_DATA_DIRS = "${cfg.sessionData.desktops}/share/";
+          XDG_DATA_DIRS = "${gdm}/share:${cfg.sessionData.desktops}/share";
         } // optionalAttrs (xSessionWrapper != null) {
           # Make GDM use this wrapper before running the session, which runs the
           # configured setupCommands. This relies on a patched GDM which supports
