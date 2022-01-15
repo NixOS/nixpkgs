@@ -104,6 +104,8 @@ let
           "BroadcastMulticastQueueLength"
         ])
         (assertValueOneOf "Mode" ["private" "vepa" "bridge" "passthru" "source"])
+        (assertInt "BroadcastMulticastQueueLength")
+        (assertRange "BroadcastMulticastQueueLength" 0 4294967294)
       ];
 
       ipvlanChecks = [
