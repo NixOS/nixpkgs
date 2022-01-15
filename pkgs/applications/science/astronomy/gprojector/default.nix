@@ -4,7 +4,6 @@
 , jre
 , makeDesktopItem
 , makeWrapper
-, ...
 }:
 
 stdenv.mkDerivation rec {
@@ -28,7 +27,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ jre ];
   nativeBuildInputs = [ makeWrapper desktopItem ];
 
-  phases = [ "installPhase" ];
+  dontConfigure = true;
+  dontBuild = true;
+  dontFixup = true;
 
   installPhase = ''
     runHook preInstall
@@ -40,7 +41,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "G.Projector transforms an input map image into any of about 200 global and regional map projections.";
+    description = "G.Projector transforms an input map image into any of about 200 global and regional map projections";
     homepage = "https://www.giss.nasa.gov/tools/gprojector/";
     maintainers = with lib.maintainers; [ alyaeanyx ];
     license = lib.licenses.unfree;
