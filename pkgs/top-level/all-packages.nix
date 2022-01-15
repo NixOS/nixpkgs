@@ -24211,6 +24211,8 @@ with pkgs;
 
   pdfstudio = callPackage ../applications/misc/pdfstudio { };
 
+  pdfstudioviewer = callPackage ../applications/misc/pdfstudioviewer { };
+
   aeolus = callPackage ../applications/audio/aeolus { };
 
   aewan = callPackage ../applications/editors/aewan { };
