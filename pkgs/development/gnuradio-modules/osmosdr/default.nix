@@ -25,7 +25,6 @@ let
   version = {
     "3.7" = "0.1.5";
     "3.8" = "0.2.2";
-    "3.9" = null;
   }.${gnuradio.versionAttr.major};
   src = fetchgit {
     url = "git://git.osmocom.org/gr-osmosdr";
@@ -33,7 +32,6 @@ let
     sha256 = {
       "3.7" = "0bf9bnc1c3c4yqqqgmg3nhygj6rcfmyk6pybi27f7461d2cw1drv";
       "3.8" = "HT6xlN6cJAnvF+s1g2I1uENhBJJizdADlLXeSD0rEqs=";
-      "3.9" = null;
     }.${gnuradio.versionAttr.major};
   };
 in mkDerivation {
