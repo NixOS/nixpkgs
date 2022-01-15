@@ -4782,6 +4782,8 @@ in {
 
   mailcap-fix = callPackage ../development/python-modules/mailcap-fix { };
 
+  mailchecker = callPackage ../development/python-modules/mailchecker { };
+
   mailchimp = callPackage ../development/python-modules/mailchimp { };
 
   mailman = callPackage ../servers/mail/mailman { };
