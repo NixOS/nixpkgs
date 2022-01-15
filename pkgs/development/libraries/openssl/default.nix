@@ -191,7 +191,7 @@ in {
     extraMeta.knownVulnerabilities = [ "Support for OpenSSL 1.0.2 ended with 2019." ];
   };
 
-  openssl_1_1 = common {
+  openssl_1_1 = common rec {
     version = "1.1.1m";
     sha256 = "sha256-+JGZvosjykX8fLnx2NPuZzEjGChq0DD1MWrKZGLbbJY=";
     patches = [
