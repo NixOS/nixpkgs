@@ -47,7 +47,7 @@ pulumi_repos=(
 
 # Dynamically builds the plugin array, using the API for getting the
 # latest version.
-plugin_num=0
+plugin_num=1
 plugins=()
 for key in "${pulumi_repos[@]}"; do
   plugin="${key}=$(gh api "repos/pulumi/pulumi-${key}/releases/latest" --jq '.tag_name | sub("^v"; "")')"
