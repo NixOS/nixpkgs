@@ -9,6 +9,7 @@
 , enableWebDAV ? false, sqlite, libuuid
 , enableExtendedAttrs ? false, attr
 , perl
+, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
@@ -19,6 +20,14 @@ stdenv.mkDerivation rec {
     url = "https://download.lighttpd.net/lighttpd/releases-${lib.versions.majorMinor version}.x/${pname}-${version}.tar.xz";
     sha256 = "sha256-+5U9snPa7wjttuICVWyuij0H7tYIHJa9mQPblX0QhNU=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2022-22707.patch";
+      url = "https://github.com/lighttpd/lighttpd1.4/commit/8c62a890e23f5853b1a562b03fe3e1bccc6e7664.patch";
+      sha256 = "0zm2khgllsd1ivh9m7sisfsyrdfz45zsmiwl963wf0gn8m100gzk";
+    })
+  ];
 
   postPatch = ''
     patchShebangs tests
