@@ -19,6 +19,6 @@ in linkNodeDeps {
  pkg = "@antora/cli";
  name = "@antora/cli";
  deps = [
-   "@antora/site-generator-default"
+   "@antora/site-generator"
  ];
 }

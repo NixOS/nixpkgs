@@ -1,7 +1,7 @@
 [
   "@angular/cli"
 , "@antora/cli"
-, "@antora/site-generator-default"
+, "@antora/site-generator"
 , "@astrojs/language-server"
 , "@bitwarden/cli"
 , "@commitlint/cli"
