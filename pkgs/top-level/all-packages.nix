@@ -13518,7 +13518,6 @@ with pkgs;
 
   lolcode = callPackage ../development/interpreters/lolcode { };
 
-  love_0_9 = callPackage ../development/interpreters/love/0.9.nix { };
   love_0_10 = callPackage ../development/interpreters/love/0.10.nix { };
   love_11 = callPackage ../development/interpreters/love/11.nix { };
   love = love_0_10;
