@@ -634,6 +634,8 @@ in {
 
   asgi-csrf = callPackage ../development/python-modules/asgi-csrf { };
 
+  asgineer = callPackage ../development/python-modules/asgineer { };
+
   asgiref = callPackage ../development/python-modules/asgiref { };
 
   asmog = callPackage ../development/python-modules/asmog { };
@@ -4055,6 +4057,8 @@ in {
 
   itemadapter = callPackage ../development/python-modules/itemadapter { };
 
+  itemdb = callPackage ../development/python-modules/itemdb { };
+
   itemloaders = callPackage ../development/python-modules/itemloaders { };
 
   iterm2 = callPackage ../development/python-modules/iterm2 { };
@@ -6331,6 +6335,8 @@ in {
   proxy-py = callPackage ../development/python-modules/proxy-py { };
 
   psautohint = callPackage ../development/python-modules/psautohint { };
+
+  pscript = callPackage ../development/python-modules/pscript { };
 
   psd-tools = callPackage ../development/python-modules/psd-tools { };
 
@@ -9712,6 +9718,8 @@ in {
   time-machine = callPackage ../development/python-modules/time-machine { };
 
   timeout-decorator = callPackage ../development/python-modules/timeout-decorator { };
+
+  timetagger = callPackage ../development/python-modules/timetagger { };
 
   timezonefinder = callPackage ../development/python-modules/timezonefinder { };
 
