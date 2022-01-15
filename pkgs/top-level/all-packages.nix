@@ -10214,6 +10214,8 @@ with pkgs;
 
   timetrap = callPackage ../applications/office/timetrap { };
 
+  timetagger = callPackage ../servers/timetagger { };
+
   timekeeper = callPackage ../applications/office/timekeeper { };
 
   timezonemap = callPackage ../development/libraries/timezonemap { };
@@ -13546,7 +13548,7 @@ with pkgs;
   love_0_8 = callPackage ../development/interpreters/love/0.8.nix { lua=lua5_1; };
   love_0_9 = callPackage ../development/interpreters/love/0.9.nix { };
   love_0_10 = callPackage ../development/interpreters/love/0.10.nix { };
-  love_11 = callPackage ../development/interpreters/love/11.1.nix { };
+  love_11 = callPackage ../development/interpreters/love/11.nix { };
   love = love_0_10;
 
   wabt = callPackage ../development/tools/wabt { };
@@ -29766,11 +29768,7 @@ with pkgs;
   };
 
   xiphos = callPackage ../applications/misc/xiphos {
-    gconf = gnome2.GConf;
-    inherit (gnome2) libglade scrollkeeper;
     gtkhtml = gnome2.gtkhtml4;
-    python = python27;
-    enchant = enchant2;
   };
 
   xournal = callPackage ../applications/graphics/xournal {

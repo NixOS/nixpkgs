@@ -12,11 +12,6 @@ stdenv.mkDerivation rec {
     rev = "master";
     sha256 = "sha256-jL8YADvhW0o6I/2Uo5FNARMAnSbvtmFp+zWH1yCVvQk=";
   };
-  propagatedBuildInputs = [ gsettings-desktop-schemas gtk3 gnome-icon-theme GConf ];
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ intltool enchant isocodes autoreconfHook ];
-
-  patchFlags = [ "-p0" ];
 
   patches = [
     # Enables enchant2 support.
@@ -24,7 +19,12 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       name ="enchant-2.patch";
       url = "https://aur.archlinux.org/cgit/aur.git/plain/enchant-2.patch?h=gtkhtml4&id=0218303a63d64c04d6483a6fe9bb55063fcfaa43";
-      sha256 = "sha256-jkA/GgIiJZmxkbcBGQ26OZ1nuI502BMPwbPhsZkbgbY=";
+      sha256 = "f0OToWGHZwxvqf+0qosfA9FfwJ/IXfjIPP5/WrcvArI=";
+      extraPrefix = "";
     })
   ];
+
+  propagatedBuildInputs = [ gsettings-desktop-schemas gtk3 gnome-icon-theme GConf ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ intltool enchant isocodes autoreconfHook ];
 }

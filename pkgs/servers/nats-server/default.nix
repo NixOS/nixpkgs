@@ -18,7 +18,7 @@ buildGoPackage rec {
   meta = {
     description = "High-Performance server for NATS";
     license = licenses.asl20;
-    maintainers = [ maintainers.swdunlop ];
+    maintainers = with maintainers; [ swdunlop derekcollison ];
     homepage = "https://nats.io/";
   };
 }

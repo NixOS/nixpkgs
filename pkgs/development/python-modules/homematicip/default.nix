@@ -7,6 +7,7 @@
 , fetchFromGitHub
 , fetchpatch
 , pytestCheckHook
+, pythonAtLeast
 , pythonOlder
 , pytest-aiohttp
 , pytest-asyncio
@@ -54,11 +55,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  postPatch = ''
-    substituteInPlace homematicip/aio/connection.py \
-      --replace ", loop=self._loop" ""
-  '';
-
   disabledTests = [
     # Assert issues with datetime
     "test_contact_interface_device"
@@ -82,6 +78,11 @@ buildPythonPackage rec {
     "test_home_unknown_types"
     # Requires network access
     "test_websocket"
+  ] ++ lib.optionals (pythonAtLeast "3.10") [
+    "test_connection_lost"
+    "test_user_disconnect_and_reconnect"
+    "test_ws_message"
+    "test_ws_no_pong"
   ];
 
   pythonImportsCheck = [
