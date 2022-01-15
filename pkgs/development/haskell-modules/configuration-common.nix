@@ -1866,25 +1866,22 @@ self: super: {
   # https://github.com/haskell-CI/haskell-ci/issues/507
   # 2021-09-05 haskell-ci needs Cabal 3.4,
   # cabal-install-parsers uses Cabal 3.6 since 0.4.3
-  haskell-ci = super.haskell-ci.override {
-    ShellCheck = self.ShellCheck_0_7_1;
-    cabal-install-parsers = self.cabal-install-parsers_0_4_2;
-  };
-
-  # Build haskell-ci from git repository, including some useful fixes,
-  # e. g. required for generating the workflows for the cabal2nix repository
-  haskell-ci-unstable = (overrideSrc rec {
-    version = "0.13.20211116-${builtins.substring 0 7 src.rev}";
-    src = pkgs.fetchFromGitHub {
-      owner = "haskell-CI";
-      repo = "haskell-ci";
-      rev = "b61df11e7f6010ce09920c231321ab1545a990b5";
-      sha256 = "0v6mqpavz5v161milq6a3x9gzap0pgksd3h4rwi2s3f9b15sczcy";
-    };
-  } super.haskell-ci).overrideScope (self: super: {
+  haskell-ci = super.haskell-ci.overrideScope (self: super: {
     attoparsec = self.attoparsec_0_14_4;
     Cabal = self.Cabal_3_6_2_0;
   });
+
+  # Build haskell-ci from git repository, including some useful fixes,
+  # e. g. required for generating the workflows for the cabal2nix repository
+  haskell-ci-unstable = overrideSrc rec {
+    version = "0.14.1-${builtins.substring 0 7 src.rev}";
+    src = pkgs.fetchFromGitHub {
+      owner = "haskell-CI";
+      repo = "haskell-ci";
+      rev = "8311a999b8e8be3aa31f65f314def256aa2d5535";
+      sha256 = "169jaqm4xs2almmvqsk567wayxs0g6kn0l5877c03hzr3d9ykrav";
+    };
+  } self.haskell-ci;
 
   Frames-streamly = super.Frames-streamly.override {
     relude = super.relude_1_0_0_1;
