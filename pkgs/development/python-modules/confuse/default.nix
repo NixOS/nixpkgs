@@ -1,18 +1,18 @@
-{ buildPythonPackage
-, enum34
+{ lib
+, buildPythonPackage
 , fetchFromGitHub
 , flit-core
-, isPy27
-, lib
-, pathlib
 , pyyaml
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "confuse";
   version = "1.5.0";
   format = "flit";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "beetbox";
@@ -27,16 +27,15 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     pyyaml
-  ] ++ lib.optionals isPy27 [
-    enum34
-    pathlib
-  ] ;
+  ];
 
   checkInputs = [
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "confuse" ];
+  pythonImportsCheck = [
+    "confuse"
+  ];
 
   meta = with lib; {
     description = "Python configuration library for Python that uses YAML";
