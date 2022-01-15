@@ -9,15 +9,16 @@
 
 buildPythonPackage rec {
   pname = "PyYAML";
-  version = "6.0";
-
-  disabled = pythonOlder "3.6";
+  version = if pythonOlder "3.6" then "5.4.1" else "6.0";
 
   src = fetchFromGitHub {
     owner = "yaml";
     repo = "pyyaml";
     rev = version;
-    sha256 = "sha256-wcII32mRgRRmAgojntyxBMQkjvxU2jylCgVzlHAj2Xc=";
+    sha256 =
+      if pythonOlder "3.6"
+      then "sha256-VUqnlOF/8zSOqh6JoEYOsfQ0P4g+eYqxyFTywgCS7gM="
+      else "sha256-wcII32mRgRRmAgojntyxBMQkjvxU2jylCgVzlHAj2Xc=";
   };
 
   nativeBuildInputs = [ cython ];
