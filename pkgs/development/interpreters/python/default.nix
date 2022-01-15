@@ -274,29 +274,29 @@ in {
     sha256 = "sha256-LtAqyecQhZxBvILer7CGGXkruaJ+6qFnbHQe3t0hTdc=";
   };
 
-  pypy27_prebuilt = callPackage ./pypy/prebuilt.nix {
+  pypy27_prebuilt = callPackage ./pypy/prebuilt_2_7.nix {
     # Not included at top-level
     self = pythonInterpreters.pypy27_prebuilt;
     sourceVersion = {
       major = "7";
       minor = "3";
-      patch = "3";
+      patch = "6";
     };
-    sha256 = "1cfpdyvbvzwc0ynjr7248jhwgcpl7073wlp7w3g2v4fnrh1bc4pl"; # linux64
+    sha256 = "sha256-ghJ/Q/rmznXUfWxFOfjB6jcunC2/pA+ui1g1HVInk6Q="; # linux64
     pythonVersion = "2.7";
     inherit passthruFun;
   };
 
-  pypy36_prebuilt = callPackage ./pypy/prebuilt.nix {
+  pypy38_prebuilt = callPackage ./pypy/prebuilt.nix {
     # Not included at top-level
-    self = pythonInterpreters.pypy36_prebuilt;
+    self = pythonInterpreters.pypy38_prebuilt;
     sourceVersion = {
       major = "7";
       minor = "3";
-      patch = "3";
+      patch = "7";
     };
-    sha256 = "02lys9bjky9bqg6ggv8djirbd3zzcsq7755v4yvwm0k4a7fmzf2g"; # linux64
-    pythonVersion = "3.6";
+    sha256 = "sha256-Xe43x8PLixYAKPveOlkBxoBD36VFoWeUUCuJfUvEDX4="; # linux64
+    pythonVersion = "3.8";
     inherit passthruFun;
   };
 

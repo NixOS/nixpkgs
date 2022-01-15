@@ -86,7 +86,6 @@ stdenv.mkDerivation rec {
     communityModules = withCommunityModules;
     tests = {
       main = nixosTests.prosody;
-      mysql = nixosTests.prosodyMysql;
     };
   };
 
