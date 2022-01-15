@@ -67,9 +67,14 @@ stdenv.mkDerivation rec {
     "DESTDIR=$(out)"
   ];
 
-  # Build and run the test app
+  # Build the test app
+  #
+  # Running the test app is currently only supported on Intel CPUs
+  # and will fail on non-Intel CPUs even in SGX simulation mode.
+  # Therefore, we only build the test app without running it until
+  # upstream resolves the issue: https://github.com/intel/intel-sgx-ssl/issues/113
   doInstallCheck = true;
-  installCheckTarget = "all test";
+  installCheckTarget = "all";
   installCheckFlags = [
     "SGX_MODE=SIM"
     "-C sgx/test_app"
