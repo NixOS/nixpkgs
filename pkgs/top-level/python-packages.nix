@@ -2961,6 +2961,8 @@ in {
     inherit (pkgs) flatbuffers;
   };
 
+  flatten-dict = callPackage ../development/python-modules/flatten-dict { };
+
   flax = callPackage ../development/python-modules/flax { };
 
   flexmock = callPackage ../development/python-modules/flexmock { };
