@@ -1,50 +1,29 @@
-{ lib
-, stdenv
+{ stdenv
+, lib
 , fetchFromGitHub
 , fetchpatch
 , appstream-glib
-, at-spi2-core
 , biblesync
-, brotli
-, clucene_core
 , cmake
-, dbus
 , dbus-glib
 , desktop-file-utils
 , docbook2x
 , docbook_xml_dtd_412
-, enchant
-, gconf
+, enchant2
 , glib
-, gnome-doc-utils
-, gtk2
+, gtk3
 , gtkhtml
 , icu
 , intltool
 , isocodes
 , itstool
-, libdatrie
-, libepoxy
-, libglade
-, libgsf
-, libpsl
-, libselinux
-, libsepol
-, libsysprof-capture
-, libthai
 , libuuid
-, libxkbcommon
 , libxslt
 , minizip
-, pcre
 , pkg-config
-, python
-, scrollkeeper
-, sqlite
 , sword
 , webkitgtk
 , wrapGAppsHook
-, xorg
 , yelp-tools
 , zip
 }:
@@ -60,62 +39,53 @@ stdenv.mkDerivation rec {
     hash = "sha256-H5Q+azE2t3fgu77C9DxrkeUCJ7iJz3Cc91Ln4dqLvD8=";
   };
 
+  patches = [
+    # GLIB_VERSION_MIN_REQUIRED is not defined.
+    # https://github.com/crosswire/xiphos/issues/1083#issuecomment-820304874
+    (fetchpatch {
+      name ="xiphos-glibc.patch";
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/xiphos-glibc.patch?h=xiphos&id=bb816f43ba764ffac1287ab1e2a649c2443e3ce8";
+      sha256 = "he3U7phU2/QCrZidHviupA7YwzudnQ9Jbb8eMZw6/ck=";
+      extraPrefix = "";
+    })
+
+    # Fix D-Bus build
+    # https://github.com/crosswire/xiphos/pull/1103
+    ./0001-Add-dbus-glib-dependency-to-main.patch
+  ];
+
   nativeBuildInputs = [
-    appstream-glib
+    appstream-glib # for appstream-util
     cmake
-    desktop-file-utils
+    desktop-file-utils # for desktop-file-validate
+    docbook2x
+    docbook_xml_dtd_412
+    intltool
     itstool
+    libxslt
     pkg-config
     wrapGAppsHook
-    yelp-tools
+    yelp-tools # for yelp-build
+    zip # for building help epubs
   ];
 
   buildInputs = [
-    at-spi2-core
     biblesync
-    brotli
-    clucene_core
-    dbus
     dbus-glib
-    docbook2x
-    docbook_xml_dtd_412
-    enchant
-    gconf
+    enchant2
     glib
-    gnome-doc-utils
-    gtk2
+    gtk3
     gtkhtml
     icu
-    intltool
     isocodes
-    libdatrie
-    libepoxy
-    libglade
-    libgsf
-    libpsl
-    libselinux
-    libsepol
-    libsysprof-capture
-    libthai
     libuuid
-    libxkbcommon
-    libxslt
     minizip
-    pcre
-    python
-    scrollkeeper
-    sqlite
     sword
     webkitgtk
-    zip
-  ]
-  ++ (with xorg; [
-    libXdmcp
-    libXtst
-  ]);
+  ];
 
   cmakeFlags = [
-    "-DDBUS=OFF"
+    # WebKit-based editor does not build.
     "-DGTKHTML=ON"
   ];
 
@@ -123,21 +93,8 @@ stdenv.mkDerivation rec {
     # The build script won't continue without the version saved locally.
     echo "${version}" > cmake/source_version.txt
 
-    export CLUCENE_HOME=${clucene_core};
     export SWORD_HOME=${sword};
   '';
-
-  patchFlags = [ "-p0" ];
-
-  patches = [
-    # GLIB_VERSION_MIN_REQUIRED is not defined.
-    # https://github.com/crosswire/xiphos/issues/1083#issuecomment-820304874
-    (fetchpatch {
-      name ="xiphos-glibc.patch";
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/xiphos-glibc.patch?h=xiphos";
-      sha256 = "sha256-0WadztJKXW2adqsDP8iSAYVShbdqHoDvP+aVJC0cQB0=";
-    })
-  ];
 
   meta = with lib; {
     description = "A GTK Bible study tool";
