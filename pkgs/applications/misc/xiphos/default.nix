@@ -3,47 +3,27 @@
 , fetchFromGitHub
 , fetchpatch
 , appstream-glib
-, at-spi2-core
 , biblesync
-, brotli
 , cmake
-, dbus
 , dbus-glib
 , desktop-file-utils
 , docbook2x
 , docbook_xml_dtd_412
-, enchant
-, gconf
+, enchant2
 , glib
-, gnome-doc-utils
-, gtk2
+, gtk3
 , gtkhtml
 , icu
 , intltool
 , isocodes
 , itstool
-, libdatrie
-, libepoxy
-, libglade
-, libgsf
-, libpsl
-, libselinux
-, libsepol
-, libsysprof-capture
-, libthai
 , libuuid
-, libxkbcommon
 , libxslt
 , minizip
-, pcre
 , pkg-config
-, python
-, scrollkeeper
-, sqlite
 , sword
 , webkitgtk
 , wrapGAppsHook
-, xorg
 , yelp-tools
 , zip
 }:
@@ -68,61 +48,44 @@ stdenv.mkDerivation rec {
       sha256 = "he3U7phU2/QCrZidHviupA7YwzudnQ9Jbb8eMZw6/ck=";
       extraPrefix = "";
     })
+
+    # Fix D-Bus build
+    # https://github.com/crosswire/xiphos/pull/1103
+    ./0001-Add-dbus-glib-dependency-to-main.patch
   ];
 
   nativeBuildInputs = [
     appstream-glib # for appstream-util
     cmake
     desktop-file-utils # for desktop-file-validate
+    docbook2x
+    docbook_xml_dtd_412
+    intltool
     itstool
+    libxslt
     pkg-config
     wrapGAppsHook
     yelp-tools # for yelp-build
+    zip # for building help epubs
   ];
 
   buildInputs = [
-    at-spi2-core
     biblesync
-    brotli
-    dbus
     dbus-glib
-    docbook2x
-    docbook_xml_dtd_412
-    enchant
-    gconf
+    enchant2
     glib
-    gnome-doc-utils
-    gtk2
+    gtk3
     gtkhtml
     icu
-    intltool
     isocodes
-    libdatrie
-    libepoxy
-    libglade
-    libgsf
-    libpsl
-    libselinux
-    libsepol
-    libsysprof-capture
-    libthai
     libuuid
-    libxkbcommon
-    libxslt
     minizip
-    pcre
-    python
-    scrollkeeper
-    sqlite
     sword
     webkitgtk
-    xorg.libXdmcp
-    xorg.libXtst
-    zip
   ];
 
   cmakeFlags = [
-    "-DDBUS=OFF"
+    # WebKit-based editor does not build.
     "-DGTKHTML=ON"
   ];
 
