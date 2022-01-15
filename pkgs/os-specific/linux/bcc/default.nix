@@ -7,7 +7,7 @@
 
 python.pkgs.buildPythonApplication rec {
   pname = "bcc";
-  version = "0.23.0";
+  version = "0.24.0";
 
   disabled = !stdenv.isLinux;
 
@@ -15,14 +15,15 @@ python.pkgs.buildPythonApplication rec {
     owner = "iovisor";
     repo = "bcc";
     rev = "v${version}";
-    sha256 = "sha256-iLVUwJTDQ8Bn38sgHOcIR8TYxIB+gIlfTgr9+gPU0gE=";
+    sha256 = "sha256-KrhbNQzdfzQaxe/V2x1Pa0kroD4YcXW1+lC+NWnLKns=";
+    fetchSubmodules = true;
   };
   format = "other";
 
   buildInputs = with llvmPackages; [
     llvm llvm.dev libclang
     elfutils luajit netperf iperf
-    flex bash libbpf
+    flex bash
   ];
 
   patches = [
@@ -39,7 +40,6 @@ python.pkgs.buildPythonApplication rec {
     "-DREVISION=${version}"
     "-DENABLE_USDT=ON"
     "-DENABLE_CPP_API=ON"
-    "-DCMAKE_USE_LIBBPF_PACKAGE=ON"
   ];
 
   # to replace this executable path:
