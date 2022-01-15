@@ -242,7 +242,9 @@ DEFAULT_SETUPTOOLS_EXTENSION = 'tar.gz'
 
 FORMATS = {
     'setuptools'        :   DEFAULT_SETUPTOOLS_EXTENSION,
-    'wheel'             :   'whl'
+    'wheel'             :   'whl',
+    'pyproject'         :   'tar.gz',
+    'flit'              :   'tar.gz'
 }
 
 def _determine_fetcher(text):
@@ -281,12 +283,8 @@ def _determine_extension(text, fetcher):
         if extension is None:
             if src_format is None:
                 src_format = 'setuptools'
-            elif src_format == 'flit':
-                raise ValueError("Don't know how to update a Flit package.")
             elif src_format == 'other':
                 raise ValueError("Don't know how to update a format='other' package.")
-            elif src_format == 'pyproject':
-                raise ValueError("Don't know how to update a pyproject package.")
             extension = FORMATS[src_format]
 
     elif fetcher == 'fetchurl':
@@ -352,9 +350,19 @@ def _update_package(path, target):
         text = _replace_value('hash', sri_hash, text)
 
     if fetcher == 'fetchFromGitHub':
-        text = _replace_value('rev', f"{prefix}${{version}}", text)
-        # incase there's no prefix, just rewrite without interpolation
-        text = text.replace('"${version}";', 'version;')
+        # in the case of fetchFromGitHub, it's common to see `rev = version;`
+        # in which no string value is meant to be substituted.
+        # Verify that the attribute is set to a variable
+        regex = '(rev\s+=\s+([_a-zA-Z][_a-zA-Z0-9\.]*);)'
+        regex = re.compile(regex)
+        value = regex.findall(text)
+        n = len(value)
+
+        if n == 0:
+            # value is set to a string, e.g. `rev = "v${version}";`
+            text = _replace_value('rev', f"{prefix}${{version}}", text)
+            # incase there's no prefix, just rewrite without interpolation
+            text = text.replace('"${version}";', 'version;')
 
     with open(path, 'w') as f:
         f.write(text)
