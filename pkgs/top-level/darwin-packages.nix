@@ -154,8 +154,6 @@ impure-cmds // appleSourcePackages // chooseLibs // {
 
   trash = callPackage ../os-specific/darwin/trash { };
 
-  usr-include = callPackage ../os-specific/darwin/usr-include { };
-
   xattr = pkgs.python3Packages.callPackage ../os-specific/darwin/xattr { };
 
   inherit (pkgs.callPackages ../os-specific/darwin/xcode { })
