@@ -41,87 +41,6 @@ let
     (mkOverride "python-slugify" "4.0.1" "69a517766e00c1268e5bbfc0d010a0a8508de0b18d30ad5a1ff357f8ae724270")
 
     (self: super: {
-      httpcore = super.httpcore.overridePythonAttrs (oldAttrs: rec {
-        version = "0.14.3";
-        src = fetchFromGitHub {
-          owner = "encode";
-          repo = "httpcore";
-          rev = version;
-          sha256 = "sha256-jPsbMhY1lWKBXlh6hsX6DGKXi/g7VQSU00tF6H7qkOo=";
-        };
-        propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ [ python3.pkgs.certifi ];
-        doCheck = false;
-      });
-    })
-
-    (self: super: {
-      httpx = super.httpx.overridePythonAttrs (oldAttrs: rec {
-        version = "0.21.1";
-        src = fetchFromGitHub {
-          owner = "encode";
-          repo = "httpx";
-          rev = version;
-          sha256 = "sha256-ayhLP+1hPWAx2ds227CKp5cebVkD5B2Z59L+3dzdINc=";
-        };
-        doCheck = false;
-      });
-    })
-
-    (self: super: {
-      pytest-httpx = super.pytest-httpx.overridePythonAttrs (oldAttrs: rec {
-        version = "0.15.0";
-        src = fetchFromGitHub {
-          owner = "Colin-bin";
-          repo = "pytest_httpx";
-          rev = "v${version}";
-          sha256 = "08dxvjkxlnam3r0yp17495d1vksyawzzkpykacjql1gi6hqlfrwg";
-        };
-      });
-    })
-
-    (self: super: {
-      respx = super.respx.overridePythonAttrs (oldAttrs: rec {
-        version = "0.19.0";
-        src = fetchFromGitHub {
-          owner = "lundberg";
-          repo = "respx";
-          rev = version;
-          sha256 = "sha256-xiAt42kc1+rro99KMwzYKi3XC+wxYVqOY11tM+M/uV8=";
-        };
-      });
-    })
-
-    (self: super: {
-      envoy-reader = super.envoy-reader.overridePythonAttrs (oldAttrs: rec {
-        patches = [
-          # Support for later httpx, https://github.com/jesserizzo/envoy_reader/pull/82
-          (fetchpatch {
-            name = "support-later-httpx.patch";
-            url = "https://github.com/jesserizzo/envoy_reader/commit/6019a89419fe9c830ba839be7d39ec54725268b0.patch";
-            sha256 = "17vsrx13rskvh8swvjisb2dk6x1jdbjcm8ikkpidia35pa24h272";
-          })
-        ];
-      });
-    })
-
-    (self: super: {
-      sanic = super.sanic.overridePythonAttrs (oldAttrs: rec {
-        version = "21.9.3";
-        src = fetchFromGitHub {
-          owner = "sanic-org";
-          repo = "sanic";
-          rev = "v${version}";
-          sha256 = "0m18jdw1mvf7jhpnrxhm96p24pxvv0h9m71a8c7sqqkwnnpa3p5i";
-        };
-        disabledTests = oldAttrs.disabledTests ++ [
-          "test_redirect"
-          "test_chained_redirect"
-          "test_unix_connection"
-        ];
-      });
-    })
-
-    (self: super: {
       huawei-lte-api = super.huawei-lte-api.overridePythonAttrs (oldAttrs: rec {
         version = "1.4.18";
         src = fetchFromGitHub {
@@ -219,33 +138,6 @@ let
           rev = "v${version}";
           sha256 = "1qjvvr2v9gfnwskdl0ayazpcmiyw9zlgnijnhgq9mcri5gq9jw5h";
         };
-      });
-    })
-
-    # Remove as soon the dependency is updated and pytest-httpx > 0.15
-    (self: super: {
-      luftdaten = super.luftdaten.overridePythonAttrs (oldAttrs: rec {
-        version = "0.7.1";
-        src = fetchFromGitHub {
-          owner = "home-assistant-ecosystem";
-          repo = "python-luftdaten";
-          rev = version;
-          sha256 = "sha256-76Y5TJet0WtzYXuK8Og0rmpsUIlXK7b37oesh+MliU8=";
-        };
-      });
-    })
-
-    # Remove as soon the dependency is updated and pytest-httpx > 0.15
-    (self: super: {
-      pyrmvtransport = super.pyrmvtransport.overridePythonAttrs (oldAttrs: rec {
-        version = "0.3.3";
-        src = fetchFromGitHub {
-          owner = "cgtobi";
-          repo = "pyrmvtransport";
-          rev = "v${version}";
-          sha256 = "sha256-nFxGEyO+wyRzPayjjv8WNIJ+XIWbVn0dyyjQKHiyr40=";
-        };
-        doCheck = false;
       });
     })
 
