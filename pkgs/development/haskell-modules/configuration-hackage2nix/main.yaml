@@ -623,3 +623,6 @@ dont-distribute-packages:
   - webkitgtk3
   - webkitgtk3-javascriptcore
   - websnap
+
+  # glade relies on system libglade which is deprecated
+  - glade
