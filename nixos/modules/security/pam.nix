@@ -1057,6 +1057,7 @@ in
         # Most of these should be moved to specific modules.
         i3lock = {};
         i3lock-color = {};
+        swaylock = {};
         vlock = {};
         xlock = {};
         xscreensaver = {};
