@@ -3,6 +3,11 @@
 # shellcheck shell=bash
 # Bash 3 compatible for Darwin
 
+if [ -z "${GITHUB_TOKEN}" ]; then
+  echo >&2 "usage: GITHUB_TOKEN=… ./update.sh"
+  exit 1
+fi
+
 # Version of Pulumi from
 # https://www.pulumi.com/docs/get-started/install/versions/
 VERSION="3.21.0"
