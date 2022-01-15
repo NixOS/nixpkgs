@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "confuse";
-  version = "1.5.0";
+  version = "1.7.0";
   format = "flit";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "beetbox";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1kvilxhjifvz6ra64jadf9jiwphrah5rcb9ryq0v7w1dywgn4qp7";
+    sha256 = "sha256-zdH5DNXnuAfYTuaG9EIKiXL2EbLSfzYjPSkC3G06bU8=";
   };
 
   nativeBuildInputs = [
