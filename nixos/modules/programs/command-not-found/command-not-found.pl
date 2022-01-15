@@ -26,6 +26,17 @@ if (!defined $res || scalar @$res == 0) {
 } elsif (scalar @$res == 1) {
     my $package = @$res[0]->{package};
     if ($ENV{"NIX_AUTO_RUN"} // "") {
+        if ($ENV{"NIX_AUTO_RUN_INTERACTIVE"} // "") {
+            while (1) {
+                print STDERR "'$program' from package '$package' will be run, confirm? [yn]: ";
+                chomp(my $comfirm = <STDIN>);
+                if (lc $comfirm eq "n") {
+                    exit 0;
+                } elsif (lc $comfirm eq "y") {
+                    last;
+                }
+            }
+        }
         exec("nix-shell", "-p", $package, "--run", shell_quote("exec", @ARGV));
     } else {
         print STDERR <<EOF;
