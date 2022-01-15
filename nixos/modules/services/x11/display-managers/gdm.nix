@@ -149,6 +149,7 @@ in
         environment = {
           GDM_X_SERVER_EXTRA_ARGS = toString
             (filter (arg: arg != "-terminate") cfg.xserverArgs);
+          # GDM is needed for gnome-login.session
           XDG_DATA_DIRS = "${gdm}/share:${cfg.sessionData.desktops}/share";
         } // optionalAttrs (xSessionWrapper != null) {
           # Make GDM use this wrapper before running the session, which runs the
