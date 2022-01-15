@@ -30412,8 +30412,6 @@ with pkgs;
 
   tts = callPackage ../tools/audio/tts { };
 
-  fslint = callPackage ../applications/misc/fslint { };
-
   ### GAMES
 
   _1oom = callPackage ../games/1oom { };

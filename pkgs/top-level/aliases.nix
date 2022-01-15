@@ -304,6 +304,7 @@ mapAliases ({
   foomatic_filters = foomatic-filters;  # 2016-08
   fscryptctl-experimental = throw "The package fscryptctl-experimental has been removed. Please switch to fscryptctl."; # 2021-11-07
   fsharp41 = throw "fsharp41 has been removed, please use dotnet-sdk_5 or later";
+  fslint = throw "fslint has been removed: end of life. Upstream recommends using czkawka (https://qarmin.github.io/czkawka/) instead"; # 2022-01-15
   fuse_exfat = exfat;                   # 2015-09-11
   fuseki = apache-jena-fuseki; # added 2018-04-25
   fwupdate = throw "fwupdate was merged into fwupd"; # added 2020-05-19
