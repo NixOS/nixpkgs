@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   version = "0.7.2";
 
   src = fetchurl {
-    url = "https://bitbucket.org/rude/love/downloads/love-${version}-linux-src.tar.gz";
+    url = "https://github.com/love2d/love/releases/download/${version}/love-${version}-linux-src.tar.gz";
     sha256 = "0s7jywkvydlshlgy11ilzngrnybmq5xlgzp2v2dhlffwrfqdqym5";
   };
 
@@ -48,10 +48,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "http://love2d.org";
+    homepage = "https://love2d.org";
     description = "A Lua-based 2D game engine/scripting language";
     license = lib.licenses.zlib;
-
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.raskin ];
   };
