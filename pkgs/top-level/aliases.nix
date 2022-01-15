@@ -660,7 +660,6 @@ mapAliases ({
   nologin = shadow; # added 2018-04-25
   nordic-polar = throw "nordic-polar was removed on 2021-05-27, now integrated in nordic"; # added 2021-05-27
   nottetris2 = throw "nottetris2 was removed because it is unmaintained by upstream and broken"; # added 2022-01-15
-  noto-fonts-cjk = noto-fonts-cjk-sans; # added 2021-12-16
   now-cli = throw "now-cli has been replaced with nodePackages.vercel"; # added 2021-08-05
   nxproxy = nx-libs; # added 2019-02-15
   nylas-mail-bin = throw "nylas-mail-bin was deprecated on 2019-09-11: abandoned by upstream";
