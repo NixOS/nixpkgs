@@ -8783,6 +8783,8 @@ in {
 
   scipy = callPackage ../development/python-modules/scipy { };
 
+  scmrepo = callPackage ../development/python-modules/scmrepo { };
+
   scour = callPackage ../development/python-modules/scour { };
 
   scp = callPackage ../development/python-modules/scp { };
