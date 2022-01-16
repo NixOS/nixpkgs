@@ -19,6 +19,29 @@ stdenv.mkDerivation rec {
       url = "https://raw.githubusercontent.com/openwrt/openwrt/eefed841b05c3cd4c65a78b50ce0934d879e6acf/package/network/services/hostapd/patches/300-noscan.patch";
       sha256 = "08p5frxhpq1rp2nczkscapwwl8g9nc4fazhjpxic5bcbssc3sb00";
     })
+    # SAE/EAP-pwd side-channel attack update 2
+    # https://w1.fi/security/2022-1/
+    (fetchurl {
+      name = "0001-crypto-Add-more-bignum-EC-helper-functions.patch";
+      url = "https://w1.fi/security/2022-1/0001-crypto-Add-more-bignum-EC-helper-functions.patch";
+      sha256 = "0gq14p4vrg4sn8dhqylidjrcm2y4v1pj758k6zin61nvfy9b9xrl";
+    })
+    (fetchurl {
+      name = "0002-dragonfly-Add-sqrt-helper-function.patch";
+      url = "https://w1.fi/security/2022-1/0002-dragonfly-Add-sqrt-helper-function.patch";
+      sha256 = "0jwdrb3lvazryahr4vkp4mgfx9699c63bknllvaw4kkc0ashvql4";
+    })
+    (fetchurl {
+      name = "0003-SAE-Derive-the-y-coordinate-for-PWE-with-own-impleme.patch";
+      url = "https://w1.fi/security/2022-1/0003-SAE-Derive-the-y-coordinate-for-PWE-with-own-impleme.patch";
+      sha256 = "09fmnvnl64gp17hxf1kz6aza6zjn2zxvmp7i917yssjc27n3ag6f";
+    })
+    (fetchurl {
+      name = "0004-EAP-pwd-Derive-the-y-coordinate-for-PWE-with-own-imp.patch";
+      url = "https://w1.fi/security/2022-1/0004-EAP-pwd-Derive-the-y-coordinate-for-PWE-with-own-imp.patch";
+      sha256 = "17lya82bq923lvxafnb80xvmw0v1z8l56dbgnbllwz79zzzsxdfn";
+    })
+
   ];
 
   outputs = [ "out" "man" ];
