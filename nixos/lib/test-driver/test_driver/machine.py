@@ -377,8 +377,8 @@ class Machine:
 
     def send_monitor_command(self, command: str) -> str:
         self.run_callbacks()
-        with self.nested("sending monitor command: {}".format(command)):
-            message = ("{}\n".format(command)).encode()
+        with self.nested(f"sending monitor command: {command}"):
+            message = f"{command}\n".encode()
             assert self.monitor is not None
             self.monitor.send(message)
             return self.wait_for_monitor_prompt()
@@ -393,7 +393,7 @@ class Machine:
             info = self.get_unit_info(unit, user)
             state = info["ActiveState"]
             if state == "failed":
-                raise Exception('unit "{}" reached state "{}"'.format(unit, state))
+                raise Exception('unit "{unit}" reached state "{state}"')
 
             if state == "inactive":
                 status, jobs = self.systemctl("list-jobs --full 2>&1", user)
@@ -401,22 +401,19 @@ class Machine:
                     info = self.get_unit_info(unit, user)
                     if info["ActiveState"] == state:
                         raise Exception(
-                            (
-                                'unit "{}" is inactive and there ' "are no pending jobs"
-                            ).format(unit)
+                            f'unit "{unit}" is inactive and there are no pending jobs'
                         )
 
             return state == "active"
 
-        with self.nested(
-            "waiting for unit {}{}".format(
-                unit, f" with user {user}" if user is not None else ""
-            )
-        ):
+        msg = f"waiting for unit {unit}"
+        if user is not None:
+            msg += f" with user {user}"
+        with self.nested(msg):
             retry(check_active)
 
     def get_unit_info(self, unit: str, user: Optional[str] = None) -> Dict[str, str]:
-        status, lines = self.systemctl('--no-pager show "{}"'.format(unit), user)
+        status, lines = self.systemctl(f'--no-pager show "{unit}"', user)
         if status != 0:
             raise Exception(
                 'retrieving systemctl info for unit "{}" {} failed with exit code {}'.format(
@@ -442,23 +439,23 @@ class Machine:
             q = q.replace("'", "\\'")
             return self.execute(
                 (
-                    "su -l {} --shell /bin/sh -c "
-                    "$'XDG_RUNTIME_DIR=/run/user/`id -u` "
-                    "systemctl --user {}'"
-                ).format(user, q)
+                    f"su -l {user} --shell /bin/sh -c "
+                    f"$'XDG_RUNTIME_DIR=/run/user/`id -u` "
+                    f"systemctl --user {q}'"
+                )
             )
-        return self.execute("systemctl {}".format(q))
+        return self.execute(f"systemctl {q}")
 
     def require_unit_state(self, unit: str, require_state: str = "active") -> None:
         with self.nested(
-            "checking if unit ‘{}’ has reached state '{}'".format(unit, require_state)
+            f"checking if unit ‘{unit}’ has reached state '{require_state}'"
         ):
             info = self.get_unit_info(unit)
             state = info["ActiveState"]
             if state != require_state:
                 raise Exception(
-                    "Expected unit ‘{}’ to to be in state ".format(unit)
-                    + "'{}' but it is in state ‘{}’".format(require_state, state)
+                    f"Expected unit ‘{unit}’ to to be in state "
+                    f"'{require_state}' but it is in state ‘{state}’"
                 )
 
     def _next_newline_closed_block_from_shell(self) -> str:
@@ -487,7 +484,7 @@ class Machine:
         self.connect()
 
         if timeout is not None:
-            command = "timeout {} sh -c {}".format(timeout, shlex.quote(command))
+            command = f"timeout {timeout} sh -c {shlex.quote(command)}"
 
         out_command = f"( set -euo pipefail; {command} ) | (base64 --wrap 0; echo)\n"
         assert self.shell
@@ -522,13 +519,11 @@ class Machine:
         """Execute each command and check that it succeeds."""
         output = ""
         for command in commands:
-            with self.nested("must succeed: {}".format(command)):
+            with self.nested(f"must succeed: {command}"):
                 (status, out) = self.execute(command, timeout=timeout)
                 if status != 0:
-                    self.log("output: {}".format(out))
-                    raise Exception(
-                        "command `{}` failed (exit code {})".format(command, status)
-                    )
+                    self.log(f"output: {out}")
+                    raise Exception(f"command `{command}` failed (exit code {status})")
                 output += out
         return output
 
@@ -536,12 +531,10 @@ class Machine:
         """Execute each command and check that it fails."""
         output = ""
         for command in commands:
-            with self.nested("must fail: {}".format(command)):
+            with self.nested(f"must fail: {command}"):
                 (status, out) = self.execute(command, timeout=timeout)
                 if status == 0:
-                    raise Exception(
-                        "command `{}` unexpectedly succeeded".format(command)
-                    )
+                    raise Exception(f"command `{command}` unexpectedly succeeded")
                 output += out
         return output
 
@@ -556,7 +549,7 @@ class Machine:
             status, output = self.execute(command, timeout=timeout)
             return status == 0
 
-        with self.nested("waiting for success: {}".format(command)):
+        with self.nested(f"waiting for success: {command}"):
             retry(check_success, timeout)
             return output
 
@@ -571,7 +564,7 @@ class Machine:
             status, output = self.execute(command, timeout=timeout)
             return status != 0
 
-        with self.nested("waiting for failure: {}".format(command)):
+        with self.nested(f"waiting for failure: {command}"):
             retry(check_failure)
             return output
 
@@ -590,8 +583,8 @@ class Machine:
 
     def get_tty_text(self, tty: str) -> str:
         return self.succeed(
-            "fold -w$(stty -F /dev/tty{0} size | "
-            "awk '{{print $2}}') /dev/vcs{0}".format(tty)
+            f"fold -w$(stty -F /dev/tty{tty} size | "
+            f"awk '{{print $2}}') /dev/vcs{tty}"
         )
 
     def wait_until_tty_matches(
@@ -611,11 +604,11 @@ class Machine:
                 )
             return bool(matcher.search(text))
 
-        with self.nested("waiting for {} to appear on tty {}".format(regexp, tty)):
+        with self.nested(f"waiting for /{regexp}/ to appear on TTY{tty}"):
             retry(tty_matches, timeout)
 
     def send_chars(self, chars: List[str]) -> None:
-        with self.nested("sending keys ‘{}‘".format(chars)):
+        with self.nested(f"sending keys {chars!r}"):
             for char in chars:
                 self.send_key(char)
 
@@ -623,7 +616,7 @@ class Machine:
         """Waits until the file exists in machine's file system."""
 
         command = make_command(["test", "-e", filename])
-        with self.nested("waiting for file ‘{}‘".format(filename)):
+        with self.nested(f"waiting for file ‘{filename}‘"):
             self.wait_until_succeeds(command, timeout)
 
     def wait_for_open_port(self, port: int, timeout: int = DEFAULT_TIMEOUT) -> None:
@@ -635,10 +628,10 @@ class Machine:
             self.wait_until_fails(f"nc -z localhost {port}")
 
     def start_job(self, jobname: str, user: Optional[str] = None) -> Tuple[int, str]:
-        return self.systemctl("start {}".format(jobname), user)
+        return self.systemctl(f"start {jobname}", user)
 
     def stop_job(self, jobname: str, user: Optional[str] = None) -> Tuple[int, str]:
-        return self.systemctl("stop {}".format(jobname), user)
+        return self.systemctl(f"stop {jobname}", user)
 
     def wait_for_job(self, jobname: str) -> None:
         self.wait_for_unit(jobname)
@@ -658,7 +651,7 @@ class Machine:
             toc = time.time()
 
             self.log("connected to guest root shell")
-            self.log("(connecting took {:.2f} seconds)".format(toc - tic))
+            self.log(f"(connecting took {toc - tic:.2f} seconds)")
             self.connected = True
 
     def screenshot(self, filename: str) -> None:
@@ -734,7 +727,7 @@ class Machine:
 
     def dump_tty_contents(self, tty: str) -> None:
         """Debugging: Dump the contents of the TTY<n>"""
-        self.execute("fold -w 80 /dev/vcs{} | systemd-cat".format(tty))
+        self.execute(f"fold -w 80 /dev/vcs{tty} | systemd-cat")
 
     def _get_screen_text_variants(self, model_ids: Iterable[int]) -> List[str]:
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -756,15 +749,15 @@ class Machine:
                     return True
 
             if last:
-                self.log("Last OCR attempt failed. Text was: {}".format(variants))
+                self.log(f"Last OCR attempt failed. Text was: {variants}")
 
             return False
 
-        with self.nested("waiting for {} to appear on screen".format(regex)):
+        with self.nested(f"waiting for /{regex}/ to appear on screen"):
             retry(screen_matches, timeout)
 
     def wait_for_console_text(self, regex: str, timeout: int = DEFAULT_TIMEOUT) -> None:
-        with self.nested("waiting for {} to appear on console".format(regex)):
+        with self.nested(f"waiting for /{regex}/ to appear on console"):
             # Buffer the console output, this is needed
             # to match multiline regexes.
             console = io.StringIO()
@@ -786,7 +779,7 @@ class Machine:
 
     def send_key(self, key: str) -> None:
         key = CHAR_TO_KEY.get(key, key)
-        self.send_monitor_command("sendkey {}".format(key))
+        self.send_monitor_command(f"sendkey {key}")
         time.sleep(0.01)
 
     def start(self) -> None:
@@ -847,7 +840,7 @@ class Machine:
         self.pid = self.process.pid
         self.booted = True
 
-        self.log("QEMU running (pid {})".format(self.pid))
+        self.log(f"QEMU running (pid {self.pid})")
 
     def cleanup_statedir(self) -> None:
         shutil.rmtree(self.state_dir)
@@ -901,8 +894,8 @@ class Machine:
             names = self.get_window_names()
             if last_try:
                 self.log(
-                    "Last chance to match {} on the window list,".format(regexp)
-                    + " which currently contains: "
+                    f"Last chance to match /{regexp}/ on the window list, "
+                    + "which currently contains: "
                     + ", ".join(names)
                 )
             return any(pattern.search(name) for name in names)
@@ -918,9 +911,7 @@ class Machine:
         """Forward a TCP port on the host to a TCP port on the guest.
         Useful during interactive testing.
         """
-        self.send_monitor_command(
-            "hostfwd_add tcp::{}-:{}".format(host_port, guest_port)
-        )
+        self.send_monitor_command(f"hostfwd_add tcp::{host_port}-:{guest_port}")
 
     def block(self) -> None:
         """Make the machine unreachable by shutting down eth1 (the multicast
