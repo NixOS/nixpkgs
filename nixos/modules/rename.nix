@@ -51,6 +51,7 @@ with lib;
     (mkRemovedOptionModule [ "services" "fourStoreEndpoint" ] "The fourStoreEndpoint module has been removed")
     (mkRemovedOptionModule [ "services" "frab" ] "The frab module has been removed")
     (mkRemovedOptionModule [ "services" "kippo" ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule [ "services" "mailpile" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "marathon" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "mathics" ] "The Mathics module has been removed")
     (mkRemovedOptionModule [ "services" "meguca" ] "Use meguca has been removed from nixpkgs")

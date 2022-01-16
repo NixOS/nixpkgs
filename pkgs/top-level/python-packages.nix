@@ -1609,8 +1609,6 @@ in {
 
   cjkwrap = callPackage ../development/python-modules/cjkwrap { };
 
-  cjson = callPackage ../development/python-modules/cjson { };
-
   ckcc-protocol = callPackage ../development/python-modules/ckcc-protocol { };
 
   claripy = callPackage ../development/python-modules/claripy { };
@@ -2825,9 +2823,7 @@ in {
 
   fints = callPackage ../development/python-modules/fints { };
 
-  fiona = callPackage ../development/python-modules/fiona {
-    gdal = pkgs.gdal_2;
-  };
+  fiona = callPackage ../development/python-modules/fiona { };
 
   fipy = callPackage ../development/python-modules/fipy { };
 
@@ -8393,9 +8389,7 @@ in {
     inherit (pkgs) libarchive;
   };
 
-  rasterio = callPackage ../development/python-modules/rasterio {
-    gdal = pkgs.gdal_2;
-  };
+  rasterio = callPackage ../development/python-modules/rasterio { };
 
   ratelim = callPackage ../development/python-modules/ratelim { };
 

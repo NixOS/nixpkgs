@@ -2197,8 +2197,6 @@ with pkgs;
 
   bitbucket-server-cli = callPackage ../applications/version-management/git-and-tools/bitbucket-server-cli { };
 
-  blink = libsForQt5.callPackage ../applications/networking/instant-messengers/blink { };
-
   blitz = callPackage ../development/libraries/blitz { };
 
   blockbook = callPackage ../servers/blockbook { };
@@ -3399,8 +3397,6 @@ with pkgs;
   metabase = callPackage ../servers/metabase { };
 
   midicsv = callPackage ../tools/audio/midicsv { };
-
-  mididings = callPackage ../tools/audio/mididings { };
 
   miniscript = callPackage ../applications/blockchains/miniscript { };
 
@@ -5583,8 +5579,6 @@ with pkgs;
 
   geteltorito = callPackage ../tools/misc/geteltorito { };
 
-  getmail = callPackage ../tools/networking/getmail { };
-
   getmail6 = callPackage ../tools/networking/getmail6 { };
 
   getopt = callPackage ../tools/misc/getopt { };
@@ -5816,8 +5810,6 @@ with pkgs;
   github-backup = callPackage ../tools/misc/github-backup { };
 
   github-runner = callPackage ../development/tools/continuous-integration/github-runner { };
-
-  gitinspector = callPackage ../applications/version-management/gitinspector { };
 
   gitkraken = callPackage ../applications/version-management/gitkraken { };
 
@@ -7596,8 +7588,6 @@ with pkgs;
 
   mailsend = callPackage ../tools/networking/mailsend { };
 
-  mailpile = callPackage ../applications/networking/mailreaders/mailpile { };
-
   mailutils = callPackage ../tools/networking/mailutils {
     sasl = gsasl;
   };
@@ -7700,8 +7690,6 @@ with pkgs;
   memo = callPackage ../applications/misc/memo { };
 
   mencal = callPackage ../applications/misc/mencal { } ;
-
-  metamorphose2 = callPackage ../applications/misc/metamorphose2 { };
 
   metar = callPackage ../applications/misc/metar { };
 
@@ -13775,12 +13763,6 @@ with pkgs;
 
   pyradio = callPackage ../applications/audio/pyradio {};
 
-  pyrex = pyrex095;
-
-  pyrex095 = callPackage ../development/interpreters/pyrex/0.9.5.nix { };
-
-  pyrex096 = callPackage ../development/interpreters/pyrex/0.9.6.nix { };
-
   racket = callPackage ../development/interpreters/racket {
     # racket 6.11 doesn't build with gcc6 + recent glibc:
     # https://github.com/racket/racket/pull/1886
@@ -13812,8 +13794,6 @@ with pkgs;
   regina = callPackage ../development/interpreters/regina { };
 
   inherit (ocamlPackages) reason;
-
-  renpy = callPackage ../development/interpreters/renpy { };
 
   pixie = callPackage ../development/interpreters/pixie { };
   dust = callPackage ../development/interpreters/pixie/dust.nix { };
@@ -14910,8 +14890,6 @@ with pkgs;
   };
 
   indent = callPackage ../development/tools/misc/indent { };
-
-  ino = callPackage ../development/embedded/arduino/ino { };
 
   inotify-tools = callPackage ../development/tools/misc/inotify-tools { };
 
@@ -23283,8 +23261,6 @@ with pkgs;
 
   cascadia-code = callPackage ../data/fonts/cascadia-code { };
 
-  cde-gtk-theme = callPackage ../data/themes/cdetheme { };
-
   charis-sil = callPackage ../data/fonts/charis-sil { };
 
   cherry = callPackage ../data/fonts/cherry { inherit (xorg) fonttosfnt mkfontdir; };
@@ -27393,8 +27369,6 @@ with pkgs;
 
   n8n = callPackage ../applications/networking/n8n {};
 
-  neap = callPackage ../applications/misc/neap { };
-
   neomutt = callPackage ../applications/networking/mailreaders/neomutt { };
 
   natron = callPackage ../applications/video/natron { };
@@ -28613,8 +28587,6 @@ with pkgs;
   cura = libsForQt5.callPackage ../applications/misc/cura { };
 
   curaPlugins = callPackage ../applications/misc/cura/plugins.nix { };
-
-  curaByDagoma = callPackage ../applications/misc/curabydagoma { };
 
   peru = callPackage ../applications/version-management/peru {};
 
@@ -30259,8 +30231,6 @@ with pkgs;
 
   digikam = libsForQt5.callPackage ../applications/graphics/digikam {};
 
-  displaycal = callPackage ../applications/graphics/displaycal {};
-
   drumkv1 = libsForQt5.callPackage ../applications/audio/drumkv1 { };
 
   ### GAMES
@@ -31690,8 +31660,6 @@ with pkgs;
   kssd = callPackage ../applications/science/biology/kssd { };
 
   last = callPackage ../applications/science/biology/last { };
-
-  lumpy = callPackage ../applications/science/biology/lumpy { };
 
   macse = callPackage ../applications/science/biology/macse { };
 
