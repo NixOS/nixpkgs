@@ -25,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "pikepdf";
-  version = "4.3.0";
+  version = "4.3.1";
   disabled = ! isPy3k;
 
   src = fetchFromGitHub {
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     extraPostFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    hash = "sha256-9dSJ6+rZd49rFSQExYnFBGQGZ8MnFM+z/0Iz/nYkW4E=";
+    hash = "sha256-u/NDDJGCcctWL3ivxtU+8CSlQH+5qkmXUcF4RkQOiPI=";
   };
 
   patches = [
