@@ -1,24 +1,27 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, darwin }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, darwin, wireguard-go }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wg-netmanager";
-  version = "0.3.6";
+  version = "0.3.8";
 
   src = fetchFromGitHub {
     owner = "gin66";
     repo = "wg_netmanager";
     rev = "wg_netmanager-v${version}";
-    sha256 = "0r0c7jv06rmm8qaxiax93nq0z1lpmsblg1b3nfyxmv4fwxc00xsn";
+    sha256 = "1fbrgn1hnygfy337r52dhrq8h2lzdr0b675ys738ibiwwm6s558z";
   };
 
   # related to the Cargo.lock file
-  cargoSha256 = "0n258nycmpyb7ysrgsf0rx7mgpqjnjd3wf64dgrj12s4zphmy4as";
+  cargoSha256 = "0wj6rlj5iyzgx5xxzd4mmza2kiwfnpyi918w7gb03hqppzd2xkrr";
 
   buildInputs = lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
 
   # Test 01 tries to create a wireguard interface, which requires sudo.
   doCheck = false;
   checkFlags = "--test 02_";
+
+  passthru.tests = {
+  };
 
   meta = with lib; {
     description = "Wireguard network manager";
