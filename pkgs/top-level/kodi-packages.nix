@@ -166,4 +166,5 @@ let self = rec {
 
   typing_extensions = callPackage ../applications/video/kodi/addons/typing_extensions { };
 
+  arrow = callPackage ../applications/video/kodi/addons/arrow { };
 }; in self
