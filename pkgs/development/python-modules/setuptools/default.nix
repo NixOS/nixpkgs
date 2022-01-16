@@ -41,7 +41,8 @@ let
 
     installPhase = ''
       echo "Moving sdist..."
-      mv dist/${name} $out
+      mkdir -p $out
+      tar -xzf dist/${name} ${pname}-${version}.post0/* -C $out/ --strip-components=1
     '';
   };
 in buildPythonPackage rec {
