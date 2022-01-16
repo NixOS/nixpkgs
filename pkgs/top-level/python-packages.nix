@@ -140,11 +140,6 @@ in {
   # it should not override the version of pytest that is used for say
   # Python 2. This is an ugly hack that is needed now because the hook
   # propagates the package.
-  pytestCheckHook_5 = if isPy3k then
-    self.pytestCheckHook.override { pytest = self.pytest_5; }
-  else
-    self.pytestCheckHook;
-
   pytestCheckHook_6_1 = if isPy3k then
     self.pytestCheckHook.override { pytest = self.pytest_6_1; }
   else
@@ -7546,14 +7541,6 @@ in {
   pytesseract = callPackage ../development/python-modules/pytesseract { };
 
   pytest = self.pytest_6;
-
-  pytest_5 = callPackage
-    ../development/python-modules/pytest/5.nix {
-      # hypothesis tests require pytest that causes dependency cycle
-      hypothesis = self.hypothesis.override {
-        doCheck = false;
-      };
-    };
 
   pytest_6 =
     callPackage ../development/python-modules/pytest {
