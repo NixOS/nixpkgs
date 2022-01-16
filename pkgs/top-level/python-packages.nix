@@ -3731,6 +3731,8 @@ in {
 
   httmock = callPackage ../development/python-modules/httmock { };
 
+  httpagentparser = callPackage ../development/python-modules/httpagentparser { };
+
   httpauth = callPackage ../development/python-modules/httpauth { };
 
   httpbin = callPackage ../development/python-modules/httpbin { };
