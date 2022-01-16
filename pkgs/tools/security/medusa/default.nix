@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "medusa-unstable";
-  version = "2018-12-16";
+  version = "2021-01-03";
 
   src = fetchFromGitHub {
     owner = "jmk-foofus";
     repo = "medusa";
-    rev = "292193b3995444aede53ff873899640b08129fc7";
-    sha256 = "0njlz4fqa0165wdmd5y8lfnafayf3c4la0r8pf3hixkdwsss1509";
+    rev = "bdaa2dda92ad3681387a60cc41d3bd9f077360a1";
+    sha256 = "1l90p4h5y1qqr2j2qwwr40k38sp79jrbffnl9m3ca2p1qd3mnn12";
   };
 
   outputs = [ "out" "man" ];
