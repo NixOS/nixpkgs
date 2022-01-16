@@ -513,8 +513,6 @@ let
 
     graphql_ppx = callPackage ../development/ocaml-modules/graphql_ppx { };
 
-    gtktop = callPackage ../development/ocaml-modules/gtktop { };
-
     hex = callPackage ../development/ocaml-modules/hex { };
 
     httpaf = callPackage ../development/ocaml-modules/httpaf { };
