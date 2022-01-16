@@ -22899,6 +22899,8 @@ with pkgs;
 
   sgx-sdk = callPackage ../os-specific/linux/sgx/sdk { };
 
+  sgx-ssl = callPackage ../os-specific/linux/sgx/ssl { };
+
   sgx-psw = callPackage ../os-specific/linux/sgx/psw { };
 
   shadow = callPackage ../os-specific/linux/shadow { };
