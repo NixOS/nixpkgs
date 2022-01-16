@@ -19,6 +19,7 @@ import time
 
 from test_driver.logger import rootlog
 
+DEFAULT_TIMEOUT = 900
 CHAR_TO_KEY = {
     '"': "shift-0x28",
     " ": "spc",
@@ -87,18 +88,17 @@ def _perform_ocr_on_screenshot(
     return model_results
 
 
-def retry(fn: Callable, timeout: int = 900) -> None:
+def retry(fn: Callable, timeout: int = DEFAULT_TIMEOUT) -> Any:
     """Call the given function repeatedly, with 1 second intervals,
-    until it returns True or a timeout is reached.
+    until it returns a truthy value or a timeout is reached.
     """
 
-    for _ in range(timeout):
-        if fn(False):
-            return
+    for n in range(timeout + 1):
+        r = fn(n == timeout)
+        if r:
+            return r
         time.sleep(1)
-
-    if not fn(True):
-        raise Exception(f"action timed out after {timeout} seconds")
+    raise Exception(f"action timed out after {timeout} seconds")
 
 
 class StartCommand:
@@ -478,7 +478,10 @@ class Machine:
         return "".join(output_buffer)
 
     def execute(
-        self, command: str, check_return: bool = True, timeout: Optional[int] = 900
+        self,
+        command: str,
+        check_return: bool = True,
+        timeout: Optional[int] = DEFAULT_TIMEOUT,
     ) -> Tuple[int, str]:
         self.run_callbacks()
         self.connect()
@@ -542,7 +545,7 @@ class Machine:
                 output += out
         return output
 
-    def wait_until_succeeds(self, command: str, timeout: int = 900) -> str:
+    def wait_until_succeeds(self, command: str, timeout: int = DEFAULT_TIMEOUT) -> str:
         """Wait until a command returns success and return its output.
         Throws an exception on timeout.
         """
@@ -557,7 +560,7 @@ class Machine:
             retry(check_success, timeout)
             return output
 
-    def wait_until_fails(self, command: str, timeout: int = 900) -> str:
+    def wait_until_fails(self, command: str, timeout: int = DEFAULT_TIMEOUT) -> str:
         """Wait until a command returns failure.
         Throws an exception on timeout.
         """
@@ -592,7 +595,9 @@ class Machine:
         )
         return output
 
-    def wait_until_tty_matches(self, tty: str, regexp: str) -> None:
+    def wait_until_tty_matches(
+        self, tty: str, regexp: str, timeout: int = DEFAULT_TIMEOUT
+    ) -> None:
         """Wait until the visible output on the chosen TTY matches regular
         expression. Throws an exception on timeout.
         """
@@ -605,41 +610,30 @@ class Machine:
                     f"Last chance to match /{regexp}/ on TTY{tty}, "
                     f"which currently contains: {text}"
                 )
-            return len(matcher.findall(text)) > 0
+            return bool(matcher.search(text))
 
         with self.nested("waiting for {} to appear on tty {}".format(regexp, tty)):
-            retry(tty_matches)
+            retry(tty_matches, timeout)
 
     def send_chars(self, chars: List[str]) -> None:
         with self.nested("sending keys ‘{}‘".format(chars)):
             for char in chars:
                 self.send_key(char)
 
-    def wait_for_file(self, filename: str) -> None:
+    def wait_for_file(self, filename: str, timeout: int = DEFAULT_TIMEOUT) -> None:
         """Waits until the file exists in machine's file system."""
 
-        def check_file(_: Any) -> bool:
-            status, _ = self.execute("test -e {}".format(filename))
-            return status == 0
-
+        command = make_command(["test", "-e", filename])
         with self.nested("waiting for file ‘{}‘".format(filename)):
-            retry(check_file)
+            self.wait_until_succeeds(command, timeout)
 
-    def wait_for_open_port(self, port: int) -> None:
-        def port_is_open(_: Any) -> bool:
-            status, _ = self.execute("nc -z localhost {}".format(port))
-            return status == 0
+    def wait_for_open_port(self, port: int, timeout: int = DEFAULT_TIMEOUT) -> None:
+        with self.nested(f"waiting for TCP port {port}"):
+            self.wait_until_succeeds(f"nc -z localhost {port}")
 
-        with self.nested("waiting for TCP port {}".format(port)):
-            retry(port_is_open)
-
-    def wait_for_closed_port(self, port: int) -> None:
-        def port_is_closed(_: Any) -> bool:
-            status, _ = self.execute("nc -z localhost {}".format(port))
-            return status != 0
-
-        with self.nested("waiting for TCP port {} to be closed"):
-            retry(port_is_closed)
+    def wait_for_closed_port(self, port: int, timeout: int = DEFAULT_TIMEOUT) -> None:
+        with self.nested(f"waiting for TCP port {port} to be closed"):
+            self.wait_until_fails(f"nc -z localhost {port}")
 
     def start_job(self, jobname: str, user: Optional[str] = None) -> Tuple[int, str]:
         return self.systemctl("start {}".format(jobname), user)
@@ -755,7 +749,7 @@ class Machine:
     def get_screen_text(self) -> str:
         return self._get_screen_text_variants([2])[0]
 
-    def wait_for_text(self, regex: str) -> None:
+    def wait_for_text(self, regex: str, timeout: int = DEFAULT_TIMEOUT) -> None:
         def screen_matches(last: bool) -> bool:
             variants = self.get_screen_text_variants()
             for text in variants:
@@ -768,23 +762,28 @@ class Machine:
             return False
 
         with self.nested("waiting for {} to appear on screen".format(regex)):
-            retry(screen_matches)
+            retry(screen_matches, timeout)
 
-    def wait_for_console_text(self, regex: str) -> None:
+    def wait_for_console_text(self, regex: str, timeout: int = DEFAULT_TIMEOUT) -> None:
         with self.nested("waiting for {} to appear on console".format(regex)):
             # Buffer the console output, this is needed
             # to match multiline regexes.
             console = io.StringIO()
-            while True:
+
+            def check_console(last: bool) -> bool:
                 try:
                     console.write(self.last_lines.get())
                 except queue.Empty:
-                    self.sleep(1)
-                    continue
+                    return False
                 console.seek(0)
-                matches = re.search(regex, console.read())
-                if matches is not None:
-                    return
+                console_text = console.read()
+                matches = re.search(regex, console_text)
+
+                if last and matches is None:
+                    self.log(f"Last console attempt failed. Text was: {console_text}")
+                return matches is not None
+
+            retry(check_console, timeout)
 
     def send_key(self, key: str) -> None:
         key = CHAR_TO_KEY.get(key, key)
@@ -887,7 +886,7 @@ class Machine:
             r"xwininfo -root -tree | sed 's/.*0x[0-9a-f]* \"\([^\"]*\)\".*/\1/; t; d'"
         ).splitlines()
 
-    def wait_for_window(self, regexp: str) -> None:
+    def wait_for_window(self, regexp: str, timeout: int = DEFAULT_TIMEOUT) -> None:
         pattern = re.compile(regexp)
 
         def window_is_visible(last_try: bool) -> bool:
@@ -901,7 +900,7 @@ class Machine:
             return any(pattern.search(name) for name in names)
 
         with self.nested("waiting for a window to appear"):
-            retry(window_is_visible)
+            retry(window_is_visible, timeout)
 
     def sleep(self, secs: int) -> None:
         # We want to sleep in *guest* time, not *host* time.
