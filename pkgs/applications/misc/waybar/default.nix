@@ -15,6 +15,7 @@
 , gtk-layer-shell
 , howard-hinnant-date
 , libxkbcommon
+, runTests        ? true,  catch2
 , traySupport     ? true,  libdbusmenu-gtk3
 , pulseSupport    ? true,  libpulseaudio
 , sndioSupport    ? true,  sndio
@@ -60,6 +61,9 @@ stdenv.mkDerivation rec {
     ++ optional  swaySupport  sway
     ++ optional  mpdSupport   libmpdclient;
 
+  checkInputs = [ catch2 ];
+  doCheck = runTests;
+
   mesonFlags = (lib.mapAttrsToList
     (option: enable: "-D${option}=${if enable then "enabled" else "disabled"}")
     {
@@ -70,6 +74,7 @@ stdenv.mkDerivation rec {
       libudev = udevSupport;
       mpd = mpdSupport;
       rfkill = rfkillSupport;
+      tests = runTests;
     }
   ) ++ [
     "-Dsystemd=disabled"
