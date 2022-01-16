@@ -49,13 +49,13 @@ let
         sha512 = "vt+kDhq/M2ayberEtJcIN/hxXy1Pk+59g2FV/ZQceeaTyCtCucjL2Q7FXlFjtWn4n15KCr1NE2lNNFhp0lEThw==";
       };
     };
-    "@types/node-17.0.0" = {
+    "@types/node-17.0.8" = {
       name = "_at_types_slash_node";
       packageName = "@types/node";
-      version = "17.0.0";
+      version = "17.0.8";
       src = fetchurl {
-        url = "https://registry.npmjs.org/@types/node/-/node-17.0.0.tgz";
-        sha512 = "eMhwJXc931Ihh4tkU+Y7GiLzT/y/DBNpNtr4yU9O2w3SYBsr9NaOPhQlLKRmoWtI54uNwuo0IOUFQjVOTZYRvw==";
+        url = "https://registry.npmjs.org/@types/node/-/node-17.0.8.tgz";
+        sha512 = "YofkM6fGv4gDJq78g4j0mMuGMkZVxZDgtU0JRdx6FgiJDG+0fY0GKVolOV8WqVmEhLCXkQRjwDdKyPxJp/uucg==";
       };
     };
     "accept-language-parser-1.5.0" = {
@@ -193,13 +193,13 @@ let
         sha1 = "ad3ff4c86ec2d029322f5a02c3a9a606c95b3f59";
       };
     };
-    "engine.io-6.1.0" = {
+    "engine.io-6.1.1" = {
       name = "engine.io";
       packageName = "engine.io";
-      version = "6.1.0";
+      version = "6.1.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/engine.io/-/engine.io-6.1.0.tgz";
-        sha512 = "ErhZOVu2xweCjEfYcTdkCnEYUiZgkAcBBAhW4jbIvNG8SLU3orAqoJCiytZjYF7eTpVmmCrLDjLIEaPlUAs1uw==";
+        url = "https://registry.npmjs.org/engine.io/-/engine.io-6.1.1.tgz";
+        sha512 = "AyMc20q8JUUdvKd46+thc9o7yCZ6iC6MoBCChG5Z1XmFMpp+2+y/oKvwpZTUJB0KCjxScw1dV9c2h5pjiYBLuQ==";
       };
     };
     "engine.io-parser-5.0.2" = {
@@ -256,13 +256,13 @@ let
         sha1 = "18282b27d08a267cb3030cd2b8b4b0f212af752a";
       };
     };
-    "graceful-fs-4.2.8" = {
+    "graceful-fs-4.2.9" = {
       name = "graceful-fs";
       packageName = "graceful-fs";
-      version = "4.2.8";
+      version = "4.2.9";
       src = fetchurl {
-        url = "https://registry.npmjs.org/graceful-fs/-/graceful-fs-4.2.8.tgz";
-        sha512 = "qkIilPUYcNhJpd33n0GBXTB1MMPp14TxEsEs0pTrsSVucApsYzW5V+Q8Qxhik6KU3evy+qkAAowTByymK0avdg==";
+        url = "https://registry.npmjs.org/graceful-fs/-/graceful-fs-4.2.9.tgz";
+        sha512 = "NtNxqUcXgpW2iMrfqSfR73Glt39K+BLwWsPs94yR63v45T0Wbej7eRmL5cWfwEgqXnmjQp3zaJTshdRW/qC2ZQ==";
       };
     };
     "handlebars-4.7.7" = {
@@ -535,13 +535,13 @@ let
         sha512 = "E5LDX7Wrp85Kil5bhZv46j8jOeboKq5JMmYM3gVGdGH8xFpPWXUMsNrlODCrkoxMEeNi/XZIwuRvY4XNwYMJpw==";
       };
     };
-    "socket.io-4.4.0" = {
+    "socket.io-4.4.1" = {
       name = "socket.io";
       packageName = "socket.io";
-      version = "4.4.0";
+      version = "4.4.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/socket.io/-/socket.io-4.4.0.tgz";
-        sha512 = "bnpJxswR9ov0Bw6ilhCvO38/1WPtE3eA2dtxi2Iq4/sFebiDJQzgKNYA7AuVVdGW09nrESXd90NbZqtDd9dzRQ==";
+        url = "https://registry.npmjs.org/socket.io/-/socket.io-4.4.1.tgz";
+        sha512 = "s04vrBswdQBUmuWJuuNTmXUVJhP0cVky8bBDhdkf8y0Ptsu7fKU2LuLbts9g+pdmAdyMMn8F/9Mf1/wbtUN0fg==";
       };
     };
     "socket.io-adapter-2.3.3" = {
@@ -715,7 +715,7 @@ in
       sources."@types/component-emitter-1.2.11"
       sources."@types/cookie-0.4.1"
       sources."@types/cors-2.8.12"
-      sources."@types/node-17.0.0"
+      sources."@types/node-17.0.8"
       sources."accept-language-parser-1.5.0"
       sources."accepts-1.3.7"
       sources."async-mutex-0.3.2"
@@ -734,7 +734,7 @@ in
       sources."destroy-1.0.4"
       sources."ee-first-1.1.1"
       sources."encodeurl-1.0.2"
-      (sources."engine.io-6.1.0" // {
+      (sources."engine.io-6.1.1" // {
         dependencies = [
           sources."debug-4.3.3"
           sources."ms-2.1.2"
@@ -746,7 +746,7 @@ in
       sources."fresh-0.5.2"
       sources."from2-2.3.0"
       sources."from2-string-1.1.0"
-      sources."graceful-fs-4.2.8"
+      sources."graceful-fs-4.2.9"
       sources."handlebars-4.7.7"
       sources."http-errors-1.8.1"
       sources."inherits-2.0.4"
@@ -775,7 +775,7 @@ in
       sources."send-0.17.2"
       sources."serve-static-1.14.2"
       sources."setprototypeof-1.2.0"
-      (sources."socket.io-4.4.0" // {
+      (sources."socket.io-4.4.1" // {
         dependencies = [
           sources."debug-4.3.3"
           sources."ms-2.1.2"
