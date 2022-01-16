@@ -17270,7 +17270,9 @@ with pkgs;
     llvmPackages = llvmPackages_11;
   };
 
-  isso = callPackage ../servers/isso { };
+  isso = callPackage ../servers/isso {
+    nodejs = nodejs-14_x;
+  };
 
   itk4 = callPackage ../development/libraries/itk/4.x.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
