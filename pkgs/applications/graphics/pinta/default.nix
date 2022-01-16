@@ -11,7 +11,7 @@
 
 buildDotnetModule rec {
   pname = "Pinta";
-  version = "2.0.1";
+  version = "2.0.2";
 
   nativeBuildInputs = [
     installShellFiles
@@ -37,7 +37,7 @@ buildDotnetModule rec {
     owner = "PintaProject";
     repo = "Pinta";
     rev = version;
-    sha256 = "sha256-iOKJPB2bI/GjeDxzG7r6ew7SGIzgrJTcRXhEYzOpC9k=";
+    sha256 = "sha256-Bvzs1beq7I1+10w9pmMePqGCz2TPDp5UK5Wa9hbKERU=";
   };
 
   postFixup = ''
