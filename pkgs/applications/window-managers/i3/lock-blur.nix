@@ -1,4 +1,4 @@
-{ i3lock-color, lib, fetchFromGitHub }:
+{ i3lock-color, lib, stdenv, fetchFromGitHub }:
 
 i3lock-color.overrideAttrs (oldAttrs : rec {
   pname = "i3lock-blur";
@@ -17,5 +17,6 @@ i3lock-color.overrideAttrs (oldAttrs : rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ dan4ik605743 ];
     platforms = platforms.all;
+    broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/i3lock-blur.x86_64-darwin
   };
 })
