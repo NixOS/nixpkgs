@@ -54,7 +54,7 @@ in buildPythonPackage rec {
     # We patch cpython/distutils to fix https://bugs.python.org/issue1222585
     # Patching of numpy.distutils is needed to prevent it from undoing the
     # patch to distutils.
-    ./numpy-distutils-C++_1.16.patch
+    ./numpy-distutils-C++.patch
   ];
 
   preConfigure = ''
