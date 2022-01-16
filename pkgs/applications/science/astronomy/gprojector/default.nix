@@ -3,7 +3,9 @@
 , fetchzip
 , jre
 , makeDesktopItem
+, copyDesktopItems
 , makeWrapper
+, extraJavaArgs ? "-Xms512M -Xmx2000M"
 }:
 
 stdenv.mkDerivation rec {
@@ -15,17 +17,17 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-IvGZOYt2d8aWtlAJJzVrwkqOOhaUHUmEDlMeD/0NdwU=";
   };
 
-  desktopItem = makeDesktopItem {
+  desktopItems = [ (makeDesktopItem {
     name = "gprojector";
     exec = "gprojector";
     desktopName = "G.Projector";
     comment = meta.description;
     categories = "Science;";
     extraEntries = "StartupWMClass = gov-nasa-giss-projector-GProjector";
-  };
+  }) ];
 
   buildInputs = [ jre ];
-  nativeBuildInputs = [ makeWrapper desktopItem ];
+  nativeBuildInputs = [ makeWrapper copyDesktopItems ];
 
   dontConfigure = true;
   dontBuild = true;
@@ -35,8 +37,7 @@ stdenv.mkDerivation rec {
     runHook preInstall
     mkdir -p $out/share
     cp -r $src/jars $out/share/java
-    cp -r $desktopItem/share/applications $out/share/applications
-    makeWrapper ${jre}/bin/java $out/bin/gprojector --add-flags "-Xms512M -Xmx2000M -jar $out/share/java/G.Projector.jar"
+    makeWrapper ${jre}/bin/java $out/bin/gprojector --add-flags "-jar $out/share/java/G.Projector.jar" --add-flags "${extraJavaArgs}"
     runHook postInstall
   '';
 
