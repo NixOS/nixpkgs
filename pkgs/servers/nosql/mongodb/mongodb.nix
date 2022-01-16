@@ -54,11 +54,11 @@ in stdenv.mkDerivation rec {
     libyamlcpp
     openssl
     pcre-cpp
-    variants.python
     sasl
     snappy
     zlib
-  ] ++ lib.optionals stdenv.isDarwin [ Security CoreFoundation cctools ];
+  ] ++ lib.optionals stdenv.isDarwin [ Security CoreFoundation cctools ]
+  ++ lib.optional (versionAtLeast version "3.6") [ variants.python ] ;
 
   # MongoDB keeps track of its build parameters, which tricks nix into
   # keeping dependencies to build inputs in the final output.

@@ -13,5 +13,4 @@ in buildMongoDB {
   sha256 = "0j6mvgv0jnsnvgkl8505bl88kbxkba66qijlpi1la0dd5pd1imfr";
   patches = [ ./forget-build-dependencies-3-4.patch ];
   license = lib.licenses.agpl3;
-  broken = true;
 }
