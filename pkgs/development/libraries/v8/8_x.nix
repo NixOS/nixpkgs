@@ -7,11 +7,11 @@
 # Use update.sh to update all checksums.
 
 let
-  version = "9.7.106.18";
+  version = "8.8.278.14";
   v8Src = fetchgit {
     url = "https://chromium.googlesource.com/v8/v8";
     rev = version;
-    sha256 = "0cb3w733w1xn6zq9dsr43nx6llcg9hrmb2dkxairarj9c0igpzyh";
+    sha256 = "0w6zldyas9w6p394876ssn3pnr5rjzjy1a5dcsmdkfj51m4rlg8m";
   };
 
   git_url = "https://chromium.googlesource.com";
@@ -20,46 +20,46 @@ let
   deps = {
     "base/trace_event/common" = fetchgit {
       url    = "${git_url}/chromium/src/base/trace_event/common.git";
-      rev    = "7f36dbc19d31e2aad895c60261ca8f726442bfbb";
-      sha256 = "01b2fhbxznqbakxv42ivrzg6w8l7i9yrd9nf72d6p5xx9dm993j4";
+      rev    = "eb94f1c7aa96207f469008f29989a43feb2718f8";
+      sha256 = "14gym38ncc9cysknv3jrql7jvcpjxf2d1dh4m8jgqb967jyzy5cj";
     };
     "build" = fetchgit {
       url    = "${git_url}/chromium/src/build.git";
-      rev    = "cf325916d58a194a935c26a56fcf6b525d1e2bf4";
-      sha256 = "1ix4h1cpx9bvgln8590xh7lllhsd9w1hd5k9l1gx5yxxrmywd3s4";
+      rev    = "2101eff1ac4bfd25f2dfa71ad632a600a38c1ed9";
+      sha256 = "0i3xcwzi4pkv4xpgjkbmcpj5h6mji80zqskkx0jx3sx0ji63fylz";
     };
     "third_party/googletest/src" = fetchgit {
       url    = "${git_url}/external/github.com/google/googletest.git";
-      rev    = "16f637fbf4ffc3f7a01fa4eceb7906634565242f";
-      sha256 = "11012k3c3mxzdwcw2iparr9lrckafpyhqzclsj26hmfbgbdi0rrh";
+      rev    = "4fe018038f87675c083d0cfb6a6b57c274fb1753";
+      sha256 = "1ilm9dmnm2v4y6l1wyfsajsbqv56j29ldfbpd0ykg4q90gpxz201";
     };
     "third_party/icu" = fetchgit {
       url    = "${git_url}/chromium/deps/icu.git";
-      rev    = "eedbaf76e49d28465d9119b10c30b82906e606ff";
-      sha256 = "0mppvx7wf9zlqjsfaa1cf06brh1fjb6nmiib0lhbb9hd55mqjdjj";
+      rev    = "c2a4cae149aae7fd30c4cbe3cf1b30df03b386f1";
+      sha256 = "0lgzxf7hmfsgqazs74v5li9ifg8r0jx5m3gxh1mnw33vpwp7qqf4";
     };
     "third_party/zlib" = fetchgit {
       url    = "${git_url}/chromium/src/third_party/zlib.git";
-      rev    = "6da1d53b97c89b07e47714d88cab61f1ce003c68";
-      sha256 = "0v7ylmbwfwv6w6wp29qdf77kjjnfr2xzin08n0v1yvbhs01h5ppy";
+      rev    = "e84c9a3fd75fdc39055b7ae27d6ec508e50bd39e";
+      sha256 = "03z30djnb3srhd0nvlxvx58sjqm2bvxk7j3vp4fk6h7a0sa2bdpi";
     };
     "third_party/jinja2" = fetchgit {
       url    = "${git_url}/chromium/src/third_party/jinja2.git";
-      rev    = "ee69aa00ee8536f61db6a451f3858745cf587de6";
-      sha256 = "1fsnd5h0gisfp8bdsfd81kk5v4mkqf8z368c7qlm1qcwc4ri4x7a";
+      rev    = "a82a4944a7f2496639f34a89c9923be5908b80aa";
+      sha256 = "02mkjwkrzhrg16zx97z792l0faz7gc8vga8w10r5y94p98jymnyz";
     };
     "third_party/markupsafe" = fetchgit {
       url    = "${git_url}/chromium/src/third_party/markupsafe.git";
-      rev    = "1b882ef6372b58bfd55a3285f37ed801be9137cd";
-      sha256 = "1jnjidbh03lhfaawimkjxbprmsgz4snr0jl06630dyd41zkdw5kr";
+      rev    = "0944e71f4b2cb9a871bcbe353f95e889b64a611a";
+      sha256 = "052ij8i7nkqchbvzv6ykj929hvfxjbzq7az2l01r0l2gfazhvdb9";
     };
   };
 
   # See `gn_version` in DEPS.
   gnSrc = fetchgit {
     url = "https://gn.googlesource.com/gn";
-    rev = "8926696a4186279489cc2b8d768533e61bba73d7";
-    sha256 = "1084lnyb0a1khbgjvak05fcx6jy973wqvsf77n0alxjys18sg2yk";
+    rev = "53d92014bf94c3893886470a1c7c1289f8818db0";
+    sha256 = "1xcm07qjk6m2czi150fiqqxql067i832adck6zxrishm70c9jbr9";
   };
 
   myGn = gn.overrideAttrs (oldAttrs: {
@@ -103,7 +103,7 @@ stdenv.mkDerivation rec {
         --replace 'current_toolchain == host_toolchain || !use_xcode_clang' \
                   'false'
     ''}
-    touch build/config/gclient_args.gni
+    echo 'checkout_google_benchmark = false' > build/config/gclient_args.gni
   '';
 
   gnFlags = [
