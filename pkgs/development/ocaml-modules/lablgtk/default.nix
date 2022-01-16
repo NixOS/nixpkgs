@@ -3,12 +3,12 @@
 let param =
   let check = lib.versionAtLeast ocaml.version; in
   if check "4.06" then rec {
-    version = "2.18.10";
+    version = "2.18.12";
     src = fetchFromGitHub {
       owner = "garrigue";
       repo = "lablgtk";
       rev = version;
-      sha256 = "0w8cdfcv2wc19sd3qzj3qq77qc6rbnbynsz02gzbl15kgrvgrfxi";
+      sha256 = "sha256:0asib87c42apwf1ln8541x6i3mvyajqbarifvz11in0mqn5k7g7h";
     };
   } else if check "3.12" then {
     version = "2.18.5";
