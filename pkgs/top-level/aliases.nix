@@ -808,6 +808,7 @@ mapAliases ({
   pgtap = postgresqlPackages.pgtap;
   plv8 = postgresqlPackages.plv8;
   tilp2 = throw "tilp2 has been removed"; # added 2022-01-15
+  timekeeper = throw "timekeeper has been removed"; # added 2022-01-16
   timescaledb = postgresqlPackages.timescaledb;
   tlauncher = throw "tlauncher has been removed because there questionable practices and legality concerns";
   tsearch_extras = postgresqlPackages.tsearch_extras;
