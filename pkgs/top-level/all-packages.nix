@@ -8524,6 +8524,8 @@ with pkgs;
 
   page = callPackage ../tools/misc/page { };
 
+  PageEdit = libsForQt5.callPackage ../applications/office/PageEdit { };
+
   pagmo2 = callPackage ../development/libraries/pagmo2 { };
 
   pakcs = callPackage ../development/compilers/pakcs { };
