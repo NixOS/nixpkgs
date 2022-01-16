@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "ets";
@@ -17,13 +17,14 @@ buildGoModule rec {
 
   ldflags = [ "-s" "-w" "-X main.version=v${version}-nixpkgs" ];
 
+  nativeBuildInputs = [ installShellFiles ];
+
   preBuild = ''
     rm -rf fixtures
   '';
 
   postInstall = ''
-    mkdir -p $out/share/man/man1
-    cp ets.1 $out/share/man/man1
+    installManPage ets.1
   '';
 
   doCheck = false;
