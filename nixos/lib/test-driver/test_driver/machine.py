@@ -54,7 +54,7 @@ assert all(len(c) == 1 for c in CHAR_TO_KEY.keys())
 
 
 def make_command(args: list) -> str:
-    return " ".join(map(shlex.quote, (map(str, args))))
+    return " ".join(shlex.quote(str(a)) for a in args)
 
 
 def _perform_ocr_on_screenshot(
@@ -65,12 +65,12 @@ def _perform_ocr_on_screenshot(
 
     magick_args = (
         "-filter Catrom -density 72 -resample 300 "
-        + "-contrast -normalize -despeckle -type grayscale "
-        + "-sharpen 1 -posterize 3 -negate -gamma 100 "
-        + "-blur 1x65535"
+        "-contrast -normalize -despeckle -type grayscale "
+        "-sharpen 1 -posterize 3 -negate -gamma 100 "
+        "-blur 1x65535"
     )
 
-    tess_args = f"-c debug_file=/dev/null --psm 11"
+    tess_args = "-c debug_file=/dev/null --psm 11"
 
     cmd = f"convert {magick_args} {screenshot_path} tiff:{screenshot_path}.tiff"
     ret = subprocess.run(cmd, shell=True, capture_output=True)
@@ -589,11 +589,10 @@ class Machine:
             self.connected = False
 
     def get_tty_text(self, tty: str) -> str:
-        status, output = self.execute(
+        return self.succeed(
             "fold -w$(stty -F /dev/tty{0} size | "
             "awk '{{print $2}}') /dev/vcs{0}".format(tty)
         )
-        return output
 
     def wait_until_tty_matches(
         self, tty: str, regexp: str, timeout: int = DEFAULT_TIMEOUT
