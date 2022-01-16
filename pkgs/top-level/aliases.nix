@@ -382,7 +382,8 @@ mapAliases ({
   gtk_doc = gtk-doc; # added 2018-02-25
   gtklick = throw "gtklick has been removed from nixpkgs as the project is stuck on python2"; # added 2022-01-01
   guileCairo = guile-cairo; # added 2017-09-24
-  guileGnome = guile-gnome; # added 2017-09-24
+  guileGnome = throw "guile-gnome has been removed"; # 2022-01-16
+  guile-gnome = throw "guile-gnome has been removed"; # 2022-01-16
   gnome3 = gnome; # added 2021-05-07
   guileLint = guile-lint; # added 2017-09-27
   guile_lib = guile-lib; # added 2017-09-24

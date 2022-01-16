@@ -13969,12 +13969,6 @@ with pkgs;
 
   guile-git = callPackage ../development/guile-modules/guile-git { };
 
-  guile-gnome = callPackage ../development/guile-modules/guile-gnome {
-    gconf = gnome2.GConf;
-    guile = guile_2_0;
-    inherit (gnome2) gnome_vfs libglade libgnome libgnomecanvas libgnomeui;
-  };
-
   guile-json = callPackage ../development/guile-modules/guile-json { };
 
   guile-lib = callPackage ../development/guile-modules/guile-lib { };
