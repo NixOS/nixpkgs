@@ -1,13 +1,9 @@
-{ lib, stdenv, fetchurl, nixosTests, jre_headless }:
+{ lib, stdenv, fetchurl, nixosTests, jre_headless, version, url, sha1 }:
 stdenv.mkDerivation {
   pname = "minecraft-server";
-  version = "1.18.1";
+  inherit version;
 
-  src = fetchurl {
-    url = "https://launcher.mojang.com/v1/objects/125e5adf40c659fd3bce3e66e67a16bb49ecc1b9/server.jar";
-    # sha1 because that comes from mojang via api
-    sha1 = "125e5adf40c659fd3bce3e66e67a16bb49ecc1b9";
-  };
+  src = fetchurl { inherit url sha1; };
 
   preferLocalBuild = true;
 
@@ -27,7 +23,7 @@ stdenv.mkDerivation {
 
   passthru = {
     tests = { inherit (nixosTests) minecraft-server; };
-    updateScript = ./update.sh;
+    updateScript = ./update.py;
   };
 
   meta = with lib; {
@@ -35,6 +31,6 @@ stdenv.mkDerivation {
     homepage = "https://minecraft.net";
     license = licenses.unfreeRedistributable;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ thoughtpolice tomberek costrouc ];
+    maintainers = with maintainers; [ thoughtpolice tomberek costrouc jyooru ];
   };
 }

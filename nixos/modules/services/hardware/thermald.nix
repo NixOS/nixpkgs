@@ -4,7 +4,8 @@ with lib;
 
 let
   cfg = config.services.thermald;
-in {
+in
+{
   ###### interface
   options = {
     services.thermald = {
@@ -41,6 +42,7 @@ in {
       description = "Thermal Daemon Service";
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
+        PrivateNetwork = true;
         ExecStart = ''
           ${cfg.package}/sbin/thermald \
             --no-daemon \
