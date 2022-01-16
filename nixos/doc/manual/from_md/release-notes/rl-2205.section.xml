@@ -384,6 +384,11 @@
       </listitem>
       <listitem>
         <para>
+          <literal>tilp2</literal> was removed together with its module
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The options
           <literal>networking.interfaces.&lt;name&gt;.ipv4.routes</literal>
           and
