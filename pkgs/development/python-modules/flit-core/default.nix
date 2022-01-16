@@ -4,6 +4,9 @@
 , flit
 }:
 
+# This is a package for bootstrapping the Python packages set.
+# What is passed to `src` needs to have already been unpacked.
+
 buildPythonPackage rec {
   pname = "flit-core";
   inherit (flit) version;
