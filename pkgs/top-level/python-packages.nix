@@ -5181,6 +5181,8 @@ in {
 
   mutf8 = callPackage ../development/python-modules/mutf8 { };
 
+  mutmut = callPackage ../development/python-modules/mutmut { };
+
   mujson = callPackage ../development/python-modules/mujson { };
 
   mwclient = callPackage ../development/python-modules/mwclient { };
