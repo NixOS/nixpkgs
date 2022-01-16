@@ -13666,4 +13666,15 @@
       fingerprint = "3586 3350 BFEA C101 DB1A 4AF0 1F81 112D 62A9 ADCE";
     }];
   };
+  jcdickinson = {
+    name = "Jonathan Dickinson";
+    email = "oss@jonathan.dickinson.id";
+    matrix = "@jonathan:dickinson.id";
+    github = "jcdickinson";
+    githubId = 522465;
+    keys = [{
+      longkeyid = "ed25519/509F0352FA9D7E45";
+      fingerprint = "4B01 D0E1 FC12 D8AF 737E  60A0 509F 0352 FA9D 7E45";
+    }];
+  };
 }
