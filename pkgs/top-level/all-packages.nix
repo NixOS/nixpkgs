@@ -17958,8 +17958,6 @@ with pkgs;
       inherit (darwin.apple_sdk.frameworks) Carbon;
   };
 
-  libgksu = callPackage ../development/libraries/libgksu { };
-
   libgnt = callPackage ../development/libraries/libgnt { };
 
   libgpg-error = callPackage ../development/libraries/libgpg-error { };

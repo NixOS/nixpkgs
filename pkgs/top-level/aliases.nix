@@ -485,6 +485,7 @@ mapAliases ({
   liberation_ttf_v1_from_source = liberation_ttf_v1; # added 2018-12-12
   liberation_ttf_v2_from_source = liberation_ttf_v2; # added 2018-12-12
   liberationsansnarrow = liberation-sans-narrow; # added 2018-12-12
+  libgksu = throw "libgksu has been removed"; # added 2022-01-16
   libgnome_keyring = libgnome-keyring; # added 2018-02-25
   libgnome_keyring3 = libgnome-keyring3; # added 2018-02-25
   libgpgerror = libgpg-error; # added 2021-09-04
