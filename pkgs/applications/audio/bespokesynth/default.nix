@@ -113,7 +113,7 @@ stdenv.mkDerivation rec {
     license = with licenses; [
       gpl3Plus
     ] ++ lib.optional enableVST2 unfree;
-    maintainers = with maintainers; [ astro tobiasBora ];
+    maintainers = with maintainers; [ astro tobiasBora OPNA2608 ];
     platforms = platforms.all;
   };
 }
