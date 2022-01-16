@@ -68,7 +68,7 @@ buildDotnetModule rec {
     "OpenTabletDriver.Tests.PluginRepositoryTest.ExpandRepositoryTarball"
   ];
 
-  postInstall = ''
+  postFixup = ''
     # Give a more "*nix" name to the binaries
     mv $out/bin/OpenTabletDriver.Console $out/bin/otd
     mv $out/bin/OpenTabletDriver.Daemon $out/bin/otd-daemon
