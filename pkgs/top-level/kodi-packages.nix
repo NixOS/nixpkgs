@@ -164,4 +164,6 @@ let self = rec {
 
   xbmcswift2 = callPackage ../applications/video/kodi/addons/xbmcswift2 { };
 
+  typing_extensions = callPackage ../applications/video/kodi/addons/typing_extensions { };
+
 }; in self
