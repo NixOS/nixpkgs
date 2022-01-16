@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "colima";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "abiosoft";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-+P4kxiib1xkS4iGC2HrYAt0YMyXyEYPqoo1BkDs7jp8=";
+    sha256 = "sha256-hZ5BqNHQAMzL69ptpbTT+fN4NdV4AFhboCL2t1sF5AQ=";
   };
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];

@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "swayidle";
-  version = "1.7";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "swaywm";
     repo = "swayidle";
     rev = version;
-    sha256 = "0ziya8d5pvvxg16jhy4i04pvq11bdvj68gz5q654ar4dldil17nn";
+    sha256 = "06iq12p4438d6bv3jlqsf01wjaxrzlnj1bnicn41kad563aq41xl";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config scdoc wayland-scanner ];
