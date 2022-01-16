@@ -1,7 +1,7 @@
 from contextlib import _GeneratorContextManager
 from pathlib import Path
 from queue import Queue
-from typing import Any, Callable, Dict, Iterable, List, Optional, Tuple
+from typing import Any, Callable, Dict, Iterable, List, Optional, Tuple, Union
 import base64
 import io
 import os
@@ -54,8 +54,8 @@ CHAR_TO_KEY = {
 assert all(len(c) == 1 for c in CHAR_TO_KEY.keys())
 
 
-def make_command(args: list) -> str:
-    return " ".join(shlex.quote(str(a)) for a in args)
+def q(s: Union[str, Path]) -> str:
+    return shlex.quote(str(s))
 
 
 def _perform_ocr_on_screenshot(
@@ -135,7 +135,7 @@ class StartCommand:
         return (
             f"{self._cmd}"
             f" -monitor unix:{monitor_socket_path}"
-            f" -chardev socket,id=shell,path={shell_socket_path}"
+            f" -chardev socket,id=shell,path={q(shell_socket_path)}"
             f"{qemu_opts}"
             f"{display_opts}"
         )
@@ -615,9 +615,8 @@ class Machine:
     def wait_for_file(self, filename: str, timeout: int = DEFAULT_TIMEOUT) -> None:
         """Waits until the file exists in machine's file system."""
 
-        command = make_command(["test", "-e", filename])
         with self.nested(f"waiting for file ‘{filename}‘"):
-            self.wait_until_succeeds(command, timeout)
+            self.wait_until_succeeds(f"test -e {q(filename)}", timeout)
 
     def wait_for_open_port(self, port: int, timeout: int = DEFAULT_TIMEOUT) -> None:
         with self.nested(f"waiting for TCP port {port}"):
@@ -678,8 +677,8 @@ class Machine:
         with open(source, "rb") as fh:
             content_b64 = base64.b64encode(fh.read()).decode()
             self.succeed(
-                f"mkdir -p $(dirname {target})",
-                f"echo -n {content_b64} | base64 -d > {target}",
+                f"mkdir -p $(dirname {q(target)})",
+                f"echo -n {content_b64} | base64 -d > {q(target)}",
             )
 
     def copy_from_host(self, source: str, target: str) -> None:
@@ -694,13 +693,13 @@ class Machine:
             vm_shared_temp = Path("/tmp/shared") / shared_temp.name
             vm_intermediate = vm_shared_temp / host_src.name
 
-            self.succeed(make_command(["mkdir", "-p", vm_shared_temp]))
+            self.succeed(f"mkdir -p {q(vm_shared_temp)}")
             if host_src.is_dir():
                 shutil.copytree(host_src, host_intermediate)
             else:
                 shutil.copy(host_src, host_intermediate)
-            self.succeed(make_command(["mkdir", "-p", vm_target.parent]))
-            self.succeed(make_command(["cp", "-r", vm_intermediate, vm_target]))
+            self.succeed(f"mkdir -p {q(vm_target.parent)}")
+            self.succeed(f"cp -r {q(vm_intermediate)} {q(vm_target)}")
 
     def copy_from_vm(self, source: str, target_dir: str = "") -> None:
         """Copy a file from the VM (specified by an in-VM source path) to a path
@@ -715,8 +714,8 @@ class Machine:
             vm_intermediate = vm_shared_temp / vm_src.name
             intermediate = shared_temp / vm_src.name
             # Copy the file to the shared directory inside VM
-            self.succeed(make_command(["mkdir", "-p", vm_shared_temp]))
-            self.succeed(make_command(["cp", "-r", vm_src, vm_intermediate]))
+            self.succeed(f"mkdir -p {q(vm_shared_temp)}")
+            self.succeed(f"cp -r  {q(vm_src)} {q(vm_intermediate)}")
             abs_target = self.out_dir / target_dir / vm_src.name
             abs_target.parent.mkdir(exist_ok=True, parents=True)
             # Copy the file from the shared directory outside VM
