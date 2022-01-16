@@ -459,3 +459,19 @@ WRAPPER(char *, mkdtemp)(char *template)
     return template;
 }
 WRAPPER_DEF(mkdtemp)
+
+WRAPPER(char *, mktemp)(char *template)
+{
+    char * (*mktemp_real) (char *template) = LOOKUP_REAL(mktemp);
+    char buf[PATH_MAX];
+    char * rewritten = rewrite_non_const(template, buf);
+    char * retval = mktemp_real(rewritten);
+    if (retval == NULL) {
+        return retval;
+    };
+    if (rewritten != template) {
+        copy_temp_wildcard(template, rewritten, 0);
+    }
+    return template;
+}
+WRAPPER_DEF(mktemp)

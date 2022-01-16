@@ -121,6 +121,10 @@ int main(int argc, char *argv[])
     assert(mkdtemp(buf) == buf);
     assert_mktemp_path(TESTDIR "/temp", "", buf);
 
+    strncpy(buf, TESTDIR "/tempXXXXXX", PATH_MAX);
+    assert(mktemp(buf) == buf);
+    assert_mktemp_path(TESTDIR "/temp", "", buf);
+
     test_spawn();
     test_system();
 
