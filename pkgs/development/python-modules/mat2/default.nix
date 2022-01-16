@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "mat2";
-  version = "0.12.2";
+  version = "0.12.3";
 
   disabled = pythonOlder "3.5";
 
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "jvoisin";
     repo = "mat2";
     rev = version;
-    sha256 = "sha256-KaHdBmTeBlCRaVkG3WsfDtFo45s/X69x7VGDYY7W5O8=";
+    hash = "sha256-TW+FwlZ+J1tanPL5WuwXtZJmtYB9LaimeIaPlN/jzqo=";
   };
 
   patches = [
@@ -40,8 +40,6 @@ buildPythonPackage rec {
       bwrap = "${bubblewrap}/bin/bwrap";
       exiftool = "${exiftool}/bin/exiftool";
       ffmpeg = "${ffmpeg}/bin/ffmpeg";
-      # remove once faf0f8a8a4134edbeec0a73de7f938453444186d is in master
-      mimetypes = "${mime-types}/etc/mime.types";
     } // lib.optionalAttrs dolphinIntegration {
       kdialog = "${plasma5Packages.kdialog}/bin/kdialog";
     }))
