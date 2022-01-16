@@ -1,8 +1,9 @@
 { lib, mkDerivation, fetchFromGitHub, cmake, qtsvg, qtwebengine, qttranslations }:
 
-mkDerivation rec{
+mkDerivation rec {
   pname = "PageEdit";
   version = "1.7.0";
+
   src = fetchFromGitHub {
     owner = "Sigil-Ebook";
     repo = pname;
