@@ -4858,6 +4858,18 @@ final: prev:
     meta.homepage = "https://github.com/mhartington/oceanic-next/";
   };
 
+  octo-nvim = buildVimPluginFrom2Nix {
+    pname = "octo.nvim";
+    version = "2022-01-13";
+    src = fetchFromGitHub {
+      owner = "pwntester";
+      repo = "octo.nvim";
+      rev = "490d7145070b6326610d5d41238b1d8e88606f8b";
+      sha256 = "054f31krj8szmpjx1w86x5w6r7j1z1xpz7v1yc0m2chmg1r61r9f";
+    };
+    meta.homepage = "https://github.com/pwntester/octo.nvim/";
+  };
+
   one-nvim = buildVimPluginFrom2Nix {
     pname = "one-nvim";
     version = "2021-06-10";
