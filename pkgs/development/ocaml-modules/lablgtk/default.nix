@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub, ocaml, findlib, pkg-config, gtk2, libgnomecanvas, libglade, gtksourceview }:
+{ lib, stdenv, fetchurl, fetchFromGitHub, ocaml, findlib, pkg-config, gtk2, libgnomecanvas, gtksourceview }:
 
 let param =
   let check = lib.versionAtLeast ocaml.version; in
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
   inherit (param) version src;
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ ocaml findlib gtk2 libgnomecanvas libglade gtksourceview ];
+  buildInputs = [ ocaml findlib gtk2 libgnomecanvas gtksourceview ];
 
   configureFlags = [ "--with-libdir=$(out)/lib/ocaml/${ocaml.version}/site-lib" ];
   buildFlags = [ "world" ];
