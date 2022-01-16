@@ -47,7 +47,6 @@ mkDerivation rec {
     acpi
     alsa-utils
     brightnessctl
-    coreutils
     dbus
     fluxbox # window manager for Lumina DE
     hicolor-icon-theme
