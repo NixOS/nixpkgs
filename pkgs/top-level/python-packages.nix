@@ -458,8 +458,6 @@ in {
 
   allure-pytest = callPackage ../development/python-modules/allure-pytest { };
 
-  alot = callPackage ../development/python-modules/alot { };
-
   alpha-vantage = callPackage ../development/python-modules/alpha-vantage { };
 
   altair = callPackage ../development/python-modules/altair { };
@@ -5440,10 +5438,6 @@ in {
   notify2 = callPackage ../development/python-modules/notify2 { };
 
   notmuch = callPackage ../development/python-modules/notmuch {
-    inherit (pkgs) notmuch;
-  };
-
-  notmuch2 = callPackage ../development/python-modules/notmuch/2.nix {
     inherit (pkgs) notmuch;
   };
 
