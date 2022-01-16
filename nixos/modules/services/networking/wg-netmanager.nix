@@ -4,18 +4,12 @@ with lib;
 
 let
   cfg = config.services.wg-netmanager;
-
 in
 {
 
-  ###### interface
-
   options = {
-
     services.wg-netmanager = {
-
       enable = mkEnableOption "Wireguard network manager";
-
       package = mkOption {
         type = types.package;
         default = pkgs.wg-netmanager;
@@ -24,14 +18,11 @@ in
           wg-netmanager derivation to use.
         '';
       };
-
     };
-
   };
 
   ###### implementation
-
-  config = mkIf cfg.enable (
+  config = mkIf cfg.enable {
 
     systemd.services.wg-netmanager = {
       description = "Wireguard network manager";
@@ -48,15 +39,11 @@ in
           "/tmp"  # wg-netmanager creates files in /tmp before deleting them after use
         ];
       unitConfig =  {
-        ConditionPathExists = "/etc/wg_netmanager/network.yaml";
-        ConditionPathExists = "/etc/wg_netmanager/peer.yaml";
+        ConditionPathExists = ["/etc/wg_netmanager/network.yaml" "/etc/wg_netmanager/peer.yaml"];
       };
     };
-
-  );
-
-  meta = {
-    maintainers = with lib.maintainers; [ gin66 ];
-    # doc = ./wg-netmanager.xml;
+   };
   };
+
+  meta.maintainers = with maintainers; [ gin66 ];
 }
