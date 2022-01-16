@@ -4685,6 +4685,12 @@
     github = "higebu";
     githubId = 733288;
   };
+  hiljusti = {
+    name = "J.R. Hill";
+    email = "hiljusti@so.dang.cool";
+    github = "hiljusti";
+    githubId = 17605298;
+  };
   hinton = {
     email = "t@larkery.com";
     name = "Tom Hinton";
