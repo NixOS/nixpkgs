@@ -443,3 +443,19 @@ WRAPPER(int, mkostemps)(char *template, int suffixlen, int flags)
     return retval;
 }
 WRAPPER_DEF(mkostemps)
+
+WRAPPER(char *, mkdtemp)(char *template)
+{
+    char * (*mkdtemp_real) (char *template) = LOOKUP_REAL(mkdtemp);
+    char buf[PATH_MAX];
+    char * rewritten = rewrite_non_const(template, buf);
+    char * retval = mkdtemp_real(rewritten);
+    if (retval == NULL) {
+        return retval;
+    };
+    if (rewritten != template) {
+        copy_temp_wildcard(template, rewritten, 0);
+    }
+    return template;
+}
+WRAPPER_DEF(mkdtemp)
