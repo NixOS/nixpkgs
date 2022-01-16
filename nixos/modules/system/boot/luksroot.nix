@@ -172,7 +172,7 @@ let
                     echo -n "${dev.device}" > /crypt-ramfs/device
 
                     # and try reading it from /dev/console with a timeout
-                    IFS= read -t 1 -r passphrase
+                    IFS= read -t 1 -rs passphrase
                     if [ -n "$passphrase" ]; then
                        ${if luks.reusePassphrases then ''
                          # remember it for the next device
@@ -265,7 +265,7 @@ let
                     break
                 else
                     # Try reading it from /dev/console with a timeout
-                    IFS= read -t 1 -r k_user
+                    IFS= read -t 1 -rs k_user
                     if [ -n "$k_user" ]; then
                        ${if luks.reusePassphrases then ''
                          # Remember it for the next device
@@ -373,7 +373,7 @@ let
                     break
                 else
                     # and try reading it from /dev/console with a timeout
-                    IFS= read -t 1 -r pin
+                    IFS= read -t 1 -rs pin
                     if [ -n "$pin" ]; then
                        ${if luks.reusePassphrases then ''
                          # remember it for the next device
