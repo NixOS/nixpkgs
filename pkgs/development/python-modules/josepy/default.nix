@@ -33,6 +33,7 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace pytest.ini \
       --replace " --flake8 --cov-report xml --cov-report=term-missing --cov=josepy --cov-config .coveragerc" ""
+    sed -i '/flake8-ignore/d' pytest.ini
   '';
 
   pythonImportsCheck = [
