@@ -1,24 +1,24 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub }:
 
 rustPlatform.buildRustPackage rec {
   pname = "yex-lang";
   version = "unstable-2021-12-25";
 
   src = fetchFromGitHub {
-    owner = "nonamesc";
+    owner = "nonamescm";
     repo = "yex-lang";
     rev = "a97def1431b73b8693700f530ec023f1776eaf83";
-    sha256 = "074x9j0ihjpaghnwywq5zyxfad2h6m57c2i58wkz6chma6vcjk08";
-    fetchSubmodules = true;
+    hash = "sha256-CEzJtlEVMvMnRyUKdko1UDTluv8Fc88tfOpKGIFMnRw=";
   };
 
-  cargoSha256 = "017nszw07gzd2awadasxqyzx4zpb3y6db1zykcixddqxlyg1wwwq";
+  cargoSha256 = "sha256-mHMenqcdt9Yjm/6H1Ywf637Sv8ddq6a4Eu2/A/jX9gQ=";
 
   meta = with lib; {
+    homepage = "https://github.com/nonamesc/yex-lang";
     description = "A cool functional scripting language written in rust";
-    homepage = "https://github.com/yex-lang/yex-lang";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
-    platforms = platforms.all;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.unix;
+    broken = stdenv.isAarch64 && stdenv.isLinux;
   };
 }
