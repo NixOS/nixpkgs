@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, fetchzip
 , cmake, pkg-config, ninja, makeWrapper
 , libjack2, alsa-lib, alsa-tools, freetype, libusb1
-, libX11, libXrandr, libXinerama, libXext, libXcursor, libGL
+, libX11, libXrandr, libXinerama, libXext, libXcursor, libXScrnSaver, libGL
 , libxcb, xcbutil, libxkbcommon, xcbutilkeysyms, xcb-util-cursor
 , gtk3, webkitgtk, python3, curl, pcre, mount, gnome, patchelf
 , Cocoa, WebKit, CoreServices, CoreAudioKit
@@ -51,6 +51,7 @@ stdenv.mkDerivation rec {
     libXinerama
     libXext
     libXcursor
+    libXScrnSaver
     curl
     gtk3
     webkitgtk
@@ -91,12 +92,18 @@ stdenv.mkDerivation rec {
     # Ensure zenity is available, or it won't be able to open new files.
     # Ensure the python used for compilation is the same as the python used at run-time.
     # jedi is also required for auto-completion.
-    wrapProgram $out/bin/BespokeSynth --prefix PATH : '${
-      lib.makeBinPath [
+    # These X11 libs get dlopen'd, they cause visual bugs when unavailable.
+    wrapProgram $out/bin/BespokeSynth \
+      --prefix PATH : '${lib.makeBinPath [
         gnome.zenity
         (python3.withPackages (ps: with ps; [ jedi ]))
-      ]
-    }'
+      ]}' \
+      --prefix LD_LIBRARY_PATH : '${lib.makeLibraryPath [
+        libXrandr
+        libXinerama
+        libXcursor
+        libXScrnSaver
+      ]}'
   '';
 
   meta = with lib; {
