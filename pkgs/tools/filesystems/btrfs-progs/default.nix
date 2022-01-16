@@ -35,6 +35,8 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "udevruledir=$(out)/lib/udev/rules.d" ];
 
+  enableParallelBuilding = true;
+
   meta = with lib; {
     description = "Utilities for the btrfs filesystem";
     homepage = "https://btrfs.wiki.kernel.org/";
