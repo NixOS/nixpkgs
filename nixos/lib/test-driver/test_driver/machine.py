@@ -114,7 +114,6 @@ class StartCommand:
         self,
         monitor_socket_path: Path,
         shell_socket_path: Path,
-        allow_reboot: bool = False,  # TODO: unused, legacy?
     ) -> str:
         display_opts = ""
         display_available = any(x in os.environ for x in ["DISPLAY", "WAYLAND_DISPLAY"])
@@ -124,9 +123,7 @@ class StartCommand:
         # qemu options
         qemu_opts = ""
         qemu_opts += (
-            ""
-            if allow_reboot
-            else " -no-reboot"
+            " -no-reboot"
             " -device virtio-serial"
             " -device virtconsole,chardev=shell"
             " -device virtio-rng-pci"
@@ -276,7 +273,6 @@ class Machine:
 
     start_command: StartCommand
     keep_vm_state: bool
-    allow_reboot: bool
 
     process: Optional[subprocess.Popen]
     pid: Optional[int]
@@ -301,13 +297,11 @@ class Machine:
         start_command: StartCommand,
         name: str = "machine",
         keep_vm_state: bool = False,
-        allow_reboot: bool = False,
         callbacks: Optional[List[Callable]] = None,
     ) -> None:
         self.out_dir = out_dir
         self.tmp_dir = tmp_dir
         self.keep_vm_state = keep_vm_state
-        self.allow_reboot = allow_reboot
         self.name = name
         self.start_command = start_command
         self.callbacks = callbacks if callbacks is not None else []
