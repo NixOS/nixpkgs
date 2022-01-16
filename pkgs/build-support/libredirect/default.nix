@@ -57,7 +57,7 @@ else stdenv.mkDerivation rec {
     ''}
 
     if [ -n "$doInstallCheck" ]; then
-      $CC -Wall -std=c99 -O3 test.c -o test
+      $CC -Wall -std=c99 -D_POSIX_C_SOURCE=200809L -O3 test.c -o test
     fi
 
     runHook postBuild
@@ -91,7 +91,7 @@ else stdenv.mkDerivation rec {
   installCheckPhase = ''
     (
       source "$hook/nix-support/setup-hook"
-      NIX_REDIRECTS="/foo/bar/test=${coreutils}/bin/true" ./test
+      NIX_REDIRECTS="/foo/bar/test=${coreutils}/bin/true:/bar/baz=$(mktemp -d)" ./test
     )
   '';
 

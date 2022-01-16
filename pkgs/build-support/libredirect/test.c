@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <errno.h>
 #include <fcntl.h>
 #include <spawn.h>
 #include <stdio.h>
@@ -9,6 +10,7 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
+#define TESTDIR "/bar/baz"
 #define TESTPATH "/foo/bar/test"
 #define SUBTEST "./test sub"
 
@@ -58,6 +60,22 @@ int main(int argc, char *argv[])
     assert(access(TESTPATH, X_OK) == 0);
 
     assert(stat(TESTPATH, &testsb) != -1);
+
+    assert(mkdir(TESTDIR "/dir-mkdir", 0777) == 0);
+    assert(unlink(TESTDIR "/dir-mkdir") == -1); // it's a directory!
+#ifndef __APPLE__
+    assert(errno == EISDIR);
+#endif
+    assert(rmdir(TESTDIR "/dir-mkdir") == 0);
+    assert(unlink(TESTDIR "/dir-mkdir") == -1);
+    assert(errno == ENOENT);
+
+    assert(mkdirat(123, TESTDIR "/dir-mkdirat", 0777) == 0);
+    assert(unlinkat(123, TESTDIR "/dir-mkdirat", 0) == -1); // it's a directory!
+#ifndef __APPLE__
+    assert(errno == EISDIR);
+#endif
+    assert(unlinkat(123, TESTDIR "/dir-mkdirat", AT_REMOVEDIR) == 0);
 
     test_spawn();
     test_system();

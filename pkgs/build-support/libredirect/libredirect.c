@@ -354,3 +354,27 @@ WRAPPER(int, mkdirat)(int dirfd, const char *path, mode_t mode)
     return mkdirat_real(dirfd, rewrite(path, buf), mode);
 }
 WRAPPER_DEF(mkdirat)
+
+WRAPPER(int, unlink)(const char *path)
+{
+    int (*unlink_real) (const char *path) = LOOKUP_REAL(unlink);
+    char buf[PATH_MAX];
+    return unlink_real(rewrite(path, buf));
+}
+WRAPPER_DEF(unlink)
+
+WRAPPER(int, unlinkat)(int dirfd, const char *path, int flags)
+{
+    int (*unlinkat_real) (int dirfd, const char *path, int flags) = LOOKUP_REAL(unlinkat);
+    char buf[PATH_MAX];
+    return unlinkat_real(dirfd, rewrite(path, buf), flags);
+}
+WRAPPER_DEF(unlinkat)
+
+WRAPPER(int, rmdir)(const char *path)
+{
+    int (*rmdir_real) (const char *path) = LOOKUP_REAL(rmdir);
+    char buf[PATH_MAX];
+    return rmdir_real(rewrite(path, buf));
+}
+WRAPPER_DEF(rmdir)
