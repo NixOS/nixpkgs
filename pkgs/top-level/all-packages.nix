@@ -25377,34 +25377,6 @@ with pkgs;
       };
     };
   };
-  gnuradio3_7 = callPackage ../applications/radio/gnuradio/wrapper.nix {
-    unwrapped = callPackage ../applications/radio/gnuradio/3.7.nix {
-      inherit (darwin.apple_sdk.frameworks) CoreAudio;
-      python = python2;
-      # Incompatible with uhd4+
-      uhd = uhd3_5;
-    };
-  };
-  gnuradio3_7Packages = lib.recurseIntoAttrs gnuradio3_7.pkgs;
-  # A build without gui components and other utilites not needed if gnuradio is
-  # used as a c++ library.
-  gnuradio3_7Minimal = gnuradio3_7.override {
-    doWrap = false;
-    unwrapped = gnuradio3_7.unwrapped.override {
-      volk = volk.override {
-        enableModTool = false;
-      };
-      features = {
-        gnuradio-companion = false;
-        python-support = false;
-        gr-qtgui = false;
-        gr-utils = false;
-        sphinx = false;
-        doxygen = false;
-        gr-wxgui = false;
-      };
-    };
-  };
 
   grandorgue = callPackage ../applications/audio/grandorgue { };
 
