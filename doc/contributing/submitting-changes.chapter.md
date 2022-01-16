@@ -227,7 +227,7 @@ digraph {
 }
 ```
 
-[This GitHub Action](https://github.com/NixOS/nixpkgs/blob/master/.github/workflows/merge-staging.yml) brings changes from `master` to `staging-next` and from `staging-next` to `staging` every 6 hours.
+[This GitHub Action](https://github.com/NixOS/nixpkgs/blob/master/.github/workflows/periodic-merge-6h.yml) brings changes from `master` to `staging-next` and from `staging-next` to `staging` every 6 hours.
 
 
 ### Master branch {#submitting-changes-master-branch}
