@@ -9458,6 +9458,8 @@ in {
 
   ring-doorbell = callPackage ../development/python-modules/ring-doorbell { };
 
+  ripe-atlas-cousteau = callPackage ../development/python-modules/ripe-atlas-cousteau { };
+
   ripe-atlas-sagan = callPackage ../development/python-modules/ripe-atlas-sagan { };
 
   riprova = callPackage ../development/python-modules/riprova { };
