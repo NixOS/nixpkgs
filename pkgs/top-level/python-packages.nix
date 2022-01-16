@@ -22,10 +22,7 @@ let
 
   namePrefix = python.libPrefix + "-";
 
-  bootstrapped-pip = if isPy3k then
-    callPackage ../development/python-modules/bootstrapped-pip { }
-  else
-    callPackage ../development/python-modules/bootstrapped-pip/2.nix { };
+  bootstrapped-pip = callPackage ../development/python-modules/bootstrapped-pip { };
 
   # Derivations built with `buildPythonPackage` can already be overriden with `override`, `overrideAttrs`, and `overrideDerivation`.
   # This function introduces `overridePythonAttrs` and it overrides the call to `buildPythonPackage`.
@@ -143,11 +140,6 @@ in {
   # it should not override the version of pytest that is used for say
   # Python 2. This is an ugly hack that is needed now because the hook
   # propagates the package.
-  pytestCheckHook_5 = if isPy3k then
-    self.pytestCheckHook.override { pytest = self.pytest_5; }
-  else
-    self.pytestCheckHook;
-
   pytestCheckHook_6_1 = if isPy3k then
     self.pytestCheckHook.override { pytest = self.pytest_6_1; }
   else
@@ -457,8 +449,6 @@ in {
   allure-python-commons-test = callPackage ../development/python-modules/allure-python-commons-test { };
 
   allure-pytest = callPackage ../development/python-modules/allure-pytest { };
-
-  alot = callPackage ../development/python-modules/alot { };
 
   alpha-vantage = callPackage ../development/python-modules/alpha-vantage { };
 
@@ -2791,7 +2781,6 @@ in {
   feedparser = callPackage ../development/python-modules/feedparser { };
 
   fenics = callPackage ../development/libraries/science/math/fenics {
-    pytest = self.pytest_4;
     hdf5 = pkgs.hdf5_1_10;
   };
 
@@ -3471,7 +3460,7 @@ in {
 
   graphql-subscription-manager = callPackage ../development/python-modules/graphql-subscription-manager { };
 
-  graph-tool = callPackage ../development/python-modules/graph-tool/2.x.x.nix { };
+  graph-tool = callPackage ../development/python-modules/graph-tool { };
 
   graphtage = callPackage ../development/python-modules/graphtage { };
 
@@ -4008,10 +3997,7 @@ in {
 
   ipython_genutils = callPackage ../development/python-modules/ipython_genutils { };
 
-  ipython = if isPy36 then
-    callPackage ../development/python-modules/ipython/7.16.nix { }
-  else
-    callPackage ../development/python-modules/ipython { };
+  ipython = callPackage ../development/python-modules/ipython { };
 
   ipyvue = callPackage ../development/python-modules/ipyvue { };
 
@@ -5440,10 +5426,6 @@ in {
   notify2 = callPackage ../development/python-modules/notify2 { };
 
   notmuch = callPackage ../development/python-modules/notmuch {
-    inherit (pkgs) notmuch;
-  };
-
-  notmuch2 = callPackage ../development/python-modules/notmuch/2.nix {
     inherit (pkgs) notmuch;
   };
 
@@ -7561,22 +7543,6 @@ in {
   pytesseract = callPackage ../development/python-modules/pytesseract { };
 
   pytest = self.pytest_6;
-
-  pytest_4 = callPackage
-    ../development/python-modules/pytest/4.nix {
-      # hypothesis tests require pytest that causes dependency cycle
-      hypothesis = self.hypothesis.override {
-        doCheck = false;
-      };
-    };
-
-  pytest_5 = callPackage
-    ../development/python-modules/pytest/5.nix {
-      # hypothesis tests require pytest that causes dependency cycle
-      hypothesis = self.hypothesis.override {
-        doCheck = false;
-      };
-    };
 
   pytest_6 =
     callPackage ../development/python-modules/pytest {
@@ -10343,8 +10309,6 @@ in {
 
   werkzeug = callPackage ../development/python-modules/werkzeug { };
 
-  werkzeug1 = callPackage ../development/python-modules/werkzeug/1.nix { };
-
   west = callPackage ../development/python-modules/west { };
 
   wfuzz = callPackage ../development/python-modules/wfuzz { };
@@ -10415,10 +10379,7 @@ in {
 
   wsnsimpy = callPackage ../development/python-modules/wsnsimpy { };
 
-  wsproto = if (pythonAtLeast "3.6") then
-    callPackage ../development/python-modules/wsproto { }
-  else
-    callPackage ../development/python-modules/wsproto/0.14.nix { };
+  wsproto = callPackage ../development/python-modules/wsproto { };
 
   wtforms = callPackage ../development/python-modules/wtforms { };
 

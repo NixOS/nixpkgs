@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "python-engineio";
-  version = "4.3.0";
+  version = "4.3.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "miguelgrinberg";
     repo = "python-engineio";
     rev = "v${version}";
-    sha256 = "sha256-ohNRtceh0bHBlnGSFUckG5KzoLY8Q1jvpFee7T78Vto=";
+    sha256 = "sha256-8595zivZmff0agFiQd5Qyd/T3BDxYcsb4RjA5AWXVNM=";
   };
 
   checkInputs = [
