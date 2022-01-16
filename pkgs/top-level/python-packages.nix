@@ -8639,6 +8639,8 @@ in {
 
   rpdb = callPackage ../development/python-modules/rpdb { };
 
+  rpi-bad-power = callPackage ../development/python-modules/rpi-bad-power { };
+
   rply = callPackage ../development/python-modules/rply { };
 
   rpm = toPythonModule (pkgs.rpm.override {
