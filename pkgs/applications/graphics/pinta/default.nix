@@ -19,6 +19,7 @@ buildDotnetModule rec {
   ];
 
   runtimeDeps = [ gtk3 ];
+  buildInputs = runtimeDeps;
 
   dotnet-sdk = dotnetCorePackages.sdk_6_0;
   dotnet-runtime = dotnetCorePackages.runtime_6_0;
@@ -39,16 +40,7 @@ buildDotnetModule rec {
     sha256 = "sha256-iOKJPB2bI/GjeDxzG7r6ew7SGIzgrJTcRXhEYzOpC9k=";
   };
 
-  # FIXME: this should be propagated by wrapGAppsHook already, however for some
-  # reason it is not working. Maybe a bug in buildDotnetModule?
-  preInstall = ''
-    gappsWrapperArgs+=(
-      --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}"
-      --set GDK_PIXBUF_MODULE_FILE ${librsvg}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache
-    )
-  '';
-
-  postInstall = ''
+  postFixup = ''
     # Rename the binary
     mv $out/bin/Pinta $out/bin/pinta
 
@@ -76,12 +68,12 @@ buildDotnetModule rec {
       --replace _Keywords Keywords
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.pinta-project.com/";
     description = "Drawing/editing program modeled after Paint.NET";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ thiagokokada ];
-    platforms = with lib.platforms; linux;
+    license = licenses.mit;
+    maintainers = with maintainers; [ thiagokokada ];
+    platforms = with platforms; linux;
     mainProgram = "pinta";
   };
 }
