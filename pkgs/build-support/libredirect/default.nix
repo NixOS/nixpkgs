@@ -57,7 +57,9 @@ else stdenv.mkDerivation rec {
     ''}
 
     if [ -n "$doInstallCheck" ]; then
-      $CC -Wall -std=c99 -D_POSIX_C_SOURCE=200809L -O3 test.c -o test
+      $CC -Wall -std=c99 \
+        ${lib.optionalString (!stdenv.isDarwin) "-D_GNU_SOURCE"} \
+        -O3 test.c -o test
     fi
 
     runHook postBuild

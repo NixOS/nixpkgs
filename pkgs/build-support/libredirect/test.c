@@ -1,9 +1,11 @@
 #include <assert.h>
 #include <errno.h>
 #include <fcntl.h>
+#include <limits.h>
 #include <spawn.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 
 #include <sys/stat.h>
@@ -43,11 +45,25 @@ void test_subprocess(void) {
     assert(system(SUBTEST) == 0);
 }
 
+void assert_mktemp_path(
+    const char * orig_prefix,
+    const char * orig_suffix,
+    const char * updated
+) {
+    // prefix unchanged
+    assert(strncmp(updated, orig_prefix, strlen(orig_prefix)) == 0);
+    // wildcards replaced
+    assert(strcmp(updated + strlen(orig_prefix), "XXXXXX") != 0);
+    // suffix unchanged
+    assert(strcmp(updated + strlen(orig_prefix) + 6, orig_suffix) == 0);
+}
+
 int main(int argc, char *argv[])
 {
     FILE *testfp;
     int testfd;
     struct stat testsb;
+    char buf[PATH_MAX];
 
     testfp = fopen(TESTPATH, "r");
     assert(testfp != NULL);
@@ -76,6 +92,30 @@ int main(int argc, char *argv[])
     assert(errno == EISDIR);
 #endif
     assert(unlinkat(123, TESTDIR "/dir-mkdirat", AT_REMOVEDIR) == 0);
+
+    strncpy(buf, TESTDIR "/tempXXXXXX", PATH_MAX);
+    testfd = mkstemp(buf);
+    assert(testfd > 0);
+    assert_mktemp_path(TESTDIR "/temp", "", buf);
+    close(testfd);
+
+    strncpy(buf, TESTDIR "/tempXXXXXX", PATH_MAX);
+    testfd = mkostemp(buf, 0);
+    assert(testfd > 0);
+    assert_mktemp_path(TESTDIR "/temp", "", buf);
+    close(testfd);
+
+    strncpy(buf, TESTDIR "/tempXXXXXX.test", PATH_MAX);
+    testfd = mkstemps(buf, strlen(".test"));
+    assert(testfd > 0);
+    assert_mktemp_path(TESTDIR "/temp", ".test", buf);
+    close(testfd);
+
+    strncpy(buf, TESTDIR "/tempXXXXXX.test", PATH_MAX);
+    testfd = mkostemps(buf, strlen(".test"), 0);
+    assert(testfd > 0);
+    assert_mktemp_path(TESTDIR "/temp", ".test", buf);
+    close(testfd);
 
     test_spawn();
     test_system();
