@@ -17,8 +17,9 @@ stdenv.mkDerivation ({
   dontConfigure = true;
   dontBuild = true;
   dontFixup = true;
+  prePhases = [ "downloadPhase" ];
 
-  prePhases = ''
+  downloadPhase = ''
     cp ${src} .
     HOME='.' DEBUG=1 ${rebar3}/bin/rebar3 get-deps
   '';
