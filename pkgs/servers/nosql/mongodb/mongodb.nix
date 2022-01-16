@@ -8,6 +8,7 @@ with lib;
 
 { version, sha256, patches ? []
 , license ? lib.licenses.sspl
+, broken ? false
 }@args:
 
 let
@@ -129,6 +130,7 @@ in stdenv.mkDerivation rec {
     description = "A scalable, high-performance, open source NoSQL database";
     homepage = "http://www.mongodb.org";
     inherit license;
+    broken = broken;
 
     maintainers = with maintainers; [ bluescreen303 offline cstrahan ];
     platforms = subtractLists systems.doubles.i686 systems.doubles.unix;
