@@ -5201,6 +5201,8 @@ with pkgs;
 
   ethtool = callPackage ../tools/misc/ethtool { };
 
+  ets = callPackage ../tools/misc/ets { };
+
   ettercap = callPackage ../applications/networking/sniffers/ettercap { };
 
   eventstat = callPackage ../os-specific/linux/eventstat { };
