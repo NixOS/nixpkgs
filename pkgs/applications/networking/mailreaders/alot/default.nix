@@ -1,9 +1,13 @@
-{ lib, buildPythonPackage, python, fetchFromGitHub, isPy3k, pytestCheckHook
-, notmuch2, urwid, urwidtrees, twisted, python_magic, configobj, mock, file, gpgme
-, service-identity, gnupg, sphinx, gawk, procps, future , withManpage ? false
+{ lib, python3, fetchFromGitHub, file, gnupg, gawk, notmuch, procps, withManpage ? false
 }:
 
-buildPythonPackage rec {
+with python3.pkgs;
+
+let
+  notmuch2 = callPackage ./notmuch.nix {
+    inherit notmuch;
+  };
+in buildPythonApplication rec {
   pname = "alot";
   version = "0.10";
   outputs = [ "out" ] ++ lib.optional withManpage "man";
