@@ -328,6 +328,7 @@ mapAliases ({
   };
   gitin = throw "gitin has been remove because it was unmaintained and depended on an insecure version of libgit2"; # added 2021-12-07
   gitinspector = throw "gitinspector has been removed because it doesn't work with python3."; # added 2022-01-12
+  gksu = throw "gksu has been removed"; # added 2022-01-16
   glib_networking = glib-networking; # added 2018-02-25
   gmailieer = lieer; # added 2020-04-19
   gmvault = throw "gmvault has been removed because it is unmaintained, mostly broken, and insecure"; # added 2021-03-08
