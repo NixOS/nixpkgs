@@ -20201,17 +20201,9 @@ with pkgs;
     gnutls = gnutls;
   });
 
-  v8_5_x = callPackage ../development/libraries/v8/5_x.nix ({
-    inherit (python2Packages) python gyp;
-    icu = icu58; # v8-5.4.232 fails against icu4c-59.1
-  } // lib.optionalAttrs stdenv.isLinux {
-    # doesn't build with gcc7
-    stdenv = gcc6Stdenv;
-  });
+  v8 = callPackage ../development/libraries/v8 { };
 
-  v8 = callPackage ../development/libraries/v8 {
-    inherit (python2Packages) python;
-  };
+  v8_8_x = callPackage ../development/libraries/v8/8_x.nix { };
 
   vaapiIntel = callPackage ../development/libraries/vaapi-intel { };
 
@@ -22917,6 +22909,8 @@ with pkgs;
 
   sgx-sdk = callPackage ../os-specific/linux/sgx/sdk { };
 
+  sgx-ssl = callPackage ../os-specific/linux/sgx/ssl { };
+
   sgx-psw = callPackage ../os-specific/linux/sgx/psw { };
 
   shadow = callPackage ../os-specific/linux/shadow { };
@@ -23619,6 +23613,8 @@ with pkgs;
 
   libre-franklin = callPackage ../data/fonts/libre-franklin { };
 
+  lightly-qt = libsForQt5.callPackage ../data/themes/lightly-qt { };
+
   line-awesome = callPackage ../data/fonts/line-awesome { };
 
   linux-manual = callPackage ../data/documentation/linux-manual { };
@@ -24236,7 +24232,7 @@ with pkgs;
 
   alock = callPackage ../misc/screensavers/alock { };
 
-  inherit (python3Packages) alot;
+  alot = callPackage ../applications/networking/mailreaders/alot { };
 
   alpine = callPackage ../applications/networking/mailreaders/alpine {
     tcl = tcl-8_5;
@@ -25371,6 +25367,38 @@ with pkgs;
       };
     };
   };
+  gnuradio3_9 = callPackage ../applications/radio/gnuradio/wrapper.nix {
+    unwrapped = callPackage ../applications/radio/gnuradio/3.9.nix {
+      inherit (darwin.apple_sdk.frameworks) CoreAudio;
+      python = python3;
+    };
+  };
+  gnuradio3_9Packages = lib.recurseIntoAttrs gnuradio.pkgs;
+  # A build without gui components and other utilites not needed for end user
+  # libraries
+  gnuradio3_9Minimal = gnuradio.override {
+    doWrap = false;
+    unwrapped = gnuradio.unwrapped.override {
+      volk = volk.override {
+        # So it will not reference python
+        enableModTool = false;
+      };
+      features = {
+        gnuradio-companion = false;
+        python-support = false;
+        examples = false;
+        gr-qtgui = false;
+        gr-utils = false;
+        gr-modtool = false;
+        gr-blocktool = false;
+        sphinx = false;
+        doxygen = false;
+        # Doesn't make it reference python eventually, but makes reverse
+        # depdendencies require python to use cmake files of GR.
+        gr-ctrlport = false;
+      };
+    };
+  };
   gnuradio3_8 = callPackage ../applications/radio/gnuradio/wrapper.nix {
     unwrapped = callPackage ../applications/radio/gnuradio/3.8.nix {
       inherit (darwin.apple_sdk.frameworks) CoreAudio;
@@ -25398,34 +25426,6 @@ with pkgs;
         # Doesn't make it reference python eventually, but makes reverse
         # depdendencies require python to use cmake files of GR.
         gr-ctrlport = false;
-      };
-    };
-  };
-  gnuradio3_7 = callPackage ../applications/radio/gnuradio/wrapper.nix {
-    unwrapped = callPackage ../applications/radio/gnuradio/3.7.nix {
-      inherit (darwin.apple_sdk.frameworks) CoreAudio;
-      python = python2;
-      # Incompatible with uhd4+
-      uhd = uhd3_5;
-    };
-  };
-  gnuradio3_7Packages = lib.recurseIntoAttrs gnuradio3_7.pkgs;
-  # A build without gui components and other utilites not needed if gnuradio is
-  # used as a c++ library.
-  gnuradio3_7Minimal = gnuradio3_7.override {
-    doWrap = false;
-    unwrapped = gnuradio3_7.unwrapped.override {
-      volk = volk.override {
-        enableModTool = false;
-      };
-      features = {
-        gnuradio-companion = false;
-        python-support = false;
-        gr-qtgui = false;
-        gr-utils = false;
-        sphinx = false;
-        doxygen = false;
-        gr-wxgui = false;
       };
     };
   };

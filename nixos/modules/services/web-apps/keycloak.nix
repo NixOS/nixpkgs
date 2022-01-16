@@ -55,7 +55,11 @@ in
 
     frontendUrl = lib.mkOption {
       type = lib.types.str;
-      apply = x: if lib.hasSuffix "/" x then x else x + "/";
+      apply = x:
+        if x == "" || lib.hasSuffix "/" x then
+          x
+        else
+          x + "/";
       example = "keycloak.example.com/auth";
       description = ''
         The public URL used as base for all frontend requests. Should
@@ -229,8 +233,22 @@ in
       '';
     };
 
+    themes = lib.mkOption {
+      type = lib.types.attrsOf lib.types.package;
+      default = {};
+      description = ''
+        Additional theme packages for Keycloak. Each theme is linked into
+        subdirectory with a corresponding attribute name.
+
+        Theme packages consist of several subdirectories which provide
+        different theme types: for example, <literal>account</literal>,
+        <literal>login</literal> etc. After adding a theme to this option you
+        can select it by its name in Keycloak administration console.
+      '';
+    };
+
     extraConfig = lib.mkOption {
-      type = lib.types.attrs;
+      type = lib.types.attrsOf lib.types.anything;
       default = { };
       example = lib.literalExpression ''
         {
@@ -289,16 +307,45 @@ in
         ${pkgs.jre}/bin/keytool -importcert -trustcacerts -alias MySQLCACert -file ${cfg.database.caCert} -keystore $out -storepass notsosecretpassword -noprompt
       '';
 
+      # Both theme and theme type directories need to be actual directories in one hierarchy to pass Keycloak checks.
+      themesBundle = pkgs.runCommand "keycloak-themes" {} ''
+        linkTheme() {
+          theme="$1"
+          name="$2"
+
+          mkdir "$out/$name"
+          for typeDir in "$theme"/*; do
+            if [ -d "$typeDir" ]; then
+              type="$(basename "$typeDir")"
+              mkdir "$out/$name/$type"
+              for file in "$typeDir"/*; do
+                ln -sn "$file" "$out/$name/$type/$(basename "$file")"
+              done
+            fi
+          done
+        }
+
+        mkdir -p "$out"
+        for theme in ${cfg.package}/themes/*; do
+          if [ -d "$theme" ]; then
+            linkTheme "$theme" "$(basename "$theme")"
+          fi
+        done
+
+        ${lib.concatStringsSep "\n" (lib.mapAttrsToList (name: theme: "linkTheme ${theme} ${lib.escapeShellArg name}") cfg.themes)}
+      '';
+
       keycloakConfig' = builtins.foldl' lib.recursiveUpdate {
         "interface=public".inet-address = cfg.bindAddress;
         "socket-binding-group=standard-sockets"."socket-binding=http".port = cfg.httpPort;
-        "subsystem=keycloak-server"."spi=hostname" = {
-          "provider=default" = {
+        "subsystem=keycloak-server" = {
+          "spi=hostname"."provider=default" = {
             enabled = true;
             properties = {
               inherit (cfg) frontendUrl forceBackendUrlToFrontendUrl;
             };
           };
+          "theme=defaults".dir = toString themesBundle;
         };
         "subsystem=datasources"."data-source=KeycloakDS" = {
           max-pool-size = "20";
@@ -348,11 +395,23 @@ in
         })
         (lib.optionalAttrs (cfg.sslCertificate != null && cfg.sslCertificateKey != null) {
           "socket-binding-group=standard-sockets"."socket-binding=https".port = cfg.httpsPort;
-          "core-service=management"."security-realm=UndertowRealm"."server-identity=ssl" = {
-            keystore-path = "/run/keycloak/ssl/certificate_private_key_bundle.p12";
-            keystore-password = "notsosecretpassword";
+          "subsystem=elytron" = lib.mkOrder 900 {
+            "key-store=httpsKS" = lib.mkOrder 900 {
+              path = "/run/keycloak/ssl/certificate_private_key_bundle.p12";
+              credential-reference.clear-text = "notsosecretpassword";
+              type = "JKS";
+            };
+            "key-manager=httpsKM" = lib.mkOrder 901 {
+              key-store = "httpsKS";
+              credential-reference.clear-text = "notsosecretpassword";
+            };
+            "server-ssl-context=httpsSSC" = lib.mkOrder 902 {
+              key-manager = "httpsKM";
+            };
           };
-          "subsystem=undertow"."server=default-server"."https-listener=https".security-realm = "UndertowRealm";
+          "subsystem=undertow" = lib.mkOrder 901 {
+            "server=default-server"."https-listener=https".ssl-context = "httpsSSC";
+          };
         })
         cfg.extraConfig
       ];
@@ -441,9 +500,9 @@ in
               # with `expression` to evaluate.
               prefixExpression = string:
                 let
-                  match = (builtins.match ''"\$\{.*}"'' string);
+                  matchResult = builtins.match ''"\$\{.*}"'' string;
                 in
-                  if match != null then
+                  if matchResult != null then
                     "expression " + string
                   else
                     string;
@@ -508,52 +567,57 @@ in
                     ""
                   else
                     throw "Unsupported type '${type}' for attribute '${attribute}'!";
+
             in
               lib.concatStringsSep ", " (lib.mapAttrsToList makeArg set);
 
 
-          /* Recurses into the `attrs` attrset, beginning at the path
-             resolved from `state.path ++ node`; if `node` is `null`,
-             starts from `state.path`. Only subattrsets that are JBoss
-             paths, i.e. follows the `key=value` format, are recursed
+          /* Recurses into the `nodeValue` attrset. Only subattrsets that
+             are JBoss paths, i.e. follows the `key=value` format, are recursed
              into - the rest are considered JBoss attributes / maps.
           */
-          recurse = state: node:
+          recurse = nodePath: nodeValue:
             let
-              path = state.path ++ (lib.optional (node != null) node);
+              nodeContent =
+                if builtins.isAttrs nodeValue && nodeValue._type or "" == "order" then
+                  nodeValue.content
+                else
+                  nodeValue;
               isPath = name:
                 let
-                  value = lib.getAttrFromPath (path ++ [ name ]) attrs;
+                  value = nodeContent.${name};
                 in
                   if (builtins.match ".*([=]).*" name) == [ "=" ] then
                     if builtins.isAttrs value || value == null then
                       true
                     else
-                      throw "Parsing path '${lib.concatStringsSep "." (path ++ [ name ])}' failed: JBoss attributes cannot contain '='!"
+                      throw "Parsing path '${lib.concatStringsSep "." (nodePath ++ [ name ])}' failed: JBoss attributes cannot contain '='!"
                   else
                     false;
-              jbossPath = "/" + (lib.concatStringsSep "/" path);
-              nodeValue = lib.getAttrFromPath path attrs;
-              children = if !builtins.isAttrs nodeValue then {} else nodeValue;
+              jbossPath = "/" + lib.concatStringsSep "/" nodePath;
+              children = if !builtins.isAttrs nodeContent then {} else nodeContent;
               subPaths = builtins.filter isPath (builtins.attrNames children);
+              getPriority = name:
+                let value = children.${name};
+                in if value._type or "" == "order" then value.priority else 1000;
+              orderedSubPaths = lib.sort (a: b: getPriority a < getPriority b) subPaths;
               jbossAttrs = lib.filterAttrs (name: _: !(isPath name)) children;
-            in
-              state // {
-                text = state.text + (
-                  if nodeValue != null then ''
+              text =
+                if nodeContent != null then
+                  ''
                     if (outcome != success) of ${jbossPath}:read-resource()
                         ${jbossPath}:add(${makeArgList jbossAttrs})
                     end-if
-                  '' + (writeAttributes jbossPath jbossAttrs)
-                  else ''
+                  '' + writeAttributes jbossPath jbossAttrs
+                else
+                  ''
                     if (outcome == success) of ${jbossPath}:read-resource()
                         ${jbossPath}:remove()
                     end-if
-                  '') + (builtins.foldl' recurse { text = ""; inherit path; } subPaths).text;
-              };
+                  '';
+            in text + lib.concatMapStringsSep "\n" (name: recurse (nodePath ++ [name]) children.${name}) orderedSubPaths;
         in
-          (recurse { text = ""; path = []; } null).text;
-
+          recurse [] attrs;
 
       jbossCliScript = pkgs.writeText "jboss-cli-script" (mkJbossScript keycloakConfig');
 

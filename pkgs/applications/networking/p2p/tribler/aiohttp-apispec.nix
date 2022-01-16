@@ -3,8 +3,8 @@
 }:
 
 let
-  apispec3 = callPackage ../apispec/3.nix {};
-  jinja2 = callPackage ../jinja2/2.nix {};
+  apispec3 = callPackage ./apispec.nix {};
+  jinja2 = callPackage ../../../../development/python2-modules/jinja2 {};
 in
 buildPythonPackage rec {
   pname = "aiohttp-apispec";

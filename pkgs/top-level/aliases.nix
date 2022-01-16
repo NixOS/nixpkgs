@@ -346,6 +346,7 @@ mapAliases ({
   gnuradio-limesdr = gnuradio3_7.pkgs.limesdr; # added 2019-05-27, changed 2020-10-16
   gnuradio-rds = gnuradio3_7.pkgs.rds; # added 2019-05-27, changed 2020-10-16
   gnuradio-osmosdr = gnuradio3_7.pkgs.osmosdr; # added 2019-05-27, changed 2020-10-16
+  gnuradio3_7 = throw "gnuradio3_7 has been removed because it required Python 2"; # added 2022-01-16
   gr-nacl = gnuradio3_7.pkgs.nacl; # added 2019-05-27, changed 2020-10-16
   gr-gsm = gnuradio3_7.pkgs.gsm; # added 2019-05-27, changed 2020-10-16
   gr-ais = gnuradio3_7.pkgs.ais; # added 2019-05-27, changed 2020-10-16
