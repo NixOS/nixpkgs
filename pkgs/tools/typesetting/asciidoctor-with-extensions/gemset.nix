@@ -93,6 +93,17 @@
     };
     version = "1.5.1";
   };
+  asciidoctor-html5s = {
+    dependencies = ["asciidoctor" "thread_safe"];
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "1zfbfcqyrsk8bnd526ang3b4j3m5pbns7x3fdxarrm8vv1qplss1";
+      type = "gem";
+    };
+    version = "0.5.1";
+  };
   asciidoctor-mathematical = {
     dependencies = ["asciidoctor" "asciimath" "mathematical"];
     groups = ["default"];
