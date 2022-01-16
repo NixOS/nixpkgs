@@ -1,17 +1,14 @@
-{ pname, version, src, binaryName, desktopName
-, autoPatchelfHook, makeDesktopItem, lib, stdenv, wrapGAppsHook
-, alsa-lib, at-spi2-atk, at-spi2-core, atk, cairo, cups, dbus, expat, fontconfig
-, freetype, gdk-pixbuf, glib, gtk3, libcxx, libdrm, libnotify, libpulseaudio, libuuid
-, libX11, libXScrnSaver, libXcomposite, libXcursor, libXdamage, libXext
-, libXfixes, libXi, libXrandr, libXrender, libXtst, libxcb, libxshmfence
-, mesa, nspr, nss, pango, systemd, libappindicator-gtk3, libdbusmenu
-, writeScript, common-updater-scripts
-}:
+{ pname, version, src, meta, binaryName, desktopName, autoPatchelfHook
+, makeDesktopItem, lib, stdenv, wrapGAppsHook, alsa-lib, at-spi2-atk
+, at-spi2-core, atk, cairo, cups, dbus, expat, fontconfig, freetype, gdk-pixbuf
+, glib, gtk3, libcxx, libdrm, libnotify, libpulseaudio, libuuid, libX11
+, libXScrnSaver, libXcomposite, libXcursor, libXdamage, libXext, libXfixes
+, libXi, libXrandr, libXrender, libXtst, libxcb, libxshmfence, mesa, nspr, nss
+, pango, systemd, libappindicator-gtk3, libdbusmenu, writeScript
+, common-updater-scripts }:
 
-let
-  inherit binaryName;
-in stdenv.mkDerivation rec {
-  inherit pname version src;
+stdenv.mkDerivation rec {
+  inherit pname version src meta;
 
   nativeBuildInputs = [
     alsa-lib
@@ -33,13 +30,45 @@ in stdenv.mkDerivation rec {
   dontWrapGApps = true;
 
   libPath = lib.makeLibraryPath [
-    libcxx systemd libpulseaudio libdrm mesa
-    stdenv.cc.cc alsa-lib atk at-spi2-atk at-spi2-core cairo cups dbus expat fontconfig freetype
-    gdk-pixbuf glib gtk3 libnotify libX11 libXcomposite libuuid
-    libXcursor libXdamage libXext libXfixes libXi libXrandr libXrender
-    libXtst nspr nss libxcb pango libXScrnSaver
-    libappindicator-gtk3 libdbusmenu
-   ];
+    libcxx
+    systemd
+    libpulseaudio
+    libdrm
+    mesa
+    stdenv.cc.cc
+    alsa-lib
+    atk
+    at-spi2-atk
+    at-spi2-core
+    cairo
+    cups
+    dbus
+    expat
+    fontconfig
+    freetype
+    gdk-pixbuf
+    glib
+    gtk3
+    libnotify
+    libX11
+    libXcomposite
+    libuuid
+    libXcursor
+    libXdamage
+    libXext
+    libXfixes
+    libXi
+    libXrandr
+    libXrender
+    libXtst
+    nspr
+    nss
+    libxcb
+    pango
+    libXScrnSaver
+    libappindicator-gtk3
+    libdbusmenu
+  ];
 
   installPhase = ''
     mkdir -p $out/{bin,opt/${binaryName},share/pixmaps}
@@ -56,7 +85,9 @@ in stdenv.mkDerivation rec {
 
     ln -s $out/opt/${binaryName}/${binaryName} $out/bin/
     # Without || true the install would fail on case-insensitive filesystems
-    ln -s $out/opt/${binaryName}/${binaryName} $out/bin/${lib.strings.toLower binaryName} || true
+    ln -s $out/opt/${binaryName}/${binaryName} $out/bin/${
+      lib.strings.toLower binaryName
+    } || true
     ln -s $out/opt/${binaryName}/discord.png $out/share/pixmaps/${pname}.png
 
     ln -s "${desktopItem}/share/applications" $out/share/
@@ -76,18 +107,11 @@ in stdenv.mkDerivation rec {
     #!/usr/bin/env nix-shell
     #!nix-shell -i bash -p curl gnugrep common-updater-scripts
     set -eou pipefail;
-    url=$(curl -sI "https://discordapp.com/api/download/${builtins.replaceStrings ["discord-" "discord"] ["" "stable"] pname}?platform=linux&format=tar.gz" | grep -oP 'location: \K\S+')
+    url=$(curl -sI "https://discordapp.com/api/download/${
+      builtins.replaceStrings [ "discord-" "discord" ] [ "" "stable" ] pname
+    }?platform=linux&format=tar.gz" | grep -oP 'location: \K\S+')
     version=''${url##https://dl*.discordapp.net/apps/linux/}
     version=''${version%%/*.tar.gz}
     update-source-version ${pname} "$version" --file=./pkgs/applications/networking/instant-messengers/discord/default.nix
   '';
-
-  meta = with lib; {
-    description = "All-in-one cross-platform voice and text chat for gamers";
-    homepage = "https://discordapp.com/";
-    downloadPage = "https://discordapp.com/download";
-    license = licenses.unfree;
-    maintainers = with maintainers; [ ldesgoui MP2E ];
-    platforms = [ "x86_64-linux" ];
-  };
 }

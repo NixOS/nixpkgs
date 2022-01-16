@@ -86,9 +86,10 @@ buildPythonPackage rec {
 
   LC_ALL = "en_US.UTF-8";
 
-  # Disable doctest plugin because it causes pytest to hang
   preCheck = ''
-    substituteInPlace pytest.ini --replace "--doctest-modules" ""
+    # Disable doctest plugin because it causes pytest to hang
+    substituteInPlace pytest.ini \
+      --replace "--doctest-modules" ""
   '';
 
   disabledTestPaths = [
@@ -116,6 +117,7 @@ buildPythonPackage rec {
     "test_peek_fifo"
     "test_peek_one_element"
     "test_peek_lifo"
+    "test_callback_kwargs"
   ] ++ lib.optionals stdenv.isDarwin [
     "test_xmliter_encoding"
     "test_download"
@@ -127,7 +129,9 @@ buildPythonPackage rec {
     install -m 644 -D extras/scrapy_zsh_completion $out/share/zsh/site-functions/_scrapy
   '';
 
-  pythonImportsCheck = [ "scrapy" ];
+  pythonImportsCheck = [
+    "scrapy"
+  ];
 
   __darwinAllowLocalNetworking = true;
 
