@@ -739,6 +739,14 @@
       </listitem>
       <listitem>
         <para>
+          The default value for
+          <literal>programs.spacefm.settings.graphical_su</literal> got
+          unset. It previously pointed to <literal>gksu</literal> which
+          has been removed.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           A new module was added for the
           <link xlink:href="https://starship.rs/">Starship</link> shell
           prompt, providing the options
