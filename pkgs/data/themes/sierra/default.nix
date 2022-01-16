@@ -48,7 +48,7 @@ stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
 
-    patchShebangs .
+    patchShebangs install.sh
 
     mkdir -p $out/share/themes
     name= ./install.sh --dest $out/share/themes \
