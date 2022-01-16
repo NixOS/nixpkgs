@@ -169,4 +169,6 @@ let self = rec {
   arrow = callPackage ../applications/video/kodi/addons/arrow { };
 
   trakt-module = callPackage ../applications/video/kodi/addons/trakt-module { };
+
+  trakt = callPackage ../applications/video/kodi/addons/trakt { };
 }; in self
