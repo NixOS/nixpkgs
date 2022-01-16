@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Utilities for the btrfs filesystem";
     homepage = "https://btrfs.wiki.kernel.org/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
   };
