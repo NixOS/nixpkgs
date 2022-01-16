@@ -310,6 +310,8 @@ in {
 
   aiohttp-remotes = callPackage ../development/python-modules/aiohttp-remotes { };
 
+  aiohttp-retry = callPackage ../development/python-modules/aiohttp-retry { };
+
   aiohttp-socks = callPackage ../development/python-modules/aiohttp-socks { };
 
   aiohttp-swagger = callPackage ../development/python-modules/aiohttp-swagger { };
@@ -2118,6 +2120,8 @@ in {
 
   dict2xml = callPackage ../development/python-modules/dict2xml { };
 
+  dictdiffer = callPackage ../development/python-modules/dictdiffer { };
+
   dictionaries = callPackage ../development/python-modules/dictionaries { };
 
   dictpath = callPackage ../development/python-modules/dictpath { };
@@ -2947,6 +2951,8 @@ in {
   flatbuffers = callPackage ../development/python-modules/flatbuffers {
     inherit (pkgs) flatbuffers;
   };
+
+  flatten-dict = callPackage ../development/python-modules/flatten-dict { };
 
   flax = callPackage ../development/python-modules/flax { };
 
@@ -4761,6 +4767,8 @@ in {
   mahotas = callPackage ../development/python-modules/mahotas { };
 
   mailcap-fix = callPackage ../development/python-modules/mailcap-fix { };
+
+  mailchecker = callPackage ../development/python-modules/mailchecker { };
 
   mailchimp = callPackage ../development/python-modules/mailchimp { };
 
@@ -7786,6 +7794,8 @@ in {
 
   python-baseconv = callPackage ../development/python-modules/python-baseconv { };
 
+  python-benedict = callPackage ../development/python-modules/python-benedict { };
+
   python-bidi = callPackage ../development/python-modules/python-bidi { };
 
   python-binance = callPackage ../development/python-modules/python-binance { };
@@ -7819,6 +7829,8 @@ in {
   python-dotenv = callPackage ../development/python-modules/python-dotenv { };
 
   python-editor = callPackage ../development/python-modules/python-editor { };
+
+  python-fsutil = callPackage ../development/python-modules/python-fsutil { };
 
   pythonefl = callPackage ../development/python-modules/python-efl { };
 
@@ -8751,6 +8763,8 @@ in {
 
   scipy = callPackage ../development/python-modules/scipy { };
 
+  scmrepo = callPackage ../development/python-modules/scmrepo { };
+
   scour = callPackage ../development/python-modules/scour { };
 
   scp = callPackage ../development/python-modules/scp { };
@@ -8897,6 +8911,8 @@ in {
   should-dsl = callPackage ../development/python-modules/should-dsl { };
 
   showit = callPackage ../development/python-modules/showit { };
+
+  shtab = callPackage ../development/python-modules/shtab { };
 
   shutilwhich = callPackage ../development/python-modules/shutilwhich { };
 
@@ -9111,6 +9127,8 @@ in {
   spacy-alignments = callPackage ../development/python-modules/spacy-alignments { };
 
   spacy-legacy = callPackage ../development/python-modules/spacy/legacy.nix { };
+
+  spacy-loggers = callPackage ../development/python-modules/spacy-loggers { };
 
   spacy_models = callPackage ../development/python-modules/spacy/models.nix { };
 

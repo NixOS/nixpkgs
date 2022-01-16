@@ -164,4 +164,11 @@ let self = rec {
 
   xbmcswift2 = callPackage ../applications/video/kodi/addons/xbmcswift2 { };
 
+  typing_extensions = callPackage ../applications/video/kodi/addons/typing_extensions { };
+
+  arrow = callPackage ../applications/video/kodi/addons/arrow { };
+
+  trakt-module = callPackage ../applications/video/kodi/addons/trakt-module { };
+
+  trakt = callPackage ../applications/video/kodi/addons/trakt { };
 }; in self

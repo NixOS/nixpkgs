@@ -26,7 +26,7 @@ buildDotnetModule rec {
     makeWrapperArgs+=(--run "cd $out/lib/btcpayserver")
   '';
 
-  postInstall = ''
+  postFixup = ''
     mv $out/bin/{BTCPayServer,btcpayserver}
   '';
 
