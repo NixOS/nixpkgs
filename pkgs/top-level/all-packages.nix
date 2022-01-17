@@ -17783,8 +17783,6 @@ with pkgs;
 
   libgringotts = callPackage ../development/libraries/libgringotts { };
 
-  libgroove = callPackage ../development/libraries/libgroove { };
-
   libgrss = callPackage ../development/libraries/libgrss { };
 
   libgweather = callPackage ../development/libraries/libgweather { };
