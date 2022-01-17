@@ -21,10 +21,11 @@ buildDotnetModule rec {
   buildInputs = [ stdenv.cc.cc.lib ];
 
   projectFile = "inklecate/inklecate.csproj";
-  nugetDeps = ./deps.nix;
+  nugetDeps = if stdenv.isDarwin then ./deps-darwin.nix else ./deps-linux.nix;
   executables = [ "inklecate" ];
 
   dotnet-runtime = dotnetCorePackages.runtime_3_1;
+  dotnet-sdk = dotnetCorePackages.sdk_6_0;
 
   meta = with lib; {
     description = "Compiler for ink, inkle's scripting language";
