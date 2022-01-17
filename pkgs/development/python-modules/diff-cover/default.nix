@@ -2,21 +2,25 @@
 , buildPythonPackage
 , chardet
 , fetchPypi
-, inflect
 , jinja2
 , jinja2_pluralize
+, pluggy
 , pycodestyle
 , pyflakes
 , pygments
 , pylint
+, pytest-datadir
 , pytest-mock
 , pytestCheckHook
 , pythonOlder
+, tomli
 }:
 
 buildPythonPackage rec {
   pname = "diff-cover";
   version = "6.4.4";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
@@ -27,26 +31,32 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     chardet
-    inflect
     jinja2
     jinja2_pluralize
+    pluggy
     pygments
+    tomli
   ];
 
   checkInputs = [
     pycodestyle
     pyflakes
     pylint
+    pytest-datadir
     pytest-mock
     pytestCheckHook
   ];
 
   disabledTests = [
-    "added_file_pylint_console"
+    # Tests check for flake8
     "file_does_not_exist"
+    # AssertionError: assert '.c { color:...
+    "test_style_defs"
   ];
 
-  pythonImportsCheck = [ "diff_cover" ];
+  pythonImportsCheck = [
+    "diff_cover"
+  ];
 
   meta = with lib; {
     description = "Automatically find diff lines that need test coverage";
