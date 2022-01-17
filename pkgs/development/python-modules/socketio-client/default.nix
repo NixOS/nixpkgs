@@ -3,8 +3,6 @@
 , requests
 , six
 , websocket-client
-, coverage
-, nose
 , fetchFromGitHub
 }:
 
@@ -24,7 +22,6 @@ buildPythonPackage rec {
     websocket-client
     requests
   ];
-
 
   # Perform networking tests.
   doCheck = false;
