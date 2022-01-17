@@ -25,10 +25,6 @@ buildPythonPackage rec {
     requests
   ];
 
-  checkInputs = [
-    coverage
-    nose
-  ];
 
   # Perform networking tests.
   doCheck = false;
