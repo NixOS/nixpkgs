@@ -6085,6 +6085,19 @@ final: prev:
     meta.homepage = "https://github.com/keith/swift.vim/";
   };
 
+  switch-vim = buildVimPluginFrom2Nix {
+    pname = "switch.vim";
+    version = "2021-09-29";
+    src = fetchFromGitHub {
+      owner = "AndrewRadev";
+      repo = "switch.vim";
+      rev = "900c5d3ee79b1771c5e07bf7290068ea35881756";
+      sha256 = "0fqvwlf01v7bpsmb3ssqw1kbpvfrk7qvrwxsy4y1bnm60kvnqb7a";
+      fetchSubmodules = true;
+    };
+    meta.homepage = "https://github.com/AndrewRadev/switch.vim/";
+  };
+
   symbols-outline-nvim = buildVimPluginFrom2Nix {
     pname = "symbols-outline.nvim";
     version = "2021-12-09";
