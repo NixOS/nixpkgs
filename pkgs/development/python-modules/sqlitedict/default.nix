@@ -1,4 +1,8 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pytest }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "sqlitedict";
@@ -11,11 +15,13 @@ buildPythonPackage rec {
     sha256 = "08fr81rz1fz35d35kravg7vl234aqagr9wqb09x6wi9lx9zkkh28";
   };
 
-  checkInputs = [ pytest ];
-
-  checkPhase = ''
-    pytest tests
+  preCheck = ''
+    mkdir tests/db
   '';
+
+  checkInputs = [
+    pytestCheckHook
+  ];
 
   meta = with lib; {
     description = "Persistent, thread-safe dict";
