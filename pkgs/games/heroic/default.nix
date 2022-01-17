@@ -1,4 +1,4 @@
-{ lib, fetchurl, appimageTools, python, gsettings-desktop-schemas, gtk3 }:
+{ lib, fetchurl, appimageTools, gsettings-desktop-schemas, gtk3 }:
 
 let
   pname = "heroic";

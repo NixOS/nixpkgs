@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, zip, unzip
-, jdk, python
+, jdk, python2
 , confFile ? ""
 , extraLibraryPaths ? []
 , extraJars ? []
@@ -30,11 +30,11 @@ stdenv.mkDerivation rec {
   fixupPhase = ''
     # Fix python reference
     sed -i \
-      -e '19iPYTHON=${python}/bin/python' \
-      -e 's|#!/usr/bin/.*python|#!${python}/bin/python|' \
+      -e '19iPYTHON=${python2}/bin/python' \
+      -e 's|#!/usr/bin/.*python|#!${python2}/bin/python|' \
       $out/bin/storm
     sed -i \
-      -e 's|#!/usr/bin/.*python|#!${python}/bin/python|' \
+      -e 's|#!/usr/bin/.*python|#!${python2}/bin/python|' \
       -e "s|STORM_CONF_DIR = .*|STORM_CONF_DIR = os.getenv('STORM_CONF_DIR','$out/conf')|" \
       -e 's|STORM_LOG4J2_CONF_DIR =.*|STORM_LOG4J2_CONF_DIR = os.path.join(STORM_CONF_DIR, "log4j2")|' \
         $out/bin/storm.py

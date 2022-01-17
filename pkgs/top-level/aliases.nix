@@ -817,8 +817,11 @@ mapAliases ({
   pyrex095 = throw "pyrex has been removed from nixpkgs as the project is still stuck on python2."; # added 2022-01-12
   pyrex096 = throw "pyrex has been removed from nixpkgs as the project is still stuck on python2."; # added 2022-01-12
   pyrit = throw "pyrit has been removed from nixpkgs as the project is still stuck on python2."; # added 2022-01-01
+  python = python2; # added 2022-01-11
   python2nix = throw "python2nix has been removed as it is outdated. Use e.g. nixpkgs-pytools instead."; # added 2021-03-08
   python-swiftclient = swiftclient; # added 2021-09-09
+  pythonFull = python2Full; # added 2022-01-11
+  pythonPackages = python.pkgs; # added 2022-01-11
   quagga = throw "quagga is no longer maintained upstream"; # added 2021-04-22
   qca-qt5 = libsForQt5.qca-qt5;  # added 2015-12-19
   qcsxcad = libsForQt5.qcsxcad;  # added 2020-11-05

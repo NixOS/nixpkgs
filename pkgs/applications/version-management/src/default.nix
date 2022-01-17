@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, python, rcs, git, makeWrapper }:
+{ lib, stdenv, fetchurl, python2, rcs, git, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "src";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ python rcs git ];
+  buildInputs = [ python2 rcs git ];
 
   preConfigure = ''
     patchShebangs .
