@@ -30,6 +30,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pradyunsg/installer";
     description = "A low-level library for installing a Python package from a wheel distribution.";
     license = licenses.mit;
-    maintainers = with maintainers; [ cpcloud ];
+    maintainers = with maintainers; [ cpcloud FRidh ];
   };
 }
