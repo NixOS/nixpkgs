@@ -1144,6 +1144,18 @@ final: prev:
     meta.homepage = "https://github.com/jvoorhis/coq.vim/";
   };
 
+  coq_nvim = buildVimPluginFrom2Nix {
+    pname = "coq_nvim";
+    version = "2022-01-17";
+    src = fetchFromGitHub {
+      owner = "ms-jpq";
+      repo = "coq_nvim";
+      rev = "9546c14f6664df71b9427b38fcebb7800b69799e";
+      sha256 = "0nr2w65mirbrpr7iyimwjq7l5vyi4qr46ncic3whwlmyi2amkrjk";
+    };
+    meta.homepage = "https://github.com/ms-jpq/coq_nvim/";
+  };
+
   Coqtail = buildVimPluginFrom2Nix {
     pname = "Coqtail";
     version = "2022-01-03";

@@ -497,6 +497,7 @@ morhetz/gruvbox
 motus/pig.vim
 mpickering/hlint-refactor-vim
 ms-jpq/chadtree@chad
+ms-jpq/coq_nvim
 mtikekar/vim-bsv
 MunifTanjim/nui.nvim@main
 mustache/vim-mustache-handlebars
