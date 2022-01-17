@@ -732,52 +732,16 @@ in
               JBOSS_MODULEPATH = "${cfg.package}/modules";
             };
             serviceConfig = {
-              ExecStartPre = let
-                startPreFullPrivileges = ''
-                  set -o errexit -o pipefail -o nounset -o errtrace
-                  shopt -s inherit_errexit
-
-                  umask u=rwx,g=,o=
-
-                  install -T -m 0400 -o keycloak -g keycloak '${cfg.database.passwordFile}' /run/keycloak/secrets/db_password
-                '' + lib.optionalString (cfg.sslCertificate != null && cfg.sslCertificateKey != null) ''
-                  install -T -m 0400 -o keycloak -g keycloak '${cfg.sslCertificate}' /run/keycloak/secrets/ssl_cert
-                  install -T -m 0400 -o keycloak -g keycloak '${cfg.sslCertificateKey}' /run/keycloak/secrets/ssl_key
-                '';
-                startPre = ''
-                  set -o errexit -o pipefail -o nounset -o errtrace
-                  shopt -s inherit_errexit
-
-                  umask u=rwx,g=,o=
-
-                  install -m 0600 ${cfg.package}/standalone/configuration/*.properties /run/keycloak/configuration
-                  install -T -m 0600 ${keycloakConfig} /run/keycloak/configuration/standalone.xml
-
-                  replace-secret '@db-password@' '/run/keycloak/secrets/db_password' /run/keycloak/configuration/standalone.xml
-
-                  export JAVA_OPTS=-Djboss.server.config.user.dir=/run/keycloak/configuration
-                  add-user-keycloak.sh -u admin -p '${cfg.initialAdminPassword}'
-                '' + lib.optionalString (cfg.sslCertificate != null && cfg.sslCertificateKey != null) ''
-                  pushd /run/keycloak/ssl/
-                  cat /run/keycloak/secrets/ssl_cert <(echo) \
-                      /run/keycloak/secrets/ssl_key <(echo) \
-                      /etc/ssl/certs/ca-certificates.crt \
-                      > allcerts.pem
-                  openssl pkcs12 -export -in /run/keycloak/secrets/ssl_cert -inkey /run/keycloak/secrets/ssl_key -chain \
-                                 -name "${cfg.frontendUrl}" -out certificate_private_key_bundle.p12 \
-                                 -CAfile allcerts.pem -passout pass:notsosecretpassword
-                  popd
-                '';
-              in [
-                "+${pkgs.writeShellScript "keycloak-start-pre-full-privileges" startPreFullPrivileges}"
-                "${pkgs.writeShellScript "keycloak-start-pre" startPre}"
+              LoadCredential = [
+                "db_password:${cfg.database.passwordFile}"
+              ] ++ lib.optionals (cfg.sslCertificate != null && cfg.sslCertificateKey != null) [
+                "ssl_cert:${cfg.sslCertificate}"
+                "ssl_key:${cfg.sslCertificateKey}"
               ];
-              ExecStart = "${cfg.package}/bin/standalone.sh";
               User = "keycloak";
               Group = "keycloak";
               DynamicUser = true;
               RuntimeDirectory = map (p: "keycloak/" + p) [
-                "secrets"
                 "configuration"
                 "deployments"
                 "data"
@@ -789,6 +753,32 @@ in
               LogsDirectory = "keycloak";
               AmbientCapabilities = "CAP_NET_BIND_SERVICE";
             };
+            script = ''
+              set -o errexit -o pipefail -o nounset -o errtrace
+              shopt -s inherit_errexit
+
+              umask u=rwx,g=,o=
+
+              install -m 0600 ${cfg.package}/standalone/configuration/*.properties /run/keycloak/configuration
+              install -T -m 0600 ${keycloakConfig} /run/keycloak/configuration/standalone.xml
+
+              replace-secret '@db-password@' "$CREDENTIALS_DIRECTORY/db_password" /run/keycloak/configuration/standalone.xml
+
+              export JAVA_OPTS=-Djboss.server.config.user.dir=/run/keycloak/configuration
+              add-user-keycloak.sh -u admin -p '${cfg.initialAdminPassword}'
+            '' + lib.optionalString (cfg.sslCertificate != null && cfg.sslCertificateKey != null) ''
+              pushd /run/keycloak/ssl/
+              cat "$CREDENTIALS_DIRECTORY/ssl_cert" <(echo) \
+                  "$CREDENTIALS_DIRECTORY/ssl_key" <(echo) \
+                  /etc/ssl/certs/ca-certificates.crt \
+                  > allcerts.pem
+              openssl pkcs12 -export -in "$CREDENTIALS_DIRECTORY/ssl_cert" -inkey "$CREDENTIALS_DIRECTORY/ssl_key" -chain \
+                             -name "${cfg.frontendUrl}" -out certificate_private_key_bundle.p12 \
+                             -CAfile allcerts.pem -passout pass:notsosecretpassword
+              popd
+            '' + ''
+              ${cfg.package}/bin/standalone.sh
+            '';
           };
 
         services.postgresql.enable = lib.mkDefault createLocalPostgreSQL;
