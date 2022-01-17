@@ -3953,6 +3953,8 @@ in {
 
   insegel = callPackage ../development/python-modules/insegel { };
 
+  installer = callPackage ../development/python-modules/installer { };
+
   intake = callPackage ../development/python-modules/intake { };
 
   intake-parquet = callPackage ../development/python-modules/intake-parquet { };
