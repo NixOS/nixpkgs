@@ -4,6 +4,7 @@
 , poetry-core
 , pytestCheckHook
 , python-gvm
+, pythonAtLeast
 , pythonOlder
 }:
 
@@ -36,6 +37,8 @@ buildPythonPackage rec {
   disabledTests = [
     # Don't test sending
     "SendTargetTestCase"
+  ] ++ lib.optionals (pythonAtLeast "3.10") [
+    "HelpFormattingParserTestCase"
   ];
 
   pythonImportsCheck = [
