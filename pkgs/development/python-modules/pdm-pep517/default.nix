@@ -18,13 +18,16 @@ buildPythonPackage rec {
     sha256 = "sha256-2o2FuuvS5PW7uhxl3EGBP75CZ3dcyjPoug1k0irl51c=";
   };
 
-  disabledTests = [
-    "test_project_version_use_scm"
-  ];
+  preCheck = ''
+    HOME=$TMPDIR
+
+    git config --global user.name nobody
+    git config --global user.email nobody@example.com
+  '';
 
   checkInputs = [
-    git
     pytestCheckHook
+    git
     pytest-cov
   ];
 
