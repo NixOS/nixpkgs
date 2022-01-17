@@ -39,7 +39,7 @@ buildPythonApplication rec {
   patches = [
     # remove need for unittest2
     (fetchpatch {
-      url = "https://github.com/openstack/tempest/pull/32/commits/cd3745c27b7d8fcdaffc72b965a3d803d9ee12c2.patch";
+      url = "https://github.com/openstack/tempest/commit/cd3745c27b7d8fcdaffc72b965a3d803d9ee12c2.patch";
       sha256 = "sha256-UwUmyFZokH66Xqfsj982MBHb0w7x6v4SAtXlqA5dpnk=";
     })
   ];
