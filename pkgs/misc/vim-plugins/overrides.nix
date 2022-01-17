@@ -10,7 +10,7 @@
 , substituteAll
 
   # Language dependencies
-, python
+, python2
 , python3
 , rustPlatform
 
@@ -184,7 +184,7 @@ self: super: {
   });
 
   ctrlp-cmatcher = super.ctrlp-cmatcher.overrideAttrs (old: {
-    buildInputs = [ python ];
+    buildInputs = [ python2 ];
     buildPhase = ''
       patchShebangs .
       ./install.sh
@@ -862,7 +862,7 @@ self: super: {
   vim-isort = super.vim-isort.overrideAttrs (old: {
     postPatch = ''
       substituteInPlace ftplugin/python_vimisort.vim \
-        --replace 'import vim' 'import vim; import sys; sys.path.append("${python.pkgs.isort}/${python.sitePackages}")'
+        --replace 'import vim' 'import vim; import sys; sys.path.append("${python2.pkgs.isort}/${python2.sitePackages}")'
     '';
   });
 
@@ -916,7 +916,7 @@ self: super: {
   });
 
   vim-wakatime = super.vim-wakatime.overrideAttrs (old: {
-    buildInputs = [ python ];
+    buildInputs = [ python2 ];
   });
 
   vim-xdebug = super.vim-xdebug.overrideAttrs (old: {

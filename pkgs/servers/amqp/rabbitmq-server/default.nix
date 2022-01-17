@@ -3,7 +3,7 @@
 , fetchurl
 , erlang
 , elixir
-, python
+, python2
 , libxml2
 , libxslt
 , xmlto
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ unzip xmlto docbook_xml_dtd_45 docbook_xsl zip rsync ];
-  buildInputs = [ erlang elixir python libxml2 libxslt glibcLocales ]
+  buildInputs = [ erlang elixir python2 libxml2 libxslt glibcLocales ]
     ++ lib.optionals stdenv.isDarwin [ AppKit Carbon Cocoa ];
 
   outputs = [ "out" "man" "doc" ];

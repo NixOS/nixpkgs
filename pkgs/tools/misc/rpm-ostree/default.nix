@@ -29,7 +29,7 @@
 , bubblewrap
 , pcre
 , check
-, python
+, python2
 , json_c
 , zchunk
 , libmodulemd
@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
     librepo
     pcre
     check
-    python
+    python2
 
     # libdnf # vendored unstable branch
     # required by vendored libdnf

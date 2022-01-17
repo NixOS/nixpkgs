@@ -4671,7 +4671,7 @@ with pkgs;
   diffutils = callPackage ../tools/text/diffutils { };
 
   dir2opus = callPackage ../tools/audio/dir2opus {
-    inherit (pythonPackages) mutagen python wrapPython;
+    inherit (python2Packages) mutagen python wrapPython;
   };
 
   dirdiff = callPackage ../tools/text/dirdiff {
@@ -10710,7 +10710,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) OpenCL;
   };
 
-  wakatime = pythonPackages.callPackage ../tools/misc/wakatime { };
+  wakatime = python2Packages.callPackage ../tools/misc/wakatime { };
 
   weather = callPackage ../applications/misc/weather { };
 
@@ -13670,7 +13670,6 @@ with pkgs;
   # Python interpreters. All standard library modules are included except for tkinter, which is
   # available as `pythonPackages.tkinter` and can be used as any other Python package.
   # When switching these sets, please update docs at ../../doc/languages-frameworks/python.md
-  python = python2;
   python2 = python27;
   python3 = python39;
   pypy = pypy2;
@@ -13679,11 +13678,6 @@ with pkgs;
 
   # Python interpreter that is build with all modules, including tkinter.
   # These are for compatibility and should not be used inside Nixpkgs.
-  pythonFull = python.override {
-    self = pythonFull;
-    pythonAttr = "pythonFull";
-    x11Support = true;
-  };
   python2Full = python2.override {
     self = python2Full;
     pythonAttr = "python2Full";
@@ -13720,7 +13714,6 @@ with pkgs;
   };
 
   # pythonPackages further below, but assigned here because they need to be in sync
-  pythonPackages = python.pkgs;
   python2Packages = python2.pkgs;
   python3Packages = python3.pkgs;
 
@@ -19145,7 +19138,9 @@ with pkgs;
 
   openbabel2 = callPackage ../development/libraries/openbabel/2.nix { };
 
-  openbabel3 = callPackage ../development/libraries/openbabel { };
+  openbabel3 = callPackage ../development/libraries/openbabel {
+    python = python3;
+  };
 
   opencascade = callPackage ../development/libraries/opencascade {
     inherit (darwin.apple_sdk.frameworks) OpenCL Cocoa;
@@ -21707,7 +21702,7 @@ with pkgs;
 
   qpid-cpp = callPackage ../servers/amqp/qpid-cpp {
     boost = boost155;
-    inherit (pythonPackages) buildPythonPackage qpid-python;
+    inherit (python2Packages) buildPythonPackage qpid-python;
   };
 
   qremotecontrol-server = callPackage ../servers/misc/qremotecontrol-server { };
@@ -23749,7 +23744,12 @@ with pkgs;
   nordzy-cursor-theme = callPackage ../data/icons/nordzy-cursor-theme { };
 
   inherit (callPackages ../data/fonts/noto-fonts {})
-    noto-fonts noto-fonts-cjk noto-fonts-emoji noto-fonts-emoji-blob-bin noto-fonts-extra;
+    noto-fonts
+    noto-fonts-cjk-sans
+    noto-fonts-cjk-serif
+    noto-fonts-emoji
+    noto-fonts-emoji-blob-bin
+    noto-fonts-extra;
 
   nuclear = callPackage ../applications/audio/nuclear { };
 
@@ -28383,6 +28383,10 @@ with pkgs;
 
   rofi-unwrapped = callPackage ../applications/misc/rofi { };
   rofi = callPackage ../applications/misc/rofi/wrapper.nix { };
+  rofi-wayland-unwrapped = callPackage ../applications/misc/rofi/wayland.nix { };
+  rofi-wayland = callPackage ../applications/misc/rofi/wrapper.nix {
+    rofi-unwrapped = rofi-wayland-unwrapped;
+  };
 
   rofi-pass = callPackage ../tools/security/pass/rofi-pass.nix { };
 
@@ -28529,7 +28533,9 @@ with pkgs;
 
   spideroak = callPackage ../applications/networking/spideroak { };
 
-  split2flac = callPackage ../applications/audio/split2flac { };
+  split2flac = callPackage ../applications/audio/split2flac {
+    inherit (python3.pkgs) mutagen;
+  };
 
   spotify-qt = libsForQt5.callPackage ../applications/audio/spotify-qt { };
 
@@ -29041,9 +29047,7 @@ with pkgs;
 
   topydo = callPackage ../applications/misc/topydo {};
 
-  torchat = callPackage ../applications/networking/instant-messengers/torchat {
-    inherit (pythonPackages) wrapPython wxPython;
-  };
+  torchat = callPackage ../applications/networking/instant-messengers/torchat { };
 
   torrential = callPackage ../applications/networking/p2p/torrential { };
 
@@ -31725,7 +31729,7 @@ with pkgs;
     useMpi = true;
   });
 
-  neuron-full = neuron-mpi.override { inherit python; };
+  neuron-full = neuron-mpi.override { python = python2; };
 
   mrbayes = callPackage ../applications/science/biology/mrbayes { };
 
@@ -33228,7 +33232,7 @@ with pkgs;
 
   nix-script = callPackage ../tools/nix/nix-script {};
 
-  nix-template-rpm = callPackage ../build-support/templaterpm { inherit (pythonPackages) python toposort; };
+  nix-template-rpm = callPackage ../build-support/templaterpm { inherit (python2Packages) python toposort; };
 
   nix-top = callPackage ../tools/package-management/nix-top { };
 
@@ -33279,7 +33283,7 @@ with pkgs;
   disnix = callPackage ../tools/package-management/disnix { };
 
   dysnomia = callPackage ../tools/package-management/disnix/dysnomia (config.disnix or {
-    inherit (pythonPackages) supervisor;
+    inherit (python2Packages) supervisor;
   });
 
   dydisnix = callPackage ../tools/package-management/disnix/dydisnix { };

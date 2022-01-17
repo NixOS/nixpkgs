@@ -1250,6 +1250,8 @@ let
         };
       };
 
+      ms-ceintl = callPackage ./language-packs.nix {}; # non-English language packs
+
       ms-dotnettools.csharp = callPackage ./ms-dotnettools-csharp { };
 
       ms-kubernetes-tools.vscode-kubernetes-tools = buildVscodeMarketplaceExtension {
@@ -1574,8 +1576,8 @@ let
         mktplcRef = {
           publisher = "stkb";
           name = "rewrap";
-          version = "1.15.4";
-          sha256 = "sha256-yuXyClvhGsonvddYHDMkLSvwEsD21vOeE54Gs9BRpeg=";
+          version = "1.16.0";
+          sha256 = "sha256-351zYmMupAv/8fQ+lOc0pYzy/wsE3JqTuxfKD+AdBAc=";
         };
         meta = with lib; {
           changelog = "https://github.com/stkb/Rewrap/blob/master/CHANGELOG.md";
@@ -1591,8 +1593,8 @@ let
         mktplcRef = {
           name = "code-spell-checker";
           publisher = "streetsidesoftware";
-          version = "2.0.14";
-          sha256 = "sha256-mwcssQvaztrnUuSoo8AWK3FXT4qKmPTRCGVYkAjgfXg=";
+          version = "2.1.4";
+          sha256 = "sha256-V8ug/EtDczjiofuL7HhpN1B+qbedpnvIlXnwiXJzD/g=";
         };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/streetsidesoftware.code-spell-checker/changelog";
