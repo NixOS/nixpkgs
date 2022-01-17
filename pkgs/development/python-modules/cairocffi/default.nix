@@ -21,13 +21,13 @@
 
 buildPythonPackage rec {
   pname = "cairocffi";
-  version = "1.2.0";
+  version = "1.3.0";
 
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-mpebUAxkyBef7ChvM36P5kTsovLNBYYM4LYtJfIuoUA=";
+    sha256 = "sha256-EIo6fLCeIDvdhQHZuq2R14bSBFYb1x6TZOizSJfEe5E=";
   };
 
   LC_ALL = "en_US.UTF-8";
