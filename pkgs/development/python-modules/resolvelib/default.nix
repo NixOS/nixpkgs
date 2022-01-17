@@ -1,4 +1,6 @@
-{ lib
+{ version
+, sha256
+, lib
 , buildPythonPackage
 , fetchFromGitHub
 , commentjson
@@ -7,18 +9,13 @@
 
 buildPythonPackage rec {
   pname = "resolvelib";
-  # Currently this package is only used by Ansible and breaking changes
-  # are frequently introduced, so when upgrading ensure the new version
-  # is compatible with Ansible
-  # https://github.com/NixOS/nixpkgs/pull/128636
-  # https://github.com/ansible/ansible/blob/devel/requirements.txt
-  version = "0.8.1";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "sarugaku";
     repo = "resolvelib";
     rev = version;
-    sha256 = "sha256-QDHEdVET7HN2ZCKxNUMofabR+rxJy0erWhNQn94D7eI=";
+    inherit sha256;
   };
 
   checkInputs = [

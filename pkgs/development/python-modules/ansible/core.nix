@@ -15,7 +15,7 @@
 , pycrypto
 , pyyaml
 , requests
-, resolvelib
+, resolvelib-0_5
 , scp
 , windowsSupport ? false, pywinrm
 , xmltodict
@@ -56,7 +56,7 @@ buildPythonPackage rec {
     jinja2
     packaging
     pyyaml
-    resolvelib
+    resolvelib-0_5
     # optional dependencies
     junit-xml
     lxml

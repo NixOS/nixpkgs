@@ -8493,7 +8493,18 @@ in {
 
   resampy = callPackage ../development/python-modules/resampy { };
 
-  resolvelib = callPackage ../development/python-modules/resolvelib { };
+  resolvelib-0_5 = callPackage ../development/python-modules/resolvelib {
+    # when upgrading ensure the new version is compatible with Ansible
+    # https://github.com/NixOS/nixpkgs/pull/128636
+    # https://github.com/ansible/ansible/blob/devel/requirements.txt
+    version = "0.5.5";
+    sha256 = "sha256-+y3RjPmPXf403cGobHkawsyf7ofsywoaeJdGiM52G6U=";
+  };
+
+  resolvelib = callPackage ../development/python-modules/resolvelib {
+    version = "0.8.1";
+    sha256 = "sha256-QDHEdVET7HN2ZCKxNUMofabR+rxJy0erWhNQn94D7eI=";
+  };
 
   responses = callPackage ../development/python-modules/responses { };
 
