@@ -8,8 +8,6 @@
 , click
 , six
 , packaging
-, backports_functools_lru_cache
-, pathlib2
 , pytest-cov
 , pytest-timeout
 }:
@@ -32,9 +30,7 @@ buildPythonPackage rec {
     click
     six
     packaging
-  ]
-  ++ lib.optionals (pythonOlder "3.5") [ pathlib2 ]
-  ++ lib.optionals (pythonOlder "3") [ backports_functools_lru_cache ];
+  ];
 
   checkInputs = [
     pytestCheckHook
