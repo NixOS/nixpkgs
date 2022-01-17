@@ -720,6 +720,13 @@
       </listitem>
       <listitem>
         <para>
+          The option <literal>services.thelounge.ensureUsers</literal>
+          has been added to allow ensuring that users exist for The
+          Lounge.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>firmwareLinuxNonfree</literal> package has been
           renamed to <literal>linux-firmware</literal>.
         </para>
