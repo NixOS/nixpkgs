@@ -2,6 +2,7 @@
 , aiohttp
 , aresponses
 , buildPythonPackage
+, cachetools
 , fetchFromGitHub
 , pytest-asyncio
 , pytestCheckHook
@@ -26,6 +27,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
+    cachetools
     xmltodict
     yarl
   ];
