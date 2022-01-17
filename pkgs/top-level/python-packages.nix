@@ -9945,6 +9945,8 @@ in {
 
   types-setuptools = callPackage ../development/python-modules/types-setuptools { };
 
+  types-tabulate = callPackage ../development/python-modules/types-tabulate { };
+
   types-toml = callPackage ../development/python-modules/types-toml { };
 
   types-typed-ast = callPackage ../development/python-modules/types-typed-ast { };
