@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , flit-core
-, toml
+, tomli
 , pythonOlder
 , importlib-metadata
 , zipp
@@ -14,12 +14,13 @@
 
 buildPythonPackage rec {
   pname = "pep517";
-  version = "0.9.1";
+  version = "0.12.0";
   format = "pyproject";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0zqidxah03qpnp6zkg3zd1kmd5f79hhdsfmlc0cldaniy80qddxf";
+    sha256 = "sha256-kxN42T0RspjPUR3WNM9epMskmijvhBYLMkfumvtOirA=";
   };
 
   nativeBuildInputs = [
@@ -27,7 +28,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    toml
+    tomli
   ] ++ lib.optionals (pythonOlder "3.8") [
     importlib-metadata zipp
   ];
@@ -41,8 +42,17 @@ buildPythonPackage rec {
 
   preCheck = ''
     rm pytest.ini # wants flake8
-    rm tests/test_meta.py # wants to run pip
   '';
+
+  disabledTests = [
+    # these import setuptools, which for some reason cannot be found
+    "test_issue_104"
+    "test_setup_py"
+    # skip these instead of removing test_meta.py
+    "test_meta_for_this_package"
+    "test_classic_package"
+    "test_meta_output"
+  ];
 
   meta = {
     description = "Wrappers to build Python packages using PEP 517 hooks";
