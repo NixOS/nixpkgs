@@ -99,14 +99,15 @@ let
         BORG_REPO = cfg.repo;
         inherit (cfg) extraArgs extraInitArgs extraCreateArgs extraPruneArgs;
       } // (mkPassEnv cfg) // cfg.environment;
-      inherit (cfg) startAt;
     };
 
   mkBackupTimers = name: cfg:
     nameValuePair "borgbackup-job-${name}" {
       description = "BorgBackup job ${name} timer";
+      wantedBy = [ "timers.target" ];
       timerConfig = {
         Persistent = cfg.persistentTimer;
+        OnCalendar = cfg.startAt;
       };
       # if remote-backup wait for network
       after = optional (cfg.persistentTimer && !isLocalPath cfg.repo) "network-online.target";
@@ -719,7 +720,8 @@ in {
         // mapAttrs' mkRepoService repos;
 
       # A job named "foo" is mapped to systemd.timers.borgbackup-job-foo
-      systemd.timers = mapAttrs' mkBackupTimers jobs;
+      # only generate the timer if interval (startAt) is set
+      systemd.timers = mapAttrs' mkBackupTimers (filterAttrs (_: cfg: cfg.startAt != []) jobs);
 
       users = mkMerge (mapAttrsToList mkUsersConfig repos);
 
