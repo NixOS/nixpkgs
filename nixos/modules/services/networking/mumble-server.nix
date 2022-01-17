@@ -3,10 +3,10 @@
 with lib;
 
 let
-  cfg = config.services.murmur;
+  cfg = config.services.mumble-server;
   forking = cfg.logFile != null;
-  configFile = pkgs.writeText "murmurd.ini" ''
-    database=/var/lib/murmur/murmur.sqlite
+  configFile = pkgs.writeText "mumble-server.ini" ''
+    database=/var/lib/mumble-server/mumble-server.sqlite
     dbDriver=QSQLITE
 
     autobanAttempts=${toString cfg.autobanAttempts}
@@ -14,7 +14,7 @@ let
     autobanTime=${toString cfg.autobanTime}
 
     logfile=${optionalString (cfg.logFile != null) cfg.logFile}
-    ${optionalString forking "pidfile=/run/murmur/murmurd.pid"}
+    ${optionalString forking "pidfile=/run/mumble-server/mumble-server.pid"}
 
     welcometext="${cfg.welcometext}"
     port=${toString cfg.port}
@@ -47,12 +47,11 @@ let
 in
 {
   imports = [
-    (mkRenamedOptionModule [ "services" "murmur" "welcome" ] [ "services" "murmur" "welcometext" ])
-    (mkRemovedOptionModule [ "services" "murmur" "pidfile" ] "Hardcoded to /run/murmur/murmurd.pid now")
+    (mkRenamedOptionModule [ "services" "murmur" ] [ "services" "mumble-server" ])
   ];
 
   options = {
-    services.murmur = {
+    services.mumble-server = {
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -87,7 +86,7 @@ in
       logFile = mkOption {
         type = types.nullOr types.path;
         default = null;
-        example = "/var/log/murmur/murmurd.log";
+        example = "/var/log/mumble-server/mumble-server.log";
         description = "Path to the log file for Murmur daemon. Empty means log to journald.";
       };
 
@@ -111,9 +110,9 @@ in
 
       package = mkOption {
         type = types.package;
-        default = pkgs.murmur;
-        defaultText = literalExpression "pkgs.murmur";
-        description = "Overridable attribute of the murmur package to use.";
+        default = pkgs.mumble-server;
+        defaultText = literalExpression "pkgs.mumble-server";
+        description = "Overridable attribute of the mumble-server package to use.";
       };
 
       password = mkOption {
@@ -246,13 +245,13 @@ in
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = "Extra configuration to put into murmur.ini.";
+        description = "Extra configuration to put into mumble-server.ini.";
       };
 
       environmentFile = mkOption {
         type = types.nullOr types.path;
         default = null;
-        example = "/var/lib/murmur/murmurd.env";
+        example = "/var/lib/mumble-server/mumble-server.env";
         description = ''
           Environment file as defined in <citerefentry>
           <refentrytitle>systemd.exec</refentrytitle><manvolnum>5</manvolnum>
@@ -263,8 +262,8 @@ in
           setting these variables accordingly in the environment file.
 
           <programlisting>
-            # snippet of murmur-related config
-            services.murmur.password = "$MURMURD_PASSWORD";
+            # snippet of related mumble-server config
+            services.mumble-server.password = "$MURMURD_PASSWORD";
           </programlisting>
 
           <programlisting>
@@ -273,45 +272,45 @@ in
           </programlisting>
 
           Note that this file needs to be available on the host on which
-          <literal>murmur</literal> is running.
+          <literal>mumble-server</literal> is running.
         '';
       };
     };
   };
 
   config = mkIf cfg.enable {
-    users.users.murmur = {
+    users.users.mumble-server = {
       description     = "Murmur Service user";
-      home            = "/var/lib/murmur";
+      home            = "/var/lib/mumble-server";
       createHome      = true;
-      uid             = config.ids.uids.murmur;
-      group           = "murmur";
+      uid             = config.ids.uids.mumble-server;
+      group           = "mumble-server";
     };
-    users.groups.murmur = {
-      gid             = config.ids.gids.murmur;
+    users.groups.mumble-server = {
+      gid             = config.ids.gids.mumble-server;
     };
 
-    systemd.services.murmur = {
+    systemd.services.mumble-server = {
       description = "Murmur Chat Service";
       wantedBy    = [ "multi-user.target" ];
       after       = [ "network-online.target" ];
       preStart    = ''
         ${pkgs.envsubst}/bin/envsubst \
-          -o /run/murmur/murmurd.ini \
+          -o /run/mumble-server/mumble-server.ini \
           -i ${configFile}
       '';
 
       serviceConfig = {
-        # murmurd doesn't fork when logging to the console.
+        # mumble-server doesn't fork when logging to the console.
         Type = if forking then "forking" else "simple";
-        PIDFile = mkIf forking "/run/murmur/murmurd.pid";
+        PIDFile = mkIf forking "/run/mumble-server/mumble-server.pid";
         EnvironmentFile = mkIf (cfg.environmentFile != null) cfg.environmentFile;
-        ExecStart = "${cfg.package}/bin/mumble-server -ini /run/murmur/murmurd.ini";
+        ExecStart = "${cfg.package}/bin/mumble-server -ini /run/mumble-server/mumble-server.ini";
         Restart = "always";
-        RuntimeDirectory = "murmur";
+        RuntimeDirectory = "mumble-server";
         RuntimeDirectoryMode = "0700";
-        User = "murmur";
-        Group = "murmur";
+        User = "mumble-server";
+        Group = "mumble-server";
       };
     };
   };

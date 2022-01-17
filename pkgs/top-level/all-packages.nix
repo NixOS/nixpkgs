@@ -27683,12 +27683,12 @@ with pkgs;
 
   multimon-ng = callPackage ../applications/radio/multimon-ng { };
 
-  murmur = (callPackages ../applications/networking/mumble {
+  mumble-server = (callPackages ../applications/networking/mumble {
       avahi = avahi-compat;
       pulseSupport = config.pulseaudio or false;
-      iceSupport = config.murmur.iceSupport or true;
-      grpcSupport = config.murmur.grpcSupport or true;
-    }).murmur;
+      iceSupport = config.mumble-server.iceSupport or true;
+      grpcSupport = config.mumble-server.grpcSupport or true;
+    }).mumble-server;
 
   mumble = (callPackages ../applications/networking/mumble {
       avahi = avahi-compat;

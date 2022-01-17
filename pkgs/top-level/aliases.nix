@@ -1182,7 +1182,7 @@ mapAliases ({
     ocamlPackages_latest;
 
   mumble_git = pkgs.mumble; # added 2019-08-01
-  murmur_git = pkgs.murmur; # added 2019-08-01
+  mumble-server_git = pkgs.mumble-server; # added 2019-08-01
   zabbix44 = throw "zabbix44: Zabbix 4.4 is end of life, see https://www.zabbix.com/documentation/current/manual/installation/upgrade_notes_500 for details on upgrading to Zabbix 5.0."; # added 2020-08-17
 
   # added 2019-09-06

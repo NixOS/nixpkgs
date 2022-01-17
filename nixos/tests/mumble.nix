@@ -7,7 +7,7 @@ let
   };
 
   # outside of tests, this file should obviously not come from the nix store
-  envFile = pkgs.writeText "nixos-test-mumble-murmurd.env" ''
+  envFile = pkgs.writeText "nixos-test-mumble-server.env" ''
     MURMURD_PASSWORD=testpassword
   '';
 
@@ -20,11 +20,11 @@ in
 
   nodes = {
     server = { config, ... }: {
-      services.murmur.enable = true;
-      services.murmur.registerName = "NixOS tests";
-      services.murmur.password = "$MURMURD_PASSWORD";
-      services.murmur.environmentFile = envFile;
-      networking.firewall.allowedTCPPorts = [ config.services.murmur.port ];
+      services.mumble-server.enable = true;
+      services.mumble-server.registerName = "NixOS tests";
+      services.mumble-server.password = "$MURMURD_PASSWORD";
+      services.mumble-server.environmentFile = envFile;
+      networking.firewall.allowedTCPPorts = [ config.services.mumble-server.port ];
     };
 
     client1 = client;
@@ -34,7 +34,7 @@ in
   testScript = ''
     start_all()
 
-    server.wait_for_unit("murmur.service")
+    server.wait_for_unit("mumble-server.service")
     client1.wait_for_x()
     client2.wait_for_x()
 
@@ -72,10 +72,10 @@ in
 
     # Find clients in logs
     server.wait_until_succeeds(
-        "journalctl -eu murmur -o cat | grep -q 'client1.\+Authenticated'"
+        "journalctl -eu mumble-server -o cat | grep -q 'client1.\+Authenticated'"
     )
     server.wait_until_succeeds(
-        "journalctl -eu murmur -o cat | grep -q 'client2.\+Authenticated'"
+        "journalctl -eu mumble-server -o cat | grep -q 'client2.\+Authenticated'"
     )
 
     server.sleep(5)  # wait to get screenshot

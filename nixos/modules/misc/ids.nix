@@ -154,7 +154,7 @@ in
       #minecraft = 114; #dynamically allocated as of 2021-09-03
       vault = 115;
       # rippled = 116; #dynamically allocated as of 2021-09-18
-      murmur = 117;
+      mumble-server = 117;
       foundationdb = 118;
       newrelic = 119;
       starbound = 120;
@@ -475,7 +475,7 @@ in
       #minecraft = 114; # unused
       vault = 115;
       #ripped = 116; # unused
-      murmur = 117;
+      mumble-server = 117;
       foundationdb = 118;
       newrelic = 119;
       starbound = 120;

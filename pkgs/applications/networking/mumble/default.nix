@@ -80,7 +80,7 @@ let
   } source;
 
   server = source: generic {
-    type = "murmur";
+    type = "mumble-server";
 
     configureFlags = [
       "-D client=OFF"
@@ -110,6 +110,6 @@ let
     };
   };
 in {
-  mumble  = client source;
-  murmur  = server source;
+  mumble = client source;
+  mumble-server = server source;
 }

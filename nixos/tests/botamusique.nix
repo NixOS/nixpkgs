@@ -6,7 +6,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...} :
 
   nodes = {
     machine = { config, ... }: {
-      services.murmur = {
+      services.mumble-server = {
         enable = true;
         registerName = "NixOS tests";
       };
@@ -29,13 +29,13 @@ import ./make-test-python.nix ({ pkgs, lib, ...} :
   testScript = ''
     start_all()
 
-    machine.wait_for_unit("murmur.service")
+    machine.wait_for_unit("mumble-server.service")
     machine.wait_for_unit("botamusique.service")
 
     machine.sleep(10)
 
     machine.wait_until_succeeds(
-        "journalctl -u murmur.service -e | grep -q '<1:botamusique(-1)> Authenticated'"
+        "journalctl -u mumble-server.service -e | grep -q '<1:botamusique(-1)> Authenticated'"
     )
 
     with subtest("Check systemd hardening"):
