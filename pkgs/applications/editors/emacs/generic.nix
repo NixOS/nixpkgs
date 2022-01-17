@@ -5,18 +5,25 @@
   , pname ? "emacs"
   , name ? "emacs-${version}${versionModifier}"
   , patches ? _: [ ]
+  , macportVersion ? null
 }:
-{ stdenv, lib, fetchurl, fetchpatch, ncurses, xlibsWrapper, libXaw, libXpm
+{ stdenv, llvmPackages_6, lib, fetchurl, fetchpatch, ncurses, xlibsWrapper, libXaw, libXpm
 , Xaw3d, libXcursor,  pkg-config, gettext, libXft, dbus, libpng, libjpeg, giflib
 , libtiff, librsvg, libwebp, gconf, libxml2, imagemagick, gnutls, libselinux
-, alsa-lib, cairo, acl, gpm, AppKit, GSS, ImageIO, m17n_lib, libotf
+, alsa-lib, cairo, acl, gpm, m17n_lib, libotf
 , sigtool, jansson, harfbuzz, sqlite, nixosTests
 , recurseIntoAttrs, emacsPackagesFor
 , libgccjit, targetPlatform, makeWrapper # native-comp params
-, fetchFromSavannah
+, fetchFromSavannah, fetchFromBitbucket
+
+  # macOS dependencies for NS and macPort
+, AppKit, Carbon, Cocoa, IOKit, OSAKit, Quartz, QuartzCore, WebKit
+, ImageCaptureCore, GSS, ImageIO # These may be optional
+
 , systemd ? null
 , withX ? !stdenv.isDarwin && !withPgtk
-, withNS ? stdenv.isDarwin
+, withNS ? stdenv.isDarwin && !withMacport
+, withMacport ? macportVersion != null
 , withGTK2 ? false, gtk2-x11 ? null
 , withGTK3 ? withPgtk, gtk3-x11 ? null, gsettings-desktop-schemas ? null
 , withXwidgets ? false, webkitgtk ? null, wrapGAppsHook ? null, glib-networking ? null
@@ -44,15 +51,16 @@ assert (libXft != null) -> libpng != null;      # probably a bug
 assert stdenv.isDarwin -> libXaw != null;       # fails to link otherwise
 assert withNS -> !withX;
 assert withNS -> stdenv.isDarwin;
-assert (withGTK2 && !withNS) -> withX;
-assert (withGTK3 && !withNS) -> withX || withPgtk;
+assert withMacport -> !withNS;
+assert (withGTK2 && !withNS && !withMacport) -> withX;
+assert (withGTK3 && !withNS && !withMacport) -> withX || withPgtk;
 assert withGTK2 -> !withGTK3 && gtk2-x11 != null && !withPgtk;
 assert withGTK3 -> !withGTK2 && ((gtk3-x11 != null) || withPgtk);
 assert withPgtk -> withGTK3 && !withX && gtk3 != null;
 assert withXwidgets -> withGTK3 && webkitgtk != null;
 
 
-let emacs = stdenv.mkDerivation (lib.optionalAttrs nativeComp {
+let emacs = (if withMacport then llvmPackages_6.stdenv else stdenv).mkDerivation (lib.optionalAttrs nativeComp {
   NATIVE_FULL_AOT = "1";
   LIBRARY_PATH = "${lib.getLib stdenv.cc.libc}/lib";
 } // {
@@ -61,7 +69,12 @@ let emacs = stdenv.mkDerivation (lib.optionalAttrs nativeComp {
 
   patches = patches fetchpatch;
 
-  src = fetchFromSavannah {
+  src = if macportVersion != null then fetchFromBitbucket {
+    owner = "mituharu";
+    repo = "emacs-mac";
+    rev = macportVersion;
+    inherit sha256;
+  } else fetchFromSavannah {
     repo = "emacs";
     rev = version;
     inherit sha256;
@@ -143,6 +156,11 @@ let emacs = stdenv.mkDerivation (lib.optionalAttrs nativeComp {
     ++ lib.optional withWebP libwebp
     ++ lib.optionals (withX && withXwidgets) [ webkitgtk glib-networking ]
     ++ lib.optionals withNS [ AppKit GSS ImageIO ]
+    ++ lib.optionals withMacport [
+      AppKit Carbon Cocoa IOKit OSAKit Quartz QuartzCore WebKit
+      # TODO are these optional?
+      ImageCaptureCore GSS ImageIO
+    ]
     ++ lib.optionals stdenv.isDarwin [ sigtool ]
     ++ lib.optionals nativeComp [ libgccjit ];
 
@@ -160,6 +178,12 @@ let emacs = stdenv.mkDerivation (lib.optionalAttrs nativeComp {
       then [ "--with-x-toolkit=${toolkit}" "--with-xft" "--with-cairo" ]
       else [ "--with-x=no" "--with-xpm=no" "--with-jpeg=no" "--with-png=no"
              "--with-gif=no" "--with-tiff=no" ])
+    ++ lib.optionals withMacport [
+      "--with-mac"
+      "--enable-mac-app=$$out/Applications"
+      "--with-xml2=yes"
+      "--with-gnutls=yes"
+    ]
     ++ lib.optional withXwidgets "--with-xwidgets"
     ++ lib.optional nativeComp "--with-native-compilation"
     ++ lib.optional withImageMagick "--with-imagemagick"
@@ -190,7 +214,7 @@ let emacs = stdenv.mkDerivation (lib.optionalAttrs nativeComp {
   '' + lib.optionalString withNS ''
     mkdir -p $out/Applications
     mv nextstep/Emacs.app $out/Applications
-  '' + lib.optionalString (nativeComp && withNS) ''
+  '' + lib.optionalString (nativeComp && (withNS || withMacport)) ''
     ln -snf $out/lib/emacs/*/native-lisp $out/Applications/Emacs.app/Contents/native-lisp
   '' + lib.optionalString nativeComp ''
     echo "Generating native-compiled trampolines..."
@@ -222,7 +246,7 @@ let emacs = stdenv.mkDerivation (lib.optionalAttrs nativeComp {
     description = "The extensible, customizable GNU text editor";
     homepage    = "https://www.gnu.org/software/emacs/";
     license     = licenses.gpl3Plus;
-    maintainers = with maintainers; [ lovek323 jwiegley adisbladis ];
+    maintainers = with maintainers; [ lovek323 jwiegley adisbladis matthewbauer ];
     platforms   = platforms.all;
 
     longDescription = ''
