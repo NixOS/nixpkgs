@@ -5,6 +5,7 @@
 , pytestCheckHook
 , pythonOlder
 , requests
+, six
 , urllib3
 }:
 
@@ -22,6 +23,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     requests
+    six
     urllib3
   ];
 
