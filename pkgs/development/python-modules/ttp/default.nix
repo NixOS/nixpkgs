@@ -57,6 +57,8 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # missing package n2g
     "test/pytest/test_N2G_formatter.py"
+    # missing test file
+    "test/pytest/test_extend_tag.py"
   ];
 
   disabledTests = [
@@ -81,6 +83,10 @@ buildPythonPackage rec {
     "test_excel_formatter_update_using_result_kwargs"
     # missing package n2g
     "test_n2g_formatter"
+    # missing test files
+    "test_TTP_CACHE_FOLDER_env_variable_usage"
+    # requires additional network setup
+    "test_child_group_do_not_start_if_no_parent_started"
   ];
 
   pytestFlagsArray = [
