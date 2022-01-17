@@ -114,6 +114,8 @@ with self; with super; {
 
   pyjwt = callPackage ../development/python2-modules/pyjwt { };
 
+  pyparsing = callPackage ../development/python2-modules/pyparsing { };
+
   pyroma = callPackage ../development/python2-modules/pyroma { };
 
   pysqlite = callPackage ../development/python2-modules/pysqlite { };
