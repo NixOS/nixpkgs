@@ -1250,6 +1250,8 @@ let
         };
       };
 
+      ms-ceintl = callPackage ./language-packs.nix {}; # non-English language packs
+
       ms-dotnettools.csharp = callPackage ./ms-dotnettools-csharp { };
 
       ms-kubernetes-tools.vscode-kubernetes-tools = buildVscodeMarketplaceExtension {
