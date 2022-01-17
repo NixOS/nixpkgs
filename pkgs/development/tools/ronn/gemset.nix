@@ -22,6 +22,11 @@
       type = "gem";
     };
     version = "2.2.0.1";
+    # Disable randomized mangling to make ronn's outputs reproducible
+    dontBuild = false;
+    postPatch = ''
+      substituteInPlace ext/generate.c --replace '#if DEBIAN_GLITCH' '#if 1'
+    '';
   };
   ronn = {
     source = {
