@@ -3,16 +3,12 @@
 , fetchFromGitHub
 , pythonOlder
 , aws-sam-translator
-, importlib-metadata
-, importlib-resources
 , jschema-to-python
 , jsonpatch
 , jsonschema
 , junit-xml
 , networkx
-, pathlib2
 , pyyaml
-, requests
 , sarif-om
 , setuptools
 , six
@@ -34,7 +30,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace 'importlib_resources~=1.4;python_version<"3.7" and python_version!="3.4"' 'importlib_resources;python_version<"3.7"'
+      --replace "jsonschema~=3.0" "jsonschema>=3.0"
   '';
 
   propagatedBuildInputs = [
@@ -44,13 +40,10 @@ buildPythonPackage rec {
     jsonschema
     junit-xml
     networkx
-    pathlib2
     pyyaml
-    requests
     sarif-om
-    setuptools
     six
-  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata importlib-resources ];
+  ];
 
   checkInputs = [
     mock
