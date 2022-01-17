@@ -246,7 +246,7 @@ let emacs = (if withMacport then llvmPackages_6.stdenv else stdenv).mkDerivation
     description = "The extensible, customizable GNU text editor" + optionalString withMacport " with Mitsuharu Yamamoto's macport patches";
     homepage    = if withMacport then "https://bitbucket.org/mituharu/emacs-mac/" else "https://www.gnu.org/software/emacs/";
     license     = licenses.gpl3Plus;
-    maintainers = with maintainers; [ lovek323 jwiegley adisbladis matthewbauer ];
+    maintainers = with maintainers; [ lovek323 jwiegley adisbladis matthewbauer atemu ];
     platforms   = if withMacport then platforms.darwin else platforms.all;
 
     longDescription = ''
