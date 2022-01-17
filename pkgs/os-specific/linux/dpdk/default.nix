@@ -37,6 +37,7 @@ in stdenv.mkDerivation rec {
     numactl
     openssl.dev
     zlib
+    python3
   ] ++ lib.optionals mod kernel.moduleBuildDependencies;
 
   # Propagated to support current DPDK users in nixpkgs which statically link
