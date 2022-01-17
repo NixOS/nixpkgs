@@ -3549,6 +3549,18 @@ final: prev:
     meta.homepage = "https://github.com/shaunsingh/moonlight.nvim/";
   };
 
+  Navigator-nvim = buildVimPluginFrom2Nix {
+    pname = "Navigator.nvim";
+    version = "2021-11-18";
+    src = fetchFromGitHub {
+      owner = "numToStr";
+      repo = "Navigator.nvim";
+      rev = "f7b689d72649e1d5132116c76ac2ad8b97c210d4";
+      sha256 = "17yfc7ss9yslf8dvwl0vi3mdpcxp5j1g6dc8qrz20v2dx8hjxd1q";
+    };
+    meta.homepage = "https://github.com/numToStr/Navigator.nvim/";
+  };
+
   ncm2 = buildVimPluginFrom2Nix {
     pname = "ncm2";
     version = "2021-10-08";
