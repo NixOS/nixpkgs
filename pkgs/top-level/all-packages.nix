@@ -24333,8 +24333,8 @@ with pkgs;
 
   aucatctl = callPackage ../applications/audio/aucatctl { };
 
-  audacious = libsForQt5.callPackage ../applications/audio/audacious { };
-  audaciousQt5 = audacious;
+  audacious = libsForQt5.callPackage ../applications/audio/audacious { enableGTK = true; };
+  audaciousQt5 = libsForQt5.callPackage ../applications/audio/audacious { };
 
   audacity-gtk2 = callPackage ../applications/audio/audacity { wxGTK = wxGTK31-gtk2; };
   audacity-gtk3 = callPackage ../applications/audio/audacity { wxGTK = wxGTK31-gtk3; };

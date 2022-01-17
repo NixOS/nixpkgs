@@ -6,7 +6,8 @@
   libcddb, libcdio, libcdio-paranoia, libcue, libjack2, libmad, libmms, libmodplug,
   libmowgli, libnotify, libogg, libpulseaudio, libsamplerate, libsidplayfp,
   libsndfile, libvorbis, libxml2, lirc, mpg123, neon, qtmultimedia, soxr,
-  wavpack, libopenmpt
+  wavpack, libopenmpt,
+  enableGTK ? false, gtk2,
 }:
 
 mkDerivation rec {
@@ -34,9 +35,11 @@ mkDerivation rec {
     libnotify libogg libpulseaudio libsamplerate libsidplayfp libsndfile
     libvorbis libxml2 lirc mpg123 neon qtmultimedia soxr wavpack
     libopenmpt
-  ];
+  ] ++ lib.optionals enableGTK [ gtk2 ];
 
-  configureFlags = [ "--disable-gtk" ];
+  configureFlags = lib.optionals (!enableGTK) [ "--disable-gtk" ];
+
+  enableParallelBuilding = true;
 
   # Here we build both audacious and audacious-plugins in one
   # derivation, since they really expect to be in the same prefix.
