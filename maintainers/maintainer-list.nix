@@ -12172,6 +12172,12 @@
     githubId = 1183303;
     name = "Jakob Klepp";
   };
+  trundle = {
+    name = "Andreas Stührk";
+    email = "andy@hammerhartes.de";
+    github = "Trundle";
+    githubId = 332418;
+  };
   tscholak = {
     email = "torsten.scholak@googlemail.com";
     github = "tscholak";

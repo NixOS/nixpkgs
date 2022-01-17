@@ -1420,6 +1420,15 @@ Superuser created successfully.
           for those who want to have all RetroArch cores available.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The Linux kernel for security reasons now restricts access to
+          BPF syscalls via <literal>BPF_UNPRIV_DEFAULT_OFF=y</literal>.
+          Unprivileged access can be reenabled via the
+          <literal>kernel.unprivileged_bpf_disabled</literal> sysctl
+          knob.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-notable-changes">

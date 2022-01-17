@@ -182,7 +182,7 @@ in
       yandexdisk = 143;
       mxisd = 144; # was once collectd
       #consul = 145;# dynamically allocated as of 2021-09-03
-      mailpile = 146;
+      #mailpile = 146; # removed 2022-01-12
       redmine = 147;
       #seeks = 148; # removed 2020-06-21
       prosody = 149;
@@ -502,7 +502,7 @@ in
       #yandexdisk = 143; # unused
       mxisd = 144; # was once collectd
       #consul = 145; # unused
-      mailpile = 146;
+      #mailpile = 146; # removed 2022-01-12
       redmine = 147;
       #seeks = 148; # removed 2020-06-21
       prosody = 149;

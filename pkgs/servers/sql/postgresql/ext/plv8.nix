@@ -1,6 +1,8 @@
-{ lib, stdenv, fetchFromGitHub, v8, perl, postgresql }:
+{ lib, stdenv, fetchFromGitHub, v8, perl, postgresql
+# For test
+, runCommand, coreutils, gnugrep }:
 
-stdenv.mkDerivation rec {
+let self = stdenv.mkDerivation rec {
   pname = "plv8";
   version = "3.0.0";
 
@@ -29,6 +31,8 @@ stdenv.mkDerivation rec {
   ];
 
   preConfigure = ''
+    # We build V8 as a monolith, so this is unnecessary.
+    substituteInPlace Makefile.shared --replace "-lv8_libplatform" ""
     patchShebangs ./generate_upgrade.sh
     substituteInPlace generate_upgrade.sh \
       --replace " 2.3.10)" " 2.3.10 2.3.11 2.3.12 2.3.13 2.3.14 2.3.15)"
@@ -42,10 +46,36 @@ stdenv.mkDerivation rec {
     rmdir "$out/nix/store"/* "$out/nix/store" "$out/nix"
   '';
 
-  # Without this, PostgreSQL will crash at runtime.
-  # The flags are only included in Makefile, not Makefile.shared.
-  # https://github.com/plv8/plv8/pull/469
-  NIX_CFLAGS_COMPILE = "-DJSONB_DIRECT_CONVERSION -DV8_COMPRESS_POINTERS=1 -DV8_31BIT_SMIS_ON_64BIT_ARCH=1";
+  NIX_CFLAGS_COMPILE = [
+    # V8 depends on C++14.
+    "-std=c++14"
+    # Without this, PostgreSQL will crash at runtime.
+    # The flags are only included in Makefile, not Makefile.shared.
+    # https://github.com/plv8/plv8/pull/469
+    "-DJSONB_DIRECT_CONVERSION" "-DV8_COMPRESS_POINTERS=1" "-DV8_31BIT_SMIS_ON_64BIT_ARCH=1"
+  ];
+
+  passthru.tests.smoke = runCommand "${pname}-test" {} ''
+    export PATH=${lib.makeBinPath [ (postgresql.withPackages (_: [self])) coreutils gnugrep ]}
+    db="$PWD/testdb"
+    initdb "$db"
+    postgres -k "$db" -D "$db" &
+    pid="$!"
+
+    for i in $(seq 1 100); do
+      if psql -h "$db" -d postgres -c "" 2>/dev/null; then
+        break
+      elif ! kill -0 "$pid"; then
+        exit 1
+      else
+        sleep 0.1
+      fi
+    done
+
+    psql -h "$db" -d postgres -c 'CREATE EXTENSION plv8; DO $$ plv8.elog(NOTICE, plv8.version); $$ LANGUAGE plv8;' 2> "$out"
+    grep -q "${version}" "$out"
+    kill -0 "$pid"
+  '';
 
   meta = with lib; {
     description = "V8 Engine Javascript Procedural Language add-on for PostgreSQL";
@@ -54,4 +84,4 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     license = licenses.postgresql;
   };
-}
+}; in self

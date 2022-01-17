@@ -210,6 +210,13 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>mailpile</literal> email webclient
+          (<literal>services.mailpile</literal>) has been removed due to
+          its reliance on python2.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The MoinMoin wiki engine
           (<literal>services.moinmoin</literal>) has been removed,
           because Python 2 is being retired from nixpkgs.
@@ -332,6 +339,22 @@
         <para>
           <literal>pkgs.docbookrx</literal> was removed since it’s
           unmaintained
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          MultiMC has been replaced with the fork PolyMC due to upstream
+          developers being hostile to 3rd party package maintainers.
+          PolyMC removes all MultiMC branding and is aimed at providing
+          proper 3rd party packages like the one contained in Nixpkgs.
+          This change affects the data folder where game instances and
+          other save and configuration files are stored. Users with
+          existing installations should rename
+          <literal>~/.local/share/multimc</literal> to
+          <literal>~/.local/share/polymc</literal>. The main config
+          file’s path has also moved from
+          <literal>~/.local/share/multimc/multimc.cfg</literal> to
+          <literal>~/.local/share/polymc/polymc.cfg</literal>.
         </para>
       </listitem>
     </itemizedlist>
