@@ -408,6 +408,18 @@
           configuration.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <literal>lib.assertMsg</literal> and
+          <literal>lib.assertOneOf</literal> no longer return
+          <literal>false</literal> if the passed condition is
+          <literal>false</literal>, <literal>throw</literal>ing the
+          given error message instead (which makes the resulting error
+          message less cluttered). This will not impact the behaviour of
+          code using these functions as intended, namely as top-level
+          wrapper for <literal>assert</literal> conditions.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.05-notable-changes">
