@@ -4,7 +4,6 @@
 , fetchPypi
 , git
 , pytestCheckHook
-, pytest-cov
 }:
 
 buildPythonPackage rec {
@@ -28,7 +27,6 @@ buildPythonPackage rec {
   checkInputs = [
     pytestCheckHook
     git
-    pytest-cov
   ];
 
   meta = with lib; {
