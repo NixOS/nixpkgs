@@ -718,6 +718,7 @@ let
       HID_ACRUX_FF       = yes;
       DRAGONRISE_FF      = yes;
       HOLTEK_FF          = yes;
+      NINTENDO_FF        = yes;
       SONY_FF            = yes;
       SMARTJOYPLUS_FF    = yes;
       THRUSTMASTER_FF    = yes;
