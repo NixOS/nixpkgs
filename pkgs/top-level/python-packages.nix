@@ -2746,14 +2746,14 @@ in {
 
   fastjet = toPythonModule (pkgs.fastjet.override {
     withPython = true;
-    inherit python;
+    inherit (self) python;
   });
 
   fastjsonschema = callPackage ../development/python-modules/fastjsonschema { };
 
   fastnlo_toolkit = toPythonModule (pkgs.fastnlo_toolkit.override {
     withPython = true;
-    inherit python;
+    inherit (self) python;
   });
 
   fastnumbers = callPackage ../development/python-modules/fastnumbers { };

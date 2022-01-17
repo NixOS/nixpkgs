@@ -1,5 +1,5 @@
 { lib, mkDerivation, fetchFromGitHub, pkg-config, qmake
-, python, qtbase, qttools }:
+, python2, qtbase, qttools }:
 
 mkDerivation rec {
   pname = "tiled";
@@ -13,7 +13,7 @@ mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config qmake ];
-  buildInputs = [ python qtbase qttools ];
+  buildInputs = [ python2 qtbase qttools ];
 
   meta = with lib; {
     description = "Free, easy to use and flexible tile map editor";

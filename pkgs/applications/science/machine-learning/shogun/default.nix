@@ -6,7 +6,7 @@
   # build
 , cmake
 , ctags
-, pythonPackages
+, python2Packages
 , swig
   # math
 , eigen
@@ -36,7 +36,7 @@
 , withSvmLight ? false
 }:
 
-assert pythonSupport -> pythonPackages != null;
+assert pythonSupport -> python2Packages != null;
 assert opencvSupport -> opencv != null;
 
 assert (!blas.isILP64) && (!lapack.isILP64);
@@ -101,7 +101,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional (!withSvmLight) ./svmlight-scrubber.patch;
 
   nativeBuildInputs = [ cmake swig ctags ]
-    ++ (with pythonPackages; [ python jinja2 ply ]);
+    ++ (with python2Packages; [ python jinja2 ply ]);
 
   buildInputs = [
     eigen
@@ -121,7 +121,7 @@ stdenv.mkDerivation rec {
     nlopt
     lp_solve
     colpack
-  ] ++ lib.optionals pythonSupport (with pythonPackages; [ python numpy ])
+  ] ++ lib.optionals pythonSupport (with python2Packages; [ python numpy ])
     ++ lib.optional opencvSupport opencv;
 
   cmakeFlags = let

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, python, zlib }:
+{ lib, stdenv, fetchFromGitHub, cmake, python3, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "seasocks";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ zlib python ];
+  buildInputs = [ zlib python3 ];
 
   meta = with lib; {
     homepage = "https://github.com/mattgodbolt/seasocks";
