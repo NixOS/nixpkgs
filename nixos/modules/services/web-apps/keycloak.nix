@@ -314,12 +314,12 @@ in
       createLocalPostgreSQL = databaseActuallyCreateLocally && cfg.database.type == "postgresql";
       createLocalMySQL = databaseActuallyCreateLocally && cfg.database.type == "mysql";
 
-      mySqlCaKeystore = pkgs.runCommand "mysql-ca-keystore" {} ''
+      mySqlCaKeystore = pkgs.runCommand "mysql-ca-keystore" { } ''
         ${pkgs.jre}/bin/keytool -importcert -trustcacerts -alias MySQLCACert -file ${cfg.database.caCert} -keystore $out -storepass notsosecretpassword -noprompt
       '';
 
       # Both theme and theme type directories need to be actual directories in one hierarchy to pass Keycloak checks.
-      themesBundle = pkgs.runCommand "keycloak-themes" {} ''
+      themesBundle = pkgs.runCommand "keycloak-themes" { } ''
         linkTheme() {
           theme="$1"
           name="$2"
@@ -346,24 +346,25 @@ in
         ${concatStringsSep "\n" (mapAttrsToList (name: theme: "linkTheme ${theme} ${escapeShellArg name}") cfg.themes)}
       '';
 
-      keycloakConfig' = foldl' recursiveUpdate {
-        "interface=public".inet-address = cfg.bindAddress;
-        "socket-binding-group=standard-sockets"."socket-binding=http".port = cfg.httpPort;
-        "subsystem=keycloak-server" = {
-          "spi=hostname"."provider=default" = {
-            enabled = true;
-            properties = {
-              inherit (cfg) frontendUrl forceBackendUrlToFrontendUrl;
+      keycloakConfig' = foldl' recursiveUpdate
+        {
+          "interface=public".inet-address = cfg.bindAddress;
+          "socket-binding-group=standard-sockets"."socket-binding=http".port = cfg.httpPort;
+          "subsystem=keycloak-server" = {
+            "spi=hostname"."provider=default" = {
+              enabled = true;
+              properties = {
+                inherit (cfg) frontendUrl forceBackendUrlToFrontendUrl;
+              };
             };
+            "theme=defaults".dir = toString themesBundle;
           };
-          "theme=defaults".dir = toString themesBundle;
-        };
-        "subsystem=datasources"."data-source=KeycloakDS" = {
-          max-pool-size = "20";
-          user-name = if databaseActuallyCreateLocally then "keycloak" else cfg.database.username;
-          password = "@db-password@";
-        };
-      } [
+          "subsystem=datasources"."data-source=KeycloakDS" = {
+            max-pool-size = "20";
+            user-name = if databaseActuallyCreateLocally then "keycloak" else cfg.database.username;
+            password = "@db-password@";
+          };
+        } [
         (optionalAttrs (cfg.database.type == "postgresql") {
           "subsystem=datasources" = {
             "jdbc-driver=postgresql" = {
@@ -513,39 +514,40 @@ in
                 let
                   matchResult = match ''"\$\{.*}"'' string;
                 in
-                  if matchResult != null then
-                    "expression " + string
-                  else
-                    string;
+                if matchResult != null then
+                  "expression " + string
+                else
+                  string;
 
               writeAttribute = attribute: value:
                 let
                   type = typeOf value;
                 in
-                  if type == "set" then
-                    let
-                      names = attrNames value;
-                    in
-                      foldl' (text: name: text + (writeAttribute "${attribute}.${name}" value.${name})) "" names
-                  else if value == null then ''
-                    if (outcome == success) of ${path}:read-attribute(name="${attribute}")
-                        ${path}:undefine-attribute(name="${attribute}")
+                if type == "set" then
+                  let
+                    names = attrNames value;
+                  in
+                  foldl' (text: name: text + (writeAttribute "${attribute}.${name}" value.${name})) "" names
+                else if value == null then ''
+                  if (outcome == success) of ${path}:read-attribute(name="${attribute}")
+                      ${path}:undefine-attribute(name="${attribute}")
+                  end-if
+                ''
+                else if elem type [ "string" "path" "bool" ] then
+                  let
+                    value' = if type == "bool" then boolToString value else ''"${value}"'';
+                  in
+                  ''
+                    if (result != ${prefixExpression value'}) of ${path}:read-attribute(name="${attribute}")
+                      ${path}:write-attribute(name=${attribute}, value=${value'})
                     end-if
                   ''
-                  else if elem type [ "string" "path" "bool" ] then
-                    let
-                      value' = if type == "bool" then boolToString value else ''"${value}"'';
-                    in ''
-                      if (result != ${prefixExpression value'}) of ${path}:read-attribute(name="${attribute}")
-                        ${path}:write-attribute(name=${attribute}, value=${value'})
-                      end-if
-                    ''
-                  else throw "Unsupported type '${type}' for path '${path}'!";
+                else throw "Unsupported type '${type}' for path '${path}'!";
             in
-              concatStrings
-                (mapAttrsToList
-                  (attribute: value: (writeAttribute attribute value))
-                  set);
+            concatStrings
+              (mapAttrsToList
+                (attribute: value: (writeAttribute attribute value))
+                set);
 
 
           /* Produces an argument list for the JBoss `add()` function,
@@ -570,17 +572,17 @@ in
                 let
                   type = typeOf value;
                 in
-                  if type == "set" then
-                    "${attribute} = { " + (makeArgList value) + " }"
-                  else if elem type [ "string" "path" "bool" ] then
-                    "${attribute} = ${if type == "bool" then boolToString value else ''"${value}"''}"
-                  else if value == null then
-                    ""
-                  else
-                    throw "Unsupported type '${type}' for attribute '${attribute}'!";
+                if type == "set" then
+                  "${attribute} = { " + (makeArgList value) + " }"
+                else if elem type [ "string" "path" "bool" ] then
+                  "${attribute} = ${if type == "bool" then boolToString value else ''"${value}"''}"
+                else if value == null then
+                  ""
+                else
+                  throw "Unsupported type '${type}' for attribute '${attribute}'!";
 
             in
-              concatStringsSep ", " (mapAttrsToList makeArg set);
+            concatStringsSep ", " (mapAttrsToList makeArg set);
 
 
           /* Recurses into the `nodeValue` attrset. Only subattrsets that
@@ -598,19 +600,21 @@ in
                 let
                   value = nodeContent.${name};
                 in
-                  if (match ".*([=]).*" name) == [ "=" ] then
-                    if isAttrs value || value == null then
-                      true
-                    else
-                      throw "Parsing path '${concatStringsSep "." (nodePath ++ [ name ])}' failed: JBoss attributes cannot contain '='!"
+                if (match ".*([=]).*" name) == [ "=" ] then
+                  if isAttrs value || value == null then
+                    true
                   else
-                    false;
+                    throw "Parsing path '${concatStringsSep "." (nodePath ++ [ name ])}' failed: JBoss attributes cannot contain '='!"
+                else
+                  false;
               jbossPath = "/" + concatStringsSep "/" nodePath;
-              children = if !isAttrs nodeContent then {} else nodeContent;
+              children = if !isAttrs nodeContent then { } else nodeContent;
               subPaths = filter isPath (attrNames children);
               getPriority = name:
-                let value = children.${name};
-                in if value._type or "" == "order" then value.priority else 1000;
+                let
+                  value = children.${name};
+                in
+                if value._type or "" == "order" then value.priority else 1000;
               orderedSubPaths = sort (a: b: getPriority a < getPriority b) subPaths;
               jbossAttrs = filterAttrs (name: _: !(isPath name)) children;
               text =
@@ -626,45 +630,48 @@ in
                         ${jbossPath}:remove()
                     end-if
                   '';
-            in text + concatMapStringsSep "\n" (name: recurse (nodePath ++ [name]) children.${name}) orderedSubPaths;
+            in
+            text + concatMapStringsSep "\n" (name: recurse (nodePath ++ [ name ]) children.${name}) orderedSubPaths;
         in
-          recurse [] attrs;
+        recurse [ ] attrs;
 
       jbossCliScript = pkgs.writeText "jboss-cli-script" (mkJbossScript keycloakConfig');
 
-      keycloakConfig = pkgs.runCommand "keycloak-config" {
-        nativeBuildInputs = [ cfg.package ];
-      } ''
-        export JBOSS_BASE_DIR="$(pwd -P)";
-        export JBOSS_MODULEPATH="${cfg.package}/modules";
-        export JBOSS_LOG_DIR="$JBOSS_BASE_DIR/log";
+      keycloakConfig = pkgs.runCommand "keycloak-config"
+        {
+          nativeBuildInputs = [ cfg.package ];
+        }
+        ''
+          export JBOSS_BASE_DIR="$(pwd -P)";
+          export JBOSS_MODULEPATH="${cfg.package}/modules";
+          export JBOSS_LOG_DIR="$JBOSS_BASE_DIR/log";
 
-        cp -r ${cfg.package}/standalone/configuration .
-        chmod -R u+rwX ./configuration
+          cp -r ${cfg.package}/standalone/configuration .
+          chmod -R u+rwX ./configuration
 
-        mkdir -p {deployments,ssl}
+          mkdir -p {deployments,ssl}
 
-        standalone.sh&
+          standalone.sh&
 
-        attempt=1
-        max_attempts=30
-        while ! jboss-cli.sh --connect ':read-attribute(name=server-state)'; do
-            if [[ "$attempt" == "$max_attempts" ]]; then
-                echo "ERROR: Could not connect to Keycloak after $attempt attempts! Failing.." >&2
-                exit 1
-            fi
-            echo "Keycloak not fully started yet, retrying.. ($attempt/$max_attempts)"
-            sleep 1
-            (( attempt++ ))
-        done
+          attempt=1
+          max_attempts=30
+          while ! jboss-cli.sh --connect ':read-attribute(name=server-state)'; do
+              if [[ "$attempt" == "$max_attempts" ]]; then
+                  echo "ERROR: Could not connect to Keycloak after $attempt attempts! Failing.." >&2
+                  exit 1
+              fi
+              echo "Keycloak not fully started yet, retrying.. ($attempt/$max_attempts)"
+              sleep 1
+              (( attempt++ ))
+          done
 
-        jboss-cli.sh --connect --file=${jbossCliScript} --echo-command
+          jboss-cli.sh --connect --file=${jbossCliScript} --echo-command
 
-        cp configuration/standalone.xml $out
-      '';
+          cp configuration/standalone.xml $out
+        '';
     in
-      mkIf cfg.enable {
-
+    mkIf cfg.enable
+      {
         assertions = [
           {
             assertion = (cfg.database.useSSL && cfg.database.type == "postgresql") -> (cfg.database.caCert != null);
@@ -725,13 +732,16 @@ in
           let
             databaseServices =
               if createLocalPostgreSQL then [
-                "keycloakPostgreSQLInit.service" "postgresql.service"
+                "keycloakPostgreSQLInit.service"
+                "postgresql.service"
               ]
               else if createLocalMySQL then [
-                "keycloakMySQLInit.service" "mysql.service"
+                "keycloakMySQLInit.service"
+                "mysql.service"
               ]
               else [ ];
-          in {
+          in
+          {
             after = databaseServices;
             bindsTo = databaseServices;
             wantedBy = [ "multi-user.target" ];
