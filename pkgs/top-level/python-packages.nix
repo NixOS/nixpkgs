@@ -9935,6 +9935,8 @@ in {
 
   types-decorator = callPackage ../development/python-modules/types-decorator { };
 
+  types-freezegun = callPackage ../development/python-modules/types-freezegun { };
+
   types-futures = callPackage ../development/python-modules/types-futures { };
 
   types-protobuf = callPackage ../development/python-modules/types-protobuf { };
