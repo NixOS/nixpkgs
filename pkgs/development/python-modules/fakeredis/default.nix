@@ -3,6 +3,7 @@
 , async_generator
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 , hypothesis
 , lupa
 , pytest-asyncio
@@ -17,7 +18,7 @@
 buildPythonPackage rec {
   pname = "fakeredis";
   version = "1.7.0";
-  format = "setuptools";
+  format = "pyproject";
 
   disabled = pythonOlder "3.5";
 
@@ -25,6 +26,23 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "sha256-yb0S5DAzbL0+GJ+uDpHrmZl7k+dtv91u1n+jUtxoTHE=";
   };
+
+  patches = [
+    (fetchpatch {
+      # redis 4.1.0 compatibility
+      # https://github.com/jamesls/fakeredis/pull/324
+      url = "https://github.com/jamesls/fakeredis/commit/8ef8dc6dacc9baf571d66a25ffbf0fadd7c70f78.patch";
+      sha256 = "sha256:03xlqmwq8nkzisrjk7y51j2jd6qdin8nbj5n9hc4wjabbvlgx4qr";
+      excludes = [
+        "setup.cfg"
+      ];
+    })
+  ];
+
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "redis<4.1.0" "redis"
+  '';
 
   propagatedBuildInputs = [
     aioredis
@@ -40,11 +58,6 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-mock
     pytestCheckHook
-  ];
-
-  disabledTestPaths = [
-    # AttributeError: 'AsyncGenerator' object has no attribute XXXX
-    "test/test_aioredis2.py"
   ];
 
   pythonImportsCheck = [
