@@ -6100,6 +6100,8 @@ in {
 
   python-tado = callPackage ../development/python-modules/python-tado { };
 
+  pythonfinder = callPackage ../development/python-modules/pythonfinder { };
+
   pyutil = callPackage ../development/python-modules/pyutil { };
 
   pkutils = callPackage ../development/python-modules/pkutils { };
