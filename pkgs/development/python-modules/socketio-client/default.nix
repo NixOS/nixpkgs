@@ -5,7 +5,9 @@
 , websocket-client
 , coverage
 , nose
-, fetchFromGitHub }:
+, fetchFromGitHub
+}:
+
 buildPythonPackage rec {
   pname = "socketio-client";
   version = "0.7.2";
