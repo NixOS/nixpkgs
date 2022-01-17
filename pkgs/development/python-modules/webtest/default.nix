@@ -2,15 +2,14 @@
 , buildPythonPackage
 , fetchPypi
 , isPy27
-, nose
 , webob
 , six
 , beautifulsoup4
 , waitress
-, mock
 , pyquery
 , wsgiproxy2
 , pastedeploy
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -36,8 +35,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    nose
-    mock
+    pytestCheckHook
     pastedeploy
     wsgiproxy2
     pyquery
