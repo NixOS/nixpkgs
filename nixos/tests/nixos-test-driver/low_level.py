@@ -18,6 +18,9 @@ with subtest("low-level commands"):
         machine.wait_until_succeeds("true")
         with must_raise("command `false` failed"):
             machine.succeed("false")
+
+        r = machine.succeed("seq 10000").splitlines()
+        assert r == [str(i + 1) for i in range(10000)]
     with subtest("fail"):
         machine.fail("false")
         machine.wait_until_fails("false")
