@@ -1992,6 +1992,8 @@ in {
 
   datamodeldict = callPackage ../development/python-modules/datamodeldict { };
 
+  dataset = callPackage ../development/python-modules/dataset { };
+
   datasets = callPackage ../development/python-modules/datasets { };
 
   datasette = callPackage ../development/python-modules/datasette { };
