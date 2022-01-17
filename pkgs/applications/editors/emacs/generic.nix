@@ -139,8 +139,8 @@ let emacs = (if withMacport then llvmPackages_6.stdenv else stdenv).mkDerivation
     ++ lib.optional (withX && (withGTK3 || withXwidgets)) wrapGAppsHook;
 
   buildInputs =
-    [ ncurses gconf libxml2 gnutls alsa-lib acl gpm gettext jansson harfbuzz.dev ]
-    ++ lib.optionals stdenv.isLinux [ dbus libselinux systemd ]
+    [ ncurses gconf libxml2 gnutls gettext jansson harfbuzz.dev ]
+    ++ lib.optionals stdenv.isLinux [ dbus libselinux systemd alsa-lib acl gpm ]
     ++ lib.optionals withX
       [ xlibsWrapper libXaw Xaw3d libXpm libpng libjpeg giflib libtiff libXft
         gconf cairo ]
