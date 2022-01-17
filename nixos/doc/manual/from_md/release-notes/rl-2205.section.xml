@@ -377,6 +377,16 @@
           include serif fonts.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The interface that allows activation scripts to restart units
+          has been reworked. Restarting and reloading is now done by a
+          single file
+          <literal>/run/nixos/activation-restart-list</literal> that
+          honors <literal>restartIfChanged</literal> and
+          <literal>reloadIfChanged</literal> of the units.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.05-notable-changes">
