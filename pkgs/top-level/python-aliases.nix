@@ -38,6 +38,7 @@ mapAliases ({
   bugseverywhere = throw "bugseverywhere has been removed: Abandoned by upstream."; # added 2019-11-27
   class-registry = phx-class-registry; # added 2021-10-05
   ConfigArgParse = configargparse; # added 2021-03-18
+  cozy = throw "cozy was removed because it was not actually https://pypi.org/project/Cozy/."; # added 2022-01-14
   dateutil = python-dateutil; # added 2021-07-03
   detox = throw "detox is no longer maintained, and was broken since may 2019"; # added 2020-07-04
   dftfit = throw "dftfit dependency lammps-cython no longer builds"; # added 2021-07-04
