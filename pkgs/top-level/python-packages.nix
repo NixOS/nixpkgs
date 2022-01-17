@@ -1825,8 +1825,6 @@ in {
 
   coveralls = callPackage ../development/python-modules/coveralls { };
 
-  cozy = callPackage ../development/python-modules/cozy { };
-
   cppe = callPackage ../development/python-modules/cppe {
     cppe = pkgs.cppe;
   };

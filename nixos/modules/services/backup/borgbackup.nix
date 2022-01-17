@@ -30,7 +30,7 @@ let
     }
     trap 'on_exit' INT TERM QUIT EXIT
 
-    archiveName="${cfg.archiveBaseName}-$(date ${cfg.dateFormat})"
+    archiveName="${if cfg.archiveBaseName == null then "" else cfg.archiveBaseName + "-"}$(date ${cfg.dateFormat})"
     archiveSuffix="${optionalString cfg.appendFailedSuffix ".failed"}"
     ${cfg.preHook}
   '' + optionalString cfg.doInit ''
@@ -60,7 +60,7 @@ let
   '' + optionalString (cfg.prune.keep != { }) ''
     borg prune $extraArgs \
       ${mkKeepArgs cfg} \
-      --prefix ${escapeShellArg cfg.prune.prefix} \
+      ${optionalString (cfg.prune.prefix != null) "--prefix ${escapeShellArg cfg.prune.prefix} \\"}
       $extraPruneArgs
     ${cfg.postPrune}
   '';
@@ -284,7 +284,7 @@ in {
           };
 
           archiveBaseName = mkOption {
-            type = types.strMatching "[^/{}]+";
+            type = types.nullOr (types.strMatching "[^/{}]+");
             default = "${globalConfig.networking.hostName}-${name}";
             defaultText = literalExpression ''"''${config.networking.hostName}-<name>"'';
             description = ''
@@ -292,6 +292,7 @@ in {
               determined by <option>dateFormat</option>, will be appended. The full
               name can be modified at runtime (<literal>$archiveName</literal>).
               Placeholders like <literal>{hostname}</literal> must not be used.
+              Use <literal>null</literal> for no base name.
             '';
           };
 
@@ -471,11 +472,11 @@ in {
           };
 
           prune.prefix = mkOption {
-            type = types.str;
+            type = types.nullOr (types.str);
             description = ''
               Only consider archive names starting with this prefix for pruning.
               By default, only archives created by this job are considered.
-              Use <literal>""</literal> to consider all archives.
+              Use <literal>""</literal> or <literal>null</literal> to consider all archives.
             '';
             default = config.archiveBaseName;
             defaultText = literalExpression "archiveBaseName";

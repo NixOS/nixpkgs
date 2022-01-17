@@ -9,21 +9,34 @@
 , enableWebDAV ? false, sqlite, libuuid
 , enableExtendedAttrs ? false, attr
 , perl
+, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
   pname = "lighttpd";
-  version = "1.4.59";
+  version = "1.4.63";
 
   src = fetchurl {
     url = "https://download.lighttpd.net/lighttpd/releases-${lib.versions.majorMinor version}.x/${pname}-${version}.tar.xz";
-    sha256 = "sha256-+5U9snPa7wjttuICVWyuij0H7tYIHJa9mQPblX0QhNU=";
+    sha256 = "1fgasvif13gvzz4rf5mjpy28cbw9fs4ymhx18494mxgb080pzvra";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2022-22707.patch";
+      url = "https://github.com/lighttpd/lighttpd1.4/commit/8c62a890e23f5853b1a562b03fe3e1bccc6e7664.patch";
+      sha256 = "0zm2khgllsd1ivh9m7sisfsyrdfz45zsmiwl963wf0gn8m100gzk";
+    })
+  ];
 
   postPatch = ''
     patchShebangs tests
     # Linux sandbox has an empty hostname and not /etc/hosts, which fails some tests
     sed -ire '/[$]self->{HOSTNAME} *=/i     if(length($name)==0) { $name = "127.0.0.1" }' tests/LightyTest.pm
+    # it's difficult to prevent this test from trying to use /var/tmp (which
+    # the sandbox doesn't have) so until libredirect has support for mkstemp
+    # calls it's easiest to disable it
+    sed -i '/test_mod_ssi/d' src/t/test_mod.c
   '';
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
