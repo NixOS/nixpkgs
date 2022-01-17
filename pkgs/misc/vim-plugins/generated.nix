@@ -4353,6 +4353,18 @@ final: prev:
     meta.homepage = "https://github.com/norcalli/nvim-colorizer.lua/";
   };
 
+  nvim-comment = buildVimPluginFrom2Nix {
+    pname = "nvim-comment";
+    version = "2022-01-04";
+    src = fetchFromGitHub {
+      owner = "terrortylor";
+      repo = "nvim-comment";
+      rev = "f670649da497de12aa3d5afc0a693d5d50b17d85";
+      sha256 = "0j3pay000yf79lz5plcnfp068fychnf7xa08cg7h5s0nx5cp5bgh";
+    };
+    meta.homepage = "https://github.com/terrortylor/nvim-comment/";
+  };
+
   nvim-compe = buildVimPluginFrom2Nix {
     pname = "nvim-compe";
     version = "2021-10-02";

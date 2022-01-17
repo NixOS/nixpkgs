@@ -777,6 +777,7 @@ tami5/sqlite.lua
 tbastos/vim-lua
 tbodt/deoplete-tabnine
 ternjs/tern_for_vim
+terrortylor/nvim-comment
 terryma/vim-expand-region
 terryma/vim-multiple-cursors
 tex/vimpreviewpandoc
