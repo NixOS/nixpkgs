@@ -88,6 +88,9 @@ EOF
       ${lib.getBin buildPackages.zsh}/bin/zsh -c "zcompile $out/etc/zprofile"
     ''}
     mv $out/etc/zprofile $out/etc/zprofile_zwc_is_used
+
+    # save space by linking the two zsh programs
+    ln -sf $out/bin/zsh $out/bin/zsh-${version}
   '';
   # XXX: patch zsh to take zwc if newer _or equal_
 
