@@ -65,10 +65,13 @@ let
   authKeysFiles = let
     mkAuthKeyFile = u: nameValuePair "ssh/authorized_keys.d/${u.name}" {
       mode = "0444";
-      source = pkgs.writeText "${u.name}-authorized_keys" ''
-        ${concatStringsSep "\n" u.openssh.authorizedKeys.keys}
-        ${concatMapStrings (f: readFile f + "\n") u.openssh.authorizedKeys.keyFiles}
-      '';
+      source =
+        let inherit (u.openssh.authorizedKeys) keys keyFiles; in
+        assert !(lib.any (lib.hasInfix "\n") keys);
+        pkgs.writeText "${u.name}-authorized_keys" ''
+          ${concatStringsSep "\n" keys}
+          ${concatMapStrings (f: readFile f + "\n") keyFiles}
+        '';
     };
     usersWithKeys = attrValues (flip filterAttrs config.users.users (n: u:
       length u.openssh.authorizedKeys.keys != 0 || length u.openssh.authorizedKeys.keyFiles != 0
