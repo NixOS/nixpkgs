@@ -243,11 +243,11 @@ let emacs = (if withMacport then llvmPackages_6.stdenv else stdenv).mkDerivation
   };
 
   meta = with lib; {
-    description = "The extensible, customizable GNU text editor";
-    homepage    = "https://www.gnu.org/software/emacs/";
+    description = "The extensible, customizable GNU text editor" + optionalString withMacport " with Mitsuharu Yamamoto's macport patches";
+    homepage    = if withMacport then "https://bitbucket.org/mituharu/emacs-mac/" else "https://www.gnu.org/software/emacs/";
     license     = licenses.gpl3Plus;
     maintainers = with maintainers; [ lovek323 jwiegley adisbladis matthewbauer ];
-    platforms   = platforms.all;
+    platforms   = if withMacport then platforms.darwin else platforms.all;
 
     longDescription = ''
       GNU Emacs is an extensible, customizable text editor—and more.  At its
