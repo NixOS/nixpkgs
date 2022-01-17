@@ -542,6 +542,31 @@
           <literal>programs.starship.settings</literal>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The <literal>zrepl</literal> package has been updated from
+          0.4.0 to 0.5:
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              The RPC protocol version was bumped; all zrepl daemons in
+              a setup must be updated and restarted before replication
+              can resume.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              A bug involving encrypt-on-receive has been fixed. Read
+              the
+              <link xlink:href="https://zrepl.github.io/configuration/sendrecvoptions.html#job-recv-options-placeholder">zrepl
+              documentation</link> and check the output of
+              <literal>zfs get -r encryption,zrepl:placeholder PATH_TO_ROOTFS</literal>
+              on the receiver.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
     </itemizedlist>
   </section>
 </section>

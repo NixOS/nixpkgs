@@ -3953,6 +3953,8 @@ in {
 
   insegel = callPackage ../development/python-modules/insegel { };
 
+  installer = callPackage ../development/python-modules/installer { };
+
   intake = callPackage ../development/python-modules/intake { };
 
   intake-parquet = callPackage ../development/python-modules/intake-parquet { };
@@ -9077,6 +9079,8 @@ in {
     python = self.python;
     usePython = true;
   });
+
+  socketio-client = callPackage ../development/python-modules/socketio-client { };
 
   socialscan = callPackage ../development/python-modules/socialscan { };
 
