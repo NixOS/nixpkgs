@@ -527,6 +527,7 @@ let
       UPROBE_EVENT          = { optional = true; tristate = whenOlder "4.11" "y";};
       UPROBE_EVENTS         = { optional = true; tristate = whenAtLeast "4.11" "y";};
       BPF_SYSCALL           = whenAtLeast "4.4" yes;
+      BPF_UNPRIV_DEFAULT_OFF = whenBetween "5.10" "5.15" yes;
       BPF_EVENTS            = whenAtLeast "4.4" yes;
       FUNCTION_PROFILER     = yes;
       RING_BUFFER_BENCHMARK = no;

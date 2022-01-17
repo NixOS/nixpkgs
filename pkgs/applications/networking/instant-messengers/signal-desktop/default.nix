@@ -113,6 +113,9 @@ in stdenv.mkDerivation rec {
     mkdir -p $out/bin
     ln -s $out/lib/Signal/signal-desktop $out/bin/signal-desktop
 
+    # Create required symlinks:
+    ln -s libGLESv2.so $out/lib/Signal/libGLESv2.so.2
+
     runHook postInstall
   '';
 

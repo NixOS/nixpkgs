@@ -9437,6 +9437,8 @@ with pkgs;
 
   sigal = callPackage ../applications/misc/sigal { };
 
+  sigi = callPackage ../applications/misc/sigi { };
+
   sigil = libsForQt5.callPackage ../applications/editors/sigil { };
 
   signald = callPackage ../applications/networking/instant-messengers/signald { };
@@ -30343,6 +30345,10 @@ with pkgs;
   mudlet = libsForQt5.callPackage ../games/mudlet {
     lua = lua5_1;
   };
+
+  blightmud = callPackage ../games/blightmud { };
+
+  blightmud-tts = callPackage ../games/blightmud { withTTS = true; };
 
   n2048 = callPackage ../games/n2048 { };
 
