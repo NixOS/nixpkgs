@@ -174,10 +174,6 @@ with self; with super; {
 
   vcrpy = callPackage ../development/python2-modules/vcrpy { };
 
-  yenc = callPackage ../development/python2-modules/yenc { };
-
-  yt = callPackage ../development/python2-modules/yt { };
-
   zeek = disabled super.zeek;
 
   zipp = callPackage ../development/python2-modules/zipp { };

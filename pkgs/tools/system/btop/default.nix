@@ -8,13 +8,14 @@
 
 stdenv.mkDerivation rec {
   pname = "btop";
-  version = "1.1.4";
+  version = "1.2.0";
+  hash = "qNm0mzPPh6jYIJX1W+macIDiGyWT+0jk7O0jCmvV/S4=";
 
   src = fetchFromGitHub {
     owner = "aristocratos";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1q8rp34fjbg9abbw5v6l5h9cmvzqq05cmkgavh8qd5xyimsx3xyh";
+    sha256 = hash;
   };
 
   hardeningDisable = lib.optionals (stdenv.isAarch64 && stdenv.isDarwin) [ "stackprotector" ];

@@ -15,19 +15,7 @@ let
     # header file isn't available at all, but that patch (./gvc-compat.patch)
     # can be shared between all versions of Vala so far.
     graphvizPatch =
-      let
-        fp = { commit, sha256 }: fetchpatch {
-          url = "https://github.com/openembedded/openembedded-core/raw/${commit}/meta/recipes-devtools/vala/vala/disable-graphviz.patch";
-          inherit sha256;
-        };
-
-      in {
-
-        # NOTE: the openembedded-core project doesn't have a patch for 0.40.12
-        # We've fixed the single merge conflict in the following patch.
-        #     0.40.12: https://github.com/openembedded/openembedded-core/raw/8553c52f174af4c8c433c543f806f5ed5c1ec48c/meta/recipes-devtools/vala/vala/disable-graphviz.patch
-        "0.40" = ./disable-graphviz-0.40.12.patch;
-
+      {
         "0.48" = ./disable-graphviz-0.46.1.patch;
 
         "0.52" = ./disable-graphviz-0.46.1.patch;
@@ -98,19 +86,14 @@ let
   });
 
 in rec {
-  vala_0_40 = generic {
-    version = "0.40.25";
-    sha256 = "1pxpack8rrmywlf47v440hc6rv3vi8q9c6niwqnwikxvb2pwf3w7";
-  };
-
   vala_0_48 = generic {
-    version = "0.48.21";
-    sha256 = "sha256-MFRVrrdo1u2bAYNgtVGC5IsW2xvBY6TluBQg+Y0h2Zg=";
+    version = "0.48.22";
+    sha256 = "sha256-27NHjEvjZvCTFkrGHNOu29zz5EQE2eNkFK4VEk525os=";
   };
 
   vala_0_52 = generic {
-    version = "0.52.9";
-    sha256 = "sha256-HpMH2B4hHxniUB6P5PtN0Z+5J8SEtV/873FOjFFdAHk=";
+    version = "0.52.10";
+    sha256 = "sha256-nCAb+BLZh04hveU/jZwU9lF0ixqBRB/1ySkSJESQEAg=";
   };
 
   vala_0_54 = generic {
