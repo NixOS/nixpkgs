@@ -81,6 +81,14 @@ stdenv.mkDerivation rec {
       stripLen = 1;
       extraPrefix = "share/extensions/";
     })
+    # Remove mandatory break from end of paragraphs, added in Pango 1.49
+    # https://gitlab.com/inkscape/inkscape/-/merge_requests/3630
+    # TODO: Remove in Inkscape 1.1.2
+    (fetchpatch {
+      url = "https://gitlab.com/inkscape/inkscape/-/commit/b3dabef2245d4e4e977ee9d6776be9a134493515.patch";
+      sha256 = "YhqUlRBKL1vJ/iCM/DvdwbmPIsAHQpcgf4TPpjlnBng=";
+    })
+
   ];
 
   postPatch = ''
