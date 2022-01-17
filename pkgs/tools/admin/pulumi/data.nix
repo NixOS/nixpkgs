@@ -1,12 +1,12 @@
 # DO NOT EDIT! This file is generated automatically by update.sh
 { }:
 {
-  version = "3.21.0";
+  version = "3.22.1";
   pulumiPkgs = {
     x86_64-linux = [
       {
-        url = "https://get.pulumi.com/releases/sdk/pulumi-v3.21.0-linux-x64.tar.gz";
-        sha256 = "110ab7i3ynkjhbk10q150p7301prffk4xqma79rk28cxxvxf4kk3";
+        url = "https://get.pulumi.com/releases/sdk/pulumi-v3.22.1-linux-x64.tar.gz";
+        sha256 = "0yxjlkvyxap4c7ny5x0ch0j4d5360qapb670f6im7vnaqhc00by0";
       }
       {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-auth0-v2.4.0-linux-amd64.tar.gz";
@@ -103,8 +103,8 @@
     ];
     x86_64-darwin = [
       {
-        url = "https://get.pulumi.com/releases/sdk/pulumi-v3.21.0-darwin-x64.tar.gz";
-        sha256 = "0pd6jlrw2cc4g33kkl2dfqks5xicmc2bnbrf0cd2ymx9mdnkdaq8";
+        url = "https://get.pulumi.com/releases/sdk/pulumi-v3.22.1-darwin-x64.tar.gz";
+        sha256 = "0b68pfrd83x02rs2saybxycpkirjciilp4a94ps3788y1plinyih";
       }
       {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-auth0-v2.4.0-darwin-amd64.tar.gz";
@@ -201,8 +201,8 @@
     ];
     aarch64-linux = [
       {
-        url = "https://get.pulumi.com/releases/sdk/pulumi-v3.21.0-linux-arm64.tar.gz";
-        sha256 = "0484hpbf25kfxac72r74h5rfp5r59hlkhzqib9vma3l1cz9icmyx";
+        url = "https://get.pulumi.com/releases/sdk/pulumi-v3.22.1-linux-arm64.tar.gz";
+        sha256 = "0551zp5n77jzh8k3jbqq75zj734faryxxdd2fvw881cxf95v39aj";
       }
       {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-auth0-v2.4.0-linux-arm64.tar.gz";
@@ -296,8 +296,8 @@
     ];
     aarch64-darwin = [
       {
-        url = "https://get.pulumi.com/releases/sdk/pulumi-v3.21.0-darwin-arm64.tar.gz";
-        sha256 = "01446r5q9a684k0z5b6d2a7gdjszy2816v09jdxkc54cg37fhmlz";
+        url = "https://get.pulumi.com/releases/sdk/pulumi-v3.22.1-darwin-arm64.tar.gz";
+        sha256 = "00jzqrnw6khbw5hsaqwi73hx9h3yxdhy2n3jn3h76az27wfjkhkz";
       }
       {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-auth0-v2.4.0-darwin-arm64.tar.gz";
