@@ -1,18 +1,19 @@
-{ buildPythonPackage, fetchFromGitHub, twisted }:
+{ buildPythonPackage, fetchFromGitHub, matrix-synapse, twisted }:
 
 buildPythonPackage rec {
   pname = "matrix-synapse-shared-secret-auth";
-  version = "1.0.2";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "devture";
     repo = "matrix-synapse-shared-secret-auth";
     rev = version;
-    sha256 = "0cnxp3bp8mmk01a0g3lzgvaawyywjg754j4nb9iwkmm3c2nqvnpz";
+    sha256 = "sha256-kaok5IwKx97FYDrVIGAtUJfExqDln5vxEKrZda2RdzE=";
   };
 
   doCheck = false;
   pythonImportsCheck = [ "shared_secret_authenticator" ];
 
+  buildInputs = [ matrix-synapse ];
   propagatedBuildInputs = [ twisted ];
 }
