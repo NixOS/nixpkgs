@@ -1,14 +1,16 @@
-{ lib, stdenv, fetchurl, pkg-config, attr, acl, zlib, libuuid, e2fsprogs, lzo
-, asciidoc, xmlto, docbook_xml_dtd_45, docbook_xsl, libxslt, zstd, python3
+{ lib, stdenv, fetchurl
+, asciidoc, docbook_xml_dtd_45, docbook_xsl, libxslt, pkg-config, python3, xmlto
+, zstd
+, acl, attr, e2fsprogs, libuuid, lzo, systemd, zlib
 }:
 
 stdenv.mkDerivation rec {
   pname = "btrfs-progs";
-  version = "5.14.1";
+  version = "5.16";
 
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/people/kdave/btrfs-progs/btrfs-progs-v${version}.tar.xz";
-    sha256 = "sha256-1UqTRlRcpG3xKOPMt31gwJfZDJO34xSZAjbijPr4xVs=";
+    sha256 = "0cqqlcq9bywfi3cpg5ivxiv7p9v6z1r6k4nnmin24mj1kp8krarq";
   };
 
   nativeBuildInputs = [
@@ -16,7 +18,7 @@ stdenv.mkDerivation rec {
     python3 python3.pkgs.setuptools
   ];
 
-  buildInputs = [ attr acl zlib libuuid e2fsprogs lzo zstd python3 ];
+  buildInputs = [ acl attr e2fsprogs libuuid lzo python3 systemd zlib zstd ];
 
   # for python cross-compiling
   _PYTHON_HOST_PLATFORM = stdenv.hostPlatform.config;
@@ -31,10 +33,14 @@ stdenv.mkDerivation rec {
 
   configureFlags = lib.optional stdenv.hostPlatform.isMusl "--disable-backtrace";
 
+  makeFlags = [ "udevruledir=$(out)/lib/udev/rules.d" ];
+
+  enableParallelBuilding = true;
+
   meta = with lib; {
     description = "Utilities for the btrfs filesystem";
     homepage = "https://btrfs.wiki.kernel.org/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
   };
