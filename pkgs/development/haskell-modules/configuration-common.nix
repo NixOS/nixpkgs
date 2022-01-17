@@ -2216,6 +2216,16 @@ self: super: {
   # Invalid CPP in test suite: https://github.com/cdornan/memory-cd/issues/1
   memory-cd = dontCheck super.memory-cd;
 
+  # raaz-0.3 onwards uses backpack and it does not play nicely with
+  # parallel builds using -j
+  #
+  # See: https://gitlab.haskell.org/ghc/ghc/-/issues/17188
+  #
+  # Overwrite the build cores
+  raaz = overrideCabal (drv: {
+    enableParallelBuilding = false;
+  }) super.raaz;
+
   # https://github.com/andreymulik/sdp/issues/3
   sdp = disableLibraryProfiling super.sdp;
   sdp-binary = disableLibraryProfiling super.sdp-binary;
