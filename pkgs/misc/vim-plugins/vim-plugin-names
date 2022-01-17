@@ -633,6 +633,7 @@ preservim/vim-pencil
 preservim/vim-wordy
 preservim/vimux
 prettier/vim-prettier
+projekt0n/circles.nvim
 psliwka/vim-smoothie
 ptzz/lf.vim
 puremourning/vimspector

@@ -531,6 +531,18 @@ final: prev:
     meta.homepage = "https://github.com/yunlingz/ci_dark/";
   };
 
+  circles-nvim = buildVimPluginFrom2Nix {
+    pname = "circles.nvim";
+    version = "2022-01-11";
+    src = fetchFromGitHub {
+      owner = "projekt0n";
+      repo = "circles.nvim";
+      rev = "3847feed23fa3ba6abecdf1b17a6c7d2022ebe65";
+      sha256 = "1wxfix1fd8qwflc7id3g0yr7838j4vgnrk1nixv5q99d7wj0hadr";
+    };
+    meta.homepage = "https://github.com/projekt0n/circles.nvim/";
+  };
+
   clang_complete = buildVimPluginFrom2Nix {
     pname = "clang_complete";
     version = "2020-09-18";
