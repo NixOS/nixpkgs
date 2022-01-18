@@ -4873,6 +4873,8 @@ in {
 
   matrix-client = callPackage ../development/python-modules/matrix-client { };
 
+  matrix-common = callPackage ../development/python-modules/matrix-common { };
+
   matrix-nio = callPackage ../development/python-modules/matrix-nio { };
 
   mattermostdriver = callPackage ../development/python-modules/mattermostdriver { };
