@@ -2930,6 +2930,8 @@ in {
 
   flask-session = callPackage ../development/python-modules/flask-session { };
 
+  flask-security-too = callPackage ../development/python-modules/flask-security-too { };
+
   flask-silk = callPackage ../development/python-modules/flask-silk { };
 
   flask-socketio = callPackage ../development/python-modules/flask-socketio { };
