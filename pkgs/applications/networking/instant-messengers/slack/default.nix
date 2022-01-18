@@ -33,6 +33,7 @@
 , nspr
 , nss
 , pango
+, pipewire
 , systemd
 , xdg-utils
 , xorg
@@ -44,14 +45,18 @@ let
 
   pname = "slack";
 
-  x86_64-darwin-version = "4.17.0";
-  x86_64-darwin-sha256 = "0r5cafxw73qnn14ljprn7w8bfn67zbkcniq60k9pf2zbqgb4cyj9";
+  x86_64-darwin-version = "4.22.0";
+  x86_64-darwin-sha256 = "094p9vyv56m5qfp9jh2205ijfqcp0dr6bkmiv0wxihy2rg20b5zp";
 
-  x86_64-linux-version = "4.17.0";
-  x86_64-linux-sha256 = "07ccms58pq27ilkyhcf6cgwb7qrddwil5kgy8yv95ljikqzi5rxi";
+  x86_64-linux-version = "4.22.0";
+  x86_64-linux-sha256 = "0k84glxp653lxgfv5b65zvvysax7fr3lhsjgq76safk7g7cjc86i";
+
+  aarch64-darwin-version = "4.22.0";
+  aarch64-darwin-sha256 = "1z2pcgva9ixjx702c1535b4k0xr9fdnfzi5m08xgvabk9x66hqx4";
 
   version = {
     x86_64-darwin = x86_64-darwin-version;
+    aarch64-darwin = aarch64-darwin-version;
     x86_64-linux = x86_64-linux-version;
   }.${system} or throwSystem;
 
@@ -64,8 +69,12 @@ let
           url = "${base}/releases/macos/${version}/prod/x64/Slack-${version}-macOS.dmg";
           sha256 = x86_64-darwin-sha256;
         };
+        aarch64-darwin = fetchurl {
+          url = "${base}/releases/macos/${version}/prod/arm64/Slack-${version}-macOS.dmg";
+          sha256 = aarch64-darwin-sha256;
+        };
         x86_64-linux = fetchurl {
-          url = "${base}/linux_releases/slack-desktop-${version}-amd64.deb";
+          url = "${base}/releases/linux/${version}/prod/x64/slack-desktop-${version}-amd64.deb";
           sha256 = x86_64-linux-sha256;
         };
       }.${system} or throwSystem;
@@ -75,7 +84,7 @@ let
     homepage = "https://slack.com";
     license = licenses.unfree;
     maintainers = with maintainers; [ mmahut ];
-    platforms = [ "x86_64-darwin" "x86_64-linux" ];
+    platforms = [ "x86_64-darwin" "x86_64-linux" "aarch64-darwin"];
   };
 
   linux = stdenv.mkDerivation rec {
@@ -111,6 +120,7 @@ let
       nspr
       nss
       pango
+      pipewire
       stdenv.cc.cc
       systemd
       xorg.libX11
@@ -139,6 +149,8 @@ let
     dontPatchELF = true;
 
     installPhase = ''
+      runHook preInstall
+
       # The deb file contains a setuid binary, so 'dpkg -x' doesn't work here
       dpkg --fsys-tarfile $src | tar --extract
       rm -rf usr/share/lintian
@@ -164,6 +176,8 @@ let
       substituteInPlace $out/share/applications/slack.desktop \
         --replace /usr/bin/ $out/bin/ \
         --replace /usr/share/ $out/share/
+
+      runHook postInstall
     '';
   };
 
@@ -177,9 +191,11 @@ let
     sourceRoot = "Slack.app";
 
     installPhase = ''
+      runHook preInstall
       mkdir -p $out/Applications/Slack.app
       cp -R . $out/Applications/Slack.app
       /usr/bin/defaults write com.tinyspeck.slackmacgap SlackNoAutoUpdates -bool YES
+      runHook postInstall
     '';
   };
 in

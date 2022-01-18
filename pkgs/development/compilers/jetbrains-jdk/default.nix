@@ -2,12 +2,12 @@
 
 openjdk11.overrideAttrs (oldAttrs: rec {
   pname = "jetbrains-jdk";
-  version = "11.0.10-b1427";
+  version = "11_0_11-b1504.13";
   src = fetchFromGitHub {
     owner = "JetBrains";
     repo = "JetBrainsRuntime";
-    rev = "jb${lib.replaceStrings ["."] ["_"] version}";
-    sha256 = "sha256-2cn+FiFfGpp7CBeQMAASVZwTm6DOFaXaWxAL/nVC2Nk=";
+    rev = "jb${version}";
+    sha256 = "1xpgsgmmj5jp5qyw98hqmik6a7z3hfwmij023ij3qqymyj3nhm2i";
   };
   patches = [];
   meta = with lib; {
@@ -23,7 +23,7 @@ openjdk11.overrideAttrs (oldAttrs: rec {
      JetBrains Runtime is not a certified build of OpenJDK. Please, use at
      your own risk.
     '';
-    homepage = "https://bintray.com/jetbrains/intellij-jdk/";
+    homepage = "https://confluence.jetbrains.com/display/JBR/JetBrains+Runtime";
     inherit (openjdk11.meta) license platforms mainProgram;
     maintainers = with maintainers; [ edwtjo petabyteboy ];
   };

@@ -22,6 +22,8 @@ stdenvNoLibs.mkDerivation rec {
     sourceRoot=$(readlink -e "./libgcc")
   '';
 
+  hardeningDisable = [ "pie" ];
+
   preConfigure = ''
     cd "$buildRoot"
   ''

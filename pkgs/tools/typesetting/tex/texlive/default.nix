@@ -19,7 +19,6 @@ let
   };
 
   # map: name -> fixed-output hash
-  # sha1 in base32 was chosen as a compromise between security and length
   fixedHashes = lib.optionalAttrs useFixedHashes (import ./fixedHashes.nix);
 
   # function for creating a working environment from a set of TL packages
@@ -109,10 +108,11 @@ let
       pkgs =
         # tarball of a collection/scheme itself only contains a tlobj file
         [( if (attrs.hasRunfiles or false) then mkPkgV "run"
-            # the fake derivations are used for filtering of hyphenation patterns
+            # the fake derivations are used for filtering of hyphenation patterns and formats
           else {
             inherit pname version;
             tlType = "run";
+            hasFormats = attrs.hasFormats or false;
             hasHyphens = attrs.hasHyphens or false;
           }
         )]
@@ -125,8 +125,8 @@ let
 
   snapshot = {
     year = "2021";
-    month = "04";
-    day = "08";
+    month = "12";
+    day = "27";
   };
 
   tlpdb = fetchurl {
@@ -136,7 +136,7 @@ let
       #"ftp://tug.org/texlive/historic/2019/tlnet-final/tlpkg/texlive.tlpdb.xz"
       "https://texlive.info/tlnet-archive/${snapshot.year}/${snapshot.month}/${snapshot.day}/tlnet/tlpkg/texlive.tlpdb.xz"
     ];
-    sha512 = "1dsj4bza84g2f2z0w31yil3iwcnggcyg9f1xxwmp6ljk5xlzyr39cb556prx9691zbwpbrwbb5hnbqxqlnwsivgk0pmbl9mbjbk9cz0";
+    hash = "sha512-PcXTctrO0aL5C7Ci1J2Z5fa5WqKONhOK2q0FnSbT5+iP9WWSCljyQiHE8C4LYMMHii48y6AJVRkjVIukI3+rUQ==";
   };
 
   # create a derivation that contains an unpacked upstream TL package
@@ -171,11 +171,12 @@ let
           # metadata for texlive.combine
           passthru = {
             inherit pname tlType version;
+            hasFormats = args.hasFormats or false;
             hasHyphens = args.hasHyphens or false;
           };
         } // lib.optionalAttrs (fixedHash != null) {
           outputHash = fixedHash;
-          outputHashAlgo = "sha1";
+          outputHashAlgo = "sha256";
           outputHashMode = "recursive";
         }
       )

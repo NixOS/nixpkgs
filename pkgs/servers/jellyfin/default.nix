@@ -15,6 +15,8 @@
 }:
 
 let
+  dotnet-sdk = dotnetCorePackages.sdk_5_0;
+  dotnet-aspnetcore = dotnetCorePackages.aspnetcore_5_0;
   runtimeDeps = [
     ffmpeg
     fontconfig
@@ -34,20 +36,16 @@ let
       "musl-");
   # https://docs.microsoft.com/en-us/dotnet/core/rid-catalog#using-rids
   runtimeId = "${os}-${musl}${arch}";
-
-  dotnet-sdk = dotnetCorePackages.sdk_5_0;
-  dotnet-net = dotnetCorePackages.net_5_0;
-  dotnet-aspnetcore = dotnetCorePackages.aspnetcore_5_0;
 in
 stdenv.mkDerivation rec {
   pname = "jellyfin";
-  version = "10.7.6"; # ensure that jellyfin-web has matching version
+  version = "10.7.7"; # ensure that jellyfin-web has matching version
 
   src = fetchFromGitHub {
     owner = "jellyfin";
     repo = "jellyfin";
     rev = "v${version}";
-    sha256 = "3wXB9HrOaLgHJjWpwPWVtcy8xcYBgZoE29hWqf1On2Q=";
+    sha256 = "mByGsz9+R8I5/f6hUoM9JK/MDcWIJ/Xt51Z/LRXeQQQ=";
   };
 
   nativeBuildInputs = [
@@ -62,9 +60,9 @@ stdenv.mkDerivation rec {
   ];
 
   nugetDeps = linkFarmFromDrvs "${pname}-nuget-deps" (import ./nuget-deps.nix {
-    fetchNuGet = { name, version, sha256 }: fetchurl {
-      name = "nuget-${name}-${version}.nupkg";
-      url = "https://www.nuget.org/api/v2/package/${name}/${version}";
+    fetchNuGet = { pname, version, sha256 }: fetchurl {
+      name = "${pname}-${version}.nupkg";
+      url = "https://www.nuget.org/api/v2/package/${pname}/${version}";
       inherit sha256;
     };
   });

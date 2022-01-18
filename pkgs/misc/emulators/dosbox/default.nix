@@ -1,10 +1,11 @@
 { stdenv, lib, fetchurl, makeDesktopItem, SDL, SDL_net, SDL_sound, libGLU, libGL, libpng, graphicsmagick }:
 
 stdenv.mkDerivation rec {
-  name = "dosbox-0.74-3";
+  pname = "dosbox";
+  version = "0.74-3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/dosbox/${name}.tar.gz";
+    url = "mirror://sourceforge/dosbox/dosbox-${version}.tar.gz";
     sha256 = "02i648i50dwicv1vaql15rccv4g8h5blf5g6inv67lrfxpbkvlf0";
   };
 

@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchPypi, isPy27, makeDesktopItem, intervaltree,
-  jedi, pycodestyle, psutil, pyflakes, rope, numpy, scipy, matplotlib, pylint,
+  jedi, pycodestyle, psutil, rope, numpy, scipy, matplotlib, pylint,
   keyring, numpydoc, qtconsole, qtawesome, nbconvert, mccabe, pyopengl,
   cloudpickle, pygments, spyder-kernels, qtpy, pyzmq, chardet, qdarkstyle,
   watchdog, python-language-server, pyqtwebengine, atomicwrites, pyxdg,
@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "spyder";
-  version = "4.2.5";
+  version = "5.2.0";
 
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "03159003f6ea51458e10000091e65e77888b095dba48e64ca2b36c75a648580c";
+    sha256 = "cd04acc88426acee9c4ce6bb91f50c13fc161a437e68bca701243b3415ce9d08";
   };
 
   nativeBuildInputs = [ pyqtwebengine.wrapQtAppsHook ];

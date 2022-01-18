@@ -59,7 +59,7 @@ in
 
     package = mkOption {
       default = pkgs.restic-rest-server;
-      defaultText = "pkgs.restic-rest-server";
+      defaultText = literalExpression "pkgs.restic-rest-server";
       type = types.package;
       description = "Restic REST server package to use.";
     };
@@ -94,6 +94,10 @@ in
         PrivateDevices = true;
       };
     };
+
+    systemd.tmpfiles.rules = mkIf cfg.privateRepos [
+        "f ${cfg.dataDir}/.htpasswd 0700 restic restic -"
+    ];
 
     users.users.restic = {
       group = "restic";

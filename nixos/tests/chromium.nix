@@ -81,12 +81,12 @@ mapAttrs (channel: chromiumPkg: makeTest rec {
         # Add optional CLI options:
         options = []
         major_version = "${versions.major (getVersion chromiumPkg.name)}"
-        if major_version > "91":
-            # To avoid a GPU crash:
-            options += ["--use-gl=angle", "--use-angle=swiftshader"]
-        options.append("file://${startupHTML}")
+        if major_version > "95" and not pname.startswith("google-chrome"):
+            # Workaround to avoid a GPU crash:
+            options.append("--use-gl=swiftshader")
         # Launch the process:
-        machine.succeed(ru(f'ulimit -c unlimited; {binary} {shlex.join(options)} & disown'))
+        options.append("file://${startupHTML}")
+        machine.succeed(ru(f'ulimit -c unlimited; {binary} {shlex.join(options)} >&2 & disown'))
         if binary.startswith("google-chrome"):
             # Need to click away the first window:
             machine.wait_for_text("Make Google Chrome the default browser")
@@ -215,7 +215,7 @@ mapAttrs (channel: chromiumPkg: makeTest rec {
 
         clipboard = machine.succeed(
             ru(
-                "echo void | ${pkgs.xclip}/bin/xclip -i"
+                "echo void | ${pkgs.xclip}/bin/xclip -i >&2"
             )
         )
         machine.succeed(
@@ -239,7 +239,18 @@ mapAttrs (channel: chromiumPkg: makeTest rec {
 
 
     with test_new_win("gpu_info", "chrome://gpu", "chrome://gpu"):
-        pass
+        # To check the text rendering (catches regressions like #131074):
+        machine.wait_for_text("Graphics Feature Status")
+
+
+    with test_new_win("version_info", "chrome://version", "About Version") as clipboard:
+        filters = [
+            r"${chromiumPkg.version} \(Official Build",
+        ]
+        if not all(
+            re.search(filter, clipboard) for filter in filters
+        ):
+            assert False, "Version info not correct."
 
 
     machine.shutdown()

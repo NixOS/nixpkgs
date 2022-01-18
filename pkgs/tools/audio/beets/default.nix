@@ -1,6 +1,18 @@
-{ stdenv, lib, fetchFromGitHub, writeScript, glibcLocales, diffPlugins, substituteAll
-, pythonPackages, imagemagick, gobject-introspection, gst_all_1
-, runtimeShell, unstableGitUpdater
+{ stdenv
+, lib
+, fetchFromGitHub
+, writeScript
+, glibcLocales
+, diffPlugins
+, substituteAll
+, pythonPackages
+# can be null, if you wish to disable a reference to it. It's needed for the
+# artresizer, see:
+# https://beets.readthedocs.io/en/v1.6.0/plugins/fetchart.html#image-resizing
+, imagemagick
+, gobject-introspection
+, gst_all_1
+, runtimeShell
 
 # external plugins package set
 , beetsExternalPlugins
@@ -73,9 +85,9 @@ let
   };
 
   pluginsWithoutDeps = [
-    "bareasc" "bench" "bpd" "bpm" "bucket" "duplicates" "edit" "embedart"
+    "albumtypes" "bareasc" "bench" "bpd" "bpm" "bucket" "duplicates" "edit" "embedart"
     "export" "filefilter" "fish" "freedesktop" "fromfilename" "ftintitle" "fuzzy"
-    "hook" "ihate" "importadded" "importfeeds" "info" "inline" "ipfs"
+    "hook" "ihate" "importadded" "importfeeds" "info" "inline" "ipfs" "gmusic"
     "mbcollection" "mbsubmit" "mbsync" "metasync" "missing" "parentwork" "permissions" "play"
     "plexupdate" "random" "rewrite" "scrub" "smartplaylist" "spotify" "the"
     "types" "unimported" "zero"
@@ -89,29 +101,15 @@ let
   testShell = "${bashInteractive}/bin/bash --norc";
   completion = "${bash-completion}/share/bash-completion/bash_completion";
 
-  # This is a stripped down beets for testing of the external plugins.
-  externalTestArgs.beets = (lib.beets.override {
-    enableAlternatives = false;
-    enableCopyArtifacts = false;
-    enableExtraFiles = false;
-  }).overrideAttrs (lib.const {
-    doInstallCheck = false;
-  });
-
 in pythonPackages.buildPythonApplication rec {
   pname = "beets";
-  # While there is a stable version, 1.4.9, it is more than 1000 commits behind
-  # master and lacks many bug fixes and improvements[1]. Also important,
-  # unstable does not require bs1770gain[2].
-  # [1]: https://discourse.beets.io/t/forming-a-beets-core-team/639
-  # [2]: https://github.com/NixOS/nixpkgs/pull/90504
-  version = "unstable-2021-05-13";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "beetbox";
     repo = "beets";
-    rev = "1faa41f8c558d3f4415e5e48cf4513d50b466d34";
-    sha256 = "sha256-P0bV7WNqCYe9+3lqnFmAoRlb2asdsBUjzRMc24RngpU=";
+    rev = "v${version}";
+    sha256 = "sha256-fT+rCJJQR7bdfAcmeFRaknmh4ZOP4RCx8MXpq7/D8tM=";
   };
 
   propagatedBuildInputs = [
@@ -133,7 +131,7 @@ in pythonPackages.buildPythonApplication rec {
     ++ lib.optional enableAcoustid         pythonPackages.pyacoustid
     ++ lib.optional enableBeatport         pythonPackages.requests_oauthlib
     ++ lib.optional enableConvert          ffmpeg
-    ++ lib.optional enableDiscogs          pythonPackages.discogs_client
+    ++ lib.optional enableDiscogs          pythonPackages.discogs-client
     ++ lib.optional (enableFetchart
                   || enableDeezer
                   || enableEmbyupdate
@@ -157,7 +155,6 @@ in pythonPackages.buildPythonApplication rec {
   ;
 
   buildInputs = [
-    imagemagick
   ] ++ (with gst_all_1; [
     gst-plugins-base
     gst-plugins-good
@@ -172,20 +169,24 @@ in pythonPackages.buildPythonApplication rec {
     responses
     # Although considered as plugin dependencies, they are needed for the
     # tests, for disabling them via an override makes the build fail. see:
-    # https://github.com/beetbox/beets/blob/v1.4.9/setup.py
+    # https://github.com/beetbox/beets/blob/v1.6.0/setup.py
     pylast
     mpd2
-    discogs_client
+    discogs-client
     pyxdg
   ];
 
   patches = [
     # Bash completion fix for Nix
     ./bash-completion-always-print.patch
-    # From some reason upstream assumes the program 'keyfinder-cli' is located
-    # in the path as `KeyFinder`
-    ./keyfinder-default-bin.patch
   ]
+    # Fix path to imagemagick, used for the artresizer.py file. This reference
+    # to imagemagick might be expensive for some people, so the patch can be
+    # disabled if imagemagick is set to null
+    ++ lib.optional (imagemagick != null) (substituteAll {
+      src = ./imagemagick-nix-path.patch;
+      inherit imagemagick;
+    })
     # We need to force ffmpeg as the default, since we do not package
     # bs1770gain, and set the absolute path there, to avoid impurities.
     ++ lib.optional enableReplaygain (substituteAll {
@@ -205,13 +206,10 @@ in pythonPackages.buildPythonApplication rec {
 
   # Disable failing tests
   postPatch = ''
-    sed -i -e '/assertIn.*item.*path/d' test/test_info.py
     echo echo completion tests passed > test/rsrc/test_completion.sh
 
+    # https://github.com/beetbox/beets/issues/1187
     sed -i -e 's/len(mf.images)/0/' test/test_zero.py
-
-    # Google Play Music was discontinued
-    rm -r beetsplug/gmusic.py
   '';
 
   postInstall = ''
@@ -261,17 +259,19 @@ in pythonPackages.buildPythonApplication rec {
     runHook postInstallCheck
   '';
 
-  makeWrapperArgs = [ "--set GI_TYPELIB_PATH \"$GI_TYPELIB_PATH\"" "--set GST_PLUGIN_SYSTEM_PATH_1_0 \"$GST_PLUGIN_SYSTEM_PATH_1_0\"" ];
+  makeWrapperArgs = [
+    "--set GI_TYPELIB_PATH \"$GI_TYPELIB_PATH\""
+    "--set GST_PLUGIN_SYSTEM_PATH_1_0 \"$GST_PLUGIN_SYSTEM_PATH_1_0\""
+  ];
 
   passthru = {
     # FIXME: remove in favor of pkgs.beetsExternalPlugins
     externalPlugins = beetsExternalPlugins;
-    updateScript = unstableGitUpdater { url = "https://github.com/beetbox/beets"; };
   };
 
   meta = with lib; {
     description = "Music tagger and library organizer";
-    homepage = "http://beets.io";
+    homepage = "https://beets.io";
     license = licenses.mit;
     maintainers = with maintainers; [ aszlig doronbehar lovesegfault pjones ];
     platforms = platforms.linux;

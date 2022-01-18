@@ -19,7 +19,6 @@ buildGoPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ pSub ];
     platforms = platforms.unix;
-    inherit version;
   };
 
 }

@@ -70,7 +70,84 @@ let
         )
       );
 
-      overrides = {
+      overrides = lib.optionalAttrs (variant == "stable") {
+
+        # upstream issue: missing file header
+        abridge-diff =
+          if super.abridge-diff.version == "0.1"
+          then markBroken super.abridge-diff
+          else super.abridge-diff;
+
+        # upstream issue: missing file header
+        bufshow = markBroken super.bufshow;
+
+        # upstream issue: missing file header
+        speech-tagger = markBroken super.speech-tagger;
+
+        # upstream issue: missing file header
+        textmate = markBroken super.textmate;
+
+        # upstream issue: missing file header
+        window-numbering = markBroken super.window-numbering;
+
+        # upstream issue: missing file header
+        voca-builder = markBroken super.voca-builder;
+
+        # upstream issue: missing file header
+        initsplit = markBroken super.initsplit;
+
+        # upstream issue: missing file header
+        jsfmt = markBroken super.jsfmt;
+
+        # upstream issue: missing file header
+        maxframe = markBroken super.maxframe;
+
+        # upstream issue: missing file header
+        connection = markBroken super.connection;
+
+        # upstream issue: missing file header
+        dictionary = markBroken super.dictionary;
+
+        # upstream issue: missing file header
+        fold-dwim =
+          if super.fold-dwim.version == "1.2"
+          then markBroken super.fold-dwim
+          else super.fold-dwim;
+
+        # upstream issue: missing file header
+        gl-conf-mode =
+          if super.gl-conf-mode.version == "0.3"
+          then markBroken super.gl-conf-mode
+          else super.gl-conf-mode;
+
+        # upstream issue: missing file header
+        ligo-mode =
+          if super.ligo-mode.version == "0.3"
+          then markBroken super.ligo-mode
+          else super.ligo-mode;
+
+        # upstream issue: missing file header
+        link = markBroken super.link;
+
+        # upstream issue: missing file header
+        org-dp =
+          if super.org-dp.version == "1"
+          then markBroken super.org-dp
+          else super.org-dp;
+
+        # upstream issue: missing file header
+        revbufs =
+          if super.revbufs.version == "1.2"
+          then markBroken super.revbufs
+          else super.revbufs;
+
+        # upstream issue: missing file header
+        elmine = markBroken super.elmine;
+
+        # upstream issue: missing file header
+        ido-complete-space-or-hyphen = markBroken super.ido-complete-space-or-hyphen;
+
+      } // {
         # Expects bash to be at /bin/bash
         ac-rtags = fix-rtags super.ac-rtags;
 
@@ -325,20 +402,13 @@ let
           buildInputs = old.buildInputs ++ [ pkgs.tdlib ];
           nativeBuildInputs = [ pkgs.pkg-config ];
 
-          patches = [
-            (pkgs.fetchpatch {
-              name = "telega-server-bin-store-prefer.patch";
-              url = "https://github.com/zevlg/telega.el/commit/72550f984ca869309d197203ef7de99182d71729.patch";
-              sha256 = "18xvz53bygksak6h5f8cz79y83p2va15i8qz7n4s3g9gsklmkj2p";
-            })
-          ];
-
           postPatch = ''
             substituteInPlace telega-customize.el \
               --replace 'defcustom telega-server-command "telega-server"' \
                         "defcustom telega-server-command \"$out/bin/telega-server\""
 
-            substituteInPlace telega-sticker.el --replace '"dwebp"' '"${pkgs.libwebp}/bin/dwebp"'
+            substituteInPlace telega-sticker.el --replace '"dwebp' '"${pkgs.libwebp}/bin/dwebp'
+            substituteInPlace telega-sticker.el --replace '"ffmpeg' '"${pkgs.ffmpeg}/bin/ffmpeg'
 
             substituteInPlace telega-vvnote.el --replace '"ffmpeg' '"${pkgs.ffmpeg}/bin/ffmpeg'
           '';
@@ -400,31 +470,7 @@ let
         rect-plus = super."rect+";
 
         # upstream issue: missing file header
-        bufshow = markBroken super.bufshow;
-
-        # upstream issue: missing file header
-        connection = markBroken super.connection;
-
-        # upstream issue: missing file header
-        dictionary = markBroken super.dictionary;
-
-        # upstream issue: missing file header
-        elmine = markBroken super.elmine;
-
-        # upstream issue: missing file header
-        ido-complete-space-or-hyphen = markBroken super.ido-complete-space-or-hyphen;
-
-        # upstream issue: missing file header
-        initsplit = markBroken super.initsplit;
-
-        # upstream issue: missing file header
         instapaper = markBroken super.instapaper;
-
-        # upstream issue: missing file header
-        jsfmt = markBroken super.jsfmt;
-
-        # upstream issue: missing file header
-        maxframe = markBroken super.maxframe;
 
         # upstream issue: doesn't build
         magit-stgit = markBroken super.magit-stgit;
@@ -442,22 +488,7 @@ let
         qiita = markBroken super.qiita;
 
         # upstream issue: missing file header
-        speech-tagger = markBroken super.speech-tagger;
-
-        # upstream issue: missing file header
         sql-presto = markBroken super.sql-presto;
-
-        # upstream issue: missing file header
-        textmate = markBroken super.textmate;
-
-        # upstream issue: missing file header
-        link = markBroken super.link;
-
-        # upstream issue: missing file header
-        voca-builder = markBroken super.voca-builder;
-
-        # upstream issue: missing file header
-        window-numbering = markBroken super.window-numbering;
 
         editorconfig = super.editorconfig.overrideAttrs (attrs: {
           propagatedUserEnvPkgs = [ pkgs.editorconfig-core-c ];
@@ -517,24 +548,7 @@ let
         });
       };
 
-      # Deprecated legacy aliases for backwards compat
-      aliases = lib.listToAttrs (lib.attrValues (lib.mapAttrs (n: v: { name = v; value = builtins.trace "Melpa attribute '${v}' is a legacy alias that will be removed in 21.05, use '${n}' instead" melpaPackages.${n}; }) (lib.filterAttrs (n: v: lib.hasAttr n melpaPackages) {
-        "auto-complete-clang-async" = "emacsClangCompleteAsync";
-        "vterm" = "emacs-libvterm";
-        "0xc" = "_0xc";
-        "2048-game" = "_2048-game";
-        "4clojure" = "_4clojure";
-        "@" = "at";
-        "term+" = "term-plus";
-        "term+key-intercept" = "term-plus-key-intercept";
-        "term+mux" = "term-plus-mux";
-        "xml+" = "xml-plus";
-      })));
-
-      melpaPackages = lib.mapAttrs (n: v: if lib.hasAttr n overrides then overrides.${n} else v) super;
-
-    in
-    melpaPackages // aliases);
+    in lib.mapAttrs (n: v: if lib.hasAttr n overrides then overrides.${n} else v) super);
 
 in
 generateMelpa { }

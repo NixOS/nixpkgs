@@ -5,65 +5,40 @@
 , python3
 }:
 
-let
-  py = python3.override {
-    packageOverrides = self: super: {
-
-      click = super.click.overridePythonAttrs (oldAttrs: rec {
-        version = "7.1.2";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "06kbzd6sjfkqan3miwj9wqyddfxc2b6hi7p5s4dvqjb3gif2bdfj";
-        };
-      });
-
-      arrow = super.arrow.overridePythonAttrs (oldAttrs: rec {
-        version = "1.0.3";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "0793badh4hgbk2c5g70hmbl7n3d4g5d87bcflld0w9rjwy59r71r";
-        };
-      });
-
-      sh = super.sh.overridePythonAttrs (oldAttrs: rec {
-        version = "1.14.1";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "13hxgifab9ichla13qaa7sh8r0il7vs1r21js72s0n355zr9mair";
-        };
-      });
-    };
-  };
-in
-with py.pkgs;
-
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "gitlint";
-  version = "0.15.1";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "jorisroovers";
     repo = "gitlint";
     rev = "v${version}";
-    sha256 = "sha256-CqmE4V+svSuQAsoX0I3NpUqPU5CQf3fyCHJPrjUjHF4=";
+    sha256 = "sha256-RXBMb43BBiJ23X0eKC1kqgLw8iFKJnP5iejY0AWcUrU=";
   };
 
-  nativeBuildInputs = [
-    wheel
-  ];
+  # Upstream splitted the project into gitlint and gitlint-core to
+  # simplify the dependency handling
+  sourceRoot = "source/gitlint-core";
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3.pkgs; [
     arrow
     click
     sh
   ];
 
-  preCheck = ''
-    export PATH="$out/bin:$PATH"
+  checkInputs = with python3.pkgs; [
+    gitMinimal
+    pytestCheckHook
+  ];
+
+  postPatch = ''
+    # We don't need gitlint-core
+    substituteInPlace setup.py \
+      --replace "'gitlint-core[trusted-deps]==' + version," ""
   '';
 
-  checkInputs = [
-    gitMinimal
+  pythonImportsCheck = [
+    "gitlint"
   ];
 
   meta = with lib; {

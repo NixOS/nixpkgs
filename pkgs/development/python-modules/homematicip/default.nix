@@ -5,7 +5,9 @@
 , async-timeout
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , pytestCheckHook
+, pythonAtLeast
 , pythonOlder
 , pytest-aiohttp
 , pytest-asyncio
@@ -16,15 +18,26 @@
 
 buildPythonPackage rec {
   pname = "homematicip";
-  version = "1.0.0";
+  version = "1.0.1";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "coreGreenberet";
     repo = "homematicip-rest-api";
     rev = version;
-    sha256 = "0bgvrjcf10kiqqkbl56sxx3jydd722b08q2j9c8sxpk0qdrmrinv";
+    sha256 = "008snxx9ijpi1zr1pi1v4a6g74j821hyw0khs9lmi08v2mcabm36";
   };
+
+  patches = [
+    (fetchpatch {
+      # Drop loop kwarg from async_timeout.timeout
+      # https://github.com/coreGreenberet/homematicip-rest-api/pull/424
+      url = "https://github.com/coreGreenberet/homematicip-rest-api/commit/90efb335667e3d462b7f9ef113d2e0b8bb4e96b4.patch";
+      sha256 = "0f2bbs0666mf6sc7p4n8fwh29yjilkq36qf5pn0waf6iqdzxqwih";
+    })
+  ];
 
   propagatedBuildInputs = [
     aenum
@@ -53,6 +66,7 @@ buildPythonPackage rec {
     "test_pluggable_switch_measuring"
     "test_rotary_handle_sensor"
     "test_security_group"
+    "test_security_zone"
     "test_shutter_device"
     "test_smoke_detector"
     "test_switching_group"
@@ -64,9 +78,16 @@ buildPythonPackage rec {
     "test_home_unknown_types"
     # Requires network access
     "test_websocket"
+  ] ++ lib.optionals (pythonAtLeast "3.10") [
+    "test_connection_lost"
+    "test_user_disconnect_and_reconnect"
+    "test_ws_message"
+    "test_ws_no_pong"
   ];
 
-  pythonImportsCheck = [ "homematicip" ];
+  pythonImportsCheck = [
+    "homematicip"
+  ];
 
   meta = with lib; {
     description = "Python module for the homematicIP REST API";

@@ -2,15 +2,15 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = "trivial-features";
-  version = "20210411-git";
+  version = "20211209-git";
 
   description = "Ensures consistent *FEATURES* across multiple CLs.";
 
   deps = [ ];
 
   src = fetchurl {
-    url = "http://beta.quicklisp.org/archive/trivial-features/2021-04-11/trivial-features-20210411-git.tgz";
-    sha256 = "0z6nzql8z7bz8kzd08mh36h0r54vqx7pwigy8r617jhvb0r0n0n4";
+    url = "http://beta.quicklisp.org/archive/trivial-features/2021-12-09/trivial-features-20211209-git.tgz";
+    sha256 = "1sxblr86hvbb99isr86y08snfpcajd6ra3396ibqkfnw33hhkgql";
   };
 
   packageName = "trivial-features";
@@ -20,8 +20,8 @@ rec {
 }
 /* (SYSTEM trivial-features DESCRIPTION
     Ensures consistent *FEATURES* across multiple CLs. SHA256
-    0z6nzql8z7bz8kzd08mh36h0r54vqx7pwigy8r617jhvb0r0n0n4 URL
-    http://beta.quicklisp.org/archive/trivial-features/2021-04-11/trivial-features-20210411-git.tgz
-    MD5 5ec554fff48d38af5023604a1ae42d3a NAME trivial-features FILENAME
-    trivial-features DEPS NIL DEPENDENCIES NIL VERSION 20210411-git SIBLINGS
+    1sxblr86hvbb99isr86y08snfpcajd6ra3396ibqkfnw33hhkgql URL
+    http://beta.quicklisp.org/archive/trivial-features/2021-12-09/trivial-features-20211209-git.tgz
+    MD5 eca3e353c7d7f100a07a5aeb4de02098 NAME trivial-features FILENAME
+    trivial-features DEPS NIL DEPENDENCIES NIL VERSION 20211209-git SIBLINGS
     (trivial-features-tests) PARASITES NIL) */

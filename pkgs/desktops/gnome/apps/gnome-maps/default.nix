@@ -9,13 +9,13 @@
 , gtk3
 , gobject-introspection
 , gdk-pixbuf
+, librest
 , librsvg
 , libgweather
 , geoclue2
 , wrapGAppsHook
 , folks
 , libchamplain
-, gfbgraph
 , libsoup
 , gsettings-desktop-schemas
 , webkitgtk
@@ -29,11 +29,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-maps";
-  version = "40.3";
+  version = "41.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-p58Fz+u1UMUanGKwgDk2PXDdo90RP+cTR6lCW9cYaIk=";
+    sha256 = "sha256-gYIbTK/GQc1QDXOzMMY85aBahPBDBxbWPoizyuqs/Qw=";
   };
 
   doCheck = true;
@@ -53,7 +53,6 @@ stdenv.mkDerivation rec {
     gdk-pixbuf
     geoclue2
     geocode-glib
-    gfbgraph
     gjs
     gnome-online-accounts
     gnome.adwaita-icon-theme
@@ -64,6 +63,7 @@ stdenv.mkDerivation rec {
     libgee
     libgweather
     libhandy
+    librest
     librsvg
     libsoup
     webkitgtk

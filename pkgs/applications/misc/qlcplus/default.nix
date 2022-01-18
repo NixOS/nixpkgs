@@ -39,8 +39,6 @@ mkDerivation rec {
       variables.pri
   '';
 
-  enableParallelBuilding = true;
-
   postInstall = ''
     ln -sf $out/lib/*/libqlcplus* $out/lib
   '';

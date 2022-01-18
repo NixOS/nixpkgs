@@ -138,7 +138,7 @@ in
 
         default = {};
 
-        example = literalExample ''
+        example = literalExpression ''
           {
             pipe1 =
               { keyfile = "/var/lib/spiped/pipe1.key";

@@ -1,5 +1,6 @@
 { fetchFromGitHub
-, lib, stdenv
+, lib
+, stdenv
 , gnome
 , gnome-icon-theme
 , hicolor-icon-theme
@@ -10,14 +11,14 @@
 
 stdenv.mkDerivation rec {
   pname = "mint-x-icons";
-  version = "1.5.5";
+  version = "1.6.3";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
-    # commit is named 1.5.5, tags=404
-    rev = "ecfbeb62bba41e85a61099df467c4700ac63c1e0";
-    sha256 = "1yxm7h7giag5hmymgxsg16vc0rhxb2vn3piaksc463mic4vwfa3i";
+    # they don't exactly do tags, it's just a named commit
+    rev = "286eb4acdfc3e3c77572dfd0cd70ffd4208d3a35";
+    hash = "sha256-mZkCEBC1O2mW8rM1kpOWdC5CwIeafyBS95cMY6x1yco=";
   };
 
   propagatedBuildInputs = [

@@ -24,7 +24,7 @@ in symlinkJoin {
     inherit license homepage;
     description = description
     + " (with plugins: "
-    + lib.concatStrings (lib.intersperse ", " (map (x: ""+x.name) plugins))
+    + lib.concatStringsSep ", " (map (x: ""+x.name) plugins)
     + ")";
   };
 }

@@ -18,11 +18,11 @@
 
 buildPythonPackage rec {
   pname = "junos-eznc";
-  version = "2.6.1";
+  version = "2.6.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2f5de7dedaac8dd71bfea23c6a7d883e29947c91de1ba299a9242e0a4406ee46";
+    sha256 = "4eee93d0af203af7cee54a8f0c7bd28af683e829edf1fd68feba85d0ad737395";
   };
 
   postPatch = ''
@@ -39,6 +39,8 @@ buildPythonPackage rec {
   checkPhase = ''
     nosetests -v --with-coverage --cover-package=jnpr.junos --cover-inclusive -a unit
   '';
+
+  pythonImportsCheck = [ "jnpr.junos" ];
 
   meta = with lib; {
     homepage = "http://www.github.com/Juniper/py-junos-eznc";

@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "openwsman";
-  version = "2.7.0";
+  version = "2.7.1";
 
   src = fetchFromGitHub {
     owner  = "Openwsman";
     repo   = "openwsman";
     rev    = "v${version}";
-    sha256 = "19dj38jyzhhhvk863cikcwk5awzlq3337pxmsaqqm4wrcygrkfmx";
+    sha256 = "sha256-/fSVzpGPObMkJIu7j6eR6A7Gtf2jttoPhcSayBvn3IU=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
@@ -35,6 +35,5 @@ stdenv.mkDerivation rec {
     license      = licenses.bsd3;
     maintainers  = with maintainers; [ deepfire ];
     platforms    = platforms.linux; # PAM is not available on Darwin
-    inherit version;
   };
 }

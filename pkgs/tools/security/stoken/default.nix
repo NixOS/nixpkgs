@@ -20,9 +20,9 @@ stdenv.mkDerivation rec {
     autoconf
   '';
 
-  nativeBuildInputs = [ pkg-config ];
+  strictDeps = true;
+  nativeBuildInputs = [ pkg-config autoconf automake libtool ];
   buildInputs = [
-    autoconf automake libtool
     libxml2 nettle
   ] ++ lib.optional withGTK3 gtk3;
 

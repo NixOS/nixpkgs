@@ -8,13 +8,20 @@
 
 buildPythonPackage rec {
   pname = "cartopy";
-  version = "0.19.0.post1";
+  version = "0.20.1";
 
   src = fetchPypi {
     inherit version;
     pname = "Cartopy";
-    sha256 = "0xnm8z3as3hriivdfd26s6vn5b63gb46x6vxw6gh1mwfm5rlg2sb";
+    sha256 = "91f87b130e2574547a20cd634498df97d797abd12dcfd0235bc0cdbcec8b05e3";
   };
+
+  postPatch = ''
+    # https://github.com/SciTools/cartopy/issues/1880
+    substituteInPlace lib/cartopy/tests/test_crs.py \
+      --replace "test_osgb(" "dont_test_osgb(" \
+      --replace "test_epsg(" "dont_test_epsg("
+  '';
 
   buildInputs = [
     geos proj

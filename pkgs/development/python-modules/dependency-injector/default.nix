@@ -16,13 +16,13 @@
 
 buildPythonPackage rec {
   pname = "dependency-injector";
-  version = "4.34.0";
+  version = "4.35.3";
 
   src = fetchFromGitHub {
     owner = "ets-labs";
     repo = "python-dependency-injector";
     rev = version;
-    sha256 = "sha256-MI0+saRe4Zi77otVPGYxrX9z8Jc5K1A1sCxHBS0uta0=";
+    sha256 = "sha256-2qe4A2T3EagNCh1zSbPWblVN7p9NH8rNwQQVyESJTdk=";
   };
 
   propagatedBuildInputs = [

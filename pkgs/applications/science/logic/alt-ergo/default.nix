@@ -2,13 +2,13 @@
 
 let
   pname = "alt-ergo";
-  version = "2.4.0";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "OCamlPro";
     repo = pname;
     rev = version;
-    sha256 = "1jm1yrvsg8iyfp9bb728zdx2i7yb6z7minjrfs27k5ncjqkjm65g";
+    sha256 = "0hglj1p0753w2isds01h90knraxa42d2jghr35dpwf9g8a1sm9d3";
   };
 
   useDune2 = true;

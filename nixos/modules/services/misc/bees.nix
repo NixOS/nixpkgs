@@ -21,6 +21,8 @@ let
         <para>
         This must be in a format usable by findmnt; that could be a key=value
         pair, or a bare path to a mount point.
+        Using bare paths will allow systemd to start the beesd service only
+        after mounting the associated path.
       '';
       example = "LABEL=MyBulkDataDrive";
     };
@@ -61,7 +63,7 @@ let
       description = ''
         Extra command-line options passed to the daemon. See upstream bees documentation.
       '';
-      example = literalExample ''
+      example = literalExpression ''
         [ "--thread-count" "4" ]
       '';
     };
@@ -75,7 +77,7 @@ in
       type = with types; attrsOf (submodule fsOptions);
       description = "BTRFS filesystems to run block-level deduplication on.";
       default = { };
-      example = literalExample ''
+      example = literalExpression ''
         {
           root = {
             spec = "LABEL=root";
@@ -122,6 +124,7 @@ in
             StartupIOWeight = 25;
             SyslogIdentifier = "beesd"; # would otherwise be "bees-service-wrapper"
           };
+        unitConfig.RequiresMountsFor = lib.mkIf (lib.hasPrefix "/" fs.spec) fs.spec;
         wantedBy = [ "multi-user.target" ];
       })
       cfg.filesystems;

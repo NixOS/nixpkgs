@@ -5,14 +5,14 @@
 
 stdenv.mkDerivation rec {
   pname = "libglvnd";
-  version = "1.3.3";
+  version = "1.4.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "glvnd";
     repo = "libglvnd";
     rev = "v${version}";
-    sha256 = "0gjk6m3gkdm12bmih2jflp0v5s1ibkixk7mrzrk0cj884m3hy1z6";
+    sha256 = "06y7m486kgg566krbhb0gvmpzy6ayd98psnrmmkrnw8p513lg8k3";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config python3 addOpenGLRunpath ];
@@ -63,6 +63,7 @@ stdenv.mkDerivation rec {
     '';
     inherit (src.meta) homepage;
     # https://gitlab.freedesktop.org/glvnd/libglvnd#libglvnd:
+    changelog = "https://gitlab.freedesktop.org/glvnd/libglvnd/-/tags/v${version}";
     license = with licenses; [ mit bsd1 bsd3 gpl3Only asl20 ];
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ primeos ];

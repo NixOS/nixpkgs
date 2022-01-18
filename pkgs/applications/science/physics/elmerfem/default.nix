@@ -2,19 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "elmerfem";
-  version = "8.4";
+  version = "9.0";
 
   src = fetchFromGitHub {
     owner = "elmercsc";
     repo = "elmerfem";
     rev = "release-${version}";
-    sha256 = "0vk31lplxlng173q8jjcpbyj1gaf98jvkqjvi9077d1nslya7vpm";
+    sha256 = "VK7jvu4s5d7k0c39XqY9dEzg/vXtX5Yr/09VcuZVQ9A=";
   };
 
   hardeningDisable = [ "format" ];
 
-  nativeBuildInputs = [ cmake pkg-config git ];
-  buildInputs = [ gfortran mpi blas liblapack qt4 qwt6_qt4 ];
+  nativeBuildInputs = [ cmake gfortran pkg-config git ];
+  buildInputs = [ mpi blas liblapack qt4 qwt6_qt4 ];
 
   preConfigure = ''
     patchShebangs ./
@@ -32,15 +32,11 @@ stdenv.mkDerivation rec {
   "-DCMAKE_OpenGL_GL_PREFERENCE=GLVND"
   ];
 
-  patches = [
-    ./fix-cmake.patch
-  ];
-
   meta = with lib; {
     homepage = "https://elmerfem.org/";
     description = "A finite element software for multiphysical problems";
     platforms = platforms.unix;
-    maintainers = [ maintainers.wulfsta ];
+    maintainers = with maintainers; [ wulfsta broke ];
     license = licenses.lgpl21;
   };
 

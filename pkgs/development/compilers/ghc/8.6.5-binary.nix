@@ -2,6 +2,8 @@
 , fetchurl, perl, gcc
 , ncurses5, ncurses6, gmp, glibc, libiconv
 , llvmPackages
+, coreutils
+, targetPackages
 }:
 
 # Prebuilt only does native
@@ -30,12 +32,24 @@ let
 
   downloadsUrl = "https://downloads.haskell.org/ghc";
 
+  runtimeDeps = [
+    targetPackages.stdenv.cc
+    targetPackages.stdenv.cc.bintools
+    coreutils # for cat
+  ]
+  ++ lib.optionals useLLVM [
+    (lib.getBin llvmPackages.llvm)
+  ]
+  # On darwin, we need unwrapped bintools as well (for otool)
+  ++ lib.optionals (stdenv.targetPlatform.linker == "cctools") [
+    targetPackages.stdenv.cc.bintools.bintools
+  ];
+
 in
 
 stdenv.mkDerivation rec {
   version = "8.6.5";
-
-  name = "ghc-${version}-binary";
+  pname = "ghc-binary";
 
   # https://downloads.haskell.org/~ghc/8.6.5/
   src = fetchurl ({
@@ -63,7 +77,6 @@ stdenv.mkDerivation rec {
     or (throw "cannot bootstrap GHC on this platform"));
 
   nativeBuildInputs = [ perl ];
-  propagatedBuildInputs = lib.optionals useLLVM [ llvmPackages.llvm ];
 
   # Cannot patchelf beforehand due to relative RPATHs that anticipate
   # the final install location/
@@ -121,14 +134,24 @@ stdenv.mkDerivation rec {
 
   configurePlatforms = [ ];
   configureFlags = [
-    "--with-gmp-libraries=${lib.getLib gmp}/lib"
     "--with-gmp-includes=${lib.getDev gmp}/include"
+    # Note `--with-gmp-libraries` does nothing for GHC bindists:
+    # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/6124
   ] ++ lib.optional stdenv.isDarwin "--with-gcc=${./gcc-clang-wrapper.sh}"
     ++ lib.optional stdenv.hostPlatform.isMusl "--disable-ld-override";
 
   # No building is necessary, but calling make without flags ironically
   # calls install-strip ...
   dontBuild = true;
+
+  # Patch scripts to include runtime dependencies in $PATH.
+  postInstall = ''
+    for i in "$out/bin/"*; do
+      test ! -h "$i" || continue
+      isScript "$i" || continue
+      sed -i -e '2i export PATH="${lib.makeBinPath runtimeDeps}:$PATH"' "$i"
+    done
+  '';
 
   # On Linux, use patchelf to modify the executables so that they can
   # find editline/gmp.
@@ -152,9 +175,17 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  # In nixpkgs, musl based builds currently enable `pie` hardening by default
+  # (see `defaultHardeningFlags` in `make-derivation.nix`).
+  # But GHC cannot currently produce outputs that are ready for `-pie` linking.
+  # Thus, disable `pie` hardening, otherwise `recompile with -fPIE` errors appear.
+  # See:
+  # * https://github.com/NixOS/nixpkgs/issues/129247
+  # * https://gitlab.haskell.org/ghc/ghc/-/issues/19580
+  hardeningDisable = lib.optional stdenv.targetPlatform.isMusl "pie";
+
   doInstallCheck = true;
   installCheckPhase = ''
-    unset ${libEnvVar}
     # Sanity check, can ghc create executables?
     cd $TMP
     mkdir test-ghc; cd test-ghc
@@ -163,7 +194,7 @@ stdenv.mkDerivation rec {
       module Main where
       main = putStrLn \$([|"yes"|])
     EOF
-    $out/bin/ghc --make main.hs || exit 1
+    env -i $out/bin/ghc --make main.hs || exit 1
     echo compilation ok
     [ $(./main) == "yes" ]
   '';
@@ -172,13 +203,19 @@ stdenv.mkDerivation rec {
     targetPrefix = "";
     enableShared = true;
 
+    inherit llvmPackages;
+
     # Our Cabal compiler name
     haskellCompilerName = "ghc-${version}";
   };
 
   meta = rec {
     license = lib.licenses.bsd3;
-    platforms = ["x86_64-linux" "aarch64-linux" "i686-linux" "x86_64-darwin"];
-    hydraPlatforms = builtins.filter (p: p != "aarch64-linux") platforms;
+    platforms = ["x86_64-linux" "i686-linux" "x86_64-darwin"];
+    # build segfaults, use ghc8102Binary which has proper musl support instead
+    broken = stdenv.hostPlatform.isMusl;
+    maintainers = with lib.maintainers; [
+      guibou
+    ] ++ lib.teams.haskell.members;
   };
 }

@@ -2,13 +2,13 @@
 
 buildPythonApplication rec {
   pname = "s3cmd";
-  version = "2.1.0";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "s3tools";
     repo = "s3cmd";
     rev = "v${version}";
-    sha256 = "0p6mbgai7f0c12pkw4s7d649gj1f8hywj60pscxvj9jsna3iifhs";
+    sha256 = "0w4abif05mp52qybh4hjg6jbbj2caljq5xdhfiha3g0s5zsq46ri";
   };
 
   propagatedBuildInputs = [ python_magic python-dateutil ];

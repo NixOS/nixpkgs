@@ -18,7 +18,7 @@ in {
       config = mkOption {
         type = types.attrs;
         # from https://github.com/TediCross/TediCross/blob/master/example.settings.yaml
-        example = literalExample ''
+        example = literalExpression ''
           {
             telegram = {
               useFirstNameInsteadOfUsername = false;

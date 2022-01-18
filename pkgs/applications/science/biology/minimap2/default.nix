@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "minimap2";
-  version = "2.17";
+  version = "2.24";
 
   src = fetchFromGitHub {
     repo = pname;
     owner = "lh3";
     rev = "v${version}";
-    sha256 = "0qdwlkib3aa6112372hdgvnvk86hsjjkhjar0p53pq4ajrr2cdlb";
+    sha256 = "sha256-sEp7/Y5ifV9LTqrkhlkfykTJYMMuc+VtF7PvmIpBxUw=";
   };
 
   buildInputs = [ zlib ];
@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
     homepage = "https://lh3.github.io/minimap2";
     license = licenses.mit;
     platforms = platforms.all;
+    badPlatforms = platforms.aarch64;
     maintainers = [ maintainers.arcadio ];
   };
 }

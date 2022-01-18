@@ -6,7 +6,7 @@
 , kauth
 , libdrm
 , hwdata
-, mesa-demos
+, glxinfo
 , procps
 , util-linux
 , vulkan-tools
@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec{
   pname = "corectrl";
-  version = "1.1.3";
+  version = "1.2.2";
 
   src = fetchFromGitLab {
     owner = "corectrl";
     repo = "corectrl";
     rev = "v${version}";
-    sha256 = "sha256-xRyc7FYzG8MnhQ8DjIUHYLeUZCZQdi4j1v1fG7F0+G8=";
+    sha256 = "1zp523cgvmfjc42wx1f1jh5q3jnsnm833m2xnbbwmfrmhrzh5269";
   };
 
   nativeBuildInputs = [
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec{
     karchive
     kauth
     libdrm
-    mesa-demos
+    glxinfo
     procps
     util-linux
     vulkan-tools
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec{
 
   cmakeFlags = [ "-DWITH_PCI_IDS_PATH=${hwdata}/share/hwdata/pci.ids" ];
 
-  runtimeDeps = [ hwdata mesa-demos vulkan-tools ];
+  runtimeDeps = [ hwdata glxinfo vulkan-tools util-linux procps ];
   binPath = lib.makeBinPath runtimeDeps;
 
   dontWrapQtApps = true;

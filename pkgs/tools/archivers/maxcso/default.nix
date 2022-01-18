@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "maxcso";
-  version = "1.12.0";
+  version = "1.13.0";
 
   src = fetchFromGitHub {
     owner = "unknownbrackets";
     repo = "maxcso";
     rev = "v${version}";
-    sha256 = "10r0vb3ndpq1pw5224d48nim5xz8jj94zhlfy29br6h6jblq8zap";
+    sha256 = "sha256-6LjR1ZMZsi6toz9swPzNmSAlrUykwvVdYi1mR8Ctq5U=";
   };
 
   buildInputs = [ libuv lz4 zlib ];

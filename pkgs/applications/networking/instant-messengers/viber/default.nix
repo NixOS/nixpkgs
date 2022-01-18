@@ -6,12 +6,12 @@
 
 stdenv.mkDerivation {
   pname = "viber";
-  version = "13.3.1.22";
+  version = "16.1.0.37";
 
   src = fetchurl {
     # Official link: https://download.cdn.viber.com/cdn/desktop/Linux/viber.deb
-    url = "http://web.archive.org/web/20210602004133/https://download.cdn.viber.com/cdn/desktop/Linux/viber.deb";
-    sha256 = "0rs26x0lycavybn6k1hbb5kzms0zzcmxlrmi4g8k7vyafj6s8dqh";
+    url = "https://web.archive.org/web/20211119123858/https://download.cdn.viber.com/cdn/desktop/Linux/viber.deb";
+    sha256 = "sha256-hOz+EQc2OOlLTPa2kOefPJMUyWvSvrgqgPgBKjWE3p8=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -82,7 +82,8 @@ stdenv.mkDerivation {
     wrapProgram $out/opt/viber/Viber \
       --set QT_PLUGIN_PATH "$out/opt/viber/plugins" \
       --set QT_XKB_CONFIG_ROOT "${xorg.xkeyboardconfig}/share/X11/xkb" \
-      --set QTCOMPOSE "${xorg.libX11.out}/share/X11/locale"
+      --set QTCOMPOSE "${xorg.libX11.out}/share/X11/locale" \
+      --set QML2_IMPORT_PATH "$out/opt/viber/qml"
     ln -s $out/opt/viber/Viber $out/bin/viber
 
     mv $out/usr/share $out/share
@@ -98,7 +99,7 @@ stdenv.mkDerivation {
   dontPatchELF = true;
 
   meta = {
-    homepage = "http://www.viber.com";
+    homepage = "https://www.viber.com";
     description = "An instant messaging and Voice over IP (VoIP) app";
     license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];

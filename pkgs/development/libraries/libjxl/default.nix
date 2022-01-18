@@ -1,4 +1,5 @@
 { stdenv, lib, fetchFromGitHub
+, fetchpatch
 , asciidoc
 , brotli
 , cmake
@@ -18,16 +19,32 @@
 
 stdenv.mkDerivation rec {
   pname = "libjxl";
-  version = "unstable-2021-06-22";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "libjxl";
     repo = "libjxl";
-    rev = "409efe027d6a4a4446b84abe8d7b2fa40409257d";
-    sha256 = "1akb6yyp2h4h6mfcqd4bgr3ybcik5v5kdc1rxaqnyjs7fp2f6nvv";
+    rev = "v${version}";
+    sha256 = "sha256-fTK5hyU9PZ6nigMsfzVugwviihgAXfEcLF+l+n5h+54=";
     # There are various submodules in `third_party/`.
     fetchSubmodules = true;
   };
+
+  patches = [
+    # present in master, remove after 0.7?
+    (fetchpatch {
+      name = "fix-link-lld-macho.patch";
+      url = "https://github.com/libjxl/libjxl/commit/88fe3fff3dc70c72405f57c69feffd9823930034.patch";
+      sha256 = "1419fyiq4srpj72cynwyvqy8ldi7vn9asvkp5fsbmiqkyhb15jpk";
+    })
+  ];
+
+  # hydra's darwin machines run into https://github.com/libjxl/libjxl/issues/408
+  # unless we disable highway's tests
+  postPatch = lib.optional stdenv.isDarwin ''
+    substituteInPlace third_party/highway/CMakeLists.txt \
+      --replace 'if(BUILD_TESTING)' 'if(false)'
+  '';
 
   nativeBuildInputs = [
     asciidoc # for docs

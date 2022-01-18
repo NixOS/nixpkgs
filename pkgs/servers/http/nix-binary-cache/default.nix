@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "2014-06-29-1";
   pname = "nix-binary-cache";
 
-  phases = ["installPhase"];
+  dontUnpack = true;
 
   installPhase = ''
     mkdir -p "$out/bin"
@@ -54,7 +54,6 @@ stdenv.mkDerivation rec {
     '';
     maintainers = [lib.maintainers.raskin];
     license = lib.licenses.gpl2Plus;
-    inherit version;
     platforms = lib.platforms.all;
     hydraPlatforms = [];
   };

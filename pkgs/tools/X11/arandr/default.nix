@@ -32,7 +32,7 @@ in buildPythonApplication rec {
   propagatedBuildInputs = [ xrandr pygobject3 ];
 
   meta = {
-    homepage = "http://christian.amsuess.com/tools/arandr/";
+    homepage = "https://christian.amsuess.com/tools/arandr/";
     description = "A simple visual front end for XRandR";
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.domenkozar ];

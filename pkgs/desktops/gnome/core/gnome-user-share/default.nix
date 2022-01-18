@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dhttpd=${apacheHttpd.out}/bin/httpd"
-    "-Dmodules_path=${apacheHttpd.dev}/modules"
+    "-Dmodules_path=${apacheHttpd}/modules"
     "-Dsystemduserunitdir=${placeholder "out"}/etc/systemd/user"
     # In 3.34.0 it defaults to false but it is silently ignored and always installed.
     # Let’s add it anyway in case they decide to make build respect the option in the future.

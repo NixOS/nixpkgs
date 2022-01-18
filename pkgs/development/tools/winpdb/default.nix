@@ -1,15 +1,16 @@
-{ lib, fetchurl, pythonPackages, makeDesktopItem }:
+{ lib, fetchurl, python2Packages, makeDesktopItem }:
 
-pythonPackages.buildPythonApplication rec {
-  name = "winpdb-1.4.8";
+python2Packages.buildPythonApplication rec {
+  pname = "winpdb";
+  version = "1.4.8";
   namePrefix = "";
 
   src = fetchurl {
-    url = "https://winpdb.googlecode.com/files/${name}.tar.gz";
+    url = "https://winpdb.googlecode.com/files/${pname}-${version}.tar.gz";
     sha256 = "0vkpd24r40j928vc04c721innv0168sbllg97v4zw10adm24d8fs";
   };
 
-  propagatedBuildInputs = [ pythonPackages.wxPython ];
+  propagatedBuildInputs = [ python2Packages.wxPython ];
 
   desktopItem = makeDesktopItem {
     name = "winpdb";

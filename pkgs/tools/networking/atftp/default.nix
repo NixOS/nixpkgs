@@ -1,13 +1,18 @@
-{ lib, stdenv, fetchurl, readline, tcp_wrappers, pcre, makeWrapper, gcc }:
+{ lib, stdenv, fetchurl, readline, tcp_wrappers, pcre, makeWrapper, gcc, ps }:
 
 stdenv.mkDerivation rec {
   pname = "atftp";
-  version = "0.7.4";
+  version = "0.7.5";
 
   src = fetchurl {
     url = "mirror://sourceforge/atftp/${pname}-${version}.tar.gz";
-    sha256 = "sha256-08nNDZcd/Hhtel9AVcNdTmaq/IECrANHPvIlvfftsmo=";
+    sha256 = "12h3sgkd25j4nfagil2jqyj1n8yxvaawj0cf01742642n57pmj4k";
   };
+
+  # fix test script
+  postPatch = ''
+    patchShebangs .
+  '';
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ readline tcp_wrappers pcre gcc ];
@@ -15,7 +20,8 @@ stdenv.mkDerivation rec {
   # Expects pre-GCC5 inline semantics
   NIX_CFLAGS_COMPILE = "-std=gnu89";
 
-  doCheck = false; # fails
+  doCheck = true;
+  checkInputs = [ ps ];
 
   meta = {
     description = "Advanced tftp tools";

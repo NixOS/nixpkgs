@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation {
   pname = "mmixware";
-  version = "unstable-2019-02-19";
+  version = "unstable-2021-06-18";
 
   src = fetchFromGitLab {
     domain = "gitlab.lrz.de";
     owner = "mmix";
     repo = "mmixware";
-    rev = "a330d68aafcfe739ecaaece888a669b8e7d9bcb8";
-    sha256 = "0bq0d19vqhfbpk4mcqzmd0hygbkhapl1mzlfkcr6afx0fhlhi087";
+    rev = "7c790176d50d13ae2422fa7457ccc4c2d29eba9b";
+    sha256 = "sha256-eSwHiJ5SP/Nennalv4QFTgVnM6oan/DWDZRqtk0o6Z0=";
   };
 
   hardeningDisable = [ "format" ];

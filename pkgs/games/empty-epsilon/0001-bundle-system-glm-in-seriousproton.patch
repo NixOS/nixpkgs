@@ -26,7 +26,7 @@ index cbd68ca..730df82 100644
  target_link_libraries(seriousproton_deps
      INTERFACE 
 -        box2d lua glew ${SFML_LIBRARIES}
-+        box2d lua glew ${SFML_LIBRARIES} glm
++        box2d lua glew ${SFML_LIBRARIES} glm::glm
          "$<$<BOOL:${WIN32}>:wsock32>"
          # LTO flag must be on the linker's list as well.
          "$<$<AND:$<BOOL:${CMAKE_COMPILER_IS_GNUCC}>,$<OR:$<CONFIG:RelWithDebInfo>,$<CONFIG:Release>>>:-flto>"

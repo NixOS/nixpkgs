@@ -61,13 +61,11 @@ mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-I${SDL.dev}/include/SDL";
 
-  enableParallelBuilding = true;
-
   meta = with lib; {
     homepage = "https://www.pokerth.net";
     description = "Poker game ${target}";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ obadz yegortimoshenko ];
+    maintainers = with maintainers; [ obadz yana ];
     platforms = platforms.all;
   };
 }

@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "pytest-mpl";
-  version = "0.12";
+  version = "0.13";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4a223909e5148c99bd18891848c7871457729322c752c9c470bd8dd6bdf9f940";
+    sha256 = "582db6e14315f9b08cbd2df39b136dc344bfe8a27c2f05b995460fb0969ec19e";
   };
 
   buildInputs = [

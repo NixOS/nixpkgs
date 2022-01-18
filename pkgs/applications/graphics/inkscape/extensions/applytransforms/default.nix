@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation {
   pname = "inkscape-applytransforms";
-  version = "0.0.0+unstable=2021-05-11";
+  version = "0.pre+unstable=2021-05-11";
 
   src = fetchFromGitHub {
     owner = "Klowner";

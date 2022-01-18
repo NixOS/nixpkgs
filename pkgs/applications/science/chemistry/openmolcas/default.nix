@@ -5,9 +5,9 @@
 } :
 
 let
-  version = "21.02";
+  version = "21.10";
   # The tag keeps moving, fix a hash instead
-  gitLabRev = "41cee871945ac712e86ee971425a49a8fc60a936";
+  gitLabRev = "117305462bac932106e8e3a0347238b768bcb058";
 
   python = python3.withPackages (ps : with ps; [ six pyparsing ]);
 
@@ -19,7 +19,7 @@ in stdenv.mkDerivation {
     owner = "Molcas";
     repo = "OpenMolcas";
     rev = gitLabRev;
-    sha256 = "0cap53gy1wds2qaxbijw09fqhvfxphfkr93nhp9xdq84yxh4wzv6";
+    sha256 = "sha256-GMi2dsNBog+TmpmP6fhQcp6Z5Bh2LelV//MqLnvRP5c=";
   };
 
   patches = [
@@ -27,9 +27,15 @@ in stdenv.mkDerivation {
     ./openblasPath.patch
   ];
 
-  nativeBuildInputs = [ perl cmake texlive.combined.scheme-minimal makeWrapper ];
-  buildInputs = [
+  nativeBuildInputs = [
+    perl
     gfortran
+    cmake
+    texlive.combined.scheme-minimal
+    makeWrapper
+  ];
+
+  buildInputs = [
     openblas
     hdf5-cpp
     python
@@ -50,7 +56,9 @@ in stdenv.mkDerivation {
     "-DOPENBLASROOT=${openblas.dev}"
   ];
 
-  GAROOT=globalarrays;
+  preConfigure = ''
+    export GAROOT=${globalarrays};
+  '';
 
   postConfigure = ''
     # The Makefile will install pymolcas during the build grrr.

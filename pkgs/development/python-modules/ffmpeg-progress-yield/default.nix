@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "ffmpeg-progress-yield";
-  version = "0.0.4";
+  version = "0.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e944093e2c1b213da8fa4f0c276c1bad44e0b8ba8be7e4fd001f5132d16baef5";
+    sha256 = "26696726cc70c019d1b76bb25e4823c93f0837ddc86bc4ea26c08165270b4d92";
   };
 
   propagatedBuildInputs = [ colorama tqdm ];

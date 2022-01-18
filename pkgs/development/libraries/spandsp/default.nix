@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, audiofile, libtiff}:
+{ lib, stdenv, fetchurl, audiofile, libtiff, buildPackages }:
 stdenv.mkDerivation rec {
   version = "0.0.6";
   pname = "spandsp";
@@ -8,7 +8,19 @@ stdenv.mkDerivation rec {
   };
 
   outputs = [ "out" "dev" ];
+  makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+  ];
 
+  configureFlags = [
+    # This flag is required to prevent linking error in the cross-compilation case.
+    # I think it's fair to assume that realloc(NULL, size) will return a valid memory
+    # block for most libc implementation, so let's just assume that and hope for the best.
+    "ac_cv_func_malloc_0_nonnull=yes"
+  ];
+
+  strictDeps = true;
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
   propagatedBuildInputs = [audiofile libtiff];
   meta = {
     description = "A portable and modular SIP User-Agent with audio and video support";
@@ -17,7 +29,6 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [raskin];
     license = lib.licenses.gpl2;
     downloadPage = "http://www.soft-switch.org/downloads/spandsp/";
-    inherit version;
     updateWalker = true;
   };
 }

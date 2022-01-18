@@ -4,21 +4,24 @@
 , fetchPypi
 , async_generator
 , paho-mqtt
-, pytestCheckHook
 }:
 
 buildPythonPackage rec {
-  pname = "asyncio_mqtt";
-  version = "0.9.1";
+  pname = "asyncio-mqtt";
+  version = "0.11.0";
+  format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "0550229cecde6ff1751c49dd5ea26b02bf52b7e9bbe9bf763da765f35bb281de";
+    pname = "asyncio_mqtt";
+    inherit version;
+    sha256 = "sha256-uJown3bNA+pLJlorJcCjpMMFosX94gt/2tLAjIkuXLA=";
   };
 
   propagatedBuildInputs = [
     paho-mqtt
-  ] ++ lib.optional (pythonOlder "3.7") async_generator;
+  ] ++ lib.optional (pythonOlder "3.7") [
+    async_generator
+  ];
 
   doCheck = false; # no tests
 

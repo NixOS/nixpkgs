@@ -11,7 +11,7 @@ in
 
     package = mkOption {
       default = pkgs.cryptpad;
-      defaultText = "pkgs.cryptpad";
+      defaultText = literalExpression "pkgs.cryptpad";
       type = types.package;
       description = "
         Cryptpad package to use.
@@ -21,7 +21,7 @@ in
     configFile = mkOption {
       type = types.path;
       default = "${cfg.package}/lib/node_modules/cryptpad/config/config.example.js";
-      defaultText = "\${cfg.package}/lib/node_modules/cryptpad/config/config.example.js";
+      defaultText = literalExpression ''"''${package}/lib/node_modules/cryptpad/config/config.example.js"'';
       description = ''
         Path to the JavaScript configuration file.
 

@@ -14,7 +14,13 @@ with lib;
           allLocales = any (x: x == "all") config.i18n.supportedLocales;
           locales = config.i18n.supportedLocales;
         };
-        example = literalExample "pkgs.glibcLocales";
+        defaultText = literalExpression ''
+          pkgs.buildPackages.glibcLocales.override {
+            allLocales = any (x: x == "all") config.i18n.supportedLocales;
+            locales = config.i18n.supportedLocales;
+          }
+        '';
+        example = literalExpression "pkgs.glibcLocales";
         description = ''
           Customized pkg.glibcLocales package.
 

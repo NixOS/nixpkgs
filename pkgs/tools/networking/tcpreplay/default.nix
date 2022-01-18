@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     "--enable-shared"
     "--enable-tcpreplay-edit"
     "--with-libpcap=${libpcap}"
-    "--with-tcpdump=${tcpdump}/bin"
+    "--with-tcpdump=${tcpdump}/bin/tcpdump"
   ];
 
   meta = with lib; {

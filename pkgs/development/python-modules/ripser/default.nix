@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "ripser";
-  version = "0.6.0";
+  version = "0.6.1";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5c47deffbf9e163186b0997f2d59486d96a7c65766e76500f754fadfbc89f5d9";
+    sha256 = "335112a0f94532ccbe686db7826ee8d0714b32f65891abf92c0a02f3cb0fc5fd";
   };
 
   checkInputs = [

@@ -1,9 +1,11 @@
 {lib, stdenv, fetchurl} :
 
-stdenv.mkDerivation {
-  name = "libmtsupport-0.0.1alpha2";
+stdenv.mkDerivation rec {
+  pname = "libmtsupport";
+  version = "0.0.1alpha2";
+
   src = fetchurl {
-    url = "mirror://sourceforge/multitran/libmtsupport-0.0.1alpha2.tar.bz2";
+    url = "mirror://sourceforge/multitran/libmtsupport-${version}.tar.bz2";
     sha256 = "481f0f1ec15d7274f1e4eb93e7d060df10a181efd037eeff5e8056d283a9298b";
   };
   patchPhase = ''

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cgreen";
-  version = "1.4.0";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "cgreen-devs";
     repo = "cgreen";
     rev = version;
-    sha256 = "JEpvkM0EZiiQUZRngICNxHbNqS/qjqkEdMPckGbdWac=";
+    sha256 = "sha256-aQrfsiPuNrEMscZrOoONiN665KlNmnOiYj9ZIyzW304=";
   };
 
   nativeBuildInputs = [ cmake ];

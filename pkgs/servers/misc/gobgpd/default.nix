@@ -2,25 +2,24 @@
 
 buildGoModule rec {
   pname = "gobgpd";
-  version = "2.29.0";
+  version = "2.34.0";
 
   src = fetchFromGitHub {
     owner = "osrg";
     repo = "gobgp";
     rev = "v${version}";
-    sha256 = "sha256-DhSIf8fAG2Zf0mwJ/iMgQU5sugHK2jJ6WJPbFbA/mhM=";
+    sha256 = "sha256-xyakq5DXwzONEP6EvDpAuzCrTDWcs+7asDlq9Vf4c1k=";
   };
 
-  vendorSha256 = "sha256-PWm7XnO6LPaU8g8ymmqRkQv2KSX9kLv9RVaa000mrTY=";
+  vendorSha256 = "sha256-+dX/XByFW5/zvfXvyWePAv9X71dJEKaQf6xNXAXoMxw=";
 
   postConfigure = ''
     export CGO_ENABLED=0
   '';
 
-  buildFlagsArray = ''
-    -ldflags=
-    -s -w -extldflags '-static'
-  '';
+  ldflags = [
+    "-s" "-w" "-extldflags '-static'"
+  ];
 
   subPackages = [ "cmd/gobgpd" ];
 

@@ -2,32 +2,41 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, pytest-asyncio
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "screenlogicpy";
-  version = "0.4.2";
+  version = "0.5.4";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "dieselrabbit";
     repo = pname;
     rev = "v${version}";
-    sha256 = "158y34d140bh93l143plq53l7n7mcnmqi5mj7hj0j1ljccxpjcnj";
+    sha256 = "0r9227s4v17jm5n0j31ssnak9f5p7xfvz4r1fwy61286is3j5gbb";
   };
 
   checkInputs = [
+    pytest-asyncio
     pytestCheckHook
   ];
 
   disabledTests = [
     # Tests require network access
     "test_gateway_discovery"
+    "test_async_discovery"
+    "test_gateway"
+    "test_async"
     "test_asyncio_gateway_discovery"
   ];
 
-  pythonImportsCheck = [ "screenlogicpy" ];
+  pythonImportsCheck = [
+    "screenlogicpy"
+  ];
 
   meta = with lib; {
     description = "Python interface for Pentair Screenlogic devices";

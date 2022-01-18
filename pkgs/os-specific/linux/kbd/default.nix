@@ -29,6 +29,10 @@ stdenv.mkDerivation rec {
     "--disable-nls"
   ];
 
+  patches = [
+    ./search-paths.patch
+  ];
+
   postPatch =
     ''
       # Renaming keymaps with name clashes, because loadkeys just picks
@@ -62,7 +66,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkg-config flex ];
 
   passthru.tests = {
-    inherit (nixosTests) keymap kbd-setfont-decompress;
+    inherit (nixosTests) keymap kbd-setfont-decompress kbd-update-search-paths-patch;
   };
 
   meta = with lib; {

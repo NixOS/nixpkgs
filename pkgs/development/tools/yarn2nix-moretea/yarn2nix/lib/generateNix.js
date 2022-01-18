@@ -33,7 +33,7 @@ const { execFileSync } = require('child_process')
 
 function prefetchgit(url, rev) {
   return JSON.parse(
-    execFileSync("nix-prefetch-git", ["--rev", rev, url], {
+    execFileSync("nix-prefetch-git", ["--rev", rev, url, "--fetch-submodules"], {
       stdio: [ "ignore", "pipe", "ignore" ],
       timeout: 60000,
     })
@@ -45,11 +45,13 @@ function fetchgit(fileName, url, rev, branch, builtinFetchGit) {
     name = "${fileName}";
     path =
       let${builtinFetchGit ? `
-        repo = builtins.fetchGit {
+        repo = builtins.fetchGit ({
           url = "${url}";
           ref = "${branch}";
           rev = "${rev}";
-        };
+        } // (if builtins.substring 0 3 builtins.nixVersion == "2.4" then {
+          allRefs = true;
+        } else {}));
       ` : `
         repo = fetchgit {
           url = "${url}";
@@ -57,7 +59,7 @@ function fetchgit(fileName, url, rev, branch, builtinFetchGit) {
           sha256 = "${prefetchgit(url, rev)}";
         };
       `}in
-        runCommandNoCC "${fileName}" { buildInputs = [gnutar]; } ''
+        runCommand "${fileName}" { buildInputs = [gnutar]; } ''
           # Set u+w because tar-fs can't unpack archives with read-only dirs
           # https://github.com/mafintosh/tar-fs/issues/79
           tar cf $out --mode u+w -C \${repo} .
@@ -67,7 +69,7 @@ function fetchgit(fileName, url, rev, branch, builtinFetchGit) {
 
 function fetchLockedDep(builtinFetchGit) {
   return function (pkg) {
-    const { nameWithVersion, resolved } = pkg
+    const { integrity, nameWithVersion, resolved } = pkg
 
     if (!resolved) {
       console.error(
@@ -80,6 +82,16 @@ function fetchLockedDep(builtinFetchGit) {
 
     const fileName = urlToName(url)
 
+    if (resolved.startsWith('https://codeload.github.com/')) {
+      const s = resolved.split('/')
+      const githubUrl = `https://github.com/${s[3]}/${s[4]}.git`
+      const githubRev = s[6]
+
+      const [_, branch] = nameWithVersion.split('#')
+
+      return fetchgit(fileName, githubUrl, githubRev, branch || 'master', builtinFetchGit)
+    }
+
     if (url.startsWith('git+') || url.startsWith("git:")) {
       const rev = sha1OrRev
 
@@ -90,21 +102,21 @@ function fetchLockedDep(builtinFetchGit) {
       return fetchgit(fileName, urlForGit, rev, branch || 'master', builtinFetchGit)
     }
 
-    const sha = sha1OrRev
+    const [algo, hash] = integrity ? integrity.split('-') : ['sha1', sha1OrRev]
 
     return `    {
       name = "${fileName}";
       path = fetchurl {
         name = "${fileName}";
         url  = "${url}";
-        sha1 = "${sha}";
+        ${algo} = "${hash}";
       };
     }`
   }
 }
 
 const HEAD = `
-{ fetchurl, fetchgit, linkFarm, runCommandNoCC, gnutar }: rec {
+{ fetchurl, fetchgit, linkFarm, runCommand, gnutar }: rec {
   offline_cache = linkFarm "offline" packages;
   packages = [
 `.trim()

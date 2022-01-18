@@ -96,6 +96,11 @@ re-enter the shell.
 
 ## Updating the package set {#updating-the-package-set}
 
+There is a script and associated environment for regenerating the package
+sets and synchronising the rPackages tree to the current CRAN and matching
+BIOC release. These scripts are found in the `pkgs/development/r-modules`
+directory and executed as follows:
+
 ```bash
 nix-shell generate-shell.nix
 
@@ -112,12 +117,11 @@ Rscript generate-r-packages.R bioc-experiment > bioc-experiment-packages.nix.new
 mv bioc-experiment-packages.nix.new bioc-experiment-packages.nix
 ```
 
-`generate-r-packages.R <repo>` reads  `<repo>-packages.nix`, therefor the renaming.
+`generate-r-packages.R <repo>` reads  `<repo>-packages.nix`, therefore
+the renaming.
 
-## Testing if the Nix-expression could be evaluated {#testing-if-the-nix-expression-could-be-evaluated}
-
-```bash
-nix-build test-evaluation.nix --dry-run
-```
-
-If this exits fine, the expression is ok. If not, you have to edit `default.nix`
+Some packages require overrides to specify external dependencies or other
+patches and special requirements. These overrides are specified in the
+`pkgs/development/r-modules/default.nix` file. As the `*-packages.nix`
+contents are automatically generated it should not be edited and broken
+builds should be addressed using overrides.

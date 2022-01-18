@@ -2,19 +2,21 @@
 , buildPythonPackage
 , fetchPypi
 , aiohttp
+, asyncio-throttle
 }:
 
 buildPythonPackage rec {
   pname = "aiohue";
-  version = "2.5.1";
+  version = "3.0.11";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3ee8e857b07364516f8b9f0e5c52d4cd775036f3ace37c2769de1e8579f4dc07";
+    sha256 = "sha256-McC5DX3Cti9eGpPniywNY2DvbAqHSFwhek85TJN/zn0=";
   };
 
   propagatedBuildInputs = [
     aiohttp
+    asyncio-throttle
   ];
 
   pythonImportsCheck = [

@@ -64,6 +64,12 @@ in
       default = false;
     };
 
+    extraIscsiCommands = mkOption {
+      description = "Extra iscsi commands to run in the initrd.";
+      default = "";
+      type = lines;
+    };
+
     extraConfig = mkOption {
       description = "Extra lines to append to /etc/iscsid.conf";
       default = null;
@@ -162,6 +168,9 @@ in
       '' else ''
         iscsiadm --mode node --targetname ${escapeShellArg cfg.target} --login
       ''}
+
+        ${cfg.extraIscsiCommands}
+
         pkill -9 iscsid
       '';
     };

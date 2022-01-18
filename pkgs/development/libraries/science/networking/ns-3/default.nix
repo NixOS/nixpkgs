@@ -1,6 +1,5 @@
 { stdenv
 , fetchFromGitLab
-, fetchpatch
 , python
 , wafHook
 
@@ -39,13 +38,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "ns-3";
-  version = "33";
+  version = "35";
 
   src = fetchFromGitLab {
     owner = "nsnam";
     repo   = "ns-3-dev";
     rev    = "ns-3.${version}";
-    sha256 = "0ds8h0f2qcb0gc2a8bk38cbhdb122i4sbg589bjn59rblzw0hkq4";
+    sha256 = "sha256-3w+lCWWra9sndL8+vkGfH5plrDYYCMFi1PzwIVRku6I=";
   };
 
   nativeBuildInputs = [ wafHook python ];
@@ -97,14 +96,6 @@ stdenv.mkDerivation rec {
   checkPhase =  ''
     ${pythonEnv.interpreter} ./test.py --nowaf
   '';
-
-  patches = [
-    (fetchpatch {
-      name = "upstream-issue-336.patch";
-      url = "https://gitlab.com/nsnam/ns-3-dev/-/commit/673004edae1112e6cb249b698aad856d728530fb.patch";
-      sha256 = "0q96ividinbh9xlws014b2ir6gaavygnln5ca9m1db06m4vfwhng";
-    })
-  ];
 
   # strictoverflow prevents clang from discovering pyembed when bindings
   hardeningDisable = [ "fortify" "strictoverflow"];

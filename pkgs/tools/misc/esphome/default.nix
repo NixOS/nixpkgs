@@ -2,6 +2,7 @@
 , pkgs
 , python3
 , fetchFromGitHub
+, fetchpatch
 , platformio
 , esptool
 , git
@@ -16,18 +17,19 @@ let
 in
 with python.pkgs; buildPythonApplication rec {
   pname = "esphome";
-  version = "1.19.4";
+  version = "2021.12.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "v${version}";
-    sha256 = "029ykjk24h21b0s0gha6kv9pvgallin6marzkb2vfbvr3icsmbz2";
+    rev = version;
+    sha256 = "sha256-uEwpolMbtBPHAOk3fDE6OE3/Sls5NB0p5ibnrbNIbV0=";
   };
 
   patches = [
     # fix missing write permissions on src files before modifing them
-   ./fix-src-permissions.patch
+    ./fix-src-permissions.patch
   ];
 
   postPatch = ''
@@ -36,12 +38,6 @@ with python.pkgs; buildPythonApplication rec {
 
     # drop coverage testing
     sed -i '/--cov/d' pytest.ini
-
-    # migrate use of hypothesis internals to be compatible with hypothesis>=5.32.1
-    # https://github.com/esphome/issues/issues/2021
-    substituteInPlace tests/unit_tests/strategies.py --replace \
-      "@st.defines_strategy_with_reusable_values" \
-      "@st.defines_strategy(force_reusable_values=True)"
   '';
 
   # Remove esptool and platformio from requirements
@@ -54,17 +50,20 @@ with python.pkgs; buildPythonApplication rec {
   # - validate_cryptography_installed
   # - validate_pillow_installed
   propagatedBuildInputs = [
+    aioesphomeapi
     click
     colorama
     cryptography
     esphome-dashboard
     ifaddr
+    kconfiglib
     paho-mqtt
     pillow
     protobuf
     pyserial
     pyyaml
     tornado
+    tzdata
     tzlocal
     voluptuous
   ];

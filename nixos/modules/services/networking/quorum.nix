@@ -1,9 +1,10 @@
-{ config, pkgs, lib, ... }:
+{ config, options, pkgs, lib, ... }:
 let
 
-  inherit (lib) mkEnableOption mkIf mkOption literalExample types optionalString;
+  inherit (lib) mkEnableOption mkIf mkOption literalExpression types optionalString;
 
   cfg = config.services.quorum;
+  opt = options.services.quorum;
   dataDir = "/var/lib/quorum";
   genesisFile = pkgs.writeText "genesis.json" (builtins.toJSON cfg.genesis);
   staticNodesFile = pkgs.writeText "static-nodes.json" (builtins.toJSON cfg.staticNodes);
@@ -23,6 +24,7 @@ in {
       group = mkOption {
         type = types.str;
         default = cfg.user;
+        defaultText = literalExpression "config.${opt.user}";
         description = "The group as which to run quorum.";
       };
 
@@ -130,7 +132,7 @@ in {
       genesis = mkOption {
         type = types.nullOr types.attrs;
         default = null;
-        example = literalExample '' {
+        example = literalExpression '' {
           alloc = {
             a47385db68718bdcbddc2d2bb7c54018066ec111 = {
               balance = "1000000000000000000000000000";

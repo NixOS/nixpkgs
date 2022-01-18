@@ -1,5 +1,4 @@
 { lib
-, nixosTests
 , buildPythonPackage
 , fetchPypi
 , substituteAll
@@ -12,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "yq";
-  version = "2.12.2";
+  version = "2.13.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2f156d0724b61487ac8752ed4eaa702a5737b804d5afa46fa55866951cd106d2";
+    sha256 = "sha256-/RMf2x9WcWrY1EzZ6q99OyLTm6iGHqZKQJzD9K4mPbg=";
   };
 
   patches = [
@@ -45,7 +44,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "yq" ];
 
-  passthru.tests = { inherit (nixosTests) yq; };
+  doInstallCheck = true;
+  installCheckPhase = ''
+    echo '{"hello":{"foo":"bar"}}' | $out/bin/yq -y . | grep 'foo: bar'
+  '';
 
   meta = with lib; {
     description = "Command-line YAML processor - jq wrapper for YAML documents";

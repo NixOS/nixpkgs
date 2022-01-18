@@ -87,8 +87,8 @@ in {
       package = mkOption {
         type = types.package;
         default = pkgs.mailman;
-        defaultText = "pkgs.mailman";
-        example = literalExample "pkgs.mailman.override { archivers = []; }";
+        defaultText = literalExpression "pkgs.mailman";
+        example = literalExpression "pkgs.mailman.override { archivers = []; }";
         description = "Mailman package to use";
       };
 

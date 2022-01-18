@@ -3,10 +3,11 @@
 , autoreconfHook, usbutils }:
 
 stdenv.mkDerivation rec {
-  name = "aircrack-ng-1.6";
+  pname = "aircrack-ng";
+  version = "1.6";
 
   src = fetchurl {
-    url = "https://download.aircrack-ng.org/${name}.tar.gz";
+    url = "https://download.aircrack-ng.org/aircrack-ng-${version}.tar.gz";
     sha256 = "0ix2k64qg7x3w0bzdsbk1m50kcpq1ws59g3zkwiafvpwdr4gs2sg";
   };
 

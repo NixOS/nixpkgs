@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , SDL2
 , cmake
-, epoxy
+, libepoxy
 , ffmpeg
 , imagemagick
 , libedit
@@ -18,26 +18,15 @@
 , wrapQtAppsHook
 }:
 
-let
-  desktopItem = makeDesktopItem {
-    name = "mgba";
-    exec = "mgba-qt";
-    icon = "mgba";
-    comment = "A Game Boy Advance Emulator";
-    desktopName = "mgba";
-    genericName = "Game Boy Advance Emulator";
-    categories = "Game;Emulator;";
-    startupNotify = "false";
-  };
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "mgba";
-  version = "0.9.0";
+  version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "mgba-emu";
     repo = "mgba";
     rev = version;
-    hash = "sha256-JVauGyHJVfiXVG4Z+Ydh1lRypy5rk9SKeTbeHFNFYJs=";
+    hash = "sha256-0ZtoyyoD+YjplJlPFpZgIg5119j/6X8ZaSZP+UpX5K0=";
   };
 
   nativeBuildInputs = [
@@ -45,9 +34,10 @@ in stdenv.mkDerivation rec {
     pkg-config
     wrapQtAppsHook
   ];
+
   buildInputs = [
     SDL2
-    epoxy
+    libepoxy
     ffmpeg
     imagemagick
     libedit
@@ -59,9 +49,18 @@ in stdenv.mkDerivation rec {
     qttools
   ];
 
-  postInstall = ''
-    cp -r ${desktopItem}/share/applications $out/share
-  '';
+  desktopItems = [
+    (makeDesktopItem {
+      name = "mgba";
+      exec = "mgba-qt";
+      icon = "mgba";
+      comment = "A Game Boy Advance Emulator";
+      desktopName = "mgba";
+      genericName = "Game Boy Advance Emulator";
+      categories = "Game;Emulator;";
+      startupNotify = "false";
+    })
+  ];
 
   meta = with lib; {
     homepage = "https://mgba.io";
@@ -80,10 +79,9 @@ in stdenv.mkDerivation rec {
       runners, and a modern feature set for emulators that older emulators may
       not support.
     '';
-
     license = licenses.mpl20;
     maintainers = with maintainers; [ MP2E AndersonTorres ];
     platforms = platforms.linux;
   };
 }
-# TODO [ AndersonTorres ]: use desktopItem functions
+# TODO: use desktopItem functions

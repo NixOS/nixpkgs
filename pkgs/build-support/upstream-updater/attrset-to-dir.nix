@@ -1,8 +1,7 @@
-a :  
+a :
 a.stdenv.mkDerivation {
   buildCommand = ''
     mkdir -p "$out/attributes"
-    
   '' + (a.lib.concatStrings (map
     (n: ''
       ln -s "${a.writeTextFile {name=n; text=builtins.getAttr n a.theAttrSet;}}" $out/attributes/${n};

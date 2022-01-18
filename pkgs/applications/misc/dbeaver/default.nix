@@ -14,17 +14,19 @@
 , libXtst
 , zlib
 , maven
+, webkitgtk
+, glib-networking
 }:
 
 stdenv.mkDerivation rec {
   pname = "dbeaver";
-  version = "21.1.2"; # When updating also update fetchedMavenDeps.sha256
+  version = "21.3.2"; # When updating also update fetchedMavenDeps.sha256
 
   src = fetchFromGitHub {
     owner = "dbeaver";
     repo = "dbeaver";
     rev = version;
-    sha256 = "sha256-3q5LTllyqw7s8unJHTuasBCM4iaJ9lLpwgbXwBGUtIw=";
+    sha256 = "SifnnzuETFKtnEwLjJtB7CV2QZaToex3MjKGuiShlwo=";
   };
 
   fetchedMavenDeps = stdenv.mkDerivation {
@@ -50,7 +52,7 @@ stdenv.mkDerivation rec {
     dontFixup = true;
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "sha256-QPDnIXP3yB1Dn0LBbBBLvRDbCyguWvG9Zzb1Vjh72UA=";
+    outputHash = "grSFtkohTlLtK8qE4A4wVppC6UHcyaXRQlGnrOmQDC4=";
   };
 
   nativeBuildInputs = [
@@ -69,6 +71,9 @@ stdenv.mkDerivation rec {
     libXrender
     libXtst
     zlib
+  ] ++ lib.optionals stdenv.isLinux [
+    webkitgtk
+    glib-networking
   ];
 
   desktopItems = [
@@ -130,7 +135,8 @@ stdenv.mkDerivation rec {
 
       makeWrapper $out/dbeaver/dbeaver $out/bin/dbeaver \
         --prefix PATH : ${jdk}/bin \
-        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([ glib gtk3 libXtst ])} \
+        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([ glib gtk3 libXtst webkitgtk glib-networking ])} \
+        --prefix GIO_EXTRA_MODULES : "${glib-networking}/lib/gio/modules" \
         --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
 
       mkdir -p $out/share/pixmaps
@@ -150,6 +156,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.asl20;
     platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" ];
-    maintainers = with maintainers; [ jojosch ];
+    maintainers = with maintainers; [ jojosch mkg20001 ];
   };
 }

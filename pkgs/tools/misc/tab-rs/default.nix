@@ -23,5 +23,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/austinjones/tab-rs";
     license = licenses.mit;
     maintainers = with maintainers; [ bbigras ];
+    mainProgram = "tab";
   };
 }

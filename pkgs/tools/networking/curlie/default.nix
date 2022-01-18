@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "curlie";
-  version = "1.6.2";
+  version = "1.6.7";
 
   src= fetchFromGitHub {
     owner = "rs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-2CZpqc1MnAY6M1UFakKLaqGjaifw+7bN4hxc0jWgSps=";
+    sha256 = "sha256-uWLJWhsqJaLji2JSuVX8Vu929AdozhtAPwsqXdpEt84=";
   };
 
   vendorSha256 = "sha256-tYZtnD7RUurhl8yccXlTIvOxybBJITM+it1ollYJ1OI=";

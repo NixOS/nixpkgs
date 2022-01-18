@@ -15,14 +15,14 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.16.0";
+  version = "1.21.1";
   pname = "azure-core";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "b1c7d2e01846074f258c8b2e592239aef836a2b1c27d8d0e8491a2c7e2906ef4";
+    sha256 = "88d2db5cf9a135a7287dc45fdde6b96f9ca62c9567512a3bb3e20e322ce7deb2";
   };
 
   propagatedBuildInputs = [
@@ -43,6 +43,11 @@ buildPythonPackage rec {
     trio
     typing-extensions
   ];
+
+  # test server needs to be available
+  preCheck = ''
+    export PYTHONPATH=tests/testserver_tests/coretestserver:$PYTHONPATH
+  '';
 
   pytestFlagsArray = [ "tests/" ];
   # disable tests which touch network

@@ -2,20 +2,23 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "snakemake";
-  version = "6.5.3";
+  version = "6.10.0";
 
   propagatedBuildInputs = with python3Packages; [
     appdirs
-    ConfigArgParse
+    configargparse
     connection-pool
     datrie
     docutils
     filelock
     GitPython
+    jinja2
     jsonschema
     nbformat
+    networkx
     psutil
     pulp
+    pygraphviz
     pyyaml
     ratelimiter
     requests
@@ -28,7 +31,7 @@ python3Packages.buildPythonApplication rec {
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "a06839346425c74542e6e2e6047db3133cd747ef89e1ebd87dad1fbba041f62d";
+    sha256 = "199a86c8d1fcfdb88c4271a1507b0ab371a15bc407f2dad9b0ab8c43438adff8";
   };
 
   doCheck = false; # Tests depend on Google Cloud credentials at ${HOME}/gcloud-service-key.json

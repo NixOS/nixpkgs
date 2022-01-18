@@ -44,7 +44,7 @@ let
       modules = mkOption {
         type = types.listOf types.str;
         default = [ "simple_away" ];
-        example = literalExample ''[ "simple_away" "sasl" ]'';
+        example = literalExpression ''[ "simple_away" "sasl" ]'';
         description = ''
           ZNC network modules to load.
         '';
@@ -148,7 +148,7 @@ in
           description = ''
             IRC networks to connect the user to.
           '';
-          example = literalExample ''
+          example = literalExpression ''
             {
               "libera" = {
                 server = "irc.libera.chat";
@@ -170,7 +170,7 @@ in
         };
 
         passBlock = mkOption {
-          example = literalExample ''
+          example = ''
             &lt;Pass password&gt;
                Method = sha256
                Hash = e2ce303c7ea75c571d80d8540a8699b46535be6a085be3414947d638e48d9e93

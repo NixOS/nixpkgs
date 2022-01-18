@@ -1,25 +1,45 @@
-{ lib, stdenv, fetchurl
-, cmake, perl, go
-, protobuf, zlib, gtest, brotli, lz4, zstd, libusb1, pcre2
+{ lib, stdenv, fetchurl, fetchpatch
+, cmake, perl, go, python3
+, protobuf, zlib, gtest, brotli, lz4, zstd, libusb1, pcre2, fmt_7
 }:
+
+let
+  pythonEnv = python3.withPackages(ps: [ ps.protobuf ]);
+in
 
 stdenv.mkDerivation rec {
   pname = "android-tools";
-  version = "31.0.0p1";
+  version = "31.0.3p1";
 
   src = fetchurl {
     url = "https://github.com/nmeum/android-tools/releases/download/${version}/android-tools-${version}.tar.xz";
-    sha256 = "1dn7v10gdx1pi0pkddznd5sdz941qz0x4jww8h2mk50nbyxc792i";
+    sha256 = "1f2svy381r798hjinrc2xiwz13gkkqxfill343zvv8jqkn8rzxhf";
   };
 
+  patches = [
+    # fmt 8 breaks the build but we can use fmt 7 from Nixpkgs:
+    (fetchpatch {
+      # Vendor google's version of fmtlib
+      url = "https://github.com/nmeum/android-tools/commit/21061c1dfb006c22304053c1f6f9e48ae4cbe25a.patch";
+      sha256 = "17mcsgfc3i8xq4hck0ppnzafh15aljxy7j2q4djcmwnvrkv9kx3s";
+      revert = true;
+      excludes = [ "vendor/fmtlib" ];
+    })
+  ];
+
   nativeBuildInputs = [ cmake perl go ];
-  buildInputs = [ protobuf zlib gtest brotli lz4 zstd libusb1 pcre2 ];
+  buildInputs = [ protobuf zlib gtest brotli lz4 zstd libusb1 pcre2 fmt_7 ];
+  propagatedBuildInputs = [ pythonEnv ];
 
   # Don't try to fetch any Go modules via the network:
   GOFLAGS = [ "-mod=vendor" ];
 
   preConfigure = ''
     export GOCACHE=$TMPDIR/go-cache
+  '';
+
+  postInstall = ''
+    install -Dm755 ../vendor/avb/avbtool.py -t $out/bin
   '';
 
   meta = with lib; {
@@ -35,6 +55,8 @@ stdenv.mkDerivation rec {
       - fastboot
       - mke2fs.android (required by fastboot)
       - simg2img, img2simg, append2simg
+      - lpdump, lpmake, lpadd, lpflash, lpunpack
+      - mkbootimg, unpack_bootimg, repack_bootimg
     '';
     # https://developer.android.com/studio/command-line#tools-platform
     # https://developer.android.com/studio/releases/platform-tools

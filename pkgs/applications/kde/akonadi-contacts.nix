@@ -3,8 +3,8 @@
   extra-cmake-modules,
   qtwebengine,
   grantlee, grantleetheme,
-  kdbusaddons, ki18n, kiconthemes, kio, kitemmodels, ktextwidgets, prison,
-  akonadi, akonadi-mime, kcontacts, kmime, libkleo,
+  kcmutils, kdbusaddons, ki18n, kiconthemes, kio, kitemmodels, ktextwidgets,
+  prison, akonadi, akonadi-mime, kcontacts, kmime, libkleo,
 }:
 
 mkDerivation {
@@ -17,7 +17,7 @@ mkDerivation {
   buildInputs = [
     qtwebengine
     grantlee grantleetheme
-    kdbusaddons ki18n kiconthemes kio kitemmodels ktextwidgets prison
+    kcmutils kdbusaddons ki18n kiconthemes kio kitemmodels ktextwidgets prison
     akonadi-mime kcontacts kmime libkleo
   ];
   propagatedBuildInputs = [ akonadi ];

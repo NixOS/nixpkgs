@@ -1,6 +1,6 @@
 { lib, mkDerivation, fetchFromGitHub, fetchpatch, pkg-config
 , qmake, qttools, kirigami2, qtquickcontrols2, qtlocation
-, libosmscout, mapnik, valhalla, libpostal, osrm-backend, protobuf
+, libosmscout, valhalla, libpostal, osrm-backend, protobuf
 , libmicrohttpd_0_9_70, sqlite, marisa, kyotocabinet, boost
 }:
 
@@ -41,7 +41,7 @@ mkDerivation rec {
   nativeBuildInputs = [ qmake pkg-config qttools ];
   buildInputs = [
     kirigami2 qtquickcontrols2 qtlocation
-    mapnik valhalla libosmscout osrm-backend libmicrohttpd_0_9_70
+    valhalla libosmscout osrm-backend libmicrohttpd_0_9_70
     libpostal sqlite marisa kyotocabinet boost protobuf date
   ];
 
@@ -52,8 +52,10 @@ mkDerivation rec {
     mv data/valhalla.json-3.1 data/valhalla.json
   '';
 
-  # Choose to build the kirigami UI variant
-  qmakeFlags = [ "SCOUT_FLAVOR=kirigami" ];
+  qmakeFlags = [
+    "SCOUT_FLAVOR=kirigami" # Choose to build the kirigami UI variant
+    "CONFIG+=disable_mapnik" # Disable the optional mapnik backend
+  ];
 
   meta = with lib; {
     description = "Maps server providing tiles, geocoder, and router";

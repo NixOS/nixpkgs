@@ -49,5 +49,6 @@ stdenv.mkDerivation rec {
     homepage = "https://git.xfce.org/archive/orage/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

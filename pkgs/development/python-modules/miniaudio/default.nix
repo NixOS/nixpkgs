@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "miniaudio";
-  version = "1.44";
+  version = "1.46";
 
   disabled = pythonOlder "3.6";
 
@@ -16,12 +16,11 @@ buildPythonPackage rec {
     owner = "irmen";
     repo = "pyminiaudio";
     rev = "v${version}";
-    sha256 = "1na3vx10lc41gkk14h6s3fm4bnrd2bwf4qbf1l6bfvhs92b9k111";
+    sha256 = "16llwmbbd9445rwhl4v66kf5zd7yl3a94zm9xyllq6ij7vnhg5jb";
   };
 
-  propagatedBuildInputs = [
-    cffi
-  ];
+  propagatedNativeBuildInputs = [ cffi ];
+  propagatedBuildInputs = [ cffi ];
 
   checkInputs = [
     pytestCheckHook

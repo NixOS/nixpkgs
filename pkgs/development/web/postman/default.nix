@@ -2,16 +2,16 @@
 , atk, at-spi2-atk, at-spi2-core, alsa-lib, cairo, cups, dbus, expat, gdk-pixbuf, glib, gtk3
 , freetype, fontconfig, nss, nspr, pango, udev, libuuid, libX11, libxcb, libXi
 , libXcursor, libXdamage, libXrandr, libXcomposite, libXext, libXfixes
-, libXrender, libXtst, libXScrnSaver, libdrm, mesa
+, libXrender, libXtst, libXScrnSaver, libxkbcommon, libdrm, mesa
 }:
 
 stdenv.mkDerivation rec {
   pname = "postman";
-  version = "8.4.0";
+  version = "9.7.1";
 
   src = fetchurl {
     url = "https://dl.pstmn.io/download/version/${version}/linux64";
-    sha256 = "040l0g6m8lmjrm0wvq8z13xyddasz7v95v54d658w14gv0n713vw";
+    sha256 = "sha256-Ioh2FfcKkpLGQdYmRnJC5cj7bNCwCMkg/gsXwPdQa1U=";
     name = "${pname}.tar.gz";
   };
 
@@ -62,6 +62,7 @@ stdenv.mkDerivation rec {
     libXrender
     libXtst
     libXScrnSaver
+    libxkbcommon
   ];
 
   nativeBuildInputs = [ wrapGAppsHook ];
@@ -73,7 +74,7 @@ stdenv.mkDerivation rec {
     rm $out/share/postman/Postman
 
     mkdir -p $out/bin
-    ln -s $out/share/postman/_Postman $out/bin/postman
+    ln -s $out/share/postman/postman $out/bin/postman
 
     mkdir -p $out/share/applications
     ln -s ${desktopItem}/share/applications/* $out/share/applications/
@@ -87,8 +88,8 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     pushd $out/share/postman
-    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" _Postman
-    for file in $(find . -type f \( -name \*.node -o -name _Postman -o -name \*.so\* \) ); do
+    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" postman
+    for file in $(find . -type f \( -name \*.node -o -name postman -o -name \*.so\* \) ); do
       ORIGIN=$(patchelf --print-rpath $file); \
       patchelf --set-rpath "${lib.makeLibraryPath buildInputs}:$ORIGIN" $file
     done
@@ -100,6 +101,6 @@ stdenv.mkDerivation rec {
     description = "API Development Environment";
     license = licenses.postman;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ xurei evanjs ];
+    maintainers = with maintainers; [ johnrichardrinehart evanjs ];
   };
 }

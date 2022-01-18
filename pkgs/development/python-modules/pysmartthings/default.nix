@@ -4,17 +4,21 @@
 , fetchFromGitHub
 , pytest-asyncio
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pysmartthings";
-  version = "0.7.6";
+  version = "0.7.7";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "andrewsayre";
     repo = pname;
     rev = version;
-    sha256 = "0m91lfzdbmq6qv6bihd278psi9ghldxpa1d0dsbii2zf338188qj";
+    sha256 = "sha256-AzAiMn88tRRPwMpwSnKoS1XUERHbKz0sVm/TjcbTsGs=";
   };
 
   propagatedBuildInputs = [
@@ -26,7 +30,14 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "pysmartthings" ];
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "aiohttp>=3.8.0,<4.0.0" "aiohttp<=4.0.0"
+  '';
+
+  pythonImportsCheck = [
+    "pysmartthings"
+  ];
 
   meta = with lib; {
     description = "Python library for interacting with the SmartThings cloud API";

@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, fetchpatch, cyrus_sasl, libevent }:
 
-stdenv.mkDerivation {
-  name = "libmemcached-1.0.18";
+stdenv.mkDerivation rec {
+  pname = "libmemcached";
+  version = "1.0.18";
 
   src = fetchurl {
-    url = "https://launchpad.net/libmemcached/1.0/1.0.18/+download/libmemcached-1.0.18.tar.gz";
+    url = "https://launchpad.net/libmemcached/${lib.versions.majorMinor version}/${version}/+download/libmemcached-${version}.tar.gz";
     sha256 = "10jzi14j32lpq0if0p9vygcl2c1352hwbywzvr9qzq7x6aq0nb72";
   };
 

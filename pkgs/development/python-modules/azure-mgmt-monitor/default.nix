@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, python
 , isPy3k
 , msrest
 , msrestazure
@@ -12,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-monitor";
-  version = "2.0.0";
+  version = "3.0.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "e7f7943fe8f0efe98b3b1996cdec47c709765257a6e09e7940f7838a0f829e82";
+    sha256 = "91ddb7333bf2b9541a53864cc8d2501e3694a03a9c0e41cbfae3348558675ce6";
   };
 
   propagatedBuildInputs = [

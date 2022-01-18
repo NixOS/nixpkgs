@@ -1,8 +1,9 @@
 { stdenv, lib, fetchurl, fetchpatch
 , zlib, xz, libintl, python, gettext, ncurses, findXMLCatalogs
+, libiconv
 , pythonSupport ? enableShared && stdenv.buildPlatform == stdenv.hostPlatform
 , icuSupport ? false, icu ? null
-, enableShared ? stdenv.hostPlatform.libc != "msvcrt"
+, enableShared ? stdenv.hostPlatform.libc != "msvcrt" && !stdenv.hostPlatform.isStatic
 , enableStatic ? !enableShared
 }:
 
@@ -40,6 +41,8 @@ stdenv.mkDerivation rec {
     ++ lib.optional pythonSupport "py"
     ++ lib.optional (enableStatic && enableShared) "static";
 
+  strictDeps = true;
+
   buildInputs = lib.optional pythonSupport python
     ++ lib.optional (pythonSupport && python?isPy2 && python.isPy2) gettext
     ++ lib.optional (pythonSupport && python?isPy3 && python.isPy3) ncurses
@@ -50,7 +53,9 @@ stdenv.mkDerivation rec {
     # RUNPATH for that, leading to undefined references for its users.
     ++ lib.optional stdenv.isFreeBSD xz;
 
-  propagatedBuildInputs = [ zlib findXMLCatalogs ] ++ lib.optional icuSupport icu;
+  propagatedBuildInputs = [ zlib findXMLCatalogs ]
+    ++ lib.optional stdenv.isDarwin libiconv
+    ++ lib.optional icuSupport icu;
 
   configureFlags = [
     "--exec_prefix=$dev"

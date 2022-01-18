@@ -5,13 +5,13 @@ with lib;
 
 python3Packages.buildPythonApplication rec {
   pname = "nicotine-plus";
-  version = "3.0.6";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "Nicotine-Plus";
     repo = "nicotine-plus";
     rev = version;
-    sha256 = "sha256-NL6TXFRB7OeqNEfdANkEqh+MCOF1+ehR+6RO1XsIix8=";
+    hash = "sha256-E8b2VRlnMWmBHu919QDPBYuMbrjov9t//bHi1Y/F0Ak=";
   };
 
   nativeBuildInputs = [ gettext wrapGAppsHook ];
@@ -19,10 +19,17 @@ python3Packages.buildPythonApplication rec {
   propagatedBuildInputs = [ gtk3 gdk-pixbuf gobject-introspection ]
     ++ (with python3Packages; [ pygobject3 ]);
 
+
   postInstall = ''
-    mv $out/bin/nicotine $out/bin/nicotine-plus
-    substituteInPlace $out/share/applications/org.nicotine_plus.Nicotine.desktop \
-      --replace "Exec=nicotine" "Exec=$out/bin/nicotine-plus"
+    ln -s $out/bin/nicotine $out/bin/nicotine-plus
+    test -e $out/share/applications/org.nicotine_plus.Nicotine.desktop && exit 1
+    install -D data/org.nicotine_plus.Nicotine.desktop -t $out/share/applications
+  '';
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}"
+    )
   '';
 
   doCheck = false;

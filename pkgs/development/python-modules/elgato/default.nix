@@ -1,26 +1,28 @@
 { lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
 , aiohttp
-, poetry-core
-, yarl
 , aresponses
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, pydantic
 , pytest-asyncio
 , pytestCheckHook
+, pythonOlder
+, yarl
 }:
 
 buildPythonPackage rec {
   pname = "elgato";
-  version = "2.1.1";
-  disabled = pythonOlder "3.8";
+  version = "2.2.0";
   format = "pyproject";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-elgato";
     rev = "v${version}";
-    sha256 = "19z568jjyww7vi8s44anrb66qjz5l22nz4jqcz49ybhf22warmff";
+    sha256 = "sha256-xsIglJSnvtd3NKqwoRAonPRN+C9KWyar0mrYcC3hPpw=";
   };
 
   nativeBuildInputs = [
@@ -29,6 +31,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
+    pydantic
     yarl
   ];
 
@@ -45,7 +48,9 @@ buildPythonPackage rec {
       --replace "--cov" ""
   '';
 
-  pythonImportsCheck = [ "elgato" ];
+  pythonImportsCheck = [
+    "elgato"
+  ];
 
   meta = with lib; {
     description = "Python client for Elgato Key Lights";

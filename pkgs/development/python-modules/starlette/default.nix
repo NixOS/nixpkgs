@@ -2,9 +2,9 @@
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
-, isPy27
 , aiofiles
-, graphene
+, anyio
+, contextlib2
 , itsdangerous
 , jinja2
 , python-multipart
@@ -12,22 +12,26 @@
 , requests
 , aiosqlite
 , databases
-, pytestCheckHook
 , pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+, trio
 , typing-extensions
 , ApplicationServices
 }:
 
 buildPythonPackage rec {
   pname = "starlette";
-  version = "0.14.2";
-  disabled = isPy27;
+  version = "0.17.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "encode";
     repo = pname;
     rev = version;
-    sha256 = "0fz28czvwiww693ig9vwdja59xxs7m0yp1df32ms1hzr99666bia";
+    sha256 = "sha256-qT/w7r8PsrauLoBolwCGpxiwhDZo3z6hIqKVXeY5yqA=";
   };
 
   postPatch = ''
@@ -37,31 +41,38 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiofiles
-    graphene
+    anyio
     itsdangerous
     jinja2
     python-multipart
     pyyaml
     requests
-  ] ++ lib.optional stdenv.isDarwin [ ApplicationServices ];
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    typing-extensions
+  ] ++ lib.optionals (pythonOlder "3.7") [
+    contextlib2
+  ] ++ lib.optional stdenv.isDarwin [
+    ApplicationServices
+  ];
 
   checkInputs = [
     aiosqlite
     databases
     pytest-asyncio
     pytestCheckHook
+    trio
     typing-extensions
   ];
 
-  disabledTestPaths = [
-    # fails to import graphql, but integrated graphql support is about to
-    # be removed in 0.15, see https://github.com/encode/starlette/pull/1135.
-    "tests/test_graphql.py"
-    # contextfunction was removed in Jinja 3.1
-    "tests/test_templates.py"
+  disabledTests = [
+    # asserts fail due to inclusion of br in Accept-Encoding
+    "test_websocket_headers"
+    "test_request_headers"
   ];
 
-  pythonImportsCheck = [ "starlette" ];
+  pythonImportsCheck = [
+    "starlette"
+  ];
 
   meta = with lib; {
     homepage = "https://www.starlette.io/";

@@ -1,31 +1,46 @@
-{ boost, cmake, fetchFromGitHub, ffmpeg, qtbase, qtx11extras,
-  qttools, qtxmlpatterns, qtsvg, gdal, gfortran, libXt, makeWrapper,
-  mkDerivation, ninja, mpi, python3, lib, tbb, libGLU, libGL }:
+{ lib, stdenv, fetchFromGitLab, fetchurl
+, boost, cmake, ffmpeg, qtbase, qtx11extras
+, qttools, qtxmlpatterns, qtsvg, gdal, gfortran, libXt, makeWrapper
+, mkDerivation, ninja, mpi, python3, tbb, libGLU, libGL
+, withDocs ? true
+}:
 
-mkDerivation rec {
+let
+  version = "5.9.1";
+
+  docFiles = [
+    (fetchurl {
+      url = "https://www.paraview.org/paraview-downloads/download.php?submit=Download&version=v${lib.versions.majorMinor version}&type=data&os=Sources&downloadFile=ParaViewTutorial-${version}.pdf";
+      name = "Tutorial.pdf";
+      sha256 = "1knpirjbz3rv8p8n03p39vv8vi5imvxakjsssqgly09g0cnsikkw";
+    })
+    (fetchurl {
+      url = "https://www.paraview.org/paraview-downloads/download.php?submit=Download&version=v${lib.versions.majorMinor version}&type=data&os=Sources&downloadFile=ParaViewGettingStarted-${version}.pdf";
+      name = "GettingStarted.pdf";
+      sha256 = "14xhlvg7s7d5amqf4qfyamx2a6b66zf4cmlfm3s7iw3jq01x1lx6";
+    })
+    (fetchurl {
+      url = "https://www.paraview.org/paraview-downloads/download.php?submit=Download&version=v${lib.versions.majorMinor version}&type=data&os=Sources&downloadFile=ParaViewCatalystGuide-${version}.pdf";
+      name = "CatalystGuide.pdf";
+      sha256 = "133vcfrbg2nh15igl51ns6gnfn1is20vq6j0rg37wha697pmcr4a";
+    })
+  ];
+
+in mkDerivation rec {
   pname = "paraview";
-  version = "5.8.0";
+  inherit version;
 
-  src = fetchFromGitHub {
-    owner = "Kitware";
-    repo = "ParaView";
+  src = fetchFromGitLab {
+    domain = "gitlab.kitware.com";
+    owner = "paraview";
+    repo = "paraview";
     rev = "v${version}";
-    sha256 = "1mka6wwg9mbkqi3phs29mvxq6qbc44sspbm4awwamqhilh4grhrj";
+    sha256 = "0pzic95br0vr785jnpxqmfxcljw3wk7bhm2xy0jfmwm1dh2b7xac";
     fetchSubmodules = true;
   };
 
-  # Avoid error: format not a string literal and
-  # no format arguments [-Werror=format-security]
-  preConfigure = ''
-    substituteInPlace VTK/Common/Core/vtkLogger.h \
-      --replace 'vtkLogScopeF(verbosity_name, __func__)' 'vtkLogScopeF(verbosity_name, "%s", __func__)'
-
-    substituteInPlace VTK/Common/Core/vtkLogger.h \
-      --replace 'vtkVLogScopeF(level, __func__)' 'vtkVLogScopeF(level, "%s", __func__)'
-  '';
-
   # Find the Qt platform plugin "minimal"
-  patchPhase = ''
+  preConfigure = ''
     export QT_PLUGIN_PATH=${qtbase.bin}/${qtbase.qtPluginPrefix}
   '';
 
@@ -63,7 +78,8 @@ mkDerivation rec {
   ];
 
   buildInputs = [
-    libGLU libGL
+    libGLU
+    libGL
     libXt
     mpi
     tbb
@@ -77,6 +93,14 @@ mkDerivation rec {
     qtsvg
   ];
 
+  postInstall = let docDir = "$out/share/paraview-${lib.versions.majorMinor version}/doc"; in
+    lib.optionalString withDocs ''
+      mkdir -p ${docDir};
+      for docFile in ${lib.concatStringsSep " " docFiles}; do
+        cp $docFile ${docDir}/$(stripHash $docFile);
+      done;
+    '';
+
   propagatedBuildInputs = [
     (python3.withPackages (ps: with ps; [ numpy matplotlib mpi4py ]))
   ];
@@ -84,7 +108,7 @@ mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.paraview.org/";
     description = "3D Data analysis and visualization application";
-    license = licenses.free;
+    license = licenses.bsd3;
     maintainers = with maintainers; [ guibert ];
     platforms = platforms.linux;
   };

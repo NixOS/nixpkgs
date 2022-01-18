@@ -1,39 +1,51 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 , pythonOlder
 , click
 , click-default-group
+, dateutils
 , sqlite-fts4
 , tabulate
 , pytestCheckHook
-, pytestrunner
-, black
 , hypothesis
-, sqlite
 }:
 
 buildPythonPackage rec {
   pname = "sqlite-utils";
-  version = "3.9.1";
+  version = "3.19";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a08ed62eb269e26ae9c35b9be9cd3d395b0522157e6543128a40cc5302d8aa81";
+    sha256 = "509099fce5f25faada6e76b6fb90e8ef5ba0f1715177933a816718be0c8e7244";
   };
+
+  patches = [
+    # https://github.com/simonw/sqlite-utils/pull/347
+    (fetchpatch {
+      name = "sqlite-utils-better-test_rebuild_fts.patch";
+      url = "https://github.com/simonw/sqlite-utils/pull/347/commits/1a7ef2fe2064ace01d5535fb771f941296fb642a.diff";
+      sha256 = "sha256-WKCQGMqr8WYjG7cmAH5pYBhgikowbt3r6hObwtMDDUY=";
+    })
+  ];
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace '"pytest-runner"' ""
+  '';
 
   propagatedBuildInputs = [
     click
     click-default-group
+    dateutils
     sqlite-fts4
     tabulate
   ];
 
   checkInputs = [
     pytestCheckHook
-    pytestrunner
-    black
     hypothesis
   ];
 
@@ -43,5 +55,4 @@ buildPythonPackage rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ meatcar ];
   };
-
 }

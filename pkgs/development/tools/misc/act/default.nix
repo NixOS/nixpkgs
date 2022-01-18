@@ -2,20 +2,20 @@
 
 buildGoModule rec {
   pname = "act";
-  version = "0.2.23";
+  version = "0.2.25";
 
   src = fetchFromGitHub {
     owner = "nektos";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-PBhlBWycAYuczfP0D+Gf1pDvrfI9gz3JyGe5FBq782Y=";
+    sha256 = "sha256-Eo5uWBLriYa7tLpPMa34+l6BYQe9useL1tN9gqUSt0k=";
   };
 
-  vendorSha256 = "sha256-dLIsVWN/PjcH0CUYRmn4YaF8Pczf/gaWhD3lulqGiuA=";
+  vendorSha256 = "sha256-1v87WcQoVyTyCStiMAoThidIMRqJwdsYNF987kQp5YM=";
 
   doCheck = false;
 
-  buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
+  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
   meta = with lib; {
     description = "Run your GitHub Actions locally";

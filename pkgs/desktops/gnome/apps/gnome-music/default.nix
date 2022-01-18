@@ -25,18 +25,19 @@
 , gst_all_1
 , libdazzle
 , libsoup
+, libhandy
 , gsettings-desktop-schemas
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gnome-music";
-  version = "40.1.1";
+  version = "41.0";
 
   format = "other";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "IMtnPhHC8xQ9NYjPyrmhInkQgOun3GASypTBhglVjVE=";
+    sha256 = "1llz2aqa3n3ivwl7i09pgylsbgrfzb872vcj1k7pvivxm1kkbcb9";
   };
 
   nativeBuildInputs = [
@@ -67,6 +68,7 @@ python3.pkgs.buildPythonApplication rec {
     libnotify
     libdazzle
     libsoup
+    libhandy
     gsettings-desktop-schemas
     tracker
   ] ++ (with gst_all_1; [
@@ -77,18 +79,24 @@ python3.pkgs.buildPythonApplication rec {
     gst-plugins-ugly
   ]);
 
-  propagatedBuildInputs = with python3.pkgs; [
+  pythonPath = with python3.pkgs; [
     pycairo
     dbus-python
     pygobject3
   ];
-
 
   postPatch = ''
     for f in meson_post_conf.py meson_post_install.py; do
       chmod +x $f
       patchShebangs $f
     done
+  '';
+
+  # Prevent double wrapping, let the Python wrapper use the args in preFixup.
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
   doCheck = false;

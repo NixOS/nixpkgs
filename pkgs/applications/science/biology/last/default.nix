@@ -1,12 +1,14 @@
-{ lib, stdenv, fetchurl, unzip, zlib, python3, parallel }:
+{ lib, stdenv, fetchFromGitLab, unzip, zlib, python3, parallel }:
 
 stdenv.mkDerivation rec {
   pname = "last";
-  version = "1179";
+  version = "1256";
 
-  src = fetchurl {
-    url = "http://last.cbrc.jp/last-${version}.zip";
-    sha256 = "sha256-949oiE7ZNkCOJuOK/huPkCN0c4TlVaTskkBe0joc0HU=";
+  src = fetchFromGitLab {
+    owner = "mcfrith";
+    repo = "last";
+    rev = version;
+    sha256 = "sha256-lOsU0X4K6jYcbkTzwQV+KAerQh9odE4zCLtSgZrYH6s=";
   };
 
   nativeBuildInputs = [ unzip ];

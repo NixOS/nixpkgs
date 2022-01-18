@@ -10,8 +10,9 @@
 , rustPlatform
 , pkg-config
 , glib
+, libadwaita
 , libhandy
-, gtk3
+, gtk4
 , openssl
 , alsa-lib
 , libpulseaudio
@@ -20,19 +21,19 @@
 
 stdenv.mkDerivation rec {
   pname = "spot";
-  version = "0.1.14";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "xou816";
     repo = "spot";
     rev = version;
-    sha256 = "eHhbm1amTx3ngqsP32uDEdrhrBeurMftg5SToTQGX9o=";
+    hash = "sha256-An9PJsuXZkvJhP67cisWxFd2dpky53EY/xcR6StgWFY=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-jY7pWoY9IJi5hHVRS1gQKb+Vmfc+wxHvoAwupOtXXQs=";
+    hash = "sha256-2qMmPIBoZS6WT06VzCmnYWaIfLzWN2HUvk7y9GKuuXg=";
   };
 
   nativeBuildInputs = [
@@ -41,7 +42,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3 # for meson postinstall script
-    gtk3 # for gtk-update-icon-cache
+    gtk4 # for gtk-update-icon-cache
     glib # for glib-compile-schemas
     desktop-file-utils
     rustPlatform.rust.cargo
@@ -52,12 +53,16 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib
-    gtk3
+    gtk4
+    libadwaita
     libhandy
     openssl
     alsa-lib
     libpulseaudio
   ];
+
+  # https://github.com/xou816/spot/issues/313
+  mesonBuildType = "release";
 
   postPatch = ''
     chmod +x build-aux/cargo.sh
@@ -74,6 +79,6 @@ stdenv.mkDerivation rec {
     description = "Native Spotify client for the GNOME desktop";
     homepage = "https://github.com/xou816/spot";
     license = licenses.mit;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [ jtojnar tomfitzhenry ];
   };
 }

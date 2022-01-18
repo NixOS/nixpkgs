@@ -5,41 +5,35 @@
 , glibcLocales
 , cacert
 , mkYarnModules
+, fetchYarnDeps
 , nodejs
-, fetchpatch
 , nixosTests
 }:
 
 let
   pname = "plausible";
-  version = "1.3.0";
-  name = "${pname}-${version}";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "plausible";
     repo = "analytics";
     rev = "v${version}";
-    sha256 = "03lm1f29gwwixnhgjish5bhi3m73qyp71ns2sczdnwnbhrw61zps";
+    sha256 = "1d31y7mwvml17w97dm5c4312n0ciq39kf4hz3g80hdzbbn72mi4q";
   };
 
   # TODO consider using `mix2nix` as soon as it supports git dependencies.
   mixFodDeps = beamPackages.fetchMixDeps {
     pname = "${pname}-deps";
     inherit src version;
-    sha256 = "18h3hs69nw06msvs3nnymf6p94qd3x1f4d2zawqriy9fr5fz7zx6";
-
-    # We need ecto 3.6 as this version checks whether the database exists before
-    # trying to create it. The creation attempt would always require super-user privileges
-    # and since 3.6 this isn't the case anymore.
-    patches = [ ./ecto_sql-fix.patch ];
+    sha256 = "1ikcskp4gvvdprl65x1spijdc8dz6klnrnkvgy2jbk0b3d7yn1v5";
   };
 
   yarnDeps = mkYarnModules {
     pname = "${pname}-yarn-deps";
     inherit version;
     packageJSON = ./package.json;
-    yarnNix = ./yarn.nix;
     yarnLock = ./yarn.lock;
+    yarnNix = ./yarn.nix;
     preBuild = ''
       mkdir -p tmp/deps
       cp -r ${mixFodDeps}/phoenix tmp/deps/phoenix
@@ -54,19 +48,6 @@ beamPackages.mixRelease {
   inherit pname version src mixFodDeps;
 
   nativeBuildInputs = [ nodejs ];
-
-  patches = [
-    # Allow socket-authentication against postgresql. Upstream PR is
-    # https://github.com/plausible/analytics/pull/1052
-    (fetchpatch {
-      url = "https://github.com/Ma27/analytics/commit/f2ee5892a6c3e1a861d69ed30cac43e05e9cd36f.patch";
-      sha256 = "sha256-JvJ7xlGw+tHtWje+jiQChVC4KTyqqdq2q+MIcOv/k1o=";
-    })
-
-    # Ensure that `tzdata` doesn't write into its store-path
-    # https://github.com/plausible/analytics/pull/1096, but rebased onto 1.3.0
-    ./tzdata-rebased.patch
-  ];
 
   passthru = {
     tests = { inherit (nixosTests) plausible; };

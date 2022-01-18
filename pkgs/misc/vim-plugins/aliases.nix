@@ -32,7 +32,7 @@ let
 
   deprecations = lib.mapAttrs (old: info:
     throw "${old} was renamed to ${info.new} on ${info.date}. Please update to ${info.new}."
-  ) (builtins.fromJSON (builtins.readFile ./deprecated.json));
+  ) (lib.importJSON ./deprecated.json);
 
 in
 mapAliases (with prev; {
@@ -94,6 +94,7 @@ mapAliases (with prev; {
   neosnippet          = neosnippet-vim;
   The_NERD_Commenter  = nerdcommenter;
   The_NERD_tree       = nerdtree;
+  onedark-nvim        = onedarkpro-nvim; # added 2021-10-22
   open-browser        = open-browser-vim;
   pathogen            = vim-pathogen;
   polyglot            = vim-polyglot;

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, pkg-config, libGLU, libGL
+{ stdenv, lib, fetchurl, fetchFromGitHub, pkg-config, libGLU, libGL
 , SDL, SDL_image, libpng, libvorbis, libogg, libmikmod
 
 , use3DOVideos ? false, requireFile ? null, writeText ? null
@@ -12,7 +12,7 @@ assert use3DOVideos -> requireFile != null && writeText != null
 
 let
   videos = import ./3dovideo.nix {
-    inherit stdenv lib requireFile writeText fetchurl haskellPackages;
+    inherit stdenv lib requireFile writeText fetchFromGitHub haskellPackages;
   };
 
   remixPacks = lib.imap1 (num: sha256: fetchurl rec {

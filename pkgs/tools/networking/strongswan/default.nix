@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchurl, fetchpatch
-, pkg-config, autoreconfHook
+{ lib, stdenv, fetchFromGitHub
+, pkg-config, autoreconfHook, perl, gperf, bison, flex
 , gmp, python3, iptables, ldns, unbound, openssl, pcsclite, glib
 , openresolv
 , systemd, pam
@@ -17,16 +17,18 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "strongswan";
-  version = "5.8.1"; # Make sure to also update <nixpkgs/nixos/modules/services/networking/strongswan-swanctl/swanctl-params.nix> when upgrading!
+  version = "5.9.4"; # Make sure to also update <nixpkgs/nixos/modules/services/networking/strongswan-swanctl/swanctl-params.nix> when upgrading!
 
-  src = fetchurl {
-    url = "https://download.strongswan.org/${pname}-${version}.tar.bz2";
-    sha256 = "034rd6kr1bmnvj8rg2kcxdjb0cgj3dn9310mmm94j1awxan71byr";
+  src = fetchFromGitHub {
+    owner = "strongswan";
+    repo = "strongswan";
+    rev = version;
+    sha256 = "1y1gs232x7hsbccjga9nbkf4bbi5wxazlkg00qd2v1nz86sfy4cd";
   };
 
   dontPatchELF = true;
 
-  nativeBuildInputs = [ pkg-config autoreconfHook ];
+  nativeBuildInputs = [ pkg-config autoreconfHook perl gperf bison flex ];
   buildInputs =
     [ curl gmp python3 ldns unbound openssl pcsclite ]
     ++ optionals enableTNC [ trousers sqlite libxml2 ]
@@ -38,12 +40,6 @@ stdenv.mkDerivation rec {
     ./ext_auth-path.patch
     ./firewall_defaults.patch
     ./updown-path.patch
-
-    # Don't use etc/dbus-1/system.d
-    (fetchpatch {
-      url = "https://patch-diff.githubusercontent.com/raw/strongswan/strongswan/pull/150.patch";
-      sha256 = "1irfxb99blb8v3hs0kmlhzkkwbmds1p0gq319z8lmacz36cgyj2c";
-    })
   ];
 
   postPatch = optionalString stdenv.isLinux ''

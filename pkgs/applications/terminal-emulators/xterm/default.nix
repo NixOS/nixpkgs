@@ -4,23 +4,19 @@
 
 stdenv.mkDerivation rec {
   pname = "xterm";
-  version = "367";
+  version = "370";
 
   src = fetchurl {
     urls = [
       "ftp://ftp.invisible-island.net/xterm/${pname}-${version}.tgz"
       "https://invisible-mirror.net/archives/xterm/${pname}-${version}.tgz"
     ];
-    sha256 = "07y51l06n344pjyxdddq6sdvxw25nl10irl4avynkqjnqyqsiw97";
+    sha256 = "ljxdhAoPD0wHf/KEWG6LH4Pz+YPcpvdPSzYZdbU4jII=";
   };
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    makeWrapper
-    pkg-config
-    fontconfig
-  ];
+  nativeBuildInputs = [ makeWrapper pkg-config fontconfig ];
 
   buildInputs = [
     xorg.libXaw

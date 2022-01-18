@@ -29,7 +29,7 @@ let
     mkPlasma5 = import ../desktops/plasma-5;
     attrs = {
       inherit libsForQt5;
-      inherit (pkgs) lib fetchurl;
+      inherit (pkgs) config lib fetchurl;
       gconf = pkgs.gnome2.GConf;
       inherit (pkgs) gsettings-desktop-schemas;
     };
@@ -43,9 +43,17 @@ let
     };
   in (lib.makeOverridable mkGear attrs);
 
-in (kdeFrameworks // plasma5 // plasma5.thirdParty // kdeGear // qt5 // {
+  plasmaMobileGear = let
+    mkPlamoGear = import ../applications/plasma-mobile;
+    attrs = {
+      inherit libsForQt5;
+      inherit (pkgs) lib fetchurl;
+    };
+  in (lib.makeOverridable mkPlamoGear attrs);
 
-  inherit kdeFrameworks plasma5 kdeGear qt5;
+in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGear // qt5 // {
+
+  inherit kdeFrameworks plasmaMobileGear plasma5 kdeGear qt5;
 
   # Alias for backwards compatibility. Added 2021-05-07.
   kdeApplications = kdeGear;
@@ -88,6 +96,8 @@ in (kdeFrameworks // plasma5 // plasma5.thirdParty // kdeGear // qt5 // {
 
   kf5gpgmepp = callPackage ../development/libraries/kf5gpgmepp { };
 
+  kirigami-addons = libsForQt5.callPackage ../development/libraries/kirigami-addons { };
+
   kimageannotator = callPackage ../development/libraries/kimageannotator { };
 
   kproperty = callPackage ../development/libraries/kproperty { };
@@ -97,6 +107,8 @@ in (kdeFrameworks // plasma5 // plasma5.thirdParty // kdeGear // qt5 // {
   kreport = callPackage ../development/libraries/kreport { };
 
   kquickimageedit = callPackage ../development/libraries/kquickimageedit { };
+
+  kweathercore = libsForQt5.callPackage ../development/libraries/kweathercore { };
 
   ldutils = callPackage ../development/libraries/ldutils { };
 
@@ -120,7 +132,11 @@ in (kdeFrameworks // plasma5 // plasma5.thirdParty // kdeGear // qt5 // {
     inherit (pkgs.darwin.apple_sdk.frameworks) AGL;
   };
 
+  libqofono = callPackage ../development/libraries/libqofono { };
+
   libqtav = callPackage ../development/libraries/libqtav { };
+
+  libqaccessibilityclient = callPackage ../development/libraries/libqaccessibilityclient { };
 
   kpmcore = callPackage ../development/libraries/kpmcore { };
 
@@ -162,6 +178,8 @@ in (kdeFrameworks // plasma5 // plasma5.thirdParty // kdeGear // qt5 // {
 
   qca-qt5 = callPackage ../development/libraries/qca-qt5 { };
 
+  qcoro = callPackage ../development/libraries/qcoro { };
+
   qcsxcad = callPackage ../development/libraries/science/electronics/qcsxcad { };
 
   qmltermwidget = callPackage ../development/libraries/qmltermwidget {
@@ -172,9 +190,9 @@ in (kdeFrameworks // plasma5 // plasma5.thirdParty // kdeGear // qt5 // {
 
   qoauth = callPackage ../development/libraries/qoauth { };
 
-  qscintilla = callPackage ../development/libraries/qscintilla {
-    withQt5 = true;
-  };
+  qscintilla = callPackage ../development/libraries/qscintilla { };
+
+  qt5ct = callPackage ../tools/misc/qt5ct { };
 
   qtfeedback = callPackage ../development/libraries/qtfeedback { };
 
@@ -183,7 +201,7 @@ in (kdeFrameworks // plasma5 // plasma5.thirdParty // kdeGear // qt5 // {
   qtinstaller = callPackage ../development/libraries/qtinstaller { };
 
   qtkeychain = callPackage ../development/libraries/qtkeychain {
-    withQt5 = true;
+    inherit (pkgs.darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
 
   qtpbfimageplugin = callPackage ../development/libraries/qtpbfimageplugin { };

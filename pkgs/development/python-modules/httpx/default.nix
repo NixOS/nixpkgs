@@ -2,35 +2,38 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
-, brotli
+, brotlicffi
 , certifi
+, charset-normalizer
 , h2
 , httpcore
 , rfc3986
 , sniffio
+, python
 , pytestCheckHook
 , pytest-asyncio
 , pytest-trio
-, pytestcov
+, typing-extensions
 , trustme
 , uvicorn
 }:
 
 buildPythonPackage rec {
   pname = "httpx";
-  version = "0.18.0";
+  version = "0.21.1";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "encode";
     repo = pname;
     rev = version;
-    sha256 = "sha256-6EYBTRXaVHBgW/JzZvWLz55AqgocOyym2FVtu2Nkp/U=";
+    sha256 = "sha256-ayhLP+1hPWAx2ds227CKp5cebVkD5B2Z59L+3dzdINc=";
   };
 
   propagatedBuildInputs = [
-    brotli
+    brotlicffi
     certifi
+    charset-normalizer
     h2
     httpcore
     rfc3986
@@ -41,12 +44,17 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-asyncio
     pytest-trio
-    pytestcov
     trustme
+    typing-extensions
     uvicorn
   ];
 
   pythonImportsCheck = [ "httpx" ];
+
+  # testsuite wants to find installed packages for testing entrypoint
+  preCheck = ''
+    export PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH
+  '';
 
   disabledTests = [
     # httpcore.ConnectError: [Errno 101] Network is unreachable
@@ -54,6 +62,13 @@ buildPythonPackage rec {
     # httpcore.ConnectError: [Errno -2] Name or service not known
     "test_async_proxy_close"
     "test_sync_proxy_close"
+    # sensitive to charset_normalizer output
+    "iso-8859-1"
+    "test_response_no_charset_with_iso_8859_1_content"
+  ];
+
+  disabledTestPaths = [
+    "tests/test_main.py"
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -62,6 +77,6 @@ buildPythonPackage rec {
     description = "The next generation HTTP client";
     homepage = "https://github.com/encode/httpx";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc fab ];
   };
 }

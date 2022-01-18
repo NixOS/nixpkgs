@@ -5,12 +5,13 @@
 , lib
 , soci
 , sqlite
+, boost
 , stdenv
 }:
 
 stdenv.mkDerivation rec {
   pname = "lime";
-  version = "4.5.14";
+  version = "5.0.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
@@ -18,10 +19,10 @@ stdenv.mkDerivation rec {
     group = "BC";
     repo = pname;
     rev = version;
-    sha256 = "sha256-ixqJ37+ljAru3hZ512nosTak0G/m6/nnmv2p/s5sVLs=";
+    sha256 = "sha256-11vvvA+pud/eOyYsbRKVvGfiyhwdhNPfRQSfaquUro8=";
   };
 
-  buildInputs = [ bctoolbox soci belle-sip sqlite ];
+  buildInputs = [ bctoolbox soci belle-sip sqlite boost ];
   nativeBuildInputs = [ cmake ];
 
   # Do not build static libraries

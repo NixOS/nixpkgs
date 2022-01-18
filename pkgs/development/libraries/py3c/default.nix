@@ -2,16 +2,18 @@
 
 stdenv.mkDerivation rec {
   pname = "py3c";
-  version = "1.3.1";
+  version = "1.4";
 
   src = fetchFromGitHub {
     owner = "encukou";
     repo = pname;
     rev = "v${version}";
-    sha256 = "04i2z7hrig78clc59q3i1z2hh24g7z1bfvxznlzxv00d4s57nhpi";
+    sha256 = "sha256-v8+0J56sZVbGdBlOotObUa10/zFMTvfXdMYRsKhyZaY=";
   };
 
-  postPatch = lib.optionalString stdenv.cc.isClang ''
+  postPatch = ''
+    # clang and gcc-11 complain about 'register' keywords used by
+    # python-2.7. Let's avoid blanket -Werror.
     substituteInPlace test/setup.py \
       --replace "'-Werror', " ""
   '';

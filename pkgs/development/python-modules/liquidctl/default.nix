@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "liquidctl";
-  version = "1.7.0";
+  version = "1.8.0";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
-    owner  = pname;
-    repo   = pname;
-    rev    = "v${version}";
-    sha256 = "sha256-tpk8wCKyrj3dOkBxj9UWcyrAb31uKtl2fRwwh7dAQGE=";
+    owner = pname;
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-N0Ebd0zIHFmuiIozkAy4SV3o8rFA1wmrGd+dJo8jdk0=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -33,6 +33,10 @@ buildPythonPackage rec {
     smbus-cffi
     i2c-tools
     colorlog
+  ];
+
+  propagatedNativeBuildInputs = [
+    smbus-cffi
   ];
 
   outputs = [ "out" "man" ];
@@ -56,9 +60,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Cross-platform CLI and Python drivers for AIO liquid coolers and other devices";
-    homepage    = "https://github.com/liquidctl/liquidctl";
-    changelog   = "https://github.com/liquidctl/liquidctl/blob/master/CHANGELOG.md";
-    license     = licenses.gpl3Plus;
+    homepage = "https://github.com/liquidctl/liquidctl";
+    changelog = "https://github.com/liquidctl/liquidctl/blob/master/CHANGELOG.md";
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ arturcygan evils ];
   };
 }

@@ -5,7 +5,6 @@
 , fetchPypi
 , pytest-cov
 , pytestCheckHook
-, six
 , tox
 }:
 

@@ -63,7 +63,7 @@ let
     };
   };
 
-  toYAML = name: attrs: pkgs.runCommandNoCC name {
+  toYAML = name: attrs: pkgs.runCommand name {
     preferLocalBuild = true;
     json = builtins.toFile "${name}.json" (builtins.toJSON attrs);
     nativeBuildInputs = [ pkgs.remarshal ];
@@ -83,6 +83,9 @@ let
   mkArgumentsOption = cmd: mkOption {
     type = types.listOf types.str;
     default = argumentsOf cmd;
+    defaultText = literalDocBook ''
+      calculated from <literal>config.services.thanos.${cmd}</literal>
+    '';
     description = ''
       Arguments to the <literal>thanos ${cmd}</literal> command.
 
@@ -120,7 +123,7 @@ let
           type = with types; nullOr str;
           default = if cfg.tracing.config == null then null
                     else toString (toYAML "tracing.yaml" cfg.tracing.config);
-          defaultText = ''
+          defaultText = literalExpression ''
             if config.services.thanos.<cmd>.tracing.config == null then null
             else toString (toYAML "tracing.yaml" config.services.thanos.<cmd>.tracing.config);
           '';
@@ -185,7 +188,7 @@ let
           type = with types; nullOr str;
           default = if cfg.objstore.config == null then null
                     else toString (toYAML "objstore.yaml" cfg.objstore.config);
-          defaultText = ''
+          defaultText = literalExpression ''
             if config.services.thanos.<cmd>.objstore.config == null then null
             else toString (toYAML "objstore.yaml" config.services.thanos.<cmd>.objstore.config);
           '';
@@ -227,7 +230,7 @@ let
         option = mkOption {
           type = types.str;
           default = "/var/lib/${config.services.prometheus.stateDir}/data";
-          defaultText = "/var/lib/\${config.services.prometheus.stateDir}/data";
+          defaultText = literalExpression ''"/var/lib/''${config.services.prometheus.stateDir}/data"'';
           description = ''
             Data directory of TSDB.
           '';
@@ -656,7 +659,7 @@ in {
     package = mkOption {
       type = types.package;
       default = pkgs.thanos;
-      defaultText = "pkgs.thanos";
+      defaultText = literalExpression "pkgs.thanos";
       description = ''
         The thanos package that should be used.
       '';

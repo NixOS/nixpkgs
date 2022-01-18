@@ -23,7 +23,6 @@ stdenv.mkDerivation rec {
     description = "Scanner Access Now Easy";
     homepage    = "http://www.sane-project.org/";
     license     = licenses.gpl2Plus;
-    maintainers = with maintainers; [ peti ];
     platforms   = platforms.linux;
   };
 }

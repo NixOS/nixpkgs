@@ -50,7 +50,6 @@ in stdenv.mkDerivation rec {
   ] ++ lib.optional enableCUDA "-DTERRA_ENABLE_CUDA=ON";
 
   doCheck = true;
-  enableParallelBuilding = true;
   hardeningDisable = [ "fortify" ];
   outputs = [ "bin" "dev" "out" "static" ];
 
@@ -82,7 +81,7 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A low-level counterpart to Lua";
-    homepage = "http://terralang.org/";
+    homepage = "https://terralang.org/";
     platforms = platforms.x86_64;
     maintainers = with maintainers; [ jb55 seylerius thoughtpolice ];
     license = licenses.mit;

@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "sopel";
-  version = "7.1.0";
+  version = "7.1.7";
   disabled = isPyPy;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "74057d4c86cff744b1f1062f3a9c4ae99eb4f1b17048ceb083293d5f4c7e989b";
+    sha256 = "4eb12e9753162e4c19a1bfdd42aea9eb7f5f15e316a6609b925350792fb454fd";
   };
 
   propagatedBuildInputs = [
@@ -36,7 +36,8 @@ buildPythonPackage rec {
   # remove once https://github.com/sopel-irc/sopel/pull/1653 lands
   postPatch = ''
     substituteInPlace requirements.txt \
-      --replace "praw>=4.0.0,<6.0.0" "praw"
+      --replace "praw>=4.0.0,<6.0.0" "praw" \
+      --replace "sqlalchemy<1.4" "sqlalchemy"
   '';
 
   checkInputs = [ pytestCheckHook ];
@@ -55,7 +56,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Simple and extensible IRC bot";
-    homepage = "http://sopel.chat";
+    homepage = "https://sopel.chat";
     license = licenses.efl20;
     maintainers = with maintainers; [ mog ];
   };

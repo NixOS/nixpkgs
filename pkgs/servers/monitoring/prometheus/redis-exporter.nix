@@ -2,23 +2,22 @@
 
 buildGoModule rec {
   pname = "redis_exporter";
-  version = "1.23.1";
+  version = "1.33.0";
 
   src = fetchFromGitHub {
     owner = "oliver006";
     repo = "redis_exporter";
     rev = "v${version}";
-    sha256 = "0hlzxmc3jnmbym7by89bb73nlr0gw1xj8d88x10zx55kry7p0jfn";
+    sha256 = "sha256-3b0hlRjPXrMjFhXi8j4VvKJyRGicIk9FZUBRsBUp+Xo=";
   };
 
-  vendorSha256 = "11237959ikd7l5glkhfz0g55mbld2hq985b5crwb9bnimaly5lga";
+  vendorSha256 = "sha256-MVDb4JN2QqZNxANDLUZywgoBc2NpcaPB8TkR1xrq+Yk=";
 
-  buildFlagsArray = ''
-    -ldflags=
-       -X main.BuildVersion=${version}
-       -X main.BuildCommitSha=unknown
-       -X main.BuildDate=unknown
-  '';
+  ldflags = [
+    "-X main.BuildVersion=${version}"
+    "-X main.BuildCommitSha=unknown"
+    "-X main.BuildDate=unknown"
+  ];
 
   # needs a redis server
   doCheck = false;

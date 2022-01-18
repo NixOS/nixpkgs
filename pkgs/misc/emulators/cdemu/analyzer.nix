@@ -1,9 +1,9 @@
 { callPackage, makeWrapper, gobject-introspection, cmake
 , python3Packages, gtk3, glib, libxml2, gnuplot, gnome, gdk-pixbuf, librsvg, intltool, libmirage }:
 let pkg = import ./base.nix {
-  version = "3.2.3";
+  version = "3.2.5";
   pkgName = "image-analyzer";
-  pkgSha256 = "17yfjmf65s77214qassz6l01cjcni4cv06nzfsm7qrzw172fmci4";
+  pkgSha256 = "00906lky0z1m0bdqnjmzxgcb19dzvljhddhh42lixyr53sjp94cc";
 };
 in callPackage pkg {
   buildInputs = [ glib gtk3 libxml2 gnuplot libmirage makeWrapper

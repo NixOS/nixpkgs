@@ -76,7 +76,7 @@ in
 
   config = mkIf cfg.enable {
     assertions = [ {
-      assertion = pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64;
+      assertion = pkgs.stdenv.hostPlatform.isx86;
       message = "Azure not currently supported on ${pkgs.stdenv.hostPlatform.system}";
     } {
       assertion = config.networking.networkmanager.enable == false;

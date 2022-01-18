@@ -3,12 +3,12 @@
 
 buildPythonPackage rec {
   pname = "asyncpg";
-  version = "0.23.0";
+  version = "0.25.0";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "812dafa4c9e264d430adcc0f5899f0dc5413155a605088af696f952d72d36b5e";
+    sha256 = "63f8e6a69733b285497c2855464a34de657f2cccd25aeaeeb5071872e9382540";
   };
 
   checkInputs = [

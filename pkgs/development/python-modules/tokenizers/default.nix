@@ -1,9 +1,11 @@
 { lib
+, stdenv
 , fetchFromGitHub
 , fetchurl
 , buildPythonPackage
 , rustPlatform
 , setuptools-rust
+, libiconv
 , numpy
 , datasets
 , pytestCheckHook
@@ -49,19 +51,19 @@ let
   };
 in buildPythonPackage rec {
   pname = "tokenizers";
-  version = "0.10.3";
+  version = "unstable-2021-08-13";
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = pname;
-    rev = "python-v${version}";
-    hash = "sha256-X7aUiJJjB2ZDlE8LbK7Pn/15SLTZbP8kb4l9ED7/xvU=";
+    rev = "e7dd6436dd4a4ffd9e8a4f110ca68e6a38677cb6";
+    sha256 = "1p7w9a43a9h6ys5nsa4g89l65dj11037p7a1lqkj4x1yc9kv2y1r";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src sourceRoot;
     name = "${pname}-${version}";
-    hash = "sha256-gRqxlL6q87sGC0birDhCmGF+CVbfxwOxW6Tl6+5mGoo=";
+    sha256 = "1yb4jsx6mp9jgd1g3mli6vr6mri2afnwqlmxq1rpvn34z6b3iw9q";
   };
 
   sourceRoot = "source/bindings/python";
@@ -71,6 +73,10 @@ in buildPythonPackage rec {
     rust.cargo
     rust.rustc
   ]);
+
+  buildInputs = lib.optionals stdenv.isDarwin [
+    libiconv
+  ];
 
   propagatedBuildInputs = [
     numpy
@@ -97,6 +103,10 @@ in buildPythonPackage rec {
       ln -s ${openaiMerges} openai-gpt-merges.txt )
   '';
 
+  postPatch = ''
+    echo 'import multiprocessing; multiprocessing.set_start_method("fork")' >> tests/__init__.py
+  '';
+
   preCheck = ''
     HOME=$TMPDIR
   '';
@@ -111,6 +121,6 @@ in buildPythonPackage rec {
     description = "Fast State-of-the-Art Tokenizers optimized for Research and Production";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ danieldk ];
+    maintainers = with maintainers; [ ];
   };
 }

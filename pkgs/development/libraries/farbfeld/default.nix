@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ libpng libjpeg ];
   nativeBuildInputs = [ makeWrapper ];
 
+  makeFlags = [ "CC:=$(CC)" ];
+
   installFlags = [ "PREFIX=$(out)" ];
   postInstall = ''
     wrapProgram "$out/bin/2ff" --prefix PATH : "${file}/bin"

@@ -54,12 +54,12 @@ let
     # tcp json rpc
     ++ [ "--tcp.enabled ${toString cfg.tcp.enable}" ]
     ++ optionals cfg.tcp.enable [
-      "--tcp.address ${cfg.tcp.listenAddress}"
+      "--tcp.bind_to_address ${cfg.tcp.listenAddress}"
       "--tcp.port ${toString cfg.tcp.port}" ]
      # http json rpc
     ++ [ "--http.enabled ${toString cfg.http.enable}" ]
     ++ optionals cfg.http.enable [
-      "--http.address ${cfg.http.listenAddress}"
+      "--http.bind_to_address ${cfg.http.listenAddress}"
       "--http.port ${toString cfg.http.port}"
     ] ++ optional (cfg.http.docRoot != null) "--http.doc_root \"${toString cfg.http.docRoot}\"");
 
@@ -206,7 +206,7 @@ in {
                 For type <literal>meta</literal>, a list of stream names in the form <literal>/one/two/...</literal>. Don't forget the leading slash.
                 For type <literal>alsa</literal>, use an empty string.
               '';
-              example = literalExample ''
+              example = literalExpression ''
                 "/path/to/pipe"
                 "/path/to/librespot"
                 "192.168.1.2:4444"
@@ -226,7 +226,7 @@ in {
               description = ''
                 Key-value pairs that convey additional parameters about a stream.
               '';
-              example = literalExample ''
+              example = literalExpression ''
                 # for type == "pipe":
                 {
                   mode = "create";
@@ -254,7 +254,7 @@ in {
         description = ''
           The definition for an input source.
         '';
-        example = literalExample ''
+        example = literalExpression ''
           {
             mpd = {
               type = "pipe";

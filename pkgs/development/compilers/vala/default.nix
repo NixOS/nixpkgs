@@ -15,32 +15,12 @@ let
     # header file isn't available at all, but that patch (./gvc-compat.patch)
     # can be shared between all versions of Vala so far.
     graphvizPatch =
-      let
-        fp = { commit, sha256 }: fetchpatch {
-          url = "https://github.com/openembedded/openembedded-core/raw/${commit}/meta/recipes-devtools/vala/vala/disable-graphviz.patch";
-          inherit sha256;
-        };
-
-      in {
-
-        # NOTE: the openembedded-core project doesn't have a patch for 0.40.12
-        # We've fixed the single merge conflict in the following patch.
-        #     0.40.12: https://github.com/openembedded/openembedded-core/raw/8553c52f174af4c8c433c543f806f5ed5c1ec48c/meta/recipes-devtools/vala/vala/disable-graphviz.patch
-        "0.40" = ./disable-graphviz-0.40.12.patch;
-
-        # NOTE: the openembedded-core project doesn't have a patch for 0.44.1
-        # We've reverted the addition of the "--disable-valadoc" option
-        # and then applied the following patch.
-        #     0.42.4: https://github.com/openembedded/openembedded-core/raw/f2b4f9ec6f44dced7f88df849cca68961419eeb8/meta/recipes-devtools/vala/vala/disable-graphviz.patch
-        "0.44" = ./disable-graphviz-0.44.3.patch;
-
-        "0.46" = ./disable-graphviz-0.46.1.patch;
-
+      {
         "0.48" = ./disable-graphviz-0.46.1.patch;
 
-        "0.50" = ./disable-graphviz-0.46.1.patch;
-
         "0.52" = ./disable-graphviz-0.46.1.patch;
+
+        "0.54" = ./disable-graphviz-0.46.1.patch;
 
       }.${lib.versions.majorMinor version} or (throw "no graphviz patch for this version of vala");
 
@@ -69,7 +49,7 @@ let
     # so that it can be used to regenerate documentation.
     patches        = lib.optionals disableGraphviz [ graphvizPatch ./gvc-compat.patch ];
     configureFlags = lib.optional  disableGraphviz "--disable-graphviz";
-    preBuild       = lib.optional  disableGraphviz "buildFlagsArray+=(\"VALAC=$(pwd)/compiler/valac\")";
+    preBuild       = lib.optionalString disableGraphviz "buildFlagsArray+=(\"VALAC=$(pwd)/compiler/valac\")";
 
     outputs = [ "out" "devdoc" ];
 
@@ -89,10 +69,11 @@ let
     doCheck = false; # fails, requires dbus daemon
 
     passthru = {
-     updateScript = gnome.updateScript {
-       attrPath = "${pname}_${lib.versions.major version}_${lib.versions.minor version}";
-       packageName = pname;
-     };
+      updateScript = gnome.updateScript {
+        attrPath = "${pname}_${lib.versions.major version}_${lib.versions.minor version}";
+        packageName = pname;
+        freeze = true;
+      };
     };
 
     meta = with lib; {
@@ -100,35 +81,25 @@ let
       homepage = "https://wiki.gnome.org/Projects/Vala";
       license = licenses.lgpl21Plus;
       platforms = platforms.unix;
-      maintainers = with maintainers; [ antono jtojnar peterhoeg ];
+      maintainers = with maintainers; [ antono jtojnar maxeaubrey ] ++ teams.pantheon.members;
     };
   });
 
 in rec {
-  vala_0_40 = generic {
-    version = "0.40.25";
-    sha256 = "1pxpack8rrmywlf47v440hc6rv3vi8q9c6niwqnwikxvb2pwf3w7";
-  };
-
-  vala_0_46 = generic {
-    version = "0.46.13";
-    sha256 = "0d7l4vh2xra3q75kw3sy2d9bn5p6s3g3r7j37bdn6ir8l3wp2ivs";
-  };
-
   vala_0_48 = generic {
-    version = "0.48.18";
-    sha256 = "1pbz4nyrrf9wp8rp953sczx545s4g0h5mars9ynkn788dzs2h3wy";
-  };
-
-  vala_0_50 = generic {
-    version = "0.50.9";
-    sha256 = "0w5ngs90rq7vy21nqfq8drqyb33kxm17j161qvakwpsbjsidv1mn";
+    version = "0.48.22";
+    sha256 = "sha256-27NHjEvjZvCTFkrGHNOu29zz5EQE2eNkFK4VEk525os=";
   };
 
   vala_0_52 = generic {
-    version = "0.52.4";
-    sha256 = "0cfz3xshc9azxx4fn25x9gadnph6jvf1r2wzd7p5krk0a4755ppc";
+    version = "0.52.10";
+    sha256 = "sha256-nCAb+BLZh04hveU/jZwU9lF0ixqBRB/1ySkSJESQEAg=";
   };
 
-  vala = vala_0_52;
+  vala_0_54 = generic {
+    version = "0.54.3";
+    sha256 = "7R1f5MvAzShF0N5PH/77Fa+waJLSMMfMppV4FnLo+2A=";
+  };
+
+  vala = vala_0_54;
 }

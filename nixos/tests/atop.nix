@@ -105,8 +105,6 @@ let assertions = rec {
 };
 in
 {
-  name = "atop";
-
   justThePackage = makeTest {
     name = "atop-justThePackage";
     machine = {

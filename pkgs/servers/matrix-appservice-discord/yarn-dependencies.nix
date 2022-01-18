@@ -1,4 +1,4 @@
-{ fetchurl, fetchgit, linkFarm, runCommandNoCC, gnutar }: rec {
+{ fetchurl, fetchgit, linkFarm, runCommand, gnutar }: rec {
   offline_cache = linkFarm "offline" packages;
   packages = [
     {
@@ -683,7 +683,7 @@
           sha256 = "1iy8as2ax50xqp1bkqb18dspkdjw6qdmvz803xaijp14bwx0shja";
         };
       in
-        runCommandNoCC "git___github.com_Sorunome_better_discord.js.git" { buildInputs = [gnutar]; } ''
+        runCommand "git___github.com_Sorunome_better_discord.js.git" { buildInputs = [gnutar]; } ''
           # Set u+w because tar-fs can't unpack archives with read-only dirs
           # https://github.com/mafintosh/tar-fs/issues/79
           tar cf $out --mode u+w -C ${repo} .
@@ -1291,7 +1291,7 @@
           sha256 = "0p7hlgdyfcipfjjx5hxwkqd524cmys9yxgqx29wmqkgjxp8xgwhy";
         };
       in
-        runCommandNoCC "git___github.com_Sorunome_discord_markdown.git" { buildInputs = [gnutar]; } ''
+        runCommand "git___github.com_Sorunome_discord_markdown.git" { buildInputs = [gnutar]; } ''
           # Set u+w because tar-fs can't unpack archives with read-only dirs
           # https://github.com/mafintosh/tar-fs/issues/79
           tar cf $out --mode u+w -C ${repo} .

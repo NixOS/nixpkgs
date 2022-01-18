@@ -26,7 +26,6 @@
 , json-glib
 , libcue
 , libexif
-, libgrss
 , libgsf
 , libgxps
 , libiptcdata
@@ -48,11 +47,11 @@
 
 stdenv.mkDerivation rec {
   pname = "tracker-miners";
-  version = "3.1.1";
+  version = "3.2.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-5NNhNRsVbyhipSRBX76/BTnHgc2HxmKWYvAmW0gDuLg=";
+    sha256 = "RDafU+Lt70FDdAbb7s1Hepf4qa/dkTSDLqRdG6KqLEc=";
   };
 
   nativeBuildInputs = [
@@ -86,7 +85,6 @@ stdenv.mkDerivation rec {
     json-glib
     libcue
     libexif
-    libgrss
     libgsf
     libgxps
     libiptcdata
@@ -108,6 +106,11 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     # TODO: tests do not like our sandbox
     "-Dfunctional_tests=false"
+
+    # libgrss is unmaintained and has no new releases since 2015, and an open
+    # security issue since then. Despite a patch now being availab, we're opting
+    # to be safe due to the general state of the project
+    "-Dminer_rss=false"
   ];
 
   patches = [

@@ -29,11 +29,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-contacts";
-  version = "40.0";
+  version = "41.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-contacts/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "0w2g5xhw65adzvwzakrj5kaim4sw1w7s8qqwm3nm6inq50znzpn9";
+    sha256 = "Y+MUm10UdbeiaYAFu191DzyApzVxcWDjnfjP3+v8zfA=";
   };
 
   propagatedUserEnvPkgs = [
@@ -59,7 +59,6 @@ stdenv.mkDerivation rec {
     evolution-data-server
     gsettings-desktop-schemas
     folks
-    libgdata # required by some dependency transitively
     gnome-desktop
     libhandy
     libxml2

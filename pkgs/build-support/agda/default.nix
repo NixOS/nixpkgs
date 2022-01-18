@@ -1,6 +1,6 @@
 # Builder for Agda packages.
 
-{ stdenv, lib, self, Agda, runCommandNoCC, makeWrapper, writeText, ghcWithPackages, nixosTests }:
+{ stdenv, lib, self, Agda, runCommand, makeWrapper, writeText, ghcWithPackages, nixosTests }:
 
 with lib.strings;
 
@@ -15,7 +15,7 @@ let
     '';
     pname = "agdaWithPackages";
     version = Agda.version;
-  in runCommandNoCC "${pname}-${version}" {
+  in runCommand "${pname}-${version}" {
     inherit pname version;
     nativeBuildInputs = [ makeWrapper ];
     passthru = {
@@ -46,8 +46,10 @@ let
 
   defaults =
     { pname
+    , meta
     , buildInputs ? []
     , everythingFile ? "./Everything.agda"
+    , includePaths ? []
     , libraryName ? pname
     , libraryFile ? "${libraryName}.agda-lib"
     , buildPhase ? null
@@ -56,6 +58,7 @@ let
     , ...
     }: let
       agdaWithArgs = withPackages (builtins.filter (p: p ? isAgdaDerivation) buildInputs);
+      includePathArgs = concatMapStrings (path: "-i" + path + " ") (includePaths ++ [(dirOf everythingFile)]);
     in
       {
         inherit libraryName libraryFile;
@@ -66,7 +69,7 @@ let
 
         buildPhase = if buildPhase != null then buildPhase else ''
           runHook preBuild
-          agda -i ${dirOf everythingFile} ${everythingFile}
+          agda ${includePathArgs} ${everythingFile}
           runHook postBuild
         '';
 
@@ -76,6 +79,12 @@ let
           find -not \( -path ${everythingFile} -or -path ${lib.interfaceFile everythingFile} \) -and \( ${concatMapStringsSep " -or " (p: "-name '*.${p}'") (extensions ++ extraExtensions)} \) -exec cp -p --parents -t "$out" {} +
           runHook postInstall
         '';
+
+        meta = if meta.broken or false then meta // { hydraPlatforms = lib.platforms.none; } else meta;
+
+        # Retrieve all packages from the finished package set that have the current package as a dependency and build them
+        passthru.tests = with builtins;
+          lib.filterAttrs (name: pkg: self.lib.isUnbrokenAgdaPackage pkg && elem pname (map (pkg: pkg.pname) pkg.buildInputs)) self;
       };
 in
 {

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     updateScript = gnome.updateScript {
       packageName = pname;
       attrPath = "goocanvasmm2";
-      versionPolicy = "odd-unstable";
+      versionPolicy = "none"; # stable version has not been released yet, last update 2015
     };
   };
 

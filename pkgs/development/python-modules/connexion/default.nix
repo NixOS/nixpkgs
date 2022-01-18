@@ -22,14 +22,16 @@
 
 buildPythonPackage rec {
   pname = "connexion";
-  version = "2.7.0";
+  version = "2.10.0";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "zalando";
     repo = pname;
     rev = version;
-    sha256 = "15iflq5403diwda6n6qrpq67wkdcvl3vs0gsg0fapxqnq3a2m7jj";
+    sha256 = "sha256-a1wj72XpjXvhWCxRLrGeDatS8a4ij9YAm9FGhTBq/i8=";
   };
 
   propagatedBuildInputs = [
@@ -54,7 +56,20 @@ buildPythonPackage rec {
     testfixtures
   ];
 
-  pythonImportsCheck = [ "connexion" ];
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "PyYAML>=5.1,<6" "PyYAML>=5.1" \
+      --replace "jsonschema>=2.5.1,<4" "jsonschema>=2.5.1"
+  '';
+
+  disabledTests = [
+    # We have a later PyYAML release
+    "test_swagger_yaml"
+  ];
+
+  pythonImportsCheck = [
+    "connexion"
+  ];
 
   meta = with lib; {
     description = "Swagger/OpenAPI First framework on top of Flask";

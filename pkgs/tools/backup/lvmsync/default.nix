@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ makeWrapper ];
 
-  phases = ["installPhase"];
+  dontUnpack = true;
 
   installPhase = let
     env = bundlerEnv {

@@ -1,56 +1,54 @@
 { lib
-, python3
-, fetchFromGitHub
-, rtmpdump
+, python3Packages
 , ffmpeg
+, fetchpatch
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "streamlink";
-  version = "2.1.1";
+  version = "3.0.3";
 
-  src = fetchFromGitHub {
-    owner = "streamlink";
-    repo = "streamlink";
-    rev = version;
-    sha256 = "14vqh4pck3q766qln7c57n9bz8zrlgfqrpkdn8x0ac9zhlhfn1zm";
+  src = python3Packages.fetchPypi {
+    inherit pname version;
+    sha256 = "sha256-oEK9p6OuqGSm2JdgfnJ+N0sJtRq6wCoVCGcU0GNEMLI=";
   };
 
-  checkInputs = with python3.pkgs; [
+  checkInputs = with python3Packages; [
     pytestCheckHook
     mock
     requests-mock
     freezegun
   ];
 
-  propagatedBuildInputs = (with python3.pkgs; [
-    pycryptodome
-    requests
-    iso-639
-    iso3166
-    websocket-client
+  propagatedBuildInputs = (with python3Packages; [
     isodate
+    lxml
+    pycountry
+    pycryptodome
+    pysocks
+    requests
+    websocket-client
   ]) ++ [
-    rtmpdump
     ffmpeg
   ];
 
-  disabledTests = [
-    "test_plugin_not_in_removed_list"
-  ];
+  postPatch = ''
+    substituteInPlace setup.cfg --replace 'lxml >=4.6.4,<5.0' 'lxml'
+  '';
 
   meta = with lib; {
-    homepage = "https://github.com/streamlink/streamlink";
+    homepage = "https://streamlink.github.io/";
     description = "CLI for extracting streams from various websites to video player of your choosing";
     longDescription = ''
-      Streamlink is a CLI utility that pipes flash videos from online
+      Streamlink is a CLI utility that pipes videos from online
       streaming services to a variety of video players such as VLC, or
       alternatively, a browser.
 
       Streamlink is a fork of the livestreamer project.
     '';
+    changelog = "https://github.com/streamlink/streamlink/raw/${version}/CHANGELOG.md";
     license = licenses.bsd2;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ dezgeg zraexy ];
+    maintainers = with maintainers; [ dezgeg zraexy DeeUnderscore ];
   };
 }

@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
 , nixosTests
 , pkg-config
 , systemd
@@ -43,11 +42,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "libreswan";
-  version = "4.4";
+  version = "4.5";
 
   src = fetchurl {
     url = "https://download.libreswan.org/${pname}-${version}.tar.gz";
-    sha256 = "0xj974yc0y1r7235zl4jhvxqz3bpb8js2fy9ic820zq9swh0lgsz";
+    sha256 = "18whvmaxqfmaqbmq72calyzk21wyvxa0idddcsxd8x36vhdza0q7";
   };
 
   strictDeps = true;
@@ -69,14 +68,6 @@ stdenv.mkDerivation rec {
     # needed to patch shebangs
     python3 bash
   ] ++ lib.optional stdenv.isLinux libselinux;
-
-  patches = [
-    # Fix compilation on aarch64, remove on next update
-    (fetchpatch {
-      url = "https://github.com/libreswan/libreswan/commit/ea50d36d2886e44317ba5ba841de1d1bf91aee6c.patch";
-      sha256 = "1jp89rm9jp55zmiyimyhg7yadj0fwwxaw7i5gyclrs38w3y1aacj";
-    })
-  ];
 
   prePatch = ''
     # Correct iproute2 path
@@ -111,10 +102,8 @@ stdenv.mkDerivation rec {
         -i configs/Makefile
   '';
 
-  # Set appropriate paths for build
-  preBuild = "export INC_USRLOCAL=\${out}";
-
   makeFlags = [
+    "PREFIX=$(out)"
     "INITSYSTEM=systemd"
     "UNITDIR=$(out)/etc/systemd/system/"
     "TMPFILESDIR=$(out)/lib/tmpfiles.d/"

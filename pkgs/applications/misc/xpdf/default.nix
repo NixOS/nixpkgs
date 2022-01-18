@@ -51,11 +51,6 @@ stdenv.mkDerivation rec {
     install -Dm644 $src/xpdf-qt/xpdf-icon.svg $out/share/pixmaps/xpdf.svg
   '';
 
-  # wrapQtAppsHook broken on macOS (https://github.com/NixOS/nixpkgs/issues/102044)
-  postFixup = lib.optionalString stdenv.isDarwin ''
-    wrapQtApp $out/bin/xpdf
-  '';
-
   meta = with lib; {
     homepage = "https://www.xpdfreader.com";
     description = "Viewer for Portable Document Format (PDF) files";

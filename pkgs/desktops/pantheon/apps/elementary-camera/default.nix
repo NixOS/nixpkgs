@@ -1,7 +1,8 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
-, pantheon
 , pkg-config
 , meson
 , ninja
@@ -13,6 +14,7 @@
 , gtk3
 , granite
 , libgee
+, libhandy
 , gst_all_1
 , libcanberra
 , clutter-gtk
@@ -24,22 +26,23 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-camera";
-  version = "1.0.6";
-
-  repoName = "camera";
+  version = "6.0.3";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "camera";
     rev = version;
-    sha256 = "sha256-asl5NdSuLItXebxvqGlSEjwWhdButmka12YQAYkQT44=";
+    sha256 = "sha256-xIv+mOlZV58XD0Z6Vc2wA1EQUxT5BaQ0zhYc9v+ne1w=";
   };
 
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
-  };
+  patches = [
+    # Fix build with meson 0.61
+    # https://github.com/elementary/camera/pull/216
+    (fetchpatch {
+      url = "https://github.com/elementary/camera/commit/ead143b7e3246c5fa9bb37c95d491fb07cea9e04.patch";
+      sha256 = "sha256-2zGigUi6DpjJx8SEvAE3Q3jrm7MggOvLc72lAPMPvs4=";
+    })
+  ];
 
   nativeBuildInputs = [
     appstream
@@ -61,11 +64,12 @@ stdenv.mkDerivation rec {
     granite
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
+    (gst_all_1.gst-plugins-good.override { gtkSupport = true; })
     gst_all_1.gstreamer
     gtk3
     libcanberra
     libgee
+    libhandy
   ];
 
   postPatch = ''
@@ -73,11 +77,18 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
+
   meta = with lib; {
     description = "Camera app designed for elementary OS";
     homepage = "https://github.com/elementary/camera";
-    license = licenses.gpl2Plus;
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
+    mainProgram = "io.elementary.camera";
   };
 }

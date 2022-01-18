@@ -1,6 +1,5 @@
 { stdenv, lib, fetchFromGitHub, fetchpatch, pkg-config, cmake, git, doxygen, help2man, ncurses, tecla
 , libusb1, udev }:
-
 let
   # fetch submodule
   noos = fetchFromGitHub {
@@ -9,12 +8,9 @@ let
     rev = "0bba46e6f6f75785a65d425ece37d0a04daf6157";
     sha256 = "0is79dhsyp9xmlnfdr1i5s1c22ipjafk9d35jpn5dynpvj86m99c";
   };
-
-  version = "2.2.1";
-
-in stdenv.mkDerivation {
+in stdenv.mkDerivation rec {
   pname = "libbladeRF";
-  inherit version;
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "Nuand";

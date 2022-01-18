@@ -99,7 +99,7 @@ in {
       package = mkOption {
         type = package;
         default = pkgs.yggdrasil;
-        defaultText = "pkgs.yggdrasil";
+        defaultText = literalExpression "pkgs.yggdrasil";
         description = "Yggdrasil package to use.";
       };
 

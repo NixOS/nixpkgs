@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , glibcLocales
-, pytestrunner
+, pytest-runner
 , pytestCheckHook
 }:
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   LC_ALL = "en_US.UTF-8";
   buildInputs = [ glibcLocales ];
 
-  nativeBuildInputs = [ pytestrunner ];
+  nativeBuildInputs = [ pytest-runner ];
 
   checkInputs = [ pytestCheckHook ];
 

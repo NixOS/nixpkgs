@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, pytestrunner
+, pytest-runner
 , pytestCheckHook
 }:
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    pytestrunner
+    pytest-runner
   ];
 
   checkInputs = [

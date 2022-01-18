@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , mkDerivation
 , fetchurl
 , fetchFromGitHub
@@ -52,13 +53,13 @@
 
 mkDerivation rec {
   pname = "mixxx";
-  version = "2.3.0";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "mixxxdj";
     repo = "mixxx";
     rev = version;
-    sha256 = "18sx4l3zzbn5142xfv5bp0crdd615a5728fkprqacnx3zpa144x6";
+    sha256 = "sha256-6M1qaRyRYWTIKqclewuD+RUVDdxVbBHcfpw2qYgO6BA=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
@@ -110,11 +111,26 @@ mkDerivation rec {
     wavpack
   ];
 
-  enableParallelBuilding = true;
-
   qtWrapperArgs = [
     "--set LOCALE_ARCHIVE ${glibcLocales}/lib/locale/locale-archive"
   ];
+
+  # mixxx installs udev rules to DATADIR instead of SYSCONFDIR
+  # let's disable this and install udev rules manually via postInstall
+  # see https://github.com/mixxxdj/mixxx/blob/2.3.1/CMakeLists.txt#L1381-L1392
+  cmakeFlags = [
+    "-DINSTALL_USER_UDEV_RULES=OFF"
+  ];
+
+  postInstall = lib.optionalString stdenv.isLinux ''
+    rules="$src/res/linux/mixxx-usb-uaccess.rules"
+    if [ ! -f "$rules" ]; then
+        echo "$rules is missing, must update the Nix file."
+        exit 1
+    fi
+    mkdir -p "$out/lib/udev/rules.d"
+    cp "$rules" "$out/lib/udev/rules.d/69-mixxx-usb-uaccess.rules"
+  '';
 
   meta = with lib; {
     homepage = "https://mixxx.org";

@@ -42,7 +42,12 @@ let
       elvis-erlang = callPackage ./elvis-erlang { };
 
       # BEAM-based languages.
-      elixir = elixir_1_12;
+      elixir = elixir_1_13;
+
+      elixir_1_13 = lib'.callElixir ../interpreters/elixir/1.13.nix {
+        inherit erlang;
+        debugInfo = true;
+      };
 
       elixir_1_12 = lib'.callElixir ../interpreters/elixir/1.12.nix {
         inherit erlang;
@@ -64,19 +69,10 @@ let
         debugInfo = true;
       };
 
-      elixir_1_8 = lib'.callElixir ../interpreters/elixir/1.8.nix {
-        erlang = pkgs.beam.interpreters.erlangR23;
-        debugInfo = true;
-      };
-
       # Remove old versions of elixir, when the supports fades out:
       # https://hexdocs.pm/elixir/compatibility-and-deprecations.html
-      elixir_1_7 = lib'.callElixir ../interpreters/elixir/1.7.nix {
-        inherit erlang;
-        debugInfo = true;
-      };
 
-      elixir_ls = callPackage ./elixir_ls.nix { inherit elixir fetchMixDeps mixRelease; };
+      elixir_ls = callPackage ./elixir-ls { inherit elixir fetchMixDeps mixRelease; };
 
       lfe = lfe_1_3;
       lfe_1_3 = lib'.callLFE ../interpreters/lfe/1.3.nix { inherit erlang buildRebar3 buildHex; };

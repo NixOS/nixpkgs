@@ -1,25 +1,30 @@
-{
-  lib, stdenv,
-  fetchFromGitHub,
-  gfortran,
-  cmake,
-  shared ? true
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, gfortran
+, cmake
+, shared ? true
 }:
-let
-  inherit (lib) optional;
-  version = "3.9.1";
-in
 
 stdenv.mkDerivation rec {
   pname = "liblapack";
-  inherit version;
+  version = "3.10.0";
 
   src = fetchFromGitHub {
     owner = "Reference-LAPACK";
     repo = "lapack";
     rev = "v${version}";
-    sha256 = "sha256-B7eRaEY9vaLvuKkJ7d2KWanGE7OXh43O0UbXFheUWK8=";
+    sha256 = "sha256-ewYUM+M7jDO5LLnB4joiKkqgXjEDmWbFZbgad8x98gc=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2021-4048.patch";
+      url = "https://github.com/Reference-LAPACK/lapack/commit/0631b6beaed60ba118b0b027c0f8d35397bf5df0.patch";
+      sha256 = "1bqjw3f6ak9iz97y7ckn0rrfcgrzbn9prgfasl489qpxgzp2kjh8";
+    })
+  ];
 
   nativeBuildInputs = [ gfortran cmake ];
 
@@ -31,8 +36,7 @@ stdenv.mkDerivation rec {
     "-DLAPACKE=ON"
     "-DCBLAS=ON"
     "-DBUILD_TESTING=ON"
-  ]
-  ++ optional shared "-DBUILD_SHARED_LIBS=ON";
+  ] ++ lib.optional shared "-DBUILD_SHARED_LIBS=ON";
 
   doCheck = true;
 
@@ -57,9 +61,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    inherit version;
     description = "Linear Algebra PACKage";
     homepage = "http://www.netlib.org/lapack/";
+    maintainers = with maintainers; [ ];
     license = licenses.bsd3;
     platforms = platforms.all;
   };

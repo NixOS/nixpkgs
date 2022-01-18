@@ -3,22 +3,16 @@
 
 stdenv.mkDerivation rec {
   pname = "interception-tools";
-  version = "0.6.6";
+  version = "0.6.8";
   src = fetchFromGitLab {
     owner = "interception/linux";
     repo = "tools";
     rev = "v${version}";
-    sha256 = "0k9h14a9d65nwvv7pj0kigjgzfv453mm3r4svnxfg1h5lccmy8jj";
+    sha256 = "sha256-jhdgfCWbkF+jD/iXsJ+fYKOtPymxcC46Q4w0aqpvcek=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ libevdev udev libyamlcpp boost ];
-
-  prePatch = ''
-    substituteInPlace CMakeLists.txt --replace \
-      '"/usr/include/libevdev-1.0"' \
-      "\"$(pkg-config --cflags libevdev | cut -c 3-)\""
-  '';
 
   meta = {
     description = "A minimal composable infrastructure on top of libudev and libevdev";

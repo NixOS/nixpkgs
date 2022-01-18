@@ -16,18 +16,21 @@ assert stdenv ? glibc;
 
 let
   platform_major = "4";
-  platform_minor = "19";
+  platform_minor = "22";
   year = "2021";
-  month = "03";
-  timestamp = "${year}${month}031800";
+  month = "12"; #release month
+  buildmonth = "11"; #sometimes differs from release month
+  timestamp = "${year}${buildmonth}241800";
   gtk = gtk3;
 in rec {
 
-  buildEclipse = callPackage ./build-eclipse.nix {
+  # work around https://bugs.eclipse.org/bugs/show_bug.cgi?id=476075#c3
+  buildEclipseUnversioned = callPackage ./build-eclipse.nix {
     inherit stdenv makeDesktopItem freetype fontconfig libX11 libXrender zlib
             jdk glib gtk libXtst gsettings-desktop-schemas webkitgtk
             makeWrapper;
   };
+  buildEclipse = eclipseData: buildEclipseUnversioned (eclipseData // { productVersion = "${platform_major}.${platform_minor}"; });
 
   ### Eclipse CPP
 
@@ -37,7 +40,7 @@ in rec {
     src =
       fetchurl {
         url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/${year}-${month}/R/eclipse-cpp-${year}-${month}-R-linux-gtk-x86_64.tar.gz";
-        sha512 = "3j0lmll0glcr9p0hf49jiaq9xr8hadsy0y58wbbkdpldj3rclxr056dkswmiw2bkypfiwrjygbli5qxyp6mz380562hc2kjwijqq476";
+        hash = "sha512-Lniaw8aUptHI0a75olTNHaMba+ugUdJKf9sJ0hGzKqY94vvfU3N2TH5eQBeXb1MyQdRdBL1D8Vs3+LD9lWlTMg==";
       };
   };
 
@@ -49,7 +52,7 @@ in rec {
     src =
       fetchurl {
         url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/${year}-${month}/R/eclipse-modeling-${year}-${month}-R-linux-gtk-x86_64.tar.gz";
-        sha512 = "0iqz9a3ixcbmaci6lnspdnzwd2h1fcygi54hmsl89pq3d1k5scyhcl123ixi24csi782w847bn0lq00n0zwras9akmnhsflra4mw5pz";
+        hash = "sha512-F/5yroFDbrSclmUP5vTNSkYR+OZ1dkPv2FPZT1XM5HFoynitYkDxnj+uTcJIBOWv3Zu1plU4yweW0DF1E9jLcg==";
       };
   };
 
@@ -61,16 +64,17 @@ in rec {
     src =
       fetchurl {
         url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops${platform_major}/R-${platform_major}.${platform_minor}-${timestamp}/eclipse-platform-${platform_major}.${platform_minor}-linux-gtk-x86_64.tar.gz";
-        sha512 = "03v1ly7j9d9qnl3d9rl5a9kp483dz8i8v3cfnh55ksm9fk8iy2fzg6wq178ggnx2z5x9k88a4wk6n647yilh2hgc2l7926imkh2j1ly";
+        hash = "sha512-3XsBk8/KHtTjit/WMneOghuOkqEHOIdLwof7718dsrDP4vfgcfhb47V7fPYDOw2eld88pHk+85mTGpZOTTywxw==";
       };
   };
 
   ### Eclipse Scala SDK
 
   eclipse-scala-sdk =
-    buildEclipse.override { jdk = jdk8; gtk = gtk2; } {
+    buildEclipseUnversioned.override { jdk = jdk8; gtk = gtk2; } {
       name = "eclipse-scala-sdk-4.7.0";
       description = "Eclipse IDE for Scala Developers";
+      productVersion = "4.7";
       src =
         fetchurl {
           url = "https://downloads.typesafe.com/scalaide-pack/4.7.0-vfinal-oxygen-212-20170929/scala-SDK-4.7.0-vfinal-2.12-linux.gtk.x86_64.tar.gz";
@@ -86,7 +90,7 @@ in rec {
     src =
       fetchurl {
         url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops${platform_major}/R-${platform_major}.${platform_minor}-${timestamp}/eclipse-SDK-${platform_major}.${platform_minor}-linux-gtk-x86_64.tar.gz";
-        sha512 = "37m91my121pch12bwpwk5svfqkm7vl07wjx4fkhpy947v5kjf36hm6x0i45swdg7f0hk72y2qz5ka15ki5jv890qy5psj6z7ax9sys7";
+        hash = "sha512-7bTYIFnX8oUPaqDrMOlGNnpyC+xvDQsNmgZUps/epGkzM9Fjlc2lPr75VR7UaezBCoAuNTSHCYtG5d6TJOKjmQ==";
       };
   };
 
@@ -98,7 +102,7 @@ in rec {
     src =
       fetchurl {
         url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/${year}-${month}/R/eclipse-java-${year}-${month}-R-linux-gtk-x86_64.tar.gz";
-        sha512 = "3qrnj6krhrqc9rfwlim3v7kshwfhsi050pszw6xdfbj56mzr9whr7l76isbpxd5j0zipgfw3qrzrx379pdp899d35fv284ilvllzl4k";
+        hash = "sha512-ahykujYH9RLvxVMPFlFILGYJO0LXHvuhnILifeAo5v5Tp5ktGVlZWG461iZHETlt8Zr76liGAqm1ytQcuzCyQA==";
       };
   };
 
@@ -110,7 +114,7 @@ in rec {
     src =
       fetchurl {
         url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/${year}-${month}/R/eclipse-jee-${year}-${month}-R-linux-gtk-x86_64.tar.gz";
-        sha512 = "04k4x9imabxddqlrgajn33ak8i58wcap40ll09xz23d1sxn9a8prh01s06ymgwg6ldg939srphvbz4112p8p0b1hl7m25a02qll91zv";
+        hash = "sha512-CuKxjcnvkROURtavZJN0AhCuA0x7NayZTpIOn9oE21rUzVqR0p7x7C5RPtMZ9gS4ZMWcYyQDJ0BVgRHBoKsYqQ==";
       };
   };
 
@@ -122,7 +126,7 @@ in rec {
     src =
       fetchurl {
         url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/${year}-${month}/R/eclipse-committers-${year}-${month}-R-linux-gtk-x86_64.tar.gz";
-        sha512 = "2yksl3w7yr1a3h4zdpa9zf394r5c185zqxhigdv858ldg46kmr9h0l2c7shbgb16kkybcnrk4x44dhjvh60x8xw6ma05klp4lp9v5va";
+        hash = "sha512-CqUbxUUMIJsXsx4XEOQ1d2L3U22VpAfQP+R8HNoVetDawhR+b2tyDVnTQRKTL4dJ0fjLXDeoHvTlPm1EXi/ahA==";
       };
   };
 
@@ -134,7 +138,7 @@ in rec {
     src =
       fetchurl {
         url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/${year}-${month}/R/eclipse-rcp-${year}-${month}-R-linux-gtk-x86_64.tar.gz";
-        sha512 = "3fhrhwbyqcys56c93s1vl9rbvn269nn5y3cb9f3n1qwgw6i97mim2zy98jl3r8cksf97jwsmqmsqclsgz9v799wcckv81dj1l628382";
+        hash = "sha256-ys3MjIBr2hLZC/GB8Am/Qlto4+dSzOoK9p7QF+GS0Eg=";
       };
   };
 

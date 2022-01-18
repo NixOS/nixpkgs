@@ -25,7 +25,6 @@ stdenv.mkDerivation rec {
   '';
   buildInputs = [mono];
   meta = {
-    inherit version;
     description = "Texture synthesis from examples";
     license = lib.licenses.mit;
     maintainers = [lib.maintainers.raskin];

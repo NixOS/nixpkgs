@@ -21,7 +21,7 @@ let
     };
 
     dontConfigure = true;
-    buildPhase = ":";
+    dontBuild = true;
     installPhase = "mkdir -p $out/include && cp -R boost $out/include/";
   };
 

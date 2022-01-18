@@ -25,8 +25,6 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper unzip ];
   buildInputs = [ thrustEnv ];
 
-  phases = [ "installPhase" "fixupPhase" ];
-
   installPhase = ''
     mkdir -p $out/bin
     mkdir -p $out/libexec/thrust

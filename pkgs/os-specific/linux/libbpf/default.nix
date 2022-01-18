@@ -1,35 +1,25 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config
-, libelf, zlib
+{ fetchFromGitHub
 , fetchpatch
+, libelf
+, pkg-config
+, stdenv
+, zlib
+, lib
+, nixosTests
 }:
 
 with builtins;
 
 stdenv.mkDerivation rec {
   pname = "libbpf";
-  version = "0.1.1";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
-    owner  = "libbpf";
-    repo   = "libbpf";
-    rev    = "v${version}";
-    sha256 = "0ilnnm4q22f8fagwp8kb37licy4ks861i2iqh2djsypqhnxvx3fv";
+    owner = "libbpf";
+    repo = "libbpf";
+    rev = "v${version}";
+    sha256 = "sha256-/MLPflnfooe7Wjy8M3CTowAi5oYpscruSkDsaVzhmYQ=";
   };
-
-  patches = [
-    (fetchpatch { # included upstream for > 0.1.0
-      name = "link-zlib.patch";
-      url = "https://github.com/libbpf/libbpf/commit/8b14cb43ff837.diff";
-      sha256 = "17mvjrs7s727drz013a8qlyj0345ldi2kph6pazcmxv6kl1qrz2z";
-    })
-  ];
-  patchFlags = "-p2";
-  # https://github.com/libbpf/libbpf/pull/201#issuecomment-689174740
-  postPatch = ''
-    substituteInPlace ../scripts/check-reallocarray.sh \
-      --replace 'mktemp /tmp/' 'mktemp ' \
-      --replace '/bin/rm' 'rm'
-  '';
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libelf zlib ];
@@ -37,6 +27,15 @@ stdenv.mkDerivation rec {
   sourceRoot = "source/src";
   enableParallelBuilding = true;
   makeFlags = [ "PREFIX=$(out)" ];
+
+  passthru.tests = {
+    bpf = nixosTests.bpf;
+  };
+
+  postInstall = ''
+    # install linux's libbpf-compatible linux/btf.h
+    install -Dm444 ../include/uapi/linux/btf.h -t $out/include/linux
+  '';
 
   # FIXME: Multi-output requires some fixes to the way the pkg-config file is
   # constructed (it gets put in $out instead of $dev for some reason, with
@@ -46,9 +45,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Upstream mirror of libbpf";
-    homepage    = "https://github.com/libbpf/libbpf";
-    license     = with licenses; [ lgpl21 /* or */ bsd2 ];
-    maintainers = with maintainers; [ thoughtpolice vcunat ];
-    platforms   = platforms.linux;
+    homepage = "https://github.com/libbpf/libbpf";
+    license = with licenses; [ lgpl21 /* or */ bsd2 ];
+    maintainers = with maintainers; [ thoughtpolice vcunat saschagrunert martinetd ];
+    platforms = platforms.linux;
   };
 }

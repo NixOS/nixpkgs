@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lib3mf";
-  version = "2.1.1";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "3MFConsortium";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1417xlxc1y5jnipixhbjfrrjgkrprbbraj8647sff9051m3hpxc3";
+    sha256 = "sha256-WMTTYYgpCIM86a6Jw8iah/YVXN9T5youzEieWL/d+Bc=";
   };
 
   nativeBuildInputs = [ cmake ninja pkg-config ];

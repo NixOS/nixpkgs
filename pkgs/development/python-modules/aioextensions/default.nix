@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "aioextensions";
-  version = "20.11.1621472";
+  version = "21.7.2261349";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "abfb2a27590f20b04808192e6c9c5f93298656c013546850c4505b5070a8cc82";
+    sha256 = "2eacc52692495f331437e8c8e9782ca71f4617ec84f174ca17acdd77631efc47";
   };
 
   propagatedBuildInputs = [ uvloop ];

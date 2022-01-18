@@ -2,7 +2,7 @@
 , fetchurl
 , makeDesktopItem
 , curl
-, dotnet-netcore
+, dotnetCorePackages
 , fontconfig
 , krb5
 , openssl
@@ -11,9 +11,10 @@
 }:
 
 let
+  dotnet-runtime = dotnetCorePackages.runtime_5_0;
   libPath = lib.makeLibraryPath [
     curl
-    dotnet-netcore
+    dotnet-runtime
     fontconfig.lib
     krb5
     openssl
@@ -24,11 +25,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "wasabiwallet";
-  version = "1.1.12.5";
+  version = "1.1.12.9";
 
   src = fetchurl {
     url = "https://github.com/zkSNACKs/WalletWasabi/releases/download/v${version}/Wasabi-${version}.tar.gz";
-    sha256 = "sha256-6KIsSsCAyZ6uYSbDBIKdtM4adGOttvJ78obCptcd57s=";
+    sha256 = "sha256-DtoLQbRXyR4xGm+M0xg9uj8wcbh1dOBJUG430OS8AS4=";
   };
 
   dontBuild = true;

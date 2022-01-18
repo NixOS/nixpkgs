@@ -1,14 +1,17 @@
-{ lib, stdenv, fetchurl
-, CoreServices ? null
-, buildPackages }:
+{ lib
+, stdenv
+, fetchurl
+, CoreServices
+, buildPackages
+}:
 
 stdenv.mkDerivation rec {
   pname = "nspr";
-  version = "4.31";
+  version = "4.33";
 
   src = fetchurl {
     url = "mirror://mozilla/nspr/releases/v${version}/src/nspr-${version}.tar.gz";
-    sha256 = "1j5b2m8cjlhnnv8sq34587avaagkqvh521w4f95miwgvsn3xlaap";
+    sha256 = "1mwklrsx05ga30crr9xi6nl4d49d5mzx2x533bxw4l0fpqay6gmj";
   };
 
   patches = [
@@ -37,13 +40,14 @@ stdenv.mkDerivation rec {
     moveToOutput share "$dev" # just aclocal
   '';
 
-  buildInputs = [] ++ lib.optionals stdenv.isDarwin [ CoreServices ];
+  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
 
   enableParallelBuilding = true;
 
   meta = with lib; {
-    homepage = "http://www.mozilla.org/projects/nspr/";
+    homepage = "https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/Reference/NSPR_functions";
     description = "Netscape Portable Runtime, a platform-neutral API for system-level and libc-like functions";
+    maintainers = with maintainers; [ ];
     platforms = platforms.all;
     license = licenses.mpl20;
   };

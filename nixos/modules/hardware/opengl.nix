@@ -89,7 +89,7 @@ in
       extraPackages = mkOption {
         type = types.listOf types.package;
         default = [];
-        example = literalExample "with pkgs; [ vaapiIntel libvdpau-va-gl vaapiVdpau intel-ocl ]";
+        example = literalExpression "with pkgs; [ vaapiIntel libvdpau-va-gl vaapiVdpau intel-ocl ]";
         description = ''
           Additional packages to add to OpenGL drivers. This can be used
           to add OpenCL drivers, VA-API/VDPAU drivers etc.
@@ -99,7 +99,7 @@ in
       extraPackages32 = mkOption {
         type = types.listOf types.package;
         default = [];
-        example = literalExample "with pkgs.pkgsi686Linux; [ vaapiIntel libvdpau-va-gl vaapiVdpau ]";
+        example = literalExpression "with pkgs.pkgsi686Linux; [ vaapiIntel libvdpau-va-gl vaapiVdpau ]";
         description = ''
           Additional packages to add to 32-bit OpenGL drivers on
           64-bit systems. Used when <option>driSupport32Bit</option> is

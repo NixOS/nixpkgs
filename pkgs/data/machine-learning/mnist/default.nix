@@ -29,7 +29,7 @@ in
       ln -s "${srcs.test-images}" "$out/${srcs.test-images.name}"
       ln -s "${srcs.test-labels}" "$out/${srcs.test-labels.name}"
     '';
-    phases = [ "installPhase" ];
+    dontUnpack = true;
     meta = with lib; {
       description = "A large database of handwritten digits";
       longDescription = ''

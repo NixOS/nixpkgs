@@ -1,15 +1,15 @@
 { lib, stdenv, fetchgit
 , makeWrapper
-, nettools, gawk, systemd, openresolv, coreutils, gnugrep
+, nettools, gawk, systemd, openresolv, coreutils, gnugrep, iproute2
 }:
 
 stdenv.mkDerivation {
   pname = "vpnc-scripts";
-  version = "unstable-2021-03-21";
+  version = "unstable-2021-09-24";
   src = fetchgit {
-    url = "git://git.infradead.org/users/dwmw2/vpnc-scripts.git";
-    rev = "8fff06090ed193c4a7285e9a10b42e6679e8ecf3";
-    sha256 = "14bzzpwz7kdmlbx825h6s4jjdml9q6ziyrq8311lp8caql68qdq1";
+    url = "https://gitlab.com/openconnect/vpnc-scripts.git";
+    rev = "b749c2cadc2f32e2efffa69302861f9a7d4a4e5f";
+    sha256 = "sha256:19aj6mfkclbkx6ycyd4xm7id1bq78ismw0y6z23f6s016k3sjc8c";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -28,7 +28,7 @@ stdenv.mkDerivation {
       --replace "/usr/bin/resolvectl" "${systemd}/bin/resolvectl"
   '' + ''
     wrapProgram $out/bin/vpnc-script \
-      --prefix PATH : "${lib.makeBinPath ([ nettools gawk coreutils gnugrep ] ++ lib.optionals stdenv.isLinux [ openresolv ])}"
+      --prefix PATH : "${lib.makeBinPath ([ nettools gawk coreutils gnugrep ] ++ lib.optionals stdenv.isLinux [ openresolv iproute2 ])}"
   '';
 
   meta = with lib; {

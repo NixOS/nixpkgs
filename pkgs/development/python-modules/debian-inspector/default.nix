@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pythonAtLeast
 , chardet
 , attrs
 , commoncode
@@ -11,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "debian-inspector";
-  version = "21.5.25";
+  version = "30.0.0";
 
   src = fetchPypi {
     pname = "debian_inspector";
     inherit version;
-    sha256 = "1d3xaqw00kav85nk29qm2yqb73bkyqf185fs1q0vgd7bnap9wqaw";
+    sha256 = "sha256-0PT5sT6adaqgYQtWjks12ys0z1C3n116aeJaEKR/Wxg=";
   };
 
   nativeBuildInputs = [

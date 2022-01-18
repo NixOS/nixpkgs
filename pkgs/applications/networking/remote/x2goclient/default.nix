@@ -24,8 +24,6 @@ mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" "ETCDIR=$(out)/etc" "build_client" "build_man" ];
 
-  enableParallelBuilding = true;
-
   installTargets = [ "install_client" "install_man" ];
 
   qtWrapperArgs = [ "--suffix PATH : ${nx-libs}/bin:${openssh}/libexec" ];

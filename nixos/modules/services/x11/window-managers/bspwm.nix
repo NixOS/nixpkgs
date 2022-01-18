@@ -14,15 +14,15 @@ in
       package = mkOption {
         type        = types.package;
         default     = pkgs.bspwm;
-        defaultText = "pkgs.bspwm";
-        example     = "pkgs.bspwm-unstable";
+        defaultText = literalExpression "pkgs.bspwm";
+        example     = literalExpression "pkgs.bspwm-unstable";
         description = ''
           bspwm package to use.
         '';
       };
       configFile = mkOption {
         type        = with types; nullOr path;
-        example     = "${pkgs.bspwm}/share/doc/bspwm/examples/bspwmrc";
+        example     = literalExpression ''"''${pkgs.bspwm}/share/doc/bspwm/examples/bspwmrc"'';
         default     = null;
         description = ''
           Path to the bspwm configuration file.
@@ -34,15 +34,15 @@ in
         package = mkOption {
           type        = types.package;
           default     = pkgs.sxhkd;
-          defaultText = "pkgs.sxhkd";
-          example     = "pkgs.sxhkd-unstable";
+          defaultText = literalExpression "pkgs.sxhkd";
+          example     = literalExpression "pkgs.sxhkd-unstable";
           description = ''
             sxhkd package to use.
           '';
         };
         configFile = mkOption {
           type        = with types; nullOr path;
-          example     = "${pkgs.bspwm}/share/doc/bspwm/examples/sxhkdrc";
+          example     = literalExpression ''"''${pkgs.bspwm}/share/doc/bspwm/examples/sxhkdrc"'';
           default     = null;
           description = ''
             Path to the sxhkd configuration file.

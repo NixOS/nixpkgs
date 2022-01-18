@@ -1,4 +1,4 @@
-{ lib, mkDerivation, fetchFromGitHub, cmake, pkg-config, freetype, libGL, pcre }:
+{ lib, stdenv, mkDerivation, fetchFromGitHub, cmake, pkg-config, freetype, libGL, pcre }:
 
 mkDerivation rec {
   pname = "contour";
@@ -23,5 +23,6 @@ mkDerivation rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ fortuneteller2k ];
     platforms = platforms.unix;
+    broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/contour.x86_64-darwin
   };
 }

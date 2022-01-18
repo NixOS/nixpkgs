@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "extrace";
-  version = "0.7";
+  version = "0.8";
 
   src = fetchFromGitHub {
     owner = "leahneukirchen";
     repo = "extrace";
     rev = "v${version}";
-    sha256 = "0acspj3djspfvgr3ng5b61qws6v2md6b0lc5qkby10mqnfpkvq85";
+    sha256 = "sha256-Kg5yzVg9sqlOCzAq/HeFUPZ89Enfkt/r7EunCfOqdA0=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];

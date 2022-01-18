@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "requirements-detector";
-  version = "0.6";
+  version = "0.7";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "landscapeio";
     repo = pname;
     rev = version;
-    sha256 = "1sfmm7daz0kpdx6pynsvi6qlfhrzxx783l1wb69c8dfzya4xssym";
+    sha256 = "sha256-DdPNqbTsL2+GUp8vppqUSa0mUVMxk73MCcpwo8u51tU=";
   };
 
   propagatedBuildInputs = [

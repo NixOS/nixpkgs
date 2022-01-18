@@ -11,11 +11,12 @@
 
 buildPythonPackage rec {
   pname = "ge25519";
-  version = "0.2.0";
+  version = "1.1.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1wgv0vqg8iv9y5d7if14gmcgslwd5zzgk322w9jaxdfbndldddik";
+    sha256 = "sha256-0M9RF8tlEoLyduvY3RvltGAnsus3HF6FEy22b6w6aUs=";
   };
 
   propagatedBuildInputs = [
@@ -30,7 +31,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "ge25519" ];
+  pythonImportsCheck = [
+    "ge25519"
+  ];
 
   meta = with lib; {
     description = "Python implementation of Ed25519 group elements and operations";

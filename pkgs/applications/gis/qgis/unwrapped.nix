@@ -1,9 +1,41 @@
-{ mkDerivation, lib, fetchFromGitHub, cmake, ninja, flex, bison, proj, geos
-, xlibsWrapper, sqlite, gsl, qwt, fcgi, python3Packages, libspatialindex
-, libspatialite, postgresql, txt2tags, openssl, libzip, hdf5, netcdf, exiv2
-, protobuf, qtbase, qtsensors, qca-qt5, qtkeychain, qscintilla, qtserialport
-, qtxmlpatterns, withGrass ? true, grass, withWebKit ? true, qtwebkit }:
-with lib;
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, cmake
+, ninja
+, flex
+, bison
+, proj
+, geos
+, xlibsWrapper
+, sqlite
+, gsl
+, qwt
+, fcgi
+, python3Packages
+, libspatialindex
+, libspatialite
+, postgresql
+, txt2tags
+, openssl
+, libzip
+, hdf5
+, netcdf
+, exiv2
+, protobuf
+, qtbase
+, qtsensors
+, qca-qt5
+, qtkeychain
+, qscintilla
+, qtserialport
+, qtxmlpatterns
+, withGrass ? true
+, grass
+, withWebKit ? true
+, qtwebkit
+}:
+
 let
   pythonBuildInputs = with python3Packages; [
     qscintilla-qt5
@@ -24,15 +56,14 @@ let
     six
   ];
 in mkDerivation rec {
-  version = "3.16.7";
-  pname = "qgis";
-  name = "${pname}-unwrapped-${version}";
+  version = "3.16.14";
+  pname = "qgis-unwrapped";
 
   src = fetchFromGitHub {
     owner = "qgis";
     repo = "QGIS";
     rev = "final-${lib.replaceStrings [ "." ] [ "_" ] version}";
-    sha256 = "0yvb2w83dplh0my72xljglq9a4a7qkfliwslav26lw4yqxr8mr0p";
+    sha256 = "sha256-3FUGSBdlhJhhpTPtYuzKOznsC7PJV3kRL9Il2Yryi1Q=";
   };
 
   passthru = {
@@ -83,7 +114,7 @@ in mkDerivation rec {
   cmakeFlags = [
     "-DCMAKE_SKIP_BUILD_RPATH=OFF"
     "-DPYQT5_SIP_DIR=${python3Packages.pyqt5}/${python3Packages.python.sitePackages}/PyQt5/bindings"
-    "-DQSCI_SIP_DIR=${python3Packages.qscintilla-qt5}/share/sip/PyQt5"
+    "-DQSCI_SIP_DIR=${python3Packages.qscintilla-qt5}/${python3Packages.python.sitePackages}/PyQt5/bindings"
   ] ++ lib.optional (!withWebKit) "-DWITH_QTWEBKIT=OFF"
     ++ lib.optional withGrass "-DGRASS_PREFIX7=${grass}/${grass.name}";
 
@@ -92,6 +123,6 @@ in mkDerivation rec {
     homepage = "https://www.qgis.org";
     license = lib.licenses.gpl2Plus;
     platforms = with lib.platforms; linux;
-    maintainers = with lib.maintainers; [ lsix sikmir ];
+    maintainers = with lib.maintainers; [ lsix sikmir erictapen ];
   };
 }

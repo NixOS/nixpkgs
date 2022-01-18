@@ -1,80 +1,145 @@
-#!/usr/bin/env bash
+#!/usr/bin/env nix-shell
+#!nix-shell -i bash -p gh
+# shellcheck shell=bash
 # Bash 3 compatible for Darwin
+
+if [ -z "${GITHUB_TOKEN}" ]; then
+  echo >&2 "usage: GITHUB_TOKEN=… ./update.sh"
+  exit 1
+fi
 
 # Version of Pulumi from
 # https://www.pulumi.com/docs/get-started/install/versions/
-VERSION="3.6.0"
+VERSION="3.22.1"
 
-# Grab latest release ${VERSION} from
-# https://github.com/pulumi/pulumi-${NAME}/releases
-plugins=(
-    "auth0=2.2.0"
-    "aws=4.10.0"
-    "cloudflare=3.2.0"
-    "consul=3.2.0"
-    "datadog=3.3.0"
-    "digitalocean=4.4.1"
-    "docker=3.0.0"
-    "equinix-metal=2.0.0"
-    "gcp=5.11.0"
-    "github=4.2.0"
-    "gitlab=4.1.0"
-    "hcloud=1.1.0"
-    "kubernetes=3.5.0"
-    "linode=3.2.0"
-    "mailgun=3.1.0"
-    "mysql=3.0.0"
-    "openstack=3.2.0"
-    "packet=3.2.2"
-    "postgresql=3.1.0"
-    "random=4.2.0"
-    "vault=4.1.0"
-    "vsphere=4.0.0"
+# An array of plugin names. The respective repository inside Pulumi's
+# Github organization is called pulumi-$name by convention.
+
+declare -a pulumi_repos
+pulumi_repos=(
+  "auth0"
+  "aws"
+  "azure"
+  "cloudflare"
+  "consul"
+  "datadog"
+  "digitalocean"
+  "docker"
+  "equinix-metal"
+  "gcp"
+  "github"
+  "gitlab"
+  "hcloud"
+  "kubernetes"
+  "linode"
+  "mailgun"
+  "mysql"
+  "openstack"
+  "packet"
+  "postgresql"
+  "random"
+  "vault"
+  "vsphere"
 )
 
+# Contains latest release ${VERSION} from
+# https://github.com/pulumi/pulumi-${NAME}/releases
+
+# Dynamically builds the plugin array, using the GitHub API for getting the
+# latest version.
+plugin_num=1
+plugins=()
+for key in "${pulumi_repos[@]}"; do
+  plugin="${key}=$(gh api "repos/pulumi/pulumi-${key}/releases/latest" --jq '.tag_name | sub("^v"; "")')"
+  printf "%20s: %s of %s\r" "${plugin}" "${plugin_num}" "${#pulumi_repos[@]}"
+  plugins+=("${plugin}")
+  sleep 1
+  ((++plugin_num))
+done
+printf "\n"
+
 function genMainSrc() {
-    local url="https://get.pulumi.com/releases/sdk/pulumi-v${VERSION}-$1-x64.tar.gz"
-    local sha256
-    sha256=$(nix-prefetch-url "$url")
-    echo "      {"
-    echo "        url = \"${url}\";"
-    echo "        sha256 = \"$sha256\";"
-    echo "      }"
+  local url="https://get.pulumi.com/releases/sdk/pulumi-v${VERSION}-${1}-${2}.tar.gz"
+  local sha256
+  sha256=$(nix-prefetch-url "$url")
+  echo "      {"
+  echo "        url = \"${url}\";"
+  echo "        sha256 = \"$sha256\";"
+  echo "      }"
+}
+
+function genSrc() {
+  local url="${1}"
+  local plug="${2}"
+  local tmpdir="${3}"
+
+  local sha256
+  sha256=$(nix-prefetch-url "$url")
+
+  {
+    if [ -n "$sha256" ]; then # file exists
+      echo "      {"
+      echo "        url = \"${url}\";"
+      echo "        sha256 = \"$sha256\";"
+      echo "      }"
+    else
+      echo "      # pulumi-resource-${plug} skipped (does not exist on remote)"
+    fi
+  } > "${tmpdir}/${plug}.nix"
 }
 
 function genSrcs() {
-    for plugVers in "${plugins[@]}"; do
-        local plug=${plugVers%=*}
-        local version=${plugVers#*=}
-        # url as defined here
-        # https://github.com/pulumi/pulumi/blob/06d4dde8898b2a0de2c3c7ff8e45f97495b89d82/pkg/workspace/plugins.go#L197
-        local url="https://api.pulumi.com/releases/plugins/pulumi-resource-${plug}-v${version}-$1-amd64.tar.gz"
-        local sha256
-        sha256=$(nix-prefetch-url "$url")
-        echo "      {"
-        echo "        url = \"${url}\";"
-        echo "        sha256 = \"$sha256\";"
-        echo "      }"
-    done
+  local tmpdir
+  tmpdir="$(mktemp -d)"
+
+  local i=0
+
+  for plugVers in "${plugins[@]}"; do
+    local plug=${plugVers%=*}
+    local version=${plugVers#*=}
+    # url as defined here
+    # https://github.com/pulumi/pulumi/blob/06d4dde8898b2a0de2c3c7ff8e45f97495b89d82/pkg/workspace/plugins.go#L197
+    local url="https://api.pulumi.com/releases/plugins/pulumi-resource-${plug}-v${version}-${1}-${2}.tar.gz"
+    genSrc "${url}" "${plug}" "${tmpdir}" &
+    ((++i))
+  done
+
+  wait
+
+  find "${tmpdir}" -name '*.nix' -print0 | sort -z | xargs -r0 cat
+  rm -r "${tmpdir}"
 }
 
 {
-  cat <<EOF
+  cat << EOF
 # DO NOT EDIT! This file is generated automatically by update.sh
 { }:
 {
   version = "${VERSION}";
   pulumiPkgs = {
-    x86_64-linux = [
 EOF
-  genMainSrc "linux"
-  genSrcs "linux"
-  echo "    ];"
-  echo "    x86_64-darwin = ["
 
-  genMainSrc "darwin"
-  genSrcs "darwin"
+  echo "    x86_64-linux = ["
+  genMainSrc "linux" "x64"
+  genSrcs "linux" "amd64"
   echo "    ];"
+
+  echo "    x86_64-darwin = ["
+  genMainSrc "darwin" "x64"
+  genSrcs "darwin" "amd64"
+  echo "    ];"
+
+  echo "    aarch64-linux = ["
+  genMainSrc "linux" "arm64"
+  genSrcs "linux" "arm64"
+  echo "    ];"
+
+  echo "    aarch64-darwin = ["
+  genMainSrc "darwin" "arm64"
+  genSrcs "darwin" "arm64"
+  echo "    ];"
+
   echo "  };"
   echo "}"
+
 } > data.nix

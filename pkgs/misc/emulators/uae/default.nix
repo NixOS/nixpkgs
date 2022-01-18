@@ -1,10 +1,11 @@
 {lib, stdenv, fetchurl, pkg-config, gtk2, alsa-lib, SDL}:
 
 stdenv.mkDerivation rec {
-  name = "uae-0.8.29";
+  pname = "uae";
+  version = "0.8.29";
 
   src = fetchurl {
-    url = "http://web.archive.org/web/20130905032631/http://www.amigaemulator.org/files/sources/develop/${name}.tar.bz2";
+    url = "https://web.archive.org/web/20130905032631/http://www.amigaemulator.org/files/sources/develop/uae-${version}.tar.bz2";
     sha256 = "05s3cd1rd5a970s938qf4c2xm3l7f54g5iaqw56v8smk355m4qr4";
   };
 
@@ -19,7 +20,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Ultimate/Unix/Unusable Amiga Emulator";
     license = lib.licenses.gpl2Plus;
-    homepage = "http://web.archive.org/web/20130901222855/http://www.amigaemulator.org/";
+    homepage = "https://web.archive.org/web/20130901222855/http://www.amigaemulator.org/";
     maintainers = [ lib.maintainers.sander ];
     platforms = lib.platforms.linux;
   };

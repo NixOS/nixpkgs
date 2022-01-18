@@ -15,14 +15,21 @@
 
 buildPythonPackage rec {
   pname = "hass-nabucasa";
-  version = "0.44.0";
+  version = "0.51.0";
 
   src = fetchFromGitHub {
     owner = "nabucasa";
     repo = pname;
     rev = version;
-    sha256 = "sha256-cfKuqkIgmbo7/kUIpJFbckyQ0uDrxXmdsI7qORX0PWc=";
+    sha256 = "sha256-qN7AXs4hJpuP+GaxjOPR2CqKMYyDJxTrCuE5HreZnhU=";
   };
+
+  postPatch = ''
+    sed -i 's/"acme.*"/"acme"/' setup.py
+    substituteInPlace setup.py \
+      --replace "cryptography>=2.8,<4.0" "cryptography" \
+      --replace "snitun==" "snitun>="
+  '';
 
   propagatedBuildInputs = [
     acme
@@ -39,12 +46,6 @@ buildPythonPackage rec {
     pytest-aiohttp
     pytestCheckHook
   ];
-
-  postPatch = ''
-    sed -i 's/"acme.*"/"acme"/' setup.py
-    substituteInPlace setup.py \
-      --replace "snitun==" "snitun>="
-  '';
 
   pythonImportsCheck = [ "hass_nabucasa" ];
 

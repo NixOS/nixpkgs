@@ -38,6 +38,10 @@ let
     version = "8.06.10";
     sha256 = "06cck7wijq4zdshzhxm6jyl8k3j0zglj2axsyfk6q1sq754zyf4a";
   };
+  "4.13" = mkNewParam {
+    version = "8.06.11";
+    sha256 = "1zjpg9jvs6i9jvbgn6zgispwqiv8rxvaszxcx9ha9fax3wzhv9qy";
+  };
  };
  param = params . ${lib.versions.majorMinor ocaml.version}
    or (throw "labltk is not available for OCaml ${ocaml.version}");
@@ -51,6 +55,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--use-findlib" "--installbindir" "$(out)/bin" ];
   dontAddPrefix = true;
+  dontAddStaticConfigureFlags = true;
+  configurePlatforms = [];
 
   buildFlags = [ "all" "opt" ];
 

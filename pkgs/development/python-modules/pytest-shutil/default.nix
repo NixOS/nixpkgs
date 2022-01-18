@@ -1,5 +1,5 @@
 { lib, isPyPy, buildPythonPackage, fetchPypi
-, pytest, cmdline, pytestcov, coverage, setuptools-git, mock, pathpy, execnet
+, pytest, cmdline, pytest-cov, coverage, setuptools-git, mock, pathpy, execnet
 , contextlib2, termcolor }:
 
 buildPythonPackage rec {
@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   buildInputs = [ pytest ];
   checkInputs = [ cmdline pytest ];
-  propagatedBuildInputs = [ pytestcov coverage setuptools-git mock pathpy execnet contextlib2 termcolor ];
+  propagatedBuildInputs = [ pytest-cov coverage setuptools-git mock pathpy execnet contextlib2 termcolor ];
 
   checkPhase = ''
     py.test ${lib.optionalString isPyPy "-k'not (test_run or test_run_integration)'"}

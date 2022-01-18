@@ -42,9 +42,9 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "A library for CUDF format";
-    homepage = "http://www.mancoosi.org/cudf/";
+    homepage = "https://www.mancoosi.org/cudf/";
     downloadPage = "https://gforge.inria.fr/projects/cudf/";
     license = licenses.lgpl3;
-    maintainers = with maintainers; [ superherointj ];
+    maintainers = with maintainers; [ ];
   };
 }

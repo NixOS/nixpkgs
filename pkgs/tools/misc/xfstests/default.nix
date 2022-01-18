@@ -4,7 +4,8 @@
 , time, util-linux, which, writeScript, xfsprogs, runtimeShell }:
 
 stdenv.mkDerivation {
-  name = "xfstests-2019-09-08";
+  pname = "xfstests";
+  version = "unstable-2019-09-08";
 
   src = fetchgit {
     url = "git://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git";

@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "luna-icons";
-  version = "1.2";
+  version = "1.9";
 
   src = fetchFromGitHub {
     owner = "darkomarko42";
     repo = pname;
     rev = version;
-    sha256 = "0kjnmclil21m9vgybk958nzzlbwryp286rajlgxg05wgjnby4cxk";
+    sha256 = "1l6jxbgq2qnw4qx0khkdxcq75v17cv2ccfnm28sslpzcc1r8amqd";
   };
 
   nativeBuildInputs = [

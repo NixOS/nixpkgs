@@ -7,39 +7,25 @@
 #   3) used by `google-cloud-sdk` only on GCE guests
 #
 
-{ stdenv, lib, fetchurl, makeWrapper, python, openssl, jq, with-gce ? false }:
+{ stdenv, lib, fetchurl, makeWrapper, nixosTests, python, openssl, jq, with-gce ? false }:
 
 let
   pythonEnv = python.withPackages (p: with p; [
     cffi
     cryptography
-    pyopenssl
+    openssl
     crcmod
   ] ++ lib.optional (with-gce) google-compute-engine);
 
-  baseUrl = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads";
-  sources = name: system: {
-    x86_64-darwin = {
-      url = "${baseUrl}/${name}-darwin-x86_64.tar.gz";
-      sha256 = "0viiwimnk26jfi4ypkvclqqxw8anlmch10zscjw69d8x1pyqczcd";
-    };
-
-    aarch64-darwin = {
-      url = "${baseUrl}/${name}-darwin-arm.tar.gz";
-      sha256 = "sha256-EZbJgMzEZScvaqSKay5aDuayVaIK1zZUzqAHgT0czZk=";
-    };
-
-    x86_64-linux = {
-      url = "${baseUrl}/${name}-linux-x86_64.tar.gz";
-      sha256 = "11113l8pyhq6vbsh79m5anh6ljss94zhnp33ghds9rn1gxa83hnb";
-    };
-  }.${system};
+  data = import ./data.nix { };
+  sources = system:
+    data.googleCloudSdkPkgs.${system} or (throw "Unsupported system: ${system}");
 
 in stdenv.mkDerivation rec {
   pname = "google-cloud-sdk";
-  version = "347.0.0";
+  inherit (data) version;
 
-  src = fetchurl (sources "${pname}-${version}" stdenv.hostPlatform.system);
+  src = fetchurl (sources stdenv.hostPlatform.system);
 
   buildInputs = [ python ];
 
@@ -89,6 +75,13 @@ in stdenv.mkDerivation rec {
     mv $out/google-cloud-sdk/completion.bash.inc $out/share/bash-completion/completions/gcloud
     ln -s $out/share/bash-completion/completions/gcloud $out/share/bash-completion/completions/gsutil
 
+    # setup zsh completion
+    mkdir -p $out/share/zsh/site-functions
+    mv $out/google-cloud-sdk/completion.zsh.inc $out/share/zsh/site-functions/_gcloud
+    ln -s $out/share/zsh/site-functions/_gcloud $out/share/zsh/site-functions/_gsutil
+    # zsh doesn't load completions from $FPATH without #compdef as the first line
+    sed -i '1 i #compdef gcloud' $out/share/zsh/site-functions/_gcloud
+
     # This directory contains compiled mac binaries. We used crcmod from
     # nixpkgs instead.
     rm -r $out/google-cloud-sdk/platform/gsutil/third_party/crcmod \
@@ -107,13 +100,20 @@ in stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  doInstallCheck = true;
+  installCheckPhase = ''
+    $out/bin/gcloud version --format json | jq '."Google Cloud SDK"' | grep "${version}"
+  '';
+
   meta = with lib; {
     description = "Tools for the google cloud platform";
     longDescription = "The Google Cloud SDK. This package has the programs: gcloud, gsutil, and bq";
     # This package contains vendored dependencies. All have free licenses.
     license = licenses.free;
     homepage = "https://cloud.google.com/sdk/";
+    changelog = "https://cloud.google.com/sdk/docs/release-notes";
     maintainers = with maintainers; [ iammrinal0 pradyuman stephenmw zimbatm ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    platforms = builtins.attrNames data.googleCloudSdkPkgs;
+    mainProgram = "gcloud";
   };
 }

@@ -33,8 +33,7 @@ in {
       package = mkOption {
         type = types.package;
         default = pkgs.bosun;
-        defaultText = "pkgs.bosun";
-        example = literalExample "pkgs.bosun";
+        defaultText = literalExpression "pkgs.bosun";
         description = ''
           bosun binary to use.
         '';

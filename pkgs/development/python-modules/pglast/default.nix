@@ -1,33 +1,34 @@
 { lib
 , buildPythonPackage
-, fetchFromGitHub
+, fetchPypi
 , isPy3k
 , setuptools
-, pytestcov
 , pytest
 }:
 
 buildPythonPackage rec {
   pname = "pglast";
-  version = "3.0";
+  version = "3.8";
 
-  # PyPI tarball does not include all the required files
-  src = fetchFromGitHub {
-    owner = "lelit";
-    repo = pname;
-    rev = "v${version}";
-    fetchSubmodules = true;
-    sha256 = "0yi24wj19rzw5dvppm8g3hnfskyzbrqw14q8x9f2q5zi8g6xnnrd";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "31ad29b6a27048b1a26c072992fc5213d2eaf366854679e6c97111e300e0ef01";
   };
 
   disabled = !isPy3k;
 
+  # ModuleNotFoundError: No module named 'pkg_resources'
   propagatedBuildInputs = [ setuptools ];
 
-  checkInputs = [ pytest pytestcov ];
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "--cov=pglast --cov-report term-missing" ""
+  '';
 
-  pythonImportsCheck = [ "pglast" ];
+  checkInputs = [ pytest ];
 
+  # pytestCheckHook doesn't work
+  # ImportError: cannot import name 'parse_sql' from 'pglast'
   checkPhase = ''
     pytest
   '';

@@ -5,28 +5,18 @@
 # cgit) that are needed here should be included directly in Nixpkgs as
 # files.
 
-stdenv.mkDerivation {
-  name = "gnum4-1.4.18";
+stdenv.mkDerivation rec {
+  pname = "gnum4";
+  version = "1.4.19";
 
   src = fetchurl {
-    url = "mirror://gnu/m4/m4-1.4.18.tar.bz2";
-    sha256 = "1xkwwq0sgv05cla0g0a01yzhk0wpsn9y40w9kh9miiiv0imxfh36";
+    url = "mirror://gnu/m4/m4-${version}.tar.bz2";
+    sha256 = "sha256-swapHA/ZO8QoDPwumMt6s5gf91oYe+oyk4EfRSyJqMg=";
   };
 
   doCheck = false;
 
   configureFlags = [ "--with-syscmd-shell=${stdenv.shell}" ];
-
-  # Upstream is aware of it; it may be in the next release.
-  patches =
-    [
-      ./s_isdir.patch
-      (fetchurl {
-        url = "https://sources.debian.org/data/main/m/m4/1.4.18-2/debian/patches/01-fix-ftbfs-with-glibc-2.28.patch";
-        sha256 = "12lmdnbml9lfvy0khpjc42riicddaz7li8wmbnsam7zsw6al11qk";
-      })
-    ]
-    ++ lib.optional stdenv.isDarwin ./darwin-secure-format.patch;
 
   meta = {
     homepage = "https://www.gnu.org/software/m4/";

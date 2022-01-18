@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "yalesmartalarmclient";
-  version = "0.3.4";
+  version = "0.3.5";
 
   src = fetchFromGitHub {
     owner = "domwillcode";
     repo = "yale-smart-alarm-client";
     rev = "v${version}";
-    sha256 = "sha256-waWi3QnH7xQZh5iYklISCvfAaBdH5k+Y10huZuTNlSc=";
+    sha256 = "11i7vh61a5xfv32zm7rkigl010wzd6snag6sf7w38256j95nnb05";
   };
 
   propagatedBuildInputs = [
@@ -23,6 +23,7 @@ buildPythonPackage rec {
 
   # Project has no tests
   doCheck = false;
+
   pythonImportsCheck = [ "yalesmartalarmclient" ];
 
   meta = with lib; {

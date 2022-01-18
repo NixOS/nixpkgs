@@ -1,16 +1,18 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, isPyPy
 , pytestCheckHook
 , case
 , psutil
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "billiard";
   version = "3.6.4.0";
-  disabled = isPyPy;
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -23,9 +25,14 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  pythonImportsCheck = [
+    "billiard"
+  ];
+
   meta = with lib; {
-    homepage = "https://github.com/celery/billiard";
     description = "Python multiprocessing fork with improvements and bugfixes";
+    homepage = "https://github.com/celery/billiard";
     license = licenses.bsd3;
+    maintainers = with maintainers; [ ];
   };
 }

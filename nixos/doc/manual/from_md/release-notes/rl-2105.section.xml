@@ -84,7 +84,7 @@
       </listitem>
       <listitem>
         <para>
-          The linux_latest kernel was updated to the 5.12 series. It
+          The linux_latest kernel was updated to the 5.13 series. It
           currently is not officially supported for use with the zfs
           filesystem. If you use zfs, you should use a different kernel
           version (either the LTS kernel, or track a specific one).

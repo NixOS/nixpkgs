@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "expat";
-  version = "2.4.1";
+  version = "2.4.2";
 
   src = fetchurl {
     url = "https://github.com/libexpat/libexpat/releases/download/R_${lib.replaceStrings ["."] ["_"] version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-zwMtDbqbkoY2VI4ysyei1msaq2PE9KE90TLC0dLy+2o=";
+    sha256 = "sha256-vC/1j0nCmqx7/3BabBZ6gh8mxRIHn/CKxDL9D9ybsZk=";
   };
 
   outputs = [ "out" "dev" ]; # TODO: fix referrers
@@ -25,6 +25,13 @@ stdenv.mkDerivation rec {
 
   preCheck = ''
     patchShebangs ./configure ./run.sh ./test-driver-wrapper.sh
+  '';
+
+  # CMake files incorrectly calculate library path from dev prefix
+  # https://github.com/libexpat/libexpat/issues/501
+  postFixup = ''
+    substituteInPlace $dev/lib/cmake/expat-${version}/expat-noconfig.cmake \
+      --replace "$"'{_IMPORT_PREFIX}' $out
   '';
 
   meta = with lib; {

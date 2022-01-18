@@ -4,7 +4,10 @@
 */
 
 { # The platforms for which we build Nixpkgs.
-  supportedSystems ? [ "x86_64-linux" ]
+  supportedSystems ? [
+    "aarch64-linux"
+    "x86_64-linux"
+  ]
 , # Attributes passed to nixpkgs. Don't build packages marked as unfree.
   nixpkgsArgs ? { config = { allowUnfree = false; inHydra = true; }; }
 }:

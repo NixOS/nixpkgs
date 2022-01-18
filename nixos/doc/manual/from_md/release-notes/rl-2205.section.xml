@@ -1,0 +1,569 @@
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="sec-release-22.05">
+  <title>Release 22.05 (“Quokka”, 2022.05/??)</title>
+  <para>
+    In addition to numerous new and upgraded packages, this release has
+    the following highlights:
+  </para>
+  <itemizedlist spacing="compact">
+    <listitem>
+      <para>
+        Support is planned until the end of December 2022, handing over
+        to 22.11.
+      </para>
+    </listitem>
+  </itemizedlist>
+  <section xml:id="sec-release-22.05-highlights">
+    <title>Highlights</title>
+    <itemizedlist>
+      <listitem>
+        <para>
+          <literal>security.acme.defaults</literal> has been added to
+          simplify configuring settings for many certificates at once.
+          This also opens up the the option to use DNS-01 validation
+          when using <literal>enableACME</literal> on web server virtual
+          hosts (e.g.
+          <literal>services.nginx.virtualHosts.*.enableACME</literal>).
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          PHP 8.1 is now available
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Mattermost has been updated to version 6.2. Migrations may
+          take a while, see the
+          <link xlink:href="https://docs.mattermost.com/install/self-managed-changelog.html#release-v6.2-feature-release">upgrade
+          notes</link>.
+        </para>
+      </listitem>
+    </itemizedlist>
+  </section>
+  <section xml:id="sec-release-22.05-new-services">
+    <title>New Services</title>
+    <itemizedlist>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/intel/linux-sgx#install-the-intelr-sgx-psw">aesmd</link>,
+          the Intel SGX Architectural Enclave Service Manager. Available
+          as
+          <link linkend="opt-services.aesmd.enable">services.aesmd</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://docs.docker.com/engine/security/rootless/">rootless
+          Docker</link>, a <literal>systemd --user</literal> Docker
+          service which runs without root permissions. Available as
+          <link xlink:href="options.html#opt-virtualisation.docker.rootless.enable">virtualisation.docker.rootless.enable</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://conduit.rs/">matrix-conduit</link>,
+          a simple, fast and reliable chat server powered by matrix.
+          Available as
+          <link xlink:href="option.html#opt-services.matrix-conduit.enable">services.matrix-conduit</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://www.elastic.co/guide/en/beats/filebeat/current/filebeat-overview.html">filebeat</link>,
+          a lightweight shipper for forwarding and centralizing log
+          data. Available as
+          <link linkend="opt-services.filebeat.enable">services.filebeat</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://frrouting.org/">FRRouting</link>, a
+          popular suite of Internet routing protocol daemons (BGP, BFD,
+          OSPF, IS-IS, VVRP and others). Available as
+          <link linkend="opt-services.ffr.babel.enable">services.frr</link>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/hifi/heisenbridge">heisenbridge</link>,
+          a bouncer-style Matrix IRC bridge. Available as
+          <link xlink:href="options.html#opt-services.heisenbridge.enable">services.heisenbridge</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://ergo.chat">ergochat</link>, a modern
+          IRC with IRCv3 features. Available as
+          <link xlink:href="options.html#opt-services.ergochat.enable">services.ergochat</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/ngoduykhanh/PowerDNS-Admin">PowerDNS-Admin</link>,
+          a web interface for the PowerDNS server. Available at
+          <link xlink:href="options.html#opt-services.powerdns-admin.enable">services.powerdns-admin</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://maddy.email">maddy</link>, a
+          composable all-in-one mail server. Available as
+          <link xlink:href="options.html#opt-services.maddy.enable">services.maddy</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/mgumz/mtr-exporter">mtr-exporter</link>,
+          a Prometheus exporter for mtr metrics. Available as
+          <link xlink:href="options.html#opt-services.mtr-exporter.enable">services.mtr-exporter</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://tetrd.app">tetrd</link>, share your
+          internet connection from your device to your PC and vice versa
+          through a USB cable. Available at
+          <link linkend="opt-services.tetrd.enable">services.tetrd</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/JustArchiNET/ArchiSteamFarm">ArchiSteamFarm</link>,
+          a C# application with primary purpose of idling Steam cards
+          from multiple accounts simultaneously. Available as
+          <link xlink:href="options.html#opt-services.archisteamfarm.enable">services.archisteamfarm</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://goteleport.com">teleport</link>,
+          allows engineers and security professionals to unify access
+          for SSH servers, Kubernetes clusters, web applications, and
+          databases across all environments. Available at
+          <link linkend="opt-services.teleport.enable">services.teleport</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://loic-sharma.github.io/BaGet/">BaGet</link>,
+          a lightweight NuGet and symbol server. Available at
+          <link linkend="opt-services.baget.enable">services.baget</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/ThomasLeister/prosody-filer">prosody-filer</link>,
+          a server for handling XMPP HTTP Upload requests. Available at
+          <link linkend="opt-services.prosody-filer.enable">services.prosody-filer</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://timetagger.app">timetagger</link>,
+          an open source time-tracker with an intuitive user experience
+          and powerful reporting.
+          <link xlink:href="options.html#opt-services.timetagger.enable">services.timetagger</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://www.rstudio.com/products/rstudio/#rstudio-server">rstudio-server</link>,
+          a browser-based version of the RStudio IDE for the R
+          programming language. Available as
+          <link xlink:href="options.html#opt-services.rstudio-server.enable">services.rstudio-server</link>.
+        </para>
+      </listitem>
+    </itemizedlist>
+  </section>
+  <section xml:id="sec-release-22.05-incompatibilities">
+    <title>Backward Incompatibilities</title>
+    <itemizedlist>
+      <listitem>
+        <para>
+          <literal>pkgs.ghc</literal> now refers to
+          <literal>pkgs.targetPackages.haskellPackages.ghc</literal>.
+          This <emphasis>only</emphasis> makes a difference if you are
+          cross-compiling and will ensure that
+          <literal>pkgs.ghc</literal> always runs on the host platform
+          and compiles for the target platform (similar to
+          <literal>pkgs.gcc</literal> for example).
+          <literal>haskellPackages.ghc</literal> still behaves as
+          before, running on the build platform and compiling for the
+          host platform (similar to <literal>stdenv.cc</literal>). This
+          means you don’t have to adjust your derivations if you use
+          <literal>haskellPackages.callPackage</literal>, but when using
+          <literal>pkgs.callPackage</literal> and taking
+          <literal>ghc</literal> as an input, you should now use
+          <literal>buildPackages.ghc</literal> instead to ensure cross
+          compilation keeps working (or switch to
+          <literal>haskellPackages.callPackage</literal>).
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>pkgs.emacsPackages.orgPackages</literal> is removed
+          because org elpa is deprecated. The packages in the top level
+          of <literal>pkgs.emacsPackages</literal>, such as org and
+          org-contrib, refer to the ones in
+          <literal>pkgs.emacsPackages.elpaPackages</literal> and
+          <literal>pkgs.emacsPackages.nongnuPackages</literal> where the
+          new versions will release.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>services.kubernetes.addons.dashboard</literal> was
+          removed due to it being an outdated version.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>mailpile</literal> email webclient
+          (<literal>services.mailpile</literal>) has been removed due to
+          its reliance on python2.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The MoinMoin wiki engine
+          (<literal>services.moinmoin</literal>) has been removed,
+          because Python 2 is being retired from nixpkgs.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>wafHook</literal> hook now honors
+          <literal>NIX_BUILD_CORES</literal> when
+          <literal>enableParallelBuilding</literal> is not set
+          explicitly. Packages can restore the old behaviour by setting
+          <literal>enableParallelBuilding=false</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>pkgs.claws-mail-gtk2</literal>, representing Claws
+          Mail’s older release version three, was removed in order to
+          get rid of Python 2. Please switch to
+          <literal>claws-mail</literal>, which is Claws Mail’s latest
+          release based on GTK+3 and Python 3.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>writers.writePython2</literal> and corresponding
+          <literal>writers.writePython2Bin</literal> convenience
+          functions to create executable Python 2 scripts in the store
+          were removed in preparation of removal of the Python 2
+          interpreter. Scripts have to be converted to Python 3 for use
+          with <literal>writers.writePython3</literal> or
+          <literal>writers.writePyPy2</literal> needs to be used.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          If you previously used
+          <literal>/etc/docker/daemon.json</literal>, you need to
+          incorporate the changes into the new option
+          <literal>virtualisation.docker.daemon.settings</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The backward compatibility in
+          <literal>services.dokuwiki</literal> to configure sites with
+          the old interface has been removed. Please use
+          <literal>services.dokuwiki.sites</literal> instead.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          opensmtpd-extras is no longer build with python2 scripting
+          support due to python2 deprecation in nixpkgs
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>autorestic</literal> package has been upgraded
+          from 1.3.0 to 1.5.0 which introduces breaking changes in
+          config file, check
+          <link xlink:href="https://autorestic.vercel.app/migration/1.4_1.5">their
+          migration guide</link> for more details.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          For <literal>pkgs.python3.pkgs.ipython</literal>, its direct
+          dependency
+          <literal>pkgs.python3.pkgs.matplotlib-inline</literal> (which
+          is really an adapter to integrate matplotlib in ipython if it
+          is installed) does not depend on
+          <literal>pkgs.python3.pkgs.matplotlib</literal> anymore. This
+          is closer to a non-Nix install of ipython. This has the added
+          benefit to reduce the closure size of
+          <literal>ipython</literal> from ~400MB to ~160MB (including
+          ~100MB for python itself).
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>documentation.man</literal> has been refactored to
+          support choosing a man implementation other than GNU’s
+          <literal>man-db</literal>. For this,
+          <literal>documentation.man.manualPages</literal> has been
+          renamed to
+          <literal>documentation.man.man-db.manualPages</literal>. If
+          you want to use the new alternative man implementation
+          <literal>mandoc</literal>, add
+          <literal>documentation.man = { enable = true; man-db.enable = false; mandoc.enable = true; }</literal>
+          to your configuration.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Normal users (with <literal>isNormalUser = true</literal>)
+          which have non-empty <literal>subUidRanges</literal> or
+          <literal>subGidRanges</literal> set no longer have additional
+          implicit ranges allocated. To enable automatic allocation back
+          set <literal>autoSubUidGidRange = true</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>idris2</literal> now requires
+          <literal>--package</literal> when using packages
+          <literal>contrib</literal> and <literal>network</literal>,
+          while previously these idris2 packages were automatically
+          loaded.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>services.thelounge.private</literal> was removed in
+          favor of <literal>services.thelounge.public</literal>, to
+          follow with upstream changes.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>pkgs.docbookrx</literal> was removed since it’s
+          unmaintained
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          MultiMC has been replaced with the fork PolyMC due to upstream
+          developers being hostile to 3rd party package maintainers.
+          PolyMC removes all MultiMC branding and is aimed at providing
+          proper 3rd party packages like the one contained in Nixpkgs.
+          This change affects the data folder where game instances and
+          other save and configuration files are stored. Users with
+          existing installations should rename
+          <literal>~/.local/share/multimc</literal> to
+          <literal>~/.local/share/polymc</literal>. The main config
+          file’s path has also moved from
+          <literal>~/.local/share/multimc/multimc.cfg</literal> to
+          <literal>~/.local/share/polymc/polymc.cfg</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>pkgs.noto-fonts-cjk</literal> is now deprecated in
+          favor of <literal>pkgs.noto-fonts-cjk-sans</literal> and
+          <literal>pkgs.noto-fonts-cjk-serif</literal> because they each
+          have different release schedules. To maintain compatibility
+          with prior releases of Nixpkgs,
+          <literal>pkgs.noto-fonts-cjk</literal> is currently an alias
+          of <literal>pkgs.noto-fonts-cjk-sans</literal> and doesn’t
+          include serif fonts.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The interface that allows activation scripts to restart units
+          has been reworked. Restarting and reloading is now done by a
+          single file
+          <literal>/run/nixos/activation-restart-list</literal> that
+          honors <literal>restartIfChanged</literal> and
+          <literal>reloadIfChanged</literal> of the units.
+        </para>
+      </listitem>
+    </itemizedlist>
+  </section>
+  <section xml:id="sec-release-22.05-notable-changes">
+    <title>Other Notable Changes</title>
+    <itemizedlist>
+      <listitem>
+        <para>
+          The option
+          <link linkend="opt-services.redis.servers">services.redis.servers</link>
+          was added to support per-application
+          <literal>redis-server</literal> which is more secure since
+          Redis databases are only mere key prefixes without any
+          configuration or ACL of their own. Backward-compatibility is
+          preserved by mapping old
+          <literal>services.redis.settings</literal> to
+          <literal>services.redis.servers.&quot;&quot;.settings</literal>,
+          but you are strongly encouraged to name each
+          <literal>redis-server</literal> instance after the application
+          using it, instead of keeping that nameless one. Except for the
+          nameless
+          <literal>services.redis.servers.&quot;&quot;</literal> still
+          accessible at <literal>127.0.0.1:6379</literal>, and to the
+          members of the Unix group <literal>redis</literal> through the
+          Unix socket <literal>/run/redis/redis.sock</literal>, all
+          other <literal>services.redis.servers.${serverName}</literal>
+          are only accessible by default to the members of the Unix
+          group <literal>redis-${serverName}</literal> through the Unix
+          socket <literal>/run/redis-${serverName}/redis.sock</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The option
+          <link linkend="opt-virtualisation.vmVariant">virtualisation.vmVariant</link>
+          was added to allow users to make changes to the
+          <literal>nixos-rebuild build-vm</literal> configuration that
+          do not apply to their normal system.
+        </para>
+        <para>
+          The <literal>config.system.build.vm</literal> attribute now
+          always exists and defaults to the value from
+          <literal>vmVariant</literal>. Configurations that import the
+          <literal>virtualisation/qemu-vm.nix</literal> module
+          themselves will override this value, such that
+          <literal>vmVariant</literal> is not used.
+        </para>
+        <para>
+          Similarly
+          <link linkend="opt-virtualisation.vmVariantWithBootLoader">virtualisation.vmVariantWithBootloader</link>
+          was added.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The
+          <literal>writers.writePyPy2</literal>/<literal>writers.writePyPy3</literal>
+          and corresponding
+          <literal>writers.writePyPy2Bin</literal>/<literal>writers.writePyPy3Bin</literal>
+          convenience functions to create executable Python 2/3 scripts
+          using the PyPy interpreter were added.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>influxdb2</literal> package was split into
+          <literal>influxdb2-server</literal> and
+          <literal>influxdb2-cli</literal>, matching the split that took
+          place upstream. A combined <literal>influxdb2</literal>
+          package is still provided in this release for backwards
+          compatibilty, but will be removed at a later date.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>services.unifi.openPorts</literal> option default
+          value of <literal>true</literal> is now deprecated and will be
+          changed to <literal>false</literal> in 22.11. Configurations
+          using this default will print a warning when rebuilt.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>security.acme</literal> certificates will now
+          correctly check for CA revokation before reaching their
+          minimum age.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Removing domains from
+          <literal>security.acme.certs._name_.extraDomainNames</literal>
+          will now correctly remove those domains during rebuild/renew.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The option
+          <link linkend="opt-programs.ssh.enableAskPassword">programs.ssh.enableAskPassword</link>
+          was added, decoupling the setting of
+          <literal>SSH_ASKPASS</literal> from
+          <literal>services.xserver.enable</literal>. This allows easy
+          usage in non-X11 environments, e.g. Wayland.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>services.stubby</literal> module was converted to
+          a
+          <link xlink:href="https://github.com/NixOS/rfcs/blob/master/rfcs/0042-config-option.md">settings-style</link>
+          configuration.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The option <literal>services.duplicati.dataDir</literal> has
+          been added to allow changing the location of duplicati’s
+          files.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>fetchFromSourcehut</literal> now allows fetching
+          repositories recursively using <literal>fetchgit</literal> or
+          <literal>fetchhg</literal> if the argument
+          <literal>fetchSubmodules</literal> is set to
+          <literal>true</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The option <literal>services.thelounge.plugins</literal> has
+          been added to allow installing plugins for The Lounge. Plugins
+          can be found in
+          <literal>pkgs.theLoungePlugins.plugins</literal> and
+          <literal>pkgs.theLoungePlugins.themes</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>firmwareLinuxNonfree</literal> package has been
+          renamed to <literal>linux-firmware</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          A new module was added for the
+          <link xlink:href="https://starship.rs/">Starship</link> shell
+          prompt, providing the options
+          <literal>programs.starship.enable</literal> and
+          <literal>programs.starship.settings</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>zrepl</literal> package has been updated from
+          0.4.0 to 0.5:
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              The RPC protocol version was bumped; all zrepl daemons in
+              a setup must be updated and restarted before replication
+              can resume.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              A bug involving encrypt-on-receive has been fixed. Read
+              the
+              <link xlink:href="https://zrepl.github.io/configuration/sendrecvoptions.html#job-recv-options-placeholder">zrepl
+              documentation</link> and check the output of
+              <literal>zfs get -r encryption,zrepl:placeholder PATH_TO_ROOTFS</literal>
+              on the receiver.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+    </itemizedlist>
+  </section>
+</section>

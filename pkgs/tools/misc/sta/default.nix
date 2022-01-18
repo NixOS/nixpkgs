@@ -31,5 +31,6 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ infinisil ];
     platforms = platforms.all;
     badPlatforms = platforms.darwin;
+    mainProgram = "sta";
   };
 }

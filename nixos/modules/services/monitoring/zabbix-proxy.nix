@@ -1,12 +1,13 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 let
   cfg = config.services.zabbixProxy;
+  opt = options.services.zabbixProxy;
   pgsql = config.services.postgresql;
   mysql = config.services.mysql;
 
   inherit (lib) mkAfter mkDefault mkEnableOption mkIf mkMerge mkOption;
-  inherit (lib) attrValues concatMapStringsSep getName literalExample optional optionalAttrs optionalString types;
+  inherit (lib) attrValues concatMapStringsSep getName literalExpression optional optionalAttrs optionalString types;
   inherit (lib.generators) toKeyValue;
 
   user = "zabbix";
@@ -52,14 +53,14 @@ in
           if cfg.database.type == "mysql" then pkgs.zabbix.proxy-mysql
           else if cfg.database.type == "pgsql" then pkgs.zabbix.proxy-pgsql
           else pkgs.zabbix.proxy-sqlite;
-        defaultText = "pkgs.zabbix.proxy-pgsql";
+        defaultText = literalExpression "pkgs.zabbix.proxy-pgsql";
         description = "The Zabbix package to use.";
       };
 
       extraPackages = mkOption {
         type = types.listOf types.package;
         default = with pkgs; [ nettools nmap traceroute ];
-        defaultText = "[ nettools nmap traceroute ]";
+        defaultText = literalExpression "[ nettools nmap traceroute ]";
         description = ''
           Packages to be added to the Zabbix <envar>PATH</envar>.
           Typically used to add executables for scripts, but can be anything.
@@ -70,7 +71,7 @@ in
         type = types.attrsOf types.package;
         description = "A set of modules to load.";
         default = {};
-        example = literalExample ''
+        example = literalExpression ''
           {
             "dummy.so" = pkgs.stdenv.mkDerivation {
               name = "zabbix-dummy-module-''${cfg.package.version}";
@@ -103,13 +104,18 @@ in
         port = mkOption {
           type = types.int;
           default = if cfg.database.type == "mysql" then mysql.port else pgsql.port;
+          defaultText = literalExpression ''
+            if config.${opt.database.type} == "mysql"
+            then config.${options.services.mysql.port}
+            else config.${options.services.postgresql.port}
+          '';
           description = "Database host port.";
         };
 
         name = mkOption {
           type = types.str;
           default = if cfg.database.type == "sqlite" then "${stateDir}/zabbix.db" else "zabbix";
-          defaultText = "zabbix";
+          defaultText = literalExpression "zabbix";
           description = "Database name.";
         };
 
@@ -262,7 +268,12 @@ in
     };
 
     security.wrappers = {
-      fping.source = "${pkgs.fping}/bin/fping";
+      fping =
+        { setuid = true;
+          owner = "root";
+          group = "root";
+          source = "${pkgs.fping}/bin/fping";
+        };
     };
 
     systemd.services.zabbix-proxy = {

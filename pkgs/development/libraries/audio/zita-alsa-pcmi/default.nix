@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   pname = "zita-alsa-pcmi";
-  version = "0.3.2";
+  version = "0.4.0";
   src = fetchurl {
     url = "http://kokkinizita.linuxaudio.org/linuxaudio/downloads/${pname}-${version}.tar.bz2";
-    sha256 = "12d7vdg74yh21w69qi0wg57iz4876j94qbiq09bvscih6xz9y78s";
+    sha256 = "sha256-vYyfNg37VB+2DkinE7rx4i1BssdMGaD+ny005y9Q8cU=";
   };
 
   buildInputs = [ alsa-lib ];

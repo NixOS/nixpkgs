@@ -37,7 +37,6 @@
 , ortp
 , pango
 , pkg-config
-, python
 , qtbase
 , qtgraphicaleffects
 , qtquickcontrols2

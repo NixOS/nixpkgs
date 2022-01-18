@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "python-dotenv";
-  version = "0.17.1";
+  version = "0.19.2";
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b1ae5e9643d5ed987fc57cc2583021e38db531946518130777734f9589b3141f";
+    sha256 = "a5de49a31e953b45ff2d2fd434bbc2670e8db5273606c1e737cc6b93eff3655f";
   };
 
   propagatedBuildInputs = [ click ];

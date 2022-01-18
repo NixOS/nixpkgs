@@ -7,14 +7,14 @@
 
 buildDunePackage rec {
   pname = "carton";
-  version = "0.4.1";
+  version = "0.4.3";
 
   useDune2 = true;
-  minimumOCamlVersion = "4.08";
+  minimalOCamlVersion = "4.08";
 
   src = fetchurl {
     url = "https://github.com/mirage/ocaml-git/releases/download/${pname}-v${version}/${pname}-${pname}-v${version}.tbz";
-    sha256 = "d16aad5560d9ab1e3b4d93d2e8fdea638c216ff47338fb630a8aefd22b452665";
+    sha256 = "sha256:0qz9ds5761wx4m7ly3av843b6dii7lmjpx2nnyijv8rm8aw95jgr";
   };
 
   # remove changelogs for mimic and the git* packages

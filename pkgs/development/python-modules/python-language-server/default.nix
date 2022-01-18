@@ -1,6 +1,6 @@
 { lib, buildPythonPackage, fetchFromGitHub, pythonAtLeast, pythonOlder, isPy27
 , backports_functools_lru_cache ? null, configparser ? null, futures ? null, future, jedi, pluggy, python-jsonrpc-server, flake8
-, pytestCheckHook, mock, pytestcov, coverage, setuptools, ujson, flaky
+, pytestCheckHook, mock, pytest-cov, coverage, setuptools, ujson, flaky
 , # Allow building a limited set of providers, e.g. ["pycodestyle"].
   providers ? ["*"]
   # The following packages are optional and
@@ -36,6 +36,7 @@ buildPythonPackage rec {
     # Reading the changelog I don't expect an API break in pycodestyle and pyflakes
     substituteInPlace setup.py \
       --replace "pycodestyle>=2.6.0,<2.7.0" "pycodestyle>=2.6.0,<2.8.0" \
+      --replace "jedi>=0.17.2,<0.18.0" "jedi>=0.17.2,<0.19.0" \
       --replace "pyflakes>=2.2.0,<2.3.0" "pyflakes>=2.2.0,<2.4.0"
   '';
 
@@ -55,7 +56,7 @@ buildPythonPackage rec {
   doCheck = providers == ["*"];
 
   checkInputs = [
-    pytestCheckHook mock pytestcov coverage flaky
+    pytestCheckHook mock pytest-cov coverage flaky
     # Do not propagate flake8 or it will enable pyflakes implicitly
     flake8
     # rope is technically a dependency, but we don't add it by default since we
@@ -85,5 +86,8 @@ buildPythonPackage rec {
     description = "An implementation of the Language Server Protocol for Python";
     license = licenses.mit;
     maintainers = [ ];
+    # no longer maintained
+    # see https://github.com/palantir/python-language-server/pull/918#issuecomment-817361554
+    broken = true;
   };
 }

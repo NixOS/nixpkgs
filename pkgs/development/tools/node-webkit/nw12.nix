@@ -30,8 +30,6 @@ in stdenv.mkDerivation rec {
       "117gx6yjbcya64yg2vybcfyp591sid209pg8a33k9afbsmgz684c";
   };
 
-  phases = [ "unpackPhase" "installPhase" ];
-
   installPhase = ''
     mkdir -p $out/share/nwjs
     cp -R * $out/share/nwjs

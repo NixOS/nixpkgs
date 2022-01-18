@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "0.7.4";
 
   src = fetchurl {
-    url = "https://liba52.sourceforge.net/files/${pname}-${version}.tar.gz";
+    url = "https://liba52.sourceforge.io/files/${pname}-${version}.tar.gz";
     sha256 = "oh1ySrOzkzMwGUNTaH34LEdbXfuZdRPu9MJd5shl7DM=";
   };
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "ATSC A/52 stream decoder";
-    homepage = "https://liba52.sourceforge.net/";
+    homepage = "https://liba52.sourceforge.io/";
     platforms = platforms.unix;
     license = licenses.gpl2Plus;
   };

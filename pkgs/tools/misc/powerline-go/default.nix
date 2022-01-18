@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "powerline-go";
-  version = "1.21.0";
+  version = "unstable-2021-07-15";
 
   src = fetchFromGitHub {
     owner = "justjanne";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-IO3I5lvPdN73EF+S5Xo+TMEYaBtd1pOGMs+aQtRnHjE=";
+    rev = "f27435b26b5001c52ffb1aee454572c59494c81b";
+    sha256 = "sha256-YB/WMprjXA5ZN6baT5nWahNj0xwbP8kzS7X/1tCwWiE=";
   };
 
   vendorSha256 = "sha256-HYF6aKz+P241EKmupEoretadlrh9FBRx6nIER66jofg=";
@@ -25,5 +25,6 @@ buildGoModule rec {
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ sifmelcara ];
+    mainProgram = "powerline-go";
   };
 }

@@ -12,10 +12,10 @@ let
 in stdenv.mkDerivation {
   inherit name m2Path m2File src;
 
+  dontUnpack = true;
+
   installPhase = ''
     mkdir -p $out/m2/$m2Path
     cp $src $out/m2/$m2Path/$m2File
   '';
-
-  phases = "installPhase";
 }

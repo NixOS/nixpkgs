@@ -1,5 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, fetchpatch
-, nose, numpy
+{ lib, buildPythonPackage, fetchPypi, nose, numpy
 , bottle, pyyaml, redis, six
 , zlib
 , pytestCheckHook }:

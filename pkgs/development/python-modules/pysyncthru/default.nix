@@ -1,35 +1,33 @@
 { lib
 , isPy27
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , aiohttp
-, demjson
+, demjson3
 , python
 }:
 
 buildPythonPackage rec {
   pname = "pysyncthru";
-  version = "0.7.3";
+  version = "0.7.10";
 
   disabled = isPy27;
 
-  src = fetchPypi {
-    pname = "PySyncThru";
-    inherit version;
-    sha256 = "13564018a7de4fe013e195e19d7bae92aa224e0f3a32373576682722d3dbee52";
+  src = fetchFromGitHub {
+    owner = "nielstron";
+    repo = "pysyncthru";
+    rev = "release-${version}";
+    sha256 = "1c29w2ldrnq0vxr9cfa2pjhwdvrpw393c84khgg2y56jrkbidq53";
   };
 
   propagatedBuildInputs = [
     aiohttp
-    demjson
+    demjson3
   ];
 
   checkPhase = ''
     ${python.interpreter} -m unittest
   '';
-
-  # no tests on PyPI, no tags on GitHub
-  doCheck = false;
 
   pythonImportsCheck = [ "pysyncthru" ];
 

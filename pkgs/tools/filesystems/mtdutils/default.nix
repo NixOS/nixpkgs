@@ -1,12 +1,13 @@
-{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, cmocka, acl, libuuid, lzo, zlib, zstd }:
+{ lib, stdenv, fetchgit, autoreconfHook, pkg-config, cmocka, acl, libuuid, lzo, zlib, zstd }:
 
 stdenv.mkDerivation rec {
   pname = "mtd-utils";
-  version = "2.1.2";
+  version = "2.1.3";
 
-  src = fetchurl {
-    url = "ftp://ftp.infradead.org/pub/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-itTF80cW1AZGqihySi9WFtMlpvEZJU+RTiaXbx926dY=";
+  src = fetchgit {
+    url = "git://git.infradead.org/mtd-utils.git";
+    rev = "v${version}";
+    sha256 = "sha256-w20Zp1G0WbNvEJwqpLw2f8VvmW8ZBEL0GSHze8qpPWg";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ] ++ lib.optional doCheck cmocka;
@@ -21,9 +22,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Tools for MTD filesystems";
+    downloadPage = "https://git.infradead.org/mtd-utils.git";
     license = licenses.gpl2Plus;
     homepage = "http://www.linux-mtd.infradead.org/";
-    maintainers = with maintainers; [ viric superherointj ];
+    maintainers = with maintainers; [ viric ];
     platforms = with platforms; linux;
   };
 }

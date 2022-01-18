@@ -28,11 +28,12 @@ The recommended way of defining a derivation for a Coq library, is to use the `c
 * `domain` (optional, defaults to `"github.com"`), domains including the strings `"github"` or `"gitlab"` in their names are automatically supported, otherwise, one must change the `fetcher` argument to support them (cf `pkgs/development/coq-modules/heq/default.nix` for an example),
 * `releaseRev` (optional, defaults to `(v: v)`), provides a default mapping from release names to revision hashes/branch names/tags,
 * `displayVersion` (optional), provides a way to alter the computation of `name` from `pname`, by explaining how to display version numbers,
-* `namePrefix` (optional), provides a way to alter the computation of `name` from `pname`, by explaining which dependencies must occur in `name`,
+* `namePrefix` (optional, defaults to `[ "coq" ]`), provides a way to alter the computation of `name` from `pname`, by explaining which dependencies must occur in `name`,
 * `extraBuildInputs` (optional), by default `buildInputs` just contains `coq`, this allows to add more build inputs,
 * `mlPlugin` (optional, defaults to `false`). Some extensions (plugins) might require OCaml and sometimes other OCaml packages. Standard dependencies can be added by setting the current option to `true`. For a finer grain control, the `coq.ocamlPackages` attribute can be used in `extraBuildInputs` to depend on the same package set Coq was built against.
 * `useDune2ifVersion` (optional, default to `(x: false)` uses Dune2 to build the package if the provided predicate evaluates to true on the version, e.g. `useDune2if = versions.isGe "1.1"`  will use dune if the version of the package is greater or equal to `"1.1"`,
 * `useDune2` (optional, defaults to `false`) uses Dune2 to build the package if set to true, the presence of this attribute overrides the behavior of the previous one.
+* `opam-name` (optional, defaults to concatenating with a dash separator the components of `namePrefix` and `pname`), name of the Dune package to build.
 * `enableParallelBuilding` (optional, defaults to `true`), since it is activated by default, we provide a way to disable it.
 * `extraInstallFlags` (optional), allows to extend `installFlags` which initializes the variable `COQMF_COQLIB` so as to install in the proper subdirectory. Indeed Coq libraries should be installed in `$(out)/lib/coq/${coq.coq-version}/user-contrib/`. Such directories are automatically added to the `$COQPATH` environment variable by the hook defined in the Coq derivation.
 * `setCOQBIN` (optional, defaults to `true`), by default, the environment variable `$COQBIN` is set to the current Coq's binary, but one can disable this behavior by setting it to `false`,

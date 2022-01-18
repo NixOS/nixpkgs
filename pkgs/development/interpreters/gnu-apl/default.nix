@@ -36,7 +36,6 @@ stdenv.mkDerivation rec {
     license     = licenses.gpl3Plus;
     maintainers = [ maintainers.kovirobi ];
     platforms   = with platforms; linux ++ darwin;
-    inherit version;
     mainProgram = "apl";
 
     longDescription = ''

@@ -6,39 +6,38 @@
 , invoke
 , pynacl
 , pyasn1
-, pytest
+, pytestCheckHook
 , pytest-relaxed
 , mock
 }:
 
 buildPythonPackage rec {
   pname = "paramiko";
-  version = "2.7.2";
+  version = "2.8.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7f36f4ba2c0d81d219f4595e35f70d56cc94f9ac40a6acdf51d6ca210ce65035";
+    sha256 = "85b1245054e5d7592b9088cc6d08da22445417912d3a3e48138675c7a8616438";
   };
 
-  checkInputs = [ invoke pytest mock pytest-relaxed ];
   propagatedBuildInputs = [ bcrypt cryptography pynacl pyasn1 ];
 
-  __darwinAllowLocalNetworking = true;
+  # with python 3.9.6+, the deprecation warnings will fail the test suite
+  # see: https://github.com/pyinvoke/invoke/issues/829
+  doCheck = false;
+  checkInputs = [ invoke pytestCheckHook pytest-relaxed mock ];
 
-  # 2 sftp tests fail (skip for now)
-  # test_config relies on artifacts to be to downloaded
-  # RSA tests don't have valid keys
-  checkPhase = ''
-    pytest tests \
-      --ignore=tests/test_sftp.py \
-      --ignore=tests/test_config.py
-  '';
+  disabledTestPaths = [
+    "tests/test_sftp.py"
+    "tests/test_config.py"
+  ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with pkgs.lib; {
     homepage = "https://github.com/paramiko/paramiko/";
     description = "Native Python SSHv2 protocol library";
     license = licenses.lgpl21Plus;
-
     longDescription = ''
       This is a library for making SSH2 connections (client or server).
       Emphasis is on using SSH2 as an alternative to SSL for making secure

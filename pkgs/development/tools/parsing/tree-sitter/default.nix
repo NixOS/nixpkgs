@@ -27,10 +27,11 @@ let
   # to update:
   # 1) change all these hashes
   # 2) nix-build -A tree-sitter.updater.update-all-grammars
-  # 3) run the ./result script that is output by that (it updates ./grammars)
-  version = "0.20.0";
-  sha256 = "0hrcisvw44fjxix09lfbrz7majaj6njbnr6c92a6a5748p2jvyng";
-  cargoSha256 = "029db3yy6nj18vxfvj0ra568a9k4x7znfj08spvzl5sxfbx6442r";
+  # 3) OPTIONAL: Set GITHUB_TOKEN env variable to avoid api rate limit
+  # 4) run the ./result script that is output by that (it updates ./grammars)
+  version = "0.20.2";
+  sha256 = "sha256-XCTS58q1XCl7XH6SLTZDZv22nUPBK8d4oqk063ZObkg=";
+  cargoSha256 = "sha256-fKS9Q3BFGzyMnbNH6ItYnPj4dybeX7ucQfzYiOxVvhA=";
 
   src = fetchFromGitHub {
     owner = "tree-sitter";
@@ -51,7 +52,7 @@ let
       mkdir $out
     '' + (lib.concatStrings (lib.mapAttrsToList
       (name: grammar: "ln -s ${fetchGrammar grammar} $out/${name}\n")
-      (import ./grammars))));
+      (import ./grammars { inherit lib; }))));
 
   builtGrammars =
     let
@@ -62,7 +63,7 @@ let
           source = fetchGrammar grammar;
           location = if grammar ? location then grammar.location else null;
         };
-      grammars' = (import ./grammars);
+      grammars' = (import ./grammars { inherit lib; });
       grammars = grammars' //
         { tree-sitter-ocaml = grammars'.tree-sitter-ocaml // { location = "ocaml"; }; } //
         { tree-sitter-ocaml-interface = grammars'.tree-sitter-ocaml // { location = "interface"; }; } //
@@ -90,8 +91,9 @@ let
           in
           {
             name =
-              (lib.strings.removePrefix "tree-sitter-"
-                (lib.strings.removeSuffix "-grammar" name))
+              (lib.strings.replaceStrings ["-"] ["_"]
+                (lib.strings.removePrefix "tree-sitter-"
+                  (lib.strings.removeSuffix "-grammar" name)))
               + stdenv.hostPlatform.extensions.sharedLibrary;
             path = "${drv}/parser";
           }

@@ -14,21 +14,20 @@
 , matplotlib-inline
 , pickleshare
 , traitlets
-, prompt_toolkit
+, prompt-toolkit
 , pexpect
 , appnope
 , backcall
-, fetchpatch
 }:
 
 buildPythonPackage rec {
   pname = "ipython";
-  version = "7.24.1";
+  version = "7.30.1";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9bc24a99f5d19721fb8a2d1408908e9c0520a17fff2233ffe82620847f17f1b6";
+    sha256 = "cb6aef731bf708a7727ab6cde8df87f0281b1427d41e65d62d4b68934fa54e97";
   };
 
   prePatch = lib.optionalString stdenv.isDarwin ''
@@ -45,7 +44,7 @@ buildPythonPackage rec {
     matplotlib-inline
     pickleshare
     traitlets
-    prompt_toolkit
+    prompt-toolkit
     pygments
     pexpect
     backcall

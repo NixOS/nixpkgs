@@ -16,22 +16,23 @@
 , withWaylandTools ? stdenv.isLinux
 , wayland
 , wayland-protocols
+, wayland-scanner
 }:
 
 stdenv.mkDerivation rec {
   pname = "libxkbcommon";
-  version = "1.3.0";
+  version = "1.3.1";
 
   src = fetchurl {
     url = "https://xkbcommon.org/download/${pname}-${version}.tar.xz";
-    sha256 = "0ysynzzgzd9jdrh1321r4bgw8wd5zljrlyn5y1a31g39xacf02bv";
+    sha256 = "0d4jzq0zv1xmng0z0q5lb4rz03ikgxdwi68k3r70ac16gb911ixk";
   };
 
   outputs = [ "out" "dev" "doc" ];
 
   depsBuildBuild = [ pkg-config ];
   nativeBuildInputs = [ meson ninja pkg-config bison doxygen ]
-    ++ lib.optional withWaylandTools wayland;
+    ++ lib.optional withWaylandTools wayland-scanner;
   buildInputs = [ xkeyboard_config libxcb libxml2 ]
     ++ lib.optionals withWaylandTools [ wayland wayland-protocols ];
   checkInputs = [ python3 ];

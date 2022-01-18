@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "0.6.1";
 
   src = fetchurl {
-    url = "https://fedorahosted.org/released/ding-libs/ding-libs-${version}.tar.gz";
+    url = "https://releases.pagure.org/SSSD/${pname}/${pname}-${version}.tar.gz";
     sha256 = "1h97mx2jdv4caiz4r7y8rxfsq78fx0k4jjnfp7x2s7xqvqks66d3";
   };
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "'D is not GLib' utility libraries";
-    homepage = "https://fedorahosted.org/sssd/";
+    homepage = "https://pagure.io/SSSD/ding-libs";
     platforms = with lib.platforms; linux;
     maintainers = with lib.maintainers; [ e-user ];
     license = [ lib.licenses.gpl3 lib.licenses.lgpl3 ];

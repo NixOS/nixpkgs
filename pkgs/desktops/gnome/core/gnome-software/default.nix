@@ -25,7 +25,6 @@
 , gsettings-desktop-schemas
 , gnome-desktop
 , libxmlb
-, gnome-online-accounts
 , json-glib
 , libsecret
 , valgrind-light
@@ -38,16 +37,16 @@
 }:
 
 let
-  withFwupd = stdenv.isx86_64 || stdenv.isi686;
+  withFwupd = stdenv.hostPlatform.isx86;
 in
 
 stdenv.mkDerivation rec {
   pname = "gnome-software";
-  version = "40.3";
+  version = "41.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-software/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "y39TbLCfWCyQdVyQl08+g9/5U56it8CWibtOCsP/yF8=";
+    sha256 = "ZQVjN3q2mxAQXfdxuz8hY3lVO7evQISNjDBljgEAmLw=";
   };
 
   patches = [
@@ -89,7 +88,6 @@ stdenv.mkDerivation rec {
     polkit
     flatpak
     libxmlb
-    gnome-online-accounts
     libsysprof-capture
   ] ++ lib.optionals withFwupd [
     fwupd

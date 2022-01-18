@@ -8,7 +8,7 @@
 </p>
 
 [Nixpkgs](https://github.com/nixos/nixpkgs) is a collection of over
-60,000 software packages that can be installed with the
+80,000 software packages that can be installed with the
 [Nix](https://nixos.org/nix/) package manager. It also implements
 [NixOS](https://nixos.org/nixos/), a purely-functional Linux distribution.
 
@@ -46,14 +46,14 @@ Nixpkgs and NixOS are built and tested by our continuous integration
 system, [Hydra](https://hydra.nixos.org/).
 
 * [Continuous package builds for unstable/master](https://hydra.nixos.org/jobset/nixos/trunk-combined)
-* [Continuous package builds for the NixOS 21.05 release](https://hydra.nixos.org/jobset/nixos/release-21.05)
+* [Continuous package builds for the NixOS 21.11 release](https://hydra.nixos.org/jobset/nixos/release-21.11)
 * [Tests for unstable/master](https://hydra.nixos.org/job/nixos/trunk-combined/tested#tabs-constituents)
-* [Tests for the NixOS 21.05 release](https://hydra.nixos.org/job/nixos/release-21.05/tested#tabs-constituents)
+* [Tests for the NixOS 21.11 release](https://hydra.nixos.org/job/nixos/release-21.11/tested#tabs-constituents)
 
 Artifacts successfully built with Hydra are published to cache at
 https://cache.nixos.org/. When successful build and test criteria are
 met, the Nixpkgs expressions are distributed via [Nix
-channels](https://nixos.org/nix/manual/#sec-channels).
+channels](https://nixos.org/manual/nix/stable/package-management/channels.html).
 
 # Contributing
 
@@ -97,7 +97,8 @@ Foundation](https://nixos.org/nixos/foundation.html). To ensure the
 continuity and expansion of the NixOS infrastructure, we are looking
 for donations to our organization.
 
-You can donate to the NixOS foundation by using Open Collective:
+You can donate to the NixOS foundation through [SEPA bank
+transfers](https://nixos.org/donate.html) or by using Open Collective:
 
 <a href="https://opencollective.com/nixos#support"><img src="https://opencollective.com/nixos/tiers/supporter.svg?width=890" /></a>
 

@@ -15,18 +15,21 @@
 
 buildPythonPackage rec {
   pname = "pyflunearyou";
-  version = "2.0.1";
+  version = "2021.10.0";
   format = "pyproject";
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "bachya";
     repo = pname;
     rev = version;
-    sha256 = "sha256-2a4OKPmy9tFLJqRg9bEXqrbr3RKVHmKPSYDrtAEqvdo=";
+    sha256 = "sha256-Q65OSE4qckpvaIvZULBR434i7hwuVM97eSq1Blb1oIU=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -42,10 +45,14 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  # Ignore the examples directory as the files are prefixed with test_.
-  # disabledTestFiles doesn't seem to work here
-  pytestFlagsArray = [ "--ignore examples/" ];
-  pythonImportsCheck = [ "pyflunearyou" ];
+  disabledTestPaths = [
+    # Ignore the examples directory as the files are prefixed with test_.
+    "examples/"
+  ];
+
+  pythonImportsCheck = [
+    "pyflunearyou"
+  ];
 
   meta = with lib; {
     description = "Python library for retrieving UV-related information from Flu Near You";

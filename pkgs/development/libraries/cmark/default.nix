@@ -2,27 +2,28 @@
 
 stdenv.mkDerivation rec {
   pname = "cmark";
-  version = "0.30.0";
+  version = "0.30.2";
 
   src = fetchFromGitHub {
     owner = "jgm";
     repo = pname;
     rev = version;
-    sha256 = "sha256-SU31kJL+8wt57bGW5fNeXjXPgPeCXZIknZwDxMXCfdc=";
+    sha256 = "sha256-IkNybUe/XYwAvPowym3aqfVyvNdw2t/brRjhOrjVRpA=";
   };
 
   nativeBuildInputs = [ cmake ];
 
   cmakeFlags = [
-    # https://github.com/commonmark/cmark/releases/tag/0.30.0
-    # recommends distributions dynamically link
+    # Link the executable with the shared library
     "-DCMARK_STATIC=OFF"
   ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = true;
 
-  preCheck = ''
-    export LD_LIBRARY_PATH=$(readlink -f ./src)
+  preCheck = let
+    lib_path = if stdenv.isDarwin then "DYLD_FALLBACK_LIBRARY_PATH" else "LD_LIBRARY_PATH";
+  in ''
+    export ${lib_path}=$(readlink -f ./src)
   '';
 
   meta = with lib; {

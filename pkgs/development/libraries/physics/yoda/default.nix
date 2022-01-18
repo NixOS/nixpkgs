@@ -2,30 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "yoda";
-  version = "1.9.0";
+  version = "1.9.4";
 
   src = fetchurl {
     url = "https://www.hepforge.org/archive/yoda/YODA-${version}.tar.bz2";
-    sha256 = "1x7xi6w7lb92x8202kbaxgqg1sly534wana4f38l3gpbzw9dwmcs";
+    hash = "sha256-KifrhuZH11szennCDC2sJeHxO9JZJbnJWuKK3JN5NwU=";
   };
-
-  patches = [
-    # fix a minor bug
-    # https://gitlab.com/hepcedar/yoda/-/merge_requests/38
-    (fetchpatch {
-      name = "yoda-fix-fuzzy-compare-bin2d.patch";
-      url = "https://gitlab.com/hepcedar/yoda/-/commit/a2999d78cb3d9ed874f367bad375dc39a1a11148.diff";
-      sha256 = "sha256-BsaVm+4VtCvRoEuN4r6A4bj9XwgMe75UesKzN+b56Qw=";
-    })
-    # fix a regression
-    # https://gitlab.com/hepcedar/yoda/-/merge_requests/40
-    (fetchpatch {
-      name = "yoda-fix-for-yodagz.patch";
-      url = "https://gitlab.com/hepcedar/yoda/-/commit/3338ba5a7466599ac6969e4ae462f133d6cf4fd8.diff";
-      sha256 = "sha256-MZTOIt468bdPCS7UVfr5hQZUsVy3TpY/TjRrNySIL70=";
-      excludes = [ "ChangeLog" ];
-    })
-  ];
 
   nativeBuildInputs = with python.pkgs; [ cython makeWrapper ];
   buildInputs = [ python ]
@@ -53,9 +35,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Provides small set of data analysis (specifically histogramming) classes";
-    license     = lib.licenses.gpl3;
-    homepage    = "https://yoda.hepforge.org";
-    platforms   = lib.platforms.unix;
+    license = lib.licenses.gpl3Only;
+    homepage = "https://yoda.hepforge.org";
+    platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ veprbl ];
   };
 }

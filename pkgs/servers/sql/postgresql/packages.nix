@@ -1,8 +1,6 @@
 self: super: {
 
-    age = super.callPackage ./ext/age.nix {
-      bison = self.bison_3_5;
-    };
+    age = super.callPackage ./ext/age.nix { };
 
     periods = super.callPackage ./ext/periods.nix { };
 
@@ -29,9 +27,7 @@ self: super: {
     plr = super.callPackage ./ext/plr.nix { };
 
     plv8 = super.callPackage ./ext/plv8.nix {
-        v8 = super.callPackage ../../../development/libraries/v8/plv8_6_x.nix {
-            python = self.python2;
-        };
+      v8 = self.v8_8_x;
     };
 
     pgjwt = super.callPackage ./ext/pgjwt.nix { };

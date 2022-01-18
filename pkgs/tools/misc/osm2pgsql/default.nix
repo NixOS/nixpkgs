@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "osm2pgsql";
-  version = "1.5.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "openstreetmap";
     repo = pname;
     rev = version;
-    sha256 = "sha256-PHr9wP+DgsiQAvrVNO8Aa/X/dkrAUnlPDwAzSISa0GM=";
+    sha256 = "sha256-0mUGvu5o2MhlriNAUAUoyDrFgTw2weGGbQcBzaauKEQ=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -33,8 +33,6 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DEXTERNAL_LIBOSMIUM=ON" "-DEXTERNAL_PROTOZERO=ON" ]
     ++ lib.optional withLuaJIT "-DWITH_LUAJIT:BOOL=ON";
-
-  NIX_CFLAGS_COMPILE = "-DACCEPT_USE_OF_DEPRECATED_PROJ_API_H";
 
   meta = with lib; {
     description = "OpenStreetMap data to PostgreSQL converter";

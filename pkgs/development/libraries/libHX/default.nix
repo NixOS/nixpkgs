@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, autoconf, automake, libtool }:
 
 stdenv.mkDerivation rec {
-  name = "libHX-3.22";
+  pname = "libHX";
+  version = "3.22";
 
   src = fetchurl {
-    url = "mirror://sourceforge/libhx/libHX/3.22/${name}.tar.xz";
+    url = "mirror://sourceforge/libhx/libHX/${version}/${pname}-${version}.tar.xz";
     sha256 = "18w39j528lyg2026dr11f2xxxphy91cg870nx182wbd8cjlqf86c";
   };
 

@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, cmake, gettext, msgpack, libtermkey, libiconv
 , libuv, lua, ncurses, pkg-config
-, unibilium, xsel, gperf
+, unibilium, gperf
 , libvterm-neovim
 , tree-sitter
 , glibcLocales ? null, procps ? null
@@ -32,13 +32,13 @@ let
 in
   stdenv.mkDerivation rec {
     pname = "neovim-unwrapped";
-    version = "0.5.0";
+    version = "0.6.1";
 
     src = fetchFromGitHub {
       owner = "neovim";
       repo = "neovim";
       rev = "v${version}";
-      sha256 = "0lgbf90sbachdag1zm9pmnlbn35964l3khs27qy4462qzpqyi9fi";
+      sha256 = "sha256-0XCW047WopPr3pRTy9rF3Ff6MvNRHT4FletzOERD41A=";
     };
 
     patches = [
@@ -49,6 +49,8 @@ in
     ];
 
     dontFixCmake = true;
+
+    inherit lua;
 
     buildInputs = [
       gperf
@@ -109,10 +111,6 @@ in
 
     preConfigure = lib.optionalString stdenv.isDarwin ''
       substituteInPlace src/nvim/CMakeLists.txt --replace "    util" ""
-    '';
-
-    postInstall = lib.optionalString stdenv.isLinux ''
-      sed -i -e "s|'xsel|'${xsel}/bin/xsel|g" $out/share/nvim/runtime/autoload/provider/clipboard.vim
     '';
 
     # export PATH=$PWD/build/bin:${PATH}

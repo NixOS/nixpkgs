@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "libebml";
@@ -10,6 +10,15 @@ stdenv.mkDerivation rec {
     rev    = "release-${version}";
     sha256 = "1hiilnabar826lfxsaflqjhgsdli6hzzhjv8q2nmw36fvvlyks25";
   };
+
+  patches = [
+    # Upstream fix for gcc-11
+    (fetchpatch {
+      url = "https://github.com/Matroska-Org/libebml/commit/f0bfd53647961e799a43d918c46cf3b6bff89806.patch";
+      sha256 = "1yd6rsds03kwx5jki4hihd2bpfh26g5l1pi82qzaqzarixdxwzvl";
+      excludes = [ "ChangeLog" ];
+    })
+  ];
 
   nativeBuildInputs = [ cmake pkg-config ];
 

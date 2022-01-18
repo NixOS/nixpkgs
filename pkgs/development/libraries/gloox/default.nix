@@ -10,12 +10,9 @@ assert idnSupport -> libidn != null;
 
 with lib;
 
-let
-  version = "1.0.24";
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec{
   pname = "gloox";
-  inherit version;
+  version = "1.0.24";
 
   src = fetchurl {
     url = "https://camaya.net/download/gloox-${version}.tar.bz2";

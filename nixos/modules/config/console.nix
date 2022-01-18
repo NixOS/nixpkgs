@@ -116,7 +116,11 @@ in
     { console.keyMap = with config.services.xserver;
         mkIf cfg.useXkbConfig
           (pkgs.runCommand "xkb-console-keymap" { preferLocalBuild = true; } ''
-            '${pkgs.ckbcomp}/bin/ckbcomp' -model '${xkbModel}' -layout '${layout}' \
+            '${pkgs.buildPackages.ckbcomp}/bin/ckbcomp' \
+              ${optionalString (config.environment.sessionVariables ? XKB_CONFIG_ROOT)
+                "-I${config.environment.sessionVariables.XKB_CONFIG_ROOT}"
+              } \
+              -model '${xkbModel}' -layout '${layout}' \
               -option '${xkbOptions}' -variant '${xkbVariant}' > "$out"
           '');
     }

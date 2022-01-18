@@ -1,18 +1,35 @@
-{ config, lib, pkgs, baseModules, extraModules, modules, modulesPath, ... }:
+{ config, options, lib, pkgs, utils, modules, baseModules, extraModules, modulesPath, ... }:
 
 with lib;
 
 let
 
   cfg = config.documentation;
+  allOpts = options;
 
-  manualModules = baseModules ++ optionals cfg.nixos.includeAllModules (extraModules ++ modules);
+  /* Modules for which to show options even when not imported. */
+  extraDocModules = [ ../virtualisation/qemu-vm.nix ];
 
-  /* For the purpose of generating docs, evaluate options with each derivation
-    in `pkgs` (recursively) replaced by a fake with path "\${pkgs.attribute.path}".
-    It isn't perfect, but it seems to cover a vast majority of use cases.
-    Caveat: even if the package is reached by a different means,
-    the path above will be shown and not e.g. `${config.services.foo.package}`. */
+  canCacheDocs = m:
+    let
+      f = import m;
+      instance = f (mapAttrs (n: _: abort "evaluating ${n} for `meta` failed") (functionArgs f));
+    in
+      cfg.nixos.options.splitBuild
+        && builtins.isPath m
+        && isFunction f
+        && instance ? options
+        && instance.meta.buildDocsInSandbox or true;
+
+  docModules =
+    let
+      p = partition canCacheDocs (baseModules ++ extraDocModules);
+    in
+      {
+        lazy = p.right;
+        eager = p.wrong ++ optionals cfg.nixos.includeAllModules (extraModules ++ modules);
+      };
+
   manual = import ../../doc/manual rec {
     inherit pkgs config;
     version = config.system.nixos.release;
@@ -21,11 +38,15 @@ let
     options =
       let
         scrubbedEval = evalModules {
-          modules = [ { nixpkgs.localSystem = config.nixpkgs.localSystem; } ] ++ manualModules;
-          args = (config._module.args) // { modules = [ ]; };
+          modules = [ {
+            _module.check = false;
+          } ] ++ docModules.eager;
           specialArgs = {
             pkgs = scrubDerivations "pkgs" pkgs;
-            inherit modulesPath;
+            # allow access to arbitrary options for eager modules, eg for getting
+            # option types from lazy modules
+            options = allOpts;
+            inherit modulesPath utils;
           };
         };
         scrubDerivations = namePrefix: pkgSet: mapAttrs
@@ -38,6 +59,49 @@ let
           )
           pkgSet;
       in scrubbedEval.options;
+    baseOptionsJSON =
+      let
+        filter =
+          builtins.filterSource
+            (n: t:
+              (t == "directory" -> baseNameOf n != "tests")
+              && (t == "file" -> hasSuffix ".nix" n)
+            );
+      in
+        pkgs.runCommand "lazy-options.json" {
+          libPath = filter "${toString pkgs.path}/lib";
+          pkgsLibPath = filter "${toString pkgs.path}/pkgs/pkgs-lib";
+          nixosPath = filter "${toString pkgs.path}/nixos";
+          modules = map (p: ''"${removePrefix "${modulesPath}/" (toString p)}"'') docModules.lazy;
+        } ''
+          export NIX_STORE_DIR=$TMPDIR/store
+          export NIX_STATE_DIR=$TMPDIR/state
+          ${pkgs.buildPackages.nix}/bin/nix-instantiate \
+            --show-trace \
+            --eval --json --strict \
+            --argstr libPath "$libPath" \
+            --argstr pkgsLibPath "$pkgsLibPath" \
+            --argstr nixosPath "$nixosPath" \
+            --arg modules "[ $modules ]" \
+            --argstr stateVersion "${options.system.stateVersion.default}" \
+            --argstr release "${config.system.nixos.release}" \
+            $nixosPath/lib/eval-cacheable-options.nix > $out \
+            || {
+              echo -en "\e[1;31m"
+              echo 'Cacheable portion of option doc build failed.'
+              echo 'Usually this means that an option attribute that ends up in documentation (eg' \
+                '`default` or `description`) depends on the restricted module arguments' \
+                '`config` or `pkgs`.'
+              echo
+              echo 'Rebuild your configuration with `--show-trace` to find the offending' \
+                'location. Remove the references to restricted arguments (eg by escaping' \
+                'their antiquotations or adding a `defaultText`) or disable the sandboxed' \
+                'build for the failing module by setting `meta.buildDocsInSandbox = false`.'
+              echo -en "\e[0m"
+              exit 1
+            } >&2
+        '';
+    inherit (cfg.nixos.options) warningsAreErrors;
   };
 
 
@@ -105,8 +169,8 @@ in
         type = types.bool;
         default = true;
         description = ''
-          Whether to install manual pages and the <command>man</command> command.
-          This also includes "man" outputs.
+          Whether to install manual pages.
+          This also includes <literal>man</literal> outputs.
         '';
       };
 
@@ -114,9 +178,18 @@ in
         type = types.bool;
         default = false;
         description = ''
-          Whether to generate the manual page index caches using
-          <literal>mandb(8)</literal>. This allows searching for a page or
-          keyword using utilities like <literal>apropos(1)</literal>.
+          Whether to generate the manual page index caches.
+          This allows searching for a page or
+          keyword using utilities like
+          <citerefentry>
+            <refentrytitle>apropos</refentrytitle>
+            <manvolnum>1</manvolnum>
+          </citerefentry>
+          and the <literal>-k</literal> option of
+          <citerefentry>
+            <refentrytitle>man</refentrytitle>
+            <manvolnum>1</manvolnum>
+          </citerefentry>.
         '';
       };
 
@@ -145,11 +218,11 @@ in
         description = ''
           Whether to install documentation targeted at developers.
           <itemizedlist>
-          <listitem><para>This includes man pages targeted at developers if <option>man.enable</option> is
+          <listitem><para>This includes man pages targeted at developers if <option>documentation.man.enable</option> is
                     set (this also includes "devman" outputs).</para></listitem>
-          <listitem><para>This includes info pages targeted at developers if <option>info.enable</option>
+          <listitem><para>This includes info pages targeted at developers if <option>documentation.info.enable</option>
                     is set (this also includes "devinfo" outputs).</para></listitem>
-          <listitem><para>This includes other pages targeted at developers if <option>doc.enable</option>
+          <listitem><para>This includes other pages targeted at developers if <option>documentation.doc.enable</option>
                     is set (this also includes "devdoc" outputs).</para></listitem>
           </itemizedlist>
         '';
@@ -163,11 +236,30 @@ in
           <itemizedlist>
           <listitem><para>This includes man pages like
                     <citerefentry><refentrytitle>configuration.nix</refentrytitle>
-                    <manvolnum>5</manvolnum></citerefentry> if <option>man.enable</option> is
+                    <manvolnum>5</manvolnum></citerefentry> if <option>documentation.man.enable</option> is
                     set.</para></listitem>
           <listitem><para>This includes the HTML manual and the <command>nixos-help</command> command if
-                    <option>doc.enable</option> is set.</para></listitem>
+                    <option>documentation.doc.enable</option> is set.</para></listitem>
           </itemizedlist>
+        '';
+      };
+
+      nixos.options.splitBuild = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether to split the option docs build into a cacheable and an uncacheable part.
+          Splitting the build can substantially decrease the amount of time needed to build
+          the manual, but some user modules may be incompatible with this splitting.
+        '';
+      };
+
+      nixos.options.warningsAreErrors = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Treat warning emitted during the option documentation build (eg for missing option
+          descriptions) as errors.
         '';
       };
 
@@ -189,7 +281,7 @@ in
           Which extra NixOS module paths the generated NixOS's documentation should strip
           from options.
         '';
-        example = literalExample ''
+        example = literalExpression ''
           # e.g. with options from modules in ''${pkgs.customModules}/nix:
           [ pkgs.customModules ]
         '';
@@ -200,38 +292,22 @@ in
   };
 
   config = mkIf cfg.enable (mkMerge [
+    {
+      assertions = [
+        {
+          assertion = !(cfg.man.man-db.enable && cfg.man.mandoc.enable);
+          message = ''
+            man-db and mandoc can't be used as the default man page viewer at the same time!
+          '';
+        }
+      ];
+    }
 
+    # The actual implementation for this lives in man-db.nix or mandoc.nix,
+    # depending on which backend is active.
     (mkIf cfg.man.enable {
-      environment.systemPackages = [ pkgs.man-db ];
       environment.pathsToLink = [ "/share/man" ];
       environment.extraOutputsToInstall = [ "man" ] ++ optional cfg.dev.enable "devman";
-      environment.etc."man_db.conf".text =
-        let
-          manualPages = pkgs.buildEnv {
-            name = "man-paths";
-            paths = config.environment.systemPackages;
-            pathsToLink = [ "/share/man" ];
-            extraOutputsToInstall = ["man"];
-            ignoreCollisions = true;
-          };
-          manualCache = pkgs.runCommandLocal "man-cache" { }
-          ''
-            echo "MANDB_MAP ${manualPages}/share/man $out" > man.conf
-            ${pkgs.man-db}/bin/mandb -C man.conf -psc >/dev/null 2>&1
-          '';
-        in
-        ''
-          # Manual pages paths for NixOS
-          MANPATH_MAP /run/current-system/sw/bin /run/current-system/sw/share/man
-          MANPATH_MAP /run/wrappers/bin          /run/current-system/sw/share/man
-
-          ${optionalString cfg.man.generateCaches ''
-          # Generated manual pages cache for NixOS (immutable)
-          MANDB_MAP /run/current-system/sw/share/man ${manualCache}
-          ''}
-          # Manual pages caches for NixOS
-          MANDB_MAP /run/current-system/sw/share/man /var/cache/man/nixos
-        '';
     })
 
     (mkIf cfg.info.enable {
@@ -258,8 +334,7 @@ in
 
       environment.systemPackages = []
         ++ optional cfg.man.enable manual.manpages
-        ++ optionals cfg.doc.enable ([ manual.manualHTML nixos-help ]
-           ++ optionals config.services.xserver.enable [ pkgs.nixos-icons ]);
+        ++ optionals cfg.doc.enable [ manual.manualHTML nixos-help ];
 
       services.getty.helpLine = mkIf cfg.doc.enable (
           "\nRun 'nixos-help' for the NixOS manual."

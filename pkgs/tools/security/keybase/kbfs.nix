@@ -10,7 +10,7 @@ buildGoPackage {
 
   dontRenameImports = true;
 
-  buildFlags = [ "-tags production" ];
+  tags = [ "production" ];
 
   meta = with lib; {
     homepage = "https://keybase.io/docs/kbfs";

@@ -7,7 +7,7 @@
 , beautifulsoup4
 , requests
 , click
-, dogpile_cache
+, dogpile-cache
 , stevedore
 , chardet
 , pysrt
@@ -19,8 +19,8 @@
 , vcrpy
 , pytest
 , pytest-flakes
-, pytestcov
-, pytestrunner
+, pytest-cov
+, pytest-runner
 }:
 
 buildPythonPackage rec {
@@ -34,13 +34,13 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     guessit babelfish enzyme beautifulsoup4 requests
-    click dogpile_cache stevedore chardet pysrt six
+    click dogpile-cache stevedore chardet pysrt six
     appdirs rarfile pytz
   ];
 
   checkInputs = [
     sympy vcrpy pytest pytest-flakes
-    pytestcov pytestrunner
+    pytest-cov pytest-runner
   ];
 
   # https://github.com/Diaoul/subliminal/pull/963

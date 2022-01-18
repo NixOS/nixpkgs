@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , autoconf
-, automake
+, automake115x
 , c-ares
 , cryptopp
 , curl
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoconf
-    automake
+    automake115x
     libtool
     pkg-config
   ];

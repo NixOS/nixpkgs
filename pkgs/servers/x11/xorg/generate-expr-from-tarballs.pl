@@ -1,10 +1,7 @@
-#! /usr/bin/env perl
+#!/usr/bin/env nix-shell
+#!nix-shell --pure --keep NIX_PATH -i perl -p cacert nix perl
 
-# Usage:
-#
-# manually update tarballs.list
-# then run: cat tarballs.list | perl ./generate-expr-from-tarballs.pl
-
+# Usage: manually update tarballs.list then run: ./generate-expr-from-tarballs.pl tarballs.list
 
 use strict;
 use warnings;
@@ -26,7 +23,7 @@ my %pcMap;
 my %extraAttrs;
 
 
-my @missingPCs = ("fontconfig", "libdrm", "libXaw", "zlib", "perl", "python3", "mkfontscale", "bdftopcf", "libxslt", "openssl", "gperf", "m4", "libinput", "libevdev", "mtdev", "xorgproto", "cairo", "gettext" );
+my @missingPCs = ("fontconfig", "libdrm", "libXaw", "zlib", "perl", "python3", "mkfontscale", "bdftopcf", "libxslt", "openssl", "gperf", "m4", "libinput", "libevdev", "mtdev", "xorgproto", "cairo", "gettext", "meson", "ninja" );
 $pcMap{$_} = $_ foreach @missingPCs;
 $pcMap{"freetype2"} = "freetype";
 $pcMap{"libpng12"} = "libpng";
@@ -232,6 +229,7 @@ while (<>) {
 
     push @nativeRequires, "gettext" if $file =~ /USE_GETTEXT/;
     push @requires, "libxslt" if $pkg =~ /libxcb/;
+    push @nativeRequires, "meson", "ninja" if $pkg =~ /libxcvt/;
     push @nativeRequires, "m4" if $pkg =~ /xcbutil/;
     push @requires, "gperf", "xorgproto" if $pkg =~ /xcbutil/;
 

@@ -1,22 +1,32 @@
-{ lib, buildPythonPackage, fetchPypi, nose }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, nose
+}:
 
 buildPythonPackage rec {
   pname = "voluptuous";
-  version = "0.12.1";
+  version = "0.12.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0js4avmhmmys78z376xk1w9305hq5nad8zqrnksgmpc1j90p4db6";
+    sha256 = "sha256-TbGsUHnbkkmCDUnIkctGYKb4yuNQSRIQq850H6v1ZRM=";
   };
 
-  checkInputs = [ nose ];
+  checkInputs = [
+    nose
+  ];
+
   checkPhase = ''
     nosetests
   '';
 
+  pythonImportsCheck = [ "voluptuous" ];
+
   meta = with lib; {
-    description = "Voluptuous is a Python data validation library";
+    description = "Python data validation library";
     homepage = "http://alecthomas.github.io/voluptuous/";
     license = licenses.bsd3;
+    maintainers = with maintainers; [ fab ];
   };
 }

@@ -1,8 +1,9 @@
-{ stdenv
-, lib
+{ lib
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
+, fetchpatch
+, duet
 , matplotlib
 , networkx
 , numpy
@@ -26,9 +27,10 @@
 , freezegun
 , pytest-asyncio
 }:
+
 buildPythonPackage rec {
   pname = "cirq-core";
-  version = "0.11.0";
+  version = "0.13.1";
 
   disabled = pythonOlder "3.6";
 
@@ -36,20 +38,36 @@ buildPythonPackage rec {
     owner = "quantumlib";
     repo = "cirq";
     rev = "v${version}";
-    hash = "sha256-JaKTGnkYhzIFb35SGaho8DRupoT0JFYKA5+rJEq4oXw=";
+    sha256 = "sha256-MVfJ8iEeW8gFvCNTqrWfYpNNYuDAufHgcjd7Nh3qp8U=";
   };
 
   sourceRoot = "source/${pname}";
+
+  patches = [
+    # present in upstream master - remove after 0.13.1
+    (fetchpatch {
+      name = "fix-test-tolerances.part-1.patch";
+      url = "https://github.com/quantumlib/Cirq/commit/eb1d9031e55d3c8801ea44abbb6a4132b2fc5126.patch";
+      sha256 = "0ka24v6dfxnap9p07ni32z9zccbmw0lbrp5mcknmpsl12hza98xm";
+      stripLen = 1;
+    })
+    (fetchpatch {
+      name = "fix-test-tolerances.part-2.patch";
+      url = "https://github.com/quantumlib/Cirq/commit/a28d601b2bcfc393336375c53e5915fd16455395.patch";
+      sha256 = "0k2dqsm4ydn6556d40kc8j04jgjn59z4wqqg1jn1r916a7yxw493";
+      stripLen = 1;
+    })
+  ];
 
   postPatch = ''
     substituteInPlace requirements.txt \
       --replace "matplotlib~=3.0" "matplotlib" \
       --replace "networkx~=2.4" "networkx" \
-      --replace "numpy~=1.16" "numpy" \
-      --replace "requests~=2.18" "requests"
+      --replace "numpy~=1.16" "numpy"
   '';
 
   propagatedBuildInputs = [
+    duet
     matplotlib
     networkx
     numpy
@@ -82,17 +100,13 @@ buildPythonPackage rec {
   disabledTests = [
     "test_metadata_search_path" # tries to import flynt, which isn't in Nixpkgs
     "test_benchmark_2q_xeb_fidelities" # fails due pandas MultiIndex. Maybe issue with pandas version in nix?
-  ] ++ lib.optionals stdenv.hostPlatform.isAarch64 [
-    # Seem to fail due to math issues on aarch64?
-    "expectation_from_wavefunction"
-    "test_single_qubit_op_to_framed_phase_form_output_on_example_case"
   ];
 
   meta = with lib; {
-    description = "A framework for creating, editing, and invoking Noisy Intermediate Scale Quantum (NISQ) circuits.";
+    description = "Framework for creating, editing, and invoking Noisy Intermediate Scale Quantum (NISQ) circuits";
     homepage = "https://github.com/quantumlib/cirq";
     changelog = "https://github.com/quantumlib/Cirq/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ drewrisinger ];
+    maintainers = with maintainers; [ drewrisinger fab ];
   };
 }

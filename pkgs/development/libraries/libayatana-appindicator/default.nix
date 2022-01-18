@@ -23,12 +23,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config autoreconfHook gtk-doc gobject-introspection dbus-glib ];
 
   buildInputs =
-    lib.lists.optional (gtkVersion == "2") libayatana-indicator-gtk2
-    ++ lib.lists.optional (gtkVersion == "3") libayatana-indicator-gtk3;
+    lib.optional (gtkVersion == "2") libayatana-indicator-gtk2
+    ++ lib.optional (gtkVersion == "3") libayatana-indicator-gtk3;
 
   propagatedBuildInputs =
-    lib.lists.optionals (gtkVersion == "2") [ gtk2 libdbusmenu-gtk2 ]
-    ++ lib.lists.optionals (gtkVersion == "3") [ gtk3 libdbusmenu-gtk3 ];
+    lib.optionals (gtkVersion == "2") [ gtk2 libdbusmenu-gtk2 ]
+    ++ lib.optionals (gtkVersion == "3") [ gtk3 libdbusmenu-gtk3 ];
 
   preAutoreconf = ''
     gtkdocize

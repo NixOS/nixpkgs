@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "django-mailman3";
-  version = "1.3.5";
+  version = "1.3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "368595b3c2623edeaca5beea5f12887424c384edd6f7052cf442443075084313";
+    sha256 = "6ea8c24c13e7afe744f18e18e4d19d0e74223e0d9bd5d782deea85dcb865feb7";
   };
 
   propagatedBuildInputs = [
@@ -27,6 +27,6 @@ buildPythonPackage rec {
     description = "Django library for Mailman UIs";
     homepage = "https://gitlab.com/mailman/django-mailman3";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ globin peti qyliss ];
+    maintainers = with maintainers; [ globin qyliss ];
   };
 }

@@ -3,7 +3,7 @@
 let
   inherit (lib)
     attrValues
-    literalExample
+    literalExpression
     mkEnableOption
     mkIf
     mkOption
@@ -24,8 +24,8 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.metricbeat;
-        defaultText = literalExample "pkgs.metricbeat";
-        example = literalExample "pkgs.metricbeat7";
+        defaultText = literalExpression "pkgs.metricbeat";
+        example = literalExpression "pkgs.metricbeat7";
         description = ''
           The metricbeat package to use
         '';
@@ -51,7 +51,6 @@ in
             module = mkOption {
               type = types.str;
               default = name;
-              defaultText = literalExample ''<name>'';
               description = ''
                 The name of the module.
 

@@ -11,7 +11,6 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1w7hdqgqr1jgxid3k7f2j52wz31gv8bzr9rsm6xzp7nnihp6i45p";
   };
 
-  cargoBuildFlags = ["--features" "bin"];
   cargoSha256 = "08ip6x4kink244majlk595yh551c2ap3ry58wly994mh8wf6ifwb";
 
   nativeBuildInputs = [ makeWrapper ];
@@ -23,6 +22,8 @@ rustPlatform.buildRustPackage rec {
     gst_all_1.gst-plugins-bad
     libsixel
   ];
+
+  buildFeatures = [ "bin" ];
 
   postInstall = ''
     wrapProgram $out/bin/termplay --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0"

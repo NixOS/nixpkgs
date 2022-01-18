@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, qtbase, qtsvg, qttools, qmake }:
 
 stdenv.mkDerivation rec {
-  name = "qwt-6.1.6";
+  pname = "qwt";
+  version = "6.1.6";
 
   src = fetchurl {
-    url = "mirror://sourceforge/qwt/${name}.tar.bz2";
+    url = "mirror://sourceforge/qwt/qwt-${version}.tar.bz2";
     sha256 = "sha256-mUYNMcEV7kEXsBddiF9HwsWQ14QgbwmBXcBY++Xt4fY=";
   };
 
@@ -15,7 +16,7 @@ stdenv.mkDerivation rec {
     sed -e "s|QWT_INSTALL_PREFIX.*=.*|QWT_INSTALL_PREFIX = $out|g" -i qwtconfig.pri
   '';
 
-  qmakeFlags = [ "-after doc.path=$out/share/doc/${name}" ];
+  qmakeFlags = [ "-after doc.path=$out/share/doc/qwt-${version}" ];
 
   dontWrapQtApps = true;
 

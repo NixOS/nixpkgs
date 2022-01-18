@@ -1,30 +1,39 @@
-{ stdenv, lib, buildGoModule, fetchFromGitHub, pcsclite, pkg-config, PCSC, pivKeySupport ? true }:
+{ stdenv, lib, buildGoModule, fetchFromGitHub, pcsclite, pkg-config, installShellFiles, PCSC, pivKeySupport ? true, pkcs11Support ? true }:
 
 buildGoModule rec {
   pname = "cosign";
-  version = "0.6.0";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "sigstore";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1h0lhbcrynaiwpgpkcn10yrn90j03g00w9hr2lvsj3cwmdbz0rcz";
+    sha256 = "sha256-WjYW9Fo27wE1pg/BqYsdHd8jwd8jG5bk37HmU1DqnyE=";
   };
 
-  buildInputs =
-    lib.optional (stdenv.isLinux && pivKeySupport) (lib.getDev pcsclite)
+  buildInputs = lib.optional (stdenv.isLinux && pivKeySupport) (lib.getDev pcsclite)
     ++ lib.optionals (stdenv.isDarwin && pivKeySupport) [ PCSC ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config installShellFiles ];
 
-  vendorSha256 = "0f3al6ds0kqyv2fapgdg9i38rfx6h169pmj6az0sfnkh2psq73ia";
+  vendorSha256 = "sha256-6T98zu55BQ26e43a1i68rhebaLwY/iFM8CRqRcv2QwI=";
 
-  subPackages = [ "cmd/cosign" ];
+  excludedPackages = "\\(sample\\|webhook\\|help\\)";
 
-  preBuild = ''
-    buildFlagsArray+=(${lib.optionalString pivKeySupport "-tags=pivkey"})
+  tags = [] ++ lib.optionals pivKeySupport [ "pivkey" ] ++ lib.optionals pkcs11Support [ "pkcs11key" ];
+
+  ldflags = [ "-s" "-w" "-X github.com/sigstore/cosign/pkg/version.GitVersion=v${version}" ];
+
+  postInstall = ''
+    installShellCompletion --cmd cosign \
+      --bash <($out/bin/cosign completion bash) \
+      --fish <($out/bin/cosign completion fish) \
+      --zsh <($out/bin/cosign completion zsh)
+    installShellCompletion --cmd sget \
+      --bash <($out/bin/sget completion bash) \
+      --fish <($out/bin/sget completion fish) \
+      --zsh <($out/bin/sget completion zsh)
   '';
-  ldflags = [ "-s" "-w" "-X github.com/sigstore/cosign/cmd/cosign/cli.gitVersion=v${version}"];
 
   meta = with lib; {
     homepage = "https://github.com/sigstore/cosign";

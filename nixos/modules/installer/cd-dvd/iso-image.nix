@@ -467,7 +467,7 @@ let
       throw "Unsupported architecture";
 
   # Syslinux (and isolinux) only supports x86-based architectures.
-  canx86BiosBoot = pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64;
+  canx86BiosBoot = pkgs.stdenv.hostPlatform.isx86;
 
 in
 
@@ -528,7 +528,7 @@ in
     };
 
     isoImage.contents = mkOption {
-      example = literalExample ''
+      example = literalExpression ''
         [ { source = pkgs.memtest86 + "/memtest.bin";
             target = "boot/memtest.bin";
           }
@@ -541,7 +541,7 @@ in
     };
 
     isoImage.storeContents = mkOption {
-      example = literalExample "[ pkgs.stdenv ]";
+      example = literalExpression "[ pkgs.stdenv ]";
       description = ''
         This option lists additional derivations to be included in the
         Nix store in the generated ISO image.
@@ -615,6 +615,55 @@ in
 
   };
 
+  # store them in lib so we can mkImageMediaOverride the
+  # entire file system layout in installation media (only)
+  config.lib.isoFileSystems = {
+    "/" = mkImageMediaOverride
+      {
+        fsType = "tmpfs";
+        options = [ "mode=0755" ];
+      };
+
+    # Note that /dev/root is a symlink to the actual root device
+    # specified on the kernel command line, created in the stage 1
+    # init script.
+    "/iso" = mkImageMediaOverride
+      { device = "/dev/root";
+        neededForBoot = true;
+        noCheck = true;
+      };
+
+    # In stage 1, mount a tmpfs on top of /nix/store (the squashfs
+    # image) to make this a live CD.
+    "/nix/.ro-store" = mkImageMediaOverride
+      { fsType = "squashfs";
+        device = "/iso/nix-store.squashfs";
+        options = [ "loop" ];
+        neededForBoot = true;
+      };
+
+    "/nix/.rw-store" = mkImageMediaOverride
+      { fsType = "tmpfs";
+        options = [ "mode=0755" ];
+        neededForBoot = true;
+      };
+
+    "/nix/store" = mkImageMediaOverride
+      { fsType = "overlay";
+        device = "overlay";
+        options = [
+          "lowerdir=/nix/.ro-store"
+          "upperdir=/nix/.rw-store/store"
+          "workdir=/nix/.rw-store/work"
+        ];
+        depends = [
+          "/nix/.ro-store"
+          "/nix/.rw-store/store"
+          "/nix/.rw-store/work"
+        ];
+      };
+  };
+
   config = {
     assertions = [
       {
@@ -653,50 +702,7 @@ in
         "boot.shell_on_fail"
       ];
 
-    fileSystems."/" =
-      { fsType = "tmpfs";
-        options = [ "mode=0755" ];
-      };
-
-    # Note that /dev/root is a symlink to the actual root device
-    # specified on the kernel command line, created in the stage 1
-    # init script.
-    fileSystems."/iso" =
-      { device = "/dev/root";
-        neededForBoot = true;
-        noCheck = true;
-      };
-
-    # In stage 1, mount a tmpfs on top of /nix/store (the squashfs
-    # image) to make this a live CD.
-    fileSystems."/nix/.ro-store" =
-      { fsType = "squashfs";
-        device = "/iso/nix-store.squashfs";
-        options = [ "loop" ];
-        neededForBoot = true;
-      };
-
-    fileSystems."/nix/.rw-store" =
-      { fsType = "tmpfs";
-        options = [ "mode=0755" ];
-        neededForBoot = true;
-      };
-
-    fileSystems."/nix/store" =
-      { fsType = "overlay";
-        device = "overlay";
-        options = [
-          "lowerdir=/nix/.ro-store"
-          "upperdir=/nix/.rw-store/store"
-          "workdir=/nix/.rw-store/work"
-        ];
-
-        depends = [
-          "/nix/.ro-store"
-          "/nix/.rw-store/store"
-          "/nix/.rw-store/work"
-        ];
-      };
+    fileSystems = config.lib.isoFileSystems;
 
     boot.initrd.availableKernelModules = [ "squashfs" "iso9660" "uas" "overlay" ];
 

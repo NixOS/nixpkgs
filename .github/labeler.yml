@@ -70,6 +70,13 @@
 
 "6.topic: nixos":
   - nixos/**/*
+  - pkgs/os-specific/linux/nixos-rebuild/**/*
+
+"6.topic: nim":
+  - doc/languages-frameworks/nim.section.md
+  - pkgs/development/compilers/nim/*
+  - pkgs/development/nim-packages/**/*
+  - pkgs/top-level/nim-packages.nix
 
 "6.topic: ocaml":
   - doc/languages-frameworks/ocaml.section.md
@@ -136,6 +143,8 @@
   - doc/languages-frameworks/vim.section.md
   - pkgs/applications/editors/vim/**/*
   - pkgs/misc/vim-plugins/**/*
+  - nixos/modules/programs/neovim.nix
+  - pkgs/applications/editors/neovim/**/*
 
 "6.topic: xfce":
   - nixos/doc/manual/configuration/xfce.xml

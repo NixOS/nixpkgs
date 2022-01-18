@@ -39,7 +39,7 @@
 , zlib
 }:
 let
-  version = "2103";
+  version = "2106.1";
 
   sysArch =
     if stdenv.hostPlatform.system == "x86_64-linux" then "x64"
@@ -50,8 +50,8 @@ let
     name = "vmwareHorizonClientFiles";
     inherit version;
     src = fetchurl {
-      url = "https://download3.vmware.com/software/view/viewclients/CART22FQ1/VMware-Horizon-Client-Linux-2103-8.2.0-17742757.tar.gz";
-      sha256 = "62f95bb802b058a98f5ee6c2296b89bd7e15884a24dc8a8ba7ce89de7e0798e4";
+      url = "https://download3.vmware.com/software/view/viewclients/CART22FQ2/VMware-Horizon-Client-Linux-2106.1-8.3.1-18435609.tar.gz";
+      sha256 = "b42ddb9d7e9c8d0f8b86b69344fcfca45251c5a5f1e06a18a3334d5a04e18c39";
     };
     nativeBuildInputs = [ makeWrapper ];
     installPhase = ''

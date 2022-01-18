@@ -8,16 +8,19 @@
 , pytest-timeout
 , pytest-xprocess
 , pytestCheckHook
- }:
+}:
 
 buildPythonPackage rec {
-  pname = "Werkzeug";
-  version = "2.0.1";
+  pname = "werkzeug";
+  version = "2.0.2";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "0hlwawnn8c41f254qify5jnjj8xb97n294h09bqimzqhs0qdpq8x";
+    pname = "Werkzeug";
+    inherit version;
+    sha256 = "sha256-qiu2/I3ujWxQTArB5/X33FgQqZA+eTtvcVqfAVva25o=";
   };
 
   propagatedBuildInputs = lib.optionals (!stdenv.isDarwin) [
@@ -53,5 +56,6 @@ buildPythonPackage rec {
       utility libraries.
     '';
     license = licenses.bsd3;
+    maintainers = with maintainers; [ ];
   };
 }

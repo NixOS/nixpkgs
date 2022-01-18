@@ -2,13 +2,13 @@
 
 mkDerivation rec {
   pname = "standard-library";
-  version = "1.6";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     repo = "agda-stdlib";
     owner = "agda";
     rev = "v${version}";
-    sha256 = "1smvnid7r1mc4lp34pfrbzgzrcl0gmw0dlkga8z0r3g2zhj98lz1";
+    sha256 = "0khl12jvknsvjsq3l5cbp2b5qlw983qbymi1dcgfz9z0b92si3r0";
   };
 
   nativeBuildInputs = [ (ghcWithPackages (self : [ self.filemanip ])) ];
@@ -16,7 +16,7 @@ mkDerivation rec {
     runhaskell GenerateEverything.hs
     # We will only build/consider Everything.agda, in particular we don't want Everything*.agda
     # do be copied to the store.
-    rm EverythingSafe.agda EverythingSafeGuardedness.agda EverythingSafeSizedTypes.agda
+    rm EverythingSafe.agda
   '';
 
   passthru.tests = { inherit (nixosTests) agda; };

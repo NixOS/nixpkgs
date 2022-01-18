@@ -20,17 +20,19 @@
 , pantheon /* granite, icons, maintainers */
 , webkitgtk
 , libpeas
+, libhandy
+, curl
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-planner";
-  version = "2.6.9";
+  version = "2.7";
 
   src = fetchFromGitHub {
     owner = "alainm23";
     repo = "planner";
     rev = version;
-    sha256 = "17ij017x2cplqhway8376k8mmrll4w1jfwhf7ixldq9g0q2inzd8";
+    sha256 = "sha256-3eFPGRcZWhzFYi52TbHmpFNLI0pWYcHbbBI7efqZwYE=";
   };
 
   nativeBuildInputs = [
@@ -57,7 +59,8 @@ stdenv.mkDerivation rec {
     pantheon.granite
     sqlite
     webkitgtk
-    libgdata # required by some dependency transitively
+    libhandy
+    curl
   ];
 
   postPatch = ''
@@ -80,7 +83,9 @@ stdenv.mkDerivation rec {
     description = "Task manager with Todoist support designed for GNU/Linux 🚀️";
     homepage = "https://planner-todo.web.app";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ dtzWill ] ++ pantheon.maintainers;
+    maintainers = with maintainers; [ dtzWill ] ++ teams.pantheon.members;
+    platforms = platforms.linux;
+    mainProgram = "com.github.alainm23.planner";
   };
 }
 

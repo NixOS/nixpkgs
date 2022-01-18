@@ -13,15 +13,14 @@ buildGoPackage rec {
     sha256 = "sha256-1cprKpIFgM3+lUEHNvda34nJTH4Ch3LtTRq/Dp6QBQ8=";
   };
 
-  buildFlags = [ "--tags" "release" ];
+  tags = [ "release" ];
 
-  buildFlagsArray = [ "-ldflags=-X main.Version=${version}" ];
+  ldflags = [ "-X main.Version=${version}" ];
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libusb1  libiconv ];
 
   meta = with lib; {
-    inherit version;
     description = "aws-vault like tool for Okta authentication";
     license = licenses.mit;
     maintainers = with maintainers; [imalsogreg Chili-Man];

@@ -1,25 +1,29 @@
 { lib, stdenv, fetchFromGitHub, znc }:
 
 let
-  zncDerivation = a@{
-    name, src, module_name,
-    buildPhase ? "${znc}/bin/znc-buildmod ${module_name}.cpp",
-    installPhase ? "install -D ${module_name}.so $out/lib/znc/${module_name}.so", ...
-  } : stdenv.mkDerivation (a // {
-    inherit buildPhase;
-    inherit installPhase;
+  zncDerivation =
+    a@{ pname
+    , src
+    , module_name
+    , buildPhase ? "${znc}/bin/znc-buildmod ${module_name}.cpp"
+    , installPhase ? "install -D ${module_name}.so $out/lib/znc/${module_name}.so"
+    , ...
+    }: stdenv.mkDerivation (a // {
+      inherit buildPhase;
+      inherit installPhase;
 
-    buildInputs = znc.buildInputs;
+      buildInputs = znc.buildInputs;
 
-    meta = a.meta // { platforms = lib.platforms.unix; };
-    passthru.module_name = module_name;
-  });
+      meta = a.meta // { platforms = lib.platforms.unix; };
+      passthru.module_name = module_name;
+    });
 
-in {
+in
+{
 
   backlog = zncDerivation rec {
-    name = "znc-backlog-${version}";
-    version = "git-2017-06-13";
+    pname = "znc-backlog";
+    version = "unstable-2017-06-13";
     module_name = "backlog";
 
     src = fetchFromGitHub {
@@ -38,15 +42,15 @@ in {
   };
 
   clientbuffer = zncDerivation rec {
-    name = "znc-clientbuffer-${version}";
-    version = "git-2020-04-24";
+    pname = "znc-clientbuffer";
+    version = "unstable-2021-05-30";
     module_name = "clientbuffer";
 
     src = fetchFromGitHub {
       owner = "CyberShadow";
       repo = "znc-clientbuffer";
-      rev = "2e32d508aa975c0a307d09575a0198f8c56c11fa";
-      sha256 = "1jaspnrbv3pzsnbysqygc8s8g3q07zx5nlrdpgwv9j8aryg0pcnh";
+      rev = "9a7465b413b53408f5d7af86e84b1d08efb6bec0";
+      sha256 = "0a3f4j6s5j7p53y42zrgpqyl2zm0jxb69lp24j6mni3licigh254";
     };
 
     meta = with lib; {
@@ -58,8 +62,8 @@ in {
   };
 
   clientaway = zncDerivation rec {
-    name = "znc-clientaway-${version}";
-    version = "git-2017-04-28";
+    pname = "znc-clientaway";
+    version = "unstable-2017-04-28";
     module_name = "clientaway";
 
     src = fetchFromGitHub {
@@ -78,8 +82,8 @@ in {
   };
 
   fish = zncDerivation rec {
-    name = "znc-fish-${version}";
-    version = "git-2017-06-26";
+    pname = "znc-fish";
+    version = "unstable-2017-06-26";
     module_name = "fish";
 
     src = fetchFromGitHub {
@@ -98,8 +102,8 @@ in {
   };
 
   ignore = zncDerivation rec {
-    name = "znc-ignore-${version}";
-    version = "git-2017-04-28";
+    pname = "znc-ignore";
+    version = "unstable-2017-04-28";
     module_name = "ignore";
 
     src = fetchFromGitHub {
@@ -118,7 +122,7 @@ in {
   };
 
   palaver = zncDerivation rec {
-    name = "znc-palaver-${version}";
+    pname = "znc-palaver";
     version = "2020-07-18";
     module_name = "palaver";
 
@@ -138,8 +142,8 @@ in {
   };
 
   playback = zncDerivation rec {
-    name = "znc-playback-${version}";
-    version = "git-2015-08-04";
+    pname = "znc-playback";
+    version = "unstable-2015-08-04";
     module_name = "playback";
 
     src = fetchFromGitHub {
@@ -158,8 +162,8 @@ in {
   };
 
   privmsg = zncDerivation rec {
-    name = "znc-privmsg-${version}";
-    version = "git-2015-02-22";
+    pname = "znc-privmsg";
+    version = "unstable-2015-02-22";
     module_name = "privmsg";
 
     src = fetchFromGitHub {
@@ -176,8 +180,8 @@ in {
   };
 
   push = zncDerivation rec {
-    name = "znc-push-${version}";
-    version = "git-2016-10-12";
+    pname = "znc-push";
+    version = "unstable-2016-10-12";
     module_name = "push";
 
     src = fetchFromGitHub {

@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "octant";
-  version = "0.22.0";
+  version = "0.25.0";
 
   src =
     let
@@ -19,10 +19,10 @@ stdenv.mkDerivation rec {
       };
     in
     fetchsrc version {
-      x86_64-linux = "sha256-1/vyV6pUqovVpovTYFF4d75wJvtTNdrbLZyjw1lLacA=";
-      aarch64-linux = "sha256-1duNW0Edj0jrpv/RMrebtZF4ph6j3PXCJ2RFejOopGQ=";
-      x86_64-darwin = "sha256-Ur5jBPk5hA6cGg+pPf36Ijh94gWEdaWlJK3yCMBYyEU=";
-      aarch64-darwin = "sha256-RaiXW+MUihk291UWmrf6gLpyrd5stIkhyWNFEQ0daCk=";
+      x86_64-linux = "sha256-woBmYDOOh3AQH0RZJtMCrOfjFBrpMPzv22cVZ2/xHZo=";
+      aarch64-linux = "sha256-3YUUdOZULjJZqVJP0aO/d1WulXlpwf012NYJ6Mc2qp8=";
+      x86_64-darwin = "sha256-9lbMyEid4I1fRLkLwGbmrB2OkycnGBPUU5wEdVZoTLo=";
+      aarch64-darwin = "sha256-Q0ZkQX9FpzEc6WC3mRoYfg9oW3fvLB1/Ksa64TDlSgo=";
     };
 
   dontConfigure = true;

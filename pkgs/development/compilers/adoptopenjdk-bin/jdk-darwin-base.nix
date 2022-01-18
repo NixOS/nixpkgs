@@ -26,6 +26,9 @@ let cpuName = stdenv.hostPlatform.parsed.cpu.name;
 
     mv $sourceRoot $out
 
+    # jni.h expects jni_md.h to be in the header search path.
+    ln -s $out/Contents/Home/include/darwin/*_md.h $out/Contents/Home/include/
+
     rm -rf $out/Home/demo
 
     # Remove some broken manpages.

@@ -1,23 +1,13 @@
-{ stdenv, lib, fetchurl, openssl, perl, libcap ? null, libseccomp ? null, pps-tools }:
-
-assert stdenv.isLinux -> libcap != null;
-assert stdenv.isLinux -> libseccomp != null;
-
-let
-  withSeccomp = stdenv.isLinux && (stdenv.isi686 || stdenv.isx86_64);
-in
+{ stdenv, lib, fetchurl, openssl, perl, pps-tools, libcap }:
 
 stdenv.mkDerivation rec {
-  name = "ntp-4.2.8p15";
+  pname = "ntp";
+  version = "4.2.8p15";
 
   src = fetchurl {
-    url = "https://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2/${name}.tar.gz";
+    url = "https://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-${lib.versions.majorMinor version}/ntp-${version}.tar.gz";
     sha256 = "06cwhimm71safmwvp6nhxp6hvxsg62whnbgbgiflsqb8mgg40n7n";
   };
-
-  # The hardcoded list of allowed system calls for seccomp is
-  # insufficient for NixOS, add more to make it work (issue #21136).
-  patches = [ ./seccomp.patch ];
 
   configureFlags = [
     "--sysconfdir=/etc"
@@ -26,12 +16,10 @@ stdenv.mkDerivation rec {
     "--with-openssl-incdir=${openssl.dev}/include"
     "--enable-ignore-dns-errors"
     "--with-yielding-select=yes"
-  ] ++ lib.optional stdenv.isLinux "--enable-linuxcaps"
-    ++ lib.optional withSeccomp "--enable-libseccomp";
+  ] ++ lib.optional stdenv.isLinux "--enable-linuxcaps";
 
-  buildInputs = [ libcap openssl perl ]
-    ++ lib.optional withSeccomp libseccomp
-    ++ lib.optional stdenv.isLinux pps-tools;
+  buildInputs = [ openssl perl ]
+    ++ lib.optionals stdenv.isLinux [ pps-tools libcap ];
 
   hardeningEnable = [ "pie" ];
 

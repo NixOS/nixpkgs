@@ -234,6 +234,11 @@ stdenv.mkDerivation {
       wrap ${targetPrefix}gnatmake ${./gnat-wrapper.sh} $ccPath/${targetPrefix}gnatmake
       wrap ${targetPrefix}gnatbind ${./gnat-wrapper.sh} $ccPath/${targetPrefix}gnatbind
       wrap ${targetPrefix}gnatlink ${./gnat-wrapper.sh} $ccPath/${targetPrefix}gnatlink
+
+      # this symlink points to the unwrapped gnat's output "out". It is used by
+      # our custom gprconfig compiler description to find GNAT's ada runtime. See
+      # ../../development/tools/build-managers/gprbuild/{boot.nix, nixpkgs-gnat.xml}
+      ln -sf ${cc} $out/nix-support/gprconfig-gnat-unwrapped
     ''
 
     + optionalString cc.langD or false ''
@@ -458,6 +463,9 @@ stdenv.mkDerivation {
     + optionalString (targetPlatform ? gcc.mode) ''
       echo "-mmode=${targetPlatform.gcc.mode}" >> $out/nix-support/cc-cflags-before
     ''
+    + optionalString (targetPlatform ? gcc.thumb) ''
+      echo "-m${if targetPlatform.gcc.thumb then "thumb" else "arm"}" >> $out/nix-support/cc-cflags-before
+    ''
     + optionalString (targetPlatform ? gcc.tune &&
                       isGccArchSupported targetPlatform.gcc.tune) ''
       echo "-mtune=${targetPlatform.gcc.tune}" >> $out/nix-support/cc-cflags-before
@@ -467,7 +475,7 @@ stdenv.mkDerivation {
     + optionalString hostPlatform.isCygwin ''
       hardening_unsupported_flags+=" pic"
     '' + optionalString targetPlatform.isMinGW ''
-      hardening_unsupported_flags+=" stackprotector"
+      hardening_unsupported_flags+=" stackprotector fortify"
     '' + optionalString targetPlatform.isAvr ''
       hardening_unsupported_flags+=" stackprotector pic"
     '' + optionalString (targetPlatform.libc == "newlib") ''

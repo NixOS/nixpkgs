@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "gruut-ipa";
-  version = "0.9.2";
+  version = "0.12.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = pname;
-    rev = "df74f7dff562d868ad8088b7251f9e7206271d37";
-    sha256 = "0b2znvjngffxc0mlmqmcai8l22ff09kc39bj6f0lkjw735vclnzh";
+    rev = "v${version}";
+    sha256 = "sha256-6pMdBKbp++/5321rc8A2euOSXZCHzHg+wmaEaMZ0egw=";
   };
 
   postPatch = ''

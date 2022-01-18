@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "muparserx";
-  version = "4.0.8";
+  version = "4.0.11";
 
   src = fetchFromGitHub {
     owner = "beltoforion";
     repo = "muparserx";
     rev = "v${version}";
-    sha256 = "097pkdffv0phr0345hy06mjm5pfy259z13plsvbxvcmds80wl48v";
+    sha256 = "sha256-BWzHlz1mQYsvWa53EtO05Rb4rRHJBSRguJTHLtgqpPw=";
   };
 
   nativeBuildInputs = [ cmake ];

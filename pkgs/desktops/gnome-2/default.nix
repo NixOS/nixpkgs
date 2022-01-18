@@ -49,7 +49,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gtkhtml = callPackage ./platform/gtkhtml { enchant = pkgs.enchant1; };
 
-  gtkhtml4 = callPackage ./platform/gtkhtml/4.x.nix { enchant = pkgs.enchant1; };
+  gtkhtml4 = callPackage ./platform/gtkhtml/4.x.nix { enchant = pkgs.enchant2; };
 
   gtkglext = callPackage ./platform/gtkglext { };
 

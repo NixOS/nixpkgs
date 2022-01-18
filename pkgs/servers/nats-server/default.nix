@@ -4,7 +4,7 @@ with lib;
 
 buildGoPackage rec {
   pname   = "nats-server";
-  version = "2.2.1";
+  version = "2.7.0";
 
   goPackagePath = "github.com/nats-io/${pname}";
 
@@ -18,7 +18,7 @@ buildGoPackage rec {
   meta = {
     description = "High-Performance server for NATS";
     license = licenses.asl20;
-    maintainers = [ maintainers.swdunlop ];
+    maintainers = with maintainers; [ swdunlop derekcollison ];
     homepage = "https://nats.io/";
   };
 }

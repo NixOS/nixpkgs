@@ -14,17 +14,21 @@
 , levmar
 , qhull
 , cmake
+, cgal_5
+, boost17x
+, mpfr
+, xercesc
 }:
 
 mkDerivation rec {
   pname = "meshlab";
-  version = "2020.12";
+  version = "2021.10";
 
   src = fetchFromGitHub {
     owner = "cnr-isti-vclab";
     repo = "meshlab";
     rev = "Meshlab-${version}";
-    sha256 = "QrnqXEVqI1ADUYWalZ0h/0+xS+gDZTinm0weT39onw0=";
+    sha256 = "14rrd8qrf91k89y6w2mn1r9zcfnwd0mir6g4dlgvr04i77hj4lk4";
     fetchSubmodules = true; # for vcglib
   };
 
@@ -41,6 +45,10 @@ mkDerivation rec {
     gmp
     levmar
     qhull
+    cgal_5
+    boost17x
+    mpfr
+    xercesc
   ];
 
   nativeBuildInputs = [ cmake ];
@@ -61,6 +69,7 @@ mkDerivation rec {
     # disable when available in nixpkgs
     "-DALLOW_BUNDLED_OPENCTM=ON"
     "-DALLOW_BUNDLED_SSYNTH=ON"
+    "-DALLOW_BUNDLED_BOOST=OFF"
     # some plugins are disabled unless these are on
     "-DALLOW_BUNDLED_NEWUOA=ON"
     "-DALLOW_BUNDLED_LEVMAR=ON"

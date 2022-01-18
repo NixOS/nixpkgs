@@ -1,25 +1,33 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, CoreServices, cmake
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, CoreServices
+, cmake
 , libiconv
 , useMimalloc ? false
-# FIXME: Test doesn't pass under rustc 1.52.1 due to different escaping of `'` in string.
-, doCheck ? false
+, doCheck ? true
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rust-analyzer-unwrapped";
-  version = "2021-07-12";
-  cargoSha256 = "sha256-wlo3GlB9OhyVXys5pHAqWPKHWZHzNjcQ0hiaYnp2SUc=";
+  version = "2021-12-27";
+  cargoSha256 = "sha256-yok7kLcvKvDwrdgJR0540QLJi5/zXi0NyZxhtoQ8Xno=";
 
   src = fetchFromGitHub {
     owner = "rust-analyzer";
     repo = "rust-analyzer";
     rev = version;
-    sha256 = "sha256-nd8valnltycywxBObSVFbt4fySEYQknFsFf5ZnEbgOk=";
+    sha256 = "sha256-/195+NsV6Mku2roi8zVy4dw8QGL6rQcnPcQ29Os8oqs=";
   };
 
-  buildAndTestSubdir = "crates/rust-analyzer";
+  patches = [
+    # Code format and git history check require more dependencies but don't really matter for packaging.
+    # So just ignore them.
+    ./ignore-git-and-rustfmt-tests.patch
+  ];
 
-  cargoBuildFlags = lib.optional useMimalloc "--features=mimalloc";
+  buildAndTestSubdir = "crates/rust-analyzer";
 
   nativeBuildInputs = lib.optional useMimalloc cmake;
 
@@ -27,6 +35,8 @@ rustPlatform.buildRustPackage rec {
     CoreServices
     libiconv
   ];
+
+  buildFeatures = lib.optional useMimalloc "mimalloc";
 
   RUST_ANALYZER_REV = version;
 
@@ -47,8 +57,8 @@ rustPlatform.buildRustPackage rec {
   passthru.updateScript = ./update.sh;
 
   meta = with lib; {
-    description = "An experimental modular compiler frontend for the Rust language";
-    homepage = "https://github.com/rust-analyzer/rust-analyzer";
+    description = "A modular compiler frontend for the Rust language";
+    homepage = "https://rust-analyzer.github.io";
     license = with licenses; [ mit asl20 ];
     maintainers = with maintainers; [ oxalica ];
   };

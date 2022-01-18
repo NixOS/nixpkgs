@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchPypi
-, pytestrunner
+, pytest-runner
 , setuptools
 , coverage, pytest
 }:
@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "0klb0ysybzlh2wihvir82hgq62v0jjmlcqklwajyms7c0p529yby";
   };
 
-  nativeBuildInputs = [ pytestrunner ];
+  nativeBuildInputs = [ pytest-runner ];
 
   propagatedBuildInputs = [ setuptools ];
 

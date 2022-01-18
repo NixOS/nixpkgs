@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "peco";
-  version = "0.5.8";
+  version = "0.5.10";
 
   subPackages = [ "cmd/peco" ];
 
@@ -10,10 +10,10 @@ buildGoModule rec {
     owner = "peco";
     repo = "peco";
     rev = "v${version}";
-    sha256 = "12xbqisk7bcy38fmjxcs069a0600gncbqzscqw6x37lgw6hlw52x";
+    sha256 = "sha256-Iu2MclUbUYX1FuMnE65Qdk0S+5+K3HW86WIdQrNUyY8=";
   };
 
-  vendorSha256 = "1p8pc50ql2vqnn0crx0y558i3m0d6vcdaj3995h3f0908pnk6x7q";
+  vendorSha256 = "sha256-+HQz7UUgATdgSWlI1dg2DdQRUSke9MyAtXgLikFhF90=";
 
   meta = with lib; {
     description = "Simplistic interactive filtering tool";

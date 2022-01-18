@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "fzf";
-  version = "0.27.2";
+  version = "0.29.0";
 
   src = fetchFromGitHub {
     owner = "junegunn";
     repo = pname;
     rev = version;
-    sha256 = "sha256-JWTyZRZrW1mFy91D+eZL6iYV0CcNxJUT4JA0hrBKZZU=";
+    sha256 = "sha256-m+mW9R50VXWUMaRmhMzpr7v8iQJxLYexYvcUMHPz3UM=";
   };
 
-  vendorSha256 = "sha256-FKDCIotyra/TZ48wbpzudJZ2aI2pn+ZR4EoZ+9+19Mw=";
+  vendorSha256 = "sha256-omvCzM5kH3nAE57S33NV0OFRJmU+Ty7hhriaG/Dc0o0=";
 
   outputs = [ "out" "man" ];
 
@@ -19,8 +19,8 @@ buildGoModule rec {
 
   buildInputs = [ ncurses ];
 
-  buildFlagsArray = [
-    "-ldflags=-s -w -X main.version=${version} -X main.revision=${src.rev}"
+  ldflags = [
+    "-s" "-w" "-X main.version=${version} -X main.revision=${src.rev}"
   ];
 
   # The vim plugin expects a relative path to the binary; patch it to abspath.

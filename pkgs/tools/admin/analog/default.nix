@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     sed -i src/anlghead.h \
       -e "s|#define DEFAULTCONFIGFILE .*|#define DEFAULTCONFIGFILE \"$out/etc/analog.cfg\"|g" \
-      -e "s|#define LANGDIR .*|#define LANGDIR \"$out/share/$pname}/lang/\"|g"
+      -e "s|#define LANGDIR .*|#define LANGDIR \"$out/share/${pname}/lang/\"|g"
     substituteInPlace src/Makefile --replace "gcc" "${stdenv.cc.targetPrefix}cc"
   '';
 
@@ -32,7 +32,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.c-amie.co.uk/software/analog/";
     license = lib.licenses.gpl2;
     description = "Powerful tool to generate web server statistics";
-    maintainers = [ lib.maintainers.peti ];
     platforms = lib.platforms.all;
   };
 

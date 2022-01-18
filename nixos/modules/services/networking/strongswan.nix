@@ -4,7 +4,7 @@ let
 
   inherit (builtins) toFile;
   inherit (lib) concatMapStringsSep concatStringsSep mapAttrsToList
-                mkIf mkEnableOption mkOption types literalExample;
+                mkIf mkEnableOption mkOption types literalExpression;
 
   cfg = config.services.strongswan;
 
@@ -79,7 +79,7 @@ in
     connections = mkOption {
       type = types.attrsOf (types.attrsOf types.str);
       default = {};
-      example = literalExample ''
+      example = literalExpression ''
         {
           "%default" = {
             keyexchange = "ikev2";

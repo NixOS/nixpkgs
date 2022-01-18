@@ -6,6 +6,7 @@
 , pkg-config
 , kirigami2
 , libdeltachat
+, qtbase
 , qtimageformats
 , qtmultimedia
 , qtwebengine
@@ -13,13 +14,13 @@
 
 mkDerivation rec {
   pname = "kdeltachat";
-  version = "unstable-2021-07-04";
+  version = "unstable-2021-12-26";
 
   src = fetchFromSourcehut {
     owner = "~link2xt";
     repo = "kdeltachat";
-    rev = "5d3cddc47773b49d4a801d031c1de96c38617908";
-    sha256 = "1sah27pvdkilnyj41xf4awri9ya14gxayr99qksllz92ywd9lxad";
+    rev = "aabe9421cb26f8e2537d49df5392e428bca8d72d";
+    hash = "sha256-5ql4KGMie9EbhHbPSNHIUQrvNpO//WgpTDIK6ETwdkg=";
   };
 
   nativeBuildInputs = [
@@ -36,10 +37,17 @@ mkDerivation rec {
     qtwebengine
   ];
 
+  # needed for qmlplugindump to work
+  QT_PLUGIN_PATH = "${qtbase.bin}/${qtbase.qtPluginPrefix}";
+  QML2_IMPORT_PATH = lib.concatMapStringsSep ":"
+    (lib: "${lib}/${qtbase.qtQmlPrefix}")
+    [ kirigami2 qtmultimedia ];
+
   meta = with lib; {
     description = "Delta Chat client using Kirigami framework";
     homepage = "https://git.sr.ht/~link2xt/kdeltachat";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dotlambda ];
+    platforms = platforms.linux;
   };
 }

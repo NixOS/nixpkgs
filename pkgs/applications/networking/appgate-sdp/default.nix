@@ -32,8 +32,7 @@
 , openssl
 , pango
 , procps
-, python37
-, python37Packages
+, python3
 , stdenv
 , systemd
 , xdg-utils
@@ -88,11 +87,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "appgate-sdp";
-  version = "5.4.2";
+  version = "5.5.2";
 
   src = fetchurl {
     url = "https://bin.appgate-sdp.com/${versions.majorMinor version}/client/appgate-sdp_${version}_amd64.deb";
-    sha256 = "sha256-wAhcTRO/Cd4MG1lfPNDq92yGcu3NOfymucddy92VaXo=";
+    sha256 = "sha256-8K7RqkxpyRsQ3QHGIfTchLaZ7/+k0hbiJdl7uc++vYs=";
   };
 
   # just patch interpreter
@@ -101,8 +100,8 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   buildInputs = [
-    python37
-    python37Packages.dbus-python
+    python3
+    python3.pkgs.dbus-python
   ];
 
   nativeBuildInputs = [
@@ -157,4 +156,3 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ ymatsiuk ];
   };
 }
-

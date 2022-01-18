@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , nix-update-script
 , meson
@@ -14,7 +15,6 @@
 , libsoup
 , libgee
 , wrapGAppsHook
-, vala_0_40
 }:
 
 stdenv.mkDerivation rec {
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    vala_0_40
+    vala
     pkg-config
     python3
     wrapGAppsHook
@@ -61,8 +61,16 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A helpful tool that lets you debug what part of your API is causing you issues";
     homepage = "https://github.com/jeremyvaartjes/ping";
-    maintainers = with maintainers; [ xiorcale ] ++ pantheon.maintainers;
+    maintainers = with maintainers; [ xiorcale ] ++ teams.pantheon.members;
     platforms = platforms.linux;
     license = licenses.gpl3;
+    mainProgram = "com.github.jeremyvaartjes.ping";
+    # Does not build with vala 0.48 or later
+    # ../src/Application.vala:696.46-696.57: error: Assignment: Cannot convert from
+    # `GLib.HashTable<weak string,weak string>' to `GLib.HashTable<string,string>?'
+    #                     HashTable<string,string> tempDataList = Soup.Form.decode(testObjs[id].data);
+    #                                              ^^^^^^^^^^^^
+    # Upstream has no activity since 28 Dec 2020
+    broken = true;
   };
 }

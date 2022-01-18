@@ -1,12 +1,8 @@
-{ lib, stdenv, fetchurl, qt4, pkg-config, libnl, python }:
-
-let
-  version = "016";
-in
+{ lib, stdenv, fetchurl, qt4, pkg-config, libnl, python2 }:
 
 stdenv.mkDerivation rec {
   pname = "ntrack";
-  inherit version;
+  version = "016";
 
   src = fetchurl {
     url = "https://launchpad.net/ntrack/main/${version}/+download/${pname}-${version}.tar.gz";
@@ -15,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libnl qt4 ];
 
-  nativeBuildInputs = [ pkg-config python ];
+  nativeBuildInputs = [ pkg-config python2 ];
 
   # error: ISO C does not support '__FUNCTION__' predefined identifier [-Werror=pedantic]
   NIX_CFLAGS_COMPILE = "-Wno-error";

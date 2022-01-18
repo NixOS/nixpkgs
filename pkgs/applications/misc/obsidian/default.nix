@@ -1,7 +1,8 @@
-{ stdenv, fetchurl, lib, makeWrapper, electron, makeDesktopItem, graphicsmagick
+{ stdenv, fetchurl, lib, makeWrapper, electron_13, makeDesktopItem, graphicsmagick
 , writeScript }:
 
 let
+  electron = electron_13;
   icon = fetchurl {
     url =
       "https://forum.obsidian.md/uploads/default/original/1X/bf119bd48f748f4fd2d65f2d1bb05d3c806883b5.png";
@@ -30,11 +31,11 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "obsidian";
-  version = "0.12.3";
+  version = "0.13.19";
 
   src = fetchurl {
     url = "https://github.com/obsidianmd/obsidian-releases/releases/download/v${version}/obsidian-${version}.tar.gz";
-    sha256 = "sha256-nwtQp7BkMZwMzfnA5wdcMAhfezM//Lm9cf0pbvnOVZE=";
+    sha256 = "1jx1raynr0dgffqwya7cp4yr3szdn9bfwrhzk09bkmn8ys7d426r";
   };
 
   nativeBuildInputs = [ makeWrapper graphicsmagick ];

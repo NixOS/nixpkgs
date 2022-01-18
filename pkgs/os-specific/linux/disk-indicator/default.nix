@@ -1,7 +1,8 @@
 { lib, stdenv, fetchgit, libX11 }:
 
 stdenv.mkDerivation {
-  name = "disk-indicator-2014-05-19";
+  pname = "disk-indicator";
+  version = "unstable-2014-05-19";
 
   src = fetchgit {
     url = "git://github.com/MeanEYE/Disk-Indicator.git";

@@ -1,5 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, fetchsvn, pkg-config, sconsPackages, libGLU, libGL, SDL2, SDL2_image
-, libvorbis, bullet, curl, gettext, writeTextFile
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchsvn
+, pkg-config
+, sconsPackages
+, libGLU
+, libGL
+, SDL2
+, SDL2_image
+, libvorbis
+, bullet
+, curl
+, gettext
+, writeTextFile
 
 , data ? fetchsvn {
     url = "svn://svn.code.sf.net/p/vdrift/code/vdrift-data";
@@ -8,7 +21,7 @@
   }
 }:
 let
-  version = "git";
+  version = "unstable-2017-12-09";
   bin = stdenv.mkDerivation {
     pname = "vdrift";
     inherit version;
@@ -36,7 +49,7 @@ let
       description = "Car racing game";
       homepage = "http://vdrift.net/";
       license = lib.licenses.gpl2Plus;
-      maintainers = with lib.maintainers; [viric];
+      maintainers = with lib.maintainers; [ viric ];
       platforms = lib.platforms.linux;
     };
   };
@@ -54,7 +67,7 @@ in writeTextFile {
   '';
 } // {
   meta = bin.meta // {
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
   };
   unwrapped = bin;
   inherit bin data;

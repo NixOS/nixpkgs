@@ -3,13 +3,14 @@
 stdenv.mkDerivation {
   name = "replace-secret";
   buildInputs = [ python3 ];
-  phases = [ "installPhase" "checkPhase" ];
+  dontUnpack = true;
   installPhase = ''
+    runHook preInstall
     install -D ${./replace-secret.py} $out/bin/replace-secret
     patchShebangs $out
+    runHook postInstall
   '';
-  doCheck = true;
-  checkPhase = ''
+  installCheckPhase = ''
     install -m 0600 ${./test/input_file} long_test
     $out/bin/replace-secret "replace this" ${./test/passwd} long_test
     $out/bin/replace-secret "and this" ${./test/rsa} long_test

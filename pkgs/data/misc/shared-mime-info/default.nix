@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
   pname = "shared-mime-info";
   version = "2.1";
 
+  outputs = [ "out" "dev" ];
+
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "xdg";
@@ -39,15 +41,15 @@ stdenv.mkDerivation rec {
     pkg-config
     gettext
     itstool
-  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     libxml2
-    shared-mime-info
-  ];
+  ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) shared-mime-info;
 
   buildInputs = [
     libxml2
     glib
   ];
+
+  strictDeps = true;
 
   mesonFlags = [
     "-Dupdate-mimedb=true"

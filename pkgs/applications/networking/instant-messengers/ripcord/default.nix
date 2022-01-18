@@ -5,12 +5,12 @@
 
 mkDerivation rec {
   pname = "ripcord";
-  version = "0.4.28";
+  version = "0.4.29";
 
   src = let
     appimage = fetchurl {
       url = "https://cancel.fm/dl/Ripcord-${version}-x86_64.AppImage";
-      sha256 = "0bczqp4kny7jlp06f4bh1xg0x17g8980dj6pk4waqc7qk88i6sfv";
+      sha256 = "sha256-4yDLPEBDsPKWtLwdpmSyl3b5XCwLAr2/EVtNRrFmmJk=";
       name = "${pname}-${version}.AppImage";
     };
   in appimageTools.extract {

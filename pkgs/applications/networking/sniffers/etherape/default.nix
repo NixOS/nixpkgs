@@ -2,9 +2,10 @@
 popt, itstool, libxml2 }:
 
 stdenv.mkDerivation rec {
-  name = "etherape-0.9.20";
+  pname = "etherape";
+  version = "0.9.20";
   src = fetchurl {
-    url = "mirror://sourceforge/etherape/${name}.tar.gz";
+    url = "mirror://sourceforge/etherape/etherape-${version}.tar.gz";
     sha256 = "sha256-9UsQtWOXB1yYofGS4rMIF+ISWBsJKd0DBOFfqOr1n5Y=";
   };
 

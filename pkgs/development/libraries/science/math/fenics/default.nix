@@ -30,6 +30,15 @@
 let
   version = "2019.1.0";
 
+  # TODO: test with newer pytest
+  pytest = pythonPackages.callPackage
+    ../../../../python2-modules/pytest {
+      # hypothesis tests require pytest that causes dependency cycle
+      hypothesis = pythonPackages.hypothesis.override {
+        doCheck = false;
+      };
+    };
+
   dijitso = pythonPackages.buildPythonPackage {
     pname = "dijitso";
     inherit version;

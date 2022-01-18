@@ -1,11 +1,8 @@
 { lib, stdenv, fetchFromGitHub, which, ocamlPackages }:
 
-let version = "5.0"; in
-
-stdenv.mkDerivation {
-
+stdenv.mkDerivation rec {
   pname = "eff";
-  inherit version;
+  version = "5.0";
 
   src = fetchFromGitHub {
     owner = "matijapretnar";

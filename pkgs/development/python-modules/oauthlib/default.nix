@@ -1,31 +1,40 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, mock
-, pytest
-, cryptography
+
+# propagates
 , blinker
+, cryptography
 , pyjwt
+
+# test
+, mock
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "oauthlib";
-  version = "unstable-2020-05-08";
+  version = "3.1.1";
+  format = "setuptools";
 
   # master supports pyjwt==1.7.1
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "46647402896db5f0d979eba9594623e889739060";
-    sha256 = "1wrdjdvlfcd74lckcgascnasrffg8sip0z673si4ag5kv4afiz3l";
+    rev = "v${version}";
+    hash = "sha256:1bgxpzh11i0x7h9py3a29cz5z714b3p498b62znnn5ciy0cr80sv";
   };
 
-  checkInputs = [ mock pytest ];
-  propagatedBuildInputs = [ cryptography blinker pyjwt ];
+  propagatedBuildInputs = [
+    blinker
+    cryptography
+    pyjwt
+  ];
 
-  checkPhase = ''
-    py.test tests/
-  '';
+  checkInputs = [
+    mock
+    pytestCheckHook
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/idan/oauthlib";

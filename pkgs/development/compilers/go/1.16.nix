@@ -40,6 +40,10 @@ let
     "armv5tel" = "arm";
     "armv6l" = "arm";
     "armv7l" = "arm";
+    "mips" = "mips";
+    "mipsel" = "mipsle";
+    "riscv64" = "riscv64";
+    "s390x" = "s390x";
     "powerpc64le" = "ppc64le";
   }.${platform.parsed.cpu.name} or (throw "Unsupported system");
 
@@ -50,11 +54,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "go";
-  version = "1.16.6";
+  version = "1.16.13";
 
   src = fetchurl {
     url = "https://dl.google.com/go/go${version}.src.tar.gz";
-    sha256 = "sha256-o6XUvEAbUdsGXk+TtSM0ek00OuDAsIplw0I7BaE4A30=";
+    sha256 = "sha256-sJJmVOrrAe9DgWY49C17FoHy0/QblVnwdzVSK3r61Bo=";
   };
 
   # perl is used for testing go vet
@@ -125,7 +129,6 @@ stdenv.mkDerivation rec {
     # Disable cgo lookup tests not works, they depend on resolver
     rm src/net/cgo_unix_test.go
 
-  '' + lib.optionalString stdenv.isLinux ''
     # prepend the nix path to the zoneinfo files but also leave the original value for static binaries
     # that run outside a nix server
     sed -i 's,\"/usr/share/zoneinfo/,"${tzdata}/share/zoneinfo/\"\,\n\t&,' src/time/zoneinfo_unix.go
@@ -269,7 +272,7 @@ stdenv.mkDerivation rec {
   disallowedReferences = [ goBootstrap ];
 
   meta = with lib; {
-    homepage = "http://golang.org/";
+    homepage = "https://go.dev/";
     description = "The Go Programming language";
     license = licenses.bsd3;
     maintainers = teams.golang.members;

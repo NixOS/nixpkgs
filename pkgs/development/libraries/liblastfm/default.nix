@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     repositories.git = "git://github.com/lastfm/liblastfm.git";
     description = "Official LastFM library";
     platforms = platforms.unix;
-    maintainers = [ maintainers.phreedom ];
+    maintainers = [ ];
     license = licenses.gpl3;
   };
 }

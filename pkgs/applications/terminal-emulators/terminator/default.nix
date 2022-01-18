@@ -27,7 +27,7 @@ python3.pkgs.buildPythonApplication rec {
     intltool
     gobject-introspection
     wrapGAppsHook
-    python3.pkgs.pytestrunner
+    python3.pkgs.pytest-runner
   ];
 
   buildInputs = [
@@ -55,6 +55,12 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   doCheck = false;
+
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   meta = with lib; {
     description = "Terminal emulator with support for tiling and tabs";

@@ -28,7 +28,6 @@ buildRubyGem rec {
   '';
 
   meta = {
-    inherit version;
     description = "Creates Nix packages from Gemfiles";
     longDescription = ''
       This is a tool that converts Gemfile.lock files to nix expressions.

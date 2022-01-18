@@ -7,18 +7,7 @@ let
 
   runtime' = filter (f: f.enable) (attrValues cfg.runtime);
 
-  # taken from the etc module
-  runtime = pkgs.stdenvNoCC.mkDerivation {
-    name = "runtime";
-
-    builder = ../system/etc/make-etc.sh;
-
-    preferLocalBuild = true;
-    allowSubstitutes = false;
-
-    sources = map (x: x.source) runtime';
-    targets = map (x: x.target) runtime';
-  };
+  runtime = pkgs.linkFarm "neovim-runtime" (map (x: { name = x.target; path = x.source; }) runtime');
 
 in {
   options.programs.neovim = {
@@ -52,24 +41,36 @@ in {
     withRuby = mkOption {
       type = types.bool;
       default = true;
-      description = "Enable ruby provider.";
+      description = "Enable Ruby provider.";
+    };
+
+    withPython3 = mkOption {
+      type = types.bool;
+      default = true;
+      description = "Enable Python 3 provider.";
+    };
+
+    withNodeJs = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Enable Node provider.";
     };
 
     configure = mkOption {
       type = types.attrs;
       default = {};
-      example = literalExample ''
-        configure = {
-            customRC = $''''
+      example = literalExpression ''
+        {
+          customRC = '''
             " here your custom configuration goes!
-            $'''';
-            packages.myVimPackage = with pkgs.vimPlugins; {
-              # loaded on launch
-              start = [ fugitive ];
-              # manually loadable by calling `:packadd $plugin-name`
-              opt = [ ];
-            };
+          ''';
+          packages.myVimPackage = with pkgs.vimPlugins; {
+            # loaded on launch
+            start = [ fugitive ];
+            # manually loadable by calling `:packadd $plugin-name`
+            opt = [ ];
           };
+        }
       '';
       description = ''
         Generate your init file from your list of plugins and custom commands.
@@ -80,7 +81,7 @@ in {
     package = mkOption {
       type = types.package;
       default = pkgs.neovim-unwrapped;
-      defaultText = literalExample "pkgs.neovim-unwrapped";
+      defaultText = literalExpression "pkgs.neovim-unwrapped";
       description = "The package to use for the neovim binary.";
     };
 
@@ -93,8 +94,8 @@ in {
 
     runtime = mkOption {
       default = {};
-      example = literalExample ''
-        runtime."ftplugin/c.vim".text = "setlocal omnifunc=v:lua.vim.lsp.omnifunc";
+      example = literalExpression ''
+        { "ftplugin/c.vim".text = "setlocal omnifunc=v:lua.vim.lsp.omnifunc"; }
       '';
       description = ''
         Set of files that have to be linked in <filename>runtime</filename>.
@@ -150,10 +151,10 @@ in {
     environment.systemPackages = [
       cfg.finalPackage
     ];
-    environment.variables = { EDITOR = mkOverride 900 "nvim"; };
+    environment.variables.EDITOR = mkIf cfg.defaultEditor (mkOverride 900 "nvim");
 
     programs.neovim.finalPackage = pkgs.wrapNeovim cfg.package {
-      inherit (cfg) viAlias vimAlias;
+      inherit (cfg) viAlias vimAlias withPython3 withNodeJs withRuby;
       configure = cfg.configure // {
 
         customRC = (cfg.configure.customRC or "") + ''

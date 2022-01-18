@@ -14,7 +14,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
   testScript = ''
     machine.wait_for_x()
-    machine.succeed("gnome-calculator &")
+    machine.succeed("gnome-calculator >&2 &")
     machine.wait_for_window("gnome-calculator")
     machine.succeed(
         "xdotool search --sync --onlyvisible --class gnome-calculator "

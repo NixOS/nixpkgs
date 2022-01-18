@@ -1,6 +1,6 @@
 { lib, buildPythonPackage, fetchPypi, pythonOlder, setuptools
 , twiggy, requests, offtrac, bugzilla, taskw, python-dateutil, pytz, keyring, six
-, jinja2, pycurl, dogpile_cache, lockfile, click, pyxdg, future, jira }:
+, jinja2, pycurl, dogpile-cache, lockfile, click, pyxdg, future, jira }:
 
 buildPythonPackage rec {
   pname = "bugwarrior";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     setuptools
     twiggy requests offtrac bugzilla taskw python-dateutil pytz keyring six
-    jinja2 pycurl dogpile_cache lockfile click pyxdg future jira
+    jinja2 pycurl dogpile-cache lockfile click pyxdg future jira
   ];
 
   # for the moment oauth2client <4.0.0 and megaplan>=1.4 are missing for running the test suite.

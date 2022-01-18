@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "032nva6iiwmw59gjipm1mv0xlcckhxsf45mc2qbnv19lbis0q22i";
   };
 
-  propagatedBuildInputs = [ perl perlPackages.TextNSP perlPackages.PerlMagick ];
+  propagatedBuildInputs = [ perl perlPackages.TextNSP perlPackages.ImageMagick ];
 
   nativeBuildInputs = [ zlib makeWrapper ];
   buildInputs = lib.optional stdenv.cc.isClang openmp;

@@ -15,7 +15,8 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "cmake-${os useNcurses "cursesUI-"}${os useQt4 "qt4UI-"}${version}";
+  pname = "cmake${os useNcurses "-cursesUI"}${os useQt4 "-qt4UI"}";
+  inherit version;
 
   inherit majorVersion;
 
@@ -56,7 +57,7 @@ stdenv.mkDerivation rec {
     (concatMap (p: [ (p.dev or p) (p.out or p) ]) buildInputs);
 
   configureFlags = [
-    "--docdir=/share/doc/${name}"
+    "--docdir=/share/doc/${pname}-${version}"
     "--mandir=/share/man"
     "--system-libs"
     "--no-system-libarchive"

@@ -1,17 +1,34 @@
-{ lib, python3, groff, less, fetchFromGitHub }:
+{ lib
+, python3
+, groff
+, less
+, fetchFromGitHub
+}:
 let
   py = python3.override {
     packageOverrides = self: super: {
+      awscrt = super.awscrt.overridePythonAttrs (oldAttrs: rec {
+        version = "0.12.4";
+        src = self.fetchPypi {
+          inherit (oldAttrs) pname;
+          inherit version;
+          sha256 = "sha256:1cmfkcv2zzirxsb989vx1hvna9nv24pghcvypl0zaxsjphv97mka";
+        };
+      });
+
       botocore = super.botocore.overridePythonAttrs (oldAttrs: rec {
-        version = "2.0.0dev122";
+        # Releases: https://github.com/boto/botocore/commits/v2
+        version = "2.0.0dev155";
         src = fetchFromGitHub {
           owner = "boto";
           repo = "botocore";
-          rev = "8dd916418c8193f56226b7772f263b2435eae27a";
-          sha256 = "sha256-iAZmqnffqrmFuxlQyOpEQzSCcL/hRAjuXKulOXoy4hY=";
+          rev = "7083e5c204e139dc41f646e0ad85286b5e7c0c23";
+          sha256 = "sha256-aiCc/CXoTem0a9wI/AMBRK3g2BXJi7LpnUY/BxBEKVM=";
         };
+        propagatedBuildInputs = super.botocore.propagatedBuildInputs ++ [py.pkgs.awscrt];
       });
-      prompt_toolkit = super.prompt_toolkit.overridePythonAttrs (oldAttrs: rec {
+
+      prompt-toolkit = super.prompt-toolkit.overridePythonAttrs (oldAttrs: rec {
         version = "2.0.10";
         src = oldAttrs.src.override {
           inherit version;
@@ -24,26 +41,14 @@ let
 in
 with py.pkgs; buildPythonApplication rec {
   pname = "awscli2";
-  version = "2.2.14"; # N.B: if you change this, change botocore to a matching version too
+  version = "2.4.9"; # N.B: if you change this, change botocore to a matching version too
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cli";
     rev = version;
-    sha256 = "sha256-LU9Tqzdi8ULZ5y3FbfSXdrip4NcxFkXRCTpVGo05LcM=";
+    sha256 = "sha256-ihmbw+gS7zZz/nebrmpEr9MR+dVabc70DBPPSrm3eeE=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "awscrt==0.11.13" "awscrt" \
-      --replace "colorama>=0.2.5,<0.4.4" "colorama" \
-      --replace "cryptography>=3.3.2,<3.4.0" "cryptography" \
-      --replace "docutils>=0.10,<0.16" "docutils" \
-      --replace "ruamel.yaml>=0.15.0,<0.16.0" "ruamel.yaml" \
-      --replace "wcwidth<0.2.0" "wcwidth"
-  '';
-
-  checkInputs = [ jsonschema mock nose ];
 
   propagatedBuildInputs = [
     awscrt
@@ -55,22 +60,35 @@ with py.pkgs; buildPythonApplication rec {
     docutils
     groff
     less
-    prompt_toolkit
+    prompt-toolkit
     pyyaml
     rsa
-    ruamel_yaml
-    s3transfer
-    six
+    ruamel-yaml
     wcwidth
   ];
+
+  checkInputs = [
+    jsonschema
+    mock
+    pytestCheckHook
+    pytest-xdist
+  ];
+
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "colorama>=0.2.5,<0.4.4" "colorama" \
+      --replace "cryptography>=3.3.2,<3.4.0" "cryptography" \
+      --replace "docutils>=0.10,<0.16" "docutils" \
+      --replace "ruamel.yaml>=0.15.0,<0.16.0" "ruamel.yaml" \
+      --replace "wcwidth<0.2.0" "wcwidth" \
+      --replace "distro>=1.5.0,<1.6.0" "distro"
+  '';
 
   checkPhase = ''
     export PATH=$PATH:$out/bin
 
     # https://github.com/NixOS/nixpkgs/issues/16144#issuecomment-225422439
     export HOME=$TMP
-
-    AWS_TEST_COMMAND=$out/bin/aws python scripts/ci/run-tests
   '';
 
   postInstall = ''

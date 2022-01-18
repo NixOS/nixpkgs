@@ -11,8 +11,8 @@ in
 
 stdenv.mkDerivation rec {
   pname = "authy";
-  version = "1.8.3";
-  rev = "5";
+  version = "1.9.0";
+  rev = "7";
 
   buildInputs = [
     alsa-lib
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://api.snapcraft.io/api/v1/snaps/download/H8ZpNgIoPyvmkgxOWw5MSzsXK1wRZiHn_${rev}.snap";
-    sha256 = "1yfvkmy34mc1dan9am11yka88jv7a4dslsszy4kcc8vap4cjmgpn";
+    sha256 = "10az47cc3lgsdi0ixmmna08nqf9xm7gsl1ph00wfwrxzsi05ygx3";
   };
 
   nativeBuildInputs = [ autoPatchelfHook makeWrapper squashfsTools ];

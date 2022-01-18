@@ -6,6 +6,8 @@ let
   cfg = config.services.grafana;
   opt = options.services.grafana;
   declarativePlugins = pkgs.linkFarm "grafana-plugins" (builtins.map (pkg: { name = pkg.pname; path = pkg; }) cfg.declarativePlugins);
+  useMysql = cfg.database.type == "mysql";
+  usePostgresql = cfg.database.type == "postgres";
 
   envOptions = {
     PATHS_DATA = cfg.dataDir;
@@ -328,13 +330,14 @@ in {
     staticRootPath = mkOption {
       description = "Root path for static assets.";
       default = "${cfg.package}/share/grafana/public";
+      defaultText = literalExpression ''"''${package}/share/grafana/public"'';
       type = types.str;
     };
 
     package = mkOption {
       description = "Package to use.";
       default = pkgs.grafana;
-      defaultText = "pkgs.grafana";
+      defaultText = literalExpression "pkgs.grafana";
       type = types.package;
     };
 
@@ -342,7 +345,7 @@ in {
       type = with types; nullOr (listOf path);
       default = null;
       description = "If non-null, then a list of packages containing Grafana plugins to install. If set, plugins cannot be manually installed.";
-      example = literalExample "with pkgs.grafanaPlugins; [ grafana-piechart-panel ]";
+      example = literalExpression "with pkgs.grafanaPlugins; [ grafana-piechart-panel ]";
       # Make sure each plugin is added only once; otherwise building
       # the link farm fails, since the same path is added multiple
       # times.
@@ -401,6 +404,7 @@ in {
       path = mkOption {
         description = "Database path.";
         default = "${cfg.dataDir}/data/grafana.db";
+        defaultText = literalExpression ''"''${config.${opt.dataDir}}/data/grafana.db"'';
         type = types.path;
       };
 
@@ -635,7 +639,7 @@ in {
     systemd.services.grafana = {
       description = "Grafana Service Daemon";
       wantedBy = ["multi-user.target"];
-      after = ["networking.target"];
+      after = ["networking.target"] ++ lib.optional usePostgresql "postgresql.service" ++ lib.optional useMysql "mysql.service";
       environment = {
         QT_QPA_PLATFORM = "offscreen";
       } // mapAttrs' (n: v: nameValuePair "GF_${n}" (toString v)) envOptions;
@@ -673,6 +677,33 @@ in {
         User = "grafana";
         RuntimeDirectory = "grafana";
         RuntimeDirectoryMode = "0755";
+        # Hardening
+        AmbientCapabilities = lib.mkIf (cfg.port < 1024) [ "CAP_NET_BIND_SERVICE" ];
+        CapabilityBoundingSet = if (cfg.port < 1024) then [ "CAP_NET_BIND_SERVICE" ] else [ "" ];
+        DeviceAllow = [ "" ];
+        LockPersonality = true;
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        PrivateTmp = true;
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        ProtectSystem = "full";
+        RemoveIPC = true;
+        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        SystemCallArchitectures = "native";
+        # Upstream grafana is not setting SystemCallFilter for compatibility
+        # reasons, see https://github.com/grafana/grafana/pull/40176
+        SystemCallFilter = [ "@system-service" "~@privileged" "~@resources" ];
+        UMask = "0027";
       };
       preStart = ''
         ln -fs ${cfg.package}/share/grafana/conf ${cfg.dataDir}

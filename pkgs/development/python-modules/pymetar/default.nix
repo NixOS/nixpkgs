@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "pymetar";
-  version = "1.3";
+  version = "1.4";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-zhuXOZIIzh5p0CDOsiUNTqeXDoHFcf1BPg868fc7CIg=";
+    sha256 = "48dbe6c4929961021cb61e49bb9e0605b54c4b61b9fb9ade51076705a08ecd54";
   };
 
   checkPhase = ''

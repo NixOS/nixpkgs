@@ -12,7 +12,8 @@
 
 buildPythonPackage rec {
   pname = "pytibber";
-  version = "0.19.0";
+  version = "0.21.6";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
@@ -20,7 +21,7 @@ buildPythonPackage rec {
     owner = "Danielhiversen";
     repo = "pyTibber";
     rev = version;
-    sha256 = "sha256-9xKt6OspdM7zWbVzjtvDPYuGyIW3K6ioASt53LOgdvk=";
+    hash = "sha256-zgiUXGso3bQ3pCD7r+VYHGBIihPwSfHibS2OZvPUb3Q=";
   };
 
   propagatedBuildInputs = [
@@ -35,15 +36,19 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "test/test.py" ];
+  pytestFlagsArray = [
+    "test/test.py"
+  ];
 
   # tests access network
   doCheck = false;
 
-  pythonImportsCheck = [ "tibber" ];
+  pythonImportsCheck = [
+    "tibber"
+  ];
 
   meta = with lib; {
-    description = "A python3 library to communicate with Tibber";
+    description = "Python library to communicate with Tibber";
     homepage = "https://github.com/Danielhiversen/pyTibber";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];

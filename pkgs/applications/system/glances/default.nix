@@ -1,5 +1,5 @@
 { stdenv, buildPythonApplication, fetchFromGitHub, isPyPy, lib
-, defusedxml, future, psutil, setuptools
+, defusedxml, future, packaging, psutil, setuptools
 # Optional dependencies:
 , bottle, pysnmp
 , hddtemp
@@ -9,14 +9,14 @@
 
 buildPythonApplication rec {
   pname = "glances";
-  version = "3.2.1";
+  version = "3.2.4.2";
   disabled = isPyPy;
 
   src = fetchFromGitHub {
     owner = "nicolargo";
     repo = "glances";
     rev = "v${version}";
-    sha256 = "0m2cxmlyay2rr9hnc08s5q9xwdqy0nhzsl10by4f9ji0kiahnpl6";
+    sha256 = "0gql61lrav3f7wbsvgc1d6vf8r0xi5xs9rz9d3sqw3wj5m90w0vq";
   };
 
   # Some tests fail in the sandbox (they e.g. require access to /sys/class/power_supply):
@@ -31,7 +31,7 @@ buildPythonApplication rec {
   ];
 
   doCheck = true;
-  preCheck = lib.optional stdenv.isDarwin ''
+  preCheck = lib.optionalString stdenv.isDarwin ''
     export DYLD_FRAMEWORK_PATH=/System/Library/Frameworks
   '';
 
@@ -40,6 +40,7 @@ buildPythonApplication rec {
     defusedxml
     future
     netifaces
+    packaging
     psutil
     pysnmp
     setuptools

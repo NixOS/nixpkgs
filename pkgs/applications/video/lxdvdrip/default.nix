@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, libdvdread }:
 
 stdenv.mkDerivation rec {
-  name = "lxdvdrip-1.76";
+  pname = "lxdvdrip";
+  version = "1.76";
 
   src = fetchurl {
-    url = "mirror://sourceforge/lxdvdrip/${name}.tgz";
+    url = "mirror://sourceforge/lxdvdrip/lxdvdrip-${version}.tgz";
     sha256 = "0vgslc7dapfrbgslnaicc8bggdccyrvcgjv1dwi19qswhh7jkzj6";
   };
 

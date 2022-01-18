@@ -1,15 +1,22 @@
 { lib, mkDerivation, fetchFromGitHub, standard-library }:
 
 mkDerivation rec {
-  version = "0.1.6";
+  version = "0.1.7.1";
   pname = "agda-categories";
 
   src = fetchFromGitHub {
     owner = "agda";
     repo = "agda-categories";
     rev = "v${version}";
-    sha256 = "1s75yqcjwj13s1m3fg29krnn05lws6143ccfdygc6c4iynvvznsh";
+    sha256 = "1acb693ad2nrmnn6jxsyrlkc0di3kk2ksj2w9wnyfxrgvfsil7rn";
   };
+
+  # Remove this once new version of agda-categories is released which
+  # directly references standard-library-1.7.1
+  postPatch = ''
+    substituteInPlace agda-categories.agda-lib \
+      --replace 'standard-library-1.7' 'standard-library-1.7.1'
+  '';
 
   buildInputs = [ standard-library ];
 

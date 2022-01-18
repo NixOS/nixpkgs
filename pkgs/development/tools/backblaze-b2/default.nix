@@ -1,23 +1,13 @@
 { fetchFromGitHub, lib, python3Packages }:
 
-let
-  python3Packages2 = python3Packages.override {
-    overrides = self: super: {
-      arrow = self.callPackage ../../python-modules/arrow/2.nix { };
-    };
-  };
-in
-let
-  python3Packages = python3Packages2; # two separate let … in to avoid infinite recursion
-in
 python3Packages.buildPythonApplication rec {
   pname = "backblaze-b2";
-  version = "2.5.0";
+  version = "3.2.0";
 
   src = python3Packages.fetchPypi {
     inherit version;
     pname = "b2";
-    sha256 = "0sh9k9fnj73ydqnk056m01xkilpxh7f4597cnczqhy21lxzr3d45";
+    sha256 = "sha256-dE4eLTNU6O0DscwN8+m1UaG46dbI0DiWzeJK49GUvKA=";
   };
 
   postPatch = ''
@@ -29,7 +19,6 @@ python3Packages.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3Packages; [
     b2sdk
-    class-registry
     phx-class-registry
     setuptools
     docutils
@@ -40,11 +29,14 @@ python3Packages.buildPythonApplication rec {
     setuptools-scm
   ];
 
-  checkInputs = with python3Packages; [ pytestCheckHook ];
+  checkInputs = with python3Packages; [
+    pytestCheckHook
+  ];
 
   disabledTests = [
     "test_files_headers"
     "test_integration"
+    "test_get_account_info"
   ];
 
   postInstall = ''

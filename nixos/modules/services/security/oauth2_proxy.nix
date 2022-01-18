@@ -91,7 +91,7 @@ in
     package = mkOption {
       type = types.package;
       default = pkgs.oauth2-proxy;
-      defaultText = "pkgs.oauth2-proxy";
+      defaultText = literalExpression "pkgs.oauth2-proxy";
       description = ''
         The package that provides oauth2-proxy.
       '';

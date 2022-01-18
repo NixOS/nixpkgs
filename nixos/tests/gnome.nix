@@ -18,6 +18,8 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
           enable = true;
           user = "alice";
         };
+        # Catch GDM failures that don't happen with AutomaticLoginEnable, e.g. https://github.com/NixOS/nixpkgs/issues/149539
+        gdm.autoLogin.delay = 1;
       };
 
       services.xserver.desktopManager.gnome.enable = true;
@@ -30,7 +32,21 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
         })
       ];
 
-      virtualisation.memorySize = 1024;
+      systemd.user.services = {
+        "org.gnome.Shell@wayland" = {
+          serviceConfig = {
+            ExecStart = [
+              # Clear the list before overriding it.
+              ""
+              # Eval API is now internal so Shell needs to run in unsafe mode.
+              # TODO: improve test driver so that it supports openqa-like manipulation
+              # that would allow us to drop this mess.
+              "${pkgs.gnome.gnome-shell}/bin/gnome-shell --unsafe-mode"
+            ];
+          };
+        };
+      };
+
     };
 
   testScript = { nodes, ... }: let

@@ -4,12 +4,13 @@
 }:
 
 buildPythonPackage rec {
-  pname = "dash_html_components";
-  version = "1.1.3";
+  pname = "dash-html-components";
+  version = "2.0.0";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "88adb77a674d5d7d0835d71c469f6e7b4aa692f9673808a474d244b71863c58a";
+    pname = "dash_html_components";
+    inherit version;
+    sha256 = "8703a601080f02619a6390998e0b3da4a5daabe97a1fd7a9cebc09d015f26e50";
   };
 
   # No tests in archive

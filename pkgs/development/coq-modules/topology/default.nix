@@ -6,6 +6,7 @@ mkCoqDerivation rec {
 
   releaseRev = v: "v${v}";
 
+  release."9.0.0".sha256 = "sha256:03lgy53xg9pmrdd3d8qb4087k5qjnk260655svp6d79x4p2lxr8c";
   release."8.12.0".sha256 = "sha256-ypHmHwzwZ6MQPYwuS3QyZmVOEPUCSbO2lhVaA6TypgQ=";
   release."8.10.0".sha256 = "sha256-mCLF3JYIiO3AEW9yvlcLeF7zN4SjW3LG+Y5vYB0l55A=";
   release."8.9.0".sha256 = "sha256-ZJh1BM34iZOQ75zqLIA+KtBjO2y33y0UpAw/ydCWQYc=";
@@ -15,16 +16,16 @@ mkCoqDerivation rec {
 
   inherit version;
   defaultVersion = with versions; switch coq.coq-version [
-    { case = isGe "8.12"; out = "8.12.0"; }
-    { case = "8.11"; out = "8.12.0"; }
-    { case = "8.10"; out = "8.10.0"; }
+    { case = isGe "8.10"; out = "9.0.0"; }
     { case = "8.9"; out = "8.9.0"; }
     { case = "8.8"; out = "8.8.0"; }
     { case = "8.7"; out = "8.7.0"; }
     { case = "8.6"; out = "8.6.0"; }
   ] null;
 
-  propagatedBuildInputs = optional (versions.isLe "8.12" defaultVersion) zorns-lemma;
+  propagatedBuildInputs = [ zorns-lemma ];
+
+  useDune2ifVersion = versions.isGe "9.0";
 
   meta = {
     description = "General topology in Coq";

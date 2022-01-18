@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, libibumad }:
 
 stdenv.mkDerivation rec {
-  name = "libibmad-1.3.13";
+  pname = "libibmad";
+  version = "1.3.13";
 
   src = fetchurl {
-    url = "https://www.openfabrics.org/downloads/management/${name}.tar.gz";
+    url = "https://www.openfabrics.org/downloads/management/${pname}-${version}.tar.gz";
     sha256 = "02sj8k2jpcbiq8s0l2lqk4vwji2dbb2lc730cv1yzv0zr0hxgk8p";
   };
 

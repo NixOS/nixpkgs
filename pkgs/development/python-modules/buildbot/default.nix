@@ -1,14 +1,20 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, makeWrapper, isPy3k,
-  python, twisted, jinja2, zope_interface, sqlalchemy,
-  sqlalchemy_migrate, python-dateutil, txaio, autobahn, pyjwt, pyyaml, unidiff, treq,
-  txrequests, pypugjs, boto3, moto, mock, python-lz4, setuptoolsTrial,
-  isort, pylint, flake8, buildbot-worker, buildbot-pkg, buildbot-plugins,
-  parameterized, git, openssh, glibcLocales, ldap3, nixosTests }:
+{ stdenv, lib, buildPythonPackage, fetchPypi, makeWrapper, isPy3k
+, python, twisted, jinja2, zope_interface, sqlalchemy, alembic, python-dateutil
+, txaio, autobahn, pyjwt, pyyaml, unidiff, treq, txrequests, pypugjs, boto3
+, moto, mock, lz4, setuptoolsTrial, isort, pylint, flake8, buildbot-worker
+, buildbot-pkg, buildbot-plugins, parameterized, git, openssh, glibcLocales
+, nixosTests
+}:
 
 let
   withPlugins = plugins: buildPythonPackage {
-    name = "${package.name}-with-plugins";
-    phases = [ "installPhase" "fixupPhase" ];
+    pname = "${package.pname}-with-plugins";
+    inherit (package) version;
+
+    dontUnpack = true;
+    dontBuild = true;
+    doCheck = false;
+
     nativeBuildInputs = [ makeWrapper ];
     propagatedBuildInputs = plugins ++ package.propagatedBuildInputs;
 
@@ -25,11 +31,11 @@ let
 
   package = buildPythonPackage rec {
     pname = "buildbot";
-    version = "3.1.1";
+    version = "3.4.0";
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "0vh2v1qs65kwcj1x8r1wj2g456kflspyz7mjara9ph9qs7j97y74";
+      sha256 = "sha256-14w1sF1aOpfUW76uhAIUpdrjAEhQkEWcRGg9Osc+qFk=";
     };
 
     propagatedBuildInputs = [
@@ -38,7 +44,7 @@ let
       jinja2
       zope_interface
       sqlalchemy
-      sqlalchemy_migrate
+      alembic
       python-dateutil
       txaio
       autobahn
@@ -56,7 +62,7 @@ let
       boto3
       moto
       mock
-      python-lz4
+      lz4
       setuptoolsTrial
       isort
       pylint
@@ -68,9 +74,6 @@ let
       git
       openssh
       glibcLocales
-      # optional dependency that was accidentally made required for tests
-      # https://github.com/buildbot/buildbot/pull/5857
-      ldap3
     ];
 
     patches = [
@@ -96,6 +99,7 @@ let
     passthru = {
       inherit withPlugins;
       tests.buildbot = nixosTests.buildbot;
+      updateScript = ./update.sh;
     };
 
     meta = with lib; {

@@ -2,29 +2,32 @@
 
 stdenv.mkDerivation rec {
   pname = "apktool";
-  version = "2.5.0";
+  version = "2.6.0";
 
   src = fetchurl {
     urls = [
       "https://bitbucket.org/iBotPeaches/apktool/downloads/apktool_${version}.jar"
       "https://github.com/iBotPeaches/Apktool/releases/download/v${version}/apktool_${version}.jar"
     ];
-    sha256 = "1r4z0z2c1drjd4ynpf36dklxs3hq1wdnzh63mk2yk4mmk75xg4mk";
+    sha256 = "sha256-91CjzSwflC8n9ff9XRfq2jva/wpmQ/SduEfoQlef3aU=";
   };
 
-  phases = [ "installPhase" ];
+  dontUnpack = true;
 
   nativeBuildInputs = [ makeWrapper ];
 
   sourceRoot = ".";
 
-  installPhase = ''
-    install -D ${src} "$out/libexec/apktool/apktool.jar"
-    mkdir -p "$out/bin"
-    makeWrapper "${jre}/bin/java" "$out/bin/apktool" \
-        --add-flags "-jar $out/libexec/apktool/apktool.jar" \
-        --prefix PATH : "${builtins.head build-tools}/libexec/android-sdk/build-tools/28.0.3"
-  '';
+  installPhase =
+    let
+      tools = builtins.head build-tools;
+    in ''
+      install -D ${src} "$out/libexec/apktool/apktool.jar"
+      mkdir -p "$out/bin"
+      makeWrapper "${jre}/bin/java" "$out/bin/apktool" \
+          --add-flags "-jar $out/libexec/apktool/apktool.jar" \
+          --prefix PATH : "${tools}/libexec/android-sdk/build-tools/${tools.version}"
+    '';
 
   meta = with lib; {
     description = "A tool for reverse engineering Android apk files";

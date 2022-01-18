@@ -7,7 +7,7 @@
 , astunparse
 , typing-extensions
 , pytestCheckHook
-, pytestcov
+, pytest-cov
 }:
 
 buildPythonPackage rec {
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     }
   )];
 
-  checkInputs = [ pytestCheckHook pytestcov ];
+  checkInputs = [ pytestCheckHook pytest-cov ];
   propagatedBuildInputs = [ matchpy numpy astunparse typing-extensions ];
 
   # Tests must be run from outside the source directory

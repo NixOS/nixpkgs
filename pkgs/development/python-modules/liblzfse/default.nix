@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchPypi
 , lzfse
-, pytestCheckHook
 }:
 buildPythonPackage rec {
   pname = "pyliblzfse";

@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, pytest, pytestrunner }:
+{ lib, buildPythonPackage, fetchPypi, pytest, pytest-runner }:
 
 buildPythonPackage rec {
   pname = "mccabe";
@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "07w3p1qm44hgxf3vvwz84kswpsx6s7kvaibzrsx5dzm0hli1i3fx";
   };
 
-  buildInputs = [ pytest pytestrunner ];
+  buildInputs = [ pytest pytest-runner ];
 
   meta = with lib; {
     description = "McCabe checker, plugin for flake8";

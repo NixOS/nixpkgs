@@ -11,9 +11,20 @@ rustPlatform.buildRustPackage rec {
     sha256 = "014blvrv0kk4gzga86mbk7gd5dl1szajfi972da3lrfznck1w24n";
   };
 
-  cargoSha256 = "119szaighki565w28la6qg25s3cv8wviqin9f7f9w8x2rif3ipb3";
+  cargoSha256 = "sha256-Vrd5DIfhUSb3BONaUG8RypmVF+HWrlM0TodlWjOLa/c=";
 
   buildInputs = lib.optional stdenv.isDarwin Security;
+
+  # 10 passed; 47 failed https://hydra.nixos.org/build/148943783/nixlog/1
+  doCheck = !stdenv.isDarwin;
+
+  # FIXME: remove when the linked-hash-map dependency is bumped upstream
+  cargoPatches = [
+    (fetchpatch {
+      url = "https://github.com/imsnif/bandwhich/pull/222/commits/be06905de2c4fb91afc22d50bf3cfe5a1e8003f5.patch";
+      sha256 = "sha256-FyZ7jUXK7ebXq7q/lvRSe7YdPnpYWKZE3WrSKLMjJeA=";
+    })
+  ];
 
   meta = with lib; {
     description = "A CLI utility for displaying current network utilization";
@@ -26,7 +37,7 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/imsnif/bandwhich";
     license = licenses.mit;
-    maintainers = with maintainers; [ Br1ght0ne ma27 ];
+    maintainers = with maintainers; [ Br1ght0ne ma27 SuperSandro2000 ];
     platforms = platforms.unix;
   };
 }

@@ -9,30 +9,33 @@
 , fetchPypi
 , gradient_statsd
 , gradient-utils
+, gql
 , halo
 , marshmallow
 , progressbar2
 , pyopenssl
 , pyyaml
 , requests
-, requests_toolbelt
+, requests-toolbelt
 , terminaltables
 , websocket-client
 }:
 
 buildPythonPackage rec {
   pname = "gradient";
-  version = "1.5.5";
+  version = "1.9.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fee5016afe5e61a640bb9d7e234a10926c17c9e83c876b617438ff5f5ce039ad";
+    hash = "sha256-zimOh4bc9EQGpqMky/etwnAF04onJ2m/KAl29IaAeAY=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
       --replace 'attrs<=' 'attrs>=' \
       --replace 'colorama==' 'colorama>=' \
+      --replace 'gql[requests]==3.0.0a6' 'gql' \
       --replace 'PyYAML==' 'PyYAML>=' \
       --replace 'marshmallow<' 'marshmallow>=' \
       --replace 'websocket-client==' 'websocket-client>='
@@ -45,6 +48,7 @@ buildPythonPackage rec {
     click-didyoumean
     click-help-colors
     colorama
+    gql
     gradient_statsd
     gradient-utils
     halo
@@ -53,13 +57,19 @@ buildPythonPackage rec {
     pyopenssl
     pyyaml
     requests
-    requests_toolbelt
+    requests-toolbelt
     terminaltables
     websocket-client
   ];
 
-  # tries to use /homeless-shelter to mimic container usage, etc
+  # Tries to use /homeless-shelter to mimic container usage, etc
   doCheck = false;
+
+  # marshmallow.exceptions.StringNotCollectionError: "only" should be a collection of strings.
+  # Support for marshmallow > 3
+  # pythonImportsCheck = [
+  #   "gradient"
+  # ];
 
   meta = with lib; {
     description = "The command line interface for Gradient";

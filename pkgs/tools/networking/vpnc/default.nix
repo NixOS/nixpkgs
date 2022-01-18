@@ -1,7 +1,8 @@
 { lib, stdenv, fetchsvn, nettools, libgcrypt, openssl, openresolv, perl, gawk, makeWrapper }:
 
 stdenv.mkDerivation {
-  name = "vpnc-0.5.3-post-r550";
+  pname = "vpnc";
+  version = "0.5.3-post-r550";
   src = fetchsvn {
     url = "https://svn.unix-ag.uni-kl.de/vpnc";
     rev = "550";
@@ -13,7 +14,7 @@ stdenv.mkDerivation {
     rm -r $sourceRoot/{trunk,branches,tags}
   '';
 
-  patches = [ ./makefile.patch ./no_default_route_when_netmask.patch ];
+  patches = [ ./no_default_route_when_netmask.patch ];
 
   # The `etc/vpnc/vpnc-script' script relies on `which' and on
   # `ifconfig' as found in net-tools (not GNU Inetutils).
@@ -21,6 +22,16 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [libgcrypt perl openssl ];
+
+  makeFlags = [
+    "PREFIX=$(out)"
+    "ETCDIR=$(out)/etc/vpnc"
+    "SCRIPT_PATH=$(out)/etc/vpnc/vpnc-script"
+  ];
+
+  postPatch = ''
+    patchShebangs makeman.pl
+  '';
 
   preConfigure = ''
     sed -i 's|^#OPENSSL|OPENSSL|g' Makefile
@@ -32,9 +43,6 @@ stdenv.mkDerivation {
 
     substituteInPlace "config.c" \
       --replace "/etc/vpnc/vpnc-script" "$out/etc/vpnc/vpnc-script"
-
-    substituteInPlace "pcf2vpnc" \
-      --replace "/usr/bin/perl" "${perl}/bin/perl"
   '';
 
   postInstall = ''

@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   pname = "reckon";
   version = (import ./gemset.nix).reckon.version;
 
-  phases = [ "installPhase" ];
+  dontUnpack = true;
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -28,5 +28,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ nicknovitski ];
     platforms = platforms.unix;
+    changelog = "https://github.com/cantino/reckon/blob/v${version}/CHANGELOG.md";
   };
 }

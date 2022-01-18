@@ -27,12 +27,12 @@ let customEmacsPackages =
         # use the unstable MELPA version of magit
         magit = self.melpaPackages.magit;
       });
-in customEmacsPackages.emacs.pkgs.withPackages (epkgs: [ epkgs.evil epkgs.magit ])
+in customEmacsPackages.withPackages (epkgs: [ epkgs.evil epkgs.magit ])
 ```
 
 */
 
-{ lib, lndir, makeWrapper, runCommand }: self:
+{ lib, lndir, makeWrapper, runCommand, gcc }: self:
 
 with lib;
 
@@ -65,7 +65,10 @@ runCommand
     # Store all paths we want to add to emacs here, so that we only need to add
     # one path to the load lists
     deps = runCommand "emacs-packages-deps"
-      { inherit explicitRequires lndir emacs; }
+      {
+        inherit explicitRequires lndir emacs;
+        nativeBuildInputs = lib.optional nativeComp gcc;
+      }
       ''
         findInputsOld() {
           local pkg="$1"; shift
@@ -162,8 +165,13 @@ runCommand
           (add-to-list 'native-comp-eln-load-path "$out/share/emacs/native-lisp/")
         ''}
         EOF
-        # Link subdirs.el from the emacs distribution
-        ln -s $emacs/share/emacs/site-lisp/subdirs.el -T $subdirs
+
+        # Generate a subdirs.el that statically adds all subdirectories to load-path.
+        $emacs/bin/emacs \
+          --batch \
+          --load ${./mk-wrapper-subdirs.el} \
+          --eval "(prin1 (macroexpand-1 '(mk-subdirs-expr \"$out/share/emacs/site-lisp\")))" \
+          > "$subdirs"
 
         # Byte-compiling improves start-up time only slightly, but costs nothing.
         $emacs/bin/emacs --batch -f batch-byte-compile "$siteStart" "$subdirs"

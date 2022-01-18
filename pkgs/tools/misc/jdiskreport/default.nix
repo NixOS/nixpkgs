@@ -10,11 +10,12 @@ let
     type = "Application";
   };
 in
-stdenv.mkDerivation {
-  name = "jdiskreport-1.4.1";
+stdenv.mkDerivation rec {
+  pname = "jdiskreport";
+  version = "1.4.1";
 
   src = fetchurl {
-    url = "http://www.jgoodies.com/download/jdiskreport/jdiskreport-1_4_1.zip";
+    url = "https://www.jgoodies.com/download/jdiskreport/jdiskreport-${lib.replaceStrings ["."] ["_"] version}.zip";
     sha256 = "0d5mzkwsbh9s9b1vyvpaawqc09b0q41l2a7pmwf7386b1fsx6d58";
   };
 

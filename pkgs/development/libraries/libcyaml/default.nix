@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libcyaml";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "tlsa";
     repo = "libcyaml";
     rev = "v${version}";
-    sha256 = "sha256-LtU1r95YoLuQ2JCphxbMojxKyXnt50XEARGUPftLgsU=";
+    sha256 = "sha256-8Dd6LQovPx+y2957zY8blA0ls10ekGvTCeKmLyHZnOI=";
   };
 
   buildInputs = [ libyaml ];
@@ -20,7 +20,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/tlsa/libcyaml";
     description = "C library for reading and writing YAML";
+    changelog = "https://github.com/tlsa/libcyaml/raw/v${version}/CHANGES.md";
     license = licenses.isc;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

@@ -6,16 +6,16 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "leftwm";
-  version = "0.2.8";
+  version = "0.2.10";
 
   src = fetchFromGitHub {
     owner = "leftwm";
     repo = "leftwm";
     rev = version;
-    sha256 = "sha256-T4A9NGT6sUSTKmLcAWjcp3Y8QQzZFAVSXevXtGm3szY=";
+    sha256 = "sha256-WGss/XmryULq8Ly5MFmEqsL+9r4fnrvBEtetngJ05NY=";
   };
 
-  cargoSha256 = "sha256-2prRtdBxpYc2xI/bLZNlqs3mxESfO9GhNUSlKFF//eE=";
+  cargoSha256 = "sha256-9qvXzsAu4H2TAcArajrGqXwKF3BBDvmZbny7hiVO9Yo=";
 
   buildInputs = rpathLibs;
 

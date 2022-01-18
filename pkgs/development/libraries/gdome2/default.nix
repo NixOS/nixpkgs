@@ -18,7 +18,10 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ glib libxml2 gtk-doc ];
   propagatedBuildInputs = [glib libxml2];
-  patches = [ ./xml-document.patch ];
+  patches = [
+    ./xml-document.patch
+    ./fno-common.patch
+  ];
 
   meta = with lib; {
     homepage = "http://gdome2.cs.unibo.it/";

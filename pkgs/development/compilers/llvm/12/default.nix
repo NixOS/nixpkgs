@@ -18,7 +18,7 @@
 }:
 
 let
-  release_version = "12.0.0";
+  release_version = "12.0.1";
   candidate = ""; # empty or "rcN"
   dash-candidate = lib.optionalString (candidate != "") "-${candidate}";
   version = "${release_version}${dash-candidate}"; # differentiating these (variables) is important for RCs
@@ -29,7 +29,7 @@ let
     inherit sha256;
   };
 
-  clang-tools-extra_src = fetch "clang-tools-extra" "0p3dzr0qa7mar83y66xa5m5apynf6ia0lsdsq6axwnm64ysy0hdd";
+  clang-tools-extra_src = fetch "clang-tools-extra" "1r9a4fdz9ci58b5z2inwvm4z4cdp6scrivnaw05dggkxz7yrwrb5";
 
   llvm_meta = {
     license     = lib.licenses.ncsa;
@@ -66,14 +66,14 @@ let
     };
 
     # `llvm` historically had the binaries.  When choosing an output explicitly,
-    # we need to reintroduce `outputUnspecified` to get the expected behavior e.g. of lib.get*
-    llvm = tools.libllvm.out // { outputUnspecified = true; };
+    # we need to reintroduce `outputSpecified` to get the expected behavior e.g. of lib.get*
+    llvm = tools.libllvm.out // { outputSpecified = false; };
 
     libclang = callPackage ./clang {
       inherit clang-tools-extra_src llvm_meta;
     };
 
-    clang-unwrapped = tools.libclang.out // { outputUnspecified = true; };
+    clang-unwrapped = tools.libclang.out // { outputSpecified = false; };
 
     # disabled until recommonmark supports sphinx 3
     #Llvm-manpages = lowPrio (tools.libllvm.override {
@@ -267,4 +267,4 @@ let
     };
   });
 
-in { inherit tools libraries; } // libraries // tools
+in { inherit tools libraries release_version; } // libraries // tools

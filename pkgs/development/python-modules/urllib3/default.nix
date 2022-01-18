@@ -12,18 +12,17 @@
 , pytest-freezegun
 , pytest-timeout
 , pytestCheckHook
-, pythonOlder
 , tornado
 , trustme
 }:
 
 buildPythonPackage rec {
   pname = "urllib3";
-  version = "1.26.5";
+  version = "1.26.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-p6zQl3ElMl9Ra9qXNfpxQrkJqNAeiy5MgQjQmE5uAJg=";
+    sha256 = "sha256-SYfGVVT3otvzDBj9SHeO8SSvb6t3GjdxA9oFheIzbs4=";
   };
 
   propagatedBuildInputs = [

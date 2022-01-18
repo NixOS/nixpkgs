@@ -54,7 +54,7 @@ in {
 
     staticConfigFile = mkOption {
       default = null;
-      example = literalExample "/path/to/static_config.toml";
+      example = literalExpression "/path/to/static_config.toml";
       type = types.nullOr types.path;
       description = ''
         Path to traefik's static configuration to use.
@@ -78,7 +78,7 @@ in {
 
     dynamicConfigFile = mkOption {
       default = null;
-      example = literalExample "/path/to/dynamic_config.toml";
+      example = literalExpression "/path/to/dynamic_config.toml";
       type = types.nullOr types.path;
       description = ''
         Path to traefik's dynamic configuration to use.
@@ -123,7 +123,7 @@ in {
 
     package = mkOption {
       default = pkgs.traefik;
-      defaultText = "pkgs.traefik";
+      defaultText = literalExpression "pkgs.traefik";
       type = types.package;
       description = "Traefik package to use.";
     };

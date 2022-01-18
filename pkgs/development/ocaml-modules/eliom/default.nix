@@ -1,40 +1,41 @@
-{ stdenv, lib, fetchzip, fetchpatch, which, ocsigen_server, ocaml,
-  lwt_react,
-  opaline, ppx_deriving, findlib
-, ocaml-migrate-parsetree
-, ppx_tools_versioned
-, js_of_ocaml-ocamlbuild, js_of_ocaml-ppx, js_of_ocaml-ppx_deriving_json
+{ stdenv
+, lib
+, fetchFromGitHub
+, which
+, ocsigen_server
+, ocaml
+, lwt_react
+, opaline
+, ppx_deriving
+, findlib
+, js_of_ocaml-ocamlbuild
+, js_of_ocaml-ppx
+, js_of_ocaml-ppx_deriving_json
 , js_of_ocaml-lwt
 , js_of_ocaml-tyxml
 , lwt_ppx
+, ocamlnet
 }:
 
-if !lib.versionAtLeast ocaml.version "4.07"
-then throw "eliom is not available for OCaml ${ocaml.version}"
-else
-
-stdenv.mkDerivation rec
-{
+stdenv.mkDerivation rec {
   pname = "eliom";
-  version = "6.12.4";
+  version = "8.9.0";
 
-  src = fetchzip {
-    url = "https://github.com/ocsigen/eliom/archive/${version}.tar.gz";
-    sha256 = "00m6v2k4mg8705dy41934lznl6gj91i6dk7p1nkaccm51nna25kz";
+  src = fetchFromGitHub {
+    owner = "ocsigen";
+    repo = "eliom";
+    rev = version;
+    sha256 = "sha256-VNxzpVpXEGlixyjadbW0GjL83jcKV5TWd46UReNYO6w=";
   };
 
-  patches = [
-    # Compatibility with js_of_ocaml >= 3.9.0, remove at next release
-    (fetchpatch {
-      url = "https://github.com/ocsigen/eliom/commit/4106a4217956f7b74a8ef3f73a1e1f55e02ade45.patch";
-      sha256 = "1cgbvpljn9x6zxirxf3rdjrsdwy319ykz3qq03c36cc40hy2w13p";
-    })
-  ];
-
-  buildInputs = [ ocaml which findlib js_of_ocaml-ocamlbuild
-    ocaml-migrate-parsetree
-    js_of_ocaml-ppx_deriving_json opaline
-    ppx_tools_versioned
+  buildInputs = [
+    ocaml
+    which
+    findlib
+    js_of_ocaml-ocamlbuild
+    js_of_ocaml-ppx_deriving_json
+    opaline
+    ocamlnet
   ];
 
   propagatedBuildInputs = [
@@ -55,7 +56,7 @@ stdenv.mkDerivation rec
     homepage = "http://ocsigen.org/eliom/";
     description = "OCaml Framework for programming Web sites and client/server Web applications";
 
-    longDescription =''Eliom is a framework for programming Web sites
+    longDescription = ''Eliom is a framework for programming Web sites
     and client/server Web applications. It introduces new concepts to
     simplify programming common behaviours and uses advanced static
     typing features of OCaml to check many properties of the Web site

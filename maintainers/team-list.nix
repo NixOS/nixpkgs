@@ -29,6 +29,20 @@ with lib.maintainers; {
     scope = "Maintain ACME-related packages and modules.";
   };
 
+  bazel = {
+    members = [
+      mboes
+      marsam
+      uri-canva
+      cbley
+      olebedev
+      groodt
+      aherrmann
+      ylecornec
+    ];
+    scope = "Bazel build tool & related tools https://bazel.build/";
+  };
+
   beam = {
     members = [
       ankhers
@@ -93,7 +107,6 @@ with lib.maintainers; {
       cstrahan
       Frostman
       kalbasit
-      mdlayher
       mic92
       orivej
       rvolosatovs
@@ -114,8 +127,9 @@ with lib.maintainers; {
 
   haskell = {
     members = [
-      maralorn
       cdepillabout
+      expipiplus1
+      maralorn
       sternenseemann
     ];
     scope = "Maintain Haskell packages and infrastructure.";
@@ -131,8 +145,20 @@ with lib.maintainers; {
     scope = "Maintain the Home Assistant ecosystem";
   };
 
+  iog = {
+    members = [
+      cleverca22
+      disassembler
+      jonringer
+      manveru
+      nrdxp
+    ];
+    scope = "Input-Output Global employees, which maintain critical software";
+  };
+
   jitsi = {
     members = [
+      cleeyv
       petabyteboy
       ryantm
       yuka
@@ -152,6 +178,24 @@ with lib.maintainers; {
     scope = "Maintain Kodi and related packages.";
   };
 
+  linux-kernel = {
+    members = [
+      TredwellGit
+      ma27
+      nequissimus
+      qyliss
+    ];
+    scope = "Maintain the Linux kernel.";
+  };
+
+  mate = {
+    members = [
+      j03
+      romildo
+    ];
+    scope = "Maintain Mate desktop environment and related packages.";
+  };
+
   matrix = {
     members = [
       ma27
@@ -161,8 +205,25 @@ with lib.maintainers; {
       ralith
       mjlbach
       dandellion
+      sumnerevans
     ];
     scope = "Maintain the ecosystem around Matrix, a decentralized messenger.";
+  };
+
+  openstack = {
+    members = [
+      angustrau
+      SuperSandro2000
+    ];
+    scope = "Maintain the ecosystem around OpenStack";
+  };
+
+  pantheon = {
+    members = [
+      davidak
+      bobby285271
+    ];
+    scope = "Maintain Pantheon desktop environment and platform.";
   };
 
   php = {
@@ -184,6 +245,15 @@ with lib.maintainers; {
       zowoq
     ];
     scope = "Maintain Podman and CRI-O related packages and modules.";
+  };
+
+  redcodelabs = {
+    members = [
+      unrooted
+      wr0belj
+      wintrmvte
+    ];
+    scope = "Maintain Red Code Labs related packages and modules.";
   };
 
   sage = {
@@ -211,5 +281,12 @@ with lib.maintainers; {
       mic92
     ];
     scope = "coqui-ai TTS (formerly Mozilla TTS) and leaf packages";
+  };
+
+  xfce = {
+    members = [
+      romildo
+    ];
+    scope = "Maintain Xfce desktop environment and related packages.";
   };
 }

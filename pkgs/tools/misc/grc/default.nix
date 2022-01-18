@@ -1,15 +1,18 @@
-{ lib, fetchFromGitHub, buildPythonApplication }:
+{ lib
+, fetchFromGitHub
+, buildPythonApplication
+}:
 
 buildPythonApplication rec {
   pname = "grc";
-  version = "1.12";
+  version = "1.13";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "garabik";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-XJj1j6sDt0iL3U6uMbB1j0OfpXRdP+x66gc6sKxrQIA=";
+    sha256 = "1h0h88h484a9796hai0wasi1xmjxxhpyxgixn6fgdyc5h69gv8nl";
   };
 
   postPatch = ''
@@ -27,7 +30,7 @@ buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    homepage = "http://korpus.juls.savba.sk/~garabik/software/grc.html";
+    homepage = "http://kassiopeia.juls.savba.sk/~garabik/software/grc.html";
     description = "A generic text colouriser";
     longDescription = ''
       Generic Colouriser is yet another colouriser (written in Python) for

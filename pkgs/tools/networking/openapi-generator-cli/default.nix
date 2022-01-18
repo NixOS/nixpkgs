@@ -1,7 +1,7 @@
 { callPackage, lib, stdenv, fetchurl, jre, makeWrapper }:
 
 let this = stdenv.mkDerivation rec {
-  version = "5.1.0";
+  version = "5.2.1";
   pname = "openapi-generator-cli";
 
   jarfilename = "${pname}-${version}.jar";
@@ -12,10 +12,10 @@ let this = stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://maven/org/openapitools/${pname}/${version}/${jarfilename}";
-    sha256 = "06dvy4pwgpyf209n0b27qwkjj7zlgadg2czwxapy94fd1wpq9yb2";
+    sha256 = "sha256-stRtSZCvPUQuTiKOHmJ7k8o3Gtly9Up+gicrDOeWjIs=";
   };
 
-  phases = [ "installPhase" ];
+  dontUnpack = true;
 
   installPhase = ''
     runHook preInstall

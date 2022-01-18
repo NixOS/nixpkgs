@@ -7,7 +7,6 @@
 , gobject-introspection
 , pycairo
 , cairo
-, which
 , ncurses
 , meson
 , ninja
@@ -17,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "pygobject";
-  version = "3.40.1";
+  version = "3.42.0";
 
   outputs = [ "out" "dev" ];
 
@@ -27,7 +26,7 @@ buildPythonPackage rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0d80g5kgf2i9cginyhalvb7ibfk9g30yilqzmcsw6h6byj8xbih0";
+    sha256 = "mxJhbjLPx5L53IQdnEcqQaNbhbpn06brQn4wem/kNns=";
   };
 
   nativeBuildInputs = [

@@ -13,6 +13,15 @@ with lib;
 
       enable = mkEnableOption "ClickHouse database server";
 
+      package = mkOption {
+        type = types.package;
+        default = pkgs.clickhouse;
+        defaultText = "pkgs.clickhouse";
+        description = ''
+          ClickHouse package to use.
+        '';
+      };
+
     };
 
   };
@@ -45,21 +54,21 @@ with lib;
         AmbientCapabilities = "CAP_SYS_NICE";
         StateDirectory = "clickhouse";
         LogsDirectory = "clickhouse";
-        ExecStart = "${pkgs.clickhouse}/bin/clickhouse-server --config-file=${pkgs.clickhouse}/etc/clickhouse-server/config.xml";
+        ExecStart = "${cfg.package}/bin/clickhouse-server --config-file=${cfg.package}/etc/clickhouse-server/config.xml";
       };
     };
 
     environment.etc = {
       "clickhouse-server/config.xml" = {
-        source = "${pkgs.clickhouse}/etc/clickhouse-server/config.xml";
+        source = "${cfg.package}/etc/clickhouse-server/config.xml";
       };
 
       "clickhouse-server/users.xml" = {
-        source = "${pkgs.clickhouse}/etc/clickhouse-server/users.xml";
+        source = "${cfg.package}/etc/clickhouse-server/users.xml";
       };
     };
 
-    environment.systemPackages = [ pkgs.clickhouse ];
+    environment.systemPackages = [ cfg.package ];
 
     # startup requires a `/etc/localtime` which only if exists if `time.timeZone != null`
     time.timeZone = mkDefault "UTC";

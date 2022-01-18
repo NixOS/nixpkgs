@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "gitlab-pages";
-  version = "1.40.0";
+  version = "1.48.0";
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitlab-pages";
     rev = "v${version}";
-    sha256 = "sha256-RgWDAvuxqZeFCU+Q2s+FDIM/AroIdnfVq/D5lG4XN7U=";
+    sha256 = "sha256-oSimHF4qiI2zcMSx51qxs88AcrrewHIbhaRW8s4Ut7Q=";
   };
 
-  vendorSha256 = "sha256-HbMM0IHw1DMDlNN1m2EHaG9CXnj9j9xROPQiT2xTGlM=";
+  vendorSha256 = "sha256-dzYO1yAQSVJmDJvjB5XPRBiYCk+ko1n928CTtUXbHBc=";
   subPackages = [ "." ];
 
   meta = with lib; {

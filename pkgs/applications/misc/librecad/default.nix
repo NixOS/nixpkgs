@@ -2,7 +2,7 @@
 , boost
 , fetchFromGitHub
 , installShellFiles
-, mkDerivationWith
+, mkDerivation
 , muparser
 , pkg-config
 , qmake
@@ -10,10 +10,9 @@
 , qtsvg
 , qttools
 , runtimeShell
-, stdenv
 }:
 
-mkDerivationWith stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "librecad";
   version = "2.2.0-rc2";
 

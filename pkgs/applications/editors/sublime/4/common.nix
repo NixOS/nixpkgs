@@ -23,7 +23,7 @@ let
     "x86_64-linux" = "x64";
   }.${stdenv.hostPlatform.system};
 
-  libPath = lib.makeLibraryPath [ xorg.libX11 xorg.libXtst glib libglvnd openssl gtk3 cairo pango ];
+  libPath = lib.makeLibraryPath [ xorg.libX11 xorg.libXtst glib libglvnd openssl gtk3 cairo pango curl ];
 in let
   binaryPackage = stdenv.mkDerivation {
     pname = "${pname}-bin";

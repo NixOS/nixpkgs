@@ -1,6 +1,8 @@
 { lib
+, appdirs
 , attrs
 , buildPythonPackage
+, bson
 , cattrs
 , fetchFromGitHub
 , itsdangerous
@@ -18,15 +20,16 @@
 
 buildPythonPackage rec {
   pname = "requests-cache";
-  version = "0.7.0";
-  disabled = pythonOlder "3.6";
+  version = "0.9.0";
   format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "reclosedev";
     repo = "requests-cache";
     rev = "v${version}";
-    sha256 = "sha256-P7JzImidUXOD4DUMdfy3sgM5RISti23wNnLwDHPoiTA=";
+    sha256 = "0gz6fyc6lgbab9k92cihrp3711r1wcp4xhs25qp176zbzgccbj43";
   };
 
   nativeBuildInputs = [
@@ -34,7 +37,9 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    appdirs
     attrs
+    bson
     cattrs
     itsdangerous
     pyyaml
@@ -50,10 +55,19 @@ buildPythonPackage rec {
     timeout-decorator
   ];
 
-  # Integration tests require local DBs
-  pytestFlagsArray = [ "tests/unit" ];
+  pytestFlagsArray = [
+    # Integration tests require local DBs
+    "tests/unit"
+  ];
 
-  pythonImportsCheck = [ "requests_cache" ];
+  disabledTests = [
+    # Tests are flaky in the sandbox
+    "test_remove_expired_responses"
+  ];
+
+  pythonImportsCheck = [
+    "requests_cache"
+  ];
 
   meta = with lib; {
     description = "Persistent cache for requests library";

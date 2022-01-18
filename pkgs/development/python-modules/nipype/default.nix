@@ -19,14 +19,14 @@
 , pybids
 , pydot
 , pytest
-, pytest_xdist
+, pytest-xdist
 , pytest-forked
 , rdflib
 , scipy
 , simplejson
 , traits
 , xvfbwrapper
-, pytestcov
+, pytest-cov
 , codecov
 , sphinx
 # other dependencies
@@ -49,12 +49,12 @@ in
 
 buildPythonPackage rec {
   pname = "nipype";
-  version = "1.6.1";
+  version = "1.7.0";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8428cfc633d8e3b8c5650e241e9eedcf637b7969bcd40f3423334d4c6b0992b5";
+    sha256 = "e689fe2e5049598c9cd3708e8df1cac732fa1a88696f283e3bc0a70fecb8ab51";
   };
 
   postPatch = ''
@@ -93,8 +93,8 @@ buildPythonPackage rec {
     mock
     pytest
     pytest-forked
-    pytest_xdist
-    pytestcov
+    pytest-xdist
+    pytest-cov
     which
   ];
 

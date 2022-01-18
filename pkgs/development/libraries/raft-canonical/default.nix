@@ -1,18 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, file, libuv }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, file, libuv, lz4 }:
 
 stdenv.mkDerivation rec {
   pname = "raft-canonical";
-  version = "0.10.1";
+  version = "0.11.2";
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "raft";
     rev = "v${version}";
-    sha256 = "sha256-Q4m0CCIArgsobhmhqLvkr7fK40SX/qBk6K5Qu0eRLaI=";
+    sha256 = "050dwy34jh8dihfwfm0r1by2i3sy9crapipp9idw32idm79y4izb";
   };
 
   nativeBuildInputs = [ autoreconfHook file pkg-config ];
-  buildInputs = [ libuv ];
+  buildInputs = [ libuv lz4 ];
 
   enableParallelBuilding = true;
 
@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/canonical/raft";
     license = licenses.asl20;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ wucke13 ];
   };
 }

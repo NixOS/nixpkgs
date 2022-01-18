@@ -17,6 +17,7 @@
 , django
 , djangorestframework
 , responses
+, mock
 }:
 
 buildPythonPackage rec {
@@ -54,6 +55,7 @@ buildPythonPackage rec {
     django
     djangorestframework
     responses
+    mock
   ];
 
   disabledTestPaths = [
@@ -64,6 +66,8 @@ buildPythonPackage rec {
   disabledTests = [
     # TypeError: Unexpected keyword arguments passed to pytest.raises: message
     "test_string_format_invalid_value"
+    # Needs a fix for new PyYAML
+    "test_django_rest_framework_apiview"
   ];
 
   pythonImportsCheck = [

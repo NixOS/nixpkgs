@@ -2,20 +2,20 @@
 
 buildGoModule rec {
   pname = "grpcurl";
-  version = "1.8.1";
+  version = "1.8.5";
 
   src = fetchFromGitHub {
     owner = "fullstorydev";
     repo = "grpcurl";
     rev = "v${version}";
-    sha256 = "sha256-BxmoIGhuAt/uhHLNdMiSrNVWAoxAAMKPJ/NsXjf2ynk=";
+    sha256 = "sha256-73gp3UQk7D3aWK2jtMpiY4tiVhvHkTqZipoynosd3ec=";
   };
 
   subPackages = [ "cmd/grpcurl" ];
 
-  vendorSha256 = "sha256-EnstvJk2kZ1Ft5xY1dO14wnmT//2K72OnDMZqeaOeQI=";
+  vendorSha256 = "sha256-dHh8zHtU/r6AscInfNfVFd5psys2b6D1FS02lSoiGto=";
 
-  buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
+  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
   meta = with lib; {
     description = "Like cURL, but for gRPC: Command-line tool for interacting with gRPC servers";

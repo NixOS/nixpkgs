@@ -20,6 +20,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://crates.io/crates/taizen";
     license = licenses.mit;
     description = "curses based mediawiki browser";
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ ];
   };
 }

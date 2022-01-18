@@ -1,23 +1,23 @@
-{ lib, buildPythonPackage, fetchurl, pytest, mock }:
+{ lib, buildPythonPackage, fetchFromGitHub, pytestCheckHook, mock }:
+
 buildPythonPackage rec {
   pname = "pep257";
   version = "0.7.0";
 
-  src = fetchurl {
-    url = "https://github.com/GreenSteam/pep257/archive/${version}.tar.gz";
-    sha256 = "1ldpgil0kaf6wz5gvl9xdx35a62vc6bmgi3wbh9320dj5v2qk4wh";
+  src = fetchFromGitHub {
+    owner = "GreenSteam";
+    repo = "pep257";
+    rev = version;
+    sha256 = "sha256-RkE9kkNkRTmZ8zJVwQzMsxU1hcjlxX6UA+ehnareynQ=";
   };
 
-  checkInputs = [ pytest mock ];
-
-  checkPhase = ''
-    py.test
-  '';
+  checkInputs = [ pytestCheckHook mock ];
 
   meta = with lib; {
     homepage = "https://github.com/GreenSteam/pep257/";
     description = "Python docstring style checker";
     longDescription = "Static analysis tool for checking compliance with Python PEP 257.";
     license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
 }

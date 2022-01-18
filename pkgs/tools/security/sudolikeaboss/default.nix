@@ -22,7 +22,6 @@ buildGoPackage rec {
   ];
 
   meta = with lib; {
-    inherit version;
     inherit (src.meta) homepage;
     description = "Get 1password access from iterm2";
     license = licenses.mit;

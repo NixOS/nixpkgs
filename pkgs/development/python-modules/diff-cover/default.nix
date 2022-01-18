@@ -16,13 +16,13 @@
 
 buildPythonPackage rec {
   pname = "diff-cover";
-  version = "5.4.0";
+  version = "5.5.0";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     pname = "diff_cover";
     inherit version;
-    sha256 = "sha256-4iQ9/QcXh/lW8HE6wFZWc6Y57xhAEWu2TQnIUZJNAMs=";
+    sha256 = "e2d36131c13f571d9f5c4109b9e08b71ed00757eabec0156de74e33f6ef5627f";
   };
 
   propagatedBuildInputs = [

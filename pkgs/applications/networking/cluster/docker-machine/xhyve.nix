@@ -17,7 +17,7 @@ buildGoPackage rec {
     export CGO_CFLAGS=-I$(pwd)/go/src/${goPackagePath}/vendor/github.com/jceel/lib9p
     export CGO_LDFLAGS=$(pwd)/go/src/${goPackagePath}/vendor/build/lib9p/lib9p.a
   '';
-  buildFlags = "--tags lib9p";
+  tags = [ "lib9p" ];
 
   src = fetchFromGitHub {
     rev    = "v${version}";

@@ -1,18 +1,25 @@
-{ lib, stdenv, autoreconfHook, fetchFromGitHub, zlib, libibmad, openssl }:
+{ lib
+, stdenv
+, fetchurl
+, libibmad
+, openssl
+, zlib
+}:
 
 stdenv.mkDerivation rec {
   pname = "mstflint";
-  version = "4.14.0-3";
+  version = "4.17.0-1";
 
-  src = fetchFromGitHub {
-    owner = "Mellanox";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "0zy9npyzf7dkxlfl9mx6997aa61mk23ixpjb01ckb1wvav5k6z82";
+  src = fetchurl {
+    url = "https://github.com/Mellanox/mstflint/releases/download/v${version}/mstflint-${version}.tar.gz";
+    sha256 = "030vpiv44sxmjf0dng91ziq1cggwj33yp0l4xc6cdhnrv2prjs7y";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ zlib libibmad openssl ];
+  buildInputs = [
+    libibmad
+    openssl
+    zlib
+  ];
 
   hardeningDisable = [ "format" ];
 

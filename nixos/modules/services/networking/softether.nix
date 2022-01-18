@@ -21,7 +21,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.softether;
-        defaultText = "pkgs.softether";
+        defaultText = literalExpression "pkgs.softether";
         description = ''
           softether derivation to use.
         '';

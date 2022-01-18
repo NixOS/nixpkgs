@@ -29,7 +29,6 @@ stdenv.mkDerivation {
     libpulseaudio
   ];
 
-  phases = [ "unpackPhase" "installPhase" ];
   installPhase = ''
     mkdir -p "$out/opt/Scrolls"
     cp -r ../Scrolls "$out/opt/Scrolls/"

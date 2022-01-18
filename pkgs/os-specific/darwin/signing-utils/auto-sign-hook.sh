@@ -1,4 +1,4 @@
-fixupOutputHooks+=('signDarwinBinariesIn $prefix')
+postFixupHooks+=(signDarwinBinariesInAllOutputs)
 
 # Uses signingUtils, see definition of autoSignDarwinBinariesHook in
 # darwin-packages.nix
@@ -14,7 +14,18 @@ signDarwinBinariesIn() {
     return 0
   fi
 
+  echo "signing $dir"
+
   while IFS= read -r -d $'\0' f; do
     signIfRequired "$f"
   done < <(find "$dir" -type f -print0)
+}
+
+# Apply fixup to each output.
+signDarwinBinariesInAllOutputs() {
+  local output
+
+  for output in $outputs; do
+     signDarwinBinariesIn "${!output}"
+  done
 }

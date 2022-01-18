@@ -1,16 +1,14 @@
-{ lib, stdenv, fetchurl, omake, ocaml, flex, bison }:
+{ lib, stdenv, fetchFromGitHub, omake, ocaml, flex, bison }:
 
-let
-  version = "2.1";
-in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "teyjus";
-  inherit version;
+  version = "2.1";
 
-  src = fetchurl {
-    url = "https://github.com/teyjus/teyjus/archive/v${version}.tar.gz";
-    sha256 = "0393wpg8v1vvarqy2xh4fdmrwlrl6jaj960kql7cq79mb9p3m269";
+  src = fetchFromGitHub {
+    owner = "teyjus";
+    repo = "teyjus";
+    rev = "v${version}";
+    sha256 = "sha256-nz7jZ+GdF6mZQPzBrVD9K/RtoeuVRuhfs7vej4zDkhg=";
   };
 
   patches = [ ./fix-lex-to-flex.patch ];

@@ -4,9 +4,10 @@ let
   windir = "/cygdrive/c/WINDOWS";
 in
 {
-  pkg = stdenv.mkDerivation {
-    name = "dotnetfx-4.0";
-    src = "${windir}/Microsoft.NET/Framework/v4.0.30319";
+  pkg = stdenv.mkDerivation rec {
+    pname = "dotnetfx";
+    version = "4.0.30319";
+    src = "${windir}/Microsoft.NET/Framework/v${version}";
     buildCommand = ''
       mkdir -p $out/bin
       ln -s $src/MSBuild.exe $out/bin

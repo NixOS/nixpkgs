@@ -3,11 +3,11 @@
 , libGL, autoreconfHook }:
 stdenv.mkDerivation rec {
   pname = "manaplus";
-  version = "1.9.3.23";
+  version = "2.1.3.17";
 
   src = fetchurl {
     url = "https://download.evolonline.org/manaplus/download/${version}/manaplus-${version}.tar.xz";
-    sha256 = "1ky182p4svwdqm6cf7jbns85hidkhkhq4s17cs2p381f0klapfjz";
+    sha256 = "sha256-6NFqxUjEAp7aiIScyTOFh2tT7PfuTCKH1vTgPpTm+j0=";
   };
 
   nativeBuildInputs = [

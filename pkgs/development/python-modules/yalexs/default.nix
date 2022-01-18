@@ -16,14 +16,16 @@
 
 buildPythonPackage rec {
   pname = "yalexs";
-  version = "1.1.11";
+  version = "1.1.17";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-fVUYrzIcW4jbxdhS/Bh8eu+aJPFOqj0LXjoQKw+FZdg=";
+    sha256 = "sha256-kCLL+0ZiraTW7swgdfS9vkLcr/s6lTccFQbC02rdNDY=";
   };
 
   propagatedBuildInputs = [
@@ -44,10 +46,13 @@ buildPythonPackage rec {
 
   postPatch = ''
     # Not used requirement
-    substituteInPlace setup.py --replace '"vol",' ""
+    substituteInPlace setup.py \
+      --replace '"vol",' ""
   '';
 
-  pythonImportsCheck = [ "yalexs" ];
+  pythonImportsCheck = [
+    "yalexs"
+  ];
 
   meta = with lib; {
     description = "Python API for Yale Access (formerly August) Smart Lock and Doorbell";

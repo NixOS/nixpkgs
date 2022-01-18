@@ -13,10 +13,11 @@ assert ldapSupport -> openldap != null;
 with lib;
 
 stdenv.mkDerivation rec {
-  name = "apr-util-1.6.1";
+  pname = "apr-util";
+  version = "1.6.1";
 
   src = fetchurl {
-    url = "mirror://apache/apr/${name}.tar.bz2";
+    url = "mirror://apache/apr/${pname}-${version}.tar.bz2";
     sha256 = "0nq3s1yn13vplgl6qfm09f7n0wm08malff9s59bqf9nid9xjzqfk";
   };
 
@@ -62,7 +63,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "http://apr.apache.org/";
+    homepage = "https://apr.apache.org/";
     description = "A companion library to APR, the Apache Portable Runtime";
     maintainers = [ maintainers.eelco ];
     platforms = platforms.unix;

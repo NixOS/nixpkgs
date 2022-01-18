@@ -2,41 +2,33 @@
 , lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , cmake
+, boost
 , eigen
 , python
 , catch
 , numpy
 , pytest
-, scipy
 }:
 
 buildPythonPackage rec {
   pname = "pybind11";
-  version = "2.6.2";
+  version = "2.8.1";
 
   src = fetchFromGitHub {
     owner = "pybind";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1lsacpawl2gb5qlh0cawj9swsyfbwhzhwiv6553a7lsigdbadqpy";
+    sha256 = "sha256-Gk4ZN/g6SRWFm0ALCvyald/9zq3wBd48mGdqdGCeGYI=";
   };
-
-  patches = [
-    # fix pybind11Config.cmake
-    (fetchpatch {
-      url = "https://github.com/pybind/pybind11/commit/d9c4e1047a95f023633a7260af5a633307438941.patch";
-      sha256 = "0kran295kj31xfs6mfha5ip132zd0pnj2dl36qzgyc1rpnha5gz4";
-    })
-  ];
 
   nativeBuildInputs = [ cmake ];
 
   dontUseCmakeBuildDir = true;
 
   cmakeFlags = [
-    "-DEIGEN3_INCLUDE_DIR=${eigen}/include/eigen3"
+    "-DBoost_INCLUDE_DIR=${lib.getDev boost}/include"
+    "-DEIGEN3_INCLUDE_DIR=${lib.getDev eigen}/include/eigen3"
     "-DBUILD_TESTING=on"
   ] ++ lib.optionals (python.isPy3k && !stdenv.cc.isClang) [
     "-DPYBIND11_CXX_STANDARD=-std=c++17"

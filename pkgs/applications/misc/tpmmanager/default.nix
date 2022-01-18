@@ -36,6 +36,5 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ tstrobel ];
     platforms = with lib.platforms; linux;
-    inherit version;
   };
 }

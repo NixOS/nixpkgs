@@ -10,9 +10,6 @@
 , hunspellDicts, spellcheckerLanguage ? null # E.g. "de_DE"
 # For a full list of available languages:
 # $ cat pkgs/development/libraries/hunspell/dictionaries.nix | grep "dictFileName =" | awk '{ print $3 }'
-, python3
-, gnome
-, sqlcipher
 }:
 
 let
@@ -21,14 +18,13 @@ let
       # E.g. "de_DE" -> "de-de" (spellcheckerLanguage -> hunspellDict)
       spellLangComponents = splitString "_" spellcheckerLanguage;
       hunspellDict = elemAt spellLangComponents 0 + "-" + toLower (elemAt spellLangComponents 1);
-    in if spellcheckerLanguage != null
-      then ''
-        --set HUNSPELL_DICTIONARIES "${hunspellDicts.${hunspellDict}}/share/hunspell" \
-        --set LC_MESSAGES "${spellcheckerLanguage}"''
-      else "");
+    in lib.optionalString (spellcheckerLanguage != null) ''
+      --set HUNSPELL_DICTIONARIES "${hunspellDicts.${hunspellDict}}/share/hunspell" \
+      --set LC_MESSAGES "${spellcheckerLanguage}"'');
+
 in stdenv.mkDerivation rec {
   pname = "signal-desktop";
-  version = "5.9.0"; # Please backport all updates to the stable channel.
+  version = "5.27.0"; # Please backport all updates to the stable channel.
   # All releases have a limited lifetime and "expire" 90 days after the release.
   # When releases "expire" the application becomes unusable until an update is
   # applied. The expiration date for the current release can be extracted with:
@@ -38,7 +34,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://updates.signal.org/desktop/apt/pool/main/s/signal-desktop/signal-desktop_${version}_amd64.deb";
-    sha256 = "1pmyi9b0b5h6mi6dwml41x4igy8rfpsv6j67izh78m5gla8wp34h";
+    sha256 = "1agxn4fcgln5lsccvw5b7g2psv6nv2y7qm5df201c9pbwjak74nm";
   };
 
   nativeBuildInputs = [
@@ -115,20 +111,17 @@ in stdenv.mkDerivation rec {
 
     # Symlink to bin
     mkdir -p $out/bin
-    ln -s $out/lib/Signal/signal-desktop $out/bin/signal-desktop-unwrapped
+    ln -s $out/lib/Signal/signal-desktop $out/bin/signal-desktop
+
+    # Create required symlinks:
+    ln -s libGLESv2.so $out/lib/Signal/libGLESv2.so.2
 
     runHook postInstall
   '';
 
-  # Required for $SQLCIPHER_LIB which contains "/build/" inside the path:
-  noAuditTmpdir = true;
-
   preFixup = ''
-    export SQLCIPHER_LIB="$out/lib/Signal/resources/app.asar.unpacked/node_modules/better-sqlite3/build/Release/better_sqlite3.node"
-    test -x "$SQLCIPHER_LIB" # To ensure the location hasn't changed
     gappsWrapperArgs+=(
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc ] }"
-      --prefix LD_PRELOAD : "$SQLCIPHER_LIB"
       ${customLanguageWrapperArgs}
     )
 
@@ -138,16 +131,6 @@ in stdenv.mkDerivation rec {
 
     autoPatchelf --no-recurse -- $out/lib/Signal/
     patchelf --add-needed ${libpulseaudio}/lib/libpulse.so $out/lib/Signal/resources/app.asar.unpacked/node_modules/ringrtc/build/linux/libringrtc-x64.node
-  '';
-
-  postFixup = ''
-    # This hack is temporarily required to avoid data-loss for users:
-    cp ${./db-reencryption-wrapper.py} $out/bin/signal-desktop
-    substituteInPlace $out/bin/signal-desktop \
-      --replace '@PYTHON@' '${python3}/bin/python3' \
-      --replace '@ZENITY@' '${gnome.zenity}/bin/zenity' \
-      --replace '@SQLCIPHER@' '${sqlcipher}/bin/sqlcipher' \
-      --replace '@SIGNAL-DESKTOP@' "$out/bin/signal-desktop-unwrapped"
   '';
 
   # Tests if the application launches and waits for "Link your phone to Signal Desktop":

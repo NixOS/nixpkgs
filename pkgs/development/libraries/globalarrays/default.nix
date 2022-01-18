@@ -2,12 +2,9 @@
 , blas, gfortran, openssh, mpi
 } :
 
-let
-  version = "5.8";
-
-in stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "globalarrays";
-  inherit version;
+  version = "5.8";
 
   src = fetchFromGitHub {
     owner = "GlobalArrays";
@@ -16,8 +13,8 @@ in stdenv.mkDerivation {
     sha256 = "0bky91ncz6vy0011ps9prsnq9f4a5s5xwr23kkmi39xzg0417mnd";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ mpi blas gfortran openssh ];
+  nativeBuildInputs = [ autoreconfHook gfortran ];
+  buildInputs = [ mpi blas openssh ];
 
   preConfigure = ''
     configureFlagsArray+=( "--enable-i8" \

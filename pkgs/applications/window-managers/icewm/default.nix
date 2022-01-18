@@ -1,9 +1,9 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, cmake
-, pkg-config
+, fetchpatch
 , asciidoc
+, cmake
 , expat
 , fontconfig
 , freetype
@@ -11,6 +11,7 @@
 , gdk-pixbuf
 , gdk-pixbuf-xlib
 , gettext
+, giflib
 , glib
 , imlib2
 , libICE
@@ -30,22 +31,22 @@
 , libpthreadstubs
 , libsndfile
 , libtiff
-, giflib
 , libxcb
 , mkfontdir
 , pcre
 , perl
+, pkg-config
 }:
 
 stdenv.mkDerivation rec {
   pname = "icewm";
-  version = "2.3.4";
+  version = "2.9.4";
 
   src = fetchFromGitHub {
     owner  = "ice-wm";
     repo = pname;
     rev = version;
-    hash = "sha256-UyLefj0eY/m3Of51NdhMNMq3z+kaLK28zDe63hbDK5A=";
+    hash = "sha256-ne2lqo9CAhGgC8dd9R03zhFXy9nPBQR0NcfAY0DeVj4=";
   };
 
   nativeBuildInputs = [
@@ -62,6 +63,7 @@ stdenv.mkDerivation rec {
     gdk-pixbuf
     gdk-pixbuf-xlib
     gettext
+    giflib
     glib
     imlib2
     libICE
@@ -81,13 +83,15 @@ stdenv.mkDerivation rec {
     libpthreadstubs
     libsndfile
     libtiff
-    giflib
     libxcb
     mkfontdir
     pcre
   ];
 
-  cmakeFlags = [ "-DPREFIX=$out" "-DCFGDIR=/etc/icewm" ];
+  cmakeFlags = [
+    "-DPREFIX=$out"
+    "-DCFGDIR=/etc/icewm"
+  ];
 
   # install legacy themes
   postInstall = ''

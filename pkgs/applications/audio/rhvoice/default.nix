@@ -1,5 +1,5 @@
 { stdenv, lib, pkg-config, fetchFromGitHub, sconsPackages
-, python, glibmm, libpulseaudio, libao }:
+, glibmm, libpulseaudio, libao }:
 
 let
   version = "unstable-2018-02-10";
@@ -19,7 +19,7 @@ in stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    python glibmm libpulseaudio libao
+    glibmm libpulseaudio libao
   ];
 
   # SConstruct patch

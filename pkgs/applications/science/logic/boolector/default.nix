@@ -1,23 +1,24 @@
-{ stdenv, fetchFromGitHub, fetchpatch, lib, python3
+{ stdenv, fetchFromGitHub, lib, python3, fetchpatch
 , cmake, lingeling, btor2tools, gtest, gmp
 }:
 
 stdenv.mkDerivation rec {
   pname = "boolector";
-  version = "3.2.1";
+  version = "3.2.2";
 
   src = fetchFromGitHub {
     owner  = "boolector";
     repo   = "boolector";
-    rev    = "refs/tags/${version}";
-    sha256 = "0jkmaw678njqgkflzj9g374yk1mci8yqvsxkrqzlifn6bwhwb7ci";
+    rev    = version;
+    sha256 = "1smcy6yp8wvnw2brgnv5bf40v87k4v4fbdbrhi7987vja632k50z";
   };
 
-  # excludes development artifacts from install, will be included in next release
   patches = [
+    # present in master - remove after 3.2.2
     (fetchpatch {
-      url = "https://github.com/Boolector/boolector/commit/4d240436e34e65096671099766344dd9126145b1.patch";
-      sha256 = "1girsbvlhkkl1hldl2gsjynwc3m92jskn798qhx0ydg6whrfgcgw";
+      name = "fix-parser-getc-char-casts.patch";
+      url = "https://github.com/Boolector/boolector/commit/cc3a70918538c1e71ea5e7273fa1ac098da37c1b.patch";
+      sha256 = "0pjvagcy74vxa2q75zbshcz8j7rvhl98549xfcf5y8yyxf5h8hyq";
     })
   ];
 

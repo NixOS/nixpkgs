@@ -39,7 +39,7 @@ in
     enable = mkEnableOption "SATA drive timeouts";
 
     deciSeconds = mkOption {
-      example = "70";
+      example = 70;
       type = types.int;
       description = ''
         Set SCT Error Recovery Control timeout in deciseconds for use in RAID configurations.

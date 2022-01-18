@@ -18,11 +18,11 @@
 }:
 
 let
-  release_version = "13.0.0";
+  release_version = "14.0.0";
   candidate = ""; # empty or "rcN"
   dash-candidate = lib.optionalString (candidate != "") "-${candidate}";
-  rev = "1605fce6c3074f8d1dff5a917a1840ffa66abd86"; # When using a Git commit
-  rev-version = "unstable-2021-06-19"; # When using a Git commit
+  rev = "ee65938357d5fffe9e586fa155b37268b5a358ac"; # When using a Git commit
+  rev-version = "unstable-2021-08-13"; # When using a Git commit
   version = if rev != "" then rev-version else "${release_version}${dash-candidate}";
   targetConfig = stdenv.targetPlatform.config;
 
@@ -30,7 +30,7 @@ let
     owner = "llvm";
     repo = "llvm-project";
     rev = if rev != "" then rev else "llvmorg-${version}";
-    sha256 = "1jf0b9vn4qv5gsvhyg6xsqdkdl4vzn7j4sfcldl8bggcgjmzp0q1";
+    sha256 = "10ahc108wbg2rsp50j3mc8h018a453ykg1rivjkhizng80pyllm1";
   };
 
   llvm_meta = {
@@ -68,27 +68,26 @@ let
     };
 
     # `llvm` historically had the binaries.  When choosing an output explicitly,
-    # we need to reintroduce `outputUnspecified` to get the expected behavior e.g. of lib.get*
-    llvm = tools.libllvm.out // { outputUnspecified = true; };
+    # we need to reintroduce `outputSpecified` to get the expected behavior e.g. of lib.get*
+    llvm = tools.libllvm.out // { outputSpecified = false; };
 
     libclang = callPackage ./clang {
       inherit llvm_meta;
     };
 
-    clang-unwrapped = tools.libclang.out // { outputUnspecified = true; };
+    clang-unwrapped = tools.libclang.out // { outputSpecified = false; };
 
-    # disabled until recommonmark supports sphinx 3
-    #Llvm-manpages = lowPrio (tools.libllvm.override {
-    #  enableManpages = true;
-    #  python3 = pkgs.python3;  # don't use python-boot
-    #});
+    llvm-manpages = lowPrio (tools.libllvm.override {
+      enableManpages = true;
+      python3 = pkgs.python3;  # don't use python-boot
+    });
 
     clang-manpages = lowPrio (tools.libclang.override {
       enableManpages = true;
       python3 = pkgs.python3;  # don't use python-boot
     });
 
-    # disabled until recommonmark supports sphinx 3
+    # TODO: lldb/docs/index.rst:155:toctree contains reference to nonexisting document 'design/structureddataplugins'
     # lldb-manpages = lowPrio (tools.lldb.override {
     #   enableManpages = true;
     #   python3 = pkgs.python3;  # don't use python-boot
@@ -248,11 +247,18 @@ let
                else stdenv;
     };
 
-    libcxxabi = callPackage ./libcxxabi {
-      inherit llvm_meta;
-      stdenv = if stdenv.hostPlatform.useLLVM or false
+    libcxxabi = let
+      stdenv_ = if stdenv.hostPlatform.useLLVM or false
                then overrideCC stdenv buildLlvmTools.clangNoLibcxx
                else stdenv;
+      cxx-headers = callPackage ./libcxx {
+        inherit llvm_meta;
+        stdenv = stdenv_;
+        headersOnly = true;
+      };
+    in callPackage ./libcxxabi {
+      stdenv = stdenv_;
+      inherit llvm_meta cxx-headers;
     };
 
     libunwind = callPackage ./libunwind {
@@ -265,4 +271,4 @@ let
     };
   });
 
-in { inherit tools libraries; } // libraries // tools
+in { inherit tools libraries release_version; } // libraries // tools

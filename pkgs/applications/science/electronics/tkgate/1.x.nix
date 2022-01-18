@@ -5,10 +5,11 @@ let
   libiconvLib = lib.optionalString stdenv.isLinux "${glibc.out}/lib";
 in
 stdenv.mkDerivation rec {
-  name = "tkgate-1.8.7";
+  pname = "tkgate";
+  version = "1.8.7";
 
   src = fetchurl {
-    url = "http://www.tkgate.org/downloads/${name}.tgz";
+    url = "http://www.tkgate.org/downloads/tkgate-${version}.tgz";
     sha256 = "1pqywkidfpdbj18i03h97f4cimld4fb3mqfy8jjsxs12kihm18fs";
   };
 
@@ -36,7 +37,6 @@ stdenv.mkDerivation rec {
     description = "Event driven digital circuit simulator with a TCL/TK-based graphical editor";
     homepage = "http://www.tkgate.org/";
     license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.peti ];
     hydraPlatforms = lib.platforms.linux;
   };
 }

@@ -4,7 +4,7 @@ with ocamlPackages;
 
 buildDunePackage rec {
   pname = "jackline";
-  version = "unstable-2021-04-23";
+  version = "unstable-2021-12-28";
 
   minimumOCamlVersion = "4.08";
 
@@ -13,8 +13,8 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner  = "hannesm";
     repo   = "jackline";
-    rev    = "861c59bb7cd27ad5c7558ff94cb0d0e8dca249e5";
-    sha256 = "00waw5qr0n70i9l9b25r9ryfi836x4qrj046bb4k9qa4d0p8q1sa";
+    rev    = "ca1012098d123c555e9fa5244466d2e009521700";
+    sha256 = "1j1azskcdrp4g44rv3a4zylkzbzpcs23zzzrx94llbgssw6cd9ih";
   };
 
   nativeBuildInpts = [

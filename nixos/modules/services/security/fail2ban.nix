@@ -55,22 +55,24 @@ in
 
       package = mkOption {
         default = pkgs.fail2ban;
+        defaultText = literalExpression "pkgs.fail2ban";
         type = types.package;
-        example = "pkgs.fail2ban_0_11";
+        example = literalExpression "pkgs.fail2ban_0_11";
         description = "The fail2ban package to use for running the fail2ban service.";
       };
 
       packageFirewall = mkOption {
         default = pkgs.iptables;
+        defaultText = literalExpression "pkgs.iptables";
         type = types.package;
-        example = "pkgs.nftables";
+        example = literalExpression "pkgs.nftables";
         description = "The firewall package used by fail2ban service.";
       };
 
       extraPackages = mkOption {
         default = [];
         type = types.listOf types.package;
-        example = lib.literalExample "[ pkgs.ipset ]";
+        example = lib.literalExpression "[ pkgs.ipset ]";
         description = ''
           Extra packages to be made available to the fail2ban service. The example contains
           the packages needed by the `iptables-ipset-proto6` action.
@@ -202,7 +204,7 @@ in
 
       jails = mkOption {
         default = { };
-        example = literalExample ''
+        example = literalExpression ''
           { apache-nohome-iptables = '''
               # Block an IP address if it accesses a non-existent
               # home directory more than 5 times in 10 minutes,

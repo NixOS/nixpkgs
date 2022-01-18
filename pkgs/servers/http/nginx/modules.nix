@@ -50,7 +50,7 @@ in
       repo = "ngx_brotli";
       rev = "25f86f0bac1101b6512135eac5f93c49c63609e3";
       sha256 = "02hfvfa6milj40qc2ikpb9f95sxqvxk4hly3x74kqhysbdi06hhv";
-    }; in pkgs.runCommandNoCC "ngx_brotli-src" {} ''
+    }; in pkgs.runCommand "ngx_brotli-src" {} ''
       cp -a ${gitsrc} $out
       substituteInPlace $out/filter/config \
         --replace '$ngx_addon_dir/deps/brotli/c' ${lib.getDev pkgs.brotli}
@@ -114,8 +114,11 @@ in
       name = "fancyindex";
       owner = "aperezdc";
       repo = "ngx-fancyindex";
-      rev = "v0.4.4";
-      sha256 = "14xmzcl608pr7hb7wng6hpz7by51cfnxlszbka3zhp3kk86ljsi6";
+      rev = "v0.5.2";
+      sha256 = "0nar45lp3jays3p6b01a78a6gwh6v0snpzcncgiphcqmj5kw8ipg";
+    };
+    meta = {
+      maintainers = with lib.maintainers; [ aneeshusa ];
     };
   };
 
@@ -293,10 +296,10 @@ in
   pam = {
     src = fetchFromGitHub {
       name = "pam";
-      owner = "stogh";
+      owner = "sto";
       repo = "ngx_http_auth_pam_module";
-      rev = "v1.5.2";
-      sha256 = "06nydxk82rc9yrw4408nakb197flxh4z1yv935crg65fn9706rl7";
+      rev = "v1.5.3";
+      sha256 = "sha256:09lnljdhjg65643bc4535z378lsn4llbq67zcxlln0pizk9y921a";
     };
     inputs = [ pkgs.pam ];
   };
@@ -452,6 +455,16 @@ in
     };
   };
 
+  upload = {
+    src = fetchFromGitHub {
+      name = "upload";
+      owner = "fdintino";
+      repo = "nginx-upload-module";
+      rev = "2.3.0";
+      sha256 = "8veZP516oC7TESO368ZsZreetbDt+1eTcamk7P1kWjU=";
+    };
+  };
+
   upstream-check = {
     src = fetchFromGitHub {
       name = "upstream-check";
@@ -488,10 +501,10 @@ in
       name = "video-thumbextractor";
       owner = "wandenberg";
       repo = "nginx-video-thumbextractor-module";
-      rev = "0.9.0";
-      sha256 = "1b0v471mzbcys73pzr7gpvzzhff0cva0l5ff32cv7z1v9c0ypji7";
+      rev = "92b80642538eec4cfc98114dec5917b8d820e912";
+      sha256 = "0a8d9ifryhhnll7k7jcsf9frshk5yhpsgz7zgxdmw81wbz5hxklc";
     };
-    inputs = [ pkgs.ffmpeg_3 ];
+    inputs = [ pkgs.ffmpeg ];
   };
 
   vod = {
@@ -499,10 +512,10 @@ in
       name = "vod";
       owner = "kaltura";
       repo = "nginx-vod-module";
-      rev = "e46079f51282d5a378e6911714b5f3a533bb7700";
-      sha256 = "0pzzq4xcq7jg8mxwnz7srj1nczg9ajd1b8q58qlm03lny8nd2hr5";
+      rev = "1.29";
+      sha256 = "1z0ka0cwqbgh3fv2d5yva395sf90626rdzx7lyfrgs89gy4h9nrr";
     };
-    inputs = [ pkgs.ffmpeg_3 pkgs.fdk_aac pkgs.openssl pkgs.libxml2 pkgs.libiconv ];
+    inputs = with pkgs; [ ffmpeg fdk_aac openssl libxml2 libiconv ];
   };
 
   vts = {

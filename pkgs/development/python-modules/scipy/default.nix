@@ -1,18 +1,34 @@
-{lib, fetchPypi, python, buildPythonPackage, gfortran, nose, pytest, pytest-xdist, numpy, pybind11 }:
+{ lib
+, stdenv
+, fetchPypi
+, python
+, buildPythonPackage
+, cython
+, gfortran
+, pythran
+, nose
+, pytest
+, pytest-xdist
+, numpy
+, pybind11
+}:
 
 buildPythonPackage rec {
   pname = "scipy";
-  version = "1.6.3";
+  version = "1.7.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a75b014d3294fce26852a9d04ea27b5671d86736beb34acdfc05859246260707";
+    sha256 = "ab5875facfdef77e0a47d5fd39ea178b58e60e454a4c85aa1e52fcb80db7babf";
   };
 
-  checkInputs = [ nose pytest pytest-xdist ];
-  nativeBuildInputs = [ gfortran ];
+  nativeBuildInputs = [ cython gfortran pythran ];
+
   buildInputs = [ numpy.blas pybind11 ];
+
   propagatedBuildInputs = [ numpy ];
+
+  checkInputs = [ nose pytest pytest-xdist ];
 
   # Remove tests because of broken wrapper
   prePatch = ''
@@ -29,6 +45,16 @@ buildPythonPackage rec {
   preBuild = ''
     ln -s ${numpy.cfg} site.cfg
   '';
+
+  # disable stackprotector on aarch64-darwin for now
+  #
+  # build error:
+  #
+  # /private/tmp/nix-build-python3.9-scipy-1.6.3.drv-0/ccDEsw5U.s:109:15: error: index must be an integer in range [-256, 255].
+  #
+  #         ldr     x0, [x0, ___stack_chk_guard];momd
+  #
+  hardeningDisable = lib.optionals (stdenv.isAarch64 && stdenv.isDarwin) [ "stackprotector" ];
 
   checkPhase = ''
     runHook preCheck

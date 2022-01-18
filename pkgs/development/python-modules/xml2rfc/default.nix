@@ -1,15 +1,34 @@
-{ lib, fetchPypi, buildPythonPackage, pythonAtLeast, intervaltree, pyflakes, requests, lxml, google-i18n-address
-, pycountry, html5lib, six, kitchen, pypdf2, dict2xml, weasyprint, pyyaml, jinja2, ConfigArgParse, appdirs
+{ lib
+, fetchPypi
+, buildPythonPackage
+, pythonOlder
+, intervaltree
+, pyflakes
+, requests
+, lxml
+, google-i18n-address
+, pycountry
+, html5lib
+, six
+, kitchen
+, pypdf2
+, dict2xml
+, weasyprint
+, pyyaml
+, jinja2
+, configargparse
+, appdirs
 }:
 
 buildPythonPackage rec {
   pname = "xml2rfc";
-  version = "3.8.0";
-  disabled = pythonAtLeast "3.9";
+  version = "3.12.0";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8e25a9d73acf57ade798fc67841277dbbdb81ced390e6f84362370305b127426";
+    sha256 = "25deadb9ee95f0dc71376a60e9c1e34636b5016c1952ad5597a6246495e34464";
   };
 
   propagatedBuildInputs = [
@@ -27,9 +46,14 @@ buildPythonPackage rec {
     pypdf2
     dict2xml
     weasyprint
-    ConfigArgParse
+    configargparse
     appdirs
   ];
+
+  postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace "jinja2>=2.11,<3.0" "jinja2>=2.11"
+  '';
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -37,6 +61,7 @@ buildPythonPackage rec {
 
   # lxml tries to fetch from the internet
   doCheck = false;
+
   pythonImportsCheck = [ "xml2rfc" ];
 
   meta = with lib; {

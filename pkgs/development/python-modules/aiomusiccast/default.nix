@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "aiomusiccast";
-  version = "0.8.2";
+  version = "0.14.3";
 
   format = "pyproject";
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "vigonotion";
     repo = "aiomusiccast";
     rev = version;
-    sha256 = "sha256-XmDE704c9KJst8hrvdyQdS52Sd6RnprQZjBCIWAaiho=";
+    hash = "sha256-ELdNxeU9dajWr4VeOyuvNrSi7B+ImVJM/BlZsw3tcKE=";
   };
 
   nativeBuildInputs = [
@@ -32,7 +32,9 @@ buildPythonPackage rec {
   # upstream has no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "aiomusiccast" ];
+  pythonImportsCheck = [
+    "aiomusiccast"
+  ];
 
   meta = with lib; {
     description = "Companion library for musiccast devices intended for the Home Assistant integration";

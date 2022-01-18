@@ -3,7 +3,8 @@
 , fetchurl
 , buildPythonPackage
 , pkgsStatic
-, openssl
+, openssl_1_1
+, openssl_1_0_2
 , invoke
 , tls-parser
 , cacert
@@ -36,7 +37,7 @@ let
     "enable-mdc2"
     "-fPIC"
   ];
-  opensslStatic = (openssl.override nasslOpensslArgs).overrideAttrs (
+  opensslStatic = (openssl_1_1.override nasslOpensslArgs).overrideAttrs (
     oldAttrs: rec {
       name = "openssl-${version}";
       version = "1.1.1h";
@@ -49,10 +50,24 @@ let
         "enable-tls1_3"
         "no-async"
       ];
+      patches = builtins.filter (
+        p: (builtins.baseNameOf (toString p)) != "macos-yosemite-compat.patch"
+      ) oldAttrs.patches;
       buildInputs = oldAttrs.buildInputs ++ [ zlibStatic cacert ];
+      meta = oldAttrs.meta // {
+        knownVulnerabilities = [
+          "CVE-2020-1971"
+          "CVE-2021-23840"
+          "CVE-2021-23841"
+          "CVE-2021-3449"
+          "CVE-2021-3450"
+          "CVE-2021-3711"
+          "CVE-2021-3712"
+        ];
+      };
     }
   );
-  opensslLegacyStatic = (openssl.override nasslOpensslArgs).overrideAttrs (
+  opensslLegacyStatic = (openssl_1_0_2.override nasslOpensslArgs).overrideAttrs (
     oldAttrs: rec {
       name = "openssl-${version}";
       version = "1.0.2e";
@@ -61,7 +76,9 @@ let
         sha256 = "1zqb1rff1wikc62a7vj5qxd1k191m8qif5d05mwdxz2wnzywlg72";
       };
       configureFlags = oldAttrs.configureFlags ++ nasslOpensslFlagsCommon;
-      patches = [ ];
+      patches = builtins.filter (
+        p: (builtins.baseNameOf (toString p)) == "darwin64-arm64.patch"
+      ) oldAttrs.patches;
       buildInputs = oldAttrs.buildInputs ++ [ zlibStatic ];
       # openssl_1_0_2 needs `withDocs = false`
       outputs = lib.remove "doc" oldAttrs.outputs;
@@ -70,14 +87,14 @@ let
 in
 buildPythonPackage rec {
   pname = "nassl";
-  version = "4.0.0";
+  version = "4.0.1";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "nabla-c0d3";
     repo = pname;
     rev = version;
-    hash = "sha256-6lk2YfI9km10YbJAn38fvo9qa4iXcByL+udCsDe+kvU=";
+    hash = "sha256-QzO7ABh2weBO6NVFIj7kZpS8ashbDGompuvdKteJeUc=";
   };
 
   postPatch = let

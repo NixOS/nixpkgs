@@ -2,35 +2,52 @@
 
 stdenv.mkDerivation rec {
   pname = "fstar";
-  version = "0.9.6.0";
+  version = "2021.12.25";
 
   src = fetchFromGitHub {
     owner = "FStarLang";
     repo = "FStar";
     rev = "v${version}";
-    sha256 = "0wix7l229afkn6c6sk4nwkfq0nznsiqdkds4ixi2yyf72immwmmb";
+    sha256 = "RmXKv/admC1w26z/ClNhH11J8n87WTfDr2lYOF6Fx7I=";
   };
 
   nativeBuildInputs = [ makeWrapper installShellFiles ];
 
-  buildInputs = with ocamlPackages; [
-    z3 ocaml findlib batteries menhir menhirLib stdint
-    zarith camlp4 yojson pprint
-    ulex ocaml-migrate-parsetree process ppx_deriving ppx_deriving_yojson ocamlbuild
-  ];
+  buildInputs = [
+    z3
+  ] ++ (with ocamlPackages; [
+    ocaml
+    findlib
+    ocamlbuild
+    batteries
+    zarith
+    stdint
+    yojson
+    fileutils
+    menhir
+    menhirLib
+    pprint
+    sedlex_2
+    ppxlib
+    ppx_deriving
+    ppx_deriving_yojson
+    process
+  ]);
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  preBuild = ''
-    patchShebangs src/tools
-    patchShebangs bin
+  buildFlags = [ "libs" ];
+
+  enableParallelBuilding = true;
+
+  postPatch = ''
+    patchShebangs ulib/gen_mllib.sh
+    substituteInPlace src/ocaml-output/Makefile --replace '$(COMMIT)' 'v${version}'
   '';
-  buildFlags = [ "-C" "src/ocaml-output" ];
 
   preInstall = ''
     mkdir -p $out/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib/fstarlib
   '';
-  installFlags = [ "-C" "src/ocaml-output" ];
   postInstall = ''
     wrapProgram $out/bin/fstar.exe --prefix PATH ":" "${z3}/bin"
     installShellCompletion --bash .completion/bash/fstar.exe.bash
@@ -42,7 +59,8 @@ stdenv.mkDerivation rec {
     description = "ML-like functional programming language aimed at program verification";
     homepage = "https://www.fstar-lang.org";
     license = licenses.asl20;
+    changelog = "https://github.com/FStarLang/FStar/raw/v${version}/CHANGES.md";
     platforms = with platforms; darwin ++ linux;
-    maintainers = with maintainers; [ gebner ];
+    maintainers = with maintainers; [ gebner pnmadelaine ];
   };
 }

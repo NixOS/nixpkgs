@@ -1,20 +1,62 @@
-{ lib, python3Packages, fetchFromGitHub }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkgs
+, python3
+, python3Packages
+}:
+let
+  py = python3.override {
+    packageOverrides = self: super: {
 
-with python3Packages; buildPythonApplication rec {
+      libusb1 = super.libusb1.overridePythonAttrs (oldAttrs: rec {
+        version = "1.9.3";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "0j8p7jb7sibiiib18vyv3w5rrk0f4d2dl99bs18nwkq6pqvwxrk0";
+        };
+
+        postPatch = ''
+          substituteInPlace usb1/libusb1.py --replace \
+            "ctypes.util.find_library(base_name)" \
+            "'${pkgs.libusb1}/lib/libusb-1.0${stdenv.hostPlatform.extensions.sharedLibrary}'"
+        '';
+      });
+    };
+  };
+in
+with py.pkgs;
+
+buildPythonApplication rec {
   pname = "nrfutil";
-  version = "6.1";
+  version = "6.1.3";
 
   src = fetchFromGitHub {
     owner = "NordicSemiconductor";
     repo = "pc-nrfutil";
     rev = "v${version}";
-    sha256 = "0g43lf5jmk0qxb7r4h68wr38fli6pjjk67w8l2cpdm9rd8jz4lpn";
+    sha256 = "1gpxjdcjn4rjvk649vpkh563c7lx3rrfvamazb1qjii1pxrvvqa7";
   };
 
-  propagatedBuildInputs = [ pc-ble-driver-py six pyserial enum34  click ecdsa
-    protobuf tqdm piccata pyspinel intelhex pyyaml crcmod libusb1 ipaddress ];
+  propagatedBuildInputs = [
+    click
+    crcmod
+    ecdsa
+    libusb1
+    intelhex
+    pc-ble-driver-py
+    piccata
+    protobuf
+    pyserial
+    pyspinel
+    pyyaml
+    tqdm
+  ];
 
-  checkInputs = [ nose behave ];
+  checkInputs = [
+    behave
+    nose
+  ];
 
   postPatch = ''
     mkdir test-reports

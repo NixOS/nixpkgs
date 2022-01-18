@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pytest-asyncio
 , pytest-cov
 , pytestCheckHook
 , requests
@@ -10,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "pytest-httpserver";
-  version = "1.0.0";
+  version = "1.0.3";
 
   src = fetchPypi {
     pname = "pytest_httpserver";
     inherit version;
-    sha256 = "sha256-rjCV0TTUBgLpVyEUDiIhOdpKV5lWEjmQr4WCUyTQdG0=";
+    sha256 = "87561c4fa6a7bc306d76d1979a3eb9d54eb26bfb2f3f51f1643bf3c090ce629d";
   };
 
   propagatedBuildInputs = [ werkzeug ];

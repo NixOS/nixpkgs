@@ -12,7 +12,7 @@ in assert lib.getVersion wineUnstable == patch.version;
 
   name = "${self.name}-staging";
 
-  postPatch = self.postPatch or "" + ''
+  prePatch = self.prePatch or "" + ''
     patchShebangs tools
     cp -r ${patch}/patches .
     chmod +w patches

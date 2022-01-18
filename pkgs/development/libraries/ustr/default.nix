@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     homepage = "http://www.and.org/ustr/";
     description = "Micro String API for C language";
     license = licenses.bsd2;
-    maintainers = [ maintainers.phreedom ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

@@ -10,8 +10,8 @@ let
     packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) defaultOverrides;
   };
 in python.pkgs.buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "gns3-gui";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "GNS3";
@@ -31,6 +31,10 @@ in python.pkgs.buildPythonPackage rec {
   dontWrapQtApps = true;
   postFixup = ''
       wrapQtApp "$out/bin/gns3"
+  '';
+  postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace "sentry-sdk==1.3.1" "sentry-sdk>=1.3.1" \
   '';
 
   meta = with lib; {

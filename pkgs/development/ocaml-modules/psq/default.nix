@@ -14,7 +14,7 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ seq ];
 
-  doCheck = lib.versionAtLeast ocaml.version "4.07";
+  doCheck = lib.versionAtLeast ocaml.version "4.08";
   checkInputs = [ qcheck-alcotest ];
 
   meta = {

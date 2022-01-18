@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "poweralertd";
-  version = "0.1.0";
+  version = "0.2.0";
 
   outputs = [ "out" "man" ];
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner = "~kennylevinsen";
     repo = "poweralertd";
     rev = version;
-    sha256 = "136xcrp7prilh905a6v933vryqy20l7nw24ahc4ycax8f0s906x9";
+    sha256 = "19rw9q4pcqw56nmzjfglfikzx5wwjl4n08awwdhg0jy1k0bm3dvp";
   };
 
   patchPhase = ''

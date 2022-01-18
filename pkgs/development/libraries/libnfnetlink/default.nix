@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "libnfnetlink-1.0.1";
+  pname = "libnfnetlink";
+  version = "1.0.1";
 
   src = fetchurl {
-    url = "https://www.netfilter.org/projects/libnfnetlink/files/${name}.tar.bz2";
+    url = "https://www.netfilter.org/projects/libnfnetlink/files/libnfnetlink-${version}.tar.bz2";
     sha256 = "06mm2x4b01k3m7wnrxblk9j0mybyr4pfz28ml7944xhjx6fy2w7j";
   };
 
@@ -23,7 +24,7 @@ stdenv.mkDerivation rec {
       This library is not meant as a public API for application developers.
       It is only used by other netfilter.org projects, like the aforementioned ones.
     '';
-    homepage = "http://www.netfilter.org/projects/libnfnetlink/index.html";
+    homepage = "https://www.netfilter.org/projects/libnfnetlink/index.html";
     license = lib.licenses.gpl2;
 
     platforms = lib.platforms.linux;

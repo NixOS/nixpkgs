@@ -6,7 +6,7 @@ stdenv.mkDerivation {
   pname = "libcxx";
   inherit version;
 
-  src = fetch "libcxx" "1wf3ww29xkx7prs7pdwicy5qqfapib26110jgmkjrbka9z57bjvx";
+  src = fetch "libcxx" "05cx39ldlxchck454lgfly1xj0c7x65iyx4hqhiihrlg6p6qj854";
 
   postUnpack = ''
     unpackFile ${libcxxabi.src}
@@ -22,6 +22,12 @@ stdenv.mkDerivation {
   ] ++ lib.optionals stdenv.hostPlatform.isMusl [
     ../../libcxx-0001-musl-hacks.patch
   ];
+
+  # Prevent errors like "error: 'foo' is unavailable: introduced in macOS yy.zz"
+  postPatch = ''
+    substituteInPlace include/__config \
+      --replace "#    define _LIBCPP_USE_AVAILABILITY_APPLE" ""
+  '';
 
   preConfigure = lib.optionalString stdenv.hostPlatform.isMusl ''
     patchShebangs utils/cat_files.py

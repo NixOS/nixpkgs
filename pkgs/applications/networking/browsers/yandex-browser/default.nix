@@ -50,11 +50,11 @@
 
 stdenv.mkDerivation rec {
   pname = "yandex-browser";
-  version = "21.5.3.753-1";
+  version = "21.6.2.817-1";
 
   src = fetchurl {
     url = "http://repo.yandex.ru/yandex-browser/deb/pool/main/y/${pname}-beta/${pname}-beta_${version}_amd64.deb";
-    sha256 = "sha256-sI2p/fCaruUJ3qPMyy+12Bh5I1SH8m7sYX5yDex2rwg=";
+    sha256 = "sha256-xeZkQzVPPNABxa3/YBLoZl1obbFdzxdqIgLyoA4PN8U=";
   };
 
   nativeBuildInputs = [
@@ -131,5 +131,6 @@ stdenv.mkDerivation rec {
     license = licenses.unfree;
     maintainers = with maintainers; [ dan4ik605743 ];
     platforms = [ "x86_64-linux" ];
+    broken = true;
   };
 }

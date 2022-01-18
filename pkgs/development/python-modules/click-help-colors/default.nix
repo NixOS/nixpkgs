@@ -1,21 +1,19 @@
 { lib, fetchPypi, buildPythonPackage
-, click, pytest
+, click, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "click-help-colors";
-  version = "0.9";
+  version = "0.9.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "eb037a2dd95a9e20b3897c2b3ca57e7f6797f76a8d93f7eeedda7fcdcbc9b635";
+    sha256 = "78cbcf30cfa81c5fc2a52f49220121e1a8190cd19197d9245997605d3405824d";
   };
 
   propagatedBuildInputs = [ click ];
 
-  # tries to use /homeless-shelter to mimic container usage, etc
-  #doCheck = false;
-  checkInputs = [ pytest ];
+  checkInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "click_help_colors" ];
 

@@ -1,4 +1,4 @@
-{ lib, runCommand, pipewire, paths-out, paths-lib, paths-out-media-session }:
+{ lib, runCommand, package, paths-out, paths-lib }:
 
 let
   check-path = output: path: ''
@@ -14,9 +14,8 @@ let
 in runCommand "pipewire-test-paths" { } ''
   touch $out
 
-  ${check-output pipewire.mediaSession paths-out-media-session}
-  ${check-output pipewire.lib paths-lib}
-  ${check-output pipewire paths-out}
+  ${check-output package.lib paths-lib}
+  ${check-output package paths-out}
 
   if [[ -n "$error" ]]; then
     exit 1

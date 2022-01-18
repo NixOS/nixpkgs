@@ -1,14 +1,11 @@
 { lib, stdenv, fetchurl, pkg-config, libopus }:
 
-let
-  version = "0.2.1";
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "libopusenc";
-  inherit version;
+  version = "0.2.1";
 
   src = fetchurl {
-    url = "https://archive.mozilla.org/pub/opus/libopusenc-${version}.tar.gz";
+    url = "mirror://mozilla/opus/libopusenc-${version}.tar.gz";
     sha256 = "1ffb0vhlymlsq70pxsjj0ksz77yfm2x0a1x8q50kxmnkm1hxp642";
   };
 

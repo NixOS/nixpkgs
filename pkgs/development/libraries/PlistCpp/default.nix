@@ -1,7 +1,8 @@
 { lib, stdenv, fetchFromGitHub, cmake, boost, NSPlist, pugixml }:
 
 stdenv.mkDerivation {
-  name = "PlistCpp-11615d";
+  pname = "PlistCpp";
+  version = "unstable-11615d";
 
   src = fetchFromGitHub {
     owner = "matthewbauer";

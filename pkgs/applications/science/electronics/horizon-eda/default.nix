@@ -3,7 +3,7 @@
 , coreutils
 , cppzmq
 , curl
-, epoxy
+, libepoxy
 , fetchFromGitHub
 , glm
 , gtkmm3
@@ -23,19 +23,19 @@
 
 stdenv.mkDerivation rec {
   pname = "horizon-eda";
-  version = "2.0.0";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "horizon-eda";
     repo = "horizon";
     rev = "v${version}";
-    sha256 = "sha256-FS24B/ySKeF8r7Tro+mf5P0ALtlPwwJCU3YdDNYLe6o=";
+    sha256 = "sha256-MUS1dIsULDJ5DahCtDpbHZq56nltHShli7+uoW1/Tqw=";
   };
 
   buildInputs = [
     cppzmq
     curl
-    epoxy
+    libepoxy
     glm
     gtkmm3
     libgit2

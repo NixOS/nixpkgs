@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "lima";
-  version = "0.5.0";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
-    owner = "AkihiroSuda";
+    owner = "lima-vm";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-1952xGSfVFI2Fs5HLJKCyB6ZxKFf5uPKXIlctM/T+8o=";
+    sha256 = "sha256-vOoRwV4BO40cUWNxmWubgbN1q7WPKe2vifg8F1duaVA=";
   };
 
-  vendorSha256 = "sha256-rPL/jxMHMkKffoYLSI3FFtFRYGtARKmrODmL9w+rN0E=";
+  vendorSha256 = "sha256-118TYmpGUNMZgFKsOzqOy71SabG9tN6IeOkpgwVSXTY=";
 
   nativeBuildInputs = [ makeWrapper installShellFiles ];
 
@@ -34,7 +34,9 @@ buildGoModule rec {
     wrapProgram $out/bin/limactl \
       --prefix PATH : ${lib.makeBinPath [ qemu ]}
     installShellCompletion --cmd limactl \
-      --bash <($out/bin/limactl completion bash)
+      --bash <($out/bin/limactl completion bash) \
+      --fish <($out/bin/limactl completion fish) \
+      --zsh <($out/bin/limactl completion zsh)
     runHook postInstall
   '';
 
@@ -44,10 +46,9 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    homepage = "https://github.com/AkihiroSuda/lima";
+    homepage = "https://github.com/lima-vm/lima";
     description = "Linux virtual machines (on macOS, in most cases)";
     license = licenses.asl20;
     maintainers = with maintainers; [ anhduy ];
   };
 }
-

@@ -3,13 +3,15 @@
 , fetchurl
 , mono6
 , msbuild
-, dotnet-sdk
+, dotnetCorePackages
 , makeWrapper
 , unzip
 , writeText
 }:
 
 let
+
+  dotnet-sdk = dotnetCorePackages.sdk_5_0;
 
   deps = map (package: stdenv.mkDerivation (with package; {
     pname = name;
@@ -66,13 +68,13 @@ let
 in stdenv.mkDerivation rec {
 
   pname = "omnisharp-roslyn";
-  version = "1.37.12";
+  version = "1.37.15";
 
   src = fetchFromGitHub {
     owner = "OmniSharp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0gyy49v3pslr0l0q6h8hzah4s0iwkhkyckyrj3g2cg08w20b10gw";
+    sha256 = "070wqs667si3f78fy6w4rrfm8qncnabg0yckjhll0yv1pzbj9q42";
   };
 
   nativeBuildInputs = [ makeWrapper msbuild ];
@@ -80,7 +82,10 @@ in stdenv.mkDerivation rec {
   buildPhase = ''
     runHook preBuild
 
-    HOME=$(pwd)/fake-home msbuild -r -p:Configuration=Release -p:RestoreConfigFile=${nuget-config} src/OmniSharp.Stdio.Driver/OmniSharp.Stdio.Driver.csproj
+    HOME=$(pwd)/fake-home msbuild -r \
+      -p:Configuration=Release \
+      -p:RestoreConfigFile=${nuget-config} \
+      src/OmniSharp.Stdio.Driver/OmniSharp.Stdio.Driver.csproj
 
     runHook postBuild
   '';
@@ -97,7 +102,7 @@ in stdenv.mkDerivation rec {
     ln -s ${msbuild}/lib/mono/msbuild/Current/bin $out/src/.msbuild/Current/Bin
 
     makeWrapper ${mono6}/bin/mono $out/bin/omnisharp \
-      --prefix PATH : ${dotnet-sdk}/bin \
+      --suffix PATH : ${dotnet-sdk}/bin \
       --add-flags "$out/src/OmniSharp.exe"
   '';
 

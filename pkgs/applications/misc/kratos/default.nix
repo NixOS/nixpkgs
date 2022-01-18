@@ -2,20 +2,20 @@
 
 buildGoModule rec {
   pname = "kratos";
-  version = "0.6.0-alpha.2";
+  version = "0.8.0-alpha.3";
 
   src = fetchFromGitHub {
     owner = "ory";
     repo = "kratos";
     rev = "v${version}";
-    sha256 = "0zg6afzqi5fmr7hmy1cd7fknd1bcplz3h0f7z67l75v8k2n73md1";
+    sha256 = "0ihq2kxjackicxg0hrpmx6bsgz056xbaq3j8py37z2w6mwszarcg";
   };
 
-  vendorSha256 = "16qg44k97l6719hib8vbv0j15x6gvs9d6738d2y990a2qiqbsqpw";
+  vendorSha256 = "175pckj30cm5xkbvsdvwzarvwapsylyjgj4ss8v5r1sa0fjpj008";
 
   subPackages = [ "." ];
 
-  buildFlags = [ "-tags sqlite" ];
+  tags = [ "sqlite" ];
 
   doCheck = false;
 

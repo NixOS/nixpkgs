@@ -1,15 +1,27 @@
 { stable, branch, version, sha256Hash, mkOverride, commonOverrides }:
 
-{ lib, python3, fetchFromGitHub }:
+{ lib, python3, fetchFromGitHub, packageOverrides ? self: super: {}
+ }:
 
 let
   defaultOverrides = commonOverrides ++ [
-    (mkOverride "aiofiles" "0.5.0"
-      "98e6bcfd1b50f97db4980e182ddd509b7cc35909e903a8fe50d8849e02d815af")
+    (self: super: {
+      aiofiles = super.aiofiles.overridePythonAttrs (oldAttrs: rec {
+        pname = "aiofiles";
+        version = "0.7.0";
+        src = fetchFromGitHub {
+          owner = "Tinche";
+          repo = pname;
+          rev = "v${version}";
+          sha256 = "sha256-njQ7eRYJO+dUrwO5pZwKHXn9nVSGYcEhwhs3x5BMc28=";
+        };
+        doCheck = false;
+      });
+    })
   ];
 
   python = python3.override {
-    packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) defaultOverrides;
+    packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) ([ packageOverrides ] ++ defaultOverrides);
   };
 in python.pkgs.buildPythonPackage {
   pname = "gns3-server";
@@ -24,14 +36,16 @@ in python.pkgs.buildPythonPackage {
 
   postPatch = ''
     substituteInPlace requirements.txt \
-      --replace "aiohttp==3.6.2" "aiohttp>=3.6.2" \
-      --replace "py-cpuinfo==7.0.0" "py-cpuinfo>=8.0.0"
+      --replace "aiohttp==3.7.4" "aiohttp>=3.7.4" \
+      --replace "Jinja2==3.0.1" "Jinja2>=3.0.1" \
+      --replace "sentry-sdk==1.3.1" "sentry-sdk>=1.3.1" \
+      --replace "async-timeout==3.0.1" "async-timeout>=3.0.1" \
   '';
 
   propagatedBuildInputs = with python.pkgs; [
     aiohttp-cors yarl aiohttp multidict setuptools
     jinja2 psutil zipstream sentry-sdk jsonschema distro async_generator aiofiles
-    prompt_toolkit py-cpuinfo
+    prompt-toolkit py-cpuinfo
   ];
 
   # Requires network access

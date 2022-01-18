@@ -1,16 +1,21 @@
-{ lib, fetchFromGitHub, buildGoPackage }:
+{ lib, fetchFromGitHub, buildGoModule }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "envsubst";
   version = "1.2.0";
 
-  goPackagePath = "github.com/a8m/envsubst";
   src = fetchFromGitHub {
     owner = "a8m";
     repo = "envsubst";
     rev = "v${version}";
     sha256 = "0zkgjdlw3d5xh7g45bzxqspxr61ljdli8ng4a1k1gk0dls4sva8n";
   };
+
+  vendorSha256 = "sha256-pQpattmS9VmO3ZIQUFn66az8GSmB4IvYhTTCFn6SUmo=";
+
+  postInstall = ''
+    install -Dm444 -t $out/share/doc/${pname} LICENSE *.md
+  '';
 
   meta = with lib; {
     description = "Environment variables substitution for Go";

@@ -1,7 +1,7 @@
 { stdenv
 , lib
 , fetchurl
-# Alphabetic ordering below
+  # Alphabetic ordering below
 , alsa-lib
 , at-spi2-atk
 , atk
@@ -59,7 +59,7 @@ let
       let
         version = "v20201206-cjk";
       in
-        "https://github.com/googlefonts/noto-cjk/raw/${version}/NotoSansCJKsc-Regular.otf";
+      "https://github.com/googlefonts/noto-cjk/raw/${version}/NotoSansCJKsc-Regular.otf";
     sha256 = "sha256-aJXSVNJ+p6wMAislXUn4JQilLhimNSedbc9nAuPVxo4=";
   };
 
@@ -70,13 +70,14 @@ let
     pulseaudio
   ];
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "onlyoffice-desktopeditors";
-  version = "6.2.0";
+  version = "6.3.1";
   minor = null;
   src = fetchurl {
     url = "https://github.com/ONLYOFFICE/DesktopEditors/releases/download/v${version}/onlyoffice-desktopeditors_amd64.deb";
-    sha256 = "sha256-nKmWxaVVul/rGDIh3u9zCpKu7U0nmrntFFf96xQyzdg=";
+    sha256 = "sha256-WCjCljA7yB7Zm/I4rDZnfgaUQpDUKwbUvL7hkIG8cVM=";
   };
 
   nativeBuildInputs = [
@@ -146,10 +147,6 @@ in stdenv.mkDerivation rec {
 
     ln -s $out/share/desktopeditors/DesktopEditors $out/bin/DesktopEditors
 
-    wrapProgram $out/bin/DesktopEditors \
-        --set QT_XKB_CONFIG_ROOT ${xkeyboard_config}/share/X11/xkb \
-        --set QTCOMPOSE ${xorg.libX11.out}/share/X11/locale
-
     substituteInPlace $out/share/applications/onlyoffice-desktopeditors.desktop \
       --replace "/usr/bin/onlyoffice-desktopeditor" "$out/bin/DesktopEditor"
 
@@ -157,8 +154,16 @@ in stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-    gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : "${runtimeLibs}" )
+    gappsWrapperArgs+=(
+      --prefix LD_LIBRARY_PATH : "${runtimeLibs}" \
+      --set QT_XKB_CONFIG_ROOT "${xkeyboard_config}/share/X11/xkb" \
+      --set QTCOMPOSE "${xorg.libX11.out}/share/X11/locale" \
+      --set QT_QPA_PLATFORM "xcb"
+      # the bundled version of qt does not support wayland
+    )
   '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     description = "Office suite that combines text, spreadsheet and presentation editors allowing to create, view and edit local documents";

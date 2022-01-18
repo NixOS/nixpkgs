@@ -1,4 +1,0 @@
-url http://www.angelcode.com/angelscript/downloads.html
-version_link '[.]zip$'
-version '.*_([0-9.]+)[.].*' '\1'
-do_overwrite () { do_overwrite_just_version ; }

@@ -12,28 +12,14 @@ diff --git a/src/kpackage/packageloader.cpp b/src/kpackage/packageloader.cpp
 index f03d882..d5aee56 100644
 --- a/src/kpackage/packageloader.cpp
 +++ b/src/kpackage/packageloader.cpp
-@@ -234,7 +234,7 @@ QList<KPluginMetaData> PackageLoader::listPackages(const QString &packageFormat,
-         } else {
-             qCDebug(KPACKAGE_LOG) << "kpluginindex: Not cached" << plugindir;
-             // If there's no cache file, fall back to listing the directory
--            const QDirIterator::IteratorFlags flags = QDirIterator::Subdirectories;
-+            const QDirIterator::IteratorFlags flags = QDirIterator::Subdirectories | QDirIterator::FollowSymlinks;
-             const QStringList nameFilters = {QStringLiteral("metadata.json"), QStringLiteral("metadata.desktop")};
- 
-             QDirIterator it(plugindir, nameFilters, QDir::Files, flags);
-diff --git a/src/kpackage/private/packagejobthread.cpp b/src/kpackage/private/packagejobthread.cpp
-index 3eed307..dd6ca6e 100644
---- a/src/kpackage/private/packagejobthread.cpp
-+++ b/src/kpackage/private/packagejobthread.cpp
-@@ -108,7 +108,7 @@ bool indexDirectory(const QString &dir, const QString &dest)
- 
-     QJsonArray plugins;
- 
--    QDirIterator it(dir, *metaDataFiles, QDir::Files, QDirIterator::Subdirectories);
-+    QDirIterator it(dir, *metaDataFiles, QDir::Files, QDirIterator::Subdirectories | QDirIterator::FollowSymlinks);
-     while (it.hasNext()) {
-         it.next();
-         const QString path = it.fileInfo().absoluteFilePath();
--- 
-2.30.1
+@@ -196,7 +196,7 @@ QList<KPluginMetaData> PackageLoader::listPackages(const QString &packageFormat,
+     }
 
+     for (auto const &plugindir : std::as_const(paths)) {
+-        const QDirIterator::IteratorFlags flags = QDirIterator::Subdirectories;
++        const QDirIterator::IteratorFlags flags = QDirIterator::Subdirectories | QDirIterator::FollowSymlinks;
+         const QStringList nameFilters = {QStringLiteral("metadata.json"), QStringLiteral("metadata.desktop")};
+
+         QDirIterator it(plugindir, nameFilters, QDir::Files, flags);
+--
+2.30.1

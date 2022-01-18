@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "pyintesishome";
-  version = "1.7.7";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "jnimmo";
     repo = "pyIntesisHome";
     rev = version;
-    sha256 = "1wjh6bib6bg9rf4q9z6dlrf3gncj859hz4i20a9w06jci7b2yaaz";
+    sha256 = "sha256-+bad3VIoP0sVw0blK9YIot2GfK5de4HTXv5/ipV2Nds=";
   };
 
   propagatedBuildInputs = [

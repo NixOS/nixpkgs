@@ -17,7 +17,7 @@ buildPythonPackage {
   patches = [
     (fetchpatch {
       name = "fix-pip10-compat.patch";
-      url = " https://github.com/capless/warrant/commit/ae17d17d9888b9218a8facf6f6ad0bf4adae9a12.patch";
+      url = "https://github.com/capless/warrant/commit/ae17d17d9888b9218a8facf6f6ad0bf4adae9a12.patch";
       sha256 = "1lvqi2qfa3kxdz05ab2lc7xnd3piyvvnz9kla2jl4pchi876z17c";
     })
   ];

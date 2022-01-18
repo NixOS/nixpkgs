@@ -18,6 +18,7 @@ let
     concatLists (map (bond: bond.interfaces) (attrValues cfg.bonds))
     ++ concatLists (map (bridge: bridge.interfaces) (attrValues cfg.bridges))
     ++ map (sit: sit.dev) (attrValues cfg.sits)
+    ++ map (gre: gre.dev) (attrValues cfg.greTunnels)
     ++ map (vlan: vlan.interface) (attrValues cfg.vlans)
     # add dependency to physical or independently created vswitch member interface
     # TODO: warn the user that any address configured on those interfaces will be useless
@@ -33,9 +34,6 @@ in
       assertion = cfg.defaultGatewayWindowSize == null;
       message = "networking.defaultGatewayWindowSize is not supported by networkd.";
     } {
-      assertion = cfg.vswitches == {};
-      message = "networking.vswitches are not supported by networkd.";
-    } {
       assertion = cfg.defaultGateway == null || cfg.defaultGateway.interface == null;
       message = "networking.defaultGateway.interface is not supported by networkd.";
     } {
@@ -50,6 +48,9 @@ in
     } ] ++ flip mapAttrsToList cfg.bridges (n: { rstp, ... }: {
       assertion = !rstp;
       message = "networking.bridges.${n}.rstp is not supported by networkd.";
+    }) ++ flip mapAttrsToList cfg.fooOverUDP (n: { local, ... }: {
+      assertion = local == null;
+      message = "networking.fooOverUDP.${n}.local is not supported by networkd.";
     });
 
     networking.dhcpcd.enable = mkDefault false;
@@ -197,6 +198,23 @@ in
           macvlan = [ name ];
         } ]);
       })))
+      (mkMerge (flip mapAttrsToList cfg.fooOverUDP (name: fou: {
+        netdevs."40-${name}" = {
+          netdevConfig = {
+            Name = name;
+            Kind = "fou";
+          };
+          # unfortunately networkd cannot encode dependencies of netdevs on addresses/routes,
+          # so we cannot specify Local=, Peer=, PeerPort=. this looks like a missing feature
+          # in networkd.
+          fooOverUDPConfig = {
+            Port = fou.port;
+            Encapsulation = if fou.protocol != null then "FooOverUDP" else "GenericUDPEncapsulation";
+          } // (optionalAttrs (fou.protocol != null) {
+            Protocol = fou.protocol;
+          });
+        };
+      })))
       (mkMerge (flip mapAttrsToList cfg.sits (name: sit: {
         netdevs."40-${name}" = {
           netdevConfig = {
@@ -210,10 +228,39 @@ in
               Local = sit.local;
             }) // (optionalAttrs (sit.ttl != null) {
               TTL = sit.ttl;
-            });
+            }) // (optionalAttrs (sit.encapsulation != null) (
+              {
+                FooOverUDP = true;
+                Encapsulation =
+                  if sit.encapsulation.type == "fou"
+                  then "FooOverUDP"
+                  else "GenericUDPEncapsulation";
+                FOUDestinationPort = sit.encapsulation.port;
+              } // (optionalAttrs (sit.encapsulation.sourcePort != null) {
+                FOUSourcePort = sit.encapsulation.sourcePort;
+              })));
         };
         networks = mkIf (sit.dev != null) {
           "40-${sit.dev}" = (mkMerge [ (genericNetwork (mkOverride 999)) {
+            tunnel = [ name ];
+          } ]);
+        };
+      })))
+      (mkMerge (flip mapAttrsToList cfg.greTunnels (name: gre: {
+        netdevs."40-${name}" = {
+          netdevConfig = {
+            Name = name;
+            Kind = gre.type;
+          };
+          tunnelConfig =
+            (optionalAttrs (gre.remote != null) {
+              Remote = gre.remote;
+            }) // (optionalAttrs (gre.local != null) {
+              Local = gre.local;
+            });
+        };
+        networks = mkIf (gre.dev != null) {
+          "40-${gre.dev}" = (mkMerge [ (genericNetwork (mkOverride 999)) {
             tunnel = [ name ];
           } ]);
         };

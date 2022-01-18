@@ -3,7 +3,7 @@
 , importlib-metadata
 , pexpect
 , prettytable
-, requests_toolbelt
+, requests-toolbelt
 }:
 buildPythonPackage rec {
   pname = "argcomplete";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     importlib-metadata
     pexpect
     prettytable
-    requests_toolbelt
+    requests-toolbelt
   ];
 
   pythonImportsCheck = [ "argcomplete" ];

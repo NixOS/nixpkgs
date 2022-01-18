@@ -1,12 +1,12 @@
 { lib, fetchurl, python3Packages, php }:
 
 python3Packages.buildPythonApplication rec {
-  name = "nextcloud-news-updater-${version}";
-  version = "10.0.1";
+  pname = "nextcloud-news-updater";
+  version = "11.0.0";
 
   src = fetchurl {
     url = "mirror://pypi/n/nextcloud_news_updater/nextcloud_news_updater-${version}.tar.gz";
-    sha256 = "14jj3w417wfsm1ki34d980b0s6vfn8i29g4c66qb2fizdq1d0z6q";
+    sha256 = "bc2055c16f0dbf610b7e17650508a18fa5a1de652ecdf69c5d4073c97376e9cf";
   };
 
   doCheck = false;

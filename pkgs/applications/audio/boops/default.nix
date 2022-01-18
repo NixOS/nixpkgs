@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "boops";
-  version = "1.6.0";
+  version = "1.8.2";
 
   src = fetchFromGitHub {
     owner = "sjaehn";
     repo = "BOops";
     rev = version;
-    sha256 = "sha256-7eNvt8PxIZCp83Y5XX5fBolBon4j+HPtu8wrgG8Miok=";
+    sha256 = "0nvpawk58g189z96xnjs4pyri5az3ckdi9mhi0i9s0a7k4gdkarr";
   };
 
   nativeBuildInputs = [ pkg-config ];

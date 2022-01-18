@@ -5,20 +5,23 @@
 , gi-docgen
 , gtk-doc
 , libxml2
-, meson
+, meson_0_60
 , ninja
 , pkg-config
 , sassc
 , vala
 , gobject-introspection
 , fribidi
+, glib
 , gtk4
+, gnome
+, gsettings-desktop-schemas
 , xvfb-run
 }:
 
 stdenv.mkDerivation rec {
   pname = "libadwaita";
-  version = "1.0.0-alpha.1";
+  version = "1.0.0.alpha.4";
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "devdoc"; # demo app
@@ -28,7 +31,7 @@ stdenv.mkDerivation rec {
     owner = "GNOME";
     repo = "libadwaita";
     rev = version;
-    sha256 = "1v52md62kaqykv8b6kxxbxwnbdzlda4ir7n5wh2iizadcailyw7p";
+    sha256 = "sha256-3aVeBaKSl6SaPQLodsyJHwnNOlXlWfIaLnbbl3+mlDA=";
   };
 
   nativeBuildInputs = [
@@ -36,7 +39,7 @@ stdenv.mkDerivation rec {
     gi-docgen
     gtk-doc
     libxml2 # for xmllint
-    meson
+    meson_0_60
     ninja
     pkg-config
     sassc
@@ -54,13 +57,31 @@ stdenv.mkDerivation rec {
   ];
 
   checkInputs = [
+    gnome.adwaita-icon-theme
     xvfb-run
   ];
 
   doCheck = true;
 
   checkPhase = ''
-    xvfb-run meson test
+    runHook preCheck
+
+    testEnvironment=(
+      # Disable portal since we cannot run it in tests.
+      ADW_DISABLE_PORTAL=1
+
+      # AdwSettings needs to be initialized from “org.gnome.desktop.interface” GSettings schema when portal is not used for color scheme.
+      # It will not actually be used since the “color-scheme” key will only have been introduced in GNOME 42, falling back to detecting theme name.
+      # See adw_settings_constructed function in https://gitlab.gnome.org/GNOME/libadwaita/commit/60ec69f0a5d49cad8a6d79e4ecefd06dc6e3db12
+      "XDG_DATA_DIRS=${glib.getSchemaDataDirPath gsettings-desktop-schemas}"
+
+      # Tests need a cache directory
+      "HOME=$TMPDIR"
+    )
+    env "''${testEnvironment[@]}" xvfb-run \
+      meson test --print-errorlogs
+
+    runHook postCheck
   '';
 
   postInstall = ''

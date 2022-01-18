@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, bison }:
 
 stdenv.mkDerivation rec {
-  name = "jam-2.6.1";
+  pname = "jam";
+  version = "2.6.1";
 
   src = fetchurl {
-    url = "https://swarm.workshop.perforce.com/projects/perforce_software-jam/download/main/${name}.tar";
+    url = "https://swarm.workshop.perforce.com/projects/perforce_software-jam/download/main/${pname}-${version}.tar";
     sha256 = "19xkvkpycxfsncxvin6yqrql3x3z9ypc1j8kzls5k659q4kv5rmc";
   };
 
@@ -15,13 +16,21 @@ stdenv.mkDerivation rec {
   '';
 
   buildPhase = ''
+    runHook preBuild
+
     make jam0
-    ./jam0 -j$NIX_BUILD_CORES -sBINDIR=$out/bin install
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
+    ./jam0 -j$NIX_BUILD_CORES -sBINDIR=$out/bin install
     mkdir -p $out/doc/jam
     cp *.html $out/doc/jam
+
+    runHook postInstall
   '';
 
   enableParallelBuilding = true;

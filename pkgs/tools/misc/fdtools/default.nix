@@ -2,8 +2,10 @@
 
 let
   pname = "fdtools";
+  # When you update, check whether we can drop the skalibs pin.
   version = "2020.05.04";
   sha256 = "0lnafcp4yipi0dl8gh33zjs8wlpz0mim8mwmiz9s49id0b0fmlla";
+  skalibs = skawarePackages.skalibs_2_10;
 
 in stdenv.mkDerivation {
   inherit pname version;
@@ -16,7 +18,10 @@ in stdenv.mkDerivation {
   patches = [ ./new-skalibs.patch ];
   outputs = [ "bin" "lib" "dev" "doc" "out" ];
 
-  buildInputs = [ skawarePackages.skalibs ];
+  buildInputs = [
+    # temporary, until fdtools catches up to skalibs
+    skalibs
+  ];
 
   configurePhase = ''
     cd ${pname}-${version}
@@ -27,7 +32,7 @@ in stdenv.mkDerivation {
       conf-compile/defaults/host_compile.sh \
       > conf-compile/host_compile.sh
 
-    echo "${skawarePackages.skalibs.lib}/lib/skalibs/sysdeps" \
+    echo "${skalibs.lib}/lib/skalibs/sysdeps" \
       > conf-compile/depend_skalibs_sysdeps
   '';
 

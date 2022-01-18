@@ -23,7 +23,7 @@ in
           System-wide configuration for GameMode (/etc/gamemode.ini).
           See gamemoded(8) man page for available settings.
         '';
-        example = literalExample ''
+        example = literalExpression ''
           {
             general = {
               renice = 10;
@@ -56,6 +56,8 @@ in
       polkit.enable = true;
       wrappers = mkIf cfg.enableRenice {
         gamemoded = {
+          owner = "root";
+          group = "root";
           source = "${pkgs.gamemode}/bin/gamemoded";
           capabilities = "cap_sys_nice+ep";
         };

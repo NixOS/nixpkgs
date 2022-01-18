@@ -1,5 +1,7 @@
-{ lib, mkDerivation, fetchFromGitHub, substituteAll, udev
-, pkg-config, qtbase, cmake, zlib, kmod, libXdmcp, qttools, qtx11extras, libdbusmenu }:
+{ lib, mkDerivation, fetchFromGitHub, substituteAll, udev, stdenv
+, pkg-config, qtbase, cmake, zlib, kmod, libXdmcp, qttools, qtx11extras, libdbusmenu
+, withPulseaudio ? stdenv.isLinux, libpulseaudio
+}:
 
 mkDerivation rec {
   version = "0.4.4";
@@ -20,7 +22,7 @@ mkDerivation rec {
     qttools
     qtx11extras
     libdbusmenu
-  ];
+  ] ++ lib.optional withPulseaudio libpulseaudio;
 
   nativeBuildInputs = [
     pkg-config

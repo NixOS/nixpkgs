@@ -11,6 +11,7 @@
 , swig
 , meson-tools
 , armTrustedFirmwareAllwinner
+, armTrustedFirmwareAllwinnerH616
 , armTrustedFirmwareRK3328
 , armTrustedFirmwareRK3399
 , armTrustedFirmwareS905
@@ -18,10 +19,10 @@
 }:
 
 let
-  defaultVersion = "2021.04";
+  defaultVersion = "2021.10";
   defaultSrc = fetchurl {
     url = "ftp://ftp.denx.de/pub/u-boot/u-boot-${defaultVersion}.tar.bz2";
-    sha256 = "06p1vymf0dl6jc2xy5w7p42mpgppa46lmpm2ishmgsycnldqnhqd";
+    sha256 = "1m0bvwv8r62s4wk4w3cmvs888dhv9gnfa98dczr4drk2jbhj7ryd";
   };
   buildUBoot = {
     version ? null
@@ -42,6 +43,11 @@ let
 
     patches = [
       ./0001-configs-rpi-allow-for-bigger-kernels.patch
+
+      # Make U-Boot forward some important settings from the firmware-provided FDT. Fixes booting on BCM2711C0 boards.
+      # See also: https://github.com/NixOS/nixpkgs/issues/135828
+      # Source: https://patchwork.ozlabs.org/project/uboot/patch/20210822143656.289891-1-sjoerd@collabora.com/
+      ./0001-rpi-Copy-properties-from-firmware-dtb-to-the-loaded-.patch
     ] ++ extraPatches;
 
     postPatch = ''
@@ -108,7 +114,6 @@ let
       maintainers = with maintainers; [ dezgeg samueldr lopsided98 ];
     } // extraMeta;
   } // removeAttrs args [ "extraMeta" ]);
-
 in {
   inherit buildUBoot;
 
@@ -164,6 +169,12 @@ in {
     defconfig = "clearfog_defconfig";
     extraMeta.platforms = ["armv7l-linux"];
     filesToInstall = ["u-boot-spl.kwb"];
+  };
+
+  ubootCubieboard2 = buildUBoot {
+    defconfig = "Cubieboard2_defconfig";
+    extraMeta.platforms = ["armv7l-linux"];
+    filesToInstall = ["u-boot-sunxi-with-spl.bin"];
   };
 
   ubootGuruplug = buildUBoot {
@@ -282,6 +293,13 @@ in {
     filesToInstall = ["u-boot-sunxi-with-spl.bin"];
   };
 
+  ubootOrangePiZero2 = buildUBoot {
+    defconfig = "orangepi_zero2_defconfig";
+    extraMeta.platforms = ["aarch64-linux"];
+    BL31 = "${armTrustedFirmwareAllwinnerH616}/bl31.bin";
+    filesToInstall = ["u-boot-sunxi-with-spl.bin"];
+  };
+
   ubootPcduino3Nano = buildUBoot {
     defconfig = "Linksprite_pcDuino3_Nano_defconfig";
     extraMeta.platforms = ["armv7l-linux"];
@@ -326,6 +344,32 @@ in {
     defconfig = "qemu_arm_defconfig";
     extraMeta.platforms = ["armv7l-linux"];
     filesToInstall = ["u-boot.bin"];
+  };
+
+  ubootQemuRiscv64Smode = buildUBoot {
+    defconfig = "qemu-riscv64_smode_defconfig";
+    extraMeta.platforms = ["riscv64-linux"];
+    filesToInstall = ["u-boot.bin"];
+  };
+
+  ubootQemuX86 = buildUBoot {
+    defconfig = "qemu-x86_defconfig";
+    extraConfig = ''
+      CONFIG_USB_UHCI_HCD=y
+      CONFIG_USB_EHCI_HCD=y
+      CONFIG_USB_EHCI_GENERIC=y
+      CONFIG_USB_XHCI_HCD=y
+    '';
+    extraPatches = [
+      # https://patchwork.ozlabs.org/project/uboot/list/?series=268007&state=%2A&archive=both
+      # Remove when upgrading to 2022.01
+      (fetchpatch {
+        url = "https://patchwork.ozlabs.org/series/268007/mbox/";
+        sha256 = "sha256-xn4Q959dgoB63zlmJepI41AXAf1kCycIGcmu4IIVjmE=";
+      })
+    ];
+    extraMeta.platforms = [ "i686-linux" "x86_64-linux" ];
+    filesToInstall = [ "u-boot.rom" ];
   };
 
   ubootRaspberryPi = buildUBoot {

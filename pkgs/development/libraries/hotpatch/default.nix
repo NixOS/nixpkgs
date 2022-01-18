@@ -1,7 +1,8 @@
 { lib, stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "hotpatch-0.2";
+  pname = "hotpatch";
+  version = "0.2";
 
   src = fetchFromGitHub {
     owner = "vikasnkumar";

@@ -17,7 +17,7 @@ let
   archSha256 = sha256;
   arch = "x64";
 
-  libPath = lib.makeLibraryPath [ xorg.libX11 glib gtk3 cairo pango ];
+  libPath = lib.makeLibraryPath [ xorg.libX11 glib gtk3 cairo pango curl ];
   redirects = [ "/usr/bin/pkexec=${pkexecPath}" "/bin/true=${coreutils}/bin/true" ];
 in let
   binaryPackage = stdenv.mkDerivation {
@@ -83,7 +83,7 @@ in stdenv.mkDerivation (rec {
   inherit pname;
   version = buildVersion;
 
-  phases = [ "installPhase" ];
+  dontUnpack = true;
 
   ${primaryBinary} = binaryPackage;
 

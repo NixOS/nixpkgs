@@ -36,7 +36,7 @@ in
           where <replaceable>name</replaceable> is the name of the
           corresponding attribute name.
         '';
-        example = literalExample ''
+        example = literalExpression ''
           {
             foo = {
               server = "tunnel.mdomain.com";
@@ -190,6 +190,7 @@ in
 
     users.users.${iodinedUser} = {
       uid = config.ids.uids.iodined;
+      group = "iodined";
       description = "Iodine daemon user";
     };
     users.groups.iodined.gid = config.ids.gids.iodined;

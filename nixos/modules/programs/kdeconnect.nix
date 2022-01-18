@@ -13,9 +13,9 @@ with lib;
     '';
     package = mkOption {
       default = pkgs.kdeconnect;
-      defaultText = "pkgs.kdeconnect";
+      defaultText = literalExpression "pkgs.kdeconnect";
       type = types.package;
-      example = literalExample "pkgs.gnomeExtensions.gsconnect";
+      example = literalExpression "pkgs.gnomeExtensions.gsconnect";
       description = ''
         The package providing the implementation for kdeconnect.
       '';

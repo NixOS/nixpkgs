@@ -19,7 +19,7 @@ in {
     environment.unixODBCDrivers = mkOption {
       type = types.listOf types.package;
       default = [];
-      example = literalExample "with pkgs.unixODBCDrivers; [ sqlite psql ]";
+      example = literalExpression "with pkgs.unixODBCDrivers; [ sqlite psql ]";
       description = ''
         Specifies Unix ODBC drivers to be registered in
         <filename>/etc/odbcinst.ini</filename>.  You may also want to

@@ -18,19 +18,20 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "purescript";
-  version = "0.14.3";
+  version = "0.14.5";
 
+  # These hashes can be updated automatically by running the ./update.sh script.
   src =
     if stdenv.isDarwin
     then
     fetchurl {
       url = "https://github.com/${pname}/${pname}/releases/download/v${version}/macos.tar.gz";
-      sha256 = "1ipksp6kx3h030xf1y3y30gazrdz893pklanwak27hbqfy3ckssj";
+      sha256 = "1brvbpzr3cwls809fl0sjrm9cbh8v7maf5d7ic2mha0xapabgfpv";
     }
     else
     fetchurl {
       url = "https://github.com/${pname}/${pname}/releases/download/v${version}/linux64.tar.gz";
-      sha256 = "158jyjpfgd84gbwpxqj41mvpy0fmb1d1iqq2h42sc7041v2f38p0";
+      sha256 = "1mvxvn30iyrq0ck6g08f925gxnnhbfgl29b2gjjsmm3m9mpll7ws";
     };
 
 
@@ -51,8 +52,11 @@ in stdenv.mkDerivation rec {
     $PURS --bash-completion-script $PURS > $out/share/bash-completion/completions/purs-completion.bash
   '';
 
-  passthru.tests = {
-    minimal-module = pkgs.callPackage ./test-minimal-module {};
+  passthru = {
+    updateScript = ./update.sh;
+    tests = {
+      minimal-module = pkgs.callPackage ./test-minimal-module {};
+    };
   };
 
   meta = with lib; {

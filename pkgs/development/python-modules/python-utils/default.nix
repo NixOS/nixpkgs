@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "python-utils";
-  version = "2.5.6";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "WoLpH";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0gd2jana5w6bn7z58di4a8dwcxvc8rx282jawbw7ws7qm2a5klz3";
+    sha256 = "0gns9v5144cj03p7qbb3822scb6pwrlgr6niixpkynwqkcwjfg4c";
   };
 
   # disable coverage and linting

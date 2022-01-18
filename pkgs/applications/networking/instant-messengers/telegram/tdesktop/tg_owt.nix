@@ -1,20 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
+{ lib, stdenv, fetchFromGitHub
 , pkg-config, cmake, ninja, yasm
 , libjpeg, openssl, libopus, ffmpeg, alsa-lib, libpulseaudio, protobuf
-, xorg, libXtst, libXcomposite, libXdamage, libXext, libXrender, libXrandr
+, openh264, usrsctp, libevent, libvpx
+, libX11, libXtst, libXcomposite, libXdamage, libXext, libXrender, libXrandr, libXi
 , glib, abseil-cpp, pcre, util-linuxMinimal, libselinux, libsepol, pipewire
-, libXi
 }:
 
 stdenv.mkDerivation {
   pname = "tg_owt";
-  version = "unstable-2021-06-27";
+  version = "unstable-2021-12-22";
 
   src = fetchFromGitHub {
     owner = "desktop-app";
     repo = "tg_owt";
-    rev = "91d836dc84a16584c6ac52b36c04c0de504d9c34";
-    sha256 = "1ir4svv5mijpzr0rmx65088iikck83vhcdqrpf9dnk6yp4j9v4v2";
+    rev = "6708e0d31a73e64fe12f54829bf4060c41b2658e";
+    sha256 = "081ylw8vp8c84x3f1xx1kia6k1sds2iza9fm5dvn3ccgjwxdm5ny";
     fetchSubmodules = true;
   };
 
@@ -24,15 +24,23 @@ stdenv.mkDerivation {
 
   buildInputs = [
     libjpeg openssl libopus ffmpeg alsa-lib libpulseaudio protobuf
-    xorg.libX11 libXtst libXcomposite libXdamage libXext libXrender libXrandr
+    openh264 usrsctp libevent libvpx
+    libX11 libXtst libXcomposite libXdamage libXext libXrender libXrandr libXi
     glib abseil-cpp pcre util-linuxMinimal libselinux libsepol pipewire
-    libXi
   ];
 
   cmakeFlags = [
-    # Building as a shared library isn't officially supported and currently broken:
+    # Building as a shared library isn't officially supported and may break at any time.
     "-DBUILD_SHARED_LIBS=OFF"
   ];
 
-  meta.license = lib.licenses.bsd3;
+  propagatedBuildInputs = [
+    # Required for linking downstream binaries.
+    abseil-cpp openh264 usrsctp libevent libvpx
+  ];
+
+  meta = with lib; {
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ oxalica ];
+  };
 }

@@ -7,6 +7,7 @@
 , testtools
 , mock
 , python
+, six
 }:
 
 buildPythonPackage rec {
@@ -33,6 +34,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     testtools
+    six # not in install_requires, but used in fixture.py
   ];
 
   checkInputs = [

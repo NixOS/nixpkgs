@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , boehmgc
 , boost
 , cairo
@@ -8,7 +9,6 @@
 , gettext
 , ghostscript
 , glib
-, glib-networking
 , glibmm
 , gsl
 , gspell
@@ -52,11 +52,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "inkscape";
-  version = "1.1";
+  version = "1.1.1";
 
   src = fetchurl {
     url = "https://media.inkscape.org/dl/resources/file/${pname}-${version}.tar.xz";
-    sha256 = "sha256-cebozj/fcC9Z28SidmZeuYLreCKwKbvb7O0t9DAXleY=";
+    sha256 = "sha256-rsoLnTO1sc+pqnBDO97mqMPQIP+vwubwyaYO7Xp5eK8=";
   };
 
   # Inkscape hits the ARGMAX when linking on macOS. It appears to be
@@ -81,6 +81,14 @@ stdenv.mkDerivation rec {
       stripLen = 1;
       extraPrefix = "share/extensions/";
     })
+    # Remove mandatory break from end of paragraphs, added in Pango 1.49
+    # https://gitlab.com/inkscape/inkscape/-/merge_requests/3630
+    # TODO: Remove in Inkscape 1.1.2
+    (fetchpatch {
+      url = "https://gitlab.com/inkscape/inkscape/-/commit/b3dabef2245d4e4e977ee9d6776be9a134493515.patch";
+      sha256 = "YhqUlRBKL1vJ/iCM/DvdwbmPIsAHQpcgf4TPpjlnBng=";
+    })
+
   ];
 
   postPatch = ''
@@ -117,7 +125,6 @@ stdenv.mkDerivation rec {
     boost
     gettext
     glib
-    glib-networking
     glibmm
     gsl
     gtkmm3

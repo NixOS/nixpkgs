@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
   cfg = config.services.gitea;
+  opt = options.services.gitea;
   gitea = cfg.package;
   pg = config.services.postgresql;
   useMysql = cfg.database.type == "mysql";
@@ -32,7 +33,7 @@ in
       package = mkOption {
         default = pkgs.gitea;
         type = types.package;
-        defaultText = "pkgs.gitea";
+        defaultText = literalExpression "pkgs.gitea";
         description = "gitea derivation to use";
       };
 
@@ -51,11 +52,12 @@ in
       log = {
         rootPath = mkOption {
           default = "${cfg.stateDir}/log";
+          defaultText = literalExpression ''"''${config.${opt.stateDir}}/log"'';
           type = types.str;
           description = "Root path for log files.";
         };
         level = mkOption {
-          default = "Trace";
+          default = "Info";
           type = types.enum [ "Trace" "Debug" "Info" "Warn" "Error" "Critical" ];
           description = "General log level.";
         };
@@ -84,6 +86,11 @@ in
         port = mkOption {
           type = types.port;
           default = (if !usePostgresql then 3306 else pg.port);
+          defaultText = literalExpression ''
+            if config.${opt.database.type} != "postgresql"
+            then 3306
+            else config.${options.services.postgresql.port}
+          '';
           description = "Database host port.";
         };
 
@@ -122,7 +129,7 @@ in
         socket = mkOption {
           type = types.nullOr types.path;
           default = if (cfg.database.createDatabase && usePostgresql) then "/run/postgresql" else if (cfg.database.createDatabase && useMysql) then "/run/mysqld/mysqld.sock" else null;
-          defaultText = "null";
+          defaultText = literalExpression "null";
           example = "/run/mysqld/mysqld.sock";
           description = "Path to the unix socket file to use for authentication.";
         };
@@ -130,6 +137,7 @@ in
         path = mkOption {
           type = types.str;
           default = "${cfg.stateDir}/data/gitea.db";
+          defaultText = literalExpression ''"''${config.${opt.stateDir}}/data/gitea.db"'';
           description = "Path to the sqlite3 database file.";
         };
 
@@ -166,6 +174,7 @@ in
         backupDir = mkOption {
           type = types.str;
           default = "${cfg.stateDir}/dump";
+          defaultText = literalExpression ''"''${config.${opt.stateDir}}/dump"'';
           description = "Path to the dump files.";
         };
       };
@@ -199,6 +208,7 @@ in
         contentDir = mkOption {
           type = types.str;
           default = "${cfg.stateDir}/data/lfs";
+          defaultText = literalExpression ''"''${config.${opt.stateDir}}/data/lfs"'';
           description = "Where to store LFS files.";
         };
       };
@@ -212,6 +222,7 @@ in
       repositoryRoot = mkOption {
         type = types.str;
         default = "${cfg.stateDir}/repositories";
+        defaultText = literalExpression ''"''${config.${opt.stateDir}}/repositories"'';
         description = "Path to the git repositories.";
       };
 
@@ -255,8 +266,9 @@ in
       };
 
       staticRootPath = mkOption {
-        type = types.str;
-        default = "${gitea.data}";
+        type = types.either types.str types.path;
+        default = gitea.data;
+        defaultText = literalExpression "package.data";
         example = "/var/lib/gitea/data";
         description = "Upper level of template and static files path.";
       };
@@ -287,7 +299,7 @@ in
           Gitea configuration. Refer to <link xlink:href="https://docs.gitea.io/en-us/config-cheat-sheet/"/>
           for details on supported values.
         '';
-        example = literalExample ''
+        example = literalExpression ''
           {
             "cron.sync_external_users" = {
               RUN_AT_START = true;
@@ -298,7 +310,7 @@ in
               ENABLED = true;
               MAILER_TYPE = "sendmail";
               FROM = "do-not-reply@example.org";
-              SENDMAIL_PATH = "${pkgs.system-sendmail}/bin/sendmail";
+              SENDMAIL_PATH = "''${pkgs.system-sendmail}/bin/sendmail";
             };
             other = {
               SHOW_FOOTER_VERSION = false;
@@ -348,7 +360,7 @@ in
       server = mkMerge [
         {
           DOMAIN = cfg.domain;
-          STATIC_ROOT_PATH = cfg.staticRootPath;
+          STATIC_ROOT_PATH = toString cfg.staticRootPath;
           LFS_JWT_SECRET = "#lfsjwtsecret#";
           ROOT_URL = cfg.rootUrl;
         }
@@ -522,20 +534,16 @@ in
           (umask 027; gitea_setup)
         ''}
 
+        # run migrations/init the database
+        ${gitea}/bin/gitea migrate
+
         # update all hooks' binary paths
-        HOOKS=$(find ${cfg.repositoryRoot} -mindepth 4 -maxdepth 6 -type f -wholename "*git/hooks/*")
-        if [ "$HOOKS" ]
-        then
-          sed -ri 's,/nix/store/[a-z0-9.-]+/bin/gitea,${gitea}/bin/gitea,g' $HOOKS
-          sed -ri 's,/nix/store/[a-z0-9.-]+/bin/env,${pkgs.coreutils}/bin/env,g' $HOOKS
-          sed -ri 's,/nix/store/[a-z0-9.-]+/bin/bash,${pkgs.bash}/bin/bash,g' $HOOKS
-          sed -ri 's,/nix/store/[a-z0-9.-]+/bin/perl,${pkgs.perl}/bin/perl,g' $HOOKS
-        fi
+        ${gitea}/bin/gitea admin regenerate hooks
 
         # update command option in authorized_keys
         if [ -r ${cfg.stateDir}/.ssh/authorized_keys ]
         then
-          sed -ri 's,/nix/store/[a-z0-9.-]+/bin/gitea,${gitea}/bin/gitea,g' ${cfg.stateDir}/.ssh/authorized_keys
+          ${gitea}/bin/gitea admin regenerate keys
         fi
       '';
 

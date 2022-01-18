@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "asciinema";
-  version = "2.0.2";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "asciinema";
     repo = "asciinema";
     rev = "v${version}";
-    sha256 = "1a2pysxnp6icyd08mgf66xr6f6j0irnfxdpf3fmzcz31ix7l9kc4";
+    sha256 = "1alcz018jrrpasrmgs8nw775a6pf62xq2xgs54c4mb396prdqy4x";
   };
 
   checkInputs = [ glibcLocales python3Packages.nose ];

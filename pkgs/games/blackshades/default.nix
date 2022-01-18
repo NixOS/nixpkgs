@@ -1,30 +1,27 @@
 { lib, stdenv, fetchFromSourcehut
-, SDL, SDL_image, libGLU, libGL, openal, libvorbis, freealut }:
+, zig, glfw, libGLU, libGL, openal, libsndfile }:
 
 stdenv.mkDerivation rec {
   pname = "blackshades";
-  version = "1.1.1";
+  version = "2.4.7";
 
   src = fetchFromSourcehut {
     owner = "~cnx";
     repo = pname;
     rev = version;
-    sha256 = "1gx43hcqahbd21ib8blhzmsrwqfzx4qy7f10ck0mh2zc4bfihz64";
+    fetchSubmodules = true;
+    sha256 = "sha256-hvJwWUUmGeb7MQgKe79cPS2ckPZ9z0Yc5S9IiwuXPD8=";
   };
 
-  buildInputs = [ SDL SDL_image libGLU libGL openal libvorbis freealut ];
+  nativeBuildInputs = [ zig ];
+  buildInputs = [ glfw libGLU libGL openal libsndfile ];
 
-  patchPhase = ''
-    sed -i -e s,Data/,$out/share/$pname/,g \
-      -e s,Data:,$out/share/$pname/,g \
-      src/*.cpp
+  preBuild = ''
+    export HOME=$TMPDIR
   '';
 
   installPhase = ''
-    mkdir -p $out/bin $out/share/doc/$pname
-    cp build/blackshades $out/bin
-    cp -R Data $out/share/$pname
-    cp README.md $out/share/doc/$pname
+    zig build -Drelease-fast -Dcpu=baseline --prefix $out install
   '';
 
   meta = {

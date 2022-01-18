@@ -1,25 +1,32 @@
-{ lib, stdenv, fetchurl, cups }:
+{ lib, stdenv, fetchurl, cups, busybox }:
 
 stdenv.mkDerivation rec {
   pname = "epson-inkjet-printer-escpr2";
-  version = "1.1.34";
+  version = "1.1.45";
 
   src = fetchurl {
     # To find new versions, visit
     # http://download.ebz.epson.net/dsc/search/01/search/?OSC=LX and search for
     # some printer like for instance "WF-7210" to get to the most recent
     # version.
-    # NOTE: Don't forget to update the webarchive link too!
-    urls = [
-      "https://download3.ebz.epson.net/dsc/f/03/00/12/85/48/fd5de1ecd7270b0398399355e265c99dfd1dbafb/epson-inkjet-printer-escpr2-1.1.34.tar.gz"
-      "https://web.archive.org/web/20210627160654/https://download3.ebz.epson.net/dsc/f/03/00/12/85/48/fd5de1ecd7270b0398399355e265c99dfd1dbafb/epson-inkjet-printer-escpr2-1.1.34.tar.gz"
-    ];
-    sha256 = "sha256-sHBGWbkZ+zolHehyXQR8U2AyKSrgDSPmrkrcfcx/bAs=";
+    url = "https://download3.ebz.epson.net/dsc/f/03/00/13/38/11/01e244e8529c5cbcec8d39220a9512d5e6c08eec/epson-inkjet-printer-escpr2-1.1.45-1lsb3.2.src.rpm";
+    sha256 = "sha256-MZXn1fsD3D6W5vlX+NwRkwLtaBRqQwe9lwnJC2L9Lfk=";
   };
+
+  unpackPhase = ''
+    runHook preUnpack
+
+    rpm2cpio $src | cpio -idmv
+    tar xvf ${pname}-${version}-1lsb3.2.tar.gz
+    cd ${pname}-${version}
+
+    runHook postUnpack
+  '';
 
   patches = [ ./cups-filter-ppd-dirs.patch ];
 
   buildInputs = [ cups ];
+  nativeBuildInputs = [ busybox ];
 
   meta = with lib; {
     homepage = "http://download.ebz.epson.net/dsc/search/01/search/";

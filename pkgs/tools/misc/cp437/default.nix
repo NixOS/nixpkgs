@@ -1,9 +1,8 @@
 { lib, stdenv, fetchFromGitHub }:
-let version = "0.6";
-in
-stdenv.mkDerivation {
+
+stdenv.mkDerivation rec {
   pname = "cp437";
-  inherit version;
+  version = "0.6";
 
   src = fetchFromGitHub {
     owner = "keaston";

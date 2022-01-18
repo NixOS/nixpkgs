@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "oatpp";
-  version = "1.2.5";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "oatpp";
     repo = "oatpp";
     rev = version;
-    sha256 = "sha256-Vtdz03scx0hvY1yeM7yfSxCVKzi84OQ1Oh9b922movE=";
+    sha256 = "sha256-k6RPg53z9iTrrKZXOm5Ga9qxI32mHgB+4d6y+IUvJC0=";
   };
 
   nativeBuildInputs = [ cmake ];

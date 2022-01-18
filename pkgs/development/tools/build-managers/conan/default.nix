@@ -21,13 +21,6 @@ let newPython = python3.override {
         sha256 = "1dv6mjsm67l1razcgmq66riqmsb36wns17mnipqr610v0z0zf5j0";
       };
     });
-    urllib3 = super.urllib3.overridePythonAttrs (oldAttrs: rec {
-      version = "1.25.11";
-      src = oldAttrs.src.override {
-        inherit version;
-        sha256 = "18hpzh1am1dqx81fypn57r2wk565fi4g14292qrc5jm1h9dalzld";
-      };
-    });
     # https://github.com/conan-io/conan/issues/8876
     pyjwt = super.pyjwt.overridePythonAttrs (oldAttrs: rec {
       version = "1.7.1";
@@ -59,14 +52,14 @@ let newPython = python3.override {
 };
 
 in newPython.pkgs.buildPythonApplication rec {
-  version = "1.35.0";
+  version = "1.43.1";
   pname = "conan";
 
   src = fetchFromGitHub {
     owner = "conan-io";
     repo = "conan";
     rev = version;
-    sha256 = "19rgylkjxvv47vz5vgh46rw108xskpv7lmax8y2fnm2wd1j3bq9c";
+    sha256 = "0jwi7smgy2d9m49igijqr2p4ncw5nksjbijj8fzjvf1lgxgnyjhr";
   };
 
   propagatedBuildInputs = with newPython.pkgs; [
@@ -107,9 +100,7 @@ in newPython.pkgs.buildPythonApplication rec {
   doCheck = false;
 
   postPatch = ''
-    substituteInPlace conans/requirements.txt \
-      --replace "deprecation>=2.0, <2.1" "deprecation" \
-      --replace "six>=1.10.0,<=1.15.0" "six>=1.10.0,<=1.16.0"
+    substituteInPlace conans/requirements.txt --replace 'PyYAML>=3.11, <6.0' 'PyYAML>=3.11'
   '';
 
   meta = with lib; {

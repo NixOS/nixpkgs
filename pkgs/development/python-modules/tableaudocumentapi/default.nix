@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "tableaudocumentapi";
-  version = "0.6";
+  version = "0.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fc6d44b62cf6ea29916c073686e2f9f35c9902eccd57b8493f8d44a59a2f60d9";
+    sha256 = "0c7d01f01758dd6e50ff2fc915c6087c0da17298635e6635581aaf25c934d6ce";
   };
 
   # tests not inclued with release

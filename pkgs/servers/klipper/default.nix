@@ -5,21 +5,15 @@
 , unstableGitUpdater
 }:
 stdenv.mkDerivation rec {
-  name = "klipper";
-  version = "unstable-2021-01-31";
+  pname = "klipper";
+  version = "unstable-2021-12-24";
 
   src = fetchFromGitHub {
     owner = "KevinOConnor";
     repo = "klipper";
-    rev = "ef4d9c3abd30ae8a485020fd9ff2fb4529a143b3";
-    sha256 = "sha256-puAkSGL0DD0JUWejPdzr7zKIW2UP2soBBtgm2msUKzA=";
+    rev = "247cd753e283e70a9949e76d0ba669d99c0eb144";
+    sha256 = "sha256-65wxhE/XqNK6ly+fxZFLjtImvpJlgU54RStUve40CJA=";
   };
-
-  # We have no LTO on i686 since commit 22284b0
-  postPatch = lib.optional stdenv.isi686 ''
-    substituteInPlace chelper/__init__.py \
-      --replace "-flto -fwhole-program " ""
-  '';
 
   sourceRoot = "source/klippy";
 
@@ -51,7 +45,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "The Klipper 3D printer firmware";
     homepage = "https://github.com/KevinOConnor/klipper";
-    maintainers = with maintainers; [ lovesegfault ];
+    maintainers = with maintainers; [ lovesegfault zhaofengli ];
     platforms = platforms.linux;
     license = licenses.gpl3Only;
   };

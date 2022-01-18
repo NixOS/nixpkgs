@@ -74,6 +74,8 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
     client.wait_for_unit("multi-user.target")
 
+    client.wait_until_succeeds("curl -sSf -H Host:nginx.traefik.test http://traefik/")
+
     with subtest("Check that a container can be reached via Traefik"):
         assert "Hello from NGINX" in client.succeed(
             "curl -sSf -H Host:nginx.traefik.test http://traefik/"

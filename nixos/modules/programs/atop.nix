@@ -19,7 +19,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.atop;
-        defaultText = "pkgs.atop";
+        defaultText = literalExpression "pkgs.atop";
         description = ''
           Which package to use for Atop.
         '';
@@ -37,7 +37,7 @@ in
         package = mkOption {
           type = types.package;
           default = config.boot.kernelPackages.netatop;
-          defaultText = "config.boot.kernelPackages.netatop";
+          defaultText = literalExpression "config.boot.kernelPackages.netatop";
           description = ''
             Which package to use for netatop.
           '';
@@ -141,8 +141,15 @@ in
             // mkService cfg.atopgpu.enable "atopgpu" [ atop ];
           timers = mkTimer cfg.atopRotateTimer.enable "atop-rotate" [ atop ];
         };
-      security.wrappers =
-        lib.mkIf cfg.setuidWrapper.enable { atop = { source = "${atop}/bin/atop"; }; };
+
+      security.wrappers = lib.mkIf cfg.setuidWrapper.enable {
+        atop =
+          { setuid = true;
+            owner = "root";
+            group = "root";
+            source = "${atop}/bin/atop";
+          };
+      };
     }
   );
 }

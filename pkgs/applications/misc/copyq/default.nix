@@ -1,32 +1,59 @@
-{ lib, mkDerivation, fetchFromGitHub, cmake
-, qtbase, qtscript, qtwebkit, libXfixes, libXtst, qtx11extras, git
-, webkitSupport ? true
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, cmake
+, extra-cmake-modules
+, qtbase
+, qtscript
+, libXfixes
+, libXtst
+, qtx11extras
+, git
+, knotifications
+, qtwayland
+, wayland
+, fetchpatch
 }:
 
 mkDerivation rec {
   pname = "CopyQ";
-  version = "3.13.0";
+  version = "6.0.1";
 
-  src  = fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "hluk";
     repo = "CopyQ";
     rev = "v${version}";
-    sha256 = "0qssyavx0dkgsyj2myqg8n7sih8niy960nyb1yknsbjm37iqraah";
+    sha256 = "sha256-edrRgnjbszqJLbGLE4anCJSGApymvK0O+2ks5jWe8aw=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    extra-cmake-modules
+  ];
 
   buildInputs = [
-    git qtbase qtscript libXfixes libXtst qtx11extras
-  ] ++ lib.optional webkitSupport qtwebkit;
+    qtbase
+    qtscript
+    libXfixes
+    libXtst
+    qtx11extras
+    knotifications
+    qtwayland
+    wayland
+  ];
+
+  postPatch = ''
+    substituteInPlace shared/com.github.hluk.copyq.desktop.in \
+      --replace copyq "$out/bin/copyq"
+  '';
 
   meta = with lib; {
-    homepage    = "https://hluk.github.io/CopyQ";
+    homepage = "https://hluk.github.io/CopyQ";
     description = "Clipboard Manager with Advanced Features";
-    license     = licenses.gpl3;
-    maintainers = [ maintainers.willtim ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ willtim artturin ];
     # NOTE: CopyQ supports windows and osx, but I cannot test these.
     # OSX build requires QT5.
-    platforms   = platforms.linux;
+    platforms = platforms.linux;
   };
 }

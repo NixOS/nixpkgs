@@ -36,14 +36,14 @@
 
 stdenv.mkDerivation rec {
   pname = "gegl";
-  version = "0.4.30";
+  version = "0.4.34";
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "dev";
 
   src = fetchurl {
     url = "https://download.gimp.org/pub/gegl/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-wRJ4LPQJaWniMhfM36vkIoTjXVQ1/wxD1A5McPrsqN0=";
+    sha256 = "sha256-72PwvKW0McYRmt3YNMp/u1B8kAxIYcV7Nme29Mz8qqo=";
   };
 
   nativeBuildInputs = [
@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Ddocs=true"
+    "-Dgtk-doc=true"
     "-Dmrg=disabled" # not sure what that is
     "-Dsdl2=disabled"
     "-Dpygobject=disabled"

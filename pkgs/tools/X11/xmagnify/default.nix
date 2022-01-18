@@ -1,12 +1,13 @@
 { lib, stdenv, fetchFromGitLab, libX11, xorgproto }:
 
-stdenv.mkDerivation {
-  name = "xmagnify-0.1.0";
+stdenv.mkDerivation rec {
+  pname = "xmagnify";
+  version = "0.1.0";
 
   src = fetchFromGitLab {
     owner = "amiloradovsky";
     repo = "magnify";
-    rev = "0.1.0";  # 56da280173e9d0bd7b3769e07ba485cb4db35869
+    rev = version;
     sha256 = "1ngnp5f5zl3v35vhbdyjpymy6mwrs0476fm5nd7dzkba7n841jdh";
   };
 

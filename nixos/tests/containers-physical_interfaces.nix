@@ -7,7 +7,6 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
   nodes = {
     server = { ... }:
       {
-        virtualisation.memorySize = 256;
         virtualisation.vlans = [ 1 ];
 
         containers.server = {
@@ -23,7 +22,6 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
         };
       };
     bridged = { ... }: {
-      virtualisation.memorySize = 128;
       virtualisation.vlans = [ 1 ];
 
       containers.bridged = {
@@ -41,7 +39,6 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     };
 
     bonded = { ... }: {
-      virtualisation.memorySize = 128;
       virtualisation.vlans = [ 1 ];
 
       containers.bonded = {
@@ -62,7 +59,6 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     };
 
     bridgedbond = { ... }: {
-      virtualisation.memorySize = 128;
       virtualisation.vlans = [ 1 ];
 
       containers.bridgedbond = {

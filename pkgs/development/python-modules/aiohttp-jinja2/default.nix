@@ -1,17 +1,17 @@
-{ lib, buildPythonPackage, fetchPypi, aiohttp, jinja2, pytest, pytest-aiohttp, pytestcov }:
+{ lib, buildPythonPackage, fetchPypi, aiohttp, jinja2, pytest, pytest-aiohttp, pytest-cov }:
 
 buildPythonPackage rec {
   pname = "aiohttp-jinja2";
-  version = "1.4.2";
+  version = "1.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9c22a0e48e3b277fc145c67dd8c3b8f609dab36bce9eb337f70dfe716663c9a0";
+    sha256 = "7c3ba5eac060b691f4e50534af2d79fca2a75712ebd2b25e6fcb1295859f910b";
   };
 
   propagatedBuildInputs = [ aiohttp jinja2 ];
 
-  checkInputs = [ pytest pytest-aiohttp pytestcov ];
+  checkInputs = [ pytest pytest-aiohttp pytest-cov ];
 
   checkPhase = ''
     pytest -W ignore::DeprecationWarning

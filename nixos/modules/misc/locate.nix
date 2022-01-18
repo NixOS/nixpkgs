@@ -25,8 +25,8 @@ in {
     locate = mkOption {
       type = package;
       default = pkgs.findutils;
-      defaultText = "pkgs.findutils";
-      example = "pkgs.mlocate";
+      defaultText = literalExpression "pkgs.findutils";
+      example = literalExpression "pkgs.mlocate";
       description = ''
         The locate implementation to use
       '';
@@ -43,6 +43,9 @@ in {
         The format is described in
         <citerefentry><refentrytitle>systemd.time</refentrytitle>
         <manvolnum>7</manvolnum></citerefentry>.
+
+        To disable automatic updates, set to <literal>"never"</literal>
+        and run <command>updatedb</command> manually.
       '';
     };
 
@@ -81,12 +84,15 @@ in {
         "bdev"
         "binfmt"
         "binfmt_misc"
+        "ceph"
         "cgroup"
+        "cgroup2"
         "cifs"
         "coda"
         "configfs"
         "cramfs"
         "cpuset"
+        "curlftpfs"
         "debugfs"
         "devfs"
         "devpts"
@@ -98,6 +104,13 @@ in {
         "ftpfs"
         "fuse"
         "fusectl"
+        "fusesmb"
+        "fuse.ceph"
+        "fuse.glusterfs"
+        "fuse.gvfsd-fuse"
+        "fuse.mfs"
+        "fuse.rclone"
+        "fuse.rozofs"
         "fuse.sshfs"
         "gfs"
         "gfs2"
@@ -107,9 +120,15 @@ in {
         "iso9660"
         "jffs2"
         "lustre"
+        "lustre_lite"
         "misc"
+        "mfs"
         "mqueue"
         "ncpfs"
+        "nfs"
+        "NFS"
+        "nfs4"
+        "nfsd"
         "nnpfs"
         "ocfs"
         "ocfs2"
@@ -124,16 +143,14 @@ in {
         "smbfs"
         "sockfs"
         "spufs"
-        "nfs"
-        "NFS"
-        "nfs4"
-        "nfsd"
         "sshfs"
         "subfs"
         "supermount"
         "sysfs"
         "tmpfs"
+        "tracefs"
         "ubifs"
+        "udev"
         "udf"
         "usbfs"
         "vboxsf"
@@ -146,7 +163,7 @@ in {
 
     prunePaths = mkOption {
       type = listOf path;
-      default = ["/tmp" "/var/tmp" "/var/cache" "/var/lock" "/var/run" "/var/spool" "/nix/store"];
+      default = [ "/tmp" "/var/tmp" "/var/cache" "/var/lock" "/var/run" "/var/spool" "/nix/store" "/nix/var/log/nix" ];
       description = ''
         Which paths to exclude from indexing
       '';
@@ -154,7 +171,7 @@ in {
 
     pruneNames = mkOption {
       type = listOf str;
-      default = [];
+      default = [ ".bzr" ".cache" ".git" ".hg" ".svn" ];
       description = ''
         Directory components which should exclude paths containing them from indexing
       '';
@@ -191,6 +208,18 @@ in {
     environment.variables = mkIf (!isMLocate)
       { LOCATE_PATH = cfg.output;
       };
+
+    environment.etc = {
+      # write /etc/updatedb.conf for manual calls to `updatedb`
+      "updatedb.conf" = {
+        text = ''
+          PRUNEFS="${lib.concatStringsSep " " cfg.pruneFS}"
+          PRUNENAMES="${lib.concatStringsSep " " cfg.pruneNames}"
+          PRUNEPATHS="${lib.concatStringsSep " " cfg.prunePaths}"
+          PRUNE_BIND_MOUNTS="${if cfg.pruneBindMounts then "yes" else "no"}"
+        '';
+      };
+    };
 
     warnings = optional (isMLocate && cfg.localuser != null) "mlocate does not support the services.locate.localuser option; updatedb will run as root. (Silence with services.locate.localuser = null.)"
             ++ optional (isFindutils && cfg.pruneNames != []) "findutils locate does not support pruning by directory component"
@@ -238,7 +267,7 @@ in {
         serviceConfig.ReadWritePaths = dirOf cfg.output;
       };
 
-    systemd.timers.update-locatedb =
+    systemd.timers.update-locatedb = mkIf (cfg.interval != "never")
       { description = "Update timer for locate database";
         partOf      = [ "update-locatedb.service" ];
         wantedBy    = [ "timers.target" ];

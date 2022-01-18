@@ -1,31 +1,37 @@
 { lib
 , buildPythonPackage
+, pythonOlder
 , fetchFromGitHub
 , substituteAll
 , graphviz
+, xdg-utils
 , makeFontsConf
 , freefont_ttf
 , mock
-, pytestCheckHook
+, pytest
 , pytest-mock
+, python
 }:
 
 buildPythonPackage rec {
   pname = "graphviz";
-  version = "0.16";
+  version = "0.19.1";
+
+  disabled = pythonOlder "3.6";
 
   # patch does not apply to PyPI tarball due to different line endings
   src = fetchFromGitHub {
     owner = "xflr6";
     repo = "graphviz";
     rev = version;
-    sha256 = "147vi60mi57z623lhllwwzczzicv2iwj1yrmllj5xx5788i73j6g";
+    sha256 = "sha256-pE1lsx/r/BjvW5W2niDx/UeRXxx4kvCyHzAUAG3bdGc=";
   };
 
   patches = [
     (substituteAll {
-      src = ./hardcode-graphviz-path.patch;
+      src = ./paths.patch;
       inherit graphviz;
+      xdgutils = xdg-utils;
     })
   ];
 
@@ -38,10 +44,18 @@ buildPythonPackage rec {
     fontDirectories = [ freefont_ttf ];
   };
 
-  checkInputs = [ mock pytestCheckHook pytest-mock ];
+  checkInputs = [
+    mock
+    pytest
+    pytest-mock
+  ];
 
-  preCheck = ''
-    export HOME=$TMPDIR
+  checkPhase = ''
+    runHook preCheck
+
+    HOME=$TMPDIR ${python.interpreter} run-tests.py
+
+    runHook postCheck
   '';
 
   meta = with lib; {

@@ -10,7 +10,7 @@ tcl.mkTclDerivation rec {
   };
 
   buildInputs = [ tcllib ];
-  phases = "installPhase fixupPhase";
+  dontUnpack = true;
 
   installPhase = ''
     mkdir -pv $out/bin

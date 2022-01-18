@@ -1,12 +1,11 @@
 { buildPythonPackage
 , fetchPypi
 , lib
-, nose
 , msgpack
 , greenlet
 , pythonOlder
 , isPyPy
-, pytestrunner
+, pytest-runner
 }:
 
 buildPythonPackage rec {
@@ -20,7 +19,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    pytestrunner
+    pytest-runner
   ];
 
   # Tests require pkgs.neovim,

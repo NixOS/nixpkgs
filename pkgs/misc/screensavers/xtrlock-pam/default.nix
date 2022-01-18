@@ -1,7 +1,8 @@
-{ lib, stdenv, fetchgit, python, pkg-config, xlibsWrapper, pam }:
+{ lib, stdenv, fetchgit, python2, pkg-config, xlibsWrapper, pam }:
 
 stdenv.mkDerivation {
-  name = "xtrlock-pam-3.4-post-20150909";
+  pname = "xtrlock-pam";
+  version = "3.4-post-20150909";
 
   src = fetchgit {
     url = "https://github.com/aanatoly/xtrlock-pam";
@@ -10,7 +11,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ python xlibsWrapper pam ];
+  buildInputs = [ python2 xlibsWrapper pam ];
 
   configurePhase = ''
     substituteInPlace .config/options.py --replace /usr/include/security/pam_appl.h ${pam}/include/security/pam_appl.h

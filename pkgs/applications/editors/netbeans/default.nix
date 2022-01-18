@@ -1,9 +1,9 @@
 { lib, stdenv, fetchurl, makeWrapper, makeDesktopItem, which, unzip, libicns, imagemagick
-, jdk, perl, python
+, jdk, perl
 }:
 
 let
-  version = "12.4";
+  version = "12.6";
   desktopItem = makeDesktopItem {
     name = "netbeans";
     exec = "netbeans";
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   inherit version;
   src = fetchurl {
     url = "mirror://apache/netbeans/netbeans/${version}/netbeans-${version}-bin.zip";
-    sha512 = "2jwfyq5ik0pwjd61mh0dhyw4xgpzfmgsjc947xg84n7xmns4mzgb8k5ggrss6hgqiqk7jl3psv7v837c2dxk1xdrdnkzs31cg9symbs";
+    hash = "sha512-K0HjEO/yw9h+2+Y5CvxyYG1+kx+KH9NSn+QsKCsvh/rG/ilYLYyy93iZfx+wzwrgEfRtfMpZGtDAxd6nyUSnCA==";
   };
 
   buildCommand = ''
@@ -58,7 +58,7 @@ stdenv.mkDerivation {
   '';
 
   nativeBuildInputs = [ makeWrapper unzip ];
-  buildInputs = [ perl python libicns imagemagick ];
+  buildInputs = [ perl libicns imagemagick ];
 
   meta = {
     description = "An integrated development environment for Java, C, C++ and PHP";

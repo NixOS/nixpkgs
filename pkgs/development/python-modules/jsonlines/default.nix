@@ -1,5 +1,5 @@
 { lib, fetchFromGitHub, buildPythonPackage, six
-, flake8, pep8-naming, pytest, pytestcov }:
+, flake8, pep8-naming, pytest, pytest-cov }:
 
 buildPythonPackage rec {
   pname = "jsonlines";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ six ];
 
-  checkInputs = [ flake8 pep8-naming pytest pytestcov ];
+  checkInputs = [ flake8 pep8-naming pytest pytest-cov ];
   checkPhase = ''
     pytest
   '';

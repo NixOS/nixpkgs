@@ -24,7 +24,7 @@
 }:
 
 let
-  version = "2.8.1";
+  version = "3.1.2";
   inherit (lib) optional optionals optionalString;
   mesonFeatureFlag = opt: b:
     "-D${opt}=${if b then "enabled" else "disabled"}";
@@ -32,18 +32,18 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "harfbuzz${optionalString withIcu "-icu"}-${version}";
+  pname = "harfbuzz${optionalString withIcu "-icu"}";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "harfbuzz";
     repo = "harfbuzz";
     rev = version;
-    sha256 = "107l9jhvwy6pnq5032kr7r21md65qg09j7iikr4jihf9pvh7gn5w";
+    sha256 = "sha256-1xndbJhx+1AzJNnpvvdEcBHPZMPaMI03h6sG2h1d3qs=";
   };
 
   postPatch = ''
-    patchShebangs src/*.py
-    patchShebangs test
+    patchShebangs src/*.py test
   '' + lib.optionalString stdenv.isDarwin ''
     # ApplicationServices.framework headers have cast-align warnings.
     substituteInPlace src/hb.hh \
