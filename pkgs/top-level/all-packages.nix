@@ -21603,7 +21603,9 @@ with pkgs;
 
   syncserver = callPackage ../servers/syncserver { };
 
-  tailscale = callPackage ../servers/tailscale { };
+  tailscale = callPackage ../servers/tailscale {
+    buildGoModule = buildGo117Module;
+  };
 
   thanos = callPackage ../servers/monitoring/thanos { };
 
