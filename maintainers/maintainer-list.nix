@@ -4465,6 +4465,16 @@
     githubId = 1621335;
     name = "Andrew Trachenko";
   };
+  gordias = {
+    name = "Gordias";
+    email = "gordias@disroot.org";
+    github = "NotGordias";
+    githubId = 94724133;
+    keys = [{
+      longkeyid = "ed25519/0x5D47284830FAA4FA";
+      fingerprint = "C006 B8A0 0618 F3B6 E0E4  2ECD 5D47 2848 30FA A4FA";
+    }];
+  };
   govanify = {
     name = "Gauvain 'GovanifY' Roussel-Tarbouriech";
     email = "gauvain@govanify.com";

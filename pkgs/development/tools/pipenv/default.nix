@@ -1,5 +1,6 @@
 { lib
 , python3
+, installShellFiles
 }:
 
 with python3.pkgs;
@@ -27,6 +28,8 @@ in buildPythonApplication rec {
 
   LC_ALL = "en_US.UTF-8";
 
+  nativeBuildInputs = [ installShellFiles ];
+
   postPatch = ''
     # pipenv invokes python in a subprocess to create a virtualenv
     # and to call setup.py.
@@ -37,6 +40,13 @@ in buildPythonApplication rec {
   '';
 
   propagatedBuildInputs = runtimeDeps python3.pkgs;
+
+  postInstall = ''
+    installShellCompletion --cmd pipenv \
+      --bash <(_PIPENV_COMPLETE=bash_source $out/bin/pipenv) \
+      --zsh <(_PIPENV_COMPLETE=zsh_source $out/bin/pipenv) \
+      --fish <(_PIPENV_COMPLETE=fish_source $out/bin/pipenv)
+  '';
 
   doCheck = true;
   checkPhase = ''
