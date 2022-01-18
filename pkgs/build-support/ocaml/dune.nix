@@ -9,7 +9,7 @@ if (args ? minimumOCamlVersion && ! lib.versionAtLeast ocaml.version args.minimu
 then throw "${pname}-${version} is not available for OCaml ${ocaml.version}"
 else
 
-stdenv.mkDerivation ({
+(stdenv.mkDerivation ({
 
   inherit enableParallelBuilding;
   dontAddStaticConfigureFlags = true;
@@ -31,12 +31,13 @@ stdenv.mkDerivation ({
     runHook postInstall
   '';
 
-} // (builtins.removeAttrs args [ "minimalOCamlVersion" ]) // {
+} // (builtins.removeAttrs args [ "minimalOCamlVersion" "minimumOCamlVersion" ]) // {
 
   name = "ocaml${ocaml.version}-${pname}-${version}";
 
   nativeBuildInputs = [ ocaml Dune findlib ] ++ nativeBuildInputs;
 
   meta = (args.meta or {}) // { platforms = args.meta.platforms or ocaml.meta.platforms; };
-
-})
+})) // {
+  inherit (args) minimumOCamlVersion minimalOCamlVersion;
+}
