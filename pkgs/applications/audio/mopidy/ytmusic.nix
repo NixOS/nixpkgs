@@ -16,6 +16,11 @@ python3Packages.buildPythonApplication rec {
     python3Packages.pytube
   ];
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace 'ytmusicapi>=0.19.1,<0.20.0' 'ytmusicapi>=0.19.1'
+  '';
+  
   doCheck = false;
 
   meta = with lib; {
