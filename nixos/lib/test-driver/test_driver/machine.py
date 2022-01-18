@@ -475,6 +475,13 @@ class Machine:
                 break
         return "".join(output_buffer)
 
+    def _shell_send(self, command: str) -> str:
+        command += "\n"
+        assert self.shell
+        self.shell.send(command.encode())
+        output = self._next_newline_closed_block_from_shell()
+        return output
+
     def execute(
         self,
         command: str,
@@ -491,19 +498,15 @@ class Machine:
         if timeout is not None:
             command = f"timeout {timeout} sh -c {shlex.quote(command)}"
 
-        out_command = f"( set -euo pipefail; {command} ) | (base64 --wrap 0; echo)\n"
-        assert self.shell
-        self.shell.send(out_command.encode())
+        command = f"( set -euo pipefail; {command} ) | (base64 --wrap 0; echo)"
 
         # Get the output
-        output = base64.b64decode(self._next_newline_closed_block_from_shell())
+        output = base64.b64decode(self._shell_send(command))
 
-        if not check_return:
-            return (-1, output.decode())
-
-        # Get the return code
-        self.shell.send("echo ${PIPESTATUS[0]}\n".encode())
-        rc = int(self._next_newline_closed_block_from_shell().strip())
+        rc = -1
+        if check_return:
+            # Get the return code
+            rc = int(self._shell_send("echo ${PIPESTATUS[0]}"))
 
         return (rc, output.decode())
 
