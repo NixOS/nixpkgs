@@ -2291,6 +2291,12 @@
     githubId = 34317;
     name = "Corey O'Connor";
   };
+  CodeLongAndProsper90 = {
+    github = "CodeLongAndProsper90";
+    githubId = 50145141;
+    email = "jupiter@m.rdis.dev";
+    name = "Scott Little";
+  };
   codsl = {
     email = "codsl@riseup.net";
     github = "codsl";
