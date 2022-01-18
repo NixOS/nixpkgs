@@ -8451,7 +8451,9 @@ with pkgs;
 
   openvswitch-lts = callPackage ../os-specific/linux/openvswitch/lts.nix { };
 
-  optifine = callPackage ../tools/games/minecraft/optifine { };
+  optifinePackages = callPackage ../tools/games/minecraft/optifine { };
+
+  optifine = optifinePackages.optifine-latest;
 
   optipng = callPackage ../tools/graphics/optipng {
     libpng = libpng12;
