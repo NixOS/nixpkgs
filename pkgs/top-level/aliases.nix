@@ -215,6 +215,7 @@ mapAliases ({
 
     Note that it is NOT possible to switch back to Deluge 1.x after this change.
   ''; # added 2021-08-18
+  demjson = with python3Packages; toPythonApplication demjson; # added 2022-01-18
   desktop_file_utils = desktop-file-utils; # added 2018-02-25
   devicemapper = lvm2; # added 2018-04-25
   digikam5 = digikam; # added 2017-02-18
