@@ -30937,8 +30937,6 @@ with pkgs;
 
   portmod = callPackage ../games/portmod { };
 
-  tlauncher = callPackage ../games/tlauncher { };
-
   tr-patcher = callPackage ../games/tr-patcher { };
 
   tes3cmd = callPackage ../games/tes3cmd { };
