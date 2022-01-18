@@ -820,7 +820,7 @@ self: super: builtins.intersectAttrs super {
 
   hlint = overrideCabal (drv: {
     postInstall = ''
-      install -Dm644 data/hlint.1 -t "$out/share/man"
+      install -Dm644 data/hlint.1 -t "$out/share/man/man1"
     '' + drv.postInstall or "";
   }) super.hlint;
 
