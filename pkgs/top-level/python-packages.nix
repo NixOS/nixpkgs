@@ -532,8 +532,6 @@ in {
 
   anyio = callPackage ../development/python-modules/anyio { };
 
-  anyjson = callPackage ../development/python-modules/anyjson { };
-
   anytree = callPackage ../development/python-modules/anytree {
     inherit (pkgs) graphviz;
   };
