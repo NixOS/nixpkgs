@@ -5,7 +5,7 @@
 , libXcursor, libXext, libXfixes, libXrender, libXScrnSaver, libXcomposite, libxcb
 , alsa-lib, libXdamage, libXtst, libXrandr, libxshmfence, expat, cups
 , dbus, gtk3, gdk-pixbuf, gcc-unwrapped, at-spi2-atk, at-spi2-core
-, libkrb5, libdrm, mesa
+, libkrb5, libdrm, libglvnd, mesa
 , libxkbcommon, pipewire, wayland # ozone/wayland
 
 # Command line programs
@@ -66,7 +66,7 @@ let
     liberation_ttf curl util-linux xdg-utils wget
     flac harfbuzz icu libpng opusWithCustomModes snappy speechd
     bzip2 libcap at-spi2-atk at-spi2-core
-    libkrb5 libdrm mesa coreutils
+    libkrb5 libdrm libglvnd mesa coreutils
     libxkbcommon pipewire wayland
   ] ++ optional pulseSupport libpulseaudio
     ++ optional libvaSupport libva
@@ -118,12 +118,6 @@ in stdenv.mkDerivation {
 
     cp -a opt/* $out/share
     cp -a usr/share/* $out/share
-
-    # To fix --use-gl=egl:
-    test -e $out/share/google/$appname/libEGL.so
-    ln -s libEGL.so $out/share/google/$appname/libEGL.so.1
-    test -e $out/share/google/$appname/libGLESv2.so
-    ln -s libGLESv2.so $out/share/google/$appname/libGLESv2.so.2
 
     substituteInPlace $out/share/applications/google-$appname.desktop \
       --replace /usr/bin/google-chrome-$dist $exe
