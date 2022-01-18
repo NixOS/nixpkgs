@@ -27193,7 +27193,9 @@ with pkgs;
     ocamlPackages = ocaml-ng.ocamlPackages_4_01_0;
   };
 
-  monitor = callPackage ../applications/system/monitor { };
+  monitor = callPackage ../applications/system/monitor {
+    libXNVCtrl = linuxPackages.nvidia_x11.settings.libXNVCtrl;
+  };
 
   moolticute = libsForQt5.callPackage ../applications/misc/moolticute { };
 
