@@ -3,22 +3,22 @@
 , mysql57, postgresql, lua, openldap, geoip, curl, unixODBC
 }:
 
-stdenv.mkDerivation rec {
+let sha256ByVersion = {
+  "4.3.1" = "0if27znz528sir52y9i4gcfhdsym7yxiwjgffy9lpscf1426q56m";
+  "4.3.2" = "1ndcpdhc9yg3nb5i26pbd8nkfma8yahnvvicccj7xlinbyvb3znp";
+  "4.5.2" = "0h9n0gyfdla9akqx16097zcq4lq981ydlxhfvs6jicxi00jlmnck";
+  "4.6.0-rc1" = "0s5csfxhk13r10c3vax28w0ydd9x0f0g4f53pk5y0wkrlg3ipvv9";
+};
+
+in stdenv.mkDerivation rec {
   pname = "powerdns";
-  version = "4.3.1";
+  version = "4.5.2";
+  versionHash = builtins.getAttr version sha256ByVersion;
 
   src = fetchurl {
     url = "https://downloads.powerdns.com/releases/pdns-${version}.tar.bz2";
-    sha256 = "0if27znz528sir52y9i4gcfhdsym7yxiwjgffy9lpscf1426q56m";
+    sha256 = versionHash;
   };
-
-  patches = [
-    (fetchpatch { # remove for >= 4.4.0
-      name = "gcc-10_undefined-reference.diff";
-      url = "https://github.com/PowerDNS/pdns/commit/05c9dd77b28.diff";
-      sha256 = "1m9szbi02h9kcabgw3kb8k9qrb54d34z0qzizrlfiw3hxs6c2zql";
-    })
-  ];
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
