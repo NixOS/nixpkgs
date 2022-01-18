@@ -25,7 +25,7 @@ in stdenv.mkDerivation rec {
   autoPatchelfIgnoreMissingDeps = true;
 
   src = fetchurl {
-    url = "https://download.qoppa.com/${pname}/v${year}/PDFStudioViewer_v${year}_${major}_${minor}_linux64.deb";
+    url = "https://download.qoppa.com/${pname}/v${year}/PDFStudioViewer_v${builtins.replaceStrings ["."] ["_"] version}_linux64.deb";
     sha256 = "128k3fm8m8zdykx4s30g5m2zl7cgmvs4qinf1w525zh84v56agz6";
   };
 
