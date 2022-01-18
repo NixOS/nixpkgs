@@ -9162,6 +9162,8 @@ in {
 
   speaklater = callPackage ../development/python-modules/speaklater { };
 
+  speaklater3 = callPackage ../development/python-modules/speaklater3 { };
+
   spectral-cube = callPackage ../development/python-modules/spectral-cube { };
 
   speedtest-cli = callPackage ../development/python-modules/speedtest-cli { };
