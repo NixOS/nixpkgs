@@ -302,9 +302,8 @@ rec {
 
     singleLineStr = mkOptionType {
       name = "singleLineStr";
-      description = "string that doesn't contain '\\n'";
-      check = x: str.check x && !(lib.hasInfix "\n" x);
-      inherit (str) merge;
+      description = "string that doesn't contain [\\n\\r]";
+      inherit (strMatching "[^\n\r]*") check merge;
     };
 
     strMatching = pattern: mkOptionType {
