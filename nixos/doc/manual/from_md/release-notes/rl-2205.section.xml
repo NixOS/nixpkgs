@@ -32,10 +32,14 @@
       </listitem>
       <listitem>
         <para>
-          Mattermost has been updated to version 6.2. Migrations may
-          take a while, see the
-          <link xlink:href="https://docs.mattermost.com/install/self-managed-changelog.html#release-v6.2-feature-release">upgrade
-          notes</link>.
+          Mattermost has been updated to extended support release 6.3,
+          as the previously packaged extended support release 5.37 is
+          <link xlink:href="https://docs.mattermost.com/upgrade/extended-support-release.html">reaching
+          its end of life</link>. Migrations may take a while, see the
+          <link xlink:href="https://docs.mattermost.com/install/self-managed-changelog.html#release-v6-3-extended-support-release">changelog</link>
+          and
+          <link xlink:href="https://docs.mattermost.com/upgrade/important-upgrade-notes.html">important
+          upgrade notes</link>.
         </para>
       </listitem>
     </itemizedlist>
@@ -400,6 +404,23 @@
           <literal>reloadIfChanged</literal> of the units.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The <literal>services.bookstack.cacheDir</literal> option has
+          been removed, since the cache directory is now handled by
+          systemd.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>services.bookstack.extraConfig</literal> option
+          has been replaced by
+          <literal>services.bookstack.config</literal> which implements
+          a
+          <link xlink:href="https://github.com/NixOS/rfcs/blob/master/rfcs/0042-config-option.md">settings-style</link>
+          configuration.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.05-notable-changes">
@@ -554,6 +575,13 @@
       </listitem>
       <listitem>
         <para>
+          <literal>services.mattermost.plugins</literal> has been added
+          to allow the declarative installation of Mattermost plugins.
+          Plugins are automatically repackaged using autoPatchelf.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>zrepl</literal> package has been updated from
           0.4.0 to 0.5:
         </para>
@@ -576,6 +604,17 @@
             </para>
           </listitem>
         </itemizedlist>
+      </listitem>
+      <listitem>
+        <para>
+          Renamed option
+          <literal>services.openssh.challengeResponseAuthentication</literal>
+          to
+          <literal>services.openssh.kbdInteractiveAuthentication</literal>.
+          Reason is that the old name has been deprecated upstream.
+          Using the old option name will still work, but produce a
+          warning.
+        </para>
       </listitem>
     </itemizedlist>
   </section>

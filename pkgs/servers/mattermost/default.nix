@@ -10,7 +10,7 @@
 , storePathAsBuildHash ? false }:
 
 let
-  version = "6.2.1";
+  version = "6.3.0";
 
   goPackagePath = "github.com/mattermost/mattermost-server";
 
@@ -22,7 +22,7 @@ let
       owner = "mattermost";
       repo = "mattermost-server";
       rev = "v${version}";
-      sha256 = "WjBsbW7aEI+MX2I1LrEJh8JgNQ4Do7PpeshXgaQAk1s=";
+      sha256 = "y3VTDl01UrMpgoN06lf98C+uTu2N9u0EAWYADPpOI3w=";
     };
 
     ldflags = [
@@ -65,7 +65,7 @@ let
 
     src = fetchurl {
       url = "https://releases.mattermost.com/${version}/mattermost-${version}-linux-amd64.tar.gz";
-      sha256 = "pV/MwMCK8vMzASXuM1+ePcarIgrcNAkFLEdmPya911E=";
+      sha256 = "PqinkPC7J6Ng1fjTrcAa6ZqiyB2JKkGRdvJ6h2wNS5w=";
     };
 
     installPhase = ''
