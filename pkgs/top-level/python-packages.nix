@@ -5068,6 +5068,8 @@ in {
 
   mohawk = callPackage ../development/python-modules/mohawk { };
 
+  mongomock = callPackage ../development/python-modules/mongomock { };
+
   mongodict = callPackage ../development/python-modules/mongodict { };
 
   mongoengine = callPackage ../development/python-modules/mongoengine { };
