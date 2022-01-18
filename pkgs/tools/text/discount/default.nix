@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
     "--pkg-config"
     "--shared"
     "--with-fenced-code"
+    # Use deterministic mangling
+    "--debian-glitch"
   ];
 
   enableParallelBuilding = true;
