@@ -11116,6 +11116,12 @@
       fingerprint = "4242 834C D401 86EF 8281  4093 86E3 0E5A 0F5F C59C";
     }];
   };
+  smasher164 = {
+    email = "aindurti@gmail.com";
+    github = "smasher164";
+    githubId = 12636891;
+    name = "Akhil Indurti";
+  };
   smironov = {
     email = "grrwlf@gmail.com";
     github = "grwlf";
