@@ -181,7 +181,8 @@ self: super: {
   # base bound
   digit = doJailbreak super.digit;
 
-  hnix = generateOptparseApplicativeCompletion "hnix"
+  # hnix.patch needed until the next release is bumped
+  hnix = appendPatch ./patches/hnix.patch (generateOptparseApplicativeCompletion "hnix"
     (overrideCabal (drv: {
       # 2020-06-05: HACK: does not pass own build suite - `dontCheck`
       doCheck = false;
@@ -189,7 +190,7 @@ self: super: {
       # needs newer version of relude and semialign than stackage has
       relude = self.relude_1_0_0_1;
       semialign = self.semialign_1_2_0_1;
-    }));
+    })));
 
   # Fails for non-obvious reasons while attempting to use doctest.
   focuslist = dontCheck super.focuslist;
