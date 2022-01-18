@@ -177,6 +177,19 @@ in
           defaultText = literalExpression ''"''${config.${opt.stateDir}}/dump"'';
           description = "Path to the dump files.";
         };
+
+        type = mkOption {
+          type = types.enum [ "zip" "rar" "tar" "sz" "tar.gz" "tar.xz" "tar.bz2" "tar.br" "tar.lz4" ];
+          default = "zip";
+          description = "Archive format used to store the dump file.";
+        };
+
+        file = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          description = "Filename to be used for the dump. If `null` a default name is choosen by gitea.";
+          example = "gitea-dump";
+        };
       };
 
       ssh = {
@@ -634,7 +647,7 @@ in
        serviceConfig = {
          Type = "oneshot";
          User = cfg.user;
-         ExecStart = "${gitea}/bin/gitea dump";
+         ExecStart = "${gitea}/bin/gitea dump --type ${cfg.dump.type}" + optionalString (cfg.dump.file != null) " --file ${cfg.dump.file}";
          WorkingDirectory = cfg.dump.backupDir;
        };
     };
