@@ -931,8 +931,8 @@ let
         mktplcRef = {
           name = "todo-tree";
           publisher = "Gruntfuggly";
-          version = "0.0.214";
-          sha256 = "0rwxjnrl44rnhx3183037k6435xs4772p58a37azl5cahsyav1hk";
+          version = "0.0.215";
+          sha256 = "sha256-WK9J6TvmMCLoqeKWh5FVp1mNAXPWVmRvi/iFuLWMylM=";
         };
         meta = with lib; {
           license = licenses.mit;
@@ -1242,8 +1242,8 @@ let
         mktplcRef = {
           name = "vscode-docker";
           publisher = "ms-azuretools";
-          version = "1.18.0";
-          sha256 = "0hhlhx3xy7x31xx2v3srvk67immajs6dm9h0wi49ii1rwx61zxah";
+          version = "1.19.0";
+          sha256 = "sha256-buIAbsyKUvX3blO1AbCq/tJ1KAcqaFpciqQovmOZ5GE=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -1343,8 +1343,8 @@ let
         mktplcRef = {
           name = "java";
           publisher = "redhat";
-          version = "0.76.0";
-          sha256 = "0xb9brki4s00piv4kqgz6idm16nk6x1j6502jljz7y9pif38z32y";
+          version = "1.2.0";
+          sha256 = "sha256-YmR3FWhPZSU2gE6NIVoA1HZBzaYaTNYFXC/uNwbDEdQ=";
         };
         buildInputs = [ jdk ];
         meta = {
@@ -1357,8 +1357,8 @@ let
         mktplcRef = {
           name = "vscode-yaml";
           publisher = "redhat";
-          version = "1.2.2";
-          sha256 = "06n4fxqr3lqmiyns9jdk3rdnanamcpzhrivllai8z9d997xmwcx6";
+          version = "1.3.0";
+          sha256 = "sha256-Tz6bLcBUATn8cYIzGoLJwgaJZGbBVr1CISmJHz+iM60=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -1591,8 +1591,8 @@ let
         mktplcRef = {
           name = "code-spell-checker";
           publisher = "streetsidesoftware";
-          version = "2.0.14";
-          sha256 = "sha256-mwcssQvaztrnUuSoo8AWK3FXT4qKmPTRCGVYkAjgfXg=";
+          version = "2.1.4";
+          sha256 = "sha256-V8ug/EtDczjiofuL7HhpN1B+qbedpnvIlXnwiXJzD/g=";
         };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/streetsidesoftware.code-spell-checker/changelog";
