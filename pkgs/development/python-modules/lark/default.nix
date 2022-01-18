@@ -19,6 +19,13 @@ buildPythonPackage rec {
   # Optional import, but fixes some re known bugs & allows advanced regex features
   propagatedBuildInputs = [ regex ];
 
+  pythonImportsCheck = [
+    "lark"
+    "lark.parsers"
+    "lark.tools"
+    "lark.grammars"
+  ];
+
   checkPhase = ''
     runHook preCheck
 
