@@ -367,6 +367,22 @@ let
 
       chenglou92.rescript-vscode = callPackage ./rescript { };
 
+      christian-kohler.path-intellisense = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "path-intellisense";
+          publisher = "christian-kohler";
+          version = "2.6.1";
+          sha256 = "sha256-ol98g3pliBlyEQ+n7cR4O04J/0QB9U8+fvf+FC0j0Fc=";
+        };
+        meta = with lib; {
+          description = "Visual Studio Code plugin that autocompletes filenames";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=christian-kohler.path-intellisense";
+          homepage = "https://github.com/ChristianKohler/PathIntellisense";
+          license = licenses.mit;
+          maintainers = with maintainers; [ imgabe ];
+        };
+      };
+
       cmschuetz12.wal = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "wal";
