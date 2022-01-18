@@ -25,21 +25,15 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "SDL2";
-  version = "2.0.14";
+  version = "2.0.20";
 
   src = fetchurl {
     url = "https://www.libsdl.org/release/${pname}-${version}.tar.gz";
-    sha256 = "1g1jahknv5r4yhh1xq5sf0md20ybdw1zh1i15lry26sq39bmn8fq";
+    sha256 = "01nx0ipw3q2p3ip5yjvhz57kk8v31g3rhxjakscpw3jvgcfvlsn5";
   };
   dontDisableStatic = withStatic;
   outputs = [ "out" "dev" ];
   outputBin = "dev"; # sdl-config
-
-  patches = [
-    ./find-headers.patch
-    # To fix the build with wayland 1.20.0:
-    ./Fix-build-against-wayland-1.20.patch
-  ];
 
   # Fix with mesa 19.2: https://bugzilla.libsdl.org/show_bug.cgi?id=4797
   postPatch = ''
