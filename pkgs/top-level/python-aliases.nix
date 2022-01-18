@@ -62,6 +62,7 @@ mapAliases ({
   grpc_google_iam_v1 = grpc-google-iam-v1; # added 2021-08-21
   HAP-python = hap-python; # added 2021-06-01
   hbmqtt = throw "hbmqtt was removed because it is no longer maintained"; # added 2021-11-07
+  hdlparse = throw "hdlparse has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2022-01-18
   IMAPClient = imapclient; # added 2021-10-28
   jupyter_client = jupyter-client; # added 2021-10-15
   Keras = keras; # added 2021-11-25
