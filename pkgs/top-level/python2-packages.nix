@@ -26,6 +26,8 @@ with self; with super; {
 
   contextlib2 = callPackage ../development/python2-modules/contextlib2 { };
 
+  coverage = callPackage ../development/python2-modules/coverage { };
+
   cryptography = callPackage ../development/python2-modules/cryptography { };
 
   cryptography_vectors = callPackage ../development/python2-modules/cryptography-vectors { };
