@@ -32,10 +32,14 @@
       </listitem>
       <listitem>
         <para>
-          Mattermost has been updated to version 6.2. Migrations may
-          take a while, see the
-          <link xlink:href="https://docs.mattermost.com/install/self-managed-changelog.html#release-v6.2-feature-release">upgrade
-          notes</link>.
+          Mattermost has been updated to extended support release 6.3,
+          as the previously packaged extended support release 5.37 is
+          <link xlink:href="https://docs.mattermost.com/upgrade/extended-support-release.html">reaching
+          its end of life</link>. Migrations may take a while, see the
+          <link xlink:href="https://docs.mattermost.com/install/self-managed-changelog.html#release-v6-3-extended-support-release">changelog</link>
+          and
+          <link xlink:href="https://docs.mattermost.com/upgrade/important-upgrade-notes.html">important
+          upgrade notes</link>.
         </para>
       </listitem>
     </itemizedlist>
@@ -537,6 +541,13 @@
           prompt, providing the options
           <literal>programs.starship.enable</literal> and
           <literal>programs.starship.settings</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>services.mattermost.plugins</literal> has been added
+          to allow the declarative installation of Mattermost plugins.
+          Plugins are automatically repackaged using autoPatchelf.
         </para>
       </listitem>
       <listitem>
