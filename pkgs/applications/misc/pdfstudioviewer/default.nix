@@ -21,7 +21,7 @@ let
   minor = "2";
 in stdenv.mkDerivation rec {
   pname = "pdfstudioviewer";
-  version = "${year}.${major}.${minor}";
+  version = "${year}.1.2";
   autoPatchelfIgnoreMissingDeps = true;
 
   src = fetchurl {
