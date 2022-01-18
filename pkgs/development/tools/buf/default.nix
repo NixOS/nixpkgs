@@ -15,7 +15,7 @@ buildGoModule rec {
     owner = "bufbuild";
     repo = pname;
     rev = "v${version}";
-    sha256 = "06ky7p516wzqmsiv3g27waqv1fj85rpjv6fvwx1f4am8fhd5mb2p";
+    sha256 = "sha256-V6xaGnSoKuJC59uZLW8uSLqwseJHvLGjrvhzE8o9fho=";
   };
   vendorSha256 = "sha256-442NHTREM2zC8VA7zAV35YSwX1lM/BXnx6p8a+avzps=";
 
