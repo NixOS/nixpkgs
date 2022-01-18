@@ -17,7 +17,8 @@ python3Packages.buildPythonApplication rec {
   version = "1.1";
   src = ./.;
 
-  propagatedBuildInputs = [ coreutils netpbm python3Packages.colorama python3Packages.ptpython qemu_pkg socat vde2 ]
+  propagatedBuildInputs = [ coreutils netpbm socat vde2 qemu_pkg ]
+    ++ (with python3Packages; [ colorama ptpython bashlex ])
     ++ (lib.optionals enableOCR [ imagemagick_light tesseract4 ]);
 
   doCheck = true;

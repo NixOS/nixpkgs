@@ -12,6 +12,9 @@ with subtest("low-level commands"):
         assert machine.execute("true") == (0, "")
         assert machine.execute("false", check_return=False) == (-1, "")
 
+        with must_raise("unexpected token"):
+            machine.execute(")")
+
     with subtest("succeed"):
         r = machine.succeed("echo hello")
         assert r == "hello\n"

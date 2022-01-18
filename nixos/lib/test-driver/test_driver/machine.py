@@ -1,8 +1,9 @@
-from contextlib import _GeneratorContextManager
+from contextlib import _GeneratorContextManager, suppress
 from pathlib import Path
 from queue import Queue
 from typing import Any, Callable, Dict, Iterable, List, Optional, Tuple, Union
 import base64
+import bashlex
 import io
 import os
 import queue
@@ -482,6 +483,10 @@ class Machine:
     ) -> Tuple[int, str]:
         self.run_callbacks()
         self.connect()
+
+        with suppress(NotImplementedError):
+            # This should succeed, otherwise it will raise an exception:
+            bashlex.parse(command)
 
         if timeout is not None:
             command = f"timeout {timeout} sh -c {shlex.quote(command)}"
