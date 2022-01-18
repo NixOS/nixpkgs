@@ -9,11 +9,15 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-A/KDvzhOoSG3tqWK+zj03vl/MHBPyhOg2mhpNrDzkqw=";
+    hash = "sha256-A/KDvzhOoSG3tqWK+zj03vl/MHBPyhOg2mhpNrDzkqw=";
   };
 
   # Module doesn't have tests
   doCheck = false;
+
+  pythonImportsCheck = [
+    "tabulate-stubs"
+  ];
 
   meta = with lib; {
     description = "Typing stubs for tabulate";
