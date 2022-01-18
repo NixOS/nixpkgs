@@ -87,6 +87,22 @@ in {
   };
 
   config = mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = cfg.settings != { }
+          -> (hasAttrByPath [ "dns" "bind_host" ] cfg.settings)
+          || (hasAttrByPath [ "dns" "bind_hosts" ] cfg.settings);
+        message =
+          "AdGuard setting dns.bind_host or dns.bind_hosts needs to be configured for a minimal working configuration";
+      }
+      {
+        assertion = cfg.settings != { }
+          -> hasAttrByPath [ "dns" "bootstrap_dns" ] cfg.settings;
+        message =
+          "AdGuard setting dns.bootstrap_dns needs to be configured for a minimal working configuration";
+      }
+    ];
+
     systemd.services.adguardhome = {
       description = "AdGuard Home: Network-level blocker";
       after = [ "network.target" ];
@@ -96,7 +112,7 @@ in {
         StartLimitBurst = 10;
       };
 
-      preStart = ''
+      preStart = optionalString (cfg.settings != { }) ''
         if    [ -e "$STATE_DIRECTORY/AdGuardHome.yaml" ] \
            && [ "${toString cfg.mutableSettings}" = "1" ]; then
           # Writing directly to AdGuardHome.yaml results in empty file

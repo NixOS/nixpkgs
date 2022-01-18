@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, makeWrapper, makeDesktopItem, which, unzip, libicns, imagemagick
-, jdk, perl, python
+, jdk, perl
 }:
 
 let
@@ -58,7 +58,7 @@ stdenv.mkDerivation {
   '';
 
   nativeBuildInputs = [ makeWrapper unzip ];
-  buildInputs = [ perl python libicns imagemagick ];
+  buildInputs = [ perl libicns imagemagick ];
 
   meta = {
     description = "An integrated development environment for Java, C, C++ and PHP";

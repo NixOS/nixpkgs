@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, python }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, python2 }:
 
 stdenv.mkDerivation rec {
   pname = "udis86";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0c60zwimim6jrm4saw36s38w5sg5v8n9mr58pkqmjrlf7q9g6am1";
   };
 
-  nativeBuildInputs = [ autoreconfHook python ];
+  nativeBuildInputs = [ autoreconfHook python2 ];
 
   configureFlags = [
     "--enable-shared"

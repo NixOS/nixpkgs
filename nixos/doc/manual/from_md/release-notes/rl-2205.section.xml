@@ -165,6 +165,14 @@
           <link xlink:href="options.html#opt-services.timetagger.enable">services.timetagger</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://www.rstudio.com/products/rstudio/#rstudio-server">rstudio-server</link>,
+          a browser-based version of the RStudio IDE for the R
+          programming language. Available as
+          <link xlink:href="options.html#opt-services.rstudio-server.enable">services.rstudio-server</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.05-incompatibilities">
@@ -357,6 +365,28 @@
           <literal>~/.local/share/polymc/polymc.cfg</literal>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <literal>pkgs.noto-fonts-cjk</literal> is now deprecated in
+          favor of <literal>pkgs.noto-fonts-cjk-sans</literal> and
+          <literal>pkgs.noto-fonts-cjk-serif</literal> because they each
+          have different release schedules. To maintain compatibility
+          with prior releases of Nixpkgs,
+          <literal>pkgs.noto-fonts-cjk</literal> is currently an alias
+          of <literal>pkgs.noto-fonts-cjk-sans</literal> and doesn’t
+          include serif fonts.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The interface that allows activation scripts to restart units
+          has been reworked. Restarting and reloading is now done by a
+          single file
+          <literal>/run/nixos/activation-restart-list</literal> that
+          honors <literal>restartIfChanged</literal> and
+          <literal>reloadIfChanged</literal> of the units.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.05-notable-changes">
@@ -508,6 +538,31 @@
           <literal>programs.starship.enable</literal> and
           <literal>programs.starship.settings</literal>.
         </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>zrepl</literal> package has been updated from
+          0.4.0 to 0.5:
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              The RPC protocol version was bumped; all zrepl daemons in
+              a setup must be updated and restarted before replication
+              can resume.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              A bug involving encrypt-on-receive has been fixed. Read
+              the
+              <link xlink:href="https://zrepl.github.io/configuration/sendrecvoptions.html#job-recv-options-placeholder">zrepl
+              documentation</link> and check the output of
+              <literal>zfs get -r encryption,zrepl:placeholder PATH_TO_ROOTFS</literal>
+              on the receiver.
+            </para>
+          </listitem>
+        </itemizedlist>
       </listitem>
     </itemizedlist>
   </section>

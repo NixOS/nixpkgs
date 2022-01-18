@@ -19,13 +19,13 @@
 
 buildDotnetModule rec {
   pname = "OpenTabletDriver";
-  version = "0.5.3.3";
+  version = "0.6.0.2";
 
   src = fetchFromGitHub {
     owner = "OpenTabletDriver";
     repo = "OpenTabletDriver";
     rev = "v${version}";
-    sha256 = "sha256-k4SoOMKAwHeYSQ80M8Af1DiiDSZIi3gS7lGr2ZrXrEI=";
+    sha256 = "sha256-qPlya5f12Cc1yAK8dliWelA7drAoeeIkFXOD+aDeToo=";
   };
 
   debPkg = fetchurl {
@@ -33,10 +33,10 @@ buildDotnetModule rec {
     sha256 = "sha256-LJqH3+JckPF7S/1uBE2X81jxWg0MF9ff92Ei8WPEA2w=";
   };
 
-  dotnet-sdk = dotnetCorePackages.sdk_5_0;
-  dotnet-runtime = dotnetCorePackages.runtime_5_0;
+  dotnet-sdk = dotnetCorePackages.sdk_6_0;
+  dotnet-runtime = dotnetCorePackages.runtime_6_0;
 
-  dotnetInstallFlags = [ "--framework=net5" ];
+  dotnetInstallFlags = [ "--framework=net6.0" ];
 
   projectFile = [ "OpenTabletDriver.Console" "OpenTabletDriver.Daemon" "OpenTabletDriver.UX.Gtk" ];
   nugetDeps = ./deps.nix;
@@ -62,10 +62,22 @@ buildDotnetModule rec {
   doCheck = true;
   testProjectFile = "OpenTabletDriver.Tests/OpenTabletDriver.Tests.csproj";
 
-  # Require networking
   disabledTests = [
+    # Require networking
     "OpenTabletDriver.Tests.PluginRepositoryTest.ExpandRepositoryTarballFork"
     "OpenTabletDriver.Tests.PluginRepositoryTest.ExpandRepositoryTarball"
+    # Require networking & unused in Linux build
+    "OpenTabletDriver.Tests.UpdaterTests.UpdaterBase_ProperlyChecks_Version_Async"
+    "OpenTabletDriver.Tests.UpdaterTests.Updater_PreventsUpdate_WhenAlreadyUpToDate_Async"
+    "OpenTabletDriver.Tests.UpdaterTests.Updater_AllowsReupdate_WhenInstallFailed_Async"
+    "OpenTabletDriver.Tests.UpdaterTests.Updater_HasUpdateReturnsFalse_During_UpdateInstall_Async"
+    "OpenTabletDriver.Tests.UpdaterTests.Updater_HasUpdateReturnsFalse_After_UpdateInstall_Async"
+    "OpenTabletDriver.Tests.UpdaterTests.Updater_Prevents_ConcurrentAndConsecutive_Updates_Async"
+    "OpenTabletDriver.Tests.UpdaterTests.Updater_ProperlyBackups_BinAndAppDataDirectory_Async"
+    # Intended only to be run in continuous integration, unnecessary for functionality
+    "OpenTabletDriver.Tests.ConfigurationTest.Configurations_DeviceIdentifier_IsNotConflicting"
+    # Depends on processor load
+    "OpenTabletDriver.Tests.TimerTests.TimerAccuracy"
   ];
 
   postFixup = ''
@@ -74,7 +86,6 @@ buildDotnetModule rec {
     mv $out/bin/OpenTabletDriver.Daemon $out/bin/otd-daemon
     mv $out/bin/OpenTabletDriver.UX.Gtk $out/bin/otd-gui
 
-    cp -r ./OpenTabletDriver/Configurations $out/lib/${pname}
     install -Dm644 $src/OpenTabletDriver.UX/Assets/otd.png -t $out/share/pixmaps
 
     # TODO: Ideally this should be build from OpenTabletDriver/OpenTabletDriver-udev instead

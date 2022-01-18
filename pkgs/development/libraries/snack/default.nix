@@ -1,6 +1,6 @@
-# alsa-lib vorbis-tools python can be made optional
+# alsa-lib vorbis-tools python2 can be made optional
 
-{ lib, stdenv, fetchurl, python, tcl, tk, vorbis-tools, pkg-config, xlibsWrapper }:
+{ lib, stdenv, fetchurl, python2, tcl, tk, vorbis-tools, pkg-config, xlibsWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "snack";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   postUnpack = ''sourceRoot="$sourceRoot/unix"'';
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ python tcl tk vorbis-tools xlibsWrapper ];
+  buildInputs = [ python2 tcl tk vorbis-tools xlibsWrapper ];
 
   hardeningDisable = [ "format" ];
 
