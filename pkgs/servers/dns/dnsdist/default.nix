@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, pkg-config, systemd
 , boost, libsodium, libedit, re2
 , net-snmp, lua, protobuf, openssl, zlib, h2o
-, nghttp2
+, nghttp2, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -38,6 +38,10 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   enableParallelBuilding = true;
+
+  passthru.tests = {
+    inherit (nixosTests) dnsdist;
+  };
 
   meta = with lib; {
     description = "DNS Loadbalancer";

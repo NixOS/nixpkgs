@@ -104,6 +104,7 @@ in
   discourse = handleTest ./discourse.nix {};
   dnscrypt-proxy2 = handleTestOn ["x86_64-linux"] ./dnscrypt-proxy2.nix {};
   dnscrypt-wrapper = handleTestOn ["x86_64-linux"] ./dnscrypt-wrapper {};
+  dnsdist = handleTest ./dnsdist.nix {};
   doas = handleTest ./doas.nix {};
   docker = handleTestOn ["x86_64-linux"] ./docker.nix {};
   docker-rootless = handleTestOn ["x86_64-linux"] ./docker-rootless.nix {};
