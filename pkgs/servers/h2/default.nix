@@ -1,13 +1,14 @@
 { lib, stdenv, fetchzip, jre, makeWrapper }:
 stdenv.mkDerivation rec {
   pname = "h2";
-
   version = "2.1.210";
 
   src = fetchzip {
-    url = "https://github.com/h2database/h2database/releases/download/version-2.1.210/h2-2022-01-17.zip";
+    url = "https://github.com/h2database/h2database/releases/download/version-${version}/h2-2022-01-17.zip";
     sha256 = "0zcjblhjj98dsj954ia3by9vx5w7mix1dzi85jnvp18kxmbldmf4";
   };
+
+  outputs = [ "out" "doc" ];
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -24,8 +25,9 @@ stdenv.mkDerivation rec {
         fi
       '';
     in ''
-      mkdir -p $out
-      cp -R * $out
+      mkdir -p $out $doc/share/doc/
+      cp -R bin $out/
+      cp -R docs $doc/share/doc/h2
 
       echo '${h2ToolScript}' > $out/bin/h2tool.sh
 
