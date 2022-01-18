@@ -20,8 +20,8 @@ python3Packages.buildPythonApplication rec {
     substituteInPlace setup.py \
       --replace 'ytmusicapi>=0.19.1,<0.20.0' 'ytmusicapi>=0.19.1'
   '';
-  
-  doCheck = false;
+
+  doCheck = true;
 
   meta = with lib; {
     description = "Mopidy extension for playing music from YouTube Music";
