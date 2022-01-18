@@ -18,6 +18,10 @@ buildPythonPackage rec {
     sha256 = "6836d456b8b0edbc5b6d3a42d1be852cebd43d2f28af4ff51789eb295f1860e2";
   };
 
+  postPatch = ''
+    sed -i '/cov/d' setup.cfg
+  '';
+
   buildInputs = [
     glibcLocales
   ];
