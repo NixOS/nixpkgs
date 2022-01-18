@@ -16371,7 +16371,7 @@ with pkgs;
   ffmpeg_3 = ffmpeg_3_4;
   # Please make sure this is updated to the latest version on the next major
   # update to ffmpeg
-  ffmpeg = ffmpeg_4;
+  ffmpeg = ffmpeg_5;
 
   ffmpeg-full = callPackage ../development/libraries/ffmpeg-full {
     svt-av1 = if stdenv.isAarch64 then null else svt-av1;
