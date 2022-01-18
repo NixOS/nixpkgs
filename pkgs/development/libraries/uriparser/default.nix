@@ -14,10 +14,10 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DURIPARSER_BUILD_DOCS=OFF"
-  ];
+  ] ++ lib.optional (!doCheck) "-DURIPARSER_BUILD_TESTS=OFF";
 
   checkInputs = [ gtest ];
-  doCheck = stdenv.targetPlatform.system == stdenv.hostPlatform.system;
+  doCheck = stdenv.buildPlatform == stdenv.hostPlatform;
 
   meta = with lib; {
     homepage = "https://uriparser.github.io/";

@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-datacatalog";
-  version = "3.6.1";
+  version = "3.6.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "136fb153740d4154d8c9ef306284f7f899399de45eef2c9027ca3e56249c4e2d";
+    sha256 = "sha256-9oixM+4HxHn0G3j8Hpg1iB5gM+7xyD5GBbWpEzzjdrE=";
   };
 
   propagatedBuildInputs = [ libcst google-api-core grpc-google-iam-v1 proto-plus ];

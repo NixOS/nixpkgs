@@ -54,7 +54,7 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "uclibc-ng-${version}";
+  pname = "uclibc-ng";
   inherit version;
 
   src = fetchurl {
