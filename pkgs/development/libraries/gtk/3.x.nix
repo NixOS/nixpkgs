@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
     # 3.24.31 does not declare QuartzCore dependency properly and fails to link
     (fetchpatch {
       url = "https://gitlab.gnome.org/GNOME/gtk/-/commit/0ac61443694b477c41fc246cb387ef86aba441de.patch";
-      sha256 = "sha256-aiT/NeAxIl6ZS9KwMssQPzD7NtW7qqeySc/CyWakQfk=";
+      sha256 = "sha256-KaMeIdV/gfM4xzN9lIkY99E7bzAfTM6VETk5DEunB2w=";
     })
   ];
 
