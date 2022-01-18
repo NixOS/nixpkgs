@@ -1124,6 +1124,8 @@ with pkgs;
 
   lxterminal = callPackage ../applications/terminal-emulators/lxterminal { };
 
+  meek = callPackage ../tools/networking/meek { };
+
   microcom = callPackage ../applications/terminal-emulators/microcom { };
 
   mlterm = callPackage ../applications/terminal-emulators/mlterm {
