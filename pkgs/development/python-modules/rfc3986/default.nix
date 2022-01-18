@@ -1,12 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, idna, pytestCheckHook }:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, idna, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "rfc3986";
-  version = "1.5.0";
+  version = "2.0.0";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "270aaf10d87d0d4e095063c65bf3ddbc6ee3d0b226328ce21e036f946e421835";
+    sha256 = "sha256-l6rPnb1L/YKbqtbmMJ+mVzqvG+P2+nNcirBeRs7LJhw=";
   };
 
   propagatedBuildInputs = [ idna ];
