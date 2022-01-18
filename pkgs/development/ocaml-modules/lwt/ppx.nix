@@ -6,7 +6,7 @@ buildDunePackage {
 
   useDune2 = true;
 
-  minimumOCamlVersion = "4.04";
+  minimalOCamlVersion = "4.04";
 
   # `lwt_ppx` has a different release cycle than Lwt, but it's included in
   # one of its release bundles.

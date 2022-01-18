@@ -15,7 +15,7 @@ buildDunePackage rec {
     fetchSubmodules = true;
   };
 
-  minimumOCamlVersion = "4.08";
+  minimalOCamlVersion = "4.08";
 
   propagatedBuildInputs = [
     lwt_ppx

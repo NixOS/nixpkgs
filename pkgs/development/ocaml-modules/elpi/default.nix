@@ -21,7 +21,7 @@ buildDunePackage rec {
   pname = "elpi";
   inherit (fetched) version src;
 
-  minimumOCamlVersion = "4.04";
+  minimalOCamlVersion = "4.04";
 
   buildInputs = [ perl ncurses ];
 

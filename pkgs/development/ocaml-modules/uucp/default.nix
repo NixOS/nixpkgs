@@ -4,12 +4,12 @@ let
   pname = "uucp";
   version = "14.0.0";
   webpage = "https://erratique.ch/software/${pname}";
-  minimumOCamlVersion = "4.03";
+  minimalOCamlVersion = "4.03";
   doCheck = true;
 in
 
-if !(lib.versionAtLeast ocaml.version minimumOCamlVersion)
-then builtins.throw "${pname} needs at least OCaml ${minimumOCamlVersion}"
+if !(lib.versionAtLeast ocaml.version minimalOCamlVersion)
+then builtins.throw "${pname} needs at least OCaml ${minimalOCamlVersion}"
 else
 
 stdenv.mkDerivation {

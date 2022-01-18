@@ -11,7 +11,7 @@ buildDunePackage rec {
     sha256 = "1v86avafsbyxjccy0y9gny31s2jzb0kd42v3mhcalklx5f044lcy";
   };
 
-  minimumOCamlVersion = "4.07";
+  minimalOCamlVersion = "4.07";
   useDune2 = true;
 
   propagatedBuildInputs = [ bigarray-compat ];

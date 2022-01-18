@@ -6,7 +6,7 @@ buildDunePackage rec {
 
   useDune2 = true;
 
-  minimumOCamlVersion = "4.05";
+  minimalOCamlVersion = "4.05";
 
   src = fetchurl {
     url = "https://github.com/garrigue/lablgtk/releases/download/${version}/lablgtk3-${version}.tbz";

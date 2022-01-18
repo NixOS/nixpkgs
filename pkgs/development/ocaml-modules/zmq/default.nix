@@ -1,7 +1,7 @@
 { lib, fetchFromGitHub, buildDunePackage, dune-configurator, czmq, stdint }:
 
 buildDunePackage rec {
-  minimumOCamlVersion = "4.03";
+  minimalOCamlVersion = "4.03";
   pname = "zmq";
   version = "20180726";
 

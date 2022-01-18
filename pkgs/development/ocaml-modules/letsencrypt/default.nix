@@ -28,7 +28,7 @@ buildDunePackage rec {
     sha256 = "f90875f5c9bdcab4c8be5ec7ebe9ea763030fa708e02857300996bb16e7c2070";
   };
 
-  minimumOCamlVersion = "4.08";
+  minimalOCamlVersion = "4.08";
   useDune2 = true;
 
   buildInputs = [

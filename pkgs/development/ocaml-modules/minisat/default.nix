@@ -6,7 +6,7 @@ buildDunePackage rec {
 
   useDune2 = true;
 
-  minimumOCamlVersion = "4.05";
+  minimalOCamlVersion = "4.05";
 
   src = fetchFromGitHub {
     owner  = "c-cube";

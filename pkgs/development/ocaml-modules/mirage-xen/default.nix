@@ -40,7 +40,7 @@ buildDunePackage rec {
       --replace "@OCAMLFIND_DESTDIR@" "$OCAMLFIND_DESTDIR"
   '';
 
-  minimumOCamlVersion = "4.08";
+  minimalOCamlVersion = "4.08";
 
   nativeBuildInputs = [
     pkg-config

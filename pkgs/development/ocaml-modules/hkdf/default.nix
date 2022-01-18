@@ -4,7 +4,7 @@ buildDunePackage rec {
   pname = "hkdf";
   version = "1.0.4";
 
-  minimumOCamlVersion = "4.07";
+  minimalOCamlVersion = "4.07";
 
   src = fetchurl {
     url = "https://github.com/hannesm/ocaml-${pname}/releases/download/v${version}/${pname}-v${version}.tbz";

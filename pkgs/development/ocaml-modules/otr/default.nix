@@ -6,7 +6,7 @@ buildDunePackage rec {
   pname = "otr";
   version = "0.3.10";
 
-  minimumOCamlVersion = "4.08";
+  minimalOCamlVersion = "4.08";
 
   src = fetchurl {
     url = "https://github.com/hannesm/ocaml-otr/releases/download/v${version}/otr-v${version}.tbz";

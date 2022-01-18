@@ -6,7 +6,7 @@ buildDunePackage rec {
   pname = "xenstore";
   version = "2.1.1";
 
-  minimumOCamlVersion = "4.04";
+  minimalOCamlVersion = "4.04";
 
   useDune2 = true;
 

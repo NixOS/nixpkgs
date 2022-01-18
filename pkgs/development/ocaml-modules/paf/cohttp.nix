@@ -22,7 +22,7 @@ buildDunePackage {
     version
     src
     useDune2
-    minimumOCamlVersion
+    minimalOCamlVersion
   ;
 
   propagatedBuildInputs = [

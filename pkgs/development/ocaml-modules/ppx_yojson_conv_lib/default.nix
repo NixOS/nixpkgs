@@ -6,7 +6,7 @@ buildDunePackage rec {
 
   useDune2 = true;
 
-  minimumOCamlVersion = "4.02.3";
+  minimalOCamlVersion = "4.02.3";
 
   src = fetchFromGitHub {
     owner = "janestreet";

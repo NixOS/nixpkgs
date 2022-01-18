@@ -6,7 +6,7 @@ buildDunePackage rec {
 
   useDune2 = true;
 
-  minimumOCamlVersion = "4.02";
+  minimalOCamlVersion = "4.02";
 
   src = fetchurl {
     url = "https://github.com/mirage/ocaml-${pname}/releases/download/v${version}/hex-v${version}.tbz";

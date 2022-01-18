@@ -41,7 +41,7 @@ buildDunePackage {
   pname = "ocamlformat";
   inherit src version;
 
-  minimumOCamlVersion =
+  minimalOCamlVersion =
     if lib.versionAtLeast version "0.17.0"
     then "4.08"
     else "4.06";

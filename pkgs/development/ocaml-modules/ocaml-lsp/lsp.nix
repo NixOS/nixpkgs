@@ -20,7 +20,7 @@ buildDunePackage rec {
   pname = "lsp";
   inherit (jsonrpc) version src;
   useDune2 = true;
-  minimumOCamlVersion =
+  minimalOCamlVersion =
     if lib.versionAtLeast version "1.7.0" then
       "4.12"
     else

@@ -8,7 +8,7 @@
 buildDunePackage {
   pname = "conduit-mirage";
 
-  inherit (conduit-lwt) version src minimumOCamlVersion useDune2;
+  inherit (conduit-lwt) version src minimalOCamlVersion useDune2;
 
   nativeBuildInputs = [ ppx_sexp_conv ];
 

@@ -14,7 +14,7 @@ buildDunePackage rec {
   pname = "odoc-parser";
   inherit version;
 
-  minimumOCamlVersion = "4.02";
+  minimalOCamlVersion = "4.02";
 
   src = fetchurl {
     url = "https://github.com/ocaml-doc/odoc-parser/releases/download/${version}/odoc-parser-${version}.tbz";

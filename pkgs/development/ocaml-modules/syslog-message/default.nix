@@ -7,7 +7,7 @@ buildDunePackage rec {
   pname = "syslog-message";
   version = "1.1.0";
 
-  minimumOCamlVersion = "4.03";
+  minimalOCamlVersion = "4.03";
 
   useDune2 = true;
 

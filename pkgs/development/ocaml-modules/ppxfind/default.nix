@@ -8,7 +8,7 @@ buildDunePackage (rec {
     sha256 = "0wa9vcrc26kirc2cqqs6kmarbi8gqy3dgdfiv9y7nzsgy1liqacq";
   };
 
-  minimumOCamlVersion = "4.03";
+  minimalOCamlVersion = "4.03";
   useDune2 = true;
 
   buildInputs = [ ocaml-migrate-parsetree ];

@@ -10,7 +10,7 @@ buildDunePackage rec {
   pname = "awa";
   version = "0.0.5";
 
-  minimumOCamlVersion = "4.07";
+  minimalOCamlVersion = "4.07";
   useDune2 = true;
 
   src = fetchurl {

@@ -6,7 +6,7 @@ buildDunePackage rec {
 
   useDune2 = true;
 
-  minimumOCamlVersion = "4.03";
+  minimalOCamlVersion = "4.03";
 
   src = fetchurl {
     url = "https://github.com/mirage/ocaml-cstruct/releases/download/v${version}/cstruct-v${version}.tbz";

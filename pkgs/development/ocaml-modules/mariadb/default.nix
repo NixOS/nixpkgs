@@ -5,7 +5,7 @@ buildOasisPackage rec {
   pname = "mariadb";
   version = "1.1.4";
 
-  minimumOCamlVersion = "4.07.0";
+  minimalOCamlVersion = "4.07.0";
 
   src = fetchFromGitHub {
     owner = "andrenth";

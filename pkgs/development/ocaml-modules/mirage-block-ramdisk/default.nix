@@ -18,7 +18,7 @@ buildDunePackage rec {
     substituteInPlace test/tests.ml --replace 'Fmt.kstrf Alcotest.fail' 'Fmt.kstrf (fun s -> Alcotest.fail s)'
   '';
 
-  minimumOCamlVersion = "4.06";
+  minimalOCamlVersion = "4.06";
 
   propagatedBuildInputs = [ io-page mirage-block ];
 

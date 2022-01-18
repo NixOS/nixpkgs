@@ -19,7 +19,7 @@ buildDunePackage rec {
 
   useDune2 = true;
 
-  minimumOCamlVersion = "4.03";
+  minimalOCamlVersion = "4.03";
 
   propagatedBuildInputs = [ fmt eqaf ];
 

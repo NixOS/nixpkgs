@@ -14,7 +14,7 @@ buildDunePackage rec {
   pname = "wayland";
   version = "1.0";
 
-  minimumOCamlVersion = "4.08";
+  minimalOCamlVersion = "4.08";
 
   useDune2 = true;
 

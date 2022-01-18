@@ -3,7 +3,7 @@
 }:
 
 buildDunePackage rec {
-  minimumOCamlVersion = "4.07";
+  minimalOCamlVersion = "4.07";
   version = "20210511";
   pname = "imagelib";
 

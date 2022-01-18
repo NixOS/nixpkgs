@@ -6,7 +6,7 @@
 buildDunePackage {
   pname = "mirage-crypto-rng-async";
 
-  inherit (mirage-crypto) useDune2 version minimumOCamlVersion src;
+  inherit (mirage-crypto) useDune2 version minimalOCamlVersion src;
 
   nativeBuildInputs = [
     dune-configurator

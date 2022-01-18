@@ -11,7 +11,7 @@ buildDunePackage rec {
     sha256 = "72ca9f6edd302fdfa16c7559cedac7ac2c885466a367e17ea1ea8807b2dd13ef";
   };
 
-  minimumOCamlVersion = "4.10";
+  minimalOCamlVersion = "4.10";
 
   meta = with lib; {
     description = "Numerical computing library for Ocaml";

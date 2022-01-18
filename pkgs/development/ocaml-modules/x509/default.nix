@@ -5,7 +5,7 @@
 }:
 
 buildDunePackage rec {
-  minimumOCamlVersion = "4.07";
+  minimalOCamlVersion = "4.07";
 
   pname = "x509";
   version = "0.15.2";

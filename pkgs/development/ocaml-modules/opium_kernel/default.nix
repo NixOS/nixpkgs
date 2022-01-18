@@ -17,7 +17,7 @@ buildDunePackage rec {
 
   useDune2 = true;
 
-  minimumOCamlVersion = "4.04.1";
+  minimalOCamlVersion = "4.04.1";
 
   src = fetchurl {
     url = "https://github.com/rgrinberg/opium/releases/download/${version}/opium-${version}.tbz";

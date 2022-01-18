@@ -7,7 +7,7 @@
 buildDunePackage {
   pname = "dns-cli";
 
-  minimumOCamlVersion = "4.08";
+  minimalOCamlVersion = "4.08";
 
   inherit (dns) version src useDune2;
 

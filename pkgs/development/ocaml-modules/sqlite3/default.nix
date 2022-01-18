@@ -4,7 +4,7 @@ buildDunePackage rec {
   pname = "sqlite3";
   version = "5.0.2";
   useDune2 = true;
-  minimumOCamlVersion = "4.05";
+  minimalOCamlVersion = "4.05";
 
   src = fetchurl {
     url = "https://github.com/mmottl/sqlite3-ocaml/releases/download/${version}/sqlite3-${version}.tbz";

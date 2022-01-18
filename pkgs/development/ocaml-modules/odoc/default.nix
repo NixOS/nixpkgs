@@ -7,7 +7,7 @@ buildDunePackage rec {
   pname = "odoc";
   version = "1.5.3";
 
-  minimumOCamlVersion = "4.02";
+  minimalOCamlVersion = "4.02";
 
   src = fetchurl {
     url = "https://github.com/ocaml/odoc/releases/download/${version}/odoc-${version}.tbz";

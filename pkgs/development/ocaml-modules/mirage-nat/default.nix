@@ -9,7 +9,7 @@ buildDunePackage rec {
   pname = "mirage-nat";
   version = "2.2.3";
 
-  minimumOCamlVersion = "4.06";
+  minimalOCamlVersion = "4.06";
 
   # due to cstruct
   useDune2 = true;

@@ -6,7 +6,7 @@ buildDunePackage rec {
   pname = "jackline";
   version = "unstable-2021-12-28";
 
-  minimumOCamlVersion = "4.08";
+  minimalOCamlVersion = "4.08";
 
   useDune2 = true;
 

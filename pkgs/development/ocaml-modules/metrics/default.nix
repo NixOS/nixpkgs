@@ -6,7 +6,7 @@ buildDunePackage rec {
 
   useDune2 = true;
 
-  minimumOCamlVersion = "4.04";
+  minimalOCamlVersion = "4.04";
 
   src = fetchurl {
     url = "https://github.com/mirage/metrics/releases/download/${version}/metrics-${version}.tbz";

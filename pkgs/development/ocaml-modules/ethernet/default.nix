@@ -7,7 +7,7 @@ buildDunePackage rec {
   pname = "ethernet";
   version = "2.2.0";
 
-  minimumOCamlVersion = "4.06";
+  minimalOCamlVersion = "4.06";
 
   # necessary due to cstruct
   useDune2 = true;

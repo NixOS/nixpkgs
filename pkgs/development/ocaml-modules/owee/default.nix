@@ -1,7 +1,7 @@
 { lib, buildDunePackage, fetchFromGitHub }:
 
 buildDunePackage rec {
-  minimumOCamlVersion = "4.06";
+  minimalOCamlVersion = "4.06";
   pname = "owee";
   version = "0.3";
 

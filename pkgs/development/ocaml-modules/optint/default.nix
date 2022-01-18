@@ -1,7 +1,7 @@
 { lib, buildDunePackage, fetchurl }:
 
 buildDunePackage rec {
-  minimumOCamlVersion = "4.07";
+  minimalOCamlVersion = "4.07";
   version = "0.1.0";
   pname = "optint";
   src = fetchurl {

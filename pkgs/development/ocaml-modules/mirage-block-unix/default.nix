@@ -13,7 +13,7 @@ buildDunePackage rec {
     sha256 = "4fc0ccea3c06c654e149c0f0e1c2a6f19be4e3fe1afd293c6a0dba1b56b3b8c4";
   };
 
-  minimumOCamlVersion = "4.06";
+  minimalOCamlVersion = "4.06";
 
   propagatedBuildInputs = [ cstruct-lwt logs mirage-block rresult uri ];
 

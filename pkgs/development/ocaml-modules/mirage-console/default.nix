@@ -6,7 +6,7 @@ buildDunePackage rec {
   pname = "mirage-console";
   version = "4.0.0";
 
-  minimumOCamlVersion = "4.08";
+  minimalOCamlVersion = "4.08";
 
   useDune2 = true;
 

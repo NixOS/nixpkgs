@@ -4,7 +4,7 @@ buildDunePackage rec {
   pname = "re";
   version = "1.9.0";
 
-  minimumOCamlVersion = "4.02";
+  minimalOCamlVersion = "4.02";
 
   useDune2 = lib.versionAtLeast ocaml.version "4.08";
 

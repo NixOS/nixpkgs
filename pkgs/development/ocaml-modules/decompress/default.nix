@@ -7,7 +7,7 @@ buildDunePackage rec {
   version = "1.4.2";
   pname = "decompress";
 
-  minimumOCamlVersion = "4.07";
+  minimalOCamlVersion = "4.07";
 
   useDune2 = true;
 

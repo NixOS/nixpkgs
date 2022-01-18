@@ -6,7 +6,7 @@ buildDunePackage rec {
 
   useDune2 = true;
 
-  minimumOCamlVersion = "4.02";
+  minimalOCamlVersion = "4.02";
 
   src = fetchurl {
     url = "https://github.com/ahrefs/atd/releases/download/2.2.1/atd-2.2.1.tbz";

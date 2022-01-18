@@ -8,7 +8,7 @@ buildDunePackage rec {
   version = "4.0.2";
   useDune2 = true;
 
-  minimumOCamlVersion = "4.03";
+  minimalOCamlVersion = "4.03";
 
   src = fetchurl {
     url = "https://github.com/mirage/ocaml-conduit/releases/download/v${version}/conduit-v${version}.tbz";

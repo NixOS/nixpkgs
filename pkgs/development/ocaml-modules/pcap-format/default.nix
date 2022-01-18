@@ -7,7 +7,7 @@ buildDunePackage rec {
   pname = "pcap-format";
   version = "0.5.2";
 
-  minimumOCamlVersion = "4.03";
+  minimalOCamlVersion = "4.03";
 
   # due to cstruct
   useDune2 = true;

@@ -10,7 +10,7 @@ buildDunePackage rec {
   pname = "git";
   version = "3.5.0";
 
-  minimumOCamlVersion = "4.08";
+  minimalOCamlVersion = "4.08";
   useDune2 = true;
 
   src = fetchurl {

@@ -5,7 +5,7 @@ buildDunePackage {
 
   inherit (posix-base) version src useDune2;
 
-  minimumOCamlVersion = "4.03";
+  minimalOCamlVersion = "4.03";
 
   propagatedBuildInputs = [ posix-base ];
 

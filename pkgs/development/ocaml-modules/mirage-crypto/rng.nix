@@ -4,7 +4,7 @@
 buildDunePackage {
   pname = "mirage-crypto-rng";
 
-  inherit (mirage-crypto) version src useDune2 minimumOCamlVersion;
+  inherit (mirage-crypto) version src useDune2 minimalOCamlVersion;
 
   doCheck = true;
   checkInputs = [ ounit randomconv ];

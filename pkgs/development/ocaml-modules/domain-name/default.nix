@@ -14,7 +14,7 @@ buildDunePackage rec {
     sha256 = "12kc9p2a2fi1ipc2hyhbzivxpph3npglxwdgvhd6v20rqqdyvnad";
   };
 
-  minimumOCamlVersion = "4.03";
+  minimalOCamlVersion = "4.03";
 
   checkInputs = [ alcotest ];
 

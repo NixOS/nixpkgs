@@ -14,7 +14,7 @@ buildDunePackage {
   pname = "cooltt";
   version = "unstable-2021-05-25";
 
-  minimumOCamlVersion = "4.10";
+  minimalOCamlVersion = "4.10";
 
   useDune2 = true;
 

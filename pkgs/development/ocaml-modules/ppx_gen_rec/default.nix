@@ -9,7 +9,7 @@ buildDunePackage rec {
     sha256 = "sha256-/mMj5UT22KQGVy1sjgEoOgPzyCYyeDPtWJYNDvQ9nlk=";
   };
 
-  minimumOCamlVersion = "4.07";
+  minimalOCamlVersion = "4.07";
   useDune2 = true;
 
   buildInputs = [ ppxlib ];

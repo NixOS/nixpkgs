@@ -6,7 +6,7 @@ buildDunePackage rec {
 
   useDune2 = lib.versionAtLeast ocaml.version "4.08";
 
-  minimumOCamlVersion = "4.02";
+  minimalOCamlVersion = "4.02";
 
   src = fetchFromGitHub {
     owner = "diml";

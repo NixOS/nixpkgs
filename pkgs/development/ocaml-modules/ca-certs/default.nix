@@ -7,7 +7,7 @@ buildDunePackage rec {
   pname = "ca-certs";
   version = "0.2.1";
 
-  minimumOCamlVersion = "4.07";
+  minimalOCamlVersion = "4.07";
 
   src = fetchurl {
     url = "https://github.com/mirage/ca-certs/releases/download/v${version}/ca-certs-v${version}.tbz";

@@ -9,7 +9,7 @@ buildDunePackage rec {
 
   useDune2 = true;
 
-  minimumOCamlVersion = "4.08";
+  minimalOCamlVersion = "4.08";
 
   src = fetchurl {
     url = "https://github.com/mirage/ocaml-cohttp/releases/download/v${version}/cohttp-v${version}.tbz";

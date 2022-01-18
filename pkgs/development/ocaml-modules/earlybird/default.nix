@@ -12,7 +12,7 @@ buildDunePackage rec {
 
   useDune2 = true;
 
-  minimumOCamlVersion = "4.11";
+  minimalOCamlVersion = "4.11";
 
   src = fetchurl {
     url = "https://github.com/hackwaly/ocamlearlybird/releases/download/${version}/${pname}-${version}.tbz";

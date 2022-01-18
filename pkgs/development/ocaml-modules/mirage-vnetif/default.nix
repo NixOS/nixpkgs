@@ -8,7 +8,7 @@ buildDunePackage rec {
   pname = "mirage-vnetif";
   version = "0.5.0";
 
-  minimumOCamlVersion = "4.06";
+  minimalOCamlVersion = "4.06";
 
   # due to cstruct
   useDune2 = true;

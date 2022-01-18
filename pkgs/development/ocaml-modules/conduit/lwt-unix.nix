@@ -5,7 +5,7 @@
 
 buildDunePackage {
   pname = "conduit-lwt-unix";
-  inherit (conduit-lwt) version src minimumOCamlVersion useDune2;
+  inherit (conduit-lwt) version src minimalOCamlVersion useDune2;
 
   buildInputs = [ ppx_sexp_conv ];
 

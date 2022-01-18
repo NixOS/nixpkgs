@@ -4,7 +4,7 @@
 }:
 
 buildDunePackage rec {
-  minimumOCamlVersion = "4.08";
+  minimalOCamlVersion = "4.08";
 
   pname = "mirage-crypto";
   version = "0.10.5";

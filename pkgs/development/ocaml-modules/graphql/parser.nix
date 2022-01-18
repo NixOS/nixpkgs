@@ -6,7 +6,7 @@ buildDunePackage rec {
 
   useDune2 = true;
 
-  minimumOCamlVersion = "4.03";
+  minimalOCamlVersion = "4.03";
 
   src = fetchurl {
     url = "https://github.com/andreas/ocaml-graphql-server/releases/download/${version}/graphql-${version}.tbz";
