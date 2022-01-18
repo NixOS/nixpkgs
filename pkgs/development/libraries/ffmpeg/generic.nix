@@ -50,9 +50,11 @@ let
 
   cmpVer = builtins.compareVersions;
   reqMin = requiredVersion: (cmpVer requiredVersion branch != 1);
+  reqMax = requiredVersion: (cmpVer requiredVersion branch != -1);
   reqMatch = requiredVersion: (cmpVer requiredVersion branch == 0);
 
   ifMinVer = minVer: flag: if reqMin minVer then flag else null;
+  ifMaxVer = maxVer: flag: if reqMax maxVer then flag else null;
 
   # Version specific fix
   verFix = withoutFix: fixVer: withFix: if reqMatch fixVer then withFix else withoutFix;
@@ -121,7 +123,7 @@ stdenv.mkDerivation rec {
       (ifMinVer "0.6" "--enable-avdevice")
       "--enable-avfilter"
       (ifMinVer "0.6" "--enable-avformat")
-      (ifMinVer "1.0" "--enable-avresample")
+      (ifMinVer "1.0" (ifMaxVer "4.4" "--enable-avresample"))
       (ifMinVer "1.1" "--enable-avutil")
       "--enable-postproc"
       (ifMinVer "0.9" "--enable-swresample")
