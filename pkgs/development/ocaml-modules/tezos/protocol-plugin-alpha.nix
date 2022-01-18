@@ -1,21 +1,21 @@
 { lib
 , buildDunePackage
 , tezos-stdlib
-, tezos-protocol-compiler
+, tezos-protocol-alpha
 }:
 
 buildDunePackage {
-  pname = "tezos-protocol-010-PtGRANAD";
+  pname = "tezos-protocol-plugin-alpha";
   inherit (tezos-stdlib) version useDune2;
   src = "${tezos-stdlib.base_src}/src";
 
-  buildInputs = [
-    tezos-protocol-compiler
+  propagatedBuildInputs = [
+    tezos-protocol-alpha
   ];
 
   doCheck = true;
 
   meta = tezos-stdlib.meta // {
-    description = "Tezos/Protocol: economic-protocol definition";
+    description = "Tezos/Protocol: protocol plugin";
   };
 }

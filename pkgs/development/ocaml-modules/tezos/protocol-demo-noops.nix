@@ -5,17 +5,17 @@
 }:
 
 buildDunePackage {
-  pname = "tezos-protocol-010-PtGRANAD";
+  pname = "tezos-protocol-demo-noops";
   inherit (tezos-stdlib) version useDune2;
-  src = "${tezos-stdlib.base_src}/src";
+  src = "${tezos-stdlib.base_src}/src/";
 
-  buildInputs = [
+  propagatedBuildInputs = [
     tezos-protocol-compiler
   ];
 
   doCheck = true;
 
   meta = tezos-stdlib.meta // {
-    description = "Tezos/Protocol: economic-protocol definition";
+    description = "Tezos/Protocol: demo_noops economic-protocol definition";
   };
 }

@@ -1,23 +1,23 @@
 { lib
 , buildDunePackage
 , tezos-stdlib
-, tezos-protocol-010-PtGRANAD
+, tezos-protocol-demo-noops
 , tezos-protocol-updater
 }:
 
 buildDunePackage {
-  pname = "tezos-embedded-protocol-010-PtGRANAD";
+  pname = "tezos-embedded-protocol-demo-noops";
   inherit (tezos-stdlib) version useDune2;
   src = "${tezos-stdlib.base_src}/src";
 
   propagatedBuildInputs = [
-    tezos-protocol-010-PtGRANAD
+    tezos-protocol-demo-noops
     tezos-protocol-updater
   ];
 
   doCheck = true;
 
   meta = tezos-stdlib.meta // {
-    description = "Tezos/Protocol: economic-protocol definition, embedded in `tezos-node`";
+    description = "Tezos/Protocol: demo_noops (economic-protocol definition, embedded in `tezos-node`)";
   };
 }
