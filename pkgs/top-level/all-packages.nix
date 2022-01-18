@@ -27472,6 +27472,8 @@ with pkgs;
 
   pijuice = with python3Packages; toPythonApplication pijuice;
 
+  pinegrow = callPackage ../applications/editors/pinegrow { };
+
   ping = callPackage ../applications/networking/ping { };
 
   piper = callPackage ../os-specific/linux/piper { };
