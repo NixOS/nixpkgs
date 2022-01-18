@@ -1117,6 +1117,8 @@ with pkgs;
   mcaimi-st = callPackage ../applications/terminal-emulators/st/mcaimi-st.nix { };
   siduck76-st = callPackage ../applications/terminal-emulators/st/siduck76-st.nix { };
 
+  snowflake = callPackage ../tools/networking/snowflake { };
+
   stupidterm = callPackage ../applications/terminal-emulators/stupidterm {
     gtk = gtk3;
   };
