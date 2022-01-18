@@ -121,6 +121,29 @@ in {
 
           compiledConfig = printf "xmonad-%s-%s" arch os
 
+          myConfig = defaultConfig
+            { modMask = mod4Mask -- Use Super instead of Alt
+            , terminal = "urxvt" }
+            `additionalKeys`
+            [ ( (mod4Mask,xK_r), compileRestart True)
+            , ( (mod4Mask,xK_q), restart "xmonad" True ) ]
+
+          --------------------------------------------
+          {- version 0.17.0 -}
+          --------------------------------------------
+          -- compileRestart resume =
+          --   dirs <- io getDirectories
+          --   whenX (recompile dirs True) $
+          --     when resume writeStateToFile
+          --       *> catchIO
+          --         ( do
+          --             args <- getArgs
+          --             executeFile (cacheDir dirs </> compiledConfig) False args Nothing
+          --         )
+          --
+          -- main = getDirectories >>= launch myConfig
+          --------------------------------------------
+
           compileRestart resume =
             whenX (recompile True) $
               when resume writeStateToFile
@@ -131,12 +154,7 @@ in {
                       executeFile (dir </> compiledConfig) False args Nothing
                   )
 
-          main = launch defaultConfig
-              { modMask = mod4Mask -- Use Super instead of Alt
-              , terminal = "urxvt" }
-              `additionalKeys`
-              [ ( (mod4Mask,xK_r), compileRestart True)
-              , ( (mod4Mask,xK_q), restart "xmonad" True ) ]
+          main = launch myConfig
         '';
       };
 
