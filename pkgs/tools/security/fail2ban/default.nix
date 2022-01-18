@@ -20,10 +20,11 @@ python3.pkgs.buildPythonApplication rec {
     ];
 
   patches = [
+    # remove references to use_2to3, for setuptools>=58
+    # has been merged into master, remove next release
     (fetchpatch {
       url = "https://github.com/fail2ban/fail2ban/commit/5ac303df8a171f748330d4c645ccbf1c2c7f3497.patch";
-      sha256 = "sha256-aozQJHwPcJTe/D/PLQzBk1YH3OAP6Qm7wO7cai5CVYI=
-";
+      sha256 = "sha256-aozQJHwPcJTe/D/PLQzBk1YH3OAP6Qm7wO7cai5CVYI=";
     })
   ];
 
