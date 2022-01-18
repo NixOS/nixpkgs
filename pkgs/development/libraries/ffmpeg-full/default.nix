@@ -100,6 +100,7 @@
 , libxcbshapeExtlib ? true # X11 grabbing shape rendering
 , libXv ? null # Xlib support
 , libXext ? null # Xlib support
+, libxml2 ? null
 , xz ? null # xz-utils
 , nvenc ? !stdenv.isDarwin && !stdenv.isAarch64, nv-codec-headers ? null # NVIDIA NVENC support
 , openal ? null # OpenAL 1.1 capture support
@@ -375,6 +376,7 @@ stdenv.mkDerivation rec {
     (enableFeature libxcbshmExtlib "libxcb-shm")
     (enableFeature libxcbxfixesExtlib "libxcb-xfixes")
     (enableFeature libxcbshapeExtlib "libxcb-shape")
+    (enableFeature (libxml2 != null) "libxml2")
     (enableFeature (xz != null) "lzma")
     (enableFeature nvenc "nvenc")
     (enableFeature (openal != null) "openal")
