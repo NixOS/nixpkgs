@@ -2,11 +2,11 @@
 stdenv.mkDerivation rec {
   pname = "h2";
 
-  version = "1.4.199";
+  version = "2.1.210";
 
   src = fetchzip {
-    url = "https://h2database.com/h2-2019-03-13.zip";
-    sha256 = "0pdvbnx7nqfqs7x1zkwz2q34331l55jknpk6arf6dksvnd71hinj";
+    url = "https://github.com/h2database/h2database/releases/download/version-2.1.210/h2-2022-01-17.zip";
+    sha256 = "0zcjblhjj98dsj954ia3by9vx5w7mix1dzi85jnvp18kxmbldmf4";
   };
 
   nativeBuildInputs = [ makeWrapper ];
