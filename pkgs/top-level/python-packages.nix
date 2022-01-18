@@ -8839,6 +8839,8 @@ in {
 
   sentinel = callPackage ../development/python-modules/sentinel { };
 
+  sentinels = callPackage ../development/python-modules/sentinels { };
+
   sentry-sdk = callPackage ../development/python-modules/sentry-sdk { };
 
   sepaxml = callPackage ../development/python-modules/sepaxml { };
