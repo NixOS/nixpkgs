@@ -9848,6 +9848,8 @@ with pkgs;
 
   sourcehut = callPackage ../applications/version-management/sourcehut { };
 
+  hut = callPackage ../applications/version-management/hut { };
+
   sshfs-fuse = callPackage ../tools/filesystems/sshfs-fuse { };
   sshfs = sshfs-fuse; # added 2017-08-14
 
