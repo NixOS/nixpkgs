@@ -30,7 +30,7 @@ let
 
     options.openssh.authorizedKeys = {
       keys = mkOption {
-        type = types.listOf types.str;
+        type = types.listOf types.singleLineStr;
         default = [];
         description = ''
           A list of verbatim OpenSSH public keys that should be added to the

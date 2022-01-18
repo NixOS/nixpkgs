@@ -300,6 +300,13 @@ rec {
       inherit (str) merge;
     };
 
+    singleLineStr = mkOptionType {
+      name = "singleLineStr";
+      description = "string that doesn't contain '\\n'";
+      check = x: str.check x && !(lib.hasInfix "\n" x);
+      inherit (str) merge;
+    };
+
     strMatching = pattern: mkOptionType {
       name = "strMatching ${escapeNixString pattern}";
       description = "string matching the pattern ${pattern}";
