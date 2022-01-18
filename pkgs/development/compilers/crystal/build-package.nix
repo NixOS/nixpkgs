@@ -77,7 +77,7 @@ stdenv.mkDerivation (mkDerivationArgs // {
     '')
     crystalBinaries)
   ++ lib.optional (format == "shards")
-    "shards build --local --production ${lib.concatStringsSep " " defaultOptions}"
+    "shards build --local --production ${lib.concatStringsSep " " (args.options or defaultOptions)}"
   ++ [ "runHook postBuild" ]));
 
   installPhase = args.installPhase or (lib.concatStringsSep "\n" ([
