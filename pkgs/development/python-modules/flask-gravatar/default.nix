@@ -16,7 +16,6 @@ buildPythonPackage rec {
     sha256 = "YGZfMcLGEokdto/4Aek+06CIHGyOw0arxk0qmSP1YuE=";
   };
 
-
   postPatch = ''
     sed -i setup.py \
      -e "s|tests_require=tests_require,||g" \
