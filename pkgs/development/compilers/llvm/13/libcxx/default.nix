@@ -61,6 +61,12 @@ stdenv.mkDerivation rec {
     popd
   '';
 
+  # https://github.com/NixOS/nixpkgs/issues/155458
+  postFixup = ''
+    find "''${!outputInclude}/include/c++/v1" -type f \
+      -exec sed -i {} -e "s|^#include <version>$|#include \"''${!outputInclude}/include/c++/v1/version\"|" \;
+  '';
+
   passthru = {
     isLLVM = true;
   };
