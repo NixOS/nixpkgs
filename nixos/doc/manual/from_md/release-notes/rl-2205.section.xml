@@ -592,6 +592,17 @@
           </listitem>
         </itemizedlist>
       </listitem>
+      <listitem>
+        <para>
+          Renamed option
+          <literal>services.openssh.challengeResponseAuthentication</literal>
+          to
+          <literal>services.openssh.kbdInteractiveAuthentication</literal>.
+          Reason is that the old name has been deprecated upstream.
+          Using the old option name will still work, but produce a
+          warning.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>
