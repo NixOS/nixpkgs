@@ -29,7 +29,16 @@ buildGoModule rec {
     "-X github.com/timescale/promscale/pkg/version.CommitHash=${src.rev}"
   ];
 
-  doCheck = false; # Requires access to a docker daemon
+  checkPhase = ''
+    runHook preCheck
+
+    # some checks requires access to a docker daemon
+    for pkg in $(getGoDirs test | grep -Ev 'testhelpers|upgrade_tests|end_to_end_tests|util'); do
+      buildGoDir test $checkFlags "$pkg"
+    done
+
+    runHook postCheck
+  '';
 
   passthru.tests.version = testVersion {
     package = promscale;
