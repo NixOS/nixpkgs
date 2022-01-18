@@ -90,9 +90,9 @@ in {
       description = "Log driver used for nextcloud logging. Possible options: errorlog, file, syslog or systemd (see https://docs.nextcloud.com/server/latest/admin_manual/configuration_server/logging_configuration.html).";
     };
     logFile = mkOption {
-      type = types.str;
-      default = "nextcloud.log";
-      description = "When logType is file, the file or path where the logfile should be stored. Default is nextcloud.log stored in the datadirectory.";
+      type = types.nullOr types.str;
+      default = null;
+      description = "When logType is file, the file or path where the logfile should be stored.";
     };
     https = mkOption {
       type = types.bool;
@@ -616,7 +616,7 @@ in {
               'skeletondirectory' => '${cfg.skeletonDirectory}',
               ${optionalString cfg.caching.apcu "'memcache.local' => '\\OC\\Memcache\\APCu',"}
               'log_type' => '${cfg.logType}',
-              'logfile' => '${cfg.logFile}',
+              ${optionalString cfg.logFile "'logfile' => '${cfg.logFile}',"}
               'loglevel' => '${builtins.toString cfg.logLevel}',
               ${optionalString (c.overwriteProtocol != null) "'overwriteprotocol' => '${c.overwriteProtocol}',"}
               ${optionalString (c.dbname != null) "'dbname' => '${c.dbname}',"}
