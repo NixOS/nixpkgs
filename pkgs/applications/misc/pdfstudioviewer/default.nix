@@ -17,8 +17,6 @@
 
 let
   year = "2021";
-  major = "1";
-  minor = "2";
 in stdenv.mkDerivation rec {
   pname = "pdfstudioviewer";
   version = "${year}.1.2";
