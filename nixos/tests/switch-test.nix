@@ -45,6 +45,50 @@ import ./make-test-python.nix ({ pkgs, ...} : {
           systemd.services.test.restartIfChanged = false;
         };
 
+        restart-and-reload-by-activation-script.configuration = {
+          systemd.services = rec {
+            simple-service = {
+              # No wantedBy so we can check if the activation script restart triggers them
+              serviceConfig = {
+                Type = "oneshot";
+                RemainAfterExit = true;
+                ExecStart = "${pkgs.coreutils}/bin/true";
+                ExecReload = "${pkgs.coreutils}/bin/true";
+              };
+            };
+
+            simple-restart-service = simple-service // {
+              stopIfChanged = false;
+            };
+
+            simple-reload-service = simple-service // {
+              reloadIfChanged = true;
+            };
+
+            no-restart-service = simple-service // {
+              restartIfChanged = false;
+            };
+          };
+
+          system.activationScripts.restart-and-reload-test = {
+            supportsDryActivation = true;
+            deps = [];
+            text = ''
+              if [ "$NIXOS_ACTION" = dry-activate ]; then
+                f=/run/nixos/dry-activation-restart-list
+              else
+                f=/run/nixos/activation-restart-list
+              fi
+              cat <<EOF >> "$f"
+              simple-service.service
+              simple-restart-service.service
+              simple-reload-service.service
+              no-restart-service.service
+              EOF
+            '';
+          };
+        };
+
         mount.configuration = {
           systemd.mounts = [
             {
@@ -260,6 +304,32 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         assert_lacks(out, "the following new units were started:")
         assert_lacks(out, "as well:")
         assert_contains(out, "would start the following units: test.service\n")
+
+    with subtest("restart and reload by activation script"):
+        out = switch_to_specialisation("${machine}", "restart-and-reload-by-activation-script")
+        assert_contains(out, "stopping the following units: test.service\n")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_lacks(out, "reloading the following units:")
+        assert_lacks(out, "restarting the following units:")
+        assert_contains(out, "\nstarting the following units: no-restart-service.service, simple-reload-service.service, simple-restart-service.service, simple-service.service\n")
+        assert_lacks(out, "as well:")
+        # Switch to the same system where the example services get restarted
+        # by the activation script
+        out = switch_to_specialisation("${machine}", "restart-and-reload-by-activation-script")
+        assert_lacks(out, "stopping the following units:")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_contains(out, "reloading the following units: simple-reload-service.service\n")
+        assert_contains(out, "restarting the following units: simple-restart-service.service, simple-service.service\n")
+        assert_lacks(out, "\nstarting the following units:")
+        assert_lacks(out, "as well:")
+        # The same, but in dry mode
+        out = switch_to_specialisation("${machine}", "restart-and-reload-by-activation-script", action="dry-activate")
+        assert_lacks(out, "would stop the following units:")
+        assert_lacks(out, "would NOT stop the following changed units:")
+        assert_contains(out, "would reload the following units: simple-reload-service.service\n")
+        assert_contains(out, "would restart the following units: simple-restart-service.service, simple-service.service\n")
+        assert_lacks(out, "\nwould start the following units:")
+        assert_lacks(out, "as well:")
 
     with subtest("mounts"):
         switch_to_specialisation("${machine}", "mount")

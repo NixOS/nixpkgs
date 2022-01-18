@@ -24,6 +24,7 @@
 , libnotify
 , xdg-utils
 , mesa
+, libappindicator-gtk3
 }:
 
 # Helper function for building a derivation for Franz and forks.
@@ -68,7 +69,7 @@ stdenv.mkDerivation rec {
     expat
     stdenv.cc.cc
   ];
-  runtimeDependencies = [ stdenv.cc.cc.lib (lib.getLib udev) libnotify ];
+  runtimeDependencies = [ stdenv.cc.cc.lib (lib.getLib udev) libnotify libappindicator-gtk3 ];
 
   unpackPhase = "dpkg-deb -x $src .";
 
