@@ -2078,8 +2078,6 @@ in {
 
   deluge-client = callPackage ../development/python-modules/deluge-client { };
 
-  demjson = callPackage ../development/python-modules/demjson { };
-
   demjson3 = callPackage ../development/python-modules/demjson3 { };
 
   dendropy = callPackage ../development/python-modules/dendropy { };

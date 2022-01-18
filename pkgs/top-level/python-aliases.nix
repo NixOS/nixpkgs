@@ -42,6 +42,7 @@ mapAliases ({
   ConfigArgParse = configargparse; # added 2021-03-18
   cozy = throw "cozy was removed because it was not actually https://pypi.org/project/Cozy/."; # added 2022-01-14
   dateutil = python-dateutil; # added 2021-07-03
+  demjson = throw "demjson has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2022-01-18
   detox = throw "detox is no longer maintained, and was broken since may 2019"; # added 2020-07-04
   dftfit = throw "dftfit dependency lammps-cython no longer builds"; # added 2021-07-04
   diff_cover = diff-cover; # added 2021-07-02
