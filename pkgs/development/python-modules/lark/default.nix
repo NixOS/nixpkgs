@@ -6,7 +6,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "lark-parser";
+  pname = "lark";
   version = "1.0.0";
 
   src = fetchFromGitHub {

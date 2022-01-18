@@ -4412,7 +4412,7 @@ in {
 
   language-data = callPackage ../development/python-modules/language-data { };
 
-  lark-parser = callPackage ../development/python-modules/lark-parser { };
+  lark = callPackage ../development/python-modules/lark { };
 
   latexcodec = callPackage ../development/python-modules/latexcodec { };
 
