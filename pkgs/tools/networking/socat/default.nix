@@ -16,13 +16,6 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-1HMYEEQVB3Y1EZ3+5EvPtB3jSXN0qaABsa/24vCFgAc=";
   };
 
-  patches = [
-    # This adds missing feature checks for TCP_INFO, a Linux feature
-    #
-    # Discussed in https://github.com/Homebrew/homebrew-core/pull/88595
-    ./socat-fix-feature-check-tcpinfo.patch
-  ];
-
   postPatch = ''
     patchShebangs test.sh
     substituteInPlace test.sh \
