@@ -182,7 +182,7 @@ in
       yandexdisk = 143;
       mxisd = 144; # was once collectd
       #consul = 145;# dynamically allocated as of 2021-09-03
-      mailpile = 146;
+      #mailpile = 146; # removed 2022-01-12
       redmine = 147;
       #seeks = 148; # removed 2020-06-21
       prosody = 149;
@@ -353,6 +353,7 @@ in
       distcc = 321;
       webdav = 322;
       pipewire = 323;
+      rstudio-server = 324;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -502,7 +503,7 @@ in
       #yandexdisk = 143; # unused
       mxisd = 144; # was once collectd
       #consul = 145; # unused
-      mailpile = 146;
+      #mailpile = 146; # removed 2022-01-12
       redmine = 147;
       #seeks = 148; # removed 2020-06-21
       prosody = 149;
@@ -660,6 +661,7 @@ in
       distcc = 321;
       webdav = 322;
       pipewire = 323;
+      rstudio-server = 324;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal

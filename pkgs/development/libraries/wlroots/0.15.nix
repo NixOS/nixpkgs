@@ -2,6 +2,7 @@
 , libGL, wayland, wayland-protocols, libinput, libxkbcommon, pixman
 , xcbutilwm, libX11, libcap, xcbutilimage, xcbutilerrors, mesa
 , libpng, ffmpeg, xcbutilrenderutil, seatd, vulkan-loader, glslang
+, nixosTests
 
 , enableXWayland ? true, xwayland ? null
 }:
@@ -48,6 +49,9 @@ stdenv.mkDerivation rec {
       cp "$binary" "$examples/bin/wlroots-$binary"
     done
   '';
+
+  # Test via TinyWL (the "minimum viable product" Wayland compositor based on wlroots):
+  passthru.tests.tinywl = nixosTests.tinywl;
 
   meta = with lib; {
     description = "A modular Wayland compositor library";

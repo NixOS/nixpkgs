@@ -77,6 +77,9 @@ buildPythonPackage rec {
   disabledTests = [
     # needs the Ahem font (fails on macOS)
     "test_font_stretch"
+    # sensitive to sandbox environments
+    "test_tab_size"
+    "test_tabulation_character"
   ];
 
   FONTCONFIG_FILE = "${fontconfig.out}/etc/fonts/fonts.conf";

@@ -21,12 +21,10 @@ in {
 
         type = settingsFormat.type;
 
-        example = literalExample ''
-          {
-            secret = "mysecret";
-            storeDir = "/srv/http/nginx/prosody-upload";
-          }
-        '';
+        example = {
+          secret = "mysecret";
+          storeDir = "/srv/http/nginx/prosody-upload";
+        };
 
         defaultText = literalExpression ''
           {

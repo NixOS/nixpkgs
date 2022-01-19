@@ -29,9 +29,9 @@ let
   configFile = if (cfg.configFile != null) then cfg.configFile else configFile';
 
   preStart = ''
-    install --owner ddclient -m600 ${configFile} /run/${RuntimeDirectory}/ddclient.conf
+    install ${configFile} /run/${RuntimeDirectory}/ddclient.conf
     ${lib.optionalString (cfg.configFile == null) (if (cfg.protocol == "nsupdate") then ''
-      install --owner ddclient -m600 ${cfg.passwordFile} /run/${RuntimeDirectory}/ddclient.key
+      install ${cfg.passwordFile} /run/${RuntimeDirectory}/ddclient.key
     '' else if (cfg.passwordFile != null) then ''
       password=$(printf "%q" "$(head -n 1 "${cfg.passwordFile}")")
       sed -i "s|^password=$|password=$password|" /run/${RuntimeDirectory}/ddclient.conf

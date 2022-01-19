@@ -32,10 +32,14 @@
       </listitem>
       <listitem>
         <para>
-          Mattermost has been updated to version 6.2. Migrations may
-          take a while, see the
-          <link xlink:href="https://docs.mattermost.com/install/self-managed-changelog.html#release-v6.2-feature-release">upgrade
-          notes</link>.
+          Mattermost has been updated to extended support release 6.3,
+          as the previously packaged extended support release 5.37 is
+          <link xlink:href="https://docs.mattermost.com/upgrade/extended-support-release.html">reaching
+          its end of life</link>. Migrations may take a while, see the
+          <link xlink:href="https://docs.mattermost.com/install/self-managed-changelog.html#release-v6-3-extended-support-release">changelog</link>
+          and
+          <link xlink:href="https://docs.mattermost.com/upgrade/important-upgrade-notes.html">important
+          upgrade notes</link>.
         </para>
       </listitem>
     </itemizedlist>
@@ -88,6 +92,13 @@
           <link xlink:href="https://github.com/hifi/heisenbridge">heisenbridge</link>,
           a bouncer-style Matrix IRC bridge. Available as
           <link xlink:href="options.html#opt-services.heisenbridge.enable">services.heisenbridge</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://ergo.chat">ergochat</link>, a modern
+          IRC with IRCv3 features. Available as
+          <link xlink:href="options.html#opt-services.ergochat.enable">services.ergochat</link>.
         </para>
       </listitem>
       <listitem>
@@ -150,6 +161,22 @@
           <link linkend="opt-services.prosody-filer.enable">services.prosody-filer</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://timetagger.app">timetagger</link>,
+          an open source time-tracker with an intuitive user experience
+          and powerful reporting.
+          <link xlink:href="options.html#opt-services.timetagger.enable">services.timetagger</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://www.rstudio.com/products/rstudio/#rstudio-server">rstudio-server</link>,
+          a browser-based version of the RStudio IDE for the R
+          programming language. Available as
+          <link xlink:href="options.html#opt-services.rstudio-server.enable">services.rstudio-server</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.05-incompatibilities">
@@ -195,6 +222,13 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>mailpile</literal> email webclient
+          (<literal>services.mailpile</literal>) has been removed due to
+          its reliance on python2.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The MoinMoin wiki engine
           (<literal>services.moinmoin</literal>) has been removed,
           because Python 2 is being retired from nixpkgs.
@@ -235,6 +269,14 @@
           <literal>/etc/docker/daemon.json</literal>, you need to
           incorporate the changes into the new option
           <literal>virtualisation.docker.daemon.settings</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The backward compatibility in
+          <literal>services.dokuwiki</literal> to configure sites with
+          the old interface has been removed. Please use
+          <literal>services.dokuwiki.sites</literal> instead.
         </para>
       </listitem>
       <listitem>
@@ -311,6 +353,73 @@
           unmaintained
         </para>
       </listitem>
+      <listitem>
+        <para>
+          MultiMC has been replaced with the fork PolyMC due to upstream
+          developers being hostile to 3rd party package maintainers.
+          PolyMC removes all MultiMC branding and is aimed at providing
+          proper 3rd party packages like the one contained in Nixpkgs.
+          This change affects the data folder where game instances and
+          other save and configuration files are stored. Users with
+          existing installations should rename
+          <literal>~/.local/share/multimc</literal> to
+          <literal>~/.local/share/polymc</literal>. The main config
+          file’s path has also moved from
+          <literal>~/.local/share/multimc/multimc.cfg</literal> to
+          <literal>~/.local/share/polymc/polymc.cfg</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>pkgs.noto-fonts-cjk</literal> is now deprecated in
+          favor of <literal>pkgs.noto-fonts-cjk-sans</literal> and
+          <literal>pkgs.noto-fonts-cjk-serif</literal> because they each
+          have different release schedules. To maintain compatibility
+          with prior releases of Nixpkgs,
+          <literal>pkgs.noto-fonts-cjk</literal> is currently an alias
+          of <literal>pkgs.noto-fonts-cjk-sans</literal> and doesn’t
+          include serif fonts.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The interface that allows activation scripts to restart units
+          has been reworked. Restarting and reloading is now done by a
+          single file
+          <literal>/run/nixos/activation-restart-list</literal> that
+          honors <literal>restartIfChanged</literal> and
+          <literal>reloadIfChanged</literal> of the units.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>services.bookstack.cacheDir</literal> option has
+          been removed, since the cache directory is now handled by
+          systemd.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>services.bookstack.extraConfig</literal> option
+          has been replaced by
+          <literal>services.bookstack.config</literal> which implements
+          a
+          <link xlink:href="https://github.com/NixOS/rfcs/blob/master/rfcs/0042-config-option.md">settings-style</link>
+          configuration.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>lib.assertMsg</literal> and
+          <literal>lib.assertOneOf</literal> no longer return
+          <literal>false</literal> if the passed condition is
+          <literal>false</literal>, <literal>throw</literal>ing the
+          given error message instead (which makes the resulting error
+          message less cluttered). This will not impact the behaviour of
+          code using these functions as intended, namely as top-level
+          wrapper for <literal>assert</literal> conditions.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.05-notable-changes">
@@ -339,6 +448,28 @@
           are only accessible by default to the members of the Unix
           group <literal>redis-${serverName}</literal> through the Unix
           socket <literal>/run/redis-${serverName}/redis.sock</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The option
+          <link linkend="opt-virtualisation.vmVariant">virtualisation.vmVariant</link>
+          was added to allow users to make changes to the
+          <literal>nixos-rebuild build-vm</literal> configuration that
+          do not apply to their normal system.
+        </para>
+        <para>
+          The <literal>config.system.build.vm</literal> attribute now
+          always exists and defaults to the value from
+          <literal>vmVariant</literal>. Configurations that import the
+          <literal>virtualisation/qemu-vm.nix</literal> module
+          themselves will override this value, such that
+          <literal>vmVariant</literal> is not used.
+        </para>
+        <para>
+          Similarly
+          <link linkend="opt-virtualisation.vmVariantWithBootLoader">virtualisation.vmVariantWithBootloader</link>
+          was added.
         </para>
       </listitem>
       <listitem>
@@ -434,11 +565,62 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>services.mbpfan</literal> module was converted to
+          a
+          <link xlink:href="https://github.com/NixOS/rfcs/blob/master/rfcs/0042-config-option.md">RFC
+          0042</link> configuration.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           A new module was added for the
           <link xlink:href="https://starship.rs/">Starship</link> shell
           prompt, providing the options
           <literal>programs.starship.enable</literal> and
           <literal>programs.starship.settings</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>services.mattermost.plugins</literal> has been added
+          to allow the declarative installation of Mattermost plugins.
+          Plugins are automatically repackaged using autoPatchelf.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>zrepl</literal> package has been updated from
+          0.4.0 to 0.5:
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              The RPC protocol version was bumped; all zrepl daemons in
+              a setup must be updated and restarted before replication
+              can resume.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              A bug involving encrypt-on-receive has been fixed. Read
+              the
+              <link xlink:href="https://zrepl.github.io/configuration/sendrecvoptions.html#job-recv-options-placeholder">zrepl
+              documentation</link> and check the output of
+              <literal>zfs get -r encryption,zrepl:placeholder PATH_TO_ROOTFS</literal>
+              on the receiver.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+      <listitem>
+        <para>
+          Renamed option
+          <literal>services.openssh.challengeResponseAuthentication</literal>
+          to
+          <literal>services.openssh.kbdInteractiveAuthentication</literal>.
+          Reason is that the old name has been deprecated upstream.
+          Using the old option name will still work, but produce a
+          warning.
         </para>
       </listitem>
     </itemizedlist>

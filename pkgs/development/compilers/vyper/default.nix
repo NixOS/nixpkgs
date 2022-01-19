@@ -1,6 +1,6 @@
 { lib, buildPythonPackage, fetchPypi, writeText, asttokens
 , pycryptodome, pytest-xdist, pytest-cov, recommonmark, semantic-version, sphinx
-, sphinx_rtd_theme, pytest-runner }:
+, sphinx_rtd_theme, pytest-runner, setuptools-scm }:
 
 let
   sample-contract = writeText "example.vy" ''
@@ -21,15 +21,7 @@ buildPythonPackage rec {
     sha256 = "sha256-fXug5v3zstz19uexMWokHBVsfcl2ZCdIOIXKeLVyh/Q=";
   };
 
-  nativeBuildInputs = [ pytest-runner ];
-
-  # Replace the dynamic commit hash lookup with the hash from the tag
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace 'asttokens==' 'asttokens>=' \
-      --replace 'subprocess.check_output("git rev-parse HEAD".split())' "' '" \
-      --replace 'commithash.decode("utf-8").strip()' "'6e7dba7a8b5f29762d3470da4f44634b819c808d'"
-  '';
+  nativeBuildInputs = [ pytest-runner setuptools-scm ];
 
   propagatedBuildInputs = [
     asttokens

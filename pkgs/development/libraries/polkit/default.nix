@@ -25,6 +25,8 @@
 , elogind
 # needed until gobject-introspection does cross-compile (https://github.com/NixOS/nixpkgs/pull/88222)
 , withIntrospection ? (stdenv.buildPlatform == stdenv.hostPlatform)
+# cross build fails on polkit-1-scan (https://github.com/NixOS/nixpkgs/pull/152704)
+, withGtkDoc ? (stdenv.buildPlatform == stdenv.hostPlatform)
 # A few tests currently fail on musl (polkitunixusertest, polkitunixgrouptest, polkitidentitytest segfault).
 # Not yet investigated; it may be due to the "Make netgroup support optional"
 # patch not updating the tests correctly yet, or doing something wrong,
@@ -119,7 +121,7 @@ stdenv.mkDerivation rec {
     "-Dos_type=redhat" # only affects PAM includes
     "-Dintrospection=${lib.boolToString withIntrospection}"
     "-Dtests=${lib.boolToString doCheck}"
-    "-Dgtk_doc=${lib.boolToString true}"
+    "-Dgtk_doc=${lib.boolToString withGtkDoc}"
     "-Dman=true"
   ] ++ lib.optionals stdenv.isLinux [
     "-Dsession_tracking=${if useSystemd then "libsystemd-login" else "libelogind"}"

@@ -26,10 +26,16 @@ stdenv.mkDerivation rec {
     "--pkg-config"
     "--shared"
     "--with-fenced-code"
+    # Use deterministic mangling
+    "--debian-glitch"
   ];
 
   enableParallelBuilding = true;
   doCheck = true;
+
+  postFixup = lib.optionalString stdenv.isDarwin ''
+    install_name_tool -id $out/lib/libmarkdown.dylib $out/lib/libmarkdown.dylib
+  '';
 
   meta = with lib; {
     description = "Implementation of Markdown markup language in C";

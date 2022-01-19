@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitLab
+, fetchpatch
 , nix-update-script
 , # base build deps
   meson
@@ -26,7 +27,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "wireplumber";
-  version = "0.4.6";
+  version = "0.4.7";
 
   outputs = [ "out" "dev" ] ++ lib.optional enableDocs "doc";
 
@@ -35,8 +36,17 @@ stdenv.mkDerivation rec {
     owner = "pipewire";
     repo = "wireplumber";
     rev = version;
-    sha256 = "sha256-y+Gj9EZn67W3U81zXgp+6JAFxZSZTwwT0TB3Kueb/Tw=";
+    sha256 = "sha256-yp4xtp+s+h+43LGVtYonoJ2tQaLRfwyMY4fp8z1l0CM=";
   };
+
+  patches = [
+    # backport a fix for default device selection
+    # FIXME remove this after 0.4.8
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/pipewire/wireplumber/-/commit/211f1e6b6cd4898121e4c2b821fae4dea6cc3317.patch";
+      sha256 = "sha256-EGcbJ8Rq/5ft6SV0VC+mTkhVE7Ycze4TL6AVc9KH7+M=";
+    })
+  ];
 
   nativeBuildInputs = [
     meson

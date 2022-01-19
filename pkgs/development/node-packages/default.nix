@@ -1,4 +1,4 @@
-{ pkgs, nodejs, stdenv, applyPatches, fetchFromGitHub, fetchpatch, fetchurl }:
+{ pkgs, nodejs, stdenv, applyPatches, fetchFromGitHub, fetchpatch, fetchurl, nixosTests }:
 
 let
   inherit (pkgs) lib;
@@ -442,6 +442,8 @@ let
         echo /var/lib/thelounge > $out/lib/node_modules/thelounge/.thelounge_home
         patch -d $out/lib/node_modules/thelounge -p1 < ${./thelounge-packages-path.patch}
       '';
+      passthru.tests = { inherit (nixosTests) thelounge; };
+      meta = super.thelounge.meta // { maintainers = with lib.maintainers; [ winter ]; };
     };
 
     yaml-language-server = super.yaml-language-server.override {

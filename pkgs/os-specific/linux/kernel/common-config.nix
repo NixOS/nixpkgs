@@ -462,6 +462,9 @@ let
       SECURITY_SELINUX_BOOTPARAM_VALUE = whenOlder "5.1" (freeform "0"); # Disable SELinux by default
       # Prevent processes from ptracing non-children processes
       SECURITY_YAMA                    = option yes;
+      # The goal of Landlock is to enable to restrict ambient rights (e.g. global filesystem access) for a set of processes.
+      # This does not have any effect if a program does not support it
+      SECURITY_LANDLOCK                = whenAtLeast "5.13" yes;
       DEVKMEM                          = whenOlder "5.13" no; # Disable /dev/kmem
 
       USER_NS                          = yes; # Support for user namespaces
@@ -539,6 +542,7 @@ let
       UPROBE_EVENT          = { optional = true; tristate = whenOlder "4.11" "y";};
       UPROBE_EVENTS         = { optional = true; tristate = whenAtLeast "4.11" "y";};
       BPF_SYSCALL           = whenAtLeast "4.4" yes;
+      BPF_UNPRIV_DEFAULT_OFF = whenBetween "5.10" "5.15" yes;
       BPF_EVENTS            = whenAtLeast "4.4" yes;
       FUNCTION_PROFILER     = yes;
       RING_BUFFER_BENCHMARK = no;

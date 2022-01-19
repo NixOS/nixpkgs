@@ -73,7 +73,6 @@ stdenv.mkDerivation rec {
     callaudiod
     gtk3
     libpeas
-    libgdata # required by some dependency transitively
     sofia_sip
   ];
 

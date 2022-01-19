@@ -1,6 +1,8 @@
 { lib
 , buildPythonPackage
+, pythonAtLeast
 , pythonOlder
+, fetchpatch
 , fetchPypi
 , setuptools-scm
 , toml
@@ -21,6 +23,14 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "sha256-stOxYEfKroLlxZADaTW6+htiHPRcLziIWvS+SDjw/QA=";
   };
+
+  patches = lib.optionals (pythonAtLeast "3.10") [
+    # fix tests for python3.10
+    (fetchpatch {
+      url = "https://github.com/jaraco/cssutils/pull/17/commits/355b1795dde77bd4b49d8df35377230fdb503802.patch";
+      sha256 = "sha256-hwe8oeZO2rq00cs079lje3wjQDEczAu3Tfy/X/M9+GQ=";
+    })
+  ];
 
   nativeBuildInputs = [
     setuptools-scm
