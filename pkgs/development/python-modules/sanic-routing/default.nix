@@ -17,6 +17,12 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytestCheckHook pytest-asyncio ];
+
+  disabledTests = [
+    # sanic_routing/route.py:333: DeprecationWarning: Use of 'number' as a path parameter type is deprected, and will be removed in Sanic v21.12. Instead, use <number:float>.
+    "test_casting"
+  ];
+
   pythonImportsCheck = [ "sanic_routing" ];
 
   meta = with lib; {
