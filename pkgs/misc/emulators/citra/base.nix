@@ -7,7 +7,7 @@
 , fdkSupport       ? true,                                fdk_aac
 , jackaudioSupport ? true,                                libjack2
 , onlineSupport    ? true
-, pulseSupport     ? config.pulseaudio or stdenv.isLinux, libpulseaudio
+, pulseSupport     ? stdenv.isLinux, libpulseaudio
 , sndioSupport     ? true,                                sndio
 , udevSupport      ? stdenv.isLinux,                      udev
 }:
