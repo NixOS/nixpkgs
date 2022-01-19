@@ -70,11 +70,14 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional stdenv.isLinux libselinux;
 
   prePatch = ''
-    # Correct iproute2 path
-    sed -e 's|"/sbin/ip"|"${iproute2}/bin/ip"|' \
-        -e 's|"/sbin/iptables"|"${iptables}/bin/iptables"|' \
+    # Correct iproute2 and iptables path
+    sed -e 's|/sbin/ip|${iproute2}/bin/ip|' \
+        -e 's|/sbin/\(ip6\?tables\)|${iptables}/bin/\1|' \
         -i initsystems/systemd/ipsec.service.in \
+           programs/barf/barf.in \
            programs/verify/verify.in
+    sed -e 's|\([[:blank:]]\)\(ip6\?tables\(-save\)\? -\)|\1${iptables}/bin/\2|' \
+        -i programs/verify/verify.in
 
     # Prevent the makefile from trying to
     # reload the systemd daemon or create tmpfiles
