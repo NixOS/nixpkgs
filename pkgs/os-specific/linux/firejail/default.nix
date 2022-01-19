@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
   # See https://github.com/netblue30/firejail/blob/e4cb6b42743ad18bd11d07fd32b51e8576239318/src/firejail/profile.c#L68-L83
   # for the profile file lookup implementation.
   postInstall = ''
-    for local in $(grep -Eh '^include.*local$' $out/etc/firejail/*.profile | awk '{print $2}' | sort | uniq)
+    for local in $(grep -Eh '^include.*local$' $out/etc/firejail/*{.inc,.profile} | awk '{print $2}' | sort | uniq)
     do
       echo "include /etc/firejail/$local" >$out/etc/firejail/$local
     done
