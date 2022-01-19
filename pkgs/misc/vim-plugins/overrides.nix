@@ -65,8 +65,16 @@
 , gobject-introspection
 , wrapGAppsHook
 
-  # vim-clap dependencies
+  # sniprun dependencies
+, bashInteractive
+, coreutils
 , curl
+, gnugrep
+, gnused
+, makeWrapper
+, procps
+
+  # vim-clap dependencies
 , libgit2
 , libiconv
 , openssl
@@ -76,7 +84,6 @@
 , asmfmt
 , delve
 , errcheck
-, gnused
 , go-motion
 , go-tools
 , gocode
@@ -535,6 +542,43 @@ self: super: {
   skim-vim = super.skim-vim.overrideAttrs (old: {
     dependencies = with self; [ skim ];
   });
+
+  sniprun =
+    let
+      version = "1.1.2";
+      src = fetchFromGitHub {
+        owner = "michaelb";
+        repo = "sniprun";
+        rev = "v${version}";
+        sha256 = "sha256-WL0eXwiPhcndI74wtFox2tSnZn1siE86x2MLkfpxxT4=";
+      };
+      sniprun-bin = rustPlatform.buildRustPackage {
+        pname = "sniprun-bin";
+        inherit version src;
+
+        cargoSha256 = "sha256-1WbgnsjoFdvko6VRKY+IjafMNqvJvyIZCDk8I9GV3GM=";
+
+        nativeBuildInputs = [ makeWrapper ];
+
+        postInstall = ''
+          wrapProgram $out/bin/sniprun \
+            --prefix PATH ${lib.makeBinPath [ bashInteractive coreutils curl gnugrep gnused procps ]}
+        '';
+
+        doCheck = false;
+      };
+    in
+    buildVimPluginFrom2Nix {
+      pname = "sniprun";
+      inherit version src;
+
+      patches = [ ./patches/sniprun/fix-paths.patch ];
+      postPatch = ''
+        substituteInPlace lua/sniprun.lua --replace '@sniprun_bin@' ${sniprun-bin}
+      '';
+
+      propagatedBuildInputs = [ sniprun-bin ];
+    };
 
   sqlite-lua = super.sqlite-lua.overrideAttrs (old: {
     postPatch = let
