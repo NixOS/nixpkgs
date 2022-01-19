@@ -169,25 +169,13 @@ in
   ];
 
   options.services.dovecot2 = {
-    enable = mkEnableOption "Dovecot 2.x POP3/IMAP server";
+    enable = mkEnableOption "the dovecot 2.x POP3/IMAP server";
 
-    enablePop3 = mkOption {
-      type = types.bool;
-      default = false;
-      description = "Start the POP3 listener (when Dovecot is enabled).";
-    };
+    enablePop3 = mkEnableOption "starting the POP3 listener (when Dovecot is enabled).";
 
-    enableImap = mkOption {
-      type = types.bool;
-      default = true;
-      description = "Start the IMAP listener (when Dovecot is enabled).";
-    };
+    enableImap = mkEnableOption "starting the IMAP listener (when Dovecot is enabled)." // { default = true; };
 
-    enableLmtp = mkOption {
-      type = types.bool;
-      default = false;
-      description = "Start the LMTP listener (when Dovecot is enabled).";
-    };
+    enableLmtp = mkEnableOption "starting the LMTP listener (when Dovecot is enabled).";
 
     protocols = mkOption {
       type = types.listOf types.str;
@@ -279,13 +267,9 @@ in
       description = "Default group to store mail for virtual users.";
     };
 
-    createMailUser = mkOption {
-      type = types.bool;
-      default = true;
-      description = ''Whether to automatically create the user
-        given in <option>services.dovecot.user</option> and the group
-        given in <option>services.dovecot.group</option>.'';
-    };
+    createMailUser = mkEnableOption ''automatically creating the user
+      given in <option>services.dovecot.user</option> and the group
+      given in <option>services.dovecot.group</option>.'' // { default = true; };
 
     modules = mkOption {
       type = types.listOf types.package;
@@ -316,11 +300,7 @@ in
       description = "Path to the server's private key.";
     };
 
-    enablePAM = mkOption {
-      type = types.bool;
-      default = true;
-      description = "Whether to create a own Dovecot PAM service and configure PAM user logins.";
-    };
+    enablePAM = mkEnableOption "creating a own Dovecot PAM service and configure PAM user logins." // { default = true; };
 
     enableDHE = mkEnableOption "enable ssl_dh and generation of primes for the key exchange." // { default = true; };
 
@@ -330,11 +310,7 @@ in
       description = "Sieve scripts to be executed. Key is a sequence, e.g. 'before2', 'after' etc.";
     };
 
-    showPAMFailure = mkOption {
-      type = types.bool;
-      default = false;
-      description = "Show the PAM failure message on authentication error (useful for OTPW).";
-    };
+    showPAMFailure = mkEnableOption "showing the PAM failure message on authentication error (useful for OTPW).";
 
     mailboxes = mkOption {
       type = with types; coercedTo
@@ -350,12 +326,7 @@ in
       description = "Configure mailboxes and auto create or subscribe them.";
     };
 
-    enableQuota = mkOption {
-      type = types.bool;
-      default = false;
-      example = true;
-      description = "Whether to enable the dovecot quota service.";
-    };
+    enableQuota = mkEnableOption "the dovecot quota service.";
 
     quotaPort = mkOption {
       type = types.str;
