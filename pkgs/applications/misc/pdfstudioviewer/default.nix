@@ -1,23 +1,24 @@
-{ stdenv,
-  lib,
-  makeWrapper,
-  fetchurl,
-  dpkg,
-  makeDesktopItem,
-  copyDesktopItems,
-  autoPatchelfHook,
-  gst_all_1,
-  sane-backends,
-  xorg,
-  gnome2,
-  alsa-lib,
-  libgccjit,
-  jdk11
-  }:
+{ stdenv
+, lib
+, makeWrapper
+, fetchurl
+, dpkg
+, makeDesktopItem
+, copyDesktopItems
+, autoPatchelfHook
+, gst_all_1
+, sane-backends
+, xorg
+, gnome2
+, alsa-lib
+, libgccjit
+, jdk11
+}:
 
 let
   year = "2021";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "pdfstudioviewer";
   version = "${year}.1.2";
   autoPatchelfIgnoreMissingDeps = true;
@@ -42,18 +43,20 @@ in stdenv.mkDerivation rec {
     jdk11 # only for unpacking .jar.pack files
   ];
 
-  desktopItems = [(makeDesktopItem {
-    name = "${pname}${year}";
-    desktopName = "PDF Studio";
-    genericName = "View and edit PDF files";
-    exec = "${pname} %f";
-    icon = "${pname}${year}";
-    comment = "Views and edits PDF files";
-    mimeType = "application/pdf";
-    categories = "Office";
-    type = "Application";
-    terminal = false;
-  })];
+  desktopItems = [
+    (makeDesktopItem {
+      name = "${pname}${year}";
+      desktopName = "PDF Studio";
+      genericName = "View and edit PDF files";
+      exec = "${pname} %f";
+      icon = "${pname}${year}";
+      comment = "Views and edits PDF files";
+      mimeType = "application/pdf";
+      categories = "Office";
+      type = "Application";
+      terminal = false;
+    })
+  ];
 
   unpackPhase = "dpkg-deb -x $src .";
   dontConfigure = true;
