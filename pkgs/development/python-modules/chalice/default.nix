@@ -24,13 +24,13 @@
 
 buildPythonPackage rec {
   pname = "chalice";
-  version = "1.26.2";
+  version = "1.26.4";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = pname;
     rev = version;
-    sha256 = "sha256-zF7wmrJTMX0Cr3wpJECUqhH58G2SLiVoC4Z2XbblQdQ=";
+    sha256 = "sha256-Xn8OqeEihLxZS9QZtrhzau2zLg9SzQrrigK70PoImhU=";
   };
 
   propagatedBuildInputs = [
