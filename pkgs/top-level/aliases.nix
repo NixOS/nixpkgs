@@ -782,6 +782,7 @@ mapAliases ({
   pgtap = postgresqlPackages.pgtap;
   plv8 = postgresqlPackages.plv8;
   timescaledb = postgresqlPackages.timescaledb;
+  tlauncher = throw "tlauncher has been removed because there questionable practices and legality concerns";
   tsearch_extras = postgresqlPackages.tsearch_extras;
   cstore_fdw = postgresqlPackages.cstore_fdw;
   pg_hll = postgresqlPackages.pg_hll;
@@ -997,6 +998,7 @@ mapAliases ({
   telepathy_salut = telepathy-salut; # added 2018-02-25
   telnet = inetutils; # added 2018-05-15
   terminus = throw "terminus has been removed, it was unmaintained in nixpkgs"; # added 2021-08-21
+  terraform_0_12 = throw "terraform_0_12 has been removed from nixpkgs on 2021/01";
   terraform_1_0_0 = throw "terraform_1_0_0 has been renamed to terraform_1"; # added 2021-06-15
   terraform_1_0 = throw "terraform_1_0 has been renamed to terraform_1"; # added 2021-12-08
   terraform-provider-ibm = terraform-providers.ibm; # added 2018-09-28

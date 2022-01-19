@@ -18,17 +18,20 @@
 , sassc
 , udisks2
 , wrapGAppsHook
+, libX11
+, libXext
+, libXNVCtrl
 }:
 
 stdenv.mkDerivation rec {
   pname = "monitor";
-  version = "0.11.0";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "stsdc";
     repo = "monitor";
     rev = version;
-    sha256 = "sha256-xWhhjn7zk/juXx50wLG2TpB5aqU+588kWBBquWrVJbM=";
+    sha256 = "1fv98yz9393ddp0k96bwbgccy6x9dmmg8g1pjd3xs6m4c1bnvfc7";
     fetchSubmodules = true;
   };
 
@@ -53,7 +56,18 @@ stdenv.mkDerivation rec {
     libwnck
     sassc
     udisks2
+    libX11
+    libXext
+    libXNVCtrl
   ];
+
+  # Force link against Xext, otherwise build fails with:
+  # ld: /nix/store/...-libXNVCtrl-495.46/lib/libXNVCtrl.a(NVCtrl.o): undefined reference to symbol 'XextAddDisplay'
+  # ld: /nix/store/...-libXext-1.3.4/lib/libXext.so.6: error adding symbols: DSO missing from command line
+  # https://github.com/stsdc/monitor/issues/292
+  NIX_LDFLAGS = "-lXext";
+
+  mesonFlags = [ "-Dindicator-wingpanel=enabled" ];
 
   postPatch = ''
     chmod +x meson/post_install.py

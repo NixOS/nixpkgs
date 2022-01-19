@@ -4256,6 +4256,16 @@
     githubId = 1313787;
     name = "Gabriel Gonzalez";
   };
+  gador = {
+    email = "florian.brandes@posteo.de";
+    github = "gador";
+    githubId = 1883533;
+    name = "Florian Brandes";
+    keys = [{
+      longkeyid = "rsa4096/0xBBB3E40E53797FD9";
+      fingerprint = "0200 3EF8 8D2B CF2D 8F00  FFDC BBB3 E40E 5379 7FD9";
+    }];
+  };
   gal_bolle = {
     email = "florent.becker@ens-lyon.org";
     github = "FlorentBecker";
@@ -4454,6 +4464,16 @@
     github = "goodrone";
     githubId = 1621335;
     name = "Andrew Trachenko";
+  };
+  gordias = {
+    name = "Gordias";
+    email = "gordias@disroot.org";
+    github = "NotGordias";
+    githubId = 94724133;
+    keys = [{
+      longkeyid = "ed25519/0x5D47284830FAA4FA";
+      fingerprint = "C006 B8A0 0618 F3B6 E0E4  2ECD 5D47 2848 30FA A4FA";
+    }];
   };
   govanify = {
     name = "Gauvain 'GovanifY' Roussel-Tarbouriech";

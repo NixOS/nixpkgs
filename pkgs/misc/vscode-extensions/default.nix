@@ -1064,6 +1064,22 @@ let
         };
       };
 
+      jdinhlife.gruvbox = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "gruvbox";
+          publisher = "jdinhlife";
+          version = "1.5.1";
+          sha256 = "sha256-0ghB0E+Wa9W2bNFFiH2Q3pUJ9HV5+JfKohX4cRyevC8=";
+        };
+        meta = with lib; {
+          description = "Gruvbox Theme";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=jdinhlife.gruvbox";
+          homepage = "https://github.com/jdinhify/vscode-theme-gruvbox";
+          license = licenses.mit;
+          maintainers = with maintainers; [ imgabe ];
+        };
+      };
+
       jnoortheen.nix-ide = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "nix-ide";
@@ -1474,8 +1490,8 @@ let
         mktplcRef = {
           name = "metals";
           publisher = "scalameta";
-          version = "1.11.0";
-          sha256 = "0a4agm0g16cxhvhvsmbsvvicfsjr53330rsab5xdi7gcpx9a1dff";
+          version = "1.12.0";
+          sha256 = "13zwjnrmkrs3wxh8c9nz9zxxs3p6lkj41q30v4a1md5pscfa1s44";
         };
         meta = {
           license = lib.licenses.asl20;
