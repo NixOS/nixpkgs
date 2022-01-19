@@ -812,8 +812,9 @@ class Machine:
             console = io.StringIO()
             while True:
                 try:
-                    console.write(self.last_lines.get())
+                    console.write(self.last_lines.get(timeout=1))
                 except queue.Empty:
+                    self.run_callbacks()
                     self.sleep(1)
                     continue
                 console.seek(0)
