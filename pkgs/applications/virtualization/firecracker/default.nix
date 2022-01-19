@@ -1,36 +1,41 @@
 { fetchurl, lib, stdenv }:
 
 let
-  version = "0.24.5";
-
-  suffix = {
+  arch = {
     x86_64-linux = "x86_64";
     aarch64-linux = "aarch64";
   }."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
-
+  
   baseurl = "https://github.com/firecracker-microvm/firecracker/releases/download";
-
-  dlbin = sha256: fetchurl {
-    url = "${baseurl}/v${version}/firecracker-v${version}-${suffix}.tgz";
-    sha256 = sha256."${stdenv.hostPlatform.system}";
+  dlhashByVersion = {
+    "0.24.5" = builtins.getAttr arch {
+      x86_64 = "sha256-drcm2kz2csuJqr8Oqs0r1BrxgPHOyuwC2S+99MhbMjA=";
+      aarch64 = "sha256-x8RoBmgY3HRUOLw8YzEwQfQuT83zGfBHHWu88b4i05o=";
+    };
+    "0.25.2" = builtins.getAttr arch {
+      x86_64 = "sha256-ZzlPq+Q9XfWQJr+7nKS0e6bfKwYNfpMHSiBIKeOr/s4=";
+      aarch64 = "sha256-75UC+HeVUfUk1HRvTJsOHbHHkgr6me1OtxDF7lahf68=";
+    };
+  };
+  dlbin = version: hash: fetchurl {
+    url = "${baseurl}/v${version}/firecracker-v${version}-${arch}.tgz";
+    sha256 = hash;
   };
 
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "firecracker";
-  inherit version;
+  version = "0.25.2";
+  dlhash = builtins.getAttr version dlhashByVersion;
 
   sourceRoot = ".";
-  src = dlbin {
-    x86_64-linux = "sha256-drcm2kz2csuJqr8Oqs0r1BrxgPHOyuwC2S+99MhbMjA=";
-    aarch64-linux = "sha256-x8RoBmgY3HRUOLw8YzEwQfQuT83zGfBHHWu88b4i05o=";
-  };
+  src = dlbin version dlhash;
 
   dontConfigure = true;
 
   buildPhase = ''
-    mv release-v${version}/firecracker-v${version}-${suffix} firecracker
-    mv release-v${version}/jailer-v${version}-${suffix} jailer
+    mv release-v${version}*/firecracker-v${version}-${arch} firecracker
+    mv release-v${version}*/jailer-v${version}-${arch} jailer
     chmod +x firecracker jailer
   '';
 
