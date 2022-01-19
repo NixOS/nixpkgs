@@ -1,0 +1,13 @@
+diff --git a/scripts/mk_util.py b/scripts/mk_util.py
+index 042e6af46..1e105b002 100644
+--- a/scripts/mk_util.py
++++ b/scripts/mk_util.py
+@@ -1995,7 +1995,7 @@ class MLComponent(Component):
+ 
+             LIBZ3 = LIBZ3 + ' ' + ' '.join(map(lambda x: '-cclib ' + x, LDFLAGS.split()))
+ 
+-            stubs_install_path = '$$(%s printconf path)/stublibs' % OCAMLFIND
++            stubs_install_path = '$$(%s printconf destdir)/stublibs' % OCAMLFIND
+             if not STATIC_LIB:
+                 loadpath = '-ccopt -L' + stubs_install_path
+                 dllpath = '-dllpath ' + stubs_install_path
