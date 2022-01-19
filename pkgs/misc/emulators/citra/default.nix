@@ -1,6 +1,5 @@
 { branch ? "nightly", libsForQt5, fetchFromGitHub }:
-let inherit libsForQt5 fetchFromGitHub;
-in {
+{
   nightly = libsForQt5.callPackage ./base.nix rec {
     pname = "citra-${branch}";
     version = "1742";
