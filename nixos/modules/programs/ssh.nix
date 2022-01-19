@@ -142,7 +142,7 @@ in
 
       knownHosts = mkOption {
         default = {};
-        type = types.attrsOf (types.submodule ({ name, config, ... }: {
+        type = types.attrsOf (types.submodule ({ name, config, options, ... }: {
           options = {
             certAuthority = mkOption {
               type = types.bool;
@@ -155,6 +155,7 @@ in
             hostNames = mkOption {
               type = types.listOf types.str;
               default = [ name ] ++ config.extraHostNames;
+              defaultText = literalExpression "[ ${name} ] ++ config.${options.extraHostNames}";
               description = ''
                 DEPRECATED, please use <literal>extraHostNames</literal>.
                 A list of host names and/or IP numbers used for accessing
