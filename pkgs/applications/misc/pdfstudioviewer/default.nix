@@ -43,16 +43,16 @@ in stdenv.mkDerivation rec {
   ];
 
   desktopItems = [(makeDesktopItem {
-       name = "${pname}${year}";
-       desktopName = "PDF Studio";
-       genericName = "View and edit PDF files";
-       exec = "${pname} %f";
-       icon = "${pname}${year}";
-       comment = "Views and edits PDF files";
-       mimeType = "application/pdf";
-       categories = "Office";
-       type = "Application";
-       terminal = false;
+    name = "${pname}${year}";
+    desktopName = "PDF Studio";
+    genericName = "View and edit PDF files";
+    exec = "${pname} %f";
+    icon = "${pname}${year}";
+    comment = "Views and edits PDF files";
+    mimeType = "application/pdf";
+    categories = "Office";
+    type = "Application";
+    terminal = false;
   })];
 
   unpackPhase = "dpkg-deb -x $src .";
@@ -68,7 +68,8 @@ in stdenv.mkDerivation rec {
     mkdir -p $out/share/pixmaps
     cp -r opt/${pname}${year} $out/share/
     ln -s $out/share/${pname}${year}/.install4j/${pname}${year}.png  $out/share/pixmaps/
-    makeWrapper $out/share/${pname}${year}/${pname}${year} $out/bin/${pname}
+    ln -s $out/share/${pname}${year}/${pname}${year} $out/bin/${pname}
+    # makeWrapper $out/share/${pname}${year}/${pname}${year} $out/bin/${pname}
 
     #Unpack jar files. Otherwise pdfstudio does this and fails due to read-only FS.
     for pfile in $out/share/${pname}${year}/jre/lib/{,ext/}*.jar.pack; do
