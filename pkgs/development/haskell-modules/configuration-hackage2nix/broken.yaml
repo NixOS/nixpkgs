@@ -2404,7 +2404,6 @@ broken-packages:
   - hsseccomp
   - hssh
   - hs-snowtify
-  - hs-speedscope
   - hsSqlite3
   - hssqlppp
   - HsSVN

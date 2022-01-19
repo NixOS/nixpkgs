@@ -1745,6 +1745,8 @@ self: super: {
   # Too strict version bounds on ghc-events
   # https://github.com/haskell/ThreadScope/issues/118
   threadscope = doJailbreak super.threadscope;
+  # https://github.com/mpickering/hs-speedscope/issues/16
+  hs-speedscope = doJailbreak super.hs-speedscope;
 
   # Too strict version bounds on tasty
   # Can likely be removed next week (2021-04-09) when 1.1.1.1 is released.
