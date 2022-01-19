@@ -75,7 +75,7 @@
 /nixos/modules/system                                 @dasJ
 
 # NixOS integration test driver
-/nixos/lib/test-driver  @tfc
+/nixos/lib/test-driver  @tfc @synthetica9
 
 # Updaters
 ## update.nix
