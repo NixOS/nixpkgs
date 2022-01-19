@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, which, xdg-dbus-proxy, nixosTests }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, pkg-config
+, libapparmor
+, which
+, xdg-dbus-proxy
+, nixosTests
+}:
 
 stdenv.mkDerivation rec {
   pname = "firejail";
@@ -11,7 +20,18 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-oKstTiGt0r4wePaZ9u1o78GZ1XWJ27aS0BdLxmfYk9Q=";
   };
 
-  buildInputs = [ which ];
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs = [
+    libapparmor
+    which
+  ];
+
+  configureFlags = [
+    "--enable-apparmor"
+  ];
 
   patches = [
     # Adds the /nix directory when using an overlay.
