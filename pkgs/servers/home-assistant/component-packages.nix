@@ -1348,6 +1348,7 @@
     "nsw_rural_fire_service_feed"
     "nuki"
     "number"
+    "nut"
     "nws"
     "nx584"
     "octoprint"
