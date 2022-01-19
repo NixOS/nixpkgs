@@ -3,8 +3,11 @@
 , buildPythonPackage
 , fetchFromGitHub
 
-# tests
+# patch
+, substituteAll
 , ffmpeg-full
+
+# tests
 , python
 }:
 
@@ -21,14 +24,19 @@ buildPythonPackage rec {
     sha256 = "0xskllq66wqndjfmvp58k26cv3w480sqsil6ifwp4gghir7hqc8m";
   };
 
+  patches = [
+    (substituteAll {
+      src = ./ffmpeg-path.patch;
+      ffmpeg = ffmpeg-full + "/bin/ffmpeg";
+      ffprobe = ffmpeg-full + "/bin/ffprobe";
+      ffplay = ffmpeg-full + "/bin/ffplay";
+    })
+  ];
+
   pythonImportsCheck = [
     "pydub"
     "pydub.audio_segment"
     "pydub.playback"
-  ];
-
-  checkInputs = [
-    ffmpeg-full
   ];
 
   checkPhase = ''

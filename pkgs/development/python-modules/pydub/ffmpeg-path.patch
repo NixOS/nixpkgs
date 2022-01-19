@@ -1,0 +1,50 @@
+diff --git a/pydub/utils.py b/pydub/utils.py
+index 740c500..ad820eb 100644
+--- a/pydub/utils.py
++++ b/pydub/utils.py
+@@ -161,42 +161,21 @@ def get_encoder_name():
+     """
+     Return enconder default application for system, either avconv or ffmpeg
+     """
+-    if which("avconv"):
+-        return "avconv"
+-    elif which("ffmpeg"):
+-        return "ffmpeg"
+-    else:
+-        # should raise exception
+-        warn("Couldn't find ffmpeg or avconv - defaulting to ffmpeg, but may not work", RuntimeWarning)
+-        return "ffmpeg"
++    return "@ffmpeg@"
+ 
+ 
+ def get_player_name():
+     """
+     Return enconder default application for system, either avconv or ffmpeg
+     """
+-    if which("avplay"):
+-        return "avplay"
+-    elif which("ffplay"):
+-        return "ffplay"
+-    else:
+-        # should raise exception
+-        warn("Couldn't find ffplay or avplay - defaulting to ffplay, but may not work", RuntimeWarning)
+-        return "ffplay"
++    return "@ffplay@"
+ 
+ 
+ def get_prober_name():
+     """
+     Return probe application, either avconv or ffmpeg
+     """
+-    if which("avprobe"):
+-        return "avprobe"
+-    elif which("ffprobe"):
+-        return "ffprobe"
+-    else:
+-        # should raise exception
+-        warn("Couldn't find ffprobe or avprobe - defaulting to ffprobe, but may not work", RuntimeWarning)
+-        return "ffprobe"
++    return "@ffprobe@"
+ 
+ 
+ def fsdecode(filename):
