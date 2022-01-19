@@ -8,16 +8,17 @@
 , libhandy
 , libpwquality
 , wrapGAppsHook
-, gtk3
+, gtk4
 , glib
 , gdk-pixbuf
 , gobject-introspection
 , desktop-file-utils
-, appstream-glib }:
+, appstream-glib
+, libadwaita }:
 
 python3Packages.buildPythonApplication rec {
-  pname = "gnome-passwordsafe";
-  version = "5.1";
+  pname = "gnome-secrets";
+  version = "6.0";
   format = "other";
   strictDeps = false; # https://github.com/NixOS/nixpkgs/issues/56943
 
@@ -26,7 +27,7 @@ python3Packages.buildPythonApplication rec {
     owner = "World";
     repo = "secrets";
     rev = version;
-    sha256 = "sha256-RgpkLoqhwCdaPZxC1Qe0MpLtYLevNCOxbvwEEI0cpE0=";
+    sha256 = "sha256-mtKQSTANkI5CawH4Fe2/rfLmUfobK6pBYgRL7yo/33E=";
   };
 
   nativeBuildInputs = [
@@ -41,16 +42,18 @@ python3Packages.buildPythonApplication rec {
   ];
 
   buildInputs = [
-    gtk3
+    gtk4
     glib
     gdk-pixbuf
     libhandy
+    libadwaita
   ];
 
   propagatedBuildInputs = with python3Packages; [
     pygobject3
     construct
     pykeepass
+    pyotp
   ] ++ [
     libpwquality # using the python bindings
   ];
