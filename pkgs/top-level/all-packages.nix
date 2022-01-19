@@ -30902,6 +30902,9 @@ with pkgs;
 
   njam = callPackage ../games/njam { };
 
+  npush = callPackage ../games/npush { };
+  run-npush = callPackage ../games/npush/run.nix { };
+
   newtonwars = callPackage ../games/newtonwars { };
 
   nudoku = callPackage ../games/nudoku { };
