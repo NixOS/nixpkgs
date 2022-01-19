@@ -5,7 +5,7 @@ import tempfile
 import threading
 from contextlib import contextmanager
 from pathlib import Path
-from typing import Any, Callable, ContextManager, Dict, Iterator, List, Optional, Union
+from typing import Any
 
 from test_driver.logger import rootlog
 from test_driver.machine import Machine, NixStartScript, retry
@@ -33,6 +33,32 @@ def get_tmp_dir() -> Path:
 
 def pythonize_name(name: str) -> str:
     return re.sub(r"^[^A-z_]|[^A-z0-9_]", "_", name)
+
+
+@contextmanager
+def must_raise(
+    regex: str,
+    exception: type[BaseException] = Exception,
+) -> Iterator[None]:
+    """Context manager that enforces that an exception is raised.
+    If no exception is raised, or the wrong kind of exception is raised,
+    or the exception string does not match the regex, an exception is raised.
+    """
+    short_desc = f"{exception.__name__} {regex!r}"
+    msg = f"Expected {short_desc}"
+
+    with rootlog.nested(f"Waiting for {short_desc}"):
+        try:
+            yield
+        except exception as e:
+            if re.search(regex, str(e)):
+                return
+            raise Exception(f"{msg}, but string {str(e)!r} did not match") from e
+        except Exception as e:
+            raise Exception(
+                f"{msg}, but {e!r} is not an instance of {exception!r}"
+            ) from e
+        raise Exception(f"{msg}, but no exception was raised")
 
 
 class Driver:
@@ -125,6 +151,7 @@ class Driver:
             serial_stdout_on=self.serial_stdout_on,
             polling_condition=self.polling_condition,
             Machine=Machine,  # for typing
+            must_raise=must_raise,
         )
         machine_symbols = {pythonize_name(m.name): m for m in self.machines}
         # If there's exactly one machine, make it available under the name
