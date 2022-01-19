@@ -367,6 +367,22 @@ let
 
       chenglou92.rescript-vscode = callPackage ./rescript { };
 
+      christian-kohler.path-intellisense = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "path-intellisense";
+          publisher = "christian-kohler";
+          version = "2.6.1";
+          sha256 = "sha256-ol98g3pliBlyEQ+n7cR4O04J/0QB9U8+fvf+FC0j0Fc=";
+        };
+        meta = with lib; {
+          description = "Visual Studio Code plugin that autocompletes filenames";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=christian-kohler.path-intellisense";
+          homepage = "https://github.com/ChristianKohler/PathIntellisense";
+          license = licenses.mit;
+          maintainers = with maintainers; [ imgabe ];
+        };
+      };
+
       cmschuetz12.wal = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "wal";
@@ -1064,6 +1080,22 @@ let
         };
       };
 
+      jdinhlife.gruvbox = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "gruvbox";
+          publisher = "jdinhlife";
+          version = "1.5.1";
+          sha256 = "sha256-0ghB0E+Wa9W2bNFFiH2Q3pUJ9HV5+JfKohX4cRyevC8=";
+        };
+        meta = with lib; {
+          description = "Gruvbox Theme";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=jdinhlife.gruvbox";
+          homepage = "https://github.com/jdinhify/vscode-theme-gruvbox";
+          license = licenses.mit;
+          maintainers = with maintainers; [ imgabe ];
+        };
+      };
+
       jnoortheen.nix-ide = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "nix-ide";
@@ -1249,6 +1281,8 @@ let
           license = lib.licenses.mit;
         };
       };
+
+      ms-ceintl = callPackage ./language-packs.nix {}; # non-English language packs
 
       ms-dotnettools.csharp = callPackage ./ms-dotnettools-csharp { };
 
@@ -1472,8 +1506,8 @@ let
         mktplcRef = {
           name = "metals";
           publisher = "scalameta";
-          version = "1.11.0";
-          sha256 = "0a4agm0g16cxhvhvsmbsvvicfsjr53330rsab5xdi7gcpx9a1dff";
+          version = "1.12.0";
+          sha256 = "13zwjnrmkrs3wxh8c9nz9zxxs3p6lkj41q30v4a1md5pscfa1s44";
         };
         meta = {
           license = lib.licenses.asl20;
@@ -1574,8 +1608,8 @@ let
         mktplcRef = {
           publisher = "stkb";
           name = "rewrap";
-          version = "1.15.4";
-          sha256 = "sha256-yuXyClvhGsonvddYHDMkLSvwEsD21vOeE54Gs9BRpeg=";
+          version = "1.16.0";
+          sha256 = "sha256-351zYmMupAv/8fQ+lOc0pYzy/wsE3JqTuxfKD+AdBAc=";
         };
         meta = with lib; {
           changelog = "https://github.com/stkb/Rewrap/blob/master/CHANGELOG.md";
@@ -1591,8 +1625,8 @@ let
         mktplcRef = {
           name = "code-spell-checker";
           publisher = "streetsidesoftware";
-          version = "2.0.14";
-          sha256 = "sha256-mwcssQvaztrnUuSoo8AWK3FXT4qKmPTRCGVYkAjgfXg=";
+          version = "2.1.4";
+          sha256 = "sha256-V8ug/EtDczjiofuL7HhpN1B+qbedpnvIlXnwiXJzD/g=";
         };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/streetsidesoftware.code-spell-checker/changelog";

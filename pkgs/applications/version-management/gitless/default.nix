@@ -6,10 +6,10 @@ buildPythonApplication rec {
   version = "0.8.8";
 
   src = fetchFromGitHub {
-    owner = "sdg-mit";
+    owner = "gitless-vcs";
     repo = "gitless";
     rev = "v${version}";
-    sha256 = "1q6y38f8ap6q1livvfy0pfnjr0l8b68hyhc9r5v87fmdyl7y7y8g";
+    sha256 = "sha256-xo5EWtP2aN8YzP8ro3bnxZwUGUp0PHD0g8hk+Y+gExE=";
   };
 
   propagatedBuildInputs = with pythonPackages; [ sh pygit2 clint ];

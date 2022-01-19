@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, python, unzip, wxPython, wrapPython, tor }:
+{ lib, stdenv, fetchFromGitHub, python2, unzip, tor }:
 
 stdenv.mkDerivation rec {
   pname = "torchat";
@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ unzip ];
-  buildInputs = [ python wxPython wrapPython ];
-  pythonPath = [ wxPython ];
+  buildInputs = with python2.pkgs; [ python wxPython wrapPython ];
+  pythonPath = with python2.pkgs; [ wxPython ];
 
   preConfigure = "cd torchat/src; rm portable.txt";
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/lib/torchat
     cp -rf * $out/lib/torchat
-    makeWrapper ${python}/bin/python $out/bin/torchat \
+    makeWrapper ${python2}/bin/python $out/bin/torchat \
         --set PYTHONPATH $out/lib/torchat:$program_PYTHONPATH \
         --run "cd $out/lib/torchat" \
         --add-flags "-O $out/lib/torchat/torchat.py"

@@ -15,28 +15,21 @@
 let
   pname = "graphite-gtk-theme";
 
-  throwIfNotSubList = name: given: valid:
-    let
-      unexpected = lib.subtractLists valid given;
-    in
-      lib.throwIfNot (unexpected == [])
-        "${name}: ${builtins.concatStringsSep ", " (builtins.map builtins.toString unexpected)} unexpected; valid ones: ${builtins.concatStringsSep ", " (builtins.map builtins.toString valid)}";
-
 in
-throwIfNotSubList "${pname}: theme variants" themeVariants [ "default" "purple" "pink" "red" "orange" "yellow" "green" "teal" "blue" "all" ]
-throwIfNotSubList "${pname}: color variants" colorVariants [ "standard" "light" "dark" ]
-throwIfNotSubList "${pname}: size variants" sizeVariants [ "standard" "compact" ]
-throwIfNotSubList "${pname}: tweaks" tweaks [ "nord" "black" "midblack" "rimless" "normal" ]
+lib.checkListOfEnum "${pname}: theme variants" [ "default" "purple" "pink" "red" "orange" "yellow" "green" "teal" "blue" "all" ] themeVariants
+lib.checkListOfEnum "${pname}: color variants" [ "standard" "light" "dark" ] colorVariants
+lib.checkListOfEnum "${pname}: size variants" [ "standard" "compact" ] sizeVariants
+lib.checkListOfEnum "${pname}: tweaks" [ "nord" "black" "midblack" "rimless" "normal" ] tweaks
 
 stdenvNoCC.mkDerivation {
   inherit pname;
-  version = "unstable-2022-01-04";
+  version = "unstable-2022-01-07";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
-    rev = "947cac4966377d8f5b5a4e2966ec2b9a6041d205";
-    sha256 = "11pl8hzk4fwniqdib0ffvjilpspr1n5pg1gw39kal13wxh4sdg28";
+    rev = "78e5421fee63b4c2a2a3d2e321538367b01a24ec";
+    sha256 = "1vfvv1gfbr9yr9mz0kb7c7ij6pxcryni1fjs87gn4hpyzns431wk";
   };
 
   nativeBuildInputs = [

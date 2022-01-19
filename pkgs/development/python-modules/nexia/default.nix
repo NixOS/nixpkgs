@@ -9,14 +9,16 @@
 
 buildPythonPackage rec {
   pname = "nexia";
-  version = "0.9.12";
+  version = "0.9.13";
+  format = "setuptools";
+
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = pname;
     rev = version;
-    sha256 = "sha256-YZHAWRTYquUm3Ymi/3mSQqxYZuoxsH5Q/LZOPDftEzU=";
+    sha256 = "sha256-0VG8tSwbVTIIsQYAEwzQfXLTDy4df/nS/rbHjYo7xf0=";
   };
 
   propagatedBuildInputs = [
@@ -29,10 +31,13 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
-    substituteInPlace setup.py --replace '"pytest-runner",' ""
+    substituteInPlace setup.py \
+      --replace '"pytest-runner",' ""
   '';
 
-  pythonImportsCheck = [ "nexia" ];
+  pythonImportsCheck = [
+    "nexia"
+  ];
 
   meta = with lib; {
     description = "Python module for Nexia thermostats";

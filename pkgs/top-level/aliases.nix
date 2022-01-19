@@ -346,6 +346,7 @@ mapAliases ({
   gnuradio-limesdr = gnuradio3_7.pkgs.limesdr; # added 2019-05-27, changed 2020-10-16
   gnuradio-rds = gnuradio3_7.pkgs.rds; # added 2019-05-27, changed 2020-10-16
   gnuradio-osmosdr = gnuradio3_7.pkgs.osmosdr; # added 2019-05-27, changed 2020-10-16
+  gnuradio3_7 = throw "gnuradio3_7 has been removed because it required Python 2"; # added 2022-01-16
   gr-nacl = gnuradio3_7.pkgs.nacl; # added 2019-05-27, changed 2020-10-16
   gr-gsm = gnuradio3_7.pkgs.gsm; # added 2019-05-27, changed 2020-10-16
   gr-ais = gnuradio3_7.pkgs.ais; # added 2019-05-27, changed 2020-10-16
@@ -660,6 +661,7 @@ mapAliases ({
   nologin = shadow; # added 2018-04-25
   nordic-polar = throw "nordic-polar was removed on 2021-05-27, now integrated in nordic"; # added 2021-05-27
   nottetris2 = throw "nottetris2 was removed because it is unmaintained by upstream and broken"; # added 2022-01-15
+  noto-fonts-cjk = noto-fonts-cjk-sans; # added 2021-12-16
   now-cli = throw "now-cli has been replaced with nodePackages.vercel"; # added 2021-08-05
   nxproxy = nx-libs; # added 2019-02-15
   nylas-mail-bin = throw "nylas-mail-bin was deprecated on 2019-09-11: abandoned by upstream";
@@ -785,6 +787,7 @@ mapAliases ({
   pgtap = postgresqlPackages.pgtap;
   plv8 = postgresqlPackages.plv8;
   timescaledb = postgresqlPackages.timescaledb;
+  tlauncher = throw "tlauncher has been removed because there questionable practices and legality concerns";
   tsearch_extras = postgresqlPackages.tsearch_extras;
   cstore_fdw = postgresqlPackages.cstore_fdw;
   pg_hll = postgresqlPackages.pg_hll;
@@ -821,8 +824,11 @@ mapAliases ({
   pyrex095 = throw "pyrex has been removed from nixpkgs as the project is still stuck on python2."; # added 2022-01-12
   pyrex096 = throw "pyrex has been removed from nixpkgs as the project is still stuck on python2."; # added 2022-01-12
   pyrit = throw "pyrit has been removed from nixpkgs as the project is still stuck on python2."; # added 2022-01-01
+  python = python2; # added 2022-01-11
   python2nix = throw "python2nix has been removed as it is outdated. Use e.g. nixpkgs-pytools instead."; # added 2021-03-08
   python-swiftclient = swiftclient; # added 2021-09-09
+  pythonFull = python2Full; # added 2022-01-11
+  pythonPackages = python.pkgs; # added 2022-01-11
   quagga = throw "quagga is no longer maintained upstream"; # added 2021-04-22
   qca-qt5 = libsForQt5.qca-qt5;  # added 2015-12-19
   qcsxcad = libsForQt5.qcsxcad;  # added 2020-11-05
@@ -998,6 +1004,7 @@ mapAliases ({
   telepathy_salut = telepathy-salut; # added 2018-02-25
   telnet = inetutils; # added 2018-05-15
   terminus = throw "terminus has been removed, it was unmaintained in nixpkgs"; # added 2021-08-21
+  terraform_0_12 = throw "terraform_0_12 has been removed from nixpkgs on 2021/01";
   terraform_1_0_0 = throw "terraform_1_0_0 has been renamed to terraform_1"; # added 2021-06-15
   terraform_1_0 = throw "terraform_1_0 has been renamed to terraform_1"; # added 2021-12-08
   terraform-provider-ibm = terraform-providers.ibm; # added 2018-09-28

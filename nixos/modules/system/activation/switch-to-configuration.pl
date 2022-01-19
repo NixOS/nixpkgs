@@ -18,11 +18,13 @@ my $startListFile = "/run/nixos/start-list";
 my $restartListFile = "/run/nixos/restart-list";
 my $reloadListFile = "/run/nixos/reload-list";
 
-# Parse restart/reload requests by the activation script
+# Parse restart/reload requests by the activation script.
+# Activation scripts may write newline-separated units to this
+# file and switch-to-configuration will handle them. While
+# `stopIfChanged = true` is ignored, switch-to-configuration will
+# handle `restartIfChanged = false` and `reloadIfChanged = true`.
 my $restartByActivationFile = "/run/nixos/activation-restart-list";
-my $reloadByActivationFile = "/run/nixos/activation-reload-list";
 my $dryRestartByActivationFile = "/run/nixos/dry-activation-restart-list";
-my $dryReloadByActivationFile = "/run/nixos/dry-activation-reload-list";
 
 make_path("/run/nixos", { mode => oct(755) });
 
@@ -382,7 +384,6 @@ sub filterUnits {
 }
 
 my @unitsToStopFiltered = filterUnits(\%unitsToStop);
-my @unitsToStartFiltered = filterUnits(\%unitsToStart);
 
 
 # Show dry-run actions.
@@ -395,21 +396,39 @@ if ($action eq "dry-activate") {
     print STDERR "would activate the configuration...\n";
     system("$out/dry-activate", "$out");
 
-    $unitsToRestart{$_} = 1 foreach
-        split('\n', read_file($dryRestartByActivationFile, err_mode => 'quiet') // "");
+    # Handle the activation script requesting the restart or reload of a unit.
+    foreach (split('\n', read_file($dryRestartByActivationFile, err_mode => 'quiet') // "")) {
+        my $unit = $_;
+        my $baseUnit = $unit;
+        my $newUnitFile = "$out/etc/systemd/system/$baseUnit";
 
-    $unitsToReload{$_} = 1 foreach
-        split('\n', read_file($dryReloadByActivationFile, err_mode => 'quiet') // "");
+        # Detect template instances.
+        if (!-e $newUnitFile && $unit =~ /^(.*)@[^\.]*\.(.*)$/) {
+          $baseUnit = "$1\@.$2";
+          $newUnitFile = "$out/etc/systemd/system/$baseUnit";
+        }
+
+        my $baseName = $baseUnit;
+        $baseName =~ s/\.[a-z]*$//;
+
+        # Start units if they were not active previously
+        if (not defined $activePrev->{$unit}) {
+            $unitsToStart{$unit} = 1;
+            next;
+        }
+
+        handleModifiedUnit($unit, $baseName, $newUnitFile, $activePrev, \%unitsToRestart, \%unitsToRestart, \%unitsToReload, \%unitsToRestart, \%unitsToSkip);
+    }
+    unlink($dryRestartByActivationFile);
 
     print STDERR "would restart systemd\n" if $restartSystemd;
     print STDERR "would reload the following units: ", join(", ", sort(keys %unitsToReload)), "\n"
         if scalar(keys %unitsToReload) > 0;
     print STDERR "would restart the following units: ", join(", ", sort(keys %unitsToRestart)), "\n"
         if scalar(keys %unitsToRestart) > 0;
+    my @unitsToStartFiltered = filterUnits(\%unitsToStart);
     print STDERR "would start the following units: ", join(", ", @unitsToStartFiltered), "\n"
         if scalar @unitsToStartFiltered;
-    unlink($dryRestartByActivationFile);
-    unlink($dryReloadByActivationFile);
     exit 0;
 }
 
@@ -433,13 +452,31 @@ print STDERR "activating the configuration...\n";
 system("$out/activate", "$out") == 0 or $res = 2;
 
 # Handle the activation script requesting the restart or reload of a unit.
-# We can only restart and reload (not stop/start) because the units to be
-# stopped are already stopped before the activation script is run.
-$unitsToRestart{$_} = 1 foreach
-    split('\n', read_file($restartByActivationFile, err_mode => 'quiet') // "");
+foreach (split('\n', read_file($restartByActivationFile, err_mode => 'quiet') // "")) {
+    my $unit = $_;
+    my $baseUnit = $unit;
+    my $newUnitFile = "$out/etc/systemd/system/$baseUnit";
 
-$unitsToReload{$_} = 1 foreach
-    split('\n', read_file($reloadByActivationFile, err_mode => 'quiet') // "");
+    # Detect template instances.
+    if (!-e $newUnitFile && $unit =~ /^(.*)@[^\.]*\.(.*)$/) {
+      $baseUnit = "$1\@.$2";
+      $newUnitFile = "$out/etc/systemd/system/$baseUnit";
+    }
+
+    my $baseName = $baseUnit;
+    $baseName =~ s/\.[a-z]*$//;
+
+    # Start units if they were not active previously
+    if (not defined $activePrev->{$unit}) {
+        $unitsToStart{$unit} = 1;
+        recordUnit($startListFile, $unit);
+        next;
+    }
+
+    handleModifiedUnit($unit, $baseName, $newUnitFile, $activePrev, \%unitsToRestart, \%unitsToRestart, \%unitsToReload, \%unitsToRestart, \%unitsToSkip);
+}
+# We can remove the file now because it has been propagated to the other restart/reload files
+unlink($restartByActivationFile);
 
 # Restart systemd if necessary. Note that this is done using the
 # current version of systemd, just in case the new one has trouble
@@ -480,7 +517,6 @@ if (scalar(keys %unitsToReload) > 0) {
     print STDERR "reloading the following units: ", join(", ", sort(keys %unitsToReload)), "\n";
     system("@systemd@/bin/systemctl", "reload", "--", sort(keys %unitsToReload)) == 0 or $res = 4;
     unlink($reloadListFile);
-    unlink($reloadByActivationFile);
 }
 
 # Restart changed services (those that have to be restarted rather
@@ -489,7 +525,6 @@ if (scalar(keys %unitsToRestart) > 0) {
     print STDERR "restarting the following units: ", join(", ", sort(keys %unitsToRestart)), "\n";
     system("@systemd@/bin/systemctl", "restart", "--", sort(keys %unitsToRestart)) == 0 or $res = 4;
     unlink($restartListFile);
-    unlink($restartByActivationFile);
 }
 
 # Start all active targets, as well as changed units we stopped above.
@@ -498,6 +533,7 @@ if (scalar(keys %unitsToRestart) > 0) {
 # that are symlinks to other units.  We shouldn't start both at the
 # same time because we'll get a "Failed to add path to set" error from
 # systemd.
+my @unitsToStartFiltered = filterUnits(\%unitsToStart);
 print STDERR "starting the following units: ", join(", ", @unitsToStartFiltered), "\n"
     if scalar @unitsToStartFiltered;
 system("@systemd@/bin/systemctl", "start", "--", sort(keys %unitsToStart)) == 0 or $res = 4;

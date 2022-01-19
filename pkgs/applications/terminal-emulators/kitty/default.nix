@@ -3,8 +3,10 @@
   libstartup_notification, libGL, libX11, libXrandr, libXinerama, libXcursor,
   libxkbcommon, libXi, libXext, wayland-protocols, wayland,
   lcms2,
+  librsync,
   installShellFiles,
   dbus,
+  darwin,
   Cocoa,
   CoreGraphics,
   Foundation,
@@ -21,20 +23,21 @@
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.23.1";
+  version = "0.24.1";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     rev = "v${version}";
-    sha256 = "sha256-2RwDU6EOJWF0u2ikJFg9U2yqSXergDkJH3h2i+QJ7G4=";
+    sha256 = "sha256-WPkyub7CwNXRksUmqiZeznnSqEPFpyHTeFLQ+D4Fb5c=";
   };
 
   buildInputs = [
     harfbuzz
     ncurses
     lcms2
+    librsync
   ] ++ lib.optionals stdenv.isDarwin [
     Cocoa
     CoreGraphics
@@ -45,6 +48,8 @@ buildPythonApplication rec {
     libpng
     python3
     zlib
+  ] ++ lib.optionals (stdenv.isDarwin && (builtins.hasAttr "UserNotifications" darwin.apple_sdk.frameworks)) [
+    darwin.apple_sdk.frameworks.UserNotifications
   ] ++ lib.optionals stdenv.isLinux [
     fontconfig libunistring libcanberra libX11
     libXrandr libXinerama libXcursor libxkbcommon libXi libXext
@@ -67,26 +72,31 @@ buildPythonApplication rec {
 
   propagatedBuildInputs = lib.optional stdenv.isLinux libGL;
 
-  outputs = [ "out" "terminfo" ];
+  outputs = [ "out" "terminfo" "shell_integration" ];
 
   # Causes build failure due to warning
   hardeningDisable = lib.optional stdenv.cc.isClang "strictoverflow";
 
   dontConfigure = true;
 
-  buildPhase = ''
+  buildPhase = let
+    commonOptions = ''
+      --update-check-interval=0 \
+      --shell-integration=enabled\ no-rc
+    '';
+  in ''
     runHook preBuild
     ${if stdenv.isDarwin then ''
       ${python.interpreter} setup.py kitty.app \
-      --update-check-interval=0 \
-      --disable-link-time-optimization
+      --disable-link-time-optimization \
+      ${commonOptions}
       make man
     '' else ''
       ${python.interpreter} setup.py linux-package \
-      --update-check-interval=0 \
       --egl-library='${lib.getLib libGL}/lib/libEGL.so.1' \
       --startup-notification-library='${libstartup_notification}/lib/libstartup-notification-1.so' \
-      --canberra-library='${libcanberra}/lib/libcanberra.so'
+      --canberra-library='${libcanberra}/lib/libcanberra.so' \
+      ${commonOptions}
     ''}
     runHook postBuild
   '';
@@ -125,10 +135,7 @@ buildPythonApplication rec {
       --bash <("$out/bin/kitty" + complete setup bash) \
       --fish <("$out/bin/kitty" + complete setup fish) \
       --zsh  <("$out/bin/kitty" + complete setup zsh)
-    runHook postInstall
-  '';
 
-  postInstall = ''
     terminfo_src=${if stdenv.isDarwin then
       ''"$out/Applications/kitty.app/Contents/Resources/terminfo"''
       else
@@ -139,6 +146,10 @@ buildPythonApplication rec {
 
     mkdir -p $out/nix-support
     echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
+
+    cp -r 'shell-integration' "$shell_integration"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

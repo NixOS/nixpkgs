@@ -394,6 +394,7 @@
   ./services/development/hoogle.nix
   ./services/development/jupyter/default.nix
   ./services/development/jupyterhub/default.nix
+  ./services/development/rstudio-server/default.nix
   ./services/development/lorri.nix
   ./services/display-managers/greetd.nix
   ./services/editors/emacs.nix
@@ -967,6 +968,7 @@
   ./services/security/vault.nix
   ./services/security/vaultwarden/default.nix
   ./services/security/yubikey-agent.nix
+  ./services/system/cachix-agent/default.nix
   ./services/system/cloud-init.nix
   ./services/system/dbus.nix
   ./services/system/earlyoom.nix

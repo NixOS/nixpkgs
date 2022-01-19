@@ -2,7 +2,8 @@
 , fetchFromGitHub, cmake
 , libusb-compat-0_1, pkg-config
 , usePython ? false
-, python, ncurses, swig2
+, python ? null
+, ncurses, swig2
 , extraPackages ? []
 } :
 

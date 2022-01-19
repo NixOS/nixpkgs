@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, pciutils, python}:
+{lib, stdenv, fetchurl, pciutils, python2}:
 
 stdenv.mkDerivation rec {
   version = "1.30";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     sed -i 's/-Werror -Wall//' Makefile
   '';
 
-  buildInputs = [ pciutils python ];
+  buildInputs = [ pciutils python2 ];
 
   installPhase = ''
     mkdir -p $out/bin

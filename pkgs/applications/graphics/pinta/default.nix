@@ -2,23 +2,23 @@
 , buildDotnetModule
 , dotnetCorePackages
 , fetchFromGitHub
+, glibcLocales
 , gtk3
-, installShellFiles
-, librsvg
-, makeDesktopItem
+, intltool
 , wrapGAppsHook
 }:
 
 buildDotnetModule rec {
   pname = "Pinta";
-  version = "2.0.1";
+  version = "2.0.2";
 
   nativeBuildInputs = [
-    installShellFiles
+    intltool
     wrapGAppsHook
   ];
 
   runtimeDeps = [ gtk3 ];
+  buildInputs = runtimeDeps;
 
   dotnet-sdk = dotnetCorePackages.sdk_6_0;
   dotnet-runtime = dotnetCorePackages.runtime_6_0;
@@ -26,7 +26,7 @@ buildDotnetModule rec {
   # How-to update deps:
   # $ nix-build -A pinta.fetch-deps
   # $ ./result
-  # $ cp /tmp/Pinta-deps.nix ./pkgs/applications/graphics/pinta/default.nix
+  # $ cp /tmp/Pinta-deps.nix ./pkgs/applications/graphics/pinta/deps.nix
   # TODO: create update script
   nugetDeps = ./deps.nix;
 
@@ -36,52 +36,49 @@ buildDotnetModule rec {
     owner = "PintaProject";
     repo = "Pinta";
     rev = version;
-    sha256 = "sha256-iOKJPB2bI/GjeDxzG7r6ew7SGIzgrJTcRXhEYzOpC9k=";
+    sha256 = "sha256-Bvzs1beq7I1+10w9pmMePqGCz2TPDp5UK5Wa9hbKERU=";
   };
 
-  # FIXME: this should be propagated by wrapGAppsHook already, however for some
-  # reason it is not working. Maybe a bug in buildDotnetModule?
-  preInstall = ''
-    gappsWrapperArgs+=(
-      --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}"
-      --set GDK_PIXBUF_MODULE_FILE ${librsvg}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache
-    )
+  # https://github.com/NixOS/nixpkgs/issues/38991
+  # bash: warning: setlocale: LC_ALL: cannot change locale (en_US.UTF-8)
+  LOCALE_ARCHIVE = "${glibcLocales}/lib/locale/locale-archive";
+
+  # Do the autoreconf/Makefile job manually
+  # TODO: use upstream build system
+  postBuild = ''
+    # Substitute translation placeholders
+    intltool-merge -x po/ xdg/pinta.appdata.xml.in xdg/pinta.appdata.xml
+    intltool-merge -d po/ xdg/pinta.desktop.in xdg/pinta.desktop
+
+    # Build translations
+    dotnet build Pinta \
+      -p:ContinuousIntegrationBuild=true \
+      -p:Deterministic=true \
+      -target:CompileTranslations,PublishTranslations \
+      -p:BuildTranslations=true \
+      -p:PublishDir="$NIX_BUILD_TOP/source/publish"
   '';
 
-  postInstall = ''
+  postFixup = ''
     # Rename the binary
-    mv $out/bin/Pinta $out/bin/pinta
+    mv "$out/bin/Pinta" "$out/bin/pinta"
 
-    # Copy desktop icons
-    for size in 16x16 22x22 24x24 32x32 96x96 scalable; do
-      mkdir -p $out/share/icons/hicolor/$size/apps
-      cp xdg/$size/* $out/share/icons/hicolor/$size/apps/
-    done
-
-    # Copy runtime icons
-    cp -r Pinta.Resources/icons/hicolor/16x16/* $out/share/icons/hicolor/16x16/
-
-    # Install manpage
-    installManPage xdg/pinta.1
-
-    # Fix and copy desktop file
-    # TODO: fix this propely by using the autoreconf+pkg-config build system
-    # from upstream
-    mkdir -p $out/share/applications
-    substitute xdg/pinta.desktop.in $out/share/applications/Pinta.desktop \
-      --replace _Name Name \
-      --replace _Comment Comment \
-      --replace _GenericName GenericName \
-      --replace _X-GNOME-FullName X-GNOME-FullName \
-      --replace _Keywords Keywords
+    # Install
+    dotnet build installer/linux/install.proj \
+      -target:Install \
+      -p:ContinuousIntegrationBuild=true \
+      -p:Deterministic=true \
+      -p:SourceDir="$NIX_BUILD_TOP/source" \
+      -p:PublishDir="$NIX_BUILD_TOP/source/publish" \
+      -p:InstallPrefix="$out"
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.pinta-project.com/";
     description = "Drawing/editing program modeled after Paint.NET";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ thiagokokada ];
-    platforms = with lib.platforms; linux;
+    license = licenses.mit;
+    maintainers = with maintainers; [ thiagokokada ];
+    platforms = with platforms; linux;
     mainProgram = "pinta";
   };
 }
