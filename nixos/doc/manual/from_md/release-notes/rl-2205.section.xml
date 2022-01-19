@@ -514,6 +514,15 @@
       </listitem>
       <listitem>
         <para>
+          <link linkend="opt-programs.ssh.knownHosts">programs.ssh.knownHosts</link>
+          has gained an <literal>extraHostNames</literal> option to
+          replace <literal>hostNames</literal>.
+          <literal>hostNames</literal> is deprecated, but still
+          available for now.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>services.stubby</literal> module was converted to
           a
           <link xlink:href="https://github.com/NixOS/rfcs/blob/master/rfcs/0042-config-option.md">settings-style</link>
