@@ -618,6 +618,8 @@ dont-distribute-packages:
  - bricks-parsec
  - bricks-rendering
  - bricks-syntax
+ - broadcast-chan-conduit
+ - broadcast-chan-pipes
  - bronyradiogermany-streaming
  - brotli-conduit
  - brotli-streams
@@ -659,6 +661,8 @@ dont-distribute-packages:
  - canteven-http
  - cao
  - cap
+ - captcha-2captcha
+ - captcha-capmonster
  - car-pool
  - carboncopy
  - cartel
@@ -827,6 +831,8 @@ dont-distribute-packages:
  - copilot-language
  - copilot-libraries
  - copilot-theorem
+ - core-webserver-servant
+ - core-webserver-warp
  - coroutine-enumerator
  - coroutine-iteratee
  - couch-simple
@@ -1186,7 +1192,7 @@ dont-distribute-packages:
  - funnyprint
  - funsat
  - fused-effects-squeal
- - futhark_0_21_2
+ - futhark_0_21_4
  - fwgl-glfw
  - fwgl-javascript
  - fxpak
@@ -1652,6 +1658,7 @@ dont-distribute-packages:
  - hsfacter
  - hslogstash
  - hspec-expectations-pretty
+ - hspec-expectations-pretty-diff_0_7_2_6
  - hspec-pg-transact
  - hspec-setup
  - hspec-shouldbe
@@ -1810,6 +1817,7 @@ dont-distribute-packages:
  - ivy-web
  - iyql
  - j2hs
+ - jacinda
  - jail
  - java-bridge-extras
  - java-character
@@ -1890,6 +1898,7 @@ dont-distribute-packages:
  - knead-arithmetic
  - knit-haskell
  - knots
+ - koji-tool
  - korfu
  - ks-test
  - kurita
@@ -2161,6 +2170,7 @@ dont-distribute-packages:
  - mprover
  - mps
  - mptcp
+ - mptcpanalyzer
  - msgpack-aeson
  - msgpack-idl
  - msgpack-rpc
@@ -2295,7 +2305,7 @@ dont-distribute-packages:
  - pairing
  - panda
  - pandoc-japanese-filters
- - pandoc_2_16_2
+ - pandoc_2_17
  - papa
  - papa-base
  - papa-base-implement
@@ -2443,6 +2453,7 @@ dont-distribute-packages:
  - proto3-suite
  - protobuf-native
  - protocol-buffers-descriptor-fork
+ - psql
  - puffytools
  - pugs-compat
  - pugs-hsregex

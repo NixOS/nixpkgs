@@ -8524,10 +8524,10 @@
     name = "Xinhao Luo";
   };
   newam = {
-    email = "alexmgit@protonmail.com";
+    email = "alex@thinglab.org";
     github = "newAM";
     githubId = 7845120;
-    name = "Alex M.";
+    name = "Alex Martens";
   };
   nikitavoloboev = {
     email = "nikita.voloboev@gmail.com";

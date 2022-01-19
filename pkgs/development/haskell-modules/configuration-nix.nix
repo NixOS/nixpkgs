@@ -818,6 +818,12 @@ self: super: builtins.intersectAttrs super {
     platforms = pkgs.lib.platforms.x86;
   } super.geomancy;
 
+  hlint = overrideCabal (drv: {
+    postInstall = ''
+      install -Dm644 data/hlint.1 -t "$out/share/man/man1"
+    '' + drv.postInstall or "";
+  }) super.hlint;
+
   hls-brittany-plugin = overrideCabal (drv: {
     testToolDepends = [ pkgs.git ];
     preCheck = ''
