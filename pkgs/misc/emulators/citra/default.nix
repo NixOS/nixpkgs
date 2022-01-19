@@ -1,4 +1,4 @@
-{ branch ? "nightly", libsForQt5, fetchFromGitHub }:
+{ branch, libsForQt5, fetchFromGitHub }:
 {
   nightly = libsForQt5.callPackage ./base.nix rec {
     pname = "citra-${branch}";
