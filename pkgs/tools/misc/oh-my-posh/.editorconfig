@@ -1,0 +1,2 @@
+[test/expected-prompt.agnoster.out]
+    trim_trailing_whitespace = unset
