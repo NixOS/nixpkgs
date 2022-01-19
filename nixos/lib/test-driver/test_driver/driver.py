@@ -2,6 +2,7 @@ from contextlib import contextmanager
 from pathlib import Path
 from typing import Any, Dict, Iterator, List, Union, Optional, Callable, ContextManager
 import os
+import re
 import tempfile
 
 from test_driver.logger import rootlog
@@ -30,6 +31,29 @@ def get_tmp_dir() -> Path:
             )
         )
     return tmp_dir
+
+
+@contextmanager
+def must_raise(
+    regex: str,
+    exception: type[BaseException] = Exception,
+) -> Iterator[None]:
+    short_desc = f"{exception.__name__} {regex!r}"
+    msg = f"Expected {short_desc}"
+
+    with rootlog.nested(f"Waiting for {short_desc}"):
+        try:
+            yield
+        except exception as e:
+            e_str = str(e)
+            if re.search(regex, str(e)):
+                return
+            raise Exception(f"{msg}, but string {str(e)!r} did not match") from e
+        except Exception as e:
+            raise Exception(
+                f"{msg}, but {e!r} is not an instance of {exception!r}"
+            ) from e
+        raise Exception(f"{msg}, but no exception was raised")
 
 
 class Driver:
@@ -115,6 +139,7 @@ class Driver:
             serial_stdout_on=self.serial_stdout_on,
             polling_condition=self.polling_condition,
             Machine=Machine,  # for typing
+            must_raise=must_raise,
         )
         machine_symbols = {m.name: m for m in self.machines}
         # If there's exactly one machine, make it available under the name
