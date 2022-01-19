@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , autoreconfHook
 }:
 
@@ -14,6 +15,14 @@ stdenv.mkDerivation rec {
     rev = "v${version}-stable";
     sha256 = "sha256-rv9D+P42RMH1O4YLQbZIEkD6KQfs8KgYjhnHeA9vQqE=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2022-23408.patch";
+      url = "https://github.com/wolfSSL/wolfssl/commit/73b4cc9476f6355a91138f545f3fd007ce058255.patch";
+      sha256 = "0r3z6ybmx3ylnw9zdva3gq4jy691r471qvhy6dvdgmdksh2kx63v";
+    })
+  ];
 
   # Almost same as Debian but for now using --enable-all --enable-reproducible-build instead of --enable-distro to ensure options.h gets installed
   configureFlags = [
