@@ -19,7 +19,7 @@
   # EOL: 2023-05-16
   cockroachdb_21_2 = callPackage ./generic.nix {
     version = "21.2.4";
-    sha256 = "1zflfn4fszg6b1g2z3pw16gni6aismm35n3d87vchasb1l5gvryx";
-    patches = [ ./redacted.patch ];
+    sha256 = "02qhi0hk7yxzx3r0m190piib2582j31mr3as7zpg17igs852xm7k";
+    # patches = [ ./redacted.patch ];
   };
 }

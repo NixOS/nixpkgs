@@ -1,15 +1,24 @@
-{ lib, stdenv, buildGoModule, fetchurl, cmake, xz, which, autoconf, ncurses6
-, libedit, libunwind, installShellFiles, removeReferencesTo, go, version, sha256
-, patches ? [ ] }:
+{ lib, stdenv, buildGoModule, fetchurl, fetchFromGitHub, cmake, xz, which
+, autoconf, ncurses6, libedit, libunwind, installShellFiles, removeReferencesTo
+, go, version, sha256, patches ? [ ] }:
 
 buildGoModule rec {
   pname = "cockroach";
   inherit version;
 
-  src = fetchurl {
-    url = "https://binaries.cockroachdb.com/cockroach-v${version}.src.tgz";
+  # src = fetchurl {
+  #   url = "https://binaries.cockroachdb.com/cockroach-v${version}.src.tgz";
+  #   inherit sha256;
+  # };
+
+  src = fetchFromGitHub {
+    owner = "cockroachdb";
+    repo = "cockroach";
+    rev = "v${version}";
+    fetchSubmodules = true;
     inherit sha256;
   };
+
   vendorSha256 = null;
 
   NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isGNU [
