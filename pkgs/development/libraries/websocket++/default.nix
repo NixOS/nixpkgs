@@ -18,6 +18,6 @@ stdenv.mkDerivation rec {
     description = "C++/Boost Asio based websocket client/server library";
     license = licenses.bsd3;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ andir ];
+    maintainers = with maintainers; [ ];
   };
 }
