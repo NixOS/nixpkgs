@@ -26,6 +26,7 @@ let
     take
     ;
   inherit (lib.attrsets)
+    attrByPath
     optionalAttrs
     ;
   inherit (lib.strings)
@@ -98,6 +99,24 @@ rec {
     description = "Whether to enable ${name}.";
     type = lib.types.bool;
   };
+
+  /* Creaties an Option attribute set for an option that specifies the
+     package a module should use.
+
+     The argument default is an attribute set path in pkgs.
+  */
+  mkPackageOption = pkgs: name:
+    { default ? [ name ], example ? null }:
+    let default' = if !isList default then [ default ] else default;
+    in mkOption {
+      type = lib.types.package;
+      description = "The ${name} package to use.";
+      default = attrByPath default'
+        (throw "${concatStringsSep "." default'} cannot be found in pkgs") pkgs;
+      defaultText = literalExpression ("pkgs." + concatStringsSep "." default');
+      ${if example != null then "example" else null} = literalExpression
+        (if isList example then "pkgs." + concatStringsSep "." example else example);
+    };
 
   /* This option accepts anything, but it does not produce any result.
 
