@@ -107,6 +107,15 @@ in stdenv.mkDerivation {
 
     src = kodi_src;
 
+    # This is a backport of
+    # https://github.com/xbmc/xbmc/commit/a6dedce7ba1f03bdd83b019941d1e369a06f7888
+    # to Kodi 19.4 Matrix.
+    # This can be removed once a new release of Kodi comes out and we upgrade
+    # to it.
+    patches = [
+      ./add-KODI_WEBSERVER_EXTRA_WHITELIST.patch
+    ];
+
     buildInputs = [
       gnutls libidn libtasn1 nasm p11-kit
       libxml2 python3Packages.python
@@ -185,6 +194,12 @@ in stdenv.mkDerivation {
       "-DSWIG_EXECUTABLE=${buildPackages.swig}/bin/swig"
       "-DFLATBUFFERS_FLATC_EXECUTABLE=${buildPackages.flatbuffers}/bin/flatc"
       "-DPYTHON_EXECUTABLE=${buildPackages.python3Packages.python}/bin/python"
+      # When wrapped KODI_HOME will likely contain symlinks to static assets
+      # that Kodi's built in webserver will cautiously refuse to serve up
+      # (because their realpaths are outside of KODI_HOME and the other
+      # whitelisted directories). This adds the entire nix store to the Kodi
+      # webserver whitelist to avoid this problem.
+      "-DKODI_WEBSERVER_EXTRA_WHITELIST=${builtins.storeDir}"
     ] ++ lib.optional waylandSupport [
       "-DWAYLANDPP_SCANNER=${buildPackages.waylandpp}/bin/wayland-scanner++"
     ];
