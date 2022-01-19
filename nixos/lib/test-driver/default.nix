@@ -29,4 +29,9 @@ python3Packages.buildPythonApplication rec {
     pylint --errors-only --enable=unused-import ${src}/test_driver
     black --check --diff ${src}/test_driver
   '';
+
+  meta = {
+    maintainers = with lib.maintainers; [ synthetica tfc ];
+    homepage = "https://nixos.org/manual/nixos/unstable/index.html#sec-nixos-tests";
+  };
 }
