@@ -742,7 +742,7 @@ mapAliases ({
   pidginotr = pidgin-otr; # added 2018-01-08
   pidginsipe = pidgin-sipe; # added 2018-01-08
   pidginwindowmerge = pidgin-window-merge; # added 2018-01-08
-  pifi = throw "pifi has been removed from nixpkgs, as it is no longer developed";
+  pifi = throw "pifi has been removed from nixpkgs, as it is no longer developed."; # added 2022-01-19
   piwik = matomo; # added 2018-01-16
   pkgconfig = pkg-config; # added 2018-02-02, moved to aliases.nix 2021-01-18
   pkgconfigUpstream = pkg-configUpstream; # added 2018-02-02
