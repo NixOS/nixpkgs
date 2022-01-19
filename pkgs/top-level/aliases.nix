@@ -42,6 +42,7 @@ mapAliases ({
   aesop = throw "aesop has been removed from nixpkgs, as it was unmaintained."; # added 2021-08-05
   ag = silver-searcher; # added 2018-04-25
   aircrackng = aircrack-ng; # added 2016-01-14
+  airtame = throw "airtame has been removed due to being unmaintained."; # added 2022-01-19
   aleth = throw "aleth (previously packaged as cpp_ethereum) has been removed; abandoned upstream."; # added 2020-11-30
   alienfx = throw "alienfx has been removed."; # added 2019-12-08
   alsaLib = alsa-lib; # added 2021-06-09

@@ -972,8 +972,6 @@ with pkgs;
 
   airspyhf = callPackage ../applications/radio/airspyhf { };
 
-  airtame = callPackage ../applications/misc/airtame { };
-
   aj-snapshot  = callPackage ../applications/audio/aj-snapshot { };
 
   ajour = callPackage ../tools/games/ajour {
