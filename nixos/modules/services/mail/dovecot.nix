@@ -38,7 +38,7 @@ let
         ssl_cert = <${cfg.sslServerCert}
         ssl_key = <${cfg.sslServerKey}
         ${optionalString (cfg.sslCACert != null) ("ssl_ca = <" + cfg.sslCACert)}
-        ssl_dh = <${config.security.dhparams.params.dovecot2.path}
+        ${optionalString cfg.enableDHE ''ssl_dh = <${config.security.dhparams.params.dovecot2.path}''}
         disable_plaintext_auth = yes
       ''
     )
@@ -322,6 +322,8 @@ in
       description = "Whether to create a own Dovecot PAM service and configure PAM user logins.";
     };
 
+    enableDHE = mkEnableOption "enable ssl_dh and generation of primes for the key exchange." // { default = true; };
+
     sieveScripts = mkOption {
       type = types.attrsOf types.path;
       default = {};
@@ -376,7 +378,7 @@ in
   config = mkIf cfg.enable {
     security.pam.services.dovecot2 = mkIf cfg.enablePAM {};
 
-    security.dhparams = mkIf (cfg.sslServerCert != null) {
+    security.dhparams = mkIf (cfg.sslServerCert != null && cfg.enableDHE) {
       enable = true;
       params.dovecot2 = {};
     };
