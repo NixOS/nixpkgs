@@ -31,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "datasette";
-  version = "0.59.4";
+  version = "0.60";
 
   disabled = pythonOlder "3.6";
 
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     owner = "simonw";
     repo = pname;
     rev = version;
-    sha256 = "sha256-bH/VREo2f84wloA2jgXnQkGNSRRRYmSvUXmI0wMfmYM=";
+    sha256 = "149mc5wnrni473pisw1q37mnm3kksnq344hyw5dj4l46cpl6yv0q";
   };
 
   nativeBuildInputs = [ pytest-runner ];
