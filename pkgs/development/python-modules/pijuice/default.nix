@@ -14,10 +14,10 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "PiSupply";
     repo = "PiJuice";
-    # rev hash retrieved from the latest modification on file Software/Source/VERSION, as this project
-    # does not use Github tags facility
-    rev = "3ba6719ab614a3dc7495d5d9c900dd4ea977c7e3";
-    sha256 = "GoNN07YgVaktpeY5iYDbfpy5fxkU1x0V3Sb1hgGAQt4=";
+    # Latest commit that fixes using the library against python 3.9 by renaming
+    # isAlive() to is_alive(). The former function was removed in python 3.9.
+    rev = "e2dca1f8dcfa12e009952a882c0674a545d193d6";
+    sha256 = "07Jr7RSjqI8j0tT0MNAjrN1sjF1+mI+V0vtKInvtxj8=";
   };
 
   patches = [
