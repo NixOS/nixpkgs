@@ -42,6 +42,7 @@ mapAliases ({
   aesop = throw "aesop has been removed from nixpkgs, as it was unmaintained."; # added 2021-08-05
   ag = silver-searcher; # added 2018-04-25
   aircrackng = aircrack-ng; # added 2016-01-14
+  airtame = throw "airtame has been removed due to being unmaintained."; # added 2022-01-19
   aleth = throw "aleth (previously packaged as cpp_ethereum) has been removed; abandoned upstream."; # added 2020-11-30
   alienfx = throw "alienfx has been removed."; # added 2019-12-08
   alsaLib = alsa-lib; # added 2021-06-09
@@ -766,6 +767,7 @@ mapAliases ({
   pidginotr = pidgin-otr; # added 2018-01-08
   pidginsipe = pidgin-sipe; # added 2018-01-08
   pidginwindowmerge = pidgin-window-merge; # added 2018-01-08
+  pifi = throw "pifi has been removed from nixpkgs, as it is no longer developed."; # added 2022-01-19
   piwik = matomo; # added 2018-01-16
   pkgconfig = pkg-config; # added 2018-02-02, moved to aliases.nix 2021-01-18
   pkgconfigUpstream = pkg-configUpstream; # added 2018-02-02
