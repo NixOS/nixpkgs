@@ -1023,6 +1023,10 @@ with pkgs;
 
   metapixel = callPackage ../tools/graphics/metapixel { };
 
+  oh-my-posh = callPackage ../tools/misc/oh-my-posh {
+    buildGoModule = buildGo117Module;
+  };
+
   pferd = callPackage ../tools/misc/pferd {};
 
   qflipper = callPackage ../tools/misc/qflipper { };
