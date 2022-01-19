@@ -9602,6 +9602,8 @@ with pkgs;
 
   sigil = libsForQt5.callPackage ../applications/editors/sigil { };
 
+  signalbackup-tools = callPackage ../applications/networking/instant-messengers/signalbackup-tools { };
+
   signald = callPackage ../applications/networking/instant-messengers/signald { };
 
   signal-cli = callPackage ../applications/networking/instant-messengers/signal-cli { };
@@ -13491,6 +13493,10 @@ with pkgs;
   hadoop = hadoop3;
 
   io = callPackage ../development/interpreters/io { };
+
+  ivy = callPackage ../development/interpreters/ivy {
+    buildGoModule = buildGo117Module;
+  };
 
   j = callPackage ../development/interpreters/j {
     stdenv = clangStdenv;

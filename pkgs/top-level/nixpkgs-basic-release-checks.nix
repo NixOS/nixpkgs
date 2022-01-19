@@ -33,6 +33,10 @@ pkgs.runCommand "nixpkgs-release-checks" { src = nixpkgs; buildInputs = [nix]; }
     for platform in ${pkgs.lib.concatStringsSep " " supportedSystems}; do
         header "checking Nixpkgs on $platform"
 
+        # To get a call trace; see https://nixos.org/manual/nixpkgs/stable/#function-library-lib.trivial.warn
+        # Relies on impure eval
+        export NIX_ABORT_ON_WARN=true
+
         nix-env -f $src \
             --show-trace --argstr system "$platform" \
             --arg config '{ allowAliases = false; }' \
@@ -40,6 +44,7 @@ pkgs.runCommand "nixpkgs-release-checks" { src = nixpkgs; buildInputs = [nix]; }
             -qa --drv-path --system-filter \* --system \
             "''${opts[@]}" 2>&1 >/dev/null | tee eval-warnings.log
 
+        # Catch any trace calls not caught by NIX_ABORT_ON_WARN (lib.warn)
         if [ -s eval-warnings.log ]; then
             echo "Nixpkgs on $platform evaluated with warnings, aborting"
             exit 1
