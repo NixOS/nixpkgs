@@ -278,7 +278,7 @@ in
         message = "knownHost ${name} must contain either a publicKey or publicKeyFile";
       });
 
-    warnings = mapAttrsToList (name: _: ''programs.ssh.knownHosts.${name}.hostNames is deprecated use programs.ssh.knownHosts.${name}.extraHostNames'')
+    warnings = mapAttrsToList (name: _: ''programs.ssh.knownHosts.${name}.hostNames is deprecated, use programs.ssh.knownHosts.${name}.extraHostNames'')
       (filterAttrs (name: {hostNames, extraHostNames, ...}: hostNames != [ name ] ++ extraHostNames) cfg.knownHosts);
 
     # SSH configuration. Slight duplication of the sshd_config
