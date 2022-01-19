@@ -40,16 +40,20 @@ stdenv.mkDerivation rec {
     sha256 = "1f606ds56sp1c58q8dblfpaq9pwwkqw9i4gkwksw45m2xkwlbflq";
   };
 
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
-
-    xgreeters = linkFarm "pantheon-greeter-xgreeters" [{
-      path = "${elementary-greeter}/share/xgreeters/io.elementary.greeter.desktop";
-      name = "io.elementary.greeter.desktop";
-    }];
-  };
+  patches = [
+    ./sysconfdir-install.patch
+    # Needed until https://github.com/elementary/greeter/issues/360 is fixed
+    (substituteAll {
+      src = ./hardcode-fallback-background.patch;
+      default_wallpaper = "${nixos-artwork.wallpapers.simple-dark-gray.gnomeFilePath}";
+    })
+    # Fix build with meson 0.61
+    # https://github.com/elementary/greeter/pull/590
+    (fetchpatch {
+      url = "https://github.com/elementary/greeter/commit/a4b25244058fce794a9f13f6b22a8ff7735ebde9.patch";
+      sha256 = "sha256-qPXhdvmYG8YMDU/CjbEkfZ0glgRzxnu0TsOPtvWHxLY=";
+    })
+  ];
 
   nativeBuildInputs = [
     desktop-file-utils
@@ -84,21 +88,6 @@ stdenv.mkDerivation rec {
     "-Dgsd-dir=${gnome-settings-daemon}/libexec/" # trailing slash is needed
   ];
 
-  patches = [
-    ./sysconfdir-install.patch
-    # Needed until https://github.com/elementary/greeter/issues/360 is fixed
-    (substituteAll {
-      src = ./hardcode-fallback-background.patch;
-      default_wallpaper = "${nixos-artwork.wallpapers.simple-dark-gray.gnomeFilePath}";
-    })
-    # Fix build with meson 0.61
-    # https://github.com/elementary/greeter/pull/590
-    (fetchpatch {
-      url = "https://github.com/elementary/greeter/commit/a4b25244058fce794a9f13f6b22a8ff7735ebde9.patch";
-      sha256 = "sha256-qPXhdvmYG8YMDU/CjbEkfZ0glgRzxnu0TsOPtvWHxLY=";
-    })
-  ];
-
   preFixup = ''
     gappsWrapperArgs+=(
       # dbus-launch needed in path
@@ -124,6 +113,17 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/share/xgreeters/io.elementary.greeter.desktop \
       --replace "Exec=io.elementary.greeter" "Exec=$out/bin/io.elementary.greeter"
   '';
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+
+    xgreeters = linkFarm "pantheon-greeter-xgreeters" [{
+      path = "${elementary-greeter}/share/xgreeters/io.elementary.greeter.desktop";
+      name = "io.elementary.greeter.desktop";
+    }];
+  };
 
   meta = with lib; {
     description = "LightDM Greeter for Pantheon";

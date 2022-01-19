@@ -22,12 +22,6 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-l2IUu9Mj22lZ5yajPcsGrJcJDakNu4srCV0Qea5ybPA=";
   };
 
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
-  };
-
   nativeBuildInputs = [
     meson
     ninja
@@ -36,6 +30,12 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ gtk3 ];
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
 
   meta = with lib; {
     description = "Simple shim for printing support via Contractor";

@@ -35,6 +35,19 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-9voy9eje3VlV4IMM664EyjKWTfSVogX5JoRCqhsUXTE=";
   };
 
+  patches = [
+    (substituteAll {
+      src = ./fix-paths.patch;
+      appcenter = appcenter;
+    })
+    # Provides the directory where the locales are actually installed
+    # https://github.com/elementary/onboarding/pull/147
+    (fetchpatch {
+      url = "https://github.com/elementary/onboarding/commit/af19c3dbefd1c0e0ec18eddacc1f21cb991f5513.patch";
+      sha256 = "sha256-fSFfjSd33W7rXXEUHY8b3rv9B9c31XfCjxjRxBBrqjs=";
+    })
+  ];
+
   nativeBuildInputs = [
     gettext
     meson
@@ -54,19 +67,6 @@ stdenv.mkDerivation rec {
     gtk3
     libgee
     libhandy
-  ];
-
-  patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
-      appcenter = appcenter;
-    })
-    # Provides the directory where the locales are actually installed
-    # https://github.com/elementary/onboarding/pull/147
-    (fetchpatch {
-      url = "https://github.com/elementary/onboarding/commit/af19c3dbefd1c0e0ec18eddacc1f21cb991f5513.patch";
-      sha256 = "sha256-fSFfjSd33W7rXXEUHY8b3rv9B9c31XfCjxjRxBBrqjs=";
-    })
   ];
 
   postPatch = ''
