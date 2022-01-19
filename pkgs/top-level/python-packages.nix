@@ -2796,6 +2796,8 @@ in {
 
   fields = callPackage ../development/python-modules/fields { };
 
+  file-read-backwards = callPackage ../development/python-modules/file-read-backwards { };
+
   filebrowser_safe = callPackage ../development/python-modules/filebrowser_safe { };
 
   filebytes = callPackage ../development/python-modules/filebytes { };
