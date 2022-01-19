@@ -18,6 +18,7 @@
     in
     {
       lib = lib.extend (final: prev: {
+        inherit forAllSystems;
         nixosSystem = { modules, ... } @ args:
           import ./nixos/lib/eval-config.nix (args // {
             modules =
