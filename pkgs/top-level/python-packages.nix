@@ -1240,8 +1240,6 @@ in {
 
   blis = callPackage ../development/python-modules/blis { };
 
-  blist = callPackage ../development/python-modules/blist { };
-
   blockchain = callPackage ../development/python-modules/blockchain { };
 
   blockdiag = callPackage ../development/python-modules/blockdiag { };
