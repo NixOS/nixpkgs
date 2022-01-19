@@ -26,11 +26,9 @@ stdenv.mkDerivation rec {
   pname = "elementary-onboarding";
   version = "6.1.0";
 
-  repoName = "onboarding";
-
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "onboarding";
     rev = version;
     sha256 = "sha256-9voy9eje3VlV4IMM664EyjKWTfSVogX5JoRCqhsUXTE=";
   };

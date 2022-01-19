@@ -24,11 +24,9 @@ stdenv.mkDerivation rec {
   pname = "elementary-feedback";
   version = "6.1.0";
 
-  repoName = "feedback";
-
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "feedback";
     rev = version;
     sha256 = "02wydbpa5qaa4xmmh4m7rbj4djbrn2i44zjakj5i6mzwjlj6sv5n";
   };

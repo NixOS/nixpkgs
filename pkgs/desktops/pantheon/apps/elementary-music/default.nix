@@ -34,11 +34,9 @@ stdenv.mkDerivation rec {
   pname = "elementary-music";
   version = "5.1.1";
 
-  repoName = "music";
-
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "music";
     rev = version;
     sha256 = "1wqsn4ss9acg0scaqpg514ll2dj3bl71wly4mm79qkinhy30yv9n";
   };

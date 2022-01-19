@@ -13,11 +13,9 @@ stdenv.mkDerivation rec {
   pname = "elementary-print-shim";
   version = "0.1.3";
 
-  repoName = "print";
-
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "print";
     rev = version;
     sha256 = "sha256-l2IUu9Mj22lZ5yajPcsGrJcJDakNu4srCV0Qea5ybPA=";
   };

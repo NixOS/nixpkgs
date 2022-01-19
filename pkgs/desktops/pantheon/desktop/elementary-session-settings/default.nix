@@ -92,11 +92,9 @@ stdenv.mkDerivation rec {
   pname = "elementary-session-settings";
   version = "6.0.0";
 
-  repoName = "session-settings";
-
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "session-settings";
     rev = version;
     sha256 = "1faglpa7q3a4335gnd074a3lnsdspyjdnskgy4bfnf6xmwjx7kjx";
   };
