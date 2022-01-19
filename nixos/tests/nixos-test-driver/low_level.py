@@ -1,5 +1,10 @@
 from test_driver.machine import retry
 
+with subtest("various")
+    # Test that "machine" alias is properly exported:
+    assert machine is basic
+    assert isinstance(machine, Machine)
+
 with subtest("retry"):
     # Should not throw, because we are saving it in the last go.
     with must_raise("action timed out"), no_sleep():
