@@ -34,6 +34,13 @@ stdenv.mkDerivation rec {
     ./tests-add-test-cases-for-import-without-uid.patch
     ./allow-import-of-previously-known-keys-even-without-UI.patch
     ./accept-subkeys-with-a-good-revocation-but-no-self-sig.patch
+  ] ++ lib.optional stdenv.isDarwin [
+    # Remove an innocent warning printed on systems without procfs
+    # https://dev.gnupg.org/T5656
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/Homebrew/formula-patches/890be5f6af88e7913d177af87a50129049e681bb/gnupg/2.3.3-proc-error.patch";
+      sha256 = "sha256-oiTa7Nf+AEmhZ683CJEaCb559PXJ6RpSSgRLpxz4CKU=";
+    })
   ];
   postPatch = ''
     sed -i 's,hkps://hkps.pool.sks-keyservers.net,hkps://keys.openpgp.org,g' configure doc/dirmngr.texi doc/gnupg.info-1
