@@ -455,6 +455,7 @@ broken-packages:
   - brick-dropdownmenu
   - bricks-internal
   - brillig
+  - broadcast-chan-tests
   - broccoli
   - brok
   - broker-haskell
@@ -571,6 +572,7 @@ broken-packages:
   - capnp
   - capped-list
   - capri
+  - captcha-core
   - caramia
   - carbonara
   - cardano-coin-selection
@@ -3881,6 +3883,7 @@ broken-packages:
   - pretty-ncols
   - prettyprinter-vty
   - prim-array
+  - primecount
   - primes-type
   - prim-instances
   - PrimitiveArray-Pretty
@@ -4452,6 +4455,8 @@ broken-packages:
   - show-prettyprint
   - Shpadoinkle-backend-pardiff
   - Shpadoinkle-backend-snabbdom
+  - Shpadoinkle-backend-static
+  - Shpadoinkle-html
   - Shpadoinkle-isreal
   - Shpadoinkle-streaming
   - Shpadoinkle-template
@@ -4852,6 +4857,7 @@ broken-packages:
   - tagsoup-selection
   - tai
   - tai64
+  - tailwind
   - takahashi
   - Takusen
   - takusen-oracle
