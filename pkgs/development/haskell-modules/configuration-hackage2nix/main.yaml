@@ -158,8 +158,6 @@ extra-packages:
   - resolv == 0.1.1.2                   # required to build cabal-install-3.0.0.0 with pre ghc-8.8.x
   - sbv == 7.13                         # required for pkgs.petrinizer
   - crackNum < 3.0                      # 2021-05-21: 3.0 removed the lib which sbv 7.13 uses
-  - ShellCheck == 0.7.1                 # 2021-05-09: haskell-ci 0.12.1 pins this version
-  - cabal-install-parsers == 0.4.2      # 2021-09-04: needed haskell-ci by until it upgrades to Cabal >= 3.6
   - ghc-api-compat == 8.6               # 2021-09-07: preserve for GHC 8.8.4
   - ghc-lib == 9.0.*                    # 2021-11-05: Need one GHC 9.0.2 compatible version
   - ghc-lib-parser == 9.0.*             # 2021-11-05: Need one GHC 9.0.2 compatible version
@@ -623,3 +621,6 @@ dont-distribute-packages:
   - webkitgtk3
   - webkitgtk3-javascriptcore
   - websnap
+
+  # glade relies on system libglade which is deprecated
+  - glade
