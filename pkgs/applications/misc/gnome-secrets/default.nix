@@ -5,19 +5,19 @@
 , gettext
 , fetchFromGitLab
 , python3Packages
-, libhandy
 , libpwquality
-, wrapGAppsHook
-, gtk3
+, wrapGAppsHook4
+, gtk4
 , glib
 , gdk-pixbuf
 , gobject-introspection
 , desktop-file-utils
-, appstream-glib }:
+, appstream-glib
+, libadwaita }:
 
 python3Packages.buildPythonApplication rec {
-  pname = "gnome-passwordsafe";
-  version = "5.1";
+  pname = "gnome-secrets";
+  version = "6.1";
   format = "other";
   strictDeps = false; # https://github.com/NixOS/nixpkgs/issues/56943
 
@@ -26,7 +26,7 @@ python3Packages.buildPythonApplication rec {
     owner = "World";
     repo = "secrets";
     rev = version;
-    sha256 = "sha256-RgpkLoqhwCdaPZxC1Qe0MpLtYLevNCOxbvwEEI0cpE0=";
+    sha256 = "sha256-TBGNiiR0GW8s/Efi4/Qqvwd87Ir0gCLGPfBmmqqSwQ8=";
   };
 
   nativeBuildInputs = [
@@ -34,26 +34,38 @@ python3Packages.buildPythonApplication rec {
     ninja
     gettext
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook4
     desktop-file-utils
     appstream-glib
     gobject-introspection
   ];
 
   buildInputs = [
-    gtk3
+    gtk4
     glib
     gdk-pixbuf
-    libhandy
+    libadwaita
   ];
 
   propagatedBuildInputs = with python3Packages; [
     pygobject3
     construct
     pykeepass
+    pyotp
   ] ++ [
     libpwquality # using the python bindings
   ];
+
+  postPatch = ''
+    substituteInPlace meson_post_install.py --replace "gtk-update-icon-cache" "gtk4-update-icon-cache";
+  '';
+
+  # Prevent double wrapping, let the Python wrapper use the args in preFixup.
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   meta = with lib; {
     broken = stdenv.hostPlatform.isStatic; # libpwquality doesn't provide bindings when static

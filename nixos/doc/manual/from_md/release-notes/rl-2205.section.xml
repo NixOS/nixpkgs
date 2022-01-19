@@ -273,6 +273,13 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>gnome-passwordsafe</literal> package updated to
+          <link xlink:href="https://gitlab.gnome.org/World/secrets/-/tags/6.0">version
+          6.x</link> and renamed to <literal>gnome-secrets</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           If you previously used
           <literal>/etc/docker/daemon.json</literal>, you need to
           incorporate the changes into the new option
