@@ -52,7 +52,7 @@ let
 in {
   name = "xmonad";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ nequissimus ];
+    maintainers = [ nequissimus ivanbrennan ];
   };
 
   machine = { pkgs, ... }: {
