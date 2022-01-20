@@ -1859,6 +1859,15 @@ let
         };
       };
 
+      vector-of-bool.gitflow = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "gitflow";
+          publisher = "vector-of-bool";
+          version = "1.2.1";
+          sha256 = "sha256-QqjVVDvw/77WIjTmxiXEHprTLsH2NMaS4zvob1DXbvA=";
+        };
+      };
+
       viktorqvarfordt.vscode-pitch-black-theme = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-pitch-black-theme";
