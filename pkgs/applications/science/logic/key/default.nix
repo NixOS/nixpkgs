@@ -1,51 +1,69 @@
 { lib, stdenv
 , fetchurl
-, unzip
 , jdk
-, ant
+, gradle_7
+, perl
 , jre
 , makeWrapper
 , testVersion
 , key
 }:
 
-# get this from the download URL when changing version
-let gitRevision = "7d3deab0763c88edee4f7a08e604661e0dbdd450";
-
-in stdenv.mkDerivation rec {
+let
   pname = "key";
-  version = "2.6.3";
-
+  version = "2.10.0";
   src = fetchurl {
-    url = "https://formal.iti.kit.edu/key/releases/${version}/key-src-${version}_${gitRevision}.zip";
-    sha256 = "1dr5jmrqs0iy76wdsfiv5hx929i24yzm1xypzqqvx7afc7apyawy";
+    url = "https://www.key-project.org/dist/${version}/key-${version}-sources.tgz";
+    sha256 = "1f201cbcflqd1z6ysrkh3mff5agspw3v74ybdc3s2lfdyz3b858w";
   };
+  sourceRoot = "key-${version}/key";
 
-  sourceRoot = "key";
+  # fake build to pre-download deps into fixed-output derivation
+  deps = stdenv.mkDerivation {
+    pname = "${pname}-deps";
+    inherit version src sourceRoot;
+    nativeBuildInputs = [ gradle_7 perl ];
+    buildPhase = ''
+      export GRADLE_USER_HOME=$(mktemp -d)
+      # https://github.com/gradle/gradle/issues/4426
+      ${lib.optionalString stdenv.isDarwin "export TERM=dumb"}
+      gradle --no-daemon classes testClasses
+    '';
+    # perl code mavenizes pathes (com.squareup.okio/okio/1.13.0/a9283170b7305c8d92d25aff02a6ab7e45d06cbe/okio-1.13.0.jar -> com/squareup/okio/okio/1.13.0/okio-1.13.0.jar)
+    installPhase = ''
+      find $GRADLE_USER_HOME/caches/modules-2 -type f -regex '.*\.\(jar\|pom\)' \
+        | perl -pe 's#(.*/([^/]+)/([^/]+)/([^/]+)/[0-9a-f]{30,40}/([^/\s]+))$# ($x = $2) =~ tr|\.|/|; "install -Dm444 $1 \$out/$x/$3/$4/$5" #e' \
+        | sh
+    '';
+    outputHashMode = "recursive";
+    outputHash = "sha256-1TWySkS8w7L6Q+V946kcLOnM4hL3fieFvLrF5BZAlh4=";
+  };
+in stdenv.mkDerivation rec {
+  inherit pname version src sourceRoot;
 
   nativeBuildInputs = [
-    unzip
     jdk
-    ant
+    gradle_7
     makeWrapper
   ];
 
-  buildPhase = ''
-    ant -buildfile scripts/build.xml \
-      -Dgit.revision=${gitRevision} \
-      compileAll deployAll
-  '';
+  # disable tests (broken on darwin)
+  gradleAction = if stdenv.isDarwin then "assemble" else "build";
 
-  postCheck = ''
-    ant -buildfile scripts/build.xml \
-      -Dgit.revision=${gitRevision} \
-      compileAllTests runAllTests test-deploy-all
+  buildPhase = ''
+    export GRADLE_USER_HOME=$(mktemp -d)
+    # https://github.com/gradle/gradle/issues/4426
+    ${lib.optionalString stdenv.isDarwin "export TERM=dumb"}
+    # point to offline repo
+    sed -ie "s#repositories {#repositories { maven { url '${deps}' }#g" build.gradle
+    cat <(echo "pluginManagement { repositories { maven { url '${deps}' } } }") settings.gradle > settings_new.gradle
+    mv settings_new.gradle settings.gradle
+    gradle --offline --no-daemon ${gradleAction}
   '';
 
   installPhase = ''
     mkdir -p $out/share/java
-    # Wrong version in the code. On next version change 2.5 to ${version}:
-    unzip deployment/key-2.5_${gitRevision}.zip -d $out/share/java
+    cp key.ui/build/libs/key-*-exe.jar $out/share/java/KeY.jar
     mkdir -p $out/bin
     makeWrapper ${jre}/bin/java $out/bin/KeY \
       --add-flags "-cp $out/share/java/KeY.jar de.uka.ilkd.key.core.Main"
@@ -55,8 +73,6 @@ in stdenv.mkDerivation rec {
     testVersion {
       package = key;
       command = "KeY --help";
-      # Wrong '2.5' version in the code. On next version change to ${version}
-      version = "2.5";
     };
 
   meta = with lib; {
