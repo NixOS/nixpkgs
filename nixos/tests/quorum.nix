@@ -72,8 +72,6 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     machine.wait_until_succeeds("systemctl restart quorum")
     machine.wait_for_unit("quorum.service")
     machine.sleep(15)
-    machine.wait_until_succeeds(
-        'geth attach /var/lib/quorum/geth.ipc --exec "eth.accounts" | grep 0x9377bc3936de934c497e22917b81aa8774ac3bb0'
-    )
+    machine.succeed('geth attach /var/lib/quorum/geth.ipc --exec "eth.accounts" | grep 0x9377bc3936de934c497e22917b81aa8774ac3bb0')
   '';
 })
