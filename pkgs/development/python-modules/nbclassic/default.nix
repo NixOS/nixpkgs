@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, python
 , notebook
 , pythonOlder
 , jupyter_server
@@ -23,6 +24,13 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ jupyter_server notebook ];
 
+  preCheck = ''
+    cd nbclassic
+    mv conftest.py tests
+    cd tests
+
+    export PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH
+  '';
   checkInputs = [
     pytestCheckHook
     pytest-tornasync
