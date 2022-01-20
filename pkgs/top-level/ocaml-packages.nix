@@ -911,6 +911,8 @@ let
 
     ocaml-print-intf = callPackage ../development/ocaml-modules/ocaml-print-intf { };
 
+    ocaml-recovery-parser = callPackage ../development/tools/ocaml/ocaml-recovery-parser { };
+
     pgocaml = callPackage ../development/ocaml-modules/pgocaml {};
 
     pgocaml_ppx = callPackage ../development/ocaml-modules/pgocaml/ppx.nix {};
