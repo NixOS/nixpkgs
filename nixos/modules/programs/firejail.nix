@@ -91,6 +91,14 @@ in {
       };
 
     environment.systemPackages = [ pkgs.firejail ] ++ [ wrappedBins ];
+
+    environment.etc."firejail/globals.local" = {
+      text = ''
+        # Fix Spotify, Electron apps, possibly other things.
+        env FONTCONFIG_PATH=/etc/fonts/fonts
+      '';
+      mode = "0644";
+    };
   };
 
   meta.maintainers = with maintainers; [ peterhoeg ];
