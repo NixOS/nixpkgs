@@ -5636,6 +5636,8 @@ in {
 
   opensimplex = callPackage ../development/python-modules/opensimplex { };
 
+  openstackdocstheme = callPackage ../development/python-modules/openstackdocstheme { };
+
   openstacksdk = callPackage ../development/python-modules/openstacksdk { };
 
   opentimestamps = callPackage ../development/python-modules/opentimestamps { };
