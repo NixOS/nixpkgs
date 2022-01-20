@@ -2,13 +2,13 @@
 
 buildPythonApplication rec {
   pname = "vpn-slice";
-  version = "0.16";
+  version = "0.16.1";
 
   src = fetchFromGitHub {
     owner = "dlenski";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-szJLw+TtpYcTaqeOTzMiQ0HVjNb9A5SLL4mGMX8xUnw=";
+    sha256 = "sha256-T6VULLNRLWO4OcAsuTmhty6H4EhinyxQSg0dfv2DUJs=";
   };
 
   propagatedBuildInputs = with python3Packages; [ setproctitle dnspython ];

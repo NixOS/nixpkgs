@@ -1,36 +1,36 @@
 diff --git a/graphviz/backend/dot_command.py b/graphviz/backend/dot_command.py
-index 1e123d1..41e19c2 100644
+index 60654bd..2c62b47 100644
 --- a/graphviz/backend/dot_command.py
 +++ b/graphviz/backend/dot_command.py
-@@ -11,7 +11,7 @@ from . import _common
- __all__ = ['command']
+@@ -9,7 +9,7 @@ from .. import parameters
  
- #: :class:`pathlib.Path` of layout command (``Path('dot')``).
+ __all__ = ['DOT_BINARY', 'command']
+ 
 -DOT_BINARY = pathlib.Path('dot')
 +DOT_BINARY = pathlib.Path('@graphviz@/bin/dot')
  
  
  def command(engine: str, format_: str, *,
 diff --git a/graphviz/backend/unflattening.py b/graphviz/backend/unflattening.py
-index 5ed25d6..8d2faf8 100644
+index a386b8c..883cdc6 100644
 --- a/graphviz/backend/unflattening.py
 +++ b/graphviz/backend/unflattening.py
 @@ -11,7 +11,7 @@ from . import execute
- __all__ = ['unflatten']
  
- #: :class:`pathlib.Path` of unflatten command (``Path('unflatten')``).
+ __all__ = ['UNFLATTEN_BINARY', 'unflatten']
+ 
 -UNFLATTEN_BINARY = pathlib.Path('unflatten')
 +UNFLATTEN_BINARY = pathlib.Path('@graphviz@/bin/unflatten')
  
  
- def unflatten(source: str,
+ @_tools.deprecate_positional_args(supported_number=1)
 diff --git a/graphviz/backend/viewing.py b/graphviz/backend/viewing.py
-index 6d4a4d1..2cc6cd8 100644
+index fde74a6..6f29b68 100644
 --- a/graphviz/backend/viewing.py
 +++ b/graphviz/backend/viewing.py
-@@ -54,7 +54,7 @@ def view_darwin(filepath, *, quiet: bool) -> None:
- @tools.attach(view, 'freebsd')
- def view_unixoid(filepath, *, quiet: bool) -> None:
+@@ -55,7 +55,7 @@ def view_darwin(filepath: typing.Union[os.PathLike, str], *,
+ def view_unixoid(filepath: typing.Union[os.PathLike, str], *,
+                  quiet: bool) -> None:
      """Open filepath in the user's preferred application (linux, freebsd)."""
 -    cmd = ['xdg-open', filepath]
 +    cmd = ['@xdgutils@/bin/xdg-open', filepath]

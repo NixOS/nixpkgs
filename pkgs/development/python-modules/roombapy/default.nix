@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "roombapy";
-  version = "1.6.4";
+  version = "1.6.5";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "pschmitt";
     repo = "roombapy";
     rev = version;
-    sha256 = "sha256-EN+em+lULAUplXlhcU409ZVPk9BfMmD2oNwO0ETuqoA=";
+    sha256 = "sha256-Xjeh29U+FCzI5n/i5s6wC0B88Ktmb8pnNDdOzCiKWi4=";
   };
 
   nativeBuildInputs = [
@@ -36,6 +36,12 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
   ];
+
+  postPatch = ''
+    # hbmqtt was replaced by amqtt
+    substituteInPlace tests/test_roomba_integration.py \
+      --replace "from hbmqtt.broker import Broker" "from amqtt.broker import Broker"
+  '';
 
   disabledTestPaths = [
     # Requires network access

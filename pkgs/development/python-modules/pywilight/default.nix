@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pywilight";
-  version = "0.0.73";
+  version = "0.0.74";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-8AYzAePLqCiz/EN6cJShGnrISijBpFHAU/u355f5IjY=";
+    sha256 = "sha256-patCdQ7qLEfy+RpH9T/Fa8ubI7QF6OmLzFUokZc5syQ=";
   };
 
   propagatedBuildInputs = [

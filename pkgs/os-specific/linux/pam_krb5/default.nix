@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "pam-krb5";
-  version = "4.10";
+  version = "4.11";
 
   src = fetchurl {
     url = "https://archives.eyrie.org/software/kerberos/pam-krb5-${version}.tar.gz";
-    sha256 = "09wzxd5zrj5bzqpb01qf148npj5k8hmd2bx2ij1qsy40hdxqyq79";
+    sha256 = "sha256-UDy+LLGv9L39o7z3+T+U+2ulLCbXCJNOcDmyGC/hCyA=";
   };
 
   buildInputs = [ pam libkrb5 ];

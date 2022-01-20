@@ -288,11 +288,16 @@ in
   # implementation
   config = mkIf (eachSite != {}) (mkMerge [{
 
-    assertions = mapAttrsToList (hostName: cfg:
-      { assertion = cfg.database.createLocally -> cfg.database.user == user;
-        message = ''services.wordpress.sites."${hostName}".database.user must be ${user} if the database is to be automatically provisioned'';
-      }
-    ) eachSite;
+    assertions =
+      (mapAttrsToList (hostName: cfg:
+        { assertion = cfg.database.createLocally -> cfg.database.user == user;
+          message = ''services.wordpress.sites."${hostName}".database.user must be ${user} if the database is to be automatically provisioned'';
+        }) eachSite) ++
+      (mapAttrsToList (hostName: cfg:
+        { assertion = cfg.database.createLocally -> cfg.database.passwordFile == null;
+          message = ''services.wordpress.sites."${hostName}".database.passwordFile cannot be specified if services.wordpress.sites."${hostName}".database.createLocally is set to true.'';
+        }) eachSite);
+
 
     services.mysql = mkIf (any (v: v.database.createLocally) (attrValues eachSite)) {
       enable = true;
@@ -344,7 +349,7 @@ in
 
             DirectoryIndex index.php
             Require all granted
-            Options +FollowSymLinks
+            Options +FollowSymLinks -Indexes
           </Directory>
 
           # https://wordpress.org/support/article/hardening-wordpress/#securing-wp-config-php

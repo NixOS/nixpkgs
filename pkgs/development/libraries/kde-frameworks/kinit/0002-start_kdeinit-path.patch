@@ -11,7 +11,7 @@ diff --git a/src/start_kdeinit/start_kdeinit_wrapper.c b/src/start_kdeinit/start
 index 891f50c..ef664ad 100644
 --- a/src/start_kdeinit/start_kdeinit_wrapper.c
 +++ b/src/start_kdeinit/start_kdeinit_wrapper.c
-@@ -23,7 +23,7 @@
+@@ -11,7 +11,7 @@
  #include <string.h>
  #include <unistd.h>
  

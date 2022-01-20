@@ -4,7 +4,7 @@
 
 let
   major = "3.12";
-  minor = "2";
+  minor = "3";
   binpath = lib.makeBinPath [ dvdauthor vcdimager ];
 
 in stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/brasero/${major}/${pname}-${version}.tar.xz";
-    sha256 = "0h90y674j26rvjahb8cc0w79zx477rb6zaqcj26wzvq8kmpic8k8";
+    hash = "sha256-h3SerjOhQSB9GwC+IzttgEWYLtMkntS5ja4fOpdf6hU=";
   };
 
   nativeBuildInputs = [ pkg-config itstool intltool wrapGAppsHook ];

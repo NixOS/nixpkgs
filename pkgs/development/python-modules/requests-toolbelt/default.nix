@@ -1,38 +1,61 @@
 { lib
-, buildPythonPackage
-, fetchPypi
-, requests
 , betamax
+, buildPythonPackage
+, fetchpatch
+, fetchPypi
 , mock
-, pytest
 , pyopenssl
+, pytestCheckHook
+, requests
 }:
 
 buildPythonPackage rec {
   pname = "requests-toolbelt";
   version = "0.9.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "968089d4584ad4ad7c171454f0a5c6dac23971e9472521ea3b6d49d610aa6fc0";
+    hash = "sha256-loCJ1FhK1K18FxRU8KXG2sI5celHJSHqO21J1hCqb8A=";
   };
 
-  checkInputs = [ pyopenssl betamax mock pytest ];
-  propagatedBuildInputs = [ requests ];
+  propagatedBuildInputs = [
+    requests
+  ];
 
-  checkPhase = ''
-    # disabled tests access the network
-    py.test tests -k "not test_no_content_length_header \
-                  and not test_read_file \
-                  and not test_reads_file_from_url_wrapper \
-                  and not test_x509_der \
-                  and not test_x509_pem"
-  '';
+  checkInputs = [
+    betamax
+    mock
+    pyopenssl
+    pytestCheckHook
+  ];
 
-  meta = {
-    description = "A toolbelt of useful classes and functions to be used with python-requests";
+  patches = [
+    (fetchpatch {
+      # Fix collections.abc deprecation warning, https://github.com/requests/toolbelt/pull/246
+      name = "fix-collections-abc-deprecation.patch";
+      url = "https://github.com/requests/toolbelt/commit/7188b06330e5260be20bce8cbcf0d5ae44e34eaf.patch";
+      sha256 = "sha256-pRkG77sNglG/KsRX6JaPgk4QxmmSBXypFRp/vNA3ot4=";
+    })
+  ];
+
+  disabledTests = [
+    # https://github.com/requests/toolbelt/issues/306
+    "test_no_content_length_header"
+    "test_read_file"
+    "test_reads_file_from_url_wrapper"
+    "test_x509_der"
+    "test_x509_pem"
+  ];
+
+  pythonImportsCheck = [
+    "requests_toolbelt"
+  ];
+
+  meta = with lib; {
+    description = "Toolbelt of useful classes and functions to be used with requests";
     homepage = "http://toolbelt.rtfd.org";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ matthiasbeyer ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ matthiasbeyer ];
   };
 }

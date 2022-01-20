@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-autoar";
-  version = "0.4.1";
+  version = "0.4.2";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-autoar/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "ZGvVDrrZLZHBvokJehU2QVYVdELKwUcd7X7LJ9mpFQ4=";
+    sha256 = "HSBpQHkwDhL+q9t3MEqWnRzBkNHRKpSb6EXK0Bx4pdM=";
   };
 
   nativeBuildInputs = [

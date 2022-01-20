@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, zlib, perl }:
+{ lib, stdenv, fetchurl, zlib, perl, nixosTests }:
 
 let
   # check if we can execute binaries for the host platform on the build platform
@@ -61,6 +61,10 @@ stdenv.mkDerivation rec {
   checkTarget = "regress";
   checkInputs = [ perl ];
   preCheck = "patchShebangs --build regress/regress.pl";
+
+  passthru.tests = {
+    nixos = nixosTests.man;
+  };
 
   meta = with lib; {
     homepage = "https://mandoc.bsd.lv/";

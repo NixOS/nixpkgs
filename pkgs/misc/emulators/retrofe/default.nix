@@ -1,5 +1,5 @@
 { lib, stdenv, fetchhg, cmake, glib, gst_all_1, makeWrapper, pkg-config
-, python, SDL2, SDL2_image, SDL2_mixer, SDL2_ttf, sqlite, zlib, runtimeShell
+, python2, SDL2, SDL2_image, SDL2_mixer, SDL2_ttf, sqlite, zlib, runtimeShell
 }:
 
 stdenv.mkDerivation {
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     sha256 = "0cvsg07ff0fdqh5zgiv2fs7s6c98hn150kpxmpw5fn6jilaszwkm";
   };
 
-  nativeBuildInputs = [ cmake makeWrapper pkg-config python ];
+  nativeBuildInputs = [ cmake makeWrapper pkg-config python2 ];
 
   buildInputs = [
     glib gst_all_1.gstreamer SDL2 SDL2_image SDL2_mixer SDL2_ttf sqlite zlib

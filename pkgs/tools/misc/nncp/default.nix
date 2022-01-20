@@ -3,12 +3,12 @@
 
 stdenv.mkDerivation rec {
   pname = "nncp";
-  version = "8.0.2";
+  version = "8.1.0";
   outputs = [ "out" "doc" "info" ];
 
   src = fetchurl {
     url = "http://www.nncpgo.org/download/${pname}-${version}.tar.xz";
-    sha256 = "sha256-hMb7bAdk3xFcUe5CTu9LnIR3VSJDUKbMSE86s8d5udM=";
+    sha256 = "sha256-d3U233dedtZrBWRdb0QElNOd/L1+Ut4CWvkZo5TPU+w=";
   };
 
   nativeBuildInputs = [ go redo-apenwarr ];

@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "glances-api";
-  version = "0.3.2";
+  version = "0.3.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "home-assistant-ecosystem";
     repo = "python-glances-api";
     rev = version;
-    sha256 = "sha256-zVK63SI8ZeVrY2iEEkgp8pq6RDheKeApb9/RWgZCKGI=";
+    sha256 = "sha256-F3jmYBZNzI4hRmH1J+S5RwxjouZNcUJOnD3QpX1J39s=";
   };
 
   nativeBuildInputs = [

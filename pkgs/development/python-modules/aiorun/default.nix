@@ -4,21 +4,21 @@
 , pythonOlder
 , pygments
 , pytestCheckHook
-, pytest-cov
 , uvloop
 }:
 
 buildPythonPackage rec {
   pname = "aiorun";
-  version = "2021.8.1";
+  version = "2021.10.1";
   format = "flit";
+
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "cjrh";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-aehYPZ1+GEO+bNSsE5vVgjtVo4MRMH+vNurk+bJ1/Io=";
+    hash = "sha256-9e1vUWDBv3BYWuKR/rZUvaIxFFetzBQaygXKnl4PDd8=";
   };
 
   propagatedBuildInputs = [
@@ -27,7 +27,6 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytestCheckHook
-    pytest-cov
     uvloop
   ];
 
@@ -36,7 +35,9 @@ buildPythonPackage rec {
     export HOME=$TMPDIR
   '';
 
-  pythonImportsCheck = [ "aiorun" ];
+  pythonImportsCheck = [
+    "aiorun"
+  ];
 
   meta = with lib; {
     description = "Boilerplate for asyncio applications";

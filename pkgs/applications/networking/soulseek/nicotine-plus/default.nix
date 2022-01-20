@@ -19,8 +19,11 @@ python3Packages.buildPythonApplication rec {
   propagatedBuildInputs = [ gtk3 gdk-pixbuf gobject-introspection ]
     ++ (with python3Packages; [ pygobject3 ]);
 
+
   postInstall = ''
-    mv $out/bin/nicotine $out/bin/nicotine-plus
+    ln -s $out/bin/nicotine $out/bin/nicotine-plus
+    test -e $out/share/applications/org.nicotine_plus.Nicotine.desktop && exit 1
+    install -D data/org.nicotine_plus.Nicotine.desktop -t $out/share/applications
   '';
 
   preFixup = ''

@@ -92,6 +92,8 @@ stdenv.mkDerivation rec {
     "--target=${stdenv.hostPlatform.config}"
   ];
 
+  # mkDerivation by default appends --build/--host to configureFlags when cross compiling
+  # These defaults are bogus for Spidermonkey - avoid passing them by providing an empty list
   configurePlatforms = [ ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];

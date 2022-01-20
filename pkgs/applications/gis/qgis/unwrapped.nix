@@ -114,7 +114,7 @@ in mkDerivation rec {
   cmakeFlags = [
     "-DCMAKE_SKIP_BUILD_RPATH=OFF"
     "-DPYQT5_SIP_DIR=${python3Packages.pyqt5}/${python3Packages.python.sitePackages}/PyQt5/bindings"
-    "-DQSCI_SIP_DIR=${python3Packages.qscintilla-qt5}/share/sip/PyQt5"
+    "-DQSCI_SIP_DIR=${python3Packages.qscintilla-qt5}/${python3Packages.python.sitePackages}/PyQt5/bindings"
   ] ++ lib.optional (!withWebKit) "-DWITH_QTWEBKIT=OFF"
     ++ lib.optional withGrass "-DGRASS_PREFIX7=${grass}/${grass.name}";
 

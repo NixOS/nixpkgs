@@ -204,7 +204,7 @@ in
       postStart = ''
         # Make sure elasticsearch is up and running before dependents
         # are started
-        while ! ${pkgs.curl}/bin/curl -sS -f http://localhost:${toString cfg.port} 2>/dev/null; do
+        while ! ${pkgs.curl}/bin/curl -sS -f http://${cfg.listenAddress}:${toString cfg.port} 2>/dev/null; do
           sleep 1
         done
       '';

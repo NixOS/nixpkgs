@@ -60,6 +60,7 @@ cl-l10n
 cl-libuv
 cl-locale
 cl-markup
+cl-mustache
 cl-mysql
 cl-paths-ttf
 cl-pattern

@@ -20,11 +20,11 @@
 
 stdenv.mkDerivation rec {
   pname = "spidermonkey";
-  version = "91.4.0";
+  version = "91.5.0";
 
   src = fetchurl {
     url = "mirror://mozilla/firefox/releases/${version}esr/source/firefox-${version}esr.source.tar.xz";
-    sha256 = "09xkzk27krzyj1qx8cjjn2zpnws1cncka75828kk7ychnjfq48p7";
+    sha256 = "04y8nj1f065b3dn354f1ns3cm9xp4kljr5ippvmfdqr7cb4xjp7l";
   };
 
   outputs = [ "out" "dev" ];
@@ -87,6 +87,10 @@ stdenv.mkDerivation rec {
     "--host=${stdenv.buildPlatform.config}"
     "--target=${stdenv.hostPlatform.config}"
   ];
+
+  # mkDerivation by default appends --build/--host to configureFlags when cross compiling
+  # These defaults are bogus for Spidermonkey - avoid passing them by providing an empty list
+  configurePlatforms = [ ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 

@@ -31,3 +31,11 @@ group :development, :test do
 
   gem 'grpc-tools', '= 1.30.2'
 end
+
+# Gems required in omnibus-gitlab pipeline
+group :development, :test, :omnibus do
+  # Using a fork until https://github.com/pivotal/LicenseFinder/pull/816 is
+  # resolved. For details, check discussion in
+  # https://gitlab.com/gitlab-org/gitlab/-/merge_requests/74881
+  gem 'gitlab-license_finder', require: false
+end

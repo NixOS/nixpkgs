@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
+{ config, options, lib, pkgs, ... }:
 
 with lib;
 
 let
   cfg = config.services.couchdb;
+  opt = options.services.couchdb;
   configFile = pkgs.writeText "couchdb.ini" (
     ''
       [couchdb]
@@ -153,6 +154,7 @@ in {
       argsFile = mkOption {
         type = types.path;
         default = "${cfg.package}/etc/vm.args";
+        defaultText = literalExpression ''"config.${opt.package}/etc/vm.args"'';
         description = ''
           vm.args configuration. Overrides Couchdb's Erlang VM parameters file.
         '';

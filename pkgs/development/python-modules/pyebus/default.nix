@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pyebus";
-  version = "1.2.4";
+  version = "1.4.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "i+p40s9SXey1lfXWW+PiXsA1kUF4o6Rk7QLmQ2ljN6g=";
+    sha256 = "sha256-6ooOSJAIi8vYmCjDHnbMGQJfPqPmzA5thDSg+iM7T+8=";
   };
 
   nativeBuildInputs = [

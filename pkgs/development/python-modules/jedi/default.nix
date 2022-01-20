@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "jedi";
-  version = "0.18.0";
+  version = "0.18.1";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "davidhalter";
     repo = "jedi";
     rev = "v${version}";
-    sha256 = "0d8zdj56hyxbsvvrid6r3nprm0ygxaad6zpsbhbj6k7p3dcx7acw";
+    sha256 = "sha256-wWNPNi16WtefvB7GcQBnWMbHVlVzxSFs4TKRqEasuR0=";
     fetchSubmodules = true;
   };
 

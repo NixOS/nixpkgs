@@ -114,8 +114,11 @@ in
       name = "fancyindex";
       owner = "aperezdc";
       repo = "ngx-fancyindex";
-      rev = "v0.4.4";
-      sha256 = "14xmzcl608pr7hb7wng6hpz7by51cfnxlszbka3zhp3kk86ljsi6";
+      rev = "v0.5.2";
+      sha256 = "0nar45lp3jays3p6b01a78a6gwh6v0snpzcncgiphcqmj5kw8ipg";
+    };
+    meta = {
+      maintainers = with lib.maintainers; [ aneeshusa ];
     };
   };
 

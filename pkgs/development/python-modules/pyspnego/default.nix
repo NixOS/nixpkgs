@@ -48,7 +48,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python SPNEGO authentication library";
-    homepage = "Python SPNEGO authentication library";
+    homepage = "https://github.com/jborean93/pyspnego";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

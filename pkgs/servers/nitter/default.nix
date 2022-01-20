@@ -2,14 +2,14 @@
 
 nimPackages.buildNimPackage rec {
   pname = "nitter";
-  version = "unstable-2021-07-18";
+  version = "unstable-2021-12-31";
   nimBinOnly = true;
 
   src = fetchFromGitHub {
     owner = "zedeus";
     repo = "nitter";
-    rev = "6c5cb01b294d4f6e3b438fc47683359eb0fe5057";
-    sha256 = "1dl8ndyv8m1hnydrp5xilcpp2cfbp02d5jap3y42i4nazc9ar6p4";
+    rev = "9d117aa15b3c3238cee79acd45d655eeb0e46293";
+    sha256 = "06hd3r1kgxx83sl5ss90r39v815xp2ki72fc8p64kid34mcn57cz";
   };
 
   buildInputs = with nimPackages; [
@@ -25,7 +25,8 @@ nimPackages.buildNimPackage rec {
     packedjson
     supersnappy
     redpool
-    frosty
+    flatty
+    zippy
     redis
   ];
 

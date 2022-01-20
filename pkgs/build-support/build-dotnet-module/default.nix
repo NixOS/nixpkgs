@@ -117,40 +117,42 @@ let
     DOTNET_NOLOGO = true; # This disables the welcome message.
     DOTNET_CLI_TELEMETRY_OPTOUT = true;
 
-    passthru.fetch-deps = args.passthru.fetch-deps or writeScript "fetch-${args.pname}-deps" ''
-      set -euo pipefail
-      cd "$(dirname "''${BASH_SOURCE[0]}")"
+    passthru = {
+      fetch-deps = writeScript "fetch-${args.pname}-deps" ''
+        set -euo pipefail
+        cd "$(dirname "''${BASH_SOURCE[0]}")"
 
-      export HOME=$(mktemp -d)
-      deps_file="/tmp/${args.pname}-deps.nix"
+        export HOME=$(mktemp -d)
+        deps_file="/tmp/${args.pname}-deps.nix"
 
-      store_src="${package.src}"
-      src="$(mktemp -d /tmp/${args.pname}.XXX)"
-      cp -rT "$store_src" "$src"
-      chmod -R +w "$src"
+        store_src="${package.src}"
+        src="$(mktemp -d /tmp/${args.pname}.XXX)"
+        cp -rT "$store_src" "$src"
+        chmod -R +w "$src"
 
-      trap "rm -rf $src $HOME" EXIT
-      pushd "$src"
+        trap "rm -rf $src $HOME" EXIT
+        pushd "$src"
 
-      export DOTNET_NOLOGO=1
-      export DOTNET_CLI_TELEMETRY_OPTOUT=1
+        export DOTNET_NOLOGO=1
+        export DOTNET_CLI_TELEMETRY_OPTOUT=1
 
-      mkdir -p "$HOME/nuget_pkgs"
+        mkdir -p "$HOME/nuget_pkgs"
 
-      for project in "${lib.concatStringsSep "\" \"" ((lib.toList projectFile) ++ lib.optionals (testProjectFile != "") (lib.toList testProjectFile))}"; do
-        ${dotnet-sdk}/bin/dotnet restore "$project" \
-          ${lib.optionalString (!enableParallelBuilding) "--disable-parallel"} \
-          -p:ContinuousIntegrationBuild=true \
-          -p:Deterministic=true \
-          --packages "$HOME/nuget_pkgs" \
-          "''${dotnetRestoreFlags[@]}" \
-          "''${dotnetFlags[@]}"
-      done
+        for project in "${lib.concatStringsSep "\" \"" ((lib.toList projectFile) ++ lib.optionals (testProjectFile != "") (lib.toList testProjectFile))}"; do
+          ${dotnet-sdk}/bin/dotnet restore "$project" \
+            ${lib.optionalString (!enableParallelBuilding) "--disable-parallel"} \
+            -p:ContinuousIntegrationBuild=true \
+            -p:Deterministic=true \
+            --packages "$HOME/nuget_pkgs" \
+            "''${dotnetRestoreFlags[@]}" \
+            "''${dotnetFlags[@]}"
+        done
 
-      echo "Writing lockfile..."
-      ${nuget-to-nix}/bin/nuget-to-nix "$HOME/nuget_pkgs" > "$deps_file"
-      echo "Succesfully wrote lockfile to: $deps_file"
-    '';
+        echo "Writing lockfile..."
+        ${nuget-to-nix}/bin/nuget-to-nix "$HOME/nuget_pkgs" > "$deps_file"
+        echo "Succesfully wrote lockfile to: $deps_file"
+      '';
+    } // args.passthru or {};
 
     configurePhase = args.configurePhase or ''
       runHook preConfigure
@@ -222,7 +224,7 @@ let
           "''${dotnetInstallFlags[@]}"  \
           "''${dotnetFlags[@]}"
       done
-    '' + (lib.optionalString packNupkg ''
+    '' + lib.optionalString packNupkg ''
       for project in ''${projectFile[@]}; do
         dotnet pack "$project" \
           -p:ContinuousIntegrationBuild=true \
@@ -233,16 +235,24 @@ let
           "''${dotnetPackFlags[@]}"  \
           "''${dotnetFlags[@]}"
       done
-    '') + (if executables != null then ''
-      for executable in $executables; do
+    '' + ''
+      runHook postInstall
+    '';
+
+    preFixup = ''
+      _wrapDotnetProgram() {
+        makeWrapper "$1" "$out/bin/$(basename "$executable")" \
+          --set DOTNET_ROOT "${dotnet-runtime}" \
+          --suffix LD_LIBRARY_PATH : "${lib.makeLibraryPath runtimeDeps}" \
+          "''${gappsWrapperArgs[@]}" \
+          "''${makeWrapperArgs[@]}"
+      }
+    '' + (if executables != null then ''
+      for executable in ''${executables[@]}; do
         execPath="$out/lib/${args.pname}/$executable"
 
         if [[ -f "$execPath" && -x "$execPath" ]]; then
-          makeWrapper "$execPath" "$out/bin/$(basename "$executable")" \
-            --set DOTNET_ROOT "${dotnet-runtime}" \
-            --suffix LD_LIBRARY_PATH : "${lib.makeLibraryPath runtimeDeps}" \
-            "''${gappsWrapperArgs[@]}" \
-            "''${makeWrapperArgs[@]}"
+          _wrapDotnetProgram $execPath
         else
           echo "Specified binary \"$executable\" is either not an executable, or does not exist!"
           exit 1
@@ -251,16 +261,10 @@ let
     '' else ''
       for executable in $out/lib/${args.pname}/*; do
         if [[ -f "$executable" && -x "$executable" && "$executable" != *"dll"* ]]; then
-          makeWrapper "$executable" "$out/bin/$(basename "$executable")" \
-            --set DOTNET_ROOT "${dotnet-runtime}" \
-            --suffix LD_LIBRARY_PATH : "${lib.makeLibraryPath runtimeDeps}" \
-            "''${gappsWrapperArgs[@]}" \
-            "''${makeWrapperArgs[@]}"
+          _wrapDotnetProgram $executable
         fi
       done
-    '') + ''
-      runHook postInstall
-    '';
+    '');
   });
 in
   package

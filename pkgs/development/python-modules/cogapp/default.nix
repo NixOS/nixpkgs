@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A code generator for executing Python snippets in source files";
-    homepage = "http://nedbatchelder.com/code/cog";
+    homepage = "https://nedbatchelder.com/code/cog";
     license = licenses.mit;
     maintainers = with maintainers; [ lovek323 ];
   };

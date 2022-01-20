@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Music tracker application, similar to Fasttracker II";
-    homepage = "http://milkytracker.org";
+    homepage = "https://milkytracker.org/";
     license = licenses.gpl3Plus;
     platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers = with maintainers; [];

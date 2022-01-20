@@ -18,7 +18,7 @@ buildGraalvmNativeImage rec {
     description = "A linter for Clojure code that sparks joy";
     homepage = "https://github.com/clj-kondo/clj-kondo";
     license = licenses.epl10;
-    changelog = "https://github.com/clj-kondo/clj-kondo/blob/v${versiont}/CHANGELOG.md";
+    changelog = "https://github.com/clj-kondo/clj-kondo/blob/v${version}/CHANGELOG.md";
     maintainers = with maintainers; [ jlesquembre bandresen thiagokokada ];
   };
 }

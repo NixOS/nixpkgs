@@ -9,6 +9,7 @@ const child_process = require('child_process')
 const path = require('path')
 const lockfile = require('./yarnpkg-lockfile.js')
 const { promisify } = require('util')
+const url = require('url')
 
 const execFile = promisify(child_process.execFile)
 
@@ -21,15 +22,15 @@ const exec = async (...args) => {
 // This has to match the logic in pkgs/development/tools/yarn2nix-moretea/yarn2nix/lib/urlToName.js
 // so that fixup_yarn_lock produces the same paths
 const urlToName = url => {
-  const isCodeloadGitTarballUrl = url.startsWith('https://codeload.github.com/') && url.includes('/tar.gz/')
+	const isCodeloadGitTarballUrl = url.startsWith('https://codeload.github.com/') && url.includes('/tar.gz/')
 
-  if (url.startsWith('git+') || isCodeloadGitTarballUrl) {
-    return path.basename(url)
-  } else {
-    return url
-      .replace(/https:\/\/(.)*(.com)\//g, '') // prevents having long directory names
-      .replace(/[@/%:-]/g, '_') // replace @ and : and - and % characters with underscore
-  }
+	if (url.startsWith('git+') || isCodeloadGitTarballUrl) {
+		return path.basename(url)
+	} else {
+		return url
+			.replace(/https:\/\/(.)*(.com)\//g, '') // prevents having long directory names
+			.replace(/[@/%:-]/g, '_') // replace @ and : and - and % characters with underscore
+	}
 }
 
 const downloadFileHttps = (fileName, url, expectedHash) => {
@@ -72,6 +73,23 @@ const downloadGit = async (fileName, url, rev) => {
 	await exec('rm', [ '-rf', fileName + '.tmp', ])
 }
 
+const isGitUrl = pattern => {
+	// https://github.com/yarnpkg/yarn/blob/3119382885ea373d3c13d6a846de743eca8c914b/src/resolvers/exotics/git-resolver.js#L15-L47
+	const GIT_HOSTS = ['github.com', 'gitlab.com', 'bitbucket.com', 'bitbucket.org']
+	const GIT_PATTERN_MATCHERS = [/^git:/, /^git\+.+:/, /^ssh:/, /^https?:.+\.git$/, /^https?:.+\.git#.+/]
+
+	for (const matcher of GIT_PATTERN_MATCHERS) if (matcher.test(pattern)) return true
+
+	const {hostname, path} = url.parse(pattern)
+	if (hostname && path && GIT_HOSTS.indexOf(hostname) >= 0
+		// only if dependency is pointing to a git repo,
+		// e.g. facebook/flow and not file in a git repo facebook/flow/archive/v1.0.0.tar.gz
+		&& path.split('/').filter(p => !!p).length === 2
+	) return true
+
+	return false
+}
+
 const downloadPkg = (pkg, verbose) => {
 	const [ url, hash ] = pkg.resolved.split('#')
 	if (verbose) console.log('downloading ' + url)
@@ -79,12 +97,10 @@ const downloadPkg = (pkg, verbose) => {
 	if (url.startsWith('https://codeload.github.com/') && url.includes('/tar.gz/')) {
 		const s = url.split('/')
 		downloadGit(fileName, `https://github.com/${s[3]}/${s[4]}.git`, s[6])
+	} else if (isGitUrl(url)) {
+		return downloadGit(fileName, url.replace(/^git\+/, ''), hash)
 	} else if (url.startsWith('https://')) {
 		return downloadFileHttps(fileName, url, hash)
-	} else if (url.startsWith('git:')) {
-		return downloadGit(fileName, url.replace(/^git\+/, ''), hash)
-	} else if (url.startsWith('git+')) {
-		return downloadGit(fileName, url.replace(/^git\+/, ''), hash)
 	} else if (url.startsWith('file:')) {
 		console.warn(`ignoring unsupported file:path url "${url}"`)
 	} else {

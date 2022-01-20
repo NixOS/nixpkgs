@@ -1,21 +1,39 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, hypothesis, mypy }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, hypothesis
+, mypy
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "algebraic-data-types";
-  version = "0.1.1";
+  version = "0.2.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jspahrsummers";
     repo = "adt";
     rev = "v" + version;
-    sha256 = "1py94jsgh6wch59n9dxnwvk74psbpa1679zfmripa1qfc2218kqi";
+    hash = "sha256-RHLI5rmFxklzG9dyYgYfSS/srCjcxNpzNcK/RPNJBPE=";
   };
 
-  disabled = pythonOlder "3.6";
-
   checkInputs = [
+    pytestCheckHook
     hypothesis
     mypy
+  ];
+
+  disabledTestPaths = [
+    # AttributeError: module 'mypy.types' has no attribute 'TypeVarDef'
+    "tests/test_mypy_plugin.py"
+  ];
+
+  pythonImportsCheck = [
+    "adt"
   ];
 
   meta = with lib; {
@@ -23,6 +41,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/jspahrsummers/adt";
     license = licenses.mit;
     maintainers = with maintainers; [ uri-canva ];
-    platforms = platforms.unix;
   };
 }

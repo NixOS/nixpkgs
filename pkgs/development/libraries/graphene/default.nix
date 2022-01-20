@@ -94,7 +94,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A thin layer of graphic data types";
-    homepage = "https://ebassi.github.com/graphene";
+    homepage = "https://github.com/ebassi/graphene";
     license = licenses.mit;
     maintainers = teams.gnome.members ++ (with maintainers; [ ]);
     platforms = platforms.unix;

@@ -1,28 +1,87 @@
-{ lib, stdenv, fetchurl, autoreconfHook, fetchpatch
-, libarchive, perl, xorg, libdvdnav, libbluray
-, zlib, a52dec, libmad, faad2, ffmpeg, alsa-lib
-, pkg-config, dbus, fribidi, freefont_ttf, libebml, libmatroska
-, libvorbis, libtheora, speex, lua5, libgcrypt, libgpg-error, libupnp
-, libcaca, libpulseaudio, flac, schroedinger, libxml2, librsvg
-, mpeg2dec, systemd, gnutls, avahi, libcddb, libjack2, SDL, SDL_image
-, libmtp, unzip, taglib, libkate, libtiger, libv4l, samba, libssh2, liboggz
-, libass, libva, libdvbpsi, libdc1394, libraw1394, libopus
-, libvdpau, libsamplerate, libspatialaudio, live555, fluidsynth
-, wayland, wayland-protocols, ncurses, srt
-, onlyLibVLC ? false
-, withQt5 ? true, qtbase, qtsvg, qtx11extras, wrapQtAppsHook
-, jackSupport ? false
-, skins2Support ? !onlyLibVLC, freetype
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, SDL
+, SDL_image
+, a52dec
+, alsa-lib
+, autoreconfHook
+, avahi
+, dbus
+, faad2
+, ffmpeg
+, flac
+, fluidsynth
+, freefont_ttf
+, fribidi
+, gnutls
+, libarchive
+, libass
+, libbluray
+, libcaca
+, libcddb
+, libdc1394
+, libdvbpsi
+, libdvdnav
+, libebml
+, libgcrypt
+, libgpg-error
+, libjack2
+, libkate
+, libmad
+, libmatroska
+, libmtp
+, liboggz
+, libopus
+, libpulseaudio
+, libraw1394
+, librsvg
+, libsamplerate
+, libspatialaudio
+, libssh2
+, libtheora
+, libtiger
+, libupnp
+, libv4l
+, libva
+, libvdpau
+, libvorbis
+, libxml2
+, live555
+, lua5
+, mpeg2dec
+, ncurses
+, perl
+, pkg-config
 , removeReferencesTo
-, chromecastSupport ? true, protobuf, libmicrodns
+, samba
+, schroedinger
+, speex
+, srt
+, systemd
+, taglib
+, unzip
+, wayland
+, wayland-protocols
+, xorg
+, zlib
+
+, chromecastSupport ? true, libmicrodns, protobuf
+, jackSupport ? false
+, onlyLibVLC ? false
+, skins2Support ? !onlyLibVLC, freetype
+, withQt5 ? true, qtbase, qtsvg, qtx11extras, wrapQtAppsHook
 }:
 
 # chromecastSupport requires TCP port 8010 to be open for it to work.
 # If your firewall is enabled, make sure to have something like:
 #   networking.firewall.allowedTCPPorts = [ 8010 ];
 
-with lib;
-
+let
+  inherit (lib) optionalString optional optionals;
+  hostIsAarch = stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isAarch64;
+in
 stdenv.mkDerivation rec {
   pname = "${optionalString onlyLibVLC "lib"}vlc";
   version = "3.0.16";
@@ -36,32 +95,95 @@ stdenv.mkDerivation rec {
   # which are not included here for no other reason that nobody has mentioned
   # needing them
   buildInputs = [
-    zlib a52dec libmad faad2 ffmpeg alsa-lib libdvdnav libdvdnav.libdvdread
-    libbluray dbus fribidi libvorbis libtheora speex lua5 libgcrypt libgpg-error
-    libupnp libcaca libpulseaudio flac schroedinger libxml2 librsvg mpeg2dec
-    systemd gnutls avahi libcddb SDL SDL_image libmtp taglib libarchive
-    libkate libtiger libv4l samba libssh2 liboggz libass libdvbpsi libva
-    xorg.xlibsWrapper xorg.libXv xorg.libXvMC xorg.libXpm xorg.xcbutilkeysyms
-    libdc1394 libraw1394 libopus libebml libmatroska libvdpau libsamplerate
-    libspatialaudio fluidsynth wayland wayland-protocols ncurses srt
-  ] ++ optional (!stdenv.hostPlatform.isAarch64 && !stdenv.hostPlatform.isAarch32) live555
-    ++ optionals withQt5    [ qtbase qtsvg qtx11extras ]
-    ++ optionals skins2Support (with xorg; [ libXpm freetype libXext libXinerama ])
-    ++ optional jackSupport libjack2
-    ++ optionals chromecastSupport [ protobuf libmicrodns ];
+    SDL
+    SDL_image
+    a52dec
+    alsa-lib
+    avahi
+    dbus
+    faad2
+    ffmpeg
+    flac
+    fluidsynth
+    fribidi
+    gnutls
+    libarchive
+    libass
+    libbluray
+    libcaca
+    libcddb
+    libdc1394
+    libdvbpsi
+    libdvdnav
+    libdvdnav.libdvdread
+    libebml
+    libgcrypt
+    libgpg-error
+    libkate
+    libmad
+    libmatroska
+    libmtp
+    liboggz
+    libopus
+    libpulseaudio
+    libraw1394
+    librsvg
+    libsamplerate
+    libspatialaudio
+    libssh2
+    libtheora
+    libtiger
+    libupnp
+    libv4l
+    libva
+    libvdpau
+    libvorbis
+    libxml2
+    lua5
+    mpeg2dec
+    ncurses
+    samba
+    schroedinger
+    speex
+    srt
+    systemd
+    taglib
+    wayland
+    wayland-protocols
+    zlib
+  ]
+  ++ (with xorg; [
+    libXpm
+    libXv
+    libXvMC
+    xcbutilkeysyms
+    xlibsWrapper
+  ])
+  ++ optional (!hostIsAarch) live555
+  ++ optional jackSupport libjack2
+  ++ optionals chromecastSupport [ libmicrodns protobuf ]
+  ++ optionals skins2Support (with xorg; [ freetype libXext libXinerama libXpm ])
+  ++ optionals withQt5 [ qtbase qtsvg qtx11extras ];
 
-  nativeBuildInputs = [ autoreconfHook perl pkg-config removeReferencesTo unzip ]
-    ++ optionals withQt5 [ wrapQtAppsHook ];
+  nativeBuildInputs = [
+    autoreconfHook
+    perl
+    pkg-config
+    removeReferencesTo
+    unzip
+  ]
+  ++ optionals withQt5 [ wrapQtAppsHook ];
 
   enableParallelBuilding = true;
 
-  LIVE555_PREFIX = if (!stdenv.hostPlatform.isAarch64 && !stdenv.hostPlatform.isAarch32) then live555 else null;
+  LIVE555_PREFIX = if hostIsAarch then null else live555;
 
   # vlc depends on a c11-gcc wrapper script which we don't have so we need to
   # set the path to the compiler
   BUILDCC = "${stdenv.cc}/bin/gcc";
 
   patches = [
+    # Required in order to run newer srt plugin. Remove it when next release arrives
     (fetchpatch {
       url = "https://raw.githubusercontent.com/archlinux/svntogit-packages/4250fe8f28c220d883db454cec2b2c76a07473eb/trunk/vlc-3.0.11.1-srt_1.4.2.patch";
       sha256 = "53poWjZfwq/6l316sqiCp0AtcGweyXBntcLDFPSokHQ=";
@@ -86,8 +208,8 @@ stdenv.mkDerivation rec {
   # Most of the libraries are auto-detected so we don't need to set a bunch of
   # "--enable-foo" flags here
   configureFlags = [
-    "--with-kde-solid=$out/share/apps/solid/actions"
     "--enable-srt" # Explicit enable srt to ensure the patch is applied.
+    "--with-kde-solid=$out/share/apps/solid/actions"
   ] ++ optional onlyLibVLC "--disable-vlc"
     ++ optional skins2Support "--enable-skins2"
     ++ optionals chromecastSupport [
@@ -111,6 +233,7 @@ stdenv.mkDerivation rec {
     description = "Cross-platform media player and streaming server";
     homepage = "http://www.videolan.org/vlc/";
     license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.linux;
   };
 }

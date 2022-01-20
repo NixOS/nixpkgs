@@ -1,52 +1,57 @@
 { lib
-, fetchPypi
-, pythonOlder
+, botocore
 , buildPythonPackage
 , docutils
+, fetchFromGitHub
 , mock
-, nose
-, coverage
+, pytestCheckHook
+, pythonOlder
 , wheel
-, unittest2
-, botocore
-, futures ? null
 }:
 
 buildPythonPackage rec {
   pname = "s3transfer";
   version = "0.5.0";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-UO2CPh3FhorUDI3JIHL3V6oOZToZKEXJSjtnb0pi2kw=";
+  disabled = pythonOlder "3.6";
+
+  src = fetchFromGitHub {
+    owner = "boto";
+    repo = pname;
+    rev = version;
+    hash = "sha256-0Dl7oKB2xxq/a8do3HgBUIGay88yOGBUdOGo+QCtnUE=";
   };
 
-  propagatedBuildInputs =
-    [
-      botocore
-    ] ++ lib.optional (pythonOlder "3") futures;
+  propagatedBuildInputs = [
+    botocore
+  ];
 
   buildInputs = [
     docutils
     mock
-    nose
-    coverage
+    pytestCheckHook
     wheel
-    unittest2
   ];
 
-  checkPhase = ''
-    pushd s3transfer/tests
-    nosetests -v unit/ functional/
-    popd
-  '';
+  disabledTestPaths = [
+    # Requires network access
+    "tests/integration/test_copy.py"
+    "tests/integration/test_delete.py"
+    "tests/integration/test_download.py"
+    "tests/integration/test_processpool.py"
+    "tests/integration/test_s3transfer.py"
+    "tests/integration/test_upload.py"
+  ];
 
-  # version on pypi has no tests/ dir
-  doCheck = false;
+  pythonImportsCheck = [
+    "s3transfer"
+  ];
 
   meta = with lib; {
+    description = "Library for managing Amazon S3 transfers";
     homepage = "https://github.com/boto/s3transfer";
     license = licenses.asl20;
-    description = "A library for managing Amazon S3 transfers";
+    maintainers = with maintainers; [ ];
   };
 }

@@ -97,4 +97,6 @@ in
 
     services.kubernetes.proxy.kubeconfig.server = mkDefault top.apiserverAddress;
   };
+
+  meta.buildDocsInSandbox = false;
 }

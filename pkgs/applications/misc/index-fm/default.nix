@@ -27,6 +27,11 @@ mkDerivation rec {
     sha256 = "sha256-Os/5igKGYBeY/FxO6I+7mpFohuk3yHGLd7vE2GewFpU=";
   };
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace "-Werror" ""
+  '';
+
   nativeBuildInputs = [
     cmake
     extra-cmake-modules

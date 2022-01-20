@@ -254,6 +254,8 @@ let
 
     data-encoding = callPackage ../development/ocaml-modules/data-encoding { };
 
+    dbf =  callPackage ../development/ocaml-modules/dbf { };
+
     decompress =  callPackage ../development/ocaml-modules/decompress { };
 
     diet =  callPackage ../development/ocaml-modules/diet { };
@@ -932,6 +934,8 @@ let
 
     ocf = callPackage ../development/ocaml-modules/ocf { };
 
+    ocf_ppx = callPackage ../development/ocaml-modules/ocf/ppx.nix { };
+
     ocp-build = callPackage ../development/tools/ocaml/ocp-build { };
 
     ocp-indent = callPackage ../development/tools/ocaml/ocp-indent { };
@@ -1277,6 +1281,8 @@ let
 
     tcslib = callPackage ../development/ocaml-modules/tcslib { };
 
+    terminal = callPackage ../development/ocaml-modules/terminal { };
+
     terminal_size = callPackage ../development/ocaml-modules/terminal_size { };
 
     tezos-010-PtGRANAD-test-helpers = callPackage ../development/ocaml-modules/tezos/010-PtGRANAD-test-helpers.nix { };
@@ -1368,6 +1374,8 @@ let
 
     vchan = callPackage ../development/ocaml-modules/vchan { };
 
+    vector = callPackage ../development/ocaml-modules/vector { };
+
     vg = callPackage ../development/ocaml-modules/vg { };
 
     vlq = callPackage ../development/ocaml-modules/vlq { };
@@ -1403,6 +1411,8 @@ let
     xml-light = callPackage ../development/ocaml-modules/xml-light { };
 
     xtmpl = callPackage ../development/ocaml-modules/xtmpl { };
+
+    xtmpl_ppx = callPackage ../development/ocaml-modules/xtmpl/ppx.nix { };
 
     yaml = callPackage ../development/ocaml-modules/yaml { };
 

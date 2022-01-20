@@ -74,7 +74,7 @@ there are 3 steps, frontend dependencies (javascript), backend dependencies (eli
 
 ##### mixRelease - Frontend dependencies (javascript) {#mix-release-javascript-deps}
 
-for phoenix projects, inside of nixpkgs you can either use yarn2nix (mkYarnModule) or node2nix. An example with yarn2nix can be found [here](https://github.com/NixOS/nixpkgs/blob/master/pkgs/servers/web-apps/plausible/default.nix#L39). An example with node2nix will follow. To package something outside of nixpkgs, you have alternatives like [npmlock2nix](https://github.com/nix-community/npmlock2nix) or [nix-npm-buildpackage](https://github.com/serokell/nix-npm-buildpackage)
+For phoenix projects, inside of nixpkgs you can either use yarn2nix (mkYarnModule) or node2nix. An example with yarn2nix can be found [here](https://github.com/NixOS/nixpkgs/blob/master/pkgs/servers/web-apps/plausible/default.nix#L39). An example with node2nix will follow. To package something outside of nixpkgs, you have alternatives like [npmlock2nix](https://github.com/nix-community/npmlock2nix) or [nix-npm-buildpackage](https://github.com/serokell/nix-npm-buildpackage)
 
 ##### mixRelease - backend dependencies (mix) {#mix-release-mix-deps}
 
@@ -82,13 +82,13 @@ There are 2 ways to package backend dependencies. With mix2nix and with a fixed-
 
 ###### mix2nix {#mix2nix}
 
-mix2nix is a cli tool available in nixpkgs. it will generate a nix expression from a mix.lock file. It is quite standard in the 2nix tool series.
+`mix2nix` is a cli tool available in nixpkgs. it will generate a nix expression from a mix.lock file. It is quite standard in the 2nix tool series.
 
 Note that currently mix2nix can't handle git dependencies inside the mix.lock file. If you have git dependencies, you can either add them manually (see [example](https://github.com/NixOS/nixpkgs/blob/master/pkgs/servers/pleroma/default.nix#L20)) or use the FOD method.
 
 The advantage of using mix2nix is that nix will know your whole dependency graph. On a dependency update, this won't trigger a full rebuild and download of all the dependencies, where FOD will do so.
 
-practical steps:
+Practical steps:
 
 - run `mix2nix > mix_deps.nix` in the upstream repo.
 - pass `mixNixDeps = with pkgs; import ./mix_deps.nix { inherit lib beamPackages; };` as an argument to mixRelease.
@@ -277,6 +277,30 @@ let
 in
 mkShell {
   buildInputs = [ elixir ];
+}
+```
+
+### Using an overlay
+
+If you need to use an overlay to change some attributes of a derivation, e.g. if you need a bugfix from a version that is not yet available in nixpkgs, you can override attributes such as `version` (and the corresponding `sha256`) and then use this overlay in your development environment:
+
+#### `shell.nix`
+
+```nix
+let
+  elixir_1_13_1_overlay = (self: super: {
+      elixir_1_13 = super.elixir_1_13.override {
+        version = "1.13.1";
+        sha256 = "0z0b1w2vvw4vsnb99779c2jgn9bgslg7b1pmd9vlbv02nza9qj5p";
+      };
+    });
+  pkgs = import <nixpkgs> { overlays = [ elixir_1_13_1_overlay ]; };
+in
+with pkgs;
+mkShell {
+  buildInputs = [
+    elixir_1_13
+  ];
 }
 ```
 

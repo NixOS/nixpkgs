@@ -2,17 +2,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "helix";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "helix-editor";
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-NoVg/8oJIgMQtxlCSjrLnYCG8shigYqZzWAQwmiqxgA=";
+    sha256 = "sha256-d/USOtcPLjdgzN7TBCouBRmoSDH5LZD4R5Qq7lUrWZw=";
   };
 
-  cargoSha256 = "sha256-kqPI8WpGpr0VL7CbBTSsjKl3xqJrv/6Qjr6UFnIgaVo=";
+  cargoSha256 = "sha256-/EATU7HsGNB35YOBp8sofbPd1nl4d3Ggj1ay3QuHkCI=";
 
   nativeBuildInputs = [ makeWrapper ];
 

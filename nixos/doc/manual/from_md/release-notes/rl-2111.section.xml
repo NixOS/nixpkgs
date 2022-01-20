@@ -275,13 +275,6 @@
       </listitem>
       <listitem>
         <para>
-          <link xlink:href="https://maddy.email">maddy</link>, a
-          composable all-in-one mail server. Available as
-          <link xlink:href="options.html#opt-services.maddy.enable">services.maddy</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
           <link xlink:href="https://sr.ht">sourcehut</link>, a
           collection of tools useful for software development. Available
           as
@@ -1425,6 +1418,15 @@ Superuser created successfully.
           <literal>retroarch.override { cores = with libretro; [ citra snes9x ]; };</literal>.
           Also, <literal>retroarchFull</literal> derivation is available
           for those who want to have all RetroArch cores available.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The Linux kernel for security reasons now restricts access to
+          BPF syscalls via <literal>BPF_UNPRIV_DEFAULT_OFF=y</literal>.
+          Unprivileged access can be reenabled via the
+          <literal>kernel.unprivileged_bpf_disabled</literal> sysctl
+          knob.
         </para>
       </listitem>
     </itemizedlist>

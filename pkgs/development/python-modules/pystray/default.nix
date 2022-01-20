@@ -3,13 +3,13 @@
 
 buildPythonPackage rec {
   pname = "pystray";
-  version = "0.19.1";
+  version = "0.19.2";
 
   src = fetchFromGitHub {
     owner = "moses-palmer";
     repo = "pystray";
     rev = "v${version}";
-    sha256 = "sha256-7w3odneRfDQ7K965ffJ+xSaGvg/KM0vTrSIj0ee13Uk=";
+    sha256 = "sha256-8B178MSe4ujlnGBmQhIu+BoAh1doP9V5cL0ermLQTvs=";
   };
 
   nativeBuildInputs = [ sphinx ];

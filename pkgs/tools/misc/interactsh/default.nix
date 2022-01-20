@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "interactsh";
-  version = "0.0.6";
+  version = "0.0.7";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-9h2RdP0rVmStl+obMbBHcbfiOBiJ/2sbk2XvH3YaHRo=";
+    sha256 = "sha256-TP2U2gQHmpAFHr5uh7MCNXZ22k8+U4h0bBxkMiMzof0=";
   };
 
   vendorSha256 = "sha256-9ehliyOCrWSDHVtmuUFBdw4BY6ygOvr2JxxJ3TvmSFU=";

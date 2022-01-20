@@ -11,13 +11,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses libiconv ];
 
-  buildPhase = ''
+  preBuild = ''
     sed -i s/gcc/cc/g Makefile
     sed -i s%ncursesw/ncurses.h%ncurses.h% stfl_internals.h
-  '' + (lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     sed -i s/-soname/-install_name/ Makefile
-  '') + ''
-    make
   '';
 
   installPhase = ''

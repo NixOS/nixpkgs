@@ -3,7 +3,7 @@
 , ncurses, gtk2, gcr, libcap, libsecret
 , enabledFlavors ? [ "curses" "tty" "gtk2" "emacs" ]
   ++ lib.optionals stdenv.isLinux [ "gnome3" ]
-  ++ lib.optionals (stdenv.hostPlatform.system != "aarch64-darwin") [ "qt" ]
+  ++ lib.optionals (!stdenv.isDarwin) [ "qt" ]
 }:
 
 with lib;

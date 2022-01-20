@@ -2,13 +2,13 @@
 
 buildGoPackage rec {
   pname = "hjson-go";
-  version = "3.1.0";
+  version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = "hjson";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-X02NnSefJfKUfagzJpdW1UpOLe84SvRaTN+8GqGKzbU=";
+    sha256 = "sha256-yU1VkxwQ12CjzITR9X6LLaOfiteN+807rfB/tWcRR1c=";
   };
 
   goPackagePath = "github.com/hjson/hjson-go";

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fstar";
-  version = "2021.11.27";
+  version = "2021.12.25";
 
   src = fetchFromGitHub {
     owner = "FStarLang";
     repo = "FStar";
     rev = "v${version}";
-    sha256 = "sha256-OpY7vDb37ym4srsmD+deXiuofUJKRyKXG7g3zsJKvHo=";
+    sha256 = "RmXKv/admC1w26z/ClNhH11J8n87WTfDr2lYOF6Fx7I=";
   };
 
   nativeBuildInputs = [ makeWrapper installShellFiles ];

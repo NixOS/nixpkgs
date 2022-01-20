@@ -1,12 +1,14 @@
-{ lib, stdenv, fetchurl, perl, coreutils }:
+{ lib, stdenv, fetchFromGitHub, perl, coreutils }:
 
 stdenv.mkDerivation rec {
   pname = "libfaketime";
   version = "0.9.9";
 
-  src = fetchurl {
-    url = "https://github.com/wolfcw/libfaketime/archive/v${version}.tar.gz";
-    sha256 = "sha256-V9AYEVA2HAqbXI7vBbETkvYTStosLZmOkuY9rtY5ZHw=";
+  src = fetchFromGitHub {
+    owner = "wolfcw";
+    repo = "libfaketime";
+    rev = "v${version}";
+    sha256 = "sha256-P1guVggteGtoq8+eeE966hDPkRwsn0m7oLCohyPrIb4=";
   };
 
   patches = [

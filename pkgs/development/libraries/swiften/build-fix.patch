@@ -30,3 +30,13 @@ diff -wbBur swift-4.0.2/Swiften/Network/PlatformNATTraversalWorker.cpp swift-4.0
      if (natPMPSupported) {
          return natPMPInterface;
      }
+--- a/Swift/Controllers/ShowProfileController.h
++++ b/Swift/Controllers/ShowProfileController.h
+@@ -12,6 +12,7 @@
+ 
+ #pragma once
+ 
++#include <map>
+ #include <Swiften/Elements/ErrorPayload.h>
+ #include <Swiften/Elements/VCard.h>
+ #include <Swiften/JID/JID.h>

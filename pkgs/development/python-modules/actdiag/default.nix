@@ -1,18 +1,44 @@
-{ lib, buildPythonPackage, fetchPypi
-, nose, docutils, blockdiag, reportlab }:
+{ lib
+, blockdiag
+, buildPythonPackage
+, fetchFromGitHub
+, nose
+, pytestCheckHook
+, pythonOlder
+, setuptools
+}:
 
 buildPythonPackage rec {
   pname = "actdiag";
-  version = "2.0.0";
+  version = "3.0.0";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0g51v9dmdq18z33v332f1f0cmb3hqgaga5minj0mc2sglark1s7h";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "blockdiag";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-WmprkHOgvlsOIg8H77P7fzEqxGnj6xaL7Df7urRkg3o=";
   };
 
-  propagatedBuildInputs = [ blockdiag docutils ];
+  propagatedBuildInputs = [
+    blockdiag
+    setuptools
+  ];
 
-  checkInputs = [ nose reportlab ];
+  checkInputs = [
+    nose
+    pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    "src/actdiag/tests/"
+  ];
+
+  pythonImportsCheck = [
+    "actdiag"
+  ];
 
   meta = with lib; {
     description = "Generate activity-diagram image from spec-text file (similar to Graphviz)";

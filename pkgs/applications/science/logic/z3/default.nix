@@ -10,6 +10,7 @@
 , ocaml ? null
 , findlib ? null
 , zarith ? null
+, writeScript
 }:
 
 assert javaBindings -> jdk != null;
@@ -19,13 +20,13 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "z3";
-  version = "4.8.12";
+  version = "4.8.14";
 
   src = fetchFromGitHub {
     owner = "Z3Prover";
     repo = pname;
     rev = "z3-${version}";
-    sha256 = "1wbcdc7h3mag8infspvxxja2hiz4igjwxzvss2kqar1rjj4ivfx0";
+    sha256 = "jPSTVSndp/T7n+VxZ/g9Rjco00Up+9xeDIVkeLl1MTw=";
   };
 
   nativeBuildInputs = optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
@@ -66,6 +67,23 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "lib" "dev" "python" ]
     ++ optional javaBindings "java"
     ++ optional ocamlBindings "ocaml";
+
+   passthru = {
+    updateScript = writeScript "update-z3" ''
+      #!/usr/bin/env nix-shell
+      #!nix-shell -i bash -p common-updater-scripts curl jq
+
+      set -eu -o pipefail
+
+      # Expect tags in format
+      #    [{name: "Nightly", ..., {name: "z3-vv.vv.vv", ...].
+      # Below we extract frst "z3-vv.vv" and drop "z3-" prefix.
+      newVersion="$(curl -s https://api.github.com/repos/Z3Prover/z3/releases |
+          jq 'first(.[].name|select(startswith("z3-"))|ltrimstr("z3-"))' --raw-output
+      )"
+      update-source-version ${pname} "$newVersion"
+    '';
+   };
 
   meta = with lib; {
     description = "A high-performance theorem prover and SMT solver";

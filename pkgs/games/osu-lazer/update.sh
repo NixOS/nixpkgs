@@ -22,6 +22,9 @@ chmod -R +w "$src"
 
 pushd "$src"
 
+export DOTNET_NOLOGO=1
+export DOTNET_CLI_TELEMETRY_OPTOUT=1
+
 mkdir ./nuget_tmp.packages
 dotnet restore osu.Desktop --packages ./nuget_tmp.packages --runtime linux-x64
 

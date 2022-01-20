@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#! nix-shell -i bash -p jq
+#! nix-shell -I nixpkgs=../../../../.. -i bash -p jq
 # shellcheck shell=bash
 
 # Update all providers which have specified provider source address
@@ -14,9 +14,9 @@ providers=$(
 )
 
 echo "Will update providers:"
-echo "$providers"
+echo "${providers}"
 
-for provider in $providers; do
-  echo "Updating $provider"
-  ./update-provider "$provider"
+for provider in ${providers}; do
+  echo "Updating ${provider}"
+  ./update-provider "${provider}"
 done

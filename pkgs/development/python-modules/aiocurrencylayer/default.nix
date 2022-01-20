@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "aiocurrencylayer";
-  version = "1.0.2";
+  version = "1.0.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "home-assistant-ecosystem";
     repo = pname;
     rev = version;
-    sha256 = "EVqnrMatOk2I6hiCkiT5FOWvMY9LEK8LlSHqi0x9kuQ=";
+    sha256 = "sha256-t2Pcoakk25vtUYajIZVITsrEUSdwwiA3fbdswy3n9P8=";
   };
 
   nativeBuildInputs = [

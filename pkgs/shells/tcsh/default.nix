@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation rec {
   pname = "tcsh";
-  version = "6.23.00";
+  version = "6.23.02";
 
   src = fetchurl {
     urls = [
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
       "ftp://ftp.astron.com/pub/tcsh/old/${pname}-${version}.tar.gz"
       "ftp://ftp.astron.com/pub/tcsh/${pname}-${version}.tar.gz"
     ];
-    hash = "sha256-Tr6y8zYz0RXZU19VTGUahSMEDY2R5d4zP7LuBFuOAB4=";
+    hash = "sha256-wD+AQFE2cxswkdpzWoHN2EgAhRAySrMl8jWv9wnkRus=";
   };
 
   buildInputs = [

@@ -117,26 +117,16 @@ self: super: {
   retry = dontCheck super.retry;
 
   # Hlint needs >= 3.3.4 for ghc 9 support.
-  hlint = super.hlint_3_3_4;
+  hlint = doDistribute super.hlint_3_3_6;
 
   # 2021-09-18: ghc-api-compat and ghc-lib-* need >= 9.0.x versions for hls and hlint
   ghc-api-compat = doDistribute super.ghc-api-compat_9_0_1;
-  ghc-lib-parser = self.ghc-lib-parser_9_0_1_20210324;
-  ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_0_0_4;
-  ghc-lib = self.ghc-lib_9_0_1_20210324;
+  ghc-lib-parser = self.ghc-lib-parser_9_0_2_20211226;
+  ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_0_0_6;
+  ghc-lib = self.ghc-lib_9_0_2_20211226;
 
   # 2021-09-18: Need semialign >= 1.2 for correct bounds
   semialign = super.semialign_1_2_0_1;
-
-  # 2021-09-18: GHC 9 compat release is missing
-  # Issue: https://github.com/obsidiansystems/dependent-sum/issues/65
-  dependent-sum-template = dontCheck (appendPatch
-      (pkgs.fetchpatch {
-        url = "https://github.com/obsidiansystems/dependent-sum/commit/8cf4c7fbc3bfa2be475a17bb7c94a1e1e9a830b5.patch";
-        sha256 = "02wyy0ciicq2x8lw4xxz3x5i4a550mxfidhm2ihh60ni6am498ff";
-        stripLen = 2;
-        extraPrefix = "";
-      }) super.dependent-sum-template);
 
   # 2021-09-18: cabal2nix does not detect the need for ghc-api-compat.
   hiedb = overrideCabal (old: {
@@ -157,7 +147,7 @@ self: super: {
   # https://github.com/lspitzner/butcher/issues/7
   butcher = doJailbreak super.butcher;
   # Fixes a bug triggered on GHC 9.0.1
-  text-short = self.text-short_0_1_4;
+  text-short = self.text-short_0_1_5;
 
   # 2021-09-18: The following plugins don‘t work yet on ghc9.
   haskell-language-server = appendConfigureFlags [

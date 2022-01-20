@@ -47,6 +47,88 @@ These functions write `text` to the Nix store. This is useful for creating scrip
 
 Many more commands wrap `writeTextFile` including `writeText`, `writeTextDir`, `writeScript`, and `writeScriptBin`. These are convenience functions over `writeTextFile`.
 
+Here are a few examples:
+```nix
+# Writes my-file to /nix/store/<store path>
+writeTextFile {
+  name = "my-file";
+  text = ''
+    Contents of File
+  '';
+}
+# See also the `writeText` helper function below.
+
+# Writes executable my-file to /nix/store/<store path>/bin/my-file
+writeTextFile {
+  name = "my-file";
+  text = ''
+    Contents of File
+  '';
+  executable = true;
+  destination = "/bin/my-file";
+}
+# Writes contents of file to /nix/store/<store path>
+writeText "my-file"
+  ''
+  Contents of File
+  '';
+# Writes contents of file to /nix/store/<store path>/share/my-file
+writeTextDir "share/my-file"
+  ''
+  Contents of File
+  '';
+# Writes my-file to /nix/store/<store path> and makes executable
+writeScript "my-file"
+  ''
+  Contents of File
+  '';
+# Writes my-file to /nix/store/<store path>/bin/my-file and makes executable.
+writeScriptBin "my-file"
+  ''
+  Contents of File
+  '';
+# Writes my-file to /nix/store/<store path> and makes executable.
+writeShellScript "my-file"
+  ''
+  Contents of File
+  '';
+# Writes my-file to /nix/store/<store path>/bin/my-file and makes executable.
+writeShellScriptBin "my-file"
+  ''
+  Contents of File
+  '';
+
+```
+
+## `concatTextFile`, `concatText`, `concatScript` {#trivial-builder-concatText}
+
+These functions concatenate `files` to the Nix store in a single file. This is useful for configuration files structured in lines of text. `concatTextFile` takes an attribute set and expects two arguments, `name` and `files`. `name` corresponds to the name used in the Nix store path. `files` will be the files to be concatenated. You can also set `executable` to true to make this file have the executable bit set.
+`concatText` and`concatScript` are simple wrappers over `concatTextFile`.
+
+Here are a few examples:
+```nix
+
+# Writes my-file to /nix/store/<store path>
+concatTextFile {
+  name = "my-file";
+  files = [ drv1 "${drv2}/path/to/file" ];
+}
+# See also the `concatText` helper function below.
+
+# Writes executable my-file to /nix/store/<store path>/bin/my-file
+concatTextFile {
+  name = "my-file";
+  files = [ drv1 "${drv2}/path/to/file" ];
+  executable = true;
+  destination = "/bin/my-file";
+}
+# Writes contents of files to /nix/store/<store path>
+concatText "my-file" [ file1 file2 ]
+
+# Writes contents of files to /nix/store/<store path>
+concatScript "my-file" [ file1 file2 ]
+```
+
 ## `writeShellApplication` {#trivial-builder-writeShellApplication}
 
 This can be used to easily produce a shell script that has some dependencies (`runtimeInputs`). It automatically sets the `PATH` of the script to contain all of the listed inputs, sets some sanity shellopts (`errexit`, `nounset`, `pipefail`), and checks the resulting script with [`shellcheck`](https://github.com/koalaman/shellcheck).
@@ -72,6 +154,26 @@ validation.
 ## `symlinkJoin` {#trivial-builder-symlinkJoin}
 
 This can be used to put many derivations into the same directory structure. It works by creating a new derivation and adding symlinks to each of the paths listed. It expects two arguments, `name`, and `paths`. `name` is the name used in the Nix store path for the created derivation. `paths` is a list of paths that will be symlinked. These paths can be to Nix store derivations or any other subdirectory contained within.
+Here is an example:
+```nix
+# adds symlinks of hello and stack to current build and prints "links added"
+symlinkJoin { name = "myexample"; paths = [ pkgs.hello pkgs.stack ]; postBuild = "echo links added"; }
+```
+This creates a derivation with a directory structure like the following:
+```
+/nix/store/sglsr5g079a5235hy29da3mq3hv8sjmm-myexample
+|-- bin
+|   |-- hello -> /nix/store/qy93dp4a3rqyn2mz63fbxjg228hffwyw-hello-2.10/bin/hello
+|   `-- stack -> /nix/store/6lzdpxshx78281vy056lbk553ijsdr44-stack-2.1.3.1/bin/stack
+`-- share
+    |-- bash-completion
+    |   `-- completions
+    |       `-- stack -> /nix/store/6lzdpxshx78281vy056lbk553ijsdr44-stack-2.1.3.1/share/bash-completion/completions/stack
+    |-- fish
+    |   `-- vendor_completions.d
+    |       `-- stack.fish -> /nix/store/6lzdpxshx78281vy056lbk553ijsdr44-stack-2.1.3.1/share/fish/vendor_completions.d/stack.fish
+...
+```
 
 ## `writeReferencesToFile` {#trivial-builder-writeReferencesToFile}
 

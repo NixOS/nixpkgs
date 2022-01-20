@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, autoconf, automake, libtool, pkg-config, gnome
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, pkg-config, gnome
 , gtk-doc, gtk2, python2Packages, lua, gobject-introspection
 }:
 
@@ -8,10 +8,11 @@ in stdenv.mkDerivation rec {
   pname = "keybinder";
   version = "0.3.0";
 
-  src = fetchurl {
-    name = "${pname}-${version}.tar.gz";
-    url = "https://github.com/engla/keybinder/archive/v${version}.tar.gz";
-    sha256 = "0kkplz5snycik5xknwq1s8rnmls3qsp32z09mdpmaacydcw7g3cf";
+  src = fetchFromGitHub {
+    owner = "engla";
+    repo = "keybinder";
+    rev = "v${version}";
+    sha256 = "sha256-q/+hqhvXIknT+/5oENcWSr1OuF00kaZlXFUP1fdCMlk=";
   };
 
   nativeBuildInputs = [ pkg-config ];

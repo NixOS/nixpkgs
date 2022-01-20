@@ -1,9 +1,9 @@
-{ pkgs, nodejs, stdenv, applyPatches, fetchFromGitHub, fetchpatch, fetchurl }:
+{ pkgs, nodejs, stdenv, applyPatches, fetchFromGitHub, fetchpatch, fetchurl, nixosTests }:
 
 let
   inherit (pkgs) lib;
-  since = (version: pkgs.lib.versionAtLeast nodejs.version version);
-  before = (version: pkgs.lib.versionOlder nodejs.version version);
+  since = version: pkgs.lib.versionAtLeast nodejs.version version;
+  before = version: pkgs.lib.versionOlder nodejs.version version;
   super = import ./composition.nix {
     inherit pkgs nodejs;
     inherit (stdenv.hostPlatform) system;
@@ -47,7 +47,7 @@ let
       '';
     };
 
-    carbon-now-cli = super.carbon-now-cli.override ({
+    carbon-now-cli = super.carbon-now-cli.override {
       nativeBuildInputs = [ pkgs.makeWrapper ];
       prePatch = ''
         export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1
@@ -56,13 +56,13 @@ let
         wrapProgram $out/bin/carbon-now \
           --set PUPPETEER_EXECUTABLE_PATH ${pkgs.chromium.outPath}/bin/chromium
       '';
-    });
+    };
 
     deltachat-desktop = super."deltachat-desktop-../../applications/networking/instant-messengers/deltachat-desktop".override {
       meta.broken = true; # use the top-level package instead
     };
 
-    fast-cli = super.fast-cli.override ({
+    fast-cli = super.fast-cli.override {
       nativeBuildInputs = [ pkgs.makeWrapper ];
       prePatch = ''
         export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1
@@ -71,7 +71,7 @@ let
         wrapProgram $out/bin/fast \
           --set PUPPETEER_EXECUTABLE_PATH ${pkgs.chromium.outPath}/bin/chromium
       '';
-    });
+    };
 
     hyperspace-cli = super."@hyperspace/cli".override {
       nativeBuildInputs = with pkgs; [
@@ -314,7 +314,7 @@ let
 
       src = fetchurl {
         url = "https://registry.npmjs.org/prisma/-/prisma-${version}.tgz";
-        sha512 = "sha512-pzgc95msPLcCHqOli7Hnabu/GRfSGSUWl5s2P6N13T/rgMB+NNeKbxCmzQiZT2yLOeLEPivV6YrW1oeQIwJxcg==";
+        sha512 = "sha512-xLmVyO/L6C4ZdHzHqiJVq3ZfDWSym29x75JcwJx746ps61UcNEg4ozSwN9ud7UjXLntdXe1xDLNOUO1lc7LN5g==";
       };
       postInstall = with pkgs; ''
         wrapProgram "$out/bin/prisma" \
@@ -358,6 +358,19 @@ let
 
     stf = super.stf.override {
       meta.broken = since "10";
+    };
+
+    tailwindcss = super.tailwindcss.override {
+      nativeBuildInputs = [ pkgs.makeWrapper ];
+      postInstall = ''
+        wrapProgram "$out/bin/tailwind" \
+          --prefix NODE_PATH : ${self.postcss}/lib/node_modules
+        wrapProgram "$out/bin/tailwindcss" \
+          --prefix NODE_PATH : ${self.postcss}/lib/node_modules
+      '';
+      passthru.tests = {
+        simple-execution = pkgs.callPackage ./package-tests/tailwindcss.nix { inherit (self) tailwindcss; };
+      };
     };
 
     tedicross = super."tedicross-git+https://github.com/TediCross/TediCross.git#v0.8.7".override {
@@ -440,7 +453,10 @@ let
       buildInputs = [ self.node-pre-gyp ];
       postInstall = ''
         echo /var/lib/thelounge > $out/lib/node_modules/thelounge/.thelounge_home
+        patch -d $out/lib/node_modules/thelounge -p1 < ${./thelounge-packages-path.patch}
       '';
+      passthru.tests = { inherit (nixosTests) thelounge; };
+      meta = super.thelounge.meta // { maintainers = with lib.maintainers; [ winter ]; };
     };
 
     yaml-language-server = super.yaml-language-server.override {

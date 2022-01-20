@@ -6,6 +6,7 @@
 , postgresql
 , libiconv
 , Security
+, protobuf
 }:
 let
   pinData = lib.importJSON ./pin.json;
@@ -33,6 +34,10 @@ rustPlatform.buildRustPackage rec {
   # https://github.com/sfackler/rust-openssl/blob/master/openssl-sys/build/find_normal.rs#L115
   OPENSSL_LIB_DIR = "${openssl.out}/lib";
   OPENSSL_INCLUDE_DIR = "${openssl.dev}/include";
+
+  PROTOC = "${protobuf}/bin/protoc";
+  PROTOC_INCLUDE = "${protobuf}/include";
+  nativeBuildInputs = [ protobuf ];
 
   passthru.updateScript = ./update.sh;
 

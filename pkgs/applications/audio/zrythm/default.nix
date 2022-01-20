@@ -137,6 +137,7 @@ stdenv.mkDerivation rec {
     "-Denable_rtmidi=true"
     "-Denable_rtaudio=true"
     "-Denable_sdl=true"
+    "-Dcarla=enabled"
     "-Dmanpage=true"
     # "-Duser_manual=true" # needs sphinx-intl
     "-Dlsp_dsp=disabled"

@@ -1,7 +1,25 @@
-{ fetchNimble }:
+{ lib, buildNimPackage, fetchFromGitHub, bumpy, chroma, flatty, nimsimd, vmath
+, zippy }:
 
-fetchNimble {
+buildNimPackage rec {
   pname = "pixie";
-  version = "1.1.3";
-  hash = "sha256-xKIejVxOd19mblL1ZwpJH91dgKQS5g8U08EL8lGGelA=";
+  version = "3.1.2";
+
+  src = fetchFromGitHub {
+    owner = "treeform";
+    repo = pname;
+    rev = version;
+    hash = "sha256-rF72ybfsipBHgQmH0e6DBn1e7WWY6dGn9yp1qvLIS3A=";
+  };
+
+  propagatedBuildInputs = [ bumpy chroma flatty nimsimd vmath zippy ];
+
+  doCheck = true;
+
+  meta = with lib;
+    src.meta // {
+      description = "Full-featured 2d graphics library for Nim";
+      license = [ licenses.mit ];
+      maintainers = [ maintainers.ehmry ];
+    };
 }

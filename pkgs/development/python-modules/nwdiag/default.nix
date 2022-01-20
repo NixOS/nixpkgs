@@ -1,22 +1,49 @@
-{ lib, fetchurl, buildPythonPackage, pep8, nose, unittest2, docutils
-, blockdiag, setuptools
+{ lib
+, blockdiag
+, fetchFromGitHub
+, buildPythonPackage
+, nose
+, pytestCheckHook
+, setuptools
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "nwdiag";
-  version = "2.0.0";
+  version = "3.0.0";
+  format = "setuptools";
 
-  src = fetchurl {
-    url = "mirror://pypi/n/nwdiag/${pname}-${version}.tar.gz";
-    sha256 = "1qkl1lq7cblr6fra2rjw3zlcccragp8384hpm4n7dkc5c3yzmmsw";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "blockdiag";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-uKrdkXpL5YBr953sRsHknYg+2/WwrZmyDf8BMA2+0tU=";
   };
 
-  buildInputs = [ pep8 nose unittest2 docutils ];
+  propagatedBuildInputs = [
+    blockdiag
+    setuptools
+  ];
 
-  propagatedBuildInputs = [ blockdiag setuptools ];
+  checkInputs = [
+    nose
+    pytestCheckHook
+  ];
 
-  # tests fail
-  doCheck = false;
+  pytestFlagsArray = [
+    "src/nwdiag/tests/"
+  ];
+
+  disabledTests = [
+    # UnicodeEncodeError: 'latin-1' codec can't encode...
+    "test_setup_inline_svg_is_true_with_multibytes"
+  ];
+
+  pythonImportsCheck = [
+    "nwdiag"
+  ];
 
   meta = with lib; {
     description = "Generate network-diagram image from spec-text file (similar to Graphviz)";

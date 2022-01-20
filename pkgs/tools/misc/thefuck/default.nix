@@ -5,13 +5,13 @@
 
 buildPythonApplication rec {
   pname = "thefuck";
-  version = "3.31";
+  version = "3.32";
 
   src = fetchFromGitHub {
     owner = "nvbn";
     repo = pname;
     rev = version;
-    sha256 = "sha256-eKKUUJr00sUtT4u91MUgJjyPOXp3NigYVfYUP/sDBhY=";
+    sha256 = "sha256-bRCy95owBJaxoyCNQF6gEENoxCkmorhyKzZgU1dQN6I=";
   };
 
   propagatedBuildInputs = [ colorama decorator psutil pyte six ];

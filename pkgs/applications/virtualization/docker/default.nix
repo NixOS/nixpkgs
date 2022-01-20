@@ -15,7 +15,7 @@ rec {
       , go-md2man, go, containerd_1_4, runc, docker-proxy, tini, libtool
       , sqlite, iproute2, lvm2, systemd, docker-buildx, docker-compose_2
       , btrfs-progs, iptables, e2fsprogs, xz, util-linux, xfsprogs, git
-      , procps, libseccomp
+      , procps, libseccomp, rootlesskit, slirp4netns, fuse-overlayfs
       , nixosTests
       , clientOnly ? !stdenv.isLinux, symlinkJoin
     }:
@@ -77,6 +77,8 @@ rec {
 
       extraPath = optionals (stdenv.isLinux) (makeBinPath [ iproute2 iptables e2fsprogs xz xfsprogs procps util-linux git ]);
 
+      extraUserPath = optionals (stdenv.isLinux && !clientOnly) (makeBinPath [ rootlesskit slirp4netns fuse-overlayfs ]);
+
       postPatch = ''
         patchShebangs hack/make.sh hack/make/
       '';
@@ -109,6 +111,11 @@ rec {
         install -Dm644 ./contrib/init/systemd/docker.service $out/etc/systemd/system/docker.service
         substituteInPlace $out/etc/systemd/system/docker.service --replace /usr/bin/dockerd $out/bin/dockerd
         install -Dm644 ./contrib/init/systemd/docker.socket $out/etc/systemd/system/docker.socket
+
+        # rootless Docker
+        install -Dm755 ./contrib/dockerd-rootless.sh $out/libexec/docker/dockerd-rootless.sh
+        makeWrapper $out/libexec/docker/dockerd-rootless.sh $out/bin/dockerd-rootless \
+          --prefix PATH : "$out/libexec/docker:$extraPath:$extraUserPath"
       '';
 
       DOCKER_BUILDTAGS = []
@@ -184,6 +191,7 @@ rec {
     '' + optionalString (!clientOnly) ''
       # symlink docker daemon to docker cli derivation
       ln -s ${moby}/bin/dockerd $out/bin/dockerd
+      ln -s ${moby}/bin/dockerd-rootless $out/bin/dockerd-rootless
 
       # systemd
       mkdir -p $out/etc/systemd/system
@@ -225,19 +233,19 @@ rec {
   # Get revisions from
   # https://github.com/moby/moby/tree/${version}/hack/dockerfile/install/*
   docker_20_10 = callPackage dockerGen rec {
-    version = "20.10.9";
+    version = "20.10.12";
     rev = "v${version}";
-    sha256 = "1msqvzfccah6cggvf1pm7n35zy09zr4qg2aalgwpqigv0jmrbyd4";
+    sha256 = "sha256-nU6grb2lSW7BY7w9aAXwVbGp9TyO2ZxnJaxAi0wbk/c=";
     moby-src = fetchFromGitHub {
       owner = "moby";
       repo = "moby";
       rev = "v${version}";
-      sha256 = "04xx7m8s9vrkm67ba2k5i90053h5qqkjcvw5rc8w7m5a309xcp4n";
+      sha256 = "sha256-qizzK1qJNRGFisahE3iAzZTNW/HmledlMNxcJCMQSJ4=";
     };
-    runcRev = "v1.0.2"; # v1.0.2
+    runcRev = "v1.0.2";
     runcSha256 = "1bpckghjah0rczciw1a1ab8z718lb2d3k4mjm4zb45lpm3njmrcp";
-    containerdRev = "v1.4.11"; # v1.4.11
-    containerdSha256 = "02slv4gc2blxnmv0p8pkm139vjn6ihjblmn8ps2k1afbbyps0ilr";
+    containerdRev = "v1.4.12";
+    containerdSha256 = "sha256-g30kshXyGVew5tVaXFAOQUOYvvo0JBqIj1YaC5nTiS8=";
     tiniRev = "v0.19.0"; # v0.19.0
     tiniSha256 = "1h20i3wwlbd8x4jr2gz68hgklh0lb0jj7y5xk1wvr8y58fip1rdn";
   };

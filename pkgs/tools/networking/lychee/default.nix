@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "lychee";
-  version = "0.8.1";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "lycheeverse";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-TjjSysG4UCXVi5ytWaJVL31TFLHC3Ro5OEB56pzbn7s=";
+    sha256 = "sha256-zgIFJLdYHSDsO34KFK51g4nVlSkc9/TFdXx2yPJ7kRQ=";
   };
 
-  cargoSha256 = "sha256-apRXxd7RBnNjhZb0xAUr5hSTafyMbg0k1wgHT93Z66g=";
+  cargoSha256 = "sha256-r4a+JkaXVYsynBiWUHaleATXvfxyhRHfR/qcooD0FmI=";
 
   nativeBuildInputs = [ pkg-config ];
 

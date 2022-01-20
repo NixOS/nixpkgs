@@ -16,6 +16,8 @@
 buildPythonPackage rec {
   pname = "denonavr";
   version = "0.10.9";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
@@ -40,7 +42,14 @@ buildPythonPackage rec {
     pytest-timeout
   ];
 
-  pythonImportsCheck = [ "denonavr" ];
+  disabledTestPaths = [
+    # https://github.com/ol-iver/denonavr/issues/228
+    "tests/test_denonavr.py"
+  ];
+
+  pythonImportsCheck = [
+    "denonavr"
+  ];
 
   meta = with lib; {
     description = "Automation Library for Denon AVR receivers";

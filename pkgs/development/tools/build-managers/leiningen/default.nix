@@ -48,5 +48,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.epl10;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ thiagokokada ];
+    mainProgram = "lein";
   };
 }

@@ -31,12 +31,12 @@
 
 buildPythonPackage rec {
   pname = "sunpy";
-  version = "3.1.2";
+  version = "3.1.3";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5eeb479c3f2424bf46355165249a1caa849872f8bee525349c4dca4d15b271fd";
+    sha256 = "4acb05a05c7e6a2090cd0bb426b34c7e1620be0de2bf90a95a3f48ba15a5fce2";
   };
 
   nativeBuildInputs = [

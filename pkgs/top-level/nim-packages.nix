@@ -77,8 +77,6 @@ lib.makeScope newScope (self:
 
     tempfile = callPackage ../development/nim-packages/tempfile { };
 
-    typography = callPackage ../development/nim-packages/typography { };
-
     ui = callPackage ../development/nim-packages/ui { inherit (pkgs) libui; };
 
     unicodedb = callPackage ../development/nim-packages/unicodedb { };

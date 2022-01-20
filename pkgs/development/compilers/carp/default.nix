@@ -2,13 +2,13 @@
 
 haskellPackages.mkDerivation rec {
   pname = "carp";
-  version = "0.5.3";
+  version = "0.5.4";
 
   src = fetchFromGitHub {
     owner = "carp-lang";
     repo = "Carp";
     rev = "v${version}";
-    sha256 = "08ryk30ii24qsdpdq7bqi406ynv9nr8zy2pcv9n70ar8fxfw0859";
+    sha256 = "sha256-o7NLd7jC1BvcoVzbD18LvHg/SqOnfn9yELUrpg2uZtY=";
   };
 
   buildTools = [ makeWrapper ];

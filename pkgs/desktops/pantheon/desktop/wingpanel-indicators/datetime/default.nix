@@ -57,7 +57,6 @@ stdenv.mkDerivation rec {
     libical
     libsoup
     wingpanel
-    libgdata # required by some dependency transitively
   ];
 
   postPatch = ''

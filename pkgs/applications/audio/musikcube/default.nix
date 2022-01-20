@@ -11,20 +11,22 @@
 , libmicrohttpd
 , ncurses
 , pulseaudio
-, lib, stdenv
+, lib
+, stdenv
 , taglib
-, systemdSupport ? stdenv.isLinux, systemd
+, systemdSupport ? stdenv.isLinux
+, systemd
 }:
 
 stdenv.mkDerivation rec {
   pname = "musikcube";
-  version = "0.96.7";
+  version = "0.96.10";
 
   src = fetchFromGitHub {
     owner = "clangen";
     repo = pname;
     rev = version;
-    sha256 = "1y00vwn1h10cfflxrm5bk271ak9gilhjycgi44hlkkhmf5bdgn35";
+    sha256 = "sha256-Aa52pRGq99Pt++aEVZdmVNhhQuBajgfZp39L1AfKvho=";
   };
 
   patches = [

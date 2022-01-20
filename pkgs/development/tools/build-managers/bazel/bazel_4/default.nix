@@ -536,6 +536,7 @@ stdenv.mkDerivation rec {
     unzip
     which
     zip
+    python3.pkgs.absl-py   # Needed to build fish completion
   ] ++ lib.optionals (stdenv.isDarwin) [ cctools libcxx CoreFoundation CoreServices Foundation ];
 
   # Bazel makes extensive use of symlinks in the WORKSPACE.
@@ -549,8 +550,6 @@ stdenv.mkDerivation rec {
     shopt -s dotglob extglob
     mv !(bazel_src) bazel_src
   '';
-  # Needed to build fish completion
-  propagatedBuildInputs = [ python3.pkgs.absl-py ];
   buildPhase = ''
     runHook preBuild
 

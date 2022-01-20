@@ -9,6 +9,8 @@ lib.makeScope newScope (self: with self; {
 
   mopidy-iris = callPackage ./iris.nix { };
 
+  mopidy-jellyfin = callPackage ./jellyfin.nix { };
+
   mopidy-local = callPackage ./local.nix { };
 
   mopidy-moped = callPackage ./moped.nix { };
@@ -18,6 +20,8 @@ lib.makeScope newScope (self: with self; {
   mopidy-mpd = callPackage ./mpd.nix { };
 
   mopidy-mpris = callPackage ./mpris.nix { };
+
+  mopidy-muse = callPackage ./muse.nix { };
 
   mopidy-musicbox-webclient = callPackage ./musicbox-webclient.nix { };
 

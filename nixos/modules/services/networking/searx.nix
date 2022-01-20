@@ -228,5 +228,4 @@ in
   };
 
   meta.maintainers = with maintainers; [ rnhmjoj ];
-
 }

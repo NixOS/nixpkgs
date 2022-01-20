@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   pname = "delve";
-  version = "1.7.3";
+  version = "1.8.0";
 
   goPackagePath = "github.com/go-delve/delve";
   excludedPackages = "\\(_fixtures\\|scripts\\|service/test\\)";
@@ -11,7 +11,7 @@ buildGoPackage rec {
     owner = "go-delve";
     repo = "delve";
     rev = "v${version}";
-    sha256 = "sha256-cqIU4nzS8l1JgW3DWRLpyCISDf2uPgw6CbVGyyvx0mg=";
+    sha256 = "sha256-NihlBFZ5xu+DMBtUiGyjxpgob2hoLlFJ7MfnM55feuw=";
   };
 
   subPackages = [ "cmd/dlv" ];
@@ -30,7 +30,7 @@ buildGoPackage rec {
 
   meta = with lib; {
     description = "debugger for the Go programming language";
-    homepage = "https://github.com/derekparker/delve";
+    homepage = "https://github.com/go-delve/delve";
     maintainers = with maintainers; [ SuperSandro2000 vdemeester ];
     license = licenses.mit;
     platforms = [ "x86_64-linux" ] ++ platforms.darwin;

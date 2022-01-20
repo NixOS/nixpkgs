@@ -129,9 +129,11 @@ let
               version = "5.0.0";
               src = oldAttrs.src.override {
                 inherit version;
-                sha256 = "sha256-MTkw/d3nA9jjcCmjBL+RQpzRGu72PFfebayp2Vjh8lU=";
+                hash = "sha256-MTkw/d3nA9jjcCmjBL+RQpzRGu72PFfebayp2Vjh8lU=";
               };
-              doCheck = false;
+              disabledTestPaths = [
+                "t/unit/backends/test_mongodb.py"
+              ];
             });
           }
         )
@@ -306,6 +308,7 @@ let
                   "colorlog"
                   "emoji"
                   "immutabledict"
+                  "PyYAML"
                   "sarge"
                   "sentry-sdk"
                   "watchdog"
