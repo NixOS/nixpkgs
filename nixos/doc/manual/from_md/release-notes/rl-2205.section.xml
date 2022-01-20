@@ -222,6 +222,23 @@
       </listitem>
       <listitem>
         <para>
+          The DHCP server (<literal>services.dhcpd4</literal>,
+          <literal>services.dhcpd6</literal>) has been hardened. The
+          service is now using the systemd’s
+          <literal>DynamicUser</literal> mechanism to run as an
+          unprivileged dynamically-allocated user with limited
+          capabilities. The dhcpd state files are now always stored in
+          <literal>/var/lib/dhcpd{4,6}</literal> and the
+          <literal>services.dhcpd4.stateDir</literal> and
+          <literal>service.dhcpd6.stateDir</literal> options have been
+          removed. If you were depending on root privileges or
+          set{uid,gid,cap} binaries in dhcpd shell hooks, you may give
+          dhcpd more capabilities with e.g.
+          <literal>systemd.services.dhcpd6.serviceConfig.AmbientCapabilities</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>mailpile</literal> email webclient
           (<literal>services.mailpile</literal>) has been removed due to
           its reliance on python2.
