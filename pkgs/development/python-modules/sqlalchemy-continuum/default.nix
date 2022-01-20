@@ -13,11 +13,11 @@
 
 buildPythonPackage rec {
   pname = "SQLAlchemy-Continuum";
-  version = "1.3.11";
+  version = "1.3.12";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1c9yd9s98crqgs39rc2ld2r0nchgyjrfbjdlqb99y4hhc6lv04xw";
+    sha256 = "ae51e5e7d300421b2270cb59413f6bbf5890ac3c9560995ac2dca1bc568033ba";
   };
 
   propagatedBuildInputs = [
