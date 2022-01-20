@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "fmagin";
     repo = "angr-cli";
     rev = "v${version}";
-    sha256 = "sha256-a5ajUBQwt3xUNkeSOeGOAFf47wd4UVk+LcuAHGqbq4s=";
+    hash = "sha256-a5ajUBQwt3xUNkeSOeGOAFf47wd4UVk+LcuAHGqbq4s=";
   };
 
   propagatedBuildInputs = [

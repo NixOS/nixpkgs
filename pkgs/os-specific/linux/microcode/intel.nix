@@ -28,6 +28,6 @@ stdenv.mkDerivation rec {
     description = "Microcode for Intel processors";
     license = licenses.unfreeRedistributableFirmware;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ andir ];
+    maintainers = with maintainers; [ ];
   };
 }

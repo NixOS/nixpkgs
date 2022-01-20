@@ -259,6 +259,7 @@ mapAliases ({
   euca2tools = throw "euca2ools has been removed because it is unmaintained upstream and still uses python2."; # added 2022-01-01
   evolution_data_server = evolution-data-server; # added 2018-02-25
   etcdctl = etcd; # added 2018-04-25
+  evilvte = throw "evilvte has been removed from nixpkgs for being unmaintained with security issues and dependant on an old version of vte which was removed."; # added 2022-01-14
   exfat-utils = exfat;                  # 2015-09-11
   facette = throw "facette has been removed."; # added 2020-01-06
   fast-neural-doodle = throw "fast-neural-doodle has been removed, as the upstream project has been abandoned"; # added 2020-03-28
@@ -506,6 +507,8 @@ mapAliases ({
   libqmatrixclient = throw "libqmatrixclient was renamed to libquotient"; # added 2020-04-09
   libwnck3 = libwnck;
   lilypond-unstable = lilypond; # added 2021-03-11
+  lilyterm = throw "lilyterm has been removed from nixpkgs, because it was relying on a vte version that depended on python2."; # added 2022-01-14
+  lilyterm-git = throw "lilyterm-git has been removed from nixpkgs, because it was relying on a vte version that depended on python2."; # added 2022-01-14
   links = links2; # added 2016-01-31
   linuxband = throw "linuxband has been removed from nixpkgs, as it's abandoned upstream."; # added 2021-12-09
   linux_rpi0 = linuxKernel.kernels.linux_rpi1;

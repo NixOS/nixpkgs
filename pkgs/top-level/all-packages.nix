@@ -1085,8 +1085,6 @@ with pkgs;
 
   eterm = callPackage ../applications/terminal-emulators/eterm { };
 
-  evilvte = callPackage ../applications/terminal-emulators/evilvte (config.evilvte or {});
-
   foot = callPackage ../applications/terminal-emulators/foot { };
 
   germinal = callPackage ../applications/terminal-emulators/germinal { };
@@ -1109,16 +1107,6 @@ with pkgs;
   lifecycled = callPackage ../tools/misc/lifecycled { };
 
   lilo = callPackage ../tools/misc/lilo { };
-
-  lilyterm = callPackage ../applications/terminal-emulators/lilyterm {
-    inherit (gnome2) vte;
-    gtk = gtk2;
-    flavour = "stable";
-  };
-
-  lilyterm-git = lilyterm.override {
-    flavour = "git";
-  };
 
   logseq = callPackage ../applications/misc/logseq { };
 
@@ -3107,6 +3095,8 @@ with pkgs;
   gh-ost = callPackage ../tools/misc/gh-ost { };
 
   ghdorker = callPackage ../tools/security/ghdorker { };
+
+  ghidra = callPackage ../tools/security/ghidra/build.nix { };
 
   ghidra-bin = callPackage ../tools/security/ghidra { };
 
@@ -15273,7 +15263,6 @@ with pkgs;
   r10k = callPackage ../tools/system/r10k { };
 
   radare2 = callPackage ../development/tools/analysis/radare2 ({
-    inherit (gnome2) vte;
     lua = lua5;
   } // (config.radare or {}));
 
@@ -25509,9 +25498,7 @@ with pkgs;
 
   grip-search = callPackage ../tools/text/grip-search { };
 
-  grip = callPackage ../applications/misc/grip {
-    inherit (gnome2) libgnome libgnomeui vte;
-  };
+  grip = callPackage ../applications/misc/grip { };
 
   gsimplecal = callPackage ../applications/misc/gsimplecal { };
 

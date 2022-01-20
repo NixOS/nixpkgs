@@ -113,6 +113,6 @@ stdenv.mkDerivation rec {
     homepage = "http://luajit.org";
     license = licenses.mit;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ thoughtpolice smironov vcunat andir lblasc ];
+    maintainers = with maintainers; [ thoughtpolice smironov vcunat lblasc ];
   } // extraMeta;
 }
