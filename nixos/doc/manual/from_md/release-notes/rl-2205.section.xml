@@ -363,6 +363,18 @@
       </listitem>
       <listitem>
         <para>
+          The options
+          <literal>networking.interfaces.&lt;name&gt;.ipv4.routes</literal>
+          and
+          <literal>networking.interfaces.&lt;name&gt;.ipv6.routes</literal>
+          are no longer ignored when using networkd instead of the
+          default scripted network backend by setting
+          <literal>networking.useNetworkd</literal> to
+          <literal>true</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           MultiMC has been replaced with the fork PolyMC due to upstream
           developers being hostile to 3rd party package maintainers.
           PolyMC removes all MultiMC branding and is aimed at providing
