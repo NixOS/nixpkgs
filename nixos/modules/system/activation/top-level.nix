@@ -135,6 +135,16 @@ let
       pkgs.replaceDependency { inherit oldDependency newDependency drv; }
     ) baseSystemAssertWarn config.system.replaceRuntimeDependencies;
 
+  /* Workaround until https://github.com/NixOS/nixpkgs/pull/156533
+     Call can be replaced by argument when that's merged.
+  */
+  tmpFixupSubmoduleBoundary = subopts:
+    lib.mkOption {
+      type = lib.types.submoduleWith {
+        modules = [ { options = subopts; } ];
+      };
+    };
+
 in
 
 {
@@ -215,6 +225,19 @@ in
         Name of the initrd file to be passed to the bootloader.
       '';
     };
+
+    system.build = tmpFixupSubmoduleBoundary {
+      toplevel = mkOption {
+        type = types.package;
+        readOnly = true;
+        description = ''
+          This option contains the store path that typically represents a NixOS system.
+
+          You can read this path in a custom deployment tool for example.
+        '';
+      };
+    };
+
 
     system.copySystemConfiguration = mkOption {
       type = types.bool;
