@@ -139,20 +139,12 @@ in
 
 {
   imports = [
+    ../build.nix
     (mkRemovedOptionModule [ "nesting" "clone" ] "Use `specialisation.«name» = { inheritParentConfig = true; configuration = { ... }; }` instead.")
     (mkRemovedOptionModule [ "nesting" "children" ] "Use `specialisation.«name».configuration = { ... }` instead.")
   ];
 
   options = {
-
-    system.build = mkOption {
-      internal = true;
-      default = {};
-      type = with types; lazyAttrsOf (uniq unspecified);
-      description = ''
-        Attribute set of derivations used to setup the system.
-      '';
-    };
 
     specialisation = mkOption {
       default = {};
