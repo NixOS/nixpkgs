@@ -12,13 +12,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wluma";
-  version = "3.0.0";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "maximbaz";
     repo = "wluma";
     rev = version;
-    sha256 = "sha256-H5ohAawHTvZoFq4t5dUgP4Tr5qNyXEP4SG738Bo8mxc=";
+    sha256 = "sha256-lh0GX2M3AFXjlu+jTQGiNKQXM7DiBc7RYMH9PYMLmV4=";
   };
 
   nativeBuildInputs = [
@@ -48,7 +48,7 @@ rustPlatform.buildRustPackage rec {
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ vulkan-loader ]}"
   '';
 
-  cargoSha256 = "sha256-xLmDDy6qKXo0mLW3R4hQfZssg6lpo0G018TonF1uS14=";
+  cargoSha256 = "sha256-ArT4xDi+qRpukuIX1RgTgC/At9kkuG3Lf1X56Q2j/2Q=";
 
   meta = with lib; {
     description = "Automatic brightness adjustment based on screen contents and ALS";
