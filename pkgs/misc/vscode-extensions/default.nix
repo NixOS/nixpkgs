@@ -1373,6 +1373,22 @@ let
         };
       };
 
+      oderwat.indent-rainbow = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "indent-rainbow";
+          publisher = "oderwat";
+          version = "8.2.2";
+          sha256 = "sha256-7kkJc+hhYaSKUbK4eYwOnLvae80sIg7rd0E4YyCXtPc=";
+        };
+        meta = with lib; {
+          description = "Makes indentation easier to read";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=oderwat.indent-rainbow";
+          homepage = "https://github.com/oderwat/vscode-indent-rainbow";
+          license = licenses.mit;
+          maintainers = with maintainers; [ imgabe ];
+        };
+      };
+
       redhat.java = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "java";
@@ -1463,6 +1479,18 @@ let
         };
         meta = {
           license = lib.licenses.mit;
+        };
+      };
+
+      ritwickdey.liveserver = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "liveserver";
+          publisher = "ritwickdey";
+          version = "5.6.1";
+          sha256 = "sha256-QPMZMttYV+dQfWTniA7nko7kXukqU9g6Wj5YDYfL6hw=";
+        };
+        meta = with lib; {
+          license = licenses.mit;
         };
       };
 
