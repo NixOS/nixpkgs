@@ -7227,6 +7227,12 @@
     email = "wheatdoge@gmail.com";
     name = "Tim Liou";
   };
+  m00wl = {
+    name = "Moritz Lumme";
+    email = "moritz.lumme@gmail.com";
+    github = "m00wl";
+    githubId = 46034439;
+  };
   m1cr0man = {
     email = "lucas+nix@m1cr0man.com";
     github = "m1cr0man";
