@@ -1705,6 +1705,8 @@ in {
 
   cnvkit = callPackage ../development/python-modules/cnvkit { };
 
+  co2signal = callPackage ../development/python-modules/co2signal { };
+
   coapthon3 = callPackage ../development/python-modules/coapthon3 { };
 
   coconut = callPackage ../development/python-modules/coconut { };
