@@ -43,6 +43,7 @@ python3.pkgs.buildPythonApplication rec {
     teensy-loader-cli
     gcc-arm-embedded
     pkgsCross.avr.buildPackages.binutils
+    pkgsCross.avr.buildPackages.binutils.bintools
     pkgsCross.avr.buildPackages.gcc8
     pkgsCross.avr.libcCross
   ];
