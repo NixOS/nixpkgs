@@ -169,7 +169,7 @@ stdenv.mkDerivation {
     homepage = "http://www.canon.com/";
     license = licenses.unfree;
     maintainers = with maintainers; [
-      kylesferrazza
+      # please consider maintaining if you are updating this package
     ];
   };
 }
