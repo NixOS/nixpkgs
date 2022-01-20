@@ -215,6 +215,7 @@ in
   initrd-secrets = handleTest ./initrd-secrets.nix {};
   inspircd = handleTest ./inspircd.nix {};
   installer = handleTest ./installer.nix {};
+  invoiceplane = handleTest ./invoiceplane.nix {};
   iodine = handleTest ./iodine.nix {};
   ipfs = handleTest ./ipfs.nix {};
   ipv6 = handleTest ./ipv6.nix {};

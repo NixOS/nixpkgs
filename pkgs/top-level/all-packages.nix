@@ -3240,6 +3240,8 @@ with pkgs;
 
   interlock = callPackage ../servers/interlock {};
 
+  invoiceplane = callPackage ../servers/web-apps/invoiceplane { };
+
   iotools = callPackage ../tools/misc/iotools { };
 
   jellyfin = callPackage ../servers/jellyfin { };
