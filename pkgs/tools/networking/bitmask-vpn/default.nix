@@ -25,14 +25,14 @@
 , provider ? "riseup"
 }:
 let
-  version = "0.21.6";
+  version = "0.21.11";
 
   src = fetchFromGitLab {
     domain = "0xacab.org";
     owner = "leap";
     repo = "bitmask-vpn";
     rev = version;
-    sha256 = "sha256-LMz+ZgQVFGujoLA8rlyZ3VnW/NSlPipD5KwCe+cFtnY=";
+    sha256 = "sha256-mhmKG6Exxh64oeeeLezJYWEw61iIHLasHjLomd2L8P4=";
   };
 
   # bitmask-root is only used on GNU/Linux
