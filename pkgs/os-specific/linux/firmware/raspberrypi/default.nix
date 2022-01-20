@@ -1,22 +1,26 @@
-{ lib, stdenvNoCC, fetchFromGitHub }:
+{ lib, stdenvNoCC, fetchurl, unzip }:
 
-stdenvNoCC.mkDerivation rec {
+let
+  rev = "cfdbadea5f74c16b7ed5d3b4866092a054e3c3bf";
+in stdenvNoCC.mkDerivation rec {
   # NOTE: this should be updated with linux_rpi
   pname = "raspberrypi-firmware";
   # not a versioned tag, but this is what the "stable"
   # branch points to, as of 2022-01-10
   version = "20220106";
 
-  src = fetchFromGitHub {
-    owner = "raspberrypi";
-    repo = "firmware";
-    rev = "cfdbadea5f74c16b7ed5d3b4866092a054e3c3bf";
-    sha256 = "sha256-l7qyeCz4BzHLz+LMm4irCZU5j/khkW87S2Q2263e44Y=";
+  src = fetchurl {
+    url = "https://github.com/raspberrypi/firmware/archive/${rev}.zip";
+    sha256 = "sha256-llRztlI2bokCosyEJOrmH+NLl/f2H+01/+xNBcxqXn0=";
+    postFetch = "true";
   };
 
+  nativeBuildInputs = [ unzip ];
+
   installPhase = ''
-    mkdir -p $out/share/raspberrypi/boot
-    cp -R boot/* $out/share/raspberrypi/boot
+    mkdir -p $out/share/raspberrypi/
+    unzip "$src"
+    mv "firmware-${rev}/boot" "$out/share/raspberrypi/"
   '';
 
   dontConfigure = true;
