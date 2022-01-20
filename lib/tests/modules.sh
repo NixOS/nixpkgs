@@ -119,6 +119,10 @@ checkConfigOutput '^true$' "$@" ./define-enable.nix ./define-attrsOfSub-if-foo-e
 checkConfigOutput '^true$' "$@" ./define-enable.nix ./define-attrsOfSub-foo-if-enable.nix
 checkConfigOutput '^true$' "$@" ./define-enable.nix ./define-attrsOfSub-foo-enable-if.nix
 
+# Check mkTransform
+checkConfigOutput '42' config.value ./declare-int-positive-value.nix ./define-value-int-positive.nix
+checkConfigOutput '84' config.value ./declare-int-positive-value.nix ./define-value-int-force-twice.nix ./define-value-int-positive.nix
+
 # Check disabledModules with config definitions and option declarations.
 set -- config.enable ./define-enable.nix ./declare-enable.nix
 checkConfigOutput '^true$' "$@"

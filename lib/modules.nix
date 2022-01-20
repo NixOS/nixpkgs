@@ -627,7 +627,7 @@ rec {
         ) defs;
 
         # Process mkOverride properties.
-        defs'' = filterOverrides' defs';
+        defs'' = filterOverrides' loc type defs';
 
         # Sort mkOrder properties.
         defs''' =
@@ -681,6 +681,8 @@ rec {
       map (mapAttrs (n: v: mkIf cfg.condition v)) (pushDownProperties cfg.content)
     else if cfg._type or "" == "override" then
       map (mapAttrs (n: v: mkOverride cfg.priority v)) (pushDownProperties cfg.content)
+    else if cfg._type or "" == "transform" then
+      map (mapAttrs (n: v: mkTransform v)) (pushDownProperties cfg.content)
     else # FIXME: handle mkOrder?
       [ cfg ];
 
@@ -727,13 +729,28 @@ rec {
 
      Note that "z" has the default priority 100.
   */
-  filterOverrides = defs: (filterOverrides' defs).values;
+  filterOverrides = loc: type: defs: (
+    filterOverrides'
+      (throw "filterOverrides does not support mkTransform. Use filterOverrides'.")
+      (throw "filterOverrides does not support mkTransform. Use filterOverrides'.")
+      defs
+  ).values;
 
-  filterOverrides' = defs:
+  filterOverrides' = loc: type: defs:
     let
       getPrio = def: if def.value._type or "" == "override" then def.value.priority else defaultPriority;
       highestPrio = foldl' (prio: def: min (getPrio def) prio) 9999 defs;
-      strip = def: if def.value._type or "" == "override" then def // { value = def.value.content; } else def;
+      lowerPrioDefs = filter (def: getPrio def > highestPrio) defs;
+      strip = def:
+        if def.value._type or "" == "override"
+        then def // { value = def.value.content or (
+            def.value.function (
+              builtins.addErrorContext
+                "while evaluating lower priority options as input to mkTransform"
+                (mergeDefinitions loc type lowerPrioDefs).mergedValue
+            )
+          ); }
+        else def;
     in {
       values = concatMap (def: if getPrio def == highestPrio then [(strip def)] else []) defs;
       inherit highestPrio;
@@ -801,6 +818,13 @@ rec {
   mkImageMediaOverride = mkOverride 60; # image media profiles can be derived by inclusion into host config, hence needing to override host config, but do allow user to mkForce
   mkForce = mkOverride 50;
   mkVMOverride = mkOverride 10; # used by ‘nixos-rebuild build-vm’
+
+  # Produce a value based on merged lower priority values.
+  mkTransform = priority: function:
+    {
+      _type = "override";
+      inherit priority function;
+    };
 
   mkFixStrictness = lib.warn "lib.mkFixStrictness has no effect and will be removed. It returns its argument unmodified, so you can just remove any calls." id;
 
