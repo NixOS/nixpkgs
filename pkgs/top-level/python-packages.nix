@@ -9234,6 +9234,8 @@ in {
 
   sphinxcontrib-actdiag = callPackage ../development/python-modules/sphinxcontrib-actdiag { };
 
+  sphinxcontrib-apidoc = callPackage ../development/python-modules/sphinxcontrib-apidoc { };
+
   sphinxcontrib-applehelp = callPackage ../development/python-modules/sphinxcontrib-applehelp { };
 
   sphinxcontrib-autoapi = callPackage ../development/python-modules/sphinxcontrib-autoapi { };
