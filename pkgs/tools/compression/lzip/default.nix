@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
     "CPPFLAGS=-DNDEBUG"
     "CFLAGS=-O3"
     "CXXFLAGS=-O3"
-  ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
-    "CXX=${stdenv.cc.targetPrefix}c++";
+    "CXX=${stdenv.cc.targetPrefix}c++"
+  ];
 
   setupHook = ./lzip-setup-hook.sh;
 
