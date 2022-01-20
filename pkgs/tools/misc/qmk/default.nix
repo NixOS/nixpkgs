@@ -5,6 +5,7 @@
 , dfu-programmer
 , dfu-util
 , gcc-arm-embedded
+, teensy-loader-cli
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -39,6 +40,7 @@ python3.pkgs.buildPythonApplication rec {
     avrdude
     dfu-programmer
     dfu-util
+    teensy-loader-cli
     gcc-arm-embedded
     pkgsCross.avr.buildPackages.binutils
     pkgsCross.avr.buildPackages.gcc8
