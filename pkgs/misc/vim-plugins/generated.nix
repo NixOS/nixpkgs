@@ -1710,6 +1710,18 @@ final: prev:
     meta.homepage = "https://github.com/dracula/vim/";
   };
 
+  dressing-nvim = buildVimPluginFrom2Nix {
+    pname = "dressing.nvim";
+    version = "2022-01-18";
+    src = fetchFromGitHub {
+      owner = "stevearc";
+      repo = "dressing.nvim";
+      rev = "3f23266f0c623415ab8051c6e05c35e0981025b5";
+      sha256 = "0khdg2wn204f0rrh5m26iaymf4ic73lk5h5z0zkc1ahdhfy3alsv";
+    };
+    meta.homepage = "https://github.com/stevearc/dressing.nvim/";
+  };
+
   echodoc-vim = buildVimPluginFrom2Nix {
     pname = "echodoc.vim";
     version = "2021-11-26";
