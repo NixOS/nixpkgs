@@ -459,6 +459,13 @@ let
       meta = super.thelounge.meta // { maintainers = with lib.maintainers; [ winter ]; };
     };
 
+    triton = super.triton.override {
+      nativeBuildInputs = [ pkgs.installShellFiles ];
+      postInstall = ''
+        installShellCompletion --cmd triton --bash <($out/bin/triton completion)
+      '';
+    };
+
     yaml-language-server = super.yaml-language-server.override {
       nativeBuildInputs = [ pkgs.makeWrapper ];
       postInstall = ''
