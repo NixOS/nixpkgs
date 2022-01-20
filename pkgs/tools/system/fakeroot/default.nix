@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, getopt, libcap, gnused }:
+{ lib, stdenv, fetchurl, fetchpatch, getopt, libcap, gnused, nixosTests }:
 
 stdenv.mkDerivation rec {
   version = "1.23";
@@ -64,6 +64,13 @@ stdenv.mkDerivation rec {
     make wraptmpf.h
     patch -p1 < ${patch-wraptmpf}
   '';
+
+  passthru = {
+    tests = {
+      # A lightweight *unit* test that exercises fakeroot and fakechroot together:
+      nixos-etc = nixosTests.etc.test-etc-fakeroot;
+    };
+  };
 
   meta = {
     homepage = "https://salsa.debian.org/clint/fakeroot";
