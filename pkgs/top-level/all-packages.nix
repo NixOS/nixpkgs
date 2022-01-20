@@ -3242,6 +3242,8 @@ with pkgs;
 
   interlock = callPackage ../servers/interlock {};
 
+  invoiceplane = callPackage ../servers/web-apps/invoiceplane { };
+
   iotools = callPackage ../tools/misc/iotools { };
 
   jellyfin = callPackage ../servers/jellyfin { };
@@ -24215,6 +24217,8 @@ with pkgs;
   foxitreader = libsForQt512.callPackage ../applications/misc/foxitreader { };
 
   pdfstudio = callPackage ../applications/misc/pdfstudio { };
+
+  pdfstudioviewer = callPackage ../applications/misc/pdfstudioviewer { };
 
   aeolus = callPackage ../applications/audio/aeolus { };
 
