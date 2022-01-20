@@ -1,4 +1,5 @@
 { lib
+, fetchurl
 , buildPythonPackage
 , fetchFromGitHub
 , cmake
@@ -33,7 +34,12 @@
 , fpdf
 }:
 
-buildPythonPackage rec {
+let
+  pendingPRs.fixReports = fetchurl {
+    url = "https://github.com/mapillary/OpenSfM/commit/7c4477c6416417a935dd8cfb59e6e7e60cc2ba37.patch";
+    sha256 = "sha256-i6p/K2vIKouY8Fmp9iKdc7Xk2u7o51PQT5fhnKzqmhs=";
+  };
+in buildPythonPackage rec {
   pname = "OpenSfM";
   version = "0.5.2";
   src = fetchFromGitHub {
@@ -83,7 +89,7 @@ buildPythonPackage rec {
   patches = [
     ./fix-cmake.patch
     ./fix-scripts.patch
-    ./fix-report-generation.patch
+    (toString pendingPRs.fixReports)
   ];
   postPatch = ''
     # Use upstream means of discovery instead
