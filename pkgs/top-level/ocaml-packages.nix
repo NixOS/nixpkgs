@@ -1287,10 +1287,12 @@ let
     terminal_size = callPackage ../development/ocaml-modules/terminal_size { };
 
     tezos-010-PtGRANAD-test-helpers = callPackage ../development/ocaml-modules/tezos/010-PtGRANAD-test-helpers.nix { };
+    tezos-011-PtHangz2-test-helpers = callPackage ../development/ocaml-modules/tezos/011-PtHangz2-test-helpers.nix { };
     tezos-base = callPackage ../development/ocaml-modules/tezos/base.nix { };
     tezos-base-test-helpers = callPackage ../development/ocaml-modules/tezos/base-test-helpers.nix { };
     tezos-clic = callPackage ../development/ocaml-modules/tezos/clic.nix { };
     tezos-client-010-PtGRANAD = callPackage ../development/ocaml-modules/tezos/client-010-PtGRANAD.nix { };
+    tezos-client-011-PtHangz2 = callPackage ../development/ocaml-modules/tezos/client-011-PtHangz2.nix { };
     tezos-client-base = callPackage ../development/ocaml-modules/tezos/client-base.nix { };
     tezos-context = callPackage ../development/ocaml-modules/tezos/context.nix { };
     tezos-crypto = callPackage ../development/ocaml-modules/tezos/crypto.nix { };
@@ -1309,8 +1311,10 @@ let
     tezos-mockup-registration = callPackage ../development/ocaml-modules/tezos/mockup-registration.nix { };
     tezos-p2p-services = callPackage ../development/ocaml-modules/tezos/p2p-services.nix { };
     tezos-p2p = callPackage ../development/ocaml-modules/tezos/p2p.nix { };
-    tezos-protocol-010-PtGRANAD-parameters = callPackage ../development/ocaml-modules/tezos/protocol-010-PtGRANAD-parameters.nix { };
     tezos-protocol-010-PtGRANAD = callPackage ../development/ocaml-modules/tezos/protocol-010-PtGRANAD.nix { };
+    tezos-protocol-010-PtGRANAD-parameters = callPackage ../development/ocaml-modules/tezos/protocol-010-PtGRANAD-parameters.nix { };
+    tezos-protocol-011-PtHangz2 = callPackage ../development/ocaml-modules/tezos/protocol-011-PtHangz2.nix { };
+    tezos-protocol-011-PtHangz2-parameters = callPackage ../development/ocaml-modules/tezos/protocol-011-PtHangz2-parameters.nix { };
     tezos-protocol-alpha = callPackage ../development/ocaml-modules/tezos/protocol-alpha.nix { };
     tezos-protocol-compiler = callPackage ../development/ocaml-modules/tezos/protocol-compiler.nix { };
     tezos-protocol-demo-noops = callPackage ../development/ocaml-modules/tezos/protocol-demo-noops.nix { };
@@ -1319,6 +1323,7 @@ let
     tezos-protocol-environment-structs = callPackage ../development/ocaml-modules/tezos/protocol-environment-structs.nix { };
     tezos-protocol-environment = callPackage ../development/ocaml-modules/tezos/protocol-environment.nix { };
     tezos-protocol-plugin-010-PtGRANAD = callPackage ../development/ocaml-modules/tezos/protocol-plugin-010-PtGRANAD.nix { };
+    tezos-protocol-plugin-011-PtHangz2 = callPackage ../development/ocaml-modules/tezos/protocol-plugin-011-PtHangz2.nix { };
     tezos-protocol-plugin-alpha = callPackage ../development/ocaml-modules/tezos/protocol-plugin-alpha.nix { };
     tezos-protocol-updater = callPackage ../development/ocaml-modules/tezos/protocol-updater.nix { };
     tezos-proxy = callPackage ../development/ocaml-modules/tezos/proxy.nix { };
