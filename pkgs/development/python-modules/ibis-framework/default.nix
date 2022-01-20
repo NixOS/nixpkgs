@@ -40,7 +40,7 @@ let
   ibisTestingData = fetchFromGitHub {
     owner = "ibis-project";
     repo = "testing-data";
-    rev = "master";
+    rev = "743201a35c6b968cf55b054f9d28949ea15d1f0a";
     sha256 = "sha256-xuSE6wHP3aF8lnEE2SuFbTRBu49ecRmc1F3HPcszptI=";
   };
 in
