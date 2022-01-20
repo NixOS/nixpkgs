@@ -307,7 +307,7 @@ rec {
       in
       mkOptionType {
         name = "singleLineStr";
-        description = "string that doesn't contain [\\n\\r]";
+        description = "(optionally newline-terminated) single-line string";
         inherit check;
         merge = loc: defs:
           lib.removeSuffix "\n" (merge loc defs);
