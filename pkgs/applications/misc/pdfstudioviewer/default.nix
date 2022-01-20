@@ -69,7 +69,7 @@ in stdenv.mkDerivation rec {
     description = "An easy to use, full-featured PDF editing software";
     license = licenses.unfree;
     platforms = platforms.linux;
-    mainprogram = pname;
+    mainProgram = pname;
     maintainers = [ maintainers.pwoelfel ];
   };
 }
