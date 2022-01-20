@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  prePatch = ''
+  postPatch = ''
     patchShebangs test-scripts/
   '';
 
