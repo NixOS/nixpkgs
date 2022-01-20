@@ -1161,6 +1161,15 @@
     "vendorSha256": "0s0kf1v2217q9hfmc7r2yybcfk33k566dfvs2jiq63kyjnadhb0k",
     "version": "2.1.0"
   },
+  "vpsadmin": {
+    "owner": "vpsfreecz",
+    "provider-source-address": "registry.terraform.io/vpsfreecz/vpsadmin",
+    "repo": "terraform-provider-vpsadmin",
+    "rev": "v0.2.0",
+    "sha256": "1jb5s8lv8az1az9an8kj8bi0hh71zcaw5mpa4zyba5xk1vqig0kv",
+    "vendorSha256": "1xnscd7yir736y913r7nvn3a78h8cwc7m206h0vcc0hrl1jvf45i",
+    "version": "0.2.0"
+  },
   "vra7": {
     "owner": "vmware",
     "provider-source-address": "registry.terraform.io/vmware/vra7",
