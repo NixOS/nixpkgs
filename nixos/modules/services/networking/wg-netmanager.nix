@@ -31,7 +31,7 @@ in
       serviceConfig = {
         Type = "simple";
         Restart = "on-failure";
-        ExecStart = "${cfg.package}/bin/wg_netmanager -c ${configFile}";
+        ExecStart = "${cfg.package}/bin/wg_netmanager";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         ExecStop = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
 
