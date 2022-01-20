@@ -137,6 +137,17 @@
     };
     version = "4.1.0";
   };
+  asciidoctor-rouge = {
+    dependencies = ["asciidoctor" "rouge"];
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "197sbzs9km58pgfqdnnglhqr7anhb0m330cv1vxfc3s2qz106zjz";
+      type = "gem";
+    };
+    version = "0.4.0";
+  };
   asciimath = {
     groups = ["default"];
     platforms = [];
