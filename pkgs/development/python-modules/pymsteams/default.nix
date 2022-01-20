@@ -1,25 +1,34 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, pythonOlder
 , requests
 }:
 
 buildPythonPackage rec {
   pname = "pymsteams";
-  version = "0.1.16";
+  version = "0.2.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "rveachkc";
     repo = pname;
     rev = version;
-    sha256 = "sha256-dRfzMCsU+jRdnqzIBLn1mPWr+UDq1HFfXXqe1dVhGDo=";
+    sha256 = "1q4fm9dwnx5cy8r6gfzbn2f05hacpjfqlsgcyf2cv56wzb9rrg8v";
   };
 
-  propagatedBuildInputs = [ requests ];
+  propagatedBuildInputs = [
+    requests
+  ];
 
   # Tests require network access
   doCheck = false;
-  pythonImportsCheck = [ "pymsteams" ];
+
+  pythonImportsCheck = [
+    "pymsteams"
+  ];
 
   meta = with lib; {
     description = "Python module to interact with Microsoft Teams";
