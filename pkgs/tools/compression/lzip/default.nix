@@ -28,10 +28,11 @@ stdenv.mkDerivation rec {
   doCheck = true;
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.nongnu.org/lzip/lzip.html";
     description = "A lossless data compressor based on the LZMA algorithm";
     license = lib.licenses.gpl2Plus;
+    maintainers = with maintainers; [ vlaci ];
     platforms = lib.platforms.all;
   };
 }
