@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "python-mpd2";
-  version = "3.0.4";
+  version = "3.0.5";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1r8saq1460yfa0sxfrvxqs2r453wz2xchlc9gzbpqznr49786rvs";
+    sha256 = "6f1bffd93b9a32fc018a9bbf3487505b52e0d757ec34066905c60a912d492384";
   };
 
   buildInputs = [ mock ];
