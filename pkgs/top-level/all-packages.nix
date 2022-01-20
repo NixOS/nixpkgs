@@ -21263,6 +21263,15 @@ with pkgs;
 
   myserver = callPackage ../servers/http/myserver { };
 
+  napalm = with python3Packages; toPythonApplication (
+    napalm.overridePythonAttrs (attrs: {
+      # add community frontends that depend on the napalm python package
+      propagatedBuildInputs = attrs.propagatedBuildInputs ++ [
+        napalm-hp-procurve
+      ];
+    })
+  );
+
   nas = callPackage ../servers/nas { };
 
   nats-streaming-server = callPackage ../servers/nats-streaming-server { };
