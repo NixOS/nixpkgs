@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "aiohttp-remotes";
   version = "1.2.0";
-  format = "setuptools";
+  format = "flit";
 
   disabled = pythonOlder "3.6";
 
@@ -42,7 +42,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A set of useful tools for aiohttp.web server";
+    description = "Set of useful tools for aiohttp.web server";
     homepage = "https://github.com/wikibusiness/aiohttp-remotes";
     license = licenses.mit;
     maintainers = with maintainers; [ qyliss ];
