@@ -6777,6 +6777,12 @@
     githubId = 22085373;
     name = "Luis Hebendanz";
   };
+  lunarequest = {
+    email = "nullarequest@vivlaid.net";
+    github = "Lunarequest";
+    githubId = 30698906;
+    name = "Advaith Madhukar"; #this is my legal name, I prefer Luna; please keep that in mind!
+  };
   lionello = {
     email = "lio@lunesu.com";
     github = "lionello";
