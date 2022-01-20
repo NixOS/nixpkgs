@@ -2,7 +2,6 @@
 , fetchFromGitHub
 , fetchpatch
 , srt
-, ffmpeg_3_4
 , bc
 , pkg-config
 , perl

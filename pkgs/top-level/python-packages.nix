@@ -1240,8 +1240,6 @@ in {
 
   blis = callPackage ../development/python-modules/blis { };
 
-  blist = callPackage ../development/python-modules/blist { };
-
   blockchain = callPackage ../development/python-modules/blockchain { };
 
   blockdiag = callPackage ../development/python-modules/blockdiag { };
@@ -2795,6 +2793,8 @@ in {
   fido2 = callPackage ../development/python-modules/fido2 { };
 
   fields = callPackage ../development/python-modules/fields { };
+
+  file-read-backwards = callPackage ../development/python-modules/file-read-backwards { };
 
   filebrowser_safe = callPackage ../development/python-modules/filebrowser_safe { };
 
@@ -6049,6 +6049,8 @@ in {
   pynobo = callPackage ../development/python-modules/pynobo { };
 
   pynuki = callPackage ../development/python-modules/pynuki { };
+
+  pynut2 = callPackage ../development/python-modules/pynut2 { };
 
   pynws = callPackage ../development/python-modules/pynws { };
 

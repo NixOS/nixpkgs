@@ -7170,6 +7170,12 @@
     githubId = 13791;
     name = "Luke Gorrie";
   };
+  luker = {
+    email = "luker@fenrirproject.org";
+    github = "LucaFulchir";
+    githubId = 2486026;
+    name = "Luca Fulchir";
+  };
   lumi = {
     email = "lumi@pew.im";
     github = "lumi-me-not";
@@ -8524,10 +8530,10 @@
     name = "Xinhao Luo";
   };
   newam = {
-    email = "alexmgit@protonmail.com";
+    email = "alex@thinglab.org";
     github = "newAM";
     githubId = 7845120;
-    name = "Alex M.";
+    name = "Alex Martens";
   };
   nikitavoloboev = {
     email = "nikita.voloboev@gmail.com";
@@ -11125,6 +11131,12 @@
       longkeyid = "rsa4096/0x86E30E5A0F5FC59C";
       fingerprint = "4242 834C D401 86EF 8281  4093 86E3 0E5A 0F5F C59C";
     }];
+  };
+  smasher164 = {
+    email = "aindurti@gmail.com";
+    github = "smasher164";
+    githubId = 12636891;
+    name = "Akhil Indurti";
   };
   smironov = {
     email = "grrwlf@gmail.com";

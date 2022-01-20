@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "torchinfo";
-  version = "1.6.2";
+  version = "1.6.3";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-vf3TADqIX4RtCU3dN/lBK4aRg3wud/KkK9u5XGnBbO4=";
+    sha256 = "sha256-g1xhtdwygzPTTswP8iZ364ynBQE7D+aAsZ3d9EpyvIA=";
   };
 
   propagatedBuildInputs = [

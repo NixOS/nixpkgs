@@ -16,7 +16,7 @@ let
     '',
     dontPatchELF ? true,
     dontStrip ? true,
-    buildInputs ? [],
+    nativeBuildInputs ? [],
     ...
   }:
   stdenv.mkDerivation ((removeAttrs a [ "vscodeExtUniqueId" ]) // {
@@ -28,7 +28,7 @@ let
 
     installPrefix = "share/vscode/extensions/${vscodeExtUniqueId}";
 
-    buildInputs = [ unzip ] ++ buildInputs;
+    nativeBuildInputs = [ unzip ] ++ nativeBuildInputs;
 
     installPhase = ''
 

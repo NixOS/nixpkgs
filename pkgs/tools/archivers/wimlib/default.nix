@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     homepage = "https://wimlib.net";
     description = "A library and program to extract, create, and modify WIM files";
     platforms = platforms.unix;
-    maintainers = with maintainers; [ andir ];
+    maintainers = with maintainers; [ ];
     license = with licenses; [ gpl3 lgpl3 cc0 ];
   };
 }

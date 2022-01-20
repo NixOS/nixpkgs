@@ -3,17 +3,21 @@
 , fetchFromGitHub
 , pytestCheckHook
 , nose
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "archinfo";
-  version = "9.1.10913";
+  version = "9.1.11508";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "angr";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-VLFbjKX7WXWoJCS9hYwtEikGC48gRg7E24D9Un+/gdc=";
+    hash = "sha256-r21n0rbHxb/e34PGpbA5KpnILFtmkXThBWbASChvVs0=";
   };
 
   checkInputs = [
@@ -21,7 +25,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "archinfo" ];
+  pythonImportsCheck = [
+    "archinfo"
+  ];
 
   meta = with lib; {
     description = "Classes with architecture-specific information";
