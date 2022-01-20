@@ -300,11 +300,18 @@ rec {
       inherit (str) merge;
     };
 
-    singleLineStr = mkOptionType {
-      name = "singleLineStr";
-      description = "string that doesn't contain [\\n\\r]";
-      inherit (strMatching "[^\n\r]*") check merge;
-    };
+    # Allow a newline character at the end and trim it in the merge function.
+    singleLineStr =
+      let
+        inherit (strMatching "[^\n\r]*\n?") check merge;
+      in
+      mkOptionType {
+        name = "singleLineStr";
+        description = "string that doesn't contain [\\n\\r]";
+        inherit check;
+        merge = loc: defs:
+          lib.removeSuffix "\n" (merge loc defs);
+      };
 
     strMatching = pattern: mkOptionType {
       name = "strMatching ${escapeNixString pattern}";
