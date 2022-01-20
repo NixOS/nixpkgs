@@ -53,7 +53,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     repo = "ibis";
     owner = "ibis-project";
-    rev = "2.1.1";
+    rev = version;
     sha256 = "sha256-n3fR6wvcSfIo7760seB+5SxtoYSqQmqkzZ9VlNQF200=";
   };
 
