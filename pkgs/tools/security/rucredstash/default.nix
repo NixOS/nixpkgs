@@ -22,8 +22,7 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "0qnfrwpdvjksc97iiwn1r6fyqaqn0q3ckbdzswf9flvwshqzb6ih";
 
   meta = with lib; {
-    description =
-      "Rust port for credstash. Manages credentials securely in AWS cloud";
+    description = "Rust port for credstash. Manages credentials securely in AWS cloud";
     homepage = "https://github.com/psibi/rucredstash";
     license = licenses.mit;
     maintainers = with maintainers; [ psibi ];
