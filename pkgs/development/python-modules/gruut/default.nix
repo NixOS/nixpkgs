@@ -18,12 +18,15 @@
 
 let
   langPkgs = [
+    "ar"
     "cs"
     "de"
-    "es"
     "en"
+    "es"
+    "fa"
     "fr"
     "it"
+    "lb"
     "nl"
     "pt"
     "ru"
