@@ -1,46 +1,29 @@
-{ stdenv
-, lib
-, makeWrapper
-, fetchurl
-, dpkg
-, makeDesktopItem
-, copyDesktopItems
-, autoPatchelfHook
-, gst_all_1
-, sane-backends
-, xorg
-, gnome2
-, alsa-lib
-, libgccjit
-, jdk11
-}:
+{ stdenv, lib, fetchurl, dpkg, makeDesktopItem, copyDesktopItems
+, autoPatchelfHook, makeWrapper, sane-backends, xorg, jdk11, gtk2, gtk3 }:
 
-let
-  year = "2021";
-in
-stdenv.mkDerivation rec {
+let year = "2021";
+in stdenv.mkDerivation rec {
   pname = "pdfstudioviewer";
   version = "${year}.1.2";
   autoPatchelfIgnoreMissingDeps = true;
+  strictDeps = true;
 
   src = fetchurl {
-    url = "https://download.qoppa.com/${pname}/v${year}/PDFStudioViewer_v${builtins.replaceStrings ["."] ["_"] version}_linux64.deb";
+    url = "https://download.qoppa.com/${pname}/v${year}/PDFStudioViewer_v${
+        builtins.replaceStrings [ "." ] [ "_" ] version
+      }_linux64.deb";
     sha256 = "128k3fm8m8zdykx4s30g5m2zl7cgmvs4qinf1w525zh84v56agz6";
   };
 
+  buildInputs =
+    [ xorg.libXrandr xorg.libXtst sane-backends xorg.libXxf86vm gtk2 gtk3 ];
+
   nativeBuildInputs = [
-    gst_all_1.gst-libav
-    sane-backends
-    xorg.libXxf86vm
-    xorg.libXtst
-    gnome2.libgtkhtml
-    alsa-lib
-    libgccjit
     autoPatchelfHook
-    makeWrapper
     dpkg
     copyDesktopItems
-    jdk11 # only for unpacking .jar.pack files
+    jdk11 # for unpacking .jar.pack files
+    makeWrapper
   ];
 
   desktopItems = [
@@ -71,7 +54,6 @@ stdenv.mkDerivation rec {
     cp -r opt/${pname}${year} $out/share/
     ln -s $out/share/${pname}${year}/.install4j/${pname}${year}.png  $out/share/pixmaps/
     ln -s $out/share/${pname}${year}/${pname}${year} $out/bin/${pname}
-    # makeWrapper $out/share/${pname}${year}/${pname}${year} $out/bin/${pname}
 
     #Unpack jar files. Otherwise pdfstudio does this and fails due to read-only FS.
     for pfile in $out/share/${pname}${year}/jre/lib/{,ext/}*.jar.pack; do
@@ -87,6 +69,7 @@ stdenv.mkDerivation rec {
     description = "An easy to use, full-featured PDF editing software";
     license = licenses.unfree;
     platforms = platforms.linux;
+    mainprogram = pname;
     maintainers = [ maintainers.pwoelfel ];
   };
 }
