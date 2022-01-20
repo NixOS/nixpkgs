@@ -393,7 +393,7 @@ let
       nativeBuildInputs = [ pkgs.makeWrapper ];
       postInstall = ''
         wrapProgram "$out/bin/typescript-language-server" \
-          --prefix PATH : ${pkgs.lib.makeBinPath [ self.typescript ]}
+          --suffix PATH : ${pkgs.lib.makeBinPath [ self.typescript ]}
       '';
     };
 
