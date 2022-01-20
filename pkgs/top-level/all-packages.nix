@@ -21874,6 +21874,8 @@ with pkgs;
 
   victoriametrics = callPackage ../servers/nosql/victoriametrics { };
 
+  virtiofsd = callPackage ../servers/misc/virtiofsd { };
+
   virtlyst = libsForQt5.callPackage ../servers/web-apps/virtlyst { };
 
   virtualenv = with python3Packages; toPythonApplication virtualenv;
