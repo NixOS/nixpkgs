@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitLab, meson_0_60, ninja, pkg-config, wayland-scanner
+{ lib, stdenv, fetchFromGitLab, meson, ninja, pkg-config, wayland-scanner
 , libGL, wayland, wayland-protocols, libinput, libxkbcommon, pixman
 , xcbutilwm, libX11, libcap, xcbutilimage, xcbutilerrors, mesa
 , libpng, ffmpeg, xcbutilrenderutil, seatd, vulkan-loader, glslang
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ pkg-config ];
 
-  nativeBuildInputs = [ meson_0_60 ninja pkg-config wayland-scanner ];
+  nativeBuildInputs = [ meson ninja pkg-config wayland-scanner ];
 
   buildInputs = [
     libGL wayland wayland-protocols libinput libxkbcommon pixman

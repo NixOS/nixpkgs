@@ -297,6 +297,12 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
     top             = applePackage "top"               "osx-10.11.6"     "0i9120rfwapgwdvjbfg0ya143i29s1m8zbddsxh39pdc59xnsg5l" {};
     PowerManagement = applePackage "PowerManagement"   "osx-10.11.6"     "1llimhvp0gjffd47322lnjq7cqwinx0c5z7ikli04ad5srpa68mh" {};
 
+    # `configdHeaders` can’t use an override because `pkgs.darwin.configd` on aarch64-darwin will
+    # be replaced by SystemConfiguration.framework from the macOS SDK.
+    configdHeaders  = applePackage "configd"           "osx-10.8.5"      "1gxakahk8gallf16xmhxhprdxkh3prrmzxnmxfvj0slr0939mmr2" {
+      headersOnly = true;
+      Security    = null;
+    };
     libutilHeaders  = pkgs.darwin.libutil.override { headersOnly = true; };
     hfsHeaders      = pkgs.darwin.hfs.override { headersOnly = true; };
     libresolvHeaders= pkgs.darwin.libresolv.override { headersOnly = true; };

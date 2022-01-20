@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
 , meson
 , ninja
 , gettext
@@ -93,26 +92,18 @@
 
 stdenv.mkDerivation rec {
   pname = "gst-plugins-bad";
-  version = "1.18.2";
+  version = "1.18.5";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "06ildd4rl6cynirv3p00d2ddf5is9svj4i7mkahldzhq24pq5mca";
+    sha256 = "sha256-oWSSO5Tw0IV4pvyuqsbgwF2niKRpA6EIaHDpykWtZ44=";
   };
 
   patches = [
     # Use pkgconfig to inject the includedirs
     ./fix_pkgconfig_includedir.patch
-    # Fix “error: cannot initialize a parameter of type 'unsigned long *' with an rvalue of type 'typename std::remove_reference<decltype(*(&opencv_dilate_erode_type))>::type *' (aka 'volatile unsigned long *')” on Darwin.
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad/commit/640a65bf966df065d41a511e2d76d1f26a2e770c.patch";
-      sha256 = "E5pig+qEfR58Jticr6ydFxZOhM3ZJ8zgrf5K4BdiB/Y=";
-      includes = [
-        "ext/opencv/gstcvdilateerode.cpp"
-      ];
-    })
   ];
 
   nativeBuildInputs = [

@@ -342,6 +342,19 @@
       </listitem>
       <listitem>
         <para>
+          The iputils package, which is installed by default, no longer
+          provides the legacy tools <literal>tftpd</literal> and
+          <literal>traceroute6</literal>. More tools
+          (<literal>ninfod</literal>, <literal>rarpd</literal>, and
+          <literal>rdisc</literal>) are going to be removed in the next
+          release. See
+          <link xlink:href="https://github.com/iputils/iputils/releases/tag/20211215">upstream’s
+          release notes</link> for more details and available
+          replacements.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>services.thelounge.private</literal> was removed in
           favor of <literal>services.thelounge.public</literal>, to
           follow with upstream changes.
@@ -621,6 +634,17 @@
           Reason is that the old name has been deprecated upstream.
           Using the old option name will still work, but produce a
           warning.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The option
+          <link linkend="opt-services.networking.networkmanager.enableFccUnlock">services.networking.networkmanager.enableFccUnlock</link>
+          was added to support FCC unlock procedures. Since release
+          1.18.4, the ModemManager daemon no longer automatically
+          performs the FCC unlock procedure by default. See
+          <link xlink:href="https://modemmanager.org/docs/modemmanager/fcc-unlock/">the
+          docs</link> for more details.
         </para>
       </listitem>
     </itemizedlist>
