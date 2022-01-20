@@ -1,12 +1,13 @@
-{ buildPythonPackage
+{ lib
+, buildPythonPackage
 , fetchPypi
 , python
-, lib
 }:
 
 buildPythonPackage rec {
   pname = "pydal";
   version = "20220114.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -33,10 +34,10 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  meta = {
-    description = "A pure Python Database Abstraction Layer";
+  meta = with lib; {
+    description = "Python Database Abstraction Layer";
     homepage = "https://github.com/web2py/pydal";
-    license = with lib.licenses; [ bsd3 ] ;
-    maintainers = with lib.maintainers; [ wamserma ];
+    license = with licenses; [ bsd3 ] ;
+    maintainers = with maintainers; [ wamserma ];
   };
 }
