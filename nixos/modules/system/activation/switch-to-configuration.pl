@@ -171,14 +171,6 @@ sub parseUnit {
     return %unitData;
 }
 
-sub parseKeyValues {
-    my $info = shift;
-    foreach my $line (@_) {
-        $line =~ /^([^=]+)=(.*)$/ or next;
-        $info->{$1} = $2;
-    }
-}
-
 # Checks whether a specified boolean in a systemd unit is true
 # or false, with a default that is applied when the value is not set.
 sub parseSystemdBool {
@@ -606,33 +598,36 @@ my $activeNew = getActiveUnits;
 while (my ($unit, $state) = each %{$activeNew}) {
     if ($state->{state} eq "failed") {
         push @failed, $unit;
+        next;
     }
-    elsif ($state->{state} eq "auto-restart") {
-        # A unit in auto-restart state is a failure *if* it previously failed to start
-        my $lines = `@systemd@/bin/systemctl show '$unit'`;
-        my $info = {};
-        parseKeyValues($info, split("\n", $lines));
 
-        if ($info->{ExecMainStatus} ne '0') {
+    if ($state->{substate} eq "auto-restart") {
+        # A unit in auto-restart substate is a failure *if* it previously failed to start
+        my $main_status = `@systemd@/bin/systemctl show --value --property=ExecMainStatus '$unit'`;
+        chomp($main_status);
+
+        if ($main_status ne "0") {
             push @failed, $unit;
+            next;
         }
     }
+
     # Ignore scopes since they are not managed by this script but rather
     # created and managed by third-party services via the systemd dbus API.
-    elsif ($state->{state} ne "failed" && !defined $activePrev->{$unit} && $unit !~ /\.scope$/) {
+    # This only lists units that are not failed (including ones that are in auto-restart but have not failed previously)
+    if ($state->{state} ne "failed" && !defined $activePrev->{$unit} && $unit !~ /\.scope$/msx) {
         push @new, $unit;
     }
 }
 
-print STDERR "the following new units were started: ", join(", ", sort(@new)), "\n"
-    if scalar @new > 0;
+if (scalar @new > 0) {
+    print STDERR "the following new units were started: ", join(", ", sort(@new)), "\n"
+}
 
 if (scalar @failed > 0) {
-    print STDERR "warning: the following units failed: ", join(", ", sort(@failed)), "\n";
-    foreach my $unit (@failed) {
-        print STDERR "\n";
-        system("COLUMNS=1000 @systemd@/bin/systemctl status --no-pager '$unit' >&2");
-    }
+    my @failed_sorted = sort @failed;
+    print STDERR "warning: the following units failed: ", join(", ", @failed_sorted), "\n\n";
+    system "@systemd@/bin/systemctl status --no-pager --full '" . join("' '", @failed_sorted) . "' >&2";
     $res = 4;
 }
 
