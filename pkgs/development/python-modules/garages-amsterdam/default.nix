@@ -2,12 +2,14 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, poetry-core
 , aiohttp
 }:
 
 buildPythonPackage rec {
   pname = "garages-amsterdam";
   version = "3.2.1";
+  format = "pyproject";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
@@ -16,6 +18,10 @@ buildPythonPackage rec {
     rev = "v${version}";
     sha256 = "16f2742r9p3mrg2nz8lnkgsxabbjga2qnp9vzq59026q6mmfwkm9";
   };
+
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
     aiohttp
