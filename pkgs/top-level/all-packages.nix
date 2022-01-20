@@ -23046,6 +23046,7 @@ with pkgs;
     ubootNovena
     ubootOdroidC2
     ubootOdroidXU3
+    ubootOlimexA64Olinuxino
     ubootOrangePiPc
     ubootOrangePiZeroPlus2H5
     ubootOrangePiZero
