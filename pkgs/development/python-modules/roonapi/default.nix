@@ -13,6 +13,7 @@ buildPythonPackage rec {
   pname = "roonapi";
   version = "0.0.39";
   format = "pyproject";
+
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
@@ -36,7 +37,9 @@ buildPythonPackage rec {
   # Tests require access to the Roon API
   doCheck = false;
 
-  pythonImportsCheck = [ "roonapi" ];
+  pythonImportsCheck = [
+    "roonapi"
+  ];
 
   meta = with lib; {
     description = "Python library to interface with the Roon API";
