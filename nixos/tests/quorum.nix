@@ -87,14 +87,14 @@ in
 
   testScript = ''
     start_all()
-    machine.wait_until_succeeds("mkdir -p /var/lib/quorum/keystore")
-    machine.wait_until_succeeds(
+    machine.succeed("mkdir -p /var/lib/quorum/keystore")
+    machine.succeed(
         'cp ${keystore-file} /var/lib/quorum/keystore/UTC--2020-03-23T11-08-34.144812212Z--${keystore.address}'
     )
-    machine.wait_until_succeeds(
+    machine.succeed(
         "echo fe2725c4e8f7617764b845e8d939a65c664e7956eb47ed7d934573f16488efc1 > /var/lib/quorum/nodekey"
     )
-    machine.wait_until_succeeds("systemctl restart quorum")
+    machine.succeed("systemctl restart quorum")
     machine.wait_for_unit("quorum.service")
     machine.sleep(15)
     machine.succeed('geth attach /var/lib/quorum/geth.ipc --exec "eth.accounts" | grep ${keystore.address}')
