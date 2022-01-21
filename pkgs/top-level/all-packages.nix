@@ -995,6 +995,8 @@ with pkgs;
     libgamemode32 = pkgsi686Linux.gamemode.lib;
   };
 
+  gay = callPackage ../tools/misc/gay {  };
+
   elkhound = callPackage ../development/tools/elkhound { };
 
   weidu = callPackage ../tools/games/weidu { };
@@ -1487,7 +1489,7 @@ with pkgs;
     client = true;
   });
 
-  antennas = callPackage ../servers/antennas { };
+  antennas = nodePackages.antennas;
 
   apg = callPackage ../tools/security/apg { };
 
@@ -23511,6 +23513,8 @@ with pkgs;
 
   hicolor-icon-theme = callPackage ../data/icons/hicolor-icon-theme { };
 
+  hannom = callPackage ../data/fonts/hannom { };
+
   hanazono = callPackage ../data/fonts/hanazono { };
 
   hermit = callPackage ../data/fonts/hermit { };
@@ -28958,6 +28962,8 @@ with pkgs;
   tesseract = tesseract3;
 
   tetraproc = callPackage ../applications/audio/tetraproc { };
+
+  tetrio-desktop = callPackage ../games/tetrio-desktop { };
 
   tev = callPackage ../applications/graphics/tev { };
 
