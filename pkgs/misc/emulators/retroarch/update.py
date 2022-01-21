@@ -26,7 +26,12 @@ CORES = {
     "bsnes": {"repo": "bsnes-libretro"},
     "bsnes-hd": {"repo": "bsnes-hd", "owner": "DerKoun"},
     "bsnes-mercury": {"repo": "bsnes-mercury"},
-    "citra": {"repo": "citra", "fetch_submodules": True, "deep_clone": True, "leave_dot_git": True},
+    "citra": {
+        "repo": "citra",
+        "fetch_submodules": True,
+        "deep_clone": True,
+        "leave_dot_git": True,
+    },
     "desmume": {"repo": "desmume"},
     "desmume2015": {"repo": "desmume2015"},
     "dolphin": {"repo": "dolphin"},
@@ -116,7 +121,9 @@ def get_repo_hash_fetchFromGitHub(
         capture_output=True,
         text=True,
     )
-    return json.loads(result.stdout)
+    j = json.loads(result.stdout)
+    # Remove False values
+    return {k: v for k, v in j.items() if v}
 
 
 def get_repo_hash(fetcher="fetchFromGitHub", **kwargs):
