@@ -79,8 +79,10 @@ buildPythonPackage rec {
       base_tests/test_plot_utils.py \
       base_tests/test_rcparams.py \
       base_tests/test_stats.py \
+      base_tests/test_stats_numba.py \
       base_tests/test_stats_utils.py \
       base_tests/test_utils.py \
+      base_tests/test_utils_numba.py \
       external_tests/test_data_cmdstan.py \
       external_tests/test_data_emcee.py
   '';
