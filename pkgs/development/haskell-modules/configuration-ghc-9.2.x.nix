@@ -244,4 +244,5 @@ self: super: {
 
   # need bytestring >= 0.11 which is only bundled with GHC >= 9.2
   regex-rure = doDistribute (markUnbroken super.regex-rure);
+  jacinda = doDistribute super.jacinda;
 }
