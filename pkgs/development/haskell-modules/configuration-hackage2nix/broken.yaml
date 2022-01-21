@@ -1308,7 +1308,6 @@ broken-packages:
   - event-driven
   - eventful-dynamodb
   - eventful-sql-common
-  - eventlog2html
   - eventloop
   - eventstore
   - ewe
