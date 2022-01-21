@@ -19649,6 +19649,8 @@ with pkgs;
 
   rubberband = callPackage ../development/libraries/rubberband { };
 
+  rure = callPackage ../development/libraries/rure { };
+
   rustc-demangle = callPackage ../development/libraries/rustc-demangle { };
 
   s2geometry = callPackage ../development/libraries/s2geometry { };
