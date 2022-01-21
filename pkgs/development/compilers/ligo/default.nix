@@ -45,7 +45,6 @@ coq.ocamlPackages.buildDunePackage rec {
     cmdliner
     core
     ocaml-recovery-parser
-    menhirSdk
   ];
 
   checkInputs = [
