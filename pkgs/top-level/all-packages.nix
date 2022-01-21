@@ -3938,6 +3938,8 @@ with pkgs;
 
   buku = callPackage ../applications/misc/buku { };
 
+  bukut = callPackage ../applications/misc/bukut { };
+
   byzanz = callPackage ../applications/video/byzanz {};
 
   ori = callPackage ../tools/backup/ori { };
