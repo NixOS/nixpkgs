@@ -12726,6 +12726,16 @@
     githubId = 3889405;
     name = "vyp";
   };
+  wackbyte = {
+    name = "wackbyte";
+    email = "wackbyte@pm.me";
+    github = "wackbyte";
+    githubId = 29505620;
+    keys = [{
+      longkeyid = "rsa4096/0x937F2AE5CCEFBF59";
+      fingerprint = "E595 7FE4 FEF6 714B 1AD3  1483 937F 2AE5 CCEF BF59";
+    }];
+  };
   wakira = {
     name = "Sheng Wang";
     email = "sheng@a64.work";
