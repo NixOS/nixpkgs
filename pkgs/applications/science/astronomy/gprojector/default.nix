@@ -1,4 +1,4 @@
-{ stdenv
+{ stdenvNoCC
 , lib
 , fetchzip
 , jre
@@ -8,7 +8,7 @@
 , extraJavaArgs ? "-Xms512M -Xmx2000M"
 }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "gprojector";
   version = "3.0.2";
 
