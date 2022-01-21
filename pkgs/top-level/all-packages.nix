@@ -23495,6 +23495,8 @@ with pkgs;
 
   hicolor-icon-theme = callPackage ../data/icons/hicolor-icon-theme { };
 
+  hannom = callPackage ../data/fonts/hannom { };
+
   hanazono = callPackage ../data/fonts/hanazono { };
 
   hermit = callPackage ../data/fonts/hermit { };
