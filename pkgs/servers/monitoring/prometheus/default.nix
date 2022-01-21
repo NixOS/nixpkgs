@@ -1,12 +1,9 @@
 { stdenv
 , lib
 , go
-, pkgs
-, nodejs-14_x
-, nodePackages
 , buildGoModule
 , fetchFromGitHub
-, mkYarnPackage
+, nodejs-16_x
 , nixosTests
 , fetchpatch
 , enableAWS ? true
@@ -30,86 +27,80 @@
 }:
 
 let
-  version = "2.30.3";
+  version = "2.33.3";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "prometheus";
     repo = "prometheus";
-    sha256 = "1as6x5bsp7mxa4rp7jhyjlpcvzqm1zngnwvp73rc4rwhz8w8vm3k";
+    sha256 = "sha256-5QHJ8m9zBclPM7HyyNGOPGVYwiOfgyv/jK0gxjjYToA=";
   };
 
   goPackagePath = "github.com/prometheus/prometheus";
 
-  codemirrorNode = import ./webui/codemirror-promql {
-    inherit pkgs;
-    nodejs = nodejs-14_x;
-    inherit (stdenv.hostPlatform) system;
-  };
-  webuiNode = import ./webui/webui {
-    inherit pkgs;
-    nodejs = nodejs-14_x;
-    inherit (stdenv.hostPlatform) system;
-  };
+  # HACK: we can't use node2nix because it doesn't support
+  # workspaces, so just shove everything into one big intermediate
+  # derivation and call it a day.
+  webuiDeps = stdenv.mkDerivation {
+    pname = "prometheus-webui-deps";
+    inherit version;
 
-  codemirror = stdenv.mkDerivation {
-    name = "prometheus-webui-codemirror-promql";
-    src = "${src}/web/ui/module/codemirror-promql";
+    src = "${src}/web/ui";
 
-    buildInputs = [ nodejs-14_x nodePackages.typescript codemirrorNode.nodeDependencies ];
+    nativeBuildInputs = [ nodejs-16_x ];
 
-    configurePhase = ''
-      ln -s ${codemirrorNode.nodeDependencies}/lib/node_modules node_modules
-    '';
-    buildPhase = ''
-      PUBLIC_URL=. npm run build
-    '';
+    buildPhase = "HOME=. npm install";
     installPhase = ''
-      mkdir -p $out
-      mv lib dist $out
+      modulePaths=". react-app module/codemirror-promql"
+      for path in $modulePaths; do
+          mkdir -p $out/$path
+          cp -r $path/node_modules $out/$path
+      done
     '';
-    distPhase = ":";
-  };
+    dontFixup = true;
 
+    outputHash = "sha256-sl+rqked1/C4QiTkaJ9/IpaboTOFQoM+DUb+vYUFM8E=";
+    outputHashMode = "recursive";
+  };
 
   webui = stdenv.mkDerivation {
-    name = "prometheus-webui";
-    src = "${src}/web/ui/react-app";
+    pname = "prometheus-webui";
+    inherit src version;
 
-    buildInputs = [ nodejs-14_x webuiNode.nodeDependencies ];
+    nativeBuildInputs = [ nodejs-16_x ];
 
-    # create `node_modules/.cache` dir (we need writeable .cache)
-    # and then copy the rest over.
-    configurePhase = ''
-      mkdir -p node_modules/{.cache,.bin}
-      cp -a ${webuiNode.nodeDependencies}/lib/node_modules/. node_modules
+    buildPhase = ''
+      cd web/ui
+      cp -r ${webuiDeps}/* .
+
+      # HACK: rewrite all the script paths to run the correct Node binary
+      modulePaths=". react-app module/codemirror-promql"
+      for path in $modulePaths; do
+        for script in $path/node_modules/.bin/*; do
+          substituteInPlace $script --replace '/usr/bin/env node' '${nodejs-16_x}/bin/node'
+        done
+      done
+
+      # HACK: create a directory that Node really wants to write to
+      chmod +w react-app/node_modules
+      mkdir react-app/node_modules/.cache
+
+      bash -x build_ui.sh --all
     '';
-    buildPhase = "PUBLIC_URL=. npm run build";
-    installPhase = "mv build $out";
-    distPhase = "true";
+
+    installPhase = "mv static/react $out";
   };
 in
 buildGoModule rec {
   pname = "prometheus";
   inherit src version;
 
-  vendorSha256 = "0qyv8vybx5wg8k8hwvrpp4hz9wv6g4kf9sq5v5qc2bxx6apc0s9r";
+  vendorSha256 = "sha256-zxQJze6FaJhmgvOBdFMIvEZaFAuhRtM+mtT5+JuvuOc=";
 
   excludedPackages = [ "documentation/prometheus-mixin" ];
 
-  nativeBuildInputs = [ nodejs-14_x ];
-
   postPatch = ''
-    # we don't want this anyways, as we
-    # build modules for them
-    echo "exit 0" > web/ui/module/build.sh
-
-    ln -s ${webuiNode.nodeDependencies}/lib/node_modules web/ui/react-app/node_modules
     ln -s ${webui} web/ui/static/react
-
-    # webui-codemirror
-    ln -s ${codemirror}/dist web/ui/module/codemirror-promql/dist
-    ln -s ${codemirror}/lib web/ui/module/codemirror-promql/lib
 
     # Disable some service discovery to shrink binaries.
     ${lib.optionalString (!enableAWS)
@@ -165,10 +156,18 @@ buildGoModule rec {
       "-X ${t}.GoVersion=${lib.getVersion go}"
     ];
 
-  # only run this in the real build, not during the vendor build
-  # this should probably be fixed in buildGoModule
   preBuild = ''
-    if [ -d vendor ]; then make assets; fi
+    # only run this in the real build, not during the vendor build
+    # this should probably be fixed in buildGoModule
+    if [ -d vendor ]; then
+      # HACK!
+      #
+      # Tell make we've already built the UI,
+      # because we did, just not in a way it expects
+      make assets \
+        -o ui-install \
+        -o ui-build
+    fi
   '';
 
   preInstall = ''
