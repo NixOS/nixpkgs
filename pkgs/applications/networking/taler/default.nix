@@ -34,6 +34,10 @@ in rec {
     propagatedBuildInputs = [ gnunet' ];
     configureFlags = [ "--with-gnunet=${gnunet'}" ];
     checkInputs = [ wget curl ];
+    # FIXME: at least one test wants to access a postgres db:
+    # `ERROR Database connection to 'postgres:///talercheck' failed: could not connect to server: No such file or directory`
+    doInstallCheck = false;
+    checkTarget = "check";
     meta = with lib; {
       description = ''
         Taler is an electronic payment system providing the ability to pay
@@ -49,12 +53,6 @@ in rec {
       license = licenses.agpl3Plus;
       platforms = platforms.gnu ++ platforms.linux;
     };
-    # FIXME: at least one test wants to access a postgres db:
-    # `ERROR Database connection to 'postgres:///talercheck' failed: could not connect to server: No such file or directory`
-    doInstallCheck = false;
-    installCheck = ''
-      make check
-    '';
   };
 
   taler-merchant = stdenv.mkDerivation rec {
@@ -78,16 +76,14 @@ in rec {
     configureFlags = [
       "--with-gnunet=${gnunet'}"
       "--with-exchange=${taler-exchange}"
-  ];
+    ];
     preCheck = ''
       find . -name '*.sh' -exec sed -i -e 's%#!/bin/bash%#!${stdenv.shell}%g' -e 's%#!/usr/bin/env bash%#!${stdenv.shell}%g'{} \;
     '';
     doCheck = false; # `make check` is meant to be run after installation
     checkInputs = [ jq ];
     doInstallCheck = true;
-    installCheck = ''
-      make check
-    '';
+    checkTarget = "check";
     meta = with lib; {
       description = ''
         This is the GNU Taler merchant backend. It provides the logic that should run
