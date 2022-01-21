@@ -33668,6 +33668,8 @@ with pkgs;
 
   ib-controller = callPackage ../applications/office/ib/controller { jdk=oraclejdk8; };
 
+  vcluster = callPackage ../applications/networking/cluster/vcluster {};
+
   vnote = libsForQt5.callPackage ../applications/office/vnote { };
 
   ssh-audit = callPackage ../tools/security/ssh-audit { };
