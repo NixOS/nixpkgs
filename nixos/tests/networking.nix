@@ -740,6 +740,7 @@ let
     routes = {
       name = "routes";
       machine = {
+        networking.useNetworkd = networkd;
         networking.useDHCP = false;
         networking.interfaces.eth0 = {
           ipv4.addresses = [ { address = "192.168.1.2"; prefixLength = 24; } ];
@@ -749,7 +750,13 @@ let
             { address = "2001:1470:fffd:2098::"; prefixLength = 64; via = "fdfd:b3f0::1"; }
           ];
           ipv4.routes = [
-            { address = "10.0.0.0"; prefixLength = 16; options = { mtu = "1500"; }; }
+            { address = "10.0.0.0"; prefixLength = 16; options = {
+              mtu = "1500";
+              # Explicitly set scope because iproute and systemd-networkd
+              # disagree on what the scope should be
+              # if the type is the default "unicast"
+              scope = "link";
+            }; }
             { address = "192.168.2.0"; prefixLength = 24; via = "192.168.1.1"; }
           ];
         };
@@ -798,6 +805,7 @@ let
                 ipv6Table, targetIPv6Table
             )
 
+      '' + optionalString (!networkd) ''
         with subtest("test clean-up of the tables"):
             machine.succeed("systemctl stop network-addresses-eth0")
             ipv4Residue = machine.succeed("ip -4 route list dev eth0 | head -n-3").strip()
