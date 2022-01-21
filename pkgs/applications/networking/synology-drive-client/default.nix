@@ -8,12 +8,12 @@ let
     description = "Desktop application to synchronize files and folders between the computer and the Synology Drive server.";
     homepage = "https://www.synology.com/en-global/dsm/feature/drive";
     license = licenses.unfree;
-    maintainers = with maintainers; [ jcouyang ];
+    maintainers = with maintainers; [ jcouyang MoritzBoehme ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
   };
 
   linux = qt5.mkDerivation {
-    inherit pname version;
+    inherit pname version meta;
 
     src = fetchurl {
       url = "${baseUrl}/${version}-${buildNumber}/Ubuntu/Installer/x86_64/synology-drive-client-${buildNumber}.x86_64.deb";
@@ -43,7 +43,7 @@ let
   };
 
   darwin = stdenv.mkDerivation {
-    inherit pname version;
+    inherit pname version meta;
 
     src = fetchurl {
       url = "${baseUrl}/${version}-${buildNumber}/Mac/Installer/synology-drive-client-${buildNumber}.dmg";
