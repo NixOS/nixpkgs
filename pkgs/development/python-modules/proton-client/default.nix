@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "proton-client";
-  version = "0.7.0";
+  version = "0.7.1";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ProtonMail";
     repo = "proton-python-client";
     rev = version;
-    sha256 = "sha256-98tEL3DUYtx27JcI6pPFS2iDJXS8K3yyvCU9UVrg1EM=";
+    sha256 = "164b6451nakyfcjqq11xn32iv3xccsi9bjjq2gzfs2nbxzsfl4ws";
   };
 
   propagatedBuildInputs = [
