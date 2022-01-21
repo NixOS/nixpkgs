@@ -12477,7 +12477,7 @@ with pkgs;
     graalvm11-ee;
 
   openshot-qt = libsForQt5.callPackage ../applications/video/openshot-qt { };
-  
+
   lingua-franca = callPackage ../development/compilers/lingua-franca { };
 
   openspin = callPackage ../development/compilers/openspin { };
