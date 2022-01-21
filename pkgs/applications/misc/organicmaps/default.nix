@@ -2,35 +2,40 @@
 , mkDerivation
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , ninja
 , pkg-config
 , which
 , python3
+, rsync
 , makeWrapper
 , qtbase
 , qtsvg
 , libGLU
 , libGL
 , zlib
+, icu
+, freetype
 }:
 
 mkDerivation rec {
   pname = "organicmaps";
-  version = "2021.12.01-4-android";
+  version = "2022.02.19-1-android";
 
   src = fetchFromGitHub {
     owner = "organicmaps";
     repo = "organicmaps";
     rev = version;
-    sha256 = "sha256-1PS9vQ8KPi68MYv3TyeKE430KZb+sxuffeeltKePTQg=";
+    sha256 = "sha256-ABjj0AQanev1ekALDwjbFWC5LIc8Km7PGtvn7DpmcWk=";
     fetchSubmodules = true;
   };
 
-  # Disable certificate check. It's dependent on time
   postPatch = ''
+    # Disable certificate check. It's dependent on time
     echo "exit 0" > tools/unix/check_cert.sh
+
+    # crude fix for https://github.com/organicmaps/organicmaps/issues/1862
+    echo "echo ${lib.replaceStrings ["." "-" "android"] ["" "" ""] version}" > tools/unix/version.sh
   '';
 
   nativeBuildInputs = [
@@ -39,6 +44,7 @@ mkDerivation rec {
     pkg-config
     which
     python3
+    rsync
     makeWrapper
   ];
 
@@ -49,14 +55,14 @@ mkDerivation rec {
     libGLU
     libGL
     zlib
+    icu
+    freetype
   ];
 
   # Yes, this is PRE configure. The configure phase uses cmake
   preConfigure = ''
     bash ./configure.sh
   '';
-
-  NIX_LDFLAGS = "-lGL";
 
   postInstall = ''
     install -Dm755 OMaps $out/bin/OMaps
@@ -67,14 +73,10 @@ mkDerivation rec {
       --add-flags '-data_path "''${XDG_DATA_HOME:-''${HOME}/.local/share}/OMaps"' \
       --run 'mkdir -p "''${XDG_DATA_HOME:-''${HOME}/.local/share}/OMaps"'
 
-    mkdir $out/share/organicmaps
+    mkdir -p $out/share/organicmaps
     cp -r ../data $out/share/organicmaps/data
     install -Dm644 ../qt/res/logo.png $out/share/icons/hicolor/96x96/apps/organicmaps.png
     install -Dm644 ../qt/res/OrganicMaps.desktop $out/share/applications/OrganicMaps.desktop
-
-    # Part of the vendored expat package. OMaps only needs the library, so we
-    # delete this to avoid conflicts with the system's expat.
-    rm $out/bin/xmlwf
   '';
 
   meta = with lib; {
