@@ -18,6 +18,14 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "source/gdal";
 
+  patches = [
+    (fetchpatch {
+      name = "CVE-2021-45943.patch";
+      url = "https://github.com/OSGeo/gdal/commit/1ca6a3e5168c200763fa46d8aa7e698d0b757e7e.patch";
+      sha256 = "0iimmlz3r1hfpkkh69z63483gglnmmwbg9j35sz8fac488irlnnn";
+    })
+  ];
+
   nativeBuildInputs = [ autoreconfHook pkg-config unzip ];
 
   buildInputs = [
