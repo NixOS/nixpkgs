@@ -1166,6 +1166,10 @@ with pkgs;
 
   yaft = callPackage ../applications/terminal-emulators/yaft { };
 
+  abricotine = callPackage ../applications/editors/abricotine {
+    electron = electron_6;
+  };
+
   aldo = callPackage ../applications/radio/aldo { };
 
   almanah = callPackage ../applications/misc/almanah { };
