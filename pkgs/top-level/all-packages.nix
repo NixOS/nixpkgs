@@ -3591,10 +3591,7 @@ with pkgs;
 
   reg = callPackage ../tools/virtualization/reg { };
 
-  river = callPackage ../applications/window-managers/river {
-    wlroots = wlroots_0_14;
-    zig = zig_0_8_1;
-  };
+  river = callPackage ../applications/window-managers/river { };
 
   rmapi = callPackage ../applications/misc/remarkable/rmapi { };
 
