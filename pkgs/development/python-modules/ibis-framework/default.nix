@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, pytestCheckHook
 , atpublic
 , cached-property
 , clickhouse-driver
@@ -77,6 +78,7 @@ buildPythonPackage rec {
   ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   checkInputs = [
+    pytestCheckHook
     click
     pytest
     pytest-mock
@@ -99,6 +101,13 @@ buildPythonPackage rec {
     "test_summary_non_numeric_group_by"
   ];
 
+  pytestFlagsArray = [
+    "--numprocesses $NIX_BUILD_CORES"
+    "ibis/tests"
+    "ibis/backends/tests"
+    "ibis/backends/{${lib.concatStringsSep "," backends}}/tests"
+  ];
+
   preCheck = ''
     set -euo pipefail
 
@@ -119,20 +128,6 @@ buildPythonPackage rec {
     wait
 
     export PYTEST_BACKENDS="${backendsString}"
-  '';
-
-  checkPhase = ''
-    set -euo pipefail
-
-    runHook preCheck
-
-    pytest --numprocesses auto \
-      ibis/tests \
-      ibis/backends/tests \
-      ibis/backends/{${lib.concatStringsSep "," backends}}/tests \
-      -k '${lib.concatMapStringsSep " and " (test: "not ${test}") disabledTests}'
-
-    runHook postCheck
   '';
 
   pythonImportsCheck = [ "ibis" ] ++ (map (backend: "ibis.backends.${backend}") backends);
