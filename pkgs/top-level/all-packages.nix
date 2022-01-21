@@ -3232,6 +3232,8 @@ with pkgs;
 
   ifm = callPackage ../tools/graphics/ifm {};
 
+  iina = callPackage ../applications/video/iina { };
+
   ink = callPackage ../tools/misc/ink { };
 
   inklecate = callPackage ../development/compilers/inklecate {};
@@ -32209,6 +32211,8 @@ with pkgs;
 
   otter = callPackage ../applications/science/logic/otter {};
 
+  otto-matic = callPackage ../games/otto-matic { };
+
   picosat = callPackage ../applications/science/logic/picosat {};
 
   libpoly = callPackage ../applications/science/logic/poly {};
@@ -32696,6 +32700,8 @@ with pkgs;
   epson-escpr2 = callPackage ../misc/drivers/epson-escpr2 { };
 
   epson_201207w = callPackage ../misc/drivers/epson_201207w { };
+
+  epson-201401w = callPackage ../misc/drivers/epson-201401w { };
 
   epson-201106w = callPackage ../misc/drivers/epson-201106w { };
 

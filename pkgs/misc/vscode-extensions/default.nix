@@ -959,8 +959,8 @@ let
         mktplcRef = {
           name = "haskell";
           publisher = "haskell";
-          version = "1.7.1";
-          sha256 = "sha256-UWdj2J5z5cTUsfvlU++LRil0tEiAH2AFb1AwBsfMvoY=";
+          version = "1.8.0";
+          sha256 = "sha256-+k8XT2COe9Z8HvZvcrzfVuocRcxXBrVoNHDT/uKK7Hs=";
         };
         meta = with lib; {
           license = licenses.mit;

@@ -57,7 +57,7 @@ buildPythonPackage rec {
     rm tests/system/test_system.py tests/unit/test__gapic.py
   '';
 
-  pythonImortsCheck = [
+  pythonImportsCheck = [
     "google.cloud.logging"
     "google.cloud.logging_v2"
   ];
