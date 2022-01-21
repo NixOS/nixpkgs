@@ -133,6 +133,9 @@ default-package-overrides:
   # Pinning patch because it is mainly used by the reflex-frp ecosystem which is not yet compatible with it.
   # https://github.com/reflex-frp/reflex-dom/issues/431
   - patch < 0.0.5.0
+  # On the recommendation of hnix author:
+  # https://github.com/NixOS/nixpkgs/pull/154461#issuecomment-1015511883
+  - hnix < 0.15
 
 extra-packages:
   - base16-bytestring < 1               # required for cabal-install etc.
