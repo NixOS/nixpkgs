@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, openssl, pkg-config, libnl
-, nixosTests
+, nixosTests, wpa_supplicant_gui
 , withDbus ? true, dbus
 , withReadline ? true, readline
 , withPcsclite ? true, pcsclite
@@ -113,6 +113,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests = {
     inherit (nixosTests) wpa_supplicant;
+    inherit wpa_supplicant_gui; # inherits the src+version updates
   };
 
   meta = with lib; {

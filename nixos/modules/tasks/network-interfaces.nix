@@ -103,6 +103,11 @@ let
         description = ''
           Other route options. See the symbol <literal>OPTIONS</literal>
           in the <literal>ip-route(8)</literal> manual page for the details.
+          You may also specify <literal>metric</literal>,
+          <literal>src</literal>, <literal>protocol</literal>,
+          <literal>scope</literal>, <literal>from</literal>
+          and <literal>table</literal>, which are technically
+          not route options, in the sense used in the manual.
         '';
       };
 
@@ -208,6 +213,14 @@ let
         type = with types; listOf (submodule (routeOpts 4));
         description = ''
           List of extra IPv4 static routes that will be assigned to the interface.
+          <warning><para>If the route type is the default <literal>unicast</literal>, then the scope
+          is set differently depending on the value of <option>networking.useNetworkd</option>:
+          the script-based backend sets it to <literal>link</literal>, while networkd sets
+          it to <literal>global</literal>.</para></warning>
+          If you want consistency between the two implementations,
+          set the scope of the route manually with
+          <literal>networking.interfaces.eth0.ipv4.routes = [{ options.scope = "global"; }]</literal>
+          for example.
         '';
       };
 

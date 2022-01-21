@@ -18,8 +18,6 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
           enable = true;
           user = "alice";
         };
-        # Catch GDM failures that don't happen with AutomaticLoginEnable, e.g. https://github.com/NixOS/nixpkgs/issues/149539
-        gdm.autoLogin.delay = 1;
       };
 
       services.xserver.desktopManager.gnome.enable = true;

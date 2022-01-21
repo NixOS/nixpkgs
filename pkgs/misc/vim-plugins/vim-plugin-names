@@ -252,6 +252,7 @@ hrsh7th/vim-vsnip
 hrsh7th/vim-vsnip-integ
 hsanson/vim-android
 hsitz/VimOrganizer
+https://git.sr.ht/~whynothugo/lsp_lines.nvim
 hura/vim-asymptote
 iamcco/coc-spell-checker
 iamcco/markdown-preview.nvim
@@ -634,6 +635,7 @@ psliwka/vim-smoothie
 ptzz/lf.vim
 puremourning/vimspector
 purescript-contrib/purescript-vim
+pwntester/octo.nvim
 python-mode/python-mode
 qnighy/lalrpop.vim
 qpkorr/vim-bufkill
@@ -754,6 +756,7 @@ steelsojka/pears.nvim
 stefandtw/quickfix-reflector.vim
 stephpy/vim-yaml
 stevearc/aerial.nvim
+stevearc/dressing.nvim
 stsewd/fzf-checkout.vim
 sudormrfbin/cheatsheet.nvim
 sunaku/vim-dasht
