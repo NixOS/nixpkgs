@@ -5,6 +5,8 @@
 , perl
 , jre
 , makeWrapper
+, makeDesktopItem
+, copyDesktopItems
 , testVersion
 , key
 }:
@@ -45,12 +47,29 @@ in stdenv.mkDerivation rec {
     jdk
     gradle_7
     makeWrapper
+    copyDesktopItems
+  ];
+
+  executable-name = "KeY";
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "KeY";
+      exec = executable-name;
+      icon = "key";
+      comment = meta.description;
+      desktopName = "KeY";
+      genericName = "KeY";
+      categories = "Science;";
+    })
   ];
 
   # disable tests (broken on darwin)
   gradleAction = if stdenv.isDarwin then "assemble" else "build";
 
   buildPhase = ''
+    runHook preBuild
+
     export GRADLE_USER_HOME=$(mktemp -d)
     # https://github.com/gradle/gradle/issues/4426
     ${lib.optionalString stdenv.isDarwin "export TERM=dumb"}
@@ -59,14 +78,22 @@ in stdenv.mkDerivation rec {
     cat <(echo "pluginManagement { repositories { maven { url '${deps}' } } }") settings.gradle > settings_new.gradle
     mv settings_new.gradle settings.gradle
     gradle --offline --no-daemon ${gradleAction}
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/java
     cp key.ui/build/libs/key-*-exe.jar $out/share/java/KeY.jar
     mkdir -p $out/bin
+    mkdir -p $out/share/icons/hicolor/256x256/apps
+    cp key.ui/src/main/resources/de/uka/ilkd/key/gui/images/key-color-icon-square.png $out/share/icons/hicolor/256x256/apps/key.png
     makeWrapper ${jre}/bin/java $out/bin/KeY \
       --add-flags "-cp $out/share/java/KeY.jar de.uka.ilkd.key.core.Main"
+
+    runHook postInstall
   '';
 
   passthru.tests.version =
