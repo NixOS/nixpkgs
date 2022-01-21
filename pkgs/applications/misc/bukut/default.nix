@@ -8,7 +8,7 @@ with python3.pkgs; buildPythonApplication rec {
     owner = "peterjschroeder";
     repo = "bukut";
     rev = "v${version}";
-    sha256 = "sha256-MCAyMvzXnC7QSpWeG7qorK4JmRBMzG3eGsp5YpKmVjg=";
+    sha256 = "sha256-Hp9/tSdRNAoll/fYNJuhYC7cgy5AK3PUtYUsS6zsz1Y=";
   };
 
   propagatedBuildInputs = [
