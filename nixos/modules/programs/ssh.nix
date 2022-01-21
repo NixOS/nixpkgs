@@ -17,7 +17,7 @@ let
       exec ${askPassword} "$@"
     '';
 
-  knownHosts = map (h: getAttr h cfg.knownHosts) (attrNames cfg.knownHosts);
+  knownHosts = attrValues cfg.knownHosts;
 
   knownHostsText = (flip (concatMapStringsSep "\n") knownHosts
     (h: assert h.hostNames != [];
@@ -142,7 +142,7 @@ in
 
       knownHosts = mkOption {
         default = {};
-        type = types.attrsOf (types.submodule ({ name, ... }: {
+        type = types.attrsOf (types.submodule ({ name, config, options, ... }: {
           options = {
             certAuthority = mkOption {
               type = types.bool;
@@ -154,10 +154,20 @@ in
             };
             hostNames = mkOption {
               type = types.listOf types.str;
-              default = [];
+              default = [ name ] ++ config.extraHostNames;
+              defaultText = literalExpression "[ ${name} ] ++ config.${options.extraHostNames}";
               description = ''
+                DEPRECATED, please use <literal>extraHostNames</literal>.
                 A list of host names and/or IP numbers used for accessing
                 the host's ssh service.
+              '';
+            };
+            extraHostNames = mkOption {
+              type = types.listOf types.str;
+              default = [];
+              description = ''
+                A list of additional host names and/or IP numbers used for
+                accessing the host's ssh service.
               '';
             };
             publicKey = mkOption {
@@ -186,9 +196,6 @@ in
               '';
             };
           };
-          config = {
-            hostNames = mkDefault [ name ];
-          };
         }));
         description = ''
           The set of system-wide known SSH hosts.
@@ -196,13 +203,10 @@ in
         example = literalExpression ''
           {
             myhost = {
-              hostNames = [ "myhost" "myhost.mydomain.com" "10.10.1.4" ];
+              extraHostNames = [ "myhost.mydomain.com" "10.10.1.4" ];
               publicKeyFile = ./pubkeys/myhost_ssh_host_dsa_key.pub;
             };
-            myhost2 = {
-              hostNames = [ "myhost2" ];
-              publicKeyFile = ./pubkeys/myhost2_ssh_host_dsa_key.pub;
-            };
+            "myhost2.net".publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILIRuJ8p1Fi+m6WkHV0KWnRfpM1WxoW8XAS+XvsSKsTK";
           }
         '';
       };
@@ -274,6 +278,9 @@ in
                     (data.publicKey != null && data.publicKeyFile == null);
         message = "knownHost ${name} must contain either a publicKey or publicKeyFile";
       });
+
+    warnings = mapAttrsToList (name: _: ''programs.ssh.knownHosts.${name}.hostNames is deprecated, use programs.ssh.knownHosts.${name}.extraHostNames'')
+      (filterAttrs (name: {hostNames, extraHostNames, ...}: hostNames != [ name ] ++ extraHostNames) cfg.knownHosts);
 
     # SSH configuration. Slight duplication of the sshd_config
     # generation in the sshd service.
