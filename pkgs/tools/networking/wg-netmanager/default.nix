@@ -2,23 +2,23 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wg-netmanager";
-  version = "0.3.12";
+  version = "0.3.13";
 
   src = fetchFromGitHub {
     owner = "gin66";
     repo = "wg_netmanager";
     rev = "wg_netmanager-v${version}";
-    sha256 = "0473id4agvq5kbi34q6kx723sbczmzi7m2zfmcgq9rwdks720qq0";
+    sha256 = "x+94GSA4HXwpwlpqT+nYGOlS1lhW6Q9NRgmfj3pUjrs=";
   };
 
   # related to the Cargo.lock file
-  cargoSha256 = "1zcdjgr9z7a5mzhwd6higc4ypga4ny179r3m8g2l09iw820h9xkr";
+  cargoSha256 = "I0Mz2nh9letGdTcWWsSfXHY/4y0zmLvZwLvUopOf5Sk=";
 
   buildInputs = lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
 
   # Test 01 tries to create a wireguard interface, which requires sudo.
   doCheck = true;
-  checkFlags = "--test 02_";
+  checkFlags = "--skip device";
 
   passthru.tests = {
   };
