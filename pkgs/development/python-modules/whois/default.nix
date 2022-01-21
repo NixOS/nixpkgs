@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "whois";
-  version = "0.9.13";
+  version = "0.9.14";
 
   src = fetchFromGitHub {
     owner = "DannyCork";
     repo = "python-whois";
     rev = version;
-    sha256 = "0y2sfs6nkr2j2crrn81wkfdzn9aphb3iaddya5zd2midlgdqq7bw";
+    sha256 = "1df4r2pr356y1c2ys6pzdl93fmx9ci4y75xphc95xn27zvqbpvix";
   };
 
   # whois is needed
