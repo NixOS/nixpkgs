@@ -66,7 +66,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
   ++ lib.optional fontconfigSupport      pkgs.fontconfig
   ++ lib.optional alsaSupport            pkgs.alsa-lib
   ++ lib.optional pulseaudioSupport      pkgs.libpulseaudio
-  ++ lib.optional xineramaSupport        pkgs.xorg.libXinerama
+  ++ lib.optional (xineramaSupport && !waylandSupport) pkgs.xorg.libXinerama
   ++ lib.optional udevSupport            pkgs.udev
   ++ lib.optional vulkanSupport          pkgs.vulkan-loader
   ++ lib.optional sdlSupport             pkgs.SDL2
