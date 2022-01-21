@@ -606,6 +606,7 @@ mapAliases ({
   mcgrid = throw "mcgrid has been removed from nixpkgs, as it's not compatible with rivet 3"; # added 2020-05-23
   mcomix = throw "mcomix has been removed from nixpkgs, as it's unmaintained; try mcomix3 a Python 3 fork"; # added 2019-12-10, modified 2020-11-25
   mididings = throw "mididings has been removed from nixpkgs as it doesn't support recent python3 versions and its upstream stopped maintaining it."; # added 2022-01-12
+  mime-types = mailcap; # added 2022-01-21
   mimms = throw "mimms has been removed from nixpkgs as the upstream project is stuck on python2."; # added 2022-01-01
   mirage = throw "mirage has been removed from nixpkgs, as it's unmaintained"; # added 2019-12-10
   minergate = throw "minergate has been removed from nixpkgs, because the package is unmaintained and the site has a bad reputation"; # added 2021-08-13
