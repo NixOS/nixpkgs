@@ -988,6 +988,7 @@ mapAliases ({
   swfdec = throw "swfdec has been removed as broken and unmaintained."; # added 2020-08-23
   swtpm-tpm2 = swtpm; # added 2021-02-26
   syncthing-cli = syncthing; # added 2021-04-06
+  synology-drive = throw "synology-drive has been superseded by synology-drive-client"; # added 2021-11-26
   system_config_printer = system-config-printer;  # added 2016-01-03
   systemd-cryptsetup-generator = throw "systemd-cryptsetup-generator is now included in the systemd package"; # added 2020-07-12
   systemd_with_lvm2 = throw "systemd_with_lvm2 is obsolete, enabled by default via the lvm module"; # added 2020-07-12
