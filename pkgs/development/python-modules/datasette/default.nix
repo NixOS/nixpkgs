@@ -30,7 +30,7 @@
 
 buildPythonPackage rec {
   pname = "datasette";
-  version = "0.60";
+  version = "0.60.1";
 
   disabled = pythonOlder "3.6";
 
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     owner = "simonw";
     repo = pname;
     rev = version;
-    sha256 = "sha256-GGxv6GWGUCJb4R4SMrDVc45q6xk4cB3vOCTabHlhNZE=";
+    sha256 = "sha256-x4bqd8hFPNLkDIsuTTy+WbAjuUl6lXsmIZoiRi7ZOm8=";
   };
 
   propagatedBuildInputs = [
