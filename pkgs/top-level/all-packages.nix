@@ -6014,6 +6014,8 @@ with pkgs;
 
   goreplay = callPackage ../tools/networking/goreplay { };
 
+  gost = callPackage ../tools/networking/gost { };
+
   gource = callPackage ../applications/version-management/gource { };
 
   govc = callPackage ../tools/virtualization/govc { };
@@ -27588,8 +27590,6 @@ with pkgs;
   synfigstudio = callPackage ../applications/graphics/synfigstudio {
     mlt-qt5 = libsForQt514.mlt;
   };
-
-  synology-drive = libsForQt5.callPackage ../applications/networking/synology-drive { };
 
   taxi = callPackage ../applications/networking/ftp/taxi { };
 
