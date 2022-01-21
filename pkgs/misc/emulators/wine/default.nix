@@ -7,8 +7,6 @@
 # Make additional configurations on demand:
 # wine.override { wineBuild = "wine32"; wineRelease = "staging"; };
 { lib, stdenv, callPackage,
-  pkgs,
-  pkgsi686Linux,
   wineRelease ? "stable",
   wineBuild ? if stdenv.hostPlatform.system == "x86_64-linux" then "wineWow" else "wine32",
   pngSupport ? false,
@@ -47,6 +45,7 @@
   faudioSupport ? false,
   vkd3dSupport ? false,
   mingwSupport ? wineRelease != "stable",
+  waylandSupport ? wineRelease == "wayland",
   embedInstallers ? false # The Mono and Gecko MSI installers
 }:
 
@@ -60,7 +59,7 @@ let wine-build = build: release:
                   gsmSupport gphoto2Support ldapSupport fontconfigSupport alsaSupport
                   pulseaudioSupport xineramaSupport gtkSupport openclSupport xmlSupport tlsSupport
                   openglSupport gstreamerSupport udevSupport vulkanSupport sdlSupport faudioSupport
-                  vkd3dSupport mingwSupport embedInstallers;
+                  vkd3dSupport mingwSupport waylandSupport embedInstallers;
         };
       });
 
@@ -69,13 +68,4 @@ in if wineRelease == "staging" then
     wineUnstable = wine-build wineBuild "unstable";
   }
 else
-  (if wineRelease == "wayland" then
-    callPackage ./wayland.nix {
-      wineWayland = wine-build wineBuild "wayland";
-      inherit pulseaudioSupport vulkanSupport vkd3dSupport;
-
-      pkgArches = lib.optionals (wineBuild == "wine32" || wineBuild == "wineWow") [ pkgsi686Linux ] ++ lib.optionals (wineBuild == "wine64" || wineBuild == "wineWow") [ pkgs ];
-    }
-    else
-      wine-build wineBuild wineRelease
-  )
+  wine-build wineBuild wineRelease
