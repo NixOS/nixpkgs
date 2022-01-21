@@ -10,6 +10,7 @@ buildDunePackage rec {
   pname = "ocaml-recovery-parser";
   version = "0.2.2";
 
+  minimalOCamlVersion = "4.08";
   useDune2 = true;
 
   src = fetchFromGitHub {
@@ -19,7 +20,7 @@ buildDunePackage rec {
     sha256 = "qQHvAPNQBbsvlQRh19sz9BtfhhMOp3uPthVozc1fpw8=";
   };
 
-  buildInputs = [
+  propagatedBuildInputs = [
     fix
     menhirLib
     menhirSdk
