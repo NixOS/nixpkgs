@@ -4571,6 +4571,12 @@
     githubId = 343415;
     name = "Greg Roodt";
   };
+  gruve-p = {
+    email = "groestlcoin@gmail.com";
+    github = "gruve-p";
+    githubId = 11212268;
+    name = "gruve-p";
+  };
   gschwartz = {
     email = "gsch@pennmedicine.upenn.edu";
     github = "GregorySchwartz";
