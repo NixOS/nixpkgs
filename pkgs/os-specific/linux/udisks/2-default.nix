@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoconf automake pkg-config libtool gettext which gobject-introspection
-    gtk-doc libxslt docbook_xml_dtd_412 docbook_xml_dtd_43 docbook_xsl util-linux
+    gtk-doc libxslt docbook_xml_dtd_412 docbook_xml_dtd_43 docbook_xsl
   ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isMusl ''
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    expat libgudev libblockdev acl systemd glib libatasmart polkit
+    expat libgudev libblockdev acl systemd glib libatasmart polkit util-linux
   ];
 
   preConfigure = "NOCONFIGURE=1 ./autogen.sh";
