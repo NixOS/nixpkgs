@@ -47,12 +47,9 @@ with python3'.pkgs; buildPythonApplication rec {
   };
 
   checkInputs = [
-    pytest-cov
     hypothesis
     pytest
     pytest-vcr
-    pylint
-    flake8
     pyyaml
     mypy-extensions
     click
@@ -70,6 +67,9 @@ with python3'.pkgs; buildPythonApplication rec {
     # Jailbreak problematic dependencies
     sed -i \
       -e "s,'PyYAML.*','PyYAML',g" \
+      -e "/'pytest-cov/d" \
+      -e "/'pylint/d" \
+      -e "/'flake8/d" \
       setup.py
   '';
 
