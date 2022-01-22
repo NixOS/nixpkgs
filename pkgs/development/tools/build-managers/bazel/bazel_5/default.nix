@@ -364,8 +364,6 @@ stdenv.mkDerivation rec {
       # don't use system installed Xcode to run clang, use Nix clang instead
       sed -i -E "s;/usr/bin/xcrun (--sdk macosx )?clang;${stdenv.cc}/bin/clang $NIX_CFLAGS_COMPILE $(bazelLinkFlags) -framework CoreFoundation;g" \
         scripts/bootstrap/compile.sh \
-        src/tools/xcode/realpath/BUILD \
-        src/tools/xcode/stdredirect/BUILD \
         tools/osx/BUILD
 
       substituteInPlace scripts/bootstrap/compile.sh --replace ' -mmacosx-version-min=10.9' ""
