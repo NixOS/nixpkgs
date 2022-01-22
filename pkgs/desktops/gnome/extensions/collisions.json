@@ -24,6 +24,10 @@
       "ShutdownTimer@neumann",
       "ShutdownTimer@deminder"
     ],
+    "bottompanel": [
+      "bottompanel@tmoer93",
+      "bottom-panel@sulincix"
+    ],
     "noannoyance": [
       "noannoyance@sindex.com",
       "noannoyance@daase.net"
@@ -71,6 +75,10 @@
       "noannoyance@sindex.com",
       "noannoyance@daase.net"
     ],
+    "fuzzy-clock": [
+      "fuzzy-clock@keepawayfromfire.co.uk",
+      "FuzzyClock@johngoetz"
+    ],
     "panel-date-format": [
       "panel-date-format@keiii.github.com",
       "panel-date-format@atareao.es"
@@ -104,6 +112,14 @@
     "lock-keys": [
       "lockkeys@vaina.lt",
       "lockkeys@fawtytoo"
+    ],
+    "shutdowntimer": [
+      "ShutdownTimer@neumann",
+      "ShutdownTimer@deminder"
+    ],
+    "fuzzy-clock": [
+      "fuzzy-clock@keepawayfromfire.co.uk",
+      "FuzzyClock@johngoetz"
     ],
     "disable-unredirect-fullscreen-windows": [
       "unredirect@vaina.lt",
