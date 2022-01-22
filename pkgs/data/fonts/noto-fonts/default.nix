@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , fetchurl
 , cairo
+, nixosTests
 , python3
 , pkg-config
 , pngquant
@@ -76,6 +77,8 @@ let
       installPhase = ''
         install -m444 -Dt $out/share/fonts/opentype/noto-cjk ${typeface}/OTC/*.ttc
       '';
+
+      passthru.tests.noto-fonts = nixosTests.noto-fonts;
 
       meta = with lib; {
         description = "Beautiful and free fonts for CJK languages";
