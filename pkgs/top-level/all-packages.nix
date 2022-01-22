@@ -23520,6 +23520,8 @@ with pkgs;
 
   graphite-gtk-theme = callPackage ../data/themes/graphite { };
 
+  graphite-kde-theme = callPackage ../data/themes/graphite-kde-theme { };
+
   greybird = callPackage ../data/themes/greybird { };
 
   gruvbox-dark-gtk = callPackage ../data/themes/gruvbox-dark-gtk { };
