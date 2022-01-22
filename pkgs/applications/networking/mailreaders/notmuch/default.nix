@@ -65,7 +65,9 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   makeFlags = [ "V=1" ];
 
-  outputs = [ "out" "man" "info" ] ++ lib.optional withEmacs "emacs";
+  outputs = [ "out" "man" "info" ]
+    ++ lib.optional withEmacs "emacs"
+    ++ lib.optional withRuby "ruby";
 
   preCheck = let
     test-database = fetchurl {
@@ -90,7 +92,7 @@ stdenv.mkDerivation rec {
     moveToOutput bin/notmuch-emacs-mua $emacs
   '' + lib.optionalString withRuby ''
     make -C bindings/ruby install \
-      vendordir=$out/lib/ruby \
+      vendordir=$ruby/lib/ruby \
       SHELL=$SHELL \
       $makeFlags "''${makeFlagsArray[@]}" \
       $installFlags "''${installFlagsArray[@]}"
