@@ -1,6 +1,8 @@
 { lib, stdenv, fetchFromGitHub
 , makeWrapper, installShellFiles
-, python3, sqlite }:
+, python3, sqlite
+, nixosTests
+}:
 
 stdenv.mkDerivation rec {
   pname = "tuptime";
@@ -33,6 +35,8 @@ stdenv.mkDerivation rec {
     wrapProgram $out/share/tuptime/db-tuptime-migrate-4.0-to-5.0.sh \
       --prefix PATH : "${lib.makeBinPath [ sqlite ]}"
   '';
+
+  passthru.tests = nixosTests.tuptime;
 
   meta = with lib; {
     description = "Total uptime & downtime statistics utility";
