@@ -1,6 +1,6 @@
 { config, lib, pkgs, ... }:
 let
-  inherit (lib) mkOption types optionalString stringAfter;
+  inherit (lib) mkOption mkDefault types optionalString stringAfter;
 
   cfg = config.boot.binfmt;
 
@@ -293,11 +293,11 @@ in {
           if preserveArgvZero then "${wrapper}/bin/${wrapperName}"
           else interpreter;
       in ({
-        inherit preserveArgvZero;
+        preserveArgvZero = mkDefault preserveArgvZero;
 
-        interpreter = interpreterReg;
-        wrapInterpreterInShell = !preserveArgvZero;
-        interpreterSandboxPath = dirOf (dirOf config.interpreter);
+        interpreter = mkDefault interpreterReg;
+        wrapInterpreterInShell = mkDefault (!config.preserveArgvZero);
+        interpreterSandboxPath = mkDefault (dirOf (dirOf config.interpreter));
       } // (magics.${system} or (throw "Cannot create binfmt registration for system ${system}")));
     }) cfg.emulatedSystems);
     nix.settings = lib.mkIf (cfg.emulatedSystems != []) {
