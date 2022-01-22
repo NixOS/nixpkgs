@@ -6800,6 +6800,17 @@
       fingerprint = "CC50 F82C 985D 2679 0703  AF15 19B0 82B3 DEFE 5451";
     }];
   };
+  leixb = {
+    email = "abone9999+nixpkgs@gmail.com";
+    matrix = "@leix_b:matrix.org";
+    github = "LeixB";
+    githubId = 17183803;
+    name = "Aleix Boné";
+    keys = [{
+      longkeyid = "rsa4096/0xFC035BB2BB28E15D";
+      fingerprint = "63D3 F436 EDE8 7E1F 1292  24AF FC03 5BB2 BB28 E15D";
+    }];
+  };
   lejonet = {
     email = "daniel@kuehn.se";
     github = "lejonet";
