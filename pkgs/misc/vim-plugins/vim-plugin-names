@@ -63,6 +63,7 @@ buoto/gotests-vim
 camspiers/lens.vim
 camspiers/snap
 carlitux/deoplete-ternjs
+catppuccin/nvim as catppuccin-nvim
 ccarpita/rtorrent-syntax-file
 cespare/vim-toml
 chaoren/vim-wordmotion

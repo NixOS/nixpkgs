@@ -4257,6 +4257,18 @@ final: prev:
     meta.homepage = "https://github.com/ChristianChiarulli/nvcode-color-schemes.vim/";
   };
 
+  catppuccin-nvim = buildVimPluginFrom2Nix {
+    pname = "catppuccin-nvim";
+    version = "2022-01-21";
+    src = fetchFromGitHub {
+      owner = "catppuccin";
+      repo = "nvim";
+      rev = "baf9a2c5d81f4336b0504e35c148482535dc2ac9";
+      sha256 = "00nma5a4jybncm3dj388p03nd4kkpj11l1cmd1dfmnzd41iaia99";
+    };
+    meta.homepage = "https://github.com/catppuccin/nvim/";
+  };
+
   nvim-ale-diagnostic = buildVimPluginFrom2Nix {
     pname = "nvim-ale-diagnostic";
     version = "2021-11-06";
