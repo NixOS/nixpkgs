@@ -53,7 +53,6 @@ let
       # mkisofs needed to create ISOs holding cloud-init data,
       # and wrapped to terraform via deecb4c1aab780047d79978c636eeb879dd68630
       libvirt = automated-providers.libvirt.overrideAttrs (_: { propagatedBuildInputs = [ cdrtools ]; });
-      teleport = callPackage ./teleport { };
     };
 
   # Put all the providers we not longer support in this list.
@@ -94,6 +93,7 @@ let
       segment = removed "2022/01";
       softlayer = archived "2022/01";
       telefonicaopencloud = archived "2022/01";
+      teleport = removed "2022/01";
       terraform = archived "2022/01";
       ultradns = archived "2022/01";
       vthunder = throw "provider was renamed to thunder on 2022/01";

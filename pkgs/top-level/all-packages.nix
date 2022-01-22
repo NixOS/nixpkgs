@@ -995,6 +995,8 @@ with pkgs;
     libgamemode32 = pkgsi686Linux.gamemode.lib;
   };
 
+  gay = callPackage ../tools/misc/gay {  };
+
   elkhound = callPackage ../development/tools/elkhound { };
 
   weidu = callPackage ../tools/games/weidu { };
@@ -1487,7 +1489,7 @@ with pkgs;
     client = true;
   });
 
-  antennas = callPackage ../servers/antennas { };
+  antennas = nodePackages.antennas;
 
   apg = callPackage ../tools/security/apg { };
 
@@ -3942,6 +3944,8 @@ with pkgs;
 
   buku = callPackage ../applications/misc/buku { };
 
+  bukut = callPackage ../applications/misc/bukut { };
+
   byzanz = callPackage ../applications/video/byzanz {};
 
   ori = callPackage ../tools/backup/ori { };
@@ -6004,6 +6008,8 @@ with pkgs;
   goreleaser = callPackage ../tools/misc/goreleaser { };
 
   goreplay = callPackage ../tools/networking/goreplay { };
+
+  gost = callPackage ../tools/networking/gost { };
 
   gource = callPackage ../applications/version-management/gource { };
 
@@ -23491,6 +23497,8 @@ with pkgs;
 
   hicolor-icon-theme = callPackage ../data/icons/hicolor-icon-theme { };
 
+  hannom = callPackage ../data/fonts/hannom { };
+
   hanazono = callPackage ../data/fonts/hanazono { };
 
   hermit = callPackage ../data/fonts/hermit { };
@@ -27571,8 +27579,6 @@ with pkgs;
     mlt-qt5 = libsForQt514.mlt;
   };
 
-  synology-drive = libsForQt5.callPackage ../applications/networking/synology-drive { };
-
   taxi = callPackage ../applications/networking/ftp/taxi { };
 
   librep = callPackage ../development/libraries/librep { };
@@ -28940,6 +28946,8 @@ with pkgs;
   tesseract = tesseract3;
 
   tetraproc = callPackage ../applications/audio/tetraproc { };
+
+  tetrio-desktop = callPackage ../games/tetrio-desktop { };
 
   tev = callPackage ../applications/graphics/tev { };
 
@@ -30903,6 +30911,9 @@ with pkgs;
   ninvaders = callPackage ../games/ninvaders { };
 
   njam = callPackage ../games/njam { };
+
+  npush = callPackage ../games/npush { };
+  run-npush = callPackage ../games/npush/run.nix { };
 
   newtonwars = callPackage ../games/newtonwars { };
 
@@ -33659,6 +33670,8 @@ with pkgs;
   ib-tws = callPackage ../applications/office/ib/tws { jdk=oraclejdk8; };
 
   ib-controller = callPackage ../applications/office/ib/controller { jdk=oraclejdk8; };
+
+  vcluster = callPackage ../applications/networking/cluster/vcluster {};
 
   vnote = libsForQt5.callPackage ../applications/office/vnote { };
 

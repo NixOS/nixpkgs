@@ -19,6 +19,7 @@ alx741/vim-hindent
 alx741/vim-stylishask
 amiorin/ctrlp-z
 andersevenrud/cmp-tmux
+andersevenrud/nordic.nvim
 andrep/vimacs
 andreshazard/vim-logreview
 AndrewRadev/sideways.vim
@@ -411,6 +412,7 @@ lifepillar/vim-mucomplete
 lighttiger2505/deoplete-vim-lsp
 lilydjwg/colorizer
 lilydjwg/fcitx.vim@fcitx5
+liuchengxu/graphviz.vim
 liuchengxu/vim-clap
 liuchengxu/vim-which-key
 liuchengxu/vista.vim
@@ -705,6 +707,7 @@ sakhnik/nvim-gdb
 saltstack/salt-vim
 samoshkin/vim-mergetool
 sbdchd/neoformat
+sblumentritt/bitbake.vim
 scalameta/nvim-metals
 sdiehl/vim-ormolu
 sebastianmarkow/deoplete-rust

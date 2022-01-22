@@ -1,17 +1,17 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, autoconf, automake, gettext, intltool
 , gtk3, lcms2, exiv2, libchamplain, clutter-gtk, ffmpegthumbnailer, fbida
-, wrapGAppsHook, fetchpatch
+, wrapGAppsHook, fetchpatch, bash, doxygen
 }:
 
 stdenv.mkDerivation rec {
   pname = "geeqie";
-  version = "1.6";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "BestImageViewer";
     repo = "geeqie";
     rev = "v${version}";
-    sha256 = "sha256-fvqpimrtzNy2UStOw3qLfC8i8V1fSrmTTsvc1ihqPsU=";
+    sha256 = "sha256-0E1TeAhkiK+hFJ4oMoeZLvfRehTzdGF3AtEVwf/MaF8=";
   };
 
   patches = [
@@ -23,11 +23,15 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  postPatch = ''
+    patchShebangs .
+  '';
+
   preConfigure = "./autogen.sh";
 
   nativeBuildInputs =
     [ pkg-config autoconf automake gettext intltool
-      wrapGAppsHook
+      wrapGAppsHook bash doxygen
     ];
 
   buildInputs = [
@@ -59,7 +63,7 @@ stdenv.mkDerivation rec {
 
     license = licenses.gpl2Plus;
 
-    homepage = "http://geeqie.sourceforge.net";
+    homepage = "https://www.geeqie.org/";
 
     maintainers = with maintainers; [ jfrankenau pSub markus1189 ];
     platforms = platforms.gnu ++ platforms.linux;

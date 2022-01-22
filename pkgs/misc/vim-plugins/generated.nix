@@ -351,6 +351,18 @@ final: prev:
     meta.homepage = "https://github.com/euclidianAce/BetterLua.vim/";
   };
 
+  bitbake-vim = buildVimPluginFrom2Nix {
+    pname = "bitbake.vim";
+    version = "2021-02-06";
+    src = fetchFromGitHub {
+      owner = "sblumentritt";
+      repo = "bitbake.vim";
+      rev = "faddca1e8768b10c80ee85221fb51a560df5ba45";
+      sha256 = "1hfly2vxhhvjdiwgfz58hr3523kf9z71i78vk168n3kdqp5vkwrp";
+    };
+    meta.homepage = "https://github.com/sblumentritt/bitbake.vim/";
+  };
+
   blueballs-neovim = buildVimPluginFrom2Nix {
     pname = "blueballs-neovim";
     version = "2021-11-28";
@@ -2361,6 +2373,18 @@ final: prev:
     meta.homepage = "https://github.com/junegunn/goyo.vim/";
   };
 
+  graphviz-vim = buildVimPluginFrom2Nix {
+    pname = "graphviz.vim";
+    version = "2021-04-09";
+    src = fetchFromGitHub {
+      owner = "liuchengxu";
+      repo = "graphviz.vim";
+      rev = "12b04c512694ace2fc15735676f5afdd05519466";
+      sha256 = "1ky9rar3gxvsf0n3y71qfln4pxmz3hpq3dqimbf0r8l8q7sw483r";
+    };
+    meta.homepage = "https://github.com/liuchengxu/graphviz.vim/";
+  };
+
   gruvbox = buildVimPluginFrom2Nix {
     pname = "gruvbox";
     version = "2020-07-03";
@@ -4147,6 +4171,18 @@ final: prev:
       sha256 = "0ylfx2d02r8ri015k5yd9gb78dwvc2sfpyw6krcqs07i0z7gaskz";
     };
     meta.homepage = "https://github.com/shaunsingh/nord.nvim/";
+  };
+
+  nordic-nvim = buildVimPluginFrom2Nix {
+    pname = "nordic.nvim";
+    version = "2021-12-20";
+    src = fetchFromGitHub {
+      owner = "andersevenrud";
+      repo = "nordic.nvim";
+      rev = "c348fba712af0c15bfdf23b396fdcb0311dfbae9";
+      sha256 = "17kmlc92wl1qya76kx9p2lq0v3n2503hlb1cf3kmys0d40xb8rsc";
+    };
+    meta.homepage = "https://github.com/andersevenrud/nordic.nvim/";
   };
 
   NrrwRgn = buildVimPluginFrom2Nix {

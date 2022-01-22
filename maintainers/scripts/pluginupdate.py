@@ -470,10 +470,10 @@ def parse_plugin_line(line: str) -> PluginDesc:
     alias = None
     uri = line
     if " as " in uri:
-        uri, alias = line.split(" as ")
+        uri, alias = uri.split(" as ")
         alias = alias.strip()
-    if "@" in line:
-        uri, branch = line.split("@")
+    if "@" in uri:
+        uri, branch = uri.split("@")
 
     repo = make_repo(uri.strip(), branch.strip(), alias)
 

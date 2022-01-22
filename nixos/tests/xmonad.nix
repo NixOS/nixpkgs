@@ -52,7 +52,7 @@ let
 in {
   name = "xmonad";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ nequissimus ];
+    maintainers = [ nequissimus ivanbrennan ];
   };
 
   machine = { pkgs, ... }: {
@@ -90,8 +90,7 @@ in {
 
     # original config has a keybinding that creates somefile
     machine.send_key("alt-ctrl-t")
-    machine.sleep(1)
-    machine.succeed("stat /tmp/somefile")
+    machine.wait_for_file("/tmp/somefile")
 
     # set up the new config
     machine.succeed("mkdir -p ${user.home}/.xmonad")
@@ -103,15 +102,13 @@ in {
 
     # new config has a keybinding that deletes somefile
     machine.send_key("alt-ctrl-r")
-    machine.sleep(1)
-    machine.fail("stat /tmp/somefile")
+    machine.wait_until_fails("stat /tmp/somefile", timeout=30)
 
     # restart with the old config, and confirm the old keybinding is back
     machine.succeed("rm /tmp/oldXMonad")
     machine.send_key("alt-q")
     machine.wait_for_file("/tmp/oldXMonad")
     machine.send_key("alt-ctrl-t")
-    machine.sleep(1)
-    machine.succeed("stat /tmp/somefile")
+    machine.wait_for_file("/tmp/somefile")
   '';
 })
