@@ -5,6 +5,8 @@ with lib;
 let
   cfg = config.services.locate;
   isMLocate = hasPrefix "mlocate" cfg.locate.name;
+  isPLocate = hasPrefix "plocate" cfg.locate.name;
+  isMorPLocate = (isMLocate || isPLocate);
   isFindutils = hasPrefix "findutils" cfg.locate.name;
 in {
   imports = [
@@ -188,24 +190,41 @@ in {
   };
 
   config = mkIf cfg.enable {
-    users.groups = mkIf isMLocate { mlocate = {}; };
+    users.groups = mkMerge [
+      (mkIf isMLocate { mlocate = {}; })
+      (mkIf isPLocate { plocate = {}; })
+    ];
 
-    security.wrappers = mkIf isMLocate {
-      locate = {
-        group = "mlocate";
+    security.wrappers = let
+      common = {
         owner = "root";
         permissions = "u+rx,g+x,o+x";
         setgid = true;
         setuid = false;
-        source = "${cfg.locate}/bin/locate";
       };
+      mlocate = (mkIf isMLocate {
+        group = "mlocate";
+        source = "${cfg.locate}/bin/locate";
+      });
+      plocate = (mkIf isPLocate {
+        group = "plocate";
+        source = "${cfg.locate}/bin/plocate";
+      });
+    in mkIf isMorPLocate {
+      locate = mkMerge [
+        common
+        mlocate
+        plocate
+      ];
+      plocate = (mkIf isPLocate (mkMerge [ common plocate ]));
     };
+
 
     nixpkgs.config = { locate.dbfile = cfg.output; };
 
     environment.systemPackages = [ cfg.locate ];
 
-    environment.variables = mkIf (!isMLocate)
+    environment.variables = mkIf (!isMorPLocate)
       { LOCATE_PATH = cfg.output;
       };
 
@@ -221,18 +240,18 @@ in {
       };
     };
 
-    warnings = optional (isMLocate && cfg.localuser != null) "mlocate does not support the services.locate.localuser option; updatedb will run as root. (Silence with services.locate.localuser = null.)"
+    warnings = optional (isMorPLocate && cfg.localuser != null) "mlocate does not support the services.locate.localuser option; updatedb will run as root. (Silence with services.locate.localuser = null.)"
             ++ optional (isFindutils && cfg.pruneNames != []) "findutils locate does not support pruning by directory component"
             ++ optional (isFindutils && cfg.pruneBindMounts) "findutils locate does not support skipping bind mounts";
 
     systemd.services.update-locatedb =
       { description = "Update Locate Database";
-        path = mkIf (!isMLocate) [ pkgs.su ];
+        path = mkIf (!isMorPLocate) [ pkgs.su ];
 
         # mlocate's updatedb takes flags via a configuration file or
         # on the command line, but not by environment variable.
         script =
-          if isMLocate
+          if isMorPLocate
           then let toFlags = x: optional (cfg.${x} != [])
                                          "--${lib.toLower x} '${concatStringsSep " " cfg.${x}}'";
                    args = concatLists (map toFlags ["pruneFS" "pruneNames" "prunePaths"]);
@@ -244,10 +263,10 @@ in {
           ''
           else ''
             exec ${cfg.locate}/bin/updatedb \
-              ${optionalString (cfg.localuser != null && ! isMLocate) "--localuser=${cfg.localuser}"} \
+              ${optionalString (cfg.localuser != null && ! isMorPLocate) "--localuser=${cfg.localuser}"} \
               --output=${toString cfg.output} ${concatStringsSep " " cfg.extraFlags}
           '';
-        environment = optionalAttrs (!isMLocate) {
+        environment = optionalAttrs (!isMorPLocate) {
           PRUNEFS = concatStringsSep " " cfg.pruneFS;
           PRUNEPATHS = concatStringsSep " " cfg.prunePaths;
           PRUNENAMES = concatStringsSep " " cfg.pruneNames;
@@ -274,4 +293,6 @@ in {
         timerConfig.OnCalendar = cfg.interval;
       };
   };
+
+  meta.maintainers = with lib.maintainers; [ SuperSandro2000 ];
 }
