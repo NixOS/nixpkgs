@@ -1,26 +1,42 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pytest
+, pytestCheckHook
+, pythonOlder
+, teamcity-messages
+, testtools
 }:
 
 buildPythonPackage rec {
   pname = "flexmock";
   version = "0.11.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "44f702c0d0adde7085b4c7afe9adab50b01b724aceeb7e49b29f5632e6325ce8";
+    hash = "sha256-RPcCwNCt3nCFtMev6a2rULAbckrO635Jsp9WMuYyXOg=";
   };
 
-  checkInputs = [ pytest ];
-  checkPhase = ''
-    py.test
-  '';
+  checkInputs = [
+    pytestCheckHook
+    teamcity-messages
+    testtools
+  ];
+
+  disabledTests = [
+    "test_failed_test_case"
+  ];
+
+  pythonImportsCheck = [
+    "flexmock"
+  ];
 
   meta = with lib; {
-    description = "flexmock is a testing library for Python that makes it easy to create mocks,stubs and fakes.";
+    description = "Testing library that makes it easy to create mocks,stubs and fakes";
     homepage = "https://flexmock.readthedocs.org";
     license = licenses.bsdOriginal;
+    maintainers = with maintainers; [ ];
   };
 }
