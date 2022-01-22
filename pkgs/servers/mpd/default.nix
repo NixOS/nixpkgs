@@ -71,7 +71,6 @@ let
     # Commercial services
     qobuz         = [ curl libgcrypt yajl ];
     soundcloud    = [ curl yajl ];
-    tidal         = [ curl yajl ];
     # Client support
     libmpdclient  = [ libmpdclient ];
     # Tag support
@@ -196,7 +195,7 @@ in
     "lame" "libsamplerate" "shout"
     "libmpdclient" "id3tag" "expat" "pcre"
     "yajl" "sqlite"
-    "soundcloud" "qobuz" "tidal"
+    "soundcloud" "qobuz"
   ] ++ lib.optionals stdenv.isLinux [
     "alsa" "systemd" "syslog" "io_uring"
   ] ++ lib.optionals (!stdenv.isDarwin) [
