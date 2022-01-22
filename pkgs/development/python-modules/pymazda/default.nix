@@ -9,6 +9,8 @@
 buildPythonPackage rec {
   pname = "pymazda";
   version = "0.3.1";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
@@ -23,7 +25,10 @@ buildPythonPackage rec {
 
   # Project has no tests
   doCheck = false;
-  pythonImportsCheck = [ "pymazda" ];
+
+  pythonImportsCheck = [
+    "pymazda"
+  ];
 
   meta = with lib; {
     description = "Python client for interacting with the MyMazda API";
