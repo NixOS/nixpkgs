@@ -73,7 +73,7 @@ let
       };
 
       installPhase = ''
-        install -m444 -Dt $out/share/fonts/opentype/noto-cjk ${typeface}/Variable/OTC/*.otf.ttc
+        install -m444 -Dt $out/share/fonts/opentype/noto-cjk ${typeface}/OTC/*.ttc
       '';
 
       meta = with lib; {
