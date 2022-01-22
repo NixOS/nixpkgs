@@ -4,7 +4,7 @@
 , libffi
 , gdbm
 , xz
-, mime-types ? null, mimetypesSupport ? true
+, mailcap, mimetypesSupport ? true
 , ncurses
 , openssl
 , readline
@@ -61,8 +61,6 @@ assert x11Support -> tcl != null
                   && libX11 != null;
 
 assert bluezSupport -> bluez != null;
-
-assert mimetypesSupport -> mime-types != null;
 
 assert lib.assertMsg (enableOptimizations -> (!stdenv.cc.isClang))
   "Optimizations with clang are not supported. configure: error: llvm-profdata is required for a --enable-optimizations build but could not be found.";
@@ -277,7 +275,7 @@ in with passthru; stdenv.mkDerivation {
       --replace "'/bin/sh'" "'${bash}/bin/sh'"
   '' + optionalString mimetypesSupport ''
     substituteInPlace Lib/mimetypes.py \
-      --replace "@mime-types@" "${mime-types}"
+      --replace "@mime-types@" "${mailcap}"
   '' + optionalString (x11Support && (tix != null)) ''
     substituteInPlace "Lib/tkinter/tix.py" --replace "os.environ.get('TIX_LIBRARY')" "os.environ.get('TIX_LIBRARY') or '${tix}/lib'"
   '';
