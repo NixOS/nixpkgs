@@ -201,6 +201,7 @@
   ./programs/starship.nix
   ./programs/steam.nix
   ./programs/sway.nix
+  ./programs/swaync.nix
   ./programs/system-config-printer.nix
   ./programs/thefuck.nix
   ./programs/tilp2.nix
