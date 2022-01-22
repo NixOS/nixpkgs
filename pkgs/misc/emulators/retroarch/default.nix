@@ -113,6 +113,7 @@ stdenv.mkDerivation rec {
     description = "Multi-platform emulator frontend for libretro cores";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
+    changelog = "https://github.com/libretro/RetroArch/blob/v${version}/CHANGES.md";
     maintainers = with maintainers; [ MP2E edwtjo matthewbauer kolbycrouch thiagokokada ];
     # FIXME: exits with error on macOS:
     # No Info.plist file in application bundle or no NSPrincipalClass in the Info.plist file, exiting
