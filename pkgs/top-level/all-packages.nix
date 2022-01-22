@@ -2593,6 +2593,8 @@ with pkgs;
 
   swaycwd = callPackage ../tools/wayland/swaycwd { };
 
+  swaync = callPackage ../tools/wayland/swaync { };
+
   swayr = callPackage ../tools/wayland/swayr { };
 
   wayland-utils = callPackage ../tools/wayland/wayland-utils { };
