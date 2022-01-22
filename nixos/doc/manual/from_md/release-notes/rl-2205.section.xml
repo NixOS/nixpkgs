@@ -611,6 +611,16 @@
       </listitem>
       <listitem>
         <para>
+          A new module was added for
+          <link xlink:href="https://github.com/ErikReider/SwayNotificationCenter">SwayNotificationCenter</link>,
+          a notification daemon with a GTK gui for Wayland compositors,
+          providing the options
+          <literal>programs.swaync.enable</literal> and
+          <literal>programs.swaync.package</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>services.mattermost.plugins</literal> has been added
           to allow the declarative installation of Mattermost plugins.
           Plugins are automatically repackaged using autoPatchelf.
