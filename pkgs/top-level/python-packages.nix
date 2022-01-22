@@ -4001,6 +4001,8 @@ in {
 
   iptools = callPackage ../development/python-modules/iptools { };
 
+  ipwhl = callPackage ../development/python-modules/ipwhl { };
+
   ipy = callPackage ../development/python-modules/IPy { };
 
   ipydatawidgets = callPackage ../development/python-modules/ipydatawidgets { };
