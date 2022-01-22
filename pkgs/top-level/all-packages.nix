@@ -8071,6 +8071,8 @@ with pkgs;
 
   netatalk = callPackage ../tools/filesystems/netatalk { };
 
+  netavark = callPackage ../tools/networking/netavark { };
+
   netcdf = callPackage ../development/libraries/netcdf {
     hdf5 = hdf5.override { usev110Api = true; };
   };
