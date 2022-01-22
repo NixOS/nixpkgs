@@ -1,5 +1,4 @@
-{ nixpkgs ? import ../.. { }
-}:
+{ nixpkgs ? import ../.. { } }:
 with nixpkgs;
 let
   pyEnv = python3.withPackages(ps: [ ps.GitPython ]);

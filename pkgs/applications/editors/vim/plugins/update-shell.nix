@@ -12,5 +12,6 @@ mkShell {
     pyEnv
     nix
     nix-prefetch-scripts
+    lua5_1.pkgs.luarocks-nix
   ];
 }

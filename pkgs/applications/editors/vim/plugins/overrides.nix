@@ -105,6 +105,22 @@
 , luaPackages
 }:
 
+let
+  # get most settings from
+  buildNeovimPlugin = luaDrv:
+
+    # toVimPlugin to add doc generation
+    # pkgs.vimUtils.vimGenDocHook
+
+    luaDrv.overrideAttrs(oa: {
+      preInstall=''
+        echo "$PWD"
+        ls -l
+        cp -r . $out
+        '';
+    });
+in
+
 self: super: {
 
   clang_complete = super.clang_complete.overrideAttrs (old: {

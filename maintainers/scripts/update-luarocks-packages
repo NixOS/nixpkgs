@@ -2,11 +2,11 @@
 #!nix-shell update-luarocks-shell.nix -i python3
 
 # format:
-# $ nix run nixpkgs.python3Packages.black -c black update.py
+# $ nix run nixpkgs#python3Packages.black -c black update.py
 # type-check:
-# $ nix run nixpkgs.python3Packages.mypy -c mypy update.py
+# $ nix run nixpkgs#python3Packages.mypy -c mypy update.py
 # linted:
-# $ nix run nixpkgs.python3Packages.flake8 -c flake8 --ignore E501,E265,E402 update.py
+# $ nix run nixpkgs#python3Packages.flake8 -c flake8 --ignore E501,E265,E402 update.py
 
 import inspect
 import os

@@ -125,7 +125,7 @@ class Repo:
 
     def prefetch(self, ref: Optional[str]) -> str:
         loaded = self._prefetch(ref)
-        return loaded["sha256"]
+        return loaded["sha256"], loaded["sha256"]
 
     def as_nix(self, plugin: "Plugin") -> str:
         return f'''fetchgit {{
@@ -199,18 +199,21 @@ class RepoGitHub(Repo):
             self.redirect[old_plugin] = new_plugin
 
 
-    def prefetch(self, commit: str) -> str:
-        if self.has_submodules():
-            sha256 = super().prefetch(commit)
-        else:
-            sha256 = self.prefetch_github(commit)
-        return sha256
+    def prefetch(self, commit: str) -> Tuple[str, str]:
+        '''Returns (store path, sha)'''
+        plugin_path, sha256 = super().prefetch(commit) if self.has_submodules() else self.prefetch_github(commit)
+        return plugin_path, sha256
 
-    def prefetch_github(self, ref: str) -> str:
-        data = subprocess.check_output(
-            ["nix-prefetch-url", "--unpack", self.url(f"archive/{ref}.tar.gz")]
-        )
-        return data.strip().decode("utf-8")
+    def prefetch_github(self, ref: str) -> Tuple[str, str]:
+        cmd = ["nix-prefetch-url", "--unpack", self.url(f"archive/{ref}.tar.gz"), '--print-path']
+        data = subprocess.check_output(cmd)
+        # return data.strip().decode("utf-8")
+        data = data.strip().decode("utf-8").splitlines()
+        print("DATA")
+        print(data)
+        print("line 0: ", data[0])
+        print("line 1: ", data[1])
+        return data[1], data[0]
 
     def as_nix(self, plugin: "Plugin") -> str:
         if plugin.has_submodules:
@@ -247,6 +250,7 @@ class Plugin:
         commit: str,
         has_submodules: bool,
         sha256: str,
+        store_path: str,
         date: Optional[datetime] = None,
     ) -> None:
         self.name = name
@@ -254,6 +258,7 @@ class Plugin:
         self.has_submodules = has_submodules
         self.sha256 = sha256
         self.date = date
+        self.store_path = store_path
 
     @property
     def normalized_name(self) -> str:
@@ -368,6 +373,7 @@ class Editor:
             "--out",
             "-o",
             dest="outfile",
+            type=Path,
             default=self.default_out,
             help="Filename to save generated nix code",
         )
@@ -423,7 +429,7 @@ def get_current_plugins(editor: Editor) -> List[Plugin]:
     data = json.loads(out)
     plugins = []
     for name, attr in data.items():
-        p = Plugin(name, attr["rev"], attr["submodules"], attr["sha256"])
+        p = Plugin(name, attr["rev"], attr["submodules"], attr["sha256"], attr["store_path"])
         plugins.append(p)
     return plugins
 
@@ -446,10 +452,10 @@ def prefetch_plugin(
 
     has_submodules = repo.has_submodules()
     print(f"prefetch {name}")
-    sha256 = repo.prefetch(commit)
+    plugin_path, sha256 = repo.prefetch(commit)
 
     return (
-        Plugin(name, commit, has_submodules, sha256, date=date),
+        Plugin(name, commit, has_submodules, sha256, store_path=plugin_path, date=date),
         repo.redirect,
     )
 
@@ -552,6 +558,7 @@ class Cache:
             for attr in data.values():
                 p = Plugin(
                     attr["name"], attr["commit"], attr["has_submodules"], attr["sha256"]
+                    , attr.get("store_path")
                 )
                 downloads[attr["commit"]] = p
         return downloads
@@ -622,6 +629,7 @@ def rewrite_input(
 
 
 def commit(repo: git.Repo, message: str, files: List[Path]) -> None:
+    log.debug("Updating git index")
     repo.index.add([str(f.resolve()) for f in files])
 
     if repo.index.diff("HEAD"):
