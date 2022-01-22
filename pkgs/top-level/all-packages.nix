@@ -25964,8 +25964,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AppKit AudioToolbox;
   };
 
-  googleearth = callPackage ../applications/misc/googleearth { };
-
   googleearth-pro = libsForQt5.callPackage ../applications/misc/googleearth-pro { };
 
   google-chrome = callPackage ../applications/networking/browsers/google-chrome { gconf = gnome2.GConf; };
