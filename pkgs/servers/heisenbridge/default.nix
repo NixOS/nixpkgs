@@ -12,6 +12,9 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     echo "${version}" > heisenbridge/version.txt
+
+    substituteInPlace setup.cfg \
+      --replace "irc >=19.0.0, <20.0" "irc"
   '';
 
   propagatedBuildInputs = with python3.pkgs; [
