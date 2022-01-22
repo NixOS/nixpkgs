@@ -26,11 +26,8 @@ stdenv.mkDerivation rec {
     inherit (src.meta) homepage;
     changelog = "https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/v${version}/CHANGELOG.md";
     license = with licenses; [
+      aom
       bsd2
-      {
-        fullName = "Alliance for Open Media Patent License 1.0";
-        url = "https://aomedia.org/license/patent-license/";
-      }
     ];
     platforms = platforms.unix;
     broken = stdenv.isAarch64; # undefined reference to `cpuinfo_arm_linux_init'
