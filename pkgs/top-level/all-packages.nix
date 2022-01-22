@@ -533,6 +533,8 @@ with pkgs;
 
   run = callPackage ../development/tools/run { };
 
+  mblock-mlink = callPackage ../development/tools/mblock-mlink { };
+
   mod = callPackage ../development/tools/mod { };
 
   broadlink-cli = callPackage ../tools/misc/broadlink-cli {};
