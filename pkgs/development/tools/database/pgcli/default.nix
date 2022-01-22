@@ -20,13 +20,13 @@
 
 buildPythonApplication rec {
   pname = "pgcli";
-  version = "3.3.0";
+  version = "3.3.1";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-PQ7UDfaR1gJUzLTVZUpSwcY3P3fSs89qkK6m7pn+pDk=";
+    sha256 = "sha256-/MyeVcpopK0Ih6z6KZGvs7ivk/PM6a2iSeatiYeZM6E=";
   };
 
   propagatedBuildInputs = [

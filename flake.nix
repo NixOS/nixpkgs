@@ -18,6 +18,9 @@
     in
     {
       lib = lib.extend (final: prev: {
+
+        nixos = import ./nixos/lib { lib = final; };
+
         nixosSystem = { modules, ... } @ args:
           import ./nixos/lib/eval-config.nix (args // {
             modules =

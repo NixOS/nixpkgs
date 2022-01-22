@@ -30,7 +30,7 @@ let
 
     options.openssh.authorizedKeys = {
       keys = mkOption {
-        type = types.listOf types.str;
+        type = types.listOf types.singleLineStr;
         default = [];
         description = ''
           A list of verbatim OpenSSH public keys that should be added to the
@@ -81,6 +81,7 @@ in
   imports = [
     (mkAliasOptionModule [ "services" "sshd" "enable" ] [ "services" "openssh" "enable" ])
     (mkAliasOptionModule [ "services" "openssh" "knownHosts" ] [ "programs" "ssh" "knownHosts" ])
+    (mkRenamedOptionModule [ "services" "openssh" "challengeResponseAuthentication" ] [ "services" "openssh" "kbdInteractiveAuthentication" ])
   ];
 
   ###### interface
@@ -218,11 +219,11 @@ in
         '';
       };
 
-      challengeResponseAuthentication = mkOption {
+      kbdInteractiveAuthentication = mkOption {
         type = types.bool;
         default = true;
         description = ''
-          Specifies whether challenge/response authentication is allowed.
+          Specifies whether keyboard-interactive authentication is allowed.
         '';
       };
 
@@ -534,7 +535,7 @@ in
         PermitRootLogin ${cfg.permitRootLogin}
         GatewayPorts ${cfg.gatewayPorts}
         PasswordAuthentication ${if cfg.passwordAuthentication then "yes" else "no"}
-        ChallengeResponseAuthentication ${if cfg.challengeResponseAuthentication then "yes" else "no"}
+        KbdInteractiveAuthentication ${if cfg.kbdInteractiveAuthentication then "yes" else "no"}
 
         PrintMotd no # handled by pam_motd
 

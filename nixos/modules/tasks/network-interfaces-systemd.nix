@@ -12,6 +12,10 @@ let
     i.ipv4.addresses
     ++ optionals cfg.enableIPv6 i.ipv6.addresses;
 
+  interfaceRoutes = i:
+    i.ipv4.routes
+    ++ optionals cfg.enableIPv6 i.ipv6.routes;
+
   dhcpStr = useDHCP: if useDHCP == true || useDHCP == null then "yes" else "no";
 
   slaves =
@@ -88,12 +92,69 @@ in
             };
           };
         });
-        networks."40-${i.name}" = mkMerge [ (genericNetwork mkDefault) {
+        networks."40-${i.name}" = mkMerge [ (genericNetwork id) {
           name = mkDefault i.name;
           DHCP = mkForce (dhcpStr
             (if i.useDHCP != null then i.useDHCP else false));
           address = forEach (interfaceIps i)
             (ip: "${ip.address}/${toString ip.prefixLength}");
+          routes = forEach (interfaceRoutes i)
+            (route: {
+              # Most of these route options have not been tested.
+              # Please fix or report any mistakes you may find.
+              routeConfig =
+                optionalAttrs (route.prefixLength > 0) {
+                  Destination = "${route.address}/${toString route.prefixLength}";
+                } //
+                optionalAttrs (route.options ? fastopen_no_cookie) {
+                  FastOpenNoCookie = route.options.fastopen_no_cookie;
+                } //
+                optionalAttrs (route.via != null) {
+                  Gateway = route.via;
+                } //
+                optionalAttrs (route.options ? onlink) {
+                  GatewayOnLink = true;
+                } //
+                optionalAttrs (route.options ? initrwnd) {
+                  InitialAdvertisedReceiveWindow = route.options.initrwnd;
+                } //
+                optionalAttrs (route.options ? initcwnd) {
+                  InitialCongestionWindow = route.options.initcwnd;
+                } //
+                optionalAttrs (route.options ? pref) {
+                  IPv6Preference = route.options.pref;
+                } //
+                optionalAttrs (route.options ? mtu) {
+                  MTUBytes = route.options.mtu;
+                } //
+                optionalAttrs (route.options ? metric) {
+                  Metric = route.options.metric;
+                } //
+                optionalAttrs (route.options ? src) {
+                  PreferredSource = route.options.src;
+                } //
+                optionalAttrs (route.options ? protocol) {
+                  Protocol = route.options.protocol;
+                } //
+                optionalAttrs (route.options ? quickack) {
+                  QuickAck = route.options.quickack;
+                } //
+                optionalAttrs (route.options ? scope) {
+                  Scope = route.options.scope;
+                } //
+                optionalAttrs (route.options ? from) {
+                  Source = route.options.from;
+                } //
+                optionalAttrs (route.options ? table) {
+                  Table = route.options.table;
+                } //
+                optionalAttrs (route.options ? advmss) {
+                  TCPAdvertisedMaximumSegmentSize = route.options.advmss;
+                } //
+                optionalAttrs (route.options ? ttl-propagate) {
+                  TTLPropagate = route.options.ttl-propagate == "enabled";
+                };
+            });
           networkConfig.IPv6PrivacyExtensions = "kernel";
           linkConfig = optionalAttrs (i.macAddress != null) {
             MACAddress = i.macAddress;

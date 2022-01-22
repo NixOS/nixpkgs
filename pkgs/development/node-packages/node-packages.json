@@ -20,6 +20,7 @@
 , "@webassemblyjs/wast-refmt"
 , "alex"
 , "alloy"
+, "antennas"
 , "asar"
 , "audiosprite"
 , "autoprefixer"

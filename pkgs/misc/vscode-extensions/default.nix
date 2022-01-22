@@ -367,6 +367,22 @@ let
 
       chenglou92.rescript-vscode = callPackage ./rescript { };
 
+      christian-kohler.path-intellisense = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "path-intellisense";
+          publisher = "christian-kohler";
+          version = "2.6.1";
+          sha256 = "sha256-ol98g3pliBlyEQ+n7cR4O04J/0QB9U8+fvf+FC0j0Fc=";
+        };
+        meta = with lib; {
+          description = "Visual Studio Code plugin that autocompletes filenames";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=christian-kohler.path-intellisense";
+          homepage = "https://github.com/ChristianKohler/PathIntellisense";
+          license = licenses.mit;
+          maintainers = with maintainers; [ imgabe ];
+        };
+      };
+
       cmschuetz12.wal = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "wal";
@@ -480,8 +496,8 @@ let
         mktplcRef = {
           name = "languagetool-linter";
           publisher = "davidlday";
-          version = "0.18.0";
-          sha256 = "sha256-AYINgq1BMfh7p4xhwSC2Www6dQvyQAGTA45HJsmMGDg=";
+          version = "0.19.0";
+          sha256 = "sha256-crq6CTXpzwHJL8FPIBneAGjDgUUNdpBt6rIaMCr1F1U=";
         };
         meta = with lib; {
           description = "LanguageTool integration for VS Code";
@@ -931,8 +947,8 @@ let
         mktplcRef = {
           name = "todo-tree";
           publisher = "Gruntfuggly";
-          version = "0.0.214";
-          sha256 = "0rwxjnrl44rnhx3183037k6435xs4772p58a37azl5cahsyav1hk";
+          version = "0.0.215";
+          sha256 = "sha256-WK9J6TvmMCLoqeKWh5FVp1mNAXPWVmRvi/iFuLWMylM=";
         };
         meta = with lib; {
           license = licenses.mit;
@@ -943,8 +959,8 @@ let
         mktplcRef = {
           name = "haskell";
           publisher = "haskell";
-          version = "1.7.1";
-          sha256 = "sha256-UWdj2J5z5cTUsfvlU++LRil0tEiAH2AFb1AwBsfMvoY=";
+          version = "1.8.0";
+          sha256 = "sha256-+k8XT2COe9Z8HvZvcrzfVuocRcxXBrVoNHDT/uKK7Hs=";
         };
         meta = with lib; {
           license = licenses.mit;
@@ -1061,6 +1077,22 @@ let
         };
         meta = with lib; {
           license = licenses.mit;
+        };
+      };
+
+      jdinhlife.gruvbox = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "gruvbox";
+          publisher = "jdinhlife";
+          version = "1.5.1";
+          sha256 = "sha256-0ghB0E+Wa9W2bNFFiH2Q3pUJ9HV5+JfKohX4cRyevC8=";
+        };
+        meta = with lib; {
+          description = "Gruvbox Theme";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=jdinhlife.gruvbox";
+          homepage = "https://github.com/jdinhify/vscode-theme-gruvbox";
+          license = licenses.mit;
+          maintainers = with maintainers; [ imgabe ];
         };
       };
 
@@ -1242,8 +1274,8 @@ let
         mktplcRef = {
           name = "vscode-docker";
           publisher = "ms-azuretools";
-          version = "1.18.0";
-          sha256 = "0hhlhx3xy7x31xx2v3srvk67immajs6dm9h0wi49ii1rwx61zxah";
+          version = "1.19.0";
+          sha256 = "sha256-buIAbsyKUvX3blO1AbCq/tJ1KAcqaFpciqQovmOZ5GE=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -1341,12 +1373,28 @@ let
         };
       };
 
+      oderwat.indent-rainbow = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "indent-rainbow";
+          publisher = "oderwat";
+          version = "8.2.2";
+          sha256 = "sha256-7kkJc+hhYaSKUbK4eYwOnLvae80sIg7rd0E4YyCXtPc=";
+        };
+        meta = with lib; {
+          description = "Makes indentation easier to read";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=oderwat.indent-rainbow";
+          homepage = "https://github.com/oderwat/vscode-indent-rainbow";
+          license = licenses.mit;
+          maintainers = with maintainers; [ imgabe ];
+        };
+      };
+
       redhat.java = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "java";
           publisher = "redhat";
-          version = "0.76.0";
-          sha256 = "0xb9brki4s00piv4kqgz6idm16nk6x1j6502jljz7y9pif38z32y";
+          version = "1.2.0";
+          sha256 = "sha256-YmR3FWhPZSU2gE6NIVoA1HZBzaYaTNYFXC/uNwbDEdQ=";
         };
         buildInputs = [ jdk ];
         meta = {
@@ -1359,8 +1407,8 @@ let
         mktplcRef = {
           name = "vscode-yaml";
           publisher = "redhat";
-          version = "1.2.2";
-          sha256 = "06n4fxqr3lqmiyns9jdk3rdnanamcpzhrivllai8z9d997xmwcx6";
+          version = "1.3.0";
+          sha256 = "sha256-Tz6bLcBUATn8cYIzGoLJwgaJZGbBVr1CISmJHz+iM60=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -1434,6 +1482,18 @@ let
         };
       };
 
+      ritwickdey.liveserver = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "liveserver";
+          publisher = "ritwickdey";
+          version = "5.6.1";
+          sha256 = "sha256-QPMZMttYV+dQfWTniA7nko7kXukqU9g6Wj5YDYfL6hw=";
+        };
+        meta = with lib; {
+          license = licenses.mit;
+        };
+      };
+
       rubbersheep.gi = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "gi";
@@ -1474,8 +1534,8 @@ let
         mktplcRef = {
           name = "metals";
           publisher = "scalameta";
-          version = "1.11.0";
-          sha256 = "0a4agm0g16cxhvhvsmbsvvicfsjr53330rsab5xdi7gcpx9a1dff";
+          version = "1.12.0";
+          sha256 = "13zwjnrmkrs3wxh8c9nz9zxxs3p6lkj41q30v4a1md5pscfa1s44";
         };
         meta = {
           license = lib.licenses.asl20;

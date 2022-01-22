@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2021.12.9";
+  version = "2021.12.10";
   components = {
     "abode" = ps: with ps; [ abodepy ];
     "accuweather" = ps: with ps; [ accuweather ];
@@ -589,7 +589,7 @@
     "nuki" = ps: with ps; [ pynuki ];
     "numato" = ps: with ps; [ ]; # missing inputs: numato-gpio
     "number" = ps: with ps; [ ];
-    "nut" = ps: with ps; [ ]; # missing inputs: pynut2
+    "nut" = ps: with ps; [ pynut2 ];
     "nws" = ps: with ps; [ pynws ];
     "nx584" = ps: with ps; [ pynx584 ];
     "nzbget" = ps: with ps; [ ]; # missing inputs: pynzbgetapi
@@ -1348,6 +1348,7 @@
     "nsw_rural_fire_service_feed"
     "nuki"
     "number"
+    "nut"
     "nws"
     "nx584"
     "octoprint"

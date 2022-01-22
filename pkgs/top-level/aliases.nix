@@ -42,6 +42,7 @@ mapAliases ({
   aesop = throw "aesop has been removed from nixpkgs, as it was unmaintained."; # added 2021-08-05
   ag = silver-searcher; # added 2018-04-25
   aircrackng = aircrack-ng; # added 2016-01-14
+  airtame = throw "airtame has been removed due to being unmaintained."; # added 2022-01-19
   aleth = throw "aleth (previously packaged as cpp_ethereum) has been removed; abandoned upstream."; # added 2020-11-30
   alienfx = throw "alienfx has been removed."; # added 2019-12-08
   alsaLib = alsa-lib; # added 2021-06-09
@@ -229,7 +230,6 @@ mapAliases ({
   double_conversion = double-conversion; # 2017-11-22
   docker_compose = docker-compose; # 2018-11-10
   draftsight = throw "draftsight has been removed, no longer available as freeware"; # added 2020-08-14
-  dtrx = throw "dtrx has been removed from nixpkgs as the upstream has abandoned the project."; # added 2022-01-01
   dvb_apps = throw "dvb_apps has been removed."; # added 2020-11-03
   dwarf_fortress = dwarf-fortress; # added 2016-01-23
   dwm-git = throw "dwm-git has been removed from nixpkgs, as it had no updates for 2 years not serving it's purpose."; # added 2021-02-07
@@ -258,6 +258,7 @@ mapAliases ({
   euca2tools = throw "euca2ools has been removed because it is unmaintained upstream and still uses python2."; # added 2022-01-01
   evolution_data_server = evolution-data-server; # added 2018-02-25
   etcdctl = etcd; # added 2018-04-25
+  evilvte = throw "evilvte has been removed from nixpkgs for being unmaintained with security issues and dependant on an old version of vte which was removed."; # added 2022-01-14
   exfat-utils = exfat;                  # 2015-09-11
   facette = throw "facette has been removed."; # added 2020-01-06
   fast-neural-doodle = throw "fast-neural-doodle has been removed, as the upstream project has been abandoned"; # added 2020-03-28
@@ -386,6 +387,7 @@ mapAliases ({
   gupnp_igd = gupnp-igd; # added 2018-02-25
   gupnptools = gupnp-tools;  # added 2015-12-19
   gutenberg = zola;  # added 2018-11-17
+  hawkthorne = throw "hawkthorne has been removed because it depended on a broken version of love"; # added 2022-01-15
   hal-flash = throw "hal-flash has been removed as Adobe Flash Player is now deprecated."; # added 2021-02-07
   heimdalFull = heimdal; # added 2018-05-01
   hepmc = hepmc2; # added 2019-08-05
@@ -504,6 +506,8 @@ mapAliases ({
   libqmatrixclient = throw "libqmatrixclient was renamed to libquotient"; # added 2020-04-09
   libwnck3 = libwnck;
   lilypond-unstable = lilypond; # added 2021-03-11
+  lilyterm = throw "lilyterm has been removed from nixpkgs, because it was relying on a vte version that depended on python2."; # added 2022-01-14
+  lilyterm-git = throw "lilyterm-git has been removed from nixpkgs, because it was relying on a vte version that depended on python2."; # added 2022-01-14
   links = links2; # added 2016-01-31
   linuxband = throw "linuxband has been removed from nixpkgs, as it's abandoned upstream."; # added 2021-12-09
   linux_rpi0 = linuxKernel.kernels.linux_rpi1;
@@ -574,6 +578,9 @@ mapAliases ({
   lua5_expat = luaPackages.luaexpat; # added 2017-05-02
   lua5_sec = luaPackages.luasec; # added 2017-05-02
   lumpy = throw "lumpy has been removed from nixpkgs, as it is stuck on python2."; # added 2022-01-12
+  love_0_7 = throw "love_0_7 was removed because it is a very old version and no longer used by any package in nixpkgs"; # added 2022-01-15
+  love_0_8 = throw "love_0_8 was removed because it is a very old version and no longer used by any package in nixpkgs"; # added 2022-01-15
+  love_0_9 = throw "love_0_9 was removed because was broken for a long time and no longer used by any package in nixpkgs"; # added 2022-01-15
   lxappearance-gtk3 = throw "lxappearance-gtk3 has been removed. Use lxappearance instead, which now defaults to Gtk3";  # added 2020-06-03
   lzma = xz; # moved from top-level 2021-03-14
   m3d-linux = m33-linux; # added 2016-08-13
@@ -656,6 +663,7 @@ mapAliases ({
   nmap-unfree = nmap; # added 2021-04-06
   nologin = shadow; # added 2018-04-25
   nordic-polar = throw "nordic-polar was removed on 2021-05-27, now integrated in nordic"; # added 2021-05-27
+  nottetris2 = throw "nottetris2 was removed because it is unmaintained by upstream and broken"; # added 2022-01-15
   noto-fonts-cjk = noto-fonts-cjk-sans; # added 2021-12-16
   now-cli = throw "now-cli has been replaced with nodePackages.vercel"; # added 2021-08-05
   nxproxy = nx-libs; # added 2019-02-15
@@ -761,6 +769,7 @@ mapAliases ({
   pidginotr = pidgin-otr; # added 2018-01-08
   pidginsipe = pidgin-sipe; # added 2018-01-08
   pidginwindowmerge = pidgin-window-merge; # added 2018-01-08
+  pifi = throw "pifi has been removed from nixpkgs, as it is no longer developed."; # added 2022-01-19
   piwik = matomo; # added 2018-01-16
   pkgconfig = pkg-config; # added 2018-02-02, moved to aliases.nix 2021-01-18
   pkgconfigUpstream = pkg-configUpstream; # added 2018-02-02
@@ -782,6 +791,7 @@ mapAliases ({
   pgtap = postgresqlPackages.pgtap;
   plv8 = postgresqlPackages.plv8;
   timescaledb = postgresqlPackages.timescaledb;
+  tlauncher = throw "tlauncher has been removed because there questionable practices and legality concerns";
   tsearch_extras = postgresqlPackages.tsearch_extras;
   cstore_fdw = postgresqlPackages.cstore_fdw;
   pg_hll = postgresqlPackages.pg_hll;
@@ -858,6 +868,7 @@ mapAliases ({
   qt-recordmydesktop = throw "qt-recordmydesktop has been removed from nixpkgs, as it's abandoned and uses deprecated libraries"; # added 2019-12-10
   qt-3 = throw "qt-3 has been removed from nixpkgs, as it's unmaintained and insecure"; # added 2021-02-15
   rfkill = throw "rfkill has been removed, as it's included in util-linux"; # added 2020-08-23
+  rimshot = throw "rimshot has been removed, because it is broken and no longer maintained upstream"; # added 2022-01-15
   riak-cs = throw "riak-cs is not maintained anymore"; # added 2020-10-14
   ring-daemon = jami-daemon; # added 2021-10-26
   radare2-cutter = cutter; # added 2021-03-30
@@ -977,6 +988,7 @@ mapAliases ({
   swfdec = throw "swfdec has been removed as broken and unmaintained."; # added 2020-08-23
   swtpm-tpm2 = swtpm; # added 2021-02-26
   syncthing-cli = syncthing; # added 2021-04-06
+  synology-drive = throw "synology-drive has been superseded by synology-drive-client"; # added 2021-11-26
   system_config_printer = system-config-printer;  # added 2016-01-03
   systemd-cryptsetup-generator = throw "systemd-cryptsetup-generator is now included in the systemd package"; # added 2020-07-12
   systemd_with_lvm2 = throw "systemd_with_lvm2 is obsolete, enabled by default via the lvm module"; # added 2020-07-12
@@ -997,6 +1009,7 @@ mapAliases ({
   telepathy_salut = telepathy-salut; # added 2018-02-25
   telnet = inetutils; # added 2018-05-15
   terminus = throw "terminus has been removed, it was unmaintained in nixpkgs"; # added 2021-08-21
+  terraform_0_12 = throw "terraform_0_12 has been removed from nixpkgs on 2021/01";
   terraform_1_0_0 = throw "terraform_1_0_0 has been renamed to terraform_1"; # added 2021-06-15
   terraform_1_0 = throw "terraform_1_0 has been renamed to terraform_1"; # added 2021-12-08
   terraform-provider-ibm = terraform-providers.ibm; # added 2018-09-28
@@ -1045,6 +1058,7 @@ mapAliases ({
   uzbl = throw "uzbl has been removed from nixpkgs, as it's unmaintained and uses insecure libraries";
   v4l_utils = v4l-utils; # added 2019-08-07
   v8_3_16_14 = throw "v8_3_16_14 was removed in 2019-11-01: no longer referenced by other packages";
+  vapor = throw "vapor was removed because it was unmaintained and upstream service no longer exists";
   vamp = { vampSDK = vamp-plugin-sdk; }; # added 2020-03-26
   varnish62 = throw "varnish62 was removed from nixpkgs, because it is unmaintained upstream. Please switch to a different release."; # 2021-07-26
   varnish63 = throw "varnish63 was removed from nixpkgs, because it is unmaintained upstream. Please switch to a different release."; # 2021-07-26

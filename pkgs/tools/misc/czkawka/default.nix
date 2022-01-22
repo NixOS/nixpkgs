@@ -14,16 +14,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "czkawka";
-  version = "3.3.1";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "qarmin";
     repo = "czkawka";
     rev = version;
-    sha256 = "0p1j5f5jk0cci6bg4jfnnn80gyi9039ni4ma8zwindk7fyn9gpc8";
+    sha256 = "sha256-UIgyKWMVSKAgUNqfxFYSfP+l9x52XAzrXr1nnfKub9I=";
   };
 
-  cargoSha256 = "1q35c5szavpsnzflw33radg6blzql3sz3jyzyqqz97ac69zns920";
+  cargoSha256 = "sha256-jPrkNKFmdVk3LEa20jtXSx+7S98fSrX7Rt/lexC0Gwo=";
 
   nativeBuildInputs = [
     pkg-config
