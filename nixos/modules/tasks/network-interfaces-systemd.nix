@@ -92,7 +92,7 @@ in
             };
           };
         });
-        networks."40-${i.name}" = mkMerge [ (genericNetwork mkDefault) {
+        networks."40-${i.name}" = mkMerge [ (genericNetwork id) {
           name = mkDefault i.name;
           DHCP = mkForce (dhcpStr
             (if i.useDHCP != null then i.useDHCP else false));
