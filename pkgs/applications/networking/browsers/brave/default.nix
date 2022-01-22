@@ -93,11 +93,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "brave";
-  version = "1.31.91";
+  version = "1.34.80";
 
   src = fetchurl {
     url = "https://github.com/brave/brave-browser/releases/download/v${version}/brave-browser_${version}_amd64.deb";
-    sha256 = "LuzflA96UQehLHUVYdPDTXs+YuFLEkpzTdO2liGrWtE=";
+    sha256 = "2N+dXQGVfm3GsaKKo3EBxLu+cu08OjlrqkgXX9knFys=";
   };
 
   dontConfigure = true;
@@ -174,7 +174,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://brave.com/";
     description = "Privacy-oriented browser for Desktop and Laptop computers";
-    changelog = "https://github.com/brave/brave-browser/blob/master/CHANGELOG_DESKTOP.md";
+    changelog = "https://github.com/brave/brave-browser/blob/master/CHANGELOG_DESKTOP.md#" + lib.replaceStrings [ "." ] [ "" ] version;
     longDescription = ''
       Brave browser blocks the ads and trackers that slow you down,
       chew up your bandwidth, and invade your privacy. Brave lets you
