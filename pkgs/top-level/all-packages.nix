@@ -29381,8 +29381,6 @@ with pkgs;
     libcaca = null;
   };
 
-  vlc_qt5 = vlc;
-
   libvlc = vlc.override {
     withQt5 = false;
     qtbase = null;
