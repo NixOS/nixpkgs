@@ -9214,12 +9214,12 @@ final: prev:
     pname = "vim-markdown";
     version = "2020-07-14";
     src = fetchFromGitHub {
-      owner = "plasticboy";
+      owner = "preservim";
       repo = "vim-markdown";
       rev = "8e5d86f7b85234d3d1b4207dceebc43a768ed5d4";
       sha256 = "013vh2rnfifm5j56imar03rvchz68ll4lbgy9y8fbw7s9a0k6yaa";
     };
-    meta.homepage = "https://github.com/plasticboy/vim-markdown/";
+    meta.homepage = "https://github.com/preservim/vim-markdown/";
   };
 
   vim-markdown-composer = buildVimPluginFrom2Nix {
