@@ -21672,6 +21672,8 @@ with pkgs;
 
   nemo-qml-plugin-dbus = libsForQt5.callPackage ../development/libraries/nemo-qml-plugin-dbus { };
 
+  netflix = callPackage ../applications/video/netflix { };
+
   nifticlib = callPackage ../development/libraries/science/biology/nifticlib { };
 
   notify-sharp = callPackage ../development/libraries/notify-sharp { };
