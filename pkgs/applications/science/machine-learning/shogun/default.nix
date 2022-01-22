@@ -177,6 +177,12 @@ stdenv.mkDerivation rec {
     rm -r $out/share
   '';
 
+  postFixup = ''
+    # CMake incorrectly calculates library path from dev prefix
+    substituteInPlace $dev/lib/cmake/shogun/ShogunTargets-release.cmake \
+      --replace "\''${_IMPORT_PREFIX}/lib/" "$out/lib/"
+  '';
+
   meta = with lib; {
     description = "A toolbox which offers a wide range of efficient and unified machine learning methods";
     homepage = "http://shogun-toolbox.org/";
