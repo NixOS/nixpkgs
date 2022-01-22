@@ -268,8 +268,7 @@ in
   mailcatcher = handleTest ./mailcatcher.nix {};
   mailhog = handleTest ./mailhog.nix {};
   man = handleTest ./man.nix {};
-  mariadb-galera-mariabackup = handleTest ./mysql/mariadb-galera-mariabackup.nix {};
-  mariadb-galera-rsync = handleTest ./mysql/mariadb-galera-rsync.nix {};
+  mariadb-galera = handleTest ./mysql/mariadb-galera.nix {};
   matomo = handleTest ./matomo.nix {};
   matrix-appservice-irc = handleTest ./matrix-appservice-irc.nix {};
   matrix-conduit = handleTest ./matrix-conduit.nix {};

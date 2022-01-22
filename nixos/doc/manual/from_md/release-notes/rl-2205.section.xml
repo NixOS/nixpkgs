@@ -536,6 +536,19 @@
       </listitem>
       <listitem>
         <para>
+          MariaDB is now offered in several versions, not just the
+          newest one. So if you have a need for running MariaDB 10.4 for
+          example, you can now just set
+          <literal>services.mysql.package = pkgs.mariadb_104;</literal>.
+          In general, it is recommended to run the newest version, to
+          get the newest features, while sticking with an LTS version
+          will most likely provide a more stable experience. Sometimes
+          software is also incompatible with the newest version of
+          MariaDB.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The option
           <link linkend="opt-programs.ssh.enableAskPassword">programs.ssh.enableAskPassword</link>
           was added, decoupling the setting of
