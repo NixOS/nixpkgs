@@ -32145,6 +32145,8 @@ with pkgs;
 
   epson_201207w = callPackage ../misc/drivers/epson_201207w { };
 
+  epson-201401w = callPackage ../misc/drivers/epson-201401w { };
+
   epson-201106w = callPackage ../misc/drivers/epson-201106w { };
 
   epson-workforce-635-nx625-series = callPackage ../misc/drivers/epson-workforce-635-nx625-series { };

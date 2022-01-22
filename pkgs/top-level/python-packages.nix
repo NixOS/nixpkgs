@@ -4711,6 +4711,8 @@ in {
 
   matrix-client = callPackage ../development/python-modules/matrix-client { };
 
+  matrix-common = callPackage ../development/python-modules/matrix-common { };
+
   matrix-nio = callPackage ../development/python-modules/matrix-nio { };
 
   mattermostdriver = callPackage ../development/python-modules/mattermostdriver { };
@@ -5006,6 +5008,8 @@ in {
   mutesync = callPackage ../development/python-modules/mutesync { };
 
   mutf8 = callPackage ../development/python-modules/mutf8 { };
+
+  mutmut = callPackage ../development/python-modules/mutmut { };
 
   mujson = callPackage ../development/python-modules/mujson { };
 
