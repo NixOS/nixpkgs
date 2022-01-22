@@ -26,13 +26,13 @@
 
 buildPythonPackage rec {
   pname = "flask-admin";
-  version = "1.5.8";
+  version = "1.6.0";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "Flask-Admin";
     inherit version;
-    sha256 = "sha256-6wah8xuYiB3uU6VcZPrr0ZkNaqw4gmNksoDfCyZ5/3Q=";
+    sha256 = "1209qhm51d4z66mbw55cmkzqvr465shnws2m2l2zzpxhnxwzqks2";
   };
 
   propagatedBuildInputs = [
@@ -69,6 +69,7 @@ buildPythonPackage rec {
     "flask_admin/tests/pymongo/test_basic.py"
     "flask_admin/tests/sqla/test_basic.py"
     "flask_admin/tests/sqla/test_form_rules.py"
+    "flask_admin/tests/sqla/test_inlineform.py"
     "flask_admin/tests/sqla/test_postgres.py"
     "flask_admin/tests/sqla/test_translation.py"
   ];
