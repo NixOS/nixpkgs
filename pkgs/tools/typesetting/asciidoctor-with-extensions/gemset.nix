@@ -115,6 +115,17 @@
     };
     version = "0.3.5";
   };
+  asciidoctor-multipage = {
+    dependencies = ["asciidoctor"];
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "1372213kxw1b9k120dmyackafzsk80h1y2n0r1hmfrri26kczgfb";
+      type = "gem";
+    };
+    version = "0.0.15";
+  };
   asciidoctor-pdf = {
     dependencies = ["asciidoctor" "concurrent-ruby" "prawn" "prawn-icon" "prawn-svg" "prawn-table" "prawn-templates" "safe_yaml" "treetop"];
     groups = ["default"];
