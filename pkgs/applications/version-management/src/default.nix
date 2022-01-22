@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "src";
-  version = "1.28";
+  version = "1.29";
 
   src = fetchurl {
     url = "http://www.catb.org/~esr/src/${pname}-${version}.tar.gz";
-    sha256 = "1fkr5z3mlj13djz9w1sb644wc7r1fywz52qq97byw1yyw0bqyi7f";
+    sha256 = "sha256-Tc+qBhLtC9u23BrqVniAprAV8YhXELvbMn+XxN5BQkE=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
