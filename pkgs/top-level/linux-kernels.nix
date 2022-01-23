@@ -348,6 +348,8 @@ in {
 
     rtl8192eu = callPackage ../os-specific/linux/rtl8192eu { };
 
+    rtl8189es = callPackage ../os-specific/linux/rtl8189es { };
+
     rtl8723bs = callPackage ../os-specific/linux/rtl8723bs { };
 
     rtl8812au = callPackage ../os-specific/linux/rtl8812au { };
