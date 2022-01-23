@@ -10527,7 +10527,7 @@ final: prev:
       owner = "evanleck";
       repo = "vim-svelte";
       rev = "5f88e5a0fe7dcece0008dae3453edbd99153a042";
-      sha256 = "1467b0bfnn8scgni405xfsj3zk8vfgj44mnm1lvr9ir696r2gmp0";
+      sha256 = "0p941kcqnv4wgcybmhnpzrvxm2y9d2fkd4n186zav7mwfzn736jq";
     };
     meta.homepage = "https://github.com/evanleck/vim-svelte/";
   };
