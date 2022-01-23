@@ -229,6 +229,7 @@ with lib.maintainers; {
   php = {
     members = [
       aanderse
+      drupol
       etu
       globin
       ma27
