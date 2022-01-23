@@ -2,14 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "spirv-tools";
-  # Update spirv-headers rev in lockstep according to DEPs file
-  version = "2021.3";
+  version = "1.2.198.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Tools";
-    rev = "v${version}";
-    sha256 = "sha256-skpsxpgl6hR5uiKfphKFQJfh+LJvhGvDW/t2u5AhXzk=";
+    rev = "sdk-${version}";
+    sha256 = "sha256-8EJbTPY5dvsqx32POf2HcCV3j2fA68GtGZA66l9V4TI=";
   };
 
   nativeBuildInputs = [ cmake python3 ];
