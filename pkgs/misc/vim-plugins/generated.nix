@@ -898,7 +898,7 @@ final: prev:
       owner = "coc-extensions";
       repo = "coc-svelte";
       rev = "5743da35da727ce8bf8a8b9733ee7ff61d476b4e";
-      sha256 = "0p941kcqnv4wgcybmhnpzrvxm2y9d2fkd4n186zav7mwfzn736jq";
+      sha256 = "1467b0bfnn8scgni405xfsj3zk8vfgj44mnm1lvr9ir696r2gmp0";
     };
     meta.homepage = "https://github.com/coc-extensions/coc-svelte/";
   };
