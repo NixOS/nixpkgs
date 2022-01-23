@@ -1,6 +1,6 @@
 { lib, fetchgit, fetchzip }:
 
-{ owner, repo, rev, name ? "source"
+{ owner, repo, rev ? null, name ? "source"
 , fetchSubmodules ? false, leaveDotGit ? null
 , deepClone ? false, private ? false, forceFetchGit ? false
 , githubBase ? "github.com", varPrefix ? null
@@ -30,8 +30,9 @@ let
   };
   fetcherArgs = (if useFetchGit
     then {
-      inherit rev deepClone fetchSubmodules; url = "${baseUrl}.git";
+      inherit deepClone fetchSubmodules; url = "${baseUrl}.git";
     } // lib.optionalAttrs (leaveDotGit != null) { inherit leaveDotGit; }
+      // lib.optionalAttrs (rev != null) { inherit rev; }
     else { url = "${baseUrl}/archive/${rev}.tar.gz"; }
   ) // privateAttrs // passthruAttrs // { inherit name; };
 in
