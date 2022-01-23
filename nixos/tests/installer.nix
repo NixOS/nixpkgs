@@ -671,8 +671,6 @@ in {
           "modprobe bcache",
           "udevadm settle",
           "make-bcache -B /dev/vda4 -C /dev/vda3",
-          "echo /dev/vda3 > /sys/fs/bcache/register",
-          "echo /dev/vda4 > /sys/fs/bcache/register",
           "udevadm settle",
           "mkfs.ext3 -L nixos /dev/bcache0",
           "mount LABEL=nixos /mnt",
