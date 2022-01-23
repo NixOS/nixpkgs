@@ -312,6 +312,7 @@ mapAliases ({
   gdk_pixbuf = gdk-pixbuf; # added 2019-05-22
   gettextWithExpat = gettext; # 2016-02-19
   getmail = throw "getmail has been removed from nixpkgs, migrate to getmail6."; # added 2022-01-12
+  giblib = throw " giblib has been removed from nixpkgs because upstream is gone."; # added 2022-01-23
   giflib_4_1 = throw "giflib_4_1 has been removed; use giflib instead"; # 2020-02-12
   git-bz = throw "giz-bz has been removed from nixpkgs as it is stuck on python2."; # added 2022-01-01
   gitAndTools = self // { # added 2021-01-14
