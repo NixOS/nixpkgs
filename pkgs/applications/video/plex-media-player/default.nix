@@ -46,5 +46,6 @@ in mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ b4dm4n ];
     homepage = "https://plex.tv";
+    mainProgram = "plexmediaplayer";
   };
 }
