@@ -543,6 +543,18 @@ final: prev:
     meta.homepage = "https://github.com/yunlingz/ci_dark/";
   };
 
+  circles-nvim = buildVimPluginFrom2Nix {
+    pname = "circles.nvim";
+    version = "2022-01-11";
+    src = fetchFromGitHub {
+      owner = "projekt0n";
+      repo = "circles.nvim";
+      rev = "3847feed23fa3ba6abecdf1b17a6c7d2022ebe65";
+      sha256 = "1wxfix1fd8qwflc7id3g0yr7838j4vgnrk1nixv5q99d7wj0hadr";
+    };
+    meta.homepage = "https://github.com/projekt0n/circles.nvim/";
+  };
+
   clang_complete = buildVimPluginFrom2Nix {
     pname = "clang_complete";
     version = "2020-09-18";
@@ -3585,6 +3597,18 @@ final: prev:
     meta.homepage = "https://github.com/shaunsingh/moonlight.nvim/";
   };
 
+  Navigator-nvim = buildVimPluginFrom2Nix {
+    pname = "Navigator.nvim";
+    version = "2021-11-18";
+    src = fetchFromGitHub {
+      owner = "numToStr";
+      repo = "Navigator.nvim";
+      rev = "f7b689d72649e1d5132116c76ac2ad8b97c210d4";
+      sha256 = "17yfc7ss9yslf8dvwl0vi3mdpcxp5j1g6dc8qrz20v2dx8hjxd1q";
+    };
+    meta.homepage = "https://github.com/numToStr/Navigator.nvim/";
+  };
+
   ncm2 = buildVimPluginFrom2Nix {
     pname = "ncm2";
     version = "2021-10-08";
@@ -4387,6 +4411,18 @@ final: prev:
       sha256 = "0gvqdfkqf6k9q46r0vcc3nqa6w45gsvp8j4kya1bvi24vhifg2p9";
     };
     meta.homepage = "https://github.com/norcalli/nvim-colorizer.lua/";
+  };
+
+  nvim-comment = buildVimPluginFrom2Nix {
+    pname = "nvim-comment";
+    version = "2022-01-04";
+    src = fetchFromGitHub {
+      owner = "terrortylor";
+      repo = "nvim-comment";
+      rev = "f670649da497de12aa3d5afc0a693d5d50b17d85";
+      sha256 = "0j3pay000yf79lz5plcnfp068fychnf7xa08cg7h5s0nx5cp5bgh";
+    };
+    meta.homepage = "https://github.com/terrortylor/nvim-comment/";
   };
 
   nvim-compe = buildVimPluginFrom2Nix {
@@ -6143,6 +6179,19 @@ final: prev:
       sha256 = "0hhi49iwkgzxhdixj0jbc4mbgad1irb056ijf7l5022r4k4gs2n8";
     };
     meta.homepage = "https://github.com/keith/swift.vim/";
+  };
+
+  switch-vim = buildVimPluginFrom2Nix {
+    pname = "switch.vim";
+    version = "2021-09-29";
+    src = fetchFromGitHub {
+      owner = "AndrewRadev";
+      repo = "switch.vim";
+      rev = "900c5d3ee79b1771c5e07bf7290068ea35881756";
+      sha256 = "0fqvwlf01v7bpsmb3ssqw1kbpvfrk7qvrwxsy4y1bnm60kvnqb7a";
+      fetchSubmodules = true;
+    };
+    meta.homepage = "https://github.com/AndrewRadev/switch.vim/";
   };
 
   symbols-outline-nvim = buildVimPluginFrom2Nix {
