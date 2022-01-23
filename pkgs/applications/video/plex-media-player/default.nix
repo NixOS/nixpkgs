@@ -36,6 +36,9 @@ in mkDerivation rec {
 
   cmakeFlags = [ "-DCMAKE_BUILD_TYPE=RelWithDebInfo" "-DQTROOT=${qtbase}" ];
 
+  # plexmediaplayer currently segfaults under wayland
+  qtWrapperArgs = [ "--set" "QT_QPA_PLATFORM" "xcb" ];
+
   passthru.updateScript = ./update.sh;
 
   meta = with lib; {
