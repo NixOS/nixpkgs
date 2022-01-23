@@ -24,6 +24,19 @@ in {
     ({
       # minimal configuration file to make lvmconfig/lvm2-activation-generator happy
       environment.etc."lvm/lvm.conf".text = "config {}";
+      boot.initrd.extraUtilsCommands = ''
+        # Copy dmsetup and lvm.
+        copy_bin_and_libs ${getBin pkgs.lvm2}/bin/dmsetup
+        copy_bin_and_libs ${getBin pkgs.lvm2}/bin/lvm
+        # Test lvm programs
+        $out/bin/dmsetup --version 2>&1 | tee -a log | grep -q "version:"
+        LVM_SYSTEM_DIR=$out $out/bin/lvm version 2>&1 | tee -a log | grep -q "LVM"
+      '';
+      boot.initrd.extraUdevRulesCommands = ''
+        for f in ${pkgs.lvm2}/lib/udev/rules.d/*.rules ; do
+          substitute "$f" "$out/''${f##*/}" --replace ${getBin pkgs.lvm2}/bin $extraUtils/bin
+        done
+      '';
     })
     (mkIf (!config.boot.isContainer) {
       systemd.tmpfiles.packages = [ cfg.package.out ];

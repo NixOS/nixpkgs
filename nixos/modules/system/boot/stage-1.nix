@@ -110,10 +110,6 @@ let
       # Copy some util-linux stuff.
       copy_bin_and_libs ${pkgs.util-linux}/sbin/blkid
 
-      # Copy dmsetup and lvm.
-      copy_bin_and_libs ${getBin pkgs.lvm2}/bin/dmsetup
-      copy_bin_and_libs ${getBin pkgs.lvm2}/bin/lvm
-
       # Add RAID mdadm tool.
       copy_bin_and_libs ${pkgs.mdadm}/sbin/mdadm
       copy_bin_and_libs ${pkgs.mdadm}/sbin/mdmon
@@ -204,8 +200,6 @@ let
       $out/bin/mount --help 2>&1 | grep -q "BusyBox"
       $out/bin/blkid -V 2>&1 | grep -q 'libblkid'
       $out/bin/udevadm --version
-      $out/bin/dmsetup --version 2>&1 | tee -a log | grep -q "version:"
-      LVM_SYSTEM_DIR=$out $out/bin/lvm version 2>&1 | tee -a log | grep -q "LVM"
       $out/bin/mdadm --version
       ${optionalString config.services.multipath.enable ''
         ($out/bin/multipath || true) 2>&1 | grep -q 'need to be root'
@@ -247,7 +241,6 @@ let
       cp -v ${udev}/lib/udev/rules.d/75-net-description.rules $out/
       cp -v ${udev}/lib/udev/rules.d/80-drivers.rules $out/
       cp -v ${udev}/lib/udev/rules.d/80-net-setup-link.rules $out/
-      cp -v ${pkgs.lvm2}/lib/udev/rules.d/*.rules $out/
       ${config.boot.initrd.extraUdevRulesCommands}
 
       for i in $out/*.rules; do
@@ -257,7 +250,6 @@ let
             --replace cdrom_id ${extraUtils}/bin/cdrom_id \
             --replace ${pkgs.coreutils}/bin/basename ${extraUtils}/bin/basename \
             --replace ${pkgs.util-linux}/bin/blkid ${extraUtils}/bin/blkid \
-            --replace ${getBin pkgs.lvm2}/bin ${extraUtils}/bin \
             --replace ${pkgs.mdadm}/sbin ${extraUtils}/sbin \
             --replace ${pkgs.bash}/bin/sh ${extraUtils}/bin/sh \
             --replace ${udev} ${extraUtils}
