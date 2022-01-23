@@ -16593,8 +16593,6 @@ with pkgs;
 
   ggz_base_libs = callPackage ../development/libraries/ggz_base_libs {};
 
-  giblib = callPackage ../development/libraries/giblib { };
-
   gifticlib = callPackage ../development/libraries/science/biology/gifticlib { };
 
   gio-sharp = callPackage ../development/libraries/gio-sharp { };
