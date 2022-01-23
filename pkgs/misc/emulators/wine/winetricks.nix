@@ -2,7 +2,8 @@
 , cabextract, unzip, p7zip, gnused, gnugrep, bash } :
 
 stdenv.mkDerivation rec {
-  name = "winetricks-${src.version}";
+  pname = "winetricks";
+  version = src.version;
 
   src = (callPackage ./sources.nix {}).winetricks;
 
