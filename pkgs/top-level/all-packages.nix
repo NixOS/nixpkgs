@@ -3598,6 +3598,8 @@ with pkgs;
     zig = zig_0_8_1;
   };
 
+  rivercarro = callPackage ../applications/misc/rivercarro { };
+
   rmapi = callPackage ../applications/misc/remarkable/rmapi { };
 
   rmview = libsForQt5.callPackage ../applications/misc/remarkable/rmview { };
