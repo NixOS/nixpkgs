@@ -28,7 +28,7 @@
 , curl
 , lzo
 , sfml
-, libpulseaudio ? null
+, libpulseaudio ? libpulseaudio
 }:
 
 stdenv.mkDerivation rec {
