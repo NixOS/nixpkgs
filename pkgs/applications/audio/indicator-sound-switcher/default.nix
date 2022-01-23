@@ -16,6 +16,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "indicator-sound-switcher";
   version = "2.3.6";
+
   src = fetchFromGitHub {
     owner = "yktoo";
     repo = pname;
