@@ -29,9 +29,9 @@ let
   # 2) nix-build -A tree-sitter.updater.update-all-grammars
   # 3) OPTIONAL: Set GITHUB_TOKEN env variable to avoid api rate limit
   # 4) run the ./result script that is output by that (it updates ./grammars)
-  version = "0.20.2";
-  sha256 = "sha256-XCTS58q1XCl7XH6SLTZDZv22nUPBK8d4oqk063ZObkg=";
-  cargoSha256 = "sha256-fKS9Q3BFGzyMnbNH6ItYnPj4dybeX7ucQfzYiOxVvhA=";
+  version = "0.20.3";
+  sha256 = "sha256-I0jHuW9bcaJrp49gHqbWQCPiTtxgMK6hFVlVj3x/zBA=";
+  cargoSha256 = "sha256-9qbCQYdpGxPrZMiNmG5ZrqyuYbhSeADaYOgnn+zHDog=";
 
   src = fetchFromGitHub {
     owner = "tree-sitter";
