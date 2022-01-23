@@ -5,13 +5,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "kube-hunter";
-  version = "0.6.3";
+  version = "0.6.4";
 
   src = fetchFromGitHub {
     owner = "aquasecurity";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-OXiFWdbp6L9S57gRIROzuvXZ0R16lvKDqZR0kW0eEYQ=";
+    sha256 = "066pivd9mdhy24n40m9917zr5f9gh4fva4zmxk9vyppgk1b3mpwc";
   };
 
   nativeBuildInputs = with python3.pkgs; [
