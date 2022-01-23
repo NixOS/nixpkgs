@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     description = "Much faster locate";
     homepage = "https://plocate.sesse.net/";
     license = licenses.mit;
-    maintainers = with maintainers; [ peterhoeg ];
+    maintainers = with maintainers; [ peterhoeg SuperSandro2000 ];
     platforms = platforms.linux;
   };
 }
