@@ -11,13 +11,8 @@ let
 in
 {
   imports = [
-    (mkRenamedOptionModule [ "services" "locate" "period" ] [
-      "services"
-      "locate"
-      "interval"
-    ])
-    (mkRemovedOptionModule [ "services" "locate" "includeStore" ]
-      "Use services.locate.prunePaths")
+    (mkRenamedOptionModule [ "services" "locate" "period" ] [ "services" "locate" "interval" ])
+    (mkRemovedOptionModule [ "services" "locate" "includeStore" ] "Use services.locate.prunePaths")
   ];
 
   options.services.locate = with types; {
@@ -269,8 +264,7 @@ in
             toFlags = x:
               optional (cfg.${x} != [ ])
                 "--${lib.toLower x} '${concatStringsSep " " cfg.${x}}'";
-            args =
-              concatLists (map toFlags [ "pruneFS" "pruneNames" "prunePaths" ]);
+            args = concatLists (map toFlags [ "pruneFS" "pruneNames" "prunePaths" ]);
           in
           ''
             exec ${cfg.locate}/bin/updatedb \
@@ -280,10 +274,7 @@ in
           ''
         else ''
           exec ${cfg.locate}/bin/updatedb \
-            ${
-              optionalString (cfg.localuser != null && !isMorPLocate)
-              "--localuser=${cfg.localuser}"
-            } \
+            ${optionalString (cfg.localuser != null && !isMorPLocate) "--localuser=${cfg.localuser}"} \
             --output=${toString cfg.output} ${concatStringsSep " " cfg.extraFlags}
         '';
       environment = optionalAttrs (!isMorPLocate) {
