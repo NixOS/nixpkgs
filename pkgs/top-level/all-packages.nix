@@ -6276,6 +6276,8 @@ in
 
   lzop = callPackage ../tools/compression/lzop { };
 
+  lzwolf = callPackage ../games/lzwolf { };
+
   macchanger = callPackage ../os-specific/linux/macchanger { };
 
   madlang = haskell.lib.justStaticExecutables haskellPackages.madlang;
