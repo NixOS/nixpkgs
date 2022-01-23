@@ -24241,9 +24241,15 @@ with pkgs;
 
   foxitreader = libsForQt512.callPackage ../applications/misc/foxitreader { };
 
-  pdfstudio = callPackage ../applications/misc/pdfstudio { };
+  pdfstudio = import ../applications/misc/pdfstudio {
+    program = "pdfstudio";
+    inherit callPackage fetchurl pkgs;
+  };
 
-  pdfstudioviewer = callPackage ../applications/misc/pdfstudioviewer { };
+  pdfstudioviewer = import ../applications/misc/pdfstudio {
+    program = "pdfstudioviewer";
+    inherit callPackage fetchurl pkgs;
+  };
 
   aeolus = callPackage ../applications/audio/aeolus { };
 
