@@ -1,21 +1,23 @@
 { lib
 , buildDunePackage
 , tezos-stdlib
-, tezos-protocol-compiler
+, tezos-protocol-011-PtHangz2
+, tezos-protocol-environment
 }:
 
 buildDunePackage {
-  pname = "tezos-protocol-010-PtGRANAD";
+  pname = "tezos-protocol-plugin-011-PtHangz2";
   inherit (tezos-stdlib) version useDune2;
   src = "${tezos-stdlib.base_src}/src";
 
   buildInputs = [
-    tezos-protocol-compiler
+    tezos-protocol-011-PtHangz2
+    tezos-protocol-environment
   ];
 
   doCheck = true;
 
   meta = tezos-stdlib.meta // {
-    description = "Tezos/Protocol: economic-protocol definition";
+    description = "Tezos/Protocol: protocol plugin";
   };
 }

@@ -5,11 +5,11 @@
 }:
 
 buildDunePackage {
-  pname = "tezos-protocol-010-PtGRANAD";
+  pname = "tezos-protocol-alpha";
   inherit (tezos-stdlib) version useDune2;
   src = "${tezos-stdlib.base_src}/src";
 
-  buildInputs = [
+  propagatedBuildInputs = [
     tezos-protocol-compiler
   ];
 

@@ -5,7 +5,7 @@
 }:
 
 buildDunePackage {
-  pname = "tezos-protocol-010-PtGRANAD";
+  pname = "tezos-protocol-011-PtHangz2";
   inherit (tezos-stdlib) version useDune2;
   src = "${tezos-stdlib.base_src}/src";
 
