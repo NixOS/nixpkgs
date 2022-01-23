@@ -65,14 +65,14 @@ while [ "$#" -gt 0 ]; do
         upgrade=1
         upgrade_all=1
         ;;
-      -s|--use-substitutes)
+      --use-substitutes|-s)
         copyClosureFlags+=("$i")
         ;;
-      --max-jobs|-j|--cores|-I|--builders)
+      -I|--max-jobs|-j|--cores|--builders)
         j="$1"; shift 1
         extraBuildFlags+=("$i" "$j")
         ;;
-      --show-trace|--keep-failed|-K|--keep-going|-k|--fallback|--repair|--no-build-output|-Q|-j*|-L|--print-build-logs|--refresh|--no-net|--offline|--impure)
+      -j*|--quiet|--print-build-logs|-L|--no-build-output|-Q| --show-trace|--keep-going|-k|--keep-failed|-K|--fallback|--refresh|--repair|--impure|--offline|--no-net)
         extraBuildFlags+=("$i")
         ;;
       --verbose|-v|-vv|-vvv|-vvvv|-vvvvv)
