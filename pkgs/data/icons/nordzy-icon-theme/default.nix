@@ -2,22 +2,19 @@
 , fetchFromGitHub
 , lib
 , gtk3
-, nordzy-theme-name ? "Nordzy"
+, jdupes
 , nordzy-themes ? [ "all" ] # Override this to only install selected themes
 }:
 
-let
-  themes-arg-string = lib.strings.concatMapStrings (theme: "-t ${theme} ") nordzy-themes;
-in
 stdenvNoCC.mkDerivation {
   pname = "nordzy-icon-theme";
-  version = "unstable-2021-12-14";
+  version = "unstable-2022-01-23";
 
   src = fetchFromGitHub {
     owner = "alvatip";
     repo = "Nordzy-icon";
-    rev = "5c247a4f19cf9849615631d1bf77727b945b634e";
-    sha256 = "Jqn5CF80xlYJ7H4qI1VEj91vcKPPoMXP5+sPs0ksiC4=";
+    rev = "10b9ee80ef5c4cac1d1770d89a6d55046521ea36";
+    sha256 = "1b8abhs5gzr2qy407jq818pr67vjky8zn3pa3c8n552ayybblibk";
   };
 
   # In the post patch phase we should first make sure to patch shebangs.
@@ -27,6 +24,7 @@ stdenvNoCC.mkDerivation {
 
   nativeBuildInputs = [
     gtk3
+    jdupes
   ];
 
   dontDropIconThemeCache = true;
@@ -34,10 +32,12 @@ stdenvNoCC.mkDerivation {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/share/icons
-    ./install.sh --dest $out/share/icons \
-      -n ${nordzy-theme-name} \
-      ${themes-arg-string}
+    name= ./install.sh --dest $out/share/icons \
+      ${lib.optionalString (nordzy-themes != []) (lib.strings.concatMapStrings (theme: "-t ${theme} ") nordzy-themes)}
+
+    # Replace duplicate files with hardlinks to the first file in each
+    # set of duplicates, reducing the installed size in about 87%
+    jdupes -L -r $out/share
 
     runHook postInstall
   '';
@@ -45,12 +45,10 @@ stdenvNoCC.mkDerivation {
   dontFixup = true;
 
   meta = with lib; {
-    description = "A free and open source icon theme using the Nord color palette and based on WhiteSur and Numix Icon Theme";
+    description = "Icon theme using the Nord color palette, based on WhiteSur and Numix icon themes";
     homepage = "https://github.com/alvatip/Nordzy-icon";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [
-      alexnortung
-    ];
+    maintainers = with maintainers; [ alexnortung ];
   };
 }
