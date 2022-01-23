@@ -1,6 +1,6 @@
 { lib, python39Packages, fetchFromGitHub }:
 
-python39Packages.buildPythonPackage rec {
+python39Packages.buildPythonApplication rec {
   name = "gay";
   version = "1.2.8";
 
