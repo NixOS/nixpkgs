@@ -25,9 +25,11 @@ let
       "nss-lookup.target"
       "nss-user-lookup.target"
       "time-sync.target"
+    ] ++ (optionals cfg.package.withCryptsetup [
       "cryptsetup.target"
       "cryptsetup-pre.target"
       "remote-cryptsetup.target"
+    ]) ++ [
       "sigpwr.target"
       "timers.target"
       "paths.target"
