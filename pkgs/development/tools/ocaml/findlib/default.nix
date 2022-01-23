@@ -47,8 +47,8 @@ stdenv.mkDerivation rec {
 
     # run for every buildInput
     addEnvHooks "$targetOffset" addOCamlPath
-    # run before configurePhase, even without buildInputs, and not in nix-shell
-    preConfigureHooks+=(createOcamlDestDir)
+    # run before installPhase, even without buildInputs, and not in nix-shell
+    preInstallHooks+=(createOcamlDestDir)
     # run even in nix-shell, and even without buildInputs
     addEnvHooks "$hostOffset" exportOcamlDestDir
   '';
