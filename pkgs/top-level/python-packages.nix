@@ -7035,6 +7035,8 @@ in {
 
   pymdstat = callPackage ../development/python-modules/pymdstat { };
 
+  pymdown-extensions = callPackage ../development/python-modules/pymdown-extensions { };
+
   pymediainfo = callPackage ../development/python-modules/pymediainfo { };
 
   pymediaroom = callPackage ../development/python-modules/pymediaroom { };
