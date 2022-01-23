@@ -1,6 +1,6 @@
-{ lib, fetchFromGitHub, buildPythonPackage, ed25519, ecdsa , semver, mnemonic,
-  unidecode, mock, pytest , backports-shutil-which, configargparse,
-  python-daemon, pymsgbox, pynacl }:
+{ lib, fetchFromGitHub, buildPythonPackage, ed25519, ecdsa , semver, mnemonic
+, unidecode, mock, pytest , backports-shutil-which, configargparse
+, python-daemon, pymsgbox, pynacl }:
 
 # XXX: when changing this package, please test the package onlykey-agent.
 
