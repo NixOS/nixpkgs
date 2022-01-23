@@ -174,7 +174,6 @@ in
   hadoop.all = handleTestOn [ "x86_64-linux" ] ./hadoop/hadoop.nix {};
   hadoop.hdfs = handleTestOn [ "x86_64-linux" ] ./hadoop/hdfs.nix {};
   hadoop.yarn = handleTestOn [ "x86_64-linux" ] ./hadoop/yarn.nix {};
-  handbrake = handleTestOn ["x86_64-linux"] ./handbrake.nix {};
   haproxy = handleTest ./haproxy.nix {};
   hardened = handleTest ./hardened.nix {};
   hedgedoc = handleTest ./hedgedoc.nix {};
