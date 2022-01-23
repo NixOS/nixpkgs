@@ -5,11 +5,14 @@ with lib;
 let
   cfg = config.services.locate;
   isMLocate = hasPrefix "mlocate" cfg.locate.name;
+  isPLocate = hasPrefix "plocate" cfg.locate.name;
+  isMorPLocate = (isMLocate || isPLocate);
   isFindutils = hasPrefix "findutils" cfg.locate.name;
-in {
+in
+{
   imports = [
     (mkRenamedOptionModule [ "services" "locate" "period" ] [ "services" "locate" "interval" ])
-    (mkRemovedOptionModule [ "services" "locate" "includeStore" ] "Use services.locate.prunePaths" )
+    (mkRemovedOptionModule [ "services" "locate" "includeStore" ] "Use services.locate.prunePaths")
   ];
 
   options.services.locate = with types; {
@@ -163,7 +166,16 @@ in {
 
     prunePaths = mkOption {
       type = listOf path;
-      default = [ "/tmp" "/var/tmp" "/var/cache" "/var/lock" "/var/run" "/var/spool" "/nix/store" "/nix/var/log/nix" ];
+      default = [
+        "/tmp"
+        "/var/tmp"
+        "/var/cache"
+        "/var/lock"
+        "/var/run"
+        "/var/spool"
+        "/nix/store"
+        "/nix/var/log/nix"
+      ];
       description = ''
         Which paths to exclude from indexing
       '';
@@ -188,26 +200,38 @@ in {
   };
 
   config = mkIf cfg.enable {
-    users.groups = mkIf isMLocate { mlocate = {}; };
+    users.groups = mkMerge [
+      (mkIf isMLocate { mlocate = { }; })
+      (mkIf isPLocate { plocate = { }; })
+    ];
 
-    security.wrappers = mkIf isMLocate {
-      locate = {
-        group = "mlocate";
-        owner = "root";
-        permissions = "u+rx,g+x,o+x";
-        setgid = true;
-        setuid = false;
-        source = "${cfg.locate}/bin/locate";
+    security.wrappers =
+      let
+        common = {
+          owner = "root";
+          permissions = "u+rx,g+x,o+x";
+          setgid = true;
+          setuid = false;
+        };
+        mlocate = (mkIf isMLocate {
+          group = "mlocate";
+          source = "${cfg.locate}/bin/locate";
+        });
+        plocate = (mkIf isPLocate {
+          group = "plocate";
+          source = "${cfg.locate}/bin/plocate";
+        });
+      in
+      mkIf isMorPLocate {
+        locate = mkMerge [ common mlocate plocate ];
+        plocate = (mkIf isPLocate (mkMerge [ common plocate ]));
       };
-    };
 
     nixpkgs.config = { locate.dbfile = cfg.output; };
 
     environment.systemPackages = [ cfg.locate ];
 
-    environment.variables = mkIf (!isMLocate)
-      { LOCATE_PATH = cfg.output;
-      };
+    environment.variables = mkIf (!isMorPLocate) { LOCATE_PATH = cfg.output; };
 
     environment.etc = {
       # write /etc/updatedb.conf for manual calls to `updatedb`
@@ -221,57 +245,65 @@ in {
       };
     };
 
-    warnings = optional (isMLocate && cfg.localuser != null) "mlocate does not support the services.locate.localuser option; updatedb will run as root. (Silence with services.locate.localuser = null.)"
-            ++ optional (isFindutils && cfg.pruneNames != []) "findutils locate does not support pruning by directory component"
-            ++ optional (isFindutils && cfg.pruneBindMounts) "findutils locate does not support skipping bind mounts";
+    warnings = optional (isMorPLocate && cfg.localuser != null)
+      "mlocate does not support the services.locate.localuser option; updatedb will run as root. (Silence with services.locate.localuser = null.)"
+    ++ optional (isFindutils && cfg.pruneNames != [ ])
+      "findutils locate does not support pruning by directory component"
+    ++ optional (isFindutils && cfg.pruneBindMounts)
+      "findutils locate does not support skipping bind mounts";
 
-    systemd.services.update-locatedb =
-      { description = "Update Locate Database";
-        path = mkIf (!isMLocate) [ pkgs.su ];
+    systemd.services.update-locatedb = {
+      description = "Update Locate Database";
+      path = mkIf (!isMorPLocate) [ pkgs.su ];
 
-        # mlocate's updatedb takes flags via a configuration file or
-        # on the command line, but not by environment variable.
-        script =
-          if isMLocate
-          then let toFlags = x: optional (cfg.${x} != [])
-                                         "--${lib.toLower x} '${concatStringsSep " " cfg.${x}}'";
-                   args = concatLists (map toFlags ["pruneFS" "pruneNames" "prunePaths"]);
-               in ''
+      # mlocate's updatedb takes flags via a configuration file or
+      # on the command line, but not by environment variable.
+      script =
+        if isMorPLocate then
+          let
+            toFlags = x:
+              optional (cfg.${x} != [ ])
+                "--${lib.toLower x} '${concatStringsSep " " cfg.${x}}'";
+            args = concatLists (map toFlags [ "pruneFS" "pruneNames" "prunePaths" ]);
+          in
+          ''
             exec ${cfg.locate}/bin/updatedb \
               --output ${toString cfg.output} ${concatStringsSep " " args} \
               --prune-bind-mounts ${if cfg.pruneBindMounts then "yes" else "no"} \
               ${concatStringsSep " " cfg.extraFlags}
           ''
-          else ''
-            exec ${cfg.locate}/bin/updatedb \
-              ${optionalString (cfg.localuser != null && ! isMLocate) "--localuser=${cfg.localuser}"} \
-              --output=${toString cfg.output} ${concatStringsSep " " cfg.extraFlags}
-          '';
-        environment = optionalAttrs (!isMLocate) {
-          PRUNEFS = concatStringsSep " " cfg.pruneFS;
-          PRUNEPATHS = concatStringsSep " " cfg.prunePaths;
-          PRUNENAMES = concatStringsSep " " cfg.pruneNames;
-          PRUNE_BIND_MOUNTS = if cfg.pruneBindMounts then "yes" else "no";
-        };
-        serviceConfig.Nice = 19;
-        serviceConfig.IOSchedulingClass = "idle";
-        serviceConfig.PrivateTmp = "yes";
-        serviceConfig.PrivateNetwork = "yes";
-        serviceConfig.NoNewPrivileges = "yes";
-        serviceConfig.ReadOnlyPaths = "/";
-        # Use dirOf cfg.output because mlocate creates temporary files next to
-        # the actual database. We could specify and create them as well,
-        # but that would make this quite brittle when they change something.
-        # NOTE: If /var/cache does not exist, this leads to the misleading error message:
-        # update-locatedb.service: Failed at step NAMESPACE spawning …/update-locatedb-start: No such file or directory
-        serviceConfig.ReadWritePaths = dirOf cfg.output;
+        else ''
+          exec ${cfg.locate}/bin/updatedb \
+            ${optionalString (cfg.localuser != null && !isMorPLocate) "--localuser=${cfg.localuser}"} \
+            --output=${toString cfg.output} ${concatStringsSep " " cfg.extraFlags}
+        '';
+      environment = optionalAttrs (!isMorPLocate) {
+        PRUNEFS = concatStringsSep " " cfg.pruneFS;
+        PRUNEPATHS = concatStringsSep " " cfg.prunePaths;
+        PRUNENAMES = concatStringsSep " " cfg.pruneNames;
+        PRUNE_BIND_MOUNTS = if cfg.pruneBindMounts then "yes" else "no";
       };
+      serviceConfig.Nice = 19;
+      serviceConfig.IOSchedulingClass = "idle";
+      serviceConfig.PrivateTmp = "yes";
+      serviceConfig.PrivateNetwork = "yes";
+      serviceConfig.NoNewPrivileges = "yes";
+      serviceConfig.ReadOnlyPaths = "/";
+      # Use dirOf cfg.output because mlocate creates temporary files next to
+      # the actual database. We could specify and create them as well,
+      # but that would make this quite brittle when they change something.
+      # NOTE: If /var/cache does not exist, this leads to the misleading error message:
+      # update-locatedb.service: Failed at step NAMESPACE spawning …/update-locatedb-start: No such file or directory
+      serviceConfig.ReadWritePaths = dirOf cfg.output;
+    };
 
-    systemd.timers.update-locatedb = mkIf (cfg.interval != "never")
-      { description = "Update timer for locate database";
-        partOf      = [ "update-locatedb.service" ];
-        wantedBy    = [ "timers.target" ];
-        timerConfig.OnCalendar = cfg.interval;
-      };
+    systemd.timers.update-locatedb = mkIf (cfg.interval != "never") {
+      description = "Update timer for locate database";
+      partOf = [ "update-locatedb.service" ];
+      wantedBy = [ "timers.target" ];
+      timerConfig.OnCalendar = cfg.interval;
+    };
   };
+
+  meta.maintainers = with lib.maintainers; [ SuperSandro2000 ];
 }
