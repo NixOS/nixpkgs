@@ -8952,6 +8952,8 @@ in {
 
   signedjson = callPackage ../development/python-modules/signedjson { };
 
+  sigrok = callPackage ../development/python-modules/sigrok { };
+
   sigtools = callPackage ../development/python-modules/sigtools { };
 
   simanneal = callPackage ../development/python-modules/simanneal { };

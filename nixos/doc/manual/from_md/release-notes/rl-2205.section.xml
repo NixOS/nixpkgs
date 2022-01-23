@@ -282,6 +282,14 @@
       <listitem>
         <para>
           The backward compatibility in
+          <literal>services.wordpress</literal> to configure sites with
+          the old interface has been removed. Please use
+          <literal>services.wordpress.sites</literal> instead.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The backward compatibility in
           <literal>services.dokuwiki</literal> to configure sites with
           the old interface has been removed. Please use
           <literal>services.dokuwiki.sites</literal> instead.

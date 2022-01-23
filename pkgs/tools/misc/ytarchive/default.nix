@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "ytarchive";
-  version = "0.3.0";
+  version = "unstable-2021-12-29";
 
   src = fetchFromGitHub {
     owner = "Kethsar";
     repo = "ytarchive";
-    rev = "v${version}";
-    sha256 = "sha256-7D92xKxU2WBMDJSY5uFKDbLHWlyT761xuZDiBJ1GxE4=";
+    rev = "2d87608c0b159da876538380b3e613bce2797599";
+    sha256 = "sha256-/cnyKcbgd6I0Ad5aZQd2pCbnU6HZYfuPHK2Ty7yYgHs=";
   };
 
   vendorSha256 = "sha256-r9fDFSCDItQ7YSj9aTY1LXRrFE9T3XD0X36ywCfu0R8=";
