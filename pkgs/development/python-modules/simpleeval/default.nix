@@ -6,14 +6,14 @@
 
 buildPythonPackage rec {
   pname = "simpleeval";
-  version = "0.9.11";
+  version = "0.9.12";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "danthedeckie";
     repo = pname;
     rev = version;
-    sha256 = "111w76mahbf3lm2p72dkqp5fhwg7nvnwm4l078dgsgkixssjazi7";
+    sha256 = "0khgl729q5133fgc00d550f4r77707rkkn7r56az4v8bvx0q8xp4";
   };
 
   checkInputs = [
