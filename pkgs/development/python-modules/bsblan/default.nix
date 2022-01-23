@@ -8,6 +8,7 @@
 , pytest-asyncio
 , pytest-cov
 , pytest-mock
+, pythonOlder
 , aiohttp
 , attrs
 , cattrs
@@ -17,6 +18,9 @@
 buildPythonPackage rec {
   pname = "bsblan";
   version = "0.5.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "liudger";
@@ -42,7 +46,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "bsblan" ];
+  pythonImportsCheck = [
+    "bsblan"
+  ];
 
   meta = with lib; {
     description = "Python client for BSB-Lan";
