@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "aioapns";
-  version = "2.0.2";
+  version = "2.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ea58ce685aa6d0ffbdc3be4a6999c7268b9c765f806d3e4da7677c098fb72cbc";
+    sha256 = "2ce526910bc2514a84b8105abe80508526ceafc0097c89f86bbbc501f8666c99";
   };
 
   propagatedBuildInputs = [

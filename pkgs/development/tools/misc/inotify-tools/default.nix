@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "inotify-tools";
-  version = "3.21.9.6";
+  version = "3.22.1.0";
 
   src = fetchFromGitHub {
     repo = "inotify-tools";
     owner = "inotify-tools";
     rev = version;
-    sha256 = "sha256-oKcVmF39N43g8O1S+xwUhVJryFcW+ZUteyoe3fUkRH8=";
+    sha256 = "sha256-I0kr+wFUWnovH9MXVsGaCBtp4+RnnMWD7sPecI3xz+Y=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

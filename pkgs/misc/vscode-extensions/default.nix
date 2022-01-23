@@ -496,8 +496,8 @@ let
         mktplcRef = {
           name = "languagetool-linter";
           publisher = "davidlday";
-          version = "0.18.0";
-          sha256 = "sha256-AYINgq1BMfh7p4xhwSC2Www6dQvyQAGTA45HJsmMGDg=";
+          version = "0.19.0";
+          sha256 = "sha256-crq6CTXpzwHJL8FPIBneAGjDgUUNdpBt6rIaMCr1F1U=";
         };
         meta = with lib; {
           description = "LanguageTool integration for VS Code";
@@ -959,8 +959,8 @@ let
         mktplcRef = {
           name = "haskell";
           publisher = "haskell";
-          version = "1.7.1";
-          sha256 = "sha256-UWdj2J5z5cTUsfvlU++LRil0tEiAH2AFb1AwBsfMvoY=";
+          version = "1.8.0";
+          sha256 = "sha256-+k8XT2COe9Z8HvZvcrzfVuocRcxXBrVoNHDT/uKK7Hs=";
         };
         meta = with lib; {
           license = licenses.mit;
@@ -1373,6 +1373,22 @@ let
         };
       };
 
+      oderwat.indent-rainbow = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "indent-rainbow";
+          publisher = "oderwat";
+          version = "8.2.2";
+          sha256 = "sha256-7kkJc+hhYaSKUbK4eYwOnLvae80sIg7rd0E4YyCXtPc=";
+        };
+        meta = with lib; {
+          description = "Makes indentation easier to read";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=oderwat.indent-rainbow";
+          homepage = "https://github.com/oderwat/vscode-indent-rainbow";
+          license = licenses.mit;
+          maintainers = with maintainers; [ imgabe ];
+        };
+      };
+
       redhat.java = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "java";
@@ -1463,6 +1479,18 @@ let
         };
         meta = {
           license = lib.licenses.mit;
+        };
+      };
+
+      ritwickdey.liveserver = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "liveserver";
+          publisher = "ritwickdey";
+          version = "5.6.1";
+          sha256 = "sha256-QPMZMttYV+dQfWTniA7nko7kXukqU9g6Wj5YDYfL6hw=";
+        };
+        meta = with lib; {
+          license = licenses.mit;
         };
       };
 

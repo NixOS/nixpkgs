@@ -336,7 +336,7 @@ in {
             default = false;
             type = types.bool;
             example = true;
-            description = literalDocBook ''
+            description = ''
               Set the <literal>persistentTimer</literal> option for the
               <citerefentry><refentrytitle>systemd.timer</refentrytitle>
               <manvolnum>5</manvolnum></citerefentry>

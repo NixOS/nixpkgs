@@ -11,17 +11,16 @@
 
 stdenv.mkDerivation rec {
   pname = "plocate";
-  version = "1.1.7";
+  version = "1.1.14";
 
   src = fetchgit {
     url = "https://git.sesse.net/plocate";
     rev = version;
-    sha256 = "sha256-5Ie4qgiKUoI9Kma6YvjXirvBbpbKVuaMSSAZa36zN3M=";
+    sha256 = "sha256-SgvCy03H5aKolbkI1dg/0G5VwT3TdSGenn2h9H4gfTY=";
   };
 
   postPatch = ''
     sed -i meson.build \
-      -e "s@unitdir =.*@unitdir = '$out/lib/systemd/system'@" \
       -e '/mkdir\.sh/d'
   '';
 
@@ -30,8 +29,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ systemd liburing zstd ];
 
   mesonFlags = [
-    # I don't know why we can't do this but instead have to resort to patching meson.build
-    #   "-Dsystemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
+    "-Dsystemunitdir=${placeholder "out"}/etc/systemd/system"
     "-Dsharedstatedir=/var/lib"
   ];
 

@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   pname = "molden";
 
   src = fetchurl {
-    url = "ftp://ftp.cmbi.umcn.nl/pub/molgraph/molden/molden${version}.tar.gz";
+    url = "https://ftp.science.ru.nl/Molden//molden${version}.tar.gz";
     sha256 = "02qi16pz2wffn3cc47dpjqhfafzwfmb79waw4nnhfyir8a4h3cq1";
   };
 

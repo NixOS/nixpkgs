@@ -2,8 +2,8 @@
 
 let
   inherit (pkgs) lib;
-  since = (version: pkgs.lib.versionAtLeast nodejs.version version);
-  before = (version: pkgs.lib.versionOlder nodejs.version version);
+  since = version: pkgs.lib.versionAtLeast nodejs.version version;
+  before = version: pkgs.lib.versionOlder nodejs.version version;
   super = import ./composition.nix {
     inherit pkgs nodejs;
     inherit (stdenv.hostPlatform) system;
@@ -47,7 +47,7 @@ let
       '';
     };
 
-    carbon-now-cli = super.carbon-now-cli.override ({
+    carbon-now-cli = super.carbon-now-cli.override {
       nativeBuildInputs = [ pkgs.makeWrapper ];
       prePatch = ''
         export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1
@@ -56,13 +56,13 @@ let
         wrapProgram $out/bin/carbon-now \
           --set PUPPETEER_EXECUTABLE_PATH ${pkgs.chromium.outPath}/bin/chromium
       '';
-    });
+    };
 
     deltachat-desktop = super."deltachat-desktop-../../applications/networking/instant-messengers/deltachat-desktop".override {
       meta.broken = true; # use the top-level package instead
     };
 
-    fast-cli = super.fast-cli.override ({
+    fast-cli = super.fast-cli.override {
       nativeBuildInputs = [ pkgs.makeWrapper ];
       prePatch = ''
         export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1
@@ -71,7 +71,7 @@ let
         wrapProgram $out/bin/fast \
           --set PUPPETEER_EXECUTABLE_PATH ${pkgs.chromium.outPath}/bin/chromium
       '';
-    });
+    };
 
     hyperspace-cli = super."@hyperspace/cli".override {
       nativeBuildInputs = with pkgs; [
@@ -360,6 +360,19 @@ let
       meta.broken = since "10";
     };
 
+    tailwindcss = super.tailwindcss.override {
+      nativeBuildInputs = [ pkgs.makeWrapper ];
+      postInstall = ''
+        wrapProgram "$out/bin/tailwind" \
+          --prefix NODE_PATH : ${self.postcss}/lib/node_modules
+        wrapProgram "$out/bin/tailwindcss" \
+          --prefix NODE_PATH : ${self.postcss}/lib/node_modules
+      '';
+      passthru.tests = {
+        simple-execution = pkgs.callPackage ./package-tests/tailwindcss.nix { inherit (self) tailwindcss; };
+      };
+    };
+
     tedicross = super."tedicross-git+https://github.com/TediCross/TediCross.git#v0.8.7".override {
       nativeBuildInputs = [ pkgs.makeWrapper ];
       postInstall = ''
@@ -380,7 +393,7 @@ let
       nativeBuildInputs = [ pkgs.makeWrapper ];
       postInstall = ''
         wrapProgram "$out/bin/typescript-language-server" \
-          --prefix PATH : ${pkgs.lib.makeBinPath [ self.typescript ]}
+          --suffix PATH : ${pkgs.lib.makeBinPath [ self.typescript ]}
       '';
     };
 

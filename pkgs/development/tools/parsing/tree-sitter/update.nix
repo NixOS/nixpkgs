@@ -304,6 +304,10 @@ let
       orga = "victorhqc";
       repo = "tree-sitter-prisma";
     };
+    "tree-sitter-org" = {
+      orga = "milisims";
+      repo = "tree-sitter-org";
+    };
   };
 
   allGrammars =

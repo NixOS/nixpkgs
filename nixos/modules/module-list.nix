@@ -1022,6 +1022,7 @@
   ./services/web-apps/keycloak.nix
   ./services/web-apps/lemmy.nix
   ./services/web-apps/invidious.nix
+  ./services/web-apps/invoiceplane.nix
   ./services/web-apps/limesurvey.nix
   ./services/web-apps/mastodon.nix
   ./services/web-apps/mattermost.nix

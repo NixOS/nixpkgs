@@ -110,6 +110,14 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://invoiceplane.com">InvoicePlane</link>,
+          web application for managing and creating invoices. Available
+          at
+          <link xlink:href="options.html#opt-services.invoiceplane.enable">services.invoiceplane</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://maddy.email">maddy</link>, a
           composable all-in-one mail server. Available as
           <link xlink:href="options.html#opt-services.maddy.enable">services.maddy</link>.
@@ -355,6 +363,18 @@
       </listitem>
       <listitem>
         <para>
+          The options
+          <literal>networking.interfaces.&lt;name&gt;.ipv4.routes</literal>
+          and
+          <literal>networking.interfaces.&lt;name&gt;.ipv6.routes</literal>
+          are no longer ignored when using networkd instead of the
+          default scripted network backend by setting
+          <literal>networking.useNetworkd</literal> to
+          <literal>true</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           MultiMC has been replaced with the fork PolyMC due to upstream
           developers being hostile to 3rd party package maintainers.
           PolyMC removes all MultiMC branding and is aimed at providing
@@ -516,12 +536,34 @@
       </listitem>
       <listitem>
         <para>
+          MariaDB is now offered in several versions, not just the
+          newest one. So if you have a need for running MariaDB 10.4 for
+          example, you can now just set
+          <literal>services.mysql.package = pkgs.mariadb_104;</literal>.
+          In general, it is recommended to run the newest version, to
+          get the newest features, while sticking with an LTS version
+          will most likely provide a more stable experience. Sometimes
+          software is also incompatible with the newest version of
+          MariaDB.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The option
           <link linkend="opt-programs.ssh.enableAskPassword">programs.ssh.enableAskPassword</link>
           was added, decoupling the setting of
           <literal>SSH_ASKPASS</literal> from
           <literal>services.xserver.enable</literal>. This allows easy
           usage in non-X11 environments, e.g. Wayland.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link linkend="opt-programs.ssh.knownHosts">programs.ssh.knownHosts</link>
+          has gained an <literal>extraHostNames</literal> option to
+          replace <literal>hostNames</literal>.
+          <literal>hostNames</literal> is deprecated, but still
+          available for now.
         </para>
       </listitem>
       <listitem>
