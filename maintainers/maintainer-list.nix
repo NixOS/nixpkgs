@@ -5715,13 +5715,11 @@
     githubId = 6634716;
     name = "João Figueira";
     keys = [
-
       # GitHub signing key
       {
         longkeyid = "rsa4096/0xDC7AE56AE98E02D7";
         fingerprint = "EC08 7AA3 DEAD A972 F015  6371 DC7A E56A E98E 02D7";
       }
-
       # Email encryption
       {
         longkeyid = "ed25519/0x197F9A632D139E30";
