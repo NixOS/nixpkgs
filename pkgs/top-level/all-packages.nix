@@ -16726,6 +16726,7 @@ with pkgs;
     else if name == "wasilibc" then targetPackages.wasilibc or wasilibc
     else if name == "relibc" then targetPackages.relibc or relibc
     else if stdenv.targetPlatform.isGhcjs then null
+    else if stdenv.targetPlatform.isSolo5 then null
     else throw "Unknown libc ${name}";
 
   libcCross = assert stdenv.targetPlatform != stdenv.buildPlatform; libcCrossChooser stdenv.targetPlatform.libc;
@@ -22956,7 +22957,26 @@ with pkgs;
 
   smimesign = callPackage ../os-specific/darwin/smimesign { };
 
-  solo5 = callPackage ../os-specific/solo5 { };
+  solo5 = callPackage ../os-specific/solo5 { }; # XXX
+  solo5-tools = callPackage ../os-specific/solo5 {
+    enableToolchain = false;
+  };
+
+  solo5-toolchain-unwrapped = callPackage ../os-specific/solo5 {
+    enableToolchain = true;
+  };
+
+  solo5-toolchain = wrapCCWith rec {
+    cc = solo5-toolchain-unwrapped;
+    inherit (solo5-toolchain-unwrapped) targetPrefix;
+    bintools = wrapBintoolsWith {
+      bintools = solo5-toolchain-unwrapped;
+    };
+    # XXX lol
+    extraBuildCommands = ''
+      echo "-target aarch64-unknown-linux" >> "$out/nix-support/cc-cflags"
+    '';
+  };
 
   speedometer = callPackage ../os-specific/linux/speedometer { };
 

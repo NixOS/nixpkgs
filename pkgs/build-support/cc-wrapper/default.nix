@@ -17,6 +17,12 @@
 , isGNU ? false, isClang ? cc.isClang or false, gnugrep ? null
 , buildPackages ? {}
 , libcxx ? null
+  # Prefix for binaries. Customarily ends with a dash separator.
+  #
+  # TODO(@Ericson2314) Make unconditional, or optional but always true by
+  # default.
+, targetPrefix ? with stdenvNoCC;
+    lib.optionalString (targetPlatform != hostPlatform) (targetPlatform.config + "-")
 }:
 
 with lib;
@@ -30,13 +36,6 @@ assert (noLibc || nativeLibc) == (libc == null);
 let
   stdenv = stdenvNoCC;
   inherit (stdenv) hostPlatform targetPlatform;
-
-  # Prefix for binaries. Customarily ends with a dash separator.
-  #
-  # TODO(@Ericson2314) Make unconditional, or optional but always true by
-  # default.
-  targetPrefix = lib.optionalString (targetPlatform != hostPlatform)
-                                           (targetPlatform.config + "-");
 
   ccVersion = lib.getVersion cc;
   ccName = lib.removePrefix targetPrefix (lib.getName cc);
