@@ -16,13 +16,13 @@
 
 buildPythonPackage rec {
   pname = "bsblan";
-  version = "0.4.1";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "liudger";
     repo = "python-bsblan";
     rev = "v.${version}";
-    sha256 = "0vyg9vsrs34jahlav83qp2djv81p3ks31qz4qh46zdij2nx7l1fv";
+    sha256 = "1j41y2njnalcsp1vjqwl508yp3ki82lv8108ijz52hprhrq4fffb";
   };
 
   propagatedBuildInputs = [
