@@ -1,6 +1,6 @@
 { fetchurl }: [
   {
-    name = "cake.scripting.abstractions";
+    pname = "cake.scripting.abstractions";
     version = "0.6.4";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/cake.scripting.abstractions/0.6.4/cake.scripting.abstractions.0.6.4.nupkg";
@@ -8,7 +8,7 @@
     };
   }
   {
-    name = "cake.scripting.transport";
+    pname = "cake.scripting.transport";
     version = "0.6.4";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/cake.scripting.transport/0.6.4/cake.scripting.transport.0.6.4.nupkg";
@@ -16,7 +16,7 @@
     };
   }
   {
-    name = "dotnet.script.dependencymodel";
+    pname = "dotnet.script.dependencymodel";
     version = "1.1.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/dotnet.script.dependencymodel/1.1.0/dotnet.script.dependencymodel.1.1.0.nupkg";
@@ -24,7 +24,7 @@
     };
   }
   {
-    name = "dotnet.script.dependencymodel.nuget";
+    pname = "dotnet.script.dependencymodel.nuget";
     version = "1.1.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/dotnet.script.dependencymodel.nuget/1.1.0/dotnet.script.dependencymodel.nuget.1.1.0.nupkg";
@@ -32,7 +32,7 @@
     };
   }
   {
-    name = "humanizer.core";
+    pname = "humanizer.core";
     version = "2.2.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/humanizer.core/2.2.0/humanizer.core.2.2.0.nupkg";
@@ -40,7 +40,7 @@
     };
   }
   {
-    name = "icsharpcode.decompiler";
+    pname = "icsharpcode.decompiler";
     version = "7.1.0.6543";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/icsharpcode.decompiler/7.1.0.6543/icsharpcode.decompiler.7.1.0.6543.nupkg";
@@ -48,7 +48,7 @@
     };
   }
   {
-    name = "mcmaster.extensions.commandlineutils";
+    pname = "mcmaster.extensions.commandlineutils";
     version = "3.1.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/mcmaster.extensions.commandlineutils/3.1.0/mcmaster.extensions.commandlineutils.3.1.0.nupkg";
@@ -56,7 +56,7 @@
     };
   }
   {
-    name = "mediatr";
+    pname = "mediatr";
     version = "8.1.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/mediatr/8.1.0/mediatr.8.1.0.nupkg";
@@ -64,7 +64,7 @@
     };
   }
   {
-    name = "messagepack";
+    pname = "messagepack";
     version = "2.1.152";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/messagepack/2.1.152/messagepack.2.1.152.nupkg";
@@ -72,7 +72,7 @@
     };
   }
   {
-    name = "messagepackanalyzer";
+    pname = "messagepackanalyzer";
     version = "2.1.152";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/messagepackanalyzer/2.1.152/messagepackanalyzer.2.1.152.nupkg";
@@ -80,7 +80,7 @@
     };
   }
   {
-    name = "messagepack.annotations";
+    pname = "messagepack.annotations";
     version = "2.1.152";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/messagepack.annotations/2.1.152/messagepack.annotations.2.1.152.nupkg";
@@ -88,7 +88,7 @@
     };
   }
   {
-    name = "microsoft.aspnetcore.app.ref";
+    pname = "microsoft.aspnetcore.app.ref";
     version = "3.1.10";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.aspnetcore.app.ref/3.1.10/microsoft.aspnetcore.app.ref.3.1.10.nupkg";
@@ -96,7 +96,7 @@
     };
   }
   {
-    name = "microsoft.bcl.asyncinterfaces";
+    pname = "microsoft.bcl.asyncinterfaces";
     version = "1.1.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.bcl.asyncinterfaces/1.1.0/microsoft.bcl.asyncinterfaces.1.1.0.nupkg";
@@ -104,7 +104,7 @@
     };
   }
   {
-    name = "microsoft.bcl.asyncinterfaces";
+    pname = "microsoft.bcl.asyncinterfaces";
     version = "1.1.1";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.bcl.asyncinterfaces/1.1.1/microsoft.bcl.asyncinterfaces.1.1.1.nupkg";
@@ -112,7 +112,7 @@
     };
   }
   {
-    name = "microsoft.bcl.asyncinterfaces";
+    pname = "microsoft.bcl.asyncinterfaces";
     version = "5.0.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.bcl.asyncinterfaces/5.0.0/microsoft.bcl.asyncinterfaces.5.0.0.nupkg";
@@ -120,7 +120,7 @@
     };
   }
   {
-    name = "microsoft.build";
+    pname = "microsoft.build";
     version = "16.10.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.build/16.10.0/microsoft.build.16.10.0.nupkg";
@@ -128,7 +128,7 @@
     };
   }
   {
-    name = "microsoft.build.framework";
+    pname = "microsoft.build.framework";
     version = "16.10.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.build.framework/16.10.0/microsoft.build.framework.16.10.0.nupkg";
@@ -136,7 +136,7 @@
     };
   }
   {
-    name = "microsoft.build.locator";
+    pname = "microsoft.build.locator";
     version = "1.4.1";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.build.locator/1.4.1/microsoft.build.locator.1.4.1.nupkg";
@@ -144,7 +144,7 @@
     };
   }
   {
-    name = "microsoft.build.tasks.core";
+    pname = "microsoft.build.tasks.core";
     version = "16.10.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.build.tasks.core/16.10.0/microsoft.build.tasks.core.16.10.0.nupkg";
@@ -152,7 +152,7 @@
     };
   }
   {
-    name = "microsoft.build.tasks.git";
+    pname = "microsoft.build.tasks.git";
     version = "1.0.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.build.tasks.git/1.0.0/microsoft.build.tasks.git.1.0.0.nupkg";
@@ -160,7 +160,7 @@
     };
   }
   {
-    name = "microsoft.build.utilities.core";
+    pname = "microsoft.build.utilities.core";
     version = "16.10.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.build.utilities.core/16.10.0/microsoft.build.utilities.core.16.10.0.nupkg";
@@ -168,7 +168,7 @@
     };
   }
   {
-    name = "microsoft.codeanalysis.analyzers";
+    pname = "microsoft.codeanalysis.analyzers";
     version = "3.3.2";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.codeanalysis.analyzers/3.3.2/microsoft.codeanalysis.analyzers.3.3.2.nupkg";
@@ -176,7 +176,7 @@
     };
   }
   {
-    name = "microsoft.codeanalysis.analyzerutilities";
+    pname = "microsoft.codeanalysis.analyzerutilities";
     version = "3.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.codeanalysis.analyzerutilities/3.3.0/microsoft.codeanalysis.analyzerutilities.3.3.0.nupkg";
@@ -184,7 +184,7 @@
     };
   }
   {
-    name = "microsoft.codeanalysis.common";
+    pname = "microsoft.codeanalysis.common";
     version = "4.0.0-4.21427.11";
     src = fetchurl {
       url = "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/microsoft.codeanalysis.common/4.0.0-4.21427.11/microsoft.codeanalysis.common.4.0.0-4.21427.11.nupkg";
@@ -192,7 +192,7 @@
     };
   }
   {
-    name = "microsoft.codeanalysis.csharp";
+    pname = "microsoft.codeanalysis.csharp";
     version = "4.0.0-4.21427.11";
     src = fetchurl {
       url = "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/microsoft.codeanalysis.csharp/4.0.0-4.21427.11/microsoft.codeanalysis.csharp.4.0.0-4.21427.11.nupkg";
@@ -200,7 +200,7 @@
     };
   }
   {
-    name = "microsoft.codeanalysis.csharp.features";
+    pname = "microsoft.codeanalysis.csharp.features";
     version = "4.0.0-4.21427.11";
     src = fetchurl {
       url = "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/microsoft.codeanalysis.csharp.features/4.0.0-4.21427.11/microsoft.codeanalysis.csharp.features.4.0.0-4.21427.11.nupkg";
@@ -208,7 +208,7 @@
     };
   }
   {
-    name = "microsoft.codeanalysis.csharp.scripting";
+    pname = "microsoft.codeanalysis.csharp.scripting";
     version = "4.0.0-4.21427.11";
     src = fetchurl {
       url = "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/microsoft.codeanalysis.csharp.scripting/4.0.0-4.21427.11/microsoft.codeanalysis.csharp.scripting.4.0.0-4.21427.11.nupkg";
@@ -216,7 +216,7 @@
     };
   }
   {
-    name = "microsoft.codeanalysis.csharp.workspaces";
+    pname = "microsoft.codeanalysis.csharp.workspaces";
     version = "4.0.0-4.21427.11";
     src = fetchurl {
       url = "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/microsoft.codeanalysis.csharp.workspaces/4.0.0-4.21427.11/microsoft.codeanalysis.csharp.workspaces.4.0.0-4.21427.11.nupkg";
@@ -224,7 +224,7 @@
     };
   }
   {
-    name = "microsoft.codeanalysis.externalaccess.omnisharp";
+    pname = "microsoft.codeanalysis.externalaccess.omnisharp";
     version = "4.0.0-4.21427.11";
     src = fetchurl {
       url = "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/microsoft.codeanalysis.externalaccess.omnisharp/4.0.0-4.21427.11/microsoft.codeanalysis.externalaccess.omnisharp.4.0.0-4.21427.11.nupkg";
@@ -232,7 +232,7 @@
     };
   }
   {
-    name = "microsoft.codeanalysis.externalaccess.omnisharp.csharp";
+    pname = "microsoft.codeanalysis.externalaccess.omnisharp.csharp";
     version = "4.0.0-4.21427.11";
     src = fetchurl {
       url = "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/microsoft.codeanalysis.externalaccess.omnisharp.csharp/4.0.0-4.21427.11/microsoft.codeanalysis.externalaccess.omnisharp.csharp.4.0.0-4.21427.11.nupkg";
@@ -240,7 +240,7 @@
     };
   }
   {
-    name = "microsoft.codeanalysis.features";
+    pname = "microsoft.codeanalysis.features";
     version = "4.0.0-4.21427.11";
     src = fetchurl {
       url = "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/microsoft.codeanalysis.features/4.0.0-4.21427.11/microsoft.codeanalysis.features.4.0.0-4.21427.11.nupkg";
@@ -248,7 +248,7 @@
     };
   }
   {
-    name = "microsoft.codeanalysis.scripting.common";
+    pname = "microsoft.codeanalysis.scripting.common";
     version = "4.0.0-4.21427.11";
     src = fetchurl {
       url = "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/microsoft.codeanalysis.scripting.common/4.0.0-4.21427.11/microsoft.codeanalysis.scripting.common.4.0.0-4.21427.11.nupkg";
@@ -256,7 +256,7 @@
     };
   }
   {
-    name = "microsoft.codeanalysis.workspaces.common";
+    pname = "microsoft.codeanalysis.workspaces.common";
     version = "4.0.0-4.21427.11";
     src = fetchurl {
       url = "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/microsoft.codeanalysis.workspaces.common/4.0.0-4.21427.11/microsoft.codeanalysis.workspaces.common.4.0.0-4.21427.11.nupkg";
@@ -264,7 +264,7 @@
     };
   }
   {
-    name = "microsoft.csharp";
+    pname = "microsoft.csharp";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.csharp/4.3.0/microsoft.csharp.4.3.0.nupkg";
@@ -272,7 +272,7 @@
     };
   }
   {
-    name = "microsoft.diasymreader";
+    pname = "microsoft.diasymreader";
     version = "1.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.diasymreader/1.3.0/microsoft.diasymreader.1.3.0.nupkg";
@@ -280,7 +280,7 @@
     };
   }
   {
-    name = "microsoft.dotnet.platformabstractions";
+    pname = "microsoft.dotnet.platformabstractions";
     version = "3.1.6";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.dotnet.platformabstractions/3.1.6/microsoft.dotnet.platformabstractions.3.1.6.nupkg";
@@ -288,7 +288,7 @@
     };
   }
   {
-    name = "microsoft.extensions.caching.abstractions";
+    pname = "microsoft.extensions.caching.abstractions";
     version = "5.0.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.caching.abstractions/5.0.0/microsoft.extensions.caching.abstractions.5.0.0.nupkg";
@@ -296,7 +296,7 @@
     };
   }
   {
-    name = "microsoft.extensions.caching.memory";
+    pname = "microsoft.extensions.caching.memory";
     version = "5.0.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.caching.memory/5.0.0/microsoft.extensions.caching.memory.5.0.0.nupkg";
@@ -304,7 +304,7 @@
     };
   }
   {
-    name = "microsoft.extensions.configuration";
+    pname = "microsoft.extensions.configuration";
     version = "2.0.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.configuration/2.0.0/microsoft.extensions.configuration.2.0.0.nupkg";
@@ -312,7 +312,7 @@
     };
   }
   {
-    name = "microsoft.extensions.configuration";
+    pname = "microsoft.extensions.configuration";
     version = "5.0.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.configuration/5.0.0/microsoft.extensions.configuration.5.0.0.nupkg";
@@ -320,7 +320,7 @@
     };
   }
   {
-    name = "microsoft.extensions.configuration.abstractions";
+    pname = "microsoft.extensions.configuration.abstractions";
     version = "2.0.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.configuration.abstractions/2.0.0/microsoft.extensions.configuration.abstractions.2.0.0.nupkg";
@@ -328,7 +328,7 @@
     };
   }
   {
-    name = "microsoft.extensions.configuration.abstractions";
+    pname = "microsoft.extensions.configuration.abstractions";
     version = "5.0.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.configuration.abstractions/5.0.0/microsoft.extensions.configuration.abstractions.5.0.0.nupkg";
@@ -336,7 +336,7 @@
     };
   }
   {
-    name = "microsoft.extensions.configuration.binder";
+    pname = "microsoft.extensions.configuration.binder";
     version = "2.0.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.configuration.binder/2.0.0/microsoft.extensions.configuration.binder.2.0.0.nupkg";
@@ -344,7 +344,7 @@
     };
   }
   {
-    name = "microsoft.extensions.configuration.binder";
+    pname = "microsoft.extensions.configuration.binder";
     version = "5.0.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.configuration.binder/5.0.0/microsoft.extensions.configuration.binder.5.0.0.nupkg";
@@ -352,7 +352,7 @@
     };
   }
   {
-    name = "microsoft.extensions.configuration.commandline";
+    pname = "microsoft.extensions.configuration.commandline";
     version = "5.0.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.configuration.commandline/5.0.0/microsoft.extensions.configuration.commandline.5.0.0.nupkg";
@@ -360,7 +360,7 @@
     };
   }
   {
-    name = "microsoft.extensions.configuration.environmentvariables";
+    pname = "microsoft.extensions.configuration.environmentvariables";
     version = "5.0.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.configuration.environmentvariables/5.0.0/microsoft.extensions.configuration.environmentvariables.5.0.0.nupkg";
@@ -368,7 +368,7 @@
     };
   }
   {
-    name = "microsoft.extensions.configuration.fileextensions";
+    pname = "microsoft.extensions.configuration.fileextensions";
     version = "5.0.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.configuration.fileextensions/5.0.0/microsoft.extensions.configuration.fileextensions.5.0.0.nupkg";
@@ -376,7 +376,7 @@
     };
   }
   {
-    name = "microsoft.extensions.configuration.json";
+    pname = "microsoft.extensions.configuration.json";
     version = "5.0.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.configuration.json/5.0.0/microsoft.extensions.configuration.json.5.0.0.nupkg";
@@ -384,7 +384,7 @@
     };
   }
   {
-    name = "microsoft.extensions.dependencyinjection";
+    pname = "microsoft.extensions.dependencyinjection";
     version = "2.0.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.dependencyinjection/2.0.0/microsoft.extensions.dependencyinjection.2.0.0.nupkg";
@@ -392,7 +392,7 @@
     };
   }
   {
-    name = "microsoft.extensions.dependencyinjection";
+    pname = "microsoft.extensions.dependencyinjection";
     version = "5.0.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.dependencyinjection/5.0.0/microsoft.extensions.dependencyinjection.5.0.0.nupkg";
@@ -400,7 +400,7 @@
     };
   }
   {
-    name = "microsoft.extensions.dependencyinjection.abstractions";
+    pname = "microsoft.extensions.dependencyinjection.abstractions";
     version = "2.0.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.dependencyinjection.abstractions/2.0.0/microsoft.extensions.dependencyinjection.abstractions.2.0.0.nupkg";
@@ -408,7 +408,7 @@
     };
   }
   {
-    name = "microsoft.extensions.dependencyinjection.abstractions";
+    pname = "microsoft.extensions.dependencyinjection.abstractions";
     version = "5.0.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.dependencyinjection.abstractions/5.0.0/microsoft.extensions.dependencyinjection.abstractions.5.0.0.nupkg";
@@ -416,7 +416,7 @@
     };
   }
   {
-    name = "microsoft.extensions.dependencymodel";
+    pname = "microsoft.extensions.dependencymodel";
     version = "5.0.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.dependencymodel/5.0.0/microsoft.extensions.dependencymodel.5.0.0.nupkg";
@@ -424,7 +424,7 @@
     };
   }
   {
-    name = "microsoft.extensions.fileproviders.abstractions";
+    pname = "microsoft.extensions.fileproviders.abstractions";
     version = "5.0.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.fileproviders.abstractions/5.0.0/microsoft.extensions.fileproviders.abstractions.5.0.0.nupkg";
@@ -432,7 +432,7 @@
     };
   }
   {
-    name = "microsoft.extensions.fileproviders.physical";
+    pname = "microsoft.extensions.fileproviders.physical";
     version = "5.0.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.fileproviders.physical/5.0.0/microsoft.extensions.fileproviders.physical.5.0.0.nupkg";
@@ -440,7 +440,7 @@
     };
   }
   {
-    name = "microsoft.extensions.filesystemglobbing";
+    pname = "microsoft.extensions.filesystemglobbing";
     version = "5.0.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.filesystemglobbing/5.0.0/microsoft.extensions.filesystemglobbing.5.0.0.nupkg";
@@ -448,7 +448,7 @@
     };
   }
   {
-    name = "microsoft.extensions.logging";
+    pname = "microsoft.extensions.logging";
     version = "2.0.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.logging/2.0.0/microsoft.extensions.logging.2.0.0.nupkg";
@@ -456,7 +456,7 @@
     };
   }
   {
-    name = "microsoft.extensions.logging";
+    pname = "microsoft.extensions.logging";
     version = "5.0.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.logging/5.0.0/microsoft.extensions.logging.5.0.0.nupkg";
@@ -464,7 +464,7 @@
     };
   }
   {
-    name = "microsoft.extensions.logging.abstractions";
+    pname = "microsoft.extensions.logging.abstractions";
     version = "2.0.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.logging.abstractions/2.0.0/microsoft.extensions.logging.abstractions.2.0.0.nupkg";
@@ -472,7 +472,7 @@
     };
   }
   {
-    name = "microsoft.extensions.logging.abstractions";
+    pname = "microsoft.extensions.logging.abstractions";
     version = "2.1.1";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.logging.abstractions/2.1.1/microsoft.extensions.logging.abstractions.2.1.1.nupkg";
@@ -480,7 +480,7 @@
     };
   }
   {
-    name = "microsoft.extensions.logging.abstractions";
+    pname = "microsoft.extensions.logging.abstractions";
     version = "5.0.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.logging.abstractions/5.0.0/microsoft.extensions.logging.abstractions.5.0.0.nupkg";
@@ -488,7 +488,7 @@
     };
   }
   {
-    name = "microsoft.extensions.logging.configuration";
+    pname = "microsoft.extensions.logging.configuration";
     version = "5.0.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.logging.configuration/5.0.0/microsoft.extensions.logging.configuration.5.0.0.nupkg";
@@ -496,7 +496,7 @@
     };
   }
   {
-    name = "microsoft.extensions.logging.console";
+    pname = "microsoft.extensions.logging.console";
     version = "5.0.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.logging.console/5.0.0/microsoft.extensions.logging.console.5.0.0.nupkg";
@@ -504,7 +504,7 @@
     };
   }
   {
-    name = "microsoft.extensions.options";
+    pname = "microsoft.extensions.options";
     version = "2.0.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.options/2.0.0/microsoft.extensions.options.2.0.0.nupkg";
@@ -512,7 +512,7 @@
     };
   }
   {
-    name = "microsoft.extensions.options";
+    pname = "microsoft.extensions.options";
     version = "5.0.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.options/5.0.0/microsoft.extensions.options.5.0.0.nupkg";
@@ -520,7 +520,7 @@
     };
   }
   {
-    name = "microsoft.extensions.options.configurationextensions";
+    pname = "microsoft.extensions.options.configurationextensions";
     version = "2.0.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.options.configurationextensions/2.0.0/microsoft.extensions.options.configurationextensions.2.0.0.nupkg";
@@ -528,7 +528,7 @@
     };
   }
   {
-    name = "microsoft.extensions.options.configurationextensions";
+    pname = "microsoft.extensions.options.configurationextensions";
     version = "5.0.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.options.configurationextensions/5.0.0/microsoft.extensions.options.configurationextensions.5.0.0.nupkg";
@@ -536,7 +536,7 @@
     };
   }
   {
-    name = "microsoft.extensions.primitives";
+    pname = "microsoft.extensions.primitives";
     version = "2.0.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.primitives/2.0.0/microsoft.extensions.primitives.2.0.0.nupkg";
@@ -544,7 +544,7 @@
     };
   }
   {
-    name = "microsoft.extensions.primitives";
+    pname = "microsoft.extensions.primitives";
     version = "5.0.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.primitives/5.0.0/microsoft.extensions.primitives.5.0.0.nupkg";
@@ -552,7 +552,7 @@
     };
   }
   {
-    name = "microsoft.netcore.app.ref";
+    pname = "microsoft.netcore.app.ref";
     version = "3.1.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.netcore.app.ref/3.1.0/microsoft.netcore.app.ref.3.1.0.nupkg";
@@ -560,7 +560,7 @@
     };
   }
   {
-    name = "microsoft.netcore.platforms";
+    pname = "microsoft.netcore.platforms";
     version = "1.0.1";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.netcore.platforms/1.0.1/microsoft.netcore.platforms.1.0.1.nupkg";
@@ -568,7 +568,7 @@
     };
   }
   {
-    name = "microsoft.netcore.platforms";
+    pname = "microsoft.netcore.platforms";
     version = "1.1.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.netcore.platforms/1.1.0/microsoft.netcore.platforms.1.1.0.nupkg";
@@ -576,7 +576,7 @@
     };
   }
   {
-    name = "microsoft.netcore.platforms";
+    pname = "microsoft.netcore.platforms";
     version = "2.0.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.netcore.platforms/2.0.0/microsoft.netcore.platforms.2.0.0.nupkg";
@@ -584,7 +584,7 @@
     };
   }
   {
-    name = "microsoft.netcore.platforms";
+    pname = "microsoft.netcore.platforms";
     version = "2.1.2";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.netcore.platforms/2.1.2/microsoft.netcore.platforms.2.1.2.nupkg";
@@ -592,7 +592,7 @@
     };
   }
   {
-    name = "microsoft.netcore.platforms";
+    pname = "microsoft.netcore.platforms";
     version = "3.1.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.netcore.platforms/3.1.0/microsoft.netcore.platforms.3.1.0.nupkg";
@@ -600,7 +600,7 @@
     };
   }
   {
-    name = "microsoft.netcore.targets";
+    pname = "microsoft.netcore.targets";
     version = "1.0.1";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.netcore.targets/1.0.1/microsoft.netcore.targets.1.0.1.nupkg";
@@ -608,7 +608,7 @@
     };
   }
   {
-    name = "microsoft.netcore.targets";
+    pname = "microsoft.netcore.targets";
     version = "1.1.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.netcore.targets/1.1.0/microsoft.netcore.targets.1.1.0.nupkg";
@@ -616,7 +616,7 @@
     };
   }
   {
-    name = "microsoft.netframework.referenceassemblies";
+    pname = "microsoft.netframework.referenceassemblies";
     version = "1.0.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.netframework.referenceassemblies/1.0.0/microsoft.netframework.referenceassemblies.1.0.0.nupkg";
@@ -624,7 +624,7 @@
     };
   }
   {
-    name = "microsoft.netframework.referenceassemblies.net472";
+    pname = "microsoft.netframework.referenceassemblies.net472";
     version = "1.0.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.netframework.referenceassemblies.net472/1.0.0/microsoft.netframework.referenceassemblies.net472.1.0.0.nupkg";
@@ -632,7 +632,7 @@
     };
   }
   {
-    name = "microsoft.net.stringtools";
+    pname = "microsoft.net.stringtools";
     version = "1.0.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.net.stringtools/1.0.0/microsoft.net.stringtools.1.0.0.nupkg";
@@ -640,7 +640,7 @@
     };
   }
   {
-    name = "microsoft.sourcelink.common";
+    pname = "microsoft.sourcelink.common";
     version = "1.0.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.sourcelink.common/1.0.0/microsoft.sourcelink.common.1.0.0.nupkg";
@@ -648,7 +648,7 @@
     };
   }
   {
-    name = "microsoft.sourcelink.github";
+    pname = "microsoft.sourcelink.github";
     version = "1.0.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.sourcelink.github/1.0.0/microsoft.sourcelink.github.1.0.0.nupkg";
@@ -656,7 +656,7 @@
     };
   }
   {
-    name = "microsoft.testplatform.objectmodel";
+    pname = "microsoft.testplatform.objectmodel";
     version = "16.9.4";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.testplatform.objectmodel/16.9.4/microsoft.testplatform.objectmodel.16.9.4.nupkg";
@@ -664,7 +664,7 @@
     };
   }
   {
-    name = "microsoft.testplatform.translationlayer";
+    pname = "microsoft.testplatform.translationlayer";
     version = "16.9.4";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.testplatform.translationlayer/16.9.4/microsoft.testplatform.translationlayer.16.9.4.nupkg";
@@ -672,7 +672,7 @@
     };
   }
   {
-    name = "microsoft.visualstudio.debugger.contracts";
+    pname = "microsoft.visualstudio.debugger.contracts";
     version = "17.2.0-beta.21417.1";
     src = fetchurl {
       url = "https://pkgs.dev.azure.com/azure-public/3ccf6661-f8ce-4e8a-bb2e-eff943ddd3c7/_packaging/78665e4c-b767-412b-9804-2b1ef7a48b8a/nuget/v3/flat2/microsoft.visualstudio.debugger.contracts/17.2.0-beta.21417.1/microsoft.visualstudio.debugger.contracts.17.2.0-beta.21417.1.nupkg";
@@ -680,7 +680,7 @@
     };
   }
   {
-    name = "microsoft.visualstudio.sdk.embedinteroptypes";
+    pname = "microsoft.visualstudio.sdk.embedinteroptypes";
     version = "15.0.12";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.visualstudio.sdk.embedinteroptypes/15.0.12/microsoft.visualstudio.sdk.embedinteroptypes.15.0.12.nupkg";
@@ -688,7 +688,7 @@
     };
   }
   {
-    name = "microsoft.visualstudio.setup.configuration.interop";
+    pname = "microsoft.visualstudio.setup.configuration.interop";
     version = "1.14.114";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.visualstudio.setup.configuration.interop/1.14.114/microsoft.visualstudio.setup.configuration.interop.1.14.114.nupkg";
@@ -696,7 +696,7 @@
     };
   }
   {
-    name = "microsoft.visualstudio.setup.configuration.interop";
+    pname = "microsoft.visualstudio.setup.configuration.interop";
     version = "1.16.30";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.visualstudio.setup.configuration.interop/1.16.30/microsoft.visualstudio.setup.configuration.interop.1.16.30.nupkg";
@@ -704,7 +704,7 @@
     };
   }
   {
-    name = "microsoft.visualstudio.threading";
+    pname = "microsoft.visualstudio.threading";
     version = "16.7.56";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.visualstudio.threading/16.7.56/microsoft.visualstudio.threading.16.7.56.nupkg";
@@ -712,7 +712,7 @@
     };
   }
   {
-    name = "microsoft.visualstudio.threading.analyzers";
+    pname = "microsoft.visualstudio.threading.analyzers";
     version = "16.7.56";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.visualstudio.threading.analyzers/16.7.56/microsoft.visualstudio.threading.analyzers.16.7.56.nupkg";
@@ -720,7 +720,7 @@
     };
   }
   {
-    name = "microsoft.visualstudio.validation";
+    pname = "microsoft.visualstudio.validation";
     version = "15.5.31";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.visualstudio.validation/15.5.31/microsoft.visualstudio.validation.15.5.31.nupkg";
@@ -728,7 +728,7 @@
     };
   }
   {
-    name = "microsoft.win32.primitives";
+    pname = "microsoft.win32.primitives";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.win32.primitives/4.3.0/microsoft.win32.primitives.4.3.0.nupkg";
@@ -736,7 +736,7 @@
     };
   }
   {
-    name = "microsoft.win32.registry";
+    pname = "microsoft.win32.registry";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.win32.registry/4.3.0/microsoft.win32.registry.4.3.0.nupkg";
@@ -744,7 +744,7 @@
     };
   }
   {
-    name = "microsoft.win32.registry";
+    pname = "microsoft.win32.registry";
     version = "4.6.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.win32.registry/4.6.0/microsoft.win32.registry.4.6.0.nupkg";
@@ -752,7 +752,7 @@
     };
   }
   {
-    name = "microsoft.win32.systemevents";
+    pname = "microsoft.win32.systemevents";
     version = "4.7.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/microsoft.win32.systemevents/4.7.0/microsoft.win32.systemevents.4.7.0.nupkg";
@@ -760,7 +760,7 @@
     };
   }
   {
-    name = "nerdbank.streams";
+    pname = "nerdbank.streams";
     version = "2.6.81";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/nerdbank.streams/2.6.81/nerdbank.streams.2.6.81.nupkg";
@@ -768,7 +768,7 @@
     };
   }
   {
-    name = "netstandard.library";
+    pname = "netstandard.library";
     version = "1.6.1";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/netstandard.library/1.6.1/netstandard.library.1.6.1.nupkg";
@@ -776,7 +776,7 @@
     };
   }
   {
-    name = "netstandard.library";
+    pname = "netstandard.library";
     version = "2.0.3";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/netstandard.library/2.0.3/netstandard.library.2.0.3.nupkg";
@@ -784,7 +784,7 @@
     };
   }
   {
-    name = "newtonsoft.json";
+    pname = "newtonsoft.json";
     version = "11.0.2";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/newtonsoft.json/11.0.2/newtonsoft.json.11.0.2.nupkg";
@@ -792,7 +792,7 @@
     };
   }
   {
-    name = "newtonsoft.json";
+    pname = "newtonsoft.json";
     version = "12.0.3";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/newtonsoft.json/12.0.3/newtonsoft.json.12.0.3.nupkg";
@@ -800,7 +800,7 @@
     };
   }
   {
-    name = "newtonsoft.json";
+    pname = "newtonsoft.json";
     version = "9.0.1";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/newtonsoft.json/9.0.1/newtonsoft.json.9.0.1.nupkg";
@@ -808,7 +808,7 @@
     };
   }
   {
-    name = "nuget.common";
+    pname = "nuget.common";
     version = "5.10.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/nuget.common/5.10.0/nuget.common.5.10.0.nupkg";
@@ -816,7 +816,7 @@
     };
   }
   {
-    name = "nuget.common";
+    pname = "nuget.common";
     version = "5.2.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/nuget.common/5.2.0/nuget.common.5.2.0.nupkg";
@@ -824,7 +824,7 @@
     };
   }
   {
-    name = "nuget.configuration";
+    pname = "nuget.configuration";
     version = "5.10.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/nuget.configuration/5.10.0/nuget.configuration.5.10.0.nupkg";
@@ -832,7 +832,7 @@
     };
   }
   {
-    name = "nuget.configuration";
+    pname = "nuget.configuration";
     version = "5.2.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/nuget.configuration/5.2.0/nuget.configuration.5.2.0.nupkg";
@@ -840,7 +840,7 @@
     };
   }
   {
-    name = "nuget.dependencyresolver.core";
+    pname = "nuget.dependencyresolver.core";
     version = "5.10.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/nuget.dependencyresolver.core/5.10.0/nuget.dependencyresolver.core.5.10.0.nupkg";
@@ -848,7 +848,7 @@
     };
   }
   {
-    name = "nuget.dependencyresolver.core";
+    pname = "nuget.dependencyresolver.core";
     version = "5.2.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/nuget.dependencyresolver.core/5.2.0/nuget.dependencyresolver.core.5.2.0.nupkg";
@@ -856,7 +856,7 @@
     };
   }
   {
-    name = "nuget.frameworks";
+    pname = "nuget.frameworks";
     version = "5.0.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/nuget.frameworks/5.0.0/nuget.frameworks.5.0.0.nupkg";
@@ -864,7 +864,7 @@
     };
   }
   {
-    name = "nuget.frameworks";
+    pname = "nuget.frameworks";
     version = "5.10.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/nuget.frameworks/5.10.0/nuget.frameworks.5.10.0.nupkg";
@@ -872,7 +872,7 @@
     };
   }
   {
-    name = "nuget.frameworks";
+    pname = "nuget.frameworks";
     version = "5.2.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/nuget.frameworks/5.2.0/nuget.frameworks.5.2.0.nupkg";
@@ -880,7 +880,7 @@
     };
   }
   {
-    name = "nuget.librarymodel";
+    pname = "nuget.librarymodel";
     version = "5.10.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/nuget.librarymodel/5.10.0/nuget.librarymodel.5.10.0.nupkg";
@@ -888,7 +888,7 @@
     };
   }
   {
-    name = "nuget.librarymodel";
+    pname = "nuget.librarymodel";
     version = "5.2.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/nuget.librarymodel/5.2.0/nuget.librarymodel.5.2.0.nupkg";
@@ -896,7 +896,7 @@
     };
   }
   {
-    name = "nuget.packaging";
+    pname = "nuget.packaging";
     version = "5.10.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/nuget.packaging/5.10.0/nuget.packaging.5.10.0.nupkg";
@@ -904,7 +904,7 @@
     };
   }
   {
-    name = "nuget.packaging";
+    pname = "nuget.packaging";
     version = "5.2.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/nuget.packaging/5.2.0/nuget.packaging.5.2.0.nupkg";
@@ -912,7 +912,7 @@
     };
   }
   {
-    name = "nuget.packaging.core";
+    pname = "nuget.packaging.core";
     version = "5.10.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/nuget.packaging.core/5.10.0/nuget.packaging.core.5.10.0.nupkg";
@@ -920,7 +920,7 @@
     };
   }
   {
-    name = "nuget.projectmodel";
+    pname = "nuget.projectmodel";
     version = "5.10.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/nuget.projectmodel/5.10.0/nuget.projectmodel.5.10.0.nupkg";
@@ -928,7 +928,7 @@
     };
   }
   {
-    name = "nuget.projectmodel";
+    pname = "nuget.projectmodel";
     version = "5.2.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/nuget.projectmodel/5.2.0/nuget.projectmodel.5.2.0.nupkg";
@@ -936,7 +936,7 @@
     };
   }
   {
-    name = "nuget.protocol";
+    pname = "nuget.protocol";
     version = "5.10.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/nuget.protocol/5.10.0/nuget.protocol.5.10.0.nupkg";
@@ -944,7 +944,7 @@
     };
   }
   {
-    name = "nuget.protocol";
+    pname = "nuget.protocol";
     version = "5.2.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/nuget.protocol/5.2.0/nuget.protocol.5.2.0.nupkg";
@@ -952,7 +952,7 @@
     };
   }
   {
-    name = "nuget.versioning";
+    pname = "nuget.versioning";
     version = "5.10.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/nuget.versioning/5.10.0/nuget.versioning.5.10.0.nupkg";
@@ -960,7 +960,7 @@
     };
   }
   {
-    name = "nuget.versioning";
+    pname = "nuget.versioning";
     version = "5.2.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/nuget.versioning/5.2.0/nuget.versioning.5.2.0.nupkg";
@@ -968,7 +968,7 @@
     };
   }
   {
-    name = "omnisharp.extensions.jsonrpc";
+    pname = "omnisharp.extensions.jsonrpc";
     version = "0.19.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/omnisharp.extensions.jsonrpc/0.19.0/omnisharp.extensions.jsonrpc.0.19.0.nupkg";
@@ -976,7 +976,7 @@
     };
   }
   {
-    name = "omnisharp.extensions.jsonrpc.generators";
+    pname = "omnisharp.extensions.jsonrpc.generators";
     version = "0.19.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/omnisharp.extensions.jsonrpc.generators/0.19.0/omnisharp.extensions.jsonrpc.generators.0.19.0.nupkg";
@@ -984,7 +984,7 @@
     };
   }
   {
-    name = "omnisharp.extensions.languageprotocol";
+    pname = "omnisharp.extensions.languageprotocol";
     version = "0.19.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/omnisharp.extensions.languageprotocol/0.19.0/omnisharp.extensions.languageprotocol.0.19.0.nupkg";
@@ -992,7 +992,7 @@
     };
   }
   {
-    name = "omnisharp.extensions.languageserver";
+    pname = "omnisharp.extensions.languageserver";
     version = "0.19.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/omnisharp.extensions.languageserver/0.19.0/omnisharp.extensions.languageserver.0.19.0.nupkg";
@@ -1000,7 +1000,7 @@
     };
   }
   {
-    name = "omnisharp.extensions.languageserver.shared";
+    pname = "omnisharp.extensions.languageserver.shared";
     version = "0.19.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/omnisharp.extensions.languageserver.shared/0.19.0/omnisharp.extensions.languageserver.shared.0.19.0.nupkg";
@@ -1008,7 +1008,7 @@
     };
   }
   {
-    name = "runtime.debian.8-x64.runtime.native.system.security.cryptography.openssl";
+    pname = "runtime.debian.8-x64.runtime.native.system.security.cryptography.openssl";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/runtime.debian.8-x64.runtime.native.system.security.cryptography.openssl/4.3.0/runtime.debian.8-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg";
@@ -1016,7 +1016,7 @@
     };
   }
   {
-    name = "runtime.fedora.23-x64.runtime.native.system.security.cryptography.openssl";
+    pname = "runtime.fedora.23-x64.runtime.native.system.security.cryptography.openssl";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/runtime.fedora.23-x64.runtime.native.system.security.cryptography.openssl/4.3.0/runtime.fedora.23-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg";
@@ -1024,7 +1024,7 @@
     };
   }
   {
-    name = "runtime.fedora.24-x64.runtime.native.system.security.cryptography.openssl";
+    pname = "runtime.fedora.24-x64.runtime.native.system.security.cryptography.openssl";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/runtime.fedora.24-x64.runtime.native.system.security.cryptography.openssl/4.3.0/runtime.fedora.24-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg";
@@ -1032,7 +1032,7 @@
     };
   }
   {
-    name = "runtime.native.system";
+    pname = "runtime.native.system";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/runtime.native.system/4.3.0/runtime.native.system.4.3.0.nupkg";
@@ -1040,7 +1040,7 @@
     };
   }
   {
-    name = "runtime.native.system.io.compression";
+    pname = "runtime.native.system.io.compression";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/runtime.native.system.io.compression/4.3.0/runtime.native.system.io.compression.4.3.0.nupkg";
@@ -1048,7 +1048,7 @@
     };
   }
   {
-    name = "runtime.native.system.net.http";
+    pname = "runtime.native.system.net.http";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/runtime.native.system.net.http/4.3.0/runtime.native.system.net.http.4.3.0.nupkg";
@@ -1056,7 +1056,7 @@
     };
   }
   {
-    name = "runtime.native.system.security.cryptography.apple";
+    pname = "runtime.native.system.security.cryptography.apple";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/runtime.native.system.security.cryptography.apple/4.3.0/runtime.native.system.security.cryptography.apple.4.3.0.nupkg";
@@ -1064,7 +1064,7 @@
     };
   }
   {
-    name = "runtime.native.system.security.cryptography.openssl";
+    pname = "runtime.native.system.security.cryptography.openssl";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/runtime.native.system.security.cryptography.openssl/4.3.0/runtime.native.system.security.cryptography.openssl.4.3.0.nupkg";
@@ -1072,7 +1072,7 @@
     };
   }
   {
-    name = "runtime.opensuse.13.2-x64.runtime.native.system.security.cryptography.openssl";
+    pname = "runtime.opensuse.13.2-x64.runtime.native.system.security.cryptography.openssl";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/runtime.opensuse.13.2-x64.runtime.native.system.security.cryptography.openssl/4.3.0/runtime.opensuse.13.2-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg";
@@ -1080,7 +1080,7 @@
     };
   }
   {
-    name = "runtime.opensuse.42.1-x64.runtime.native.system.security.cryptography.openssl";
+    pname = "runtime.opensuse.42.1-x64.runtime.native.system.security.cryptography.openssl";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/runtime.opensuse.42.1-x64.runtime.native.system.security.cryptography.openssl/4.3.0/runtime.opensuse.42.1-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg";
@@ -1088,7 +1088,7 @@
     };
   }
   {
-    name = "runtime.osx.10.10-x64.runtime.native.system.security.cryptography.apple";
+    pname = "runtime.osx.10.10-x64.runtime.native.system.security.cryptography.apple";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/runtime.osx.10.10-x64.runtime.native.system.security.cryptography.apple/4.3.0/runtime.osx.10.10-x64.runtime.native.system.security.cryptography.apple.4.3.0.nupkg";
@@ -1096,7 +1096,7 @@
     };
   }
   {
-    name = "runtime.osx.10.10-x64.runtime.native.system.security.cryptography.openssl";
+    pname = "runtime.osx.10.10-x64.runtime.native.system.security.cryptography.openssl";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/runtime.osx.10.10-x64.runtime.native.system.security.cryptography.openssl/4.3.0/runtime.osx.10.10-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg";
@@ -1104,7 +1104,7 @@
     };
   }
   {
-    name = "runtime.rhel.7-x64.runtime.native.system.security.cryptography.openssl";
+    pname = "runtime.rhel.7-x64.runtime.native.system.security.cryptography.openssl";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/runtime.rhel.7-x64.runtime.native.system.security.cryptography.openssl/4.3.0/runtime.rhel.7-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg";
@@ -1112,7 +1112,7 @@
     };
   }
   {
-    name = "runtime.ubuntu.14.04-x64.runtime.native.system.security.cryptography.openssl";
+    pname = "runtime.ubuntu.14.04-x64.runtime.native.system.security.cryptography.openssl";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/runtime.ubuntu.14.04-x64.runtime.native.system.security.cryptography.openssl/4.3.0/runtime.ubuntu.14.04-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg";
@@ -1120,7 +1120,7 @@
     };
   }
   {
-    name = "runtime.ubuntu.16.04-x64.runtime.native.system.security.cryptography.openssl";
+    pname = "runtime.ubuntu.16.04-x64.runtime.native.system.security.cryptography.openssl";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/runtime.ubuntu.16.04-x64.runtime.native.system.security.cryptography.openssl/4.3.0/runtime.ubuntu.16.04-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg";
@@ -1128,7 +1128,7 @@
     };
   }
   {
-    name = "runtime.ubuntu.16.10-x64.runtime.native.system.security.cryptography.openssl";
+    pname = "runtime.ubuntu.16.10-x64.runtime.native.system.security.cryptography.openssl";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/runtime.ubuntu.16.10-x64.runtime.native.system.security.cryptography.openssl/4.3.0/runtime.ubuntu.16.10-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg";
@@ -1136,7 +1136,7 @@
     };
   }
   {
-    name = "sqlitepclraw.bundle_green";
+    pname = "sqlitepclraw.bundle_green";
     version = "2.0.4";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/sqlitepclraw.bundle_green/2.0.4/sqlitepclraw.bundle_green.2.0.4.nupkg";
@@ -1144,7 +1144,7 @@
     };
   }
   {
-    name = "sqlitepclraw.core";
+    pname = "sqlitepclraw.core";
     version = "2.0.4";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/sqlitepclraw.core/2.0.4/sqlitepclraw.core.2.0.4.nupkg";
@@ -1152,7 +1152,7 @@
     };
   }
   {
-    name = "sqlitepclraw.lib.e_sqlite3";
+    pname = "sqlitepclraw.lib.e_sqlite3";
     version = "2.0.4";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/sqlitepclraw.lib.e_sqlite3/2.0.4/sqlitepclraw.lib.e_sqlite3.2.0.4.nupkg";
@@ -1160,7 +1160,7 @@
     };
   }
   {
-    name = "sqlitepclraw.provider.dynamic_cdecl";
+    pname = "sqlitepclraw.provider.dynamic_cdecl";
     version = "2.0.4";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/sqlitepclraw.provider.dynamic_cdecl/2.0.4/sqlitepclraw.provider.dynamic_cdecl.2.0.4.nupkg";
@@ -1168,7 +1168,7 @@
     };
   }
   {
-    name = "sqlitepclraw.provider.e_sqlite3";
+    pname = "sqlitepclraw.provider.e_sqlite3";
     version = "2.0.4";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/sqlitepclraw.provider.e_sqlite3/2.0.4/sqlitepclraw.provider.e_sqlite3.2.0.4.nupkg";
@@ -1176,7 +1176,7 @@
     };
   }
   {
-    name = "system.appcontext";
+    pname = "system.appcontext";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.appcontext/4.3.0/system.appcontext.4.3.0.nupkg";
@@ -1184,7 +1184,7 @@
     };
   }
   {
-    name = "system.buffers";
+    pname = "system.buffers";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.buffers/4.3.0/system.buffers.4.3.0.nupkg";
@@ -1192,7 +1192,7 @@
     };
   }
   {
-    name = "system.buffers";
+    pname = "system.buffers";
     version = "4.4.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.buffers/4.4.0/system.buffers.4.4.0.nupkg";
@@ -1200,7 +1200,7 @@
     };
   }
   {
-    name = "system.buffers";
+    pname = "system.buffers";
     version = "4.5.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.buffers/4.5.0/system.buffers.4.5.0.nupkg";
@@ -1208,7 +1208,7 @@
     };
   }
   {
-    name = "system.buffers";
+    pname = "system.buffers";
     version = "4.5.1";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.buffers/4.5.1/system.buffers.4.5.1.nupkg";
@@ -1216,7 +1216,7 @@
     };
   }
   {
-    name = "system.codedom";
+    pname = "system.codedom";
     version = "4.4.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.codedom/4.4.0/system.codedom.4.4.0.nupkg";
@@ -1224,7 +1224,7 @@
     };
   }
   {
-    name = "system.collections";
+    pname = "system.collections";
     version = "4.0.11";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.collections/4.0.11/system.collections.4.0.11.nupkg";
@@ -1232,7 +1232,7 @@
     };
   }
   {
-    name = "system.collections";
+    pname = "system.collections";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.collections/4.3.0/system.collections.4.3.0.nupkg";
@@ -1240,7 +1240,7 @@
     };
   }
   {
-    name = "system.collections.concurrent";
+    pname = "system.collections.concurrent";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.collections.concurrent/4.3.0/system.collections.concurrent.4.3.0.nupkg";
@@ -1248,7 +1248,7 @@
     };
   }
   {
-    name = "system.collections.immutable";
+    pname = "system.collections.immutable";
     version = "1.5.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.collections.immutable/1.5.0/system.collections.immutable.1.5.0.nupkg";
@@ -1256,7 +1256,7 @@
     };
   }
   {
-    name = "system.collections.immutable";
+    pname = "system.collections.immutable";
     version = "1.7.1";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.collections.immutable/1.7.1/system.collections.immutable.1.7.1.nupkg";
@@ -1264,7 +1264,7 @@
     };
   }
   {
-    name = "system.collections.immutable";
+    pname = "system.collections.immutable";
     version = "5.0.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.collections.immutable/5.0.0/system.collections.immutable.5.0.0.nupkg";
@@ -1272,7 +1272,7 @@
     };
   }
   {
-    name = "system.componentmodel.composition";
+    pname = "system.componentmodel.composition";
     version = "4.5.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.componentmodel.composition/4.5.0/system.componentmodel.composition.4.5.0.nupkg";
@@ -1280,7 +1280,7 @@
     };
   }
   {
-    name = "system.composition";
+    pname = "system.composition";
     version = "1.0.31";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.composition/1.0.31/system.composition.1.0.31.nupkg";
@@ -1288,7 +1288,7 @@
     };
   }
   {
-    name = "system.composition.attributedmodel";
+    pname = "system.composition.attributedmodel";
     version = "1.0.31";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.composition.attributedmodel/1.0.31/system.composition.attributedmodel.1.0.31.nupkg";
@@ -1296,7 +1296,7 @@
     };
   }
   {
-    name = "system.composition.convention";
+    pname = "system.composition.convention";
     version = "1.0.31";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.composition.convention/1.0.31/system.composition.convention.1.0.31.nupkg";
@@ -1304,7 +1304,7 @@
     };
   }
   {
-    name = "system.composition.hosting";
+    pname = "system.composition.hosting";
     version = "1.0.31";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.composition.hosting/1.0.31/system.composition.hosting.1.0.31.nupkg";
@@ -1312,7 +1312,7 @@
     };
   }
   {
-    name = "system.composition.runtime";
+    pname = "system.composition.runtime";
     version = "1.0.31";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.composition.runtime/1.0.31/system.composition.runtime.1.0.31.nupkg";
@@ -1320,7 +1320,7 @@
     };
   }
   {
-    name = "system.composition.typedparts";
+    pname = "system.composition.typedparts";
     version = "1.0.31";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.composition.typedparts/1.0.31/system.composition.typedparts.1.0.31.nupkg";
@@ -1328,7 +1328,7 @@
     };
   }
   {
-    name = "system.configuration.configurationmanager";
+    pname = "system.configuration.configurationmanager";
     version = "4.7.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.configuration.configurationmanager/4.7.0/system.configuration.configurationmanager.4.7.0.nupkg";
@@ -1336,7 +1336,7 @@
     };
   }
   {
-    name = "system.console";
+    pname = "system.console";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.console/4.3.0/system.console.4.3.0.nupkg";
@@ -1344,7 +1344,7 @@
     };
   }
   {
-    name = "system.diagnostics.debug";
+    pname = "system.diagnostics.debug";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.diagnostics.debug/4.3.0/system.diagnostics.debug.4.3.0.nupkg";
@@ -1352,7 +1352,7 @@
     };
   }
   {
-    name = "system.diagnostics.diagnosticsource";
+    pname = "system.diagnostics.diagnosticsource";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.diagnostics.diagnosticsource/4.3.0/system.diagnostics.diagnosticsource.4.3.0.nupkg";
@@ -1360,7 +1360,7 @@
     };
   }
   {
-    name = "system.diagnostics.diagnosticsource";
+    pname = "system.diagnostics.diagnosticsource";
     version = "5.0.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.diagnostics.diagnosticsource/5.0.0/system.diagnostics.diagnosticsource.5.0.0.nupkg";
@@ -1368,7 +1368,7 @@
     };
   }
   {
-    name = "system.diagnostics.tools";
+    pname = "system.diagnostics.tools";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.diagnostics.tools/4.3.0/system.diagnostics.tools.4.3.0.nupkg";
@@ -1376,7 +1376,7 @@
     };
   }
   {
-    name = "system.diagnostics.tracing";
+    pname = "system.diagnostics.tracing";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.diagnostics.tracing/4.3.0/system.diagnostics.tracing.4.3.0.nupkg";
@@ -1384,7 +1384,7 @@
     };
   }
   {
-    name = "system.drawing.common";
+    pname = "system.drawing.common";
     version = "4.7.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.drawing.common/4.7.0/system.drawing.common.4.7.0.nupkg";
@@ -1392,7 +1392,7 @@
     };
   }
   {
-    name = "system.formats.asn1";
+    pname = "system.formats.asn1";
     version = "5.0.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.formats.asn1/5.0.0/system.formats.asn1.5.0.0.nupkg";
@@ -1400,7 +1400,7 @@
     };
   }
   {
-    name = "system.globalization";
+    pname = "system.globalization";
     version = "4.0.11";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.globalization/4.0.11/system.globalization.4.0.11.nupkg";
@@ -1408,7 +1408,7 @@
     };
   }
   {
-    name = "system.globalization";
+    pname = "system.globalization";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.globalization/4.3.0/system.globalization.4.3.0.nupkg";
@@ -1416,7 +1416,7 @@
     };
   }
   {
-    name = "system.globalization.calendars";
+    pname = "system.globalization.calendars";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.globalization.calendars/4.3.0/system.globalization.calendars.4.3.0.nupkg";
@@ -1424,7 +1424,7 @@
     };
   }
   {
-    name = "system.globalization.extensions";
+    pname = "system.globalization.extensions";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.globalization.extensions/4.3.0/system.globalization.extensions.4.3.0.nupkg";
@@ -1432,7 +1432,7 @@
     };
   }
   {
-    name = "system.io";
+    pname = "system.io";
     version = "4.1.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.io/4.1.0/system.io.4.1.0.nupkg";
@@ -1440,7 +1440,7 @@
     };
   }
   {
-    name = "system.io";
+    pname = "system.io";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.io/4.3.0/system.io.4.3.0.nupkg";
@@ -1448,7 +1448,7 @@
     };
   }
   {
-    name = "system.io.compression";
+    pname = "system.io.compression";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.io.compression/4.3.0/system.io.compression.4.3.0.nupkg";
@@ -1456,7 +1456,7 @@
     };
   }
   {
-    name = "system.io.compression.zipfile";
+    pname = "system.io.compression.zipfile";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.io.compression.zipfile/4.3.0/system.io.compression.zipfile.4.3.0.nupkg";
@@ -1464,7 +1464,7 @@
     };
   }
   {
-    name = "system.io.filesystem";
+    pname = "system.io.filesystem";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.io.filesystem/4.3.0/system.io.filesystem.4.3.0.nupkg";
@@ -1472,7 +1472,7 @@
     };
   }
   {
-    name = "system.io.filesystem.primitives";
+    pname = "system.io.filesystem.primitives";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.io.filesystem.primitives/4.3.0/system.io.filesystem.primitives.4.3.0.nupkg";
@@ -1480,7 +1480,7 @@
     };
   }
   {
-    name = "system.io.pipelines";
+    pname = "system.io.pipelines";
     version = "4.7.3";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.io.pipelines/4.7.3/system.io.pipelines.4.7.3.nupkg";
@@ -1488,7 +1488,7 @@
     };
   }
   {
-    name = "system.io.pipelines";
+    pname = "system.io.pipelines";
     version = "5.0.1";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.io.pipelines/5.0.1/system.io.pipelines.5.0.1.nupkg";
@@ -1496,7 +1496,7 @@
     };
   }
   {
-    name = "system.linq";
+    pname = "system.linq";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.linq/4.3.0/system.linq.4.3.0.nupkg";
@@ -1504,7 +1504,7 @@
     };
   }
   {
-    name = "system.linq.expressions";
+    pname = "system.linq.expressions";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.linq.expressions/4.3.0/system.linq.expressions.4.3.0.nupkg";
@@ -1512,7 +1512,7 @@
     };
   }
   {
-    name = "system.memory";
+    pname = "system.memory";
     version = "4.5.3";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.memory/4.5.3/system.memory.4.5.3.nupkg";
@@ -1520,7 +1520,7 @@
     };
   }
   {
-    name = "system.memory";
+    pname = "system.memory";
     version = "4.5.4";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.memory/4.5.4/system.memory.4.5.4.nupkg";
@@ -1528,7 +1528,7 @@
     };
   }
   {
-    name = "system.net.http";
+    pname = "system.net.http";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.net.http/4.3.0/system.net.http.4.3.0.nupkg";
@@ -1536,7 +1536,7 @@
     };
   }
   {
-    name = "system.net.primitives";
+    pname = "system.net.primitives";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.net.primitives/4.3.0/system.net.primitives.4.3.0.nupkg";
@@ -1544,7 +1544,7 @@
     };
   }
   {
-    name = "system.net.sockets";
+    pname = "system.net.sockets";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.net.sockets/4.3.0/system.net.sockets.4.3.0.nupkg";
@@ -1552,7 +1552,7 @@
     };
   }
   {
-    name = "system.net.websockets";
+    pname = "system.net.websockets";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.net.websockets/4.3.0/system.net.websockets.4.3.0.nupkg";
@@ -1560,7 +1560,7 @@
     };
   }
   {
-    name = "system.numerics.vectors";
+    pname = "system.numerics.vectors";
     version = "4.4.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.numerics.vectors/4.4.0/system.numerics.vectors.4.4.0.nupkg";
@@ -1568,7 +1568,7 @@
     };
   }
   {
-    name = "system.numerics.vectors";
+    pname = "system.numerics.vectors";
     version = "4.5.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.numerics.vectors/4.5.0/system.numerics.vectors.4.5.0.nupkg";
@@ -1576,7 +1576,7 @@
     };
   }
   {
-    name = "system.objectmodel";
+    pname = "system.objectmodel";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.objectmodel/4.3.0/system.objectmodel.4.3.0.nupkg";
@@ -1584,7 +1584,7 @@
     };
   }
   {
-    name = "system.reactive";
+    pname = "system.reactive";
     version = "4.4.1";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.reactive/4.4.1/system.reactive.4.4.1.nupkg";
@@ -1592,7 +1592,7 @@
     };
   }
   {
-    name = "system.reflection";
+    pname = "system.reflection";
     version = "4.1.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.reflection/4.1.0/system.reflection.4.1.0.nupkg";
@@ -1600,7 +1600,7 @@
     };
   }
   {
-    name = "system.reflection";
+    pname = "system.reflection";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.reflection/4.3.0/system.reflection.4.3.0.nupkg";
@@ -1608,7 +1608,7 @@
     };
   }
   {
-    name = "system.reflection.dispatchproxy";
+    pname = "system.reflection.dispatchproxy";
     version = "4.5.1";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.reflection.dispatchproxy/4.5.1/system.reflection.dispatchproxy.4.5.1.nupkg";
@@ -1616,7 +1616,7 @@
     };
   }
   {
-    name = "system.reflection.emit";
+    pname = "system.reflection.emit";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.reflection.emit/4.3.0/system.reflection.emit.4.3.0.nupkg";
@@ -1624,7 +1624,7 @@
     };
   }
   {
-    name = "system.reflection.emit";
+    pname = "system.reflection.emit";
     version = "4.6.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.reflection.emit/4.6.0/system.reflection.emit.4.6.0.nupkg";
@@ -1632,7 +1632,7 @@
     };
   }
   {
-    name = "system.reflection.emit.ilgeneration";
+    pname = "system.reflection.emit.ilgeneration";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.reflection.emit.ilgeneration/4.3.0/system.reflection.emit.ilgeneration.4.3.0.nupkg";
@@ -1640,7 +1640,7 @@
     };
   }
   {
-    name = "system.reflection.emit.ilgeneration";
+    pname = "system.reflection.emit.ilgeneration";
     version = "4.6.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.reflection.emit.ilgeneration/4.6.0/system.reflection.emit.ilgeneration.4.6.0.nupkg";
@@ -1648,7 +1648,7 @@
     };
   }
   {
-    name = "system.reflection.emit.lightweight";
+    pname = "system.reflection.emit.lightweight";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.reflection.emit.lightweight/4.3.0/system.reflection.emit.lightweight.4.3.0.nupkg";
@@ -1656,7 +1656,7 @@
     };
   }
   {
-    name = "system.reflection.emit.lightweight";
+    pname = "system.reflection.emit.lightweight";
     version = "4.6.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.reflection.emit.lightweight/4.6.0/system.reflection.emit.lightweight.4.6.0.nupkg";
@@ -1664,7 +1664,7 @@
     };
   }
   {
-    name = "system.reflection.extensions";
+    pname = "system.reflection.extensions";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.reflection.extensions/4.3.0/system.reflection.extensions.4.3.0.nupkg";
@@ -1672,7 +1672,7 @@
     };
   }
   {
-    name = "system.reflection.metadata";
+    pname = "system.reflection.metadata";
     version = "1.6.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.reflection.metadata/1.6.0/system.reflection.metadata.1.6.0.nupkg";
@@ -1680,7 +1680,7 @@
     };
   }
   {
-    name = "system.reflection.metadata";
+    pname = "system.reflection.metadata";
     version = "5.0.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.reflection.metadata/5.0.0/system.reflection.metadata.5.0.0.nupkg";
@@ -1688,7 +1688,7 @@
     };
   }
   {
-    name = "system.reflection.primitives";
+    pname = "system.reflection.primitives";
     version = "4.0.1";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.reflection.primitives/4.0.1/system.reflection.primitives.4.0.1.nupkg";
@@ -1696,7 +1696,7 @@
     };
   }
   {
-    name = "system.reflection.primitives";
+    pname = "system.reflection.primitives";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.reflection.primitives/4.3.0/system.reflection.primitives.4.3.0.nupkg";
@@ -1704,7 +1704,7 @@
     };
   }
   {
-    name = "system.reflection.typeextensions";
+    pname = "system.reflection.typeextensions";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.reflection.typeextensions/4.3.0/system.reflection.typeextensions.4.3.0.nupkg";
@@ -1712,7 +1712,7 @@
     };
   }
   {
-    name = "system.resources.extensions";
+    pname = "system.resources.extensions";
     version = "4.6.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.resources.extensions/4.6.0/system.resources.extensions.4.6.0.nupkg";
@@ -1720,7 +1720,7 @@
     };
   }
   {
-    name = "system.resources.resourcemanager";
+    pname = "system.resources.resourcemanager";
     version = "4.0.1";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.resources.resourcemanager/4.0.1/system.resources.resourcemanager.4.0.1.nupkg";
@@ -1728,7 +1728,7 @@
     };
   }
   {
-    name = "system.resources.resourcemanager";
+    pname = "system.resources.resourcemanager";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.resources.resourcemanager/4.3.0/system.resources.resourcemanager.4.3.0.nupkg";
@@ -1736,7 +1736,7 @@
     };
   }
   {
-    name = "system.runtime";
+    pname = "system.runtime";
     version = "4.1.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.runtime/4.1.0/system.runtime.4.1.0.nupkg";
@@ -1744,7 +1744,7 @@
     };
   }
   {
-    name = "system.runtime";
+    pname = "system.runtime";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.runtime/4.3.0/system.runtime.4.3.0.nupkg";
@@ -1752,7 +1752,7 @@
     };
   }
   {
-    name = "system.runtime.compilerservices.unsafe";
+    pname = "system.runtime.compilerservices.unsafe";
     version = "4.4.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.runtime.compilerservices.unsafe/4.4.0/system.runtime.compilerservices.unsafe.4.4.0.nupkg";
@@ -1760,7 +1760,7 @@
     };
   }
   {
-    name = "system.runtime.compilerservices.unsafe";
+    pname = "system.runtime.compilerservices.unsafe";
     version = "4.5.2";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.runtime.compilerservices.unsafe/4.5.2/system.runtime.compilerservices.unsafe.4.5.2.nupkg";
@@ -1768,7 +1768,7 @@
     };
   }
   {
-    name = "system.runtime.compilerservices.unsafe";
+    pname = "system.runtime.compilerservices.unsafe";
     version = "4.5.3";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.runtime.compilerservices.unsafe/4.5.3/system.runtime.compilerservices.unsafe.4.5.3.nupkg";
@@ -1776,7 +1776,7 @@
     };
   }
   {
-    name = "system.runtime.compilerservices.unsafe";
+    pname = "system.runtime.compilerservices.unsafe";
     version = "4.7.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.runtime.compilerservices.unsafe/4.7.0/system.runtime.compilerservices.unsafe.4.7.0.nupkg";
@@ -1784,7 +1784,7 @@
     };
   }
   {
-    name = "system.runtime.compilerservices.unsafe";
+    pname = "system.runtime.compilerservices.unsafe";
     version = "4.7.1";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.runtime.compilerservices.unsafe/4.7.1/system.runtime.compilerservices.unsafe.4.7.1.nupkg";
@@ -1792,7 +1792,7 @@
     };
   }
   {
-    name = "system.runtime.compilerservices.unsafe";
+    pname = "system.runtime.compilerservices.unsafe";
     version = "5.0.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.runtime.compilerservices.unsafe/5.0.0/system.runtime.compilerservices.unsafe.5.0.0.nupkg";
@@ -1800,7 +1800,7 @@
     };
   }
   {
-    name = "system.runtime.extensions";
+    pname = "system.runtime.extensions";
     version = "4.1.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.runtime.extensions/4.1.0/system.runtime.extensions.4.1.0.nupkg";
@@ -1808,7 +1808,7 @@
     };
   }
   {
-    name = "system.runtime.extensions";
+    pname = "system.runtime.extensions";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.runtime.extensions/4.3.0/system.runtime.extensions.4.3.0.nupkg";
@@ -1816,7 +1816,7 @@
     };
   }
   {
-    name = "system.runtime.handles";
+    pname = "system.runtime.handles";
     version = "4.0.1";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.runtime.handles/4.0.1/system.runtime.handles.4.0.1.nupkg";
@@ -1824,7 +1824,7 @@
     };
   }
   {
-    name = "system.runtime.handles";
+    pname = "system.runtime.handles";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.runtime.handles/4.3.0/system.runtime.handles.4.3.0.nupkg";
@@ -1832,7 +1832,7 @@
     };
   }
   {
-    name = "system.runtime.interopservices";
+    pname = "system.runtime.interopservices";
     version = "4.1.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.runtime.interopservices/4.1.0/system.runtime.interopservices.4.1.0.nupkg";
@@ -1840,7 +1840,7 @@
     };
   }
   {
-    name = "system.runtime.interopservices";
+    pname = "system.runtime.interopservices";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.runtime.interopservices/4.3.0/system.runtime.interopservices.4.3.0.nupkg";
@@ -1848,7 +1848,7 @@
     };
   }
   {
-    name = "system.runtime.interopservices.runtimeinformation";
+    pname = "system.runtime.interopservices.runtimeinformation";
     version = "4.0.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.runtime.interopservices.runtimeinformation/4.0.0/system.runtime.interopservices.runtimeinformation.4.0.0.nupkg";
@@ -1856,7 +1856,7 @@
     };
   }
   {
-    name = "system.runtime.interopservices.runtimeinformation";
+    pname = "system.runtime.interopservices.runtimeinformation";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.runtime.interopservices.runtimeinformation/4.3.0/system.runtime.interopservices.runtimeinformation.4.3.0.nupkg";
@@ -1864,7 +1864,7 @@
     };
   }
   {
-    name = "system.runtime.interopservices.windowsruntime";
+    pname = "system.runtime.interopservices.windowsruntime";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.runtime.interopservices.windowsruntime/4.3.0/system.runtime.interopservices.windowsruntime.4.3.0.nupkg";
@@ -1872,7 +1872,7 @@
     };
   }
   {
-    name = "system.runtime.numerics";
+    pname = "system.runtime.numerics";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.runtime.numerics/4.3.0/system.runtime.numerics.4.3.0.nupkg";
@@ -1880,7 +1880,7 @@
     };
   }
   {
-    name = "system.security.accesscontrol";
+    pname = "system.security.accesscontrol";
     version = "4.5.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.security.accesscontrol/4.5.0/system.security.accesscontrol.4.5.0.nupkg";
@@ -1888,7 +1888,7 @@
     };
   }
   {
-    name = "system.security.accesscontrol";
+    pname = "system.security.accesscontrol";
     version = "4.6.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.security.accesscontrol/4.6.0/system.security.accesscontrol.4.6.0.nupkg";
@@ -1896,7 +1896,7 @@
     };
   }
   {
-    name = "system.security.accesscontrol";
+    pname = "system.security.accesscontrol";
     version = "4.7.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.security.accesscontrol/4.7.0/system.security.accesscontrol.4.7.0.nupkg";
@@ -1904,7 +1904,7 @@
     };
   }
   {
-    name = "system.security.cryptography.algorithms";
+    pname = "system.security.cryptography.algorithms";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.security.cryptography.algorithms/4.3.0/system.security.cryptography.algorithms.4.3.0.nupkg";
@@ -1912,7 +1912,7 @@
     };
   }
   {
-    name = "system.security.cryptography.algorithms";
+    pname = "system.security.cryptography.algorithms";
     version = "4.3.1";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.security.cryptography.algorithms/4.3.1/system.security.cryptography.algorithms.4.3.1.nupkg";
@@ -1920,7 +1920,7 @@
     };
   }
   {
-    name = "system.security.cryptography.cng";
+    pname = "system.security.cryptography.cng";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.security.cryptography.cng/4.3.0/system.security.cryptography.cng.4.3.0.nupkg";
@@ -1928,7 +1928,7 @@
     };
   }
   {
-    name = "system.security.cryptography.cng";
+    pname = "system.security.cryptography.cng";
     version = "4.7.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.security.cryptography.cng/4.7.0/system.security.cryptography.cng.4.7.0.nupkg";
@@ -1936,7 +1936,7 @@
     };
   }
   {
-    name = "system.security.cryptography.cng";
+    pname = "system.security.cryptography.cng";
     version = "5.0.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.security.cryptography.cng/5.0.0/system.security.cryptography.cng.5.0.0.nupkg";
@@ -1944,7 +1944,7 @@
     };
   }
   {
-    name = "system.security.cryptography.csp";
+    pname = "system.security.cryptography.csp";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.security.cryptography.csp/4.3.0/system.security.cryptography.csp.4.3.0.nupkg";
@@ -1952,7 +1952,7 @@
     };
   }
   {
-    name = "system.security.cryptography.encoding";
+    pname = "system.security.cryptography.encoding";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.security.cryptography.encoding/4.3.0/system.security.cryptography.encoding.4.3.0.nupkg";
@@ -1960,7 +1960,7 @@
     };
   }
   {
-    name = "system.security.cryptography.openssl";
+    pname = "system.security.cryptography.openssl";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.security.cryptography.openssl/4.3.0/system.security.cryptography.openssl.4.3.0.nupkg";
@@ -1968,7 +1968,7 @@
     };
   }
   {
-    name = "system.security.cryptography.pkcs";
+    pname = "system.security.cryptography.pkcs";
     version = "4.7.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.security.cryptography.pkcs/4.7.0/system.security.cryptography.pkcs.4.7.0.nupkg";
@@ -1976,7 +1976,7 @@
     };
   }
   {
-    name = "system.security.cryptography.pkcs";
+    pname = "system.security.cryptography.pkcs";
     version = "5.0.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.security.cryptography.pkcs/5.0.0/system.security.cryptography.pkcs.5.0.0.nupkg";
@@ -1984,7 +1984,7 @@
     };
   }
   {
-    name = "system.security.cryptography.primitives";
+    pname = "system.security.cryptography.primitives";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.security.cryptography.primitives/4.3.0/system.security.cryptography.primitives.4.3.0.nupkg";
@@ -1992,7 +1992,7 @@
     };
   }
   {
-    name = "system.security.cryptography.protecteddata";
+    pname = "system.security.cryptography.protecteddata";
     version = "4.4.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.security.cryptography.protecteddata/4.4.0/system.security.cryptography.protecteddata.4.4.0.nupkg";
@@ -2000,7 +2000,7 @@
     };
   }
   {
-    name = "system.security.cryptography.protecteddata";
+    pname = "system.security.cryptography.protecteddata";
     version = "4.7.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.security.cryptography.protecteddata/4.7.0/system.security.cryptography.protecteddata.4.7.0.nupkg";
@@ -2008,7 +2008,7 @@
     };
   }
   {
-    name = "system.security.cryptography.x509certificates";
+    pname = "system.security.cryptography.x509certificates";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.security.cryptography.x509certificates/4.3.0/system.security.cryptography.x509certificates.4.3.0.nupkg";
@@ -2016,7 +2016,7 @@
     };
   }
   {
-    name = "system.security.cryptography.xml";
+    pname = "system.security.cryptography.xml";
     version = "4.7.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.security.cryptography.xml/4.7.0/system.security.cryptography.xml.4.7.0.nupkg";
@@ -2024,7 +2024,7 @@
     };
   }
   {
-    name = "system.security.permissions";
+    pname = "system.security.permissions";
     version = "4.5.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.security.permissions/4.5.0/system.security.permissions.4.5.0.nupkg";
@@ -2032,7 +2032,7 @@
     };
   }
   {
-    name = "system.security.permissions";
+    pname = "system.security.permissions";
     version = "4.7.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.security.permissions/4.7.0/system.security.permissions.4.7.0.nupkg";
@@ -2040,7 +2040,7 @@
     };
   }
   {
-    name = "system.security.principal.windows";
+    pname = "system.security.principal.windows";
     version = "4.5.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.security.principal.windows/4.5.0/system.security.principal.windows.4.5.0.nupkg";
@@ -2048,7 +2048,7 @@
     };
   }
   {
-    name = "system.security.principal.windows";
+    pname = "system.security.principal.windows";
     version = "4.6.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.security.principal.windows/4.6.0/system.security.principal.windows.4.6.0.nupkg";
@@ -2056,7 +2056,7 @@
     };
   }
   {
-    name = "system.security.principal.windows";
+    pname = "system.security.principal.windows";
     version = "4.7.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.security.principal.windows/4.7.0/system.security.principal.windows.4.7.0.nupkg";
@@ -2064,7 +2064,7 @@
     };
   }
   {
-    name = "system.text.encoding";
+    pname = "system.text.encoding";
     version = "4.0.11";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.text.encoding/4.0.11/system.text.encoding.4.0.11.nupkg";
@@ -2072,7 +2072,7 @@
     };
   }
   {
-    name = "system.text.encoding";
+    pname = "system.text.encoding";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.text.encoding/4.3.0/system.text.encoding.4.3.0.nupkg";
@@ -2080,7 +2080,7 @@
     };
   }
   {
-    name = "system.text.encoding.codepages";
+    pname = "system.text.encoding.codepages";
     version = "4.0.1";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.text.encoding.codepages/4.0.1/system.text.encoding.codepages.4.0.1.nupkg";
@@ -2088,7 +2088,7 @@
     };
   }
   {
-    name = "system.text.encoding.codepages";
+    pname = "system.text.encoding.codepages";
     version = "4.5.1";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.text.encoding.codepages/4.5.1/system.text.encoding.codepages.4.5.1.nupkg";
@@ -2096,7 +2096,7 @@
     };
   }
   {
-    name = "system.text.encoding.extensions";
+    pname = "system.text.encoding.extensions";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.text.encoding.extensions/4.3.0/system.text.encoding.extensions.4.3.0.nupkg";
@@ -2104,7 +2104,7 @@
     };
   }
   {
-    name = "system.text.encodings.web";
+    pname = "system.text.encodings.web";
     version = "4.7.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.text.encodings.web/4.7.0/system.text.encodings.web.4.7.0.nupkg";
@@ -2112,7 +2112,7 @@
     };
   }
   {
-    name = "system.text.encodings.web";
+    pname = "system.text.encodings.web";
     version = "5.0.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.text.encodings.web/5.0.0/system.text.encodings.web.5.0.0.nupkg";
@@ -2120,7 +2120,7 @@
     };
   }
   {
-    name = "system.text.json";
+    pname = "system.text.json";
     version = "4.7.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.text.json/4.7.0/system.text.json.4.7.0.nupkg";
@@ -2128,7 +2128,7 @@
     };
   }
   {
-    name = "system.text.json";
+    pname = "system.text.json";
     version = "5.0.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.text.json/5.0.0/system.text.json.5.0.0.nupkg";
@@ -2136,7 +2136,7 @@
     };
   }
   {
-    name = "system.text.regularexpressions";
+    pname = "system.text.regularexpressions";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.text.regularexpressions/4.3.0/system.text.regularexpressions.4.3.0.nupkg";
@@ -2144,7 +2144,7 @@
     };
   }
   {
-    name = "system.threading";
+    pname = "system.threading";
     version = "4.0.11";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.threading/4.0.11/system.threading.4.0.11.nupkg";
@@ -2152,7 +2152,7 @@
     };
   }
   {
-    name = "system.threading";
+    pname = "system.threading";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.threading/4.3.0/system.threading.4.3.0.nupkg";
@@ -2160,7 +2160,7 @@
     };
   }
   {
-    name = "system.threading.tasks";
+    pname = "system.threading.tasks";
     version = "4.0.11";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.threading.tasks/4.0.11/system.threading.tasks.4.0.11.nupkg";
@@ -2168,7 +2168,7 @@
     };
   }
   {
-    name = "system.threading.tasks";
+    pname = "system.threading.tasks";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.threading.tasks/4.3.0/system.threading.tasks.4.3.0.nupkg";
@@ -2176,7 +2176,7 @@
     };
   }
   {
-    name = "system.threading.tasks.dataflow";
+    pname = "system.threading.tasks.dataflow";
     version = "5.0.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.threading.tasks.dataflow/5.0.0/system.threading.tasks.dataflow.5.0.0.nupkg";
@@ -2184,7 +2184,7 @@
     };
   }
   {
-    name = "system.threading.tasks.extensions";
+    pname = "system.threading.tasks.extensions";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.threading.tasks.extensions/4.3.0/system.threading.tasks.extensions.4.3.0.nupkg";
@@ -2192,7 +2192,7 @@
     };
   }
   {
-    name = "system.threading.tasks.extensions";
+    pname = "system.threading.tasks.extensions";
     version = "4.5.2";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.threading.tasks.extensions/4.5.2/system.threading.tasks.extensions.4.5.2.nupkg";
@@ -2200,7 +2200,7 @@
     };
   }
   {
-    name = "system.threading.tasks.extensions";
+    pname = "system.threading.tasks.extensions";
     version = "4.5.3";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.threading.tasks.extensions/4.5.3/system.threading.tasks.extensions.4.5.3.nupkg";
@@ -2208,7 +2208,7 @@
     };
   }
   {
-    name = "system.threading.tasks.extensions";
+    pname = "system.threading.tasks.extensions";
     version = "4.5.4";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.threading.tasks.extensions/4.5.4/system.threading.tasks.extensions.4.5.4.nupkg";
@@ -2216,7 +2216,7 @@
     };
   }
   {
-    name = "system.threading.timer";
+    pname = "system.threading.timer";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.threading.timer/4.3.0/system.threading.timer.4.3.0.nupkg";
@@ -2224,7 +2224,7 @@
     };
   }
   {
-    name = "system.valuetuple";
+    pname = "system.valuetuple";
     version = "4.5.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.valuetuple/4.5.0/system.valuetuple.4.5.0.nupkg";
@@ -2232,7 +2232,7 @@
     };
   }
   {
-    name = "system.windows.extensions";
+    pname = "system.windows.extensions";
     version = "4.7.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.windows.extensions/4.7.0/system.windows.extensions.4.7.0.nupkg";
@@ -2240,7 +2240,7 @@
     };
   }
   {
-    name = "system.xml.readerwriter";
+    pname = "system.xml.readerwriter";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.xml.readerwriter/4.3.0/system.xml.readerwriter.4.3.0.nupkg";
@@ -2248,7 +2248,7 @@
     };
   }
   {
-    name = "system.xml.xdocument";
+    pname = "system.xml.xdocument";
     version = "4.3.0";
     src = fetchurl {
       url = "https://api.nuget.org/v3-flatcontainer/system.xml.xdocument/4.3.0/system.xml.xdocument.4.3.0.nupkg";

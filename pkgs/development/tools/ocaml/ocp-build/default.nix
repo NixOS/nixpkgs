@@ -1,10 +1,8 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch, ocaml, findlib, ncurses, cmdliner, re }:
-let
-  version = "1.99.21";
-in
-stdenv.mkDerivation {
 
-  name = "ocaml${ocaml.version}-ocp-build-${version}";
+stdenv.mkDerivation rec {
+  pname = "ocaml${ocaml.version}-ocp-build";
+  version = "1.99.21";
 
   src = fetchFromGitHub {
     owner = "OCamlPro";

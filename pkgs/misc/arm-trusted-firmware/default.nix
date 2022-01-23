@@ -10,7 +10,7 @@ let
             , ... } @ args:
            stdenv.mkDerivation ({
 
-    name = "arm-trusted-firmware${lib.optionalString (platform != null) "-${platform}"}-${version}";
+    pname = "arm-trusted-firmware${lib.optionalString (platform != null) "-${platform}"}";
     inherit version;
 
     src = fetchFromGitHub {
