@@ -3103,6 +3103,8 @@ in {
     pythonPackages = self;
   });
 
+  gamble = callPackage ../development/python-modules/gamble { };
+
   gaphas = callPackage ../development/python-modules/gaphas { };
 
   garminconnect-aio = callPackage ../development/python-modules/garminconnect-aio { };
