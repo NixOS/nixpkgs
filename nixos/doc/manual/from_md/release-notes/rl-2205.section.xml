@@ -189,266 +189,290 @@
   </section>
   <section xml:id="sec-release-22.05-incompatibilities">
     <title>Backward Incompatibilities</title>
-    <itemizedlist>
-      <listitem>
-        <para>
-          <literal>pkgs.ghc</literal> now refers to
-          <literal>pkgs.targetPackages.haskellPackages.ghc</literal>.
-          This <emphasis>only</emphasis> makes a difference if you are
-          cross-compiling and will ensure that
-          <literal>pkgs.ghc</literal> always runs on the host platform
-          and compiles for the target platform (similar to
-          <literal>pkgs.gcc</literal> for example).
-          <literal>haskellPackages.ghc</literal> still behaves as
-          before, running on the build platform and compiling for the
-          host platform (similar to <literal>stdenv.cc</literal>). This
-          means you don’t have to adjust your derivations if you use
-          <literal>haskellPackages.callPackage</literal>, but when using
-          <literal>pkgs.callPackage</literal> and taking
-          <literal>ghc</literal> as an input, you should now use
-          <literal>buildPackages.ghc</literal> instead to ensure cross
-          compilation keeps working (or switch to
-          <literal>haskellPackages.callPackage</literal>).
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <literal>pkgs.emacsPackages.orgPackages</literal> is removed
-          because org elpa is deprecated. The packages in the top level
-          of <literal>pkgs.emacsPackages</literal>, such as org and
-          org-contrib, refer to the ones in
-          <literal>pkgs.emacsPackages.elpaPackages</literal> and
-          <literal>pkgs.emacsPackages.nongnuPackages</literal> where the
-          new versions will release.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <literal>services.kubernetes.addons.dashboard</literal> was
-          removed due to it being an outdated version.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          The <literal>mailpile</literal> email webclient
-          (<literal>services.mailpile</literal>) has been removed due to
-          its reliance on python2.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          The MoinMoin wiki engine
-          (<literal>services.moinmoin</literal>) has been removed,
-          because Python 2 is being retired from nixpkgs.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          The <literal>wafHook</literal> hook now honors
-          <literal>NIX_BUILD_CORES</literal> when
-          <literal>enableParallelBuilding</literal> is not set
-          explicitly. Packages can restore the old behaviour by setting
-          <literal>enableParallelBuilding=false</literal>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <literal>pkgs.claws-mail-gtk2</literal>, representing Claws
-          Mail’s older release version three, was removed in order to
-          get rid of Python 2. Please switch to
-          <literal>claws-mail</literal>, which is Claws Mail’s latest
-          release based on GTK+3 and Python 3.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          The <literal>writers.writePython2</literal> and corresponding
-          <literal>writers.writePython2Bin</literal> convenience
-          functions to create executable Python 2 scripts in the store
-          were removed in preparation of removal of the Python 2
-          interpreter. Scripts have to be converted to Python 3 for use
-          with <literal>writers.writePython3</literal> or
-          <literal>writers.writePyPy2</literal> needs to be used.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          If you previously used
-          <literal>/etc/docker/daemon.json</literal>, you need to
-          incorporate the changes into the new option
-          <literal>virtualisation.docker.daemon.settings</literal>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          The backward compatibility in
-          <literal>services.wordpress</literal> to configure sites with
-          the old interface has been removed. Please use
-          <literal>services.wordpress.sites</literal> instead.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          The backward compatibility in
-          <literal>services.dokuwiki</literal> to configure sites with
-          the old interface has been removed. Please use
-          <literal>services.dokuwiki.sites</literal> instead.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          opensmtpd-extras is no longer build with python2 scripting
-          support due to python2 deprecation in nixpkgs
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          The <literal>autorestic</literal> package has been upgraded
-          from 1.3.0 to 1.5.0 which introduces breaking changes in
-          config file, check
-          <link xlink:href="https://autorestic.vercel.app/migration/1.4_1.5">their
-          migration guide</link> for more details.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          For <literal>pkgs.python3.pkgs.ipython</literal>, its direct
-          dependency
-          <literal>pkgs.python3.pkgs.matplotlib-inline</literal> (which
-          is really an adapter to integrate matplotlib in ipython if it
-          is installed) does not depend on
-          <literal>pkgs.python3.pkgs.matplotlib</literal> anymore. This
-          is closer to a non-Nix install of ipython. This has the added
-          benefit to reduce the closure size of
-          <literal>ipython</literal> from ~400MB to ~160MB (including
-          ~100MB for python itself).
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <literal>documentation.man</literal> has been refactored to
-          support choosing a man implementation other than GNU’s
-          <literal>man-db</literal>. For this,
-          <literal>documentation.man.manualPages</literal> has been
-          renamed to
-          <literal>documentation.man.man-db.manualPages</literal>. If
-          you want to use the new alternative man implementation
-          <literal>mandoc</literal>, add
-          <literal>documentation.man = { enable = true; man-db.enable = false; mandoc.enable = true; }</literal>
-          to your configuration.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          Normal users (with <literal>isNormalUser = true</literal>)
-          which have non-empty <literal>subUidRanges</literal> or
-          <literal>subGidRanges</literal> set no longer have additional
-          implicit ranges allocated. To enable automatic allocation back
-          set <literal>autoSubUidGidRange = true</literal>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <literal>idris2</literal> now requires
-          <literal>--package</literal> when using packages
-          <literal>contrib</literal> and <literal>network</literal>,
-          while previously these idris2 packages were automatically
-          loaded.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <literal>services.thelounge.private</literal> was removed in
-          favor of <literal>services.thelounge.public</literal>, to
-          follow with upstream changes.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <literal>pkgs.docbookrx</literal> was removed since it’s
-          unmaintained
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          The options
-          <literal>networking.interfaces.&lt;name&gt;.ipv4.routes</literal>
-          and
-          <literal>networking.interfaces.&lt;name&gt;.ipv6.routes</literal>
-          are no longer ignored when using networkd instead of the
-          default scripted network backend by setting
-          <literal>networking.useNetworkd</literal> to
-          <literal>true</literal>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          MultiMC has been replaced with the fork PolyMC due to upstream
-          developers being hostile to 3rd party package maintainers.
-          PolyMC removes all MultiMC branding and is aimed at providing
-          proper 3rd party packages like the one contained in Nixpkgs.
-          This change affects the data folder where game instances and
-          other save and configuration files are stored. Users with
-          existing installations should rename
-          <literal>~/.local/share/multimc</literal> to
-          <literal>~/.local/share/polymc</literal>. The main config
-          file’s path has also moved from
-          <literal>~/.local/share/multimc/multimc.cfg</literal> to
-          <literal>~/.local/share/polymc/polymc.cfg</literal>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <literal>pkgs.noto-fonts-cjk</literal> is now deprecated in
-          favor of <literal>pkgs.noto-fonts-cjk-sans</literal> and
-          <literal>pkgs.noto-fonts-cjk-serif</literal> because they each
-          have different release schedules. To maintain compatibility
-          with prior releases of Nixpkgs,
-          <literal>pkgs.noto-fonts-cjk</literal> is currently an alias
-          of <literal>pkgs.noto-fonts-cjk-sans</literal> and doesn’t
-          include serif fonts.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          The interface that allows activation scripts to restart units
-          has been reworked. Restarting and reloading is now done by a
-          single file
-          <literal>/run/nixos/activation-restart-list</literal> that
-          honors <literal>restartIfChanged</literal> and
-          <literal>reloadIfChanged</literal> of the units.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          The <literal>services.bookstack.cacheDir</literal> option has
-          been removed, since the cache directory is now handled by
-          systemd.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          The <literal>services.bookstack.extraConfig</literal> option
-          has been replaced by
-          <literal>services.bookstack.config</literal> which implements
-          a
-          <link xlink:href="https://github.com/NixOS/rfcs/blob/master/rfcs/0042-config-option.md">settings-style</link>
-          configuration.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <literal>lib.assertMsg</literal> and
-          <literal>lib.assertOneOf</literal> no longer return
-          <literal>false</literal> if the passed condition is
-          <literal>false</literal>, <literal>throw</literal>ing the
-          given error message instead (which makes the resulting error
-          message less cluttered). This will not impact the behaviour of
-          code using these functions as intended, namely as top-level
-          wrapper for <literal>assert</literal> conditions.
-        </para>
-      </listitem>
-    </itemizedlist>
+    <section xml:id="sec-release-22.05-nixos-nixpkgs-changes">
+      <title>NixOS / Nixpkgs Changes</title>
+      <itemizedlist>
+        <listitem>
+          <para>
+            The interface that allows activation scripts to restart
+            units has been reworked. Restarting and reloading is now
+            done by a single file
+            <literal>/run/nixos/activation-restart-list</literal> that
+            honors <literal>restartIfChanged</literal> and
+            <literal>reloadIfChanged</literal> of the units.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <literal>lib.assertMsg</literal> and
+            <literal>lib.assertOneOf</literal> no longer return
+            <literal>false</literal> if the passed condition is
+            <literal>false</literal>, <literal>throw</literal>ing the
+            given error message instead (which makes the resulting error
+            message less cluttered). This will not impact the behaviour
+            of code using these functions as intended, namely as
+            top-level wrapper for <literal>assert</literal> conditions.
+          </para>
+        </listitem>
+      </itemizedlist>
+    </section>
+    <section xml:id="sec-release-22.05-package-changes">
+      <title>Package Changes</title>
+      <itemizedlist>
+        <listitem>
+          <para>
+            <literal>autorestic</literal> package has been upgraded from
+            1.3.0 to 1.5.0 which introduces breaking changes in config
+            file, check
+            <link xlink:href="https://autorestic.vercel.app/migration/1.4_1.5">their
+            migration guide</link> for more details.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <literal>opensmtpd-extras</literal> is no longer build with
+            python2 scripting support due to python2 deprecation in
+            nixpkgs
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <literal>ghc</literal> now refers to
+            <literal>targetPackages.haskellPackages.ghc</literal>. This
+            <emphasis>only</emphasis> makes a difference if you are
+            cross-compiling and will ensure that <literal>ghc</literal>
+            always runs on the host platform and compiles for the target
+            platform (similar to <literal>gcc</literal> for example).
+            <literal>haskellPackages.ghc</literal> still behaves as
+            before, running on the build platform and compiling for the
+            host platform (similar to <literal>stdenv.cc</literal>).
+            This means you don’t have to adjust your derivations if you
+            use <literal>haskellPackages.callPackage</literal>, but when
+            using <literal>pkgs.callPackage</literal> and taking
+            <literal>ghc</literal> as an input, you should now use
+            <literal>buildPackages.ghc</literal> instead to ensure cross
+            compilation keeps working (or switch to
+            <literal>haskellPackages.callPackage</literal>).
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <literal>emacsPackages.orgPackages</literal> is removed
+            because org elpa is deprecated. The packages in the top
+            level of <literal>emacsPackages</literal>, such as org and
+            org-contrib, refer to the ones in
+            <literal>emacsPackages.elpaPackages</literal> and
+            <literal>emacsPackages.nongnuPackages</literal> where the
+            new versions will release.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <literal>noto-fonts-cjk</literal> is now deprecated in favor
+            of <literal>noto-fonts-cjk-sans</literal> and
+            <literal>noto-fonts-cjk-serif</literal> because they each
+            have different release schedules. To maintain compatibility
+            with prior releases of Nixpkgs,
+            <literal>noto-fonts-cjk</literal> is currently an alias of
+            <literal>noto-fonts-cjk-sans</literal> and doesn’t include
+            serif fonts.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <literal>idris2</literal> now requires
+            <literal>--package</literal> when using packages
+            <literal>contrib</literal> and <literal>network</literal>,
+            while previously these idris2 packages were automatically
+            loaded.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            MultiMC has been replaced with the fork PolyMC due to
+            upstream developers being hostile to 3rd party package
+            maintainers. PolyMC removes all MultiMC branding and is
+            aimed at providing proper 3rd party packages like the one
+            contained in Nixpkgs. This change affects the data folder
+            where game instances and other save and configuration files
+            are stored. Users with existing installations should rename
+            <literal>~/.local/share/multimc</literal> to
+            <literal>~/.local/share/polymc</literal>. The main config
+            file’s path has also moved from
+            <literal>~/.local/share/multimc/multimc.cfg</literal> to
+            <literal>~/.local/share/polymc/polymc.cfg</literal>.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <literal>python3.pkgs.ipython</literal> - its direct
+            dependency <literal>python3.pkgs.matplotlib-inline</literal>
+            (which is really an adapter to integrate matplotlib in
+            ipython if it is installed) does not depend on
+            <literal>python3.pkgs.matplotlib</literal> anymore. This is
+            closer to a non-Nix install of ipython. This has the added
+            benefit to reduce the closure size of
+            <literal>ipython</literal> from ~400MB to ~160MB (including
+            ~100MB for python itself).
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <literal>wafHook</literal> hook now honors
+            <literal>NIX_BUILD_CORES</literal> when
+            <literal>enableParallelBuilding</literal> is not set
+            explicitly. Packages can restore the old behaviour by
+            setting <literal>enableParallelBuilding=false</literal>.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <literal>writers.writePython2</literal> and corresponding
+            <literal>writers.writePython2Bin</literal> convenience
+            functions to create executable Python 2 scripts in the store
+            were removed in preparation of removal of the Python 2
+            interpreter. Scripts have to be converted to Python 3 for
+            use with <literal>writers.writePython3</literal> or
+            <literal>writers.writePyPy2</literal> needs to be used.
+          </para>
+        </listitem>
+      </itemizedlist>
+    </section>
+    <section xml:id="sec-release-22.05-service-changes">
+      <title>Service Changes</title>
+      <itemizedlist>
+        <listitem>
+          <para>
+            <literal>documentation.man</literal> has been refactored to
+            support choosing a man implementation other than GNU’s
+            <literal>man-db</literal>. For this,
+            <literal>documentation.man.manualPages</literal> has been
+            renamed to
+            <literal>documentation.man.man-db.manualPages</literal>. If
+            you want to use the new alternative man implementation
+            <literal>mandoc</literal>, add
+            <literal>documentation.man = { enable = true; man-db.enable = false; mandoc.enable = true; }</literal>
+            to your configuration.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <literal>services.bookstack.extraConfig</literal> option has
+            been replaced by
+            <literal>services.bookstack.config</literal> which
+            implements a
+            <link xlink:href="https://github.com/NixOS/rfcs/blob/master/rfcs/0042-config-option.md">settings-style</link>
+            configuration.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <literal>networking.interfaces.&lt;name&gt;.ipv4.routes</literal>
+            and
+            <literal>networking.interfaces.&lt;name&gt;.ipv6.routes</literal>
+            are no longer ignored when using networkd instead of the
+            default scripted network backend by setting
+            <literal>networking.useNetworkd</literal> to
+            <literal>true</literal>.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <literal>services.dokuwiki</literal> legacy options have
+            been removed. Please use
+            <literal>services.dokuwiki.sites</literal> instead.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <literal>services.thelounge.private</literal> was removed in
+            favor of <literal>services.thelounge.public</literal>, to
+            follow with upstream changes.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <literal>services.wordpress</literal> legacy options have
+            been removed. Please use
+            <literal>services.wordpress.sites</literal> instead.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <literal>users.users.&lt;name&gt;.isNormalUser</literal>
+            behavior has been altered. Normal users (with
+            <literal>isNormalUser = true</literal>) which have non-empty
+            <literal>subUidRanges</literal> or
+            <literal>subGidRanges</literal> set no longer have
+            additional implicit ranges allocated. To enable automatic
+            allocation back set
+            <literal>autoSubUidGidRange = true</literal>.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <literal>virtualisation.docker.daemon.settings</literal> now
+            uses
+            <link xlink:href="https://github.com/NixOS/rfcs/blob/master/rfcs/0042-config-option.md">RFC
+            0042</link> style settings, previous
+            <literal>/etc/docker/daemon.json</literal> configuration
+            will need to be altered.
+          </para>
+        </listitem>
+      </itemizedlist>
+    </section>
+    <section xml:id="sec-release-22.05-service-removals">
+      <title>Service Removals</title>
+      <itemizedlist>
+        <listitem>
+          <para>
+            <literal>services.bookstack.cacheDir</literal> option has
+            been removed, since the cache directory is now handled by
+            systemd.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <literal>services.kubernetes.addons.dashboard</literal> was
+            removed due to it being an outdated version.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <literal>services.mailpile</literal> and related
+            <literal>pkgs.mailpile</literal> have been removed due to
+            its reliance on python2.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <literal>services.moinmoin</literal> and related
+            <literal>pkgs.moinmoin</literal> have been removed, because
+            Python 2 is being retired from nixpkgs.
+          </para>
+        </listitem>
+      </itemizedlist>
+    </section>
+    <section xml:id="sec-release-22.05-package-removals">
+      <title>Package Removals</title>
+      <itemizedlist>
+        <listitem>
+          <para>
+            <literal>claws-mail-gtk2</literal>, representing Claws
+            Mail’s older release version three, was removed in order to
+            get rid of Python 2. Please switch to
+            <literal>claws-mail</literal>, which is Claws Mail’s latest
+            release based on GTK+3 and Python 3.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <literal>docbookrx</literal> was removed since it’s
+            unmaintained
+          </para>
+        </listitem>
+      </itemizedlist>
+    </section>
   </section>
   <section xml:id="sec-release-22.05-notable-changes">
     <title>Other Notable Changes</title>
