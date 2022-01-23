@@ -32,6 +32,13 @@ CORES = {
         "deep_clone": True,
         "leave_dot_git": True,
     },
+    "citra-canary": {
+        "repo": "citra",
+        "fetch_submodules": True,
+        "deep_clone": True,
+        "leave_dot_git": True,
+        "rev": "canary",
+    },
     "desmume": {"repo": "desmume"},
     "desmume2015": {"repo": "desmume2015"},
     "dolphin": {"repo": "dolphin"},
@@ -107,6 +114,7 @@ def get_repo_hash_fetchFromGitHub(
     deep_clone=False,
     fetch_submodules=False,
     leave_dot_git=False,
+    rev=None,
 ):
     extra_args = []
     if deep_clone:
@@ -115,6 +123,9 @@ def get_repo_hash_fetchFromGitHub(
         extra_args.append("--fetch-submodules")
     if leave_dot_git:
         extra_args.append("--leave-dot-git")
+    if rev:
+        extra_args.append("--rev")
+        extra_args.append(rev)
     result = subprocess.run(
         ["nix-prefetch-github", owner, repo, *extra_args],
         check=True,
