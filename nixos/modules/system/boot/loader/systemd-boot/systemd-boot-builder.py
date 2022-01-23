@@ -15,7 +15,7 @@ import re
 import datetime
 import glob
 import os.path
-from typing import NamedTuple, List, Optional
+from typing import NamedTuple, Optional
 
 class SystemIdentifier(NamedTuple):
     profile: Optional[str]
@@ -142,7 +142,7 @@ def mkdir_p(path: str) -> None:
             raise
 
 
-def get_generations(profile: Optional[str] = None) -> List[SystemIdentifier]:
+def get_generations(profile: Optional[str] = None) -> list[SystemIdentifier]:
     gen_list = subprocess.check_output([
         "@nix@/bin/nix-env",
         "--list-generations",
@@ -158,7 +158,7 @@ def get_generations(profile: Optional[str] = None) -> List[SystemIdentifier]:
     return configurations[-configurationLimit:]
 
 
-def get_specialisations(profile: Optional[str], generation: int, _: Optional[str]) -> List[SystemIdentifier]:
+def get_specialisations(profile: Optional[str], generation: int, _: Optional[str]) -> list[SystemIdentifier]:
     specialisations_dir = os.path.join(
             system_dir(profile, generation, None), "specialisation")
     if not os.path.exists(specialisations_dir):
@@ -166,7 +166,7 @@ def get_specialisations(profile: Optional[str], generation: int, _: Optional[str
     return [SystemIdentifier(profile, generation, spec) for spec in os.listdir(specialisations_dir)]
 
 
-def remove_old_entries(gens: List[SystemIdentifier]) -> None:
+def remove_old_entries(gens: list[SystemIdentifier]) -> None:
     rex_profile = re.compile("^@efiSysMountPoint@/loader/entries/nixos-(.*)-generation-.*\.conf$")
     rex_generation = re.compile("^@efiSysMountPoint@/loader/entries/nixos.*-generation-(.*)\.conf$")
     known_paths = []
@@ -189,7 +189,7 @@ def remove_old_entries(gens: List[SystemIdentifier]) -> None:
             os.unlink(path)
 
 
-def get_profiles() -> List[str]:
+def get_profiles() -> list[str]:
     if os.path.isdir("/nix/var/nix/profiles/system-profiles/"):
         return [x
             for x in os.listdir("/nix/var/nix/profiles/system-profiles/")
