@@ -8,6 +8,7 @@
 , libpng
 , libvorbis
 , SDL2
+, makeWrapper
 , lua5_2
 , glew
 , openssl
@@ -44,7 +45,7 @@ stdenv.mkDerivation {
       --replace "/bin/rm" "${coreutils}/bin/rm"
   '';
 
-  nativeBuildInputs = [ pkg-config openscad ];
+  nativeBuildInputs = [ pkg-config openscad makeWrapper ];
   buildInputs = [ coreutils portaudio libbsd libpng libvorbis SDL2 lua5_2 glew openssl picotts sox alsa-utils libopus ];
 
   postBuild = ''
@@ -57,6 +58,8 @@ stdenv.mkDerivation {
     cp -R share $out/share
     cp -R bin $out/bin
     cp snis_launcher $out/bin/
+    # without this, snis_client crashes on Wayland
+    wrapProgram $out/bin/snis_client --set SDL_VIDEODRIVER x11
     runHook postInstall
   '';
 
