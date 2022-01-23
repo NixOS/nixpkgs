@@ -30,14 +30,14 @@ def copy_if_not_exists(source: str, dest: str) -> None:
 
 def generation_dir(gen: SystemIdentifier) -> str:
     if gen.profile:
-        return "/nix/var/nix/profiles/system-profiles/%s-%d-link" % (gen.profile, gen.generation)
+        return f"/nix/var/nix/profiles/system-profiles/{gen.profile}-{gen.generation}-link"
     else:
-        return "/nix/var/nix/profiles/system-%d-link" % (gen.generation)
+        return f"/nix/var/nix/profiles/system-{gen.generation}-link"
 
 def system_dir(gen: SystemIdentifier) -> str:
     d = generation_dir(gen)
     if gen.specialisation:
-        return os.path.join(d, "specialisation", gen.specialisation)
+        return f"{d}/specialisation/{gen.specialisation}"
     else:
         return d
 
@@ -60,49 +60,45 @@ def generation_conf_filename(gen: SystemIdentifier) -> str:
 
 
 def write_loader_conf(gen: SystemIdentifier) -> None:
-    with open("@efiSysMountPoint@/loader/loader.conf.tmp", 'w') as f:
+    with open("@efiSysMountPoint@/loader/loader.conf.tmp", "w") as f:
         if "@timeout@" != "":
             f.write("timeout @timeout@\n")
-        f.write("default %s\n" % generation_conf_filename(gen))
+        f.write(f"default {generation_conf_filename(gen)}\n")
         if not @editor@:
-            f.write("editor 0\n");
-        f.write("console-mode @consoleMode@\n");
+            f.write("editor 0\n")
+        f.write("console-mode @consoleMode@\n")
     os.rename("@efiSysMountPoint@/loader/loader.conf.tmp", "@efiSysMountPoint@/loader/loader.conf")
 
 
 def profile_path(gen: SystemIdentifier, name: str) -> str:
-    return os.path.realpath("%s/%s" % (system_dir(gen), name))
+    return os.path.realpath(f"{system_dir(gen)}/{name}")
 
 
 def copy_from_profile(gen: SystemIdentifier, name: str, dry_run: bool = False) -> str:
     store_file_path = profile_path(gen, name)
     suffix = os.path.basename(store_file_path)
     store_dir = os.path.basename(os.path.dirname(store_file_path))
-    efi_file_path = "/efi/nixos/%s-%s.efi" % (store_dir, suffix)
+    efi_file_path = f"/efi/nixos/{store_dir}-{suffix}.efi"
     if not dry_run:
-        copy_if_not_exists(store_file_path, "@efiSysMountPoint@%s" % (efi_file_path))
+        copy_if_not_exists(store_file_path, f"@efiSysMountPoint@{efi_file_path}")
     return efi_file_path
 
 
 def describe_generation(generation_dir: str) -> str:
     try:
-        with open("%s/nixos-version" % generation_dir) as f:
+        with open(f"{generation_dir}/nixos-version") as f:
             nixos_version = f.read()
     except IOError:
         nixos_version = "Unknown"
 
-    kernel_dir = os.path.dirname(os.path.realpath("%s/kernel" % generation_dir))
-    module_dir = glob.glob("%s/lib/modules/*" % kernel_dir)[0]
+    kernel_dir = os.path.dirname(os.path.realpath(f"{generation_dir}/kernel"))
+    module_dir = glob.glob(fr"{kernel_dir}/lib/modules/*")[0]
     kernel_version = os.path.basename(module_dir)
 
     build_time = int(os.path.getctime(generation_dir))
-    build_date = datetime.datetime.fromtimestamp(build_time).strftime('%F')
+    build_date = datetime.datetime.fromtimestamp(build_time).strftime("%F")
 
-    description = "NixOS {}, Linux Kernel {}, Built on {}".format(
-        nixos_version, kernel_version, build_date
-    )
-
-    return description
+    return f"NixOS {nixos_version}, Linux Kernel {kernel_version}, Built on {build_date}"
 
 
 def write_entry(gen: SystemIdentifier, machine_id: str) -> None:
@@ -110,27 +106,26 @@ def write_entry(gen: SystemIdentifier, machine_id: str) -> None:
     initrd = copy_from_profile(gen, "initrd")
     try:
         append_initrd_secrets = profile_path(gen, "append-initrd-secrets")
-        subprocess.check_call([append_initrd_secrets, "@efiSysMountPoint@%s" % (initrd)])
+        subprocess.check_call([append_initrd_secrets, f"@efiSysMountPoint@{initrd}"])
     except FileNotFoundError:
         pass
-    entry_file = "@efiSysMountPoint@/loader/entries/%s" % (
-        generation_conf_filename(gen))
+    entry_file = f"@efiSysMountPoint@/loader/entries/{generation_conf_filename(gen)}"
     generation_dir = os.readlink(system_dir(gen))
-    tmp_path = "%s.tmp" % (entry_file)
-    kernel_params = "init=%s/init " % generation_dir
+    tmp_path = f"{entry_file}.tmp"
+    kernel_params = f"init={generation_dir}/init "
 
-    with open("%s/kernel-params" % (generation_dir)) as params_file:
+    with open(f"{generation_dir}/kernel-params") as params_file:
         kernel_params = kernel_params + params_file.read()
-    with open(tmp_path, 'w') as f:
-        f.write(BOOT_ENTRY.format(profile=" [" + gen.profile + "]" if gen.profile else "",
-                    specialisation=" (%s)" % gen.specialisation if gen.specialisation else "",
+    with open(tmp_path, "w") as f:
+        f.write(BOOT_ENTRY.format(profile=f" [{gen.profile}]" if gen.profile else "",
+                    specialisation=f" ({gen.specialisation})" if gen.specialisation else "",
                     generation=gen.generation,
                     kernel=kernel,
                     initrd=initrd,
                     kernel_params=kernel_params,
                     description=describe_generation(generation_dir)))
         if machine_id is not None:
-            f.write("machine-id %s\n" % machine_id)
+            f.write(f"machine-id {machine_id}\n")
     os.rename(tmp_path, entry_file)
 
 
@@ -147,10 +142,10 @@ def get_generations(profile: Optional[str] = None) -> list[SystemIdentifier]:
         "@nix@/bin/nix-env",
         "--list-generations",
         "-p",
-        "/nix/var/nix/profiles/%s" % ("system-profiles/" + profile if profile else "system"),
+        "/nix/var/nix/profiles/" + (f"system-profiles/{profile}" if profile else "system"),
         "--option", "build-users-group", ""],
         universal_newlines=True)
-    gen_lines = gen_list.split('\n')
+    gen_lines = gen_list.split("\n")
     gen_lines.pop()
 
     configurationLimit = @configurationLimit@
@@ -159,21 +154,20 @@ def get_generations(profile: Optional[str] = None) -> list[SystemIdentifier]:
 
 
 def get_specialisations(gen: SystemIdentifier) -> list[SystemIdentifier]:
-    specialisations_dir = os.path.join(
-            system_dir(gen), "specialisation")
+    specialisations_dir = f"{system_dir(gen)}/specialisation"
     if not os.path.exists(specialisations_dir):
         return []
     return [SystemIdentifier(gen.profile, gen.generation, spec) for spec in os.listdir(specialisations_dir)]
 
 
 def remove_old_entries(gens: list[SystemIdentifier]) -> None:
-    rex_profile = re.compile("^@efiSysMountPoint@/loader/entries/nixos-(.*)-generation-.*\.conf$")
-    rex_generation = re.compile("^@efiSysMountPoint@/loader/entries/nixos.*-generation-(.*)\.conf$")
+    rex_profile = re.compile(r"^@efiSysMountPoint@/loader/entries/nixos-(.*)-generation-.*\.conf$")
+    rex_generation = re.compile(r"^@efiSysMountPoint@/loader/entries/nixos.*-generation-(.*)\.conf$")
     known_paths = []
     for gen in gens:
         known_paths.append(copy_from_profile(gen, "kernel", True))
         known_paths.append(copy_from_profile(gen, "initrd", True))
-    for path in glob.iglob("@efiSysMountPoint@/loader/entries/nixos*-generation-[1-9]*.conf"):
+    for path in glob.iglob(r"@efiSysMountPoint@/loader/entries/nixos*-generation-[1-9]*.conf"):
         try:
             if rex_profile.match(path):
                 prof = rex_profile.sub(r"\1", path)
@@ -184,7 +178,7 @@ def remove_old_entries(gens: list[SystemIdentifier]) -> None:
                 os.unlink(path)
         except ValueError:
             pass
-    for path in glob.iglob("@efiSysMountPoint@/efi/nixos/*"):
+    for path in glob.iglob(r"@efiSysMountPoint@/efi/nixos/*"):
         if not path in known_paths and not os.path.isdir(path):
             os.unlink(path)
 
@@ -199,8 +193,8 @@ def get_profiles() -> list[str]:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description='Update NixOS-related systemd-boot files')
-    parser.add_argument('default_config', metavar='DEFAULT-CONFIG', help='The default NixOS config to boot')
+    parser = argparse.ArgumentParser(description="Update NixOS-related systemd-boot files")
+    parser.add_argument("default_config", metavar="DEFAULT-CONFIG", help="The default NixOS config to boot")
     args = parser.parse_args()
 
     try:
@@ -241,7 +235,7 @@ def main() -> None:
         sdboot_status = subprocess.check_output(["@systemd@/bin/bootctl", "--path=@efiSysMountPoint@", "status"], universal_newlines=True)
 
         # See status_binaries() in systemd bootctl.c for code which generates this
-        m = re.search("^\W+File:.*/EFI/(BOOT|systemd)/.*\.efi \(systemd-boot ([\d.]+[^)]*)\)$",
+        m = re.search(r"^\W+File:.*/EFI/(BOOT|systemd)/.*\.efi \(systemd-boot ([\d.]+[^)]*)\)$",
                       sdboot_status, re.IGNORECASE | re.MULTILINE)
 
         needs_install = False
@@ -251,9 +245,9 @@ def main() -> None:
             # Let systemd-boot attempt an installation if a previous one wasn't found
             needs_install = True
         else:
-            sdboot_version = f'({m.group(2)})'
+            sdboot_version = f"({m.group(2)})"
             if systemd_version != sdboot_version:
-                print("updating systemd-boot from %s to %s" % (sdboot_version, systemd_version))
+                print(f"updating systemd-boot from {sdboot_version} to {systemd_version}")
                 needs_install = True
 
         if needs_install:
@@ -275,20 +269,20 @@ def main() -> None:
                 write_loader_conf(gen)
         except OSError as e:
             profile = f"profile '{gen.profile}'" if gen.profile else "default profile"
-            print("ignoring {} in the list of boot entries because of the following error:\n{}".format(profile, e), file=sys.stderr)
+            print(f"ignoring {profile} in the list of boot entries because of the following error:", e, sep="\n", file=sys.stderr)
 
-    for root, _, files in os.walk('@efiSysMountPoint@/efi/nixos/.extra-files', topdown=False):
+    for root, _, files in os.walk("@efiSysMountPoint@/efi/nixos/.extra-files", topdown=False):
         relative_root = root.removeprefix("@efiSysMountPoint@/efi/nixos/.extra-files").removeprefix("/")
-        actual_root = os.path.join("@efiSysMountPoint@", relative_root)
+        actual_root = f"@efiSysMountPoint@/{relative_root}"
 
         for file in files:
-            actual_file = os.path.join(actual_root, file)
+            actual_file = f"{actual_root}/{file}"
 
             if os.path.exists(actual_file):
                 os.unlink(actual_file)
-            os.unlink(os.path.join(root, file))
+            os.unlink(f"{root}/{file}")
 
-        if not len(os.listdir(actual_root)):
+        if not os.listdir(actual_root):
             os.rmdir(actual_root)
         os.rmdir(root)
 
@@ -302,8 +296,8 @@ def main() -> None:
     # event sync the efi filesystem after each update.
     rc = libc.syncfs(os.open("@efiSysMountPoint@", os.O_RDONLY))
     if rc != 0:
-        print("could not sync @efiSysMountPoint@: {}".format(os.strerror(rc)), file=sys.stderr)
+        print("could not sync @efiSysMountPoint@:", os.strerror(rc), file=sys.stderr)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
