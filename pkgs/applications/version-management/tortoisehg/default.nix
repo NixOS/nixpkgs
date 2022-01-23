@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication rec {
     ];
     nativeBuildInputs = [ qt5.wrapQtAppsHook ];
 
-    doCheck = false; # tests fail with "thg: cannot connect to X server"
+    doCheck = true;
     postInstall = ''
       mkdir -p $out/share/doc/tortoisehg
       cp COPYING.txt $out/share/doc/tortoisehg/Copying.txt
@@ -29,8 +29,17 @@ python3Packages.buildPythonApplication rec {
     '';
 
     checkPhase = ''
-      echo "test: thg version"
-      $out/bin/thg version
+      export QT_QPA_PLATFORM=offscreen
+      echo "test: thg smoke test"
+      $out/bin/thg -h > help.txt &
+      sleep 1s
+      if grep "list of commands" help.txt; then
+        echo "thg help output was captured. Seems like package in a working state."
+        exit 0
+      else
+        echo "thg help output was not captured. Seems like package is broken."
+        exit 1
+      fi
     '';
 
     passthru.mercurial = tortoiseMercurial;
