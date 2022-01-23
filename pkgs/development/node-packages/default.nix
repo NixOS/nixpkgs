@@ -199,6 +199,19 @@ let
       '';
     };
 
+    manta = super.manta.override {
+      nativeBuildInputs = with pkgs; [ nodejs-12_x installShellFiles ];
+      postInstall = ''
+        # create completions, following upstream procedure https://github.com/joyent/node-manta/blob/v5.2.3/Makefile#L85-L91
+        completion_cmds=$(find ./bin -type f -printf "%f\n")
+
+        node ./lib/create_client.js
+        for cmd in $completion_cmds; do
+          installShellCompletion --cmd $cmd --bash <(./bin/$cmd --completion)
+        done
+      '';
+    };
+
     markdownlint-cli = super.markdownlint-cli.override {
       meta.mainProgram = "markdownlint";
     };
