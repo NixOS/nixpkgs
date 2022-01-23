@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 __nixpkgs_setup_set_original=$-
 set -eu
 set -o pipefail
