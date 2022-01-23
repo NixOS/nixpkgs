@@ -135,7 +135,7 @@
     "cloud" = ps: with ps; [ pyturbojpeg aiohttp-cors hass-nabucasa ];
     "cloudflare" = ps: with ps; [ pycfdns ];
     "cmus" = ps: with ps; [ ]; # missing inputs: pycmus
-    "co2signal" = ps: with ps; [ ]; # missing inputs: co2signal
+    "co2signal" = ps: with ps; [ co2signal ];
     "coinbase" = ps: with ps; [ ]; # missing inputs: coinbase
     "color_extractor" = ps: with ps; [ colorthief ];
     "comed_hourly_pricing" = ps: with ps; [ ];
@@ -1090,6 +1090,7 @@
     "climate"
     "cloud"
     "cloudflare"
+    "co2signal"
     "color_extractor"
     "comfoconnect"
     "command_line"
