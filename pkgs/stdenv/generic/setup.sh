@@ -1,3 +1,4 @@
+__nixpkgs_setup_set_original=$-
 set -eu
 set -o pipefail
 shopt -s inherit_errexit
@@ -1361,5 +1362,7 @@ runHook userHook
 
 dumpVars
 
-# Disable nounset for nix-shell.
-set +u
+# Restore the original options for nix-shell
+[[ $__nixpkgs_setup_set_original == *e* ]] || set +e
+[[ $__nixpkgs_setup_set_original == *u* ]] || set +u
+unset -v __nixpkgs_setup_set_original
