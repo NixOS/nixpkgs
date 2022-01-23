@@ -30180,6 +30180,10 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) IOKit Security AppKit;
   };
 
+  snarkos = callPackage ../applications/blockchains/snarkos {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   tessera = callPackage ../applications/blockchains/tessera { };
 
   vertcoin  = libsForQt514.callPackage ../applications/blockchains/vertcoin {
