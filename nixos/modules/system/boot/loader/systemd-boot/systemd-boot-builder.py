@@ -15,9 +15,12 @@ import re
 import datetime
 import glob
 import os.path
-from typing import Tuple, List, Optional
+from typing import NamedTuple, List, Optional
 
-SystemIdentifier = Tuple[Optional[str], int, Optional[str]]
+class SystemIdentifier(NamedTuple):
+    profile: Optional[str]
+    generation: int
+    specialisation: Optional[str]
 
 
 def copy_if_not_exists(source: str, dest: str) -> None:
@@ -161,7 +164,14 @@ def get_generations(profile: Optional[str] = None) -> List[SystemIdentifier]:
     gen_lines.pop()
 
     configurationLimit = @configurationLimit@
-    configurations: List[SystemIdentifier] = [ (profile, int(line.split()[0]), None) for line in gen_lines ]
+    configurations = [
+        SystemIdentifier(
+            profile=profile,
+            generation=int(line.split()[0]),
+            specialisation=None
+        )
+        for line in gen_lines
+    ]
     return configurations[-configurationLimit:]
 
 
@@ -170,7 +180,7 @@ def get_specialisations(profile: Optional[str], generation: int, _: Optional[str
             system_dir(profile, generation, None), "specialisation")
     if not os.path.exists(specialisations_dir):
         return []
-    return [(profile, generation, spec) for spec in os.listdir(specialisations_dir)]
+    return [SystemIdentifier(profile, generation, spec) for spec in os.listdir(specialisations_dir)]
 
 
 def remove_old_entries(gens: List[SystemIdentifier]) -> None:
@@ -281,7 +291,8 @@ def main() -> None:
             if os.readlink(system_dir(*gen)) == args.default_config:
                 write_loader_conf(*gen)
         except OSError as e:
-            print("ignoring generation '{}' in the list of boot entries because of the following error:\n{}".format(*gen, e), file=sys.stderr)
+            profile = f"profile '{gen.profile}'" if gen.profile else "default profile"
+            print("ignoring {} in the list of boot entries because of the following error:\n{}".format(profile, e), file=sys.stderr)
 
     memtest_entry_file = "@efiSysMountPoint@/loader/entries/memtest86.conf"
     if os.path.exists(memtest_entry_file):
