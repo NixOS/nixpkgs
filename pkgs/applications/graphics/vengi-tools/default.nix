@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , fetchurl
+, writeText
 
 , cmake
 , pkg-config
@@ -18,6 +19,7 @@
 , libuuid
 , wayland-protocols
 , Carbon
+, CoreServices
 # optionals
 , opencl-headers
 , OpenCL
@@ -39,14 +41,32 @@ let cmake3_22 = cmake.overrideAttrs (old: {
 
 in stdenv.mkDerivation rec {
   pname = "vengi-tools";
-  version = "0.0.14";
+  version = "0.0.17";
 
   src = fetchFromGitHub {
     owner = "mgerhardy";
     repo = "engine";
     rev = "v${version}";
-    sha256 = "sha256-v82hKskTSwM0NDgLVHpHZNRQW6tWug4pPIt91MrUwUo=";
+    sha256 = "sha256-h+R9L0BBD3NSFWUh43g4V2LBcNyqVInBeJiOLY03nRk=";
   };
+
+  # Patch from the project's author for fixing an issue with AnimationShaders.h
+  # not being included when turning off some components
+  patches = [(writeText "vengi-tools-fix-build.patch" ''
+    diff --git a/src/modules/voxelworldrender/CMakeLists.txt b/src/modules/voxelworldrender/CMakeLists.txt
+    index aebe5f97b..903e62b37 100644
+    --- a/src/modules/voxelworldrender/CMakeLists.txt
+    +++ b/src/modules/voxelworldrender/CMakeLists.txt
+    @@ -27,7 +27,7 @@ set(FILES
+            voxel/models/plants/3.qb
+            voxel/models/plants/4.qb
+     )
+    -engine_add_module(TARGET ''${LIB} SRCS ''${SRCS} ''${SRCS_SHADERS} FILES ''${FILES} DEPENDENCIES frontend voxelrender)
+    +engine_add_module(TARGET ''${LIB} SRCS ''${SRCS} ''${SRCS_SHADERS} FILES ''${FILES} DEPENDENCIES animation frontend voxelrender)
+     generate_shaders(''${LIB} world water postprocess)
+
+     set(TEST_SRCS
+  '')];
 
   nativeBuildInputs = [
     cmake3_22
@@ -69,7 +89,7 @@ in stdenv.mkDerivation rec {
     #libpqxx
     #mosquitto
   ] ++ lib.optional stdenv.isLinux wayland-protocols
-    ++ lib.optionals stdenv.isDarwin [ Carbon OpenCL ]
+    ++ lib.optionals stdenv.isDarwin [ Carbon CoreServices OpenCL ]
     ++ lib.optional (!stdenv.isDarwin) opencl-headers;
 
   cmakeFlags = [
@@ -82,7 +102,7 @@ in stdenv.mkDerivation rec {
     "-DGAMES=OFF"
     "-DMAPVIEW=OFF"
     "-DAIDEBUG=OFF"
-  ];
+  ] ++ lib.optional stdenv.isDarwin "-DCORESERVICES_LIB=${CoreServices}";
 
   # Set the data directory for each executable. We cannot set it at build time
   # with the PKGDATADIR cmake variable because each executable needs a specific
@@ -115,5 +135,7 @@ in stdenv.mkDerivation rec {
     license = [ licenses.mit licenses.cc-by-sa-30 ];
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
+    # Requires SDK 10.14 https://github.com/NixOS/nixpkgs/issues/101229
+    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }
