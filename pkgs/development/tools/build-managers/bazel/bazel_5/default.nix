@@ -419,7 +419,7 @@ stdenv.mkDerivation rec {
         substituteInPlace "$path" \
           --replace "/usr/bin/env python2" ${python27}/bin/python \
           --replace "/usr/bin/env python3" ${python3}/bin/python \
-          --replace /usr/bin/env ${coreutils}/bin/env 
+          --replace /usr/bin/env ${coreutils}/bin/env
       done
 
       # bazel test runner include references to /bin/bash
@@ -458,7 +458,6 @@ stdenv.mkDerivation rec {
       build --sandbox_debug
       EOF
 
-      
       cat >> tools/jdk/BUILD.tools <<EOF
       load("@bazel_tools//tools/jdk:default_java_toolchain.bzl", "default_java_toolchain", "NONPREBUILT_TOOLCHAIN_CONFIGURATION")
       default_java_toolchain(
