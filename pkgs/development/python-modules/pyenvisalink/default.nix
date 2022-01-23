@@ -10,7 +10,9 @@
 buildPythonPackage rec {
   pname = "pyenvisalink";
   version = "4.3";
-  disabled = pythonOlder "3.5";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -25,7 +27,10 @@ buildPythonPackage rec {
 
   # Tests require an Envisalink device
   doCheck = false;
-  pythonImportsCheck = [ "pyenvisalink" ];
+
+  pythonImportsCheck = [
+    "pyenvisalink"
+  ];
 
   meta = with lib; {
     description = "Python interface for Envisalink 2DS/3 Alarm API";
