@@ -30,6 +30,8 @@ lib.makeScope newScope (self:
 
     jsonschema = callPackage ../development/nim-packages/jsonschema { };
 
+    jsony = callPackage ../development/nim-packages/jsony { };
+
     karax = callPackage ../development/nim-packages/karax { };
 
     lscolors = callPackage ../development/nim-packages/lscolors { };
