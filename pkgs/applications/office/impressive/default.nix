@@ -1,9 +1,9 @@
-{ fetchurl, stdenv, python2, makeWrapper, lib
+{ fetchurl, stdenv, python3, makeWrapper, lib
 , SDL, ghostscript, pdftk, dejavu_fonts }:
 
 let
-  version = "0.12.1";
-  pythonEnv = python2.withPackages (ps: with ps; [pyopengl pygame pillow]);
+  version = "0.13.0-beta2";
+  pythonEnv = python3.withPackages (ps: with ps; [pyopengl pygame pillow]);
 in stdenv.mkDerivation {
     # This project was formerly known as KeyJNote.
     # See http://keyj.emphy.de/apple-lawsuit/ for details.
@@ -13,7 +13,7 @@ in stdenv.mkDerivation {
 
     src = fetchurl {
       url = "mirror://sourceforge/impressive/Impressive-${version}.tar.gz";
-      sha256 = "1r7ihv41awnlnlry1kymb8fka053wdhzibfwcarn78rr3vs338vl";
+      sha256 = "042a84yl1pfk7dmac4rgf5dlgbdvhv3i5zq5fqayg2yb278lb91q";
     };
 
     nativeBuildInputs = [ makeWrapper ];
@@ -31,7 +31,7 @@ in stdenv.mkDerivation {
 
     installPhase = ''
       mkdir -p "$out/bin" "$out/share/doc/impressive" "$out/share/man/man1"
-      mv impressive.py "$out/bin/impressive"
+      install -m 0755 impressive.py "$out/bin/impressive"
       mv impressive.1 "$out/share/man/man1"
       mv changelog.txt impressive.html license.txt "$out/share/doc/impressive"
 
