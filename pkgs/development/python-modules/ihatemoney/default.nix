@@ -95,15 +95,10 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
-    # upstream performed the update without needing to patch the code
-    # the original patch does not apply, sadly
-    # https://github.com/spiral-project/ihatemoney/pull/912
-    substituteInPlace setup.cfg --replace "Flask-WTF>=0.14.3,<1" "Flask-WTF>=0.14.3,<2"
-    # https://github.com/spiral-project/ihatemoney/pull/986
-    substituteInPlace setup.cfg --replace "SQLAlchemy>=1.3.0,<1.4" "SQLAlchemy>=1.3.0,<1.5"
-    # enabled by the patch above, remove on next release
-    substituteInPlace setup.cfg --replace "WTForms>=2.3.1,<2.4" "WTForms"
-
+    substituteInPlace setup.cfg \
+      --replace "Flask-WTF>=0.14.3,<1" "Flask-WTF>=0.14.3,<2" \
+      --replace "SQLAlchemy>=1.3.0,<1.4" "SQLAlchemy>=1.3.0,<1.5" \
+      --replace "WTForms>=2.3.1,<2.4" "WTForms"
   '';
 
   checkInputs = [
