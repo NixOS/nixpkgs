@@ -5,7 +5,11 @@ let
   # even though the platforms aren't the same. mandoc can't be cross compiled
   # (easily) because of its configurePhase, but we want to allow “native” cross
   # such as pkgsLLVM and pkgsStatic.
-  executableCross = stdenv.hostPlatform.isCompatible stdenv.buildPlatform;
+  # For a lack of a better predicate at the moment, we compare the platforms'
+  # system tuples. See also:
+  # * https://github.com/NixOS/nixpkgs/pull/140271
+  # * https://github.com/NixOS/nixpkgs/issues/61414
+  executableCross = stdenv.buildPlatform.system == stdenv.hostPlatform.system;
 
   # Name of an UTF-8 locale _always_ present at runtime, used for UTF-8 support
   # (locale set by the user may differ). This would usually be C.UTF-8, but
