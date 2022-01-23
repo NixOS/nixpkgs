@@ -664,8 +664,8 @@ let
         mktplcRef = {
           name = "elm-ls-vscode";
           publisher = "Elmtooling";
-          version = "2.0.1";
-          sha256 = "06x5ld2r1hzns2s052mvhmfiaawjzcn0jf5lkfprhmrkxnmfdd43";
+          version = "2.4.0";
+          sha256 = "sha256-5hYlkx8hlwS8iWTlfupX8XjTLAY/KUi0bd3jf/tm92o=";
         };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/Elmtooling.elm-ls-vscode/changelog";
