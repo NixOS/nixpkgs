@@ -169,12 +169,33 @@ in
         off if you want to configure it manually.
       '';
     };
+
+    prosody.withOwnerAllowKickPatch = mkOption {
+      type = bool;
+      default = false;
+      description = ''
+       Patch prosody with muc_owner_allow_kick.patch. This patch will allow MUC owners to kick each other.
+      '';
+    };
+
+    prosody.allowners_muc = mkOption {
+      type = bool;
+      default = false;
+      description = ''
+        Add module allowners, any user in chat is able to
+        kick other. Usefull in jitsi-meet to kick ghosts.
+      '';
+    };
+
   };
 
   config = mkIf cfg.enable {
     services.prosody = mkIf cfg.prosody.enable {
       enable = mkDefault true;
       xmppComplianceSuite = mkDefault false;
+      package = mkIf cfg.prosody.withOwnerAllowKickPatch (
+        pkgs.prosody.override { withOwnerAllowKickPatch = true ;    }
+         );
       modules = {
         admin_adhoc = mkDefault false;
         bosh = mkDefault true;
@@ -189,6 +210,7 @@ in
         {
           domain = "conference.${cfg.hostName}";
           name = "Jitsi Meet MUC";
+          allowners_muc = cfg.prosody.allowners_muc;
           roomLocking = false;
           roomDefaultPublicJids = true;
           extraConfig = ''
