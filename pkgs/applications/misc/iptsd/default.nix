@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
       --replace "install_dir: rulesdir" "install_dir: datadir" \
   '';
   mesonFlags = [
-    "-Dsystemd=true"
+    "-Dservice_manager=systemd"
     "-Dsample_config=false"
     "-Ddebug_tool=false"
   ];

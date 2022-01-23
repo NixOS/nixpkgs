@@ -515,6 +515,8 @@
   };
   algorith = {
     email = "dries_van_daele@telenet.be";
+    github = "DriesVanDaele";
+    githubId = 1141488;
     name = "Dries Van Daele";
   };
   alibabzo = {

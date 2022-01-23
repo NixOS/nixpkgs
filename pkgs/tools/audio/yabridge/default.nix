@@ -105,11 +105,7 @@ in multiStdenv.mkDerivation rec {
     "-Dwith-bitbridge=true"
 
     # Requires CMake and is unnecessary
-    "-Dtomlplusplus:GENERATE_CMAKE_CONFIG=disabled"
-
-    # tomlplusplus examples and tests don't build with winegcc
-    "-Dtomlplusplus:BUILD_EXAMPLES=disabled"
-    "-Dtomlplusplus:BUILD_TESTS=disabled"
+    "-Dtomlplusplus:generate_cmake_config=false"
   ];
 
   installPhase = ''
