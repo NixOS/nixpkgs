@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "stups-pierone";
-  version = "1.1.45";
+  version = "1.1.49";
   disabled = !isPy3k;
 
   src = fetchFromGitHub {
     owner = "zalando-stups";
     repo = "pierone-cli";
     rev = version;
-    sha256 = "1ggfizw27wpcagbbk15xpfrhq6b250cx4278b5d7y8s438g128cs";
+    sha256 = "1kb1lpnxbcq821mx75vzapndvxfvsdrplyhsqjq4vdhyqrx2dn3q";
   };
 
   propagatedBuildInputs = [

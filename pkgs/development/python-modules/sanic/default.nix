@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "sanic";
-  version = "21.9.3";
+  version = "21.12.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     owner = "sanic-org";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0m18jdw1mvf7jhpnrxhm96p24pxvv0h9m71a8c7sqqkwnnpa3p5i";
+    sha256 = "0jyl23q7b7fyqzan97qflkqcvmfpzbxbzv0qgygxasrzh80zx67g";
   };
 
   postPatch = ''

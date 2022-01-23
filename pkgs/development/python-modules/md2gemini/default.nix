@@ -3,7 +3,7 @@
 
 buildPythonPackage rec {
   pname = "md2gemini";
-  version = "1.8.1";
+  version = "1.9.0";
 
   propagatedBuildInputs = [ mistune_2_0 cjkwrap wcwidth ];
   checkInputs = [ pytestCheckHook ];
@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0mfa0f0m762168fbsxjr1cx9yhj82dr8z1d28jl6hj9bkqnvvwiy";
+    sha256 = "775cee2be36aa0f4b7ea2861f2ac7d80e113f78b40a58f92192b6c73f6c84e75";
   };
 
   meta = with lib; {

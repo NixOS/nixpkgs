@@ -8,7 +8,7 @@
 , python
 , catch
 , numpy
-, pytest
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -49,16 +49,18 @@ buildPythonPackage rec {
   checkInputs = [
     catch
     numpy
-    pytest
+    pytestCheckHook
   ];
 
-  checkPhase = ''
-    runHook preCheck
-
-    make check
-
-    runHook postCheck
-  '';
+  disabledTestPaths = [
+    # require dependencies not available in nixpkgs
+    "tests/test_embed/test_trampoline.py"
+    "tests/test_embed/test_interpreter.py"
+    # numpy changed __repr__ output of numpy dtypes
+    "tests/test_numpy_dtypes.py"
+    # no need to test internal packaging
+    "tests/extra_python_package/test_files.py"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/pybind/pybind11";

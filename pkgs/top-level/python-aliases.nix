@@ -33,13 +33,16 @@ in
   ### Deprecated aliases - for backward compatibility
 
 mapAliases ({
+  anyjson = throw "anyjson has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2022-01-18
   blockdiagcontrib-cisco = throw "blockdiagcontrib-cisco is not compatible with blockdiag 2.0.0 and has been removed."; # added 2020-11-29
   bt_proximity = bt-proximity; # added 2021-07-02
   bugseverywhere = throw "bugseverywhere has been removed: Abandoned by upstream."; # added 2019-11-27
+  carrot = throw "carrot has been removed, as its development was discontinued in 2012"; # added 2022-01-18
   class-registry = phx-class-registry; # added 2021-10-05
   ConfigArgParse = configargparse; # added 2021-03-18
   cozy = throw "cozy was removed because it was not actually https://pypi.org/project/Cozy/."; # added 2022-01-14
   dateutil = python-dateutil; # added 2021-07-03
+  demjson = throw "demjson has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2022-01-18
   detox = throw "detox is no longer maintained, and was broken since may 2019"; # added 2020-07-04
   dftfit = throw "dftfit dependency lammps-cython no longer builds"; # added 2021-07-04
   diff_cover = diff-cover; # added 2021-07-02
@@ -60,6 +63,7 @@ mapAliases ({
   grpc_google_iam_v1 = grpc-google-iam-v1; # added 2021-08-21
   HAP-python = hap-python; # added 2021-06-01
   hbmqtt = throw "hbmqtt was removed because it is no longer maintained"; # added 2021-11-07
+  hdlparse = throw "hdlparse has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2022-01-18
   IMAPClient = imapclient; # added 2021-10-28
   jupyter_client = jupyter-client; # added 2021-10-15
   Keras = keras; # added 2021-11-25
@@ -72,6 +76,7 @@ mapAliases ({
   prometheus_client = prometheus-client; # added 2021-06-10
   prompt_toolkit = prompt-toolkit; # added 2021-07-22
   pur = throw "pur has been renamed to pkgs.pur"; # added 2021-11-08
+  pycallgraph = throw "pycallgraph has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2022-01-18
   pylibgen = throw "pylibgen is unmaintained upstreamed, and removed from nixpkgs"; # added 2020-06-20
   pymssql = throw "pymssql has been abandoned upstream."; # added 2020-05-04
   pysmart-smartx = pysmart; # added 2021-10-22

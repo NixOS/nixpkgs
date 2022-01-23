@@ -18,6 +18,11 @@ buildPythonPackage rec {
     sha256 = "ef3a931fc1f1db74edf8660e475b9295e0904ee922030ef0e45b0c73f4be65ae";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace 'typing_extensions>=3.7.4.2,<4.0.0.0' 'typing_extensions'
+  '';
+
   propagatedBuildInputs = [
     six
     typing-extensions

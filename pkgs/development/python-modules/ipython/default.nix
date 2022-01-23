@@ -9,6 +9,7 @@
 , nose
 , pygments
 # Runtime dependencies
+, black
 , jedi
 , decorator
 , matplotlib-inline
@@ -18,16 +19,17 @@
 , pexpect
 , appnope
 , backcall
+, stack-data
 }:
 
 buildPythonPackage rec {
   pname = "ipython";
-  version = "7.30.1";
+  version = "8.0.1";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cb6aef731bf708a7727ab6cde8df87f0281b1427d41e65d62d4b68934fa54e97";
+    sha256 = "0x19sj4dlq7r4p1mqnpx9245r8dwvpjwd8n34snfm37a452lsmmb";
   };
 
   prePatch = lib.optionalString stdenv.isDarwin ''
@@ -39,10 +41,12 @@ buildPythonPackage rec {
   checkInputs = [ nose pygments ];
 
   propagatedBuildInputs = [
+    black
     jedi
     decorator
     matplotlib-inline
     pickleshare
+    stack-data
     traitlets
     prompt-toolkit
     pygments

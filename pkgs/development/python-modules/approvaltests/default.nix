@@ -1,7 +1,7 @@
 { lib, buildPythonPackage, fetchFromGitHub, pyperclip }:
 
 buildPythonPackage rec {
-  version = "0.2.6";
+  version = "3.3.2";
   pname = "approvaltests";
 
   # no tests included in PyPI tarball
@@ -9,7 +9,7 @@ buildPythonPackage rec {
     owner = "approvals";
     repo = "ApprovalTests.Python";
     rev = version;
-    sha256 = "1k1bj8q1qm89a8xm4az6qk4qswwmgxw5jpdjcxmf93zh5hrcy9h9";
+    sha256 = "15blwjzd6nwh0kzxa9xxscxdn0vqwb1bax8d46wk01dcywdyd6ni";
   };
 
   propagatedBuildInputs = [ pyperclip ];

@@ -7,16 +7,22 @@
 
 buildPythonPackage rec {
   pname = "sanic-routing";
-  version = "0.7.2";
+  version = "21.12.0";
 
   src = fetchFromGitHub {
     owner = "sanic-org";
     repo = "sanic-routing";
     rev = "v${version}";
-    hash = "sha256-MN6A8CtDVxj34eehr3UIwCT09VOfcruVX+/iImr1MgY=";
+    hash = "sha256-IN+keJ5OI++p33/FgW5Xo+Pk09VuR7EASDF7G6eWvM4=";
   };
 
   checkInputs = [ pytestCheckHook pytest-asyncio ];
+
+  disabledTests = [
+    # sanic_routing/route.py:333: DeprecationWarning: Use of 'number' as a path parameter type is deprected, and will be removed in Sanic v21.12. Instead, use <number:float>.
+    "test_casting"
+  ];
+
   pythonImportsCheck = [ "sanic_routing" ];
 
   meta = with lib; {

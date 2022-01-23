@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, hypothesis, lark-parser, libcst, black, parso, pytestCheckHook, pytest-cov, pytest-xdist }:
+{ lib, buildPythonPackage, fetchPypi, hypothesis, lark, libcst, black, parso, pytestCheckHook, pytest-cov, pytest-xdist }:
 
 buildPythonPackage rec {
   pname = "hypothesmith";
@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "0fb7b3fd03d76eddd4474b0561e1c2662457593a74cc300fd27e5409cd4d7922";
   };
 
-  propagatedBuildInputs = [ hypothesis lark-parser libcst ];
+  propagatedBuildInputs = [ hypothesis lark libcst ];
 
   checkInputs = [ black parso pytestCheckHook pytest-cov pytest-xdist ];
 

@@ -17,13 +17,13 @@ let
 in
 buildPythonPackage rec {
   pname = "kaldi-active-grammar";
-  version = "2.1.0";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "daanzu";
     repo = pname;
     rev = "v${version}";
-    sha256 = "ArbwduoH7mMmIjlFfYAFvcpR39rrkVUJhYEyQzZqsbY=";
+    sha256 = "0lilk6yjzcy31avy2z36bl9lr60gzwhmyqwqn8akq11qc3mbffsk";
   };
 
   KALDI_BRANCH = "foo";

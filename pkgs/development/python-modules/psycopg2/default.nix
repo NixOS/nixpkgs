@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "psycopg2";
-  version = "2.9.2";
+  version = "2.9.3";
 
   # Extension modules don't work well with PyPy. Use psycopg2cffi instead.
   # c.f. https://github.com/NixOS/nixpkgs/pull/104151#issuecomment-729750892
@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a84da9fa891848e0270e8e04dcca073bc9046441eeb47069f5c0e36783debbea";
+    sha256 = "8e841d1bf3434da985cc5ef13e6f75c8981ced601fd70cc6bf33351b91562981";
   };
 
   nativeBuildInputs = [

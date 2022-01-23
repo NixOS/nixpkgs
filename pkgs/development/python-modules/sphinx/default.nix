@@ -29,14 +29,14 @@
 
 buildPythonPackage rec {
   pname = "sphinx";
-  version = "4.3.1";
+  version = "4.3.2";
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "sphinx-doc";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-8Yj6cPZFG8ycbbZtMR+fsIAOX0brxroi6nYjP+WhnxA=";
+    sha256 = "sha256-ze6+iGGWSDljb8SPc1Z9UcPfUrleDTeaol5ZDGj1iYg=";
     extraPostFetch = ''
       cd $out
       mv tests/roots/test-images/testimäge.png \

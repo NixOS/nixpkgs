@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "pytest-localserver";
-  version = "0.5.1";
+  version = "0.5.1.post0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ef6f04193dc0f7e8df5b27b3a8834318fa12eaf025436d2a99afff1b73cde761";
+    sha256 = "5ec7f8e6534cf03887af2cb59e577f169ac0e8b2fd2c3e3409280035f386d407";
   };
 
   propagatedBuildInputs = [

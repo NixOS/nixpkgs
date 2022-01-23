@@ -21,7 +21,7 @@ let
     , extraBuildInputs ? [ ]
     }: buildPythonPackage rec {
       inherit pname;
-      version = "1.0.0";
+      version = "1.1.0";
       format = "pyproject";
 
       outputs = [ "out" ] ++ lib.optional (pname == "wasmer") "testsout";
@@ -30,7 +30,7 @@ let
         owner = "wasmerio";
         repo = "wasmer-python";
         rev = version;
-        hash = "sha256-I1GfjLaPYMIHKh2m/5IQepUsJNiVUEJg49wyuuzUYtY=";
+        hash = "sha256-nOeOhQ1XY+9qmLGURrI5xbgBUgWe5XRpV38f73kKX2s=";
       };
 
       cargoDeps = rustPlatform.fetchCargoTarball {

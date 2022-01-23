@@ -52,6 +52,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  pytestFlagsArray = [
+    "--asyncio-mode=auto"
+  ];
+
   postPatch = ''
     substituteInPlace setup.py \
       --replace "pytest-runner" ""

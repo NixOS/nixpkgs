@@ -14,12 +14,12 @@
 
 buildPythonPackage rec {
   pname = "qiling";
-  version = "1.4.0";
+  version = "1.4.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-xUoNHMyGN0G2itVcKLsk+7QKxZdguzyh6OZCqCHNB4Y=";
+    sha256 = "e72dc5856cbda975f962ddf063063a32bd6c3b825f75e0795e94ba6840a7d45f";
   };
 
   propagatedBuildInputs = [
