@@ -368,6 +368,7 @@ mapAliases ({
   google-music-scripts = throw "google-music-scripts has been removed because Google Play Music was discontinued"; # added 2021-03-07
   google-musicmanager = throw "google-musicmanager has been removed because Google Play Music was discontinued"; # added 2021-03-07
   googleAuthenticator = google-authenticator; # added 2016-10-16
+  googleearth = throw "the non-pro version of Google Earth was removed because it was discontinued and downloading it isn't possible anymore"; # added 2022-01-22
   grantlee5 = libsForQt5.grantlee;  # added 2015-12-19
   graalvm8 = throw "graalvm8-ce has been removed by upstream."; # added 2021-10-19
   graalvm8-ce = throw "graalvm8-ce has been removed by upstream."; # added 2021-10-19
@@ -480,6 +481,7 @@ mapAliases ({
   libgnome_keyring3 = libgnome-keyring3; # added 2018-02-25
   libgpgerror = libgpg-error; # added 2021-09-04
   libgumbo = gumbo; # added 2018-01-21
+  libgroove = throw "libgroove has been removed, because it depends on an outdated and insecure version of ffmpeg"; # added 2022-01-21
   libGL_driver = mesa.drivers; # added 2019-05-28
   libintlOrEmpty = lib.optional (!stdenv.isLinux || stdenv.hostPlatform.libc != "glibc") gettext; # added 2018-03-14
   libjpeg_drop = libjpeg_original; # added 2020-06-05
