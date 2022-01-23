@@ -21016,6 +21016,12 @@ with pkgs;
     buildGoModule = buildGo116Module;
   };
 
+  promtail = grafana-loki.overrideAttrs (o: {
+    pname = "promtail";
+    subPackages = ["clients/cmd/promtail"];
+    CGO_ENABLED = 1;
+  });
+
   grafana_reporter = callPackage ../servers/monitoring/grafana-reporter { };
 
   grafana-image-renderer = callPackage ../servers/monitoring/grafana-image-renderer { };
