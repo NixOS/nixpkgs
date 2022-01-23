@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchurl
 , writeText
 
 , cmake
@@ -28,18 +27,7 @@
 , nixosTests
 }:
 
-# cmake 3.21 inserts invalid `ldd` and `-Wl,--no-as-needed` calls, apparently
-# related to
-# https://cmake.org/cmake/help/v3.21/prop_tgt/LINK_WHAT_YOU_USE.html
-let cmake3_22 = cmake.overrideAttrs (old: {
-  version = "3.22.0";
-  src = fetchurl {
-    url = "https://cmake.org/files/v3.22/cmake-3.22.0.tar.gz";
-    sha256 = "sha256-mYx7o0d40t/bPfimlUaeJLEeK/oh++QbNho/ReHJNF4=";
-  };
-});
-
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "vengi-tools";
   version = "0.0.17";
 
@@ -69,7 +57,7 @@ in stdenv.mkDerivation rec {
   '')];
 
   nativeBuildInputs = [
-    cmake3_22
+    cmake
     pkg-config
     ninja
     python3
