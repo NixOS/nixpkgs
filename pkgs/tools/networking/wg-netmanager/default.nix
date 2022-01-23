@@ -2,17 +2,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wg-netmanager";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "gin66";
     repo = "wg_netmanager";
     rev = "wg_netmanager-v${version}";
-    sha256 = "4tWJJLSHBDUofnkOWa89P1Ga9jKWS3hn+LnfAnnnxtw=";
+    sha256 = "AAtSSBz2zGLIEpcEMbe1mfYZikiaYEI+6KeSL5n54PE=";
   };
 
   # related to the Cargo.lock file
-  cargoSha256 = "NN1dKESyPPLAUgSt8KtcaOEhkyaw0GhlgCmNh28Ikew=";
+  cargoSha256 = "17k83QkQDq5uRCRADRLD2Q7pv7yES20lpms/N/UK+BM=";
 
   buildInputs = lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
 
