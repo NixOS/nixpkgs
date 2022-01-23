@@ -63,6 +63,7 @@ buoto/gotests-vim
 camspiers/lens.vim
 camspiers/snap
 carlitux/deoplete-ternjs
+catppuccin/nvim as catppuccin-nvim
 ccarpita/rtorrent-syntax-file
 cespare/vim-toml
 chaoren/vim-wordmotion
@@ -617,7 +618,6 @@ PeterRincker/vim-argumentative
 petRUShka/vim-opencl
 phaazon/hop.nvim
 phanviet/vim-monokai-pro
-plasticboy/vim-markdown
 Pocco81/TrueZen.nvim
 ponko2/deoplete-fish
 posva/vim-vue
@@ -629,6 +629,7 @@ prabirshrestha/vim-lsp
 preservim/nerdcommenter
 preservim/nerdtree
 preservim/tagbar
+preservim/vim-markdown
 preservim/vim-pencil
 preservim/vim-wordy
 preservim/vimux
