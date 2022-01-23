@@ -1,5 +1,6 @@
 { stdenv, fetchurl, lib, libidn, openssl, makeWrapper, fetchhg
 , lua
+, jitsi-meet-prosody
 , nixosTests
 , withLibevent ? true
 , withDBI ? true
@@ -7,6 +8,7 @@
 , withExtraLibs ? [ ]
 , withExtraLuaPackages ? _: [ ]
 , withOnlyInstalledCommunityModules ? [ ]
+, withOwnerAllowKickPatch ? false
 , withCommunityModules ? [ ] }:
 
 with lib;
@@ -83,6 +85,9 @@ stdenv.mkDerivation rec {
       wrapProgram $out/bin/prosody-migrator \
         --prefix LUA_PATH ';' "$luaEnvPath" \
         --prefix LUA_CPATH ';' "$luaEnvCPath"
+      ${lib.optionalString withOwnerAllowKickPatch ''
+        patch $out/lib/prosody/modules/muc/muc.lib.lua ${jitsi-meet-prosody}/share/prosody-plugins/muc_owner_allow_kick.patch
+        ''}
     '';
 
   passthru = {
