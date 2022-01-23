@@ -42,7 +42,6 @@ rec {
 
   # Generate convenience wrappers for running the test driver
   # has vlans, vms and test script defaulted through env variables
-  # also instantiates test script with nodes, if it's a function (contract)
   setupDriverForTest = {
       testScript
     , testName
@@ -93,12 +92,6 @@ rec {
         (node: builtins.match "^[A-z_]([A-z0-9_]+)?$" node == null)
         nodeHostNames;
 
-      testScript' =
-        # Call the test script with the computed nodes.
-        if lib.isFunction testScript
-        then testScript { inherit nodes; }
-        else testScript;
-
     in
     if lib.length invalidNodeNames > 0 then
       throw ''
@@ -111,9 +104,8 @@ rec {
       ''
     else lib.warnIf skipLint "Linting is disabled" (runCommand testDriverName
       {
-        inherit testName;
+        inherit testName testScript;
         nativeBuildInputs = [ makeWrapper ];
-        testScript = testScript';
         preferLocalBuild = true;
         passthru = passthru // {
           inherit nodes;
@@ -158,14 +150,16 @@ rec {
     , ...
     } @ t:
     let
-      nodes = qemu_pkg:
-        let
-          testScript' =
-            # Call the test script with the computed nodes.
-            if lib.isFunction testScript
-            then testScript { nodes = nodes qemu_pkg; }
-            else testScript;
+      # Instantiates test script with nodes, if it's a function (contract)
+      mkTestScript = qemu_pkg:
+        # Call the test script with the computed nodes.
+        if lib.isFunction testScript
+        then testScript { nodes = nodes qemu_pkg false; }
+        else testScript;
 
+      nodes = qemu_pkg: addAdditionalPaths:
+        let
+          testScript' = mkTestScript qemu_pkg;
           build-vms = import ./build-vms.nix {
             inherit system lib pkgs minimal specialArgs;
             extraConfigurations = extraConfigurations ++ [(
@@ -182,17 +176,9 @@ rec {
                 # copied to the image.
                 virtualisation.additionalPaths =
                   lib.optional
-                    # A testScript may evaluate nodes, which has caused
-                    # infinite recursions. The demand cycle involves:
-                    #   testScript -->
-                    #   nodes -->
-                    #   toplevel -->
-                    #   additionalPaths -->
-                    #   hasContext testScript' -->
-                    #   testScript (ad infinitum)
-                    # If we don't need to build an image, we can break this
-                    # cycle by short-circuiting when useNixStoreImage is false.
-                    (config.virtualisation.useNixStoreImage && builtins.hasContext testScript')
+                    (config.virtualisation.useNixStoreImage
+                     && addAdditionalPaths
+                     && builtins.hasContext testScript')
                     (pkgs.writeStringReferencesToFile testScript');
 
                 # Ensure we do not use aliases. Ideally this is only set
@@ -207,16 +193,18 @@ rec {
           );
 
       driver = setupDriverForTest {
-        inherit testScript enableOCR skipLint passthru;
+        inherit enableOCR skipLint passthru;
+        testScript = mkTestScript pkgs.qemu_test;
         testName = name;
         qemu_pkg = pkgs.qemu_test;
-        nodes = nodes pkgs.qemu_test;
+        nodes = nodes pkgs.qemu_test true;
       };
       driverInteractive = setupDriverForTest {
-        inherit testScript enableOCR skipLint passthru;
+        inherit enableOCR skipLint passthru;
+        testScript = mkTestScript pkgs.qemu;
         testName = name;
         qemu_pkg = pkgs.qemu;
-        nodes = nodes pkgs.qemu;
+        nodes = nodes pkgs.qemu true;
       };
 
       test =
