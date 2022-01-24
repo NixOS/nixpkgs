@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
 
   GSEXE="${ghostscript}/bin/gs";
 
+  configureFlags = [ "--enable-transfig" ];
+
   postInstall = ''
     wrapProgram $out/bin/fig2ps2tex \
         --set PATH ${lib.makeBinPath [ coreutils bc gnugrep gawk ]}
