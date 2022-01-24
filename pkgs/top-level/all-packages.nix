@@ -12850,6 +12850,10 @@ with pkgs;
     ocamlformat_0_15_1 ocamlformat_0_16_0 ocamlformat_0_17_0 ocamlformat_0_18_0
     ocamlformat_0_19_0 ocamlformat_0_20_0 ocamlformat_0_20_1;
 
+  inherit (callPackage ../development/tools/ocaml/ocamlformat-rpc { })
+    ocamlformat-rpc # latest version
+    ocamlformat-rpc_0_20_0 ocamlformat-rpc_0_20_1;
+
   orc = callPackage ../development/compilers/orc { };
 
   orocos-kdl = callPackage ../development/libraries/orocos-kdl { };
