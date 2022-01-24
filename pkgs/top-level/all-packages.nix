@@ -17276,6 +17276,8 @@ with pkgs;
   indicator-application-gtk2 = callPackage ../development/libraries/indicator-application/gtk2.nix { };
   indicator-application-gtk3 = callPackage ../development/libraries/indicator-application/gtk3.nix { };
 
+  indicator-sound-switcher = callPackage ../applications/audio/indicator-sound-switcher { };
+
   indilib = callPackage ../development/libraries/science/astronomy/indilib { };
   indi-full = callPackage ../development/libraries/science/astronomy/indilib/indi-full.nix { };
 
