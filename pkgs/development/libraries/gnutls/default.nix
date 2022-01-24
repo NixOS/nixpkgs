@@ -21,11 +21,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gnutls";
-  version = "3.7.2";
+  version = "3.7.3";
 
   src = fetchurl {
     url = "mirror://gnupg/gnutls/v${lib.versions.majorMinor version}/gnutls-${version}.tar.xz";
-    sha256 = "646e6c5a9a185faa4cea796d378a1ba8e1148dbb197ca6605f95986a25af2752";
+    sha256 = "16n4yvw3792gcdxkikjmhddr6cbs4wlk027zfxlhmchsqcxw8ngw";
   };
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
