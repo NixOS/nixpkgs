@@ -717,7 +717,12 @@ let
 
       HID_ACRUX_FF       = yes;
       DRAGONRISE_FF      = yes;
+      GREENASIA_FF       = yes;
       HOLTEK_FF          = yes;
+      JOYSTICK_PSXPAD_SPI_FF = yes;
+      LOGIG940_FF        = yes;
+      NINTENDO_FF        = whenAtLeast "5.16" yes;
+      PLAYSTATION_FF     = whenAtLeast "5.12" yes;
       SONY_FF            = yes;
       SMARTJOYPLUS_FF    = yes;
       THRUSTMASTER_FF    = yes;
