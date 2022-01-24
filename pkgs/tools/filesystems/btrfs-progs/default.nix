@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     python3 python3.pkgs.setuptools
   ];
 
-  buildInputs = [ acl attr e2fsprogs libuuid lzo python3 systemd zlib zstd ];
+  buildInputs = [ acl attr e2fsprogs libuuid lzo python3 zlib zstd ] ++ lib.optionals stdenv.hostPlatform.isGnu [ systemd ];
 
   # for python cross-compiling
   _PYTHON_HOST_PLATFORM = stdenv.hostPlatform.config;
@@ -31,9 +31,9 @@ stdenv.mkDerivation rec {
     install -v -m 444 -D btrfs-completion $out/share/bash-completion/completions/btrfs
   '';
 
-  configureFlags = lib.optional stdenv.hostPlatform.isMusl "--disable-backtrace";
+  configureFlags = lib.optional stdenv.hostPlatform.isMusl "--disable-backtrace --disable-libudev";
 
-  makeFlags = [ "udevruledir=$(out)/lib/udev/rules.d" ];
+  makeFlags = lib.optionals stdenv.hostPlatform.isGnu [ "udevruledir=$(out)/lib/udev/rules.d" ];
 
   enableParallelBuilding = true;
 
