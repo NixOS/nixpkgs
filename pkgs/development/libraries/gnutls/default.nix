@@ -1,5 +1,5 @@
 { config, lib, stdenv, fetchurl, zlib, lzo, libtasn1, nettle, pkg-config, lzip
-, perl, gmp, autoconf, automake, libidn, libiconv
+, perl, gmp, autoconf, automake, libidn2, libiconv
 , unbound, dns-root-data, gettext, util-linux
 , cxxBindings ? !stdenv.hostPlatform.isStatic # tries to link libstdc++.so
 , guileBindings ? config.gnutls.guile or false, guile
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ lzo lzip libtasn1 libidn zlib gmp libunistring unbound gettext libiconv ]
+  buildInputs = [ lzo lzip libtasn1 libidn2 zlib gmp libunistring unbound gettext libiconv ]
     ++ lib.optional (withP11-kit) p11-kit
     ++ lib.optional (isDarwin && withSecurity) Security
     ++ lib.optional (tpmSupport && stdenv.isLinux) trousers
