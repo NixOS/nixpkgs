@@ -4299,6 +4299,8 @@ in {
 
   jupytext = callPackage ../development/python-modules/jupytext { };
 
+  jurigged = callPackage ../development/python-modules/jurigged { };
+
   justbackoff = callPackage ../development/python-modules/justbackoff { };
 
   jwcrypto = callPackage ../development/python-modules/jwcrypto { };
