@@ -24243,12 +24243,12 @@ with pkgs;
 
   pdfstudio = import ../applications/misc/pdfstudio {
     program = "pdfstudio";
-    inherit callPackage fetchurl pkgs;
+    inherit callPackage fetchurl libgccjit;
   };
 
   pdfstudioviewer = import ../applications/misc/pdfstudio {
     program = "pdfstudioviewer";
-    inherit callPackage fetchurl pkgs;
+    inherit callPackage fetchurl libgccjit;
   };
 
   aeolus = callPackage ../applications/audio/aeolus { };
