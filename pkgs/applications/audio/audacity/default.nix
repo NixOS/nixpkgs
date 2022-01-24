@@ -50,6 +50,7 @@
 , CoreAudioKit ? null
 , CoreServices ? null
 , wxmac
+, testGraphical
 }:
 
 # TODO
@@ -76,7 +77,7 @@ let
   });
 
 in
-stdenv.mkDerivation rec {
+let self = stdenv.mkDerivation rec {
   pname = "audacity";
   # nixpkgs-update: no auto update
   # Humans too! Let's wait to see how the situation with
@@ -172,6 +173,10 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # Test fails
 
+  passthru.tests = {
+    graphical = testGraphical { package = self; };
+  };
+
   meta = with lib; {
     description = "Sound editor with graphical UI";
     homepage = "https://www.audacityteam.org/";
@@ -179,4 +184,5 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ lheckemann veprbl ];
     platforms = platforms.unix;
   };
-}
+};
+in self
