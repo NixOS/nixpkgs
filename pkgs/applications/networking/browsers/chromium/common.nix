@@ -288,7 +288,7 @@ let
       google_api_key = "AIzaSyDGi15Zwl11UNe6Y-5XW_upsfyw31qwZPI";
 
       # Optional features:
-      use_gio = gnomeSupport;
+      use_gio = gnomeSupport || chromiumVersionAtLeast "99";
       use_gnome_keyring = gnomeKeyringSupport;
       use_cups = cupsSupport;
 
