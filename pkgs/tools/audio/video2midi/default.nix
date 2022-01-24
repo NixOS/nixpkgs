@@ -28,7 +28,7 @@ in pythonPackages.buildPythonApplication rec {
   meta = with lib; {
     description = "Youtube synthesia video to midi conversion tool";
     homepage = src.meta.homepage;
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     maintainers = [ ];
     platforms = platforms.linux;
   };
