@@ -58,15 +58,18 @@ buildPythonPackage rec {
   checkInputs = [
     Babel
     mock
-    pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "mkdocs/tests/*.py" ];
 
-  disabledTests = [
-    # Don't start a test server
-    "testing_server"
-  ];
+  checkPhase = ''
+    set -euo pipefail
+
+    runHook preCheck
+
+    python -m unittest discover -v -p '*tests.py' mkdocs --top-level-directory .
+
+    runHook postCheck
+  '';
 
   pythonImportsCheck = [ "mkdocs" ];
 
