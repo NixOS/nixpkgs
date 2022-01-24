@@ -3,7 +3,7 @@
 , year
 , version
 , desktopName
-, pkgs
+, buildFHSUserEnv
 , extraBuildInputs ? []
 , stdenv
 , lib
