@@ -16,7 +16,7 @@
 , pyyaml
 , pyyaml-env-tag
 , watchdog
-# testing deps
+  # testing deps
 , Babel
 , mock
 , pytestCheckHook
