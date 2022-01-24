@@ -1633,8 +1633,6 @@ with pkgs;
 
   corsair = with python3Packages; toPythonApplication corsair-scan;
 
-  corsmisc = callPackage ../tools/security/corsmisc { };
-
   cosign = callPackage ../tools/security/cosign {
     inherit (darwin.apple_sdk.frameworks) PCSC;
   };
