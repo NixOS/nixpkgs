@@ -354,6 +354,7 @@ broken-packages:
   - binary-derive
   - binary-ext
   - binary-indexed-tree
+  - binary-io
   - binary-protocol
   - binary-typed
   - BinderAnn
@@ -755,6 +756,7 @@ broken-packages:
   - compact-socket
   - compact-string
   - compact-string-fix
+  - comparse
   - compdata-dags
   - compdata-param
   - competition
@@ -3853,6 +3855,7 @@ broken-packages:
   - powerdns
   - powermate
   - powerpc
+  - powerqueue-distributed
   - powerqueue-levelmem
   - pprecord
   - PPrinter
