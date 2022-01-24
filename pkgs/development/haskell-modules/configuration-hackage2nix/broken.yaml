@@ -354,6 +354,7 @@ broken-packages:
   - binary-derive
   - binary-ext
   - binary-indexed-tree
+  - binary-io
   - binary-protocol
   - binary-typed
   - BinderAnn
@@ -755,6 +756,7 @@ broken-packages:
   - compact-socket
   - compact-string
   - compact-string-fix
+  - comparse
   - compdata-dags
   - compdata-param
   - competition
@@ -1308,7 +1310,6 @@ broken-packages:
   - event-driven
   - eventful-dynamodb
   - eventful-sql-common
-  - eventlog2html
   - eventloop
   - eventstore
   - ewe
@@ -2404,7 +2405,6 @@ broken-packages:
   - hsseccomp
   - hssh
   - hs-snowtify
-  - hs-speedscope
   - hsSqlite3
   - hssqlppp
   - HsSVN
@@ -3855,6 +3855,7 @@ broken-packages:
   - powerdns
   - powermate
   - powerpc
+  - powerqueue-distributed
   - powerqueue-levelmem
   - pprecord
   - PPrinter
@@ -4013,7 +4014,6 @@ broken-packages:
   - quiver
   - quokka
   - quoridor-hs
-  - raaz
   - RabbitMQ
   - rad
   - radian
