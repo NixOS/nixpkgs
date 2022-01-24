@@ -7,18 +7,18 @@
 
 buildGoModule rec {
   pname = "expenses";
-  version = "0.2.2";
+  version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "manojkarthick";
     repo = "expenses";
     rev = "v${version}";
-    sha256 = "sha256-CaIbLtP7ziv9UBQE+QsNnqX65OV+6GIvkLwKm1G++iY=";
+    sha256 = "sha256-sqsogF2swMvYZL7Kj+ealrB1AAgIe7ZXXDLRdHL6Q+0=";
   };
 
-  vendorSha256 = "sha256-NWTFxF4QCH1q1xx+hmVmpvDeOlqH5Ai2+0ParE5px9M=";
+  vendorSha256 = "sha256-Ac3f17Ws3Ne8Zo0vT+qlaMm/rhak9ua2jh5jlT6jF2Y=";
 
-  # package does not contain any tests as of v0.2.2
+  # package does not contain any tests as of v0.2.3
   doCheck = false;
 
   buildInputs = [ sqlite ];
