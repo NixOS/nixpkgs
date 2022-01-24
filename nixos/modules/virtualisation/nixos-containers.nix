@@ -669,6 +669,17 @@ in
               '';
             };
 
+            startAfter = mkOption {
+              type = types.listOf types.str;
+              default = [];
+              example = [ "container@mariadb.service" "nginx.service" ];
+              description = ''
+                List of systemd units to wait for before starting the container.
+                This option can be used to specify dependencies on another
+                container, target or service.
+              '';
+            };
+
             extraFlags = mkOption {
               type = types.listOf types.str;
               default = [];
@@ -789,7 +800,7 @@ in
             {
               wantedBy = [ "machines.target" ];
               wants = [ "network.target" ];
-              after = [ "network.target" ];
+              after = [ "network.target" ] ++ cfg.startAfter;
               restartTriggers = [
                 containerConfig.path
                 config.environment.etc."containers/${name}.conf".source
