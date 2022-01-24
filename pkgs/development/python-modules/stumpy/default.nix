@@ -7,11 +7,7 @@
 , pandas
 , dask
 , distributed
-, coverage
-, flake8
-, black
-, pytest
-, codecov
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -35,17 +31,8 @@ buildPythonPackage rec {
     pandas
     dask
     distributed
-    coverage
-    flake8
-    black
-    pytest
-    codecov
+    pytestCheckHook
   ];
-
-  # ignore changed numpy operations
-  checkPhase = ''
-    pytest -k 'not allc'
-  '';
 
   meta = with lib; {
     description = "A powerful and scalable library that can be used for a variety of time series data mining tasks";

@@ -520,6 +520,8 @@ in {
 
   ansiconv = callPackage ../development/python-modules/ansiconv { };
 
+  ansimarkup = callPackage ../development/python-modules/ansimarkup { };
+
   ansiwrap = callPackage ../development/python-modules/ansiwrap { };
 
   antlr4-python3-runtime = callPackage ../development/python-modules/antlr4-python3-runtime {
@@ -1486,6 +1488,8 @@ in {
   connection-pool = callPackage ../development/python-modules/connection-pool { };
 
   coqpit = callPackage ../development/python-modules/coqpit { };
+
+  cepa = callPackage ../development/python-modules/cepa { };
 
   cerberus = callPackage ../development/python-modules/cerberus { };
 
@@ -6677,6 +6681,8 @@ in {
 
   pydrive = callPackage ../development/python-modules/pydrive { };
 
+  pydrive2 = callPackage ../development/python-modules/pydrive2 { };
+
   pydroid-ipcam = callPackage ../development/python-modules/pydroid-ipcam  { };
 
   pydsdl = callPackage ../development/python-modules/pydsdl { };
@@ -8949,6 +8955,8 @@ in {
   sievelib = callPackage ../development/python-modules/sievelib { };
 
   signedjson = callPackage ../development/python-modules/signedjson { };
+
+  sigrok = callPackage ../development/python-modules/sigrok { };
 
   sigtools = callPackage ../development/python-modules/sigtools { };
 

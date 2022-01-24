@@ -280,6 +280,12 @@
 # terraform providers
 /pkgs/applications/networking/cluster/terraform-providers @zowoq
 
+# kubernetes
+/nixos/doc/manual/configuration/kubernetes.chapter.md @zowoq
+/nixos/modules/services/cluster/kubernetes            @zowoq
+/nixos/tests/kubernetes                               @zowoq
+/pkgs/applications/networking/cluster/kubernetes      @zowoq
+
 # Matrix
 /pkgs/servers/heisenbridge                                 @piegamesde
 /pkgs/servers/matrix-conduit                               @piegamesde @pstn

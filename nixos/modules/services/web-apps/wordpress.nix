@@ -1,19 +1,13 @@
 { config, pkgs, lib, ... }:
 
-let
-  inherit (lib) mkDefault mkEnableOption mkForce mkIf mkMerge mkOption types;
-  inherit (lib) any attrValues concatMapStringsSep flatten literalExpression;
-  inherit (lib) filterAttrs mapAttrs mapAttrs' mapAttrsToList nameValuePair optional optionalAttrs optionalString;
+with lib;
 
-  cfg = migrateOldAttrs config.services.wordpress;
+let
+  cfg = config.services.wordpress;
   eachSite = cfg.sites;
   user = "wordpress";
   webserver = config.services.${cfg.webserver};
   stateDir = hostName: "/var/lib/wordpress/${hostName}";
-
-  # Migrate config.services.wordpress.<hostName> to config.services.wordpress.sites.<hostName>
-  oldSites = filterAttrs (o: _: o != "sites" && o != "webserver");
-  migrateOldAttrs = cfg: cfg // { sites = cfg.sites // oldSites cfg; };
 
   pkg = hostName: cfg: pkgs.stdenv.mkDerivation rec {
     pname = "wordpress-${hostName}";
@@ -266,36 +260,29 @@ in
 {
   # interface
   options = {
-    services.wordpress = mkOption {
-      type = types.submodule {
-        # Used to support old interface
-        freeformType = types.attrsOf (types.submodule siteOpts);
+    services.wordpress = {
 
-        # New interface
-        options.sites = mkOption {
-          type = types.attrsOf (types.submodule siteOpts);
-          default = {};
-          description = "Specification of one or more WordPress sites to serve";
-        };
-
-        options.webserver = mkOption {
-          type = types.enum [ "httpd" "nginx" "caddy" ];
-          default = "httpd";
-          description = ''
-            Whether to use apache2 or nginx for virtual host management.
-
-            Further nginx configuration can be done by adapting <literal>services.nginx.virtualHosts.&lt;name&gt;</literal>.
-            See <xref linkend="opt-services.nginx.virtualHosts"/> for further information.
-
-            Further apache2 configuration can be done by adapting <literal>services.httpd.virtualHosts.&lt;name&gt;</literal>.
-            See <xref linkend="opt-services.httpd.virtualHosts"/> for further information.
-          '';
-        };
+      sites = mkOption {
+        type = types.attrsOf (types.submodule siteOpts);
+        default = {};
+        description = "Specification of one or more WordPress sites to serve";
       };
-      default = {};
-      description = "Wordpress configuration";
-    };
 
+      webserver = mkOption {
+        type = types.enum [ "httpd" "nginx" "caddy" ];
+        default = "httpd";
+        description = ''
+          Whether to use apache2 or nginx for virtual host management.
+
+          Further nginx configuration can be done by adapting <literal>services.nginx.virtualHosts.&lt;name&gt;</literal>.
+          See <xref linkend="opt-services.nginx.virtualHosts"/> for further information.
+
+          Further apache2 configuration can be done by adapting <literal>services.httpd.virtualHosts.&lt;name&gt;</literal>.
+          See <xref linkend="opt-services.httpd.virtualHosts"/> for further information.
+        '';
+      };
+
+    };
   };
 
   # implementation
@@ -311,8 +298,6 @@ in
           message = ''services.wordpress.sites."${hostName}".database.passwordFile cannot be specified if services.wordpress.sites."${hostName}".database.createLocally is set to true.'';
         }) eachSite);
 
-
-    warnings = mapAttrsToList (hostName: _: ''services.wordpress."${hostName}" is deprecated use services.wordpress.sites."${hostName}"'') (oldSites cfg);
 
     services.mysql = mkIf (any (v: v.database.createLocally) (attrValues eachSite)) {
       enable = true;

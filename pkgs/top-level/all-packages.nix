@@ -323,6 +323,8 @@ with pkgs;
 
   evans = callPackage ../development/tools/evans { };
 
+  firefly-desktop = callPackage ../applications/misc/firefly-desktop { };
+
   frugal = callPackage ../development/tools/frugal { };
 
   glade = callPackage ../development/tools/glade { };
@@ -532,6 +534,8 @@ with pkgs;
   tapview = callPackage ../development/tools/tapview { };
 
   run = callPackage ../development/tools/run { };
+
+  mblock-mlink = callPackage ../development/tools/mblock-mlink { };
 
   mod = callPackage ../development/tools/mod { };
 
@@ -1157,6 +1161,8 @@ with pkgs;
   lukesmithxyz-st = callPackage ../applications/terminal-emulators/st/lukesmithxyz-st { };
   mcaimi-st = callPackage ../applications/terminal-emulators/st/mcaimi-st.nix { };
   siduck76-st = callPackage ../applications/terminal-emulators/st/siduck76-st.nix { };
+
+  snowflake = callPackage ../tools/networking/snowflake { };
 
   stupidterm = callPackage ../applications/terminal-emulators/stupidterm {
     gtk = gtk3;
@@ -3597,6 +3603,8 @@ with pkgs;
     wlroots = wlroots_0_14;
     zig = zig_0_8_1;
   };
+
+  rivercarro = callPackage ../applications/misc/rivercarro { };
 
   rmapi = callPackage ../applications/misc/remarkable/rmapi { };
 
@@ -6934,7 +6942,9 @@ with pkgs;
 
   ldc = callPackage ../development/compilers/ldc { };
 
-  ligo = callPackage ../development/compilers/ligo { };
+  ligo = callPackage ../development/compilers/ligo {
+    coq = coq_8_14;
+  };
 
   ldgallery = callPackage ../tools/graphics/ldgallery {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
@@ -7567,6 +7577,8 @@ with pkgs;
   lzbench = callPackage ../tools/compression/lzbench { };
 
   lzop = callPackage ../tools/compression/lzop { };
+
+  lzwolf = callPackage ../games/lzwolf { };
 
   macchanger = callPackage ../os-specific/linux/macchanger { };
 
@@ -8383,6 +8395,8 @@ with pkgs;
     luaPackages = lua53Packages;
   };
 
+  opensbi = callPackage ../misc/opensbi { };
+
   opensc = callPackage ../tools/security/opensc {
     inherit (darwin.apple_sdk.frameworks) Carbon PCSC;
   };
@@ -8457,7 +8471,9 @@ with pkgs;
 
   openvswitch-lts = callPackage ../os-specific/linux/openvswitch/lts.nix { };
 
-  optifine = callPackage ../tools/games/minecraft/optifine { };
+  optifinePackages = callPackage ../tools/games/minecraft/optifine { };
+
+  optifine = optifinePackages.optifine-latest;
 
   optipng = callPackage ../tools/graphics/optipng {
     libpng = libpng12;
@@ -9498,6 +9514,8 @@ with pkgs;
 
   sdate = callPackage ../tools/misc/sdate { };
 
+  sdat2img = callPackage ../tools/filesystems/sdat2img { };
+
   sdcv = callPackage ../applications/misc/sdcv { };
 
   sdl-jstest = callPackage ../tools/misc/sdl-jstest { };
@@ -10007,6 +10025,8 @@ with pkgs;
 
   systrayhelper = callPackage ../tools/misc/systrayhelper {};
 
+  syft = callPackage ../tools/admin/syft { };
+
   Sylk = callPackage ../applications/networking/Sylk {};
 
   privoxy = callPackage ../tools/networking/privoxy {
@@ -10191,6 +10211,8 @@ with pkgs;
   threema-desktop = callPackage ../applications/networking/instant-messengers/threema-desktop { };
 
   tidy-viewer = callPackage ../tools/text/tidy-viewer { };
+
+  tile38 = callPackage ../servers/tile38 { };
 
   tiled = libsForQt5.callPackage ../applications/editors/tiled { };
 
@@ -14540,9 +14562,12 @@ with pkgs;
 
   libstdcxx5 = callPackage ../development/libraries/gcc/libstdc++/5.nix { };
 
-  libsigrok = callPackage ../development/tools/libsigrok { };
+  libsigrok = callPackage ../development/tools/libsigrok {
+    python = python3;
+  };
   # old version:
   libsigrok_0_3 = libsigrok.override {
+    python = python3;
     version = "0.3.0";
     sha256 = "0l3h7zvn3w4c1b9dgvl3hirc4aj1csfkgbk87jkpl7bgl03nk4j3";
     doInstallCheck = false;
@@ -17250,6 +17275,8 @@ with pkgs;
 
   indicator-application-gtk2 = callPackage ../development/libraries/indicator-application/gtk2.nix { };
   indicator-application-gtk3 = callPackage ../development/libraries/indicator-application/gtk3.nix { };
+
+  indicator-sound-switcher = callPackage ../applications/audio/indicator-sound-switcher { };
 
   indilib = callPackage ../development/libraries/science/astronomy/indilib { };
   indi-full = callPackage ../development/libraries/science/astronomy/indilib/indi-full.nix { };
@@ -26240,9 +26267,7 @@ with pkgs;
     inherit (xorg) xcbutilrenderutil;
   };
 
-  sway-unwrapped = callPackage ../applications/window-managers/sway {
-    wlroots = wlroots_0_14;
-  };
+  sway-unwrapped = callPackage ../applications/window-managers/sway { };
   sway = callPackage ../applications/window-managers/sway/wrapper.nix { };
   swaybg = callPackage ../applications/window-managers/sway/bg.nix { };
   swayidle = callPackage ../applications/window-managers/sway/idle.nix { };
@@ -26688,6 +26713,7 @@ with pkgs;
   kubeval-schema = callPackage ../applications/networking/cluster/kubeval/schema.nix { };
 
   kubernetes = callPackage ../applications/networking/cluster/kubernetes { };
+  kubectl = callPackage ../applications/networking/cluster/kubernetes/kubectl.nix { };
 
   kubeseal = callPackage ../applications/networking/cluster/kubeseal { };
 
@@ -26696,8 +26722,6 @@ with pkgs;
   kubeconform = callPackage ../applications/networking/cluster/kubeconform { };
 
   kubecolor = callPackage ../applications/networking/cluster/kubecolor { };
-
-  kubectl = callPackage ../applications/networking/cluster/kubectl { };
 
   kubebuilder = callPackage ../applications/networking/cluster/kubebuilder { };
 
@@ -29402,8 +29426,6 @@ with pkgs;
     libcaca = null;
   };
 
-  vlc_qt5 = vlc;
-
   libvlc = vlc.override {
     withQt5 = false;
     qtbase = null;
@@ -30174,6 +30196,17 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) IOKit;
   };
 
+  groestlcoin  = libsForQt5.callPackage ../applications/blockchains/groestlcoin {
+    boost = boost17x;
+    withGui = true;
+    inherit (darwin) autoSignDarwinBinariesHook;
+  };
+
+  groestlcoind = callPackage ../applications/blockchains/groestlcoin {
+    boost = boost17x;
+    inherit (darwin) autoSignDarwinBinariesHook;
+  };
+
   ledger_agent = with python3Packages; toPythonApplication ledger_agent;
 
   ledger-live-desktop = callPackage ../applications/blockchains/ledger-live-desktop { };
@@ -30239,6 +30272,10 @@ with pkgs;
 
   solana-testnet = callPackage ../applications/blockchains/solana {
     inherit (darwin.apple_sdk.frameworks) IOKit Security AppKit;
+  };
+
+  snarkos = callPackage ../applications/blockchains/snarkos {
+    inherit (darwin.apple_sdk.frameworks) Security;
   };
 
   tessera = callPackage ../applications/blockchains/tessera { };
@@ -31238,6 +31275,8 @@ with pkgs;
   };
 
   synthv1 = libsForQt5.callPackage ../applications/audio/synthv1 { };
+
+  snis = callPackage ../games/snis { };
 
   system-syzygy = callPackage ../games/system-syzygy { };
 
@@ -33437,7 +33476,10 @@ with pkgs;
   retroarch = wrapRetroArch { retroarch = retroarchBare; };
 
   retroarchFull = retroarch.override {
-    cores = builtins.filter (c: c ? libretroCore) (builtins.attrValues libretro);
+    cores = builtins.filter
+      # Remove cores not supported on platform
+      (c: c ? libretroCore && (builtins.elem stdenv.hostPlatform.system c.meta.platforms))
+      (builtins.attrValues libretro);
   };
 
   libretro = recurseIntoAttrs (callPackage ../misc/emulators/retroarch/cores.nix {
