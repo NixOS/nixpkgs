@@ -249,33 +249,29 @@ in
 {
   # interface
   options = {
-    services.dokuwiki = mkOption {
-      type = types.submodule {
+    services.dokuwiki = {
 
-        options.sites = mkOption {
-          type = types.attrsOf (types.submodule siteOpts);
-          default = {};
-          description = "Specification of one or more DokuWiki sites to serve";
-        };
-
-        options.webserver = mkOption {
-          type = types.enum [ "nginx" "caddy" ];
-          default = "nginx";
-          description = ''
-            Whether to use nginx or caddy for virtual host management.
-
-            Further nginx configuration can be done by adapting <literal>services.nginx.virtualHosts.&lt;name&gt;</literal>.
-            See <xref linkend="opt-services.nginx.virtualHosts"/> for further information.
-
-            Further apache2 configuration can be done by adapting <literal>services.httpd.virtualHosts.&lt;name&gt;</literal>.
-            See <xref linkend="opt-services.httpd.virtualHosts"/> for further information.
-          '';
-        };
+      sites = mkOption {
+        type = types.attrsOf (types.submodule siteOpts);
+        default = {};
+        description = "Specification of one or more DokuWiki sites to serve";
       };
-      default = {};
-      description = "DokuWiki configuration";
-    };
 
+      webserver = mkOption {
+        type = types.enum [ "nginx" "caddy" ];
+        default = "nginx";
+        description = ''
+          Whether to use nginx or caddy for virtual host management.
+
+          Further nginx configuration can be done by adapting <literal>services.nginx.virtualHosts.&lt;name&gt;</literal>.
+          See <xref linkend="opt-services.nginx.virtualHosts"/> for further information.
+
+          Further apache2 configuration can be done by adapting <literal>services.httpd.virtualHosts.&lt;name&gt;</literal>.
+          See <xref linkend="opt-services.httpd.virtualHosts"/> for further information.
+        '';
+      };
+
+    };
   };
 
   # implementation
