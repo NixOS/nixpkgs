@@ -1,11 +1,11 @@
-{ lib, stdenv, fetchurl, ladspa-sdk, pkgs, ... }:
+{ lib, stdenv, fetchurl, ladspa-sdk, ... }:
 
 stdenv.mkDerivation rec {
   pname = "blop-plugins";
   version = "0.2.8";
 
   src = fetchurl {
-    url = "http://prdownloads.sourceforge.net/blop/blop-${version}.tar.gz?download";
+    url = "http://prdownloads.sourceforge.net/blop/blop-${version}.tar.gz";
     sha256 = "sha256-focTT6xCjSw6REIxGeJz0YnvCO419Ic9fYjWRhCvPgo=";
   };
 
