@@ -43,6 +43,7 @@ in
         # This folder must be writeable as the application is storing
         # its data in it, so the StateDirectory is a good choice
         N8N_USER_FOLDER = "/var/lib/n8n";
+        HOME = "/var/lib/n8n";
         N8N_CONFIG_FILES = "${configFile}";
       };
       serviceConfig = {

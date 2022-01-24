@@ -6,6 +6,7 @@
 , mock
 , pytestCheckHook
 , pythonOlder
+, stdenv
 , wheel
 }:
 
@@ -23,16 +24,9 @@ buildPythonPackage rec {
     hash = "sha256-0Dl7oKB2xxq/a8do3HgBUIGay88yOGBUdOGo+QCtnUE=";
   };
 
-  propagatedBuildInputs = [
-    botocore
-  ];
+  propagatedBuildInputs = [ botocore ];
 
-  buildInputs = [
-    docutils
-    mock
-    pytestCheckHook
-    wheel
-  ];
+  buildInputs = [ docutils mock pytestCheckHook wheel ];
 
   disabledTestPaths = [
     # Requires network access
@@ -42,11 +36,13 @@ buildPythonPackage rec {
     "tests/integration/test_processpool.py"
     "tests/integration/test_s3transfer.py"
     "tests/integration/test_upload.py"
-  ];
+  ] ++
+  # There was a change in python 3.8 that defaults multiprocessing to spawn instead of fork on macOS
+  # See https://bugs.python.org/issue33725 and https://github.com/python/cpython/pull/13603.
+  # I suspect the underlying issue here is that upstream tests aren't compatible with spawn multiprocessing, and pass on linux where the default is still fork
+  lib.optionals stdenv.isDarwin [ "tests/unit/test_compat.py" ];
 
-  pythonImportsCheck = [
-    "s3transfer"
-  ];
+  pythonImportsCheck = [ "s3transfer" ];
 
   meta = with lib; {
     description = "Library for managing Amazon S3 transfers";

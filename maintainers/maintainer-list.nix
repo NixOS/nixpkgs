@@ -515,6 +515,8 @@
   };
   algorith = {
     email = "dries_van_daele@telenet.be";
+    github = "DriesVanDaele";
+    githubId = 1141488;
     name = "Dries Van Daele";
   };
   alibabzo = {
@@ -4571,6 +4573,12 @@
     githubId = 343415;
     name = "Greg Roodt";
   };
+  gruve-p = {
+    email = "groestlcoin@gmail.com";
+    github = "gruve-p";
+    githubId = 11212268;
+    name = "gruve-p";
+  };
   gschwartz = {
     email = "gsch@pennmedicine.upenn.edu";
     github = "GregorySchwartz";
@@ -5708,6 +5716,24 @@
     github = "magnusjonsson";
     githubId = 8900;
     name = "Johan Magnus Jonsson";
+  };
+  jmc-figueira = {
+    email = "business+nixos@jmc-figueira.dev";
+    github = "jmc-figueira";
+    githubId = 6634716;
+    name = "João Figueira";
+    keys = [
+      # GitHub signing key
+      {
+        longkeyid = "rsa4096/0xDC7AE56AE98E02D7";
+        fingerprint = "EC08 7AA3 DEAD A972 F015  6371 DC7A E56A E98E 02D7";
+      }
+      # Email encryption
+      {
+        longkeyid = "ed25519/0x197F9A632D139E30";
+        fingerprint = "816D 23F5 E672 EC58 7674  4A73 197F 9A63 2D13 9E30";
+      }
+    ];
   };
   jmettes = {
     email = "jonathan@jmettes.com";
@@ -11016,7 +11042,7 @@
     name = "Yann Hodique";
   };
   sikmir = {
-    email = "sikmir@gmail.com";
+    email = "sikmir@disroot.org";
     github = "sikmir";
     githubId = 688044;
     name = "Nikolay Korotkiy";
@@ -11847,6 +11873,12 @@
     github = "tg-x";
     githubId = 378734;
     name = "TG ⊗ Θ";
+  };
+  tgunnoe = {
+    email = "t@gvno.net";
+    github = "tgunnoe";
+    githubId = 7254833;
+    name = "Taylor Gunnoe";
   };
   th0rgal = {
     email = "thomas.marchand@tuta.io";

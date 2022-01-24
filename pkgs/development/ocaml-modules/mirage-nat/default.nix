@@ -1,5 +1,5 @@
 { lib, buildDunePackage, fetchurl
-, ipaddr, cstruct, lwt, rresult, logs, lru
+, ipaddr, cstruct, lwt, logs, lru
 , tcpip, ethernet, stdlib-shims
 , alcotest, mirage-clock-unix
 , ppxlib, ppx_deriving
@@ -7,16 +7,16 @@
 
 buildDunePackage rec {
   pname = "mirage-nat";
-  version = "2.2.3";
+  version = "2.2.5";
 
-  minimumOCamlVersion = "4.06";
+  minimumOCamlVersion = "4.08";
 
   # due to cstruct
   useDune2 = true;
 
   src = fetchurl {
     url = "https://github.com/mirage/${pname}/releases/download/v${version}/${pname}-v${version}.tbz";
-    sha256 = "0cy95j184hi8fm1h6z6x1brjfrmbq3zjy2mqz99m8ys9vwkb63ma";
+    sha256 = "01xp0z4mywhawz7rxizi9ph342mqqwyfa5hqgvs8lhqzcym5d104";
   };
 
   buildInputs = [
@@ -27,7 +27,6 @@ buildDunePackage rec {
     ipaddr
     cstruct
     lwt
-    rresult
     logs
     lru
     tcpip

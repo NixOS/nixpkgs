@@ -16,30 +16,25 @@
 
 stdenv.mkDerivation rec {
   pname = "ytfzf";
-  version = "2.0";
+  version = "2.1";
 
   src = fetchFromGitHub {
     owner = "pystardust";
     repo = "ytfzf";
     rev = "v${version}";
-    sha256 = "sha256-JuLfFC3oz2FvCaD+XPuL1N8tGKmv4atyZIBeDKWYgT8=";
+    hash = "sha256-NJLXXam7FmBWj9sM+S71e5o5e6OtVpw0m32kUo3Fbec=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
 
-  makeFlags = [ "PREFIX=${placeholder "out"}/bin" ];
-
   dontBuild = true;
+
+  installFlags = [ "PREFIX=${placeholder "out"}" "doc" ];
 
   postInstall = ''
     wrapProgram "$out/bin/ytfzf" --prefix PATH : ${lib.makeBinPath [
       chafa coreutils curl dmenu fzf gnused jq mpv ueberzug yt-dlp
     ]}
-
-    gzip -c docs/man/ytfzf.1 > docs/man/ytfzf.1.gz
-    gzip -c docs/man/ytfzf.5 > docs/man/ytfzf.5.gz
-    install -Dt "$out/share/man/man1" docs/man/ytfzf.1.gz
-    install -Dt "$out/share/man/man5" docs/man/ytfzf.5.gz
   '';
 
   meta = with lib; {

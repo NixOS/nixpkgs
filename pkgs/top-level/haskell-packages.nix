@@ -19,7 +19,7 @@ let
     "ghcHEAD"
   ];
 
-  haskellLibUncomposable = import ../development/haskell-modules/lib.nix {
+  haskellLibUncomposable = import ../development/haskell-modules/lib {
     inherit (pkgs) lib;
     inherit pkgs;
   };

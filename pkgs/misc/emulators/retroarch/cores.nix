@@ -8,7 +8,6 @@
 , cmake
 , curl
 , fetchFromGitHub
-, fetchpatch
 , ffmpeg
 , fluidsynth
 , gettext
@@ -56,7 +55,7 @@ let
     , license
     , src ? (getCoreSrc core)
     , broken ? false
-    , version ? "unstable-2021-12-06"
+    , version ? "unstable-2022-01-21"
     , platforms ? retroarch.meta.platforms
       # The resulting core file is based on core name
       # Setting `normalizeCore` to `true` will convert `-` to `_` on the core filename
@@ -245,14 +244,6 @@ in
     description = "Port of bsnes to libretro";
     license = lib.licenses.gpl3Only;
     makefile = "Makefile";
-    # https://github.com/libretro/bsnes-libretro/issues/10
-    patches = [
-      (fetchpatch {
-        name = "added-missing-GB_VERSION-define.patch";
-        url = "https://github.com/nE0sIghT/bsnes-libretro/commit/97fd8b486f9a9046277a580b238b6673a98f7f72.patch";
-        sha256 = "sha256-gCiy6sqc9sixT6Appr5ZCfHyBE2jYhPb0KvI63nfmEc=";
-      })
-    ];
   };
 
   bsnes-hd =
@@ -307,6 +298,24 @@ in
   citra = mkLibRetroCore {
     core = "citra";
     description = "Port of Citra to libretro";
+    license = lib.licenses.gpl2Plus;
+    extraNativeBuildInputs = [ cmake pkg-config ];
+    extraBuildInputs = [ libGLU libGL boost ];
+    makefile = "Makefile";
+    cmakeFlags = [
+      "-DENABLE_LIBRETRO=ON"
+      "-DENABLE_QT=OFF"
+      "-DENABLE_SDL2=OFF"
+      "-DENABLE_WEB_SERVICE=OFF"
+      "-DENABLE_DISCORD_PRESENCE=OFF"
+    ];
+    preConfigure = "sed -e '77d' -i externals/cmake-modules/GetGitRevisionDescription.cmake";
+    postBuild = "cd src/citra_libretro";
+  };
+
+  citra-canary = mkLibRetroCore {
+    core = "citra-canary";
+    description = "Port of Citra Canary/Experimental to libretro";
     license = lib.licenses.gpl2Plus;
     extraNativeBuildInputs = [ cmake pkg-config ];
     extraBuildInputs = [ libGLU libGL boost ];
@@ -865,6 +874,7 @@ in
       "-DBUILD_SDL=OFF"
       "-DBUILD_SOKOL=OFF"
     ];
+    preConfigure = "cd core";
     postBuild = "cd lib";
   };
 

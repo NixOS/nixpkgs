@@ -1,41 +1,76 @@
 --- a/onionshare_cli/common.py
 +++ b/onionshare_cli/common.py
-@@ -308,33 +308,10 @@ class Common:
+@@ -318,67 +318,12 @@ class Common:
          return path
-
+ 
      def get_tor_paths(self):
 -        if self.platform == "Linux":
 -            tor_path = shutil.which("tor")
 -            if not tor_path:
 -                raise CannotFindTor()
 -            obfs4proxy_file_path = shutil.which("obfs4proxy")
+-            snowflake_file_path = shutil.which("snowflake-client")
+-            meek_client_file_path = shutil.which("meek-client")
 -            prefix = os.path.dirname(os.path.dirname(tor_path))
 -            tor_geo_ip_file_path = os.path.join(prefix, "share/tor/geoip")
 -            tor_geo_ipv6_file_path = os.path.join(prefix, "share/tor/geoip6")
 -        elif self.platform == "Windows":
+-            # In Windows, the Tor binaries are in the onionshare package, not the onionshare_cli package
 -            base_path = self.get_resource_path("tor")
+-            base_path = base_path.replace("onionshare_cli", "onionshare")
 -            tor_path = os.path.join(base_path, "Tor", "tor.exe")
+-
+-            # If tor.exe isn't there, mayber we're running from the source tree
+-            if not os.path.exists(tor_path):
+-                base_path = os.path.join(os.getcwd(), "onionshare", "resources", "tor")
+-
+-                tor_path = os.path.join(base_path, "Tor", "tor.exe")
+-                if not os.path.exists(tor_path):
+-                    raise CannotFindTor()
+-
 -            obfs4proxy_file_path = os.path.join(base_path, "Tor", "obfs4proxy.exe")
+-            snowflake_file_path = os.path.join(base_path, "Tor", "snowflake-client.exe")
+-            meek_client_file_path = os.path.join(base_path, "Tor", "meek-client.exe")
 -            tor_geo_ip_file_path = os.path.join(base_path, "Data", "Tor", "geoip")
 -            tor_geo_ipv6_file_path = os.path.join(base_path, "Data", "Tor", "geoip6")
+-
 -        elif self.platform == "Darwin":
--            tor_path = shutil.which("tor")
--            if not tor_path:
--                raise CannotFindTor()
--            obfs4proxy_file_path = shutil.which("obfs4proxy")
--            prefix = os.path.dirname(os.path.dirname(tor_path))
--            tor_geo_ip_file_path = os.path.join(prefix, "share/tor/geoip")
--            tor_geo_ipv6_file_path = os.path.join(prefix, "share/tor/geoip6")
+-            # Let's see if we have tor binaries in the onionshare GUI package
+-            base_path = self.get_resource_path("tor")
+-            base_path = base_path.replace("onionshare_cli", "onionshare")
+-            tor_path = os.path.join(base_path, "tor")
+-            if os.path.exists(tor_path):
+-                obfs4proxy_file_path = os.path.join(base_path, "obfs4proxy")
+-                snowflake_file_path = os.path.join(base_path, "snowflake-client")
+-                meek_client_file_path = os.path.join(base_path, "meek-client")
+-                tor_geo_ip_file_path = os.path.join(base_path, "geoip")
+-                tor_geo_ipv6_file_path = os.path.join(base_path, "geoip6")
+-            else:
+-                # Fallback to looking in the path
+-                tor_path = shutil.which("tor")
+-                if not os.path.exists(tor_path):
+-                    raise CannotFindTor()
+-
+-                obfs4proxy_file_path = shutil.which("obfs4proxy")
+-                snowflake_file_path = shutil.which("snowflake-client")
+-                meek_client_file_path = shutil.which("meek-client")
+-                prefix = os.path.dirname(os.path.dirname(tor_path))
+-                tor_geo_ip_file_path = os.path.join(prefix, "share/tor/geoip")
+-                tor_geo_ipv6_file_path = os.path.join(prefix, "share/tor/geoip6")
+-
 -        elif self.platform == "BSD":
 -            tor_path = "/usr/local/bin/tor"
 -            tor_geo_ip_file_path = "/usr/local/share/tor/geoip"
 -            tor_geo_ipv6_file_path = "/usr/local/share/tor/geoip6"
 -            obfs4proxy_file_path = "/usr/local/bin/obfs4proxy"
+-            snowflake_file_path = "/usr/local/bin/snowflake-client"
+-            meek_client_file_path = "/usr/local/bin/meek-client"
 +        tor_path = "@tor@/bin/tor"
 +        tor_geo_ip_file_path = "@geoip@/share/tor/geoip"
 +        tor_geo_ipv6_file_path = "@geoip@/share/tor/geoip6"
 +        obfs4proxy_file_path = "@obfs4@/bin/obfs4proxy"
-
++        snowflake_file_path = "@snowflake@/bin/snowflake-client"
++        meek_client_file_path = "@meek@/bin/meek-client"
+ 
          return (
              tor_path,
-

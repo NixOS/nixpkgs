@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, lib, ...} :
+import ./make-test-python.nix ({ pkgs, lib, ... }:
 
 {
   name = "sway";
@@ -13,18 +13,37 @@ import ./make-test-python.nix ({ pkgs, lib, ...} :
 
     environment = {
       # For glinfo and wayland-info:
-      systemPackages = with pkgs; [ mesa-demos wayland-utils ];
+      systemPackages = with pkgs; [ mesa-demos wayland-utils alacritty ];
       # Use a fixed SWAYSOCK path (for swaymsg):
       variables = {
         "SWAYSOCK" = "/tmp/sway-ipc.sock";
-        "WLR_RENDERER_ALLOW_SOFTWARE" = "1";
+        # TODO: Investigate if we can get hardware acceleration to work (via
+        # virtio-gpu and Virgil). We currently have to use the Pixman software
+        # renderer since the GLES2 renderer doesn't work inside the VM (even
+        # with WLR_RENDERER_ALLOW_SOFTWARE):
+        # "WLR_RENDERER_ALLOW_SOFTWARE" = "1";
+        "WLR_RENDERER" = "pixman";
       };
       # For convenience:
       shellAliases = {
-        test-x11 = "glinfo | head -n 3 | tee /tmp/test-x11.out && touch /tmp/test-x11-exit-ok";
+        test-x11 = "glinfo | tee /tmp/test-x11.out && touch /tmp/test-x11-exit-ok";
         test-wayland = "wayland-info | tee /tmp/test-wayland.out && touch /tmp/test-wayland-exit-ok";
       };
+
+      # To help with OCR:
+      etc."xdg/foot/foot.ini".text = lib.generators.toINI { } {
+        main = {
+          font = "inconsolata:size=14";
+        };
+        colors = rec {
+          foreground = "000000";
+          background = "ffffff";
+          regular2 = foreground;
+        };
+      };
     };
+
+    fonts.fonts = [ pkgs.inconsolata ];
 
     # Automatically configure and start Sway when logging in on tty1:
     programs.bash.loginShellInit = ''
@@ -61,7 +80,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...} :
     machine.wait_for_file("/run/user/1000/wayland-1")
     machine.wait_for_file("/tmp/sway-ipc.sock")
 
-    # Test XWayland:
+    # Test XWayland (foot does not support X):
     machine.succeed(
         "su - alice -c 'swaymsg exec WINIT_UNIX_BACKEND=x11 WAYLAND_DISPLAY=invalid alacritty'"
     )
@@ -69,21 +88,22 @@ import ./make-test-python.nix ({ pkgs, lib, ...} :
     machine.send_chars("test-x11\n")
     machine.wait_for_file("/tmp/test-x11-exit-ok")
     print(machine.succeed("cat /tmp/test-x11.out"))
+    machine.copy_from_vm("/tmp/test-x11.out")
     machine.screenshot("alacritty_glinfo")
     machine.succeed("pkill alacritty")
 
-    # Start a terminal (Alacritty) on workspace 3:
+    # Start a terminal (foot) on workspace 3:
     machine.send_key("alt-3")
-    machine.succeed(
-        "su - alice -c 'swaymsg exec WINIT_UNIX_BACKEND=wayland DISPLAY=invalid alacritty'"
-    )
+    machine.sleep(3)
+    machine.send_key("alt-ret")
     machine.wait_for_text("alice@machine")
     machine.send_chars("test-wayland\n")
     machine.wait_for_file("/tmp/test-wayland-exit-ok")
     print(machine.succeed("cat /tmp/test-wayland.out"))
-    machine.screenshot("alacritty_wayland_info")
+    machine.copy_from_vm("/tmp/test-wayland.out")
+    machine.screenshot("foot_wayland_info")
     machine.send_key("alt-shift-q")
-    machine.wait_until_fails("pgrep alacritty")
+    machine.wait_until_fails("pgrep foot")
 
     # Test gpg-agent starting pinentry-gnome3 via D-Bus (tests if
     # $WAYLAND_DISPLAY is correctly imported into the D-Bus user env):
@@ -104,9 +124,6 @@ import ./make-test-python.nix ({ pkgs, lib, ...} :
     # Exit Sway and verify process exit status 0:
     machine.succeed("su - alice -c 'swaymsg exit || true'")
     machine.wait_until_fails("pgrep -x sway")
-
-    # TODO: Sway currently segfaults after "swaymsg exit" but only in this VM test:
-    # machine # [  104.090032] sway[921]: segfault at 3f800008 ip 00007f7dbdc25f10 sp 00007ffe282182f8 error 4 in libwayland-server.so.0.1.0[7f7dbdc1f000+8000]
-    # machine.wait_for_file("/tmp/sway-exit-ok")
+    machine.wait_for_file("/tmp/sway-exit-ok")
   '';
 })

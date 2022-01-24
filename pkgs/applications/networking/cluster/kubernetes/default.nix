@@ -95,7 +95,7 @@ stdenv.mkDerivation rec {
     description = "Production-Grade Container Scheduling and Management";
     license = licenses.asl20;
     homepage = "https://kubernetes.io";
-    maintainers = with maintainers; [ johanot offline saschagrunert ];
+    maintainers = with maintainers; [ ] ++ teams.kubernetes.members;
     platforms = platforms.unix;
   };
 

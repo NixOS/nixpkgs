@@ -24,13 +24,13 @@ stdenv.mkDerivation rec {
     substituteInPlace tests/unit-utils-io.c --replace "| O_DIRECT" ""
   '';
 
-  NIX_LDFLAGS = lib.optionalString (stdenv.cc.isGNU && !stdenv.targetPlatform.isStatic) "-lgcc_s";
+  NIX_LDFLAGS = lib.optionalString (stdenv.cc.isGNU && !stdenv.hostPlatform.isStatic) "-lgcc_s";
 
   configureFlags = [
     "--enable-cryptsetup-reencrypt"
     "--with-crypto_backend=openssl"
     "--disable-ssh-token"
-  ] ++ lib.optionals stdenv.targetPlatform.isStatic [
+  ] ++ lib.optionals stdenv.hostPlatform.isStatic [
     "--enable-static-cryptsetup"
   ];
 
