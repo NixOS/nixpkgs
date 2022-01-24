@@ -12,17 +12,16 @@ let
     "--config /var/lib/AdGuardHome/AdGuardHome.yaml"
   ] ++ cfg.extraArgs);
 
-  baseConfig = {
+  superSettings = {
     bind_host = cfg.host;
     bind_port = cfg.port;
   };
 
   configFile = pkgs.writeTextFile {
     name = "AdGuardHome.yaml";
-    text = builtins.toJSON (recursiveUpdate cfg.settings baseConfig);
+    text = builtins.toJSON (cfg.settings // superSettings);
     checkPhase = "${pkgs.adguardhome}/bin/adguardhome -c $out --check-config";
   };
-
 in {
   options.services.adguardhome = with types; {
     enable = mkEnableOption "AdGuard Home network-wide ad blocker";
@@ -100,6 +99,18 @@ in {
           -> hasAttrByPath [ "dns" "bootstrap_dns" ] cfg.settings;
         message =
           "AdGuard setting dns.bootstrap_dns needs to be configured for a minimal working configuration";
+      }
+      {
+        assertion = cfg.settings != { }
+          -> !(hasAttr "bind_host" cfg.settings);
+        message =
+          "AdGuard setting bind_host needs to be configured through services.adguardhome.host";
+      }
+      {
+        assertion = cfg.settings != { }
+          -> !(hasAttr "bind_port" cfg.settings);
+        message =
+          "AdGuard setting bind_port needs to be configured through services.adguardhome.port";
       }
     ];
 
