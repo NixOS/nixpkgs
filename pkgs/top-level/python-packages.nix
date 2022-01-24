@@ -3285,6 +3285,8 @@ in {
 
   glymur = callPackage ../development/python-modules/glymur { };
 
+  giving = callPackage ../development/python-modules/giving { };
+
   gmpy2 = callPackage ../development/python-modules/gmpy2 { };
 
   gmpy = callPackage ../development/python-modules/gmpy { };
