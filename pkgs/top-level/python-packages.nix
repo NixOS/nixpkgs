@@ -9973,6 +9973,8 @@ self: super: with self; {
 
   ovoenergy = callPackage ../development/python-modules/ovoenergy { };
 
+  ovld = callPackage ../development/python-modules/ovld { };
+
   owslib = callPackage ../development/python-modules/owslib { };
 
   oyaml = callPackage ../development/python-modules/oyaml { };
