@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
         building synthesis networks.
     '';
     homepage = "http://blop.sourceforge.net/index.html";
-    license = licenses.gpl3;
+    license = licenses.gpl2Plus;
     maintainers = [ maintainers.fps ];
   };
 }
