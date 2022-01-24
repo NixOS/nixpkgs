@@ -1,6 +1,6 @@
 { program ? "pdfstudioviewer"
 , fetchurl
-, pkgs
+, libgccjit
 , callPackage
 }:
 
