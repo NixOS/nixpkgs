@@ -30,7 +30,7 @@
     version = "${year}.1.2";
     desktopName = "PDF Studio Viewer";
     longDescription = ''
-    PDF Studio Viewer is an easy to use, full-featured PDF editing software. This is the free edition. For the standard/pro edition, see the package pdfstudio.
+      PDF Studio Viewer is an easy to use, full-featured PDF editing software. This is the free edition. For the standard/pro edition, see the package pdfstudio.
     '';
     src = fetchurl {
       url = "https://download.qoppa.com/${pname}/v${year}/PDFStudioViewer_v${
