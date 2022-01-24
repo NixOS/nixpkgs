@@ -4,13 +4,13 @@
 stdenv.mkDerivation rec {
 
   pname = "havoc";
-  version = "0.3.1";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "ii8";
     repo = pname;
     rev = version;
-    sha256 = "1g05r9j6srwz1krqvzckx80jn8fm48rkb4xp68953gy9yp2skg3k";
+    sha256 = "sha256-zNKDQqkDeNj5fB5EdMVfAs2H4uBgLh6Fp3uSjiJ1VhQ=";
   };
 
   nativeBuildInputs = [ pkg-config ];
