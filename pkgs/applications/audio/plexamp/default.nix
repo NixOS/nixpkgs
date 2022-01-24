@@ -1,4 +1,4 @@
-{ lib, fetchurl, appimageTools, pkgs }:
+{ lib, fetchurl, appimageTools, pkgs, testGraphical }:
 
 let
   pname = "plexamp";
@@ -6,14 +6,15 @@ let
 
   src = fetchurl {
     url = "https://plexamp.plex.tv/plexamp.plex.tv/desktop/Plexamp-${version}.AppImage";
-    name="${pname}-${version}.AppImage";
+    name = "${pname}-${version}.AppImage";
     sha512 = "uassNLdCXx3WLarUMJNhU8fbXugG7yTLMQacPAszLoRdmbMwcN6wT7ED26VhlNVhY3xr02GjZSDw4/LADZWqKw==";
   };
 
   appimageContents = appimageTools.extractType2 {
     inherit pname version src;
   };
-in appimageTools.wrapType2 {
+in
+let self = appimageTools.wrapType2 {
   inherit pname version src;
 
   multiPkgs = null; # no 32bit needed
@@ -29,6 +30,12 @@ in appimageTools.wrapType2 {
   '';
 
   passthru.updateScript = ./update-plexamp.sh;
+  passthru.tests = {
+    graphical = testGraphical {
+      package = self;
+      expectedText = "Welcome to Plexamp";
+    };
+  };
 
   meta = with lib; {
     description = "A beautiful Plex music player for audiophiles, curators, and hipsters";
@@ -38,4 +45,5 @@ in appimageTools.wrapType2 {
     maintainers = with maintainers; [ killercup synthetica ];
     platforms = [ "x86_64-linux" ];
   };
-}
+};
+in self
