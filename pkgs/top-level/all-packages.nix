@@ -1663,6 +1663,8 @@ with pkgs;
 
   cyclonedx-python = callPackage ../tools/misc/cyclonedx-python { };
 
+  dcap = callPackage ../tools/networking/dcap { };
+
   deltachat-cursed = callPackage ../applications/networking/instant-messengers/deltachat-cursed { };
 
   deltachat-desktop = callPackage ../applications/networking/instant-messengers/deltachat-desktop {
