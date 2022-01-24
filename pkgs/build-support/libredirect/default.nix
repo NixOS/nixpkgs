@@ -55,6 +55,7 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     install -vD "$libName" "$out/lib/$libName"
+
   '' + lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
     # dylib will be rejected unless dylib rpath gets explictly set
     install_name_tool \
