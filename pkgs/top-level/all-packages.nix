@@ -30194,6 +30194,17 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) IOKit;
   };
 
+  groestlcoin  = libsForQt5.callPackage ../applications/blockchains/groestlcoin {
+    boost = boost17x;
+    withGui = true;
+    inherit (darwin) autoSignDarwinBinariesHook;
+  };
+
+  groestlcoind = callPackage ../applications/blockchains/groestlcoin {
+    boost = boost17x;
+    inherit (darwin) autoSignDarwinBinariesHook;
+  };
+
   ledger_agent = with python3Packages; toPythonApplication ledger_agent;
 
   ledger-live-desktop = callPackage ../applications/blockchains/ledger-live-desktop { };
