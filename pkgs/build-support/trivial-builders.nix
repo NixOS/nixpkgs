@@ -820,6 +820,8 @@ rec {
     , command ? "${package.meta.mainProgram or package.pname or package.name}"
     , expectedText ? "File" # Very very common in menu bars.
     }: import ../../nixos/tests/make-test-python.nix ({ pkgs, ... }: {
+      name = "${package.name}-test-graphical";
+
       machine = { ... }: {
         imports = [ ../../nixos/tests/common/wayland-cage.nix ];
         environment.systemPackages = [ package ];
