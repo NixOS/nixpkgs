@@ -18,8 +18,12 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     install -Dm755 usr/local/bin/mysides -t $out/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {
