@@ -5037,6 +5037,8 @@ in {
 
   mizani = callPackage ../development/python-modules/mizani { };
 
+  mkdocs = callPackage ../development/python-modules/mkdocs { };
+
   mkl-service = callPackage ../development/python-modules/mkl-service { };
 
   ml-collections = callPackage ../development/python-modules/ml-collections { };
