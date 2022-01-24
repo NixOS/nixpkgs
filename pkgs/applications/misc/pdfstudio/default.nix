@@ -26,7 +26,6 @@
     year = "2021";
     version = "${year}.1.2";
     desktopName = "PDF Studio Viewer";
-    extraBuildInputs = [ ];
     src = fetchurl {
       url = "https://download.qoppa.com/${pname}/v${year}/PDFStudioViewer_v${
           builtins.replaceStrings [ "." ] [ "_" ] version
