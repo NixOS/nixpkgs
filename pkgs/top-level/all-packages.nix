@@ -10189,9 +10189,9 @@ with pkgs;
     getPackagesWithPrefix = prefix: mapAttrs' (name: pkg: nameValuePair (removePrefix ("thelounge-" + prefix + "-") name) pkg)
       (filterAttrs (name: _: hasPrefix ("thelounge-" + prefix + "-") name) pkgs);
   in
-  {
-    plugins = getPackagesWithPrefix "plugin";
-    themes = getPackagesWithPrefix "theme";
+  recurseIntoAttrs {
+    plugins = recurseIntoAttrs (getPackagesWithPrefix "plugin");
+    themes = recurseIntoAttrs (getPackagesWithPrefix "theme");
   };
 
   thefuck = python3Packages.callPackage ../tools/misc/thefuck { };
