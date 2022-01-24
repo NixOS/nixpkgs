@@ -520,6 +520,8 @@ in {
 
   ansiconv = callPackage ../development/python-modules/ansiconv { };
 
+  ansimarkup = callPackage ../development/python-modules/ansimarkup { };
+
   ansiwrap = callPackage ../development/python-modules/ansiwrap { };
 
   antlr4-python3-runtime = callPackage ../development/python-modules/antlr4-python3-runtime {
