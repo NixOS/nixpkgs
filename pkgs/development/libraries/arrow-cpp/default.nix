@@ -207,7 +207,6 @@ stdenv.mkDerivation rec {
       ];
     in
     lib.optionalString doInstallCheck "-${builtins.concatStringsSep ":" filteredTests}";
-
   installCheckInputs = [ perl which ] ++ lib.optional enableS3 minio;
   installCheckPhase =
     let
