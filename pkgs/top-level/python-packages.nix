@@ -6898,6 +6898,8 @@ self: super: with self; {
 
   jupytext = callPackage ../development/python-modules/jupytext { };
 
+  jurigged = callPackage ../development/python-modules/jurigged { };
+
   justbackoff = callPackage ../development/python-modules/justbackoff { };
 
   justbases = callPackage ../development/python-modules/justbases { };
