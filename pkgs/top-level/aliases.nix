@@ -1085,6 +1085,7 @@ mapAliases ({
   weechat-matrix-bridge = weechatScripts.weechat-matrix-bridge; # added 2018-09-06
   wicd = throw "wicd has been removed as it is abandoned."; # added 2021-09-11
   wineStaging = wine-staging; # added 2018-01-08
+  wineWayland = wine-wayland;
   winusb = woeusb; # added 2017-12-22
   winswitch = throw "winswitch has been removed from nixpkgs."; # added 2019-12-10
   wireshark-gtk = throw "wireshark-gtk is not supported anymore. Use wireshark-qt or wireshark-cli instead."; # added 2019-11-18

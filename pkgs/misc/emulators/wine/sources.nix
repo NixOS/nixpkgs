@@ -10,6 +10,8 @@ let fetchurl = args@{url, sha256, ...}:
   pkgs.fetchurl { inherit url sha256; } // args;
     fetchFromGitHub = args@{owner, repo, rev, sha256, ...}:
   pkgs.fetchFromGitHub { inherit owner repo rev sha256; } // args;
+    fetchFromGitLab = args@{domain, owner, repo, rev, sha256, ...}:
+  pkgs.fetchFromGitLab { inherit domain owner repo rev sha256; } // args;
 in rec {
 
   stable = fetchurl rec {
@@ -53,6 +55,19 @@ in rec {
     rev = "v${version}";
 
     disabledPatchsets = [ ];
+  };
+
+  wayland = fetchFromGitLab rec {
+    version = "7.0-rc2";
+    sha256 = "sha256-FU9L8cyIIfFQ+8f/AUg7IT+RxTpyNTuSfL0zBnur0SA=";
+    domain = "gitlab.collabora.com";
+    owner = "alf";
+    repo = "wine";
+    rev = "95f0154c96a4b7d81e783ee5ba2f5d9cc7cda351";
+
+    inherit (unstable) gecko32 gecko64;
+
+    inherit (unstable) mono;
   };
 
   winetricks = fetchFromGitHub rec {
