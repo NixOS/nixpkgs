@@ -4,7 +4,7 @@
 , version
 , desktopName
 , pkgs
-, extraBuildInputs
+, extraBuildInputs ? []
 , stdenv
 , lib
 , dpkg
