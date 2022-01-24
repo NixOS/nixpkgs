@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, testGraphical
 , fetchurl
 , fetchpatch
 , SDL
@@ -82,7 +83,7 @@ let
   inherit (lib) optionalString optional optionals;
   hostIsAarch = stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isAarch64;
 in
-stdenv.mkDerivation rec {
+let self = stdenv.mkDerivation rec {
   pname = "${optionalString onlyLibVLC "lib"}vlc";
   version = "3.0.16";
 
@@ -229,6 +230,13 @@ stdenv.mkDerivation rec {
     cp -R share/hrtfs $out/share/vlc
   '';
 
+  passthru.tests = {
+    graphical = testGraphical {
+      package = self;
+      expectedText = "Media";
+    };
+  };
+
   meta = with lib; {
     description = "Cross-platform media player and streaming server";
     homepage = "http://www.videolan.org/vlc/";
@@ -236,4 +244,5 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.linux;
   };
-}
+};
+in self
