@@ -474,6 +474,18 @@ rec {
           [{ inherit (module) file; inherit value; }]
         ) configs;
 
+      # Convert an option tree decl to a submodule option decl
+      optionTreeToOption = decl:
+        if isOption decl.options
+        then decl
+        else decl // {
+            options = mkOption {
+              type = types.submoduleWith {
+                modules = [ { options = decl.options; } ];
+              };
+            };
+          };
+
       resultsByName = mapAttrs (name: decls:
         # We're descending into attribute ‘name’.
         let
@@ -493,7 +505,15 @@ rec {
               firstOption = findFirst (m: isOption m.options) "" decls;
               firstNonOption = findFirst (m: !isOption m.options) "" decls;
             in
-              throw "The option `${showOption loc}' in `${firstOption._file}' is a prefix of options in `${firstNonOption._file}'."
+              if firstOption.options.type?isSubmodule && firstOption.options.type.isSubmodule
+              then
+                let opt = fixupOptionType loc (mergeOptionDecls loc (map optionTreeToOption decls));
+                in {
+                  matchedOptions = evalOptionValue loc opt defns';
+                  unmatchedDefns = [];
+                }
+              else
+                throw "The option `${showOption loc}' in `${firstOption._file}' is a prefix of options in `${firstNonOption._file}'."
           else
             mergeModules' loc decls defns) declsByName;
 
