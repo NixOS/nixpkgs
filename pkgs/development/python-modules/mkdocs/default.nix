@@ -61,11 +61,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  postPatch = ''
-    # Remove test due to missing requirement
-    rm mkdocs/tests/theme_tests.py
-  '';
-
   pytestFlagsArray = [ "mkdocs/tests/*.py" ];
 
   disabledTests = [
