@@ -22,6 +22,9 @@ let
       sha256 = "sha256-Ms55Lum2oMu+w0ASPiKayfdl3/jCpK6SR6FLK6OjZac=";
     };
   });
+  django-extensions' = django-extensions.overrideAttrs (oldAttrs: rec {
+    propagatedBuildInputs = [];
+  });
 in
 
 buildPythonApplication rec {
@@ -37,7 +40,7 @@ buildPythonApplication rec {
     requests
     mypy-extensions
     django_3'
-    django-extensions
+    django-extensions'
     dateparser
     youtube-dl
     python-crontab
