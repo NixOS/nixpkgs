@@ -5714,7 +5714,7 @@
     github = "jmc-figueira";
     githubId = 6634716;
     name = "João Figueira";
-    keys = [r
+    keys = [
       # GitHub signing key
       {
         longkeyid = "rsa4096/0xDC7AE56AE98E02D7";
