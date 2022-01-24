@@ -4113,7 +4113,14 @@ with pkgs;
     citrix_workspace_21_12_0
   ;
 
-  citra = libsForQt5.callPackage ../misc/emulators/citra { };
+  citra-canary = import ../misc/emulators/citra {
+    branch = "canary";
+    inherit (pkgs) libsForQt5 fetchFromGitHub;
+  };
+  citra-nightly = import ../misc/emulators/citra {
+    branch = "nightly";
+    inherit (pkgs) libsForQt5 fetchFromGitHub;
+  };
 
   cmigemo = callPackage ../tools/text/cmigemo { };
 
