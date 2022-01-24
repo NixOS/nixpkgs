@@ -402,6 +402,8 @@ package-maintainers:
     - haskell-ci
     - diagrams
     - rel8
+    - regex-rure
+    - jacinda
     # owothia
     - irc-client
     - chatter
