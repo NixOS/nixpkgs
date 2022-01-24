@@ -10179,6 +10179,8 @@ in {
 
   varint = callPackage ../development/python-modules/varint { };
 
+  varname = callPackage ../development/python-modules/varname { };
+
   vcrpy = callPackage ../development/python-modules/vcrpy { };
 
   vcver = callPackage ../development/python-modules/vcver { };
