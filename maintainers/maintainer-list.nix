@@ -1918,12 +1918,10 @@
     github = "cburstedde";
     githubId = 109908;
     name = "Carsten Burstedde";
-    keys = [
-      {
-        longkeyid = "rsa2048/0x0704CD9E550A6BCD";
-        fingerprint = "1127 A432 6524 BF02 737B  544E 0704 CD9E 550A 6BCD";
-      }
-    ];
+    keys = [{
+      longkeyid = "rsa2048/0x0704CD9E550A6BCD";
+      fingerprint = "1127 A432 6524 BF02 737B  544E 0704 CD9E 550A 6BCD";
+    }];
   };
   cdepillabout = {
     email = "cdep.illabout@gmail.com";
@@ -6371,7 +6369,7 @@
     keys = [{
       longkeyid = "rsa4096/0x7248991EFA8EFBEE";
       fingerprint = "01F5 0A29 D4AA 9117 5A11  BDB1 7248 991E FA8E FBEE";
-     }];
+    }];
   };
   kiwi = {
     email = "envy1988@gmail.com";
@@ -7026,7 +7024,7 @@
     email = "nullarequest@vivlaid.net";
     github = "Lunarequest";
     githubId = 30698906;
-    name = "Advaith Madhukar"; #this is my legal name, I prefer Luna; please keep that in mind!
+    name = "Advaith Madhukar"; # this is my legal name, I prefer Luna; please keep that in mind!
   };
   lionello = {
     email = "lio@lunesu.com";
@@ -10624,14 +10622,20 @@
     name = "Samuel Dionne-Riel";
   };
   samuelgrf = {
-    email = "git@samuelgrf.com";
+    email = "s@muel.gr";
     github = "samuelgrf";
     githubId = 67663538;
     name = "Samuel Gräfenstein";
-    keys = [{
-      longkeyid = "rsa4096/0xEF76A063F15C63C8";
-      fingerprint = "FF24 5832 8FAF 4660 18C6  186E EF76 A063 F15C 63C8";
-    }];
+    keys = [
+      {
+        longkeyid = "rsa4096/0xDE75F92E318123F0";
+        fingerprint = "6F2E 2A90 423C 8111 BFF2  895E DE75 F92E 3181 23F0";
+      }
+      {
+        longkeyid = "rsa4096/0xEF76A063F15C63C8";
+        fingerprint = "FF24 5832 8FAF 4660 18C6  186E EF76 A063 F15C 63C8";
+      }
+    ];
   };
   samuelrivas = {
     email = "samuelrivas@gmail.com";
@@ -11512,10 +11516,10 @@
     name = "Justus K";
   };
   SubhrajyotiSen = {
-      email = "subhrajyoti12@gmail.com";
-      github = "SubhrajyotiSen";
-      githubId = 12984845;
-      name = "Subhrajyoti Sen";
+    email = "subhrajyoti12@gmail.com";
+    github = "SubhrajyotiSen";
+    githubId = 12984845;
+    name = "Subhrajyoti Sen";
   };
   suhr = {
     email = "suhr@i2pmail.org";
