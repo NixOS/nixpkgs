@@ -3510,6 +3510,8 @@ in {
 
   grip = callPackage ../development/python-modules/grip { };
 
+  groestlcoin_hash = callPackage ../development/python-modules/groestlcoin_hash { };
+
   grpc-google-iam-v1 = callPackage ../development/python-modules/grpc-google-iam-v1 { };
 
   grpcio = callPackage ../development/python-modules/grpcio { };
