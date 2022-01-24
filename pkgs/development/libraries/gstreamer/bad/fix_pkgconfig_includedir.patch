@@ -1,0 +1,15 @@
+diff --git a/pkgconfig/meson.build b/pkgconfig/meson.build
+index 271f327f3..7e2afa754 100644
+--- a/pkgconfig/meson.build
++++ b/pkgconfig/meson.build
+@@ -2,8 +2,8 @@ pkgconf = configuration_data()
+ 
+ pkgconf.set('prefix', join_paths(get_option('prefix')))
+ pkgconf.set('exec_prefix', '${prefix}')
+-pkgconf.set('libdir', '${prefix}/@0@'.format(get_option('libdir')))
+-pkgconf.set('includedir', '${prefix}/@0@'.format(get_option('includedir')))
++pkgconf.set('libdir', join_paths(get_option('prefix'), get_option('libdir')))
++pkgconf.set('includedir', join_paths(get_option('prefix'), get_option('includedir')))
+ pkgconf.set('GST_API_VERSION', api_version)
+ pkgconf.set('VERSION', gst_version)
+ 

@@ -1,0 +1,58 @@
+--- a/configure
++++ b/configure
+@@ -6029,53 +6029,8 @@
+ #AC_CHECK_HEADERS(zlib.h)
+ #EGG_CHECK_ZLIB
+ 
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for path to OpenSSL" >&5
+-$as_echo_n "checking for path to OpenSSL... " >&6; }
+-
+-
+-# Check whether --with-openssl was given.
+-if test "${with_openssl+set}" = set; then :
+-  withval=$with_openssl; with_openssl_path=$withval
+-else
+-  with_openssl_path=auto
+-fi
+-
+-
+-
+-cf_openssl_basedir=""
+-if test "$with_openssl_path" != "auto"; then
+-    cf_openssl_basedir="`echo ${with_openssl_path} | sed 's/\/$//'`"
+-else
+-    for dirs in /usr/local/ssl /usr/pkg /usr/local /usr/local/openssl; do
+-    if test -f "${dirs}/include/openssl/opensslv.h" && test -f "${dirs}/lib/libssl.so"; then
+-      cf_openssl_basedir="${dirs}"
+-      break
+-    fi
+-  done
+-  unset dirs
+-fi
+-if test ! -z "$cf_openssl_basedir"; then
+-  if test -f "${cf_openssl_basedir}/include/openssl/opensslv.h" && test -f "${cf_openssl_basedir}/lib/libssl.so"; then
+-    SSL_INCLUDES="-I${cf_openssl_basedir}/include"
+-    SSL_LIBS="-L${cf_openssl_basedir}/lib"
+-  else
+-        cf_openssl_basedir=""
+-  fi
+-else
+-    if test -f "/usr/include/openssl/opensslv.h" ; then
+-    cf_openssl_basedir="/usr"
+-  fi
+-fi
+-
+-if test ! -z "$cf_openssl_basedir"; then
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $cf_openssl_basedir" >&5
+-$as_echo "$cf_openssl_basedir" >&6; }
+-else
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: not found" >&5
+-$as_echo "not found" >&6; }
+-  as_fn_error 1 "OpenSSL is required." "$LINENO" 5
+-fi
+-unset cf_openssl_basedir
++SSL_INCLUDES="-I@openssl.dev@/include"
++SSL_LIBS="-L@openssl.out@/lib"
+ 
+ save_CXX="$CXX"
+ CXX="$CXX $SSL_INCLUDES"

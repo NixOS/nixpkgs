@@ -1,0 +1,25 @@
+From 80bca7370d4b8bafcf18abcda30f02e190f419a4 Mon Sep 17 00:00:00 2001
+From: Tom Hall <tahall256@protonmail.ch>
+Date: Sat, 29 Aug 2020 19:14:30 +0100
+Subject: [PATCH] Use KDE_INSTALL_TARGETS_DEFAULT_ARGS when installing targets
+
+---
+ src/server/CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/server/CMakeLists.txt b/src/server/CMakeLists.txt
+index 0f99682..35e3601 100644
+--- a/src/server/CMakeLists.txt
++++ b/src/server/CMakeLists.txt
+@@ -356,7 +356,7 @@ set_target_properties(KWaylandServer PROPERTIES VERSION   ${KWAYLANDSERVER_VERSI
+                                                 SOVERSION ${KWAYLANDSERVER_SOVERSION}
+ )
+ 
+-install(TARGETS KWaylandServer EXPORT KWaylandServerTargets ${KF5_INSTALL_TARGETS_DEFAULT_ARGS})
++install(TARGETS KWaylandServer EXPORT KWaylandServerTargets ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
+ 
+ set(SERVER_LIB_HEADERS
+   ${CMAKE_CURRENT_BINARY_DIR}/KWaylandServer/kwaylandserver_export.h
+-- 
+2.26.2
+

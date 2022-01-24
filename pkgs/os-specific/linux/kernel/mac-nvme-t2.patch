@@ -1,0 +1,283 @@
+diff --git a/drivers/nvme/host/pci.c b/drivers/nvme/host/pci.c
+index dd10cf78f2d3..8f006638452b 100644
+--- a/drivers/nvme/host/pci.c
++++ b/drivers/nvme/host/pci.c
+@@ -28,8 +28,8 @@
+ #include "trace.h"
+ #include "nvme.h"
+ 
+-#define SQ_SIZE(depth)		(depth * sizeof(struct nvme_command))
+-#define CQ_SIZE(depth)		(depth * sizeof(struct nvme_completion))
++#define SQ_SIZE(q)	((q)->q_depth * sizeof(struct nvme_command))
++#define CQ_SIZE(q)	((q)->q_depth * sizeof(struct nvme_completion))
+ 
+ #define SGES_PER_PAGE	(PAGE_SIZE / sizeof(struct nvme_sgl_desc))
+ 
+@@ -1344,16 +1344,16 @@ static enum blk_eh_timer_return nvme_timeout(struct request *req, bool reserved)
+ 
+ static void nvme_free_queue(struct nvme_queue *nvmeq)
+ {
+-	dma_free_coherent(nvmeq->dev->dev, CQ_SIZE(nvmeq->q_depth),
++	dma_free_coherent(nvmeq->dev->dev, CQ_SIZE(nvmeq),
+ 				(void *)nvmeq->cqes, nvmeq->cq_dma_addr);
+ 	if (!nvmeq->sq_cmds)
+ 		return;
+ 
+ 	if (test_and_clear_bit(NVMEQ_SQ_CMB, &nvmeq->flags)) {
+ 		pci_free_p2pmem(to_pci_dev(nvmeq->dev->dev),
+-				nvmeq->sq_cmds, SQ_SIZE(nvmeq->q_depth));
++				nvmeq->sq_cmds, SQ_SIZE(nvmeq));
+ 	} else {
+-		dma_free_coherent(nvmeq->dev->dev, SQ_SIZE(nvmeq->q_depth),
++		dma_free_coherent(nvmeq->dev->dev, SQ_SIZE(nvmeq),
+ 				nvmeq->sq_cmds, nvmeq->sq_dma_addr);
+ 	}
+ }
+@@ -1433,12 +1433,12 @@ static int nvme_cmb_qdepth(struct nvme_dev *dev, int nr_io_queues,
+ }
+ 
+ static int nvme_alloc_sq_cmds(struct nvme_dev *dev, struct nvme_queue *nvmeq,
+-				int qid, int depth)
++				int qid)
+ {
+ 	struct pci_dev *pdev = to_pci_dev(dev->dev);
+ 
+ 	if (qid && dev->cmb_use_sqes && (dev->cmbsz & NVME_CMBSZ_SQS)) {
+-		nvmeq->sq_cmds = pci_alloc_p2pmem(pdev, SQ_SIZE(depth));
++		nvmeq->sq_cmds = pci_alloc_p2pmem(pdev, SQ_SIZE(nvmeq));
+ 		if (nvmeq->sq_cmds) {
+ 			nvmeq->sq_dma_addr = pci_p2pmem_virt_to_bus(pdev,
+ 							nvmeq->sq_cmds);
+@@ -1447,11 +1447,11 @@ static int nvme_alloc_sq_cmds(struct nvme_dev *dev, struct nvme_queue *nvmeq,
+ 				return 0;
+ 			}
+ 
+-			pci_free_p2pmem(pdev, nvmeq->sq_cmds, SQ_SIZE(depth));
++			pci_free_p2pmem(pdev, nvmeq->sq_cmds, SQ_SIZE(nvmeq));
+ 		}
+ 	}
+ 
+-	nvmeq->sq_cmds = dma_alloc_coherent(dev->dev, SQ_SIZE(depth),
++	nvmeq->sq_cmds = dma_alloc_coherent(dev->dev, SQ_SIZE(nvmeq),
+ 				&nvmeq->sq_dma_addr, GFP_KERNEL);
+ 	if (!nvmeq->sq_cmds)
+ 		return -ENOMEM;
+@@ -1465,12 +1465,13 @@ static int nvme_alloc_queue(struct nvme_dev *dev, int qid, int depth)
+ 	if (dev->ctrl.queue_count > qid)
+ 		return 0;
+ 
+-	nvmeq->cqes = dma_alloc_coherent(dev->dev, CQ_SIZE(depth),
++	nvmeq->q_depth = depth;
++	nvmeq->cqes = dma_alloc_coherent(dev->dev, CQ_SIZE(nvmeq),
+ 					 &nvmeq->cq_dma_addr, GFP_KERNEL);
+ 	if (!nvmeq->cqes)
+ 		goto free_nvmeq;
+ 
+-	if (nvme_alloc_sq_cmds(dev, nvmeq, qid, depth))
++	if (nvme_alloc_sq_cmds(dev, nvmeq, qid))
+ 		goto free_cqdma;
+ 
+ 	nvmeq->dev = dev;
+@@ -1479,15 +1480,14 @@ static int nvme_alloc_queue(struct nvme_dev *dev, int qid, int depth)
+ 	nvmeq->cq_head = 0;
+ 	nvmeq->cq_phase = 1;
+ 	nvmeq->q_db = &dev->dbs[qid * 2 * dev->db_stride];
+-	nvmeq->q_depth = depth;
+ 	nvmeq->qid = qid;
+ 	dev->ctrl.queue_count++;
+ 
+ 	return 0;
+ 
+  free_cqdma:
+-	dma_free_coherent(dev->dev, CQ_SIZE(depth), (void *)nvmeq->cqes,
+-							nvmeq->cq_dma_addr);
++	dma_free_coherent(dev->dev, CQ_SIZE(nvmeq), (void *)nvmeq->cqes,
++			  nvmeq->cq_dma_addr);
+  free_nvmeq:
+ 	return -ENOMEM;
+ }
+@@ -1515,7 +1515,7 @@ static void nvme_init_queue(struct nvme_queue *nvmeq, u16 qid)
+ 	nvmeq->cq_head = 0;
+ 	nvmeq->cq_phase = 1;
+ 	nvmeq->q_db = &dev->dbs[qid * 2 * dev->db_stride];
+-	memset((void *)nvmeq->cqes, 0, CQ_SIZE(nvmeq->q_depth));
++	memset((void *)nvmeq->cqes, 0, CQ_SIZE(nvmeq));
+ 	nvme_dbbuf_init(dev, nvmeq, qid);
+ 	dev->online_queues++;
+ 	wmb(); /* ensure the first interrupt sees the initialization */
+diff --git a/drivers/nvme/host/core.c b/drivers/nvme/host/core.c
+index cc09b81fc7f4..716ebe87a2b8 100644
+--- a/drivers/nvme/host/core.c
++++ b/drivers/nvme/host/core.c
+@@ -1986,6 +1986,7 @@ int nvme_enable_ctrl(struct nvme_ctrl *ctrl, u64 cap)
+ 	ctrl->ctrl_config = NVME_CC_CSS_NVM;
+ 	ctrl->ctrl_config |= (page_shift - 12) << NVME_CC_MPS_SHIFT;
+ 	ctrl->ctrl_config |= NVME_CC_AMS_RR | NVME_CC_SHN_NONE;
++	/* Use default IOSQES. We'll update it later if needed */
+ 	ctrl->ctrl_config |= NVME_CC_IOSQES | NVME_CC_IOCQES;
+ 	ctrl->ctrl_config |= NVME_CC_ENABLE;
+ 
+@@ -2698,6 +2699,30 @@ int nvme_init_identify(struct nvme_ctrl *ctrl)
+ 		ctrl->hmmin = le32_to_cpu(id->hmmin);
+ 		ctrl->hmminds = le32_to_cpu(id->hmminds);
+ 		ctrl->hmmaxd = le16_to_cpu(id->hmmaxd);
++
++		/* Grab required IO queue size */
++		ctrl->iosqes = id->sqes & 0xf;
++		if (ctrl->iosqes < NVME_NVM_IOSQES) {
++			dev_err(ctrl->device,
++				"unsupported required IO queue size %d\n", ctrl->iosqes);
++			ret = -EINVAL;
++			goto out_free;
++		}
++		/*
++		 * If our IO queue size isn't the default, update the setting
++		 * in CC:IOSQES.
++		 */
++		if (ctrl->iosqes != NVME_NVM_IOSQES) {
++			ctrl->ctrl_config &= ~(0xfu << NVME_CC_IOSQES_SHIFT);
++			ctrl->ctrl_config |= ctrl->iosqes << NVME_CC_IOSQES_SHIFT;
++			ret = ctrl->ops->reg_write32(ctrl, NVME_REG_CC,
++						     ctrl->ctrl_config);
++			if (ret) {
++				dev_err(ctrl->device,
++					"error updating CC register\n");
++				goto out_free;
++			}
++		}
+ 	}
+ 
+ 	ret = nvme_mpath_init(ctrl, id);
+diff --git a/drivers/nvme/host/nvme.h b/drivers/nvme/host/nvme.h
+index 716a876119c8..34ef35fcd8a5 100644
+--- a/drivers/nvme/host/nvme.h
++++ b/drivers/nvme/host/nvme.h
+@@ -244,6 +244,7 @@ struct nvme_ctrl {
+ 	u32 hmmin;
+ 	u32 hmminds;
+ 	u16 hmmaxd;
++	u8 iosqes;
+ 
+ 	/* Fabrics only */
+ 	u16 sqsize;
+diff --git a/drivers/nvme/host/pci.c b/drivers/nvme/host/pci.c
+index 8f006638452b..54b35ea4af88 100644
+--- a/drivers/nvme/host/pci.c
++++ b/drivers/nvme/host/pci.c
+@@ -28,7 +28,7 @@
+ #include "trace.h"
+ #include "nvme.h"
+ 
+-#define SQ_SIZE(q)	((q)->q_depth * sizeof(struct nvme_command))
++#define SQ_SIZE(q)	((q)->q_depth << (q)->sqes)
+ #define CQ_SIZE(q)	((q)->q_depth * sizeof(struct nvme_completion))
+ 
+ #define SGES_PER_PAGE	(PAGE_SIZE / sizeof(struct nvme_sgl_desc))
+@@ -162,7 +162,7 @@ static inline struct nvme_dev *to_nvme_dev(struct nvme_ctrl *ctrl)
+ struct nvme_queue {
+ 	struct nvme_dev *dev;
+ 	spinlock_t sq_lock;
+-	struct nvme_command *sq_cmds;
++	void *sq_cmds;
+ 	 /* only used for poll queues: */
+ 	spinlock_t cq_poll_lock ____cacheline_aligned_in_smp;
+ 	volatile struct nvme_completion *cqes;
+@@ -178,6 +178,7 @@ struct nvme_queue {
+ 	u16 last_cq_head;
+ 	u16 qid;
+ 	u8 cq_phase;
++	u8 sqes;
+ 	unsigned long flags;
+ #define NVMEQ_ENABLED		0
+ #define NVMEQ_SQ_CMB		1
+@@ -488,7 +489,8 @@ static void nvme_submit_cmd(struct nvme_queue *nvmeq, struct nvme_command *cmd,
+ 			    bool write_sq)
+ {
+ 	spin_lock(&nvmeq->sq_lock);
+-	memcpy(&nvmeq->sq_cmds[nvmeq->sq_tail], cmd, sizeof(*cmd));
++	memcpy(nvmeq->sq_cmds + (nvmeq->sq_tail << nvmeq->sqes),
++	       cmd, sizeof(*cmd));
+ 	if (++nvmeq->sq_tail == nvmeq->q_depth)
+ 		nvmeq->sq_tail = 0;
+ 	nvme_write_sq_db(nvmeq, write_sq);
+@@ -1465,6 +1467,7 @@ static int nvme_alloc_queue(struct nvme_dev *dev, int qid, int depth)
+ 	if (dev->ctrl.queue_count > qid)
+ 		return 0;
+ 
++	nvmeq->sqes = qid ? dev->ctrl.iosqes : NVME_NVM_ADMSQES;
+ 	nvmeq->q_depth = depth;
+ 	nvmeq->cqes = dma_alloc_coherent(dev->dev, CQ_SIZE(nvmeq),
+ 					 &nvmeq->cq_dma_addr, GFP_KERNEL);
+diff --git a/include/linux/nvme.h b/include/linux/nvme.h
+index 01aa6a6c241d..7af18965fb57 100644
+--- a/include/linux/nvme.h
++++ b/include/linux/nvme.h
+@@ -141,6 +141,7 @@ enum {
+  * (In bytes and specified as a power of two (2^n)).
+  */
+ #define NVME_NVM_IOSQES		6
++#define NVME_NVM_ADMSQES	6
+ #define NVME_NVM_IOCQES		4
+ 
+ enum {
+diff --git a/drivers/nvme/host/core.c b/drivers/nvme/host/core.c
+index 716ebe87a2b8..480ea24d8cf4 100644
+--- a/drivers/nvme/host/core.c
++++ b/drivers/nvme/host/core.c
+@@ -2701,7 +2701,10 @@ int nvme_init_identify(struct nvme_ctrl *ctrl)
+ 		ctrl->hmmaxd = le16_to_cpu(id->hmmaxd);
+ 
+ 		/* Grab required IO queue size */
+-		ctrl->iosqes = id->sqes & 0xf;
++		if (ctrl->quirks & NVME_QUIRK_128_BYTES_SQES)
++			ctrl->iosqes = 7;
++		else
++			ctrl->iosqes = id->sqes & 0xf;
+ 		if (ctrl->iosqes < NVME_NVM_IOSQES) {
+ 			dev_err(ctrl->device,
+ 				"unsupported required IO queue size %d\n", ctrl->iosqes);
+diff --git a/drivers/nvme/host/nvme.h b/drivers/nvme/host/nvme.h
+index 34ef35fcd8a5..b2a78d08b984 100644
+--- a/drivers/nvme/host/nvme.h
++++ b/drivers/nvme/host/nvme.h
+@@ -92,6 +92,16 @@ enum nvme_quirks {
+ 	 * Broken Write Zeroes.
+ 	 */
+ 	NVME_QUIRK_DISABLE_WRITE_ZEROES		= (1 << 9),
++
++	/*
++	 * Use only one interrupt vector for all queues
++	 */
++	NVME_QUIRK_SINGLE_VECTOR		= (1 << 10),
++
++	/*
++	 * Use non-standard 128 bytes SQEs.
++	 */
++	NVME_QUIRK_128_BYTES_SQES		= (1 << 11),
+ };
+ 
+ /*
+diff --git a/drivers/nvme/host/pci.c b/drivers/nvme/host/pci.c
+index 54b35ea4af88..ab2358137419 100644
+--- a/drivers/nvme/host/pci.c
++++ b/drivers/nvme/host/pci.c
+@@ -2080,6 +2080,9 @@ static int nvme_setup_irqs(struct nvme_dev *dev, unsigned int nr_io_queues)
+ 	dev->io_queues[HCTX_TYPE_DEFAULT] = 1;
+ 	dev->io_queues[HCTX_TYPE_READ] = 0;
+ 
++	if (dev->ctrl.quirks & NVME_QUIRK_SINGLE_VECTOR)
++		irq_queues = 1;
++
+ 	return pci_alloc_irq_vectors_affinity(pdev, 1, irq_queues,
+ 			      PCI_IRQ_ALL_TYPES | PCI_IRQ_AFFINITY, &affd);
+ }
+@@ -3037,6 +3040,9 @@ static const struct pci_device_id nvme_id_table[] = {
+ 	{ PCI_DEVICE_CLASS(PCI_CLASS_STORAGE_EXPRESS, 0xffffff) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_APPLE, 0x2001) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_APPLE, 0x2003) },
++	{ PCI_DEVICE(PCI_VENDOR_ID_APPLE, 0x2005),
++		.driver_data = NVME_QUIRK_SINGLE_VECTOR |
++				NVME_QUIRK_128_BYTES_SQES },
+ 	{ 0, }
+ };
+ MODULE_DEVICE_TABLE(pci, nvme_id_table);

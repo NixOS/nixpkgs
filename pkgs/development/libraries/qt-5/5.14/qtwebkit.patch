@@ -1,0 +1,12 @@
+diff --git a/Source/WebKit2/PlatformQt.cmake b/Source/WebKit2/PlatformQt.cmake
+--- a/Source/WebKit2/PlatformQt.cmake
++++ b/Source/WebKit2/PlatformQt.cmake
+@@ -261,6 +261,7 @@
+ list(APPEND WebKit2_SYSTEM_INCLUDE_DIRECTORIES
+     ${GLIB_INCLUDE_DIRS}
+     ${GSTREAMER_INCLUDE_DIRS}
++    ${GSTREAMER_PBUTILS_INCLUDE_DIRS}
+     ${Qt5Quick_INCLUDE_DIRS}
+     ${Qt5Quick_PRIVATE_INCLUDE_DIRS}
+     ${SQLITE_INCLUDE_DIR}
+

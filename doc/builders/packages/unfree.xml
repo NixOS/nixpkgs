@@ -1,0 +1,13 @@
+<section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xml:id="unfree-software">
+ <title>Unfree software</title>
+
+ <para>
+  All users of Nixpkgs are free software users, and many users (and developers) of Nixpkgs want to limit and tightly control their exposure to unfree software. At the same time, many users need (or want) to run some specific pieces of proprietary software. Nixpkgs includes some expressions for unfree software packages. By default unfree software cannot be installed and doesn’t show up in searches. To allow installing unfree software in a single Nix invocation one can export <literal>NIXPKGS_ALLOW_UNFREE=1</literal>. For a persistent solution, users can set <literal>allowUnfree</literal> in the Nixpkgs configuration.
+ </para>
+
+ <para>
+  Fine-grained control is possible by defining <literal>allowUnfreePredicate</literal> function in config; it takes the <literal>mkDerivation</literal> parameter attrset and returns <literal>true</literal> for unfree packages that should be allowed.
+ </para>
+</section>
