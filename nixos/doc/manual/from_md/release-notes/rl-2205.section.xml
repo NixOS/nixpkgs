@@ -609,6 +609,14 @@
       </listitem>
       <listitem>
         <para>
+          A new option
+          <literal>boot.initrd.extraModprobeConfig</literal> has been
+          added which can be used to configure kernel modules that are
+          loaded in the initrd.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>fetchFromSourcehut</literal> now allows fetching
           repositories recursively using <literal>fetchgit</literal> or
           <literal>fetchhg</literal> if the argument
