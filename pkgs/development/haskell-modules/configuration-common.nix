@@ -54,9 +54,9 @@ self: super: {
   # There's an open PR updating the lower bound for `network`:
   # > https://github.com/abhinav/pinch/pull/46
   # With that said version tracked for `network` right now is 3.1.1.1 so we're
-  # replacing the network pinch uses with `network_3_1_2_5` for now.
+  # replacing the network pinch uses with `network_3_1_2_7` for now.
   pinch = super.pinch.overrideScope (self : super: {
-    network = self.network_3_1_2_5;
+    network = self.network_3_1_2_7;
   });
 
   # We can remove this once fakedata version gets to 1.0.1 as the test suite
@@ -2065,11 +2065,11 @@ self: super: {
 
   # Needs network >= 3.1.2
   quic = super.quic.overrideScope (self: super: {
-    network = self.network_3_1_2_5;
+    network = self.network_3_1_2_7;
   });
 
   http3 = super.http3.overrideScope (self: super: {
-    network = self.network_3_1_2_5;
+    network = self.network_3_1_2_7;
   });
 
   # Fixes https://github.com/NixOS/nixpkgs/issues/140613
@@ -2104,7 +2104,7 @@ self: super: {
 
   # Needs brick > 0.64
   nix-tree = super.nix-tree.override {
-    brick = self.brick_0_66;
+    brick = self.brick_0_66_1;
   };
 
   # build newer version for `pkgs.shellcheck`

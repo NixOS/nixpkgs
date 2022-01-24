@@ -127,7 +127,7 @@ self: super: {
   indexed-traversable-instances = doJailbreak super.indexed-traversable-instances;
   lifted-async = doJailbreak super.lifted-async;
   lukko = doJailbreak super.lukko;
-  network = super.network_3_1_2_5;
+  network = super.network_3_1_2_7;
   ormolu = self.ormolu_0_4_0_0;
   OneTuple = super.OneTuple_0_3_1;
   parallel = doJailbreak super.parallel;
