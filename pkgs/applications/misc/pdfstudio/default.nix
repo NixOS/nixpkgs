@@ -21,7 +21,7 @@
     };
   };
 
-  pdfstudioviewer = pkgs.callPackage ./common.nix rec {
+  pdfstudioviewer = callPackage ./common.nix rec {
     pname = program;
     year = "2021";
     version = "${year}.1.2";
