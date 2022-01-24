@@ -22683,6 +22683,7 @@ with pkgs;
   nvmet-cli = callPackage ../os-specific/linux/nvmet-cli { };
 
   system76-firmware = callPackage ../os-specific/linux/firmware/system76-firmware { };
+  system76-oled = callPackage ../os-specific/linux/system76-oled {};
 
   ocf-resource-agents = callPackage ../os-specific/linux/ocf-resource-agents { };
 
