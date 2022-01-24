@@ -10307,9 +10307,16 @@ in {
   wasmerPackages = pkgs.recurseIntoAttrs (callPackage ../development/python-modules/wasmer { });
   inherit (self.wasmerPackages) wasmer wasmer-compiler-cranelift wasmer-compiler-llvm wasmer-compiler-singlepass;
 
-  watchdog = callPackage ../development/python-modules/watchdog {
-    inherit (pkgs.darwin.apple_sdk.frameworks) CoreServices;
-  };
+  watchdog =
+    if stdenv.isDarwin && stdenv.isx86_64 then
+      # last version to not require the 10.13 SDK
+      callPackage ../development/python-modules/watchdog/1.0.2.nix {
+        inherit (pkgs.darwin.apple_sdk.frameworks) CoreServices;
+      }
+    else
+      callPackage ../development/python-modules/watchdog {
+        inherit (pkgs.darwin.apple_sdk.frameworks) CoreServices;
+      };
 
   watchgod = callPackage ../development/python-modules/watchgod { };
 
