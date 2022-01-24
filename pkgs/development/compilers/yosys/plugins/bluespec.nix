@@ -5,6 +5,7 @@
 stdenv.mkDerivation {
   pname = "yosys-bluespec";
   version = "2021.09.08";
+  plugin = "bluespec";
 
   src = fetchFromGitHub {
     owner  = "thoughtpolice";

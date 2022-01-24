@@ -80,7 +80,7 @@ buildPythonPackage rec {
     "test_filename_without_dir"
     "test_overwrite"
     "test_options"
-  ] ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+  ] ++ lib.optionals (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isRiscV) [
     # aarch64-only (?) failure, unknown reason so far
     # https://github.com/adobe-type-tools/afdko/issues/1425
     "test_spec"

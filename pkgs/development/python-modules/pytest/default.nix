@@ -1,4 +1,5 @@
 { lib, buildPythonPackage, pythonOlder, fetchPypi, isPy3k, isPyPy
+, pythonAtLeast, fetchpatch
 , atomicwrites
 , attrs
 , hypothesis
@@ -27,10 +28,13 @@ buildPythonPackage rec {
     sha256 = "131b36680866a76e6781d13f101efb86cf674ebb9762eb70d3082b6f29889e89";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "pluggy>=0.12,<1.0.0a1" "pluggy>=0.23,<2.0"
-  '';
+  patches = lib.optionals (pythonAtLeast "3.10") [
+    (fetchpatch {
+      # Fix test_errors_in_xfail_skip_expressions for Python 3.10.1, remove after 6.2.5
+      url = "https://github.com/pytest-dev/pytest/commit/913439f5e5691f391e2969b3c8f0a49e50dce43a.patch";
+      sha256 = "0hsl3lww6bx5k99cp8gj0fy9rg02kcfbwiiwjx2y8vbhwd5ns41p";
+    })
+  ];
 
   nativeBuildInputs = [ setuptools-scm ];
 

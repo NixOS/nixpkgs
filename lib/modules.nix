@@ -37,6 +37,7 @@ let
     toList
     types
     warnIf
+    zipAttrsWith
     ;
   inherit (lib.options)
     isOption
@@ -442,10 +443,11 @@ rec {
         }
       */
       byName = attr: f: modules:
-        foldl' (acc: module:
-              if !(builtins.isAttrs module.${attr}) then
+        zipAttrsWith (n: concatLists)
+          (map (module: let subtree = module.${attr}; in
+              if !(builtins.isAttrs subtree) then
                 throw ''
-                  You're trying to declare a value of type `${builtins.typeOf module.${attr}}'
+                  You're trying to declare a value of type `${builtins.typeOf subtree}'
                   rather than an attribute-set for the option
                   `${builtins.concatStringsSep "." prefix}'!
 
@@ -454,11 +456,8 @@ rec {
                   this option by e.g. referring to `man 5 configuration.nix'!
                 ''
               else
-                acc // (mapAttrs (n: v:
-                                   (acc.${n} or []) ++ f module v
-                                 ) module.${attr}
-                       )
-               ) {} modules;
+                mapAttrs (n: f module) subtree
+              ) modules);
       # an attrset 'name' => list of submodules that declare ‘name’.
       declsByName = byName "options" (module: option:
           [{ inherit (module) _file; options = option; }]

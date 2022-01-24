@@ -6,123 +6,135 @@ self: super:
 
 with self; with super; {
 
-  boto3 = callPackage ../development/python-modules/boto3/1_17.nix {};
+  bootstrapped-pip = callPackage ../development/python2-modules/bootstrapped-pip { };
 
-  botocore = callPackage ../development/python-modules/botocore/1_20.nix {};
+  boto3 = callPackage ../development/python2-modules/boto3 {};
 
-  certifi = callPackage ../development/python-modules/certifi/python2.nix { };
+  botocore = callPackage ../development/python2-modules/botocore {};
 
-  chardet = callPackage ../development/python-modules/chardet/2.nix { };
+  certifi = callPackage ../development/python2-modules/certifi { };
 
-  cheetah = callPackage ../development/python-modules/cheetah { };
+  chardet = callPackage ../development/python2-modules/chardet { };
 
-  click = callPackage ../development/python-modules/click/7.nix { };
+  cheetah = callPackage ../development/python2-modules/cheetah { };
 
-  configparser = callPackage ../development/python-modules/configparser/4.nix { };
+  click = callPackage ../development/python2-modules/click { };
 
-  construct = callPackage ../development/python-modules/construct/2.10.54.nix { };
+  configparser = callPackage ../development/python2-modules/configparser { };
 
-  contextlib2 = callPackage ../development/python-modules/contextlib2/0.nix { };
+  construct = callPackage ../development/python2-modules/construct { };
 
-  cryptography = callPackage ../development/python-modules/cryptography/3.3.nix { };
+  contextlib2 = callPackage ../development/python2-modules/contextlib2 { };
 
-  cryptography_vectors = callPackage ../development/python-modules/cryptography/vectors-3.3.nix { };
+  cryptography = callPackage ../development/python2-modules/cryptography { };
 
-  decorator = callPackage ../development/python-modules/decorator/4.nix { };
+  cryptography_vectors = callPackage ../development/python2-modules/cryptography-vectors { };
 
-  enum = callPackage ../development/python-modules/enum { };
+  decorator = callPackage ../development/python2-modules/decorator { };
 
-  filelock =  callPackage ../development/python-modules/filelock/3.2.nix { };
+  enum = callPackage ../development/python2-modules/enum { };
 
-  flask = callPackage ../development/python-modules/flask/1.nix { };
+  filelock =  callPackage ../development/python2-modules/filelock { };
 
-  freezegun = callPackage ../development/python-modules/freezegun/0.3.nix { };
+  flask = callPackage ../development/python2-modules/flask { };
 
-  futures = callPackage ../development/python-modules/futures { };
+  freezegun = callPackage ../development/python2-modules/freezegun { };
 
-  google-apputils = callPackage ../development/python-modules/google-apputils { };
+  futures = callPackage ../development/python2-modules/futures { };
 
-  httpretty = callPackage ../development/python-modules/httpretty/0.nix { };
+  google-apputils = callPackage ../development/python2-modules/google-apputils { };
 
-  hypothesis = callPackage ../development/python-modules/hypothesis/2.nix { };
+  httpretty = callPackage ../development/python2-modules/httpretty { };
 
-  idna = callPackage ../development/python-modules/idna/2.nix { };
+  hypothesis = callPackage ../development/python2-modules/hypothesis { };
 
-  importlib-metadata = callPackage ../development/python-modules/importlib-metadata/2.nix { };
+  idna = callPackage ../development/python2-modules/idna { };
 
-  ipaddr = callPackage ../development/python-modules/ipaddr { };
+  importlib-metadata = callPackage ../development/python2-modules/importlib-metadata { };
 
-  itsdangerous = callPackage ../development/python-modules/itsdangerous/1.nix { };
+  ipaddr = callPackage ../development/python2-modules/ipaddr { };
 
-  jinja2 = callPackage ../development/python-modules/jinja2/2.nix { };
+  itsdangerous = callPackage ../development/python2-modules/itsdangerous { };
 
-  libcloud = callPackage ../development/python-modules/libcloud/2.nix { };
+  jinja2 = callPackage ../development/python2-modules/jinja2 { };
 
-  lpod = callPackage ../development/python-modules/lpod { };
+  libcloud = callPackage ../development/python2-modules/libcloud { };
 
-  marisa = callPackage ../development/python-modules/marisa {
+  lpod = callPackage ../development/python2-modules/lpod { };
+
+  marisa = callPackage ../development/python2-modules/marisa {
     inherit (pkgs) marisa;
   };
 
-  markdown = callPackage ../development/python-modules/markdown/3_1.nix { };
+  markdown = callPackage ../development/python2-modules/markdown { };
 
-  markupsafe = callPackage ../development/python-modules/markupsafe/1.nix { };
+  markupsafe = callPackage ../development/python2-modules/markupsafe { };
 
-  mock = callPackage ../development/python-modules/mock/2.nix { };
+  mock = callPackage ../development/python2-modules/mock { };
 
-  more-itertools = callPackage ../development/python-modules/more-itertools/2.7.nix { };
+  more-itertools = callPackage ../development/python2-modules/more-itertools { };
 
-  mutagen = callPackage ../development/python-modules/mutagen/1.43.nix { };
+  mutagen = callPackage ../development/python2-modules/mutagen { };
 
-  numpy = callPackage ../development/python-modules/numpy/1.16.nix { };
+  numpy = callPackage ../development/python2-modules/numpy { };
 
-  packaging = callPackage ../development/python-modules/packaging/2.nix { };
+  packaging = callPackage ../development/python2-modules/packaging { };
 
-  pillow = callPackage ../development/python-modules/pillow/6.nix {
+  pillow = callPackage ../development/python2-modules/pillow {
     inherit (pkgs) freetype libjpeg zlib libtiff libwebp tcl lcms2 tk;
     inherit (pkgs.xorg) libX11;
   };
 
-  pip = callPackage ../development/python-modules/pip/20.nix { };
+  pip = callPackage ../development/python2-modules/pip { };
 
-  pluggy = callPackage ../development/python-modules/pluggy/0.nix { };
+  pluggy = callPackage ../development/python2-modules/pluggy { };
 
-  prettytable = callPackage ../development/python-modules/prettytable/1.nix { };
+  prettytable = callPackage ../development/python2-modules/prettytable { };
 
-  protobuf = callPackage ../development/python-modules/protobuf {
+  protobuf = callPackage ../development/python2-modules/protobuf {
     disabled = isPyPy;
     protobuf = pkgs.protobuf3_17; # last version compatible with Python 2
   };
 
-  pycairo = callPackage ../development/python-modules/pycairo/1.18.nix {
+  pycairo = callPackage ../development/python2-modules/pycairo {
     inherit (pkgs.buildPackages) meson;
   };
 
-  pygments = callPackage ../development/python-modules/Pygments/2_5.nix { };
+  pygments = callPackage ../development/python2-modules/Pygments { };
 
-  pygobject3 = callPackage ../development/python-modules/pygobject/3.36.nix {
+  pygobject3 = callPackage ../development/python2-modules/pygobject {
     inherit (pkgs) meson;
   };
 
-  pygtk = callPackage ../development/python-modules/pygtk { };
+  pygtk = callPackage ../development/python2-modules/pygtk { };
 
   pyGtkGlade = self.pygtk.override {
     inherit (pkgs.gnome2) libglade;
   };
 
-  pyjwt = callPackage ../development/python-modules/pyjwt/1.nix { };
+  pyjwt = callPackage ../development/python2-modules/pyjwt { };
 
-  pyroma = callPackage ../development/python-modules/pyroma/2.nix { };
+  pyroma = callPackage ../development/python2-modules/pyroma { };
 
-  pysqlite = callPackage ../development/python-modules/pysqlite { };
+  pysqlite = callPackage ../development/python2-modules/pysqlite { };
 
   pytest = pytest_4;
 
-  pytest-runner = callPackage ../development/python-modules/pytest-runner/2.nix { };
+  pytest_4 = callPackage
+    ../development/python2-modules/pytest {
+      # hypothesis tests require pytest that causes dependency cycle
+      hypothesis = self.hypothesis.override {
+        doCheck = false;
+      };
+    };
 
-  pytest-xdist = callPackage ../development/python-modules/pytest-xdist/1.nix { };
+  pytest-runner = callPackage ../development/python2-modules/pytest-runner { };
 
-  qpid-python = callPackage ../development/python-modules/qpid-python { };
+  pytest-xdist = callPackage ../development/python2-modules/pytest-xdist { };
+
+  pyyaml = callPackage ../development/python2-modules/pyyaml { };
+
+  qpid-python = callPackage ../development/python2-modules/qpid-python { };
 
   recoll = disabled super.recoll;
 
@@ -130,42 +142,40 @@ with self; with super; {
 
   rpm = disabled super.rpm;
 
-  s3transfer = callPackage ../development/python-modules/s3transfer/0_4.nix { };
+  s3transfer = callPackage ../development/python2-modules/s3transfer { };
 
-  scandir = callPackage ../development/python-modules/scandir { };
+  scandir = callPackage ../development/python2-modules/scandir { };
 
   sequoia = disabled super.sequoia;
 
-  setuptools = callPackage ../development/python-modules/setuptools/44.0.nix { };
+  setuptools = callPackage ../development/python2-modules/setuptools { };
 
-  setuptools-scm = callPackage ../development/python-modules/setuptools-scm/2.nix { };
+  setuptools-scm = callPackage ../development/python2-modules/setuptools-scm { };
 
-  sphinxcontrib-websupport = callPackage ../development/python-modules/sphinxcontrib-websupport/1_1.nix { };
+  sphinxcontrib-websupport = callPackage ../development/python2-modules/sphinxcontrib-websupport { };
 
-  sphinx = callPackage ../development/python-modules/sphinx/2.nix { };
+  sphinx = callPackage ../development/python2-modules/sphinx { };
 
-  TurboCheetah = callPackage ../development/python-modules/TurboCheetah { };
+  TurboCheetah = callPackage ../development/python2-modules/TurboCheetah { };
 
-  typing = callPackage ../development/python-modules/typing { };
+  typing = callPackage ../development/python2-modules/typing { };
 
-  urllib3 = callPackage ../development/python-modules/urllib3/2.nix { };
+  urllib3 = callPackage ../development/python2-modules/urllib3 { };
 
-  werkzeug = callPackage ../development/python-modules/werkzeug/1.nix { };
+  werkzeug = callPackage ../development/python2-modules/werkzeug { };
 
-  wxPython30 = callPackage ../development/python-modules/wxPython/3.0.nix {
+  wsproto = callPackage ../development/python2-modules/wsproto { };
+
+  wxPython30 = callPackage ../development/python2-modules/wxPython {
     wxGTK = pkgs.wxGTK30;
   };
 
   wxPython = self.wxPython30;
 
-  vcrpy = callPackage ../development/python-modules/vcrpy/3.nix { };
-
-  yenc = callPackage ../development/python-modules/yenc { };
-
-  yt = callPackage ../development/python-modules/yt { };
+  vcrpy = callPackage ../development/python2-modules/vcrpy { };
 
   zeek = disabled super.zeek;
 
-  zipp = callPackage ../development/python-modules/zipp/1.nix { };
+  zipp = callPackage ../development/python2-modules/zipp { };
 
 }

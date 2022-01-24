@@ -87,8 +87,12 @@ in {
 
             port = mkOption {
               type = types.port;
-              default = 6379;
-              description = "The port for Redis to listen to.";
+              default = if name == "" then 6379 else 0;
+              defaultText = literalExpression ''if name == "" then 6379 else 0'';
+              description = ''
+                The TCP port to accept connections.
+                If port 0 is specified Redis will not listen on a TCP socket.
+              '';
             };
 
             openFirewall = mkOption {
@@ -102,7 +106,7 @@ in {
             bind = mkOption {
               type = with types; nullOr str;
               default = if name == "" then "127.0.0.1" else null;
-              defaultText = "127.0.0.1 or null if name != \"\"";
+              defaultText = literalExpression ''if name == "" then "127.0.0.1" else null'';
               description = ''
                 The IP interface to bind to.
                 <literal>null</literal> means "all interfaces".
@@ -253,7 +257,7 @@ in {
           };
           config.settings = mkMerge [
             {
-              port = if config.bind == null then 0 else config.port;
+              port = config.port;
               daemonize = false;
               supervised = "systemd";
               loglevel = config.logLevel;

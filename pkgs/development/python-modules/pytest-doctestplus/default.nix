@@ -1,16 +1,19 @@
 { lib
 , buildPythonPackage
+, fetchpatch
 , fetchPypi
-, pythonOlder
 , packaging
 , pytest
 , pytestCheckHook
+, pythonOlder
 , setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "pytest-doctestplus";
   version = "0.11.2";
+  format = "setuptools";
+
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
@@ -34,6 +37,15 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  patches = [
+    # Removal of distutils, https://github.com/astropy/pytest-doctestplus/pull/172
+    (fetchpatch {
+      name = "distutils-removal.patch";
+      url = "https://github.com/astropy/pytest-doctestplus/commit/ae2ee14cca0cde0fab355936995fa083529b00ff.patch";
+      sha256 = "sha256-uryKV7bWw2oz0glyh2lpGqtDPFvRTo8RmI1N1n15/d4=";
+    })
+  ];
+
   disabledTests = [
     # ERROR: usage: __main__.py [options] [file_or_dir] [file_or_dir] [...]
     # __main__.py: error: unrecognized arguments: --remote-data
@@ -49,6 +61,6 @@ buildPythonPackage rec {
     description = "Pytest plugin with advanced doctest features";
     homepage = "https://astropy.org";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }

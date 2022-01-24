@@ -5,16 +5,16 @@
 
 buildPythonPackage rec {
   pname = "tatsu";
-  version = "5.6.1";
+  version = "5.7.3";
+  # upstream only supports 3.10+
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "neogeny";
     repo = "TatSu";
     rev = "v${version}";
-    sha256 = "149ra1lwax5m1svlv4dwjfqw00lc5vwyfj6zw2v0ammmfm1b94x9";
+    sha256 = "1d6rnlybj971b5j5glvq288hd4r204nkmssqb0k8rm6cqcwhz292";
   };
-
-  disabled = pythonOlder "3.8";
 
   nativeBuildInputs = [ pytest-runner ];
   propagatedBuildInputs = [ colorama regex ];

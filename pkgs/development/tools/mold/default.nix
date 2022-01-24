@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib openssl ];
   nativeBuildInputs = [ autoPatchelfHook cmake xxHash ];
 
+  enableParallelBuilding = true;
   dontUseCmakeConfigure = true;
   EXTRA_LDFLAGS = "-fuse-ld=${llvmPackages_latest.lld}/bin/ld.lld";
   LTO = 1;

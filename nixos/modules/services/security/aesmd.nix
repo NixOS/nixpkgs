@@ -73,6 +73,11 @@ in
 
     hardware.cpu.intel.sgx.provision.enable = true;
 
+    # Make sure the AESM service can find the SGX devices until
+    # https://github.com/intel/linux-sgx/issues/772 is resolved
+    # and updated in nixpkgs.
+    hardware.cpu.intel.sgx.enableDcapCompat = mkForce true;
+
     systemd.services.aesmd =
       let
         storeAesmFolder = "${sgx-psw}/aesm";

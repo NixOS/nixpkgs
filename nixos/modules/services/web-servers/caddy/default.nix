@@ -38,6 +38,10 @@ let
       '';
     in
       if pkgs.stdenv.buildPlatform == pkgs.stdenv.hostPlatform then Caddyfile-formatted else Caddyfile;
+
+  acmeHosts = unique (catAttrs "useACMEHost" acmeVHosts);
+
+  mkCertOwnershipAssertion = import ../../../security/acme/mk-cert-ownership-assertion.nix;
 in
 {
   imports = [
@@ -266,7 +270,11 @@ in
       { assertion = cfg.adapter != "caddyfile" -> cfg.configFile != configFile;
         message = "Any value other than 'caddyfile' is only valid when providing your own `services.caddy.configFile`";
       }
-    ];
+    ] ++ map (name: mkCertOwnershipAssertion {
+      inherit (cfg) group user;
+      cert = config.security.acme.certs.${name};
+      groups = config.users.groups;
+    }) acmeHosts;
 
     services.caddy.extraConfig = concatMapStringsSep "\n" mkVHostConf virtualHosts;
     services.caddy.globalConfig = ''
@@ -323,8 +331,7 @@ in
 
     security.acme.certs =
       let
-        eachACMEHost = unique (catAttrs "useACMEHost" acmeVHosts);
-        reloads = map (useACMEHost: nameValuePair useACMEHost { reloadServices = [ "caddy.service" ]; }) eachACMEHost;
+        reloads = map (useACMEHost: nameValuePair useACMEHost { reloadServices = [ "caddy.service" ]; }) acmeHosts;
       in
         listToAttrs reloads;
 

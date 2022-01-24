@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip, fetchurl, xorg, gnused
+{ lib, stdenv, fetchzip, fetchurl, xorg
 , withBigAtlas ? true
 , withEphemeris ? true
 , withMoonsEphemeris ? true
@@ -14,7 +14,8 @@ stdenv.mkDerivation rec {
   };
 
   patchPhase = ''
-    ${gnused}/bin/sed -i "s:~/astrolog:$out/astrolog:g" astrolog.h
+    sed -i "s:~/astrolog:$out/astrolog:g" astrolog.h
+    substituteInPlace Makefile --replace cc "$CC" --replace strip "$STRIP"
   '';
 
   buildInputs = [ xorg.libX11 ];

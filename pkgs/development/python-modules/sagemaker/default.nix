@@ -12,21 +12,20 @@
 , pandas
 , pathos
 , packaging
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "sagemaker";
-  version = "2.69.0";
+  version = "2.73.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8e9051a44a82be07e32d83cfc12d724fd1cb76f83ade34cd9e69c45a8d37c676";
+    sha256 = "6735874a29aefc1e989a132a2e24945e5b0d057d8b297a2da695cf8421a78810";
   };
-
-  pythonImportsCheck = [
-    "sagemaker"
-    "sagemaker.lineage.visualizer"
-  ];
 
   propagatedBuildInputs = [
     attrs
@@ -42,11 +41,16 @@ buildPythonPackage rec {
     pandas
   ];
 
-  doCheck = false;
-
   postFixup = ''
     [ "$($out/bin/sagemaker-upgrade-v2 --help 2>&1 | grep -cim1 'pandas failed to import')" -eq "0" ]
   '';
+
+  doCheck = false;
+
+  pythonImportsCheck = [
+    "sagemaker"
+    "sagemaker.lineage.visualizer"
+  ];
 
   meta = with lib; {
     description = "Library for training and deploying machine learning models on Amazon SageMaker";

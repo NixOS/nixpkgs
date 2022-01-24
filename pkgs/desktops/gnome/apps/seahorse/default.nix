@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
     # Add “org.gnome.crypto.pgp” GSettings schema to path
     # to make it available for “gpgme-backend” test.
     # It is used by Seahorse’s internal “common” library.
-    addToSearchPath XDG_DATA_DIRS "${glib.getSchemaPath gcr}/../.."
+    addToSearchPath XDG_DATA_DIRS "${glib.getSchemaDataDirPath gcr}"
     # The same test also requires home directory so that it can store settings.
     export HOME=$TMPDIR
   '';

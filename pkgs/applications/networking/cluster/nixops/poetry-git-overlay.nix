@@ -5,8 +5,8 @@ self: super: {
     _: {
       src = pkgs.fetchgit {
         url = "https://github.com/NixOS/nixops.git";
-        rev = "7ebdd8ace8d6bcefc18ee9e3e590f8bfa3368771";
-        sha256 = "16pwxs5bca6cd83f0rs4sf5r8yf07wmha051waysmxs9xxl856yc";
+        rev = "0c989d79c9052ebf52f12964131f4fc31ac20a18";
+        sha256 = "07jz9grq3hjn1g9xybln5phbjhn2zsldcnan3lal6syzjggja6v1";
       };
     }
   );

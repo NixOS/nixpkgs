@@ -5,12 +5,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.0.2";
+  version = "1.0.4";
   pname = "dj-email-url";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "838fd4ded9deba53ae757debef431e25fa7fca31d3948b3c4808ccdc84fab2b7";
+    sha256 = "7ee35df51065d17ac7b55e98ad8eda3a1f6c5d65fc89cdc5de7a96e534942553";
   };
 
   checkPhase = ''

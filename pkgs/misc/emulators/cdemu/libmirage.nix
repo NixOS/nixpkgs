@@ -4,7 +4,7 @@
 
 let pkg = import ./base.nix {
   version = "3.2.5";
-  pkgName = "libmirage";
+  pname = "libmirage";
   pkgSha256 = "0f8i2ha44rykkk3ac2q8zsw3y1zckw6qnf6zvkyrj3qqbzhrf3fm";
 };
 in callPackage pkg {

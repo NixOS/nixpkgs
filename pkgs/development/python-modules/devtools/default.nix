@@ -37,6 +37,8 @@ buildPythonPackage rec {
   disabledTests = [
     # Test for Windows32
     "test_print_subprocess"
+    # sensitive to timing
+    "test_multiple_not_verbose"
   ];
 
   pythonImportsCheck = [

@@ -4,7 +4,6 @@
 , fetchFromGitHub
 , pythonOlder
 , pytestCheckHook
-, unittest2
 }:
 
 buildPythonPackage rec {
@@ -27,7 +26,6 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytestCheckHook
-    unittest2
   ];
 
   pytestFlagsArray = [

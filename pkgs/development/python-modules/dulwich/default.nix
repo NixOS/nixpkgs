@@ -16,7 +16,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.20.27";
+  version = "0.20.31";
   pname = "dulwich";
   format = "setuptools";
 
@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-9dP6dlmRTnorh4NahWZsdwHTdR+IFVFlPUzSVgsqEk4=";
+    hash = "sha256-9vwYpVDNsU5xCjcqBflcnIMc/DEp/X7RGyASDuVwFYc=";
   };
 
   LC_ALL = "en_US.UTF-8";

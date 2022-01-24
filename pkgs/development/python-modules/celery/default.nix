@@ -7,6 +7,7 @@
 , click-didyoumean
 , click-plugins
 , click-repl
+, dnspython
 , fetchPypi
 , kombu
 , moto
@@ -22,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "celery";
-  version = "5.2.1";
+  version = "5.2.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b41a590b49caf8e6498a57db628e580d5f8dc6febda0f42de5d783aed5b7f808";
+    hash = "sha256-4s1BZnrZfU9qL0Zy0cam662hlMYZJTBYtfI3BKqtqoI=";
   };
 
   propagatedBuildInputs = [
@@ -46,6 +47,7 @@ buildPythonPackage rec {
   checkInputs = [
     boto3
     case
+    dnspython
     moto
     pymongo
     pytest-celery
@@ -53,6 +55,11 @@ buildPythonPackage rec {
     pytest-timeout
     pytestCheckHook
   ];
+
+  postPatch = ''
+    substituteInPlace requirements/default.txt \
+      --replace "setuptools>=59.1.1,<59.7.0" "setuptools"
+  '';
 
   disabledTestPaths = [
     # test_eventlet touches network
@@ -75,6 +82,6 @@ buildPythonPackage rec {
     description = "Distributed task queue";
     homepage = "https://github.com/celery/celery/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ fab ];
   };
 }

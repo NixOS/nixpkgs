@@ -50,6 +50,7 @@ in {
   # Data.Vect.Sort is available via --package contrib
   use-contrib = testCompileAndRun {
     testName = "use-contrib";
+    packages = [ "contrib" ];
     code = ''
       module Main
 

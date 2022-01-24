@@ -99,6 +99,10 @@ in newPython.pkgs.buildPythonApplication rec {
   # Not enabled right now due to time constraints/failing tests that I didn't have time to track down
   doCheck = false;
 
+  postPatch = ''
+    substituteInPlace conans/requirements.txt --replace 'PyYAML>=3.11, <6.0' 'PyYAML>=3.11'
+  '';
+
   meta = with lib; {
     homepage = "https://conan.io";
     description = "Decentralized and portable C/C++ package manager";

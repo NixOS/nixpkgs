@@ -16,13 +16,13 @@
 
 buildPythonPackage rec {
   pname = "glean_parser";
-  version = "4.3.1";
+  version = "4.4.0";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-wZSro1pX/50TlSfFMh71JlmXlJlONVutTDFL06tkw+s=";
+    sha256 = "3ae1435b183936a49368806421df27ab944f1802e86a02b38b8e08e53ff0aac5";
   };
 
   postPatch = ''

@@ -252,8 +252,8 @@ let
   promTypes.scrape_config = types.submodule {
     options = {
       authorization = mkOption {
-        type = types.attrs;
-        default = {};
+        type = types.nullOr types.attrs;
+        default = null;
         description = ''
           Sets the `Authorization` header on every scrape request with the configured credentials.
         '';

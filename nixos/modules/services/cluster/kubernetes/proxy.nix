@@ -6,7 +6,6 @@ let
   top = config.services.kubernetes;
   otop = options.services.kubernetes;
   cfg = top.proxy;
-  klib = options.services.kubernetes.lib.default;
 in
 {
   imports = [
@@ -44,7 +43,7 @@ in
       type = str;
     };
 
-    kubeconfig = klib.mkKubeConfigOptions "Kubernetes proxy";
+    kubeconfig = top.lib.mkKubeConfigOptions "Kubernetes proxy";
 
     verbosity = mkOption {
       description = ''
@@ -73,7 +72,7 @@ in
           ${optionalString (cfg.featureGates != [])
             "--feature-gates=${concatMapStringsSep "," (feature: "${feature}=true") cfg.featureGates}"} \
           --hostname-override=${cfg.hostname} \
-          --kubeconfig=${klib.mkKubeConfig "kube-proxy" cfg.kubeconfig} \
+          --kubeconfig=${top.lib.mkKubeConfig "kube-proxy" cfg.kubeconfig} \
           ${optionalString (cfg.verbosity != null) "--v=${toString cfg.verbosity}"} \
           ${cfg.extraOpts}
         '';
@@ -89,7 +88,7 @@ in
     services.kubernetes.proxy.hostname = with config.networking; mkDefault hostName;
 
     services.kubernetes.pki.certs = {
-      kubeProxyClient = klib.mkCert {
+      kubeProxyClient = top.lib.mkCert {
         name = "kube-proxy-client";
         CN = "system:kube-proxy";
         action = "systemctl restart kube-proxy.service";
@@ -98,4 +97,6 @@ in
 
     services.kubernetes.proxy.kubeconfig.server = mkDefault top.apiserverAddress;
   };
+
+  meta.buildDocsInSandbox = false;
 }

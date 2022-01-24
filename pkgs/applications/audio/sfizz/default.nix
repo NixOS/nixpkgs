@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sfizz";
-  version = "1.1.1";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "sfztools";
     repo = pname;
     rev = version;
-    sha256 = "1gzpbns89j6ggzfjjvyhgigynsv20synrs7lmc32hwp4g73l0j7n";
+    sha256 = "sha256-biHsB49Ym9NU4tMOVnUNuIxPtpcIi6oCAS7JBPhxwec=";
     fetchSubmodules = true;
   };
 

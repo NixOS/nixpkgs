@@ -41,6 +41,7 @@ buildDotnetModule rec {
   buildInputs = [
     stdenv.cc.cc.lib
     fontconfig
+    gtk3
   ];
 
   runtimeDeps = [
@@ -58,5 +59,7 @@ buildDotnetModule rec {
     homepage = "https://github.com/trippsc2/OpenTracker";
     license = licenses.mit;
     maintainers = [ maintainers.ivar ];
+    mainProgram = "OpenTracker";
+    platforms = platforms.linux;
   };
 }

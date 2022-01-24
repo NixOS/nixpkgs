@@ -3,13 +3,13 @@
 # Usage: `pkgs.mpv.override { scripts = [ pkgs.mpvScripts.sponsorblock ]; }`
 stdenvNoCC.mkDerivation {
   pname = "mpv_sponsorblock";
-  version = "unstable-2020-07-05";
+  version = "unstable-2021-12-23";
 
   src = fetchFromGitHub {
     owner = "po5";
     repo = "mpv_sponsorblock";
-    rev = "f71e49e0531350339134502e095721fdc66eac20";
-    sha256 = "1fr4cagzs26ygxyk8dxqvjw4n85fzv6is6cb1jhr2qnsjg6pa0p8";
+    rev = "6743bd47d4cfce3ae3d5dd4f587f3193bd4fb9b2";
+    sha256 = "06c37f33cdpz1w1jacjf1wnbh4f9b1xpipxzkg5ixf46cbwssmsj";
   };
 
   dontBuild = true;
@@ -39,10 +39,13 @@ stdenvNoCC.mkDerivation {
     cp -r sponsorblock.lua sponsorblock_shared $out/share/mpv/scripts/
   '';
 
-  passthru.scriptName = "sponsorblock.lua";
+  passthru = {
+    scriptName = "sponsorblock.lua";
+    updateScript = ./update-sponsorblock.sh;
+  };
 
   meta = with lib; {
-    description = "mpv script to skip sponsored segments of YouTube videos";
+    description = "Script for mpv to skip sponsored segments of YouTube videos";
     homepage = "https://github.com/po5/mpv_sponsorblock";
     license = licenses.gpl3;
     platforms = platforms.all;

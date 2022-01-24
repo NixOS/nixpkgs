@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
 , pkg-config
 , meson
@@ -37,6 +38,15 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "sha256-AXmMcPj2hf33G5v3TUg+eZwaKOdVlRvoVXglMJFHRjw=";
   };
+
+  patches = [
+    # Fix build with meson 0.61
+    # https://github.com/elementary/code/pull/1165
+    (fetchpatch {
+      url = "https://github.com/elementary/code/commit/a2607cce3a6b1bb62d02456456d3cbc3c6530bb0.patch";
+      sha256 = "sha256-VKR83IOUYsQhBRlU9JUTlMJtXWv/AyG4wDsjMU2vmU8=";
+    })
+  ];
 
   passthru = {
     updateScript = nix-update-script {

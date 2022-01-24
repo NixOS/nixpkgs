@@ -2,7 +2,7 @@
 
 let
   baseName = "scalafmt";
-  version = "3.3.0";
+  version = "3.3.1";
   deps = stdenv.mkDerivation {
     name = "${baseName}-deps-${version}";
     buildCommand = ''
@@ -13,7 +13,7 @@ let
     '';
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash     = "PlLQVNn2HomcR9grqGFgaXYWxg9EU7ihd28wXruZiBs=";
+    outputHash     = "hEfy8hNuWin7mKXs9yD9bEKHCVNuxrz5qasTeLOi1zY=";
   };
 in
 stdenv.mkDerivation {

@@ -5,8 +5,8 @@
 , pandas
 , pytestCheckHook
 , pythonOlder
-, setuptools
 , setuptoolsBuildHook
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
@@ -21,14 +21,16 @@ buildPythonPackage rec {
     sha256 = "sha256-wuvoDKgbEKAkH2h23MNKyWluXFzc30dY2nz0vXMsQfc=";
   };
 
+  SETUPTOOLS_SCM_PRETEND_VERSION="${version}";
+
   nativeBuildInputs = [
     setuptoolsBuildHook
+    setuptools-scm
   ];
 
   propagatedBuildInputs = [
     numpy
     pandas
-    setuptools
   ];
 
   checkInputs = [

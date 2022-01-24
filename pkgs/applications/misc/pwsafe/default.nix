@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     done
 
     # Fix hard coded paths.
-    for f in $(grep -Rl /usr/share/ src) ; do
+    for f in $(grep -Rl /usr/share/ src install/desktop) ; do
       substituteInPlace $f --replace /usr/share/ $out/share/
     done
 

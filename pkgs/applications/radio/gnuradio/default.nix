@@ -9,7 +9,7 @@
 , cppunit
 , orc
 , boost
-, log4cpp
+, spdlog
 , mpir
 , doxygen
 , python
@@ -18,6 +18,8 @@
 , fftwFloat
 , alsa-lib
 , libjack2
+, libiio
+, libad9361
 , CoreAudio
 , uhd
 , SDL
@@ -45,14 +47,14 @@
 , overrideSrc ? {}
 , pname ? "gnuradio"
 , versionAttr ? {
-  major = "3.9";
-  minor = "4";
+  major = "3.10";
+  minor = "0";
   patch = "0";
 }
 }:
 
 let
-  sourceSha256 = "sha256-O+37CyF0IVPdUB1e68HsaXD0T2VsOLPXOpLNlRYEXUk=";
+  sourceSha256 = "sha256-1K8nlNiirks3MJ+9cH9bkILVFtu5OxhKkNhetGqojn4=";
   featuresInfo = {
     # Needed always
     basic = {
@@ -64,7 +66,7 @@ let
       runtime = [
         volk
         boost
-        log4cpp
+        spdlog
         mpir
       ]
         # when gr-qtgui is disabled, icu needs to be included, otherwise
@@ -170,6 +172,22 @@ let
     };
     gr-channels = {
       cmakeEnableFlag = "GR_CHANNELS";
+    };
+    gr-pdu = {
+      cmakeEnableFlag = "GR_PDU";
+      runtime = [
+        libiio
+        libad9361
+      ];
+    };
+    gr-iio = {
+      cmakeEnableFlag = "GR_IIO";
+      runtime = [
+        libiio
+      ];
+    };
+    common-precompiled-headers = {
+      cmakeEnableFlag = "COMMON_PCH";
     };
     gr-qtgui = {
       runtime = [ qt5.qtbase libsForQt5.qwt ];

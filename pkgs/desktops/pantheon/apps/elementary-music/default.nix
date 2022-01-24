@@ -50,6 +50,12 @@ stdenv.mkDerivation rec {
       url = "https://github.com/elementary/music/commit/aea97103d59afd213467403a48788e476e47c4c3.patch";
       sha256 = "1ayj8l6lb19hhl9bhsdfbq7jgchfmpjx0qkljnld90czcksn95yx";
     })
+    # Fix build with meson 0.61
+    # https://github.com/elementary/music/pull/674
+    (fetchpatch {
+      url = "https://github.com/elementary/music/commit/fb3d840049c1e2e0bf8fdddea378a2db647dd096.patch";
+      sha256 = "sha256-tQZv7hZExLqbkGXahZxDfg7bkgwCKYbDholC2zuwlNw=";
+    })
   ];
 
   passthru = {

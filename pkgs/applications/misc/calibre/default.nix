@@ -108,8 +108,10 @@ mkDerivation rec {
       python
       regex
       sip
+      setuptools
       zeroconf
       jeepney
+      pycryptodome
       # the following are distributed with calibre, but we use upstream instead
       odfpy
     ] ++ lib.optional (unrarSupport) unrardll

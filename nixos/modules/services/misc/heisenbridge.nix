@@ -23,7 +23,7 @@ let
 in
 {
   options.services.heisenbridge = {
-    enable = mkEnableOption "the Matrix<->IRC bridge";
+    enable = mkEnableOption "the Matrix to IRC bridge";
 
     package = mkOption {
       type = types.package;
@@ -172,25 +172,39 @@ in
           ++ (map (lib.escapeShellArg) cfg.extraArgs)
         );
 
-        ProtectHome = true;
-        PrivateDevices = true;
-        ProtectKernelTunables = true;
-        ProtectKernelModules = true;
-        ProtectControlGroups = true;
-        StateDirectory = "heisenbridge";
-        StateDirectoryMode = "755";
+        # Hardening options
 
         User = "heisenbridge";
         Group = "heisenbridge";
+        RuntimeDirectory = "heisenbridge";
+        RuntimeDirectoryMode = "0700";
+        StateDirectory = "heisenbridge";
+        StateDirectoryMode = "0755";
 
-        CapabilityBoundingSet = [ "CAP_CHOWN" ] ++ optional (cfg.port < 1024 || cfg.identd.port < 1024) "CAP_NET_BIND_SERVICE";
+        ProtectSystem = "strict";
+        ProtectHome = true;
+        PrivateTmp = true;
+        PrivateDevices = true;
+        ProtectKernelTunables = true;
+        ProtectControlGroups = true;
+        RestrictSUIDSGID = true;
+        PrivateMounts = true;
+        ProtectKernelModules = true;
+        ProtectKernelLogs = true;
+        ProtectHostname = true;
+        ProtectClock = true;
+        ProtectProc = "invisible";
+        ProcSubset = "pid";
+        RestrictNamespaces = true;
+        RemoveIPC = true;
+        UMask = "0077";
+
+        CapabilityBoundingSet = [ "CAP_CHOWN" ] ++ optional (cfg.port < 1024 || (cfg.identd.enable && cfg.identd.port < 1024)) "CAP_NET_BIND_SERVICE";
         AmbientCapabilities = CapabilityBoundingSet;
         NoNewPrivileges = true;
-
         LockPersonality = true;
         RestrictRealtime = true;
-        PrivateMounts = true;
-        SystemCallFilter = "~@aio @clock @cpu-emulation @debug @keyring @memlock @module @mount @obsolete @raw-io @setuid @swap";
+        SystemCallFilter = ["@system-service" "~@priviledged" "@chown"];
         SystemCallArchitectures = "native";
         RestrictAddressFamilies = "AF_INET AF_INET6";
       };

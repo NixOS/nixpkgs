@@ -1,82 +1,77 @@
-{ stdenv,
-  lib,
-  makeWrapper,
-  fetchurl,
-  dpkg,
-  makeDesktopItem,
-  copyDesktopItems,
-  autoPatchelfHook,
-  gst_all_1,
-  sane-backends,
-  xorg,
-  gnome2,
-  alsa-lib,
-  libgccjit,
-  jdk11
-  }:
+{ stdenv
+, lib
+, fetchurl
+, libgccjit
+, dpkg
+, makeDesktopItem
+, copyDesktopItems
+, autoPatchelfHook
+, sane-backends
+, jdk11
+}:
 
-let
-  year = "2021";
-  major = "1";
-  minor = "1";
-in stdenv.mkDerivation rec {
+# See also package 'pdfstudioviewer'
+# Differences are ${pname}, Download directory name (PDFStudio / PDFStudioViewer),
+# sha256, and libgccjit (not needed for PDFStudioViewer)
+let year = "2021";
+in
+stdenv.mkDerivation rec {
   pname = "pdfstudio";
-  version = "${year}.${major}.${minor}";
-  autoPatchelfIgnoreMissingDeps = true;
+  version = "${year}.1.2";
+  strictDeps = true;
 
   src = fetchurl {
-    url = "https://download.qoppa.com/${pname}/v${year}/PDFStudio_v${year}_${major}_${minor}_linux64.deb";
-    sha256 = "089jfpbsxwjhx245g8svlmg213kny3z5nl6ra1flishnrsfjjcxb";
+    url = "https://download.qoppa.com/${pname}/v${year}/PDFStudio_v${
+        builtins.replaceStrings [ "." ] [ "_" ] version
+      }_linux64.deb";
+    sha256 = "1188ll2qz58rr2slavqxisbz4q3fdzidpasb1p33926z0ym3rk45";
   };
 
-  nativeBuildInputs = [
-    gst_all_1.gst-libav
-    sane-backends
-    xorg.libXxf86vm
-    xorg.libXtst
-    gnome2.libgtkhtml
-    alsa-lib
-    libgccjit
-    autoPatchelfHook
-    makeWrapper
-    dpkg
-    copyDesktopItems
-    jdk11 # only for unpacking .jar.pack files
+  buildInputs = [
+    libgccjit #for libstdc++.so.6 and libgomp.so.1
+    sane-backends #for libsane.so.1
+    jdk11
   ];
 
-  desktopItems = [(makeDesktopItem {
-       name = "${pname}${year}";
-       desktopName = "PDF Studio";
-       genericName = "View and edit PDF files";
-       exec = "${pname} %f";
-       icon = "${pname}${year}";
-       comment = "Views and edits PDF files";
-       mimeType = "application/pdf";
-       categories = "Office";
-       type = "Application";
-       terminal = false;
-  })];
+  nativeBuildInputs = [
+    autoPatchelfHook
+    dpkg
+    copyDesktopItems
+  ];
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "${pname}${year}";
+      desktopName = "PDF Studio";
+      genericName = "View and edit PDF files";
+      exec = "${pname} %f";
+      icon = "${pname}${year}";
+      comment = "Views and edits PDF files";
+      mimeType = "application/pdf";
+      categories = "Office";
+      type = "Application";
+      terminal = false;
+    })
+  ];
 
   unpackPhase = "dpkg-deb -x $src .";
-  dontConfigure = true;
   dontBuild = true;
+
+  postPatch = ''
+    substituteInPlace opt/${pname}${year}/${pname}${year} --replace "# INSTALL4J_JAVA_HOME_OVERRIDE=" "INSTALL4J_JAVA_HOME_OVERRIDE=${jdk11.out}"
+    substituteInPlace opt/${pname}${year}/updater --replace "# INSTALL4J_JAVA_HOME_OVERRIDE=" "INSTALL4J_JAVA_HOME_OVERRIDE=${jdk11.out}"
+  '';
 
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out/bin
     mkdir -p $out/share
-    mkdir -p $out/share/applications
     mkdir -p $out/share/pixmaps
     cp -r opt/${pname}${year} $out/share/
+    rm -rf $out/share/${pname}${year}/jre
     ln -s $out/share/${pname}${year}/.install4j/${pname}${year}.png  $out/share/pixmaps/
-    makeWrapper $out/share/${pname}${year}/${pname}${year} $out/bin/${pname}
-
-    #Unpack jar files. Otherwise pdfstudio does this and fails due to read-only FS.
-    for pfile in $out/share/${pname}${year}/jre/lib/{,ext/}*.jar.pack; do
-      jar_file=`echo "$pfile" | awk '{ print substr($0,1,length($0)-5) }'`
-      unpack200 -r "$pfile" "$jar_file"
-    done
+    ln -s $out/share/${pname}${year}/${pname}${year} $out/bin/${pname}
 
     runHook postInstall
   '';
@@ -86,6 +81,7 @@ in stdenv.mkDerivation rec {
     description = "An easy to use, full-featured PDF editing software";
     license = licenses.unfree;
     platforms = platforms.linux;
+    mainProgram = pname;
     maintainers = [ maintainers.pwoelfel ];
   };
 }

@@ -48,11 +48,12 @@ buildPythonPackage rec {
     "TestMoveSCPCLI"
     "TestQRGetServiceClass"
     "TestQRMoveServiceClass"
+    "TestState"
+    "TestStorageServiceClass"
     "TestStoreSCP"
     "TestStoreSCPCLI"
     "TestStoreSCU"
     "TestStoreSCUCLI"
-    "TestState"
   ];
 
   pythonImportsCheck = [

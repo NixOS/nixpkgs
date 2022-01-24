@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ unzip ];
 
   buildPhase = ''
-    g++ ${compileFlags} -fPIC --shared libzpaq.cpp -o libzpaq.so
-    g++ ${compileFlags} -L. -L"$out/lib" -lzpaq zpaqd.cpp -o zpaqd
+    $CXX ${compileFlags} -fPIC --shared libzpaq.cpp -o libzpaq.so
+    $CXX ${compileFlags} -L. -L"$out/lib" -lzpaq zpaqd.cpp -o zpaqd
   '';
 
   installPhase = ''

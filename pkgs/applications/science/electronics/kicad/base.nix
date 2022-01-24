@@ -68,7 +68,6 @@ stdenv.mkDerivation rec {
   # tagged releases don't have "unknown"
   # kicad nightlies use git describe --dirty
   # nix removes .git, so its approximated here
-  # "6.99.0" doesn't have "-unknown", yet; so leaving this in case it returns
   postPatch = ''
     substituteInPlace CMakeModules/KiCadVersion.cmake \
       --replace "unknown" "${builtins.substring 0 10 src.rev}" \
@@ -105,7 +104,7 @@ stdenv.mkDerivation rec {
   ++ optionals (withI18n) [
     "-DKICAD_BUILD_I18N=ON"
   ]
-  ++ optionals (!withPCM) [
+  ++ optionals (!withPCM && stable) [
     "-DKICAD_PCM=OFF"
   ];
 

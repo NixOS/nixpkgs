@@ -1,24 +1,28 @@
-{ lib, rustPlatform, fetchFromGitHub, testVersion, sigi }:
+{ lib, rustPlatform, fetchCrate, installShellFiles, testVersion, sigi }:
 
 rustPlatform.buildRustPackage rec {
   pname = "sigi";
-  version = "2.1.1";
+  version = "3.0.0";
 
-  src = fetchFromGitHub {
-    owner = "hiljusti";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-y0m1AQE5qoUfPZjJfo7w5h+zZ1pbz8FkLFDM13MTWvQ=";
+  src = fetchCrate {
+    inherit pname version;
+    sha256 = "sha256-1xZMj6NjwA9pVOEL4CDv4XHC3usu3WdjsLJuW3vgxc8=";
   };
 
-  cargoSha256 = "sha256-NTjL57Y1Uzk5F34BW3lB3xUpD60Opt0fGWuXHQU5L3g=";
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installManPage sigi.1
+  '';
+
+  cargoSha256 = "sha256-NUWm2GkK7bASo6bAOgQgHate45iDG5l3G/KhtLrjzQ8=";
 
   passthru.tests.version = testVersion { package = sigi; };
 
   meta = with lib; {
     description = "CLI tool for organization and planning";
     homepage = "https://github.com/hiljusti/sigi";
-    license = licenses.gpl3;
+    license = licenses.gpl2;
     maintainers = with maintainers; [ hiljusti ];
   };
 }

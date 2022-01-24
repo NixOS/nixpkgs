@@ -6,7 +6,6 @@ let
   top = config.services.kubernetes;
   otop = options.services.kubernetes;
   cfg = top.controllerManager;
-  klib = options.services.kubernetes.lib.default;
 in
 {
   imports = [
@@ -57,7 +56,7 @@ in
       type = int;
     };
 
-    kubeconfig = klib.mkKubeConfigOptions "Kubernetes controller manager";
+    kubeconfig = top.lib.mkKubeConfigOptions "Kubernetes controller manager";
 
     leaderElect = mkOption {
       description = "Whether to start leader election before executing main loop.";
@@ -130,7 +129,7 @@ in
             "--cluster-cidr=${cfg.clusterCidr}"} \
           ${optionalString (cfg.featureGates != [])
             "--feature-gates=${concatMapStringsSep "," (feature: "${feature}=true") cfg.featureGates}"} \
-          --kubeconfig=${klib.mkKubeConfig "kube-controller-manager" cfg.kubeconfig} \
+          --kubeconfig=${top.lib.mkKubeConfig "kube-controller-manager" cfg.kubeconfig} \
           --leader-elect=${boolToString cfg.leaderElect} \
           ${optionalString (cfg.rootCaFile!=null)
             "--root-ca-file=${cfg.rootCaFile}"} \
@@ -157,7 +156,7 @@ in
       path = top.path;
     };
 
-    services.kubernetes.pki.certs = with klib; {
+    services.kubernetes.pki.certs = with top.lib; {
       controllerManager = mkCert {
         name = "kube-controller-manager";
         CN = "kube-controller-manager";
@@ -172,4 +171,6 @@ in
 
     services.kubernetes.controllerManager.kubeconfig.server = mkDefault top.apiserverAddress;
   };
+
+  meta.buildDocsInSandbox = false;
 }

@@ -7,6 +7,7 @@
 , colorama
 , pyserial
 , wheel
+, scons
 , setuptools
 , tinyprog
 , pytestCheckHook
@@ -14,17 +15,20 @@
 
 buildPythonApplication rec {
   pname = "apio";
-  version = "0.7.6";
+  version = "0.8.0";
   format = "flit";
 
   src = fetchFromGitHub {
     owner = "FPGAwars";
     repo = "apio";
     rev = "v${version}";
-    sha256 = "sha256-KmqxwYKsvcTSuUSVXgegR47y9VeU/vICbYWD7z3aDRM=";
+    sha256 = "sha256-nOZI+FHdZRnkJF/No8z0mZ4Q5aHFnF7c20ajTPI00N4=";
   };
 
   postPatch = ''
+    substituteInPlace pyproject.toml --replace \
+      'scons==4.2.0' 'scons'
+
     substituteInPlace apio/managers/scons.py --replace \
       'return "tinyprog --libusb --program"' \
       'return "${tinyprog}/bin/tinyprog --libusb --program"'
@@ -49,6 +53,7 @@ buildPythonApplication rec {
     colorama
     pyserial
     wheel
+    scons
     setuptools # needs pkg_resources at runtime (technically not needed when tinyprog is also in this list because of the propagatedBuildInputs of tinyprog)
 
     tinyprog # needed for upload to TinyFPGA

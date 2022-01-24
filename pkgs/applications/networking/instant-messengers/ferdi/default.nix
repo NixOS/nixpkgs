@@ -17,10 +17,10 @@ in
 mkFranzDerivation' rec {
   pname = "ferdi";
   name = "Ferdi";
-  version = "5.6.5";
+  version = "5.7.0";
   src = fetchurl {
     url = "https://github.com/getferdi/ferdi/releases/download/v${version}/ferdi_${version}_amd64.deb";
-    sha256 = "sha256-JeFPvU4xXHcv6/ApCDkejYWfA8lqsxwoFXnqIiOQ0+Y=";
+    sha256 = "sha256-WwtnYNjXHk80o1wMsEBoaT9j0+4TWTfWhuVpGHaZB7c=";
   };
   extraBuildInputs = [ xorg.libxshmfence ];
   meta = with lib; {

@@ -3,6 +3,7 @@
 , libssh, nghttp2, zlib, cmake, makeWrapper
 , withQt ? true, qt5 ? null
 , ApplicationServices, SystemConfiguration, gmp
+, asciidoctor
 }:
 
 assert withQt  -> qt5  != null;
@@ -33,7 +34,7 @@ in stdenv.mkDerivation {
   # Avoid referencing -dev paths because of debug assertions.
   NIX_CFLAGS_COMPILE = [ "-DQT_NO_DEBUG" ];
 
-  nativeBuildInputs = [ bison cmake flex makeWrapper pkg-config ] ++ optional withQt qt5.wrapQtAppsHook;
+  nativeBuildInputs = [ asciidoctor bison cmake flex makeWrapper pkg-config ] ++ optional withQt qt5.wrapQtAppsHook;
 
   buildInputs = [
     gettext pcre perl libpcap lua5 libssh nghttp2 openssl libgcrypt

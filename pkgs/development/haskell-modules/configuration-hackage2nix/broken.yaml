@@ -455,6 +455,7 @@ broken-packages:
   - brick-dropdownmenu
   - bricks-internal
   - brillig
+  - broadcast-chan-tests
   - broccoli
   - brok
   - broker-haskell
@@ -571,6 +572,7 @@ broken-packages:
   - capnp
   - capped-list
   - capri
+  - captcha-core
   - caramia
   - carbonara
   - cardano-coin-selection
@@ -1783,6 +1785,7 @@ broken-packages:
   - graph-rewriting
   - graph-serialize
   - graphted
+  - graph-trace-dot
   - graphula-core
   - graph-utils
   - graql
@@ -1801,6 +1804,7 @@ broken-packages:
   - gross
   - GroteTrap
   - groundhog-converters
+  - groundhog-inspector
   - groundhog-mysql
   - grouped-list
   - group-theory
@@ -3879,6 +3883,7 @@ broken-packages:
   - pretty-ncols
   - prettyprinter-vty
   - prim-array
+  - primecount
   - primes-type
   - prim-instances
   - PrimitiveArray-Pretty
@@ -4081,6 +4086,7 @@ broken-packages:
   - refined-http-api-data
   - reflection-extras
   - reflex-basic-host
+  - reflex-dom-ace
   - reflex-dom-contrib
   - reflex-dom-helper
   - reflex-dom-helpers
@@ -4108,6 +4114,7 @@ broken-packages:
   - regex-posix-unittest
   - regexpr-symbolic
   - regexqq
+  - regex-rure
   - regex-tdfa-pipes
   - regex-tdfa-quasiquoter
   - regex-tdfa-rc
@@ -4448,6 +4455,8 @@ broken-packages:
   - show-prettyprint
   - Shpadoinkle-backend-pardiff
   - Shpadoinkle-backend-snabbdom
+  - Shpadoinkle-backend-static
+  - Shpadoinkle-html
   - Shpadoinkle-isreal
   - Shpadoinkle-streaming
   - Shpadoinkle-template
@@ -4848,6 +4857,7 @@ broken-packages:
   - tagsoup-selection
   - tai
   - tai64
+  - tailwind
   - takahashi
   - Takusen
   - takusen-oracle

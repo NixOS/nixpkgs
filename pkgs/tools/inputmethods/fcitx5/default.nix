@@ -41,13 +41,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "fcitx5";
-  version = "5.0.11";
+  version = "5.0.12";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    sha256 = "sha256-81FuV6wBDQcOG5TLEJBqSG09BRgLekAo3tqZA40AQYo=";
+    sha256 = "sha256-v+K4rlUOBWoRXh7lNeETBbgtu5IJqYKXwSznIRzrrwE=";
   };
 
   prePatch = ''

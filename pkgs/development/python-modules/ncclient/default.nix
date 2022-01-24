@@ -21,7 +21,6 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     paramiko
     lxml
-    selectors2
   ];
 
   checkInputs = [

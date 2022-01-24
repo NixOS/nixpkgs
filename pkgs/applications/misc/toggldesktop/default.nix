@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchzip, buildEnv, makeDesktopItem, runCommand, writeText, pkg-config
+{ mkDerivation, lib, fetchFromGitHub, buildEnv, makeDesktopItem, runCommand, writeText, pkg-config
 , cmake, qmake, cacert, jsoncpp, libX11, libXScrnSaver, lua, openssl, poco
 , qtbase, qtwebengine, qtx11extras, sqlite }:
 
@@ -6,18 +6,22 @@ let
   name = "toggldesktop-${version}";
   version = "7.4.231";
 
-  src = fetchzip {
-    url = "https://github.com/toggl/toggldesktop/archive/v${version}.tar.gz";
-    sha256 = "01hqkx9dljnhwnyqi6mmzfp02hnbi2j50rsfiasniqrkbi99x9v1";
+  src = fetchFromGitHub {
+    owner = "toggl";
+    repo = "toggldesktop";
+    rev = "v${version}";
+    sha256 = "sha256-YaeeUlwz42i1ik5nUKSIy0IBrvu1moi95dBK2lKfGAY=";
   };
 
   bugsnag-qt = mkDerivation rec {
     pname = "bugsnag-qt";
     version = "20180522.005732";
 
-    src = fetchzip {
-      url = "https://github.com/alpakido/bugsnag-qt/archive/${version}.tar.gz";
-      sha256 = "02s6mlggh0i4a856md46dipy6mh47isap82jlwmjr7hfsk2ykgnq";
+    src = fetchFromGitHub {
+      owner = "alpakido";
+      repo = "bugsnag-qt";
+      rev = version;
+      sha256 = "sha256-2L7pxdQOniwrp1Kgq3Q8BFbjb2yGtGoKUiQC+B6tRgs=";
     };
 
     nativeBuildInputs = [ qmake ];
@@ -28,9 +32,11 @@ let
     pname = "qxtglobalshortcut";
     version = "f584471dada2099ba06c574bdfdd8b078c2e3550";
 
-    src = fetchzip {
-      url = "https://github.com/hluk/qxtglobalshortcut/archive/${version}.tar.gz";
-      sha256 = "1iy17gypav10z8aa62s5jb6mq9y4kb9ms4l61ydmk3xwlap7igw1";
+    src = fetchFromGitHub {
+      owner = "hluk";
+      repo = "qxtglobalshortcut";
+      rev = version;
+      sha256 = "sha256-gb94rqK8j1mbD4YSXdOaxCdczZJFC6MU+iBsdf07wcc=";
     };
 
     nativeBuildInputs = [ cmake ];
@@ -41,9 +47,11 @@ let
     pname = "qt-oauth-lib";
     version = "20190125.190943";
 
-    src = fetchzip {
-      url = "https://github.com/alpakido/qt-oauth-lib/archive/${version}.tar.gz";
-      sha256 = "0zmfgvdf6n79mgfvbda7lkdxxlzjmy86436gqi2r5x05vq04sfrj";
+    src = fetchFromGitHub {
+      owner = "alpakido";
+      repo = "qt-oauth-lib";
+      rev = version;
+      sha256 = "sha256-MjtNAN4F9JJFxM8MYpCv8tPe26RHtbXdq+lY49p+rn4=";
     };
 
     nativeBuildInputs = [ qmake ];

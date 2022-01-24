@@ -1,4 +1,4 @@
-{ go, cacert, git, lib, stdenv, vend }:
+{ go, cacert, git, lib, stdenv }:
 
 { name ? "${args'.pname}-${args'.version}"
 , src
@@ -106,10 +106,7 @@ let
         exit 10
       fi
 
-    ${if runVend then ''
-      echo "running 'vend' to rewrite vendor folder"
-      ${vend}/bin/vend
-    '' else if proxyVendor then ''
+    ${if proxyVendor then ''
       mkdir -p "''${GOPATH}/pkg/mod/cache/download"
       go mod download
     '' else ''

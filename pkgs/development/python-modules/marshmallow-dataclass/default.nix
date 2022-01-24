@@ -4,6 +4,7 @@
 , marshmallow
 , marshmallow-enum
 , pytestCheckHook
+, pythonAtLeast
 , pythonOlder
 , typeguard
 , typing-inspect
@@ -34,7 +35,20 @@ buildPythonPackage rec {
     typeguard
   ];
 
-  pythonImportsCheck = [ "marshmallow_dataclass" ];
+  pytestFlagsArray = [
+    # DeprecationWarning: The distutils package is deprecated and slated for removal in Python 3.12.
+    "-W"
+    "ignore::DeprecationWarning"
+  ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.10") [
+    # TypeError: UserId is not a dataclass and cannot be turned into one.
+    "test_newtype"
+  ];
+
+  pythonImportsCheck = [
+    "marshmallow_dataclass"
+  ];
 
   meta = with lib; {
     description = "Automatic generation of marshmallow schemas from dataclasses";

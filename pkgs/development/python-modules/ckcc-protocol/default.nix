@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "ckcc-protocol";
-  version = "1.1.0";
+  version = "1.2.1";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b660225ac06fc06ad17b33ece428126eef785388450e14313f72d25d4082c5ab";
+    sha256 = "65f0313f9915b36068f6dfcab08e04671621e6227650443bc12e81997081ae7f";
   };
 
   propagatedBuildInputs = [ click ecdsa hidapi pyaes ];

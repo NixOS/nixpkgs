@@ -98,9 +98,23 @@ self: super:
     '';
   });
 
+  backports-functools-lru-cache = super.backports-functools-lru-cache.overridePythonAttrs (old: {
+    postPatch = ''
+      substituteInPlace setup.py --replace \
+        'setuptools.setup()' \
+        'setuptools.setup(version="${old.version}")'
+    '';
+  });
+
   bcrypt = super.bcrypt.overridePythonAttrs (
     old: {
       buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.libffi ];
+    }
+  );
+
+  bjoern = super.bjoern.overridePythonAttrs (
+    old: {
+      buildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkgs.libev ];
     }
   );
 
@@ -247,6 +261,36 @@ self: super:
     buildInputs = (old.buildInputs or [ ]) ++ [ self.setuptools ];
   });
 
+  dbus-python = super.dbus-python.overridePythonAttrs (old: {
+    outputs = [ "out" "dev" ];
+
+    postPatch = old.postPatch or "" + ''
+      substituteInPlace ./configure --replace /usr/bin/file ${pkgs.file}/bin/file
+      substituteInPlace ./dbus-python.pc.in --replace 'Cflags: -I''${includedir}' 'Cflags: -I''${includedir}/dbus-1.0'
+    '';
+
+    configureFlags = (old.configureFlags or [ ]) ++ [
+      "PYTHON_VERSION=${lib.versions.major self.python.version}"
+    ];
+
+    preConfigure = lib.concatStringsSep "\n" [
+      (old.preConfigure or "")
+      (if (lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11" && stdenv.isDarwin) then ''
+        MACOSX_DEPLOYMENT_TARGET=10.16
+      '' else "")
+    ];
+
+    preBuild = old.preBuild or "" + ''
+      make distclean
+    '';
+
+    nativeBuildInputs = old.nativeBuildInputs or [ ] ++ [ pkgs.pkg-config ];
+    buildInputs = old.buildInputs or [ ] ++ [ pkgs.dbus pkgs.dbus-glib ]
+      # My guess why it's sometimes trying to -lncurses.
+      # It seems not to retain the dependency anyway.
+      ++ lib.optional (! self.python ? modules) pkgs.ncurses;
+  });
+
   dcli = super.dcli.overridePythonAttrs (old: {
     propagatedBuildInputs = (old.propagatedBuildInputs or [ ]) ++ [ self.setuptools ];
   });
@@ -370,6 +414,13 @@ self: super:
           --replace 'setup_requires="setupmeta"' 'setup_requires=[]' \
           --replace 'versioning="devcommit"' 'version="${old.version}"'
       '';
+    }
+  );
+
+  fastapi = super.fastapi.overridePythonAttrs (
+    old: {
+      # Note: requires full flit, not just flit-core
+      nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ self.flit ];
     }
   );
 
@@ -504,6 +555,13 @@ self: super:
     propagatedBuildInputs = (old.propagatedBuildInputs or [ ]) ++ [ self.pyparsing ];
   });
 
+  icecream = super.icecream.overridePythonAttrs (old: {
+    #  # ERROR: Could not find a version that satisfies the requirement executing>=0.3.1 (from icecream) (from versions: none)
+    postPatch = ''
+      substituteInPlace setup.py --replace 'executing>=0.3.1' 'executing'
+    '';
+  });
+
   imagecodecs = super.imagecodecs.overridePythonAttrs (
     old: {
       patchPhase = ''
@@ -569,9 +627,9 @@ self: super:
       # disable the removal of pyproject.toml, required because of setuptools_scm
       dontPreferSetupPy = true;
 
-      postPatch = old.postPatch or "" + ''
+      postPatch = old.postPatch or "" + (lib.optionalString ((old.format or "") != "wheel") ''
         substituteInPlace setup.py --replace 'setuptools.setup()' 'setuptools.setup(version="${old.version}")'
-      '';
+      '');
     }
   );
 
@@ -867,13 +925,6 @@ self: super:
     buildInputs = oa.buildInputs ++ [ self.pbr ];
   });
 
-  moto = super.moto.overridePythonAttrs (
-    old: {
-      buildInputs = (old.buildInputs or [ ]) ++
-        [ self.sshpubkeys ];
-    }
-  );
-
   mpi4py = super.mpi4py.overridePythonAttrs (
     old:
     let
@@ -988,8 +1039,18 @@ self: super:
   );
 
   opencv-python = super.opencv-python.overridePythonAttrs (
-    old: rec {
-      buildInputs = (old.buildInputs or [ ]) ++ [ self.scikit-build ];
+    old: {
+      nativeBuildInputs = [ pkgs.cmake ] ++ old.nativeBuildInputs;
+      buildInputs = [ self.scikit-build ] ++ (old.buildInputs or [ ]);
+      dontUseCmakeConfigure = true;
+    }
+  );
+
+  opencv-contrib-python = super.opencv-contrib-python.overridePythonAttrs (
+    old: {
+      nativeBuildInputs = [ pkgs.cmake ] ++ old.nativeBuildInputs;
+      buildInputs = [ self.scikit-build ] ++ (old.buildInputs or [ ]);
+      dontUseCmakeConfigure = true;
     }
   );
 
@@ -1006,6 +1067,13 @@ self: super:
       dontUseCmakeConfigure = true;
     }
   );
+
+  pantalaimon = super.pantalaimon.overridePythonAttrs (old: {
+    nativeBuildInputs = old.nativeBuildInputs or [ ] ++ [ pkgs.installShellFiles ];
+    postInstall = old.postInstall or "" + ''
+      installManPage docs/man/*.[1-9]
+    '';
+  });
 
   paramiko = super.paramiko.overridePythonAttrs (old: {
     doCheck = false; # requires networking
@@ -1076,6 +1144,10 @@ self: super:
       dontPreferSetupPy = true;
     }
   );
+
+  prettytable = super.prettytable.overridePythonAttrs (old: {
+    propagatedBuildInputs = (old.propagatedBuildInputs or [ ]) ++ [ self.setuptools ];
+  });
 
   psycopg2 = super.psycopg2.overridePythonAttrs (
     old: {
@@ -1277,7 +1349,11 @@ self: super:
     }
   );
 
-  pytezos = super.pytezos.override (old: {
+  pytaglib = super.pytaglib.overridePythonAttrs (old: {
+    buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.taglib ];
+  });
+
+  pytezos = super.pytezos.overridePythonAttrs (old: {
     buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.libsodium ];
   });
 
@@ -1323,6 +1399,7 @@ self: super:
           pkgs.qt5.qtsvg
           pkgs.qt5.qtdeclarative
           pkgs.qt5.qtwebchannel
+          pkgs.qt5.qt3d
           # self.pyqt5-sip
           self.sip
         ]
@@ -1472,6 +1549,12 @@ self: super:
     }
   );
 
+  python-olm = super.python-olm.overridePythonAttrs (
+    old: {
+      buildInputs = old.buildInputs or [ ] ++ [ pkgs.olm ];
+    }
+  );
+
   python-snappy = super.python-snappy.overridePythonAttrs (
     old: {
       buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.snappy ];
@@ -1495,6 +1578,13 @@ self: super:
       ];
     }
   );
+
+  pyudev = super.pyudev.overridePythonAttrs (old: {
+    postPatch = ''
+      substituteInPlace src/pyudev/_ctypeslib/utils.py \
+        --replace "find_library(name)" "'${pkgs.lib.getLib pkgs.systemd}/lib/libudev.so'"
+    '';
+  });
 
   pyusb = super.pyusb.overridePythonAttrs (
     old: {
@@ -1559,6 +1649,12 @@ self: super:
     }
   );
 
+  requests-mock = super.requests-mock.overridePythonAttrs (
+    old: {
+      propagatedBuildInputs = (old.propagatedBuildInputs or [ ]) ++ [ super.pbr ];
+    }
+  );
+
   requests-unixsocket = super.requests-unixsocket.overridePythonAttrs (
     old: {
       nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ self.pbr ];
@@ -1614,6 +1710,18 @@ self: super:
         ln -s ${self.numpy.cfg} site.cfg
       '';
     } else old
+  );
+
+  scikit-image = super.scikit-image.overridePythonAttrs (
+    old: {
+      nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [
+        self.cython
+        self.pythran
+        self.packaging
+        self.wheel
+        self.numpy
+      ];
+    }
   );
 
   scikit-learn = super.scikit-learn.overridePythonAttrs (
@@ -1673,7 +1781,7 @@ self: super:
   tables = super.tables.overridePythonAttrs (
     old: {
       buildInputs = (old.buildInputs or [ ]) ++ [ self.pywavelets ];
-      HDF5_DIR = "${pkgs.hdf5}";
+      HDF5_DIR = lib.getDev pkgs.hdf5;
       nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkgs.pkg-config ];
       propagatedBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkgs.hdf5 self.numpy self.numexpr ];
     }
@@ -2126,6 +2234,10 @@ self: super:
     buildInputs = (old.buildInputs or [ ]) ++ [ self.pbr ];
   });
 
+  pysqlite = super.pysqlite.overridePythonAttrs (old: {
+    buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.sqlite ];
+  });
+
   selinux = super.selinux.overridePythonAttrs (old: {
     buildInputs = (old.buildInputs or [ ]) ++ [ self.setuptools-scm-git-archive ];
   });
@@ -2145,6 +2257,12 @@ self: super:
   uwsgi = super.uwsgi.overridePythonAttrs (old: {
     buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.ncurses ];
     sourceRoot = ".";
+  });
+
+  wcwidth = super.wcwidth.overridePythonAttrs (old: {
+    propagatedBuildInputs = (old.propagatedBuildInputs or [ ]) ++
+      lib.optional self.isPy27 (self.backports-functools-lru-cache or self.backports_functools_lru_cache)
+    ;
   });
 
   wtforms = super.wtforms.overridePythonAttrs (old: {

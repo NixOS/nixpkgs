@@ -13,11 +13,11 @@
 
 buildPythonPackage rec {
   pname = "ipykernel";
-  version = "6.5.1";
+  version = "6.6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "dd27172bccbbcfef952991e49372e4c6fd1c14eed0df05ebd5b4335cb27a81a2";
+    sha256 = "3a227788216b43982d9ac28195949467627b0d16e6b8af9741d95dcaa8c41a89";
   };
 
   propagatedBuildInputs = [

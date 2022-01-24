@@ -52,6 +52,8 @@ let self = rec {
 
   a4ksubtitles = callPackage ../applications/video/kodi/addons/a4ksubtitles { };
 
+  arteplussept = callPackage ../applications/video/kodi/addons/arteplussept { };
+
   controllers = {
     default = callPackage ../applications/video/kodi/addons/controllers { controller = "default"; };
 
@@ -160,4 +162,13 @@ let self = rec {
 
   websocket = callPackage ../applications/video/kodi/addons/websocket { };
 
+  xbmcswift2 = callPackage ../applications/video/kodi/addons/xbmcswift2 { };
+
+  typing_extensions = callPackage ../applications/video/kodi/addons/typing_extensions { };
+
+  arrow = callPackage ../applications/video/kodi/addons/arrow { };
+
+  trakt-module = callPackage ../applications/video/kodi/addons/trakt-module { };
+
+  trakt = callPackage ../applications/video/kodi/addons/trakt { };
 }; in self
