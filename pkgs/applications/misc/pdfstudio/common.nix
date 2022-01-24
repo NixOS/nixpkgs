@@ -58,9 +58,7 @@ let
     installPhase = ''
       runHook preInstall
 
-      mkdir -p $out/bin
-      mkdir -p $out/share
-      mkdir -p $out/share/pixmaps
+      mkdir -p $out/{bin,share/pixmaps}
       cp -r opt/${pname}${year} $out/share/
       rm -rf $out/share/${pname}${year}/jre
       ln -s $out/share/${pname}${year}/.install4j/${pname}${year}.png  $out/share/pixmaps/
