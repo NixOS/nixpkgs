@@ -69,7 +69,7 @@ buildPythonPackage rec {
   pythonImportsCheck = map (ext: "pymdownx.${ext}") extensions;
 
   meta = with lib; {
-    description = "Extensions for Python Markdown.";
+    description = "Extensions for Python Markdown";
     homepage = "https://facelessuser.github.io/pymdown-extensions/";
     license = with licenses; [ mit bsd2 ];
     maintainers = with maintainers; [ cpcloud ];
