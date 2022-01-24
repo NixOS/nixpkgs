@@ -3,6 +3,7 @@
 , year
 , version
 , desktopName
+, longDescription
 , buildFHSUserEnv
 , extraBuildInputs ? []
 , stdenv
@@ -90,6 +91,7 @@ buildFHSUserEnv {
   meta = with lib; {
     homepage = "https://www.qoppa.com/${pname}/";
     description = "An easy to use, full-featured PDF editing software";
+    longDescription = longDescription;
     license = licenses.unfree;
     platforms = platforms.linux;
     mainProgram = pname;
