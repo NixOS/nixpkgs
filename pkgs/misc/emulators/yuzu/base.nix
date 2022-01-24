@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
       # Icons
       cc-by-nd-30 cc0
     ];
-    maintainers = with maintainers; [ ivar joshuafern ];
+    maintainers = with maintainers; [ ivar joshuafern sbruder ];
     platforms = platforms.linux;
     broken = stdenv.isAarch64; # Currently aarch64 is not supported.
   };
