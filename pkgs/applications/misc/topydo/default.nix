@@ -4,13 +4,13 @@ with python3Packages;
 
 buildPythonApplication rec {
   pname = "topydo";
-  version = "0.13";
+  version = "0.14";
 
   src = fetchFromGitHub {
     owner = "bram85";
     repo = pname;
     rev = version;
-    sha256 = "0b3dz137lpbvpjvfy42ibqvj3yk526x4bpn819fd11lagn77w69r";
+    sha256 = "1lpfdai0pf90ffrzgmmkadbd86rb7250i3mglpkc82aj6prjm6yb";
   };
 
   propagatedBuildInputs = [

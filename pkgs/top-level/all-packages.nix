@@ -1633,8 +1633,6 @@ with pkgs;
 
   corsair = with python3Packages; toPythonApplication corsair-scan;
 
-  corsmisc = callPackage ../tools/security/corsmisc { };
-
   cosign = callPackage ../tools/security/cosign {
     inherit (darwin.apple_sdk.frameworks) PCSC;
   };
@@ -6224,9 +6222,7 @@ with pkgs;
 
   gvm-tools = with python3.pkgs; toPythonApplication gvm-tools;
 
-  gvpe = callPackage ../tools/networking/gvpe {
-    openssl = openssl_1_0_2;
-  };
+  gvpe = callPackage ../tools/networking/gvpe {};
 
   gvolicon = callPackage ../tools/audio/gvolicon {};
 
@@ -19290,6 +19286,8 @@ with pkgs;
 
   opensubdiv = callPackage ../development/libraries/opensubdiv { };
 
+  opensupaplex = callPackage ../games/opensupaplex { };
+
   open-wbo = callPackage ../applications/science/logic/open-wbo {};
 
   openwsman = callPackage ../development/libraries/openwsman {};
@@ -21864,8 +21862,6 @@ with pkgs;
 
   sickgear = callPackage ../servers/sickbeard/sickgear.nix { };
 
-  sigurlx = callPackage ../tools/security/sigurlx { };
-
   sipwitch = callPackage ../servers/sip/sipwitch { };
 
   slimserver = callPackage ../servers/slimserver { };
@@ -23803,6 +23799,8 @@ with pkgs;
   nordic = callPackage ../data/themes/nordic { };
 
   nordzy-cursor-theme = callPackage ../data/icons/nordzy-cursor-theme { };
+
+  nordzy-icon-theme = callPackage ../data/icons/nordzy-icon-theme { };
 
   inherit (callPackages ../data/fonts/noto-fonts {})
     noto-fonts
@@ -33502,7 +33500,7 @@ with pkgs;
   retroarchFull = retroarch.override {
     cores = builtins.filter
       # Remove cores not supported on platform
-      (c: c ? libretroCore && (builtins.elem stdenv.hostPlatform.system c.meta.platforms))
+      (c: c ? libretroCore && (lib.meta.availableOn stdenv.hostPlatform c))
       (builtins.attrValues libretro);
   };
 
