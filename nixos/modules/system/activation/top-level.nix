@@ -109,9 +109,7 @@ let
     utillinux = pkgs.util-linux;
 
     kernelParams = config.boot.kernelParams;
-    installBootLoader =
-      config.system.build.installBootLoader
-      or "echo 'Warning: do not know how to make this configuration bootable; please enable a boot loader.' 1>&2; true";
+    installBootLoader = config.system.build.installBootLoader;
     activationScript = config.system.activationScripts.script;
     dryActivationScript = config.system.dryActivationScript;
     nixosLabel = config.system.nixos.label;
@@ -227,6 +225,23 @@ in
     };
 
     system.build = tmpFixupSubmoduleBoundary {
+      installBootLoader = mkOption {
+        internal = true;
+        default = "echo 'Warning: do not know how to make this configuration bootable; please enable a boot loader.' 1>&2; true";
+        description = ''
+          A program that writes a bootloader installation script to the path passed in the first command line argument.
+
+          See <literal>nixos/modules/system/activation/switch-to-configuration.pl</literal>.
+        '';
+        type = types.unique {
+          message = ''
+            Only one bootloader can be enabled at a time. This requirement has not
+            been checked until NixOS 22.05. Earlier versions defaulted to the last
+            definition. Change your configuration to enable only one bootloader.
+          '';
+        } (types.either types.str types.package);
+      };
+
       toplevel = mkOption {
         type = types.package;
         readOnly = true;
