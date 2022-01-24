@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "multidict";
-  version = "5.2.0";
+  version = "6.0.2";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0dd1c93edb444b33ba2274b66f63def8a327d607c6c790772f448a53b6ea59ce";
+    sha256 = "5ff3bd75f38e4c43f1f470f2df7a4d430b821c4ce22be384e1459cb57d6bb013";
   };
 
   postPatch = ''
