@@ -11,7 +11,7 @@
     version = "${year}.1.2";
     desktopName = "PDF Studio";
     extraBuildInputs = [
-      pkgs.libgccjit #for libstdc++.so.6 and libgomp.so.1
+      libgccjit #for libstdc++.so.6 and libgomp.so.1
     ];
     src = fetchurl {
       url = "https://download.qoppa.com/${pname}/v${year}/PDFStudio_v${
