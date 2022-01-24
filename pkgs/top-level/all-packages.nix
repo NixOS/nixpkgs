@@ -23782,6 +23782,8 @@ with pkgs;
 
   nordzy-cursor-theme = callPackage ../data/icons/nordzy-cursor-theme { };
 
+  nordzy-icon-theme = callPackage ../data/icons/nordzy-icon-theme { };
+
   inherit (callPackages ../data/fonts/noto-fonts {})
     noto-fonts
     noto-fonts-cjk-sans
