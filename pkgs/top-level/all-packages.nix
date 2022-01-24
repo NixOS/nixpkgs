@@ -33482,7 +33482,7 @@ with pkgs;
   retroarchFull = retroarch.override {
     cores = builtins.filter
       # Remove cores not supported on platform
-      (c: c ? libretroCore && (builtins.elem stdenv.hostPlatform.system c.meta.platforms))
+      (c: c ? libretroCore && (lib.meta.availableOn stdenv.hostPlatform c))
       (builtins.attrValues libretro);
   };
 
