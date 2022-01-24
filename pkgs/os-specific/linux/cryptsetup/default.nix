@@ -31,8 +31,6 @@ stdenv.mkDerivation rec {
     "--enable-cryptsetup-reencrypt"
     "--with-crypto_backend=openssl"
     "--disable-ssh-token"
-  ] ++ lib.optionals stdenv.hostPlatform.isStatic [
-    "--enable-static-cryptsetup"
   ];
 
   nativeBuildInputs = [ pkg-config ];
