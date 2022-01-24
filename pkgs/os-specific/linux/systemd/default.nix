@@ -541,17 +541,6 @@ stdenv.mkDerivation {
             "src/analyze/test-verify.c"
             "src/test/test-env-file.c"
             "src/test/test-fileio.c"
-            "test/test-execute/exec-systemcallfilter-failing2.service"
-            "test/test-execute/exec-systemcallfilter-failing3.service"
-            "test/test-execute/exec-systemcallfilter-failing.service"
-            "test/testsuite-06.units/hola.service"
-            "test/udev-test.pl"
-            "test/units/hello.service"
-            "test/units/testsuite-07.sh"
-            "test/units/testsuite-15.sh"
-            "test/units/testsuite-17.05.sh"
-            "test/units/testsuite-40.sh"
-            "test/units/unstoppable.service"
           ];
         }
         {
@@ -565,11 +554,6 @@ stdenv.mkDerivation {
           replacement = "$out/lib/systemd/systemd-fsck";
           where = [
             "man/systemd-fsck@.service.xml"
-            "test/test-fstab-generator.sh"
-            "test/test-fstab-generator/test-12-dev-sdx.expected/systemd-fsck-root.service"
-            "test/test-fstab-generator/test-13-label.expected/systemd-fsck-root.service"
-            "test/test-fstab-generator/test-14-uuid.expected/systemd-fsck-root.service"
-            "test/test-fstab-generator/test-15-partuuid.expected/systemd-fsck-root.service"
           ];
         }
       ] ++ lib.optionals withImportd [
@@ -599,9 +583,9 @@ stdenv.mkDerivation {
         map (path: "substituteInPlace ${path} --replace '${search}' \"${replacement}\"") where;
       mkEnsureSubstituted = { replacement, search, where }:
         ''
-          if [[ $(grep -r '${search}' | grep -v "${replacement}" | grep -v NEWS | wc -l) -gt 0 ]]; then
-            echo "Not all references to '${search}' have been replace. Found the following matches:"
-            grep '${search}' -r | grep -v "${replacement}" | grep -v NEWS
+          if [[ $(grep -r '${search}' | grep -v "${replacement}" | grep -Ev 'NEWS|^test/' | wc -l) -gt 0 ]]; then
+            echo "Not all references to '${search}' have been replaced. Found the following matches:"
+            grep '${search}' -r | grep -v "${replacement}" | grep -Ev 'NEWS|^test/'
             exit 1
           fi
         '';
