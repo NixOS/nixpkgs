@@ -57,23 +57,6 @@ index ab05720..075b42f 100644
  	rm -f $(_ELOD)/49-tlp-sleep
  	rm -f $(_SHCPL)/tlp-stat
  	rm -f $(_SHCPL)/bluetooth
-diff --git a/tlp-sleep b/tlp-sleep
-deleted file mode 100644
-index e548d55..0000000
---- a/tlp-sleep
-+++ /dev/null
-@@ -1,11 +0,0 @@
--#!/bin/sh
--
--# tlp - systemd suspend/resume hook
--#
--# Copyright (c) 2021 Thomas Koch <linrunner at gmx.net> and others.
--# This software is licensed under the GPL v2 or later.
--
--case $1 in
--    pre)  tlp suspend ;;
--    post) tlp resume  ;;
--esac
 diff --git a/tlp-sleep.service.in b/tlp-sleep.service.in
 new file mode 100644
 index 0000000..79c202c
