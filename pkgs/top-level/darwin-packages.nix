@@ -42,11 +42,13 @@ lib.makeScopeWithSplicing splicePackages newScope otherSplices (_: {}) (spliced:
   apple_sdk_11_0 = pkgs.callPackage ../os-specific/darwin/apple-sdk-11.0 { };
 
   # Pick an SDK
-  apple_sdk = if stdenv.hostPlatform.isAarch64 then apple_sdk_11_0 else apple_sdk_10_12;
+  apple_sdk = if stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.useiOSPrebuilt
+    then apple_sdk_11_0 else
+    apple_sdk_10_12;
 
   # Pick the source of libraries: either Apple's open source releases, or the
   # SDK.
-  useAppleSDKLibs = stdenv.hostPlatform.isAarch64;
+  useAppleSDKLibs = stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.useiOSPrebuilt;
 
   selectAttrs = attrs: names:
     lib.listToAttrs (lib.concatMap (n: if attrs ? "${n}" then [(lib.nameValuePair n attrs."${n}")] else []) names);

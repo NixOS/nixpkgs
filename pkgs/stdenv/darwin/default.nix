@@ -38,7 +38,7 @@ let
   # Bootstrap version needs to be known to reference headers included in the bootstrap tools
   bootstrapLlvmVersion = if localSystem.isAarch64 then "11.1.0" else "7.1.0";
 
-  useAppleSDKLibs = localSystem.isAarch64;
+  useAppleSDKLibs = localSystem.isAarch64 || localSystem.useiOSPrebuilt;
   haveKRB5 = localSystem.isx86_64;
 
   # final toolchain is injected into llvmPackages_${finalLlvmVersion}
