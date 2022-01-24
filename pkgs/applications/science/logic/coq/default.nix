@@ -204,5 +204,6 @@ self = stdenv.mkDerivation {
     branch = coq-version;
     maintainers = with maintainers; [ roconnor thoughtpolice vbgl Zimmi48 ];
     platforms = platforms.unix;
+    mainProgram = "coqide";
   };
 }; in self
