@@ -19,7 +19,8 @@ let
     , vendorSha256 ? throw "vendorSha256 missing: please use `buildGoModule`" /* added 2022/01 */
     , deleteVendor ? false
     , proxyVendor ? false
-    , provider-source-address
+    , # Looks like "registry.terraform.io/vancluever/acme"
+      provider-source-address
     }@attrs:
     buildGoModule {
       pname = repo;
@@ -34,9 +35,15 @@ let
         inherit owner repo rev sha256;
       };
 
-      # Terraform allow checking the provider versions, but this breaks
-      # if the versions are not provided via file paths.
-      postBuild = "mv $NIX_BUILD_TOP/go/bin/${repo}{,_v${version}}";
+      # Move the provider to libexec
+      postInstall = ''
+        dir=$out/libexec/terraform-providers/${provider-source-address}/${version}/''${GOOS}_''${GOARCH}
+        mkdir -p "$dir"
+        mv $out/bin/* "$dir/terraform-provider-$(basename ${provider-source-address})_${version}"
+        rmdir $out/bin
+      '';
+
+      # Keep the attributes around for later consumption
       passthru = attrs;
     };
 

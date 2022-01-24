@@ -13534,6 +13534,8 @@ with pkgs;
     stdenv = clangStdenv;
   };
 
+  jacinda = haskell.lib.compose.justStaticExecutables haskell.packages.ghc921.jacinda;
+
   janet = callPackage ../development/interpreters/janet {};
 
   jelly = callPackage ../development/interpreters/jelly {};
@@ -19714,6 +19716,8 @@ with pkgs;
   rttr = callPackage ../development/libraries/rttr { };
 
   rubberband = callPackage ../development/libraries/rubberband { };
+
+  rure = callPackage ../development/libraries/rure { };
 
   rustc-demangle = callPackage ../development/libraries/rustc-demangle { };
 
@@ -28083,6 +28087,8 @@ with pkgs;
   pidgin-opensteamworks = callPackage ../applications/networking/instant-messengers/pidgin-plugins/pidgin-opensteamworks { };
 
   purple-facebook = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-facebook { };
+
+  purpur = callPackage ../games/purpur { };
 
   pikopixel = callPackage ../applications/graphics/pikopixel { };
 
