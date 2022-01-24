@@ -80,7 +80,7 @@ let
     Name=Pantheon
     Comment=This session provides elementary experience
     Exec=@out@/libexec/pantheon
-    TryExec=${wingpanel}/bin/wingpanel
+    TryExec=${wingpanel}/bin/io.elementary.wingpanel
     Icon=
     DesktopNames=Pantheon
     Type=Application
