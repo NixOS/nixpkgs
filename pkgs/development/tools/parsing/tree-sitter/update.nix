@@ -398,7 +398,11 @@ let
     res=$(${curl}/bin/curl "''${args[@]}")
 
     if [[ "$(printf "%s" "$res" | ${jq}/bin/jq '.message?')" =~ "rate limit" ]]; then
-      echo "rate limited" >&2   #
+      echo "rate limited" >&2
+      exit 1
+    elif [[ "$(printf "%s" "$res" | ${jq}/bin/jq '.message?')" =~ "Bad credentials" ]]; then
+      echo "bad credentials" >&2
+      exit 1
     fi
 
     printf "%s" "$res" | ${jq}/bin/jq 'map(.name)' \
