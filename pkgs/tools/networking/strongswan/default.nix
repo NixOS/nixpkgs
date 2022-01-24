@@ -7,6 +7,7 @@
 , enableTNC            ? false, trousers, sqlite, libxml2
 , enableNetworkManager ? false, networkmanager
 , darwin
+, nixosTests
 }:
 
 # Note on curl support: If curl is built with gnutls as its backend, the
@@ -100,6 +101,8 @@ stdenv.mkDerivation rec {
   '';
 
   NIX_LDFLAGS = optionalString stdenv.cc.isGNU "-lgcc_s" ;
+
+  passthru.tests = { inherit (nixosTests) strongswan-swanctl; };
 
   meta = {
     description = "OpenSource IPsec-based VPN Solution";
