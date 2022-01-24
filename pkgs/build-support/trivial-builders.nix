@@ -818,7 +818,7 @@ rec {
   testGraphical =
     { package
     , command ? "${package.meta.mainProgram or package.pname or package.name}"
-    , expectedText ? null
+    , expectedText ? "File" # Very very common in menu bars.
     }: import ../../nixos/tests/make-test-python.nix ({ pkgs, ... }: {
       machine = { ... }: {
         imports = [ ../../nixos/tests/common/wayland-cage.nix ];
