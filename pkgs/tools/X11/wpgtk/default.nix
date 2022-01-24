@@ -44,7 +44,7 @@ python3Packages.buildPythonApplication rec {
      INFO: To work properly, this tool needs "programs.dconf.enable = true" on nixos or dconf installed. A reboot may be required after installing dconf.
      '';
     homepage = "https://github.com/deviantfero/wpgtk";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = [ maintainers.melkor333 ];
   };
