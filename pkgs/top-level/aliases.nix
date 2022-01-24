@@ -157,6 +157,7 @@ mapAliases ({
   couchdb = throw "couchdb was removed from nixpkgs, use couchdb3 instead"; # added 2021-03-03
   couchdb2 = throw "couchdb2 was removed from nixpkgs, use couchdb3 instead"; # added 2021-03-03
   coredumper = throw "coredumper has been removed: abandoned by upstream."; # added 2019-11-16
+  corsmisc = throw "corsmisc has been removed (upstream is gone)"; # added 2022-01-24
   cpp_ethereum = throw "cpp_ethereum has been removed; abandoned upstream."; # added 2020-11-30
   cpuminer-multi = throw "cpuminer-multi has been removed: deleted by upstream"; # added 2022-01-07
   crafty = throw "crafty has been removed: deleted by upstream"; # 2022-01-07
@@ -924,6 +925,7 @@ mapAliases ({
   shared_mime_info = shared-mime-info; # added 2018-02-25
   sickbeard = throw "sickbeard has been removed from nixpkgs, as it was unmaintained."; # added 2022-01-01
   sickrage = throw "sickbeard has been removed from nixpkgs, as it was unmaintained."; # added 2022-01-01
+  sigurlx = throw "sigurlx has been removed (upstream is gone)"; # added 2022-01-24
   skrooge2 = skrooge; # added 2017-02-18
   sky = throw "sky has been removed from nixpkgs (2020-09-16)";
   skype = skypeforlinux; # added 2017-07-27
