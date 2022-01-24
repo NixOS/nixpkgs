@@ -42,11 +42,6 @@ buildPythonPackage rec {
     pytest-timeout
   ];
 
-  disabledTestPaths = [
-    # https://github.com/ol-iver/denonavr/issues/228
-    "tests/test_denonavr.py"
-  ];
-
   pythonImportsCheck = [
     "denonavr"
   ];
