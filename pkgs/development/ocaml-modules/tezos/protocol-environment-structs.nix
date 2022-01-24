@@ -3,6 +3,7 @@
 , tezos-stdlib
 , tezos-crypto
 , tezos-protocol-environment-packer
+, bls12-381-legacy
 }:
 
 buildDunePackage {
@@ -13,6 +14,7 @@ buildDunePackage {
   propagatedBuildInputs = [
     tezos-crypto
     tezos-protocol-environment-packer
+    bls12-381-legacy
   ];
 
   doCheck = true;

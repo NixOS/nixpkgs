@@ -1,7 +1,8 @@
 { lib, stdenv, linux-firmware, libarchive }:
 
 stdenv.mkDerivation {
-  name = "amd-ucode-${linux-firmware.version}";
+  pname = "amd-ucode";
+  version = linux-firmware.version;
 
   src = linux-firmware;
 

@@ -2,7 +2,7 @@
 , python3Packages, gtk3, glib, libxml2, gnuplot, gnome, gdk-pixbuf, librsvg, intltool, libmirage }:
 let pkg = import ./base.nix {
   version = "3.2.5";
-  pkgName = "image-analyzer";
+  pname = "image-analyzer";
   pkgSha256 = "00906lky0z1m0bdqnjmzxgcb19dzvljhddhh42lixyr53sjp94cc";
 };
 in callPackage pkg {

@@ -4,10 +4,7 @@
 , qcheck-alcotest
 , alcotest
 , alcotest-lwt
-, hashcons
-, pyml
 , uri
-, tezos-test-services
 , tezos-stdlib
 }:
 
@@ -20,8 +17,6 @@ buildDunePackage rec {
     qcheck-alcotest
     alcotest
     alcotest-lwt
-    hashcons
-    pyml
     uri
   ];
 

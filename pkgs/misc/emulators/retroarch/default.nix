@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , enableNvidiaCgToolkit ? false
+, withGamemode ? stdenv.isLinux
 , withVulkan ? stdenv.isLinux
 , alsa-lib
 , AppKit
@@ -8,6 +9,7 @@
 , ffmpeg
 , Foundation
 , freetype
+, gamemode
 , libdrm
 , libGL
 , libGLU
@@ -26,23 +28,22 @@
 , pkg-config
 , python3
 , SDL2
-, substituteAll
 , udev
 , vulkan-loader
 , wayland
 , which
 }:
 
-with lib;
-
 let
-  version = "1.9.14";
-  libretroSuperSrc = fetchFromGitHub {
+  version = "1.10.0";
+  libretroCoreInfo = fetchFromGitHub {
     owner = "libretro";
     repo = "libretro-core-info";
-    sha256 = "sha256-C2PiBcN5r9NDxFWFE1pytSGR1zq9E5aVt6QUf5aJ7I0=";
+    sha256 = "sha256-3j7fvcfbgyk71MmbUUKYi+/0cpQFNbYXO+DMDUjDqkQ=";
     rev = "v${version}";
   };
+  runtimeLibs = lib.optional withVulkan vulkan-loader
+    ++ lib.optional withGamemode gamemode.lib;
 in
 stdenv.mkDerivation rec {
   pname = "retroarch-bare";
@@ -51,7 +52,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "RetroArch";
-    sha256 = "sha256-H2fCA1sM8FZfVnLxBjnKe7RjHJNAn/Antxlos5oFFSY=";
+    sha256 = "sha256-bpTSzODVRKRs1OW6JafjbU3e/AqdQeGzWcg1lb9SIyo=";
     rev = "v${version}";
   };
 
@@ -70,46 +71,49 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ pkg-config ] ++
-    optional stdenv.isLinux wayland ++
-    optional withVulkan makeWrapper;
+    lib.optional stdenv.isLinux wayland ++
+    lib.optional (runtimeLibs != [ ]) makeWrapper;
 
   buildInputs = [ ffmpeg freetype libxml2 libGLU libGL python3 SDL2 which ] ++
-    optional enableNvidiaCgToolkit nvidia_cg_toolkit ++
-    optional withVulkan vulkan-loader ++
-    optionals stdenv.isDarwin [ libobjc AppKit Foundation ] ++
-    optionals stdenv.isLinux [
+    lib.optional enableNvidiaCgToolkit nvidia_cg_toolkit ++
+    lib.optional withVulkan vulkan-loader ++
+    lib.optionals stdenv.isDarwin [ libobjc AppKit Foundation ] ++
+    lib.optionals stdenv.isLinux [
       alsa-lib
-      libdrm
-      libpulseaudio
-      libv4l
       libX11
       libXdmcp
       libXext
       libXxf86vm
+      libdrm
+      libpulseaudio
+      libv4l
+      libxkbcommon
       mesa
       udev
       wayland
-      libxkbcommon
     ];
 
   enableParallelBuilding = true;
 
   configureFlags = lib.optionals stdenv.isLinux [ "--enable-kms" "--enable-egl" ];
 
-  postInstall = optionalString withVulkan ''
+  postInstall = ''
     mkdir -p $out/share/libretro/info
     # TODO: ideally each core should have its own core information
-    cp -r ${libretroSuperSrc}/* $out/share/libretro/info
-    wrapProgram $out/bin/retroarch --prefix LD_LIBRARY_PATH ':' ${vulkan-loader}/lib
+    cp -r ${libretroCoreInfo}/* $out/share/libretro/info
+  '' + lib.optionalString (runtimeLibs != [ ]) ''
+    wrapProgram $out/bin/retroarch \
+      --prefix LD_LIBRARY_PATH ':' ${lib.makeLibraryPath runtimeLibs}
   '';
 
   preFixup = "rm $out/bin/retroarch-cg2glsl";
 
-  meta = {
+  meta = with lib; {
     homepage = "https://libretro.com";
     description = "Multi-platform emulator frontend for libretro cores";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
+    changelog = "https://github.com/libretro/RetroArch/blob/v${version}/CHANGES.md";
     maintainers = with maintainers; [ MP2E edwtjo matthewbauer kolbycrouch thiagokokada ];
     # FIXME: exits with error on macOS:
     # No Info.plist file in application bundle or no NSPrincipalClass in the Info.plist file, exiting

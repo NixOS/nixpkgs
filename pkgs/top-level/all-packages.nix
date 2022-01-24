@@ -323,6 +323,8 @@ with pkgs;
 
   evans = callPackage ../development/tools/evans { };
 
+  firefly-desktop = callPackage ../applications/misc/firefly-desktop { };
+
   frugal = callPackage ../development/tools/frugal { };
 
   glade = callPackage ../development/tools/glade { };
@@ -532,6 +534,8 @@ with pkgs;
   tapview = callPackage ../development/tools/tapview { };
 
   run = callPackage ../development/tools/run { };
+
+  mblock-mlink = callPackage ../development/tools/mblock-mlink { };
 
   mod = callPackage ../development/tools/mod { };
 
@@ -3598,6 +3602,8 @@ with pkgs;
     zig = zig_0_8_1;
   };
 
+  rivercarro = callPackage ../applications/misc/rivercarro { };
+
   rmapi = callPackage ../applications/misc/remarkable/rmapi { };
 
   rmview = libsForQt5.callPackage ../applications/misc/remarkable/rmview { };
@@ -6042,6 +6048,8 @@ with pkgs;
     hamlib = hamlib_4;
   };
 
+  gprojector = callPackage ../applications/science/astronomy/gprojector { };
+
   gptfdisk = callPackage ../tools/system/gptfdisk { };
 
   grafx2 = callPackage ../applications/graphics/grafx2 {};
@@ -6932,7 +6940,9 @@ with pkgs;
 
   ldc = callPackage ../development/compilers/ldc { };
 
-  ligo = callPackage ../development/compilers/ligo { };
+  ligo = callPackage ../development/compilers/ligo {
+    coq = coq_8_14;
+  };
 
   ldgallery = callPackage ../tools/graphics/ldgallery {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
@@ -7566,6 +7576,8 @@ with pkgs;
 
   lzop = callPackage ../tools/compression/lzop { };
 
+  lzwolf = callPackage ../games/lzwolf { };
+
   macchanger = callPackage ../os-specific/linux/macchanger { };
 
   macchina = callPackage ../tools/misc/macchina {
@@ -8104,6 +8116,8 @@ with pkgs;
 
   pandoc-plantuml-filter = python3Packages.callPackage ../tools/misc/pandoc-plantuml-filter { };
 
+  panicparse = callPackage ../tools/misc/panicparse { };
+
   patray = callPackage ../tools/audio/patray { };
 
   pasystray = callPackage ../tools/audio/pasystray { };
@@ -8379,6 +8393,8 @@ with pkgs;
     luaPackages = lua53Packages;
   };
 
+  opensbi = callPackage ../misc/opensbi { };
+
   opensc = callPackage ../tools/security/opensc {
     inherit (darwin.apple_sdk.frameworks) Carbon PCSC;
   };
@@ -8453,7 +8469,9 @@ with pkgs;
 
   openvswitch-lts = callPackage ../os-specific/linux/openvswitch/lts.nix { };
 
-  optifine = callPackage ../tools/games/minecraft/optifine { };
+  optifinePackages = callPackage ../tools/games/minecraft/optifine { };
+
+  optifine = optifinePackages.optifine-latest;
 
   optipng = callPackage ../tools/graphics/optipng {
     libpng = libpng12;
@@ -10003,6 +10021,8 @@ with pkgs;
 
   systrayhelper = callPackage ../tools/misc/systrayhelper {};
 
+  syft = callPackage ../tools/admin/syft { };
+
   Sylk = callPackage ../applications/networking/Sylk {};
 
   privoxy = callPackage ../tools/networking/privoxy {
@@ -10187,6 +10207,8 @@ with pkgs;
   threema-desktop = callPackage ../applications/networking/instant-messengers/threema-desktop { };
 
   tidy-viewer = callPackage ../tools/text/tidy-viewer { };
+
+  tile38 = callPackage ../servers/tile38 { };
 
   tiled = libsForQt5.callPackage ../applications/editors/tiled { };
 
@@ -14536,9 +14558,12 @@ with pkgs;
 
   libstdcxx5 = callPackage ../development/libraries/gcc/libstdc++/5.nix { };
 
-  libsigrok = callPackage ../development/tools/libsigrok { };
+  libsigrok = callPackage ../development/tools/libsigrok {
+    python = python3;
+  };
   # old version:
   libsigrok_0_3 = libsigrok.override {
+    python = python3;
     version = "0.3.0";
     sha256 = "0l3h7zvn3w4c1b9dgvl3hirc4aj1csfkgbk87jkpl7bgl03nk4j3";
     doInstallCheck = false;
@@ -22073,6 +22098,10 @@ with pkgs;
 
   bluez5 = callPackage ../os-specific/linux/bluez { };
 
+  bluez5-experimental = callPackage ../os-specific/linux/bluez {
+    withExperimental = true;
+  };
+
   pulseaudio-modules-bt = callPackage ../applications/audio/pulseaudio-modules-bt {
     # pulseaudio-modules-bt is most likely to be used with pulseaudioFull
     pulseaudio = pulseaudioFull;
@@ -26232,9 +26261,7 @@ with pkgs;
     inherit (xorg) xcbutilrenderutil;
   };
 
-  sway-unwrapped = callPackage ../applications/window-managers/sway {
-    wlroots = wlroots_0_14;
-  };
+  sway-unwrapped = callPackage ../applications/window-managers/sway { };
   sway = callPackage ../applications/window-managers/sway/wrapper.nix { };
   swaybg = callPackage ../applications/window-managers/sway/bg.nix { };
   swayidle = callPackage ../applications/window-managers/sway/idle.nix { };
@@ -26680,6 +26707,7 @@ with pkgs;
   kubeval-schema = callPackage ../applications/networking/cluster/kubeval/schema.nix { };
 
   kubernetes = callPackage ../applications/networking/cluster/kubernetes { };
+  kubectl = callPackage ../applications/networking/cluster/kubernetes/kubectl.nix { };
 
   kubeseal = callPackage ../applications/networking/cluster/kubeseal { };
 
@@ -26688,8 +26716,6 @@ with pkgs;
   kubeconform = callPackage ../applications/networking/cluster/kubeconform { };
 
   kubecolor = callPackage ../applications/networking/cluster/kubecolor { };
-
-  kubectl = callPackage ../applications/networking/cluster/kubectl { };
 
   kubebuilder = callPackage ../applications/networking/cluster/kubebuilder { };
 
@@ -30233,6 +30259,10 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) IOKit Security AppKit;
   };
 
+  snarkos = callPackage ../applications/blockchains/snarkos {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   tessera = callPackage ../applications/blockchains/tessera { };
 
   vertcoin  = libsForQt514.callPackage ../applications/blockchains/vertcoin {
@@ -31230,6 +31260,8 @@ with pkgs;
   };
 
   synthv1 = libsForQt5.callPackage ../applications/audio/synthv1 { };
+
+  snis = callPackage ../games/snis { };
 
   system-syzygy = callPackage ../games/system-syzygy { };
 
@@ -32895,10 +32927,6 @@ with pkgs;
 
   hplipWithPlugin = hplip.override { withPlugin = true; };
 
-  hplip_3_16_11 = callPackage ../misc/drivers/hplip/3.16.11.nix { };
-
-  hplipWithPlugin_3_16_11 = hplip_3_16_11.override { withPlugin = true; };
-
   hyperfine = callPackage ../tools/misc/hyperfine {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -33433,7 +33461,10 @@ with pkgs;
   retroarch = wrapRetroArch { retroarch = retroarchBare; };
 
   retroarchFull = retroarch.override {
-    cores = builtins.filter (c: c ? libretroCore) (builtins.attrValues libretro);
+    cores = builtins.filter
+      # Remove cores not supported on platform
+      (c: c ? libretroCore && (builtins.elem stdenv.hostPlatform.system c.meta.platforms))
+      (builtins.attrValues libretro);
   };
 
   libretro = recurseIntoAttrs (callPackage ../misc/emulators/retroarch/cores.nix {

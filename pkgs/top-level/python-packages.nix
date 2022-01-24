@@ -1705,6 +1705,8 @@ in {
 
   cnvkit = callPackage ../development/python-modules/cnvkit { };
 
+  co2signal = callPackage ../development/python-modules/co2signal { };
+
   coapthon3 = callPackage ../development/python-modules/coapthon3 { };
 
   coconut = callPackage ../development/python-modules/coconut { };
@@ -2842,6 +2844,8 @@ in {
 
   flake8-debugger = callPackage ../development/python-modules/flake8-debugger { };
 
+  flake8-docstrings = callPackage ../development/python-modules/flake8-docstrings { };
+
   flake8-future-import = callPackage ../development/python-modules/flake8-future-import { };
 
   flake8-import-order = callPackage ../development/python-modules/flake8-import-order { };
@@ -3100,6 +3104,8 @@ in {
     enablePython = true;
     pythonPackages = self;
   });
+
+  gamble = callPackage ../development/python-modules/gamble { };
 
   gaphas = callPackage ../development/python-modules/gaphas { };
 
@@ -6671,6 +6677,8 @@ in {
 
   pydrive = callPackage ../development/python-modules/pydrive { };
 
+  pydrive2 = callPackage ../development/python-modules/pydrive2 { };
+
   pydroid-ipcam = callPackage ../development/python-modules/pydroid-ipcam  { };
 
   pydsdl = callPackage ../development/python-modules/pydsdl { };
@@ -8943,6 +8951,8 @@ in {
   sievelib = callPackage ../development/python-modules/sievelib { };
 
   signedjson = callPackage ../development/python-modules/signedjson { };
+
+  sigrok = callPackage ../development/python-modules/sigrok { };
 
   sigtools = callPackage ../development/python-modules/sigtools { };
 

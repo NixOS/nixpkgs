@@ -1,7 +1,8 @@
 { fetchFromGitHub, lib, stdenv, cmake, qt4 }:
 
 stdenv.mkDerivation {
-  name = "resim";
+  pname = "resim";
+  version = "unstable-2016-11-11";
   src = fetchFromGitHub {
     owner = "itszor";
     repo = "resim";

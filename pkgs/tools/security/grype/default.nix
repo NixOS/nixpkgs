@@ -2,22 +2,43 @@
 
 buildGoModule rec {
   pname = "grype";
-  version = "0.31.1";
+  version = "0.32.0";
 
   src = fetchFromGitHub {
     owner = "anchore";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-3V8qBgRIogZNisUshhs9Va9cbZ5D2hBJwqXPvqSmEWw=";
+    sha256 = "sha256-jn28IusHgHHFFrvqZLIvbqCFMhMQ5K/gqC4hVQLffY0=";
+    # populate values that require us to use git. By doing this in postFetch we
+    # can delete .git afterwards and maintain better reproducibility of the src.
+    leaveDotGit = true;
+    postFetch = ''
+      cd "$out"
+      commit="$(git rev-parse HEAD)"
+      source_date_epoch=$(git log --date=format:'%Y-%m-%dT%H:%M:%SZ' -1 --pretty=%ad)
+      substituteInPlace "$out/internal/version/build.go" \
+        --replace 'gitCommit = valueNotProvided' "gitCommit = \"$commit\"" \
+        --replace 'buildDate = valueNotProvided' "buildDate = \"$source_date_epoch\""
+      find "$out" -name .git -print0 | xargs -0 rm -rf
+    '';
   };
-
-  vendorSha256 = "sha256-/Z0tRzd7v84h8TSfbT4EqwyHWpAb30VNr4EDrNlHyd4=";
+  vendorSha256 = "sha256-05/xFjgiqbXy7Y2LTGHcXtvusGgfZ/TwLQHaO8rIjvc=";
 
   nativeBuildInputs = [ installShellFiles ];
 
   ldflags = [
-    "-s" "-w" "-X github.com/anchore/grype/internal/version.version=${version}"
+    "-s"
+    "-w"
+    "-X github.com/anchore/grype/internal/version.version=${version}"
+    "-X github.com/anchore/grype/internal/version.gitTreeState=clean"
   ];
+
+  preBuild = ''
+    # grype version also displays the version of the syft library used
+    # we need to grab it from the go.sum and add an ldflag for it
+    SYFTVERSION="$(grep "github.com/anchore/syft" go.sum -m 1 | awk '{print $2}')"
+    ldflags+=" -X github.com/anchore/grype/internal/version.syftVersion=$SYFTVERSION"
+  '';
 
   # Tests require a running Docker instance
   doCheck = false;
