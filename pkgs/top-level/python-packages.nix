@@ -1713,6 +1713,8 @@ in {
 
   coapthon3 = callPackage ../development/python-modules/coapthon3 { };
 
+  codefind = callPackage ../development/python-modules/codefind { };
+
   coconut = callPackage ../development/python-modules/coconut { };
 
   cocotb = callPackage ../development/python-modules/cocotb { };
