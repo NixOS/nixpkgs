@@ -9,7 +9,7 @@ rec {
      between the function name and argument of another. haskell.lib.compose is
      preferred for any new code.
   */
-  compose = import ./lib/compose.nix { inherit pkgs lib; };
+  compose = import ./compose.nix { inherit pkgs lib; };
 
   /* This function takes a file like `hackage-packages.nix` and constructs
      a full package set out of that.
