@@ -366,7 +366,7 @@ let
     set -euo pipefail
 
     args=( '--silent' )
-    if [ -n "$GITHUB_TOKEN" ]; then
+    if [ -n "''${GITHUB_TOKEN:-}" ]; then
       args+=( "-H" "Authorization: token ''${GITHUB_TOKEN}" )
     fi
     args+=( "https://api.github.com/repos/${urlEscape orga}/${urlEscape repo}/releases/latest" )
@@ -390,7 +390,7 @@ let
     set -euo pipefail
 
     args=( '--silent' )
-    if [ -n "$GITHUB_TOKEN" ]; then
+    if [ -n "''${GITHUB_TOKEN:-}" ]; then
       args+=( "-H" "Authorization: token ''${GITHUB_TOKEN}" )
     fi
     args+=( 'https://api.github.com/orgs/${urlEscape orga}/repos?per_page=100' )
