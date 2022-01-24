@@ -1,5 +1,6 @@
 { lib, stdenv, fetchFromGitHub, cmake, extra-cmake-modules, fcitx5, fcitx5-qt
-, ninja, gettext, qt5 }:
+, ninja, gettext, wrapQtAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-unikey";
@@ -12,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "BFIqMmjIC29Z4rATZEf+qQWrULU9Wkuk6WOUXDEPO10=";
   };
 
-  nativeBuildInputs = [ cmake extra-cmake-modules qt5.wrapQtAppsHook ];
+  nativeBuildInputs = [ cmake extra-cmake-modules wrapQtAppsHook ];
 
   buildInputs = [ fcitx5 fcitx5-qt ninja gettext ];
 
