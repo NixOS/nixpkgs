@@ -1,7 +1,7 @@
 { stdenv, lib, pkgArches, callPackage,
   name, version, src, mingwGccs, monos, geckos, platforms,
   bison, flex, fontforge, makeWrapper, pkg-config,
-  autoconf, hexdump, perl,
+  autoconf, hexdump, perl, nixosTests,
   supportFlags,
   patches,
   buildScript ? null, configureFlags ? []
@@ -144,7 +144,10 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
     ++ lib.optional (stdenv.hostPlatform.isDarwin) "fortify"
     ++ lib.optional (supportFlags.mingwSupport) "format";
 
-  passthru = { inherit pkgArches; };
+  passthru = {
+    inherit pkgArches;
+    tests = { inherit (nixosTests) wine; };
+  };
   meta = {
     inherit version platforms;
     homepage = "https://www.winehq.org/";

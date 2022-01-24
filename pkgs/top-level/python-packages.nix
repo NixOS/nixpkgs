@@ -3510,6 +3510,8 @@ in {
 
   grip = callPackage ../development/python-modules/grip { };
 
+  groestlcoin_hash = callPackage ../development/python-modules/groestlcoin_hash { };
+
   grpc-google-iam-v1 = callPackage ../development/python-modules/grpc-google-iam-v1 { };
 
   grpcio = callPackage ../development/python-modules/grpcio { };
@@ -7040,6 +7042,8 @@ in {
   pymc3 = callPackage ../development/python-modules/pymc3 { };
 
   pymdstat = callPackage ../development/python-modules/pymdstat { };
+
+  pymdown-extensions = callPackage ../development/python-modules/pymdown-extensions { };
 
   pymediainfo = callPackage ../development/python-modules/pymediainfo { };
 
