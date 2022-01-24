@@ -456,6 +456,7 @@ stdenv.mkDerivation rec {
       build --verbose_failures
       build --curses=no
       build --sandbox_debug
+      build --features=-layering_check
       EOF
 
       cat >> tools/jdk/BUILD.tools <<EOF
@@ -465,8 +466,23 @@ stdenv.mkDerivation rec {
         configuration = NONPREBUILT_TOOLCHAIN_CONFIGURATION,
         java_runtime = "@local_jdk//:jdk",
       )
-
       EOF
+
+      cat >> third_party/grpc/bazel_1.41.0.patch <<EOF
+      diff --git a/third_party/grpc/BUILD b/third_party/grpc/BUILD
+      index 39ee9f97c6..9128d20c85 100644
+      --- a/third_party/grpc/BUILD
+      +++ b/third_party/grpc/BUILD
+      @@ -28,7 +28,6 @@ licenses(["notice"])
+       package(
+           default_visibility = ["//visibility:public"],
+           features = [
+      -        "layering_check",
+               "-parse_headers",
+           ],
+       )
+      EOF
+
       # add the same environment vars to compile.sh
       sed -e "/\$command \\\\$/a --copt=\"$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --copt=\"/g')\" \\\\" \
           -e "/\$command \\\\$/a --host_copt=\"$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --host_copt=\"/g')\" \\\\" \
@@ -478,6 +494,7 @@ stdenv.mkDerivation rec {
           -e "/\$command \\\\$/a --java_runtime_version=local_jdk_11 \\\\" \
           -e "/\$command \\\\$/a --verbose_failures \\\\" \
           -e "/\$command \\\\$/a --curses=no \\\\" \
+          -e "/\$command \\\\$/a --features=-layering_check \\\\" \
           -e "/\$command \\\\$/a --sandbox_debug \\\\" \
           -i scripts/bootstrap/compile.sh
 
