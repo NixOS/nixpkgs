@@ -45,7 +45,7 @@ let
                   '!defined(__ANDROID__) && !defined(__OpenBSD__) && 0'
     '';
 
-    outputs = [ "bin" "dev" "out" "man" ] ++ lib.optional withDocs "doc";
+    outputs = [ "bin" "dev" "out" "lib" "man" ] ++ lib.optional withDocs "doc";
     setOutputFlags = false;
     separateDebugInfo =
       !stdenv.hostPlatform.isDarwin &&
@@ -94,7 +94,7 @@ let
     dontAddStaticConfigureFlags = true;
     configureFlags = [
       "shared" # "shared" builds both shared and static libraries
-      "--libdir=lib"
+      "--libdir=${placeholder "lib"}/lib"
       "--openssldir=etc/ssl"
     ] ++ lib.optionals withCryptodev [
       "-DHAVE_CRYPTODEV"
@@ -103,6 +103,7 @@ let
       ++ lib.optional enableSSL3 "enable-ssl3"
       ++ lib.optional (lib.versionAtLeast version "3.0.0") "enable-ktls"
       ++ lib.optional (lib.versionAtLeast version "1.1.0" && stdenv.hostPlatform.isAarch64) "no-afalgeng"
+      ++ lib.optional static "disable-dynamic-engine"
       # OpenSSL needs a specific `no-shared` configure flag.
       # See https://wiki.openssl.org/index.php/Compilation_and_Installation#Configure_Options
       # for a comprehensive list of configuration options.
@@ -117,7 +118,20 @@ let
       "MANSUFFIX=ssl"
     ];
 
+    buildFlags = lib.optionals static [
+      # Even though engines are disabled in static builds, we have to
+      # override ENGINESDIR so the bin output doesn't end up with an
+      # reference to the lib output.
+      "ENGINESDIR=/"
+    ];
+
     enableParallelBuilding = true;
+
+    preInstall = lib.optionalString static ''
+      # Build system wants to be able to create the engines directory
+      # even though nothing will get installed to it.
+      installFlagsArray+=(ENGINESDIR="$NIX_BUILD_TOP/engines")
+    '';
 
     postInstall =
     lib.optionalString (!static) ''
