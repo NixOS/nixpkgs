@@ -2506,6 +2506,8 @@ self: super: with self; {
 
   cobble = callPackage ../development/python-modules/cobble { };
 
+  codefind = callPackage ../development/python-modules/codefind { };
+
   coconut = callPackage ../development/python-modules/coconut { };
 
   cocotb = callPackage ../development/python-modules/cocotb { };
