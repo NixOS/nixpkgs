@@ -47,7 +47,7 @@ let
       })
     ];
 
-    unpackPhase = "dpkg-deb -x $src .";
+    unpackCmd = "dpkg-deb -x $src ./${pname}-${version}";
     dontBuild = true;
 
     postPatch = ''
