@@ -520,6 +520,8 @@ in {
 
   ansiconv = callPackage ../development/python-modules/ansiconv { };
 
+  ansimarkup = callPackage ../development/python-modules/ansimarkup { };
+
   ansiwrap = callPackage ../development/python-modules/ansiwrap { };
 
   antlr4-python3-runtime = callPackage ../development/python-modules/antlr4-python3-runtime {
@@ -1486,6 +1488,8 @@ in {
   connection-pool = callPackage ../development/python-modules/connection-pool { };
 
   coqpit = callPackage ../development/python-modules/coqpit { };
+
+  cepa = callPackage ../development/python-modules/cepa { };
 
   cerberus = callPackage ../development/python-modules/cerberus { };
 
