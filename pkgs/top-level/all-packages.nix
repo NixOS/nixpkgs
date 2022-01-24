@@ -10208,6 +10208,8 @@ with pkgs;
 
   tidy-viewer = callPackage ../tools/text/tidy-viewer { };
 
+  tile38 = callPackage ../servers/tile38 { };
+
   tiled = libsForQt5.callPackage ../applications/editors/tiled { };
 
   tiledb = callPackage ../development/libraries/tiledb { };
