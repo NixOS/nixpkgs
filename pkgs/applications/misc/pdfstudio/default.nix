@@ -11,7 +11,7 @@
     version = "${year}.1.2";
     desktopName = "PDF Studio";
     longDescription = ''
-    PDF Studio is an easy to use, full-featured PDF editing software. This is the standard/pro edition, which requires a license. For the free PDF Studio Viewer see the package pdfstudioviewer.
+      PDF Studio is an easy to use, full-featured PDF editing software. This is the standard/pro edition, which requires a license. For the free PDF Studio Viewer see the package pdfstudioviewer.
     '';
     extraBuildInputs = [
       libgccjit #for libstdc++.so.6 and libgomp.so.1
