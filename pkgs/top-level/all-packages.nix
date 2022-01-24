@@ -10952,10 +10952,6 @@ with pkgs;
 
   ts = callPackage ../tools/system/ts { };
 
-  transfig = callPackage ../tools/graphics/transfig {
-    libpng = libpng12;
-  };
-
   ttmkfdir = callPackage ../tools/misc/ttmkfdir { };
 
   ttwatch = callPackage ../tools/misc/ttwatch { };

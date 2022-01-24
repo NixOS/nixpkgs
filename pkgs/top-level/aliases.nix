@@ -1188,6 +1188,7 @@ mapAliases ({
   torch-repl = throw "torch-repl has been removed, as the upstream project has been abandoned"; # Added 2020-03-28
   torchPackages = throw "torchPackages has been removed, as the upstream project has been abandoned"; # Added 2020-03-28
   trang = jing-trang; # Added 2018-04-25
+  transfig = fig2dev; # Added 2022-02-15
   transmission-remote-cli = "transmission-remote-cli has been removed, as the upstream project has been abandoned. Please use tremc instead"; # Added 2020-10-14
   transmission_gtk = transmission-gtk; # Added 2018-01-06
   transmission_remote_gtk = transmission-remote-gtk; # Added 2018-01-06
