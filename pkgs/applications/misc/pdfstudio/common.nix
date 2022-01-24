@@ -59,8 +59,8 @@ let
       runHook preInstall
 
       mkdir -p $out/{bin,share/pixmaps}
+      rm -rf opt/${pname}${year}/jre
       cp -r opt/${pname}${year} $out/share/
-      rm -rf $out/share/${pname}${year}/jre
       ln -s $out/share/${pname}${year}/.install4j/${pname}${year}.png  $out/share/pixmaps/
       ln -s $out/share/${pname}${year}/${pname}${year} $out/bin/${pname}
 
