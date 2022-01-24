@@ -34,5 +34,6 @@ mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ smitop ];
     platforms = platforms.linux;
+    badPlatforms = platforms.aarch64;
   };
 }
