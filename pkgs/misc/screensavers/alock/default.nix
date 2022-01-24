@@ -2,8 +2,8 @@
 , libX11, pam, libgcrypt, libXrender, imlib2 }:
 
 stdenv.mkDerivation rec {
-  date = "20170720";
-  name = "alock-${date}";
+  pname = "alock";
+  version = "unstable-2017-07-20";
 
   src = fetchgit {
     url = "https://github.com/Arkq/alock";

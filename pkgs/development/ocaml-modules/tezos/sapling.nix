@@ -4,7 +4,7 @@
 , tezos-stdlib
 , tezos-crypto
 , tezos-rust-libs
-, tezos-test-services
+, tezos-base-test-helpers
 , alcotest-lwt
 }:
 
@@ -20,7 +20,7 @@ buildDunePackage {
 
   checkInputs = [
     alcotest-lwt
-    tezos-test-services
+    tezos-base-test-helpers
   ];
 
   # requires the "zcash-params" files

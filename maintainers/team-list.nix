@@ -166,6 +166,17 @@ with lib.maintainers; {
     scope = "Maintain Jitsi.";
   };
 
+  kubernetes = {
+    members = [
+      johanot
+      offline
+      saschagrunert
+      srhb
+      zowoq
+    ];
+    scope = "Maintain the Kubernetes package and module";
+  };
+
   kodi = {
     members = [
       aanderse

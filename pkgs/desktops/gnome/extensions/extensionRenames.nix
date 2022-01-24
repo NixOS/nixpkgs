@@ -21,6 +21,16 @@
   "unredirect@vaina.lt" = "disable-unredirect-fullscreen-windows";
   "unredirect@aunetx" = "disable-unredirect-fullscreen-windows-2";
 
+  "fuzzy-clock@keepawayfromfire.co.uk" = "fuzzy-clock-2";
+  "FuzzyClock@johngoetz" = "fuzzy-clock";
+
+  # At the moment, ShutdownTimer@deminder is a fork of ShutdownTimer@neumann which adds new features
+  # there seem to be upstream plans, so this should be checked periodically:
+  # https://github.com/Deminder/ShutdownTimer https://github.com/neumann-d/ShutdownTimer/pull/46
+  "ShutdownTimer@neumann" = null;
+  "shutdown-timer-gnome-shell-extension" = "shutdowntimer-2";
+  "ShutdownTimer@deminder" = "shutdowntimer";
+
   # ############################################################################
   # These are conflicts for older extensions (i.e. they don't support the latest GNOME version).
   # Make sure to move them up once they are updated
@@ -32,13 +42,6 @@
 
   "Hide_Activities@shay.shayel.org" = "hide-activities-button";
   "hide-activities-button@nmingori.gnome-shell-extensions.org" = "hide-activities-button-2";
-
-  # At the moment, ShutdownTimer@deminder is a fork of ShutdownTimer@neumann which adds new features
-  # there seem to be upstream plans, so this should be checked periodically:
-  # https://github.com/Deminder/ShutdownTimer https://github.com/neumann-d/ShutdownTimer/pull/46
-  "ShutdownTimer@neumann" = null;
-  "shutdown-timer-gnome-shell-extension" = "shutdowntimer-2";
-  "ShutdownTimer@deminder" = "shutdowntimer";
 
   "noannoyance@sindex.com" = "noannoyance";
   "noannoyance@daase.net" = "noannoyance-2";
@@ -53,6 +56,9 @@
   "screen-lock@garciabaameiro.com" = "screen-lock"; # Don't know why they got 'extension-list' as slug
 
   # ####### GNOME 3.38 #######
+
+  "bottompanel@tmoer93" = "bottompanel";
+  "bottom-panel@sulincix" = "bottompanel-2";
 
   # See https://github.com/pbxqdown/gnome-shell-extension-transparent-window/issues/12#issuecomment-800765381
   "transparent-window@pbxqdown.github.com" = "transparent-window";
