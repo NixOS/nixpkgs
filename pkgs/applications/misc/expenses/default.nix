@@ -1,8 +1,8 @@
 { lib
-
 , buildGoModule
 , fetchFromGitHub
 , sqlite
+, installShellFiles
 }:
 
 buildGoModule rec {
@@ -21,11 +21,20 @@ buildGoModule rec {
   # package does not contain any tests as of v0.2.3
   doCheck = false;
 
+  nativeBuildInputs = [ installShellFiles ];
+
   buildInputs = [ sqlite ];
 
   ldflags = [
     "-s" "-w" "-X github.com/manojkarthick/expenses/cmd.Version=${version}"
   ];
+
+  postInstall = ''
+    installShellCompletion --cmd expenses \
+      --bash <($out/bin/expenses completion bash) \
+      --zsh <($out/bin/expenses completion zsh) \
+      --fish <($out/bin/expenses completion fish)
+  '';
 
   meta = with lib; {
    description = "An interactive command line expense logger";
