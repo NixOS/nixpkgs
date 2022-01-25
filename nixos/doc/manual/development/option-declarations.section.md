@@ -57,6 +57,80 @@ The function `mkOption` accepts the following arguments.
 :   A textual description of the option, in DocBook format, that will be
     included in the NixOS manual.
 
+## Utility functions for common option patterns {#sec-option-declarations-util}
+
+### `mkEnableOption` {#sec-option-declarations-util-mkEnableOption}
+
+Creates an Option attribute set for a boolean value option i.e an
+option to be toggled on or off.
+
+This function takes a single string argument, the name of the thing to be toggled.
+
+The option's description is "Whether to enable \<name\>.".
+
+For example:
+
+::: {#ex-options-declarations-util-mkEnableOption-magic .example}
+```nix
+lib.mkEnableOption "magic"
+# is like
+lib.mkOption {
+  type = lib.types.bool;
+  default = false;
+  example = true;
+  description = "Whether to enable magic.";
+}
+```
+
+### `mkPackageOption` {#sec-option-declarations-util-mkPackageOption}
+
+Usage:
+
+```nix
+mkPackageOption pkgs "name" { default = [ "path" "in" "pkgs" ]; example = "literal example"; }
+```
+
+Creates an Option attribute set for an option that specifies the package a module should use for some purpose.
+
+**Note**: You shouldn’t necessarily make package options for all of your modules. You can always overwrite a specific package throughout nixpkgs by using [nixpkgs overlays](https://nixos.org/manual/nixpkgs/stable/#chap-overlays).
+
+The default package is specified as a list of strings representing its attribute path in nixpkgs. Because of this, you need to pass nixpkgs itself as the first argument.
+
+The second argument is the name of the option, used in the description "The \<name\> package to use.". You can also pass an example value, either a literal string or a package's attribute path.
+
+You can omit the default path if the name of the option is also attribute path in nixpkgs.
+
+::: {#ex-options-declarations-util-mkPackageOption .title}
+Examples:
+
+::: {#ex-options-declarations-util-mkPackageOption-hello .example}
+```nix
+lib.mkPackageOption pkgs "hello" { }
+# is like
+lib.mkOption {
+  type = lib.types.package;
+  default = pkgs.hello;
+  defaultText = lib.literalExpression "pkgs.hello";
+  description = "The hello package to use.";
+}
+```
+
+::: {#ex-options-declarations-util-mkPackageOption-ghc .example}
+```nix
+lib.mkPackageOption pkgs "GHC" {
+  default = [ "ghc" ];
+  example = "pkgs.haskell.package.ghc921.ghc.withPackages (hkgs: [ hkgs.primes ])";
+}
+# is like
+lib.mkOption {
+  type = lib.types.package;
+  default = pkgs.ghc;
+  defaultText = lib.literalExpression "pkgs.ghc";
+  example = lib.literalExpression "pkgs.haskell.package.ghc921.ghc.withPackages (hkgs: [ hkgs.primes ])";
+  description = "The GHC package to use.";
+}
+```
+
 ## Extensible Option Types {#sec-option-declarations-eot}
 
 Extensible option types is a feature that allow to extend certain types

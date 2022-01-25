@@ -34,6 +34,7 @@
 , server ? false # build server version
 , sqlite
 , pam
+, nixosTests
 }:
 
 let
@@ -209,7 +210,10 @@ in
       platforms = platforms.linux;
     };
 
-    passthru = { inherit server; };
+    passthru = {
+      inherit server;
+      tests = { inherit (nixosTests) rstudio-server; };
+    };
   } // lib.optionalAttrs (!server) {
     qtWrapperArgs = [
       "--suffix PATH : ${lib.makeBinPath [ gnumake ]}"

@@ -2,13 +2,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mcfly";
-  version = "0.5.11";
+  version = "0.5.12";
 
   src = fetchFromGitHub {
     owner = "cantino";
     repo = "mcfly";
     rev = "v${version}";
-    sha256 = "sha256-JyNrEIgvL4TQHpAEefDnLirXplGjJcUqsmALKY44VuM=";
+    sha256 = "sha256-VguUuQacjdcgrtIHmDdyqh6TuyJxvZCLrn4nxbEtqJc=";
   };
 
   postPatch = ''
@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
     substituteInPlace mcfly.fish --replace '(command which mcfly)'  '${placeholder "out"}/bin/mcfly'
   '';
 
-  cargoSha256 = "sha256-7wyRHViPL+Hb9Rwrb1dAmmz+faOl9ddNlTdQ/XvTWE8=";
+  cargoSha256 = "sha256-Lz8uwBsgY9ORRTbEOEB6hh1r/Yb0nAgnYUayLRG4QyI=";
 
   meta = with lib; {
     homepage = "https://github.com/cantino/mcfly";

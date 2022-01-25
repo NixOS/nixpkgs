@@ -34,6 +34,23 @@ with lib;
       type = types.lines;
     };
 
+    boot.initrd.extraModprobeConfig = mkOption {
+      default = "";
+      example =
+        ''
+          options zfs zfs_arc_max=1073741824
+        '';
+      description = ''
+        Does exactly the same thing as
+        <option>boot.extraModprobeConfig</option>, except
+        that the generated <filename>modprobe.conf</filename>
+        file is also included in the initrd.
+        This is useful for setting module options for kernel
+        modules that are loaded during early boot in the initrd.
+      '';
+      type = types.lines;
+    };
+
   };
 
 
@@ -49,6 +66,9 @@ with lib;
           blacklist ${name}
         '')}
         ${config.boot.extraModprobeConfig}
+      '';
+    environment.etc."modprobe.d/nixos-initrd.conf".text = ''
+        ${config.boot.initrd.extraModprobeConfig}
       '';
     environment.etc."modprobe.d/debian.conf".source = pkgs.kmod-debian-aliases;
 

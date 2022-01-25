@@ -3,7 +3,7 @@
 # How to obtain `sha256`:
 # nix-prefetch-url --unpack https://github.com/elixir-lang/elixir/archive/v${version}.tar.gz
 mkDerivation {
-  version = "1.13.1";
-  sha256 = "0z0b1w2vvw4vsnb99779c2jgn9bgslg7b1pmd9vlbv02nza9qj5p";
+  version = "1.13.2";
+  sha256 = "sha256-qv85aDP3RPCa1YBo45ykWRRZNanL6brNKDMPu9SZdbQ=";
   minimumOTPVersion = "22";
 }

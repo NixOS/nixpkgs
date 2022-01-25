@@ -3506,6 +3506,8 @@ in {
 
   grip = callPackage ../development/python-modules/grip { };
 
+  groestlcoin_hash = callPackage ../development/python-modules/groestlcoin_hash { };
+
   grpc-google-iam-v1 = callPackage ../development/python-modules/grpc-google-iam-v1 { };
 
   grpcio = callPackage ../development/python-modules/grpcio { };
@@ -5564,6 +5566,10 @@ in {
 
   onkyo-eiscp = callPackage ../development/python-modules/onkyo-eiscp { };
 
+  online-judge-api-client = callPackage ../development/python-modules/online-judge-api-client { };
+
+  online-judge-tools = callPackage ../development/python-modules/online-judge-tools { };
+
   onlykey-solo-python = callPackage ../development/python-modules/onlykey-solo-python { };
 
   onnx = callPackage ../development/python-modules/onnx { };
@@ -6109,6 +6115,8 @@ in {
   python-juicenet = callPackage ../development/python-modules/python-juicenet { };
 
   python-kasa = callPackage ../development/python-modules/python-kasa { };
+
+  python-keycloak = callPackage ../development/python-modules/python-keycloak { };
 
   python-keystoneclient = callPackage ../development/python-modules/python-keystoneclient { };
 
@@ -7034,6 +7042,8 @@ in {
   pymc3 = callPackage ../development/python-modules/pymc3 { };
 
   pymdstat = callPackage ../development/python-modules/pymdstat { };
+
+  pymdown-extensions = callPackage ../development/python-modules/pymdown-extensions { };
 
   pymediainfo = callPackage ../development/python-modules/pymediainfo { };
 
