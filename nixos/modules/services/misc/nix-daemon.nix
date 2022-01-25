@@ -29,9 +29,24 @@ let
 
   nixbldUsers = listToAttrs (map makeNixBuildUser (range 1 cfg.nrBuildUsers));
 
+  makeNixConfigValue = value:
+    if value == true then "true"
+    else if value == false then "false"
+    else if isList value then (toString value)
+    else generators.mkValueStringDefault { } value;
+
+  makeNixConfig = settings: (generators.toKeyValue {
+    listsAsDuplicateKeys = false;
+    mkKeyValue = generators.mkKeyValueDefault {
+      mkValueString = makeNixConfigValue;
+    } " = ";
+  } settings);
+
+  convertedExtraOptions = if (isAttrs cfg.extraOptions) then (makeNixConfig cfg.extraOptions) else cfg.extraOptions;
+
   nixConf =
     assert versionAtLeast nixVersion "2.2";
-    pkgs.runCommand "nix.conf" { preferLocalBuild = true; extraOptions = cfg.extraOptions; } (
+    pkgs.runCommand "nix.conf" { preferLocalBuild = true; extraOptions = convertedExtraOptions; } (
       ''
         cat > $out <<END
         # WARNING: this file is generated from the nix.* options in
@@ -168,13 +183,13 @@ in
       };
 
       extraOptions = mkOption {
-        type = types.lines;
+        type = types.either types.lines types.attrs;
         default = "";
         example = ''
           keep-outputs = true
           keep-derivations = true
         '';
-        description = "Additional text appended to <filename>nix.conf</filename>.";
+        description = "Additional options appended to <filename>nix.conf</filename>.";
       };
 
       distributedBuilds = mkOption {
