@@ -203,6 +203,15 @@ let
       meta.mainProgram = "markdownlint";
     };
 
+    marked-man = super.marked-man.override {
+      nativeBuildInputs = [ pkgs.makeWrapper ];
+
+      postInstall = ''
+        wrapProgram "$out/bin/marked-man" \
+          --prefix NODE_PATH : ${self."marked-git+https://github.com/markedjs/marked.git#v0.7.0"}/lib/node_modules
+      '';
+    };
+
     node-gyp = super.node-gyp.override {
       nativeBuildInputs = [ pkgs.makeWrapper ];
       # Teach node-gyp to use nodejs headers locally rather that download them form https://nodejs.org.

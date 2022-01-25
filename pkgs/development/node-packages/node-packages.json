@@ -192,6 +192,8 @@
 , "markdownlint-cli2"
 , "markdown-link-check"
 , {"markdown-preview-nvim": "../../misc/vim-plugins/markdown-preview-nvim"}
+, {"marked": "git+https://github.com/markedjs/marked.git#v0.7.0"}
+, "marked-man"
 , "mastodon-bot"
 , "mathjax"
 , "meat"
