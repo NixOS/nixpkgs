@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, ocaml, findlib }:
 stdenv.mkDerivation rec {
-  name = "ocamlbuild-${version}";
+  pname = "ocaml${ocaml.version}-ocamlbuild";
   version = "0.14.0";
 
   src = fetchFromGitHub {
