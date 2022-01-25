@@ -28,6 +28,8 @@ stdenv.mkDerivation {
     bittorrent-integration = nixosTests.bittorrent;
   };
 
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
     homepage = "https://erdgeist.org/arts/software/opentracker/";
     license = licenses.beerware;
