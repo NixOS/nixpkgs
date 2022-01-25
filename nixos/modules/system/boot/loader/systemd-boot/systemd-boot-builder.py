@@ -25,18 +25,12 @@ class SystemIdentifier(NamedTuple):
     specialisation: Optional[str]
 
 
-def generation_dir(gen: SystemIdentifier) -> str:
-    if gen.profile:
-        return f"/nix/var/nix/profiles/system-profiles/{gen.profile}-{gen.generation}-link"
-    else:
-        return f"/nix/var/nix/profiles/system-{gen.generation}-link"
+def profile_path(profile: Optional[str]) -> str:
+    return "/nix/var/nix/profiles/" + (f"system-profiles/{profile}" if profile else "system")
 
 def system_dir(gen: SystemIdentifier) -> str:
-    d = generation_dir(gen)
-    if gen.specialisation:
-        return f"{d}/specialisation/{gen.specialisation}"
-    else:
-        return d
+    generation_dir = f"{profile_path(gen.profile)}-{gen.generation}-link"
+    return f"{generation_dir}/specialisation/{gen.specialisation}" if gen.specialisation else generation_dir
 
 BOOT_ENTRY = """title NixOS{profile}{specialisation}
 version Generation {generation} {description}
@@ -67,12 +61,8 @@ def write_loader_conf(gen: SystemIdentifier) -> None:
     os.rename("@efiSysMountPoint@/loader/loader.conf.tmp", "@efiSysMountPoint@/loader/loader.conf")
 
 
-def profile_path(gen: SystemIdentifier, name: str) -> str:
-    return os.path.realpath(f"{system_dir(gen)}/{name}")
-
-
 def copy_from_profile(gen: SystemIdentifier, name: str, dry_run: bool = False) -> str:
-    store_file_path = profile_path(gen, name)
+    store_file_path = os.path.realpath(f"{system_dir(gen)}/{name}")
     suffix = os.path.basename(store_file_path)
     store_dir = os.path.basename(os.path.dirname(store_file_path))
     efi_file_path = f"/efi/nixos/{store_dir}-{suffix}.efi"
@@ -102,7 +92,7 @@ def write_entry(gen: SystemIdentifier, machine_id: str) -> None:
     kernel = copy_from_profile(gen, "kernel")
     initrd = copy_from_profile(gen, "initrd")
     try:
-        append_initrd_secrets = profile_path(gen, "append-initrd-secrets")
+        append_initrd_secrets = os.path.realpath(f"{system_dir(gen)}/append-initrd-secrets")
         subprocess.check_call([append_initrd_secrets, f"@efiSysMountPoint@{initrd}"])
     except FileNotFoundError:
         pass
@@ -112,15 +102,16 @@ def write_entry(gen: SystemIdentifier, machine_id: str) -> None:
     kernel_params = f"init={generation_dir}/init "
 
     with open(f"{generation_dir}/kernel-params") as params_file:
-        kernel_params = kernel_params + params_file.read()
+        kernel_params += params_file.read()
     with open(tmp_path, "w") as f:
-        f.write(BOOT_ENTRY.format(profile=f" [{gen.profile}]" if gen.profile else "",
-                    specialisation=f" ({gen.specialisation})" if gen.specialisation else "",
-                    generation=gen.generation,
-                    kernel=kernel,
-                    initrd=initrd,
-                    kernel_params=kernel_params,
-                    description=describe_generation(generation_dir)))
+        f.write(BOOT_ENTRY.format(
+            profile=f" [{gen.profile}]" if gen.profile else "",
+            specialisation=f" ({gen.specialisation})" if gen.specialisation else "",
+            generation=gen.generation,
+            kernel=kernel,
+            initrd=initrd,
+            kernel_params=kernel_params,
+            description=describe_generation(generation_dir)))
         if machine_id is not None:
             f.write(f"machine-id {machine_id}\n")
     os.rename(tmp_path, entry_file)
@@ -131,22 +122,23 @@ def get_generations(profile: Optional[str] = None) -> list[SystemIdentifier]:
         "@nix@/bin/nix-env",
         "--list-generations",
         "-p",
-        "/nix/var/nix/profiles/" + (f"system-profiles/{profile}" if profile else "system"),
+        profile_path(profile),
         "--option", "build-users-group", ""],
         universal_newlines=True)
     gen_lines = gen_list.split("\n")
     gen_lines.pop()
 
-    configurationLimit = @configurationLimit@
+    configuration_limit = @configurationLimit@
     configurations = [SystemIdentifier(profile, int(line.split()[0]), None) for line in gen_lines]
-    return configurations[-configurationLimit:]
+    return configurations[-configuration_limit:]
 
 
 def get_specialisations(gen: SystemIdentifier) -> list[SystemIdentifier]:
-    specialisations_dir = f"{system_dir(gen)}/specialisation"
-    if not os.path.exists(specialisations_dir):
+    try:
+        return [SystemIdentifier(gen.profile, gen.generation, spec)
+            for spec in os.listdir(f"{system_dir(gen)}/specialisation")]
+    except OSError:
         return []
-    return [SystemIdentifier(gen.profile, gen.generation, spec) for spec in os.listdir(specialisations_dir)]
 
 
 def remove_old_entries(gens: list[SystemIdentifier]) -> None:
@@ -158,10 +150,7 @@ def remove_old_entries(gens: list[SystemIdentifier]) -> None:
         known_paths.append(copy_from_profile(gen, "initrd", True))
     for path in glob.iglob(r"@efiSysMountPoint@/loader/entries/nixos*-generation-[1-9]*.conf"):
         try:
-            if rex_profile.match(path):
-                prof = rex_profile.sub(r"\1", path)
-            else:
-                prof = "system"
+            prof = rex_profile.sub(r"\1", path) if rex_profile.match(path) else "system"
             gen_number = int(rex_generation.sub(r"\1", path))
             if not (prof, gen_number) in gens:
                 os.unlink(path)
@@ -173,11 +162,11 @@ def remove_old_entries(gens: list[SystemIdentifier]) -> None:
 
 
 def get_profiles() -> list[str]:
-    if os.path.isdir("/nix/var/nix/profiles/system-profiles/"):
-        return [x
-            for x in os.listdir("/nix/var/nix/profiles/system-profiles/")
-            if not x.endswith("-link")]
-    else:
+    try:
+        return [generation_dir
+            for generation_dir in os.listdir("/nix/var/nix/profiles/system-profiles/")
+            if not generation_dir.endswith("-link")]
+    except OSError:
         return []
 
 
@@ -194,9 +183,7 @@ def main() -> None:
         # be there on newly installed systems, so let's generate one so that
         # bootctl can find it and we can also pass it to write_entry() later.
         cmd = ["@systemd@/bin/systemd-machine-id-setup", "--print"]
-        machine_id = subprocess.run(
-          cmd, text=True, check=True, stdout=subprocess.PIPE
-        ).stdout.rstrip()
+        machine_id = subprocess.run(cmd, text=True, check=True, stdout=subprocess.PIPE).stdout.rstrip()
 
     if os.getenv("NIXOS_INSTALL_GRUB") == "1":
         warn("NIXOS_INSTALL_GRUB env var deprecated, use NIXOS_INSTALL_BOOTLOADER", DeprecationWarning)
