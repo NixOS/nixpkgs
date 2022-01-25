@@ -39,11 +39,14 @@ gccStdenv.mkDerivation rec {
     "--enable-targets=${gambit-params.targets}"
     "--enable-single-host"
     "--enable-c-opt=${optimizationSetting}"
+    "--enable-c-opt-rts=-O2"
     "--enable-gcc-opts"
     "--enable-shared"
     "--enable-absolute-shared-libs" # Yes, NixOS will want an absolute path, and fix it.
     "--enable-openssl"
+    #"--enable-default-compile-options='(compactness 9)'" # Make life easier on the JS backend
     "--enable-default-runtime-options=${gambit-params.defaultRuntimeOptions}"
+    # "--enable-rtlib-debug" # used by Geiser, but only on recent-enough gambit, and messes js runtime
     # "--enable-debug" # Nope: enables plenty of good stuff, but also the costly console.log
     # "--enable-multiple-versions" # Nope, NixOS already does version multiplexing
     # "--enable-guide"
@@ -84,18 +87,19 @@ gccStdenv.mkDerivation rec {
   '';
 
   buildPhase = ''
-    # Make bootstrap compiler, from release bootstrap
+    echo "Make bootstrap compiler, from release bootstrap"
     mkdir -p boot
     cp -rp ${bootstrap}/gambit/. boot/.
     chmod -R u+w boot
     cd boot
     cp ../gsc/makefile.in ../gsc/*.scm gsc/
+    echo > include/stamp.h # No stamp needed for the bootstrap compiler
     ./configure
     for i in lib gsi gsc ; do (cd $i ; make -j$NIX_BUILD_CORES) ; done
     cd ..
     cp boot/gsc/gsc gsc-boot
 
-    # Now use the bootstrap compiler to build the real thing!
+    echo "Now use the bootstrap compiler to build the real thing!"
     make -j$NIX_BUILD_CORES from-scratch
     ${lib.optionalString gambit-params.modules "make -j$NIX_BUILD_CORES modules"}
   '';
@@ -107,6 +111,7 @@ gccStdenv.mkDerivation rec {
   '';
 
   doCheck = true;
+  dontStrip = true;
 
   meta = gambit-support.meta;
 }
