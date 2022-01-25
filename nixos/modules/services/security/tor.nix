@@ -794,6 +794,11 @@ in
               };
             }));
           };
+          options.ShutdownWaitLength = mkOption {
+            type = types.int;
+            default = 30;
+            description = descriptionGeneric "ShutdownWaitLength";
+          };
           options.SocksPolicy = optionStrings "SocksPolicy" // {
             example = ["accept *:*"];
           };
@@ -977,7 +982,7 @@ in
         ExecStart = "${cfg.package}/bin/tor -f ${torrc}";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         KillSignal = "SIGINT";
-        TimeoutSec = 30;
+        TimeoutSec = cfg.settings.ShutdownWaitLength + 30; # Wait a bit longer than ShutdownWaitLength before actually timing out
         Restart = "on-failure";
         LimitNOFILE = 32768;
         RuntimeDirectory = [

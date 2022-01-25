@@ -117,7 +117,7 @@ let
       repo = "tree-sitter-make";
     };
     "tree-sitter-markdown" = {
-      orga = "ikatyang";
+      orga = "MDeiml";
       repo = "tree-sitter-markdown";
     };
     "tree-sitter-rst" = {
