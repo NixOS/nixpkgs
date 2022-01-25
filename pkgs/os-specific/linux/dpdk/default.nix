@@ -31,7 +31,6 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     jansson
     libbpf
-    libbsd
     libelf
     libpcap
     numactl
@@ -40,10 +39,12 @@ in stdenv.mkDerivation rec {
     python3
   ] ++ lib.optionals mod kernel.moduleBuildDependencies;
 
-  # Propagated to support current DPDK users in nixpkgs which statically link
-  # with the framework (e.g. odp-dpdk).
   propagatedBuildInputs = [
+    # Propagated to support current DPDK users in nixpkgs which statically link
+    # with the framework (e.g. odp-dpdk).
     rdma-core
+    # Requested by pkg-config.
+    libbsd
   ];
 
   postPatch = ''
