@@ -229,7 +229,7 @@ in rec {
 
   nix = nixStable;
 
-  nixStable = nix_2_5;
+  nixStable = nix_2_6;
 
   nix_2_3 = callPackage common (rec {
     pname = "nix";
@@ -276,6 +276,22 @@ in rec {
     boehmgc = boehmgc_nix;
 
     patches = [ installNlohmannJsonPatch ];
+
+    inherit storeDir stateDir confDir;
+  });
+
+  nix_2_6 = callPackage common (rec {
+    pname = "nix";
+    version = "2.6.0";
+
+    src = fetchFromGitHub {
+      owner = "NixOS";
+      repo = "nix";
+      rev = version;
+      sha256 = "sha256-xEPeMcNJVOeZtoN+d+aRwolpW8mFSEQx76HTRdlhPhg=";
+    };
+
+    boehmgc = boehmgc_nix;
 
     inherit storeDir stateDir confDir;
   });
