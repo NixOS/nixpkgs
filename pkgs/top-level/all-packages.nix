@@ -17015,8 +17015,6 @@ with pkgs;
 
   gdk-pixbuf-xlib = callPackage ../development/libraries/gdk-pixbuf/xlib.nix { };
 
-  gnome-sharp = callPackage ../development/libraries/gnome-sharp { };
-
   gnome-menus = callPackage ../development/libraries/gnome-menus { };
 
   elementary-cmake-modules = callPackage ../development/libraries/elementary-cmake-modules { };
