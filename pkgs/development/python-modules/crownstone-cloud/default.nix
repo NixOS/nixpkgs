@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "crownstone-cloud";
-  version = "1.4.8";
+  version = "1.4.9";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "crownstone";
     repo = "crownstone-lib-python-cloud";
     rev = version;
-    sha256 = "sha256-iHn4g52/QM0TS/flKkcFrX6IFrCjiXUxcjVLHNg6tVo=";
+    sha256 = "sha256-CS1zeQiWPnsGCWixCsN9sz08mPORW5sVqIpSFPh0Qt0=";
   };
 
   propagatedBuildInputs = [
@@ -30,11 +30,6 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytestCheckHook
-  ];
-
-  disabledTests = [
-    # https://github.com/crownstone/crownstone-lib-python-cloud/issues/1
-    "test_data_structure"
   ];
 
   postPatch = ''

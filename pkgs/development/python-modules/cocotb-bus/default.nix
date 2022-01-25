@@ -1,16 +1,15 @@
 { lib
-, stdenv
 , buildPythonPackage
 , fetchPypi
 }:
 
 buildPythonPackage rec {
   pname = "cocotb-bus";
-  version = "0.1.1";
+  version = "0.2.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cc9b0bb00c95061a67f650caf96e3a294bb74ef437124dea456dd9e2a9431854";
+    sha256 = "a197aa4b0e0ad28469c8877b41b3fb2ec0206da9f491b9276d1578ce6dd8aa8d";
   };
 
   postPatch = ''

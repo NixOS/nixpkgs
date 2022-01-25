@@ -1,27 +1,30 @@
 {
-  mkDerivation, fetchpatch,
-  util-linux, extra-cmake-modules, kdoctools, qttools,
+  stdenv, lib, mkDerivation, fetchpatch,
+  extra-cmake-modules, kdoctools, qttools,
+  acl, attr, libkrb5, util-linux,
   karchive, kbookmarks, kcompletion, kconfig, kconfigwidgets, kcoreaddons,
   kdbusaddons, ki18n, kiconthemes, kitemviews, kjobwidgets, knotifications,
   kservice, ktextwidgets, kwallet, kwidgetsaddons, kwindowsystem, kxmlgui,
-  qtbase, qtscript, qtx11extras, solid, kcrash
+  qtbase, qtscript, qtx11extras, solid, kcrash, kded
 }:
 
 mkDerivation {
   name = "kio";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
-    util-linux karchive kconfigwidgets kdbusaddons ki18n kiconthemes knotifications
+    karchive kconfigwidgets kdbusaddons ki18n kiconthemes knotifications
     ktextwidgets kwallet kwidgetsaddons kwindowsystem qtscript qtx11extras
-    kcrash
+    kcrash libkrb5
+  ] ++ lib.lists.optionals stdenv.isLinux [
+    acl attr # both are needed for ACL support
+    util-linux # provides libmount
   ];
   propagatedBuildInputs = [
     kbookmarks kcompletion kconfig kcoreaddons kitemviews kjobwidgets kservice
-    kxmlgui qtbase qttools solid
+    kxmlgui qtbase qttools solid kded
   ];
   outputs = [ "out" "dev" ];
   patches = [
     ./0001-Remove-impure-smbd-search-path.patch
-    ./0002-Debug-module-loader.patch
  ];
 }

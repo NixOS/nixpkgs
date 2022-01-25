@@ -3,13 +3,13 @@
 
 buildDotnetModule rec {
   pname = "btcpayserver";
-  version = "1.2.4";
+  version = "1.3.7";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-vjNJ08twsJ036TTFF6srOGshDpP7ZwWCGN0XjrtFT/g=";
+    sha256 = "sha256-W8WRw42hMNUaQZlfrl73REGIvLcj6Vso9Axx53ENkx0=";
   };
 
   projectFile = "BTCPayServer/BTCPayServer.csproj";
@@ -26,7 +26,7 @@ buildDotnetModule rec {
     makeWrapperArgs+=(--run "cd $out/lib/btcpayserver")
   '';
 
-  postInstall = ''
+  postFixup = ''
     mv $out/bin/{BTCPayServer,btcpayserver}
   '';
 

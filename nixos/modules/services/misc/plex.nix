@@ -65,6 +65,29 @@ in
         '';
       };
 
+      extraScanners = mkOption {
+        type = types.listOf types.path;
+        default = [];
+        description = ''
+          A list of paths to extra scanners to install in Plex's scanners
+          directory.
+
+          Every time the systemd unit for Plex starts up, all of the symlinks
+          in Plex's scanners directory will be cleared and this module will
+          symlink all of the paths specified here to that directory.
+        '';
+        example = literalExpression ''
+          [
+            (fetchFromGitHub {
+              owner = "ZeroQI";
+              repo = "Absolute-Series-Scanner";
+              rev = "773a39f502a1204b0b0255903cee4ed02c46fde0";
+              sha256 = "4l+vpiDdC8L/EeJowUgYyB3JPNTZ1sauN8liFAcK+PY=";
+            })
+          ]
+        '';
+      };
+
       package = mkOption {
         type = types.package;
         default = pkgs.plex;
@@ -113,6 +136,7 @@ in
         # Configuration for our FHS userenv script
         PLEX_DATADIR=cfg.dataDir;
         PLEX_PLUGINS=concatMapStringsSep ":" builtins.toString cfg.extraPlugins;
+        PLEX_SCANNERS=concatMapStringsSep ":" builtins.toString cfg.extraScanners;
 
         # The following variables should be set by the FHS userenv script:
         #   PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR

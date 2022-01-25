@@ -1,7 +1,7 @@
 { lib
 , fetchFromGitHub
 , buildPythonPackage
-, pytest_5
+, pytest
 , numpy
 , scipy
 , matplotlib
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   buildInputs = [ opencl-headers ];
   # Note: the 1.0.5 release should be compatible with pytest6, so this can
   # be set back to 'pytest' at that point
-  checkInputs = [ pytest_5 ];
+  checkInputs = [ pytest ];
   propagatedBuildInputs = [ docutils matplotlib numpy scipy pyopencl ];
 
   checkPhase = ''

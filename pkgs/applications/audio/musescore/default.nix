@@ -29,9 +29,9 @@ mkDerivation rec {
   qtWrapperArgs = [
     # MuseScore JACK backend loads libjack at runtime.
     "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libjack2 ]}"
-    # Work around crash on update from 3.4.2 to 3.5.0
-    # https://bugreports.qt.io/browse/QTBUG-85967
-    "--set QML_DISABLE_DISK_CACHE 1"
+    # There are some issues with using the wayland backend, see:
+    # https://musescore.org/en/node/321936
+    "--set QT_QPA_PLATFORM xcb"
   ];
 
   nativeBuildInputs = [ cmake pkg-config ];
@@ -49,7 +49,7 @@ mkDerivation rec {
     description = "Music notation and composition software";
     homepage = "https://musescore.org/";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ vandenoever turion ];
+    maintainers = with maintainers; [ vandenoever turion doronbehar ];
     platforms = platforms.linux;
     repositories.git = "https://github.com/musescore/MuseScore";
   };

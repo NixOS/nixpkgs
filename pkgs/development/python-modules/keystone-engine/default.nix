@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, keystone }:
+{ lib, stdenv, buildPythonPackage, fetchPypi, keystone }:
 
 buildPythonPackage rec {
   pname = "keystone-engine";
@@ -8,6 +8,8 @@ buildPythonPackage rec {
    inherit pname version;
    sha256 = "1xahdr6bh3dw5swrc2r8kqa8ljhqlb7k2kxv5mrw5rhcmcnzcyig";
   };
+
+  setupPyBuildFlags = lib.optionals stdenv.isLinux [ "--plat-name" "linux" ];
 
   preConfigure = ''
     substituteInPlace setup.py --replace \

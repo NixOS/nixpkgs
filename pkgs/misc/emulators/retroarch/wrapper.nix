@@ -1,4 +1,4 @@
-{ stdenv, lib, makeWrapper, retroarch, cores }:
+{ stdenv, lib, makeWrapper, retroarch, cores ? [ ] }:
 
 stdenv.mkDerivation {
   pname = "retroarch";
@@ -8,10 +8,10 @@ stdenv.mkDerivation {
 
   buildCommand = ''
     mkdir -p $out/lib
-    $(for coreDir in $cores
+    for coreDir in $cores
     do
-      $(ln -s $coreDir/* $out/lib/.)
-    done)
+      ln -s $coreDir/* $out/lib/.
+    done
 
     ln -s -t $out ${retroarch}/share
 
@@ -28,10 +28,10 @@ stdenv.mkDerivation {
   preferLocalBuild = true;
 
   meta = with retroarch.meta; {
-    inherit license homepage platforms maintainers;
+    inherit changelog license homepage platforms maintainers;
     description = description
-                  + " (with cores: "
-                  + lib.concatStringsSep ", " (map (x: ""+x.name) cores)
-                  + ")";
+      + " (with cores: "
+      + lib.concatStringsSep ", " (map (x: "${x.name}") cores)
+      + ")";
   };
 }

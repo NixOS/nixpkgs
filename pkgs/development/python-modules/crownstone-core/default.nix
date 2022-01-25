@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "crownstone-core";
-  version = "3.0.1";
+  version = "3.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "crownstone";
     repo = "crownstone-lib-python-core";
     rev = version;
-    sha256 = "138lignv7c8kkqbqfkdcfpg39gm9x44h7r2j403m4ib7gq420hsn";
+    sha256 = "sha256-ujS4ho9io7KcoK5w1SCn7UPFg1ho3dgW0HS5HfsYsuU=";
   };
 
   propagatedBuildInputs = [

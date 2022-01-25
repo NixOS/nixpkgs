@@ -169,6 +169,8 @@ let
           --java_toolchain='@bazel_tools//tools/jdk:toolchain_hostjdk8' \
           --javabase='@local_jdk//:jdk' \
           --verbose_failures \
+          --curses=no \
+          --sandbox_debug \
           //...
     '';
   };

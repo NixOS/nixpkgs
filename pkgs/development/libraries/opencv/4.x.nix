@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
 , fetchFromGitHub
 , cmake
 , pkg-config
@@ -74,20 +73,20 @@
 }:
 
 let
-  version = "4.5.2";
+  version = "4.5.4";
 
   src = fetchFromGitHub {
     owner = "opencv";
     repo = "opencv";
     rev = version;
-    sha256 = "sha256-pxi1VBF4txvRqspdqvCsAQ3XKzl633/o3wyOgD9wid4=";
+    sha256 = "sha256-eIESkc/yYiZZ5iY4t/rAPd+jfjuMYR3srCBC4fO3g70=";
   };
 
   contribSrc = fetchFromGitHub {
     owner = "opencv";
     repo = "opencv_contrib";
     rev = version;
-    sha256 = "sha256-iMenRTY+qeL7WRgnRuQbsHflYDakE7pWWSHeIjrg0Iw=";
+    sha256 = "sha256-RkCIGukZ8KJkmVZQAZTWdVcVKD2I3NcfGShcqzKhQD0=";
   };
 
   # Contrib must be built in order to enable Tesseract support:
@@ -219,11 +218,6 @@ stdenv.mkDerivation {
   # Ensures that we use the system OpenEXR rather than the vendored copy of the source included with OpenCV.
   patches = [
     ./cmake-don-t-use-OpenCVFindOpenEXR.patch
-    # Fix usage of deprecated version of protobuf' SetTotalBytesLimit. Remove with the next release.
-    (fetchpatch {
-      url = "https://github.com/opencv/opencv/commit/384875f4fcf1782b10699a379aa245a03cb27a04.patch";
-      sha256 = "1agwd0pm07m2dy8a62vmfl4n73dsmsdll2a73q6kara9wm3jlp41";
-    })
   ] ++ lib.optional enableCuda ./cuda_opt_flow.patch;
 
   # This prevents cmake from using libraries in impure paths (which
@@ -275,13 +269,18 @@ stdenv.mkDerivation {
     # tesseract & leptonica.
     ++ lib.optionals enableTesseract [ tesseract leptonica ]
     ++ lib.optional enableTbb tbb
-    ++ lib.optionals enableCuda [ cudatoolkit nvidia-optical-flow-sdk ]
     ++ lib.optionals stdenv.isDarwin [ bzip2 AVFoundation Cocoa VideoDecodeAcceleration CoreMedia MediaToolbox ]
     ++ lib.optionals enableDocs [ doxygen graphviz-nox ];
 
-  propagatedBuildInputs = lib.optional enablePython pythonPackages.numpy;
+  propagatedBuildInputs = lib.optional enablePython pythonPackages.numpy
+    ++ lib.optionals enableCuda [ cudatoolkit nvidia-optical-flow-sdk ];
 
-  nativeBuildInputs = [ cmake pkg-config unzip ];
+  nativeBuildInputs = [ cmake pkg-config unzip ]
+  ++ lib.optionals enablePython [
+    pythonPackages.pip
+    pythonPackages.wheel
+    pythonPackages.setuptools
+  ];
 
   NIX_CFLAGS_COMPILE = lib.optionalString enableEXR "-I${ilmbase.dev}/include/OpenEXR";
 
@@ -339,6 +338,21 @@ stdenv.mkDerivation {
   postInstall = ''
     sed -i "s|{exec_prefix}/$out|{exec_prefix}|;s|{prefix}/$out|{prefix}|" \
       "$out/lib/pkgconfig/opencv4.pc"
+  ''
+  # install python distribution information, so other packages can `import opencv`
+  + lib.optionalString enablePython ''
+    pushd $NIX_BUILD_TOP/$sourceRoot/modules/python/package
+    python -m pip wheel --verbose --no-index --no-deps --no-clean --no-build-isolation --wheel-dir dist .
+
+    pushd dist
+    python -m pip install ./*.whl --no-index --no-warn-script-location --prefix="$out" --no-cache
+
+    # the cv2/__init__.py just tries to check provide "nice user feedback" if the installation is bad
+    # however, this also causes infinite recursion when used by other packages
+    rm -r $out/${pythonPackages.python.sitePackages}/cv2
+
+    popd
+    popd
   '';
 
   passthru = lib.optionalAttrs enablePython { pythonPath = [ ]; };

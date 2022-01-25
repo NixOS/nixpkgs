@@ -22,7 +22,6 @@ let
       lsb-release
       # Errors in output without those
       pciutils
-      python2
       # Games' dependencies
       xorg.xrandr
       which
@@ -187,7 +186,7 @@ in buildFHSUserEnv rec {
     xorg.libICE
     gnome2.GConf
     freetype
-    (curl.override { gnutlsSupport = true; sslSupport = false; })
+    (curl.override { gnutlsSupport = true; opensslSupport = false; })
     nspr
     nss
     fontconfig

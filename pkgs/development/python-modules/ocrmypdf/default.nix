@@ -1,13 +1,12 @@
 { lib
 , buildPythonPackage
-, cffi
 , coloredlogs
 , fetchFromGitHub
 , ghostscript
 , img2pdf
+, importlib-metadata
 , importlib-resources
 , jbig2enc
-, leptonica
 , pdfminer
 , pikepdf
 , pillow
@@ -15,8 +14,8 @@
 , pngquant
 , pytest-xdist
 , pytestCheckHook
+, pythonOlder
 , reportlab
-, setuptools
 , setuptools-scm
 , setuptools-scm-git-archive
 , stdenv
@@ -28,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "ocrmypdf";
-  version = "12.6.0";
+  version = "13.2.0";
 
   src = fetchFromGitHub {
     owner = "jbarlow83";
@@ -40,7 +39,7 @@ buildPythonPackage rec {
     extraPostFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    sha256 = "0zw7c6l9fkf128gxsbd7v4abazlxiygqys6627jpsjbmxg5jgp5w";
+    sha256 = "sha256-mVPKcxTKoRgttwJdsY7r0kF7W1+G45iCc+mFctDipSM=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -50,7 +49,6 @@ buildPythonPackage rec {
       src = ./paths.patch;
       gs = "${lib.getBin ghostscript}/bin/gs";
       jbig2 = "${lib.getBin jbig2enc}/bin/jbig2";
-      liblept = "${lib.getLib leptonica}/lib/liblept${stdenv.hostPlatform.extensions.sharedLibrary}";
       pngquant = "${lib.getBin pngquant}/bin/pngquant";
       tesseract = "${lib.getBin tesseract4}/bin/tesseract";
       unpaper = "${lib.getBin unpaper}/bin/unpaper";
@@ -63,18 +61,19 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    cffi
     coloredlogs
     img2pdf
-    importlib-resources
     pdfminer
     pikepdf
     pillow
     pluggy
     reportlab
-    setuptools
     tqdm
-  ];
+  ] ++ (lib.optionals (pythonOlder "3.8") [
+    importlib-metadata
+  ]) ++ (lib.optionals (pythonOlder "3.9") [
+    importlib-resources
+  ]);
 
   checkInputs = [
     pytest-xdist
@@ -89,7 +88,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jbarlow83/OCRmyPDF";
     description = "Adds an OCR text layer to scanned PDF files, allowing them to be searched";
     license = with licenses; [ mpl20 mit ];
-    platforms = platforms.linux;
     maintainers = with maintainers; [ kiwi dotlambda ];
     changelog = "https://github.com/jbarlow83/OCRmyPDF/blob/v${version}/docs/release_notes.rst";
   };

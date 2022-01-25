@@ -47,6 +47,6 @@ stdenv.mkDerivation rec {
     homepage = "http://ssldump.sourceforge.net";
     license = "BSD-style";
     maintainers = with maintainers; [ aycanirican ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

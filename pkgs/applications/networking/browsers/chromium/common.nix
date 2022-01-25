@@ -34,7 +34,7 @@
 , libva
 , libdrm, wayland, libxkbcommon # Ozone
 , curl
-, epoxy
+, libepoxy
 # postPatch:
 , glibc # gconv + locale
 
@@ -150,8 +150,7 @@ let
       libva
       libdrm wayland mesa.drivers libxkbcommon
       curl
-    ] ++ optionals (chromiumVersionAtLeast "96") [
-      epoxy
+      libepoxy
     ] ++ optionals gnomeSupport [ gnome2.GConf libgcrypt ]
       ++ optional gnomeKeyringSupport libgnome-keyring3
       ++ optionals cupsSupport [ libgcrypt cups ]
@@ -162,6 +161,28 @@ let
       ./patches/no-build-timestamps.patch
       # For bundling Widevine (DRM), might be replaceable via bundle_widevine_cdm=true in gnFlags:
       ./patches/widevine-79.patch
+    ] ++ lib.optionals (versionRange "97" "98") [
+      # A critical Ozone/Wayland fix:
+      # (Note: The patch for surface_augmenter.cc doesn't apply on M97 so we extract that part.)
+      (fetchpatch {
+        # [linux/wayland] Fixed terminate caused by binding to wrong version.
+        url = "https://github.com/chromium/chromium/commit/dd4c3ddadbb9869f59cee201a38e9ca3b9154f4d.patch";
+        excludes = [ "ui/ozone/platform/wayland/host/surface_augmenter.cc" ];
+        sha256 = "sha256-lp4kxPNAkafdE9NfD3ittTCpomRpX9Hqhtt9GFf4Ntw=";
+      })
+      ./patches/m97-ozone-wayland-fix-surface_augmenter.patch
+    ] ++ lib.optionals (versionRange "98" "99") [
+      (githubPatch {
+        # [linux/wayland] Fixed terminate caused by binding to wrong version.
+        commit = "dd4c3ddadbb9869f59cee201a38e9ca3b9154f4d";
+        sha256 = "sha256-FH7lBQTruMzkBT2XQ+kgADmJA0AxJfaV/gvtoqfQ4a4=";
+      })
+    ] ++ lib.optionals (versionRange "97" "99") [
+      (githubPatch {
+        # [linux/wayland] Fixed terminate caused by binding to wrong version. (fixup)
+        commit = "a84b79daa8897b822336b8f348ef4daaae07af37";
+        sha256 = "sha256-2x6/rGGzTC6lKLMkVyD9RNCTsMVrtRQyr/NjSpaj2is=";
+      })
     ];
 
     postPatch = ''
@@ -183,7 +204,7 @@ let
         substituteInPlace third_party/harfbuzz-ng/src/src/update-unicode-tables.make \
           --replace "/usr/bin/env -S make -f" "/usr/bin/make -f"
       fi
-      chmod -x third_party/webgpu-cts/src/tools/${lib.optionalString (chromiumVersionAtLeast "96") "run_"}deno
+      chmod -x third_party/webgpu-cts/src/tools/run_deno
 
       # We want to be able to specify where the sandbox is via CHROME_DEVEL_SANDBOX
       substituteInPlace sandbox/linux/suid/client/setuid_sandbox_host.cc \
@@ -267,7 +288,7 @@ let
       google_api_key = "AIzaSyDGi15Zwl11UNe6Y-5XW_upsfyw31qwZPI";
 
       # Optional features:
-      use_gio = gnomeSupport;
+      use_gio = gnomeSupport || chromiumVersionAtLeast "99";
       use_gnome_keyring = gnomeKeyringSupport;
       use_cups = cupsSupport;
 

@@ -58,8 +58,6 @@ in
        --prefix PATH : '${coreutils}/bin' \
        --prefix PATH : '${fontconfig.bin}/bin' \
        --run '. ${./set-gdfontpath-from-fontconfig.sh}'
-  '' + lib.optionalString (stdenv.isDarwin && withQt) ''
-     wrapQtApp $out/bin/gnuplot
   '';
 
   enableParallelBuilding = true;

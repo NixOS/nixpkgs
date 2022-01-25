@@ -29,6 +29,7 @@
 , webkitgtk
 , jemalloc
 , rnnoise
+, abseil-cpp
   # Transitive dependencies:
 , util-linuxMinimal
 , pcre
@@ -36,7 +37,7 @@
 , libXdmcp
 , libselinux
 , libsepol
-, epoxy
+, libepoxy
 , at-spi2-core
 , libXtst
 , libthai
@@ -47,6 +48,8 @@
 , brotli
 , microsoft_gsl
 , rlottie
+, stdenv
+, gcc10Stdenv
 }:
 
 # Main reference:
@@ -57,11 +60,17 @@
 # - https://github.com/void-linux/void-packages/blob/master/srcpkgs/telegram-desktop/template
 
 let
-  tg_owt = callPackage ./tg_owt.nix { };
+  tg_owt = callPackage ./tg_owt.nix {
+    abseil-cpp = abseil-cpp.override {
+      cxxStandard = "17";
+    };
+  };
+  # Aarch64 default gcc9 will cause ICE. For reference #108305
+  env = if stdenv.isAarch64 then gcc10Stdenv else stdenv;
 in
-mkDerivation rec {
+env.mkDerivation rec {
   pname = "telegram-desktop";
-  version = "3.1.9";
+  version = "3.4.8";
   # Note: Update via pkgs/applications/networking/instant-messengers/telegram/tdesktop/update.py
 
   # Telegram-Desktop with submodules
@@ -70,7 +79,7 @@ mkDerivation rec {
     repo = "tdesktop";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "1nmakl9jxmw3k8gka56cyywbjwv06a5983dy6h9jhkkq950fn33s";
+    sha256 = "11h2w82i10zn55iz9xda8ihsnv6s8rxm3wkmmmkpa4zfzinryqb4";
   };
 
   postPatch = ''
@@ -130,7 +139,7 @@ mkDerivation rec {
     libXdmcp
     libselinux
     libsepol
-    epoxy
+    libepoxy
     at-spi2-core
     libXtst
     libthai
@@ -149,6 +158,8 @@ mkDerivation rec {
     "-DTDESKTOP_API_HASH=d524b414d21f4d37f08684c1df41ac9c"
     # See: https://github.com/NixOS/nixpkgs/pull/130827#issuecomment-885212649
     "-DDESKTOP_APP_USE_PACKAGED_FONTS=OFF"
+    # TODO: Remove once QT6 is available in nixpkgs
+    "-DDESKTOP_APP_QT6=OFF"
   ];
 
   postFixup = ''
@@ -178,6 +189,6 @@ mkDerivation rec {
     platforms = platforms.linux;
     homepage = "https://desktop.telegram.org/";
     changelog = "https://github.com/telegramdesktop/tdesktop/releases/tag/v${version}";
-    maintainers = with maintainers; [ oxalica primeos vanilla ];
+    maintainers = with maintainers; [ oxalica vanilla ];
   };
 }

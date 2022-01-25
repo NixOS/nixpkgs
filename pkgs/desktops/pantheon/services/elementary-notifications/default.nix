@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , meson
 , ninja
@@ -10,7 +11,6 @@
 , libgee
 , libhandy
 , libcanberra-gtk3
-, pantheon
 , python3
 , wrapGAppsHook
 }:
@@ -58,5 +58,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = teams.pantheon.members;
     platforms = platforms.linux;
+    mainProgram = "io.elementary.notifications";
   };
 }

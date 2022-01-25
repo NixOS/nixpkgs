@@ -1,8 +1,8 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , fetchpatch
 , nix-update-script
-, pantheon
 , meson
 , ninja
 , substituteAll

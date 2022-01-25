@@ -3,16 +3,9 @@
 , buildPythonPackage
 , fetchPypi
 , python
-, isPy38
-, beautifulsoup4
-, bottleneck
 , cython
+, numpy
 , python-dateutil
-, html5lib
-, jinja2
-, lxml
-, numexpr
-, openpyxl
 , pytz
 , scipy
 , sqlalchemy
@@ -22,6 +15,7 @@
 # Test inputs
 , glibcLocales
 , hypothesis
+, jinja2
 , pytestCheckHook
 , pytest-xdist
 , pytest-asyncio
@@ -33,11 +27,12 @@
 
 buildPythonPackage rec {
   pname = "pandas";
-  version = "1.3.2";
+  version = "1.3.4";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cbcb84d63867af3411fa063af3de64902665bb5b3d40b25b2059e40603594e87";
+    sha256 = "a2aa18d3f0b7d538e21932f637fbfe8518d085238b429e4790a35e1e44a96ffc";
   };
 
   nativeBuildInputs = [ cython ];
@@ -45,19 +40,9 @@ buildPythonPackage rec {
   buildInputs = lib.optional stdenv.isDarwin libcxx;
 
   propagatedBuildInputs = [
-    beautifulsoup4
-    bottleneck
+    numpy
     python-dateutil
-    html5lib
-    numexpr
-    lxml
-    openpyxl
     pytz
-    scipy
-    sqlalchemy
-    tables
-    xlrd
-    xlwt
   ];
 
   checkInputs = [
@@ -84,7 +69,7 @@ buildPythonPackage rec {
                 "['pandas/src/klib', 'pandas/src', '$cpp_sdk']"
   '';
 
-  doCheck = !stdenv.isAarch64; # upstream doesn't test this architecture
+  doCheck = !stdenv.isAarch32 && !stdenv.isAarch64; # upstream doesn't test this architecture
 
   pytestFlagsArray = [
     "--skip-slow"
@@ -107,6 +92,8 @@ buildPythonPackage rec {
     "test_from_coo"
     # AssertionError: No common DType exists for the given inputs
     "test_comparison_invalid"
+    # AssertionError: Regex pattern '"quotechar" must be string, not int'
+    "python-kwargs2"
   ] ++ lib.optionals stdenv.isDarwin [
     "test_locale"
     "test_clipboard"

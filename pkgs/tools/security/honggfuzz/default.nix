@@ -1,17 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, callPackage, makeWrapper
-, clang, llvm, libbfd, libopcodes, libunwind, libblocksruntime
-}:
+{ lib, stdenv, fetchFromGitHub, callPackage, makeWrapper, clang, llvm, libbfd
+, libopcodes, libunwind, libblocksruntime }:
 
 let
   honggfuzz = stdenv.mkDerivation rec {
     pname = "honggfuzz";
-    version = "2.4";
+    version = "2.5";
 
     src = fetchFromGitHub {
       owner = "google";
       repo = pname;
       rev = version;
-      sha256 = "sha256-sU5lmlfmvVWo4K96sI+xQsPfTMd1wsLbihcKI4aTj6g=";
+      sha256 = "sha256-TkyUKmiiSAfCnfQhSOUxuce6+dRyMmHy7vFK59jPIxM=";
     };
 
     postPatch = ''
@@ -28,7 +27,8 @@ let
     makeFlags = [ "PREFIX=$(out)" ];
 
     meta = {
-      description = "A security oriented, feedback-driven, evolutionary, easy-to-use fuzzer";
+      description =
+        "A security oriented, feedback-driven, evolutionary, easy-to-use fuzzer";
       longDescription = ''
         Honggfuzz is a security oriented, feedback-driven, evolutionary,
         easy-to-use fuzzer with interesting analysis options. It is
@@ -42,9 +42,9 @@ let
         fuzzing), and it will work its way up, expanding it by utilizing
         feedback-based coverage metrics.
       '';
-      homepage    = "https://honggfuzz.dev/";
-      license     = lib.licenses.asl20;
-      platforms   = ["x86_64-linux"];
+      homepage = "https://honggfuzz.dev/";
+      license = lib.licenses.asl20;
+      platforms = [ "x86_64-linux" ];
       maintainers = with lib.maintainers; [ cpu ];
     };
   };

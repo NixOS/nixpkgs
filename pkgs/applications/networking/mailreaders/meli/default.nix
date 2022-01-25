@@ -25,13 +25,13 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-ZE653OtXyZ9454bKPApmuL2kVko/hGBWEAya1L1KIoc=";
 
-  cargoBuildFlags = lib.optional withNotmuch "--features=notmuch";
-
   nativeBuildInputs = [ pkg-config gzip makeWrapper ];
 
   buildInputs = [ openssl dbus sqlite ] ++ lib.optional withNotmuch notmuch;
 
   checkInputs = [ file ];
+
+  buildFeatures = lib.optional withNotmuch [ "notmuch" ];
 
   postInstall = ''
     mkdir -p $out/share/man/man1

@@ -6,9 +6,11 @@ with utils;
 let
 
   cfg = config.networking;
+  opt = options.networking;
   interfaces = attrValues cfg.interfaces;
   hasVirtuals = any (i: i.virtual) interfaces;
   hasSits = cfg.sits != { };
+  hasGres = cfg.greTunnels != { };
   hasBonds = cfg.bonds != { };
   hasFous = cfg.fooOverUDP != { }
     || filterAttrs (_: s: s.encapsulation != null) cfg.sits != { };
@@ -101,6 +103,11 @@ let
         description = ''
           Other route options. See the symbol <literal>OPTIONS</literal>
           in the <literal>ip-route(8)</literal> manual page for the details.
+          You may also specify <literal>metric</literal>,
+          <literal>src</literal>, <literal>protocol</literal>,
+          <literal>scope</literal>, <literal>from</literal>
+          and <literal>table</literal>, which are technically
+          not route options, in the sense used in the manual.
         '';
       };
 
@@ -206,6 +213,14 @@ let
         type = with types; listOf (submodule (routeOpts 4));
         description = ''
           List of extra IPv4 static routes that will be assigned to the interface.
+          <warning><para>If the route type is the default <literal>unicast</literal>, then the scope
+          is set differently depending on the value of <option>networking.useNetworkd</option>:
+          the script-based backend sets it to <literal>link</literal>, while networkd sets
+          it to <literal>global</literal>.</para></warning>
+          If you want consistency between the two implementations,
+          set the scope of the route manually with
+          <literal>networking.interfaces.eth0.ipv4.routes = [{ options.scope = "global"; }]</literal>
+          for example.
         '';
       };
 
@@ -417,7 +432,11 @@ in
         network node hostname (uname --nodename) the option
         boot.kernel.sysctl."kernel.hostname" can be used as a workaround (but
         the 64 character limit still applies).
+
+        WARNING: Do not use underscores (_) or you may run into unexpected issues.
       '';
+       # warning until the issues in https://github.com/NixOS/nixpkgs/pull/138978
+       # are resolved
     };
 
     networking.fqdn = mkOption {
@@ -992,6 +1011,65 @@ in
       });
     };
 
+    networking.greTunnels = mkOption {
+      default = { };
+      example = literalExpression ''
+        {
+          greBridge = {
+            remote = "10.0.0.1";
+            local = "10.0.0.22";
+            dev = "enp4s0f0";
+            type = "tap";
+          };
+        }
+      '';
+      description = ''
+        This option allows you to define Generic Routing Encapsulation (GRE) tunnels.
+      '';
+      type = with types; attrsOf (submodule {
+        options = {
+
+          remote = mkOption {
+            type = types.nullOr types.str;
+            default = null;
+            example = "10.0.0.1";
+            description = ''
+              The address of the remote endpoint to forward traffic over.
+            '';
+          };
+
+          local = mkOption {
+            type = types.nullOr types.str;
+            default = null;
+            example = "10.0.0.22";
+            description = ''
+              The address of the local endpoint which the remote
+              side should send packets to.
+            '';
+          };
+
+          dev = mkOption {
+            type = types.nullOr types.str;
+            default = null;
+            example = "enp4s0f0";
+            description = ''
+              The underlying network device on which the tunnel resides.
+            '';
+          };
+
+          type = mkOption {
+            type = with types; enum [ "tun" "tap" ];
+            default = "tap";
+            example = "tap";
+            apply = v: if v == "tun" then "gre" else "gretap";
+            description = ''
+              Whether the tunnel routes layer 2 (tap) or layer 3 (tun) traffic.
+            '';
+          };
+        };
+      });
+    };
+
     networking.vlans = mkOption {
       default = { };
       example = literalExpression ''
@@ -1165,6 +1243,9 @@ in
 
     networking.tempAddresses = mkOption {
       default = if cfg.enableIPv6 then "default" else "disabled";
+      defaultText = literalExpression ''
+        if ''${config.${opt.enableIPv6}} then "default" else "disabled"
+      '';
       type = types.enum (lib.attrNames tempaddrValues);
       description = ''
         Whether to enable IPv6 Privacy Extensions for interfaces not
@@ -1221,6 +1302,7 @@ in
     boot.kernelModules = [ ]
       ++ optional hasVirtuals "tun"
       ++ optional hasSits "sit"
+      ++ optional hasGres "gre"
       ++ optional hasBonds "bonding"
       ++ optional hasFous "fou";
 
@@ -1233,6 +1315,8 @@ in
       "net.ipv4.conf.all.forwarding" = mkDefault (any (i: i.proxyARP) interfaces);
       "net.ipv6.conf.all.disable_ipv6" = mkDefault (!cfg.enableIPv6);
       "net.ipv6.conf.default.disable_ipv6" = mkDefault (!cfg.enableIPv6);
+      # networkmanager falls back to "/proc/sys/net/ipv6/conf/default/use_tempaddr"
+      "net.ipv6.conf.default.use_tempaddr" = tempaddrValues.${cfg.tempAddresses}.sysctl;
     } // listToAttrs (flip concatMap (filter (i: i.proxyARP) interfaces)
         (i: [(nameValuePair "net.ipv4.conf.${replaceChars ["."] ["/"] i.name}.proxy_arp" true)]))
       // listToAttrs (forEach interfaces

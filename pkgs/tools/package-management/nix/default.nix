@@ -31,10 +31,12 @@ common =
   }:
   let
      sh = busybox-sandbox-shell;
-     nix = stdenv.mkDerivation rec {
-      inherit pname version src patches;
 
-      is24 = lib.versionAtLeast version "2.4pre";
+    is24 = lib.versionAtLeast version "2.4pre";
+    is25 = lib.versionAtLeast version "2.5pre";
+
+    nix = stdenv.mkDerivation {
+      inherit pname version src patches;
 
       VERSION_SUFFIX = suffix;
 
@@ -42,7 +44,7 @@ common =
         [ "out" "dev" ]
         ++ lib.optionals enableDocumentation [ "man" "doc" ];
 
-      hardeningEnable = [ "pie" ];
+      hardeningEnable = lib.optionals (!stdenv.isDarwin) [ "pie" ];
 
       nativeBuildInputs =
         [ pkg-config ]
@@ -58,7 +60,7 @@ common =
            ];
 
       buildInputs =
-        [ curl libsodium openssl sqlite xz bzip2 nlohmann_json
+        [ curl libsodium openssl sqlite xz bzip2
           brotli boost editline
         ]
         ++ lib.optionals stdenv.isDarwin [ Security ]
@@ -77,17 +79,12 @@ common =
 
       propagatedBuildInputs = [ boehmgc ];
 
-      # Seems to be required when using std::atomic with 64-bit types
-      NIX_LDFLAGS =
-        # need to list libraries individually until
+      NIX_LDFLAGS = lib.optionals (!is24) [
         # https://github.com/NixOS/nix/commit/3e85c57a6cbf46d5f0fe8a89b368a43abd26daba
-        # is in a release
-          lib.optionalString enableStatic "-lssl -lbrotlicommon -lssh2 -lz -lnghttp2 -lcrypto"
-
-        # need to detect it here until
+        (lib.optionalString enableStatic "-lssl -lbrotlicommon -lssh2 -lz -lnghttp2 -lcrypto")
         # https://github.com/NixOS/nix/commits/74b4737d8f0e1922ef5314a158271acf81cd79f8
-        # is in a release
-        + lib.optionalString (stdenv.hostPlatform.system == "armv5tel-linux" || stdenv.hostPlatform.system == "armv6l-linux") "-latomic";
+        (lib.optionalString (stdenv.hostPlatform.system == "armv5tel-linux" || stdenv.hostPlatform.system == "armv6l-linux") "-latomic")
+      ];
 
       preConfigure =
         # Copy libboost_context so we don't get all of Boost in our closure.
@@ -150,13 +147,17 @@ common =
       # socket path becomes too long otherwise
       preInstallCheck = lib.optionalString stdenv.isDarwin ''
         export TMPDIR=$NIX_BUILD_TOP
+      ''
+      # See https://github.com/NixOS/nix/issues/5687
+      + lib.optionalString (is25 && stdenv.isDarwin) ''
+        echo "exit 99" > tests/gc-non-blocking.sh
       '';
 
-      separateDebugInfo = stdenv.isLinux;
+      separateDebugInfo = stdenv.isLinux && (is24 -> !enableStatic);
 
       enableParallelBuilding = true;
 
-      meta = {
+      meta = with lib; {
         description = "Powerful package manager that makes package management reliable and reproducible";
         longDescription = ''
           Nix is a powerful package manager for Linux and other Unix systems that
@@ -166,13 +167,16 @@ common =
           environments.
         '';
         homepage = "https://nixos.org/";
-        license = lib.licenses.lgpl2Plus;
-        maintainers = [ lib.maintainers.eelco ];
-        platforms = lib.platforms.unix;
-        outputsToInstall = [ "out" ] ++ lib.optional enableDocumentation "man";
+        license = licenses.lgpl2Plus;
+        maintainers = with maintainers; [ eelco lovesegfault ];
+        platforms = platforms.unix;
+        outputsToInstall = [ "out" ] ++ optional enableDocumentation "man";
       };
 
       passthru = {
+        is24 = lib.warn ''nix package: attribute .is24 is deprecated. Please use lib.versionAtLeast X.version "2.4pre".'' is24;
+        is25 = lib.warn ''nix package: attribute .is25 is deprecated. Please use lib.versionAtLeast X.version "2.5pre".'' is25;
+
         perl-bindings = perl.pkgs.toPerlModule (stdenv.mkDerivation {
           pname = "nix-perl";
           inherit version;
@@ -200,69 +204,92 @@ common =
     };
   in nix;
 
-  boehmgc_nix = boehmgc.override {
+  boehmgc_nix_2_3 = boehmgc.override {
     enableLargeConfig = true;
   };
 
-  boehmgc_nixUnstable = boehmgc_nix.overrideAttrs (drv: {
+  boehmgc_nix = boehmgc_nix_2_3.overrideAttrs (drv: {
     patches = (drv.patches or []) ++ [
       # Part of the GC solution in https://github.com/NixOS/nix/pull/4944
       (fetchpatch {
-        url = https://github.com/hercules-ci/nix/raw/5c58d84a76d96f269e3ff1e72c9c9ba5f68576af/boehmgc-coroutine-sp-fallback.diff;
+        url = "https://github.com/hercules-ci/nix/raw/5c58d84a76d96f269e3ff1e72c9c9ba5f68576af/boehmgc-coroutine-sp-fallback.diff";
         sha256 = "sha256-JvnWVTlkltmQUs/0qApv/LPZ690UX1/2hEP+LYRwKbI=";
       })
     ];
   });
 
-in rec {
+  # master: https://github.com/NixOS/nix/pull/5536
+  # 2.4: https://github.com/NixOS/nix/pull/5537
+  installNlohmannJsonPatch = fetchpatch {
+    url = "https://github.com/NixOS/nix/pull/5536.diff";
+    sha256 = "sha256-SPnam4xNIjbMgnq6IP1AaM1V62X0yZNo4DEVmI8sHOo=";
+  };
 
+  buildNix =
+  { version, suffix ? ""
+  , src ? null, sha256 ? null
+  , boehmgc ? boehmgc_nix, patches ? [ ]
+  }:
+    assert (src == null) -> (sha256 != null);
+    assert (sha256 == null) -> (src != null);
+    callPackage common {
+      pname = "nix";
+      version = "${version}${suffix}";
+      inherit suffix;
+
+      src =
+        if src != null
+        then src
+        else fetchFromGitHub {
+          owner = "NixOS";
+          repo = "nix";
+          rev = version;
+          inherit sha256;
+        };
+
+      inherit boehmgc patches;
+      inherit storeDir stateDir confDir;
+    };
+
+in rec {
   nix = nixStable;
 
-  nixStable = callPackage common (rec {
-    pname = "nix";
+  nixStable = nix_2_5;
+
+  nix_2_3 = buildNix rec {
     version = "2.3.16";
     src = fetchurl {
-      url = "https://nixos.org/releases/nix/${pname}-${version}/${pname}-${version}.tar.xz";
+      url = "https://nixos.org/releases/nix/nix-${version}/nix-${version}.tar.xz";
       sha256 = "sha256-fuaBtp8FtSVJLSAsO+3Nne4ZYLuBj2JpD2xEk7fCqrw=";
     };
+    boehmgc = boehmgc_nix_2_3;
+  };
 
-    boehmgc = boehmgc_nix;
+  nix_2_4 = buildNix {
+    version = "2.4";
+    sha256 = "sha256-op48CCDgLHK0qV1Batz4Ln5FqBiRjlE6qHTiZgt3b6k=";
+    patches = [ installNlohmannJsonPatch ];
+  };
 
-    inherit storeDir stateDir confDir;
-  });
+  nix_2_5 = buildNix {
+    version = "2.5.1";
+    sha256 = "sha256-GOsiqy9EaTwDn2PLZ4eFj1VkXcBUbqrqHehRE9GuGdU=";
+    patches = [ installNlohmannJsonPatch ];
+  };
 
-  nix_2_4 = callPackage common (rec {
-    pname = "nix";
-    version = "2.4pre-rc1";
+  nix_2_6 = buildNix {
+    version = "2.6.0";
+    sha256 = "sha256-xEPeMcNJVOeZtoN+d+aRwolpW8mFSEQx76HTRdlhPhg=";
+  };
 
+  nixUnstable = lib.lowPrio (buildNix rec {
+    version = "2.7";
+    suffix = "pre20220124_${lib.substring 0 7 src.rev}";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = version;
-      sha256 = "sha256-KOb8etMm5LksvT2l+CkvqzMO1bgmo9tJmyaNh0LvaR8=";
+      rev = "0a70b37b5694c769fb855c1afe7642407d1db64f";
+      sha256 = "sha256-aOM9MPNlnWNMobx4CuD4JIXH2poRlG8AKkuxY7FysWg=";
     };
-
-    boehmgc = boehmgc_nixUnstable;
-
-    inherit storeDir stateDir confDir;
   });
-
-  nixUnstable = lib.lowPrio (callPackage common rec {
-    pname = "nix";
-    version = "2.5${suffix}";
-    suffix = "pre20211007_${lib.substring 0 7 src.rev}";
-
-    src = fetchFromGitHub {
-      owner = "NixOS";
-      repo = "nix";
-      rev = "844dd901a7debe8b03ec93a7f717b6c4038dc572";
-      sha256 = "sha256-fe1B4lXkS6/UfpO0rJHwLC06zhOPrdSh4s9PmQ1JgPo=";
-    };
-
-    boehmgc = boehmgc_nixUnstable;
-
-    inherit storeDir stateDir confDir;
-
-  });
-
 }

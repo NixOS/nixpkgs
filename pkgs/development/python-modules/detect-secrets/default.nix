@@ -4,6 +4,7 @@
 , gibberish-detector
 , isPy27
 , mock
+, pkgs
 , pyahocorasick
 , pytestCheckHook
 , pyyaml
@@ -21,7 +22,8 @@ buildPythonPackage rec {
     owner = "Yelp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-dj0lqm9s8OKhM4OmNrmGVRc32/ZV0I9+5WcW2hvLwu0=";
+    sha256 = "sha256-dG2YaWXAMINxBGKNMlVfGTR9QHdnepiZmN+G88X4Wak=";
+    leaveDotGit = true;
   };
 
   propagatedBuildInputs = [
@@ -36,6 +38,7 @@ buildPythonPackage rec {
     pytestCheckHook
     responses
     unidiff
+    pkgs.gitMinimal
   ];
 
   preCheck = ''
@@ -44,24 +47,15 @@ buildPythonPackage rec {
 
   disabledTests = [
     # Tests are failing for various reasons. Needs to be adjusted with the next update
-    "test_baseline_filters_out_known_secrets"
     "test_basic"
-    "test_does_not_modify_slim_baseline"
     "test_handles_each_path_separately"
     "test_handles_multiple_directories"
     "test_load_and_output"
     "test_make_decisions"
-    "test_modifies_baseline"
-    "test_no_files_in_git_repo"
-    "test_outputs_baseline_if_none_supplied"
+    "test_restores_line_numbers"
     "test_saves_to_baseline"
     "test_scan_all_files"
-    "test_should_scan_all_files_in_directory_if_flag_is_provided"
-    "test_should_scan_specific_non_tracked_file"
-    "test_should_scan_tracked_files_in_directory"
     "test_start_halfway"
-    "test_works_from_different_directory"
-    "TestModifiesBaselineFromVersionChange"
   ];
 
   pythonImportsCheck = [ "detect_secrets" ];

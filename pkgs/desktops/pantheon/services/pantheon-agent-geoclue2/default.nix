@@ -1,7 +1,7 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , nix-update-script
-, pantheon
 , pkg-config
 , meson
 , ninja
@@ -38,13 +38,13 @@ stdenv.mkDerivation rec {
     pkg-config
     vala
     wrapGAppsHook
-   ];
+  ];
 
   buildInputs = [
     geoclue2
     gtk3
     libgee
-   ];
+  ];
 
   # This should be provided by a post_install.py script - See -> https://github.com/elementary/pantheon-agent-geoclue2/pull/21
   postInstall = ''

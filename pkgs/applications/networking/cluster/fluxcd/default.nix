@@ -1,18 +1,18 @@
 { lib, buildGoModule, fetchFromGitHub, fetchzip, installShellFiles }:
 
 let
-  version = "0.19.1";
-  sha256 = "184f5q3aa4p6gjdmr8x6a97rzaj64ws8bf3q8sz4xjyznznwcpp0";
-  manifestsSha256 = "1xxf572yvjmik7dvijz810lxzfj7irddznl4icidn7hrljzjrv95";
+  version = "0.24.1";
+  sha256 = "18jzf5kd06c10f45y4crvaqa5r10dhq2ashlhppzrmhigiyavxac";
+  manifestsSha256 = "0qbdik65irnwgw7klj5w0z00jxflm855gikpnqb9gsxd7rbw8ysk";
 
   manifests = fetchzip {
-    url = "https://github.com/fluxcd/flux2/releases/download/v${version}/manifests.tar.gz";
+    url =
+      "https://github.com/fluxcd/flux2/releases/download/v${version}/manifests.tar.gz";
     sha256 = manifestsSha256;
     stripRoot = false;
   };
-in
 
-buildGoModule rec {
+in buildGoModule rec {
   pname = "fluxcd";
   inherit version;
 
@@ -23,15 +23,13 @@ buildGoModule rec {
     inherit sha256;
   };
 
-  vendorSha256 = "sha256-1ZIeS42LoreZKkzDNZxmF17HeDWWVo49CaZDrIR2U9g=";
+  vendorSha256 = "sha256-HoAVdY+kZLpUEl3mE7obbTzAJUyt5MBPjGhs6ZDSnzU=";
 
   postUnpack = ''
     cp -r ${manifests} source/cmd/flux/manifests
   '';
 
-  patches = [
-    ./patches/disable-tests-ssh_key.patch
-  ];
+  patches = [ ./patches/disable-tests-ssh_key.patch ];
 
   ldflags = [ "-s" "-w" "-X main.VERSION=${version}" ];
 
@@ -39,7 +37,7 @@ buildGoModule rec {
 
   # Required to workaround test error:
   #   panic: mkdir /homeless-shelter: permission denied
-  HOME="$TMPDIR";
+  HOME = "$TMPDIR";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -58,7 +56,8 @@ buildGoModule rec {
   passthru.updateScript = ./update.sh;
 
   meta = with lib; {
-    description = "Open and extensible continuous delivery solution for Kubernetes";
+    description =
+      "Open and extensible continuous delivery solution for Kubernetes";
     longDescription = ''
       Flux is a tool for keeping Kubernetes clusters in sync
       with sources of configuration (like Git repositories), and automating
@@ -66,6 +65,6 @@ buildGoModule rec {
     '';
     homepage = "https://fluxcd.io";
     license = licenses.asl20;
-    maintainers = with maintainers; [ jlesquembre superherointj ];
+    maintainers = with maintainers; [ jlesquembre bryanasdev000 ];
   };
 }

@@ -14,7 +14,7 @@
 , publicsuffix2
 , xmltodict
 , geoip2
-, IMAPClient
+, imapclient
 , dateparser
 , elasticsearch-dsl
 , kafka-python
@@ -49,7 +49,7 @@ buildPythonPackage rec {
     publicsuffix2
     xmltodict
     geoip2
-    IMAPClient
+    imapclient
     dateparser
     elasticsearch-dsl
     kafka-python

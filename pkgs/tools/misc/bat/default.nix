@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, nixosTests
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
@@ -13,15 +12,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "bat";
-  version = "0.18.3";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-3XwnlSPlyEE4oznXK59/rooZLtj1+VbozprXU2W0J5I=";
+    sha256 = "sha256-XF5wMLHdiyasB2H6thk6OrkAm5bZZmlPFlBl02k52qU=";
   };
-  cargoSha256 = "sha256-g5yfE/s1N6EgI2ikiJbypI4iQbXPu6zGNoSVC6ldoWo=";
+  cargoSha256 = "sha256-GipH9CBzvfaDqov1v9bKtrsRhUfiQ/AhBi1p+gBTwzM=";
 
   nativeBuildInputs = [ pkg-config installShellFiles makeWrapper ];
 
@@ -41,7 +40,18 @@ rustPlatform.buildRustPackage rec {
 
   checkFlags = [ "--skip=pager_more" "--skip=pager_most" ];
 
-  passthru.tests = { inherit (nixosTests) bat; };
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    testFile=$(mktemp /tmp/bat-test.XXXX)
+    echo -ne 'Foobar\n\n\n42' > $testFile
+    $out/bin/bat -p $testFile | grep "Foobar"
+    $out/bin/bat -p $testFile -r 4:4 | grep 42
+    rm $testFile
+
+    runHook postInstallCheck
+  '';
 
   meta = with lib; {
     description = "A cat(1) clone with syntax highlighting and Git integration";

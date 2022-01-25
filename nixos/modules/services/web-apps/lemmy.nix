@@ -214,8 +214,6 @@ in
       systemd.services.lemmy-postgresql = mkIf cfg.settings.database.createLocally {
         description = "Lemmy postgresql db";
         after = [ "postgresql.service" ];
-        bindsTo = [ "postgresql.service" ];
-        requiredBy = [ "lemmy.service" ];
         partOf = [ "lemmy.service" ];
         script = with cfg.settings.database; ''
           PSQL() {

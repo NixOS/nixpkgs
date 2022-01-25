@@ -8,7 +8,6 @@ import ./make-test-python.nix ({ lib, ... }: {
       enable = true;
       passwordFile = builtins.toFile "password" "admin";
     };
-    virtualisation.memorySize = 1024;
   };
 
   testScript = ''

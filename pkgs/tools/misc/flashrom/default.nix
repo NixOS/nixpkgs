@@ -1,5 +1,6 @@
 { fetchurl
-, gcc9Stdenv
+, fetchpatch
+, stdenv
 , installShellFiles
 , lib
 , libftdi1
@@ -10,7 +11,7 @@
 , jlinkSupport ? false
 }:
 
-gcc9Stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "flashrom";
   version = "1.2";
 
@@ -20,10 +21,22 @@ gcc9Stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config installShellFiles ];
-  buildInputs = [ libftdi1 libusb1 ]
-    # https://github.com/flashrom/flashrom/issues/125
-    ++ lib.optional (!gcc9Stdenv.isAarch64) pciutils
+  buildInputs = [ libftdi1 libusb1 pciutils ]
     ++ lib.optional jlinkSupport libjaylink;
+
+  patches = [
+    # remove when updating from 1.2
+    (fetchpatch {
+      name = "fix-aarch64-build.patch";
+      url = "https://github.com/flashrom/flashrom/commit/da6b3b70cb852dd8e9f9e21aef95fa83e7f7ab0d.patch";
+      sha256 = "sha256-fXYDXgT/ik+qtxxFEyJ7/axtycbwLkEg0UD+hzsYEwg=";
+    })
+    # fix build with gcc 10
+    (fetchpatch {
+      url = "https://github.com/flashrom/flashrom/commit/3a0c1966e4c66f91e6e8551e906b6db38002acb4.patch";
+      sha256 = "sha256-UfXLefMS20VUc7hk4IXECFbDWEbBnHMGSzOYemTfvjI=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace util/z60_flashrom.rules \
@@ -43,6 +56,6 @@ gcc9Stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ funfunctor fpletz felixsinger ];
     platforms = platforms.all;
-    broken = gcc9Stdenv.isDarwin; # requires DirectHW
+    broken = stdenv.isDarwin; # requires DirectHW
   };
 }

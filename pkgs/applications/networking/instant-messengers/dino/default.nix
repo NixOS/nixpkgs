@@ -5,7 +5,7 @@
 , libnotify, libsoup, libgee
 , librsvg, libsignal-protocol-c
 , libgcrypt
-, epoxy
+, libepoxy
 , at-spi2-core
 , sqlite
 , dbus
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     libgcrypt
     libsoup
     pcre
-    epoxy
+    libepoxy
     at-spi2-core
     dbus
     icu

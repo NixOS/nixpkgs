@@ -453,7 +453,7 @@ in
         cantarell-fonts
         dejavu_fonts
         source-code-pro # Default monospace font in 3.32
-        source-sans-pro
+        source-sans
       ];
 
       # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/blob/gnome-3-38/elements/core/meta-gnome-core-shell.bst

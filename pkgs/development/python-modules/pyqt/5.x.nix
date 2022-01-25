@@ -5,7 +5,6 @@
 , pkg-config
 , dbus
 , lndir
-, python
 , dbus-python
 , sip
 , pyqt-builder

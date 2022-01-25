@@ -2,24 +2,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "just";
-  version = "0.10.2";
+  version = "0.10.5";
 
   src = fetchFromGitHub {
     owner = "casey";
     repo = pname;
     rev = version;
-    sha256 = "sha256-AR1bNsyex+kfXdiSF3QgeqK8qwIssLfaaY0qNhnp7ak=";
+    sha256 = "sha256-PbWV8It/ubDbZooJdt/KWihnp221Pexs0U6zMa8KSMw=";
   };
-  cargoSha256 = "sha256-Ukhp8mPXD/dDolfSugOCVwRMgkjmDRCoNzthgqrN6p0=";
+  cargoSha256 = "sha256-VRfk6566SNmvCxtD9EdDxDdBvQuEfjPVggXzt4VoYRg=";
 
   nativeBuildInputs = [ installShellFiles ];
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
-
-  postPatch = ''
-    # this hard codes the compiler, which breaks the aarch64 in particular
-    # we rather want to set the compiler ourself
-    rm .cargo/config
-  '';
 
   postInstall = ''
     installManPage man/just.1

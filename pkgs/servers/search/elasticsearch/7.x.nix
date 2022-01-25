@@ -1,5 +1,4 @@
 { elk7Version
-, enableUnfree ? true
 , lib
 , stdenv
 , fetchurl
@@ -18,19 +17,15 @@ let
   arch = elemAt info 0;
   plat = elemAt info 1;
   shas =
-    if enableUnfree
-    then {
-      x86_64-linux = "sha256-O3rjtvXyJI+kRBqiz2U2OMkCIQj4E+AIHaE8N4o14R4=";
-      x86_64-darwin = "sha256-AwuY2yMxf+v7U5/KD3Cf+Hv6ijjySEyj6pzF3RCsg24=";
-    }
-    else {
-      x86_64-linux = "sha256-cJrdkFIFgAI6wfQh34Z8yFuLrOCOKzgOsWZhU3S/3NQ=";
-      x86_64-darwin = "sha256-OhMVOdXei9D9cH+O5tBhdKvZ05TsImjMqUUsucRyWMo=";
+    {
+      x86_64-linux  = "1s16l95wc589cr69pfbgmkn9rkvxn6sd6jlbiqpm6p6iyxiaxd6c";
+      x86_64-darwin = "05h7pvq4pb816wgcymnfklp3w6sv54x6138v2infw5219dnk8pfs";
+      aarch64-linux = "0q4xnjzhlx1b2lkikca88qh9glfxaifsm419k2bxxlrfrx31zlkq";
     };
 in
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation rec {
+  pname = "elasticsearch";
   version = elk7Version;
-  pname = "elasticsearch${optionalString (!enableUnfree) "-oss"}";
 
   src = fetchurl {
     url = "https://artifacts.elastic.co/downloads/elasticsearch/${pname}-${version}-${plat}-${arch}.tar.gz";
@@ -49,9 +44,11 @@ stdenv.mkDerivation (rec {
       "ES_CLASSPATH=\"\$ES_CLASSPATH:$out/\$additional_classpath_directory/*\""
   '';
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ jre_headless util-linux ]
-    ++ optional enableUnfree zlib;
+  nativeBuildInputs = [ autoPatchelfHook makeWrapper ];
+
+  buildInputs = [ jre_headless util-linux zlib ];
+
+  runtimeDependencies = [ zlib ];
 
   installPhase = ''
     mkdir -p $out
@@ -69,22 +66,12 @@ stdenv.mkDerivation (rec {
     wrapProgram $out/bin/elasticsearch-plugin --set JAVA_HOME "${jre_headless}"
   '';
 
-  passthru = { inherit enableUnfree; };
+  passthru = { enableUnfree = true; };
 
   meta = {
     description = "Open Source, Distributed, RESTful Search Engine";
-    license = if enableUnfree then licenses.elastic else licenses.asl20;
+    license = licenses.elastic;
     platforms = platforms.unix;
     maintainers = with maintainers; [ apeschar basvandijk ];
   };
-} // optionalAttrs enableUnfree {
-  dontPatchELF = true;
-  nativeBuildInputs = [ makeWrapper autoPatchelfHook ];
-  runtimeDependencies = [ zlib ];
-  postFixup = ''
-    for exe in $(find $out/modules/x-pack-ml/platform/linux-x86_64/bin -executable -type f); do
-      echo "patching $exe..."
-      patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$exe"
-    done
-  '';
-})
+}

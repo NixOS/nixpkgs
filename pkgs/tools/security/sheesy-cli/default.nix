@@ -14,11 +14,15 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "159a5ph1gxwcgahyr8885lq3c1w76nxzfrfdpyqixqrr7jzx2rd3";
   cargoDepsName = pname;
 
-  cargoBuildFlags = [ "--bin sy" "--features" "vault,extract,completions,substitute,process" ];
-
   nativeBuildInputs = [ libgpg-error gpgme gettext installShellFiles ];
 
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security ];
+
+  buildFeatures = [ "vault" "extract" "completions" "substitute" "process" ];
+
+  checkFeatures = [ ];
+
+  cargoBuildFlags = [ "--bin" "sy" ];
 
   postInstall = ''
     installShellCompletion --cmd sy \

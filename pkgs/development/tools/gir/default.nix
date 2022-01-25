@@ -2,17 +2,22 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "gir";
-  version = "unstable-2021-05-05";
+  version = "unstable-2021-11-21";
 
   src = fetchFromGitHub {
     owner = "gtk-rs";
     repo = "gir";
-    rev = "c148542ce89b0bf7cbb9f5ef4179c96a45d022df";
-    sha256 = "0vy366ipwnn0cpp14l1v5g3dpnsr3hd8mjp3333lp0946igfqsy5";
-    leaveDotGit = true; # required for build.rs
+    rev = "a69abbe5ee1a745e554cac9433c65d2ac26a7688";
+    sha256 = "16ygy1bcbcj69x6ss72g9n62qlsd1bacr5hz91f8whw6qm9am46m";
   };
 
-  cargoSha256 = "11as1v88zf0f7l2ngllg5zqycvd05nb4vrsyl1dlarjvbq7fhvv8";
+  cargoSha256 = "14srs2369yryqpkklmfp64fyqxrhf91b2bjy0068nx2myr25m624";
+
+  postPatch = ''
+    rm build.rs
+    sed -i '/build = "build\.rs"/d' Cargo.toml
+    echo "pub const VERSION: &str = \"$version\";" > src/gir_version.rs
+  '';
 
   meta = with lib; {
     description = "Tool to generate rust bindings and user API for glib-based libraries";

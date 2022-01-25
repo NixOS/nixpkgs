@@ -83,14 +83,14 @@ in
         default = true;
         description = ''
           Allow GDM to run on Wayland instead of Xserver.
-          Note to enable Wayland with Nvidia you need to
-          enable the <option>nvidiaWayland</option>.
+          Note to enable Wayland with Nvidia the <option>nvidiaWayland</option>
+          must not be disabled.
         '';
       };
 
       nvidiaWayland = mkOption {
         type = types.bool;
-        default = false;
+        default = true;
         description = ''
           Whether to allow wayland to be used with the proprietary
           NVidia graphics driver.

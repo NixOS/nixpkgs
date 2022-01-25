@@ -1,0 +1,13 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 98611276..989350bb 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -260,6 +260,8 @@ if(NCNN_VULKAN)
+                 include("${GLSLANG_TARGET_DIR}/HLSLTargets.cmake")
+             endif()
+             include("${GLSLANG_TARGET_DIR}/glslangTargets.cmake")
++            include("${GLSLANG_TARGET_DIR}/SPIRV-Tools/SPIRV-ToolsTarget.cmake")
++            include("${GLSLANG_TARGET_DIR}/SPIRV-Tools-opt/SPIRV-Tools-optTargets.cmake")
+             include("${GLSLANG_TARGET_DIR}/SPIRVTargets.cmake")
+ 
+             if (NOT TARGET glslang OR NOT TARGET SPIRV)

@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A DNS toolkit for Python";
-    homepage = "http://www.dnspython.org";
+    homepage = "https://www.dnspython.org";
     license = with licenses; [ isc ];
   };
 }

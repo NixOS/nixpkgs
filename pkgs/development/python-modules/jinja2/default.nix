@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "Jinja2";
-  version = "3.0.1";
+  version = "3.0.3";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "197ms1wimxql650245v63wkv04n8bicj549wfhp51bx68x5lhgvh";
+    sha256 = "611bb273cd68f3b993fabdc4064fc858c5b47a973cb5aa7999ec1ba405c87cd7";
   };
 
   propagatedBuildInputs = [
@@ -29,6 +29,13 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    # Avoid failure due to deprecation warning
+    # Fixed in https://github.com/python/cpython/pull/28153
+    # Remove after cpython 3.9.8
+    "-p no:warnings"
   ];
 
   meta = with lib; {

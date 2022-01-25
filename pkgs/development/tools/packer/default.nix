@@ -1,17 +1,22 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+}:
 
 buildGoModule rec {
   pname = "packer";
-  version = "1.7.6";
+  version = "1.7.9";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "packer";
     rev = "v${version}";
-    sha256 = "sha256-nZeOtV6sbgzUhDOlWJ5eLzOh0gsaukXFrPg3y8x9ce4=";
+    sha256 = "sha256-e2G4kxcizE2lfdryS4S04OwWxseyUqGS0SAaBdiXax0=";
   };
 
-  vendorSha256 = "sha256-zg4mVFvP/SciCLDF9FopqzeiE5dfpxfZJ6BYjcj2BZ0=";
+  vendorSha256 = "sha256-5YcDaGbvw6xo5J8mtJ3CUS8JNCqKUD7kdUyfYIkQ6aE=";
 
   subPackages = [ "." ];
 
@@ -30,5 +35,6 @@ buildGoModule rec {
     maintainers = with maintainers; [ cstrahan zimbatm ma27 ];
     changelog   = "https://github.com/hashicorp/packer/blob/v${version}/CHANGELOG.md";
     platforms   = platforms.unix;
+    broken = stdenv.isDarwin; # needs to update gopsutil to at least v3.21.3 to include https://github.com/shirou/gopsutil/pull/1042
   };
 }

@@ -1,7 +1,7 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , nix-update-script
-, pantheon
 , pkg-config
 , meson
 , ninja
@@ -28,21 +28,13 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-calendar";
-  version = "6.0.2";
-
-  repoName = "calendar";
+  version = "6.1.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "calendar";
     rev = version;
-    sha256 = "16xp8gfgpyz9xpjsxm6jlk4skkknj65g0q4x0qvw9sg9f1p6a514";
-  };
-
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    sha256 = "sha256-LaVJ7QLc0UdSLgLIuHP4Anc7kPUelZW9PnIWuqKGtEQ=";
   };
 
   nativeBuildInputs = [
@@ -70,7 +62,6 @@ stdenv.mkDerivation rec {
     libhandy
     libical
     libnotify
-    libgdata # required by some dependency transitively
   ];
 
   postPatch = ''
@@ -78,11 +69,18 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
+
   meta = with lib; {
     description = "Desktop calendar app designed for elementary OS";
     homepage = "https://github.com/elementary/calendar";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = teams.pantheon.members;
+    mainProgram = "io.elementary.calendar";
   };
 }

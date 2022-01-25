@@ -7,18 +7,24 @@
 
 stdenv.mkDerivation rec {
   pname = "bison";
-  version = "3.7.6";
+  version = "3.8.2";
 
   src = fetchurl {
     url = "mirror://gnu/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-adwLtG6o/DB9TKHgthyMNV6yB9Cwxp9PhGIyjnTXueo=";
+    sha256 = "sha256-BsnhO99+sk1M62tZIFpPZ8LH5yExGWREMP6C+9FKCrs=";
   };
+
+  # gnulib relies on --host= to detect iconv() features on musl().
+  # Otherwise tests fail due to incorrect unicode symbol oconversion.
+  configurePlatforms = [ "build" "host" ];
 
   nativeBuildInputs = [ m4 perl ] ++ lib.optional stdenv.isSunOS help2man;
   propagatedBuildInputs = [ m4 ];
 
-  doCheck = false; # fails
-  doInstallCheck = false; # fails
+  enableParallelBuilding = true;
+
+  doCheck = true;
+  doInstallCheck = true;
 
   meta = {
     homepage = "https://www.gnu.org/software/bison/";

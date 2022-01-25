@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "pytools";
-  version = "2021.2.8";
+  version = "2021.2.9";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e11adc4914d805ac2bd02656fc6c0ec57c29dd305bd4a44122ca4e651a4bba8b";
+    sha256 = "db6cf83c9ba0a165d545029e2301621486d1e9ef295684072e5cd75316a13755";
   };
 
   checkInputs = [ pytest ];

@@ -7,6 +7,7 @@ let
 
   defaultProfile = filterAttrs (k: v: v != null) {
     HomepageLocation = cfg.homepageLocation;
+    DefaultSearchProviderEnabled = cfg.defaultSearchProviderEnabled;
     DefaultSearchProviderSearchURL = cfg.defaultSearchProviderSearchURL;
     DefaultSearchProviderSuggestURL = cfg.defaultSearchProviderSuggestURL;
     ExtensionInstallForcelist = cfg.extensions;
@@ -48,6 +49,13 @@ in
         description = "Chromium default homepage";
         default = null;
         example = "https://nixos.org";
+      };
+
+      defaultSearchProviderEnabled = mkOption {
+        type = types.nullOr types.bool;
+        description = "Enable the default search provider.";
+        default = null;
+        example = true;
       };
 
       defaultSearchProviderSearchURL = mkOption {

@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , nix-update-script
 , appstream
 , appstream-glib
@@ -20,7 +21,6 @@
 , meson
 , ninja
 , packagekit
-, pantheon
 , pkg-config
 , python3
 , vala
@@ -30,29 +30,21 @@
 
 stdenv.mkDerivation rec {
   pname = "appcenter";
-  version = "3.8.0";
+  version = "3.9.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "07lkdpnjj9pxbq8h794qjiidvnysvzx0132w98r1wg9k7ca170bj";
+    sha256 = "sha256-xktIHQHmz5gh72NEz9UQ9fMvBlj1BihWxHgxsHmTIB0=";
   };
 
   patches = [
-    # Try to remove other backends to make flatpak backend work.
-    # https://github.com/NixOS/nixpkgs/issues/70214
-    ./flatpak-only.patch
-    # The homepage banner does not show up on first run,
-    # has issues with app icon and mouse scrolling.
-    ./drop-homepage-banner.patch
+    # Introduces a packagekit_backend meson flag.
+    # Makes appcenter actually work by using only the flatpak backend.
+    # https://github.com/elementary/appcenter/pull/1739
+    ./add-packagekit-backend-option.patch
   ];
-
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
-  };
 
   nativeBuildInputs = [
     appstream-glib
@@ -87,6 +79,8 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dpayments=false"
     "-Dcurated=false"
+    # This option is introduced in add-packagekit-backend-option.patch
+    "-Dpackagekit_backend=false"
   ];
 
   postPatch = ''
@@ -94,11 +88,18 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
+
   meta = with lib; {
     homepage = "https://github.com/elementary/appcenter";
     description = "An open, pay-what-you-want app store for indie developers, designed for elementary OS";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = teams.pantheon.members;
+    mainProgram = "io.elementary.appcenter";
   };
 }

@@ -3,22 +3,25 @@
 , rustPlatform
 , fetchFromGitHub
 , llvmPackages
-, rocksdb
+, rocksdb_6_23
 , Security
 }:
 
+let
+  rocksdb = rocksdb_6_23;
+in
 rustPlatform.buildRustPackage rec {
   pname = "electrs";
-  version = "0.9.1";
+  version = "0.9.4";
 
   src = fetchFromGitHub {
     owner = "romanz";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-GDO8iGntQncvdJiDMBJk9GrGF9JToasbLRzju3S0TS0=";
+    hash = "sha256-37KTcLFVzuXlLpz9INXbasUdzuY+T34ef8EtfczQ+D8=";
   };
 
-  cargoHash = "sha256-Ms785+3Z4xEUW8FRRu1FIHk7HSWYLBThKlJDFjW6j0I=";
+  cargoHash = "sha256-aOSCpvejMUfSZCDwShqMPEc3vXw9ri2QvTaCuHODTwA=";
 
   # needed for librocksdb-sys
   nativeBuildInputs = [ llvmPackages.clang ];

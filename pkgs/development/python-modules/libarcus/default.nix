@@ -4,14 +4,14 @@
 
 buildPythonPackage rec {
   pname = "libarcus";
-  version = "4.10.0";
+  version = "4.12.0";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "Ultimaker";
     repo = "libArcus";
     rev = version;
-    sha256 = "1ahka8s8fjwymyr7pca7i7h51ikfr35zy4nkzfcjn946x7p0dprf";
+    sha256 = "sha256-X33ptwYj9YkVWqUDPP+Ic+hoIb+rwsLdQXvHLA9z+3w=";
   };
 
   patches = [

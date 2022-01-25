@@ -56,7 +56,6 @@ mkDerivation rec {
   postInstall = lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/Applications
     mv GoldenDict.app $out/Applications
-    wrapQtApp $out/Applications/GoldenDict.app/Contents/MacOS/GoldenDict
   '';
 
   meta = with lib; {

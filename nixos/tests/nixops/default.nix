@@ -26,8 +26,7 @@ let
         nix.binaryCaches = lib.mkForce [ ];
         users.users.person.isNormalUser = true;
         virtualisation.writableStore = true;
-        virtualisation.memorySize = 1024 /*MiB*/;
-        virtualisation.pathsInNixDB = [
+        virtualisation.additionalPaths = [
           pkgs.hello
           pkgs.figlet
 
@@ -78,7 +77,7 @@ let
         # Put newlines on console, to flush the console reader's line buffer
         # in case nixops' last output did not end in a newline, as is the case
         # with a status line (if implemented?)
-        deployer.succeed("while sleep 60s; do echo [60s passed] >/dev/console; done &")
+        deployer.succeed("while sleep 60s; do echo [60s passed]; done >&2 &")
 
         deployer_do("cd ~/unicorn; ssh -oStrictHostKeyChecking=accept-new root@server echo hi")
 

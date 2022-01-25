@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, cmake, boost, python2}:
+{ lib, stdenv, fetchurl, cmake, boost, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "avro-c++";
@@ -9,8 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "1ars58bfw83s8f1iqbhnqp4n9wc9cxsph0gs2a8k7r9fi09vja2k";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ python2 boost ];
+  nativeBuildInputs = [ cmake python3 ];
+  buildInputs = [ boost ];
 
   preConfigure = ''
     substituteInPlace test/SchemaTests.cc --replace "BOOST_CHECKPOINT" "BOOST_TEST_CHECKPOINT"

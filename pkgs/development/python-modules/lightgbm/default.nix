@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "lightgbm";
-  version = "3.3.0";
+  version = "3.3.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "107ae7babbbda2c2f0e07484f0c53cdeb455e9219235f79dc4e1685d7541e505";
+    sha256 = "5d25d16e77c844c297ece2044df57651139bc3c8ad8c4108916374267ac68b64";
   };
 
   nativeBuildInputs = [

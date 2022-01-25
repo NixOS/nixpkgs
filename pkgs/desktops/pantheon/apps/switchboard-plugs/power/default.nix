@@ -1,13 +1,12 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , nix-update-script
-, pantheon
 , meson
 , ninja
 , pkg-config
 , vala
 , libgee
-, elementary-settings-daemon
 , gnome-settings-daemon
 , granite
 , gtk3
@@ -44,7 +43,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     dbus
-    elementary-settings-daemon
     gnome-settings-daemon
     glib
     granite

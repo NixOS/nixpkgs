@@ -6,12 +6,15 @@
 , python
 , zlib
 , ncurses
-, pytest
 , docutils
 , pygments
 , numpy
 , scipy
-, scikit-learn }:
+, scikit-learn
+, spdlog
+, fmt
+, rapidjson
+}:
 
 buildPythonPackage rec {
   pname = "vowpalwabbit";
@@ -32,7 +35,14 @@ buildPythonPackage rec {
     pygments
     python.pkgs.boost
     zlib.dev
+    spdlog
+    fmt
+    rapidjson
   ];
+
+  # As we disable configure via cmake, pass explicit global options to enable
+  # spdlog and fmt packages
+  setupPyGlobalFlags = [ "--cmake-options=\"-DSPDLOG_SYS_DEP=ON;-DFMT_SYS_DEP=ON\"" ];
 
   propagatedBuildInputs = [
     numpy

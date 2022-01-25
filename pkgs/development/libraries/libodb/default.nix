@@ -6,13 +6,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "libodb";
-  version = "2.5.0-b.19";
+  version = "2.5.0-b.21";
 
   outputs = [ "out" "dev" "doc" ];
 
   src = fetchurl {
     url = "https://pkg.cppget.org/1/beta/odb/libodb-${version}.tar.gz";
-    sha256 = "8180d9d40d8e74ed25b1712953f19379a29abdee3896ae98ba9ade35846adb39";
+    sha256 = "sha256-Q4HZ8zU5osZ9Phz59ZAjXh0dbB8ELBY5gMRbDnawCWs=";
   };
 
   nativeBuildInputs = [ build2 ];
@@ -41,5 +41,6 @@ stdenv.mkDerivation rec {
     changelog = "https://git.codesynthesis.com/cgit/odb/libodb/tree/NEWS";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ r-burns ];
+    platforms = platforms.all;
   };
 }

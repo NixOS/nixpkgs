@@ -8,11 +8,12 @@
 
 buildPythonPackage rec {
   pname = "pykodi";
-  version = "0.2.6";
+  version = "0.2.7";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-SDp2S9HeqejRM3cf4x+5RLUQMPhjieQaXoubwf9Q/d4=";
+    sha256 = "sha256-2fFkbZZ3RXMolaaGpkvvVfSYtNNB1bTsoRCin3GnVKM=";
   };
 
   propagatedBuildInputs = [
@@ -24,7 +25,9 @@ buildPythonPackage rec {
   # has no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "pykodi" ];
+  pythonImportsCheck = [
+    "pykodi"
+  ];
 
   meta = with lib; {
     description = "An async python interface for Kodi over JSON-RPC";

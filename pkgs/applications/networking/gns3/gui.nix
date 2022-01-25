@@ -32,6 +32,10 @@ in python.pkgs.buildPythonPackage rec {
   postFixup = ''
       wrapQtApp "$out/bin/gns3"
   '';
+  postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace "sentry-sdk==1.3.1" "sentry-sdk>=1.3.1" \
+  '';
 
   meta = with lib; {
     description = "Graphical Network Simulator 3 GUI (${branch} release)";

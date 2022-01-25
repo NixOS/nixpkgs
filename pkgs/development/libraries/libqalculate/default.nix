@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libqalculate";
-  version = "3.20.1";
+  version = "3.22.0";
 
   src = fetchFromGitHub {
     owner = "qalculate";
     repo = "libqalculate";
     rev = "v${version}";
-    sha256 = "sha256-8SYI8CoeTfZXX0CgLnfl0rHwUZbYM7OGYzFQ41jm5Qs=";
+    sha256 = "sha256-yj6adBP9nZLXZVg62bYenfuiMeyULEql25KbDen9ljA=";
   };
 
   outputs = [ "out" "dev" "doc" ];
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "An advanced calculator library";
     homepage = "http://qalculate.github.io";
-    maintainers = with maintainers; [ gebner ];
+    maintainers = with maintainers; [ gebner doronbehar ];
     license = licenses.gpl2Plus;
     platforms = platforms.all;
   };

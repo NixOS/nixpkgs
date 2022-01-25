@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "libcpuid";
@@ -14,6 +14,12 @@ stdenv.mkDerivation rec {
   patches = [
     # Work around https://github.com/anrieff/libcpuid/pull/102.
     ./stdint.patch
+    # Fixes cross-compilation to NetBSD, remove me for libcpuid > 0.5.1
+    (fetchpatch {
+      name = "use-popcount-from-libc.patch";
+      url = "https://github.com/anrieff/libcpuid/commit/1acaf9980b55ae180cc08db218b9face28202519.patch";
+      sha256 = "0lvsv9baq0sria1f1ncn1b2783js29lfs5fv8milp54pg1wd5b7q";
+    })
   ];
 
   nativeBuildInputs = [ autoreconfHook ];

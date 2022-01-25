@@ -7,7 +7,6 @@
 , azure-core
 , cryptography
 , msrest
-, futures ? null
 }:
 
 buildPythonPackage rec {

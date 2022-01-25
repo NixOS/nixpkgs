@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "soju";
-  version = "0.1.2";
+  version = "0.3.0";
 
   src = fetchFromSourcehut {
     owner = "~emersion";
     repo = "soju";
     rev = "v${version}";
-    sha256 = "sha256-dauhGfwSjjRt1vl2+OPhtcme/QaRNTs43heQVnI7oRU=";
+    sha256 = "sha256-j7LwWBBJvNUeg0+P632HaGliVtrrCD0VNxkynaZzidQ=";
   };
 
-  vendorSha256 = "sha256-0JLbqqybLZ/cYyHAyNR4liAVJI2oIsHELJLWlQy0qjE=";
+  vendorSha256 = "sha256-fDfH2pQ5MtZDjiGx26vS5dBzxejVXPfflLX8N8VcJTA=";
 
   subPackages = [
     "cmd/soju"

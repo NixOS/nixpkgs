@@ -40,6 +40,24 @@ Used with Git. Expects `url` to a Git repo, `rev`, and `sha256`. `rev` in this c
 
 Additionally the following optional arguments can be given: `fetchSubmodules = true` makes `fetchgit` also fetch the submodules of a repository. If `deepClone` is set to true, the entire repository is cloned as opposing to just creating a shallow clone. `deepClone = true` also implies `leaveDotGit = true` which means that the `.git` directory of the clone won't be removed after checkout.
 
+If only parts of the repository are needed, `sparseCheckout` can be used. This will prevent git from fetching unnecessary blobs from server, see [git sparse-checkout](https://git-scm.com/docs/git-sparse-checkout) and [git clone --filter](https://git-scm.com/docs/git-clone#Documentation/git-clone.txt---filterltfilter-specgt) for more infomation:
+
+```nix
+{ stdenv, fetchgit }:
+
+stdenv.mkDerivation {
+  name = "hello";
+  src = fetchgit {
+    url = "https://...";
+    sparseCheckout = ''
+      path/to/be/included
+      another/path
+    '';
+    sha256 = "0000000000000000000000000000000000000000000000000000";
+  };
+}
+```
+
 ## `fetchfossil` {#fetchfossil}
 
 Used with Fossil. Expects `url` to a Fossil archive, `rev`, and `sha256`.
@@ -82,4 +100,11 @@ This is used with repo.or.cz repositories. The arguments expected are very simil
 
 ## `fetchFromSourcehut` {#fetchfromsourcehut}
 
-This is used with sourcehut repositories. The arguments expected are very similar to fetchFromGitHub above. Don't forget the tilde (~) in front of the user name!
+This is used with sourcehut repositories. Similar to `fetchFromGitHub` above,
+it expects `owner`, `repo`, `rev` and `sha256`, but don't forget the tilde (~)
+in front of the username! Expected arguments also include `vc` ("git" (default)
+or "hg"), `domain` and `fetchSubmodules`.
+
+If `fetchSubmodules` is `true`, `fetchFromSourcehut` uses `fetchgit`
+or `fetchhg` with `fetchSubmodules` or `fetchSubrepos` set to `true`,
+respectively. Otherwise the fetcher uses `fetchzip`.

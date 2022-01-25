@@ -1,6 +1,6 @@
 { lib, stdenv, fetchgit
 , sqlite, expat, mp4v2, flac, spidermonkey_68, taglib, libexif, curl, ffmpeg, file
-, pkg-config, autoreconfHook }:
+, pkg-config, autoreconfHook, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "mediatomb";
@@ -15,12 +15,14 @@ stdenv.mkDerivation rec {
   buildInputs = [ sqlite expat spidermonkey_68 taglib libexif curl ffmpeg file mp4v2 flac
                   pkg-config autoreconfHook ];
 
+  passthru.tests = { inherit (nixosTests) mediatomb; };
+
   meta = with lib; {
     homepage = "http://mediatomb.cc";
     repositories.git = "git://mediatomb.git.sourceforge.net/gitroot/mediatomb/mediatomb";
     description = "UPnP MediaServer with a web user interface";
     license = licenses.gpl2;
-    maintainers = [ maintainers.phreedom ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

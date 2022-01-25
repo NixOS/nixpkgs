@@ -29,6 +29,7 @@ python3.pkgs.buildPythonApplication rec {
     lxml
     typing-extensions
     python-dateutil
+    pytz
     tzlocal
   ];
 

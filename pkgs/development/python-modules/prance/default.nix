@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , chardet
 , requests
-, ruamel_yaml
+, ruamel-yaml
 , six
 , semver
 , pytestCheckHook
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     chardet
     requests
-    ruamel_yaml
+    ruamel-yaml
     six
     semver
   ];

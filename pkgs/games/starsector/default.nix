@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation rec {
   pname = "starsector";
-  version = "0.95a-RC15";
+  version = "0.95.1a-RC5";
 
   src = fetchzip {
     url = "https://s3.amazonaws.com/fractalsoftworks/starsector/starsector_linux-${version}.zip";
-    sha256 = "sha256-/5ij/079aOad7otXSFFcmVmiYQnMX/0RXGOr1j0rkGY=";
+    sha256 = "sha256-V8/WQPvPIrF3Tg7JVO+GfeYqWhkWWrnHSVcFXGQqDAA=";
   };
 
   nativeBuildInputs = [

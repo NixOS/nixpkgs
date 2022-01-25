@@ -1,10 +1,11 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
 , linkFarm
 , substituteAll
 , elementary-greeter
-, pantheon
 , pkg-config
 , meson
 , ninja
@@ -19,7 +20,6 @@
 , elementary-icon-theme
 , wingpanel-with-indicators
 , elementary-gtk-theme
-, elementary-settings-daemon
 , nixos-artwork
 , lightdm
 , gdk-pixbuf
@@ -33,11 +33,9 @@ stdenv.mkDerivation rec {
   pname = "elementary-greeter";
   version = "6.0.1";
 
-  repoName = "greeter";
-
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "greeter";
     rev = version;
     sha256 = "1f606ds56sp1c58q8dblfpaq9pwwkqw9i4gkwksw45m2xkwlbflq";
   };
@@ -67,7 +65,6 @@ stdenv.mkDerivation rec {
     clutter-gtk # else we get could not generate cargs for mutter-clutter-2
     elementary-gtk-theme
     elementary-icon-theme
-    elementary-settings-daemon
     gnome-settings-daemon
     gdk-pixbuf
     granite
@@ -94,6 +91,12 @@ stdenv.mkDerivation rec {
       src = ./hardcode-fallback-background.patch;
       default_wallpaper = "${nixos-artwork.wallpapers.simple-dark-gray.gnomeFilePath}";
     })
+    # Fix build with meson 0.61
+    # https://github.com/elementary/greeter/pull/590
+    (fetchpatch {
+      url = "https://github.com/elementary/greeter/commit/a4b25244058fce794a9f13f6b22a8ff7735ebde9.patch";
+      sha256 = "sha256-qPXhdvmYG8YMDU/CjbEkfZ0glgRzxnu0TsOPtvWHxLY=";
+    })
   ];
 
   preFixup = ''
@@ -101,7 +104,7 @@ stdenv.mkDerivation rec {
       # dbus-launch needed in path
       --prefix PATH : "${dbus}/bin"
 
-      # for `wingpanel -g`
+      # for `io.elementary.wingpanel -g`
       --prefix PATH : "${wingpanel-with-indicators}/bin"
 
       # for the compositor
@@ -128,5 +131,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = teams.pantheon.members;
+    mainProgram = "io.elementary.greeter";
   };
 }

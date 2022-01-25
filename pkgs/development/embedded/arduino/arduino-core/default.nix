@@ -11,7 +11,7 @@
 , ncurses
 , readline
 , withGui ? false
-, gtk3 ? null
+, gtk3
 , wrapGAppsHook
 , withTeensyduino ? false
   /* Packages needed for Teensyduino */
@@ -31,7 +31,6 @@
 , udev
 }:
 
-assert withGui -> gtk3 != null && wrapGAppsHook != null;
 assert withTeensyduino -> withGui;
 let
   externalDownloads = import ./downloads.nix {
@@ -70,48 +69,45 @@ let
     xorg.libXxf86vm
     zlib
   ];
-  teensy_architecture = if stdenv.hostPlatform.isx86_32 then "linux32"
-                        else if stdenv.hostPlatform.isx86_64 then "linux64"
-                        else if stdenv.hostPlatform.isAarch64 then "linuxaarch64"
-                        else if stdenv.hostPlatform.isAarch32 then "linuxarm"
-                        else throw "${stdenv.hostPlatform.system} is not supported in teensy";
+  teensy_architecture =
+    if stdenv.hostPlatform.isx86_32 then "linux32"
+    else if stdenv.hostPlatform.isx86_64 then "linux64"
+    else if stdenv.hostPlatform.isAarch64 then "linuxaarch64"
+    else if stdenv.hostPlatform.isAarch32 then "linuxarm"
+    else throw "${stdenv.hostPlatform.system} is not supported in teensy";
 
-  flavor = (if withTeensyduino then "teensyduino" else "arduino")
-             + lib.optionalString (!withGui) "-core";
 in
 stdenv.mkDerivation rec {
-  version = "1.8.13";
-  name = "${flavor}-${version}";
+  pname = (if withTeensyduino then "teensyduino" else "arduino") + lib.optionalString (!withGui) "-core";
+  version = "1.8.16";
 
   src = fetchFromGitHub {
     owner = "arduino";
     repo = "Arduino";
     rev = version;
-    sha256 = "0qg3qyj1b7wbaw2rsfly7nf3115h26nskl4ggrn6plhx272ni84p";
+    sha256 = "sha256-6d+y0Lgr+h0qYpCsa/ihvSMNuAdRMNQRuxZFpkWLDvg=";
   };
 
-  teensyduino_version = "153";
+  teensyduino_version = "155";
   teensyduino_src = fetchurl {
     url = "https://www.pjrc.com/teensy/td_${teensyduino_version}/TeensyduinoInstall.${teensy_architecture}";
     sha256 = {
-      linux64 = "02qgsj4h4zrjxkcclx7clsqbqd699kg0dq1xxa9hbj3vfnddjv1f";
-      linux32 = "14xaff8xj176ih8ifdvxsly5xgjjm82dqbn7lqq81a43i0svjjyn";
-      linuxarm = "0xpg9axa6dqyhccm9cpvsv2al7rgwy4gv2l8b2kffvn974dl5759";
-      linuxaarch64 = "1lyn4zy4l5mml3c19fw6i2pk1ypnq6mgjmxmzk9d54wpf6n3j5dk";
+      linux64 = "sha256-DypCbCm4RKYgnFJRwoHyPht6dFG48YvWM4RzEDdJE6U=";
+      linux32 = "sha256-MJ4xsTAZPO8BhO/VWSjBAjBVLrKM+3PNi1fiF8dsuVQ=";
+      linuxarm = "sha256-x5JdYflLThohos9RTAWt4XrzvksB7VWfXTKqgXZ1d6Q=";
+      linuxaarch64 = "sha256-N18nvavEMhvt2jOrdI+tsXtbWIdsj1n4aMVeaaBlcT4=";
     }.${teensy_architecture} or (throw "No arduino binaries for ${teensy_architecture}");
   };
   # Used because teensyduino requires jars be a specific size
   arduino_dist_src = fetchurl {
     url = "https://downloads.arduino.cc/arduino-${version}-${teensy_architecture}.tar.xz";
-    sha256 =
-      {
-        linux64 = "1bdlk51dqiyg5pw23hs8rfv8nrjqy0jqfl89h1466ahahpnd080v";
-        linux32 = "0mgsw9wpwv1pgs2jslzflh7zf4ggqjgcd55hmdzrj0dvgkyw4cr2";
-        linuxarm = "08n4lpak3i7yfyi0085j4nq14gb2n7zx85wl9drp8gaavxnfbp5f";
-        linuxaarch64 = "0m4nhykzknm2hdpz1fhr2hbpncry53kvzs9y5lgj7rx3sy6ygbh7";
-      }.${teensy_architecture} or (throw "No arduino binaries for ${teensy_architecture}");
+    sha256 = {
+      linux64 = "sha256-VK+Skl2xjqPWYEEKt1CCLwBZRxoyRfYQ3/60Byen9po=";
+      linux32 = "sha256-fjqV4avddmWAdFqMuUNUcDguxv3SI45m5QHFiWP8EKE=";
+      linuxarm = "sha256-Br8vUN7njI7VCH+ZvUh44l8LcgW+61+Q0x2AiXxIhTM=";
+      linuxaarch64 = "sha256-bOizBUUuyINg0/EqEatBq9lECT97JXxKbesCGyCA3YQ=";
+    }.${teensy_architecture} or (throw "No arduino binaries for ${teensy_architecture}");
   };
-
 
   # the glib setup hook will populate GSETTINGS_SCHEMAS_PATH,
   # wrapGAppHooks (among other things) adds it to XDG_DATA_DIRS
@@ -158,7 +154,7 @@ stdenv.mkDerivation rec {
   javaPath = lib.makeBinPath [ jdk ];
 
   # Everything else will be patched into rpath
-  rpath = (lib.makeLibraryPath [ zlib libusb-compat-0_1 libusb1 readline ncurses5 stdenv.cc.cc ]);
+  rpath = lib.makeLibraryPath [ zlib libusb-compat-0_1 libusb1 readline ncurses5 stdenv.cc.cc ];
 
   installPhase = ''
     mkdir -p $out/share/arduino
@@ -198,8 +194,8 @@ stdenv.mkDerivation rec {
       chmod +w ./TeensyduinoInstall.${teensy_architecture}
       upx -d ./TeensyduinoInstall.${teensy_architecture}
       patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-          --set-rpath "${teensy_libpath}" \
-          ./TeensyduinoInstall.${teensy_architecture}
+        --set-rpath "${teensy_libpath}" \
+        ./TeensyduinoInstall.${teensy_architecture}
       chmod +x ./TeensyduinoInstall.${teensy_architecture}
       ./TeensyduinoInstall.${teensy_architecture} --dir=$out/share/arduino
       # Check for successful installation
@@ -216,8 +212,8 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     for file in $(find $out -type f \( -perm /0111 -o -name \*.so\* \) ); do
-        patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$file" || true
-        patchelf --set-rpath ${rpath}:$out/lib $file || true
+      patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$file" || true
+      patchelf --set-rpath ${rpath}:$out/lib $file || true
     done
 
     ${lib.concatMapStringsSep "\n"
@@ -238,15 +234,15 @@ stdenv.mkDerivation rec {
     ${lib.optionalString withTeensyduino ''
       # Patch the Teensy loader binary
       patchelf --debug \
-          --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-          --set-rpath "${teensy_libpath}" \
-          $out/share/arduino/hardware/tools/teensy{,_ports,_reboot,_restart,_serialmon}
+        --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
+        --set-rpath "${teensy_libpath}" \
+        $out/share/arduino/hardware/tools/teensy{,_ports,_reboot,_restart,_serialmon}
     ''}
   '';
 
   meta = with lib; {
     description = "Open-source electronics prototyping platform";
-    homepage = "http://arduino.cc/";
+    homepage = "https://www.arduino.cc/";
     license = if withTeensyduino then licenses.unfreeRedistributable else licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ antono auntie robberer bjornfor bergey ];

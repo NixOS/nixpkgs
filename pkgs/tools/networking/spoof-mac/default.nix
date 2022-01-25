@@ -16,6 +16,8 @@ buildPythonPackage rec {
   # No tests
   doCheck = false;
 
+  pythonImportsCheck = [ "spoofmac" ];
+
   meta = with lib; {
     description = "Change your MAC address for debugging purposes";
     homepage = "https://github.com/feross/SpoofMAC";

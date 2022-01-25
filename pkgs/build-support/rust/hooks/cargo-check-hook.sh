@@ -16,11 +16,20 @@ cargoCheckHook() {
         threads=1
     fi
 
-    if [ "${cargoBuildType}" != "debug" ]; then
-        cargoBuildProfileFlag="--${cargoBuildType}"
+    if [ "${cargoCheckType}" != "debug" ]; then
+        cargoCheckProfileFlag="--${cargoCheckType}"
     fi
 
-    argstr="${cargoBuildProfileFlag} --target @rustTargetPlatformSpec@ --frozen ${cargoTestFlags}";
+    if [ -n "${cargoCheckNoDefaultFeatures-}" ]; then
+        cargoCheckNoDefaultFeaturesFlag=--no-default-features
+    fi
+
+    if [ -n "${cargoCheckFeatures-}" ]; then
+        cargoCheckFeaturesFlag="--features=${cargoCheckFeatures// /,}"
+    fi
+
+    argstr="${cargoCheckProfileFlag} ${cargoCheckNoDefaultFeaturesFlag} ${cargoCheckFeaturesFlag}
+        --target @rustTargetPlatformSpec@ --frozen ${cargoTestFlags}"
 
     (
         set -x

@@ -1,7 +1,7 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , nix-update-script
-, pantheon
 , appstream
 , desktop-file-utils
 , meson
@@ -26,21 +26,13 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-tasks";
-  version = "6.0.4";
-
-  repoName = "tasks";
+  version = "6.1.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "tasks";
     rev = version;
-    sha256 = "1gb51gm8qgd8yzhqb7v69p2f1fgm3qf534if4lc85jrjsb8hgmhl";
-  };
-
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    sha256 = "sha256-Gt9Hp9m28QdAFnKIT1xcbiSM5cn6kW7wEXmi/iFfu8k=";
   };
 
   nativeBuildInputs = [
@@ -74,11 +66,18 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
+
   meta = with lib; {
     homepage = "https://github.com/elementary/tasks";
     description = "Synced tasks and reminders on elementary OS";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = teams.pantheon.members;
+    mainProgram = "io.elementary.tasks";
   };
 }

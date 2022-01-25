@@ -3,7 +3,7 @@
 let
   package = buildGoModule rec {
     pname = "nomad-autoscaler";
-    version = "0.3.3";
+    version = "0.3.4";
 
     outputs = [
       "out"
@@ -25,10 +25,10 @@ let
       owner = "hashicorp";
       repo = "nomad-autoscaler";
       rev = "v${version}";
-      sha256 = "sha256-bN/U6aCf33B88ouQwTGG8CqARzWmIvXNr5JPr3l8cVI=";
+      sha256 = "sha256-SmlcQH+K/axl6Gj+bX0Quk6K/usP0c1hWnIdFjS1dn8=";
     };
 
-    vendorSha256 = "sha256-Ls8gkfLyxfQD8krvxjAPnZhf1r1s2MhtQfMMfp8hJII=";
+    vendorSha256 = "sha256-tO8vi9jBV6rVcGk/OoaXzpnQi4yPdozYZZwAMFCz2+c=";
 
     subPackages = [ "." ];
 

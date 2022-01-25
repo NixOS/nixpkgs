@@ -2,22 +2,24 @@
 
 buildGoModule rec {
   pname = "ddosify";
-  version = "0.4.1";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-z7jYnEZSHh/Omg5DMNFzuPhV1d8lZSy8I+8tM86O43s=";
+    sha256 = "sha256-QLJB2WcnguknEMdgwJzltp++mJCL4cFOWU568aTk0sc=";
   };
 
-  vendorSha256 = "sha256-VWWik7oovVJq0J/tj/2Mm5QtvRkJLtMROJhRC2JFZdw=";
+  vendorSha256 = "sha256-TY8shTb77uFm8/yCvlIncAfq7brWgnH/63W+hj1rvqg=";
 
-  # triggers a different set of tests that seems to be interactive and fail (no url target defined)
   ldflags = [
     "-s -w"
     "-X main.GitVersion=${version}"
   ];
+
+  # TestCreateHammerMultipartPayload error occurred - Get "https://upload.wikimedia.org/wikipedia/commons/b/bd/Test.svg"
+  doCheck = false;
 
   doInstallCheck = true;
   installCheckPhase = ''

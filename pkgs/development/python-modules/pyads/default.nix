@@ -8,14 +8,16 @@
 
 buildPythonPackage rec {
   pname = "pyads";
-  version = "3.3.8";
-  disabled = pythonOlder "3.6";
+  version = "3.3.9";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "stlehmann";
     repo = pname;
     rev = version;
-    sha256 = "sha256-jhEVBndUOKM8rBX0LEqPTMLqbpizCiD7T+OCzbVgLM8=";
+    sha256 = "sha256-eNouFJQDgp56fgkA7wZKfosKWOKU6OvXRjFwjCMvZqI=";
   };
 
   buildInputs = [
@@ -31,7 +33,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "pyads" ];
+  pythonImportsCheck = [
+    "pyads"
+  ];
 
   meta = with lib; {
     description = "Python wrapper for TwinCAT ADS library";

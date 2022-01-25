@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "nwg-wrapper";
-  version = "0.0.2";
+  version = "0.1.2";
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-LkAB0MrwQxP3X7glfSnI0GZMv8tjaeSOz7WSOW33wuo=";
+    sha256 = "114y55mv2rgnp75a3c7rk46v5v84d1zqb6wkha7x16ab6xa9phzl";
   };
 
   nativeBuildInputs = [ gobject-introspection wrapGAppsHook ];

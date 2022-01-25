@@ -15,7 +15,7 @@ let
     (optionalString rule.noLog "nolog")
     (optionalString rule.persist "persist")
     (optionalString rule.keepEnv "keepenv")
-    "setenv { SSH_AUTH_SOCK ${concatStringsSep " " rule.setEnv} }"
+    "setenv { SSH_AUTH_SOCK TERMINFO TERMINFO_DIRS ${concatStringsSep " " rule.setEnv} }"
   ];
 
   mkArgs = rule:

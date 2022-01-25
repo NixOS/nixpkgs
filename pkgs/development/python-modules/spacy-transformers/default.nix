@@ -12,14 +12,18 @@
 
 buildPythonPackage rec {
   pname = "spacy-transformers";
-  version = "1.1.1";
+  version = "1.1.3";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f66c4b08c3afe2c9f01bc4a377af3c62ea9c1aa7b67ff51f62b9be73d6609e49";
+    sha256 = "f4f553d3d2a065147a8c1292b5d9adf050c0f78dd15bb05c9614341cf88c5574";
   };
+
+  postPatch = ''
+    sed -i 's/transformers>=3.4.0,<4.12.0/transformers/' setup.cfg
+  '';
 
   propagatedBuildInputs = [
     pytorch

@@ -1,4 +1,4 @@
-{ config, lib, pkgs, utils, ... }:
+{ config, options, lib, pkgs, utils, ... }:
 with lib;
 let
   cfg = config.services.unifi;
@@ -9,25 +9,6 @@ let
         ${optionalString (cfg.maximumJavaHeapSize != null) "-Xmx${(toString cfg.maximumJavaHeapSize)}m"} \
         -jar ${stateDir}/lib/ace.jar
   '';
-  mountPoints = [
-    {
-      what = "${cfg.unifiPackage}/dl";
-      where = "${stateDir}/dl";
-    }
-    {
-      what = "${cfg.unifiPackage}/lib";
-      where = "${stateDir}/lib";
-    }
-    {
-      what = "${cfg.mongodbPackage}/bin";
-      where = "${stateDir}/bin";
-    }
-    {
-      what = "${cfg.dataDir}";
-      where = "${stateDir}/data";
-    }
-  ];
-  systemdMountPoints = map (m: "${utils.escapeSystemdPath m.where}.mount") mountPoints;
 in
 {
 
@@ -68,17 +49,7 @@ in
       '';
     };
 
-    services.unifi.dataDir = mkOption {
-      type = types.str;
-      default = "${stateDir}/data";
-      description = ''
-        Where to store the database and other data.
-
-        This directory will be bind-mounted to ${stateDir}/data as part of the service startup.
-      '';
-    };
-
-    services.unifi.openPorts = mkOption {
+    services.unifi.openFirewall = mkOption {
       type = types.bool;
       default = true;
       description = ''
@@ -114,6 +85,10 @@ in
 
   config = mkIf cfg.enable {
 
+    warnings = optional
+      (options.services.unifi.openFirewall.highestPrio >= (mkOptionDefault null).priority)
+      "The current services.unifi.openFirewall = true default is deprecated and will change to false in 22.11. Set it explicitly to silence this warning.";
+
     users.users.unifi = {
       isSystemUser = true;
       group = "unifi";
@@ -122,7 +97,7 @@ in
     };
     users.groups.unifi = {};
 
-    networking.firewall = mkIf cfg.openPorts {
+    networking.firewall = mkIf cfg.openFirewall {
       # https://help.ubnt.com/hc/en-us/articles/218506997
       allowedTCPPorts = [
         8080  # Port for UAP to inform controller.
@@ -136,32 +111,11 @@ in
       ];
     };
 
-    # We must create the binary directories as bind mounts instead of symlinks
-    # This is because the controller resolves all symlinks to absolute paths
-    # to be used as the working directory.
-    systemd.mounts = map ({ what, where }: {
-        bindsTo = [ "unifi.service" ];
-        partOf = [ "unifi.service" ];
-        unitConfig.RequiresMountsFor = stateDir;
-        options = "bind";
-        what = what;
-        where = where;
-      }) mountPoints;
-
-    systemd.tmpfiles.rules = [
-      "d '${stateDir}' 0700 unifi - - -"
-      "d '${stateDir}/data' 0700 unifi - - -"
-      "d '${stateDir}/webapps' 0700 unifi - - -"
-      "L+ '${stateDir}/webapps/ROOT' - - - - ${cfg.unifiPackage}/webapps/ROOT"
-    ];
-
     systemd.services.unifi = {
       description = "UniFi controller daemon";
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ] ++ systemdMountPoints;
-      partOf = systemdMountPoints;
-      bindsTo = systemdMountPoints;
-      unitConfig.RequiresMountsFor = stateDir;
+      after = [ "network.target" ];
+
       # This a HACK to fix missing dependencies of dynamic libs extracted from jars
       environment.LD_LIBRARY_PATH = with pkgs.stdenv; "${cc.cc.lib}/lib";
       # Make sure package upgrades trigger a service restart
@@ -209,8 +163,27 @@ in
         SystemCallErrorNumber = "EPERM";
         SystemCallFilter = [ "@system-service" ];
 
-        # Required for ProtectSystem=strict
-        BindPaths = [ stateDir ];
+        StateDirectory = "unifi";
+        RuntimeDirectory = "unifi";
+        LogsDirectory = "unifi";
+        CacheDirectory= "unifi";
+
+        TemporaryFileSystem = [
+          # required as we want to create bind mounts below
+          "${stateDir}/webapps:rw"
+        ];
+
+        # We must create the binary directories as bind mounts instead of symlinks
+        # This is because the controller resolves all symlinks to absolute paths
+        # to be used as the working directory.
+        BindPaths =  [
+          "/var/log/unifi:${stateDir}/logs"
+          "/run/unifi:${stateDir}/run"
+          "${cfg.unifiPackage}/dl:${stateDir}/dl"
+          "${cfg.unifiPackage}/lib:${stateDir}/lib"
+          "${cfg.mongodbPackage}/bin:${stateDir}/bin"
+          "${cfg.unifiPackage}/webapps/ROOT:${stateDir}/webapps/ROOT"
+        ];
 
         # Needs network access
         PrivateNetwork = false;
@@ -220,6 +193,10 @@ in
     };
 
   };
+  imports = [
+    (mkRemovedOptionModule [ "services" "unifi" "dataDir" ] "You should move contents of dataDir to /var/lib/unifi/data" )
+    (mkRenamedOptionModule [ "services" "unifi" "openPorts" ] [ "services" "unifi" "openFirewall" ])
+  ];
 
   meta.maintainers = with lib.maintainers; [ erictapen pennae ];
 }

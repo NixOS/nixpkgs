@@ -20,7 +20,7 @@ buildDunePackage rec {
   ];
 
   meta = with lib; {
-    homepage = "http://www-verimag.imag.fr/lustre-v6.html";
+    homepage = "https://www-verimag.imag.fr/lustre-v6.html";
     description = "Lustre V6 compiler";
     license = lib.licenses.cecill21;
     maintainers = [ lib.maintainers.delta ];

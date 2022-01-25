@@ -13,13 +13,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "beamerpresenter";
-  version = "0.2.0";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "stiglers-eponym";
     repo = "BeamerPresenter";
     rev = "v${version}";
-    sha256 = "10i5nc5b5syaqvsixam4lmfiz3b5cphbjfgfqavi5jilq769792a";
+    sha256 = "sha256-+ZxllYL2wco4bG2pqInIbL9qfOoqoUJJUReqDyEBRcI=";
   };
 
   nativeBuildInputs = [ qmake installShellFiles wrapQtAppsHook ];
@@ -35,10 +35,6 @@ stdenv.mkDerivation rec {
         --replace "/etc/" "$out/etc/" \
         --replace '$${GUI_CONFIG_PATH}' "$out/etc/xdg/beamerpresenter/gui.json"
     done
-  '';
-
-  postInstall = lib.optionalString stdenv.isDarwin ''
-    wrapQtApp "$out"/bin/beamerpresenter.app/Contents/MacOS/beamerpresenter
   '';
 
   meta = with lib; {

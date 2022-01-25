@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "asteval";
-  version = "0.9.25";
+  version = "0.9.26";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "newville";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Jy+4NifItCGI1Jj25VakwoJcrpZw0Ng4cArf2M31WGs=";
+    sha256 = "0l2iv51yclqn52w3yvyz3brpbca076ivv70h4gd6bkhwjbax1i2b";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

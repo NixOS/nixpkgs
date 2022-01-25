@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub, sqlite, xdg-utils}:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, Security, sqlite, xdg-utils}:
 
 rustPlatform.buildRustPackage rec {
   pname = "anup";
@@ -14,6 +14,8 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     sqlite
     xdg-utils
+  ] ++ lib.optionals stdenv.isDarwin [
+    Security
   ];
 
   cargoSha256 = "sha256-1TA2HDHKA3twFtlAWaC2zcRzS8TJwcbBt1OTQ3hC3qM=";

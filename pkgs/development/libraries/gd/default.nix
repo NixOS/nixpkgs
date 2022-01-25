@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchurl, fetchpatch
+{ lib, stdenv, fetchurl
+, fetchpatch
 , autoconf
 , automake
 , pkg-config
@@ -14,24 +15,29 @@
 
 stdenv.mkDerivation rec {
   pname = "gd";
-  version = "2.3.2";
+  version = "2.3.3";
 
   src = fetchurl {
     url = "https://github.com/libgd/libgd/releases/download/${pname}-${version}/libgd-${version}.tar.xz";
-    sha256 = "1yypywkh8vphcy4qqpf51kxpb0a3r7rjqk3fc61rpn70hiq092j7";
+    sha256 = "0qas3q9xz3wgw06dm2fj0i189rain6n60z1vyq50d5h7wbn25s1z";
   };
 
-  hardeningDisable = [ "format" ];
   patches = [
-    (fetchpatch {
-      name = "CVE-2021-40812.partial.patch";
-      url = "https://github.com/libgd/libgd/commit/6f5136821be86e7068fcdf651ae9420b5d42e9a9.patch";
-      sha256 = "11rvhd23bl05ksj8z39hwrhqqjm66svr4hl3y230wrc64rvnd2d2";
+    (fetchpatch { # included in > 2.3.3
+      name = "restore-GD_FLIP.patch";
+      url = "https://github.com/libgd/libgd/commit/f4bc1f5c26925548662946ed7cfa473c190a104a.diff";
+      sha256 = "XRXR3NOkbEub3Nybaco2duQk0n8vxif5mTl2AUacn9w=";
     })
   ];
 
-  # -pthread gets passed to clang, causing warnings
-  configureFlags = lib.optional stdenv.isDarwin "--enable-werror=no";
+  hardeningDisable = [ "format" ];
+
+  configureFlags =
+    [
+      "--enable-gd-formats"
+    ]
+    # -pthread gets passed to clang, causing warnings
+    ++ lib.optional stdenv.isDarwin "--enable-werror=no";
 
   nativeBuildInputs = [ autoconf automake pkg-config ];
 

@@ -5,11 +5,11 @@
 
 buildPythonApplication rec {
   pname = "pwncat";
-  version = "0.1.1";
+  version = "0.1.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "62e625e9061f037cfca7b7455a4f7db4213c1d1302e73d4c475c63f924f1805f";
+    sha256 = "1230fdn5mx3wwr3a3nn6z2vwh973n248m11hnx9y3fjq7bgpky67";
   };
 
   # Tests requires to start containers

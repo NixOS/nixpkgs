@@ -85,6 +85,14 @@ import ./make-test-python.nix (
       # ../../pkgs/tools/security/doas/0001-add-NixOS-specific-dirs-to-safe-PATH.patch
       with subtest("recursive calls to doas from subprocesses should succeed"):
           machine.succeed('doas -u test0 sh -c "doas -u test0 true"')
+
+      with subtest("test0 should inherit TERMINFO_DIRS from the user environment"):
+          dirs = machine.succeed(
+               "su - test0 -c 'doas -u root $SHELL -c \"echo \$TERMINFO_DIRS\"'"
+          )
+
+          if not "test0" in dirs:
+             raise Exception(f"user profile TERMINFO_DIRS is not preserved: {dirs}")
     '';
   }
 )

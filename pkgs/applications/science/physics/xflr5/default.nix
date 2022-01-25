@@ -13,7 +13,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "An analysis tool for airfoils, wings and planes";
-    homepage = https://sourceforge.net/projects/xflr5/;
+    homepage = "https://sourceforge.net/projects/xflr5/";
     license = licenses.gpl3;
     maintainers = [ maintainers.esclear ];
     platforms = platforms.linux;

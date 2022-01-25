@@ -1,14 +1,14 @@
 { lib, buildPythonPackage, fetchPypi, aiohttp, pythonOlder
-, sqlalchemy, ruamel_yaml, CommonMark, lxml
+, sqlalchemy, ruamel-yaml, CommonMark, lxml, aiosqlite
 }:
 
 buildPythonPackage rec {
   pname = "mautrix";
-  version = "0.10.10";
+  version = "0.14.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "78309702392fe1ced000a23cfacb9bae0511ba533963b82d1d040f4a39924c09";
+    sha256 = "sha256-dh3uQUBEMqtlrOpnO5Aa7GC5gajwQ12rWyVPwX6xIsQ=";
   };
 
   propagatedBuildInputs = [
@@ -16,7 +16,8 @@ buildPythonPackage rec {
 
     # defined in optional-requirements.txt
     sqlalchemy
-    ruamel_yaml
+    aiosqlite
+    ruamel-yaml
     CommonMark
     lxml
   ];

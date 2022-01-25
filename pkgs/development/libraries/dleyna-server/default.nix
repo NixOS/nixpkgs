@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dleyna-server";
-  version = "0.7.1";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "phako";
     repo = pname;
     rev = "v${version}";
-    sha256 = "bScgwJGPrCaLrw67WnvSpINgq5Vv9LJ/I0MUP9BeO2E=";
+    sha256 = "sha256-jlF9Lr/NG+Fsy/bB7aLb7xOLqel8GueJK5luo9rsDME=";
   };
 
   nativeBuildInputs = [

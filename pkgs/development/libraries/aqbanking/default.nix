@@ -29,7 +29,7 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "An interface to banking tasks, file formats and country information";
-    homepage = "https://www.aquamaniac.de/";
+    homepage = "https://www.aquamaniac.de/rdm/";
     hydraPlatforms = [];
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ goibhniu ];

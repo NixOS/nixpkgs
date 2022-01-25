@@ -18,13 +18,13 @@
 
 mkDerivation rec {
   pname = "chiaki";
-  version = "2.1.0";
+  version = "2.1.1";
 
   src = fetchgit {
     url = "https://git.sr.ht/~thestr4ng3r/chiaki";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "1hgh2j71rch53cnpm3f195gpfgrb4hd0yqa810k3ikar8zl4h7sd";
+    sha256 = "sha256-VkCA8KS4EHuVSgoYt1YDT38hA1NEBckiBwRcgDZUSs4=";
   };
 
   nativeBuildInputs = [

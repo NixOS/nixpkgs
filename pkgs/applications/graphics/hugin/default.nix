@@ -1,14 +1,46 @@
-{ lib, stdenv, cmake, fetchurl, gnumake, makeWrapper, pkg-config, fetchpatch
-, autopanosiftc, boost, cairo, enblend-enfuse, exiv2, fftw, flann, gettext
-, glew, ilmbase, lcms2, lensfun, libjpeg, libpng, libtiff, libX11, libXi
-, libXmu, libGLU, libGL, openexr, panotools, perlPackages, sqlite, vigra, wxGTK, zlib
+{ lib
+, stdenv
+, cmake
+, fetchurl
+, gnumake
+, makeWrapper
+, pkg-config
+, fetchpatch
+, autopanosiftc
+, boost
+, cairo
+, enblend-enfuse
+, exiv2
+, fftw
+, flann
+, gettext
+, glew
+, ilmbase
+, lcms2
+, lensfun
+, libjpeg
+, libpng
+, libtiff
+, libX11
+, libXi
+, libXmu
+, libGLU
+, libGL
+, openexr
+, panotools
+, perlPackages
+, sqlite
+, vigra
+, wxGTK
+, zlib
 }:
 
 stdenv.mkDerivation rec {
-  name = "hugin-2019.0.0";
+  pname = "hugin";
+  version = "2019.0.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/hugin/${name}.tar.bz2";
+    url = "mirror://sourceforge/hugin/hugin-${version}.tar.bz2";
     sha256 = "1l925qslp98gg7yzmgps10h6dq0nb60wbfk345anlxsv0g2ifizr";
   };
 
@@ -21,9 +53,30 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    boost cairo exiv2 fftw flann gettext glew ilmbase lcms2 lensfun libjpeg
-    libpng libtiff libX11 libXi libXmu libGLU libGL openexr panotools sqlite vigra
-    wxGTK zlib
+    boost
+    cairo
+    exiv2
+    fftw
+    flann
+    gettext
+    glew
+    ilmbase
+    lcms2
+    lensfun
+    libjpeg
+    libpng
+    libtiff
+    libX11
+    libXi
+    libXmu
+    libGLU
+    libGL
+    openexr
+    panotools
+    sqlite
+    vigra
+    wxGTK
+    zlib
   ];
 
   nativeBuildInputs = [ cmake makeWrapper pkg-config ];

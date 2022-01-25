@@ -19,16 +19,16 @@ let
     maintainers = with maintainers; [ fliegendewurst ];
   };
 
-  version = "0.47.8";
+  version = "0.49.5";
 
   desktopSource = {
     url = "https://github.com/zadam/trilium/releases/download/v${version}/trilium-linux-x64-${version}.tar.xz";
-    sha256 = "1vnwjiv4bidw5xspcd7d7fn8dbhvgia9ws363fs5zs48c9k2hwwz";
+    sha256 = "0bis0xkpcr8rvhm9364v0np5cnvkscv2fgl90f455lcwy7kk9m12";
   };
 
   serverSource = {
     url = "https://github.com/zadam/trilium/releases/download/v${version}/trilium-linux-x64-server-${version}.tar.xz";
-    sha256 = "1clgw0i3vbl8lrsjdjbn71yhim6356gm8h24831mnksb4sawhh7f";
+    sha256 = "1wv9xz1asjadz1jzgpaxf6lzbj5azgsq0qpawp3y257h488r1z9k";
   };
 
 in {
@@ -39,15 +39,6 @@ in {
     inherit meta;
 
     src = fetchurl desktopSource;
-
-    # Fetch from source repo, no longer included in release.
-    # (they did special-case icon.png but we want the scalable svg)
-    # Use the version here to ensure we get any changes.
-    trilium_svg = fetchurl {
-      url = "https://raw.githubusercontent.com/zadam/trilium/v${version}/images/trilium.svg";
-      sha256 = "1rgj7pza20yndfp8n12k93jyprym02hqah36fkk2b3if3kcmwnfg";
-    };
-
 
     nativeBuildInputs = [
       autoPatchelfHook
@@ -61,12 +52,12 @@ in {
       runHook preInstall
       mkdir -p $out/bin
       mkdir -p $out/share/trilium
-      mkdir -p $out/share/{applications,icons/hicolor/scalable/apps}
+      mkdir -p $out/share/{applications,icons/hicolor/128x128/apps}
 
       cp -r ./* $out/share/trilium
       ln -s $out/share/trilium/trilium $out/bin/trilium
 
-      ln -s ${trilium_svg} $out/share/icons/hicolor/scalable/apps/trilium.svg
+      ln -s $out/share/trilium/icon.png $out/share/icons/hicolor/128x128/apps/trilium.png
       cp ${desktopItem}/share/applications/* $out/share/applications
       runHook postInstall
     '';

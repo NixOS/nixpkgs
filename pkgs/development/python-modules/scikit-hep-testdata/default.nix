@@ -5,13 +5,12 @@
 , importlib-resources
 , pyyaml
 , requests
-, pytestCheckHook
 , setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "scikit-hep-testdata";
-  version = "0.4.9";
+  version = "0.4.11";
   format = "pyproject";
 
   # fetch from github as we want the data files
@@ -20,7 +19,7 @@ buildPythonPackage rec {
     owner = "scikit-hep";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0y70nx94y2qf0zmaqjq4ljld31jh277ica0j4c3ck2ph7jrs5pg0";
+    sha256 = "18r5nk8d5y79ihzjkjm5l0hiw2sjgj87px7vwb0bxbs73f5v353b";
   };
 
   nativeBuildInputs = [

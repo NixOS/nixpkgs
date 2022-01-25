@@ -47,6 +47,7 @@ stdenv.mkDerivation rec {
     "--with-gsasl"
     "--with-mysql"
     "--with-path-sendmail=${system-sendmail}/bin/sendmail"
+    "--with-mail-rc=/etc/mail.rc"
   ];
 
   readmsg-tests = let

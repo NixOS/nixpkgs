@@ -1,7 +1,8 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
-, pantheon
 , pkg-config
 , meson
 , python3
@@ -14,14 +15,11 @@
 , granite
 , libgee
 , bamf
-, libcanberra
 , libcanberra-gtk3
 , gnome-desktop
 , mutter
 , clutter
-, elementary-dock
 , elementary-icon-theme
-, elementary-settings-daemon
 , gnome-settings-daemon
 , wrapGAppsHook
 , gexiv2
@@ -29,20 +27,30 @@
 
 stdenv.mkDerivation rec {
   pname = "gala";
-  version = "6.2.1";
+  version = "6.3.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "1phnhj731kvk8ykmm33ypcxk8fkfny9k6kdapl582qh4d47wcy6f";
+    sha256 = "sha256-f/WDm9/+lXgplg9tGpct4f+1cOhKgdypwiDRBhewRGw=";
   };
 
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
-  };
+  patches = [
+    ./plugins-dir.patch
+    # Session crashes when switching windows with Alt+Tab
+    # https://github.com/elementary/gala/issues/1312
+    (fetchpatch {
+      url = "https://github.com/elementary/gala/commit/cc83db8fe398feae9f3e4caa8352b65f0c8c96d4.patch";
+      sha256 = "sha256-CPO3EHIzqHAV6ZLHngivCdsD8je8CK/NHznfxSEkhzc=";
+    })
+    # WindowSwitcher: Clear indicator background
+    # https://github.com/elementary/gala/pull/1318
+    (fetchpatch {
+      url = "https://github.com/elementary/gala/commit/cce53acffecba795b6cc48916d4621a47996d2c9.patch";
+      sha256 = "sha256-5aTZE6poo4sQMTLfk9Nhw4G4BW8i9dvpWktizRIS58Q=";
+    })
+  ];
 
   nativeBuildInputs = [
     desktop-file-utils
@@ -59,22 +67,21 @@ stdenv.mkDerivation rec {
   buildInputs = [
     bamf
     clutter
-    elementary-dock
     elementary-icon-theme
-    elementary-settings-daemon
     gnome-settings-daemon
     gexiv2
     gnome-desktop
     granite
     gtk3
-    libcanberra
     libcanberra-gtk3
     libgee
     mutter
   ];
 
-  patches = [
-    ./plugins-dir.patch
+  mesonFlags = [
+    # TODO: enable this and remove --builtin flag from session-settings
+    # https://github.com/NixOS/nixpkgs/pull/140429
+    "-Dsystemd=false"
   ];
 
   postPatch = ''
@@ -82,11 +89,18 @@ stdenv.mkDerivation rec {
     patchShebangs build-aux/meson/post_install.py
   '';
 
-  meta =  with lib; {
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
+
+  meta = with lib; {
     description = "A window & compositing manager based on mutter and designed by elementary for use with Pantheon";
     homepage = "https://github.com/elementary/gala";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = teams.pantheon.members;
+    mainProgram = "gala";
   };
 }

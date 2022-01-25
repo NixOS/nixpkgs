@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pn";
-  version = "unstable-2021-01-28";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "Orange-OpenSource";
     repo = pname;
-    rev = "41e1215397129ed0d42b5f137fb35b5e0648edda";
-    sha256 = "1g8r7y230k01ghraa55g1bhz3fiz6bjdgcsddy2dfa5ih8c4s3jm";
+    rev = "v${version}";
+    sha256 = "sha256-vRF9MPcw/hCreHVLD6QB7g1r0wQiZv1xrfzIHj1Yf9M=";
   };
 
   nativeBuildInputs = [ cmake ];

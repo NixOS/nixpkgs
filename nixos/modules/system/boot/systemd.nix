@@ -1,9 +1,9 @@
 { config, lib, pkgs, utils, ... }:
 
 with utils;
+with systemdUtils.unitOptions;
+with systemdUtils.lib;
 with lib;
-with import ./systemd-unit-options.nix { inherit config lib; };
-with import ./systemd-lib.nix { inherit config lib pkgs; };
 
 let
 
@@ -42,7 +42,7 @@ let
       "systemd-udevd-kernel.socket"
       "systemd-udevd.service"
       "systemd-udev-settle.service"
-      "systemd-udev-trigger.service"
+      ] ++ (optional (!config.boot.isContainer) "systemd-udev-trigger.service") ++ [
       # hwdb.bin is managed by NixOS
       # "systemd-hwdb-update.service"
 
@@ -67,6 +67,7 @@ let
       "systemd-user-sessions.service"
       "dbus-org.freedesktop.import1.service"
       "dbus-org.freedesktop.machine1.service"
+      "dbus-org.freedesktop.login1.service"
       "user@.service"
       "user-runtime-dir@.service"
 
@@ -209,20 +210,14 @@ let
   makeJobScript = name: text:
     let
       scriptName = replaceChars [ "\\" "@" ] [ "-" "_" ] (shellEscape name);
-      out = pkgs.writeTextFile {
+      out = (pkgs.writeShellScriptBin scriptName ''
+        set -e
+        ${text}
+      '').overrideAttrs (_: {
         # The derivation name is different from the script file name
         # to keep the script file name short to avoid cluttering logs.
         name = "unit-script-${scriptName}";
-        executable = true;
-        destination = "/bin/${scriptName}";
-        text = ''
-          #!${pkgs.runtimeShell} -e
-          ${text}
-        '';
-        checkPhase = ''
-          ${pkgs.stdenv.shell} -n "$out/bin/${scriptName}"
-        '';
-      };
+      });
     in "${out}/bin/${scriptName}";
 
   unitConfig = { config, options, ... }: {

@@ -1,10 +1,10 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , nix-update-script
 , desktop-file-utils
 , pkg-config
 , writeScript
-, pantheon
 , gnome-keyring
 , gnome-session
 , wingpanel

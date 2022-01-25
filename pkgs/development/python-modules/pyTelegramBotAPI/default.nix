@@ -1,15 +1,15 @@
-{ lib, buildPythonPackage, fetchPypi, requests }:
+{ lib, buildPythonPackage, fetchPypi, aiohttp, requests }:
 
 buildPythonPackage rec {
   pname = "pyTelegramBotAPI";
-  version = "4.1.1";
+  version = "4.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cc8011ca05301653f2e5c2d02eadff0e882b611841a76f9e5b911994899df49e";
+    sha256 = "a0405d1c6c60e6603594e9319c28d31b97abe49afe9af21d230f5072a1d38976";
   };
 
-  propagatedBuildInputs = [ requests ];
+  propagatedBuildInputs = [ aiohttp requests ];
 
   meta = with lib; {
     homepage = "https://github.com/eternnoir/pyTelegramBotAPI";

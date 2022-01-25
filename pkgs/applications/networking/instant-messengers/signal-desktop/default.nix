@@ -21,9 +21,10 @@ let
     in lib.optionalString (spellcheckerLanguage != null) ''
       --set HUNSPELL_DICTIONARIES "${hunspellDicts.${hunspellDict}}/share/hunspell" \
       --set LC_MESSAGES "${spellcheckerLanguage}"'');
+
 in stdenv.mkDerivation rec {
   pname = "signal-desktop";
-  version = "5.20.0"; # Please backport all updates to the stable channel.
+  version = "5.27.1"; # Please backport all updates to the stable channel.
   # All releases have a limited lifetime and "expire" 90 days after the release.
   # When releases "expire" the application becomes unusable until an update is
   # applied. The expiration date for the current release can be extracted with:
@@ -33,7 +34,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://updates.signal.org/desktop/apt/pool/main/s/signal-desktop/signal-desktop_${version}_amd64.deb";
-    sha256 = "0a57gajxjqkp7zcmjc3iiys06b7v53nd81gkwrsfn2gmshihlzkd";
+    sha256 = "0z0v7q0rpxdx7ic78jv7wp1hq8nrfp51jjdr6d85x0hsfdj0z1mc";
   };
 
   nativeBuildInputs = [
@@ -112,18 +113,15 @@ in stdenv.mkDerivation rec {
     mkdir -p $out/bin
     ln -s $out/lib/Signal/signal-desktop $out/bin/signal-desktop
 
+    # Create required symlinks:
+    ln -s libGLESv2.so $out/lib/Signal/libGLESv2.so.2
+
     runHook postInstall
   '';
 
-  # Required for $SQLCIPHER_LIB which contains "/build/" inside the path:
-  noAuditTmpdir = true;
-
   preFixup = ''
-    export SQLCIPHER_LIB="$out/lib/Signal/resources/app.asar.unpacked/node_modules/better-sqlite3/build/Release/better_sqlite3.node"
-    test -x "$SQLCIPHER_LIB" # To ensure the location hasn't changed
     gappsWrapperArgs+=(
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc ] }"
-      --prefix LD_PRELOAD : "$SQLCIPHER_LIB"
       ${customLanguageWrapperArgs}
     )
 

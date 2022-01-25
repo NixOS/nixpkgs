@@ -37,6 +37,6 @@ buildGoModule rec {
     homepage = "https://github.com/lawl/NoiseTorch";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ panaeon legendofmiracles ];
+    maintainers = with maintainers; [ panaeon lom ];
   };
 }

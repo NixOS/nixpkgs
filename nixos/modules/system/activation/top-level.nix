@@ -1,4 +1,4 @@
-{ config, lib, pkgs, modules, baseModules, specialArgs, ... }:
+{ config, lib, pkgs, extendModules, noUserModules, ... }:
 
 with lib;
 
@@ -11,16 +11,10 @@ let
   # you can provide an easy way to boot the same configuration
   # as you use, but with another kernel
   # !!! fix this
-  children = mapAttrs (childName: childConfig:
-      (import ../../../lib/eval-config.nix {
-        inherit lib baseModules specialArgs;
-        system = config.nixpkgs.initialSystem;
-        modules =
-           (optionals childConfig.inheritParentConfig modules)
-        ++ [ ./no-clone.nix ]
-        ++ [ childConfig.configuration ];
-      }).config.system.build.toplevel
-    ) config.specialisation;
+  children =
+    mapAttrs
+      (childName: childConfig: childConfig.configuration.system.build.toplevel)
+      config.specialisation;
 
   systemBuilder =
     let
@@ -61,8 +55,8 @@ let
       substituteInPlace $out/dry-activate --subst-var out
       chmod u+x $out/activate $out/dry-activate
       unset activationScript dryActivationScript
-      ${pkgs.stdenv.shell} -n $out/activate
-      ${pkgs.stdenv.shell} -n $out/dry-activate
+      ${pkgs.stdenv.shellDryRun} $out/activate
+      ${pkgs.stdenv.shellDryRun} $out/dry-activate
 
       cp ${config.system.build.bootStage2} $out/init
       substituteInPlace $out/init --subst-var-by systemConfig $out
@@ -115,9 +109,7 @@ let
     utillinux = pkgs.util-linux;
 
     kernelParams = config.boot.kernelParams;
-    installBootLoader =
-      config.system.build.installBootLoader
-      or "echo 'Warning: do not know how to make this configuration bootable; please enable a boot loader.' 1>&2; true";
+    installBootLoader = config.system.build.installBootLoader;
     activationScript = config.system.activationScripts.script;
     dryActivationScript = config.system.dryActivationScript;
     nixosLabel = config.system.nixos.label;
@@ -141,24 +133,26 @@ let
       pkgs.replaceDependency { inherit oldDependency newDependency drv; }
     ) baseSystemAssertWarn config.system.replaceRuntimeDependencies;
 
+  /* Workaround until https://github.com/NixOS/nixpkgs/pull/156533
+     Call can be replaced by argument when that's merged.
+  */
+  tmpFixupSubmoduleBoundary = subopts:
+    lib.mkOption {
+      type = lib.types.submoduleWith {
+        modules = [ { options = subopts; } ];
+      };
+    };
+
 in
 
 {
   imports = [
+    ../build.nix
     (mkRemovedOptionModule [ "nesting" "clone" ] "Use `specialisation.«name» = { inheritParentConfig = true; configuration = { ... }; }` instead.")
     (mkRemovedOptionModule [ "nesting" "children" ] "Use `specialisation.«name».configuration = { ... }` instead.")
   ];
 
   options = {
-
-    system.build = mkOption {
-      internal = true;
-      default = {};
-      type = types.attrs;
-      description = ''
-        Attribute set of derivations used to setup the system.
-      '';
-    };
 
     specialisation = mkOption {
       default = {};
@@ -176,7 +170,11 @@ in
         </screen>
       '';
       type = types.attrsOf (types.submodule (
-        { ... }: {
+        local@{ ... }: let
+          extend = if local.config.inheritParentConfig
+            then extendModules
+            else noUserModules.extendModules;
+        in {
           options.inheritParentConfig = mkOption {
             type = types.bool;
             default = true;
@@ -185,7 +183,15 @@ in
 
           options.configuration = mkOption {
             default = {};
-            description = "Arbitrary NixOS configuration options.";
+            description = ''
+              Arbitrary NixOS configuration.
+
+              Anything you can add to a normal NixOS configuration, you can add
+              here, including imports and config values, although nested
+              specialisations will be ignored.
+            '';
+            visible = "shallow";
+            inherit (extend { modules = [ ./no-clone.nix ]; }) type;
           };
         })
       );
@@ -202,6 +208,7 @@ in
     system.boot.loader.kernelFile = mkOption {
       internal = true;
       default = pkgs.stdenv.hostPlatform.linux-kernel.target;
+      defaultText = literalExpression "pkgs.stdenv.hostPlatform.linux-kernel.target";
       type = types.str;
       description = ''
         Name of the kernel file to be passed to the bootloader.
@@ -216,6 +223,39 @@ in
         Name of the initrd file to be passed to the bootloader.
       '';
     };
+
+    system.build = tmpFixupSubmoduleBoundary {
+      installBootLoader = mkOption {
+        internal = true;
+        # "; true" => make the `$out` argument from switch-to-configuration.pl
+        #             go to `true` instead of `echo`, hiding the useless path
+        #             from the log.
+        default = "echo 'Warning: do not know how to make this configuration bootable; please enable a boot loader.' 1>&2; true";
+        description = ''
+          A program that writes a bootloader installation script to the path passed in the first command line argument.
+
+          See <literal>nixos/modules/system/activation/switch-to-configuration.pl</literal>.
+        '';
+        type = types.unique {
+          message = ''
+            Only one bootloader can be enabled at a time. This requirement has not
+            been checked until NixOS 22.05. Earlier versions defaulted to the last
+            definition. Change your configuration to enable only one bootloader.
+          '';
+        } (types.either types.str types.package);
+      };
+
+      toplevel = mkOption {
+        type = types.package;
+        readOnly = true;
+        description = ''
+          This option contains the store path that typically represents a NixOS system.
+
+          You can read this path in a custom deployment tool for example.
+        '';
+      };
+    };
+
 
     system.copySystemConfiguration = mkOption {
       type = types.bool;
@@ -310,4 +350,6 @@ in
 
   };
 
+  # uses extendModules to generate a type
+  meta.buildDocsInSandbox = false;
 }

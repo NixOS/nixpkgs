@@ -2,19 +2,15 @@
 
 stdenv.mkDerivation rec {
   pname = "epson-inkjet-printer-escpr2";
-  version = "1.1.38";
+  version = "1.1.45";
 
   src = fetchurl {
     # To find new versions, visit
     # http://download.ebz.epson.net/dsc/search/01/search/?OSC=LX and search for
     # some printer like for instance "WF-7210" to get to the most recent
     # version.
-    # NOTE: Don't forget to update the webarchive link too!
-    urls = [
-      "https://download3.ebz.epson.net/dsc/f/03/00/12/91/84/6902a4d11864b195ddda45f6de968d8ec1ee9e3b/epson-inkjet-printer-escpr2-1.1.38-1lsb3.2.src.rpm"
-      "https://web.archive.org/web/20210731163511/https://download3.ebz.epson.net/dsc/f/03/00/12/91/84/6902a4d11864b195ddda45f6de968d8ec1ee9e3b/epson-inkjet-printer-escpr2-1.1.38-1lsb3.2.src.rpm"
-    ];
-    sha256 = "sha256-rQtmWREZKtu5MuqEn91/1+SfGol4f8jKzd1mQ0e3h1c=";
+    url = "https://download3.ebz.epson.net/dsc/f/03/00/13/38/11/01e244e8529c5cbcec8d39220a9512d5e6c08eec/epson-inkjet-printer-escpr2-1.1.45-1lsb3.2.src.rpm";
+    sha256 = "sha256-MZXn1fsD3D6W5vlX+NwRkwLtaBRqQwe9lwnJC2L9Lfk=";
   };
 
   unpackPhase = ''

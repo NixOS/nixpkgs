@@ -1,12 +1,14 @@
-{ stdenv, lib, fetchurl, cmake, extra-cmake-modules, threadweaver, ktexteditor, kdevelop-unwrapped, python }:
+{ stdenv, lib, fetchFromGitHub, cmake, extra-cmake-modules, threadweaver, ktexteditor, kdevelop-unwrapped, python }:
 
 stdenv.mkDerivation rec {
   pname = "kdev-python";
   version = "5.6.2";
 
-  src = fetchurl {
-    url = "https://github.com/KDE/${pname}/archive/v${version}.tar.gz";
-    sha256 = "sha256-Iw3puQ3ZS0eNfBvaZ4cxsP49IRqIMX3R+r3OPG771RI=";
+  src = fetchFromGitHub {
+    owner = "KDE";
+    repo = "kdev-python";
+    rev = "v${version}";
+    sha256 = "sha256-xYElqpJjRtBRIyZGf6JaCvurQ+QrGrdLHxtuANYfCds=";
   };
 
   cmakeFlags = [

@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , attrs
 , beautifulsoup4
 , buildPythonPackage
@@ -7,6 +8,7 @@
 , intbitset
 , pytest-xdist
 , pytestCheckHook
+, pythonAtLeast
 , pythonOlder
 , requests
 , saneyaml
@@ -18,6 +20,7 @@
 buildPythonPackage rec {
   pname = "commoncode";
   version = "30.0.0";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
@@ -47,6 +50,17 @@ buildPythonPackage rec {
   checkInputs = [
     pytestCheckHook
     pytest-xdist
+  ];
+
+  disabledTests = lib.optionals stdenv.isDarwin [
+    # expected result is tailored towards the quirks of upstream's
+    # CI environment on darwin
+    "test_searchable_paths"
+  ];
+
+  disabledTestPaths = lib.optionals (pythonAtLeast "3.10") [
+    # https://github.com/nexB/commoncode/issues/36
+    "src/commoncode/fetch.py"
   ];
 
   pythonImportsCheck = [

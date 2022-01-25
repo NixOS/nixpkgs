@@ -100,15 +100,31 @@ let
 
     enableParallelBuilding = !crossCompiling;
 
+    # perl includes the build date, the uname of the build system and the
+    # username of the build user in some files.
+    # We override these to make it build deterministically.
+    # other distro solutions
+    # https://github.com/bmwiedemann/openSUSE/blob/master/packages/p/perl/perl-reproducible.patch
+    # https://github.com/archlinux/svntogit-packages/blob/packages/perl/trunk/config.over
+    # https://salsa.debian.org/perl-team/interpreter/perl/blob/debian-5.26/debian/config.over
+    # A ticket has been opened upstream to possibly clean some of this up: https://rt.perl.org/Public/Bug/Display.html?id=133452
     preConfigure = ''
-        substituteInPlace ./Configure --replace '`LC_ALL=C; LANGUAGE=C; export LC_ALL; export LANGUAGE; $date 2>&1`' 'Thu Jan  1 00:00:01 UTC 1970'
-        substituteInPlace ./Configure --replace '$uname -a' '$uname --kernel-name --machine --operating-system'
+        cat > config.over <<EOF
+        ${lib.optionalString (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu) ''osvers="gnulinux"''}
+        myuname="nixpkgs"
+        myhostname="nixpkgs"
+        cf_by="nixpkgs"
+        cf_time="$(date -d "@$SOURCE_DATE_EPOCH")"
+        EOF
       '' + optionalString stdenv.isDarwin ''
         substituteInPlace hints/darwin.sh --replace "env MACOSX_DEPLOYMENT_TARGET=10.3" ""
       '' + optionalString (!enableThreading) ''
         # We need to do this because the bootstrap doesn't have a static libpthread
         sed -i 's,\(libswanted.*\)pthread,\1,g' Configure
       '';
+
+    # Default perl does not support --host= & co.
+    configurePlatforms = [];
 
     setupHook = ./setup-hook.sh;
 

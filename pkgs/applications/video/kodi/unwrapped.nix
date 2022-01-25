@@ -10,13 +10,13 @@
 , libjpeg, libpng, libtiff
 , libmpeg2, libsamplerate, libmad
 , libogg, libvorbis, flac, libxslt
-, lzo, libcdio, libmodplug, libass, libbluray
+, lzo, libcdio, libmodplug, libass, libbluray, libudfread
 , sqlite, libmysqlclient, nasm, gnutls, libva, libdrm
 , curl, bzip2, zip, unzip, glxinfo
 , libcec, libcec_platform, dcadec, libuuid
 , libcrossguid, libmicrohttpd
 , bluez, doxygen, giflib, glib, harfbuzz, lcms2, libidn, libpthreadstubs, libtasn1
-, libplist, p11-kit, zlib, flatbuffers, fmt, fstrcmp, rapidjson
+, libplist, p11-kit, zlib, flatbuffers, fstrcmp, rapidjson
 , lirc
 , x11Support ? true, libX11, xorgproto, libXt, libXmu, libXext, libXinerama, libXrandr, libXtst, libXfixes, xdpyinfo, libXdmcp
 , dbusSupport ? true, dbus
@@ -38,15 +38,15 @@ assert usbSupport -> !udevSupport; # libusb-compat-0_1 won't be used if udev is 
 assert gbmSupport || waylandSupport || x11Support;
 
 let
-  kodiReleaseDate = "20211006";
-  kodiVersion = "19.2";
+  kodiReleaseDate = "20211024";
+  kodiVersion = "19.3";
   rel = "Matrix";
 
   kodi_src = fetchFromGitHub {
     owner  = "xbmc";
     repo   = "xbmc";
     rev    = "${kodiVersion}-${rel}";
-    sha256 = "sha256-w5m7xlnjQDJ4l75b3ctF0wMZ4kqi+H0X6WFLs0gV6lM=";
+    sha256 = "02bnknk87zzv9j6b6k9c0xx47q2gh399j6v25rm94g7rhzf8phbw";
   };
 
   ffmpeg = stdenv.mkDerivation rec {
@@ -118,14 +118,14 @@ in stdenv.mkDerivation {
       libjpeg libpng libtiff
       libmpeg2 libsamplerate libmad
       libogg libvorbis flac libxslt systemd
-      lzo libcdio libmodplug libass libbluray
+      lzo libcdio libmodplug libass libbluray libudfread
       sqlite libmysqlclient avahi lame
       curl bzip2 zip unzip glxinfo
       libcec libcec_platform dcadec libuuid
       libgcrypt libgpg-error libunistring
       libcrossguid libplist
       bluez giflib glib harfbuzz lcms2 libpthreadstubs
-      ffmpeg flatbuffers fmt fstrcmp rapidjson
+      ffmpeg flatbuffers fstrcmp rapidjson
       lirc
       mesa # for libEGL
     ]
@@ -198,10 +198,10 @@ in stdenv.mkDerivation {
     '' + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
       # Need these tools on the build system when cross compiling,
       # hacky, but have found no other way.
-      CXX=${stdenv.cc.targetPrefix}c++ LD=ld make -C tools/depends/native/JsonSchemaBuilder
+      CXX=$CXX_FOR_BUILD LD=ld make -C tools/depends/native/JsonSchemaBuilder
       cmakeFlags+=" -DWITH_JSONSCHEMABUILDER=$PWD/tools/depends/native/JsonSchemaBuilder/bin"
 
-      CXX=${stdenv.cc.targetPrefix}c++ LD=ld make EXTRA_CONFIGURE= -C tools/depends/native/TexturePacker
+      CXX=$CXX_FOR_BUILD LD=ld make EXTRA_CONFIGURE= -C tools/depends/native/TexturePacker
       cmakeFlags+=" -DWITH_TEXTUREPACKER=$PWD/tools/depends/native/TexturePacker/bin"
     '';
 

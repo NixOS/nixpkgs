@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libxsmm";
-  version = "1.16.2";
+  version = "1.16.3";
 
   src = fetchFromGitHub {
     owner = "hfp";
     repo = "libxsmm";
     rev = version;
-    sha256 = "sha256-gmv5XHBRztcF7+ZKskQMloytJ53k0eJg0HJmUhndq70=";
+    sha256 = "sha256-PpMiD/PeQ0pe5hqFG6VFHWpR8y3wnO2z1dJfHHeItlQ=";
   };
 
   nativeBuildInputs = [

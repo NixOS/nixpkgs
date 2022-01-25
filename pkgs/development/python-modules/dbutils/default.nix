@@ -5,13 +5,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "2.0.2";
+  version = "3.0.1";
   pname = "dbutils";
 
   src = fetchPypi {
     inherit version;
     pname = "DBUtils";
-    sha256 = "1cc8zyd4lapzf9ny6c2jf1vysphlhr19m8miyvw5spbyq4pxpnsf";
+    sha256 = "6ec83f4d75d7a7b42a92e86b775f251e2671639b3b2123fe13a5d8d8fe7c5643";
   };
 
   checkInputs = [ pytestCheckHook ];

@@ -76,8 +76,10 @@ let
 
   trivialBuilders = self: super:
     import ../build-support/trivial-builders.nix {
-      inherit lib; inherit (self) stdenv stdenvNoCC; inherit (self.pkgsBuildHost.xorg) lndir;
-      inherit (self) runtimeShell;
+      inherit lib;
+      inherit (self) runtimeShell stdenv stdenvNoCC;
+      inherit (self.pkgsBuildHost) shellcheck;
+      inherit (self.pkgsBuildHost.xorg) lndir;
     };
 
   stdenvBootstappingAndPlatforms = self: super: let
@@ -116,7 +118,6 @@ let
     inherit (super.stdenv) buildPlatform hostPlatform targetPlatform;
   in {
     inherit buildPlatform hostPlatform targetPlatform;
-    inherit (hostPlatform) system;
   };
 
   splice = self: super: import ./splice.nix lib self (adjacentPackages != null);

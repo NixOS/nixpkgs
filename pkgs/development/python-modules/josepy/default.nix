@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "josepy";
-  version = "1.9.0";
+  version = "1.11.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "51cce8d97ced0556aae0ce3161b26d5f0f54bc42c749d3c606edc6d97d9802dc";
+    sha256 = "40ef59f2f537ec01bafe698dad66281f6ccf4642f747411647db403ab8fa9a2d";
   };
 
   postPatch = ''

@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , pytestCheckHook
 , python-snappy
-, pythonOlder
 , thriftpy2
 }:
 

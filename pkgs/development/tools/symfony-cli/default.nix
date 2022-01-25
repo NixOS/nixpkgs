@@ -1,29 +1,24 @@
-{ stdenvNoCC, fetchurl, lib }:
+{ buildGoModule, fetchFromGitHub, lib }:
 
-stdenvNoCC.mkDerivation rec {
+buildGoModule rec {
   pname = "symfony-cli";
-  version = "4.26.3";
+  version = "5.2.1";
+  vendorSha256 = "sha256-vnevuJoDiAx/Z6uKO/SX3UV3j/jsXXNlnui6Nzm+tBA=";
 
-  src = fetchurl {
-    url = "https://github.com/symfony/cli/releases/download/v${version}/symfony_linux_amd64.gz";
-    sha256 = "sha256-les12GheTKr4XvZpE4YIyNMaXWizeB0COhDiMcYYC7o=";
+  src = fetchFromGitHub {
+    owner = "symfony-cli";
+    repo = "symfony-cli";
+    rev = "v${version}";
+    sha256 = "sha256-51TkiOf3QkwuLv3l+aj5r5tgpDD/VglqeAjliCm5E5M=";
   };
 
-  dontBuild = true;
-
-  unpackPhase = ''
-    gunzip <$src >symfony
-  '';
-
-  installPhase = ''
-    install -D -t $out/bin symfony
-  '';
+  # Tests requires network access
+  doCheck = false;
 
   meta = with lib; {
     description = "Symfony CLI";
-    homepage = "https://symfony.com/download";
-    license = licenses.unfree;
+    homepage = "https://github.com/symfony-cli/symfony-cli";
+    license = licenses.agpl3Plus;
     maintainers = with maintainers; [ drupol ];
-    platforms = [ "x86_64-linux" ];
   };
 }

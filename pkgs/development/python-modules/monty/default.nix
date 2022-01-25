@@ -8,20 +8,20 @@
 , pandas
 , pydantic
 , pymongo
-, ruamel_yaml
+, ruamel-yaml
 , tqdm
 }:
 
 buildPythonPackage rec {
   pname = "monty";
-  version = "2021.8.17";
+  version = "2021.12.1";
   disabled = pythonOlder "3.5"; # uses type annotations
 
   src = fetchFromGitHub {
     owner = "materialsvirtuallab";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0lg6d0qk6iv476rcn45p5f50kips5g9s709cxddwnk5yrz57c4d0";
+    sha256 = "0zcbdh7pqv4dq3fan0zh912w9bvmf2p0zj1fhp0ayhdsc50cwldh";
   };
 
   postPatch = ''
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
-    ruamel_yaml
+    ruamel-yaml
     tqdm
     msgpack
   ];

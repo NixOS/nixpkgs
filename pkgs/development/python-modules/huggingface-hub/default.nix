@@ -4,25 +4,34 @@
 , pythonOlder
 , filelock
 , importlib-metadata
+, packaging
+, pyyaml
 , requests
+, ruamel-yaml
 , tqdm
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "huggingface-hub";
-  version = "0.0.6";
+  version = "0.1.2";
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "huggingface_hub";
     rev = "v${version}";
-    hash = "sha256-0DSgWmodeRmvGq2v3n86BzRx5Xdb8fIQh+G/2O2d+yo=";
+    sha256 = "1pmi76vinwwn0bcxy5hj8pxhzqxdbzp0y3hsd631yyys01s0n6xd";
   };
+
+  nativeBuildInputs = [ packaging ];
 
   propagatedBuildInputs = [
     filelock
+    pyyaml
     requests
+    ruamel-yaml
     tqdm
+    typing-extensions
   ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   # Tests require network access.

@@ -16,12 +16,12 @@
 
 buildPythonPackage rec {
   pname = "b2sdk";
-  version = "1.12.0";
+  version = "1.14.0";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-PsImSuK0IVY9EwpLKlP5ZFS6A7j2iJOtUg/GUcQTJR0=";
+    sha256 = "900da60f9e569e02405b85db35541a79e1cac776ace5d054498b107982ea443c";
   };
 
   nativeBuildInputs = [
@@ -57,7 +57,9 @@ buildPythonPackage rec {
     "test_large_file"
   ];
 
-  pythonImportsCheck = [ "b2sdk" ];
+  pythonImportsCheck = [
+    "b2sdk"
+  ];
 
   meta = with lib; {
     description = "Client library and utilities for access to B2 Cloud Storage (backblaze)";

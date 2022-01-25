@@ -12,25 +12,25 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "i3status-rust";
-  version = "0.20.4";
+  version = "0.21.2";
 
   src = fetchFromGitHub {
     owner = "greshake";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-lohMrsMCAnb2p7H+xfa24Wx3LEFxCAlGHfP9A70Hg48=";
+    sha256 = "sha256-m0Yq6uxo4FAmwvUK/b3zTb79AT9h/fgdm4Q9sf1DYe0=";
   };
 
-  cargoSha256 = "sha256-pe96VNTH49qgQ4yxKcAcQPN31W2k1mD9TdhNKBp4x5Q=";
+  cargoSha256 = "sha256-J+829GzZ4lKrn3MSip/weaI8pExBt3uex86bKZOofg4=";
 
   nativeBuildInputs = [ pkg-config makeWrapper ];
 
   buildInputs = [ dbus libpulseaudio notmuch openssl ];
 
-  cargoBuildFlags = [
-    "--features=notmuch"
-    "--features=maildir"
-    "--features=pulseaudio"
+  buildFeatures = [
+    "notmuch"
+    "maildir"
+    "pulseaudio"
   ];
 
   prePatch = ''

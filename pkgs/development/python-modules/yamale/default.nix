@@ -4,12 +4,13 @@
 , pythonOlder
 , pytestCheckHook
 , pyyaml
-, ruamel_yaml
+, ruamel-yaml
 }:
 
 buildPythonPackage rec {
   pname = "yamale";
-  version = "3.0.8";
+  version = "4.0.2";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
@@ -17,19 +18,21 @@ buildPythonPackage rec {
     owner = "23andMe";
     repo = pname;
     rev = version;
-    sha256 = "0bn0himn5fwndaxn205s55bdc4np7lhd940i0lkv0m7ybhbw7dap";
+    sha256 = "sha256-hFBU3o3HpL0Schgzcx3oYq0IAUVGKThIfEteYcFbLnk=";
   };
 
   propagatedBuildInputs = [
     pyyaml
-    ruamel_yaml
+    ruamel-yaml
   ];
 
   checkInputs = [
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "yamale" ];
+  pythonImportsCheck = [
+    "yamale"
+  ];
 
   meta = with lib; {
     description = "A schema and validator for YAML";

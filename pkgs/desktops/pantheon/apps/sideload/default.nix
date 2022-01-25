@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , desktop-file-utils
 , nix-update-script
 , elementary-gtk-theme
@@ -13,7 +14,6 @@
 , libhandy
 , meson
 , ninja
-, pantheon
 , pkg-config
 , python3
 , vala
@@ -72,5 +72,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = teams.pantheon.members;
+    mainProgram = "io.elementary.sideload";
   };
 }

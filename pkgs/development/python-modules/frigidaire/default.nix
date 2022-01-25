@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "frigidaire";
-  version = "0.16";
+  version = "0.18.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "bm1549";
     repo = pname;
     rev = version;
-    sha256 = "1yzwzvlxz28rhnwhwsn37v7l7fxikzr4j7m293db9452w340p0zl";
+    sha256 = "sha256-U2ixBtigY15RzMNIeUK71uNOndUepK2kE/CTFwl855w=";
   };
 
   propagatedBuildInputs = [
@@ -34,7 +34,9 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "frigidaire" ];
+  pythonImportsCheck = [
+    "frigidaire"
+  ];
 
   meta = with lib; {
     description = "Python API for the Frigidaire devices";

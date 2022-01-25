@@ -19,7 +19,6 @@ def sortKey(opt):
         for p in opt.findall('attr[@name="loc"]/list/string')
     ]
 
-# always ensure that the sort order matches the order used in the nix expression!
 options.sort(key=sortKey)
 
 doc = ET.Element("expr")

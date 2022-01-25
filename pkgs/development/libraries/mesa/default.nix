@@ -33,7 +33,7 @@ with lib;
 let
   # Release calendar: https://www.mesa3d.org/release-calendar.html
   # Release frequency: https://www.mesa3d.org/releasing.html#schedule
-  version = "21.2.3";
+  version = "21.3.4";
   branch  = versions.major version;
 
 self = stdenv.mkDerivation {
@@ -47,23 +47,31 @@ self = stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/${version}/mesa-${version}.tar.xz"
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
     ];
-    sha256 = "0x3ivd34j938js2iffzlvnlj4hwywxrscd8q1rvq894x2m52hibj";
+    sha256 = "0zd6skf9qcwlk1k1ljgwijwlyz5si3pgi0h97gd6kkivm7a4y43p";
   };
 
   # TODO:
   #  revive ./dricore-gallium.patch when it gets ported (from Ubuntu), as it saved
   #  ~35 MB in $drivers; watch https://launchpad.net/ubuntu/+source/mesa/+changelog
   patches = [
-    ./missing-includes.patch # dev_t needs sys/stat.h, time_t needs time.h, etc.-- fixes build w/musl
+    # To fix flickering on Intel GPUs (iris), see https://github.com/NixOS/nixpkgs/issues/153377:
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/mesa/mesa/-/commit/07dc3d4238e57901ccf98e0b506d9aad2c86b9d9.diff";
+      sha256 = "sha256-3fa1qHJes3x1/iXsxfjgy9HnEGlOyFtJatSkU1a3XDI=";
+    })
+    # fixes pkgsMusl.mesa build
+    ./musl.patch
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/void-linux/void-packages/b9f58f303ae23754c95d5d1fe87a98b5a2d8f271/srcpkgs/mesa/patches/musl-endian.patch";
+      sha256 = "sha256-eRc91qCaFlVzrxFrNUPpAHd1gsqKsLCCN0IW8pBQcqk=";
+    })
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/void-linux/void-packages/b9f58f303ae23754c95d5d1fe87a98b5a2d8f271/srcpkgs/mesa/patches/musl-stacksize.patch";
+      sha256 = "sha256-bEp0AWddsw1Pc3rxdKN8fsrX4x2TQEzMUa5afhLXGsg=";
+    })
+
     ./opencl.patch
     ./disk_cache-include-dri-driver-path-in-cache-key.patch
-    # Fix `-Werror=int-conversion` pthread warnings on musl.
-    # TODO: Remove when https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/6121 is merged and available
-    (fetchpatch {
-      name = "nine_debug-Make-tid-more-type-correct";
-      url = "https://gitlab.freedesktop.org/mesa/mesa/commit/aebbf819df6d1e.patch";
-      sha256 = "17248hyzg43d73c86p077m4lv1pkncaycr3l27hwv9k4ija9zl8q";
-    })
   ] ++ optionals (stdenv.isDarwin && stdenv.isAarch64) [
     # Fix aarch64-darwin build, remove when upstreaam supports it out of the box.
     # See: https://gitlab.freedesktop.org/mesa/mesa/-/issues/1020
@@ -93,6 +101,10 @@ self = stdenv.mkDerivation {
     ++ lib.optional stdenv.isLinux "driversdev"
     ++ lib.optional enableOpenCL "opencl";
 
+  preConfigure = ''
+    PATH=${llvmPackages.libllvm.dev}/bin:$PATH
+  '';
+
   # TODO: Figure out how to enable opencl without having a runtime dependency on clang
   mesonFlags = [
     "--sysconfdir=/etc"
@@ -119,6 +131,9 @@ self = stdenv.mkDerivation {
     "-Dgallium-nine=${boolToString enableGalliumNine}" # Direct3D in Wine
     "-Dosmesa=${boolToString enableOSMesa}" # used by wine
     "-Dmicrosoft-clc=disabled" # Only relevant on Windows (OpenCL 1.2 API on top of D3D12)
+
+    # To enable non-mesa gbm backends to be found (e.g. Nvidia)
+    "-Dgbm-backends-path=${libglvnd.driverLink}/lib/gbm:${placeholder "out"}/lib/gbm"
   ] ++ optionals stdenv.isLinux [
     "-Dglvnd=true"
   ] ++ optionals enableOpenCL [

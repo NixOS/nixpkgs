@@ -1,25 +1,25 @@
-{ lib, fetchFromGitHub, gcc, python }:
+{ lib, fetchFromGitHub, gcc, python2 }:
 
 let
   xhtml2pdf = import ./xhtml2pdf.nix {
     inherit lib;
-    fetchPypi = python.pkgs.fetchPypi;
-    buildPythonPackage = python.pkgs.buildPythonPackage;
-    html5lib = python.pkgs.html5lib;
-    httplib2 = python.pkgs.httplib2;
-    nose = python.pkgs.nose;
-    pillow = python.pkgs.pillow;
-    pypdf2 = python.pkgs.pypdf2;
-    reportlab = python.pkgs.reportlab;
+    fetchPypi = python2.pkgs.fetchPypi;
+    buildPythonPackage = python2.pkgs.buildPythonPackage;
+    html5lib = python2.pkgs.html5lib;
+    httplib2 = python2.pkgs.httplib2;
+    nose = python2.pkgs.nose;
+    pillow = python2.pkgs.pillow;
+    pypdf2 = python2.pkgs.pypdf2;
+    reportlab = python2.pkgs.reportlab;
   };
 
 in
 
-python.pkgs.buildPythonApplication rec {
+python2.pkgs.buildPythonApplication rec {
   pname = "sasview";
   version = "4.2.0";
 
-  checkInputs = with python.pkgs; [
+  checkInputs = with python2.pkgs; [
     pytest
     unittest-xml-reporting
   ];
@@ -35,7 +35,7 @@ python.pkgs.buildPythonApplication rec {
     HOME=$(mktemp -d) py.test
   '';
 
-  propagatedBuildInputs = with python.pkgs; [
+  propagatedBuildInputs = with python2.pkgs; [
     bumps
     gcc
     h5py

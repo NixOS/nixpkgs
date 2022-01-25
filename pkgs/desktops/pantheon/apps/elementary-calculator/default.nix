@@ -1,8 +1,8 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , fetchpatch
 , nix-update-script
-, pantheon
 , pkg-config
 , meson
 , ninja
@@ -21,21 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-calculator";
-  version = "1.7.0";
-
-  repoName = "calculator";
+  version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "calculator";
     rev = version;
-    sha256 = "1kl2iximcmbk8inklb2xav7dp08lp5pn9xxa59327zw13gdy8fkf";
-  };
-
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    sha256 = "sha256-U0wXrw9ZJwkqZAtTTHmTzqYhwF9V2JZEZZdDak3kPIc=";
   };
 
   nativeBuildInputs = [
@@ -63,11 +55,18 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
+
   meta = with lib; {
     homepage = "https://github.com/elementary/calculator";
     description = "Calculator app designed for elementary OS";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = teams.pantheon.members;
+    mainProgram = "io.elementary.calculator";
   };
 }

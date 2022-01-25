@@ -23,10 +23,10 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
-    owner = "dask";
+    owner = "fsspec";
     repo = pname;
     rev = version;
-    sha256 = "sha256-BME40kyxZHx9+XrMCqWYp8+q6tjeYwAw/zISMNpQxDU=";
+    sha256 = "sha256-cpV+HKE39Yct1yu5xW9HZftx2Wy9ydFL2YLvPD3YM2M=";
   };
 
   propagatedBuildInputs = [
@@ -58,7 +58,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Convenient Filesystem interface over GCS";
-    homepage = "https://github.com/dask/gcsfs";
+    homepage = "https://github.com/fsspec/gcsfs";
     license = licenses.bsd3;
     maintainers = with maintainers; [ nbren12 ];
   };

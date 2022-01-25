@@ -1,12 +1,24 @@
-{ lib, fetchPypi, buildPythonPackage
-, fetchpatch, configobj, six, traitsui
-, pytestCheckHook, tables, pandas
-, pythonOlder, importlib-resources
+{ lib
+, buildPythonPackage
+, configobj
+, fetchpatch
+, fetchPypi
+, importlib-resources
+, pandas
+, pytestCheckHook
+, pythonAtLeast
+, pythonOlder
+, tables
+, traits
+, traitsui
 }:
 
 buildPythonPackage rec {
   pname = "apptools";
   version = "5.1.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -24,7 +36,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     configobj
-    six
+    traits
     traitsui
   ] ++ lib.optionals (pythonOlder "3.9") [
     importlib-resources
@@ -40,10 +52,22 @@ buildPythonPackage rec {
     export HOME=$TMP
   '';
 
+  disabledTestPaths = lib.optionals (pythonAtLeast "3.10") [
+    # https://github.com/enthought/apptools/issues/303
+    "apptools/io/h5/tests/test_dict_node.py"
+    "apptools/io/h5/tests/test_file.py"
+    "apptools/io/h5/tests/test_table_node.py"
+  ];
+
+
+  pythonImportsCheck = [
+    "apptools"
+  ];
+
   meta = with lib; {
-    description = "Set of packages that Enthought has found useful in creating a number of applications.";
+    description = "Set of packages that Enthought has found useful in creating a number of applications";
     homepage = "https://github.com/enthought/apptools";
-    maintainers = with maintainers; [ knedlsepp ];
     license = licenses.bsdOriginal;
+    maintainers = with maintainers; [ knedlsepp ];
   };
 }

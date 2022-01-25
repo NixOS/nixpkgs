@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "julia-bin";
-  version = "1.6.3";
+  version = "1.6.5";
 
   src = {
     x86_64-linux = fetchurl {
       url = "https://julialang-s3.julialang.org/bin/linux/x64/${lib.versions.majorMinor version}/julia-${version}-linux-x86_64.tar.gz";
-      sha256 = "0jrijj9snfx70692z2301rjassvwjcsjbxdsjyif9hyp9hrrqif7";
+      sha256 = "0b4fmcfd5q5wzvasmsfqq838rivpxn274n5y2kza4m3jakp27zmq";
     };
   }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
@@ -19,7 +19,6 @@ stdenv.mkDerivation rec {
   '';
   patches = [
     # Source release Nix patch(es) relevant for binary releases as well.
-    ./patches/1.6-bin/0002-nix-Skip-tempname-test-broken-in-sandbox.patch
     ./patches/1.6-bin/0005-nix-Enable-parallel-unit-tests-for-sandbox.patch
   ];
   postPatch = ''
@@ -62,7 +61,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "High-level, high-performance dynamic language for technical computing.";
+    description = "High-level, high-performance, dynamic language for technical computing";
     homepage = "https://julialang.org";
     # Bundled and linked with various GPL code, although Julia itself is MIT.
     license = lib.licenses.gpl2Plus;

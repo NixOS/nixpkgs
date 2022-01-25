@@ -32,7 +32,7 @@ let
   defaultTclPkgConfigureFlags = [
     "--with-tcl=${tcl}/lib"
     "--with-tclinclude=${tcl}/include"
-    "--exec-prefix=\${out}"
+    "--exec-prefix=${placeholder "out"}"
   ];
 
   self = (stdenv.mkDerivation ((builtins.removeAttrs attrs [

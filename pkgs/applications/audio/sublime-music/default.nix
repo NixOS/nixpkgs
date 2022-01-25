@@ -15,14 +15,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "sublime-music";
-  version = "0.11.13";
+  version = "0.11.16";
   format = "pyproject";
 
   src = fetchFromGitLab {
     owner = "sublime-music";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-NzbQtRcsRVppyuG1UuS3IidSnniUOavf5YoAf/kcZqw=";
+    sha256 = "sha256-n77mTgElwwFaX3WQL8tZzbkPwnsyQ08OW9imSOjpBlg=";
   };
 
   nativeBuildInputs = [
@@ -57,19 +57,26 @@ python3Packages.buildPythonApplication rec {
    ++ lib.optional serverSupport bottle
   ;
 
+  postPatch = ''
+    sed -i "/--cov/d" setup.cfg
+    sed -i "/--no-cov-on-fail/d" setup.cfg
+  '';
+
   # hook for gobject-introspection doesn't like strictDeps
   # https://github.com/NixOS/nixpkgs/issues/56943
   strictDeps = false;
 
-  # Use the test suite provided by the upstream project.
   checkInputs = with python3Packages; [
     pytest
-    pytest-cov
   ];
-  checkPhase = "${xvfb-run}/bin/xvfb-run pytest";
 
-  # Also run the python import check for sanity
-  pythonImportsCheck = [ "sublime_music" ];
+  checkPhase = ''
+    ${xvfb-run}/bin/xvfb-run pytest
+  '';
+
+  pythonImportsCheck = [
+    "sublime_music"
+  ];
 
   postInstall = ''
     install -Dm444 sublime-music.desktop      -t $out/share/applications

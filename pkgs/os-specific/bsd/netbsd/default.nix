@@ -72,7 +72,7 @@ in lib.makeScopeWithSplicing
     nativeBuildInputs = with buildPackages.netbsd; [
       bsdSetupHook netbsdSetupHook
       makeMinimal
-      install tsort lorder mandoc groff statHook rsync
+      install tsort lorder buildPackages.mandoc groff statHook rsync
     ];
     buildInputs = with self; compatIfNeeded;
 
@@ -120,7 +120,17 @@ in lib.makeScopeWithSplicing
   } // lib.optionalAttrs (attrs.headersOnly or false) {
     installPhase = "includesPhase";
     dontBuild = true;
-  } // attrs));
+  } // attrs // {
+    postPatch = lib.optionalString (!stdenv'.hostPlatform.isNetBSD) ''
+      # Files that use NetBSD-specific macros need to have nbtool_config.h
+      # included ahead of them on non-NetBSD platforms.
+      set +e
+      grep -Zlr "^__RCSID
+      ^__BEGIN_DECLS" | xargs -0r grep -FLZ nbtool_config.h |
+          xargs -0tr sed -i '0,/^#/s//#include <nbtool_config.h>\n\0/'
+      set -e
+    '' + attrs.postPatch or "";
+  }));
 
   ##
   ## START BOOTSTRAPPING
@@ -182,6 +192,12 @@ in lib.makeScopeWithSplicing
     configurePlatforms = [ "build" "host" ];
     configureFlags = [
       "--cache-file=config.cache"
+    ] ++ lib.optionals stdenv.hostPlatform.isMusl [
+      # We include this header in our musl package only for legacy
+      # compatibility, and compat works fine without it (and having it
+      # know about sys/cdefs.h breaks packages like glib when built
+      # statically).
+      "ac_cv_header_sys_cdefs_h=no"
     ];
 
     nativeBuildInputs = with buildPackages.netbsd; commonDeps ++ [
@@ -508,7 +524,7 @@ in lib.makeScopeWithSplicing
     nativeBuildInputs = with buildPackages.netbsd; [
       bsdSetupHook netbsdSetupHook
       makeMinimal
-      install mandoc groff nbperf
+      install mandoc groff nbperf rsync
     ];
     makeFlags = defaultMakeFlags ++ [ "TOOLDIR=$(out)" ];
     extraPaths = with self; [
@@ -674,7 +690,7 @@ in lib.makeScopeWithSplicing
     nativeBuildInputs = with buildPackages.netbsd; [
       bsdSetupHook netbsdSetupHook
       makeMinimal
-      byacc install tsort lorder mandoc statHook
+      byacc install tsort lorder mandoc statHook rsync
     ];
     buildInputs = with self; [ headers ];
     SHLIBINSTALLDIR = "$(out)/lib";
@@ -707,7 +723,7 @@ in lib.makeScopeWithSplicing
     sha256 = "0pq05k3dj0dfsczv07frnnji92mazmy2qqngqbx2zgqc1x251414";
     nativeBuildInputs = with buildPackages.netbsd; [
       bsdSetupHook netbsdSetupHook
-      makeMinimal install tsort lorder mandoc statHook nbperf tic
+      makeMinimal install tsort lorder mandoc statHook nbperf tic rsync
     ];
     buildInputs = with self; compatIfNeeded;
     SHLIBINSTALLDIR = "$(out)/lib";
@@ -966,7 +982,15 @@ in lib.makeScopeWithSplicing
     noCC = true;
     version = "9.2";
     sha256 = "1l4lmj4kmg8dl86x94sr45w0xdnkz8dn4zjx0ipgr9bnq98663zl";
-    makeFlags = defaultMakeFlags ++ [ "FILESDIR=$(out)/share" ];
+    # man0 generates a man.pdf using ps2pdf, but doesn't install it later,
+    # so we can avoid the dependency on ghostscript
+    postPatch = ''
+      substituteInPlace man0/Makefile --replace "ps2pdf" "echo noop "
+    '';
+    makeFlags = defaultMakeFlags ++ [
+      "FILESDIR=$(out)/share"
+      "MKRUMP=no" # would require to have additional path sys/rump/share/man
+    ];
   };
   #
   # END MISCELLANEOUS

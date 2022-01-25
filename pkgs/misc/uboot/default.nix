@@ -274,6 +274,13 @@ in {
     filesToInstall = ["u-boot-dtb.bin"];
   };
 
+  ubootOlimexA64Olinuxino = buildUBoot {
+    defconfig = "a64-olinuxino-emmc_defconfig";
+    extraMeta.platforms = ["aarch64-linux"];
+    BL31 = "${armTrustedFirmwareAllwinner}/bl31.bin";
+    filesToInstall = ["u-boot-sunxi-with-spl.bin"];
+  };
+
   ubootOrangePiPc = buildUBoot {
     defconfig = "orangepi_pc_defconfig";
     extraMeta.platforms = ["armv7l-linux"];
@@ -350,6 +357,26 @@ in {
     defconfig = "qemu-riscv64_smode_defconfig";
     extraMeta.platforms = ["riscv64-linux"];
     filesToInstall = ["u-boot.bin"];
+  };
+
+  ubootQemuX86 = buildUBoot {
+    defconfig = "qemu-x86_defconfig";
+    extraConfig = ''
+      CONFIG_USB_UHCI_HCD=y
+      CONFIG_USB_EHCI_HCD=y
+      CONFIG_USB_EHCI_GENERIC=y
+      CONFIG_USB_XHCI_HCD=y
+    '';
+    extraPatches = [
+      # https://patchwork.ozlabs.org/project/uboot/list/?series=268007&state=%2A&archive=both
+      # Remove when upgrading to 2022.01
+      (fetchpatch {
+        url = "https://patchwork.ozlabs.org/series/268007/mbox/";
+        sha256 = "sha256-xn4Q959dgoB63zlmJepI41AXAf1kCycIGcmu4IIVjmE=";
+      })
+    ];
+    extraMeta.platforms = [ "i686-linux" "x86_64-linux" ];
+    filesToInstall = [ "u-boot.rom" ];
   };
 
   ubootRaspberryPi = buildUBoot {

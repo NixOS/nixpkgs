@@ -18,11 +18,12 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1bn364rmp0q86rd7vgv4n7x09cdf9m4njcaq92jnk85ni6h147ax";
   };
 
-  cargoBuildFlags = lib.optionals nvidiaSupport [ "--features" "nvidia" ];
   cargoSha256 = "0c2mk2bcz4qjyqmf11yqhnhy4pqxr77b3c1gvr5jfmjshx4ff7v2";
 
   nativeBuildInputs = lib.optional nvidiaSupport makeWrapper;
   buildInputs = lib.optionals stdenv.isDarwin [ IOKit ];
+
+  buildFeatures = lib.optional nvidiaSupport "nvidia";
 
   postInstall = lib.optionalString nvidiaSupport ''
     wrapProgram $out/bin/zenith \

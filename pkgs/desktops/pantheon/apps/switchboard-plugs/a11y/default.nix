@@ -1,9 +1,9 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , substituteAll
 , fetchFromGitHub
 , fetchpatch
 , nix-update-script
-, pantheon
 , meson
 , ninja
 , pkg-config

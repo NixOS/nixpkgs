@@ -13,19 +13,18 @@
 , sqlite
 , curl
 , libuchardet
-, fmt
 , spdlog
 }:
 
 stdenv.mkDerivation rec {
   pname = "cherrytree";
-  version = "0.99.41";
+  version = "0.99.44";
 
   src = fetchFromGitHub {
     owner = "giuspen";
     repo = "cherrytree";
     rev = version;
-    sha256 = "sha256-Bhk5xpJiVDSTxP1wAFTL39MgAIOa6Is9NTF1WEh6S1A=";
+    sha256 = "sha256-13wZb+PxeCrQ3MpewMnqBHO8QnoCRFhKU4awTdYtFd4=";
   };
 
   nativeBuildInputs = [
@@ -44,7 +43,6 @@ stdenv.mkDerivation rec {
     sqlite
     curl
     libuchardet
-    fmt
     spdlog
   ];
 

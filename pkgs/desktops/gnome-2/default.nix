@@ -49,7 +49,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gtkhtml = callPackage ./platform/gtkhtml { enchant = pkgs.enchant1; };
 
-  gtkhtml4 = callPackage ./platform/gtkhtml/4.x.nix { enchant = pkgs.enchant1; };
+  gtkhtml4 = callPackage ./platform/gtkhtml/4.x.nix { enchant = pkgs.enchant2; };
 
   gtkglext = callPackage ./platform/gtkglext { };
 
@@ -61,8 +61,6 @@ lib.makeScope pkgs.newScope (self: with self; {
   gtksourceview = callPackage ./desktop/gtksourceview {
     autoreconfHook = pkgs.autoreconfHook269;
   };
-
-  vte = callPackage ./desktop/vte { };
 
 #### BINDINGS
 

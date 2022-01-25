@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
@@ -7,6 +7,7 @@ let
   name = "sickbeard";
 
   cfg = config.services.sickbeard;
+  opt = options.services.sickbeard;
   sickbeard = cfg.package;
 
 in
@@ -39,6 +40,7 @@ in
       configFile = mkOption {
         type = types.path;
         default = "${cfg.dataDir}/config.ini";
+        defaultText = literalExpression ''"''${config.${opt.dataDir}}/config.ini"'';
         description = "Path to config file.";
       };
       port = mkOption {

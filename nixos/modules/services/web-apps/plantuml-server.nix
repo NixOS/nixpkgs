@@ -58,8 +58,8 @@ in
 
       graphvizPackage = mkOption {
         type = types.package;
-        default = pkgs.graphviz_2_32;
-        defaultText = literalExpression "pkgs.graphviz_2_32";
+        default = pkgs.graphviz;
+        defaultText = literalExpression "pkgs.graphviz";
         description = "Package containing the dot executable.";
       };
 

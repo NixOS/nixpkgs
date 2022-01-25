@@ -5,8 +5,9 @@
 , desktop-file-utils
 , glib
 , gobject-introspection
-, gtk3
-, libhandy
+, gtk4
+, itstool
+, libadwaita
 , librsvg
 , meson
 , ninja
@@ -17,7 +18,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "metadata-cleaner";
-  version = "1.0.7";
+  version = "2.1.3";
 
   format = "other";
 
@@ -25,14 +26,15 @@ python3.pkgs.buildPythonApplication rec {
     owner = "rmnvgr";
     repo = "metadata-cleaner";
     rev = "v${version}";
-    sha256 = "sha256-HlP/QahVFCAct06pKanjozFqeyTdHoHanIemq5ID2CQ=";
+    hash = "sha256-9sLjgqqQBXcudlBRmqAwWcWMUXoIUyAK272zaNKbJNY=";
   };
 
   nativeBuildInputs = [
     appstream
     desktop-file-utils
     glib
-    gtk3
+    gtk4
+    itstool
     meson
     ninja
     pkg-config
@@ -41,8 +43,8 @@ python3.pkgs.buildPythonApplication rec {
 
   buildInputs = [
     gobject-introspection
-    gtk3
-    libhandy
+    gtk4
+    libadwaita
     librsvg
     poppler_gi
   ];

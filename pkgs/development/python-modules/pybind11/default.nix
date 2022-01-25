@@ -3,6 +3,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , cmake
+, boost
 , eigen
 , python
 , catch
@@ -12,13 +13,13 @@
 
 buildPythonPackage rec {
   pname = "pybind11";
-  version = "2.7.1";
+  version = "2.9.0";
 
   src = fetchFromGitHub {
     owner = "pybind";
     repo = pname;
     rev = "v${version}";
-    sha256 = "13nq16pxz4vck7jn936ymhm0y0q82hd7kkw0ip7k85cx7wywzbql";
+    hash = "sha256-zYDgXXpn8Z1Zti8Eje8qxDvbQV70/LmezG3AtxzDG+o=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -26,7 +27,8 @@ buildPythonPackage rec {
   dontUseCmakeBuildDir = true;
 
   cmakeFlags = [
-    "-DEIGEN3_INCLUDE_DIR=${eigen}/include/eigen3"
+    "-DBoost_INCLUDE_DIR=${lib.getDev boost}/include"
+    "-DEIGEN3_INCLUDE_DIR=${lib.getDev eigen}/include/eigen3"
     "-DBUILD_TESTING=on"
   ] ++ lib.optionals (python.isPy3k && !stdenv.cc.isClang) [
     "-DPYBIND11_CXX_STANDARD=-std=c++17"

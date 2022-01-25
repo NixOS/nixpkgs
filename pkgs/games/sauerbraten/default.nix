@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchzip, SDL2, SDL2_image, SDL2_mixer
-, zlib, makeWrapper
+{ lib
+, stdenv
+, fetchzip
+, SDL2
+, SDL2_image
+, SDL2_mixer
+, zlib
+, makeWrapper
+, copyDesktopItems
+, makeDesktopItem
 }:
 
 stdenv.mkDerivation rec {
@@ -13,26 +21,47 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     makeWrapper
+    copyDesktopItems
   ];
 
   buildInputs = [
-    SDL2 SDL2_mixer SDL2_image
+    SDL2
+    SDL2_mixer
+    SDL2_image
     zlib
   ];
 
   sourceRoot = "source/src";
 
+  enableParallelBuilding = true;
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "sauerbraten";
+      exec = "sauerbraten_client %u";
+      icon = "sauerbraten";
+      desktopName = "Sauerbraten";
+      comment = "FPS that uses an improved version of the Cube engine";
+      categories = "Application;Game;ActionGame;";
+    })
+  ];
+
   installPhase = ''
-    mkdir -p $out/bin $out/share/sauerbraten $out/share/doc/sauerbraten
-    cp -rv "../docs/"* $out/share/doc/sauerbraten/
-    cp -v sauer_client sauer_server $out/share/sauerbraten/
-    cp -rv ../packages ../data $out/share/sauerbraten/
+    runHook preInstall
+
+    mkdir -p $out/bin $out/share/icon/ $out/share/sauerbraten $out/share/doc/sauerbraten
+    cp -r "../docs/"* $out/share/doc/sauerbraten/
+    cp sauer_client sauer_server $out/share/sauerbraten/
+    cp -r ../packages ../data $out/share/sauerbraten/
+    ln -s $out/share/sauerbraten/cube.png $out/share/icon/sauerbraten.png
 
     makeWrapper $out/share/sauerbraten/sauer_server $out/bin/sauerbraten_server \
       --run "cd $out/share/sauerbraten"
     makeWrapper $out/share/sauerbraten/sauer_client $out/bin/sauerbraten_client \
       --run "cd $out/share/sauerbraten" \
-      --add-flags "-q\''${HOME}"
+      --add-flags "-q\''${HOME}/.config/sauerbraten"
+
+    runHook postInstall
   '';
 
   meta = with lib; {
@@ -42,9 +71,8 @@ stdenv.mkDerivation rec {
     hydraPlatforms =
       # raskin: tested amd64-linux;
       # not setting platforms because it is 0.5+ GiB of game data
-      [];
-    license = "freeware"; # as an aggregate - data files have different licenses
-                          # code is under zlib license
+      [ ];
+    license = "freeware"; # as an aggregate - data files have different licenses code is under zlib license
     platforms = platforms.linux;
   };
 }

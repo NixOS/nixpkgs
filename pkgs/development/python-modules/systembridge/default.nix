@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "systembridge";
-  version = "2.2.0";
+  version = "2.2.3";
 
   src = fetchFromGitHub {
     owner = "timmo001";
     repo = "system-bridge-connector-py";
     rev = "v${version}";
-    sha256 = "sha256-VR5juaZdZaEo7S0XXJkspcKmH1alitNIWmI0g/dFBbM=";
+    sha256 = "sha256-AVMZBhf15eZM9oMUFyiHYs866P1v5z1pbTvX2Qpjzfc=";
   };
 
   propagatedBuildInputs = [

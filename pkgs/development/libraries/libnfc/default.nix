@@ -11,6 +11,8 @@ stdenv.mkDerivation {
 
   buildInputs = [ libusb-compat-0_1 readline ];
 
+  configureFlags = [ "sysconfdir=/etc" ];
+
   meta = with lib; {
     description = "Open source library libnfc for Near Field Communication";
     license = licenses.gpl3;

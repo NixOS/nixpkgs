@@ -36,7 +36,7 @@ buildGoModule {
   cmakeFlags = [ "-GNinja" ] ++ lib.optionals (stdenv.isLinux) [ "-DCMAKE_OSX_ARCHITECTURES=" ];
 
   installPhase = ''
-    mkdir -p $bin/bin $out/include $out/lib
+    mkdir -p $bin/bin $dev $out/lib
 
     mv tool/bssl $bin/bin
 
@@ -44,10 +44,10 @@ buildGoModule {
     mv crypto/libcrypto.a     $out/lib
     mv decrepit/libdecrepit.a $out/lib
 
-    mv ../include/openssl $out/include
+    mv ../include $dev
   '';
 
-  outputs = [ "out" "bin" ];
+  outputs = [ "out" "bin" "dev" ];
 
   meta = with lib; {
     description = "Free TLS/SSL implementation";

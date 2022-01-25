@@ -11,7 +11,7 @@
 }:
 
 stdenv.mkDerivation {
-  name = "toxvpn";
+  pname = "toxvpn";
   version = "unstable-2019-09-09";
 
   src = fetchFromGitHub {

@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     # being generated to make sure that they use our glibc.
     EXTRA_FLAGS="-I$NIX_FIXINC_DUMMY $(cat $NIX_CC/nix-support/libc-crt1-cflags) $(cat $NIX_CC/nix-support/libc-cflags) -O2"
 
-    extraLDFlags="-L$glibc_libdir -rpath $glibc_libdir $(cat $NIX_BINTOOLS/nix-support/libc-ldflags) $(cat $NIX_BINTOOLS/nix-support/libc-ldflags-before)"
+    extraLDFlags="-L$glibc_libdir -rpath $glibc_libdir $(cat $NIX_BINTOOLS/nix-support/libc-ldflags || true) $(cat $NIX_BINTOOLS/nix-support/libc-ldflags-before || true)"
     for i in $extraLDFlags; do
       EXTRA_FLAGS="$EXTRA_FLAGS -Wl,$i"
     done

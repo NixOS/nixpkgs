@@ -31,18 +31,18 @@ in
 
 buildPythonApplication rec {
   pname = "lexicon";
-  version = "3.5.2";
+  version = "3.9.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "AnalogJ";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1jsc2ybbf3mbvgzkgliria494dpj23mgqnw2lh43cnd9rgsjvzn3";
+    hash = "sha256-qJFHwFzFjZVdQv4YfrlR2cMQHsEtpQbvg/DMo6C5/z0=";
   };
 
   nativeBuildInputs = [
-    poetry
+    poetry-core
   ];
 
   propagatedBuildInputs = [
@@ -52,6 +52,7 @@ buildPythonApplication rec {
     dnspython
     future
     localzone
+    oci
     pynamecheap
     pyyaml
     requests
@@ -64,20 +65,24 @@ buildPythonApplication rec {
 
   checkInputs = [
     mock
-    pytest
-    pytest-cov
+    pytestCheckHook
     pytest-xdist
     vcrpy
   ];
 
-  checkPhase = ''
-    pytest --ignore=lexicon/tests/providers/test_auto.py
-  '';
+  disabledTestPaths = [
+    # Tests require network access
+    "lexicon/tests/providers/test_auto.py"
+  ];
+
+  pythonImportsCheck = [
+    "lexicon"
+  ];
 
   meta = with lib; {
-    description = "Manipulate DNS records on various DNS providers in a standardized way";
+    description = "Manipulate DNS records of various DNS providers in a standardized way";
     homepage = "https://github.com/AnalogJ/lexicon";
-    maintainers = with maintainers; [ flyfloh ];
     license = licenses.mit;
+    maintainers = with maintainers; [ flyfloh ];
   };
 }

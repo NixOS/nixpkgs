@@ -2,14 +2,12 @@
 , withGUI ? false, gtk2, pkg-config, sqlite # compile GUI
 }:
 
-let numVersion = "02.18"; # :(
-in
 stdenv.mkDerivation rec {
-  name = "lshw-${numVersion}b";
-  version = numVersion;
+  pname = "lshw";
+  version = "B.02.18";
 
   src = fetchurl {
-    url = "https://ezix.org/software/files/lshw-B.${version}.tar.gz";
+    url = "https://ezix.org/software/files/lshw-${version}.tar.gz";
     sha256 = "0brwra4jld0d53d7jsgca415ljglmmx1l2iazpj4ndilr48yy8mf";
   };
 
@@ -48,7 +46,7 @@ stdenv.mkDerivation rec {
     homepage = "https://ezix.org/project/wiki/HardwareLiSter";
     description = "Provide detailed information on the hardware configuration of the machine";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ phreedom ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

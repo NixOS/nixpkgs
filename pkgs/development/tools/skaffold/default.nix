@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "skaffold";
-  version = "1.32.0";
+  version = "1.35.2";
 
   src = fetchFromGitHub {
     owner = "GoogleContainerTools";
     repo = "skaffold";
     rev = "v${version}";
-    sha256 = "sha256-LvTAM3uYzSEhX7zz7Z+VcMYV5p80EnyaEIu0CmAUaSg=";
+    sha256 = "sha256-s1gkfgpQhmXgbU0iGu71a+cMQsInGTf7GUb8h2SK9qs=";
   };
 
-  vendorSha256 = "sha256-TUpHg4yvZ0WKcUFXjWh4Q4/gRtJ93xNa/gLkj5PYo/w=";
+  vendorSha256 = "sha256-jr4HEs2mTRPNAiV/OWUnjYyQ1uSUJfVOTNCRi/18tEo=";
 
   subPackages = ["cmd/skaffold"];
 
@@ -23,6 +23,11 @@ buildGoModule rec {
   ];
 
   nativeBuildInputs = [ installShellFiles ];
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    $out/bin/skaffold version | grep ${version} > /dev/null
+  '';
 
   postInstall = ''
     installShellCompletion --cmd skaffold \
@@ -41,6 +46,6 @@ buildGoModule rec {
       It also provides building blocks and describe customizations for a CI/CD pipeline.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ vdemeester ];
+    maintainers = with maintainers; [ vdemeester bryanasdev000];
   };
 }

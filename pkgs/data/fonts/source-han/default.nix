@@ -48,8 +48,13 @@ in
   serif = makePackage {
     family = "serif";
     description = "serif";
-    rev = "1.001R";
-    sha256 = "0nnsb2w140ih0cnp1fh7s4csvzp9y0cavz9df2ryhv215mh9z4m0";
+    rev = "2.000R";
+    sha256 = "0x3n6s4khdd6l0crwd7g9sjaqp8lkvksglhc7kj3cv80hldab9wp";
+    postFetch = ''
+      mkdir -p $out/share/fonts/opentype/source-han-serif
+      unzip $downloadedFile -d $out/share/fonts/opentype/source-han-serif
+    '';
+    zip = ".zip";
   };
 
   mono = makePackage {

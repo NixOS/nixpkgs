@@ -5,7 +5,7 @@
 , pytestCheckHook
 , pythonOlder
 , pyyaml
-, ruamel_yaml
+, ruamel-yaml
 , toml
 }:
 
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     msgpack
     pyyaml
-    ruamel_yaml
+    ruamel-yaml
     toml
   ];
 

@@ -1,16 +1,16 @@
 { lib, buildGoModule, fetchFromGitHub, fetchurl, makeWrapper, runCommand }:
 
 let
-  version = "1.3.1";
+  version = "1.3.4";
 
   src = fetchFromGitHub {
     owner = "root-gg";
     repo = "plik";
     rev = version;
-    sha256 = "C/1Uwjsqd9n3WSXlnlq9K3EJHkLOSavS9cPqF2UqmGo=";
+    sha256 = "0kmcidnjw26vnxx9h3swcg72i507awg89s4nfxw6rwbyw36iiiqf";
   };
 
-  vendorSha256 = "klmWXC3tkoOcQHhiQZjR2C5jqaRJqMQOLtVxZ0cFq/Y=";
+  vendorSha256 = null;
 
   meta = with lib; {
     homepage = "https://plik.root.gg/";
@@ -18,7 +18,8 @@ let
     maintainers = with maintainers; [ freezeboy ];
     license = licenses.mit;
   };
-in {
+in
+{
 
   plik = buildGoModule {
     pname = "plik";

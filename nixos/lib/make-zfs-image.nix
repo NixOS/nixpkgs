@@ -241,7 +241,7 @@ let
     pkgs.vmTools.override {
       rootModules =
         [ "zfs" "9p" "9pnet_virtio" "virtio_pci" "virtio_blk" ] ++
-          (pkgs.lib.optional (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) "rtc_cmos");
+          (pkgs.lib.optional pkgs.stdenv.hostPlatform.isx86 "rtc_cmos");
       kernel = modulesTree;
     }
   ).runInLinuxVM (

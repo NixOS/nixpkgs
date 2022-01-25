@@ -1,25 +1,42 @@
-{ lib, buildDotnetModule, fetchFromGitHub, makeDesktopItem
-, libX11, libgdiplus, ffmpeg
+{ lib, buildDotnetModule, fetchFromGitHub, makeDesktopItem, copyDesktopItems
+, dotnetCorePackages, libX11, libgdiplus, ffmpeg
 , SDL2_mixer, openal, libsoundio, sndio, pulseaudio
-, gtk3, gobject-introspection, gdk-pixbuf, wrapGAppsHook
+, gtk3, gdk-pixbuf, wrapGAppsHook
 }:
 
 buildDotnetModule rec {
   pname = "ryujinx";
-  version = "1.0.7065"; # Versioning is based off of the official appveyor builds: https://ci.appveyor.com/project/gdkchan/ryujinx
+  version = "1.0.7168"; # Versioning is based off of the official appveyor builds: https://ci.appveyor.com/project/gdkchan/ryujinx
 
   src = fetchFromGitHub {
     owner = "Ryujinx";
     repo = "Ryujinx";
-    rev = "c54a14d0b8d445d9d0074861dca816cc801e4008";
-    sha256 = "13j91413x1bvg27vcx9sgc7gv00q84d8f5pllih5g5plzld4r541";
+    rev = "6e0799580f0d1b473a79471c5d365c6524d97a86";
+    sha256 = "145sn9xkjxj79292faypcdmpmbxm1w70q0iprg6pfymf9920gvfv";
   };
 
+  dotnet-sdk = dotnetCorePackages.sdk_6_0;
+  dotnet-runtime = dotnetCorePackages.runtime_6_0;
+
   projectFile = "Ryujinx.sln";
-  executables = [ "Ryujinx" ];
   nugetDeps = ./deps.nix;
 
-  nativeBuildInputs = [ wrapGAppsHook gobject-introspection gdk-pixbuf ];
+  dotnetFlags = [ "/p:ExtraDefineConstants=DISABLE_UPDATER" ];
+
+  # TODO: Add the headless frontend. Currently errors on the following:
+  # System.Exception: SDL2 initlaization failed with error "No available video device"
+  executables = [ "Ryujinx" ];
+
+  nativeBuildInputs = [
+    copyDesktopItems
+    wrapGAppsHook
+  ];
+
+  buildInputs = [
+    gtk3
+    gdk-pixbuf
+  ];
+
   runtimeDeps = [
     gtk3
     libX11
@@ -48,24 +65,26 @@ buildDotnetModule rec {
     for i in 16 32 48 64 96 128 256 512 1024; do
       install -D ${src}/Ryujinx/Ui/Resources/Logo_Ryujinx.png $out/share/icons/hicolor/''${i}x$i/apps/ryujinx.png
     done
-
-    cp -r ${makeDesktopItem {
-      desktopName = "Ryujinx";
-      name = "ryujinx";
-      exec = "Ryujinx";
-      icon = "ryujinx";
-      comment = meta.description;
-      type = "Application";
-      categories = "Game;";
-    }}/share/applications $out/share
   '';
+
+  desktopItems = [(makeDesktopItem {
+    desktopName = "Ryujinx";
+    name = "ryujinx";
+    exec = "Ryujinx";
+    icon = "ryujinx";
+    comment = meta.description;
+    type = "Application";
+    categories = "Game;";
+  })];
 
   meta = with lib; {
     description = "Experimental Nintendo Switch Emulator written in C#";
     homepage = "https://ryujinx.org/";
     license = licenses.mit;
+    changelog = "https://github.com/Ryujinx/Ryujinx/wiki/Changelog";
     maintainers = [ maintainers.ivar ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "Ryujinx";
   };
   passthru.updateScript = ./updater.sh;
 }

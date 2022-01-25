@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "softlayer";
-  version = "5.9.7";
+  version = "5.9.8";
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = "softlayer-python";
     rev = "v${version}";
-    sha256 = "0zwhykrpckx3ln4w6vlgp0nrkkr8343ni1w43hxznm55qmrllrpg";
+    sha256 = "087kyl2yacvh12i4x3357659mgq4xycv8a4y9rl3rj57kp5jc6ah";
   };
 
   propagatedBuildInputs = [

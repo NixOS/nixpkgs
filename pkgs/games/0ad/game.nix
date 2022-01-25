@@ -1,4 +1,4 @@
-{ stdenv, lib, perl, fetchurl, python2, fmt, libidn
+{ stdenv, lib, perl, fetchurl, python3, fmt, libidn
 , pkg-config, spidermonkey_78, boost, icu, libxml2, libpng, libsodium
 , libjpeg, zlib, curl, libogg, libvorbis, enet, miniupnpc
 , openal, libGLU, libGL, xorgproto, libX11, libXcursor, nspr, SDL2
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     sha256 = "1p9fa8f7sjb9c5wl3mawzyfqvgr614kdkhrj2k4db9vkyisws3fp";
   };
 
-  nativeBuildInputs = [ python2 perl pkg-config ];
+  nativeBuildInputs = [ python3 perl pkg-config ];
 
   buildInputs = [
     spidermonkey_78_6 boost icu libxml2 libpng libjpeg

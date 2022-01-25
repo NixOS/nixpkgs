@@ -2,17 +2,17 @@
 
 let
   pname = "radicle-upstream";
-  version = "0.2.10";
+  version = "0.2.12";
   name = "${pname}-${version}";
 
   srcs = {
     x86_64-linux = fetchurl {
       url = "https://releases.radicle.xyz/radicle-upstream-${version}.AppImage";
-      sha256 = "sha256-iZC7FzYaQsCoAq/soi5g2oo/Xd2PtZgO/wR8zDgN4Fk=";
+      sha256 = "7520c7feb94234df6f8523689d098e0d19510e2ac0122e482d1e01086c9b02fe";
     };
     x86_64-darwin = fetchurl {
       url = "https://releases.radicle.xyz/radicle-upstream-${version}.dmg";
-      sha256 = "sha256-gc5OrNu7t0VJrjLQO7+7TWvEj7D51WmMJfL/KQDMgvA=";
+      sha256 = "8bbff051f169f029044e4c4965cad88f48e939b945fd5c253f0c39665a19ce44";
     };
   };
   src = srcs.${stdenv.hostPlatform.system};

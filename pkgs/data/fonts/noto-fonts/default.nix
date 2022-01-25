@@ -3,7 +3,6 @@
 , lib
 , fetchFromGitHub
 , fetchurl
-, fetchzip
 , cairo
 , python3
 , pkg-config
@@ -61,6 +60,42 @@ let
         maintainers = with maintainers; [ mathnerd314 emily ];
       };
     };
+
+  mkNotoCJK = { typeface, version, rev, sha256 }:
+    stdenvNoCC.mkDerivation {
+      pname = "noto-fonts-cjk-${lib.toLower typeface}";
+      inherit version;
+
+      src = fetchFromGitHub {
+        owner = "googlefonts";
+        repo = "noto-cjk";
+        inherit rev sha256;
+      };
+
+      installPhase = ''
+        install -m444 -Dt $out/share/fonts/opentype/noto-cjk ${typeface}/OTC/*.ttc
+      '';
+
+      meta = with lib; {
+        description = "Beautiful and free fonts for CJK languages";
+        homepage = "https://www.google.com/get/noto/help/cjk/";
+        longDescription = ''
+          Noto ${typeface} CJK is a ${lib.toLower typeface} typeface designed as
+          an intermediate style between the modern and traditional. It is
+          intended to be a multi-purpose digital font for user interface
+          designs, digital content, reading on laptops, mobile devices, and
+          electronic books. Noto ${typeface} CJK comprehensively covers
+          Simplified Chinese, Traditional Chinese, Japanese, and Korean in a
+          unified font family. It supports regional variants of ideographic
+          characters for each of the four languages. In addition, it supports
+          Japanese kana, vertical forms, and variant characters (itaiji); it
+          supports Korean hangeul — both contemporary and archaic.
+        '';
+        license = licenses.ofl;
+        platforms = platforms.all;
+        maintainers = with maintainers; [ mathnerd314 emily ];
+      };
+    };
 in
 
 {
@@ -74,54 +109,33 @@ in
     weights = "{Black,Condensed,Extra,Medium,Semi,Thin}*";
   };
 
-  noto-fonts-cjk = let zip = fetchzip {
-    url = let rev = "be6c059ac1587e556e2412b27f5155c8eb3ddbe6"; in
-      "https://raw.githubusercontent.com/googlefonts/noto-cjk/${rev}/NotoSansCJK.ttc.zip";
-    # __MACOSX...
-    stripRoot = false;
-    sha256 = "0ik4z2b15i0pghskgfm3adzb0h35fr4gyzvz3bq49hhkhn9h85vi";
-  }; in stdenvNoCC.mkDerivation {
-    pname = "noto-fonts-cjk";
-    version = "2.001";
+  noto-fonts-cjk-sans = mkNotoCJK {
+    typeface = "Sans";
+    version = "2.004";
+    rev = "9f7f3c38eab63e1d1fddd8d50937fe4f1eacdb1d";
+    sha256 = "sha256-BX4tcDcz+RGka8mtced1k3BopUJQ14t1BtAVqTjyPik=";
+  };
 
-    buildCommand = ''
-      install -m444 -Dt $out/share/fonts/opentype/noto-cjk ${zip}/*.ttc
-    '';
-
-    meta = with lib; {
-      description = "Beautiful and free fonts for CJK languages";
-      homepage = "https://www.google.com/get/noto/help/cjk/";
-      longDescription =
-      ''
-        Noto Sans CJK is a sans serif typeface designed as an intermediate style
-        between the modern and traditional. It is intended to be a multi-purpose
-        digital font for user interface designs, digital content, reading on laptops,
-        mobile devices, and electronic books. Noto Sans CJK comprehensively covers
-        Simplified Chinese, Traditional Chinese, Japanese, and Korean in a unified font
-        family. It supports regional variants of ideographic characters for each of the
-        four languages. In addition, it supports Japanese kana, vertical forms, and
-        variant characters (itaiji); it supports Korean hangeul — both contemporary and
-        archaic.
-      '';
-      license = licenses.ofl;
-      platforms = platforms.all;
-      maintainers = with maintainers; [ mathnerd314 emily ];
-    };
+  noto-fonts-cjk-serif = mkNotoCJK {
+    typeface = "Serif";
+    version = "2.000";
+    rev = "9f7f3c38eab63e1d1fddd8d50937fe4f1eacdb1d";
+    sha256 = "sha256-BX4tcDcz+RGka8mtced1k3BopUJQ14t1BtAVqTjyPik=";
   };
 
   noto-fonts-emoji = let
-    version = "2.028";
+    version = "2.034";
     emojiPythonEnv =
       python3.withPackages (p: with p; [ fonttools nototools ]);
   in stdenv.mkDerivation {
     pname = "noto-fonts-emoji";
-    version = builtins.replaceStrings [ "_" ] [ "." ] version;
+    inherit version;
 
     src = fetchFromGitHub {
       owner = "googlefonts";
       repo = "noto-emoji";
       rev = "v${version}";
-      sha256 = "0dy7px7wfl6bqkfzz82jm4gvbjp338ddsx0mwfl6m7z48l7ng4v6";
+      sha256 = "1d6zzk0ii43iqfnjbldwp8sasyx99lbjp1nfgqjla7ixld6yp98l";
     };
 
     nativeBuildInputs = [
@@ -166,31 +180,32 @@ in
       homepage = "https://github.com/googlefonts/noto-emoji";
       license = with licenses; [ ofl asl20 ];
       platforms = platforms.all;
-      maintainers = with maintainers; [ mathnerd314 ];
+      maintainers = with maintainers; [ mathnerd314 sternenseemann ];
     };
   };
 
-  noto-fonts-emoji-blob-bin = stdenv.mkDerivation rec {
-    pname = "noto-fonts-emoji-blob-bin";
-    version = "2019-06-14-Emoji-12";
-
-    src = fetchurl {
+  noto-fonts-emoji-blob-bin =
+    let
+      pname = "noto-fonts-emoji-blob-bin";
+      version = "14.0.1";
+    in
+    fetchurl {
+      name = "${pname}-${version}";
       url = "https://github.com/C1710/blobmoji/releases/download/v${version}/Blobmoji.ttf";
-      sha256 = "0snvymglmvpnfgsriw2cnnqm0f4llav0jvzir6mpd17mqqhhabbh";
+      sha256 = "sha256-wSH9kRJ8y2i5ZDqzeT96dJcEJnHDSpU8bOhmxaT+UCg=";
+
+      downloadToTemp = true;
+      recursiveHash = true;
+      postFetch = ''
+        install -Dm 444 $downloadedFile $out/share/fonts/blobmoji/Blobmoji.ttf
+      '';
+
+      meta = with lib; {
+        description = "Noto Emoji with extended Blob support";
+        homepage = "https://github.com/C1710/blobmoji";
+        license = with licenses; [ ofl asl20 ];
+        platforms = platforms.all;
+        maintainers = with maintainers; [ rileyinman jk ];
+      };
     };
-
-    dontUnpack = true;
-
-    installPhase = ''
-      install -D $src $out/share/fonts/blobmoji/Blobmoji.ttf
-    '';
-
-    meta = with lib; {
-      description = "Noto Emoji with extended Blob support";
-      homepage = "https://github.com/C1710/blobmoji";
-      license = with licenses; [ ofl asl20 ];
-      platforms = platforms.all;
-      maintainers = with maintainers; [ rileyinman ];
-    };
-  };
 }

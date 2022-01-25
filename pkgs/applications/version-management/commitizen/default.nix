@@ -1,17 +1,49 @@
-{ pkgs, nodejs, stdenv, lib, ... }:
+{ buildPythonApplication
+, lib
+, fetchFromGitHub
+, poetry
+, termcolor
+, questionary
+, colorama
+, decli
+, tomlkit
+, jinja2
+, pyyaml
+, argcomplete
+, typing-extensions
+}:
 
-let
-  nodePackages = import ./node-composition.nix {
-    inherit pkgs nodejs;
-    inherit (stdenv.hostPlatform) system;
+buildPythonApplication rec {
+  pname = "commitizen";
+  version = "2.20.3";
+
+  src = fetchFromGitHub {
+    owner = "commitizen-tools";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-rAm2GTRxZIHQmn/FM0IwwH/2h+oOvzGmeVr5xkvD/zA=";
   };
-in
-nodePackages.commitizen.override {
+
+  format = "pyproject";
+
+  nativeBuildInputs = [ poetry ];
+
+  propagatedBuildInputs = [
+    termcolor
+    questionary
+    colorama
+    decli
+    tomlkit
+    jinja2
+    pyyaml
+    argcomplete
+    typing-extensions
+  ];
+
   meta = with lib; {
-    description = "The commitizen command line utility";
-    homepage = "https://commitizen.github.io/cz-cli";
-    maintainers = with maintainers; [ freezeboy ];
+    description = "Tool to create committing rules for projects, auto bump versions, and generate changelogs";
+    homepage = "https://github.com/commitizen-tools/commitizen";
     license = licenses.mit;
-    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ lovesegfault ];
   };
 }

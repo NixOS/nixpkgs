@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rofi-file-browser-extended";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "marvinkreis";
     repo = pname;
     rev = version;
-    sha256 = "1grcal8ga4gpaj3p1dvx4zmqai93jjz2izpj91lxwj0dbz1gmbdm";
+    sha256 = "sha256-TNAAImQaIJRgvD8kFf2oHNj4bQiq1NhD8KkCgW5dSK8=";
     fetchSubmodules = true;
   };
 

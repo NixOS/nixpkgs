@@ -35,6 +35,15 @@ stdenv.mkDerivation rec {
     cp ${gnu-config}/config.guess configure.guess
   '';
 
+  # Build system reuses the same object file names for shared and static
+  # library. Occasionally fails in the middle:
+  #    gcc -O2 -fsigned-char -g -O2 -c scan_devices.c
+  #    rm  -f *.o core *~ *.out
+  #    gcc -O2 -fsigned-char -g -O2 -fpic -c scan_devices.c
+  #    gcc -fpic -shared -o libcdda_interface.so.0.10.2 ... scan_devices.o ...
+  #    scan_devices.o: file not recognized: file format not recognized
+  enableParallelBuilding = false;
+
   meta = with lib; {
     homepage = "https://xiph.org/paranoia";
     description = "A tool and library for reading digital audio from CDs";

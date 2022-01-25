@@ -2,7 +2,8 @@
 , stdenv
 , lib
 , fetchFromGitHub
-, unstableGitUpdater
+, fetchpatch
+, nix-update-script
 , qtbase
 , qtsvg
 , qttools
@@ -19,14 +20,24 @@
 
 mkDerivation rec {
   pname = "punes";
-  version = "unstable-2021-09-11";
+  version = "0.108";
 
   src = fetchFromGitHub {
     owner = "punesemu";
     repo = "puNES";
-    rev = "60ca36fcb066c41d0b3f2b550ca94dc7d12d84d6";
-    sha256 = "JOi6AE1bpAc/wj9fQqHrUNc6vceeUyP0phT2f9kcJTY=";
+    rev = "v${version}";
+    sha256 = "0inkwmvbr2w4addmgk9r4f13yismang9ylfgflhh9352lf0lirv8";
   };
+
+  patches = [
+    # Drop when version > 0.108
+    # https://github.com/punesemu/puNES/issues/185
+    (fetchpatch {
+      name = "0001-punes-Fixed-make-install.patch";
+      url = "https://github.com/punesemu/puNES/commit/902434f50398ebcda0786ade4b28a0496084810e.patch";
+      sha256 = "1a3052n3n1qipi4bd7f7gq4zl5jjjzzzpbijdisis2vxvhnfvcim";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace configure.ac \
@@ -49,8 +60,8 @@ mkDerivation rec {
     "--with-ffmpeg"
   ];
 
-  passthru.updateScript = unstableGitUpdater {
-    url = "https://github.com/punesemu/puNES.git";
+  passthru.updateScript = nix-update-script {
+    attrPath = pname;
   };
 
   meta = with lib; {

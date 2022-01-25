@@ -16,7 +16,8 @@
 
 buildPythonPackage rec {
   pname = "pyatmo";
-  version = "6.1.0";
+  version = "6.2.2";
+  format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
@@ -24,7 +25,7 @@ buildPythonPackage rec {
     owner = "jabesq";
     repo = "pyatmo";
     rev = "v${version}";
-    sha256 = "sha256-Iscnv3hfYa8QFiXMUN334Muo0oGqnnK11RPNxQJggG0=";
+    sha256 = "1cd6g5vix8k45ndx4aq4pvyyisqdp38gd2466jrlg8z9byandj0i";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -54,7 +55,9 @@ buildPythonPackage rec {
       --replace "requests~=2.24" "requests"
   '';
 
-  pythonImportsCheck = [ "pyatmo" ];
+  pythonImportsCheck = [
+    "pyatmo"
+  ];
 
   meta = with lib; {
     description = "Simple API to access Netatmo weather station data";

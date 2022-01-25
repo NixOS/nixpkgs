@@ -1,28 +1,30 @@
 { lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
 , aiohttp
+, awesomeversion
 , backoff
+, buildPythonPackage
+, cachetools
+, fetchFromGitHub
 , poetry-core
-, packaging
 , yarl
 , aresponses
 , pytest-asyncio
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "wled";
-  version = "0.8.0";
-  disabled = pythonOlder "3.8";
+  version = "0.11.0";
   format = "pyproject";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-wled";
     rev = "v${version}";
-    sha256 = "1jhykilb81sp1srxk91222qglwdlr993ssvgfnl837nbcx6ws1hw";
+    sha256 = "02mc9dbz7lvk7d8aaimggm3vg99bc42njsv8sfchvc9amvdi94qy";
   };
 
   nativeBuildInputs = [
@@ -31,8 +33,9 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
+    awesomeversion
     backoff
-    packaging
+    cachetools
     yarl
   ];
 
@@ -49,7 +52,9 @@ buildPythonPackage rec {
       --replace "--cov" ""
   '';
 
-  pythonImportsCheck = [ "wled" ];
+  pythonImportsCheck = [
+    "wled"
+  ];
 
   meta = with lib; {
     description = "Asynchronous Python client for WLED";

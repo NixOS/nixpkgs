@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, nixosTests, ... }:
 let
   cfg = config.services.step-ca;
   settingsFormat = (pkgs.formats.json { });
@@ -82,6 +82,8 @@ in
       });
     in
     {
+      passthru.tests.step-ca = nixosTests.step-ca;
+
       assertions =
         [
           {
@@ -119,7 +121,7 @@ in
           ];
 
           # ProtectProc = "invisible"; # not supported by upstream yet
-          # ProcSubset = "pid"; # not supported by upstream upstream yet
+          # ProcSubset = "pid"; # not supported by upstream yet
           # PrivateUsers = true; # doesn't work with privileged ports therefore not supported by upstream
 
           DynamicUser = true;

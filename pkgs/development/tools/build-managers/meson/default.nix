@@ -1,19 +1,19 @@
 { lib
-, python3
-
-, writeTextDir
-, substituteAll
 , fetchpatch
 , installShellFiles
+, ninja
+, pkg-config
+, python3
+, substituteAll
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "meson";
-  version = "0.57.1";
+  version = "0.60.3";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "19n8alcpzv6npgp27iqljkmvdmr7s2c7zm8y997j1nlvpa1cgqbj";
+    hash = "sha256-h8pfqTWKAYZFKTkr1k4CcVjrlK/KfHdmsYZu8n7MuY4=";
   };
 
   patches = [
@@ -57,14 +57,22 @@ python3.pkgs.buildPythonApplication rec {
     # unsandboxed non-NixOS builds, see:
     # https://github.com/NixOS/nixpkgs/issues/86131#issuecomment-711051774
     ./boost-Do-not-add-system-paths-on-nix.patch
+
+    # Meson tries to update ld.so.cache which breaks when the target architecture
+    # differs from the build host's.
+    ./do-not-update-ldconfig-cache.patch
   ];
 
   setupHook = ./setup-hook.sh;
 
-  # 0.45 update enabled tests but they are failing
+  # Meson included tests since 0.45, however they fail in Nixpkgs because they
+  # require a typical building environment (including C compiler and stuff).
+  # Just for the sake of documentation, the next lines are maintained here.
   doCheck = false;
-  # checkInputs = [ ninja pkg-config ];
-  # checkPhase = "python ./run_project_tests.py";
+  checkInputs = [ ninja pkg-config ];
+  checkPhase = ''
+    python ./run_project_tests.py
+  '';
 
   postFixup = ''
     pushd $out/bin
@@ -87,9 +95,19 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://mesonbuild.com";
-    description = "SCons-like build system that use python as a front-end language and Ninja as a building backend";
+    description = "An open source, fast and friendly build system made in Python";
+    longDescription = ''
+      Meson is an open source build system meant to be both extremely fast, and,
+      even more importantly, as user friendly as possible.
+
+      The main design point of Meson is that every moment a developer spends
+      writing or debugging build definitions is a second wasted. So is every
+      second spent waiting for the build system to actually start compiling
+      code.
+    '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ jtojnar mbe ];
-    platforms = platforms.all;
+    maintainers = with maintainers; [ jtojnar mbe AndersonTorres ];
+    inherit (python3.meta) platforms;
   };
 }
+# TODO: a more Nixpkgs-tailoired test suite

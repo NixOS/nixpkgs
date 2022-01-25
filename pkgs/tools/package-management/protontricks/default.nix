@@ -9,17 +9,18 @@
 , winetricks
 , yad
 , pytestCheckHook
+, nix-update-script
 }:
 
 buildPythonApplication rec {
   pname = "protontricks";
-  version = "1.6.0";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "Matoking";
     repo = pname;
     rev = version;
-    hash = "sha256-sbYIqVsuDZ2Htb6SVIe/gBA1UIvUzu4fjTjWQ7k1WFs=";
+    sha256 = "sha256-StI9UdSILcCUmViQnxteOJr6xLSz+EgtxRpJis57lBY=";
   };
 
   patches = [
@@ -54,6 +55,10 @@ buildPythonApplication rec {
   '';
 
   pythonImportsCheck = [ "protontricks" ];
+
+  passthru.updateScript = nix-update-script {
+    attrPath = pname;
+  };
 
   meta = with lib; {
     description = "A simple wrapper for running Winetricks commands for Proton-enabled games";

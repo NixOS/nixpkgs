@@ -4,6 +4,7 @@
 , substituteAll
 , libpcap
 , openssl
+, bash
 }:
 
 stdenv.mkDerivation rec {
@@ -31,17 +32,21 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libpcap
     openssl
+    bash
   ];
 
   postPatch = ''
-    # strip is not found when cross compiling with seemingly no way to point
-    # make to the right place, fixup phase will correctly strip
-    # everything anyway so we remove it from the Makefiles
     for file in $(find -name Makefile.linux); do
-      substituteInPlace "$file" --replace '$(INSTALL) -s' '$(INSTALL)'
       substituteInPlace "$file" --replace '-m 4550' '-m 550'
     done
+
+    patchShebangs --host \
+      scripts/{pon,poff,plog}
   '';
+
+  makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -52,9 +57,7 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    for tgt in pon poff plog; do
-      substituteInPlace "$out/bin/$tgt" --replace "/usr/sbin" "$out/bin"
-    done
+    substituteInPlace "$out/bin/pon" --replace "/usr/sbin" "$out/bin"
   '';
 
   meta = with lib; {

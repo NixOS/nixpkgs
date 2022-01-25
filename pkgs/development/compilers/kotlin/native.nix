@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation rec {
   pname = "kotlin-native";
-  version = "1.5.31";
+  version = "1.6.10";
 
   src = let
     getArch = {
@@ -20,9 +20,9 @@ stdenv.mkDerivation rec {
       "https://github.com/JetBrains/kotlin/releases/download/v${version}/kotlin-native-${arch}-${version}.tar.gz";
 
     getHash = arch: {
-      "macos-aarch64" = "sha256-+9AF42AlPn1/8c14t8u+NN8FkoEmdt6tpmIKU9Rp2AM=";
-      "macos-x86_64" = "sha256-/eciSo4Eps2TTsv1XU1Rlm+KBmgQT0MWp2s/OAYtGt4=";
-      "linux-x86_64" = "sha256-Y2t+nlTu+j+h0oRneo7CJx0PmLAkqKYBJ+8go7rargM=";
+      "macos-aarch64" = "sha256-W+9F1YZ5ATa6KaALYQEXW4xr4UxfquuC72xoB2987iM=";
+      "macos-x86_64" = "sha256-pceORt+YJZiP67nbnUB6ny1ic/r0aTrdA2hsQi5Otp8=";
+      "linux-x86_64" = "sha256-tcZffJPcR6PYJ22wIh5BHn/yjG3Jb+MG5COLbAQ2/Ww=";
     }.${arch};
   in
     fetchurl {
@@ -39,6 +39,7 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     mkdir -p $out
+    rm bin/kotlinc
     mv * $out
 
     runHook postInstall
@@ -58,7 +59,7 @@ stdenv.mkDerivation rec {
       standard library.
     '';
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ fabianhjr ];
     platforms = [ "x86_64-linux" ] ++ lib.platforms.darwin;
   };
 }

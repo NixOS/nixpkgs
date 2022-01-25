@@ -24,7 +24,7 @@
 , pyopenssl
 , pyparsing
 , pyperclip
-, ruamel_yaml
+, ruamel-yaml
 , setuptools
 , sortedcontainers
 , tornado
@@ -78,7 +78,7 @@ buildPythonPackage rec {
     pyopenssl
     pyparsing
     pyperclip
-    ruamel_yaml
+    ruamel-yaml
     sortedcontainers
     tornado
     urwid

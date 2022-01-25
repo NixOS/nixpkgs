@@ -16,67 +16,8 @@ rec {
 
   inherit pkgs;
 
-  # Reifies and correctly wraps the python test driver for
-  # the respective qemu version and with or without ocr support
-  pythonTestDriver = {
-      qemu_pkg ? pkgs.qemu_test
-    , enableOCR ? false
-  }:
-    let
-      name = "nixos-test-driver";
-      testDriverScript = ./test-driver/test-driver.py;
-      ocrProg = tesseract4.override { enableLanguages = [ "eng" ]; };
-      imagemagick_tiff = imagemagick_light.override { inherit libtiff; };
-    in stdenv.mkDerivation {
-      inherit name;
-
-      nativeBuildInputs = [ makeWrapper ];
-      buildInputs = [ (python3.withPackages (p: [ p.ptpython p.colorama ])) ];
-      checkInputs = with python3Packages; [ pylint black mypy ];
-
-      dontUnpack = true;
-
-      preferLocalBuild = true;
-
-      buildPhase = ''
-        python <<EOF
-        from pydoc import importfile
-        with open('driver-symbols', 'w') as fp:
-          t = importfile('${testDriverScript}')
-          d = t.Driver([],[],"")
-          test_symbols = d.test_symbols()
-          fp.write(','.join(test_symbols.keys()))
-        EOF
-      '';
-
-      doCheck = true;
-      checkPhase = ''
-        mypy --disallow-untyped-defs \
-             --no-implicit-optional \
-             --ignore-missing-imports ${testDriverScript}
-        pylint --errors-only ${testDriverScript}
-        black --check --diff ${testDriverScript}
-      '';
-
-      installPhase =
-        ''
-          mkdir -p $out/bin
-          cp ${testDriverScript} $out/bin/nixos-test-driver
-          chmod u+x $out/bin/nixos-test-driver
-          # TODO: copy user script part into this file (append)
-
-          wrapProgram $out/bin/nixos-test-driver \
-            --argv0 ${name} \
-            --prefix PATH : "${lib.makeBinPath [ qemu_pkg vde2 netpbm coreutils socat ]}" \
-            ${lib.optionalString enableOCR
-              "--prefix PATH : '${ocrProg}/bin:${imagemagick_tiff}/bin'"} \
-
-          install -m 0644 -vD driver-symbols $out/nix-support/driver-symbols
-        '';
-    };
-
   # Run an automated test suite in the given virtual network.
-  runTests = { driver, pos }:
+  runTests = { driver, driverInteractive, pos }:
     stdenv.mkDerivation {
       name = "vm-test-run-${driver.testName}";
 
@@ -93,7 +34,7 @@ rec {
         '';
 
       passthru = driver.passthru // {
-        inherit driver;
+        inherit driver driverInteractive;
       };
 
       inherit pos; # for better debugging
@@ -112,8 +53,15 @@ rec {
     , passthru ? {}
   }:
     let
-      # FIXME: get this pkg from the module system
-      testDriver = pythonTestDriver { inherit qemu_pkg enableOCR;};
+      # Reifies and correctly wraps the python test driver for
+      # the respective qemu version and with or without ocr support
+      testDriver = pkgs.callPackage ./test-driver {
+        inherit enableOCR;
+        qemu_pkg = qemu_test;
+        imagemagick_light = imagemagick_light.override { inherit libtiff; };
+        tesseract4 = tesseract4.override { enableLanguages = [ "eng" ]; };
+      };
+
 
       testDriverName =
         let
@@ -134,7 +82,9 @@ rec {
       vlans = map (m: m.config.virtualisation.vlans) (lib.attrValues nodes);
       vms = map (m: m.config.system.build.vm) (lib.attrValues nodes);
 
-      nodeHostNames = map (c: c.config.system.name) (lib.attrValues nodes);
+      nodeHostNames = let
+        nodesList = map (c: c.config.system.name) (lib.attrValues nodes);
+      in nodesList ++ lib.optional (lib.length nodesList == 1) "machine";
 
       # TODO: This is an implementation error and needs fixing
       # the testing famework cannot legitimately restrict hostnames further
@@ -176,10 +126,11 @@ rec {
         echo -n "$testScript" > $out/test-script
         ln -s ${testDriver}/bin/nixos-test-driver $out/bin/nixos-test-driver
 
+        ${testDriver}/bin/generate-driver-symbols
         ${lib.optionalString (!skipLint) ''
           PYFLAKES_BUILTINS="$(
             echo -n ${lib.escapeShellArg (lib.concatStringsSep "," nodeHostNames)},
-            < ${lib.escapeShellArg "${testDriver}/nix-support/driver-symbols"}
+            < ${lib.escapeShellArg "driver-symbols"}
           )" ${python3Packages.pyflakes}/bin/pyflakes $out/test-script
         ''}
 
@@ -209,11 +160,41 @@ rec {
     let
       nodes = qemu_pkg:
         let
+          testScript' =
+            # Call the test script with the computed nodes.
+            if lib.isFunction testScript
+            then testScript { nodes = nodes qemu_pkg; }
+            else testScript;
+
           build-vms = import ./build-vms.nix {
             inherit system lib pkgs minimal specialArgs;
             extraConfigurations = extraConfigurations ++ [(
+              { config, ... }:
               {
                 virtualisation.qemu.package = qemu_pkg;
+
+                # Make sure all derivations referenced by the test
+                # script are available on the nodes. When the store is
+                # accessed through 9p, this isn't important, since
+                # everything in the store is available to the guest,
+                # but when building a root image it is, as all paths
+                # that should be available to the guest has to be
+                # copied to the image.
+                virtualisation.additionalPaths =
+                  lib.optional
+                    # A testScript may evaluate nodes, which has caused
+                    # infinite recursions. The demand cycle involves:
+                    #   testScript -->
+                    #   nodes -->
+                    #   toplevel -->
+                    #   additionalPaths -->
+                    #   hasContext testScript' -->
+                    #   testScript (ad infinitum)
+                    # If we don't need to build an image, we can break this
+                    # cycle by short-circuiting when useNixStoreImage is false.
+                    (config.virtualisation.useNixStoreImage && builtins.hasContext testScript')
+                    (pkgs.writeStringReferencesToFile testScript');
+
                 # Ensure we do not use aliases. Ideally this is only set
                 # when the test framework is used by Nixpkgs NixOS tests.
                 nixpkgs.config.allowAliases = false;
@@ -243,7 +224,7 @@ rec {
           passMeta = drv: drv // lib.optionalAttrs (t ? meta) {
             meta = (drv.meta or { }) // t.meta;
           };
-        in passMeta (runTests { inherit driver pos; });
+        in passMeta (runTests { inherit driver pos driverInteractive; });
 
     in
       test // {

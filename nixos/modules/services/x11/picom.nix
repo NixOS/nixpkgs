@@ -1,10 +1,11 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
 
   cfg = config.services.picom;
+  opt = options.services.picom;
 
   pairOf = x: with types;
     addCheck (listOf x) (y: length y == 2)
@@ -178,7 +179,16 @@ in {
 
     wintypes = mkOption {
       type = types.attrs;
-      default = { popup_menu = { opacity = cfg.menuOpacity; }; dropdown_menu = { opacity = cfg.menuOpacity; }; };
+      default = {
+        popup_menu = { opacity = cfg.menuOpacity; };
+        dropdown_menu = { opacity = cfg.menuOpacity; };
+      };
+      defaultText = literalExpression ''
+        {
+          popup_menu = { opacity = config.${opt.menuOpacity}; };
+          dropdown_menu = { opacity = config.${opt.menuOpacity}; };
+        }
+      '';
       example = {};
       description = ''
         Rules for specific window types.

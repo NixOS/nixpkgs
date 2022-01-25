@@ -5,17 +5,17 @@
 
 buildGoModule rec {
   pname = "aerc";
-  version = "0.5.2";
+  version = "0.7.1";
 
   src = fetchFromSourcehut {
-    owner = "~sircmpwn";
+    owner = "~rjarry";
     repo = pname;
     rev = version;
-    sha256 = "1ja639qry8h2d6y7qshf62ypkzs2rzady59p81scqh8nx0g9bils";
+    sha256 = "sha256-wiylBBqnivDnMUyCg3Zateu4jcjicTfrQFALT8dg5No=";
   };
 
-  runVend = true;
-  vendorSha256 = "9PXdUH0gu8PGaKlRJCUF15W1/LxA+sv3Pwl2UnjYxWY=";
+  proxyVendor = true;
+  vendorSha256 = "sha256-3BbKf2xSzXznCB5UU/cThVg329GSeJG9KwjaS+tN3Rs=";
 
   doCheck = false;
 

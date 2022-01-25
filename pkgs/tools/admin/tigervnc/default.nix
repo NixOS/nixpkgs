@@ -12,14 +12,14 @@
 with lib;
 
 stdenv.mkDerivation rec {
-  version = "1.11.0";
+  version = "1.12.0";
   pname = "tigervnc";
 
   src = fetchFromGitHub {
     owner = "TigerVNC";
     repo = "tigervnc";
     rev = "v${version}";
-    sha256 = "sha256-IX39oEhTyk7NV+9dD9mFtes22fBdMTAVIv5XkqFK560=";
+    sha256 = "sha256-77X+AvHFWfYYIio3c+EYf11jg/1IbYhNUweRIDHMOZw=";
   };
 
 

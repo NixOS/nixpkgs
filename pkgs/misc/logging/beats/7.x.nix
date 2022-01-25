@@ -8,10 +8,10 @@ let beat = package: extraArgs: buildGoModule (rec {
     owner = "elastic";
     repo = "beats";
     rev = "v${version}";
-    sha256 = "sha256-zr0a0LBR4G9okS2pUixDYtYZ0yCp4G6j08jx/zlIKOA=";
+    sha256 = "sha256-9Jl5Xo1iKdOY9ZE5JXKSL4ee+NdsN3KCY2dDYuxlzPI=";
   };
 
-  vendorSha256 = "sha256-xmw432vY1T2EixkDcXdGrnMdc8fYOI4R2lEjbkav3JQ=";
+  vendorSha256 = "sha256-tyxyM7RsTHTVVxc9gagPsSvFRaWGTmobKzyv9RODXBk=";
 
   subPackages = [ package ];
 
@@ -24,7 +24,14 @@ let beat = package: extraArgs: buildGoModule (rec {
 } // extraArgs);
 in
 rec {
-  filebeat7 = beat "filebeat" { meta.description = "Lightweight shipper for logfiles"; };
+  filebeat7 = beat "filebeat" {
+    meta.description = "Lightweight shipper for logfiles";
+    buildInputs = [ systemd ];
+    tags = [ "withjournald" ];
+    postFixup = ''
+      patchelf --set-rpath ${lib.makeLibraryPath [ (lib.getLib systemd) ]} "$out/bin/filebeat"
+    '';
+  };
   heartbeat7 = beat "heartbeat" { meta.description = "Lightweight shipper for uptime monitoring"; };
   metricbeat7 = beat "metricbeat" {
     meta.description = "Lightweight shipper for metrics";
@@ -46,16 +53,5 @@ rec {
       your application processes, parse on the fly protocols like HTTP, MySQL,
       PostgreSQL, Redis or Thrift and correlate the messages into transactions.
     '';
-  };
-  journalbeat7 = beat "journalbeat" {
-    meta.description = ''
-      Journalbeat is an open source data collector to read and forward
-      journal entries from Linuxes with systemd.
-    '';
-    buildInputs = [ systemd.dev ];
-    postFixup = let libPath = lib.makeLibraryPath [ (lib.getLib systemd) ]; in
-      ''
-        patchelf --set-rpath ${libPath} "$out/bin/journalbeat"
-      '';
   };
 }

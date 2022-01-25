@@ -1,4 +1,4 @@
-{ lib, fetchzip, buildDunePackage, ssl, lwt }:
+{ lib, fetchFromGitHub, buildDunePackage, ssl, lwt }:
 
 buildDunePackage rec {
   pname = "lwt_ssl";
@@ -7,9 +7,11 @@ buildDunePackage rec {
   minimumOCamlVersion = "4.02";
   useDune2 = true;
 
-  src = fetchzip {
-    url = "https://github.com/aantron/${pname}/archive/${version}.tar.gz";
-    sha256 = "0v417ch5zn0yknj156awa5mrq3mal08pbrvsyribbn63ix6f9y3p";
+  src = fetchFromGitHub {
+    owner = "aantron";
+    repo = "lwt_ssl";
+    rev = version;
+    sha256 = "sha256-d/jkTI/D2LVi9nrndRGgqg6ca1FcmRKknR7YXyA7gWw=";
   };
 
   propagatedBuildInputs = [ ssl lwt ];

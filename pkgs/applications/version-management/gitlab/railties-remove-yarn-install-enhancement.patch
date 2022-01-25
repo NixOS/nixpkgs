@@ -1,0 +1,13 @@
+diff --git a/railties/lib/rails/tasks/yarn.rake b/railties/lib/rails/tasks/yarn.rake
+index 0226da721a..365cdeb0f9 100644
+--- a/railties/lib/rails/tasks/yarn.rake
++++ b/railties/lib/rails/tasks/yarn.rake
+@@ -27,8 +27,3 @@ namespace :yarn do
+     exit 1
+   end
+ end
+-
+-# Run Yarn prior to Sprockets assets precompilation, so dependencies are available for use.
+-if Rake::Task.task_defined?("assets:precompile") && File.exist?(Rails.root.join("bin", "yarn"))
+-  Rake::Task["assets:precompile"].enhance [ "yarn:install" ]
+-end

@@ -1,8 +1,8 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , fetchpatch
 , nix-update-script
-, pantheon
 , pkg-config
 , meson
 , ninja
@@ -20,31 +20,23 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-shortcut-overlay";
-  version = "1.2.0";
-
-  repoName = "shortcut-overlay";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "shortcut-overlay";
     rev = version;
-    sha256 = "1zs2fpx4agr00rsfmpi00nhiw92mlypzm4p9x3g851p24m62fn79";
+    sha256 = "sha256-qmqzGCM3cVM6y80pzjm5CCyG6BO6XlKZiODAAEnwVrM=";
   };
 
   patches = [
-    # Upstream code not respecting our localedir
-    # https://github.com/elementary/shortcut-overlay/pull/100
+    # Fix build with meson 0.61
+    # https://github.com/elementary/shortcut-overlay/pull/113
     (fetchpatch {
-      url = "https://github.com/elementary/shortcut-overlay/commit/f26e3684568e30cb6e151438e2d86c4d392626bf.patch";
-      sha256 = "0zxyqpk9xbxdm8lmgdwbb4yzzwbjlhypsca3xs34a2pl0b9pcdwd";
+      url = "https://github.com/elementary/shortcut-overlay/commit/130f78eb4b7770586ea98ba0a5fdbbf5bb116f3f.patch";
+      sha256 = "sha256-XXWq9CEv3Z2B8ogcFQAJZCfy19XxNHs3c8NToE2m/aA=";
     })
   ];
-
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
-  };
 
   nativeBuildInputs = [
     desktop-file-utils
@@ -65,11 +57,18 @@ stdenv.mkDerivation rec {
     libhandy
   ];
 
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
+
   meta = with lib; {
     description = "A native OS-wide shortcut overlay to be launched by Gala";
     homepage = "https://github.com/elementary/shortcut-overlay";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = teams.pantheon.members;
+    mainProgram = "io.elementary.shortcut-overlay";
   };
 }

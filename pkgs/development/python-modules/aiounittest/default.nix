@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "aiounittest";
-  version = "1.4.0";
+  version = "1.4.1";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "kwarunek";
     repo = pname;
     rev = version;
-    sha256 = "sha256-GbGApY4pQoFpP3RTCLdjjTnJbdz9wEXXzZRRYXgtFEM=";
+    sha256 = "sha256-FixGF1JLJVqTgLaWugbeu8f+SDjpHSdSLoGklYBup4M=";
   };
 
   propagatedBuildInputs = [

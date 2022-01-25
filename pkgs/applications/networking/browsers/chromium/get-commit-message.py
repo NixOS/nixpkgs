@@ -39,7 +39,7 @@ for entry in feed.entries:
         print('chromium: TODO -> ' + version + '\n')
     print(url)
     if fixes := re.search(r'This update includes .+ security fixes\.', content).group(0):
-        zero_days = re.search(r'Google is aware( of reports)? that .+ in the wild\.', content)
+        zero_days = re.search(r'Google is aware( of reports)? th(e|at) .+ in the wild\.', content)
         if zero_days:
             fixes += " " + zero_days.group(0)
         print('\n' + '\n'.join(textwrap.wrap(fixes, width=72)))

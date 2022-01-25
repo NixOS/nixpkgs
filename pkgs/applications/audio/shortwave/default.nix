@@ -80,6 +80,7 @@ stdenv.mkDerivation rec {
       desktop. It is the successor to the older Gradio application.
     '';
     maintainers = with maintainers; [ lasandell ];
+    broken = true; # incompatible with latest libadwaita
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };

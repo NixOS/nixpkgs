@@ -15,8 +15,9 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-isl=system" ];
 
-  # Breaks the test cases
-  #enableParallelBuilding = true;
+  enableParallelBuilding = true;
+  # Breaks the test cases as it reuses 'cloog_temp' file name for different tests.
+  enableParallelChecking = false;
 
   doCheck = true;
 

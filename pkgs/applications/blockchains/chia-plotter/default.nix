@@ -4,18 +4,18 @@
 , libsodium
 , cmake
 , substituteAll
-, pythonPackages
+, python3Packages
 }:
 
 stdenv.mkDerivation {
   pname = "chia-plotter";
-  version = "unstable-2021-07-12";
+  version = "1.1.7";
 
   src = fetchFromGitHub {
     owner = "madMAx43v3r";
     repo = "chia-plotter";
-    rev = "974d6e5f1440f68c48492122ca33828a98864dfc";
-    sha256 = "0dliswvqmi3wq9w8jp0sb0z74n5k37608sig6r60z206g2bwhjja";
+    rev = "18cad340858f0dbcc8dafd0bda1ce1af0fe58c65";
+    sha256 = "sha256-lXjeqcjn3+LtnVYngdM1T3on7V7wez4oOAZ0RpKJXMM=";
     fetchSubmodules = true;
   };
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
     # prevent CMake from trying to get libraries on the Internet
     (substituteAll {
       src = ./dont_fetch_dependencies.patch;
-      pybind11_src = pythonPackages.pybind11.src;
+      pybind11_src = python3Packages.pybind11.src;
       relic_src = fetchFromGitHub {
         owner = "relic-toolkit";
         repo = "relic";

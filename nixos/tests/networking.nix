@@ -489,6 +489,77 @@ let
               client2.wait_until_succeeds("ping -c 1 fc00::2")
         '';
     };
+    gre = let
+      node = { pkgs, ... }: with pkgs.lib; {
+        networking = {
+          useNetworkd = networkd;
+          useDHCP = false;
+        };
+      };
+    in {
+      name = "GRE";
+      nodes.client1 = args@{ pkgs, ... }:
+        mkMerge [
+          (node args)
+          {
+            virtualisation.vlans = [ 1 2 ];
+            networking = {
+              greTunnels = {
+                greTunnel = {
+                  local = "192.168.2.1";
+                  remote = "192.168.2.2";
+                  dev = "eth2";
+                  type = "tap";
+                };
+              };
+              bridges.bridge.interfaces = [ "greTunnel" "eth1" ];
+              interfaces.eth1.ipv4.addresses = mkOverride 0 [];
+              interfaces.bridge.ipv4.addresses = mkOverride 0 [
+                { address = "192.168.1.1"; prefixLength = 24; }
+              ];
+            };
+          }
+        ];
+      nodes.client2 = args@{ pkgs, ... }:
+        mkMerge [
+          (node args)
+          {
+            virtualisation.vlans = [ 2 3 ];
+            networking = {
+              greTunnels = {
+                greTunnel = {
+                  local = "192.168.2.2";
+                  remote = "192.168.2.1";
+                  dev = "eth1";
+                  type = "tap";
+                };
+              };
+              bridges.bridge.interfaces = [ "greTunnel" "eth2" ];
+              interfaces.eth2.ipv4.addresses = mkOverride 0 [];
+              interfaces.bridge.ipv4.addresses = mkOverride 0 [
+                { address = "192.168.1.2"; prefixLength = 24; }
+              ];
+            };
+          }
+        ];
+      testScript = { ... }:
+        ''
+          start_all()
+
+          with subtest("Wait for networking to be configured"):
+              client1.wait_for_unit("network.target")
+              client2.wait_for_unit("network.target")
+
+              # Print diagnostic information
+              client1.succeed("ip addr >&2")
+              client2.succeed("ip addr >&2")
+
+          with subtest("Test GRE tunnel bridge over VLAN"):
+              client1.wait_until_succeeds("ping -c 1 192.168.1.2")
+
+              client2.wait_until_succeeds("ping -c 1 192.168.1.1")
+        '';
+    };
     vlan = let
       node = address: { pkgs, ... }: with pkgs.lib; {
         #virtualisation.vlans = [ 1 ];
@@ -669,6 +740,7 @@ let
     routes = {
       name = "routes";
       machine = {
+        networking.useNetworkd = networkd;
         networking.useDHCP = false;
         networking.interfaces.eth0 = {
           ipv4.addresses = [ { address = "192.168.1.2"; prefixLength = 24; } ];
@@ -678,7 +750,13 @@ let
             { address = "2001:1470:fffd:2098::"; prefixLength = 64; via = "fdfd:b3f0::1"; }
           ];
           ipv4.routes = [
-            { address = "10.0.0.0"; prefixLength = 16; options = { mtu = "1500"; }; }
+            { address = "10.0.0.0"; prefixLength = 16; options = {
+              mtu = "1500";
+              # Explicitly set scope because iproute and systemd-networkd
+              # disagree on what the scope should be
+              # if the type is the default "unicast"
+              scope = "link";
+            }; }
             { address = "192.168.2.0"; prefixLength = 24; via = "192.168.1.1"; }
           ];
         };
@@ -727,6 +805,7 @@ let
                 ipv6Table, targetIPv6Table
             )
 
+      '' + optionalString (!networkd) ''
         with subtest("test clean-up of the tables"):
             machine.succeed("systemctl stop network-addresses-eth0")
             ipv4Residue = machine.succeed("ip -4 route list dev eth0 | head -n-3").strip()

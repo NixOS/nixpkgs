@@ -1,20 +1,29 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index c1e78d1d..13639ba1 100644
+index 50e712fa..d39c2ce4 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -328,14 +328,7 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
-         ${OPENSSL_ROOT}/lib/libssl.lib
-         ${OPENSSL_ROOT}/lib/libcrypto.lib
-     )
--elseif (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
--    set (OPENSSL_ROOT /usr/local/opt/openssl)
--    include_directories (BEFORE SYSTEM ${OPENSSL_ROOT}/include)
--    set (OPENSSL_LIBS
--        ${OPENSSL_ROOT}/lib/libssl.a
--        ${OPENSSL_ROOT}/lib/libcrypto.a
--    )
--elseif (${CMAKE_SYSTEM_NAME} MATCHES "Linux|.*BSD|DragonFly")
-+elseif (${CMAKE_SYSTEM_NAME} MATCHES "Linux|Darwin|.*BSD|DragonFly")
-     set (OPENSSL_LIBS ssl crypto)
- else()
-     message (FATAL_ERROR "Couldn't find OpenSSL")
+@@ -326,9 +326,6 @@ endif()
+ # Apple has to use static libraries because
+ # "Use of the Apple-provided OpenSSL libraries by apps is strongly discouraged."
+ # https://developer.apple.com/library/archive/documentation/Security/Conceptual/cryptoservices/SecureNetworkCommunicationAPIs/SecureNetworkCommunicationAPIs.html
+-if(APPLE)
+-    set(OPENSSL_USE_STATIC_LIBS TRUE)
+-endif()
+ find_package(OpenSSL REQUIRED)
+ 
+ #
+diff --git a/src/gui/src/OSXHelpers.mm b/src/gui/src/OSXHelpers.mm
+index 0c98afc1..38c190a6 100644
+--- a/src/gui/src/OSXHelpers.mm
++++ b/src/gui/src/OSXHelpers.mm
+@@ -20,10 +20,6 @@
+ #import <Foundation/Foundation.h>
+ #import <CoreData/CoreData.h>
+ #import <Cocoa/Cocoa.h>
+-#import <UserNotifications/UNNotification.h>
+-#import <UserNotifications/UNUserNotificationCenter.h>
+-#import <UserNotifications/UNNotificationContent.h>
+-#import <UserNotifications/UNNotificationTrigger.h>
+ 
+ #import <QtGlobal>
+ 

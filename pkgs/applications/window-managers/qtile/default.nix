@@ -1,23 +1,15 @@
-{ lib, fetchFromGitHub, python3, glib, cairo, pango, pkg-config, libxcb, xcbutilcursor }:
+{ lib, fetchFromGitHub, python3, python3Packages, mypy, glib, pango, pkg-config, xcbutilcursor }:
 
 let
-  enabled-xcffib = cairocffi-xcffib: cairocffi-xcffib.override {
-    withXcffib = true;
-  };
-
-  # make it easier to reference python
-  python = python3;
-  pythonPackages = python.pkgs;
-
-  unwrapped = pythonPackages.buildPythonPackage rec {
+  unwrapped = python3Packages.buildPythonPackage rec {
     pname = "qtile";
-    version = "0.18.1";
+    version = "0.20.0";
 
     src = fetchFromGitHub {
       owner = "qtile";
       repo = "qtile";
       rev = "v${version}";
-      sha256 = "0ln0fxarin9liy9n76zywmbr31xrjw8f7d3nr1mphci7wkc9bqmm";
+      sha256 = "TRmul3t//izJRdViTvxFz29JZeGYsWc7WsJjagQ35nw=";
     };
 
     postPatch = ''
@@ -33,13 +25,13 @@ let
 
     nativeBuildInputs = [
       pkg-config
-    ] ++ (with pythonPackages; [
+    ] ++ (with python3Packages; [
       setuptools-scm
     ]);
 
-    propagatedBuildInputs = with pythonPackages; [
+    propagatedBuildInputs = with python3Packages; [
       xcffib
-      (enabled-xcffib cairocffi)
+      (cairocffi.override { withXcffib = true; })
       setuptools
       python-dateutil
       dbus-python
@@ -47,6 +39,14 @@ let
       psutil
       pyxdg
       pygobject3
+      pywayland
+      pywlroots
+      xkbcommon
+    ];
+
+    # for `qtile check`, needs `stubtest` and `mypy` commands
+    makeWrapperArgs = [
+      "--suffix PATH : ${lib.makeBinPath [ mypy ]}"
     ];
 
     doCheck = false; # Requires X server #TODO this can be worked out with the existing NixOS testing infrastructure.
@@ -60,9 +60,9 @@ let
     };
   };
 in
-  (python.withPackages (ps: [ unwrapped ])).overrideAttrs (_: {
-    # otherwise will be exported as "env", this restores `nix search` behavior
-    name = "${unwrapped.pname}-${unwrapped.version}";
-    # export underlying qtile package
-    passthru = { inherit unwrapped; };
-  })
+(python3.withPackages (_: [ unwrapped ])).overrideAttrs (_: {
+  # otherwise will be exported as "env", this restores `nix search` behavior
+  name = "${unwrapped.pname}-${unwrapped.version}";
+  # export underlying qtile package
+  passthru = { inherit unwrapped; };
+})

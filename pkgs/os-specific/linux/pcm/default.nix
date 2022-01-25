@@ -1,15 +1,17 @@
 { lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  version = "202107";
   pname = "pcm";
+  version = "202112";
 
   src = fetchFromGitHub {
     owner = "opcm";
     repo = "pcm";
     rev = version;
-    sha256 = "sha256-2fN+jS6+BpodjjN+TV67uiNgZ0eblWjzbyU3CDp9ee0=";
+    sha256 = "sha256-uuQvj8BcUmuYDwV4r3oqkT+QTcSFcGjBeGUM2NZRFcA=";
   };
+
+  enableParallelBuilding = true;
 
   installPhase = ''
     mkdir -p $out/bin

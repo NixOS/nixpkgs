@@ -13,12 +13,14 @@
 
 buildPythonPackage rec {
   pname = "python-telegram-bot";
-  version = "13.7";
+  version = "13.10";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-JN91RZ4zW5a6/6aZFnn4RL1CaXivWmnKQZoKxDpAYCw=";
+    sha256 = "d2c555431821f4ace0c1b7ce12af41999f01b793b275dee131f1034d08c01e3e";
   };
 
   propagatedBuildInputs = [
@@ -45,7 +47,9 @@ buildPythonPackage rec {
   # tests not included with release
   doCheck = false;
 
-  pythonImportsCheck = [ "telegram" ];
+  pythonImportsCheck = [
+    "telegram"
+  ];
 
   meta = with lib; {
     description = "Python library to interface with the Telegram Bot API";

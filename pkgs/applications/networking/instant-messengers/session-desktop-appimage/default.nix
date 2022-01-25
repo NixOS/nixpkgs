@@ -3,14 +3,12 @@
 , appimageTools
 }:
 
-let
-  version = "1.7.3";
-in
-appimageTools.wrapType2 {
-  name = "session-desktop-appimage-${version}";
+appimageTools.wrapType2 rec {
+  pname = "session-desktop-appimage";
+  version = "1.7.6";
   src = fetchurl {
     url = "https://github.com/oxen-io/session-desktop/releases/download/v${version}/session-desktop-linux-x86_64-${version}.AppImage";
-    sha256 = "0s0zvj9ddrngdzsx8hd07pq3150sq8ab1hbpsi9i2ir99sv1p7gn";
+    sha256 = "PNjUslqLcSxkRSXFpesBr2sfre4wetZWfUQTjywdClU=";
   };
 
   meta = with lib; {

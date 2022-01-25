@@ -4,13 +4,12 @@
 , enableShells ? [ "bash" "zsh" "fish" "sh" "posh" ]
 }:
 nimPackages.buildNimPackage rec{
-
-  name = "swaycwd";
+  pname = "swaycwd";
   version = "0.0.2";
 
   src = fetchFromGitLab {
     owner = "cab404";
-    repo = name;
+    repo = pname;
     rev = "v${version}";
     hash = "sha256-OZWOPtOqcX+fVQCxWntrn98EzFu70WH55rfYCPDMSKk=";
   };

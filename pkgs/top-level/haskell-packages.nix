@@ -1,4 +1,4 @@
-{ buildPackages, pkgs, newScope, stdenv }:
+{ buildPackages, pkgsBuildTarget, pkgs, newScope, stdenv }:
 
 let
   # These are attributes in compiler and packages that don't support integer-simple.
@@ -19,13 +19,13 @@ let
     "ghcHEAD"
   ];
 
-  haskellLib = import ../development/haskell-modules/lib.nix {
+  haskellLibUncomposable = import ../development/haskell-modules/lib {
     inherit (pkgs) lib;
     inherit pkgs;
   };
 
   callPackage = newScope {
-    inherit haskellLib;
+    haskellLib = haskellLibUncomposable.compose;
     overrides = pkgs.haskell.packageOverrides;
   };
 
@@ -44,13 +44,15 @@ let
   inherit (pkgs.haskell) compiler packages;
 
 in {
-  lib = haskellLib;
+  lib = haskellLibUncomposable;
 
   package-list = callPackage ../development/haskell-modules/package-list.nix {};
 
   compiler = {
 
-    ghc865Binary = callPackage ../development/compilers/ghc/8.6.5-binary.nix { };
+    ghc865Binary = callPackage ../development/compilers/ghc/8.6.5-binary.nix {
+      llvmPackages = pkgs.llvmPackages_6;
+    };
 
     ghc8102Binary = callPackage ../development/compilers/ghc/8.10.2-binary.nix {
       llvmPackages = pkgs.llvmPackages_9;
@@ -62,11 +64,11 @@ in {
     };
 
     ghc8107Binary = callPackage ../development/compilers/ghc/8.10.7-binary.nix {
-      llvmPackages = pkgs.llvmPackages_11;
+      llvmPackages = pkgs.llvmPackages_12;
     };
 
     ghc8107BinaryMinimal = callPackage ../development/compilers/ghc/8.10.7-binary.nix {
-      llvmPackages = pkgs.llvmPackages_11;
+      llvmPackages = pkgs.llvmPackages_12;
       minimal = true;
     };
 
@@ -79,7 +81,7 @@ in {
         else
           packages.ghc865Binary;
       inherit (buildPackages.python3Packages) sphinx;
-      buildLlvmPackages = buildPackages.llvmPackages_7;
+      buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_7;
       llvmPackages = pkgs.llvmPackages_7;
     };
     ghc8107 = callPackage ../development/compilers/ghc/8.10.7.nix {
@@ -96,10 +98,10 @@ in {
       # https://github.com/xattr/xattr/issues/44 and
       # https://github.com/xattr/xattr/issues/55 are solved.
       inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
-      buildLlvmPackages = buildPackages.llvmPackages_9;
-      llvmPackages = pkgs.llvmPackages_9;
+      buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
+      llvmPackages = pkgs.llvmPackages_12;
     };
-    ghc901 = callPackage ../development/compilers/ghc/9.0.1.nix {
+    ghc902 = callPackage ../development/compilers/ghc/9.0.2.nix {
       bootPkgs =
         # aarch64 ghc8107Binary exceeds max output size on hydra
         # the oldest ghc with aarch64-darwin support is 8.10.5
@@ -108,8 +110,9 @@ in {
         else
           packages.ghc8107Binary;
       inherit (buildPackages.python3Packages) sphinx;
-      buildLlvmPackages = buildPackages.llvmPackages_10;
-      llvmPackages = pkgs.llvmPackages_10;
+      inherit (buildPackages.darwin) autoSignDarwinBinariesHook xattr;
+      buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_9;
+      llvmPackages = pkgs.llvmPackages_9;
     };
     ghc921 = callPackage ../development/compilers/ghc/9.2.1.nix {
       bootPkgs =
@@ -122,19 +125,19 @@ in {
       # Need to use apple's patched xattr until
       # https://github.com/xattr/xattr/issues/44 and
       # https://github.com/xattr/xattr/issues/55 are solved.
-      inherit (buildPackages.darwin) xattr;
-      buildLlvmPackages = buildPackages.llvmPackages_10;
-      llvmPackages = pkgs.llvmPackages_10;
+      inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
+      buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
+      llvmPackages = pkgs.llvmPackages_12;
     };
     ghcHEAD = callPackage ../development/compilers/ghc/head.nix {
-      bootPkgs = packages.ghc901; # no binary yet
+      bootPkgs = packages.ghc8107Binary;
       inherit (buildPackages.python3Packages) sphinx;
       # Need to use apple's patched xattr until
       # https://github.com/xattr/xattr/issues/44 and
       # https://github.com/xattr/xattr/issues/55 are solved.
-      inherit (buildPackages.darwin) xattr;
-      buildLlvmPackages = buildPackages.llvmPackages_10;
-      llvmPackages = pkgs.llvmPackages_10;
+      inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
+      buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
+      llvmPackages = pkgs.llvmPackages_12;
       libffi = pkgs.libffi;
     };
 
@@ -212,9 +215,9 @@ in {
       ghc = bh.compiler.ghc8107;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.10.x.nix { };
     };
-    ghc901 = callPackage ../development/haskell-modules {
-      buildHaskellPackages = bh.packages.ghc901;
-      ghc = bh.compiler.ghc901;
+    ghc902 = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc902;
+      ghc = bh.compiler.ghc902;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.0.x.nix { };
     };
     ghc921 = callPackage ../development/haskell-modules {

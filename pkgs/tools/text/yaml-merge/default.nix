@@ -1,18 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, pythonPackages }:
+{ lib, stdenv, fetchFromGitHub, python3Packages }:
 
 stdenv.mkDerivation {
   pname = "yaml-merge";
-  version = "unstable-2016-02-16";
+  version = "unstable-2022-01-12";
 
   src = fetchFromGitHub {
     owner = "abbradar";
     repo = "yaml-merge";
-    rev = "4eef7b68632d79dec369b4eff5a8c63f995f81dc";
-    sha256 = "0mwda2shk43i6f22l379fcdchmb07fm7nf4i2ii7fk3ihkhb8dgp";
+    rev = "2f0174fe92fc283dd38063a3a14f7fe71db4d9ec";
+    sha256 = "sha256-S2eZw+FOZvOn0XupZDRNcolUPd4PhvU1ziu+kx2AwnY=";
   };
 
-  pythonPath = with pythonPackages; [ pyyaml ];
-  nativeBuildInputs = [ pythonPackages.wrapPython ];
+  pythonPath = with python3Packages; [ pyyaml ];
+  nativeBuildInputs = with python3Packages;  [ wrapPython ];
 
   installPhase = ''
     install -Dm755 yaml-merge.py $out/bin/yaml-merge

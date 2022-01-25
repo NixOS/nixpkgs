@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "nbxmpp";
-  version = "2.0.3";
+  version = "2.0.4";
 
   disabled = pythonOlder "3.7";
 
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "gajim";
     repo = "python-nbxmpp";
     rev = "nbxmpp-${version}";
-    sha256 = "0gzyd25sja7n49f1ihyg6gch1b0r409r0p3qpwn8w8xy7jgn6ysc";
+    sha256 = "1c2ncx1k93gxndaw183x0vlqgjnippl3v6sknklj3z2yjcj0l1ks";
   };
 
   buildInputs = [

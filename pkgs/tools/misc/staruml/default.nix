@@ -21,13 +21,13 @@ let
   ];
 in
 stdenv.mkDerivation rec {
-  version = "4.0.1";
+  version = "4.1.6";
   pname = "staruml";
 
   src =
     fetchurl {
       url = "https://staruml.io/download/releases-v4/StarUML_${version}_amd64.deb";
-      sha256 = "0vxrs5y4a17bnc27fd2k2qc0vi81v677mi55znylwf3a41fjfcir";
+      sha256 = "sha256-CUOdpR8RExMLeOX8469egENotMNuPU4z8S1IGqA21z0=";
     };
 
   nativeBuildInputs = [ makeWrapper dpkg ];

@@ -1,37 +1,31 @@
-{ lib, fetchFromGitHub, rustPlatform, pkg-config, openssl, withRodio ? true
+{ lib, stdenv, fetchFromGitHub, rustPlatform, pkg-config, openssl, withRodio ? true
 , withALSA ? true, alsa-lib ? null, withPulseAudio ? false, libpulseaudio ? null
 , withPortAudio ? false, portaudio ? null }:
 
 rustPlatform.buildRustPackage rec {
   pname = "librespot";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "librespot-org";
     repo = "librespot";
     rev = "v${version}";
-    sha256 = "0n7h690gplpp47gdj038g6ncgwr7wvwfkg00cbrbvxhv7kzqqa1f";
+    sha256 = "1fv2sk89rf1vraq823bxddlxj6b4gqhfpc36xr7ibz2405zickfv";
   };
 
-  cargoSha256 = "0qakvpxvn84ppgs3qlsfan4flqkmjcgs698w25jasx9ymiv8wc3s";
-
-  cargoBuildFlags = with lib; [
-    "--no-default-features"
-    "--features"
-    (concatStringsSep "," (filter (x: x != "") [
-      (optionalString withRodio "rodio-backend")
-      (optionalString withALSA "alsa-backend")
-      (optionalString withPulseAudio "pulseaudio-backend")
-      (optionalString withPortAudio "portaudio-backend")
-
-    ]))
-  ];
+  cargoSha256 = "1sal85gsbnrabxi39298w9njdc08csnwl40akd6k9fsc0fmpn1b0";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl ] ++ lib.optional withALSA alsa-lib
     ++ lib.optional withPulseAudio libpulseaudio
     ++ lib.optional withPortAudio portaudio;
+
+  buildNoDefaultFeatures = true;
+  buildFeatures = lib.optional withRodio "rodio-backend"
+    ++ lib.optional withALSA "alsa-backend"
+    ++ lib.optional withPulseAudio "pulseaudio-backend"
+    ++ lib.optional withPortAudio "portaudio-backend";
 
   doCheck = false;
 
@@ -41,5 +35,6 @@ rustPlatform.buildRustPackage rec {
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ bennofs ];
     platforms = platforms.unix;
+    broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/librespot.x86_64-darwin
   };
 }

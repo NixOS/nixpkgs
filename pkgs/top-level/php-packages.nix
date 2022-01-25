@@ -107,7 +107,11 @@ lib.makeScope pkgs.newScope (self: with self; {
           (dep: "mkdir -p ext; ln -s ${dep.dev}/include ext/${dep.extensionName}")
           internalDeps}
       '';
-      checkPhase = "runHook preCheck; NO_INTERACTON=yes make test; runHook postCheck";
+      checkPhase = ''
+        runHook preCheck
+        NO_INTERACTON=yes SKIP_PERF_SENSITIVE=yes make test
+        runHook postCheck
+      '';
       outputs = [ "out" "dev" ];
       installPhase = ''
         mkdir -p $out/lib/php/extensions
@@ -172,6 +176,8 @@ lib.makeScope pkgs.newScope (self: with self; {
     couchbase = callPackage ../development/php-packages/couchbase { };
 
     event = callPackage ../development/php-packages/event { };
+
+    gnupg = callPackage ../development/php-packages/gnupg { };
 
     igbinary = callPackage ../development/php-packages/igbinary { };
 
@@ -534,14 +540,26 @@ lib.makeScope pkgs.newScope (self: with self; {
             ++ lib.optionals (lib.versionOlder php.version "7.4") [ "--with-libxml-dir=${libxml2.dev}" ];
           doCheck = false;
         }
-        { name = "sockets"; doCheck = false; }
+        {
+          name = "sockets";
+          doCheck = false;
+          patches = lib.optional (php.version == "8.1.2")
+            (fetchpatch {
+              url = "https://github.com/php/php-src/commit/07aaa34cd418c44f7bc653fafbf49f07fc71b2bf.patch";
+              sha256 = "sha256-EwVb09/zV2vJ8PuyLpKFCovxe6yKct0UBvishZaordM=";
+            });
+        }
         { name = "sodium"; buildInputs = [ libsodium ]; }
         { name = "sqlite3"; buildInputs = [ sqlite ]; }
         { name = "sysvmsg"; }
         { name = "sysvsem"; }
         { name = "sysvshm"; }
         { name = "tidy"; configureFlags = [ "--with-tidy=${html-tidy}" ]; doCheck = false; }
-        { name = "tokenizer"; }
+        {
+          name = "tokenizer";
+          patches = lib.optional (lib.versionAtLeast php.version "8.1")
+            ../development/interpreters/php/fix-tokenizer-php81.patch;
+        }
         {
           name = "wddx";
           buildInputs = [ libxml2 ];
@@ -563,6 +581,7 @@ lib.makeScope pkgs.newScope (self: with self; {
           buildInputs = [ libxml2 ];
           internalDeps = [ php.extensions.dom ];
           NIX_CFLAGS_COMPILE = [ "-I../.." "-DHAVE_DOM" ];
+          doCheck = false;
           configureFlags = [ "--enable-xmlreader" ]
             # Required to build on darwin.
             ++ lib.optionals (lib.versionOlder php.version "7.4") [ "--with-libxml-dir=${libxml2.dev}" ];

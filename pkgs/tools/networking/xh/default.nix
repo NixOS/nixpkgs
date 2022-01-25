@@ -1,22 +1,33 @@
-{ stdenv, lib, openssl, pkg-config, rustPlatform, fetchFromGitHub, Security
-, libiconv, installShellFiles }:
+{ stdenv
+, lib
+, pkg-config
+, rustPlatform
+, fetchFromGitHub
+, installShellFiles
+, withNativeTls ? true
+, Security
+, libiconv
+, openssl }:
 
 rustPlatform.buildRustPackage rec {
   pname = "xh";
-  version = "0.13.0";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "ducaale";
     repo = "xh";
     rev = "v${version}";
-    sha256 = "sha256-fTd4VSUUj9Im+kCEuFgDsA7eofM1xQfrRzigr1vyJ3I=";
+    sha256 = "sha256-zq1jpkMcq7WHc6weht2iEFMlxIJSoDreWqJCi8F+Lxs=";
   };
 
-  cargoSha256 = "sha256-yZdGw/6iVg8PaUyjTrxj6h/2yhBtqEqvMhdRHhMwDZc=";
+  cargoSha256 = "sha256-NcznWWMcgK4RixqvumPEQUlvIFRyYkbeTTGvjQ91ggE=";
+
+  buildFeatures = lib.optional withNativeTls "native-tls";
 
   nativeBuildInputs = [ installShellFiles pkg-config ];
 
-  buildInputs = if stdenv.isDarwin then [ Security libiconv ] else [ openssl ];
+  buildInputs = lib.optionals withNativeTls
+    (if stdenv.isDarwin then [ Security libiconv ] else [ openssl ]);
 
   # Get openssl-sys to use pkg-config
   OPENSSL_NO_VENDOR = 1;

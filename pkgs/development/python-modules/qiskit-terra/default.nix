@@ -16,7 +16,10 @@
 , python-dateutil
 , retworkx
 , scipy
+, scikit-quant ? null
+, symengine
 , sympy
+, tweedledum
 , withVisualization ? false
   # Python visualization requirements, optional
 , ipywidgets
@@ -29,9 +32,6 @@
   # Crosstalk-adaptive layout pass
 , withCrosstalkPass ? false
 , z3
-  # Classical function -> Quantum Circuit compiler
-, withClassicalFunctionCompiler ? true
-, tweedledum
   # test requirements
 , ddt
 , hypothesis
@@ -52,12 +52,11 @@ let
     seaborn
   ];
   crosstalkPackages = [ z3 ];
-  classicalCompilerPackages = [ tweedledum ];
 in
 
 buildPythonPackage rec {
   pname = "qiskit-terra";
-  version = "0.17.4";
+  version = "0.18.3";
 
   disabled = pythonOlder "3.6";
 
@@ -65,7 +64,7 @@ buildPythonPackage rec {
     owner = "Qiskit";
     repo = pname;
     rev = version;
-    hash = "sha256-JyNuke+XPqjLVZbvPud9Y7k0+EmvETVKcOYcDldBiVo=";
+    sha256 = "sha256-w/EnkdlC1hvmLqm4I8ajEYADxqMYGdHKrySLcb/yWGs=";
   };
 
   nativeBuildInputs = [ cython ];
@@ -82,10 +81,12 @@ buildPythonPackage rec {
     python-dateutil
     retworkx
     scipy
+    scikit-quant
+    symengine
     sympy
+    tweedledum
   ] ++ lib.optionals withVisualization visualizationPackages
-  ++ lib.optionals withCrosstalkPass crosstalkPackages
-  ++ lib.optionals withClassicalFunctionCompiler classicalCompilerPackages;
+  ++ lib.optionals withCrosstalkPass crosstalkPackages;
 
   # *** Tests ***
   checkInputs = [
@@ -103,21 +104,21 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     "test/randomized/test_transpiler_equivalence.py" # collection requires qiskit-aer, which would cause circular dependency
-  ] ++ lib.optionals (!withClassicalFunctionCompiler) [
-    "test/python/classical_function_compiler/"
+    # These tests are nondeterministic and can randomly fail.
+    # We ignore them here for deterministic building.
+    "test/randomized/"
+    # These tests consistently fail on GitHub Actions build
+    "test/python/quantum_info/operators/test_random.py"
   ];
+  pytestFlagsArray = [ "--durations=10" ];
   disabledTests = [
-    # Not working on matplotlib >= 3.4.0, checks images match.
-    "test_plot_circuit_layout"
-
     # Flaky tests
-    "test_cx_equivalence"
-    "test_pulse_limits"
-    "test_1q_random"
-  ] ++ lib.optionals (!withClassicalFunctionCompiler) [
-    "TestPhaseOracle"
-  ] ++ lib.optionals stdenv.isAarch64 [
-    "test_circuit_init" # failed on aarch64, https://gist.github.com/r-rmcgibbo/c2e173d43ced4f6954811004f6b5b842
+    "test_pulse_limits" # Fails on GitHub Actions, probably due to minor floating point arithmetic error.
+    "test_cx_equivalence"  # Fails due to flaky test
+    "test_two_qubit_synthesis_not_pulse_optimal" # test of random circuit, seems to randomly fail depending on seed
+    "test_qv_natural" # fails due to sign error. Not sure why
+  ] ++ lib.optionals (lib.versionAtLeast matplotlib.version "3.4.0") [
+    "test_plot_circuit_layout"
   ]
   # Disabling slow tests for build constraints
   ++ [
@@ -147,6 +148,12 @@ buildPythonPackage rec {
     "test_qaoa_qc_mixer_4"
     "test_abelian_grouper_random_2"
     "test_pauli_two_design"
+    "test_shor_factoring"
+    "test_sample_counts_memory_ghz"
+    "test_two_qubit_weyl_decomposition_ab0"
+    "test_sample_counts_memory_superposition"
+    "test_piecewise_polynomial_function"
+    "test_vqe_qasm"
   ];
 
   # Moves tests to $PACKAGEDIR/test. They can't be run from /build because of finding

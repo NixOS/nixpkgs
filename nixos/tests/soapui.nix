@@ -16,7 +16,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
   testScript = ''
     machine.wait_for_x()
-    machine.succeed("soapui &")
+    machine.succeed("soapui >&2 &")
     machine.wait_for_window(r"SoapUI \d+\.\d+\.\d+")
     machine.sleep(1)
     machine.screenshot("soapui")

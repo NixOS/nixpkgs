@@ -1,36 +1,22 @@
-{ stdenv, rustPlatform, rust, fetchurl, fetchFromGitHub, lib, nasm, cargo-c, libiconv }:
+{ lib, rust, stdenv, rustPlatform, fetchCrate, nasm, cargo-c, libiconv }:
 
 let
   rustTargetPlatformSpec = rust.toRustTargetSpec stdenv.hostPlatform;
 in rustPlatform.buildRustPackage rec {
   pname = "rav1e";
-  version = "0.4.1";
+  version = "0.5.0";
 
-  src = stdenv.mkDerivation rec {
-    name = "${pname}-${version}-source";
-
-    src = fetchFromGitHub {
-      owner = "xiph";
-      repo = "rav1e";
-      rev = "v${version}";
-      sha256 = "0jnq5a3fv6fzzbmprzfxidlcwwgblkwwm0135cfw741wjv7f7h6r";
-    };
-
-    cargoLock = fetchurl {
-      url = "https://github.com/xiph/rav1e/releases/download/v${version}/Cargo.lock";
-      sha256 = "14fi9wam9rs5206rvcd2f3sjpzq41pnfml14w74wn2ws3gpi46zn";
-    };
-
-    installPhase = ''
-      mkdir -p $out
-      cp -r ./* $out/
-      cp ${cargoLock} $out/Cargo.lock
-    '';
+  src = fetchCrate {
+    inherit pname version;
+    sha256 = "sha256-3g2wqQJk26KUfzmneKdTxfNSRI/ioMa5MR6AEeR7eKs=";
   };
 
-  cargoSha256 = "0miq6iiywwbxm6k0alnqg6bnd14pwc8vl9d8fgg6c0vjlfy5zhlb";
+  cargoSha256 = "sha256-sPUAWQj8UDHV7IvYnerASltSPPGVB7f1tThqFYBu6t4=";
+
   nativeBuildInputs = [ nasm cargo-c ];
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
+
+  checkType = "debug";
 
   postBuild = ''
     cargo cbuild --release --frozen --prefix=${placeholder "out"} --target ${rustTargetPlatformSpec}

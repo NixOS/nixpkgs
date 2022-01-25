@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i bash -p coreutils gnused curl common-updater-scripts nuget-to-nix nix-prefetch-git jq dotnet-sdk_5
+#! nix-shell -i bash -p coreutils gnused curl common-updater-scripts nuget-to-nix nix-prefetch-git jq dotnet-sdk_6
 set -eo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
@@ -31,21 +31,8 @@ cp -rT "$store_src" "$src"
 chmod -R +w "$src"
 pushd "$src"
 
-# Setup empty nuget package folder to force reinstall.
-mkdir ./nuget_tmp.packages
-cat >./nuget_tmp.config <<EOF
-<?xml version="1.0" encoding="utf-8"?>
-<configuration>
-  <packageSources>
-    <add key="nuget" value="https://api.nuget.org/v3/index.json" />
-  </packageSources>
-  <config>
-    <add key="globalPackagesFolder" value="$(realpath ./nuget_tmp.packages)" />
-  </config>
-</configuration>
-EOF
-
-dotnet restore Ryujinx.sln --configfile ./nuget_tmp.config
+mkdir nuget_tmp.packages
+dotnet restore Ryujinx.sln --packages nuget_tmp.packages
 
 nuget-to-nix ./nuget_tmp.packages > "$deps_file"
 

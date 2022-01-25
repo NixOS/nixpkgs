@@ -13,6 +13,7 @@
 , readline
 , systemd
 , udev
+, withExperimental ? false
 }: let
   pythonPath = with python3.pkgs; [
     dbus-python
@@ -21,11 +22,11 @@
   ];
 in stdenv.mkDerivation rec {
   pname = "bluez";
-  version = "5.61";
+  version = "5.62";
 
   src = fetchurl {
     url = "mirror://kernel/linux/bluetooth/${pname}-${version}.tar.xz";
-    sha256 = "sha256-g6/WxSF5VUv+q7y1OP7C62vpCorDxAhxtJ162LScQjs=";
+    sha256 = "sha256-OAkKW3UOF/wI0+UheO2NMlTF9L0sSIMNXBlVuI47wMI=";
   };
 
   buildInputs = [
@@ -84,7 +85,8 @@ in stdenv.mkDerivation rec {
     # To provide ciptool, sdptool, and rfcomm (unmaintained)
     # superseded by new D-Bus APIs
     "--enable-deprecated"
-  ];
+  ] ++ lib.optional withExperimental "--enable-experimental";
+
 
   # Work around `make install' trying to create /var/lib/bluetooth.
   installFlags = [ "statedir=$(TMPDIR)/var/lib/bluetooth" ];

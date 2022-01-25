@@ -19,11 +19,11 @@
 
 stdenv.mkDerivation rec {
   pname = "github-desktop";
-  version = "2.9.3";
+  version = "2.9.6";
 
   src = fetchurl {
     url = "https://github.com/shiftkey/desktop/releases/download/release-${version}-linux1/GitHubDesktop-linux-${version}-linux1.deb";
-    sha256 = "sha256-e3XDjVQ5VcsS/MGxNsDs2h77joZAz8mNn+SwrqiUAR0=";
+    sha256 = "sha256-YL3Gc76jWfQvY96pAlS5JB7BwSOUklNvGR0tOBdQHuE=";
   };
 
   nativeBuildInputs = [

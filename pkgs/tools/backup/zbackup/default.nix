@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchFromGitHub, cmake, zlib, openssl, protobuf, protobufc, lzo, libunwind }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch
+, cmake, protobufc
+, libunwind, lzo, openssl, protobuf, zlib
+}:
+
 stdenv.mkDerivation rec {
   pname = "zbackup";
   version = "1.4.4";
@@ -9,6 +13,12 @@ stdenv.mkDerivation rec {
     rev = version;
     hash = "sha256-9Fk4EhEeQ2J4Kirc7oad4CzmW70Mmza6uozd87qfgZI=";
   };
+
+  patches = [
+    # compare with https://github.com/zbackup/zbackup/pull/158;
+    # but that doesn't apply cleanly to this version
+    ./protobuf-api-change.patch
+  ];
 
   buildInputs = [ zlib openssl protobuf lzo libunwind ];
   nativeBuildInputs = [ cmake protobufc ];

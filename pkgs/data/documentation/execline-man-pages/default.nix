@@ -2,8 +2,8 @@
 
 buildManPages {
   pname = "execline-man-pages";
-  version = "2.8.1.0.1";
-  sha256 = "0d3lzxy7wv91q3nr6bw1wfmrfj285i15wmj4c8v9k9pxjg42iwwx";
+  version = "2.8.1.0.3";
+  sha256 = "1n7c75lmyrjzzcbwjl6fxhfs4k29qlr66r1q35799h942cn4li7v";
   description = "Port of the documentation for the execline suite to mdoc";
   maintainers = [ lib.maintainers.sternenseemann ];
 }

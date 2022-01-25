@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, writeText, gradleGen, pkg-config, perl, cmake
+{ stdenv, lib, fetchurl, writeText, gradle_4, pkg-config, perl, cmake
 , gperf, gtk2, gtk3, libXtst, libXxf86vm, glib, alsa-lib, ffmpeg, python2, ruby
 , openjdk11-bootstrap }:
 
@@ -7,9 +7,9 @@ let
   update = ".0.3";
   build = "1";
   repover = "${major}${update}+${build}";
-  gradle_ = (gradleGen.override {
+  gradle_ = (gradle_4.override {
     java = openjdk11-bootstrap;
-  }).gradle_4_10;
+  });
 
   makePackage = args: stdenv.mkDerivation ({
     version = "${major}${update}-${build}";
@@ -107,6 +107,9 @@ in makePackage {
   disallowedReferences = [ openjdk11-bootstrap ];
 
   passthru.deps = deps;
+
+  # Uses a lot of RAM, OOMs otherwise
+  requiredSystemFeatures = [ "big-parallel" ];
 
   meta = with lib; {
     homepage = "http://openjdk.java.net/projects/openjfx/";

@@ -6,30 +6,6 @@ let
   py = python3.override {
     packageOverrides = self: super: {
 
-      boto3 = super.boto3.overridePythonAttrs (oldAttrs: rec {
-        version = "1.17.112";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "1byqrffbgpp1mq62gnn3w3hnm54dfar0cwgvmkl7mrgbwz5xmdh8";
-        };
-      });
-
-      botocore = super.botocore.overridePythonAttrs (oldAttrs: rec {
-        version = "1.20.112";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "1ksdjh3mwbzgqgfj58vyrhann23b9gqam8id2svmpdmmdq5vgffh";
-        };
-      });
-
-      s3transfer = super.s3transfer.overridePythonAttrs (oldAttrs: rec {
-        version = "0.4.2";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "1cp169vz9rvng7dwbn33fgdbl3b014zpsdqsnfxxw7jm2r5jy0nb";
-        };
-      });
-
       dpath = super.dpath.overridePythonAttrs (oldAttrs: rec {
         version = "1.5.0";
         src = oldAttrs.src.override {
@@ -46,15 +22,13 @@ with py.pkgs;
 
 buildPythonApplication rec {
   pname = "checkov";
-  version = "2.0.505";
-
-  disabled = python3.pythonOlder "3.7";
+  version = "2.0.762";
 
   src = fetchFromGitHub {
     owner = "bridgecrewio";
     repo = pname;
     rev = version;
-    sha256 = "sha256-5udTx+aAC72R8wfn+lrWsZXgAyj/eN5nn/ly1JIkmCU=";
+    hash = "sha256-7YINKTvEAAOGoGkc4t2YwuMBF4rvOxRD2XhJxJBWvis=";
   };
 
   nativeBuildInputs = with py.pkgs; [
@@ -62,6 +36,10 @@ buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with py.pkgs; [
+    aiodns
+    aiohttp
+    aiomultiprocess
+    argcomplete
     bc-python-hcl2
     boto3
     cachetools
@@ -76,10 +54,13 @@ buildPythonApplication rec {
     dpath
     GitPython
     jmespath
+    jsonpath-ng
+    jsonschema
     junit-xml
     networkx
     packaging
     policyuniverse
+    prettytable
     pyyaml
     semantic-version
     tabulate
@@ -90,16 +71,34 @@ buildPythonApplication rec {
   ];
 
   checkInputs = with py.pkgs; [
-    jsonschema
+    aioresponses
+    mock
+    pytest-asyncio
+    pytest-mock
     pytest-xdist
     pytestCheckHook
   ];
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "cyclonedx-python-lib>=0.11.0,<1.0.0" "cyclonedx-python-lib>=0.11.0" \
+      --replace "prettytable>=3.0.0" "prettytable"
+  '';
+
+  preCheck = ''
+    export HOME=$(mktemp -d);
+  '';
 
   disabledTests = [
     # No API key available
     "api_key"
     # Requires network access
     "TestSarifReport"
+    # Will probably be fixed in one of the next releases
+    "test_valid_cyclonedx_bom"
+    # Requires prettytable release which is only available in staging
+    "test_skipped_check_exists"
+    "test_record_relative_path_with_relative_dir"
   ];
 
   disabledTestPaths = [
@@ -107,6 +106,11 @@ buildPythonApplication rec {
     # https://github.com/bridgecrewio/checkov/blob/f03a4204d291cf47e3753a02a9b8c8d805bbd1be/.github/workflows/build.yml
     "integration_tests/"
     "tests/terraform/"
+    # Performance tests have no value for us
+    "performance_tests/test_checkov_performance.py"
+    # Requires prettytable release which is only available in staging
+    "tests/sca_package/"
+    "tests/test_runner_filter.py"
   ];
 
   pythonImportsCheck = [
@@ -121,6 +125,6 @@ buildPythonApplication rec {
       Kubernetes, Serverless framework and other infrastructure-as-code-languages.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ anhdle14 ];
+    maintainers = with maintainers; [ anhdle14 fab ];
   };
 }

@@ -153,7 +153,7 @@ in {
     package = mkOption {
       type = types.package;
       description = "Which package to use for the Nextcloud instance.";
-      relatedPackages = [ "nextcloud20" "nextcloud21" "nextcloud22" ];
+      relatedPackages = [ "nextcloud21" "nextcloud22" "nextcloud23" ];
     };
     phpPackage = mkOption {
       type = types.package;
@@ -499,22 +499,23 @@ in {
     occ = mkOption {
       type = types.package;
       default = occ;
+      defaultText = literalDocBook "generated script";
       internal = true;
       description = ''
         The nextcloud-occ program preconfigured to target this Nextcloud instance.
       '';
     };
+
+    nginx.recommendedHttpHeaders = mkOption {
+      type = types.bool;
+      default = true;
+      description = "Enable additional recommended HTTP response headers";
+    };
   };
 
   config = mkIf cfg.enable (mkMerge [
-    { assertions = let acfg = cfg.config; in [
-        { assertion = versionOlder cfg.package.version "21" -> cfg.config.defaultPhoneRegion == null;
-          message = "The `defaultPhoneRegion'-setting is only supported for Nextcloud >=21!";
-        }
-      ];
-
-      warnings = let
-        latest = 22;
+    { warnings = let
+        latest = 23;
         upgradeWarning = major: nixos:
           ''
             A legacy Nextcloud install (from before NixOS ${nixos}) may be installed.
@@ -532,8 +533,8 @@ in {
         # FIXME(@Ma27) remove as soon as nextcloud properly supports
         # mariadb >=10.6.
         isUnsupportedMariadb =
-          # All currently supported Nextcloud versions are affected.
-          (versionOlder cfg.package.version "23")
+          # All currently supported Nextcloud versions are affected (https://github.com/nextcloud/server/issues/25436).
+          (versionOlder cfg.package.version "24")
           # This module uses mysql
           && (cfg.config.dbtype == "mysql")
           # MySQL is managed via NixOS
@@ -547,9 +548,9 @@ in {
           Using config.services.nextcloud.poolConfig is deprecated and will become unsupported in a future release.
           Please migrate your configuration to config.services.nextcloud.poolSettings.
         '')
-        ++ (optional (versionOlder cfg.package.version "20") (upgradeWarning 19 "21.05"))
         ++ (optional (versionOlder cfg.package.version "21") (upgradeWarning 20 "21.05"))
         ++ (optional (versionOlder cfg.package.version "22") (upgradeWarning 21 "21.11"))
+        ++ (optional (versionOlder cfg.package.version "23") (upgradeWarning 22 "22.05"))
         ++ (optional isUnsupportedMariadb ''
             You seem to be using MariaDB at an unsupported version (i.e. at least 10.6)!
             Please note that this isn't supported officially by Nextcloud. You can either
@@ -574,9 +575,14 @@ in {
           # This versionOlder statement remains set to 21.03 for backwards compatibility.
           # See https://github.com/NixOS/nixpkgs/pull/108899 and
           # https://github.com/NixOS/rfcs/blob/master/rfcs/0080-nixos-release-schedule.md.
-          else if versionOlder stateVersion "21.03" then nextcloud19
+          # FIXME(@Ma27) remove this else-if as soon as 21.05 is EOL! This is only here
+          # to ensure that users who are on Nextcloud 19 with a stateVersion <21.05 with
+          # no explicit services.nextcloud.package don't upgrade to v21 by accident (
+          # nextcloud20 throws an eval-error because it's dropped).
+          else if versionOlder stateVersion "21.03" then nextcloud20
           else if versionOlder stateVersion "21.11" then nextcloud21
-          else nextcloud22
+          else if versionOlder stateVersion "22.05" then nextcloud22
+          else nextcloud23
         );
 
       services.nextcloud.datadir = mkOptionDefault config.services.nextcloud.home;
@@ -589,7 +595,7 @@ in {
     { systemd.timers.nextcloud-cron = {
         wantedBy = [ "timers.target" ];
         timerConfig.OnBootSec = "5m";
-        timerConfig.OnUnitActiveSec = "15m";
+        timerConfig.OnUnitActiveSec = "5m";
         timerConfig.Unit = "nextcloud-cron.service";
       };
 
@@ -904,14 +910,16 @@ in {
         };
         extraConfig = ''
           index index.php index.html /index.php$request_uri;
-          add_header X-Content-Type-Options nosniff;
-          add_header X-XSS-Protection "1; mode=block";
-          add_header X-Robots-Tag none;
-          add_header X-Download-Options noopen;
-          add_header X-Permitted-Cross-Domain-Policies none;
-          add_header X-Frame-Options sameorigin;
-          add_header Referrer-Policy no-referrer;
-          add_header Strict-Transport-Security "max-age=15552000; includeSubDomains" always;
+          ${optionalString (cfg.nginx.recommendedHttpHeaders) ''
+            add_header X-Content-Type-Options nosniff;
+            add_header X-XSS-Protection "1; mode=block";
+            add_header X-Robots-Tag none;
+            add_header X-Download-Options noopen;
+            add_header X-Permitted-Cross-Domain-Policies none;
+            add_header X-Frame-Options sameorigin;
+            add_header Referrer-Policy no-referrer;
+            add_header Strict-Transport-Security "max-age=15552000; includeSubDomains" always;
+          ''}
           client_max_body_size ${cfg.maxUploadSize};
           fastcgi_buffers 64 4K;
           fastcgi_hide_header X-Powered-By;

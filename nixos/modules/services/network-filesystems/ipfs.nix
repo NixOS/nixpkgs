@@ -79,6 +79,11 @@ in
           if versionAtLeast config.system.stateVersion "17.09"
           then "/var/lib/ipfs"
           else "/var/lib/ipfs/.ipfs";
+        defaultText = literalExpression ''
+          if versionAtLeast config.system.stateVersion "17.09"
+          then "/var/lib/ipfs"
+          else "/var/lib/ipfs/.ipfs"
+        '';
         description = "The data dir for IPFS";
       };
 

@@ -5,7 +5,7 @@
 , pkg-config
 , ninja
 , wayland
-, epoxy
+, libepoxy
 , glib
 , libwpe
 , libxkbcommon
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     wayland
-    epoxy
+    libepoxy
     glib
     libwpe
     libxkbcommon

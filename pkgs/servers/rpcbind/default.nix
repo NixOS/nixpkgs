@@ -3,12 +3,12 @@
 
 stdenv.mkDerivation {
   pname = "rpcbind";
-  version = "1.2.5";
+  version = "1.2.6";
 
   src = fetchgit {
     url = "git://git.linux-nfs.org/projects/steved/rpcbind.git";
     rev = "c0c89b3bf2bdf304a5fe3cab626334e0cdaf1ef2";
-    sha256 = "1k5rr0pia70ifyp877rbjdd82377fp7ii0sqvv18qhashr6489va";
+    sha256 = "sha256-aidETIZaQYzC3liDGM915wyBWpMrn4OudxEcFS/Iucw=";
   };
 
   patches = [

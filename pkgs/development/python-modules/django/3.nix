@@ -13,13 +13,13 @@
 
 buildPythonPackage rec {
   pname = "Django";
-  version = "3.2.8";
+  version = "3.2.11";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f6d2c4069c9b9bfac03bedff927ea1f9e0d29e34525cec8a68fd28eb2a8df7af";
+    sha256 = "sha256-aclKvl1rGwiL9HXgm3t0QD+UPjTaEH55hGXSBF2ifnU=";
   };
 
   patches = lib.optional withGdal
@@ -43,6 +43,6 @@ buildPythonPackage rec {
     description = "A high-level Python Web framework";
     homepage = "https://www.djangoproject.com/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ georgewhewell lsix ];
+    maintainers = with maintainers; [ georgewhewell ];
   };
 }

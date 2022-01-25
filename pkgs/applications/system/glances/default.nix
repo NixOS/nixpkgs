@@ -1,5 +1,5 @@
 { stdenv, buildPythonApplication, fetchFromGitHub, isPyPy, lib
-, defusedxml, future, psutil, setuptools
+, defusedxml, future, packaging, psutil, setuptools
 # Optional dependencies:
 , bottle, pysnmp
 , hddtemp
@@ -9,14 +9,14 @@
 
 buildPythonApplication rec {
   pname = "glances";
-  version = "3.2.3.1";
+  version = "3.2.4.2";
   disabled = isPyPy;
 
   src = fetchFromGitHub {
     owner = "nicolargo";
     repo = "glances";
     rev = "v${version}";
-    sha256 = "0h7y36z4rizl1lyxacq32vpmvbwn9w2nrvrxn791060cksfw4xwd";
+    sha256 = "0gql61lrav3f7wbsvgc1d6vf8r0xi5xs9rz9d3sqw3wj5m90w0vq";
   };
 
   # Some tests fail in the sandbox (they e.g. require access to /sys/class/power_supply):
@@ -40,6 +40,7 @@ buildPythonApplication rec {
     defusedxml
     future
     netifaces
+    packaging
     psutil
     pysnmp
     setuptools

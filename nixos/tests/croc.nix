@@ -38,7 +38,7 @@ in {
     sender.execute("echo Hello World > testfile01.txt")
     sender.execute("echo Hello Earth > testfile02.txt")
     sender.execute(
-        "croc --pass ${pass} --relay relay send --code topSecret testfile01.txt testfile02.txt &"
+        "croc --pass ${pass} --relay relay send --code topSecret testfile01.txt testfile02.txt >&2 &"
     )
 
     # receive the testfiles and check them

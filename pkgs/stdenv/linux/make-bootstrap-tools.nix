@@ -160,6 +160,11 @@ in with pkgs; rec {
         # pkgs/stdenv/linux/default.nix for the details.
         cp -d ${isl_0_20.out}/lib/libisl*.so* $out/lib
 
+      '' + lib.optionalString (stdenv.hostPlatform.isRiscV) ''
+        # libatomic is required on RiscV platform for C/C++ atomics and pthread
+        # even though they may be translated into native instructions.
+        cp -d ${bootGCC.out}/lib/libatomic.a* $out/lib
+
       '' + ''
         cp -d ${bzip2.out}/lib/libbz2.so* $out/lib
 

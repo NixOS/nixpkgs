@@ -39,7 +39,6 @@ import ./make-test-python.nix {
 
     smtp2 = { pkgs, ... }: {
       imports = [ common/user-account.nix ];
-      virtualisation.memorySize = 512;
       networking = {
         firewall.allowedTCPPorts = [ 25 143 ];
         useDHCP = false;

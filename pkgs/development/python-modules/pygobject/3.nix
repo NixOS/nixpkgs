@@ -7,7 +7,6 @@
 , gobject-introspection
 , pycairo
 , cairo
-, which
 , ncurses
 , meson
 , ninja

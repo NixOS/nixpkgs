@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, cmake,
+{ stdenv, lib, fetchFromGitHub, cmake,
   mesa, libGLU, glfw,
   libX11, libXi, libXcursor, libXrandr, libXinerama,
   alsaSupport ? stdenv.hostPlatform.isLinux, alsa-lib,
@@ -9,22 +9,14 @@
 
 stdenv.mkDerivation rec {
   pname = "raylib";
-  version = "3.7.0";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "raysan5";
     repo = pname;
     rev = version;
-    sha256 = "1w8v747hqy0ils6zmy8sm056f24ybjhn9bamqzlxvbqhvh9vvly1";
+    sha256 = "1mszf5v7qy38cv1fisq6xd9smb765hylhkv1ms9y7shmdl2ni6b7";
   };
-
-  patches = [
-    # fixes incorrect version being set by cmake
-    (fetchpatch {
-      url = "https://github.com/raysan5/raylib/commit/204aa4c46fdd6986aa0130eeba658562c540759f.patch";
-      sha256 = "10pl7828iy4kadach0wy4fs95vr7k08z3mxw90j8dm9xak1ri8fz";
-    })
-  ];
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [

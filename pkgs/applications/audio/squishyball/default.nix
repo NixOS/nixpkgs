@@ -16,8 +16,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ flac libao libvorbis ncurses opusfile ];
 
-  NIX_CFLAGS_COMPILE = "-DNCURSES_INTERNALS";
-
   patches = [ ./gnu-screen.patch ];
 
   postInstall = ''

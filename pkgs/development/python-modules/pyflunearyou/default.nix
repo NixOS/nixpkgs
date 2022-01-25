@@ -15,15 +15,16 @@
 
 buildPythonPackage rec {
   pname = "pyflunearyou";
-  version = "2.0.2";
+  version = "2021.10.0";
   format = "pyproject";
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "bachya";
     repo = pname;
     rev = version;
-    sha256 = "07n2dvnfpfglpdlnwzj4dy41x2zc07ia2krvxdarnv8wzap30y23";
+    sha256 = "sha256-Q65OSE4qckpvaIvZULBR434i7hwuVM97eSq1Blb1oIU=";
   };
 
   nativeBuildInputs = [
@@ -44,11 +45,14 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  # Ignore the examples directory as the files are prefixed with test_.
-  # disabledTestFiles doesn't seem to work here
-  disabledTestPaths = [ "examples/" ];
+  disabledTestPaths = [
+    # Ignore the examples directory as the files are prefixed with test_.
+    "examples/"
+  ];
 
-  pythonImportsCheck = [ "pyflunearyou" ];
+  pythonImportsCheck = [
+    "pyflunearyou"
+  ];
 
   meta = with lib; {
     description = "Python library for retrieving UV-related information from Flu Near You";

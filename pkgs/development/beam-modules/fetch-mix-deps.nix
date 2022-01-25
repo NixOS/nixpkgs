@@ -1,4 +1,4 @@
-{ stdenvNoCC, lib, elixir, hex, rebar, rebar3, cacert, git }:
+{ stdenvNoCC, lib, elixir, hex, rebar, rebar3, cacert, git }@inputs:
 
 { pname
 , version
@@ -8,6 +8,8 @@
 , debug ? false
 , meta ? { }
 , patches ? []
+, elixir ? inputs.elixir
+, hex ? inputs.hex.override { inherit elixir; }
 , ...
 }@attrs:
 

@@ -93,7 +93,11 @@ let
     #   python3 = pkgs.python3;  # don't use python-boot
     # });
 
-    clang = if stdenv.cc.isGNU then tools.libstdcxxClang else tools.libcxxClang;
+    # pick clang appropriate for package set we are targeting
+    clang =
+      /**/ if stdenv.targetPlatform.useLLVM or false then tools.clangUseLLVM
+      else if (pkgs.targetPackages.stdenv or stdenv).cc.isGNU then tools.libstdcxxClang
+      else tools.libcxxClang;
 
     libstdcxxClang = wrapCCWith rec {
       cc = tools.clang-unwrapped;
@@ -244,14 +248,26 @@ let
       inherit llvm_meta;
       stdenv = if stdenv.hostPlatform.useLLVM or false
                then overrideCC stdenv buildLlvmTools.clangNoLibcxx
-               else stdenv;
+               else (
+                 # libcxx >= 13 does not build on gcc9
+                 if stdenv.cc.isGNU && lib.versionOlder stdenv.cc.version "10"
+                 then pkgs.gcc10Stdenv
+                 else stdenv
+               );
     };
 
-    libcxxabi = callPackage ./libcxxabi {
-      inherit llvm_meta;
-      stdenv = if stdenv.hostPlatform.useLLVM or false
+    libcxxabi = let
+      stdenv_ = if stdenv.hostPlatform.useLLVM or false
                then overrideCC stdenv buildLlvmTools.clangNoLibcxx
                else stdenv;
+      cxx-headers = callPackage ./libcxx {
+        inherit llvm_meta;
+        stdenv = stdenv_;
+        headersOnly = true;
+      };
+    in callPackage ./libcxxabi {
+      stdenv = stdenv_;
+      inherit llvm_meta cxx-headers;
     };
 
     libunwind = callPackage ./libunwind {

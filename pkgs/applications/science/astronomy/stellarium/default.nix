@@ -6,13 +6,13 @@
 
 mkDerivation rec {
   pname = "stellarium";
-  version = "0.21.2";
+  version = "0.21.3";
 
   src = fetchFromGitHub {
     owner = "Stellarium";
     repo = "stellarium";
     rev = "v${version}";
-    sha256 = "sha256-bh00o++l3sqELX5kgRhiCcQOLVqvjEyEMcJTnnVPNU8=";
+    sha256 = "sha256-TQMLy5ziBF7YqPDzPwgjY5FHxxMUe7MXo/TGxQ1nGcg=";
   };
 
   nativeBuildInputs = [ cmake perl wrapQtAppsHook ];
@@ -26,10 +26,6 @@ mkDerivation rec {
     substituteInPlace CMakeLists.txt \
       --replace 'SET(CMAKE_INSTALL_PREFIX "''${PROJECT_BINARY_DIR}/Stellarium.app/Contents")' \
                 'SET(CMAKE_INSTALL_PREFIX "${placeholder "out"}/Stellarium.app/Contents")'
-  '';
-
-  postFixup = lib.optionalString stdenv.isDarwin ''
-    wrapQtApp "$out"/Stellarium.app/Contents/MacOS/stellarium
   '';
 
   meta = with lib; {

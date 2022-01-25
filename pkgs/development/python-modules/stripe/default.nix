@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "stripe";
-  version = "2.61.0";
+  version = "2.65.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8131addd3512a22c4c539dda2d869a8f488e06f1b02d1f3a5f0f4848fc56184e";
+    sha256 = "2e55d4d7262085de9cef2228f14581925c35350ba58a332352b1ec9e19a7b7a6";
   };
 
   propagatedBuildInputs = [ requests ];

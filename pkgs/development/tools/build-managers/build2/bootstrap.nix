@@ -5,10 +5,10 @@
 }:
 stdenv.mkDerivation rec {
   pname = "build2-bootstrap";
-  version = "0.13.0";
+  version = "0.14.0";
   src = fetchurl {
     url = "https://download.build2.org/${version}/build2-toolchain-${version}.tar.xz";
-    sha256 = "01hmr5y8aa28qchwy9ci8x5q746flwxmlxarmy4w9zay9nmvryms";
+    sha256 = "sha256-GO/GstQUmPdRbnqKXJECP2GCyGfUI3kjmDkN0MAEz90=";
   };
   patches = [
     # Pick up sysdirs from NIX_LDFLAGS

@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, fetchgit, vdr, alsa-lib, fetchFromGitHub
-, libvdpau, libxcb, xcbutilwm, graphicsmagick, libav, pcre, xorgserver, ffmpeg_3
+, libvdpau, libxcb, xcbutilwm, graphicsmagick, libav, pcre, xorgserver, ffmpeg
 , libiconv, boost, libgcrypt, perl, util-linux, groff, libva, xorg, ncurses
 , callPackage
 }: let
@@ -52,7 +52,7 @@ in {
     version = "20190525";
 
     buildInputs = [
-      vdr libxcb xcbutilwm ffmpeg_3
+      vdr libxcb xcbutilwm ffmpeg
       alsa-lib
       libvdpau # vdpau
       libva # va-api
@@ -62,6 +62,8 @@ in {
 
     postPatch = ''
       substituteInPlace vaapidev.c --replace /usr/bin/X ${xorgserver}/bin/X
+      # https://github.com/rofafor/vdr-plugin-vaapidevice/issues/5
+      substituteInPlace Makefile --replace libva libva-x11
     '';
 
     src = fetchFromGitHub {
@@ -130,12 +132,12 @@ in {
 
   epgsearch = stdenv.mkDerivation rec {
     pname = "vdr-epgsearch";
-    version = "20191202";
+    version = "2.4.1";
 
     src = fetchgit {
       url = "git://projects.vdr-developer.org/vdr-plugin-epgsearch.git";
-      sha256 = "18kskwnnscr4rb4yzfikw1la318zjgraf340cl7n9z77chi2gi8m";
-      rev = "602d66c55964998ce25c6c57b302949a9517f149";
+      sha256 = "sha256-UlbPCkUFN0Gyxjw9xq2STFTDZRVcPPNjadSQd4o2o9U=";
+      rev = "v${version}";
     };
 
     postPatch = ''
