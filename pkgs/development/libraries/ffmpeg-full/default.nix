@@ -99,6 +99,7 @@
 , libxcbshapeExtlib ? true # X11 grabbing shape rendering
 , libXv ? null # Xlib support
 , libXext ? null # Xlib support
+, libxml2 ? null # libxml2 support, for IMF and DASH demuxers
 , xz ? null # xz-utils
 , nvenc ? !stdenv.isDarwin && !stdenv.isAarch64, nv-codec-headers ? null # NVIDIA NVENC support
 , openal ? null # OpenAL 1.1 capture support
@@ -372,6 +373,7 @@ stdenv.mkDerivation rec {
     (enableFeature libxcbshmExtlib "libxcb-shm")
     (enableFeature libxcbxfixesExtlib "libxcb-xfixes")
     (enableFeature libxcbshapeExtlib "libxcb-shape")
+    (enableFeature (libxml2 != null) "libxml2")
     (enableFeature (xz != null) "lzma")
     (enableFeature nvenc "nvenc")
     (enableFeature (openal != null) "openal")
@@ -428,7 +430,7 @@ stdenv.mkDerivation rec {
     bzip2 celt dav1d fontconfig freetype frei0r fribidi game-music-emu gnutls gsm
     libjack2 ladspaH lame libaom libass libbluray libbs2b libcaca libdc1394 libmodplug libmysofa
     libogg libopus librsvg libssh libtheora libvdpau libvorbis libvpx libwebp libX11
-    libxcb libXv libXext xz openal openjpeg libpulseaudio rav1e svt-av1 rtmpdump opencore-amr
+    libxcb libXv libXext libxml2 xz openal openjpeg libpulseaudio rav1e svt-av1 rtmpdump opencore-amr
     samba SDL2 soxr speex srt vid-stab vo-amrwbenc x264 x265 xavs xvidcore
     zeromq4 zimg zlib
   ] ++ optionals openglExtlib [ libGL libGLU ]
