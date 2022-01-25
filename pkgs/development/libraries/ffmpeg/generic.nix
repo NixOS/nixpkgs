@@ -1,7 +1,7 @@
 { lib, stdenv, buildPackages, fetchurl, pkg-config, addOpenGLRunpath, perl, texinfo, yasm
 , alsa-lib, bzip2, fontconfig, freetype, gnutls, libiconv, lame, libass, libogg
 , libssh, libtheora, libva, libdrm, libvorbis, libvpx, xz, libpulseaudio, soxr
-, x264, x265, xvidcore, zlib, libopus, speex, nv-codec-headers, dav1d
+, x264, x265, xvidcore, zimg, zlib, libopus, speex, nv-codec-headers, dav1d
 , srt ? null
 , openglSupport ? false, libGLU ? null, libGL ? null
 , libmfxSupport ? false, intel-media-sdk ? null
@@ -154,6 +154,7 @@ stdenv.mkDerivation rec {
       (ifMinVer "1.2" "--enable-libsoxr")
       "--enable-libx264"
       "--enable-libxvid"
+      "--enable-libzimg"
       "--enable-zlib"
       (ifMinVer "2.8" "--enable-libopus")
       "--enable-libspeex"
@@ -176,7 +177,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     bzip2 fontconfig freetype gnutls libiconv lame libass libogg libssh libtheora
-    libvorbis xz soxr x264 x265 xvidcore zlib libopus speex srt nv-codec-headers
+    libvorbis xz soxr x264 x265 xvidcore zimg zlib libopus speex srt nv-codec-headers
   ] ++ optionals openglSupport [ libGL libGLU ]
     ++ optional libmfxSupport intel-media-sdk
     ++ optional libaomSupport libaom

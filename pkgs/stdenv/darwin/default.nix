@@ -399,6 +399,8 @@ rec {
       persistent = self: super: with prevStage; {
         cmake = super.cmakeMinimal;
 
+        curl = super.curlMinimal;
+
         inherit pbzx cpio;
 
         python3 = super.python3Minimal;
@@ -755,6 +757,9 @@ rec {
         darwin.binutils
         darwin.binutils.bintools
         curl.out
+        zstd.out
+        libidn2.out
+        libunistring.out
         openssl.out
         libssh2.out
         nghttp2.lib

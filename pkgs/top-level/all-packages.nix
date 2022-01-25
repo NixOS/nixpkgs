@@ -2549,6 +2549,8 @@ with pkgs;
 
   comma = callPackage ../tools/package-management/comma { };
 
+  commitizen = python3Packages.callPackage ../applications/version-management/commitizen { };
+
   common-licenses = callPackage ../data/misc/common-licenses {};
 
   compactor = callPackage ../applications/networking/compactor { };
@@ -3392,9 +3394,7 @@ with pkgs;
 
   merriweather-sans = callPackage ../data/fonts/merriweather-sans { };
 
-  # TODO: call a sprintable to deprecate Meson 0.57 as soon as possible
-  meson = callPackage ../development/tools/build-managers/meson/0.57 { };
-  meson_0_60 = callPackage ../development/tools/build-managers/meson/0.60 { };
+  meson = callPackage ../development/tools/build-managers/meson { };
 
   meson-tools = callPackage ../misc/meson-tools { };
 
@@ -4480,10 +4480,19 @@ with pkgs;
 
   curlFull = curl.override {
     ldapSupport = true;
+    gsaslSupport = true;
+    rtmpSupport = true;
+    pslSupport = true;
+  };
+
+  curlHTTP3 = curl.override {
+    openssl = quictls;
+    http3Support = true;
   };
 
   curl = curlMinimal.override ({
     idnSupport = true;
+    zstdSupport = true;
   } // lib.optionalAttrs (!stdenv.hostPlatform.isStatic) {
     gssSupport = true;
     brotliSupport = true;
@@ -7430,6 +7439,9 @@ with pkgs;
   libpointmatcher = callPackage ../development/libraries/libpointmatcher { };
 
   libportal = callPackage ../development/libraries/libportal { };
+  libportal-gtk3 = libportal.override { variant = "gtk3"; };
+  libportal-gtk4 = libportal.override { variant = "gtk4"; };
+  libportal-qt5 = libportal.override { variant = "qt5"; };
 
   libmicrodns = callPackage ../development/libraries/libmicrodns { };
 
@@ -13299,7 +13311,11 @@ with pkgs;
       # Others should instead delegate to the next stage's choice with
       # `targetPackages.stdenv.cc.bintools`. This one is different just to
       # provide the default choice, avoiding infinite recursion.
-      bintools ? if stdenv.targetPlatform.isDarwin then darwin.binutils else binutils
+      # See the bintools attribute for the logic and reasoning. We need to provide
+      # a default here, since eval will hit this function when bootstrapping
+      # stdenv where the bintools attribute doesn't exist, but will never actually
+      # be evaluated -- callPackage ends up being too eager.
+      bintools ? pkgs.bintools
     , libc ? bintools.libc
     , # libc++ from the default LLVM version is bound at the top level, but we
       # want the C++ library to be explicitly chosen by the caller, and null by
@@ -17011,7 +17027,7 @@ with pkgs;
   gtkextra = callPackage ../development/libraries/gtkextra { };
 
   gtk3 = callPackage ../development/libraries/gtk/3.x.nix {
-    inherit (darwin.apple_sdk.frameworks) AppKit Cocoa;
+    inherit (darwin.apple_sdk.frameworks) AppKit Cocoa QuartzCore;
   };
 
   gtk4 = callPackage ../development/libraries/gtk/4.x.nix {
@@ -17929,6 +17945,9 @@ with pkgs;
   libffcall = callPackage ../development/libraries/libffcall { };
 
   libffi = callPackage ../development/libraries/libffi { };
+  libffiBoot = libffi.override {
+    doCheck = false;
+  };
 
   libfreeaptx = callPackage ../development/libraries/libfreeaptx { };
 
@@ -17994,6 +18013,8 @@ with pkgs;
   libhttpseverywhere = callPackage ../development/libraries/libhttpseverywhere { };
 
   libhugetlbfs = callPackage ../development/libraries/libhugetlbfs { };
+
+  libhwy = callPackage ../development/libraries/libhwy { };
 
   libHX = callPackage ../development/libraries/libHX { };
 
@@ -18521,9 +18542,7 @@ with pkgs;
 
   libtiff = if stdenv.isDarwin && stdenv.isAarch64
     then callPackage ../development/libraries/libtiff/aarch64-darwin.nix { }
-    else callPackage ../development/libraries/libtiff {
-      inherit (darwin.apple_sdk.frameworks) Cocoa GLUT;
-    };
+    else callPackage ../development/libraries/libtiff { };
 
   libtiger = callPackage ../development/libraries/libtiger { };
 
@@ -21415,7 +21434,6 @@ with pkgs;
   };
 
   pulseaudio = callPackage ../servers/pulseaudio ({
-    inherit (darwin) Libc;
     inherit (darwin.apple_sdk.frameworks) CoreServices AudioUnit Cocoa;
   } // lib.optionalAttrs stdenv.isDarwin {
     # Default autoreconfHook (2.70) fails on darwin,
@@ -22365,7 +22383,7 @@ with pkgs;
   iproute_mptcp = callPackage ../os-specific/linux/iproute/mptcp.nix { };
 
   iputils = hiPrio (callPackage ../os-specific/linux/iputils { });
-  # hiPrio for collisions with inetutils (ping and tftpd.8.gz)
+  # hiPrio for collisions with inetutils (ping)
 
   iptables = callPackage ../os-specific/linux/iptables { };
   iptables-legacy = callPackage ../os-specific/linux/iptables { nftablesCompat = false; };

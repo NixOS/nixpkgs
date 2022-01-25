@@ -6630,6 +6630,8 @@ in {
 
   pycryptodome = callPackage ../development/python-modules/pycryptodome { };
 
+  pycryptodome-test-vectors = callPackage ../development/python-modules/pycryptodome-test-vectors { };
+
   pycryptodomex = callPackage ../development/python-modules/pycryptodomex { };
 
   pyct = callPackage ../development/python-modules/pyct { };

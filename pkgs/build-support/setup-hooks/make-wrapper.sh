@@ -23,6 +23,7 @@ assertExecutable() {
 
 # --prefix          ENV SEP VAL   : suffix/prefix ENV with VAL, separated by SEP
 # --suffix
+# --prefix-each     ENV SEP VALS  : like --prefix, but VALS is a list
 # --suffix-each     ENV SEP VALS  : like --suffix, but VALS is a list
 # --prefix-contents ENV SEP FILES : like --suffix-each, but contents of FILES
 #                                   are read first and used as VALS
@@ -73,6 +74,14 @@ makeWrapper() {
                     echo "export $varName=${value@Q}\${$varName:+${separator@Q}}\$$varName" >> "$wrapper"
                 fi
             fi
+        elif [[ "$p" == "--prefix-each" ]]; then
+            varName="${params[$((n + 1))]}"
+            separator="${params[$((n + 2))]}"
+            values="${params[$((n + 3))]}"
+            n=$((n + 3))
+            for value in $values; do
+                echo "export $varName=${value@Q}\${$varName:+${separator@Q}}\$$varName" >> "$wrapper"
+            done
         elif [[ "$p" == "--suffix-each" ]]; then
             varName="${params[$((n + 1))]}"
             separator="${params[$((n + 2))]}"
