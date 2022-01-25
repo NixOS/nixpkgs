@@ -14,7 +14,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "nixos-test-driver";
-  version = "1.1";
+  version = "1.2";
   src = ./.;
 
   propagatedBuildInputs = [ coreutils netpbm python3Packages.colorama python3Packages.ptpython qemu_pkg socat vde2 ]
@@ -29,4 +29,9 @@ python3Packages.buildPythonApplication rec {
     pylint --errors-only --enable=unused-import ${src}/test_driver
     black --check --diff ${src}/test_driver
   '';
+
+  meta = {
+    maintainers = with lib.maintainers; [ synthetica tfc ];
+    homepage = "https://nixos.org/manual/nixos/unstable/index.html#sec-nixos-tests";
+  };
 }

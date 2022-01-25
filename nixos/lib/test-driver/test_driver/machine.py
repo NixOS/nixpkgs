@@ -805,21 +805,22 @@ class Machine:
         with self.nested("waiting for {} to appear on screen".format(regex)):
             retry(screen_matches)
 
-    def wait_for_console_text(self, regex: str) -> None:
+    def wait_for_console_text(self, regex: str) -> re.Match[str]:
         with self.nested("waiting for {} to appear on console".format(regex)):
             # Buffer the console output, this is needed
             # to match multiline regexes.
             console = io.StringIO()
             while True:
                 try:
-                    console.write(self.last_lines.get())
+                    console.write(self.last_lines.get(timeout=1))
                 except queue.Empty:
+                    self.run_callbacks()
                     self.sleep(1)
                     continue
                 console.seek(0)
                 matches = re.search(regex, console.read())
                 if matches is not None:
-                    return
+                    return matches
 
     def send_key(self, key: str) -> None:
         key = CHAR_TO_KEY.get(key, key)
