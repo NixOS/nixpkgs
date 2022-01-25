@@ -30,8 +30,21 @@ class Driver:
         self.tests = tests
         self.out_dir = out_dir
 
-        tmp_dir = Path(os.environ.get("TMPDIR", tempfile.gettempdir()))
+        tmp_dir = Path(tempfile.gettempdir())
         tmp_dir.mkdir(mode=0o700, exist_ok=True)
+
+        if not tmp_dir.is_dir():
+            raise NotADirectoryError(
+                "The directory defined by TMPDIR, TEMP, TMP or CWD: {0} is not a directory".format(
+                    tmp_dir
+                )
+            )
+        if not os.access(tmp_dir, os.W_OK):
+            raise PermissionError(
+                "The directory defined by TMPDIR, TEMP, TMP or CWD: {0} is not writeable".format(
+                    tmp_dir
+                )
+            )
 
         with rootlog.nested("start all VLans"):
             self.vlans = [VLan(nr, tmp_dir) for nr in vlans]
