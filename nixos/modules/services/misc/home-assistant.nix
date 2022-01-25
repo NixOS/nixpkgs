@@ -278,6 +278,11 @@ in {
           "bluetooth_tracker"
           "bluetooth_le_tracker"
         ];
+        componentsUsingPing = [
+          # Components that require the capset syscall for the ping wrapper
+          "ping"
+          "wake_on_lan"
+        ];
         componentsUsingSerialDevices = [
           # Components that require access to serial devices (/dev/tty*)
           # List generated from home-assistant documentation:
@@ -382,6 +387,8 @@ in {
         SystemCallFilter = [
           "@system-service"
           "~@privileged"
+        ] ++ optionals (any useComponent componentsUsingPing) [
+          "capset"
         ];
         UMask = "0077";
       };
