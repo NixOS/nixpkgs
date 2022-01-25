@@ -25,6 +25,10 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     ${optionalString withPkcs11 ''
+      substituteInPlace configure.ac \
+        --replace '/usr/lib/opensc-pkcs11.so' '${opensc}/lib/opensc-pkcs11.so' \
+        --replace '/usr/lib64/opensc-pkcs11.so' '${opensc}/lib/opensc-pkcs11.so'
+
       substituteInPlace rngd.c \
         --replace /usr/lib64/opensc-pkcs11.so ${opensc}/lib/opensc-pkcs11.so
     ''}
