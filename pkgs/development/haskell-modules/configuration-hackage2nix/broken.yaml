@@ -2032,6 +2032,7 @@ broken-packages:
   - hasql-dynamic-statements
   - hasql-generic
   - hasql-simple
+  - hasql-transaction-io
   - hastache
   - haste
   - haste-prim
@@ -5378,6 +5379,7 @@ broken-packages:
   - weather-api
   - webapi
   - webapp
+  - webauthn
   - WebBits
   - webby
   - webcloud

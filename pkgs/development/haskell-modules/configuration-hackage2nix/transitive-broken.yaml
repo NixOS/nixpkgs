@@ -481,7 +481,7 @@ dont-distribute-packages:
  - atuin
  - audiovisual
  - aura
- - aura_3_2_6
+ - aura_3_2_7
  - authoring
  - autonix-deps-kf5
  - avers
@@ -1030,6 +1030,7 @@ dont-distribute-packages:
  - edges
  - editable
  - effective-aspects-mzv
+ - eflint
  - egison
  - egison-pattern-src-haskell-mode
  - egison-pattern-src-th-mode
@@ -2546,6 +2547,7 @@ dont-distribute-packages:
  - reactor
  - readpyc
  - reanimate
+ - reanimate_1_1_5_0
  - record-aeson
  - record-gl
  - record-preprocessor
@@ -3057,6 +3059,7 @@ dont-distribute-packages:
  - trasa-reflex
  - trasa-server
  - trasa-th
+ - traverse-code
  - treemap-html-tools
  - treersec
  - trek-app
