@@ -18611,6 +18611,8 @@ with pkgs;
     udev = systemdMinimal;
   };
 
+  libusbgx = callPackage ../development/libraries/libusbgx { };
+
   libusbmuxd = callPackage ../development/libraries/libusbmuxd { };
 
   libutempter = callPackage ../development/libraries/libutempter { };
@@ -22307,6 +22309,8 @@ with pkgs;
   gpu-switch = callPackage ../os-specific/linux/gpu-switch { };
 
   gradm = callPackage ../os-specific/linux/gradm { };
+
+  gt = callPackage ../os-specific/linux/gt { };
 
   inherit (nodePackages) gtop;
 
