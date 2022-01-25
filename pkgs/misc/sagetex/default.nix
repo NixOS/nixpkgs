@@ -5,8 +5,8 @@
 }:
 
 stdenv.mkDerivation rec {
+  pname = "sagetex"; 
   version = "3.6";
-  pname = "sagetex";
   passthru.tlType = "run";
 
   src = fetchFromGitHub {
