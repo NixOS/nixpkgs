@@ -18417,6 +18417,8 @@ with pkgs;
 
   libpst = callPackage ../development/libraries/libpst { };
 
+  libptytty = callPackage ../development/libraries/libptytty { };
+
   libpwquality = callPackage ../development/libraries/libpwquality { };
 
   libqalculate = callPackage ../development/libraries/libqalculate {
