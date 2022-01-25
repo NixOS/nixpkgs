@@ -21,7 +21,7 @@ in
       libgccjit #for libstdc++.so.6 and libgomp.so.1
     ];
     src = fetchurl {
-      url = makeurl { pname = pname; year = year; version = version; };
+      url = makeurl { inherit pname year version; };
       sha256 = "1188ll2qz58rr2slavqxisbz4q3fdzidpasb1p33926z0ym3rk45";
     };
   };
