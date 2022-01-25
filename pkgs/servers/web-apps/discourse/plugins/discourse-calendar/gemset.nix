@@ -5,10 +5,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "04bsr3420wb8y5pagg3s0rkx44fix47wrjvfby2d205l9bq6azyk";
+      sha256 = "02lys9pnb99hsczs551iqzjn008i8k7c728xxba7acfi9rdw9pa6";
       type = "gem";
     };
-    version = "7.0.0";
+    version = "7.0.1";
   };
   concurrent-ruby = {
     groups = ["default"];
