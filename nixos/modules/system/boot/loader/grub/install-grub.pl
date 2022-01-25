@@ -562,11 +562,18 @@ sub addProfile {
             next;
         }
         my $date = strftime("%F", localtime(lstat($link)->mtime));
-        my $version =
-            -e "$link/nixos-version"
-            ? readFile("$link/nixos-version")
-            : basename((glob(dirname(Cwd::abs_path("$link/kernel")) . "/lib/modules/*"))[0]);
-        addEntry("NixOS - Configuration " . nrFromGen($link) . " ($date - $version)", $link);
+        my $nixos_version = readFile("$link/nixos-version");
+        # Figure out the kernel version
+        my $kernel_dir = dirname(Cwd::abs_path("$link/kernel"));
+        my @module_dirs = glob("$kernel_dir/lib/modules/*");
+        my $kernel_version = "unknown";
+        if (scalar @module_dirs > 0) {
+            $kernel_version = basename($module_dirs[0]);
+        } elsif ($kernel_dir =~ /.*-linux-(.*$)/msx) {
+            $kernel_version = $1;
+        }
+
+        addEntry("NixOS $nixos_version - generation " . nrFromGen($link) . ", kernel $kernel_version, added $date", $link);
     }
 
     $conf .= "}\n" if $grubVersion == 2;
