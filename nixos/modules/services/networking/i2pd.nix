@@ -222,14 +222,12 @@ let
         in concatStringsSep "\n" inTunOpts))];
     in pkgs.writeText "i2pd-tunnels.conf" opts;
 
-  i2pdSh = pkgs.writeScriptBin "i2pd" ''
-    #!/bin/sh
-    exec ${cfg.package}/bin/i2pd \
-      ${if cfg.address == null then "" else "--host="+cfg.address} \
-      --service \
-      --conf=${i2pdConf} \
-      --tunconf=${tunnelConf}
-  '';
+  i2pdFlags = concatStringsSep " " (
+    optional (cfg.address != null) ("--host=" + cfg.address) ++ [
+    "--service"
+    ("--conf=" + i2pdConf)
+    ("--tunconf=" + tunnelConf)
+  ]);
 
 in
 
@@ -686,7 +684,7 @@ in
         User = "i2pd";
         WorkingDirectory = homeDir;
         Restart = "on-abort";
-        ExecStart = "${i2pdSh}/bin/i2pd";
+        ExecStart = "${cfg.package}/bin/i2pd ${i2pdFlags}";
       };
     };
   };
