@@ -16,9 +16,9 @@ let
     owner = "gravitational";
     repo = "teleport";
     rev = "v${version}";
-    sha256 = "sha256-02Wsj2V7RNjKlkgAqj7IqyRGCxml8pw5h0vflqcGAB8=";
+    sha256 = "sha256-/Dn2X1VMQI1OYHmvNDlAjrLI64DFxmVmS3PeEKLFVjQ=";
   };
-  version = "8.0.6";
+  version = "8.1.1";
 
   roleTester = rustPlatform.buildRustPackage {
     name = "teleport-roletester";
@@ -39,8 +39,8 @@ let
   webassets = fetchFromGitHub {
     owner = "gravitational";
     repo = "webassets";
-    rev = "240464d54ac498281592eb0b30c871dc3c7ce09b";
-    sha256 = "sha256-8gt8x2fNh8mA1KCop5dEZmpBWBu7HsrTY5zVUlmKDgs=";
+    rev = "36ba49bb58dd6933d5ed5c9599e86d2b6c828137";
+    sha256 = "sha256-XgH+IjTsaJUdM54Y+L8Rf/bt6y0vB4t8IcRES2EG70s=";
   };
 in
 buildGo117Module rec {
