@@ -699,6 +699,12 @@
           warning.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <literal>services.autorandr</literal> now allows for adding
+          hooks and profiles declaratively.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>
