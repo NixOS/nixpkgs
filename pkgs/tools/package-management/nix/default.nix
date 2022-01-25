@@ -254,7 +254,7 @@ common =
 in rec {
   nix = nixStable;
 
-  nixStable = nix_2_6;
+  nixStable = nix_2_5;
 
   nix_2_3 = buildNix rec {
     version = "2.3.16";
