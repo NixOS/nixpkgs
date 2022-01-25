@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, unzip, erlang, which, pam }:
+{ stdenv, lib, fetchurl, unzip, erlang, which, pam, nixosTests }:
 
 let
   solrName = "solr-4.10.4-yz-2.tgz";
@@ -89,6 +89,8 @@ stdenv.mkDerivation {
 
     runHook postInstall
   '';
+
+  passthru.tests = { inherit (nixosTests) riak; };
 
   meta = with lib; {
     maintainers = with maintainers; [ cstrahan mdaiter ];

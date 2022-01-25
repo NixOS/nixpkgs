@@ -4,13 +4,13 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 
 stdenv.mkDerivation rec {
   pname = "scs";
-  version = "3.0.0";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "cvxgrp";
     repo = "scs";
     rev = version;
-    sha256 = "sha256-Lly28KDDZ5hJyiMOhiX/3VaKs0iPcSqizOurZevhfCo=";
+    sha256 = "sha256-yoh25DmvY7fohAvABCiSLkvr7TskGd0ED2K3rIa/IeM=";
   };
 
   # Actually link and add libgfortran to the rpath
