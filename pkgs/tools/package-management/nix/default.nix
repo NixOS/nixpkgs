@@ -283,14 +283,13 @@ in rec {
   };
 
   nixUnstable = lib.lowPrio (buildNix rec {
-    version = "2.6";
-    suffix = "pre20211217_${lib.substring 0 7 src.rev}";
+    version = "2.7";
+    suffix = "pre20220124_${lib.substring 0 7 src.rev}";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "6e6e998930f0d7361d64644eb37d9134e74e8501";
-      sha256 = "sha256-RZSWOJUPkXIlMNYMC5a+WNrOjpqAHyhzyqD57BGfNY8=";
+      rev = "0a70b37b5694c769fb855c1afe7642407d1db64f";
+      sha256 = "sha256-aOM9MPNlnWNMobx4CuD4JIXH2poRlG8AKkuxY7FysWg=";
     };
-    patches = [ installNlohmannJsonPatch ];
   });
 }
