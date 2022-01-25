@@ -1,8 +1,12 @@
 { lib, makeWrapper, symlinkJoin
-, qgis-ltr-unwrapped, extraPythonPackages ? (ps: [ ])
+, extraPythonPackages ? (ps: [ ])
+, libsForQt5
 }:
 with lib;
-symlinkJoin rec {
+let
+  qgis-ltr-unwrapped = libsForQt5.callPackage ./unwrapped-ltr.nix {  };
+in symlinkJoin rec {
+
   inherit (qgis-ltr-unwrapped) version;
   name = "qgis-${version}";
 
@@ -21,6 +25,8 @@ symlinkJoin rec {
       --prefix PATH : $program_PATH \
       --set PYTHONPATH $program_PYTHONPATH
   '';
+
+  passthru.unwrapped = qgis-ltr-unwrapped;
 
   inherit (qgis-ltr-unwrapped) meta;
 }

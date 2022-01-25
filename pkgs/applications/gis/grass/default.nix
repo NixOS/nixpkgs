@@ -95,7 +95,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     wrapProgram $out/bin/grass78 \
     --set PYTHONPATH $PYTHONPATH \
-    --set GRASS_PYTHON ${python3Packages.python}/bin/${python3Packages.python.executable} \
+    --set GRASS_PYTHON ${python3Packages.python.interpreter} \
     --suffix LD_LIBRARY_PATH ':' '${gdal}/lib'
     ln -s $out/grass*/lib $out/lib
     ln -s $out/grass*/include $out/include
