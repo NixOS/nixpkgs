@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 , python
 , cffi
 , pkg-config
@@ -17,11 +18,13 @@
 
 buildPythonPackage rec {
   pname = "pywlroots";
-  version = "0.14.12";
+  version = "0.15.3";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "80v1kuiYL3OdtDVJj0EvgrO9x1eN8xxUyRuI4Wb4giI=";
+    sha256 = "09hsvfafnx1d3xp2pic21bbc5lc1w315ap6w5vch3fla7s4dw8dh";
   };
 
   nativeBuildInputs = [ pkg-config ];
