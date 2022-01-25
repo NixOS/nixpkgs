@@ -49,6 +49,9 @@ in stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs config/arm buildtools
+  '' + lib.optionalString mod ''
+    # kernel_install_dir is hardcoded to `/lib/modules`; patch that.
+    sed -i "s,kernel_install_dir *= *['\"].*,kernel_install_dir = '$kmod/lib/modules/${kernel.modDirVersion}'," kernel/linux/meson.build
   '';
 
   mesonFlags = [
@@ -61,20 +64,8 @@ in stdenv.mkDerivation rec {
   ++ lib.optional (!shared) "-Ddefault_library=static"
   ++ lib.optional stdenv.isx86_64 "-Dmachine=nehalem"
   ++ lib.optional stdenv.isAarch64 "-Dmachine=generic"
-  ++ lib.optional mod "-Dkernel_dir=${placeholder "kmod"}/lib/modules/${kernel.modDirVersion}"
+  ++ lib.optional mod "-Dkernel_dir=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ++ lib.optional (withExamples != []) "-Dexamples=${builtins.concatStringsSep "," withExamples}";
-
-  # dpdk meson script does not support separate kernel source and installion
-  # dirs (except via destdir), so we temporarily link the former into the latter.
-  preConfigure = lib.optionalString mod ''
-    mkdir -p $kmod/lib/modules/${kernel.modDirVersion}
-    ln -sf ${kernel.dev}/lib/modules/${kernel.modDirVersion}/build \
-      $kmod/lib/modules/${kernel.modDirVersion}
-  '';
-
-  postBuild = lib.optionalString mod ''
-    rm -f $kmod/lib/modules/${kernel.modDirVersion}/build
-  '';
 
   postInstall = ''
     # Remove Sphinx cache files. Not only are they not useful, but they also
@@ -84,7 +75,7 @@ in stdenv.mkDerivation rec {
     find examples -type f -executable -exec install {} $out/bin \;
   '';
 
-  outputs = [ "out" ] ++ lib.optional mod "kmod";
+  outputs = [ "out" "doc" ] ++ lib.optional mod "kmod";
 
   meta = with lib; {
     description = "Set of libraries and drivers for fast packet processing";
