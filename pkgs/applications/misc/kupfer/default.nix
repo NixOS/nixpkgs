@@ -41,10 +41,16 @@ buildPythonApplication rec {
   # see https://github.com/NixOS/nixpkgs/issues/56943 for details
   strictDeps = false;
 
+  # pass -s to python executable so the user site directory is not added to
+  # sys.path similar to setting PYTHONNOUSERSITE=1 but without passing it down
+  # to child processes
+  preBuild = ''
+    substituteInPlace bin/kupfer.in --replace "\''${PYTHON}"  "\''${PYTHON} -s"
+  '';
+
   postInstall = ''
     gappsWrapperArgs+=(
       "--prefix" "PYTHONPATH" : "${makePythonPath propagatedBuildInputs}"
-      "--set" "PYTHONNOUSERSITE" "1"
     )
   '';
 
