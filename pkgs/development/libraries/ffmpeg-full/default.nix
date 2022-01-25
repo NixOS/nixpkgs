@@ -32,7 +32,6 @@
 , avdeviceLibrary ? true # Build avdevice library
 , avfilterLibrary ? true # Build avfilter library
 , avformatLibrary ? true # Build avformat library
-, avresampleLibrary ? true # Build avresample library
 , avutilLibrary ? true # Build avutil library
 , postprocLibrary ? true # Build postproc library
 , swresampleLibrary ? true # Build swresample library
@@ -225,7 +224,6 @@ assert avdeviceLibrary -> avformatLibrary
                        && avcodecLibrary
                        && avutilLibrary; # configure flag since 0.6
 assert avformatLibrary -> avcodecLibrary && avutilLibrary; # configure flag since 0.6
-assert avresampleLibrary -> avutilLibrary;
 assert postprocLibrary -> avutilLibrary;
 assert swresampleLibrary -> soxr != null;
 assert swscaleLibrary -> avutilLibrary;
@@ -304,7 +302,6 @@ stdenv.mkDerivation rec {
     (enableFeature avdeviceLibrary "avdevice")
     (enableFeature avfilterLibrary "avfilter")
     (enableFeature avformatLibrary "avformat")
-    (enableFeature avresampleLibrary "avresample")
     (enableFeature avutilLibrary "avutil")
     (enableFeature (postprocLibrary && gplLicensing) "postproc")
     (enableFeature swresampleLibrary "swresample")
@@ -453,7 +450,7 @@ stdenv.mkDerivation rec {
   checkPhase = let
     ldLibraryPathEnv = if stdenv.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
   in ''
-    ${ldLibraryPathEnv}="libavcodec:libavdevice:libavfilter:libavformat:libavresample:libavutil:libpostproc:libswresample:libswscale:''${${ldLibraryPathEnv}}" \
+    ${ldLibraryPathEnv}="libavcodec:libavdevice:libavfilter:libavformat:libavutil:libpostproc:libswresample:libswscale:''${${ldLibraryPathEnv}}" \
       make check -j$NIX_BUILD_CORES
   '';
 
