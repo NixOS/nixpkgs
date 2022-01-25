@@ -294,7 +294,7 @@ in {
                     description = ''
                       List of resources to host on this listener.
                     '';
-                    example = ["client" "webclient" "federation"];
+                    example = ["client" "federation"];
                   };
                   compress = mkOption {
                     type = types.bool;
@@ -319,7 +319,7 @@ in {
           tls = true;
           x_forwarded = false;
           resources = [
-            { names = ["client" "webclient"]; compress = true; }
+            { names = ["client"]; compress = true; }
             { names = ["federation"]; compress = false; }
           ];
         }];
