@@ -36,6 +36,9 @@
         # what the pi3 firmware does by default.
         disable_overscan=1
 
+        # Supported in newer board revisions
+        arm_boost=1
+
         [all]
         # Boot in 64-bit mode.
         arm_64bit=1
