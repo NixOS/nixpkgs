@@ -15125,7 +15125,7 @@ with pkgs;
 
   mkcert = callPackage ../development/tools/misc/mkcert { };
 
-  mkdocs = callPackage ../development/tools/documentation/mkdocs { };
+  mkdocs = with python3Packages; toPythonApplication mkdocs;
 
   mmtf-cpp = callPackage ../development/libraries/science/chemistry/mmtf-cpp { };
 
@@ -18437,6 +18437,8 @@ with pkgs;
   libpsl = callPackage ../development/libraries/libpsl { };
 
   libpst = callPackage ../development/libraries/libpst { };
+
+  libptytty = callPackage ../development/libraries/libptytty { };
 
   libpwquality = callPackage ../development/libraries/libpwquality { };
 
@@ -33122,6 +33124,7 @@ with pkgs;
     nix_2_3
     nix_2_4
     nix_2_5
+    nix_2_6
     nixUnstable;
 
   nixStatic = pkgsStatic.nix;
