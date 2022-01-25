@@ -48,11 +48,8 @@ class Driver:
                 keep_vm_state=keep_vm_state,
                 name=cmd.machine_name,
                 tmp_dir=tmp_dir,
-<<<<<<< HEAD
                 callbacks=[self.check_polling_conditions],
-=======
                 out_dir=self.out_dir,
->>>>>>> 68b2e235272 (nixos/test-driver: use an argument instead of the out env-var)
             )
             for cmd in cmd(start_scripts)
         ]
