@@ -27297,8 +27297,6 @@ with pkgs;
 
   monkeysphere = callPackage ../tools/security/monkeysphere { };
 
-  monodevelop = callPackage ../applications/editors/monodevelop {};
-
   monotone = callPackage ../applications/version-management/monotone {
     lua = lua5;
     boost = boost170;
