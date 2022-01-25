@@ -9,7 +9,7 @@ mkCoqDerivation {
 
   inherit version;
   defaultVersion = with versions; switch coq.coq-version [
-    { case = range "8.11" "8.14"; out = "0.1.0"; }
+    { case = range "8.11" "8.15"; out = "0.1.0"; }
   ] null;
 
   releaseRev = v: "v${v}";

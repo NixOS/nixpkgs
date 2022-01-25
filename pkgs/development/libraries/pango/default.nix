@@ -24,14 +24,14 @@
 
 stdenv.mkDerivation rec {
   pname = "pango";
-  version = "1.50.0";
+  version = "1.50.3";
 
   outputs = [ "bin" "out" "dev" ]
     ++ lib.optionals withDocs [ "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "26i2Ld+G4Q9z+Tw9Ila3MjiyvK+HA3yiKbQL3AQOs/M=";
+    sha256 = "St0F7fUcH7N1oczedJiRQSDiPLKA3XOVsa60QfGDikw=";
   };
 
   strictDeps = !withIntrospection;

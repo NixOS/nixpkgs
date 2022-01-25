@@ -1994,6 +1994,8 @@ in {
 
   datadog = callPackage ../development/python-modules/datadog { };
 
+  datafusion = callPackage ../development/python-modules/datafusion { };
+
   datamodeldict = callPackage ../development/python-modules/datamodeldict { };
 
   dataset = callPackage ../development/python-modules/dataset { };
@@ -5039,6 +5041,8 @@ in {
 
   mizani = callPackage ../development/python-modules/mizani { };
 
+  mkdocs = callPackage ../development/python-modules/mkdocs { };
+
   mkl-service = callPackage ../development/python-modules/mkl-service { };
 
   ml-collections = callPackage ../development/python-modules/ml-collections { };
@@ -6625,6 +6629,8 @@ in {
   pycrypto = callPackage ../development/python-modules/pycrypto { };
 
   pycryptodome = callPackage ../development/python-modules/pycryptodome { };
+
+  pycryptodome-test-vectors = callPackage ../development/python-modules/pycryptodome-test-vectors { };
 
   pycryptodomex = callPackage ../development/python-modules/pycryptodomex { };
 

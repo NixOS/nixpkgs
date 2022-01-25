@@ -515,6 +515,8 @@
   };
   algorith = {
     email = "dries_van_daele@telenet.be";
+    github = "DriesVanDaele";
+    githubId = 1141488;
     name = "Dries Van Daele";
   };
   alibabzo = {
@@ -7024,7 +7026,7 @@
     email = "nullarequest@vivlaid.net";
     github = "Lunarequest";
     githubId = 30698906;
-    name = "Advaith Madhukar"; # this is my legal name, I prefer Luna; please keep that in mind!
+    name = "Luna D Dragon";
   };
   lionello = {
     email = "lio@lunesu.com";
@@ -12041,7 +12043,7 @@
     name = "Tiago Castro";
   };
   tilcreator = {
-    name = "Tilman Jackel";
+    name = "TilCreator";
     email = "contact.nixos@tc-j.de";
     matrix = "@tilcreator:matrix.org";
     github = "TilCreator";

@@ -24,7 +24,9 @@ buildPythonApplication rec {
   };
 
   postPatch = ''
-    substituteInPlace setup.py --replace "'pytest-runner'," ""
+    substituteInPlace setup.py \
+      --replace "'pytest-runner'," "" \
+      --replace "cryptography==" "cryptography>="
   '';
 
   propagatedBuildInputs = [

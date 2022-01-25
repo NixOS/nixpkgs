@@ -121,18 +121,18 @@ rec {
         allowSubstitutes = false;
       }
       ''
-        n=$out${destination}
-        mkdir -p "$(dirname "$n")"
+        target=$out${destination}
+        mkdir -p "$(dirname "$target")"
 
         if [ -e "$textPath" ]; then
-          mv "$textPath" "$n"
+          mv "$textPath" "$target"
         else
-          echo -n "$text" > "$n"
+          echo -n "$text" > "$target"
         fi
 
         eval "$checkPhase"
 
-        (test -n "$executable" && chmod +x "$n") || true
+        (test -n "$executable" && chmod +x "$target") || true
       '';
 
   /*
@@ -219,7 +219,7 @@ rec {
         ${text}
         '';
       checkPhase = ''
-        ${stdenv.shell} -n $out
+        ${stdenv.shellDryRun} "$target"
       '';
     };
 
@@ -246,7 +246,7 @@ rec {
         ${text}
         '';
       checkPhase = ''
-        ${stdenv.shell} -n $out/bin/${name}
+        ${stdenv.shellDryRun} "$target"
       '';
     };
 
@@ -295,8 +295,8 @@ rec {
       checkPhase =
         if checkPhase == null then ''
           runHook preCheck
-          ${stdenv.shell} -n $out/bin/${name}
-          ${shellcheck}/bin/shellcheck $out/bin/${name}
+          ${stdenv.shellDryRun} "$target"
+          ${shellcheck}/bin/shellcheck "$target"
           runHook postCheck
         ''
         else checkPhase;

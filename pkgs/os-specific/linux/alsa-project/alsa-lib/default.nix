@@ -7,23 +7,14 @@
 
 stdenv.mkDerivation rec {
   pname = "alsa-lib";
-  version = "1.2.5.1";
+  version = "1.2.6.1";
 
   src = fetchurl {
     url = "mirror://alsa/lib/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-YoQh2VDOyvI03j+JnVIMCmkjMTyWStdR/6wIHfMxQ44=";
+    hash = "sha256-rVgpk9Us21+xWaC+q2CmrFfqsMwb34XcTbbWGX8CMz8=";
   };
 
-  patches = [
-    ./alsa-plugin-conf-multilib.patch
-  ];
-
   enableParallelBuilding = true;
-
-  # Fix pcm.h file in order to prevent some compilation bugs
-  postPatch = ''
-    sed -i -e 's|//int snd_pcm_mixer_element(snd_pcm_t \*pcm, snd_mixer_t \*mixer, snd_mixer_elem_t \*\*elem);|/\*int snd_pcm_mixer_element(snd_pcm_t \*pcm, snd_mixer_t \*mixer, snd_mixer_elem_t \*\*elem);\*/|' include/pcm.h
-  '';
 
   postInstall = ''
     ln -s ${alsa-ucm-conf}/share/alsa/{ucm,ucm2} $out/share/alsa
@@ -43,5 +34,6 @@ stdenv.mkDerivation rec {
 
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
+    maintainers = with maintainers; [ l-as ];
   };
 }

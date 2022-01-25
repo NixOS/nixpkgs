@@ -9,6 +9,7 @@
 , pytestCheckHook
 , python-box
 , python-dateutil
+, pythonOlder
 , requests
 , requests-pkcs12
 , responses
@@ -19,13 +20,16 @@
 
 buildPythonPackage rec {
   pname = "pytenable";
-  version = "1.4.2";
+  version = "1.4.3";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "tenable";
     repo = "pyTenable";
     rev = version;
-    sha256 = "sha256-qljoJ+nYFVS5VHr/M4mITtO9Czuyb4HLzVjhprhyJIs=";
+    hash = "sha256-p9d3wZkOMhNQWJN6tCNUlW15A3irU8QN/nm7PLGTE/M=";
   };
 
   propagatedBuildInputs = [
@@ -59,7 +63,9 @@ buildPythonPackage rec {
     "test_uploads_docker_push_cs_tag_typeerror"
   ];
 
-  pythonImportsCheck = [ "tenable" ];
+  pythonImportsCheck = [
+    "tenable"
+  ];
 
   meta = with lib; {
     description = "Python library for the Tenable.io and TenableSC API";

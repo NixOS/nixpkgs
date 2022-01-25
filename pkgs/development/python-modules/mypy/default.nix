@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "mypy";
-  version = "0.930";
+  version = "0.931";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "python";
     repo = "mypy";
     rev = "v${version}";
-    sha256 = "sha256-0yo6f9hRYFfwdfukOGNNTgPCIFO2MZdfMvzbci7FWRs=";
+    sha256 = "1v83flrdxh8grcp40qw04q4hzjflih9xwib64078vsxv2w36f817";
   };
 
   patches = [
