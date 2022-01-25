@@ -1,21 +1,46 @@
-{ lib
-, python3
+{
+  # eval time deps
+  lib
+, buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
+, pythonOlder
+  # runtime deps
+, click
+, ghp-import
+, importlib-metadata
+, jinja2
+, markdown
+, mergedeep
+, packaging
+, pyyaml
+, pyyaml-env-tag
+, watchdog
+  # testing deps
+, Babel
+, mock
+, pytestCheckHook
 }:
 
-with python3.pkgs;
-
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "mkdocs";
-  version = "1.2.1";
+  version = "1.2.3";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-JF3Zz1ObxeKsIF0pa8duJxqjLgMvmWsWMApHT43Z+EY=";
+    sha256 = "sha256-LBw2ftGyeNvARQ8xiYUho8BiQh+aIEqROP51gKvNxEo=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/mkdocs/mkdocs/commit/c93fc91e4dc0ef33e2ea418aaa32b0584a8d354a.patch";
+      sha256 = "sha256-7uLIuQOt6KU/+iS9cwhXkWPAHzZkQdMyNBxSMut5WK4=";
+      excludes = [ "tox.ini" ];
+    })
+  ];
 
   propagatedBuildInputs = [
     click
@@ -33,20 +58,18 @@ buildPythonApplication rec {
   checkInputs = [
     Babel
     mock
-    pytestCheckHook
   ];
 
-  postPatch = ''
-    # Remove test due to missing requirement
-    rm mkdocs/tests/theme_tests.py
+
+  checkPhase = ''
+    set -euo pipefail
+
+    runHook preCheck
+
+    python -m unittest discover -v -p '*tests.py' mkdocs --top-level-directory .
+
+    runHook postCheck
   '';
-
-  pytestFlagsArray = [ "mkdocs/tests/*.py" ];
-
-  disabledTests = [
-    # Don't start a test server
-    "testing_server"
-  ];
 
   pythonImportsCheck = [ "mkdocs" ];
 

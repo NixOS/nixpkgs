@@ -225,79 +225,71 @@ common =
     sha256 = "sha256-SPnam4xNIjbMgnq6IP1AaM1V62X0yZNo4DEVmI8sHOo=";
   };
 
-in rec {
+  buildNix =
+  { version, suffix ? ""
+  , src ? null, sha256 ? null
+  , boehmgc ? boehmgc_nix, patches ? [ ]
+  }:
+    assert (src == null) -> (sha256 != null);
+    assert (sha256 == null) -> (src != null);
+    callPackage common {
+      pname = "nix";
+      version = "${version}${suffix}";
+      inherit suffix;
 
+      src =
+        if src != null
+        then src
+        else fetchFromGitHub {
+          owner = "NixOS";
+          repo = "nix";
+          rev = version;
+          inherit sha256;
+        };
+
+      inherit boehmgc patches;
+      inherit storeDir stateDir confDir;
+    };
+
+in rec {
   nix = nixStable;
 
   nixStable = nix_2_5;
 
-  nix_2_3 = callPackage common (rec {
-    pname = "nix";
+  nix_2_3 = buildNix rec {
     version = "2.3.16";
     src = fetchurl {
-      url = "https://nixos.org/releases/nix/${pname}-${version}/${pname}-${version}.tar.xz";
+      url = "https://nixos.org/releases/nix/nix-${version}/nix-${version}.tar.xz";
       sha256 = "sha256-fuaBtp8FtSVJLSAsO+3Nne4ZYLuBj2JpD2xEk7fCqrw=";
     };
-
     boehmgc = boehmgc_nix_2_3;
+  };
 
-    inherit storeDir stateDir confDir;
-  });
-
-  nix_2_4 = callPackage common (rec {
-    pname = "nix";
+  nix_2_4 = buildNix {
     version = "2.4";
-
-    src = fetchFromGitHub {
-      owner = "NixOS";
-      repo = "nix";
-      rev = version;
-      sha256 = "sha256-op48CCDgLHK0qV1Batz4Ln5FqBiRjlE6qHTiZgt3b6k=";
-    };
-
-    boehmgc = boehmgc_nix;
-
+    sha256 = "sha256-op48CCDgLHK0qV1Batz4Ln5FqBiRjlE6qHTiZgt3b6k=";
     patches = [ installNlohmannJsonPatch ];
+  };
 
-    inherit storeDir stateDir confDir;
-  });
-
-  nix_2_5 = callPackage common (rec {
-    pname = "nix";
+  nix_2_5 = buildNix {
     version = "2.5.1";
+    sha256 = "sha256-GOsiqy9EaTwDn2PLZ4eFj1VkXcBUbqrqHehRE9GuGdU=";
+    patches = [ installNlohmannJsonPatch ];
+  };
 
+  nix_2_6 = buildNix {
+    version = "2.6.0";
+    sha256 = "sha256-xEPeMcNJVOeZtoN+d+aRwolpW8mFSEQx76HTRdlhPhg=";
+  };
+
+  nixUnstable = lib.lowPrio (buildNix rec {
+    version = "2.7";
+    suffix = "pre20220124_${lib.substring 0 7 src.rev}";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = version;
-      sha256 = "sha256-GOsiqy9EaTwDn2PLZ4eFj1VkXcBUbqrqHehRE9GuGdU=";
+      rev = "0a70b37b5694c769fb855c1afe7642407d1db64f";
+      sha256 = "sha256-aOM9MPNlnWNMobx4CuD4JIXH2poRlG8AKkuxY7FysWg=";
     };
-
-    boehmgc = boehmgc_nix;
-
-    patches = [ installNlohmannJsonPatch ];
-
-    inherit storeDir stateDir confDir;
   });
-
-  nixUnstable = lib.lowPrio (callPackage common rec {
-    pname = "nix";
-    version = "2.6${suffix}";
-    suffix = "pre20211217_${lib.substring 0 7 src.rev}";
-
-    src = fetchFromGitHub {
-      owner = "NixOS";
-      repo = "nix";
-      rev = "6e6e998930f0d7361d64644eb37d9134e74e8501";
-      sha256 = "sha256-RZSWOJUPkXIlMNYMC5a+WNrOjpqAHyhzyqD57BGfNY8=";
-    };
-
-    boehmgc = boehmgc_nix;
-
-    patches = [ installNlohmannJsonPatch ];
-
-    inherit storeDir stateDir confDir;
-
-  });
-
 }
