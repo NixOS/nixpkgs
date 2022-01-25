@@ -18630,6 +18630,8 @@ with pkgs;
     udev = systemdMinimal;
   };
 
+  libusbgx = callPackage ../development/libraries/libusbgx { };
+
   libusbmuxd = callPackage ../development/libraries/libusbmuxd { };
 
   libutempter = callPackage ../development/libraries/libutempter { };
@@ -22326,6 +22328,8 @@ with pkgs;
 
   gradm = callPackage ../os-specific/linux/gradm { };
 
+  gt = callPackage ../os-specific/linux/gt { };
+
   inherit (nodePackages) gtop;
 
   hd-idle = callPackage ../os-specific/linux/hd-idle { };
@@ -22358,9 +22362,7 @@ with pkgs;
 
   ifmetric = callPackage ../os-specific/linux/ifmetric {};
 
-  ima-evm-utils = callPackage ../os-specific/linux/ima-evm-utils {
-    openssl = openssl_1_0_2;
-  };
+  ima-evm-utils = callPackage ../os-specific/linux/ima-evm-utils {};
 
   intel2200BGFirmware = callPackage ../os-specific/linux/firmware/intel2200BGFirmware { };
 
@@ -27354,7 +27356,7 @@ with pkgs;
 
   mpg321 = callPackage ../applications/audio/mpg321 { };
 
-  mpc_cli = callPackage ../applications/audio/mpc {
+  mpc-cli = callPackage ../applications/audio/mpc {
     inherit (python3Packages) sphinx;
   };
 
@@ -29347,9 +29349,7 @@ with pkgs;
 
   qpdfview = libsForQt5.callPackage ../applications/misc/qpdfview {};
 
-  qtile = callPackage ../applications/window-managers/qtile {
-    inherit (xorg) libxcb;
-  };
+  qtile = callPackage ../applications/window-managers/qtile { };
 
   vimpc = callPackage ../applications/audio/vimpc { };
 
@@ -32061,6 +32061,8 @@ with pkgs;
   sage = callPackage ../applications/science/math/sage { };
   sageWithDoc = sage.override { withDoc = true; };
 
+  sagetex = callPackage ../misc/sagetex { };
+
   subread = callPackage ../applications/science/biology/subread { };
 
   suitesparse_4_2 = callPackage ../development/libraries/science/math/suitesparse/4.2.nix { };
@@ -33959,9 +33961,7 @@ with pkgs;
 
   wprecon = callPackage ../tools/security/wprecon { };
 
-  wraith = callPackage ../applications/networking/irc/wraith {
-    openssl = openssl_1_0_2;
-  };
+  wraith = callPackage ../applications/networking/irc/wraith { };
 
   wxmupen64plus = callPackage ../misc/emulators/wxmupen64plus { };
 

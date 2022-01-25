@@ -172,11 +172,13 @@ rec {
     else if all isInt list && all (x: x == head list) list then head list
     else throw "Cannot merge definitions of `${showOption loc}'. Definition values:${showDefs defs}";
 
-  mergeOneOption = loc: defs:
-    if defs == [] then abort "This case should never happen."
-    else if length defs != 1 then
-      throw "The unique option `${showOption loc}' is defined multiple times. Definition values:${showDefs defs}"
-    else (head defs).value;
+  mergeOneOption = mergeUniqueOption { message = ""; };
+
+  mergeUniqueOption = { message }: loc: defs:
+    if length defs == 1
+    then (head defs).value
+    else assert length defs > 1;
+      throw "The option `${showOption loc}' is defined multiple times.\n${message}\nDefinition values:${showDefs defs}";
 
   /* "Merge" option definitions by checking that they all have the same value. */
   mergeEqualOption = loc: defs:

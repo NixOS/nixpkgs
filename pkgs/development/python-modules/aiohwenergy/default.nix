@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "aiohwenergy";
-  version = "0.6.0";
+  version = "0.7.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "DCSBL";
     repo = pname;
     rev = version;
-    sha256 = "006q2kgc28dn43skk2x76d13fp51sy073nm8f2hrxn4wqwkccsx3";
+    sha256 = "0pgk9ky4kfb1kp0mpyxdinwql1q85a3bl5w34pr88wqdqdw467ms";
   };
 
   propagatedBuildInputs = [
