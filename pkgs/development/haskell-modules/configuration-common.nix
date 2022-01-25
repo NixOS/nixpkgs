@@ -1524,10 +1524,7 @@ self: super: {
   # Upstream issue: https://github.com/haskell-servant/servant-swagger/issues/129
   servant-swagger = dontCheck super.servant-swagger;
 
-  # substituteInPlace: https://github.com/hercules-ci/hercules-ci-agent/issues/363
-  hercules-ci-agent = overrideCabal { preConfigure = ''
-    substituteInPlace hercules-ci-agent/Hercules/Agent/Cachix/Init.hs --replace "Cachix.Client.Env" "Cachix.Client.Version"
-  ''; } (generateOptparseApplicativeCompletion "hercules-ci-agent" super.hercules-ci-agent);
+  hercules-ci-agent = generateOptparseApplicativeCompletion "hercules-ci-agent" super.hercules-ci-agent;
 
   hercules-ci-cli = pkgs.lib.pipe super.hercules-ci-cli [
     unmarkBroken
