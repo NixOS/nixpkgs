@@ -35,7 +35,7 @@ in
       PDF Studio Viewer is an easy to use, full-featured PDF editing software. This is the free edition. For the standard/pro edition, see the package pdfstudio.
     '';
     src = fetchurl {
-      url = makeurl { pname = pname; year = year; version = version; };
+      url = makeurl { inherit pname year version; };
       sha256 = "128k3fm8m8zdykx4s30g5m2zl7cgmvs4qinf1w525zh84v56agz6";
     };
   };
