@@ -250,6 +250,12 @@ Composed types are types that take a type as parameter. `listOf
 :   Ensures that type *`t`* cannot be merged. It is used to ensure option
     definitions are declared only once.
 
+`types.unique` `{ message = m }` *`t`*
+
+:   Ensures that type *`t`* cannot be merged. Prints the message *`m`*, after
+    the line `The option <option path> is defined multiple times.` and before
+    a list of definition locations.
+
 `types.either` *`t1 t2`*
 
 :   Type *`t1`* or type *`t2`*, e.g. `with types; either int str`.
