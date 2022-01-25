@@ -1,4 +1,4 @@
-{ lib, fetchurl, appimageTools }:
+{ lib, fetchurl, appimageTools, wrapGAppsHook, gsettings-desktop-schemas, gtk3 }:
 
 let
   pname = "lens";
@@ -18,6 +18,10 @@ let
 
 in appimageTools.wrapType2 {
   inherit name src;
+
+  profile = ''
+    export XDG_DATA_DIRS=${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS
+  '';
 
   extraInstallCommands =
     ''
