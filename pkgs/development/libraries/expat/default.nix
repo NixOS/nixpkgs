@@ -14,6 +14,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-sfnxsaXrsKyqiMn/eb+k4UWCO3iqUYXlxdhfBggkd4o=";
   };
 
+  patches = [
+    ./CVE-2022-23852-fix.patch
+    ./CVE-2022-23852-test.patch
+  ];
+  patchFlags = "-p2";
+
   outputs = [ "out" "dev" ]; # TODO: fix referrers
   outputBin = "dev";
 
