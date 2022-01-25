@@ -48,7 +48,11 @@ appimageTools.wrapType2 rec {
     description = "NoSQL Workbench for Amazon DynamoDB is a cross-platform client-side application for modern database development and operations and is available for Windows and macOS";
     homepage = "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/workbench.html";
     platforms = [ "x86_64-linux" ];
-    license = licenses.nosql-workbench;
+    license = {
+      fullName = "NoSQL Workbench License Agreement";
+      url = "https://aws.amazon.com/nosql/nosql-workbench-license/";
+      free = false;
+    };
     maintainers = with maintainers; [ johnrichardrinehart ];
   };
 }

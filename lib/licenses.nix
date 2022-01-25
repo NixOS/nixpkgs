@@ -838,12 +838,6 @@ in mkLicense lset) ({
     fullName = "No Limit Public License";
   };
 
-  nosql-workbench = {
-    fullName = "NoSQL Workbench License Agreement";
-    url = "https://aws.amazon.com/nosql/nosql-workbench-license/";
-    free = false;
-  };
-
   nposl3 = {
     spdxId = "NPOSL-3.0";
     fullName = "Non-Profit Open Software License 3.0";
