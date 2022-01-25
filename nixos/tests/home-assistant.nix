@@ -49,6 +49,12 @@ in {
           payload_on = "let_there_be_light";
           payload_off = "off";
         }];
+        wake_on_lan = {};
+        switch = [{
+          platform = "wake_on_lan";
+          mac = "00:11:22:33:44:55";
+          host = "127.0.0.1";
+        }];
         # tests component-based capability assignment (CAP_NET_BIND_SERVICE)
         emulated_hue = {
           host_ip = "127.0.0.1";
@@ -98,6 +104,10 @@ in {
         output_log = hass.succeed("cat ${configDir}/home-assistant.log")
         print("\n### home-assistant.log ###\n")
         print(output_log + "\n")
+
+    # wait for home-assistant to fully boot
+    hass.sleep(30)
+    hass.wait_for_unit("home-assistant.service")
 
     with subtest("Check that no errors were logged"):
         assert "ERROR" not in output_log
