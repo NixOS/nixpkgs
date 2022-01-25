@@ -33,18 +33,20 @@ class EnvDefault(argparse.Action):
         setattr(namespace, self.dest, values)
 
 
-def raise_if_not_writeable_dir(path: Path) -> None:
-    """Raises an ArgumentTypeError if the given path isn't a writeable directory
+def writeable_dir(arg: str) -> Path:
+    """Raises an ArgumentTypeError if the given argument isn't a writeable directory
     Note: We want to fail as early as possible if a directory isn't writeable,
     since an executed nixos-test could fail (very late) because of the test-driver
     writing in a directory without proper permissions.
     """
+    path = Path(arg)
     if not path.is_dir():
         raise argparse.ArgumentTypeError("{0} is not a directory".format(path))
     if not os.access(path, os.W_OK):
         raise argparse.ArgumentTypeError(
             "{0} is not a writeable directory".format(path)
         )
+    return path
 
 
 def main() -> None:
@@ -83,7 +85,7 @@ def main() -> None:
         help="""The path to the directory where outputs copied from the VM will be placed.
                 By e.g. Machine.copy_from_vm or Machine.screenshot""",
         default=Path.cwd(),
-        type=Path,
+        type=writeable_dir,
     )
     arg_parser.add_argument(
         "testscript",
@@ -94,8 +96,6 @@ def main() -> None:
     )
 
     args = arg_parser.parse_args()
-
-    raise_if_not_writeable_dir(args.output_directory)
 
     if not args.keep_vm_state:
         rootlog.info("Machine state will be reset. To keep it, pass --keep-vm-state")
