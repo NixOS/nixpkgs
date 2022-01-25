@@ -631,6 +631,7 @@ mapAliases ({
   module_init_tools = kmod; # added 2016-04-22
   mozart = mozart2-binary; # added 2019-09-23
   mozart-binary = mozart2-binary; # added 2019-09-23
+  mpc_cli = mpc-cli; # moved from top-level 2022-01-24
   mpd_clientlib = libmpdclient; # added 2021-02-11
   mpich2 = mpich;  # added 2018-08-06
   msf = metasploit; # added 2018-04-25

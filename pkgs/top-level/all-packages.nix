@@ -27334,7 +27334,6 @@ with pkgs;
 
   mpg321 = callPackage ../applications/audio/mpg321 { };
 
-  mpc_cli = mpc-cli; # TODO: move this to aliases.nix
   mpc-cli = callPackage ../applications/audio/mpc {
     inherit (python3Packages) sphinx;
   };
