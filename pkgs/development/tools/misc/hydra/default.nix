@@ -1,4 +1,4 @@
-{ fetchFromGitHub, nixStable, callPackage, nixUnstable, nixosTests }:
+{ fetchFromGitHub, nix, callPackage, nixUnstable, nixosTests }:
 
 {
   hydra-unstable = callPackage ./common.nix {

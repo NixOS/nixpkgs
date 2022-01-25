@@ -33134,7 +33134,6 @@ with pkgs;
       inherit (darwin.apple_sdk.frameworks) Security;
       })
     nix
-    nixStable
     nix_2_3
     nix_2_4
     nix_2_5
