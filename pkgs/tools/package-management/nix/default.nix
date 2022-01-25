@@ -43,9 +43,7 @@ let
       inherit boehmgc patches Security;
       inherit storeDir stateDir confDir;
     };
-in rec {
-  nix = nix_2_5;
-
+in {
   nix_2_3 = buildNix rec {
     version = "2.3.16";
     src = fetchurl {

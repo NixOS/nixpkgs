@@ -33133,12 +33133,13 @@ with pkgs;
       stateDir = config.nix.stateDir or "/nix/var";
       inherit (darwin.apple_sdk.frameworks) Security;
       })
-    nix
     nix_2_3
     nix_2_4
     nix_2_5
     nix_2_6
     nixUnstable;
+
+  nix = nix_2_5;
 
   nixStatic = pkgsStatic.nix;
 
