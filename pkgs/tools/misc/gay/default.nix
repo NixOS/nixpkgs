@@ -1,7 +1,7 @@
-{ lib, python39Packages, fetchFromGitHub }:
+{ lib, python3Packages, fetchFromGitHub }:
 
-python39Packages.buildPythonPackage rec {
-  name = "gay";
+python3Packages.buildPythonApplication rec {
+  pname = "gay";
   version = "1.2.8";
 
   src = fetchFromGitHub {
@@ -21,6 +21,5 @@ python39Packages.buildPythonPackage rec {
     homepage = "https://github.com/ms-jpq/gay";
     maintainers = with maintainers; [ CodeLongAndProsper90 ];
     license = licenses.mit;
-    platforms = platforms.all;
   };
 }

@@ -3,13 +3,13 @@
 
 mkDerivation rec {
   pname = "stellarsolver";
-  version = "1.8";
+  version = "1.9";
 
   src = fetchFromGitHub {
     owner = "rlancaste";
     repo = pname;
     rev = version;
-    sha256 = "sha256-eC45V0aqFSUVJrxhaEXFzgzaXkHVwA5Yj8YyGvii0QI=";
+    sha256 = "sha256-PiRXNiemJ+UjVhmd2KPcTKJoDW9K9QBf62nkP1LlOfw=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -25,6 +25,6 @@ mkDerivation rec {
     description = "Astrometric plate solving library";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ hjones2199 ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

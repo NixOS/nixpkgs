@@ -188,6 +188,7 @@ let
         icepeak
         idris
         ihaskell
+        jacinda
         jl
         koka
         krank

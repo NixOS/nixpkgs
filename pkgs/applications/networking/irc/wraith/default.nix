@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   pname = "wraith";
-  version = "1.4.7";
+  version = "1.4.10";
   src = fetchurl {
     url = "mirror://sourceforge/wraithbotpack/wraith-v${version}.tar.gz";
-    sha256 = "0h6liac5y7im0jfm2sj18mibvib7d1l727fjs82irsjj1v9kif3j";
+    sha256 = "1h8159g6wh1hi69cnhqkgwwwa95fa6z1zrzjl219mynbf6vjjzkw";
   };
   hardeningDisable = [ "format" ];
   buildInputs = [ openssl ];

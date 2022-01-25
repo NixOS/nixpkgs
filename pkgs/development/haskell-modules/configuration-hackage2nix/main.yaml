@@ -133,6 +133,9 @@ default-package-overrides:
   # Pinning patch because it is mainly used by the reflex-frp ecosystem which is not yet compatible with it.
   # https://github.com/reflex-frp/reflex-dom/issues/431
   - patch < 0.0.5.0
+  # On the recommendation of hnix author:
+  # https://github.com/NixOS/nixpkgs/pull/154461#issuecomment-1015511883
+  - hnix < 0.15
 
 extra-packages:
   - base16-bytestring < 1               # required for cabal-install etc.
@@ -399,6 +402,8 @@ package-maintainers:
     - haskell-ci
     - diagrams
     - rel8
+    - regex-rure
+    - jacinda
     # owothia
     - irc-client
     - chatter
@@ -446,6 +451,7 @@ unsupported-platforms:
   FTGL:                                         [ x86_64-darwin, aarch64-darwin ]
   fuzzytime:                                    [ x86_64-darwin, aarch64-darwin ] # https://github.com/kamwitsta/fuzzytime/issues/2
   ghcjs-dom-hello:                              [ x86_64-darwin, aarch64-darwin ]
+  gi-adwaita:                                   [ x86_64-darwin, aarch64-darwin ]
   gi-dbusmenugtk3:                              [ x86_64-darwin, aarch64-darwin ]
   gi-dbusmenu:                                  [ x86_64-darwin, aarch64-darwin ]
   gi-ggit:                                      [ x86_64-darwin, aarch64-darwin ]

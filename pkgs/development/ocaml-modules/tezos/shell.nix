@@ -5,13 +5,13 @@
 , tezos-requester
 , tezos-validation
 , tezos-store
-, tezos-workers
-, tezos-test-services
-# , tezos-embedded-protocol-demo-noops
-, tezos-test-helpers
-# , tezos-protocol-plugin-alpha
+, lwt-canceler
 , alcotest-lwt
-, crowbar
+, qcheck-alcotest
+, tezos-base-test-helpers
+, tezos-embedded-protocol-demo-noops
+, tezos-protocol-plugin-alpha
+, tezos-test-helpers
 }:
 
 buildDunePackage {
@@ -20,24 +20,23 @@ buildDunePackage {
   src = "${tezos-stdlib.base_src}/src/lib_shell";
 
   propagatedBuildInputs = [
+    lwt-canceler
     tezos-p2p
     tezos-requester
-    tezos-validation
     tezos-store
-    tezos-workers
+    tezos-validation
   ];
 
   checkInputs = [
     alcotest-lwt
-    crowbar
+    qcheck-alcotest
+    tezos-base-test-helpers
+    tezos-embedded-protocol-demo-noops
+    tezos-protocol-plugin-alpha
     tezos-test-helpers
-    tezos-test-services
-    # tezos-embedded-protocol-demo-noops
-    # tezos-protocol-plugin-alpha
   ];
 
-  # A lot of extra deps with wide dependency cones needed
-  doCheck = false;
+  doCheck = true;
 
   meta = tezos-stdlib.meta // {
     description = "Tezos: descriptions of RPCs exported by `tezos-shell`";

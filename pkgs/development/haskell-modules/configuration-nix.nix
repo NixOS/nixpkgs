@@ -1054,4 +1054,22 @@ self: super: builtins.intersectAttrs super {
       "-p" "!/Can be used with http-client/"
     ] ++ drv.testFlags or [];
   }) super.http-api-data-qq;
+
+  # Additionally install documentation
+  jacinda = overrideCabal (drv: {
+    enableSeparateDocOutput = true;
+    postInstall = ''
+      ${drv.postInstall or ""}
+
+      docDir="$doc/share/doc/${drv.pname}-${drv.version}"
+
+      # man page goes to $out, it's small enough and haskellPackages has no
+      # support for a man output at the moment and $doc requires downloading
+      # a full PDF
+      install -Dm644 man/ja.1 -t "$out/share/man/man1"
+      # language guide and examples
+      install -Dm644 doc/guide.pdf -t "$docDir"
+      install -Dm644 test/examples/*.jac -t "$docDir/examples"
+    '';
+  }) super.jacinda;
 }

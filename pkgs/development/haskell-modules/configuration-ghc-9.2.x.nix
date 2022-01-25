@@ -241,4 +241,8 @@ self: super: {
 
   # https://github.com/sjakobi/bsb-http-chunked/issues/38
   bsb-http-chunked = dontCheck super.bsb-http-chunked;
+
+  # need bytestring >= 0.11 which is only bundled with GHC >= 9.2
+  regex-rure = doDistribute (markUnbroken super.regex-rure);
+  jacinda = doDistribute super.jacinda;
 }

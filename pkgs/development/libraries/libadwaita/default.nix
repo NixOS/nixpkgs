@@ -53,6 +53,9 @@ stdenv.mkDerivation rec {
   buildInputs = [
     fribidi
     gobject-introspection
+  ];
+
+  propagatedBuildInputs = [
     gtk4
   ];
 

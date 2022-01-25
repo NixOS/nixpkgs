@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "treex";
-  version = "0.6.7";
+  version = "0.6.8";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "cgarciae";
     repo = pname;
     rev = version;
-    sha256 = "1hl3wj71c7cp7jzkhyjy7xgs2vc8c89icq0bgfr49y4pwv69n43m";
+    sha256 = "0pi4c78vqhy7mh9ranssdxdjbqnvyagsfkx95k93bnvzgmnr2kxb";
   };
 
   postPatch = ''

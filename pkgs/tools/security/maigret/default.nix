@@ -5,13 +5,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "maigret";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "soxoj";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1jvfi3d7b1x4x1h0hz193n541fa0qgp7lynd6j0w050cgg753hpz";
+    sha256 = "0igfxg238awdn1ly8s3r655yi3gpxink7g2hr6xb0c1nrm7z0kad";
   };
 
   propagatedBuildInputs = with python3.pkgs; [

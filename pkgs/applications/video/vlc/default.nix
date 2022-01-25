@@ -62,16 +62,14 @@
 , systemd
 , taglib
 , unzip
-, wayland
-, wayland-protocols
 , xorg
 , zlib
-
 , chromecastSupport ? true, libmicrodns, protobuf
 , jackSupport ? false
 , onlyLibVLC ? false
 , skins2Support ? !onlyLibVLC, freetype
-, withQt5 ? true, qtbase, qtsvg, qtx11extras, wrapQtAppsHook
+, waylandSupport ? true, wayland, wayland-protocols
+, withQt5 ? true, qtbase, qtsvg, qtwayland, qtx11extras, wrapQtAppsHook
 }:
 
 # chromecastSupport requires TCP port 8010 to be open for it to work.
@@ -148,8 +146,6 @@ stdenv.mkDerivation rec {
     srt
     systemd
     taglib
-    wayland
-    wayland-protocols
     zlib
   ]
   ++ (with xorg; [
@@ -162,8 +158,15 @@ stdenv.mkDerivation rec {
   ++ optional (!hostIsAarch) live555
   ++ optional jackSupport libjack2
   ++ optionals chromecastSupport [ libmicrodns protobuf ]
-  ++ optionals skins2Support (with xorg; [ freetype libXext libXinerama libXpm ])
-  ++ optionals withQt5 [ qtbase qtsvg qtx11extras ];
+  ++ optionals skins2Support (with xorg; [
+    freetype
+    libXext
+    libXinerama
+    libXpm
+  ])
+  ++ optionals waylandSupport [ wayland wayland-protocols ]
+  ++ optionals withQt5 [ qtbase qtsvg qtx11extras ]
+  ++ optional (waylandSupport && withQt5) qtwayland;
 
   nativeBuildInputs = [
     autoreconfHook
@@ -172,7 +175,8 @@ stdenv.mkDerivation rec {
     removeReferencesTo
     unzip
   ]
-  ++ optionals withQt5 [ wrapQtAppsHook ];
+  ++ optionals withQt5 [ wrapQtAppsHook ]
+  ++ optionals waylandSupport [ wayland wayland-protocols ];
 
   enableParallelBuilding = true;
 
@@ -210,9 +214,11 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--enable-srt" # Explicit enable srt to ensure the patch is applied.
     "--with-kde-solid=$out/share/apps/solid/actions"
-  ] ++ optional onlyLibVLC "--disable-vlc"
-    ++ optional skins2Support "--enable-skins2"
-    ++ optionals chromecastSupport [
+  ]
+  ++ optional onlyLibVLC "--disable-vlc"
+  ++ optional skins2Support "--enable-skins2"
+  ++ optional waylandSupport "--enable-wayland"
+  ++ optionals chromecastSupport [
     "--enable-sout"
     "--enable-chromecast"
     "--enable-microdns"

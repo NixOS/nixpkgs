@@ -24,6 +24,7 @@ andrep/vimacs
 andreshazard/vim-logreview
 AndrewRadev/sideways.vim
 AndrewRadev/splitjoin.vim
+AndrewRadev/switch.vim
 AndrewRadev/tagalong.vim
 andsild/peskcolor.vim
 andviro/flake8-vim
@@ -501,6 +502,7 @@ morhetz/gruvbox
 motus/pig.vim
 mpickering/hlint-refactor-vim
 ms-jpq/chadtree@chad
+ms-jpq/coq_nvim
 mtikekar/vim-bsv
 MunifTanjim/nui.nvim@main
 mustache/vim-mustache-handlebars
@@ -559,6 +561,7 @@ ntpeters/vim-better-whitespace
 numirias/semshi
 numtostr/comment.nvim
 numToStr/FTerm.nvim
+numToStr/Navigator.nvim
 nvie/vim-flake8
 nvim-lua/completion-nvim
 nvim-lua/diagnostic-nvim
@@ -634,6 +637,7 @@ preservim/vim-pencil
 preservim/vim-wordy
 preservim/vimux
 prettier/vim-prettier
+projekt0n/circles.nvim
 psliwka/vim-smoothie
 ptzz/lf.vim
 puremourning/vimspector
@@ -778,6 +782,7 @@ tami5/sqlite.lua
 tbastos/vim-lua
 tbodt/deoplete-tabnine
 ternjs/tern_for_vim
+terrortylor/nvim-comment
 terryma/vim-expand-region
 terryma/vim-multiple-cursors
 tex/vimpreviewpandoc
