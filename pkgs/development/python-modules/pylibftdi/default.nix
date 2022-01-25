@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "pylibftdi";
-  version = "0.19.0";
+  version = "0.20.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bb0ec74df292ef884aa37bf1e98fb9df4d338718e1559eebda363317a792123e";
+    sha256 = "f4a87fc4af2c9c7d42badd4192ca9b529f32c9d96fdc8daea7e29c509226df5f";
   };
 
   propagatedBuildInputs = [
