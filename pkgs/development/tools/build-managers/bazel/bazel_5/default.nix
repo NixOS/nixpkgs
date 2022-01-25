@@ -175,7 +175,10 @@ stdenv.mkDerivation rec {
     # This patch removes using the -fobjc-arc compiler option and makes the code
     # compile without automatic reference counting. Caveat: this leaks memory, but
     # we accept this fact because xcode_locator is only a short-lived process used during the build.
-    ./no-arc.patch
+    (substituteAll {
+      src = ./no-arc.patch;
+      multiBinPatch = if stdenv.hostPlatform.system == "aarch64-darwin" then "-arch arm64 -Wl,-no_adhoc_codesign" else "";
+    })
 
     # --experimental_strict_action_env (which may one day become the default
     # see bazelbuild/bazel#2574) hardcodes the default
