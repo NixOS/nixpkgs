@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "aioshelly";
-  version = "1.0.7";
+  version = "1.0.8";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "home-assistant-libs";
     repo = pname;
     rev = version;
-    sha256 = "1jx2m03c8f76nn8r14vk0v7qq2kijgjhqcqwl95kih50cgmj0yzf";
+    sha256 = "0l6qhgpzg082zk9134w2psnzkzf5zr0jyvrkxnhhz5lx9q5k94pc";
   };
 
   propagatedBuildInputs = [
