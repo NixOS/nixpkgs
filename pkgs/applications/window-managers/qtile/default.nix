@@ -11,13 +11,13 @@ let
 
   unwrapped = pythonPackages.buildPythonPackage rec {
     pname = "qtile";
-    version = "0.19.0";
+    version = "0.20.0";
 
     src = fetchFromGitHub {
       owner = "qtile";
       repo = "qtile";
       rev = "v${version}";
-      sha256 = "BLHGVPMQd8O4h5TVx/F/klzSra+FZYogp22V6Yq04T0=";
+      sha256 = "0z766w26lqy2b8xngccqw5jljvyg8py4wqnm8p4jrzkzgfbsw6ad";
     };
 
     postPatch = ''
@@ -68,9 +68,9 @@ let
     };
   };
 in
-  (python.withPackages (ps: [ unwrapped ])).overrideAttrs (_: {
-    # otherwise will be exported as "env", this restores `nix search` behavior
-    name = "${unwrapped.pname}-${unwrapped.version}";
-    # export underlying qtile package
-    passthru = { inherit unwrapped; };
-  })
+(python.withPackages (ps: [ unwrapped ])).overrideAttrs (_: {
+  # otherwise will be exported as "env", this restores `nix search` behavior
+  name = "${unwrapped.pname}-${unwrapped.version}";
+  # export underlying qtile package
+  passthru = { inherit unwrapped; };
+})
