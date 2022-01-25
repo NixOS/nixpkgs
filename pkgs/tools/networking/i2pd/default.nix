@@ -1,4 +1,5 @@
 { lib, stdenv, fetchFromGitHub
+, installShellFiles
 , boost, zlib, openssl
 , upnpSupport ? true, miniupnpc ? null
 , aesniSupport ? stdenv.hostPlatform.aesSupport
@@ -21,6 +22,10 @@ stdenv.mkDerivation rec {
   buildInputs = with lib; [ boost zlib openssl ]
     ++ optional upnpSupport miniupnpc;
 
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
   makeFlags =
     let ynf = a: b: a + "=" + (if b then "yes" else "no"); in
     [ (ynf "USE_AESNI" aesniSupport)
@@ -32,6 +37,8 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     install -D i2pd $out/bin/i2pd
+    install --mode=444 -D 'contrib/i2pd.service' "$out/etc/systemd/system/i2pd.service"
+    installManPage 'debian/i2pd.1'
   '';
 
   meta = with lib; {
