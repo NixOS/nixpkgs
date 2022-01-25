@@ -9166,6 +9166,8 @@ with pkgs;
 
   real_time_config_quick_scan = callPackage ../applications/audio/real_time_config_quick_scan { };
 
+  realesrgan-ncnn-vulkan = callPackage ../tools/graphics/realesrgan-ncnn-vulkan { };
+
   react-native-debugger = callPackage ../development/tools/react-native-debugger { };
 
   read-edid = callPackage ../os-specific/linux/read-edid { };
@@ -19014,6 +19016,8 @@ with pkgs;
   nanomsg = callPackage ../development/libraries/nanomsg { };
 
   nanovna-saver = libsForQt5.callPackage ../applications/science/electronics/nanovna-saver { };
+
+  ncnn = callPackage ../development/libraries/ncnn { };
 
   ndpi = callPackage ../development/libraries/ndpi { };
 
