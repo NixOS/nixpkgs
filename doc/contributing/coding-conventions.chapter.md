@@ -169,6 +169,55 @@
   })
   ```
 
+- Between first level not string-like variables in `mkDerivation` like `buildInputs`, `patches` or `meta` should be an empty line to make the code less cramped and more clear:
+
+  ```nix
+  { stdenv, pkg-config, libxml2 }:
+
+  stdenv.mkDerivation {
+    pname = "nix";
+    version = "2.5.0";
+
+    src = ./.;
+
+    patches = [
+      (fetchpatch {
+        url = "...";
+        sha256 = "...";
+      })
+    ];
+
+    nativeBuildInputs = [ pkg-config ];
+
+    buildInputs = [ libxml2 ];
+
+    meta = with lib; {
+      homepage = "https://nixos.org";
+    };
+  };
+  ```
+
+  instead of
+
+  ```nix
+  { stdenv, pkg-config, libxml2 }:
+  stdenv.mkDerivation {
+    pname = "nix";
+    version = "2.5.0";
+    src = ./.;
+    patches = [
+      (fetchpatch {
+        url = "...";
+        sha256 = "...";
+      })
+    ];
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ libxml2 ];
+    meta = with lib; {
+      homepage = "https://nixos.org";
+    };
+  };
+
 - Unnecessary string conversions should be avoided. Do
 
   ```nix
