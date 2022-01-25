@@ -3923,6 +3923,8 @@ in {
 
   impacket = callPackage ../development/python-modules/impacket { };
 
+  importlab = callPackage ../development/python-modules/importlab { };
+
   importlib-metadata = callPackage ../development/python-modules/importlib-metadata { };
 
   importlib-resources = callPackage ../development/python-modules/importlib-resources { };
