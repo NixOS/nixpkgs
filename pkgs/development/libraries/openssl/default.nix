@@ -206,6 +206,17 @@ let
         echo "Found an erroneous dependency on perl ^^^" >&2
         exit 1
       fi
+    '' + lib.optionalString (!withPerl) ''
+      # If withPerl is disabled, clear out any references to perl that remain in the bin output
+      # (after the postInstall hook above and fixup phase have run)
+      substituteInPlace $bin/bin/c_rehash --replace ${buildPackages.perl}/bin/perl "/usr/bin/env perl"
+      substituteInPlace $bin/bin/c_rehash --replace ${perl}/bin/perl "/usr/bin/env perl"
+
+      # Check to make sure the bin output doesn't depend on perl
+      if grep -r '${buildPackages.perl}' $bin; then
+        echo "Found an erroneous dependency on perl in bin output ^^^" >&2
+        exit 1
+      fi
     '';
 
     passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
