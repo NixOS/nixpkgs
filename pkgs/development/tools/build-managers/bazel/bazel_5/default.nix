@@ -177,7 +177,7 @@ stdenv.mkDerivation rec {
     # we accept this fact because xcode_locator is only a short-lived process used during the build.
     (substituteAll {
       src = ./no-arc.patch;
-      multiBinPatch = if stdenv.hostPlatform.system == "aarch64-darwin" then "-arch arm64 -Wl,-no_adhoc_codesign" else "";
+      multiBinPatch = if stdenv.hostPlatform.system == "aarch64-darwin" then "arm64" else "x86_64";
     })
 
     # --experimental_strict_action_env (which may one day become the default
