@@ -141,7 +141,7 @@ rec {
           --set startScripts "''${vmStartScripts[*]}" \
           --set testScript "$out/test-script" \
           --set vlans '${toString vlans}' \
-          ${if interactive then "--add-flags --interactive" else ""}
+          ${lib.optionalString (interactive) "--add-flags --interactive"}
       '');
 
   # Make a full-blown test
