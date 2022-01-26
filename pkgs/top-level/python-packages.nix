@@ -7921,7 +7921,7 @@ in {
   python-http-client = callPackage ../development/python-modules/python-http-client { };
 
   pythonix = callPackage ../development/python-modules/pythonix {
-    nix = pkgs.nix_2_3;
+    nix = pkgs.nixVersions.nix_2_3;
     meson = pkgs.meson.override { python3 = self.python; };
   };
 
