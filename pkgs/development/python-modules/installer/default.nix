@@ -17,6 +17,7 @@ buildPythonPackage rec {
     repo = pname;
     rev = version;
     sha256 = "sha256-vhZYUhUcD5fnjkyEqFMvggVGH9Ri8iNgqRgSBQTOCtM=";
+    name = "${pname}-${version}-source";
   };
 
   nativeBuildInputs = [ flit-core ];

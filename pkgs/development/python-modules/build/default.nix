@@ -28,6 +28,7 @@ buildPythonPackage rec {
     repo = pname;
     rev = version;
     hash = "sha256-P0DFBYsL2Ce/JwfYss64+CY/IvzYZEiz9wuEslij+oU=";
+    name = "${pname}-${version}-source";
   };
 
   nativeBuildInputs = [

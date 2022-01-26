@@ -8,6 +8,8 @@
 
 self: super: with self; {
 
+  bootstrapped-build = toPythonModule (callPackage ../development/python-modules/bootstrapped-build { });
+
   bootstrapped-pip = toPythonModule (callPackage ../development/python-modules/bootstrapped-pip { });
 
   setuptools = callPackage ../development/python-modules/setuptools { };

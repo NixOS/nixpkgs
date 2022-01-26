@@ -53,6 +53,24 @@ in {
       };
     } ./flit-build-hook.sh) {};
 
+  buildBuildHook = callPackage ({ makePythonHook, bootstrapped-build }:
+    makePythonHook {
+      name = "build-build-hook.sh";
+      deps = [ bootstrapped-build ];
+      substitutions = {
+        inherit pythonInterpreter pythonSitePackages;
+      };
+    } ./build-build-hook.sh) {};
+
+  installerInstallHook = callPackage ({ makePythonHook, bootstrapped-build }:
+    makePythonHook {
+      name = "build-build-hook.sh";
+      deps = [ bootstrapped-build ];
+      substitutions = {
+        inherit pythonInterpreter pythonSitePackages;
+      };
+    } ./build-build-hook.sh) {};
+
   pipBuildHook = callPackage ({ makePythonHook, pip, wheel }:
     makePythonHook {
       name = "pip-build-hook.sh";
