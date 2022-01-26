@@ -1,9 +1,9 @@
 { stdenv, lib
 , kernel
 , fetchurl
-, pkg-config, meson, ninja
+, pkg-config, meson, ninja, makeWrapper
 , libbsd, numactl, libbpf, zlib, libelf, jansson, openssl, libpcap, rdma-core
-, doxygen, python3
+, doxygen, python3, pciutils
 , withExamples ? []
 , shared ? false }:
 
@@ -20,6 +20,7 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
+    makeWrapper
     doxygen
     meson
     ninja
@@ -71,11 +72,18 @@ in stdenv.mkDerivation rec {
     # Remove Sphinx cache files. Not only are they not useful, but they also
     # contain store paths causing spurious dependencies.
     rm -rf $out/share/doc/dpdk/html/.doctrees
+
+    wrapProgram $out/bin/dpdk-devbind.py \
+      --prefix PATH : "${lib.makeBinPath [ pciutils ]}"
   '' + lib.optionalString (withExamples != []) ''
-    find examples -type f -executable -exec install {} $out/bin \;
+    mkdir -p $examples/bin
+    find examples -type f -executable -exec install {} $examples/bin \;
   '';
 
-  outputs = [ "out" "doc" ] ++ lib.optional mod "kmod";
+  outputs =
+    [ "out" "doc" ]
+    ++ lib.optional mod "kmod"
+    ++ lib.optional (withExamples != []) "examples";
 
   meta = with lib; {
     description = "Set of libraries and drivers for fast packet processing";
