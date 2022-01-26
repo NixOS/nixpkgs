@@ -15,6 +15,7 @@ stdenv.mkDerivation {
   makeFlags = [
     "LIBOWFAT_HEADERS=${libowfat}/include/libowfat"
     "LIBOWFAT_LIBRARY=${libowfat}/lib"
+    "opentracker"
   ];
 
   installPhase = ''
