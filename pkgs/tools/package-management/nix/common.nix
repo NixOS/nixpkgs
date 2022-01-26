@@ -53,9 +53,6 @@ in
 , stateDir
 , storeDir
 }:
-let
-  sh = busybox-sandbox-shell;
-in
 stdenv.mkDerivation {
   pname = "nix";
 
@@ -158,7 +155,7 @@ stdenv.mkDerivation {
     # option was removed in 2.4
     "--disable-init-state"
   ] ++ lib.optionals stdenv.isLinux [
-    "--with-sandbox-shell=${sh}/bin/busybox"
+    "--with-sandbox-shell=${busybox-sandbox-shell}/bin/busybox"
   ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform ? nix && stdenv.hostPlatform.nix ? system) [
     "--with-system=${stdenv.hostPlatform.nix.system}"
   ] ++ lib.optionals (!withLibseccomp) [
