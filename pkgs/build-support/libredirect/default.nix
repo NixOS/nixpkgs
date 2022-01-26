@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
       -isystem ${llvmPackages_13.clang.libc}/include \
       -isystem ${llvmPackages_13.libclang.lib}/lib/clang/*/include \
       -L${llvmPackages_13.clang.libc}/lib \
-      -Wl,-install_name,$out/lib/$libName \
+      -Wl,-install_name,$libName \
       -Wall -std=c99 -O3 -fPIC libredirect.c \
       -ldl -shared -o "$libName"
     '' else if stdenv.isDarwin then ''
@@ -56,6 +56,12 @@ stdenv.mkDerivation rec {
 
     install -vD "$libName" "$out/lib/$libName"
 
+  '' + lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+    # dylib will be rejected unless dylib rpath gets explictly set
+    install_name_tool \
+      -change $libName $out/lib/$libName \
+      $out/lib/$libName
+  '' + ''
     # Provide a setup hook that injects our library into every process.
     mkdir -p "$hook/nix-support"
     cat <<SETUP_HOOK > "$hook/nix-support/setup-hook"
