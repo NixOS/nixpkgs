@@ -749,7 +749,9 @@ class Machine:
         )
         return output
 
-    def wait_until_tty_matches(self, tty: str, regexp: str, timeout: int = 900) -> None:
+    def wait_until_tty_matches(
+        self, tty: str, regexp: str, timeout: int = DEFAULT_TIMEOUT
+    ) -> None:
         """Wait until the visible output on the chosen TTY matches regular
         expression. Throws an exception on timeout.
         """
