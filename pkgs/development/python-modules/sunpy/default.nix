@@ -1,5 +1,5 @@
-{ stdenv
-, lib
+{ lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
@@ -32,6 +32,8 @@
 buildPythonPackage rec {
   pname = "sunpy";
   version = "3.1.3";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
@@ -40,36 +42,36 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    setuptools-scm
     astropy-extension-helpers
+    setuptools-scm
   ];
 
   propagatedBuildInputs = [
-    numpy
-    scipy
-    matplotlib
-    pandas
+    asdf
     astropy
     astropy-helpers
-    h5netcdf
-    parfive
-    sqlalchemy
-    scikitimage
-    towncrier
-    glymur
     beautifulsoup4
     drms
+    glymur
+    h5netcdf
+    matplotlib
+    numpy
+    pandas
+    parfive
     python-dateutil
-    zeep
+    scikitimage
+    scipy
+    sqlalchemy
+    towncrier
     tqdm
-    asdf
+    zeep
   ];
 
   checkInputs = [
     hypothesis
-    pytestCheckHook
     pytest-astropy
     pytest-mock
+    pytestCheckHook
   ];
 
   # darwin has write permission issues
@@ -81,11 +83,20 @@ buildPythonPackage rec {
 
   disabledTests = [
     "rst"
+    "test_sunpy_warnings_logging"
+    "test_main_nonexisting_module"
+    "test_main_stdlib_module"
   ];
 
   disabledTestPaths = [
     "sunpy/io/special/asdf/schemas/sunpy.org/sunpy/coordinates/frames/helioprojective-1.0.0.yaml"
     "sunpy/io/special/asdf/schemas/sunpy.org/sunpy/coordinates/frames/heliocentric-1.0.0.yaml"
+    "sunpy/io/special/asdf/schemas/sunpy.org/sunpy/coordinates/frames/heliographic_carrington-*.yaml"
+    "sunpy/io/special/asdf/schemas/sunpy.org/sunpy/coordinates/frames/geocentricearthequatorial-1.0.0.yaml"
+    "sunpy/io/special/asdf/schemas/sunpy.org/sunpy/coordinates/frames/geocentricsolarecliptic-1.0.0.yaml"
+    "sunpy/io/special/asdf/schemas/sunpy.org/sunpy/coordinates/frames/heliocentricearthecliptic-1.0.0.yaml"
+    "sunpy/io/special/asdf/schemas/sunpy.org/sunpy/coordinates/frames/heliocentricinertial-1.0.0.yaml"
+    "sunpy/io/special/asdf/schemas/sunpy.org/sunpy/map/generic_map-1.0.0.yaml"
     # requires mpl-animators package
     "sunpy/map/tests/test_compositemap.py"
     "sunpy/map/tests/test_mapbase.py"
@@ -100,17 +111,24 @@ buildPythonPackage rec {
     "sunpy/visualization/colormaps/tests/test_cm.py"
     # requires cdflib package
     "sunpy/timeseries/tests/test_timeseries_factory.py"
+    # distutils is deprecated
+    "sunpy/io/setup_package.py"
   ];
 
   pytestFlagsArray = [
-    "--deselect=sunpy/tests/tests/test_self_test.py::test_main_nonexisting_module"
-    "--deselect=sunpy/tests/tests/test_self_test.py::test_main_stdlib_module"
+    "-W"
+    "ignore::DeprecationWarning"
   ];
 
+  # Wants a configuration file
+  # pythonImportsCheck = [
+  #   "sunpy"
+  # ];
+
   meta = with lib; {
-    description = "SunPy: Python for Solar Physics";
+    description = "Python for Solar Physics";
     homepage = "https://sunpy.org";
     license = licenses.bsd2;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }

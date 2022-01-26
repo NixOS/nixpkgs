@@ -3,7 +3,6 @@
 , buildPythonPackage
 , fetchPypi
 , pytest-asyncio
-, pytest-cov
 , pytestCheckHook
 , pythonOlder
 , siosocks
@@ -29,7 +28,6 @@ buildPythonPackage rec {
   checkInputs = [
     async-timeout
     pytest-asyncio
-    pytest-cov
     pytestCheckHook
     trustme
   ];
