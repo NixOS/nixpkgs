@@ -61,10 +61,8 @@
 , libGL
 # TODO libGL or libglvnd? libglvnd is "better"?
 
-# TODO implement: buildExamples buildTests
 , buildExamples ? false
 , buildTests ? false
-
 , debug ? false
 , developerBuild ? false
 , decryptSslTraffic ? false
@@ -74,9 +72,27 @@ let
   compareVersion = v: builtins.compareVersions version v;
   qmakeCacheName = ".qmake.stash";
   debugSymbols = debug || developerBuild;
-in
 
+  splitBuildInstallEnabled = false; # debug post-build phases
+
+drv1 =
 stdenv.mkDerivation rec {
+
+  # when splitting, disable all phases after buildPhase
+  # https://github.com/NixOS/nixpkgs/blob/master/pkgs/stdenv/generic/setup.sh#L1305
+  dontCheck = splitBuildInstallEnabled;
+  dontInstall = splitBuildInstallEnabled;
+  dontFixup = splitBuildInstallEnabled;
+  dontInstallCheck = splitBuildInstallEnabled;
+  dontDist = splitBuildInstallEnabled;
+  postPhases = if splitBuildInstallEnabled then "splitBuildInstallLoad splitBuildInstallExport" else "";
+
+  # TODO better? how to load "hooks" for mkDerivation?
+  splitBuildInstallLoad = ''
+    . ${../split-build-install.export.sh}
+  '';
+
+
 
   pname = "qtbase";
 
@@ -157,7 +173,8 @@ stdenv.mkDerivation rec {
     ++ lib.optional (postgresql != null) postgresql
   ;
 
-  nativeBuildInputs = [ bison flex gperf lndir perl pkg-config which cmake ninja xmlstarlet ]
+  nativeBuildInputs = [ bison flex gperf lndir perl pkg-config which cmake xmlstarlet ]
+    ++ lib.optionals (!splitBuildInstallEnabled) [ ninja ]
     ++ lib.optionals stdenv.isDarwin [ xcbuild ]
   ;
 
@@ -169,6 +186,7 @@ stdenv.mkDerivation rec {
 
   fix_qt_builtin_paths = ../hooks/fix-qt-builtin-paths.sh;
   fix_qt_module_paths = ../hooks/fix-qt-module-paths.sh;
+
   preHook = ''
     . "$fix_qt_builtin_paths"
     . "$fix_qt_module_paths"
@@ -176,6 +194,7 @@ stdenv.mkDerivation rec {
     . ${../hooks/fix-qmake-libtool.sh}
   '';
 
+  # TODO substituteInPlace -> https://bugreports.qt.io/browse/QTBUG-97568
   postPatch = ''
     for prf in qml_plugin.prf qt_plugin.prf qt_docs.prf qml_module.prf create_cmake.prf; do
       substituteInPlace "mkspecs/features/$prf" \
@@ -184,7 +203,6 @@ stdenv.mkDerivation rec {
         --subst-var qtDocPrefix
     done
 
-    # TODO remove when upstream bug is fixed https://bugreports.qt.io/browse/QTBUG-97568
     substituteInPlace configure --replace /bin/pwd pwd
     substituteInPlace util/cmake/tests/data/quoted.pro --replace /bin/ls ${coreutils}/bin/ls
     substituteInPlace src/corelib/CMakeLists.txt --replace /bin/ls ${coreutils}/bin/ls
@@ -291,6 +309,23 @@ stdenv.mkDerivation rec {
   # To prevent these failures, we need to override PostgreSQL detection.
   PSQL_LIBS = lib.optionalString (postgresql != null) "-L${postgresql.lib}/lib -lpq";
 
+  configureFlags = [
+    "-make libs"
+    "-make tools"
+    "-make examples"
+  ]
+  ++ lib.optional buildTests [
+    "-make tests" # TODO install where?
+    "-make benchmarks"
+    #"-make manual-tests"
+    #"-make minimal-static-tests"
+  ]
+  # FIXME these have no effect. maybe we must set cmakeFlags?
+  ++ lib.optional buildExamples ["-make examples"] # TODO install where?
+  ++ lib.optional developerBuild ["-developer-build"]
+  ++ lib.optional debug ["-debug"]
+  ;
+
   cmakeFlags = [
     #"--trace-expand" # debug cmake
     "-DQT_FEATURE_journald=ON"
@@ -301,47 +336,24 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "bin" "dev" ];
 
-  # Move selected outputs.
-  # TODO(milahu) cleanup
-  # plugins folder is ./plugins
-  # plugins files are
-  # ./plugins/generic/libqlibinputplugin.so
-  # ./plugins/platforminputcontexts/libcomposeplatforminputcontextplugin.so
-  # ...
-  # TODO move to qtbase-6.2.0-bin/lib/qt-6.2.0/plugins/generic/libqevdevkeyboardplugin.so ... etc
-  # TODO $out/mkspecs should not exist
-  # TODO $out/plugins should not exist
-  # TODO preInstall or postInstall?
-  # "moveQtDevTools" was replaced by "moveToOutput bin $dev"
-  preInstall = ''
-    moveToOutput plugins $bin
-    moveToOutput mkspecs $dev
-    moveToOutput bin $dev
+  postInstall = ''
+    mkdir $bin $dev
+    mv $out/plugins $bin/
+    mv $out/mkspecs $out/bin $dev/
   '';
+  # postFixup: ln -v -s $out/libexec $dev/
+  # cannot move libexec, dep cycle
+  # cmake files require libexec/moc from both $out and $dev
+  # TODO patch cmake files to use only $dev
 
-  # TODO(milahu) cleanup
-  # TODO where should mkspecs be?
-  #   $out/mkspecs/qconfig.pri
-  #   $dev/mkspecs/qconfig.pri
+  # TODO refactor. same code in qtbase.nix and qtModule.nix
   postFixup = ''
     sed '/QMAKE_DEFAULT_.*DIRS/ d' -i $dev/mkspecs/qconfig.pri
     fixQtModulePaths "''${!outputDev}/mkspecs/modules"
     fixQtBuiltinPaths "''${!outputDev}" '*.pr?'
 
-    # TODO verify
-    if false; then
-    d="$bin/lib/qt-${version}"
-    echo "moving plugins to $d"
-    mkdir -p $d
-    mv $out/plugins $d/
-    fi
+    ln -v -s $out/libexec $dev/
 
-    ln -v -s $out/libexec $dev/${""/*
-# cmake files require libexec/moc from both $out and $dev ...
-# TODO ideally patch the cmake files to use only $dev, assuming that these are development tools
-*/}
-
-    # TODO refactor. same code in qtbase.nix and qtModule.nix
     echo "patching output paths in cmake files ..."
     (
     cd $dev/lib/cmake
@@ -378,29 +390,12 @@ stdenv.mkDerivation rec {
     s+="s/\\\''${QT_BUILD_INTERNALS_RELOCATABLE_INSTALL_PREFIX}\/\\\''${INSTALL_DOCDIR}/$outEscaped\/share\/doc/g;"
     s+="s/\\\''${QT_BUILD_INTERNALS_RELOCATABLE_INSTALL_PREFIX}\/\\\''${INSTALL_LIBDIR}/$outEscaped\/lib/g;"
     s+="s/\\\''${QT_BUILD_INTERNALS_RELOCATABLE_INSTALL_PREFIX}\/\\\''${INSTALL_MKSPECSDIR}/$devEscaped\/mkspecs/g;"
-
-    # lib/cmake/Qt6/QtBuild.cmake
     s+="s/\\\''${CMAKE_CURRENT_LIST_DIR}\/\.\.\/mkspecs/$devEscaped\/mkspecs/g;"
-    # lib/cmake/Qt6/QtPriHelpers.cmake
     s+="s/\\\''${CMAKE_CURRENT_BINARY_DIR}\/mkspecs/$devEscaped\/mkspecs/g;"
 
-    #s+="s/\\\''${QtBase_SOURCE_DIR}\/lib/\\\''${QtBase_BINARY_DIR}\/lib/g;" # TODO?
     perlRegex="$s"
-
-    echo "debug: perlRegex = $perlRegex"
-    find . -name '*.cmake' -exec perl -00 -p -i -e "$perlRegex" '{}' \;
-    echo "rc of find = $?" # zero when perl returns nonzero?
-    # FIXME catch errors from perl: find -> xargs
+    find . -name '*.cmake' -print0 | xargs -0 perl -00 -p -i -e "$perlRegex"
     echo "patching output paths in cmake files done"
-
-    echo "verify that all _IMPORT_PREFIX are replaced ..."
-    matches="$(find . -name '*.cmake' -exec grep -HnF _IMPORT_PREFIX '{}' \;)"
-    if [ -n "$matches" ]; then
-      echo "fatal: _IMPORT_PREFIX was not replaced in:"
-      echo "$matches"
-      exit 1
-    fi
-    echo "verify that all _IMPORT_PREFIX are replaced done"
     )
 
     # TODO generate qt.conf from buildInputs -> qmake -qtconf /path/to/qt.conf
@@ -426,11 +421,17 @@ stdenv.mkDerivation rec {
     Documentation = $out/${qtDocPrefix}
     ; Qml2Imports = (provided by qtdeclarative)
     EOF
-
-    echo "moving docs to $out/${qtDocPrefix}"
-    mkdir $out/${qtDocPrefix}
-    mv $out/share/doc/* $out/${qtDocPrefix} || true
   '';
+  /*
+    echo "verify that all _IMPORT_PREFIX are replaced ..."
+    matches="$(find . -name '*.cmake' -exec grep -HnF _IMPORT_PREFIX '{}' \;)"
+    if [ -n "$matches" ]; then
+      echo "fatal: _IMPORT_PREFIX was not replaced in:"
+      echo "$matches"
+      exit 1
+    fi
+    echo "verify that all _IMPORT_PREFIX are replaced done"
+  */
 
   dontStrip = debugSymbols;
 
@@ -444,3 +445,47 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
   };
 }
+;
+
+in
+if (!splitBuildInstallEnabled) then drv1
+else
+let
+  pname = drv1.pname;
+  qtPluginPrefix = drv1.qtPluginPrefix;
+  qtDocPrefix = drv1.qtDocPrefix;
+in
+stdenv.mkDerivation (drv1.drvAttrs // {
+  src = drv1.out;
+  prePhases = "splitBuildInstallLoad splitBuildInstallImport";
+  postPhases = "";
+
+  # TODO better? how to load "hooks" for mkDerivation?
+  # separate script for import, to avoid rebuilds
+  splitBuildInstallLoad = ''
+    . ${../split-build-install.import.sh}
+  '';
+
+  # when splitting, disable all phases before buildPhase
+  # https://github.com/NixOS/nixpkgs/blob/master/pkgs/stdenv/generic/setup.sh#L1305
+  dontUnpack = true;
+  dontPatch = true;
+  dontConfigure = true;
+  dontBuild = true;
+
+  # enable all install phases
+  dontCheck = false;
+  dontInstall = false;
+  dontFixup = false;
+  dontInstallCheck = false;
+  dontDist = false;
+
+  # avoid rebuild
+  installPhase = ''
+    runHook preInstall
+    cd /build/$sourceRoot/build
+    cmake -P cmake_install.cmake
+    runHook postInstall
+  '';
+
+})
