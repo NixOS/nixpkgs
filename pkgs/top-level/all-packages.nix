@@ -15317,6 +15317,8 @@ with pkgs;
 
   qxmledit = libsForQt5.callPackage ../applications/editors/qxmledit {} ;
 
+  trse = libsForQt5.callPackage ../applications/editors/trse { };
+
   r10k = callPackage ../tools/system/r10k { };
 
   radare2 = callPackage ../development/tools/analysis/radare2 ({
