@@ -241,7 +241,13 @@ rec {
     binary = crystal_1_1;
   };
 
-  crystal = crystal_1_2;
+  crystal_1_3 = generic {
+    version = "1.3.2";
+    sha256 = "sha256-dX7WPrtVs4emGUP4Vixl4U20pKfZm2CEnSd/t/iKxxw=";
+    binary = crystal_1_2;
+  };
+
+  crystal = crystal_1_3;
 
   crystal2nix = callPackage ./crystal2nix.nix { };
 }
