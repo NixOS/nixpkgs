@@ -25737,10 +25737,6 @@ with pkgs;
 
   fluxbox = callPackage ../applications/window-managers/fluxbox { };
 
-  fme = callPackage ../applications/misc/fme {
-    inherit (gnome2) libglademm;
-  };
-
   fomp = callPackage ../applications/audio/fomp { };
 
   formatter = callPackage ../applications/misc/formatter { };
