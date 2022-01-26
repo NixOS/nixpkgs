@@ -2367,6 +2367,7 @@ broken-packages:
   - hslua-module-version
   - hsluv-haskell
   - hsmagick
+  - hs-mesos
   - hsmodetweaks
   - Hsmtlib
   - hsmtpclient
