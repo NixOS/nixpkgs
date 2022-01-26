@@ -721,6 +721,14 @@
           <literal>tmux</literal>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The polkit service, available at
+          <literal>security.polkit.enable</literal>, is now disabled by
+          default. It will automatically be enabled through services and
+          desktop environments as needed.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>
