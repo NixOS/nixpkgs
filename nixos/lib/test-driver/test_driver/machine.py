@@ -84,6 +84,8 @@ CHAR_TO_KEY = {
     ")": "shift-0x0B",
 }
 
+DEFAULT_TIMEOUT = 900
+
 
 def make_command(args: list) -> str:
     return " ".join(map(shlex.quote, (map(str, args))))
@@ -120,7 +122,7 @@ def _perform_ocr_on_screenshot(
     return model_results
 
 
-def retry(fn: Callable, timeout: int = 900) -> None:
+def retry(fn: Callable, timeout: int = DEFAULT_TIMEOUT) -> None:
     """Call the given function repeatedly, with 1 second intervals,
     until it returns True or a timeout is reached.
     """
@@ -547,7 +549,7 @@ class Machine:
         command: str,
         check_return: bool = True,
         check_output: bool = True,
-        timeout: Optional[int] = 900,
+        timeout: Optional[int] = DEFAULT_TIMEOUT,
     ) -> Tuple[int, str]:
         """
         Execute a shell command, returning a list `(status, stdout)`.
@@ -693,7 +695,7 @@ class Machine:
                 output += out
         return output
 
-    def wait_until_succeeds(self, command: str, timeout: int = 900) -> str:
+    def wait_until_succeeds(self, command: str, timeout: int = DEFAULT_TIMEOUT) -> str:
         """
         Repeat a shell command with 1-second intervals until it succeeds.
         Has a default timeout of 900 seconds which can be modified, e.g.
@@ -712,7 +714,7 @@ class Machine:
             retry(check_success, timeout)
             return output
 
-    def wait_until_fails(self, command: str, timeout: int = 900) -> str:
+    def wait_until_fails(self, command: str, timeout: int = DEFAULT_TIMEOUT) -> str:
         """
         Like `wait_until_succeeds`, but repeating the command until it fails.
         """
