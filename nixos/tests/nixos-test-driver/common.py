@@ -15,16 +15,6 @@ def host_files_same(path1, path2):
 
 
 @contextmanager
-def must_raise(exception_text, exception_class=Exception):
-    try:
-        yield
-    except exception_class as e:
-        if exception_text in str(e):
-            return
-    raise Exception(f"Expected exception {repr(exception_text)}")
-
-
-@contextmanager
 def no_sleep():
     import time
 

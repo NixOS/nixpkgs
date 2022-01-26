@@ -1,6 +1,6 @@
 from tempfile import TemporaryDirectory
 
-out = Path(os.environ.get("out", "."))
+out = driver.out_dir
 
 with subtest("File copy methods"):
     for method in [machine.copy_from_host, machine.copy_from_host_via_shell]:

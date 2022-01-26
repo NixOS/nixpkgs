@@ -1,4 +1,4 @@
-out = Path(os.environ.get("out", "."))
+out = driver.out_dir
 
 with subtest("wait_for_x"):
     machine.wait_for_x()

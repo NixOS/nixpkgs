@@ -1,6 +1,6 @@
 from test_driver.machine import retry
 
-with subtest("various")
+with subtest("various"):
     # Test that "machine" alias is properly exported:
     assert machine is basic
     assert isinstance(machine, Machine)
