@@ -303,188 +303,43 @@ stdenv.mkDerivation rec {
 
   # Move selected outputs.
   # TODO(milahu) cleanup
+  # plugins folder is ./plugins
+  # plugins files are
+  # ./plugins/generic/libqlibinputplugin.so
+  # ./plugins/platforminputcontexts/libcomposeplatforminputcontextplugin.so
+  # ...
+  # TODO move to qtbase-6.2.0-bin/lib/qt-6.2.0/plugins/generic/libqevdevkeyboardplugin.so ... etc
+  # TODO $out/mkspecs should not exist
+  # TODO $out/plugins should not exist
+  # TODO preInstall or postInstall?
+  # "moveQtDevTools" was replaced by "moveToOutput bin $dev"
   preInstall = ''
-    echo preInstall 0
-    echo find plugins folder
-    find . -name plugins
-    echo find plugins folder done
-    echo find plugins files
-    find . -name '*plugin.so'
-    echo find plugins files done
-    # TODO move to qtbase-6.2.0-bin/lib/qt-6.2.0/plugins/generic/libqevdevkeyboardplugin.so ... etc
-
-    echo preInstall 1
-
-    # FIXME why is this both in pre and post install?
-    moveToOutput "mkspecs" "$dev" || {
-      echo FIXME preInstall moveToOutput failed
-    }
-
-    echo preInstall 2
-    if [ -d mkspecs ]; then
-      echo "ERROR: qtbase preInstall: dir mkspecs still exists after moveToOutput. forcing remove"
-
-      # FIXME why is this both in pre and post install?
-      rm -rf $out/mkspecs || {
-        echo FIXME preInstall remove failed
-      }
-
-    else
-      echo "SUCCESS: qtbase preInstall: dir mkspecs was removed by moveToOutput"
-    fi
-    echo preInstall done
+    moveToOutput plugins $bin
+    moveToOutput mkspecs $dev
+    moveToOutput bin $dev
   '';
 
-  # Move selected outputs.
   # TODO(milahu) cleanup
-  postInstall = ''
-    echo postInstall 1
-
-    # FIXME why is this both in pre and post install?
-    moveToOutput "mkspecs" "$dev" || {
-      echo FIXME preInstall remove failed
-    }
-
-    echo postInstall 2
-
-    # FIXME why is this both in pre and post install?
-    rm -rf $out/mkspecs || {
-      echo FIXME preInstall remove failed
-    }
-
-    echo postInstall done
-  '';
-
-  # TODO(milahu) bin/ or build/bin/ ?
-  devTools = [
-    "bin/fixqt4headers.pl"
-    "bin/moc"
-    "bin/qdbuscpp2xml"
-    "bin/qdbusxml2cpp"
-    "bin/qlalr"
-    "bin/qmake"
-    "bin/rcc"
-    "bin/syncqt.pl"
-    "bin/uic"
-  ];
-
-  # TODO(milahu) cleanup
+  # TODO where should mkspecs be?
+  #   $out/mkspecs/qconfig.pri
+  #   $dev/mkspecs/qconfig.pri
   postFixup = ''
-    # copy-paste from the build derivation
-    # TODO move this back as soon as it works
-
-    #PS4='+ Line $(expr $LINENO + 550): '; set -o xtrace # debug
-
-    echo postFixup 1
-    # Don't retain build-time dependencies like gdb.
-
-    # noisy: echo "find $dev"; find $dev
-
-    #echo "find $bin"; find $bin
-    # FIXME qtbase-6.2.0-bin: No such file or directory
-
-    if true; then
-    echo "searching mkspecs/qconfig.pri ..."
-    find $dev -path '*/mkspecs/qconfig.pri'
-    find $out -path '*/mkspecs/qconfig.pri'
-    echo "searching mkspecs/qconfig.pri done"
-    # -> $out/mkspecs/qconfig.pri
-    fi
-
-    # FIXME why is this not in $dev?
     sed '/QMAKE_DEFAULT_.*DIRS/ d' -i $dev/mkspecs/qconfig.pri
-    #sed '/QMAKE_DEFAULT_.*DIRS/ d' -i $out/mkspecs/qconfig.pri # FIXME no such file qtbase-6.2.2/mkspecs/qconfig.pri
+    fixQtModulePaths "''${!outputDev}/mkspecs/modules"
+    fixQtBuiltinPaths "''${!outputDev}" '*.pr?'
 
-    echo postFixup 3
-    # FIXME fixQtModulePaths: command not found
-    fixQtModulePaths "''${!outputDev}/mkspecs/modules" || {
-      echo FIXME fixQtModulePaths failed
-    }
-
-    echo postFixup 4
-    # FIXME fixQtBuiltinPaths: command not found
-    fixQtBuiltinPaths "''${!outputDev}" '*.pr?' || {
-      echo FIXME fixQtBuiltinPaths failed
-    }
-
-    echo "postFixup ls:"; ls; echo ":postFixup ls"
-
-    # debug
-    echo "postFixup: find bin"
-    find bin || {
-      echo FIXME find bin failed
-    }
-
-    echo postFixup 5
-    # Move development tools to $dev
-    # FIXME moveQtDevTools: command not found
-    moveQtDevTools || {
-      echo FIXME moveQtDevTools failed
-      echo "ls:"; ls; echo ":ls"
-    }
-
-    # debug
-    echo "postFixup: find bin 2"
-    find bin || {
-      echo FIXME find bin 2 failed
-    }
-
-    # fix: error: builder for 'qtbase-6.2.0.drv' failed to produce output path for output 'bin'
-    # TODO how is this working in qt5?
-    set -o xtrace
-    echo "debug: bin = $bin"
-    mkdir -v $bin
-    cp -r --verbose bin $bin
-    set +o xtrace
-
-    echo postFixup 6
-    moveToOutput bin "$dev" || {
-      echo FIXME postFixup command failed: moveToOutput bin "$dev"
-      echo "ls:"; ls; echo ":ls"
-    }
-
-    echo postFixup done
-
+    # TODO verify
+    if false; then
     d="$bin/lib/qt-${version}"
     echo "moving plugins to $d"
     mkdir -p $d
     mv $out/plugins $d/
-
-    # TODO where are mkspecs?
-    #echo "moving mkspecs to $dev"
-    #mv $out/mkspecs $dev/
-    if true; then
-      echo "searching mkspecs ..."
-      find $dev -name 'mkspecs'
-      find $out -name 'mkspecs'
-      echo "searching mkspecs done"
     fi
 
-    echo "pwd = $(pwd)"
-    echo "ls:"; ls; echo ":ls"
-    echo "running tests ..."
-    cd $NIX_BUILD_TOP/$sourceRoot/build
-    echo "running tests: make test"; make test
-    # FIXME No tests were found!!!
-    echo "running tests done"
-
-    ln -v -s $out/libexec $dev/
-
-    # cmake files require libexec/moc from both $out and $dev ...
-    # TODO ideally patch the cmake files to use only $dev, assuming that these are development tools
-
-    # FIXME ...
-    # CMake Error at /nix/store/idjvx01d2nalglfzbv0dycirpa9p3cql-qtbase-6.2.0-dev/lib/cmake/Qt6Core/Qt6CoreTargets.cmake:104 (message):
-    # The imported target "Qt6::Core" references the file
-    # "/nix/store/idjvx01d2nalglfzbv0dycirpa9p3cql-qtbase-6.2.0-dev/lib/libQt6Core.so.6.2.0"
-    # but this file does not exist.
-    #
-    # qt5:
-    # nix-locate lib/libQt5Core.so.5.14.2
-    # libsForQt514.qt5.qtbase.out                   5,877,576 x /nix/store/r9dhw881gg1ql16m90w8lad57wyvbqbw-qtbase-5.14.2/lib/libQt5Core.so.5.14.2
-    # libsForQt514.full.out                                 0 s /nix/store/jxhqm8c8gbmn5rkx377vdvajq8xjg271-qt-full-5.14.2/lib/libQt5Core.so.5.14.2
-    #
-    # -> Qt6::Core should be searched in $out, not in $dev
+    ln -v -s $out/libexec $dev/${""/*
+# cmake files require libexec/moc from both $out and $dev ...
+# TODO ideally patch the cmake files to use only $dev, assuming that these are development tools
+*/}
 
     # TODO refactor. same code in qtbase.nix and qtModule.nix
     echo "patching output paths in cmake files ..."
