@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "atlassian-python-api";
-  version = "3.18.0";
+  version = "3.18.1";
 
   src = fetchFromGitHub {
     owner = "atlassian-api";
     repo = pname;
     rev = version;
-    sha256 = "0akrwvq1f87lyckzwgpd16aljsbqjwwliv7j9czal7f216nbkvv6";
+    sha256 = "09xvkbdfhkrdkn8axb6bhi7p12lm2z1z84rx1wksfw9mffqk90v9";
   };
 
   checkInputs = [
