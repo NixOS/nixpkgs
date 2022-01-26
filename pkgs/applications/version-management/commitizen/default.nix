@@ -11,17 +11,18 @@
 , pyyaml
 , argcomplete
 , typing-extensions
+, packaging
 }:
 
 buildPythonApplication rec {
   pname = "commitizen";
-  version = "2.20.3";
+  version = "2.20.4";
 
   src = fetchFromGitHub {
     owner = "commitizen-tools";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-rAm2GTRxZIHQmn/FM0IwwH/2h+oOvzGmeVr5xkvD/zA=";
+    sha256 = "sha256-2DhWiUAkAkyNxYB1CGzUB2nGZeCWvFqSztrxasUPSXw=";
   };
 
   format = "pyproject";
@@ -38,6 +39,7 @@ buildPythonApplication rec {
     pyyaml
     argcomplete
     typing-extensions
+    packaging
   ];
 
   meta = with lib; {
