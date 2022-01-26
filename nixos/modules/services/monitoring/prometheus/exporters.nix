@@ -72,6 +72,7 @@ let
     "unbound"
     "unifi"
     "unifi-poller"
+    "v2ray"
     "varnish"
     "wireguard"
     "flow"
