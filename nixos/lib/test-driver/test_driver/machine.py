@@ -1218,7 +1218,7 @@ class Machine:
             r"xwininfo -root -tree | sed 's/.*0x[0-9a-f]* \"\([^\"]*\)\".*/\1/; t; d'"
         ).splitlines()
 
-    def wait_for_window(self, regexp: str, timeout: int = 900) -> None:
+    def wait_for_window(self, regexp: str, timeout: int = DEFAULT_TIMEOUT) -> None:
         """
         Wait until an X11 window has appeared whose name matches the given
         regular expression, e.g., `wait_for_window("Terminal")`.
