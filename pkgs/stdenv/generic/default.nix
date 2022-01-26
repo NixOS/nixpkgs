@@ -169,6 +169,9 @@ let
 
       inherit cc hasCC;
 
+      # Convenience to check whether the stdenv is cross-compiling.
+      isCross = buildPlatform != hostPlatform;
+
       # Convenience for doing some very basic shell syntax checking by parsing a script
       # without running any commands. Because this will also skip `shopt -s extglob`
       # commands and extglob affects the Bash parser, we enable extglob always.

@@ -615,6 +615,13 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>stdenv</literal> now contains a convenience
+          <literal>isCross</literal> which evaluates to
+          <literal>buildPlatform != hostPlatform</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The option <literal>services.duplicati.dataDir</literal> has
           been added to allow changing the location of duplicati’s
           files.
