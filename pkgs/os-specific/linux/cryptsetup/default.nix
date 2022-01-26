@@ -6,6 +6,7 @@ stdenv.mkDerivation rec {
   version = "2.4.3";
 
   outputs = [ "out" "dev" "man" ];
+  separateDebugInfo = true;
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/cryptsetup/v2.4/${pname}-${version}.tar.xz";
