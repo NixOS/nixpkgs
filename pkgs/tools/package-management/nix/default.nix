@@ -44,18 +44,13 @@ let
       inherit storeDir stateDir confDir;
     };
 in rec {
-  stable = nix_2_6;
-
-  nix_2_6 = buildNix {
-    version = "2.6.0";
-    sha256 = "sha256-xEPeMcNJVOeZtoN+d+aRwolpW8mFSEQx76HTRdlhPhg=";
-  };
-
-  nix_2_5 = buildNix {
-    version = "2.5.1";
-    sha256 = "sha256-GOsiqy9EaTwDn2PLZ4eFj1VkXcBUbqrqHehRE9GuGdU=";
-    # https://github.com/NixOS/nix/pull/5536
-    patches = [ ./patches/install-nlohmann_json-headers.patch ];
+  nix_2_3 = buildNix rec {
+    version = "2.3.16";
+    src = fetchurl {
+      url = "https://nixos.org/releases/nix/nix-${version}/nix-${version}.tar.xz";
+      sha256 = "sha256-fuaBtp8FtSVJLSAsO+3Nne4ZYLuBj2JpD2xEk7fCqrw=";
+    };
+    boehmgc = boehmgc_nix_2_3;
   };
 
   nix_2_4 = buildNix {
@@ -65,14 +60,20 @@ in rec {
     patches = [ ./patches/install-nlohmann_json-headers.patch ];
   };
 
-  nix_2_3 = buildNix rec {
-    version = "2.3.16";
-    src = fetchurl {
-      url = "https://nixos.org/releases/nix/nix-${version}/nix-${version}.tar.xz";
-      sha256 = "sha256-fuaBtp8FtSVJLSAsO+3Nne4ZYLuBj2JpD2xEk7fCqrw=";
-    };
-    boehmgc = boehmgc_nix_2_3;
+  nix_2_5 = buildNix {
+    version = "2.5.1";
+    sha256 = "sha256-GOsiqy9EaTwDn2PLZ4eFj1VkXcBUbqrqHehRE9GuGdU=";
+    # https://github.com/NixOS/nix/pull/5536
+    patches = [ ./patches/install-nlohmann_json-headers.patch ];
   };
+
+  nix_2_6 = buildNix {
+    version = "2.6.0";
+    sha256 = "sha256-xEPeMcNJVOeZtoN+d+aRwolpW8mFSEQx76HTRdlhPhg=";
+  };
+
+  # FIXME: nix_2_6 is broken on aarch64-darwin for now.
+  stable = nix_2_5;
 
   unstable = lib.lowPrio (buildNix rec {
     version = "2.7";
