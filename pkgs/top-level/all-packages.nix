@@ -28957,6 +28957,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  talosctl = callPackage ../applications/networking/cluster/talosctl { };
+
   talentedhack = callPackage ../applications/audio/talentedhack { };
 
   tambura = callPackage ../applications/audio/tambura { };
