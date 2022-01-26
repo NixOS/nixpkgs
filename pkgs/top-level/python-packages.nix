@@ -8867,6 +8867,8 @@ in {
 
   segments = callPackage ../development/python-modules/segments { };
 
+  segno = callPackage ../development/python-modules/segno { };
+
   selectors2 = callPackage ../development/python-modules/selectors2 { };
 
   selenium = callPackage ../development/python-modules/selenium { };
