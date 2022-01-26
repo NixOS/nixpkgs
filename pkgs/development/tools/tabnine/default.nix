@@ -1,17 +1,19 @@
 { stdenv, lib, fetchurl, unzip }:
 let
+  # You can check the latest version with `curl -sS https://update.tabnine.com/bundles/version`
+  version = "4.0.60";
   supportedPlatforms = {
     "x86_64-linux" = {
       name = "x86_64-unknown-linux-musl";
-      sha256 = "sha256-On+Sokm2+BV3JbIwK8oPO6882FOWBlgSaAp3VAyR+RM=";
+      sha256 = "sha256-v5UxRMDDQxpqIKMe9mYMXcpWiacdXzFfaQ6bgab/WmQ=";
     };
     "x86_64-darwin" = {
       name = "x86_64-apple-darwin";
-      sha256 = "sha256-4YCm42mVcsEvY4I5MWrnbfgUIU7KUIrEirvjN8ISIr0=";
+      sha256 = "sha256-vFMMzMatuu1TY6dnBXycv0HxvkOj4Axfx8p0VW0hOic=";
     };
     "aarch64-darwin" = {
       name = "aarch64-apple-darwin";
-      sha256 = "sha256-HN4o5bGX389eAR7ea5EY1JlId8q4lSPGJ4cZo9c2aP4=";
+      sha256 = "sha256-DUeDQLtvSY7W2nG60UunluCSO0ijJP2CYxpRIZA4LTE=";
     };
   };
   platform =
@@ -20,10 +22,9 @@ let
     else
       throw "Not supported on ${stdenv.hostPlatform.system}";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "tabnine";
-  # You can check the latest version with `curl -sS https://update.tabnine.com/bundles/version`
-  version = "3.7.25";
+  inherit version;
 
   src = fetchurl {
     url = "https://update.tabnine.com/bundles/${version}/${platform.name}/TabNine.zip";
@@ -53,7 +54,7 @@ stdenv.mkDerivation rec {
     homepage = "https://tabnine.com";
     description = "Smart Compose for code that uses deep learning to help you write code faster";
     license = licenses.unfree;
-    platforms = [ "x86_64-darwin" "aarch64-darwin" "x86_64-linux" ];
+    platforms = attrNames supportedPlatforms;
     maintainers = with maintainers; [ lovesegfault ];
   };
 }
