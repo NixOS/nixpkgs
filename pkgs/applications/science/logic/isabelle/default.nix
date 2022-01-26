@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, nettools, java, polyml, z3, veriT, vampire, eprover-ho, rlwrap, makeDesktopItem }:
+{ lib, stdenv, fetchurl, coreutils, nettools, java, polyml, z3, veriT, vampire, eprover-ho, rlwrap, makeDesktopItem }:
 # nettools needed for hostname
 
 stdenv.mkDerivation rec {
@@ -73,6 +73,11 @@ stdenv.mkDerivation rec {
     for comp in contrib/jdk* contrib/polyml-* contrib/z3-* contrib/verit-* contrib/vampire-* contrib/e-*; do
       rm -rf $comp/x86*
     done
+
+    substituteInPlace lib/Tools/env \
+      --replace /usr/bin/env ${coreutils}/bin/env
+
+    rm -r heaps
   '' + (if ! stdenv.isLinux then "" else ''
     arch=${if stdenv.hostPlatform.system == "x86_64-linux" then "x86_64-linux" else "x86-linux"}
     for f in contrib/*/$arch/{bash_process,epclextract,nunchaku,SPASS,zipperposition}; do
@@ -82,6 +87,11 @@ stdenv.mkDerivation rec {
       patchelf --set-rpath "${lib.concatStringsSep ":" [ "${java}/lib/openjdk/lib/server" "${stdenv.cc.cc.lib}/lib" ]}" $d/*.so
     done
   '');
+
+  buildPhase = ''
+    export HOME=$TMP # The build fails if home is not set
+    bin/isabelle build -v -o system_heaps -b HOL
+  '';
 
   installPhase = ''
     mkdir -p $out/bin
@@ -117,7 +127,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://isabelle.in.tum.de/";
     license = licenses.bsd3;
-    maintainers = [ maintainers.jwiegley ];
+    maintainers = [ maintainers.jwiegley maintainers.jvanbruegge ];
     platforms = platforms.linux;
   };
 }
