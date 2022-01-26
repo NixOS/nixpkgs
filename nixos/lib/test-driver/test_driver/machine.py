@@ -1018,7 +1018,7 @@ class Machine:
         """
         return self._get_screen_text_variants([2])[0]
 
-    def wait_for_text(self, regex: str, timeout: int = 900) -> None:
+    def wait_for_text(self, regex: str, timeout: int = DEFAULT_TIMEOUT) -> None:
         """
         Wait until the supplied regular expressions matches the textual
         contents of the screen by using optical character recognition (see
