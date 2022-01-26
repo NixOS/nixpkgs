@@ -29626,6 +29626,8 @@ with pkgs;
 
   yeahwm = callPackage ../applications/window-managers/yeahwm { };
 
+  youki = callPackage ../applications/virtualization/youki { };
+
   vym = qt5.callPackage ../applications/misc/vym { };
 
   wad = callPackage ../tools/security/wad { };
