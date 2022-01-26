@@ -6462,6 +6462,12 @@
     githubId = 752510;
     name = "Martin Potier";
   };
+  jqqqqqqqqqq = {
+    email = "jqqqqqqqqqq@gmail.com";
+    github = "jqqqqqqqqqq";
+    githubId = 12872927;
+    name = "Curtis Jiang";
+  };
   jqueiroz = {
     email = "nixos@johnjq.com";
     github = "jqueiroz";

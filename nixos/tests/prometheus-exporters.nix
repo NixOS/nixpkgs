@@ -1256,6 +1256,67 @@ let
       '';
     };
 
+    v2ray = {
+      exporterConfig = {
+        enable = true;
+      };
+
+      metricProvider = {
+        systemd.services.prometheus-nginx-exporter.after = [ "v2ray.service" ];
+        services.v2ray = {
+          enable = true;
+          config = {
+            stats = {};
+            api = {
+              tag = "api";
+              services = [ "StatsService" ];
+            };
+            inbounds = [
+              {
+                port = 1080;
+                listen = "127.0.0.1";
+                protocol = "http";
+              }
+              {
+                listen = "127.0.0.1";
+                port = 54321;
+                protocol = "dokodemo-door";
+                settings = { address = "127.0.0.1"; };
+                tag = "api";
+              }
+            ];
+            outbounds = [
+              {
+                protocol = "freedom";
+              }
+              {
+                protocol = "freedom";
+                settings = {};
+                tag = "api";
+              }
+            ];
+            routing = {
+              strategy = "rules";
+              settings = {
+                rules = [
+                  {
+                    inboundTag = [ "api" ];
+                    outboundTag = "api";
+                    type = "field";
+                  }
+                ];
+              };
+            };
+          };
+        };
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-v2ray-exporter.service")
+        wait_for_open_port(9299)
+        succeed("curl -sSf localhost:9299/scrape | grep 'v2ray_up 1'")
+      '';
+    };
+
     varnish = {
       exporterConfig = {
         enable = true;
