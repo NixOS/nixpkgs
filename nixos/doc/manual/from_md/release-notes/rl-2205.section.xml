@@ -163,6 +163,13 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://github.com/Tookmund/Swapspace">Swapspace</link>,
+          dynamic swap management via swapfiles. Avaliable at
+          <link linkend="opt-services.swapspace.enable">services.swapspace</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://timetagger.app">timetagger</link>,
           an open source time-tracker with an intuitive user experience
           and powerful reporting.
