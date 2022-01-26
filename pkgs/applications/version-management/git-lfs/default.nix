@@ -19,6 +19,12 @@ buildGoPackage rec {
 
   subPackages = [ "." ];
 
+  preBuild = ''
+    pushd go/src/github.com/git-lfs/git-lfs
+      go generate ./commands
+    popd
+  '';
+
   postBuild = ''
     make -C go/src/${goPackagePath} man
   '';

@@ -1791,7 +1791,7 @@ with pkgs;
 
   github-to-sqlite = with python3Packages; toPythonApplication github-to-sqlite;
 
-  gitless = callPackage ../applications/version-management/gitless { python = python3; };
+  gitless = callPackage ../applications/version-management/gitless { };
 
   gistyc = with python3Packages; toPythonApplication gistyc;
 
@@ -3601,10 +3601,7 @@ with pkgs;
 
   reg = callPackage ../tools/virtualization/reg { };
 
-  river = callPackage ../applications/window-managers/river {
-    wlroots = wlroots_0_14;
-    zig = zig_0_8_1;
-  };
+  river = callPackage ../applications/window-managers/river { };
 
   rivercarro = callPackage ../applications/misc/rivercarro { };
 
@@ -9177,6 +9174,8 @@ with pkgs;
   rdrview = callPackage ../tools/networking/rdrview {};
 
   real_time_config_quick_scan = callPackage ../applications/audio/real_time_config_quick_scan { };
+
+  realesrgan-ncnn-vulkan = callPackage ../tools/graphics/realesrgan-ncnn-vulkan { };
 
   react-native-debugger = callPackage ../development/tools/react-native-debugger { };
 
@@ -19033,6 +19032,8 @@ with pkgs;
   nanomsg = callPackage ../development/libraries/nanomsg { };
 
   nanovna-saver = libsForQt5.callPackage ../applications/science/electronics/nanovna-saver { };
+
+  ncnn = callPackage ../development/libraries/ncnn { };
 
   ndpi = callPackage ../development/libraries/ndpi { };
 

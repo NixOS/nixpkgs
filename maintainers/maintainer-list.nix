@@ -8588,6 +8588,12 @@
     githubId = 7845120;
     name = "Alex Martens";
   };
+  nialov = {
+    email = "nikolasovaskainen@gmail.com";
+    github = "nialov";
+    githubId = 47318483;
+    name = "Nikolas Ovaskainen";
+  };
   nikitavoloboev = {
     email = "nikita.voloboev@gmail.com";
     github = "nikitavoloboev";
@@ -12043,7 +12049,7 @@
     name = "Tiago Castro";
   };
   tilcreator = {
-    name = "Tilman Jackel";
+    name = "TilCreator";
     email = "contact.nixos@tc-j.de";
     matrix = "@tilcreator:matrix.org";
     github = "TilCreator";

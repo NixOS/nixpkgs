@@ -31,6 +31,11 @@ stdenv.mkDerivation rec {
     ln -s "${spirv-headers.src}" External/spirv-tools/external/spirv-headers
   '';
 
+  # This is a dirty fix for lib/cmake/SPIRVTargets.cmake:51 which includes this directory
+  postInstall = ''
+    mkdir $out/include/External
+  '';
+
   meta = with lib; {
     inherit (src.meta) homepage;
     description = "Khronos reference front-end for GLSL and ESSL";

@@ -6829,6 +6829,8 @@ in {
 
   pygeoip = callPackage ../development/python-modules/pygeoip { };
 
+  pygeos = callPackage ../development/python-modules/pygeos { };
+
   pygetwindow = callPackage ../development/python-modules/pygetwindow { };
 
   pygit2 = callPackage ../development/python-modules/pygit2 { };
@@ -8278,9 +8280,7 @@ in {
 
   pywizlight = callPackage ../development/python-modules/pywizlight { };
 
-  pywlroots = callPackage ../development/python-modules/pywlroots {
-    wlroots = pkgs.wlroots_0_14;
-  };
+  pywlroots = callPackage ../development/python-modules/pywlroots { };
 
   pyxattr = callPackage ../development/python-modules/pyxattr { };
 
