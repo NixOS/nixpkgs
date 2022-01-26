@@ -25737,10 +25737,6 @@ with pkgs;
 
   fluxbox = callPackage ../applications/window-managers/fluxbox { };
 
-  fme = callPackage ../applications/misc/fme {
-    inherit (gnome2) libglademm;
-  };
-
   fomp = callPackage ../applications/audio/fomp { };
 
   formatter = callPackage ../applications/misc/formatter { };
@@ -28257,9 +28253,7 @@ with pkgs;
 
   wrapQemuBinfmtP = callPackage ../applications/virtualization/qemu/binfmt-p-wrapper.nix { };
 
-  qgis-unwrapped = libsForQt5.callPackage ../applications/gis/qgis/unwrapped.nix {
-    withGrass = false;
-  };
+  qgis-ltr = callPackage ../applications/gis/qgis/ltr.nix { };
 
   qgis = callPackage ../applications/gis/qgis { };
 
@@ -28958,6 +28952,8 @@ with pkgs;
   taizen = callPackage ../applications/misc/taizen {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+
+  talosctl = callPackage ../applications/networking/cluster/talosctl { };
 
   talentedhack = callPackage ../applications/audio/talentedhack { };
 
