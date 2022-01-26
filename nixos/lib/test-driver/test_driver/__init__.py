@@ -61,7 +61,7 @@ def main() -> None:
         "-I",
         "--interactive",
         help="drop into a python repl and run the tests interactively",
-        action="store_true",
+        action=argparse.BooleanOptionalAction,
     )
     arg_parser.add_argument(
         "--start-scripts",
