@@ -1,44 +1,18 @@
-/*
-
-TODO?
-copy config.summary to $out
-
-nix-shell -p cmake pkg-config dbus glib udev fontconfig freetype    libxkbcommon   libGL libdrm     libxml2 libxslt openssl sqlite sqlite.out sqlite.dev zlib harfbuzz icu libjpeg libpng pcre2 xlibsWrapper double-conversion util-linux
-
-FIXME
-DEBUG 1: /nix/store/i9vknhf60qi16k64h5zspmq6ysiijym4-qtbase-6.2.1-dev/mkspecs/common/linux.conf:22: QMAKE_INCDIR_OPENGL_ES2 := /nix/store/j1dn71biz3xfjkvjabk04fi1wpb11b7j-libGL-1.3.4-dev/include/nix/store/j1dn71biz3xfjkvjabk04fi1wpb11b7j-libGL-1.3.4-dev/include
-DEBUG 1: /nix/store/i9vknhf60qi16k64h5zspmq6ysiijym4-qtbase-6.2.1-dev/mkspecs/common/linux.conf:23: QMAKE_LIBDIR_OPENGL_ES2 := /nix/store/z6wgyqy9h6fhb80j54cfpfs27bg8py9q-libGL-1.3.4/lib/nix/store/z6wgyqy9h6fhb80j54cfpfs27bg8py9q-libGL-1.3.4/lib
-
-/nix/store/i9vknhf60qi16k64h5zspmq6ysiijym4-qtbase-6.2.1-dev/mkspecs/common/linux.conf
-QMAKE_INCDIR_OPENGL_ES2 = $$QMAKE_INCDIR_OPENGL/nix/store/j1dn71biz3xfjkvjabk04fi1wpb11b7j-libGL-1.3.4-dev/include
-QMAKE_LIBDIR_OPENGL_ES2 = $$QMAKE_LIBDIR_OPENGL/nix/store/z6wgyqy9h6fhb80j54cfpfs27bg8py9q-libGL-1.3.4/lib
--> remove $$QMAKE_LIBDIR_OPENGL
--> fix regex:
-      sed -i mkspecs/common/linux.conf \
-          -e "/^QMAKE_INCDIR_OPENGL/ s|$|${libGL.dev or libGL}/include|" \
-          -e "/^QMAKE_LIBDIR_OPENGL/ s|$|${libGL.out}/lib|"
-
-TODO qtconfig for qt4 -> qt5ct for qt5 -> qt6ct for qt6?
-
-TODO wrapQtAppsHook to set QT_PLUGIN_PATH
-https://nixos.wiki/wiki/Qt#qt.qpa.plugin:_Could_not_find_the_Qt_platform_plugin_.22xcb.22_in_.22.22
-https://github.com/NixOS/nixpkgs/blob/nixos-19.09/pkgs/development/libraries/qt-5/hooks/wrap-qt-apps-hook.sh#L25
-https://github.com/NixOS/nixpkgs/issues/127277#issuecomment-865130858
-
-
-configure -headerdir $dev/include -> no effect, also not when setting -path $out
--> try setting -path /, dirs must be subdirs of path?
-./cmake/QtProcessConfigureArgs.cmake
-  translate_path_input(headerdir INSTALL_INCLUDEDIR)
-
-*/
-
-{ stdenv, lib
-, src, patches ? [], version, qtCompatVersion
-
-, coreutils, bison, flex, gdb, gperf, lndir, perl, pkg-config, python3
-, python3Packages # debug: split ninja build
-, bash # debug
+{ stdenv
+, lib
+, src
+, patches ? []
+, version
+, qtCompatVersion
+, coreutils
+, bison
+, flex
+, gdb
+, gperf
+, lndir
+, perl
+, pkg-config
+, python3
 , which
 , cmake # used in configure
 , ninja # used in build
@@ -50,7 +24,8 @@ configure -headerdir $dev/include -> no effect, also not when setting -path $out
 , double-conversion
 , util-linux
 # FIXME checking Nixpkgs on aarch64-darwin: called without required argument 'utillinux'
-#, journalctl, systemd
+#, journalctl
+, systemd
 , libb2
 , md4c
 , mtdev
@@ -58,12 +33,11 @@ configure -headerdir $dev/include -> no effect, also not when setting -path $out
 , libselinux
 , libsepol
 , vulkan-headers
-#, openvg, openvg-headers
 , libthai
 , libdrm
 , libdatrie
+, lttng-ust
 , epoxy
-#, valgrind
 
   # darwin support
 , libiconv, libobjc, xcbuild, AGL, AppKit, ApplicationServices, Carbon, Cocoa, CoreAudio, CoreBluetooth
@@ -87,13 +61,9 @@ configure -headerdir $dev/include -> no effect, also not when setting -path $out
 , libGL
 # TODO libGL or libglvnd? libglvnd is "better"?
 
-/*
+# TODO implement: buildExamples buildTests
 , buildExamples ? false
 , buildTests ? false
-*/
-# debug TODO remove
-, buildExamples ? true
-, buildTests ? true
 
 , debug ? false
 , developerBuild ? false
@@ -104,29 +74,22 @@ let
   compareVersion = v: builtins.compareVersions version v;
   qmakeCacheName = ".qmake.stash";
   debugSymbols = debug || developerBuild;
+in
 
-  splitBuildInstall = true;
-  # TODO set default false
-  # run buildPhase in a separate derivation, to debug a broken installPhase
+stdenv.mkDerivation rec {
 
-  buildWithNinja = !splitBuildInstall;
-  # ninja makes it much harder to split buildPhase and installPhase
-  # build files are locked via mtime and murmurhash64 in .ninja_log
-
-qtbaseDrv = stdenv.mkDerivation rec {
   pname = "qtbase";
 
   inherit qtCompatVersion src version;
-  /*
-  inherit qtCompatVersion version;
-  src = /tmp/qtbase/qtbase-everywhere-src-6.2.1;
-  */
 
   debug = debugSymbols;
-  # note: git repo: git://code.qt.io/qt/qtbase.git
 
   propagatedBuildInputs = [
-    libxml2 libxslt openssl sqlite sqlite.out sqlite.dev zlib
+    libxml2
+    libxslt
+    openssl
+    sqlite sqlite.out sqlite.dev
+    zlib
     unixODBC
 
     # Text rendering
@@ -141,7 +104,8 @@ qtbaseDrv = stdenv.mkDerivation rec {
     zstd
     double-conversion
     util-linux # mount for gio-2.0
-    #journalctl systemd # journald logging backend
+    #journalctl
+    systemd
     libb2
     md4c
     mtdev
@@ -149,23 +113,16 @@ qtbaseDrv = stdenv.mkDerivation rec {
     libselinux
     libsepol
 
+    lttng-ust # linux trace
+
     # TODO enable vulkan/openvg only when openGL is available
     vulkan-headers
-    /*
-    openvg-headers
-
-    # testing qt openvg: https://bugreports.qt.io/browse/QTBUG-25720
-    # TODO allow to pass openvg impl as parameter to qtbase
-    openvg.shivavg
-    #openvg.monkvg
-    #openvg.amanithvg
-    */
 
     libthai # for pango
     libdrm
     libdatrie # for libthai
     epoxy # for gdk-3.0
-    #valgrind # for libdrm (optional, too large)
+    #valgrind # for libdrm (optional, bloat)
   ] ++ (with unixODBCDrivers; [
     psql
     sqlite
@@ -197,18 +154,16 @@ qtbaseDrv = stdenv.mkDerivation rec {
     ++ lib.optional developerBuild gdb
     ++ lib.optional (cups != null) cups
     ++ lib.optional (libmysqlclient != null) libmysqlclient
-    ++ lib.optional (postgresql != null) postgresql;
+    ++ lib.optional (postgresql != null) postgresql
+  ;
 
-  nativeBuildInputs = [ bison flex gperf lndir perl pkg-config which cmake ccache xmlstarlet ]
-    ++ lib.optional (!splitBuildInstall) ninja
+  nativeBuildInputs = [ bison flex gperf lndir perl pkg-config which cmake ninja xmlstarlet ]
     ++ lib.optionals stdenv.isDarwin [ xcbuild ]
-    ++ [ python3 ] ++ (with python3Packages; [ mmh3 murmurhash ]); # debug: split ninja build
+  ;
 
   propagatedNativeBuildInputs = [ lndir ];
 
   enableParallelBuilding = true;
-
-  outputs = [ "out" "bin" "dev" ];
 
   inherit patches;
 
@@ -278,25 +233,18 @@ qtbaseDrv = stdenv.mkDerivation rec {
   # TODO what is setOutputFlags?
   setOutputFlags = false;
 
-  # out-of-tree build in $PWD/build
-  # TODO try building without openvg in library path
-#    export LD_LIBRARY_PATH="${openvg.shivavg}/lib:$LD_LIBRARY_PATH"
   preConfigure = ''
     export LD_LIBRARY_PATH="$PWD/build/lib:$PWD/build/plugins/platforms''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
     NIX_CFLAGS_COMPILE+=" -DNIXPKGS_QT_PLUGIN_PREFIX=\"$qtPluginPrefix\""
-  '' +
-    # enable openvg. experimental. maybe not implemented
-    # testing qt openvg: https://bugreports.qt.io/browse/QTBUG-25720
-    # qtperf6 -graphicssystem openvg
-    # qtperf6 -graphicssystem OpenVG
-    # qtperf6 -graphicssystem ShivaVG
+
+    t1_configurePhase=$(date +%s)
   ''
-    sed -i 's,#### Tests,qt_find_package(OpenVG PROVIDED_TARGETS OpenVG::OpenVG MODULE_NAME gui QMAKE_LIB openvg MARK_OPTIONAL)\n\n&,' src/gui/configure.cmake
-    sed -i 's,CONDITION libs.openvg OR FIXME,CONDITION QT_FEATURE_library AND QT_FEATURE_opengl AND OpenVG_FOUND,' src/gui/configure.cmake
-    cp ${../cmake/FindOpenVG.cmake} cmake/FindOpenVG.cmake
-  '';
+  ;
 
   postConfigure = ''
+    dt_configurePhase=$(($(date +%s) - $t1_configurePhase))
+    echo "qtbase configurePhase done after $dt_configurePhase seconds"
+
     qmakeCacheInjectNixOutputs() {
         local cache="$1/${qmakeCacheName}"
         echo "qmakeCacheInjectNixOutputs: $cache"
@@ -312,12 +260,6 @@ qtbaseDrv = stdenv.mkDerivation rec {
     NIX_OUTPUT_PLUGIN = $bin/$qtPluginPrefix
     EOF
     }
-
-    [ -z "$(find . -name '.qmake.conf')" ] && echo "FIXME ERROR in postConfigure: .qmake.conf files not found"
-
-    find . -name '.qmake.conf' | while read conf; do
-        qmakeCacheInjectNixOutputs "$(dirname $conf)"
-    done
   '';
 
   preBuild = ''
@@ -349,270 +291,18 @@ qtbaseDrv = stdenv.mkDerivation rec {
   # To prevent these failures, we need to override PostgreSQL detection.
   PSQL_LIBS = lib.optionalString (postgresql != null) "-L${postgresql.lib}/lib -lpq";
 
-  # TODO Remove obsolete and useless flags once the build will be totally mastered
-  configureFlags = [
-    # TODO verify: `qmake -query QT_INSTALL_HEADERS` should return $dev/include, qmake should find qt headers
-    # TODO try to remove the cmake/qmake patches
-    "-prefix" "$(out)" # required to set other paths https://bugreports.qt.io/browse/QTBUG-33995
-    # TODO test: "-prefix" "/"
-    # plugindir: $(out) or $(bin)?
-    "-plugindir" "$(out)/$(qtPluginPrefix)"
-    "-qmldir" "$(out)/$(qtQmlPrefix)"
-    "-docdir" "$(out)/$(qtDocPrefix)"
-    "-libdir" "$(out)/lib"
-    "-bindir" "$(bin)/bin"
-    "-headerdir" "$(dev)/include" # no effect?
-    #"-hostdatadir $(dev)" # Data used by qmake. $(dev) or $(out)?
+  cmakeFlags = [
+    #"--trace-expand" # debug cmake
+    "-DQT_FEATURE_journald=ON"
+    "-DQT_FEATURE_sctp=ON"
+    "-DQT_FEATURE_libproxy=ON"
+    "-DQT_FEATURE_system_sqlite=ON"
+  ];
 
-    "-DQT6_INSTALL_HEADERS=$(dev)/include" # TODO verify
-    # build/lib/cmake/Qt6Core/Qt6CoreConfigExtras.cmake
-
-    "-DINSTALL_INCLUDEDIR=$(dev)/include" # TODO verify
-    # build/lib/cmake/Qt6BuildInternals/QtBuildInternalsExtra.cmake
-
-    "-verbose"
-    "-confirm-license"
-    "-opensource"
-
-    "-release"
-    "-shared"
-    "-accessibility"
-    "-optimized-qmake"
-    "-strip"
-    "-system-proxies"
-    "-pkg-config"
-    "-ccache" # FIXME Using ccache: no
-
-    #"-openvg" # FIXME remove? no effect?
-    # qtbase/src/gui/qt_cmdline.cmake:26:qt_commandline_option(openvg TYPE boolean)
-    # qtbase/src/gui/configure.cmake:1208:qt_configure_add_summary_entry(ARGS "openvg")
-    # openvg is broken in qt 6.2.1 https://bugreports.qt.io/browse/QTBUG-98040
-
-    "-journald"
-    "-sctp"
-    "-libproxy"
-    "-sqlite" "system"
-
-    "-gui"
-    "-widgets"
-    "-opengl desktop"
-    "-libproxy"
-    "-sctp"
-    "-icu"
-    "-L" "${icu.out}/lib"
-    "-I" "${icu.dev}/include"
-    "-pch"
-  ] ++ lib.optional debugSymbols "-debug"
-    ++ lib.optionals developerBuild [
-    "-developer-build"
-    "-no-warnings-are-errors"
-  ] ++ (if (!stdenv.hostPlatform.isx86_64) then [
-    "-no-sse2"
-  ] else
-
-  [
-    "-sse2"
-    "${lib.optionalString (!stdenv.hostPlatform.sse3Support)   "-no"}-sse3"
-    "${lib.optionalString (!stdenv.hostPlatform.ssse3Support)  "-no"}-ssse3"
-    "${lib.optionalString (!stdenv.hostPlatform.sse4_1Support) "-no"}-sse4.1"
-    "${lib.optionalString (!stdenv.hostPlatform.sse4_2Support) "-no"}-sse4.2"
-    "${lib.optionalString (!stdenv.hostPlatform.avxSupport)    "-no"}-avx"
-    "${lib.optionalString (!stdenv.hostPlatform.avx2Support)   "-no"}-avx2"
-  ]
-  ) ++ [
-    "-no-mips_dsp"
-    "-no-mips_dspr2"
-  ] ++ [
-    "-system-zlib"
-    "-L" "${zlib.out}/lib"
-    "-I" "${zlib.dev}/include"
-    "-system-libjpeg"
-    "-L" "${libjpeg.out}/lib"
-    "-I" "${libjpeg.dev}/include"
-    "-system-harfbuzz"
-    "-L" "${harfbuzz.out}/lib"
-    "-I" "${harfbuzz.dev}/include"
-    "-system-pcre"
-    "-openssl-linked"
-    "-L" "${openssl.out}/lib"
-    "-I" "${openssl.dev}/include"
-    /*
-    "-system-sqlite"
-    */
-    "-sqlite" "system"
-    # FIXME Using system provided SQLite: no
-    ''-${if libmysqlclient != null then "plugin" else "no"}-sql-mysql''
-    ''-${if postgresql != null then "plugin" else "no"}-sql-psql''
-
-    "-make" "libs"
-    "-make" "tools"
-    # TODO maybe remove examples + tests
-    # FIXME? write examples + tests to qtbase-everywhere-src-6.2.0/build/
-    # currently in
-    # qtbase-everywhere-src-6.2.0/examples
-    # qtbase-everywhere-src-6.2.0/tests
-    /*
-    FIXME tests are not working / missing
-    qtbase-everywhere-src-6.2.0/build/CMakeCache.txt
-    FEATURE_itemmodeltester:BOOL=ON
-    FEATURE_testlib:BOOL=ON
-    QT_BUILD_TESTS_BY_DEFAULT:BOOL=ON
-    */
-    ''-${lib.optionalString (!buildExamples) "no"}make'' "examples"
-    ''-${lib.optionalString (!buildTests) "no"}make'' "tests"
-  ] ++ (
-    if stdenv.isDarwin then [
-      "-platform macx-clang"
-      "-no-fontconfig"
-      "-qt-freetype"
-      "-qt-libpng"
-      "-no-framework"
-    ] else [
-      "-xcb"
-      "-qpa xcb"
-      "-L" "${libX11.out}/lib"
-      "-I" "${libX11.out}/include"
-      "-L" "${libXext.out}/lib"
-      "-I" "${libXext.out}/include"
-      "-L" "${libXrender.out}/lib"
-      "-I" "${libXrender.out}/include"
-
-      "-libinput"
-
-      ''-${lib.optionalString (cups == null) "no-"}cups''
-      "-dbus-linked"
-      "-glib"
-      "-system-libpng"
-    ] ++ lib.optional withGtk3 "-gtk"
-      ++ [
-      "-inotify"
-      # Without these, Qt stops working on kernels < 3.17. See:
-      # https://github.com/NixOS/nixpkgs/issues/38832
-      # FIXME why support old kernels?
-      "-no-feature-renameat2"
-      "-no-feature-getentropy"
-    ] ++ lib.optionals (cups != null) [
-      "-L" "${cups.lib}/lib"
-      "-I" "${cups.dev}/include"
-    ] ++ lib.optionals (libmysqlclient != null) [
-      "-L" "${libmysqlclient}/lib"
-      "-I" "${libmysqlclient}/include"
-    ]
-  );
-
-  installPhaseYes = ''
-    runHook preInstall
-    ${if buildWithNinja then "ninja install" else "make install"}
-    runHook postInstall
-  '';
-
-  #outputs = [ "bin" "dev" "out" ];
-  # we must escape
-  installPhase = if splitBuildInstall then ''
-    # do not run install hooks
-    #runHook preInstall
-    #runHook postInstall
-
-    echo debug installPhase: copy /build to $out
-    cp -r /build $out
-
-    cat >$out/set-sourceRoot.sh <<EOF
-    sourceRoot=$sourceRoot
-    EOF
-
-    ${if !buildWithNinja then "" else ''
-      # debug
-      cat >$out/get-mtime-millisec-of-all-files-recursive.sh <<'EOF'
-      #! ${bash}/bin/bash
-      read -d "" fileHandler <<'__EOF'
-      file="$1"
-      actual=$(stat -c%.Y "$file" | tr -d .)
-      echo "$actual $file"
-      __EOF
-      find . -exec sh -c "$fileHandler" 'dummyArgv0' '{}' \;
-      EOF
-      chmod +x $out/get-mtime-millisec-of-all-files-recursive.sh
-
-      # debug
-      # TODO murmurhash64 of files or build commands??
-      cat >$out/murmurhash-cli.py <<'EOF'
-      #! ${python3}/bin/python3
-      # https://github.com/milahu/murmurhash-cli-python
-      import sys
-      import mmh3
-      for path in sys.argv[1:]:
-        try:
-          bytes = open(path, 'rb').read()
-          hash3 = mmh3.hash_bytes(bytes).hex()
-          #print(f"{hash3[0:16]} {path}") # murmurhash3 64bit
-          print(f"{hash3[0:16]} {hash3} {path}") # murmurhash3 64bit + 128bit
-        except Exception as e:
-          print(f"error: {type(e).__name__}: {e} in file {path}")
-      EOF
-      chmod +x $out/murmurhash-cli.py
-
-      echo "debug: get file hashes ..."
-      # TODO should be same as in .ninja_log
-      (
-        cd $out/$sourceRoot/build
-        find . -exec $out/murmurhash-cli.py '{}' \; >$out/murmurhash.txt
-      )
-      echo "debug: get file hashes done $out/murmurhash.txt"
-
-      echo "debug: get file times ..."
-      # TODO should be same as in .ninja_log
-      (
-        cd $out/$sourceRoot/build
-        $out/get-mtime-millisec-of-all-files-recursive.sh >$out/filetimes.txt
-      )
-      echo "debug: get file times done $out/filetimes.txt"
-    ''}
-
-    echo "debug: create empty outputs bin + dev"
-    # fix: builder failed to produce output path for output 'bin'
-    mkdir -v $bin $dev
-
-    nixStoreEscaped=$(date +%s.%N | sha512sum -)
-    nixStoreEscaped=''${nixStoreEscaped:0:11}
-    echo "debug: nixStoreEscaped = $nixStoreEscaped"
-
-    outHash=''${out:11:32}
-    binHash=''${bin:11:32}
-    devHash=''${dev:11:32}
-
-    echo "debug: store escaped paths in $out/buildPhaseEscapedPaths"
-    cat >$out/buildPhaseEscapedPaths <<EOF
-    outHash=$outHash
-    binHash=$binHash
-    devHash=$devHash
-    nixStoreEscaped=$nixStoreEscaped
-    EOF
-
-    # a: /nix/store/a3vjswd3i42xy5hzxras78z0m40g9jk7-qtbase-6.2.0
-    # b: xxxxxxxxxxxa3vjswd3i42xy5hzxras78z0m40g9jk7-qtbase-6.2.0
-    #    ^          ^ outHash: 32 chars
-    #    ^ nixStoreEscaped: 11 chars
-
-    echo "debug: regex = s,/nix/store/($outHash|$binHash|$devHash),$nixStoreEscaped\1,g"
-
-    # note: the output paths also appear in binary files = *.so, etc
-    # so we use the same length as the original path
-    # tr -d '\0': fix "ignored null byte" when replacing binary files
-    (
-    cd $out
-    find . -type f | while read f
-    do
-      if [ -n "$(sed -i -E "s,/nix/store/($outHash|$binHash|$devHash),$nixStoreEscaped\1,g w /dev/stdout" "$f" | tr -d '\0')" ]
-      then
-        # file was replaced
-        echo "$f" >>$out/patched-files-with-escaped-output-paths.txt
-      fi
-    done
-    )
-    echo "debug: replaced install paths in $(wc -l $out/patched-files-with-escaped-output-paths.txt | cut -d' ' -f1) files. see $out/patched-files-with-escaped-output-paths.txt"
-  '' else installPhaseYes;
+  outputs = [ "out" "bin" "dev" ];
 
   # Move selected outputs.
+  # TODO(milahu) cleanup
   preInstall = ''
     echo preInstall 0
     echo find plugins folder
@@ -646,6 +336,7 @@ qtbaseDrv = stdenv.mkDerivation rec {
   '';
 
   # Move selected outputs.
+  # TODO(milahu) cleanup
   postInstall = ''
     echo postInstall 1
 
@@ -664,258 +355,21 @@ qtbaseDrv = stdenv.mkDerivation rec {
     echo postInstall done
   '';
 
-  # TODO set build root "build/" somewhere else
-  # for example in the hook functions, see preHook
+  # TODO(milahu) bin/ or build/bin/ ?
   devTools = [
-    "build/bin/fixqt4headers.pl"
-    "build/bin/moc"
-    "build/bin/qdbuscpp2xml"
-    "build/bin/qdbusxml2cpp"
-    "build/bin/qlalr"
-    "build/bin/qmake"
-    "build/bin/rcc"
-    "build/bin/syncqt.pl"
-    "build/bin/uic"
+    "bin/fixqt4headers.pl"
+    "bin/moc"
+    "bin/qdbuscpp2xml"
+    "bin/qdbusxml2cpp"
+    "bin/qlalr"
+    "bin/qmake"
+    "bin/rcc"
+    "bin/syncqt.pl"
+    "bin/uic"
   ];
 
-  fixupPhase = if splitBuildInstall then ''echo debug: skip fixupPhase'' else fixupPhaseYes;
-  fixupPhaseYes = ''
-    runHook preFixup
-    runHook postFixup
-  '';
-
-  # cwd is /build/$sourceRoot/build
-  # TODO refactor for splitBuildInstall: move everything after buildPhase to "let ... in",
-  # so we can modify installPhase, fixupPhase, ... without rebuilding the build derivation
-  postFixup = if splitBuildInstall then "echo debug: skip postFixup" else postFixupYes;
-  postFixupYes = ''
-    #PS4='+ Line $(expr $LINENO + 550): '; set -o xtrace # debug
-
-    echo postFixup 1
-    # Don't retain build-time dependencies like gdb.
-
-    echo postFixup 2
-    sed '/QMAKE_DEFAULT_.*DIRS/ d' -i $dev/mkspecs/qconfig.pri
-
-    echo postFixup 3
-    fixQtModulePaths "''${!outputDev}/mkspecs/modules" || {
-      echo FIXME fixQtModulePaths failed
-    }
-
-    echo postFixup 4
-    fixQtBuiltinPaths "''${!outputDev}" '*.pr?' || {
-      echo FIXME fixQtBuiltinPaths failed
-    }
-
-    echo "postFixup ls:"; ls; echo ":postFixup ls"
-
-    # debug
-    echo "postFixup: find bin"
-    find bin || {
-      echo FIXME find bin failed
-    }
-
-    echo postFixup 5
-    # Move development tools to $dev
-    moveQtDevTools || {
-      echo FIXME moveQtDevTools failed
-      echo "ls:"; ls; echo ":ls"
-    }
-
-    # debug
-    echo "postFixup: find bin 2"
-    find bin || {
-      echo FIXME find bin 2 failed
-    }
-
-    # fix: error: builder for 'qtbase-6.2.0.drv' failed to produce output path for output 'bin'
-    # TODO how is this working in qt5?
-    set -o xtrace
-    mkdir $bin
-    cp -r --verbose bin $bin
-    set +o xtrace
-
-    echo postFixup 6
-    moveToOutput bin "$dev" || {
-      echo FIXME postFixup command failed: moveToOutput bin "$dev"
-      echo "ls:"; ls; echo ":ls"
-    }
-
-    echo postFixup done
-  '';
-
-  dontStrip = debugSymbols;
-
-  setupHook = ../hooks/qtbase-setup-hook.sh;
-
-  meta = with lib; {
-    homepage = "https://www.qt.io/";
-    description = "A cross-platform application framework for C++";
-    license = with licenses; [ fdl13 gpl2 lgpl21 lgpl3 ];
-    maintainers = with maintainers; [ qknight ttuegel periklis bkchr milahu ];
-    platforms = platforms.unix;
-  };
-};
-
-in
-
-if !splitBuildInstall then qtbaseDrv
-else (qtbaseDrv // stdenv.mkDerivation rec {
-  buildInputs = [ qtbaseDrv ] ++ qtbaseDrv.buildInputs;
-  nativeBuildInputs = qtbaseDrv.nativeBuildInputs;
-  inherit (qtbaseDrv) preHook fix_qt_builtin_paths fix_qt_module_paths; # fixQtModulePaths fixQtBuiltinPaths moveQtDevTools
-  inherit (qtbaseDrv) pname version outputs;
-  # TODO inherit all attributes of qtbaseDrv?
-  # also: qtPluginPrefix ...
-
-  # pname must have same length in both qtbaseDrv and qtbase, so binary patching is less risky
-  src = qtbaseDrv.out;
-
-  unpackPhase = ''
-    echo "installing from cached build ${qtbaseDrv}"
-
-    . ${qtbaseDrv}/set-sourceRoot.sh
-
-    # this takes about 30 seconds for qtbase. we must copy to get write access
-    # TODO microoptimization: manual copy-on-write:
-    # hardlink most files, only copy those files that we must modify
-    echo "copying cached build files ..."
-    t1=$(date +%s)
-    cp -r ${qtbaseDrv}/$sourceRoot /build/
-    echo "copying cached build files done in $(($(date +%s) - $t1)) seconds"
-
-    chmod -R +w /build
-
-    # set: nixStoreEscaped outHash binHash devHash
-    source ${qtbaseDrv}/buildPhaseEscapedPaths
-
-    outHashNew=''${out:11:32}
-    binHashNew=''${bin:11:32}
-    devHashNew=''${dev:11:32}
-
-    # replace install paths
-    echo "replacing output hashes:"
-    echo "  out: $outHash -> $outHashNew"
-    echo "  bin: $binHash -> $binHashNew"
-    echo "  dev: $devHash -> $devHashNew"
-
-    (
-    cd /build
-    cat ${qtbaseDrv}/patched-files-with-escaped-output-paths.txt | while read f
-    do
-      if [ "$f" = "./env-vars" ]; then continue; fi
-      if [ ! -e "$f" ]
-      then
-        echo "fatal error: no such file: $f"
-        exit 1
-      fi
-      if [ -z "$(
-        sed -i -E "s,$nixStoreEscaped$outHash,/nix/store/$outHashNew,g w /dev/stdout" "$f" | tr -d '\0'
-        sed -i -E "s,$nixStoreEscaped$binHash,/nix/store/$binHashNew,g w /dev/stdout" "$f" | tr -d '\0'
-        sed -i -E "s,$nixStoreEscaped$devHash,/nix/store/$devHashNew,g w /dev/stdout" "$f" | tr -d '\0'
-      )" ]
-      then
-        echo "fatal error: no paths replaced in $f"
-        exit 1
-      #else echo "replaced $(echo "$sedOutput" | wc -l | cut -d' ' -f1) paths in $f"
-      fi
-    done
-    )
-
-    # this is working
-    if false; then
-    # debug: verify patched output paths (slow)
-    echo "debug: test replacement of old hashes ..."
-    echo "grep -HnE ($outHash|$binHash|$devHash)"
-    echo "this should be empty:"
-    find /build -type f -not -path /build/env-vars \
-      -exec grep -HnEa ".{50}($outHash|$binHash|$devHash).{50}" '{}' \;
-    echo ":this should be empty"
-    diff -u0 ${qtbaseDrv}/$sourceRoot/build/cmake_install.cmake /build/$sourceRoot/build/cmake_install.cmake || true
-    fi
-
-    ${if !buildWithNinja then "" else /* much more complex than cmake ... */ ''
-      cd /build/$sourceRoot/build
-
-      echo "debug: restoring timestamps in /build to prevent rerun_cmake"
-      if [ "$(head -n 1 .ninja_log)" != "# ninja log v5" ]
-      then
-        echo "fatal error: unexpected format of ${qtbaseDrv}/$sourceRoot/build/.ninja_log:"
-        head -n 1 .ninja_log
-        exit 1
-      fi
-
-      mv .ninja_log .ninja_log.bak
-      echo "# ninja log v5" >.ninja_log
-      # https://github.com/m-ou-se/ninj/issues/13
-      #while IFS=$'\t' read -r buildTimeStart buildTimeEnd fileTimeModify filePath buildCommandHash
-      while IFS=$'\t' read -r buildTimeStart buildTimeEnd fileTimeModify filePath fileHash
-      do
-        TAB=$'\t'
-        fileTimeModify=1000000000 # stat -c %.Y build/ # modify time is zero in nix store
-        ##############murmurhash3_64=$(python -c 'import mmh3; "".join("{:02x}".format(x) for x in mmh3.hash_bytes("sdf")[0:8])')
-        echo "$buildTimeStart$TAB$buildTimeEnd$TAB$fileTimeModify$TAB$filePath$TAB$fileHash" >>.ninja_log
-        if false
-        then
-          echo "buildTimeStart = $buildTimeStart"
-          echo "buildTimeEnd = $buildTimeEnd"
-          echo "fileTimeModify = $fileTimeModify"
-          echo "filePath = $filePath"
-          echo "fileHash = $fileHash"
-        fi
-      done < <(tail -n +2 .ninja_log.bak)
-
-      diff -u --color=always <(head .ninja_log.bak) <(head .ninja_log) || true
-    ''}
-  '';
-
-  # wontfix? "ninja install" will always run RERUN_CMAKE
-  # [0/1] Re-running CMake...
-  # https://lists.llvm.org/pipermail/llvm-dev/2019-May/132592.html
-  installPhase = if buildWithNinja then ''
-    touch build.ninja # update mtime
-    # debug: show some file times, compare with .ninja_log
-    stat -c $'wxyz %.W %.X %.Y %.Z %n' build.ninja CMakeFiles/3.21.2/CMakeCCompiler.cmake
-    #ninja install
-    cd /build/$sourceRoot/build
-    ninja -d explain install # debug
-  '' else ''
-    cd /build/$sourceRoot/build
-    cmake -P cmake_install.cmake
-    # -Wdev --debug-output --trace # debug cmake
-  '';
-  # "make install" calls "cmake -P ..."
-
-  dontConfigure = true;
-  dontWrapQtApps = true;
-  dontBuild = true;
-
-  preInstall = ''
-    echo "splitBuildInstall install: preInstall"
-    #find . build.ninja # FIXME no such file
-
-    echo "splitBuildInstall install: preInstall: ls"; ls; echo "ls done"
-
-    # TODO patch install paths
-    # is this easy to solve?
-    # or ... use outputs = [ "out" "bin" "dev" ] in qtbaseDrv
-    # but patch the makefiles, so there are no more references to $out $bin $dev
-
-    echo "qtbaseDrv = ${qtbaseDrv}"
-    #echo "mkDerivation2: preInstall: ls"; ls; echo "ls done"
-    #source env-vars # load env from buildPhase
-  '' + qtbaseDrv.preInstall;
-
-  # FIXME this is not called -> add "runHook postInstall" to installPhase?
-  postInstall = ''
-    echo "splitBuildInstall install: postInstall"
-  '' + qtbaseDrv.postInstall;
-
+  # TODO(milahu) cleanup
   postFixup = ''
-    echo "splitBuildInstall install: postFixup"
-  '' +
-  #'' + qtbaseDrv.postFixupYes;
-  ''
     # copy-paste from the build derivation
     # TODO move this back as soon as it works
 
@@ -929,7 +383,7 @@ else (qtbaseDrv // stdenv.mkDerivation rec {
     #echo "find $bin"; find $bin
     # FIXME qtbase-6.2.0-bin: No such file or directory
 
-    if false; then
+    if true; then
     echo "searching mkspecs/qconfig.pri ..."
     find $dev -path '*/mkspecs/qconfig.pri'
     find $out -path '*/mkspecs/qconfig.pri'
@@ -938,8 +392,8 @@ else (qtbaseDrv // stdenv.mkDerivation rec {
     fi
 
     # FIXME why is this not in $dev?
-    #sed '/QMAKE_DEFAULT_.*DIRS/ d' -i $dev/mkspecs/qconfig.pri
-    sed '/QMAKE_DEFAULT_.*DIRS/ d' -i $out/mkspecs/qconfig.pri
+    sed '/QMAKE_DEFAULT_.*DIRS/ d' -i $dev/mkspecs/qconfig.pri
+    #sed '/QMAKE_DEFAULT_.*DIRS/ d' -i $out/mkspecs/qconfig.pri # FIXME no such file qtbase-6.2.2/mkspecs/qconfig.pri
 
     echo postFixup 3
     # FIXME fixQtModulePaths: command not found
@@ -996,13 +450,20 @@ else (qtbaseDrv // stdenv.mkDerivation rec {
     mkdir -p $d
     mv $out/plugins $d/
 
-    echo "moving mkspecs to $dev"
-    mv $out/mkspecs $dev/
+    # TODO where are mkspecs?
+    #echo "moving mkspecs to $dev"
+    #mv $out/mkspecs $dev/
+    if true; then
+      echo "searching mkspecs ..."
+      find $dev -name 'mkspecs'
+      find $out -name 'mkspecs'
+      echo "searching mkspecs done"
+    fi
 
     echo "pwd = $(pwd)"
     echo "ls:"; ls; echo ":ls"
     echo "running tests ..."
-    cd /build/$sourceRoot/build
+    cd $NIX_BUILD_TOP/$sourceRoot/build
     echo "running tests: make test"; make test
     # FIXME No tests were found!!!
     echo "running tests done"
@@ -1024,8 +485,6 @@ else (qtbaseDrv // stdenv.mkDerivation rec {
     # libsForQt514.full.out                                 0 s /nix/store/jxhqm8c8gbmn5rkx377vdvajq8xjg271-qt-full-5.14.2/lib/libQt5Core.so.5.14.2
     #
     # -> Qt6::Core should be searched in $out, not in $dev
-
-
 
     # TODO refactor. same code in qtbase.nix and qtModule.nix
     echo "patching output paths in cmake files ..."
@@ -1108,24 +567,25 @@ else (qtbaseDrv // stdenv.mkDerivation rec {
     ArchData = $dev
     Binaries = $dev/bin
     Headers = $dev/include
-    Plugins = $bin/${qtbaseDrv.qtPluginPrefix}
-    Documentation = $out/${qtbaseDrv.qtDocPrefix}
+    Plugins = $bin/${qtPluginPrefix}
+    Documentation = $out/${qtDocPrefix}
     ; Qml2Imports = (provided by qtdeclarative)
     EOF
 
-    echo "moving docs to $out/${qtbaseDrv.qtDocPrefix}"
-    mkdir $out/${qtbaseDrv.qtDocPrefix}
-    mv $out/share/doc/* $out/${qtbaseDrv.qtDocPrefix} || true
-
-    echo "used cached build: qtbaseDrv = ${qtbaseDrv}"
-
-    echo "out = $out"
-    echo "bin = $bin"
-    echo "dev = $dev"
+    echo "moving docs to $out/${qtDocPrefix}"
+    mkdir $out/${qtDocPrefix}
+    mv $out/share/doc/* $out/${qtDocPrefix} || true
   '';
-})
 
-/*
-TODO? in qtModules, patch QMAKE_QT_CONFIG
-*/
+  dontStrip = debugSymbols;
 
+  setupHook = ../hooks/qtbase-setup-hook.sh;
+
+  meta = with lib; {
+    homepage = "https://www.qt.io/";
+    description = "A cross-platform application framework for C++";
+    license = with licenses; [ fdl13 gpl2 lgpl21 lgpl3 ];
+    maintainers = with maintainers; [ qknight ttuegel periklis bkchr milahu ];
+    platforms = platforms.unix;
+  };
+}
