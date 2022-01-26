@@ -140,7 +140,7 @@ self: super: builtins.intersectAttrs super {
 
   hs-mesos = overrideCabal (drv: {
     # Pass _only_ mesos; the correct protobuf is propagated.
-    extraLibraries = [ pkgs.mesos ];
+    # extraLibraries = [ pkgs.mesos ]; # mesos is no longer in nixpkgs
     preConfigure = "sed -i -e /extra-lib-dirs/d -e 's|, /usr/include, /usr/local/include/mesos||' hs-mesos.cabal";
   }) super.hs-mesos;
 
