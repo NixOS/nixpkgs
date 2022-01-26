@@ -38,6 +38,21 @@ in {
         PrivateTmp = true;
         WorkingDirectory = "/var/empty";
         # By default opentracker drops all privileges and runs in chroot after starting up as root.
+
+        CapabilityBoundingSet = "CAP_SYS_CHROOT CAP_SETUID CAP_SETGID";
+        ProtectSystem = "strict";
+        ProtectHome = true;
+        PrivateDevices = true;
+        ProtectKernelTunables = true;
+        ProtectKernelModules = true;
+        ProtectKernelLogs = true;
+        ProtectControlGroups = true;
+        RestrictAddressFamilies = "AF_INET AF_INET6";
+        RestrictNamespaces = true;
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
       };
     };
   };
