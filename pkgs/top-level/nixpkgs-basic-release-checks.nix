@@ -6,7 +6,6 @@ pkgs.runCommand "nixpkgs-release-checks" { src = nixpkgs; buildInputs = [nix]; }
     export NIX_STORE_DIR=$TMPDIR/store
     export NIX_STATE_DIR=$TMPDIR/state
     export NIX_PATH=nixpkgs=$TMPDIR/barf.nix
-    opts=(--option build-users-group "")
     nix-store --init
 
     echo 'abort "Illegal use of <nixpkgs> in Nixpkgs."' > $TMPDIR/barf.nix
@@ -26,26 +25,35 @@ pkgs.runCommand "nixpkgs-release-checks" { src = nixpkgs; buildInputs = [nix]; }
     for platform in ${pkgs.lib.concatStringsSep " " supportedSystems}; do
         header "checking Nixpkgs on $platform"
 
+        opts=(
+            --show-trace
+            -f '<src>'
+            --argstr system "$platform"
+            --arg config 'import <src/pkgs/top-level/packages-config.nix>'
+            --option experimental-features 'no-url-literals'
+            --option build-users-group ""
+            --query --available
+            --system --drv-path
+        )
+
         # To get a call trace; see https://nixos.org/manual/nixpkgs/stable/#function-library-lib.trivial.warn
         # Relies on impure eval
         export NIX_ABORT_ON_WARN=true
 
-        nix-env -f $src \
-            --show-trace --argstr system "$platform" \
-            --arg config '{ allowAliases = false; }' \
-            --option experimental-features 'no-url-literals' \
-            -qa --drv-path --system-filter \* --system \
-            "''${opts[@]}" 2> eval-warnings.log > packages1
+        nix-env -I src="$src" "''${opts[@]}" > packages1 2> eval-warnings.log || true
+
+        # Catch any trace calls not caught by NIX_ABORT_ON_WARN (lib.warn)
+        if [[ -s eval-warnings.log ]]; then
+            cat eval-warnings.log
+            echo "Nixpkgs on $platform evaluated with warnings, aborting"
+            exit 1
+        fi
+        rm eval-warnings.log
 
         s1=$(sha1sum packages1 | cut -c1-40)
         echo $s1
 
-        nix-env -f $src2 \
-            --show-trace --argstr system "$platform" \
-            --arg config '{ allowAliases = false; }' \
-            --option experimental-features 'no-url-literals' \
-            -qa --drv-path --system-filter \* --system \
-            "''${opts[@]}" > packages2
+        nix-env -I src="$src2" "''${opts[@]}" > packages2
 
         s2=$(sha1sum packages2 | cut -c1-40)
 
@@ -55,19 +63,7 @@ pkgs.runCommand "nixpkgs-release-checks" { src = nixpkgs; buildInputs = [nix]; }
             exit 1
         fi
 
-        # Catch any trace calls not caught by NIX_ABORT_ON_WARN (lib.warn)
-        if [ -s eval-warnings.log ]; then
-            echo "Nixpkgs on $platform evaluated with warnings, aborting"
-            exit 1
-        fi
-        rm eval-warnings.log
-
-        nix-env -f $src \
-            --show-trace --argstr system "$platform" \
-            --arg config '{ allowAliases = false; }' \
-            --option experimental-features 'no-url-literals' \
-            -qa --drv-path --system-filter \* --system --meta --xml \
-            "''${opts[@]}" > /dev/null
+        nix-env -I src="$src" "''${opts[@]}" --meta --xml > /dev/null
     done
 
     touch $out
