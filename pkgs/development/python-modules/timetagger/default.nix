@@ -3,6 +3,8 @@
 , fetchFromGitHub
 , pytestCheckHook
 , requests
+, pytest
+, pythonOlder
 }:
 
 python3Packages.buildPythonPackage rec {
@@ -33,7 +35,11 @@ python3Packages.buildPythonPackage rec {
   checkInputs = [
     pytestCheckHook
     requests
+    pytest
   ];
+
+  # fails with `No module named pytest` on python version 3.10
+  doCheck = pythonOlder "3.10";
 
   meta = with lib; {
     homepage = "https://timetagger.app";
