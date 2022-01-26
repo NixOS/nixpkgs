@@ -3545,7 +3545,7 @@
     name = "Leo Maroni";
   };
   emmanuelrosa = {
-    email = "emmanuel_rosa@aol.com";
+    email = "emmanuelrosa@protonmail.com";
     matrix = "@emmanuelrosa:matrix.org";
     github = "emmanuelrosa";
     githubId = 13485450;
@@ -5983,6 +5983,13 @@
     github = "jshholland";
     githubId = 107689;
     name = "Josh Holland";
+  };
+  jsierles = {
+    email = "joshua@hey.com";
+    matrix = "@jsierles:matrix.org";
+    name = "Joshua Sierles";
+    github = "jsierles";
+    githubId = 82;
   };
   jtcoolen = {
     email = "jtcoolen@pm.me";
