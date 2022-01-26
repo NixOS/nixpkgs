@@ -1,3 +1,15 @@
+{ lib, fetchFromGitHub
+, version
+, suffix ? ""
+, sha256 ? null
+, src ? fetchFromGitHub { owner = "NixOS"; repo = "nix"; rev = version; inherit sha256; }
+, patches ? [ ]
+}:
+assert (sha256 == null) -> (src != null);
+let
+  atLeast24 = lib.versionAtLeast version "2.4pre";
+  atLeast25 = lib.versionAtLeast version "2.5pre";
+in
 { stdenv
 , autoconf-archive
 , autoreconfHook
@@ -32,7 +44,7 @@
 , util-linuxMinimal
 , xz
 
-, enableDocumentation ? lib.versionOlder version "2.4pre" || stdenv.hostPlatform == stdenv.buildPlatform
+, enableDocumentation ? atLeast24 || stdenv.hostPlatform == stdenv.buildPlatform
 , enableStatic ? stdenv.hostPlatform.isStatic
 , withAWS ? !enableStatic && (stdenv.isLinux || stdenv.isDarwin), aws-sdk-cpp
 , withLibseccomp ? lib.meta.availableOn stdenv.hostPlatform libseccomp, libseccomp
@@ -40,31 +52,17 @@
 , confDir
 , stateDir
 , storeDir
-
-, version
-, src
-, suffix ? ""
-, patches ? [ ]
 }:
 let
   sh = busybox-sandbox-shell;
-
-  atLeast24 = lib.versionAtLeast version "2.4pre";
-  atLeast25 = lib.versionAtLeast version "2.5pre";
-
-  nix-aws-sdk = (aws-sdk-cpp.override {
-    apis = [ "s3" "transfer" ];
-    customMemoryManagement = false;
-  }).overrideDerivation (args: {
-    patches = (args.patches or [ ]) ++ [ ./patches/aws-sdk-cpp-TransferManager-ContentEncoding.patch ];
-  });
 in
 stdenv.mkDerivation {
   pname = "nix";
-  inherit src patches;
 
   version = "${version}${suffix}";
   VERSION_SUFFIX = suffix;
+
+  inherit src patches;
 
   outputs =
     [ "out" "dev" ]
@@ -108,7 +106,7 @@ stdenv.mkDerivation {
   ] ++ lib.optionals withLibseccomp [
     libseccomp
   ] ++ lib.optionals withAWS [
-    nix-aws-sdk
+    aws-sdk-cpp
   ];
 
   propagatedBuildInputs = [ boehmgc ];
@@ -208,6 +206,6 @@ stdenv.mkDerivation {
   passthru = {
     inherit boehmgc;
 
-    perl-bindings = perl.pkgs.toPerlModule (callPackage ./nix-perl.nix { inherit version src; });
+    perl-bindings = perl.pkgs.toPerlModule (callPackage ./nix-perl.nix { inherit src version;  });
   };
 }
