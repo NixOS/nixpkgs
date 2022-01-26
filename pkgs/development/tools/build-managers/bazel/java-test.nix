@@ -5,6 +5,7 @@
 , gccStdenv
 , lib
 , openjdk8
+, jdk11_headless
 , runLocal
 , runtimeShell
 , writeScript
@@ -41,18 +42,19 @@ let
     name = "bazel-test-java";
     inherit workspaceDir;
     bazelPkg = bazel;
-    buildInputs = [ openjdk8 ];
+    buildInputs = [ (if lib.strings.versionOlder bazel.version "5.0.0" then openjdk8 else jdk11_headless) ];
     bazelScript = ''
       ${bazel}/bin/bazel \
         run \
         --distdir=${distDir} \
-          --host_javabase='@local_jdk//:jdk' \
-          --java_toolchain='@bazel_tools//tools/jdk:toolchain_hostjdk8' \
-          --javabase='@local_jdk//:jdk' \
           --verbose_failures \
           --curses=no \
           --sandbox_debug \
-          //:ProjectRunner
+          //:ProjectRunner \
+    '' + lib.optionalString (lib.strings.versionOlder bazel.version "5.0.0") ''
+          --host_javabase='@local_jdk//:jdk' \
+          --java_toolchain='@bazel_tools//tools/jdk:toolchain_hostjdk8' \
+          --javabase='@local_jdk//:jdk' \
     '';
   };
 
