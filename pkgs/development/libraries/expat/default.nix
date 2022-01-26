@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
   patches = [
     ./CVE-2022-23852-fix.patch
     ./CVE-2022-23852-test.patch
+    ./CVE-2022-23990.patch
   ];
   patchFlags = "-p2";
 
