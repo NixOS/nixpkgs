@@ -46,7 +46,7 @@ buildPythonPackage rec {
   ];
 
   patches = [
-    # Support for redis >= 4.1.0, https://github.com/jamesls/fakeredis/pull/324
+    # Support for redis <= 4.1.0, https://github.com/jamesls/fakeredis/pull/324
     (fetchpatch {
       name = "support-redis-4.1.0.patch";
       url = "https://github.com/jamesls/fakeredis/commit/8ef8dc6dacc9baf571d66a25ffbf0fadd7c70f78.patch";
