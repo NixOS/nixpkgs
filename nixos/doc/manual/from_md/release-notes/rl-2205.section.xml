@@ -712,6 +712,15 @@
           warning.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <literal>programs.tmux</literal> has a new option
+          <literal>plugins</literal> that accepts a list of packages
+          from the <literal>tmuxPlugins</literal> group. The specified
+          packages are added to the system and loaded by
+          <literal>tmux</literal>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>
