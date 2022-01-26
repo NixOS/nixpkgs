@@ -87,8 +87,9 @@ in
       aarch64-linux = "00ln18vpi07jq2slk3kplyhcj8ad41n0yl880q5cihilk7daclxz";
       aarch64-darwin = aarch64-linux;
     };
-
+    jdk = jdk11_headless;
     inherit openssl;
+    # TODO: Package and add Intel Storage Acceleration Library
     nativeLibs = [ stdenv.cc.cc.lib protobuf3_7 zlib snappy ];
     libPatches = ''
       ln -s ${getLib cyrus_sasl}/lib/libsasl2.so $out/lib/${untarDir}/lib/native/libsasl2.so.2
@@ -96,8 +97,12 @@ in
       ln -s ${getLib zlib}/lib/libz.so.1 $out/lib/${untarDir}/lib/native/
       ln -s ${getLib zstd}/lib/libzstd.so.1 $out/lib/${untarDir}/lib/native/
       ln -s ${getLib bzip2}/lib/libbz2.so.1 $out/lib/${untarDir}/lib/native/
-    '' + optionalString stdenv.isLinux "patchelf --add-rpath ${jdk.home}/lib/server $out/lib/${untarDir}/lib/native/libnativetask.so.1.0.0";
-    jdk = jdk11_headless;
+    '' + optionalString stdenv.isLinux ''
+      # libjvm.so for Java >=11
+      patchelf --add-rpath ${jdk.home}/lib/server $out/lib/${untarDir}/lib/native/libnativetask.so.1.0.0
+      # Java 8 has libjvm.so at a different path
+      patchelf --add-rpath ${jdk.home}/jre/lib/amd64/server $out/lib/${untarDir}/lib/native/libnativetask.so.1.0.0
+    '';
     tests = nixosTests.hadoop;
   };
   hadoop_3_2 = common rec {
