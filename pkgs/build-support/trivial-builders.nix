@@ -1,4 +1,4 @@
-{ lib, stdenv, stdenvNoCC, lndir, runtimeShell, shellcheck }:
+{ lib, stdenv, stdenvNoCC, lndir, runtimeShell, shellcheck, nixosTest }:
 
 rec {
 
@@ -819,7 +819,7 @@ rec {
     { package
     , command ? "${package.meta.mainProgram or package.pname or package.name}"
     , expectedText ? "File" # Very very common in menu bars.
-    }: import ../../nixos/tests/make-test-python.nix ({ pkgs, ... }: {
+    }: nixosTest ({ pkgs, ... }: {
       name = "${package.name}-test-graphical";
 
       machine = { ... }: {
