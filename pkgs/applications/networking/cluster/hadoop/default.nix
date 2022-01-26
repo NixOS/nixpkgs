@@ -15,7 +15,7 @@
 , zlib
 , zstd
 , openssl
-, openssl
+, glibc
 , nixosTests
 }:
 
@@ -40,7 +40,10 @@ let
       installPhase = ''
         mkdir -p $out/{lib/${untarDir}/conf,bin,lib}
         mv * $out/lib/${untarDir}
-
+      '' + optionalString stdenv.isLinux ''
+        # All versions need container-executor, but some versions can't use autoPatchelf because of broken SSL versions
+        patchelf --set-interpreter ${glibc.out}/lib64/ld-linux-x86-64.so.2 $out/lib/${untarDir}/bin/container-executor
+      '' + ''
         for n in $(find $out/lib/${untarDir}/bin -type f ! -name "*.*"); do
           makeWrapper "$n" "$out/bin/$(basename $n)"\
             --set-default JAVA_HOME ${jdk.home}\
@@ -112,15 +115,13 @@ in
     jdk = jdk8_headless;
     # not using native libs because of broken openssl_1_0_2 dependency
     # can be manually overriden
-    # Disable tests involving HDFS till the module adds support for hadoop_3_2
-    tests = nixosTests.hadoop_3_2 // { all = null; hdfs = null; };
+    tests = nixosTests.hadoop_3_2;
   };
   hadoop2 = common rec {
     pname = "hadoop";
     version = "2.10.1";
     sha256.x86_64-linux = "1w31x4bk9f2swnx8qxx0cgwfg8vbpm6cy5lvfnbbpl3rsjhmyg97";
     jdk = jdk8_headless;
-    # Disable tests involving HDFS till the module adds support for hadoop2
-    tests = nixosTests.hadoop2 // { all = null; hdfs = null; };
+    tests = nixosTests.hadoop2;
   };
 }
