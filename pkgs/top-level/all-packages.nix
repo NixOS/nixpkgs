@@ -1083,6 +1083,8 @@ with pkgs;
 
   archi = callPackage ../tools/misc/archi { };
 
+  breitbandmessung = callPackage ../applications/networking/breitbandmessung { };
+
   contour = libsForQt5.callPackage ../applications/terminal-emulators/contour { };
 
   cool-retro-term = libsForQt5.callPackage ../applications/terminal-emulators/cool-retro-term { };
