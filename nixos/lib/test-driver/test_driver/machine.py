@@ -777,7 +777,7 @@ class Machine:
             for char in chars:
                 self.send_key(char, delay, log=False)
 
-    def wait_for_file(self, filename: str, timeout: int = 900) -> None:
+    def wait_for_file(self, filename: str, timeout: int = DEFAULT_TIMEOUT) -> None:
         """
         Waits until the file exists in the machine's file system.
         """
@@ -790,7 +790,7 @@ class Machine:
             retry(check_file, timeout)
 
     def wait_for_open_port(
-        self, port: int, addr: str = "localhost", timeout: int = 900
+        self, port: int, addr: str = "localhost", timeout: int = DEFAULT_TIMEOUT
     ) -> None:
         """
         Wait until a process is listening on the given TCP port and IP address
