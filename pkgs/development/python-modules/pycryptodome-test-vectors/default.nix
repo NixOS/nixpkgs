@@ -5,12 +5,12 @@
 
 buildPythonPackage rec {
   pname = "pycryptodome-test-vectors";
-  version = "1.0.4";
+  version = "1.0.6";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-2+ZL8snmaB0tNxGZRbUM6SdfXZf4CM0nh3/wTOu9R50=";
+    hash = "sha256-oNfIVm7wyhgU9pgDhdP6BVJehuEw4d238GDaYMuAYLQ=";
     extension = "zip";
   };
 
