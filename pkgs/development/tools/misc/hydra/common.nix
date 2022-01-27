@@ -3,9 +3,9 @@
 , top-git, mercurial, darcs, subversion, breezy, openssl, bzip2, libxslt
 , perl, postgresql, nukeReferences, git, boehmgc, nlohmann_json
 , docbook_xsl, openssh, gnused, coreutils, findutils, gzip, xz, gnutar
-, rpm, dpkg, cdrkit, pixz, lib, boost, autoreconfHook, src ? null, version ? null
-, migration ? false, patches ? []
-, tests ? {}, mdbook
+, rpm, dpkg, cdrkit, pixz, lib, boost, autoreconfHook, mdbook, nixosTests
+
+, migration ? false
 }:
 
 with stdenv;
@@ -80,8 +80,16 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "hydra";
+  version = "unstable-2021-08-11";
 
-  inherit stdenv src version patches;
+  src = fetchFromGitHub {
+    owner = "NixOS";
+    repo = pname;
+    rev = "9bce425c3304173548d8e822029644bb51d35263";
+    sha256 = "sha256-tGzwKNW/odtAYcazWA9bPVSmVXMGKfXsqCA1UYaaxmU=";
+  };
+
+  inherit stdenv;
 
   buildInputs =
     [ makeWrapper autoconf automake libtool unzip nukeReferences sqlite libpqxx_6
@@ -131,7 +139,10 @@ in stdenv.mkDerivation rec {
 
   dontStrip = true;
 
-  passthru = { inherit perlDeps migration tests; };
+  passthru = {
+    inherit perlDeps migration;
+    tests.basic = nixosTests.hydra.hydra-unstable;
+  };
 
   meta = with lib; {
     description = "Nix-based continuous build system";
