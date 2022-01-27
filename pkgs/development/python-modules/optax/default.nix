@@ -22,10 +22,11 @@ buildPythonPackage rec {
     sha256 = "1q8cxc42a5xais2ll1l238cnn3l7w28savhgiz0lg01ilz2ysbli";
   };
 
+  buildInputs = [ jaxlib ];
+
   propagatedBuildInputs = [
     absl-py
     chex
-    jaxlib
     numpy
   ];
 
