@@ -442,13 +442,49 @@
       </listitem>
       <listitem>
         <para>
-          The interface that allows activation scripts to restart units
-          has been reworked. Restarting and reloading is now done by a
-          single file
-          <literal>/run/nixos/activation-restart-list</literal> that
-          honors <literal>restartIfChanged</literal> and
-          <literal>reloadIfChanged</literal> of the units.
+          <literal>switch-to-configuration</literal> (the script that is
+          run when running <literal>nixos-rebuild switch</literal> for
+          example) has been reworked
         </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              The interface that allows activation scripts to restart
+              units has been streamlined. Restarting and reloading is
+              now done by a single file
+              <literal>/run/nixos/activation-restart-list</literal> that
+              honors <literal>restartIfChanged</literal> and
+              <literal>reloadIfChanged</literal> of the units.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              The script now uses a proper ini-file parser to parse
+              systemd units. Some values are now only searched in one
+              section instead of in the entire unit. This is only
+              relevant for units that don’t use the NixOS systemd moule.
+            </para>
+            <itemizedlist spacing="compact">
+              <listitem>
+                <para>
+                  <literal>RefuseManualStop</literal>,
+                  <literal>X-OnlyManualStart</literal>,
+                  <literal>X-StopOnRemoval</literal>,
+                  <literal>X-StopOnReconfiguration</literal> are only
+                  searched in the <literal>[Unit]</literal> section
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  <literal>X-ReloadIfChanged</literal>,
+                  <literal>X-RestartIfChanged</literal>,
+                  <literal>X-StopIfChanged</literal> are only searched
+                  in the <literal>[Service]</literal> section
+                </para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+        </itemizedlist>
       </listitem>
       <listitem>
         <para>
@@ -530,6 +566,29 @@
           <link linkend="opt-virtualisation.vmVariantWithBootLoader">virtualisation.vmVariantWithBootloader</link>
           was added.
         </para>
+      </listitem>
+      <listitem>
+        <para>
+          The configuration portion of the <literal>nix-daemon</literal>
+          module has been reworked and exposed as
+          <link xlink:href="options.html#opt-nix-settings">nix.settings</link>:
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              Legacy options have been mapped to the corresponding
+              options under under
+              <link xlink:href="options.html#opt-nix.settings">nix.settings</link>
+              but may be deprecated in the future.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              <link xlink:href="options.html#opt-nix.buildMachines.publicHostKey">nix.buildMachines.publicHostKey</link>
+              has been added.
+            </para>
+          </listitem>
+        </itemizedlist>
       </listitem>
       <listitem>
         <para>

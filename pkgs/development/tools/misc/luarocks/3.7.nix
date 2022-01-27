@@ -77,6 +77,5 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [raskin teto];
     platforms = platforms.linux ++ platforms.darwin;
     downloadPage = "http://luarocks.org/releases/";
-    updateWalker = true;
   };
 }

@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, flex, bison, pkg-config, zlib, libtiff, libpng, fftw
-, cairo, readline, ffmpeg, makeWrapper, wxGTK30, netcdf, blas
+, cairo, readline, ffmpeg, makeWrapper, wxGTK30, wxmac, netcdf, blas
 , proj, gdal, geos, sqlite, postgresql, libmysqlclient, python3Packages, libLAS, proj-datumgrid
 , zstd, pdal, wrapGAppsHook
 }:
@@ -16,10 +16,14 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ flex bison zlib proj gdal libtiff libpng fftw sqlite cairo
-  readline ffmpeg makeWrapper wxGTK30 netcdf geos postgresql libmysqlclient blas
-  libLAS proj-datumgrid zstd pdal wrapGAppsHook ]
-    ++ (with python3Packages; [ python python-dateutil wxPython_4_1 numpy ]);
+  buildInputs = [ flex bison zlib proj gdal libtiff libpng fftw sqlite
+  readline ffmpeg makeWrapper netcdf geos postgresql libmysqlclient blas
+  libLAS proj-datumgrid zstd wrapGAppsHook ]
+    ++ lib.optionals stdenv.isLinux [ cairo pdal wxGTK30 ]
+    ++ lib.optional stdenv.isDarwin wxmac
+    ++ (with python3Packages; [ python python-dateutil numpy ]
+      ++ lib.optional stdenv.isDarwin wxPython_4_0
+      ++ lib.optional stdenv.isLinux wxPython_4_1);
 
   # On Darwin the installer tries to symlink the help files into a system
   # directory
@@ -33,12 +37,11 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-proj-share=${proj}/share/proj"
     "--with-proj-includes=${proj.dev}/include"
-    "--with-proj-lib=${proj}/lib"
+    "--with-proj-libs=${proj}/lib"
     "--without-opengl"
     "--with-readline"
     "--with-wxwidgets"
     "--with-netcdf"
-    "--with-pdal"
     "--with-geos"
     "--with-postgres"
     "--with-postgres-libs=${postgresql.lib}/lib/"
@@ -51,6 +54,12 @@ stdenv.mkDerivation rec {
     "--with-zstd"
     "--with-fftw"
     "--with-pthread"
+  ] ++ lib.optionals stdenv.isLinux [
+    "--with-pdal"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "--without-cairo"
+    "--without-freetype"
+    "--without-x"
   ];
 
   # Otherwise a very confusing "Can't load GDAL library" error

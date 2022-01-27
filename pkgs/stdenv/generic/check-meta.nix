@@ -236,7 +236,6 @@ let
     name = str;
     version = str;
     tag = str;
-    updateWalker = bool;
     executables = listOf str;
     outputsToInstall = listOf str;
     position = str;
@@ -244,7 +243,6 @@ let
     repositories = attrsOf str;
     isBuildPythonPackage = platforms;
     schedulingPriority = int;
-    downloadURLRegexp = str;
     isFcitxEngine = bool;
     isIbusEngine = bool;
     isGutenprint = bool;

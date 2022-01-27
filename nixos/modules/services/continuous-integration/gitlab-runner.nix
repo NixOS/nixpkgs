@@ -147,7 +147,7 @@ in
     concurrent = mkOption {
       type = types.int;
       default = 1;
-      example = literalExpression "config.nix.maxJobs";
+      example = literalExpression "config.nix.settings.max-jobs";
       description = ''
         Limits how many jobs globally can be run concurrently.
         The most upper limit of jobs using all defined runners.
