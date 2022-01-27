@@ -1785,6 +1785,7 @@ dont-distribute-packages:
  - introduction-test
  - intset
  - invertible-hlist
+ - invertible-hxt
  - ion
  - ip
  - ipatch
@@ -3213,6 +3214,7 @@ dont-distribute-packages:
  - warped
  - wavesurfer
  - wavy
+ - web-inv-route
  - web-mongrel2
  - web-page
  - web-rep

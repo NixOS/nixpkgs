@@ -2220,6 +2220,7 @@ broken-packages:
   - hlongurl
   - hlrdb-core
   - hls-exactprint-utils
+  - hls-rename-plugin
   - hlwm
   - hmarkup
   - hmatrix-banded
@@ -2599,6 +2600,7 @@ broken-packages:
   - introduction
   - intro-prelude
   - invert
+  - invertible
   - invertible-syntax
   - io-capture
   - io-choice
