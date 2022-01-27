@@ -23943,6 +23943,8 @@ with pkgs;
 
   publicsuffix-list = callPackage ../data/misc/publicsuffix-list { };
 
+  phinger-cursors = callPackage ../data/icons/phinger-cursors { };
+
   qogir-icon-theme = callPackage ../data/icons/qogir-icon-theme { };
 
   qogir-theme = callPackage ../data/themes/qogir { };
