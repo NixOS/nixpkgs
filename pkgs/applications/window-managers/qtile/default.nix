@@ -1,23 +1,15 @@
-{ lib, fetchFromGitHub, python3, mypy, glib, cairo, pango, pkg-config, libxcb, xcbutilcursor }:
+{ lib, fetchFromGitHub, python3, python3Packages, mypy, glib, pango, pkg-config, xcbutilcursor }:
 
 let
-  enabled-xcffib = cairocffi-xcffib: cairocffi-xcffib.override {
-    withXcffib = true;
-  };
-
-  # make it easier to reference python
-  python = python3;
-  pythonPackages = python.pkgs;
-
-  unwrapped = pythonPackages.buildPythonPackage rec {
+  unwrapped = python3Packages.buildPythonPackage rec {
     pname = "qtile";
-    version = "0.19.0";
+    version = "0.20.0";
 
     src = fetchFromGitHub {
       owner = "qtile";
       repo = "qtile";
       rev = "v${version}";
-      sha256 = "BLHGVPMQd8O4h5TVx/F/klzSra+FZYogp22V6Yq04T0=";
+      sha256 = "TRmul3t//izJRdViTvxFz29JZeGYsWc7WsJjagQ35nw=";
     };
 
     postPatch = ''
@@ -33,13 +25,13 @@ let
 
     nativeBuildInputs = [
       pkg-config
-    ] ++ (with pythonPackages; [
+    ] ++ (with python3Packages; [
       setuptools-scm
     ]);
 
-    propagatedBuildInputs = with pythonPackages; [
+    propagatedBuildInputs = with python3Packages; [
       xcffib
-      (enabled-xcffib cairocffi)
+      (cairocffi.override { withXcffib = true; })
       setuptools
       python-dateutil
       dbus-python
@@ -68,9 +60,9 @@ let
     };
   };
 in
-  (python.withPackages (ps: [ unwrapped ])).overrideAttrs (_: {
-    # otherwise will be exported as "env", this restores `nix search` behavior
-    name = "${unwrapped.pname}-${unwrapped.version}";
-    # export underlying qtile package
-    passthru = { inherit unwrapped; };
-  })
+(python3.withPackages (_: [ unwrapped ])).overrideAttrs (_: {
+  # otherwise will be exported as "env", this restores `nix search` behavior
+  name = "${unwrapped.pname}-${unwrapped.version}";
+  # export underlying qtile package
+  passthru = { inherit unwrapped; };
+})

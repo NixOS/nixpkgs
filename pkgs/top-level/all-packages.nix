@@ -1791,7 +1791,7 @@ with pkgs;
 
   github-to-sqlite = with python3Packages; toPythonApplication github-to-sqlite;
 
-  gitless = callPackage ../applications/version-management/gitless { python = python3; };
+  gitless = callPackage ../applications/version-management/gitless { };
 
   gistyc = with python3Packages; toPythonApplication gistyc;
 
@@ -3601,10 +3601,7 @@ with pkgs;
 
   reg = callPackage ../tools/virtualization/reg { };
 
-  river = callPackage ../applications/window-managers/river {
-    wlroots = wlroots_0_14;
-    zig = zig_0_8_1;
-  };
+  river = callPackage ../applications/window-managers/river { };
 
   rivercarro = callPackage ../applications/misc/rivercarro { };
 
@@ -8644,11 +8641,6 @@ with pkgs;
 
   pngout = callPackage ../tools/graphics/pngout { };
 
-  ipsecTools = callPackage ../os-specific/linux/ipsec-tools {
-    flex = flex_2_5_35;
-    openssl = openssl_1_0_2;
-  };
-
   patch = gnupatch;
 
   patchage = callPackage ../applications/audio/patchage { };
@@ -9179,6 +9171,8 @@ with pkgs;
   rdrview = callPackage ../tools/networking/rdrview {};
 
   real_time_config_quick_scan = callPackage ../applications/audio/real_time_config_quick_scan { };
+
+  realesrgan-ncnn-vulkan = callPackage ../tools/graphics/realesrgan-ncnn-vulkan { };
 
   react-native-debugger = callPackage ../development/tools/react-native-debugger { };
 
@@ -14239,6 +14233,15 @@ with pkgs;
     bazel_self = bazel_4;
   };
 
+  bazel_5 = callPackage ../development/tools/build-managers/bazel/bazel_5 {
+    inherit (darwin) cctools;
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation CoreServices Foundation;
+    buildJdk = jdk11_headless;
+    runJdk = jdk11_headless;
+    stdenv = if stdenv.cc.isClang then llvmPackages.stdenv else stdenv;
+    bazel_self = bazel_5;
+  };
+
   bazel-buildtools = callPackage ../development/tools/build-managers/bazel/buildtools { };
   buildifier = bazel-buildtools;
   buildozer = bazel-buildtools;
@@ -14488,8 +14491,6 @@ with pkgs;
   cubiomes-viewer = libsForQt5.callPackage ../applications/misc/cubiomes-viewer { };
 
   ctmg = callPackage ../tools/security/ctmg { };
-
-  cmake_2_8 = callPackage ../development/tools/build-managers/cmake/2.8.nix { };
 
   cmake = libsForQt5.callPackage ../development/tools/build-managers/cmake {
     inherit (darwin.apple_sdk.frameworks) SystemConfiguration;
@@ -18630,6 +18631,8 @@ with pkgs;
     udev = systemdMinimal;
   };
 
+  libusbgx = callPackage ../development/libraries/libusbgx { };
+
   libusbmuxd = callPackage ../development/libraries/libusbmuxd { };
 
   libutempter = callPackage ../development/libraries/libutempter { };
@@ -19031,6 +19034,8 @@ with pkgs;
   nanomsg = callPackage ../development/libraries/nanomsg { };
 
   nanovna-saver = libsForQt5.callPackage ../applications/science/electronics/nanovna-saver { };
+
+  ncnn = callPackage ../development/libraries/ncnn { };
 
   ndpi = callPackage ../development/libraries/ndpi { };
 
@@ -22326,6 +22331,8 @@ with pkgs;
 
   gradm = callPackage ../os-specific/linux/gradm { };
 
+  gt = callPackage ../os-specific/linux/gt { };
+
   inherit (nodePackages) gtop;
 
   hd-idle = callPackage ../os-specific/linux/hd-idle { };
@@ -22358,9 +22365,7 @@ with pkgs;
 
   ifmetric = callPackage ../os-specific/linux/ifmetric {};
 
-  ima-evm-utils = callPackage ../os-specific/linux/ima-evm-utils {
-    openssl = openssl_1_0_2;
-  };
+  ima-evm-utils = callPackage ../os-specific/linux/ima-evm-utils {};
 
   intel2200BGFirmware = callPackage ../os-specific/linux/firmware/intel2200BGFirmware { };
 
@@ -24461,6 +24466,10 @@ with pkgs;
 
   bambootracker = libsForQt5.callPackage ../applications/audio/bambootracker { };
 
+  blocky = callPackage ../applications/networking/blocky {
+    buildGoModule = buildGo117Module;
+  };
+
   cadence = libsForQt5.callPackage ../applications/audio/cadence { };
 
   cheesecutter = callPackage ../applications/audio/cheesecutter { };
@@ -25719,10 +25728,6 @@ with pkgs;
 
   fluxbox = callPackage ../applications/window-managers/fluxbox { };
 
-  fme = callPackage ../applications/misc/fme {
-    inherit (gnome2) libglademm;
-  };
-
   fomp = callPackage ../applications/audio/fomp { };
 
   formatter = callPackage ../applications/misc/formatter { };
@@ -26786,7 +26791,10 @@ with pkgs;
 
   fluxctl = callPackage ../applications/networking/cluster/fluxctl { };
 
-  fluxcd = callPackage ../applications/networking/cluster/fluxcd { };
+  fluxcd = callPackage ../applications/networking/cluster/fluxcd {
+    # Fix-Me: This locking should be removed once PR #154059 is merged.
+    buildGoModule = buildGo117Module;
+  };
 
   linkerd = callPackage ../applications/networking/cluster/linkerd { };
   linkerd_edge = callPackage ../applications/networking/cluster/linkerd/edge.nix { };
@@ -27352,7 +27360,7 @@ with pkgs;
 
   mpg321 = callPackage ../applications/audio/mpg321 { };
 
-  mpc_cli = callPackage ../applications/audio/mpc {
+  mpc-cli = callPackage ../applications/audio/mpc {
     inherit (python3Packages) sphinx;
   };
 
@@ -28239,9 +28247,7 @@ with pkgs;
 
   wrapQemuBinfmtP = callPackage ../applications/virtualization/qemu/binfmt-p-wrapper.nix { };
 
-  qgis-unwrapped = libsForQt5.callPackage ../applications/gis/qgis/unwrapped.nix {
-    withGrass = false;
-  };
+  qgis-ltr = callPackage ../applications/gis/qgis/ltr.nix { };
 
   qgis = callPackage ../applications/gis/qgis { };
 
@@ -28941,6 +28947,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  talosctl = callPackage ../applications/networking/cluster/talosctl { };
+
   talentedhack = callPackage ../applications/audio/talentedhack { };
 
   tambura = callPackage ../applications/audio/tambura { };
@@ -29345,9 +29353,7 @@ with pkgs;
 
   qpdfview = libsForQt5.callPackage ../applications/misc/qpdfview {};
 
-  qtile = callPackage ../applications/window-managers/qtile {
-    inherit (xorg) libxcb;
-  };
+  qtile = callPackage ../applications/window-managers/qtile { };
 
   vimpc = callPackage ../applications/audio/vimpc { };
 
@@ -32059,6 +32065,8 @@ with pkgs;
   sage = callPackage ../applications/science/math/sage { };
   sageWithDoc = sage.override { withDoc = true; };
 
+  sagetex = callPackage ../misc/sagetex { };
+
   subread = callPackage ../applications/science/biology/subread { };
 
   suitesparse_4_2 = callPackage ../development/libraries/science/math/suitesparse/4.2.nix { };
@@ -32619,9 +32627,7 @@ with pkgs;
 
   astrolabe-generator = callPackage ../applications/science/astronomy/astrolabe-generator { };
 
-  tulip = callPackage ../applications/science/misc/tulip {
-    cmake = cmake_2_8;
-  };
+  tulip = libsForQt5.callPackage ../applications/science/misc/tulip { };
 
   vite = callPackage ../applications/science/misc/vite { };
 
@@ -33955,9 +33961,7 @@ with pkgs;
 
   wprecon = callPackage ../tools/security/wprecon { };
 
-  wraith = callPackage ../applications/networking/irc/wraith {
-    openssl = openssl_1_0_2;
-  };
+  wraith = callPackage ../applications/networking/irc/wraith { };
 
   wxmupen64plus = callPackage ../misc/emulators/wxmupen64plus { };
 
@@ -34188,6 +34192,8 @@ with pkgs;
   xulrunner = firefox-unwrapped;
 
   xrq = callPackage ../applications/misc/xrq { };
+
+  pynitrokey = callPackage ../tools/security/pynitrokey { };
 
   nitrokey-app = libsForQt5.callPackage ../tools/security/nitrokey-app { };
   nitrokey-udev-rules = callPackage ../tools/security/nitrokey-app/udev-rules.nix { };

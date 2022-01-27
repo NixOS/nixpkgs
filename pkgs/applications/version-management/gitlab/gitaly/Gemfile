@@ -3,11 +3,11 @@ source 'https://rubygems.org'
 gem 'rugged', '~> 1.2'
 gem 'github-linguist', '~> 7.12', require: 'linguist'
 gem 'gitlab-markup', '~> 1.7.1'
-gem 'activesupport', '~> 6.1.4.1'
+gem 'activesupport', '~> 6.1.4.4'
 gem 'rdoc', '~> 6.0'
-gem 'gitlab-gollum-lib', '~> 4.2.7.10.gitlab.1', require: false
+gem 'gitlab-gollum-lib', '~> 4.2.7.10.gitlab.2', require: false
 gem 'gitlab-gollum-rugged_adapter', '~> 0.4.4.4.gitlab.1', require: false
-gem 'grpc', '~> 1.30.2'
+gem 'grpc', '~> 1.42.0' # keep in lock-step with grpc-tools
 gem 'sentry-raven', '~> 3.0', require: false
 gem 'faraday', '~> 1.0'
 gem 'rbtrace', require: false
@@ -19,7 +19,7 @@ gem 'gitlab-labkit', '~> 0.21.1'
 # This version needs to be in sync with GitLab CE/EE
 gem 'licensee', '~> 9.14.1'
 
-gem 'google-protobuf', '~> 3.17.0'
+gem 'google-protobuf', '~> 3.19.0'
 
 group :development, :test do
   gem 'rubocop', '~> 0.69', require: false
@@ -29,7 +29,7 @@ group :development, :test do
   gem 'factory_bot', require: false
   gem 'pry', '~> 0.12.2', require: false
 
-  gem 'grpc-tools', '= 1.30.2'
+  gem 'grpc-tools', '~> 1.42.0'
 end
 
 # Gems required in omnibus-gitlab pipeline

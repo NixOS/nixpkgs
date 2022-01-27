@@ -105,7 +105,7 @@ let
       repo = "tree-sitter-latex";
     };
     "tree-sitter-lua" = {
-      orga = "nvim-treesitter";
+      orga = "MunifTanjim";
       repo = "tree-sitter-lua";
     };
     "tree-sitter-fennel" = {
@@ -117,7 +117,7 @@ let
       repo = "tree-sitter-make";
     };
     "tree-sitter-markdown" = {
-      orga = "ikatyang";
+      orga = "MDeiml";
       repo = "tree-sitter-markdown";
     };
     "tree-sitter-rst" = {

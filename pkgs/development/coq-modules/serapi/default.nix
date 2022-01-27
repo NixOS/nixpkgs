@@ -1,19 +1,6 @@
 { lib, fetchzip, mkCoqDerivation, coq, version ? null }:
 
 let
-  ocamlPackages =
-    coq.ocamlPackages.overrideScope'
-      (self: super: {
-        ppxlib = super.ppxlib.override { version = "0.15.0"; };
-        # the following does not work
-        ppx_sexp_conv = super.ppx_sexp_conv.overrideAttrs (_: {
-          src = fetchzip {
-            url = "https://github.com/janestreet/ppx_sexp_conv/archive/v0.14.1.tar.gz";
-            sha256 = "04bx5id99clrgvkg122nx03zig1m7igg75piphhyx04w33shgkz2";
-          };
-        });
-      });
-
   release = {
     "8.14.0+0.14.0".sha256 = "sha256:1kh80yb791yl771qbqkvwhbhydfii23a7lql0jgifvllm2k8hd8d";
     "8.14+rc1+0.14.0".sha256 = "1w7d7anvcfx8vz51mnrf1jkw6rlpzjkjlr06avf58wlhymww7pja";
@@ -29,8 +16,6 @@ in
   inherit version release;
 
   defaultVersion =  with versions;
-    if isGe "4.12" coq.ocamlPackages.ocaml.version then null
-    else
     switch coq.version [
       { case = isEq "8.14"; out = "8.14.0+0.14.0"; }
       { case = isEq "8.13"; out = "8.13.0+0.13.0"; }
@@ -42,7 +27,7 @@ in
   useDune2 = true;
 
   propagatedBuildInputs =
-    with ocamlPackages; [
+    with coq.ocamlPackages; [
       cmdliner
       findlib # run time dependency of SerAPI
       ppx_deriving

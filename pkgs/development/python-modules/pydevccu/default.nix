@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "danielperna84";
     repo = pname;
     rev = version;
-    sha256 = "1dfq7nqbmg7mqdcz27kvj772j61j1v47kz26f7map20x4kbz413b";
+    sha256 = "sha256-awTy1yQdiKvqcUb8ecgOMhgpzpF7HvFZw/W8urA92LU=";
   };
 
   # Module has no tests

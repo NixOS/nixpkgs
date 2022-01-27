@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "esphome";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-SIsFG2GVHUcWKorDmIebYVinPr1Ia0e7TnVko5VYiYw=";
+    sha256 = "1349b2as6r3m9sxlfss8plzafn31kf3rihwa58b4f7cmc4dhb2s8";
   };
 
   propagatedBuildInputs = [
