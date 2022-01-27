@@ -57,6 +57,12 @@ buildPythonPackage rec {
     ./fix-cython.patch
   ];
 
+  # See https://github.com/NixOS/nixpkgs/issues/156957.
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "typing-extensions>=3.7.0,<4" "typing-extensions"
+  '';
+
   sourceRoot = "source/sdks/python";
 
   nativeBuildInputs = [
