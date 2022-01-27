@@ -26854,7 +26854,7 @@ with pkgs;
   lame = callPackage ../development/libraries/lame { };
 
   labwc = callPackage ../applications/window-managers/labwc {
-    wlroots = wlroots_0_14;
+    wlroots = wlroots_0_15;
   };
 
   larswm = callPackage ../applications/window-managers/larswm { };
