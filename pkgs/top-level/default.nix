@@ -16,7 +16,10 @@
    evaluation is taking place, and the configuration from environment variables
    or dot-files. */
 
-{ # The system packages will be built on. See the manual for the
+{ # The library to be used across pkgs.
+  lib ? import ../../lib
+
+, # The system packages will be built on. See the manual for the
   # subtle division of labor between these two `*System`s and the three
   # `*Platform`s.
   localSystem
@@ -47,8 +50,6 @@ let # Rename the function arguments
   crossSystem0 = crossSystem;
 
 in let
-  lib = import ../../lib;
-
   inherit (lib) throwIfNot;
 
   checked =
