@@ -15,9 +15,15 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "http://brianstafford.info/libesmtp/index.html";
     description = "A Library for Posting Electronic Mail";
-    license = licenses.lgpl21;
+    longDescription = ''
+      libESMTP is an SMTP client library which manages submission of electronic mail
+      via a preconfigured Mail Transport Agent (MTA) such as Exim or Postfix.
+      It implements many SMTP extensions including TLS for security
+      and PIPELINING for high performance.
+    '';
+    homepage = "https://libesmtp.github.io/";
+    license = licenses.lgpl21Plus;
   };
 }
 
