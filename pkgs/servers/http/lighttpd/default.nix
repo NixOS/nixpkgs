@@ -1,4 +1,5 @@
 { lib, stdenv, buildPackages, fetchurl, pkg-config, pcre2, libxml2, zlib, bzip2, which, file
+, fetchpatch
 , openssl
 , enableDbi ? false, libdbi
 , enableMagnet ? false, lua5_1
@@ -19,6 +20,14 @@ stdenv.mkDerivation rec {
     url = "https://download.lighttpd.net/lighttpd/releases-${lib.versions.majorMinor version}.x/${pname}-${version}.tar.xz";
     sha256 = "sha256-4Uidn6dJb78uBxwzi1k7IwDTjCPx5ZZ+UsnvSC4bDiY=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "macos-10.12-avoid-ccrandomgeneratebytes.patch";
+      url = "https://redmine.lighttpd.net/projects/lighttpd/repository/14/revisions/6791f71b20a127b5b0091020dd065f4f9c7cafb6/diff?format=diff";
+      sha256 = "1x5ybkvxwinl7s1nv3rrc57m4mj38q0gbyjp1ijr4w5lhabw4vzs";
+    })
+  ];
 
   postPatch = ''
     patchShebangs tests
