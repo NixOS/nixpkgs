@@ -806,6 +806,8 @@ rec {
       fromImage ? null
     , # Files to put on the image (a nix store path or list of paths).
       contents ? [ ]
+    , # List of lists of paths to explicitly put into individual layers
+      explicitLayers ? [ ]
     , # Docker config; e.g. what command to run on the container.
       config ? { }
     , # Time of creation of the image. Passing "now" will make the
@@ -923,7 +925,7 @@ rec {
           paths() {
             cat $paths ${lib.concatMapStringsSep " "
                            (path: "| (grep -v ${path} || true)")
-                           unnecessaryDrvs}
+                           (unnecessaryDrvs ++ (lib.concatLists explicitLayers))}
           }
 
           # Compute the number of layers that are already used by a potential
@@ -939,10 +941,14 @@ rec {
           # one layer will be taken up by the customisation layer
           (( usedLayers += 1 ))
 
+          # explicitLayers
+          (( usedLayers += ${toString (lib.length explicitLayers)} ))
+
           if ! (( $usedLayers < $maxLayers )); then
-            echo >&2 "Error: usedLayers $usedLayers layers to store 'fromImage' and" \
-                      "'extraCommands', but only maxLayers=$maxLayers were" \
-                      "allowed. At least 1 layer is required to store contents."
+            echo >&2 "Error: usedLayers $usedLayers layers to store 'fromImage'," \
+                      "`explicitLayers`, and 'extraCommands', but only" \
+                      "maxLayers=$maxLayers were allowed." \
+                      "At least 1 layer is required to store contents."
             exit 1
           fi
           availableLayers=$(( maxLayers - usedLayers ))
@@ -961,10 +967,11 @@ rec {
             paths |
               jq -sR '
                 rtrimstr("\n") | split("\n")
-                  | (.[:$maxLayers-1] | map([.])) + [ .[$maxLayers-1:] ]
+                  | (.[:$maxLayers-1] | map([.])) + $explicitLayers + [ .[$maxLayers-1:] ]
                   | map(select(length > 0))
               ' \
-                --argjson maxLayers "$availableLayers"
+                --argjson maxLayers "$availableLayers" \
+                --argjson explicitLayers '${builtins.toJSON explicitLayers}'
           )"
 
           cat ${baseJson} | jq '
