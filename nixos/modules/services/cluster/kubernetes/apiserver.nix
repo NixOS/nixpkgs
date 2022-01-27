@@ -420,34 +420,12 @@ in
           initialAdvertisePeerUrls = mkDefault ["https://${top.masterAddress}:2380"];
         };
 
-        services.kubernetes.addonManager.bootstrapAddons = mkIf isRBACEnabled {
-
-          apiserver-kubelet-api-admin-crb = {
-            apiVersion = "rbac.authorization.k8s.io/v1";
-            kind = "ClusterRoleBinding";
-            metadata = {
-              name = "system:kube-apiserver:kubelet-api-admin";
-            };
-            roleRef = {
-              apiGroup = "rbac.authorization.k8s.io";
-              kind = "ClusterRole";
-              name = "system:kubelet-api-admin";
-            };
-            subjects = [{
-              kind = "User";
-              name = "system:kube-apiserver";
-            }];
-          };
-
-        };
-
       services.kubernetes.pki.certs = with top.lib; {
         apiServer = mkCert {
           name = "kube-apiserver";
           CN = "kubernetes";
           hosts = [
                     "kubernetes.default.svc"
-                    "kubernetes.default.svc.${top.addons.dns.clusterDomain}"
                     cfg.advertiseAddress
                     top.masterAddress
                     apiserverServiceIP
@@ -483,7 +461,6 @@ in
           CN = top.masterAddress;
           hosts = [
                     "etcd.local"
-                    "etcd.${top.addons.dns.clusterDomain}"
                     top.masterAddress
                     cfg.advertiseAddress
                   ];

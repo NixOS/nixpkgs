@@ -53,47 +53,6 @@ in
         action = "systemctl restart flannel.service";
       };
     };
-
-    # give flannel som kubernetes rbac permissions if applicable
-    services.kubernetes.addonManager.bootstrapAddons = mkIf ((storageBackend == "kubernetes") && (elem "RBAC" top.apiserver.authorizationMode)) {
-
-      flannel-cr = {
-        apiVersion = "rbac.authorization.k8s.io/v1";
-        kind = "ClusterRole";
-        metadata = { name = "flannel"; };
-        rules = [{
-          apiGroups = [ "" ];
-          resources = [ "pods" ];
-          verbs = [ "get" ];
-        }
-        {
-          apiGroups = [ "" ];
-          resources = [ "nodes" ];
-          verbs = [ "list" "watch" ];
-        }
-        {
-          apiGroups = [ "" ];
-          resources = [ "nodes/status" ];
-          verbs = [ "patch" ];
-        }];
-      };
-
-      flannel-crb = {
-        apiVersion = "rbac.authorization.k8s.io/v1";
-        kind = "ClusterRoleBinding";
-        metadata = { name = "flannel"; };
-        roleRef = {
-          apiGroup = "rbac.authorization.k8s.io";
-          kind = "ClusterRole";
-          name = "flannel";
-        };
-        subjects = [{
-          kind = "User";
-          name = "flannel-client";
-        }];
-      };
-
-    };
   };
 
   meta.buildDocsInSandbox = false;

@@ -243,33 +243,6 @@ in
           mapAttrs mkSpec cfg.certs;
       };
 
-      #TODO: Get rid of kube-addon-manager in the future for the following reasons
-      # - it is basically just a shell script wrapped around kubectl
-      # - it assumes that it is clusterAdmin or can gain clusterAdmin rights through serviceAccount
-      # - it is designed to be used with k8s system components only
-      # - it would be better with a more Nix-oriented way of managing addons
-      systemd.services.kube-addon-manager = mkIf top.addonManager.enable (mkMerge [{
-        environment.KUBECONFIG = with cfg.certs.addonManager;
-          top.lib.mkKubeConfig "addon-manager" {
-            server = top.apiserverAddress;
-            certFile = cert;
-            keyFile = key;
-          };
-        }
-
-        (optionalAttrs (top.addonManager.bootstrapAddons != {}) {
-          serviceConfig.PermissionsStartOnly = true;
-          preStart = with pkgs;
-          let
-            files = mapAttrsToList (n: v: writeText "${n}.json" (builtins.toJSON v))
-              top.addonManager.bootstrapAddons;
-          in
-          ''
-            export KUBECONFIG=${clusterAdminKubeconfig}
-            ${kubectl}/bin/kubectl apply -f ${concatStringsSep " \\\n -f " files}
-          '';
-        })]);
-
       environment.etc.${cfg.etcClusterAdminKubeconfig}.source = mkIf (!isNull cfg.etcClusterAdminKubeconfig)
         clusterAdminKubeconfig;
 
@@ -339,7 +312,7 @@ in
         trustedCaFile = mkDefault caCert;
       };
       networking.extraHosts = mkIf (config.services.etcd.enable) ''
-        127.0.0.1 etcd.${top.addons.dns.clusterDomain} etcd.local
+        127.0.0.1 etcd.local
       '';
 
       services.flannel = with cfg.certs.flannelClient; {

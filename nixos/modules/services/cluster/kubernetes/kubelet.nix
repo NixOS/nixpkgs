@@ -77,9 +77,8 @@ in
 
     clusterDomain = mkOption {
       description = "Use alternative domain.";
-      default = config.services.kubernetes.addons.dns.clusterDomain;
-      defaultText = literalExpression "config.${options.services.kubernetes.addons.dns.clusterDomain}";
-      type = str;
+      default = null;
+      type = nullOr str;
     };
 
     clientCaFile = mkOption {
@@ -309,7 +308,7 @@ in
               "--client-ca-file=${cfg.clientCaFile}"} \
             ${optionalString (cfg.clusterDns != "")
               "--cluster-dns=${cfg.clusterDns}"} \
-            ${optionalString (cfg.clusterDomain != "")
+            ${optionalString (cfg.clusterDomain != null)
               "--cluster-domain=${cfg.clusterDomain}"} \
             --cni-conf-dir=${cniConfig} \
             ${optionalString (cfg.featureGates != [])

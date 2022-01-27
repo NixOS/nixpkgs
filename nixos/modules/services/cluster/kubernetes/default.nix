@@ -103,7 +103,7 @@ let
 in {
 
   imports = [
-    (mkRemovedOptionModule [ "services" "kubernetes" "addons" "dashboard" ] "Removed due to it being an outdated version")
+    (mkRemovedOptionModule [ "services" "kubernetes" "addons" ] "Removed ...")
     (mkRemovedOptionModule [ "services" "kubernetes" "verbose" ] "")
   ];
 
@@ -114,8 +114,8 @@ in {
       description = ''
         Kubernetes role that this machine should take.
 
-        Master role will enable etcd, apiserver, scheduler, controller manager
-        addon manager, flannel and proxy services.
+        Master role will enable etcd, apiserver, scheduler, controller manager,
+        flannel and proxy services.
         Node role will enable flannel, docker, kubelet and proxy services.
       '';
       default = [];
@@ -215,7 +215,6 @@ in {
       services.kubernetes.apiserver.enable = mkDefault true;
       services.kubernetes.scheduler.enable = mkDefault true;
       services.kubernetes.controllerManager.enable = mkDefault true;
-      services.kubernetes.addonManager.enable = mkDefault true;
       services.kubernetes.proxy.enable = mkDefault true;
       services.etcd.enable = true; # Cannot mkDefault because of flannel default options
       services.kubernetes.kubelet = {
@@ -279,8 +278,7 @@ in {
         cfg.scheduler.enable ||
         cfg.controllerManager.enable ||
         cfg.kubelet.enable ||
-        cfg.proxy.enable ||
-        cfg.addonManager.enable
+        cfg.proxy.enable
     ) {
       systemd.targets.kubernetes = {
         description = "Kubernetes";
@@ -301,9 +299,6 @@ in {
         createHome = true;
       };
       users.groups.kubernetes.gid = config.ids.gids.kubernetes;
-
-      # dns addon is enabled by default
-      services.kubernetes.addons.dns.enable = mkDefault true;
 
       services.kubernetes.apiserverAddress = mkDefault ("https://${if cfg.apiserver.advertiseAddress != null
                           then cfg.apiserver.advertiseAddress
