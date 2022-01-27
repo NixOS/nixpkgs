@@ -135,7 +135,7 @@ let
     };
 
     aarch64-darwin = x86_64-darwin;
-  }.${system} or (throw "Unsupported system: ${system}");
+  }.${system} or { src = throw "Unsupported system: ${system}"; };
 in
 stdenv.mkDerivation ({
   pname = "breitbandmessung";
