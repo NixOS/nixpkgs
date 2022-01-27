@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPackages, fetchurl, pkg-config, pcre, libxml2, zlib, bzip2, which, file
+{ lib, stdenv, buildPackages, fetchurl, pkg-config, pcre2, libxml2, zlib, bzip2, which, file
 , openssl
 , enableDbi ? false, libdbi
 , enableMagnet ? false, lua5_1
@@ -9,25 +9,16 @@
 , enableWebDAV ? false, sqlite, libuuid
 , enableExtendedAttrs ? false, attr
 , perl
-, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
   pname = "lighttpd";
-  version = "1.4.63";
+  version = "1.4.64";
 
   src = fetchurl {
     url = "https://download.lighttpd.net/lighttpd/releases-${lib.versions.majorMinor version}.x/${pname}-${version}.tar.xz";
-    sha256 = "1fgasvif13gvzz4rf5mjpy28cbw9fs4ymhx18494mxgb080pzvra";
+    sha256 = "sha256-4Uidn6dJb78uBxwzi1k7IwDTjCPx5ZZ+UsnvSC4bDiY=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "CVE-2022-22707.patch";
-      url = "https://github.com/lighttpd/lighttpd1.4/commit/8c62a890e23f5853b1a562b03fe3e1bccc6e7664.patch";
-      sha256 = "0zm2khgllsd1ivh9m7sisfsyrdfz45zsmiwl963wf0gn8m100gzk";
-    })
-  ];
 
   postPatch = ''
     patchShebangs tests
@@ -42,7 +33,7 @@ stdenv.mkDerivation rec {
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ pcre pcre.dev libxml2 zlib bzip2 which file openssl ]
+  buildInputs = [ pcre2 pcre2.dev libxml2 zlib bzip2 which file openssl ]
              ++ lib.optional enableDbi libdbi
              ++ lib.optional enableMagnet lua5_1
              ++ lib.optional enableMysql libmysqlclient
@@ -64,7 +55,7 @@ stdenv.mkDerivation rec {
                 ++ lib.optional enableExtendedAttrs "--with-attr";
 
   preConfigure = ''
-    export PATH=$PATH:${pcre.dev}/bin
+    export PATH=$PATH:${pcre2.dev}/bin
     sed -i "s:/usr/bin/file:${file}/bin/file:g" configure
   '';
 
