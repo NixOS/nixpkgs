@@ -4125,6 +4125,10 @@ in {
 
   jaxlib = self.jaxlib-build;
 
+  jaxlibWithCuda = self.jaxlib-build.override {
+    cudaSupport = true;
+  };
+
   JayDeBeApi = callPackage ../development/python-modules/JayDeBeApi { };
 
   jc = callPackage ../development/python-modules/jc { };
