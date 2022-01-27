@@ -16,6 +16,7 @@
 , nodePackages
 , xar
 , cpio
+, makeWrapper
 , enableRectOverlay ? false }:
 
 let 
@@ -132,10 +133,10 @@ let
 
       src = fetchurl {
         url = "https://statics.teams.cdn.office.net/production-osx/${version}/Teams_osx.pkg";
-        sha256 = "TlQEYNvIkQ7drkS2SInTe26iYRdf3u3kptRcgQMEVqk=";
+        sha256 = "1mg6a3b3954w4xy5rlcrwxczymygl61dv2rxqp45sjcsh3hp39q0";
       };
 
-      buildInputs = [ xar cpio ];
+      buildInputs = [ xar cpio makeWrapper ];
 
       unpackPhase = ''
         xar -xf $src
@@ -151,7 +152,7 @@ let
         runHook preInstallPhase
         mkdir -p $out/{Applications/${appName},bin}
         cp -R . $out/Applications/${appName}
-        ln -s $out/Applications/${appName}/Contents/MacOS/Teams $out/bin/teams
+        makeWrapper $out/Applications/${appName}/Contents/MacOS/Teams $out/bin/teams
         runHook postInstallPhase
       '';
     };
