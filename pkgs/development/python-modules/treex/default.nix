@@ -5,6 +5,7 @@
 , fetchFromGitHub
 , flax
 , hypothesis
+, jaxlib
 , keras
 , lib
 , poetry-core
@@ -37,6 +38,8 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     poetry-core
   ];
+
+  buildInputs = [ jaxlib ];
 
   propagatedBuildInputs = [
     einops
