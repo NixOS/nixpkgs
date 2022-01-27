@@ -8474,7 +8474,9 @@ with pkgs;
 
   opae = callPackage ../development/libraries/opae { };
 
-  opentelemetry-collector = callPackage ../tools/misc/opentelemetry-collector { };
+  opentelemetry-collector = callPackage ../tools/misc/opentelemetry-collector {
+      buildGoModule = buildGo117Module;
+  };
 
   opentracing-cpp = callPackage ../development/libraries/opentracing-cpp { };
 
