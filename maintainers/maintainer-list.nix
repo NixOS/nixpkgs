@@ -6536,6 +6536,12 @@
     githubId = 787421;
     name = "Kevin Quick";
   };
+  kradalby = {
+    name = "Kristoffer Dalby";
+    email = "kristoffer@dalby.cc";
+    github = "kradalby";
+    githubId = 98431;
+  };
   kraem = {
     email = "me@kraem.xyz";
     github = "kraem";
