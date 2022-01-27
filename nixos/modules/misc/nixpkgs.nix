@@ -94,11 +94,11 @@ let
             };
       in
       import ../../.. ({
-        inherit (cfg) config overlays;
+        inherit (cfg) lib config overlays;
       } // systemArgs)
     else
       import ../../.. {
-        inherit (cfg) config overlays localSystem crossSystem;
+        inherit (cfg) lib config overlays localSystem crossSystem;
       };
 
   finalPkgs = if opt.pkgs.isDefined then cfg.pkgs.appendOverlays cfg.overlays else defaultPkgs;
@@ -117,7 +117,7 @@ in
     pkgs = mkOption {
       defaultText = literalExpression ''
         import "''${nixos}/.." {
-          inherit (cfg) config overlays localSystem crossSystem;
+          inherit (cfg) lib config overlays localSystem crossSystem;
         }
       '';
       type = pkgsType;
@@ -152,6 +152,26 @@ in
 
         Note that using a distinct version of Nixpkgs with NixOS may
         be an unexpected source of problems. Use this option with care.
+      '';
+    };
+
+    lib = mkOption {
+      default = lib;
+      defaultText = literalMD "the `lib` argument passed to modules";
+      example = literalExpression ''
+        lib.extend (final: prev: {
+          # Make lib.foo available in package expressions
+          foo = "bar";
+        })
+      '';
+      type = types.unique
+        { message = "`lib` is not suitable for plain attrset merging, as it does not interact well with the `extend` function. Any fixes to `lib` should be applied by invoking `extend` on some original `lib` value."; }
+        (types.lazyAttrsOf types.raw);
+      description = lib.mdDoc ''
+        The library used in nixpkgs. You shouldn't need to set this
+        unless you know what you're doing.
+
+        Ignored when `nixpkgs.pkgs` is set.
       '';
     };
 
