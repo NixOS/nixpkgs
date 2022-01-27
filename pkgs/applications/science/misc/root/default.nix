@@ -120,7 +120,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-Drpath=ON"
-    "-DCMAKE_CXX_STANDARD=17"
+    "-DCMAKE_CXX_STANDARD=11"
     "-DCMAKE_INSTALL_BINDIR=bin"
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
@@ -176,7 +176,8 @@ stdenv.mkDerivation rec {
   postInstall = ''
     for prog in rootbrowse rootcp rooteventselector rootls rootmkdir rootmv rootprint rootrm rootslimtree; do
       wrapProgram "$out/bin/$prog" \
-        --prefix PYTHONPATH : "$out/lib"
+        --set PYTHONPATH "$out/lib" \
+        --set LD_LIBRARY_PATH "$out/lib"
     done
   '';
 
