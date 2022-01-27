@@ -33774,6 +33774,8 @@ with pkgs;
 
   vnote = libsForQt5.callPackage ../applications/office/vnote { };
 
+  sshportal = callPackage ../servers/sshportal { };
+
   ssh-audit = callPackage ../tools/security/ssh-audit { };
 
   ssh-tools = callPackage ../applications/misc/ssh-tools { };
