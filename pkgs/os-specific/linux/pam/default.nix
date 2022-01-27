@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-IB1AcwsRNbGzzeoJ8sKKxjTXMYHM0Bcs7d7jZJxXkvw=";
   };
 
+  patches = [ ./suid-wrapper-path.patch ];
+
   outputs = [ "out" "doc" "man" /* "modules" */ ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
