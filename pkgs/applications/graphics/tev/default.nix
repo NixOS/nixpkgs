@@ -5,14 +5,14 @@
 
 stdenv.mkDerivation rec {
   pname = "tev";
-  version = "1.19";
+  version = "1.22";
 
   src = fetchFromGitHub {
     owner = "Tom94";
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-laP47xOND6PMA6dwTcCupcTIW+9zCaxO6rHzvDSL9JU=";
+    sha256 = "sha256-WLDQaN6wHnadvp0JyUzlcZVNiSbFudmmBSNYRMaE6U4=";
   };
 
   nativeBuildInputs = [ cmake wrapGAppsHook ];
@@ -53,6 +53,7 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/Tom94/tev/releases/tag/v${version}";
     license = licenses.bsd3;
     platforms = platforms.unix;
+    badPlatforms = [ "aarch64-linux" ]; # fails on Hydra since forever
     maintainers = with maintainers; [ ];
   };
 }
