@@ -34167,8 +34167,6 @@ with pkgs;
 
   tomb = callPackage ../os-specific/linux/tomb {};
 
-  tomboy = callPackage ../applications/misc/tomboy { };
-
   imatix_gsl = callPackage ../development/tools/imatix_gsl {};
 
   sccache = callPackage ../development/tools/misc/sccache {
