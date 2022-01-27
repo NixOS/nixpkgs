@@ -43,7 +43,7 @@ python3Packages.buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://timetagger.app";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     description = "Tag your time, get the insight";
     maintainers = with maintainers; [ matthiasbeyer ];
   };
