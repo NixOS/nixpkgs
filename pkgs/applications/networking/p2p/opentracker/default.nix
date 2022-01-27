@@ -81,6 +81,7 @@ stdenv.mkDerivation {
 
   passthru.tests = {
     bittorrent-integration = nixosTests.bittorrent;
+    inherit (nixosTests) opentracker;
   };
 
   passthru.updateScript = ./update.sh;
