@@ -80,7 +80,7 @@ let
   makeStdenv =
     { cc, fetchurl, extraPath ? [], overrides ? (self: super: { }), extraNativeBuildInputs ? [] }:
 
-    import ../generic {
+    import ../generic lib {
       buildPlatform = localSystem;
       hostPlatform = localSystem;
       targetPlatform = localSystem;

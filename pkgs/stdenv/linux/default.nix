@@ -86,7 +86,7 @@ let
 
     let
 
-      thisStdenv = import ../generic {
+      thisStdenv = import ../generic lib {
         name = "${name}-stdenv-linux";
         buildPlatform = localSystem;
         hostPlatform = localSystem;
@@ -390,7 +390,7 @@ in
   # binutils built.
   (prevStage: {
     inherit config overlays;
-    stdenv = import ../generic rec {
+    stdenv = import ../generic lib rec {
       name = "stdenv-linux";
 
       buildPlatform = localSystem;

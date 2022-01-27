@@ -1,4 +1,6 @@
-let lib = import ../../../lib; stdenv-overridable = lib.makeOverridable (
+lib:
+
+let stdenv-overridable = lib.makeOverridable (
 
 argsStdenv@{ name ? "stdenv", preHook ? "", initialPath
 

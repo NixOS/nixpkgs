@@ -200,7 +200,7 @@ in
       curl = bootstrapTools;
     };
 
-    stdenv = import ../generic {
+    stdenv = import ../generic lib {
       name = "stdenv-freebsd-boot-1";
       buildPlatform = localSystem;
       hostPlatform = localSystem;
@@ -220,7 +220,7 @@ in
 
     inherit (prevStage) bootstrapTools;
 
-    stdenv = import ../generic {
+    stdenv = import ../generic lib {
       name = "stdenv-freebsd-boot-0";
       inherit config;
       initialPath = [ prevStage.bootstrapTools ];
@@ -234,7 +234,7 @@ in
 
   (prevStage: {
     inherit config overlays;
-    stdenv = import ../generic rec {
+    stdenv = import ../generic lib rec {
       name = "stdenv-freebsd-boot-3";
       inherit config;
 

@@ -146,7 +146,7 @@ rec {
         '' + mkExtraBuildCommands cc;
       });
 
-      thisStdenv = import ../generic {
+      thisStdenv = import ../generic lib {
         name = "${name}-stdenv-darwin";
 
         inherit config shell extraBuildInputs;
@@ -665,7 +665,7 @@ rec {
         inherit binutils binutils-unwrapped;
       };
     in
-    import ../generic rec {
+    import ../generic lib rec {
       name = "stdenv-darwin";
 
       inherit config;

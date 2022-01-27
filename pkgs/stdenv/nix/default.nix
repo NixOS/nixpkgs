@@ -10,7 +10,7 @@ bootStages ++ [
   (prevStage: {
     inherit config overlays;
 
-    stdenv = import ../generic rec {
+    stdenv = import ../generic lib rec {
       inherit config;
 
       inherit (prevStage.stdenv) buildPlatform hostPlatform targetPlatform;
