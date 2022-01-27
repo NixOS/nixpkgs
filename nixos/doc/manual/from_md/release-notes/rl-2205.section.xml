@@ -185,6 +185,15 @@
           <link xlink:href="options.html#opt-services.rstudio-server.enable">services.rstudio-server</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/juanfont/headscale">headscale</link>,
+          an Open Source implementation of the
+          <link xlink:href="https://tailscale.io">Tailscale</link>
+          Control Server. Available as
+          <link xlink:href="options.html#opt-services.headscale.enable">services.headscale</link>
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.05-incompatibilities">
