@@ -11424,6 +11424,8 @@ with pkgs;
 
   undistract-me = callPackage ../shells/bash/undistract-me { };
 
+  carapace = callPackage ../shells/carapace { };
+
   dash = callPackage ../shells/dash { };
 
   dasht = callPackage ../tools/misc/dasht { };
