@@ -98,7 +98,7 @@ in rec {
 
     description = mkOption {
       default = "";
-      type = types.str;
+      type = types.singleLineStr;
       description = "Description of this unit used in systemd messages and progress indicators.";
     };
 
