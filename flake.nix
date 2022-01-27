@@ -22,7 +22,7 @@
         nixos = import ./nixos/lib { lib = final; };
 
         nixosSystem = args:
-          import ./nixos/lib/eval-config.nix (args // {
+          import ./nixos/lib/eval-config.nix ({ lib = final; } // args // {
             modules = args.modules ++ [ {
               system.nixos.versionSuffix =
                 ".${final.substring 0 8 (self.lastModifiedDate or self.lastModified or "19700101")}.${self.shortRev or "dirty"}";
