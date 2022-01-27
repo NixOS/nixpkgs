@@ -213,6 +213,19 @@
       </listitem>
       <listitem>
         <para>
+          <literal>pkgs.ghc.withPackages</literal> as well as
+          <literal>haskellPackages.ghcWithPackages</literal> etc. now
+          needs be overridden directly, as opposed to overriding the
+          result of calling it. Additionally, the
+          <literal>withLLVM</literal> parameter has been renamed to
+          <literal>useLLVM</literal>. So instead of
+          <literal>(ghc.withPackages (p: [])).override { withLLVM = true; }</literal>,
+          one needs to use
+          <literal>(ghc.withPackages.override { useLLVM = true; }) (p: [])</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>pkgs.emacsPackages.orgPackages</literal> is removed
           because org elpa is deprecated. The packages in the top level
           of <literal>pkgs.emacsPackages</literal>, such as org and
