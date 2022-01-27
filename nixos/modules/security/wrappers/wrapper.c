@@ -170,6 +170,7 @@ int readlink_malloc(const char *p, char **ret) {
 }
 
 int main(int argc, char **argv) {
+    ASSERT(argc >= 1);
     char *self_path = NULL;
     int self_path_size = readlink_malloc("/proc/self/exe", &self_path);
     if (self_path_size < 0) {
