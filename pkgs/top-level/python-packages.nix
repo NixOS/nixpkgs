@@ -9973,6 +9973,8 @@ in {
 
   txtorcon = callPackage ../development/python-modules/txtorcon { };
 
+  txzmq = callPackage ../development/python-modules/txzmq { };
+
   typecode = callPackage ../development/python-modules/typecode { };
 
   typecode-libmagic = callPackage ../development/python-modules/typecode/libmagic.nix {
