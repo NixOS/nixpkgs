@@ -107,7 +107,10 @@ rec {
   # Same as `makeExtensible` but the name of the extending attribute is
   # customized.
   makeExtensibleWithCustomName = extenderName: rattrs:
-    fix' rattrs // {
-      ${extenderName} = f: makeExtensibleWithCustomName extenderName (extends f rattrs);
-   };
+    let
+      self = rattrs self // {
+        ${extenderName} = f: makeExtensibleWithCustomName extenderName (extends f rattrs);
+        __unfix__ = rattrs; # TODO: remove this?
+      };
+    in self;
 }
