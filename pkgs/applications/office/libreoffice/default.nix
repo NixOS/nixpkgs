@@ -1,22 +1,111 @@
-{ stdenv, fetchurl, lib, pam, python3, libxslt, perl, ArchiveZip, box2d, gettext
-, IOCompress, zlib, libjpeg, expat, freetype, libwpd
-, libxml2, db, curl, fontconfig, libsndfile, neon
-, bison, flex, zip, unzip, gtk3, libmspack, getopt, file, cairo, which
-, icu, boost, jdk, ant, cups, xorg, fontforge, jre_minimal
-, openssl, gperf, cppunit, poppler, util-linux
-, librsvg, libGLU, libGL, bsh, CoinMP, libwps, libabw, libmysqlclient
-, autoconf, automake, openldap, bash, hunspell, librdf_redland, nss, nspr
-, libwpg, dbus-glib, clucene_core, libcdr, lcms
-, unixODBC, mdds, sane-backends, mythes, libexttextcat, libvisio
-, fontsConf, pkg-config, bluez5, libtool, carlito
-, libatomic_ops, graphite2, harfbuzz, libodfgen, libzmf
-, librevenge, libe-book, libmwaw, glm, gst_all_1
-, gdb, commonsLogging, librdf_rasqal, wrapGAppsHook
-, gnome, glib, ncurses, libepoxy, gpgme, undmg
+{ stdenv
+, fetchurl
+, lib
+, pam
+, python3
+, libxslt
+, perl
+, ArchiveZip
+, box2d
+, gettext
+, IOCompress
+, zlib
+, libjpeg
+, expat
+, freetype
+, libwpd
+, libxml2
+, db
+, curl
+, fontconfig
+, libsndfile
+, neon
+, bison
+, flex
+, zip
+, unzip
+, gtk3
+, libmspack
+, getopt
+, file
+, cairo
+, which
+, icu
+, boost
+, jdk
+, ant
+, cups
+, xorg
+, fontforge
+, jre_minimal
+, openssl
+, gperf
+, cppunit
+, poppler
+, util-linux
+, librsvg
+, libGLU
+, libGL
+, bsh
+, CoinMP
+, libwps
+, libabw
+, libmysqlclient
+, autoconf
+, automake
+, openldap
+, bash
+, hunspell
+, librdf_redland
+, nss
+, nspr
+, libwpg
+, dbus-glib
+, clucene_core
+, libcdr
+, lcms
+, unixODBC
+, mdds
+, sane-backends
+, mythes
+, libexttextcat
+, libvisio
+, fontsConf
+, pkg-config
+, bluez5
+, libtool
+, carlito
+, libatomic_ops
+, graphite2
+, harfbuzz
+, libodfgen
+, libzmf
+, librevenge
+, libe-book
+, libmwaw
+, glm
+, gst_all_1
+, gdb
+, commonsLogging
+, librdf_rasqal
+, wrapGAppsHook
+, gnome
+, glib
+, ncurses
+, libepoxy
+, gpgme
+, undmg
 , langs ? [ "ca" "cs" "da" "de" "en-GB" "en-US" "eo" "es" "fr" "hu" "it" "ja" "nl" "pl" "pt" "pt-BR" "ro" "ru" "sl" "zh-CN" ]
 , withHelp ? true
-, kdeIntegration ? false, mkDerivation ? null, qtbase ? null, qtx11extras ? null
-, ki18n ? null, kconfig ? null, kcoreaddons ? null, kio ? null, kwindowsystem ? null
+, kdeIntegration ? false
+, mkDerivation ? null
+, qtbase ? null
+, qtx11extras ? null
+, ki18n ? null
+, kconfig ? null
+, kcoreaddons ? null
+, kio ? null
+, kwindowsystem ? null
 , wrapQtAppsHook ? null
 , variant ? "fresh"
 } @ args:
@@ -41,84 +130,86 @@ let
   pname = "libreoffice";
 
   meta = with lib; {
-      description = "Comprehensive, professional-quality productivity suite, a variant of openoffice.org";
-      homepage = "https://libreoffice.org/";
-      license = licenses.lgpl3;
-      maintainers = with maintainers; [ raskin ];
-      platforms = platforms.linux ++ platforms.darwin;
+    description = "Comprehensive, professional-quality productivity suite, a variant of openoffice.org";
+    homepage = "https://libreoffice.org/";
+    license = licenses.lgpl3;
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.linux ++ platforms.darwin;
   };
 
 
   srcs = {
     third_party =
-      map (x : ((fetchurl {inherit (x) url sha256 name;}) // {inherit (x) md5name md5;}))
-      (importVariant "download.nix" ++ [
-        (rec {
-          name = "unowinreg.dll";
-          url = "https://dev-www.libreoffice.org/extern/${md5name}";
-          sha256 = "1infwvv1p6i21scywrldsxs22f62x85mns4iq8h6vr6vlx3fdzga";
-          md5 = "185d60944ea767075d27247c3162b3bc";
-          md5name = "${md5}-${name}";
-        })
-      ]);
+      map (x: ((fetchurl { inherit (x) url sha256 name; }) // { inherit (x) md5name md5; }))
+        (importVariant "download.nix" ++ [
+          (rec {
+            name = "unowinreg.dll";
+            url = "https://dev-www.libreoffice.org/extern/${md5name}";
+            sha256 = "1infwvv1p6i21scywrldsxs22f62x85mns4iq8h6vr6vlx3fdzga";
+            md5 = "185d60944ea767075d27247c3162b3bc";
+            md5name = "${md5}-${name}";
+          })
+        ]);
 
     translations = primary-src.translations;
     help = primary-src.help;
   };
   linux = (mkDrv rec {
     inherit pname version meta;
-  
+
     inherit (primary-src) src;
-  
+
     outputs = [ "out" "dev" ];
-  
+
     NIX_CFLAGS_COMPILE = [
       "-I${librdf_rasqal}/include/rasqal" # librdf_redland refers to rasqal.h instead of rasqal/rasqal.h
       "-fno-visibility-inlines-hidden" # https://bugs.documentfoundation.org/show_bug.cgi?id=78174#c10
     ];
-  
+
     tarballPath = "external/tarballs";
-  
+
     postUnpack = ''
       mkdir -v $sourceRoot/${tarballPath}
     '' + (lib.flip lib.concatMapStrings srcs.third_party (f: ''
-        ln -sfv ${f} $sourceRoot/${tarballPath}/${f.md5name}
-        ln -sfv ${f} $sourceRoot/${tarballPath}/${f.name}
-      ''))
+      ln -sfv ${f} $sourceRoot/${tarballPath}/${f.md5name}
+      ln -sfv ${f} $sourceRoot/${tarballPath}/${f.name}
+    ''))
     + ''
       ln -sv ${srcs.help} $sourceRoot/${tarballPath}/${srcs.help.name}
       ln -svf ${srcs.translations} $sourceRoot/${tarballPath}/${srcs.translations.name}
       tar -xf ${srcs.help}
       tar -xf ${srcs.translations}
     '';
-  
+
     patches = [ ./skip-failed-test-with-icu70.patch ];
-  
+
     ### QT/KDE
     #
     # We have to resort to the ugly patching of configure.ac as it assumes that
     # the first directory that contains headers and libraries during the check
     # contains all the relevant headers/libs which doesn't work with both as they
     # are in multiple directories due to each having their own derivation.
-    postPatch = let
-      inc = e: path:
-        "${lib.getDev e}/include/KF5/${path}";
-      libs = list:
-        lib.concatMapStringsSep " " (e: "-L${lib.getLib e}/lib") list;
-    in ''
-      substituteInPlace shell/source/unix/exec/shellexec.cxx \
-        --replace /usr/bin/xdg-open ${if kdeIntegration then "kde-open5" else "xdg-open"}
-  
-      # configure checks for header 'gpgme++/gpgmepp_version.h',
-      # and if it is found (no matter where) uses a hardcoded path
-      # in what presumably is an effort to make it possible to write
-      # '#include <context.h>' instead of '#include <gpgmepp/context.h>'.
-      #
-      # Fix this path to point to where the headers can actually be found instead.
-      substituteInPlace configure.ac --replace \
-        'GPGMEPP_CFLAGS=-I/usr/include/gpgme++' \
-        'GPGMEPP_CFLAGS=-I${gpgme.dev}/include/gpgme++'
-    '' + lib.optionalString kdeIntegration ''
+    postPatch =
+      let
+        inc = e: path:
+          "${lib.getDev e}/include/KF5/${path}";
+        libs = list:
+          lib.concatMapStringsSep " " (e: "-L${lib.getLib e}/lib") list;
+      in
+      ''
+        substituteInPlace shell/source/unix/exec/shellexec.cxx \
+          --replace /usr/bin/xdg-open ${if kdeIntegration then "kde-open5" else "xdg-open"}
+
+        # configure checks for header 'gpgme++/gpgmepp_version.h',
+        # and if it is found (no matter where) uses a hardcoded path
+        # in what presumably is an effort to make it possible to write
+        # '#include <context.h>' instead of '#include <gpgmepp/context.h>'.
+        #
+        # Fix this path to point to where the headers can actually be found instead.
+        substituteInPlace configure.ac --replace \
+          'GPGMEPP_CFLAGS=-I/usr/include/gpgme++' \
+          'GPGMEPP_CFLAGS=-I${gpgme.dev}/include/gpgme++'
+      '' + lib.optionalString kdeIntegration ''
         substituteInPlace configure.ac \
           --replace '$QT5INC'             ${qtbase.dev}/include \
           --replace '$QT5LIB'             ${qtbase.out}/lib \
@@ -132,28 +223,28 @@ let
           --replace '$kf5_incdir/KWindow' ${inc kwindowsystem "KWindow"} \
           --replace '$kf5_incdir/KIO'     ${inc kio "KIO"} \
           --replace '-L$kf5_libdir '      '${libs [ kconfig kcoreaddons ki18n kio kwindowsystem ]} '
-    '';
-  
+      '';
+
     dontUseCmakeConfigure = true;
     dontUseCmakeBuildDir = true;
-  
+
     preConfigure = ''
       configureFlagsArray=(
         "--with-parallelism=$NIX_BUILD_CORES"
         "--with-lang=${langsSpaces}"
       );
-  
+
       chmod a+x ./bin/unpack-sources
       patchShebangs .
-  
+
       # This is required as some cppunittests require fontconfig configured
       cp "${fontsConf}" fonts.conf
       sed -e '/include/i<include>${carlito}/etc/fonts/conf.d</include>' -i fonts.conf
       export FONTCONFIG_FILE="$PWD/fonts.conf"
-  
+
       NOCONFIGURE=1 ./autogen.sh
     '';
-  
+
     postConfigure =
       # fetch_Download_item tries to interpret the name as a variable name, let it do so...
       ''
@@ -272,54 +363,54 @@ let
       ''
       # This to avoid using /lib:/usr/lib at linking
       + ''
-      sed -i '/gb_LinkTarget_LDFLAGS/{ n; /rpath-link/d;}' solenv/gbuild/platform/unxgcc.mk
-  
-      find -name "*.cmd" -exec sed -i s,/lib:/usr/lib,, {} \;
+        sed -i '/gb_LinkTarget_LDFLAGS/{ n; /rpath-link/d;}' solenv/gbuild/platform/unxgcc.mk
+
+        find -name "*.cmd" -exec sed -i s,/lib:/usr/lib,, {} \;
       '';
-  
+
     makeFlags = [ "SHELL=${bash}/bin/bash" ];
-  
+
     enableParallelBuilding = true;
-  
+
     buildPhase = ''
       make build-nocheck
     '';
-  
+
     doCheck = true;
-  
+
     # It installs only things to $out/lib/libreoffice
     postInstall = ''
       mkdir -p $out/bin $out/share/desktop
-  
+
       mkdir -p "$out/share/gsettings-schemas/collected-for-libreoffice/glib-2.0/schemas/"
-  
+
       for a in sbase scalc sdraw smath swriter simpress soffice unopkg; do
         ln -s $out/lib/libreoffice/program/$a $out/bin/$a
       done
-  
+
       ln -s $out/bin/soffice $out/bin/libreoffice
       ln -s $out/lib/libreoffice/share/xdg $out/share/applications
-  
+
       for f in $out/share/applications/*.desktop; do
         substituteInPlace "$f" \
           --replace "Exec=libreofficedev${major}.${minor}" "Exec=libreoffice" \
           --replace "Exec=libreoffice${major}.${minor}"    "Exec=libreoffice"
       done
-  
+
       cp -r sysui/desktop/icons  "$out/share"
       sed -re 's@Icon=libreoffice(dev)?[0-9.]*-?@Icon=@' -i "$out/share/applications/"*.desktop
-  
+
       mkdir -p $dev
       cp -r include $dev
     '' + lib.optionalString kdeIntegration ''
-        for prog in $out/bin/*
-        do
-          wrapQtApp $prog
-        done
+      for prog in $out/bin/*
+      do
+        wrapQtApp $prog
+      done
     '';
-  
+
     dontWrapQtApps = true;
-  
+
     configureFlags = [
       (if withHelp then "" else "--without-help")
       "--with-boost=${boost.dev}"
@@ -342,17 +433,17 @@ let
       "--with-system-libwps"
       "--with-system-openldap"
       "--with-system-coinmp"
-  
+
       # Without these, configure does not finish
       "--without-junit"
-  
+
       # Schema files for validation are not included in the source tarball
       "--without-export-validation"
-  
+
       # We do tarball prefetching ourselves
       "--disable-fetch-external"
       "--enable-build-opensymbol"
-  
+
       # I imagine this helps. Copied from go-oo.
       # Modified on every upgrade, though
       "--disable-odk"
@@ -361,7 +452,7 @@ let
       "--without-fonts"
       "--without-myspell-dicts"
       "--without-doxygen"
-  
+
       # TODO: package these as system libraries
       "--with-system-beanshell"
       "--without-system-hsqldb"
@@ -385,60 +476,144 @@ let
       "--enable-qt5"
       "--enable-gtk3-kde5"
     ];
-  
+
     checkPhase = ''
       make unitcheck
       make slowcheck
     '';
-  
+
     nativeBuildInputs = [
-      gdb fontforge autoconf automake bison pkg-config libtool jdk
+      gdb
+      fontforge
+      autoconf
+      automake
+      bison
+      pkg-config
+      libtool
+      jdk
     ] ++ lib.optional (!kdeIntegration) wrapGAppsHook
-      ++ lib.optional kdeIntegration wrapQtAppsHook;
-  
+    ++ lib.optional kdeIntegration wrapQtAppsHook;
+
     buildInputs = with xorg;
-      [ ant ArchiveZip boost box2d cairo clucene_core
-        IOCompress cppunit cups curl db dbus-glib expat file flex fontconfig
-        freetype getopt gperf gtk3
-        hunspell icu jre' lcms libcdr libexttextcat unixODBC libjpeg
-        libmspack librdf_redland librsvg libsndfile libvisio libwpd libwpg libX11
-        libXaw libXext libXi libXinerama libxml2 libxslt libXtst
-        libXdmcp libpthreadstubs libGLU libGL mythes
-        glib libmysqlclient
-        neon nspr nss openldap openssl pam perl pkg-config poppler
-        python3 sane-backends unzip which zip zlib
-        mdds bluez5 libwps libabw libzmf
-        libxshmfence libatomic_ops graphite2 harfbuzz gpgme util-linux
-        librevenge libe-book libmwaw glm ncurses libepoxy
-        libodfgen CoinMP librdf_rasqal gnome.adwaita-icon-theme gettext
+      [
+        ant
+        ArchiveZip
+        boost
+        box2d
+        cairo
+        clucene_core
+        IOCompress
+        cppunit
+        cups
+        curl
+        db
+        dbus-glib
+        expat
+        file
+        flex
+        fontconfig
+        freetype
+        getopt
+        gperf
+        gtk3
+        hunspell
+        icu
+        jre'
+        lcms
+        libcdr
+        libexttextcat
+        unixODBC
+        libjpeg
+        libmspack
+        librdf_redland
+        librsvg
+        libsndfile
+        libvisio
+        libwpd
+        libwpg
+        libX11
+        libXaw
+        libXext
+        libXi
+        libXinerama
+        libxml2
+        libxslt
+        libXtst
+        libXdmcp
+        libpthreadstubs
+        libGLU
+        libGL
+        mythes
+        glib
+        libmysqlclient
+        neon
+        nspr
+        nss
+        openldap
+        openssl
+        pam
+        perl
+        pkg-config
+        poppler
+        python3
+        sane-backends
+        unzip
+        which
+        zip
+        zlib
+        mdds
+        bluez5
+        libwps
+        libabw
+        libzmf
+        libxshmfence
+        libatomic_ops
+        graphite2
+        harfbuzz
+        gpgme
+        util-linux
+        librevenge
+        libe-book
+        libmwaw
+        glm
+        ncurses
+        libepoxy
+        libodfgen
+        CoinMP
+        librdf_rasqal
+        gnome.adwaita-icon-theme
+        gettext
       ]
       ++ (with gst_all_1; [
         gstreamer
-        gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly
+        gst-plugins-base
+        gst-plugins-good
+        gst-plugins-bad
+        gst-plugins-ugly
         gst-libav
       ])
       ++ lib.optional kdeIntegration [ qtbase qtx11extras kcoreaddons kio ];
-  
+
     passthru = {
       inherit srcs;
       jdk = jre';
     };
-  
+
     requiredSystemFeatures = [ "big-parallel" ];
-  
+
   }).overrideAttrs ((importVariant "override.nix") (args // { inherit kdeIntegration; }));
 
   inherit (stdenv.hostPlatform) system;
   throwSystem = throw "Unsupported system: ${system}";
-  darwinArch  = {
+  darwinArch = {
     aarch64-darwin = "aarch64";
-    x86_64-darwin  = "x86_64";
+    x86_64-darwin = "x86_64";
   }.${system} or throwSystem;
   appName = "LibreOffice.app";
 
   darwin = stdenv.mkDerivation rec {
     inherit pname meta;
-    version  = "7.2.5";
+    version = "7.2.5";
     src = fetchurl {
       url = "https://download.documentfoundation.org/libreoffice/stable/${version}/mac/${darwinArch}/LibreOffice_${version}_MacOS_${darwinArch}.dmg";
       sha256 = {
@@ -461,6 +636,7 @@ let
       runHook postInstallPhase
     '';
   };
-in if stdenv.isDarwin
-  then darwin
-  else linux
+in
+if stdenv.isDarwin
+then darwin
+else linux
