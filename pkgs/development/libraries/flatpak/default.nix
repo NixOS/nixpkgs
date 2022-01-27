@@ -1,6 +1,5 @@
 { lib, stdenv
 , fetchurl
-, fetchpatch
 , autoreconfHook
 , docbook_xml_dtd_45
 , docbook-xsl-nons
@@ -54,14 +53,14 @@
 
 stdenv.mkDerivation rec {
   pname = "flatpak";
-  version = "1.12.2";
+  version = "1.12.4";
 
   # TODO: split out lib once we figure out what to do with triggerdir
   outputs = [ "out" "dev" "man" "doc" "devdoc" "installedTests" ];
 
   src = fetchurl {
     url = "https://github.com/flatpak/flatpak/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "df1eb464f9142c11627f99f04f6a5c02c868bbb145489b8902cb6c105e774b75"; # Taken from https://github.com/flatpak/flatpak/releases/
+    sha256 = "792e6265f7f6d71b2a087028472a048287bed2587e43d2eec2c31d360c16211c"; # Taken from https://github.com/flatpak/flatpak/releases/
   };
 
   patches = [
@@ -97,13 +96,6 @@ stdenv.mkDerivation rec {
 
     # But we want the GDK_PIXBUF_MODULE_FILE from the wrapper affect the icon validator.
     ./validate-icon-pixbuf.patch
-
-    # Tests don't respect the FLATPAK_BINARY override that was added, this is a workaround.
-    # https://github.com/flatpak/flatpak/pull/4496 (Can be removed once included).
-    (fetchpatch {
-      url = "https://github.com/flatpak/flatpak/commit/96dbe28cfa96e80b23fa1d8072eb36edad41279c.patch";
-      sha256 = "1jczk06ymfs98h3nsg245g0jwxvml7wg2x6pb7mrfpsdmrpz2czd";
-    })
   ];
 
   nativeBuildInputs = [
