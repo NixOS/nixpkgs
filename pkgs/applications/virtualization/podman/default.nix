@@ -44,6 +44,14 @@ buildGoModule rec {
     systemd
   ];
 
+  patches = [
+    # Temporary fix for darwin.  This works because the wrapper correctly sets the
+    # path.  When 4.0.0 is released, this goes away and the wrapper should set
+    # $CONTAINERS_HELPER_BINARY_DIR instead:
+    # https://github.com/containers/podman/blob/main/vendor/github.com/containers/common/pkg/config/config.go#L1171
+    ./0001-Look-for-gvproxy-in-PATH.patch
+  ];
+
   buildPhase = ''
     runHook preBuild
     patchShebangs .

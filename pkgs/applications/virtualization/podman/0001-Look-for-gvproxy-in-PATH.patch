@@ -1,0 +1,25 @@
+From f2883a5bfb099f7690518ac612f82aa7f7d30709 Mon Sep 17 00:00:00 2001
+From: Jason Felice <jason.m.felice@gmail.com>
+Date: Thu, 27 Jan 2022 13:55:05 -0500
+Subject: [PATCH] Look for gvproxy in PATH
+
+---
+ pkg/machine/qemu/machine.go | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/pkg/machine/qemu/machine.go b/pkg/machine/qemu/machine.go
+index ab1b6c7df..866b3d6a5 100644
+--- a/pkg/machine/qemu/machine.go
++++ b/pkg/machine/qemu/machine.go
+@@ -652,7 +652,7 @@ func (v *MachineVM) startHostNetworking() error {
+ 	if err != nil {
+ 		return err
+ 	}
+-	binary, err := cfg.FindHelperBinary(machine.ForwarderBinaryName, false)
++	binary, err := cfg.FindHelperBinary(machine.ForwarderBinaryName, true)
+ 	if err != nil {
+ 		return err
+ 	}
+-- 
+2.34.1
+
