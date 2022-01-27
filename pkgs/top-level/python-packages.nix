@@ -3885,6 +3885,8 @@ in {
 
   ijson = callPackage ../development/python-modules/ijson { };
 
+  ilua = callPackage ../development/python-modules/ilua { };
+
   imagecodecs-lite = callPackage ../development/python-modules/imagecodecs-lite { };
 
   imagecorruptions = callPackage ../development/python-modules/imagecorruptions { };
