@@ -82,6 +82,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ ertes AndersonTorres ] ++ teams.sage.members;
     platforms = platforms.linux ++ platforms.darwin;
-    updateWalker = true;
   };
 }

@@ -94,6 +94,5 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ sander ];
     platforms = with platforms; linux ++ darwin;
     repositories.git = "https://github.com/MidnightCommander/mc.git";
-    updateWalker = true;
   };
 }

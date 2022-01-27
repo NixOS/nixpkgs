@@ -67,7 +67,7 @@ with pkgs;
   clangStdenvNoLibs = mkStdenvNoLibs clangStdenv;
 
   # For convenience, allow callers to get the path to Nixpkgs.
-  path = config.path;
+  path = ../..;
 
 
   ### Helper functions.
@@ -26793,7 +26793,10 @@ with pkgs;
 
   fluxctl = callPackage ../applications/networking/cluster/fluxctl { };
 
-  fluxcd = callPackage ../applications/networking/cluster/fluxcd { };
+  fluxcd = callPackage ../applications/networking/cluster/fluxcd {
+    # Fix-Me: This locking should be removed once PR #154059 is merged.
+    buildGoModule = buildGo117Module;
+  };
 
   linkerd = callPackage ../applications/networking/cluster/linkerd { };
   linkerd_edge = callPackage ../applications/networking/cluster/linkerd/edge.nix { };
@@ -33771,6 +33774,8 @@ with pkgs;
 
   vnote = libsForQt5.callPackage ../applications/office/vnote { };
 
+  sshportal = callPackage ../servers/sshportal { };
+
   ssh-audit = callPackage ../tools/security/ssh-audit { };
 
   ssh-tools = callPackage ../applications/misc/ssh-tools { };
@@ -34161,8 +34166,6 @@ with pkgs;
   linkchecker = callPackage ../tools/networking/linkchecker { };
 
   tomb = callPackage ../os-specific/linux/tomb {};
-
-  tomboy = callPackage ../applications/misc/tomboy { };
 
   imatix_gsl = callPackage ../development/tools/imatix_gsl {};
 

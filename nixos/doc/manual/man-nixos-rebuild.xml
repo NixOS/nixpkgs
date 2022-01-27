@@ -453,7 +453,7 @@
       Allow ad-hoc remote builders for building the new system. This requires
       the user executing <command>nixos-rebuild</command> (usually root) to be
       configured as a trusted user in the Nix daemon. This can be achieved by
-      using the <literal>nix.trustedUsers</literal> NixOS option. Examples
+      using the <literal>nix.settings.trusted-users</literal> NixOS option. Examples
       values for that option are described in the <literal>Remote builds
       chapter</literal> in the Nix manual, (i.e. <command>--builders
       "ssh://bigbrother x86_64-linux"</command>). By specifying an empty string
