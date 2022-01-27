@@ -8,9 +8,10 @@ let
     if cfg."${attr}File" != null then
       cfg."${attr}File"
     else if cfg.${attr} != null then
-      pkgs.writeText
-        "opentracker-${attr}.txt"
-        (concatMapStrings (hash: "${hash}\n") cfg.${attr})
+      toString
+        (pkgs.writeText
+          "opentracker-${attr}.txt"
+          (concatMapStrings (hash: "${hash}\n") cfg.${attr}))
     else
       null;
 
@@ -22,6 +23,8 @@ let
     whitelist = whitelistFile != null;
     restrictStats = cfg.restrictStats.enable;
   };
+
+  escapeColon = replaceStrings [ ":" "\\" ] [ "\\:" "\\\\" ];
 
   mkService = { description, RestrictAddressFamilies, pkg, configFile }: {
     inherit description;
@@ -52,8 +55,8 @@ let
       MemoryDenyWriteExecute = true;
       RestrictRealtime = true;
       RestrictSUIDSGID = true;
-      BindReadOnlyPaths = optional (blacklistFile != null) "${blacklistFile}:/run/opentracker/blacklist.txt"
-                       ++ optional (whitelistFile != null) "${whitelistFile}:/run/opentracker/whitelist.txt";
+      BindReadOnlyPaths = optional (blacklistFile != null) "${escapeColon blacklistFile}:/run/opentracker/blacklist.txt"
+                       ++ optional (whitelistFile != null) "${escapeColon whitelistFile}:/run/opentracker/whitelist.txt";
     };
   };
 
