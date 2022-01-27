@@ -31,6 +31,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-WvkQx+9YjKCINpyVg8KjCV0GAb0rJfblSFaO14/4oas=";
   };
 
+  patches = [
+    ./indicators.patch
+  ];
+
   nativeBuildInputs = [
     gettext
     meson
@@ -51,10 +55,6 @@ stdenv.mkDerivation rec {
     libgee
     mutter
     mesa # for libEGL
-  ];
-
-  patches = [
-    ./indicators.patch
   ];
 
   postPatch = ''

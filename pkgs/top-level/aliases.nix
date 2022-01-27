@@ -284,6 +284,7 @@ mapAliases ({
   flutter-beta = throw "Non-stable versions of Flutter have been removed. You can use flutterPackages.mkFlutter to generate a package for other Flutter versions."; # added 2020-01-15
   flutter-dev = throw "Non-stable versions of Flutter have been removed. You can use flutterPackages.mkFlutter to generate a package for other Flutter versions."; # added 2020-01-15
   flvtool2 = throw "flvtool2 has been removed."; # added 2020-11-03
+  fme = throw "fme was removed, because it is old and uses Glade, a discontinued library."; # added 2022-01-26
   foldingathome = fahclient; # added 2020-09-03
   font-awesome-ttf = font-awesome; # 2018-02-25
   # 2019-10-31
@@ -412,6 +413,7 @@ mapAliases ({
   inotifyTools = inotify-tools;
   inter-ui = inter; # added 2021-03-27
   iproute = iproute2; # moved from top-level 2021-03-14
+  ipsecTools = throw "ipsecTools has benn removed, because it was no longer maintained upstream"; # added 2021-12-15
   i-score = throw "i-score has been removed: abandoned upstream."; # added 2020-11-21
   jack2Full = jack2; # moved from top-level 2021-03-14
   jamomacore = throw "jamomacore has been removed: abandoned upstream."; # added 2020-11-21

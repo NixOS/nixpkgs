@@ -34,11 +34,9 @@ stdenv.mkDerivation rec {
   pname = "elementary-music";
   version = "5.1.1";
 
-  repoName = "music";
-
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "music";
     rev = version;
     sha256 = "1wqsn4ss9acg0scaqpg514ll2dj3bl71wly4mm79qkinhy30yv9n";
   };
@@ -57,12 +55,6 @@ stdenv.mkDerivation rec {
       sha256 = "sha256-tQZv7hZExLqbkGXahZxDfg7bkgwCKYbDholC2zuwlNw=";
     })
   ];
-
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
-  };
 
   nativeBuildInputs = [
     desktop-file-utils
@@ -107,6 +99,12 @@ stdenv.mkDerivation rec {
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
   '';
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
 
   meta = with lib; {
     description = "Music player and library designed for elementary OS";

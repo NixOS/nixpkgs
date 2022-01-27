@@ -23,11 +23,9 @@ stdenv.mkDerivation rec {
   pname = "elementary-settings-daemon";
   version = "1.1.0";
 
-  repoName = "settings-daemon";
-
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "settings-daemon";
     rev = version;
     sha256 = "sha256-1Xp1uJzDFuGZlhJhKj00cYtb4Q1syMAm+82fTOtk0VI=";
   };
