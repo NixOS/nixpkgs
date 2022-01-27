@@ -1030,6 +1030,7 @@ mapAliases ({
   tftp_hpa = tftp-hpa; # added 2015-04-03
   timescale-prometheus = promscale; # added 2020-09-29
   timetable = throw "timetable has been removed, as the upstream project has been abandoned"; # added 2021-09-05
+  tomboy = throw "tomboy is not actively developed anymore and was removed, request packaging tomboy-ng"; # added 2022-01-27
   tomcat7 = throw "tomcat7 has been removed from nixpkgs as it has reached end of life."; # added 2021-06-16
   tomcat8 = throw "tomcat8 has been removed from nixpkgs as it has reached end of life."; # added 2021-06-16
   tomcat85 = throw "tomcat85 has been removed from nixpkgs as it has reached end of life."; # added 2020-03-11
