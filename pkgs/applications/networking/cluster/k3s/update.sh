@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl gnugrep gnused jq
+#!nix-shell -i bash -p curl gawk gnugrep gnused jq yq-go go
 
 set -x -eu -o pipefail
 
@@ -29,17 +29,34 @@ curl --silent https://raw.githubusercontent.com/k3s-io/k3s/${K3S_COMMIT}/scripts
 FILE_SCRIPTS_VERSION=${WORKDIR}/scripts-version.sh
 curl --silent https://raw.githubusercontent.com/k3s-io/k3s/${K3S_COMMIT}/scripts/version.sh > $FILE_SCRIPTS_VERSION
 
-FILE_MANIFESTS_TRAEFIK=${WORKDIR}/manifests-traefik.yaml
-curl --silent https://raw.githubusercontent.com/k3s-io/k3s/${K3S_COMMIT}/manifests/traefik.yaml > $FILE_MANIFESTS_TRAEFIK
 
-TRAEFIK_CHART_VERSION=$(awk -F/ '/traefik-([[:digit:]]+\.)/ {sub(/traefik-/, "", $6) ; sub(/\.tgz/, "", $6); print $6}' $FILE_MANIFESTS_TRAEFIK)
+##### TRAEFIK is disabled until I can get package building ######
 
-TRAEFIK_CHART_SHA256=$(nix-prefetch-url --quiet "https://helm.traefik.io/traefik/traefik-${TRAEFIK_CHART_VERSION}.tgz")
+# FILE_MANIFESTS_TRAEFIK=${WORKDIR}/manifests-traefik.yaml
+# curl --silent https://raw.githubusercontent.com/k3s-io/k3s/${K3S_COMMIT}/manifests/traefik.yaml > $FILE_MANIFESTS_TRAEFIK
 
-K3S_ROOT_VERSION=$(grep 'ROOT_VERSION=' ${FILE_SCRIPTS_DOWNLOAD} \
-    | cut -d'=' -f2 | cut -d' ' -f1 | sed 's/^v//')
+# CHART_TRAEFIK-CRD_VERSION=$(yq e '.spec.chart' $FILE_MANIFESTS_TRAEFIK | awk 'match($0, /([0-9.]+)([0-9]{2})/, m) { print m[1]; exit; }')
+
+# CHART_TRAEFIK_VERSION=$(yq e '.spec.chart' $FILE_MANIFESTS_TRAEFIK | awk 'match($0, /([0-9.]+)([0-9]{2})/, m) { print m[2]; exit; }')
+
+# TRAEFIK_CHART_URL_SHA256=$(nix-prefetch-url --quiet "https://helm.traefik.io/traefik/traefik-${TRAEFIK_CHART_VERSION}.tgz")
+
+# https://helm.traefik.io/traefik/traefik-10.9.100.tgz
+
+# https://github.com/traefik/traefik-helm-chart/archive/refs/tags/v10.9.1.tar.gz
+
+# https://helm.traefik.io/traefik
+
+# https://github.com/traefik/traefik/archive/refs/tags/v2.5.6.tar.gz
+
+####################
+
+ARCH=${ARCH:-$(go env GOARCH)}
+
+K3S_ROOT_VERSION=$(grep 'VERSION_ROOT=' ${FILE_SCRIPTS_VERSION} \
+    | cut -d'=' -f2 | cut -d' ' -f1 | sed -e 's/"//g' -e 's/^v//')
 K3S_ROOT_SHA256=$(nix-prefetch-url --quiet --unpack \
-    "https://github.com/k3s-io/k3s-root/releases/download/v${K3S_ROOT_VERSION}/k3s-root-amd64.tar")
+    "https://github.com/k3s-io/k3s-root/releases/download/v${K3S_ROOT_VERSION}/k3s-root-${ARCH}.tar")
 
 CNIPLUGINS_VERSION=$(grep 'VERSION_CNIPLUGINS=' ${FILE_SCRIPTS_VERSION} \
     | cut -d'=' -f2 | cut -d' ' -f1 | sed -e 's/"//g' -e 's/^v//')
@@ -54,8 +71,8 @@ setKV k3sVersion ${K3S_VERSION}
 setKV k3sCommit ${K3S_COMMIT}
 setKV k3sRepoSha256 ${K3S_REPO_SHA256}
 
-setKV traefikChartVersion ${TRAEFIK_CHART_VERSION}
-setKV traefikChartSha256 ${TRAEFIK_CHART_SHA256}
+# setKV traefikChartVersion ${TRAEFIK_CHART_VERSION}
+# setKV traefikChartSha256 ${TRAEFIK_CHART_URL_SHA256}
 
 setKV k3sRootVersion ${K3S_ROOT_VERSION}
 setKV k3sRootSha256 ${K3S_ROOT_SHA256}
