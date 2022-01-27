@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "labwc";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
-    owner = "johanmalm";
+    owner = "labwc";
     repo = pname;
     rev = version;
-    sha256 = "sha256-v8LGiQG/n1IXeVMPWyiP9MgZzZLW78JftvxnRVTswaM=";
+    sha256 = "18vdmchkn7krm7c25cp80ispfc3gcg3559y8pdwyni6l3q6xbn1v";
   };
 
   nativeBuildInputs = [
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   mesonFlags = [ "-Dxwayland=enabled" ];
 
   meta = with lib; {
-    homepage = "https://github.com/johanmalm/labwc";
+    homepage = "https://github.com/labwc/labwc";
     description = "Openbox alternative for Wayland";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ AndersonTorres ];
