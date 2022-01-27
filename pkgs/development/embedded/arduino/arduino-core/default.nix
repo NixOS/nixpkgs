@@ -79,13 +79,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = (if withTeensyduino then "teensyduino" else "arduino") + lib.optionalString (!withGui) "-core";
-  version = "1.8.16";
+  version = "1.8.19";
 
   src = fetchFromGitHub {
     owner = "arduino";
     repo = "Arduino";
     rev = version;
-    sha256 = "sha256-6d+y0Lgr+h0qYpCsa/ihvSMNuAdRMNQRuxZFpkWLDvg=";
+    sha256 = "sha256-I+PvfGc5F8H/NJOGRa18z7dKyKcO8I8Cg7Tj5yxkYAQ=";
   };
 
   teensyduino_version = "155";
@@ -102,10 +102,10 @@ stdenv.mkDerivation rec {
   arduino_dist_src = fetchurl {
     url = "https://downloads.arduino.cc/arduino-${version}-${teensy_architecture}.tar.xz";
     sha256 = {
-      linux64 = "sha256-VK+Skl2xjqPWYEEKt1CCLwBZRxoyRfYQ3/60Byen9po=";
-      linux32 = "sha256-fjqV4avddmWAdFqMuUNUcDguxv3SI45m5QHFiWP8EKE=";
-      linuxarm = "sha256-Br8vUN7njI7VCH+ZvUh44l8LcgW+61+Q0x2AiXxIhTM=";
-      linuxaarch64 = "sha256-bOizBUUuyINg0/EqEatBq9lECT97JXxKbesCGyCA3YQ=";
+      linux64 = "sha256-62i93B0cASC+L8oTUKA+40Uxzzf1GEeyEhC25wVFvJs=";
+      linux32 = "sha256-wSxtx3BqXMQCeWQDK8PHkWLlQqQM1Csao8bIk98FrFg=";
+      linuxarm = "sha256-lJ/R1ePq7YtDk3bvloFcn8jswrJH+L63tvH5QpTqfXs=";
+      linuxaarch64 = "sha256-gm8cDjLKNfpcaeO7fw6Kyv1TnWV/ZmH4u++nun9X6jo=";
     }.${teensy_architecture} or (throw "No arduino binaries for ${teensy_architecture}");
   };
 
