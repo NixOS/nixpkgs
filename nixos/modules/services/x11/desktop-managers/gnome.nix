@@ -569,6 +569,7 @@ in
         atomix
         five-or-more
         four-in-a-row
+        pkgs.gnome-2048
         gnome-chess
         gnome-klotski
         gnome-mahjongg

@@ -5896,6 +5896,8 @@ with pkgs;
 
   gnirehtet = callPackage ../tools/networking/gnirehtet { };
 
+  gnome-2048 = callPackage ../desktops/gnome/games/gnome-2048 { };
+
   gnome-builder = callPackage ../applications/editors/gnome-builder { };
 
   gnome-feeds = callPackage ../applications/networking/feedreaders/gnome-feeds {};
