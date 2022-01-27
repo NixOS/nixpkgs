@@ -17241,7 +17241,7 @@ with pkgs;
 
   hwloc = callPackage ../development/libraries/hwloc {};
 
-  hydra-unstable = callPackage ../development/tools/misc/hydra/unstable.nix { nix = nix_2_4; };
+  hydra_unstable = callPackage ../development/tools/misc/hydra/unstable.nix { nix = nix_2_4; };
 
   hydra-cli = callPackage ../development/tools/misc/hydra-cli { };
 

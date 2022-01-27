@@ -470,6 +470,7 @@ mapAliases ({
   htmlTidy = html-tidy; # Added 2014-12-06
   ht-rust = xh; # Added 2021-02-13
   hydra-flakes = throw "hydra-flakes: Flakes support has been merged into Hydra's master. Please use `hydra-unstable` now."; # Added 2020-04-06
+  hydra-unstable = hydra_unstable; # added 2022-01-27
 
   ### I ###
 
