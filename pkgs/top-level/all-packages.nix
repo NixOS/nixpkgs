@@ -67,7 +67,7 @@ with pkgs;
   clangStdenvNoLibs = mkStdenvNoLibs clangStdenv;
 
   # For convenience, allow callers to get the path to Nixpkgs.
-  path = config.path;
+  path = ../..;
 
 
   ### Helper functions.
