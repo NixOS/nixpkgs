@@ -53,6 +53,7 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/Tom94/tev/releases/tag/v${version}";
     license = licenses.bsd3;
     platforms = platforms.unix;
+    badPlatforms = [ "aarch64-linux" ]; # fails on Hydra since forever
     maintainers = with maintainers; [ ];
   };
 }
