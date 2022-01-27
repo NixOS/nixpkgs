@@ -33122,18 +33122,13 @@ with pkgs;
 
   neo = callPackage ../applications/misc/neo { };
 
-  inherit (callPackage ../tools/package-management/nix {
-      storeDir = config.nix.storeDir or "/nix/store";
-      stateDir = config.nix.stateDir or "/nix/var";
-      inherit (darwin.apple_sdk.frameworks) Security;
-      })
-    nix
-    nixStable
-    nix_2_3
-    nix_2_4
-    nix_2_5
-    nix_2_6
-    nixUnstable;
+  nixVersions = callPackage ../tools/package-management/nix {
+    storeDir = config.nix.storeDir or "/nix/store";
+    stateDir = config.nix.stateDir or "/nix/var";
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
+  nix = nixVersions.stable;
 
   nixStatic = pkgsStatic.nix;
 
@@ -33306,7 +33301,7 @@ with pkgs;
 
   nix-linter = haskell.lib.compose.justStaticExecutables (haskellPackages.nix-linter);
 
-  nixos-option = callPackage ../tools/nix/nixos-option { nix = nix_2_3; };
+  nixos-option = callPackage ../tools/nix/nixos-option { nix = nixVersions.nix_2_3; };
 
   nix-pin = callPackage ../tools/package-management/nix-pin { };
 
