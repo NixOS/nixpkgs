@@ -62,7 +62,7 @@
         }).nixos.manual.x86_64-linux;
       };
 
-      legacyPackages = forAllSystems (system: import ./. { inherit system; config.path = self.outPath; });
+      legacyPackages = forAllSystems (system: import ./. { inherit system; });
 
       nixosModules = {
         notDetected = import ./nixos/modules/installer/scan/not-detected.nix;
