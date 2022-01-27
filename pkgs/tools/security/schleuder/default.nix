@@ -2,6 +2,7 @@
 , bundlerApp
 , ruby
 , bundlerUpdateScript
+, defaultGemConfig
 }:
 
 bundlerApp {
