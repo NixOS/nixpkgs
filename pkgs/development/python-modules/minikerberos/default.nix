@@ -4,11 +4,15 @@
 , buildPythonPackage
 , fetchPypi
 , oscrypto
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "minikerberos";
   version = "0.2.15";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -24,7 +28,9 @@ buildPythonPackage rec {
   # no tests are published: https://github.com/skelsec/minikerberos/pull/5
   doCheck = false;
 
-  pythonImportsCheck = [ "minikerberos" ];
+  pythonImportsCheck = [
+    "minikerberos"
+  ];
 
   meta = with lib; {
     description = "Kerberos manipulation library in Python";
