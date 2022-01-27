@@ -8641,11 +8641,6 @@ with pkgs;
 
   pngout = callPackage ../tools/graphics/pngout { };
 
-  ipsecTools = callPackage ../os-specific/linux/ipsec-tools {
-    flex = flex_2_5_35;
-    openssl = openssl_1_0_2;
-  };
-
   patch = gnupatch;
 
   patchage = callPackage ../applications/audio/patchage { };
@@ -14494,8 +14489,6 @@ with pkgs;
   cubiomes-viewer = libsForQt5.callPackage ../applications/misc/cubiomes-viewer { };
 
   ctmg = callPackage ../tools/security/ctmg { };
-
-  cmake_2_8 = callPackage ../development/tools/build-managers/cmake/2.8.nix { };
 
   cmake = libsForQt5.callPackage ../development/tools/build-managers/cmake {
     inherit (darwin.apple_sdk.frameworks) SystemConfiguration;
@@ -32633,9 +32626,7 @@ with pkgs;
 
   astrolabe-generator = callPackage ../applications/science/astronomy/astrolabe-generator { };
 
-  tulip = callPackage ../applications/science/misc/tulip {
-    cmake = cmake_2_8;
-  };
+  tulip = libsForQt5.callPackage ../applications/science/misc/tulip { };
 
   vite = callPackage ../applications/science/misc/vite { };
 
