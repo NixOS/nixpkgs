@@ -71,14 +71,8 @@ let
         #   produce separate, smaller store paths
         # When already in the store,
         #   avoid copying; reuse the whole nixpkgs sources
-        #
-        # We can only avoid copying when pkgs.path is already a string. A path
-        # value can not be converted to a store path without rehashing it.
-        # builtins.storePath would be a solution but is currently off-limits
-        # because of https://github.com/NixOS/nix/issues/1888
-        #        and https://github.com/NixOS/nix/issues/5868
         pull = dir:
-          if builtins.typeOf pkgs.path == "string" && isStorePath pkgs.path
+          if isStorePath pkgs.path
           then "${pkgs.path}/${dir}"
           else filter "${toString pkgs.path}/${dir}";
       in
