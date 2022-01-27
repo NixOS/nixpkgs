@@ -1976,6 +1976,18 @@ final: prev:
     meta.homepage = "https://github.com/wincent/ferret/";
   };
 
+  fidget-nvim = buildVimPluginFrom2Nix {
+    pname = "fidget.nvim";
+    version = "2022-01-26";
+    src = fetchFromGitHub {
+      owner = "j-hui";
+      repo = "fidget.nvim";
+      rev = "66c5ba6ea5f9da9e6a9ef0da07ab594768d5bd39";
+      sha256 = "0065rw25rw4r7bnh80z6bis543zynk961w28dqz7pp1x3i4h9lmg";
+    };
+    meta.homepage = "https://github.com/j-hui/fidget.nvim/";
+  };
+
   file-line = buildVimPluginFrom2Nix {
     pname = "file-line";
     version = "2016-10-21";
