@@ -10762,7 +10762,9 @@ with pkgs;
 
   wg-friendly-peer-names = callPackage ../tools/networking/wg-friendly-peer-names { };
 
-  wg-netmanager = callPackage ../tools/networking/wg-netmanager { };
+  wg-netmanager = callPackage ../tools/networking/wg-netmanager {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   woff2 = callPackage ../development/web/woff2 { };
 
