@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "minikerberos";
-  version = "0.2.14";
+  version = "0.2.15";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-MND7r4Gkx9RnEMgEl62QXFYr1NEloihQ2HeU9hyhsx8=";
+    sha256 = "20fae3cf1b329451eb3cba55d6b3c5b44501db5a23e49f47bc770e7461308672";
   };
 
   propagatedBuildInputs = [
