@@ -25,6 +25,8 @@
 , ortp
 , pkg-config
 , python3
+, qtbase
+, qtdeclarative
 , SDL
 , speex
 , srtp
@@ -33,7 +35,9 @@
 
 stdenv.mkDerivation rec {
   pname = "mediastreamer2";
-  version = "4.5.15";
+  version = "5.1.20";
+
+  dontWrapQtApps = true;
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
@@ -41,7 +45,7 @@ stdenv.mkDerivation rec {
     group = "BC";
     repo = pname;
     rev = version;
-    sha256 = "sha256-n/EuXEQ9nJKC32PMvWkfP1G+E6uQQuu1/A168n8/cIY=";
+    sha256 = "sha256-u8YqF5BzyYIF9+XB90Eu6DlwXuu1FDOJUzxebj0errU=";
   };
 
   patches = [
@@ -59,12 +63,20 @@ stdenv.mkDerivation rec {
     intltool
     pkg-config
     python3
+    qtbase
+    qtdeclarative
   ];
 
   propagatedBuildInputs = [
-    alsa-lib
+    # Made by BC
     bctoolbox
     bzrtp
+    ortp
+
+    # Vendored by BC but we use upstream, might cause problems
+    libmatroska
+
+    alsa-lib
     ffmpeg
     glew
     gsm
@@ -73,7 +85,6 @@ stdenv.mkDerivation rec {
     libX11
     libXext
     libXv
-    libmatroska
     libopus
     libpcap
     libpulseaudio
@@ -81,7 +92,6 @@ stdenv.mkDerivation rec {
     libupnp
     libv4l
     libvpx
-    ortp
     SDL
     speex
     srtp
@@ -89,22 +99,17 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  # Do not build static libraries
-  cmakeFlags = [ "-DENABLE_STATIC=NO" ];
-
-  NIX_CFLAGS_COMPILE = [
-    "-DGIT_VERSION=\"v${version}\""
-    "-Wno-error=deprecated-declarations"
-    "-Wno-error=cast-function-type"
-    "-Wno-error=stringop-truncation"
-    "-Wno-error=stringop-overflow"
-  ] ++ lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "11") [
-    "-Wno-error=stringop-overread"
+  cmakeFlags = [
+    "-DENABLE_STATIC=NO" # Do not build static libraries
+    "-DENABLE_QT_GL=ON" # Build necessary MSQOGL plugin for Linphone desktop
+    "-DCMAKE_C_FLAGS=-DGIT_VERSION=\"v${version}\""
+    "-DENABLE_STRICT=NO" # Disable -Werror
   ];
+
   NIX_LDFLAGS = "-lXext";
 
   meta = with lib; {
-    description = "A powerful and lightweight streaming engine specialized for voice/video telephony applications";
+    description = "A powerful and lightweight streaming engine specialized for voice/video telephony applications. Part of the Linphone project";
     homepage = "http://www.linphone.org/technical-corner/mediastreamer2";
     license = licenses.gpl3Only;
     platforms = platforms.linux;

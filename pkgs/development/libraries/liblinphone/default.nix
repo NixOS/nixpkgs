@@ -16,6 +16,7 @@
 , graphviz
 , gtk2
 , intltool
+, jsoncpp
 , libexosip
 , libmatroska
 , libnotify
@@ -34,11 +35,12 @@
 , pkg-config
 , python3
 , readline
-, soci
+, bc-soci
 , boost
 , speex
 , sqlite
-, lib, stdenv
+, lib
+, stdenv
 , udev
 , xercesc
 , xsd
@@ -47,7 +49,7 @@
 
 stdenv.mkDerivation rec {
   pname = "liblinphone";
-  version = "4.5.17";
+  version = "5.1.22";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
@@ -55,8 +57,10 @@ stdenv.mkDerivation rec {
     group = "BC";
     repo = pname;
     rev = version;
-    sha256 = "sha256-ryyT4bG3lnE72ydvCAoiT3IeHY4mZwX9nCqaTRC1wyc=";
+    sha256 = "sha256-hTyp/fUA1+7J1MtqX33kH8Vn1XNjx51Wy5REvrpdJTY=";
   };
+
+  patches = [ ./use-normal-jsoncpp.patch ];
 
   # Do not build static libraries
   cmakeFlags = [ "-DENABLE_STATIC=NO" ];
@@ -66,12 +70,24 @@ stdenv.mkDerivation rec {
   # of them might not be needed for liblinphone alone.
   buildInputs = [
     (python3.withPackages (ps: [ ps.pystache ps.six ]))
+
+    # Made by BC
     bcg729
     bctoolbox
     belcard
     belle-sip
     belr
     bzrtp
+    lime
+    mediastreamer
+    ortp
+
+    # Vendored by BC
+    bc-soci
+
+    # Vendored by BC but we use upstream, might cause problems
+    libmatroska
+
     cairo
     cyrus_sasl
     ffmpeg
@@ -80,20 +96,15 @@ stdenv.mkDerivation rec {
     gtk2
     libX11
     libexosip
-    libmatroska
     libnotify
     libosip
     libsoup
     libupnp
     libxml2
-    lime
     mbedtls
-    mediastreamer
     openldap
-    ortp
     pango
     readline
-    soci
     boost
     speex
     sqlite
@@ -101,10 +112,13 @@ stdenv.mkDerivation rec {
     xercesc
     xsd
     zlib
+    jsoncpp
   ];
 
   nativeBuildInputs = [
+    # Made by BC
     bcunit
+
     cmake
     doxygen
     graphviz
