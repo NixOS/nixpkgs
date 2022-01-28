@@ -18,6 +18,8 @@ in
       description = "Whether to enable PolKit.";
     };
 
+    security.polkit.enablePkexec = lib.mkEnableOption "the pkexec setuid binary";
+
     security.polkit.extraConfig = mkOption {
       type = types.lines;
       default = "";
@@ -83,7 +85,7 @@ in
     security.pam.services.polkit-1 = {};
 
     security.wrappers = {
-      pkexec =
+      pkexec = lib.mkIf cfg.enablePkexec
         { setuid = true;
           owner = "root";
           group = "root";

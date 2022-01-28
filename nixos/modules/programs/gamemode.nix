@@ -53,7 +53,10 @@ in
     };
 
     security = {
-      polkit.enable = true;
+      polkit = {
+        enable = true;
+        enablePkexec = true;
+      };
       wrappers = mkIf cfg.enableRenice {
         gamemoded = {
           owner = "root";

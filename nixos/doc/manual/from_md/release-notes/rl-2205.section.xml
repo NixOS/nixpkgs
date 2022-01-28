@@ -230,6 +230,14 @@
       </listitem>
       <listitem>
         <para>
+          The polkit module now disables the <literal>pkexec</literal>
+          setuid wrapper by default because it introduces an additional
+          attack surface. It can be re-enabled using
+          <literal>security.polkit.enablePkexec</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>mailpile</literal> email webclient
           (<literal>services.mailpile</literal>) has been removed due to
           its reliance on python2.
