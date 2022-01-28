@@ -673,7 +673,7 @@ in
       text =
         concatMapStrings
           (machine:
-            (concatStringsSep " " [
+            (concatStringsSep " " ([
               "${optionalString (machine.sshUser != null) "${machine.sshUser}@"}${machine.hostName}"
               (if machine.system != null then machine.system else if machine.systems != [ ] then concatStringsSep "," machine.systems else "-")
               (if machine.sshKey != null then machine.sshKey else "-")
@@ -682,7 +682,7 @@ in
               (concatStringsSep "," machine.supportedFeatures)
               (concatStringsSep "," machine.mandatoryFeatures)
             ]
-            ++ optional (isNixAtLeast "2.4pre") (if machine.publicHostKey != null then machine.publicHostKey else "-"))
+            ++ optional (isNixAtLeast "2.4pre") (if machine.publicHostKey != null then machine.publicHostKey else "-")))
             + "\n"
           )
           cfg.buildMachines;
