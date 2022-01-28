@@ -175,6 +175,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     couchbase = callPackage ../development/php-packages/couchbase { };
 
+    ds = callPackage ../development/php-packages/ds { };
+
     event = callPackage ../development/php-packages/event { };
 
     gnupg = callPackage ../development/php-packages/gnupg { };
