@@ -152,6 +152,8 @@ let
       rmdir $out/etc/ssl/{certs,private}
     '';
 
+    propagatedBuildOutputs = [ "out" ];
+
     postFixup = lib.optionalString (!stdenv.hostPlatform.isWindows) ''
       # Check to make sure the main output doesn't depend on perl
       if grep -r '${buildPackages.perl}' $out; then
