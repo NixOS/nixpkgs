@@ -17,8 +17,8 @@ let
     # However, the version string is more useful for end-users.
     # These are contained in a attrset of their own to make it obvious that
     # people should update both.
-    version = "1.17.3";
-    commit = "46bf743b97d0d3f01ff437b2f10cc0bd9cdfe6e4";
+    version = "1.17.4";
+    commit = "0de60452be1fa329c16076916b6bfe1f672aeed4";
   };
 in
 buildBazelPackage rec {
@@ -28,7 +28,7 @@ buildBazelPackage rec {
     owner = "envoyproxy";
     repo = "envoy";
     rev = srcVer.commit;
-    hash = "sha256:09zzr4h3zjsb2rkxrvlazpx0jy33yn9j65ilxiqbvv0ckaralqfc";
+    sha256 = "03nbh0l0zpfv4kc0bl6qpa8p915wg9g8izx6bj3p9pi70lcb7yf5";
 
     extraPostFetch = ''
       chmod -R +w $out
@@ -58,7 +58,7 @@ buildBazelPackage rec {
   ];
 
   fetchAttrs = {
-    sha256 = "sha256:1cy2b73x8jzczq9z9c1kl7zrg5iasvsakb50zxn4mswpmajkbj5h";
+    sha256 = "sha256:1a72cqij8gx0i91xwwq8gl7ja46sisbzg2wsvcgmfgqhkzpn9jgp";
     dontUseCmakeConfigure = true;
     dontUseGnConfigure = true;
     preInstall = ''
@@ -79,10 +79,14 @@ buildBazelPackage rec {
       # they're nondeterministically built and packed.
       >$bazelOut/external/config_validation_pip3/PyYAML-5.3.1-cp38-cp38-linux_x86_64.whl
       >$bazelOut/external/protodoc_pip3/PyYAML-5.3.1-cp38-cp38-linux_x86_64.whl
-      >$bazelOut/external/thrift_pip3/thrift-0.13.0-cp38-cp38-linux_x86_64.whl
+      >$bazelOut/external/thrift_pip3/thrift-0.13.0-cp39-cp39-linux_x86_64.whl
 
       # Remove Unix timestamps from go cache.
       rm -rf $bazelOut/external/bazel_gazelle_go_repository_cache/{gocache,pkg/mod/cache,pkg/sumdb}
+
+      rm -rf .cache
+      rm -f $bazelOut/java.log $bazelOut/javalog.properties $bazelOut/java.log.*
+      rm -f $bazelOut/command.log $bazelOut/command.profile.gz
     '';
   };
   buildAttrs = {
