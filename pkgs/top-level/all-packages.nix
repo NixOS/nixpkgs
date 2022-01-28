@@ -27625,6 +27625,8 @@ with pkgs;
 
   qemacs = callPackage ../applications/editors/qemacs { };
 
+  razerCommander = callPackage ../os-specific/linux/razercommander { };
+
   rqbit = callPackage ../applications/networking/p2p/rqbit {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
