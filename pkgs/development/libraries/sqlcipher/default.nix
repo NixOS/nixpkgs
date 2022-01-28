@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, openssl, tcl, installShellFiles, buildPackages, readline, ncurses, zlib }:
+{ stdenv, lib, fetchFromGitHub, openssl, tcl, installShellFiles, buildPackages, readline, ncurses, zlib, sqlite }:
 
 stdenv.mkDerivation rec {
   pname = "sqlcipher";
@@ -21,9 +21,8 @@ stdenv.mkDerivation rec {
   ];
 
   CFLAGS = [
-    "-DSQLITE_ENABLE_COLUMN_METADATA=1"
-    "-DSQLITE_SECURE_DELETE=1"
-    "-DSQLITE_ENABLE_UNLOCK_NOTIFY=1"
+    # We want feature parity with sqlite
+    sqlite.NIX_CFLAGS_COMPILE
     "-DSQLITE_HAS_CODEC"
   ];
 

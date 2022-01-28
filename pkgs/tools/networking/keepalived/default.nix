@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, nixosTests
 , file, libmnl, libnftnl, libnl
-, net-snmp, openssl, pkg-config
+, net-snmp, openssl, fetchpatch, pkg-config
 , autoreconfHook }:
 
 stdenv.mkDerivation rec {
@@ -21,6 +21,14 @@ stdenv.mkDerivation rec {
     libnl
     net-snmp
     openssl
+  ];
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/acassen/keepalived/commit/7977fec0be89ae6fe87405b3f8da2f0b5e415e3d.patch";
+      sha256 = "sha256-9TVFkgjACxln417txdVS2pCYJt5XxXWoW/afWCtKLHk=";
+      name = "CVE-2021-44225.patch";
+    })
   ];
 
   enableParallelBuilding = true;
