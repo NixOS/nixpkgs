@@ -201,7 +201,14 @@ in {
       type = types.package;
       example = literalExpression ''
         pkgs.home-assistant.override {
-          extraPackages = ps: with ps; [ colorlog ];
+          extraPackages = python3Packages: with python3Packages; [
+            psycopg2
+          ];
+          extraComponents = [
+            "default_config"
+            "esphome"
+            "met"
+          ];
         }
       '';
       description = ''
