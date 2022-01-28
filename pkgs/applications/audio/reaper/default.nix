@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "reaper";
-  version = "6.43";
+  version = "6.46";
 
   src = fetchurl {
     url = "https://www.reaper.fm/files/${lib.versions.major version}.x/reaper${builtins.replaceStrings ["."] [""] version}_linux_${stdenv.hostPlatform.qemuArch}.tar.xz";
     hash = {
-      x86_64-linux = "sha256-VQ91px9YZWbrw31fFQxS+H/6fsjkLDrYU6FtI8eSq6E=";
-      aarch64-linux = "sha256-x6z5+H7ASWiuNL0maNGK05VmJptHdFGRiFf6DgwlZDw=";
+      x86_64-linux = "sha256-cHjiO2hRK8gUaq2VfuE9GOtRJ0JyfH2rhdIbK+RxoEM=";
+      aarch64-linux = "sha256-j+05SdyDWzI1fekwwQ2RAGontEvppkUWPYfZEtOVXYg=";
     }.${stdenv.hostPlatform.system};
   };
 
