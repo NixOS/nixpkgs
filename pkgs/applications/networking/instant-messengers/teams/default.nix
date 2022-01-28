@@ -29,7 +29,7 @@ let
     downloadPage = "https://teams.microsoft.com/downloads";
     license = licenses.unfree;
     maintainers = [ maintainers.liff ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
   };
 
   linux = stdenv.mkDerivation rec {
