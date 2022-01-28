@@ -6588,6 +6588,8 @@ in {
     inherit (pkgs) graphviz;
   };
 
+  pycfmodel = callPackage ../development/python-modules/pycfmodel { };
+
   pychannels = callPackage ../development/python-modules/pychannels { };
 
   pychart = callPackage ../development/python-modules/pychart { };
