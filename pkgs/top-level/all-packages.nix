@@ -21797,8 +21797,7 @@ with pkgs;
 
   openfire = callPackage ../servers/xmpp/openfire { };
 
-  softether_4_29 = callPackage ../servers/softether/4.29.nix { };
-  softether = softether_4_29;
+  softether = callPackage ../servers/softether { };
 
   qboot = pkgsi686Linux.callPackage ../applications/virtualization/qboot { };
 
