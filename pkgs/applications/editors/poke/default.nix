@@ -76,7 +76,7 @@ in stdenv.mkDerivation rec {
       set -eu -o pipefail
 
       # Expect the text in format of '<a href="...">poke 2.0</a>'
-      new_version="$(curl -s http://www.jemarch.net/poke |
+      new_version="$(curl -s https://www.jemarch.net/poke |
           pcregrep -o1 '>poke ([0-9.]+)</a>')"
       update-source-version ${pname} "$new_version"
     '';
