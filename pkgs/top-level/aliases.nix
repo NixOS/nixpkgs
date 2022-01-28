@@ -667,7 +667,13 @@ mapAliases ({
   nilfs_utils = nilfs-utils; # added 2018-04-25
   nix-direnv-flakes = nix-direnv;
   nix-review = nixpkgs-review; # added 2019-12-22
-  nixFlakes = nixStable; # added 2021-05-21
+  nixFlakes = nixVersions.stable; # added 2021-05-21
+  nixStable = nixVersions.stable; # added 2022-01-24
+  nixUnstable = nixVersions.unstable; # added 2022-01-26
+  nix_2_3 = nixVersions.nix_2_3;
+  nix_2_4 = nixVersions.nix_2_4;
+  nix_2_5 = nixVersions.nix_2_5;
+  nix_2_6 = nixVersions.nix_2_6;
   nmap_graphical = nmap-graphical;  # added 2017-01-19
   nmap-unfree = nmap; # added 2021-04-06
   nologin = shadow; # added 2018-04-25
@@ -1033,6 +1039,7 @@ mapAliases ({
   tftp_hpa = tftp-hpa; # added 2015-04-03
   timescale-prometheus = promscale; # added 2020-09-29
   timetable = throw "timetable has been removed, as the upstream project has been abandoned"; # added 2021-09-05
+  tomboy = throw "tomboy is not actively developed anymore and was removed."; # added 2022-01-27
   tomcat7 = throw "tomcat7 has been removed from nixpkgs as it has reached end of life."; # added 2021-06-16
   tomcat8 = throw "tomcat8 has been removed from nixpkgs as it has reached end of life."; # added 2021-06-16
   tomcat85 = throw "tomcat85 has been removed from nixpkgs as it has reached end of life."; # added 2020-03-11

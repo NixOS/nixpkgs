@@ -38,7 +38,6 @@ in stdenv.mkDerivation rec {
     license = licenses.gpl2;
     downloadPage = "https://vifm.info/downloads.shtml";
     homepage = "https://vifm.info/";
-    updateWalker = true;
     changelog = "https://github.com/vifm/vifm/blob/v${version}/ChangeLog";
   };
 }

@@ -61,85 +61,17 @@ let
       in scrubbedEval.options;
     baseOptionsJSON =
       let
-        filterIntoStore =
+        filter =
           builtins.filterSource
             (n: t:
               (t == "directory" -> baseNameOf n != "tests")
               && (t == "file" -> hasSuffix ".nix" n)
             );
-
-        # Figure out if Nix runs in pure evaluation mode. May return true in
-        # impure mode, but this is highly unlikely.
-        # We need to know because of https://github.com/NixOS/nix/issues/1888
-        # and https://github.com/NixOS/nix/issues/5868
-        isPureEval = builtins.getEnv "PATH" == "" && builtins.getEnv "_" == "";
-
-        # Return a nixpkgs subpath with minimal copying.
-        #
-        # The sources for the base options json derivation can come in one of
-        # two forms:
-        #   - single source: a store path with all of nixpkgs, postfix with
-        #     subpaths to access various directories. This has the benefit of
-        #     not creating copies of these subtrees in the Nix store, but
-        #     can cause unnecessary rebuilds if you update the Nixpkgs `pkgs`
-        #     tree often.
-        #   - split sources: multiple store paths with subdirectories of
-        #     nixpkgs that exclude the bulk of the pkgs directory.
-        #     This requires more copying and hashing during evaluation but
-        #     requires fewer files to be copied. This method produces fewer
-        #     unnecessary rebuilds of the base options json.
-        #
-        # Flake
-        #
-        # Flakes always put a copy of the full nixpkgs sources in the store,
-        # so we can use the "single source" method. This method is ideal
-        # for using nixpkgs as a dependency, as the base options json will be
-        # substitutable from cache.nixos.org.
-        #
-        # This requires that the `self.outPath` is wired into `pkgs` correctly,
-        # which is done for you if `pkgs` comes from the `lib.nixosSystem` or
-        # `legacyPackages` flake attributes.
-        #
-        # Other Nixpkgs invocation
-        #
-        # If you do not use the known-correct flake attributes, but rather
-        # invoke Nixpkgs yourself, set `config.path` to the correct path value,
-        # e.g. `import nixpkgs { config.path = nixpkgs; }`.
-        #
-        # Choosing between single or split source paths
-        #
-        # We make assumptions based on the type and contents of `pkgs.path`.
-        # By passing a different `config.path` to Nixpkgs, you can influence
-        # how your documentation cache is evaluated and rebuilt.
-        #
-        # Single source
-        #  - If pkgs.path is a string containing a store path, the code has no
-        #    choice but to create this store path, if it hasn't already been.
-        #    We assume that the "single source" method is most efficient.
-        #  - If pkgs.path is a path value containing that is a store path,
-        #    we try to convert it to a string with context without copying.
-        #    This occurs for example when nixpkgs was fetched and using its
-        #    default `config.path`, which is `./.`.
-        #    Nix currently does not allow this conversion when evaluating in
-        #    pure mode. If the conversion is not possible, we use the
-        #    "split source" method.
-        #
-        # Split source
-        #  - If pkgs.path is a path value that is not a store path, we assume
-        #    that it's unlikely for all of nixpkgs to end up in the store for
-        #    other reasons and try to keep both the copying and rebuilds low.
-        pull =
-          if builtins.typeOf pkgs.path == "string" && isStorePath pkgs.path then
-            dir: "${pkgs.path}/${dir}"
-          else if !isPureEval && isStorePath pkgs.path then
-            dir: "${builtins.storePath pkgs.path}/${dir}"
-          else
-            dir: filterIntoStore "${toString pkgs.path}/${dir}";
       in
         pkgs.runCommand "lazy-options.json" {
-          libPath = pull "lib";
-          pkgsLibPath = pull "pkgs/pkgs-lib";
-          nixosPath = pull "nixos";
+          libPath = filter "${toString pkgs.path}/lib";
+          pkgsLibPath = filter "${toString pkgs.path}/pkgs/pkgs-lib";
+          nixosPath = filter "${toString pkgs.path}/nixos";
           modules = map (p: ''"${removePrefix "${modulesPath}/" (toString p)}"'') docModules.lazy;
         } ''
           export NIX_STORE_DIR=$TMPDIR/store

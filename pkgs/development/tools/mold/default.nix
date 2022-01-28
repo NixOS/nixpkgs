@@ -7,6 +7,7 @@
 , xxHash
 , zlib
 , openssl
+, nix-update-script
 }:
 
 stdenv.mkDerivation rec {
@@ -28,6 +29,12 @@ stdenv.mkDerivation rec {
   EXTRA_LDFLAGS = "-fuse-ld=${llvmPackages_latest.lld}/bin/ld.lld";
   LTO = 1;
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = pname;
+    };
+  };
 
   meta = with lib; {
     description = "A high performance drop-in replacement for existing unix linkers";

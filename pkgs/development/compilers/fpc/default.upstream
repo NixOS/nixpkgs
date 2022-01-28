@@ -1,6 +1,0 @@
-url https://sourceforge.net/projects/freepascal/files/Source/
-SF_version_dir
-version_link 'fpcbuild-[0-9.]+[.]tar[.]gz/download$'
-SF_redirect
-version '.*-([0-9.]+)[.]tar[.]gz' '\1'
-do_overwrite () { do_overwrite_just_version; }

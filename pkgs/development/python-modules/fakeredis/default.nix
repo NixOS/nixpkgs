@@ -18,9 +18,10 @@
 buildPythonPackage rec {
   pname = "fakeredis";
   version = "1.7.0";
+
   format = "pyproject";
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -38,11 +39,6 @@ buildPythonPackage rec {
       ];
     })
   ];
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "redis<4.1.0" "redis"
-  '';
 
   propagatedBuildInputs = [
     aioredis
@@ -63,6 +59,11 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "fakeredis"
   ];
+
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "redis<4.1.0" "redis"
+  '';
 
   meta = with lib; {
     description = "Fake implementation of Redis API";

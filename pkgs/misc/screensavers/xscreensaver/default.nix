@@ -62,6 +62,5 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ raskin ];
     platforms = lib.platforms.unix; # Once had cygwin problems
     downloadPage = "https://www.jwz.org/xscreensaver/download.html";
-    updateWalker = true;
   };
 }

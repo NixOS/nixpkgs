@@ -62,7 +62,11 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  CXXFLAGS = "-fpermissive";
+  CXXFLAGS = lib.concatStringsSep " " [
+    "-fpermissive"
+    # poppler uses std::optional
+    "-std=c++17"
+  ];
 
   # - Unset CC and CXX as they confuse libtool.
   # - teach gdal that libdf is the legacy name for libhdf
