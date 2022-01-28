@@ -290,6 +290,9 @@ stdenv.mkDerivation rec {
     name = "create-deps-file";
     runtimeInputs = [ dotnetSdk nuget-to-nix ];
     text = ''
+      # Disable telemetry data
+      export DOTNET_CLI_TELEMETRY_OPTOUT=1
+
       rundir=$(pwd)
 
       printf "\n* Setup workdir\n"
