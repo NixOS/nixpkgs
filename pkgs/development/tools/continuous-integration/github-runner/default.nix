@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
     # Disable specific tests
     substituteInPlace src/dir.proj \
       --replace 'dotnet test Test/Test.csproj' \
-                "dotnet test Test/Test.csproj --filter '${lib.concatStringsSep "&amp;" disabledTests}'"
+                "dotnet test Test/Test.csproj --filter '${lib.concatStringsSep "&amp;" (map (x: "FullyQualifiedName!=${x}") disabledTests)}'"
 
     # We don't use a Git checkout
     substituteInPlace src/dir.proj \
@@ -137,10 +137,10 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  # Fully qualified name of disabled tests
   disabledTests =
-    [ "FullyQualifiedName!=GitHub.Runner.Common.Tests.Listener.SelfUpdaterL0.TestSelfUpdateAsync" ] ++ map
-    (x: "FullyQualifiedName!=GitHub.Runner.Common.Tests.Listener.SelfUpdaterL0.TestSelfUpdateAsync_${x}")
-    [
+    [ "GitHub.Runner.Common.Tests.Listener.SelfUpdaterL0.TestSelfUpdateAsync" ]
+    ++ map (x: "GitHub.Runner.Common.Tests.Listener.SelfUpdaterL0.TestSelfUpdateAsync_${x}") [
       "Cancel_CloneHashTask_WhenNotNeeded"
       "CloneHash_RuntimeAndExternals"
       "DownloadRetry"
@@ -150,15 +150,8 @@ stdenv.mkDerivation rec {
       "UseExternalsRuntimeTrimmedPackage"
       "UseExternalsTrimmedPackage"
       "ValidateHash"
-    ] ++ [
-    "FullyQualifiedName!=GitHub.Runner.Common.Tests.Listener.RunnerL0.TestRunOnceHandleUpdateMessage"
-  ] ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
-    # "JavaScript Actions in Alpine containers are only supported on x64 Linux runners. Detected Linux Arm64"
-    "FullyQualifiedName!=GitHub.Runner.Common.Tests.Worker.StepHostL0.DetermineNodeRuntimeVersionInAlpineContainerAsync"
-  ] ++ map
-    # Online tests
-    (x: "FullyQualifiedName!=GitHub.Runner.Common.Tests.Worker.ActionManagerL0.PrepareActions_${x}")
-    [
+    ]
+    ++ map (x: "GitHub.Runner.Common.Tests.Worker.ActionManagerL0.PrepareActions_${x}") [
       "CompositeActionWithActionfile_CompositeContainerNested"
       "CompositeActionWithActionfile_CompositePrestepNested"
       "CompositeActionWithActionfile_MaxLimit"
@@ -188,11 +181,15 @@ stdenv.mkDerivation rec {
       "RepositoryActionWithInvalidWrapperActionfile_Node_Legacy"
       "RepositoryActionWithWrapperActionfile_PreSteps"
       "RepositoryActionWithWrapperActionfile_PreSteps_Legacy"
-    ] ++ map
-    (x: "FullyQualifiedName!=GitHub.Runner.Common.Tests.DotnetsdkDownloadScriptL0.${x}")
-    [
+    ]
+    ++ map (x: "GitHub.Runner.Common.Tests.DotnetsdkDownloadScriptL0.${x}") [
       "EnsureDotnetsdkBashDownloadScriptUpToDate"
       "EnsureDotnetsdkPowershellDownloadScriptUpToDate"
+    ]
+    ++ [ "GitHub.Runner.Common.Tests.Listener.RunnerL0.TestRunOnceHandleUpdateMessage" ]
+    ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
+      # "JavaScript Actions in Alpine containers are only supported on x64 Linux runners. Detected Linux Arm64"
+      "GitHub.Runner.Common.Tests.Worker.StepHostL0.DetermineNodeRuntimeVersionInAlpineContainerAsync"
     ];
 
   checkInputs = [ git ];
@@ -203,6 +200,8 @@ stdenv.mkDerivation rec {
     mkdir -p _layout/externals
     ln -s ${nodejs-12_x} _layout/externals/node12
     ln -s ${nodejs-16_x} _layout/externals/node16
+
+    printf 'Disabled tests:\n%s\n' '${lib.concatMapStringsSep "\n" (x: " - ${x}") disabledTests}'
 
     # BUILDCONFIG needs to be "Debug"
     dotnet msbuild \
