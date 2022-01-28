@@ -11,6 +11,7 @@
 , documentationSupport ? false
 , doxygen
 , graphviz
+, runCommand
 , eventGUISupport ? false
 , cairo
 , glib
@@ -26,19 +27,19 @@ let
   mkFlag = optSet: flag: "-D${flag}=${lib.boolToString optSet}";
 
   sphinx-build =
-    python3.pkgs.sphinx.overrideAttrs (attrs: {
-      propagatedBuildInputs =
-        attrs.propagatedBuildInputs
-        ++ (with python3.pkgs; [
-          recommonmark
-          sphinx_rtd_theme
-        ]);
-
-      postFixup = attrs.postFixup or "" + ''
-        # Do not propagate Python
-        rm $out/nix-support/propagated-build-inputs
-      '';
-    });
+    let
+      env = python3.withPackages (pp: with pp; [
+        sphinx
+        recommonmark
+        sphinx_rtd_theme
+      ]);
+    in
+    # Expose only the sphinx-build binary to avoid contaminating
+    # everything with Sphinx’s Python environment.
+    runCommand "sphinx-build" { } ''
+      mkdir -p "$out/bin"
+      ln -s "${env}/bin/sphinx-build" "$out/bin"
+    '';
 in
 
 stdenv.mkDerivation rec {
