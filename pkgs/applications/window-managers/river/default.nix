@@ -13,8 +13,8 @@
 , udev
 , libevdev
 , libinput
-, libX11
 , libGL
+, xwaylandSupport ? true, libX11
 }:
 
 stdenv.mkDerivation rec {
@@ -39,9 +39,8 @@ stdenv.mkDerivation rec {
     udev
     libevdev
     libinput
-    libX11
     libGL
-  ];
+  ] ++ lib.optional xwaylandSupport libX11;
 
   dontConfigure = true;
 
@@ -51,7 +50,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
-    zig build -Drelease-safe -Dcpu=baseline -Dxwayland -Dman-pages --prefix $out install
+    zig build -Drelease-safe -Dcpu=baseline ${lib.optionalString xwaylandSupport "-Dxwayland"} -Dman-pages --prefix $out install
     runHook postInstall
   '';
 
