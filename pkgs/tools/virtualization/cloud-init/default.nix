@@ -118,6 +118,8 @@ python3.pkgs.buildPythonApplication rec {
     "cloudinit"
   ];
 
+  passthru.tests.cloud-init = nixosTests.cloud-init;
+
   meta = with lib; {
     homepage = "https://cloudinit.readthedocs.org";
     description = "Provides configuration and customization of cloud instance";
