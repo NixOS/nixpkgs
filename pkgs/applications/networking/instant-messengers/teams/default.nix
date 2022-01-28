@@ -28,7 +28,7 @@ let
     homepage = "https://teams.microsoft.com";
     downloadPage = "https://teams.microsoft.com/downloads";
     license = licenses.unfree;
-    maintainers = [ maintainers.liff ];
+    maintainers = with maintainers; [ liff tricktron ];
     platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
   };
 
