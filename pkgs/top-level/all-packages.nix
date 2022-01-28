@@ -3660,7 +3660,9 @@ with pkgs;
 
   stagit = callPackage ../development/tools/stagit { };
 
-  starboard = callPackage ../applications/networking/cluster/starboard { };
+  starboard = callPackage ../applications/networking/cluster/starboard {
+    buildGoModule = buildGo117Module;
+  };
 
   statserial = callPackage ../tools/misc/statserial { };
 
