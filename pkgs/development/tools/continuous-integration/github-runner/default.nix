@@ -43,13 +43,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "github-runner";
-  version = "2.286.0";
+  version = "2.287.1";
 
   src = fetchFromGitHub {
     owner = "actions";
     repo = "runner";
     rev = "v${version}";
-    hash = "sha256-a3Kh65NTpVlKUer59rna7NWIQSxh1edU9MwguakzydI=";
+    hash = "sha256-4SPrtX3j8blWTYnSkD2Z7IecZvI4xdAqHRJ1lBM0aAo=";
   };
 
   nativeBuildInputs = [
@@ -137,10 +137,20 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  disabledTests = [
-    # Self-updating is patched out, hence this test will fail
-    "FullyQualifiedName!=GitHub.Runner.Common.Tests.Listener.SelfUpdaterL0.TestSelfUpdateAsync_ValidateHash"
-    "FullyQualifiedName!=GitHub.Runner.Common.Tests.Listener.SelfUpdaterL0.TestSelfUpdateAsync"
+  disabledTests =
+    [ "FullyQualifiedName!=GitHub.Runner.Common.Tests.Listener.SelfUpdaterL0.TestSelfUpdateAsync" ] ++ map
+    (x: "FullyQualifiedName!=GitHub.Runner.Common.Tests.Listener.SelfUpdaterL0.TestSelfUpdateAsync_${x}")
+    [
+      "Cancel_CloneHashTask_WhenNotNeeded"
+      "CloneHash_RuntimeAndExternals"
+      "DownloadRetry"
+      "FallbackToFullPackage"
+      "NoUpdateOnOldVersion"
+      "NotUseExternalsRuntimeTrimmedPackageOnHashMismatch"
+      "UseExternalsRuntimeTrimmedPackage"
+      "UseExternalsTrimmedPackage"
+      "ValidateHash"
+    ] ++ [
     "FullyQualifiedName!=GitHub.Runner.Common.Tests.Listener.RunnerL0.TestRunOnceHandleUpdateMessage"
   ] ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
     # "JavaScript Actions in Alpine containers are only supported on x64 Linux runners. Detected Linux Arm64"
