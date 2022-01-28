@@ -10,10 +10,11 @@ let
     pname = "runescape-launcher";
     version = "2.2.9";
 
+    # Packages: https://content.runescape.com/downloads/ubuntu/dists/trusty/non-free/binary-amd64/Packages
     # upstream is https://content.runescape.com/downloads/ubuntu/pool/non-free/r/${pname}/${pname}_${version}_amd64.deb
     src = fetchurl {
       url = "https://archive.org/download/${pname}_${version}_amd64/${pname}_${version}_amd64.deb";
-      sha256 = "10ly44lbgbbqc65lx7mhfzfjaiz1xj0mfjqlwlxz0sdjyw4a6ij6";
+      sha256 = "1zilpxh8k8baylbl9nqq9kgjiv2xzw4lizbgcmzky5rhmych8n4g";
     };
 
     nativeBuildInputs = [
