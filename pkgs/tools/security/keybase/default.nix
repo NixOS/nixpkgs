@@ -1,15 +1,15 @@
-{ stdenv, substituteAll, lib, buildGoPackage, fetchFromGitHub
+{ stdenv, substituteAll, lib, buildGoModule, fetchFromGitHub
 , AVFoundation, AudioToolbox, ImageIO, CoreMedia
 , Foundation, CoreGraphics, MediaToolbox
-, gnupg
+, gnupg, ...
 }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "keybase";
-  version = "5.8.1";
+  version = "5.9.1";
 
-  goPackagePath = "github.com/keybase/client";
-  subPackages = [ "go/kbnm" "go/keybase" ];
+  modRoot = "go";
+  subPackages = [ "kbnm" "keybase" ];
 
   dontRenameImports = true;
 
@@ -17,8 +17,9 @@ buildGoPackage rec {
     owner = "keybase";
     repo = "client";
     rev = "v${version}";
-    sha256 = "sha256-SeBZtrRsWTv5yBBsp18daKCNAr70OalH3shlKf+aiEU=";
+    sha256 = "sha256-WAI/rl6awVLbXqdqYAq8fyABAO2qet+GYucuiwClylI=";
   };
+  vendorSha256 = "sha256-ZZTM1s/kFHkCjnaDYuP7xCrkW2an3I6kvcMXMy63ySE=";
 
   patches = [
     (substituteAll {
@@ -30,6 +31,7 @@ buildGoPackage rec {
 
   buildInputs = lib.optionals stdenv.isDarwin [ AVFoundation AudioToolbox ImageIO CoreMedia Foundation CoreGraphics MediaToolbox ];
   tags = [ "production" ];
+  ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
     homepage = "https://www.keybase.io/";
