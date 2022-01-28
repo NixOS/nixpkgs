@@ -31112,9 +31112,14 @@ with pkgs;
 
   pong3d = callPackage ../games/pong3d { };
 
-  pokerth = libsForQt5.callPackage ../games/pokerth { };
+  pokerth = libsForQt5.callPackage ../games/pokerth {
+    boost = boost16x;
+  };
 
-  pokerth-server = libsForQt5.callPackage ../games/pokerth { target = "server"; };
+  pokerth-server = libsForQt5.callPackage ../games/pokerth {
+    boost = boost16x;
+    target = "server";
+  };
 
   powermanga = callPackage ../games/powermanga { };
 
