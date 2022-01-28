@@ -1,6 +1,5 @@
 { stdenv
 , lib
-, buildEnv
 , buildGoModule
 , fetchFromGitHub
 , makeWrapper
@@ -102,16 +101,35 @@ let
           terraform.overrideAttrs
             (orig: { passthru = orig.passthru // passthru; })
         else
-          lib.appendToName "with-plugins" (buildEnv {
+          lib.appendToName "with-plugins" (stdenv.mkDerivation {
             inherit (terraform) name meta;
-            paths = actualPlugins;
             nativeBuildInputs = [ makeWrapper ];
-            postBuild = ''
-              mkdir -p $out/bin
+
+            buildCommand = ''
+              # Create wrappers for terraform plugins because Terraform only
+              # walks inside of a tree of files.
+              for providerDir in ${toString actualPlugins}
+              do
+                for file in $(find $providerDir/libexec/terraform-providers -type f)
+                do
+                  relFile=''${file#$providerDir/}
+                  mkdir -p $out/$(dirname $relFile)
+                  cat <<WRAPPER > $out/$relFile
+              #!${runtimeShell}
+              exec "$file" "$@"
+              WRAPPER
+                  chmod +x $out/$relFile
+                done
+              done
+
+              # Create a wrapper for terraform to point it to the plugins dir.
+              mkdir -p $out/bin/
               makeWrapper "${terraform}/bin/terraform" "$out/bin/terraform" \
                 --set NIX_TERRAFORM_PLUGIN_DIR $out/libexec/terraform-providers \
                 --prefix PATH : "${lib.makeBinPath wrapperInputs}"
             '';
+
+            inherit passthru;
           });
     in
     withPlugins (_: [ ]);
