@@ -1277,6 +1277,8 @@ with pkgs;
 
   aldo = callPackage ../applications/radio/aldo { };
 
+  alglib = callPackage ../development/libraries/alglib { };
+
   almanah = callPackage ../applications/misc/almanah { };
 
   alpine-make-vm-image = callPackage ../tools/virtualization/alpine-make-vm-image { };
