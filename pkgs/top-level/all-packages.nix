@@ -24934,7 +24934,7 @@ with pkgs;
   darcs-to-git = callPackage ../applications/version-management/git-and-tools/darcs-to-git { };
 
   darktable = callPackage ../applications/graphics/darktable {
-    lua = lua5_3;
+    lua = lua5_4;
     pugixml = pugixml.override { shared = true; };
   };
 
@@ -29754,6 +29754,8 @@ with pkgs;
     gtk = gtk2;
   };
 
+  xxh = with python3Packages; toPythonApplication xxh;
+
   kodiPackages = recurseIntoAttrs (kodi.packages);
 
   kodi = callPackage ../applications/video/kodi {
@@ -31114,9 +31116,14 @@ with pkgs;
 
   pong3d = callPackage ../games/pong3d { };
 
-  pokerth = libsForQt5.callPackage ../games/pokerth { };
+  pokerth = libsForQt5.callPackage ../games/pokerth {
+    boost = boost16x;
+  };
 
-  pokerth-server = libsForQt5.callPackage ../games/pokerth { target = "server"; };
+  pokerth-server = libsForQt5.callPackage ../games/pokerth {
+    boost = boost16x;
+    target = "server";
+  };
 
   powermanga = callPackage ../games/powermanga { };
 

@@ -52,8 +52,7 @@
 , libaom
 , portmidi
 , fetchpatch
-, lua5_4
-, ...
+, lua
 }:
 
 stdenv.mkDerivation rec {
@@ -104,7 +103,7 @@ stdenv.mkDerivation rec {
     libheif
     libaom
     portmidi
-    lua5_4
+    lua
   ] ++ lib.optionals stdenv.isLinux [
     colord
     colord-gtk

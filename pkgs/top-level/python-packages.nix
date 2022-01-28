@@ -10308,6 +10308,8 @@ in {
 
   wandb = callPackage ../development/python-modules/wandb { };
 
+  warcio = callPackage ../development/python-modules/warcio { };
+
   warlock = callPackage ../development/python-modules/warlock { };
 
   warrant = callPackage ../development/python-modules/warrant { };
@@ -10582,6 +10584,8 @@ in {
   xvfbwrapper = callPackage ../development/python-modules/xvfbwrapper {
     inherit (pkgs.xorg) xorgserver;
   };
+
+  xxh = callPackage ../tools/networking/xxh { };
 
   xxhash = callPackage ../development/python-modules/xxhash { };
 
