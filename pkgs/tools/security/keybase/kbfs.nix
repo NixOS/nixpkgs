@@ -15,7 +15,7 @@ buildGoModule {
     homepage = "https://keybase.io/docs/kbfs";
     description = "The Keybase filesystem";
     platforms = platforms.unix;
-    maintainers = with maintainers; [ avaq rvolosatovs bennofs np ];
+    maintainers = with maintainers; [ avaq rvolosatovs bennofs np shofius ];
     license = licenses.bsd3;
   };
 }
