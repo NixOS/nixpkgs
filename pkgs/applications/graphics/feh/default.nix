@@ -3,8 +3,6 @@
 , curl, libexif, jpegexiforient, perl
 , enableAutoreload ? !stdenv.hostPlatform.isDarwin }:
 
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "feh";
   version = "3.8";
@@ -22,22 +20,24 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "PREFIX=${placeholder "out"}" "exif=1"
-  ] ++ optional stdenv.isDarwin "verscmp=0"
-    ++ optional enableAutoreload "inotify=1";
+  ] ++ lib.optional stdenv.isDarwin "verscmp=0"
+    ++ lib.optional enableAutoreload "inotify=1";
 
   installTargets = [ "install" ];
   postInstall = ''
-    wrapProgram "$out/bin/feh" --prefix PATH : "${makeBinPath [ libjpeg jpegexiforient ]}" \
+    wrapProgram "$out/bin/feh" --prefix PATH : "${lib.makeBinPath [ libjpeg jpegexiforient ]}" \
                                --add-flags '--theme=feh'
   '';
 
   checkInputs = lib.singleton (perl.withPackages (p: [ p.TestCommand ]));
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "A light-weight image viewer";
     homepage = "https://feh.finalrewind.org/";
-    license = licenses.mit;
+    # released under a variant of the MIT license
+    # https://spdx.org/licenses/MIT-feh.html
+    license = licenses.mit-feh;
     maintainers = with maintainers; [ viric willibutz globin ma27 ];
     platforms = platforms.unix;
   };
