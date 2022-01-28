@@ -8477,6 +8477,9 @@ with pkgs;
   opentelemetry-collector = callPackage ../tools/misc/opentelemetry-collector {
       buildGoModule = buildGo117Module;
   };
+  opentelemetry-collector-contrib = callPackage ../tools/misc/opentelemetry-collector/contrib.nix {
+      buildGoModule = buildGo117Module;
+  };
 
   opentracing-cpp = callPackage ../development/libraries/opentracing-cpp { };
 
