@@ -4,7 +4,6 @@
 , nix-update-script
 , meson
 , ninja
-, python3
 , rustPlatform
 , pkg-config
 , glib
@@ -22,7 +21,7 @@
 
 stdenv.mkDerivation rec {
   pname = "ashpd-demo";
-  version = "0.0.1-alpha";
+  version = "0.2.2";
 
   src =
     let
@@ -30,7 +29,7 @@ stdenv.mkDerivation rec {
         owner = "bilelmoussaoui";
         repo = "ashpd";
         rev = version;
-        sha256 = "Lf3Wj4VTDyJ5a1bJTEI6R6aaeEHZ+4hO+BsD98sKb/s=";
+        sha256 = "9O6XqM4oys/hXgztQQ8tTobJV8U52db/VY6FlTMUvGY=";
       };
     in
     "${share}/ashpd-demo";
@@ -38,14 +37,13 @@ stdenv.mkDerivation rec {
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-npqC8lu7acAggJyR4iDkcQZYMNNnseV2pB3+j4G/nIk=";
+    hash = "sha256-eFq42m16zzrUBbAqv7BsAf4VxyO93WynLjvIzKbZwnQ=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
-    python3
     rustPlatform.rust.cargo
     rustPlatform.cargoSetupHook
     rustPlatform.rust.rustc
@@ -70,13 +68,6 @@ stdenv.mkDerivation rec {
   # <spa-0.2/spa/utils/defs.h> included by libspa-sys requires <stdbool.h>
   BINDGEN_EXTRA_CLANG_ARGS = "-I${llvmPackages.libclang.lib}/lib/clang/${lib.getVersion llvmPackages.clang}/include -I${glibc.dev}/include";
 
-  postPatch = ''
-    patchShebangs build-aux/meson_post_install.py
-    # https://github.com/bilelmoussaoui/ashpd/pull/32
-    substituteInPlace build-aux/meson_post_install.py \
-      --replace "gtk-update-icon-cache" "gtk4-update-icon-cache"
-  '';
-
   passthru = {
     updateScript = nix-update-script {
       attrPath = pname;
@@ -86,7 +77,6 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Tool for playing with XDG desktop portals";
     homepage = "https://github.com/bilelmoussaoui/ashpd/tree/master/ashpd-demo";
-    broken = true; # requires older libadwaita
     license = licenses.mit;
     maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.linux;
