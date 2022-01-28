@@ -1213,6 +1213,8 @@ with pkgs;
 
   yaft = callPackage ../applications/terminal-emulators/yaft { };
 
+  zutty = callPackage ../applications/terminal-emulators/zutty { fontmiscmisc = xorg.fontmiscmisc; };
+
   aldo = callPackage ../applications/radio/aldo { };
 
   almanah = callPackage ../applications/misc/almanah { };
