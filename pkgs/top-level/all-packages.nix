@@ -19861,6 +19861,8 @@ with pkgs;
 
   skaffold = callPackage ../development/tools/skaffold { };
 
+  skjold = callPackage ../development/tools/skjold { };
+
   skalibs = skawarePackages.skalibs;
   skalibs_2_10 = skawarePackages.skalibs_2_10;
 
