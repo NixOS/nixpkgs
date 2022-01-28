@@ -569,29 +569,6 @@
       </listitem>
       <listitem>
         <para>
-          The configuration portion of the <literal>nix-daemon</literal>
-          module has been reworked and exposed as
-          <link xlink:href="options.html#opt-nix-settings">nix.settings</link>:
-        </para>
-        <itemizedlist spacing="compact">
-          <listitem>
-            <para>
-              Legacy options have been mapped to the corresponding
-              options under under
-              <link xlink:href="options.html#opt-nix.settings">nix.settings</link>
-              but may be deprecated in the future.
-            </para>
-          </listitem>
-          <listitem>
-            <para>
-              <link xlink:href="options.html#opt-nix.buildMachines.publicHostKey">nix.buildMachines.publicHostKey</link>
-              has been added.
-            </para>
-          </listitem>
-        </itemizedlist>
-      </listitem>
-      <listitem>
-        <para>
           The
           <literal>writers.writePyPy2</literal>/<literal>writers.writePyPy3</literal>
           and corresponding

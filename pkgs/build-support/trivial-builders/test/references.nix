@@ -28,7 +28,7 @@ nixosTest {
     virtualisation.writableStore = true;
 
     # Test runs without network, so we don't substitute and prepare our deps
-    nix.settings.substituters = lib.mkForce [];
+    nix.binaryCaches = lib.mkForce [];
     environment.etc."pre-built-paths".source = writeText "pre-built-paths" (
       builtins.toJSON [hello figlet stdenvNoCC]
     );

@@ -45,11 +45,11 @@ in makeTest {
         ../modules/profiles/base.nix
       ];
 
-      nix.settings = {
-        substituters = mkForce [];
-        hashed-mirrors = null;
-        connect-timeout = 1;
-      };
+      nix.binaryCaches = mkForce [ ];
+      nix.extraOptions = ''
+        hashed-mirrors =
+        connect-timeout = 1
+      '';
 
       virtualisation.diskSize = 8 * 1024;
       virtualisation.emptyDiskImages = [

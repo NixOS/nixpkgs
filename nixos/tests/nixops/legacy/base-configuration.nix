@@ -16,7 +16,7 @@ in
     (modulesPath + "/testing/test-instrumentation.nix")
   ];
   virtualisation.writableStore = true;
-  nix.settings.substituters = lib.mkForce [ ];
+  nix.binaryCaches = lib.mkForce [ ];
   virtualisation.graphics = false;
   documentation.enable = false;
   services.qemuGuest.enable = true;

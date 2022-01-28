@@ -23,7 +23,7 @@ let
       deployer = { config, lib, nodes, pkgs, ... }: {
         imports = [ ../../modules/installer/cd-dvd/channel.nix ];
         environment.systemPackages = [ nixopsPkg ];
-        nix.settings.substituters = lib.mkForce [ ];
+        nix.binaryCaches = lib.mkForce [ ];
         users.users.person.isNormalUser = true;
         virtualisation.writableStore = true;
         virtualisation.additionalPaths = [

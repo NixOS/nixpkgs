@@ -17,7 +17,7 @@ in
     description = "Azure NixOS Test User";
     openssh.authorizedKeys.keys = [ (builtins.readFile ~/.ssh/id_ed25519.pub) ];
   };
-  nix.settings.trusted-users = [ username ];
+  nix.trustedUsers = [ username ];
 
   virtualisation.azureImage.diskSize = 2500;
 
