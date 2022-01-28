@@ -9,6 +9,12 @@
 , mkYarnPackage
 , nixosTests
 , fetchpatch
+, enableAWS ? true
+, enableAzure ? true
+, enableDigitalOcean ? true
+, enableGCE ? true
+, enableKubernetes ? true
+, enableLinode ? true
 }:
 
 let
@@ -92,6 +98,20 @@ buildGoModule rec {
     # webui-codemirror
     ln -s ${codemirror}/dist web/ui/module/codemirror-promql/dist
     ln -s ${codemirror}/lib web/ui/module/codemirror-promql/lib
+
+    # Disable some service discovery to shrink binaries.
+    ${lib.optionalString (!enableAWS)
+      "sed -i -e '/register aws/d' discovery/install/install.go"}
+    ${lib.optionalString (!enableAzure)
+      "sed -i -e '/register azure/d' discovery/install/install.go"}
+    ${lib.optionalString (!enableDigitalOcean)
+      "sed -i -e '/register digitalocean/d' discovery/install/install.go"}
+    ${lib.optionalString (!enableGCE)
+      "sed -i -e '/register gce/d' discovery/install/install.go"}
+    ${lib.optionalString (!enableKubernetes)
+      "sed -i -e '/register kubernetes/d' discovery/install/install.go"}
+    ${lib.optionalString (!enableLinode)
+      "sed -i -e '/register linode/d' discovery/install/install.go"}
   '';
 
   tags = [ "builtinassets" ];
