@@ -77,9 +77,6 @@ stdenv.mkDerivation rec {
     ./patches/use-get-directory-for-diag.patch
     # Don't try to install systemd service
     ./patches/dont-install-systemd-service.patch
-    # Prevent the runner from starting a self-update for new versions
-    # (upstream issue: https://github.com/actions/runner/issues/485)
-    ./patches/prevent-self-update.patch
   ];
 
   postPatch = ''
