@@ -158,7 +158,6 @@ in python.pkgs.buildPythonApplication rec {
       src = ./patches/ffmpeg-path.patch;
       ffmpeg = "${lib.getBin ffmpeg}/bin/ffmpeg";
     })
-    ./patches/tests-ignore-OSErrors-in-hass-fixture.patch
   ];
 
   postPatch = let
