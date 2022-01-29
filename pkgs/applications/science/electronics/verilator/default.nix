@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   doCheck = false;
   checkTarget = "test";
 
-  preConfigurePhases = ''
+  preConfigure = ''
     autoconf
   '';
 
