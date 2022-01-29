@@ -8378,6 +8378,8 @@ in {
 
   qscintilla = self.qscintilla-qt5;
 
+  qt5reactor = callPackage ../development/python-modules/qt5reactor { };
+
   qtawesome = callPackage ../development/python-modules/qtawesome { };
 
   qtconsole = callPackage ../development/python-modules/qtconsole { };
