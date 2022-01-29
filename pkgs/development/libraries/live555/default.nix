@@ -3,6 +3,9 @@
 , fetchurl
 , darwin
 , openssl
+
+# major and only downstream dependency
+, vlc
 }:
 
 stdenv.mkDerivation rec {
@@ -61,6 +64,10 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  passthru.tests = {
+    inherit vlc;
+  };
 
   meta = with lib; {
     homepage = "http://www.live555.com/liveMedia/";

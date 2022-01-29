@@ -1,5 +1,6 @@
 { buildPythonPackage
 , fetchFromGitHub
+, jaxlib
 , keras
 , lib
 , matplotlib
@@ -20,6 +21,8 @@ buildPythonPackage rec {
     rev = "v${version}";
     sha256 = "0zvq0vl88hiwmss49bnm7gdmndr1dfza2bcs1fj88a9r7w9dmlsr";
   };
+
+  buildInputs = [ jaxlib ];
 
   propagatedBuildInputs = [
     matplotlib
