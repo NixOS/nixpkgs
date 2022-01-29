@@ -131,6 +131,10 @@ sub parseSystemdIni {
 
     # Copy over all sections
     foreach my $sectionName (keys %fileContents) {
+        if ($sectionName eq "Install") {
+            # Skip the [Install] section because it has no relevant keys for us
+            next;
+        }
         # Copy over all keys
         foreach my $iniKey (keys %{$fileContents{$sectionName}}) {
             # Ensure the value is an array so it's easier to work with
