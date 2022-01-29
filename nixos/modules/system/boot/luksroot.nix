@@ -444,12 +444,7 @@ let
                     # Try reading it from /dev/console with a timeout
                     IFS= read -t 1 -r pin
                     if [ -n "$pin" ]; then
-                       ${if luks.reusePassphrases then ''
-                         # Remember it for the next device
-                         echo -n "$pin" > /crypt-ramfs/passphrase
-                       '' else ''
-                         # Don't save it to ramfs. We are very paranoid
-                       ''}
+                       echo -n "$pin" > /crypt-ramfs/passphrase
                        echo
                        break
                     fi
