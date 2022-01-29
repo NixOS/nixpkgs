@@ -693,8 +693,8 @@ let
         mktplcRef = {
           name = "prettier-vscode";
           publisher = "esbenp";
-          version = "9.1.0";
-          sha256 = "sha256-lR5BDbDYURCF1Gq5JIm7BcXVvKXPdNBYom0BiVX/3u0=";
+          version = "9.2.0";
+          sha256 = "sha256-ROI312MPMUY1q6IV4qVCW8DD0MQPA/hVW7rfamo/IbI=";
         };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/esbenp.prettier-vscode/changelog";
