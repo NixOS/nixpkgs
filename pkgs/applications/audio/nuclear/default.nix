@@ -1,12 +1,12 @@
 { appimageTools, lib, fetchurl }:
 let
   pname = "nuclear";
-  version = "0.6.6";
+  version = "0.6.17";
   name = "${pname}-v${version}";
 
   src = fetchurl {
     url = "https://github.com/nukeop/nuclear/releases/download/v${version}/${name}.AppImage";
-    sha256 = "0c1335m76fv0wfbk07s8r6ln7zbmlqd66052gqfisakl8a1aafl6";
+    sha256 = "M5nTsAUMItFDb1wd9mGDAnj+PgHMYMYiMtvtlc3GqVk=";
   };
 
   appimageContents = appimageTools.extract { inherit name src; };
