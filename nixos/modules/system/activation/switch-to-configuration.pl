@@ -507,8 +507,12 @@ foreach my $device (keys %$prevSwaps) {
         # "systemctl stop" here because systemd has lots of alias
         # units that prevent a stop from actually calling
         # "swapoff".
-        print STDERR "stopping swap device: $device\n";
-        system("@utillinux@/sbin/swapoff", $device);
+        if ($action ne "dry-activate") {
+            print STDERR "would stop swap device: $device\n";
+        } else {
+            print STDERR "stopping swap device: $device\n";
+            system("@utillinux@/sbin/swapoff", $device);
+        }
     }
     # FIXME: update swap options (i.e. its priority).
 }
