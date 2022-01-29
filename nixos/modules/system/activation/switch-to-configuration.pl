@@ -205,7 +205,7 @@ sub fingerprintUnit {
 }
 
 sub handleModifiedUnit {
-    my ($unit, $baseName, $newUnitFile, $activePrev, $unitsToStop, $unitsToStart, $unitsToReload, $unitsToRestart, $unitsToSkip) = @_;
+    my ($unit, $baseName, $newUnitFile, $newUnitInfo, $activePrev, $unitsToStop, $unitsToStart, $unitsToReload, $unitsToRestart, $unitsToSkip) = @_;
 
     if ($unit eq "sysinit.target" || $unit eq "basic.target" || $unit eq "multi-user.target" || $unit eq "graphical.target" || $unit =~ /\.path$/ || $unit =~ /\.slice$/) {
         # Do nothing.  These cannot be restarted directly.
@@ -223,7 +223,7 @@ sub handleModifiedUnit {
         # Revert of the attempt: https://github.com/NixOS/nixpkgs/pull/147609
         # More details: https://github.com/NixOS/nixpkgs/issues/74899#issuecomment-981142430
     } else {
-        my %unitInfo = parseUnit($newUnitFile);
+        my %unitInfo = $newUnitInfo ? %{$newUnitInfo} : parseUnit($newUnitFile);
         if (parseSystemdBool(\%unitInfo, "Service", "X-ReloadIfChanged", 0)) {
             $unitsToReload->{$unit} = 1;
             recordUnit($reloadListFile, $unit);
@@ -349,7 +349,7 @@ while (my ($unit, $state) = each %{$activePrev}) {
         }
 
         elsif (fingerprintUnit($prevUnitFile) ne fingerprintUnit($newUnitFile)) {
-            handleModifiedUnit($unit, $baseName, $newUnitFile, $activePrev, \%unitsToStop, \%unitsToStart, \%unitsToReload, \%unitsToRestart, \%unitsToSkip);
+            handleModifiedUnit($unit, $baseName, $newUnitFile, undef, $activePrev, \%unitsToStop, \%unitsToStart, \%unitsToReload, \%unitsToRestart, \%unitsToSkip);
         }
     }
 }
@@ -473,7 +473,7 @@ if ($action eq "dry-activate") {
             next;
         }
 
-        handleModifiedUnit($unit, $baseName, $newUnitFile, $activePrev, \%unitsToRestart, \%unitsToRestart, \%unitsToReload, \%unitsToRestart, \%unitsToSkip);
+        handleModifiedUnit($unit, $baseName, $newUnitFile, undef, $activePrev, \%unitsToRestart, \%unitsToRestart, \%unitsToReload, \%unitsToRestart, \%unitsToSkip);
     }
     unlink($dryRestartByActivationFile);
 
@@ -529,7 +529,7 @@ foreach (split('\n', read_file($restartByActivationFile, err_mode => 'quiet') //
         next;
     }
 
-    handleModifiedUnit($unit, $baseName, $newUnitFile, $activePrev, \%unitsToRestart, \%unitsToRestart, \%unitsToReload, \%unitsToRestart, \%unitsToSkip);
+    handleModifiedUnit($unit, $baseName, $newUnitFile, undef, $activePrev, \%unitsToRestart, \%unitsToRestart, \%unitsToReload, \%unitsToRestart, \%unitsToSkip);
 }
 # We can remove the file now because it has been propagated to the other restart/reload files
 unlink($restartByActivationFile);
