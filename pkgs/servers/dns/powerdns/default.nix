@@ -1,28 +1,20 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkg-config, nixosTests
+{ lib, stdenv, fetchurl, pkg-config, nixosTests
 , boost, libyamlcpp, libsodium, sqlite, protobuf, openssl, systemd
-, mysql57, postgresql, lua, openldap, geoip, curl, unixODBC
+, mariadb-connector-c, postgresql, lua, openldap, geoip, curl, unixODBC
 }:
 
 stdenv.mkDerivation rec {
   pname = "powerdns";
-  version = "4.3.1";
+  version = "4.5.3";
 
   src = fetchurl {
     url = "https://downloads.powerdns.com/releases/pdns-${version}.tar.bz2";
-    sha256 = "0if27znz528sir52y9i4gcfhdsym7yxiwjgffy9lpscf1426q56m";
+    sha256 = "0kq4if44hw7d08im3k25l2wpm8sa2g3cpmqxd7crnhkyg1lxjq0w";
   };
-
-  patches = [
-    (fetchpatch { # remove for >= 4.4.0
-      name = "gcc-10_undefined-reference.diff";
-      url = "https://github.com/PowerDNS/pdns/commit/05c9dd77b28.diff";
-      sha256 = "1m9szbi02h9kcabgw3kb8k9qrb54d34z0qzizrlfiw3hxs6c2zql";
-    })
-  ];
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    boost mysql57.connector-c postgresql lua openldap sqlite protobuf geoip
+    boost mariadb-connector-c postgresql lua openldap sqlite protobuf geoip
     libyamlcpp libsodium curl unixODBC openssl systemd
   ];
 
