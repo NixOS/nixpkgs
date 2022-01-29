@@ -1082,11 +1082,11 @@
       };
     }
     {
-      name = "_types_node___node_17.0.10.tgz";
+      name = "_types_node___node_17.0.13.tgz";
       path = fetchurl {
-        name = "_types_node___node_17.0.10.tgz";
-        url  = "https://registry.yarnpkg.com/@types/node/-/node-17.0.10.tgz";
-        sha1 = "616f16e9d3a2a3d618136b1be244315d95bd7cab";
+        name = "_types_node___node_17.0.13.tgz";
+        url  = "https://registry.yarnpkg.com/@types/node/-/node-17.0.13.tgz";
+        sha1 = "5ed7ed7c662948335fcad6c412bb42d99ea754e3";
       };
     }
     {
@@ -1674,11 +1674,11 @@
       };
     }
     {
-      name = "bytes___bytes_3.1.1.tgz";
+      name = "bytes___bytes_3.1.2.tgz";
       path = fetchurl {
-        name = "bytes___bytes_3.1.1.tgz";
-        url  = "https://registry.yarnpkg.com/bytes/-/bytes-3.1.1.tgz";
-        sha1 = "3f018291cb4cbad9accb6e6970bca9c8889e879a";
+        name = "bytes___bytes_3.1.2.tgz";
+        url  = "https://registry.yarnpkg.com/bytes/-/bytes-3.1.2.tgz";
+        sha1 = "8b0beeb98605adf1b128fa4386403c009e0221a5";
       };
     }
     {
@@ -1730,11 +1730,11 @@
       };
     }
     {
-      name = "caniuse_lite___caniuse_lite_1.0.30001301.tgz";
+      name = "caniuse_lite___caniuse_lite_1.0.30001304.tgz";
       path = fetchurl {
-        name = "caniuse_lite___caniuse_lite_1.0.30001301.tgz";
-        url  = "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001301.tgz";
-        sha1 = "ebc9086026534cab0dab99425d9c3b4425e5f450";
+        name = "caniuse_lite___caniuse_lite_1.0.30001304.tgz";
+        url  = "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001304.tgz";
+        sha1 = "38af55ed3fc8220cb13e35e6e7309c8c65a05559";
       };
     }
     {
@@ -2378,11 +2378,11 @@
       };
     }
     {
-      name = "electron_to_chromium___electron_to_chromium_1.4.52.tgz";
+      name = "electron_to_chromium___electron_to_chromium_1.4.57.tgz";
       path = fetchurl {
-        name = "electron_to_chromium___electron_to_chromium_1.4.52.tgz";
-        url  = "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.52.tgz";
-        sha1 = "ce44c6d6cc449e7688a4356b8c261cfeafa26833";
+        name = "electron_to_chromium___electron_to_chromium_1.4.57.tgz";
+        url  = "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.57.tgz";
+        sha1 = "2b2766df76ac8dbc0a1d41249bc5684a31849892";
       };
     }
     {
@@ -2538,11 +2538,11 @@
       };
     }
     {
-      name = "eslint_module_utils___eslint_module_utils_2.7.2.tgz";
+      name = "eslint_module_utils___eslint_module_utils_2.7.3.tgz";
       path = fetchurl {
-        name = "eslint_module_utils___eslint_module_utils_2.7.2.tgz";
-        url  = "https://registry.yarnpkg.com/eslint-module-utils/-/eslint-module-utils-2.7.2.tgz";
-        sha1 = "1d0aa455dcf41052339b63cada8ab5fd57577129";
+        name = "eslint_module_utils___eslint_module_utils_2.7.3.tgz";
+        url  = "https://registry.yarnpkg.com/eslint-module-utils/-/eslint-module-utils-2.7.3.tgz";
+        sha1 = "ad7e3a10552fdd0642e1e55292781bd6e34876ee";
       };
     }
     {
@@ -2842,11 +2842,11 @@
       };
     }
     {
-      name = "flatted___flatted_3.2.4.tgz";
+      name = "flatted___flatted_3.2.5.tgz";
       path = fetchurl {
-        name = "flatted___flatted_3.2.4.tgz";
-        url  = "https://registry.yarnpkg.com/flatted/-/flatted-3.2.4.tgz";
-        sha1 = "28d9969ea90661b5134259f312ab6aa7929ac5e2";
+        name = "flatted___flatted_3.2.5.tgz";
+        url  = "https://registry.yarnpkg.com/flatted/-/flatted-3.2.5.tgz";
+        sha1 = "76c8584f4fc843db64702a6bd04ab7a8bd666da3";
       };
     }
     {
@@ -4571,11 +4571,11 @@
       };
     }
     {
-      name = "postcss_calc___postcss_calc_8.2.2.tgz";
+      name = "postcss_calc___postcss_calc_8.2.3.tgz";
       path = fetchurl {
-        name = "postcss_calc___postcss_calc_8.2.2.tgz";
-        url  = "https://registry.yarnpkg.com/postcss-calc/-/postcss-calc-8.2.2.tgz";
-        sha1 = "9706e7399e8ec8b61a47830dcf1f21391af23373";
+        name = "postcss_calc___postcss_calc_8.2.3.tgz";
+        url  = "https://registry.yarnpkg.com/postcss-calc/-/postcss-calc-8.2.3.tgz";
+        sha1 = "53b95ce93de19213c2a5fdd71277a81690ef41d0";
       };
     }
     {
