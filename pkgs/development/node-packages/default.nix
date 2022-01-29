@@ -127,7 +127,15 @@ let
     # ../../applications/video/epgstation
     epgstation = super."epgstation-../../applications/video/epgstation".override (drv: {
       meta = drv.meta // {
-        broken = true; # not really broken, see the comment above
+        platforms = pkgs.lib.platforms.none;
+      };
+    });
+
+    # NOTE: this is a stub package to fetch npm dependencies for
+    # ../../applications/video/epgstation/client
+    epgstation-client = super."epgstation-client-../../applications/video/epgstation/client".override (drv: {
+      meta = drv.meta // {
+        platforms = pkgs.lib.platforms.none;
       };
     });
 
