@@ -20230,7 +20230,7 @@ with pkgs;
   triehash = callPackage ../tools/misc/triehash { };
 
   trillian = callPackage ../tools/misc/trillian {
-    buildGoModule = buildGo115Module;
+    buildGoModule = buildGo117Module;
   };
 
   twolame = callPackage ../development/libraries/twolame { };
