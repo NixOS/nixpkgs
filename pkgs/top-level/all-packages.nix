@@ -22624,6 +22624,8 @@ with pkgs;
 
   lockdep = callPackage ../os-specific/linux/lockdep { };
 
+  lsirec = callPackage ../os-specific/linux/lsirec { };
+
   lsiutil = callPackage ../os-specific/linux/lsiutil { };
 
   kaitai-struct-compiler = callPackage ../development/compilers/kaitai-struct-compiler { };
@@ -33141,11 +33143,11 @@ with pkgs;
 
   neo = callPackage ../applications/misc/neo { };
 
-  nixVersions = callPackage ../tools/package-management/nix {
+  nixVersions = recurseIntoAttrs (callPackage ../tools/package-management/nix {
     storeDir = config.nix.storeDir or "/nix/store";
     stateDir = config.nix.stateDir or "/nix/var";
     inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  });
 
   nix = nixVersions.stable;
 
