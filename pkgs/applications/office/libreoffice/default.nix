@@ -635,6 +635,11 @@ let
       ln -s $out/Applications/${appName}/Contents/MacOS/soffice $out/bin
       runHook postInstallPhase
     '';
+
+    passthru = {
+      # needed due to the wrapper.nix
+      inherit jdk;
+    };
   };
 in
 if stdenv.isDarwin
