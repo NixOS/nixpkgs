@@ -8,11 +8,11 @@
 , alabaster
 , docutils
 , imagesize
+, importlib-metadata
 , jinja2
 , packaging
 , pygments
 , requests
-, setuptools
 , snowballstemmer
 , sphinxcontrib-applehelp
 , sphinxcontrib-devhelp
@@ -29,14 +29,14 @@
 
 buildPythonPackage rec {
   pname = "sphinx";
-  version = "4.3.2";
+  version = "4.4.0";
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "sphinx-doc";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ze6+iGGWSDljb8SPc1Z9UcPfUrleDTeaol5ZDGj1iYg=";
+    sha256 = "sha256-Q4CqPO08AfR+CDB02al65A+FHRFUDUfFTba0u8YQx+8=";
     extraPostFetch = ''
       cd $out
       mv tests/roots/test-images/testimäge.png \
@@ -54,7 +54,6 @@ buildPythonPackage rec {
     packaging
     pygments
     requests
-    setuptools
     snowballstemmer
     sphinxcontrib-applehelp
     sphinxcontrib-devhelp
@@ -64,6 +63,8 @@ buildPythonPackage rec {
     sphinxcontrib-serializinghtml
     # extra[docs]
     sphinxcontrib-websupport
+  ] ++ lib.optionals (pythonOlder "3.10") [
+    importlib-metadata
   ];
 
   checkInputs = [
@@ -114,6 +115,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://www.sphinx-doc.org";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = teams.sphinx.members;
   };
 }
