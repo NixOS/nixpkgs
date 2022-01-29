@@ -302,6 +302,9 @@ let
     # Enable Sound Open Firmware support
     } // optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux" &&
                         versionAtLeast version "5.5") {
+      SND_SOC_INTEL_SOUNDWIRE_SOF_MACH       = whenAtLeast "5.10" module;
+      SND_SOC_INTEL_USER_FRIENDLY_LONG_NAMES = whenAtLeast "5.10" yes; # dep of SOF_MACH
+      SND_SOC_SOF_INTEL_SOUNDWIRE_LINK = whenBetween "5.10" "5.11" yes; # dep of SOF_MACH
       SND_SOC_SOF_TOPLEVEL              = yes;
       SND_SOC_SOF_ACPI                  = module;
       SND_SOC_SOF_PCI                   = module;
@@ -449,13 +452,19 @@ let
     };
 
     security = {
+      # https://googleprojectzero.blogspot.com/2019/11/bad-binder-android-in-wild-exploit.html
+      DEBUG_LIST                       = yes;
       # Detect writes to read-only module pages
       DEBUG_SET_MODULE_RONX            = { optional = true; tristate = whenOlder "4.11" "y"; };
       RANDOMIZE_BASE                   = option yes;
-      STRICT_DEVMEM                    = option yes; # Filter access to /dev/mem
+      STRICT_DEVMEM                    = mkDefault yes; # Filter access to /dev/mem
+      IO_STRICT_DEVMEM                 = whenAtLeast "4.5" (mkDefault yes);
       SECURITY_SELINUX_BOOTPARAM_VALUE = whenOlder "5.1" (freeform "0"); # Disable SELinux by default
       # Prevent processes from ptracing non-children processes
       SECURITY_YAMA                    = option yes;
+      # The goal of Landlock is to enable to restrict ambient rights (e.g. global filesystem access) for a set of processes.
+      # This does not have any effect if a program does not support it
+      SECURITY_LANDLOCK                = whenAtLeast "5.13" yes;
       DEVKMEM                          = whenOlder "5.13" no; # Disable /dev/kmem
 
       USER_NS                          = yes; # Support for user namespaces
@@ -473,7 +482,7 @@ let
 
       # Detect buffer overflows on the stack
       CC_STACKPROTECTOR_REGULAR = {optional = true; tristate = whenOlder "4.18" "y";};
-    } // optionalAttrs stdenv.hostPlatform.isx86 {
+    } // optionalAttrs stdenv.hostPlatform.isx86_64 {
       # Enable Intel SGX
       X86_SGX     = whenAtLeast "5.11" yes;
       # Allow KVM guests to load SGX enclaves
@@ -533,6 +542,7 @@ let
       UPROBE_EVENT          = { optional = true; tristate = whenOlder "4.11" "y";};
       UPROBE_EVENTS         = { optional = true; tristate = whenAtLeast "4.11" "y";};
       BPF_SYSCALL           = whenAtLeast "4.4" yes;
+      BPF_UNPRIV_DEFAULT_OFF = whenBetween "5.10" "5.15" yes;
       BPF_EVENTS            = whenAtLeast "4.4" yes;
       FUNCTION_PROFILER     = yes;
       RING_BUFFER_BENCHMARK = no;
@@ -883,6 +893,12 @@ let
       SCHED_CORE = whenAtLeast "5.14" yes;
 
       FSL_MC_UAPI_SUPPORT = mkIf (stdenv.hostPlatform.system == "aarch64-linux") (whenAtLeast "5.12" yes);
+
+      ASHMEM =                 { optional = true; tristate = whenAtLeast "5.0" "y";};
+      ANDROID =                { optional = true; tristate = whenAtLeast "5.0" "y";};
+      ANDROID_BINDER_IPC =     { optional = true; tristate = whenAtLeast "5.0" "y";};
+      ANDROID_BINDERFS =       { optional = true; tristate = whenAtLeast "5.0" "y";};
+      ANDROID_BINDER_DEVICES = { optional = true; freeform = whenAtLeast "5.0" "binder,hwbinder,vndbinder";};
     } // optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "aarch64-linux") {
       # Enable CPU/memory hotplug support
       # Allows you to dynamically add & remove CPUs/memory to a VM client running NixOS without requiring a reboot

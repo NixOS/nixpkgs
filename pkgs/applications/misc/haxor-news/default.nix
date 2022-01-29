@@ -15,7 +15,8 @@ let
           sha256 = "09h1153wgr5x2ny7ds0w2m81n3bb9j8hjb8sjfnrg506r01clkyx";
         };
       });
-      click = self.callPackage ../../../development/python-modules/click/7.nix { };
+      # Use click 7
+      click = self.callPackage ../../../development/python2-modules/click/default.nix { };
     };
   };
 in

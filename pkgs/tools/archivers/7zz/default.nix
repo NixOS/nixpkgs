@@ -1,13 +1,12 @@
 { stdenv, lib, fetchurl, p7zip }:
 
-# https://sourceforge.net/p/sevenzip/discussion/45797/thread/7fe6c21efa/
 stdenv.mkDerivation rec {
   pname = "7zz";
-  version = "21.04";
+  version = "21.07";
 
   src = fetchurl {
-    url = "https://7-zip.org/a/7z${lib.replaceStrings ["." ] [""] version}-src.7z";
-    sha256 = "sha256-XmuEyIJAJQM0ZbgrW02lQ2rp4KFDBjLXKRaTfY+VCOg=";
+    url = "https://7-zip.org/a/7z${lib.replaceStrings [ "." ] [ "" ] version}-src.7z";
+    sha256 = "sha256-0QdNVvQVqrmdmeWXp7ZtxFXbpjSa6KTInfdkdbahKEw=";
   };
 
   sourceRoot = "CPP/7zip/Bundles/Alone2";
@@ -16,8 +15,6 @@ stdenv.mkDerivation rec {
   # to build with the optimized assembler but that doesn't support building with
   # GCC: https://github.com/nidud/asmc/issues/8
   makefile = "../../cmpl_gcc.mak"; # "../../cmpl_gcc_x64.mak";
-
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=maybe-uninitialized" ];
 
   nativeBuildInputs = [ p7zip ];
 

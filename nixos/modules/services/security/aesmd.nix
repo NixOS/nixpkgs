@@ -1,7 +1,8 @@
-{ config, pkgs, lib, ... }:
+{ config, options, pkgs, lib, ... }:
 with lib;
 let
   cfg = config.services.aesmd;
+  opt = options.services.aesmd;
 
   sgx-psw = pkgs.sgx-psw.override { inherit (cfg) debug; };
 
@@ -43,6 +44,9 @@ in
         options.proxyType = mkOption {
           type = with types; nullOr (enum [ "default" "direct" "manual" ]);
           default = if (cfg.settings.proxy != null) then "manual" else null;
+          defaultText = literalExpression ''
+            if (config.${opt.settings}.proxy != null) then "manual" else null
+          '';
           example = "default";
           description = ''
             Type of proxy to use. The <literal>default</literal> uses the system's default proxy.
@@ -68,6 +72,11 @@ in
     }];
 
     hardware.cpu.intel.sgx.provision.enable = true;
+
+    # Make sure the AESM service can find the SGX devices until
+    # https://github.com/intel/linux-sgx/issues/772 is resolved
+    # and updated in nixpkgs.
+    hardware.cpu.intel.sgx.enableDcapCompat = mkForce true;
 
     systemd.services.aesmd =
       let

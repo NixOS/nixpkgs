@@ -1035,7 +1035,7 @@ in
         setuid = true;
         owner = "root";
         group = "root";
-        source = "${pkgs.pam}/sbin/unix_chkpwd.orig";
+        source = "${pkgs.pam}/bin/unix_chkpwd";
       };
     };
 
@@ -1072,8 +1072,8 @@ in
     security.apparmor.includes."abstractions/pam" = let
       isEnabled = test: fold or false (map test (attrValues config.security.pam.services));
       in
-      lib.concatMapStringsSep "\n"
-        (name: "r ${config.environment.etc."pam.d/${name}".source},")
+      lib.concatMapStrings
+        (name: "r ${config.environment.etc."pam.d/${name}".source},\n")
         (attrNames config.security.pam.services) +
       ''
       mr ${getLib pkgs.pam}/lib/security/pam_filter/*,

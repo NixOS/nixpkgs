@@ -67,7 +67,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Open Neural Network Exchange";
-    homepage = "http://onnx.ai";
+    homepage = "https://onnx.ai";
     license = licenses.asl20;
     maintainers = with maintainers; [ acairncross ];
   };

@@ -1,6 +1,5 @@
 { lib
 , fetchurl
-, fetchpatch
 , substituteAll, python3, pkg-config, runCommand, writeText
 , xorg, gtk3, glib, pango, cairo, gdk-pixbuf, atk, pandoc
 , wrapGAppsHook, xorgserver, getopt, xauth, util-linux, which
@@ -44,11 +43,11 @@ let
   '';
 in buildPythonApplication rec {
   pname = "xpra";
-  version = "4.2";
+  version = "4.3.1";
 
   src = fetchurl {
-    url = "https://xpra.org/src/${pname}-${version}.tar.gz";
-    hash = "sha256-KkQw4FJeH4G5jZ4GdP3aXZ3zxu4GALbiOI6POKJW6fk=";
+    url = "https://xpra.org/src/${pname}-${version}.tar.xz";
+    hash = "sha256-v0Abn0oYcl1I4H9GLN1pV9hk9tTE+Wlv2gPTtEE6t6k=";
   };
 
   patches = [
@@ -57,21 +56,14 @@ in buildPythonApplication rec {
       inherit libfakeXinerama;
     })
     ./fix-41106.patch  # https://github.com/NixOS/nixpkgs/issues/41106
-    # Xorg won't start without. Remove on next version!
-    (fetchpatch {
-      url = "https://github.com/Xpra-org/xpra/commit/f9f242abad69363dfa558e1f6f7956ae99164b67.patch";
-      sha256 = "sha256-TOP9RuXPuqxyKY/7LSSrCWnAmJstEE+D5EwjMiVmchM=";
-    })
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py --replace '/usr/include/security' '${pam}/include/security'
-  '';
+  INCLUDE_DIRS = "${pam}/include";
 
   nativeBuildInputs = [ pkg-config wrapGAppsHook pandoc ]
     ++ lib.optional withNvenc cudatoolkit;
   buildInputs = with xorg; [
-    libX11 xorgproto libXrender libXi
+    libX11 xorgproto libXrender libXi libXres
     libXtst libXfixes libXcomposite libXdamage
     libXrandr libxkbfile
     ] ++ [
@@ -143,7 +135,6 @@ in buildPythonApplication rec {
   meta = {
     homepage = "https://xpra.org/";
     downloadPage = "https://xpra.org/src/";
-    downloadURLRegexp = "xpra-.*[.]tar[.][gx]z$";
     description = "Persistent remote applications for X";
     platforms = platforms.linux;
     license = licenses.gpl2;

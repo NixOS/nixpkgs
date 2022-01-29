@@ -2,31 +2,29 @@
 
 nimPackages.buildNimPackage rec {
   pname = "nitter";
-  version = "unstable-2021-07-18";
+  version = "unstable-2022-01-32";
   nimBinOnly = true;
 
   src = fetchFromGitHub {
     owner = "zedeus";
     repo = "nitter";
-    rev = "6c5cb01b294d4f6e3b438fc47683359eb0fe5057";
-    sha256 = "1dl8ndyv8m1hnydrp5xilcpp2cfbp02d5jap3y42i4nazc9ar6p4";
+    rev = "cdb4efadfeb5102b501c7ff79261fefc7327edb9";
+    sha256 = "sha256-kNK0UQd1whkaZwj98b2JYtYwjUSE1qBcAYytqnSaK1o=";
   };
 
   buildInputs = with nimPackages; [
     jester
     karax
     sass
-    regex
-    unicodedb
-    unicodeplus
-    segmentation
     nimcrypto
     markdown
     packedjson
     supersnappy
     redpool
-    frosty
     redis
+    zippy
+    flatty
+    jsony
   ];
 
   postBuild = ''

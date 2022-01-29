@@ -4,6 +4,7 @@
 , pytestCheckHook
 , brotli
 , cairosvg
+, flit-core
 , fonttools
 , pydyf
 , pyphen
@@ -26,45 +27,16 @@
 
 buildPythonPackage rec {
   pname = "weasyprint";
-  version = "53.4";
+  version = "54.0";
   disabled = !isPy3k;
+
+  format = "pyproject";
 
   src = fetchPypi {
     inherit version;
     pname = "weasyprint";
-    sha256 = "sha256-EMyxfVXHMJa98e3T7+WMuFWwfkwwfZutTryaPxP/RYA=";
+    sha256 = "0aeda9a045c7881289420cac917cc57115b1243e476187338e66d593dd000853";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "--isort --flake8 --cov --no-cov-on-fail" ""
-  '';
-
-  disabledTests = [
-    # needs the Ahem font (fails on macOS)
-    "test_font_stretch"
-  ];
-
-  checkInputs = [
-    pytestCheckHook
-    ghostscript
-  ];
-
-  FONTCONFIG_FILE = "${fontconfig.out}/etc/fonts/fonts.conf";
-
-  propagatedBuildInputs = [
-    brotli
-    cairosvg
-    cffi
-    cssselect
-    fonttools
-    html5lib
-    lxml
-    pydyf
-    pyphen
-    tinycss
-    zopfli
-  ];
 
   patches = [
     (substituteAll {
@@ -77,6 +49,50 @@ buildPythonPackage rec {
       harfbuzz = "${harfbuzz.out}/lib/libharfbuzz${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
   ];
+
+  nativeBuildInputs = [
+    flit-core
+  ];
+
+  propagatedBuildInputs = [
+    brotli
+    cairosvg
+    cffi
+    cssselect
+    fonttools
+    html5lib
+    lxml
+    flit-core
+    pydyf
+    pyphen
+    tinycss
+    zopfli
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+    ghostscript
+  ];
+
+  disabledTests = [
+    # needs the Ahem font (fails on macOS)
+    "test_font_stretch"
+    # sensitive to sandbox environments
+    "test_tab_size"
+    "test_tabulation_character"
+  ];
+
+  FONTCONFIG_FILE = "${fontconfig.out}/etc/fonts/fonts.conf";
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "--isort --flake8 --cov --no-cov-on-fail" ""
+  '';
+
+  preCheck = ''
+    # Fontconfig wants to create a cache.
+    export HOME=$TMPDIR
+  '';
 
   meta = with lib; {
     homepage = "https://weasyprint.org/";

@@ -1,5 +1,4 @@
 { lib, buildPythonPackage, fetchPypi
-, matplotlib
 , traitlets
 
 # tests
@@ -16,7 +15,6 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    matplotlib # not documented, but required
     traitlets
   ];
 

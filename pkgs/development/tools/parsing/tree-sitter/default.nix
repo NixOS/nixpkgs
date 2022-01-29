@@ -27,10 +27,11 @@ let
   # to update:
   # 1) change all these hashes
   # 2) nix-build -A tree-sitter.updater.update-all-grammars
-  # 3) run the ./result script that is output by that (it updates ./grammars)
-  version = "0.20.1";
-  sha256 = "sha256-JKbL05hFWI0jhAnRT9D0SWCoRPFqoMD4+LQQ1zyWc7g=";
-  cargoSha256 = "sha256-64O+3GrDqhRGth20B2/+jNDYSnwvT3SqYVqYNthiCB0=";
+  # 3) OPTIONAL: Set GITHUB_TOKEN env variable to avoid api rate limit
+  # 4) run the ./result script that is output by that (it updates ./grammars)
+  version = "0.20.4";
+  sha256 = "sha256-H/7j4HnaccmaH5m/FMTbi01uA3JtKVHiJLTQ4VZ7jfo=";
+  cargoSha256 = "sha256-Pf/gVBQFssOomzq0IZp5H7MYwvFBRjMYfifLKCB7DCs=";
 
   src = fetchFromGitHub {
     owner = "tree-sitter";
@@ -90,7 +91,7 @@ let
           in
           {
             name =
-              (lib.strings.replaceStrings ["-"] ["_"]
+              (lib.strings.replaceStrings [ "-" ] [ "_" ]
                 (lib.strings.removePrefix "tree-sitter-"
                   (lib.strings.removeSuffix "-grammar" name)))
               + stdenv.hostPlatform.extensions.sharedLibrary;

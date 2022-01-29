@@ -8,13 +8,14 @@
 
 buildPythonPackage rec {
   pname = "getmac";
-  version = "0.8.2";
+  version = "0.8.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "GhostofGoes";
     repo = pname;
     rev = version;
-    sha256 = "08d4iv5bjl1s4i9qhzf3pzjgj1rgbwi0x26qypf3ycgdj0a6gvh2";
+    sha256 = "sha256-X4uuYisyobCxhoywaSXBZjVxrPAbBiZrWUJAi2/P5mw=";
   };
 
   checkInputs = [
@@ -33,7 +34,9 @@ buildPythonPackage rec {
     "test_uuid_lanscan_iface"
   ];
 
-  pythonImportsCheck = [ "getmac" ];
+  pythonImportsCheck = [
+    "getmac"
+  ];
 
   meta = with lib; {
     description = "Python package to get the MAC address of network interfaces and hosts on the local network";

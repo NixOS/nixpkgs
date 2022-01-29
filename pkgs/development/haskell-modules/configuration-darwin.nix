@@ -256,6 +256,30 @@ self: super: ({
     ] ++ (drv.libraryFrameworkDepends or []);
   }) super.streamly_0_8_1_1;
 
+  http-client-tls = overrideCabal (drv: {
+    postPatch = ''
+      # This comment has been inserted, so the derivation hash changes, forcing
+      # a rebuild of this derivation which has succeeded to build on Hydra before,
+      # but apparently been corrupted, causing reverse dependencies to fail.
+      #
+      # This workaround can be removed upon the next darwin stdenv rebuild,
+      # presumably https://github.com/NixOS/nixpkgs/pull/152850 or the next
+      # full haskellPackages rebuild.
+    '' + drv.postPatch or "";
+  }) super.http-client-tls;
+
+  foldl = overrideCabal (drv: {
+    postPatch = ''
+      # This comment has been inserted, so the derivation hash changes, forcing
+      # a rebuild of this derivation which has succeeded to build on Hydra before,
+      # but apparently been corrupted, causing reverse dependencies to fail.
+      #
+      # This workaround can be removed upon the next darwin stdenv rebuild,
+      # presumably https://github.com/NixOS/nixpkgs/pull/152850 or the next
+      # full haskellPackages rebuild.
+    '' + drv.postPatch or "";
+  }) super.foldl;
+
 } // lib.optionalAttrs pkgs.stdenv.isAarch64 {  # aarch64-darwin
 
   # https://github.com/fpco/unliftio/issues/87

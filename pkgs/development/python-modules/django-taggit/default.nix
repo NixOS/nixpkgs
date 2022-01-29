@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "django-taggit";
-  version = "1.5.1";
+  version = "2.1.0";
   format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e5bb62891f458d55332e36a32e19c08d20142c43f74bc5656c803f8af25c084a";
+    sha256 = "a9f41e4ad58efe4b28d86f274728ee87eb98eeae90c9eb4b4efad39e5068184e";
   };
 
   propagatedBuildInputs = [

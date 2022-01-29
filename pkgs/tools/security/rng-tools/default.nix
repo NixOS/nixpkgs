@@ -23,13 +23,6 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-qheJaeVX2zuv0mvKEd6wcbSHFjiJE0t5hVCJiRSKm3M=";
   };
 
-  postPatch = ''
-    ${optionalString withPkcs11 ''
-      substituteInPlace rngd.c \
-        --replace /usr/lib64/opensc-pkcs11.so ${opensc}/lib/opensc-pkcs11.so
-    ''}
-  '';
-
   nativeBuildInputs = [ autoreconfHook libtool pkg-config ];
 
   configureFlags = [
@@ -49,8 +42,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  # For cross-compilation
-  makeFlags = [ "AR:=$(AR)" ];
+  makeFlags = [
+    "AR:=$(AR)" # For cross-compilation
+  ] ++ optionals (withPkcs11) [
+    "PKCS11_ENGINE=${opensc}/lib/opensc-pkcs11.so" # Overrides configure script paths
+  ];
 
   doCheck = true;
   preCheck = "patchShebangs tests/*.sh";

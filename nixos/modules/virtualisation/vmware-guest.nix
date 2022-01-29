@@ -27,6 +27,7 @@ in
       message = "VMWare guest is not currently supported on ${pkgs.stdenv.hostPlatform.system}";
     } ];
 
+    boot.initrd.availableKernelModules = [ "mptspi" ];
     boot.initrd.kernelModules = [ "vmw_pvscsi" ];
 
     environment.systemPackages = [ open-vm-tools ];

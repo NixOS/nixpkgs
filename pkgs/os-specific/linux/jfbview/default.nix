@@ -14,7 +14,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "${package}-${version}";
+  pname = package;
   version = "0.5.7";
 
   src = fetchFromGitHub {

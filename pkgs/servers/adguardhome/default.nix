@@ -1,8 +1,8 @@
-{ lib, stdenv, fetchurl, fetchzip }:
+{ lib, stdenv, fetchurl, fetchzip, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "adguardhome";
-  version = "0.107.0";
+  version = "0.107.3";
 
   src = (import ./bins.nix { inherit fetchurl fetchzip; }).${stdenv.hostPlatform.system};
 
@@ -12,6 +12,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = ./update.sh;
+    tests.adguardhome = nixosTests.adguardhome;
   };
 
   meta = with lib; {

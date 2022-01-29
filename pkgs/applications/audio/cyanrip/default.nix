@@ -12,13 +12,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "cyanrip";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "cyanreg";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0lgb92sfpf4w3nj5vlj6j7931mj2q3cmcx1app9snf853jk9ahmw";
+    sha256 = "1aip52bwkq8cb1d8ifyv2m6m5dz7jk6qmbhyb97yyf4nhxv445ky";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config ];
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/cyanreg/cyanrip";
     description = "Bule-ish CD ripper";
-    license = licenses.lgpl3Plus;
+    license = licenses.lgpl21Plus;
     platforms = platforms.all;
     maintainers = [ maintainers.zane ];
   };

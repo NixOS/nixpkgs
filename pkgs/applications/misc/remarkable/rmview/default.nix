@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "rmview";
-  version = "3.0";
+  version = "3.1";
 
   src = fetchFromGitHub {
     owner = "bordaigorl";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-zEl2uduSJvqhO5YPrH5ixps+IR5A0CIDwXHI+KvoT4Q=";
+    sha256 = "11p62dglxnvml3x95mi2sfai1k0gmvzwixzijr3gls2ss73maffw";
   };
 
   nativeBuildInputs = with python3Packages; [ pyqt5 wrapQtAppsHook ];

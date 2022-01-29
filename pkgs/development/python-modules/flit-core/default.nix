@@ -2,12 +2,11 @@
 , buildPythonPackage
 , callPackage
 , flit
-, toml
 }:
 
 buildPythonPackage rec {
   pname = "flit-core";
-  version = "3.2.0";
+  version = "3.6.0";
   format = "pyproject";
 
   outputs = [
@@ -20,10 +19,6 @@ buildPythonPackage rec {
   preConfigure = ''
     cd flit_core
   '';
-
-  propagatedBuildInputs = [
-    toml
-  ];
 
   postInstall = ''
     mkdir $testsout

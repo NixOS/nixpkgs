@@ -21,6 +21,8 @@ lib.makeScope newScope (self: with self; {
 
   mopidy-mpris = callPackage ./mpris.nix { };
 
+  mopidy-muse = callPackage ./muse.nix { };
+
   mopidy-musicbox-webclient = callPackage ./musicbox-webclient.nix { };
 
   mopidy-podcast = callPackage ./podcast.nix { };

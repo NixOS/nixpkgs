@@ -2,14 +2,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "flexget";
-  version = "3.2.7";
+  version = "3.2.15";
 
   # Fetch from GitHub in order to use `requirements.in`
   src = fetchFromGitHub {
     owner = "flexget";
     repo = "flexget";
     rev = "v${version}";
-    sha256 = "12nj1jcxbkpc0x59rg59fsryignpppsx0wiwncdv6fzr58pdhd3v";
+    sha256 = "0ygkygd0gcldwdx6wl1kbvzi93k75m0v05m614cahh0jc7j27xy7";
   };
 
   postPatch = ''

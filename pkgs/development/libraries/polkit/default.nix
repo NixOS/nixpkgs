@@ -25,6 +25,8 @@
 , elogind
 # needed until gobject-introspection does cross-compile (https://github.com/NixOS/nixpkgs/pull/88222)
 , withIntrospection ? (stdenv.buildPlatform == stdenv.hostPlatform)
+# cross build fails on polkit-1-scan (https://github.com/NixOS/nixpkgs/pull/152704)
+, withGtkDoc ? (stdenv.buildPlatform == stdenv.hostPlatform)
 # A few tests currently fail on musl (polkitunixusertest, polkitunixgrouptest, polkitidentitytest segfault).
 # Not yet investigated; it may be due to the "Make netgroup support optional"
 # patch not updating the tests correctly yet, or doing something wrong,
@@ -57,6 +59,11 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       url = "https://gitlab.freedesktop.org/polkit/polkit/-/commit/7ba07551dfcd4ef9a87b8f0d9eb8b91fabcb41b3.patch";
       sha256 = "ebbLILncq1hAZTBMsLm+vDGw6j0iQ0crGyhzyLZQgKA=";
+    })
+    # pkexec: local privilege escalation (CVE-2021-4034)
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/polkit/polkit/-/commit/a2bf5c9c83b6ae46cbd5c779d3055bff81ded683.patch";
+      sha256 = "162jkpg2myq0rb0s5k3nfr4pqwv9im13jf6vzj8p5l39nazg5i4s";
     })
   ] ++ lib.optionals stdenv.hostPlatform.isMusl [
     # Make netgroup support optional (musl does not have it)
@@ -119,7 +126,7 @@ stdenv.mkDerivation rec {
     "-Dos_type=redhat" # only affects PAM includes
     "-Dintrospection=${lib.boolToString withIntrospection}"
     "-Dtests=${lib.boolToString doCheck}"
-    "-Dgtk_doc=${lib.boolToString true}"
+    "-Dgtk_doc=${lib.boolToString withGtkDoc}"
     "-Dman=true"
   ] ++ lib.optionals stdenv.isLinux [
     "-Dsession_tracking=${if useSystemd then "libsystemd-login" else "libelogind"}"

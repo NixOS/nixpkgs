@@ -275,7 +275,12 @@ stdenv.mkDerivation {
   propagatedBuildInputs = lib.optional enablePython pythonPackages.numpy
     ++ lib.optionals enableCuda [ cudatoolkit nvidia-optical-flow-sdk ];
 
-  nativeBuildInputs = [ cmake pkg-config unzip ];
+  nativeBuildInputs = [ cmake pkg-config unzip ]
+  ++ lib.optionals enablePython [
+    pythonPackages.pip
+    pythonPackages.wheel
+    pythonPackages.setuptools
+  ];
 
   NIX_CFLAGS_COMPILE = lib.optionalString enableEXR "-I${ilmbase.dev}/include/OpenEXR";
 
@@ -333,6 +338,21 @@ stdenv.mkDerivation {
   postInstall = ''
     sed -i "s|{exec_prefix}/$out|{exec_prefix}|;s|{prefix}/$out|{prefix}|" \
       "$out/lib/pkgconfig/opencv4.pc"
+  ''
+  # install python distribution information, so other packages can `import opencv`
+  + lib.optionalString enablePython ''
+    pushd $NIX_BUILD_TOP/$sourceRoot/modules/python/package
+    python -m pip wheel --verbose --no-index --no-deps --no-clean --no-build-isolation --wheel-dir dist .
+
+    pushd dist
+    python -m pip install ./*.whl --no-index --no-warn-script-location --prefix="$out" --no-cache
+
+    # the cv2/__init__.py just tries to check provide "nice user feedback" if the installation is bad
+    # however, this also causes infinite recursion when used by other packages
+    rm -r $out/${pythonPackages.python.sitePackages}/cv2
+
+    popd
+    popd
   '';
 
   passthru = lib.optionalAttrs enablePython { pythonPath = [ ]; };

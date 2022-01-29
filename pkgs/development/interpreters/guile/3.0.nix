@@ -99,7 +99,10 @@ builder rec {
 
     # See below.
     "--without-threads"
-  ];
+  ]
+  # Disable JIT on Apple Silicon, as it is not yet supported
+  # https://debbugs.gnu.org/cgi/bugreport.cgi?bug=44505";
+  ++ lib.optional (stdenv.isDarwin && stdenv.isAarch64) "--enable-jit=no";
 
   postInstall = ''
     wrapProgram $out/bin/guile-snarf --prefix PATH : "${gawk}/bin"

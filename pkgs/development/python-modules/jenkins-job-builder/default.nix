@@ -17,6 +17,9 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
+    # relax version constraint, https://storyboard.openstack.org/#!/story/2009723
+    substituteInPlace requirements.txt --replace 'PyYAML>=3.10.0,<6' 'PyYAML>=3.10.0'
+
     export HOME=$TMPDIR
   '';
 

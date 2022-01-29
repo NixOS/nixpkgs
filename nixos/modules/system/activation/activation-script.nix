@@ -56,6 +56,7 @@ let
       ln -sfn "$(readlink -f "$systemConfig")" /run/current-system
 
       # Prevent the current configuration from being garbage-collected.
+      mkdir -p /nix/var/nix/gcroots
       ln -sfn /run/current-system /nix/var/nix/gcroots/current-system
 
       exit $_status

@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "pygit2";
-  version = "1.7.1";
+  version = "1.7.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d7faa29558436decc2e78110f38d6677eb366b683ba5cdc2803d47195711165d";
+    sha256 = "70a4536a35452c31f823b59b6fdb665aa3778a43b73ccda3a4f79fa9962ad2bb";
   };
 
   preConfigure = lib.optionalString stdenv.isDarwin ''

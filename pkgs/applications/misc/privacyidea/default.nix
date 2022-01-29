@@ -20,8 +20,8 @@ let
           sha256 = "ae2f05671588762dd83a21d8b18c51fe355e86783e24594995ff8d7380dffe38";
         };
       });
-      werkzeug = self.callPackage ../../../development/python-modules/werkzeug/1.nix { };
-      flask = self.callPackage ../../../development/python-modules/flask/1.nix { };
+      werkzeug = self.callPackage ../../../development/python2-modules/werkzeug { };
+      flask = self.callPackage ../../../development/python2-modules/flask { };
       sqlsoup = super.sqlsoup.overrideAttrs ({ meta ? {}, ... }: {
         meta = meta // { broken = false; };
       });

@@ -3,9 +3,9 @@
 , cmake
 , pkg-config
 , freeglut
-, liblapack
+, lapack
 , libusb1
-, openblas
+, blas
 , zlib
 }:
 
@@ -24,9 +24,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     freeglut
-    liblapack
+    lapack
     libusb1
-    openblas
+    blas
     zlib
   ];
 

@@ -3,8 +3,8 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
   mktplcRef = {
     name = "terraform";
     publisher = "hashicorp";
-    version = "2.17.0";
-    sha256 = "sha256-IZlw1lYibbBw3rcSiWEKP8rObxnMCE1ppogwmigNgwE=";
+    version = "2.19.0";
+    sha256 = "sha256-k/fcEJuELz0xkwivSrP6Nxtz861BLq1wR2ZDMXVrvkY=";
   };
 
   patches = [ ./fix-terraform-ls.patch ];

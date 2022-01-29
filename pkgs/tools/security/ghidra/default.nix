@@ -70,7 +70,7 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A software reverse engineering (SRE) suite of tools developed by NSA's Research Directorate in support of the Cybersecurity mission";
-    homepage = "https://ghidra-sre.org/";
+    homepage = "https://github.com/NationalSecurityAgency/ghidra";
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
     license = licenses.asl20;
     maintainers = with maintainers; [ ck3d govanify mic92 ];

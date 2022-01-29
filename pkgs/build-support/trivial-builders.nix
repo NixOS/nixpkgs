@@ -121,18 +121,18 @@ rec {
         allowSubstitutes = false;
       }
       ''
-        n=$out${destination}
-        mkdir -p "$(dirname "$n")"
+        target=$out${destination}
+        mkdir -p "$(dirname "$target")"
 
         if [ -e "$textPath" ]; then
-          mv "$textPath" "$n"
+          mv "$textPath" "$target"
         else
-          echo -n "$text" > "$n"
+          echo -n "$text" > "$target"
         fi
 
         eval "$checkPhase"
 
-        (test -n "$executable" && chmod +x "$n") || true
+        (test -n "$executable" && chmod +x "$target") || true
       '';
 
   /*
@@ -219,7 +219,7 @@ rec {
         ${text}
         '';
       checkPhase = ''
-        ${stdenv.shell} -n $out
+        ${stdenv.shellDryRun} "$target"
       '';
     };
 
@@ -246,7 +246,7 @@ rec {
         ${text}
         '';
       checkPhase = ''
-        ${stdenv.shell} -n $out/bin/${name}
+        ${stdenv.shellDryRun} "$target"
       '';
     };
 
@@ -295,8 +295,8 @@ rec {
       checkPhase =
         if checkPhase == null then ''
           runHook preCheck
-          ${stdenv.shell} -n $out/bin/${name}
-          ${shellcheck}/bin/shellcheck $out/bin/${name}
+          ${stdenv.shellDryRun} "$target"
+          ${shellcheck}/bin/shellcheck "$target"
           runHook postCheck
         ''
         else checkPhase;
@@ -321,6 +321,67 @@ rec {
     mv "$codePath" code.c
     $CC -x c code.c -o "$n"
     '';
+
+
+  /* concat a list of files to the nix store.
+   * The contents of files are added to the file in the store.
+   *
+   * Examples:
+   * # Writes my-file to /nix/store/<store path>
+   * concatTextFile {
+   *   name = "my-file";
+   *   files = [ drv1 "${drv2}/path/to/file" ];
+   * }
+   * # See also the `concatText` helper function below.
+   *
+   * # Writes executable my-file to /nix/store/<store path>/bin/my-file
+   * concatTextFile {
+   *   name = "my-file";
+   *   files = [ drv1 "${drv2}/path/to/file" ];
+   *   executable = true;
+   *   destination = "/bin/my-file";
+   * }
+   */
+  concatTextFile =
+    { name # the name of the derivation
+    , files
+    , executable ? false # run chmod +x ?
+    , destination ? ""   # relative path appended to $out eg "/bin/foo"
+    , checkPhase ? ""    # syntax checks, e.g. for scripts
+    , meta ? { }
+    }:
+    runCommandLocal name
+      { inherit files executable checkPhase meta destination; }
+      ''
+        file=$out$destination
+        mkdir -p "$(dirname "$file")"
+        cat $files > "$file"
+
+        (test -n "$executable" && chmod +x "$file") || true
+        eval "$checkPhase"
+      '';
+
+
+  /*
+   * Writes a text file to nix store with no optional parameters available.
+   *
+   * Example:
+   * # Writes contents of files to /nix/store/<store path>
+   * concatText "my-file" [ file1 file2 ]
+   *
+  */
+  concatText = name: files: concatTextFile { inherit name files; };
+
+    /*
+   * Writes a text file to nix store with and mark it as executable.
+   *
+   * Example:
+   * # Writes contents of files to /nix/store/<store path>
+   * concatScript "my-file" [ file1 file2 ]
+   *
+  */
+  concatScript = name: files: concatTextFile { inherit name files; executable = true; };
+
 
   /*
    * Create a forest of symlinks to the files in `paths'.

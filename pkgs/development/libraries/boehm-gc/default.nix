@@ -1,6 +1,7 @@
 { lib, stdenv, fetchurl
 , autoreconfHook
-, enableLargeConfig ? false # doc: https://github.com/ivmai/bdwgc/blob/v8.0.6/doc/README.macros#L195
+, enableLargeConfig ? false # doc: https://github.com/ivmai/bdwgc/blob/v8.0.6/doc/README.macros (LARGE_CONFIG)
+, nixVersions
 }:
 
 stdenv.mkDerivation rec {
@@ -35,6 +36,8 @@ stdenv.mkDerivation rec {
   doCheck = true; # not cross;
 
   enableParallelBuilding = true;
+
+  passthru.tests = nixVersions;
 
   meta = {
     description = "The Boehm-Demers-Weiser conservative garbage collector for C and C++";

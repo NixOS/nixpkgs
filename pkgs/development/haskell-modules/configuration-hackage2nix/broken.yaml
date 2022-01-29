@@ -354,6 +354,7 @@ broken-packages:
   - binary-derive
   - binary-ext
   - binary-indexed-tree
+  - binary-io
   - binary-protocol
   - binary-typed
   - BinderAnn
@@ -455,6 +456,7 @@ broken-packages:
   - brick-dropdownmenu
   - bricks-internal
   - brillig
+  - broadcast-chan-tests
   - broccoli
   - brok
   - broker-haskell
@@ -571,6 +573,7 @@ broken-packages:
   - capnp
   - capped-list
   - capri
+  - captcha-core
   - caramia
   - carbonara
   - cardano-coin-selection
@@ -753,6 +756,7 @@ broken-packages:
   - compact-socket
   - compact-string
   - compact-string-fix
+  - comparse
   - compdata-dags
   - compdata-param
   - competition
@@ -1306,7 +1310,6 @@ broken-packages:
   - event-driven
   - eventful-dynamodb
   - eventful-sql-common
-  - eventlog2html
   - eventloop
   - eventstore
   - ewe
@@ -1783,6 +1786,7 @@ broken-packages:
   - graph-rewriting
   - graph-serialize
   - graphted
+  - graph-trace-dot
   - graphula-core
   - graph-utils
   - graql
@@ -1801,6 +1805,7 @@ broken-packages:
   - gross
   - GroteTrap
   - groundhog-converters
+  - groundhog-inspector
   - groundhog-mysql
   - grouped-list
   - group-theory
@@ -2027,6 +2032,7 @@ broken-packages:
   - hasql-dynamic-statements
   - hasql-generic
   - hasql-simple
+  - hasql-transaction-io
   - hastache
   - haste
   - haste-prim
@@ -2109,6 +2115,7 @@ broken-packages:
   - heredocs
   - her-lexer
   - Hermes
+  - hermes-json
   - herms
   - hetero-dict
   - heterogeneous-list-literals
@@ -2213,6 +2220,7 @@ broken-packages:
   - hlongurl
   - hlrdb-core
   - hls-exactprint-utils
+  - hls-rename-plugin
   - hlwm
   - hmarkup
   - hmatrix-banded
@@ -2399,7 +2407,6 @@ broken-packages:
   - hsseccomp
   - hssh
   - hs-snowtify
-  - hs-speedscope
   - hsSqlite3
   - hssqlppp
   - HsSVN
@@ -2593,6 +2600,7 @@ broken-packages:
   - introduction
   - intro-prelude
   - invert
+  - invertible
   - invertible-syntax
   - io-capture
   - io-choice
@@ -2869,6 +2877,7 @@ broken-packages:
   - libsystemd-daemon
   - libtagc
   - libxls
+  - libxlsxwriter-hs
   - libxslt
   - libyaml-streamly
   - lie
@@ -3316,6 +3325,7 @@ broken-packages:
   - NaturalSort
   - naver-translate
   - nbt
+  - ncurses
   - neat
   - needle
   - neet
@@ -3848,6 +3858,7 @@ broken-packages:
   - powerdns
   - powermate
   - powerpc
+  - powerqueue-distributed
   - powerqueue-levelmem
   - pprecord
   - PPrinter
@@ -3876,6 +3887,7 @@ broken-packages:
   - pretty-ncols
   - prettyprinter-vty
   - prim-array
+  - primecount
   - primes-type
   - prim-instances
   - PrimitiveArray-Pretty
@@ -4005,7 +4017,6 @@ broken-packages:
   - quiver
   - quokka
   - quoridor-hs
-  - raaz
   - RabbitMQ
   - rad
   - radian
@@ -4078,6 +4089,7 @@ broken-packages:
   - refined-http-api-data
   - reflection-extras
   - reflex-basic-host
+  - reflex-dom-ace
   - reflex-dom-contrib
   - reflex-dom-helper
   - reflex-dom-helpers
@@ -4105,6 +4117,7 @@ broken-packages:
   - regex-posix-unittest
   - regexpr-symbolic
   - regexqq
+  - regex-rure
   - regex-tdfa-pipes
   - regex-tdfa-quasiquoter
   - regex-tdfa-rc
@@ -4382,6 +4395,7 @@ broken-packages:
   - servant-streaming
   - servant-to-elm
   - servant-tracing
+  - servant-util-beam-pg
   - servant-yaml
   - servant-zeppelin
   - server-generic
@@ -4444,6 +4458,8 @@ broken-packages:
   - show-prettyprint
   - Shpadoinkle-backend-pardiff
   - Shpadoinkle-backend-snabbdom
+  - Shpadoinkle-backend-static
+  - Shpadoinkle-html
   - Shpadoinkle-isreal
   - Shpadoinkle-streaming
   - Shpadoinkle-template
@@ -4844,6 +4860,7 @@ broken-packages:
   - tagsoup-selection
   - tai
   - tai64
+  - tailwind
   - takahashi
   - Takusen
   - takusen-oracle
@@ -5364,6 +5381,7 @@ broken-packages:
   - weather-api
   - webapi
   - webapp
+  - webauthn
   - WebBits
   - webby
   - webcloud

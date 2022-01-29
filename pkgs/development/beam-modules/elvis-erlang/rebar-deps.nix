@@ -26,11 +26,11 @@ let
     };
     parse_trans = builder {
       name = "parse_trans";
-      version = "3.4.0";
+      version = "3.4.1";
       src = fetchHex {
         pkg = "parse_trans";
-        version = "3.4.0";
-        sha256 = "sha256-+Z42iDC+pEVSIk434ElDpUh08IuFkEhd6NE4MrY6LcM=";
+        version = "3.4.1";
+        sha256 = "sha256-YgpAbOddragnuC5FPBnPBndr4mb1pnz/NOHvLLtg5Jo=";
       };
       beamDeps = [ ];
     };
@@ -66,11 +66,11 @@ let
     };
     certifi = builder {
       name = "certifi";
-      version = "2.6.1";
+      version = "2.8.0";
       src = fetchHex {
         pkg = "certifi";
-        version = "2.6.1";
-        sha256 = "sha256-UkyXtJkbOEndXBemMSI4licsawr0RneLpGdaHf9Tu34=";
+        version = "2.8.0";
+        sha256 = "sha256-asfvwcb4YAsI1iUpLUu/WE4UhHzhtrXETZg9Jz4Ql+o=";
       };
       beamDeps = [ ];
     };
@@ -146,11 +146,11 @@ let
     };
     elvis_core = builder {
       name = "elvis_core";
-      version = "1.1.2";
+      version = "1.3.1";
       src = fetchHex {
         pkg = "elvis_core";
-        version = "1.1.2";
-        sha256 = "sha256-xO5Cp6fC/FZ/Pqa1FQFkzWgpDxEA6bGaTPiG2Kocpzw=";
+        version = "1.3.1";
+        sha256 = "sha256-eoiQv4GFoyUs1OvYJv5fita5MCTt+IV26yeunl3BnWk=";
       };
       beamDeps = [ katana_code zipper ];
     };

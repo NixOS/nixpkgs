@@ -8,6 +8,7 @@
 , gcc11
 , gnome
 , gssdp
+, lame
 , lib
 , libgmpris
 , llvmPackages_10
@@ -45,11 +46,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "hqplayerd";
-  version = "4.27.2-72";
+  version = "4.29.1-80";
 
   src = fetchurl {
     url = "https://www.signalyst.eu/bins/${pname}/fc34/${pname}-${version}sse42.fc34.x86_64.rpm";
-    sha256 = "sha256-oCZS68n9R6Hm6lltcL6zQhPaU9FRqtB59DrstRNjnH8=";
+    sha256 = "sha256-TL5zq7fu7tLoWadmVDMXrE8oiVhHbggpmwWrIGRuAnI=";
   };
 
   unpackPhase = ''
@@ -67,6 +68,7 @@ stdenv.mkDerivation rec {
     gssdp
     gupnp_1_2
     gupnp-av_0_12
+    lame
     libgmpris
     llvmPackages_10.openmp
     mpg123

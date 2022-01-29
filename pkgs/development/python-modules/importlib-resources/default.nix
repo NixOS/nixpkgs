@@ -1,10 +1,10 @@
 { lib
+, isPy27
 , buildPythonPackage
 , fetchPypi
 , setuptools-scm
 , importlib-metadata
 , typing ? null
-, singledispatch ? null
 , pythonOlder
 , python
 }:
@@ -12,6 +12,7 @@
 buildPythonPackage rec {
   pname = "importlib-resources";
   version = "5.4.0";
+  disabled = isPy27;
 
   src = fetchPypi {
     pname = "importlib_resources";
@@ -25,8 +26,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     importlib-metadata
-  ] ++ lib.optional (pythonOlder "3.4") [
-    singledispatch
   ] ++ lib.optional (pythonOlder "3.5") [
     typing
   ];

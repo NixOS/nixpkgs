@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, openssl, libcap, curl, which
-, eventlog, pkg-config, glib, python, systemd, perl
+, eventlog, pkg-config, glib, python2, systemd, perl
 , riemann_c_client, protobufc, pcre, libnet
 , json_c, libuuid, libivykis, mongoc, rabbitmq-c
 , libesmtp
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     eventlog
     glib
     perl
-    python
+    python2
     systemd
     riemann_c_client
     protobufc

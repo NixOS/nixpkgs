@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, buildGoModule, makeWrapper, runCommand
-, moreutils, jq, git, cacert, zip, rsync, pkg-config, yarn, python3
-, esbuild, nodejs-14_x, libsecret, xorg, ripgrep
-, AppKit, Cocoa, Security, cctools }:
+, cacert, moreutils, jq, git, rsync, pkg-config, yarn, python3
+, esbuild, nodejs-14_x, node-gyp, libsecret, xorg, ripgrep
+, AppKit, Cocoa, CoreServices, Security, cctools, xcbuild }:
 
 let
   system = stdenv.hostPlatform.system;
@@ -11,16 +11,24 @@ let
   yarn' = yarn.override { inherit nodejs; };
   defaultYarnOpts = [ "frozen-lockfile" "non-interactive" "no-progress"];
 
+  # replaces esbuild's download script with a binary from nixpkgs
+  patchEsbuild = path : version : ''
+    mkdir -p ${path}/node_modules/esbuild/bin
+    jq "del(.scripts.postinstall)" ${path}/node_modules/esbuild/package.json | sponge ${path}/node_modules/esbuild/package.json
+    sed -i 's/${version}/${esbuild.version}/g' ${path}/node_modules/esbuild/lib/main.js
+    ln -s -f ${esbuild}/bin/esbuild ${path}/node_modules/esbuild/bin/esbuild
+  '';
+
 in stdenv.mkDerivation rec {
   pname = "code-server";
-  version = "3.12.0";
-  commit = "798dc0baf284416dbbf951e4ef596beeab6cb6c4";
+  version = "4.0.1";
+  commit = "7fe23daf009e5234eaa54a1ea5ff26df384c47ac";
 
   src = fetchFromGitHub {
     owner = "cdr";
     repo = "code-server";
     rev = "v${version}";
-    sha256 = "17v3sz0wjrmikmzyh9xswr4kf1vcj9njlibqb4wwj0pq0d72wdvl";
+    sha256 = "1s3dcmzlkyh7qfs3ai1p7dlp45iys0ax1fbxxz17p395pw9anrrl";
   };
 
   cloudAgent = buildGoModule rec {
@@ -63,27 +71,16 @@ in stdenv.mkDerivation rec {
     outputHashAlgo = "sha256";
 
     # to get hash values use nix-build -A code-server.prefetchYarnCache
-    outputHash = {
-      x86_64-linux = "1clfdl9hy5j2dj6jj6a9vgq0wzllfj0h2hbb73959k3w85y4ad2w";
-      aarch64-linux = "1clfdl9hy5j2dj6jj6a9vgq0wzllfj0h2hbb73959k3w85y4ad2w";
-      x86_64-darwin = "1clfdl9hy5j2dj6jj6a9vgq0wzllfj0h2hbb73959k3w85y4ad2w";
-    }.${system} or (throw "Unsupported system ${system}");
+    outputHash = "0qmfsirld1qfl2s26rxbpmvxsyj2pvzkgk8w89zlrgbhgc5fj8p9";
   };
 
-  # Extract the Node.js source code which is used to compile packages with
-  # native bindings
-  nodeSources = runCommand "node-sources" {} ''
-    tar --no-same-owner --no-same-permissions -xf ${nodejs.src}
-    mv node-* $out
-  '';
-
   nativeBuildInputs = [
-    nodejs yarn' python pkg-config zip makeWrapper git rsync jq moreutils
+    nodejs yarn' python pkg-config makeWrapper git rsync jq moreutils
   ];
   buildInputs = lib.optionals (!stdenv.isDarwin) [ libsecret ]
     ++ (with xorg; [ libX11 libxkbfile ])
     ++ lib.optionals stdenv.isDarwin [
-      AppKit Cocoa Security cctools
+      AppKit Cocoa CoreServices Security cctools xcbuild
     ];
 
   patches = [
@@ -119,9 +116,17 @@ in stdenv.mkDerivation rec {
 
     # skip unnecessary electron download
     export ELECTRON_SKIP_BINARY_DOWNLOAD=1
-  '' + lib.optionalString stdenv.isLinux ''
-    # set nodedir, so we can build binaries later
-    npm config set nodedir "${nodeSources}"
+
+    # set nodedir to prevent node-gyp from downloading headers
+    # taken from https://nixos.org/manual/nixpkgs/stable/#javascript-tool-specific
+    mkdir -p $HOME/.node-gyp/${nodejs.version}
+    echo 9 > $HOME/.node-gyp/${nodejs.version}/installVersion
+    ln -sfv ${nodejs}/include $HOME/.node-gyp/${nodejs.version}
+    export npm_config_nodedir=${nodejs}
+
+    # use updated node-gyp. fixes the following error on Darwin:
+    # PermissionError: [Errno 1] Operation not permitted: '/usr/sbin/pkgutil'
+    export npm_config_node_gyp=${node-gyp}/lib/node_modules/node-gyp/bin/node-gyp.js
   '';
 
   buildPhase = ''
@@ -169,6 +174,9 @@ in stdenv.mkDerivation rec {
     # sw_vers before that variable is checked.
     patch -p1 -i ${./playwright.patch}
 
+    # Patch out remote download of nodejs from build script
+    patch -p1 -i ${./remove-node-download.patch}
+
     # Replicate install vscode dependencies without running script for all vscode packages
     # that require patching for postinstall scripts to succeed
     find ./vendor/modules/code-oss-dev -path "*node_modules" -prune -o \
@@ -176,21 +184,21 @@ in stdenv.mkDerivation rec {
         xargs -I {} yarn --cwd {} \
           --frozen-lockfile --offline --ignore-scripts --ignore-engines
 
+
     # patch shebangs of everything to allow binary packages to build
     patchShebangs .
 
-    # patch build esbuild
-    mkdir -p vendor/modules/code-oss-dev/build/node_modules/esbuild/bin
-    jq "del(.scripts.postinstall)" vendor/modules/code-oss-dev/build/node_modules/esbuild/package.json | sponge vendor/modules/code-oss-dev/build/node_modules/esbuild/package.json
-    sed -i 's/0.12.6/${esbuild.version}/g' vendor/modules/code-oss-dev/build/node_modules/esbuild/lib/main.js
-    ln -s -f ${esbuild}/bin/esbuild vendor/modules/code-oss-dev/build/node_modules/esbuild/bin/esbuild
-
-    # patch extensions esbuild
-    mkdir -p vendor/modules/code-oss-dev/extensions/node_modules/esbuild/bin
-    jq "del(.scripts.postinstall)" vendor/modules/code-oss-dev/extensions/node_modules/esbuild/package.json | sponge vendor/modules/code-oss-dev/extensions/node_modules/esbuild/package.json
-    sed -i 's/0.11.12/${esbuild.version}/g' vendor/modules/code-oss-dev/extensions/node_modules/esbuild/lib/main.js
-    ln -s -f ${esbuild}/bin/esbuild vendor/modules/code-oss-dev/extensions/node_modules/esbuild/bin/esbuild
-
+    ${patchEsbuild "./vendor/modules/code-oss-dev/build" "0.12.6"}
+    ${patchEsbuild "./vendor/modules/code-oss-dev/extensions" "0.11.23"}
+  '' + lib.optionalString stdenv.isDarwin ''
+    # use prebuilt binary for @parcel/watcher, which requires macOS SDK 10.13+
+    # (see issue #101229)
+    pushd ./vendor/modules/code-oss-dev/remote/node_modules/@parcel/watcher
+    mkdir -p ./build/Release
+    mv ./prebuilds/darwin-x64/node.napi.glibc.node ./build/Release/watcher.node
+    jq "del(.scripts) | .gypfile = false" ./package.json | sponge ./package.json
+    popd
+  '' + ''
     # rebuild binaries, we use npm here, as yarn does not provide an alternative
     # that would not attempt to try to reinstall everything and break our
     # patching attempts

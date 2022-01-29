@@ -650,7 +650,7 @@ let
     name = "buildRustCrate-tests";
     meta = {
       description = "Test cases for buildRustCrate";
-      maintainers = [ lib.maintainers.andir ];
+      maintainers = [ ];
     };
     constituents = builtins.attrValues tests;
   };

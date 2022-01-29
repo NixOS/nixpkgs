@@ -25,13 +25,13 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-mail";
-  version = "6.3.1";
+  version = "6.4.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "mail";
     rev = version;
-    sha256 = "sha256-wOu9jvvwG53vzcNa38nk4eREZWW7Cin8el4qApQ8gI8=";
+    sha256 = "sha256-ooqVNMgeAqGlFcfachPPfhSiKTEEcNGv5oWdM7VLWOc=";
   };
 
   nativeBuildInputs = [

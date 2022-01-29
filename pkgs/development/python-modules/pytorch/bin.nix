@@ -11,6 +11,7 @@
 , patchelf
 , pyyaml
 , requests
+, setuptools
 , typing-extensions
 }:
 
@@ -41,6 +42,7 @@ in buildPythonPackage {
     numpy
     pyyaml
     requests
+    setuptools
     typing-extensions
   ];
 
@@ -72,7 +74,7 @@ in buildPythonPackage {
     # https://docs.nvidia.com/cuda/eula/index.html
     # https://www.intel.com/content/www/us/en/developer/articles/license/onemkl-license-faq.html
     license = licenses.bsd3;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ junjihashimoto ];
   };
 }

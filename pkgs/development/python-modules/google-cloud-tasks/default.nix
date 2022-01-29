@@ -12,11 +12,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-tasks";
-  version = "2.7.1";
+  version = "2.7.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2fd2222901a7d8ba65f28f9019cb41f5d4c952d012f020bdde105527a3f5ae43";
+    sha256 = "sha256-h/lmrrT8fu1YLDYF6s856EAB8+k7CMFfIMGZPDxC7Ys=";
   };
 
   propagatedBuildInputs = [ google-api-core grpc-google-iam-v1 libcst proto-plus ];

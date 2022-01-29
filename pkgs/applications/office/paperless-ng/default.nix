@@ -83,7 +83,7 @@ py.pkgs.pythonPackages.buildPythonApplication rec {
     daphne
     dateparser
     django-cors-headers
-    django_extensions
+    django-extensions
     django-filter
     django-picklefield
     django-q

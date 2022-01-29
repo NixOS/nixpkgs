@@ -40,23 +40,14 @@
 
 stdenv.mkDerivation rec {
   pname = "icewm";
-  version = "2.6.0";
+  version = "2.9.4";
 
   src = fetchFromGitHub {
     owner  = "ice-wm";
     repo = pname;
     rev = version;
-    hash = "sha256-R06tiWS9z6K5Nbi+vvk7DyozpcFdrHleMeh7Iq/FfHQ=";
+    hash = "sha256-ne2lqo9CAhGgC8dd9R03zhFXy9nPBQR0NcfAY0DeVj4=";
   };
-
-  patches = [
-    # https://github.com/ice-wm/icewm/pull/57
-    # Fix trailing -I that leads to "to generate dependencies you must specify either '-M' or '-MM'"
-    (fetchpatch {
-      url = "https://github.com/ice-wm/icewm/pull/57/commits/ebd2c45341cc31755758a423392a0f78a64d2d37.patch";
-      sha256 = "16m9znd3ijcfl7la3l27ac3clx8l9qng3fprkpxqcifd89ny1ml5";
-    })
-  ];
 
   nativeBuildInputs = [
     asciidoc

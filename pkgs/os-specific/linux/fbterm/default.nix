@@ -1,24 +1,17 @@
 { stdenv, lib, fetchurl, gpm, freetype, fontconfig, pkg-config, ncurses, libx86 }:
-let
-  s = # Generated upstream information
-    {
-      version = "1.7.0";
-      pname = "fbterm";
-      hash = "0pciv5by989vzvjxsv1jsv4bdp4m8j0nfbl29jm5fwi12w4603vj";
-      url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/fbterm/fbterm-1.7.0.tar.gz";
-      sha256 = "0pciv5by989vzvjxsv1jsv4bdp4m8j0nfbl29jm5fwi12w4603vj";
-    };
-  buildInputs = [ gpm freetype fontconfig ncurses ]
-    ++ lib.optional stdenv.hostPlatform.isx86 libx86;
-in
-stdenv.mkDerivation {
-  inherit (s) pname version;
+
+stdenv.mkDerivation rec {
+  version = "1.7.0";
+  pname = "fbterm";
+
   src = fetchurl {
-    inherit (s) url sha256;
+    url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/fbterm/fbterm-${version}.tar.gz";
+    sha256 = "0pciv5by989vzvjxsv1jsv4bdp4m8j0nfbl29jm5fwi12w4603vj";
   };
 
   nativeBuildInputs = [ pkg-config ncurses ];
-  inherit buildInputs;
+  buildInputs = [ gpm freetype fontconfig ncurses ]
+    ++ lib.optional stdenv.hostPlatform.isx86 libx86;
 
   preConfigure = ''
     sed -e '/ifdef SYS_signalfd/atypedef long long loff_t;' -i src/fbterm.cpp
@@ -51,10 +44,9 @@ stdenv.mkDerivation {
   ];
 
   meta = with lib; {
-    inherit (s) version;
     description = "Framebuffer terminal emulator";
     homepage = "https://code.google.com/archive/p/fbterm/";
-    maintainers = [ maintainers.raskin ];
+    maintainers = with maintainers; [ raskin ];
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

@@ -1,4 +1,6 @@
-{ lib, buildPythonPackage, fetchFromGitHub
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
 , pythonOlder
 , h5py
 , matplotlib
@@ -15,10 +17,10 @@
 buildPythonPackage rec {
   pname = "sumo";
   version = "2.2.5";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
-  # No tests in Pypi tarball
   src = fetchFromGitHub {
     owner = "SMTG-UCL";
     repo = "sumo";
@@ -38,7 +40,18 @@ buildPythonPackage rec {
     castepxbin
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "castepxbin==0.1.0" "castepxbin>=0.1.0"
+  '';
+
+  pythonImportsCheck = [
+    "sumo"
+  ];
 
   meta = with lib; {
     description = "Toolkit for plotting and analysis of ab initio solid-state calculation data";

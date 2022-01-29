@@ -13,8 +13,8 @@ buildGoModule rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  vendorSha256 = "1ngig5zw0gf1mkjjsfvvn09rncb36rg274cbi3glp8wzfcr8aip3";
-  runVend = true;
+  vendorSha256 = "sha256-TxeHfO5IUVsKmKZ1e0/KXi+6dk2nn6AoNG0eB3jyGkY=";
+  proxyVendor = true;
 
   buildInputs = [ ffmpeg ];
 

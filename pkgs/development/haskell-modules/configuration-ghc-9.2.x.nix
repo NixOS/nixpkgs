@@ -83,7 +83,7 @@ self: super: {
   # Jailbreaks & Version Updates
   assoc = doJailbreak super.assoc;
   async = doJailbreak super.async;
-  attoparsec = super.attoparsec_0_14_3;
+  attoparsec = super.attoparsec_0_14_4;
   base64-bytestring = doJailbreak super.base64-bytestring;
   base-compat = self.base-compat_0_12_1;
   base-compat-batteries = self.base-compat-batteries_0_12_1;
@@ -102,23 +102,23 @@ self: super: {
   genvalidity-hspec = self.genvalidity-hspec_1_0_0_0;
   ghc-byteorder = doJailbreak super.ghc-byteorder;
   ghc-exactprint = overrideCabal (drv: {
-    # HACK: ghc-exactprint 1.3.0 is not buildable for GHC < 9.2,
+    # HACK: ghc-exactprint 1.4.1 is not buildable for GHC < 9.2,
     # but hackage2nix evaluates the cabal file with GHC 8.10.*,
     # causing the build-depends to be skipped. Since the dependency
     # list hasn't changed much since 0.6.4, we can just reuse the
     # normal expression.
-    inherit (self.ghc-exactprint_1_3_0) src version;
+    inherit (self.ghc-exactprint_1_4_1) src version;
     revision = null; editedCabalFile = null;
     libraryHaskellDepends = [
       self.fail
       self.ordered-containers
     ] ++ drv.libraryHaskellDepends or [];
   }) super.ghc-exactprint;
-  ghc-lib = self.ghc-lib_9_2_1_20211101;
-  ghc-lib-parser = self.ghc-lib-parser_9_2_1_20211101;
+  ghc-lib = self.ghc-lib_9_2_1_20220109;
+  ghc-lib-parser = self.ghc-lib-parser_9_2_1_20220109;
   ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_2_0_1;
   hackage-security = doJailbreak super.hackage-security;
-  hashable = super.hashable_1_4_0_1;
+  hashable = super.hashable_1_4_0_2;
   hashable-time = doJailbreak super.hashable-time_0_3;
   hedgehog = doJailbreak super.hedgehog;
   HTTP = overrideCabal (drv: { postPatch = "sed -i -e 's,! Socket,!Socket,' Network/TCP.hs"; }) (doJailbreak super.HTTP);
@@ -127,17 +127,17 @@ self: super: {
   indexed-traversable-instances = doJailbreak super.indexed-traversable-instances;
   lifted-async = doJailbreak super.lifted-async;
   lukko = doJailbreak super.lukko;
-  network = super.network_3_1_2_5;
+  network = super.network_3_1_2_7;
   ormolu = self.ormolu_0_4_0_0;
   OneTuple = super.OneTuple_0_3_1;
   parallel = doJailbreak super.parallel;
-  path = doJailbreak super.path_0_9_1;
+  path = doJailbreak super.path_0_9_2;
   polyparse = overrideCabal (drv: { postPatch = "sed -i -e 's, <0.11, <0.12,' polyparse.cabal"; }) (doJailbreak super.polyparse);
   primitive = doJailbreak super.primitive;
   quickcheck-instances = super.quickcheck-instances_0_3_27;
   regex-posix = doJailbreak super.regex-posix;
   resolv = doJailbreak super.resolv;
-  retrie = doDistribute self.retrie_1_2_0_0;
+  retrie = doDistribute self.retrie_1_2_0_1;
   semialign = super.semialign_1_2_0_1;
   singleton-bool = doJailbreak super.singleton-bool;
   scientific = doJailbreak super.scientific;
@@ -221,7 +221,7 @@ self: super: {
   semigroupoids = overrideCabal (drv: { postPatch = "sed -i -e 's,hashable >= 1.2.7.0  && < 1.4,hashable >= 1.2.7.0  \\&\\& < 1.5,' semigroupoids.cabal";}) super.semigroupoids;
 
   # Tests have a circular dependency on quickcheck-instances
-  text-short = dontCheck super.text-short_0_1_4;
+  text-short = dontCheck super.text-short_0_1_5;
 
   # Use hlint from git for GHC 9.2.1 support
   hlint = doDistribute (
@@ -233,12 +233,16 @@ self: super: {
         rev = "77a9702e10b772a7695c08682cd4f450fd0e9e46";
         sha256 = "0hpp3iw7m7w2abr8vb86gdz3x6c8lj119zxln933k90ia7bmk8jc";
       };
-    } (super.hlint_3_3_5.overrideScope (self: super: {
-      ghc-lib-parser = self.ghc-lib-parser_9_2_1_20211101;
+    } (super.hlint_3_3_6.overrideScope (self: super: {
+      ghc-lib-parser = self.ghc-lib-parser_9_2_1_20220109;
       ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_2_0_1;
     }))
   );
 
   # https://github.com/sjakobi/bsb-http-chunked/issues/38
   bsb-http-chunked = dontCheck super.bsb-http-chunked;
+
+  # need bytestring >= 0.11 which is only bundled with GHC >= 9.2
+  regex-rure = doDistribute (markUnbroken super.regex-rure);
+  jacinda = doDistribute super.jacinda;
 }

@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "supervisor";
-  version = "4.2.2";
+  version = "4.2.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5b2b8882ec8a3c3733cce6965cc098b6d80b417f21229ab90b18fe551d619f90";
+    sha256 = "40dc582ce1eec631c3df79420b187a6da276bbd68a4ec0a8f1f123ea616b97a2";
   };
 
   # wants to write to /tmp/foo which is likely already owned by another

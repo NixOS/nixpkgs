@@ -33,6 +33,12 @@ let pkgs_ = pkgs;
 in
 
 let
+  evalModulesMinimal = (import ./default.nix {
+    inherit lib;
+    # Implicit use of feature is noted in implementation.
+    featureFlags.minimalModules = { };
+  }).evalModules;
+
   pkgsModule = rec {
     _file = ./eval-config.nix;
     key = _file;
@@ -70,11 +76,9 @@ let
     };
   allUserModules = modules ++ legacyModules;
 
-  noUserModules = lib.evalModules ({
-    inherit prefix;
+  noUserModules = evalModulesMinimal ({
+    inherit prefix specialArgs;
     modules = baseModules ++ extraModules ++ [ pkgsModule modulesModule ];
-    specialArgs =
-      { modulesPath = builtins.toString ../modules; } // specialArgs;
   });
 
   # Extra arguments that are useful for constructing a similar configuration.
@@ -88,13 +92,8 @@ let
 
   nixosWithUserModules = noUserModules.extendModules { modules = allUserModules; };
 
-in withWarnings {
-
-  # Merge the option definitions in all modules, forming the full
-  # system configuration.
-  inherit (nixosWithUserModules) config options _module type;
-
+in
+withWarnings nixosWithUserModules // {
   inherit extraArgs;
-
   inherit (nixosWithUserModules._module.args) pkgs;
 }

@@ -47,11 +47,12 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+    # fix timeouts when docbuilding with >= 64 cpus
+    # https://github.com/Singular/Singular/issues/1117
+    ./vspace-MAX_PROCESS.patch
+
     # add aarch64 support to cpu-check.m4. copied from redhat.
     ./redhat-aarch64.patch
-
-    # vspace causes hangs in modstd and other libraries on aarch64
-    ./disable-vspace-on-aarch64.patch
 
     # the newest version of ax-prog-cc-for-build.m4 seems to trigger
     # linker errors. see

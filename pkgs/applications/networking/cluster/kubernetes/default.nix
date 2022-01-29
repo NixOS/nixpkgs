@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "kubernetes";
-  version = "1.22.4";
+  version = "1.22.6";
 
   src = fetchFromGitHub {
     owner = "kubernetes";
     repo = "kubernetes";
     rev = "v${version}";
-    sha256 = "sha256-6ivBecOttzbX85+WCttaU5nXjaiEiKU8xRhnCPkjLXg=";
+    sha256 = "sha256-NL00GOdkVLVHTlj1RK1+stssioy+0xbtiKn4FZnCuzs=";
   };
 
   nativeBuildInputs = [ removeReferencesTo makeWrapper which go rsync installShellFiles ];
@@ -95,7 +95,7 @@ stdenv.mkDerivation rec {
     description = "Production-Grade Container Scheduling and Management";
     license = licenses.asl20;
     homepage = "https://kubernetes.io";
-    maintainers = with maintainers; [ johanot offline saschagrunert ];
+    maintainers = with maintainers; [ ] ++ teams.kubernetes.members;
     platforms = platforms.unix;
   };
 

@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "easy-thumbnails";
-  version = "2.8";
+  version = "2.8.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fd2249d936671847fc54a2d6c8c87bcca8f803001967dd03bab6b8bcb7590825";
+    sha256 = "1a283fe8a3569c3feab4605e8279929d75c85c1151b2fd627f95b1863b5fc6c2";
   };
 
   propagatedBuildInputs = [

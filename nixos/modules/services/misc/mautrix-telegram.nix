@@ -145,7 +145,7 @@ in {
             --config='${settingsFile}' \
             --registration='${registrationFile}'
         fi
-
+      '' + lib.optionalString (pkgs.mautrix-telegram ? alembic) ''
         # run automatic database init and migration scripts
         ${pkgs.mautrix-telegram.alembic}/bin/alembic -x config='${settingsFile}' upgrade head
       '';

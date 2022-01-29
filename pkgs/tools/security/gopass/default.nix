@@ -59,7 +59,7 @@ buildGoModule rec {
     description = "The slightly more awesome Standard Unix Password Manager for Teams. Written in Go";
     homepage = "https://www.gopass.pw/";
     license = licenses.mit;
-    maintainers = with maintainers; [ andir rvolosatovs ];
+    maintainers = with maintainers; [ rvolosatovs ];
     changelog = "https://github.com/gopasspw/gopass/raw/v${version}/CHANGELOG.md";
 
     longDescription = ''

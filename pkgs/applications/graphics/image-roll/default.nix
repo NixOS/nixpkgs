@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "image-roll";
-  version = "1.4.0";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "weclaw1";
     repo = pname;
     rev = version;
-    sha256 = "sha256-NhZ0W9WBOIRe2nE4jQJ9WgfduKhHd+222feUCay4atw=";
+    sha256 = "sha256-SyG/syIDnyQaXUgGkXZkY98dmFs7O+OFnGL50250nJI=";
   };
 
-  cargoSha256 = "sha256-7sV8v/npmdOgTMtnww/VoK1Kp4Na9Go95XLcfdgkTik=";
+  cargoSha256 = "sha256-pyeJ7WmtkbQjbek/rRh2UKFQ5o006Rf7phZ1yl2s4wA=";
 
   nativeBuildInputs = [ glib pkg-config wrapGAppsHook ];
 

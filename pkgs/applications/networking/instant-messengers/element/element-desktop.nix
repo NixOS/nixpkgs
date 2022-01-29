@@ -7,12 +7,11 @@
 , fetchYarnDeps
 , electron
 , element-web
+, sqlcipher
 , callPackage
 , Security
 , AppKit
 , CoreServices
-
-, useWayland ? false
 }:
 
 let
@@ -78,8 +77,11 @@ mkYarnPackage rec {
     ln -s "${desktopItem}/share/applications" "$out/share/applications"
 
     # executable wrapper
+    # LD_PRELOAD workaround for sqlcipher not found: https://github.com/matrix-org/seshat/issues/102
     makeWrapper '${electron_exec}' "$out/bin/${executableName}" \
-      --add-flags "$out/share/element/electron${lib.optionalString useWayland " --enable-features=UseOzonePlatform --ozone-platform=wayland"}"
+      --set LD_PRELOAD ${sqlcipher}/lib/libsqlcipher.so \
+      --add-flags "$out/share/element/electron" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}"
   '';
 
   # Do not attempt generating a tarball for element-web again.
@@ -94,7 +96,7 @@ mkYarnPackage rec {
     name = "element-desktop";
     exec = "${executableName} %u";
     icon = "element";
-    desktopName = "Element (Riot)";
+    desktopName = "Element";
     genericName = "Matrix Client";
     comment = meta.description;
     categories = "Network;InstantMessaging;Chat;";

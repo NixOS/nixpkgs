@@ -1,5 +1,8 @@
 { stdenv, lib, fetchFromGitHub
 , gettext, libpng, SDL2, SDL2_image, SDL2_mixer, SDL2_ttf, zlib
+
+# updater only
+, nix-update-script
 }:
 
 stdenv.mkDerivation rec {
@@ -28,6 +31,12 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = pname;
+    };
+  };
 
   meta = with lib; {
     homepage = "https://github.com/ihhub/fheroes2";

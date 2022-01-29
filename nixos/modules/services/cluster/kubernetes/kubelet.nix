@@ -264,8 +264,6 @@ in
         "net.bridge.bridge-nf-call-ip6tables" = 1;
       };
 
-      systemd.enableUnifiedCgroupHierarchy = false; # true breaks node memory metrics
-
       systemd.services.kubelet = {
         description = "Kubernetes Kubelet Service";
         wantedBy = [ "kubernetes.target" ];
@@ -395,4 +393,6 @@ in
     })
 
   ];
+
+  meta.buildDocsInSandbox = false;
 }

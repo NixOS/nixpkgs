@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  mesonFlags = [ "-Dwith-lua=lua" "-Dwith-text=true" ];
+  mesonFlags = [ "-Dwith-lua=lua" "-Dtext-frontend=true" ];
 
   postInstall = ''
     wrapProgram $out/bin/hexchat --prefix PYTHONPATH : "$PYTHONPATH"

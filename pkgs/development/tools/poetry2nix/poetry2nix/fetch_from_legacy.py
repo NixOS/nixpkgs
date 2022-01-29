@@ -63,30 +63,36 @@ context.verify_mode = ssl.CERT_NONE
 req = urllib.request.Request(index_url)
 if username and password:
     import base64
-    password_b64 = base64.b64encode(bytes(f"{username}:{password}", "utf-8")).decode("utf-8")
-    req.add_header("Authorization", f"Basic {password_b64}")
-response = urllib.request.urlopen(
-    req,
-    context=context)
+
+    password_b64 = base64.b64encode(":".join((username, password)).encode()).decode(
+        "utf-8"
+    )
+    req.add_header("Authorization", "Basic {}".format(password_b64))
+response = urllib.request.urlopen(req, context=context)
 index = response.read()
 
 parser = Pep503()
 parser.feed(str(index))
 if package_filename not in parser.sources:
-    print("The file %s has not be found in the index %s" % (
-        package_filename, index_url))
+    print(
+        "The file %s has not be found in the index %s" % (package_filename, index_url)
+    )
     exit(1)
 
 package_file = open(package_filename, "wb")
 # Sometimes the href is a relative path
-if urlparse(parser.sources[package_filename]).netloc == '':
+if urlparse(parser.sources[package_filename]).netloc == "":
     parsed_url = urlparse(index_url)
-    package_url = urlunparse((
-        parsed_url.scheme,
-        parsed_url.netloc,
-        parser.sources[package_filename],
-        None, None, None,
-    ))
+    package_url = urlunparse(
+        (
+            parsed_url.scheme,
+            parsed_url.netloc,
+            parsed_url.path + "/" + parser.sources[package_filename],
+            None,
+            None,
+            None,
+        )
+    )
 else:
     package_url = parser.sources[package_filename]
 
@@ -106,10 +112,8 @@ print("Downloading %s" % real_package_url)
 
 req = urllib.request.Request(real_package_url)
 if username and password:
-    req.add_unredirected_header("Authorization", f"Basic {password_b64}")
-response = urllib.request.urlopen(
-    req,
-    context=context)
+    req.add_unredirected_header("Authorization", "Basic {}".format(password_b64))
+response = urllib.request.urlopen(req, context=context)
 
 with response as r:
     shutil.copyfileobj(r, package_file)

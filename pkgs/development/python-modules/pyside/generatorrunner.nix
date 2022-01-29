@@ -1,16 +1,17 @@
-{ lib, stdenv, fetchurl, cmake, pysideApiextractor, python3, qt4 }:
+{ lib, stdenv, fetchFromGitHub, cmake, pysideApiextractor, python3, qt4 }:
 
 # This derivation does not provide any Python module and should therefore be called via `all-packages.nix`.
 let
   pythonEnv = python3.withPackages(ps: with ps; [ sphinx ]);
+in stdenv.mkDerivation rec {
   pname = "pyside-generatorrunner";
   version = "0.6.16";
-in stdenv.mkDerivation {
-  name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "https://github.com/PySide/Generatorrunner/archive/0.6.16.tar.gz";
-    sha256 = "0vzk3cp0pfbhd921r8f1xkcz96znla39dhj074k623x9k26lj2sj";
+  src = fetchFromGitHub {
+    owner = "PySide";
+    repo = "Generatorrunner";
+    rev = version;
+    sha256 = "sha256-JAghKY033RTD5b2elitzVQbbN3PMmT3BHwpqx8N5EYg=";
   };
 
   outputs = [ "out" "dev" ];

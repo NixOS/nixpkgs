@@ -38,12 +38,15 @@ mapAliases ({
   bugseverywhere = throw "bugseverywhere has been removed: Abandoned by upstream."; # added 2019-11-27
   class-registry = phx-class-registry; # added 2021-10-05
   ConfigArgParse = configargparse; # added 2021-03-18
+  cozy = throw "cozy was removed because it was not actually https://pypi.org/project/Cozy/."; # added 2022-01-14
   dateutil = python-dateutil; # added 2021-07-03
   detox = throw "detox is no longer maintained, and was broken since may 2019"; # added 2020-07-04
   dftfit = throw "dftfit dependency lammps-cython no longer builds"; # added 2021-07-04
   diff_cover = diff-cover; # added 2021-07-02
   discogs_client = discogs-client; # added 2021-07-02
   djangorestframework-jwt = drf-jwt; # added 2021-07-20
+  django_environ = django-environ; # added 2021-12-25
+  django_extensions = django-extensions; # added 2022-01-09
   django_redis = django-redis; # added 2021-10-11
   django_taggit = django-taggit; # added 2021-10-11
   dns = dnspython; # added 2017-12-10
@@ -85,7 +88,9 @@ mapAliases ({
   python_simple_hipchat = python-simple-hipchat; # added 2021-07-21
   qasm2image = throw "qasm2image is no longer maintained (since November 2018), and is not compatible with the latest pythonPackages.qiskit versions."; # added 2020-12-09
   rdflib-jsonld = throw "rdflib-jsonld is not compatible with rdflib 6"; # added 2021-11-05
+  repeated_test = throw "repeated_test is no longer maintained"; # added 2022-01-11
   requests_toolbelt = requests-toolbelt; # added 2017-09-26
+  roboschool = throw "roboschool is deprecated in favor of PyBullet and has been removed"; # added 2022-01-15
   rotate-backups = throw "rotate-backups was removed in favor of the top-level rotate-backups"; # added 2021-07-01
   ruamel_base = ruamel-base; # added 2021-11-01
   ruamel_yaml = ruamel-yaml; # added 2021-11-01
@@ -106,6 +111,7 @@ mapAliases ({
   tvnamer = throw "tvnamer was moved to pkgs.tvnamer"; # added 2021-07-05
   WazeRouteCalculator = wazeroutecalculator; # added 2021-09-29
   websocket_client = websocket-client; # added 2021-06-15
+  xenomapper = throw "xenomapper was moved to pkgs.xenomapper"; # added 2021-12-31
   zc-buildout221 = zc-buildout; # added 2021-07-21
   zc_buildout_nix = throw "zc_buildout_nix was pinned to a version no longer compatible with other modules";
 })

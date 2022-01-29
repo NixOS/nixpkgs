@@ -468,7 +468,7 @@ in {
         default = false;
         example = true;
         description = ''
-          Whether to open the default ports in the firewall: TCP 22000 for transfers
+          Whether to open the default ports in the firewall: TCP/UDP 22000 for transfers
           and UDP 21027 for discovery.
 
           If multiple users are running Syncthing on this machine, you will need
@@ -504,7 +504,7 @@ in {
 
     networking.firewall = mkIf cfg.openDefaultPorts {
       allowedTCPPorts = [ 22000 ];
-      allowedUDPPorts = [ 21027 ];
+      allowedUDPPorts = [ 21027 22000 ];
     };
 
     systemd.packages = [ pkgs.syncthing ];

@@ -1,14 +1,14 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGo117Module, fetchFromGitHub }:
 
-buildGoModule rec {
+buildGo117Module rec {
   pname = "cloudflared";
-  version = "2021.12.3";
+  version = "2022.1.2";
 
   src = fetchFromGitHub {
     owner  = "cloudflare";
     repo   = "cloudflared";
     rev    = version;
-    sha256 = "sha256-+T8BtYc/TBP2qL/Wfi2CDwD6VAqY/0F7QIUEhjOnLUk=";
+    hash   = "sha256-PdmYOFy6CWMqHlcK0PeHPGCVSLhIJOIDnXOAh/qYt+8=";
   };
 
   vendorSha256 = null;

@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "git-cliff";
-  version = "0.4.2";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "orhun";
     repo = "git-cliff";
     rev = "v${version}";
-    sha256 = "sha256-FCBNm51QI1jDdq2BZFwZA1kpIfXIvh1ickmY3ZqwGPY=";
+    sha256 = "sha256-1ScZ8pxRN/Eot/Q+HWbWOgDWBmVLjqtPeftRsNQIJEI=";
   };
 
-  cargoSha256 = "sha256-CBCyujJHWTatJO+Tk6MyOk12B0cY1JSwLQizjcXeQzQ=";
+  cargoSha256 = "sha256-FMlJn/mVcrHhu3gGISb1e7D2mVAocccqXRYZnMVNPqA=";
 
   # attempts to run the program on .git in src which is not deterministic
   doCheck = false;

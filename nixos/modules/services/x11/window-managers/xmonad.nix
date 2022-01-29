@@ -2,7 +2,7 @@
 
 with lib;
 let
-  inherit (lib) mkOption mkIf optionals literalExpression;
+  inherit (lib) mkOption mkIf optionals literalExpression optionalString;
   cfg = config.services.xserver.windowManager.xmonad;
 
   ghcWithPackages = cfg.haskellPackages.ghcWithPackages;
@@ -26,11 +26,14 @@ let
     in
       pkgs.runCommandLocal "xmonad" {
         nativeBuildInputs = [ pkgs.makeWrapper ];
-      } ''
+      } (''
         install -D ${xmonadEnv}/share/man/man1/xmonad.1.gz $out/share/man/man1/xmonad.1.gz
         makeWrapper ${configured}/bin/xmonad $out/bin/xmonad \
+      '' + optionalString cfg.enableConfiguredRecompile ''
+          --set NIX_GHC "${xmonadEnv}/bin/ghc" \
+      '' + ''
           --set XMONAD_XMESSAGE "${pkgs.xorg.xmessage}/bin/xmessage"
-      '';
+      '');
 
   xmonad = if (cfg.config != null) then xmonad-config else xmonad-vanilla;
 in {
@@ -95,12 +98,14 @@ in {
           xmonad from PATH. This allows e.g. switching to the new xmonad binary
           after rebuilding your system with nixos-rebuild.
           For the same reason, ghc is not added to the environment when this
-          option is set.
+          option is set, unless <option>enableConfiguredRecompile</option> is
+          set to <literal>true</literal>.
 
           If you actually want to run xmonad with a config specified here, but
           also be able to recompile and restart it from a copy of that source in
-          $HOME/.xmonad on the fly, you will have to implement that yourself
-          using something like "compileRestart" from the example.
+          $HOME/.xmonad on the fly, set <option>enableConfiguredRecompile</option>
+          to <literal>true</literal> and implement something like "compileRestart"
+          from the example.
           This should allow you to switch at will between the local xmonad and
           the one NixOS puts in your PATH.
         '';
@@ -116,6 +121,29 @@ in {
 
           compiledConfig = printf "xmonad-%s-%s" arch os
 
+          myConfig = defaultConfig
+            { modMask = mod4Mask -- Use Super instead of Alt
+            , terminal = "urxvt" }
+            `additionalKeys`
+            [ ( (mod4Mask,xK_r), compileRestart True)
+            , ( (mod4Mask,xK_q), restart "xmonad" True ) ]
+
+          --------------------------------------------
+          {- version 0.17.0 -}
+          --------------------------------------------
+          -- compileRestart resume =
+          --   dirs <- io getDirectories
+          --   whenX (recompile dirs True) $
+          --     when resume writeStateToFile
+          --       *> catchIO
+          --         ( do
+          --             args <- getArgs
+          --             executeFile (cacheDir dirs </> compiledConfig) False args Nothing
+          --         )
+          --
+          -- main = getDirectories >>= launch myConfig
+          --------------------------------------------
+
           compileRestart resume =
             whenX (recompile True) $
               when resume writeStateToFile
@@ -126,12 +154,17 @@ in {
                       executeFile (dir </> compiledConfig) False args Nothing
                   )
 
-          main = launch defaultConfig
-              { modMask = mod4Mask -- Use Super instead of Alt
-              , terminal = "urxvt" }
-              `additionalKeys`
-              [ ( (mod4Mask,xK_r), compileRestart True)
-              , ( (mod4Mask,xK_q), restart "xmonad" True ) ]
+          main = launch myConfig
+        '';
+      };
+
+      enableConfiguredRecompile = mkOption {
+        default = false;
+        type = lib.types.bool;
+        description = ''
+          Enable recompilation even if <option>config</option> is set to a
+          non-null value. This adds the necessary Haskell dependencies (GHC with
+          packages) to the xmonad binary's environment.
         '';
       };
 

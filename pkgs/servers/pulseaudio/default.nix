@@ -26,11 +26,11 @@
 , # Whether to build only the library.
   libOnly ? false
 
-, AudioUnit, Cocoa, CoreServices, Libc
+, AudioUnit, Cocoa, CoreServices
 }:
 
 stdenv.mkDerivation rec {
-  name = "${if libOnly then "lib" else ""}pulseaudio-${version}";
+  pname = "${if libOnly then "lib" else ""}pulseaudio";
   version = "14.2";
 
   src = fetchurl {
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ libtool libsndfile soxr speexdsp fftwFloat ]
     ++ lib.optionals stdenv.isLinux [ glib dbus ]
-    ++ lib.optionals stdenv.isDarwin [ AudioUnit Cocoa CoreServices Libc ]
+    ++ lib.optionals stdenv.isDarwin [ AudioUnit Cocoa CoreServices ]
     ++ lib.optionals (!libOnly) (
       [ libasyncns webrtc-audio-processing ]
       ++ lib.optional jackaudioSupport libjack2
@@ -101,8 +101,6 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-I${Libc}";
-
   installFlags =
     [ "sysconfdir=${placeholder "out"}/etc"
       "pulseconfdir=${placeholder "out"}/etc/pulse"
@@ -119,7 +117,7 @@ stdenv.mkDerivation rec {
 
   preFixup = lib.optionalString (stdenv.isLinux  && (stdenv.hostPlatform == stdenv.buildPlatform)) ''
     wrapProgram $out/libexec/pulse/gsettings-helper \
-     --prefix XDG_DATA_DIRS : "$out/share/gsettings-schemas/${name}" \
+     --prefix XDG_DATA_DIRS : "$out/share/gsettings-schemas/${pname}-${version}" \
      --prefix GIO_EXTRA_MODULES : "${lib.getLib dconf}/lib/gio/modules"
   '';
 

@@ -32,7 +32,6 @@ let
     last
     length
     tail
-    unique
     ;
   inherit (lib.attrsets)
     attrNames
@@ -48,6 +47,7 @@ let
     mergeDefaultOption
     mergeEqualOption
     mergeOneOption
+    mergeUniqueOption
     showFiles
     showOption
     ;
@@ -300,6 +300,19 @@ rec {
       inherit (str) merge;
     };
 
+    # Allow a newline character at the end and trim it in the merge function.
+    singleLineStr =
+      let
+        inherit (strMatching "[^\n\r]*\n?") check merge;
+      in
+      mkOptionType {
+        name = "singleLineStr";
+        description = "(optionally newline-terminated) single-line string";
+        inherit check;
+        merge = loc: defs:
+          lib.removeSuffix "\n" (merge loc defs);
+      };
+
     strMatching = pattern: mkOptionType {
       name = "strMatching ${escapeNixString pattern}";
       description = "string matching the pattern ${pattern}";
@@ -457,6 +470,18 @@ rec {
       nestedTypes.elemType = elemType;
     };
 
+    unique = { message }: type: mkOptionType rec {
+      name = "unique";
+      inherit (type) description check;
+      merge = mergeUniqueOption { inherit message; };
+      emptyValue = type.emptyValue;
+      getSubOptions = type.getSubOptions;
+      getSubModules = type.getSubModules;
+      substSubModules = m: uniq (type.substSubModules m);
+      functor = (defaultFunctor name) // { wrapped = type; };
+      nestedTypes.elemType = type;
+    };
+
     # Null or value of ...
     nullOr = elemType: mkOptionType rec {
       name = "nullOr";
@@ -586,6 +611,7 @@ rec {
     # A value from a set of allowed ones.
     enum = values:
       let
+        inherit (lib.lists) unique;
         show = v:
                if builtins.isString v then ''"${v}"''
           else if builtins.isInt v then builtins.toString v

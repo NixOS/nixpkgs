@@ -117,13 +117,13 @@ self: super: {
   retry = dontCheck super.retry;
 
   # Hlint needs >= 3.3.4 for ghc 9 support.
-  hlint = doDistribute super.hlint_3_3_5;
+  hlint = doDistribute super.hlint_3_3_6;
 
   # 2021-09-18: ghc-api-compat and ghc-lib-* need >= 9.0.x versions for hls and hlint
   ghc-api-compat = doDistribute super.ghc-api-compat_9_0_1;
-  ghc-lib-parser = self.ghc-lib-parser_9_0_1_20210324;
-  ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_0_0_4;
-  ghc-lib = self.ghc-lib_9_0_1_20210324;
+  ghc-lib-parser = self.ghc-lib-parser_9_0_2_20211226;
+  ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_0_0_6;
+  ghc-lib = self.ghc-lib_9_0_2_20211226;
 
   # 2021-09-18: Need semialign >= 1.2 for correct bounds
   semialign = super.semialign_1_2_0_1;
@@ -147,7 +147,7 @@ self: super: {
   # https://github.com/lspitzner/butcher/issues/7
   butcher = doJailbreak super.butcher;
   # Fixes a bug triggered on GHC 9.0.1
-  text-short = self.text-short_0_1_4;
+  text-short = self.text-short_0_1_5;
 
   # 2021-09-18: The following plugins don‘t work yet on ghc9.
   haskell-language-server = appendConfigureFlags [

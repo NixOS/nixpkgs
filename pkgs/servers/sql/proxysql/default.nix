@@ -25,7 +25,7 @@
 , pcre
 , perl
 , prometheus-cpp
-, python
+, python2
 , re2
 , zlib
 }:
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     cmake
     libtool
     perl
-    python
+    python2
   ];
 
   buildInputs = [

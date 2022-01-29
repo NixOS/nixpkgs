@@ -19,7 +19,7 @@ assert stdenv.cc.isClang -> llvmPackages != null;
 assert elem precision [ "single" "double" "long-double" "quad-precision" ];
 
 let
-  version = "3.3.9";
+  version = "3.3.10";
   withDoc = stdenv.cc.isGNU;
 in
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation {
       "http://fftw.org/fftw-${version}.tar.gz"
       "ftp://ftp.fftw.org/pub/fftw/fftw-${version}.tar.gz"
     ];
-    sha256 = "sha256-vyx85AsEroEa9xTetRJRDMLBe5q51t3PSf5Eh+6nrz0=";
+    sha256 = "sha256-VskyVJhSzdz6/as4ILAgDHdCZ1vpIXnlnmIVs0DiZGc=";
   };
 
   outputs = [ "out" "dev" "man" ]

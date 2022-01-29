@@ -54,6 +54,8 @@ buildPythonPackage rec {
   pytestFlagsArray = [
     "-n"
     "$NIX_BUILD_CORES"
+    "-W"
+    "ignore::DeprecationWarning"
   ];
 
   disabledTests = [

@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, nix-update-script }:
 
 stdenv.mkDerivation rec {
   pname = "re2";
-  version = "2021-09-01";
+  version = "2021-11-01";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "re2";
     rev = version;
-    sha256 = "1fyhypw345xz8zdh53gz6j1fwgrx0gszk1d349ja37dpxh4jp2jh";
+    sha256 = "sha256-q8u7xNp6n17F6twPoVkix8iCKPWUN+qg6rhSR4Dv+bI=";
   };
 
   patches = [
@@ -38,6 +38,12 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
   installCheckTarget = "testinstall";
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = pname;
+    };
+  };
 
   meta = {
     homepage = "https://github.com/google/re2";

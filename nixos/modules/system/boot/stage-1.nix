@@ -338,6 +338,9 @@ let
         { object = pkgs.writeText "mdadm.conf" config.boot.initrd.mdadmConf;
           symlink = "/etc/mdadm.conf";
         }
+        { object = config.environment.etc."modprobe.d/nixos-initrd.conf".source;
+          symlink = "/etc/modprobe.d/nixos-initrd.conf";
+        }
         { object = pkgs.runCommand "initrd-kmod-blacklist-ubuntu" {
               src = "${pkgs.kmod-blacklist-ubuntu}/modprobe.conf";
               preferLocalBuild = true;
@@ -633,7 +636,7 @@ in
 
           <itemizedlist>
             <listitem><para><literal>boot.consoleLogLevel = 0;</literal></para></listitem>
-            <listitem><para><literal>boot.kernelParams = [ "quiet" "udev.log_priority=3" ];</literal></para></listitem>
+            <listitem><para><literal>boot.kernelParams = [ "quiet" "udev.log_level=3" ];</literal></para></listitem>
           </itemizedlist>
         '';
     };

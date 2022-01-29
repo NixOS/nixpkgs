@@ -19,7 +19,9 @@ in  {
     sha256 = "0cj7iy5799pchyzqqncpkhibkq012g3bdpn18pfb19nm43svhn4j";
   };
 
-  mesonFlags = mesonFlags ++ [
+  mesonFlags = [
+    # Include virtual drivers for fprintd tests
+    "-Ddrivers=all"
     "-Dudev_hwdb_dir=${placeholder "out"}/lib/udev/hwdb.d"
   ];
 

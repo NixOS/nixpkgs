@@ -13,7 +13,7 @@ buildGoModule rec {
     sha256 = "sha256-wjLY40bxpoMk6YIG/4KbjxSWUDVNn3cX5OcsgfEPjzk=";
   };
 
-  vendorSha256 = "sha256-J/DlugisnCvbYpqMQuyISyiKHB0hepHrQKsnzSes2zs=";
+  vendorSha256 = "sha256-0tytdTZxnWYl8AxaquF0ArY3dy51j8H2kzw69qcSHzk=";
 
   nativeBuildInputs = [ ronn installShellFiles ];
 

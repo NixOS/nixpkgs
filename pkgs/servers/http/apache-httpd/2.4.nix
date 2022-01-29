@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "apache-httpd";
-  version = "2.4.51";
+  version = "2.4.52";
 
   src = fetchurl {
     url = "mirror://apache/httpd/httpd-${version}.tar.bz2";
-    sha256 = "20e01d81fecf077690a4439e3969a9b22a09a8d43c525356e863407741b838f4";
+    sha256 = "sha256-ASf33El+mYPpxRR0vtdeRWB/L4cKdnWobckK9tVy9ck=";
   };
 
   # FIXME: -dev depends on -doc

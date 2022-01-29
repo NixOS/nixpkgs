@@ -7,21 +7,20 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "cwltool";
-  version = "3.1.20211104071347";
+  version = "3.1.20220124184855";
   format = "setuptools";
-
-  disabled = python3.pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "common-workflow-language";
     repo = pname;
     rev = version;
-    sha256 = "sha256-tp4SdilW2PKav7b3/BchXYl33W9U0aQH6FPdOhHSvIQ=";
+    sha256 = "0b0mxminfijbi3d9sslhwhs8awnagdsx8d2wh9x9ipdpwipihpmb";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace 'prov == 1.5.1' 'prov' \
+      --replace "ruamel.yaml >= 0.15, < 0.17.18" "ruamel.yaml" \
+      --replace "prov == 1.5.1" "prov" \
       --replace "setup_requires=PYTEST_RUNNER," ""
   '';
 

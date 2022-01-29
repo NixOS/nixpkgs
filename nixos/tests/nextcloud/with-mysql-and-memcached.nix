@@ -40,15 +40,16 @@ in {
 
       services.mysql = {
         enable = true;
-        bind = "127.0.0.1";
+        settings.mysqld = {
+          bind-address = "127.0.0.1";
+
+          # FIXME(@Ma27) Nextcloud isn't compatible with mariadb 10.6,
+          # this is a workaround.
+          # See https://help.nextcloud.com/t/update-to-next-cloud-21-0-2-has-get-an-error/117028/22
+          innodb_read_only_compressed = 0;
+        };
         package = pkgs.mariadb;
 
-        # FIXME(@Ma27) Nextcloud isn't compatible with mariadb 10.6,
-        # this is a workaround.
-        # See https://help.nextcloud.com/t/update-to-next-cloud-21-0-2-has-get-an-error/117028/22
-        extraOptions = ''
-          innodb_read_only_compressed=0
-        '';
         initialScript = pkgs.writeText "mysql-init" ''
           CREATE USER 'nextcloud'@'localhost' IDENTIFIED BY 'hunter2';
           CREATE DATABASE IF NOT EXISTS nextcloud;

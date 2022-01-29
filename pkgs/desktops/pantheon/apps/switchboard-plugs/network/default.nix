@@ -18,20 +18,21 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-network";
-  version = "2.4.1";
+  version = "2.4.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0nqihsbrpjw4nx1c50g854bqybniw38adi78vzg8nyl6ikj2r0z4";
+    sha256 = "sha256-CdSX4p98HQNC0VF5Ae/ZnDqm000+9KJ6JhQWhSHC4CI=";
   };
 
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
-  };
+  patches = [
+    (substituteAll {
+      src = ./fix-paths.patch;
+      inherit networkmanagerapplet;
+    })
+  ];
 
   nativeBuildInputs = [
     meson
@@ -49,12 +50,11 @@ stdenv.mkDerivation rec {
     switchboard
   ];
 
-  patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
-      inherit networkmanagerapplet;
-    })
-  ];
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
 
   meta = with lib; {
     description = "Switchboard Networking Plug";

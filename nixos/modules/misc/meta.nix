@@ -54,6 +54,21 @@ in
         '';
       };
 
+      buildDocsInSandbox = mkOption {
+        type = types.bool // {
+          merge = loc: defs: defs;
+        };
+        internal = true;
+        default = true;
+        description = ''
+          Whether to include this module in the split options doc build.
+          Disable if the module references `config`, `pkgs` or other module
+          arguments that cannot be evaluated as constants.
+
+          This option should be defined at most once per module.
+        '';
+      };
+
     };
   };
 

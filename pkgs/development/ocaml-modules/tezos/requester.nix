@@ -2,9 +2,11 @@
 , buildDunePackage
 , tezos-stdlib
 , tezos-base
-, tezos-test-services
 , lwt-watcher
 , alcotest-lwt
+, qcheck-alcotest
+, tezos-base-test-helpers
+, tezos-test-helpers
 }:
 
 buildDunePackage {
@@ -19,7 +21,9 @@ buildDunePackage {
 
   checkInputs = [
     alcotest-lwt
-    tezos-test-services
+    qcheck-alcotest
+    tezos-base-test-helpers
+    tezos-test-helpers
   ];
 
   doCheck = true;

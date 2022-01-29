@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Source code indenter, formatter, and beautifier for C, C++, C# and Java";
-    homepage = "https://astyle.sourceforge.net/";
+    homepage = "http://astyle.sourceforge.net/";
     license = licenses.lgpl3;
     platforms = platforms.unix;
   };

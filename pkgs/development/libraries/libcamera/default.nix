@@ -4,9 +4,11 @@
 , meson
 , ninja
 , pkg-config
+, makeFontsConf
 , boost
 , gnutls
 , openssl
+, libdrm
 , libevent
 , lttng-ust
 , gst_all_1
@@ -15,16 +17,17 @@
 , doxygen
 , python3
 , python3Packages
+, systemd # for libudev
 }:
 
 stdenv.mkDerivation {
   pname = "libcamera";
-  version = "unstable-2021-09-24";
+  version = "unstable-2022-01-03";
 
   src = fetchgit {
     url = "https://git.libcamera.org/libcamera/libcamera.git";
-    rev = "40f5fddca7f774944a53f58eeaebc4db79c373d8";
-    sha256 = "0jklgdv5ma4nszxibms5lkf5d2ips7ncynwa1flglrhl5bl4wkzz";
+    rev = "1db1e31e664c1f613dc964d8519fe75d67b154b6";
+    hash = "sha256-pXYPIU9xDWA870Gp1Jgizi5xnUHRvTqEq/ofFXdVZdg=";
   };
 
   postPatch = ''
@@ -44,6 +47,10 @@ stdenv.mkDerivation {
 
     # cam integration
     libevent
+    libdrm
+
+    # hotplugging
+    systemd
 
     # lttng tracing
     lttng-ust
@@ -65,10 +72,17 @@ stdenv.mkDerivation {
     openssl
   ];
 
-  mesonFlags = [ "-Dv4l2=true" "-Dqcam=disabled" ];
+  mesonFlags = [
+    "-Dv4l2=true"
+    "-Dqcam=disabled"
+    "-Dlc-compliance=disabled" # tries unconditionally to download gtest when enabled
+    ];
 
   # Fixes error on a deprecated declaration
   NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+
+  # Silence fontconfig warnings about missing config
+  FONTCONFIG_FILE = makeFontsConf { fontDirectories = []; };
 
   meta = with lib; {
     description = "An open source camera stack and framework for Linux, Android, and ChromeOS";

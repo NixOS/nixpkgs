@@ -47,7 +47,6 @@ stdenv.mkDerivation rec {
     echo -n > server/meson.build
   '';
 
-  mesonFlags = [ "-Doverride_server_path=${prebuilt_server}" ];
   postInstall = ''
     mkdir -p "$out/share/scrcpy"
     ln -s "${prebuilt_server}" "$out/share/scrcpy/scrcpy-server"

@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   # always built for checks but install static lib only when necessary
-  preInstall = lib.optionalString (!enableStatic) "rm libcryptopp.a";
+  preInstall = lib.optionalString (!enableStatic) "rm -f libcryptopp.a";
 
   installTargets = [ "install-lib" ];
   installFlags = [ "LDCONF=true" ];

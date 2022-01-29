@@ -2,20 +2,22 @@
 , fetchFromGitHub
 , rustPlatform
 , installShellFiles
+, testVersion
+, lsd
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "lsd";
-  version = "0.20.1";
+  version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = "Peltoche";
     repo = pname;
     rev = version;
-    sha256 = "sha256-r/Rllu+tgKqz+vkxA8BSN+3V0lUUd6dEATfickQp4+s=";
+    sha256 = "sha256-4pa8yJjUTO5MUDuljfU9Vo2ZjbsIwWJsJj6VVNfN25A=";
   };
 
-  cargoSha256 = "sha256-O8P29eYlHgmmAADZ/DgTBmj0ZOa+4u/Oee+TMF+/4Ro=";
+  cargoSha256 = "sha256-P0HJVp2ReJuLSZrArw/EAfLFDOZqswI0nD1SCHwegoE=";
 
   nativeBuildInputs = [ installShellFiles ];
   postInstall = ''
@@ -25,18 +27,9 @@ rustPlatform.buildRustPackage rec {
   # Found argument '--test-threads' which wasn't expected, or isn't valid in this context
   doCheck = false;
 
-  doInstallCheck = true;
-  installCheckPhase = ''
-    runHook preInstallCheck
-
-    testFile=$(mktemp /tmp/lsd-test.XXXX)
-    echo 'abc' > $testFile
-    $out/bin/lsd --classic --blocks "size,name" -l $testFile | grep "4 B $testFile"
-    $out/bin/lsd --version | grep "${version}"
-    rm $testFile
-
-    runHook postInstallCheck
-  '';
+  passthru.tests.version = testVersion {
+    package = lsd;
+  };
 
   meta = with lib; {
     homepage = "https://github.com/Peltoche/lsd";

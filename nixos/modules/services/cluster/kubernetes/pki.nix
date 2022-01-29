@@ -401,4 +401,6 @@ in
         };
       };
     });
+
+  meta.buildDocsInSandbox = false;
 }

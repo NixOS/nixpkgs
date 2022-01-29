@@ -22,7 +22,6 @@ let
       lsb-release
       # Errors in output without those
       pciutils
-      python2
       # Games' dependencies
       xorg.xrandr
       which

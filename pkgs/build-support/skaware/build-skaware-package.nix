@@ -21,9 +21,9 @@
   # : lines
 , postInstall
   # : list Maintainer
-, maintainers ? []
+, maintainers ? [ ]
   # : passtrhu arguments (e.g. tests)
-, passthru ? {}
+, passthru ? { }
 
 }:
 
@@ -54,7 +54,8 @@ let
     "CONTRIBUTING"
   ];
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   inherit pname version;
 
   src = fetchurl {
@@ -73,8 +74,8 @@ in stdenv.mkDerivation {
     # This might not hold for e.g. BSD.
     "--with-sysdep-devurandom=yes"
     (if stdenv.isDarwin
-      then "--disable-shared"
-      else "--enable-shared")
+    then "--disable-shared"
+    else "--enable-shared")
   ]
     # On darwin, the target triplet from -dumpmachine includes version number,
     # but skarnet.org software uses the triplet to test binary compatibility.
@@ -82,9 +83,11 @@ in stdenv.mkDerivation {
     # binary built on a different version of darwin.
     # http://www.skarnet.org/cgi-bin/archive.cgi?1:mss:623:heiodchokfjdkonfhdph
     ++ (lib.optional stdenv.isDarwin
-         "--build=${stdenv.hostPlatform.system}");
+    "--build=${stdenv.hostPlatform.system}");
 
   inherit postConfigure;
+
+  makeFlags = lib.optional stdenv.cc.isClang [ "AR=${stdenv.cc.targetPrefix}ar" "RANLIB=${stdenv.cc.targetPrefix}ranlib" ];
 
   # TODO(Profpatsch): ensure that there is always a $doc output!
   postInstall = ''

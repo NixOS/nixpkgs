@@ -68,7 +68,8 @@ def get_matching_chromedriver(version):
         return {
             'version': chromedriver_version,
             'sha256_linux': nix_prefetch_url(get_chromedriver_url('linux64')),
-            'sha256_darwin': nix_prefetch_url(get_chromedriver_url('mac64'))
+            'sha256_darwin': nix_prefetch_url(get_chromedriver_url('mac64')),
+            'sha256_darwin_aarch64': nix_prefetch_url(get_chromedriver_url('mac64_m1'))
         }
 
 

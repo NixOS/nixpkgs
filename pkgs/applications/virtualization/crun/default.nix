@@ -37,13 +37,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "crun";
-  version = "1.4";
+  version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = pname;
     rev = version;
-    sha256 = "sha256-hO3gOZ0AaSvymIDvoylHzlHscoN1+G7wDXTCP1c5uIw=";
+    sha256 = "sha256-zGtHO8CgpbXTh8nZ6WA0ocakzLjL/PW2IULI5QSEPVI=";
     fetchSubmodules = true;
   };
 

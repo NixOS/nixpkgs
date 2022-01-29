@@ -1,4 +1,4 @@
-{ lib, python3, fetchFromGitHub }:
+{ lib, python3, fetchFromGitHub, withServer ? false }:
 
 let
   python3' = python3.override {
@@ -19,6 +19,21 @@ let
       });
     };
   };
+  serverRequire = with python3'.pkgs; [
+    requests
+    flask
+    flask-admin
+    flask-api
+    flask-bootstrap
+    flask-paginate
+    flask-reverse-proxy-fix
+    flask_wtf
+    arrow
+    werkzeug
+    click
+    vcrpy
+    toml
+  ];
 in
 with python3'.pkgs; buildPythonApplication rec {
   version = "4.6";
@@ -32,40 +47,29 @@ with python3'.pkgs; buildPythonApplication rec {
   };
 
   checkInputs = [
-    pytest-cov
     hypothesis
     pytest
     pytest-vcr
-    pylint
-    flake8
     pyyaml
     mypy-extensions
+    click
   ];
 
   propagatedBuildInputs = [
     cryptography
     beautifulsoup4
-    requests
+    certifi
     urllib3
-    flask
-    flask-admin
-    flask-api
-    flask-bootstrap
-    flask-paginate
-    flask-reverse-proxy-fix
-    flask_wtf
-    arrow
-    werkzeug
-    click
     html5lib
-    vcrpy
-    toml
-  ];
+  ] ++ lib.optionals withServer serverRequire;
 
   postPatch = ''
     # Jailbreak problematic dependencies
     sed -i \
       -e "s,'PyYAML.*','PyYAML',g" \
+      -e "/'pytest-cov/d" \
+      -e "/'pylint/d" \
+      -e "/'flake8/d" \
       setup.py
   '';
 
@@ -80,6 +84,8 @@ with python3'.pkgs; buildPythonApplication rec {
       --replace "self.assertEqual(url, \"https://www.google.com\")" ""
     substituteInPlace setup.py \
       --replace mypy-extensions==0.4.1 mypy-extensions>=0.4.1
+  '' + lib.optionalString (!withServer) ''
+    rm tests/test_{server,views}.py
   '';
 
   postInstall = ''
@@ -89,6 +95,8 @@ with python3'.pkgs; buildPythonApplication rec {
     cp auto-completion/zsh/* $out/share/zsh/site-functions
     cp auto-completion/bash/* $out/share/bash-completion/completions
     cp auto-completion/fish/* $out/share/fish/vendor_completions.d
+  '' + lib.optionalString (!withServer) ''
+    rm $out/bin/bukuserver
   '';
 
   meta = with lib; {
@@ -99,4 +107,3 @@ with python3'.pkgs; buildPythonApplication rec {
     maintainers = with maintainers; [ matthiasbeyer infinisil ma27 ];
   };
 }
-

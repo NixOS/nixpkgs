@@ -1,9 +1,8 @@
 { lib
 , buildDunePackage
 , tezos-stdlib
-, tezos-embedded-protocol-010-PtGRANAD
 , tezos-protocol-010-PtGRANAD
-, tezos-shell
+, tezos-protocol-environment
 }:
 
 buildDunePackage {
@@ -12,9 +11,8 @@ buildDunePackage {
   src = "${tezos-stdlib.base_src}/src/proto_010_PtGRANAD/lib_plugin";
 
   buildInputs = [
-    tezos-embedded-protocol-010-PtGRANAD
     tezos-protocol-010-PtGRANAD
-    tezos-shell
+    tezos-protocol-environment
   ];
 
   doCheck = true;

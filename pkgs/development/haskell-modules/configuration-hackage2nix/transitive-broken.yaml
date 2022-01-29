@@ -481,7 +481,7 @@ dont-distribute-packages:
  - atuin
  - audiovisual
  - aura
- - aura_3_2_6
+ - aura_3_2_7
  - authoring
  - autonix-deps-kf5
  - avers
@@ -618,6 +618,8 @@ dont-distribute-packages:
  - bricks-parsec
  - bricks-rendering
  - bricks-syntax
+ - broadcast-chan-conduit
+ - broadcast-chan-pipes
  - bronyradiogermany-streaming
  - brotli-conduit
  - brotli-streams
@@ -659,6 +661,8 @@ dont-distribute-packages:
  - canteven-http
  - cao
  - cap
+ - captcha-2captcha
+ - captcha-capmonster
  - car-pool
  - carboncopy
  - cartel
@@ -794,6 +798,7 @@ dont-distribute-packages:
  - condor
  - conductive-hsc3
  - conductive-song
+ - conduit-aeson
  - conduit-vfs-zip
  - confcrypt
  - conferer-provider-dhall
@@ -826,6 +831,8 @@ dont-distribute-packages:
  - copilot-language
  - copilot-libraries
  - copilot-theorem
+ - core-webserver-servant
+ - core-webserver-warp
  - coroutine-enumerator
  - coroutine-iteratee
  - couch-simple
@@ -958,6 +965,8 @@ dont-distribute-packages:
  - diplomacy
  - diplomacy-server
  - dirfiles
+ - dirtree
+ - disco
  - discogs-haskell
  - discord-gateway
  - discord-hs
@@ -1021,6 +1030,7 @@ dont-distribute-packages:
  - edges
  - editable
  - effective-aspects-mzv
+ - eflint
  - egison
  - egison-pattern-src-haskell-mode
  - egison-pattern-src-th-mode
@@ -1185,6 +1195,7 @@ dont-distribute-packages:
  - funnyprint
  - funsat
  - fused-effects-squeal
+ - futhark_0_21_4
  - fwgl-glfw
  - fwgl-javascript
  - fxpak
@@ -1296,6 +1307,7 @@ dont-distribute-packages:
  - graph-rewriting-strategies
  - graph-rewriting-trs
  - graph-rewriting-ww
+ - graph-trace-viz
  - graph-visit
  - graphicsFormats
  - graphicstools
@@ -1616,6 +1628,7 @@ dont-distribute-packages:
  - hreq-conduit
  - hs-blake2
  - hs-brotli
+ - hs-duktape
  - hs-ffmpeg
  - hs-gen-iface
  - hs-pkpass
@@ -1649,6 +1662,7 @@ dont-distribute-packages:
  - hsfacter
  - hslogstash
  - hspec-expectations-pretty
+ - hspec-expectations-pretty-diff
  - hspec-pg-transact
  - hspec-setup
  - hspec-shouldbe
@@ -1771,6 +1785,7 @@ dont-distribute-packages:
  - introduction-test
  - intset
  - invertible-hlist
+ - invertible-hxt
  - ion
  - ip
  - ipatch
@@ -1807,6 +1822,7 @@ dont-distribute-packages:
  - ivy-web
  - iyql
  - j2hs
+ - jacinda
  - jail
  - java-bridge-extras
  - java-character
@@ -1887,6 +1903,7 @@ dont-distribute-packages:
  - knead-arithmetic
  - knit-haskell
  - knots
+ - koji-tool
  - korfu
  - ks-test
  - kurita
@@ -2157,6 +2174,8 @@ dont-distribute-packages:
  - mpretty
  - mprover
  - mps
+ - mptcp
+ - mptcpanalyzer
  - msgpack-aeson
  - msgpack-idl
  - msgpack-rpc
@@ -2251,6 +2270,7 @@ dont-distribute-packages:
  - numhask-histogram
  - numhask-range
  - numhask-test
+ - nyan
  - nymphaea
  - oath
  - obd
@@ -2290,7 +2310,7 @@ dont-distribute-packages:
  - pairing
  - panda
  - pandoc-japanese-filters
- - pandoc_2_16_2
+ - pandoc_2_17_0_1
  - papa
  - papa-base
  - papa-base-implement
@@ -2438,6 +2458,7 @@ dont-distribute-packages:
  - proto3-suite
  - protobuf-native
  - protocol-buffers-descriptor-fork
+ - psql
  - puffytools
  - pugs-compat
  - pugs-hsregex
@@ -2445,6 +2466,7 @@ dont-distribute-packages:
  - puppetresources
  - pure-cdb
  - pure-priority-queue-tests
+ - purescript-bridge
  - purescript-iso
  - push-notify
  - push-notify-apn
@@ -2526,6 +2548,7 @@ dont-distribute-packages:
  - reactor
  - readpyc
  - reanimate
+ - reanimate_1_1_5_0
  - record-aeson
  - record-gl
  - record-preprocessor
@@ -2687,6 +2710,7 @@ dont-distribute-packages:
  - scp-streams
  - scrabble-bot
  - scrapbook
+ - scroll
  - sde-solver
  - seakale-postgresql
  - seakale-tests
@@ -2729,6 +2753,7 @@ dont-distribute-packages:
  - servant-streaming-client
  - servant-streaming-docs
  - servant-streaming-server
+ - servant-subscriber
  - servant-swagger-tags
  - servant-waargonaut
  - servant-zeppelin-client
@@ -2828,6 +2853,7 @@ dont-distribute-packages:
  - sounddelay
  - soundgen
  - source-code-server
+ - spade
  - sparkle
  - sparrow
  - sparsebit
@@ -3013,6 +3039,7 @@ dont-distribute-packages:
  - toktok
  - too-many-cells
  - top
+ - topaz
  - topkata
  - total-map
  - toxcore
@@ -3033,12 +3060,14 @@ dont-distribute-packages:
  - trasa-reflex
  - trasa-server
  - trasa-th
+ - traverse-code
  - treemap-html-tools
  - treersec
  - trek-app
  - trek-db
  - triangulation
  - tries
+ - trimdent
  - trimpolya
  - truelevel
  - trurl
@@ -3185,6 +3214,7 @@ dont-distribute-packages:
  - warped
  - wavesurfer
  - wavy
+ - web-inv-route
  - web-mongrel2
  - web-page
  - web-rep

@@ -1,6 +1,6 @@
-{ lib, pythonPackages, fetchFromGitHub }:
+{ lib, python2Packages, fetchFromGitHub }:
 
-pythonPackages.buildPythonPackage rec {
+python2Packages.buildPythonPackage rec {
   pname = "poretools";
   version = "unstable-2016-07-10";
 
@@ -11,7 +11,7 @@ pythonPackages.buildPythonPackage rec {
     sha256 = "0bglj833wxpp3cq430p1d3xp085ls221js2y90w7ir2x5ay8l7am";
   };
 
-  propagatedBuildInputs = [pythonPackages.h5py pythonPackages.matplotlib pythonPackages.seaborn pythonPackages.pandas];
+  propagatedBuildInputs = [python2Packages.h5py python2Packages.matplotlib python2Packages.seaborn python2Packages.pandas];
 
   meta = {
     description = "a toolkit for working with nanopore sequencing data from Oxford Nanopore";

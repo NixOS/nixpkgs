@@ -2,15 +2,10 @@
 , stdenv
 , fetchurl
 , gtk2
-, glib
 , pkg-config
-, libgnome
-, libgnomeui
-, vte
 , curl
 , cdparanoia
 , libid3tag
-, ncurses
 , libtool
 }:
 
@@ -26,14 +21,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config libtool ];
   buildInputs = [
     gtk2
-    glib
-    libgnome
-    libgnomeui
-    vte
     curl
     cdparanoia
     libid3tag
-    ncurses
   ];
   enableParallelBuilding = true;
 

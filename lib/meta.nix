@@ -78,7 +78,7 @@ rec {
 
        2. (modern) a pattern for the platform `parsed` field.
 
-     We can inject these into a patten for the whole of a structured platform,
+     We can inject these into a pattern for the whole of a structured platform,
      and then match that.
   */
   platformMatch = platform: elem: let

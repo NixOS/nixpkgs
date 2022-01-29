@@ -66,7 +66,8 @@ let
       stringLength sub substring tail trace;
     inherit (self.trivial) id const pipe concat or and bitAnd bitOr bitXor
       bitNot boolToString mergeAttrs flip mapNullable inNixShell isFloat min max
-      importJSON importTOML warn warnIf info showWarnings nixpkgsVersion version
+      importJSON importTOML warn warnIf throwIfNot checkListOfEnum
+      info showWarnings nixpkgsVersion version
       mod compare splitByAndCompare functionArgs setFunctionArgs isFunction
       toHexString toBaseDigits;
     inherit (self.fixedPoints) fix fix' converge extends composeExtensions
@@ -121,8 +122,9 @@ let
       mkRenamedOptionModule mkMergedOptionModule mkChangedOptionModule
       mkAliasOptionModule mkDerivedConfig doRename;
     inherit (self.options) isOption mkEnableOption mkSinkUndeclaredOptions
-      mergeDefaultOption mergeOneOption mergeEqualOption getValues
-      getFiles optionAttrSetToDocList optionAttrSetToDocList'
+      mergeDefaultOption mergeOneOption mergeEqualOption mergeUniqueOption
+      getValues getFiles
+      optionAttrSetToDocList optionAttrSetToDocList'
       scrubOptionValue literalExpression literalExample literalDocBook
       showOption showFiles unknownModule mkOption;
     inherit (self.types) isType setType defaultTypeMerge defaultFunctor

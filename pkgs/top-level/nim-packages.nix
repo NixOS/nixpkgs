@@ -30,6 +30,8 @@ lib.makeScope newScope (self:
 
     jsonschema = callPackage ../development/nim-packages/jsonschema { };
 
+    jsony = callPackage ../development/nim-packages/jsony { };
+
     karax = callPackage ../development/nim-packages/karax { };
 
     lscolors = callPackage ../development/nim-packages/lscolors { };
@@ -76,8 +78,6 @@ lib.makeScope newScope (self:
     supersnappy = callPackage ../development/nim-packages/supersnappy { };
 
     tempfile = callPackage ../development/nim-packages/tempfile { };
-
-    typography = callPackage ../development/nim-packages/typography { };
 
     ui = callPackage ../development/nim-packages/ui { inherit (pkgs) libui; };
 

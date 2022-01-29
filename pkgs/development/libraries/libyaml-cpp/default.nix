@@ -35,6 +35,6 @@ stdenv.mkDerivation rec {
     description = "A YAML parser and emitter for C++";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ andir ];
+    maintainers = with maintainers; [ ];
   };
 }

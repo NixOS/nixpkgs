@@ -714,11 +714,11 @@
     md5name = "505e70834d35383537b6491e7ae8641f1a4bed1876dbfe361201fc80868d88ca-libpng-1.6.37.tar.xz";
   }
   {
-    name = "poppler-21.01.0.tar.xz";
-    url = "https://dev-www.libreoffice.org/src/poppler-21.01.0.tar.xz";
-    sha256 = "016dde34e5f868ea98a32ca99b643325a9682281500942b7113f4ec88d20e2f3";
+    name = "poppler-21.11.0.tar.xz";
+    url = "https://dev-www.libreoffice.org/src/poppler-21.11.0.tar.xz";
+    sha256 = "31b76b5cac0a48612fdd154c02d9eca01fd38fb8eaa77c1196840ecdeb53a584";
     md5 = "";
-    md5name = "016dde34e5f868ea98a32ca99b643325a9682281500942b7113f4ec88d20e2f3-poppler-21.01.0.tar.xz";
+    md5name = "31b76b5cac0a48612fdd154c02d9eca01fd38fb8eaa77c1196840ecdeb53a584-poppler-21.11.0.tar.xz";
   }
   {
     name = "poppler-data-0.4.10.tar.gz";

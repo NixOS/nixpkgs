@@ -10,7 +10,7 @@
 , libjpeg, libpng, libtiff
 , libmpeg2, libsamplerate, libmad
 , libogg, libvorbis, flac, libxslt
-, lzo, libcdio, libmodplug, libass, libbluray
+, lzo, libcdio, libmodplug, libass, libbluray, libudfread
 , sqlite, libmysqlclient, nasm, gnutls, libva, libdrm
 , curl, bzip2, zip, unzip, glxinfo
 , libcec, libcec_platform, dcadec, libuuid
@@ -118,7 +118,7 @@ in stdenv.mkDerivation {
       libjpeg libpng libtiff
       libmpeg2 libsamplerate libmad
       libogg libvorbis flac libxslt systemd
-      lzo libcdio libmodplug libass libbluray
+      lzo libcdio libmodplug libass libbluray libudfread
       sqlite libmysqlclient avahi lame
       curl bzip2 zip unzip glxinfo
       libcec libcec_platform dcadec libuuid

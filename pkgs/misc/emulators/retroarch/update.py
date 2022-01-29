@@ -1,11 +1,10 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i python3 -p "python3.withPackages (ps: with ps; [ requests nix-prefetch-github ])" -p "git"
+#!nix-shell -I nixpkgs=../../../../ -i python3 -p "python3.withPackages (ps: with ps; [ requests nix-prefetch-github ])" -p "git"
 
 import json
 import sys
+import subprocess
 from pathlib import Path
-
-from nix_prefetch_github import nix_prefetch_github
 
 SCRIPT_PATH = Path(__file__).absolute().parent
 HASHES_PATH = SCRIPT_PATH / "hashes.json"
@@ -27,7 +26,19 @@ CORES = {
     "bsnes": {"repo": "bsnes-libretro"},
     "bsnes-hd": {"repo": "bsnes-hd", "owner": "DerKoun"},
     "bsnes-mercury": {"repo": "bsnes-mercury"},
-    "citra": {"repo": "citra", "fetch_submodules": True},
+    "citra": {
+        "repo": "citra",
+        "fetch_submodules": True,
+        "deep_clone": True,
+        "leave_dot_git": True,
+    },
+    "citra-canary": {
+        "repo": "citra",
+        "fetch_submodules": True,
+        "deep_clone": True,
+        "leave_dot_git": True,
+        "rev": "canary",
+    },
     "desmume": {"repo": "desmume"},
     "desmume2015": {"repo": "desmume2015"},
     "dolphin": {"repo": "dolphin"},
@@ -97,19 +108,33 @@ def info(*msg):
     print(*msg, file=sys.stderr)
 
 
-def get_repo_hash_fetchFromGitHub(repo, owner="libretro", fetch_submodules=False):
-    assert repo is not None, "Parameter 'repo' can't be None."
-
-    repo_hash = nix_prefetch_github(
-        owner=owner, repo=repo, fetch_submodules=fetch_submodules
+def get_repo_hash_fetchFromGitHub(
+    repo,
+    owner="libretro",
+    deep_clone=False,
+    fetch_submodules=False,
+    leave_dot_git=False,
+    rev=None,
+):
+    extra_args = []
+    if deep_clone:
+        extra_args.append("--deep-clone")
+    if fetch_submodules:
+        extra_args.append("--fetch-submodules")
+    if leave_dot_git:
+        extra_args.append("--leave-dot-git")
+    if rev:
+        extra_args.append("--rev")
+        extra_args.append(rev)
+    result = subprocess.run(
+        ["nix-prefetch-github", owner, repo, *extra_args],
+        check=True,
+        capture_output=True,
+        text=True,
     )
-    return {
-        "owner": repo_hash.repository.owner,
-        "repo": repo_hash.repository.name,
-        "rev": repo_hash.rev,
-        "sha256": repo_hash.sha256,
-        "fetchSubmodules": repo_hash.fetch_submodules,
-    }
+    j = json.loads(result.stdout)
+    # Remove False values
+    return {k: v for k, v in j.items() if v}
 
 
 def get_repo_hash(fetcher="fetchFromGitHub", **kwargs):

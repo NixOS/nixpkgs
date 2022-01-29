@@ -1,8 +1,8 @@
 { lib, stdenv, fetchurl, pkg-config, glib, python3, gtk2, readline }:
 
-let version = "1.06.002"; in
-stdenv.mkDerivation {
-  name = "gnubg-"+version;
+stdenv.mkDerivation rec {
+  pname = "gnubg";
+  version = "1.06.002";
 
   src = fetchurl {
     url = "http://gnubg.org/media/sources/gnubg-release-${version}-sources.tar.gz";

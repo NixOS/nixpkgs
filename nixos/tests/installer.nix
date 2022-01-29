@@ -306,6 +306,9 @@ let
           # The test cannot access the network, so any packages we
           # need must be included in the VM.
           system.extraDependencies = with pkgs; [
+            brotli
+            brotli.dev
+            brotli.lib
             desktop-file-utils
             docbook5
             docbook_xsl_ns
@@ -315,6 +318,7 @@ let
             ntp
             perlPackages.ListCompare
             perlPackages.XMLLibXML
+            python3Minimal
             shared-mime-info
             sudo
             texinfo
@@ -334,11 +338,11 @@ let
             (pkgs.grub2_efi.override { inherit zfsSupport; })
           ]);
 
-          nix.binaryCaches = mkForce [ ];
-          nix.extraOptions = ''
-            hashed-mirrors =
-            connect-timeout = 1
-          '';
+          nix.settings = {
+            substituters = mkForce [];
+            hashed-mirrors = null;
+            connect-timeout = 1;
+          };
         };
 
       };
@@ -561,24 +565,14 @@ in {
           + " mkpart primary 2048M -1s"  # PV2
           + " set 2 lvm on",
           "udevadm settle",
-          "sleep 1",
           "pvcreate /dev/vda1 /dev/vda2",
-          "sleep 1",
           "vgcreate MyVolGroup /dev/vda1 /dev/vda2",
-          "sleep 1",
           "lvcreate --size 1G --name swap MyVolGroup",
-          "sleep 1",
           "lvcreate --size 3G --name nixos MyVolGroup",
-          "sleep 1",
           "mkswap -f /dev/MyVolGroup/swap -L swap",
           "swapon -L swap",
           "mkfs.xfs -L nixos /dev/MyVolGroup/nixos",
           "mount LABEL=nixos /mnt",
-      )
-    '';
-    postBootCommands = ''
-      assert "loaded active" in machine.succeed(
-          "systemctl list-units 'lvm2-pvscan@*' -ql --no-legend | tee /dev/stderr"
       )
     '';
   };
@@ -681,8 +675,6 @@ in {
           "modprobe bcache",
           "udevadm settle",
           "make-bcache -B /dev/vda4 -C /dev/vda3",
-          "echo /dev/vda3 > /sys/fs/bcache/register",
-          "echo /dev/vda4 > /sys/fs/bcache/register",
           "udevadm settle",
           "mkfs.ext3 -L nixos /dev/bcache0",
           "mount LABEL=nixos /mnt",

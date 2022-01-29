@@ -233,19 +233,19 @@ rec {
   # Get revisions from
   # https://github.com/moby/moby/tree/${version}/hack/dockerfile/install/*
   docker_20_10 = callPackage dockerGen rec {
-    version = "20.10.9";
+    version = "20.10.12";
     rev = "v${version}";
-    sha256 = "1msqvzfccah6cggvf1pm7n35zy09zr4qg2aalgwpqigv0jmrbyd4";
+    sha256 = "sha256-nU6grb2lSW7BY7w9aAXwVbGp9TyO2ZxnJaxAi0wbk/c=";
     moby-src = fetchFromGitHub {
       owner = "moby";
       repo = "moby";
       rev = "v${version}";
-      sha256 = "04xx7m8s9vrkm67ba2k5i90053h5qqkjcvw5rc8w7m5a309xcp4n";
+      sha256 = "sha256-qizzK1qJNRGFisahE3iAzZTNW/HmledlMNxcJCMQSJ4=";
     };
-    runcRev = "v1.0.2"; # v1.0.2
+    runcRev = "v1.0.2";
     runcSha256 = "1bpckghjah0rczciw1a1ab8z718lb2d3k4mjm4zb45lpm3njmrcp";
-    containerdRev = "v1.4.11"; # v1.4.11
-    containerdSha256 = "02slv4gc2blxnmv0p8pkm139vjn6ihjblmn8ps2k1afbbyps0ilr";
+    containerdRev = "v1.4.12";
+    containerdSha256 = "sha256-g30kshXyGVew5tVaXFAOQUOYvvo0JBqIj1YaC5nTiS8=";
     tiniRev = "v0.19.0"; # v0.19.0
     tiniSha256 = "1h20i3wwlbd8x4jr2gz68hgklh0lb0jj7y5xk1wvr8y58fip1rdn";
   };

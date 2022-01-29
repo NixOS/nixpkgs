@@ -245,12 +245,9 @@ let
         defaultListen =
           if vhost.listen != [] then vhost.listen
           else
-            let addrs = if vhost.listenAddresses != [] then vhost.listenAddresses else (
-              [ "0.0.0.0" ] ++ optional enableIPv6 "[::0]"
-            );
-            in
-          optionals (hasSSL || vhost.rejectSSL) (map (addr: { inherit addr; port = 443; ssl = true; }) addrs)
-          ++ optionals (!onlySSL) (map (addr: { inherit addr; port = 80; ssl = false; }) addrs);
+            let addrs = if vhost.listenAddresses != [] then vhost.listenAddresses else cfg.defaultListenAddresses;
+            in optionals (hasSSL || vhost.rejectSSL) (map (addr: { inherit addr; port = 443; ssl = true; }) addrs)
+              ++ optionals (!onlySSL) (map (addr: { inherit addr; port = 80; ssl = false; }) addrs);
 
         hostListen =
           if vhost.forceSSL
@@ -317,7 +314,7 @@ let
           ${optionalString (hasSSL && vhost.sslTrustedCertificate != null) ''
             ssl_trusted_certificate ${vhost.sslTrustedCertificate};
           ''}
-          ${optionalString (hasSSL && vhost.rejectSSL) ''
+          ${optionalString vhost.rejectSSL ''
             ssl_reject_handshake on;
           ''}
           ${optionalString (hasSSL && vhost.kTLS) ''
@@ -374,6 +371,8 @@ let
       ${user}:{PLAIN}${password}
     '') authDef)
   );
+
+  mkCertOwnershipAssertion = import ../../../security/acme/mk-cert-ownership-assertion.nix;
 in
 
 {
@@ -427,6 +426,16 @@ in
         example = "20s";
         description = "
           Change the proxy related timeouts in recommendedProxySettings.
+        ";
+      };
+
+      defaultListenAddresses = mkOption {
+        type = types.listOf types.str;
+        default = [ "0.0.0.0" ] ++ optional enableIPv6 "[::0]";
+        defaultText = literalExpression ''[ "0.0.0.0" ] ++ lib.optional config.networking.enableIPv6 "[::0]"'';
+        example = literalExpression ''[ "10.0.0.12" "[2002:a00:1::]" ]'';
+        description = "
+          If vhosts do not specify listenAddresses, use these addresses by default.
         ";
       };
 
@@ -842,7 +851,11 @@ in
           services.nginx.virtualHosts.<name>.useACMEHost are mutually exclusive.
         '';
       }
-    ];
+    ] ++ map (name: mkCertOwnershipAssertion {
+      inherit (cfg) group user;
+      cert = config.security.acme.certs.${name};
+      groups = config.users.groups;
+    }) dependentCertNames;
 
     systemd.services.nginx = {
       description = "Nginx Web Server";

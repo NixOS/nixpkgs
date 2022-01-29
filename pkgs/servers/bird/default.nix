@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, flex, bison, readline, libssh }:
+{ lib, stdenv, fetchurl, fetchpatch, flex, bison, readline, libssh, nixosTests }:
 
 with lib;
 
@@ -33,6 +33,8 @@ let
       configureFlags = [
         "--localstatedir=/var"
       ] ++ optional enableIPv6 "--enable-ipv6";
+
+      passthru.tests = nixosTests.bird;
 
       meta = {
         description = "BIRD Internet Routing Daemon";

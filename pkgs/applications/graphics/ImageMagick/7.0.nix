@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, libtool
+{ lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config, libtool
 , bzip2, zlib, libX11, libXext, libXt, fontconfig, freetype, ghostscript, libjpeg, djvulibre
 , lcms2, openexr, libjxl, libpng, liblqr1, libraw, librsvg, libtiff, libxml2, openjpeg, libwebp, libheif
 , ApplicationServices
@@ -18,12 +18,22 @@ in
 
 stdenv.mkDerivation rec {
   pname = "imagemagick";
-  version = "7.1.0-19";
+  version = "7.1.0-20";
 
-  src = fetchurl {
-    url = "https://download.imagemagick.org/ImageMagick/download/releases/ImageMagick-${version}.tar.xz";
-    hash = "sha256-P9eRdKsPMLwWQ68+ZU8dL/zDqVVCY5gRVWiLT0n3/Xc=";
+  src = fetchFromGitHub {
+    owner = "ImageMagick";
+    repo = "ImageMagick";
+    rev = version;
+    sha256 = "0r8zmk2cfmf09l94hqzfz4aspnzn178ggdbgm7w4hr0p864cbvc3";
   };
+
+  patches = [
+    # fix a type confusion bug introduced in 7.1.0-20 with commit 075565e93c71bcaaabf0ce70b7d1060bccdf0020
+    (fetchpatch {
+      url = "https://github.com/ImageMagick/ImageMagick/commit/62845d5672eca4446b952dd0ab2e3e0dab0309d4.patch";
+      sha256 = "1kni5i8b5hl69niypidm90mhir8cafi6r9i857fxdlv045h3dg4p";
+    })
+  ];
 
   outputs = [ "out" "dev" "doc" ]; # bin/ isn't really big
   outputMan = "out"; # it's tiny

@@ -24,7 +24,7 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "signal-desktop";
-  version = "5.26.1"; # Please backport all updates to the stable channel.
+  version = "5.29.1"; # Please backport all updates to the stable channel.
   # All releases have a limited lifetime and "expire" 90 days after the release.
   # When releases "expire" the application becomes unusable until an update is
   # applied. The expiration date for the current release can be extracted with:
@@ -34,7 +34,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://updates.signal.org/desktop/apt/pool/main/s/signal-desktop/signal-desktop_${version}_amd64.deb";
-    sha256 = "sha256-QIRt16AHILBNxKPxsOQ0n65W/bbalhXH1fM7KIaXP10=";
+    sha256 = "1a56mnmv0lnizmd4dl8fya3mdsy0jy5qr5bqb72m9cipq0069alc";
   };
 
   nativeBuildInputs = [
@@ -113,6 +113,9 @@ in stdenv.mkDerivation rec {
     mkdir -p $out/bin
     ln -s $out/lib/Signal/signal-desktop $out/bin/signal-desktop
 
+    # Create required symlinks:
+    ln -s libGLESv2.so $out/lib/Signal/libGLESv2.so.2
+
     runHook postInstall
   '';
 
@@ -120,6 +123,7 @@ in stdenv.mkDerivation rec {
     gappsWrapperArgs+=(
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc ] }"
       ${customLanguageWrapperArgs}
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}"
     )
 
     # Fix the desktop link

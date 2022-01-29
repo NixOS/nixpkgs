@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "keyring";
-  version = "23.4.0";
-  disabled = pythonOlder "3.6";
+  version = "23.5.0";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-iPIGAkKV48b7FrsKYPtLt+wRhWKdxacp8SqnwjbQE4c=";
+    hash = "sha256-kBJQjhQagL0cC2d41cYQ3Z+MRk11rGd0JIUAUD+XL7k=";
   };
 
   nativeBuildInputs = [

@@ -1,7 +1,7 @@
-From da4f855044b2babe052ce303cca1de736cf952cd Mon Sep 17 00:00:00 2001
+From ddcfae6de8c460903c5db8c536ffeb5771e976f8 Mon Sep 17 00:00:00 2001
 From: Eelco Dolstra <eelco.dolstra@logicblox.com>
 Date: Fri, 19 Dec 2014 14:46:17 +0100
-Subject: [PATCH 05/21] Add some NixOS-specific unit directories
+Subject: [PATCH 05/19] Add some NixOS-specific unit directories
 
 Look in `/nix/var/nix/profiles/default/lib/systemd/{system,user}` for
 units provided by packages installed into the default profile via
@@ -122,5 +122,5 @@ index fc0f8c34fa..162432e77f 100644
  
  systemd_sleep_dir=${root_prefix}/lib/systemd/system-sleep
 -- 
-2.33.0
+2.33.1
 

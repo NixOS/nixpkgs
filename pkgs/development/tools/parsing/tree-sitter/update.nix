@@ -105,7 +105,7 @@ let
       repo = "tree-sitter-latex";
     };
     "tree-sitter-lua" = {
-      orga = "nvim-treesitter";
+      orga = "MunifTanjim";
       repo = "tree-sitter-lua";
     };
     "tree-sitter-fennel" = {
@@ -117,7 +117,7 @@ let
       repo = "tree-sitter-make";
     };
     "tree-sitter-markdown" = {
-      orga = "ikatyang";
+      orga = "MDeiml";
       repo = "tree-sitter-markdown";
     };
     "tree-sitter-rst" = {
@@ -304,6 +304,10 @@ let
       orga = "victorhqc";
       repo = "tree-sitter-prisma";
     };
+    "tree-sitter-org" = {
+      orga = "milisims";
+      repo = "tree-sitter-org";
+    };
   };
 
   allGrammars =
@@ -360,9 +364,15 @@ let
   # generic bash script to find the latest github release for a repo
   latestGithubRelease = { orga, repo }: writeShellScript "latest-github-release" ''
     set -euo pipefail
-    res=$(${curl}/bin/curl \
-      --silent \
-      "https://api.github.com/repos/${urlEscape orga}/${urlEscape repo}/releases/latest")
+
+    args=( '--silent' )
+    if [ -n "''${GITHUB_TOKEN:-}" ]; then
+      args+=( "-H" "Authorization: token ''${GITHUB_TOKEN}" )
+    fi
+    args+=( "https://api.github.com/repos/${urlEscape orga}/${urlEscape repo}/releases/latest" )
+
+    res=$(${curl}/bin/curl "''${args[@]}")
+
     if [[ "$(printf "%s" "$res" | ${jq}/bin/jq '.message?')" =~ "rate limit" ]]; then
       echo "rate limited" >&2
     fi
@@ -378,12 +388,21 @@ let
   # find the latest repos of a github organization
   latestGithubRepos = { orga }: writeShellScript "latest-github-repos" ''
     set -euo pipefail
-    res=$(${curl}/bin/curl \
-      --silent \
-      'https://api.github.com/orgs/${urlEscape orga}/repos?per_page=100')
+
+    args=( '--silent' )
+    if [ -n "''${GITHUB_TOKEN:-}" ]; then
+      args+=( "-H" "Authorization: token ''${GITHUB_TOKEN}" )
+    fi
+    args+=( 'https://api.github.com/orgs/${urlEscape orga}/repos?per_page=100' )
+
+    res=$(${curl}/bin/curl "''${args[@]}")
 
     if [[ "$(printf "%s" "$res" | ${jq}/bin/jq '.message?')" =~ "rate limit" ]]; then
-      echo "rate limited" >&2   #
+      echo "rate limited" >&2
+      exit 1
+    elif [[ "$(printf "%s" "$res" | ${jq}/bin/jq '.message?')" =~ "Bad credentials" ]]; then
+      echo "bad credentials" >&2
+      exit 1
     fi
 
     printf "%s" "$res" | ${jq}/bin/jq 'map(.name)' \
@@ -417,7 +436,8 @@ let
     mkdir -p "$outputDir"
     ${foreachSh allGrammars
       ({name, orga, repo}: ''${updateGrammar { inherit orga repo; }} > $outputDir/${name}.json'')}
-    ( echo "{"
+    ( echo "{ lib }:"
+      echo "{"
       ${foreachSh allGrammars
         ({name, ...}: ''
            # indentation hack

@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , autoreconfHook
 , alsa-lib
-, python
+, python3
 , SDL
 }:
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--enable-dependency-tracking" ]
     ++ lib.optional stdenv.isDarwin "--disable-sdltest";
 
-  nativeBuildInputs = [ autoreconfHook python ];
+  nativeBuildInputs = [ autoreconfHook python3 ];
 
   buildInputs = [ SDL ] ++ lib.optional stdenv.isLinux alsa-lib;
 

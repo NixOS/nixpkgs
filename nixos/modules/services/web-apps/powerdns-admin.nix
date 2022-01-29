@@ -146,4 +146,7 @@ in
       group = "powerdnsadmin";
     };
   };
+
+  # uses attributes of the linked package
+  meta.buildDocsInSandbox = false;
 }

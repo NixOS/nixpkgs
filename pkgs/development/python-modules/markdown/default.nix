@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "markdown";
-  version = "3.3.5";
+  version = "3.3.6";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     pname = "Markdown";
     inherit version;
-    sha256 = "sha256-JulUa/vN5fzQcr2PYSycG24md8uKrb32UgZnT0bd4Gk=";
+    sha256 = "sha256-dt+K4yKU7Dnc+JNAOCiC36Epdfh/RcPtHs2x6M78cAY=";
   };
 
   propagatedBuildInputs = lib.optionals (pythonOlder "3.10") [

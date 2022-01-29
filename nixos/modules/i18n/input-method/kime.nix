@@ -45,5 +45,7 @@ in
 
     environment.etc."xdg/kime/config.yaml".text = replaceStrings [ "\\\\" ] [ "\\" ] (builtins.toJSON cfg.config);
   };
-}
 
+  # uses attributes of the linked package
+  meta.buildDocsInSandbox = false;
+}

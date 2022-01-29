@@ -181,6 +181,7 @@ let
       maintainers = with maintainers; [ goibhniu gilligan cko marsam ];
       platforms = platforms.linux ++ platforms.darwin;
       mainProgram = "node";
+      knownVulnerabilities = optional (versionOlder version "12") "This NodeJS release has reached its end of life. See https://nodejs.org/en/about/releases/.";
     };
 
     passthru.python = python; # to ensure nodeEnv uses the same version

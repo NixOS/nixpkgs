@@ -17,7 +17,7 @@ buildDotnetModule rec {
   dotnet-sdk = dotnetCorePackages.sdk_3_1;
   dotnet-runtime = dotnetCorePackages.aspnetcore_3_1;
 
-  postInstall = ''
+  postFixup = ''
     mv $out/bin/{NBXplorer,nbxplorer}
   '';
 

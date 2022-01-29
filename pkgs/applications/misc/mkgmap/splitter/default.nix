@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Utility for splitting OpenStreetMap maps into tiles";
-    homepage = "http://www.mkgmap.org.uk";
+    homepage = "https://www.mkgmap.org.uk/";
     downloadPage = "https://www.mkgmap.org.uk/download/splitter.html";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ sikmir ];

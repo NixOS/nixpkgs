@@ -27,6 +27,6 @@ buildGoModule rec {
     description = "Command line tools for fly.io services";
     homepage = "https://fly.io/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ aaronjanse ];
+    maintainers = with maintainers; [ aaronjanse jsierles ];
   };
 }

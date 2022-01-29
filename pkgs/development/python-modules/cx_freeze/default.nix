@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "cx_Freeze";
-  version = "6.8.3";
+  version = "6.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "05e7a2b099d4eb36e74116311b693dcc3103763aee92ef32079be0b6d4832fa0";
+    sha256 = "673aa3199af2ef87fc03a43a30e5d78b27ced2cedde925da89c55b5657da267b";
   };
 
   disabled = pythonOlder "3.5";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A set of scripts and modules for freezing Python scripts into executables";
-    homepage = "http://cx-freeze.sourceforge.net/";
+    homepage = "https://marcelotduarte.github.io/cx_Freeze/";
     license = licenses.psfl;
   };
 }

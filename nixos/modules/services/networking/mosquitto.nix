@@ -136,7 +136,7 @@ let
         + concatStringsSep "\n"
           (plainLines
            ++ optional (plainLines != []) ''
-             ${pkgs.mosquitto}/bin/mosquitto_passwd -U "$file"
+             ${cfg.package}/bin/mosquitto_passwd -U "$file"
            ''
            ++ hashedLines));
 
@@ -444,6 +444,15 @@ let
   globalOptions = with types; {
     enable = mkEnableOption "the MQTT Mosquitto broker";
 
+    package = mkOption {
+      type = package;
+      default = pkgs.mosquitto;
+      defaultText = literalExpression "pkgs.mosquitto";
+      description = ''
+        Mosquitto package to use.
+      '';
+    };
+
     bridges = mkOption {
       type = attrsOf bridgeOptions;
       default = {};
@@ -556,7 +565,7 @@ in
     systemd.services.mosquitto = {
       description = "Mosquitto MQTT Broker Daemon";
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      after = [ "network-online.target" ];
       serviceConfig = {
         Type = "notify";
         NotifyAccess = "main";
@@ -565,7 +574,7 @@ in
         RuntimeDirectory = "mosquitto";
         WorkingDirectory = cfg.dataDir;
         Restart = "on-failure";
-        ExecStart = "${pkgs.mosquitto}/bin/mosquitto -c ${configFile}";
+        ExecStart = "${cfg.package}/bin/mosquitto -c ${configFile}";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
 
         # Hardening

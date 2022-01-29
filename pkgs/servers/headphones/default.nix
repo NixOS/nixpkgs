@@ -1,21 +1,20 @@
-{ lib, fetchFromGitHub, python2, makeWrapper }:
+{ lib, fetchFromGitHub, python3, makeWrapper }:
 
-python2.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "headphones";
-  version = "0.5.20";
+  version = "0.6.0-alpha.1";
 
   src = fetchFromGitHub {
     owner = "rembo10";
     repo = "headphones";
     rev = "v${version}";
-    sha256 = "0m234fr1i8bb8mgmjsdpkbaa3l16y23ca6s7nyyl5ismmjxhi4mz";
+    sha256 = "sha256-+mWtceQoHSMRkA8izZnKM0cgbt0P5Hr3arKOevpKvqc=";
   };
 
   dontBuild = true;
   doCheck = false;
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ python2 ];
 
   installPhase = ''
     mkdir -p $out/bin $out/opt/headphones

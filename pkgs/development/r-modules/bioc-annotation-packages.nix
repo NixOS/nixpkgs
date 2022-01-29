@@ -7,7 +7,7 @@
 let derive2 = derive { biocVersion = "3.14"; };
 in with self; {
   AHCytoBands = derive2 { name="AHCytoBands"; version="0.99.1"; sha256="0svxxhj3mh5gqik45ikcxnlhnma8n1c0rv8pycj2034cb9ms1dbv"; depends=[]; };
-  AHEnsDbs = derive2 { name="AHEnsDbs"; version="1.1.2"; sha256="06phi519h709nabs09xqnfyqjilj1fzmxb272hy7gy8g6lvx3g7d"; depends=[AnnotationHubData ensembldb]; };
+  AHEnsDbs = derive2 { name="AHEnsDbs"; version="1.1.4"; sha256="1s6z7cy4fx1w37w9j3315v8v7blip98kiv5wxgqfvsy98irxk58r"; depends=[AnnotationHubData ensembldb]; };
   AHLRBaseDbs = derive2 { name="AHLRBaseDbs"; version="1.2.0"; sha256="0x82jcvza2vy0vi8pl0c55nsggpbrfgfxvqli38q29km8cdqcxmi"; depends=[AnnotationHub]; };
   AHMeSHDbs = derive2 { name="AHMeSHDbs"; version="1.2.0"; sha256="12a8wh671zvwknr47cbcmijpwjm13wyd7plmifkdpj0vqgc78q0a"; depends=[AnnotationHub]; };
   AHPathbankDbs = derive2 { name="AHPathbankDbs"; version="0.99.5"; sha256="10wcrglm521xcrfbzc39dkbjvg1pkz0zq70vgnh68akiwmdirp89"; depends=[AnnotationHub]; };

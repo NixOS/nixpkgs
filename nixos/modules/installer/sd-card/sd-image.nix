@@ -176,7 +176,7 @@ in
 
       nativeBuildInputs = [ dosfstools e2fsprogs mtools libfaketime util-linux zstd ];
 
-      inherit (config.sdImage) compressImage;
+      inherit (config.sdImage) imageName compressImage;
 
       buildCommand = ''
         mkdir -p $out/nix-support $out/sd-image

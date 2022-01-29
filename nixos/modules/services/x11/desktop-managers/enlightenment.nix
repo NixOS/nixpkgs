@@ -36,6 +36,7 @@ in
       enlightenment.econnman
       enlightenment.efl
       enlightenment.enlightenment
+      enlightenment.ecrire
       enlightenment.ephoto
       enlightenment.rage
       enlightenment.terminology

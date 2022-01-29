@@ -5,7 +5,7 @@
 , libXcursor, libXext, libXfixes, libXrender, libXScrnSaver, libXcomposite, libxcb
 , alsa-lib, libXdamage, libXtst, libXrandr, libxshmfence, expat, cups
 , dbus, gtk3, gdk-pixbuf, gcc-unwrapped, at-spi2-atk, at-spi2-core
-, libkrb5, libdrm, mesa
+, libkrb5, libdrm, libglvnd, mesa
 , libxkbcommon, pipewire, wayland # ozone/wayland
 
 # Command line programs
@@ -44,7 +44,7 @@
 , libvaSupport ? true, libva
 
 # For Vulkan support (--enable-features=Vulkan)
-, vulkanSupport ? true, vulkan-loader
+, addOpenGLRunpath
 }:
 
 with lib;
@@ -66,11 +66,10 @@ let
     liberation_ttf curl util-linux xdg-utils wget
     flac harfbuzz icu libpng opusWithCustomModes snappy speechd
     bzip2 libcap at-spi2-atk at-spi2-core
-    libkrb5 libdrm mesa coreutils
+    libkrb5 libdrm libglvnd mesa coreutils
     libxkbcommon pipewire wayland
   ] ++ optional pulseSupport libpulseaudio
     ++ optional libvaSupport libva
-    ++ optional vulkanSupport vulkan-loader
     ++ [ gtk3 ];
 
   suffix = if channel != "stable" then "-" + channel else "";
@@ -119,12 +118,6 @@ in stdenv.mkDerivation {
     cp -a opt/* $out/share
     cp -a usr/share/* $out/share
 
-    # To fix --use-gl=egl:
-    test -e $out/share/google/$appname/libEGL.so
-    ln -s libEGL.so $out/share/google/$appname/libEGL.so.1
-    test -e $out/share/google/$appname/libGLESv2.so
-    ln -s libGLESv2.so $out/share/google/$appname/libGLESv2.so.2
-
     substituteInPlace $out/share/applications/google-$appname.desktop \
       --replace /usr/bin/google-chrome-$dist $exe
     substituteInPlace $out/share/gnome-control-center/default-apps/google-$appname.xml \
@@ -150,7 +143,8 @@ in stdenv.mkDerivation {
       --prefix LD_LIBRARY_PATH : "$rpath" \
       --prefix PATH            : "$binpath" \
       --prefix XDG_DATA_DIRS   : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH" \
-      --add-flags ${escapeShellArg commandLineArgs}
+      --add-flags ${escapeShellArg commandLineArgs} \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}"
 
     for elf in $out/share/google/$appname/{chrome,chrome-sandbox,${crashpadHandlerBinary},nacl_helper}; do
       patchelf --set-rpath $rpath $elf

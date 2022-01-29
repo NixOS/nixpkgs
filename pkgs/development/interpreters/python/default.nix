@@ -185,10 +185,10 @@ in {
     sourceVersion = {
       major = "3";
       minor = "10";
-      patch = "0";
+      patch = "1";
       suffix = "";
     };
-    sha256 = "00mhn6kj4qkvkkv6hh2klnnjr0yk0c9hspp7njc7n6m1lvkzi6as";
+    sha256 = "0xz1wrd6xi20sbli30vm6jclc4rlnnd03irybknf2p8sdrdjdwd7";
     inherit (darwin) configd;
     inherit passthruFun;
   };
@@ -219,6 +219,7 @@ in {
     sqlite = null;
     configd = null;
     tzdata = null;
+    libffi = pkgs.libffiBoot; # without test suite
     stripConfig = true;
     stripIdlelib = true;
     stripTests = true;
@@ -273,29 +274,29 @@ in {
     sha256 = "sha256-LtAqyecQhZxBvILer7CGGXkruaJ+6qFnbHQe3t0hTdc=";
   };
 
-  pypy27_prebuilt = callPackage ./pypy/prebuilt.nix {
+  pypy27_prebuilt = callPackage ./pypy/prebuilt_2_7.nix {
     # Not included at top-level
     self = pythonInterpreters.pypy27_prebuilt;
     sourceVersion = {
       major = "7";
       minor = "3";
-      patch = "3";
+      patch = "6";
     };
-    sha256 = "1cfpdyvbvzwc0ynjr7248jhwgcpl7073wlp7w3g2v4fnrh1bc4pl"; # linux64
+    sha256 = "sha256-ghJ/Q/rmznXUfWxFOfjB6jcunC2/pA+ui1g1HVInk6Q="; # linux64
     pythonVersion = "2.7";
     inherit passthruFun;
   };
 
-  pypy36_prebuilt = callPackage ./pypy/prebuilt.nix {
+  pypy38_prebuilt = callPackage ./pypy/prebuilt.nix {
     # Not included at top-level
-    self = pythonInterpreters.pypy36_prebuilt;
+    self = pythonInterpreters.pypy38_prebuilt;
     sourceVersion = {
       major = "7";
       minor = "3";
-      patch = "3";
+      patch = "7";
     };
-    sha256 = "02lys9bjky9bqg6ggv8djirbd3zzcsq7755v4yvwm0k4a7fmzf2g"; # linux64
-    pythonVersion = "3.6";
+    sha256 = "sha256-Xe43x8PLixYAKPveOlkBxoBD36VFoWeUUCuJfUvEDX4="; # linux64
+    pythonVersion = "3.8";
     inherit passthruFun;
   };
 

@@ -13,7 +13,7 @@
 # Outputs
 , alsa-lib, libjack2, libpulseaudio, libshout, pipewire
 # Misc
-, icu, sqlite, avahi, dbus, pcre, libgcrypt, expat
+, icu, sqlite, avahi, dbus, pcre2, libgcrypt, expat
 # Services
 , yajl
 # Client support
@@ -71,7 +71,6 @@ let
     # Commercial services
     qobuz         = [ curl libgcrypt yajl ];
     soundcloud    = [ curl yajl ];
-    tidal         = [ curl yajl ];
     # Client support
     libmpdclient  = [ libmpdclient ];
     # Tag support
@@ -80,7 +79,7 @@ let
     dbus          = [ dbus ];
     expat         = [ expat ];
     icu           = [ icu ];
-    pcre          = [ pcre ];
+    pcre          = [ pcre2 ];
     sqlite        = [ sqlite ];
     syslog        = [ ];
     systemd       = [ systemd ];
@@ -117,13 +116,13 @@ let
 
     in stdenv.mkDerivation rec {
       pname = "mpd";
-      version = "0.23.4";
+      version = "0.23.5";
 
       src = fetchFromGitHub {
         owner  = "MusicPlayerDaemon";
         repo   = "MPD";
         rev    = "v${version}";
-        sha256 = "sha256-siMFLV1fKdRt8To6AhLXmAAsgqZCA/bbvmlhbb6hLic=";
+        sha256 = "sha256-zsxh/rUJtcuke0zYBrh225Qd6RKo1SiFDbMmROdkyjI=";
       };
 
       buildInputs = [
@@ -196,7 +195,7 @@ in
     "lame" "libsamplerate" "shout"
     "libmpdclient" "id3tag" "expat" "pcre"
     "yajl" "sqlite"
-    "soundcloud" "qobuz" "tidal"
+    "soundcloud" "qobuz"
   ] ++ lib.optionals stdenv.isLinux [
     "alsa" "systemd" "syslog" "io_uring"
   ] ++ lib.optionals (!stdenv.isDarwin) [

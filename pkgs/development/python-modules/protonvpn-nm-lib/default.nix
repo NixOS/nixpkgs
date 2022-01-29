@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "protonvpn-nm-lib";
-  version = "3.5.0";
+  version = "3.7.0";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = pname;
     rev = version;
-    sha256 = "sha256-E75toza++l5UFdOLGgolH8pL5xvoUkLE7u+8L5RDFbI=";
+    sha256 = "sha256-RZ10p/Lg9GQj0CohW2v+THch5EaD236rEHETGjNStdY=";
   };
 
   propagatedBuildInputs = [

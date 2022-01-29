@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
+{ lib, buildPythonPackage, fetchPypi, isPy27, fetchpatch
 , alembic
 , click
 , cloudpickle
@@ -20,16 +20,18 @@
 , sqlalchemy
 , gorilla
 , gunicorn
+, prometheus-flask-exporter
+, importlib-metadata
 }:
 
 buildPythonPackage rec {
   pname = "mlflow";
-  version = "1.21.0";
+  version = "1.22.0";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5524a371f19c66a18e7ebe9b1085a77f63a6ae514271e487428f28187d79fc8f";
+    sha256 = "f680390715e436ae38cf7056ec91030fc9eb67cc631226f28ff9504fbe395add";
   };
 
   # run into https://stackoverflow.com/questions/51203641/attributeerror-module-alembic-context-has-no-attribute-config
@@ -58,6 +60,17 @@ buildPythonPackage rec {
     sqlalchemy
     gorilla
     gunicorn
+    prometheus-flask-exporter
+    importlib-metadata
+  ];
+
+  patches = [
+    # Relex alembic version, https://github.com/mlflow/mlflow/pull/5245
+    (fetchpatch {
+      name = "relax-alembic-version.patch";
+      url = "https://github.com/mlflow/mlflow/commit/945eb4b67f315c0b2c4018b1df006fde910f115f.patch";
+      sha256 = "sha256-jETVEPzlNe0PvFZVOi1SwgJELfx/KCeq6REL3vl+YT0=";
+    })
   ];
 
   meta = with lib; {
@@ -65,7 +78,5 @@ buildPythonPackage rec {
     description = "Open source platform for the machine learning lifecycle";
     license = licenses.asl20;
     maintainers = with maintainers; [ tbenst ];
-    # missing prometheus-flask-exporter, not packaged in nixpkgs
-    broken = true; # 2020-08-15
   };
 }

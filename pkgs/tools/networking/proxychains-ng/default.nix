@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "proxychains-ng";
-  version = "4.15";
+  version = "4.16";
 
   src = fetchFromGitHub {
     owner = "rofl0r";
     repo = pname;
     rev = "v${version}";
-    sha256 = "128d502y8pn7q2ls6glx9bvibwzfh321sah5r5li6b6iywh2zqlc";
+    sha256 = "sha256-uu/zN6W0ue526/3a9QeYg6J4HLaovZJVOYXksjouYok=";
   };
 
   meta = with lib; {
@@ -19,6 +19,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/rofl0r/proxychains-ng";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ zenithal ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ [ "aarch64-darwin" ];
   };
 }

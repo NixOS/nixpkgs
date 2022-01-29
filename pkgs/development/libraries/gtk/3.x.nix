@@ -44,6 +44,7 @@
 , cups
 , AppKit
 , Cocoa
+, QuartzCore
 , broadwaySupport ? true
 }:
 
@@ -59,7 +60,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gtk+3";
-  version = "3.24.30";
+  version = "3.24.31";
 
   outputs = [ "out" "dev" ] ++ lib.optional withGtkDoc "devdoc";
   outputBin = "dev";
@@ -71,7 +72,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk+/${lib.versions.majorMinor version}/gtk+-${version}.tar.xz";
-    sha256 = "sha256-unW//zIK0fTPvukrqBPsM2MizDxmDUBqrQFLBwh6O6k=";
+    sha256 = "sha256-Qjw+f9tMRZ7oieNf1Ncf0mI1YlQcEEGxHAflrR/xC/k=";
   };
 
   patches = [
@@ -83,6 +84,12 @@ stdenv.mkDerivation rec {
     # e.g. https://gitlab.gnome.org/GNOME/gtk/blob/3.24.4/gtk/gtk-launch.c#L31-33
     # https://gitlab.gnome.org/GNOME/gtk/merge_requests/536
     ./patches/3.0-darwin-x11.patch
+
+    # 3.24.31 does not declare QuartzCore dependency properly and fails to link
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gtk/-/commit/0ac61443694b477c41fc246cb387ef86aba441de.patch";
+      sha256 = "sha256-KaMeIdV/gfM4xzN9lIkY99E7bzAfTM6VETk5DEunB2w=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -104,7 +111,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libxkbcommon
-    libepoxy
+    (libepoxy.override { inherit x11Support; })
     isocodes
   ] ++ lib.optionals stdenv.isDarwin [
     AppKit
@@ -133,6 +140,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.isDarwin [
     # explicitly propagated, always needed
     Cocoa
+    QuartzCore
   ] ++ lib.optionals waylandSupport [
     libGL
     wayland

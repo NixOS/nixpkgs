@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, fetchpatch
 , gettext
 , ncurses
 , gtkGUI ? false
@@ -16,6 +17,16 @@ stdenv.mkDerivation rec {
     url = "http://www.jpj.net/~trevor/aumix/releases/aumix-${version}.tar.bz2";
     sha256 = "0a8fwyxnc5qdxff8sl2sfsbnvgh6pkij4yafiln0fxgg6bal7knj";
   };
+
+  patches = [
+    # Pull Gentoo fix for -fno-common toolchains. Upstream does not
+    # seem to have the contacts
+    (fetchpatch {
+      name = "fno-common.patch";
+      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/media-sound/aumix/files/aumix-2.9.1-fno-common.patch?id=496c9ec7355f06f6d1d19be780a6981503e6df1f";
+      sha256 = "0qwylhx1hawsmx1pc7ykrjq9phksc73dq9rss6ggq15n3ggnc95y";
+    })
+  ];
 
   buildInputs = [ gettext ncurses ]
     ++ lib.optionals gtkGUI [ pkg-config gtk2 ];

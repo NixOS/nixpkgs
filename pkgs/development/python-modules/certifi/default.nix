@@ -25,7 +25,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "certifi" ];
 
   meta = with lib; {
-    homepage = "https://certifi.io/";
+    homepage = "https://github.com/certifi/python-certifi";
     description = "Python package for providing Mozilla's CA Bundle";
     license = licenses.isc;
     maintainers = with maintainers; [ koral ];

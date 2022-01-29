@@ -93,6 +93,17 @@
     };
     version = "1.5.1";
   };
+  asciidoctor-html5s = {
+    dependencies = ["asciidoctor" "thread_safe"];
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "1zfbfcqyrsk8bnd526ang3b4j3m5pbns7x3fdxarrm8vv1qplss1";
+      type = "gem";
+    };
+    version = "0.5.1";
+  };
   asciidoctor-mathematical = {
     dependencies = ["asciidoctor" "asciimath" "mathematical"];
     groups = ["default"];
@@ -125,6 +136,17 @@
       type = "gem";
     };
     version = "4.1.0";
+  };
+  asciidoctor-rouge = {
+    dependencies = ["asciidoctor" "rouge"];
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "197sbzs9km58pgfqdnnglhqr7anhb0m330cv1vxfc3s2qz106zjz";
+      type = "gem";
+    };
+    version = "0.4.0";
   };
   asciimath = {
     groups = ["default"];

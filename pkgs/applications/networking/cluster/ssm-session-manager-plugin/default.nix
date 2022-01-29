@@ -19,8 +19,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoPatchelfHook ] ++ (if stdenv.isDarwin then [ unzip ] else [ dpkg ]);
 
-  buildInputs = [ awscli ];
-
   unpackPhase = if stdenv.isDarwin then "unzip $src" else "dpkg-deb -x $src .";
 
   installPhase = ''

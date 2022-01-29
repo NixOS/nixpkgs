@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, callPackage, patchelf, makeWrapper, coreutils, libusb1, avahi-compat, glib, libredirect }:
+{ stdenv, lib, fetchurl, callPackage, patchelf, makeWrapper, coreutils, libusb1, avahi-compat, glib, libredirect, nixosTests }:
 let
   myPatchElf = file: with lib; ''
     patchelf --set-interpreter \
@@ -87,6 +87,8 @@ stdenv.mkDerivation rec {
   '';
 
   dontPatchELF = true;
+
+  passthru.tests = { inherit (nixosTests) brscan5; };
 
   meta = {
     description = "Brother brscan5 sane backend driver";

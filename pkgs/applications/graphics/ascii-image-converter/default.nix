@@ -11,8 +11,7 @@ buildGoModule rec {
     sha256 = "DitJnWIz1Dt9yXtyQp/z738IAmG4neYmfc49Wdjos7Q=";
   };
 
-  runVend = true;
-  vendorSha256 = "JKrBMhzBL1+jlMPudynjOc/ekFiUVaxltyLr4V8QZbg=";
+  vendorSha256 = "sha256-pKgukWKF4f/kLASjh8aKU7x9UBW/H+4C/02vxmh+qOU=";
 
   meta = with lib; {
     description = "Convert images into ASCII art on the console";

@@ -1,15 +1,20 @@
-{ buildPythonPackage
+{ lib
+, buildPythonPackage
 , fetchFromGitHub
-, lib
 , matplotlib
 , palettable
 , pandas
 , pytestCheckHook
+, pythonOlder
+, scipy
 }:
 
 buildPythonPackage rec {
   pname = "mizani";
   version = "0.7.3";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "has2k1";
@@ -18,15 +23,25 @@ buildPythonPackage rec {
     sha256 = "04r53dp5jbklv8l9ncgc5wiq0gx25y73h65gmmbbfkxwgsl3w78l";
   };
 
+  propagatedBuildInputs = [
+    matplotlib
+    palettable
+    pandas
+    scipy
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+  ];
+
   postPatch = ''
-    substituteInPlace pytest.ini --replace " --cov=mizani --cov-report=xml" ""
+    substituteInPlace pytest.ini \
+      --replace " --cov=mizani --cov-report=xml" ""
   '';
 
-  propagatedBuildInputs = [ matplotlib palettable pandas ];
-
-  checkInputs = [ pytestCheckHook ];
-
-  pythonImportsCheck = [ "mizani" ];
+  pythonImportsCheck = [
+    "mizani"
+  ];
 
   meta = with lib; {
     description = "Scales for Python";

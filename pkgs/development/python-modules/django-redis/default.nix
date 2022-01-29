@@ -19,7 +19,7 @@
 
 let
   pname = "django-redis";
-  version = "5.1.0";
+  version = "5.2.0";
 in
 buildPythonPackage {
   inherit pname version;
@@ -30,7 +30,7 @@ buildPythonPackage {
     owner = "jazzband";
     repo = "django-redis";
     rev = version;
-    sha256 = "sha256-S94qH2W5e65yzGfPxpwBUKhvvVS0Uc/zSyo66bnvzf4=";
+    sha256 = "sha256-e8wCgfxBT+WKFY4H83CTMirTpQym3QAoeWnXbRCDO90=";
   };
 
   postPatch = ''
@@ -53,6 +53,11 @@ buildPythonPackage {
 
   preCheck = ''
     ${pkgs.redis}/bin/redis-server &
+    REDIS_PID=$!
+  '';
+
+  postCheck = ''
+    kill $REDIS_PID
   '';
 
   checkInputs = [

@@ -33,7 +33,7 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   meta = with lib; {
-    homepage = "https://www.radicale.org/3.0.html";
+    homepage = "https://radicale.org/v3.html";
     description = "CalDAV and CardDAV server";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dotlambda ];

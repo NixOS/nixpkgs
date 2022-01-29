@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-tuUuIlZcS+a0izXeJl3Ckp+/PYAWkZ0+Cw7blwkh9+M=";
   };
 
-  buildInputs = [
+  strictDeps = true;
+  nativeBuildInputs = [
     texinfo
     texLive
     perl

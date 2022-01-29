@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fastjsonschema
 , fetchFromGitHub
+, fetchpatch
 , future-typing
 , inflection
 , mypy
@@ -18,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "typical";
-  version = "2.7.9";
+  version = "2.8.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -27,12 +28,8 @@ buildPythonPackage rec {
     owner = "seandstewart";
     repo = "typical";
     rev = "v${version}";
-    sha256 = "sha256-ITIsSM92zftnvqLiVGFl//IbBb8N3ffkkqohzOx2JO4=";
+    hash = "sha256-DRjQmoZzWw5vpwIx70wQg6EO/aHqyX7RWpWZ9uOxSTg=";
   };
-
-  patches = [
-    ./use-poetry-core.patch
-  ];
 
   nativeBuildInputs = [
     poetry-core
@@ -56,6 +53,15 @@ buildPythonPackage rec {
     pandas
   ];
 
+  patches = [
+    # Switch to poetry-core, https://github.com/seandstewart/typical/pull/193
+    (fetchpatch {
+      name = "switch-to-poetry-core.patch";
+      url = "https://github.com/seandstewart/typical/commit/66b3c34f8969b7fb1f684f0603e514405bab0dd7.patch";
+      sha256 = "sha256-c7qJOtHmJRnVEGl+OADB3HpjvMK8aYDD9+0gplOn9pQ=";
+    })
+  ];
+
   disabledTests = [
     # We use orjson
     "test_ujson"
@@ -65,6 +71,8 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     "benchmark/"
+    # Tests are failing on Hydra
+    "tests/mypy/test_mypy.py"
   ];
 
   pythonImportsCheck = [

@@ -297,6 +297,7 @@ class Machine:
     the machine lifecycle with the help of a start script / command."""
 
     name: str
+    out_dir: Path
     tmp_dir: Path
     shared_dir: Path
     state_dir: Path
@@ -318,23 +319,28 @@ class Machine:
     # Store last serial console lines for use
     # of wait_for_console_text
     last_lines: Queue = Queue()
+    callbacks: List[Callable]
 
     def __repr__(self) -> str:
         return f"<Machine '{self.name}'>"
 
     def __init__(
         self,
+        out_dir: Path,
         tmp_dir: Path,
         start_command: StartCommand,
         name: str = "machine",
         keep_vm_state: bool = False,
         allow_reboot: bool = False,
+        callbacks: Optional[List[Callable]] = None,
     ) -> None:
+        self.out_dir = out_dir
         self.tmp_dir = tmp_dir
         self.keep_vm_state = keep_vm_state
         self.allow_reboot = allow_reboot
         self.name = name
         self.start_command = start_command
+        self.callbacks = callbacks if callbacks is not None else []
 
         # set up directories
         self.shared_dir = self.tmp_dir / "shared-xchg"
@@ -406,6 +412,7 @@ class Machine:
             return answer
 
     def send_monitor_command(self, command: str) -> str:
+        self.run_callbacks()
         with self.nested("sending monitor command: {}".format(command)):
             message = ("{}\n".format(command)).encode()
             assert self.monitor is not None
@@ -509,6 +516,7 @@ class Machine:
     def execute(
         self, command: str, check_return: bool = True, timeout: Optional[int] = 900
     ) -> Tuple[int, str]:
+        self.run_callbacks()
         self.connect()
 
         if timeout is not None:
@@ -697,10 +705,9 @@ class Machine:
             self.connected = True
 
     def screenshot(self, filename: str) -> None:
-        out_dir = os.environ.get("out", os.getcwd())
         word_pattern = re.compile(r"^\w+$")
         if word_pattern.match(filename):
-            filename = os.path.join(out_dir, "{}.png".format(filename))
+            filename = os.path.join(self.out_dir, "{}.png".format(filename))
         tmp = "{}.ppm".format(filename)
 
         with self.nested(
@@ -751,7 +758,6 @@ class Machine:
         all the VMs (using a temporary directory).
         """
         # Compute the source, target, and intermediate shared file names
-        out_dir = Path(os.environ.get("out", os.getcwd()))
         vm_src = Path(source)
         with tempfile.TemporaryDirectory(dir=self.shared_dir) as shared_td:
             shared_temp = Path(shared_td)
@@ -761,7 +767,7 @@ class Machine:
             # Copy the file to the shared directory inside VM
             self.succeed(make_command(["mkdir", "-p", vm_shared_temp]))
             self.succeed(make_command(["cp", "-r", vm_src, vm_intermediate]))
-            abs_target = out_dir / target_dir / vm_src.name
+            abs_target = self.out_dir / target_dir / vm_src.name
             abs_target.parent.mkdir(exist_ok=True, parents=True)
             # Copy the file from the shared directory outside VM
             if intermediate.is_dir():
@@ -969,3 +975,7 @@ class Machine:
         self.shell.close()
         self.monitor.close()
         self.serial_thread.join()
+
+    def run_callbacks(self) -> None:
+        for callback in self.callbacks:
+            callback()

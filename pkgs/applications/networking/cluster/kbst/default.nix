@@ -34,7 +34,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Kubestack framework CLI";
     homepage = "https://www.kubestack.com/";
-    license = licenses.apsl20;
+    license = licenses.asl20;
     maintainers = with maintainers; [ mtrsk ];
   };
 }

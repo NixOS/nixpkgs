@@ -4,16 +4,18 @@
 , gzip, hdf5, imagemagick, jdk, libarchive, libcaca, llvm, lz4, mono, ocaml, oggvideotools, openssh, openssl, pdftk, pgpdump, poppler_utils, procyon, qemu, R
 , radare2, sng, sqlite, squashfsTools, tcpdump, ubootTools, odt2txt, unzip, wabt, xmlbeans, xxd, xz, zip, zstd
 , enableBloat ? false
+# updater only
+, writeScript
 }:
 
 # Note: when upgrading this package, please run the list-missing-tools.sh script as described below!
 python3Packages.buildPythonApplication rec {
   pname = "diffoscope";
-  version = "197";
+  version = "201";
 
   src = fetchurl {
     url = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
-    sha256 = "sha256-EKTknFa6gGqd1kpy/k1Vh1Zya+XvBMlU5G6Rg2p66es=";
+    sha256 = "sha256-urvSZSpy5ksHhWqJM8ek0dyyKPeme/sJ16L6JfHg7Lg=";
   };
 
   outputs = [ "out" "man" ];
@@ -90,6 +92,19 @@ python3Packages.buildPythonApplication rec {
     "tests/comparators/test_device.py"
     "tests/comparators/test_macho.py"
   ];
+
+   passthru = {
+    updateScript = writeScript "update-diffoscope" ''
+      #!/usr/bin/env nix-shell
+      #!nix-shell -i bash -p curl pcre common-updater-scripts
+
+      set -eu -o pipefail
+
+      # Expect the text in format of "Latest release: 198 (31 Dec 2021)"'.
+      newVersion="$(curl -s https://diffoscope.org/ | pcregrep -o1 'Latest release: ([0-9]+)')"
+      update-source-version ${pname} "$newVersion"
+    '';
+   };
 
   meta = with lib; {
     description = "Perform in-depth comparison of files, archives, and directories";

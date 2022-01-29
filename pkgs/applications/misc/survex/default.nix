@@ -9,7 +9,7 @@
 , proj_7
 , perl532
 , unscii
-, python
+, python2
 , libGL
 , libGLU
 , xlibsWrapper
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   pname = "survex";
   version = "1.2.44";
 
-  nativeBuildInputs = [ docbook5 docbook2x autoreconfHook pkg-config perlenv python ];
+  nativeBuildInputs = [ docbook5 docbook2x autoreconfHook pkg-config perlenv python2 ];
 
   buildInputs = [
     libGL libGLU ffmpeg proj_7

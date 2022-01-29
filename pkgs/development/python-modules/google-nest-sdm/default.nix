@@ -1,19 +1,21 @@
 { lib
 , aiohttp
+, asynctest
 , buildPythonPackage
+, coreutils
 , fetchFromGitHub
 , google-auth
 , google-auth-oauthlib
 , google-cloud-pubsub
-, pythonOlder
-, requests_oauthlib
 , pytest-aiohttp
 , pytestCheckHook
+, pythonOlder
+, requests_oauthlib
 }:
 
 buildPythonPackage rec {
   pname = "google-nest-sdm";
-  version = "0.4.9";
+  version = "1.5.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -22,7 +24,7 @@ buildPythonPackage rec {
     owner = "allenporter";
     repo = "python-google-nest-sdm";
     rev = version;
-    sha256 = "sha256-Y0p1Hu3hcJQzbHmwMaIC8l5W4GXuuX8LBLCOvQ1N0So=";
+    sha256 = "sha256-8Y3ixkDl/AmXQMOY+29og5njMh9M2qjwWBGCsiqX5PU=";
   };
 
   propagatedBuildInputs = [
@@ -34,9 +36,16 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
+    asynctest
+    coreutils
     pytest-aiohttp
     pytestCheckHook
   ];
+
+  postPatch = ''
+    substituteInPlace tests/event_media_test.py \
+      --replace "/bin/echo" "${coreutils}/bin/echo"
+  '';
 
   pythonImportsCheck = [
     "google_nest_sdm"

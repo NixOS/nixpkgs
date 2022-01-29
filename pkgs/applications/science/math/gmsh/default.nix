@@ -5,11 +5,11 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 
 stdenv.mkDerivation rec {
   pname = "gmsh";
-  version = "4.9.0";
+  version = "4.9.2";
 
   src = fetchurl {
-    url = "http://gmsh.info/src/gmsh-${version}-source.tgz";
-    sha256 = "sha256-uO8TPJtm/+Et8XR+ctSs8Z8esenNlesPV3y8QIHZvqM=";
+    url = "https://gmsh.info/src/gmsh-${version}-source.tgz";
+    sha256 = "sha256-26KB4DNYT12gfi2Y1656PcSBcjyybCxye2X8ILMBYYw=";
   };
 
   buildInputs = [ blas lapack gmm fltk libjpeg zlib libGLU libGL
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A three-dimensional finite element mesh generator";
-    homepage = "http://gmsh.info/";
+    homepage = "https://gmsh.info/";
     platforms = [ "x86_64-linux" ];
     license = lib.licenses.gpl2Plus;
   };

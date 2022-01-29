@@ -1,5 +1,6 @@
 { fetchNuGet }: [
   (fetchNuGet { pname = "AngleSharp"; version = "0.16.1"; sha256 = "11r5fpm8009pwdlr0vblqbvngpm5mb7jc565sqb3rnwbd5yyrrnk"; })
+  (fetchNuGet { pname = "AngleSharp.Xml"; version = "0.16.0"; sha256 = "1skj9x9njypd4hyajkadsavp3m1vv7l8jb4jhczixa22p8p0cfrq"; })
   (fetchNuGet { pname = "Autofac"; version = "6.3.0"; sha256 = "0zg0lsqzb8hh7l97mfd2z3fxdab86sbmxkaprzi41v0hs1x3jd9b"; })
   (fetchNuGet { pname = "Autofac.Extensions.DependencyInjection"; version = "7.2.0"; sha256 = "0spr5yn4lhkyg3wm2xqjx857wxim4llc7i8291gw7hkvr6yiw8m6"; })
   (fetchNuGet { pname = "AutoMapper"; version = "10.1.1"; sha256 = "1l1p9g7f7finr8laklbm7h2c45k0swl47iq0ik68js5s6pzvd6f8"; })

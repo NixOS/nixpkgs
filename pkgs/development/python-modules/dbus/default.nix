@@ -23,6 +23,10 @@ buildPythonPackage rec {
     MACOSX_DEPLOYMENT_TARGET=10.16
   '' else null;
 
+  configureFlags = [
+    "PYTHON=${python.pythonForBuild.interpreter}"
+  ];
+
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ dbus dbus-glib ]
     # My guess why it's sometimes trying to -lncurses.

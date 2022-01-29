@@ -6,7 +6,7 @@
 , platformToolsVersion ? "31.0.3"
 , buildToolsVersions ? [ "31.0.0" ]
 , includeEmulator ? false
-, emulatorVersion ? "30.6.3"
+, emulatorVersion ? "30.9.0"
 , platformVersions ? []
 , includeSources ? false
 , includeSystemImages ? false

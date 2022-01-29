@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "influxdb-client";
-  version = "1.24.0";
+  version = "1.25.0";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "influxdata";
     repo = "influxdb-client-python";
     rev = "v${version}";
-    sha256 = "0w0pw87fnxms88f3dadyhxdgms4rzvcww18h6l87wnqc6wxa6paw";
+    sha256 = "0anziqlczzc9qmz1mrk8yapn0pc18wz2pknyghyj5qpym3w2azas";
   };
 
   propagatedBuildInputs = [

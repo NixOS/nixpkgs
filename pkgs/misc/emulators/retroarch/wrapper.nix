@@ -28,10 +28,10 @@ stdenv.mkDerivation {
   preferLocalBuild = true;
 
   meta = with retroarch.meta; {
-    inherit license homepage platforms maintainers;
+    inherit changelog license homepage platforms maintainers;
     description = description
-                  + " (with cores: "
-                  + lib.concatStringsSep ", " (map (x: ""+x.name) cores)
-                  + ")";
+      + " (with cores: "
+      + lib.concatStringsSep ", " (map (x: "${x.name}") cores)
+      + ")";
   };
 }

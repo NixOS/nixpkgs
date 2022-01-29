@@ -20,14 +20,14 @@
 
 stdenv.mkDerivation rec {
   pname = "gupnp";
-  version = "1.4.0";
+  version = "1.4.3";
 
   outputs = [ "out" "dev" ]
     ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [ "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gupnp/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-WQ/7ArhNoqGuxo/VNLxArxs33T9iI/nRV3/EirSL428=";
+    sha256 = "sha256-FO2nd5NNot90PQckiZM72YETMre1v0Fia4Ay77KLM7o=";
   };
 
   patches = [

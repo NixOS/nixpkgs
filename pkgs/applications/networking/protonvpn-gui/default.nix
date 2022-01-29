@@ -3,13 +3,13 @@ wrapGAppsHook, python3Packages, gtk3, networkmanager, webkitgtk }:
 
 python3Packages.buildPythonApplication rec {
   pname = "protonvpn-linux-gui";
-  version = "1.4.1";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = "linux-app";
     rev = version;
-    sha256 = "sha256-08gXEKm8udgNltRdqvAMFL0pDCWZu/kfl1xGQtZPBCc=";
+    sha256 = "sha256-uzooFQBq2mhqTBr/cgea5cVQ889P70sgSk2vjXBQEfw=";
   };
 
   strictDeps = false;

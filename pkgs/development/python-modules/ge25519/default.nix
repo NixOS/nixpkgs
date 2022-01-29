@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "ge25519";
-  version = "1.0.0";
+  version = "1.1.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-f7xvZ92zRO3GLSdfgEyhkWVwAFT2TvKHy6+iF+k43bI=";
+    sha256 = "sha256-0M9RF8tlEoLyduvY3RvltGAnsus3HF6FEy22b6w6aUs=";
   };
 
   propagatedBuildInputs = [
@@ -30,12 +30,6 @@ buildPythonPackage rec {
     nose
     pytestCheckHook
   ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "bitlist~=0.5.1" "bitlist>=0.5.1" \
-      --replace "parts~=1.1.2" "parts>=1.1.2"
-  '';
 
   pythonImportsCheck = [
     "ge25519"

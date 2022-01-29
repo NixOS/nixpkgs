@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "croniter";
-  version = "1.0.15";
+  version = "1.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "06c2smrjskd9di8lcpymcxmygncxr14932qjhslc37yyaafzq3d7";
+    sha256 = "4023e4d18ced979332369964351e8f4f608c1f7c763e146b1d740002c4245247";
   };
 
   propagatedBuildInputs = [
