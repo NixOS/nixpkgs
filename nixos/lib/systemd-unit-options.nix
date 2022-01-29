@@ -201,6 +201,17 @@ in rec {
       '';
     };
 
+    reloadTriggers = mkOption {
+      default = [];
+      type = types.listOf unitOption;
+      description = ''
+        An arbitrary list of items such as derivations.  If any item
+        in the list changes between reconfigurations, the service will
+        be reloaded.  If anything but a reload trigger changes in the
+        unit file, the unit will be restarted instead.
+      '';
+    };
+
     onFailure = mkOption {
       default = [];
       type = types.listOf unitNameType;
@@ -338,6 +349,11 @@ in rec {
         configuration switch if its definition has changed.  If
         enabled, the value of <option>restartIfChanged</option> is
         ignored.
+
+        This option should not be used anymore in favor of
+        <option>reloadTriggers</option> which allows more granular
+        control of when a service is reloaded and when a service
+        is restarted.
       '';
     };
 
