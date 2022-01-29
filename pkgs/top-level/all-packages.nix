@@ -12482,13 +12482,6 @@ with pkgs;
 
   glslang = callPackage ../development/compilers/glslang { };
 
-  go_1_15 = callPackage ../development/compilers/go/1.15.nix ({
-    inherit (darwin.apple_sdk.frameworks) Security Foundation;
-  } // lib.optionalAttrs (stdenv.cc.isGNU && stdenv.isAarch64) {
-    stdenv = gcc8Stdenv;
-    buildPackages = buildPackages // { stdenv = buildPackages.gcc8Stdenv; };
-  });
-
   go_1_16 = callPackage ../development/compilers/go/1.16.nix ({
     inherit (darwin.apple_sdk.frameworks) Security Foundation;
   } // lib.optionalAttrs (stdenv.cc.isGNU && stdenv.isAarch64) {
@@ -20827,9 +20820,6 @@ with pkgs;
 
   ### DEVELOPMENT / GO MODULES
 
-  buildGo115Package = callPackage ../development/go-packages/generic {
-    go = buildPackages.go_1_15;
-  };
   buildGo116Package = callPackage ../development/go-packages/generic {
     go = buildPackages.go_1_16;
   };
@@ -20844,9 +20834,6 @@ with pkgs;
 
   buildGoPackage = buildGo116Package;
 
-  buildGo115Module = callPackage ../development/go-modules/generic {
-    go = buildPackages.go_1_15;
-  };
   buildGo116Module = callPackage ../development/go-modules/generic {
     go = buildPackages.go_1_16;
   };
