@@ -20718,9 +20718,6 @@ with pkgs;
 
   buildGoPackage = buildGo116Package;
 
-  buildGo115Module = callPackage ../development/go-modules/generic {
-    go = buildPackages.go_1_15;
-  };
   buildGo116Module = callPackage ../development/go-modules/generic {
     go = buildPackages.go_1_16;
   };
