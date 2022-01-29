@@ -1,7 +1,7 @@
 { stdenv
 , lib
 , src
-, patches ? []
+, patches ? [ ]
 , version
 , qtCompatVersion
 , coreutils
@@ -24,8 +24,8 @@
 , zstd
 , double-conversion
 , util-linux
-# FIXME checking Nixpkgs on aarch64-darwin: called without required argument 'utillinux'
-#, journalctl
+  # FIXME checking Nixpkgs on aarch64-darwin: called without required argument 'utillinux'
+  #, journalctl
 , systemd
 , libb2
 , md4c
@@ -42,26 +42,70 @@
 , epoxy
 
   # darwin support
-, libiconv, libobjc, xcbuild, AGL, AppKit, ApplicationServices, Carbon, Cocoa, CoreAudio, CoreBluetooth
-, CoreLocation, CoreServices, DiskArbitration, Foundation, OpenGL, MetalKit, IOKit
+, libiconv
+, libobjc
+, xcbuild
+, AGL
+, AppKit
+, ApplicationServices
+, Carbon
+, Cocoa
+, CoreAudio
+, CoreBluetooth
+, CoreLocation
+, CoreServices
+, DiskArbitration
+, Foundation
+, OpenGL
+, MetalKit
+, IOKit
 
-, dbus, fontconfig, freetype, glib, harfbuzz, icu, libX11, libXcomposite
-, libXcursor, libXext, libXi, libXrender, libinput, libjpeg, libpng
-, libxcb, libxkbcommon, libxml2, libxslt, openssl
+, dbus
+, fontconfig
+, freetype
+, glib
+, harfbuzz
+, icu
+, libX11
+, libXcomposite
+, libXcursor
+, libXext
+, libXi
+, libXrender
+, libinput
+, libjpeg
+, libpng
+, libxcb
+, libxkbcommon
+, libxml2
+, libxslt
+, openssl
 , pcre
-, pcre2, sqlite, udev
-, xcbutil, xcbutilimage, xcbutilkeysyms, xcbutilrenderutil, xcbutilwm
-, zlib, at-spi2-core
-, unixODBC , unixODBCDrivers
+, pcre2
+, sqlite
+, udev
+, xcbutil
+, xcbutilimage
+, xcbutilkeysyms
+, xcbutilrenderutil
+, xcbutilwm
+, zlib
+, at-spi2-core
+, unixODBC
+, unixODBCDrivers
 
   # optional dependencies
-, cups, libmysqlclient, postgresql
-, withGtk3 ? false, dconf, gtk3
+, cups
+, libmysqlclient
+, postgresql
+, withGtk3 ? false
+, dconf
+, gtk3
 
   # options
 , libGLSupported ? !stdenv.isDarwin
 , libGL
-# TODO libGL or libglvnd? libglvnd is "better"?
+  # TODO libGL or libglvnd? libglvnd is "better"?
 
 , buildExamples ? false
 , buildTests ? false
@@ -111,18 +155,23 @@ stdenv.mkDerivation rec {
     libxml2
     libxslt
     openssl
-    sqlite sqlite.out sqlite.dev
+    sqlite
+    sqlite.out
+    sqlite.dev
     zlib
     unixODBC
 
     # Text rendering
-    harfbuzz icu
+    harfbuzz
+    icu
 
     # Image formats
-    libjpeg libpng
+    libjpeg
+    libpng
     pcre2
     pcre # for glib-2.0
-    libproxy libproxy.dev # pulls kerberos
+    libproxy
+    libproxy.dev # pulls kerberos
     xlibsWrapper
     xlibs.libXdmcp
     xlibs.libXtst
@@ -158,18 +207,44 @@ stdenv.mkDerivation rec {
   ]) ++ (
     if stdenv.isDarwin then [
       # TODO: move to buildInputs, this should not be propagated.
-      AGL AppKit ApplicationServices Carbon Cocoa CoreAudio CoreBluetooth
-      CoreLocation CoreServices DiskArbitration Foundation OpenGL
-      libobjc libiconv MetalKit IOKit
+      AGL
+      AppKit
+      ApplicationServices
+      Carbon
+      Cocoa
+      CoreAudio
+      CoreBluetooth
+      CoreLocation
+      CoreServices
+      DiskArbitration
+      Foundation
+      OpenGL
+      libobjc
+      libiconv
+      MetalKit
+      IOKit
     ] else [
-      dbus glib udev
+      dbus
+      glib
+      udev
 
       # Text rendering
-      fontconfig freetype
+      fontconfig
+      freetype
 
       # X11 libs
-      libX11 libXcomposite libXext libXi libXrender libxcb libxkbcommon xcbutil
-      xcbutilimage xcbutilkeysyms xcbutilrenderutil xcbutilwm
+      libX11
+      libXcomposite
+      libXext
+      libXi
+      libXrender
+      libxcb
+      libxkbcommon
+      xcbutil
+      xcbutilimage
+      xcbutilkeysyms
+      xcbutilrenderutil
+      xcbutilwm
     ] ++ lib.optional libGLSupported libGL
   );
 
@@ -177,7 +252,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals (!stdenv.isDarwin)
     (
       [ libinput ]
-      ++ lib.optional withGtk3 gtk3
+        ++ lib.optional withGtk3 gtk3
     )
     ++ lib.optional developerBuild gdb
     ++ lib.optional (cups != null) cups
@@ -232,18 +307,18 @@ stdenv.mkDerivation rec {
     fi
   '' + (
     if stdenv.isDarwin then ''
-        # TODO this is a noop. these search patterns are not in configure
-        if false; then
-        sed -i \
-            -e 's|/usr/bin/xcode-select|xcode-select|' \
-            -e 's|/usr/bin/xcrun|xcrun|' \
-            -e 's|/usr/bin/xcodebuild|xcodebuild|' \
-            -e 's|QMAKE_CONF_COMPILER=`getXQMakeConf QMAKE_CXX`|QMAKE_CXX="clang++"\nQMAKE_CONF_COMPILER="clang++"|' \
-            ./configure
-        fi
-        substituteInPlace ./mkspecs/common/mac.conf \
-            --replace "/System/Library/Frameworks/OpenGL.framework/" "${OpenGL}/Library/Frameworks/OpenGL.framework/" \
-            --replace "/System/Library/Frameworks/AGL.framework/" "${AGL}/Library/Frameworks/AGL.framework/"
+      # TODO this is a noop. these search patterns are not in configure
+      if false; then
+      sed -i \
+          -e 's|/usr/bin/xcode-select|xcode-select|' \
+          -e 's|/usr/bin/xcrun|xcrun|' \
+          -e 's|/usr/bin/xcodebuild|xcodebuild|' \
+          -e 's|QMAKE_CONF_COMPILER=`getXQMakeConf QMAKE_CXX`|QMAKE_CXX="clang++"\nQMAKE_CONF_COMPILER="clang++"|' \
+          ./configure
+      fi
+      substituteInPlace ./mkspecs/common/mac.conf \
+          --replace "/System/Library/Frameworks/OpenGL.framework/" "${OpenGL}/Library/Frameworks/OpenGL.framework/" \
+          --replace "/System/Library/Frameworks/AGL.framework/" "${AGL}/Library/Frameworks/AGL.framework/"
     '' else lib.optionalString libGLSupported ''
       sed -i mkspecs/common/linux.conf \
           -e "/^QMAKE_INCDIR_OPENGL/ s|$|${libGL.dev or libGL}/include|" \
@@ -309,11 +384,11 @@ stdenv.mkDerivation rec {
     ''-D${if compareVersion "5.11.0" >= 0 then "LIBRESOLV_SO" else "NIXPKGS_LIBRESOLV"}="${stdenv.cc.libc.out}/lib/libresolv"''
     ''-DNIXPKGS_LIBXCURSOR="${libXcursor.out}/lib/libXcursor"''
   ] ++ lib.optional libGLSupported ''-DNIXPKGS_MESA_GL="${libGL.out}/lib/libGL"''
-    ++ lib.optional stdenv.isLinux "-DUSE_X11"
-    ++ lib.optionals withGtk3 [
-      ''-DNIXPKGS_QGTK3_XDG_DATA_DIRS="${gtk3}/share/gsettings-schemas/${gtk3.name}"''
-      ''-DNIXPKGS_QGTK3_GIO_EXTRA_MODULES="${dconf.lib}/lib/gio/modules"''
-    ] ++ lib.optional decryptSslTraffic "-DQT_DECRYPT_SSL_TRAFFIC");
+  ++ lib.optional stdenv.isLinux "-DUSE_X11"
+  ++ lib.optionals withGtk3 [
+    ''-DNIXPKGS_QGTK3_XDG_DATA_DIRS="${gtk3}/share/gsettings-schemas/${gtk3.name}"''
+    ''-DNIXPKGS_QGTK3_GIO_EXTRA_MODULES="${dconf.lib}/lib/gio/modules"''
+  ] ++ lib.optional decryptSslTraffic "-DQT_DECRYPT_SSL_TRAFFIC");
 
   prefixKey = "-prefix ";
 
@@ -334,9 +409,9 @@ stdenv.mkDerivation rec {
     #"-make minimal-static-tests"
   ]
   # FIXME these have no effect. maybe we must set cmakeFlags?
-  ++ lib.optional buildExamples ["-make examples"] # TODO install where?
-  ++ lib.optional developerBuild ["-developer-build"]
-  ++ lib.optional debug ["-debug"]
+  ++ lib.optional buildExamples [ "-make examples" ] # TODO install where?
+  ++ lib.optional developerBuild [ "-developer-build" ]
+  ++ lib.optional debug [ "-debug" ]
   ;
 
   cmakeFlags = [

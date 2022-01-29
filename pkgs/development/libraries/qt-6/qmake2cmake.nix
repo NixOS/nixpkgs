@@ -1,6 +1,6 @@
 /*
-sample use
-nixpkgs/pkgs/tools/misc/qarma-for-qt6/default.nix
+  sample use
+  nixpkgs/pkgs/tools/misc/qarma-for-qt6/default.nix
 */
 
 { lib

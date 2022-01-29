@@ -24,15 +24,17 @@ qtModule {
 
 
   # TODO debug cycle error
-  splitBuildInstall = let
-    # set vars for postFixup
-    patch-cmake-files-sh = ../patch-cmake-files.sh;
-    patch-cmake-files-regex-diff = ../patch-cmake-files.regex.diff;
-    self.qtbase.version = version;
-    pname = "qtvirtualkeyboard";
-    version = "6.2.2";
-    qtCompatVersion = version;
-  in {
+  splitBuildInstall =
+    let
+      # set vars for postFixup
+      patch-cmake-files-sh = ../patch-cmake-files.sh;
+      patch-cmake-files-regex-diff = ../patch-cmake-files.regex.diff;
+      self.qtbase.version = version;
+      pname = "qtvirtualkeyboard";
+      version = "6.2.2";
+      qtCompatVersion = version;
+    in
+    {
 
     # copy-paste from qtModule
     postFixup = ''
@@ -158,6 +160,6 @@ qtModule {
       # `/nix/store/g8rbk52z0qws3pcifmlbq81y5rnda78g-qtvirtualkeyboard-6.2.2-bin/lib/libQt6VirtualKeyboard.so.6'
     '';
 
-  };
+    };
 
 }

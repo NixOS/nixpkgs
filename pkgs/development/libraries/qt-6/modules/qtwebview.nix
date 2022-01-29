@@ -6,12 +6,12 @@
 , CoreFoundation
 , WebKit
 
-/*
-# FIXME these should be propagated by qtwebengine
-, qtwebchannel
-, qtwebsockets
-, qtpositioning
-*/
+  /*
+    # FIXME these should be propagated by qtwebengine
+    , qtwebchannel
+    , qtwebsockets
+    , qtpositioning
+  */
 }:
 
 qtModule {

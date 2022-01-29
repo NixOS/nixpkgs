@@ -2,7 +2,7 @@
 , qtbase
 , qtdeclarative
 , libiconv
-# FIXME Configure summary: qt5compat is not using libiconv. bug in qt6?
+  # FIXME Configure summary: qt5compat is not using libiconv. bug in qt6?
 , icu
 , openssl
 }:

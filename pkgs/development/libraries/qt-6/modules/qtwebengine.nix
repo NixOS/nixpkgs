@@ -1,24 +1,50 @@
 { qtModule
-, qtdeclarative, qtwebchannel
-, qtpositioning, qtwebsockets
-
-/* TODO(milahu)
-  -- The following OPTIONAL packages have not been found:
-  * Qt6QmlCompilerPlus
-  * Qt6Designer
-*/
-
-# ninja is hard requirement for buildPhase
-# https://bugreports.qt.io/browse/QTBUG-96897
-, bison, coreutils, flex, git, gperf, ninja, pkg-config, python2, which
-, nodejs, qtbase, perl
-
-, xorg, libXcursor, libXScrnSaver, libXrandr, libXtst
-, libxshmfence, libXi
+, qtdeclarative
+, qtwebchannel
+, qtpositioning
+, qtwebsockets
+, bison
+, coreutils
+, flex
+, git
+, gperf
+, ninja
+  # ninja is hard requirement for buildPhase
+  # https://bugreports.qt.io/browse/QTBUG-96897
+, pkg-config
+, python2
+, which
+, nodejs
+, qtbase
+, perl
+, xorg
+, libXcursor
+, libXScrnSaver
+, libXrandr
+, libXtst
+, libxshmfence
+, libXi
 , xlibs
-, fontconfig, freetype, harfbuzz, icu, dbus, libdrm
-, zlib, minizip, libjpeg, libpng, libtiff, libwebp, libopus
-, jsoncpp, protobuf, libvpx, srtp, snappy, nss, libevent
+, fontconfig
+, freetype
+, harfbuzz
+, icu
+, dbus
+, libdrm
+, zlib
+, minizip
+, libjpeg
+, libpng
+, libtiff
+, libwebp
+, libopus
+, jsoncpp
+, protobuf
+, libvpx
+, srtp
+, snappy
+, nss
+, libevent
 , openssl
 , alsa-lib
 , pulseaudio
@@ -28,14 +54,35 @@
 , pipewire
 , enableProprietaryCodecs ? true
 , gn
-# TODO(milahu) remove gn?
-# -- Could NOT find Gn: Found unsuitable version "1718 (fd3d768)", but required is exact version "6.2.2"
-, cctools, libobjc, libunwind, sandbox, xnu
-, ApplicationServices, AVFoundation, Foundation, ForceFeedback, GameController, AppKit
-, ImageCaptureCore, CoreBluetooth, IOBluetooth, CoreWLAN, Quartz, Cocoa, LocalAuthentication
-, cups, openbsm, runCommand, xcbuild, writeScriptBin
+  # TODO(milahu) remove gn?
+  # -- Could NOT find Gn: Found unsuitable version "1718 (fd3d768)", but required is exact version "6.2.2"
+, cctools
+, libobjc
+, libunwind
+, sandbox
+, xnu
+, ApplicationServices
+, AVFoundation
+, Foundation
+, ForceFeedback
+, GameController
+, AppKit
+, ImageCaptureCore
+, CoreBluetooth
+, IOBluetooth
+, CoreWLAN
+, Quartz
+, Cocoa
+, LocalAuthentication
+, cups
+, openbsm
+, runCommand
+, xcbuild
+, writeScriptBin
 , ffmpeg
-, lib, stdenv, fetchpatch
+, lib
+, stdenv
+, fetchpatch
 , version ? null
 , qtCompatVersion
 , glib
@@ -46,12 +93,24 @@
 , kerberos
 }:
 
+# TODO(milahu) add optional dependencies? Qt6QmlCompilerPlus Qt6Designer
+
 qtModule rec {
   pname = "qtwebengine";
   qtInputs = [ qtdeclarative qtwebchannel qtwebsockets qtpositioning ];
   nativeBuildInputs = [
     # requires python2
-    bison coreutils flex git gperf ninja pkg-config python2 which gn nodejs
+    bison
+    coreutils
+    flex
+    git
+    gperf
+    ninja
+    pkg-config
+    python2
+    which
+    gn
+    nodejs
   ] ++ lib.optional stdenv.isDarwin xcbuild;
   doCheck = true;
   outputs = [ "out" "bin" "dev" ];
@@ -106,21 +165,22 @@ qtModule rec {
     sed -i -e '/libpci_loader.*Load/s!"\(libpci\.so\)!"${pciutils}/lib/\1!' \
       src/3rdparty/chromium/gpu/config/gpu_info_collector_linux.cc
   '' + lib.optionalString stdenv.isDarwin (
-  ''
-    substituteInPlace src/buildtools/config/mac_osx.pri \
-      --replace 'QMAKE_CLANG_DIR = "/usr"' 'QMAKE_CLANG_DIR = "${stdenv.cc}"'
-  ''
-   # Following is required to prevent a build error:
-   # ninja: error: '/nix/store/z8z04p0ph48w22rqzx7ql67gy8cyvidi-SDKs/MacOSX10.12.sdk/usr/include/mach/exc.defs', needed by 'gen/third_party/crashpad/crashpad/util/mach/excUser.c', missing and no known rule to make it
-  + ''
-    substituteInPlace src/3rdparty/chromium/third_party/crashpad/crashpad/util/BUILD.gn \
-      --replace '$sysroot/usr' "${xnu}"
-  # Apple has some secret stuff they don't share with OpenBSM
-  substituteInPlace src/3rdparty/chromium/base/mac/mach_port_rendezvous.cc \
-    --replace "audit_token_to_pid(request.trailer.msgh_audit)" "request.trailer.msgh_audit.val[5]"
-  substituteInPlace src/3rdparty/chromium/third_party/crashpad/crashpad/util/mach/mach_message.cc \
-    --replace "audit_token_to_pid(audit_trailer->msgh_audit)" "audit_trailer->msgh_audit.val[5]"
-  '');
+    ''
+      substituteInPlace src/buildtools/config/mac_osx.pri \
+        --replace 'QMAKE_CLANG_DIR = "/usr"' 'QMAKE_CLANG_DIR = "${stdenv.cc}"'
+    ''
+    # Following is required to prevent a build error:
+    # ninja: error: '/nix/store/z8z04p0ph48w22rqzx7ql67gy8cyvidi-SDKs/MacOSX10.12.sdk/usr/include/mach/exc.defs', needed by 'gen/third_party/crashpad/crashpad/util/mach/excUser.c', missing and no known rule to make it
+    + ''
+        substituteInPlace src/3rdparty/chromium/third_party/crashpad/crashpad/util/BUILD.gn \
+          --replace '$sysroot/usr' "${xnu}"
+      # Apple has some secret stuff they don't share with OpenBSM
+      substituteInPlace src/3rdparty/chromium/base/mac/mach_port_rendezvous.cc \
+        --replace "audit_token_to_pid(request.trailer.msgh_audit)" "request.trailer.msgh_audit.val[5]"
+      substituteInPlace src/3rdparty/chromium/third_party/crashpad/crashpad/util/mach/mach_message.cc \
+        --replace "audit_token_to_pid(audit_trailer->msgh_audit)" "audit_trailer->msgh_audit.val[5]"
+    ''
+  );
 
   NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isGNU [
     # with gcc8, -Wclass-memaccess became part of -Wall and this exceeds the logging limit
@@ -181,16 +241,21 @@ qtModule rec {
   propagatedBuildInputs = [
 
     # Image formats
-    libjpeg libpng libtiff libwebp
+    libjpeg
+    libpng
+    libtiff
+    libwebp
 
     # Video formats
-    srtp libvpx
+    srtp
+    libvpx
 
     # Audio formats
     libopus
 
     # Text rendering
-    harfbuzz icu
+    harfbuzz
+    icu
 
     openssl
     glib
@@ -205,22 +270,38 @@ qtModule rec {
     kerberos
 
   ] ++ lib.optionals (!stdenv.isDarwin) [
-    dbus zlib minizip snappy nss protobuf jsoncpp
+    dbus
+    zlib
+    minizip
+    snappy
+    nss
+    protobuf
+    jsoncpp
 
     # Audio formats
     alsa-lib
     pulseaudio
 
     # Text rendering
-    fontconfig freetype
+    fontconfig
+    freetype
 
     libcap
     pciutils
 
     # X11 libs
-    xorg.xrandr libXScrnSaver libXcursor libXrandr xorg.libpciaccess libXtst
-    xorg.libXcomposite xorg.libXdamage libdrm xorg.libxkbfile
-    libxshmfence libXi
+    xorg.xrandr
+    libXScrnSaver
+    libXcursor
+    libXrandr
+    xorg.libpciaccess
+    libXtst
+    xorg.libXcomposite
+    xorg.libXdamage
+    libdrm
+    xorg.libxkbfile
+    libxshmfence
+    libXi
     xlibs.libXext
 
     # Pipewire

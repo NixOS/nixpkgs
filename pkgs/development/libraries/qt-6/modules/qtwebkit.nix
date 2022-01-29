@@ -1,11 +1,32 @@
-{ qtModule, stdenv, lib, fetchurl
-, qtbase, qtdeclarative
-#, qtlocation
-, qtmultimedia, qtsensors, qtwebchannel
-, fontconfig, libwebp, libxml2, libxslt
-, sqlite, systemd, glib, gst_all_1, cmake
-, bison, flex, gdb, gperf, perl, pkg-config, python2, ruby
-, ICU, OpenGL
+{ qtModule
+, stdenv
+, lib
+, fetchurl
+, qtbase
+, qtdeclarative
+  #, qtlocation
+, qtmultimedia
+, qtsensors
+, qtwebchannel
+, fontconfig
+, libwebp
+, libxml2
+, libxslt
+, sqlite
+, systemd
+, glib
+, gst_all_1
+, cmake
+, bison
+, flex
+, gdb
+, gperf
+, perl
+, pkg-config
+, python2
+, ruby
+, ICU
+, OpenGL
 }:
 
 let
@@ -26,24 +47,34 @@ let
 in
 qtModule {
   pname = "qtwebkit";
-  qtInputs = [ qtbase qtdeclarative
+  qtInputs = [
+    qtbase
+    qtdeclarative
     #qtlocation
-  qtsensors ]
-    ++ lib.optional (stdenv.isDarwin && lib.versionAtLeast qtbase.version "5.9.0") qtmultimedia
-    ++ lib.optional usingAnnulenWebkitFork qtwebchannel;
+    qtsensors
+  ]
+  ++ lib.optional (stdenv.isDarwin && lib.versionAtLeast qtbase.version "5.9.0") qtmultimedia
+  ++ lib.optional usingAnnulenWebkitFork qtwebchannel;
   buildInputs = [ fontconfig libwebp libxml2 libxslt sqlite glib gst_all_1.gstreamer gst_all_1.gst-plugins-base ]
     ++ lib.optionals stdenv.isDarwin [ ICU OpenGL ]
     ++ lib.optional usingAnnulenWebkitFork hyphen;
   nativeBuildInputs = [
-    bison flex gdb gperf perl pkg-config python2 ruby
+    bison
+    flex
+    gdb
+    gperf
+    perl
+    pkg-config
+    python2
+    ruby
   ] ++ lib.optional usingAnnulenWebkitFork cmake;
 
   cmakeFlags = lib.optionals usingAnnulenWebkitFork ([ "-DPORT=Qt" ]
     ++ lib.optionals stdenv.isDarwin [
-      "-DQt5Multimedia_DIR=${lib.getDev qtmultimedia}/lib/cmake/Qt5Multimedia"
-      "-DQt5MultimediaWidgets_DIR=${lib.getDev qtmultimedia}/lib/cmake/Qt5MultimediaWidgets"
-      "-DMACOS_FORCE_SYSTEM_XML_LIBRARIES=OFF"
-    ]);
+    "-DQt5Multimedia_DIR=${lib.getDev qtmultimedia}/lib/cmake/Qt5Multimedia"
+    "-DQt5MultimediaWidgets_DIR=${lib.getDev qtmultimedia}/lib/cmake/Qt5MultimediaWidgets"
+    "-DMACOS_FORCE_SYSTEM_XML_LIBRARIES=OFF"
+  ]);
 
   # QtWebKit overrides qmake's default_pre and default_post features,
   # so its custom qmake files must be found first at the front of QMAKEPATH.
