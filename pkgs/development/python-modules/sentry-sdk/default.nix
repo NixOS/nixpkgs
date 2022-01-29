@@ -109,6 +109,8 @@ buildPythonPackage rec {
     "test_circular_references"
     # Failing wsgi test
     "test_session_mode_defaults_to_request_mode_in_wsgi_handler"
+    # Network requests to public web
+    "test_crumb_capture"
   ];
 
   disabledTestPaths = [

@@ -171,13 +171,6 @@ let
         sha256 = "sha256-lp4kxPNAkafdE9NfD3ittTCpomRpX9Hqhtt9GFf4Ntw=";
       })
       ./patches/m97-ozone-wayland-fix-surface_augmenter.patch
-    ] ++ lib.optionals (versionRange "98" "99") [
-      (githubPatch {
-        # [linux/wayland] Fixed terminate caused by binding to wrong version.
-        commit = "dd4c3ddadbb9869f59cee201a38e9ca3b9154f4d";
-        sha256 = "sha256-FH7lBQTruMzkBT2XQ+kgADmJA0AxJfaV/gvtoqfQ4a4=";
-      })
-    ] ++ lib.optionals (versionRange "97" "99") [
       (githubPatch {
         # [linux/wayland] Fixed terminate caused by binding to wrong version. (fixup)
         commit = "a84b79daa8897b822336b8f348ef4daaae07af37";

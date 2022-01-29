@@ -408,6 +408,7 @@ mapAliases ({
   imagemagick7_light = imagemagick_light; # added 2021-02-22
   imagemagick7 = imagemagick; # added 2021-02-22
   imagemagick7Big = imagemagickBig; # added 2021-02-22
+  impressive = throw "impressive has been removed due to lack of released python 2 support and maintainership in nixpkgs"; # added 2022-01-27
   inboxer = throw "inboxer has been removed as it is no longer maintained and no longer works as Google shut down the inbox service this package wrapped.";
   infiniband-diags = rdma-core; # added 2019-08-09
   inotifyTools = inotify-tools;
