@@ -277,6 +277,7 @@ itchyny/vim-gitbranch
 itspriddle/vim-shellcheck
 ivalkeen/vim-simpledb
 ivanov/vim-ipython
+j-hui/fidget.nvim
 jackguo380/vim-lsp-cxx-highlight
 jacoborus/tender.vim
 jakwings/vim-pony

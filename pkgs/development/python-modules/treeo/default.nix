@@ -22,12 +22,12 @@ buildPythonPackage rec {
     poetry-core
   ];
 
-  # These deps are not needed for the wheel, but required during the import.
+  # jax is not declared in the dependencies, but is necessary.
   propagatedBuildInputs = [
     jax
-    jaxlib
   ];
 
+  checkInputs = [ jaxlib ];
   pythonImportsCheck = [
     "treeo"
   ];
