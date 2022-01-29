@@ -1,0 +1,13 @@
+diff --git a/setup.cfg b/setup.cfg
+index 8b86fb8..2606228 100644
+--- a/setup.cfg
++++ b/setup.cfg
+@@ -25,7 +25,7 @@ classifiers =
+ setup_requires = setuptools>=44; wheel; setuptools_scm>=3.4.3; toml
+ packages = find:
+ zip_safe = False
+-install_requires = pydantic>=1.7,<1.9; typeguard>=2.10.0,<3
++install_requires = pydantic>=1.7,<2; typeguard>=2.10.0,<3
+ include_package_data = True
+ tests_require =
+     mock==3.0.5

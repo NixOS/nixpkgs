@@ -22,6 +22,10 @@ buildPythonPackage rec {
     sha256 = "sha256-/nmDaA67XzrrmfwlBm5syTS4hn25m30Zb3gvOdL+bR8=";
   };
 
+  patches = [
+    ./relax-requirements.patch
+  ];
+
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
   nativeBuildInputs = [ setuptools-scm ];
 
