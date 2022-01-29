@@ -171,6 +171,13 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://github.com/audreyt/ethercalc">ethercalc</link>,
+          an online collaborative spreadsheet. Available as
+          <link xlink:href="options.html#opt-services.ethercalc.enable">services.ethercalc</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://timetagger.app">timetagger</link>,
           an open source time-tracker with an intuitive user experience
           and powerful reporting.

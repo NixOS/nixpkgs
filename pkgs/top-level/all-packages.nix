@@ -5131,6 +5131,8 @@ with pkgs;
     electron = electron_14;
   };
 
+  ethercalc = callPackage ../servers/web-apps/ethercalc { };
+
   ethtool = callPackage ../tools/misc/ethtool { };
 
   ettercap = callPackage ../applications/networking/sniffers/ettercap { };
