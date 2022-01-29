@@ -1,7 +1,8 @@
-{ stdenv, fetchFromGitHub, pkgs, lib, nodejs, nodePackages, pkg-config, libjpeg
+{ stdenv, fetchFromGitHub, pkgs, lib, nodejs-12_x, nodePackages, pkg-config, libjpeg
 , pixman, cairo, pango }:
 
 let
+  nodejs = nodejs-12_x;
   # No official version ever released
   src = fetchFromGitHub {
     owner = "matrix-discord";
