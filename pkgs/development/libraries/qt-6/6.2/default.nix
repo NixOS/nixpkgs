@@ -16,7 +16,7 @@ top-level attribute to `top-level/all-packages.nix`.
 
 { newScope
 , lib, stdenv, fetchurl, fetchgit, fetchpatch, fetchFromGitHub, makeSetupHook, makeWrapper
-, bison, cups, harfbuzz, libGL, perl, cmake
+, bison, cups, harfbuzz, libGL, perl, cmake, writeText
 , gstreamer, gst-plugins-base, gtk3, dconf
 , llvmPackages_5, darwin
 
@@ -36,8 +36,10 @@ let
   srcs = import ./srcs.nix { inherit fetchurl mirror; } // {
     # qtwebkit does not have an official release tarball on the qt mirror and is
     # mostly maintained by the community.
+    /* not-yet available for qt6
     qtwebkit = rec {
       src = fetchFromGitHub {
+        # https://github.com/qt/qtwebkit
         owner = "qt";
         repo = "qtwebkit";
         rev = "v${version}";
@@ -45,12 +47,13 @@ let
       };
       version = "5.212.0-alpha4";
     };
+    */
   };
 
   qtModule =
     import ../qtModule.nix
     {
-      inherit perl lib cmake;
+      inherit perl lib cmake writeText;
       # Use a variant of mkDerivation that does not include wrapQtApplications
       # to avoid cyclic dependencies between Qt modules.
       mkDerivation =
@@ -95,7 +98,7 @@ let
       qtdeclarative = callPackage ../modules/qtdeclarative.nix {};
       qtdoc = callPackage ../modules/qtdoc.nix {};
       qtimageformats = callPackage ../modules/qtimageformats.nix {};
-      qtlocation = callPackage ../modules/qtlocation.nix {};
+      #qtlocation = callPackage ../modules/qtlocation.nix {};
       qtmultimedia = callPackage ../modules/qtmultimedia.nix {
         inherit gstreamer gst-plugins-base;
       };
@@ -122,7 +125,8 @@ let
       qtscxml = callPackage ../modules/qtscxml.nix {};
       qttools = callPackage ../modules/qttools.nix {};
       qttranslations = callPackage ../modules/qttranslations.nix {};
-      qtvirtualkeyboard = callPackage ../modules/qtvirtualkeyboard.nix {};
+      # FIXME cycle error
+      # qtvirtualkeyboard = callPackage ../modules/qtvirtualkeyboard.nix {};
       qtwayland = callPackage ../modules/qtwayland.nix {};
       qtwebchannel = callPackage ../modules/qtwebchannel.nix {};
       qtwebengine = callPackage ../modules/qtwebengine.nix {
@@ -132,10 +136,12 @@ let
         inherit (darwin.apple_sdk.frameworks) ApplicationServices AVFoundation Foundation ForceFeedback GameController AppKit
           ImageCaptureCore CoreBluetooth IOBluetooth CoreWLAN Quartz Cocoa LocalAuthentication;
       };
+      /*
       qtwebkit = callPackage ../modules/qtwebkit.nix {
         inherit (darwin) ICU;
         inherit (darwin.apple_sdk.frameworks) OpenGL;
       };
+      */
       qtwebsockets = callPackage ../modules/qtwebsockets.nix {};
       qtwebview = callPackage ../modules/qtwebview.nix {
         inherit (darwin.apple_sdk.frameworks) CoreFoundation WebKit;
@@ -144,9 +150,15 @@ let
       env = callPackage ../qt-env.nix {};
       full = env "qt-full-${qtbase.version}" ([
         qt3d qtcharts qtconnectivity qtdeclarative qtdoc
-        qtimageformats qtlocation qtmultimedia
+        qtimageformats
+        # qtlocation
+        qtmultimedia
         qtsensors qtserialport qtsvg qttools qttranslations
-        qtvirtualkeyboard qtwebchannel qtwebengine qtwebkit qtwebsockets
+        # FIXME cycle error
+        # qtvirtualkeyboard
+        qtwebchannel qtwebengine
+        # qtwebkit
+        qtwebsockets
         qtwebview
       ] ++ lib.optional (!stdenv.isDarwin) qtwayland);
 

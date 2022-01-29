@@ -1,5 +1,7 @@
 { qtModule, stdenv, lib, fetchurl
-, qtbase, qtdeclarative, qtlocation, qtmultimedia, qtsensors, qtwebchannel
+, qtbase, qtdeclarative
+#, qtlocation
+, qtmultimedia, qtsensors, qtwebchannel
 , fontconfig, libwebp, libxml2, libxslt
 , sqlite, systemd, glib, gst_all_1, cmake
 , bison, flex, gdb, gperf, perl, pkg-config, python2, ruby
@@ -7,6 +9,7 @@
 }:
 
 let
+  # TODO update
   hyphen = stdenv.mkDerivation rec {
     pname = "hyphen";
     version = "2.8.8";
@@ -23,7 +26,9 @@ let
 in
 qtModule {
   pname = "qtwebkit";
-  qtInputs = [ qtbase qtdeclarative qtlocation qtsensors ]
+  qtInputs = [ qtbase qtdeclarative
+    #qtlocation
+  qtsensors ]
     ++ lib.optional (stdenv.isDarwin && lib.versionAtLeast qtbase.version "5.9.0") qtmultimedia
     ++ lib.optional usingAnnulenWebkitFork qtwebchannel;
   buildInputs = [ fontconfig libwebp libxml2 libxslt sqlite glib gst_all_1.gstreamer gst_all_1.gst-plugins-base ]

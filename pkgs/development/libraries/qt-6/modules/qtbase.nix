@@ -20,6 +20,7 @@
 , xmlstarlet
 , libproxy
 , xlibsWrapper
+, xlibs
 , zstd
 , double-conversion
 , util-linux
@@ -33,6 +34,7 @@
 , libselinux
 , libsepol
 , vulkan-headers
+, vulkan-loader
 , libthai
 , libdrm
 , libdatrie
@@ -74,6 +76,13 @@ let
   debugSymbols = debug || developerBuild;
 
   splitBuildInstallEnabled = false; # debug post-build phases
+  # use only when needed, to avoid rebuilds
+  split-build-install-import-sh = if splitBuildInstallEnabled then ../split-build-install.import.sh else "";
+  split-build-install-export-sh = if splitBuildInstallEnabled then ../split-build-install.export.sh else "";
+  # TODO micro optimize: use only one regex in split-build-install.import.sh -> https://stackoverflow.com/a/29606752/10440128
+
+  patch-cmake-files-sh = ../patch-cmake-files.sh;
+  patch-cmake-files-regex-diff = ../patch-cmake-files.regex.diff;
 
 drv1 =
 stdenv.mkDerivation rec {
@@ -89,10 +98,8 @@ stdenv.mkDerivation rec {
 
   # TODO better? how to load "hooks" for mkDerivation?
   splitBuildInstallLoad = ''
-    . ${../split-build-install.export.sh}
+    . ${split-build-install-export-sh}
   '';
-
-
 
   pname = "qtbase";
 
@@ -115,13 +122,16 @@ stdenv.mkDerivation rec {
     libjpeg libpng
     pcre2
     pcre # for glib-2.0
-    libproxy libproxy.dev
+    libproxy libproxy.dev # pulls kerberos
     xlibsWrapper
+    xlibs.libXdmcp
+    xlibs.libXtst
+    xlibs.xcbutilcursor
     zstd
     double-conversion
     util-linux # mount for gio-2.0
     #journalctl
-    systemd
+    systemd # pulls kerberos
     libb2
     md4c
     mtdev
@@ -133,12 +143,14 @@ stdenv.mkDerivation rec {
 
     # TODO enable vulkan/openvg only when openGL is available
     vulkan-headers
+    vulkan-loader
 
     libthai # for pango
     libdrm
     libdatrie # for libthai
     epoxy # for gdk-3.0
-    #valgrind # for libdrm (optional, bloat)
+    #valgrind # for libdrm. TODO add? or is it bloat?
+    #tslib # touchscreen
   ] ++ (with unixODBCDrivers; [
     psql
     sqlite
@@ -184,6 +196,7 @@ stdenv.mkDerivation rec {
 
   inherit patches;
 
+  # also used in setupHook
   fix_qt_builtin_paths = ../hooks/fix-qt-builtin-paths.sh;
   fix_qt_module_paths = ../hooks/fix-qt-module-paths.sh;
 
@@ -332,13 +345,16 @@ stdenv.mkDerivation rec {
     "-DQT_FEATURE_sctp=ON"
     "-DQT_FEATURE_libproxy=ON"
     "-DQT_FEATURE_system_sqlite=ON"
+    "-DQT_FEATURE_vulkan=ON"
+    #"-DQT_FEATURE_openssl_linked=ON" # TODO? "Qt directly linked to OpenSSL"
+    #"-DQT_FEATURE_ltcg=ON" # default off
   ];
 
   outputs = [ "out" "bin" "dev" ];
 
   postInstall = ''
-    mkdir $bin $dev
-    mv $out/plugins $bin/
+    mkdir -p $dev $(dirname $bin/${qtPluginPrefix})
+    mv $out/plugins $bin/${qtPluginPrefix}
     mv $out/mkspecs $out/bin $dev/
   '';
   # postFixup: ln -v -s $out/libexec $dev/
@@ -354,49 +370,16 @@ stdenv.mkDerivation rec {
 
     ln -v -s $out/libexec $dev/
 
-    echo "patching output paths in cmake files ..."
-    (
-    cd $dev/lib/cmake
-    moduleNAME="${lib.toUpper pname}"
-    outEscaped=$(echo $out | sed 's,/,\\/,g')
-    devEscaped=$(echo $dev | sed 's,/,\\/,g')
-    if [ -n "$bin" ]; then
-    binEscaped=$(echo $bin | sed 's,/,\\/,g') # optional plugins
-    else binEscaped=""; fi
-
-    # TODO build the perlRegex string with nix? avoid the bash escape hell
-    # or use: read -d "" perlRegex <<EOF ... EOF
-    s=""
-    s+="s/^# Compute the installation prefix relative to this file\."
-    s+="\n.*?set\(_IMPORT_PREFIX \"\"\)\nendif\(\)"
-    s+="/# NixOS was here"
-    s+="\nset(_''${moduleNAME}_NIX_OUT \"$outEscaped\")"
-    s+="\nset(_''${moduleNAME}_NIX_DEV \"$devEscaped\")"
-    s+="\nset(_''${moduleNAME}_NIX_BIN \"$binEscaped\")/s;"
-    s+="s/\\\''${_IMPORT_PREFIX}\/(\.\/)?include/\\\''${_''${moduleNAME}_NIX_DEV}\/include/g;"
-    s+="s/\\\''${_IMPORT_PREFIX}\/(\.\/)?libexec/\\\''${_''${moduleNAME}_NIX_OUT}\/libexec/g;"
-    s+="s/\\\''${_IMPORT_PREFIX}\/(\.\/)?lib/\\\''${_''${moduleNAME}_NIX_OUT}\/lib/g;" # must come after libexec
-    s+="s/\\\''${_IMPORT_PREFIX}\/(\.\/)?plugins/\\\''${_''${moduleNAME}_NIX_BIN}\/lib\/qt-${version}\/plugins/g;"
-    s+="s/\\\''${_IMPORT_PREFIX}\/(\.\/)?bin/\\\''${_''${moduleNAME}_NIX_DEV}\/bin/g;" # qmake ...
-    s+="s/\\\''${_IMPORT_PREFIX}\/(\.\/)?mkspecs/\\\''${_''${moduleNAME}_NIX_DEV}\/mkspecs/g;"
-    s+="s/set\(_IMPORT_PREFIX\)"
-    s+="/set(_''${moduleNAME}_NIX_OUT)"
-    s+="\nset(_''${moduleNAME}_NIX_DEV)"
-    s+="\nset(_''${moduleNAME}_NIX_BIN)/g;"
-    s+="s/\\\''${QtBase_SOURCE_DIR}\/libexec/\\\''${QtBase_BINARY_DIR}\/libexec/g;" # QtBase_SOURCE_DIR = qtbase/$dev
-
-    s+="s/\\\''${QT_BUILD_INTERNALS_RELOCATABLE_INSTALL_PREFIX}\/\\\''${INSTALL_LIBEXECDIR}/$outEscaped\/libexec/g;"
-    s+="s/\\\''${QT_BUILD_INTERNALS_RELOCATABLE_INSTALL_PREFIX}\/\\\''${INSTALL_BINDIR}/$devEscaped\/bin/g;"
-    s+="s/\\\''${QT_BUILD_INTERNALS_RELOCATABLE_INSTALL_PREFIX}\/\\\''${INSTALL_DOCDIR}/$outEscaped\/share\/doc/g;"
-    s+="s/\\\''${QT_BUILD_INTERNALS_RELOCATABLE_INSTALL_PREFIX}\/\\\''${INSTALL_LIBDIR}/$outEscaped\/lib/g;"
-    s+="s/\\\''${QT_BUILD_INTERNALS_RELOCATABLE_INSTALL_PREFIX}\/\\\''${INSTALL_MKSPECSDIR}/$devEscaped\/mkspecs/g;"
-    s+="s/\\\''${CMAKE_CURRENT_LIST_DIR}\/\.\.\/mkspecs/$devEscaped\/mkspecs/g;"
-    s+="s/\\\''${CMAKE_CURRENT_BINARY_DIR}\/mkspecs/$devEscaped\/mkspecs/g;"
-
-    perlRegex="$s"
-    find . -name '*.cmake' -print0 | xargs -0 perl -00 -p -i -e "$perlRegex"
-    echo "patching output paths in cmake files done"
-    )
+    echo "patching output paths in $dev/lib/cmake ..."
+    find $dev/lib/cmake -name '*.cmake' -print0 \
+      | xargs -0 ${patch-cmake-files-sh} \
+      qtCompatVersion=${qtCompatVersion} \
+      QT_MODULE_NAME=${lib.toUpper pname} \
+      NIX_OUT_PATH=$out \
+      NIX_DEV_PATH=$dev \
+      NIX_BIN_PATH=$bin \
+      REGEX_FILE=${patch-cmake-files-regex-diff} --
+    echo "patching output paths in $dev/lib/cmake done"
 
     # TODO generate qt.conf from buildInputs -> qmake -qtconf /path/to/qt.conf
     # Qml2Imports is provided by qtdeclarative
@@ -421,17 +404,19 @@ stdenv.mkDerivation rec {
     Documentation = $out/${qtDocPrefix}
     ; Qml2Imports = (provided by qtdeclarative)
     EOF
-  '';
-  /*
-    echo "verify that all _IMPORT_PREFIX are replaced ..."
-    matches="$(find . -name '*.cmake' -exec grep -HnF _IMPORT_PREFIX '{}' \;)"
-    if [ -n "$matches" ]; then
-      echo "fatal: _IMPORT_PREFIX was not replaced in:"
-      echo "$matches"
-      exit 1
-    fi
+
+    echo "verify that all _IMPORT_PREFIX are replaced in $dev/lib/cmake"
+    (
+      cd $dev/lib/cmake
+      matches="$(find . -name '*.cmake' -print0 | xargs -0 grep -HnF _IMPORT_PREFIX || true)"
+      if [ -n "$matches" ]; then
+        echo "fatal: _IMPORT_PREFIX was not replaced in:"
+        echo "$matches"
+        exit 1
+      fi
+    )
     echo "verify that all _IMPORT_PREFIX are replaced done"
-  */
+  '';
 
   dontStrip = debugSymbols;
 
@@ -463,7 +448,7 @@ stdenv.mkDerivation (drv1.drvAttrs // {
   # TODO better? how to load "hooks" for mkDerivation?
   # separate script for import, to avoid rebuilds
   splitBuildInstallLoad = ''
-    . ${../split-build-install.import.sh}
+    . ${split-build-install-import-sh}
   '';
 
   # when splitting, disable all phases before buildPhase

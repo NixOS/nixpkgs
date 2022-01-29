@@ -1,13 +1,12 @@
 { qtModule
 , qtbase
-, libglvnd, libxkbcommon, vulkan-headers # TODO should be inherited from qtbase
-, qtdeclarative # TODO verify
+, qtdeclarative
 , openssl
 }:
 
 qtModule {
   pname = "qtquick3d";
   qtInputs = [ qtbase qtdeclarative ];
-  buildInputs = [ openssl openssl.dev libglvnd libxkbcommon vulkan-headers ];
+  buildInputs = [ openssl openssl.dev ];
   outputs = [ "out" "dev" "bin" ];
 }

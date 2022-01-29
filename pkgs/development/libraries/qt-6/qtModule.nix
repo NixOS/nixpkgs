@@ -1,4 +1,9 @@
-{ lib, mkDerivation, perl, cmake }:
+/*
+FIXME qimgv (etc) should not require $dev packages
+$bin paths are ok, they are needed for plugins
+*/
+
+{ lib, mkDerivation, perl, cmake, writeText }:
 
 { self, srcs, patches ? [] }:
 
@@ -14,6 +19,11 @@ let
   inherit (args) pname;
   version = args.version or srcs.${pname}.version;
   src = args.src or srcs.${pname}.src;
+
+  patch-cmake-files-sh = ./patch-cmake-files.sh;
+  patch-cmake-files-regex-diff = ./patch-cmake-files.regex.diff;
+
+  qtCompatVersion = self.qtbase.qtCompatVersion;
 in
 
 let
@@ -32,6 +42,9 @@ drv1 = mkDerivation (args // {
   splitBuildInstallLoad = ''
     . ${./split-build-install.export.sh}
   '';
+  # FIXME this is slow: splitBuildInstallExport: storing variables
+  # -> parallel regex + track modified files (splitBuildInstall.patchedFiles.txt)
+  # or faster to patch all files?
 
   inherit pname version src;
   patches = args.patches or patches.${pname} or [];
@@ -52,6 +65,12 @@ drv1 = mkDerivation (args // {
     . ${./hooks/fix-qt-builtin-paths.sh}
   '';
 
+  # help cmake to find $dev/lib/cmake
+  setupHook = writeText "setup-hook.sh" ''
+    echo "setupHook of ${pname}: add to QT_ADDITIONAL_PACKAGES_PREFIX_PATH: $1"
+    export "QT_ADDITIONAL_PACKAGES_PREFIX_PATH=''${QT_ADDITIONAL_PACKAGES_PREFIX_PATH:+''${QT_ADDITIONAL_PACKAGES_PREFIX_PATH}:}$1"
+  '';
+
   preConfigure = ''
     ${args.preConfigure or ""}
 
@@ -59,6 +78,8 @@ drv1 = mkDerivation (args // {
   '';
 
   dontWrapQtApps = args.dontWrapQtApps or true;
+
+  # https://stackoverflow.com/a/70875733/10440128
 
   # TODO verify for qt6: patching of pkgconfig files
   # TODO test before buildPhase if the module will produce plugins
@@ -73,82 +94,50 @@ drv1 = mkDerivation (args // {
         done
     fi
 
-    # TODO refactor. same code in qtbase.nix and qtModule.nix
-    echo "patching output paths in cmake files ..."
-    moduleNAME="${lib.toUpper pname}"
-    outEscaped=$(echo $out | sed 's,/,\\/,g')
-    devEscaped=$(echo $dev | sed 's,/,\\/,g')
-    if [ -n "$bin" ]; then
-    binEscaped=$(echo $bin | sed 's,/,\\/,g') # optional plugins
-    else binEscaped=""; fi
+    if [ -d $dev/lib/cmake ]; then
+      echo "patching output paths in $dev/lib/cmake ..."
+      find $dev/lib/cmake -name '*.cmake' -print0 \
+        | xargs -0 ${patch-cmake-files-sh} \
+        qtCompatVersion=${qtCompatVersion} \
+        QT_MODULE_NAME=${lib.toUpper pname} \
+        NIX_OUT_PATH=$out \
+        NIX_DEV_PATH=$dev \
+        NIX_BIN_PATH=$bin \
+        REGEX_FILE=${patch-cmake-files-regex-diff} --
+      echo "patching output paths in $dev/lib/cmake done"
+    fi
 
-    # TODO build the perlRegex string with nix? avoid the bash escape hell
-    # or use: read -d "" perlRegex <<EOF ... EOF
-    s=""
-    s+="s/^# Compute the installation prefix relative to this file\."
-    s+="\n.*?set\(_IMPORT_PREFIX \"\"\)\nendif\(\)"
-    s+="/# NixOS was here"
-    s+="\nset(_''${moduleNAME}_NIX_OUT \"$outEscaped\")"
-    s+="\nset(_''${moduleNAME}_NIX_DEV \"$devEscaped\")"
-    s+="\nset(_''${moduleNAME}_NIX_BIN \"$binEscaped\")/s;"
-    s+="s/\\\''${_IMPORT_PREFIX}\/(\.\/)?include/\\\''${_''${moduleNAME}_NIX_DEV}\/include/g;"
-    s+="s/\\\''${_IMPORT_PREFIX}\/(\.\/)?libexec/\\\''${_''${moduleNAME}_NIX_OUT}\/libexec/g;"
-    s+="s/\\\''${_IMPORT_PREFIX}\/(\.\/)?lib/\\\''${_''${moduleNAME}_NIX_OUT}\/lib/g;" # must come after libexec
-    s+="s/\\\''${_IMPORT_PREFIX}\/(\.\/)?plugins/\\\''${_''${moduleNAME}_NIX_BIN}\/lib\/qt-${version}\/plugins/g;"
-    s+="s/\\\''${_IMPORT_PREFIX}\/(\.\/)?bin/\\\''${_''${moduleNAME}_NIX_DEV}\/bin/g;" # qmake ...
-    s+="s/\\\''${_IMPORT_PREFIX}\/(\.\/)?mkspecs/\\\''${_''${moduleNAME}_NIX_DEV}\/mkspecs/g;"
-    s+="s/\\\''${_IMPORT_PREFIX}\/(\.\/)?qml/\\\''${_''${moduleNAME}_NIX_OUT}\/qml/g;"
-    s+="s/set\(_IMPORT_PREFIX\)"
-    s+="/set(_''${moduleNAME}_NIX_OUT)"
-    s+="\nset(_''${moduleNAME}_NIX_DEV)"
-    s+="\nset(_''${moduleNAME}_NIX_BIN)/g;"
-    s+="s/\\\''${QtBase_SOURCE_DIR}\/libexec/\\\''${QtBase_BINARY_DIR}\/libexec/g;" # QtBase_SOURCE_DIR = qtbase/$dev
-
-    s+="s/\\\''${QT_BUILD_INTERNALS_RELOCATABLE_INSTALL_PREFIX}\/\\\''${INSTALL_LIBEXECDIR}/$outEscaped\/libexec/g;"
-    s+="s/\\\''${QT_BUILD_INTERNALS_RELOCATABLE_INSTALL_PREFIX}\/\\\''${INSTALL_BINDIR}/$devEscaped\/bin/g;"
-    s+="s/\\\''${QT_BUILD_INTERNALS_RELOCATABLE_INSTALL_PREFIX}\/\\\''${INSTALL_DOCDIR}/$outEscaped\/share\/doc/g;"
-    s+="s/\\\''${QT_BUILD_INTERNALS_RELOCATABLE_INSTALL_PREFIX}\/\\\''${INSTALL_LIBDIR}/$outEscaped\/lib/g;"
-    s+="s/\\\''${QT_BUILD_INTERNALS_RELOCATABLE_INSTALL_PREFIX}\/\\\''${INSTALL_MKSPECSDIR}/$devEscaped\/mkspecs/g;"
-
-    # lib/cmake/Qt6/QtBuild.cmake
-    s+="s/\\\''${CMAKE_CURRENT_LIST_DIR}\/\.\.\/mkspecs/$devEscaped\/mkspecs/g;"
-    # lib/cmake/Qt6/QtPriHelpers.cmake
-    s+="s/\\\''${CMAKE_CURRENT_BINARY_DIR}\/mkspecs/$devEscaped\/mkspecs/g;"
-
-    #s+="s/\\\''${QtBase_SOURCE_DIR}\/lib/\\\''${QtBase_BINARY_DIR}\/lib/g;" # TODO?
-    perlRegex="$s"
-
-    echo "debug: perlRegex = $perlRegex"
-    find $dev/lib/cmake -name '*.cmake' -exec perl -00 -p -i -e "$perlRegex" '{}' \;
-    echo "rc of find = $?" # zero when perl returns nonzero?
-    # FIXME catch errors from perl: find -> xargs
-    echo "patching output paths in cmake files done"
-
-    moveQtDevTools
+    if [ -d $out/bin ]; then
+      # assume that all $out/bin are devTools
+      echo "move $out/bin to $dev/bin"
+      mkdir $dev || true
+      mv $out/bin $dev/bin
+    fi
 
     if [ -d $out/plugins ]; then
       if [ -z "$bin" ]; then
-        echo 'fatal error: qt module has plugins but no "bin" output'
-        echo 'listing plugins ...'
-        find $out/plugins
-        echo 'listing plugins done'
-        echo 'todo: in qtModule for ${pname}-${version}, set:'
-        echo '  outputs = [ "out" "dev" "bin" ];'
-        exit 1
+        echo 'FIXME qt module has plugins but no "bin" output'
       fi
-      echo "moving plugins to $bin/lib/qt-${self.qtbase.version}/plugins"
-      mkdir -p $bin/lib/qt-${self.qtbase.version}
-      mv $out/plugins $bin/lib/qt-${self.qtbase.version}
+      if false; then
+        # WORKAROUND cycle error
+        echo "symlinking plugins"${""/* FIXME cycle error: mv $out/plugins $bin/lib/qt-${self.qtbase.version} */}
+        mkdir -p $bin/lib/qt-${self.qtbase.version}
+        ln -s -v $out/plugins $bin/lib/qt-${self.qtbase.version}/plugins
+      else
+        # TODO test: cycle error?
+        mkdir -p $bin/lib/qt-${self.qtbase.version}
+        echo "moving plugins to $bin"
+        mv $out/plugins $bin/lib/qt-${self.qtbase.version}/plugins
+      fi
     elif [ -n "$bin" ]; then
-      echo 'FIXME warning: qt module has no plugins but "bin" output'
-      echo 'todo: in qtModule for ${pname}-${version}, remove:'
-      echo '  outputs = [ "out" "dev" "bin" ];'
+      echo 'FIXME qt module has no plugins but "bin" output'
+      echo '  -> in qtModule for ${pname}-${version}, remove bin from outputs'
     fi
 
     ${args.postFixup or ""}
 
     echo "verify that all _IMPORT_PREFIX are replaced ..."
-    matches="$(find $dev/lib/cmake -name '*.cmake' -exec grep -HnF _IMPORT_PREFIX '{}' \;)"
+    matches="$(find $dev/lib/cmake -name '*.cmake' -print0 | xargs -0 grep -HnF _IMPORT_PREFIX || true)"
     if [ -n "$matches" ]; then
       echo "fatal: _IMPORT_PREFIX was not replaced in:"
       echo "$matches"
@@ -192,4 +181,13 @@ else mkDerivation (drv1.drvAttrs // {
   dontFixup = false;
   dontInstallCheck = false;
   dontDist = false;
+
+  # avoid rebuild
+  installPhase = ''
+    runHook preInstall
+    cd /build/$sourceRoot/build
+    cmake -P cmake_install.cmake
+    runHook postInstall
+  '';
+
 } // argsFull.splitBuildInstall)

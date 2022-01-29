@@ -19752,7 +19752,7 @@ with pkgs;
   qt62 = recurseIntoAttrs (makeOverridable
     (import ../development/libraries/qt-6/6.2) {
       inherit newScope;
-      inherit lib stdenv fetchurl fetchpatch fetchgit fetchFromGitHub makeSetupHook makeWrapper;
+      inherit lib stdenv fetchurl fetchpatch fetchgit fetchFromGitHub makeSetupHook makeWrapper writeText;
       inherit bison cups dconf harfbuzz libGL perl cmake gtk3;
       inherit (gst_all_1) gstreamer gst-plugins-base;
       inherit llvmPackages_5 darwin;

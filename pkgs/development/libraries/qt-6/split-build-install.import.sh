@@ -31,35 +31,19 @@ splitBuildInstallImport() {
   done
 
   echo "splitBuildInstallImport: debug: regex:"
-  regexList=()
+  regexStr=""
   isFirst=true
   for o in $outputs; do
     a=${o}Hash
     b=${o}HashNew
-    regex="s,${!a}$suffixEscaped,${!b}$suffix,g"
+    regex="s,${!a}$suffixEscaped,${!b}$suffix,g;"
     echo "  $o: $regex"
-    regexList+=("$regex")
+    regexStr+="$regex"
   done
 
   (
     cd /build
-    cat $src/splitBuildInstall.patchedFiles.txt | while read f
-    do
-      [ "$f" = './env-vars' ] && continue
-      if [ ! -e "$f" ]; then
-        echo "splitBuildInstallImport: fatal error: no such file: $f"
-        exit 1
-      fi
-      if [ -z "$(
-        for regex in "${regexList[@]}"; do
-          sed -i -E "$regex w /dev/stdout" "$f" | tr -d '\0'
-        done
-      )" ]; then
-        echo "splitBuildInstallImport: fatal error: no paths replaced in $f"
-        exit 1
-      #else echo "replaced $(echo "$sedOutput" | wc -l | cut -d' ' -f1) paths in $f"
-      fi
-    done
+    cat $src/splitBuildInstall.patchedFiles.txt | xargs -0 sed -i "$regexStr"
   )
 
   if false; then
@@ -77,7 +61,7 @@ splitBuildInstallImport() {
     echo "splitBuildInstallImport: test replacement of old hashes ..."
     echo "  regex = $regex"
 
-    grepResult="$(find /build -type f -not -path /build/env-vars -exec grep -HnEa "$regex" '{}' \;)"
+    grepResult="$(find /build -type f -not -path /build/env-vars -print0 | xargs -0 grep -HnEa "$regex" || true)"
     if [ -n "$grepResult" ]; then
     echo "splitBuildInstallImport: fatal error: some hashes were not replaced:"
     echo "$grepResult"

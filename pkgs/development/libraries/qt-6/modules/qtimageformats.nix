@@ -1,6 +1,5 @@
 { qtModule
 , qtbase
-, libglvnd, vulkan-headers # TODO should be inherited from qtbase
 , libwebp
 , jasper
 , libmng
@@ -10,6 +9,6 @@
 qtModule {
   pname = "qtimageformats";
   qtInputs = [ qtbase ];
-  buildInputs = [ libwebp jasper libmng libtiff libglvnd vulkan-headers ];
+  buildInputs = [ libwebp jasper libmng libtiff ];
   outputs = [ "out" "dev" "bin" ];
 }

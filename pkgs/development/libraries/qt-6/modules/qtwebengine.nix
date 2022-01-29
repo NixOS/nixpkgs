@@ -1,72 +1,21 @@
-# FIXME configureFlags are ignored
-
-/*
-
-Configure summary:
-
-WebEngine Repository Build Options:
-  Build Ninja ............................ no
-  Build Gn ............................... yes
-  Jumbo Build ............................ yes
-  Developer build ........................ no
-  Build QtWebEngine Modules:
-    Build QtWebEngineCore ................ yes
-    Build QtWebEngineWidgets ............. yes
-    Build QtWebEngineQuick ............... yes
-  Build QtPdf Modules:
-    Build QtPdfWidgets ................... no
-    Build QtPdfQuick ..................... no
-  Optional system libraries:
-    re2 .................................. yes
-    icu .................................. no
-    libwebp, libwebpmux and libwebpdemux . yes
-    opus ................................. yes
-    ffmpeg ............................... no
-    libvpx ............................... yes
-    snappy ............................... yes
-    glib ................................. yes
-    zlib ................................. yes
-    minizip .............................. yes
-    libevent ............................. no
-    libxml2 and libxslt .................. no
-    lcms2 ................................ yes
-    png .................................. yes
-    jpeg ................................. yes
-    harfbuzz ............................. yes
-    freetype ............................. yes
-    libpci ............................... yes
-Qt WebEngineCore:
-  Embedded build ......................... no
-  Full debug information ................. no
-  Sanitizer support ...................... no
-  Pepper Plugins ......................... yes
-  Printing and PDF ....................... yes
-  Proprietary Codecs ..................... no
-  Spellchecker ........................... yes
-  Native Spellchecker .................... no
-  WebRTC ................................. yes
-  PipeWire over GIO ...................... no
-  Geolocation ............................ yes
-  WebChannel support ..................... yes
-  Kerberos Authentication ................ no
-  Extensions ............................. yes
-  Support GLX on qpa-xcb ................. yes
-  Use ALSA ............................... yes
-  Use PulseAudio ......................... yes
-Qt WebEngineQuick:
-  UI Delegates ........................... yes
-
-*/
-
 { qtModule
 , qtdeclarative, qtwebchannel
 , qtpositioning, qtwebsockets
 
+/* TODO(milahu)
+  -- The following OPTIONAL packages have not been found:
+  * Qt6QmlCompilerPlus
+  * Qt6Designer
+*/
+
+# ninja is hard requirement for buildPhase
+# https://bugreports.qt.io/browse/QTBUG-96897
 , bison, coreutils, flex, git, gperf, ninja, pkg-config, python2, which
 , nodejs, qtbase, perl
 
 , xorg, libXcursor, libXScrnSaver, libXrandr, libXtst
 , libxshmfence, libXi
+, xlibs
 , fontconfig, freetype, harfbuzz, icu, dbus, libdrm
 , zlib, minizip, libjpeg, libpng, libtiff, libwebp, libopus
 , jsoncpp, protobuf, libvpx, srtp, snappy, nss, libevent
@@ -76,9 +25,11 @@ Qt WebEngineQuick:
 , libcap
 , pciutils
 , systemd
-, pipewire_0_2
+, pipewire
 , enableProprietaryCodecs ? true
 , gn
+# TODO(milahu) remove gn?
+# -- Could NOT find Gn: Found unsuitable version "1718 (fd3d768)", but required is exact version "6.2.2"
 , cctools, libobjc, libunwind, sandbox, xnu
 , ApplicationServices, AVFoundation, Foundation, ForceFeedback, GameController, AppKit
 , ImageCaptureCore, CoreBluetooth, IOBluetooth, CoreWLAN, Quartz, Cocoa, LocalAuthentication
@@ -92,42 +43,20 @@ Qt WebEngineQuick:
 , libxslt
 , lcms2
 , re2
-
-, libglvnd, libxkbcommon, vulkan-headers, libX11, libXcomposite
+, kerberos
 }:
 
 qtModule rec {
   pname = "qtwebengine";
   qtInputs = [ qtdeclarative qtwebchannel qtwebsockets qtpositioning ];
   nativeBuildInputs = [
+    # requires python2
     bison coreutils flex git gperf ninja pkg-config python2 which gn nodejs
   ] ++ lib.optional stdenv.isDarwin xcbuild;
   doCheck = true;
-  outputs = [ "bin" "dev" "out" ];
+  outputs = [ "out" "bin" "dev" ];
 
   enableParallelBuilding = true;
-
-  /* breaks with ninja
-  # debug: install is failing
-  # splitBuildInstall requires cmake, not ninja
-  splitBuildInstall =
-  let
-    # workaround for splitBuildInstall
-    pname = "qtwebengine";
-    version = "6.2.2";
-    self = { inherit qtbase; };
-    args = { postFixup = ""; };
-  in
-  {
-    # needed to disable rebuild
-    installPhase = ''
-      runHook preInstall
-      cd /build/$sourceRoot/build
-      cmake -P cmake_install.cmake
-      runHook postInstall
-    '';
-  };
-  */
 
   # Don’t use the gn setup hook
   dontUseGnConfigure = true;
@@ -135,6 +64,11 @@ qtModule rec {
   # ninja builds some components with -Wno-format,
   # which cannot be set at the same time as -Wformat-security
   hardeningDisable = [ "format" ];
+
+  # disable ninja line-clearing
+  preBuild = ''
+    export TERM=dumb
+  '';
 
   postPatch = ''
     # Patch Chromium build tools
@@ -210,8 +144,8 @@ qtModule rec {
     "-fno-objc-arc"
   ];
 
+  # FIXME set in hook: QT_ADDITIONAL_PACKAGES_PREFIX_PATH
   preConfigure = ''
-    # FIXME qt6: set this automatically
     export QT_ADDITIONAL_PACKAGES_PREFIX_PATH="${qtdeclarative.dev}:${qtwebsockets.dev}:${qtwebchannel.dev}:${qtpositioning.dev}"
 
     export NINJAFLAGS=-j$NIX_BUILD_CORES
@@ -221,11 +155,28 @@ qtModule rec {
     fi
   '';
 
-  # FIXME flags are ignored
-  configureFlags = [ "-system-ffmpeg" ]
-    ++ lib.optional stdenv.isLinux "-webengine-webrtc-pipewire"
-    ++ lib.optional enableProprietaryCodecs "-proprietary-codecs";
-  qmakeFlags = [ "--" ] ++ configureFlags;
+  cmakeFlags =
+    [
+      "-DQT_FEATURE_qtpdf_build=ON"
+      "-DQT_FEATURE_qtpdf_widgets_build=ON"
+      "-DQT_FEATURE_qtpdf_quick_build=ON"
+      "-DQT_FEATURE_pdf_v8=ON"
+      "-DQT_FEATURE_pdf_xfa=ON"
+      "-DQT_FEATURE_pdf_xfa_bmp=ON"
+      "-DQT_FEATURE_pdf_xfa_gif=ON"
+      "-DQT_FEATURE_pdf_xfa_png=ON"
+      "-DQT_FEATURE_pdf_xfa_tiff=ON"
+      "-DQT_FEATURE_webengine_system_icu=ON"
+      "-DQT_FEATURE_webengine_system_libevent=ON"
+      "-DQT_FEATURE_webengine_system_libxml=ON"
+      "-DQT_FEATURE_webengine_system_ffmpeg=ON"
+      #"-DQT_FEATURE_webengine_native_spellchecker=ON" # android only. https://bugreports.qt.io/browse/QTBUG-100293
+      "-DQT_FEATURE_webengine_kerberos=ON" # auth -> requires include/gssapi.h -> kerberos
+      "-DQT_FEATURE_webengine_sanitizer=ON"
+    ]
+    ++ lib.optional stdenv.isLinux "-DQT_FEATURE_webengine_webrtc_pipewire=ON" # TODO(milahu) why linux only? (ported from qt5)
+    ++ lib.optional enableProprietaryCodecs "-DQT_FEATURE_webengine_proprietary_codecs=ON"
+  ;
 
   propagatedBuildInputs = [
 
@@ -251,8 +202,7 @@ qtModule rec {
     libevent
     ffmpeg
 
-    # FIXME should be propagated by qtbase
-    libglvnd libxkbcommon vulkan-headers libX11 libXcomposite
+    kerberos
 
   ] ++ lib.optionals (!stdenv.isDarwin) [
     dbus zlib minizip snappy nss protobuf jsoncpp
@@ -271,9 +221,10 @@ qtModule rec {
     xorg.xrandr libXScrnSaver libXcursor libXrandr xorg.libpciaccess libXtst
     xorg.libXcomposite xorg.libXdamage libdrm xorg.libxkbfile
     libxshmfence libXi
+    xlibs.libXext
 
     # Pipewire
-    pipewire_0_2
+    pipewire
   ]
 
   # FIXME These dependencies shouldn't be needed but can't find a way
@@ -301,8 +252,10 @@ qtModule rec {
     libunwind
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = [
     cups
+    cups.dev # cups-config is used in buildPhase # TODO propagatedBuildInputs?
+  ] ++ lib.optionals stdenv.isDarwin [
     sandbox
 
     # `sw_vers` is used by `src/3rdparty/chromium/build/config/mac/sdk_info.py`
@@ -321,9 +274,6 @@ qtModule rec {
     '')
   ];
 
-  dontUseNinjaBuild = true;
-  dontUseNinjaInstall = true;
-
   postInstall = lib.optionalString stdenv.isLinux ''
     cat > $out/libexec/qt.conf <<EOF
     [Paths]
@@ -338,6 +288,7 @@ qtModule rec {
     maintainers = with maintainers; [ matthewbauer ];
     platforms = platforms.unix;
     # This build takes a long time; particularly on slow architectures
+    # 1 hour on 32x3.6GHz -> maybe 12 hours on 4x2.4GHz
     timeout = 24 * 3600;
   };
 }

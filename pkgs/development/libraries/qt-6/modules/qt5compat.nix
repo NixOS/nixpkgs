@@ -1,7 +1,6 @@
 { qtModule
 , qtbase
-, libglvnd, libxkbcommon, vulkan-headers # TODO should be inherited from qtbase
-, qtdeclarative # TODO verify
+, qtdeclarative
 , libiconv
 # FIXME Configure summary: qt5compat is not using libiconv. bug in qt6?
 , icu
@@ -11,5 +10,14 @@
 qtModule {
   pname = "qt5compat";
   qtInputs = [ qtbase qtdeclarative ];
-  buildInputs = [ libiconv icu openssl openssl.dev libglvnd libxkbcommon vulkan-headers ];
+  buildInputs = [ libiconv icu openssl openssl.dev ];
+
+  cmakeFlags = [
+    "-DQT_FEATURE_iconv=ON" # icu?
+    /*
+    "-DQT_FEATURE_big_codecs=ON"
+    "-DQT_FEATURE_codecs=ON" # icu?
+    "-DQT_FEATURE_textcodec=ON" # icu?
+    */
+  ];
 }

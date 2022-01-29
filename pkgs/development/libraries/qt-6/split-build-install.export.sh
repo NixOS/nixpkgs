@@ -47,35 +47,30 @@ splitBuildInstallExport() {
   # b: /nix/store/a3vjswd3i42xy5hzxras78z0m40g9jk7xxxxxxxxxxxxx
   #               ^ outHash: 32 chars             ^ suffixEscaped: variable length
 
-  regex="s,("
+  re_grep="("
   isFirst=true
   for o in $outputs; do
     k=${o}Hash
     h=${!k}
-    if $isFirst; then isFirst=false; else regex+='|'; fi
-    regex+=$h
+    if $isFirst; then isFirst=false; else re_grep+='|'; fi
+    re_grep+=$h
   done
-  regex+=")$suffix,\1$suffixEscaped,g w /dev/stdout"
+  re_grep+=")$suffix"
 
-  echo "splitBuildInstallExport: debug: regex = $regex"
+  re_sed="s,$re_grep,\1$suffixEscaped,g"
 
-  # note: the output paths also appear in binary files = *.so, etc
-  # so we use the same length as the original path
-  # tr -d '\0': fix "ignored null byte" when replacing binary files
-  touch $out/splitBuildInstall.patchedFiles.txt
+  echo "splitBuildInstallExport: debug: re_grep = $re_grep"
+  echo "splitBuildInstallExport: debug: re_sed = $re_sed"
+
   (
-    cd $out
-    find . -type f | while read f; do
-      if [ -n "$(sed -i -E "$regex" "$f" | tr -d '\0')" ]; then
-        # file was replaced
-        echo "$f" >>$out/splitBuildInstall.patchedFiles.txt
-      fi
-    done
+    cd "$out"
+    grep -r -l -Z -E "$re_grep" | tee "$out/splitBuildInstall.patchedFiles.txt" | xargs -0 sed -i -E "$re_sed"
   )
-  n=$(wc -l $out/splitBuildInstall.patchedFiles.txt | cut -d' ' -f1)
-  if [ "$n" = '0' ]; then
+
+  n=$(stat -c%s $out/splitBuildInstall.patchedFiles.txt)
+  if [ $n = 0 ]; then
     echo "splitBuildInstallExport: fatal error: no install paths were replaced"
     exit 1
   fi
-  echo "splitBuildInstallExport: replaced install paths in $n files. see $out/splitBuildInstall.patchedFiles.txt"
+  echo "splitBuildInstallExport: replaced install paths. see $out/splitBuildInstall.patchedFiles.txt"
 }

@@ -1,6 +1,5 @@
 { qtModule
 , qtbase
-, libglvnd, libxkbcommon, vulkan-headers # TODO should be inherited from qtbase
 , libwebp
 , jasper
 , libmng
@@ -11,7 +10,7 @@
 qtModule {
   pname = "qtsvg";
   qtInputs = [ qtbase ];
-  buildInputs = [ libwebp jasper libmng zlib libglvnd libxkbcommon vulkan-headers ];
+  buildInputs = [ libwebp jasper libmng zlib ];
   nativeBuildInputs = [ pkg-config ];
   outputs = [ "out" "dev" "bin" ];
 }
