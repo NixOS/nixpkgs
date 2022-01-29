@@ -54,10 +54,14 @@ import ./make-test-python.nix {
                                               assert any([theme["name"] == "thelounge-theme-solarized" for theme in payload["themes"]])
                                             ''}
 
-                                            break
+                                            await ws.send_str("42" + json.dumps(["changelog"]))
                                         elif event == "auth:start":
                                             payload = ["auth:perform", {"user": user, "password": password}]
                                             await ws.send_str("42" + json.dumps(payload))
+                                        elif event == "changelog":
+                                            assert payload["packages"] is False
+
+                                            break
 
 
             asyncio.run(main())
@@ -116,5 +120,8 @@ import ./make-test-python.nix {
     public.succeed("PYTHONUNBUFFERED=1 test-runner")
     private.succeed("PYTHONUNBUFFERED=1 test-runner john password123")
     private.succeed("PYTHONUNBUFFERED=1 test-runner jane password123")
+
+    for command in ["install foo", "uninstall foo", "outdated", "upgrade"]:
+        private.succeed(f"sudo -u thelounge thelounge {command} |& grep NixOS")
   '';
 }
