@@ -9479,7 +9479,7 @@ with pkgs;
 
   sasquatch = callPackage ../tools/filesystems/sasquatch { };
 
-  sasview = callPackage ../applications/science/misc/sasview {};
+  sasview = libsForQt5.callPackage ../applications/science/misc/sasview {};
 
   scallion = callPackage ../tools/security/scallion { };
 
