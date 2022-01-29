@@ -4253,7 +4253,7 @@ with pkgs;
     anthy = callPackage ../tools/inputmethods/ibus-engines/ibus-anthy { };
 
     bamboo = callPackage ../tools/inputmethods/ibus-engines/ibus-bamboo {
-      go = go_1_15;
+      go = go_1_17;
     };
 
     hangul = callPackage ../tools/inputmethods/ibus-engines/ibus-hangul { };
