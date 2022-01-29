@@ -22622,6 +22622,8 @@ with pkgs;
 
   lockdep = callPackage ../os-specific/linux/lockdep { };
 
+  lsirec = callPackage ../os-specific/linux/lsirec { };
+
   lsiutil = callPackage ../os-specific/linux/lsiutil { };
 
   kaitai-struct-compiler = callPackage ../development/compilers/kaitai-struct-compiler { };
