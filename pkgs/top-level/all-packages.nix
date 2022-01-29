@@ -19763,11 +19763,6 @@ with pkgs;
     qt5 = qt512;
   });
 
-  libsForQt62 = recurseIntoAttrs (import ./qt6-packages.nix {
-    inherit lib pkgs;
-    qt6 = qt62;
-  });
-
   libsForQt514 = recurseIntoAttrs (import ./qt5-packages.nix {
     inherit lib pkgs;
     qt5 = qt514;
@@ -19778,9 +19773,17 @@ with pkgs;
     qt5 = qt515;
   });
 
+  libsForQt62 = recurseIntoAttrs (import ./qt6-packages.nix {
+    inherit lib pkgs;
+    qt6 = qt62;
+  });
+
   # TODO bump to 5.14 on darwin once it's not broken; see #95199
   qt5 =        if stdenv.hostPlatform.isDarwin then qt512 else qt515;
   libsForQt5 = if stdenv.hostPlatform.isDarwin then libsForQt512 else libsForQt515;
+
+  qt6 = qt62;
+  libsForQt6 = libsForQt62;
 
   # plasma5Packages maps to the Qt5 packages set that is used to build the plasma5 desktop
   plasma5Packages = libsForQt515;
@@ -19788,8 +19791,8 @@ with pkgs;
   qtEnv = qt5.env;
   qt5Full = qt5.full;
 
-  qt6 = qt62;
-  libsForQt6 = libsForQt62;
+  qt6Env = qt6.env;
+  qt6Full = qt6.full;
 
 
   qtscriptgenerator = callPackage ../development/libraries/qtscriptgenerator { };
@@ -28483,7 +28486,7 @@ with pkgs;
 
   qjackctl = libsForQt5.callPackage ../applications/audio/qjackctl { };
 
-  qimgv = libsForQt6.callPackage ../applications/graphics/qimgv { };
+  qimgv = libsForQt5.callPackage ../applications/graphics/qimgv { };
 
   qlandkartegt = libsForQt514.callPackage ../applications/misc/qlandkartegt {
     gdal = gdal.override {
