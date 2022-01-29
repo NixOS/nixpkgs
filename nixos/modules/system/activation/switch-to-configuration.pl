@@ -2,10 +2,11 @@
 
 use strict;
 use warnings;
+use Array::Compare;
 use Config::IniFiles;
 use File::Path qw(make_path);
 use File::Basename;
-use File::Slurp;
+use File::Slurp qw(read_file write_file edit_file);
 use Net::DBus;
 use Sys::Syslog qw(:standard :macros);
 use Cwd 'abs_path';
@@ -20,12 +21,19 @@ my $restartListFile = "/run/nixos/restart-list";
 my $reloadListFile = "/run/nixos/reload-list";
 
 # Parse restart/reload requests by the activation script.
-# Activation scripts may write newline-separated units to this
+# Activation scripts may write newline-separated units to the restart
 # file and switch-to-configuration will handle them. While
 # `stopIfChanged = true` is ignored, switch-to-configuration will
 # handle `restartIfChanged = false` and `reloadIfChanged = true`.
+# This is the same as specifying a restart trigger in the NixOS module.
+#
+# The reload file asks the script to reload a unit. This is the same as
+# specifying a reload trigger in the NixOS module and can be ignored if
+# the unit is restarted in this activation.
 my $restartByActivationFile = "/run/nixos/activation-restart-list";
+my $reloadByActivationFile = "/run/nixos/activation-reload-list";
 my $dryRestartByActivationFile = "/run/nixos/dry-activation-restart-list";
+my $dryReloadByActivationFile = "/run/nixos/dry-activation-reload-list";
 
 make_path("/run/nixos", { mode => oct(755) });
 
@@ -196,12 +204,88 @@ sub recordUnit {
     write_file($fn, { append => 1 }, "$unit\n") if $action ne "dry-activate";
 }
 
-# As a fingerprint for determining whether a unit has changed, we use
-# its absolute path. If it has an override file, we append *its*
-# absolute path as well.
-sub fingerprintUnit {
-    my ($s) = @_;
-    return abs_path($s) . (-f "${s}.d/overrides.conf" ? " " . abs_path "${s}.d/overrides.conf" : "");
+# The opposite of recordUnit, removes a unit name from a file
+sub unrecord_unit {
+    my ($fn, $unit) = @_;
+    edit_file { s/^$unit\n//msx } $fn if $action ne "dry-activate";
+}
+
+# Compare the contents of two unit files and return whether the unit
+# needs to be restarted or reloaded. If the units differ, the service
+# is restarted unless the only difference is `X-Reload-Triggers` in the
+# `Unit` section. If this is the only modification, the unit is reloaded
+# instead of restarted.
+# Returns:
+# - 0 if the units are equal
+# - 1 if the units are different and a restart action is required
+# - 2 if the units are different and a reload action is required
+sub compare_units {
+    my ($old_unit, $new_unit) = @_;
+    my $comp = Array::Compare->new;
+    my $ret = 0;
+
+    # Comparison hash for the sections
+    my %section_cmp = map { $_ => 1 } keys %{$new_unit};
+    # Iterate over the sections
+    foreach my $section_name (keys %{$old_unit}) {
+        # Missing section in the new unit?
+        if (not exists $section_cmp{$section_name}) {
+            if ($section_name eq 'Unit' and %{$old_unit->{'Unit'}} == 1 and defined(%{$old_unit->{'Unit'}}{'X-Reload-Triggers'})) {
+                # If a new [Unit] section was removed that only contained X-Reload-Triggers,
+                # do nothing.
+                next;
+            } else {
+                return 1;
+            }
+        }
+        delete $section_cmp{$section_name};
+        # Comparison hash for the section contents
+        my %ini_cmp = map { $_ => 1 } keys %{$new_unit->{$section_name}};
+        # Iterate over the keys of the section
+        foreach my $ini_key (keys %{$old_unit->{$section_name}}) {
+            delete $ini_cmp{$ini_key};
+            my @old_value = @{$old_unit->{$section_name}{$ini_key}};
+            # If the key is missing in the new unit, they are different...
+            if (not $new_unit->{$section_name}{$ini_key}) {
+                # ... unless the key that is now missing was the reload trigger
+                if ($section_name eq 'Unit' and $ini_key eq 'X-Reload-Triggers') {
+                    next;
+                }
+                return 1;
+            }
+            my @new_value = @{$new_unit->{$section_name}{$ini_key}};
+            # If the contents are different, the units are different
+            if (not $comp->compare(\@old_value, \@new_value)) {
+                # Check if only the reload triggers changed
+                if ($section_name eq 'Unit' and $ini_key eq 'X-Reload-Triggers') {
+                    $ret = 2;
+                } else {
+                    return 1;
+                }
+            }
+        }
+        # A key was introduced that was missing in the old unit
+        if (%ini_cmp) {
+            if ($section_name eq 'Unit' and %ini_cmp == 1 and defined($ini_cmp{'X-Reload-Triggers'})) {
+                # If the newly introduced key was the reload triggers, reload the unit
+                $ret = 2;
+            } else {
+                return 1;
+            }
+        };
+    }
+    # A section was introduced that was missing in the old unit
+    if (%section_cmp) {
+        if (%section_cmp == 1 and defined($section_cmp{'Unit'}) and %{$new_unit->{'Unit'}} == 1 and defined(%{$new_unit->{'Unit'}}{'X-Reload-Triggers'})) {
+            # If a new [Unit] section was introduced that only contains X-Reload-Triggers,
+            # reload instead of restarting
+            $ret = 2;
+        } else {
+            return 1;
+        }
+    }
+
+    return $ret;
 }
 
 sub handleModifiedUnit {
@@ -224,7 +308,7 @@ sub handleModifiedUnit {
         # More details: https://github.com/NixOS/nixpkgs/issues/74899#issuecomment-981142430
     } else {
         my %unitInfo = $newUnitInfo ? %{$newUnitInfo} : parseUnit($newUnitFile);
-        if (parseSystemdBool(\%unitInfo, "Service", "X-ReloadIfChanged", 0)) {
+        if (parseSystemdBool(\%unitInfo, "Service", "X-ReloadIfChanged", 0) and not $unitsToRestart->{$unit} and not $unitsToStop->{$unit}) {
             $unitsToReload->{$unit} = 1;
             recordUnit($reloadListFile, $unit);
         }
@@ -238,6 +322,11 @@ sub handleModifiedUnit {
                 # stopped and started.
                 $unitsToRestart->{$unit} = 1;
                 recordUnit($restartListFile, $unit);
+                # Remove from units to reload so we don't restart and reload
+                if ($unitsToReload->{$unit}) {
+                    delete $unitsToReload->{$unit};
+                    unrecord_unit($reloadListFile, $unit);
+                }
             } else {
                 # If this unit is socket-activated, then stop the
                 # socket unit(s) as well, and restart the
@@ -258,6 +347,11 @@ sub handleModifiedUnit {
                                 recordUnit($startListFile, $socket);
                                 $socketActivated = 1;
                             }
+                            # Remove from units to reload so we don't restart and reload
+                            if ($unitsToReload->{$unit}) {
+                                delete $unitsToReload->{$unit};
+                                unrecord_unit($reloadListFile, $unit);
+                            }
                         }
                     }
                 }
@@ -272,6 +366,11 @@ sub handleModifiedUnit {
                 }
 
                 $unitsToStop->{$unit} = 1;
+                # Remove from units to reload so we don't restart and reload
+                if ($unitsToReload->{$unit}) {
+                    delete $unitsToReload->{$unit};
+                    unrecord_unit($reloadListFile, $unit);
+                }
             }
         }
     }
@@ -348,8 +447,16 @@ while (my ($unit, $state) = each %{$activePrev}) {
             }
         }
 
-        elsif (fingerprintUnit($prevUnitFile) ne fingerprintUnit($newUnitFile)) {
-            handleModifiedUnit($unit, $baseName, $newUnitFile, undef, $activePrev, \%unitsToStop, \%unitsToStart, \%unitsToReload, \%unitsToRestart, \%unitsToSkip);
+        else {
+            my %old_unit_info = parseUnit($prevUnitFile);
+            my %new_unit_info = parseUnit($newUnitFile);
+            my $diff = compare_units(\%old_unit_info, \%new_unit_info);
+            if ($diff eq 1) {
+                handleModifiedUnit($unit, $baseName, $newUnitFile, \%new_unit_info, $activePrev, \%unitsToStop, \%unitsToStart, \%unitsToReload, \%unitsToRestart, \%unitsToSkip);
+            } elsif ($diff eq 2 and not $unitsToRestart{$unit}) {
+                $unitsToReload{$unit} = 1;
+                recordUnit($reloadListFile, $unit);
+            }
         }
     }
 }
@@ -363,17 +470,6 @@ sub pathToUnitName {
     chomp $escaped;
     close $cmd or die;
     return $escaped;
-}
-
-sub unique {
-    my %seen;
-    my @res;
-    foreach my $name (@_) {
-        next if $seen{$name};
-        $seen{$name} = 1;
-        push @res, $name;
-    }
-    return @res;
 }
 
 # Compare the previous and new fstab to figure out which filesystems
@@ -477,6 +573,16 @@ if ($action eq "dry-activate") {
     }
     unlink($dryRestartByActivationFile);
 
+    foreach (split('\n', read_file($dryReloadByActivationFile, err_mode => 'quiet') // "")) {
+        my $unit = $_;
+
+        if (defined($activePrev->{$unit}) and not $unitsToRestart{$unit} and not $unitsToStop{$unit}) {
+            $unitsToReload{$unit} = 1;
+            recordUnit($reloadListFile, $unit);
+        }
+    }
+    unlink($dryReloadByActivationFile);
+
     print STDERR "would restart systemd\n" if $restartSystemd;
     print STDERR "would reload the following units: ", join(", ", sort(keys %unitsToReload)), "\n"
         if scalar(keys %unitsToReload) > 0;
@@ -533,6 +639,17 @@ foreach (split('\n', read_file($restartByActivationFile, err_mode => 'quiet') //
 }
 # We can remove the file now because it has been propagated to the other restart/reload files
 unlink($restartByActivationFile);
+
+foreach (split('\n', read_file($reloadByActivationFile, err_mode => 'quiet') // "")) {
+    my $unit = $_;
+
+    if (defined($activePrev->{$unit}) and not $unitsToRestart{$unit} and not $unitsToStop{$unit}) {
+        $unitsToReload{$unit} = 1;
+        recordUnit($reloadListFile, $unit);
+    }
+}
+# We can remove the file now because it has been propagated to the other reload file
+unlink($reloadByActivationFile);
 
 # Restart systemd if necessary. Note that this is done using the
 # current version of systemd, just in case the new one has trouble
