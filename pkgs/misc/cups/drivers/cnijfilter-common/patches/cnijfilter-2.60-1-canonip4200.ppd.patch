@@ -1,0 +1,230 @@
+--- a/ppd/canonip4200.ppd	2006-03-06 10:36:49.000000000 +0100
++++ b/ppd/canonip4200.ppd	2006-08-29 09:13:00.000000000 +0200
+@@ -43,7 +43,7 @@
+ *cupsFilter: "application/vnd.cups-postscript 0 pstocanonij"
+ *cupsManualCopies: True
+ *cupsModelNumber: 260
+-*cupsVersion: 1.1
++*cupsVersion: 1.2
+ 
+ *MaxMediaWidth: "612"
+ *MaxMediaHeight: "1656"
+@@ -81,6 +81,26 @@
+ *PageSize creditcard/Credit Card 2.13x3.39in 54x86mm: "<</CNPageSizeName(creditcard)/PageSize[153 244]/ImagingBBox null>>setpagedevice"
+ *PageSize businesscard/Card 2.16x3.58in 55x91mm: "<</CNPageSizeName(businesscard)/PageSize[156 256]/ImagingBBox null>>setpagedevice"
+ *PageSize panorama/P 89x254mm: "<</CNPageSizeName(panorama)/PageSize[252 720]/ImagingBBox null>>setpagedevice"
++*PageSize Letter.bl/Letter borderless: "<</CNPageSizeName(letter)/PageSize[612 792]/ImagingBBox null>>setpagedevice"
++*PageSize Legal.bl/Legal borderless: "<</CNPageSizeName(legal)/PageSize[612 1008]/ImagingBBox null>>setpagedevice"
++*PageSize A5.bl/A5 borderless: "<</CNPageSizeName(a5)/PageSize[420 595]/ImagingBBox null>>setpagedevice"
++*PageSize A4.bl/A4 borderless: "<</CNPageSizeName(a4)/PageSize[595 842]/ImagingBBox null>>setpagedevic"
++*PageSize B5.bl/B5 borderless: "<</CNPageSizeName(b5)/PageSize[516 729]/ImagingBBox null>>setpagedevice"
++*PageSize 4X6.bl/4x6in borderless 101.6x152.4mm: "<</CNPageSizeName(4X6)/PageSize[288 432]/ImagingBBox null>>setpagedevice"
++*PageSize 4X8.bl/4x8in borderless 101.6x203.2mm: "<</CNPageSizeName(4X8)/PageSize[288 576]/ImagingBBox null>>setpagedevice"
++*PageSize 5X7.bl/5x7in borderless 127.0x177.8mm: "<</CNPageSizeName(5X7)/PageSize[360 504]/ImagingBBox null>>setpagedevice"
++*PageSize 8X10.bl/8x10in borderless 203.2x254.0mm: "<</CNPageSizeName(8X10)/PageSize[576 720]/ImagingBBox null>>setpagedevice"
++*PageSize l.bl/L borderless 89x127mm: "<</CNPageSizeName(l)/PageSize[252 360]/ImagingBBox null>>setpagedevice"
++*PageSize 2l.bl/2L borderless 127x178mm: "<</CNPageSizeName(2l)/PageSize[360 505]/ImagingBBox null>>setpagedevice"
++*PageSize postcard.bl/Hagaki borderless 100x148mm: "<</CNPageSizeName(postcard)/PageSize[283 420]/ImagingBBox null>>setpagedevice"
++*PageSize postdbl.bl/Hagaki 2 borderless 148x200mm: "<</CNPageSizeName(postdbl)/PageSize[567 420]/ImagingBBox null>>setpagedevice"
++*PageSize envelop10p.bl/Comm. Env. #10 borderless: "<</CNPageSizeName(envelop10p)/PageSize[297 684]/ImagingBBox null>>setpagedevice"
++*PageSize envelopdlp.bl/DL Env. borderless: "<</CNPageSizeName(envelopdlp)/PageSize[312 624]/ImagingBBox null>>setpagedevice"
++*PageSize envj4p.bl/Youkei 4 borderless 105.5x235mm: "<</CNPageSizeName(envj4p)/PageSize[298 666]/ImagingBBox null>>setpagedevice"
++*PageSize envj6p.bl/Youkei 6 borderless 98x190mm: "<</CNPageSizeName(envj6p)/PageSize[278 539]/ImagingBBox null>>setpagedevice"
++*PageSize creditcard.bl/Credit Card borderless 2.13x3.39in 54x86mm: "<</CNPageSizeName(creditcard)/PageSize[153 244]/ImagingBBox null>>setpagedevice"
++*PageSize businesscard.bl/Card borderless 2.16x3.58in 55x91mm: "<</CNPageSizeName(businesscard)/PageSize[156 256]/ImagingBBox null>>setpagedevice"
++*PageSize panorama.bl/P borderless 89x254mm: "<</CNPageSizeName(panorama)/PageSize[252 720]/ImagingBBox null>>setpagedevice"
+ *CloseUI: *PageSize
+ 
+ *OpenUI *PageRegion: PickOne
+@@ -105,6 +125,26 @@
+ *PageRegion creditcard/Credit Card 2.13x3.39in 54x86mm: "<</CNPageSizeName(creditcard)/PageSize[153 244]/ImagingBBox null>>setpagedevice"
+ *PageRegion businesscard/Card 2.16x3.58in 55x91mm: "<</CNPageSizeName(businesscard)/PageSize[156 256]/ImagingBBox null>>setpagedevice"
+ *PageRegion panorama/P 89x254mm: "<</CNPageSizeName(panorama)/PageSize[252 720]/ImagingBBox null>>setpagedevice"
++*PageRegion Letter.bl/Letter borderless: "<</CNPageSizeName(letter)/PageSize[612 792]/ImagingBBox null>>setpagedevice"
++*PageRegion Legal.bl/Legal borderless: "<</CNPageSizeName(legal)/PageSize[612 1008]/ImagingBBox null>>setpagedevice"
++*PageRegion A5.bl/A5 borderless: "<</CNPageSizeName(a5)/PageSize[420 595]/ImagingBBox null>>setpagedevice"
++*PageRegion A4.bl/A4 borderless: "<</CNPageSizeName(a4)/PageSize[595 842]/ImagingBBox null>>setpagedevice"
++*PageRegion B5.bl/B5 borderless: "<</CNPageSizeName(b5)/PageSize[516 729]/ImagingBBox null>>setpagedevice"
++*PageRegion 4X6.bl/4x6in borderless 101.6x152.4mm: "<</CNPageSizeName(4X6)/PageSize[288 432]/ImagingBBox null>>setpagedevice"
++*PageRegion 4X8.bl/4x8in borderless 101.6x203.2mm: "<</CNPageSizeName(4X8)/PageSize[288 576]/ImagingBBox null>>setpagedevice"
++*PageRegion 5X7.bl/5x7in borderless 127.0x177.8mm: "<</CNPageSizeName(5X7)/PageSize[360 504]/ImagingBBox null>>setpagedevice"
++*PageRegion 8X10.bl/8x10in borderless 203.2x254.0mm: "<</CNPageSizeName(8X10)/PageSize[576 720]/ImagingBBox null>>setpagedevice"
++*PageRegion l.bl/L borderless 89x127mm: "<</CNPageSizeName(l)/PageSize[252 360]/ImagingBBox null>>setpagedevice"
++*PageRegion 2l.bl/2L borderless 127x178mm: "<</CNPageSizeName(2l)/PageSize[360 505]/ImagingBBox null>>setpagedevice"
++*PageRegion postcard.bl/Hagaki borderless 100x148mm: "<</CNPageSizeName(postcard)/PageSize[283 420]/ImagingBBox null>>setpagedevice"
++*PageRegion postdbl.bl/Hagaki 2 borderless 148x200mm: "<</CNPageSizeName(postdbl)/PageSize[567 420]/ImagingBBox null>>setpagedevice"
++*PageRegion envelop10p.bl/Comm. Env. #10 borderless: "<</CNPageSizeName(envelop10p)/PageSize[297 684]/ImagingBBox null>>setpagedevice"
++*PageRegion envelopdlp.bl/DL Env. borderless: "<</CNPageSizeName(envelopdlp)/PageSize[312 624]/ImagingBBox null>>setpagedevice"
++*PageRegion envj4p.bl/Youkei 4 borderless 105.5x235mm: "<</CNPageSizeName(envj4p)/PageSize[298 666]/ImagingBBox null>>setpagedevice"
++*PageRegion envj6p.bl/Youkei 6 borderless 98x190mm: "<</CNPageSizeName(envj6p)/PageSize[278 539]/ImagingBBox null>>setpagedevice"
++*PageRegion creditcard.bl/Credit Card borderless 2.13x3.39in 54x86mm: "<</CNPageSizeName(creditcard)/PageSize[153 244]/ImagingBBox null>>setpagedevice"
++*PageRegion businesscard.bl/Card borderless 2.16x3.58in 55x91mm: "<</CNPageSizeName(businesscard)/PageSize[156 256]/ImagingBBox null>>setpagedevice"
++*PageRegion panorama.bl/P borderless 89x254mm: "<</CNPageSizeName(panorama)/PageSize[252 720]/ImagingBBox null>>setpagedevice"
+ *CloseUI: *PageRegion
+ 
+ *OpenUI *MediaType/Media Type: PickOne
+@@ -141,8 +181,109 @@
+ *OpenUI *Resolution/Output Resolution: PickOne
+ *DefaultResolution: 600
+ *Resolution 600/600 dpi: "<</HWResolution[600 600]>>setpagedevice"
++*Resolution 1200/1200 dpi: "<</HWResolution[1200 1200]>>setpagedevice"
++*Resolution 2400/2400 dpi: "<</HWResolution[2400 2400]>>setpagedevice"
+ *CloseUI: *Resolution
+ 
++*OpenUI *CNQuality/Quality: PickOne
++*DefaultCNQuality: 2
++*CNQuality 2/High: "2"
++*CNQuality 3/Normal: "3"
++*CNQuality 4/Standard: "4"
++*CNQuality 5/Economy: "5"
++*CloseUI: *CNQuality
++
++*OpenUI *CNGamma/Gamma Adjustment: PickOne
++*DefaultCNGamma: 1.8
++*CNGamma 1.4/1.4: "<</CNGamma(1.4)>>setpagedevice"
++*CNGamma 1.8/1.8: "<</CNGamma(1.8)>>setpagedevice"
++*CNGamma 2.2/2.2: "<</CNGamma(2.2)>>setpagedevice"
++*CloseUI: *CNRenderIntent
++
++*OpenGroup: Color Adjustment
++
++*OpenUI *ColorModel/Color Model: PickOne
++*DefaultColorModel: rgb
++*ColorModel rgb/RGB: "<</cupsColorOrder 0/cupsColorSpace 1/cupsCompression 0/cupsBitsPerColor 8>>setpagedevice"
++*CloseUI: *ColorModel
++
++*OpenUI *CNBalanceC/Balance Cyan: PickOne
++*DefaultCNBalanceC: 0
++*CNBalanceC -50/-50: "<</CNBalanceC(-50)>>setpagedevice"
++*CNBalanceC -40/-40: "<</CNBalanceC(-40)>>setpagedevice"
++*CNBalanceC -30/-30: "<</CNBalanceC(-30)>>setpagedevice"
++*CNBalanceC -20/-20: "<</CNBalanceC(-20)>>setpagedevice"
++*CNBalanceC -10/-10: "<</CNBalanceC(-10)>>setpagedevice"
++*CNBalanceC 0/0: "<</CNBalanceC(0)>>setpagedevice"
++*CNBalanceC 10/10: "<</CNBalanceC(10)>>setpagedevice"
++*CNBalanceC 20/20: "<</CNBalanceC(20)>>setpagedevice"
++*CNBalanceC 30/30: "<</CNBalanceC(30)>>setpagedevice"
++*CNBalanceC 40/40: "<</CNBalanceC(40)>>setpagedevice"
++*CNBalanceC 50/50: "<</CNBalanceC(50)>>setpagedevice"
++*CloseUI: *CNBalanceC
++
++*OpenUI *CNBalanceM/Balance Magenta: PickOne
++*DefaultCNBalanceM: 0
++*CNBalanceM -50/-50: "<</CNBalanceM(-50)>>setpagedevice"
++*CNBalanceM -40/-40: "<</CNBalanceM(-40)>>setpagedevice"
++*CNBalanceM -30/-30: "<</CNBalanceM(-30)>>setpagedevice"
++*CNBalanceM -20/-20: "<</CNBalanceM(-20)>>setpagedevice"
++*CNBalanceM -10/-10: "<</CNBalanceM(-10)>>setpagedevice"
++*CNBalanceM 0/0: "<</CNBalanceM(0)>>setpagedevice"
++*CNBalanceM 10/10: "<</CNBalanceM(10)>>setpagedevice"
++*CNBalanceM 20/20: "<</CNBalanceM(20)>>setpagedevice"
++*CNBalanceM 30/30: "<</CNBalanceM(30)>>setpagedevice"
++*CNBalanceM 40/40: "<</CNBalanceM(40)>>setpagedevice"
++*CNBalanceM 50/50: "<</CNBalanceM(50)>>setpagedevice"
++*CloseUI: *CNBalanceM
++
++*OpenUI *CNBalanceY/Balance Yellow: PickOne
++*DefaultCNBalanceY: 0
++*CNBalanceY -50/-50: "<</CNBalanceY(-50)>>setpagedevice"
++*CNBalanceY -40/-40: "<</CNBalanceY(-40)>>setpagedevice"
++*CNBalanceY -30/-30: "<</CNBalanceY(-30)>>setpagedevice"
++*CNBalanceY -20/-20: "<</CNBalanceY(-20)>>setpagedevice"
++*CNBalanceY -10/-10: "<</CNBalanceY(-10)>>setpagedevice"
++*CNBalanceY 0/0: "<</CNBalanceY(0)>>setpagedevice"
++*CNBalanceY 10/10: "<</CNBalanceY(10)>>setpagedevice"
++*CNBalanceY 20/20: "<</CNBalanceY(20)>>setpagedevice"
++*CNBalanceY 30/30: "<</CNBalanceY(30)>>setpagedevice"
++*CNBalanceY 40/40: "<</CNBalanceY(40)>>setpagedevice"
++*CNBalanceY 50/50: "<</CNBalanceY(50)>>setpagedevice"
++*CloseUI: *CNBalanceY
++
++*OpenUI *CNBalanceK/Balance Black: PickOne
++*DefaultCNBalanceK: 0
++*CNBalanceK -50/-50: "<</CNBalanceK(-50)>>setpagedevice"
++*CNBalanceK -40/-40: "<</CNBalanceK(-40)>>setpagedevice"
++*CNBalanceK -30/-30: "<</CNBalanceK(-30)>>setpagedevice"
++*CNBalanceK -20/-20: "<</CNBalanceK(-20)>>setpagedevice"
++*CNBalanceK -10/-10: "<</CNBalanceK(-10)>>setpagedevice"
++*CNBalanceK 0/0: "<</CNBalanceK(0)>>setpagedevice"
++*CNBalanceK 10/10: "<</CNBalanceK(10)>>setpagedevice"
++*CNBalanceK 20/20: "<</CNBalanceK(20)>>setpagedevice"
++*CNBalanceK 30/30: "<</CNBalanceK(30)>>setpagedevice"
++*CNBalanceK 40/40: "<</CNBalanceK(40)>>setpagedevice"
++*CNBalanceK 50/50: "<</CNBalanceK(50)>>setpagedevice"
++*CloseUI: *CNBalanceK
++
++*OpenUI *CNDensity/Density: PickOne
++*DefaultCNDensity: 0
++*CNDensity -50/-50: "<</CNDensity(-50)>>setpagedevice"
++*CNDensity -40/-40: "<</CNDensity(-40)>>setpagedevice"
++*CNDensity -30/-30: "<</CNDensity(-30)>>setpagedevice"
++*CNDensity -20/-20: "<</CNDensity(-20)>>setpagedevice"
++*CNDensity -10/-10: "<</CNDensity(-10)>>setpagedevice"
++*CNDensity 0/0: "<</CNDensity(0)>>setpagedevice"
++*CNDensity 10/10: "<</CNDensity(10)>>setpagedevice"
++*CNDensity 20/20: "<</CNDensity(20)>>setpagedevice"
++*CNDensity 30/30: "<</CNDensity(30)>>setpagedevice"
++*CNDensity 40/40: "<</CNDensity(40)>>setpagedevice"
++*CNDensity 50/50: "<</CNDensity(50)>>setpagedevice"
++*CloseUI: *CNDensity
++
++*CloseGroup: Color Adjustment
++
+ *OpenUI *ColorModel/Color Model: PickOne
+ *DefaultColorModel: rgb
+ *ColorModel rgb/RGB: "<</cupsColorOrder 0/cupsColorSpace 1/cupsCompression 0/cupsBitsPerColor 8>>setpagedevice"
+@@ -169,6 +310,26 @@
+ *ImageableArea creditcard: "9.64 14.17 143.43 235.28"
+ *ImageableArea businesscard: "9.64 14.17 146.27 249.45"
+ *ImageableArea panorama: "9.64 14.17 242.65 711.50"
++*ImageableArea Letter.bl: "0 0 612 792"
++*ImageableArea Legal.bl: "0 0 612 1008"
++*ImageableArea A5.bl: "0 0 420 595"
++*ImageableArea A4.bl: "0 0 595 842"
++*ImageableArea B5.bl: "0 0 516 729"
++*ImageableArea 4X6.bl: "0 0 288 432"
++*ImageableArea 4X8.bl: "0 0 288 576"
++*ImageableArea 5X7.bl: "0 0 360 504"
++*ImageableArea 8X10.bl: "0 0 576 720"
++*ImageableArea l.bl: "0 0 252 360"
++*ImageableArea 2l.bl: "0 0 360 505"
++*ImageableArea postcard.bl: "0 0 283 420"
++*ImageableArea postdbl.bl: "0 0 567 420"
++*ImageableArea envelop10p.bl: "0 0 297 684"
++*ImageableArea envelopdlp.bl: "0 0 312 624"
++*ImageableArea envj4p.bl: "0 0 298 666"
++*ImageableArea envj6p.bl: "0 0 278 539"
++*ImageableArea creditcard.bl: "0 0 153 244"
++*ImageableArea businesscard.bl: "0 0 156 28"
++*ImageableArea panorama.bl: "0 0 252 720"
+ 
+ *DefaultPaperDimension: A4
+ *PaperDimension Letter: "612 792"
+@@ -191,6 +352,26 @@
+ *PaperDimension creditcard: "153 244"
+ *PaperDimension businesscard: "156 258"
+ *PaperDimension panorama: "252 720"
++*PaperDimension Letter.bl: "612 792"
++*PaperDimension Legal.bl: "612 1008"
++*PaperDimension A5.bl: "420 595"
++*PaperDimension A4.bl: "595 842"
++*PaperDimension B5.bl: "516 729"
++*PaperDimension 4X6.bl: "288 432"
++*PaperDimension 4X8.bl: "288 576"
++*PaperDimension 5X7.bl: "360 504"
++*PaperDimension 8X10.bl: "576 720"
++*PaperDimension l.bl: "252 360"
++*PaperDimension 2l.bl: "360 505"
++*PaperDimension postcard.bl: "283 420"
++*PaperDimension postdbl.bl: "567 420"
++*PaperDimension envelop10p.bl: "297 684"
++*PaperDimension envelopdlp.bl: "312 624"
++*PaperDimension envj4p.bl: "298 666"
++*PaperDimension envj6p.bl: "278 539"
++*PaperDimension creditcard.bl: "153 244"
++*PaperDimension businesscard.bl: "156 258"
++*PaperDimension panorama.bl: "252 720"
+ 
+ *%CNPpdToOptKey PageSize       --papersize
+ *%CNPpdToOptKey MediaType      --media
+

@@ -1,0 +1,11 @@
+--- a/cngpijmon/cnijnpr/cnijnpr/Makefile.am	2015-04-15 21:38:21.633948632 +0200
++++ b/cngpijmon/cnijnpr/cnijnpr/Makefile.am	2015-04-15 21:38:58.621948359 +0200
+@@ -5,7 +5,7 @@
+ cnijnpr_SOURCES=\
+ 	cnijnpr.c
+ 
+-cnijnpr_LDADD = -lcnnet -lbscc2sts
++cnijnpr_LDADD = -lcnnet -lbscc2sts -ldl
+ cnijnpr_LDFLAGS = -L../../../com/libs_bin -L../../../lgmon/src
+ 
+ #AM_CFLAGS= -O2 -Wall
