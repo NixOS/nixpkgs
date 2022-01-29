@@ -200,6 +200,8 @@ with pkgs;
 
   fission = callPackage ../development/tools/fission { };
 
+  appthreat-depscan = callPackage ../development/tools/appthreat-depscan { };
+
   authy = callPackage ../applications/misc/authy { };
 
   avro-tools = callPackage ../development/tools/avro-tools { };
@@ -1764,7 +1766,7 @@ with pkgs;
   genymotion = callPackage ../development/mobile/genymotion { };
 
   galene = callPackage ../servers/web-apps/galene {
-    buildGoModule = buildGo115Module;
+    buildGoModule = buildGo117Module;
   };
 
   gamecube-tools = callPackage ../development/tools/gamecube-tools { };
@@ -8089,11 +8091,6 @@ with pkgs;
   # with different versions we pin Go for all versions.
   # Upstream partially documents used Go versions here
   # https://github.com/hashicorp/nomad/blob/master/contributing/golang.md
-  nomad_1_0 = callPackage ../applications/networking/cluster/nomad/1.0.nix {
-    buildGoPackage = buildGo115Package;
-    inherit (linuxPackages) nvidia_x11;
-    nvidiaGpuSupport = config.cudaSupport or false;
-  };
   nomad_1_1 = callPackage ../applications/networking/cluster/nomad/1.1.nix {
     buildGoModule = buildGo116Module;
     inherit (linuxPackages) nvidia_x11;
@@ -20232,7 +20229,7 @@ with pkgs;
   triehash = callPackage ../tools/misc/triehash { };
 
   trillian = callPackage ../tools/misc/trillian {
-    buildGoModule = buildGo115Module;
+    buildGoModule = buildGo117Module;
   };
 
   twolame = callPackage ../development/libraries/twolame { };
@@ -26784,7 +26781,7 @@ with pkgs;
   kubebuilder = callPackage ../applications/networking/cluster/kubebuilder { };
 
   kuttl = callPackage ../applications/networking/cluster/kuttl {
-    buildGoModule = buildGo115Module;
+    buildGoModule = buildGo117Module;
   };
 
   kubectl-doctor = callPackage ../applications/networking/cluster/kubectl-doctor { };

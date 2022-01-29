@@ -566,6 +566,8 @@ in {
 
   apptools = callPackage ../development/python-modules/apptools { };
 
+  appthreat-vulnerability-db = callPackage ../development/python-modules/appthreat-vulnerability-db { };
+
   aprslib = callPackage ../development/python-modules/aprslib { };
 
   APScheduler = callPackage ../development/python-modules/APScheduler { };
