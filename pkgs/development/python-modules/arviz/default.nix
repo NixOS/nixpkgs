@@ -12,8 +12,10 @@
 , cloudpickle
 , scipy
 , setuptools
+, typing-extensions
 # , tensorflow-probability (incompatible version)
 , xarray
+, zarr
 , h5py
 #, pymc3 (broken)
 #, pyro-ppl (broken)
@@ -46,12 +48,18 @@ buildPythonPackage rec {
     scipy
   ];
 
+  postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace "typing_extensions>=3.7.4.3,<4" "typing_extensions>=3.7.4.3"
+  '';
+
   checkInputs = [
     bokeh
     emcee
     numba
     pytest
     cloudpickle
+    zarr
     #tensorflow-probability (used by disabled tests)
     h5py
     #pymc3 (broken, used by disabled tests)
@@ -83,6 +91,7 @@ buildPythonPackage rec {
       base_tests/test_stats_utils.py \
       base_tests/test_utils.py \
       base_tests/test_utils_numba.py \
+      base_tests/test_data_zarr.py \
       external_tests/test_data_cmdstan.py \
       external_tests/test_data_emcee.py
   '';
