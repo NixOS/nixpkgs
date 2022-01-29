@@ -14,6 +14,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-rVgpk9Us21+xWaC+q2CmrFfqsMwb34XcTbbWGX8CMz8=";
   };
 
+  patches = [
+    ./alsa-plugin-conf-multilib.patch
+  ];
+
   enableParallelBuilding = true;
 
   postInstall = ''
