@@ -1,4 +1,5 @@
 { config, lib, stdenv, fetchurl, zlib, lzo, libtasn1, nettle, pkg-config, lzip
+, fetchpatch
 , perl, gmp, autoconf, automake, libidn, p11-kit, libiconv
 , unbound, dns-root-data, gettext, util-linux
 , guileBindings ? config.gnutls.guile or false, guile
@@ -31,7 +32,14 @@ stdenv.mkDerivation rec {
   outputInfo = "devdoc";
   outputDoc  = "devdoc";
 
-  patches = [ ./nix-ssl-cert-file.patch ]
+  patches = [
+    ./nix-ssl-cert-file.patch
+    (fetchpatch {
+      name = "GNUTLS-SA-2022-01-17.diff"; # no CVE number (yet)
+      url = "https://gitlab.com/gnutls/gnutls/-/commit/22f837ba0bc7d13c3d738a8583566368fc12aee1.diff";
+      sha256 = "bLutc0Uc64B7MiR/dxZuE9zUkHQjjtUO1cSa4ODfuwQ=";
+    })
+  ]
     # Disable native add_system_trust.
     ++ lib.optional (isDarwin && !withSecurity) ./no-security-framework.patch;
 

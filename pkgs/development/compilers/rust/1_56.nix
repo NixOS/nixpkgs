@@ -17,6 +17,7 @@
 , makeRustPlatform
 , llvmPackages_11
 , llvmPackages_13, llvm_13
+, fetchpatch
 } @ args:
 
 import ./default.nix {
@@ -57,6 +58,23 @@ import ./default.nix {
   selectRustPackage = pkgs: pkgs.rust_1_56;
 
   rustcPatches = [
+    # Patch 0001 was skipped as it doesn't apply cleanly and affects Windows-only code.
+    (fetchpatch {
+      name = "0002-CVE-2022-21658.patch";
+      url = "https://raw.githubusercontent.com/rust-lang/wg-security-response/240384a5fd494d4f8167c0ffa8ef566661003d8a/patches/CVE-2022-21658/0002-Fix-CVE-2022-21658-for-UNIX-like.patch";
+      sha256 = "0gwjp7clh52mg2pps44awwpdq9zq2nci8q97jaljis7h16yx3ra7";
+    })
+    (fetchpatch {
+      name = "0003-CVE-2022-21658.patch";
+      url = "https://raw.githubusercontent.com/rust-lang/wg-security-response/240384a5fd494d4f8167c0ffa8ef566661003d8a/patches/CVE-2022-21658/0003-Fix-CVE-2022-21658-for-WASI.patch";
+      sha256 = "01d77a15gikzkql4q6y43bx1cx8hy8n71v1qmlnzp7wg40v78xrp";
+    })
+    (fetchpatch {
+      name = "0004-CVE-2022-21658.patch";
+      url = "https://raw.githubusercontent.com/rust-lang/wg-security-response/240384a5fd494d4f8167c0ffa8ef566661003d8a/patches/CVE-2022-21658/0004-Update-std-fs-remove_dir_all-documentation.patch";
+      sha256 = "08afz21m1k12245q1jg813cnwl8gc95ajbzqn6mwlppqhhi4wdq2";
+    })
+    # Patch 0005 was skipped as it doesn't apply cleanly and only affects platforms that aren't Linux.
   ];
 }
 
