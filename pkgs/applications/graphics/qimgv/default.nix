@@ -2,15 +2,13 @@
 , lib
 , fetchFromGitHub
 , fetchpatch
-
 , cmake
 , pkg-config
-
 , exiv2
 , mpv
 , opencv4
 , qtbase
-, libglvnd, libxkbcommon, vulkan-headers # TODO should be inherited from qtbase
+, wrapQtAppsHook
 , qtwayland
 , qt5compat
 , qtimageformats
@@ -22,24 +20,23 @@ mkDerivation rec {
   version = "1.0.2";
 
   src = fetchFromGitHub {
-    name = "${pname}-${version}-source";
     owner = "easymodo";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-YlV/ysm7bdPverpKpanrL+jPVvMtP1paoAm0PREMaww=";
+    sha256 = "YlV/ysm7bdPverpKpanrL+jPVvMtP1paoAm0PREMaww=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
+    wrapQtAppsHook
   ];
 
-  buildInputs = [
+  propagatedBuildInputs = [
     exiv2
     mpv
     opencv4
     qtbase
-    libglvnd libxkbcommon vulkan-headers
     qtwayland
     qt5compat
     qtimageformats
@@ -61,14 +58,6 @@ mkDerivation rec {
   qtWrapperArgs = [
     "--prefix LD_LIBRARY_PATH : ${placeholder "out"}/lib"
   ];
-
-  # FIXME qt6: set this automatically when adding buildInputs = [ qtsvg qt5compat ]
-  preConfigure = ''
-    export QT_ADDITIONAL_PACKAGES_PREFIX_PATH="${qtsvg.dev}:${qt5compat.dev}"
-  '';
-
-  # FIXME qt.qpa.plugin: Could not find the Qt platform plugin "wayland" in ""
-  # "" should be the QT_PLUGIN_PATH, which is set in the wrapper for qimgv
 
   meta = with lib; {
     description = "A Qt image viewer with optional video support";
