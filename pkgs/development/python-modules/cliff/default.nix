@@ -3,11 +3,14 @@
 , fetchPypi
 , autopage
 , cmd2
+, installShellFiles
+, openstackdocstheme
 , pbr
 , prettytable
 , pyparsing
 , pyyaml
 , stevedore
+, sphinx
 , callPackage
 }:
 
@@ -26,6 +29,12 @@ buildPythonPackage rec {
     rm test-requirements.txt
   '';
 
+  nativeBuildInputs = [
+    installShellFiles
+    openstackdocstheme
+    sphinx
+  ];
+
   propagatedBuildInputs = [
     autopage
     cmd2
@@ -35,6 +44,11 @@ buildPythonPackage rec {
     pyyaml
     stevedore
   ];
+
+  postInstall = ''
+    sphinx-build -a -E -d doc/build/doctrees -b man doc/source doc/build/man
+    installManPage doc/build/man/cliff.1
+  '';
 
   # check in passthru.tests.pytest to escape infinite recursion with stestr
   doCheck = false;
