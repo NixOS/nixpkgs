@@ -92,6 +92,10 @@ in {
         "default_config"
         "met"
         "esphome"
+      ] ++ optionals (pkgs.stdenv.hostPlatform.isAarch32 || pkgs.stdenv.hostPlatform.isAarch64) [
+        # Use the platform as an indicator that we might be running on a RaspberryPi and include
+        # relevant components
+        "rpi_power"
       ];
       example = literalExpression ''
         [
