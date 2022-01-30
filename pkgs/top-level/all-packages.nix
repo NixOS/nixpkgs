@@ -2485,7 +2485,9 @@ with pkgs;
 
   cassowary = callPackage ../tools/networking/cassowary { };
 
-  croc = callPackage ../tools/networking/croc { };
+  croc = callPackage ../tools/networking/croc {
+    buildGoModule = buildGo117Module;
+  };
 
   cbftp = callPackage ../tools/networking/cbftp { };
 
