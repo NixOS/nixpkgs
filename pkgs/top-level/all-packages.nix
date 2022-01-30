@@ -26901,12 +26901,10 @@ with pkgs;
     boost = boost175;
   };
 
-  libreoffice = if stdenv.hostPlatform.isDarwin
-    then callPackage ../applications/office/libreoffice libreoffice-args
+  libreoffice = if stdenv.isDarwin
+    then callPackage ../applications/office/libreoffice/darwin.nix {}
     else hiPrio libreoffice-still;
-  libreoffice-unwrapped =  if stdenv.hostPlatform.isDarwin
-    then libreoffice
-    else libreoffice.libreoffice;
+  libreoffice-unwrapped = (hiPrio libreoffice-still).libreoffice;
 
   libreoffice-args = {
     inherit (perlPackages) ArchiveZip IOCompress;
