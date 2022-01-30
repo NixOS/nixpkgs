@@ -21,7 +21,6 @@
 , elementary-dock
 , bamf
 , sqlite
-, libdbusmenu-gtk3
 , zeitgeist
 , glib-networking
 , elementary-icon-theme
@@ -74,7 +73,6 @@ stdenv.mkDerivation rec {
     gtk3
     libcanberra
     libcloudproviders
-    libdbusmenu-gtk3
     libgee
     libgit2-glib
     libhandy
